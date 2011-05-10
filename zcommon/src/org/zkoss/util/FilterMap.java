@@ -53,6 +53,13 @@ public class FilterMap extends AbstractMap {
 		_filter = filter;
 	}
 
+	/** Returns the original map being filtered.
+	 * That is, the map passed to the constructor.
+	 */
+	public Map getOrigin() {
+		return _map;
+	}
+
 	//@Override
 	public Object get(Object key) {
 		return _filter.filter(key, _map.get(key));
