@@ -15,11 +15,58 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<zscript><![CDATA[
-		import org.zkoss.zktest.util.*;
+		import org.zkoss.zksandbox.*;
 		import org.zkoss.zul.*;
+		import java.util.*;
+		import java.text.*;
 		
-		TreeModel model = ModelProvider.TreeModelFactory.getBeanDefaultTreeModel(5,5,5);
-		TreeitemRenderer render = ModelProvider.TreeRendererFactory.getBeanTreeitemRenderer();
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+		Random rand = new Random(new Random().nextLong());
+		int level1 = 5;
+		int level2 = 5;
+		int level3 = 5;
+		String label = "item";
+		
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		List list = new ArrayList(level1);
+		for (int i = 0; i < level1; i++) {
+			List subList = new ArrayList(level2);
+			for (int j = 0; j < level2; j++) {
+				List subSubList = new ArrayList(level3);
+				for (int k = 0; k < level3; k++) {
+					subSubList.add(new DefaultTreeNode(new String[]{label + " " + rand.nextInt(level3),
+							rand.nextInt(level3)+"", df.format(cal.getTime())}));
+					cal.add(java.util.Calendar.MINUTE, 1);
+				}
+				subList.add(new DefaultTreeNode(new String[]{label + " " + rand.nextInt(level2),
+						rand.nextInt(level2)+"", df.format(cal.getTime())}, subSubList));
+				cal.add(java.util.Calendar.HOUR_OF_DAY, 1);
+			}
+			
+			list.add(new DefaultTreeNode(new String[]{label + " " + rand.nextInt(level1),
+					rand.nextInt(level1)+"", df.format(cal.getTime())}, subList));
+			cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
+		}
+		TreeModel model = new DefaultTreeModel(new DefaultTreeNode(null, list));
+		TreeitemRenderer render = new TreeitemRenderer() {
+			public void render(Treeitem item, Object data) throws Exception {
+				String[] ary = (String[]) ((DefaultTreeNode) data).getData();
+				Treerow tr;
+				if (item.getTreerow() == null) {
+					tr = new Treerow();
+					tr.setParent(item);
+				} else {
+					tr = item.getTreerow();
+					tr.getChildren().clear();
+				}
+				tr.appendChild(new Treecell(ary[0]));
+				tr.appendChild(new Treecell(ary[1]));
+				tr.appendChild(new Treecell(ary[2]));
+				item.setValue(data);
+			}
+		};
+		
+		
 	]]></zscript>
 	<html>
 	<![CDATA[
@@ -32,9 +79,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</html>
 	<tree model="${model}" itemRenderer="${render}">
 		<treecols>
-			<treecol label="name" sort="auto(name)"/>
-			<treecol label="number" sort="auto(number)"/>
-			<treecol label="date" sort="auto(date)"/>
+			<treecol label="name" sort="auto(0)"/>
+			<treecol label="number" sort="auto(1)"/>
+			<treecol label="date" sort="auto(2)"/>
 		</treecols>
 	</tree>
 </zk>
