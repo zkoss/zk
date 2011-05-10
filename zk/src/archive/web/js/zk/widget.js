@@ -1678,12 +1678,13 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget
 	 */
 	set: function (name, value, extra) {
-		var cc,m;
-		if (m = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
-			zk._set(this, name, value, extra, m);
+		var cc;
+		if (cc = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
+		//to optimize the performance we check the method first (most common)
+			zk._set(this, name, value, extra, cc);
 			return this;
 		}
-		
+
 		if ((cc = name.charAt(0)) == '$') {
 			if (name.startsWith('$$on')) {
 				var cls = this.$class,
@@ -3190,11 +3191,10 @@ bind_: function (desktop, skipper, after) {
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
 
-		var p = this.parent;
+		var p = this.parent, v;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		var v = this._draggable;
-		if (v && v != "false" && !_dragCtl(this))
+		if ((v = this._draggable) && v != "false" && !_dragCtl(this))
 			this.initDrag_();
 		
 		if (this._nvflex || this._nhflex)
