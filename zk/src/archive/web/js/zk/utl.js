@@ -156,11 +156,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return zUtl.encodeXML(txt.substring(0, j) + '...', opts);
 		}
 
-		var out = [], k = 0;
+		var out = [], k = 0, enc;
 		if (multiline || pre)
 			for (var j = 0; j < tl; ++j) {
 				var cc = txt.charAt(j);
-				if (multiline && cc == '\n') {
+				if (enc = _encs[cc]) {
+					out.push(txt.substring(k, j), '&', enc, ';');
+					k = j + 1;
+				} else if (multiline && cc == '\n') {
 					out.push(txt.substring(k, j), "<br/>\n");
 					k = j + 1;
 				} else if (pre && (cc == ' ' || cc == '\t')) {
@@ -168,16 +171,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 					if (cc == '\t')
 						out.push("&nbsp;&nbsp;&nbsp;");
 					k = j + 1;
-				} else {
-					var enc = _encs[cc];
-					if (enc) {
-						out.push(txt.substring(k, j), '&', enc, ';');
-						k = j + 1;
-					}
 				}
 			}
 		else
-			for (var j = 0, enc; j < tl; ++j)
+			for (var j = 0; j < tl; ++j)
 				if (enc = _encs[txt.charAt(j)]) {
 					out.push(txt.substring(k, j), '&', enc, ';');
 					k = j + 1;
