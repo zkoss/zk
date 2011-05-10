@@ -1680,7 +1680,7 @@ wgt.$f().main.setTitle("foo");
 	set: function (name, value, extra) {
 		var cc,m;
 		if (m = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
-			zk._set(this, name, value, m, extra);
+			zk._set(this, name, value, extra, m);
 			return this;
 		}
 		
