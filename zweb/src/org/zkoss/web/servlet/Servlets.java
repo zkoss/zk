@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -824,50 +825,49 @@ public class Servlets {
 	/** Returns the resource of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
-	 * <p>Since 5.0.7, file:/, http://, https:// and ftp:// are supported.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
-	public static final URL getResource(ServletContext ctx, String uri)
-	throws MalformedURLException {
-		File file = toFile(uri);
-		if (file != null)
-			return file.exists() ? file.toURI().toURL(): null;
-				//spec: return null if not found
-		URL url = toURL(uri);
-		if (url != null)
-			return url; //unfortunately, we cannot detect if it exists
-		return new ParsedURI(ctx, uri).getResource();
+	public static final URL getResource(ServletContext ctx, String uri) {
+		try {
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
+				return file.exists() ? file.toURI().toURL(): null;
+					//spec: return null if not found
+			}
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url; //unfortunately, we cannot detect if it exists
+			return new ParsedURI(ctx, uri).getResource();
+		} catch (Throwable ex) {
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
 	}
 	/** Returns the resource stream of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
-	 * <p>Since 5.0.7, file:/, http:/, https:/ and ftp:/ are supported.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
 	public static final InputStream getResourceAsStream(
 	ServletContext ctx, String uri)
 	throws IOException {
 		try {
-			File file = toFile(uri);
-			if (file != null)
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
 				return file.exists() ?
 					new BufferedInputStream (new FileInputStream(file)): null;
 					//spec: return null if not found
+			}
 
 			URL url = toURL(uri);
 			if (url != null)
 				return url.openStream();
+			return new ParsedURI(ctx, uri).getResourceAsStream();
 		} catch (Throwable ex) {
-			if (log.debugable())
-				log.debug("Failed to load "+uri, ex);
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
 			return null; //spec: return null if not found
 		}
-		return new ParsedURI(ctx, uri).getResourceAsStream();
-	}
-	/** Converts URI to a file if it starts with file:/, or null if not. */
-	private static File toFile(String uri) {
-		if (uri != null && uri.toLowerCase().startsWith("file:/"))
-			return new File(
-				uri.substring(uri.length() > 8 && uri.charAt(7) == ':' ? 6: 5));
-		return null;
 	}
 	/** Converts URI to URL if starts with http:/, https:/ or ftp:/ */
 	private static URL toURL(String uri)

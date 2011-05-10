@@ -47,7 +47,7 @@ public class ServletLabelLocator implements LabelLocator {
 	}
 	/** Constructs a locator for the given path.
 	 * @param path the path of the properties file<br/>
-	 * Notice that <code>file:/path</code> is supported (but not http://).
+	 * Notice that <code>file://path</code> is supported (but not http://).
 	 * @since 5.0.7
 	 */
 	public ServletLabelLocator(ServletContext ctx, String path) {
@@ -66,7 +66,7 @@ public class ServletLabelLocator implements LabelLocator {
 		final String prefix = j >= 0 ? path.substring(0, j): path;
 		final String suffix = j >= 0 ? path.substring(j): "";
 		path = locale == null ? prefix + suffix: prefix + '_' + locale + suffix;
-		final URL url = path.toLowerCase().startsWith("file:/") ?
+		final URL url = path.toLowerCase().startsWith("file://") ?
 			Servlets.getResource(_ctx, path): _ctx.getResource(path);
 			//we don't accept http:// since we cannot detect if it exists
 		if (url == null && _path != null && _path.equals(path))
