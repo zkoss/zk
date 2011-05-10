@@ -31,7 +31,8 @@ ZK 5.0.7
   3299209: Menuitem support autodisable
   3299234: A way to get the list of data from onBindingValidate evt
   3299344: A way to get associated bean of a Binding
- 
+  3299827: Support Mac listbox multiple selection
+  
 * Bugs
   3286462: native component cause issue in fulfill
   3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
@@ -124,7 +125,6 @@ ZK 5.0.7
   3297864: type ",01" doesn't got "0,01" (de locale)
   3297287: fileupload issue if the properties used without in order
   3297746: opera bug for listbox rendering
-  3299404: Cant add columns when using sizedByContent of grid on IE8
   
 * Upgrade Notes
   + The default format of datebox and timebox becomes an empty string.

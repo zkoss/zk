@@ -684,7 +684,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
-		&& !evt.data.shiftKey && !evt.data.ctrlKey
+		&& !evt.data.shiftKey && !(evt.data.ctrlKey || evt.data.metaKey) 
 		&& (!this._cdo || cmClicked)) {
 			// Bug 2997034
 			this._syncFocus(row);
@@ -709,7 +709,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._multiple) {
 				if (evt.data.shiftKey)
 					this._selectUpto(row, evt, skipFocus);
-				else if (evt.data.ctrlKey)
+				else if (evt.data.ctrlKey || evt.data.metaKey)
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 				else // Bug: 1973470
 					this._select(row, evt, skipFocus);
@@ -773,7 +773,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var row = this._focusItem || this.getSelectedItem(),
 			data = evt.data,
-			shift = data.shiftKey, ctrl = data.ctrlKey;
+			shift = data.shiftKey, ctrl = (data.ctrlKey || data.metaKey);
 		if (shift && !this._multiple)
 			shift = false; //OK to
 
@@ -990,7 +990,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (evt) {
 			edata = evt.data
 			if (this._multiple)
-				keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));

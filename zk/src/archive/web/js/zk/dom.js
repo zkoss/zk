@@ -2121,6 +2121,7 @@ zk.copy(jq.Event.prototype, {
 		if (this.altKey) inf.altKey = true;
 		if (this.ctrlKey) inf.ctrlKey = true;
 		if (this.shiftKey) inf.shiftKey = true;
+		if (this.metaKey) inf.metaKey = true;
 		inf.which = this.which || 0;
 		return inf;
 	}
@@ -2160,6 +2161,7 @@ zk.copy(jq.Event, {
 		if (data.altKey) inf.altKey = true;
 		if (data.ctrlKey) inf.ctrlKey = true;
 		if (data.shiftKey) inf.shiftKey = true;
+		if (data.metaKey) inf.metaKey = true;
 		inf.which = data.which || 0;
 		return inf;
 	},

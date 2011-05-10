@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Hello"?>
+<!--
+hello.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 23 21:03:20     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+    <listbox id="box" fixedLayout="true" multiple="true" >
+        <listhead>
+            <listheader label="Name" />
+            <listheader label="Gender" />
+            <listheader label="Age" />
+        </listhead>
+        <listitem>
+            <listcell label="Mary" />
+            <listcell label="FEMALE" />
+            <listcell label="18" />
+        </listitem>
+        <listitem>
+            <listcell label="John" />
+            <listcell label="MALE" />
+            <listcell label="20" />
+        </listitem>
+        <listitem>
+            <listcell label="Jane" />
+            <listcell label="FEMALE" />
+            <listcell label="32" />
+        </listitem>
+        <listitem>
+            <listcell label="Henry" />
+            <listcell label="MALE" />
+            <listcell label="29" />
+        </listitem>
+    <listitem>
+      <listcell label="Mark" />
+      <listcell label="MALE" />
+      <listcell label="15" />
+    </listitem>
+    <listitem>
+      <listcell label="Jeffery" />
+      <listcell label="MALE" />
+      <listcell label="17" />
+    </listitem>
+    <listitem>
+      <listcell label="Rebecca" />
+      <listcell label="FEMALE" />
+      <listcell label="21" />
+    </listitem>
+    </listbox>
