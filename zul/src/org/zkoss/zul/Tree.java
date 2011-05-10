@@ -1685,13 +1685,10 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 					}
 				}
 			}
-			
+			if (_model instanceof Openable)
+				item.setOpen(((Openable)_model).isOpen(node));
 			try {
 				_renderer.render(item, node);
-				if (_model instanceof Openable) {
-					if (!item.isOpen() && ((Openable)_model).isOpen(node))
-						item.setOpen(true);
-				}
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
