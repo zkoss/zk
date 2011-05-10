@@ -176,7 +176,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		var cols = this.columns ? this.columns.nChildren : 1,
 			uuid = this.uuid, zcls = this.getZclass();
 		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
-		( this._isEmpty() ? ' style="display:none"' : '' ),
+		( !this._emptyMessage || this._isEmpty()  ? ' style="display:none"' : '' ),
 			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
 	},
 	/**
