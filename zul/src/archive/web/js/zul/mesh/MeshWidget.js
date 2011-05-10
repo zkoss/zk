@@ -1032,10 +1032,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 
-		if (child.$instanceof(this.getHeadWidgetClass()))
+		if (child.$instanceof(this.getHeadWidgetClass())) {
 			this.head = child;
-		else if (!child.$instanceof(zul.mesh.Auxhead))
-			return;
+			this._minWd = null;
+		} else if (!child.$instanceof(zul.mesh.Auxhead)) 
+				return;
 
 		var nsib = child.nextSibling;
 		if (nsib)
@@ -1050,7 +1051,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 
 		if (child == this.head) {
-			this.head = null;
+			this._minWd = this.head = null;
 			this.heads.$remove(child);
 		} else if (child.$instanceof(zul.mesh.Auxhead))
 			this.heads.$remove(child);
