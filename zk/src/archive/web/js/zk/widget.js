@@ -1678,7 +1678,12 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget
 	 */
 	set: function (name, value, extra) {
-		var cc;
+		var cc,m;
+		if (m = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
+			zk._set(this, name, value, m, extra);
+			return this;
+		}
+		
 		if ((cc = name.charAt(0)) == '$') {
 			if (name.startsWith('$$on')) {
 				var cls = this.$class,
