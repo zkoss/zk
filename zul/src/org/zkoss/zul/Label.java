@@ -59,8 +59,8 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (value == null) value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			smartUpdate("value", getEncodedValue());
-				//allow deriving to override getEncodedValue()
+			smartUpdate("value", getValue());
+				//allow deriving to override getValue()
 		}
 	}
 
@@ -150,22 +150,13 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		render(renderer, "multiline", _multiline);
 		render(renderer, "pre", _pre);
 
-		final String val = getEncodedValue();
-			//allow deriving to override getEncodedValue()
+		final String val = getValue();
+			//allow deriving to override getValue()
 		render(renderer, "value", val);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(val);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-label" : _zclass;
-	}
-	/** Returns the encoded value before sending it to the client.
-	 * <p>Default: it is the same as {@link #getValue}.
-	 * <p>It is designed to be overriden such that the encoding can be
-	 * done at the server (rather than, by default, at the client).
-	 * @since 5.0.7
-	 */
-	protected String getEncodedValue() {
-		return getValue();
 	}
 
 	/** No child is allowed.
