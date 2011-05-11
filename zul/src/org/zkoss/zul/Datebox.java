@@ -93,7 +93,7 @@ public class Datebox extends FormatInputElement implements
 	 * 
 	 * <p>Though you might override this method to provide your own default format,
 	 * it is suggested to specify the format for the current thread
-	 * with {@link DateFormats#setDateFormatLocal}.
+	 * with {@link DateFormats#setLocalFormatInfo}.
 	 */
 	protected String getDefaultFormat() {
 		return DateFormats.getDateFormat(DateFormat.DEFAULT, _locale, DEFAULT_FORMAT);

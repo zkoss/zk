@@ -253,7 +253,7 @@ will be used to retrieve the real format.
 	 * 
 	 * <p>Though you might override this method to provide your own default format,
 	 * it is suggested to specify the format for the current thread
-	 * with {@link DateFormats#setTimeFormatLocal}.
+	 * with {@link DateFormats#setLocalFormatInfo}.
 	 * @since 5.0.7
 	 */
 	protected String getDefaultFormat() {

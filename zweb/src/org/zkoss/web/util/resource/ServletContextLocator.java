@@ -42,7 +42,7 @@ public class ServletContextLocator implements Locator {
 	}
 	/** Constructor.
 	 * @param acceptURL whether to URL (such as file:/, http:// and
-	 * ftp://) are accepted. In other words, {@Link Servlets#getResource}
+	 * ftp://) are accepted. In other words, {@link Servlets#getResource}
 	 * will be used.
 	 * @see Servlets#getResource
 	 * @since 5.0.7
@@ -79,7 +79,7 @@ public class ServletContextLocator implements Locator {
 	 * (for {@link #getResource} and {@link #getResourceAsStream}).
 	 * It must be null, empty, or starts with /.
 	 * @param acceptURL whether to URL (such as file:/, http:// and
-	 * ftp://) are accepted. In other words, {@Link Servlets#getResource}
+	 * ftp://) are accepted. In other words, {@link Servlets#getResource}
 	 * will be used.
 	 */
 	public ServletContextLocator(ServletContext ctx, String dir, String prefix,

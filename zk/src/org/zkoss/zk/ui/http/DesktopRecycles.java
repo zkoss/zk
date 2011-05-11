@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.DesktopRecycle;
 /**
  * Utilties to handle {@link DesktopRecycle}.
  * @author tomyeh
- * @5.0.7
+ * @since 5.0.7
  */
 public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 	private static Log log = Log.lookup(DesktopRecycles.class);

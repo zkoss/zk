@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.text;
 
 import java.util.Locale;
+import java.text.DateFormat;
 
 /** The format infomation for date/time.
  * It is used with {@link DateFormats#setLocalFormatInfo} to provide

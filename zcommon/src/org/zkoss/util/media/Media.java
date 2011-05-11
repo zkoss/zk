@@ -56,7 +56,7 @@ public interface Media {
 	 * <p>It might <i>not</i> be a copy, so don't modify
 	 * it directly unless you know what you are doing.
 	 *
-	 * <p>If the data is not cached in memory ({@link #isMemory} return false),
+	 * <p>If the data is not cached in memory ({@link #inMemory} return false),
 	 * the data will be read from {@link #getStreamData}. Furthermore, it
 	 * also implies you can not invoke this method again.
 	 *
