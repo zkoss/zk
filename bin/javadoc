@@ -19,7 +19,10 @@ function subfolder {
 				)
 			elif [ -f "$f" ] ; then
 				echo "Replacing... $f"
-				$main/bin/overwrite $f sed -f $main/bin/javadoc.sed $f
+				tempfl=/tmp/javadoc.temp
+				sed -f $main/bin/javadoc.sed $f > $tempfl
+				cp -f $tempfl $f
+				rm -f $tempfl
 			fi
 		fi
 done
