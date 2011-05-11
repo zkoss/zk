@@ -79,7 +79,6 @@ public class ThemeSelectionCtrl extends GenericForwardComposer {
 	private void initThemeListbox() {
 		themeSelectListbox.setItemRenderer(new ListitemRenderer() {
 			
-			@Override
 			public void render(Listitem item, Object obj) throws Exception {
 				String name = (String)obj;
 				String display = Library.getProperty(PREFIX_KEY_THEME_DISPLAYS + name);
