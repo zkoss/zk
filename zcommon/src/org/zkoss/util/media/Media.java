@@ -66,7 +66,7 @@ public interface Media {
 	public byte[] getByteData();
 	/** Returns the raw data in string.
 	 *
-	 * <p>If the data is not cached in memory ({@link #isMemory} return false),
+	 * <p>If the data is not cached in memory ({@link #inMemory} return false),
 	 * the data will be read from {@link #getReaderData}. Furthermore, it
 	 * also implies you can not invoke this method again.
 	 *
