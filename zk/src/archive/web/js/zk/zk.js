@@ -296,7 +296,7 @@ zk.copy(zk, {
 	 * @type Double
 	 * @since 5.0.7
 	 */
-	//iex, null,
+	//iex: null,
 	/** Whether it is Internet Exploer 6 (excluding 7 or others).
 	 * @type Boolean
 	 */

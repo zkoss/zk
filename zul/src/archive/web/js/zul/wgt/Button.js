@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	var _fixMouseupForClick = zk.safari || zk.gecko ? function (wgt, evt){
 		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
-		/**
+		/*
 		 * Here we have these states :
 		 * 1.down for mouse down in the widget  (down)
 		 * 2.mouse up in the widget but click not fired (up in timeout)

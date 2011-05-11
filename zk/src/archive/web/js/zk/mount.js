@@ -744,7 +744,7 @@ jq(function() {
 						//Use sync request for chrome and safari.
 						//Note: when pressing F5, the request's URL still arrives before this even async:false
 						async: !zk.safari
-					}, zAu.ajaxSettings), true/**fixed IE memory issue for jQuery 1.4.x*/);
+					}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
 				}
 			} catch (e) { //silent
 			}
