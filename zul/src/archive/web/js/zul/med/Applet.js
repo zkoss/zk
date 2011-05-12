@@ -124,7 +124,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
 			}
 			try {
-				eval(expr + end);
+				eval(expr + end); //don't use $eval since this function shall not be compressed
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: "+expr+'\n'+e.message);
 			}
@@ -210,7 +210,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	domAttrs_: function(no){
 		return this.$supers('domAttrs_', arguments)
 				+ ' code="' + (this._code || '') + '"'
-				+ ' codebase="' + (this._codebase || '') + '"'
+				+ zUtl.appendAttr("codebase", this._codebase)
 				+ zUtl.appendAttr("archive", this._archive)
 				+ zUtl.appendAttr("align", this._align)
 				+ zUtl.appendAttr("hspace", this._hspace)

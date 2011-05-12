@@ -42,7 +42,6 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 	private String _content = "";
-	private boolean _noSmartUpdate = false;
 	
 	static {
 		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -98,8 +97,7 @@ public class Menu extends LabelImageElement {
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			if (!_noSmartUpdate)
-				smartUpdate("content", content);
+			smartUpdate("content", content);
 		}
 	}
 	//-- Component --//
@@ -179,9 +177,12 @@ public class Menu extends LabelImageElement {
 		} else if (cmd.equals(Events.ON_CHANGE)) {
 			final Map data = request.getData();
 			if (getContent().indexOf("#color") == 0) {
-				_noSmartUpdate = true;
-				setContent("#color=" + (String)data.get("color"));
-				_noSmartUpdate = false;
+				disableClientUpdate(true);
+				try {
+					setContent("#color=" + (String)data.get("color"));
+				} finally {
+					disableClientUpdate(false);
+				}
 				Events.postEvent(InputEvent.getInputEvent(request, _content));
 			}
 		} else

@@ -56,8 +56,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="tryBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Try me!"/>
-						<button id="reloadBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Reload"/>
+						<button id="tryBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Reload" autodisable="self"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

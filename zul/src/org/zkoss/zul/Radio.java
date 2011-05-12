@@ -92,7 +92,7 @@ public class Radio extends Checkbox {
 			if (_group != null)
 				_group.addExternal(this);
 
-			smartUpdate("u$radiogroup", _group != null ? _group.getUuid(): null);
+			smartUpdate("$u$radiogroup", _group != null ? _group.getUuid(): null);
 		}
 	}
 	/** Associates the radiogroup to this radio component by giving ID.
@@ -111,7 +111,7 @@ public class Radio extends Checkbox {
 		_group = null;
 		_groupId = radiogroupId;
 		if (resolveGroup(true)) //try to bind as soon as possible since they relate to each other
-			smartUpdate("u$radiogroup", _group != null ? _group.getUuid(): null);
+			smartUpdate("$u$radiogroup", _group != null ? _group.getUuid(): null);
 		else
 			invalidate(); //delay the retrieval of _group to redraw
 	}
@@ -193,15 +193,6 @@ public class Radio extends Checkbox {
 		return _zclass == null ? "z-radio" : _zclass;
 	}
 	
-	/** Process the onCheck event sent when the radio is checked.
-	 * @since 3.6.0
-	 */
-	public void onCheck(Event event) {
-		final Radiogroup rg = getRadiogroup();
-		if (rg != null)
-			Events.sendEvent(rg, event);
-	}
-	
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Radiogroup oldgp = getRadiogroup();
@@ -219,7 +210,7 @@ public class Radio extends Checkbox {
 		super.renderProperties(renderer);
 		resolveGroup(false);
 		if (_group != null)
-			render(renderer, "u$radiogroup", _group.getUuid());
+			render(renderer, "$u$radiogroup", _group.getUuid());
 	}
 	
 	//-- ComponentCtrl --//
@@ -234,6 +225,10 @@ public class Radio extends Checkbox {
 			_checked = evt.isChecked();
 			fixSiblings(_checked, true);
 			Events.postEvent(evt);
+			// Bug: B50-3284663: Radio always sends onCheck event
+			final Radiogroup rg = getRadiogroup();
+			if (rg != null)
+				Events.postEvent(rg, evt);
 		} else
 			super.service(request, everError);
 	}

@@ -42,32 +42,14 @@ import org.zkoss.zk.ui.util.ThemeProvider.Aide;
  * @since 5.0.0
  */
 public class CacheableThemeProvider implements ThemeProvider{
-	private final static String BLUE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
-	private final static String BREEZE_MESSAGEBOX_TEMPLATE_URI = "~./zul/html/messagebox.breeze.zul";
+	private final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
+	private final static String DEFAULT_MSGBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
 	
 	public Collection getThemeURIs(Execution exec, List uris) {
-		String theme = Themes.getThemeStyle(exec);
-		if(Strings.isEmpty(theme) || Strings.isBlank(theme))
-			Themes.setThemeStyle(exec, Themes.BREEZE_THEME);
-		
-		boolean isBreeze = Themes.isBreeze(exec) && Themes.hasBreezeLib();
-		Messagebox.setTemplate(isBreeze ? 
-				BREEZE_MESSAGEBOX_TEMPLATE_URI : BLUE_MESSAGEBOX_TEMPLATE_URI);
-		/* Use Breeze Theme as default theme*/
-		if (isBreeze) {
-			proessBreezeURI(uris);
-			return uris;
-		}
-
+		String suffix = getThemeFileSuffix();
 		String fsc = Themes.getFontSizeCookie(exec);
-		boolean isSilvergray = Themes.isSilvergray(exec) && Themes.hasSilvergrayLib();
+		boolean isSilvergray = Themes.isSilvergray() && Themes.hasSilvergrayLib();
 		processSilverAndFontURI(isSilvergray, uris, fsc);
-
-		//slivergray
-		if (isSilvergray) {
-			uris.add("~./silvergray/color.css.dsp");
-			uris.add("~./silvergray/img.css.dsp");
-		}
 		
 		if ("lg".equals(fsc)) {
 			uris.add("/css/fontlg.css.dsp");
@@ -78,24 +60,24 @@ public class CacheableThemeProvider implements ThemeProvider{
 			if (isSilvergray)
 				uris.add("/css/silvergraysm.css.dsp");
 		}
-		
-		return uris;
-	}
-	
-	/**
-	 * Setup inject URI for cache and removes silvergray URI
-	 * @param uris
-	 */
-	private static void proessBreezeURI (List uris) {
-		for (ListIterator it = uris.listIterator(); it.hasNext();) {
-			final String uri = (String)it.next();
-			
-			if (uri.startsWith(Themes.DEFAULT_WCS_URI)) {
-				it.set(Aide.injectURI(uri, Themes.BREEZE_THEME));
-				continue;
-			} else if (uri.startsWith(Themes.DEFAULT_SILVERGRAY_URI))
-				it.remove();
+		if (Strings.isEmpty(suffix)) {
+			Messagebox.setTemplate(DEFAULT_MSGBOX_TEMPLATE_URI);
+			return uris;
 		}
+		if (isUsingDefaultTemplate(suffix))
+			Messagebox.setTemplate(getThemeMsgBoxURI(suffix));
+		
+		//slivergray
+		if (isSilvergray) {
+			uris.add("~./silvergray/color.css.dsp");
+			uris.add("~./silvergray/img.css.dsp");
+		} else {
+			uris.add(getExtCSS(suffix));
+			uris.add(getNormCSS(suffix));
+		}
+		
+		bypassURI(uris, suffix);
+		return uris;
 	}
 	
 	/**
@@ -126,14 +108,16 @@ public class CacheableThemeProvider implements ThemeProvider{
 		return 8760; //safe to cache
 	}
 	public String beforeWCS(Execution exec, String uri) {
+		if(!Themes.isClassicBlue() && !Themes.isSilvergray())
+			return uri;
 		final String[] dec = Aide.decodeURI(uri);
 		if (dec != null) {
-			if ("lg".equals(dec[1])) {
+			if ("lg".equals(dec[1]) || "silvergray-lg".equals(dec[1])) {
 				exec.setAttribute("fontSizeM", "15px");
 				exec.setAttribute("fontSizeMS", "13px");
 				exec.setAttribute("fontSizeS", "13px");
 				exec.setAttribute("fontSizeXS", "12px");
-			} else if ("sm".equals(dec[1])) {
+			} else if ("sm".equals(dec[1]) || "silvergray-sm".equals(dec[1])) {
 				exec.setAttribute("fontSizeM", "10px");
 				exec.setAttribute("fontSizeMS", "9px");
 				exec.setAttribute("fontSizeS", "9px");
@@ -145,11 +129,53 @@ public class CacheableThemeProvider implements ThemeProvider{
 	}
 
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (!Themes.hasBreezeLib() || !Themes.isBreeze(exec))
+		if(Themes.isSilvergray() && Themes.hasSilvergrayLib())
 			return uri;
-		if(uri.startsWith("~./js/zul/") || uri.startsWith("~./js/zkex/") 
-				|| uri.startsWith("~./js/zkmax/") || uri.startsWith("~./zul/css/"))
-			return uri.replaceFirst(".css.dsp", ".breeze.css.dsp");
+		
+		String suffix = getThemeFileSuffix();
+		if (Strings.isEmpty(suffix)) return uri;
+
+		if(uri.startsWith("~./js/zul/") || 
+				uri.startsWith("~./js/zkex/") || 
+				uri.startsWith("~./js/zkmax/")){
+			return uri.replaceFirst(".css.dsp", getWidgetCSSName(suffix));
+		}
 		return uri;
+	}
+
+	private static String getThemeFileSuffix() {
+		String suffix = Themes.getCurrentTheme();
+		return Themes.CLASSICBLUE_THEME.equals(suffix) ? null : suffix;
+	}
+
+	private static boolean isUsingDefaultTemplate(String suffix){
+		return getThemeMsgBoxURI(suffix).equals(Messagebox.getTemplate()) ||
+			DEFAULT_MSGBOX_TEMPLATE_URI.equals(Messagebox.getTemplate());
+	}
+
+	private static String getThemeMsgBoxURI(String suffix) {
+		return "~./zul/html/messagebox." + suffix + ".zul";
+	}
+
+	private static String getExtCSS(String suffix) {
+		return "~./zul/css/ext." + suffix + ".css.dsp";
+	}
+	
+	private static String getNormCSS(String suffix) {
+		return "~./zul/css/norm." + suffix + ".css.dsp";
+	}
+
+	private void bypassURI(List uris, String suffix) {
+		for (ListIterator it = uris.listIterator(); it.hasNext();) {
+			final String uri = (String)it.next();
+			if (uri.startsWith(DEFAULT_WCS)) {
+				it.set(Aide.injectURI(uri, suffix));
+				break;
+			} 
+		}
+	}
+
+	private static String getWidgetCSSName(String suffix) {
+		return "." + suffix + ".css.dsp";
 	}
 }

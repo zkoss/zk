@@ -64,6 +64,8 @@ function (out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 	
+	this.redrawEmpty_(out);
+
 	out.push('</table><', tag, ' id="', uuid,
 		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tag, '>', "</div>");

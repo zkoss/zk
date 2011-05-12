@@ -119,23 +119,20 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	_colHtmlPre: function () {
 		var s = '',
 			box = this.getListbox(),
-			zcls = this.parent.getZclass();
-		if (box != null && this.parent.firstChild == this) {
-			if (_isListgroup(this.parent)) {
-				s = '<span id="' + this.parent.uuid + '-img" class="' + zcls + '-img ' + zcls
-					+ '-img-' + (this.parent._open ? 'open' : 'close') + '"></span>';
-			}
-				
-			if (box.isCheckmark()
-			&& !_isListgroup(this.parent) && !_isListgroupfoot(this.parent)) {
-				var item = this.parent,
-					chkable = item.isCheckable(),
+			p = this.parent,
+			zcls = p.getZclass();
+		if (box != null && p.firstChild == this) {
+			var isGrp = _isListgroup(p);
+			// insert checkmark
+			if (box.isCheckmark() && !_isListgroupfoot(p) &&
+					(!isGrp || box.groupSelect)) {
+				var chkable = p.isCheckable(),
 					multi = box.isMultiple(),
 					img = zcls + '-img';
-				s += '<span id="' + item.uuid + '-cm" class="' + img + ' ' + img
+				s += '<span id="' + p.uuid + '-cm" class="' + img + ' ' + img
 					+ (multi ? '-checkbox' : '-radio');
 				
-				if (!chkable || item.isDisabled())
+				if (!chkable || p.isDisabled())
 					s += ' ' + img + '-disd';
 				
 				s += '"';
@@ -144,9 +141,25 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 					
 				s += '></span>';
 			}
+			// insert toggle icon
+			if (isGrp) {
+				s += '<span id="' + p.uuid + '-img" class="' + zcls + '-img ' + zcls
+					+ '-img-' + (p._open ? 'open' : 'close') + '"></span>';
+			}
 			if (s) return s;
 		}
 		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? "&nbsp;": '';
+	},
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		
+		//sync frozen
+		var box, frozen, tbody, td, tds, node;
+		if ((box = this.getListbox()) && box.efrozen && 
+			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
+			(node = this.$n()))) {
+			box._moveToHidingFocusCell(node.cellIndex);
+		}
 	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)

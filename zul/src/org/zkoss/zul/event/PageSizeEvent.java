@@ -21,10 +21,12 @@ import org.zkoss.zk.ui.event.Event;
 
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.Grid;
 
 /**
- * Used to notify that the page size is changed (by the user), or by
- * {@link Paginal} (such as {@link org.zkoss.zul.Paging}).
+ * Used to notify the paging size has been changed 
+ * when the autopaging ({@link Grid#setAutopaging}) is enabled 
+ * and user changed the size of the content. 
  * 
  * @author tomyeh
  * @since 2.4.1

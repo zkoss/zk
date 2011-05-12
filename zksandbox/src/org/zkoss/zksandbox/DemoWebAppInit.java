@@ -49,6 +49,19 @@ public class DemoWebAppInit implements WebAppInit {
 	final static String CATEGORY_TYPE = "CATEGORY";
 	
 	final static String LINK_TYPE = "LINK";
+
+	private final static String THEME_CLASSICBLUE_NAME = Themes.CLASSICBLUE_THEME;
+	private final static String THEME_CLASSICBLUE_DISPLAY = "Classic blue";
+	private final static int THEME_CLASSICBLUE_PRIORITY = 1000;
+	
+	private final static String THEME_SILVERGREY_NAME = "silvergray";
+	private final static String SILVERGREY_DISPLAY = "Silver Gray";
+	private final static int SILVERGREY_PRIORITY = 9000;
+	/*package*/ final static String KEY_SILVERGREY_PROPERTY = "org.zkoss.zul.themejar.silvergray";
+
+	/*package*/ final static String THEME_DEFAULT = "org.zkoss.theme.default";
+	private final static String PREFIX_KEY_PRIORITY = "org.zkoss.theme.priority.";
+	private final static String PREFIX_KEY_THEME_DISPLAYS = "org.zkoss.theme.display.";
 	
 	private static Map _cateMap = new LinkedHashMap () {
 		 public Object remove(Object key) {
@@ -62,28 +75,35 @@ public class DemoWebAppInit implements WebAppInit {
 	public void init(WebApp wapp) throws Exception {
 		loadProperites((ServletContext)wapp.getNativeContext());
 		setThemeProperites();
+		initThemes();
+	}
+
+	private static void initThemes() {
+		addTheme(THEME_CLASSICBLUE_NAME, THEME_CLASSICBLUE_DISPLAY, THEME_CLASSICBLUE_PRIORITY);
+		if(Themes.hasSilvergrayLib())
+			addTheme(THEME_SILVERGREY_NAME, SILVERGREY_DISPLAY, SILVERGREY_PRIORITY);
 	}
 	
 	/**
 	 * Sets silvergray library property if there is silvergray.jar 
 	 */
 	private void setThemeProperites () {
-		String prop = Library.getProperty("org.zkoss.zksandbox.theme.silvergray");
+		String prop = Library.getProperty(KEY_SILVERGREY_PROPERTY);
 		if (prop == null) {
 			final ClassLocator loc = new ClassLocator();
 			try {
 				for (Enumeration en = loc.getResources("metainfo/zk/lang-addon.xml");
 				en.hasMoreElements();) {
 					final URL url = (URL)en.nextElement();
-					if (url.toString().lastIndexOf("silvergray.jar") >= 0) {
-						Library.setProperty("org.zkoss.zksandbox.theme.silvergray", "true");
+					if (url.toString().lastIndexOf("silvergray-tod.jar") >= 0) {
+						Library.setProperty(KEY_SILVERGREY_PROPERTY, "true");
 						return;
 					}
 				}
 			} catch (Exception ex) {
 				log.error(ex); //keep running
 			}
-			Library.setProperty("org.zkoss.zksandbox.theme.silvergray", "false");
+			Library.setProperty(KEY_SILVERGREY_PROPERTY, "false");
 		}
 	}
 	static Map getCateMap() {
@@ -139,5 +159,32 @@ public class DemoWebAppInit implements WebAppInit {
 			log.error("Ingored: failed to load a properties file, \nCause: "
 					+ e.getMessage());
 		}
+	}
+
+	private static void appendThemeName(String theme) {
+		String themes = Library.getProperty(Themes.THEME_NAMES);
+		if (themes == null)
+			Library.setProperty(Themes.THEME_NAMES, theme + ";");
+		else if (!Themes.containTheme(themes, theme))
+			Library.setProperty(Themes.THEME_NAMES, themes + ";" + theme);
+	}
+	
+	private static void setThemeDisplay(String name, String display) {
+		Library.setProperty(PREFIX_KEY_THEME_DISPLAYS + name, display);
+	}
+
+	private static void updateFirstPriority(String name, int priority) {
+		Library.setProperty(PREFIX_KEY_PRIORITY + name, "" + priority);
+		
+		String defaultTheme = Library.getProperty(THEME_DEFAULT);
+		if (Library.getIntProperty(PREFIX_KEY_PRIORITY + defaultTheme, Integer.MAX_VALUE) < priority)
+			return;
+		Library.setProperty(THEME_DEFAULT, name);
+	}
+
+	private static void addTheme(String themeName, String themeDisplay, int themePriority){
+		appendThemeName(themeName);
+		setThemeDisplay(themeName, themeDisplay);
+		updateFirstPriority(themeName, themePriority);
 	}
 }

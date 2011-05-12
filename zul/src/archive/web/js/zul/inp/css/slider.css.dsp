@@ -38,7 +38,6 @@
 .z-slider-scale-tick {
 	background-image:url(${c:encodeURL('~./zul/img/slider/ticks.gif')});
 	padding-top:6px;
-	width:214px;
 }
 
 <%-- Vertical style --%>

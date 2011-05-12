@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
+import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.XulElement;
 
@@ -49,7 +50,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private boolean _open = true;
 	private boolean _selected;
 	private boolean _disabled;
-	private boolean _checkable = true;;
+	private boolean _checkable = true;
+	private TreeNode _treeNode;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
@@ -199,6 +201,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public void setValue(Object value) {
 		_value = value;
 	}
+	/**
+	 * Returns the {@link TreeNode} in corresponding position of {@link TreeModel}.
+	 * @since 5.0.7
+	 */
+	/*package*/ TreeNode getTreeNode() {
+		return _treeNode;
+	}
+	/** 
+	 * Sets the {@link TreeNode} in corresponding position of {@link TreeModel}.
+	 * @since 5.0.7
+	 */
+	/*package*/ void setTreeNode(TreeNode treeNode) {
+		_treeNode = treeNode;
+	}
 
 	/** Returns whether this container is open.
 	 * <p>Default: true.
@@ -208,6 +224,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	/** Sets whether this container is open.
 	 */
+	@SuppressWarnings("unchecked")
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
@@ -215,14 +232,17 @@ implements org.zkoss.zk.ui.ext.Disable {
 			//initialized before creating child components (for ZK pages)
 			smartUpdate("open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
-			if(_open) {
-				if (_treechildren != null) addVisibleItemCount(_treechildren.getVisibleItemCount());
-				Tree tree = getTree();
-				if(tree != null && tree.getModel() !=null){
+			if (_treechildren != null) 
+				addVisibleItemCount((_open ? 1: -1) * _treechildren.getVisibleItemCount());
+			
+			Tree tree = getTree();
+			if(tree != null && tree.getModel() !=null){
+				if(_open)
 					tree.renderItem(this);
-				}
-			} else 
-				if (_treechildren != null) addVisibleItemCount(-_treechildren.getVisibleItemCount());
+				TreeModel model = tree.getModel();
+				if (model instanceof Openable)
+					((Openable)model).setOpen(_treeNode, open);
+			}
 		}
 	}
 	/** Returns whether this item is selected.
@@ -374,7 +394,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) {
+		// 
+		if (super.isVisible() != visible) {
 			smartUpdate("visible", visible);
 			int count = isOpen() && _treechildren != null ? _treechildren
 					.getVisibleItemCount() + 1 : 1;
@@ -586,6 +607,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */
+	@SuppressWarnings("unchecked")
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_OPEN)) {
@@ -594,12 +616,17 @@ implements org.zkoss.zk.ui.ext.Disable {
 			final boolean open = evt.isOpen();
 
 			final Tree tree = getTree();
-			if (open && !isLoaded() && tree != null && tree.getModel() != null) {
-				tree.renderItem(Treeitem.this);
-
-				// better client side performance with invalidate
-				if (_treechildren != null && _treechildren.getChildren().size() >= 5)
-					invalidate();
+			if (tree != null && tree.getModel() != null) {
+				if (open && !isLoaded()) {
+					tree.renderItem(Treeitem.this);
+					
+					// better client side performance with invalidate
+					if (_treechildren != null && _treechildren.getChildren().size() >= 5)
+						invalidate();
+				}
+				TreeModel model = tree.getModel();
+				if (model instanceof Openable)
+					((Openable)model).setOpen(_treeNode, open);
 			}
 			
 			if (_treechildren != null && super.isVisible()) {

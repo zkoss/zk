@@ -16,13 +16,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.http;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -31,36 +31,33 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-
+import org.zkoss.image.AImage;
 import org.zkoss.lang.D;
-import org.zkoss.lang.Strings;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
+import org.zkoss.sound.AAudio;
 import org.zkoss.util.logging.Log;
-import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
-import org.zkoss.image.AImage;
-import org.zkoss.sound.AAudio;
-
+import org.zkoss.util.media.Media;
 import org.zkoss.web.servlet.Servlets;
-
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ComponentNotFoundException;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.impl.Attributes;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.CharsetFinder;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The utility used to process file upload.
@@ -202,11 +199,13 @@ public class AuUploader implements AuExtension {
 	 *
 	 * <p>If you prefer not to log or to generate the custom error message,
 	 * you can extend this class and override this method.
-	 * Then, specify it in web.xml as follows.
+	 * Then, specify it in web.xml as follows. 
+	 * (we change from processor0 to extension0 after ZK5.)
+	 * @see DHtmlUpdateServlet
 <code><pre>&lt;servlet&gt;
   &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
   &lt;init-param&gt;
-    &lt;param-name&gt;processor0&lt;/param-name&gt;
+    &lt;param-name&gt;extension0&lt;/param-name&gt;
     &lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
   &lt;/init-param&gt;
 ...</pre></code>

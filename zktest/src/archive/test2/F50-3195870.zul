@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3195870.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 14 20:22:12 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "auto sort".</li>
+			<li>Click "model 1" and "bean model".</li>
+			<li>Click "ascending".</li>
+			<li>click all of test button, they shall be in sorted</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import java.util.*;
+		import org.zkoss.zul.*;
+		import org.zkoss.zktest.util.ModelProvider;
+		
+		public void updateGridBeanModel(Grid grid, Column col1, Column col2, Column col3) {
+			grid.model = null;
+			grid.rowRenderer = ModelProvider.GridRendererFactory.getBeanRowRenderer();
+			col1.setSort("auto(name)");
+			col2.setSort("auto(number)");
+			col3.setSort("auto(date)");
+			grid.model = beanModel;
+		}
+		public void updateGridAryModel(Grid grid, Column col1, Column col2, Column col3) {
+			grid.model = null;
+			grid.rowRenderer = ModelProvider.GridRendererFactory.getArrayRowRenderer();
+			col1.setSort("auto(0)");
+			col2.setSort("auto(1)");
+			col3.setSort("auto(2)");
+			grid.model = arrayModel;
+		}
+		public void updateLibBeanModel(Listbox lb, Listheader col1, Listheader col2, Listheader col3) {
+			lb.model = null;
+			lb.itemRenderer = ModelProvider.ListboxRendererFactory.getBeanItemRenderer();
+			col1.setSort("auto(name)");
+			col2.setSort("auto(number)");
+			col3.setSort("auto(date)");
+			lb.model = beanModel;
+		}
+		public void updateLibAryModel(Listbox lb, Listheader col1, Listheader col2, Listheader col3) {
+			lb.model = null;
+			lb.itemRenderer = ModelProvider.ListboxRendererFactory.getArrayItemRenderer();
+			col1.setSort("auto(0)");
+			col2.setSort("auto(1)");
+			col2.setSort("auto(2)");
+			lb.model = arrayModel;
+		}
+		public void updateGridBeanGModel(Grid grid, Column col1, Column col2, Column col3) {
+			grid.model = null;
+			grid.rowRenderer = ModelProvider.GridRendererFactory.getGroupBeanRowRenderer();
+			col1.setSort("auto(name)");
+			col2.setSort("auto(number)");
+			col3.setSort("auto(date)");
+			grid.model = beanGModel;
+		}
+		public void updateGridAryGModel(Grid grid, Column col1, Column col2, Column col3) {
+			grid.model = null;
+			grid.rowRenderer = ModelProvider.GridRendererFactory.getGroupArrayRowRenderer();
+			col1.setSort("auto(0)");
+			col2.setSort("auto(1)");
+			col3.setSort("auto(2)");
+			grid.model = arrayGModel;
+		}
+		public void updateLibBeanGModel(Listbox lb, Listheader col1, Listheader col2, Listheader col3) {
+			lb.model = null;
+			lb.itemRenderer = ModelProvider.ListboxRendererFactory.getGroupBeanItemRenderer();
+			col1.setSort("auto(name)");
+			col2.setSort("auto(number)");
+			col3.setSort("auto(date)");
+			lb.model = beanGModel;
+		}
+		public void updateLibAryGModel(Listbox lb, Listheader col1, Listheader col2, Listheader col3) {
+			lb.model = null;
+			lb.itemRenderer = ModelProvider.ListboxRendererFactory.getGroupArrayItemRenderer();
+			col1.setSort("auto(0)");
+			col2.setSort("auto(1)");
+			col2.setSort("auto(2)");
+			lb.model = arrayGModel;
+			
+		}
+		public void updateTreeBeanModel(Tree tree, Treecol col1, Treecol col2, Treecol col3) {
+			tree.model = null;
+			tree.itemRenderer = ModelProvider.TreeRendererFactory.getBeanTreeitemRenderer();
+			col1.setSort("auto(name)");
+			col2.setSort("auto(number)");
+			col3.setSort("auto(date)");
+			tree.model = beanTModel;
+		}
+		public void updateTreeAryModel(Tree tree, Treecol col1, Treecol col2, Treecol col3) {
+			tree.model = null;
+			tree.itemRenderer = ModelProvider.TreeRendererFactory.getArrayTreeitemRenderer();
+			col1.setSort("auto(0)");
+			col2.setSort("auto(1)");
+			col2.setSort("auto(2)");
+			tree.model = arrayTModel;
+		}
+		
+		
+		
+		
+		
+		public void model1() {
+			grid.model = sModel;
+			lb.model = sModel;
+			tree.model = sTModel;
+		}
+		
+		public void model2() {
+			grid.model = sModel2;
+			lb.model = sModel2;
+			tree.model = sTModel2;
+		}
+		
+		public void beanModel() {
+			updateGridBeanModel(grid2, col1, col2, col3);
+			updateLibBeanModel(lb2, hd1, hd2, hd3);
+			updateGridBeanGModel(grid3, col11, col12, col13);
+			updateLibBeanGModel(lb3, hd11, hd12, hd13);
+			updateTreeBeanModel(tree2, tc1, tc2, tc3);
+		}
+		public void aryModel() {
+			updateGridAryModel(grid2, col1, col2, col3);
+			updateLibAryModel(lb2, hd1, hd2, hd3);
+			updateGridAryGModel(grid3, col11, col12, col13);
+			updateLibAryGModel(lb3, hd11, hd12, hd13);
+			updateTreeAryModel(tree2, tc1, tc2, tc3);
+		}
+		
+		public void ascending() {
+			col.sortDirection = "ascending";
+			col1.sortDirection = "ascending";
+			hd.sortDirection = "ascending";
+			hd1.sortDirection = "ascending";
+			col12.sortDirection = "ascending";
+			hd12.sortDirection = "ascending";
+			tc.sortDirection = "ascending";
+			tc1.sortDirection = "ascending";
+		}
+		
+		public void descending() {
+			col.sortDirection = "descending";
+			col1.sortDirection = "descending";
+			hd.sortDirection = "descending";
+			hd1.sortDirection = "descending";
+			col12.sortDirection = "descending";
+			hd12.sortDirection = "descending";
+			tc.sortDirection = "descending";
+			tc1.sortDirection = "descending";
+		}
+		
+		public void switchPaging(Grid grid) {
+			switchPagingG(grid);
+			switchPagingG(grid2);
+			switchPagingG(grid3);
+			switchPagingL(lb);
+			switchPagingL(lb2);
+			switchPagingL(lb3);
+			switchPagingT(tree);
+			switchPagingT(tree2);
+		}
+		public void switchPagingG(Grid grid) {
+			String mold = grid.mold;
+			
+			if ("default".equals(mold)) {
+				grid.mold = "paging";
+				grid.pageSize = 5;
+			} else {
+				grid.mold = "default";
+			}
+		}
+		public void switchPagingL(Listbox lb) {
+			String mold = lb.mold;
+			
+			if ("default".equals(mold)) {
+				lb.mold = "paging";
+				lb.pageSize = 5;
+			} else {
+				lb.mold = "default";
+			}
+		}
+		public void switchPagingT(Tree tree) {
+			String mold = tree.mold;
+			
+			if ("default".equals(mold)) {
+				tree.mold = "paging";
+				tree.pageSize = 5;
+			} else {
+				tree.mold = "default";
+			}
+		}
+		
+		public void autosort() {
+			page.setAttribute("org.zkoss.zul.grid.autoSort", true);
+			page.setAttribute("org.zkoss.zul.listbox.autoSort", true);
+			page.setAttribute("org.zkoss.zul.tree.autoSort", true);
+		}
+		
+		List list = ModelProvider.getList(10, "item");
+		ListModelList sModel = new ListModelList(list);
+		ListModelList sModel2 = new ListModelList(ModelProvider.getList(10, "option"));
+		ListModelList beanModel = ModelProvider.ListModelFactory.getBeanListModelList(10, "item");
+		ListModelList arrayModel = ModelProvider.ListModelFactory.getArrayListModelList(10, "option");
+		GroupsModelArray beanGModel = ModelProvider.GroupModelFactory.getBeanGroupsModelArray(10, "item");
+		GroupsModelArray arrayGModel = ModelProvider.GroupModelFactory.getArrayGroupsModelArray(10, "option");
+		DefaultTreeModel beanTModel = ModelProvider.TreeModelFactory.getBeanDefaultTreeModel(5,3,3, "item");
+		DefaultTreeModel arrayTModel = ModelProvider.TreeModelFactory.getArrayDefaultTreeModel(5,3,3, "option");
+		
+		DefaultTreeModel sTModel = ModelProvider.TreeModelFactory.getSingleColDefaultTreeModel(10,0,0, "item");
+		DefaultTreeModel sTModel2 = ModelProvider.TreeModelFactory.getSingleColDefaultTreeModel(10,0,0, "option");
+		TreeitemRenderer tRenderer= ModelProvider.TreeRendererFactory.getSingleColTreeitemRenderer();
+		
+		
+	]]></zscript>
+	<div>
+		<button label="ascending"
+			onClick='ascending();' />
+		<button label="descending"
+			onClick='descending();' />
+		<button label="paging" onClick='switchPaging();' />
+		<button label="auto sort" onClick='autosort();' />
+		<separator/>
+		<button label="model 1" onClick="model1();" />
+		<button label="model 2" onClick="model2();" />
+		<button label="bean model" onClick="beanModel();" />
+		<button label="array model" onClick="aryModel();" />
+		<separator/>
+		<button label="add" onClick='sModel.add("item 5");'/>
+		<button label="add bean" onClick='ModelProvider.ListModelFactory.addListModelListBean(beanModel, "item 5");'/>
+		<button label="add str" onClick='ModelProvider.ListModelFactory.addListModelListAry(arrayModel, "option 5");'/>
+		<button label="update row 2 to item9" onClick='sModel.set(1, "item 9");'/>
+	</div>
+	<hlayout>
+		<div>
+			<grid width="200px" height="200px" id="grid">
+				<columns>
+					<column id="col" label="column" sort="auto" />
+				</columns>
+			</grid>
+		</div>
+		<div>
+			<grid width="200px" height="200px" id="grid2">
+				<columns>
+					<column id="col1" label="name" />
+					<column id="col2" label="number"  />
+					<column id="col3" label="date"  />
+				</columns>
+			</grid>
+		</div>
+	</hlayout>
+	<separator/>
+	<hlayout>
+		<div>
+			<listbox id="lb" width="200px" height="200px">
+				<listhead>
+					<listheader id="hd" label="column" sort="auto"/>
+				</listhead>
+			</listbox>
+		</div>
+		<div>
+			<listbox id="lb2" width="200px" height="200px">
+				<listhead>
+					<listheader id="hd1" label="name"/>
+					<listheader id="hd2" label="number"/>
+					<listheader id="hd3" label="date"/>
+				</listhead>
+			</listbox>
+		</div>
+	</hlayout>
+	<separator/>
+	<hlayout>
+		<div>
+			<grid width="400px" height="200px" id="grid3">
+				<columns>
+					<column id="col11" label="name" />
+					<column id="col12" label="number"  />
+					<column id="col13" label="date"  />
+				</columns>
+			</grid>
+		</div>
+		<div>
+			<listbox id="lb3" width="400px" height="200px">
+				<listhead>
+					<listheader id="hd11" label="name"/>
+					<listheader id="hd12" label="number"/>
+					<listheader id="hd13" label="date"/>
+				</listhead>
+			</listbox>
+		</div>
+	</hlayout>
+	<hlayout>
+		<div>
+			<tree id="tree" width="200px" height="200px" itemRenderer="${tRenderer}">
+				<treecols>
+					<treecol id="tc" label="column" sort="auto"/>
+				</treecols>
+			</tree>
+		</div>
+		<div>
+			<tree id="tree2" width="400px" height="200px">
+				<treecols>
+					<treecol id="tc1" label="name"/>
+					<treecol id="tc2" label="number"/>
+					<treecol id="tc3" label="date"/>
+				</treecols>
+			</tree>
+		</div>
+	</hlayout>
+</zk>

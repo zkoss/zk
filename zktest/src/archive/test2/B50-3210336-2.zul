@@ -1,0 +1,17 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Maximize the panels respectively. If the panel does not occupy the whole area, it is a bug.</li>
+		</ol>
+	]]></html>
+	<portallayout maximizedMode="whole" style="border:2px solid red" height="500px">
+		<portalchildren style="padding:5px;border:2px solid gray">
+			<panel title="Panel 1" border="normal" maximizable="true" vflex="1">
+				<panelchildren>1/2 ABCD</panelchildren>
+			</panel>
+			<panel title="Panel 2" border="normal" maximizable="true" vflex="1">
+				<panelchildren>1/2 EFGH</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

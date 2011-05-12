@@ -651,14 +651,17 @@ public class HtmlPageRenders {
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
 		if (page != null) {
-			final String attrnm = "org.zkoss.zk.ui.sys.SEORenderer";
 			final WebApp wapp = page.getDesktop().getWebApp();
+			final Configuration config = wapp.getConfiguration();
+
+			//backward compatible with 5.0.6
+			final String attrnm = "org.zkoss.zk.ui.sys.SEORenderer";
 			Object seo = wapp.getAttribute(attrnm);
 			if (seo == null) {
 				synchronized (HtmlPageRenders.class) {
 					seo = wapp.getAttribute(attrnm);
 					if (seo == null) {
-						final String clsnm = wapp.getConfiguration()
+						final String clsnm = config
 							.getPreference("org.zkoss.zk.ui.sys.SEORenderer.class", null);
 						if (clsnm != null)
 							try {
@@ -674,6 +677,10 @@ public class HtmlPageRenders {
 			}
 			if (seo instanceof SEORenderer)
 				((SEORenderer)seo).render(page, out);
+
+			final SEORenderer[] sds = config.getSEORenderers();
+			for (int j = 0; j < sds.length; ++j)
+				sds[j].render(page, out);
 		}
 		out.write("</div>");
 	}

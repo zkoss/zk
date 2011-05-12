@@ -665,7 +665,8 @@ public class Parser {
 					final String textAs =
 						parentInfo != null ? parentInfo.getTextAs(): null;
 					if (textAs != null) {
-						parentInfo.addProperty(textAs, trimLabel, null);
+						if (trimLabel.length() != 0)
+							parentInfo.addProperty(textAs, trimLabel, null);
 					} else {
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
 							if (trimLabel.length() == 0)

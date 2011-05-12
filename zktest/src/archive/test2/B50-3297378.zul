@@ -1,0 +1,11 @@
+<div>
+	<html><![CDATA[
+	<ol>
+		<li>Click the A button.</li>
+		<li>Then, A and B shall remain enabled, while C remains disabled.</li>
+	</ol>
+	]]></html>
+	<button id="a" label="A" autodisable="a, b, c"/>
+	<button id="b" label="B" />
+	<button id="c" label="C" disabled="true"/>
+</div>

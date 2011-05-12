@@ -63,6 +63,7 @@ public class DefinitionLoaders {
 
 	/** List<Object[Locator, URL]> */
 	private static List<Object[]> _addons;
+	private static List<Object[]> _langs;
 	/** A map of (String ext, String lang). */
 	private static Map<String, String> _exts;
 	private static boolean _loaded, _loading;
@@ -83,8 +84,8 @@ public class DefinitionLoaders {
 	//2) deserialize LanguageDefinition (and maybe ComponentDefinition)
 
 	/** Adds a language addon.
-	 * It is usually used when an application want to load additional addon
-	 * dynamically. For example, if you want to load an addon only if
+	 * It is usually used when an application want to load additional addons.
+	 * For example, if you want to load an addon only if
 	 * the professional edition is ready, you can register a
 	 * {@link org.zkoss.zk.ui.util.WebAppInit} listener.
 	 */
@@ -93,13 +94,30 @@ public class DefinitionLoaders {
 			throw new IllegalArgumentException("null");
 
 		if (_loaded) {
-			loadAddon(locator, url);
+			loadLang(locator, url, true); //addon
 		} else {
 			if (_addons == null)
 				_addons = new LinkedList<Object[]>();
 			_addons.add(new Object[] {locator, url});
 		}
 	}
+	/** Adds a language.
+	 * It is usually used when application want to load additional language.
+	 * @since 5.0.7
+	 */
+	public static void addLanguage(Locator locator, URL url) {
+		if (locator == null || url == null)
+			throw new IllegalArgumentException("null");
+
+		if (_loaded) {
+			loadLang(locator, url, false);
+		} else {
+			if (_langs == null)
+				_langs = new LinkedList<Object[]>();
+			_langs.add(new Object[] {locator, url});
+		}
+	}
+
 	/** Associates an extension to a language.
 	 *
 	 * @param lang the language name. It cannot be null.
@@ -162,7 +180,16 @@ public class DefinitionLoaders {
 			}
 		}
 
-		//3. process lang-addon.xml (with dependency)
+		//5. process other language (from addLanguage)
+		if (_langs != null) {
+			for (Iterator<Object[]> it = _langs.iterator(); it.hasNext();) {
+				final Object[] p = it.next();
+				loadLang((Locator)p[0], (URL)p[1], false);
+			}
+			_langs = null; //free memory
+		}
+
+		//4. process lang-addon.xml (with dependency)
 		final List xmls = locator.getDependentXMLResources(
 			"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 		for (Iterator it = xmls.iterator(); it.hasNext();) {
@@ -177,16 +204,16 @@ public class DefinitionLoaders {
 			}
 		}
 
-		//4. process other addon (from addAddon)
+		//5. process other addon (from addAddon)
 		if (_addons != null) {
-			for (Iterator it = _addons.iterator(); it.hasNext();) {
-				final Object[] p = (Object[])it.next();
-				loadAddon((Locator)p[0], (URL)p[1]);
+			for (Iterator<Object[]> it = _addons.iterator(); it.hasNext();) {
+				final Object[] p = it.next();
+				loadLang((Locator)p[0], (URL)p[1], true); //addon
 			}
 			_addons = null; //free memory
 		}
 
-		//5. process the extension
+		//6. process the extension
 		if (_exts != null) {
 			for (Map.Entry<String, String> me: _exts.entrySet()) {
 				final String ext = me.getKey();
@@ -200,14 +227,14 @@ public class DefinitionLoaders {
 			_exts = null;
 		}
 	}
-	/** Loads a language addon.
+	/** Loads a language.
 	 */
-	private static void loadAddon(Locator locator, URL url) {
+	private static void loadLang(Locator locator, URL url, boolean addon) {
 		try {
 			parseLang(
-				new SAXBuilder(true, false, true).build(url), locator, url, true);
+				new SAXBuilder(true, false, true).build(url), locator, url, addon);
 		} catch (Exception ex) {
-			log.error("Failed to load addon: "+url, ex);
+			log.error("Failed to load "+(addon?"addon":"language")+": "+url, ex);
 			//keep running
 		}
 	}

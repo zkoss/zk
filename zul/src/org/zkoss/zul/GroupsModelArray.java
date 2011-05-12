@@ -178,7 +178,7 @@ implements GroupsModelExt<D> {
 	public void sort(Comparator<D> cmpr, boolean ascending, int col) {
 		sortAllGroupData(cmpr,ascending,col);
 
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
 	}
 
 	public void group(final Comparator<D> cmpr, boolean ascending, int col) {

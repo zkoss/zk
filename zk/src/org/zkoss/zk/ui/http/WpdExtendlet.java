@@ -14,49 +14,46 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Exceptions;
-import org.zkoss.io.Files;
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONArray;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
-
+import org.zkoss.io.Files;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONObject;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
-import org.zkoss.web.util.resource.ExtendletContext;
+import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ExtendletConfig;
+import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
-
-import org.zkoss.zk.ui.WebApps;
-import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.device.Device;
+import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.URIInfo;
-import org.zkoss.zk.device.Devices;
-import org.zkoss.zk.device.Device;
 
 /**
  * The extendlet to handle WPD (Widget Package Descriptor).
@@ -114,6 +111,19 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		boolean zkpkg = false;
 		setProvider(new Provider(this, request, response));
 		try {
+			
+			/* 2011/4/27 Tony:
+			 * Here we don't use "org.zkoss.web.classWebResource.cache" directly,
+			 * since some of our users might want to clear the cache for their css.dsp ,
+			 * and still cache the wpd js resource.
+			 * 
+			 * So we add on a new config to clear the widget source .
+			 * @see bug 2898413
+			 */
+			String resourceCache = Library.getProperty("org.zkoss.zk.WPD.cache");
+			if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
+				_cache.clear();
+			
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
 				if (Servlets.isIncluded(request))

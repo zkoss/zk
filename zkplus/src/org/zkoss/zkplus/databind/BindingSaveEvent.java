@@ -50,6 +50,10 @@ public class BindingSaveEvent extends Event {
 	}
 	
 	/** Gets the associate binding of this event.
+	 * The property that causes the binding can be found by use of
+	 * {@link Binding#getExpression}.
+	 * Furthermore, the bean can be retrieved by use of 
+	 * {@link Binding#getBean}.
 	 */
 	public Binding getBinding() {
 		return _binding;

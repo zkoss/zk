@@ -45,7 +45,7 @@ public class Timer extends HtmlBasedComponent {
 	}
 	public Timer(int delay) {
 		this();
-		_delay = delay;
+		_delay = Math.max(0, delay);
 	}
 
 	/** Returns the delay, the number of milliseconds between
@@ -57,11 +57,10 @@ public class Timer extends HtmlBasedComponent {
 	}
 	/** Sets the delay, the number of milliseconds between
 	 * successive action events.
+	 * @param delay If negative, 0 is assumed.
 	 */
-	public void setDelay(int delay)
-	throws WrongValueException {
-		if (delay < 0)
-			throw new WrongValueException("Negative delay is not allowed: "+delay);
+	public void setDelay(int delay) {
+		delay = Math.max(0, delay);
 		if (delay != _delay) {
 			_delay = delay;
 			smartUpdate("delay", _delay);

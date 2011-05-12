@@ -21,9 +21,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			uplder.destroy(finish);
 		delete o.uploaders[key];
 	}
-	function _parseMaxSize(val) {
-		return val.indexOf("maxsize=") >= 0 ? val.match(new RegExp(/maxsize=([^,]*)/))[1] : '';
-	}
 	function _start(o, form, val) { //start upload		
 		var key = o.getKey(o.sid),
 			uplder = new zul.Uploader(o, key, form, val);
@@ -64,9 +61,18 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param String clsnm the CSS class name of the fileupload
 	 */
 	$init: function(wgt, parent, clsnm) {
-		this.maxsize = _parseMaxSize(clsnm);
-		this.isNative = clsnm.indexOf('native') != -1;
-		this._clsnm = (this.maxsize || this.isNative) ? clsnm.split(',')[0] : clsnm;
+		var cls;
+		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
+			if (attrs[i].startsWith('maxsize='))
+				this.maxsize = attrs[i].match(new RegExp(/maxsize=([^,]*)/))[1];
+			else if (attrs[i] == 'native')
+				this.isNative = true;
+			else if (attrs[i] != 'true')
+				cls = attrs[i];
+		}
+		
+		this._clsnm = cls || '';
+		
 		this._wgt = wgt;
 		this._parent = parent;
 		
@@ -86,9 +92,6 @@ zul.Upload = zk.$extends(zk.Object, {
 			diff = inp.offsetWidth - ref.offsetWidth,
 			st = outer.style,
 			dy = refof[1] - outerof[1];
-		if (zk.opera && dy >= 0 && dy <= 2) dy = -16;
-			//Bug 3166941: dirty fix: offsetTop is wrong and unable to get correct one
-			//Tried: 1) use div, 2) put extra character (neither works)
 		st.top = dy + "px";
 		st.left = refof[0] - outerof[0] - diff + "px";
 		inp.style.height = ref.offsetHeight + 'px';
@@ -254,7 +257,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this._wgt = upload._wgt;
 		
 		var viewer, self = this;
-		if (upload._clsnm.startsWith('true')) viewer = new zul.UploadViewer(this, flnm);
+		if (!upload._clsnm) viewer = new zul.UploadViewer(this, flnm);
 		else
 			zk.$import(upload._clsnm, function (cls) {
 				viewer = new cls(self, flnm);

@@ -51,7 +51,8 @@
 	height: 21px;
 	text-align: center;
 }
-.z-menu-body .z-menu-inner-m div {
+.z-menu-body .z-menu-inner-m div,
+.z-menubar-hor .z-menu-body-clk .z-menu-inner-m  div {
 	display: block;
 	min-height: 16px;
 	padding-right: 3px;
@@ -59,6 +60,11 @@
 	background: transparent no-repeat right -14px;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
 }
+.z-menubar-hor .z-menu-body-clk .z-menu-inner-m  div,
+.z-menubar-ver .z-menu-body-clk .z-menu-inner-m  div {
+	padding-right: 8px;
+}
+
 .z-menubar-ver .z-menu-body .z-menu-inner-m div {
 	background-position: right 0;
 }
@@ -140,7 +146,7 @@
 .z-menu-item-body-over .z-menu-item-inner-m .z-menu-btn{
 	color:#233D6D;
 }
-<%-- remove the line beside the menu arrow
+<%-- remove the line beside the menu arrow (add tail for return it)
 .z-menubar-hor .z-menu-body-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
@@ -150,6 +156,15 @@
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-ver-over.gif')});
 }
 --%>
+
+.z-menubar-hor .z-menu-body-clk-over .z-menu-inner-m  div {
+	background: transparent no-repeat right 0;
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
+}
+.z-menubar-ver .z-menu-body-clk-over .z-menu-inner-m  div {
+	background: transparent no-repeat right 0;
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-ver-over.gif')});
+}
 <%--define disabled menuitem effect--%>
 .z-menubar-hor .z-menu-item-disd *, .z-menubar-ver .z-menu-item-disd *{
 	color:gray !important;

@@ -13,31 +13,6 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _checkFormat(fmt) {
-		var error, out = [];
-		for (var i = 0, l = fmt.length; i < l; i++) {
-			var c = fmt.charAt(i);
-			switch (c) {
-			case 'K':
-			case 'h':
-			case 'H':
-			case 'k':
-			case 'm':
-			case 's':
-				if (fmt.charAt(i+1) == c)
-					i++;
-				else
-					error = true;
-				out.push(c + c);
-				break;
-			default:
-				out.push(c);
-			}
-		}
-		if (error)
-			return zk.fmt.Text.format(msgzul.DATE_REQUIRED + out.join(''));
-	}
-
 	var LEGAL_CHARS = 'ahKHksm',
 		/*constant for MINUTE (m) field alignment.
 		 * @type int
@@ -145,14 +120,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			fmthdler = wgt._fmthdler,
 			index = fmthdler.$indexOf(startHandler),
 			text = [],
-			prevStart = pos,
 			hdler = startHandler,
-			ofs, hStart, hEnd;
+			isFirst = true,
+			prevStart, ofs, hStart, hEnd, posOfs;
 		
 		//restore separator
 		do {
 			hStart = hdler.index[0];
 			hEnd = hdler.index[1] + 1;
+			
+			if (hdler.type && 
+				(posOfs = hdler.isSingleLength())) {
+				//sync handler index
+				hdler._doShift(wgt, posOfs);
+				selEnd--;					
+			}
+			
 			//latest one
 			if (hEnd >= selEnd && hdler.type) {
 				ofs = selEnd - hStart;
@@ -162,8 +145,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			
 			if (hdler.type) {
-				//the first one using pos
-				prevStart = Math.max(hStart, prevStart);
+				prevStart = isFirst ? pos: hStart;
+				isFirst = false
 				continue;
 			}
 			ofs = hStart - prevStart;
@@ -175,14 +158,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		} while (hdler = fmthdler[++index]);
 		return text.join('');
 	}
-	
 	function _getMaxLen (wgt) {
-		var f = wgt._fmthdler,
-			date = wgt.getValue(),
-			len = 0;
-		for (var i = 0, l = f.length; i < l; i++)
-			len += f[i].format(date).length;
-		return len;
+		var val = wgt.getInputNode().value,
+			len = 0, th, lastTh;
+		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
+			th = f[i];
+			len += (th.type ? th.getText(val): th.format()).length;
+			if (th.type) lastTh = th;
+		}
+		return (lastTh.digits == 1) ? ++len: len;
 	}
 
 /**
@@ -242,17 +226,20 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (date) {
 		if (!this._changed && !date && arguments.length) return '';
-		var out = [];
-		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++)
-			out.push(f[i].format(date));
+		var out = [], th, text, offset;
+		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
+			th = f[i];
+			text = th.format(date);
+			out.push(text);
+			//sync handler index
+			if (th.type && (offset = th.isSingleLength()) !== false && 
+				(offset += text.length - 1))
+				th._doShift(this, offset);
+		}
 		return out.join('');
 	},
 	coerceFromString_: function (val) {
 		if (!val) return null;
-
-		var error;
-		if ((error = _checkFormat(this._format)))
-			return {error: error};
 
 		var date = zUtl.today(this._format),
 			hasAM, isAM, hasHour1,
@@ -279,25 +266,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			return;
 		}
 
-		if (hasAM) {
-			for (var i = 0, l = fmt.length; i < l; i++) {
-				if (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD) {
-					hasHour1 = true;
-					break;
-				}
-			}
-		}
-
-		if (hasHour1) {
-			for (var i = 0, l = fmt.length; i < l; i++) {
-				if (fmt[i].type != HOUR0_FIELD && fmt[i].type != HOUR1_FIELD)
-					date = fmt[i].unformat(date, val, isAM);
-			}
-		} else {
-			for (var i = 0, l = fmt.length; i < l; i++) {
-				if (fmt[i].type != HOUR2_FIELD && fmt[i].type != HOUR3_FIELD)
-					date = fmt[i].unformat(date, val);
-			}
+		for (var i = 0, l = fmt.length; i < l; i++) {
+			if (!hasAM && (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD))
+				isAM = true;
+			date = fmt[i].unformat(date, val, isAM);
 		}
 		return date;
 	},
@@ -402,7 +374,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
 			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");
 		}
-		this.domUnlisten_(document.body, "onMouseup", "_dodropbtnup");
+		this.domUnlisten_(document.body, "onZMouseup", "_dodropbtnup");
 		this._currentbtn = null;
 	},
 	_btnDown: function(evt) {
@@ -418,7 +390,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._currentbtn)
 			this._dodropbtnup(evt);
 		jq(btn).addClass(zcls + "-btn-clk");
-		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
+		this.domListen_(document.body, "onZMouseup", "_dodropbtnup");
 		this._currentbtn = btn;
 
 		if (!inp.value)
@@ -547,43 +519,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		var node = this.$n();
-		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
-			return;
-		
-		var inp = this.getInputNode(),
-    		$n = jq(node),
-    		$inp = jq(inp),
-    		inc = this.getInplaceCSS(),
-    		shallClean = !node.style.width && this._inplace;
-		if (this._buttonVisible && shallClean) {
-			$n.removeClass(inc);
-			$inp.removeClass(inc);
-			
-			if (zk.opera)
-				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
-			else
-				node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
-			$n.addClass(inc);
-			$inp.addClass(inc);
-		}
-		var extraWidth = this.inRoundedMold() && shallClean;
-		
-		if (extraWidth) {
-    		$n.removeClass(inc);
-    		$inp.removeClass(inc);
-		}
-		if (zk.ie6_)			
-			inp.style.width = jq.px(0);
-		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
-							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn');
-		
-		if (extraWidth) {
-    		$n.addClass(inc);
-    		$inp.addClass(inc);
-		}
-		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
 		var n = this.$n(),
@@ -636,20 +572,18 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.db.Timebox, 'bind_', arguments);
-		var inp = this.getInputNode(),
-			btn = this.$n("btn");
-		zWatch.listen({onSize: this, onShow: this});
-
+		var btn, inp = this.getInputNode();
+	
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
-
-		if (btn) {
-			this.domListen_(btn, "onMouseDown", "_btnDown")
-				.domListen_(btn, "onMouseUp", "_btnUp")
+		
+		if (btn = this.$n('btn'))
+			this.domListen_(btn, "onZMouseDown", "_btnDown")
+				.domListen_(btn, "onZMouseUp", "_btnUp")
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
-		}
-		this.syncWidth();
+
+		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
@@ -659,8 +593,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
 		if (btn) {
-			this.domUnlisten_(btn, "onMouseDown", "_btnDown")
-				.domUnlisten_(btn, "onMouseUp", "_btnUp")
+			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")
+				.domUnlisten_(btn, "onZMouseUp", "_btnUp")
 				.domUnlisten_(btn, "onMouseOut", "_btnOut")
 				.domUnlisten_(btn, "onMouseOver", "_btnOver");
 		}
@@ -676,6 +610,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	$init: function (index, type) {
 		this.index = index;
 		this.type = type;
+		if (index[0] == index[1])
+			this.digits = 1;
 	},
 	format: function (date) {
 		return '00';
@@ -688,18 +624,34 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			start = this.index[0],
 			end = this.index[1] + 1,
 			val = inp.value,
-			text = val.substring(start, end);
+			text = this.getText(val),
+			singleLen = this.isSingleLength() !== false,
+			ofs;
 
-		text = zk.parseInt(text.replace(/ /g, '0'));
-		text += up;
+		text = zk.parseInt(singleLen ? text: 
+				text.replace(/ /g, '0')) + up;
+		
 		var max = this.maxsize + 1;
-		if (text < this.minsize)
+		if (text < this.minsize) {
 			text = this.maxsize;
-		else if (text >= max)
+			ofs = 1;
+		} else if (text >= max) {
 			text = this.minsize;
+			ofs = -1;
+		} else if (singleLen) 
+			ofs = (up > 0) ? 
+					(text == 10) ? 1: 0:
+					(text == 9) ? -1: 0;
 
-		if (/* TODO: this.digits == 2 && */text < 10) text = "0" + text;
+		if (text < 10 && !singleLen)
+			 text = "0" + text;
+		
 		inp.value = val.substring(0, start) + text + val.substring(end);
+		
+		if (singleLen && ofs) {
+			this._doShift(wgt, ofs);
+			end += ofs; 
+		}
 
 		zk(inp).setSelectionRange(start, end);
 	},
@@ -726,22 +678,24 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				index = fmthdler.$indexOf(this),
 				ofs = backspace? -1: 1,
 				ofs2 = backspace? 0: 1,
-				hdlerPos = this.index[ofs2] + ofs2,
-				hdler;
-			ofs2 = backspace? 1: 0;
-			if (pos == hdlerPos) {// on start or end
-				//delete sibling handler
-				if (hdler = fmthdler[index + ofs * 2]) {
-					hdlerPos = hdler.index[ofs2] + ofs2;
-					pos = hdlerPos + ofs;
-					inp.value = val.substring(0, pos + ofs2-1) + ' '
-						+ val.substring(pos + ofs2);
-				}
+				ofs3 = backspace? 1: 0,
+				hdler, posOfs;
+			if (pos == this.index[ofs2] + ofs2) {// on start or end
+				//delete by sibling handler
+				if (hdler = fmthdler[index + ofs * 2]) 
+					pos = hdler.index[ofs3] + ofs3 + ofs;
 			} else {// delete self
-				pos += ofs;					
-				inp.value = val.substring(0, pos + ofs2-1) + ' '
-					+ val.substring(pos + ofs2);
+				pos += ofs;
+				hdler = this;
 			}
+			if (hdler) {
+				posOfs = hdler.isSingleLength();
+				inp.value = val.substring(0, (ofs3 += pos)-1) + 
+					(posOfs ? '': ' ') + val.substring(ofs3);
+				if (posOfs)	
+					hdler._doShift(wgt, posOfs);
+			}
+			if (posOfs && !backspace) pos--;
 		}
 		zk(inp).setSelectionRange(pos, pos);
 	},
@@ -761,7 +715,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			sel = zk(inp).getSelectionRange(),
 			val = inp.value,
 			pos = sel[0],
-			maxLength = _getMaxLen(wgt);
+			maxLength = _getMaxLen(wgt),
+			posOfs = this.isSingleLength();
 			
 		// clean over text	
 		if (val.length > maxLength) {
@@ -775,23 +730,59 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		
 		// first number (hendle max bound)
 		if (pos == this.index[0]) {
-			var i;
-			if ((i = zk.parseInt(num + '0')) > this.maxsize) {
-				val = inp.value = val.substring(0, pos) + '00'
-					+ val.substring(pos + 2);
-				zk(inp).setSelectionRange(++pos, Math.max(sel[1], pos));
-				sel = zk(inp).getSelectionRange();
+			var text = this.getText(val)
+						.substring((posOfs === 0)? 0: 1).trim(),
+				i;
+			if (!text.length) text = '0';
+			
+			if ((i = zk.parseInt(num + text)) > this.maxsize) {
+				if (posOfs !== 0) {
+					val = inp.value = val.substring(0, pos) + (posOfs ? '0': '00')
+						+ val.substring(pos + 2);
+					if (!posOfs) pos++;
+					zk(inp).setSelectionRange(pos, Math.max(sel[1], pos));
+					sel = zk(inp).getSelectionRange();
+				}
+				if (posOfs)
+					this._doShift(wgt, posOfs);
 			}
-		} else if (pos == (this.index[1] + 1)) {
-			//end of handler
-			this._addNextTime(wgt, num);
-			return;
+		} else if (pos == (this.index[1] + 1)) {//end of handler
+			var i;
+			if (posOfs !== false) {
+				var text = this.getText(val);
+				if ((i = zk.parseInt(text + num)) <= this.maxsize) {//allow add number
+					if (i && i < 10) // 1-9
+						pos--;
+					else if (i || posOfs) { // 0 or larger then 10, except zero and non-posOfs
+						val = inp.value = val.substring(0, (pos + posOfs)) +
+							(posOfs ? '' : '0') + val.substring(pos);
+						if (i) // larger then 10
+							this._doShift(wgt, 1);
+						else { // 0
+							zk(inp).setSelectionRange(pos, Math.max(sel[1], pos));
+							if (posOfs)//2 digits zero
+								this._doShift(wgt, posOfs);
+						}
+					}
+				}
+			}
+			
+			if (!i || i > this.maxsize) {
+				this._addNextTime(wgt, num);
+				return;
+			}
 		}
 		
 		if (pos != sel[1]) {
 			//select edit
+			var s = _cleanSelectionText(wgt, this),
+				ofs;
+			//in middle position
+			if (posOfs !== false && (ofs = pos - this.index[1]))
+				this._doShift(wgt, ofs);
+				
 			inp.value = val.substring(0, pos++) + num 
-				+ _cleanSelectionText(wgt, this).substring(1)
+				+ s.substring(ofs ? 0: 1)
 				+ val.substring(sel[1]);
 		} else {
 			inp.value = val.substring(0, pos) 
@@ -804,16 +795,30 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		var start = this.index[0],
 			end = this.index[1] + 1;
 		return val.substring(start, end);
+	},
+	_doShift: function (wgt, shift) {
+		var f = wgt._fmthdler,
+			index = f.$indexOf(this),
+			NTH;
+		this.index[1] += shift;	
+		while (NTH = f[++index]) {
+			NTH.index[0] += shift;
+			NTH.index[1] += shift;
+		}
+	},
+	isSingleLength: function () {
+		return this.digits == 1 && (this.index[0] - this.index[1]);
 	}
 });
 zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
 	maxsize: 23,
 	minsize: 0,
 	format: function (date) {
-		if (!date) return '00';
+		var singleLen = this.digits == 1;
+		if (!date) return singleLen ? '0': '00';
 		else {
 			var h = date.getHours();
-			if (h < 10)
+			if (!singleLen && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
@@ -832,7 +837,7 @@ zul.inp.HourInDayHandler2 = zk.$extends(zul.inp.TimeHandler, {
 			var h = date.getHours();
 			if (h == 0)
 				h = '24';
-			else if (h < 10)
+			else if (this.digits == 2 && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
@@ -855,7 +860,7 @@ zul.inp.HourHandler = zk.$extends(zul.inp.TimeHandler, {
 			h = (h % 12);
 			if (h == 0)
 				h = '12';
-			else if (h < 10)
+			else if (this.digits == 2 && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
@@ -872,11 +877,12 @@ zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
 	maxsize: 11,
 	minsize: 0,
 	format: function (date) {
-		if (!date) return '00';
+		var singleLen = this.digits == 1;
+		if (!date) return singleLen ? '0': '00';
 		else {
 			var h = date.getHours();
 			h = (h % 12);
-			if (h < 10)
+			if (!singleLen && h < 10)
 				h = '0' + h;
 			return h.toString();
 		}
@@ -889,10 +895,11 @@ zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
 });
 zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
 	format: function (date) {
-		if (!date) return '00';
+		var singleLen = this.digits == 1;
+		if (!date) return singleLen ? '0': '00';
 		else {
 			var m = date.getMinutes();
-			if (m < 10)
+			if (!singleLen && m < 10)
 				m = '0' + m;
 			return m.toString();
 		}
@@ -904,10 +911,11 @@ zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
 });
 zul.inp.SecondHandler = zk.$extends(zul.inp.TimeHandler, {
 	format: function (date) {
-		if (!date) return '00';
+		var singleLen = this.digits == 1;
+		if (!date) return  singleLen ? '0': '00';
 		else {
 			var s = date.getSeconds();
-			if (s < 10)
+			if (!singleLen && s < 10)
 				s = '0' + s;
 			return s.toString();
 		}

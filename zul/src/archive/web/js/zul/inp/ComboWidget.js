@@ -389,44 +389,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		var node = this.$n();
-		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
-			return;
-
-		var inp = this.getInputNode(),
-			$n = jq(node),
-			$inp = jq(inp),
-			inc = this.getInplaceCSS(),
-			shallClean = !node.style.width && this._inplace;
-		if (this._buttonVisible && shallClean) {
-			$n.removeClass(inc);
-			$inp.removeClass(inc);
-			
-			if (zk.opera)
-				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
-			else
-				node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
-			$n.addClass(inc);
-			$inp.addClass(inc);
-		}
-		if (zk.ie6_ && node.style.width)
-			inp.style.width = jq.px(0);
-		
-		var extraWidth = this.inRoundedMold() && shallClean;
-		
-		if (extraWidth) {
-    		$n.removeClass(inc);
-    		$inp.removeClass(inc);
-		}
-		var	width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
-							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn');
-
-		if (extraWidth) {
-    		$n.addClass(inc);
-    		$inp.addClass(inc);
-		}
-		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
 		if ('w' == attr)
@@ -467,14 +430,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
-
-		var btn = this.$n('btn'),
-			inp = this.getInputNode();
+		var btn, inp = this.getInputNode();
 			
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 			
-		if (btn) {
+		if (btn = this.$n('btn')) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}

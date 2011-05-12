@@ -12,6 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _toggleClickableCSS(wgt, remove) {
+		if (wgt.isListen('onClick')) {
+			if (remove) 
+				jq(wgt.$n()).removeClass(wgt.getZclass() + '-body-clk-over');
+			else 
+				jq(wgt.$n()).addClass(wgt.getZclass() + '-body-clk-over');
+		}
+	}
+	
 /**
  * An element, much like a button, that is placed on a menu bar.
  * When the user clicks the menu element, the child {@link Menupopup}
@@ -136,6 +146,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			this.domListen_(anc, "onMouseOver")
 				.domListen_(anc, "onMouseOut");
+			if (this.isListen('onClick')) {
+				jq(this.$n()).addClass(this.getZclass() + '-body-clk');
+			}
 		}
 
 		if (this._contentHandler)
@@ -160,7 +173,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers(zul.menu.Menu, 'unbind_', arguments);
 	},
-	doClick_: function (evt) {		
+	// used for overriding from different theme
+	_getArrowWidth: function () {
+		return 15;
+	},
+	doClick_: function (evt) {
 		var node = this.$n();
 		if (this.menupopup) {
 			jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
@@ -168,10 +185,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (this.isTopmost())
 				this.getMenubar()._lastTarget = this;
 			if (this.isListen('onClick')) {
-				var arrorWidth = 12, //note : /img/menu/btn-arrow.gif : width = 12
-					clk = jq(node).find('TABLE'),
+				var arrowWidth = this._getArrowWidth(), //note : /img/menu/btn-arrow.gif : width = 12
+					clk = this.isTopmost()? jq(node).find('TABLE'): jq(node),
 					offsetWidth = zk(clk).offsetWidth(),
-					clickArea = offsetWidth - arrorWidth,
+					clickArea = offsetWidth - arrowWidth,
 					ofs = zk(clk).revisedOffset(),
 					clickOffsetX = evt.domEvent.clientX - ofs[0];
 
@@ -190,20 +207,24 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (content && !content.isOpen())
 				content.onShow();
 		}
+
 	},
 	doMouseOver_: function () {
+		if (!this.isTopmost()) {
+			var content = this._contentHandler;
+			if (content && !content.isOpen())
+				content.onShow();
+		}
 		this.$supers('doMouseOver_', arguments);
-		if (this.isTopmost()) return;
-
-		var content = this._contentHandler;
-		if (content && !content.isOpen())
-			content.onShow();
 	},
 	_togglePopup: function () {
-		if (!this.menupopup.isOpen())
+		if (!this.menupopup.isOpen()){
+			if(this.isTopmost())
+				_toggleClickableCSS(this);
 			this.menupopup.open();
+		}
 		else if (this.isTopmost()) 
-			this.menupopup.close();
+			this.menupopup.close({sendOnOpen: true});
 		else
 			zk(this.menupopup.$n('a')).focus(); // force to get a focus 
 	},
@@ -216,6 +237,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
+		if(topmost)
+			_toggleClickableCSS(this);
 		if (topmost && zk.ie && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return; // don't activate
 
@@ -284,15 +307,23 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass();
+			zcls = wgt.getZclass(),
+			cls = zcls;
 		cls += top ? wgt.menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
-		jq(n).removeClass(cls);
+		var anode = jq(n);
+		anode.removeClass(cls);
+		if(!(anode.hasClass(zcls + '-body-seld') || anode.hasClass(zcls + '-body-over')))
+			_toggleClickableCSS(wgt, true);
 	},
 	_rmOver: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
-			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		jq(n).removeClass(cls);	
+			zcls = wgt.getZclass(),
+			cls = zcls + (top ? '-body-over' : '-over');
+		var anode = jq(n);
+		anode.removeClass(cls);
+		if(!anode.hasClass(zcls + '-body-seld'))
+			_toggleClickableCSS(wgt, true);
 	}
 });
 
@@ -391,4 +422,4 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		var tag = this.isTopmost() ? 'td' : 'li';
 		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
 	}
-});
+});})();

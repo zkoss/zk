@@ -95,8 +95,8 @@ by dragging list items around.</p>
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload"/>
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

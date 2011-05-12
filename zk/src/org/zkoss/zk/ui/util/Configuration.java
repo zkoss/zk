@@ -59,6 +59,8 @@ import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
@@ -101,15 +103,18 @@ public class Configuration {
 		_execCleans = new FastReadArray<Class<?>>(Class.class),
 		_composers = new FastReadArray<Class<?>>(Class.class),
 		_initiators = new FastReadArray<Class<?>>(Class.class),
+		_seoRends = new FastReadArray<Class<?>>(Class.class),
 		_resolvers = new FastReadArray<Class<?>>(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
-	private final FastReadArray<UiLifeCycle>
-		_uiCycles = new FastReadArray<UiLifeCycle>(UiLifeCycle.class);
 	private final FastReadArray<URIInterceptor>
 		_uriIntcps = new FastReadArray<URIInterceptor>(URIInterceptor.class);
 	private final FastReadArray<RequestInterceptor>
 		_reqIntcps = new FastReadArray<RequestInterceptor>(RequestInterceptor.class);
+	private final FastReadArray<UiLifeCycle>
+		_uiCycles = new FastReadArray<UiLifeCycle>(UiLifeCycle.class);
+	private final FastReadArray<PropertiesRenderer>
+		_propRends = new FastReadArray<PropertiesRenderer>(PropertiesRenderer.class);
 	private final FastReadArray<String>
 		_labellocs = new FastReadArray<String>(String.class);
 	private final Map<String, String> _prefs  = Collections.synchronizedMap(new HashMap<String,String>());
@@ -192,13 +197,25 @@ public class Configuration {
 	 * to richlets. In additions, an independent
 	 * composer is instantiated for each page so there is synchronization required.
 	 *
+	 * <p>By default, a listener is instantiated when required, and dropped
+	 * after invoked. In other words, a new instance will be instantiated in
+	 * the next invocation. It means you don't have to worry the threading,
+	 * <p>However, for better performance, the following listeners will be instantiated
+	 * in {@link #addListener}, and then used repeatedly. It means it has
+	 * to be thread safe. These listeners include
+	 * {@link URIInterceptor}, {@link RequestInterceptor},
+	 * {@link EventInterceptor}, {@link UiLifeCycle},
+	 * and {@link PropertiesRenderer}.
+	 *
 	 * @param klass the listener class must implement at least one of
 	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
 	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
-	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link VariableResolver},
+	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link SEORenderer} (since 5.0.7),
+	 * {@link PropertiesRenderer} (since 5.0.7),
+	 * {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
 	 * {@link UiLifeCycle}, {@link DesktopRecycle},
 	 * and/or {@link EventInterceptor} interfaces.
@@ -294,10 +311,17 @@ public class Configuration {
 			_initiators.add(klass); //not instance
 			added = true;
 		}
+		if (SEORenderer.class.isAssignableFrom(klass)) {
+			_seoRends.add(klass);
+			added = true;
+		}
 		if (VariableResolver.class.isAssignableFrom(klass)) {
 			_resolvers.add(klass); //not instance
 			added = true;
 		}
+
+		//for better performance, the following listeners are instantiated
+		//here and shared in the whole application
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
@@ -329,6 +353,15 @@ public class Configuration {
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
 				_uiCycles.add((UiLifeCycle)
+					(listener = getInstance(klass, listener)));
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
+		if (PropertiesRenderer.class.isAssignableFrom(klass)) {
+			try {
+				_propRends.add((PropertiesRenderer)
 					(listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate "+klass, ex);
@@ -379,12 +412,14 @@ public class Configuration {
 
 		_composers.remove(klass);
 		_initiators.remove(klass);
+		_seoRends.remove(klass);
 		_resolvers.remove(klass);
 
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
 		_reqIntcps.removeBy(sc, true);
 		_uiCycles.removeBy(sc, true);
+		_propRends.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
 	}
@@ -973,6 +1008,29 @@ public class Configuration {
 		}
 		return inits.toArray(new Initiator[inits.size()]);
 	}
+	/** Returns a readonly list of the system-level SEO renderer.
+	 * It is empty if none is registered.
+	 * To register a system-level SEO renderers, use {@link #addListener}.
+	 * <p>Notice that, once registered, an instance is instantiated before
+	 * invoking {@link SEORenderer#render}.
+	 * @since 5.0.7
+	 */
+	public SEORenderer[] getSEORenderers() {
+		final Class[] sdclses = (Class[])_seoRends.toArray();
+		if (sdclses.length == 0)
+			return new SEORenderer[0];
+
+		final List<SEORenderer> sds = new LinkedList<SEORenderer>();
+		for (int j = 0; j < sdclses.length; ++j) {
+			final SEORenderer sd;
+			try {
+				sds.add((SEORenderer)sdclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + sdclses[j]);
+			}
+		}
+		return sds.toArray(new SEORenderer[sds.size()]);
+	}
 	
 	/** Initializes the given page with the variable resolvers registered
 	 * by {@link #addListener}.
@@ -990,6 +1048,16 @@ public class Configuration {
 		}
 	}
 
+	/** Returns a readonly list of the system-level properties renders.
+	 * It is empty if none is registered.
+	 * To register a system-level properties renders, use {@link #addListener}.
+	 * <p>Notice that, once registered, it is instantiated immeidately,
+	 * and the same instance is shared for rendering the properties of every component.
+	 * @since 5.0.7
+	 */
+	public PropertiesRenderer[] getPropertiesRenderers() {
+		return (PropertiesRenderer[])_propRends.toArray();
+	}
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
 	 * when a component is attached to a page.
 	 * @since 3.0.6

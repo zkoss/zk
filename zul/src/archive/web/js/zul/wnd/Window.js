@@ -259,7 +259,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.domListen_(wgt.$n(), 'onMouseOut');
 			var Window = wgt.$class;
 			wgt._sizer = new zk.Draggable(wgt, null, {
-				stackup: true, draw: Window._drawsizing,
+				stackup: true, 
+				draw: Window._drawsizing,
+				snap: Window._snapsizing,
 				initSensitivity: 0,
 				starteffect: Window._startsizing,
 				ghosting: Window._ghostsizing,
@@ -1199,6 +1201,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
 		zWatch.fire('onFloatUp', dg.control); //notify all
+	},
+	_snapsizing: function (dg, pos) {
+		// snap y only when dragging upper boundary/corners 
+		px = (dg.z_dir >= 6 && dg.z_dir <= 8) ? 
+				Math.max(pos[0], 0) : pos[0];
+		// snap x only when dragging left boundary/corners
+		py = (dg.z_dir == 8 || dg.z_dir <= 2) ? 
+				Math.max(pos[1], 0) : pos[1];
+		return [px, py];
 	},
 	_ghostsizing: function (dg, ofs, evt) {
 		var wnd = dg.control,

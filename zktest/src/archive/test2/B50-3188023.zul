@@ -1,7 +1,7 @@
 <zk>
 	<html><![CDATA[
 		<ol>
-			<li>Content overflow, all hflex="min", IE 6/7/8</li>
+			<li>Content overflow, all hflex="min", IE only</li>
 			<li>You shall see 3 horizontal scrollbar, and NO vertical scrollbar for each Grid/Listbox/Tree</li>
 			<li>If not, there are bugs.</li>
 		</ol>

@@ -177,6 +177,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkmax.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
 	</listener>
 	-->
+	<listener>
+        <description>For Zul Testing Language</description>
+        <listener-class>org.zkoss.zktest.test2.DesktopInit</listener-class>
+	</listener>
 	<!-- [ZK EE]
 		Turn on if you use InaccessibleWidgetBlockService (IWBS) and
 		want to block only particular events.
@@ -347,9 +351,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<theme-uri>/b**.css</theme-uri>
 	</desktop-config>
 	-->
-	<desktop-config>
-	  <theme-provider-class>org.zkoss.zktest.util.CacheableThemeProvider</theme-provider-class>
-	</desktop-config>
 
 	<!-- Uncomment the following if you want to redirect to particular
 		page when ZK Client receives an error code.

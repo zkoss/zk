@@ -42,6 +42,18 @@ var Listbox =
  */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_nrows: 0,
+	/** 
+	 * Whether to allow Listgroup to be selected
+	 * <p>Default: false
+	 * @since 5.0.7
+	 * @type boolean
+	 */
+	groupSelect: false,
+	$define:{
+		emptyMessage:function(msg){
+			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+		}
+	},	
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
@@ -139,10 +151,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this.desktop && this._shallStripe) {
-			this.stripe();
-			if (this._shallSize)
-				this.$supers('onResponse', arguments);
+		if (this.desktop) {
+			if (this._shallStripe) {
+				this.stripe();
+				if (this._shallSize) this.$supers('onResponse', arguments);
+			}
+			if (this._shallFixEmpty) 
+				this._fixForEmpty();
 		}
 	},
 	_syncStripe: function () {
@@ -174,6 +189,18 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 
 	//-- super --//
+	getFocusCell: function (el) {
+		var tbody = this.getCaveNode();
+		if (jq.isAncestor(tbody, el)) {
+			var tds = jq(el).parents('td'), td;
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if (td.parentNode.parentNode == tbody) {
+					return td;
+				}
+			}
+		}
+	},
 	getCaveNode: function () {
 		return this.$n('rows') || this.$n('cave');
 	},	
@@ -225,7 +252,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		} else if (child.$instanceof(zul.mesh.Frozen)) {
 			this.frozen = child;
 		}
-
+		
+		this._syncEmpty();
+		
 		if (!ignoreAll) {
 			if (!ignoreDom && !noRerender)
 				return this.rerender();
@@ -274,10 +303,36 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._selItems.$remove(child);
 			stripe = true;
 		}
-
+		this._syncEmpty();
 		if (!ignoreDom) { //unlike _fixOnAdd, it ignores strip too (historical reason; might be able to be better)
 			if (stripe) this._syncStripe();
 			this._syncSize();
+		}
+	},
+	/**
+	 * A redraw method for the empty message , if you want to customize the message ,
+	 * you could overwrite this.
+	 * @param Array out A array that contains html structure ,
+	 * 			it usually come from mold(redraw_). 
+	 */
+	redrawEmpty_: function (out) {
+		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
+			uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
+		((!this._emptyMessage || this._nrows) ? ' style="display:none"' : '' ),
+			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+	},
+	_syncEmpty: function () {
+		this._shallFixEmpty = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
+	},
+	_fixForEmpty: function () {
+		if (this.desktop) {
+			if(this._nrows)
+				jq(this.$n("empty")).hide();
+			else
+				jq(this.$n("empty")).show();
 		}
 	},
 	onChildReplaced_: function (oldc, newc) {

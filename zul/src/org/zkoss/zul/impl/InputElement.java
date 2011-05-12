@@ -29,6 +29,8 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.ext.Disable;
+import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuRequests;
@@ -50,7 +52,8 @@ import org.zkoss.zul.ext.Constrainted;
  *
  * @author tomyeh
  */
-abstract public class InputElement extends XulElement {
+abstract public class InputElement extends XulElement
+implements Constrainted, Readonly, Disable {
 	private static final Log log = Log.lookup(InputElement.class);
 
 	static {
@@ -262,8 +265,7 @@ abstract public class InputElement extends XulElement {
 	 */
 	public void setText(String value) throws WrongValueException {
 		if (_auxinf != null && _auxinf.maxlength > 0 && value != null && value.length() > _auxinf.maxlength)
-			throw showCustomError(
-				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
 
 		final Object val = coerceFromString(value);
 		final boolean same = Objects.equals(_value, val);
@@ -327,10 +329,6 @@ abstract public class InputElement extends XulElement {
 						log.realCauseBriefly(ex);
 					}
 				}
-			} catch (WrongValueException ex) {
-				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint))
-					((CustomConstraint)constr).showCustomError(this, ex);
-				throw ex;
 			} finally {
 				Scopes.afterInterpret();
 			}
@@ -628,7 +626,7 @@ abstract public class InputElement extends XulElement {
 	 */
 	protected void checkUserError() throws WrongValueException {
 		if (_auxinf != null && _auxinf.errmsg != null)
-			throw showCustomError(new WrongValueException(this, _auxinf.errmsg));
+			throw new WrongValueException(this, _auxinf.errmsg);
 				//Note: we still throw exception to abort the exec flow
 				//It's client's job NOT to show the error box!
 				//(client checks z.srvald to decide whether to open error box)
@@ -670,8 +668,7 @@ abstract public class InputElement extends XulElement {
 	}
 	private void setValueByClient(Object value, String valstr) {
 		if (_auxinf != null && _auxinf.maxlength > 0 && valstr != null && valstr.length() > _auxinf.maxlength)
-			throw showCustomError(
-				new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength)));
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
 
 		final boolean same = Objects.equals(_value, value);
 		boolean errFound = false;
@@ -706,8 +703,7 @@ abstract public class InputElement extends XulElement {
 				value = unmarshall(clientv);
 			} catch (NumberFormatException ex) {
 				initAuxInfo().errmsg = ex.getMessage();
-				throw showCustomError(
-						new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv));
+				throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
 			}
 			final String valstr = coerceToString(value);
 			try {

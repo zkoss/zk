@@ -57,6 +57,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		return _auxinf != null && _auxinf.disabled;
 	}
 	/** Sets whether it is disabled.
+	 * @see #setAutodisable
 	 */
 	public void setDisabled(boolean disabled) {
 		if ((_auxinf != null && _auxinf.disabled) != disabled) {
@@ -256,7 +257,11 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
 	 * image, audio or text files.</li>
 	 *  </ul>
-	 *  
+	 * 
+	 * <p> Note: if the options of the <code>false</code> or the customized handler
+	 * (like <code>foo.Upload</code>) are not specified, the option of <code>true</code>
+	 * is implicit by default.
+	 * 
 	 * @param upload a JavaScript class to handle the file upload
 	 * at the client, or "true" if the default class is used,
 	 * or null or "false" to disable the file download (and then
@@ -300,8 +305,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!HORIZONTAL.equals(s = getOrient())) render(renderer, "orient", s);
 		if (!BUTTON.equals(s = getType())) render(renderer, "type", s);
 
-		if (isDisabled())
-			render(renderer, "disabled", true);
+		render(renderer, "disabled", isDisabled());
 		render(renderer, "autodisable", getAutodisable());
 		final String href;
 		render(renderer, "href", href = getEncodedHref());
@@ -338,6 +342,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 		public Object getValue() {
 			return getEncodedHref();
 		}
+	}
+
+	//@Override
+	protected void updateByClient(String name, Object value) {
+		if ("disabled".equals(name))
+			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
+				"true".equals(Objects.toString(value)));
+		else
+			super.updateByClient(name, value);
 	}
 
 	private AuxInfo initAuxInfo() {

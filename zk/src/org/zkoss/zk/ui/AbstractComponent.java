@@ -85,9 +85,11 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.impl.SimpleScope;
+import org.zkoss.zk.ui.impl.Utils;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -521,11 +523,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	private String nextUuid(Desktop desktop) {
-		String uuid;
-		do {
-			uuid = ((DesktopCtrl)desktop).getNextUuid(this);
-		} while (desktop.getComponentByUuidIfAny(uuid) != null);
-		return uuid;
+		Set<String> gened = null;
+		for (;;) {
+			String uuid = ((DesktopCtrl)desktop).getNextUuid(this);
+			if (desktop.getComponentByUuidIfAny(uuid) == null)
+				return uuid;
+
+			if (gened == null)
+				gened = new HashSet<String>();
+			if (!gened.add(uuid))
+				throw new UiException("UUID, "+uuid+", was generated repeatedly (cycle: "+gened.size()
+					+"), and still replicates with existent components. Please have a better ID generator.");
+		}
 	}
 	public String getId() {
 		return _id;
@@ -1677,6 +1686,7 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 
+	//@override
 	public boolean disableClientUpdate(boolean disable) {
 		final UiEngine uieng =
 			_page != null ? getAttachedUiEngine(): getCurrentUiEngine();
@@ -1720,6 +1730,12 @@ w:use="foo.MyWindow"&gt;
 
 			final JsContentRenderer renderer = new JsContentRenderer();
 			renderProperties(renderer);
+			if (_page != null) {
+				PropertiesRenderer[] prs = _page.getDesktop().getWebApp()
+					.getConfiguration().getPropertiesRenderers();
+				for (int j = 0; j < prs.length; j++)
+					prs[j].renderProperties(this, renderer);
+			}
 
 			final String wgtcls = getWidgetClass();
 			if (wgtcls == null)
@@ -1821,7 +1837,7 @@ w:use="foo.MyWindow"&gt;
 				if (shallHandleImportant == null) {
 					final Desktop desktop = getDesktop();
 					shallHandleImportant = Boolean.valueOf(
-						desktop != null && markImportantEvent(desktop));
+						desktop != null && Utils.shallGenerateImportantEvents(desktop, getWidgetClass()));
 				}
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
@@ -1857,14 +1873,6 @@ w:use="foo.MyWindow"&gt;
 			renderer.render("z$is", true); //see zk.Widget (widget.js)
 	}
 
-	@SuppressWarnings("unchecked")
-	private boolean markImportantEvent(Desktop desktop) {
-		Set<String> wgtcls = (Set<String>)desktop.getAttribute(IMPORTANT_EVENTS);
-		if (wgtcls == null)
-			desktop.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet<String>(50));
-		return wgtcls.add(getWidgetClass());
-	}
-	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
 	 * It ignores if value is null or empty.
@@ -2479,11 +2487,25 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	/** Called when the widget running at the client asks the server
-	 * to update a value (with an AU request named <code>setAttr</code>).
+	 * to update a value. The update is caused by an AU request named <code>setAttr</code>
+	 * (by invoking zk.Widget's smartUpdate at client).
 	 *
-	 * <p>By default, it uses reflection to find out the setter to update
-	 * the value. Nothing happens if the method is not found.
-	 * You can override it if necessary.
+	 * <p>By default, it does nothing but log a warning message, since
+	 * it is not safe to allow the client to update a field arbitary.
+	 * <p>However, if you'd like to allow the update for a particular component
+	 * you could do one of the following
+	 * <ol>
+	 * <li>For component developers: override this method to update the field
+	 * directly. For example,<br/>
+<pre><code>protected void updateByClient(String name, Object value) {
+	if ("disabled".equals(name))
+		setDisabled(name, ((Boolean)value).booleanValue());
+	else
+		super.updateByClient(name, value);</code></pre></li>
+	 * <li>For application developers: set an attribute called
+	 * <code>org.zkoss.zk.ui.updateByClient</code> to be true.
+	 * Then, this method will use reflection to find out the setter to update
+	 * the value. Nothing happens if the method is not found.</li>
 	 *
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
 	 * disable any update to the client, when calling the setter
@@ -2492,6 +2514,13 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	protected void updateByClient(String name, Object value) {
+		Object o = getAttribute("org.zkoss.zk.ui.updateByClient");
+		if (!(o instanceof Boolean && ((Boolean)o).booleanValue())
+		&& !(o instanceof String && "true".equals(o))) {
+			log.warning("Ignore update of "+name+"="+value+" from client for "+this.getClass());
+			return; //ignored
+		}
+
 		Method m;
 		final String mtdnm = Classes.toMethodName(name, "set");
 		Object[] args = new Object[] {value};
@@ -2733,11 +2762,9 @@ w:use="foo.MyWindow"&gt;
 		s.writeObject(null);
 
 		willSerialize(_auxinf.ausvc);
-		s.writeObject(_auxinf.ausvc != null
-			&& (_auxinf.ausvc instanceof java.io.Serializable
-			|| _auxinf.ausvc instanceof java.io.Externalizable) ?
-				_auxinf.ausvc: null);
+		Serializables.smartWrite(s, _auxinf.ausvc);
 	}
+
 	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
 	 * for each object in the collection.
 	 * @param c a collection of objects. Ignored if null.

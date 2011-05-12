@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
-You should see a checkmark before the label "Group" and "Foot", rather than an
-open/close sign.
+You should see a checkmark before the open/close sign.
 <listbox id="box" multiple="true" checkmark="true">
 	<listhead>
 		<listheader label="Name"/>

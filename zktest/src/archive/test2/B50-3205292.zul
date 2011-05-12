@@ -1,0 +1,10 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>The green block to extend to the bottom, otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<groupbox vflex="1">
+		<div style="border:2px solid green" vflex="1">ABCD</div>
+	</groupbox>
+</zk>

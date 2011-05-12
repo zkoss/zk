@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<n:html xmlns:n="native">
+	<n:head>
+		<n:title>Title</n:title>
+	</n:head>
+	<n:body>
+		<n:ol>
+			<n:li>Click the hi button, and you shall see a moidal dialog.</n:li>
+			<n:li>Click the show button, and you shall see "1. I am... 10. I am..."</n:li>
+		</n:ol>
+
+	<button label="hi" onClick='alert("Hi!")'/>
+	<button id="add" label="show"/>
+	<window id="addForm" xmlns:h="native" fulfill="add.onClick" >
+		<h:div>1. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>2. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>3. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>4. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>5. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>6. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>7. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>8. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>9. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+		<h:div>10. I am a native component </h:div>
+		<button label="close" onClick="addForm.detach()"/>
+	</window>
+	</n:body>
+</n:html>

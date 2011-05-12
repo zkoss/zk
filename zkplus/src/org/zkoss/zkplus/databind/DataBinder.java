@@ -969,7 +969,7 @@ public class DataBinder implements java.io.Serializable {
 		return myGetBeanWithExpression(comp, path, true);
 	}
 	
-	private Object getBeanWithExpression(Component comp, String path) {
+	/* package */ Object getBeanWithExpression(Component comp, String path) {
 		return myGetBeanWithExpression(comp, path, false);
 	}
 	
@@ -1008,7 +1008,7 @@ public class DataBinder implements java.io.Serializable {
 		if (bean != null) {
 			//feature#1766905 Binding to Map
 			//bug# 2630168, check Map case first and avoid throw unnecessary exception
-			if (bean instanceof Map && ((Map)bean).containsKey(nodeid)) { //bug#2987511
+			if (bean instanceof Map) { //regret the change for bug#2987511(follow the EL spec)
 				bean = ((Map)bean).get(nodeid);
 			} else {
 				try {
@@ -1036,7 +1036,7 @@ public class DataBinder implements java.io.Serializable {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
-		boolean refChanged = false; //wether this setting change the reference
+		boolean refChanged = false; // whether this setting change the reference
 		String beanid = null;
 		final List nodeids = parseExpression(path, ".");
 		final List<BindingNode> nodes = new ArrayList<BindingNode>(nodeids.size());
@@ -1076,13 +1076,13 @@ public class DataBinder implements java.io.Serializable {
 					throw new UiException("Cannot find the specified databind bean expression:" + path);
 				}
 				nodes.add(currentNode);
-				try {
-					bean = Fields.get(bean, beanid);
-				} catch (NoSuchMethodException ex) {
-					//feature#1766905 Binding to Map
-					if (bean instanceof Map) {
-						bean = ((Map)bean).get(beanid);
-					} else {
+				// Bug B50-3183438: Access to bean shall be consistent
+				if (bean instanceof Map) {
+					bean = ((Map)bean).get(beanid); //feature#1766905 Binding to Map
+				} else {
+					try {
+						bean = Fields.get(bean, beanid);
+					} catch (NoSuchMethodException ex) {
 						throw UiException.Aide.wrap(ex);
 					}
 				}
@@ -1091,22 +1091,22 @@ public class DataBinder implements java.io.Serializable {
 				return; //no bean to set value, skip
 			}
 			beanid = (String) it.next();
-			try {
-				orgVal = Fields.get(bean, beanid);
-				if(Objects.equals(orgVal, val)) {
-					return; //same value, no need to do anything
-				}
-				Fields.set(bean, beanid, val, autoConvert);
-			} catch (NoSuchMethodException ex) {
-				//feature#1766905 Binding to Map
-				if (bean instanceof Map) {
-					((Map)bean).put(beanid, val);
-				} else {
+			// Bug B50-3183438: Access to bean shall be consistent
+			if (bean instanceof Map)
+				((Map)bean).put(beanid, val); //feature#1766905 Binding to Map
+			else {
+				try {
+					orgVal = Fields.get(bean, beanid);
+					if(Objects.equals(orgVal, val))
+						return; //same value, no need to do anything
+					Fields.set(bean, beanid, val, autoConvert);
+				} catch (NoSuchMethodException ex) {
+					throw UiException.Aide.wrap(ex);
+				} catch (ModificationException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
-			} catch (ModificationException ex) {
-				throw UiException.Aide.wrap(ex);
 			}
+			
 			if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
 				currentNode = (BindingNode) currentNode.getKidNode(beanid);
 				if (currentNode == null) {

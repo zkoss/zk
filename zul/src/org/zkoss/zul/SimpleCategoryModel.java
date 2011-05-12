@@ -115,11 +115,9 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		List<Comparable<?>> key = new ArrayList<Comparable<?>>(2);
 		key.add(series);
 		key.add(category);
-		if (!_valueMap.containsKey(key)) {
+						
+		if (_valueMap.remove(key) == null)
 			return;
-		}
-				
-		_valueMap.remove(key);
 		
 		int ccount = ((Integer) _categoryMap.get(category)).intValue();
 		if (ccount > 1) {

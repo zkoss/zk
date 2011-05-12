@@ -68,6 +68,12 @@ public interface ExecutionCtrl {
 
 	/** Returns the next event queued by
 	 * {@link org.zkoss.zk.ui.Execution#postEvent}, or null if no event queued.
+	 * <p>Implementation Notes:
+	 * {@link org.zkoss.zk.ui.Execution#postEvent(int,Component,Event)}
+	 * proxies the event with {@link org.zkoss.zk.ui.impl.ProxyEvent}
+	 * if the real target is different from {@link Event#getTarget}.
+	 * Of course, it is transparent to the event listeners since the real
+	 * event will be passed to the listener (rather than the proxy event).
 	 */
 	public Event getNextEvent();
 

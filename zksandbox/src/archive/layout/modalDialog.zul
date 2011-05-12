@@ -67,8 +67,8 @@ closable=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>tru
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload"/>
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

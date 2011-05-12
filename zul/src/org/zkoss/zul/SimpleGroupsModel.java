@@ -190,7 +190,7 @@ implements GroupsModelExt<D> {
 		for(int i=0;i<_data.length;i++){
 			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
 		}
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
 	}
 
 	/** Sorts a group of data.

@@ -344,10 +344,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									var sameOffParent = c.offsetParent == noffParent;
 									sz = c.offsetHeight + c.offsetTop - (sameOffParent ? ntop + tbp : tp);
 								}
-								var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
-								
-								if (!zk.safari || bm >= 0)
-									sz += bm;
+								if(c.nodeType != 3) {
+									var bm = zkc.sumStyles(ignore ? "tb" : "b", jq.margins);
+									if (!zk.safari || bm >= 0)
+										sz += bm;
+								}
 								if (sz > max)
 									max = sz;
 							}
@@ -475,9 +476,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									var	sameOffParent = c.offsetParent == noffParent;
 									sz = c.offsetWidth + c.offsetLeft - (sameOffParent ? nleft + lbp : lp);
 								}
-								var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
-								if (!zk.safari || rm >= 0)
-									sz +=  rm;
+								if(c.nodeType != 3) {
+									var rm = zkc.sumStyles(ignore ? "lr" : "r", jq.margins);
+									if (!zk.safari || rm >= 0)
+										sz +=  rm;
+								}
 								if (sz > max)
 									max = sz;
 							}
@@ -557,7 +560,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		
 		//normal triggering
-		var r1 = p1 = this,
+		var r1 = this, p1 = r1,
 			j1 = -1;
 		if (this._hflex == 'min' && this._hflexsz === undefined && !this.ignoreFlexSize_('w')) {
 			++j1;
@@ -569,7 +572,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					break;
 			}
 		}
-		var r2 = p2 = this,
+		var r2 = this, p2 = r2,
 			j2 = -1;
 		if (this._vflex == 'min' && this._vflexsz === undefined && !this.ignoreFlexSize_('h')) {
 			++j2;
@@ -617,7 +620,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			psz = this.getParentSize_(p),
 			hgh = psz.height,
 			wdh = psz.width,
-			c = p.firstChild;
+			c = p.firstChild,
+			scrWdh = jq.scrollbarWidth();
+		
+		// Bug 3185686
+		// has vertical scrollbar
+		if(wdh - p.clientWidth > 11)
+			wdh -= scrWdh;
+		// has horizontal scrollbar
+		if(hgh - p.clientHeight > 11)
+			hgh -= scrWdh;
 		
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
@@ -637,7 +649,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			segTop = 0,
 			segLeft = 0,
 			segBottom = segTop,
-			segRight = segLeft;
+			segRight = segLeft,
+			zkpOffsets = zk(p).revisedOffset();
 
 		for (; c; c = c.nextSibling) {
 			var zkc = zk(c);
@@ -650,9 +663,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
-					sameOffParent = c.offsetParent === p.offsetParent, 
-					offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp),
-					offLeft = c.offsetLeft - (sameOffParent ?  lbp + pleft : lp),
+					zkcOffsets = zkc.revisedOffset(),
+					offTop = zkcOffsets[1] - zkpOffsets[1],
+					offLeft = zkcOffsets[0] - zkpOffsets[0],
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins),
 					cwgt = _binds[c.id];
@@ -667,7 +680,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							wdh -= minwdh;
 						else {
 							//might change width in _fixMinFlex(), so regain the value
-							offLeft = c.offsetLeft - (sameOffParent ? lbp + pleft : lp);
+							offLeft = zkc.revisedOffset()[0] - zkpOffsets[0];
 							offwdh = zkc.offsetWidth();
 							marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
 							segRight = Math.max(segRight, marginRight);
@@ -707,7 +720,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							hgh -= minhgh;
 						else {
 							//might change height in _fixMinFlex(), so regain the value
-							offTop = c.offsetTop - (sameOffParent ? tbp + ptop : tp);
+							offTop = zkc.revisedOffset()[1] - zkpOffsets[1];
 							offhgh = minhgh; //zkc.offsetHeight();
 							marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
 							segBottom = Math.max(segBottom, marginBottom);
@@ -855,7 +868,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			drag._lastDropTo = null;
 		}
 	}
-	function DD_pointer(evt) {
+	function DD_pointer(evt, height) {
+		if (zk.ios)
+			return [evt.pageX - 50, evt.pageY - height - 30];
 		return [evt.pageX + 7, evt.pageY + 5];
 	}
 	function DD_enddrag(drag, evt) {
@@ -893,14 +908,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
 	}
 	function DD_ghosting(drag, ofs, evt) {
-		return drag.control.cloneDrag_(drag, DD_pointer(evt));
+		return drag.control.cloneDrag_(drag, DD_pointer(evt, jq(drag.node).height()));
 	}
 	function DD_endghosting(drag, origin) {
 		drag.control.uncloneDrag_(drag);
 		drag._dragImg = null;
 	}
 	function DD_constraint(drag, pt, evt) {
-		return DD_pointer(evt);
+		return DD_pointer(evt, jq(drag.node).height());
 	}
 	function DD_ignoredrag(drag, pt, evt) {
 		return drag.control.ignoreDrag_(pt);
@@ -1164,7 +1179,7 @@ new zul.wnd.Window{
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
 		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (props && props.z$is)
+		if (props && zk.cut(props, "z$is"))
 			this._fellows = {};
 
 		this.afterInit(function () {
@@ -1470,7 +1485,7 @@ new zul.wnd.Window{
 		 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
 		 * They are called when the widget is becoming visible (show) and invisible (hide).
 		 * <p>The action effect (<code>action-effect1</code>) is the name of a method
-		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.Actions</javadoc>,
+		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.eff.Actions</a>,
 		 * such as
 		 * <code>show: slideDown; hide: slideUp</code>
 		 * @param String action the cient-side action
@@ -1647,13 +1662,13 @@ wgt.$f().main.setTitle("foo");
 	 * back to the server. In additions, the value is assumed to
 	 * be a boolean indicating if the server registers a listener.
 	 *
-	 * <h3>u$xxx</h3>
-	 * <p>If the name starts with <code>u$</code>, it indicates
+	 * <h3>$u$xxx</h3>
+	 * <p>If the name starts with <code>$u$</code>, it indicates
 	 * the value is UUID of a widget, and it will be resolved to a widget
 	 * before calling the real method.
 	 * <p>However, since we cannot resolve a widget by its UUID until
 	 * the widget is bound (to DOM). Thus, ZK sets property after mounted.
-	 * For example, <code>wgt.set("u$radiogroup", uuid)</code> is equivalent
+	 * For example, <code>wgt.set("$u$radiogroup", uuid)</code> is equivalent
 	 * to the following.
 	 * <pre><code>zk.afterMount(function () {
 	 wgt.set("radiogroup", zk.Widget.$(uuid))
@@ -1674,32 +1689,35 @@ wgt.$f().main.setTitle("foo");
 	 */
 	set: function (name, value, extra) {
 		var cc;
-		if (name.length > 4 && name.startsWith('$$on')) {
-			var cls = this.$class,
-				ime = cls._importantEvts;
-			(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
-		} else if (name.length > 3 && name.startsWith('$on'))
-			this._asaps[name.substring(1)] = value;
-		else if (name.length > 2 && name.startsWith('on')
-		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
-			this.setListener(name, value);
-		else {
-			var useExtra = arguments.length >= 3;
-			if (name.startsWith("u$")) {
+		if (cc = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
+		//to optimize the performance we check the method first (most common)
+			zk._set2(this, cc, null, value, extra);
+			return this;
+		}
+
+		if ((cc = name.charAt(0)) == '$') {
+			if (name.startsWith('$$on')) {
+				var cls = this.$class,
+					ime = cls._importantEvts;
+				(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
+				return this;
+			} else if (name.startsWith('$on')) {
+				this._asaps[name.substring(1)] = value;
+				return this;
+			} else if (name.startsWith('$u$')) { //value is UUID
 				var self = this;
 				zk.afterMount(function () {
-					name = name.substring(2);
-					value = zk.Widget.$(value);
-					if (useExtra)
-						zk.set(self, name, value, extra);
-					else
-						zk.set(self, name, value);
+					zk._set(self, name.substring(3), zk.Widget.$(value), extra);
 				});
-			} else if (useExtra)
-				zk.set(this, name, value, extra);
-			else
-				zk.set(this, name, value);
+				return this;
+			}
+		} else if (cc == 'o' && name.charAt(1) == 'n'
+			&& ((cc = name.charAt(2)) <= 'Z' && cc >= 'A')) {
+			this.setListener(name, value);
+			return this;
 		}
+
+		zk._set2(this, null, name, value, extra);
 		return this;
 	},
 	/** Retrieves a value from the specified property.
@@ -1812,7 +1830,8 @@ wgt.$f().main.setTitle("foo");
 		}
 		++this.nChildren;
 
-		_addIdSpaceDown(child);
+		if (child.id || child.firstChild) //optimize for mount.js's create()
+			_addIdSpaceDown(child);
 
 		if (!ignoreDom)
 			if (this.shallChildROD_(child))
@@ -2650,40 +2669,28 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domStyle_: function (no) {
-		var style = '', s;
+		var out = [], s;
 		if (s = this.z$display) //see au.js
-			style = "display:" + s + ';';
+			out.push("display:", s, ';');
 		else if (!this.isVisible() && (!no || !no.visible))
-			style = 'display:none;';
+			out.push("display:none;");
 
-		if (!no || !no.style) {
-			s = this.getStyle(); 
-			if (s) {
-				style += s;
-				if (s.charAt(s.length - 1) != ';') style += ';';
-			}
+		if ((!no || !no.style) && (s = this.getStyle())) {
+			out.push(s);
+			if (s.charAt(s.length - 1) != ';')
+				out.push(';');
 		}
-		if (!no || !no.width) {
-			s = this.getWidth();
-			if (s) style += 'width:' + s + ';';
-		}
-		if (!no || !no.height) {
-			s = this.getHeight();
-			if (s) style += 'height:' + s + ';';
-		}
-		if (!no || !no.left) {
-			s = this.getLeft();
-			if (s) style += 'left:' + s + ';';
-		}
-		if (!no || !no.top) {
-			s = this.getTop();
-			if (s) style += 'top:' + s + ';';
-		}
-		if (!no || !no.zIndex) {
-			s = this.getZIndex();
-			if (s >= 0) style += 'z-index:' + s + ';';
-		}
-		return style;
+		if ((!no || !no.width) && (s = this.getWidth()))
+			out.push('width:', s, ';');
+		if ((!no || !no.height) && (s = this.getHeight()))
+			out.push('height:', s, ';');
+		if ((!no || !no.left) && (s = this.getLeft()))
+			out.push('left:', s, ';');
+		if ((!no || !no.top) && (s = this.getTop()))
+			out.push('top:', s, ';');
+		if ((!no || !no.zIndex) && (s = this.getZIndex()) >= 0)
+			out.push('z-index:', s, ';');
+		return out.join('');
 	},
 	/** Returns the class name(s) used for the DOM element of this widget.
 	 * <p>Default: a concatenation of {@link #getZclass} and {@link #getSclass}. 
@@ -2702,16 +2709,12 @@ redraw: function (out) {
 	 * @see #domAttrs_
 	 */
 	domClass_: function (no) {
-		var scls = '';
-		if (!no || !no.sclass) {
-			var s = this.getSclass();
-			if (s) scls = s;
-		}
-		if (!no || !no.zclass) {
-			var s = this.getZclass();
-			if (s) scls += (scls ? ' ': '') + s;
-		}
-		return scls;
+		var s, z;
+		if (!no || !no.sclass)
+			s = this.getSclass();
+		if (!no || !no.zclass)
+			z = this.getZclass();
+		return s ? z ? s + ' ' + z: s: z||'';
 	},
 	/** Returns the HTML attributes that is used to generate DOM element of this widget.
 	 * It is usually used to implement a mold ({@link #redraw}):
@@ -2737,18 +2740,18 @@ function () {
 	 * @return String 
 	 */
 	domAttrs_: function (no) {
-		var html = "", attrs;
-		if (!no || !no.id)
-			html += zUtl.appendAttr("id", this.uuid);
-		if (!no || !no.domStyle)
-			html += zUtl.appendAttr("style", this.domStyle_(no));
-		if (!no || !no.domClass)
-			html += zUtl.appendAttr("class", this.domClass_());
-		if (!no || !no.tooltiptext)
-			html += zUtl.appendAttr("title", this.domTooltiptext_());
+		var out = [], attrs, s;
+		if ((!no || !no.id) && (s = this.uuid))
+			out.push(' id="', s, '"')
+		if ((!no || !no.domStyle) && (s = this.domStyle_(no)))
+			out.push(' style="', s, '"');
+		if ((!no || !no.domClass) && (s = this.domClass_(no)))
+			out.push(' class="', s, '"');
+		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
+			out.push(' title="', s, '"');
 		for (var nm in (attrs = this.domExtraAttrs))
-			html += zUtl.appendAttr(nm, attrs[nm]);
-		return html;
+			out.push(' ', nm, '="', attrs[nm]||'', '"'); //generate even if val is empty
+		return out.join('');
 	},
 	/** Returns the tooltiptext for generating the title attribute of the DOM element.
 	 * <p>Default: return {@link #getTooltiptext}.
@@ -2950,9 +2953,23 @@ function () {
 	 * @see #getCaveNode 
 	 */
 	insertChildHTML_: function (child, before, desktop) {
-		var ben;
-		if (before)
+		var ben, html = child.redrawHTML_();
+		if (before) {
+			if (before.$instanceof(zk.Native)) { //native.$n() is usually null
+				ben = before.previousSibling;
+				if (ben) {
+					if (ben == child) //always true (since link ready), but to be safe
+						ben = ben.previousSibling;
+					if (ben && (ben = ben.$n())) {
+						jq(ben).after(html);
+						child.bind(desktop);
+						return;
+					}
+				}
+				//FUTURE: it is not correct to go here, but no better choice yet
+			}
 			before = before.getFirstNode_();
+		}
 		if (!before)
 			for (var w = this;;) {
 				ben = w.getCaveNode();
@@ -2971,9 +2988,9 @@ function () {
 		if (before) {
 			var sib = before.previousSibling;
 			if (_isProlog(sib)) before = sib;
-			jq(before).before(child.redrawHTML_());
+			jq(before).before(html);
 		} else
-			jq(ben).append(child.redrawHTML_());
+			jq(ben).append(html);
 		child.bind(desktop);
 	},
 	/** Called by {@link #insertChildHTML_} to to find the location to place the DOM element of the child.
@@ -3184,11 +3201,10 @@ bind_: function (desktop, skipper, after) {
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
 
-		var p = this.parent;
+		var p = this.parent, v;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		var v = this._draggable;
-		if (v && v != "false" && !_dragCtl(this))
+		if ((v = this._draggable) && v != "false" && !_dragCtl(this))
 			this.initDrag_();
 		
 		if (this._nvflex || this._nhflex)
@@ -3374,6 +3390,9 @@ unbind_: function (skipper, after) {
 	afterChildrenMinFlex_: function() {
 		//to be overridden, after my children fix the minimum flex (both width and height)
 	},
+	afterResetChildSize_: function() {
+		//to be overridden, after my children reset the size of (both width and height)
+	},
 	getParentSize_: function(p) {
 		//to be overridden
 		var zkp = zk(p);
@@ -3386,19 +3405,19 @@ unbind_: function (skipper, after) {
 		return _fixMinFlex.apply(this, arguments);
 	},
 	resetSize_: function(orient) {
-		var n = this.$n();
-		if (orient == 'w')
-			n.style.width = '';
-		else if (orient == 'h')
-			n.style.height = '';
+		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
 	},
 	beforeSize: function () {
 		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
 		if (this.isRealVisible()) {
-			if (this._hflex && this._hflex != 'min')
+			if (this._hflex && this._hflex != 'min') {
 				this.resetSize_('w');
-			if (this._vflex && this._vflex != 'min')
+				this.parent.afterResetChildSize_('w');
+			}
+			if (this._vflex && this._vflex != 'min') {
 				this.resetSize_('h');
+				this.parent.afterResetChildSize_('h');
+			}
 		}
 	},
 	/** Initializes the widget to make it draggable.
@@ -3599,6 +3618,12 @@ focus_: function (timeout) {
 
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
+			var wgt = this.getTopWidget();
+			
+			// Bug #3201879
+			if (wgt && wgt != modal && wgt.getZIndex() > modal.getZIndex())
+				return true;
+			
 			if (!opts || !opts.checkOnly) {
 				var cf = zk.currentFocus;
 				//Note: browser might change focus later, so delay a bit
@@ -3614,6 +3639,18 @@ focus_: function (timeout) {
 	/** Smart-updates a property of the peer component associated with this widget, running at the server, with the specified value.
 	 * <p>It is actually fired an AU requst named <code>setAttr</code>, and
 	 * it is handled by the <code>updateByClient</code> method in <code>org.zkoss.zk.ui.AbstractComponent</code> (at the server).
+	 * <p>By default, it is controlled by a component attribute called <code>org.zkoss.zk.ui.updateByClient</code>.
+	 * And, it is default to false.
+	 * Thus, the component developer has to override <code>updateByClient</code> at
+	 * the server (in Java) and then update it rather than calling back superclass.
+	 * For example,
+	 * <pre><code>protected void updateByClient(String name, Object value) {
+	if ("disabled".equals(name))
+		setDisabled(value instanceof Boolean && ((Boolean)value).booleanValue());
+	else
+		super.updateByClient(name, value);
+}</code></pre>
+	 *
 	 * @param String name the property name
      * @param Object value the property value
      * @param int timeout the delay before sending out the AU request. It is optional. If omitted, -1 is assumed (i.e., it will be sent with next non-deferrable request). 
@@ -4570,12 +4607,12 @@ _doFooSelect: function (evt) {
 		return '_z_' + _nextUuid++;
 	},
 
-	/** Tests if UUID is generated automatically. 
+	/** @deprecated we cannot really detect at the client if UUID is generated automatically.
 	 * @param String uuid the UUID to test
 	 * @return boolean
 	 */
 	isAutoId: function (id) {
-		return !id || id.startsWith('_z_') || id.startsWith('z_');
+		return !id;
 	},
 
 	/** Registers a widget class.
@@ -4950,7 +4987,11 @@ zk.Native = zk.$extends(zk.Widget, {
 
 	redraw: function (out) {
 		var s = this.prolog;
-		if (s) out.push(s);
+		if (s) {
+			out.push(s);
+			if (this.value && s.startsWith("<textarea"))
+				out.push(this.value);
+		}
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

@@ -45,7 +45,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _equalDate(d1, d2) {
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
 	}
-
+	function _prepareTimeFormat(h, m, s) {
+		var o =[];
+		if (h) o.push(h);
+		if (m) o.push(m);
+		if (s) o.push(s);
+		return o.join(":");
+	}
+	
 var Datebox =
 /**
  * An edit box for holding a date.
@@ -264,21 +271,23 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			mm = fmt.indexOf('m'),
 			ss = fmt.indexOf('s'),
 			hasAM = aa > -1,
-			hasHour1 = hasAM ? hh > -1 || KK > -1 : false;
-
+			//bug 3284144: The databox format parse a wrong result with hh:mm:ss 
+			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false,
+			hv,
+			mv = mm > -1 ? 'mm' : '',
+			sv = ss > -1 ? 'ss' : '';
+		
 		if (hasHour1) {
-			if ((hh != -1 && aa < hh) || (kk != -1 && aa < kk)) {
-				var f = hh < KK ? 'a KK' : 'a hh';
-				return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-			} else {
-				var f = hh < KK ? 'KK' : 'hh';
-				f = f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-				return f + ' a';
-			}
-		} else {
-			var f = HH < kk ? 'kk' : HH > -1 ? 'HH' : '';
-			return f + (mm > -1 ? ':mm': '') + (ss > -1 ? ':ss': '');
-		}
+			var time = _prepareTimeFormat(hh < KK ? "KK" : "hh", mv, sv);
+			if (aa == -1) 
+				return time;
+			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
+				return 'a ' + time;
+			else
+				return time + ' a';
+		} else
+			return _prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
+		
 	},
 	/** Returns the Date format of the specified format
 	 * @return String
@@ -311,43 +320,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
-		var node = this.$n();
-		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
-			return;
-
-		var inp = this.getInputNode(),
-    		$n = jq(node),
-    		$inp = jq(inp),
-    		inc = this.getInplaceCSS(),
-    		shallClean = !node.style.width && this._inplace;
-		if (this._buttonVisible && shallClean) {
-			$n.removeClass(inc);
-			$inp.removeClass(inc);
-
-			if (zk.opera)
-				node.style.width = jq.px0(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
-			else
-				node.style.width = jq.px0(zk(node).revisedWidth(node.offsetWidth));
-			$n.addClass(inc);
-			$inp.addClass(inc);
-		}
-		var extraWidth = this.inRoundedMold() && shallClean;
-
-		if (extraWidth) {
-    		$n.removeClass(inc);
-    		$inp.removeClass(inc);
-		}
-		if (zk.ie6_)			
-			inp.style.width = jq.px(0);
-		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
-							 : zk(node).revisedWidth(node.offsetWidth),
-			btn = this.$n('btn');
-
-		if (extraWidth) {
-    		$n.addClass(inc);
-    		$inp.addClass(inc);
-		}
-		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
 		var n = this.$n();
@@ -365,7 +338,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doClick_: function (evt) {
 		if (this._disabled) return;
-		if (this._readonly && this._buttonVisible && this._pop)
+		if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen())
 			this._pop.open();
 		this.$supers('doClick_', arguments);
 	},
@@ -449,17 +422,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function (){
 		this.$supers(Datebox, 'bind_', arguments);
-		var btn = this.$n('btn'),
-			inp = this.getInputNode();
+		var btn, inp = this.getInputNode();
 
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
 
-		if (btn) {
+		if (btn = this.$n('btn')) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		this.syncWidth();
 
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this._format);
@@ -616,6 +587,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			//we should use UTC date instead of Locale date to our value.
 			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)).toUTCDate()
 				|| (inp.value ? db._value: zUtl.today(fmt));
+		
 		if (value)
 			this.setValue(value);
 		if (fmt) {

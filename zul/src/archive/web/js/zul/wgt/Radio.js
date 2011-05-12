@@ -133,5 +133,10 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				newParent._fixOnAdd(this); 
 		}
 		this.$supers("beforeParentChanged_", arguments);
+	},
+	fireOnCheck_: function (checked) {
+		// if Radiogroup listens to onCheck, we shall fire the event too.
+		var group = this.getRadiogroup();
+		this.fire('onCheck', checked, {toServer: group && group.isListen('onCheck')} );
 	}
 });

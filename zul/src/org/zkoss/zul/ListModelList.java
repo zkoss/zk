@@ -390,6 +390,6 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	 */
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 }

@@ -172,10 +172,13 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				checked = real.checked;
 			if (checked != this._checked) //changed
 				this.setChecked(checked) //so Radio has a chance to override it
-					.fire('onCheck', checked);
+					.fireOnCheck_(checked);
 			if (zk.safari) zk(real).focus();
 			return this.$supers('doClick_', arguments);
 		}
+	},
+	fireOnCheck_: function (checked) {
+		this.fire('onCheck', checked);
 	},
 	beforeSendAU_: function (wgt, evt) {
 		if (evt.name != "onClick") //don't stop event if onClick (otherwise, check won't work)

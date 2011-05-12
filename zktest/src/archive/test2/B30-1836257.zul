@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 
 <window title="listbox demo" border="normal">
-[ 1836257 ] A wrong stripe when listitem is invisible
+[ 1836257 ] Click the Button. The stripe color should be correct.
 
 		<listbox width="250px">
 			<listhead sizable="true">

@@ -60,14 +60,14 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 		final List<Initiator> inits = pagedef.doInit(page);
 		boolean sysinitEx = false;
-		for (int j = 0; j < _sysinits.length; ++j)
-			if (_sysinits[j] instanceof InitiatorExt) {
+		for (int j = 0; j < sysinits.length; ++j)
+			if (sysinits[j] instanceof InitiatorExt) {
 				sysinitEx = true;
 				break;
 			}
 
 		boolean initEx = false;
-		for (Initiator init: _inits)
+		for (Initiator init: inits)
 			if (init instanceof InitiatorExt) {
 				initEx = true;
 				break;

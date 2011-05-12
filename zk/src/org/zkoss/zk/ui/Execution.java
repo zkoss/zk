@@ -168,12 +168,20 @@ public interface Execution extends Scope {
 	 * In other words, the event is placed to the event queue.
 	 *
 	 * <p>The priority of the event is assumed to be 0. Refer to
-	 * {@link #postEvent(int, Event)}.
+	 * {@link #postEvent(int, Event)} for more information.
+	 * @see #postEvent(int, Event)
+	 * @see #postEvent(int, Component, Event)
 	 */
 	public void postEvent(Event evt);
 	/** Queues an event with the specified priority to this execution.
 	 * In other words, the event is placed to the event queue
 	 * with the specified prority.
+	 *
+	 * <p>The event will be sent to the component specified in {@link Event#getTarget}.
+	 * If {@link Event#getTarget} is null, it means broadcast, i.e.,
+	 * all root components will receive this event.
+	 * If you prefer a different target, you could use {@link #postEvent(int, Component, Event)}
+	 * instead.
 	 *
 	 * <p>The posted events are processed from the higher priority to the 
 	 * lower one. If two events are posted with the same priority,
@@ -186,10 +194,24 @@ public interface Execution extends Scope {
 	 * lower than -10,000 since they are reserved for component
 	 * development.
 	 *
-	 * @param priority the priority of the event.
+	 * @param priority the priority of the event. The default priority is 0
+	 * and the higher value means higher priority.
+	 * @see #postEvent(int, Component, Event)
 	 * @since 3.0.7
 	 */
 	public void postEvent(int priority, Event evt);
+	/** Queues the give event for the specified target to this execution.
+	 * The target could be different from {@link Event#getTarget}.
+	 * @param priority the priority of the event. The default priority is 0
+	 * and the higher value means higher priority.
+	 * @param realTarget the target component that will receive the event.
+	 * If null, it means broadcast, i.e., all root components will receive
+	 * this event.
+	 * <br/>Notice that postEvent(n, event) is the same as postEvent(n, event.getTarget(), event),
+	 * but different from postEvent(n, 0, event).
+	 * @since 5.0.7
+	 */
+	public void postEvent(int priority, Component realTarget, Event evt);
 
 	/** Whether to overwrite uri if both uri and params contain the same
 	 * parameter.

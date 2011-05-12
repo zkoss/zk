@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
@@ -138,16 +139,19 @@ public class FieldComparator implements Comparator, Serializable {
 		sb.append(fi.asc ? " ASC" : " DESC");
 	}
 	@SuppressWarnings("unchecked")
-	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException { 
-		final Object f1 = Fields.getByCompound(getCompareObject(o1), fieldname);
-		final Object f2 = Fields.getByCompound(getCompareObject(o2), fieldname);
+	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException {
+		// Bug B50-3183438: Access to bean shall be consistent
+		final Object f1 = o1 instanceof Map ? ((Map)o1).get(fieldname) : 
+			Fields.getByCompound(getCompareObject(o1), fieldname);
+		final Object f2 = o2 instanceof Map ? ((Map)o2).get(fieldname) : 
+			Fields.getByCompound(getCompareObject(o2), fieldname);
 		final Object v1 = handleFunction(f1, func);
 		final Object v2 = handleFunction(f2, func);
 		
-		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;
-		if (v2 == null) return _maxnull  ? -1: 1;
+		if (v1 == null) return v2 == null ? 0: _maxnull ? 1 : -1;
+		if (v2 == null) return _maxnull ? -1 : 1;
 		final int v = ((Comparable)v1).compareTo(v2);
-		return asc ? v: -v;
+		return asc ? v : -v;
 	}
 
 	private Object getCompareObject(Object o) {

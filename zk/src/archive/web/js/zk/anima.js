@@ -147,21 +147,21 @@ zk.copy(zjq.prototype, {
 
 		switch (anchor) {
 		case 't':
-			css.height = '0px';
+			css.height = '0';
 			anima.height = jq.px0(dims.height);
 			break;
 		case 'b':
-			css.height = '0px';
+			css.height = '0';
 			css.top = jq.px(dims.top + dims.height);
 			anima.height = jq.px0(dims.height);
 			anima.top = jq.px(dims.top);
 			break;
 		case 'l':
-			css.width = '0px';
+			css.width = '0';
 			anima.width = jq.px0(dims.width);
 			break;
 		case 'r':
-			css.width = '0px';
+			css.width = '0';
 			css.left = jq.px(dims.left + dims.width);
 			anima.width = jq.px0(dims.width);
 			anima.left = jq.px(dims.left);

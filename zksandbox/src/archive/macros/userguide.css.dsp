@@ -181,49 +181,62 @@ a.edition-field:hover {
 }
 
 <%-- Breeze --%>
-.breeze .demo-header .z-north-body {
+.breeze .demo-header .z-north-body,
+.silvertail .demo-header .z-north-body {
 	background-image: url(${c:encodeURL('/img/breeze-category-bg.png')});
 }
-.breeze .demo-categorybar .demo-seld {
+.breeze .demo-categorybar .demo-seld,
+.silvertail .demo-categorybar .demo-seld {
 	background-image: url(${c:encodeURL('/img/breeze-category-seld.png')});
 }
-.breeze .demo-categorybar .demo-over {
+.breeze .demo-categorybar .demo-over,
+.silvertail .demo-categorybar .demo-over {
 	background-image: url(${c:encodeURL('/img/breeze-category-over.png')});
 }
-.breeze .demo-categorybar .demo-seld.demo-over {
+.breeze .demo-categorybar .demo-seld.demo-over,
+.silvertail .demo-categorybar .demo-seld.demo-over {
 	background-image: url(${c:encodeURL('/img/breeze-category-over-seld.png')});
 }
 .breeze .demo-categorybar-left-scroll,
-.breeze .demo-categorybar-right-scroll {
+.breeze .demo-categorybar-right-scroll,
+.silvertail .demo-categorybar-left-scroll,
+.silvertail .demo-categorybar-right-scroll {
 	border: 0;
 	width: 17px;
 	height: 27px;
 	top: 36px;
 }
-.breeze .demo-categorybar-body-scroll {
+.breeze .demo-categorybar-body-scroll,
+.silvertail .demo-categorybar-body-scroll {
 	margin-left: 22px;
 	margin-right: 22px;
 }
-.breeze .demo-categorybar-left-scroll {
+.breeze .demo-categorybar-left-scroll,
+.silvertail .demo-categorybar-left-scroll {
 	background-image: url(${c:encodeURL('/img/breeze-arrow-left.png')});
 	background-position: 0 0;
 }
-.breeze .demo-categorybar-left-scroll:hover {
+.breeze .demo-categorybar-left-scroll:hover,
+.silvertail .demo-categorybar-left-scroll:hover {
 	background-position: right 0;
 }
-.breeze .demo-categorybar-right-scroll {
+.breeze .demo-categorybar-right-scroll,
+.silvertail .demo-categorybar-right-scroll {
 	background-image: url(${c:encodeURL('/img/breeze-arrow-right.png')});
 	background-position: right 0;
 }
-.breeze .demo-categorybar-right-scroll:hover {
+.breeze .demo-categorybar-right-scroll:hover,
+.silvertail .demo-categorybar-right-scroll:hover {
 	background-position: 0 0;
 }
 <c:if test="${c:browser('ie6-')}">
-.breeze .demo-categorybar-left-scroll {
+.breeze .demo-categorybar-left-scroll,
+.silvertail .demo-categorybar-left-scroll {
 	background-image: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-left.png')}");
 }
-.breeze .demo-categorybar-right-scroll {
+.breeze .demo-categorybar-right-scroll,
+.silvertail .demo-categorybar-right-scroll {
 	background-image: none;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop, src="${c:encodeURL('/img/breeze-arrow-right.png')}");
 }

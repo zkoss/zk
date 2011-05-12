@@ -106,13 +106,17 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			if (!_fixOnChildChanged(this) && this.parent._fixHeaders())
 				this.parent.onSize();
 			_syncFrozen(this);
+			this.parent._minWd = null;
 		}
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		if (this.desktop && !_fixOnChildChanged(this)
-		&& !this.childReplacing_ && this.parent._fixHeaders())
-			this.parent.onSize();
+		if (this.desktop) {
+			if (!_fixOnChildChanged(this) && !this.childReplacing_ &&
+				this.parent._fixHeaders()) 
+				this.parent.onSize();
+			this.parent._minWd = null;
+		}
 	},
 	beforeChildrenFlex_: function (hwgt) { //HeaderWidget
 		if (hwgt && !hwgt._flexFixed) {

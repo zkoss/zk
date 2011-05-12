@@ -17,6 +17,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-longbox.
  */
 zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
+	onSize: _zkf = function() {
+		var width = this.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			this.getInputNode().style.width = '';
+		this.syncWidth();
+	},
+	onShow: _zkf,
+	/** Synchronizes the input element's width of this component
+	 */
+	syncWidth: function () {
+		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
+	},
 	//bug #2997037, cannot enter large long integer into longbox
 	coerceFromString_: function (value) {
 		if (!value) return null;
@@ -66,5 +78,15 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	unmarshall_: function(val) {
 		return val ? new zk.Long(val) : val;
+	},	
+	bind_: function(){
+		this.$supers(zul.inp.Longbox, 'bind_', arguments);
+		if (this.inRoundedMold())
+			zWatch.listen({onSize: this, onShow: this});
+	},	
+	unbind_: function(){
+		if (this.inRoundedMold())
+			zWatch.unlisten({onSize: this, onShow: this});
+		this.$supers(zul.inp.Longbox, 'unbind_', arguments);
 	}
 });

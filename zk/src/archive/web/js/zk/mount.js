@@ -67,8 +67,8 @@ function zkamn(pkg, fn) {
 //@since 5.0.2
 function zkmprops(uuid, props) {
 	//z$ea: value embedded as element's child nodes
-	var v = zk.cut(props, "z$ea");
-	if (v) {
+	var v;
+	if (v = zk.cut(props, "z$ea")) {
 		var embed = jq(uuid, zk)[0];
 		if (embed) {
 			var val = [], n;
@@ -81,13 +81,11 @@ function zkmprops(uuid, props) {
 	}
 
 	//z$al: afterLoad
-	v = zk.cut(props, "z$al");
-	if (v) {
+	if (v = zk.cut(props, "z$al"))
 		zk.afterLoad(function () {
 			for (var p in v)
 				props[p] = v[p](); //must be func
 		});
-	}
 }
 
 (function () {
@@ -155,12 +153,12 @@ function zkmprops(uuid, props) {
 //@};
 	zk.afterMount = function (fn, delay) { //part of zk
 		if (fn)
-			if (zk.mounting)
+			if (!jq.isReady)
+				jq(function () {zk.afterMount(fn);}); //B3278524
+			else if (zk.mounting)
 				_aftMounts.push(fn); //normal
 			else if (zk.loading)
 				zk.afterLoad(fn);
-			else if (!jq.isReady)
-				jq(fn);
 			else if (delay < 0) {
 				fn();
 				return true; //called
@@ -173,16 +171,23 @@ function zkmprops(uuid, props) {
 	}
 	//Load all required packages
 	function mountpkg() {
+		var types = {};
 		for (var j = _createInf0.length; j--;) {
 			var inf = _createInf0[j];
 			if (!inf.pked) { //mountpkg might be called multiple times before mount()
 				inf.pked = true;
-				pkgLoad(inf[0], inf[1]);
+				getTypes(types, inf[0], inf[1]);
 			}
+		}
+
+		for (var type in types) {
+			var j = type.lastIndexOf('.');
+			if (j >= 0)
+				zk._load(type.substring(0, j), types[type]); //use _load for better performance
 		}
 	}
 	//Loads package of a widget tree. Also handle z$pk
-	function pkgLoad(dt, wi) {
+	function getTypes(types, dt, wi) {
 		//z$pk: packages to load
 		var v = zk.cut(wi[2], "z$pk");
 		if (v) zk.load(v);
@@ -192,14 +197,11 @@ function zkmprops(uuid, props) {
 			type = wi[2].wc;
 		else if (type === 1) //1: zhtml.Widget
 			wi[0] = type = "zhtml.Widget";
-		if (type) {
-			var j = type.lastIndexOf('.');
-			if (j >= 0)
-				zk.load(type.substring(0, j), dt);
-		}
+		if (type)
+			types[type] = dt;
 
 		for (var children = wi[3], j = children.length; j--;)
-			pkgLoad(dt, children[j]);
+			getTypes(types, dt, children[j]);
 	}
 	//mount for browser loading
 	function mtBL() {
@@ -567,7 +569,7 @@ jq(function() {
 	function _afterKeyDown(wevt) {
 		var dts = zk.Desktop.all, Page = zk.Page;
 		for (var dtid in dts)
-			for (wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
+			for (var wgt = dts[dtid].firstChild; wgt; wgt = wgt.nextSibling)
 				if (wgt.$instanceof(Page)) {
 					for (var w = wgt.firstChild; w; w = w.nextSibling)
 						if (_afterKD(w, wevt))
@@ -611,16 +613,34 @@ jq(function() {
 		if (!wgt) wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
-	.mousedown(function (evt) {
+	.bind('zcontextmenu', function (evt) {
+		//ios: zcontextmenu shall be listened first,
+		//due to need stop other event (ex: click, mouseup) 
+		
+		zk.clickPointer[0] = evt.pageX;
+		zk.clickPointer[1] = evt.pageY;
+
+		var wgt = Widget.$(evt, {child:true});
+		if (wgt) {
+			if (zk.ie)
+				evt.which = 3;
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
+			_doEvt(wevt);
+			if (wevt.domStopped)
+				return false;
+		}
+		return !zk.ie || evt.returnValue;
+	})
+	.bind('zmousedown', function(evt){
 		var wgt = Widget.$(evt, {child:true});
 		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	})
-	.mouseup(function (evt) {
+	.bind('zmouseup', function(evt){
 		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
-			return; //ingore
+			return; //ignore
 
 		if (e != null) {
 			_docMouseDown(e, null, true); //simulate mousedown
@@ -636,7 +656,7 @@ jq(function() {
 		else wgt = Widget.$(evt, {child:true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
-	.mousemove(function (evt) {
+	.bind('zmousemove', function(evt){
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -645,6 +665,7 @@ jq(function() {
 		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
+		if (zk.ios && zk.Draggable.ignoreClick()) return;
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -663,7 +684,7 @@ jq(function() {
 				'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
-	.dblclick(function (evt) {
+	.bind('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
 		var wgt = Widget.$(evt, {child:true});
@@ -673,21 +694,6 @@ jq(function() {
 			if (wevt.domStopped)
 				return false;
 		}
-	})
-	.bind("contextmenu", function (evt) {
-		zk.clickPointer[0] = evt.pageX;
-		zk.clickPointer[1] = evt.pageY;
-
-		var wgt = Widget.$(evt, {child:true});
-		if (wgt) {
-			if (zk.ie)
-				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-		return !zk.ie || evt.returnValue;
 	});
 
 	jq(window).resize(function () {
@@ -733,8 +739,12 @@ jq(function() {
 						data: {dtid: dtid, cmd_0: bRmDesktop?"rmDesktop":"dummy", opt_0: "i"},
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
-						}
-					}, zAu.ajaxSettings), true/**fixed IE memory issue for jQuery 1.4.x*/);
+						},
+						//2011/04/22 feature 3291332
+						//Use sync request for chrome and safari.
+						//Note: when pressing F5, the request's URL still arrives before this even async:false
+						async: !zk.safari
+					}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
 				}
 			} catch (e) { //silent
 			}

@@ -19,6 +19,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _ensel() {
 		this.style.KhtmlUserSelect = "";
 	}
+	
+zk.copy(zjq, {
+	_fixCSS: function (el) { 
+		var olddisp = el.style.display; //force redraw
+		el.style.display='none';
+		var dummy = el.offsetWidth; //force recalc
+		el.style.display=olddisp;
+	}
+});
 
 zk.copy(zjq.prototype, {
 	disableSelection: function () {

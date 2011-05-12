@@ -52,6 +52,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
+	_height: "207px",
+	_width: "207px",
 	_curpos: 0,
 	_maxpos: 100,
 	_pageIncrement: 10,
@@ -68,13 +70,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: function() {
-			if (this.isVertical()) {
-				this.setWidth("");
-				this.setHeight("207px");
-			} else {
-				this.setWidth("207px");
-				this.setHeight("");
-			}
 			this.rerender();
 		},
 		/** Returns the current position of the slider.
@@ -180,12 +175,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		zul.inp.Slider.down_btn = null;
 		if (widget)
-			jq(document).unbind("mouseup", widget.onup_);
+			jq(document).unbind("zmouseup", widget.onup_);
 	},
 	doMouseDown_: function(evt) {
 		var btn = this.$n("btn");
 		jq(btn).addClass(this.getZclass() + "-btn-drag");
-		jq(document).mouseup(this.onup_);
+		jq(document).bind('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = btn;
 		this.$supers('doMouseDown_', arguments);
 	},
@@ -298,10 +293,24 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_getHeight: function() {
 		return this.getRealNode().clientHeight - this.$n("btn").offsetHeight + 7;
 	},
-	_fixPos: _zkf = function() {
+	_fixHgh: function() {
+		if (this.isVertical()) {
+			this.$n("btn").style.top = "0px";
+			var inner = this.$n("inner"), 
+				het = this.getRealNode().clientHeight;
+			if (het > 0) 
+				inner.style.height = (het + 7) + "px";
+			else 
+				inner.style.height = "214px";
+		}
+	},
+	_fixPos: function() {
 		this.$n("btn").style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
-	onSize: _zkf,
+	onSize: _zkf = function() {
+		this._fixHgh();
+		this._fixPos();
+	},
 	onShow: _zkf,
 	/** Return whether this widget in scale mold
 	 * @return boolean
@@ -331,20 +340,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	getRealNode: function () {
-		return this.inScaleMold() ? this.$n("real") : this.$n();
+		return this.inScaleMold() && this.isVertical() ? this.$n("real") : this.$n();
 	},
 	bind_: function() {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
-		var inner = this.$n("inner");
-		
-		if (this.isVertical()) {
-			this.$n("btn").style.top = "0px";
-			var het = this.getRealNode().clientHeight;
-			if (het > 0) 
-				inner.style.height = (het + 7) + "px";
-			else 
-				inner.style.height = "214px";
-		}
+		this._fixHgh();
 		this._makeDraggable();
 		
 		zWatch.listen({onSize: this, onShow: this});
@@ -359,6 +359,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers(zul.inp.Slider, 'unbind_', arguments);
-	}	
+	}
 });
 })();

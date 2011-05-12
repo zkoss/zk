@@ -25,6 +25,7 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	white-space: nowrap;
 	padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
+	position: relative;
 }
 div.z-grid-header .z-column-sort div.z-column-cnt {
 	cursor: pointer;
@@ -64,6 +65,16 @@ div.z-grid-pgi-t {
 div.z-grid-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
+
+tbody.z-grid-empty-body td{
+   	font-family: ${fontFamilyC};
+    font-size: ${fontSizeM};
+    font-weight: normal;
+    color:#7d7d7d;
+    font-style:italic;
+    text-align:center;
+}
+
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
@@ -185,7 +196,9 @@ a.z-column-btn:hover {
 	background-image: url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.png')});
 }
 <%-- ZK Column's sizing --%>
-div.z-grid-header .z-column.z-column-sizing, div.z-grid-header .z-column.z-column-sizing div.z-column-cnt {
+div.z-grid-header .z-column.z-column-sizing, 
+div.z-grid-header .z-column.z-column-sizing div.z-column-cnt,
+div.z-grid-header .z-column.z-column-sizing div.z-column-cnt .z-column-btn {
 	cursor: e-resize;
 }
 
@@ -254,3 +267,4 @@ div.z-grid {
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
 </c:if>
+

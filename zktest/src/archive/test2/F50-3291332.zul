@@ -1,0 +1,17 @@
+<zk>
+	<h:pre xmlns:h="xhtml">
+	  This one is testing unload desktop support for chrome/safari ,
+	   
+	  if you are part-time tester , just press F5 and check there's still a 
+	  	button with current date and browser not crashed.
+	  
+	  if you are a RD , please test in your local eclipse server and 
+	  	setup breakpoint to test if  DesktopImpl::service get the "rmDesktop" after your press F5.
+	  
+	  (Safari/Chrome only.) 
+	</h:pre>
+	<button id="test" label="test" />
+	<zscript>
+	test.setLabel(new Date().toString());
+	</zscript>
+</zk>

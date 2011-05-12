@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.xml.XMLs;
@@ -309,5 +310,21 @@ public class Utils {
 			return dt != null ? dt.getComponentByUuidIfAny(id.substring(5, len - 1)): null;
 		}
 		return comp.getFellowIfAny(id);
+	}
+
+	/** Tests if the given attribute is defined in a component or in library property.
+	 * @param name the name of the attribute
+	 * @param defValue the default value if neither component's attribute or library property is defined
+	 * for the given name
+	 * @param recurse whether to look up the ancestor's attribute
+	 * @since 5.0.7
+	 */
+	public static final 
+	boolean testAttribute(Component comp, String name, boolean defValue, boolean recurse) {
+		Object val = comp.getAttribute(name, recurse);
+		if (val == null)
+			val = Library.getProperty(name);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val): defValue;
 	}
 }

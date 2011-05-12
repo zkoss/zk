@@ -39,7 +39,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
- * It is designed to be overriden
+ * It is designed to be overridden
  */
 zul.db.Renderer = {
 	/** Returns the HTML fragment representing a day cell.
@@ -364,8 +364,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_doMousewheel: function (evt, intDelta) {		
 		if (jq(this.$n(-intDelta > 0 ? "tdr": "tdl")).hasClass(this.getZclass() + '-icon-disd'))
 			return;
-		
-		this._shiftView(-intDelta);
+		this._shiftView(intDelta > 0 ? -1: 1);
 		evt.stop();
 	},
 	_doMouseEffect: function (evt) {

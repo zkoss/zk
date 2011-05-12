@@ -35,33 +35,6 @@ zk.copy(zk, (function() {
 			zk.disableESC();
 		}
 	}
-	function doLoad(pkg, dt) {
-		if (!pkg || _loading[pkg])
-			return !zk.loading && !_loadedsemis.length;
-			//since pkg might be loading (-> return false)
-
-		markLoading(pkg);
-
-		var modver = zk.getVersion(pkg) || zk.build,
-			e = document.createElement("script"),
-			uri = pkg + ".wpd",
-			host = zk.getHost(pkg, true);
-		e.type = "text/javascript";
-		e.charset = "UTF-8";
-
-		if (uri.charAt(0) != '/') uri = '/' + uri;
-
-		if (host) uri = host + "/web/js" + uri;
-		else {
-			if (modver) uri = "/web/_zv" + modver + "/js" + uri;
-			else uri = "/web/js" + uri;
-			uri = zk.ajaxURI(uri, {desktop:dt,au:true});
-		}
-
-		e.src = uri;
-		jq.head().appendChild(e);
-		return false;
-	}
 	function doEnd(afs, wait) {
 		for (var fn; fn = afs.shift();) {
 			if (updCnt() || (wait && _loadedsemis.length)) {
@@ -160,10 +133,37 @@ zk.load('zul.utl', function () {
 		var loading;
 		for (var pkgs = pkg.split(','), j = pkgs.length; j--;) {
 			pkg = pkgs[j].trim();
-			if (!doLoad(pkg, dt))
+			if (!zk._load(pkg, dt))
 				loading = true;
 		}
 		return !loading;
+	},
+	_load: function (pkg, dt) { //called by mount.js (better performance)
+		if (!pkg || _loading[pkg])
+			return !zk.loading && !_loadedsemis.length;
+			//since pkg might be loading (-> return false)
+
+		markLoading(pkg);
+
+		var modver = zk.getVersion(pkg) || zk.build,
+			e = document.createElement("script"),
+			uri = pkg + ".wpd",
+			host = zk.getHost(pkg, true);
+		e.type = "text/javascript";
+		e.charset = "UTF-8";
+
+		if (uri.charAt(0) != '/') uri = '/' + uri;
+
+		if (host) uri = host + "/web/js" + uri;
+		else {
+			if (modver) uri = "/web/_zv" + modver + "/js" + uri;
+			else uri = "/web/js" + uri;
+			uri = zk.ajaxURI(uri, {desktop:dt,au:true});
+		}
+
+		e.src = uri;
+		jq.head().appendChild(e);
+		return false;
 	},
 
 	/** Loads a JavaScript file.

@@ -22,8 +22,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (panels.desktop && (box = panels.getTabbox())) {
 			var oldSel = panels._selPnl,
 				sel = box._selTab;
-			if (oldSel != (sel = sel.getLinkedPanel())) {
-				if (oldSel) oldSel._sel(false, true);
+			if (oldSel != (sel && (sel = sel.getLinkedPanel()))) {
+				if (oldSel && oldSel.desktop) oldSel._sel(false, true);
 				if (sel) sel._sel(true, true);
 				panels._selPnl = sel;
 			}

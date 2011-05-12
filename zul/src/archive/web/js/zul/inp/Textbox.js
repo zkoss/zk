@@ -73,7 +73,18 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 				inp.type = type;
 		}
 	},
-
+	onSize: _zkf = function() {
+		var width = this.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			this.getInputNode().style.width = '';
+		this.syncWidth();
+	},
+	onShow: _zkf,
+	/** Synchronizes the input element's width of this component
+	 */
+	syncWidth: function () {
+		zul.inp.RoundUtl.syncWidth(this, this.$n('right-edge'));
+	},
 	//super//
 	textAttrs_: function () {
 		var html = this.$supers('textAttrs_', arguments);
@@ -85,5 +96,15 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-textbox" + 
 				(this.inRoundedMold() && !this.isMultiline() ? "-rounded": "");
+	},	
+	bind_: function(){
+		this.$supers(zul.inp.Textbox, 'bind_', arguments);
+		if (this.inRoundedMold())
+			zWatch.listen({onSize: this, onShow: this});
+	},	
+	unbind_: function(){
+		if (this.inRoundedMold())
+			zWatch.unlisten({onSize: this, onShow: this});
+		this.$supers(zul.inp.Textbox, 'unbind_', arguments);
 	}
 });

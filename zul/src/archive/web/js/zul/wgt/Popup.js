@@ -60,7 +60,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * </ul></p>
 	 * @param Map opts 
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
-	 *  it will show a disable mask.
+	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
+	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
+	 *  element.
 	 */
 	open: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position),

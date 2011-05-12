@@ -61,6 +61,8 @@ function (out) {
 			this.domPad_(out, '-bpad');
 	}
 	
+	this.redrawEmpty_(out);
+	
 	out.push('</table></div>');
 	
 	if (this.foot) {

@@ -260,6 +260,16 @@ div.z-log button {
 .z-word-wrap {
 	word-wrap: break-word;
 }
+.z-word-nowrap {
+	white-space: nowrap;
+}
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+.z-word-nowrap  .z-row-inner,
+.z-word-nowrap  .z-cell,
+.z-word-nowrap  .z-listcell {
+	white-space: nowrap;
+}
+</c:if>
 .z-overflow-hidden {
 	overflow: hidden;
 }

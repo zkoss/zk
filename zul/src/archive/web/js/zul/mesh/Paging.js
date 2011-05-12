@@ -285,7 +285,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				if (!this.$weave)
 					jq(btn[j]).mouseover(Paging._domMouseOver)
 						.mouseout(Paging._domMouseOut)
-						.mousedown(Paging._domMouseDown)
+						.bind('zmousedown', Paging._domMouseDown)
 						.click(Paging['_dom' + postfix[k] + 'Click']);
 
 				if (this._pageCount == 1)
@@ -311,7 +311,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				for (var j = btn.length; j--;) {
 					jq(btn[j]).unbind("mouseover", Paging._domMouseOver)
 						.unbind("mouseout", Paging._domMouseOut)
-						.unbind("mousedown", Paging._domMouseDown)
+						.unbind("zmousedown", Paging._domMouseDown)
 						.unbind("click", Paging['_dom' + postfix[k] + 'Click']);
 				}
 			}
@@ -484,7 +484,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (!$table.hasClass(zcls + "-btn-disd")) {
 			$table.addClass(zcls + "-btn-clk");
 			wgt.$class._downbtn = $table[0];
-			jq(document).mouseup(wgt.$class._domMouseUp);
+			jq(document).bind('zmouseup', wgt.$class._domMouseUp);
 		}
 	},
 	_domMouseUp: function (evt) {
@@ -493,7 +493,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			jq(zul.mesh.Paging._downbtn).removeClass(zcls + "-btn-clk");
 		}
 		zul.mesh.Paging._downbtn = null;
-		jq(document).unbind("mouseup", zul.mesh.Paging._domMouseUp);
+		jq(document).unbind("zmouseup", zul.mesh.Paging._domMouseUp);
 	}
 });
 

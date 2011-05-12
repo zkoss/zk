@@ -455,6 +455,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
+		// Feature 3285074 add no-cache for security risk.
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("Cache-Control", "no-store");
+		response.setHeader("Expires", "-1");
+		
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			process(sess, request, response);

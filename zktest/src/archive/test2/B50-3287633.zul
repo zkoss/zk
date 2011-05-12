@@ -1,0 +1,11 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Firefox only.</li>
+			<li>There should not be javascript error, and the purple area should be as wide as the text.</li>
+		</ol>
+	]]></html>
+	<div vflex="min" hflex="min" style="background: #FF00FF">
+		<label vflex="min" hflex="min">text</label>
+	</div>
+</zk>

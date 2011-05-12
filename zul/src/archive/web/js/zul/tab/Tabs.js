@@ -471,8 +471,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
-			var child = jq(tbx).children('div');
-			allTab = jq(cave).children();
+			var child = jq(tbx).children('div'),
+				allTab = jq(cave).children();
 			if (tbx.style.height) {
 				this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			} else {

@@ -32,7 +32,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		if (!wgt.$weave)
 			$btn.mouseover(this.proxy(this._domOver))
 				.mouseout(this.proxy(this._domOut))
-				.mousedown(this.proxy(this._domDown));
+				.bind('zmousedown', this.proxy(this._domDown));
 	},
 	/**
 	 * Cleans the button setting, and then you cannot use the object any more.
@@ -45,7 +45,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		if (!this._wgt.$weave)
 			$btn.unbind('mouseover', this.proxy(this._domOver))
 				.unbind('mouseout', this.proxy(this._domOut))
-				.unbind('mousedown', this.proxy(this._domDown));
+				.unbind('zmousedown', this.proxy(this._domDown));
 	},
 	_domOver: function () {
 		var wgt = this._wgt,
@@ -89,7 +89,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			if (inRoundedMold && !wgt.isReadonly() && !jq(inp).hasClass(zcls + '-text-invalid'))
 				jq(inp).addClass(zcls + "-inp-clk");			
 
-			jq(document).mouseup(this.proxy(this._domUp));
+			jq(document).bind('zmouseup', this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
 		}
@@ -107,7 +107,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			jq(curab._btn).removeClass(zcls + "-btn-clk");
 			jq(wgt.getInputNode()).removeClass(zcls + "-inp-clk");
 			
-			jq(document).unbind("mouseup", curab.proxy(this._domUp));
+			jq(document).unbind("zmouseup", curab.proxy(this._domUp));
 		}
 	}
 });

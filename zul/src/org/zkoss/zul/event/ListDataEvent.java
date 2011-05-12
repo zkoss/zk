@@ -30,7 +30,8 @@ public class ListDataEvent {
 	public static final int INTERVAL_ADDED = 1;
     /** Identifies the removal of one or more contiguous items from the list. */   
 	public static final int INTERVAL_REMOVED = 2;
-
+	/** Identifies the structure of the lists has changed. @since 5.0.7*/
+	public static final int STRUCTURE_CHANGED = 3;
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 

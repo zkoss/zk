@@ -22,6 +22,7 @@ import javax.servlet.ServletContext;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.web.servlet.Servlets;
 
 /**
  * Locator based on ServletContext.
@@ -31,17 +32,38 @@ import org.zkoss.util.resource.Locator;
 public class ServletContextLocator implements Locator {
 	private final ServletContext _ctx;
 	private final String _dir, _prefix;
+	private final boolean _acceptURL;
 
+	/** Constructor.
+	 * A short cut of ServletContextLocator(ctx, null, null, false)
+	 */
 	public ServletContextLocator(ServletContext ctx) {
-		this(ctx, null, null);
+		this(ctx, null, null, false);
 	}
-	/**
+	/** Constructor.
+	 * @param acceptURL whether to URL (such as file:/, http:// and
+	 * ftp://) are accepted. In other words, {@link Servlets#getResource}
+	 * will be used.
+	 * @see Servlets#getResource
+	 * @since 5.0.7
+	 */
+	public ServletContextLocator(ServletContext ctx, boolean acceptURL) {
+		this(ctx, null, null, acceptURL);
+	}
+	/** Constructor.
+	 * A short of ServletContextLocator(ctx, dir, null, false).
 	 * @param dir the directory used when relative path is specified
 	 * (for {@link #getResource} and {@link #getResourceAsStream}).
 	 * It must be null, empty, or starts with /.
 	 */
 	public ServletContextLocator(ServletContext ctx, String dir) {
-		this(ctx, dir, null);
+		this(ctx, dir, null, false);
+	}
+	/** Constructor.
+	 * A short cut of ServletContextLocator(ctx, dir, prefix, false).
+	 */
+	public ServletContextLocator(ServletContext ctx, String dir, String prefix) {
+		this(ctx, dir, prefix, false);
 	}
 	/** Constructor.
 	 * For example, if prefix is "/WEB-INF/cwr", then getResource("/abc") will
@@ -56,8 +78,12 @@ public class ServletContextLocator implements Locator {
 	 * @param prefix the directory to prefix each directory specified
 	 * (for {@link #getResource} and {@link #getResourceAsStream}).
 	 * It must be null, empty, or starts with /.
+	 * @param acceptURL whether to URL (such as file:/, http:// and
+	 * ftp://) are accepted. In other words, {@link Servlets#getResource}
+	 * will be used.
 	 */
-	public ServletContextLocator(ServletContext ctx, String dir, String prefix) {
+	public ServletContextLocator(ServletContext ctx, String dir, String prefix,
+	boolean acceptURL) {
 		if (ctx == null)
 			throw new IllegalArgumentException("null");
 		if (dir != null) {
@@ -86,6 +112,7 @@ public class ServletContextLocator implements Locator {
 		_ctx = ctx;
 		_dir = dir;
 		_prefix = prefix;
+		_acceptURL = acceptURL;
 	}
 
 	/** Returns the servlet context. */
@@ -106,17 +133,30 @@ public class ServletContextLocator implements Locator {
 	}
 	public URL getResource(String name) {
 		try {
-			URL url = _ctx.getResource(fixName(name, true));
+			URL url = getResource0(fixName(name, true));
 			return url == null && _prefix != null ?
-				_ctx.getResource(fixName(name, false)): url;
+				getResource0(fixName(name, false)): url;
 		} catch (java.net.MalformedURLException ex) {
 			throw new SystemException(ex);
 		}
 	}
 	public InputStream getResourceAsStream(String name) {
-		InputStream is = _ctx.getResourceAsStream(fixName(name, true));
-		return is == null && _prefix != null ?
-			_ctx.getResourceAsStream(fixName(name, false)): is;
+		try {
+			InputStream is = getResourceAsStream0(fixName(name, true));
+			return is == null && _prefix != null ?
+				getResourceAsStream0(fixName(name, false)): is;
+		} catch (java.io.IOException ex) {
+			throw new SystemException(ex);
+		}
+	}
+	private URL getResource0(String path)
+	throws java.net.MalformedURLException {
+		return _acceptURL ? Servlets.getResource(_ctx, path): _ctx.getResource(path);
+	}
+	private InputStream getResourceAsStream0(String path)
+	throws java.io.IOException {
+		return _acceptURL ? Servlets.getResourceAsStream(_ctx, path):
+			_ctx.getResourceAsStream(path);
 	}
 
 	//-- Object --//

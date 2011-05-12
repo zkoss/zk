@@ -117,7 +117,7 @@ zjq = function (jq) { //ZK extension
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			var p = el.parentNode;
-			while (p && p != document.body) {
+			while (p && p != document.body && p.nodeType === 1) {
 				var $p = jq(p),
 					style = $p.css("position");
 				if (style == "relative" || style == "absolute") {
@@ -199,7 +199,7 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
-	_fixCSS: function (el) { //overriden in domie.js
+	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)
 			;
@@ -211,12 +211,20 @@ zk.copy(zjq, {
 	_fixClick: zk.$void, //overriden in domie.js
 	_fixedVParent: zk.$void,
 	_fixIframe: zk.$void,
-	_useQS: zk.$void, //overriden in domie67.js (used in zAU)
+	_useQS: zk.$void, //overriden in domie.js (used in zAU)
 
 	//The source URI used for iframe (to avoid HTTPS's displaying nonsecure issue)
-	src0: "" //an empty src; overriden in domie.js
+	src0: "", //an empty src; overriden in domie.js
+	eventTypes: {
+		zmousedown: 'mousedown',
+		zmouseup: 'mouseup',
+		zmousemove: 'mousemove',
+		zdblclick: 'dblclick',
+		zcontextmenu: 'contextmenu'
+	}
 });
-
+jq.fn.zbind = jq.fn.bind;
+jq.fn.zunbind = jq.fn.unbind;
 /** @class jq
  * @import jq.Event
  * @import zk.Widget
@@ -386,8 +394,13 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
+	},
+	bind: function(type, data, fn) {
+		return this.zbind(zjq.eventTypes[type] || type, data, fn);
+	},
+	unbind: function(type, fn){
+		return this.zunbind(zjq.eventTypes[type] || type, fn);
 	}
-
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
 	 * it does nothing if nothing is matched.
@@ -594,7 +607,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	sumStyles: function (areas, styles) {
 		var val = 0;
 		for (var i = 0, len = areas.length, $jq = this.jq; i < len; i++){
-			 var w = zk.parseInt($jq.css(styles[areas.charAt(i)]));
+			 var w = Math.round(zk.parseFloat($jq.css(styles[areas.charAt(i)])));
 			 if (!isNaN(w)) val += w;
 		}
 		return val;
@@ -906,10 +919,12 @@ jq(el).zk.center(); //same as 'center'
 			wd = this.dimension(), hgh = wd.height; //only width and height
 		wd = wd.width;
 		
+		/*Fixed since ios safari 5.0.2(webkit 533.17.9)
 		if (zk.ios) { // Bug 3042165(iphone/ipad)
 			x -= jq.innerX();
 			y -= jq.innerY();
 		}
+		*/
 		switch(where) {
 		case "before_start":
 			y -= hgh;
@@ -962,17 +977,42 @@ jq(el).zk.center(); //same as 'center'
 		default: // overlap is assumed
 			// nothing to do.
 		}
-
+		
 		if (!opts || !opts.overflow) {
 			var scX = jq.innerX(),
 				scY = jq.innerY(),
 				scMaxX = scX + jq.innerWidth(),
 				scMaxY = scY + jq.innerHeight();
-
+			
 			if (x + wd > scMaxX) x = scMaxX - wd;
 			if (x < scX) x = scX;
 			if (y + hgh > scMaxY) y = scMaxY - hgh;
 			if (y < scY) y = scY;
+		}
+		
+		// Bug 3251564
+		// dodge reference element (i.e. not to cover the reference textbox, etc)
+		if (opts && opts.dodgeRef) {
+			var dl = dim.left, dt = dim.top,
+				dr = dl + dim.width, db = dt + dim.height;
+			// overlap test
+			if (x + wd > dl && x < dr && y + hgh > dt && y < db) {
+				if (opts.overflow) {
+					// overflow allowed: try to dodge to the right
+					x = dr;
+				} else {
+					var scX = jq.innerX(),
+						scMaxX = scX + jq.innerWidth(),
+						spr = scMaxX - dr,
+						spl = dl - scX;
+					// no overflow: dodge to the larger space
+					// try right side first
+					if (spr >= wd || spr >= spl)
+						x = Math.min(dr, scMaxX - wd);
+					else
+						x = Math.max(dl - wd, scX);
+				}
+			}
 		}
 
 		var el = this.jq[0],
@@ -1195,13 +1235,18 @@ jq(el).zk.center(); //same as 'center'
 	/** Forces the browser to redo (re-apply) CSS of all matched elements. 
 	 * <p>Notice that calling this method might introduce some performance penality.
 	 * @param int timeout number of milliseconds to wait before really re-applying CSS.
-	 * 100 is assumed if not specified or negative.
+	 * 100 is assumed if not specified , -1 means re-applying css right now.
 	 * @return jqzk this object
 	 */
 	redoCSS: function (timeout) {
-		for (var j = this.jq.length; j--;)
-			_rdcss.push(this.jq[j]);
-		setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
+		if (timeout == -1){ //timeout -1 means immediately
+			for (var j = this.jq.length; j--;)
+				zjq._fixCSS(this.jq[j]);	
+		} else {
+			for (var j = this.jq.length; j--;)
+				_rdcss.push(this.jq[j]);
+			setTimeout(_redoCSS0, timeout >= 0 ? timeout : 100);
+		}
 		return this;
 	},
 	/** Forces the browser to re-load the resource specified in the <code>src</code>
@@ -1300,7 +1345,7 @@ jq(el).zk.center(); //same as 'center'
 					p.appendChild(el);
 				
 				var cf, p;
-				if (zk.ff == 3.6 && (cf = zk._prevFocus) && 
+				if ((zk.ff == 3.6 || zk.ff == 4) && (cf = zk._prevFocus) && 
 					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf) && 
 					cf.getInputNode)
 					jq(cf.getInputNode()).trigger('blur');
@@ -2060,6 +2105,7 @@ zk.copy(jq.Event.prototype, {
 		if (this.altKey) inf.altKey = true;
 		if (this.ctrlKey) inf.ctrlKey = true;
 		if (this.shiftKey) inf.shiftKey = true;
+		if (this.metaKey) inf.metaKey = true;
 		inf.which = this.which || 0;
 		return inf;
 	}
@@ -2099,6 +2145,7 @@ zk.copy(jq.Event, {
 		if (data.altKey) inf.altKey = true;
 		if (data.ctrlKey) inf.ctrlKey = true;
 		if (data.shiftKey) inf.shiftKey = true;
+		if (data.metaKey) inf.metaKey = true;
 		inf.which = data.which || 0;
 		return inf;
 	},

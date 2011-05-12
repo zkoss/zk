@@ -16,15 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
-
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -110,10 +109,13 @@ public class Tab extends LabelImageElement {
 				Events.postEvent(new SelectEvent<Tab>(Events.ON_SELECT, tab, selItems));
 			}
 		}
+		
+		//Cache panel before detach , or we couldn't get it after tab is detached.
 		final Tabpanel panel = getLinkedPanel();
-		if (panel != null)
-			panel.detach();
+		
 		detach();
+		if (panel != null)
+			panel.detach();		
 	}
 
 	private Tab selectNextTab() {

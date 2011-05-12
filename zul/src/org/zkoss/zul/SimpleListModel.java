@@ -102,7 +102,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		Arrays.sort(_data, (Comparator)cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 	
 	/**

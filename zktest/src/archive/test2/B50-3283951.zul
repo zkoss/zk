@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3283951.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 11 11:42:10 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "set select" button, the item shall be selected.</li>
+			<li>Click "select item" button, the select item shall not be null.</li>
+		</ol>
+	]]></html>
+	<button label="set select" onClick="titem.selected=true;"/>
+	<button label="select item" onClick="alert(tree.selectedItem);"/>
+	<tree id="tree" width="100px" multiple="true">
+		<treechildren>
+			<treeitem label="item" id="titem"/>
+		</treechildren>
+	</tree>
+</zk>

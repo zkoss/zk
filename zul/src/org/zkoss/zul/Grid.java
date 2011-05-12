@@ -26,11 +26,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
@@ -41,12 +41,13 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
@@ -55,9 +56,10 @@ import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
-import org.zkoss.zul.impl.Padding;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Padding;
+import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -166,6 +168,24 @@ import org.zkoss.zul.impl.MeshElement;
  * Basically, you shall operate on the item of the ListModel rather than on the 
  * {@link Row} if you use the ListModel and ROD.</p>
  * 
+ * <h3>Custom Attributes</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.grid.rod</dt>
+ * <dd>Specifies whether to enable ROD (render-on-demand).</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.grid.autoSort</dt>.(since 5.0.7) 
+ * <dd>Specifies whether to sort the model when the following cases:</br>
+ * <ol>
+ * <li>{@link #setModel} is called and {@link Column#setSortDirection} is set.</li>
+ * <li>{@link Column#setSortDirection} is called.</li>
+ * <li>Model receives {@link ListDataEvent} and {@link Column#setSortDirection} is set.</li>
+ * </ol>
+ * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * you can specifies the value as "ignore.change".</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -211,6 +231,9 @@ public class Grid extends MeshElement implements Paginated {
 	private int _topPad; //since 5.0.0 top padding
 	private boolean _renderAll; //since 5.0.0
 	
+	
+	private String _emptyMessage;
+	
 	private transient boolean _rod;
 	
 	static {
@@ -219,7 +242,7 @@ public class Grid extends MeshElement implements Paginated {
 		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
 		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
-		addClientEvent(Grid.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 	
 	public Grid() {
@@ -678,7 +701,8 @@ public class Grid extends MeshElement implements Paginated {
 				final Paginal pgi = getPaginal();
 				pgi.setTotalSize(getDataLoader().getTotalSize());
 			}
-			postOnInitRender();
+			if (!doSort(this))
+				postOnInitRender();
 			//Since user might setModel and setRender separately or repeatedly,
 			//we don't handle it right now until the event processing phase
 			//such that we won't render the same set of data twice
@@ -720,6 +744,25 @@ public class Grid extends MeshElement implements Paginated {
 			};
 			
 		_model.addListDataListener(_dataListener);
+	}
+	
+	/**
+	 * Sort the rows based on {@link Column#getSortDirection}.
+	 * @return
+	 */
+	private static boolean doSort(Grid grid) {
+		Columns cols = grid.getColumns();
+		if (!grid.isAutosort() || cols == null) return false;
+		for (Iterator it = cols.getChildren().iterator();
+		it.hasNext();) {
+			final Column hd = (Column)it.next();
+			String dir = hd.getSortDirection();
+			if (!"natural".equals(dir)) {
+				hd.doSort("ascending".equals(dir));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Returns the renderer to render each row, or null if the default
@@ -908,8 +951,16 @@ public class Grid extends MeshElement implements Paginated {
 	/** Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
-		getDataLoader().doListDataChange(event);
-		postOnInitRender(); //to improve performance
+		//sort when add
+		int type = event.getType();
+		if ((type == ListDataEvent.INTERVAL_ADDED || 
+				type == ListDataEvent.CONTENTS_CHANGED) && 
+				!isIgnoreSortWhenChanged()) {
+			doSort(this);
+		} else {
+			getDataLoader().doListDataChange(event);
+			postOnInitRender(); // to improve performance
+		}
 	}
 
 	/** Returns the label for the cell generated by the default renderer.
@@ -1189,12 +1240,30 @@ public class Grid extends MeshElement implements Paginated {
 	}
 	
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.grid.rod", "false");
-		Object rod2 = getAttribute("org.zkoss.zul.grid.rod", true); //might be String or Boolean
-		if (rod2 == null) {
-			rod2 = rod1;
-		}
-		return rod2 instanceof Boolean ? ((Boolean)rod2).booleanValue() : "true".equals(rod2);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true);
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	/*package*/ boolean isAutosort() {
+		String attr = "org.zkoss.zul.grid.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	private boolean isIgnoreSortWhenChanged() {
+		String attr = "org.zkoss.zul.grid.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val == null ? true: "ignore.change".equals(val);
 	}
 	
 	/*package*/ DataLoader getDataLoader() {
@@ -1217,7 +1286,10 @@ public class Grid extends MeshElement implements Paginated {
 	public Object clone() {
 		final Grid clone = (Grid)super.clone();
 		clone.init();
-
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		//recreate the DataLoader 
 		final int offset = clone.getDataLoader().getOffset(); 
 		final int limit = clone.getDataLoader().getLimit();
@@ -1231,7 +1303,7 @@ public class Grid extends MeshElement implements Paginated {
 		if (clone._frozen != null) ++cnt;
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
-
+		
 		if (clone._model != null) {
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
@@ -1252,6 +1324,7 @@ public class Grid extends MeshElement implements Paginated {
 				if (--cnt == 0) break;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
+				addPagingListener(_pgi);
 				if (--cnt == 0) break;
 			} else if (child instanceof Frozen) {
 				_frozen = (Frozen)child;
@@ -1263,6 +1336,19 @@ public class Grid extends MeshElement implements Paginated {
 		}
 	}
 
+	
+	
+	public String getEmptyMessage() {
+		return _emptyMessage;
+	}
+	
+	public void setEmptyMessage(String emptyMessage) {
+		if(!Objects.equals(emptyMessage, _emptyMessage)){
+			_emptyMessage = emptyMessage;
+			smartUpdate("emptyMessage",_emptyMessage);
+		}
+	}
+	
 	//Serializable//
 	//NOTE: they must be declared as private
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
@@ -1270,9 +1356,9 @@ public class Grid extends MeshElement implements Paginated {
 		s.defaultWriteObject();
 
 		willSerialize(_model);
-		s.writeObject(_model instanceof java.io.Serializable || _model instanceof java.io.Externalizable ? _model: null);
+		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
-		s.writeObject(_renderer instanceof java.io.Serializable || _renderer instanceof java.io.Externalizable ? _renderer: null);
+		Serializables.smartWrite(s, _renderer);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -1314,6 +1400,9 @@ public class Grid extends MeshElement implements Paginated {
 			renderer.render("_currentLeft", _currentLeft);
 
 		renderer.render("_topPad", _topPad);
+		
+		renderer.render("emptyMessage", _emptyMessage);
+		
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
 		
@@ -1348,7 +1437,6 @@ public class Grid extends MeshElement implements Paginated {
 	implements Padding {
 		//-- Padding --//
 		public int getHeight() {
-			// TODO Auto-generated method stub
 			return _topPad;
 		}
 
@@ -1367,7 +1455,7 @@ public class Grid extends MeshElement implements Paginated {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, getPreloadSize()));
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) {
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) {
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -1379,6 +1467,8 @@ public class Grid extends MeshElement implements Paginated {
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
+				// Bug: B50-3204965: onPageSize is not fired in autopaging scenario
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();

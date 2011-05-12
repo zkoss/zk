@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.net.URL;
+import java.io.InputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
@@ -175,12 +176,13 @@ public class ConfigParser {
 							parseSubZScriptConfig(el);
 							parseSubDeviceConfig(el);
 						}
-						if (!syscfgLoadedConfig) {
+						if (!syscfgLoadedConfig) { //config not null
 							parseSubSystemConfig(config, el);
 							parseSubClientConfig(config, el);
 						}
 						if (!syscfgLoaded) {
 							parseProperties(el);
+							parseLangConfigs(locator, el);
 						}
 
 						if (config != null) {
@@ -269,6 +271,17 @@ public class ConfigParser {
 			throw new IllegalArgumentException("null");
 		log.info("Parsing "+url);
 		parse(new SAXBuilder(true, false, true).build(url).getRootElement(),
+			config, locator);
+	}
+	/** Parses zk.xml from an input stream into the configuration.
+	 * @param is the input stream of zk.xml
+	 * @since 5.0.7
+	 */
+	public void parse(InputStream is, Configuration config, Locator locator)
+	throws Exception {
+		if (is == null || config == null)
+			throw new IllegalArgumentException("null");
+		parse(new SAXBuilder(true, false, true).build(is).getRootElement(),
 			config, locator);
 	}
 	/** Parses zk.xml, specified by the root element.
@@ -372,7 +385,7 @@ public class ConfigParser {
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri
-				parseLangAddon(locator, el);
+				parseLangConfig(locator, el);
 			} else if ("language-mapping".equals(elnm)) {
 			//language-mapping
 			//	language-name/extension
@@ -665,8 +678,15 @@ public class ConfigParser {
 		}
 	}
 
+	/** Parse language-config */
+	private static void parseLangConfigs(Locator locator, Element root) {
+		for (Iterator it = root.getElements("language-config").iterator();
+		it.hasNext();) {
+			parseLangConfig(locator, (Element)it.next());
+		}
+	}
 	/** Parse language-config/addon-uri. */
-	private static void parseLangAddon(Locator locator, Element conf) {
+	private static void parseLangConfig(Locator locator, Element conf) {
 		for (Iterator it = conf.getElements("addon-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -677,6 +697,17 @@ public class ConfigParser {
 				log.error("File not found: "+path+", at "+el.getLocator());
 			else
 				DefinitionLoaders.addAddon(locator, url);
+		}
+		for (Iterator it = conf.getElements("language-uri").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String path = el.getText(true);
+
+			final URL url = locator.getResource(path);
+			if (url == null)
+				log.error("File not found: "+path+", at "+el.getLocator());
+			else
+				DefinitionLoaders.addLanguage(locator, url);
 		}
 	}
 	/** Parse a class, if specified, whether it implements cls.

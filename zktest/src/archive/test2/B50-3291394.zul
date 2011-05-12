@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3291394.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 29 16:28:40 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml" xmlns:zk="http://www.zkoss.org/2005/zk">
+	<zscript>
+		EventListener evtlForProject = new EventListener() { public void onEvent(Event evt) {alert("Project clicked");} };
+		EventListener evtlForAbout = new EventListener() { public void onEvent(Event evt) {alert("About clicked");} };
+	</zscript>
+
+1. Please click the checkbox "Add onClick to Project" and mouseover the menu "Project", you should see there is a separator line inside the button and you can click at the left area of the line to alert a dialog, and click the arrow icon, it will show the dropdown menu.
+<separator/>
+2. Please click the checkbox "Vertical orient" and test the step 1 again <h:br />
+<menubar id="menubar" width="100%">
+		<menu id="Project" label="Project" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+			<menupopup>
+				<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
+					onClick="alert(self.label)" />
+				<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
+					onClick="alert(self.label)" />
+				<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
+					onClick="alert(self.label)" />
+				<menuseparator />
+				<menuitem label="Exit" image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+			</menupopup>
+		</menu>
+		<menu label="Help" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)" />
+				<menu label="About" id="About">
+					<menupopup>
+						<menuitem label="About ZK"
+							onClick="alert(self.label)" />
+						<menuitem label="About Potix"
+							onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+		<menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)" />
+				<menu label="Color Picker" content="#color=#184dc6"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<checkbox label="Add onClick to Project">
+		<attribute name="onCheck">
+			if(self.checked)
+				Project.addEventListener("onClick", evtlForProject);
+			else
+				Project.removeEventListener("onClick", evtlForProject);
+		</attribute>
+	</checkbox>
+	<checkbox label="Vertical orient">
+		<attribute name="onCheck">
+			menubar.orient= self.checked ? "vertical" : "horizontal";
+			menubar.width = self.checked ? "100px" : "200px";
+		</attribute>
+	</checkbox>
+</zk>

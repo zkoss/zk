@@ -365,6 +365,6 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		Collections.sort(copy, cmpr);
 		_set.clear();
 		_set.addAll(copy);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 }

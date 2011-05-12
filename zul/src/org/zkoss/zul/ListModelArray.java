@@ -145,7 +145,7 @@ implements Sortable<E>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		Arrays.sort(_array, (Comparator)cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
 	//Object//

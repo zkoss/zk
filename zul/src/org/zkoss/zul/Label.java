@@ -152,12 +152,13 @@ public class Label extends XulElement {
 
 		final String val = getValue();
 			//allow deriving to override getValue()
-		render(renderer, "value", val); //no need to encode
+		render(renderer, "value", val);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(val);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-label" : _zclass;
 	}
+
 	/** No child is allowed.
 	 */
 	protected boolean isChildable() {

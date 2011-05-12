@@ -62,7 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 /** @class zul.inp.Renderer
  * The renderer used to render a inputWidget.
- * It is designed to be overriden
+ * It is designed to be overridden.
  */
 zul.inp.Renderer = {
 	/** render the spinner's(timebox) button
@@ -71,6 +71,55 @@ zul.inp.Renderer = {
 	*/
 	renderSpinnerButton: function (out, wgt) {
 	}
+};
+/** @class zul.inp.RoundUtl
+ * The RoundUtl used to adjust the display of the rounded input.
+ * @since 5.0.7
+ */
+zul.inp.RoundUtl = {
+	/** Synchronizes the input element's width of this component
+	*/
+	syncWidth: function (wgt, rightElem) {
+		var node = wgt.$n();
+		if (!zk(node).isRealVisible() || (!wgt._inplace && !node.style.width))
+			return;
+
+		var inp = wgt.getInputNode();
+		
+		if (!node.style.width && wgt._inplace && 
+			(wgt._buttonVisible == undefined
+				|| wgt._buttonVisible)) {
+			node.style.width = jq.px0(this.getOuterWidth(wgt, true));
+		}
+		
+		if (zk.ie6_ && node.style.width)
+			inp.style.width = '0px';
+	
+		var	width = this.getOuterWidth(wgt, wgt.inRoundedMold());
+		
+		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (rightElem ? rightElem.offsetWidth : 0)));
+	},
+	getOuterWidth: function(wgt, rmInplace) {
+		var node = wgt.$n(),
+			$n = jq(node),
+			$inp = jq(wgt.getInputNode()),
+			inc = wgt.getInplaceCSS(),
+			shallClean = !node.style.width && wgt._inplace;
+		
+		if (rmInplace && shallClean) {
+    		$n.removeClass(inc);
+    		$inp.removeClass(inc);
+		}
+		var	width = zk(node).revisedWidth(
+				node[zk.opera ? 'clientWidth': 'offsetWidth']) 
+				+ (zk.opera ? zk(node).borderWidth(): 0);
+		if (rmInplace && shallClean) {
+    		$n.addClass(inc);
+    		$inp.addClass(inc);
+		}
+		return width;
+	}
+	
 };
 var InputWidget =
 /**
@@ -383,7 +432,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
-				if (this._inplaceout === undefined)
+				if (!this._inplaceout)
 					this._inplaceout = true;
 			}
 			
@@ -392,9 +441,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, "end_before", {
-							overflow: true
-						});
+						self._errbox.open(self, null, "end_before", {dodgeRef: true}); // Bug 3251564
 				});
 			}
 		}
@@ -707,6 +754,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(n).unbind("reset", this.proxy(this._resetForm));
 
 		this.$supers(InputWidget, 'unbind_', arguments);
+	},
+	resetSize_: function(orient) {
+		var n;
+		if (this.$n() != (n = this.getInputNode()))
+			n.style[orient == 'w' ? 'width': 'height'] = '';
+		this.$supers('resetSize_', arguments);
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;

@@ -45,6 +45,11 @@ zul.grid.Renderer = {
  * 
  */
 zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
+	$define:{
+		emptyMessage:function(msg){
+			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+		}
+	},
 	/** Returns the specified cell, or null if not available.
 	 * @param int row which row to fetch (starting at 0).
 	 * @param int col which column to fetch (starting at 0).
@@ -88,6 +93,18 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return this;
 	},
 	//-- super --//
+	getFocusCell: function (el) {
+		var tbody = this.rows.$n();
+		if (jq.isAncestor(tbody, el)) {
+			var tds = jq(el).parents('td'), td;
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if (td.parentNode.parentNode == tbody) {
+					return td;
+				}
+			}
+		}
+	},
 	getZclass: function () {
 		return this._zclass == null ? "z-grid" : this._zclass;
 	},
@@ -142,6 +159,37 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (!isRows && !this.childReplacing_) //not called by onChildReplaced_
 			this._syncSize();
 	},
+	/**
+	 * empty means no any row .
+	 * @return boolean
+	 */
+	_isEmpty: function () {
+		return this.rows ? this.rows.nChildren : false; 
+	},
+	/**
+	 * a redraw method for the empty message , if you want to customize the message ,
+	 * you could overwrite this.
+	 * @param Array out A array that contains html structure ,
+	 * 			it usually come from mold(redraw_). 
+	 */
+	redrawEmpty_: function (out) {
+		var cols = this.columns ? this.columns.nChildren : 1,
+			uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
+		( !this._emptyMessage || this._isEmpty()  ? ' style="display:none"' : '' ),
+			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+	},
+	/**
+	 * Fix for the empty message shows up or now. 
+	 */
+	fixForEmpty_: function () {
+		if (this.desktop) {
+			if(this._isEmpty())
+				jq(this.$n("empty")).hide();
+			else
+				jq(this.$n("empty")).show();
+		}
+	},	
 	onChildAdded_: function(child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_

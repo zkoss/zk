@@ -45,6 +45,9 @@ public class Treecol extends HeaderElement {
 	private String _sortAscNm = "none";
 	private String _sortDscNm = "none";
 	private int _maxlength;
+	private boolean _ignoreSort = false;
+	private boolean _isCustomAscComparator = false;
+	private boolean _isCustomDscComparator = false;
 
 	static {
 		addClientEvent(Treecol.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -90,7 +93,7 @@ public class Treecol extends HeaderElement {
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the tree is sorted.
+	 * as an indicator as to how the tree is sorted. (unless the tree has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort treechildren ({@link Treeitem}),
 	 * the sort direction is maintained automatically.
@@ -105,6 +108,12 @@ public class Treecol extends HeaderElement {
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Tree tree = getTree();
+				if (tree != null && tree.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
 			smartUpdate("sortDirection", _sortDir);
 		}
 	}
@@ -173,16 +182,20 @@ public class Treecol extends HeaderElement {
 				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
 					if ((index = Integer.parseInt(name)) < 0)
 						throw new IllegalArgumentException("Nonnegative number is required: "+name);
-				if (getSortAscending() == null)
+				if (getSortAscending() == null || !_isCustomAscComparator) {
 					if (index < 0)
 						setSortAscending(new FieldComparator(name, true));
 					else
 						setSortAscending(new ArrayComparator(index, true));
-				if (getSortDescending() == null)
+					_isCustomAscComparator = false;
+				}
+				if (getSortDescending() == null || !_isCustomDscComparator) {
 					if (index < 0)
 						setSortDescending(new FieldComparator(name, false));
 					else
 						setSortDescending(new ArrayComparator(index, false));
+					_isCustomDscComparator = false;
+				}
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
@@ -207,7 +220,8 @@ public class Treecol extends HeaderElement {
 	public void setSortAscending(Comparator<?> sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
-			String nm = _sortAsc == null ? "none" : "fromServer";
+			_isCustomAscComparator = _sortAsc != null;
+			String nm = _isCustomAscComparator ? "fromServer": "none";
 			if (!_sortAscNm.equals(nm)) {
 				_sortAscNm = nm;
 				smartUpdate("sortAscending", _sortAscNm);
@@ -243,7 +257,8 @@ public class Treecol extends HeaderElement {
 	public void setSortDescending(Comparator<?> sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
-			String nm = _sortDsc == null ? "none" : "fromServer";
+			_isCustomDscComparator = _sortDsc != null;
+			String nm = _isCustomDscComparator ? "fromServer": "none";
 			if (!_sortDscNm.equals(nm)) {
 				_sortDscNm = nm;
 				smartUpdate("sortDescending", _sortDscNm);
@@ -345,7 +360,11 @@ public class Treecol extends HeaderElement {
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
+		return doSort(ascending);
+	}
 
+	@SuppressWarnings("unchecked")	
+	/*package*/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -372,7 +391,8 @@ public class Treecol extends HeaderElement {
 		} finally {
 			Scopes.afterInterpret();
 		}
-
+		
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = tree.getTreecols().getChildren().iterator();
 		it.hasNext();) {
@@ -380,6 +400,7 @@ public class Treecol extends HeaderElement {
 			col.setSortDirection(
 				col != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
 
 		// sometimes the items at client side are out of date
 		tree.invalidate();

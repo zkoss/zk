@@ -34,6 +34,7 @@ import java.util.Set;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
@@ -44,14 +45,18 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Utils;
 
 /**
  *  A container which can be used to hold a tabular
@@ -66,6 +71,25 @@ import org.zkoss.zul.impl.MeshElement;
  *
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree. (since 3.5.0)
  *
+ * <p>Custom Attributes:
+ * <dl>
+ * <dt>org.zkoss.zul.tree.rightSelect</dt>
+ * <dd>Specifies whether the selection shall be toggled when user right clicks on
+ * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.tree.autoSort</dt>.(since 5.0.7) 
+ * <dd>Specifies whether to sort the model when the following cases:</br>
+ * <ol>
+ * <li>{@link #setModel} is called and {@link Treecol#setSortDirection} is set.</li>
+ * <li>{@link Treecol#setSortDirection} is called.</li>
+ * <li>Model receives {@link TreeDataEvent} and {@link Treecol#setSortDirection} is set.</li>
+ * </ol>
+ * If you want to ignore sort when receiving {@link TreeDataEvent}, 
+ * you can specifies the value as "ignore.change".</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
  * @author tomyeh
  */
 public class Tree extends MeshElement implements Paginated {
@@ -84,12 +108,10 @@ public class Tree extends MeshElement implements Paginated {
 	private String _name;
 	private boolean _multiple, _checkmark;
 	private boolean _vflex;
-	/** disable smartUpdate; usually caused by the client. */
-	private transient boolean _noSmartUpdate;
 	private String _innerWidth = "100%";
 
-	private TreeModel<Object> _model;
-	private TreeitemRenderer _renderer;
+	private transient TreeModel<Object> _model;
+	private transient TreeitemRenderer _renderer;
 	private transient TreeDataListener _dataListener;
 
 	private transient Paginal _pgi;
@@ -108,7 +130,7 @@ public class Tree extends MeshElement implements Paginated {
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
-		addClientEvent(Tree.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 	}
 
@@ -714,6 +736,10 @@ public class Tree extends MeshElement implements Paginated {
 		return count;
 	}
 
+	// used by Treechildren
+	public void smartUpdate(String attr, Object value) {
+		super.smartUpdate(attr, value);
+	}
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
 	 *
@@ -756,6 +782,8 @@ public class Tree extends MeshElement implements Paginated {
 				_sel = item;
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
+				
+				addSelectionToModel(item);
 
 				smartUpdate("selectedItem", item.getUuid());
 			}
@@ -763,6 +791,12 @@ public class Tree extends MeshElement implements Paginated {
 				setActivePage(item);
 		}
 	}
+	@SuppressWarnings("unchecked")
+	private void addSelectionToModel(Treeitem item) {
+		if (_model instanceof Selectable)
+			((Selectable) _model).addSelection(item.getTreeNode());
+	}
+
 	/** Selects the given item, without deselecting any other items
 	 * that are already selected..
 	 */
@@ -776,6 +810,9 @@ public class Tree extends MeshElement implements Paginated {
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
+				addSelectionToModel(item);
+				if(_sel == null)
+					_sel = (Treeitem)_selItems.iterator().next();
 				smartUpdateSelection();
 			}
 		}
@@ -832,6 +869,9 @@ public class Tree extends MeshElement implements Paginated {
 			_sel = null;
 			smartUpdate("selectedItem", "");
 		}
+		if (_model instanceof Selectable) {
+			((Selectable) _model).clearSelection();
+		}
 	}
 	/** Selects all items.
 	 */
@@ -847,6 +887,7 @@ public class Tree extends MeshElement implements Paginated {
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
 				changed = true;
+				addSelectionToModel(item);
 			}
 			if (first) {
 				_sel = item;
@@ -893,9 +934,6 @@ public class Tree extends MeshElement implements Paginated {
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-tree" : _zclass;
-	}
-	protected void smartUpdate(String attr, Object value) {
-		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Treecols) {
@@ -984,6 +1022,8 @@ public class Tree extends MeshElement implements Paginated {
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
+				addSelectionToModel(item);
+
 			}
 		}
 	}
@@ -1079,7 +1119,10 @@ public class Tree extends MeshElement implements Paginated {
 
 		final Tree clone = (Tree)super.clone();
 		clone.init();
-
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		int cnt = 0;
 		if (_treecols != null) ++cnt;
 		if (_treefoot != null) ++cnt;
@@ -1109,8 +1152,9 @@ public class Tree extends MeshElement implements Paginated {
 				} else if (child instanceof Treechildren) {
 					_treechildren = (Treechildren)child;
 					if (--cnt == 0) break;
-				}else if (child instanceof Paging) {
+				} else if (child instanceof Paging) {
 					_pgi = _paging = (Paging)child;
+					addPagingListener(_pgi);
 					if (--cnt == 0) break;
 				}
 			}
@@ -1124,6 +1168,7 @@ public class Tree extends MeshElement implements Paginated {
 				if (ti.isSelected()) {
 					if (_sel == null) _sel = ti;
 					_selItems.add(ti);
+					addSelectionToModel(ti);
 					if (--cntSel == 0) break;
 				}
 			}
@@ -1131,12 +1176,26 @@ public class Tree extends MeshElement implements Paginated {
 	}
 
 	//-- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		willSerialize(_model);
+		Serializables.smartWrite(s, _model);
+		willSerialize(_renderer);
+		Serializables.smartWrite(s, _renderer);
+	}
+	@SuppressWarnings("unchecked")
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		init();
+		_model = (TreeModel)s.readObject();
+		didDeserialize(_model);
+		_renderer = (TreeitemRenderer)s.readObject();
+		didDeserialize(_renderer);
 
+		init();
 		afterUnmarshal(-1, -1);
 
 		if (_model != null) initDataListener();
@@ -1161,7 +1220,13 @@ public class Tree extends MeshElement implements Paginated {
 		if(parent != null){
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
-			switch (event.getType()) {
+			int type = event.getType();
+			if ((type == TreeDataEvent.INTERVAL_ADDED || 
+					type == TreeDataEvent.CONTENTS_CHANGED) && 
+					!isIgnoreSortWhenChanged()) {
+				doSort(this);
+			}
+			switch (type) {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for(int i=indexFrom;i<=indexTo;i++)
 					onTreeDataInsert(parent,node,i);
@@ -1327,6 +1392,7 @@ public class Tree extends MeshElement implements Paginated {
 				setModelDirectly(model);
 				initDataListener();
 			}
+			doSort(this);
 			syncModel();
 		} else if (_model != null) {
 			_model.removeTreeDataListener(_dataListener);
@@ -1353,6 +1419,21 @@ public class Tree extends MeshElement implements Paginated {
 		return (TreeModel)_model;
 	}
 
+	private static boolean doSort(Tree tree) {
+		Treecols cols = tree.getTreecols();
+		if (!tree.isAutosort() || cols == null) return false;
+		for (Iterator it = cols.getChildren().iterator();
+		it.hasNext();) {
+			final Treecol hd = (Treecol)it.next();
+			String dir = hd.getSortDirection();
+			if (!"natural".equals(dir)) {
+				hd.doSort("ascending".equals(dir));
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/** Synchronizes the tree to be consistent with the specified model.
 	 * <p>Author: jeffliu
 	 */
@@ -1491,12 +1572,26 @@ public class Tree extends MeshElement implements Paginated {
 			_renderer = getRealRenderer();
 		}
 
+		@SuppressWarnings("unchecked")
 		private void render(Treeitem item, Object node) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
 
+			if (node instanceof TreeNode) {
+				TreeNode treeNode = (TreeNode) node;
+				item.setTreeNode(treeNode);
+				if (_model instanceof Selectable) {
+					final Object value = 
+						_model.getChild(treeNode.getParent(), item.indexOf());
+					if (((Selectable) _model).getSelection().contains(value)) {
+						addItemToSelection(item);
+					}
+				}
+			}
+			if (_model instanceof Openable)
+				item.setOpen(((Openable)_model).isOpen(node));
 			try {
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
@@ -1819,13 +1914,30 @@ public class Tree extends MeshElement implements Paginated {
 	/** Returns whether to toggle a list item selection on right click
 	 */
 	private boolean isRightSelect() {
-		if (_rightSelect == null) //ok to race
-			_rightSelect = Boolean.valueOf(
-				!"false".equals(Library.getProperty("org.zkoss.zul.tree.rightSelect")));
-		return _rightSelect.booleanValue();
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.rightSelect", true, true);
 	}
-	private static Boolean _rightSelect;
-
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	/*package*/ boolean isAutosort() {
+		String attr = "org.zkoss.zul.tree.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	private boolean isIgnoreSortWhenChanged() {
+		String attr = "org.zkoss.zul.tree.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val == null ? true: "ignore.change".equals(val);
+	}
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
 	 */
@@ -1848,7 +1960,7 @@ public class Tree extends MeshElement implements Paginated {
 		if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
-			_noSmartUpdate = true;
+			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
@@ -1886,11 +1998,11 @@ public class Tree extends MeshElement implements Paginated {
 					}
 				}
 			} finally {
-				_noSmartUpdate = false;
+				disableClientUpdate(false);
 			}
 
 			Events.postEvent(evt);
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -1906,6 +2018,8 @@ public class Tree extends MeshElement implements Paginated {
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
+				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);

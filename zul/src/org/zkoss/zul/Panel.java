@@ -17,10 +17,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
+import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.ext.Framable;
@@ -461,10 +460,13 @@ public class Panel extends XulElement implements Framable {
 		if (super.insertBefore(toolbar, refChild)) {
 			if ("tbar".equals(name)) {
 				_tbar = toolbar;
+				response(new AuSetAttribute(this, "tbar", toolbar.getUuid()));
 			} else if ("bbar".equals(name)) {
 				_bbar = toolbar;
+				response(new AuSetAttribute(this, "bbar", toolbar.getUuid()));
 			} else if ("fbar".equals(name)) {
 				_fbar = toolbar;
+				response(new AuSetAttribute(this, "fbar", toolbar.getUuid()));
 			}
 			return true;
 		}

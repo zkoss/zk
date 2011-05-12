@@ -1,0 +1,18 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>IE 6/7 only.</li>
+			<li>The Listbox should only show 10 rows. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		String[] s = new String[50];
+	]]></zscript>
+	<listbox width="200px" rows="10">
+		<listitem forEach="${s}">
+			<listcell>
+				Listitem
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>

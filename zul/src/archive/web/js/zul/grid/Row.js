@@ -131,7 +131,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	getGroup: function () {
 		// TODO: this performance is not good.
 		if (_isPE() && this.parent && this.parent.hasGroup())
-			for (var w = this.previousSibling; w; w = w.previousSibling)
+			for (var w = this; w; w = w.previousSibling)
 				if (w.$instanceof(zkex.grid.Group)) return w;
 				
 		return null;
@@ -274,6 +274,23 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.detail)
 			this.detail = null;
+	},
+	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+		//sync frozen
+		var grid, frozen, tbody, td, tds;
+		if ((grid = this.getGrid()) && grid.efrozen && 
+			(frozen = zk.Widget.$(grid.efrozen.firstChild)) &&
+			grid.rows && (tbody = grid.rows.$n())) {
+			tds = jq(evt.domTarget).parents('td')
+			for (var i = 0, j = tds.length; i < j; i++) {
+				td = tds[i];
+				if (td.parentNode.parentNode == tbody) {
+					grid._moveToHidingFocusCell(td.cellIndex);
+					break;
+				}
+			}
+		}
 	},
 	doMouseOver_: function(evt) {
 		if (this._musin) return;

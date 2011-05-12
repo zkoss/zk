@@ -45,7 +45,7 @@ Rights Reserved.
 <zk>
 <zscript deferred="true">
 	boolean isBreeze = org.zkoss.zksandbox.Themes.isBreeze(execution) &amp;&amp; org.zkoss.zksandbox.Themes.hasBreezeLib();
-	boolean isSilvergray = org.zkoss.zksandbox.Themes.isSilvergray(execution) &amp;&amp; org.zkoss.zksandbox.Themes.hasSilvergrayLib();
+	boolean isSilvergray = org.zkoss.zksandbox.Themes.isSilvergray() &amp;&amp; org.zkoss.zksandbox.Themes.hasSilvergrayLib();
 	String bgColor = isBreeze? "#F7F7F7" : isSilvergray? "#DDDDDD" : "#C5E6EF";
 	String bgStyle = "background: " + bgColor;
 	b.setStyle(bgStyle);
@@ -222,8 +222,8 @@ Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload"/>
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

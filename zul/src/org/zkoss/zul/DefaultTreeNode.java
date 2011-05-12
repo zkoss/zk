@@ -217,8 +217,11 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		child.setParent(null);
 		
 		DefaultTreeModel model = getModel();
-		if (model != null)
+		if (model != null) {
 			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+			model.removeSelection(child);
+			model.setOpen(child, false);
+		}
 	}
 	//@Override
 	/**
@@ -230,13 +233,9 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	@SuppressWarnings("unchecked")
 	public void remove(TreeNode<E> child) {
 		int index = _children.indexOf(child);
-		if (!_children.remove(child))
+		if (index < 0)
 			throw new IllegalArgumentException("not a child");
-		((DefaultTreeNode<E>)child).setParent(null);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null)
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+		remove(index);
 	}
 	@SuppressWarnings("unchecked")
 	public int compareTo(DefaultTreeNode<E> node) {

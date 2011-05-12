@@ -127,12 +127,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
-			var n = this.$n('cave');
-			if (n) {
+			var n;
+			if (n = this.$n('cave')) {
 				if (zk.ie6_) n.style.height = "";
-				var fix = function() {
-					n.style.height =
-						zk(n).revisedHeight(zk(n).vflexHeight(), true)
+				var wgt = this,
+					$n = zk(n),
+					fix = function() {
+					n.style.height = wgt.isLegend()? hgh:
+						$n.revisedHeight($n.vflexHeight(), true)
 						+ "px";
 				};
 				fix();
@@ -148,7 +150,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this._fixHgh();
 		if (!this.isLegend())
 			setTimeout(this.proxy(this._fixShadow), 500);
-			//shadow raraly needs to fix so OK to delay for better performance
+			//shadow rarely needs to fix so OK to delay for better performance
 	},
 	onShow: _zkf,
 	_fixShadow: function () {
@@ -177,13 +179,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
-
-		if (!this.isLegend())
-			zWatch.listen({onSize: this, onShow: this});
+		// Bug: B50-3205292: vflex with legend Groupbox
+		//if (!this.isLegend())
+		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
-		if (!this.isLegend())
-			zWatch.unlisten({onSize: this, onShow: this});
+		// Bug: B50-3205292: vflex with legend Groupbox
+		//if (!this.isLegend())
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {

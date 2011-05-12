@@ -884,6 +884,9 @@ w:use="foo.MyWindow"&gt;
 	 *comp.setWidgetOverride("myfield", "new Date()"); //override a property
 	 *</code></pre>
 	 *
+	 * <p>If there is no previous method or property, the method/property will
+	 * be assigned directly.
+	 *
 	 * <p>Notice that, unlike {@link #setWidgetListener}, if the method has been sent
 	 * to the client for update, it cannot be removed by calling this method
 	 * with a null value.

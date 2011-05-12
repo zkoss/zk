@@ -17,9 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var v = zk.Widget.$(c)._colspan;
 		return v ? v: 1;
 	}
-	function _resetColspan(c) {
-		c.colSpan = _colspan(c);
-	}
 	function _fixaux(cells, from, to) {
 		for (var j = 0, k = 0, cl = cells.length; j < cl; ++j) {
 			var ke = k + _colspan( zk.Widget.$(cells[j]));
@@ -30,19 +27,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						v = from - k, v2 = ke - to;
 					v = (v > 0 ? v: 0) + (v2 > 0 ? v2: 0);
 					if (v) {
-						cell.colSpan = v;
-						cell.style.display = "";
+						cell.style.width = "";
 					} else {
-						_resetColspan(cell);
-						cell.style.display = "none";
+						cell.style.width = "0px";
 					}
 				}
 				for (; j < cl; ++j) {
 					var cell = cells[j];
-					_resetColspan(cell);
-					if (cell.style.display != "none")
+					if (parseInt(cell.style.width) != 0)
 						break; //done
-					cell.style.display = "";
+					cell.style.width = "";
 				}
 				return;
 			}
@@ -52,12 +46,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	// Bug 3218078
 	function _onSizeLater(wgt) {		
 		var parent = wgt.parent,
-			bdfaker = parent.ebdfaker;
-		if (!bdfaker) {
-			bdfaker = parent.ebodyrows[0];
-			if (bdfaker)
+			bdfaker;
+		if (!(bdfaker = parent.ebdfaker) && 
+			(bdfaker = parent.ebodyrows[0]))
 				bdfaker = bdfaker.$n();
-		}
+
 		if (bdfaker) {
 			var leftWidth = 0;
 			for (var i = wgt._columns, n = bdfaker.firstChild; n && i--; n = n.nextSibling)
@@ -71,7 +64,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			scroll.style.width = jq.px0(width);
 			
 			var scrollScale = bdfaker.childNodes.length - wgt._columns -
-					(parent.isSizedByContent() ? 1 : 2 /* fixed a bug related to the feature #3025419*/);
+					2;/* fixed a bug related to the feature #3025419*/
 			
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			wgt.syncScorll();
@@ -140,9 +133,22 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	_onScroll: function (evt) {
-		if (!evt.data) return;
-		this.setStart(this._start + 2);
-		this.parent.ebody.scrollLeft = 0;
+		if (!evt.data || !zk.currentFocus) return;
+		var p, index, td, frozen = this, 
+			fn = function () {
+				if (zk.currentFocus &&
+					(td = p.getFocusCell(zk.currentFocus.$n())) && 
+						(index = td.cellIndex - frozen._columns) >= 0) {
+					frozen.setStart(index);
+					p.ebody.scrollLeft = 0;
+				}
+			};
+			
+		if (p = this.parent) {
+			if (zk.ie)
+				setTimeout(fn, 0);
+			else fn();
+		}
 		evt.stop();
 	},
 	bind_: function () {
@@ -158,13 +164,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.domListen_(scroll, 'onScroll');
 
 		if (gbody)
-			gbody.style.overflowX = 'hidden';
+			jq(gbody).addClass('z-word-nowrap').css('overflow-x', 'hidden');
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this, onSize: this});
 		var p;
 		if ((p = this.parent) && (p = p.$n('body')))
-			p.style.overflowX = '';
+			jq(p).removeClass('z-word-nowrap').css('overflow-x', '');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
 	},
 	_doScroll: function (evt) {
@@ -207,28 +213,36 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible;
+			var colhead = mesh.head.getChildAt(this._columns).$n(), isVisible, hdWgt, shallUpdate, cellWidth;
 			for (var display, faker, index = this._columns,
 					tail = mesh.head.nChildren - index,
 					n = colhead;
 					n; n = n.nextSibling, index++, tail--) {
-				isVisible = (isVisible = zk.Widget.$(n)) && isVisible.isVisible();
-				display = cnt-- <= 0 ? '' : 'none';
-				if (force || n.style.display != display) {
-					n.style.display = display;
+				
+				isVisible = (hdWgt = zk.Widget.$(n)) && hdWgt.isVisible();
+				shallUpdate = false;
+				if (cnt-- <= 0) {// show
+					if (force || parseInt(n.style.width) == 0) {
+						cellWidth = hdWgt._origWd || n.style.width;
+						hdWgt._origWd = null;
+						shallUpdate = true;
+					}
+				} else if (force || parseInt(n.style.width) != 0) {//hide
+					faker = jq('#' + n.id + '-hdfaker')[0];
+					hdWgt._origWd = hdWgt._origWd || faker.style.width || jq.px0(jq(faker).outerWidth());
+					cellWidth = '0px';
+					shallUpdate = true;
+				}
+				
+				if (force || shallUpdate) {
+					n.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
-						faker.style.display = display;
+						faker.style.width = cellWidth;
 
-					//body
-					if (isVisible)
-						for (var i = 0, rl = rows.length, cells;
-						i < rl && (ofs = (cells = rows[i++].cells).length - tail) >= 0;)
-							cells[ofs].style.display = display;
-						
 					// foot
 					if (mesh.foot) {
 						var eFootTbl = mesh.efoottbl;
@@ -237,7 +251,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							var tBodies = eFootTbl.tBodies;
 							
 							if (tBodies) {
-								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.display = display;
+								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.width = cellWidth;
 							}
 						}
 					}
@@ -282,6 +296,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh.ebodytbl.style.width = width;
 		if (mesh.efoottbl)
 			mesh.efoottbl.style.width = width;
+
+		mesh._restoreFocus();
 	}
 });
 

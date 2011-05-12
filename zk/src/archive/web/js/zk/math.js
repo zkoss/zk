@@ -104,12 +104,18 @@ zk.Long = zk.$extends(zk.Object, {
 	//1) consider '.' rather than zkDecimal
 	//2) ignore unrecognized characters
 		value = value ? '' + value: '0';
-		for (var j = 0, len = value.length; j < len; ++j) {
+		var len = value.length;
+		for (var j = 0; j < len; ++j) {
 			var cc = value.charAt(j);
-			if ((cc < '0' || cc > '9') && cc != '-' && cc != '+') {
+			if ((cc < '0' || cc > '9') && (j > 0 || (cc != '-' && cc != '+'))) {
 				value = value.substring(0, j);
 				break;
 			}
+		}
+		if(len == 1) {
+			var c = value.charAt(0);
+			if(cc < '0' || cc > '9')
+				value = 'NaN';
 		}
 		this._value = value;
 	},

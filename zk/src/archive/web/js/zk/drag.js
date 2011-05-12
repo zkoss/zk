@@ -61,10 +61,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if(!_activedg) return;
 
 		_lastPt = null;
-		var evt;
+		var evt,
+			adg = _activedg;
 		_activedg._endDrag(evt = jq.Event.zk(devt));
 		_activedg = null;
 		if (evt.domStopped) devt.stop();
+		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
+		if(adg._suicide) {
+			adg._suicide = false;
+			adg.destroy();
+		}
 	}
 	function _dockeypress(devt) {
 		if(_activedg) _activedg._keypress(devt);
@@ -98,7 +104,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				afterFinish: function () {node.style.position = orgpos;}});
 		}
 	}
-
+	
 /** A draggable object used to make a DOM element draggable. 
  * @disable(zkgwt)
  */
@@ -328,25 +334,31 @@ String scroll; //DOM Element's ID</code></pre>
 		this.opts = opts;
 		this.dragging = false;   
 
-		jq(this.handle).mousedown(this.proxy(this._mousedown));
+		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown));
 
 		//register
 		if(_drags.length == 0)
-			jq(document).mouseup(_docmouseup)
-				.mousemove(_docmousemove)
+			jq(document).bind('zmouseup', _docmouseup)
+				.bind('zmousemove', _docmousemove)
 				.keypress(_dockeypress);
 		_drags.push(this);
 	},
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy: function () {
-		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
+		if(this.dragging) {
+			// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
+			// destroy later
+			this._suicide = true;
+			return;
+		}
+		jq(this.handle).unbind("zmousedown", this.proxy(this._mousedown));
 
 		//unregister
 		_drags.$remove(this);
 		if(_drags.length == 0)
-			jq(document).unbind("mouseup", _docmouseup)
-				.unbind("mousemove", _docmousemove)
+			jq(document).unbind("zmouseup", _docmouseup)
+				.unbind("zmousemove", _docmousemove)
 				.unbind("keypress", _dockeypress);
 		if (_activedg == this) //just in case
 			_activedg = null;
@@ -562,7 +574,7 @@ String scroll; //DOM Element's ID</code></pre>
 		setTimeout(function(){
 			zk.dragging=false;
 			zWatch.fire("onEndDrag", self, evt);
-		}, 0);
+		}, zk.ios ? 500: 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
@@ -618,23 +630,25 @@ String scroll; //DOM Element's ID</code></pre>
 	_draw: function (point, evt) {
 		var node = this.node,
 			$node = zk(node),
-			pos = $node.cmOffset();
-		if(this.opts.ghosting) {
+			pos = $node.cmOffset(),
+			opts = this.opts;
+		if(opts.ghosting) {
 			var r = $node.scrollOffset();
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
 
-		var d = this._currentDelta();
+		var d = this._currentDelta(),
+			scroll = opts.scroll;
 		pos[0] -= d[0]; pos[1] -= d[1];
 
-		if(this.opts.scroll && (this.opts.scroll != window && this._isScrollChild)) {
-			pos[0] -= this.opts.scroll.scrollLeft-this.orgScrlLeft;
-			pos[1] -= this.opts.scroll.scrollTop-this.orgScrlTop;
+		if(scroll && (scroll != window && this._isScrollChild)) {
+			pos[0] -= scroll.scrollLeft-this.orgScrlLeft;
+			pos[1] -= scroll.scrollTop-this.orgScrlTop;
 		}
 
 		var p = [point[0]-pos[0]-this.offset[0],
 			point[1]-pos[1]-this.offset[1]],
-			snap = this.opts.snap;
+			snap = opts.snap;
 
 		if(snap)
 			if(typeof snap == 'function') {
@@ -655,19 +669,19 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		var style = node.style;
-		if (typeof this.opts.draw == 'function') {
-			this.opts.draw(this, this.snap_(p), evt);
-		} else if (typeof this.opts.constraint == 'function') {
-			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
+		if (typeof opts.draw == 'function') {
+			opts.draw(this, this.snap_(p, opts), evt);
+		} else if (typeof opts.constraint == 'function') {
+			var np = opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
-			p = this.snap_(p);
+			p = this.snap_(p, opts);
 			style.left = jq.px(p[0]);
 			style.top  = jq.px(p[1]);
 		} else {
-			p = this.snap_(p);
-			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
+			p = this.snap_(p, opts);
+			if((!opts.constraint) || (opts.constraint=='horizontal'))
 				style.left = jq.px(p[0]);
-			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
+			if((!opts.constraint) || (opts.constraint=='vertical'))
 				style.top  = jq.px(p[1]);
 		}
 
@@ -761,8 +775,8 @@ String scroll; //DOM Element's ID</code></pre>
 	 * @param Offset ofs the offset of the dragging position
 	 * @return Offset the offset after snapped
 	 */
-	snap_: function (pos) {
-		if (pos[1] < 0)
+	snap_: function (pos, opts) {
+		if (!opts.snap && pos[1] < 0)
 			pos[1] = 0;
 		return pos;
 	}

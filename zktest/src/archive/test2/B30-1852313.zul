@@ -21,7 +21,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:h3>When you open the tree node, the browser should not have any error!</n:h3>
+	<n:h3>Open any Tree node (just once), the browser should NOT have any javascript error!</n:h3>
+	<n:h3>If the layout look incorrect, it is a normal result.</n:h3>
 
 	<window>
 

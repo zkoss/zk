@@ -279,14 +279,24 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers('setHflex', arguments);
 		if (this.desktop) this.onSize();
 	},
-	/* Calculates the size. */
-	_calcSize: function () {
-		var anchor, oldCSS;
+	_getEbodyWd: function () {
+		var anchor = this.$n('a');
+		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
+		if (zk.safari)
+			anchor.style.display = 'none';
 
+		//Bug 1659601: we cannot do it in init(); or, IE failed!
+		var tblwd = this.ebody.clientWidth;
+
+		if (zk.safari)
+			anchor.style.display = '';
+		return tblwd;
+	},
+	_beforeCalcSize: function () {
 		// Bug 279925
 		if (zk.ie8) {
-			anchor = this.$n('a');
-			oldCSS = anchor.style.display;
+			var anchor = this.$n('a');
+			this._oldCSS = anchor.style.display;
 			anchor.style.display = "none";
 		}
 
@@ -295,99 +305,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncFocus(this._focusItem);
 
 		this._calcHgh();
-		//Bug 1553937: wrong sibling location
-		//Otherwise,
-		//IE: element's width will be extended to fit body
-		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
-		//note: we don't solve this bug for paging yet
-		var n = this.$n(),
-			wd = n.style.width;
-		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zk(n).revisedWidth(n.offsetWidth);
-			if (wd < 0) wd = 0;
-			if (wd) wd += "px";
-		}
-		if (wd) {
-			this.ebody.style.width = wd;
-			if (this.ehead) this.ehead.style.width = wd;
-			if (this.efoot) this.efoot.style.width = wd;
-		}
-
-		// Bug in B30-1823236.zul, the anchor needs to be hidden before invoking this.ebody.clientWidth
-		if (zk.safari)
-			this.$n("a").style.display = 'none';
-
-		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this.ebody.clientWidth;
-
-		if (zk.safari)
-			this.$n("a").style.display = '';
-
-		var hgh = this.getHeight() || n.style.height || this.getRows(); // bug in B36-2841185.zul
-		if (zk.ie) {//By experimental: see zk-blog.txt
-			if (this.eheadtbl &&
-			this.eheadtbl.offsetWidth !=
-			this.ebodytbl.offsetWidth)
-				this.ebodytbl.style.width = ""; //reset
-			if (tblwd &&
-					// fixed column's sizing issue in B30-1895907.zul
-					(!this.eheadtbl || !this.ebodytbl || !this.eheadtbl.style.width ||
-					this.eheadtbl.style.width != this.ebodytbl.style.width
-					|| this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
-					// end of the fixed
-					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
-				if (--tblwd < 0)
-					tblwd = 0;
-				this.ebodytbl.style.width = tblwd + "px";
-			}
-			// bug #2799258 and #1599788
-			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
-				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
-				if (this.ebody.clientWidth && scroll > 11) //v-scrollbar 
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight); //extend body height to remove the v-scrollbar
-				// resync
-				tblwd = this.ebody.clientWidth;
-			}
-		}
-		if (this.ehead) {
-			if (tblwd) this.ehead.style.width = tblwd + 'px';
-			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
-				this._adjHeadWd();
-			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
-		} else if (this.efoot) {
-			if (tblwd) this.efoot.style.width = tblwd + 'px';
-			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
-				this._cpCellWd();
-		}
-
-		//check if need to span width
-		this._adjSpanWd();
-
-		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
-		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
-			n.style.width = this.ebodytbl.offsetWidth + 'px';
-			this._hflexsz = n.offsetWidth;
-		}
-
-		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
-
+	},
+	_afterCalcSize: function () {
 		// Bug 279925
-		if (zk.ie8)
-			anchor.style.display = oldCSS;
-
-		// Bug in B36-2841185.zul
-		if (zk.ie8 && this.isModel() && this.inPagingMold())
-			zk(this).redoCSS();
-		
-		//bug#3186596: unwanted v-scrollbar
-		if (zk.ie && !zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto")) {
-			var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
-			if (this.ebody.clientWidth && scroll > 11) { //v-scroll, expand body height to remove v-scroll
-				this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
-				if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
-			}
+		if (zk.ie8) {
+			this.$n('a').style.display = this._oldCSS;
+			delete this._oldCSS;
 		}
+		this.$supers('_afterCalcSize', arguments);
 	},
 	_calcHgh: function () {
 		var rows = this.ebodyrows,
@@ -759,7 +684,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
-		&& !evt.data.shiftKey && !evt.data.ctrlKey
+		&& !evt.data.shiftKey && !(evt.data.ctrlKey || evt.data.metaKey) 
 		&& (!this._cdo || cmClicked)) {
 			// Bug 2997034
 			this._syncFocus(row);
@@ -784,7 +709,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._multiple) {
 				if (evt.data.shiftKey)
 					this._selectUpto(row, evt, skipFocus);
-				else if (evt.data.ctrlKey)
+				else if (evt.data.ctrlKey || evt.data.metaKey)
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 				else // Bug: 1973470
 					this._select(row, evt, skipFocus);
@@ -848,7 +773,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var row = this._focusItem || this.getSelectedItem(),
 			data = evt.data,
-			shift = data.shiftKey, ctrl = data.ctrlKey;
+			shift = data.shiftKey, ctrl = (data.ctrlKey || data.metaKey);
 		if (shift && !this._multiple)
 			shift = false; //OK to
 
@@ -1065,7 +990,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (evt) {
 			edata = evt.data
 			if (this._multiple)
-				keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
@@ -1134,6 +1059,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
+	},
+	_ignoreHghExt: function () {
+		return this._rows > 0;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

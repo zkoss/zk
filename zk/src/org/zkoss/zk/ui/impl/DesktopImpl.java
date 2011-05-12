@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
@@ -162,7 +163,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The device. */
 	private transient Device _dev; //it will re-init each time getDevice called
 	/** A map of media (String key, Media content). */
-	private CacheMap<String, Media> _meds;
+	private transient CacheMap<String, Media> _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
@@ -182,6 +183,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient ReqResult _lastRes;
 	private transient List<AuResponse> _piggyRes;
+	/** A set of widget classes whose important events are generated. */
+	private transient Set<String> _importantEventGened;
 
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -805,6 +808,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void recoverDidFail(Throwable ex) {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
+	}
+
+	public void recycle() {
+		_importantEventGened = null; //re-gen is required
+	}
+	/** Returns whether to generate the information of the important events of the given widget class.
+	 */
+	/*package*/ boolean shallGenerateImportantEvents(String wgtcls) {
+		if (_importantEventGened == null)
+			_importantEventGened= new HashSet<String>(32);
+		return _importantEventGened.add(wgtcls);
 	}
 
 	public boolean isAlive() {

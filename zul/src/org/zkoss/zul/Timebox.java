@@ -23,10 +23,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Locale;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.FormatInputElement;
@@ -38,8 +40,6 @@ import org.zkoss.zul.mesg.MZul;
  * An input box for holding a time (a java.util.Date Object , but only Hour & Minute are used.
  *
  * <p>Default {@link #getZclass}: z-timebox. (since 3.5.0)
- *
- * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
  * <p>timebox supports below key events.
  * <lu>
@@ -58,12 +58,15 @@ import org.zkoss.zul.mesg.MZul;
  * @since 3.0.0
  */
 public class Timebox extends FormatInputElement {
+	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
 	private TimeZone _tzone;
+	/** The locale assoicated with this timebox. */
+	private Locale _locale;
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
 		setCols(5);
-		setFormat("HH:mm");
+		setFormat("");
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();
@@ -73,7 +76,30 @@ public class Timebox extends FormatInputElement {
 
 
 	/** Sets the date format.
-<p>The following pattern letters are defined:
+<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
+Since 5.0.7, you could specify one of the following reserved words,
+and {@link DateFormats#getTimeFormat}
+will be used to retrieve the real format.
+<table border=0 cellspacing=3 cellpadding=0>
+<tr>
+<td>short</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#SHORT}</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#MEDIUM}</td>
+</tr>
+<tr>
+<td>long</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#LONG}</td>
+</tr>
+<tr>
+<td>full</td>
+<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#FULL}</td>
+</tr>
+</table>
+
+<p>In additions, the format could be a combination of the following pattern letters:
 <table border=0 cellspacing=3 cellpadding=0>
 
      <tr bgcolor="#ccccff">
@@ -121,11 +147,26 @@ public class Timebox extends FormatInputElement {
  	@since 5.0.0
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		if (format == null || format.length() == 0)
-			format = "HH:mm";
-		super.setFormat(format);
+		super.setFormat(format != null ? format: "");
 	}
 	
+	/** Returns the real format, i.e., the combination of the format patterns,
+	 * such as hh:mm.
+	 * <p>As described in {@link #setFormat}, a developer could specify
+	 * an abstract name, such as short, or an empty string as the format,
+	 * and this method will convert it to a real time format.
+	 * @since 5.0.7
+	 */
+	public String getRealFormat() {
+		final String format = getFormat();
+		if (format == null || format.length() == 0)
+			return getDefaultFormat();
+
+		int ts = Datebox.toStyle(format);
+		return ts != -111 ?
+			DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT): format;
+	}
+
 	/** Returns the value (in Date), might be null unless
 	 *  a constraint stops it. And, only Hour and Mintue field is effective.
 	 * @exception WrongValueException if user entered a wrong value
@@ -176,7 +217,50 @@ public class Timebox extends FormatInputElement {
 			smartUpdate("_value", marshall(_value));
 		}
 	}
-	
+
+	/** Returns the locale associated with this timebox,
+	 * or null if {@link Locales#getCurrent} is preferred.
+	 * @since 5.0.7
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+	/** Sets the locale used to indetify the format of this timebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(Locale locale) {
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			smartUpdate("format", getRealFormat());
+		}
+	}
+	/** Sets the locale used to indetify the format of this timebox.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.7
+	 */
+	public void setLocale(String locale) {
+		setLocale(locale != null && locale.length() > 0 ?
+			Locales.getLocale(locale): null);
+	}
+
+	/**
+	 * Returns the default format, which is used when constructing a timebox.
+	 * <p>Default: DateFormats.getTimeFormat(DEFAULT, null, "HH:mm")
+	 * (see {@link DateFormats#getTimeFormat}).
+	 * 
+	 * <p>Though you might override this method to provide your own default format,
+	 * it is suggested to specify the format for the current thread
+	 * with {@link DateFormats#setLocalFormatInfo}.
+	 * @since 5.0.7
+	 */
+	protected String getDefaultFormat() {
+		return DateFormats.getTimeFormat(DateFormat.DEFAULT, _locale, "HH:mm");
+			//We use HH:mm for backward compatibility
+	}
+
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;
 		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
@@ -190,7 +274,7 @@ public class Timebox extends FormatInputElement {
 		if (value == null || value.length() == 0){
 			return null;
 		}
-		final String fmt = getFormat();
+		final String fmt = getRealFormat();
 		final DateFormat df = getDateFormat(fmt);
 		final Date date;
 		try {
@@ -203,7 +287,7 @@ public class Timebox extends FormatInputElement {
 		return date;
 	}
 	protected String coerceToString(Object value) {
-		final DateFormat df = getDateFormat(getFormat());
+		final DateFormat df = getDateFormat(getRealFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
 	
@@ -212,7 +296,8 @@ public class Timebox extends FormatInputElement {
 	 * <p>Default: it uses SimpleDateFormat to format the date.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
-		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
+		final DateFormat df = new SimpleDateFormat(fmt,
+			_locale != null ? _locale: Locales.getCurrent());
 		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;

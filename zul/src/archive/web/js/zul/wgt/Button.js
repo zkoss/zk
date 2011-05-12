@@ -54,6 +54,39 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
+	var _fixMouseupForClick = zk.safari || zk.gecko ? function (wgt, evt){
+		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
+		/*
+		 * Here we have these states :
+		 * 1.down for mouse down in the widget  (down)
+		 * 2.mouse up in the widget but click not fired (up in timeout)
+		 * 3.mouse up in the wiget and click event fired (null in timeout)
+		 * 4.mouse up not in the widget (null)
+		 */
+		if ( wgt._fxcfg == 1 ) {
+			if (jq.contains(wgt.$n(), evt.domTarget)) {
+				wgt._fxcfg = 2;
+				if(wgt._fxctm) clearTimeout(wgt._fxctm);
+				wgt._fxctm = setTimeout(function() {
+					if (wgt._fxcfg == 2) {
+						wgt.doClick_(new zk.Event(wgt, 'onClick', {}));
+						wgt._fxctm = wgt._fxcfg = null;
+					}
+				}, 50);
+			} else
+				wgt._fxcfg = null;
+		}
+	}: zk.$void,
+
+	_fixMousedownForClick = zk.safari || zk.gecko ?  function (wgt) {
+		wgt._fxcfg = 1;
+	}: zk.$void,
+
+	_fixClick = zk.safari || zk.gecko  ? function (wgt) {
+		if(wgt._fxctm) clearTimeout(wgt._fxctm);
+		wgt._fxctm = wgt._fxcfg = null;
+	}: zk.$void; 
+	
 var Button = 
 /**
  * A button.
@@ -345,6 +378,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
+		_fixClick(this);
+		
 		if (!this._disabled) {
 			zul.wgt.ADBS.autodisable(this);
 			if (this._type != "button") {
@@ -380,6 +415,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
+		//3276814:fix click then padding change issue for FF3 and Chrome/Safari
+		//set it down to prevent the case for down in other place but up on this widget,
+		//and down in this widget and up for other place
+		
+		_fixMousedownForClick(this);
+		
 		if (!this._disabled) {
 			var zcls = this.getZclass();
 			jq(this.$n('box')).addClass(zcls + "-clk")
@@ -387,12 +428,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (!zk.ie || !this._uplder) zk(this.$n('btn')).focus(30);
 				//change focus will disable upload in IE
 		}
-
 		zk.mouseCapture = this; //capture mouse up
 		this.$supers('doMouseDown_', arguments);
 	},
-	doMouseUp_: function () {
+	doMouseUp_: function (evt) {
 		if (!this._disabled) {
+			_fixMouseupForClick(this, evt);
+			
 			var zcls = this.getZclass();
 			jq(this.$n('box')).removeClass(zcls + "-clk")
 				.removeClass(zcls + "-over");
@@ -448,7 +490,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					if (perm = ad.charAt(0) == '+')
 						ad = ad.substring(1);
 					ad = "self" == ad ? wgt: wgt.$f(ad);
-					if (ad) {
+					if (ad && !ad._disabled) {
 						ad.setDisabled(true);
 						if (wgt.inServer)
 							if (perm)

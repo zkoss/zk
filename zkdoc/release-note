@@ -41,17 +41,41 @@ ZK 6.0.0
 	--------
 ZK 5.0.7
 * Features
+  3263584: Support drag and drop with ipad
   3256604: Support double click event with ipad
   3202692: Support more EL utilties: toUpperCase, toLowerCase...
   3243015: Easier way to access I18N labels in EL
   3252169: Easier way to specify multiple properties files for i18n labels
+  3287163: Allow user to pick up format regardless the locale
+  3290020: Datebox/timebox allows user to specify locale
   3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
   3226332: Timebox supports selection all and delete
   3259969: Support system-level initiator
-  3163700: Client: zk.getVersion() shall handle sub-packages
+  3278536: Include shall allow the included page to be rendered later
   3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
-
+  3163700: Client: zk.getVersion() shall handle sub-packages
+  3185445: Tree Sorting Enhancement - keep collapsed/selected state
+  3195870: Listbox and others shall sort model based on current state
+  3196789: Listbox supports Listgroup selection
+  3285074: Add no-cache for the zkau request for security concern
+  3285723: Throws an exception when creates too much duplicated uuid
+  2520010: new 'emptyMessage' attribute for Grid/Listbox
+  3287024: Able to load extra zk.xml specified in a library property
+  3290172: A plugin to generate custom properties for particular widget
+  3290092: Allow SEORenderer to be a application-level listener
+  3291332: adding unload desktop support for Chrome/Safari
+  3294710: Log not-serializable and ignored objects
+  3294843: Disable update-by-client by default and an option to enable
+  3297288: A way to post an event to a speicif component; not getTarget
+  3298165: Allow multiple lang.xml or lang-addon.xml in a jar file
+  3299209: Menuitem support autodisable
+  3299234: A way to get the list of data from onBindingValidate evt
+  3299344: A way to get associated bean of a Binding
+  3299827: Support Mac listbox multiple selection
+  
 * Bugs
+  3286462: native component cause issue in fulfill
+  3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
   3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
   3190987: Dyanmic tab,tabpanel are disorder
   3214829: c:l() causes ConcurrentModificationException if registered dynamically
@@ -67,9 +91,90 @@ ZK 5.0.7
   3251279: zk.ajaxURI not respecting ignoreSession
   3247017: SSL/IE6 iframe combination produces warnings
   3259479: Cannot retrieve the forEach element in zscript
+  3259998: Close the tab cause js error
   3261959: Tree with hflex=min won't appear the hor. scrollbar
+  3201748: Data-Binding and non-existing Map keys  
+  3210356: DateFormat.getTimeInstance cause Timebox error
+  3275778: AMedia: java.io.NotSerializableException: FileInputStream
+  3278524: Included HTML page might fail to call zk.afterMount
+  3283943: Row#getGroup() inconsistent between server and client
+  3283951: Select item in multiSel tree via API can't retrieve selitem
+  3284149: Click timebox in a readonly datebox will increase time 
+  3284216: Upgrade the version of chart.swf for Security risk
+  3285023: Frozen.getStrat() should be getStart()
+  3285594: InaccessibleWidgetBlockService shall block updates of readonly components
+  3285153: Column resize ghost bar does not appear in model window
+  3285158: Columns with sizable and menupopup has confusing dragging
+  3245960: Textarea content should not be interpret as span
+  3284976: Longbox parsing is to lenient
+  3287633: Label hflex property with min set
+  3205292: Vflex does not work in Groupbox with default mold
+  3210336: Vflex on panel is not working with portallayout
+  3212613: Problem with live data and frozen
+  3280506: Listbox issue on ZK5
+  3263841: Timer constructor allows negative delay time
+  3288904: Date failed to convert when year value is too large
+  3251564: Position of constraint message (error box)
+  3285635: Style issue on slider in vertical
+  3289412: Vertical slider set height not work
+  3285610: Inplace editor doesn't remove the border when focus out
+  3222965: java.io.NotSerializableException: org.zkoss.io.RepeatableFileInputStream
+  3185686: hflex does not take vertical scrollbar width into account
+  3288779: Column cannot set a new sort rule 
+  3290873: Checkbox didn't show up focus effect when label is empty
+  3291272: Cloning Grid/Listbox/Tree in paging mold
+  3290858: combobox with autodrop and setModel in onChanging
+  3236331: Flex issues in Vlayout/Hlayout
+  3212409: Some issues on zul.xsd
+  3284663: Radio always sends onCheck event
+  3192194: Combobox does't propagate selection to Selectable Models
+  3287366: Databinding Grid inside a Row template doesn't work
+  3183438: Access to bean shall be consistent
+  3204554: doublespinner and italian locale
+  3292544: Can't type "." into Doublespinner
+  3196910: Cell in grid group doesn't display a expected look
+  3201879: window.doModal opens a non-functioning popup
+  3290321: Listboxheader jumps on sort when horizontal scrolled
+  3292606: ZHTML Textarea onChange not work (an extra onchange fired)
+  3291371: Listbox scroll to top when page changes
+  3195768: showCustomError is called twice
+  3285148: Vertical scroll bar wrongly appears with autopaging
+  3285142: Drag fails to clear up ghost when widget is detached
+  3276814: Trendy button onClick not fired on specific area
+  3226830: zul Window dohighlight failed with IE7 simulate meta
+  3293422: Window sizable has incorrect moving constraint
+  3284144: The databox format parse a wrong result with hh:mm:ss
+  3285714: Grid in ROD shall fall back when not using model
+  3287082: Bandbox will recieve onChanging event when edit page number
+  3292545: InputElement in rounded mold doesn't support the width
+  3293492: doublespinner  rounded mold not support width
+  3204965: onChangePageSize is not fired in autopaging scenario
+  3244126: Horizontal scrollbar malfunction with Grid on IE
+  3201762: Borderlayout flex has issue with listbox hflex in IE 6 
+  3280125: Frozen grid has horizontal scroll bar with IE
+  3293724: treeitem.setVisible() not work normally
+  3291394: Menu text overlapped by split line
+  3196064: Clients.ScrollIntoView in FF2 error
+  3242714: <applet> tag causes entire browser to hang
+  3218576: Panel#addToolBar() may result in wrong position
+  3296056: Tablelayout with hflex won't resize its width after resizing
+  3296607: Datebox do not show the error
+  3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
+  3297378: autodisable shall not enable a button that was originally disabled
+  3298164: vflex issue in nested container
+  3297864: type ",01" doesn't got "0,01" (de locale)
+  3297287: fileupload issue if the properties used without in order
+  3297746: opera bug for listbox rendering
+  3215657: Upload button not working in Opera
   
 * Upgrade Notes
+  + The default format of datebox and timebox becomes an empty string.
+    To retrieve the real format, please use Datebox/Timebox's getRealFomrat() instead.
+  + zk.Widget.smartUpdate() is disabled by default. If your client-side application
+    depends on it, you have to turn on an attribute of the component called
+    org.zkoss.zk.ui.updateByClient.
+    If your component depends on it, you have to override AbstractComponent.updateByClient
+    to handle it explicitly (please refer to JavaDoc API)
 
 	--------
 ZK 5.0.6

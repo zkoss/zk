@@ -31,10 +31,6 @@ public interface InitiatorExt {
 	/** Called after all components are created (aka., composed),
 	 * and before any event is processed.
 	 *
-	 * <p>Note: if this interface is implemented with {@link Initiator},
-	 * {@link Initiator#doAfterCompose} won't be called.
-	 * Rather, this method is called.
-	 *
 	 * <p>It won't be called if an un-caught exception occurs when creating
 	 * components.
 	 *
@@ -58,7 +54,7 @@ public interface InitiatorExt {
 	 * If you want to ignore the exception, just return true.
 	 *
 	 * <p>Notice: this method won't be called if the exception occurs
-	 * in {@link #doInit}.
+	 * in {@link Initiator#doInit}.
 	 *
 	 * @param ex the exception being thrown
 	 * @return whether to ignore the exception. If false is returned,
@@ -69,7 +65,7 @@ public interface InitiatorExt {
 	 */
 	public boolean doCatch(Throwable ex) throws Exception;
 	/** Do the cleanup after the page has been evaluated.
-	 * It won't be called if {@link #doInit} throws an exception.
+	 * It won't be called if {@link Initiator#doInit} throws an exception.
 	 * However,it is always called no matter whether {@link #doCatch} is called.
 	 *
 	 * <p>An exception thrown in this method is simply logged. It has no

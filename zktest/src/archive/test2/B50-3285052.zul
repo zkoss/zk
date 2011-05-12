@@ -1,0 +1,27 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Select tab 3.</li>
+			<li>Remove tab 1, tab 2.</li>
+			<li>Select tab 5. If you see two Tabpanels, it is a bug.</li>
+		</ol>
+	]]></html>
+	<tabbox width="500px">
+		<tabs>
+			<tab label="Tab 1" closable="true" />
+			<tab label="Tab 2" closable="true" />
+			<tab label="Tab 3" closable="true" />
+			<tab label="Tab 4" closable="true" />
+			<tab label="Tab 5" closable="true" />
+			<tab label="Tab 6" closable="true" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>This is panel 1</tabpanel>
+			<tabpanel>This is panel 2</tabpanel>
+			<tabpanel>This is panel 3</tabpanel>
+			<tabpanel>This is panel 4</tabpanel>
+			<tabpanel>This is panel 5</tabpanel>
+			<tabpanel>This is panel 6</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

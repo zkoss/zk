@@ -20,10 +20,6 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.util.DesktopRecycle;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.au.AuResponse;
@@ -55,19 +51,6 @@ public class AbortByRemoveDesktop implements AbortingReason {
 		((ExecutionCtrl)exec).getVisualizer().disable();
 
 		//Bug 1868371: we shall postpone the cleanup to the last step
-		final Desktop dt = exec.getDesktop();
-		final WebApp wapp = dt.getWebApp();
-		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
-		if (dtrc == null || !beforeRemove(dtrc, exec, dt))
-			((WebAppCtrl)wapp).getDesktopCache(dt.getSession()).removeDesktop(dt);
-	}
-	private static boolean beforeRemove(DesktopRecycle dtrc, Execution exec,
-	Desktop dt) {
-		try {
-			return dtrc.beforeRemove(exec, dt, 0);
-		} catch (Throwable ex) {
-			log.error(ex);
-			return false;
-		}
+		DesktopRecycles.removeDesktop(exec);
 	}
 }

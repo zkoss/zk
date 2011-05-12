@@ -14,11 +14,15 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
+import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,6 +46,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Checksums;
 import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
@@ -57,7 +62,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
  * @see org.zkoss.web.servlet.Charsets
  */
 public class Servlets {
-//	private static final Log log = Log.lookup(Servlets.class);
+	private static final Log log = Log.lookup(Servlets.class);
 
 	private static BrowserIdentifier _bwid;
 
@@ -805,18 +810,58 @@ public class Servlets {
 	/** Returns the resource of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
-	public static final URL getResource(ServletContext ctx, String uri)
-	throws MalformedURLException {
-		return new ParsedURI(ctx, uri).getResource();
+	public static final URL getResource(ServletContext ctx, String uri) {
+		try {
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
+				return file.exists() ? file.toURI().toURL(): null;
+					//spec: return null if not found
+			}
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url; //unfortunately, we cannot detect if it exists
+			return new ParsedURI(ctx, uri).getResource();
+		} catch (Throwable ex) {
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
 	}
 	/** Returns the resource stream of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
 	public static final InputStream getResourceAsStream(
-	ServletContext ctx, String uri) {
-		return new ParsedURI(ctx, uri).getResourceAsStream();
+	ServletContext ctx, String uri)
+	throws IOException {
+		try {
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
+				return file.exists() ?
+					new BufferedInputStream (new FileInputStream(file)): null;
+					//spec: return null if not found
+			}
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url.openStream();
+			return new ParsedURI(ctx, uri).getResourceAsStream();
+		} catch (Throwable ex) {
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
+	}
+	/** Converts URI to URL if starts with http:/, https:/ or ftp:/ */
+	private static URL toURL(String uri)
+	throws MalformedURLException {
+		String s;
+		if (uri != null && ((s = uri.toLowerCase()).startsWith("http://")
+		|| s.startsWith("https://") || s.startsWith("ftp://")))
+			return new URL(uri);
+		return null;
 	}
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {

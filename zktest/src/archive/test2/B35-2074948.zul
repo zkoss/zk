@@ -6,7 +6,7 @@
 		Corporation. All Rights Reserved. {{IS_RIGHT }}IS_RIGHT
 	-->
 <window title="Menu Demo" border="normal">
-	<label value="Vertical Menu Popup position not correct" />
+	<label value="Vertical Menu Popup position shall be correct" />
 	<window>
 		<menubar orient="vertical">
 			<menu

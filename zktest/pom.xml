@@ -24,7 +24,7 @@
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 	</properties>
-	<version>5.0.7.FL.20110304</version>
+	<version>5.0.7</version>
 	<packaging>war</packaging>
 	<licenses>
 		<license>

@@ -57,6 +57,17 @@
 .z-window-embedded, .z-window-modal, .z-window-overlapped, .z-window-popup, .z-window-highlighted {
 	margin: 0; padding: 0; overflow: hidden; zoom: 1;
 }
+
+.z-window-modal-tl-noborder,
+.z-window-highlighted-tl-noborder,
+.z-window-overlapped-tl-noborder,
+.z-window-popup-tl-noborder,
+.z-window-modal-bl-noborder,
+.z-window-highlighted-bl-noborder,
+.z-window-overlapped-bl-noborder,
+.z-window-popup-bl-noborder {
+	display: none;
+}
 <%-- Top Left Corner --%>
 .z-window-embedded-tl,
 .z-window-modal-tl,

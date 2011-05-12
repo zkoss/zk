@@ -47,5 +47,25 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 			w.redraw(out);
 	
 		out.push('</div>');
+	},
+	//@Override
+	open: function (opts) {
+		if (!this.firstChild) { 
+			// ignore when <bandpopup> is absent, but event is still fired
+			if (opts && opts.sendOnOpen)
+				this.fire('onOpen', {open:true, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
+			return;
+		}
+		this.$supers('open', arguments);
+	},
+	enterPressed_: function (evt) {
+		//bug 3280506: do not close when children press enter.
+		if(evt.domTarget == this.getInputNode())
+			this.$supers('enterPressed_', arguments);
+	},
+	doKeyUp_: function(evt) {
+		//bug 3287082: do not fire onChanging when children typing.
+		if(evt.domTarget == this.getInputNode())
+			this.$supers('doKeyUp_', arguments);
 	}
 });

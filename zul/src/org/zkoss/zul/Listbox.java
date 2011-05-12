@@ -32,12 +32,13 @@ import java.util.Set;
 
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -45,12 +46,16 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
@@ -59,9 +64,10 @@ import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
-import org.zkoss.zul.impl.Padding;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
+import org.zkoss.zul.impl.Padding;
+import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A listbox.
@@ -196,6 +202,34 @@ import org.zkoss.zul.impl.MeshElement;
  * rather than on the {@link Listitem} of the {@link Listbox} if you use the
  * {@link ListModel} and ROD.</p>
  *
+ * <h3>Custom Attributes</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.listbox.rightSelect</dt>
+ * <dd>Specifies whether the selection shall be toggled when user right clicks on
+ * item, if the checkmark ({@link #isCheckmark}) is enabled.</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.listbox.rod</dt>
+ * <dd>Specifies whether to enable ROD (render-on-demand).</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * <dt>org.zkoss.zul.listbox.autoSort</dt>.(since 5.0.7) 
+ * <dd>Specifies whether to sort the model when the following cases:</br>
+ * <ol>
+ * <li>{@link #setModel} is called and {@link Listheader#setSortDirection} is set.</li>
+ * <li>{@link Listheader#setSortDirection} is called.</li>
+ * <li>Model receives {@link ListDataEvent} and {@link Listheader#setSortDirection} is set.</li>
+ * </ol>
+ * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * you can specifies the value as "ignore.change".</br>
+ * Notice that you could specify this attribute in any of its ancestor's attributes.
+ * It will be inherited.</dd>
+ * </dl>
+ * <dt>org.zkoss.zul.listbox.groupSelect</dt>
+ * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
+ * you could specify this attribute in any of its ancestor's attributes. It will 
+ * be inherited. Default value is false.</dd>
+ *
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -258,11 +292,10 @@ public class Listbox extends MeshElement implements Paginated {
 	private boolean _autopaging;
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
+	private String _emptyMessage;
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE
@@ -277,7 +310,7 @@ public class Listbox extends MeshElement implements Paginated {
 		// 5.0.0
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
-		addClientEvent(Listbox.class, "onChangePageSize", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Listbox.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 	}
 
 	public Listbox() {
@@ -1433,12 +1466,6 @@ public class Listbox extends MeshElement implements Paginated {
 		return !_groupsInfo.isEmpty();
 	}
 
-	// -- Component --//
-	protected void smartUpdate(String attr, Object value) {
-		if (!_noSmartUpdate)
-			super.smartUpdate(attr, value);
-	}
-
 	/* package */void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
@@ -2279,7 +2306,8 @@ public class Listbox extends MeshElement implements Paginated {
 				final Paginal pgi = getPaginal();
 				pgi.setTotalSize(getDataLoader().getTotalSize());
 			}
-			postOnInitRender();
+			if (!doSort(this))
+				postOnInitRender();
 			// Since user might setModel and setItemRender separately or
 			// repeatedly,
 			// we don't handle it right now until the event processing phase
@@ -2295,6 +2323,21 @@ public class Listbox extends MeshElement implements Paginated {
 				smartUpdate("model", false);
 			getDataLoader().updateModelInfo();
 		}
+	}
+	
+	private static boolean doSort(Listbox listbox) {
+		Listhead hds = listbox.getListhead();
+		if (!listbox.isAutosort() || hds == null) return false;
+		for (Iterator it = hds.getChildren().iterator();
+		it.hasNext();) {
+			final Listheader hd = (Listheader)it.next();
+			String dir = hd.getSortDirection();
+			if (!"natural".equals(dir)) {
+				hd.doSort("ascending".equals(dir));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -2498,8 +2541,16 @@ public class Listbox extends MeshElement implements Paginated {
 	 * Handles when the list model's content changed.
 	 */
 	private void onListDataChange(ListDataEvent event) {
-		getDataLoader().doListDataChange(event);
-		postOnInitRender(); // to improve performance
+		//sort when add
+		int type = event.getType();
+		if ((type == ListDataEvent.INTERVAL_ADDED || 
+				type == ListDataEvent.CONTENTS_CHANGED) && 
+				!isIgnoreSortWhenChanged()) {
+			doSort(this);
+		} else {
+			getDataLoader().doListDataChange(event);
+			postOnInitRender(); // to improve performance
+		}
 	}
 
 	/** Used to render listitem if _model is specified. */
@@ -2684,7 +2735,18 @@ public class Listbox extends MeshElement implements Paginated {
 			}
 		}
 	}
-
+	
+	public String getEmptyMessage() {
+		return _emptyMessage;
+	}
+	
+	public void setEmptyMessage(String emptyMessage) {
+		if(!Objects.equals(emptyMessage, _emptyMessage)){
+			this._emptyMessage = emptyMessage;
+			smartUpdate("emptyMessage",this._emptyMessage);
+		}
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-listbox" : _zclass;
 	}
@@ -2764,13 +2826,7 @@ public class Listbox extends MeshElement implements Paginated {
 	}
 
 	private boolean evalRod() {
-		final String rod1 = org.zkoss.lang.Library.getProperty("org.zkoss.zul.listbox.rod", "false");
-		//bug# 3039948: Unable to turn on rod for Listbox if defined in its parent
-		Object rod2 = getAttribute("org.zkoss.zul.listbox.rod", true); //might be String or Boolean
-		if (rod2 == null) {
-			rod2 = rod1;
-		}
-		return rod2 instanceof Boolean ? ((Boolean)rod2).booleanValue() : "true".equals(rod2);
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rod", false, true);
 	}
 
 	/* package */DataLoader getDataLoader() {
@@ -2853,6 +2909,10 @@ public class Listbox extends MeshElement implements Paginated {
 	public Object clone() {
 		final Listbox clone = (Listbox) super.clone();
 		clone.init();
+		
+		// remove cached listeners
+		clone._pgListener = clone._pgImpListener = null;
+		
 		clone.afterUnmarshal();
 		if (clone._model != null) {
 			// we use the same data model but we have to create a new listener
@@ -2891,6 +2951,7 @@ public class Listbox extends MeshElement implements Paginated {
 				_frozen = (Frozen) child;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging) child;
+				addPagingListener(_pgi);
 			}
 		}
 	}
@@ -2902,12 +2963,9 @@ public class Listbox extends MeshElement implements Paginated {
 		s.defaultWriteObject();
 
 		willSerialize(_model);
-		s.writeObject(_model instanceof java.io.Serializable
-				|| _model instanceof java.io.Externalizable ? _model : null);
+		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
-		s.writeObject(_renderer instanceof java.io.Serializable
-				|| _renderer instanceof java.io.Externalizable ? _renderer
-				: null);
+		Serializables.smartWrite(s, _renderer);
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -2951,6 +3009,8 @@ public class Listbox extends MeshElement implements Paginated {
 			renderer.render("rows", getRows());
 
 		render(renderer, "name", _name);
+		
+		render(renderer, "emptyMessage", _emptyMessage);
 
 		if (inSelectMold()) {
 			render(renderer, "multiple", isMultiple());
@@ -2992,17 +3052,38 @@ public class Listbox extends MeshElement implements Paginated {
 				renderer.render("_cdo", true);
 			if (!isRightSelect())
 				renderer.render("rightSelect", false);
+			if (isListgroupSelectable())
+				renderer.render("groupSelect", true);
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
 	private boolean isRightSelect() {
-		if (_rightSelect == null) //ok to race
-			_rightSelect = Boolean.valueOf(
-				!"false".equals(Library.getProperty("org.zkoss.zul.listbox.rightSelect")));
-		return _rightSelect.booleanValue();
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rightSelect", true, true);
 	}
-	private static Boolean _rightSelect;
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	/*package*/ boolean isAutosort() {
+		String attr = "org.zkoss.zul.listbox.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val instanceof Boolean ? ((Boolean)val).booleanValue():
+			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** Returns whether to sort all of item when model or sort direction be changed.
+	 * @since 5.0.7
+	 */
+	private boolean isIgnoreSortWhenChanged() {
+		String attr = "org.zkoss.zul.listbox.autoSort";
+		Object val = getAttribute(attr, true);
+		if (val == null)
+			val = Library.getProperty(attr);
+		return val == null ? true: "ignore.change".equals(val);
+	}
 
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
@@ -3014,7 +3095,14 @@ public class Listbox extends MeshElement implements Paginated {
 		return _ckDeselectOther.booleanValue();
 	}
 	private static Boolean _ckDeselectOther;
-
+	
+	/**
+	 * Returns whether Listgroup is selectable.
+	 */
+	private boolean isListgroupSelectable() {
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.groupSelect", false, true);
+	}
+	
 	/**
 	 * Processes an AU request.
 	 *
@@ -3032,7 +3120,7 @@ public class Listbox extends MeshElement implements Paginated {
 			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					getPreloadSize()));
-		} else if (inPagingMold() && cmd.equals("onChangePageSize")) { //since 5.0.2
+		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
@@ -3047,6 +3135,8 @@ public class Listbox extends MeshElement implements Paginated {
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
+				// Bug: B50-3204965: onChangePageSize is not fired in autopaging scenario
+				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onScrollPos")) {
 			final Map data = request.getData();
@@ -3059,7 +3149,7 @@ public class Listbox extends MeshElement implements Paginated {
 				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
-			_noSmartUpdate = true;
+			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
@@ -3096,7 +3186,7 @@ public class Listbox extends MeshElement implements Paginated {
 					}
 				}
 			} finally {
-				_noSmartUpdate = false;
+				disableClientUpdate(false);
 			}
 
 			Events.postEvent(evt);

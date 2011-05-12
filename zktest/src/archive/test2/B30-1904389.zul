@@ -63,7 +63,7 @@ public void validationForEntry(Event ev) {
 <textbox value="@{u.state}" onBindingSave="validationForEntry(event)"/>  
  
 <button id="submit" label="submit"> 
-<attribute name="onBindingValidation"> 
+<attribute name="onBindingValidate"> 
 	System.out.println("onBindingValidation(): called"); 
 </attribute> 
 <attribute name="onClick"> 

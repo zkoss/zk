@@ -36,7 +36,7 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	
 	//@Override
 	protected String getBrowserDelay() {
-		return "zk.ie6_ || zk.ie7 ? 1300 : 100"; 
+		return "zk.ie6_ || zk.ie7_ ? 1300 : 100"; 
 	}
 	
 	/**

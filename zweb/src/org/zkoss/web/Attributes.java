@@ -51,6 +51,13 @@ public class Attributes {
 	 */
 	public static final String PREFERRED_FIRST_DAY_OF_WEEK = "org.zkoss.web.preferred.firstDayOfWeek";
 
+	/** The session attribute used to specify the class used to return
+	 * the formats of date, time or both for datebox and timebox.
+	 * The class must implement {@link org.zkoss.text.DateFormatInfo}.
+	 * @since 5.0.7
+	 */
+	public static final String PREFERRED_DATE_FORMAT_INFO = "org.zkoss.web.preferred.dateFormatInfo";
+
 	/** The attribute name that contains the alert passed from
 	 * another request {@link org.zkoss.web.servlet.http.Https#sendRedirect}.
 	 * It is automatically reset after the next request is responsed.

@@ -14,7 +14,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	Check listbox's Second footer and tree's is in third column
+	Check "Second footer" is in third column
 	<hbox>
 		<listbox width="300px">
 			<listhead>

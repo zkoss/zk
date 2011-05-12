@@ -18,6 +18,7 @@ import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -25,10 +26,22 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 /**
  * Utilities to implement ZK.
  * @author tomyeh
- * @since 6.0.0
+ * @since 5.0.7
  */
 public class Utils {
 	private static final Log log = Log.lookup(Utils.class);
+
+	/** Marks the per-desktop information of the given key will be generated,
+	 * and returns true if the information is not generated yet
+	 * (i.e., this method is NOT called with the given key).
+	 * You could use this method to minimize the bytes to be sent to
+	 * the client if the information is required only once per desktop.
+	 */
+	public static
+	boolean shallGenerateImportantEvents(Desktop desktop, String key) {
+		return !(desktop instanceof DesktopImpl) //always gen if unknown
+		|| ((DesktopImpl)desktop).shallGenerateImportantEvents(key);
+	}
 
 	/** Returns the XML resources locator to locate
 	 * metainfo/zk/config.xml, metainfo/zk/lang.xml, and metainfo/zk/lang-addon.xml
