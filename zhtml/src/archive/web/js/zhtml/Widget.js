@@ -41,14 +41,13 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			}
 		}
 	},
-	_doChange: function (evt, timeout) {
+	_doChange: function (evt) {
 		var n = this.$n();
 		if (n) {
 			var val = n.value;
 			if (val != this._defValue) {
 				this._defValue = val;
-				this.fire('onChange', this._onChangeData(val), null,
-					timeout ? timeout: 150);
+				this.fire('onChange', this._onChangeData(val), null);
 			}
 		}
 	},
@@ -72,24 +71,25 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				this.fireX(wevt); //no propagation
 			}
 	},
-	_doCheck: function (timeout) {
+	_doCheck: function () {
 		var n = this.$n();
 		if (n) {
 			var val = n.checked;
 			if (val != this._defChecked) { //changed
 				this._defChecked = val;
-				this.fire('onCheck', val, timeout);
+				this.fire('onCheck', val);
 			}
 		}
 	},
 	bind_: function () {
 		this.$supers(zhtml.Widget, 'bind_', arguments);
-		if (this.isListen('onChange', {any:true})) {
-			this._doChange(null, -1);
-			this.domListen_(this.$n(), 'onChange');
+		var n;
+		if (this.isListen('onChange', {any:true}) && (n = this.$n())) {
+			this._defValue = n.value;
+			this.domListen_(n, 'onChange');
 		}
-		if (this.isListen('onCheck', {any:true}))
-			this._doCheck(-1);
+		if (this.isListen('onCheck', {any:true}) && (n = this.$n()))
+			this._defChecked = n.checked;
 	},
 	unbind_: function () {
 		this.domUnlisten_(this.$n(), 'onChange');

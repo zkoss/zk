@@ -335,7 +335,7 @@ public class LabelLoader {
 		return new FilterMap(map, _fmfilter); //no special key
 	}
 	@SuppressWarnings("unchecked")
-	private Map segmentInner(Map map) {
+	private FilterMap segmentInner(Map map) {
 		final Map segFound = new HashMap();
 		for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
@@ -352,9 +352,17 @@ public class LabelLoader {
 				vals.put(key.substring(index + 1), val);
 			}
 		}
+
 		for (Iterator it = segFound.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
-			map.put(me.getKey(), segmentInner((Map)me.getValue()));
+			final FilterMap seged;
+			Object o = map.put(me.getKey(), seged = segmentInner((Map)me.getValue()));
+			if (o != null && !(o instanceof Map)/*just in case*/) {
+				final Map m = seged.getOrigin();
+				o = m.put("$", o);
+				if (o != null)
+					m.put("$", o); //restore
+			}
 		}
 		return new FilterMap(map, _fmfilter);
 	}

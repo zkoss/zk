@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#	Purpose:
+#		To build java projects
+#	Description:
+#		'build help' for more descriptions
+#	History:
+#		March 29 15:11 2001, Created by tomyeh
+#		August 21 13:59 2002, Rewritten by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+version=$1
+if [ "$version" == "" ] ; then
+	echo "Usage: maven.install [ version ] [ official | daily ]"
+	exit 1
+fi
+
+if [ "$2" != "official" ] ; then
+	version=$version.FL.$(date +%Y%m%d)
+fi
+
+function upVer {
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $maindir/$1/pom.xml
+	cd $maindir/$1
+	mvn install
+	cd ..
+}
+
+upVer zcommon
+upVer zweb
+upVer zk
+upVer zul
+upVer zkex
+upVer zhtml
+upVer zml
+upVer zkmax
+upVer zkplus

@@ -28,12 +28,21 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
+import org.zkoss.util.logging.Log;
+
 /**
  * Utilities to handle java.io.Serializable.
  *
  * @author tomyeh
  */
 public class Serializables {
+	/** The logger called org.zkoss.io.serializable used to log serialization
+	 * information. You could set it to DEBUG, such that the not-serializable
+	 * and ignored values will be logged.
+	 * @since 5.0.7
+	 */
+	public static final Log logio = Log.lookup("org.zkoss.io.serializable");
+
 	private Serializables() {}
 
 	/** Writes only serializable entries of the specified map.
@@ -42,13 +51,21 @@ public class Serializables {
 	public static <K, V> void smartWrite(ObjectOutputStream s, Map<K, V> map)
 	throws IOException {
 		if (map != null) {
+			final boolean debug = logio.debugable();
 			for (Map.Entry<K, V> me: map.entrySet()) {
 				final K nm = me.getKey();
 				final V val = me.getValue();
 				if (((nm instanceof Serializable) || (nm instanceof Externalizable))
 				&& (val == null || (val instanceof Serializable) || (val instanceof Externalizable))) {
-					s.writeObject(nm);
-					s.writeObject(val);
+					try {
+						s.writeObject(nm);
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						logio.error("Unable to serialize entry: "+nm+'='+val);
+						throw ex;
+					}
+				} else if (nm != null && debug) {
+					logio.debug("Skip not-serializable entry: "+nm+'='+val);
 				}
 			}
 		}
@@ -77,10 +94,18 @@ public class Serializables {
 	public static <T> void smartWrite(ObjectOutputStream s, Collection<T> col)
 	throws IOException {
 		if (col != null) {
+			final boolean debug = logio.debugable();
 			for (T val: col) {
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
-					s.writeObject(val);
+					try {
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						logio.error("Unable to serialize item: "+val);
+						throw ex;
+					}
+				} else if (val != null && debug) {
+					logio.debug("Skip not-serializable item: "+val);
 				}
 			}
 		}
@@ -131,14 +156,34 @@ public class Serializables {
 	public static <T> void smartWrite(ObjectOutputStream s, T[] ary)
 	throws IOException {
 		if (ary != null) {
+			final boolean debug = logio.debugable();
 			for (int j = 0; j < ary.length; ++j) {
 				final T val = ary[j];
 				if ((val instanceof Serializable)
 				|| (val instanceof Externalizable)) {
-					s.writeObject(val);
+					try {
+						s.writeObject(val);
+					} catch (java.io.NotSerializableException ex) {
+						logio.error("Unable to serialize item: "+val);
+						throw ex;
+					}
+				} else if (val != null && debug) {
+					logio.debug("Skip not-serializable item: "+val);
 				}
 			}
 		}
 		s.writeObject(null);
+	}
+	/** Writes the given value only if it is serializable.
+	 * If not, null is written.
+	 * @since 5.0.7
+	 */
+	public static void smartWrite(ObjectOutputStream s, Object val)
+	throws IOException {
+		final boolean bser = val instanceof java.io.Serializable
+			|| val instanceof java.io.Externalizable;
+		s.writeObject(bser ? val: null);
+		if (!bser && val != null && logio.debugable())
+			logio.debug("Skip not-serializable object: "+val);
 	}
 }
