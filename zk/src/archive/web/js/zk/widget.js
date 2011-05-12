@@ -113,7 +113,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		else if (p) p.lastChild = to;
 	}
 
-	function _bind0(wgt) {
+	function _bind0(wgt) { //always called no matter ROD or not
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -1168,26 +1168,23 @@ new zul.wnd.Window{
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (props && zk.cut(props, "z$is"))
+		//2) Assign class.propotype.z$is to true (used by AbstractComponent.java)
+		if (this.$class.prototype.z$is)
 			this._fellows = {};
 
-		this.afterInit(function () {
-			if (props) {
-				var mold = props.mold;
-				if (mold != null) {
-					if (mold) this._mold = mold;
-					delete props.mold; //avoid setMold being called
-				}
-				for (var nm in props)
-					this.set(nm, props[nm]);
-			}
+		//zkac is a token used by create() in mount.js for optimizing performance
+		if (props !== zkac)
+			this.afterInit(function () {
+				//if props.$oid, it must be an object other than {} so ignore
+				if (props && typeof props == 'object' && !props.$oid)
+					for (var nm in props)
+						this.set(nm, props[nm]);
 
-			if ((zk.spaceless || this.rawId) && this.id)
-				this.uuid = this.id; //setId was called
-			if (!this.uuid)
-				this.uuid = zk.Widget.nextUuid();
-		});
+				if ((zk.spaceless || this.rawId) && this.id)
+					this.uuid = this.id; //setId was called
+				if (!this.uuid)
+					this.uuid = zk.Widget.nextUuid();
+			});
 	},
 
 	$define: {

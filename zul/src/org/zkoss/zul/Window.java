@@ -153,6 +153,7 @@ implements org.zkoss.zul.api.Window, Framable, IdSpace {
 	}
 
 	public Window() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -811,13 +812,6 @@ implements org.zkoss.zul.api.Window, Framable, IdSpace {
 			renderer.render("shadow", false);
 		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
 			//render mode as the last property
-	}
-	/** Does nothing since the cleint (zul.wnd.Window) always assigns
-	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
-	 * @since 5.0.6
-	 */
-	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-window-" + getMode() : _zclass;

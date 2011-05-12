@@ -203,8 +203,10 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 	private byte _progressStatus;
 
 	public Include() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
 	public Include(String src) {
+		this();
 		setSrc(src);
 	}
 
@@ -578,13 +580,6 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 			_renderResult = null;
 			ueng.setOwner(old);
 		}
-	}
-	/** Does nothing since the cleint (zul.wgt.Include) always assigns
-	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
-	 * @since 5.0.6
-	 */
-	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();

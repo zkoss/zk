@@ -71,6 +71,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	private String _tag = "span";
 
 	public HtmlMacroComponent() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 		init();
 	}
 	private void init() {
@@ -295,12 +296,5 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		super.renderProperties(renderer);
 		if (!"span".equals(_tag))
 			renderer.render("enclosingTag", _tag);
-	}
-	/** Does nothing since the cleint (zk.Macro) always assigns
-	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
-	 * @since 5.0.6
-	 */
-	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
 	}
 }

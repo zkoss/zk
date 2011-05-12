@@ -20,14 +20,15 @@ import org.zkoss.zk.ui.Desktop;
  * @since 5.0.7
  */
 public class Utils {
-	/** Returns whether the information about the important events shall be generated
-	 * for the given widget class in the given desktop.
-	 * The information needs to be generated only once for each widget class
-	 * for a given desktop.
+	/** Marks the per-desktop information of the given key will be generated,
+	 * and returns true if the information is not generated yet
+	 * (i.e., this method is NOT called with the given key).
+	 * You could use this method to minimize the bytes to be sent to
+	 * the client if the information is required only once per desktop.
 	 */
 	public static
-	boolean shallGenerateImportantEvents(Desktop desktop, String wgtcls) {
+	boolean markClientInfoPerDesktop(Desktop desktop, String key) {
 		return !(desktop instanceof DesktopImpl) //always gen if unknown
-		|| ((DesktopImpl)desktop).shallGenerateImportantEvents(wgtcls);
+		|| ((DesktopImpl)desktop).markClientInfoPerDesktop(key);
 	}
 }

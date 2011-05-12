@@ -179,8 +179,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private transient ReqResult _lastRes;
 	private transient List _piggyRes;
-	/** A set of widget classes whose important events are generated. */
-	private transient Set _importantEventGened;
+	/** A set of keys that shall be generated to the client only once per desktop. */
+	private transient Set _clientPerDesktops;
 
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -815,14 +815,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void recycle() {
-		_importantEventGened = null; //re-gen is required
+		_clientPerDesktops = null; //re-gen is required
 	}
-	/** Returns whether to generate the information of the important events of the given widget class.
+	/** Marks the per-desktop information of the given key will be generated,
+	 * and returns true if the information is not generated yet
+	 * (i.e., this method is NOT called with the given key).
+	 * You could use this method to minimize the bytes to be sent to
+	 * the client if the information is required only once per desktop.
 	 */
-	/*package*/ boolean shallGenerateImportantEvents(String wgtcls) {
-		if (_importantEventGened == null)
-			_importantEventGened= new HashSet(32);
-		return _importantEventGened.add(wgtcls);
+	/*package*/ boolean markClientInfoPerDesktop(String key) {
+		if (_clientPerDesktops == null)
+			_clientPerDesktops= new HashSet(32);
+		return _clientPerDesktops.add(key);
 	}
 
 	public boolean isAlive() {
