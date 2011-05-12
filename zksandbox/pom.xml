@@ -22,7 +22,7 @@
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<zuljsp.version>1.4.1</zuljsp.version>
 	</properties>
-	<version>5.0.7</version>
+	<version>5.0.8-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<licenses>
 		<license>

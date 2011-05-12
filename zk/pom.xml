@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zk</artifactId>
-	<version>5.0.7</version>
+	<version>5.0.8-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ZK Kernel</name>
 	<url>http://www.zkoss.org/zk</url>
