@@ -1188,13 +1188,13 @@ zk.log('value is", value);
 		return parseFloat(ver) || ver;
 	}
 	var browser = jq.browser,
-		agent = zk.agent = navigator.userAgent.toLowerCase(), j;
+		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ff = ((j = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(j + 8));
-	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
-	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
+	zk.ff = zk.gecko && ((zk.ff = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(zk.ff + 8));
+	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
+	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {

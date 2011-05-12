@@ -1176,7 +1176,7 @@ new zul.wnd.Window{
 		if (props !== zkac)
 			this.afterInit(function () {
 				//if props.$oid, it must be an object other than {} so ignore
-				if (props && typeof props == 'object' && !props.$oid)
+				if (props && typeof props == 'object' && props.$oid == null)
 					for (var nm in props)
 						this.set(nm, props[nm]);
 
