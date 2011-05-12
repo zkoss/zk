@@ -29,9 +29,11 @@ if [ "$2" != "official" ] ; then
 fi
 
 function upVer {
+	cp $maindir/$1/pom.xml $maindir/$1/pom.xml.bak
 	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $maindir/$1/pom.xml
 	cd $maindir/$1
 	mvn install
+	mv -f $maindir/$1/pom.xml.bak $maindir/$1/pom.xml
 	cd ..
 }
 
