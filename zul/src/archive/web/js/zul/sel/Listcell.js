@@ -195,12 +195,12 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	bindChildren_: function () {
 		var p;
-		if (!(p = this.parent) || !p._ignoreCellBinding)
+		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
 			this.$supers("bindChildren_", arguments);
 	},
 	unbindChildren_: function () {
 		var p;
-		if (!(p = this.parent) || !p._ignoreCellBinding)
+		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
 			this.$supers("unbindChildren_", arguments);
 	},
 	deferRedrawHTML_: function (out) {

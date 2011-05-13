@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.sel.Option = zk.$extends(zul.Widget, {
 	_selected: false,
-	_ignoreCellBinding: true, //Listcell.js optimization
 	$define: {
     	/**
     	 * Returns whether it is disabled.
