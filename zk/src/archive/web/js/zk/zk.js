@@ -1301,10 +1301,11 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 	 * @return boolean true if this object is an instance of the class
 	 */
 	$instanceof: function () {
-		for (var extds = this.$class._$extds, args = arguments,
-		j = args.length, cls; j--;)
-			if ((cls = args[j]) && extds[cls.$oid])
-				return true; //found
+		for (var args = arguments, j = args.length, self = this.$class, cls; j--;)
+			if (cls = args[j])
+				for (var c = self; c; c = c.superclass)
+					if (c == cls)
+						return true;
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
@@ -1478,7 +1479,10 @@ if (klass1.isAssignableFrom(klass2)) {
 	 * @return boolean true if assignable
 	 */
 	isAssignableFrom: function (cls) {
-		return cls && (cls = cls._$extds) && cls[this.$oid] != null;
+		for (; cls; cls = cls.superclass)
+			if (this == cls)
+				return true;
+		return false;
 	}
 };
 zk.copy(zk.Object, _zkf);
