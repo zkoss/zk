@@ -24,8 +24,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-tree, and an other option is z-dottree.
  */
 zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
-	// optimized for treechildren to identify
-	_isTree: true,
 	/**
 	 * clears the tree children.
 	 */

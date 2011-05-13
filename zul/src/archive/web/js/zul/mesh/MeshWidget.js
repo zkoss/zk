@@ -884,8 +884,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wd = n.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			wd = zk(n).revisedWidth(n.offsetWidth);
-			if (wd < 0) 
-				wd = 0;
 			if (wd) 
 				wd += "px";
 		}
@@ -898,13 +896,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this._getEbodyWd();
-		var hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
+		var tblwd = this._getEbodyWd(),
+			hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
 		if (zk.ie) {//By experimental: see zk-blog.txt
-			if (this.eheadtbl &&
-			this.eheadtbl.offsetWidth !=
-			this.ebodytbl.offsetWidth) 
-				this.ebodytbl.style.width = ""; //reset 
+			if (this.eheadtbl && this.eheadtbl.offsetWidth != this.ebodytbl.offsetWidth) 
+				this.ebodytbl.style.width = ""; //reset
+				 
 			if (tblwd && 
 					// fixed column's sizing issue in B30-1895907.zul
 					(!this.eheadtbl || !this.ebodytbl || !this.eheadtbl.style.width ||
@@ -912,14 +909,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					|| this.ebody.offsetWidth == this.ebodytbl.offsetWidth) &&
 					// end of the fixed
 					this.ebody.offsetWidth - tblwd > 11) { //scrollbar
-				if (--tblwd < 0) 
-					tblwd = 0;
-				this.ebodytbl.style.width = tblwd + "px";
+				this.ebodytbl.style.width = jq.px0(--tblwd);
 			}
 			// bug #2799258 and #1599788
 			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto") && !this._ignoreHghExt()) {
-				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
-				if (this.ebody.clientWidth && scroll > 11) //v-scrollbar 
+				var clientWidth = this.ebody.clientWidth,
+					scroll = this.ebody.offsetWidth - clientWidth;
+				if (clientWidth && scroll > 11) //v-scrollbar 
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight); //extend body height to remove the v-scrollbar
 				// resync
 				tblwd = this.ebody.clientWidth;
