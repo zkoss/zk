@@ -3,10 +3,14 @@ ZK 5.0.8
 * Features
 
 * Bugs
+  3301374: datebox onChange event not fired
   3301375: native component in vbox stretch align show javascript error
+
+* Upgrade Notes
 
 	--------
 ZK 5.0.7
+May 11, 2011
 * Features
   3263584: Support drag and drop with ipad
   3256604: Support double click event with ipad
