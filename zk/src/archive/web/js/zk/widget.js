@@ -4969,6 +4969,7 @@ zk.Native = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "native",
+	rawId: true,
 
 	redraw: function (out) {
 		var s = this.prolog;

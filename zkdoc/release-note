@@ -1,4 +1,11 @@
 	--------
+ZK 5.0.8
+* Features
+
+* Bugs
+  3301375: native component in vbox stretch align show javascript error
+
+	--------
 ZK 5.0.7
 * Features
   3263584: Support drag and drop with ipad
