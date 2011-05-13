@@ -1176,7 +1176,7 @@ new zul.wnd.Window{
 		if (props !== zkac)
 			this.afterInit(function () {
 				//if props.$oid, it must be an object other than {} so ignore
-				if (props && typeof props == 'object' && props.$oid == null)
+				if (props && typeof props == 'object' && !props.$oid)
 					for (var nm in props)
 						this.set(nm, props[nm]);
 
@@ -2518,14 +2518,12 @@ out.push('</div>');
 	 */
 	redraw: function (out) {
 		if (!this.deferRedraw_(out)) {
-			var s = this.prolog;
-			if (s) out.push(s);
+			var f;
+			if (f = this.prolog)
+				out.push(f);
 
-			for (var p = this, mold = this._mold; p; p = p.superclass) {
-				var f = p.$class.molds;
-				if (f && (f = f[mold]))
-					return f.apply(this, arguments);
-			}
+			if ((f = this.$class.molds) && (f = f[this._mold]))
+				return f.apply(this, arguments);
 
 			zk.error("Mold "+mold+" not found in "+this.className);
 		}
