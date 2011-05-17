@@ -1217,8 +1217,8 @@ zk.log('value is", value);
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 		if (zk.iex) {
-			zk.ie = zk.iex == 7 ? 7 : (document.documentMode || 6); //dom/js version
-			if (zk.ie < 6) zk.ie = 6; //quirk mode
+			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
+				zk.ie = 6; //assume quirk mode
 			zk.ie7 = zk.ie >= 7; //ie7 or later
 			zk.ie8 = zk.ie >= 8; //ie8 or later
 			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
