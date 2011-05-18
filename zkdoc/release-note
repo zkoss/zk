@@ -15,6 +15,7 @@ May 20, 2011
   3301353: Unneeded vert-scrollbar when using Portallayout
   3303725: Wrong Panel size in Portallayout
   3301374: datebox onChange event not fired
+  3303681: tabbox with wrong height
   
 	--------
 ZK 5.0.7

@@ -121,19 +121,37 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
     			for (var e = n.parentNode.firstChild; e; e = e.nextSibling)
     				if (e != n) hgh -= e.offsetHeight;
     			hgh -= n.firstChild.offsetHeight;
-    			hgh = zk(n.lastChild).revisedHeight(hgh);
+    			hgh = zk(n = n.lastChild).revisedHeight(hgh);
     			if (zk.ie8)
     				hgh -= 1; // show the bottom border
-    			var cave = this.getCaveNode();
-    			cave.style.height = jq.px0(hgh);
-        		if (zk.ie && !zk.ie8) {
-        			var s = cave.style,
-        			z = s.zoom;
+    			var cave = this.getCaveNode(),
+					s = cave.style;
+    			s.height = jq.px0(hgh);
+				//Bug-3303681: need to minus the scroll bar height
+				if (zk.ie < 8)
+					s.overflow = 'auto';
+				if (n.offsetHeight - n.clientHeight > 11)
+					s.height = jq.px0(hgh - jq.scrollbarWidth());
+        		if (zk.ie < 8) {
+        			var z = s.zoom;
         			s.zoom = 1;
         			s.zoom = z;
         			s.overflow = 'hidden';
         		}
     		}
+		}
+	},
+	//@Override
+	afterAnima_: function (visible) {
+		this.$supers('afterAnima_', arguments);
+		//Bug-3303681: need to minus the scroll bar height
+		if (visible && this.getTabbox().inAccordionMold()) {
+			var n, cave;
+			if ((n = this.$n()) && (n = n.lastChild) && 
+				(n.offsetHeight - n.clientHeight > 11) &&
+				(cave = this.getCaveNode()) && cave.style.height)
+				cave.style.height = 
+					jq.px0(zk.parseInt(cave.style.height) - jq.scrollbarWidth());
 		}
 	},
 	domClass_: function () {
