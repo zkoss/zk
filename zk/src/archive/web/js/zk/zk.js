@@ -1188,13 +1188,13 @@ zk.log('value is", value);
 		return parseFloat(ver) || ver;
 	}
 	var browser = jq.browser,
-		agent = zk.agent = navigator.userAgent.toLowerCase(), j;
+		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ff = ((j = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(j + 8));
-	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
-	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
+	zk.ff = zk.gecko && ((zk.ff = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(zk.ff + 8));
+	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
+	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
@@ -1207,8 +1207,8 @@ zk.log('value is", value);
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 		if (zk.iex) {
-			zk.ie = document.documentMode||6; //dom/js version
-			if (zk.ie < 6) zk.ie = 6; //quirk mode
+			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
+				zk.ie = 6; //assume quirk mode
 			zk.ie7 = zk.ie >= 7; //ie7 or later
 			zk.ie8 = zk.ie >= 8; //ie8 or later
 			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
