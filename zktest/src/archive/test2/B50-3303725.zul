@@ -1,0 +1,28 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Drag Panel 2 to the left column (between 1 and 3). If the 3 Panels do not occupy the full height of Portallayout (the green box), it is a bug.</li>
+		</ol>
+	]]></html>
+	<portallayout width="500px" height="500px" style="border: 1px solid green;">
+		<portalchildren hflex="1" vflex="1">
+			<panel title="Panel 1" vflex="1" border="normal">
+				<panelchildren>
+					Panel Children 1
+				</panelchildren>
+			</panel>
+			<panel title="Panel 3" vflex="1" border="normal">
+				<panelchildren>
+					Panel Children 3
+				</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren hflex="1">
+			<panel title="Panel 2" vflex="1" border="normal">
+				<panelchildren>
+					Panel Children 2
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
