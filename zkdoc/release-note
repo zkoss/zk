@@ -1,4 +1,11 @@
 	--------
+ZK 5.0.7.1
+* Bugs
+  3301353: Unneeded vert-scrollbar when using Portallayout
+  3303725: Wrong Panel size in Portallayout
+  3301374: datebox onChange event not fired
+  
+	--------
 ZK 5.0.7
 * Features
   3263584: Support drag and drop with ipad
