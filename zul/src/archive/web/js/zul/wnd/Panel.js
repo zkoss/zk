@@ -698,7 +698,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.domListen_(this.$n(), 'onMouseOut');
 			var Panel = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
-				stackup: true, draw: Panel._drawsizing,
+				stackup: true, 
+				draw: Panel._drawsizing,
+				snap: Panel._snapsizing,
 				starteffect: Panel._startsizing,
 				ghosting: Panel._ghostsizing,
 				endghosting: Panel._endghostsizing,
@@ -1019,6 +1021,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		return true;
 	},
+	_snapsizing: zul.wnd.Window._snapsizing,
 	_aftersizing: zul.wnd.Window._aftersizing,
 	_drawsizing: zul.wnd.Window._drawsizing
 });

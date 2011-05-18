@@ -5,6 +5,7 @@ ZK 5.0.8
 * Bugs
   3301374: datebox onChange event not fired
   3301375: native component in vbox stretch align show javascript error
+  3303684: Panel sizable has incorrect moving constraint
 
 * Upgrade Notes
 
