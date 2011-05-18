@@ -43,17 +43,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		};
 	}
-	function regClass(jclass, superclass) {
-		var oid = jclass.$oid = ++_oid;
-		zk.classes[oid] = jclass;
-		jclass.prototype.$class = jclass;
-		jclass.$class = zk.Class;
-		(jclass._$extds = (jclass.superclass = superclass) ?
-			zk.copy({}, superclass._$extds): {})[oid] = jclass;
-			//_$extds is a map of all super classes and jclass
-		return jclass;
-	}
-
 	function defGet(nm) {
 		return new Function('return this.' + nm + ';');
 	}
@@ -184,10 +173,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Refer to {@link jq} for DOM related utilities.
  */
 zk.copy(zk, {
-	/** A map of all classes, Map<int oid, zk.Class cls>.
-	 * @since 5.0.8
-	 */
-	classes: {},
 	/** The delay before showing the processing prompt (unit: milliseconds).
 	 * <p>Default: 900 (depending on the server's configuration)
 	 * @type int
@@ -671,8 +656,9 @@ foo.Widget = zk.$extends(zk.Widget, {
 		if (!superclass)
 			throw 'unknown superclass';
 
-		var jclass = newClass(),
-			thispt = jclass.prototype,
+		var jclass = newClass();
+
+		var thispt = jclass.prototype,
 			superpt = superclass.prototype,
 			define = members['$define'];
 		delete members['$define'];
@@ -686,11 +672,15 @@ foo.Widget = zk.$extends(zk.Widget, {
 
 		zk.copy(jclass, staticMembers);
 
+		thispt.$class = jclass;
 		thispt._$super = superpt;
 		thispt._$subs = [];
 		superpt._$subs.push(thispt);
 			//maintain a list of subclasses (used zk.override)
-		return regClass(jclass, superclass);
+		jclass.$class = zk.Class;
+		jclass.superclass = superclass;
+
+		return jclass;
 	},
 
 	/** Provides the default values for the specified options.
@@ -1198,13 +1188,13 @@ zk.log('value is", value);
 		return parseFloat(ver) || ver;
 	}
 	var browser = jq.browser,
-		agent = zk.agent = navigator.userAgent.toLowerCase();
+		agent = zk.agent = navigator.userAgent.toLowerCase(), j;
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ff = zk.gecko && ((zk.ff = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(zk.ff + 8));
-	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
-	zk.android = zk.safari && (agent.indexOf('android') >= 0);
+	zk.ff = ((j = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(j + 8));
+	zk.ios = (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0) && zk.safari;
+	zk.android = (agent.indexOf('android') >= 0) && zk.safari;
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.gecko) {
@@ -1217,8 +1207,8 @@ zk.log('value is", value);
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 		if (zk.iex) {
-			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
-				zk.ie = 6; //assume quirk mode
+			zk.ie = document.documentMode||6; //dom/js version
+			if (zk.ie < 6) zk.ie = 6; //quirk mode
 			zk.ie7 = zk.ie >= 7; //ie7 or later
 			zk.ie8 = zk.ie >= 8; //ie8 or later
 			zk.css3 = zk.ie9 = zk.ie >= 9; //ie9 or later
@@ -1250,7 +1240,7 @@ zk.log('value is", value);
 				return f.apply(o, arguments);
 			};
 	}
-regClass(zk.Object = newClass());
+zk.Object = function () {};
 /** @class zk.Object
  * The root of the class hierarchy.
  * @see zk.Class
@@ -1281,12 +1271,11 @@ zk.Object.prototype = {
 	/** The class that this object belongs to.
 	 * @type zk.Class
 	 */
-	//$class: zk.Object, //assigned in regClass()
+	$class: zk.Object,
 	/** The object ID. Each object has its own unique $oid.
 	 * It is mainly used for debugging purpose.
 	 * <p>Trick: you can test if a JavaScript object is a ZK object by examining this property, such as
 	 * <code>if (o.$oid) alert('o is a ZK object');</code>
-	 * <p>Notice: zk.Class extends from zk.Object (so a class also has $oid)
 	 * @type int
 	 */
 	//$oid: 0,
@@ -1301,11 +1290,15 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 	 * @return boolean true if this object is an instance of the class
 	 */
 	$instanceof: function () {
-		for (var args = arguments, j = args.length, self = this.$class, cls; j--;)
-			if (cls = args[j])
-				for (var c = self; c; c = c.superclass)
+		for (var j = arguments.length, cls; j--;)
+			if (cls = arguments[j]) {
+				var c = this.$class;
+				if (c == zk.Class)
+					return this == zk.Object || this == zk.Class; //follow Java
+				for (; c; c = c.superclass)
 					if (c == cls)
 						return true;
+			}
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
@@ -1425,7 +1418,6 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 			supers[nm] = old; //restore
 		}
 	},
-	//a list of subclass's prototypes
 	_$subs: [],
 
 	/** Proxies a member function such that it can be called with this object in a context that this object is not available.
@@ -1454,9 +1446,14 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	}
 };
 
+zk.Class = function () {}
+zk.Class.superclass = zk.Object;
+zk.Class.prototype.$class = zk.Class;
 /** @partial zk.Object
  */
 _zkf = {
+	//note we cannot generate javadoc for this because Java cannot have both static and non-static of the same name
+	$class: zk.Class,
 	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
 	 * Example:
 <pre><code>
@@ -1483,10 +1480,11 @@ if (klass1.isAssignableFrom(klass2)) {
 			if (this == cls)
 				return true;
 		return false;
-	}
+	},
+	$instanceof: zk.Object.prototype.$instanceof
 };
+zk.copy(zk.Class, _zkf);
 zk.copy(zk.Object, _zkf);
-zk.copy(regClass(zk.Class = function () {}, zk.Object), _zkf);
 
 //error box//
 var _erbx, _errcnt = 0;
