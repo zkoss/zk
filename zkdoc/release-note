@@ -3,13 +3,19 @@ ZK 5.0.8
 * Features
 
 * Bugs
-  3301374: datebox onChange event not fired
   3301375: native component in vbox stretch align show javascript error
   3303684: Panel sizable has incorrect moving constraint
-  3303725: Wrong Panel size in Portallayout
 
 * Upgrade Notes
 
+	--------
+ZK 5.0.7.1
+May 20, 2011
+* Bugs
+  3301353: Unneeded vert-scrollbar when using Portallayout
+  3303725: Wrong Panel size in Portallayout
+  3301374: datebox onChange event not fired
+  
 	--------
 ZK 5.0.7
 May 11, 2011
@@ -120,7 +126,7 @@ May 11, 2011
   3285714: Grid in ROD shall fall back when not using model
   3287082: Bandbox will recieve onChanging event when edit page number
   3292545: InputElement in rounded mold doesn't support the width
-  3293492: doublespinner  rounded mold not support width
+  3293492: doublespinner rounded mold not support width
   3204965: onChangePageSize is not fired in autopaging scenario
   3244126: Horizontal scrollbar malfunction with Grid on IE
   3201762: Borderlayout flex has issue with listbox hflex in IE 6 
