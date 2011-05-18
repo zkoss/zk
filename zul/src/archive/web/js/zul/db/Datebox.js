@@ -632,10 +632,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this.close();
 			db._inplaceout = true;
 			
-			// Bug 3122159
-			evt.data.value = db._value = date;
+			// Bug 3122159 and 3301374
+			evt.data.value = date;
 			if(!_equalDate(date, oldDate))
-				db.fire(evt.name, evt.data);
+				db.updateChange_();
 		}
 		evt.stop();
 	},
