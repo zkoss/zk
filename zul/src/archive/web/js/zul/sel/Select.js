@@ -256,19 +256,18 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		}
 		
 		this.fire('onSelect', {items: data, reference: reference});
-	
+		
 		// To Be Fixed: Bug 1756559: see au.js
 		/*if (zkau.lateReq) {
 			zkau.send(zkau.lateReq, 25);
 			delete zkau.lateReq;
 		}*/
 	},
-	doKeyUp_: function (evt) {
-		if (zk.gecko || zk.safari) {
-			if (this.isMultiple() || this.getSelectedIndex() === evt.domTarget.selectedIndex) 
-				return; //not change or unnecessary.
-			this._doChange(evt);
-		} else this.$supers('doKeyUp_', arguments);
+	doBlur_: function (evt) {
+		if (this.isMultiple() || this.getSelectedIndex() === evt.domTarget.selectedIndex) 
+			return this.$supers('doBlur_', arguments) ; //not change or unnecessary.
+			
+		this._doChange(evt);
 	},
 	onChildAdded_: function (/*child*/) {
 		this.rerender();
