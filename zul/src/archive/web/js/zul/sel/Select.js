@@ -265,9 +265,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	doBlur_: function (evt) {
 		if (this.isMultiple() || this.getSelectedIndex() === evt.domTarget.selectedIndex) 
-			return this.$supers('doBlur_', arguments) ; //not change or unnecessary.
-			
+			return this.$supers('doBlur_', arguments); //not change or unnecessary.
 		this._doChange(evt);
+		return this.$supers('doBlur_', arguments); 		
 	},
 	onChildAdded_: function (/*child*/) {
 		this.rerender();
