@@ -913,9 +913,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			// bug #2799258 and #1599788
 			if (!zk.ie8 && !this.isVflex() && (!hgh || hgh == "auto") && !this._ignoreHghExt()) {
-				var clientWidth = this.ebody.clientWidth,
-					scroll = this.ebody.offsetWidth - clientWidth;
-				if (clientWidth && scroll > 11) //v-scrollbar 
+				if (zk(this.ebody).hasVScroll()) //v-scrollbar 
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight); //extend body height to remove the v-scrollbar
 				// resync
 				tblwd = this.ebody.clientWidth;
@@ -963,10 +961,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
 		if (zk.ie && !this.isVflex() && (!hgh || hgh == "auto")) {
 			if(!zk.ie8) { 
-				var scroll = this.ebody.offsetWidth - this.ebody.clientWidth;
-				if (this.ebody.clientWidth && scroll > 11) { //v-scroll, expand body height to remove v-scroll
+				var $ebody;
+				if (($ebody=zk(this.ebody)).hasVScroll()) { //v-scroll, expand body height to remove v-scroll
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
-					if ((this.ebody.offsetWidth - this.ebody.clientWidth) > 11) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
+					if ($ebody.hasVScroll()) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
 						this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
 				}
 			} else if (!this.efrozen) {

@@ -456,8 +456,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
 			hgh = n.style.height;
-			if (zk.ie && (!hgh || hgh == "auto")
-			&& this.ebody.offsetWidth - this.ebody.clientWidth > 11) {
+			if (zk.ie && (!hgh || hgh == "auto") && zk(this.ebody).hasVScroll()) {
 				if (!nVisiRows) this.ebody.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.ebody.style.height =
 						(this.ebody.offsetHeight * 2 - this.ebody.clientHeight) + "px";

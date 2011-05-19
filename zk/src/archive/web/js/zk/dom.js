@@ -579,6 +579,22 @@ zjq.prototype = {
 		}
 		return this;
 	},
+	/** Tests if the first matched DOM element has the vertical scrollbar
+	 * @return boolean true if the element has the vertical scrollbar
+	 * @since 5.0.8
+	 */
+	hasVScroll: function () {
+		var n;
+		return (n = this.jq[0]) && n.offsetWidth - n.clientWidth > 11;
+	},
+	/** Tests if the first matched DOM element has the horizontal scrollbar
+	 * @return boolean true if the element has the horizontal scrollbar
+	 * @since 5.0.8
+	 */
+	hasHScroll: function () {
+		var n;
+		return (n = this.jq[0]) && n.offsetHeight - n.clientHeight > 11;
+	},
 
 	/** Tests if the first matched element is overlapped with the specified
 	 * element.
@@ -586,8 +602,8 @@ zjq.prototype = {
 	 * @return boolean true if they are overlapped.
 	 */
 	isOverlapped: function (el) {
-		var n = this.jq[0];
-		if (n)
+		var n;
+		if (n = this.jq[0])
 			return jq.isOverlapped(
 				this.cmOffset(), [n.offsetWidth, n.offsetHeight],
 				zk(el).cmOffset(), [el.offsetWidth, el.offsetHeight]);
