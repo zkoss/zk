@@ -391,11 +391,14 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel, Framab
 	 * <code>rounded</code> and <code>rounded+</code>.
 	 * For more information, please refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
-	 * @param border the border. If null or "0", "none" is assumed.
+	 * @param border the border. If null, "0" or "false", "none" is assumed.
+	 * If "true", "normal" is assumed (since 5.0.8).
 	 */
 	public void setBorder(String border) {
-		if (border == null || "0".equals(border))
+		if (border == null || "0".equals(border) || "false".equals(border))
 			border = "none";
+		else if ("true".equals(border))
+			border = "normal";
 		if (_framableBC) {
 			if (border.startsWith("rounded")) {
 				_framableBC = false;

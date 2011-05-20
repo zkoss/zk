@@ -356,12 +356,14 @@ implements org.zkoss.zul.api.Window, Framable, IdSpace {
 	}
 	/** Sets the border (either none or normal).
 	 *
-	 * @param border the border. If null or "0", "none" is assumed.
-	 * Since 2.4.1, We assume "0" to be "none".
+	 * @param border the border. If null, "0" or "false", "none" is assumed.
+	 * If "true", "normal" is assumed (since 5.0.8).
 	 */
 	public void setBorder(String border) {
-		if (border == null || "0".equals(border))
+		if (border == null || "0".equals(border) || "false".equals(border))
 			border = "none";
+		else if ("true".equals(border))
+			border = "normal";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
 			smartUpdate("border", border);
