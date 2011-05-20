@@ -1,0 +1,15 @@
+<zk>
+<html><![CDATA[
+	<ul>
+	<li>You see see nothing shown in the following listbox</li>
+	</ul>
+]]></html>
+<listbox id="listbox" mold="select" rows="1">
+<listitem label="A" />
+<listitem label="B" />
+<listitem label="C" />
+</listbox>
+<zscript>
+listbox.setSelectedIndex(-1);
+</zscript>
+</zk>
