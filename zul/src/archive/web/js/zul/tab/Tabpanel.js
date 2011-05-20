@@ -141,19 +141,6 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
     		}
 		}
 	},
-	//@Override
-	afterAnima_: function (visible) {
-		this.$supers('afterAnima_', arguments);
-		//Bug-3303681: need to minus the scroll bar height
-		if (visible && this.getTabbox().inAccordionMold()) {
-			var n, cave;
-			if ((n = this.$n()) && (n = n.lastChild) && 
-				(n.offsetHeight - n.clientHeight > 11) &&
-				(cave = this.getCaveNode()) && cave.style.height)
-				cave.style.height = 
-					jq.px0(zk.parseInt(cave.style.height) - jq.scrollbarWidth());
-		}
-	},
 	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments);
 		if (this.getTabbox().inAccordionMold())
