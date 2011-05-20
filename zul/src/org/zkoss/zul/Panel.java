@@ -413,6 +413,14 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel, Framab
 	
 		setBorder0(border);
 	}
+	/** Enables or disables the border.
+	 * @param border whether to have a border. If true is specified,
+	 * it is the same as <code>setBorder("normal")</code>.
+	 * @since 5.0.8
+	 */
+	public void setBorder(boolean border) {
+		setBorder(border ? "normal": "none");
+	}
 	private void setBorder0(String border) {
 		if (!Objects.equals(_border, border)) {
 			_border = border;

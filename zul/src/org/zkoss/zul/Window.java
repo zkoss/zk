@@ -369,6 +369,14 @@ implements org.zkoss.zul.api.Window, Framable, IdSpace {
 			smartUpdate("border", border);
 		}
 	}
+	/** Enables or disables the border.
+	 * @param border whether to have a border. If true is specified,
+	 * it is the same as <code>setBorder("normal")</code>.
+	 * @since 5.0.8
+	 */
+	public void setBorder(boolean border) {
+		setBorder(border ? "normal": "none");
+	}
 
 	/** Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
