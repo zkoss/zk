@@ -12,6 +12,26 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	function _digitsAfterDecimal(v) {
+		var vs = '' + v,
+			i = vs.indexOf(zk.DECIMAL);
+		return i < 0 ? 0 : vs.length - i - 1;
+	}
+	function _shiftedSum(v1, v2, exp, asc) {
+		var mul;
+		if (exp) {
+			mul = Math.pow(10, exp);
+			v1 *= mul;
+			v2 *= mul;
+			v1 = Math.round(v1);
+			v2 = Math.round(v2);
+		}
+		var res = asc ? v1 + v2 : v1 - v2;
+		if (exp)
+			res /= mul;
+		return res;
+	}
 /**
  * An edit box for holding a constrained double.
  *
@@ -29,7 +49,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		/** Set the step of dobule spinner
 		 * @param double step
 		 */
-		step: _zkf = function(){},
+		step: function (v) {
+			this._fixedDigits = _digitsAfterDecimal(v);
+		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
 		 * @return boolean
@@ -277,15 +299,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		if (this.inp && !this.inp.disabled && !zk.dragging)
 			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
 	},
-	_increase: function (is_add){
+	_increase: function (asc){
 		var inp = this.inp,
 			value = this.coerceFromString_(inp.value),
-			result;
-		if (is_add)
-			result = value + this._step;
-		else
-			result = value - this._step;
-
+			shiftLen = Math.max(_digitsAfterDecimal(value), this._fixedDigits),
+			result = _shiftedSum(value, this._step, shiftLen, asc); // B50-3301517
+		
 		// control overflow
 		if ( result > Math.pow(2,63)-1 )	result = Math.pow(2,63)-1;
 		else if ( result < -Math.pow(2,63) ) result = -Math.pow(2,63);
@@ -388,3 +407,5 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	}
 	
 });
+
+})();

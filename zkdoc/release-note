@@ -5,12 +5,13 @@ ZK 5.0.8
 * Bugs
   3301375: native component in vbox stretch align show javascript error
   3303684: Panel sizable has incorrect moving constraint
+  3301517: Double spinner show 0.000000000001
 
 * Upgrade Notes
 
 	--------
 ZK 5.0.7.1
-May 20, 2011
+May 19, 2011
 * Bugs
   3301353: Unneeded vert-scrollbar when using Portallayout
   3303725: Wrong Panel size in Portallayout
