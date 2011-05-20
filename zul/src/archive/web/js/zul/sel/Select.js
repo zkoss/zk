@@ -237,36 +237,42 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	_doChange: function (evt) {		
 		var data = [], reference, n = this.$n();
-		if (this.isMultiple()) {
-			var opts = n.options;
+		if (this._multiple) {
+			var opts = n.options, changed;
 			for (var j = 0, ol = opts.length; j < ol; ++j) {
 				var opt = opts[j],
-					o = zk.Widget.$(opt.id);
-				if (o) o.setSelected(opt.selected);
-				if (opt.selected) {
+					o = zk.Widget.$(opt.id),
+					v = opt.selected;
+				if (o && o._selected != v) {
+					o.setSelected(v);
+					changed = true;
+				}
+				if (v) {
 					data.push(opt.id);
 					if (!reference) reference = opt.id;
 				}
 			}
+			if (!changed)
+				return;
 		} else {
-			var opt = n.options[n.selectedIndex];
-			this.setSelectedIndex(n.selectedIndex);
-			data.push(opt.id);
-			reference = opt.id;
+			var v = n.selectedIndex;
+			if (this._selectedIndex == v)
+				return;
+
+			this.setSelectedIndex(v);
+			data.push(reference = n.options[v].id);
 		}
-		
+
 		this.fire('onSelect', {items: data, reference: reference});
-		
-		// To Be Fixed: Bug 1756559: see au.js
-		/*if (zkau.lateReq) {
-			zkau.send(zkau.lateReq, 25);
-			delete zkau.lateReq;
-		}*/
 	},
+	//Bug 3304408: IE does not fire onchange
 	doBlur_: function (evt) {
-		if (!this.isMultiple() && this.getSelectedIndex() !== evt.domTarget.selectedIndex)
-			this._doChange(evt);
+		this._doChange(evt);
 		return this.$supers('doBlur_', arguments); 		
+	},
+	//Bug 1756559: ctrl key shall fore it to be sent first
+	beforeCtrlKeys_: function (evt) {
+		this._doChange(evt);
 	},
 	onChildAdded_: function (/*child*/) {
 		this.rerender();

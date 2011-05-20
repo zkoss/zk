@@ -6,6 +6,7 @@ ZK 5.0.8
   3301375: native component in vbox stretch align show javascript error
   3303684: Panel sizable has incorrect moving constraint
   3301517: Double spinner show 0.000000000001
+  3304408: Listbox[mold=select], onChange event not fired in IE6
 
 * Upgrade Notes
 
@@ -17,7 +18,6 @@ May 19, 2011
   3303725: Wrong Panel size in Portallayout
   3301374: datebox onChange event not fired
   3303681: tabbox with wrong height
-  3304408: Listbox[mold=select], onChange event not fired in IE6
   
 	--------
 ZK 5.0.7
