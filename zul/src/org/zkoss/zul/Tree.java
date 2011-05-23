@@ -184,7 +184,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			if (cmp instanceof Treeitem) {
 				if (data[4] >= data[0]) return false; // full
 				final Treeitem item = (Treeitem) cmp;
-				if (item.isVisible()) {
+				if (item.isRealVisible()) {
 					int count = item.isOpen() && item.getTreechildren() != null ?
 							item.getTreechildren().getVisibleItemCount(): 0;
 					boolean shoulbBeVisited = data[1] < data[2] + 1 + count;
@@ -708,7 +708,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	 * @since 3.0.4
 	 */
 	public void setActivePage(Treeitem item) {
-		if (item.isVisible() && item.getTree() == this && isVisible()) {
+		if (item.isRealVisible() && item.getTree() == this && isVisible()) {
 			int index = getVisibleIndexOfItem(item);
 			if (index != -1) {
 				final Paginal pgi = getPaginal();
@@ -749,7 +749,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
 		if (item == null) return 0;
 		int count = 0;
-		if (item.isVisible()) {
+		if (item.isRealVisible()) {
 			count++;
 			if (inclusive && item.isOpen() && item.getTreechildren() != null)
 				count += item.getTreechildren().getVisibleItemCount();
@@ -762,7 +762,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 			Component cmp = item.getParent().getParent();
 			if (cmp instanceof Treeitem) {
 				Treeitem parent = (Treeitem)cmp;
-				if (parent.isVisible()) {
+				if (parent.isRealVisible()) {
 					parent.setOpen(true);
 					int cnt = getVisibleIndexOfItem0(parent, false);
 					if (cnt == -1) return -1;

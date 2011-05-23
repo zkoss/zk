@@ -83,9 +83,10 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 	}*/
 
 	//-- Component --//
-	/** Returns whether this is visible.
-	 * whether all its ancestors is open.
-	 */
+//	/** Returns whether this is visible.
+//	 * whether all its ancestors is open.
+//	 */
+	/*
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
@@ -98,6 +99,7 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		return !(comp instanceof Treechildren)
 			|| ((Treechildren)comp).isVisible(); //recursive
 	}
+	*/
 	public void smartUpdate(String attr, Object value) {
 		super.smartUpdate(attr, value);
 	}
@@ -107,7 +109,7 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		Component comp = getParent();
 		if (!(comp instanceof Treeitem))
 			return true;
-		if (!comp.isVisible()) return false;
+		if (!((Treeitem) comp).isRealVisible()) return false;
 		return true;
 	}
 	

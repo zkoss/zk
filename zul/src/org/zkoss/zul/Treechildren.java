@@ -80,16 +80,29 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	public org.zkoss.zul.api.Treerow getLinkedTreerowApi() {
 		return getLinkedTreerow();
 	}
-	/** Returns whether this is visible.
-	 * <p>Besides depends on {@link #setVisible}, it also depends on
-	 * whether all its ancestors is open.
-	 */
+//	/** Returns whether this is visible.
+//	 * <p>Besides depends on {@link #setVisible}, it also depends on
+//	 * whether all its ancestors is open.
+//	 */
+	/*
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
 		Component comp = getParent();
 		return !(comp instanceof Treeitem) || 
 			((Treeitem)comp).isOpen() && ((Treeitem)comp).isVisible(); //recursive
+	}
+	*/
+	/*package*/ boolean isRealVisible() {
+		if(!isVisible())
+			return false;
+		Component comp = getParent();
+		if(comp == null)
+			return true;
+		if(!(comp instanceof Treeitem))
+			return comp.isVisible();
+		Treeitem item = (Treeitem) comp;
+		return item.isOpen() && item.isRealVisible();
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
