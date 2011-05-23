@@ -63,12 +63,13 @@ zul.Upload = zk.$extends(zk.Object, {
 	$init: function(wgt, parent, clsnm) {
 		var cls;
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
-			if (attrs[i].startsWith('maxsize='))
-				this.maxsize = attrs[i].match(new RegExp(/maxsize=([^,]*)/))[1];
-			else if (attrs[i] == 'native')
+			var attr = attrs[i].trim(); 
+			if (attr.startsWith('maxsize='))
+				this.maxsize = attr.match(new RegExp(/maxsize=([^,]*)/))[1];
+			else if (attr == 'native')
 				this.isNative = true;
-			else if (attrs[i] != 'true')
-				cls = attrs[i];
+			else if (attr != 'true')
+				cls = attr;
 		}
 		
 		this._clsnm = cls || '';
