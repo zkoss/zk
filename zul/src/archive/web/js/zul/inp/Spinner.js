@@ -57,21 +57,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			}
 			this.onSize();
 			return;
-		},
-		/** Returns the minimum value.
-		 * @return int
-		 */
-		/** Set the minimum value.
-		 * @param int min
-		 */
-		min: _zkf = function(v){this._min = parseInt(v, 10);},
-		/** Returns the maximum value.
-		 * @return int
-		 */
-		/** Set the maximum value.
-		 * @param int max
-		 */
-		max: _zkf
+		}
 	},
 	getZclass: function () {
 		var zcls = this._zclass;

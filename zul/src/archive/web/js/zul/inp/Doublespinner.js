@@ -58,7 +58,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		/** Sets whether the button (on the right of the textbox) is visible.
 		 * @param boolean visible
-	 	*/
+	 	 */
 		buttonVisible: function(v){			
 			var n = this.$n("btn"),
 				zcls = this.getZclass();
@@ -80,21 +80,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			}
 			this.onSize();
 			return;
-		},
-		/** Returns the minimum value.
-		 * @return double
-		 */
-		/** Set the minimum value.
-		 * @param double min
-		 */
-		min: _zkf = function(v){this._min = parseFloat(v, 10);},
-		/** Returns the maximum value.
-		 * @return double
-		 */
-		/** Set the maximum value.
-		 * @param double max
-		 */
-		max: _zkf
+		}
 	},
 	getZclass: function () {
 		var zcls = this._zclass;

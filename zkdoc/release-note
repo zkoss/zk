@@ -8,6 +8,7 @@ ZK 5.0.8
   3301517: Double spinner show 0.000000000001
   3304408: Listbox[mold=select], onChange event not fired in IE6
   2973303: listbox mold select and selectedIndex -1
+  3306079: Spinner/Doublespinner has unnecessary methods
 
 * Upgrade Notes
 
