@@ -9,7 +9,4 @@
 <listitem label="B" />
 <listitem label="C" />
 </listbox>
-<zscript>
-listbox.setSelectedIndex(-1);
-</zscript>
 </zk>

@@ -407,18 +407,6 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	//-- super --//
-	/** Not callable. Use {@link Treerow#setDraggable} instead.
-	 */
-	public void setDraggable(String draggable) {
-		if (draggable != null)
-			throw new UnsupportedOperationException("Use Treerow.setDraggable() instead");
-	}
-	/** Not callable. Use {@link Treerow#setDroppable} instead.
-	 */
-	public void setDroppable(String dropable) {
-		if (dropable != null)
-			throw new UnsupportedOperationException("Use Treerow.setDroppable() instead");
-	}
 	/*
 	public boolean isVisible(){
 		if(!super.isVisible()) 

@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.8
 * Features
+  3306718: Treeitem allows draggable/droppable (in addion to treerow)
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
