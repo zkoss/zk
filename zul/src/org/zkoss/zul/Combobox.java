@@ -24,12 +24,16 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -627,7 +631,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			Iterator it = ((Selectable) _model).getSelection().iterator();
 			if (!it.hasNext()) return;
 			
-			if (it.next().equals(
+			if (Objects.equals(it.next(),
 					_model.getElementAt(getItems().indexOf(item)))) {
 				setSelectedItem(item);
 			}

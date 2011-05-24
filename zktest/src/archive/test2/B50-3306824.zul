@@ -1,0 +1,23 @@
+
+<zk>
+
+<zscript><![CDATA[
+       		final ListModelList list = new ListModelList();
+      		list.add("1");
+      		list.add(null);
+      		list.add(null);
+      		list.add("2");
+			
+]]></zscript>
+<combobox id="combo" model="${list}" />
+<zscript>
+
+		combo.setItemRenderer(new ComboitemRenderer() {
+			public void render(Comboitem item, Object data) throws Exception {
+				// TODO Auto-generated method stub
+				item.setLabel(""+data);
+			}
+		});
+</zscript>
+<button label="test" onClick="list.remove(list.size()-1);" />    
+</zk>
