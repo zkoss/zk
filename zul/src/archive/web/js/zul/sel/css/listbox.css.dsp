@@ -184,6 +184,11 @@ td.z-listgroupfoot-inner div.z-listcell-cnt {
 	cursor: e-resize;
 }
 
+<%-- Autopaging --%>
+.z-listbox-autopaging .z-listcell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
 div.z-listbox-header, div.z-listbox-footer {

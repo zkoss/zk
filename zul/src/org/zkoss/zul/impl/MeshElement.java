@@ -26,6 +26,7 @@ import org.zkoss.lang.Objects;
 public class MeshElement extends XulElement implements org.zkoss.zul.impl.api.MeshElement {
 	private String _span;
 	private boolean _sizedByContent;
+	private boolean _autopaging;
 	
 	/**
 	 * Return column span hint of this component.
@@ -111,6 +112,33 @@ public class MeshElement extends XulElement implements org.zkoss.zul.impl.api.Me
 		} else
 			return "true".equalsIgnoreCase(s);
 	}
+
+	/**
+	 * Sets whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Listbox dynamically.
+	 * @param autopaging true to turn on the auto-paging facility.
+	 * @since 5.0.2
+	 */
+	public void setAutopaging(boolean autopaging) {
+		if (_autopaging != autopaging) {
+			_autopaging = autopaging;
+			smartUpdate("autopaging", autopaging);
+		}
+	}
+
+	/**
+	 * Returns whether the auto-paging facility is turned on when mold is
+	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
+	 * rather, the page size is automatically determined by the height of the
+	 * Listbox dynamically.
+	 * @return whether the "autopaging" facility is turned on.
+	 * @since 5.0.2
+	 */
+	public boolean isAutopaging() {
+		return _autopaging;
+	}
 	
 	//@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
@@ -120,5 +148,7 @@ public class MeshElement extends XulElement implements org.zkoss.zul.impl.api.Me
 			renderer.render("sizedByContent", true);
 		if (_span != null)
 			renderer.render("span", _span);
+		if (isAutopaging())
+			renderer.render("autopaging", true);
 	}
 }

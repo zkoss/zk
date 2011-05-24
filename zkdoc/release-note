@@ -10,8 +10,27 @@ ZK 5.0.8
   3304408: Listbox[mold=select], onChange event not fired in IE6
   2973303: listbox mold select and selectedIndex -1
   3306079: Spinner/Doublespinner has unnecessary methods
+  3002530: glitches with autopaging and renderdefer
 
 * Upgrade Notes
+  + If enable the autopaging function of Tree, Listbox, and Grid, the height of
+	each row will be applied the following CSS by default. If you want to change
+	the height, please overwrite the CSS rule as your preference.
+.z-grid-autopaging .z-row-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+.z-listbox-autopaging .z-listcell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+.z-tree-autopaging .z-treecell-cnt,
+.z-dottree-autopaging .z-treecell-cnt,
+.z-filetree-autopaging .z-treecell-cnt,
+.z-vfiletree-autopaging .z-treecell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
 
 	--------
 ZK 5.0.7.1

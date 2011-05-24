@@ -43,9 +43,10 @@ function (out) {
 	
 		out.push('</table></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', zcls, '-body"><table', width,	zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'"');
-		
-	out.push('>');
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body');
+	if (this._autopaging)
+		out.push(' ', zcls, '-autopaging');
+	out.push('"><table', width,	zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
 		this.domFaker_(out, '-bdfaker', zcls);

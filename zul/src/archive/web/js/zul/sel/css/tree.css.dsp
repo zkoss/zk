@@ -337,6 +337,16 @@ span.z-vfiletree-vbar, span.z-vfiletree-spacer {
 	background:none;
 }
 
+
+<%-- Autopaging --%>
+.z-tree-autopaging .z-treecell-cnt,
+.z-dottree-autopaging .z-treecell-cnt,
+.z-filetree-autopaging .z-treecell-cnt,
+.z-vfiletree-autopaging .z-treecell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
 div.z-tree-header, div.z-dottree-header, div.z-filetree-header, div.z-vfiletree-header,

@@ -202,6 +202,11 @@ div.z-grid-header .z-column.z-column-sizing div.z-column-cnt .z-column-btn {
 	cursor: e-resize;
 }
 
+<%-- Autopaging --%>
+.z-grid-autopaging .z-row-cnt {
+	height: 30px;
+	overflow: hidden;
+}
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
 div.z-grid-header, div.z-grid-footer {

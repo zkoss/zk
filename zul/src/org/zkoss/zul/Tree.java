@@ -116,7 +116,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 
 	private transient Paginal _pgi;
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
-	private boolean _autopaging;
+	
 	/** The paging controller, used only if mold = "paging" and user
 	 * doesn't assign a controller via {@link #setPaginal}.
 	 * If exists, it is the last child
@@ -390,32 +390,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	public void setPageSize(int pgsz) throws WrongValueException {
 		if (pgsz < 0 || !inPagingMold()) return;
 		pgi().setPageSize(pgsz);
-	}
-	/**
-	 * Sets whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Tree dynamically.
-	 * @param autopaging true to turn on the auto-paging facility.
-	 * @since 5.0.2
-	 */
-	public void setAutopaging(boolean autopaging) {
-		if (_autopaging != autopaging) {
-			_autopaging = autopaging;
-			smartUpdate("autopaging", autopaging);
-		}
-	}
-
-	/**
-	 * Returns whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Tree dynamically.
-	 * @return whether the "autopaging" facility is turned on.
-	 * @since 5.0.2
-	 */
-	public boolean isAutopaging() {
-		return _autopaging;
 	}
 
 	/** Returns the number of pages.
@@ -2036,8 +2010,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
-		if (isAutopaging())
-			renderer.render("autopaging", true);
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())
