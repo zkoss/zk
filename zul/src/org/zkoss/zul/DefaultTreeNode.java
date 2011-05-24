@@ -141,7 +141,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	/** Sets the parent.
 	 * It is called automatically when {@link #insert}, {@link #add} or {@link #remove} is
 	 * called.
-	 * The deriving class rarely needs to overide it.
+	 * The deriving class rarely needs to override it.
 	 */
 	protected void setParent(DefaultTreeNode parent) {
 		_parent = parent;
