@@ -65,7 +65,7 @@ public class ErrorEvent extends InputEvent {
 		this(name, target, val, null, msg);
 	}
 	/** Returns the error message if this event is caused by a wrong data,
-	 * or null if it is to clear messsage.
+	 * or null if it is to clear message.
 	 */
 	public final String getMessage() {
 		return _msg;
