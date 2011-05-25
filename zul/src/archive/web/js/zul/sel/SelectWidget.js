@@ -43,8 +43,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
 				$headercm = jq(box._headercm);
 			var checked;
-			for (var it = box.getBodyWidgetIterator(), w; (w = it.next());)
-				if (w.isVisible() && !w.isDisabled() && !w.isSelected()) {
+			for (var it = box.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
+				if (!w.isDisabled() && !w.isSelected()) {
 					checked = false;
 					break;
 				} else

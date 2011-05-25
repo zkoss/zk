@@ -195,8 +195,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * @return zul.sel.TreeItemIter
 	 * @disable(zkgwt)
 	 */
-	itemIterator: _zkf = function () {
-		return new zul.sel.TreeItemIter(this);
+	itemIterator: _zkf = function (opts) {
+		return new zul.sel.TreeItemIter(this, opts);
 	},
 	/**
 	 * Returns the tree item iterator.
@@ -213,8 +213,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * is no good.
 	 * @return Array
 	 */
-	getItems: function () {
-		return this.treechildren ? this.treechildren.getItems(): [];
+	getItems: function (opts) {
+		return this.treechildren ? this.treechildren.getItems(null, opts): [];
 	},
 	/** Returns the number of child {@link Treeitem}.
 	 * The same as {@link #getItems}.size().
@@ -254,13 +254,14 @@ zul.sel.TreeItemIter = zk.$extends(zk.Object, {
 	/** Constructor
 	 * @param Tree tree the widget that the iterator belongs to
 	 */
-	$init: function (tree) {
+	$init: function (tree, opts) {
 		this.tree = tree;
+		this.opts = opts;
 	},
 	_init: function () {
 		if (!this._isInit) {
 			this._isInit = true;
-			this.items = this.tree.getItems();
+			this.items = this.tree.getItems(this.opts);
 			this.length = this.items.length;
 			this.cur = 0;
 		}

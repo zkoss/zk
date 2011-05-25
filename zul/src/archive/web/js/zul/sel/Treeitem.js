@@ -116,9 +116,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_showKids: function (open) {
-		if (this.treechildren)
-			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
-				w.$n().style.display = w.isVisible() && open ? '' : 'none';
+		var tc = this.treechildren;
+		if (tc)
+			for (var w = tc.firstChild, vi = tc._isRealVisible(); w; w = w.nextSibling) {
+				w.$n().style.display = vi && w.isVisible() && open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
@@ -236,16 +237,22 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var p = this.parent && this.parent.parent ? this.parent.parent : null;
 		return p && p.$instanceof(zul.sel.Treeitem) ? p : null;
 	},
+	/*
 	isVisible: function () {
 		var p;
 		return this.$supers('isVisible', arguments) && (p = this.parent) && p.isVisible();
 	},
+	*/
+	_isRealVisible: function () {
+		var p;
+		return this.isVisible() && (p = this.parent) && p._isRealVisible();
+	},
 	setVisible: function (visible) {
-		if (this._visible != visible) { // not to use isVisible()
+		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
 			if (this.treerow) this.treerow.setVisible(visible);
 			// Bug: B50-3293724
-			_showDOM(this, this.isVisible());
+			_showDOM(this, this._isRealVisible());
 		}
 		return this;
 	},

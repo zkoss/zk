@@ -667,8 +667,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//height might diff (due to different content)
 		var items = [],
 			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
-		for (var j = 0, it = this.getBodyWidgetIterator(), len = rows.length, w; (w = it.next()) && j < len; j++) {
-			if (w.isVisible() && !w._loaded) {
+		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}), 
+				len = rows.length, w; (w = it.next()) && j < len; j++) {
+			if (!w._loaded) {
 				var row = rows[j], $row = zk(row),
 					top = $row.offsetTop();
 				
@@ -694,16 +695,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hgh = 0, 
 			row,
 			j = 0;
-		for (var it = this.getBodyWidgetIterator(), len = rows.length, w; (w = it.next()) && j < len; j++) {
-			if (w.isVisible()) {
-				row = rows[j];
-				var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
-				if (top > max) {
-					--j;
-					break;
-				}
-				hgh = top;
+		for (var it = this.getBodyWidgetIterator({skipHidden:true}), 
+				len = rows.length, w; (w = it.next()) && j < len; j++) {
+			row = rows[j];
+			var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
+			if (top > max) {
+				--j;
+				break;
 			}
+			hgh = top;
 		}
 		if (row) { //there is row
 			if (top <= max) { //row not exceeds the height, estimate
@@ -1215,8 +1215,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return;
 		var ncols = dst.cells.length,
 			src, maxnc = 0;
-		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next());) {
-			if (!w.isVisible() || (this._modal && !w._loaded)) continue;
+		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+			if (this._modal && !w._loaded) 
+				continue;
 
 			var row = srcrows[j++], $row = zk(row),
 				cells = row.cells, nc = $row.ncols(),
