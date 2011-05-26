@@ -2108,29 +2108,35 @@ wgt.$f().main.setTitle("foo");
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
+	 * <li>dom - whether to check DOM element instead of {@link #isVisible}</li>
 	 * <li>until - specifies the ancestor to search up to. If not specified, this method searches all ancestors. If specified, this method searches only this widget and ancestors up to the specified one.</li>
+	 * <li>strict - whether to check DOM element's style.visibility.
+	 * It is used only if <code>dom</code> is also specified.</li>
 	 * </ul>
 	 * @return boolean
 	 * @see #isVisible
 	 */
 	isRealVisible: function (opts) {
-		var dom = opts && opts.dom;
-		for (var wgt = this; wgt; wgt = wgt.parent) {
+		var dom = opts && opts.dom,
+			wgt = this;
+		while (wgt) {
 			if (dom) {
-				if (!zk(wgt.$n()).isVisible())
+				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return false;
-			} else if (!wgt.isVisible())
+			} else if (!wgt._visible)
 				return false;
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
-			var p = wgt.parent, n;
-			if (p && p.isVisible() && (p=p.$n()) && (n=wgt.$n()))
+			var wp = wgt.parent, p, n;
+			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
 					if ((n.style||{}).display == 'none')
 						return false; //hidden by parent
 
 			if (opts && opts.until == wgt)
 				break;
+
+			wgt = wp;
 		}
 		return true;
 	},
@@ -4404,12 +4410,17 @@ _doFooSelect: function (evt) {
 	/* Returns if the given watch shall be fired for this widget.
 	 * It is called by {@link zWatch} to check if the given watch shall be fired
 	 * @param String name the name of the watch, such as onShow
+	 * @param zk.Widget p the parent widget causing the watch event.
+	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
 	 * @return boolean
 	 * @5.0.3
 	 */
-	isWatchable_: function (name) {
-		var n;
-		return (n=this.$n()) && zk(n).isRealVisible(name!='onShow');
+	isWatchable_: function (name, p) {
+		var strict = name != 'onShow';
+		if (p)
+			return this.isRealVisible({dom:true, strict:strict, until:p});
+
+		return (p=this.$n()) && zk(p).isRealVisible(strict);
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 	},

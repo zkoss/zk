@@ -243,9 +243,14 @@ zWatch = (function () {
 	}
 	//Returns if c is a visible child of p
 	function _visibleChild(name, p, c) {
-		var cp = c;
-		for (; cp; cp = cp.parent)
-			if (p == cp) return _visible(name, c);
+		if (c.isWatchable_) //in future, w might not be a widget
+			for (var w = c; w; w = w.parent) {
+				if (!w._visible) //much faster to check _visible than DOM element
+					break;
+
+				if (p == w)
+					return c.isWatchable_(name, p);
+			}
 		return false;
 	}
 	//Returns subset of xinfs that are visible childrens of p
@@ -256,7 +261,7 @@ zWatch = (function () {
 				o = xinf[0],
 				diff = bindLevel > o.bindLevel;
 			if (diff) break;//nor ancestor, nor this (&sibling)
-			if ((p == o && _visible(name, o)) || _visibleChild(name, p, o)) {
+			if (_visibleChild(name, p, o)) {
 				if (remove)
 					xinfs.splice(j, 1);
 				found.unshift(xinf); //parent first
