@@ -142,7 +142,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	/** Sets the parent.
 	 * It is called automatically when {@link #insert}, {@link #add} or {@link #remove} is
 	 * called.
-	 * The deriving class rarely needs to overide it.
+	 * The deriving class rarely needs to override it.
 	 */
 	protected void setParent(DefaultTreeNode<E> parent) {
 		_parent = parent;

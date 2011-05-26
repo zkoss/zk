@@ -338,13 +338,16 @@ function zkmprops(uuid, props) {
 				zk._wgtutl.replace(wgt, w);
 				wgt.unbind(); //reuse it as new widget
 			} else {
-				var cls = zk.$import(type),
-					initOpts = {uuid: uuid}, v;
+				var cls = zk.$import(type), v;
 				if (!cls)
 					throw 'Unknown widget: ' + type;
-				if (v = wi[4]) initOpts.mold = v;
-				if (v = zk.cut(props, "z$is")) initOpts.z$is = v;
-				(wgt = new cls(initOpts)).inServer = true;
+				if (zk.cut(props, "z$is"))
+					cls.prototype.z$is = true;
+				(wgt = new cls(zkac)).inServer = true;
+					//zkac used as token to optimize the performance of zk.Widget.$init
+				wgt.uuid = uuid;
+				if (v = wi[4])
+					wgt._mold = v;
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 

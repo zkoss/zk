@@ -153,6 +153,7 @@ implements Framable, IdSpace {
 	}
 
 	public Window() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -348,16 +349,26 @@ implements Framable, IdSpace {
 	}
 	/** Sets the border (either none or normal).
 	 *
-	 * @param border the border. If null or "0", "none" is assumed.
-	 * Since 2.4.1, We assume "0" to be "none".
+	 * @param border the border. If null, "0" or "false", "none" is assumed.
+	 * If "true", "normal" is assumed (since 5.0.8).
 	 */
 	public void setBorder(String border) {
-		if (border == null || "0".equals(border))
+		if (border == null || "0".equals(border) || "false".equals(border))
 			border = "none";
+		else if ("true".equals(border))
+			border = "normal";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
 			smartUpdate("border", border);
 		}
+	}
+	/** Enables or disables the border.
+	 * @param border whether to have a border. If true is specified,
+	 * it is the same as <code>setBorder("normal")</code>.
+	 * @since 5.0.8
+	 */
+	public void setBorder(boolean border) {
+		setBorder(border ? "normal": "none");
 	}
 
 	/** Returns the title.
@@ -804,13 +815,6 @@ implements Framable, IdSpace {
 			renderer.render("shadow", false);
 		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
 			//render mode as the last property
-	}
-	/** Does nothing since the cleint (zul.wnd.Window) always assigns
-	 * <code>_this.fellows = {}</code>, i.e., all instances must be a space owner.
-	 * @since 5.0.6
-	 */
-	protected void renderIdSpace(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-window-" + getMode() : _zclass;

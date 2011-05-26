@@ -688,9 +688,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				zktd = zk(td),
 				tdsz = vert ? zktd.revisedWidth(td.offsetWidth) : zktd.revisedHeight(td.offsetHeight);
 			
-			for(var child = this.firstChild; child; child = child.nextSibling) {
-				if (child.isVisible()) {
-					var c = child.$n();
+			for(var child = this.firstChild, c; child; child = child.nextSibling) {
+				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, !zk.safari) + 'px';

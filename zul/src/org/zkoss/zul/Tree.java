@@ -116,7 +116,7 @@ public class Tree extends MeshElement implements Paginated {
 
 	private transient Paginal _pgi;
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
-	private boolean _autopaging;
+	
 	/** The paging controller, used only if mold = "paging" and user
 	 * doesn't assign a controller via {@link #setPaginal}.
 	 * If exists, it is the last child
@@ -183,7 +183,7 @@ public class Tree extends MeshElement implements Paginated {
 			if (cmp instanceof Treeitem) {
 				if (data[4] >= data[0]) return false; // full
 				final Treeitem item = (Treeitem) cmp;
-				if (item.isVisible()) {
+				if (item.isRealVisible()) {
 					int count = item.isOpen() && item.getTreechildren() != null ?
 							item.getTreechildren().getVisibleItemCount(): 0;
 					boolean shoulbBeVisited = data[1] < data[2] + 1 + count;
@@ -381,32 +381,6 @@ public class Tree extends MeshElement implements Paginated {
 	public void setPageSize(int pgsz) throws WrongValueException {
 		if (pgsz < 0 || !inPagingMold()) return;
 		pgi().setPageSize(pgsz);
-	}
-	/**
-	 * Sets whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Tree dynamically.
-	 * @param autopaging true to turn on the auto-paging facility.
-	 * @since 5.0.2
-	 */
-	public void setAutopaging(boolean autopaging) {
-		if (_autopaging != autopaging) {
-			_autopaging = autopaging;
-			smartUpdate("autopaging", autopaging);
-		}
-	}
-
-	/**
-	 * Returns whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Tree dynamically.
-	 * @return whether the "autopaging" facility is turned on.
-	 * @since 5.0.2
-	 */
-	public boolean isAutopaging() {
-		return _autopaging;
 	}
 
 	/** Returns the number of pages.
@@ -681,7 +655,7 @@ public class Tree extends MeshElement implements Paginated {
 	 * @since 3.0.4
 	 */
 	public void setActivePage(Treeitem item) {
-		if (item.isVisible() && item.getTree() == this && isVisible()) {
+		if (item.isRealVisible() && item.getTree() == this && isVisible()) {
 			int index = getVisibleIndexOfItem(item);
 			if (index != -1) {
 				final Paginal pgi = getPaginal();
@@ -712,7 +686,7 @@ public class Tree extends MeshElement implements Paginated {
 	private int getVisibleIndexOfItem0(Treeitem item, boolean inclusive) {
 		if (item == null) return 0;
 		int count = 0;
-		if (item.isVisible()) {
+		if (item.isRealVisible()) {
 			count++;
 			if (inclusive && item.isOpen() && item.getTreechildren() != null)
 				count += item.getTreechildren().getVisibleItemCount();
@@ -725,7 +699,7 @@ public class Tree extends MeshElement implements Paginated {
 			Component cmp = item.getParent().getParent();
 			if (cmp instanceof Treeitem) {
 				Treeitem parent = (Treeitem)cmp;
-				if (parent.isVisible()) {
+				if (parent.isRealVisible()) {
 					parent.setOpen(true);
 					int cnt = getVisibleIndexOfItem0(parent, false);
 					if (cnt == -1) return -1;
@@ -1902,8 +1876,6 @@ public class Tree extends MeshElement implements Paginated {
 
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
-		if (isAutopaging())
-			renderer.render("autopaging", true);
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())

@@ -581,17 +581,21 @@ zul.Widget = zk.$extends(zk.Widget, {
 				break; //found
 		}
 
-		for (var w = target;; w = w.parent) {
-			if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
-				return;
+		//Bug 3304408: SELECT fixes the selected index later than mousedown
+		//so we have to defer the firing of ctrl keys
+		setTimeout(function () {
+			for (var w = target;; w = w.parent) {
+				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
+					return;
+				if (w == wgt) break;
+			}
+			wgt.fire(evtnm, zk.copy({reference: target}, evt.data),
+				{ctl: true});
+		}, 0);
 
-			if (w == wgt) break;
-		}
-
-		wgt.fire(evtnm, zk.copy({reference: target}, evt.data),
-			{ctl: true});
 		evt.stop();
-		//TODO: Bug 1756559
+		if (jq.nodeName(evt.domTarget, "select"))
+			evt.stop({dom:true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
 		//Bug 2041347
 		if (zk.ie && keyCode == 112) {

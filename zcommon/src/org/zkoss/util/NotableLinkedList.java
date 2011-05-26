@@ -22,7 +22,7 @@ import java.util.AbstractSequentialList;
  * that provides the callback methods such as {@link #onAdd}, {@link #onSet}
  * and {@link #onRemove}.
  * @author tomyeh
- * @since 6.0.0
+ * @since 5.0.8
  */
 public class NotableLinkedList<E> extends AbstractSequentialList<E>
 implements List<E>, Cloneable, java.io.Serializable {

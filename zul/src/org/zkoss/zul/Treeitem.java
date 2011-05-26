@@ -371,31 +371,25 @@ implements org.zkoss.zk.ui.ext.Disable {
 				return (Tree)p;
 		return null;
 	}
-
-	//-- super --//
-	/** No callable. Use {@link Treerow#setDraggable} isntead.
-	 */
-	public void setDraggable(String draggable) {
-		if (draggable != null)
-			throw new UnsupportedOperationException("Use Treerow.setDraggable() instead");
-	}
-	/** No callable. Use {@link Treerow#setDroppable} isntead.
-	 */
-	public void setDroppable(String dropable) {
-		if (dropable != null)
-			throw new UnsupportedOperationException("Use Treerow.setDroppable() instead");
+	/*package*/ boolean isRealVisible() {
+		if(!isVisible())
+			return false;
+		Component comp = getParent();
+		return comp == null || (comp instanceof Treechildren) ? 
+				((Treechildren)comp).isRealVisible() : comp.isVisible();
 	}
 	
+	//-- super --//
+	/*
 	public boolean isVisible(){
 		if(!super.isVisible()) 
 			return false;
 		Component comp = getParent();
 		return comp == null || comp.isVisible();
 	}
-	
+	*/
 	public boolean setVisible(boolean visible) {
-		// 
-		if (super.isVisible() != visible) {
+		if (isVisible() != visible) {
 			smartUpdate("visible", visible);
 			int count = isOpen() && _treechildren != null ? _treechildren
 					.getVisibleItemCount() + 1 : 1;
@@ -418,7 +412,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 3.6.1
 	 */
 	public int getVisibleItemCount() {
-		return super.isVisible() ? 1 + (_open && _treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
+		return isVisible() ? 1 + (_open && _treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
 	}
 	/**
 	 * adds the number of the visible item to the count of its parent.
@@ -539,7 +533,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		Tree tree = getTree();
 		if (!tree.inPagingMold()) {
 			super.redrawChildren(out);
-		} else if (isVisible() && shallVisitTree(tree, this)) {
+		} else if (isRealVisible() && shallVisitTree(tree, this)) {
 			if (shallRenderTree(tree)) {
 				ComponentCtrl child = getTreerow();
 				if (child != null)

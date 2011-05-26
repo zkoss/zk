@@ -565,15 +565,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	//-- Attributable --//
-	/** @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public final boolean isAttributeModificationAware() {
-		return false;
-	}
-	/** @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public final void setAttributeModificationAware(boolean aware) {
-	}
 	public final List<Attribute> getAttributeItems() {
 		if (_attrs == null)
 			_attrs = newAttrArray();
@@ -818,7 +809,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		protected AttrArray() {
 		}
 
-		//-- CheckableTreeArray --//
+		//-- NotableLinkedList --//
 		protected void onAdd(Attribute newElement, Attribute followingElement) {
 			checkAdd(newElement, followingElement, false);
 		}

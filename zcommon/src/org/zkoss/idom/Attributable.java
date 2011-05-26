@@ -152,11 +152,4 @@ public interface Attributable {
 	 * @return the attribute being replaced; null if no one is replaced
 	 */
 	public Attribute setAttributeValue(String tname, String value);
-
-	/** @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public boolean isAttributeModificationAware();
-	/** @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void setAttributeModificationAware(boolean aware);
 }

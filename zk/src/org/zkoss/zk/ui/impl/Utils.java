@@ -38,9 +38,9 @@ public class Utils {
 	 * the client if the information is required only once per desktop.
 	 */
 	public static
-	boolean shallGenerateImportantEvents(Desktop desktop, String key) {
+	boolean markClientInfoPerDesktop(Desktop desktop, String key) {
 		return !(desktop instanceof DesktopImpl) //always gen if unknown
-		|| ((DesktopImpl)desktop).shallGenerateImportantEvents(key);
+		|| ((DesktopImpl)desktop).markClientInfoPerDesktop(key);
 	}
 
 	/** Returns the XML resources locator to locate

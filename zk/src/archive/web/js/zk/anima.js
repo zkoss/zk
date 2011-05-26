@@ -359,13 +359,13 @@ zk.copy(zjq.prototype, {
 
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
+			if (prop) _restoreProp(self, prop);
 			if (visible) {
 				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
 				zWatch.fireDown('onShow', wgt);
 			} else {
 				self.jq.hide();
 			}
-			if (prop) _restoreProp(self, prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);
 			wgt.afterAnima_(visible);
 			setTimeout(function () {

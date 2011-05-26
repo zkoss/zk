@@ -222,7 +222,7 @@ public class Events {
 	 * @since 5.0.2
 	 */
 	public static final String ON_DESKTOP_RECYCLE = "onDesktopRecycle";
-	
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

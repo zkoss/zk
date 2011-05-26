@@ -1824,21 +1824,23 @@ w:use="foo.MyWindow"&gt;
 	protected void renderProperties(ContentRenderer renderer)
 	throws IOException {
 		render(renderer, "id", _id);
-		renderIdSpace(renderer);
 		if (_auxinf != null && !_auxinf.visible) //don't call isVisible since it might be overriden (backward compatible)
 			renderer.render("visible", false);
 		render(renderer, "autag", getAutag());
+
+		final Desktop desktop = getDesktop();
+		if (this instanceof IdSpace && this.getAttribute("z$is") == null // Used by Window and others to minimize number of bytes
+		&& Utils.markClientInfoPerDesktop(desktop, getWidgetClass() + ":is"))
+			renderer.render("z$is", true);
 
 		Boolean shallHandleImportant = null;
 		for (Map.Entry<String, Integer> me: getClientEvents().entrySet()) {
 			final String evtnm = me.getKey();
 			final int flags = me.getValue().intValue();
 			if ((flags & CE_IMPORTANT) != 0) {
-				if (shallHandleImportant == null) {
-					final Desktop desktop = getDesktop();
+				if (shallHandleImportant == null)
 					shallHandleImportant = Boolean.valueOf(
-						desktop != null && Utils.shallGenerateImportantEvents(desktop, getWidgetClass()));
-				}
+						Utils.markClientInfoPerDesktop(desktop, getWidgetClass()));
 				if (shallHandleImportant.booleanValue())
 					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
 			}
@@ -1855,22 +1857,6 @@ w:use="foo.MyWindow"&gt;
 			renderer.render("z$rod",
 				(o instanceof Boolean && ((Boolean)o).booleanValue())
 				|| !"false".equals(o));
-	}
-	/** Called by {@link #renderProperties} to render a property indicates
-	 * this component implements {@link IdSpace} (per-instance property).
-	 * <p>It is used if a widget class might or might not support the ID space
-	 * depending on the component being associated.
-	 * If a widget class always supports IdSpace, such as zul.wnd.Window
-	 * and zk.Macro, it is better to override <code>$init</cod> and
-	 * assign <code>this._fellows = {}</code>. Then, it could override this
-	 * method to do nothing, such that the number of bytes being sent to
-	 * the client will be minimized. For more information, please refer to
-	 * {@link HtmlMacroComponent}.
-	 * @since 5.0.6
-	 */
-	protected void renderIdSpace(ContentRenderer renderer) throws IOException {
-		if (this instanceof IdSpace)
-			renderer.render("z$is", true); //see zk.Widget (widget.js)
 	}
 
 	/** An utility to be called by {@link #renderProperties} to

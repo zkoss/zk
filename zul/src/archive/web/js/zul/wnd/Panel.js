@@ -44,6 +44,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onMaximize: this, onClose: this, onMove: this, onSize: this.onSizeEvent}, -1000);
+		this._skipper = new zul.wnd.PanelSkipper(this);
 	},
 
 	$define: {
@@ -104,7 +105,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		movable: _zkf = function () {
-			this.rerender(); //TODO: like Window, use _updDomOuter
+			this.rerender(this._skipper);
 		},
 		/**
 		 * Sets whether to float the panel to display it inline where it is rendered.
@@ -200,7 +201,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <p>Default: "none".
 		 * @return String
 		 */
-		border: _zkf,
+		border: function () {
+			this.rerender(); // no skipper, as body DOM depends on border
+		},
 		/** 
 		 * Sets the title.
 		 * @param String title
@@ -698,7 +701,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.domListen_(this.$n(), 'onMouseOut');
 			var Panel = this.$class;
 			this._sizer = new zk.Draggable(this, null, {
-				stackup: true, draw: Panel._drawsizing,
+				stackup: true, 
+				draw: Panel._drawsizing,
+				snap: Panel._snapsizing,
 				starteffect: Panel._startsizing,
 				ghosting: Panel._ghostsizing,
 				endghosting: Panel._endghostsizing,
@@ -1019,8 +1024,27 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		return true;
 	},
+	_snapsizing: zul.wnd.Window._snapsizing,
 	_aftersizing: zul.wnd.Window._aftersizing,
 	_drawsizing: zul.wnd.Window._drawsizing
+});
+
+zul.wnd.PanelSkipper = zk.$extends(zk.Skipper, {
+	$init: function (p) {
+		this._p = p;
+	},
+	skip: function (wgt, skipId) {
+		var skip = jq(skipId || (wgt.uuid + '-body'), zk)[0];
+		if (skip) {
+			skip.parentNode.removeChild(skip);
+				//don't use jq to remove, since it unlisten events
+			return skip;
+		}
+	},
+	restore: function () {
+		this.$supers('restore', arguments);
+		this._p.zsync();
+	}
 });
 
 /** @class zul.wnd.PanelRenderer

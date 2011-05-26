@@ -360,8 +360,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @return zul.sel.ItemIter
 	 * @disable(zkgwt)
 	 */
-	itemIterator: _zkf = function () {
-		return new zul.sel.ItemIter(this);
+	itemIterator: _zkf = function (opts) {
+		return new zul.sel.ItemIter(this, opts);
 	},
 	/**Returns the tree item iterator.
 	 * @return zul.sel.ItemIter
@@ -378,13 +378,17 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 	/** Constructor
 	 * @param Listbox listbox the widget that the iterator belongs to
 	 */
-	$init: function (box) {
+	$init: function (box, opts) {
 		this.box = box;
+		this.opts = opts;
 	},
 	_init: function () {
 		if (!this._isInit) {
 			this._isInit = true;
-			this.p = this.box.firstItem;
+			var p = this.box.firstItem;
+			if(this.opts && this.opts.skipHidden)
+				for (; p && !p.isVisible(); p = p.nextSibling) {}
+			this.p = p;
 		}
 	},
 	 /**
@@ -402,8 +406,12 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
      */
 	next: function () {
 		this._init();
-		var p = this.p;
-		if (p) this.p = p.parent.nextItem(p);
+		var p = this.p,
+			q = p ? p.parent.nextItem(p) : null;
+		if (this.opts && this.opts.skipHidden)
+			for (; q && !q.isVisible(); q = q.parent.nextItem(q)) {}
+		if (p) 
+			this.p = q;
 		return p;
 	}
 });

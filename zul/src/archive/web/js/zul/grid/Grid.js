@@ -234,8 +234,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * Returns the tree item iterator.
 	 * @return zul.grid.RowIter
 	 */
-	getBodyWidgetIterator: function () {
-		return new zul.grid.RowIter(this);
+	getBodyWidgetIterator: function (opts) {
+		return new zul.grid.RowIter(this, opts);
 	}
 });
 /**
@@ -246,13 +246,17 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 	/** Constructor
 	 * @param Grid grid the widget that the iterator belongs to
 	 */
-	$init: function (grid) {
+	$init: function (grid, opts) {
 		this.grid = grid;
+		this.opts = opts;
 	},
 	_init: function () {
 		if (!this._isInit) {
 			this._isInit = true;
-			this.p = this.grid.rows ? this.grid.rows.firstChild: null;
+			var p = this.grid.rows ? this.grid.rows.firstChild: null;
+			if (this.opts && this.opts.skipHidden)
+				for (; p && !p.isVisible(); p = p.nextSibling) {}
+			this.p = p;
 		}
 	},
 	 /**
@@ -270,8 +274,12 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
      */
 	next: function () {
 		this._init();
-		var p = this.p;
-		if (p) this.p = p.nextSibling;
+		var p = this.p,
+			q = p ? p.nextSibling : null;
+		if (this.opts && this.opts.skipHidden)
+			for (; q && !q.isVisible(); q = q.nextSibling) {}
+		if (p) 
+			this.p = q;
 		return p;
 	}
 });

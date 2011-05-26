@@ -42,7 +42,10 @@ function (out) {
 	
 		out.push('</table></div><div class="', zcls, '-header-bg"></div>');
 	}
-	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body');
+	if (this._autopaging)
+		out.push(' ', zcls, '-autopaging');
+	out.push('"');
 
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="height:', hgh, '"');

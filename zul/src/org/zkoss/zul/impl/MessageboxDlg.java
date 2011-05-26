@@ -135,31 +135,31 @@ public class MessageboxDlg extends Window {
 			switch (button) {
 			case YES:
 				label = MZul.YES;
-				_evtnm = "onYes";
+				_evtnm = Messagebox.ON_YES;
 				break;
 			case NO:
 				label = MZul.NO;
-				_evtnm = "onNo";
+				_evtnm = Messagebox.ON_NO;
 				break;
 			case RETRY:
 				label = MZul.RETRY;
-				_evtnm = "onRetry";
+				_evtnm = Messagebox.ON_RETRY;
 				break;
 			case ABORT:
 				label = MZul.ABORT;
-				_evtnm = "onAbort";
+				_evtnm = Messagebox.ON_ABORT;
 				break;
 			case IGNORE:
 				label = MZul.IGNORE;
-				_evtnm = "onIgnore";
+				_evtnm = Messagebox.ON_IGNORE;
 				break;
 			case CANCEL:
 				label = MZul.CANCEL;
-				_evtnm = "onCancel";
+				_evtnm = Messagebox.ON_CANCEL;
 				break;
 			default:
 				label = MZul.OK;
-				_evtnm = "onOK";
+				_evtnm = Messagebox.ON_OK;
 				break;
 			}
 			setLabel(Messages.get(label));

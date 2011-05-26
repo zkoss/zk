@@ -68,15 +68,6 @@ public interface Item extends Cloneable {
 	public static final int FIND_RECURSIVE = 0x0100;
 
 	/**
-	 * @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public boolean isReadonly();
-	/**
-	 * @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void setReadonly(boolean readonly);
-
-	/**
 	 * Gets the name of the item.
 	 * For vertices that support namespace (implements Namespaceable),
 	 * it is the same as getTagName.
@@ -165,26 +156,10 @@ public interface Item extends Cloneable {
 	 */
 	public void setLocator(Locator loc);
 
-	/**
-	 * @deprecated As of release 6.0.0, replaced with {@link #clone()}.
-	 */
-	public Item clone(boolean reserved);
 	/** Clones this item. Unlike other objects, it does a deep cloning.
+	 * @since 5.0,8
 	 */
 	public Object clone();
-
-	/**
-	 * @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public boolean isModified();
-	/**
-	 * @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void clearModified(boolean includingDescendant);
-	/**
-	 * @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public void setModified();
 
 	//-- Internal Methods --//
 	/**

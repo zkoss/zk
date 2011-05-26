@@ -25,6 +25,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.impl.MessageboxDlg;
@@ -77,6 +78,35 @@ public class Messagebox {
 	/** A IGNORE button. */
 	public static final int IGNORE = 0x0400;
 
+	/** The event to indicate the Yes button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_YES = "onYes";
+	/** The event to indicate the No button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_NO = "onNo";
+	/** The event to indicate the RETRY button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_RETRY = "onRetry";
+	/** The event to indicate the Abort button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_ABORT = "onAbort";
+	/** The event to indicate the Ignore button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_IGNORE = "onIgnore";
+	/** The event to indicate the OK button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_OK = Events.ON_OK;
+	/** The event to indicate the Cancel button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_CANCEL = Events.ON_CANCEL;
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -121,13 +151,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button Name</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -193,13 +223,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -326,13 +356,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -408,13 +438,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -480,13 +510,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *<tr><td>The close button on the right-top corner (x)<br>since 5.0.2</td><td>onClose</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},

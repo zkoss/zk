@@ -289,7 +289,7 @@ public class Listbox extends MeshElement implements Paginated {
 	private int _currentLeft = 0;
 	private int _topPad; // since 5.0.0 top padding
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
-	private boolean _autopaging;
+	
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
 	private boolean _renderAll; //since 5.0.0
@@ -1299,33 +1299,6 @@ public class Listbox extends MeshElement implements Paginated {
 	 */
 	public void setPageSize(int pgsz) throws WrongValueException {
 		pgi().setPageSize(pgsz);
-	}
-
-	/**
-	 * Sets whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Listbox dynamically.
-	 * @param autopaging true to turn on the auto-paging facility.
-	 * @since 5.0.2
-	 */
-	public void setAutopaging(boolean autopaging) {
-		if (_autopaging != autopaging) {
-			_autopaging = autopaging;
-			smartUpdate("autopaging", autopaging);
-		}
-	}
-
-	/**
-	 * Returns whether the auto-paging facility is turned on when mold is
-	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
-	 * rather, the page size is automatically determined by the height of the
-	 * Listbox dynamically.
-	 * @return whether the "autopaging" facility is turned on.
-	 * @since 5.0.2
-	 */
-	public boolean isAutopaging() {
-		return _autopaging;
 	}
 
 	/**
@@ -3044,8 +3017,6 @@ public class Listbox extends MeshElement implements Paginated {
 			if (_rod && ((Cropper)getDataLoader()).isCropper()) { //bug #2936064
 				renderer.render("_listbox$rod", true);
 			}
-			if (isAutopaging())
-				renderer.render("autopaging", true);
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
 			if (isCheckmarkDeselectOther())

@@ -51,7 +51,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 * @since 5.0.6
 	 */
 	isTopmost: function () {
-		return this.parent && this.parent._isTree;
+		return this.parent && this.parent.$instanceof(zul.sel.Tree);
 	},
 	//@Override
 	insertBefore: function (child, sibling, ignoreDom) {
@@ -102,13 +102,23 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 				return cn;	
 			}
 	},
+	/*
 	isVisible: function () {
 		if (!this.$supers('isVisible', arguments))
 			return false;
-
 		var p;
 		return this.isTopmost()
 			|| ((p = this.parent) && p.isOpen() && p.isVisible()); //recursive
+	},
+	*/
+	//@Override
+	isRealVisible: function () {
+		this._isRealVisible() && this.$supers('isRealVisible', arguments);
+	},
+	_isRealVisible: function () {
+		var p;
+		return this.isVisible() && (this.isTopmost() || 
+				((p = this.parent) && p.isOpen() && p._isRealVisible()));
 	},
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
@@ -118,13 +128,15 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 * @param Array items
 	 * @return Array
 	 */
-	getItems: function (items) {
+	getItems: function (items, opts) {
 		items = items || [];
-		for (var w = this.firstChild; w; w = w.nextSibling) {
-			items.push(w);
-			if (w.treechildren) 
-				w.treechildren.getItems(items);
-		}
+		var skiphd = opts && opts.skipHidden;
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (!skiphd || w.isVisible()) {
+				items.push(w);
+				if (w.treechildren && (!skiphd || w.isOpen())) 
+					w.treechildren.getItems(items, opts);
+			}
 		return items;
 	},
 	/** Returns the number of child {@link Treeitem}
@@ -148,7 +160,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			oldtree._onTreechildrenRemoved(this);
 			
 		if (newParent) {
-			var tree = newParent._isTree ? newParent : newParent.getTree();
+			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
 		}
 		this.$supers("beforeParentChanged_", arguments);

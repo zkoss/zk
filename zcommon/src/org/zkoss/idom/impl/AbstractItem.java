@@ -110,35 +110,6 @@ implements Item, Node, Serializable, Cloneable {
 	}
 
 	//-- Item --//
-	/**
-	 * @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public boolean isReadonly() {
-		return false;
-	}
-	/**
-	 * @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void setReadonly(boolean readonly) {
-	}
-
-	/**
-	 * @deprecated As of release 6.0.0, it always returns false.
-	 */
-	public boolean isModified() {
-		return false;
-	}
-	/**
-	 * @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void clearModified(boolean includingDescendant) {
-	}
-	/**
-	 * @deprecated As of release 6.0.0, it does nothing.
-	 */
-	public void setModified() {
-	}
-
 	public void setName(String name) {
 		throw new DOMException(DOMException.INVALID_ACCESS_ERR, _loc);
 	}
@@ -162,12 +133,6 @@ implements Item, Node, Serializable, Cloneable {
 			assert(_parent == null);
 		}
 		return this;
-	}
-	/**
-	 * @deprecated As of release 6.0.0, replaced with {@link #clone()}.
-	 */
-	public Item clone(boolean reserved) {
-		return (Item)clone();
 	}
 	public final Group getParent() {
 		return _parent;
@@ -200,7 +165,7 @@ implements Item, Node, Serializable, Cloneable {
 	public final Node cloneNode(boolean deep) {
 		if (!deep)
 			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "always deep", _loc); //NOT YET
-		return (Node)clone(false);
+		return (Node)clone();
 	}
 
 	public final Node getParentNode() {

@@ -55,67 +55,67 @@ function (out, skipper) {
 		out.push('</div>');
 		
 		if (isFrameRequired) out.push('</div></div></div>');
-	} else if (rounded) {
-		out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');		
-	}
-			
+	} else if (rounded)
+		out.push('<div class="', zcls,'-tl ', zcls,'-tl-gray"><div class="' ,zcls ,'-tr ', zcls,'-tr-gray"></div></div>');
 	
 	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
-	
-	if (!this._open) out.push(' style="display:none;"');
-	
+	if (!this._open) 
+		out.push(' style="display:none;"');
 	out.push('>');
 	
-	if (rounded) {
-		out.push('<div class="', zcls, '-cl"><div class="', zcls,
-				'-cr"><div class="', zcls, '-cm');
-		if (noheader) {
-			out.push(' ', zcls, '-noheader');
+	if (!skipper) {
+		if (rounded) {
+			out.push('<div class="', zcls, '-cl"><div class="', zcls,
+					'-cr"><div class="', zcls, '-cm');
+			if (noheader) {
+				out.push(' ', zcls, '-noheader');
+			}
+			out.push('">');		
 		}
-		out.push('">');		
-	}
-	if (this.tbar) {
-		out.push('<div id="', uuid, '-tb" class="', zcls, '-top');
-		
-		if (noborder)
-			out.push(' ', zcls, '-top-noborder');
-		
-		if (noheader)
-			out.push(' ', zcls, '-noheader');
-		
-		out.push('">');
-		this.tbar.redraw(out);
-		out.push('</div>');
-	}
-	if (this.panelchildren)
-		this.panelchildren.redraw(out);
-		
-	if (this.bbar) {
-		out.push('<div id="', uuid, '-bb" class="', zcls, '-btm');
-		
-		if (noborder)
-			out.push(' ', zcls, '-btm-noborder');
+		if (this.tbar) {
+			out.push('<div id="', uuid, '-tb" class="', zcls, '-top');
 			
-		if (noheader)
-			out.push(' ', zcls, '-noheader');
+			if (noborder)
+				out.push(' ', zcls, '-top-noborder');
+			
+			if (noheader)
+				out.push(' ', zcls, '-noheader');
+			
+			out.push('">');
+			this.tbar.redraw(out);
+			out.push('</div>');
+		}
+		if (this.panelchildren)
+			this.panelchildren.redraw(out);
+			
+		if (this.bbar) {
+			out.push('<div id="', uuid, '-bb" class="', zcls, '-btm');
+			
+			if (noborder)
+				out.push(' ', zcls, '-btm-noborder');
+				
+			if (noheader)
+				out.push(' ', zcls, '-noheader');
+			
+			out.push('">');
+			this.bbar.redraw(out);
+			out.push('</div>');
+		}
 		
-		out.push('">');
-		this.bbar.redraw(out);
-		out.push('</div>');
-	}
-	
-	if (rounded) {
-		out.push('</div></div></div><div class="', zcls, '-fl');
-		
-		if (!this.fbar) out.push(' ', zcls, '-nobtm2');
-		
-		out.push('"><div class="', zcls, '-fr"><div class="', zcls, '-fm">');
-	}
-	if (this.fbar) {
-		out.push('<div id="', uuid, '-fb" class="', zcls, '-btm2">');
-		this.fbar.redraw(out);
-		out.push('</div>');
-	}
-	if (rounded) out.push('</div></div></div><div class="', zcls ,'-bl"><div class="', zcls ,'-br"></div></div>');
+		if (rounded) {
+			out.push('</div></div></div><div class="', zcls, '-fl');
+			
+			if (!this.fbar) out.push(' ', zcls, '-nobtm2');
+			
+			out.push('"><div class="', zcls, '-fr"><div class="', zcls, '-fm">');
+		}
+		if (this.fbar) {
+			out.push('<div id="', uuid, '-fb" class="', zcls, '-btm2">');
+			this.fbar.redraw(out);
+			out.push('</div>');
+		}
+		if (rounded) 
+			out.push('</div></div></div><div class="', zcls ,'-bl"><div class="', zcls ,'-br"></div></div>');
+	} // end of uuid-body content
 	out.push('</div></div>');
 }

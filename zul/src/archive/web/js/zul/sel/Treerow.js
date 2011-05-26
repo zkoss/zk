@@ -51,17 +51,25 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	domTooltiptext_ : function () {
 		return this._tooltiptext || this.parent._tooltiptext || this.parent.parent._tooltiptext;
 	},
-	/** Returns whether this is visible.
-	 * whether all its ancestors is open.
-	 * @return boolean
-	 */
+//	/** Returns whether this is visible.
+//	 * whether all its ancestors is open.
+//	 * @return boolean
+//	 */
+	/*
 	isVisible: function () {
 		if (!this.parent || !this.$supers('isVisible', arguments))
 			return false;
-		if (!this.parent.isVisible())
+		if (!this.parent._isRealVisible())
 			return false;
 		var child = this.parent.parent;
 		return child && child.isVisible();
+	},
+	*/
+	//@Override
+	domStyle_: function (no) {
+		// patch the case that treerow is hidden by treeitem visibility
+		return ((this.parent && !this.parent._isRealVisible() && this.isVisible()) ?
+				'display:none;' : '') + this.$supers('domStyle_', arguments);
 	},
 	//@Override
 	removeChild: function (child) {

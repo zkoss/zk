@@ -113,7 +113,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		else if (p) p.lastChild = to;
 	}
 
-	function _bind0(wgt) {
+	function _bind0(wgt) { //always called no matter ROD or not
 		_binds[wgt.uuid] = wgt;
 		if (wgt.id)
 			_addGlobal(wgt);
@@ -1178,26 +1178,23 @@ new zul.wnd.Window{
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (props && zk.cut(props, "z$is"))
+		//2) Assign class.propotype.z$is to true (used by AbstractComponent.java)
+		if (this.$class.prototype.z$is)
 			this._fellows = {};
 
-		this.afterInit(function () {
-			if (props) {
-				var mold = props.mold;
-				if (mold != null) {
-					if (mold) this._mold = mold;
-					delete props.mold; //avoid setMold being called
-				}
-				for (var nm in props)
-					this.set(nm, props[nm]);
-			}
+		//zkac is a token used by create() in mount.js for optimizing performance
+		if (props !== zkac)
+			this.afterInit(function () {
+				//if props.$oid, it must be an object other than {} so ignore
+				if (props && typeof props == 'object' && !props.$oid)
+					for (var nm in props)
+						this.set(nm, props[nm]);
 
-			if ((zk.spaceless || this.rawId) && this.id)
-				this.uuid = this.id; //setId was called
-			if (!this.uuid)
-				this.uuid = zk.Widget.nextUuid();
-		});
+				if ((zk.spaceless || this.rawId) && this.id)
+					this.uuid = this.id; //setId was called
+				if (!this.uuid)
+					this.uuid = zk.Widget.nextUuid();
+			});
 	},
 
 	$define: {
@@ -2121,29 +2118,35 @@ wgt.$f().main.setTitle("foo");
 	/** Returns if this widget is really visible, i.e., all ancestor widget and itself are visible. 
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
+	 * <li>dom - whether to check DOM element instead of {@link #isVisible}</li>
 	 * <li>until - specifies the ancestor to search up to. If not specified, this method searches all ancestors. If specified, this method searches only this widget and ancestors up to the specified one.</li>
+	 * <li>strict - whether to check DOM element's style.visibility.
+	 * It is used only if <code>dom</code> is also specified.</li>
 	 * </ul>
 	 * @return boolean
 	 * @see #isVisible
 	 */
 	isRealVisible: function (opts) {
-		var dom = opts && opts.dom;
-		for (var wgt = this; wgt; wgt = wgt.parent) {
+		var dom = opts && opts.dom,
+			wgt = this;
+		while (wgt) {
 			if (dom) {
-				if (!zk(wgt.$n()).isVisible())
+				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return false;
-			} else if (!wgt.isVisible())
+			} else if (!wgt._visible)
 				return false;
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
-			var p = wgt.parent, n;
-			if (p && p.isVisible() && (p=p.$n()) && (n=wgt.$n()))
+			var wp = wgt.parent, p, n;
+			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
 					if ((n.style||{}).display == 'none')
 						return false; //hidden by parent
 
 			if (opts && opts.until == wgt)
 				break;
+
+			wgt = wp;
 		}
 		return true;
 	},
@@ -2531,14 +2534,12 @@ out.push('</div>');
 	 */
 	redraw: function (out) {
 		if (!this.deferRedraw_(out)) {
-			var s = this.prolog;
-			if (s) out.push(s);
+			var f;
+			if (f = this.prolog)
+				out.push(f);
 
-			for (var p = this, mold = this._mold; p; p = p.superclass) {
-				var f = p.$class.molds;
-				if (f && (f = f[mold]))
-					return f.apply(this, arguments);
-			}
+			if ((f = this.$class.molds) && (f = f[this._mold]))
+				return f.apply(this, arguments);
 
 			zk.error("Mold "+mold+" not found in "+this.className);
 		}
@@ -4419,12 +4420,17 @@ _doFooSelect: function (evt) {
 	/* Returns if the given watch shall be fired for this widget.
 	 * It is called by {@link zWatch} to check if the given watch shall be fired
 	 * @param String name the name of the watch, such as onShow
+	 * @param zk.Widget p the parent widget causing the watch event.
+	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
 	 * @return boolean
 	 * @5.0.3
 	 */
-	isWatchable_: function (name) {
-		var n;
-		return (n=this.$n()) && zk(n).isRealVisible(name!='onShow');
+	isWatchable_: function (name, p) {
+		var strict = name != 'onShow';
+		if (p)
+			return this.isRealVisible({dom:true, strict:strict, until:p});
+
+		return (p=this.$n()) && zk(p).isRealVisible(strict);
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 	},
@@ -4984,6 +4990,7 @@ zk.Native = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "native",
+	rawId: true,
 
 	redraw: function (out) {
 		var s = this.prolog;
@@ -5085,7 +5092,7 @@ function (skipper) {
  * @disable(zkgwt)
  */
 zk.Skipper = zk.$extends(zk.Object, {
-	/** Returns whether the specified child wiget will be skipped by {@link #skip}.
+	/** Returns whether the specified child widget will be skipped by {@link #skip}.
 	 * <p>Default: returns if wgt.caption != child. In other words, it skip all children except the caption. 
 	 * @param zk.Widget wgt the widget to re-render
 	 * @param zk.Widget child a child (descendant) of this widget.
@@ -5094,9 +5101,9 @@ zk.Skipper = zk.$extends(zk.Object, {
 	skipped: function (wgt, child) {
 		return wgt.caption != child;
 	},
-	/** Skips all or subset of the descedant (child) widgets of the specified widget.
+	/** Skips all or subset of the descendant (child) widgets of the specified widget.
 	 * <p>Notice that the <pre>skipId</pre> argument is not used by {@link zk.Widget#rerender}.
-	 * Rather it is used to simplify the overriding of this methid,
+	 * Rather it is used to simplify the overriding of this method,
 	 * such that the deriving class can call back this class and
 	 * to pass a different ID to skip
 	 *
