@@ -5071,7 +5071,7 @@ function (skipper) {
  * @disable(zkgwt)
  */
 zk.Skipper = zk.$extends(zk.Object, {
-	/** Returns whether the specified child wiget will be skipped by {@link #skip}.
+	/** Returns whether the specified child widget will be skipped by {@link #skip}.
 	 * <p>Default: returns if wgt.caption != child. In other words, it skip all children except the caption. 
 	 * @param zk.Widget wgt the widget to re-render
 	 * @param zk.Widget child a child (descendant) of this widget.
@@ -5080,9 +5080,9 @@ zk.Skipper = zk.$extends(zk.Object, {
 	skipped: function (wgt, child) {
 		return wgt.caption != child;
 	},
-	/** Skips all or subset of the descedant (child) widgets of the specified widget.
+	/** Skips all or subset of the descendant (child) widgets of the specified widget.
 	 * <p>Notice that the <pre>skipId</pre> argument is not used by {@link zk.Widget#rerender}.
-	 * Rather it is used to simplify the overriding of this methid,
+	 * Rather it is used to simplify the overriding of this method,
 	 * such that the deriving class can call back this class and
 	 * to pass a different ID to skip
 	 *
