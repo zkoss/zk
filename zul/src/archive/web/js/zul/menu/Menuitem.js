@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zWatch.listen(zk.ie7_ ? {onShow: wgt, onSize: wgt} : {onShow: wgt});
 		var v;
 		if (v = wgt._upload)
-			wgt._uplder = new zul.Upload(wgt, wgt.isTopmost() ? wgt.$n() : wgt.$n('a'), v);
+			wgt._uplder = new zul.Upload(wgt, wgt._getUploadRef(), v);
 	}
 	
 	function _cleanUpld(wgt) {
@@ -252,7 +252,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		else {
 			if (!this._canActivate(evt)) return;
-			zul.wgt.ADBS.autodisable(this);
+			if (!this._upload)
+				zul.wgt.ADBS.autodisable(this);
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
@@ -301,6 +302,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_canActivate: function (evt) {
 		return !this.isDisabled() && (!zk.ie || !this.isTopmost() || this._uplder
 				|| jq.isAncestor(this.$n('a'), evt.domTarget));
+	},
+	_getUploadRef: function () {
+		return this.isTopmost() ? this.$n() : this.$n('a');
 	},
 	doMouseOver_: function (evt) {
 		var menubar = this.getMenubar();

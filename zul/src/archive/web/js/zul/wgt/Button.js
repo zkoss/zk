@@ -381,7 +381,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		_fixClick(this);
 		
 		if (!this._disabled) {
-			zul.wgt.ADBS.autodisable(this);
+			if (!this._upload)
+				zul.wgt.ADBS.autodisable(this);
 			if (this._type != "button") {
 				var n;
 				if ((n = this.$n('btn')) && (n = n.form)) {
@@ -480,7 +481,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	 * @param zk.Widget wgt
 	 */
 	autodisable: function(wgt) {
-		var ads = wgt._autodisable, aded;
+		var ads = wgt._autodisable, aded, uplder;
 		if (ads) {
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
@@ -490,6 +491,12 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					if (perm = ad.charAt(0) == '+')
 						ad = ad.substring(1);
 					ad = "self" == ad ? wgt: wgt.$f(ad);
+					//B50-3304877: autodisable and Upload
+					if (ad == wgt) { //backup uploader before disable
+						uplder = wgt._uplder;
+						wgt._uplder = null;
+						wgt._autodisable_self = true;
+					}
 					if (ad && !ad._disabled) {
 						ad.setDisabled(true);
 						if (wgt.inServer)
@@ -503,7 +510,10 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		}
 		if (aded) {
 			aded = new zul.wgt.ADBS(aded);
-			if (wgt.isListen('onClick', {asapOnly:true}))
+			if (uplder) {
+				uplder._aded = aded;
+				wgt._uplder = uplder;//zul.Upload.sendResult came on it.
+			} else if (wgt.isListen('onClick', {asapOnly:true}))
 				zWatch.listen({onResponse: aded});
 			else
 				setTimeout(function () {aded.onResponse();}, 800);

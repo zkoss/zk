@@ -12,6 +12,7 @@ ZK 5.0.8
   3306079: Spinner/Doublespinner has unnecessary methods
   3002530: glitches with autopaging and renderdefer
   3306824: NullPointer when combobox's model has null
+  3304877: Upload fail when the component with autodisable
 
 * Upgrade Notes
   + If enable the autopaging function of Tree, Listbox, and Grid, the height of
