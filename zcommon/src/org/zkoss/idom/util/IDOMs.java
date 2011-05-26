@@ -262,8 +262,6 @@ public class IDOMs {
 	dumpTree(PrintWriter s, Item vtx, String prefix) {
 		s.print(prefix);
 		s.print(vtx);
-		s.print(vtx.isReadonly() ? 'R' : ' ');
-		s.println(vtx.isModified() ? 'M' : ' ');
 		if (vtx instanceof Group) {
 			prefix = prefix + "  ";
 			for (Iterator it = ((Group)vtx).getChildren().iterator();

@@ -18,7 +18,7 @@ package org.zkoss.util;
 
 import java.util.*;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * Red-black tree based array implementation of List interface.
  * Unlike LinkedList, the random access by index is as fast as log(n).
  * Unlike ArrayList, the insertion is as fast as log(n). It is

@@ -43,11 +43,9 @@ implements org.w3c.dom.EntityReference {
 		return _name;
 	}
 	public final void setName(String name) {
-		checkWritable();
 		if (!Objects.equals(_name, name)) {
 			Verifier.checkXMLName(name, getLocator());
 			_name = name;
-			setModified();
 		}
 	}
 

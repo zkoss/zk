@@ -18,7 +18,7 @@ package org.zkoss.util;
 import java.util.Collection;
 import java.util.Iterator;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * The checkable TreeArray. It extends TreeArray such that deriving
  * classes could add validation when an element is added, removed or set.
  * It is also useful to maintain the modification flag.

@@ -38,8 +38,7 @@ import org.w3c.dom.TypeInfo;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.mesg.MCommon;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.util.NotableLinkedList;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
@@ -59,8 +58,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	protected List _attrs = null;
 	/** Additional namespaces. May be null*/
 	protected Map _addNamespaces = null;
-	/** Whether it is aware of the attribute modification. */
-	boolean _attrModAware = false;
 
 	/**
 	 * Constructor.
@@ -172,7 +169,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 */
 	public final boolean addDeclaredNamespace(Namespace ns) {
 		if (_addNamespaces == null) {
-			_addNamespaces = new LinkedHashMap(5);
+			_addNamespaces = new LinkedHashMap(4);
 		} else {
 			final Namespace old = (Namespace)_addNamespaces.get(ns.getPrefix());
 			if (old != null) {
@@ -476,7 +473,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * a namespace that has an URI but without a prefix.
 	 */
 	public final void setNamespace(Namespace ns) {
-		checkWritable();
 		if (ns == null) {
 			if (_ns != null && _ns.getPrefix().length() == 0)
 				return; //nothing to do
@@ -510,7 +506,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return _ns.tagNameOf(_lname);
 	}
 	public final void setTagName(String tname) {
-		checkWritable();
 		int kp = tname.indexOf(':');
 		String prefix = kp >= 0 ? tname.substring(0, kp): "";
 		String lname  = kp >= 0 ? tname.substring(kp + 1): tname;
@@ -522,50 +517,11 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return _lname;
 	}
 	public final void setLocalName(String lname) {
-		checkWritable();
 		Verifier.checkElementName(lname, getLocator());
 		_lname = lname;
 	}
 
 	//-- Item --//
-	/** Clear the modification flag.
-	 * <p>Note: if both includingDescendant and
-	 * {@link #isAttributeModificationAware} are true, attributes'
-	 * modified flags are cleaned.
-	 */
-	public void clearModified(boolean includingDescendant) {
-		if (includingDescendant && _attrModAware) {
-			for (final Iterator it = _attrs.iterator(); it.hasNext();)
-				((Item)it.next()).clearModified(true);
-		}
-		super.clearModified(includingDescendant);
-	}
-	public Item clone(boolean preserveModified) {
-		Element elem = (Element)super.clone(preserveModified);
-
-		if (_addNamespaces != null) {
-			elem._addNamespaces = new LinkedHashMap();
-			elem._addNamespaces.putAll(_addNamespaces);
-		}
-		if (_attrs != null) {
-			elem._attrs = elem.newAttrArray();
-				//NOTE: AttrArray is an inner class, so we must use the right
-				//object to create the array. Here is 'elem'.
-
-			for (final Iterator it = _attrs.iterator(); it.hasNext();) {
-				Item v = ((Item)it.next()).clone(preserveModified);
-				boolean bClearModified = !preserveModified || !v.isModified();
-
-				elem._attrs.add(v); //v becomes modified (v.setParent is called)
-
-				if (bClearModified)
-					v.clearModified(false);
-			}
-		}
-		elem._modified = preserveModified && _modified;
-		return elem;
-	}
-
 	/**
 	 * Gets the tag name of the element -- the name with prefix.
 	 * To get the local name, use getLocalName.
@@ -606,11 +562,14 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	//-- Attributable --//
+	/** @deprecated As of release 5.0.8, it always returns false.
+	 */
 	public final boolean isAttributeModificationAware() {
-		return _attrModAware;
+		return false;
 	}
+	/** @deprecated As of release 5.0.8, it always returns false.
+	 */
 	public final void setAttributeModificationAware(boolean aware) {
-		_attrModAware = aware;
 	}
 	public final List getAttributeItems() {
 		if (_attrs == null)
@@ -667,7 +626,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	public final Attribute setAttribute(Attribute attr) {
-		checkWritable();
 		int j = getAttributeIndex(0, attr.getTagName());
 		if (j >= 0) {
 			return (Attribute)getAttributeItems().set(j, attr);
@@ -687,13 +645,30 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		return attr != null ? attr.getValue(): null;
 	}
 	public final Attribute setAttributeValue(String tname, String value) {
-		checkWritable();
 		Attribute attr = getAttributeItem(tname);
 		if (attr != null)
 			attr.setValue(value);
 		else
 			getAttributeItems().add(new Attribute(tname, value));
 		return attr;
+	}
+
+	//Cloneable//
+	public Object clone() {
+		Element elem = (Element)super.clone();
+
+		if (_addNamespaces != null)
+			elem._addNamespaces = new LinkedHashMap(_addNamespaces);
+
+		if (_attrs != null) {
+			elem._attrs = elem.newAttrArray();
+				//NOTE: AttrArray is an inner class, so we must use the right
+				//object to create the array. Here is 'elem'.
+
+			for (Iterator it = _attrs.iterator(); it.hasNext();)
+				elem._attrs.add((Attribute)((Attribute)it.next()).clone());
+		}
+		return elem;
 	}
 
 	//-- Node --//
@@ -751,8 +726,6 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 	public final void setAttributeNS
 	(String nsURI, String tname, String value) {
-		checkWritable();
-
 		int kp = tname.indexOf(':');
 		String prefix = kp >= 0 ? tname.substring(0, kp): "";
 		String lname  = kp >= 0 ? tname.substring(kp + 1): tname;
@@ -841,27 +814,11 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	}
 
 	//-- AttrArray --//
-	protected class AttrArray extends CheckableTreeArray {
+	protected class AttrArray extends NotableLinkedList {
 		protected AttrArray() {
 		}
 
-		//-- utilities --//
-		private Attribute checkAdd(Object newItem) {
-			checkWritable();
-
-			if (!(newItem instanceof Attribute))
-				throw new DOMException(
-					DOMException.HIERARCHY_REQUEST_ERR, "Invalid type", getLocator());
-
-			Attribute attr = (Attribute)newItem;
-			if (attr.getOwner() != null)
-				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
-					"Attribute, "+attr.toString()+", owned by other; detach or clone it", getLocator());
-
-			return attr;
-		}
-
-		//-- CheckableTreeArray --//
+		//-- NotableLinkedList --//
 		protected void onAdd(Object newElement, Object followingElement) {
 			checkAdd(newElement, followingElement, false);
 		}
@@ -869,33 +826,32 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			assert(replaced != null);
 			checkAdd(newElement, replaced, true);
 		}
-		private void checkAdd(Object newItem, Object other, boolean replace) {
+		private void checkAdd(Object newValue, Object other, boolean replace) {
+			Attribute newItem = (Attribute)newValue;
 			//first, remove any existent with the same uri and name
-			Object attrRemoved = null;
-			Attribute attr = checkAdd(newItem);
+			if (newItem.getOwner() != null)
+				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
+					"Attribute, "+newItem.toString()+", owned by other; detach or clone it", getLocator());
 
-			int j = getAttributeIndex(0, attr.getTagName());
+			int j = getAttributeIndex(0, newItem.getTagName());
 			if (j >= 0 && (!replace || get(j) != other))
 				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
-					"Attribute name, " + attr.getTagName() +", is conflicts with existent one (" + j + ')', getLocator());
+					"Attribute name, " + newItem.getTagName() +", is conflicts with existent one (" + j + ')', getLocator());
 
 			try {
 				if (replace)
 					onRemove(other);
-				attr.setOwner(Element.this);
+				newItem.setOwner(Element.this);
 			}catch(RuntimeException ex) {
 				if (replace) {
 					Attribute attrRep = (Attribute)other;
 					if (attrRep.getOwner() == null)
 						attrRep.setOwner(Element.this); //restore it
 				}
-				if (attrRemoved != null)
-					super.add(j, attrRemoved); //restore it
 				throw ex;
 			}
 		}
 		protected void onRemove(Object item) {
-			checkWritable();
 			((Attribute)item).setOwner(null);
 		}
 

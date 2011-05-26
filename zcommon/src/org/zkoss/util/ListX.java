@@ -16,7 +16,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * The extended list interface. It provides methods
  * to access the entry of each node in the list.
  *

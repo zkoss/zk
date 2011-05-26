@@ -153,12 +153,10 @@ public interface Attributable {
 	 */
 	public Attribute setAttributeValue(String tname, String value);
 
-	/** Returns whether it is aware of the modificatioin of attributes.
-	 * If true, the modified flag is set if any of its attribute is modified.
-	 * <p>Default: false.
+	/** @deprecated As of release 5.0.8, it always returns false.
 	 */
 	public boolean isAttributeModificationAware();
-	/** Sets whether it is aware of the modificatioin of attributes.
+	/** @deprecated As of release 5.0.8, it does nothing.
 	 */
 	public void setAttributeModificationAware(boolean aware);
 }

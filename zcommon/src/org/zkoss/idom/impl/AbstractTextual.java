@@ -105,15 +105,12 @@ implements Textual, CharacterData {
 		return _text;
 	}
 	public void setText(String text) {
-		checkWritable();
-
 		if (text == null)
 			text = "";
 
 		if (!Objects.equals(_text, text)) {
 			checkText(text);
 			_text = text;
-			setModified();
 		}
 	}
 
