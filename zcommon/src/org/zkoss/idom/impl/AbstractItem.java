@@ -200,7 +200,7 @@ implements Item, Node, Serializable, Cloneable {
 	public final Node cloneNode(boolean deep) {
 		if (!deep)
 			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "always deep", _loc); //NOT YET
-		return (Node)clone(false);
+		return (Node)clone();
 	}
 
 	public final Node getParentNode() {
