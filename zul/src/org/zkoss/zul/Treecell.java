@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
@@ -128,6 +127,7 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	}
 
 	/** Returns whether an item is the last visible child.
+	 * @deprecated
 	 */
 	public static boolean isLastChild(Treeitem item) {
 		final Component parent = item.getParent();
@@ -136,27 +136,6 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 			if (n.isVisible()) return  n == item;
 		return false;		
 	}
-	/** Returns an array of Treeitem from the root.
-	 */
-	private Treeitem[] getTreeitems(Component item) {
-		final List pitems = new LinkedList();
-		for (;;) {
-			final Component tch = item.getParent();
-			if (tch == null)
-				break;
-			item = tch.getParent();
-			if (item == null || item instanceof Tree)
-				break;
-			pitems.add(0, item);
-		}
-		return (Treeitem[])pitems.toArray(new Treeitem[pitems.size()]);
-	}
-
-	private Treeitem getTreeitem() {
-		final Component parent = getParent();
-		return parent != null ? (Treeitem)parent.getParent(): null;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-treecell" : _zclass;
 	}
