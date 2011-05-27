@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3304877.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 26, 2011 6:41:30 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Try to upload a big file.</li>
+			<li>The button shall not be click while upload is not finish.</li>
+		</ol>
+	]]></html>
+	<menubar>
+		<menuitem label="Upload"
+			upload="true,maxsize=-1" autodisable="self" />
+	</menubar>
+	<button label="Upload"
+		upload="true,maxsize=-1" autodisable="self" />
+	<toolbarbutton label="Upload"
+		upload="true,maxsize=-1" autodisable="self" />
+</zk>

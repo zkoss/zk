@@ -111,7 +111,9 @@ zul.Upload = zk.$extends(zk.Object, {
 		else 
 			jq(wgt).after(html);
 			
-		this.sync();
+		//B50-3304877: autodisable and Upload
+		if (!wgt._autodisable_self)
+			this.sync();
 		
 		var outer = this._outer = parent ? parent.lastChild : ref.nextSibling,
 			inp = outer.firstChild.firstChild;
@@ -347,6 +349,8 @@ zul.Uploader = zk.$extends(zk.Object, {
 			}
 		};
 		zul.Uploader._tmupload = setInterval(t, 1000);
+		//B50-3304877: autodisable and Upload
+		zul.wgt.ADBS.autodisable(wgt);
 	},
 	/**
 	 * Cancels the uploader to upload.
@@ -379,6 +383,25 @@ zul.Uploader = zk.$extends(zk.Object, {
 	end: function (finish) {
 		this.viewer.destroy(finish);
 		zul.Upload.destroy(this);
+		
+		//B50-3304877: autodisable and Upload
+		var wgt, upload, aded, parent;
+		if ((wgt = this._wgt) && (upload = this._upload) && 
+			(aded = upload._aded)) {
+			wgt._uplder = null; // prevent destory
+			aded.onResponse();
+			upload._aded = null;
+			
+			//restore uploader
+			wgt._uplder.destroy();
+			if ((parent = upload._parent) && !jq(parent).parents('html').length) {
+				upload._parent = wgt._getUploadRef();
+				upload.initContent();
+			}
+			wgt._uplder = upload;
+			wgt._uplder.sync();
+			delete wgt._autodisable_self;
+		}
 	}
 });
 

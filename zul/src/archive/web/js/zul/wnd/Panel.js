@@ -1034,8 +1034,8 @@ zul.wnd.PanelSkipper = zk.$extends(zk.Skipper, {
 		this._p = p;
 	},
 	skip: function (wgt, skipId) {
-		var skip = jq(skipId || (wgt.uuid + '-body'), zk)[0];
-		if (skip) {
+		var skip;
+		if (skip = jq(skipId || (wgt.uuid + '-body'), zk)[0]) {
 			skip.parentNode.removeChild(skip);
 				//don't use jq to remove, since it unlisten events
 			return skip;

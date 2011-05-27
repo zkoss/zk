@@ -414,8 +414,10 @@ zk.copy(zk, {
 	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
-	 * By default, it is false. It is true if <a href="http://code.google.com/p/zkuery/">ZKuery</a>
-	 * is used
+	 * <p>By default, it is false.
+	 * <p>You could enable it if the pure-client approach is taken,
+	 * since it is more convenient. However, it also means the concept of
+	 * ID space is no longer valid.
 	 * @type boolean
 	 */
 	//spaceless: null,
@@ -1499,10 +1501,9 @@ _zErb = zk.$extends(zk.Object, {
 			// Use zUtl.encodeXML -- Bug 1463668: security
  			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
- 					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >';
-		if (!zk.zkuery)
-			html += '<div class="btn redraw" onclick="_zErb.redraw()"></div>';
-		html += '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
+ 					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >'
+					+ '<div class="btn redraw" onclick="_zErb.redraw()"></div>'
+					+ '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
 		jq(document.body).append(html);
 		_erbx = this;
 		this.id = id;

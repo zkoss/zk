@@ -102,6 +102,8 @@ import org.zkoss.zk.xel.Evaluator;
  * &lt;/window>
  * </code></pre>
  * 
+ * <p>Since 5.1.0, {@link ComponentActivationListener} is no longer implemented
+ * by this class.
  * @author henrichen
  * @since 3.0.6
  * @see org.zkoss.zk.ui.Components#wireFellows
@@ -348,18 +350,6 @@ extends GenericComposer<T> implements ComponentCloneListener {
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
-		}
-	}
-	
-	public void didActivate(Component comp) {
-		//wire variables to reference fields (include implicit objects)
-
-		//Note: we have to check _applied because application might store
-		//the composer somewhere other than the original component
-		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
-			if (self == null) { //Bug #2873310. didActivate only once
-				Components.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
-			}
 		}
 	}
 }

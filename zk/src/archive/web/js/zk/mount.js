@@ -330,7 +330,7 @@ function zkmprops(uuid, props) {
 			(wgt = new cls({uuid: uuid}, zk.cut(props, "ct"))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			if (type == "#stub") { //not possible if zkuery
+			if (type == "#stub") {
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
 					throw "Unknow stub "+uuid;
@@ -557,7 +557,7 @@ jq(function() {
 		_reszInf.lastTime = now + 1000;
 			//ignore following for a while if processing (in slow machine)
 
-		if (!zk.zkuery) zAu._onClientInfo();
+		zAu._onClientInfo();
 
 		_reszInf.inResize = true;
 		try {
@@ -602,7 +602,7 @@ jq(function() {
 			_afterKeyDown(wevt);
 
 		if (evt.keyCode == 27
-		&& (zk._noESC > 0 || (!zk.zkuery && zAu.shallIgnoreESC()))) //Bug 1927788: prevent FF from closing connection
+		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
 			return false; //eat
 	})
 	.keyup(function (evt) {
@@ -731,7 +731,7 @@ jq(function() {
 		//Good news: Opera preserves the most udpated content, when BACK to
 		//a cached page, its content. OTOH, IE/FF/Safari cannot.
 		//Note: Safari/Chrome won't send rmDesktop when onunload is called
-		var bRmDesktop = !zk.opera && !zk.keepDesktop && !zk.zkuery;
+		var bRmDesktop = !zk.opera && !zk.keepDesktop;
 		if (bRmDesktop || zk.pfmeter) {
 			try {
 				var dts = zk.Desktop.all;

@@ -15,8 +15,6 @@ ZK 6.0.0
   + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
     doCatch(Throwable) and doFinally() were removed.
     And, doCatch(Throwable) and doFinally() are moved to InitiatorExt
-  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
-    are removed.
   + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
     They are replaced with org.zkoss.zul.DefaultTreeNode and
     org.zkoss.zul.DefaultTreeModel.
@@ -29,13 +27,20 @@ ZK 6.0.0
   + Two new methods are, newComposer and newServerPush, added to
     org.zkoss.zk.ui.sys.UiFactory to allow developers to customize the instantiation
     of a composer or a server push implementation.
-  + Listbox in the select mold will show up an empty selection if none of listitems
-    are selected (in the prior version, the first item will be shown though it is not
-    selected - Bug 2973303)
   + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
   + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
     are removed.
-  + The id-to-uuid-prefix configuration is removed
+
+	--------
+ZK 5.1.0
+* Features
+
+* Bugs
+
+* Upgrade Notes
+  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
+    are removed.
+  + No longer support ZKuery
 
 	--------
 ZK 5.0.8
@@ -51,6 +56,7 @@ ZK 5.0.8
   3306079: Spinner/Doublespinner has unnecessary methods
   3002530: glitches with autopaging and renderdefer
   3306824: NullPointer when combobox's model has null
+  3304877: Upload fail when the component with autodisable
 
 * Upgrade Notes
   + If enable the autopaging function of Tree, Listbox, and Grid, the height of
@@ -72,6 +78,7 @@ ZK 5.0.8
 	overflow: hidden;
 }
   + iDOM is simplified and the concept of readonly and modification is removed.
+  + The id-to-uuid-prefix configuration is removed
 
 	--------
 ZK 5.0.7.1

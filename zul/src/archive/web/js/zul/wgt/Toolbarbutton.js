@@ -248,7 +248,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function(evt){
 		if (!this._disabled) {
-			zul.wgt.ADBS.autodisable(this);
+			if (!this._upload)
+				zul.wgt.ADBS.autodisable(this);
 			this.fireX(evt);
 
 			if (!evt.stopped) {
