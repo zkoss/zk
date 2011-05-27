@@ -475,7 +475,7 @@ the short time styling.
 	public Locale getLocale() {
 		return _locale;
 	}
-	/** Sets the locale used to indetify the format of this datebox.
+	/** Sets the locale used to identify the format of this datebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.7
@@ -487,7 +487,7 @@ the short time styling.
 			smartUpdate("localizedFormat", getLocalizedFormat());
 		}
 	}
-	/** Sets the locale used to indetify the format of this datebox.
+	/** Sets the locale used to identify the format of this datebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.7

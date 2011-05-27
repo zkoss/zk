@@ -225,7 +225,7 @@ will be used to retrieve the real format.
 	public Locale getLocale() {
 		return _locale;
 	}
-	/** Sets the locale used to indetify the format of this timebox.
+	/** Sets the locale used to identify the format of this timebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.7
@@ -236,7 +236,7 @@ will be used to retrieve the real format.
 			smartUpdate("format", getRealFormat());
 		}
 	}
-	/** Sets the locale used to indetify the format of this timebox.
+	/** Sets the locale used to identify the format of this timebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.7
