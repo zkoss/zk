@@ -1,0 +1,59 @@
+<zk>
+	<html><![CDATA[
+	<ul>
+		<li>Drag "Item 2.1" to "Item 1", then "Item 2.1" will become the first and top-level tree item.</li>
+		<li>Drag "Item 3" to "Item 2.1.2", then "Item 3" will be inserted before "Item 2.1.2"</li>
+	</ul>
+	]]></html>
+	<zscript>
+	void move(Component dragged) {
+		self.parent.insertBefore(dragged, self);
+	}
+	</zscript>
+<tree>
+	<treecols>
+		<treecol label="Name"/>
+		<treecol label="Description"/>
+	</treecols>
+	<treechildren>
+		<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<treerow>
+				<treecell label="Item 1"/>
+				<treecell label="Item 1 description"/>
+			</treerow>
+		</treeitem>
+		<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+			<treerow>
+				<treecell label="Item 2"/>
+				<treecell label="Item 2 description"/>
+			</treerow>
+			<treechildren>
+				<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+					<treerow>
+						<treecell label="Item 2.1"/>
+					</treerow>
+					<treechildren>
+						<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+							<treerow>
+								<treecell label="Item 2.1.1"/>
+							</treerow>
+						</treeitem>
+						<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+							<treerow>
+								<treecell label="Item 2.1.2"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+					<treerow>
+						<treecell label="Item 2.2"/>
+						<treecell label="Item 2.2 is something who cares"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3" draggable="true" droppable="true" onDrop="move(event.dragged)"/>
+	</treechildren>
+</tree>
+</zk>
