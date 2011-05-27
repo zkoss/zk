@@ -405,7 +405,7 @@
 		</hlayout>
 		<vlayout hflex="1" height="50px"
 			style="border:1px solid black;">
-			<div>
+			<div hflex="1">
 				<div hflex="1" height="20px" forEach="1,2"
 					style="border:1px solid black;float: left;">
 					div
@@ -414,7 +414,7 @@
 		</vlayout>
 		<borderlayout hflex="1" height="50px">
 			<center>
-				<div>
+				<div hflex="1">
 					<div hflex="1" height="20px" forEach="1,2"
 						style="border:1px solid black;float: left;">
 						div
