@@ -74,45 +74,9 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 	public String getZclass() {
 		return _zclass == null ? "z-treerow" : _zclass;
 	}
-
-	/*obsolete: protected boolean isAsapRequired(String evtnm) {
-		if (!Events.ON_OPEN.equals(evtnm))
-			return super.isAsapRequired(evtnm);
-		final Treeitem ti = (Treeitem)getParent();
-		return ti != null && ti.isAsapRequired(evtnm);
-	}*/
-
-	//-- Component --//
-//	/** Returns whether this is visible.
-//	 * whether all its ancestors is open.
-//	 */
-	/*
-	public boolean isVisible() {
-		if (!super.isVisible())
-			return false;
-		Component comp = getParent();
-		if (!(comp instanceof Treeitem))
-			return true;
-		if (!comp.isVisible()) return false;
-		
-		comp = comp.getParent();
-		return !(comp instanceof Treechildren)
-			|| ((Treechildren)comp).isVisible(); //recursive
-	}
-	*/
 	public void smartUpdate(String attr, Object value) {
 		super.smartUpdate(attr, value);
 	}
-	private boolean isBothVisible() {
-		if (!super.isVisible())
-			return false;
-		Component comp = getParent();
-		if (!(comp instanceof Treeitem))
-			return true;
-		if (!((Treeitem) comp).isRealVisible()) return false;
-		return true;
-	}
-	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treeitem))
 			throw new UiException("Wrong parent: "+parent);
