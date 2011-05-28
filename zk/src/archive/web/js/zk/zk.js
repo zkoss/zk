@@ -414,8 +414,10 @@ zk.copy(zk, {
 	//alerting: false,
 	/** Indicates whether {@link Widget#id} is always the same
 	 * as {@link Widget#uuid}.
-	 * By default, it is false. It is true if <a href="http://code.google.com/p/zkuery/">ZKuery</a>
-	 * is used
+	 * <p>By default, it is false.
+	 * <p>You could enable it if the pure-client approach is taken,
+	 * since it is more convenient. However, it also means the concept of
+	 * ID space is no longer valid.
 	 * @type boolean
 	 */
 	//spaceless: null,
@@ -1067,6 +1069,7 @@ zk.endProcessing();
 	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
+		zAu.send(new zk.Event(null, "error", {message: msg}, {ignorable: true}), 800);
 		_zErb.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.

@@ -1858,7 +1858,7 @@ w:use="foo.MyWindow"&gt;
 				(o instanceof Boolean && ((Boolean)o).booleanValue())
 				|| !"false".equals(o));
 	}
-	/** @deprecated As of release 5.1.0, no longer used.
+	/** @deprecated As of release 5.0.8, no longer used.
 	 */
 	protected void renderIdSpace(ContentRenderer renderer) throws IOException {
 	}
