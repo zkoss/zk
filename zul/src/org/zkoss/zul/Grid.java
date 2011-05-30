@@ -1185,7 +1185,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		return true;
 	}
 	
-	private boolean evalRod() {
+	/*package*/ boolean evalRod() {
 		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true);
 	}
 	

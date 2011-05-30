@@ -16,6 +16,7 @@ ZK 5.0.8
   3306824: NullPointer when combobox's model has null
   3304877: Upload fail when the component with autodisable
   3308335: Fail to dynamically change the roundingMode for subclass...
+  3309174: Remove items from the  model of a non-rod grid cause error
 
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
