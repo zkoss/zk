@@ -38,7 +38,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -52,7 +51,6 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.RenderEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GridDataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
@@ -191,7 +189,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see RowRenderer
  * @see RowRendererExt
  */
-public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Grid {
+public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 	private static final Log log = Log.lookup(Grid.class);
 	private static final long serialVersionUID = 20091111L;
 
@@ -208,7 +206,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	private transient Foot _foot;
 	private transient Frozen _frozen;
 	private transient Collection _heads;
-	private String _pagingPosition = "bottom";
 	private transient ListModel _model;
 	private transient RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -435,31 +432,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	}
 
 	//--Paging--//
-	/**
-	 * Sets how to position the paging of grid at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
-	 * "top", or "both".
-	 * @since 3.0.4
-	 */
-	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null || (!pagingPosition.equals("top") &&
-			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
-			throw new WrongValueException("Unsupported position : "+pagingPosition);
-		if(!Objects.equals(_pagingPosition, pagingPosition)){
-			_pagingPosition = pagingPosition;
-			smartUpdate("pagingPosition", pagingPosition);
-		}
-	}
-	/**
-	 * Returns how to position the paging of grid at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @since 3.0.4
-	 */
-	public String getPagingPosition() {
-		return _pagingPosition;
-	}
-	
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -580,41 +552,7 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 	public org.zkoss.zul.api.Paging getPagingChildApi() {
 		return getPagingChild();
 	}
-	/** Returns the page size, aka., the number rows per page.
-	 * @exception IllegalStateException if {@link #getPaginal} returns null,
-	 * i.e., mold is not "paging" and no external controller is specified.
-	 */
-	public int getPageSize() {
-		return pgi().getPageSize();
-	}
-	/** Sets the page size, aka., the number rows per page.
-	 * @exception IllegalStateException if {@link #getPaginal} returns null,
-	 * i.e., mold is not "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException {
-		pgi().setPageSize(pgsz);
-	}
-
-	/** Returns the number of pages.
-	 * Note: there is at least one page even no item at all.
-	 * @since 3.0.4
-	 */
-	public int getPageCount() {
-		return pgi().getPageCount();
-	}
-	/** Returns the active page (starting from 0).
-	 * @since 3.0.4
-	 */
-	public int getActivePage() {
-		return pgi().getActivePage();
-	}
-	/** Sets the active page (starting from 0).
-	 * @since 3.0.4
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-		pgi().setActivePage(pg);
-	}
-	private Paginal pgi() {
+	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi;
@@ -1398,8 +1336,6 @@ public class Grid extends MeshElement implements Paginated, org.zkoss.zul.api.Gr
 		if (_model != null)
 			render(renderer, "model", true);
 
-		if (!"bottom".equals(_pagingPosition))
-			render(renderer, "pagingPosition", _pagingPosition);
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);
 		if (_currentTop != 0)

@@ -25,7 +25,7 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.event.ListDataEvent;//for javadoc
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.impl.api.MeshElement;
 
 /**
  * A listbox.
@@ -84,31 +84,7 @@ import org.zkoss.zul.ext.Paginated;
  * @see org.zkoss.zul.ListitemRendererExt
  * @since 3.5.2
  */
-public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
-
-	/**
-	 * Sets whether sizing listbox column width by its content. Default is false, i.e.
-	 * the outline of grid is dependent on browser. It means, we don't 
-	 * calculate the width of each cell. If set to true, the outline will count on 
-	 * the content of body. In other words, the outline of grid will be like 
-	 * ZK version 2.4.1 that the header's width is only for reference.
-	 * 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
-	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent 
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent);
-	
-	/**
-	 * Returns whether sizing listbox column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
-	 * it's prior to the original value.
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent();
-	
+public interface Listbox extends MeshElement {	
 	/**
 	 * Sets the outline of listbox whether is fixed layout. If true, the outline of
 	 * grid will be depended on browser. It means, we don't calculate the width
@@ -444,93 +420,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public org.zkoss.zul.api.Listitem removeItemAtApi(int index);
 
 	// --Paging--//
-	/**
-	 * Sets how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 * 
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 */
-	public void setPagingPosition(String pagingPosition);
-
-	/**
-	 * Returns the paging controller, or null if not available. Note: the paging
-	 * controller is used only if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
-	 * developers with {@link #setPaginal}).
-	 * 
-	 * <p>
-	 * If a paging controller is specified (either by {@link #setPaginal}, or by
-	 * {@link #setMold} with "paging"), the listbox will rely on the paging
-	 * controller to handle long-content instead of scrolling.
-	 */
-	public Paginal getPaginal();
-
-	/**
-	 * Specifies the paging controller. Note: the paging controller is used only
-	 * if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * It is OK, though without any effect, to specify a paging controller even
-	 * if mold is not "paging".
-	 * 
-	 * @param pgi
-	 *            the paging controller. If null and {@link #getMold} is
-	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingChildApi}).
-	 */
-	public void setPaginal(Paginal pgi);
-
-	/**
-	 * Returns the child paging controller that is created automatically, or
-	 * null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * 
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi();
-
-	/**
-	 * Returns the page size, aka., the number items per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize();
-
-	/**
-	 * Sets the page size, aka., the number items per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException;
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 * 
-	 */
-	public int getPageCount();
-
-	/**
-	 * Returns the active page (starting from 0).
-	 * 
-	 */
-	public int getActivePage();
-
-	/**
-	 * Sets the active page (starting from 0).
-	 * 
-	 * @see #setActivePage(Listitem)
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
-
 	/**
 	 * Sets the active page in which the specified item is. The active page will
 	 * become the page that contains the specified item.

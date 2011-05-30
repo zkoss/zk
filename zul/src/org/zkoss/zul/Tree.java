@@ -52,7 +52,6 @@ import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
@@ -92,7 +91,7 @@ import org.zkoss.zul.impl.Utils;
  * </dl>
  * @author tomyeh
  */
-public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tree {
+public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 	private static final Log log = Log.lookup(Tree.class);
 
 	private transient Treecols _treecols;
@@ -123,7 +122,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	 */
 	private transient Paging _paging;
 	private EventListener _pgListener, _pgImpListener;
-	private String _pagingPosition = "bottom";
 
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -245,30 +243,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 	}
 
 	//--Paging--//
-	/**
-	 * Sets how to position the paging of tree at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
-	 * "top", or "both".
-	 * @since 3.0.7
-	 */
-	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null || (!pagingPosition.equals("top") &&
-			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
-			throw new WrongValueException("Unsupported position : "+pagingPosition);
-		if(!Objects.equals(_pagingPosition, pagingPosition)){
-			_pagingPosition = pagingPosition;
-			smartUpdate("pagingPosition", pagingPosition);
-		}
-	}
-	/**
-	 * Returns how to position the paging of tree at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @since 3.0.7
-	 */
-	public String getPagingPosition() {
-		return _pagingPosition;
-	}
+	
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -392,26 +367,7 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		pgi().setPageSize(pgsz);
 	}
 
-	/** Returns the number of pages.
-	 * Note: there is at least one page even no item at all.
-	 * @since 3.0.7
-	 */
-	public int getPageCount() {
-		return pgi().getPageCount();
-	}
-	/** Returns the active page (starting from 0).
-	 * @since 3.0.7
-	 */
-	public int getActivePage() {
-		return pgi().getActivePage();
-	}
-	/** Sets the active page (starting from 0).
-	 * @since 3.0.7
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-		pgi().setActivePage(pg);
-	}
-	private Paginal pgi() {
+	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi;
@@ -2008,8 +1964,6 @@ public class Tree extends MeshElement implements Paginated, org.zkoss.zul.api.Tr
 		if (_model != null)
 			render(renderer, "model", true);
 
-		if (!"bottom".equals(_pagingPosition))
-			render(renderer, "pagingPosition", _pagingPosition);
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())

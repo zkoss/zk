@@ -58,7 +58,6 @@ import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
@@ -234,8 +233,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends MeshElement implements Paginated,
-		org.zkoss.zul.api.Listbox {
+public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
@@ -261,8 +259,6 @@ public class Listbox extends MeshElement implements Paginated,
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
-
-	private String _pagingPosition = "bottom";
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -1286,38 +1282,6 @@ public class Listbox extends MeshElement implements Paginated,
 
 	// --Paging--//
 	/**
-	 * Sets how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 *
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 * @since 3.0.4
-	 */
-	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null
-				|| (!pagingPosition.equals("top")
-						&& !pagingPosition.equals("bottom") && !pagingPosition
-						.equals("both")))
-			throw new WrongValueException("Unsupported position : "
-					+ pagingPosition);
-		if (!Objects.equals(_pagingPosition, pagingPosition)) {
-			_pagingPosition = pagingPosition;
-			smartUpdate("pagingPosition", pagingPosition);
-		}
-	}
-
-	/**
-	 * Returns how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 *
-	 * @since 3.0.4
-	 */
-	public String getPagingPosition() {
-		return _pagingPosition;
-	}
-
-	/**
 	 * Returns the paging controller, or null if not available. Note: the paging
 	 * controller is used only if {@link #getMold} is "paging".
 	 *
@@ -1447,58 +1411,7 @@ public class Listbox extends MeshElement implements Paginated,
 		return getPagingChild();
 	}
 
-	/**
-	 * Returns the page size, aka., the number items per page.
-	 *
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize() {
-		return pgi().getPageSize();
-	}
-
-	/**
-	 * Sets the page size, aka., the number items per page.
-	 *
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException {
-		pgi().setPageSize(pgsz);
-	}
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 *
-	 * @since 3.0.4
-	 */
-	public int getPageCount() {
-		return pgi().getPageCount();
-	}
-
-	/**
-	 * Returns the active page (starting from 0).
-	 *
-	 * @since 3.0.4
-	 */
-	public int getActivePage() {
-		return pgi().getActivePage();
-	}
-
-	/**
-	 * Sets the active page (starting from 0).
-	 *
-	 * @since 3.0.4
-	 * @see #setActivePage(Listitem)
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-		pgi().setActivePage(pg);
-	}
-
-	private Paginal pgi() {
+	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi;
@@ -3208,8 +3121,6 @@ public class Listbox extends MeshElement implements Paginated,
 			if (_model != null)
 				render(renderer, "model", true);
 
-			if (!"bottom".equals(_pagingPosition))
-				render(renderer, "pagingPosition", _pagingPosition);
 			if (!"100%".equals(_innerWidth))
 				render(renderer, "innerWidth", _innerWidth);
 			if (_currentTop != 0)

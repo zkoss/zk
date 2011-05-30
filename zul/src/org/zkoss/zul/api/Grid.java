@@ -19,13 +19,12 @@ package org.zkoss.zul.api;
 import java.util.Collection;
 import java.util.Set;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.event.ListDataEvent;//for javadoc
+import org.zkoss.zul.impl.api.MeshElement;
 
 /**
  * A grid is an element that contains both rows and columns elements. It is used
@@ -76,36 +75,13 @@ import org.zkoss.zul.event.ListDataEvent;//for javadoc
  * @see RowRenderer
  * @see org.zkoss.zul.RowRendererExt
  */
-public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
+public interface Grid extends MeshElement {
 	/**
 	 * Sets whether to grow and shrink vertical to fit their given space, so
 	 * called vertial flexibility.
 	 * 
 	 */
 	public void setVflex(boolean vflex);
-
-	/**
-	 * Sets whether sizing grid column width by its content. Default is false, i.e.
-	 * the outline of grid is dependent on browser. It means, we don't 
-	 * calculate the width of each cell. If set to true, the outline will count on 
-	 * the content of body. In other words, the outline of grid will be like 
-	 * ZK version 2.4.1 that the header's width is only for reference.
-	 * 
-	 * <p> You can also specify the "sized-by-content" attribute of component in 
-	 * lang-addon.xml directly, it will then take higher priority.
-	 * @param byContent 
-	 * @since 5.0.0
-	 */
-	public void setSizedByContent(boolean byContent);
-	
-	/**
-	 * Returns whether sizing grid column width by its content. Default is false.
-	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
-	 * it's prior to the original value.
-	 * @since 5.0.0
-	 * @see #setSizedByContent
-	 */
-	public boolean isSizedByContent();
 	
 	/**
 	 * Sets the outline of grid whether is fixed layout. If true, the outline of
@@ -170,93 +146,6 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align);
-
-	// --Paging--//
-	/**
-	 * Sets how to position the paging of grid at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 * 
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 */
-	public void setPagingPosition(String pagingPosition);
-
-	/**
-	 * Returns the paging controller, or null if not available. Note: the paging
-	 * controller is used only if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
-	 * developers with {@link #setPaginal}).
-	 * 
-	 * <p>
-	 * If a paging controller is specified (either by {@link #setPaginal}, or by
-	 * {@link #setMold} with "paging"), the grid will rely on the paging
-	 * controller to handle long-content instead of scrolling.
-	 */
-	public Paginal getPaginal();
-
-	/**
-	 * Specifies the paging controller. Note: the paging controller is used only
-	 * if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * It is OK, though without any effect, to specify a paging controller even
-	 * if mold is not "paging".
-	 * 
-	 * @param pgi
-	 *            the paging controller. If null and {@link #getMold} is
-	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingChildApi}).
-	 */
-	public void setPaginal(Paginal pgi);
-
-	/**
-	 * Returns the child paging controller that is created automatically, or
-	 * null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * 
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi();
-
-	/**
-	 * Returns the page size, aka., the number rows per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize();
-
-	/**
-	 * Sets the page size, aka., the number rows per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException;
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 * 
-	 */
-	public int getPageCount();
-
-	/**
-	 * Returns the active page (starting from 0).
-	 * 
-	 */
-	public int getActivePage();
-
-	/**
-	 * Sets the active page (starting from 0).
-	 * 
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
 
 	// -- ListModel dependent codes --//
 	/**
