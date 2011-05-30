@@ -3,6 +3,7 @@ ZK 5.0.8
 * Features
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
+  3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -14,6 +15,7 @@ ZK 5.0.8
   3002530: glitches with autopaging and renderdefer
   3306824: NullPointer when combobox's model has null
   3304877: Upload fail when the component with autodisable
+  3308335: Fail to dynamically change the roundingMode for subclass...
 
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

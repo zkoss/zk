@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-intbox.
  *
  */
-zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 	onSize: function(){
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
@@ -39,7 +39,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10);
 		
 		if (isNaN(val) || (info.raw != ''+val && info.raw != '-'+val))
@@ -52,16 +52,13 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (value) {
 		var fmt = this._format;
-		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding): value != null  ? ''+value: '';
+		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
+					: value != null  ? ''+value: '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-intbox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
-			this.$supers('doKeyPress_', arguments);
-	},	
 	bind_: function(){
 		this.$supers(zul.inp.Intbox, 'bind_', arguments);
 		if (this.inRoundedMold())

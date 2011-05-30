@@ -104,7 +104,7 @@ zk.fmt.Number = {
 		}
 		return valStr;
 	},
-	format: function (fmt, val, rounding) {
+	format: function (fmt, val, rounding, localizedSymbols) {
 		if (val == null) return '';
 		if (!fmt) return val + '';
 		
@@ -115,8 +115,16 @@ zk.fmt.Number = {
 			fmt = fmt[useMinsuFmt ? 1 : 0];
 		}
 		
+		// localized symbols
+		localizedSymbols = localizedSymbols || {
+				GROUPING: zk.GROUPING,
+				DECIMAL:  zk.DECIMAL,
+				PERCENT:  zk.PERCENT,
+				PER_MILL: zk.PER_MILL,
+				MINUS:    zk.MINUS
+			};
 		//calculate number of fixed decimals
-		var efmt = this._escapeQuote(fmt);
+		var efmt = this._escapeQuote(fmt, localizedSymbols);
 		fmt = efmt.fmt;
 		var pureFmtStr = efmt.pureFmtStr,
 			ind = efmt.purejdot,
@@ -204,7 +212,7 @@ zk.fmt.Number = {
 			
 		for (var g = 1, i = indFmt - 1, j = indVal - 1; i >= 0 && j >= 0;) {
 			if (g % groupDigit == 0 && pre.charAt(0) != ',') {
-				pre = zk.GROUPING + pre;
+				pre = localizedSymbols.GROUPING + pre;
 				g++;
 			}
 			var fmtcc = fmt.charAt(i); 
@@ -243,7 +251,7 @@ zk.fmt.Number = {
 					j++;
 				}
 			} else
-				suf += fmtcc == '%' ? zk.PERCENT : fmtcc;
+				suf += fmtcc == '%' ? localizedSymbols.PERCENT : fmtcc;
 		}
 		if (j < valStr.length) 
 			suf = valStr.substr(j, valStr.length);
@@ -263,25 +271,25 @@ zk.fmt.Number = {
 		
 		//combine
 		if (pre)
-			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre);
+			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre, localizedSymbols);
 		if (!pre && fmt.charAt(indFmt+1) == '#')
 			pre = '0';
-		if (!suf && (pre == zk.PERCENT || pre == zk.PER_MILL))
+		if (!suf && (pre == localizedSymbols.PERCENT || pre == localizedSymbols.PER_MILL))
 			pre = '0' + pre;
-		var rexp = new RegExp('^0*['+zk.PERCENT+'|'+zk.PER_MILL+']?$'),
+		var rexp = new RegExp('^0*['+localizedSymbols.PERCENT+'|'+localizedSymbols.PER_MILL+']?$'),
 			shownZero = suf? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
-		return (val < 0 && !shownZero && !useMinsuFmt? zk.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? zk.DECIMAL : '') + suf : pre);
+		return (val < 0 && !shownZero && !useMinsuFmt? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
-	_escapeQuote: function (fmt) {
+	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej= -1,
-			validPercent = fmt ? !new RegExp('\(\'['+zk.PERCENT+'|'+zk.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
+			validPercent = fmt ? !new RegExp('\(\'['+localizedSymbols.PERCENT+'|'+localizedSymbols.PER_MILL+']+\'\)', 'g').test(fmt) : true; 
 			//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = fmt.length; j < len; ++j) {
 			cc = fmt.charAt(j);
 			if (cc == '%' && validPercent)
 				shift += 2;
-			else if (cc == zk.PER_MILL && validPercent)
+			else if (cc == localizedSymbols.PER_MILL && validPercent)
 				shift += 3;
 			
 			if (cc == '\'') { // a single quote
@@ -318,30 +326,39 @@ zk.fmt.Number = {
 		}
 		return j;
 	},	
-	_removePrefixSharps: function (val) {
+	_removePrefixSharps: function (val, localizedSymbols) {
 		var ret = '',
 			sharp = true;
 		for(var len = val.length, j=0; j < len; ++j) {
 			var cc = val.charAt(j);
 			if (sharp) {
-				if (cc == '#' || cc == zk.GROUPING) continue;
+				if (cc == '#' || cc == localizedSymbols.GROUPING) continue;
 				else if (/[\d]/.test(cc)) sharp = false; // Bug 2990659
 			}
 			ret = ret + (cc == '#' ? '0' : cc);
 		}
 		return ret;
 	},
-	unformat: function (fmt, val, ignoreLocale) {
+	unformat: function (fmt, val, ignoreLocale, localizedSymbols) {
 		if (!val) return {raw: val, divscale: 0};
 
+		// localized symbols
+		localizedSymbols = localizedSymbols || {
+				GROUPING: zk.GROUPING,
+				DECIMAL:  zk.DECIMAL,
+				PERCENT:  zk.PERCENT,
+				PER_MILL: zk.PER_MILL,
+				MINUS:    zk.MINUS
+			};
+			
 		var divscale = 0, //the second element
 			minus, sb, cc, ignore,
-			zkMinus = ignoreLocale ? '-': zk.MINUS,
-			zkDecimal = ignoreLocale ? '.': zk.DECIMAL, //bug #2932443, no format and German Locale
-			zkPercent = ignoreLocale ? '%': zk.PERCENT,
+			zkMinus = ignoreLocale ? '-': localizedSymbols.MINUS,
+			zkDecimal = ignoreLocale ? '.': localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
+			zkPercent = ignoreLocale ? '%': localizedSymbols.PERCENT,
 			permill = String.fromCharCode(0x2030),
-			zkPermill = ignoreLocale ? permill: zk.PER_MILL, 
-			zkGrouping = ignoreLocale ? ',': zk.GROUPING,
+			zkPermill = ignoreLocale ? permill: localizedSymbols.PER_MILL, 
+			zkGrouping = ignoreLocale ? ',': localizedSymbols.GROUPING,
 			validPercent = !new RegExp('\(\'[%|'+permill+']+\'\)', 'g').test(fmt); 
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {

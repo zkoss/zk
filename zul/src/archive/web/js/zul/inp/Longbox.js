@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An edit box for holding an integer.
  * <p>Default {@link #getZclass}: z-longbox.
  */
-zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 	onSize: _zkf = function() {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
@@ -33,7 +33,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 	
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = new zk.Long(info.raw),
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
@@ -46,15 +46,12 @@ zul.inp.Longbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function(value) {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value : 
-			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding) : value.$toLocaleString() : '';
+			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding, this._localizedSymbols)
+				 : value.$toLocaleString() : '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-longbox" + (this.inRoundedMold() ? "-rounded": "");
-	},
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
-			this.$supers('doKeyPress_', arguments);
 	},
 	_isOutRange: function(val) {
 		var negative = val.charAt(0) == '-';

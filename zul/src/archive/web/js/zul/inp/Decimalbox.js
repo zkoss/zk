@@ -17,39 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
     
 	// Fixed merging JS issue
 	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL;
+		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL;
 	});
 /**
  * An edit box for holding BigDecimal.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
-zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 	$define: { //zk.def
-		/** Returns the rounding mode.
-		 * <ul>
-		 * <li>0: ROUND_UP</li>
-		 * <li>1: ROUND_DOWN</li>
-		 * <li>2: ROUDN_CEILING</li>
-		 * <li>3: ROUND_FLOOR</li>
-		 * <li>4: ROUND_HALF_UP</li>
-		 * <li>5: ROUND_HALF_DOWN</li>
-		 * <li>6: ROUND_HALF_EVEN</li>
-		 * </ul>
-		 * @return int
-		 */
-		/** Sets the rounding mode.
-		 * <ul>
-		 * <li>0: ROUND_UP</li>
-		 * <li>1: ROUND_DOWN</li>
-		 * <li>2: ROUDN_CEILING</li>
-		 * <li>3: ROUND_FLOOR</li>
-		 * <li>4: ROUND_HALF_UP</li>
-		 * <li>5: ROUND_HALF_DOWN</li>
-		 * <li>6: ROUND_HALF_EVEN</li>
-		 * </ul>
-		 * @param int rounding mode
-		 */
-		rounding: null,
 		/** Returns the precision scale.
 		 * @return int
 		 */
@@ -57,6 +32,12 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 		 * @param int scale
 		 */
 		scale: null
+	},
+	setLocalizedSymbols: function (val) {
+		var old = this._localizedSymbols;
+		this.$supers('setLocalizedSymbols', arguments);
+		if (this._localizedSymbols !== old)
+			this._allowKeys += this._localizedSymbols.DECIMAL;
 	},
 	onSize: _zkf = function() {
 		var width = this.getWidth();
@@ -73,7 +54,7 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = new zk.BigDecimal(info.raw),
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
@@ -86,7 +67,8 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 	coerceToString_: function(value) {
 		var fmt = this._format;
 		return value != null ? typeof value == 'string' ? value : 
-			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding) : value.$toLocaleString() : '';
+			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding, this._localizedSymbols)
+			: value.$toLocaleString() : '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

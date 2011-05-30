@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3287044.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 30 15:20:55 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Please check each input value is the same as the "Correct Result"
+	<separator/>
+	2. Please click the button "Change all locales to Taiwan", and then you should see
+	all of the input values will be the same as the correct result in TW (Taiwan).
+	<grid width="550px">
+		<columns>
+			<column hflex="min" label="Locale(Correct Result)" />
+			<column hflex="min" label="Doublebox" />
+			<column hflex="min" label="Decimalbox" />
+			<column hflex="min" label="Doublespinner" />
+		</columns>
+		<rows id="rows">
+			<row>
+				TW (Taiwan): 2,000.02
+				<doublebox format="#,###.00" locale="tw"
+					value="2000.02" />
+				<decimalbox format="#,###.00" locale="tw" value="2000.02"/>
+				<doublespinner format="#,###.00" locale="tw" value="2000.02" step="0.5"/>
+			</row>
+			<row>
+				FR (French): 2 000,02
+				<doublebox format="#,###.00" locale="fr"
+					value="2000.02" />
+				<decimalbox format="#,###.00" locale="fr" value="2000.02"/>
+				<doublespinner format="#,###.00" locale="fr" value="2000.02" step="0.5"/>
+			</row>
+			<row>
+				<label pre="true">IT (Italian):    2.000,02</label>
+				<doublebox format="#,###.00" locale="it"
+					value="2000.02" />
+				<decimalbox format="#,###.00" locale="it" value="2000.02"/>
+				<doublespinner format="#,###.00" locale="it" value="2000.02" step="0.5"/>
+			</row>
+		</rows>
+	</grid>
+	<button label="Change all locales to Taiwan">
+		<attribute name="onClick"><![CDATA[
+			for(Iterator it = rows.getChildren().iterator(); it.hasNext();) {
+				for(Iterator itt = it.next().getChildren().iterator(); itt.hasNext();) {
+						Component c = itt.next();
+						if (c instanceof org.zkoss.zul.impl.NumberInputElement)
+							c.setLocale("tw");
+				}
+			}
+			]]></attribute>
+	</button>
+</zk>
+

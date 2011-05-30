@@ -13,9 +13,9 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _digitsAfterDecimal(v) {
+	function _digitsAfterDecimal(v, DECIMAL) {
 		var vs = '' + v,
-			i = vs.indexOf(zk.DECIMAL);
+			i = vs.indexOf(DECIMAL);
 		return i < 0 ? 0 : vs.length - i - 1;
 	}
 	function _shiftedSum(v1, v2, exp, asc) {
@@ -32,13 +32,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			res /= mul;
 		return res;
 	}
+	
+	var _allowKeys;
+	
+	// Fixed merging JS issue
+	zk.load('zul.lang', function () {
+		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL+'e';
+	});
 /**
  * An edit box for holding a constrained double.
  *
  * <p>Default {@link #getZclass}: z-doublespinner.
  * @since 5.0.6
  */
-zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
@@ -50,7 +57,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		 * @param double step
 		 */
 		step: function (v) {
-			this._fixedDigits = _digitsAfterDecimal(v);
+			this._fixedDigits = _digitsAfterDecimal(v, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -82,6 +89,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			return;
 		}
 	},
+	setLocalizedSymbols: function (val) {
+		var old = this._localizedSymbols;
+		this.$supers('setLocalizedSymbols', arguments);
+		if (this._localizedSymbols !== old)
+			this._allowKeys += this._localizedSymbols.DECIMAL + 'e';
+	},
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-doublespinner" + (this.inRoundedMold() ? "-rounded": "");
@@ -105,7 +118,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('setConstraint', arguments);
 	},
 	coerceFromString_: function (value) {//copy from doublebox
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
     		raw = info.raw,
     		val = parseFloat(raw),
     		valstr = ''+val,
@@ -148,10 +161,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
     	return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
-		var fmt = this._format;
+		var fmt = this._format,
+			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
 		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, value, this._rounding) : 
-			zk.DECIMAL == '.' ? (''+value) : (''+value).replace('.', zk.DECIMAL);
+			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
+				DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -163,7 +177,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
 	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys+zk.DECIMAL))
+		if (!this._shallIgnore(evt, this._allowKeys || _allowKeys))
 			this.$supers('doKeyPress_', arguments);
 	},
 	doKeyDown_: function(evt){

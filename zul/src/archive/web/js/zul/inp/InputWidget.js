@@ -838,8 +838,4 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	onChangingForced: true
 });
-zk.load('zul.lang', function () { // Fixed merging JS issue
-	zul.inp.InputWidget._allowKeys = "0123456789"+zk.MINUS+zk.PERCENT
-		+(zk.groupingDenied ? '': zk.GROUPING);
-});
 })();

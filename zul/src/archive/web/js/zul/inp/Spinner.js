@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>Default {@link #getZclass}: z-spinner.
  */
-zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
@@ -84,7 +84,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {//copy from intbox
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = parseInt(info.raw, 10);
 		if (info.raw != ''+val && info.raw != '-'+val)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
@@ -94,7 +94,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format;
-		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding): value != null ? ''+value: '';
+		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
+				: value != null ? ''+value: '';
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -105,10 +106,6 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
-			this.$supers('doKeyPress_', arguments);
-	},
 	doKeyDown_: function(evt){
 		var inp = this.inp;
 		if (inp.disabled || inp.readOnly)
