@@ -239,7 +239,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 	}
 	function _exmsg(e) {
-		var msg = e.message, m2 = "";
+		var msg = e.message||e, m2 = "";
 		if (e.name) m2 = " " +e.name;
 //		if (e.fileName) m2 += " " +e.fileName;
 //		if (e.lineNumber) m2 += ":" +e.lineNumber;
@@ -499,7 +499,7 @@ zAu = {
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2+": ":"")+(cmd||"")
-				+ (ex?"\n"+(_exmsg(ex) || ex):""));
+				+ (ex?"\n"+_exmsg(ex):""));
 	},
 	/** Returns the URI for the specified error.
 	 * @param int code the error code
