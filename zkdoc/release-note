@@ -4,6 +4,7 @@ ZK 5.0.8
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
+  3309539: Timebox and Datebox support different language for different locale
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

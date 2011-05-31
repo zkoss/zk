@@ -21,10 +21,14 @@ package org.zkoss.zul;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
+import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
@@ -233,7 +237,7 @@ will be used to retrieve the real format.
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
-			smartUpdate("format", getRealFormat());
+			invalidate();
 		}
 	}
 	/** Sets the locale used to identify the format of this timebox.
@@ -302,7 +306,30 @@ will be used to retrieve the real format.
 		df.setTimeZone(tz);
 		return df;
 	}
-
+	private String getRealSymbols() {
+		if (_locale != null) {
+			final String localeName = _locale.toString();
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
+					getDesktop(),
+					getClass().getName() + localeName)) {
+				final Map map = new HashMap(2);
+				final Calendar cal = Calendar.getInstance(_locale);
+				
+				SimpleDateFormat df = new SimpleDateFormat("a", _locale);
+				cal.set(Calendar.HOUR_OF_DAY, 3);
+				final String[] ampm = new String[2];
+				ampm[0] = df.format(cal.getTime());
+				cal.set(Calendar.HOUR_OF_DAY, 15);
+				ampm[1] = df.format(cal.getTime());
+				map.put("APM", ampm);
+				return JSONValue.toJSONString(new Object[] {
+						localeName, map });
+			} else return JSONValue.toJSONString(new Object[] {
+					localeName, null });
+		}
+		return null;
+	}
+	
 	// super
 	public String getZclass() {
 		return _zclass == null ?  "z-timebox" : _zclass;
@@ -313,5 +340,7 @@ will be used to retrieve the real format.
 
 		if(_btnVisible != true)
 			renderer.render("buttonVisible", _btnVisible);
+		if (_locale != null)
+			renderer.render("localizedSymbols", getRealSymbols());
 	}
 }

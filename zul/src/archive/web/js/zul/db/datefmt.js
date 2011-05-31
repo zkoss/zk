@@ -115,9 +115,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 
 zk.fmt.Date = {
-	parseDate : function (txt, fmt, strict, refval) {
+	parseDate : function (txt, fmt, strict, refval, localizedSymbols) {
 		if (!fmt) fmt = "yyyy/MM/dd";
 		refval = refval || zUtl.today(fmt);
+		
+		localizedSymbols = localizedSymbols || {
+			DOW_1ST: zk.DOW_1ST,
+				ERA: zk.ERA,    
+			 YDELTA: zk.YDELTA,
+			   SDOW: zk.SDOW,
+			  S2DOW: zk.S2DOW,
+			   FDOW: zk.FDOW,
+			   SMON: zk.SMON,
+			  S2MON: zk.S2MON,
+			   FMON: zk.FMON,
+				APM: zk.APM
+		};
 		var y = refval.getFullYear(),
 			m = refval.getMonth(),
 			d = refval.getDate(), dFound,
@@ -168,10 +181,10 @@ zk.fmt.Date = {
 						isNumber0 = !isNaN(token);
 					if (!mon) break; 
 					if (!isNumber0 && token)
-						for (var index = zk.SMON.length; --index >= 0;) {
-							var smon = zk.SMON[index].toLowerCase();
+						for (var index = localizedSymbols.SMON.length; --index >= 0;) {
+							var smon = localizedSymbols.SMON[index].toLowerCase();
 							if (mon.startsWith(smon)) {
-								token = zk.SMON[index];
+								token = localizedSymbols.SMON[index];
 								m = index;
 								break;
 							}
@@ -194,12 +207,12 @@ zk.fmt.Date = {
 						for (var l = 0;; ++l) {
 							if (l == 12) return; //failed
 							if (len == 3) {
-								if (zk.SMON[l] == token) {
+								if (localizedSymbols.SMON[l] == token) {
 									m = l;
 									break;
 								}
 							} else {
-								if (token && zk.FMON[l].startsWith(token)) {
+								if (token && localizedSymbols.FMON[l].startsWith(token)) {
 									m = l;
 									break;
 								}
@@ -250,7 +263,7 @@ zk.fmt.Date = {
 					if (!hasHour1)
 						break;
 					if (!token) return; //failed
-					isAM = token.startsWith(zk.APM[0]);
+					isAM = token.startsWith(localizedSymbols.APM[0]);
 					break
 				//default: ignored
 				}
@@ -269,13 +282,13 @@ zk.fmt.Date = {
 				return; //failed
 
 			txt = txt.trim();
-			txt = _ckDate(zk.FDOW, txt);
-			txt = _ckDate(zk.SDOW, txt);
-			txt = _ckDate(zk.S2DOW, txt);
-			txt = _ckDate(zk.FMON, txt);
-			txt = _ckDate(zk.SMON, txt);
-			txt = _ckDate(zk.S2MON, txt);
-			txt = _ckDate(zk.APM, txt);
+			txt = _ckDate(localizedSymbols.FDOW, txt);
+			txt = _ckDate(localizedSymbols.SDOW, txt);
+			txt = _ckDate(localizedSymbols.S2DOW, txt);
+			txt = _ckDate(localizedSymbols.FMON, txt);
+			txt = _ckDate(localizedSymbols.SMON, txt);
+			txt = _ckDate(localizedSymbols.S2MON, txt);
+			txt = _ckDate(localizedSymbols.APM, txt);
 			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
 				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
@@ -285,9 +298,21 @@ zk.fmt.Date = {
 		return +dt == +refval ? refval: dt;
 			//we have to use getTime() since dt == refVal always false
 	},
-	formatDate : function (val, fmt) {
+	formatDate : function (val, fmt, localizedSymbols) {
 		if (!fmt) fmt = "yyyy/MM/dd";
 
+		localizedSymbols = localizedSymbols || {
+			DOW_1ST: zk.DOW_1ST,
+				ERA: zk.ERA,    
+			 YDELTA: zk.YDELTA,
+			   SDOW: zk.SDOW,
+			  S2DOW: zk.S2DOW,
+			   FDOW: zk.FDOW,
+			   SMON: zk.SMON,
+			  S2MON: zk.S2MON,
+			   FMON: zk.FMON,
+				APM: zk.APM
+		};
 		var txt = "";
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
@@ -304,15 +329,15 @@ zk.fmt.Date = {
 					break;
 				case 'M':
 					if (len <= 2) txt += _digitFixed(val.getMonth()+1, len);
-					else if (len == 3) txt += zk.SMON[val.getMonth()];
-					else txt += zk.FMON[val.getMonth()];
+					else if (len == 3) txt += localizedSymbols.SMON[val.getMonth()];
+					else txt += localizedSymbols.FMON[val.getMonth()];
 					break;
 				case 'd':
 					txt += _digitFixed(dayInMonth(val), len);
 					break;
 				case 'E':
-					if (len <= 3) txt += zk.SDOW[(val.getDay() - zk.DOW_1ST + 7) % 7];
-					else txt += zk.FDOW[(val.getDay() - zk.DOW_1ST) % 7];
+					if (len <= 3) txt += localizedSymbols.SDOW[(val.getDay() - localizedSymbols.DOW_1ST + 7) % 7];
+					else txt += localizedSymbols.FDOW[(val.getDay() - localizedSymbols.DOW_1ST) % 7];
 					break;
 				case 'D':
 					txt += dayInYear(val);
@@ -324,7 +349,7 @@ zk.fmt.Date = {
 					txt += weekInMonth(val);
 					break;
 				case 'G':
-					txt += zk.ERA;
+					txt += localizedSymbols.ERA;
 					break;
 				case 'F':
 					txt += dayOfWeekInMonth(val);
@@ -361,7 +386,7 @@ zk.fmt.Date = {
 					txt += -(val.getTimezoneOffset()/60);
 					break;
 				case 'a':
-					txt += zk.APM[val.getHours() > 11 ? 1 : 0];
+					txt += localizedSymbols.APM[val.getHours() > 11 ? 1 : 0];
 					break;
 				default:
 					txt += '1';
@@ -385,8 +410,10 @@ zk.fmt.Date = {
  */
 zk.fmt.Calendar = zk.$extends(zk.Object, {
 	_offset: zk.YDELTA,
-	$init: function (date) {
+	$init: function (date, localizedSymbols) {
 		this._date = date;
+		if (localizedSymbols)
+			this._offset = localizedSymbols.YDELTA;
 	},
 	getTime: function () {
 		return this._date;
@@ -400,13 +427,16 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	getYearOffset: function () {
 		return this._offset;
 	},
-	formatDate: function (val, fmt) {
+	formatDate: function (val, fmt, localizedSymbols) {
 		var d;
+		if (localizedSymbols)
+			this._offset = localizedSymbols.YDELTA;
+			
 		if (this._offset) {
 			d = new Date(val);
 			d.setFullYear(d.getFullYear() + this._offset);
 		}
-		return zk.fmt.Date.formatDate(d || val, fmt);
+		return zk.fmt.Date.formatDate(d || val, fmt, localizedSymbols);
 	},
     toUTCDate: function () {
         var d;
@@ -415,8 +445,11 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
                 .setFullYear(d.getFullYear() - this._offset);
         return d;
     }, 
-	parseDate: function (txt, fmt, strict, refval) {
-		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval);
+	parseDate: function (txt, fmt, strict, refval, localizedSymbols) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols);
+		if (localizedSymbols)
+			this._offset = localizedSymbols.YDELTA;
+			
 		if (this._offset && fmt) {
 			var cnt = 0;
 			for (var i = fmt.length; i--;)

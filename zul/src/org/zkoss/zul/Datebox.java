@@ -17,24 +17,34 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.text.DateFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
+import org.zkoss.util.WaitLock;
+import org.zkoss.util.logging.Log;
 import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.http.Utils;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.XulElement;
@@ -54,6 +64,8 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
+	
+	private static final Log log = Log.lookup(Datebox.class);
 	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
 
 	private TimeZone _tzone;
@@ -61,6 +73,7 @@ public class Datebox extends FormatInputElement implements
 	/** The locale associated with this datebox. */
 	private Locale _locale;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
+	private static Map _symbols = new HashMap(8);
 	
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -483,10 +496,176 @@ the short time styling.
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
-			smartUpdate("format", getRealFormat());
-			smartUpdate("localizedFormat", getLocalizedFormat());
+			invalidate();
 		}
 	}
+	
+	private static Map loadSymbols(Locale locale) {
+		WaitLock lock = null;
+		for (;;) {
+			final Object o;
+			synchronized (_symbols) {	
+				o = _symbols.get(locale);
+				if (o == null)
+					_symbols.put(locale, lock = new WaitLock()); //lock it
+			}
+
+			if (o instanceof Map)
+				return (Map)o;
+			if (o == null)
+				break; //go to load the symbols
+
+			//wait because some one is creating the servlet
+			if (!((WaitLock)o).waitUntilUnlock(5*60*1000))
+				log.warning("Take too long to wait loading localized symbol: "+locale
+					+"\nTry to load again automatically...");
+		} //for(;;)
+		
+		try {
+			
+			// the following implementation is referred to 
+			// org.zkoss.zk.ui.http.Wpds#getDateJavaScript()
+			final Map map = new HashMap();
+			final Calendar cal = Calendar.getInstance(locale);
+			int firstDayOfWeek = Utils.getFirstDayOfWeek();
+			cal.clear();
+	
+			if (firstDayOfWeek < 0)
+				firstDayOfWeek = cal.getFirstDayOfWeek();
+			map.put("DOW_1ST",
+					Integer.valueOf(firstDayOfWeek - Calendar.SUNDAY));
+	
+			final boolean zhlang = locale.getLanguage().equals("zh");
+			SimpleDateFormat df = new SimpleDateFormat("E", locale);
+			final String[] sdow = new String[7], s2dow = new String[7];
+			for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {
+				cal.set(Calendar.DAY_OF_WEEK, j);
+				sdow[k] = df.format(cal.getTime());
+				if (++j > Calendar.SATURDAY)
+					j = Calendar.SUNDAY;
+	
+				if (zhlang) {
+					s2dow[k] = sdow[k].length() >= 3 ? sdow[k].substring(2)
+							: sdow[k];
+				} else {
+					final int len = sdow[k].length();
+					final char cc = sdow[k].charAt(len - 1);
+					s2dow[k] = cc == '.' || cc == ',' ? sdow[k].substring(
+							0, len - 1) : sdow[k];
+				}
+			}
+			df = new SimpleDateFormat("G", locale);
+			map.put("ERA", df.format(new java.util.Date()));
+	
+			Calendar ec = Calendar.getInstance(Locale.ENGLISH);
+			Calendar lc = Calendar.getInstance(locale);
+			map.put("YDELTA",
+					Integer.valueOf(lc.get(Calendar.YEAR)
+							- ec.get(Calendar.YEAR)));
+	
+			df = new SimpleDateFormat("EEEE", locale);
+			final String[] fdow = new String[7];
+			for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {
+				cal.set(Calendar.DAY_OF_WEEK, j);
+				fdow[k] = df.format(cal.getTime());
+				if (++j > Calendar.SATURDAY)
+					j = Calendar.SUNDAY;
+			}
+	
+			df = new SimpleDateFormat("MMM", locale);
+			final String[] smon = new String[12], s2mon = new String[12];
+			for (int j = 0; j < 12; ++j) {
+				cal.set(Calendar.MONTH, j);
+				smon[j] = df.format(cal.getTime());
+	
+				if (zhlang) {
+					s2mon[j] = smon[0].length() >= 2 ? // remove the last
+														// char
+					smon[j].substring(0, smon[j].length() - 1)
+							: smon[j];
+				} else {
+					final int len = smon[j].length();
+					final char cc = smon[j].charAt(len - 1);
+					s2mon[j] = cc == '.' || cc == ',' ? smon[j].substring(
+							0, len - 1) : smon[j];
+				}
+			}
+	
+			df = new SimpleDateFormat("MMMM", locale);
+			final String[] fmon = new String[12];
+			for (int j = 0; j < 12; ++j) {
+				cal.set(Calendar.MONTH, j);
+				fmon[j] = df.format(cal.getTime());
+			}
+	
+			map.put("SDOW", sdow);
+			if (Objects.equals(s2dow, sdow))
+				map.put("S2DOW", sdow);
+			else map.put("S2DOW", s2dow);
+			if (Objects.equals(fdow, sdow))
+				map.put("FDOW", sdow);
+			else map.put("FDOW", fdow);
+	
+			map.put("SMON", smon);
+			if (Objects.equals(s2mon, smon))
+				map.put("S2MON", smon);
+			else map.put("S2MON", s2mon);
+	
+			if (Objects.equals(fmon, smon))
+				map.put("FMON", smon);
+			else map.put("FMON", fmon);
+	
+			// AM/PM available since ZK 3.0
+			df = new SimpleDateFormat("a", locale);
+			cal.set(Calendar.HOUR_OF_DAY, 3);
+			final String[] ampm = new String[2];
+			ampm[0] = df.format(cal.getTime());
+			cal.set(Calendar.HOUR_OF_DAY, 15);
+			ampm[1] = df.format(cal.getTime());
+	
+			map.put("APM", ampm);
+			
+			synchronized (_symbols) {
+				_symbols.put(locale, map);
+				cloneSymbols();
+			}
+			
+			return map;
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	private static void cloneSymbols() {
+		final Map symbols = new HashMap();
+		for (Iterator it = _symbols.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final Object value = me.getValue();
+			if (value instanceof Map) {
+				final Object key = me.getKey();
+				symbols.put(key, value);
+			}
+		}
+		_symbols = symbols;
+	}
+	
+	private static String getRealSymbols(Locale locale, Datebox box) {
+		if (locale != null) {
+			final String localeName = locale.toString();
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
+					box.getDesktop(),
+					box.getClass().getName() + localeName)) {
+				Map symbols = (Map)_symbols.get(locale);
+				if (symbols == null)
+					symbols = loadSymbols(locale);
+				return JSONValue.toJSONString(new Object[] {
+						localeName, symbols });
+			} else return JSONValue.toJSONString(new Object[] {
+					localeName, null });
+		}
+		return null;
+	}
+	
 	/** Sets the locale used to identify the format of this datebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
@@ -626,5 +805,8 @@ the short time styling.
 		if (_tzone != null)
 			renderer.render("timeZone", _tzone.getID());
 		renderer.render("localizedFormat", getLocalizedFormat());
+		
+		if (_locale != null)
+			renderer.render("localizedSymbols", getRealSymbols(_locale, this));
 	}
 }

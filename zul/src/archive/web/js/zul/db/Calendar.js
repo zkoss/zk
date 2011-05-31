@@ -138,8 +138,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				var j = constraint.indexOf("and", 7);
 				if (j < 0 && zk.debugJS) 
 					zk.error('Unknown constraint: ' + constraint);
-				this._beg = new zk.fmt.Calendar().parseDate(constraint.substring(7, j), 'yyyyMMdd');
-				this._end = new zk.fmt.Calendar().parseDate(constraint.substring(j + 3), 'yyyyMMdd');
+				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), 'yyyyMMdd');
+				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3), 'yyyyMMdd');
 				if (this._beg.getTime() > this._end.getTime()) {
 					var d = this._beg;
 					this._beg = this._end;
@@ -149,10 +149,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				this._beg.setHours(0, 0, 0, 0);
 				this._end.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith("before")) {
-				this._end = new zk.fmt.Calendar().parseDate(constraint.substring(6), 'yyyyMMdd');
+				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6), 'yyyyMMdd');
 				this._end.setHours(0, 0, 0, 0);
 			} else if (constraint.startsWith("after")) {
-				this._beg = new zk.fmt.Calendar().parseDate(constraint.substring(5), 'yyyyMMdd');
+				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5), 'yyyyMMdd');
 				this._beg.setHours(0, 0, 0, 0);
 			}
 		},
@@ -252,7 +252,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		return zcs != null ? zcs: "z-calendar";
 	},
 	_updFormData: function (val) {
-		val = new zk.fmt.Calendar().formatDate(val, this.getFormat())
+		val = new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols);
 		if (this._name) {
 			val = val || '';
 			if (!this.efield)
