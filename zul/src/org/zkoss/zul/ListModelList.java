@@ -246,7 +246,7 @@ implements ListModelExt, List, java.io.Serializable {
     }
 	
 	public ListIterator listIterator() {
-		return _list.listIterator();
+		return listIterator(0);
 	}
 	
 	public ListIterator listIterator(final int index) {
@@ -297,6 +297,7 @@ implements ListModelExt, List, java.io.Serializable {
 	}
 	
 	public Object remove(int index) {
+		System.out.println(index);
 		removeSelection(_list.get(index));
 		Object ret = _list.remove(index);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
