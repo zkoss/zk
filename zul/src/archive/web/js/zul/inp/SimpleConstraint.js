@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.
 	 * @param Object a
-	 * I can be String or number, the number or name of flag, 
+	 * It can be String or number, the number or name of flag, 
 	 * such as "no positive", 0x0001.
 	 * @param String b the regular expression
 	 * @param String c the error message
