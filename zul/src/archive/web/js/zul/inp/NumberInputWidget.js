@@ -13,7 +13,8 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _allowKeys;
+	var _allowKeys,
+		globallocalizedSymbols = {};
 /**
  * A skeletal implementation for number-type input box.
  * @since 5.0.8
@@ -47,7 +48,13 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		rounding: null,
 		localizedSymbols: [
 			function (val) {
-				return 	val ? jq.evalJSON(val) : val;
+				if(val) {
+					var ary = jq.evalJSON(val);
+					if (!globallocalizedSymbols[ary[0]])
+						globallocalizedSymbols[ary[0]] = ary[1];
+					return globallocalizedSymbols[ary[0]];
+				} 
+				return val;
 			},
 			function () {
 				if (this._localizedSymbols) {

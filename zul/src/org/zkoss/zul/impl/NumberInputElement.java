@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONValue;
 import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
@@ -114,7 +114,7 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
-			smartUpdate("localizedSymbols", getRealSymbols());
+			invalidate();
 		}
 	}
 	/** Sets the locale used to identify the symbols of this number input element.
@@ -127,19 +127,27 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 			Locales.getLocale(locale): null);
 	}
 	
-	/** Returns the real symbols according to the currect locale.
+	/** Returns the real symbols according to the current locale.
 	 * @since 5.0.8
 	 */
-	protected String getRealSymbols() {
+	private String getRealSymbols() {
 		if (_locale != null) {
-			final DecimalFormatSymbols symbols = new DecimalFormatSymbols(_locale);
-			Map map = new HashMap();
-			map.put("GROUPING", String.valueOf(symbols.getGroupingSeparator()));
-			map.put("DECIMAL", String.valueOf(symbols.getDecimalSeparator()));
-			map.put("PERCENT", String.valueOf(symbols.getPercent()));
-			map.put("PER_MILL", String.valueOf(symbols.getPerMill()));
-			map.put("MINUS", String.valueOf(symbols.getMinusSign()));
-			return JSONObject.toJSONString(map);
+			final String localeName = _locale.toString();
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
+					getDesktop(), "org.zkoss.zul.impl.NumberInputElement" + localeName)) {
+				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(
+						_locale);
+				Map map = new HashMap();
+				map.put("GROUPING",
+						String.valueOf(symbols.getGroupingSeparator()));
+				map.put("DECIMAL",
+						String.valueOf(symbols.getDecimalSeparator()));
+				map.put("PERCENT", String.valueOf(symbols.getPercent()));
+				map.put("PER_MILL", String.valueOf(symbols.getPerMill()));
+				map.put("MINUS", String.valueOf(symbols.getMinusSign()));
+				return JSONValue.toJSONString(new Object[] { localeName, map });
+			} else return JSONValue.toJSONString(new Object[] { localeName,
+					null });
 		}
 		return null;
 	}

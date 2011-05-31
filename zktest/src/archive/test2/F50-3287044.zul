@@ -18,7 +18,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<separator/>
 	2. Please click the button "Change all locales to Taiwan", and then you should see
 	all of the input values will be the same as the correct result in TW (Taiwan).
-	<grid width="550px">
+	<grid width="600px" span="3">
 		<columns>
 			<column hflex="min" label="Locale(Correct Result)" />
 			<column hflex="min" label="Doublebox" />
