@@ -394,7 +394,7 @@ zk.fmt.Date = {
 					//However, it must be an error if we don't generate a digit
 				}
 				j = k - 1;
-			} else {
+			} else if (cc != "'"){
 				txt += cc;
 			}
 		}

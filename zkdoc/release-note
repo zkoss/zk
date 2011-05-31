@@ -18,6 +18,7 @@ ZK 5.0.8
   3304877: Upload fail when the component with autodisable
   3308335: Fail to dynamically change the roundingMode for subclass...
   3309174: Remove items from the  model of a non-rod grid cause error
+  3309256: Datebox and Timebox with long format will display wrong
   3306149: Cannot remove the latest element in grid model (grid in rod)
 
 * Upgrade Notes

@@ -321,7 +321,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (val) {
 		if (val) {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
-			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this.localizedFormat)};
+			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(/\'/g, '')))};
 			return d;
 		}
 		return null;

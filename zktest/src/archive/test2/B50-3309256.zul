@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3309256.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 31 15:31:06 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+If the text of the input element contains single quote ('), that is a bug.
+<datebox format="long" locale="zh_TW" width="140px" onCreate="self.value = new Date()"/>
+<timebox format="long" locale="zh_TW" width="140px" onCreate="self.value = new Date()"/>
+</zk>
