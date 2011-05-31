@@ -53,7 +53,8 @@ var _defaultIgnore = {draggable: 'false', droppable: 'false', mold: 'default', c
 	},
 	// put these attributes in the end of the tag.
 	attrsLater = {
-		getText: 1
+		getText: 1,
+		getMold: 1
 	};
 
 function _dumpAttrs0(out, nm, wgt) {
