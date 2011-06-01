@@ -244,8 +244,16 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 					if (!globallocalizedSymbols[ary[0]])
 						globallocalizedSymbols[ary[0]] = ary[1];
 					return globallocalizedSymbols[ary[0]];
-				} 
+				}
 				return val;
+			},
+			function () {
+				
+				// in this case, we cannot use setLocalizedSymbols() for Timebox
+				if (this._tm)
+					this._tm._localizedSymbols = this._localizedSymbols;
+				if (this._pop)
+					this._pop.setLocalizedSymbols(this._localizedSymbols);
 			}
 		]
 	},
@@ -446,7 +454,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 		zWatch.listen({onSize: this, onShow: this});
 		this._pop.setFormat(this.getDateFormat());
-		this._pop.setLocalizedSymbols(this._localizedSymbols);
 	},
 	unbind_: function () {
 		var btn;
