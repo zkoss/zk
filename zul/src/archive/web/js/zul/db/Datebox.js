@@ -445,8 +445,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		zWatch.listen({onSize: this, onShow: this});
-		this._pop.setFormat(this._format);
-		this._pop.setLocalizedSymbols(this._localizedSymbols)
+		this._pop.setFormat(this.getDateFormat());
+		this._pop.setLocalizedSymbols(this._localizedSymbols);
 	},
 	unbind_: function () {
 		var btn;
