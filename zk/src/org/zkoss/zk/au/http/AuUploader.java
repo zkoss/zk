@@ -102,11 +102,13 @@ public class AuUploader implements AuExtension {
 					final String key = uuid + '_' + sid;
 					Object sinfo = size.get(key);
 					if (sinfo instanceof String) {
+						System.out.println("Update Info: Error");
 						response.getWriter().write("error:" + sinfo);
 						size.remove(key);
 						precent.remove(key);
 						return;
 					}
+					System.out.println("Update Info");
 					final Integer p = (Integer)precent.get(key);
 					final Long cb = (Long)sinfo;
 					response.getWriter().write((p != null ? p.intValue(): -1)+ ","
@@ -115,6 +117,7 @@ public class AuUploader implements AuExtension {
 				} else 
 					alert = "enctype must be multipart/form-data";
 			} else {
+				System.out.println("Sending Data");
 				uuid = request.getParameter("uuid");
 				sid = request.getParameter("sid");
 				if (uuid == null || uuid.length() == 0) {
