@@ -775,7 +775,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		// Bug 2974370
 		if (zk.ie6_)
 			zWatch.listen({beforeSize: this});
-
+		else if (zk.ie7_) //Bug 3307255
+			zk(this.$n()).redoCSS();
+		
 		var uuid = this.uuid,
 			$Panel = this.$class;
 

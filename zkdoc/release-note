@@ -21,6 +21,7 @@ ZK 5.0.8
   3309256: Datebox and Timebox with long format will display wrong
   3306149: Cannot remove the latest element in grid model (grid in rod)
   3309632: Upload may incorrectly terminate
+  3307255: Panel in Portallayout missing top and bottom in IE7
 
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
