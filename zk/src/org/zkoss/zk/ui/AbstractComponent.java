@@ -2545,7 +2545,11 @@ w:use="foo.MyWindow"&gt;
 	 * the value. Nothing happens if the method is not found.</li>
 	 *
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
-	 * disable any update to the client, when calling the setter
+	 * disable any update to the client, when calling the setter.
+	 *
+	 * <p>If you wanto enable the client update for all instances of a given
+	 * component (though not recommended for the security reason), you could
+	 * refer to <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/New_Features_of_ZK_5.0.7#Client-side_smartUpdate_now_disabled_by_default">here</a>.
 	 *
 	 * <p>See also <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/Widget.html#smartUpdate%28_global_.String,%20zk.Object,%20int%29">zk.Widget.smartUpdate()</a>.
 	 * @since 5.0.0
