@@ -21,7 +21,7 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	 * @param Object a
 	 * It can be String or number, the number or name of flag, 
 	 * such as "no positive", 0x0001.
-	 * @param Widget the datebox
+	 * @param zk.Widget the datebox
 	 * @since 5.0.8
 	 */
 	$init: function (a, wgt) {

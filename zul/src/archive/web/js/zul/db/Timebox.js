@@ -177,11 +177,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
  * 
- * <p>Like {@link zul.inp.Combobox} and {@link zul.db.Datebox},
+ * <p>Like {@link zul.inp.Combobox} and {@link Datebox},
  * the value of a read-only time box ({@link #isReadonly}) can be changed
  * by clicking the up or down button (though users cannot type anything
  * in the input box).
- *
  */
 zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
