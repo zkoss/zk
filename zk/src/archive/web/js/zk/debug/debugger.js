@@ -165,6 +165,8 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 			var n = wgt.$n('css');
 			if (n)
 				out.push('&gt;<br/>', n.innerHTML, _space(--nLevel), '&lt;/', nm, '&gt;<br/>');
+			else
+				out.push('/&gt;<br/>');
 		} else if (noChildable)
 			out.push('/&gt;--&gt;<br/>');
 		else
