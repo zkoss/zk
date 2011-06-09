@@ -267,11 +267,11 @@ will be used to retrieve the real format.
 
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
+		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset() + _tzone.getDSTSavings());
 	}
 	protected Object unmarshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
+		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset() - _tzone.getDSTSavings());
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		//null or empty string,
