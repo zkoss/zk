@@ -318,7 +318,6 @@ zul.Uploader = zk.$extends(zk.Object, {
 					if (data.startsWith('error:')) {
 						self._echo = true; // B50-3309632
 						zul.Uploader.clearInterval(self.id);
-						var wgt = self.getWidget();
 						if (wgt) {
 							self.cancel();
 							zul.Upload.error(data.substring(6, data.length), wgt.uuid, self._sid);
@@ -389,6 +388,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 	end: function (finish) {
 		this.viewer.destroy(finish);
 		zul.Upload.destroy(this);
+		this._echo = null;
 		
 		//B50-3304877: autodisable and Upload
 		var wgt, upload, aded, parent;
