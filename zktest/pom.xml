@@ -16,7 +16,9 @@
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
 		<js.version>1.7R1</js.version>
-		<jasperreports.version>3.7.0</jasperreports.version>
+		<poi.version>3.7</poi.version>
+		<jxl.version>2.6.12</jxl.version>		
+		<jasperreports.version>4.0.1</jasperreports.version>
 		<jfreechart.version>1.0.13</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
 		<ckez.version>3.3.2_50</ckez.version>
@@ -180,6 +182,22 @@
 			<version>${js.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>${jxl.version}</version>
+		</dependency>		
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
