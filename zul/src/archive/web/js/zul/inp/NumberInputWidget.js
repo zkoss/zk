@@ -25,7 +25,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		 * <ul>
 		 * <li>0: ROUND_UP</li>
 		 * <li>1: ROUND_DOWN</li>
-		 * <li>2: ROUDN_CEILING</li>
+		 * <li>2: ROUND_CEILING</li>
 		 * <li>3: ROUND_FLOOR</li>
 		 * <li>4: ROUND_HALF_UP</li>
 		 * <li>5: ROUND_HALF_DOWN</li>
@@ -37,7 +37,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		 * <ul>
 		 * <li>0: ROUND_UP</li>
 		 * <li>1: ROUND_DOWN</li>
-		 * <li>2: ROUDN_CEILING</li>
+		 * <li>2: ROUND_CEILING</li>
 		 * <li>3: ROUND_FLOOR</li>
 		 * <li>4: ROUND_HALF_UP</li>
 		 * <li>5: ROUND_HALF_DOWN</li>
