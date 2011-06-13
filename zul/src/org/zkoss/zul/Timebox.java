@@ -267,11 +267,13 @@ will be used to retrieve the real format.
 
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset() + _tzone.getDSTSavings());
+		Date date = (Date) value;
+		return new Date((date).getTime() - getTimeOffset(TimeZones.getCurrent(), date) + getTimeOffset(_tzone, date));
 	}
 	protected Object unmarshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset() - _tzone.getDSTSavings());
+		Date date = (Date) value;
+		return new Date((date).getTime() + getTimeOffset(TimeZones.getCurrent(), date) - getTimeOffset(_tzone, date));
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		//null or empty string,
@@ -342,5 +344,9 @@ will be used to retrieve the real format.
 			renderer.render("buttonVisible", _btnVisible);
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols());
+	}
+	
+	private long getTimeOffset(TimeZone timezone, Date date) {
+		return timezone.getRawOffset() + (timezone.inDaylightTime(date) ? timezone.getDSTSavings(): 0);
 	}
 }
