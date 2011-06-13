@@ -734,11 +734,13 @@ the short time styling.
 	}
 	protected Object marshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() - TimeZones.getCurrent().getRawOffset() + _tzone.getRawOffset());
+		Date date = (Date) value;
+		return new Date((date).getTime() - Dates.getTimezoneOffset(TimeZones.getCurrent(), date) + Dates.getTimezoneOffset(_tzone, date));
 	}
 	protected Object unmarshall(Object value) {
 		if (value == null || _tzone == null) return value;
-		return new Date(((Date) value).getTime() + TimeZones.getCurrent().getRawOffset() - _tzone.getRawOffset());
+		Date date = (Date) value;
+		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date) - Dates.getTimezoneOffset(_tzone, date));
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
