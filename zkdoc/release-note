@@ -25,6 +25,7 @@ ZK 5.0.8
   3307255: Panel in Portallayout missing top and bottom in IE7
   3310470: Columnlayout does not work with vflex
   3310055: Timebox issue with daylight saving timezone
+  3309583: Auxheader HTML Error 
 
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
