@@ -14,10 +14,10 @@
 <window id="wnd" title="Grid uses 100% of the width"
 	mode="highlighted" hflex="min" closable="true"
 	visible="false" position="center,center" border="normal">
-	<grid sizedByContent="true" oddRowSclass="none">
+	<grid hflex="min" oddRowSclass="none">
 		<columns>
-			<column align="right" />
-			<column/>
+			<column align="right" hflex="min"  />
+			<column hflex="min" />
 		</columns>
 		<rows>
 			<row>

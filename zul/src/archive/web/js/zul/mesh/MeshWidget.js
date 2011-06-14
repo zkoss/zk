@@ -495,8 +495,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_adjMinWd: function () {
 		if (this._hflex == 'min') {
-			this._hflexsz = this._getMinWd(); //override
-			this.$n().style.width = jq.px0(this._hflexsz);
+			var w = this._getMinWd();
+			this._hflexsz = w + zk(this).padBorderWidth(); //override
+			this.$n().style.width = jq.px0(w);
 		}
 	},
 	_getMinWd: function () {
@@ -1056,9 +1057,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.isSizedByContent())
 				this._calcSize();
 			if (this.head)
-				for(var w = this.head.firstChild; w; w = w.nextSibling) 
-					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
-						return null;
+				this._fixHeaders();
 			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width 
 		}
 		return null;
