@@ -1942,7 +1942,8 @@ jq.alert('With listener', {
 </td></tr>
 <tr>
 <td> button
-</td><td> a map ({@link Map}) of buttons. If null or empty, OK is assumed
+</td><td> a map ({@link Map}) of buttons.
+</td><td> If null or empty, OK is assumed
 </td><td> Specifies what buttons to display. The key is the button name,
 and the value is a function ({@link Function}) to execute when the button
 is clicked.
