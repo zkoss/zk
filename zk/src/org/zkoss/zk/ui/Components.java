@@ -24,11 +24,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.Principal;
 import java.util.AbstractCollection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,30 +36,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-import java.util.Date;
+import java.util.Set;
 
+import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -975,6 +972,11 @@ public class Components {
 			wireOthers(x);
 		}
 		private void wireImplicit(Object x) {
+			//Feature #3315689 
+			Class cls = _controller.getClass();
+			if(ignoreFromWire(cls))
+				return;
+			
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
 				//we cannot inject event proxy because it is not an Interface
