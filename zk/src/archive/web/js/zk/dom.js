@@ -1897,10 +1897,12 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * <code>org.zkoss.zul.Messagebox.show()</code> at the server.
 <pre><code>
 jq.alert('Hi');
-jq.alert('This is a popup message box', {mode:popup, icon: ERROR});
+jq.alert('This is a popup message box', {mode:"popup", icon: "ERROR"});
 jq.alert('With listener', {
-  YES: function () {jq.alert('Yes clicked')},
-  NO: function () {jq.alert('No clicked')}
+	button : {
+  		YES: function () {jq.alert('Yes clicked')},
+  		NO: function () {jq.alert('No clicked')}
+	}
 });
 </code></pre>
 	 * @param String msg the message to show
