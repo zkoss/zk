@@ -5366,6 +5366,21 @@ jQuery.extend({
 					return elem.style.opacity;
 				}
 			}
+		},
+		marginRight: {
+			get: function( elem, computed ) {
+				var ret;
+			    // Temporarily swap a float on the element to retrieve correct margins in webkit
+			    // Ticket #3333 http://bugs.jquery.com/ticket/3333
+			    jQuery.swap( elem, { "float": "left" }, function() {
+			      if ( computed ) {
+			        ret = curCSS( elem, "margin-right", "marginRight" );
+			      } else {
+			        ret = elem.style.marginRight;
+			      }
+			    });
+			    return ret;
+			}
 		}
 	},
 
