@@ -46,18 +46,7 @@ import org.zkoss.util.logging.Log;
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);
 
-	private static Method NOT_FOUND;
-	static {
-		Object indicator = new Object() {
-			public void notfound() {
-			}
-		};
-		try {
-			NOT_FOUND = indicator.getClass().getMethod("notfound");
-		} catch (SecurityException e) {
-		} catch (NoSuchMethodException e) {
-		}
-	}
+	private static Object NOT_FOUND = new Object();
 	
 	/**
 	 * Instantiates a new instance of the specified class with
@@ -754,13 +743,13 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
-		Method m = (Method)_closms.get(aoi);
-		if (m != null) {
-			if (m == NOT_FOUND) 
-				throw newNoSuchMethodException(cls, name, argTypes);
-			
-			return m;
-		}
+		Object m = (Object)_closms.get(aoi);
+		if( m == NOT_FOUND)
+			throw newNoSuchMethodException(cls, name, argTypes);
+		
+		if (m != null) 
+			return (Method) m;
+		
 
 		try{
 			m = myGetCloseMethod(cls, name, argTypes, false);
@@ -769,7 +758,7 @@ public class Classes {
 			throw ex;
 		}
 		_closms.put(aoi, m);
-		return m;
+		return (Method) m;
 	}
 	/**
 	 * Like {@link #getCloseMethod} to get a 'close' method, but
@@ -784,13 +773,12 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
-		Method m = (Method)_closms.get(aoi);
-		if (m != null) {
-			if (m == NOT_FOUND) 
-				throw newNoSuchMethodException(cls, name, argTypes);
-			
-			return m;
-		}
+		Object m = (Object)_closms.get(aoi);
+		if( m == NOT_FOUND)
+			throw newNoSuchMethodException(cls, name, argTypes);
+		
+		if (m != null) 
+			return (Method) m;
 
 		try{
 			m = myGetCloseMethod(cls, name, argTypes, true);
@@ -799,7 +787,7 @@ public class Classes {
 			throw ex;
 		}
 		_closms.put(aoi, m);
-		return m;
+		return (Method) m;
 	}
 	private static Cache _closms = new MultiCache(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
