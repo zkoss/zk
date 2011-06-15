@@ -16,31 +16,26 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Collection;
-import java.util.Arrays;
-import java.util.Date;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.zkoss.mesg.MCommon;
-import org.zkoss.mesg.Messages;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Objects;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.math.BigIntegers;
-import org.zkoss.util.MultiCache;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.mesg.Messages;
 import org.zkoss.util.Cache;
 import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -51,6 +46,19 @@ import org.zkoss.util.logging.Log;
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);
 
+	private static Method NOT_FOUND;
+	static {
+		Object indicator = new Object() {
+			public void notfound() {
+			}
+		};
+		try {
+			NOT_FOUND = indicator.getClass().getMethod("notfound");
+		} catch (SecurityException e) {
+		} catch (NoSuchMethodException e) {
+		}
+	}
+	
 	/**
 	 * Instantiates a new instance of the specified class with
 	 * the specified arguments and argument types.
@@ -747,10 +755,19 @@ public class Classes {
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
 		Method m = (Method)_closms.get(aoi);
-		if (m != null)
+		if (m != null) {
+			if (m == NOT_FOUND) 
+				throw newNoSuchMethodException(cls, name, argTypes);
+			
 			return m;
+		}
 
-		m = myGetCloseMethod(cls, name, argTypes, false);
+		try{
+			m = myGetCloseMethod(cls, name, argTypes, false);
+		}catch(NoSuchMethodException ex){
+			_closms.put(aoi, NOT_FOUND);
+			throw ex;
+		}
 		_closms.put(aoi, m);
 		return m;
 	}
@@ -768,10 +785,19 @@ public class Classes {
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
 		Method m = (Method)_closms.get(aoi);
-		if (m != null)
+		if (m != null) {
+			if (m == NOT_FOUND) 
+				throw newNoSuchMethodException(cls, name, argTypes);
+			
 			return m;
+		}
 
-		m = myGetCloseMethod(cls, name, argTypes, true);
+		try{
+			m = myGetCloseMethod(cls, name, argTypes, true);
+		}catch(NoSuchMethodException ex){
+			_closms.put(aoi, NOT_FOUND);
+			throw ex;
+		}
 		_closms.put(aoi, m);
 		return m;
 	}
