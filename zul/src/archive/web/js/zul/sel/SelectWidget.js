@@ -406,12 +406,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						tpadoffsethgh = (tpad ? tpad.offsetHeight : 0),
 						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;
 					if (nRows <= nVisiRows) {
-						//Fixed side effect of reversion: 16986
-						var bdfaker = this.ebdfaker, minWd;
-						if ((bdfaker = this.ebdfaker) && (minWd = this._minWd)) {
-							for (var i = minWd.wds.length;i--;)
-								bdfaker.cells[i].style.width = jq.px0(minWd.wds[i]);
-						}
 						var $midVisiRow = zk(midVisiRow);
 						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
 					} else {
@@ -492,6 +486,23 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._visiRows = v;
 		} else
 			return this.getRows() || this._visiRows || 0;
+	},
+	beforeParentMinFlex_: function (orient) {
+		var nRows;
+		if (orient == 'h' && (nRows = this.getRows()) && nRows > 1) {
+			this.ebody.style.height = '';
+		}
+		this.$supers('beforeParentMinFlex_', arguments);
+	},
+	//Fixed side effect of reversion: 16986
+	afterChildrenMinFlex_: function (orient) {
+		var nRows, bdfaker, minWd;
+		if (orient == 'w' && (nRows = this.getRows()) && nRows > 1 && 
+			(bdfaker = this.ebdfaker) && (minWd = this._minWd)) {
+			for (var i = minWd.wds.length;i--;)
+				bdfaker.cells[i].style.width = jq.px0(minWd.wds[i]);
+		}
+		this.$supers('afterChildrenMinFlex_', arguments);
 	},
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {

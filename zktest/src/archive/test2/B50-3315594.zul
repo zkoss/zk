@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3315594.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jun 15, 2011 3:36:58 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>You shall see "item 19" in the window.</li>
+		</ol>
+	]]></html>
+	<window border="normal" vflex="min" hflex="min">
+		<listbox rows="20" hflex="min">
+			<listhead>
+				<listheader hflex="min" label="column" />
+				<listheader hflex="min" label="column" />
+			</listhead>
+			<zscript><![CDATA[
+				List list = new ArrayList();
+				for (int i = 0; i < 20; i++)
+					list.add("item " + i);
+			]]></zscript>
+			<listitem forEach="${list}">
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+			</listitem>
+		</listbox>
+	</window>
+</zk>
