@@ -74,6 +74,49 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	/** Today is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_TODAY = NO_ZERO;
+	/** The Error-box position. 
+	 */
+	public static final int BEFORE_START = 0x1001;
+	/** The Error-box position. 
+	 */
+	public static final int BEFORE_END = 0x1002;
+	/** The Error-box position. 
+	 */
+	public static final int END_BEFORE = 0x1003;
+	/** The Error-box position. 
+	 */
+	public static final int END_AFTER = 0x1004;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_END = 0x1005;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_START = 0x1006;
+	/** The Error-box position. 
+	 */
+	public static final int START_AFTER = 0x1007;
+	/** The Error-box position. 
+	 */
+	public static final int START_BEFORE = 0x1008;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP = 0x1009;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_END = 0x1010;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_BEFORE = 0x1011;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_AFTER = 0x1012;
+	/** The Error-box position. 
+	 */
+	public static final int AT_POINTER = 0x1013;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_POINTER = 0x1014;
+	
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */
 	protected int _flags;
@@ -170,7 +213,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 					break;
 				}
 			}
-
+			
 			_flags |= parseConstraint(s.trim().toLowerCase());
 		}
 
@@ -215,6 +258,34 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			return STRICT;
 		else if (constraint.equals("server"))
 			return SERVER;
+		else if (constraint.equals("before_start"))
+			return BEFORE_START;
+		else if (constraint.equals("before_end"))
+			return BEFORE_END;
+		else if (constraint.equals("end_before"))
+			return END_BEFORE;
+		else if (constraint.equals("end_after"))
+			return END_AFTER;
+		else if (constraint.equals("after_end"))
+			return AFTER_END;
+		else if (constraint.equals("after_start"))
+			return AFTER_START;
+		else if (constraint.equals("start_after"))
+			return START_AFTER;
+		else if (constraint.equals("start_before"))
+			return START_BEFORE;
+		else if (constraint.equals("overlap"))
+			return OVERLAP;
+		else if (constraint.equals("overlap_end"))
+			return OVERLAP_END;
+		else if (constraint.equals("overlap_before"))
+			return OVERLAP_BEFORE;
+		else if (constraint.equals("overlap_after"))
+			return OVERLAP_AFTER;
+		else if (constraint.equals("at_pointer"))
+			return AT_POINTER;
+		else if (constraint.equals("after_pointer"))
+			return AFTER_POINTER;
 		else if (constraint.length() > 0)
 			throw new UiException("Unknown constraint: "+constraint);
 		return 0;

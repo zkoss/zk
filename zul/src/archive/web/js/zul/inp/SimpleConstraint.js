@@ -94,7 +94,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * @return Object
 	 */
 	getFlags: function () {
-		return tis._flags;
+		return this._flags;
 	},
 	/** Parses a constraint into an Object attribute.
 	 * For example, "no positive" is parsed to f.NO_POSITIVE = true.
@@ -123,8 +123,79 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (cst == "server") {
 			f.SERVER = true;
 			this.serverValidate = true;
-		} else if (zk.debugJS)
+		}else if (cst == "before_start")
+			this._pos = "before_start";
+		else if (cst == "before_end")
+			this._pos = "before_end";
+		else if (cst == "end_before")
+			this._pos = "end_before";
+		else if (cst == "end_after")
+			this._pos = "end_after";
+		else if (cst == "after_end")
+			this._pos = "after_end";
+		else if (cst == "after_start")
+			this._pos = "after_start";
+		else if (cst == "start_after")
+			this._pos = "start_after";
+		else if (cst == "start_before")
+			this._pos = "start_before";
+		else if (cst == "overlap")
+			this._pos = "overlap";
+		else if (cst == "overlap_end")
+			this._pos = "overlap_end";
+		else if (cst == "overlap_before")
+			this._pos = "overlap_before";
+		else if (cst == "overlap_after")
+			this._pos = "overlap_after";
+		else if (cst == "at_pointer")
+			this._pos = "at_pointer";
+		else if (cst == "after_pointer")
+			this._pos = "after_pointer";
+		else if (zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
+	},
+	_cvtNum: function (v) { //compatible with server side
+		var f = {};
+		if (v & 1)
+			f.NO_POSITIVE = f.NO_FUTURE = true;
+		if (v & 2)
+			f.NO_NEGATIVE = f.NO_PAST = true;
+		if (v & 4)
+			f.NO_ZERO = f.NO_TODAY = true;
+		if (v & 0x100)
+			f.NO_EMPTY = true;
+		if (v & 0x200)
+			f.STRICT = true;
+		if (v & 0x1001)
+			this._pos = "before_start";
+		else if (v & 0x1002)
+			this._pos = "before_end";
+		else if (v & 0x1003)
+			this._pos = "end_before";
+		else if (v & 0x1004)
+			this._pos = "end_after";
+		else if (v & 0x1005)
+			this._pos = "after_end";
+		else if (v & 0x1006)
+			this._pos = "after_start";
+		else if (v & 0x1007)
+			this._pos = "start_after";
+		else if (v & 0x1008)
+			this._pos = "start_before";
+		else if (v & 0x1009)
+			this._pos = "overlap";
+		else if (v & 0x1010)
+			this._pos = "overlap_end";
+		else if (v & 0x1011)
+			this._pos = "overlap_before";
+		else if (v & 0x1012)
+			this._pos = "overlap_after";
+		else if (v & 0x1012)
+			this._pos = "at_pointer";
+		else if (v & 0x1012)
+			this._pos = "after_pointer";
+		
+		return f;
 	},
 	_cvtNum: function (v) { //compatible with server side
 		var f = {};

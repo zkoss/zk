@@ -7,6 +7,7 @@ ZK 5.0.8
   3309539: Timebox and Datebox support different language for different locale
   3310927: ZK JasperReport support JasperReport
   3315689: Optimize the HtmlMacroComponent 
+  3316591: Allow user to specify error-box position
   
 * Bugs
   3301375: native component in vbox stretch align show javascript error
