@@ -188,7 +188,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 				_out = new BufferedOutputStream(new FileOutputStream(_f));
 				_out.write(bs);
 			} catch (Throwable ex) {
-				log.warning("Ingored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				log.warning("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
 				disableBuffering();
 			}
 		}
