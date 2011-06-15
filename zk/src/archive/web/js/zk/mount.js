@@ -102,7 +102,7 @@ function zkmprops(uuid, props) {
 	//1. page's AU must be processed after all zkx(), while they might be added
 	//  before zkx (such as test/test.zhtml), or multiple zkx (such jspTags.jsp)
 	//2. mount.js:_startCheck must be called after processing page's AU
-	//  (otherwise, /zkdemo/userguide will jump to #f1 causing additional step)
+	//  (otherwise, zksandbox will jump to #f1 causing additional step)
 	//Note: it is better to block zAu but the chance to be wrong is low --
 	//a timer must be started early and its response depends page's AU
 	jq(function () {

@@ -473,7 +473,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (popup) {
 				evt.contextSelected = true;
 				
-				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
@@ -493,7 +493,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (ctx) {
 				evt.contextSelected = true;
 				
-				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];

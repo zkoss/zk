@@ -575,7 +575,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		pp.style.width = pp.style.height = "auto";
 		pp.style.position = "absolute"; //just in case
-		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zkdemo/userguide/#f9)
+		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zksandbox/#f9)
 		pp.style.display = "block";
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
 

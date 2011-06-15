@@ -166,7 +166,7 @@ public interface Desktop extends Scope {
 	 * In other words, it is the request path of the first page
 	 * (see {@link Page#getRequestPath}).
 	 *
-	 * <p>For example, "/userguide/index.zul" (a ZUML page is requested)
+	 * <p>For example, "/foo/index.zul" (a ZUML page is requested)
 	 * or /test (a richlet).
 	 *
 	 * @see Page#getRequestPath
