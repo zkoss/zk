@@ -33,7 +33,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		jq(document.body).append(this);
 
 		// Fixed IE6/7 issue in B50-2941554.zul
-		var self = this, cstp = owner._cst._pos;
+		var self = this, cstp = owner._cst && owner._cst._pos;
 		setTimeout(function() {
 			if (self.parent) //Bug #3067998: if 
 				self.open(owner, null, cstp ? cstp: "end_before", 
