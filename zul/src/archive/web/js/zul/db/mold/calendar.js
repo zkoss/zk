@@ -127,5 +127,5 @@ function (out) {
 	}
 	out.push('</table><', tags, ' id="', uuid,
 			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
-			' class="z-focus-a"></td></tr></table></div>');
+			' class="z-focus-a" /></td></tr></table></div>');
 }
