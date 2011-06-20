@@ -988,7 +988,8 @@ return window.jq = jQuery; //used by zk
 		boxModel: null,
 		inlineBlockNeedsLayout: false,
 		shrinkWrapBlocks: false,
-		reliableHiddenOffsets: true
+		reliableHiddenOffsets: true,
+		reliableMarginRight: true
 	};
 
 	// Make sure that the options inside disabled selects aren't marked as disabled
@@ -1086,6 +1087,21 @@ return window.jq = jQuery; //used by zk
 		jQuery.support.reliableHiddenOffsets = jQuery.support.reliableHiddenOffsets && tds[0].offsetHeight === 0;
 		div.innerHTML = "";
 
+		var marginDiv;
+		// Check if div with explicit width and no margin-right incorrectly
+		// gets computed margin-right based on width of container. For more
+		// info see bug #3333
+		// Fails in WebKit before Feb 2011 nightlies
+		// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+		if ( document.defaultView && document.defaultView.getComputedStyle ) {
+			marginDiv = document.createElement( "div" );
+			marginDiv.style.width = "0";
+			marginDiv.style.marginRight = "0";
+			div.appendChild( marginDiv );
+			jQuery.support.reliableMarginRight =
+				( parseInt( ( document.defaultView.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+		}
+		
 		document.body.removeChild( div ).style.display = "none";
 		div = tds = null;
 	});
@@ -5571,14 +5587,27 @@ jQuery(function() {
 			get: function( elem, computed ) {
 				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
 				// Work around by temporarily setting element display to inline-block
-				var ret;
-				jQuery.swap( elem, { "display": "inline-block" }, function() {
-					if ( computed ) {
-						ret = curCSS( elem, "margin-right", "marginRight" );
+				var tag,
+					ret;
+					
+				// Potix Jumper Chen. fixed for B50-3150160.zul on Safari. 20110620
+				if ((tag = jq.nodeName(elem)) == 'td' || tag == 'th') {
+					if (computed) {
+						ret = curCSS(elem, "margin-right", "marginRight");
 					} else {
 						ret = elem.style.marginRight;
 					}
-				});
+				} else {
+					jQuery.swap(elem, {
+						"display": "inline-block"
+					}, function() {
+						if (computed) {
+							ret = curCSS(elem, "margin-right", "marginRight");
+						} else {
+							ret = elem.style.marginRight;
+						}
+					});
+				}
 				return ret;
 			}
 		}
