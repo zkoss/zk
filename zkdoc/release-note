@@ -30,7 +30,8 @@ ZK 5.0.8
   3309583: Auxheader HTML Error 
   3315594: Vflex fail with a window contain a listbox with rows
   3317170: Datebox without rod render a incorrect dom (FF3.6 only)
-
+  3322892: emptyMessage fail when Grid has height
+  
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
