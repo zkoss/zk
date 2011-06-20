@@ -488,8 +488,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return this.getRows() || this._visiRows || 0;
 	},
 	beforeParentMinFlex_: function (orient) {
-		var nRows;
-		if (orient == 'h' && (nRows = this.getRows()) && nRows > 1) {
+		if (orient == 'h' && this.getRows() > 1) {
 			this.ebody.style.height = '';
 		}
 		this.$supers('beforeParentMinFlex_', arguments);
