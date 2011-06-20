@@ -76,46 +76,46 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public static final int NO_TODAY = NO_ZERO;
 	/** The Error-box position. 
 	 */
-	public static final int BEFORE_START = 0x1001;
+	public static final int BEFORE_START = 0x1000;
 	/** The Error-box position. 
 	 */
-	public static final int BEFORE_END = 0x1002;
+	public static final int BEFORE_END = 0x2000;
 	/** The Error-box position. 
 	 */
-	public static final int END_BEFORE = 0x1003;
+	public static final int END_BEFORE = 0x3000;
 	/** The Error-box position. 
 	 */
-	public static final int END_AFTER = 0x1004;
+	public static final int END_AFTER = 0x4000;
 	/** The Error-box position. 
 	 */
-	public static final int AFTER_END = 0x1005;
+	public static final int AFTER_END = 0x5000;
 	/** The Error-box position. 
 	 */
-	public static final int AFTER_START = 0x1006;
+	public static final int AFTER_START = 0x6000;
 	/** The Error-box position. 
 	 */
-	public static final int START_AFTER = 0x1007;
+	public static final int START_AFTER = 0x7000;
 	/** The Error-box position. 
 	 */
-	public static final int START_BEFORE = 0x1008;
+	public static final int START_BEFORE = 0x8000;
 	/** The Error-box position. 
 	 */
-	public static final int OVERLAP = 0x1009;
+	public static final int OVERLAP = 0x9000;
 	/** The Error-box position. 
 	 */
-	public static final int OVERLAP_END = 0x1010;
+	public static final int OVERLAP_END = 0xa000;
 	/** The Error-box position. 
 	 */
-	public static final int OVERLAP_BEFORE = 0x1011;
+	public static final int OVERLAP_BEFORE = 0xb000;
 	/** The Error-box position. 
 	 */
-	public static final int OVERLAP_AFTER = 0x1012;
+	public static final int OVERLAP_AFTER = 0xc000;
 	/** The Error-box position. 
 	 */
-	public static final int AT_POINTER = 0x1013;
+	public static final int AT_POINTER = 0xd000;
 	/** The Error-box position. 
 	 */
-	public static final int AFTER_POINTER = 0x1014;
+	public static final int AFTER_POINTER = 0xe000;
 	
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */

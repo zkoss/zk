@@ -441,8 +441,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this, cstp = self._cst && self._cst._pos;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, cstp ? cstp: "end_before", 
-								{dodgeRef: (cstp ? false: true)}); // Bug 3251564
+						self._errbox.open(self, null, cstp || "end_before", 
+								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}
 		}

@@ -12,6 +12,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _posAllowed = [
+		"before_start", "before_end", "end_before", "end_after",
+		"after_end", "after_start", "start_after", "start_before",
+		"overlap", "overlap_end", "overlap_before", "overlap_after",
+		"at_pointer", "after_pointer"
+	];
+
 /**
  * The default constraint supporting no empty, regular expressions and so on.
  * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
@@ -123,34 +131,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (cst == "server") {
 			f.SERVER = true;
 			this.serverValidate = true;
-		}else if (cst == "before_start")
-			this._pos = "before_start";
-		else if (cst == "before_end")
-			this._pos = "before_end";
-		else if (cst == "end_before")
-			this._pos = "end_before";
-		else if (cst == "end_after")
-			this._pos = "end_after";
-		else if (cst == "after_end")
-			this._pos = "after_end";
-		else if (cst == "after_start")
-			this._pos = "after_start";
-		else if (cst == "start_after")
-			this._pos = "start_after";
-		else if (cst == "start_before")
-			this._pos = "start_before";
-		else if (cst == "overlap")
-			this._pos = "overlap";
-		else if (cst == "overlap_end")
-			this._pos = "overlap_end";
-		else if (cst == "overlap_before")
-			this._pos = "overlap_before";
-		else if (cst == "overlap_after")
-			this._pos = "overlap_after";
-		else if (cst == "at_pointer")
-			this._pos = "at_pointer";
-		else if (cst == "after_pointer")
-			this._pos = "after_pointer";
+		} else if (cst && _posAllowed.$contains(cst))
+			this._pos = cst;
 		else if (zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
 	},
@@ -166,35 +148,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			f.NO_EMPTY = true;
 		if (v & 0x200)
 			f.STRICT = true;
-		if (v & 0x1001)
-			this._pos = "before_start";
-		else if (v & 0x1002)
-			this._pos = "before_end";
-		else if (v & 0x1003)
-			this._pos = "end_before";
-		else if (v & 0x1004)
-			this._pos = "end_after";
-		else if (v & 0x1005)
-			this._pos = "after_end";
-		else if (v & 0x1006)
-			this._pos = "after_start";
-		else if (v & 0x1007)
-			this._pos = "start_after";
-		else if (v & 0x1008)
-			this._pos = "start_before";
-		else if (v & 0x1009)
-			this._pos = "overlap";
-		else if (v & 0x1010)
-			this._pos = "overlap_end";
-		else if (v & 0x1011)
-			this._pos = "overlap_before";
-		else if (v & 0x1012)
-			this._pos = "overlap_after";
-		else if (v & 0x1012)
-			this._pos = "at_pointer";
-		else if (v & 0x1012)
-			this._pos = "after_pointer";
-		
+		if (v = (v & 0xf000))
+			this._pos = _posAllowed[v >> 12];		
 		return f;
 	},
 	_cvtNum: function (v) { //compatible with server side
@@ -298,3 +253,4 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		return msg || msgzul.ILLEGAL_VALUE;
 	}
 });
+})();

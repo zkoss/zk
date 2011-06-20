@@ -36,8 +36,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		var self = this, cstp = owner._cst && owner._cst._pos;
 		setTimeout(function() {
 			if (self.parent) //Bug #3067998: if 
-				self.open(owner, null, cstp ? cstp: "end_before", 
-						{dodgeRef: (cstp ? false: true)});
+				self.open(owner, null, cstp || "end_before", 
+						{dodgeRef: !cstp});
 		}, 0);
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
