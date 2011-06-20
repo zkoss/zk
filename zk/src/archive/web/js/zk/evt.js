@@ -100,7 +100,6 @@ onClick: function (evt) {
 	 * <li>implicit: whether this event is an implicit event, i.e., whether it is implicit to users (so no progressing bar).</li>
 	 * <li>ignorable: whether this event is ignorable, i.e., whether to ignore any error of sending this event back the server.
 		<ul><li>An ignorable event is also an imiplicit event.</li></ul></li>
-	 * <li>ctl: whether it is a control, such as onClick, rather than a notification for status change.</li>
 	 * <li>toServer: whether to send this event to the server. If specified, it is always sent no matter the widget is created at the server or not.</li>
 	 * <li>uri: the URI to send the Ajax request to. If not specified, zAu#comURI is used (i.e., the desktop's update URI is used). If specified, the URI specified in this option is used -- notice that there is no encoding at all, so make sure it is correct. </li>
 	 * <li>rtags (since 5.0.2): a map ({@link Map}) that can be anything and will be passed to

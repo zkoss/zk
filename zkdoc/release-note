@@ -30,6 +30,7 @@ ZK 5.0.8
   3309583: Auxheader HTML Error 
   3315594: Vflex fail with a window contain a listbox with rows
   3317170: Datebox without rod render a incorrect dom (FF3.6 only)
+  3322903: onTimer may cancel onClick request
   3322892: emptyMessage fail when Grid has height
   
 * Upgrade Notes

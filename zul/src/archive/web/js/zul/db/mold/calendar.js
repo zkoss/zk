@@ -25,9 +25,8 @@ function (out) {
 		ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
 		yofs = y - (y % 10 + 1),
 		ydec = zk.parseInt(y/100),
-		tags = zk.ie || zk.gecko ? "a" : "button";
-	
-	var localizedSymbols = this._localizedSymbols || {
+		tagnm = zk.ie || zk.gecko ? "a" : "button",
+		localizedSymbols = this._localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
 				ERA: zk.ERA,    
 			 YDELTA: zk.YDELTA,
@@ -39,6 +38,7 @@ function (out) {
 			   FMON: zk.FMON,
 				APM: zk.APM
 		};
+
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
 			'<tr><td id="', uuid, '-tdl" class="', zcls, '-tdl');
 	
@@ -125,7 +125,7 @@ function (out) {
 		}
 		break;
 	}
-	out.push('</table><', tags, ' id="', uuid,
-			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
-			' class="z-focus-a" /></td></tr></table></div>');
+	out.push('</table><', tagnm, ' id="', uuid,
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+		tagnm, '></td></tr></table></div>');
 }

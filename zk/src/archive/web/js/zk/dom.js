@@ -2193,7 +2193,7 @@ zk.copy(jq.Event, {
 	zk: function (evt, wgt) {
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
-			data, opts;
+			data;
 
 		if (type.startsWith('mouse')) {
 			if (type.length > 5)
@@ -2205,16 +2205,13 @@ zk.copy(jq.Event, {
 			data = evt.keyData();
 		} else if (type == 'dblclick') {
 			data = evt.mouseData();
-			opts = {ctl:true};
 			type = 'DoubleClick';
 		} else {
-			if (type == 'click') {
+			if (type == 'click')
 				data = evt.mouseData();
-				opts = {ctl:true};
-			}
 			type = type.charAt(0).toUpperCase() + type.substring(1);
 		}
-		return new zk.Event(target, 'on' + type, data, opts, evt);
+		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
 });
 })(document, window);

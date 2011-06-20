@@ -627,7 +627,7 @@ jq(function() {
 		if (wgt) {
 			if (zk.ie)
 				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
@@ -684,7 +684,7 @@ jq(function() {
 
 		if (evt.which == 1)
 			_doEvt(new zk.Event(Widget.$(evt, {child:true}),
-				'onClick', evt.mouseData(), {ctl:true}, evt));
+				'onClick', evt.mouseData(), {}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
 	.bind('zdblclick', function (evt) {
@@ -692,7 +692,7 @@ jq(function() {
 
 		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;

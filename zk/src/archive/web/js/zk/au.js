@@ -248,27 +248,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
-		var clkfd = zk.clickFilterDelay;
-		if (clkfd > 0 && (aureq.opts||{}).ctl) {
-			//Don't send the same request if it is in processing
-			if (ajaxReqInf && ajaxReqInf.ctli == aureq.uuid
-			&& ajaxReqInf.ctlc == aureq.cmd)
-				return;
-
-			var t = jq.now();
-			if (ctlUuid == aureq.uuid && ctlCmd == aureq.cmd //Bug 1797140
-			&& t - ctlTime < clkfd)
-				return; //to prevent key stroke are pressed twice (quickly)
-
-			//Note: it is still possible to queue two ctl with same uuid and cmd,
-			//if the first one was not sent yet and the second one is generated
-			//after 390ms. However, it is rare so no handle it
-
-			ctlTime = t;
-			ctlUuid = aureq.uuid;
-			ctlCmd = aureq.cmd;
-		}
-
 		dt._aureqs.push(aureq);
 
 		ajaxSend2(dt, timeout);
@@ -807,23 +786,14 @@ zAu.beforeSend = function (uri, req) {
 			zAu.showError("FAILED_TO_SEND", null, null, e);
 		}
 
-		//bug 1721809: we cannot filter out ctl even if zAu.processing
-
 		//decide ignorable
-		var ignorable = true, ctli, ctlc;
+		var ignorable = true;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
-				evtnm = aureq.name,
 				opts = aureq.opts||{};
-			if (opts.uri != uri)
+			if ((opts.uri != uri)
+			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
-
-			ignorable = ignorable && opts.ignorable; //all ignorable
-
-			if (opts.ctl && !ctli) {
-				ctli = aureq.target.uuid;
-				ctlc = evtnm;
-			}
 		}
 
 		//Consider XML (Pros: ?, Cons: larger packet)
@@ -844,7 +814,7 @@ zAu.beforeSend = function (uri, req) {
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
-				ctli: ctli, ctlc: ctlc, implicit: implicit,
+				implicit: implicit, 
 				ignorable: ignorable, tmout: 0, rtags: rtags
 			});
 		return true;

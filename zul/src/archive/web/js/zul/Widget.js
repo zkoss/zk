@@ -589,8 +589,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					return;
 				if (w == wgt) break;
 			}
-			wgt.fire(evtnm, zk.copy({reference: target}, evt.data),
-				{ctl: true});
+			wgt.fire(evtnm, zk.copy({reference: target}, evt.data));
 		}, 0);
 
 		evt.stop();

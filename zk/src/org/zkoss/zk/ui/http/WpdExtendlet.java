@@ -482,8 +482,6 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (v != 800) sb.append("td:").append(v).append(',');
 		v = config.getResendDelay();
 		if (v > 0) sb.append("rd:").append(v).append(',');
-		v = config.getClickFilterDelay();
-		if (v >= 0) sb.append("cd:").append(v).append(',');
 		if (config.isTimerKeepAlive())
 			sb.append("ta:1,");
 		if (config.isDebugJS()) sb.append("dj:1,");

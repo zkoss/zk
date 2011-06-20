@@ -46,7 +46,7 @@ import org.zkoss.util.logging.Log;
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);
 
-	private static Object NOT_FOUND = new Object();
+	private static final Object NOT_FOUND = new Object();
 	
 	/**
 	 * Instantiates a new instance of the specified class with

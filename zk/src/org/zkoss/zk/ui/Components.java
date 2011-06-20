@@ -973,8 +973,7 @@ public class Components {
 		}
 		private void wireImplicit(Object x) {
 			//Feature #3315689 
-			Class cls = _controller.getClass();
-			if(ignoreFromWire(cls))
+			if(ignoreFromWire(_controller.getClass()))
 				return;
 			
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
