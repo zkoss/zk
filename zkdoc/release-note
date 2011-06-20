@@ -32,6 +32,8 @@ ZK 5.0.8
   3317170: Datebox without rod render a incorrect dom (FF3.6 only)
   3322903: onTimer may cancel onClick request
   3322892: emptyMessage fail when Grid has height
+  3309557: Rod render the empty content with listbox
+  3322909: emptyMessage fail when Listbox has height
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

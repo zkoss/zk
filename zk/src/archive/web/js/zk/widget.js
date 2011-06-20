@@ -2078,7 +2078,13 @@ wgt.$f().main.setTitle("foo");
 			//5. bind
 			for (var j = 0, len = wgts.length; j < len; ++j) {
 				wgts[j].bind(fc);
-				this.onChildReplaced_(oldwgts[j], wgts[j]);
+				if(this.$instanceof(zul.sel.Listbox)){
+					var n = this._nrows; //Bug 3322909 Dirty fix for nrows counting wrong. 
+					this.onChildReplaced_(oldwgts[j], wgts[j]);
+					this._nrows = n;
+				}else{
+					this.onChildReplaced_(oldwgts[j], wgts[j]);
+				}
 			}
 		}
 	},

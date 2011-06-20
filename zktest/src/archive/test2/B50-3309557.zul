@@ -1,0 +1,38 @@
+<zk>
+	<html>
+		<![CDATA[ <ol> <li>Drag the scroll bar several times.</li> <li>Sometimes
+		the listbox show a empty content.</li> </ol> ]]>
+	</html>
+	<zscript><![CDATA[
+	import java.util.*;
+	import org.zkoss.zul.*;
+	List list = new ArrayList();
+	for (int i = 0; i < 200; i++)
+		list.add("item " + i);
+	ListModelList model = new ListModelList(list);
+]]></zscript>
+	<hlayout>
+		<listbox model="${model}" width="300px" height="250px" />
+	</hlayout>
+	
+	<script>
+	
+	zk.afterMount(function(){
+		var num = [932,1734,3028,2484,1630,750,25,260,1114,2434,3443,5150,3856];
+	
+			var k = setInterval(function(){
+			if(num.length > 0 ){
+				zk.log("wait "+ (num.length *2) +" seconds...");
+				zk.Widget.$(jq("@listbox")).ebody.scrollTop = num.shift();;
+			}else{
+				zk.log("end");
+				
+				zk.log("if you see any empty area in listbox , it's bug.'");
+				clearInterval(k);
+			}
+		},2000);
+	})
+
+	
+	</script>
+</zk>
