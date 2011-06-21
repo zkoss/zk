@@ -42,15 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
 				$headercm = jq(box._headercm);
-			var checked;
-			for (var it = box.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
-				if (!w.isDisabled() && !w.isSelected()) {
-					checked = false;
-					break;
-				} else
-					checked = true;
-
-			$headercm[checked ? "addClass": "removeClass"](zcls);
+			$headercm[box._isAllSelected() ? "addClass": "removeClass"](zcls);
 		}
 	}
 	function _isButton(evt) {
@@ -1074,6 +1066,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
+	},
+	_isAllSelected: function () {
+		var c;
+		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
+			if (!w.isDisabled() && !w.isSelected())
+				return false;
+			else 
+				c = true;
+		return c;
 	},
 	_ignoreHghExt: function () {
 		return this._rows > 0;

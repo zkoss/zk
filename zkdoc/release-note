@@ -34,6 +34,7 @@ ZK 5.0.8
   3322892: emptyMessage fail when Grid has height
   3309557: Rod render the empty content with listbox
   3322909: emptyMessage fail when Listbox has height
+  3322970: Listhead checkmark state is not synchronized
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

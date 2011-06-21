@@ -368,7 +368,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @see #itemIterator
 	 * @disable(zkgwt)
 	 */
-	getBodyWidgetIterator: _zkf
+	getBodyWidgetIterator: _zkf,
+	_updHeaderCM: function () {
+		// B50-3322970: need to clear Listheader _check cache
+		var lh = this.listhead;
+		if (this._headercm && this._multiple && lh && (lh = lh.firstChild))
+			lh._checked = this._isAllSelected();
+		this.$supers('_updHeaderCM', arguments);
+	}
 });
 /**
  * The listitem iterator.

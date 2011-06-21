@@ -1,0 +1,23 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click the checkmark of the header to select all Listitems.</li>
+			<li>Click the checkmark of the first Lisitem to unselect it.</li>
+			<li>Hover the mouse on the checkmark of the header. If it becomes checked, it is a bug.</li>
+		</ol>
+	]]></html>
+	<listbox checkmark="true" multiple="true">
+		<listhead>
+			<listheader>Header</listheader>
+		</listhead>
+		<listitem>
+			<listcell>1</listcell>
+		</listitem>
+		<listitem>
+			<listcell>2</listcell>
+		</listitem>
+		<listitem>
+			<listcell>3</listcell>
+		</listitem>
+	</listbox>
+</zk>
