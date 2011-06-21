@@ -8,6 +8,7 @@ ZK 5.0.8
   3310927: ZK JasperReport support JasperReport
   3315689: Optimize the HtmlMacroComponent 
   3316591: Allow user to specify error-box position
+  3323594: Render on Demand for Grid and Listbox supports setInitSize
   
 * Bugs
   3301375: native component in vbox stretch align show javascript error

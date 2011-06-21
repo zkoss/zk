@@ -227,10 +227,9 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 	private int _topPad; //since 5.0.0 top padding
 	private boolean _renderAll; //since 5.0.0
 	
-	
-	private String _emptyMessage;
-	
 	private transient boolean _rod;
+	private String _emptyMessage;
+	private int _initRodSize = INIT_LIMIT;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -741,6 +740,42 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
 	}
 
+	/**
+	 * Returns the number of rows rendered when the Grid first render.
+	 * <p>
+	 * Default: 50.
+	 *
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 *
+	 * @since 5.0.8
+	 */
+	public int getInitRodSize() {
+		return _initRodSize;
+	}
+
+	/**
+	 * Sets the number of rows rendered when the Grid first render.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 *
+	 * @param sz
+	 *            the number of rows rendered when the Grid first render.
+	 * @exception UiException
+	 *                if sz is negative
+	 * @since 5.0.8
+	 */
+	public void setInitRodSize(int sz) {
+		if (sz < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		if (_initRodSize != sz) {
+			_initRodSize = sz;
+			smartUpdate("initRodSize", sz);
+		}
+	}
+	
 	/** Returns the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 *
@@ -1088,7 +1123,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, INIT_LIMIT); //change offset back to 0
+					getDataLoader().syncModel(0, _initRodSize); //change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); //paging mold -> non-paging mold
@@ -1223,7 +1258,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, INIT_LIMIT);
+			_dataLoader.init(this, 0, _initRodSize);
 		}
 		return _dataLoader;
 	}
@@ -1350,8 +1385,10 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
 		
-		if (_rod && ((Cropper)getDataLoader()).isCropper()) {//bug #2936064 
-			renderer.render("_grid$rod", true);
+		if (_rod) {
+			if (((Cropper)getDataLoader()).isCropper())//bug #2936064 
+					renderer.render("_grid$rod", true);
+			renderer.render("initRodSize", _initRodSize);
 		}
 	}
 	/*package*/ boolean isRod() {
