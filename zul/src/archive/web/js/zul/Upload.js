@@ -388,7 +388,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 	end: function (finish) {
 		this.viewer.destroy(finish);
 		zul.Upload.destroy(this);
-		this._echo = null;
+		this._echo = true;
 		
 		//B50-3304877: autodisable and Upload
 		var wgt, upload, aded, parent;
