@@ -327,4 +327,26 @@ public class Utils {
 		return val instanceof Boolean ? ((Boolean)val).booleanValue():
 			val != null ? "true".equals(val): defValue;
 	}
+	
+	/** Returns the number if the given attribute is defined in a component or in library property.
+	 * @param name the name of the attribute
+	 * @param defValue the default value if neither component's attribute or library property is defined
+	 * for the given name
+	 * @param recurse whether to look up the ancestor's attribute
+	 * @since 5.0.8
+	 */
+	public static final 
+	int testAttribute(Component comp, String name, int defValue, boolean recurse) {
+		Object val = comp.getAttribute(name, recurse);
+		if (val == null)
+			val = Library.getProperty(name);
+		if (val instanceof Integer)
+			return ((Integer)val).intValue();
+		
+		try {
+			return Integer.parseInt((String) val);
+		} catch (NumberFormatException e) {
+			return defValue;
+		}
+	}
 }

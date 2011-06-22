@@ -227,13 +227,26 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
- *
+ * 
+ * <dt>org.zkoss.zul.listbox.preloadSize</dt>
+ * <dd>Specifies the number of items to preload when receiving
+ * the rendering request from the client.
+ * <p>It is used only if live data ({@link #setModel(ListModel)} and
+ * not paging ({@link #getPagingChild}).</dd>
+ * 
+ * <dt>org.zkoss.zul.listbox.initRodSize</dt>
+ * <dd>Specifies the number of items rendered when the Listbox first render.
+ * <p>
+ * It is used only if live data ({@link #setModel(ListModel)} and not paging
+ * ({@link #getPagingChild}).</dd>
+ * 
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
 public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
+	private static final long serialVersionUID = 2009111111L;
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
@@ -290,7 +303,6 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 
 	private transient boolean _rod;
 	private String _emptyMessage;
-	private int _initRodSize = INIT_LIMIT;
 	
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE
@@ -2488,43 +2500,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 					.newInstanceByThread(clsnm));
 	}
 
-	/**
-	 * Returns the number of items rendered when the Listbox first render.
-	 * <p>
-	 * Default: 50.
-	 *
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * @since 5.0.8
-	 */
-	public int getInitRodSize() {
-		return _initRodSize;
-	}
-
-	/**
-	 * Sets the number of items rendered when the Listbox first render.
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * @param sz
-	 *            the number of items rendered when the Listbox first render.
-	 * @exception UiException
-	 *                if sz is negative
-	 * @since 5.0.8
-	 */
-	public void setInitRodSize(int sz) {
-		if (sz < 0)
-			throw new UiException("nonnegative is required: " + sz);
-		if (_initRodSize != sz) {
-			_initRodSize = sz;
-			smartUpdate("initRodSize", sz);
-		}
-	}
-	
-	/**
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
 	 * Returns the number of items to preload when receiving the rendering
 	 * request from the client.
 	 *
@@ -2546,7 +2522,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
 
-	/**
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
 	 * Sets the number of items to preload when receiving the rendering request
 	 * from the client.
 	 * <p>
@@ -2846,7 +2822,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, _initRodSize); // change offset back to 0
+					getDataLoader().syncModel(0, initRodSize()); // change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); // paging mold -> non-paging mold
@@ -2969,7 +2945,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, _initRodSize);
+			_dataLoader.init(this, 0, initRodSize());
 		}
 		return _dataLoader;
 	}
@@ -3172,7 +3148,9 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			if (_rod) { 
 				if (((Cropper)getDataLoader()).isCropper())//bug #2936064
 					renderer.render("_listbox$rod", true);
-				renderer.render("initRodSize", _initRodSize);
+				int sz = initRodSize();
+				if (sz != INIT_LIMIT)
+					renderer.render("initRodSize", initRodSize());
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
@@ -3200,6 +3178,41 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			val = Library.getProperty(attr);
 		return val instanceof Boolean ? ((Boolean)val).booleanValue():
 			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** 
+	 * Returns the number of items to preload when receiving the rendering
+	 * request from the client.
+	 * <p>
+	 * Default: 7.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int preloadSize() {
+		final String size = (String) getAttribute("pre-load-size");
+		int sz = size != null ? Integer.parseInt(size) : _preloadsz;
+		
+		if ((sz = Utils.testAttribute(this, 
+				"org.zkoss.zul.listbox.preloadSize", sz, true)) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
+	}
+	
+	/** 
+	 * Returns the number of items rendered when the Listbox first render.
+	 *  <p>
+	 * Default: 100.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int initRodSize() {
+		int sz = Utils.testAttribute(this, "org.zkoss.zul.listbox.initRodSize",
+				INIT_LIMIT, true);
+		if ((sz) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
 	}
 	
 	/** Returns whether to sort all of item when model or sort direction be changed.
@@ -3247,7 +3260,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
 			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
-					getPreloadSize()));
+					preloadSize()));
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();

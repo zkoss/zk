@@ -184,6 +184,19 @@ import org.zkoss.zul.impl.XulElement;
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
+ * 
+ * <dt>org.zkoss.zul.grid.preloadSize</dt>
+ * <dd>Specifies the number of rows to preload when receiving
+ * the rendering request from the client.
+ * <p>It is used only if live data ({@link #setModel(ListModel)} and
+ * not paging ({@link #getPagingChild}).</dd>
+ * 
+ * <dt>org.zkoss.zul.grid.initRodSize</dt>
+ * <dd>Specifies the number of rows rendered when the Grid first render.
+ * <p>
+ * It is used only if live data ({@link #setModel(ListModel)} and not paging
+ * ({@link #getPagingChild}).</dd>
+ * 
  * @author tomyeh
  * @see ListModel
  * @see RowRenderer
@@ -229,7 +242,6 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 	
 	private transient boolean _rod;
 	private String _emptyMessage;
-	private int _initRodSize = INIT_LIMIT;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -740,43 +752,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
 	}
 
-	/**
-	 * Returns the number of rows rendered when the Grid first render.
-	 * <p>
-	 * Default: 50.
-	 *
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * @since 5.0.8
-	 */
-	public int getInitRodSize() {
-		return _initRodSize;
-	}
-
-	/**
-	 * Sets the number of rows rendered when the Grid first render.
-	 * <p>
-	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingChild}.
-	 *
-	 * @param sz
-	 *            the number of rows rendered when the Grid first render.
-	 * @exception UiException
-	 *                if sz is negative
-	 * @since 5.0.8
-	 */
-	public void setInitRodSize(int sz) {
-		if (sz < 0)
-			throw new UiException("nonnegative is required: " + sz);
-		if (_initRodSize != sz) {
-			_initRodSize = sz;
-			smartUpdate("initRodSize", sz);
-		}
-	}
-	
-	/** Returns the number of rows to preload when receiving
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
+	 * Returns the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 *
 	 * <p>Default: 7.
@@ -791,7 +768,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		final String size = (String) getAttribute("pre-load-size");
 		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
-	/** Sets the number of rows to preload when receiving
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
+	 * Sets the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPagingChild}.
@@ -1123,7 +1101,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, _initRodSize); //change offset back to 0
+					getDataLoader().syncModel(0, initRodSize()); //change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); //paging mold -> non-paging mold
@@ -1236,6 +1214,41 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
 	}
 	
+	/** 
+	 * Returns the number of rows to preload when receiving the rendering
+	 * request from the client.
+	 * <p>
+	 * Default: 7.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int preloadSize() {
+		final String size = (String) getAttribute("pre-load-size");
+		int sz = size != null ? Integer.parseInt(size) : _preloadsz;
+		
+		if ((sz = Utils.testAttribute(this, 
+				"org.zkoss.zul.grid.preloadSize", sz, true)) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
+	}
+	
+	/** 
+	 * Returns the number of rows rendered when the Grid first render.
+	 *  <p>
+	 * Default: 100.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int initRodSize() {
+		int sz = Utils.testAttribute(this, "org.zkoss.zul.grid.initRodSize",
+				INIT_LIMIT, true);
+		if ((sz) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
+	}
+	
 	/** Returns whether to sort all of item when model or sort direction be changed.
 	 * @since 5.0.7
 	 */
@@ -1258,7 +1271,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, _initRodSize);
+			_dataLoader.init(this, 0, initRodSize());
 		}
 		return _dataLoader;
 	}
@@ -1388,7 +1401,9 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		if (_rod) {
 			if (((Cropper)getDataLoader()).isCropper())//bug #2936064 
 					renderer.render("_grid$rod", true);
-			renderer.render("initRodSize", _initRodSize);
+			int sz = initRodSize();
+			if (sz != INIT_LIMIT)
+				renderer.render("initRodSize", initRodSize());
 		}
 	}
 	/*package*/ boolean isRod() {
@@ -1433,7 +1448,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onDataLoading")) {
-			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, getPreloadSize()));
+			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request, preloadSize()));
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) {
 			final Map data = request.getData();
 			final int oldsize = getPageSize();
