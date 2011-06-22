@@ -487,8 +487,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	//Fixed side effect of reversion: 16986
 	afterChildrenMinFlex_: function (orient) {
-		var nRows, bdfaker, minWd;
-		if (orient == 'w' && (nRows = this.getRows()) && nRows > 1 && 
+		var bdfaker, minWd;
+		if (orient == 'w' && this.getRows() > 1 && 
 			(bdfaker = this.ebdfaker) && (minWd = this._minWd)) {
 			for (var i = minWd.wds.length;i--;)
 				bdfaker.cells[i].style.width = jq.px0(minWd.wds[i]);
