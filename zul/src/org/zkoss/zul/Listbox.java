@@ -228,13 +228,13 @@ import org.zkoss.zul.impl.XulElement;
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
  * 
- * <dt>org.zkoss.zul.listbox.preloadSize</dt>
+ * <dt>org.zkoss.zul.listbox.preloadSize</dt>.(since 5.0.7) 
  * <dd>Specifies the number of items to preload when receiving
  * the rendering request from the client.
  * <p>It is used only if live data ({@link #setModel(ListModel)} and
  * not paging ({@link #getPagingChild}).</dd>
  * 
- * <dt>org.zkoss.zul.listbox.initRodSize</dt>
+ * <dt>org.zkoss.zul.listbox.initRodSize</dt>.(since 5.0.7) 
  * <dd>Specifies the number of items rendered when the Listbox first render.
  * <p>
  * It is used only if live data ({@link #setModel(ListModel)} and not paging

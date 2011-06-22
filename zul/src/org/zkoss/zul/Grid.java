@@ -185,13 +185,13 @@ import org.zkoss.zul.impl.XulElement;
  * It will be inherited.</dd>
  * </dl>
  * 
- * <dt>org.zkoss.zul.grid.preloadSize</dt>
+ * <dt>org.zkoss.zul.grid.preloadSize</dt>.(since 5.0.8) 
  * <dd>Specifies the number of rows to preload when receiving
  * the rendering request from the client.
  * <p>It is used only if live data ({@link #setModel(ListModel)} and
  * not paging ({@link #getPagingChild}).</dd>
  * 
- * <dt>org.zkoss.zul.grid.initRodSize</dt>
+ * <dt>org.zkoss.zul.grid.initRodSize</dt>.(since 5.0.8) 
  * <dd>Specifies the number of rows rendered when the Grid first render.
  * <p>
  * It is used only if live data ({@link #setModel(ListModel)} and not paging
