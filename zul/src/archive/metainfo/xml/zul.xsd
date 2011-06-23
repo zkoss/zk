@@ -1325,7 +1325,6 @@
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
@@ -1587,7 +1586,6 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
@@ -2323,7 +2321,6 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
