@@ -584,7 +584,7 @@ jq(function() {
 		if (!wgt.afterKeyDown_)
 			return; //handled
 		wevt.target = wgt; //mimic as keydown directly sent to wgt
-		return wgt.afterKeyDown_(wevt);
+		return wgt.afterKeyDown_(wevt,true);
 	}
 
 	jq(document)
