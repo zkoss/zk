@@ -88,8 +88,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
+		super.init(config); // B50-3310020: save config
 
 		String param = config.getInitParameter("log-level");
 		if (param != null && param.length() > 0) {
