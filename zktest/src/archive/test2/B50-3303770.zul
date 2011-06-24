@@ -1,0 +1,14 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click the button to clear all rows. You should NOT see any error message.</li>
+		</ol>
+	]]></html>
+	<grid mold="paging">
+		<rows id="rows">
+			<group visible="false" />
+			<row>1</row>
+		</rows>
+	</grid>
+	<button label="Clear" onClick="rows.getChildren().clear()" />
+</zk>
