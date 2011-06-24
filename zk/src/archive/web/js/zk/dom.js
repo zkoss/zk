@@ -546,7 +546,24 @@ zjq.prototype = {
 	 * If true, both the style.display and style.visibility properties are tested.
 	 * @return boolean whether the first matched element is really visible.
 	 */
-	isRealVisible: function (strict) {
+	isRealVisible: zk.ie < 8 ? function (strict) {
+		var n = this.jq,
+			body = document.body;
+		if (!n.length) return false;
+
+		// we cannot use jq().is(':visible') in this case, becuase it is not reliable.
+		if (strict) {
+			do {
+				if (n.css('display') == 'none' || n.css('visibility') == 'hidden') return false;
+			} while ((n = n.parent()) && n[0] != body); //yes, assign
+		} else {
+			do {
+				if (n.css('display') == 'none') return false;
+			} while ((n = n.parent()) && n[0] != body); //yes, assign
+		}
+		return true;
+	}:
+	function (strict) {
 		var n = this.jq[0];
 		return n && this.isVisible(strict) && (n.offsetWidth > 0 || n.offsetHeight > 0
 		|| (!n.firstChild 
@@ -1128,26 +1145,37 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	offsetWidth: function () {
 		var el = this.jq[0];
-		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetWidth;
-
-		var wd = 0;
-		for (var cells = el.cells, j = cells.length; j--;)
-			wd += cells[j].offsetWidth;
-		return wd;
+		if ((!zk.safari && !zk.ie < 8) || !jq.nodeName(el, "tr")) return el.offsetWidth;
+		
+		if (!zk.safari) {
+			if (this.isRealVisible()) 
+				return el.offsetWidth;
+			else
+				return 0;
+		} else {
+			var wd = 0;
+			for (var cells = el.cells, j = cells.length; j--;) 
+				wd += cells[j].offsetWidth;
+			return wd;
+		}
 	},
 	/** Returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation. 
 	 * @return int the offset height
 	 */
 	offsetHeight: function () {
 		var el = this.jq[0];
-		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetHeight;
-
-		var hgh = 0;
-		for (var cells = el.cells, j = cells.length; j--;) {
-			var h = cells[j].offsetHeight;
-			if (h > hgh) hgh = h;
+		if ((!zk.safari && !(zk.ie < 8)) || !jq.nodeName(el, "tr")) return el.offsetHeight;
+		if (!zk.safari && !this.isRealVisible()) {
+			return 0;
+		} else {
+			var hgh = 0;
+			for (var cells = el.cells, j = cells.length; j--;) {
+				var h = cells[j].offsetHeight;
+				if (h > hgh) 
+					hgh = h;
+			}
+			return hgh;
 		}
-		return hgh;
 	},
 	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation. 
 	 * @return int the offset top
