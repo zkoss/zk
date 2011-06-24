@@ -199,6 +199,10 @@ w:use="foo.MyWindow"&gt;
 	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached}
 	 * rather than this method.
 	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
+	 *
 	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached
 	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageDetached
 	 */
@@ -624,7 +628,6 @@ w:use="foo.MyWindow"&gt;
 	 * instead of this method, unless
 	 * you want to control where to put the child.
 	 *
-	 *
 	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
 	 * and/or {@link #removeChild},
 	 * while {@link #insertBefore} and {@link #removeChild}
@@ -632,6 +635,10 @@ w:use="foo.MyWindow"&gt;
 	 * if the parent is changed. Thus, you don't need to override 
 	 * both {@link #insertBefore} and {@link #setParent}, if you want
 	 * to customize the behavior.
+	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
 	 *
 	 * @param newChild the new child to be inserted.
 	 * @param refChild the child before which you want the new child
@@ -661,6 +668,10 @@ w:use="foo.MyWindow"&gt;
 	 * if the parent is changed. Thus, you don't need to override 
 	 * both {@link #insertBefore} and {@link #setParent}, if you want
 	 * to customize the behavior.
+	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
 	 *
 	 * @return true if child is removed successfully; false if it doesn't
 	 * have the specified child

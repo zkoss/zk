@@ -101,6 +101,15 @@ import org.zkoss.zk.xel.Evaluator;
  *     &lt;textbox id="mytextbox" value="${mywin$composer.title}"/>
  * &lt;/window>
  * </code></pre>
+ *
+ * <p>Since 5.0.8, you could name the composer by specify a custom attribute
+ * called <code>composerName</code>. For example,
+ *<pre><code>
+ * &lt;window apply="MyComposer">
+ * &lt;custom-attribute composerName="mc"/>
+ *     &lt;textbox id="mytextbox" value="${mc.title}"/>
+ * &lt;/window>
+ * </code></pre>
  * 
  * @author henrichen
  * @since 3.0.6

@@ -914,23 +914,35 @@ public class Components {
 		 * Inject controller as variable of the specified component.
 		 */
 		private void wireController(Component comp, String id) {
+			//feature #3326788: support custom name
+			Object onm = comp.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				comp.setAttribute((String)onm, _controller);
+
 			//feature #2778513, support {id}$composer name
-			final String composerid =  id + _separator + "composer";
-			if (!comp.hasAttributeOrFellow(composerid, false)) {
-				comp.setAttribute(composerid, _controller);
-			}
-			comp.setAttribute(varname(id, _controller.getClass()), _controller);
+			final String nm = composerNameById(id);
+			if (!comp.hasAttributeOrFellow(nm, false))
+				comp.setAttribute(nm, _controller);
+
+			//support {id}$ClassName
+			comp.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
 		/**
 		 * Inject controller as variable of the specified page.
 		 */
 		private void wireController(Page page, String id) {
-			final String composerid =  id + _separator + "composer";
-			if (!page.hasAttributeOrFellow(composerid, false)) {
-				page.setAttribute(composerid, _controller);
-			}
-			page.setAttribute(varname(id, _controller.getClass()), _controller);
+			Object onm = page.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				page.setAttribute((String)onm, _controller);
+
+			final String nm = composerNameById(id);
+			if (!page.hasAttributeOrFellow(nm, false))
+				page.setAttribute(nm, _controller);
+
+			page.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
 		private void wireFellows(IdSpace idspace) {
@@ -1207,7 +1219,11 @@ public class Components {
 					getImplicit((Page)x, fdname) :
 					getImplicit((Component)x, fdname);
 		}
-		private String varname(String id, Class cls) {
+
+		private String composerNameById(String id) {
+			return id + _separator + "composer";
+		}
+		private String composerNameByClass(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
 			return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
