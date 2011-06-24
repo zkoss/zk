@@ -1,0 +1,15 @@
+<zk>
+	<html>
+		<![CDATA[ <ol> <li>Type "aa" in the datebox, then press "tab"
+		key</li> <li>You can see "error1" in the below of datebox.</li>
+		<li>Delete "aa" in the datebox, then press "tab" key</li>
+		<li>You can see "error2" in the below of datebox.</li> </ol> ]]>
+	</html>
+	<zscript>
+		int i = 1;
+	</zscript>
+	<datebox format="dd-MMM-yyyy"
+		onError='msg.value = "error" + (i++);' />
+	<separator height="50px" />
+	<label id="msg" />
+</zk>
