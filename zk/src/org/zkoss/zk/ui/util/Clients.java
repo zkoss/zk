@@ -303,4 +303,12 @@ public class Clients {
 	throws java.io.IOException {
 		Executions.getCurrent().getDesktop().getDevice().reloadMessages(locale);
 	}
+
+	/** Logs the message to the client.
+	 *  <p>data[0]: the title
+	 * @since 5.0.8
+	 */
+	public static final void log(String msg) {
+		response(new AuLog(msg));
+	}
 }

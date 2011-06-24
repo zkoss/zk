@@ -968,6 +968,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	title: function (title) {
 		document.title = title;
 	},
+	/** Logs the message.
+	 * @param String msg the message to log
+	 * @since 5.0.8
+	 */
+	log: zk.log,
 	/** Executes the JavaScript.
 	 * @param String script the JavaScript code snippet to execute
 	 */
