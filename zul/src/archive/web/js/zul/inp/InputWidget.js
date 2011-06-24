@@ -809,8 +809,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.$supers('doKeyUp_', arguments);
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace) {
+	afterKeyDown_: function (evt,simulated) {
+		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
 				if ($inp.toggleClass(inc).hasClass(inc)) 
@@ -819,7 +819,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
 		}
 		if (evt.keyCode != 13 || !this.isMultiline())
-			this.$supers('afterKeyDown_', arguments);
+			return this.$supers('afterKeyDown_', arguments);
 	},
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();

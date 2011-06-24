@@ -118,6 +118,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this.$supers('setConstraint', arguments);
 	},
 	coerceFromString_: function (value) {//copy from doublebox
+		// B50-3322816
+		if (!value) return null;
+		
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
     		raw = info.raw,
     		val = parseFloat(raw),
@@ -158,6 +161,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
     	}
     
     	if (info.divscale) val = val / Math.pow(10, info.divscale);
+		
+		// B50-3322795
+		this._fixedDigits = _digitsAfterDecimal(val, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
     	return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
@@ -368,11 +374,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			n.style.width = this.getWidth() || '';
 		}
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace)
+	afterKeyDown_: function (evt,simulated) {
+		if(!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 			
-		this.$supers('afterKeyDown_', arguments);
+		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Doublespinner, 'bind_', arguments); 
@@ -381,6 +387,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
+		
 		
 		if(btn = this.$n("btn"))
 			this.domListen_(btn, "onZMouseDown", "_btnDown")

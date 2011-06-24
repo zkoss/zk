@@ -39,6 +39,9 @@ ZK 5.0.8
   3322970: Listhead checkmark state is not synchronized
   3310020: init(SCfg) of DhtmlLayoutS. breaks contract of GenericSrvlet
   3307376: The datebox shall fire onError after the error is cleared.
+  3322795: double spinner weird action
+  3322816: Doublespinner cannot accept empty value
+  3306850: doublespinner has weird actions
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

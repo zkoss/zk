@@ -296,11 +296,11 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			n.style.width = this.getWidth() || '';
 		}
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace)
+	afterKeyDown_: function (evt,simulated) {
+		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 			
-		this.$supers('afterKeyDown_', arguments);
+		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
