@@ -36,8 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	private String _value = "";
-	private int _maxlength;
-	private boolean _multiline, _pre;
+	private AuxInfo _auxinf;
 
 	public Label() {
 	}
@@ -68,30 +67,30 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	 * <p>Default: 0 (means no limitation)
 	 */
 	public int getMaxlength() {
-		return _maxlength;
+		return _auxinf != null ? _auxinf.maxlength: 0;
 	}
 	/** Sets the maximal length of the label.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
-		if (_maxlength != maxlength) {
-			_maxlength = maxlength;
-			smartUpdate("maxlength", _maxlength);
+		if ((_auxinf != null ? _auxinf.maxlength: 0) != maxlength) {
+			initAuxInfo().maxlength = maxlength;
+			smartUpdate("maxlength", getMaxlength());
 		}
 	}
 	/** Returns whether to preserve the new line and the white spaces at the
 	 * begining of each line.
 	 */
 	public boolean isMultiline() {
-		return _multiline;
+		return _auxinf != null && _auxinf.multiline;
 	}
 	/** Sets whether to preserve the new line and the white spaces at the
 	 * begining of each line.
 	 */
 	public void setMultiline(boolean multiline) {
-		if (_multiline != multiline) {
-			_multiline = multiline;
-			smartUpdate("multiline", _multiline);
+		if ((_auxinf != null && _auxinf.multiline) != multiline) {
+			initAuxInfo().multiline = multiline;
+			smartUpdate("multiline", isMultiline());
 		}
 	}
 	/** Returns whether to preserve the white spaces, such as space,
@@ -106,15 +105,15 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 */
 	public boolean isPre() {
-		return _pre;
+		return _auxinf != null && _auxinf.pre;
 	}
 	/** Sets whether to preserve the white spaces, such as space,
 	 * tab and new line.
 	 */
 	public void setPre(boolean pre) {
-		if (_pre != pre) {
-			_pre = pre;
-			smartUpdate("pre", _pre);
+		if ((_auxinf != null && _auxinf.pre) != pre) {
+			initAuxInfo().pre = pre;
+			smartUpdate("pre", isPre());
 		}
 	}
 	/** @deprecated As of release 5.0.0, use CSS instead.
@@ -146,9 +145,10 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	throws IOException {
 		super.renderProperties(renderer);
 
-		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
-		render(renderer, "multiline", _multiline);
-		render(renderer, "pre", _pre);
+		int v = getMaxlength();
+		if (v > 0) renderer.render("maxlength", v);
+		render(renderer, "multiline", isMultiline());
+		render(renderer, "pre", isPre());
 
 		final String val = getValue();
 			//allow deriving to override getValue()
@@ -159,9 +159,36 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		return _zclass == null ? "z-label" : _zclass;
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final Label clone = (Label)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	/** No child is allowed.
 	 */
 	protected boolean isChildable() {
 		return false;
+	}
+
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		private int maxlength;
+		private boolean multiline;
+		private boolean pre;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }
