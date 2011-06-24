@@ -4,13 +4,11 @@
 			background-color: #999999;
 		}
 	</style>
-	<html><![CDATA[
-		<ol>
-			<li>IE 6/7 only</li>
-			<li>You shall see the GRAY background of data content in the 1st column occupy the whole cell.<li>
-			<li>If not, it is a bug.</li>
-		</ol>
-	]]></html>
+	1. IE 6/7 only
+	<separator/>
+	2. You shall see the GRAY background of data content in the 1st column occupy the whole cell.
+	<separator/>
+	3. If not, it is a bug.
 	<tree span="true">
 		<treecols>
 			<treecol label="100px" width="100px" />

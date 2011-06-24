@@ -1,4 +1,9 @@
 <zk>
+<style>
+ol, li {
+	margin: 0px;
+}
+</style>
 <html>
 <![CDATA[
 <ol>

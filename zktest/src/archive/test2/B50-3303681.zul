@@ -13,7 +13,11 @@ B50-3303681.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk><style>
+ol, li {
+	margin: 0px;
+}
+</style>
 	<html><![CDATA[
 		<ol>
 			<li>Make sure "b" is under the panel of "a", and "b" is visible.</li>
