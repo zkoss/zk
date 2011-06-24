@@ -18,6 +18,7 @@ package org.zkoss.zul.impl;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 
 /**
  * The fundamental class for mesh elements such as {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}, and {@link org.zkoss.zul.Tree}.
@@ -25,7 +26,7 @@ import org.zkoss.zul.ext.Paginal;
  * @author henrichen
  * @since 5.0.6
  */
-abstract public class MeshElement extends XulElement implements org.zkoss.zul.impl.api.MeshElement {
+abstract public class MeshElement extends XulElement implements Paginated, org.zkoss.zul.impl.api.MeshElement {
 	private String _span;
 	private boolean _sizedByContent;
 	private boolean _autopaging;
