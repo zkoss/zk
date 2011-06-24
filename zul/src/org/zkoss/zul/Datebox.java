@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
@@ -649,7 +647,7 @@ the short time styling.
 		_symbols = symbols;
 	}
 	
-	private static String getRealSymbols(Locale locale, Datebox box) {
+	private static Object[] getRealSymbols(Locale locale, Datebox box) {
 		if (locale != null) {
 			final String localeName = locale.toString();
 			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
@@ -658,10 +656,9 @@ the short time styling.
 				Map symbols = (Map)_symbols.get(locale);
 				if (symbols == null)
 					symbols = loadSymbols(locale);
-				return JSONValue.toJSONString(new Object[] {
-						localeName, symbols });
-			} else return JSONValue.toJSONString(new Object[] {
-					localeName, null });
+				return new Object[] {localeName, symbols };
+			}
+			return new Object[] {localeName, null };
 		}
 		return null;
 	}

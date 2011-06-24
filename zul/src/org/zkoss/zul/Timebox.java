@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
 
-import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
@@ -309,7 +308,7 @@ will be used to retrieve the real format.
 		df.setTimeZone(tz);
 		return df;
 	}
-	private String getRealSymbols() {
+	private Object[] getRealSymbols() {
 		if (_locale != null) {
 			final String localeName = _locale.toString();
 			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
@@ -325,10 +324,9 @@ will be used to retrieve the real format.
 				cal.set(Calendar.HOUR_OF_DAY, 15);
 				ampm[1] = df.format(cal.getTime());
 				map.put("APM", ampm);
-				return JSONValue.toJSONString(new Object[] {
-						localeName, map });
-			} else return JSONValue.toJSONString(new Object[] {
-					localeName, null });
+				return new Object[] {localeName, map };
+			}
+			return new Object[] {localeName, null };
 		}
 		return null;
 	}

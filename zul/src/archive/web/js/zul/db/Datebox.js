@@ -240,10 +240,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		localizedSymbols: [
 			function (val) {
 				if(val) {
-					var ary = jq.evalJSON(val);
-					if (!globallocalizedSymbols[ary[0]])
-						globallocalizedSymbols[ary[0]] = ary[1];
-					return globallocalizedSymbols[ary[0]];
+					if (!globallocalizedSymbols[val[0]])
+						globallocalizedSymbols[val[0]] = val[1];
+					return globallocalizedSymbols[val[0]];
 				}
 				return val;
 			},
