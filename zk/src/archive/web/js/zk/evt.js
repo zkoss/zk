@@ -358,7 +358,7 @@ zWatch.listen({onSend: ml})
   return {
   	/** Registers watch listener(s). For example,
 <pre><code>
-zWatch({
+zWatch.listen({
   onSize: this,
   onShow: this,
   onHide: [this, this._onHide]
