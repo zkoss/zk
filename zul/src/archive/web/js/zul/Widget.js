@@ -534,11 +534,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * If found, it calls {@link #beforeCtrlKeys_} for each widget that were
 	 * searched, and then fire the event.
 	 * @param zk.Event evt the widget event.
-	 * @param boolean simulated the event was not sent to the widget originally, 
+	 * @param boolean simulated if the event was not sent to the widget originally (rather,
+	 * it is caused by pressing when none of widget but document gains the focus)
 	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
-	afterKeyDown_: function (evt,simulated) {
+	afterKeyDown_: function (evt/*, simulated*/) {
 		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
 		switch (keyCode) {
 		case 13: //ENTER
