@@ -207,7 +207,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @since 5.0.4
 	 */
 	slideDown_: function (pp) {
-		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});
+		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown, duration: 100});
 	},
 	/** Slides up the drop-down list.
 	 * <p>Default: <code>pp.style.display = "none";</code><br/>
