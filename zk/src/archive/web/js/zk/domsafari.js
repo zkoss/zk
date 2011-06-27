@@ -41,6 +41,41 @@ zk.copy(zjq.prototype, {
 			for (var ns = this.getElementsByTagName("iframe"), j = ns.length; j--;)
 				ns[j].src = zjq.src0;
 		});
+	},
+	offsetWidth: function () {
+		var el = this.jq[0];
+		if (!jq.nodeName(el, "tr"))
+			return el.offsetWidth;
+		
+		var wd = 0;
+		for (var cells = el.cells, j = cells.length; j--;) 
+			wd += cells[j].offsetWidth;
+		return wd;
+	},
+	offsetHeight: function () {
+		var el = this.jq[0];
+		if (!jq.nodeName(el, "tr"))
+			return el.offsetHeight;
+
+		var hgh = 0;
+		for (var cells = el.cells, j = cells.length; j--;) {
+			var h = cells[j].offsetHeight;
+			if (h > hgh) 
+				hgh = h;
+		}
+		return hgh;
+	},
+	offsetTop: function () {
+		var el = this.jq[0];
+		if (jq.nodeName(el, "tr") && el.cells.length)
+			el = el.cells[0];
+		return el.offsetTop;
+	},
+	offsetLeft: function () {
+		var el = this.jq[0];
+		if (jq.nodeName(el, "tr") && el.cells.length)
+			el = el.cells[0];
+		return el.offsetLeft;
 	}
 });
 

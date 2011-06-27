@@ -139,8 +139,6 @@ zk.copy(zjq.prototype, {
 	}
 });
 
-})();
-
 zk.override(jq.event, zjq._evt = {}, {
 	fix: function (evt) {
 		evt = zjq._evt.fix.apply(this, arguments);
@@ -151,7 +149,7 @@ zk.override(jq.event, zjq._evt = {}, {
 });
 
 //IE: use query string if possible to avoid incomplete-request problem
-if (!zk.ie8) //including ie6, ie7, ie7 compatible mode (under ie8/9)
+if (zk.ie < 8) {
 	zjq._useQS = function (reqInf) {
 		var s = reqInf.content, j = s.length, prev, cc;
 		if (j + reqInf.uri.length < 2000) {
@@ -165,3 +163,47 @@ if (!zk.ie8) //including ie6, ie7, ie7 compatible mode (under ie8/9)
 		}
 		return false;
 	};
+
+	function _visi0($n) {
+		return $n.css('display') != 'none';
+	}
+	function _visi1($n) {
+		return _visi0($n) && $n.css('visibility') != 'hidden';
+	}
+  zk.copy(zjq.prototype, {
+	isRealVisible: function (strict) {
+		var $n = this.jq;
+		if (!$n.length) return false;
+
+		//we cannot use jq().is(':visible') in this case, becuase it is not reliable
+		var fn = strict ? _visi1: _visi0,
+			body = document.body;
+		do {
+			if (!fn($n))
+				return false;
+		} while (($n = $n.parent()) && $n[0] != body); //yes, assign
+		return true;
+	},
+	offsetWidth: function () {
+		var el = this.jq[0];
+		return !jq.nodeName(el, "tr") || this.isRealVisible() ? el.offsetWidth: 0;
+	},
+	offsetHeight: function () {
+		var el = this.jq[0];
+		if (!jq.nodeName(el, "tr"))
+			return el.offsetHeight;
+
+		var hgh = 0;
+		if (this.isRealVisible()) {
+			for (var cells = el.cells, j = cells.length; j--;) {
+				var h = cells[j].offsetHeight;
+				if (h > hgh) 
+					hgh = h;
+			}
+		}
+		return hgh;
+	}
+  });
+}
+
+})();
