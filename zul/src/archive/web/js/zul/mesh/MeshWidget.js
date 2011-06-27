@@ -1056,8 +1056,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
 			if (this.isSizedByContent())
 				this._calcSize();
-			if (this.head)
+			if (this.head) {
 				this._fixHeaders();
+				for(var w = this.head.firstChild; w; w = w.nextSibling) 
+					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
+						return null;				
+			}
 			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width 
 		}
 		return null;

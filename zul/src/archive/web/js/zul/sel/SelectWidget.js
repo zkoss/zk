@@ -479,22 +479,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		} else
 			return this.getRows() || this._visiRows || 0;
 	},
-	beforeParentMinFlex_: function (orient) {
-		if (orient == 'h' && this.getRows() > 1) {
-			this.ebody.style.height = '';
-		}
-		this.$supers('beforeParentMinFlex_', arguments);
-	},
-	//Fixed side effect of reversion: 16986
-	afterChildrenMinFlex_: function (orient) {
-		var bdfaker, minWd;
-		if (orient == 'w' && this.getRows() > 1 && 
-			(bdfaker = this.ebdfaker) && (minWd = this._minWd)) {
-			for (var i = minWd.wds.length;i--;)
-				bdfaker.cells[i].style.width = jq.px0(minWd.wds[i]);
-		}
-		this.$supers('afterChildrenMinFlex_', arguments);
-	},
 	/* Height of the head row. If now header, defval is returned. */
 	_headHgh: function (defVal) {
 		var hgh = this.ehead ? this.ehead.offsetHeight : 0;
