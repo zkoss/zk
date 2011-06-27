@@ -1,14 +1,9 @@
 <zk>
-<html>
-<![CDATA[
-<ol>
-<li>You shall see top and bottom two parts of blocks separate by a horizontal line</li>
-<li>The top part you shall see three rectangles with size fit exactly to its contents</li>
-<li>The bottom part you shall see also three rectangles with the width expand to be as wide as the browser window</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. You shall see top and bottom two parts of blocks separate by a horizontal line
+<separator/>
+2. The top part you shall see three rectangles with size fit exactly to its contents
+<separator/>
+3. The bottom part you shall see also three rectangles with the width expand to be as wide as the browser window
 	<grid hflex="min">
 		<columns>
 			<column hflex="min"/>

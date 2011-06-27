@@ -1,9 +1,5 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>If there are NO space between listbox right edge and "Message" header right edge, then it is OK</li>
-		</ol>
-	]]></html>
+If there are NO space between listbox right edge and "Message" header right edge, then it is OK
 	<listbox id="logMsgsGrid" sizedByContent="true" style="border: 0;" hflex="min" span="min">
 		<listhead sizable="true">
 			<listheader label="Message Time" width="150px" />

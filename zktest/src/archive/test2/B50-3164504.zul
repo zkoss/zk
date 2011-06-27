@@ -14,11 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<html><![CDATA[
-		<ol>
-			<li>Resize the browser, the row shall be resized after you resize the browser</li>
-		</ol>
-	]]></html>
+Resize the browser, the row shall be resized after you resize the browser
 <grid>
 	<columns>
 		<column hflex="1"	align="right" />

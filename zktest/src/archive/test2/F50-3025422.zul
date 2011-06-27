@@ -21,7 +21,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 </style>
 
 	<panel title="panel" border="normal" width="800px" >
-		<panelchildren style="overflow:auto;">
+		<panelchildren style="overflow:auto;position:relative;" hflex="1">
 			<listbox sizedByContent="true"
 				style="border: 0;" hflex="min">
 				<listhead sizable="true">

@@ -1,18 +1,16 @@
 <zk>
 <div>
-<html>
-<![CDATA[
-<ol>
-<li>You shall see a Listbox with 4 columns. The first two column width fit the content exactly. The 3rd and 4th column width is 2 : 1</li>
-<li>Drag the browser border to extend the browser window width. The 1st and 2nd column width shall not change. The 3rd and 4th column width shall change accordingly but still keep the width propotion of 1: 2</li>
-<li>Press the "invalidate" button, and nothing shall change. The listbox and column keep as was</li>
-<li>Drag the browser border to shrink the browser window width. The 1st and 2nd column width shall not change. The 3rd and 4th column width shall change accordingly but still keep the width propotion of 1: 2</li>
-<li>Keep Drag the browser border to shrink the browser window width the 3rd and 4th columns will shrink to "disappear" and horizontal scrollbar start to appear. Note the 1st and 2nd column still keep their width as was.</li>
-<li>Press the "invalidate" button, and nothing shall change. The listbox and column keep as was</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. You shall see a Listbox with 4 columns. The first two column width fit the content exactly. The 3rd and 4th column width is 2 : 1
+<separator/>
+2. Drag the browser border to extend the browser window width. The 1st and 2nd column width shall not change. The 3rd and 4th column width shall change accordingly but still keep the width propotion of 1: 2
+<separator/>
+3. Press the "invalidate" button, and nothing shall change. The listbox and column keep as was
+<separator/>
+4. Drag the browser border to shrink the browser window width. The 1st and 2nd column width shall not change. The 3rd and 4th column width shall change accordingly but still keep the width propotion of 1: 2
+<separator/>
+5. Keep Drag the browser border to shrink the browser window width the 3rd and 4th columns will shrink to "disappear" and horizontal scrollbar start to appear. Note the 1st and 2nd column still keep their width as was.
+<separator/>
+6. Press the "invalidate" button, and nothing shall change. The listbox and column keep as was
 </div>
 <zscript>
 String[] msgs = {
