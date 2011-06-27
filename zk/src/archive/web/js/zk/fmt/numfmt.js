@@ -13,6 +13,14 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	var _defaultSymbols = {
+		GROUPING: zk.GROUPING,
+		DECIMAL:  zk.DECIMAL,
+		PERCENT:  zk.PERCENT,
+		PER_MILL: zk.PER_MILL,
+		MINUS:    zk.MINUS
+	};
+
 	function down(valStr, ri) {
 		return valStr.substring(0, ri);
 	}
@@ -55,6 +63,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return null;
 	}
+
 zk.fmt.Number = {
 	setScale: function (val, scale, rounding) { //bug #3089502: setScale in decimalbox not working
 		if (scale === undefined || scale < 0)
@@ -116,13 +125,7 @@ zk.fmt.Number = {
 		}
 		
 		// localized symbols
-		localizedSymbols = localizedSymbols || {
-				GROUPING: zk.GROUPING,
-				DECIMAL:  zk.DECIMAL,
-				PERCENT:  zk.PERCENT,
-				PER_MILL: zk.PER_MILL,
-				MINUS:    zk.MINUS
-			};
+		localizedSymbols = localizedSymbols || _defaultSymbols;
 		//calculate number of fixed decimals
 		var efmt = this._escapeQuote(fmt, localizedSymbols);
 		fmt = efmt.fmt;
