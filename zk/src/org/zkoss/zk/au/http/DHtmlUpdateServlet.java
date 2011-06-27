@@ -118,6 +118,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private long _lastModified;
 	/** (String name, AuExtension). */
 	private Map _aues = new HashMap(8);
+	private int _gaefix = 0; //used for GAE_FIX
 	private boolean _compress = true;
 
 	/** Returns the update servlet of the specified application, or
@@ -549,7 +550,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		sess.setAttribute(Attributes.GAE_FIX, new Integer(0)); //enforce GAE to write session
+		sess.setAttribute(Attributes.GAE_FIX, new Integer(_gaefix++)); //enforce GAE to write session
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
