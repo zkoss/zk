@@ -1,16 +1,12 @@
 <zk>
 <div>
-<html>
-<![CDATA[
-<ol>
-<li>IE6/IE7 only.
-<li>You shall see a Listbox and a Grid with 3 columns. The 1st and 3rd column width fit the content exactly. The 2nd column width is expanded.</li>
-<li>Drag browser window to shrink window width. The 2nd column shall shrink accordingly.</li>
-<li>If you saw vertical scrollbar appear and stay, it is a bug</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. IE6/IE7 only.
+<separator/>
+2. You shall see a Listbox and a Grid with 3 columns. The 1st and 3rd column width fit the content exactly. The 2nd column width is expanded.
+<separator/>
+Drag browser window to shrink window width. The 2nd column shall shrink accordingly.
+<separator/>If you saw vertical scrollbar appear and stay, it is a bug
+<separator/>
 </div>
 <zscript>
 String[] msgs = {

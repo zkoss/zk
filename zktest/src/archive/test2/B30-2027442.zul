@@ -1,6 +1,6 @@
 <window id="wnd" width="100%" title="Model and Paging">
 <html><![CDATA[
-<p>1. Yous shall see a button "Load".<br/>
+<p>1. You shall see a button "Load".<br/>
 2. Click "Load" button.<br/>
 3. You shall see a list with "0", "1", "2", "3"  and so on in order.<br/>
 4. If not in order, it is a bug.<br/>
