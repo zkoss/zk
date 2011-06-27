@@ -295,6 +295,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
 	-->
+	<!-- Turn on the following if you want to use ZK with Weblogic clustering server
+		or cloud environment (such as Google App Engine)
+	<listener>
+		<listener-class>org.zkoss.zkplus.cluster.ClusterSessionPatch</listener-class>
+	</listener>
+	-->
 	<!-- Disable the serialization of BeanShell methods
 		Default: enable
 		Disable it if Google App Engine is used since it cannot serialize
