@@ -2600,7 +2600,7 @@ w:use="foo.MyWindow"&gt;
 	public String toString() {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
-		return "<"+clsnm.substring(j+1)+' '+(_id.length() > 0  ? _id: _uuid)+'>';
+		return "<"+clsnm.substring(j+1)+' '+(!Strings.isEmpty(_id)  ? _id: _uuid)+'>';
 	}
 	public boolean equals(Object o) { //no more override
 		return this == o;
