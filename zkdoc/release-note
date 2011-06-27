@@ -44,6 +44,7 @@ ZK 5.0.8
   3322816: Doublespinner cannot accept empty value
   3306850: doublespinner has weird actions
   3303770: WrongValueException in Grid with paging mold
+  3314014: Separator bar not showing in IE6
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
