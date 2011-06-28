@@ -70,8 +70,8 @@ ZK 5.0.8
 	overflow: hidden;
 }
   + iDOM is simplified and the concept of readonly and modification is removed.
-  + Add org.zkoss.zkplus.cluster.ClusterSessionPatch listener to zk.xml for 
-  	enforce GAE to write session or use ZK with Weblogic clustering server. 
+  + Add org.zkoss.zkplus.cluster.ClusterSessionPatch listener to zk.xml
+  	enforcing GAE to write session states for each Ajax request
 
 	--------
 ZK 5.0.7.1
