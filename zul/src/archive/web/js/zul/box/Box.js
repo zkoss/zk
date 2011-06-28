@@ -481,7 +481,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			szes = this._sizes;
 		
 		for (; xc; xc = xc.nextSibling) {
-			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? xc.firstChild.firstChild : xc.firstChild : xc,
+			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
+					xc.firstChild.id ? xc.firstChild: xc.firstChild.firstChild : xc.firstChild : xc,
 				zkc = zk(c),
 				fixedSize = false;
 			if (zkc.isVisible()) {
@@ -548,8 +549,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
-				offtop = cwgt.$n().offsetTop,
-				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				offtop = zk.ie && (!cwgt.$instanceof(zul.wgt.Cell) ? cwgt.$n() : cwgt.$n().firstChild).offsetTop,
+				isz = lastsz - (offtop > 0 ? (offtop * 2) : 0);
+				
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {

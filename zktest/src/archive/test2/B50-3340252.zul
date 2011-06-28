@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3340252.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jun 28, 2011 7:38:23 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="Check the height of blue and yellow area are the same"/>
+	<vbox width="100px" height="100px" align="stretch">
+		<cell vflex="1">
+			<div style="background: blue" vflex="1" />
+		</cell>
+		<cell vflex="1">
+			<div style="background: yellow" vflex="1" />
+		</cell>
+	</vbox>
+	<separator></separator>
+	<vbox width="100px" height="100px" align="stretch">
+		<div style="background: blue" vflex="1" />
+		<div style="background: yellow" vflex="1" />
+	</vbox>
+</zk>
