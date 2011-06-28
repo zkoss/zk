@@ -40,11 +40,12 @@ public class ClusterSessionPatch implements ExecutionCleanup {
 
 	public void cleanup(Execution exec, Execution parent, List errs)
 			throws Exception {
-		Session sess = Sessions.getCurrent();
+		Session sess = exec.getSession();
 		//enforce GAE to write session
 		//enforce Weblogic to sync session
 		if (sess != null)
-			sess.setAttribute(Attributes.ZK_SESSION, sess);
+			sess.setAttribute(Attributes.ZK_SESSION, 
+					sess.getAttribute(Attributes.ZK_SESSION));
 	}
 
 }
