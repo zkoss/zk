@@ -86,6 +86,9 @@ public class UiEngineImpl implements UiEngine {
 	/** # of suspended event processing threads.
 	 */
 	private int _suspCnt;
+	/** the extension.
+	 */
+	private Extension _ext;
 
 	public UiEngineImpl() {
 	}
@@ -471,7 +474,8 @@ public class UiEngineImpl implements UiEngine {
 			else
 				execCtrl.setResponses(responses);
 
-			redrawNewPage(page, out);
+			((PageCtrl)page).redraw(out);
+			afterRedrawNewPage(page);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
@@ -544,27 +548,36 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Called after the whole component tree has been created by
 	 * this engine.
-	 * <p>Default: does nothing.
-	 * <p>Derived class might override this method to process the components
-	 * if necessary.
 	 * @param comps the components being created. It is never null but
 	 * it might be a zero-length array.
-	 * @since 5.0.4
 	 */
-	protected void afterCreate(Component[] comps) {
+	private void afterCreate(Component[] comps) {
+		getExtension().afterCreate(comps);
 	}
-	/** Called to render the result of a page to the (HTTP) output,
-	 * when a new page is created and processed.
-	 * <p>Default: it invokes {@link PageCtrl#redraw}.
-	 * <p>Notice that it is called in the rendering phase (the last phase),
-	 * so it is not allowed to post events or to invoke invalidate or smartUpdate
-	 * in this method.
-	 * <p>Notice that it is not called if an old page is redrawn.
-	 * @since 5.0.4
-	 * @see #execNewPage
+	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+	 * has been called).
 	 */
-	protected void redrawNewPage(Page page, Writer out) throws IOException {
-		((PageCtrl)page).redraw(out);
+	private void afterRedrawNewPage(Page page) {
+		getExtension().afterRedrawNewPage(page);
+	}
+	private Extension getExtension() {
+		if (_ext == null) {
+			synchronized (this) {
+				if (_ext == null) {
+					String clsnm = Library.getProperty("org.zkoss.zk.ui.impl.UiEngineImpl.extension");
+					if (clsnm != null) {
+						try {
+							_ext = (Extension)Classes.newInstanceByThread(clsnm);
+						} catch (Throwable ex) {
+							log.realCauseBriefly("Unable to instantiate "+clsnm, ex);
+						}
+					}
+					if (_ext == null)
+						_ext = new DefaultExtension();
+				}
+			}
+		}
+		return _ext;
 	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
@@ -2255,6 +2268,40 @@ public class UiEngineImpl implements UiEngine {
 			pfmeter.requestCompleteAtServer(pfReqId, exec, System.currentTimeMillis());
 		} catch (Throwable ex) {
 			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+		}
+	}
+
+	/** An interface used to extend the UI engine.
+	 * The class name of the extension shall be specified in
+	 * the library properties called org.zkoss.zk.ui.impl.UiEngineImpl.extension.
+	 * <p>Notice that it is used only internally.
+	 * @since 5.0.8
+	 */
+	public static interface Extension {
+		/** Called after the whole component tree has been created by
+		 * this engine.
+		 * <p>The implementation might implement this method to process
+		 * the components, such as merging, if necessary.
+		 * @param comps the components being created. It is never null but
+		 * it might be a zero-length array.
+		 */
+		public void afterCreate(Component[] comps);
+		/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+		 * has been called).
+		 * <p>Notice that it is called in the rendering phase (the last phase),
+		 * so it is not allowed to post events or to invoke invalidate or smartUpdate
+		 * in this method.
+		 * <p>Notice that it is not called if an old page is redrawn.
+		 * <p>The implementation shall process the components such as merging
+		 * if necessary.
+		 * @see #execNewPage
+		 */
+		public void afterRedrawNewPage(Page page);
+	}
+	private static class DefaultExtension implements Extension {
+		public void afterCreate(Component[] comps) {
+		}
+		public void afterRedrawNewPage(Page page) {
 		}
 	}
 }
