@@ -475,7 +475,7 @@ public class UiEngineImpl implements UiEngine {
 				execCtrl.setResponses(responses);
 
 			((PageCtrl)page).redraw(out);
-			afterRedrawNewPage(page);
+			afterRenderNewPage(page);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
@@ -557,8 +557,8 @@ public class UiEngineImpl implements UiEngine {
 	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
 	 * has been called).
 	 */
-	private void afterRedrawNewPage(Page page) {
-		getExtension().afterRedrawNewPage(page);
+	private void afterRenderNewPage(Page page) {
+		getExtension().afterRenderNewPage(page);
 	}
 	private Extension getExtension() {
 		if (_ext == null) {
@@ -2296,12 +2296,12 @@ public class UiEngineImpl implements UiEngine {
 		 * if necessary.
 		 * @see #execNewPage
 		 */
-		public void afterRedrawNewPage(Page page);
+		public void afterRenderNewPage(Page page);
 	}
 	private static class DefaultExtension implements Extension {
 		public void afterCreate(Component[] comps) {
 		}
-		public void afterRedrawNewPage(Page page) {
+		public void afterRenderNewPage(Page page) {
 		}
 	}
 }
