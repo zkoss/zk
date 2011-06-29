@@ -498,12 +498,12 @@
 			<div width="100px" height="100px"
 						style="border:1px solid black;">vbox</div>
 		</vbox>
-		<hlayout hflex="1"
+		<hlayout hflex="min"
 			style="border:1px solid black;">
 			<div width="100px" height="100px"
 						style="border:1px solid black;">hlayout</div>
 		</hlayout>
-		<vlayout hflex="1"
+		<vlayout hflex="min"
 			style="border:1px solid black;">
 			<div width="100px" height="100px"
 						style="border:1px solid black;">vlayout</div>
