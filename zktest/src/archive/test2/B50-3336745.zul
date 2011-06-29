@@ -1,0 +1,9 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Button 1 then Button 2 quickly. (Button 2 will be removed.) If you see javascript error, it is a bug.</li>
+		</ol>
+	]]></html>
+	<button id="btn1" label="Button 1" onClick='btn2.detach();' />
+	<button id="btn2" label="Button 2" onClick='alert("Button 2");' />
+</zk>

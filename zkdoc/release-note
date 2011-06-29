@@ -47,6 +47,7 @@ ZK 5.0.8
   3314014: Separator bar not showing in IE6
   3315668: doModal Window sometimes can't close with a cluster weblogic
   3340252: Set vflex to cell in Vbox cause js error
+  3336745: getBoundingClientRect cause error on IE/FF
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

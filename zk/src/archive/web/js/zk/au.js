@@ -306,8 +306,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function toJSON(target, data) {
 		if (!jq.isArray(data)) {
 			if (data.pageX != null && data.x == null)  {
-				var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
-					[data.pageX, data.pageY];
+				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
+						target.fromPageCoord(data.pageX, data.pageY):
+						[data.pageX, data.pageY];
 				data.x = ofs[0];
 				data.y = ofs[1];
 			}
