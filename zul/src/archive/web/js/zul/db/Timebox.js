@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var LEGAL_CHARS = 'ahKHksm',
+	var LEGAL_CHARS = 'ahKHksmz',
 		/*constant for MINUTE (m) field alignment.
 		 * @type int
 		 */
@@ -81,6 +81,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var start = i,
 					end = fmt.charAt(i+1) == 's' ? ++i : i;
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
+				break;
+			case 'z':
+				index.push({index:[i, i],format:(function(text){
+					return function(){
+						return text;
+					};
+				})(wgt._timezone)});
 				break;
 			default:
 				var ary = [],
@@ -185,11 +192,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',
-	$init: function() {
+	_timezone: '',
+	$init: function() {		
 		this.$supers('$init', arguments);
 		_updFormat(this, this._format);
 	},
 	$define: {
+		timezone: function (v) {
+			_updFormat(this, this._format);
+		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
 		 * @return boolean

@@ -67,6 +67,7 @@ public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Tim
 	/** The locale assoicated with this timebox. */
 	private Locale _locale;
 	private boolean _btnVisible = true;
+	private static Date _dummyDate = new Date();
 	
 	public Timebox() {
 		setCols(5);
@@ -151,7 +152,15 @@ will be used to retrieve the real format.
  	@since 5.0.0
  	 */
 	public void setFormat(String format) throws WrongValueException {
-		super.setFormat(format != null ? format: "");
+		if (!Objects.equals(getFormat(), format)) {
+			String realformat = getRealFormat();
+			if (realformat.indexOf("z") != -1) {
+				String timezone = getFormattedTimezone();
+				smartUpdate("timezone", timezone);
+			}
+			
+			super.setFormat(format != null ? format: "");			
+		}
 	}
 	
 	/** Returns the real format, i.e., the combination of the format patterns,
@@ -339,9 +348,19 @@ will be used to retrieve the real format.
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
+		String realformat = getRealFormat();
+		if (realformat.indexOf("z") != -1) {
+			String timezone = getFormattedTimezone();
+			renderer.render("timezone", timezone);
+		}
+
 		if(_btnVisible != true)
 			renderer.render("buttonVisible", _btnVisible);
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols());
+	}
+	
+	private String getFormattedTimezone(){
+		return getDateFormat("z").format(_dummyDate);
 	}
 }
