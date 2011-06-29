@@ -336,7 +336,7 @@ public class Utils {
 	 * @since 5.0.8
 	 */
 	public static final 
-	int testAttribute(Component comp, String name, int defValue, boolean recurse) {
+	int getIntAttribute(Component comp, String name, int defValue, boolean recurse) {
 		Object val = comp.getAttribute(name, recurse);
 		if (val == null)
 			val = Library.getProperty(name);
