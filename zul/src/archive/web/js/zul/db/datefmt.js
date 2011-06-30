@@ -180,20 +180,24 @@ zk.fmt.Date = {
 					var mon = token ? token.toLowerCase() : '',
 						isNumber0 = !isNaN(token);
 					if (!mon) break; 
-					if (!isNumber0 && token)
-						for (var index = localizedSymbols.SMON.length; --index >= 0;) {
+					if (!isNumber0 && token) {
+						for (var index = localizedSymbols.SMON.length, brkswch; --index >= 0;) {
 							var smon = localizedSymbols.SMON[index].toLowerCase();
 							if (mon.startsWith(smon)) {
 								token = localizedSymbols.SMON[index];
 								m = index;
-								break;
+								brkswch = true;
+								break; // shall break to switch level: B50-3314513
 							}
 						}
+						if (brkswch)
+							break;
+					}
 					if (len == 3 && token) {
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						if (isNaN(nv = _parseInt(token)))
-							break;
+							return; // failed, B50-3314513
 						m = nv - 1;
 					} else if (len <= 2) {
 						if (nosep && token && token.length > 2) {//Bug 2560497 : if no separator, token must be assigned.
@@ -201,7 +205,7 @@ zk.fmt.Date = {
 							token = token.substring(0, 2);
 						}
 						if (isNaN(nv = _parseInt(token)))
-							break; 
+							return; // failed, B50-3314513
 						m = nv - 1;
 					} else {
 						for (var l = 0;; ++l) {

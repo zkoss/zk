@@ -1,0 +1,18 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type "abc" in the following 4 dateboxes. All four should show errors.</li>
+		</ol>
+	]]></html>
+	<label value="en_US: " />
+	<datebox locale="en_US" />
+	<separator />
+	<label value="zh_TW: " />
+	<datebox locale="zh_TW" />
+	<separator />
+	<label value="de_DE: " />
+	<datebox locale="de_DE" />
+	<separator />
+	<label value="fr_FR: " />
+	<datebox locale="fr_FR" />
+</zk>
