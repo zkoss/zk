@@ -1095,10 +1095,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_getSigRow: function () {
 		// scan for tr with largest number of td children
-		var tb = this.ebodytbl;
-		if (!(tb = tb.firstChild))
-			return; // no table
-		for (var tr = tb.firstChild, maxtr = tr, len, max = maxtr.cells.length; tr; tr = tr.nextSibling)
+		var tr = this.ebodytbl;
+		if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
+			return; // no first tr
+		for (var maxtr = tr, len, max = maxtr.cells.length; tr; tr = tr.nextSibling)
 			if ((len = tr.cells.length) > max) {
 				maxtr = tr;
 				max = len;
