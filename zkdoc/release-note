@@ -54,7 +54,8 @@ ZK 5.0.8
   3312936: Panel vflex issue (IE6/7)
   3309193: Chrome returns wrong margin value on InputElement
   3310406: ztag selector throws error when mounting
-  3339315: Mesh Element with hflex min causes zero width 
+  3339315: Mesh Element with hflex min causes zero width
+  3316035: Grid with sizedByContent and hflex:min display wrong
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

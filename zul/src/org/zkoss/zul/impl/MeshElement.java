@@ -213,7 +213,7 @@ abstract public class MeshElement extends XulElement implements Paginated, org.z
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (isSizedByContent())
-			renderer.render("sizedByContent", true);
+			renderer.render("hflex", "min");
 		if (_span != null)
 			renderer.render("span", _span);
 		if (isAutopaging())

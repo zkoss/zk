@@ -1,0 +1,43 @@
+<zk>
+	The 3 Grids should look identical.
+	<grid hflex="min">
+		<columns>
+			<column hflex="min" />
+			<column hflex="min" />
+		</columns>
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+	<grid sizedByContent="true">
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+</zk>
