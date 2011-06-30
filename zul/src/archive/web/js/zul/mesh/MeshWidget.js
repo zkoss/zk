@@ -132,8 +132,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				width += wd;
 				if (w) w = w.previousSibling;
 			}
-			if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
-				--wds[maxj];
+			/** Fixed for B50-2979776.zul
+			 * if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
+				--wds[maxj];*/
 		}
 
 		if (wgt.eheadtbl) {//restore headers widthes
@@ -453,7 +454,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (!this.inServer && this.desktop)
 			this.onResponse();
 	},
-	_fixHeaders: function () {
+	_fixHeaders: function (force) {
 		if (this.head && this.ehead) {
 			var empty = true;
 			var flex = false;
@@ -472,7 +473,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var old = this.ehead.style.display; 
 			this.ehead.style.display = empty ? 'none' : '';
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
-			if (empty && flex && this.isRealVisible()) 
+			if ((force || empty) && flex && this.isRealVisible()) 
 				for (var w = this.head.firstChild; w; w = w.nextSibling)
 					if (w._nhflex) w.fixFlex_();
 			return old != this.ehead.style.display;
@@ -1057,7 +1058,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.isSizedByContent())
 				this._calcSize();
 			if (this.head) {
-				this._fixHeaders();
+				this._fixHeaders(true/** B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;				
@@ -1065,6 +1066,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width 
 		}
 		return null;
+	},
+	// fixed for B50-3315594.zul
+	beforeParentMinFlex_: function (orient) {
+		if (orient == 'w') {
+			if (this.isSizedByContent()) 
+				this._calcSize();
+			if (this.head) {
+				this._fixHeaders();
+			}
+		} else {
+			this._calcSize();
+		}
 	},
 	_calcMinWds: function () {
 		if (!this._minWd)

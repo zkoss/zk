@@ -50,6 +50,9 @@ ZK 5.0.8
   3336745: getBoundingClientRect cause error on IE/FF
   3323593: Timebox with long format shows meanless "z"
   3314513: Datebox validate fail with different locale
+  3317729: Textbox with hflex="1" shall occupied column's width (IE)
+  3312936: Panel vflex issue (IE6/7)
+  3309193: Chrome returns wrong margin value on InputElement
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

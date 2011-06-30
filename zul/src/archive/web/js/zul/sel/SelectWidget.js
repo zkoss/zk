@@ -409,6 +409,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
 
+			// Fixed for B50-3315594.zul
+			if (zk.opera) {
+				this.ebody.style.height = ''; //reset first to hide scrollbar
+				if (this.ebody.offsetHeight) {} // force to recalculate
+			}
+			
 			this.ebody.style.height = hgh + "px";
 
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.

@@ -578,6 +578,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zWatch.fireDown('onSize', self);
 		}, zk.ie6_ ? 800: 0);
 	},
+	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+		if (isFlexMin) {
+			height += this._titleHeight(n) +
+				(this._rounded() ? jq(this.$n('body')).find(':last')[0].offsetHeight : 0);
+		}
+		this.$supers('setFlexSizeH_', arguments);
+	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
 		if (this._maximized && !this.__maximized)

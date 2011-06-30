@@ -54,5 +54,12 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 			zWatch.fireDown('beforeSize', this.parent);
 			zWatch.fireDown('onSize', this.parent);
 		}
+	},
+	// bug for B50-3312936.zul
+	getParentSize_: function (p) {
+		return {
+			height: this.parent._offsetHeight(this.parent.$n()),
+			width: zk(p).revisedWidth(p.offsetWidth)
+		};
 	}
 });

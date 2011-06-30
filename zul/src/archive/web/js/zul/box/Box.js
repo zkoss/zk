@@ -28,7 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			spacing = box._spacing,
 			spacing0 = _spacing0(spacing),
 			vert = box.isVertical(),
-			spstyle = spacing ? (vert?'height:':'width:') + spacing: 'px';
+			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
 			'-chdex2" class="', box.getZclass(), '-sep"');
@@ -536,8 +536,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
-				offtop = cwgt.$n().offsetTop,
-				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
+				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
+				isz = vsz;// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = vsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
@@ -549,9 +549,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
-				offtop = zk.ie && (!cwgt.$instanceof(zul.wgt.Cell) ? cwgt.$n() : cwgt.$n().firstChild).offsetTop,
-				isz = lastsz - (offtop > 0 ? (offtop * 2) : 0);
-				
+				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
+				isz = lastsz;// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
@@ -589,6 +589,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		child.parent.afterChildrenFlex_(child);
 		child._flexFixed = false;
 		
+		// Bug for B50-3014664.zul
+		if (zk.ie < 8)
+			zk(this).redoCSS();
 		return false; //to skip original _fixFlex
 	},
 	_childOuterAttrs: function (child) {

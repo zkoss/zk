@@ -279,6 +279,11 @@
 	zoom: 1;
 }
 <%-- Center Middle --%>
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+.z-window-embedded-cm {
+	zoom: 1; <%-- fixed for B50-3315594.zul --%>
+}
+</c:if>
 .z-window-modal-cm,
 .z-window-highlighted-cm,
 .z-window-overlapped-cm {
