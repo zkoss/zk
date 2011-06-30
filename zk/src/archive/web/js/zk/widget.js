@@ -4563,7 +4563,8 @@ _doFooSelect: function (evt) {
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName) {
 				var n = _binds[wid].$n();
-				if (n) els.push(n);
+				//Bug B50-3310406 need to check if widget is removed or not.
+				if (n && zk.Widget.$(_binds[wid])) els.push(n);
 			}
 		}
 		if (els.length)

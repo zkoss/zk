@@ -53,6 +53,7 @@ ZK 5.0.8
   3317729: Textbox with hflex="1" shall occupied column's width (IE)
   3312936: Panel vflex issue (IE6/7)
   3309193: Chrome returns wrong margin value on InputElement
+  3310406: ztag selector throws error when mounting
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
