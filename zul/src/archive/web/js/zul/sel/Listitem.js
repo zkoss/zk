@@ -86,15 +86,16 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	_updHeaderCM: function (bRemove) {
 		// B50-3322970: need to clear Listheader _check cache
-		var box = this.getListbox(), lh;
-		if (!this.isSelected() && box && box._headercm && box._multiple && 
+		var box, lh;
+		if (!this.isSelected() && (box = this.getListbox()) 
+			&& box._headercm && box._multiple && 
 				(lh = box.listhead) && (lh = lh.firstChild))
 			lh._checked = false;
 		this.$supers('_updHeaderCM', arguments);
 	},
 	_syncListitems: function (newwgt) {
-		var box = this.getListbox();
-		if (box) {
+		var box;
+		if (box = this.getListbox()) {
 			if (box.firstItem.uuid == newwgt.uuid)
 				box.firstItem = newwgt;
 			if (box.lastItem.uuid == newwgt.uuid)

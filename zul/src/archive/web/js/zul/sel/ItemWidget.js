@@ -184,8 +184,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_updHeaderCM: function (bRemove) { //update header's checkmark
-		var box = this.getMeshWidget();
-		if (box && box._headercm && box._multiple) {
+		var box;
+		if ((box = this.getMeshWidget()) && box._headercm && box._multiple) {
 			if (bRemove) {
 				box._updHeaderCM();
 				return;

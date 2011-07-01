@@ -371,8 +371,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	getBodyWidgetIterator: _zkf,
 	_updHeaderCM: function () {
 		// B50-3322970: need to clear Listheader _check cache
-		var lh = this.listhead;
-		if (this._headercm && this._multiple && lh && (lh = lh.firstChild))
+		var lh;
+		if (this._headercm && this._multiple 
+			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
 		this.$supers('_updHeaderCM', arguments);
 	}

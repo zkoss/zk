@@ -1058,13 +1058,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 	},
 	_isAllSelected: function () {
-		var c;
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
 			if (!w.isDisabled() && !w.isSelected())
 				return false;
-			else 
-				c = true;
-		return c;
+		return true;
 	},
 	_ignoreHghExt: function () {
 		return this._rows > 0;
