@@ -14,7 +14,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<style dynamic="true">
+<style>
     .cells td, .search .item td {
         border-bottom: 1px solid #BFDBF5;
     }
