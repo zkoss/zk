@@ -649,8 +649,8 @@ jq(function() {
 			_docMouseDown(e, null, true); //simulate mousedown
 
 			//simulate focus if zk.Draggable invokes evt.stop
-			if ((wgt = e.target) && wgt != zk.currentFocus &&
-				zk.Draggable.stopWhenMousedown(wgt.$n()))
+			if ((wgt = e.target) && wgt != zk.currentFocus
+			&& !zk.Draggable.ignoreStop(wgt.$n()))
 				try {wgt.focus();} catch (e) {}
 				//Bug 3017606/2988327: don't invoke window.blur,or browser might be min (IE/FF)
 		}

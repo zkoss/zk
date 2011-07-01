@@ -113,8 +113,7 @@ if (zk.ie8_) //ie8 only
 	}
 	function _dissel0(evt) {
 		evt = evt || window.event;
-		var n = evt.srcElement;
-		return jq.nodeName(n, "textarea", "input") && (n.type == "text" || n.type == "password");
+		return zk(evt.srcElement).isInput();
 	}
 	function _ensel() {
 		this.onselectstart = null;
