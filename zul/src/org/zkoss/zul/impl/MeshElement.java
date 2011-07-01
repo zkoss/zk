@@ -99,7 +99,7 @@ abstract public class MeshElement extends XulElement implements Paginated, org.z
 	public void setSizedByContent(boolean byContent) {
 		if(_sizedByContent != byContent) {
 			_sizedByContent = byContent;
-			smartUpdate("sizedByContent", byContent);
+			smartUpdate("hflex", byContent ? "min" : getHflex()); // sizedByContent is now implemented by hflex="min".
 		}
 	}
 
@@ -213,7 +213,7 @@ abstract public class MeshElement extends XulElement implements Paginated, org.z
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (isSizedByContent())
-			renderer.render("hflex", "min");
+			renderer.render("hflex", "min"); // sizedByContent is now implemented by hflex="min".
 		if (_span != null)
 			renderer.render("span", _span);
 		if (isAutopaging())
