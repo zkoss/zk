@@ -136,8 +136,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			 * if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
 				--wds[maxj];*/
 		} else {
-			var tr = wgt._getSigRow();
-			if (tr) {
+			var tr;
+			if (tr = wgt._getSigRow()) {
 				for (var cells = tr.cells, i = cells.length; i--;) {
 					var wd = cells[i].offsetWidth;
 					wds[i] = wd;
