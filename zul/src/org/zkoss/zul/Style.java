@@ -16,20 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
-import java.io.Writer;
-
 import org.zkoss.lang.Objects;
-import org.zkoss.util.media.Media;
-import org.zkoss.util.media.AMedia;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
-
-import org.zkoss.zul.impl.Utils;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.
@@ -61,8 +52,6 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	/** _src and _content cannot be nonnull at the same time. */
 	private String _content;
 	private String _media;
-	/** Count the version of {@link #_content}. */
-	private byte _cntver;
 
 	public Style() {
 		super.setVisible(false);
@@ -173,9 +162,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		if (_src != null || !Objects.equals(_content, content)) {
 			_content = content;
 			_src = null;
-			++_cntver;
-			smartUpdate("src", new EncodedURL());
-				//AU: always uses src to solve IE/Chrome/... issue
+			smartUpdate("content", _content);
 		}
 	}
 
@@ -184,33 +171,12 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		boolean gened = false;
+		render(renderer, "media", _media);
 		final String cnt = getContent();
-			//allow derive to override getContent()
-		if (cnt != null) {
-			final HtmlPageRenders.RenderContext rc =
-				HtmlPageRenders.getRenderContext(null);
-			if (rc != null && rc.perm != null) {
-				final Writer out = rc.perm;
-					//don't use rc.temp which will be replaced with widgets later
-				out.write("\n<style id=\"");
-				out.write(getUuid());
-				out.write("-css\" type=\"text/css\"");
-				if (_media != null) {
-					out.write(" media=\"");
-					out.write(_media);
-					out.write('"');
-				}
-				out.write(">\n");
-				out.write(cnt);
-				out.write("\n</style>\n");
-				gened = true;
-			}
-		}
-		if (!gened) {
+		if (cnt != null)
+			render(renderer, "content", cnt);
+		else
 			render(renderer, "src", getEncodedURL());
-			render(renderer, "media", _media);
-		}
 	}
 
 	//Component//
@@ -223,26 +189,9 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		return false;
 	}
 
-	//-- ComponentCtrl --//
-	public Object getExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl implements DynamicMedia {
-		//-- DynamicMedia --//
-		public Media getMedia(String pathInfo) {
-			return new AMedia("css", "css", "text/css;charset=UTF-8", getContent());
-		}
-	}
-
 	/** Returns the encoded URL of the image (never null).
 	 */
 	private String getEncodedURL() {
-		if (getContent() != null) //allow derived to override getContent()
-			return Utils.getDynamicMediaURI(this, _cntver, "css", "css");
-
 		if (_src != null) {
 			final Desktop dt = getDesktop();
 			if (dt != null)
