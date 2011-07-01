@@ -33,7 +33,7 @@
 		</treechildren>
 	</tree>
 	<separator bar="true" spacing="50px"/>
-	<grid hflex="min">
+	<grid>
 		<columns>
 			<column />
 		</columns>
@@ -41,7 +41,7 @@
 			<row>Row Content</row>
 		</rows>
 	</grid>
-	<listbox hflex="min">
+	<listbox>
 		<listhead>
 			<listheader/>
 		</listhead>
@@ -49,7 +49,7 @@
 			<listcell>Listitem Content</listcell>
 		</listitem>
 	</listbox>
-	<tree hflex="min">
+	<tree>
 		<treecols>
 			<treecol />
 		</treecols>
