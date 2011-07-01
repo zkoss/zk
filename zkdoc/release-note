@@ -57,6 +57,9 @@ ZK 5.0.8
   3339315: Mesh Element with hflex min causes zero width
   3316035: Grid with sizedByContent and hflex:min display wrong
   3345636: Chrome, Set hflex="1" to Datebox do not align with Textbox
+  3309975: Textbox in a  draggable component get selection while focus 
+  3310017: The textbox's cursor position cannot be changed
+  
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
