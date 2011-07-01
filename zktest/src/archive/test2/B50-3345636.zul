@@ -1,0 +1,43 @@
+<zk>
+	In both Grids, the Textbox should have (almost) the same width as datebox in Chrome/Safari.
+	<grid hflex="min">
+		<columns>
+			<column hflex="min" align="right" />
+			<column hflex="min" />
+		</columns>
+		<rows>
+			<row>
+				<label value="Name:" />
+				<textbox />
+			</row>
+			<row>
+				<label value="Birthday:" />
+				<datebox hflex="1" />
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<columns>
+			<column hflex="min" align="right" />
+			<column hflex="min" />
+		</columns>
+		<rows>
+			<row>
+				<cell>
+					<label value="Name:" />
+				</cell>
+				<cell>
+					<textbox />
+				</cell>
+			</row>
+			<row>
+				<cell>
+					<label value="Birthday:" />
+				</cell>
+				<cell>
+					<datebox hflex="1" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+</zk>
