@@ -618,10 +618,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
-				} else {
-					this._lastRawValVld = value;
-					this.fire('onError', {value: val});
 				}
+				this._lastRawValVld = value;
+				this.fire('onError', {value: val});
 			}
 			return {value: val};
 		} finally {
