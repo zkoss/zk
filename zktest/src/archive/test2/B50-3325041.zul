@@ -14,21 +14,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	try to type floating number like "1.2", "1.55" in the double spinner.
+	try to type floating number like "1.23" in the double spinner.
 	<separator/>
 	If floating number can't type in, it's a bug
 	<separator/>
-	click button test1, see if the alerted value is the same as input of doublespinner 
+	click button next to input, see if the alerted value is the same as valued inputted. 
 	<separator/>
-	try to type floating number like "1.2", "1.55" in the doublebox.
+	follow above instruction for decimalbox and doublebox too.
 	<separator/>
-	If floating number can't type in, it's a bug
-	<separator/>
-	click button test2, see if the alerted value is the same as input of doublebox 
-	<separator/>
+	
 	doublespinner : <doublespinner id="ds"/>
 	<button label="test1" onClick='alert(ds.value)'/>
 	<separator/> 
 	decimalbox: <decimalbox id="db"></decimalbox>
 	<button label="test2" onClick='alert(db.value)'/>
+	<separator/> 
+	doublebox: <doublebox id="doub"></doublebox>
+	<button label="test3" onClick='alert(doub.value)'/>
 </zk>
