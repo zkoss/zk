@@ -1,0 +1,34 @@
+<!--
+B50-3330762.zul
+
+{{IS_NOTE
+ Purpose:
+  
+ Description:
+  
+ History:
+  Mon Jul 4 10:21:01 TST 2011, Created by peterkuo
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<separator/>
+		input "1" in spinner and click button "test"
+	<separator/>
+		see if exception thrown, there should be no exception in console
+	<separator/>
+		click the up arrow, the value change to 1.1
+	<separator/>
+		button "test"
+	<separator/>
+		see if exception thrown, there should be no exception in console
+	<separator/>
+	<window apply="org.zkoss.zktest.test2.B3330762">
+		<doublespinner id="ds" step="0.1"/>
+		<button id="btn" label="test" />
+	</window>
+</zk>
