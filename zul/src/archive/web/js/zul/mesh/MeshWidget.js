@@ -37,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn)
-			wgtn.style.whiteSpace = 'pre';//'nowrap';
+			wgtn.style.whiteSpace = (zk.ff && zk.ff > 3) ? 'nowrap' : 'pre'; // B50-3346235: pre cause extra space in FF5+
 		var eheadtblw,
 			efoottblw,
 			ebodytblw,
