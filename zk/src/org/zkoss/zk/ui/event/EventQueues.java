@@ -105,8 +105,8 @@ public class EventQueues {
 	 * <li>This method can be called only in an activated execution,
 	 * i.e., {@link org.zkoss.zk.ui.Executions#getCurrent} not null.
 	 * If you want to use it without an execution, please use
-	 * 	{@link #lookup(String, String, boolean)} or {@link #lookup(String, WebApp, boolean)}
-	 * instead.</li>
+	 * 	{@link #lookup(String, Session, boolean)} or {@link #lookup(String, WebApp, boolean)}
+	 * instead (depending on your scope).</li>
 	 * </ul>
 	 *
 	 * @param name the queue name.
