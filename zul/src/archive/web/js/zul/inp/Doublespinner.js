@@ -49,6 +49,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
+	$init: function () {
+		this.$supers('$init', arguments);
+		//bug B50-3325041
+		this._allowKeys = _allowKeys;
+	},
 	$define: {
 		/** Return the step of double spinner
 		 * @return double
@@ -182,10 +187,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, this._allowKeys || _allowKeys))
-			this.$supers('doKeyPress_', arguments);
-	},
 	doKeyDown_: function(evt){
 		var inp = this.inp;
 		if (inp.disabled || inp.readOnly)

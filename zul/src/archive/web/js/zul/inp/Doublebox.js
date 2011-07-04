@@ -25,6 +25,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-doublebox.
  */
 zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
+	$init: function () {
+		this.$supers('$init', arguments);
+		//bug B50-3325041
+		this._allowKeys = _allowKeys;
+	},
 	setLocalizedSymbols: function (val) {
 		var old = this._localizedSymbols;
 		this.$supers('setLocalizedSymbols', arguments);
@@ -104,10 +109,6 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-doublebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, this._allowKeys || _allowKeys))
-			this.$supers('doKeyPress_', arguments);
-	},	
 	bind_: function(){
 		this.$supers(zul.inp.Doublebox, 'bind_', arguments);
 		if (this.inRoundedMold())

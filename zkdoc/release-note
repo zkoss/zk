@@ -63,6 +63,7 @@ ZK 5.0.8
   3330762: DoubleSpinner's ClassCastException on value get
   3348943: ZK JPA cause Exception
   3316030: Column with hflex:min, but it is not real displayed as min 
+  3325041: doublespinner can't type in floating number
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

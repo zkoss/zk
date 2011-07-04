@@ -24,6 +24,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
 zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
+	$init: function () {
+		this.$supers('$init', arguments);
+		//bug B50-3325041
+		this._allowKeys = _allowKeys;
+	},	
 	$define: { //zk.def
 		/** Returns the precision scale.
 		 * @return int
@@ -73,10 +78,6 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-decimalbox" + (this.inRoundedMold() ? "-rounded": "");
-	},
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, _allowKeys))
-			this.$supers('doKeyPress_', arguments);
 	},
 	marshall_: function(val) {
 		return val ? val.$toString() : val;
