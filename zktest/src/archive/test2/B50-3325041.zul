@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3325041.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 4 12:02:34 TST 2011, Created by peterkuo
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	try to type floating number like "1.2", "1.55" in the double spinner.
+	<separator/>
+	If floating number can't type in, it's a bug
+	<separator/> 
+	<doublespinner id="ds"/>
+	<button label="test" onClick='alert(ds.value)'/>
+</zk>
