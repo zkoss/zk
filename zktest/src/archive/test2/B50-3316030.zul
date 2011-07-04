@@ -1,0 +1,19 @@
+<zk>
+	The Grid's width should be just large enough to hold its content.
+	<grid hflex="min">
+		<columns>
+			<column hflex="min" />
+			<column hflex="min" />
+		</columns>
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+</zk>
