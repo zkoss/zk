@@ -61,6 +61,7 @@ ZK 5.0.8
   3310017: The textbox's cursor position cannot be changed
   3313028: Grid hflex fail while the label in a div with FF4
   3330762: DoubleSpinner's ClassCastException on value get
+  3348943: ZK JPA cause Exception
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
