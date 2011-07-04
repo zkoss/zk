@@ -1,0 +1,20 @@
+<zk>
+	The cell should be just as width as it content (see the gray background).
+	<grid>
+		<columns>
+			<column hflex="min" label="1" />
+		</columns>
+		<rows>
+			<row>
+				<div hflex="min">
+					<label value="Appointment" />
+				</div>
+			</row>
+			<row>
+				<div hflex="min">
+					<label value="Appointment" />
+				</div>
+			</row>
+		</rows>
+	</grid>
+</zk>

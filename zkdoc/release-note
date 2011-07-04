@@ -59,7 +59,7 @@ ZK 5.0.8
   3345636: Chrome, Set hflex="1" to Datebox do not align with Textbox
   3309975: Textbox in a  draggable component get selection while focus 
   3310017: The textbox's cursor position cannot be changed
-  
+  3313028: Grid hflex fail while the label in a div with FF4
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
