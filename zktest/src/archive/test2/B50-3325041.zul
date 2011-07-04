@@ -17,7 +17,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	try to type floating number like "1.2", "1.55" in the double spinner.
 	<separator/>
 	If floating number can't type in, it's a bug
+	<separator/>
+	click button test1, see if the alerted value is the same as input of doublespinner 
+	<separator/>
+	try to type floating number like "1.2", "1.55" in the doublebox.
+	<separator/>
+	If floating number can't type in, it's a bug
+	<separator/>
+	click button test2, see if the alerted value is the same as input of doublebox 
+	<separator/>
+	doublespinner : <doublespinner id="ds"/>
+	<button label="test1" onClick='alert(ds.value)'/>
 	<separator/> 
-	<doublespinner id="ds"/>
-	<button label="test" onClick='alert(ds.value)'/>
+	decimalbox: <decimalbox id="db"></decimalbox>
+	<button label="test2" onClick='alert(db.value)'/>
 </zk>
