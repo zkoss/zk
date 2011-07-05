@@ -735,20 +735,8 @@ jq(function() {
 		if (bRmDesktop || zk.pfmeter) {
 			try {
 				var dts = zk.Desktop.all;
-				for (var dtid in dts) {
-					var dt = dts[dtid];
-					jq.ajax(zk.$default({
-						url: zk.ajaxURI(null, {desktop:dt,au:true}),
-						data: {dtid: dtid, cmd_0: bRmDesktop?"rmDesktop":"dummy", opt_0: "i"},
-						beforeSend: function (xhr) {
-							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
-						},
-						//2011/04/22 feature 3291332
-						//Use sync request for chrome and safari.
-						//Note: when pressing F5, the request's URL still arrives before this even async:false
-						async: !zk.safari
-					}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
-				}
+				for (var dtid in dts)
+					zAu._rmDesktop(dts[dtid], !bRmDesktop);
 			} catch (e) { //silent
 			}
 		}

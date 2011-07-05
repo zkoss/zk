@@ -4843,11 +4843,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			}, timeout); //Liferay on IE will create widgets later
 		else {
 			for (var dtid in dts)
-				if (!_exists(dt = dts[dtid])) { //removed
+				if (!_exists(dt = dts[dtid]) && dt.firstChild) { //to be safe, don't remove if no child)
 					delete dts[dtid];
 					--Desktop._ndt;
 					if (Desktop._dt == dt)
 						Desktop._dt = null;
+					zAu._rmDesktop(dt);
 				}
 
 			if (!Desktop._dt)

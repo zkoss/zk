@@ -583,6 +583,21 @@ zAu = {
 		}
 	},
 
+	//remove desktop (used in mount.js and wiget.js)
+	_rmDesktop: function (dt, dummy) {
+		jq.ajax(zk.$default({
+			url: zk.ajaxURI(null, {desktop:dt,au:true}),
+			data: {dtid: dt.id, cmd_0: dummy ? "dummy": "rmDesktop", opt_0: "i"},
+			beforeSend: function (xhr) {
+				if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
+			},
+			//2011/04/22 feature 3291332
+			//Use sync request for chrome and safari.
+			//Note: when pressing F5, the request's URL still arrives before this even async:false
+			async: !zk.safari
+		}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
+	},
+
 	////Ajax////
 	/** Processes the AU response sent from the server.
 	 * <p>Don't call it directly at the client.
