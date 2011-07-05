@@ -502,7 +502,7 @@ if [ "$javadocAll" = "true" ] ; then
 	cp zk/version zk/format javadoctmp
 	invoke_ant javadoc javadoctmp ZK
 	rm -rf javadoctmp
-	exit 1
+	exit 0
 else
 	echo "targets: ${targetList}"
 	for target in $targetList ; do
