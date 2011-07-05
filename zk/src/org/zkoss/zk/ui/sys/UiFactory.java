@@ -35,6 +35,16 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
  * to {@link PageDefinition}.
  *
+ * <p>To customize the implementation of {@link WebApp}, please
+ * specify <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-class_Element">web-app-class</a>
+ * instead (of implementing this interface).
+ *
+ * <p>Rather than implementing this interface from scratch, you could
+ * extend from {@link org.zkoss.zk.ui.http.SimpleUiFactory}
+ * (for non-clustering environment)
+ * or {@link org.zkoss.zk.ui.http.SerializableUiFactory}
+ * (for clustering environment).
+ *
  * @author tomyeh
  */
 public interface UiFactory {
