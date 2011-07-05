@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
-		_syncdt = jq.now() + 60000, //when zk.Desktop.sync() shall be called
+		_syncdt, //timer ID to sync destkops
 		_rdque = [], _rdtid, //async rerender's queue and timeout ID
 		_ignCanActivate; //whether canActivate always returns true
 
@@ -206,6 +206,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!gs.length) delete _globals[wgt.id];
 		}
 	}
+
+	//check if a desktop exists
+	function _exists(wgt) {
+		if (document.getElementById(wgt.uuid)) //don't use $n() since it caches
+			return true;
+
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			if (_exists(wgt))
+				return  true;
+	}
+
 	function _fireClick(wgt, evt) {
 		if (!wgt.shallIgnoreClick_(evt) && 
 			!wgt.fireX(evt).stopped && evt.shallStop) {
@@ -4745,11 +4756,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
-		var Desktop = zk.Desktop, dts = Desktop.all, dt = jq.now();
-		if (dt > _syncdt) { //Liferay+IE: widgets are created later so don't sync at beginning
-			_syncdt = dt + 60000;
-			Desktop.sync();
-		}
+		var Desktop = zk.Desktop, dts = Desktop.all, dt;
 
 		this._aureqs = [];
 		//Sever side effect: this.desktop = this;
@@ -4765,14 +4772,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			this.stateless = stateless;
 			dts[dtid] = this;
 			++Desktop._ndt;
-			if (!Desktop._dt) Desktop._dt = this; //default desktop
 		}
-	},
-	_exists: function () {
-		if (this._pguid) //_pguid not assigned at beginning
-			for (var w = this.firstChild; w; w = w.nextSibling) //under JSP, page.$n is null so test all
-				if (w.$n())
-					return true;
+
+		Desktop._dt = dt||this; //default desktop
+		Desktop.sync(60000); //wait since liferay on IE delays the creation
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
@@ -4822,18 +4825,36 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	_ndt: 0, //used in au.js/dom.js
 	/** Checks if any desktop becomes invalid, and removes the invalid desktops.
 	 * This method is called automatically when a new desktop is added. Application developers rarely need to access this method.
+	 * @param timeout how many miliseconds to wait before doing the synchronization
 	 * @return zk.Desktop the first desktop, or null if no desktop at all. 
 	 */
-	sync: function () {
+	sync: function (timeout) {
 		var Desktop = zk.Desktop, dts = Desktop.all, dt;
-		if ((dt = Desktop._dt) && !dt._exists()) //removed
-			Desktop._dt = null;
-		for (var dtid in dts) {
-			if (!(dt = dts[dtid])._exists()) { //removed
-				delete dts[dtid];
-				--Desktop._ndt;
-			} else if (!Desktop._dt)
-				Desktop._dt = dt;
+
+		if (_syncdt) {
+			clearTimeout(_syncdt);
+			_syncdt = null;
+		}
+
+		if (timeout >= 0)
+			_syncdt = setTimeout(function () {
+				_syncdt = null;
+				Desktop.sync();
+			}, timeout); //Liferay on IE will create widgets later
+		else {
+			for (var dtid in dts)
+				if (!_exists(dt = dts[dtid])) { //removed
+					delete dts[dtid];
+					--Desktop._ndt;
+					if (Desktop._dt == dt)
+						Desktop._dt = null;
+				}
+
+			if (!Desktop._dt)
+				for (var dtid in dts) {
+					Desktop._dt = dts[dtid];
+					break;
+				}
 		}
 		return Desktop._dt;
 	}

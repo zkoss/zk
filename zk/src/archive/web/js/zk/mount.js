@@ -411,8 +411,7 @@ function zkmprops(uuid, props) {
 			if (wi) {
 				if (wi[0] === 0) { //page
 					var props = wi[2];
-					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
-						._pguid = wi[1];
+					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"));
 					if (owner = zk.cut(props, "ow"))
 						owner = Widget.$(owner);
 				}

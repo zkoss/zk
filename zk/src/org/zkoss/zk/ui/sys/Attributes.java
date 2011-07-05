@@ -32,8 +32,9 @@ public class Attributes {
 	public static final String CLIENT_ROD = "org.zkoss.zul.client.rod";
 
 	//Execution/request//
-	/** The execution attribute used to control how to {@link org.zkoss.zk.ui.sys.PageCtrl#redraw}
-	 * a page. There are three different values: <code>destkop</code>,
+	/** The execution attribute used to control how to redraw
+	 * a page ({@link org.zkoss.zk.ui.sys.PageCtrl#redraw}).
+	 * There are three different values: <code>destkop</code>,
 	 * <code>page</code>, and <code>complete</code>.
 	 *
 	 * <p>Default: null (means auto). In other words, <code>desktop</code> is assumed
@@ -47,12 +48,7 @@ public class Attributes {
 	 * <code>zk.redrawCtrl</code>. For example, if you are using
 	 * other technology, say jQuery, and want to load a ZUL page dynamically; as shown below:
 <pre><code>
-  jQuery.ajax({
-    url: "z5-load-1.zul?zk.redrawCtrl=page",
-    success: function (html) {
-      jQuery("#myDiv").append(html);
-    }
-  });
+	$("#pos").load("frag.zul?zk.redrawCtrl=page");
 </code></pre>
 	 *
 	 * <p>If you prefer to draw the desktop with the page, you can set the
@@ -100,6 +96,10 @@ public class Attributes {
 	 * this attribute to save the use of memroy.
 	 *
 	 * <pre><code>request.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);</code></pre>
+	 *
+	 * <p>Since 5.0.8, if the zk.redrawCtrl parameter is specified with page
+	 * (as described in {@link #PAGE_REDRAW_CONTROL}),
+	 * it implies {@link #NO_CACHE}
 	 *
 	 * @since 3.0.1
 	 */

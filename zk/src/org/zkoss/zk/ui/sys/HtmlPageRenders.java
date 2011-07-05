@@ -301,7 +301,8 @@ public class HtmlPageRenders {
 			}
 		}
 
-		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null,
+		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null
+			&& !"page".equals(ExecutionsCtrl.getPageRedrawControl(exec)),
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
@@ -959,6 +960,7 @@ public class HtmlPageRenders {
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
+				.append("','").append(desktop.getRequestPath())
 				.append("');").append(outSpecialJS(desktop))
 				.append("</script>\n");
 		}
