@@ -227,9 +227,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
-			var n = this.$n()
+			var n = this.$n();
 			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
+		this.$supers('doMouseOut_', arguments);
 	},
 	ignoreDrag_: function (pt) {
 		if (this.parent.isSizable()) {

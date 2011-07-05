@@ -93,18 +93,11 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		return img ? label ? img + ' ' + label: img: label;
 	},
 	doMouseOver_: function () {
-		var himg = this._hoverImage;
-		if (himg) {
-			var n = this.getImageNode();
-			if (n) n.src = himg;
-		}
+		this._updateImageNode(true);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
-		if (this._hoverImage) {
-			var n = this.getImageNode();
-			if (n) n.src = this._image;
-		}
+		this._updateImageNode();
 		this.$supers('doMouseOut_', arguments);
 	},
 	/**
@@ -117,6 +110,17 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			if (n) this._eimg = jq(n).find('img:first')[0];
 		}
 		return this._eimg;
+	},
+	_updateImageNode: function (inHover) {
+		var n = this.getImageNode();
+		if (n && this._hoverImage)
+			this.changeImageNodeSrc_(n, inHover ? this._hoverImage : this._image);
+	},
+	/**
+	 * Change image URI of the image node.
+	 */
+	changeImageNodeSrc_: function (n, img) {
+		n.src = img;
 	},
 	//@Override
 	clearCache: function () {

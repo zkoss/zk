@@ -97,13 +97,13 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		jq(n).removeClass(zcls + '-over')
 			.removeClass(zcls + '-over-seld');
 	},
-
 	doClick_: function (evt) {
 		if (!this._disabled) {
 			this._doMouseOut();
 
 			var cb = this.parent;
 			cb._select(this, {sendOnSelect:true, sendOnChange: true});
+			this._updateImageNode();
 			cb.close({sendOnOpen:true});
 			
 			// Fixed the onFocus event is triggered too late in IE.
@@ -112,7 +112,6 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		}
 	},
-
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (this._disabled && (!no || !no.zclass)) {
