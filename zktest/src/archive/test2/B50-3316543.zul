@@ -1,0 +1,10 @@
+<zk>
+	You should see both 'mdminfile' and 'wtbinfile' below. Otherwise it is a bug.
+	<separator bar="true" />
+	<div>
+		${labels.mdm}
+	</div>
+	<div>
+		${labels.wtb}
+	</div>
+</zk>

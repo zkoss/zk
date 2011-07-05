@@ -27,6 +27,7 @@ import java.io.InputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
@@ -603,11 +604,15 @@ public class ConfigParser {
 
 		s = el.getElementValue("crawlable", true);
 		if (s != null) config.setCrawlable(!"false".equals(s));
-
-		s = el.getElementValue("label-location", true);
-		if (s != null && s.length() != 0)
-			config.addLabelLocation(s);
-
+		
+		//bug B50-3316543
+		for (Iterator it = el.getElements("label-location").iterator();it.hasNext();) {
+			final Element elinner = (Element)it.next();
+			final String path = elinner.getText(true);
+			if (!Strings.isEmpty(path))
+				config.addLabelLocation(path);
+		}
+		
 		Class cls = parseClass(el, "upload-charset-finder-class",
 			CharsetFinder.class);
 		if (cls != null)
