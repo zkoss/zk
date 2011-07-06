@@ -1,11 +1,5 @@
 <zk>
-<html>
-<![CDATA[
-<ol>
-<li>If the bottom side of the content is not chopped half way, it is OK</li>
-</ol>
-]]>
-</html>
+If the bottom side of the content is not chopped half way, it is OK
 <window hflex="min" vflex="min" title="my window">
 	<borderlayout hflex="min" vflex="min">
 		<west hflex="min" vflex="min">

@@ -13,18 +13,19 @@
 	<separator/>
 	6. Click "both" radiobox, the page size shall re-calculate and there should be NO vertical scrollbar appear in grid. Both on top and bottom you can see the paging bar.
 	<separator/>
+	<vlayout>
 	<radiogroup 
 		onCheck="listbox.pagingPosition = self.selectedItem.label">
 		<radio label="top" />
 		<radio label="bottom" checked="true" />
 		<radio label="both" />
 	</radiogroup>
-	<separator/>
 	<button label="Change Paging Mold">
 		<attribute name="onClick">
 		listbox.pagingChild.mold = "os".equals(listbox.pagingChild.mold) ? "default" : "os";
 		</attribute>
 	</button>
+	</vlayout>
 	<zscript>
 		List items = new org.zkoss.zktest.test2.BigList(1000); //a big list of Integer
 	</zscript>

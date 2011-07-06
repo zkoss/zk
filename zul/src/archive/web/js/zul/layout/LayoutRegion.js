@@ -306,6 +306,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-" + this.getPosition() : this._zclass;
 	},
 	//-- super --//
+	getMarginSize_: function (attr) {
+		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);  
+	},
 	setWidth: function (width) {
 		this._width = width;
 		var real = this.$n('real');

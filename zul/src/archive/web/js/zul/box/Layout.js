@@ -176,6 +176,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			}
 		}
 	},
+	getChildMinSize_: function (attr, cwgt) { //'w' for width or 'h' for height
+		var zkc = zk(cwgt.$n().parentNode);
+		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth();
+	},
 	beforeChildrenFlex_: function(child) {
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete child._flexFixed;
@@ -250,7 +254,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var cwgt = vflexs.shift(), 
 				vsz = (vert ? (cwgt._nvflex * hgh / vflexsz) : hgh) | 0, //cast to integer
 				offtop = cwgt.$n().offsetTop,
-				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
+				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2)
+							: /** B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
+			 
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = vsz;
 			
@@ -262,7 +268,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				offtop = cwgt.$n().offsetTop,
-				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2)
+							: /** B50-3236331.zul */(zk.ie < 8 ? 1 : 0));
 			cwgt.setFlexSize_({height:isz});
 			cwgt._vflexsz = lastsz;
 			var chdex = cwgt.$n('chdex');

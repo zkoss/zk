@@ -765,10 +765,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var n = this.$n();
 				
 				n.style.height = '';
-				if (this.ebody) {
-					// check if this or this.parent has _vflex='min' should reset an empty string for B50-2976912.zul
-					this.ebody.style.height = (this._vflex != 'min' && (!this.parent || this.parent._vflex != 'min')) ? '0px' : '';
-				}
 				n._lastsz = null;
 			}
 		}
