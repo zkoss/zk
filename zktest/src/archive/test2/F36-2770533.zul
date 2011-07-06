@@ -1,4 +1,4 @@
-<window apply="org.zkoss.zktest.test2.ZscriptComposer">
+<window apply="org.zkoss.zktest.test2.ZScriptComposer">
 	<html>
 	<![CDATA[
 	<ol>

@@ -278,8 +278,13 @@ public class EventProcessor {
 	public EventListener getEventListener() {
 		return _listener;
 	}
-	public ZScript getEventZscript() {
+	public ZScript getEventZScript() {
 		return _zscript;
+	}
+	/** @deprecated As of release 5.0.8, replaced with {@link #getEventZScript}
+	 */
+	public ZScript getEventZscript() {
+		return getEventZScript();
 	}
 	public void update(Method mtd, EventListener ln, ZScript zs) {
 		_method = mtd;
