@@ -66,6 +66,7 @@ ZK 5.0.8
   3325041: doublespinner can't type in floating number
   3316543: Only load the first property file
   3304954: HoverImage doesn't show up in menus
+  3340841: Listitem doesn't show selection if disabled
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

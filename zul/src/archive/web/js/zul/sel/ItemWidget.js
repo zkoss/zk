@@ -150,9 +150,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = this.isDisabled() ? zcls + '-disd' : this.isSelected() ? zcls + '-seld' : '';
-			if (added) scls += (scls ? ' ': '') + added;
+			var zcls = this.getZclass();
+			if (this.isDisabled())
+				scls += (scls ? ' ': '') + zcls + '-disd';
+			if (this.isSelected())
+				scls += (scls ? ' ': '') + zcls + '-seld';
 		}
 		return scls;
 	},

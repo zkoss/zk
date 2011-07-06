@@ -37,11 +37,14 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		return this.parent ? this.parent.treechildren : null;
 	},
 	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
-		if (!no || !no.zclass) {
-			var added = this.parent ? this.parent.isDisabled() ? this.getZclass() + '-disd'
-					: this.parent.isSelected() ? this.getZclass() + '-seld' : '' : '';
-			if (added) scls += (scls ? ' ': '') + added;
+		var scls = this.$supers('domClass_', arguments),
+			p = this.parent;
+		if (p && (!no || !no.zclass)) {
+			var zcls = this.getZclass();
+			if (p.isDisabled())
+				scls += (scls ? ' ': '') + zcls + '-disd';
+			if (p.isSelected())
+				scls += (scls ? ' ': '') + zcls + '-seld';
 		}
 		return scls;
 	},
