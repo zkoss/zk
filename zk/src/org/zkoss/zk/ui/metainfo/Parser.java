@@ -998,8 +998,6 @@ public class Parser {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
 
-		if (parent instanceof PageDefinition)
-			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
 		if (annHelper.clear())
 			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator());
 

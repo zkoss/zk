@@ -87,8 +87,7 @@ implements Condition, java.io.Serializable {
 			}
 		}
 
-		_scope = scope == null ?
-			Component.COMPONENT_SCOPE: Components.getScope(scope);
+		_scope = scope == null ? -1: Components.getScope(scope);
 		_cond = cond;
 	}
 	/** The same as AttributesInfo(evalr, attrs, scope, "none", cond).
@@ -108,11 +107,14 @@ implements Condition, java.io.Serializable {
 		this(evalr, attrs, scope, null, cond);
 	}
 
-	/** Returns the scope.
+	/** Returns the scope, or null if it is not assoicated with a scope.
+	 * <p>Notice that, prior to 5.0.8, "component" is returned if
+	 * it is not associated with a scope (which is not correct since
+	 * this info might be associated with a page).
 	 * @since 3.0.6
 	 */
 	public String getScope() {
-		return Components.scopeToString(_scope);
+		return _scope != -1 ? Components.scopeToString(_scope): null;
 	}
 	/** Returns the composite type: "none", "list" or "map".
 	 * @since 3.0.6
@@ -133,7 +135,8 @@ implements Condition, java.io.Serializable {
 				final String name = (String)me.getKey();
 				final Object value = me.getValue();
 				comp.setAttribute(
-					name, Utils.evaluateComposite(eval, comp, value), _scope);
+					name, Utils.evaluateComposite(eval, comp, value),
+					_scope != -1 ? _scope: Component.COMPONENT_SCOPE);
 			}
 		}
 	}
@@ -148,7 +151,8 @@ implements Condition, java.io.Serializable {
 				final String name = (String)me.getKey();
 				final Object value = me.getValue();
 				page.setAttribute(name,
-					Utils.evaluateComposite(eval, page, value), _scope);
+					Utils.evaluateComposite(eval, page, value),
+					_scope != -1 ? _scope: Component.PAGE_SCOPE);
 			}
 		}
 	}
