@@ -110,7 +110,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return cur.left >= wdh || cur.top < hgh;
 		}
 	} 
-var zFlex = { //static methods
+zFlex = { //static methods
 	fixFlexX: function (ctl, opts, resize) {
 		var wgt = this;
 		//avoid firedown("onShow") firedown("onSize") calling in again
@@ -156,7 +156,6 @@ var zFlex = { //static methods
 
 	},
 	fixFlex: function () {
-		_cnt++;
 		var wgt = this;
 		//avoid firedown("onSize") calling in again
 		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
