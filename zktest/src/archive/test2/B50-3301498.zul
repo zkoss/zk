@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3301498.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Fri Jul 5 16:57:22 TST 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	<window title="Layout Demo" width="600px" border="normal">
+	<separator/>
+	click the button "Add Content"
+	<separator/>
+	content should be filled, vertical scrollbar appear in Grid, Listbox, Tree
+	<separator/>
+	Content of each column should align correctly. 
+	<separator/>
+		<vlayout>
+			Grid:
+			<grid id="grid" height="100px">
+				<columns>
+					<column label="Column 1" />
+					<column label="Column 2" />
+					<column label="Column 3" />
+					<column label="Column 4" />
+				</columns>
+				<rows id="rows"></rows>
+			</grid>
+			Listbox:
+			<listbox id="listbox" height="100px">
+				<listhead>
+					<listheader label="Column 1" />
+					<listheader label="Column 2" />
+					<listheader label="Column 3" />
+					<listheader label="Column 4" />
+				</listhead>
+			</listbox>
+			Tree:
+			<tree id="tree" height="100px">
+				<treecols>
+					<treecol label="Column 1" />
+					<treecol label="Column 2" />
+					<treecol label="Column 3" />
+					<treecol label="Column 4" />
+				</treecols>
+				<treechildren id="treechildren"/>
+			</tree>
+		</vlayout>
+		<button label="Add content">
+			<attribute name="onClick"><![CDATA[
+	grid.setVisible(true);
+	for (int i = 0; i < 4; i++) {
+		Row r = new Row();
+		r.appendChild(new Label("Cell"));
+		r.appendChild(new Label("Cell"));
+		r.appendChild(new Label("Cell"));
+		r.appendChild(new Label("Cell"));
+		rows.appendChild(r);
+
+		Listitem item = new Listitem();
+		item.appendChild(new Listcell("Cell"));
+		item.appendChild(new Listcell("Cell"));
+		item.appendChild(new Listcell("Cell"));
+		item.appendChild(new Listcell("Cell"));
+		listbox.appendChild(item);
+		
+		Treeitem treeitem = new Treeitem();
+		Treerow treerow = new Treerow();
+		treeitem.appendChild(treerow);
+		treerow.appendChild(new Treecell("cell"));
+		treerow.appendChild(new Treecell("cell"));
+		treerow.appendChild(new Treecell("cell"));
+		treerow.appendChild(new Treecell("cell"));
+		treechildren.appendChild(treeitem);
+	}
+]]></attribute>
+		</button>
+	</window>
+</zk>
