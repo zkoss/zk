@@ -333,6 +333,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <dd>Insert</dd>
 	 * <dt>#del</dt>
 	 * <dd>Delete</dd>
+	 * <dt>#bak</dt>
+	 * <dd>Backspace</dd> 
 	 * <dt>#left</dt>
 	 * <dd>Left arrow</dd>
 	 * <dt>#right</dt>
@@ -407,6 +409,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				else if ("down" == s) cc = 40;
 				else if ("ins" == s) cc = 45;
 				else if ("del" == s) cc = 46;
+				else if ("bak" == s) cc = 8;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
@@ -560,6 +563,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			return;
 		case 45: //Ins
 		case 46: //Del
+		case 8: //Backspace
 			break;
 		default:
 			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
