@@ -68,7 +68,8 @@ ZK 5.0.8
   3316543: Only load the first property file
   3304954: HoverImage doesn't show up in menus
   3340841: Listitem doesn't show selection if disabled
-  3316665: setVflex to Window calculate a wrong height 
+  3316665: setVflex to Window calculate a wrong height
+  3306729: vflex of listbox not work well on IE6
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
