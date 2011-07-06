@@ -138,7 +138,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-		if (!isRows && !_noSync)
+						
+		if (!_noSync)//bug#3301498 
 			this._syncSize();  //sync-size required
 	},
 	onChildRemoved_: function (child) {

@@ -106,8 +106,9 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		else jq(this.$n('a')).offset({top: 0, left: 0});
 	},
 	_onTreechildrenAdded: function (tchs) {
+		this._syncSize();//bug#3301498
 		if (!tchs || tchs.parent == this)
-			return; //already being processed by insertBefore
+			return; //the rest is already being processed by insertBefore
 
 		//main the selected status
 		for (var j = 0, items = tchs.getItems(), k = items.length; j < k; ++j)
