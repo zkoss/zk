@@ -70,6 +70,7 @@ ZK 5.0.8
   3340841: Listitem doesn't show selection if disabled
   3316665: setVflex to Window calculate a wrong height
   3306729: vflex of listbox not work well on IE6
+  3310051: Listbox with hflex cannot shorten its width on IE6
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

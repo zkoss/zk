@@ -754,17 +754,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ehead.style.width = "";
 			if (this.efoot) 
 				this.efoot.style.width = "";
-				
+		
+			// Bug 3310051
+			if (zk.ie6_ && this._hflex && this._hflex != 'min') {
+				n.style.width = '';
+			}
 			n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
 		}
 		
 		// Bug 2896474
-		if (zk.ie6_ && this._vflex) {
+		if (zk.ie6_ && this._vflex && this._vflex != 'min') {
 			var hgh = this.getHeight();
 			if (!hgh || hgh == "auto" || hgh.indexOf('%') >= 0) {
 				var n = this.$n();
-				
 				n.style.height = '';
+				if (this.ebody) 
+					this.ebody.style.height = "";
 				n._lastsz = null;
 			}
 		}
