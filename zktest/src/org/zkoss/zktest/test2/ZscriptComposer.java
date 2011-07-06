@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.api.Button;
 
 /**
- * Test whether ZScript variable can be wired.
+ * Test whether zscript's variable can be wired.
  * @author henrichen
  *
  */
