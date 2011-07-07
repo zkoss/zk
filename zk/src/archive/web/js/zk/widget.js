@@ -2803,9 +2803,11 @@ unbind_: function (skipper, after) {
 		n.style.height = jq.px0(h);
 			
 		// fixed for B50-3317729.zul on webkit
-		margins -= zkn.sumStyles("tb", jq.margins);
-		if (margins)
-			n.style.height = jq.px0(h + margins);
+		if (zk.safari) {
+			margins -= zkn.sumStyles("tb", jq.margins);
+			if (margins) 
+				n.style.height = jq.px0(h + margins);
+		}
 	},
 	
 	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
@@ -2817,9 +2819,11 @@ unbind_: function (skipper, after) {
 		n.style.width = jq.px0(w);
 		
 		// fixed for B50-3317729.zul on webkit
-		margins -= zkn.sumStyles("lr", jq.margins);
-		if (margins)
-			n.style.width = jq.px0(w + margins);
+		if (zk.safari) {
+			margins -= zkn.sumStyles("lr", jq.margins);
+			if (margins) 
+				n.style.width = jq.px0(w + margins);
+		}
 	},
 	beforeChildrenFlex_: function(kid) {
 		//to be overridden
