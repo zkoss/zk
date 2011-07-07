@@ -45,11 +45,11 @@ ol, li {
 						<tab label="b"/>
 					</tabs>
 					<tabpanels>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
 					</tabpanels>
 				</tabbox>
@@ -75,11 +75,11 @@ ol, li {
 						<tab label="b"/>
 					</tabs>
 					<tabpanels>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
 					</tabpanels>
 				</tabbox>

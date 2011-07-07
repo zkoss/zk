@@ -24,11 +24,10 @@ function (out) {
 		out.push('<div class="', zcls, '-outer" id="', uuid, '">');
 		if (tab)
 			tab.redraw(out);
-		out.push('<div id="', uuid, '-real"', this.domAttrs_({id:1}), '>',
-				'<div id="', uuid, '-cave">');
+		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1}), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</div></div></div>');
+		out.push('</div></div>');
 
 	} else {//Default Mold
 		out.push('<div', this.domAttrs_(), '>');

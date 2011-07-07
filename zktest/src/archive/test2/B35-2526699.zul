@@ -27,7 +27,7 @@ http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<box>
 	Click the accordion tab and resize the window, the accordion tab should shouldn't float to left. 
-		<window id="mainWindow" border="normal" width="1024px"
+		<window id="mainWindow" border="normal" width="1200px"
 			height="768px" apply="${mainWindowController}">
 			<!-- The height for the include is important or IE will interpret the
 				height as 100% of the screen -->
@@ -44,7 +44,7 @@ http://www.zkoss.org/2005/zul/zul.xsd">
 				</tabs>
 				<tabpanels>
 					<tabpanel>
-						<box width="1004" height="650">
+						<box>
 							<hbox>
 								<window title="My Window"
 									border="normal" width="324px" height="437px">
@@ -55,7 +55,7 @@ http://www.zkoss.org/2005/zul/zul.xsd">
 											<tab label="Test3"></tab>
 										</tabs>
 										<tabpanels>
-											<tabpanel width="313px">
+											<tabpanel>
 												<grid height="50px">
 													<rows>
 														<row>
@@ -69,7 +69,7 @@ http://www.zkoss.org/2005/zul/zul.xsd">
 													</rows>
 												</grid>
 											</tabpanel>
-											<tabpanel width="313px">
+											<tabpanel>
 												<grid height="190px">
 													<rows>
 														<row>
@@ -83,7 +83,7 @@ http://www.zkoss.org/2005/zul/zul.xsd">
 													</rows>
 												</grid>
 											</tabpanel>
-											<tabpanel width="313px">
+											<tabpanel>
 												<grid height="190px">
 													<rows>
 														<row>
