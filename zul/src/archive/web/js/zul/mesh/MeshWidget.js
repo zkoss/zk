@@ -471,37 +471,32 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var empty = true,
 				flex = false,
 				meshmin = (this._hflex == 'min');
-			for (var i = this.heads.length; i-- > 0;) {
+			for (var i = this.heads.length; i-- > 0;)
 				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
-					if (meshmin && !w._nhflex) {
-						// B50-3357475: assume header hflex min if unspecified
+					if (meshmin && !w._width && !w._nhflex) {
+						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
 						w._nhflex = -65500; // min
 						w._nhflexbak = true;
 					}
 					if (!flex && w._nhflex)
 						flex = true;
-					if (w.getLabel() || w.getImage()
-							|| w.nChildren) {
+					if (w.getLabel() || w.getImage() || w.nChildren)
 						empty = false;
-						break;
-					}
 				}
-				if (!empty) break;
-			}
-			var old = this.ehead.style.display; 
+			var old = this.ehead.style.display,
+				tofix = (force || empty) && flex && this.isRealVisible();
 			this.ehead.style.display = empty ? 'none' : '';
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
-			if ((force || empty) && flex && this.isRealVisible()) 
-				for (var w = this.head.firstChild; w; w = w.nextSibling)
-					if (w._nhflex) {
-						w.fixFlex_();
-						if (w._nhflexbak) {
-							delete w._hflex;
-							delete w._nhflex;
-							delete w._nhflexbak;
-						}
-					}
+			for (var w = this.head.firstChild; w; w = w.nextSibling) {
+				if (tofix && w._nhflex)
+					w.fixFlex_();
+				if (w._nhflexbak) {
+					delete w._hflex;
+					delete w._nhflex;
+					delete w._nhflexbak;
+				}
+			}
 			return old != this.ehead.style.display;
 		}
 	},
