@@ -16,12 +16,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _getTextWidth(zkc, zkp, zkpOffset) {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			start = 0;
+			start = 0,
+			oldVal = [],
+			zs, ps;
 		if ($prev.length) {
-			$zkc[0].style.marginLeft = '0px';
-			$zkc[0].style.marginRight = '0px';
-			$prev[0].style.marginLeft = '0px';
-			$prev[0].style.marginRight = '0px';
+			zs = $zkc[0].style,
+			ps = $prev[0].style;
+			
+			// store the old value
+			oldVal[0] = zs.marginLeft;
+			oldVal[1] = zs.marginRight;
+			oldVal[2] = ps.marginLeft;
+			oldVal[3] = ps.marginRight;
+			
+			// clean margin
+			zs.marginLeft = '0px';
+			zs.marginRight = '0px';
+			ps.marginLeft = '0px';
+			ps.marginRight = '0px';
 			
 			start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
 		} else {
@@ -29,11 +41,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		start = zkc.cmOffset()[0] - start;
 		
-		$zkc[0].style.marginLeft = '';
-		$zkc[0].style.marginRight = '';
+		if (oldVal.length) {
+			zs.marginLeft = oldVal[0];
+			zs.marginRight = oldVal[1];
+		}
 		if ($prev.length) {
-			$prev[0].style.marginLeft = '';
-			$prev[0].style.marginRight = '';
+			ps.marginLeft = oldVal[2];
+			ps.marginRight = oldVal[3];
 		}
 		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
 		
@@ -42,12 +56,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _getTextHeight(zkc, zkp, zkpOffset) {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			start = 0;
+			start = 0
+			oldVal = [],
+			zs, ps;
 		if ($prev.length) {
-			$zkc[0].style.marginTop = '0px';
-			$zkc[0].style.marginBottom = '0px';
-			$prev[0].style.marginTop = '0px';
-			$prev[0].style.marginBottom = '0px';
+			zs = $zkc[0].style,
+			ps = $prev[0].style;
+			
+			// store the old value
+			oldVal[0] = zs.marginTop;
+			oldVal[1] = zs.marginBottom;
+			oldVal[2] = ps.marginTop;
+			oldVal[3] = ps.marginBottom;
+			
+			// clean margin
+			zs.marginTop = '0px';
+			zs.marginBottom = '0px';
+			ps.marginTop = '0px';
+			ps.marginBottom = '0px';
 			
 			start = $prev.zk.cmOffset()[1] + $prev.zk.offsetHeight();
 		} else {
@@ -55,11 +81,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		start = zkc.cmOffset()[1] - start;
 		
-		$zkc[0].style.marginTop = '';
-		$zkc[0].style.marginBottom = '';
+		if (oldVal.length) {
+			zs.marginTop = oldVal[0];
+			zs.marginBottom = oldVal[1];
+		}
 		if ($prev.length) {
-			$prev[0].style.marginTop = '';
-			$prev[0].style.marginBottom = '';
+			ps.marginTop = oldVal[2];
+			ps.marginBottom = oldVal[3];
 		}
 		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
 	}
@@ -99,6 +127,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return 0;
 	}
 	
+	// check whether the two elements are the same baseline, if so, we need to
+	// sum them together.
 	function _isSameBaseline(ref, cur, vertical) {
 		if (vertical) {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
@@ -219,12 +249,10 @@ zFlex = { //static methods
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						var minwdh = zFlex.fixMinFlex.apply(cwgt, [c, 'w']);
-							wdh -= minwdh;
+						wdh -= zFlex.fixMinFlex.apply(cwgt, [c, 'w']);
 					} else {
 						if (pretxt) {
-							var w = _getTextWidth(zkc, zkp, zkpOffset);
-							wdh -= w;
+							wdh -= _getTextWidth(zkc, zkp, zkpOffset);
 						}
 						hflexs.push(cwgt);
 						hflexsz += cwgt._nhflex;
@@ -239,12 +267,10 @@ zFlex = { //static methods
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						var minhgh = zFlex.fixMinFlex.apply(cwgt, [c, 'h']);
-							hgh -= minhgh;
+						hgh -= zFlex.fixMinFlex.apply(cwgt, [c, 'h']);
 					} else {
 						if (pretxt) {
-							var h = _getTextHeight(zkc, zkp, zkpOffset);
-							hgh -= h;
+							hgh -= _getTextHeight(zkc, zkp, zkpOffset);
 						}
 						vflexs.push(cwgt);
 						vflexsz += cwgt._nvflex;
@@ -333,13 +359,11 @@ zFlex = { //static methods
 											sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
 									} else {
 										cwgt.beforeParentMinFlex_(o);
-										sz += wgt.getChildMinSize_(o, cwgt); // fixed for B50-3157031.zul
-										
-										var bm = zkc.sumStyles("tb", jq.margins);
-										sz += bm;
+										sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
+												+ zkc.sumStyles("tb", jq.margins);
 									}
 									
-									var curDim = first != curDim ? zkc.dimension(true) : false;
+									var curDim = first != cwgt ? zkc.dimension(true) : false;
 									//bug #3006276: East/West bottom cut if East/West higher than Center.
 									if (cwgt._maxFlexHeight && sz > vmax) //@See West/East/Center
 										vmax = sz;
@@ -441,9 +465,8 @@ zFlex = { //static methods
 											sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
 									} else {
 										cwgt.beforeParentMinFlex_(o);
-										sz += wgt.getChildMinSize_(o, cwgt); // fixed for B50-3157031.zul
-										var rm = zkc.sumStyles("lr", jq.margins);
-											sz += rm;
+										sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
+												+ zkc.sumStyles("lr", jq.margins);
 									}
 									var curDim = first != cwgt ? zkc.dimension(true) : false;
 									if (cwgt._sumFlexWidth) //@See East/West/Center
