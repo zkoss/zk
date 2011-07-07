@@ -1,3 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3354057.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 6 16:07:21 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
 <zk>
 	The Grid/Listbox/Tree below should be sized by content. If they have 0 width, it is a bug.
 	<grid vflex="min" hflex="min">

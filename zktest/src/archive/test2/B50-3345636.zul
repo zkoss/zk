@@ -1,3 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3345636.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 6 16:07:21 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
 <zk>
 	In both Grids, the Textbox should have (almost) the same width as datebox in Chrome/Safari.
 	<grid hflex="min">
