@@ -12,6 +12,7 @@ ZK 5.0.8
   3326788: A way to name the composer GenericAutowireComposer
   3327013: A way to log message to the client
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
+  3307322: Control Keys support backspace
   
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -71,6 +72,7 @@ ZK 5.0.8
   3316665: setVflex to Window calculate a wrong height
   3306729: vflex of listbox not work well on IE6
   3310051: Listbox with hflex cannot shorten its width on IE6
+  3301498: Alignment of rows and header broken
   3357475: Grid with hflex min should imply default header hflex 
   
 * Upgrade Notes
