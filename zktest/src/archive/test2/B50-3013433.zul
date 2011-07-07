@@ -16,7 +16,7 @@
 			</ol>
 			]]>
 			</html>
-		  <grid hflex="1" width="400px">
+		  <grid hflex="1">
 		    <columns>
 			  <column label="label1" />
 			  <column label="label2" />
