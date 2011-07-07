@@ -395,9 +395,26 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//bug#3147926: auto fit. 
 		//Adjust hdfakerflex/bdfakerflex
 		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
-		hdflex.style.width = ''; 
-		if (bdflex) bdflex.style.width = '';
+			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0],
+			hdflexVal = hdflex.style.width;
+		
+		hdflex.style.width = '';
+		
+		// fixed for B50-3183228.zul unexpected hor. scrollbar
+		if (zk.ie < 8) {
+			if (hdflex.offsetWidth == 1)
+				hdflex.style.width = hdflexVal;
+		} 
+		if (bdflex) {
+			var bdflexVal = bdflex.style.width;
+			bdflex.style.width = '';
+			
+			// fixed for B50-3183228.zul unexpected hor. scrollbar
+			if (zk.ie < 8) {
+				if (bdflex.offsetWidth == 1)
+					bdflex.style.width = bdflexVal;
+			}
+		}
 		
 		//bug 3061765: unexpected horizontal scrollbar when sizing
 /*		table.style.width = total + wd + "px";
@@ -432,6 +449,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		// bug #2799258
 		zWatch.fireDown('onSize', mesh);
+		
+		// fixed for B50-3147926.zul
+		if (zk.ie < 8)
+			zk(mesh).redoCSS();
 	},
 
 	redraw: function (out) {
