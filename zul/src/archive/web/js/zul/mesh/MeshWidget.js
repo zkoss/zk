@@ -468,10 +468,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_fixHeaders: function (force) {
 		if (this.head && this.ehead) {
-			var empty = true;
-			var flex = false;
+			var empty = true,
+				flex = false,
+				meshmin = (this._hflex == 'min');
 			for (var i = this.heads.length; i-- > 0;) {
 				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
+					if (meshmin && !w._nhflex) {
+						// B50-3357475: assume header hflex min if unspecified
+						w._hflex = 'min';
+						w._nhflex = -65500; // min
+						w._nhflexbak = true;
+					}
 					if (!flex && w._nhflex)
 						flex = true;
 					if (w.getLabel() || w.getImage()
@@ -487,7 +494,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
 			if ((force || empty) && flex && this.isRealVisible()) 
 				for (var w = this.head.firstChild; w; w = w.nextSibling)
-					if (w._nhflex) w.fixFlex_();
+					if (w._nhflex) {
+						w.fixFlex_();
+						if (w._nhflexbak) {
+							delete w._hflex;
+							delete w._nhflex;
+							delete w._nhflexbak;
+						}
+					}
 			return old != this.ehead.style.display;
 		}
 	},
