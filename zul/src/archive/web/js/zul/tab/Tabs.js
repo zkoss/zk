@@ -46,7 +46,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	// fixed for bug 3013433 on IE6
 	beforeSize: function () {
-		this.$n('header').style.width = this.$n().style.width = '';
+		var w = this.getWidth(),
+			hflex = this.getHflex();
+		if (!w && hflex != 'min') // fixed for F50-2831389.zul
+			this.$n('header').style.width = this.$n().style.width = '';
 	},
 	onSize: _zkf = function () {
 		this._fixWidth();
@@ -423,7 +426,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				//LI in IE doesn't have width...
 				if (tabs.style.width) {
 					tabs._width = tabs.style.width;
-					;
 				} else {
 					//vertical tabs have default width 50px
 					this._forceStyle(tabs, "w", tabs._width ? tabs._width : "50px");
