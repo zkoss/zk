@@ -77,7 +77,6 @@ ZK 5.0.8
   3303877: IE6 only, vflex fail with tabbox  
   3305038: Fileupload.get() cause javascript error
   
-  
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
