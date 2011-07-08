@@ -76,6 +76,7 @@ ZK 5.0.8
   3357475: Grid with hflex min should imply default header hflex
   3303877: IE6 only, vflex fail with tabbox  
   3305038: Fileupload.get() cause javascript error
+  3357931: WrongValueException Thrown On Valid Component
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
