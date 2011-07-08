@@ -22,14 +22,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		delete o.uploaders[key];
 	}
 	function _start(o, form, val) { //start upload		
-		var key = o.getKey(o.sid),
-			uplder = new zul.Uploader(o, key, form, val);
-			
-		zul.Upload.start(uplder);
-		o.uploaders[key] = uplder;
-		
+		var key = o.getKey(o.sid);
+		//Bug 3305038: Fileupload.get() cause javascript error
 		o.sid++;
 		o.initContent();
+
+		var uplder = new zul.Uploader(o, key, form, val);
+		zul.Upload.start(uplder);
+		o.uploaders[key] = uplder;
 	}
 
 	function _onchange(evt) {
