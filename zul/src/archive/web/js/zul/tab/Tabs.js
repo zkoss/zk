@@ -170,7 +170,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childHeight - (headerOffsetHeight - 10) > 0) {
+				if (childHeight - (headerOffsetHeight - zk(this.$n('cave')).padBorderHeight()) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var btnsize = this._getArrowSize(),
@@ -240,7 +240,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					break;
 				}
 			} else { // not enough tab to scroll
-				if (childWidth - (headerOffsetWidth - 10) > 0) {
+				if (childWidth - (headerOffsetWidth - zk(this.$n('cave')).padBorderWidth()) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = this.$n("cave"),
