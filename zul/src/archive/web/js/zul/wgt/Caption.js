@@ -89,5 +89,9 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			return 0;
 		else
 			return this.$supers('getMarginSize_', arguments);  
+	},
+	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
+		if (o == 'w')
+			this.$n().width = '';
 	}
 });
