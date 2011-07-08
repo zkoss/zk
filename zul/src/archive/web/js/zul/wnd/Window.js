@@ -1208,6 +1208,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	ignoreFlexSize_: function (type) {
 		return this._mode != 'embedded';
 	}
+	,
+	insertChildHTML_: function(child, before, desktop){
+		//Bug : 3353521
+		if (child.$instanceof(zul.wgt.Caption))
+			jq(this.$n("cap")).empty().append(child.redrawHTML_());
+		else
+			this.$supers('insertChildHTML_', arguments);
+	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
