@@ -599,7 +599,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
 
-		if (!zk.ie) {
+		if (!zk.ie || zk.ie9) { // IE9 for B50-3306835.zul
 			if (!zk.Draggable.ignoreStop(target))
 				devt.stop();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)

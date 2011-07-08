@@ -80,6 +80,7 @@ ZK 5.0.8
   3353121: Grid in Tabbox vflex issue, IE7 only
   3303872: IE8 only, tabpanel disappear after hide then show
   3303874: IE7 only, the scroll bar do not appear in the tabpanel
+  3306835: can not drag image into listbox on IE9
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
