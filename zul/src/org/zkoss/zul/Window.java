@@ -429,12 +429,16 @@ implements org.zkoss.zul.api.Window, Framable, IdSpace {
 	 *
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Window">Overlapped, Popup, Modal, Highlighted and Embedded</a>
 	 * for more information.
+	 *
+	 * <p>If the event processing thread is disabled (it is the default),
+	 * InterruptedException won't be thrown.
 	 * 
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
 	 *
-	 * @exception InterruptedException thrown if "modal" is specified,
+	 * @exception InterruptedException thrown if "modal" is specified
+	 * the event thread is enabled (disabled by default),
 	 * and one of the following conditions occurs:
 	 * 1) the desktop or the Web application is being destroyed, or
 	 * 2) {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
