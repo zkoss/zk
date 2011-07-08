@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _getTextHeight(zkc, zkp, zkpOffset) {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			start = 0
+			start = 0,
 			oldVal = [],
 			zs, ps;
 		if ($prev.length) {
