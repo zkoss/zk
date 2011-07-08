@@ -78,6 +78,7 @@ ZK 5.0.8
   3305038: Fileupload.get() cause javascript error
   3357931: WrongValueException Thrown On Valid Component
   3353121: Grid in Tabbox vflex issue, IE7 only
+  3303872: IE8 only, tabpanel disappear after hide then show
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
