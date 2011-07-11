@@ -84,6 +84,7 @@ ZK 5.0.8
   3343388: Set hflex="min" to Groupbox fail
   3353521: Window render Caption in a wrong place
   3357573: child in the groupbox cannot resize correctly
+  3345912: IE6 only, use Cell in Grid,it appears a strange line
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
