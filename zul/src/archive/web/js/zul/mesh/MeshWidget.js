@@ -126,10 +126,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
-				} else if (zk.ff == 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
+				} else if (zk.ff > 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
-				width += wd;
+				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w) w = w.previousSibling;
 			}
 			/** Fixed for B50-2979776.zul
@@ -144,9 +144,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (zk.ie < 8 && max < wd) {
 						max = wd;
 						maxj = i;
-					} else if (zk.ff == 4 || zk.ie == 9) // firefox4 & IE9 still cause break line in case B50-3147926 column 1
+					} else if (zk.ff > 4 || zk.ie == 9) // firefox4 & IE9 still cause break line in case B50-3147926 column 1
 						++wds[i];
-					width += wd;
+					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				}
 			}
 		}
