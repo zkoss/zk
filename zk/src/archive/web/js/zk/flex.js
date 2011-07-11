@@ -213,17 +213,17 @@ zFlex = { //static methods
 			hgh = psz.height,
 			wdh = psz.width,
 			c = p.firstChild,
-			scrWdh = jq.scrollbarWidth();
+			scrWdh;
 			
 		// Bug 3185686
 		// has vertical scrollbar
 		if(p.offsetWidth - p.clientWidth > 11)
-			wdh -= scrWdh;
+			wdh -= (scrWdh = jq.scrollbarWidth());
 			
 		// has horizontal scrollbar
 		// check p.clientHeight for B50-3312936.zul
 		if(p.clientHeight && p.offsetHeight - p.clientHeight > 11)
-			hgh -= scrWdh;
+			hgh -= scrWdh || jq.scrollbarWidth();
 			
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
