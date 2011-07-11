@@ -124,6 +124,15 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) this._fixHgh();
 	},
+	_fixWdh: function () {
+		var wdh = this.$n().style.width;
+		if (wdh && wdh.indexOf('px') >= 0) {
+			var n;
+			if (n = this.$n('cave')) {
+				n.style.width = wdh;
+			}
+		}
+	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
@@ -144,13 +153,38 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-
+	getParentSize_: zk.ie6_ ? function (p) {
+		var zkp = zk(p),
+			hgh,
+			wdh,
+			s = p.style;
+		if (s.width.indexOf('px') >= 0) {
+			wdh = zk.parseInt(s.width);
+		} else {
+			// Fixed for B50-3357573.zul
+			var n = this.$n(),
+				oldVal = n.style.display;
+			n.style.display = 'none';
+			wdh = zkp.revisedWidth(p.offsetWidth);
+			n.style.display = oldVal;
+		}
+		if (s.height.indexOf('px') >= 0) {
+			hgh = zk.parseInt(s.height);
+		}
+		return {height: hgh || zkp.revisedHeight(p.offsetHeight),
+					width: wdh || zkp.revisedWidth(p.offsetWidth)};
+	} : function(p) {
+		return this.$supers('getParentSize_', arguments);
+	},
 	//watch//
 	onSize: _zkf = function () {
 		this._fixHgh();
-		if (!this.isLegend())
+		if (!this.isLegend()) {
 			setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow rarely needs to fix so OK to delay for better performance
+		} else {
+			this._fixWdh();
+		} 
 	},
 	onShow: _zkf,
 	_fixShadow: function () {

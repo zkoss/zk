@@ -83,6 +83,7 @@ ZK 5.0.8
   3306835: can not drag image into listbox on IE9
   3343388: Set hflex="min" to Groupbox fail
   3353521: Window render Caption in a wrong place
+  3357573: child in the groupbox cannot resize correctly
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
