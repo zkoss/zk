@@ -2089,7 +2089,7 @@ redraw: function (out) {
 			var n = this.$n(),
 				w = this._hflex ? n.style.width : null,
 				h = this._vflex ? n.style.height : null,
-				s = jq.parseStyle(this.domStyle_({width:w, height:h}));
+				s = jq.parseStyle(this.domStyle_(null, {width:w, height:h}));
 			zk(n).clearStyles().jq.css(s);
 
 			var t = this.getTextNode();
