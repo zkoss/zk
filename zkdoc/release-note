@@ -86,6 +86,7 @@ ZK 5.0.8
   3357573: child in the groupbox cannot resize correctly
   3345912: IE6 only, use Cell in Grid,it appears a strange line
   3356022: borderlayout and tabpanel bug
+  3355680: hflex fail in combobox while select options
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

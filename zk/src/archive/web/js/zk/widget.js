@@ -2093,6 +2093,11 @@ redraw: function (out) {
 			if (t && t != n)
 				zk(t).clearStyles().jq.css(jq.filterTextStyle(s));
 			this.zsync();
+			// B50-3355680: size is potentially affected
+			if (this._hflex || this._vflex) {
+				zWatch.fireDown('beforeSize', this);
+				zWatch.fireDown('onSize', this);
+			}
 		}
 	},
 	/** Returns the DOM element that is used to hold the text, or null
