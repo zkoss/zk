@@ -355,8 +355,10 @@ zFlex = { //static methods
 									if (cwgt._vflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._vflexsz === undefined ? zFlex.fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
-										} else
+										}/** Fixed for B50-3356022.zul
+										 else
 											sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
+										*/
 									} else {
 										cwgt.beforeParentMinFlex_(o);
 										sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul
@@ -461,8 +463,10 @@ zFlex = { //static methods
 									if (cwgt._hflex == 'min') {
 										if (zkc.isVisible()) {
 											sz += cwgt._hflexsz === undefined ? zFlex.fixMinFlex.apply(cwgt, [c, o]) : cwgt._hflexsz;
-										} else
+										}/** Fixed for B50-3356022.zul
+										 else {
 											sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
+										}*/
 									} else {
 										cwgt.beforeParentMinFlex_(o);
 										sz += wgt.getChildMinSize_(o, cwgt) // fixed for B50-3157031.zul

@@ -52,6 +52,7 @@
 			</tabbox>
 		</east>
 		<west vflex="min" hflex="min" border="normal" title="west">
+		west
 		</west>
 	</borderlayout>
 </window>
