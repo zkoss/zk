@@ -2085,20 +2085,29 @@ redraw: function (out) {
 	 */
 	updateDomStyle_: function () {
 		if (this.desktop) {
-			var s = jq.parseStyle(this.domStyle_()),
-				n = this.$n();
+			// B50-3355680: size is potentially affected when setStyle
+			var n = this.$n(),
+				w = this._hflex ? n.style.width : null,
+				h = this._vflex ? n.style.height : null,
+				s = jq.parseStyle(this.domStyle_({width:w, height:h}));
 			zk(n).clearStyles().jq.css(s);
 
 			var t = this.getTextNode();
-			if (t && t != n)
-				zk(t).clearStyles().jq.css(jq.filterTextStyle(s));
-			this.zsync();
-			// B50-3355680: size is potentially affected
-			if (this._hflex || this._vflex) {
-				zWatch.fireDown('beforeSize', this);
-				zWatch.fireDown('onSize', this);
+			if (t && t != n) {
+				s = this._domTextStyle(t, s);
+				zk(t).clearStyles().jq.css(s);
 			}
+			this.zsync();
 		}
+	},
+	_domTextStyle: function (t, s) {
+		// B50-3355680
+		s = jq.filterTextStyle(s);
+		if (!s.width && this._hflex)
+			s.width = t.style.width;
+		if (!s.height && this._vflex)
+			s.height = t.style.height;
+		return s;
 	},
 	/** Returns the DOM element that is used to hold the text, or null
 	 * if this widget doesn't show any text.
@@ -2128,11 +2137,17 @@ redraw: function (out) {
 	 * <li>top - exclude {@link #getTop}</li>
 	 * <li>zIndex - exclude {@link #getZIndex}</li>
 	 * </ul>
+	 * @param Map ext [options] the extra style values to append.
+	 * Allowed value (subclass might support more options):<br/>
+	 * <ul>
+	 * <li>width</li>
+	 * <li>height</li>
+	 * </ul>
 	 * @return String the content of the style, such as width:100px;z-index:1; 
 	 * @see #domClass_
 	 * @see #domAttrs_
 	 */
-	domStyle_: function (no) {
+	domStyle_: function (no, ext) {
 		var out = [], s;
 		if (s = this.z$display) //see au.js
 			out.push("display:", s, ';');
@@ -2144,10 +2159,18 @@ redraw: function (out) {
 			if (s.charAt(s.length - 1) != ';')
 				out.push(';');
 		}
-		if ((!no || !no.width) && (s = this.getWidth()))
-			out.push('width:', s, ';');
-		if ((!no || !no.height) && (s = this.getHeight()))
-			out.push('height:', s, ';');
+		if (!no || !no.width) {
+			if (s = this.getWidth())
+				out.push('width:', s, ';');
+			else if (ext && ext.width)
+				out.push('width:', ext.width, ';');
+		}
+		if (!no || !no.height) {
+			if (s = this.getHeight())
+				out.push('height:', s, ';');
+			else if (ext && ext.height)
+				out.push('height:', ext.height, ';');
+		}
 		if ((!no || !no.left) && (s = this.getLeft()))
 			out.push('left:', s, ';');
 		if ((!no || !no.top) && (s = this.getTop()))
