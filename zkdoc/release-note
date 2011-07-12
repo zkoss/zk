@@ -87,6 +87,7 @@ ZK 5.0.8
   3345912: IE6 only, use Cell in Grid,it appears a strange line
   3356022: borderlayout and tabpanel bug
   3355680: hflex fail in combobox while select options
+  3304968: IE9 only, tab will be hide after open then close
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
