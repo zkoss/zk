@@ -89,6 +89,7 @@ ZK 5.0.8
   3355680: hflex fail in combobox while select options
   3304968: IE9 only, tab will be hide after open then close
   3362731: IE Rod, use mouse wheel scrol down to end cause js error
+  3309122: ROD issue when use oncreate
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
