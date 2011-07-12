@@ -20,6 +20,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _toggleEffect(wgt, undo) {
 		var self = wgt;
 		setTimeout(function () {
+			if (!self.desktop)
+				return;// fixed for B50-3362731.zul 
+				
 			var $n = jq(self.$n()),
 				zcls = self.getZclass() + '-over';
 			if (undo) {

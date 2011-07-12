@@ -16,6 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _toggleEffect(wgt, undo) {
 		var self = wgt;
 		setTimeout(function () {
+			if (!self.desktop)
+				return;// fixed for B50-3362731.zul
+			
 			var $n = jq(self.$n()),
 				zcls = self.getZclass();
 			if (undo) {
@@ -25,12 +28,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else if (self._musin) {
 				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
 				
-				var musout = self.getMeshWidget()._musout;
+				var mesh = self.getMeshWidget(),
+					musout = mesh._musout;
 				// fixed mouse-over issue for datebox 
 				if (musout && $n[0] != musout.$n()) {
 					jq(musout.$n()).removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
 					musout._musin = false;
-					self.parent._musout = null;
+					mesh._musout = null;
 				}
 			}
 		});
