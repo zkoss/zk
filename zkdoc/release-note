@@ -96,6 +96,7 @@ ZK 5.0.8
   3314143: Treeitem in a close dot tree does not render correctly
   3306281: onClick in Flash with IE not working
   3343001: IE6 7 only, Tree will not increase height when open treeitem
+  3352909: Listbox ROD will not render item in a correct position
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
