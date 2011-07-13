@@ -93,6 +93,7 @@ ZK 5.0.8
   3317743: Listbox checkmarks don't work as expected in paging mold
   3365535: Groupbox default mold hflex min may have wrong size
   3300935: (ipad)Tooltip shall not appear while taps on a component
+  3314143: Treeitem in a close dot tree does not render correctly
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

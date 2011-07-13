@@ -153,7 +153,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	_isLastVisibleChild: function (item) {
 		var parent = item.parent;
 		for (var w = parent.lastChild; w; w = w.previousSibling)
-			if (w._isRealVisible()) return w == item;
+			if (w._isVisibleInTree()) return w == item; // B50-3314143
 		return false;
 	},
 	_getTreeitems: function (item, tree) {
