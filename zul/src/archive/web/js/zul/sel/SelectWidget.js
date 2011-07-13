@@ -983,11 +983,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (it[j].isSelected())
 				data.push(it[j]);
 
-		var edata, keep;
+		var edata, keep = true;
 		if (evt) {
-			edata = evt.data
-			if (this._multiple)
-				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+			edata = evt.data;
+			if (this._multiple && this._cdo)
+				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
+					(evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
