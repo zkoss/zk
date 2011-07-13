@@ -76,7 +76,7 @@ public class Event implements java.io.Serializable {
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
-	 * @param data an arbitary data
+	 * @param data an arbitrary data
 	 */
 	public Event(String name, Component target, Object data) {
 		if (name == null)
