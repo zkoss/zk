@@ -945,10 +945,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		if (this.ehead) {
-			if (tblwd) this.ehead.style.width = tblwd + 'px';
-			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
-				this._adjHeadWd();
-			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
+			if (tblwd) 
+				this.ehead.style.width = tblwd + 'px';
+			if (tblwd && this.efoot) 
+				this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
@@ -1004,9 +1004,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
-		if (this.isSizedByContent())
-			return true;
-		else if (!this.head)
+		if (!this.head)
 			return false;
 		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
@@ -1046,7 +1044,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
-		out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
+		out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th></tr></tbody>');
 	},
 
 	//super//
@@ -1080,8 +1078,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
-			if (this.isSizedByContent())
-				this._calcSize();
 			if (this.head) {
 				this._fixHeaders(true/** B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
@@ -1125,14 +1121,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	// fixed for B50-3315594.zul
 	beforeParentMinFlex_: function (orient) {
 		if (orient == 'w') {
-			if (this.isSizedByContent()) 
-				this._calcSize();
-			if (this.head) {
+			if (this.head)
 				this._fixHeaders();
-			}
-		} else {
+		} else
 			this._calcSize();
-		}
 	},
 	_calcMinWds: function () {
 		if (!this._minWd)
@@ -1341,10 +1333,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-	
-		if (zk.opera && this.isSizedByContent())
-			dst.parentNode.parentNode.style.width = sum + "px";
-	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
 	}

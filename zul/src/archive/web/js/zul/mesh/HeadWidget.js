@@ -80,7 +80,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 	onColSize: function (evt) {
 		var owner = this.parent;
-		if (owner.isSizedByContent()) owner._adjHeadWd(owner);
 		evt.column._width = evt.width;
 		owner._innerWidth = owner.eheadtbl.width || owner.eheadtbl.style.width;
 		owner.fire('onInnerWidth', owner._innerWidth);
@@ -146,7 +145,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
 		var wgt = this.parent;
-		if (wgt && !wgt.isSizedByContent()) {
+		if (wgt) {
 			wgt._adjFlexWd();
 			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space 
 		}
