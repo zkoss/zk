@@ -19,22 +19,14 @@ package org.zkoss.zk.au;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.text.ParseException;
 
 import org.zkoss.json.JSONs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
@@ -84,7 +76,7 @@ public class AuRequest {
 		_data = data != null ? parseType(data): Collections.EMPTY_MAP;
 	}
 	/** Constructor for a general request sent from client.
-	 * This is usully used to ask server to log or report status.
+	 * This is usually used to ask server to log or report status.
 	 *
 	 * @param cmd the command of the request (never null)
 	 * @param data the data; might be null.
@@ -165,7 +157,7 @@ public class AuRequest {
 		return _desktop;
 	}
 	/** Returns the page that this request is applied for, or null
-	 * if this reqeuest is a general request -- regardless any page or
+	 * if this request is a general request -- regardless any page or
 	 * component.
 	 */
 	public Page getPage() {
