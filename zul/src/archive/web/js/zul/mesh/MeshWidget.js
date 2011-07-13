@@ -957,7 +957,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//check if need to span width
 		this._adjSpanWd();
-
+		// no header case
+		this._fixBodyMinWd(true);
+		
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
@@ -1086,22 +1088,26 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;				
 			}
-			var width = this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width
-			if (!this.head && this._hflex == 'min')
-				this._fixBodyMinWd(); // sized by content without header
-			return width;
+			this._fixBodyMinWd(); // sized by content without header
+			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width
 		}
 		return null;
 	},
-	_fixBodyMinWd: function () {
-		// called only when there is no header
-		var tr = this.ebodytbl,
-			wds = this._minWd.wds,
-			wlen = wds.length;
-		if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
-			return; // no first tr
-		for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
-			c.style.width = (zk.safari ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+	_fixBodyMinWd: function (fixMesh) {
+		// effective only when there is no header
+		if (!this.head && this._hflex == 'min') {
+			var bdw = zk(this.$n()).padBorderWidth();
+				wd = this._getMinWd() + bdw, // has to call _getMinWd first so this._minWd will be available
+				tr = this.ebodytbl,
+				wds = this._minWd.wds,
+				wlen = wds.length;
+			if (fixMesh)
+				this.setFlexSize_({width:wd}, true);
+			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
+				return; // no first tr
+			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
+				c.style.width = (zk.safari ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+		}
 	},
 	_getSigRow: function () {
 		// scan for tr with largest number of td children
