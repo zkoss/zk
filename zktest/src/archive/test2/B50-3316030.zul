@@ -1,3 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3316030.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
 <zk>
 	The Grid's width should be just large enough to hold its content.
 	<grid hflex="min">
