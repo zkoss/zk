@@ -505,8 +505,12 @@ jq(function() {
 		if (wgt && !wgt.$weave) {
 			var en = wevt.name,
 				fn = _subevts[en];
-			if (fn)
-				wgt[fn].call(wgt, wevt);
+			if (fn) {
+				// Bug 3300935, disable tooltip for IOS
+				if (!zk.ios || (fn != 'doTooltipOver_' && fn != 'doTooltipOut_')) {
+					wgt[fn].call(wgt, wevt);
+				}
+			}
 			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
