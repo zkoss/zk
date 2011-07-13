@@ -213,7 +213,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						xc.style.height = c.style.height;
+						xc.style.height = jq.px0(zkxc.revisedHeight(c.offsetHeight + zkc.sumStyles("tb", jq.margins)));
 						if (vert) 
 							hgh -= xc.offsetHeight + zkxc.sumStyles("tb", jq.margins);
 					} else {
@@ -232,7 +232,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						xc.style.width = c.style.width;
+						xc.style.width = jq.px0(zkxc.revisedWidth(c.offsetWidth + zkc.sumStyles("lr", jq.margins)));
 						if (!vert)
 							wdh -= xc.offsetWidth + zkxc.sumStyles("lr", jq.margins);
 					} else {
