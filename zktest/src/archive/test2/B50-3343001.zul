@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3343001.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 13 14:35:12 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>IE 6/7 only.</div>
+	<div>Open any Treeitem. If the Tree height does not increase, it is a bug.</div>
+	<tree width="100px">
+		<treecols>
+			<treecol width="200px" />
+		</treecols>
+		<treechildren>
+			<treeitem forEach="1,2,3,4,5" label="item" open="false">
+				<treechildren>
+					<treeitem forEach="1,2,3,4,5" label="item" />
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

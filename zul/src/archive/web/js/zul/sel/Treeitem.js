@@ -108,7 +108,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					if (!tree._fixhdwcnt++)
 						tree._fixhdoldwd = oldwd;
 					setTimeout(function () {
-						if (!--tree._fixhdwcnt && tree.$n() && tree._fixhdoldwd != ebodytbl.clientWidth)
+						if (!--tree._fixhdwcnt && tree.$n() && 
+								(tree._fixhdoldwd != ebodytbl.clientWidth || (zk.ie && !zk.ie8))) // B50-3343001: IE 6/7
 							tree._calcSize();
 					}, 250);
 				}
