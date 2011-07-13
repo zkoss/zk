@@ -198,6 +198,17 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		zul.sel.Treeitem._syncSelItems(this, newwgt);
 
 		this.$supers('replaceWidget', arguments);
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.desktop)
+			this.getTree()._shallSize = true;
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		var selItems = this._selItems, len;
+		if (this.desktop)
+			this.getTree()._shallSize = true;
 	}
 });
 
