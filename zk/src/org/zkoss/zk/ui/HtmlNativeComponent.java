@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.ext.render.Merger;
@@ -61,7 +62,7 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  * @since 3.0.0
  */
 public class HtmlNativeComponent extends AbstractComponent
-implements DynamicTag, Native {
+implements DynamicTag, Native, RawId {
 	private static final Helper _helper = new HtmlHelper();
 	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
