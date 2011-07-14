@@ -4497,7 +4497,7 @@ zk.Native = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "native",
-	rawId: true,
+	//rawId: true, (Bug 3358505: it cannot be rawId)
 
 	redraw: function (out) {
 		var s = this.prolog;
