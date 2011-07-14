@@ -133,8 +133,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
+		super.init(config);
 
 //		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
