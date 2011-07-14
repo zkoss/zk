@@ -284,6 +284,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		if (_dataLoader != null) {
 			_dataLoader.reset();
 			_dataLoader = null;
+			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
 	}
 	
@@ -625,6 +626,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 					_model.removeListDataListener(_dataListener);
 					if (_model instanceof GroupsListModel)
 						_rows.getChildren().clear();
+					
+					resetDataLoader(); // Bug 3357641
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
 					smartUpdate("model", true);

@@ -2370,6 +2370,8 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 					_model.removeListDataListener(_dataListener);
 					if (_model instanceof GroupsListModel)
 						getItems().clear();
+					
+					resetDataLoader(); // Bug 3357641
 				} else {
 					getItems().clear(); // Bug 1807414
 					if (!inSelectMold())
@@ -2972,6 +2974,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 		if (_dataLoader != null) {
 			_dataLoader.reset();
 			_dataLoader = null;
+			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
 	}
 
