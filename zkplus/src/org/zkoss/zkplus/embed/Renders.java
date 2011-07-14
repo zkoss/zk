@@ -50,13 +50,6 @@ import org.zkoss.zk.ui.http.Utils;
  * It allows application developers to use the native element without knowing the existence of ZK.
  * For example, ZK Spreadsheet for JSF is a native JSF component made in this way.
  *
- * <p>To use an embedded component, ZK Update Engine
- * ({@link org.zkoss.zk.au.http.DHtmlUpdateServlet}) is still required,
- * while ZK Loader ({@link org.zkoss.zk.ui.http.DHtmlLayoutServlet}) is not needed (though not hurt).
- * If ZK Loader not installed, it assumes the update URI is "/zkau", which
- * can be overriden by setting a library property called
- * "org.zkoss.zkplus.embed.updateURI".
- *
  * <p>Example:
 <pre><code>
 	Calendar cal = new Calendar();
@@ -99,17 +92,7 @@ public class Renders {
 		if (path == null)
 			path = Https.getThisServletPath(request);
 
-		WebManager webman = WebManager.getWebManagerIfAny(ctx);
-		if (webman == null) {
-			final String ATTR = "org.zkoss.zkplus.embed.updateURI";
-			String updateURI = Library.getProperty(ATTR);
-			if (updateURI == null)
-				updateURI = "/zkau";
-			else
-				updateURI = Utils.checkUpdateURI(updateURI, ATTR);
-			webman = new WebManager(ctx, updateURI);
-		}
-
+		final WebManager webman = WebManager.getWebManager(ctx);
 		final Session sess = WebManager.getSession(ctx, request);
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
