@@ -62,7 +62,7 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  * @since 3.0.0
  */
 public class HtmlNativeComponent extends AbstractComponent
-implements DynamicTag, Native, RawId {
+implements DynamicTag, Native {
 	private static final Helper _helper = new HtmlHelper();
 	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
