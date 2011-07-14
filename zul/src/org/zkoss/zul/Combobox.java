@@ -24,6 +24,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -572,6 +573,13 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setRows(int rows) {
 		if (rows != 1)
 			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
+	}
+	public boolean shallBlock(AuRequest request) {
+		String cmd = request.getCommand();
+		if (isReadonly() && (Events.ON_CHANGE.equals(cmd) || 
+				Events.ON_SELECT.equals(cmd)))
+			return false; // B50-3316103: special case of readonly component
+		return super.shallBlock(request);
 	}
 
 	private void syncSelectionToModel() {

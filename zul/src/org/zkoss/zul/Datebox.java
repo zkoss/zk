@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.http.Utils;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.XulElement;
@@ -719,6 +720,13 @@ the short time styling.
 			setTimeZone(timezone);
 		} else 
 			super.service(request, everError);
+	}
+	
+	public boolean shallBlock(AuRequest request) {
+		String cmd = request.getCommand();
+		if (isReadonly() && Events.ON_CHANGE.equals(cmd))
+			return false; // B50-3316103: special case of readonly component
+		return super.shallBlock(request);
 	}
 	
 	/**

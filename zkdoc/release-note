@@ -99,6 +99,7 @@ ZK 5.0.8
   3352909: Listbox ROD will not render item in a correct position
   3354086: Model attribute will not accept a ListModel
   3343077: IE only, column of Grid and Tree do not sync with scroll bar
+  3316103: InaccessibleWidgetBlockService wrongly blocks Combobox
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

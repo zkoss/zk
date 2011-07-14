@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3316103.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 14 12:45:33 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		This test case requires to specify the following in zk.xml:
+		<![CDATA[
+		<listener>
+			<listener-class>org.zkoss.zkmax.au.InaccessibleWidgetBlockService$DesktopInit</listener-class>
+		</listener>
+		]]>
+	</div>
+	<div>
+		1. Select an item from the Combobox. You should see text appearing on the right. Otherwise it is a bug.
+	</div>
+	<div>
+		2. Pick a date in the Datebox. You should see text appearing on the right. Otherwise it is a bug.
+	</div>
+	<hlayout>
+		<combobox readonly="true" onChange="label2.setValue(self.getRawText())">
+			<comboitem label="1" />
+			<comboitem label="2" />
+			<comboitem label="3" />
+		</combobox>
+		<label id="label2" />
+	</hlayout>
+	<hlayout>
+		<datebox readonly="true" onChange="label3.setValue(self.getRawText())" />
+		<label id="label3" />
+	</hlayout>
+</zk>

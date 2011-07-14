@@ -51,6 +51,9 @@ import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Blockable;
+import org.zkoss.zk.ui.ext.Disable;
+import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
@@ -106,7 +109,7 @@ import org.zkoss.zk.scripting.*;
  * @author tomyeh
  */
 public class AbstractComponent
-implements Component, ComponentCtrl, java.io.Serializable {
+implements Component, ComponentCtrl, Blockable, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
 	private static final long serialVersionUID = 20100719L;
 
@@ -2262,6 +2265,19 @@ w:use="foo.MyWindow"&gt;
 	public Set getEventHandlerNames() {
 		return _auxinf != null && _auxinf.evthds != null ?
 			_auxinf.evthds.getEventNames(): Collections.EMPTY_SET;
+	}
+	public boolean shallBlock(AuRequest request) {
+		String cmd = request.getCommand();
+		if(Events.ON_OPEN.equals(cmd))
+			return false;
+		if(!Components.isRealVisible(this))
+			return true;
+		if(this instanceof Disable && ((Disable) this).isDisabled())
+			return true;
+		if(this instanceof Readonly && ((Readonly) this).isReadonly() && 
+				(Events.ON_CHANGE.equals(cmd) || Events.ON_CHANGING.equals(cmd) || Events.ON_SELECT.equals(cmd)))
+			return true;
+		return false;
 	}
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {
