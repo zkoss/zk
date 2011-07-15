@@ -173,6 +173,7 @@ May 11, 2011
   3299234: A way to get the list of data from onBindingValidate evt
   3299344: A way to get associated bean of a Binding
   3299827: Support Mac listbox multiple selection
+  3337441: Firefox Listbox Multiselect
   
 * Bugs
   3286462: native component cause issue in fulfill

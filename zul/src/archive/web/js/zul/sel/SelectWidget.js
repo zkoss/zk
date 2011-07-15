@@ -878,7 +878,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		var focusfound = false, rowfound = false;
-		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
 			if (w.isDisabled()) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(w, true);
@@ -888,6 +888,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._changeSelect(w, true);
 				if (this._isFocus(w) || w == this._lastSelectedItem)
 					break;
+			} else if (!si) { // Bug: 3337441
+				if (w != row)
+					continue;
+				this._changeSelect(w, true);
+				break;
 			} else {
 				rowfound = w == row;
 				focusfound = this._isFocus(w) || w == this._lastSelectedItem;
