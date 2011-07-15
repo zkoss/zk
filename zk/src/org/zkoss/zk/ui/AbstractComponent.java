@@ -34,7 +34,6 @@ import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
@@ -42,18 +41,13 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
-import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Blockable;
-import org.zkoss.zk.ui.ext.Disable;
-import org.zkoss.zk.ui.ext.Readonly;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
@@ -68,7 +62,6 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Names;
@@ -84,8 +77,6 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
@@ -94,12 +85,10 @@ import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.ui.impl.Utils;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
-import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.scripting.*;
 
@@ -109,7 +98,7 @@ import org.zkoss.zk.scripting.*;
  * @author tomyeh
  */
 public class AbstractComponent
-implements Component, ComponentCtrl, Blockable, java.io.Serializable {
+implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
 	private static final long serialVersionUID = 20100719L;
 
@@ -1373,7 +1362,7 @@ implements Component, ComponentCtrl, Blockable, java.io.Serializable {
 	 * returned by {@link AuResponse#getOverrideKey}).
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the componet returned by
+	 * depends on the existence of the component returned by
 	 * {@link AuResponse#getDepends}.
 	 * In other words, the response is removed if the component is removed.
 	 * If it is null, the response is component-independent and it is
@@ -1694,7 +1683,7 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	//-- in the redrawing phase --//
-	/** Redraws this component and all its decendants.
+	/** Redraws this component and all its descendants.
 	 * <p>Default: It uses {@link JsContentRenderer} to render all information
 	 * in JavaScript codes. For devices that don't support JavaScript,
 	 * it must override this method.
@@ -1704,7 +1693,7 @@ w:use="foo.MyWindow"&gt;
 	 * and  then {@link #redrawChildren} to redraw children (and descendants)
 	 * (by calling their {@link #redraw}).
 	 *
-	 * <p>If a dervied class wants to render more properties, it can override
+	 * <p>If a derived class wants to render more properties, it can override
 	 * {@link #renderProperties}.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
@@ -2265,19 +2254,6 @@ w:use="foo.MyWindow"&gt;
 	public Set getEventHandlerNames() {
 		return _auxinf != null && _auxinf.evthds != null ?
 			_auxinf.evthds.getEventNames(): Collections.EMPTY_SET;
-	}
-	public boolean shallBlock(AuRequest request) {
-		String cmd = request.getCommand();
-		if(Events.ON_OPEN.equals(cmd))
-			return false;
-		if(!Components.isRealVisible(this))
-			return true;
-		if(this instanceof Disable && ((Disable) this).isDisabled())
-			return true;
-		if(this instanceof Readonly && ((Readonly) this).isReadonly() && 
-				(Events.ON_CHANGE.equals(cmd) || Events.ON_CHANGING.equals(cmd) || Events.ON_SELECT.equals(cmd)))
-			return true;
-		return false;
 	}
 	private void onListenerChange(Desktop desktop, boolean listen) {
 		if (listen) {

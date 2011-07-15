@@ -39,9 +39,11 @@ import org.zkoss.util.WaitLock;
 import org.zkoss.util.logging.Log;
 import org.zkoss.text.DateFormats;
 
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.http.Utils;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -721,12 +723,17 @@ the short time styling.
 		} else 
 			super.service(request, everError);
 	}
-	
-	public boolean shallBlock(AuRequest request) {
-		String cmd = request.getCommand();
-		if (isReadonly() && Events.ON_CHANGE.equals(cmd))
-			return false; // B50-3316103: special case of readonly component
-		return super.shallBlock(request);
+	public Object getExtraCtrl() {
+		return new Blockable() {
+			public boolean shallBlock(AuRequest request) {
+				// B50-3316103: special case of readonly component: do not block onChange and onSelect
+				final String cmd = request.getCommand();
+				if(Events.ON_OPEN.equals(cmd))
+					return false;
+				return !Components.isRealVisible(Datebox.this) || isDisabled() || 
+					(isReadonly() && Events.ON_CHANGING.equals(cmd));
+			}
+		};
 	}
 	
 	/**
