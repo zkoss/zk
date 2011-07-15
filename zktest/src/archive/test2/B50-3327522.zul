@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3327522.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Jul 13 12:04:12 TST 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	<window hflex="1" vflex="1">
+		<separator/>
+			click the button "visible", "open" several times
+		<separator/>
+			test visible,open as "true,true","true,false","false,true","false,false"
+		<separator/>
+			click the arrow icon in east bar, to see if open/close work correctly as you click "open" button in last step 
+		<separator/>
+		<borderlayout hflex="1" vflex="1">
+		<!--
+		-->  
+			<east id="east" width="150px"  collapsible="true" open="true" visible="true" 
+				onOpen='lab2.setValue(String.valueOf(east.isOpen()))'>
+				<div style="background-color:#80c0c0" hflex="1"
+					vflex="1">
+					East
+				</div>
+			</east>
+		
+			<center hflex="1" vflex="1" style="border: solid 3px red;">
+				<div>
+				center
+				<separator/>
+				<button label="visible" onClick='east.setVisible(!east.isVisible());lab1.setValue(String.valueOf(east.isVisible()))'/>
+				<label id="lab1" value="${east.visible}"/>
+				<separator/>
+				<button label="open" onClick='east.setOpen(!east.isOpen());lab2.setValue(String.valueOf(east.isOpen()))'/>
+				<label id="lab2" value="${east.open}"/>
+				<separator/>
+				<!-- 
+				<button label="collapsible" onClick='east.setCollapsible(!east.isCollapsible());lab3.setValue(String.valueOf(east.isCollapsible()))'/>
+				<label id="lab3" value="${east.collapsible};"/>
+				<separator/>
+				<button label="splittable" onClick='east.setSplittable(!east.isSplittable());lab4.setValue(String.valueOf(east.isSplittable()))'/>
+				<label id="lab4" value="${east.splittable}"/>
+				<separator/>
+				 -->
+				</div>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

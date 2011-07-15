@@ -102,6 +102,7 @@ ZK 5.0.8
   3316103: InaccessibleWidgetBlockService wrongly blocks Combobox
   3357641: listbox scroll bar position issue if ROD is true
   3358505: ZK EE with native failed to invalidate (JS error)
+  3327522: Visible property for borderlayout panels (west, east, etc)
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
