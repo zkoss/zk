@@ -140,7 +140,7 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
-		_maxUploadSize = 5120, _maxProcTime = 3000,
+		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
@@ -1407,6 +1407,22 @@ public class Configuration {
 	 */
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
+	}
+	/** Specifies the maximal allowed upload size, in kilobytes.
+	 *
+	 * <p>Default: 5120.
+	 *
+	 * @param sz the maximal allowed upload size.
+	 * A negative value indicates there is no limit.
+	 */
+	public void setFileSizeThreshold(int sz) {
+		_fileSizeThreshold = sz;
+	}
+	/** Returns the maximal allowed upload size, in kilobytes, or 
+	 * a negative value if no limit.
+	 */
+	public int getFileSizeThreshold() {
+		return _fileSizeThreshold;
 	}
 	/** Returns the charset used to encode the uploaded text file
 	 * (never null).

@@ -13,6 +13,7 @@ ZK 5.0.8
   3327013: A way to log message to the client
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
+  3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
   
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -103,6 +104,7 @@ ZK 5.0.8
   3357641: listbox scroll bar position issue if ROD is true
   3358505: ZK EE with native failed to invalidate (JS error)
   3327522: Visible property for borderlayout panels (west, east, etc)
+  3337441: Firefox Listbox Multiselect
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
@@ -174,7 +176,6 @@ May 11, 2011
   3299234: A way to get the list of data from onBindingValidate evt
   3299344: A way to get associated bean of a Binding
   3299827: Support Mac listbox multiple selection
-  3337441: Firefox Listbox Multiselect
   
 * Bugs
   3286462: native component cause issue in fulfill

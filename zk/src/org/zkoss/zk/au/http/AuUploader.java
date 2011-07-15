@@ -335,10 +335,14 @@ public class AuUploader implements AuExtension {
 		final Map params = new HashMap();
 		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request, key);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
-
-		sfu.setProgressListener(fty.new ProgressCallback());
-
+		
 		final Configuration conf = desktop.getWebApp().getConfiguration();
+		int thrs = conf.getFileSizeThreshold();
+		if (thrs > 0)
+			fty.setSizeThreshold(1024*thrs);
+		
+		sfu.setProgressListener(fty.new ProgressCallback());
+		
 		int maxsz = conf.getMaxUploadSize();
 		try {
 			maxsz = Integer.parseInt(request.getParameter("maxsize"));

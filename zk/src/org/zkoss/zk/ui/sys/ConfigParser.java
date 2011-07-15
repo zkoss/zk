@@ -593,6 +593,9 @@ public class ConfigParser {
 		v = parseInteger(el, "max-upload-size", false);
 		if (v != null) config.setMaxUploadSize(v.intValue());
 
+		v = parseInteger(el, "file-size-threshold", false);
+		if (v != null) config.setFileSizeThreshold(v.intValue());
+
 		v = parseInteger(el, "max-process-time", true);
 		if (v != null) config.setMaxProcessTime(v.intValue());
 
