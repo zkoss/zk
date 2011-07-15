@@ -1,3 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-210.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 15 17:46:41 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
 <zk>
 <style id="s3" src="Z5-style.css"/>
 <div id="main" class="css1">

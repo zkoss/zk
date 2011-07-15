@@ -105,6 +105,7 @@ ZK 5.0.8
   3358505: ZK EE with native failed to invalidate (JS error)
   3327522: Visible property for borderlayout panels (west, east, etc)
   3337441: Firefox Listbox Multiselect
+  ZK-210: Style Tag Ignored in IE6/7/8
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
