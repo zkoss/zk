@@ -333,7 +333,7 @@ function zkmprops(uuid, props) {
 			if (type == "#stub") { //not possible if zkuery
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
-					throw "Unknow stub "+uuid;
+					throw "Unknown stub "+uuid;
 				var w = new Widget();
 				zk._wgtutl.replace(wgt, w);
 				wgt.unbind(); //reuse it as new widget

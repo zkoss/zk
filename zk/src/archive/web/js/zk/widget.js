@@ -3012,7 +3012,7 @@ unbind_: function (skipper, after) {
 	 */
 	onDrop_: function (drag, evt) {
 		var data = zk.copy({dragged: drag.control}, evt.data);
-		this.fire('onDrop', data, null, 38);
+		this.fire('onDrop', data, null, zk.Widget.auDelay);
 	},
 	/** Called to create the visual effect representing what is being dragged.
 	 * In other words, it creates the DOM element that will be moved with the mouse pointer when the user is dragging.
@@ -3198,7 +3198,8 @@ focus_: function (timeout) {
 					}
 					if (asap != null //true or false
 					|| evt.opts.sendAhead)
-						this.sendAU_(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
+						this.sendAU_(evt,
+							asap ? timeout >= 0 ? timeout : zk.Widget.auDelay : -1);
 				}
 			}
 			return evt;
@@ -4171,7 +4172,14 @@ zk.Widget.getClass('combobox');
 			throw cls;
 		}
 		return new cls(props);
-	}
+	},
+	/** The default delay before sending an AU request when {@link #fire}
+	 * is called (and the server has an ARAP event listener registered).
+	 * <p>Default: 38 (Unit: miliseconds).
+	 * @since 5.0.8
+	 * @type int
+	 */
+	auDelay: 38
 });
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
@@ -4376,6 +4384,7 @@ zk._wgtutl = { //internal utilities
 			p.parent = to;
 		from.parent = from.nextSibling = from.previousSibling =
 		from.firstChild = from.lastChild = null;
+		from.nChildren = 0;
 	},
 
 	autohide: function () { //called by effect.js
