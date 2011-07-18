@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdws = [],
 			hdcavews = [];
 			
-		if (wgt.eheadtbl) {//clear and backup headers widthes
+		if (wgt.eheadtbl) {//clear and backup headers widths
 			wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
@@ -77,7 +77,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (wgt.head && wgt.head.$n())
 			wgt.head.$n().style.width = '';
-		if (wgt.efoottbl) {//clear and backup footers widthes
+		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
@@ -90,7 +90,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ftcell.style.width = '';
 			}
 		}
-		if (wgt.ebodytbl) {//clear and backup body fackers widthes
+		if (wgt.ebodytbl) {//clear and backup body faker widths
 			wgt.ebody.style.width = '';
 			ebodytblw = wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
