@@ -406,9 +406,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * _parent and _top.</li>
 	 * <li>overwrite - whether load a new page in the current browser window.
 	 * If true, the new page replaces the previous page's position in the history list.</li>
-	 * <li>reload - whether to enforce the reload.
-	 * It is used if the new URL is the same as the current one except
-	 * the bookmark (<code>#xxx</code>).</li>
 	 * </ul>
 	 */
 	go: function (url, opts) {
@@ -421,16 +418,13 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (url) {
 				location.href = url;
 
-				if (!opts.reload)
-					return;
-
-				var j = url.indexOf('#'),
-					un = j >= 0 ? url.substring(0, j): url,
-					pn = _pathname(location.href);
-				
+				var j = url.indexOf('#');
 				//bug 3363687, only if '#" exist, has to reload()
 				if(j < 0)
 					return;
+				
+				var	un = j >= 0 ? url.substring(0, j): url,
+					pn = _pathname(location.href);
 				
 				j = pn.indexOf('#');
 				if (j >= 0) pn = pn.substring(0, j);

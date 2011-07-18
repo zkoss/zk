@@ -167,7 +167,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				&& !onError(req, _errCode = rstatus)) {
 					var eru = _errURIs['' + rstatus];
 					if (typeof eru == "string") {
-						zUtl.go(eru, {reload: true});
+						zUtl.go(eru);
 						return;
 					}
 
@@ -973,7 +973,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	redirect: function (url, target) {
 		try {
-			zUtl.go(url, {target: target, reload: true});
+			zUtl.go(url, {target: target});
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}
