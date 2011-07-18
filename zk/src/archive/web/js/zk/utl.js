@@ -427,6 +427,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				var j = url.indexOf('#'),
 					un = j >= 0 ? url.substring(0, j): url,
 					pn = _pathname(location.href);
+				
+				//bug 3363687, only if '#" exist, has to reload()
+				if(j < 0)
+					return;
+				
 				j = pn.indexOf('#');
 				if (j >= 0) pn = pn.substring(0, j);
 				if (pn != un)
