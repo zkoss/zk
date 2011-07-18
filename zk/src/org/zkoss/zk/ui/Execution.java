@@ -900,10 +900,6 @@ public interface Execution extends Scope {
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
-	 *
 	 * @since 3.0.2
 	 */
 	public boolean isHilDevice();

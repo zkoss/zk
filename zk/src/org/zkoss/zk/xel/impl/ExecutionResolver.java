@@ -155,7 +155,7 @@ public class ExecutionResolver implements VariableResolverX {
 			}
 
 			Object o = _exec.getAttribute(name);
-			if (o != null || _exec.hasAttribute(name))
+			if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 				return o;
 
 			o = comp.getAttributeOrFellow(name, true);
@@ -181,7 +181,7 @@ public class ExecutionResolver implements VariableResolverX {
 					return o;
 
 				o = _exec.getAttribute(name);
-				if (o != null || _exec.hasAttribute(name))
+				if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 					return o;
 
 				o = page.getAttributeOrFellow(name, true);
@@ -193,7 +193,7 @@ public class ExecutionResolver implements VariableResolverX {
 					return o;
 			} else {
 				Object o = _exec.getAttribute(name, true);
-				if (o != null || _exec.hasAttribute(name, true))
+				if (o != null/* || _exec.hasAttribute(name, true)*/) //ServletRequest not support hasAttribute
 					return o;
 			}
 		}
