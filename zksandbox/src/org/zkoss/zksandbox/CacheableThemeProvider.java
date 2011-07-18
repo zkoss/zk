@@ -72,7 +72,6 @@ public class CacheableThemeProvider implements ThemeProvider{
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		} else {
-			uris.add(getExtCSS(suffix));
 			uris.add(getNormCSS(suffix));
 		}
 		
@@ -155,10 +154,6 @@ public class CacheableThemeProvider implements ThemeProvider{
 
 	private static String getThemeMsgBoxURI(String suffix) {
 		return "~./zul/html/messagebox." + suffix + ".zul";
-	}
-
-	private static String getExtCSS(String suffix) {
-		return "~./zul/css/ext." + suffix + ".css.dsp";
 	}
 	
 	private static String getNormCSS(String suffix) {
