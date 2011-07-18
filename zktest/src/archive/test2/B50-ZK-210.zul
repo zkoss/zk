@@ -41,9 +41,9 @@ Click remove the yellow background will be removed.
 	]]></zscript>
 	<separator bar="true"/>
 	<button label="add" onClick='addStyle(".css1 {background: yellow}")'/>
-	<button label="remove" onClick='removeStyle()'/>
 	<button label="update to red" onClick='updateStyle(".css1 {background: red}")'/>
 	<button label="change to gray" onClick='updateStyle(".css1 {background: gray}")'/>
+	<button label="remove" onClick='removeStyle()'/>
 </div>
 <separator bar="true"/>
 <div class="css2">
@@ -64,5 +64,5 @@ Click remove the yellow background will be removed.
 	<button label="add back" onClick="self.parent.appendChild(ts3)"/>
 </div>
 <include/>
-<button label="include" onClick='self.previousSibling.setSrc("style.zul")'/>
+<button label="include" onClick='self.previousSibling.setSrc("/test2/B50-ZK-210.zul")'/>
 </zk>
