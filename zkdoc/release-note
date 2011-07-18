@@ -111,6 +111,8 @@ ZK 5.0.8
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
     selected - Bug 2973303)
+  + Listheader's selectAll checkmark will disable when Listbox in ROD mode. Here
+	is the feature tracker - http://tracker.zkoss.org/browse/ZK-220
   + If enable the autopaging function of Tree, Listbox, and Grid, the height of
 	each row will be applied the following CSS by default. If you want to change
 	the height, please overwrite the CSS rule as your preference.
