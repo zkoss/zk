@@ -14,7 +14,8 @@ ZK 5.0.8
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
-  ZK-214 : Add a databinding composer instead of 
+  ZK-214: Add a databinding composer instead of initiator
+
 * Bugs
   3301375: native component in vbox stretch align show javascript error
   3303684: Panel sizable has incorrect moving constraint
@@ -105,9 +106,10 @@ ZK 5.0.8
   3358505: ZK EE with native failed to invalidate (JS error)
   3327522: Visible property for borderlayout panels (west, east, etc)
   3337441: Firefox Listbox Multiselect
-  ZK-210 : Style Tag Ignored in IE6/7/8
+  ZK-210: Style Tag Ignored in IE6/7/8
   3363687: Window onCreate fired twice for Execution#sendRedirect() 
-  ZK-223 : Fine tune ZKThemes and sandbox
+  ZK-223: Fine tune ZKThemes and sandbox
+  ZK-200: Outside Window border disappear when defer including
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

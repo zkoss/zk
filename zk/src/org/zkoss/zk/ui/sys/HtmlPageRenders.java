@@ -658,7 +658,7 @@ public class HtmlPageRenders {
 	}
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
-		if (page != null) {
+		if (page != null && ((PageCtrl)page).getOwner() == null) { //only the topmost page shall generate SEO
 			final WebApp wapp = page.getDesktop().getWebApp();
 			final Configuration config = wapp.getConfiguration();
 
