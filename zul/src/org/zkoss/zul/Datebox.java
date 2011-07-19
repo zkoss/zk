@@ -733,7 +733,7 @@ the short time styling.
 	 * override {@link #getExtraCtrl} to return an instance that extends from
 	 * this class.
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Blockable {
+	protected class ExtraCtrl extends FormatInputElement.ExtraCtrl implements Blockable {
 		public boolean shallBlock(AuRequest request) {
 			// B50-3316103: special case of readonly component: do not block onChange and onSelect
 			final String cmd = request.getCommand();
