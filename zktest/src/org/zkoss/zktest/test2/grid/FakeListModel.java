@@ -28,7 +28,7 @@ import org.zkoss.zul.event.ListDataEvent;
  * @author Jeff
  *
  */
-public class FakeListModel extends AbstractListModel implements ListModelExt {
+public class FakeListModel extends AbstractListModel implements ListModelExt, java.io.Serializable {
 	
 	private int _size;
 	private boolean _asc = true;
