@@ -20,12 +20,7 @@
 maindir="$(pwd)"
 version=$1
 if [ "$version" == "" ] ; then
-	echo "Usage: maven.install [ version ] [ official | daily ]"
-	exit 1
-fi
-
-if [ "$2" != "official" ] ; then
-	version=$version.FL.$(date +%Y%m%d)
+      version=$version.FL.$(date +%Y%m%d)
 fi
 
 function upVer {
