@@ -17,11 +17,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.text.DateFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,9 +38,9 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.http.Utils;
 import org.zkoss.zk.au.AuRequest;
@@ -723,17 +721,27 @@ the short time styling.
 		} else 
 			super.service(request, everError);
 	}
+	
 	public Object getExtraCtrl() {
-		return new Blockable() {
-			public boolean shallBlock(AuRequest request) {
-				// B50-3316103: special case of readonly component: do not block onChange and onSelect
-				final String cmd = request.getCommand();
-				if(Events.ON_OPEN.equals(cmd))
-					return false;
-				return !Components.isRealVisible(Datebox.this) || isDisabled() || 
-					(isReadonly() && Events.ON_CHANGING.equals(cmd));
-			}
-		};
+		return new ExtraCtrl();
+	}
+	
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 *
+	 * <p>If a component requires more client controls, it is suggested to
+	 * override {@link #getExtraCtrl} to return an instance that extends from
+	 * this class.
+	 */
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Blockable {
+		public boolean shallBlock(AuRequest request) {
+			// B50-3316103: special case of readonly component: do not block onChange and onSelect
+			final String cmd = request.getCommand();
+			if(Events.ON_OPEN.equals(cmd))
+				return false;
+			return !Components.isRealVisible(Datebox.this) || isDisabled() || 
+				(isReadonly() && Events.ON_CHANGING.equals(cmd));
+		}
 	}
 	
 	/**
