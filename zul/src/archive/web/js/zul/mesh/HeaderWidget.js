@@ -78,8 +78,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == '' 
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			this._hflexWidth = sz.width;
-			return {width: sz.width};
+			//updated: need to concern inner padding due to _getContentEdgeWidth
+			//spec in flex.js
+			var rvw = this.isRealVisible() && this.firstChild ? 
+					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
+			this._hflexWidth = rvw;
+			return {width: rvw};
 		} else
 			return this.$supers('setFlexSize_', arguments);
 	},

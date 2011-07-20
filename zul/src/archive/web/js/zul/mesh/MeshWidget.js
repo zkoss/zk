@@ -151,7 +151,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 
-		if (wgt.eheadtbl) {//restore headers widthes
+		if (wgt.eheadtbl) {//restore headers widths
 			wgt.eheadtbl.width = eheadtblw||'';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix||'';
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
@@ -162,13 +162,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				headcave.style.width = hdcavews[i];
 			}
 		}
-		if (wgt.efoottbl) {//restore footers widthes
+		if (wgt.efoottbl) {//restore footers widths
 			wgt.efoottbl.width = efoottblw||'';
 			wgt.efoottbl.style.tableLayout = efoottblfix||'';
 			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;)
 				ftfaker.cells[i].style.width = ftfakerws[i];
 		}
-		if (wgt.ebodytbl) {//restore body fackers widthes
+		if (wgt.ebodytbl) {//restore body fakers widths
 			wgt.ebodytbl.width = ebodytblw||'';
 			wgt.ebodytbl.style.tableLayout = ebodytblfix||'';
 			if (bdfaker)
@@ -470,10 +470,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.head && this.ehead) {
 			var empty = true,
 				flex = false,
-				meshmin = (this._hflex == 'min');
+				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
 			for (var i = this.heads.length; i-- > 0;)
 				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
-					if (meshmin && !w._width && !w._nhflex) {
+					if (hdsmin && !w._width && !w._nhflex) {
 						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
 						w._nhflex = -65500; // min
@@ -947,7 +947,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ehead) {
 			if (tblwd) 
 				this.ehead.style.width = tblwd + 'px';
-			if (tblwd && this.efoot) 
+			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
+				this._adjHeadWd();
+			else if (tblwd && this.efoot) 
 				this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
@@ -1004,6 +1006,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
+		if (this.isSizedByContent())
+			return true;
 		if (!this.head)
 			return false;
 		var allwidths = true;
@@ -1044,7 +1048,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
-		out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths ? '' : ' style="width:0px"'), '></th></tr></tbody>');
+		out.push('<th id="', head.uuid, fakeId, 'flex"', 
+				(allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
 	},
 
 	//super//
@@ -1055,7 +1060,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.head = child;
 			this._minWd = null;
 		} else if (!child.$instanceof(zul.mesh.Auxhead)) 
-				return;
+			return;
 
 		var nsib = child.nextSibling;
 		if (nsib)
@@ -1078,6 +1083,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
+			if (this.isSizedByContent())
+				this._calcSize();
 			if (this.head) {
 				this._fixHeaders(true/** B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
@@ -1091,18 +1098,29 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_fixBodyMinWd: function (fixMesh) {
 		// effective only when there is no header
-		if (!this.head && this._hflex == 'min') {
+		var sbc = this.isSizedByContent(),
+			meshmin = this._hflex == 'min';
+		if (!this.head && (meshmin || sbc)) {
 			var bdw = zk(this.$n()).padBorderWidth();
 				wd = this._getMinWd() + bdw, // has to call _getMinWd first so this._minWd will be available
 				tr = this.ebodytbl,
 				wds = this._minWd.wds,
 				wlen = wds.length;
-			if (fixMesh)
+			if (fixMesh && meshmin)
 				this.setFlexSize_({width:wd}, true);
 			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 				return; // no first tr
 			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
 				c.style.width = (zk.safari ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+			if (sbc && !meshmin) {
+				// add flex <td> if absent
+				var bdfx = tr.lastChild,
+					bdfxid = this.uuid + '-bdflex';
+				if (!bdfx || bdfx.id != bdfxid) {
+					jq(tr).append('<td id="' + bdfxid + '"></td>');
+					bdfx = tr.lastChild;
+				}
+			}
 		}
 	},
 	_getSigRow: function () {
@@ -1121,6 +1139,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	// fixed for B50-3315594.zul
 	beforeParentMinFlex_: function (orient) {
 		if (orient == 'w') {
+			if (this.isSizedByContent()) 
+				this._calcSize();
 			if (this.head)
 				this._fixHeaders();
 		} else
@@ -1333,6 +1353,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
+		if (zk.opera && this.isSizedByContent())
+			dst.parentNode.parentNode.style.width = sum + "px";
 		if (fakeRow)
 			src.parentNode.removeChild(src);
 	}
