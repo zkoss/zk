@@ -1,3 +1,15 @@
+<!--
+B50-ZK-215.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 21 12:46:12 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
 <zk>
 	<div>IE 6/7 only.</div>
 	<div>Enter "a" in the Combobox so its Combopopup will drop down. If the width of the popup is as large as window size, it is a bug.</div>
