@@ -50,7 +50,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				if (child.isVisible()) {
 					var c = child.$n();
 					if (vert) {
-						if (child._nhflex)
+						if (child._nhflex && child._nhflex > 0) // B50-ZK-159: skip when min flex
 							child.setFlexSize_({width:'auto'});
 						else if (c && this._isStretchAlign()) {//release width of children might cause wider box
 									 //bug 2951825, widget not necessary with HTML dom element(<script>)
@@ -68,7 +68,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 							chdex.style.width = '';
 						}
 					} else {
-						if (child._nvflex)
+						if (child._nvflex && child._nvflex > 0) // B50-ZK-159: skip when min flex
 							child.setFlexSize_({height:'auto'});
 						else if (c && this._isStretchAlign()) {//release height of children might cause higher box
 									 //bug 2951825, widget not necessary with HTML dom element(<script>)

@@ -112,8 +112,9 @@ ZK 5.0.8
   ZK-223: Fine tune ZKThemes and sandbox
   ZK-200: Outside Window border disappear when defer including
   ZK-215: Combobox options width failed in IE
-  ZK-56: setSelectedIndex not scroll the selectedItem 
+  ZK-56:  setSelectedIndex not scroll the selectedItem 
   ZK-232: Server push fail in cluster environment
+  ZK-159: Hflex fail with nest container 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
