@@ -110,6 +110,7 @@ ZK 5.0.8
   3363687: Window onCreate fired twice for Execution#sendRedirect() 
   ZK-223: Fine tune ZKThemes and sandbox
   ZK-200: Outside Window border disappear when defer including
+  ZK-215: Combobox options width failed in IE
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

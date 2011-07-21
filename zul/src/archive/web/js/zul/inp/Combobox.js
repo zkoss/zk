@@ -171,6 +171,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				//purpose: onSelect can retrieve the value correctly
 				//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
 		}
+		// B50-ZK-215: table width will fit to 100% of window width instead of its parent in IE6/7
+		if (zk.ie < 8){
+			var pp = this.getPopupNode_(),
+				wd = pp.style.width;
+			if (pp.firstChild && wd && wd != 'auto')
+				pp.firstChild.style.width = zk(pp).revisedWidth(zk.parseInt(pp.style.width) - 1) + 'px';
+		}
 	},
 	_isStrict: function () {
 		var strict = this.getConstraint();
