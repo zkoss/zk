@@ -74,9 +74,11 @@ public class Renders {
 	throws ServletException, IOException {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		render(ctx, request, response, new EmbedRichlet(comp), path, out);
+		render(ctx, request, response, new EmbedRichlet(comp), path, false, out);
 	}
 	/** Outputs the HTML tags of the given component to the given writer.
+	 * It is the same as <code>render(ctx, request, response, richlet, path, false, out)</code>.
+	 *
 	 * @param path the request path. If null, the servlet path is assumed.
 	 * @param out the output (never null).
 	 * @param richlet the richlet to run. If you have only one component to show and no need
@@ -88,6 +90,25 @@ public class Renders {
 	public static final void render(ServletContext ctx,
 	HttpServletRequest request, HttpServletResponse response,
 	Richlet richlet, String path, Writer out)
+	throws ServletException, IOException {
+		render(ctx, request, response, richlet, path, false, out);
+	}
+	/** Outputs the HTML tags of the given component to the given writer with
+	 * additional control.
+	 * @param path the request path. If null, the servlet path is assumed.
+	 * @param out the output (never null).
+	 * @param richlet the richlet to run. If you have only one component to show and no need
+	 * process it under an execution, you could use
+	 * {@link #render(ServletContext, HttpServletRequest, HttpServletResponse, Component, String, Writer)}
+	 * instead.
+	 * @param pageDOM whether to generate the DOM element to represent the page.
+	 * In other words, if true is specified, the content will be enclosed with
+	 * an additional DIV element representing the tag.
+	 * @since 5.0.8
+	 */
+	public static final void render(ServletContext ctx,
+	HttpServletRequest request, HttpServletResponse response,
+	Richlet richlet, String path, boolean pageDOM, Writer out)
 	throws ServletException, IOException {
 		if (path == null)
 			path = Https.getThisServletPath(request);
@@ -114,7 +135,7 @@ public class Renders {
 			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
 			exec = new ExecutionImpl(ctx, request, response, desktop, page);
 			exec.setAttribute(Attributes.PAGE_REDRAW_CONTROL, "page");
-			exec.setAttribute(Attributes.PAGE_RENDERER, new PageRenderer(exec));
+			exec.setAttribute(Attributes.PAGE_RENDERER, new PageRenderer(exec, pageDOM));
 
 			wappc.getUiEngine().execNewPage(exec, richlet, page, out);
 					//no need to set device type here, since UiEngine will do it later
@@ -147,23 +168,38 @@ public class Renders {
 	 */
 	public static class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		private final Execution _exec;
+		private final boolean _pageDOM;
 		/** Default constructor.
 		 * It is the same as <code>PageRenderer(Executions.getCurrent())</code>.
 		 */
 		public PageRenderer() {
-			this(Executions.getCurrent());
+			this(Executions.getCurrent(), false);
 		}
 		public PageRenderer(Execution exec) {
+			this(exec, false);
+		}
+		/**
+		 * @param pageDOM whether to generate the DOM element to represent the page.
+		 * In other words, if true is specified, the content will be enclosed with
+		 * an additional DIV element representing the tag.
+		 * @since 5.0.8
+		 */
+		public PageRenderer(Execution exec, boolean pageDOM) {
 			_exec = exec;
+			_pageDOM = pageDOM;
 		}
 
 		//@Override
 		public void render(Page page, Writer out) throws IOException {
-			final Desktop desktop = _exec.getDesktop();
-
 			out.write(HtmlPageRenders.outLangStyleSheets(_exec, null, null));
 			out.write(HtmlPageRenders.outLangJavaScripts(_exec, null, null));
 
+			if (_pageDOM) {
+				HtmlPageRenders.outPageContent(_exec, page, out, false);
+				return;
+			}
+
+			final Desktop desktop = _exec.getDesktop();
 			out.write("<script type=\"text/javascript\">zkpb('");
 			out.write(page.getUuid());
 			out.write("','");
