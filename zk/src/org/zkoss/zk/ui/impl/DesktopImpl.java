@@ -167,6 +167,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
 	private transient ServerPush _spush;
+	private transient ServerPush _spush0;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List _dtCleans, _execInits, _execCleans,
@@ -911,8 +912,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			safeActivate(exec);
 			try {
 				sessDidActivate();
+				enableServerPush0(_spush0, true);
 			} finally {
 				safeDeactivate(exec);
+				_spush0 = null;
 			}
 		}
 	}
@@ -1065,7 +1068,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				}
 			} else
 				sp = (ServerPush)o;
-			enableServerPush0(sp, true);
+			_spush0 = sp;
 		}
 	}
 	private void didDeserialize(Collection c) {
