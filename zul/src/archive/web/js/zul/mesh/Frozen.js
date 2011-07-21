@@ -168,6 +168,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this, onSize: this});
+		this.parent.unlisten({onScroll: this.proxy(this._onScroll)});
 		var p;
 		if ((p = this.parent) && (p = p.$n('body')))
 			jq(p).removeClass('z-word-nowrap').css('overflow-x', '');
