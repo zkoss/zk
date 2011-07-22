@@ -609,6 +609,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			//unlike server, validation occurs only if attached
 			if (!this.desktop) this._errmsg = null;
 			else {
+				var em = this._errmsg;
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
@@ -620,7 +621,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					return {error: msg};
 				}
 				this._lastRawValVld = value;
-				this.fire('onError', {value: val});
+				if (em)
+					this.fire('onError', {value: val});
 			}
 			return {value: val};
 		} finally {
