@@ -286,6 +286,6 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	    }
 	    sb.deleteCharAt(sb.length() - 1);
 	    sb.append(']');
-	    return sb.toString().replace("\\", "");
+	    return sb.toString().replaceAll("\\\\", "");
 	}
 }
