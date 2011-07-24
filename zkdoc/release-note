@@ -117,6 +117,7 @@ ZK 5.0.8
   ZK-159: Hflex fail with nest container
   ZK-182: Header of grid scroll fail after remove the Frozen
   ZK-163: The Flashchart didn't compatible with jre / jdk 1.4.x
+  ZK-195: Tree with vflex causes wrong wd in another tree w/ scrollbar
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

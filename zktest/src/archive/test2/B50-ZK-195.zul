@@ -1,0 +1,23 @@
+<!--
+B50-ZK-195.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 09:38:12 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<grid>
+		<columns>
+			<column>Column</column>
+		</columns>
+		<rows>
+			<row>Row</row>
+		</rows>
+	</grid>
+	<grid vflex="1" />
+</zk>
