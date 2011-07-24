@@ -69,7 +69,9 @@ if (window._gat) {
 	gafn = null;
 	try {
 		var pageTracker = _gat._getTracker("UA-121377-3");
-		pageTracker._setDomainName("zkoss.org");
+		pageTracker._setDomainName(".zkoss.org");
+		pageTracker._setAllowLinker(true);
+		pageTracker._setAllowHash(true);
 		pageTracker._initData();
 		pageTracker._trackPageview();
 
