@@ -1,11 +1,10 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>Only in webkit (Chrome, Safari)</li>
-			<li>Drag browser window to change width, the Listbox/Tree shall change there width accordingly.</li>
-			<li>When done dragging if you saw an extra space on top of the body content, it is a bug.</li>
-		</ol>
-	]]></html>
+	1. Only in webkit (Chrome, Safari)
+	<separator/>
+	2. Drag browser window to change width, the Listbox/Tree shall change there width accordingly.
+	<separator/>
+	3. When done dragging if you saw an extra space on top of the body content, it is a bug.
+	<separator/>
 	<style>
 		/*
 		.z-listbox-body, .z-tree-body {

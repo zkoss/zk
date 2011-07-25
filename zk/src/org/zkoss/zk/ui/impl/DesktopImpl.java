@@ -168,6 +168,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
 	private transient ServerPush _spush;
+	/** A temporary object being deserialized but not yet activate. */
+	private transient ServerPush _spushTemp;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List<DesktopCleanup> _dtCleans;
@@ -558,6 +560,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		ri.uuids.add(uuid);
 		return true; //recycled
 	}
+	public Component mapComponent(String uuid, Component comp) {
+		if (uuid == null)
+			throw new IllegalArgumentException("null");
+		return comp != null ?
+			(Component)_comps.put(uuid, comp): (Component)_comps.remove(uuid);
+			//no recycle, no check
+	}
 	private static int getExecId() {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ? System.identityHashCode(exec): 0;
@@ -702,7 +711,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} else if ("error".equals(cmd)) {
 			final Map data = request.getData();
 			if (data != null)
-				log.error("Client Error: " + data.get(""));
+				log.error(this+" client error: " + data.get("message"));
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}
@@ -908,8 +917,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			safeActivate(exec);
 			try {
 				sessDidActivate();
+				if (_spushTemp != null)
+					enableServerPush0(_spushTemp, true);
 			} finally {
 				safeDeactivate(exec);
+				_spushTemp = null;
 			}
 		}
 	}
@@ -1062,7 +1074,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				}
 			} else
 				sp = (ServerPush)o;
-			enableServerPush0(sp, true);
+			_spushTemp = sp;
 		}
 	}
 	private void didDeserialize(Collection c) {

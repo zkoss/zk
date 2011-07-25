@@ -65,7 +65,6 @@ import org.zkoss.zk.xel.ExValue;
  * @author tomyeh
  */
 public class ComponentsCtrl {
-
 	private static final ThreadLocal<Object> _compdef = new ThreadLocal<Object>();
 
 	/** Returns the automatically generate component's UUID/ID.

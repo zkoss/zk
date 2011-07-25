@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
-		_detached = []; //used for resolving #stub in mount.js (it stores detached widgets in this AU)
+		_detached = []; //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
 
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
@@ -167,7 +167,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				&& !onError(req, _errCode = rstatus)) {
 					var eru = _errURIs['' + rstatus];
 					if (typeof eru == "string") {
-						zUtl.go(eru, {reload: true});
+						zUtl.go(eru);
 						return;
 					}
 
@@ -248,27 +248,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 
 	function ajaxSend(dt, aureq, timeout) {
-		var clkfd = zk.clickFilterDelay;
-		if (clkfd > 0 && (aureq.opts||{}).ctl) {
-			//Don't send the same request if it is in processing
-			if (ajaxReqInf && ajaxReqInf.ctli == aureq.uuid
-			&& ajaxReqInf.ctlc == aureq.cmd)
-				return;
-
-			var t = jq.now();
-			if (ctlUuid == aureq.uuid && ctlCmd == aureq.cmd //Bug 1797140
-			&& t - ctlTime < clkfd)
-				return; //to prevent key stroke are pressed twice (quickly)
-
-			//Note: it is still possible to queue two ctl with same uuid and cmd,
-			//if the first one was not sent yet and the second one is generated
-			//after 390ms. However, it is rare so no handle it
-
-			ctlTime = t;
-			ctlUuid = aureq.uuid;
-			ctlCmd = aureq.cmd;
-		}
-
 		dt._aureqs.push(aureq);
 
 		ajaxSend2(dt, timeout);
@@ -327,8 +306,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function toJSON(target, data) {
 		if (!jq.isArray(data)) {
 			if (data.pageX != null && data.x == null)  {
-				var ofs = target ? target.fromPageCoord(data.pageX, data.pageY):
-					[data.pageX, data.pageY];
+				var ofs = target && target.desktop ? // B50-3336745: target may have been detached
+						target.fromPageCoord(data.pageX, data.pageY):
+						[data.pageX, data.pageY];
 				data.x = ofs[0];
 				data.y = ofs[1];
 			}
@@ -497,7 +477,7 @@ zAu = {
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = msgzk[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2+": ":"")+(cmd||"")
-				+ (ex?"\n"+(_exmsg(ex) || ex):""));
+			+ (ex?"\n"+_exmsg(ex):""));
 	},
 	/** Returns the URI for the specified error.
 	 * @param int code the error code
@@ -599,6 +579,21 @@ zAu = {
 			}
 			return;
 		}
+	},
+
+	//remove desktop (used in mount.js and wiget.js)
+	_rmDesktop: function (dt, dummy) {
+		jq.ajax(zk.$default({
+			url: zk.ajaxURI(null, {desktop:dt,au:true}),
+			data: {dtid: dt.id, cmd_0: dummy ? "dummy": "rmDesktop", opt_0: "i"},
+			beforeSend: function (xhr) {
+				if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
+			},
+			//2011/04/22 feature 3291332
+			//Use sync request for chrome and safari.
+			//Note: when pressing F5, the request's URL still arrives before this even async:false
+			async: !zk.safari
+		}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
 	},
 
 	////Ajax////
@@ -819,23 +814,14 @@ zAu.beforeSend = function (uri, req, dt) {
 			zAu.showError("FAILED_TO_SEND", null, null, e);
 		}
 
-		//bug 1721809: we cannot filter out ctl even if zAu.processing
-
 		//decide ignorable
-		var ignorable = true, ctli, ctlc;
+		var ignorable = true;
 		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j],
-				evtnm = aureq.name,
 				opts = aureq.opts||{};
-			if (opts.uri != uri)
+			if ((opts.uri != uri)
+			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
-
-			ignorable = ignorable && opts.ignorable; //all ignorable
-
-			if (opts.ctl && !ctli) {
-				ctli = aureq.target.uuid;
-				ctlc = evtnm;
-			}
 		}
 
 		//Consider XML (Pros: ?, Cons: larger packet)
@@ -856,7 +842,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
-				ctli: ctli, ctlc: ctlc, implicit: implicit,
+				implicit: implicit, 
 				ignorable: ignorable, tmout: 0, rtags: rtags
 			});
 		return true;
@@ -997,7 +983,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	redirect: function (url, target) {
 		try {
-			zUtl.go(url, {target: target, reload: true});
+			zUtl.go(url, {target: target});
 		} catch (ex) {
 			if (!zk.confirmClose) throw ex;
 		}
@@ -1008,6 +994,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	title: function (title) {
 		document.title = title;
 	},
+	/** Logs the message.
+	 * @param String msg the message to log
+	 * @since 5.0.8
+	 */
+	log: zk.log,
 	/** Executes the JavaScript.
 	 * @param String script the JavaScript code snippet to execute
 	 */

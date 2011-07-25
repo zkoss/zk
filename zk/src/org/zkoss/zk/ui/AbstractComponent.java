@@ -34,16 +34,13 @@ import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
-import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
-import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
@@ -59,12 +56,12 @@ import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Names;
@@ -73,6 +70,9 @@ import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.StubsComponent;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -80,22 +80,16 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.ui.impl.Utils;
-import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
-import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.scripting.*;
 
@@ -164,10 +158,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		_def.applyAttributes(this);
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
-	/** Constructs a stub component.
-	 * @param useless an useless argument
+	/** Constructs a dummy component that is not associated
+	 * with any component definition.
+	 * @param useless an useless argument (it is ignored but used
+	 * to distinquish the default constructor)
+	 * @since 5.1.0
 	 */
-	/*package*/ AbstractComponent(boolean useless) { //called by StubComponent
+	protected AbstractComponent(boolean useless) {
 		_def = ComponentsCtrl.DUMMY;
 	}
 	/** Returns the component definition of the specified class, or null
@@ -1169,13 +1166,46 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			first._parent = this;
 	}
 
-	/** Replaces with the given component.
-	 * This component will be detached at the end.
+	/** Replace the specified component with this component in
+	 * the component tree. In other words, the parent of the given
+	 * component will become the parent of this components, so
+	 * are siblings and children. Furthermore, comp will be detached
+	 * at the end.
+	 *
+	 * <p>Notice that the replacement won't change anything at the client.
+	 * It is the caller'job to maintain the consistency between the server
+	 * and the client.
+	 *
+	 * <p>This method is rarely used.
+	 *
+	 * @param comp the component. In this implementation it supports
+	 * only derived classes of {@link AbstractComponent}.
+	 * @param bFellow whether to add this component to the map of fellows
+	 * if it is assigned with an ID. If false, the component (comp) cannot
+	 * be retrieved back even with an ID (note: ID is always preserved).
+	 * @param bListener whether to retain the event listeners and handlers.
+	 * If true, the event listeners and handlers, if any, will be registered
+	 * to this stub component. In other words, the event will be processed.
+	 * However, it is a stub component, rather than the original one.
+	 * I means the event is the most generic format: an instance of
+	 * {@link org.zkoss.zk.ui.event.Event} (rather than MouseEvent or others).
+	 * @param bChildren whether to have the children of the given component.<br/>
+	 * If false, this component won't have any children, and all UUID of children
+	 * reference back to this component.<br/>
+	 * If true, the given component's children will belong to this component.
+	 * @exception IllegalStateException if this component has a parent,
+	 * sibling or child.
+	 * @since 5.1.0
 	 */
-	/*package*/ final //called by StubComponent
-	void replaceWith(AbstractComponent comp, boolean bFellow, boolean bListener) {
-		if (comp._parent != null || comp._next != null || comp._prev != null
-		|| comp._chdinf != null || comp._page != null)
+	protected void replace(Component comp, boolean bFellow, boolean bListener,
+	boolean bChildren) {
+		((AbstractComponent)comp).replaceWith(this, bFellow, bListener, bChildren);
+	}
+	private final
+	void replaceWith(AbstractComponent comp, boolean bFellow, boolean bListener,
+	boolean bChildren) {
+		if (this == comp || comp._parent != null || comp._next != null
+		|| comp._prev != null || comp._chdinf != null || comp._page != null)
 			throw new IllegalStateException();
 
 		comp._def = _def;
@@ -1196,35 +1226,48 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		_parent = _next = _prev = null;
 
-		//fix children link
-		if (_chdinf != null) {
-			for (p = _chdinf.first; p != null; p = p._next)
-				p._parent = comp;
-			comp._chdinf = _chdinf;
-			_chdinf = null;
-		}
-
 		//fix the uuid-to-component map
-		if (_page != null) {
-			comp._page = _page;
+		final Page page;
+		if ((page = _page) != null) {
+			comp._page = page;
 			if (comp._parent == null)
-				((AbstractPage)_page).onReplaced(this, comp);
+				((AbstractPage)page).onReplaced(this, comp);
 				//call onReplaced instead addRoot/removeRoot
 
-			final DesktopCtrl desktopCtrl = (DesktopCtrl)_page.getDesktop();
-			desktopCtrl.removeComponent(this, false);
-			desktopCtrl.addComponent(comp);
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)page.getDesktop();
+			desktopCtrl.mapComponent(_uuid, comp);
 			_page = null;
 		}
 
 		//add comp to the fellow map
-		if (bFellow) {
-			comp._id = _id;
+		comp._id = _id;
+		if (bFellow)
 			addToIdSpaces(comp); ///called after fixing comp._parent...
-		}
 
 		if (_auxinf != null)
 			comp._auxinf = _auxinf.cloneStub(comp, bListener);
+
+		//fix children link; do it as the last step,
+		//since StubsComponent.onChildrenMerge depends on _page
+		if (_chdinf != null)
+			if (bChildren) {
+				for (p = _chdinf.first; p != null; p = p._next)
+					p._parent = comp;
+				comp._chdinf = _chdinf;
+				_chdinf = null;
+			} else if (comp instanceof StubsComponent) { //dirty but not worth to generalize it yet
+				((StubsComponent)comp).onChildrenMerged(this);
+			} else if (page != null) {
+				childrenMerged((DesktopCtrl)page.getDesktop(), _chdinf);
+			}
+	}
+	private static
+	void childrenMerged(DesktopCtrl desktopCtrl, ChildInfo chdinf) {
+		if (chdinf != null)
+			for (AbstractComponent p = chdinf.first; p != null; p = p._next) {
+				desktopCtrl.removeComponent(p, true); //OK to recycle
+				childrenMerged(desktopCtrl, p._chdinf);
+			}
 	}
 
 	/** Appends a child to the end of all children.
@@ -1291,7 +1334,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-
 	public boolean isVisible() {
 		return _auxinf == null || _auxinf.visible;
 	}
@@ -1327,6 +1369,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if ((_auxinf != null ? _auxinf.stubonly: 0) != v)
 			initAuxInfo().stubonly = (byte)v;
 			//no need to update client (it is all about server-side handling)
+	}
+	public void setStubonly(boolean stubonly) {
+		setStubonly(stubonly ? "true": "false");
 	}
 
 	public boolean isInvalidated() {
@@ -1364,7 +1409,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * returned by {@link AuResponse#getOverrideKey}).
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the componet returned by
+	 * depends on the existence of the component returned by
 	 * {@link AuResponse#getDepends}.
 	 * In other words, the response is removed if the component is removed.
 	 * If it is null, the response is component-independent and it is
@@ -1694,7 +1739,7 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	//-- in the redrawing phase --//
-	/** Redraws this component and all its decendants.
+	/** Redraws this component and all its descendants.
 	 * <p>Default: It uses {@link JsContentRenderer} to render all information
 	 * in JavaScript codes. For devices that don't support JavaScript,
 	 * it must override this method.
@@ -1704,7 +1749,7 @@ w:use="foo.MyWindow"&gt;
 	 * and  then {@link #redrawChildren} to redraw children (and descendants)
 	 * (by calling their {@link #redraw}).
 	 *
-	 * <p>If a dervied class wants to render more properties, it can override
+	 * <p>If a derived class wants to render more properties, it can override
 	 * {@link #renderProperties}.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
@@ -2494,7 +2539,11 @@ w:use="foo.MyWindow"&gt;
 	 * the value. Nothing happens if the method is not found.</li>
 	 *
 	 * <p>Notice: this method will invoke {@link #disableClientUpdate} to
-	 * disable any update to the client, when calling the setter
+	 * disable any update to the client, when calling the setter.
+	 *
+	 * <p>If you wanto enable the client update for all instances of a given
+	 * component (though not recommended for the security reason), you could
+	 * refer to <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/New_Features_of_ZK_5.0.7#Client-side_smartUpdate_now_disabled_by_default">here</a>.
 	 *
 	 * <p>See also <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/Widget.html#smartUpdate%28_global_.String,%20zk.Object,%20int%29">zk.Widget.smartUpdate()</a>.
 	 * @since 5.0.0
@@ -2545,7 +2594,7 @@ w:use="foo.MyWindow"&gt;
 	public String toString() {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
-		return "<"+clsnm.substring(j+1)+' '+(_id.length() > 0  ? _id: _uuid)+'>';
+		return "<"+clsnm.substring(j+1)+' '+_uuid+(Strings.isEmpty(_id) ? "": "#"+_id)+'>';
 	}
 	public boolean equals(Object o) { //no more override
 		return this == o;
@@ -2974,6 +3023,31 @@ w:use="foo.MyWindow"&gt;
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
+	//@Override
+	public Template getTemplate(String name) {
+		return _auxinf != null && _auxinf.templates != null ?
+			_auxinf.templates.get(name): null;
+	}
+	//@Override
+	public Template setTemplate(String name, Template template) {
+		if (template == null) {
+			return _auxinf != null && _auxinf.templates != null ?
+				_auxinf.templates.remove(name): null;
+		} else {
+			AuxInfo auxinf = initAuxInfo();
+			if (auxinf.templates == null)
+				auxinf.templates = new HashMap<String, Template>(4);
+			return auxinf.templates.put(name, template);
+		}
+	}
+	//@Override
+	public Set<String> getTemplateNames() {
+		if (_auxinf != null && _auxinf.templates != null)
+			return _auxinf.templates.keySet();
+		return Collections.emptySet();
+	}
+
 	/** Merge multiple memembers into an single object (and create on demand)
 	 * to minimize the footprint
 	 * @since 5.0.4
@@ -3013,6 +3087,9 @@ w:use="foo.MyWindow"&gt;
 		private Map<String, String> wgtattrs;
 		/** The AU tag. */
 		private String autag;
+
+		/** The templates. */
+		private Map<String, Template> templates;
 
 		/** Whether this component is stub-only (0: inheirt, -1: false, 1: true). */
 		private byte stubonly;

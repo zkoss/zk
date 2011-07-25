@@ -1,0 +1,46 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>You should see a textbox and radio * 14.</li>
+<li>Focus in the textbox and blur (click out of the textbox).</li>
+<li>You should see a error-box rendered append the textbox</li>
+<li>Click every radio to check the position of error-box</li>
+<li>Position info: http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Popup</li>
+</ol>
+]]>
+</html>
+	<style>
+		.container { text-align:center; padding: 50px 300px; }
+		.container .z-panel-embedded-cnt { padding:0; } .txb { border:
+		none; }
+	</style>
+
+	<panel framable="true" sclass="container" width="400px">
+		<panelchildren>
+			<textbox id='txb' sclass="txb" width="99%"
+				style="background:#FFFFCC" rows="5"
+				constraint="no empty,End_Before" />
+		</panelchildren>
+	</panel>
+	<radiogroup>
+		<attribute name="onCheck">
+			txb.setConstraint("no empty, " + self.selectedItem.label);
+			txb.focus();
+		</attribute>
+		<radio label="Before_Start" />
+		<radio label="Before_End" />
+		<radio label="End_Before" />
+		<radio label="End_After" />
+		<radio label="After_End" />
+		<radio label="After_Start" />
+		<radio label="Start_After" />
+		<radio label="Start_Before" />
+		<radio label="Overlap" />
+		<radio label="Overlap_end" />
+		<radio label="Overlap_before" />
+		<radio label="Overlap_after" />
+		<radio label="at_pointer" />
+		<radio label="after_pointer" />
+	</radiogroup>
+</zk>

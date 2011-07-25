@@ -71,10 +71,7 @@ public class CacheableThemeProvider implements ThemeProvider{
 		if (isSilvergray) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
-		} else {
-			uris.add(getExtCSS(suffix));
-			uris.add(getNormCSS(suffix));
-		}
+		} 
 		
 		bypassURI(uris, suffix);
 		return uris;
@@ -156,15 +153,7 @@ public class CacheableThemeProvider implements ThemeProvider{
 	private static String getThemeMsgBoxURI(String suffix) {
 		return "~./zul/html/messagebox." + suffix + ".zul";
 	}
-
-	private static String getExtCSS(String suffix) {
-		return "~./zul/css/ext." + suffix + ".css.dsp";
-	}
 	
-	private static String getNormCSS(String suffix) {
-		return "~./zul/css/norm." + suffix + ".css.dsp";
-	}
-
 	private void bypassURI(List uris, String suffix) {
 		for (ListIterator it = uris.listIterator(); it.hasNext();) {
 			final String uri = (String)it.next();

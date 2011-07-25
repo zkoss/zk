@@ -17,11 +17,9 @@ import java.util.Date;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a setting of a response header.
@@ -38,8 +36,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @author tomyeh
  * @since 5.0.2
  */
-public class ResponseHeaderInfo extends EvalRefStub
-implements Condition {
+public class ResponseHeaderInfo { //directive
 	private final String _name;
 	private final ExValue _value, _append;
 	private final ConditionImpl _cond;
@@ -51,12 +48,11 @@ implements Condition {
 	 * It could be evaluated to a string, or a date ({@link Date}).
 	 * @param append whether to append the header, or to set the header. It could contain EL expressions.
 	 */
-	public ResponseHeaderInfo(EvaluatorRef evalr, String name, String value, String append, ConditionImpl cond) {
+	public ResponseHeaderInfo(String name, String value, String append, ConditionImpl cond) {
 		if (name == null || name.length() == 0 || value == null)
 			throw new IllegalArgumentException();
 
 		_name = name;
-		_evalr = evalr;
 		_value = new ExValue(value, Object.class);
 		_append = append != null ? new ExValue(append, Boolean.class): null;
 		_cond = cond;
@@ -67,28 +63,22 @@ implements Condition {
 		return _name;
 	}
 	/** Returns the value of the response header.
-	 * <p>Notice that it does NOT invoke {@link #isEffective}, so the caller
-	 * has to call it first.
 	 * @return the value which is an instance of {@link Date} or {@link String}
 	 * (and never null).
 	 */
-	public Object getValue(Page page) {
-		final Object val = _value.getValue(_evalr, page);
-		return val != null ? val instanceof Date ? val: val.toString(): "";
+	public Object getValue(PageDefinition pgdef, Page page) {
+		final Evaluator eval = pgdef.getEvaluator();
+		if (_cond == null || _cond.isEffective(eval, page)) {
+			final Object val = _value.getValue(eval, page);
+			return val != null ? val instanceof Date ? val: val.toString(): "";
+		}
+		return "";
 	}
 	/** Returns whether to append the response header, rather than replace.
-	 * <p>Notice that it does NOT invoke {@link #isEffective}, so the caller
-	 * has to call it first.
 	 */
-	public boolean shallAppend(Page page) {
-		final Boolean bAppend = _append != null ? (Boolean)_append.getValue(_evalr, page): null;
+	public boolean shallAppend(PageDefinition pgdef, Page page) {
+		final Evaluator eval = pgdef.getEvaluator();
+		final Boolean bAppend = _append != null ? (Boolean)_append.getValue(eval, page): null;
 		return bAppend != null && bAppend.booleanValue();
-	}
-
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 }

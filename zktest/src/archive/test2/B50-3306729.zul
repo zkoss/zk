@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3306729.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul  6 18:04:32 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window id="win1" title="ZK is best!!!" border="normal" width="780px">
+<listbox id="libox" width="100%" multiple="true" vflex="true">
+<listhead sizable="true">
+<listheader label="Name" sort="auto" width="25%" image="/img/coffee.gif"/>
+<listheader label="Gender" sort="auto" width="25%" image="/img/folder.gif"/>
+<listheader label="Age" sort="auto" width="25%" align="center" image="/img/cubfirs.gif"/>
+<listheader label="Description" width="25%" sort="auto" image="/img/home.gif"/>
+</listhead>
+<auxhead>
+<auxheader label="All Header" style="font-weight:bold; color:red;" align="center" colspan="4"/>
+</auxhead>
+<auxhead>
+<auxheader label="A+B" rowspan="2" colspan="2"/>
+<auxheader label="C"/>
+<auxheader>
+<attribute name="label">DE</attribute>
+</auxheader>
+</auxhead>
+<auxhead>
+<auxheader label="A"/>
+<auxheader label="B+C+D"/>
+</auxhead>
+<auxhead>
+<auxheader label="A+B+C" colspan="3"/>
+<auxheader label="D"/>
+</auxhead>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+<listitem>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+<listcell label="cell"/>
+</listitem>
+</listbox>
+</window>
+</zk>

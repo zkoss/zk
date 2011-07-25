@@ -1,8 +1,8 @@
 // category.js
 
-zk.$package('userguide');
+zk.$package('zksandbox');
 zk.load('zul.wgt', function () {
-userguide.Categorybar = zk.$extends(zul.wgt.Div, {
+zksandbox.Categorybar = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zk(this.$n()).disableSelection();
@@ -85,7 +85,7 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 });
 
 zk.load('zul.wgt', function () {
-userguide.Category = zk.$extends(zul.wgt.Button, {
+zksandbox.Category = zk.$extends(zul.wgt.Button, {
 	redraw: function (out) {
 		var zcls = this.getZclass();
 		out.push('<div', this.domAttrs_(), '>',

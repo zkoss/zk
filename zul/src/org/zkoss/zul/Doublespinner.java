@@ -143,6 +143,14 @@ public class Doublespinner extends NumberInputElement {
 		return value != null && getFormat() == null ? value.toString()
 				: formatNumber(value, null);
 	}
+	
+	protected Object unmarshall(Object value) {
+		if(value instanceof Integer){
+			return new Double(((Integer)value).doubleValue());	
+		}
+		return value;
+	}
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);

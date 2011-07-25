@@ -31,7 +31,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * An implementation of {@link ForEach}.
@@ -105,7 +105,7 @@ public class ForEachImpl implements ForEach {
 	public ForEachImpl(EvaluatorRef evalr, Component comp,
 	ExValue[] expr, ExValue begin, ExValue end) {
 		if (comp == null || evalr == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("null");
 
 		_evalr = evalr;
 		_page = null;

@@ -12,6 +12,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _posAllowed = [
+		"before_start", "before_end", "end_before", "end_after",
+		"after_end", "after_start", "start_after", "start_before",
+		"overlap", "overlap_end", "overlap_before", "overlap_after",
+		"at_pointer", "after_pointer"
+	];
+
 /**
  * The default constraint supporting no empty, regular expressions and so on.
  * <p>Depending on the component (such as {@link Intbox} and {@link zul.db.Datebox}).
@@ -20,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.
 	 * @param Object a
-	 * I can be String or number, the number or name of flag, 
+	 * It can be String or number, the number or name of flag, 
 	 * such as "no positive", 0x0001.
 	 * @param String b the regular expression
 	 * @param String c the error message
@@ -94,7 +102,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * @return Object
 	 */
 	getFlags: function () {
-		return tis._flags;
+		return this._flags;
 	},
 	/** Parses a constraint into an Object attribute.
 	 * For example, "no positive" is parsed to f.NO_POSITIVE = true.
@@ -123,8 +131,26 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (cst == "server") {
 			f.SERVER = true;
 			this.serverValidate = true;
-		} else if (zk.debugJS)
+		} else if (cst && _posAllowed.$contains(cst))
+			this._pos = cst;
+		else if (zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
+	},
+	_cvtNum: function (v) { //compatible with server side
+		var f = {};
+		if (v & 1)
+			f.NO_POSITIVE = f.NO_FUTURE = true;
+		if (v & 2)
+			f.NO_NEGATIVE = f.NO_PAST = true;
+		if (v & 4)
+			f.NO_ZERO = f.NO_TODAY = true;
+		if (v & 0x100)
+			f.NO_EMPTY = true;
+		if (v & 0x200)
+			f.STRICT = true;
+		if (v = (v & 0xf000))
+			this._pos = _posAllowed[v >> 12];		
+		return f;
 	},
 	_cvtNum: function (v) { //compatible with server side
 		var f = {};
@@ -227,3 +253,4 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		return msg || msgzul.ILLEGAL_VALUE;
 	}
 });
+})();

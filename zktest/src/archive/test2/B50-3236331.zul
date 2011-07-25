@@ -1,14 +1,10 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>All the red and green borders of the Divs should be visible.</li>
-		</ol>
-	]]></html>
+	All the red and green borders of the Divs should be visible.
 	<hlayout height="300px">
-		<div vflex="2" style="border: 1px solid red">
+		<div vflex="2" hflex="min" style="border: 1px solid red">
 			Div 1
 		</div>
-		<div vflex="2" style="border: 1px solid green">
+		<div vflex="2" hflex="min" style="border: 1px solid green">
 			Div 2
 		</div>
 	</hlayout>

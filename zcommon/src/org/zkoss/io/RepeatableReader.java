@@ -214,10 +214,10 @@ public class RepeatableReader extends Reader implements Repeatable {
 	 * The reader can be read repeatedly.
 	 * Note: it assumes the resource is text (rather than binary).
 	 *
-	 * <p>By repeatable-read we meaen, after {@link #close}, the next
+	 * <p>By repeatable-read we mean, after {@link #close}, the next
 	 * invocation of {@link #read} will re-open the reader.
 	 *
-	 * <p>Note: it is effecient since we don't have to buffer the
+	 * <p>Note: it is efficient since we don't have to buffer the
 	 * content of the file to make it repeatable-read.
 	 *
 	 * @exception IllegalArgumentException if file is null.
@@ -249,7 +249,7 @@ public class RepeatableReader extends Reader implements Repeatable {
 				_out = new FileWriter(_f, "UTF-8");
 				_out.write(cnt);
 			} catch (Throwable ex) {
-				log.warning("Ingored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
+				log.warning("Ignored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
 				disableBuffering();
 			}
 		}

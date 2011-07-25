@@ -83,8 +83,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
 	//legend in fieledset, the margin in safari/chrome will be huge, 
 	//shall ignore it when calculate width. @see widget#setMinFlexSize
-	_isIgnoreMargin: function () {
+	getMarginSize_: function () {
 		var parent = this.parent;
-		return zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend();  
+		if (zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend())
+			return 0;
+		else
+			return this.$supers('getMarginSize_', arguments);  
+	},
+	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
+		if (o == 'w')
+			this.$n().width = '';
 	}
 });

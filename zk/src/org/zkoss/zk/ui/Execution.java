@@ -164,6 +164,46 @@ public interface Execution extends Scope {
 	 */
 	public VariableResolver getVariableResolver();
 
+	/** Adds a name resolver that will be used to resolve a variable
+	 * (by {@link #getVariableResolver}).
+	 *
+	 * <p>The new added variable resolver has the higher priority.
+	 * In additions, the priority of the variable resolver added with this method
+	 * is higher than the attributes defined in the execution, and
+	 * any variable resolver added to a page
+	 * ({@link Page#addVariableResolver}).
+	 *
+	 * <p>Notice that {@link #getVariableResolver} returns a variable resolver
+	 * used to evaluate EL expressions. It
+	 * resolves all builtin names and all custom variable resolvers.
+	 * It is not any variable resolver added by this method.
+	 *
+	 * @return wether the resolver is added successfully.
+	 * Note: if the resolver was added before, it won't be added again
+	 * and this method returns false.
+	 * @since 5.0.8
+	 */
+	public boolean addVariableResolver(VariableResolver resolver);
+	/** Removes a name resolve that was added by {@link #addVariableResolver}.
+	 *
+	 * @return false if resolved is not added before.
+	 * @since 5.0.8
+	 */
+	public boolean removeVariableResolver(VariableResolver resolver);
+	/** Returns if the specified variable resolved has been registered
+	 * @see #addVariableResolver
+	 * @since 5.0.8
+	 */
+	public boolean hasVariableResolver(VariableResolver resolver);
+	/** Returns the object, if any, defined in any variable resolver
+	 * added by {@link #addVariableResolver}.
+	 * <p>Notice that it looks only for the variables defined
+	 * in {@link #addVariableResolver}. To get a variable an EL expression
+	 * can reference, please use {@link #getVariableResolver} instead.
+	 * @since 5.0.8
+	 */
+	public Object getXelVariable(String name);
+
 	/** Queues an event to this execution.
 	 * In other words, the event is placed to the event queue.
 	 *
@@ -653,6 +693,162 @@ public interface Execution extends Scope {
 	public Component createComponentsDirectly(Reader reader, String extension,
 	Component parent, Map<?, ?> arg) throws IOException;
 
+	/** Creates components from the specified page definition
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * @param pagedef the page definition to use. It cannot be null.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @since 5.1.0
+	 */
+	public Component createComponents(PageDefinition pagedef,
+	Component parent, Component insertBefore, VariableResolver resolver);
+	/** Creates components from a page file specified by an URI
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>It loads the page definition from the specified URI (by
+	 * use {@link #getPageDefinition} ), and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 5.1.0
+	 */
+	public Component createComponents(String uri, Component parent,
+	Component insertBefore, VariableResolver resolver);
+	/** Creates components from the raw content specified by a string
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(String, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 5.1.0
+	 */
+	public Component createComponentsDirectly(String content, String extension,
+	Component parent, Component insertBefore, VariableResolver resolver);
+	/** Creates components from the raw content specified by a DOM tree
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 5.1.0
+	 */
+	public Component createComponentsDirectly(Document content, String extension,
+	Component parent, Component insertBefore, VariableResolver resolver);
+	/** Creates components from the raw content read from the specified reader
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
+	 * @since 5.1.0
+	 */
+	public Component createComponentsDirectly(Reader reader, String extension,
+	Component parent, Component insertBefore, VariableResolver resolver)
+	throws IOException;
+
 	/** Creates components that don't belong to any page
 	 * from the specified page definition.
 	 *
@@ -897,6 +1093,7 @@ public interface Execution extends Scope {
 	public boolean isOpera();
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
+	 *
 	 * @since 3.0.2
 	 */
 	public boolean isHilDevice();

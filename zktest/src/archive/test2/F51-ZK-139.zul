@@ -1,0 +1,50 @@
+<vlayout>
+	<html><![CDATA[
+	<ol>
+	<li>Press the "create after..." button and a set of components will be created and appended at the end.</li>
+	<li>Press again and a new set will be append.</li>
+	<li>Press the "create before..." button and a set of components will be created and inserted before the button.</li>
+	<li>Press again and a new set will be inserted.</li>
+	</ol>
+	]]></html>
+
+	<template name="t1">
+		${count}: This is date: <datebox/>
+		This is native:
+			<n:ol xmlns:n="native">
+				<n:li>first item</n:li>
+				<n:li>second item</n:li>
+			</n:ol>
+
+		This is listbox
+		<zscript>
+		ListModel infos = new ListModelArray(
+			new String[][] {
+				{"Apple", "10kg"},
+				{"Orange", "20kg"},
+				{"Mango", "12kg"}
+			});
+		</zscript>
+		<listbox model="${infos}">
+			<listhead>
+				<listheader label="Name"/>
+			</listhead>
+		</listbox>
+	</template>
+	<zscript>
+	public class VResolver implements org.zkoss.xel.VariableResolver {
+		int count = 0;
+		public Object resolveVariable(String name) {
+			if ("count".equals(name))
+				return ++count;
+			return null;
+		}
+	}
+	VResolver resolver = new VResolver();
+	</zscript>		
+
+	<button label="create after from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, null, resolver)'/>
+	<button label="create before from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, self, resolver)'/>
+</vlayout>

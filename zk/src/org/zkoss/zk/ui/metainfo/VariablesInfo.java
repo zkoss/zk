@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
 
 /**
@@ -34,19 +34,13 @@ import org.zkoss.zk.xel.impl.Utils;
  * 
  * @author tomyeh
  */
-public class VariablesInfo extends EvalRefStub
-implements Condition, java.io.Serializable {
+public class VariablesInfo extends ConditionLeafInfo {
 	/** Map(String name, ExValue/ExValue[]/Map value). */
 	private final Map<String, Object> _vars;
-	private final ConditionImpl _cond;
 	private final int _composite;
 	private final boolean _local;
 
 	/** Constructor.
-	 * @param evalr the evaluator reference. It cannot be null.
-	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
-	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
-	 * belongs.
 	 * @param vars a map of (String name, String value).
 	 * Note: once called, the caller cannot access it any more.
 	 * In other words, it becomes part of this object.
@@ -54,13 +48,13 @@ implements Condition, java.io.Serializable {
 	 * @param composite indicates the composite type.
 	 * It can be one of "none", "list" or "map".
 	 * If null or empty, "none" is assumed.
-	 * @exception IllegalArgumentException if evalr is null,
-	 * or the composite type is illegal.
+	 * @exception IllegalArgumentException if the composite type is illegal.
 	 * @since 3.0.6
 	 */
-	public VariablesInfo(EvaluatorRef evalr, Map<String, String> vars, boolean local,
+	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local,
 	String composite, ConditionImpl cond) {
-		if (evalr == null) throw new IllegalArgumentException();
+		super(parent, cond);
+
 		if (composite == null || composite.length() == 0
 		|| composite.equals("none"))
 			_composite = Utils.SCALAR;
@@ -71,7 +65,6 @@ implements Condition, java.io.Serializable {
 		else
 			throw new IllegalArgumentException("Unkonwn composite: "+composite);
 
-		_evalr = evalr;
 		if (vars != null) {
 			_vars = new LinkedHashMap<String, Object>();
 			for (Map.Entry<String, String> me: vars.entrySet()) {
@@ -83,22 +76,16 @@ implements Condition, java.io.Serializable {
 		}
 
 		_local = local;
-		_cond = cond;
 	}
-	/** The same as VariablesInfo(evalr, vars, locale, "none", cond).
-	 * @param evalr the evaluator reference. It cannot be null.
-	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
-	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
-	 * belongs.
+	/** The same as VariablesInfo(parent, vars, locale, "none", cond).
 	 * @param vars a map of (String name, String value).
 	 * Note: once called, the caller cannot access it any more.
 	 * In other words, it becomes part of this object.
 	 * @param local whether they are local variables.
-	 * @exception IllegalArgumentException if evalr is null
 	 */
-	public VariablesInfo(EvaluatorRef evalr, Map<String, String> vars, boolean local,
+	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local,
 	ConditionImpl cond) {
-		this(evalr, vars, local, null, cond);
+		this(parent, vars, local, null, cond);
 	}
 
 	/** Returns if it is for local variable.
@@ -121,7 +108,7 @@ implements Condition, java.io.Serializable {
 	 */
 	public void apply(Component comp) {
 		if (_vars != null && isEffective(comp)) {
-			final Evaluator eval = _evalr.getEvaluator();
+			final Evaluator eval = getEvaluator();
 			for (Map.Entry<String, Object> me: _vars.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
@@ -135,7 +122,7 @@ implements Condition, java.io.Serializable {
 	 */
 	public void apply(Page page) {
 		if (_vars != null && isEffective(page)) {
-			final Evaluator eval = _evalr.getEvaluator();
+			final Evaluator eval = getEvaluator();
 			for (Map.Entry<String, Object> me: _vars.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
@@ -143,14 +130,6 @@ implements Condition, java.io.Serializable {
 					name, Utils.evaluateComposite(eval, page, value), !_local);
 			}
 		}
-	}
-
-	//Condition//
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 
 	//Object//

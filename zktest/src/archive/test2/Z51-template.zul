@@ -1,0 +1,30 @@
+<vlayout>
+	<template name="t1">
+		This is date: <datebox/>
+		This is native:
+			<n:ol xmlns:n="native">
+				<n:li>first item</n:li>
+				<n:li>second item</n:li>
+			</n:ol>
+
+		This is listbox
+		<zscript>
+		ListModel infos = new ListModelArray(
+			new String[][] {
+				{"Apple", "10kg"},
+				{"Orange", "20kg"},
+				{"Mango", "12kg"}
+			});
+		</zscript>
+		<listbox model="${infos}">
+			<listhead>
+				<listheader label="Name"/>
+			</listhead>
+		</listbox>
+	</template>
+
+	<button label="create after from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, null)'/>
+	<button label="create before from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, self)'/>
+</vlayout>

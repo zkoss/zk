@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3363687.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Jul 13 16:45:33 TST 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+<window onCreate='System.out.println("ONCREATE")' xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+Must has RD to look at the console to see if "ONCREATE" is printed twice when reload.
+
+<label id="date"/>
+<separator/>
+<button label="no /" onClick='Executions.getCurrent().sendRedirect("B50-3363687.zul")'  onCreate='date.setValue(new Date().toString())'></button>
+<button label="has /" onClick='Executions.getCurrent().sendRedirect("/test2/B50-3363687.zul")'></button>
+
+<!-- 
+<button label="_blank, no /" onClick='Executions.getCurrent().sendRedirect("B50-3363687.zul","_blank")'></button>
+<button label="_blank, has /" onClick='Executions.getCurrent().sendRedirect("/test2/B50-3363687.zul","_blank")'></button>
+
+<button label="eval no/">
+	<attribute w:name="onClick">
+		location.href="B50-3363687.zul";
+	</attribute>
+</button>
+<button label="eval has/">
+	<attribute w:name="onClick">
+		location.href="/zktest/test2/B50-3363687.zul";
+	</attribute>
+</button>
+<button label="clients eval has/">
+	<attribute name="onClick"><![CDATA[
+	    Clients.evalJavaScript("location.href='/zktest/test2/B50-3363687.zul';");
+	]]>
+	</attribute>
+</button>
+ -->
+
+</window>
+</zk>

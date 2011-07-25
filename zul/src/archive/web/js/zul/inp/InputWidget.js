@@ -438,10 +438,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			
 			// Bug #2280308
 			if (this._errbox) {
-				var self = this;
+				var self = this, cstp = self._cst && self._cst._pos;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, "end_before", {dodgeRef: true}); // Bug 3251564
+						self._errbox.open(self, null, cstp || "end_before", 
+								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}
 		}
@@ -608,6 +609,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			//unlike server, validation occurs only if attached
 			if (!this.desktop) this._errmsg = null;
 			else {
+				var em = this._errmsg;
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
@@ -617,8 +619,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
-				} else
-					this._lastRawValVld = value;
+				}
+				this._lastRawValVld = value;
+				if (em)
+					this.fire('onError', {value: val});
 			}
 			return {value: val};
 		} finally {
@@ -806,8 +810,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.$supers('doKeyUp_', arguments);
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace) {
+	afterKeyDown_: function (evt,simulated) {
+		if (!simulated && this._inplace) {
 			if (!this._multiline && evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
 				if ($inp.toggleClass(inc).hasClass(inc)) 
@@ -816,7 +820,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
 		}
 		if (evt.keyCode != 13 || !this.isMultiline())
-			this.$supers('afterKeyDown_', arguments);
+			return this.$supers('afterKeyDown_', arguments);
 	},
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();
@@ -837,9 +841,5 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.1
 	 */
 	onChangingForced: true
-});
-zk.load('zul.lang', function () { // Fixed merging JS issue
-	zul.inp.InputWidget._allowKeys = "0123456789"+zk.MINUS+zk.PERCENT
-		+(zk.groupingDenied ? '': zk.GROUPING);
 });
 })();

@@ -119,7 +119,7 @@ public class SAXBuilder {
 	 *
 	 * @param nsaware whether the parser is namespace aware
 	 * @param validate whether the parser shall validate the document
-	 * @param smartIgnore whether to ignore comments and ignorable-whitesace
+	 * @param smartIgnore whether to ignore comments and ignorable-whitespace
 	 * (if validate is true), and to coalesce
 	 *
 	 * @exception ParserConfigurationException if a parser cannot be created
@@ -143,7 +143,7 @@ public class SAXBuilder {
 		return _ignoreWhitespaces;
 	}
 	/**
-	 * Sets whether the parser should elminate whitespace in 
+	 * Sets whether the parser should eliminate whitespace in 
 	 * element content. They are known as "ignorable whitespace". 
 	 * Only whitespace which is contained within element content that has
 	 * an element only content model will be eliminated (see XML Rec 2.10).
@@ -225,7 +225,7 @@ public class SAXBuilder {
 	/**
 	 * Specifies the org.xml.sax.ErrorHandler to be used to report errors
 	 * present in the XML document to be parsed.
-	 * <p>Default: null -- to use the default imple-mentation and behavior.
+	 * <p>Default: null -- to use the default implementation and behavior.
 	 */
 	public final void setErrorHandler(ErrorHandler eh) {
 		_errHandler = eh;
@@ -241,7 +241,7 @@ public class SAXBuilder {
 
 	/**
 	 * Specifies the org.xml.sax.EntityResolver to be used to resolve
-	 * entities present in the XML docu-ment to be parsed.
+	 * entities present in the XML document to be parsed.
 	 * <p>Default: null -- to use the default implementation and behavior.
 	 */
 	public final void setEntityResolver(org.xml.sax.EntityResolver er) {
@@ -250,7 +250,7 @@ public class SAXBuilder {
 	/**
 	 * Gets the org.xml.sax.EntityResolver.
 	 *
-	 * @return the enity resolverr; null to use the default implementation
+	 * @return the entity resolver; null to use the default implementation
 	 */
 	public final EntityResolver getEntityResolver() {
 		return _resolver;

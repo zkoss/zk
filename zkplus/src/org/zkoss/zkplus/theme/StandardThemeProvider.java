@@ -46,8 +46,6 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 		if (isUsingDefaultTemplate(suffix))
 			Messagebox.setTemplate(getThemeMsgBoxURI(suffix));
 		
-		uris.add(getExtCSS(suffix));
-		uris.add(getNormCSS(suffix));
 		bypassURI(uris, suffix);
 		return uris;
 	}
@@ -55,14 +53,6 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 	private static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
 		return Themes.CLASSICBLUE_NAME.equals(suffix) ? null : suffix;
-	}
-	
-	private static String getExtCSS(String suffix) {
-		return "~./zul/css/ext." + suffix + ".css.dsp";
-	}
-	
-	private static String getNormCSS(String suffix) {
-		return "~./zul/css/norm." + suffix + ".css.dsp";
 	}
 	
 	private static String getThemeMsgBoxURI(String suffix) {

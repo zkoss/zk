@@ -32,8 +32,9 @@ public class Attributes {
 	public static final String CLIENT_ROD = "org.zkoss.zul.client.rod";
 
 	//Execution/request//
-	/** The execution attribute used to control how to {@link org.zkoss.zk.ui.sys.PageCtrl#redraw}
-	 * a page. There are three different values: <code>destkop</code>,
+	/** The execution attribute used to control how to redraw
+	 * a page ({@link org.zkoss.zk.ui.sys.PageCtrl#redraw}).
+	 * There are three different values: <code>destkop</code>,
 	 * <code>page</code>, and <code>complete</code>.
 	 *
 	 * <p>Default: null (means auto). In other words, <code>desktop</code> is assumed
@@ -47,12 +48,7 @@ public class Attributes {
 	 * <code>zk.redrawCtrl</code>. For example, if you are using
 	 * other technology, say jQuery, and want to load a ZUL page dynamically; as shown below:
 <pre><code>
-  jQuery.ajax({
-    url: "z5-load-1.zul?zk.redrawCtrl=page",
-    success: function (html) {
-      jQuery("#myDiv").append(html);
-    }
-  });
+	$("#pos").load("frag.zul?zk.redrawCtrl=page");
 </code></pre>
 	 *
 	 * <p>If you prefer to draw the desktop with the page, you can set the
@@ -100,6 +96,10 @@ public class Attributes {
 	 * this attribute to save the use of memroy.
 	 *
 	 * <pre><code>request.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);</code></pre>
+	 *
+	 * <p>Since 5.0.8, if the zk.redrawCtrl parameter is specified with page
+	 * (as described in {@link #PAGE_REDRAW_CONTROL}),
+	 * it implies {@link #NO_CACHE}
 	 *
 	 * @since 3.0.1
 	 */
@@ -188,7 +188,7 @@ public class Attributes {
 	/** A component attribute used to indicate whether to enable the stubing of
 	 * the native components.
 	 * <p>By default, the native component will be stub-ized, i.e., replaced
-	 * with a stateless component called {@link org.zkoss.zk.ui.StubComponent},
+	 * with a stateless component called {@link org.zkoss.zk.ui.sys.StubComponent},
 	 * such that the memory footprint will be minimized.
 	 * To stub-ize non-native, please use {@link org.zkoss.zk.ui.Component#setStubonly}.
 	 * <p>Default: true. Though rarely, you could disable the stubing by
@@ -203,4 +203,9 @@ public class Attributes {
 	 * @since 5.0.6
 	 */
 	public static final String STUB_NATIVE = "org.zkoss.zk.ui.stub.native";
+	
+	/** A session attribute used to store the ZK session in the native session. 
+	 * @since 5.0.8
+	 */
+	public static final String ZK_SESSION = "javax.zkoss.zk.ui.Session";
 }

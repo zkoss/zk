@@ -24,11 +24,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.Principal;
 import java.util.AbstractCollection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,31 +36,29 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-import java.util.Date;
+import java.util.Set;
 
+import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.ExpressionFactory;
 
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -907,23 +905,35 @@ public class Components {
 		 * Inject controller as variable of the specified component.
 		 */
 		private void wireController(Component comp, String id) {
+			//feature #3326788: support custom name
+			Object onm = comp.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				comp.setAttribute((String)onm, _controller);
+
 			//feature #2778513, support {id}$composer name
-			final String composerid =  id + _separator + "composer";
-			if (!comp.hasAttributeOrFellow(composerid, false)) {
-				comp.setAttribute(composerid, _controller);
-			}
-			comp.setAttribute(varname(id, _controller.getClass()), _controller);
+			final String nm = composerNameById(id);
+			if (!comp.hasAttributeOrFellow(nm, false))
+				comp.setAttribute(nm, _controller);
+
+			//support {id}$ClassName
+			comp.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
 		/**
 		 * Inject controller as variable of the specified page.
 		 */
 		private void wireController(Page page, String id) {
-			final String composerid =  id + _separator + "composer";
-			if (!page.hasAttributeOrFellow(composerid, false)) {
-				page.setAttribute(composerid, _controller);
-			}
-			page.setAttribute(varname(id, _controller.getClass()), _controller);
+			Object onm = page.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				page.setAttribute((String)onm, _controller);
+
+			final String nm = composerNameById(id);
+			if (!page.hasAttributeOrFellow(nm, false))
+				page.setAttribute(nm, _controller);
+
+			page.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
 		private void wireFellows(IdSpace idspace) {
@@ -966,6 +976,10 @@ public class Components {
 		}
 		@SuppressWarnings("unchecked")
 		private void wireImplicit(Object x) {
+			//Feature #3315689 
+			if(ignoreFromWire(_controller.getClass()))
+				return;
+			
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
 				//we cannot inject event proxy because it is not an Interface
@@ -1196,7 +1210,11 @@ public class Components {
 					getImplicit((Page)x, fdname) :
 					getImplicit((Component)x, fdname);
 		}
-		private String varname(String id, Class cls) {
+
+		private String composerNameById(String id) {
+			return id + _separator + "composer";
+		}
+		private String composerNameByClass(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
 			return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
@@ -1226,44 +1244,57 @@ public class Components {
 				Component parent, Map arg) {
 			return exec().createComponents(pagedef, parent, arg);
 		}
-
 		public Component createComponents(String uri, Component parent, Map arg) {
 			return exec().createComponents(uri, parent, arg);
+		}
+		public Component createComponentsDirectly(String content,
+				String extension, Component parent, Map arg) {
+			return exec().createComponentsDirectly(content, extension, parent, arg);
+		}
+		public Component createComponentsDirectly(Document content,
+				String extension, Component parent, Map arg) {
+			return exec().createComponentsDirectly(content, extension, parent, arg);
+		}
+		public Component createComponentsDirectly(Reader reader,
+				String extension, Component parent, Map arg) throws IOException {
+			return exec().createComponentsDirectly(reader, extension, parent, arg);
+		}
+
+		public Component createComponents(PageDefinition pagedef,
+				Component parent, Component insertBefore, VariableResolver resolver) {
+			return exec().createComponents(pagedef, parent, insertBefore, resolver);
+		}
+		public Component createComponents(String uri, Component parent, Component insertBefore, VariableResolver resolver) {
+			return exec().createComponents(uri, parent, insertBefore, resolver);
+		}
+		public Component createComponentsDirectly(String content,
+				String extension, Component parent, Component insertBefore, VariableResolver resolver) {
+			return exec().createComponentsDirectly(content, extension, parent, insertBefore, resolver);
+		}
+		public Component createComponentsDirectly(Document content,
+				String extension, Component parent, Component insertBefore, VariableResolver resolver) {
+			return exec().createComponentsDirectly(content, extension, parent, insertBefore, resolver);
+		}
+		public Component createComponentsDirectly(Reader reader,
+				String extension, Component parent, Component insertBefore, VariableResolver resolver) throws IOException {
+			return exec().createComponentsDirectly(reader, extension, parent, insertBefore, resolver);
 		}
 
 		public Component[] createComponents(PageDefinition pagedef, Map arg) {
 			return exec().createComponents(pagedef, arg);
 		}
-
 		public Component[] createComponents(String uri, Map arg) {
 			return exec().createComponents(uri, arg);
-		}
-
-		public Component createComponentsDirectly(String content,
-				String extension, Component parent, Map arg) {
-			return exec().createComponentsDirectly(content, extension, parent, arg);
-		}
-
-		public Component createComponentsDirectly(Document content,
-				String extension, Component parent, Map arg) {
-			return exec().createComponentsDirectly(content, extension, parent, arg);
-		}
-
-		public Component createComponentsDirectly(Reader reader,
-				String extension, Component parent, Map arg) throws IOException {
-			return exec().createComponentsDirectly(reader, extension, parent, arg);
 		}
 
 		public Component[] createComponentsDirectly(String content,
 				String extension, Map arg) {
 			return exec().createComponentsDirectly(content, extension, arg);
 		}
-
 		public Component[] createComponentsDirectly(Document content,
 				String extension, Map arg) {
 			return exec().createComponentsDirectly(content, extension, arg);
 		}
-
 		public Component[] createComponentsDirectly(Reader reader,
 				String extension, Map arg) throws IOException {
 			return exec().createComponentsDirectly(reader, extension, arg);
@@ -1576,6 +1607,19 @@ public class Components {
 
 		public String locate(String path) {
 			return exec().locate(path);
+		}
+
+		public boolean addVariableResolver(VariableResolver resolver) {
+			return exec().addVariableResolver(resolver);
+		}
+		public boolean removeVariableResolver(VariableResolver resolver) {
+			return exec().removeVariableResolver(resolver);
+		}
+		public boolean hasVariableResolver(VariableResolver resolver) {
+			return exec().hasVariableResolver(resolver);
+		}
+		public Object getXelVariable(String name) {
+			return exec().getXelVariable(name);
 		}
 
 		public String toString() {

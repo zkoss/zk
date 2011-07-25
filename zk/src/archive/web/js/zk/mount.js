@@ -102,7 +102,7 @@ function zkmprops(uuid, props) {
 	//1. page's AU must be processed after all zkx(), while they might be added
 	//  before zkx (such as test/test.zhtml), or multiple zkx (such jspTags.jsp)
 	//2. mount.js:_startCheck must be called after processing page's AU
-	//  (otherwise, /zkdemo/userguide will jump to #f1 causing additional step)
+	//  (otherwise, zksandbox will jump to #f1 causing additional step)
 	//Note: it is better to block zAu but the chance to be wrong is low --
 	//a timer must be started early and its response depends page's AU
 	jq(function () {
@@ -320,7 +320,7 @@ function zkmprops(uuid, props) {
 
 	/* create the widget tree. */
 	function create(parent, wi, ignoreDom) {
-		var wgt,
+		var wgt, stub,
 			type = wi[0],
 			uuid = wi[1],
 			props = wi[2]||{};
@@ -330,12 +330,14 @@ function zkmprops(uuid, props) {
 			(wgt = new cls({uuid: uuid}, zk.cut(props, "ct"))).inServer = true;
 			if (parent) parent.appendChild(wgt, ignoreDom);
 		} else {
-			if (type == "#stub") {
+			if ((stub = type == "#stub") || type == "#stubs") {
 				if (!(wgt = _wgt_$(uuid) //use the original one since filter() might applied
 				|| zAu._wgt$(uuid))) //search detached (in prev cmd of same AU)
-					throw "Unknow stub "+uuid;
+					throw "Unknown stub "+uuid;
 				var w = new Widget();
-				zk._wgtutl.replace(wgt, w);
+				zk._wgtutl.replace(wgt, w, stub);
+					//to reuse wgt, we replace it with a dummy widget, w
+					//if #stubs, we have to reuse the whole subtree (not just wgt), so don't move children
 				wgt.unbind(); //reuse it as new widget
 			} else {
 				var cls = zk.$import(type), v;
@@ -411,8 +413,7 @@ function zkmprops(uuid, props) {
 			if (wi) {
 				if (wi[0] === 0) { //page
 					var props = wi[2];
-					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"))
-						._pguid = wi[1];
+					zkdt(zk.cut(props, "dt"), zk.cut(props, "cu"), zk.cut(props, "uu"), zk.cut(props, "ru"));
 					if (owner = zk.cut(props, "ow"))
 						owner = Widget.$(owner);
 				}
@@ -506,8 +507,12 @@ jq(function() {
 		if (wgt && !wgt.$weave) {
 			var en = wevt.name,
 				fn = _subevts[en];
-			if (fn)
-				wgt[fn].call(wgt, wevt);
+			if (fn) {
+				// Bug 3300935, disable tooltip for IOS
+				if (!zk.ios || (fn != 'doTooltipOver_' && fn != 'doTooltipOut_')) {
+					wgt[fn].call(wgt, wevt);
+				}
+			}
 			if (!wevt.stopped)
 				wgt['do' + en.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
@@ -584,7 +589,7 @@ jq(function() {
 		if (!wgt.afterKeyDown_)
 			return; //handled
 		wevt.target = wgt; //mimic as keydown directly sent to wgt
-		return wgt.afterKeyDown_(wevt);
+		return wgt.afterKeyDown_(wevt,true);
 	}
 
 	jq(document)
@@ -627,7 +632,7 @@ jq(function() {
 		if (wgt) {
 			if (zk.ie)
 				evt.which = 3;
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
@@ -649,7 +654,8 @@ jq(function() {
 			_docMouseDown(e, null, true); //simulate mousedown
 
 			//simulate focus if zk.Draggable invokes evt.stop
-			if ((wgt = e.target) && wgt != zk.currentFocus)
+			if ((wgt = e.target) && wgt != zk.currentFocus
+			&& !zk.Draggable.ignoreStop(wgt.$n()))
 				try {wgt.focus();} catch (e) {}
 				//Bug 3017606/2988327: don't invoke window.blur,or browser might be min (IE/FF)
 		}
@@ -684,7 +690,7 @@ jq(function() {
 
 		if (evt.which == 1)
 			_doEvt(new zk.Event(Widget.$(evt, {child:true}),
-				'onClick', evt.mouseData(), {ctl:true}, evt));
+				'onClick', evt.mouseData(), {}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	})
 	.bind('zdblclick', function (evt) {
@@ -692,7 +698,7 @@ jq(function() {
 
 		var wgt = Widget.$(evt, {child:true});
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
@@ -735,20 +741,8 @@ jq(function() {
 		if (bRmDesktop || zk.pfmeter) {
 			try {
 				var dts = zk.Desktop.all;
-				for (var dtid in dts) {
-					var dt = dts[dtid];
-					jq.ajax(zk.$default({
-						url: zk.ajaxURI(null, {desktop:dt,au:true}),
-						data: {dtid: dtid, cmd_0: bRmDesktop?"rmDesktop":"dummy", opt_0: "i"},
-						beforeSend: function (xhr) {
-							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
-						},
-						//2011/04/22 feature 3291332
-						//Use sync request for chrome and safari.
-						//Note: when pressing F5, the request's URL still arrives before this even async:false
-						async: !zk.safari
-					}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
-				}
+				for (var dtid in dts)
+					zAu._rmDesktop(dts[dtid], !bRmDesktop);
 			} catch (e) { //silent
 			}
 		}

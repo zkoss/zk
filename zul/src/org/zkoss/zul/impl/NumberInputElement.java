@@ -21,8 +21,13 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
+import org.zkoss.json.JSONValue;
 import org.zkoss.lang.JVMs;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.math.RoundingModes;
 
@@ -34,7 +39,8 @@ import org.zkoss.math.RoundingModes;
 abstract public class NumberInputElement extends FormatInputElement {
 	/** The rounding mode. */
 	private int _rounding = BigDecimal.ROUND_HALF_EVEN;
-
+	private Locale _locale;
+	
 	/** Sets the rounding mode.
 	 * Note: You cannot change the rounding mode unless you are
 	 * using Java 6 or later.
@@ -90,7 +96,64 @@ abstract public class NumberInputElement extends FormatInputElement {
 	public int getRoundingMode() {
 		return _rounding;
 	}
+
+
+	/** Returns the locale associated with this number input element,
+	 * or null if {@link Locales#getCurrent} is preferred.
+	 * @since 5.0.8
+	 */
+	public Locale getLocale() {
+		return _locale;
+	}
+	/** Sets the locale used to identify the symbols of this number input element.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.8
+	 */
+	public void setLocale(Locale locale) {
+		if (!Objects.equals(_locale, locale)) {
+			_locale = locale;
+			invalidate();
+		}
+	}
+	/** Sets the locale used to identify the symbols of this number input element.
+	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
+	 * is assumed)
+	 * @since 5.0.8
+	 */
+	public void setLocale(String locale) {
+		setLocale(locale != null && locale.length() > 0 ?
+			Locales.getLocale(locale): null);
+	}
 	
+	/** Returns the real symbols according to the current locale.
+	 * @since 5.0.8
+	 */
+	private String getRealSymbols() {
+		if (_locale != null) {
+			final String localeName = _locale.toString();
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
+					getDesktop(), "org.zkoss.zul.impl.NumberInputElement" + localeName)) {
+				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(
+						_locale);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("GROUPING",
+						String.valueOf(symbols.getGroupingSeparator()));
+				map.put("DECIMAL",
+						String.valueOf(symbols.getDecimalSeparator()));
+				map.put("PERCENT", String.valueOf(symbols.getPercent()));
+				map.put("PER_MILL", String.valueOf(symbols.getPerMill()));
+				map.put("MINUS", String.valueOf(symbols.getMinusSign()));
+				return JSONValue.toJSONString(new Object[] { localeName, map });
+			} else return JSONValue.toJSONString(new Object[] { localeName,
+					null });
+		}
+		return null;
+	}
+	
+	private Locale getDefaultLocale() {
+		return _locale != null ? _locale : Locales.getCurrent(); 
+	}
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -98,6 +161,8 @@ abstract public class NumberInputElement extends FormatInputElement {
 		
 		if (_rounding != BigDecimal.ROUND_HALF_EVEN)
 			renderer.render("_rounding", _rounding);
+		if (_locale != null)
+			renderer.render("localizedSymbols", getRealSymbols());
 	}
 	
 	//utilities//
@@ -115,7 +180,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 		if (value == null) return "";
 
 		final DecimalFormat df = (DecimalFormat)
-			NumberFormat.getInstance(Locales.getCurrent());
+			NumberFormat.getInstance(getDefaultLocale());
 		if (_rounding != BigDecimal.ROUND_HALF_EVEN)
 			df.setRoundingMode(RoundingMode.valueOf(_rounding));
 
@@ -141,7 +206,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 		if (val == null) return new Object[] {null, null};
 
 		final DecimalFormatSymbols symbols =
-			new DecimalFormatSymbols(Locales.getCurrent());
+			new DecimalFormatSymbols(getDefaultLocale());
 		final char GROUPING = symbols.getGroupingSeparator(),
 			DECIMAL = symbols.getDecimalSeparator(),
 			PERCENT = symbols.getPercent(),

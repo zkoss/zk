@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3345912.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 11 14:44:04 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	The style of the two row should look the same.
+	<grid width="50px">
+		<rows>
+			<row>
+				<cell>
+					<label value="item" />
+				</cell>
+				<cell>
+					<label value="item" />
+				</cell>
+			</row>
+			<row>
+				<label value="item" />
+				<label value="item" />
+			</row>
+		</rows>
+	</grid>
+</zk>

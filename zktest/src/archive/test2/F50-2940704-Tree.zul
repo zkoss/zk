@@ -1,6 +1,11 @@
 <zk>
+<style>
+ol,li {
+	margin: 0;
+}
+</style>
 	Auto Paging shall re-calculate the page size every time the tree height is changed.
-	<html>
+	<div><html>
 	<![CDATA[
 	<ol>
 	<li>Click browser's maximize button. The page size shall re-calculate and there should be NO vertical scrollbar appear in tree</li>
@@ -13,19 +18,20 @@
 	<li>Done</li>
 	</ol>
 	]]>
-	</html>
+	</html></div>
+	<vlayout>
 	<radiogroup
 		onCheck="tree.pagingPosition = self.selectedItem.label;">
 		<radio label="top" />
 		<radio label="bottom" checked="true" />
 		<radio label="both" />
 	</radiogroup>
-	<separator/>
 	<button label="Change Paging Mold">
 		<attribute name="onClick">
 		tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" : "os";
 		</attribute>
 	</button>
+	</vlayout>
 	<zscript>					
 	import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 	

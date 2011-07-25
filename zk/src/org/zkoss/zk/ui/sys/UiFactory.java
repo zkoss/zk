@@ -37,6 +37,16 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
  * to {@link PageDefinition}.
  *
+ * <p>To customize the implementation of {@link WebApp}, please
+ * specify <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-class_Element">web-app-class</a>
+ * instead (of implementing this interface).
+ *
+ * <p>Rather than implementing this interface from scratch, you could
+ * extend from {@link org.zkoss.zk.ui.http.SimpleUiFactory}
+ * (for non-clustering environment)
+ * or {@link org.zkoss.zk.ui.http.SerializableUiFactory}
+ * (for clustering environment).
+ *
  * @author tomyeh
  */
 public interface UiFactory {
@@ -115,10 +125,10 @@ public interface UiFactory {
 	 * @param page the page that the new component belongs to (never null).
 	 * @param parent the parent compoent, or null if the new component is root.
 	 * @param compInfo the component information
-	 * @since 2.4.0
+	 * @since 5.1.0
 	 */
 	public Component newComponent(Page page, Component parent,
-	ComponentInfo compInfo);
+	ComponentInfo compInfo, Component insertBefore);
 
 	/** Creates and initializes a component based on the specified
 	 * {@link ComponentDefinition}.
@@ -140,13 +150,13 @@ public interface UiFactory {
 	/** Creates and initializes a composer of the given class and page.
 	 * @param page the page that the composer will be created for.
 	 * @exception UiException if failed to instantiate
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public Composer newComposer(Class klass, Page page);
 	/** Creates and initializes the server push of the given class and desktop.
 	 * @param desktop the desktop that the server push will be created for.
 	 * @exception UiException if failed to instantiate
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public ServerPush newServerPush(Class klass, Desktop desktop);
 

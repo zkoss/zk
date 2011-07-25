@@ -68,7 +68,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * <p>This associates the componentX's attribute attrY to the bean's value. The bean's value is something
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
- * {@link org.zkoss.zk.ui.Page#getZScriptVariable} then {@link org.zkoss.zk.ui.Component#getVariable} method. 
+ * {@link org.zkoss.zk.ui.Page#getZScriptVariable} then {@link org.zkoss.zk.ui.Component#getAttributeOrFellow} method. 
  * That is, all those variables defined in zscript are also accessible by this DataBinder. Note that you can choose 
  * either two formats of annotations as your will and you 
  * can even hybrid them together though it is not generally a good practice.</p>

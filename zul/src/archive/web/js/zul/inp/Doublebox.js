@@ -17,14 +17,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	// Fixed merging JS issue
 	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.InputWidget._allowKeys+zk.DECIMAL+'e';
+		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL+'e';
 	});
 		//supports 1e2
 /**
  * An edit box for holding an float point value (double).
  * <p>Default {@link #getZclass}: z-doublebox.
  */
-zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
+	$init: function () {
+		this.$supers('$init', arguments);
+		//bug B50-3325041
+		this._allowKeys = _allowKeys;
+	},
+	setLocalizedSymbols: function (val) {
+		var old = this._localizedSymbols;
+		this.$supers('setLocalizedSymbols', arguments);
+		if (this._localizedSymbols !== old)
+			this._allowKeys += this._localizedSymbols.DECIMAL + 'e';
+	},
 	onSize: _zkf = function() {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
@@ -40,7 +51,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (value) {
 		if (!value) return null;
 
-		var info = zk.fmt.Number.unformat(this._format, value),
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			raw = info.raw,
 			val = parseFloat(raw),
 			valstr = ''+val,
@@ -88,19 +99,16 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 		return true;
 	},
 	coerceToString_: function(value) {
-		var fmt = this._format;
+		var fmt = this._format,
+			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
 		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, value, this._rounding) : 
-			zk.DECIMAL == '.' ? (''+value) : (''+value).replace('.', zk.DECIMAL);
+			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
+			DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-doublebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, _allowKeys))
-			this.$supers('doKeyPress_', arguments);
-	},	
 	bind_: function(){
 		this.$supers(zul.inp.Doublebox, 'bind_', arguments);
 		if (this.inRoundedMold())

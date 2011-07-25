@@ -1,0 +1,57 @@
+<window>
+	<html><![CDATA[
+	<ul><li>You shall see three items and each has two colums</li></ul>
+	]]></html>
+	<zscript>
+	ListModel infos = new ListModelArray(
+		new String[][] {
+			{"Apple", "10kg"},
+			{"Orange", "20kg"},
+			{"Mango", "12kg"}
+		});
+	</zscript>			
+	<grid model="${infos}">
+		<template name="model">
+			<row>
+				<label value="${each[0]}"/>
+				<label value="${each[1]}"/>
+			</row>
+		</template>
+	</grid>
+
+	<html><![CDATA[
+	<ul><li>You shall see 20,000 items and each has two colums.</li></ul>
+	]]></html>
+	<zscript>
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(20000);
+	</zscript>
+	<grid height="200px" model="${strset}">
+		<columns>
+			<column label="Sequence" sort="auto"/>
+			<column label="Options" sort="auto"/>
+		</columns>
+		<template name="model">
+			<row>
+				<label value="#${self.parent.index}"/><!-- performance is not good (for testing only) -->
+				<label value=":${each}"/>
+			</row>
+		</template>
+	</grid>
+	<!-- used for debugging
+	<zscript><![CDATA[
+	public class MyRender implements RowRenderer {
+		public void render(Row item, Object data) {
+			item.appendChild(new Label("#" + item.getIndex())); //performance is not good (for testing only)
+			item.appendChild(new Label(":" + data));
+		}
+	}
+	RowRenderer render = new MyRender();
+	]]></zscript>
+	<grid height="200px" model="${strset}" rowRenderer="${render}">
+		<columns>
+			<column label="Sequence" sort="auto"/>
+			<column label="Options" sort="auto"/>
+		</columns>
+	</grid>
+	-->
+</window>

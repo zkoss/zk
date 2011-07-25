@@ -22,12 +22,11 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 
 /**
- * Represents an event cause by mouse activitly.
+ * Represents an event cause by mouse activity.
  *
  * <p>There are two possible way to identify a mouse event.
  * One is by coordinate ({@link #getX} and {@link #getY}.
@@ -53,13 +52,13 @@ public class MouseEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = 0x004;
-	/** Indicatees whether the left button is clicked.
+	/** Indicates whether the left button is clicked.
 	 */
 	public static final int LEFT_CLICK = 0x100;
-	/** Indicatees whether the right button is clicked.
+	/** Indicates whether the right button is clicked.
 	 */
 	public static final int RIGHT_CLICK = 0x200;
-	/** Indicatees whether the middle button is clicked.
+	/** Indicates whether the middle button is clicked.
 	 * @since 5.0.0
 	 */
 	public static final int MIDDLE_CLICK = 0x400;
@@ -131,7 +130,7 @@ public class MouseEvent extends Event {
 	 * <p>If each partition is represented with {@link org.zkoss.zul.Area}, the
 	 * return value is {@link org.zkoss.zul.Area#getId}, if it is assigned, or
 	 * {@link org.zkoss.zul.Area#getUuid} if not assigned.
-	 * To simplify the access, you can retrive it back with
+	 * To simplify the access, you can retrieve it back with
 	 * {@link #getAreaComponent}.
 	 * @see #getAreaComponent
 	 */
@@ -140,7 +139,7 @@ public class MouseEvent extends Event {
 	}
 	/** Returns the component representing the area that the click occurs,
 	 * or null if not associated with any component.
-	 * <p>This method assumes {@link #getArea} is ether a component's ID
+	 * <p>This method assumes {@link #getArea} is either a component's ID
 	 * or a component's UUID. It is true when {@link org.zkoss.zul.Area} is used
 	 * to partition a component, such as {@link org.zkoss.zul.Imagemap} and {@link org.zkoss.zul.Chart}.
 	 * @since 5.0.4

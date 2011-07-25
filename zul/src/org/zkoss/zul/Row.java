@@ -178,9 +178,11 @@ public class Row extends XulElement {
 		return _loaded;
 	}
 	/** Returns the index of the specified row.
-	 * The current implementation is stupid, so not public it yet.
+	 * <p>Notice that the performance is not good if there are a lot of rows.
+	 * Therefore, this method shall not be used with a huge grid.
+	 * @since 5.1.0
 	 */
-	/*package*/ int getIndex() {
+	public int getIndex() {
 		int j = 0;
 		if (_index < 0) {
 			for (Iterator it = getParent().getChildren().iterator();

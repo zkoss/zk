@@ -21,8 +21,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.xel.VariableResolver;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.Frozen;
 import org.zkoss.zul.Group;
@@ -201,18 +204,38 @@ public class ListboxDataLoader implements DataLoader, Cropper {
 		cell.setParent(item);
 		return cell;
 	}
+
 	public Object getRealRenderer() {
 		final ListitemRenderer renderer = _listbox.getItemRenderer();
-		return renderer != null ? renderer : _defRend; 
+		return renderer != null ? renderer: _defRend;
 	}
-	
 	private static final ListitemRenderer _defRend = new ListitemRenderer() {
-		public void render(Listitem item, Object data) {
-			item.setLabel(Objects.toString(data));
-			item.setValue(data);
+		public void render(Listitem item, final Object data) {
+			final Listbox listbox = (Listbox)item.getParent();
+			final Template tm = listbox.getTemplate("model");
+			if (tm == null) {
+				item.setLabel(Objects.toString(data));
+				item.setValue(data);
+			} else {
+				final Component[] items = tm.create(listbox, item,
+					new VariableResolver() {
+						public Object resolveVariable(String name) {
+							return "each".equals(name) ? data: null;
+						}
+					});
+				if (items.length != 1)
+					throw new UiException("The model template must have exactly one item, not "+items.length);
+
+				final Listitem nli = (Listitem)items[0];
+				if (nli.getValue() == null) //template might set it
+					nli.setValue(data);
+				item.setAttribute("org.zkoss.zul.model.renderAs", nli);
+					//indicate a new item is created to replace the existent one
+				item.detach();
+			}
 		}
 	};
-	
+
 	public void syncModel(int offset, int limit) {
 		_listbox.setAttribute(Listbox.SYNCING_MODEL, Boolean.TRUE);
 		try {

@@ -853,8 +853,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					it.remove(); //done
 
 					final Component parent = (Component)zsInfo[0];
-					if ((parent == null || parent.getPage() == this)
-					&& isEffective(zscript, parent)) {
+					if (parent == null || parent.getPage() == this) {
 						final Scope scope =
 							Scopes.beforeInterpret(parent != null ? (Scope)parent: this);
 						try {

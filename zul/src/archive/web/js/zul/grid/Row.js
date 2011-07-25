@@ -20,6 +20,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _toggleEffect(wgt, undo) {
 		var self = wgt;
 		setTimeout(function () {
+			if (!self.desktop)
+				return;// fixed for B50-3362731.zul 
+				
 			var $n = jq(self.$n()),
 				zcls = self.getZclass() + '-over';
 			if (undo) {
@@ -161,15 +164,14 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return child.$n('chdextr') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var cls = !this.getGrid().isSizedByContent() ? 'z-overflow-hidden' : '';
 		if (before)
 			jq(this._getChdextr(before)).before(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
-						zclass: this.getZclass(), cls: cls}));
+						zclass: this.getZclass(), cls: 'z-overflow-hidden'}));
 		else
 			jq(this).append(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
-						zclass: this.getZclass(), cls: cls}));
+						zclass: this.getZclass(), cls: 'z-overflow-hidden'}));
 		
 		child.bind(desktop);
 	},

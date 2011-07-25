@@ -41,10 +41,11 @@ import org.zkoss.zk.xel.Evaluator;
  * Why not? Since there is no way to run zscript before the init directive
  * (and better performance).
  * </p>
+ * <p>Note: it is not serializable.</p>
  *
  * @author tomyeh
  */
-public class InitiatorInfo extends ArgumentInfo {
+public class InitiatorInfo extends ArgumentInfo { //directive
 //	private static final Log log = Log.lookup(InitiatorInfo.class);
 
 	/** A class, an ExValue or an Initiator. */
@@ -52,6 +53,9 @@ public class InitiatorInfo extends ArgumentInfo {
 
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
+	 * @param args the map of arguments. Ignored if null.<br/>
+	 * Notice that, once assigned, the map belongs to this object, and the caller
+	 * shall not access it again
 	 * @since 3.6.2
 	 */
 	public InitiatorInfo(Class<? extends Initiator> cls, Map<String, String> args) {

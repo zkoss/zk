@@ -85,7 +85,7 @@ public class Script extends AbstractComponent {
 	}
 	/** Constructs a script component with the specified content.
 	 * @param content the content (the code snippet).
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public Script(String content) {
 		setContent(content);

@@ -41,7 +41,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<portlet-preferences>
 			<preference>
 				<name>zk_page</name>
-				<value>/userguide/index.zul</value>
+				<value>/index.zul</value>
 			</preference>
 		</portlet-preferences>
 		-->

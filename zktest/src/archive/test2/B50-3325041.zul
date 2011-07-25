@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3325041.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 4 12:02:34 TST 2011, Created by peterkuo
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	try to type floating number like "1.23" in the double spinner.
+	<separator/>
+	If floating number can't type in, it's a bug
+	<separator/>
+	click button next to input, see if the alerted value is the same as valued inputted. 
+	<separator/>
+	follow above instruction for decimalbox and doublebox too.
+	<separator/>
+	
+	doublespinner : <doublespinner id="ds"/>
+	<button label="test1" onClick='alert(ds.value)'/>
+	<separator/> 
+	decimalbox: <decimalbox id="db"></decimalbox>
+	<button label="test2" onClick='alert(db.value)'/>
+	<separator/> 
+	doublebox: <doublebox id="doub"></doublebox>
+	<button label="test3" onClick='alert(doub.value)'/>
+</zk>

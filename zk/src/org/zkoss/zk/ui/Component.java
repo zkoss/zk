@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
 
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
@@ -198,6 +199,10 @@ w:use="foo.MyWindow"&gt;
 	 * To know whether it is attached, override
 	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached}
 	 * rather than this method.
+	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
 	 *
 	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached
 	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageDetached
@@ -540,6 +545,11 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.4
 	 */
 	public void setStubonly(String stubonly);
+	/** Sets whether this component is stub-only.
+	 * It is the same as <code>setStubonly(stubonly ? "true": "false")</code>.
+	 * @since 5.1.0
+	 */
+	public void setStubonly(boolean stubonly);
 
 	/** Returns the parent component, or null if this is the root component.
 	 */
@@ -579,7 +589,6 @@ w:use="foo.MyWindow"&gt;
 	 * instead of this method, unless
 	 * you want to control where to put the child.
 	 *
-	 *
 	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
 	 * and/or {@link #removeChild},
 	 * while {@link #insertBefore} and {@link #removeChild}
@@ -587,6 +596,10 @@ w:use="foo.MyWindow"&gt;
 	 * if the parent is changed. Thus, you don't need to override 
 	 * both {@link #insertBefore} and {@link #setParent}, if you want
 	 * to customize the behavior.
+	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
 	 *
 	 * @param newChild the new child to be inserted.
 	 * @param refChild the child before which you want the new child
@@ -616,6 +629,10 @@ w:use="foo.MyWindow"&gt;
 	 * if the parent is changed. Thus, you don't need to override 
 	 * both {@link #insertBefore} and {@link #setParent}, if you want
 	 * to customize the behavior.
+	 *
+	 * <p>If you would like to monitor if a component is attached or detached
+	 * from a page, you could register a desktop listener implementing
+	 * {@link org.zkoss.zk.ui.util.UiLifeCycle}.
 	 *
 	 * @return true if child is removed successfully; false if it doesn't
 	 * have the specified child
@@ -963,6 +980,24 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.3
 	 */
 	public Set<String> getWidgetAttributeNames();
+
+	/** Returns the template of the given name, or null if not available.
+	 * @since 5.1.0
+	 * @see #setTemplate
+	 */
+	public Template getTemplate(String name);
+	/** Sets a UI template which could be retrieved later
+	 * with {@link #getTemplate}.
+	 * @param name the template's name. It cannot be empty or null.
+	 * @param template the template to assign. If it is null, the previous
+	 * template, if any, will be removed
+	 * @return the previous template, if any
+	 */
+	public Template setTemplate(String name, Template template);
+	/** Returns a readonly set of the names of all templates.
+	 * @since 5.1.0
+	 */
+	public Set<String> getTemplateNames();
 
 	/** Sets an AU service to process the AU request before the component's
 	 * default handling.

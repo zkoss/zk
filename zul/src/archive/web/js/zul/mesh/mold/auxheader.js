@@ -17,5 +17,5 @@ function (out) {
 	this.getZclass(), '-cnt"', this.domTextStyleAttr_(), '>', this.domContent_());
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
-	out.push('</div></td>');
+	out.push('</div></th>');
 }

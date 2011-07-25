@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<zscript><![CDATA[
+void mesg(String msg) {
+	inf.value += msg + '\n';
+}
+void dump(StringBuffer sb, Component c, int level) {
+	for (int l = level; --l >= 0;)
+		sb.append("  ");
+	sb.append(c).append('\n');
+	for (c =  c.firstChild; c != null; c = c.nextSibling)
+		dump(sb, c, level + 1);
+}
+void show(Event event) {
+	mesg("Event: "+event+":"+event.command+":"+event.id+":"+event.getRequestData());
+}
+	String t0uuid;
+	]]></zscript>
+
+<div style="border:1px solid grey" onStub='show(event)'>
+	<button label="append stub">
+		<attribute name="onClick"><![CDATA[
+	Div div = new Div();
+	div.setStubonly(true);
+	div.appendChild(new Label("Last child: "+self.parent.lastChild+" while adding " + div));
+	self.parent.appendChild(div);
+		]]></attribute>
+	</button>
+	<button label="dump info">
+		<attribute name="onClick"><![CDATA[
+	StringBuffer sb = new StringBuffer();
+	dump(sb, self.parent, 0);
+	inf.value += sb.toString();
+		]]></attribute>
+	</button>
+	<button label="invalidate" onClick="self.parent.invalidate()"/>
+	<button label="add stub child to the last child">
+		<attribute name="onClick"><![CDATA[
+	Label l = new Label("*in child*");
+	l.setStubonly(true);
+	self.parent.lastChild.appendChild(l);
+		]]></attribute>
+	</button>
+
+	<button label="locate t0" onClick='mesg(t0uuid+":"+ref.nextSibling.getId(t0uuid))'/>
+	<button label="detach" onClick='ref.nextSibling.detach()'/>
+
+	<div id="ref"/>
+	<div stubonly="true" style="border:1px solid blue">
+		stub 1
+		<div>
+			1.1
+			<div>
+			<textbox id="t0" value="1.1.1 (stub)" onChange="">
+				<zscript>
+			t0uuid = self.uuid;
+				</zscript>
+			</textbox>
+			<button id="b0" label="click (stub)" onClick=""/></div>
+		</div>
+		<div>
+			1.2
+			<textbox value="1.3 (non-stub)" stubonly="false"/>
+			1.4
+		</div>
+		<div>1.5</div>
+	</div>
+</div>
+<textbox id="inf" rows="20" width="95%"/>
+</zk>

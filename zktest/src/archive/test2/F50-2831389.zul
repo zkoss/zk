@@ -21,14 +21,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 		onCheck='tb.mold = self.checked ? "accordion-lite" : "default"' />
 	<checkbox label="accordion" checked="true"
 		onCheck='tb.mold = self.checked ? "accordion" : "default"' />
-	<div height="400px" style="overflow:hidden">
+	<div height="400px" style="overflow:hidden;">
 		<tabbox id="tb" width="400px" mold="accordion" vflex="true">
 			<tabs>
 				<tab label="Tab 1" />
 				<tab label="Tab 2" />
 			</tabs>
 			<tabpanels>
-				<tabpanel style="overflow:auto">
+				<tabpanel style="overflow:auto;position:relative">
 					<tabbox id="tb2" orient="vertical">
 						<tabs width="20px">
 							<tab label="A" />

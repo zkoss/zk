@@ -625,7 +625,8 @@ implements Constrainted, Readonly, Disable {
 	 * {@link #getText} and {@link #getTargetValue}.
 	 */
 	protected void checkUserError() throws WrongValueException {
-		if (_auxinf != null && _auxinf.errmsg != null)
+		//Bug 3357931: WrongValueException Thrown On Valid Component
+		if (_auxinf != null && _auxinf.errmsg != null && !_auxinf.errmsg.equals("null"))
 			throw new WrongValueException(this, _auxinf.errmsg);
 				//Note: we still throw exception to abort the exec flow
 				//It's client's job NOT to show the error box!

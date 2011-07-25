@@ -54,7 +54,7 @@
 		parameters.put("ReportTitle", "Address Report");
 		parameters.put("DataFile", "CustomDataSource from java");
 
-		report.setSrc("/userguide/data/jasperreport.jasper");
+		report.setSrc("/data/jasperreport.jasper");
 		report.setParameters(parameters);
 		report.setDatasource(new CustomDataSource());
 		report.setType((String) format.getSelectedItem().getValue());

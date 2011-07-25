@@ -16,6 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _toggleEffect(wgt, undo) {
 		var self = wgt;
 		setTimeout(function () {
+			if (!self.desktop)
+				return;// fixed for B50-3362731.zul
+			
 			var $n = jq(self.$n()),
 				zcls = self.getZclass();
 			if (undo) {
@@ -25,12 +28,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else if (self._musin) {
 				$n.addClass(self.isSelected() ? zcls + "-over-seld" : zcls + "-over");
 				
-				var musout = self.getMeshWidget()._musout;
+				var mesh = self.getMeshWidget(),
+					musout = mesh._musout;
 				// fixed mouse-over issue for datebox 
 				if (musout && $n[0] != musout.$n()) {
 					jq(musout.$n()).removeClass(zcls + "-over-seld").removeClass(zcls + "-over");
 					musout._musin = false;
-					self.parent._musout = null;
+					mesh._musout = null;
 				}
 			}
 		});
@@ -150,9 +154,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass(),
-				added = this.isDisabled() ? zcls + '-disd' : this.isSelected() ? zcls + '-seld' : '';
-			if (added) scls += (scls ? ' ': '') + added;
+			var zcls = this.getZclass();
+			if (this.isDisabled())
+				scls += (scls ? ' ': '') + zcls + '-disd';
+			if (this.isSelected())
+				scls += (scls ? ' ': '') + zcls + '-seld';
 		}
 		return scls;
 	},
@@ -184,8 +190,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_updHeaderCM: function (bRemove) { //update header's checkmark
-		var box = this.getMeshWidget();
-		if (box && box._headercm && box._multiple) {
+		var box;
+		if ((box = this.getMeshWidget()) && box._headercm && box._multiple) {
 			if (bRemove) {
 				box._updHeaderCM();
 				return;

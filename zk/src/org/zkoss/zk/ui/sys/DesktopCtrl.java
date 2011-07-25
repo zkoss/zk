@@ -76,8 +76,25 @@ public interface DesktopCtrl {
 	/** Adds a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicityly.
+	 * @exception InternalError if there is a component associated with
+	 * the same UUID
 	 */
 	public void addComponent(Component comp);
+	/** Maps a component associated with the given UUID to this page.
+	 * Notice that the given uuid can be different from comp's UUID
+	 * ({@link Component#getUuid}).
+	 * <p>If the given component is null, the mapping of UUID is removed.
+	 * <p>Unlike {@link #addComponent} and {@link #removeComponent}, this method simply replaces
+	 * the mapping if the given UUID is already mapped to the other component.
+	 * <p>It is used internally and developers shall not invoke it
+	 * explicityly.
+	 * @param comp the component to assoicate with the given UUID.
+	 * If not, the association (i.e., mapping) is removed.
+	 * @return the previous component that was associated with the given UUID.
+	 * @since 5.1.0
+	 */
+	public Component mapComponent(String uuid, Component comp);
+
 	/** Removes a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
 	 * explicitly.

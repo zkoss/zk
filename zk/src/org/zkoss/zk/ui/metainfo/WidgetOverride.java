@@ -15,10 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * Represents a method of the peer widget.
@@ -32,9 +30,8 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  */
 public class WidgetOverride extends WidgetListener {
 	/**
+	 * @param evalr the evaluator reference used to evaluate the condition.
 	 * @param name the the method name, such as setValue.
-	 * @param evalr the evaluator reference. It is required if cond is not null.
-	 * @param script the script snippet. EL is allowed.
 	 * @exception IllegalArgumentException if script is null
 	 * or (cond is not null but evalr is null)
 	 */

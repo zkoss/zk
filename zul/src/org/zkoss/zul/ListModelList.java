@@ -247,7 +247,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
     }
 	
 	public ListIterator<E> listIterator() {
-		return _list.listIterator();
+		return listIterator(0);
 	}
 	
 	public ListIterator<E> listIterator(final int index) {

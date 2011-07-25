@@ -27,7 +27,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents the compmonent infomation about the native components.
@@ -38,7 +37,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @since 3.0.0
  */
 public class NativeInfo extends ComponentInfo {
-	private List<Object> _prokids, _epikids;
+	private List<NodeInfo> _prokids, _epikids;
 	private NativeInfo _splitkid;
 	/** Declared namespaces (Namespace). */
 	private List<Namespace> _dns;
@@ -53,14 +52,6 @@ public class NativeInfo extends ComponentInfo {
 		super(parent, compdef, tagnm);
 		if (!compdef.isNative())
 			throw new IllegalArgumentException("compdef must be native");
-	}
-	/** Constructs a native info without a parent.
-	 * @param compdef the component definition (never null).
-	 * @since 3.5.0
-	 */
-	public NativeInfo(EvaluatorRef evlar, ComponentDefinition compdef,
-	String tagnm) {
-		super(evlar, compdef, tagnm);
 	}
 
 	/** Returns a readonly list of the declared namespaces (never null).
@@ -86,7 +77,7 @@ public class NativeInfo extends ComponentInfo {
 	 * In other words, a prolog child won't be created as part of
 	 * <p>The prolog children must be rendered before {@link #getChildren}.
 	 */
-	public List<Object> getPrologChildren() {
+	public List<NodeInfo> getPrologChildren() {
 		if (_prokids != null)
 			return _prokids;
 		return Collections.emptyList();
@@ -94,7 +85,7 @@ public class NativeInfo extends ComponentInfo {
 	/** Returns a readonly list of the epilog children ({@link NativeInfo}).
 	 * The epilog children must be rendered after {@link #getChildren}.
 	 */
-	public List<Object> getEpilogChildren() {
+	public List<NodeInfo> getEpilogChildren() {
 		if (_epikids != null)
 			return _epikids;
 		return Collections.emptyList();
@@ -108,50 +99,9 @@ public class NativeInfo extends ComponentInfo {
 	 * @param child the prolog child.
 	 * @see #getPrologChildren
 	 */
-	public void addPrologChild(NativeInfo child) {
-		addPrologChildDirectly(child);
-	}
-	/** Adds a prolog child.
-	 *
-	 * @param child the prolog child. If child belongs to {@link #getChildren},
-	 * it will be removed first.
-	 * @see #getPrologChildren
-	 */
-	public void addPrologChild(ZScript child) {
-		addPrologChildDirectly(child);
-	}
-	/** Adds a prolog child.
-	 *
-	 * @param child the prolog child. If child belongs to {@link #getChildren},
-	 * it will be removed first.
-	 * @see #getPrologChildren
-	 */
-	public void addPrologChild(VariablesInfo child) {
-		addPrologChildDirectly(child);
-	}
-	/** Adds a prolog child.
-	 *
-	 * <p>Note: if child belong to other {@link ComponentInfo},
-	 * you have to remove them first before calling this method.
-	 * Otherwise, the result is unpreditable.
-	 *
-	 * @param child the prolog child.
-	 * @see #getPrologChildren
-	 */
-	public void addPrologChild(AttributesInfo child) {
-		addPrologChildDirectly(child);
-	}
-	/** Adds a text as a prolog child.
-	 */
-	public void addPrologChild(TextInfo text) {
-		addPrologChildDirectly(text);
-	}
-	/** Adds a prolog child.
-	 * @param chld the child can NOT be{@link ComponentInfo}.
-	 */
-	/*package*/ void addPrologChildDirectly(Object child) {
+	public void addPrologChild(NodeInfo child) {
 		if (_prokids == null)
-			_prokids = new LinkedList<Object>();
+			_prokids = new LinkedList<NodeInfo>();
 		_prokids.add(child);
 	}
 	/** Adds an epilog child.
@@ -160,42 +110,9 @@ public class NativeInfo extends ComponentInfo {
 	 * it will be removed first.
 	 * @see #getPrologChildren
 	 */
-	public void addEpilogChild(NativeInfo child) {
-		addEpilogChildDirectly(child);
-	}
-	/** Adds an epilog child.
-	 *
-	 * @param child the epilog child. If child belongs to {@link #getChildren},
-	 * it will be removed first.
-	 * @see #getPrologChildren
-	 */
-	public void addEpilogChild(ZScript child) {
-		addEpilogChildDirectly(child);
-	}
-	/** Adds an epilog child.
-	 *
-	 * @param child the epilog child. If child belongs to {@link #getChildren},
-	 * it will be removed first.
-	 * @see #getPrologChildren
-	 */
-	public void addEpilogChild(VariablesInfo child) {
-		addEpilogChildDirectly(child);
-	}
-	/** Adds an epilog child.
-	 *
-	 * @param child the epilog child. If child belongs to {@link #getChildren},
-	 * it will be removed first.
-	 * @see #getPrologChildren
-	 */
-	public void addEpilogChild(AttributesInfo child) {
-		addEpilogChildDirectly(child);
-	}
-	/** Adds an epilog child.
-	 * @param chld the child can NOT be{@link ComponentInfo}.
-	 */
-	/*package*/ void addEpilogChildDirectly(Object child) {
+	public void addEpilogChild(NodeInfo child) {
 		if (_epikids == null)
-			_epikids = new LinkedList<Object>();
+			_epikids = new LinkedList<NodeInfo>();
 		_epikids.add(child);
 	}
 
@@ -229,13 +146,5 @@ public class NativeInfo extends ComponentInfo {
 		}
 
 		return comp;
-	}
-	public Object clone() {
-		final NativeInfo clone = (NativeInfo)super.clone();
-		if (clone._prokids != null)
-			clone._prokids = new LinkedList<Object>(clone._prokids);
-		if (clone._epikids != null)
-			clone._epikids = new LinkedList<Object>(clone._epikids);
-		return clone;
 	}
 }

@@ -479,7 +479,7 @@ public class DataBinder implements java.io.Serializable {
 	}
 	
 	/** Bind a real bean object to the specified beanid. You might not need to call this method because this
-	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getVariable} method
+	 * DataBinder would look up the variable via the {@link org.zkoss.zk.ui.Component#getAttributeOrFellow} method
 	 * if it cannot find the specified bean via the given beanid.
 	 *
 	 * @param beanid The bean id used in data binding.

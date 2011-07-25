@@ -580,7 +580,8 @@ String scroll; //DOM Element's ID</code></pre>
 
 	_mousedown: function (devt) {
 		var node = this.node,
-			evt = jq.Event.zk(devt);
+			evt = jq.Event.zk(devt),
+			target = devt.target;
 		if(_dragging[node] || evt.which != 1)
 			return;
 
@@ -591,15 +592,16 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		// Bug B50-3147909: Safari has issue with select and draggable
 		// Now select element is not draggable in Chrome and Safari
-		if(zk.safari && jq.nodeName(devt.target, 'select'))
+		if(zk.safari && jq.nodeName(target, 'select'))
 			return;
 		
 		var pos = zk(node).cmOffset();
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 		_activate(this, devt, pt);
 
-		if (!zk.ie) {
-			devt.stop();
+		if (!zk.ie || zk.ie9) { // IE9 for B50-3306835.zul
+			if (!zk.Draggable.ignoreStop(target))
+				devt.stop();
 			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
 			//FF3: if not stop, IMG cannot be dragged (test/dragdrop.zul) and INPUT not droppable (Bug 3031511)
 			//Opera: if not stop, 'easy' to become selecting text
@@ -787,6 +789,10 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 	ignoreClick: function () { //called by mount
 		return zk.dragging;
+	},
+	ignoreStop: function (target) { //called by mount
+		//Bug 3310017/3309975: if trigger focus() FF and chrome cannot handle input cursor.
+		return zk(target).isInput();
 	}
 });
 })();

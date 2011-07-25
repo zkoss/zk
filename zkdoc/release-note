@@ -2,12 +2,8 @@
 ZK 6.0.0
 * Features
   3061730: Make ZK complaint to Java 5, such generics
-  2974464: A way to customize message with i3-label
-  2971889: Way to notify server of JS error
   2920934: A plugin to load lang.xml, config.xml.. from custom location
-  2947727: The instantiation of Composer & Server Push customizable
   2978342: A way to tag AU request for statistic purpose
-  3025389: A way to monitor the execution and event processing
 
 * Bugs
 
@@ -18,15 +14,10 @@ ZK 6.0.0
   + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
     They are replaced with org.zkoss.zul.DefaultTreeNode and
     org.zkoss.zul.DefaultTreeModel.
-  + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
-    Override getChildren() and getExtraCtrl() instead.
   + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
 	and GenericAutowireComposer ignore the variables defined
 	in zscript and XEL. If it causes problems, please use the construactor
 	with full control (GenericAutowireComposer(separator,boolean,boolean)).
-  + Two new methods are, newComposer and newServerPush, added to
-    org.zkoss.zk.ui.sys.UiFactory to allow developers to customize the instantiation
-    of a composer or a server push implementation.
   + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
   + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
     are removed.
@@ -34,18 +25,53 @@ ZK 6.0.0
 	--------
 ZK 5.1.0
 * Features
+  ZK-139: A way to define a template that component could use
+  ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
+  ZK-217: A way to add a temporary variable resolver to an execution
+  2974464: A way to customize message with i3-label
+  ZK-233: Execution.createComponents support inserting before particular component and variable resolver
+  3025389: A way to monitor the execution and event processing
+  2947727: The instantiation of Composer & Server Push customizable
+  ZK-224: Tree shall render the model in the onInitRender event listener
 
 * Bugs
 
 * Upgrade Notes
   + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
     are removed.
+  + The Window, Messagebox and Fileupload components won't throw InterruptedException.
+    Rather, it is wrapped with UiException (because the event processing thread is
+    deprecated)
+  + UiFactory's newComponent method's signature is changed. Furthermore
+    Two new methods are, newComposer and newServerPush, added to UiFactory
+    to allow developers to customize the instantiation of a composer or 
+    a server push implementation.
+  + Tree's model rendering is deferred to the onInitRender event
+  + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
+    Override getChildren() and getExtraCtrl() instead.
+  + The event processing thread is deprecated and might be removed in the future
+  + StubComponent's package becomes org.zkoss.zk.ui.sys.
+  + EvaluatorRef's package becomes org.zkoss.zk.xel.
   + No longer support ZKuery
 
 	--------
 ZK 5.0.8
 * Features
+  2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
+  3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
+  3309539: Timebox and Datebox support different language for different locale
+  3310927: ZK JasperReport support JasperReport
+  3315689: Optimize the HtmlMacroComponent 
+  3316591: Allow user to specify error-box position
+  3323594: Render on Demand for Grid and Listbox supports setInitSize
+  3326788: A way to name the composer GenericAutowireComposer
+  3327013: A way to log message to the client
+  3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
+  3307322: Control Keys support backspace
+  3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
+  ZK-214: Add a databinding composer instead of initiator
+  ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -57,8 +83,104 @@ ZK 5.0.8
   3002530: glitches with autopaging and renderdefer
   3306824: NullPointer when combobox's model has null
   3304877: Upload fail when the component with autodisable
-
+  3308335: Fail to dynamically change the roundingMode for subclass...
+  3309174: Remove items from the  model of a non-rod grid cause error
+  3309256: Datebox and Timebox with long format will display wrong
+  3306149: Cannot remove the latest element in grid model (grid in rod)
+  3309632: Upload may incorrectly terminate
+  3307255: Panel in Portallayout missing top and bottom in IE7
+  3310470: Columnlayout does not work with vflex
+  3310055: Timebox issue with daylight saving timezone
+  3309583: Auxheader HTML Error 
+  3315594: Vflex fail with a window contain a listbox with rows
+  3317170: Datebox without rod render a incorrect dom (FF3.6 only)
+  3322903: onTimer may cancel onClick request
+  3322892: emptyMessage fail when Grid has height
+  3309557: Rod render the empty content with listbox
+  3322909: emptyMessage fail when Listbox has height
+  3322970: Listhead checkmark state is not synchronized
+  3310020: init(SCfg) of DhtmlLayoutS. breaks contract of GenericSrvlet
+  3307376: The datebox shall fire onError after the error is cleared.
+  3322795: double spinner weird action
+  3322816: Doublespinner cannot accept empty value
+  3306850: doublespinner has weird actions
+  3303770: WrongValueException in Grid with paging mold
+  3314014: Separator bar not showing in IE6
+  3315668: doModal Window sometimes can't close with a cluster weblogic
+  3340252: Set vflex to cell in Vbox cause js error
+  3336745: getBoundingClientRect cause error on IE/FF
+  3323593: Timebox with long format shows meanless "z"
+  3314513: Datebox validate fail with different locale
+  3317729: Textbox with hflex="1" shall occupied column's width (IE)
+  3312936: Panel vflex issue (IE6/7)
+  3309193: Chrome returns wrong margin value on InputElement
+  3310406: ztag selector throws error when mounting
+  3339315: Mesh Element with hflex min causes zero width
+  3316035: Grid with sizedByContent and hflex:min display wrong
+  3345636: Chrome, Set hflex="1" to Datebox do not align with Textbox
+  3309975: Textbox in a  draggable component get selection while focus 
+  3310017: The textbox's cursor position cannot be changed
+  3313028: Grid hflex fail while the label in a div with FF4
+  3330762: DoubleSpinner's ClassCastException on value get
+  3348943: ZK JPA cause Exception
+  3316030: Column with hflex:min, but it is not real displayed as min 
+  3325041: doublespinner can't type in floating number
+  3316543: Only load the first property file
+  3304954: HoverImage doesn't show up in menus
+  3340841: Listitem doesn't show selection if disabled
+  3316665: setVflex to Window calculate a wrong height
+  3306729: vflex of listbox not work well on IE6
+  3310051: Listbox with hflex cannot shorten its width on IE6
+  3301498: Alignment of rows and header broken
+  3357475: Grid with hflex min should imply default header hflex
+  3303877: IE6 only, vflex fail with tabbox  
+  3305038: Fileupload.get() cause javascript error
+  3357931: WrongValueException Thrown On Valid Component
+  3353121: Grid in Tabbox vflex issue, IE7 only
+  3303872: IE8 only, tabpanel disappear after hide then show
+  3303874: IE7 only, the scroll bar do not appear in the tabpanel
+  3306835: can not drag image into listbox on IE9
+  3343388: Set hflex="min" to Groupbox fail
+  3353521: Window render Caption in a wrong place
+  3357573: child in the groupbox cannot resize correctly
+  3345912: IE6 only, use Cell in Grid,it appears a strange line
+  3356022: borderlayout and tabpanel bug
+  3355680: hflex fail in combobox while select options
+  3304968: IE9 only, tab will be hide after open then close
+  3362731: IE Rod, use mouse wheel scrol down to end cause js error
+  3309122: ROD issue when use oncreate
+  3317743: Listbox checkmarks don't work as expected in paging mold
+  3365535: Groupbox default mold hflex min may have wrong size
+  3300935: (ipad)Tooltip shall not appear while taps on a component
+  3314143: Treeitem in a close dot tree does not render correctly
+  3306281: onClick in Flash with IE not working
+  3343001: IE6 7 only, Tree will not increase height when open treeitem
+  3352909: Listbox ROD will not render item in a correct position
+  3354086: Model attribute will not accept a ListModel
+  3343077: IE only, column of Grid and Tree do not sync with scroll bar
+  3316103: InaccessibleWidgetBlockService wrongly blocks Combobox
+  3357641: listbox scroll bar position issue if ROD is true
+  3358505: ZK EE with native failed to invalidate (JS error)
+  3327522: Visible property for borderlayout panels (west, east, etc)
+  3337441: Firefox Listbox Multiselect
+  ZK-210: Style Tag Ignored in IE6/7/8
+  3363687: Window onCreate fired twice for Execution#sendRedirect() 
+  ZK-223: Fine tune ZKThemes and sandbox
+  ZK-200: Outside Window border disappear when defer including
+  ZK-215: Combobox options width failed in IE
+  ZK-56:  setSelectedIndex not scroll the selectedItem 
+  ZK-232: Server push fail in cluster environment
+  ZK-159: Hflex fail with nest container
+  ZK-182: Header of grid scroll fail after remove the Frozen
+  ZK-163: The Flashchart didn't compatible with jre / jdk 1.4.x
+  ZK-195: Tree with vflex causes wrong wd in another tree w/ scrollbar
+  
 * Upgrade Notes
+  + Listbox in the select mold will show up an empty selection if none of listitems
+    are selected (in the prior version, the first item will be shown though it is not
+    selected - Bug 2973303)
+  + Listheader's selectAll checkmark will disable when Listbox in ROD mode. Here
+	is the feature tracker - http://tracker.zkoss.org/browse/ZK-220
   + If enable the autopaging function of Tree, Listbox, and Grid, the height of
 	each row will be applied the following CSS by default. If you want to change
 	the height, please overwrite the CSS rule as your preference.
@@ -79,6 +201,8 @@ ZK 5.0.8
 }
   + iDOM is simplified and the concept of readonly and modification is removed.
   + The id-to-uuid-prefix configuration is removed
+  + Add org.zkoss.zkplus.cluster.ClusterSessionPatch listener to zk.xml
+  	enforcing GAE to write session states for each Ajax request
 
 	--------
 ZK 5.0.7.1

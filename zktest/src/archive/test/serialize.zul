@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Test of Serialization">
-<vbox id="vb">
+<vlayout id="vb">
 	<div id="src">
 	<listbox multiple="true" width="200px" onSelect='self.parent.appendChild(new Label(self.selectedItem.label))'>
 		<listhead>
@@ -39,11 +39,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</listitem>
 	</listbox>
 	</div>
-	<radiogroup id="rg">
-		<radio label="K1"/>
-		<radio label="K2"/>
-		<radio label="K3"/>
-	</radiogroup>
+	<groupbox id="gb" mold="3d" open="false" closable="true">
+		<caption label="a groupbox"/>
+		<radiogroup fulfill="gb.onOpen">
+			<radio label="K1"/>
+			<radio label="K2"/>
+			<radio label="K3"/>
+		</radiogroup>
+	</groupbox>
 
 	<zscript>
 	int cnt = 0;
@@ -69,11 +72,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
 		}</attribute>
 	</button>
-	<button label="Clone radiogroup by Serialization">
+	<button label="Clone groupbox by Serialization">
 		<attribute name="onClick">{
 	import java.io.*;
 	ByteArrayOutputStream boa = new ByteArrayOutputStream();
-	new ObjectOutputStream(boa).writeObject(rg);
+	new ObjectOutputStream(boa).writeObject(gb);
 	byte[] bs = boa.toByteArray();
 	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
 	l.setId("dst" + ++cnt);
@@ -158,5 +161,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	vb.insertBefore(t, self);
 		}</attribute>
 	</button>
-</vbox>
+</vlayout>
 </window>

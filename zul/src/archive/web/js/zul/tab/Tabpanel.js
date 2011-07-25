@@ -73,10 +73,10 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
 		var accd = this.getTabbox().inAccordionMold();
 		if (accd && animation) {
-			var p = this.$n("real"); //accordion uses 'real'
+			var p = this.$n("cave");
 			zk(p)[toSel ? "slideDown" : "slideUp"](this);
 		} else {
-			var $pl = jq(accd ? this.$n("real") : this.$n()),
+			var $pl = jq(accd ? this.$n("cave") : this.$n()),
 				vis = $pl.zk.isVisible();
 			if (toSel) {
 				if (!vis) {
@@ -127,17 +127,6 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
     			var cave = this.getCaveNode(),
 					s = cave.style;
     			s.height = jq.px0(hgh);
-				//Bug-3303681: need to minus the scroll bar height
-				if (zk.ie < 8)
-					s.overflow = 'auto';
-				if (n.offsetHeight - n.clientHeight > 11)
-					s.height = jq.px0(hgh - jq.scrollbarWidth());
-        		if (zk.ie < 8) {
-        			var z = s.zoom;
-        			s.zoom = 1;
-        			s.zoom = z;
-        			s.overflow = 'hidden';
-        		}
     		}
 		}
 	},
@@ -149,10 +138,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function() {
 		var tabbox = this.getTabbox();
-		if (tabbox.inAccordionMold() && !zk(this.$n("real")).isVisible())
+		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
 			return;
 		this._fixPanelHgh();		//Bug 2104974
-		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
+		
+		//Bug 2526699 - (add zk.ie7)
+		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS();
 	},
 	onShow: _zkf,
 	//bug #3014664

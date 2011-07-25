@@ -17,7 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
@@ -30,7 +29,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  * @since 3.0.2
  */
-public class ForwardInfo {
+public class ForwardInfo { //directive
 	private final ExValue _uri;
 	private final ConditionImpl _cond;
 

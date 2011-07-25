@@ -1,11 +1,4 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>IE 6/7 only.</li>
-			<li>The Listbox should occupy the entire West region. If not, it is a bug.</li>
-			<li>Try to drag splitter. If the Listbox's height becomes too small, it is a bug.</li>
-		</ol>
-	]]></html>
 	<borderlayout>
 		<west size="40%" flex="true" splittable="true">
 			<listbox vflex="1" hflex="1">
@@ -24,7 +17,11 @@
 			</listbox>
 		</west>
 		<center>
-			<div>Div Content</div>
+			<div>	1. IE 6/7 only.
+	<separator/>
+	2. The Listbox should occupy the entire West region. If not, it is a bug.
+	<separator/>
+	3. Try to drag splitter. If the Listbox's height becomes too small, it is a bug.</div>
 		</center>
 	</borderlayout>
 </zk>

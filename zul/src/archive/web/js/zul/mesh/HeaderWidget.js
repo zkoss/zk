@@ -78,8 +78,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == '' 
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
-			this._hflexWidth = sz.width;
-			return {width: sz.width};
+			//updated: need to concern inner padding due to _getContentEdgeWidth
+			//spec in flex.js
+			var rvw = this.isRealVisible() && this.firstChild ? 
+					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
+			this._hflexWidth = rvw;
+			return {width: rvw};
 		} else
 			return this.$supers('setFlexSize_', arguments);
 	},
@@ -227,9 +231,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
-			var n = this.$n()
+			var n = this.$n();
 			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
+		this.$supers('doMouseOut_', arguments);
 	},
 	ignoreDrag_: function (pt) {
 		if (this.parent.isSizable()) {
@@ -394,9 +399,26 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//bug#3147926: auto fit. 
 		//Adjust hdfakerflex/bdfakerflex
 		var hdflex = jq(mesh.ehead).find('table>tbody>tr>th:last-child')[0],
-			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0];
-		hdflex.style.width = ''; 
-		if (bdflex) bdflex.style.width = '';
+			bdflex = jq(mesh.ebody).find('table>tbody>tr>th:last-child')[0],
+			hdflexVal = hdflex.style.width;
+		
+		hdflex.style.width = '';
+		
+		// fixed for B50-3183228.zul unexpected hor. scrollbar
+		if (zk.ie < 8) {
+			if (hdflex.offsetWidth == 1)
+				hdflex.style.width = hdflexVal;
+		} 
+		if (bdflex) {
+			var bdflexVal = bdflex.style.width;
+			bdflex.style.width = '';
+			
+			// fixed for B50-3183228.zul unexpected hor. scrollbar
+			if (zk.ie < 8) {
+				if (bdflex.offsetWidth == 1)
+					bdflex.style.width = bdflexVal;
+			}
+		}
 		
 		//bug 3061765: unexpected horizontal scrollbar when sizing
 /*		table.style.width = total + wd + "px";
@@ -431,6 +453,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		// bug #2799258
 		zWatch.fireDown('onSize', mesh);
+		
+		// fixed for B50-3147926.zul
+		if (zk.ie < 8)
+			zk(mesh).redoCSS();
 	},
 
 	redraw: function (out) {

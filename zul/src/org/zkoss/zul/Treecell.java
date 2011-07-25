@@ -114,28 +114,6 @@ public class Treecell extends LabelImageElement {
 		}
 	}
 
-
-	/** Returns an array of Treeitem from the root.
-	 */
-	private Treeitem[] getTreeitems(Component item) {
-		final List<Treeitem> pitems = new LinkedList<Treeitem>();
-		for (;;) {
-			final Component tch = item.getParent();
-			if (tch == null)
-				break;
-			item = tch.getParent();
-			if (item == null || item instanceof Tree)
-				break;
-			pitems.add(0, (Treeitem)item);
-		}
-		return pitems.toArray(new Treeitem[pitems.size()]);
-	}
-
-	private Treeitem getTreeitem() {
-		final Component parent = getParent();
-		return parent != null ? (Treeitem)parent.getParent(): null;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-treecell" : _zclass;
 	}

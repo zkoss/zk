@@ -22,10 +22,23 @@ function (out) {
 		m = val.getMonth(),
 		d = val.getDate(),
 		y = val.getFullYear(),
-		ydelta = new zk.fmt.Calendar(val).getYear() - y, 
+		ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
 		yofs = y - (y % 10 + 1),
 		ydec = zk.parseInt(y/100),
-		tags = zk.ie || zk.gecko ? "a" : "button";
+		tagnm = zk.ie || zk.gecko ? "a" : "button",
+		localizedSymbols = this._localizedSymbols || {
+			DOW_1ST: zk.DOW_1ST,
+				ERA: zk.ERA,    
+			 YDELTA: zk.YDELTA,
+			   SDOW: zk.SDOW,
+			  S2DOW: zk.S2DOW,
+			   FDOW: zk.FDOW,
+			   SMON: zk.SMON,
+			  S2MON: zk.S2MON,
+			   FMON: zk.FMON,
+				APM: zk.APM
+		};
+
 	out.push('<div id="', this.uuid, '"', this.domAttrs_(), '><table style="table-layout: fixed" width="100%"', zUtl.cellps0, '>',
 			'<tr><td id="', uuid, '-tdl" class="', zcls, '-tdl');
 	
@@ -37,10 +50,10 @@ function (out) {
 				'<tr><td id="', uuid, '-title" class="', zcls, '-title">');
 	switch(view) {
 	case "day" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', localizedSymbols.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "month" :
-		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', zk.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
+		out.push('<span id="', uuid, '-tm" class="', zcls, '-ctrler">', localizedSymbols.SMON[m], '</span> <span id="', uuid, '-ty" class="', zcls, '-ctrler">', y + ydelta, '</span>');
 		break;
 	case "year" :
 		out.push('<span id="', uuid, '-tyd" class="', zcls, '-ctrler">', yofs + ydelta + 1, '-', yofs + ydelta + 10, '</span>');
@@ -61,12 +74,12 @@ function (out) {
 	case "day" :
 		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, '-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
 				'<tr class="', zcls, '-caldow">');
-			var sun = (7 - zk.DOW_1ST) % 7, sat = (6 + sun) % 7;
+			var sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7;
 			for (var j = 0 ; j < 7; ++j) {
 				out.push('<td');
 				if (j == sun || j == sat) out.push(' class="z-weekend"');
 				else out.push(' class="z-weekday"');
-				out.push( '>' + zk.S2DOW[j] + '</td>');
+				out.push( '>' + localizedSymbols.S2DOW[j] + '</td>');
 			}
 			out.push('</tr>');
 			for (var j = 0; j < 6; ++j) { //at most 7 rows
@@ -80,7 +93,7 @@ function (out) {
 		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
 		for (var j = 0 ; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', zk.SMON[j] + '</td>');
+			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', localizedSymbols.SMON[j] + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		break;
@@ -112,7 +125,7 @@ function (out) {
 		}
 		break;
 	}
-	out.push('</table><', tags, ' id="', uuid,
-			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
-			' class="z-focus-a"></td></tr></table></div>');
+	out.push('</table><', tagnm, ' id="', uuid,
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+		tagnm, '></td></tr></table></div>');
 }

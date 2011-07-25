@@ -188,10 +188,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (fromServer) {
 					
 					// Bug 2995770
-					if (!zk(this.$n()).isRealVisible()) {
+					if (!this.isRealVisible()) {
 						if (colled) {
 							jq(real)[open ? 'show' : 'hide']();
-							jq(colled)[!open ? 'show' : 'hide']();
+							jq(colled)[open ? 'show' : 'hide']();
 						}
 						return;
 					}
@@ -211,10 +211,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 							afterAnima: this.$class.afterSlideOut
 						});
 					else {
-						jq(real)[open ? 'show' : 'hide']();
-						if (!open) zWatch.fireDown('onHide', this);
-						jq(colled)[!open ? 'show' : 'hide']();
-						if (open) zWatch.fireDown('onShow', this);
+						jq(real).show();
+						jq(colled).hide();
+						zWatch.fireDown('onShow', this);
 					}
 				}
 			} else {
@@ -226,8 +225,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						});
 				else {
 					if (colled)
-						jq(colled)[!open ? 'show' : 'hide']();
-					jq(real)[open ? 'show' : 'hide']();
+						jq(colled).show();
+					jq(real).hide();
 				}
 			}
 			if (nonAnima) this.parent.resize();
@@ -306,6 +305,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-" + this.getPosition() : this._zclass;
 	},
 	//-- super --//
+	getMarginSize_: function (attr) {
+		return zk(this.$n('real')).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);  
+	},
 	setWidth: function (width) {
 		this._width = width;
 		var real = this.$n('real');
@@ -330,8 +332,23 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
 			var real = this.$n('real');
-			if (real) {
-				real.style.display = real.parentNode.style.display;
+			var colled = this.$n('colled');
+			if (real){
+				if(this._visible){
+					if(this._open){
+						jq(real).show();
+						if(colled) 
+							jq(colled).hide();
+					}else{
+						jq(real).hide();
+						if(colled)
+							jq(colled).show();
+					}
+				}else{
+					jq(real).hide();
+					if(colled)
+						jq(colled).hide();	
+				}
 				this.parent.resize();
 			}
 		}
@@ -441,6 +458,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					if (colled)
 						jq(colled).show();
 					jq(real).hide();
+				}
+				
+				if(!this._visible){
+					var colled = this.$n('colled'),
+						real = this.$n('real');
+					jq(real).hide();
+					if (colled)
+						jq(colled).hide();
 				}
 			}
 		}

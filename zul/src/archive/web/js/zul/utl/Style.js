@@ -32,11 +32,26 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 */
 		/**
 		 * Sets the URI of an external style sheet.
-		 * 
+		 * <p>Calling this method implies setContent(null).
 		 * @param String src the URI of an external style sheet
 		 */
-		src: _zkf = function () {
-			if (this.desktop) this._updLink();
+		src: function () {
+			this._content = null;
+			this.rerender(0);
+		},
+		/**
+		 * Returns the content of this style tag.
+		 * @return String
+		 * @since 5.0.8
+		 */
+		/**
+		 * Sets the content of this style tag.
+		 * <p>Calling this method implies setSrc(null).
+		 * @param String content the content of this style tag.
+		 */
+		content: function () {
+			this._src = null;
+			this.rerender(0);
 		},
 		/**
 		 * Returns the media dependencies for this style sheet.
@@ -50,40 +65,22 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 * @param String media the media of this style sheet.
 		 * @since 5.0.3
 		 */
-		media: _zkf
-	},
-
-	//super//
-	bind_: function () {
-		this.$supers(zul.utl.Style, 'bind_', arguments);
-		this._updLink();
-	},
-	unbind_: function () {
-		jq(this._getLink()).remove();
-		this.$supers(zul.utl.Style, 'unbind_', arguments);
-	},
-	_updLink: function () {
-		if (this._src) {
-			jq(this.uuid + '-css', zk).remove();
-
-			var head = jq.head(),
-				ln = this._getLink(head),
-				n = this.$n();
-			if (n) n.innerHTML = '';
-			if (ln) {
-				ln.href = this._src;
-				if (this._media) ln.media = this._media;
-			} else
-				zk.loadCSS(this._src, this.uuid, this._media);
+		media: function (v) {
+			var n = this.$n('real');
+			if (n) n.media = v;
 		}
-	},
-	_getLink: function (head) {
-		head = head || jq.head();
-		for (var lns = head.getElementsByTagName("LINK"), j = lns.length,
-		uuid = this.uuid; j--;)
-			if (lns[j].id == uuid)
-				return lns[j];
-	},
-	redraw: function () { //nothing to do
 	}
 });
+if (zk.ie < 9)
+	zul.utl.Style.prototype.bind_ = function () {
+		this.$supers(zul.utl.Style, 'bind_', arguments);
+
+		//test2/Z5-style.zul: we have to re-assign href (setOuter might work well)
+		if (this._src) {
+			var self = this;
+			setTimeout(function () {
+				var n = self.$n('real');
+				if (n) n.href = self._src;
+			});
+		}
+	};

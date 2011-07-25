@@ -108,7 +108,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					if (!tree._fixhdwcnt++)
 						tree._fixhdoldwd = oldwd;
 					setTimeout(function () {
-						if (!--tree._fixhdwcnt && tree.$n() && tree._fixhdoldwd != ebodytbl.clientWidth)
+						if (!--tree._fixhdwcnt && tree.$n() && 
+								(tree._fixhdoldwd != ebodytbl.clientWidth || (zk.ie && !zk.ie8))) // B50-3343001: IE 6/7
 							tree._calcSize();
 					}, 250);
 				}
@@ -237,15 +238,21 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var p = this.parent && this.parent.parent ? this.parent.parent : null;
 		return p && p.$instanceof(zul.sel.Treeitem) ? p : null;
 	},
-	/*
-	isVisible: function () {
-		var p;
-		return this.$supers('isVisible', arguments) && (p = this.parent) && p.isVisible();
-	},
-	*/
 	_isRealVisible: function () {
 		var p;
 		return this.isVisible() && (p = this.parent) && p._isRealVisible();
+	},
+	_isVisibleInTree: function () {
+		// used by Treecell#_isLastVisibleChild
+		if (!this.isVisible())
+			return;
+		var c = this.parent, p;
+		if (!c || !c.isVisible() || !(p = c.parent))
+			return false;
+		if (p.$instanceof(zul.sel.Tree))
+			return true;
+		// Treeitem
+		return p._isVisibleInTree(); // timing issue, does not concern open state
 	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {

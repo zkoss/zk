@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3365535.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 13 11:05:57 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+The text "Div Content " cannot cover the text "Groupbox Content"
+<hlayout>
+<groupbox hflex="min">
+Groupbox Content
+</groupbox>
+<div>
+Div Content
+</div>
+</hlayout>
+</zk>

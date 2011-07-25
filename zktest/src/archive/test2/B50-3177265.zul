@@ -1,14 +1,11 @@
 <zk>
-<html><![CDATA[
-<ol>
-<li>Each column shall occupy exactly match space</li>
-<li>The Listbox shall accommodate exactly 3 columns</li>
-<li>Now press the "invalidate" button</li>
-<li>The width of the Listbox shall keep as is without change</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. Each column shall occupy exactly match space
+<separator/>
+2. The Listbox shall accommodate exactly 3 columns
+<separator/>
+3. Now press the "invalidate" button
+<separator/>
+4. The width of the Listbox shall keep as is without change
 <zscript>
 String[] msgs = {
 	"ZK Ajax Framework",

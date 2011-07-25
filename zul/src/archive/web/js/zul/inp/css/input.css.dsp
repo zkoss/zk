@@ -35,6 +35,9 @@
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
+	<c:if test="${c:isSafari()}">
+		margin: 0;
+	</c:if>
 }
 .z-textbox-focus,
 .z-decimalbox-focus,

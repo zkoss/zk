@@ -28,6 +28,7 @@ import java.io.InputStream;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import static org.zkoss.lang.Generics.cast;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
@@ -580,6 +581,9 @@ public class ConfigParser {
 		v = parseInteger(el, "max-upload-size", false);
 		if (v != null) config.setMaxUploadSize(v.intValue());
 
+		v = parseInteger(el, "file-size-threshold", false);
+		if (v != null) config.setFileSizeThreshold(v.intValue());
+
 		v = parseInteger(el, "max-process-time", true);
 		if (v != null) config.setMaxProcessTime(v.intValue());
 
@@ -591,11 +595,15 @@ public class ConfigParser {
 
 		s = el.getElementValue("crawlable", true);
 		if (s != null) config.setCrawlable(!"false".equals(s));
-
-		s = el.getElementValue("label-location", true);
-		if (s != null && s.length() != 0)
-			config.addLabelLocation(s);
-
+		
+		//bug B50-3316543
+		for (Iterator it = el.getElements("label-location").iterator();it.hasNext();) {
+			final Element elinner = (Element)it.next();
+			final String path = elinner.getText(true);
+			if (!Strings.isEmpty(path))
+				config.addLabelLocation(path);
+		}
+		
 		Class cls = parseClass(el, "upload-charset-finder-class",
 			CharsetFinder.class);
 		if (cls != null)
@@ -644,9 +652,6 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "resend-delay", false);
 		if (v != null) config.setResendDelay(v.intValue());
-
-		v = parseInteger(conf, "click-filter-delay", false);
-		if (v != null) config.setClickFilterDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)

@@ -207,7 +207,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @since 5.0.4
 	 */
 	slideDown_: function (pp) {
-		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});
+		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown, duration: 100});
 	},
 	/** Slides up the drop-down list.
 	 * <p>Default: <code>pp.style.display = "none";</code><br/>
@@ -422,11 +422,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			n.style.width = this.getWidth() || '';
 		}
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace)
+	afterKeyDown_: function (evt,simulated) {
+		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 			
-		this.$supers('afterKeyDown_', arguments);
+		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);

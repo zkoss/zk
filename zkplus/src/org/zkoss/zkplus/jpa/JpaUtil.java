@@ -226,10 +226,11 @@ public class JpaUtil {
 	private static EntityManager initEntityManger(String puName,Map properties) {
 		EntityManager em;
 		if (properties == null) {
-			em = getEmMap().get(puName);
+			String puName2 = getPersistenceUnitName(puName);
+			em = (EntityManager) getEmMap().get(puName2);
 			if (em == null) {
 				em = createEntityManager(puName, null);
-				getEmMap().put(getPersistenceUnitName(puName), em);
+				getEmMap().put(puName2, em);
 			}
 		} else {
 			em = createEntityManager(puName, properties);

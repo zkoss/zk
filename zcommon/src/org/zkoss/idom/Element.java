@@ -191,7 +191,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * <p>The content of an element is the first Binary or Text child of
 	 * the element. Each element can has zero or one content.
 	 *
-	 * <p>Note: {@link #getText} returns the catenation of all Text
+	 * <p>Note: {@link #getText} returns the concatenation of all Text
 	 * children, not just the first one.
 	 *
 	 * @return the content of this element; null if no such child
@@ -222,7 +222,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * <p>If obj is a {@link Item} or an array/collection of {@link Item},
 	 * this method will add them as child vertices rather than
 	 * being the content.
-	 * Moreever, if the first item of the array/collection is {@link Item},
+	 * Moreover, if the first item of the array/collection is {@link Item},
 	 * it is assumed to be all valid component to being has valid vertices.
 	 * If not, an exception is thrown.
 	 *
@@ -300,19 +300,19 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * null if the content is null or the child element doesn't exist.
 	 *
 	 * <p>Note that there might be more than one child with the same path
-	 * in an idom tree; this method simply picks the first one that matchs and
+	 * in an idom tree; this method simply picks the first one that matches and
 	 * returns its content. To access certain one, you might use [n] to
 	 * [@attr = value] specify which one to access.
 	 *
 	 *
-	 * <p>To know whether the child element exists or conent is null,
+	 * <p>To know whether the child element exists or content is null,
 	 * use {@link #hasContent}.
 	 *
 	 * <p>The content of an element is a special feature of iDOM.
 	 * Like a Map, it is designed to let developers use names (in a path-like
 	 * format) to access objects. See {@link #setContent(String, Object)}.
 	 *
-	 * <p>Like Unix path, the giving name could use '/' to catenate a series
+	 * <p>Like Unix path, the giving name could use '/' to concatenate a series
 	 * of child elements.
 	 *
 	 * <p>An empty path denotes this element itself. Leading, ending
@@ -373,14 +373,14 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	 * Sets the content of the child element with the giving path.
 	 *
 	 * <p>Note that there might be more than one child with the same path
-	 * in an idom tree; this method simply pick one that matchs and set
+	 * in an idom tree; this method simply pick one that matches and set
 	 * its content (see {@link #setContent(Object)}).
 	 *
 	 * <p>The content of an element is a special feature of iDOM.
 	 * Like a Map, it is designed to let developers use names (in a path-like
 	 * format) to access objects. See {@link #getContent(String)}.
 	 *
-	 * <p>Like Unix path, the giving name could use '/' to catenate a series
+	 * <p>Like Unix path, the giving name could use '/' to concatenate a series
 	 * of child elements.
 	 *
 	 * <p>An empty path denotes this element itself. Leading, ending
@@ -540,7 +540,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		setTagName(tname);
 	}
 
-	/** Returns the catenation of {@link Textual} children; never null.
+	/** Returns the concatenation of {@link Textual} children; never null.
 	 * Note: both &lt;tag/&gt; and &lt;tag&gt;&lt;/tag&gt; returns an
 	 * empty string. To tell the difference, check the number of children.
 	 * @see #getText(boolean)
@@ -554,7 +554,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 			sb.append(getTextOfChild(it.next()));
 		return sb.toString();
 	}
-	/** Returns the catenation of {@link Textual} children; never null.
+	/** Returns the concatenation of {@link Textual} children; never null.
 	 *
 	 * @param trim whether to trim before returning
 	 * @see #getText()

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3317743.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Click on item 3.</div>
+	<div>2. Go to next page.</div>
+	<div>3. Click on item 8, but on the blank, NOT on the checkmark.</div>
+	<div>4. Go back to page 1. If item 3 is deselected, it is a bug.</div>
+	<zscript><![CDATA[
+		ListModelList m = new ListModelList();
+		for(int i = 0; i < 20; i++)
+			m.add(i);
+	]]></zscript>
+	<listbox multiple="true" model="${m}" checkmark="true"
+		mold="paging" pageSize="5" />
+</zk>

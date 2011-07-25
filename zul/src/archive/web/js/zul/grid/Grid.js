@@ -126,6 +126,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
 			isRows = true;
+			this.fixForEmpty_();
 		} else if (child.$instanceof(zul.grid.Columns)) 
 			this.columns = child;
 		else if (child.$instanceof(zul.grid.Foot)) 
@@ -137,7 +138,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-		if (!isRows && !_noSync)
+						
+		if (!_noSync)//bug#3301498 
 			this._syncSize();  //sync-size required
 	},
 	onChildRemoved_: function (child) {
@@ -147,6 +149,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (child == this.rows) {
 			this.rows = null;
 			isRows = true;
+			this.fixForEmpty_();
 		} else if (child == this.columns) 
 			this.columns = null;
 		else if (child == this.foot) 

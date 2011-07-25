@@ -25,16 +25,23 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
+import org.zkoss.xel.VariableResolver;
+
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
@@ -265,10 +272,13 @@ public class Combobox extends Textbox {
 				data.getData() : getRawText());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
-			for (Iterator it = getItems().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j){
-				Comboitem item = (Comboitem)it.next();
+			for (Comboitem item = getItems().size() <= ofs ? null: (Comboitem)getItems().get(ofs), nxt;
+			j < pgsz && item != null; ++j, item = nxt) {
+				nxt = (Comboitem)item.getNextSibling(); //store it first
 				renderer.render(subset, item);
+				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				if (v != null) //a new item is created to replace the existent one
+					item = (Comboitem)v;
 				fixSelectOnRender(item);// comboitem can be selected after set a label
 			}
 		} catch (Throwable ex) {
@@ -289,19 +299,36 @@ public class Combobox extends Textbox {
 		}
 	}
 
-	private static ComboitemRenderer getDefaultItemRenderer() {
-		return _defRend;
-	}
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
-		public void render(Comboitem item, Object data) {
-			item.setLabel(Objects.toString(data));
-			item.setValue(data);
+		public void render(Comboitem item, final Object data) {
+			final Combobox cb = (Combobox)item.getParent();
+			final Template tm = cb.getTemplate("model");
+			if (tm == null) {
+				item.setLabel(Objects.toString(data));
+				item.setValue(data);
+			} else {
+				final Component[] items = tm.create(item.getParent(), item,
+					new VariableResolver() {
+						public Object resolveVariable(String name) {
+							return "each".equals(name) ? data: null;
+						}
+					});
+				if (items.length != 1)
+					throw new UiException("The model template must have exactly one item, not "+items.length);
+
+				final Comboitem nci = (Comboitem)items[0];
+				if (nci.getValue() == null) //template might set it
+					nci.setValue(data);
+				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
+					//indicate a new item is created to replace the existent one
+				item.detach();
+			}
 		}
 	};
-	/** Returns the renderer used to render rows.
+	/** Returns the renderer used to render items.
 	 */
 	private ComboitemRenderer getRealRenderer() {
-		return _renderer != null ? _renderer: getDefaultItemRenderer();
+		return _renderer != null ? _renderer: _defRend;
 	}
 
 	/** Used to render comboitem if _model is specified. */
@@ -539,7 +566,29 @@ public class Combobox extends Textbox {
 		if (rows != 1)
 			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
 	}
-
+	
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 *
+	 * <p>If a component requires more client controls, it is suggested to
+	 * override {@link #getExtraCtrl} to return an instance that extends from
+	 * this class.
+	 */
+	protected class ExtraCtrl extends Textbox.ExtraCtrl implements Blockable {
+		public boolean shallBlock(AuRequest request) {
+			// B50-3316103: special case of readonly component: do not block onChange and onSelect
+			final String cmd = request.getCommand();
+			if(Events.ON_OPEN.equals(cmd))
+				return false;
+			return !Components.isRealVisible(Combobox.this) || isDisabled() || 
+				(isReadonly() && Events.ON_CHANGING.equals(cmd));
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void syncSelectionToModel() {
 		if (_model instanceof Selectable) {

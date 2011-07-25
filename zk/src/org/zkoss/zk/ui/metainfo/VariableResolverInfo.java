@@ -35,16 +35,20 @@ import org.zkoss.zk.xel.Evaluator;
  * Why not? Since there is no way to run zscript before
  * the variable-resolver directive (and better performance).
  * </p>
+ * <p>Note: it is not serializable.</p>
  * 
  * @author tomyeh
  */
-public class VariableResolverInfo extends ArgumentInfo {
+public class VariableResolverInfo extends ArgumentInfo { //directive
 //	private static final Log log = Log.lookup(VariableResolverInfo.class);
 
 	/** A class, an ExValue or an VariableResolver. */
 	private final Object _resolver;
 
 	/** Constructs with a class.
+	 * @param args the map of arguments. Ignored if null.<br/>
+	 * Notice that, once assigned, the map belongs to this object, and the caller
+	 * shall not access it again
 	 * @since 3.6.2
 	 */
 	public VariableResolverInfo(Class<? extends VariableResolver> cls, Map<String, String> args) {

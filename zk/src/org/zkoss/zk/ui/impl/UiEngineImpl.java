@@ -44,20 +44,38 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.json.*;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.json.JSONArray;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Express;
+import org.zkoss.zk.ui.event.FulfillEvent;
+import org.zkoss.zk.ui.event.CreateEvent;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
-import org.zkoss.zk.ui.util.*;
+import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.ComposerExt;
+import org.zkoss.zk.ui.util.FullComposer;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ForEach;
+import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
+import org.zkoss.zk.ui.util.PerformanceMeter;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.xel.Evaluators;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.au.*;
@@ -86,6 +104,9 @@ public class UiEngineImpl implements UiEngine {
 	/** # of suspended event processing threads.
 	 */
 	private int _suspCnt;
+	/** the extension.
+	 */
+	private Extension _ext;
 
 	public UiEngineImpl() {
 	}
@@ -379,7 +400,7 @@ public class UiEngineImpl implements UiEngine {
 							execCreate(new CreateInfo(
 								((WebAppCtrl)wapp).getUiFactory(), exec, page,
 								config.getComposer(page)),
-							pagedef, null);
+							pagedef, null, null);
 					}
 
 					inits.doAfterCompose(page, comps);
@@ -448,7 +469,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Redraw the page (and responses)
-			List<AuResponse> responses = getResponses(exec, uv, errs);
+			List<AuResponse> responses = getResponses(exec, uv, errs, false);
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -459,7 +480,8 @@ public class UiEngineImpl implements UiEngine {
 			else
 				execCtrl.setResponses(responses);
 
-			redrawNewPage(page, out);
+			((PageCtrl)page).redraw(out);
+			afterRenderNewPage(page);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
@@ -527,7 +549,7 @@ public class UiEngineImpl implements UiEngine {
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			execCtrl.setResponses(getResponses(exec, uv, errs));
+			execCtrl.setResponses(getResponses(exec, uv, errs, false));
 
 			((PageCtrl)page).redraw(out);
 		} finally {
@@ -538,27 +560,42 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Called after the whole component tree has been created by
 	 * this engine.
-	 * <p>Default: does nothing.
-	 * <p>Derived class might override this method to process the components
-	 * if necessary.
 	 * @param comps the components being created. It is never null but
 	 * it might be a zero-length array.
-	 * @since 5.0.4
 	 */
-	protected void afterCreate(Component[] comps) {
+	private void afterCreate(Component[] comps) {
+		getExtension().afterCreate(comps);
 	}
-	/** Called to render the result of a page to the (HTTP) output,
-	 * when a new page is created and processed.
-	 * <p>Default: it invokes {@link PageCtrl#redraw}.
-	 * <p>Notice that it is called in the rendering phase (the last phase),
-	 * so it is not allowed to post events or to invoke invalidate or smartUpdate
-	 * in this method.
-	 * <p>Notice that it is not called if an old page is redrawn.
-	 * @since 5.0.4
-	 * @see #execNewPage
+	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+	 * has been called).
 	 */
-	protected void redrawNewPage(Page page, Writer out) throws IOException {
-		((PageCtrl)page).redraw(out);
+	private void afterRenderNewPage(Page page) {
+		getExtension().afterRenderNewPage(page);
+	}
+	/** Called when this engine renders the given components.
+	 * @param comps the collection of components that have been redrawn.
+	 */
+	protected void afterRenderComponents(Collection comps) {
+		getExtension().afterRenderComponents(comps);
+	}
+	private Extension getExtension() {
+		if (_ext == null) {
+			synchronized (this) {
+				if (_ext == null) {
+					String clsnm = Library.getProperty("org.zkoss.zk.ui.impl.UiEngineImpl.extension");
+					if (clsnm != null) {
+						try {
+							_ext = (Extension)Classes.newInstanceByThread(clsnm);
+						} catch (Throwable ex) {
+							log.realCauseBriefly("Unable to instantiate "+clsnm, ex);
+						}
+					}
+					if (_ext == null)
+						_ext = new DefaultExtension();
+				}
+			}
+		}
+		return _ext;
 	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
@@ -571,7 +608,7 @@ public class UiEngineImpl implements UiEngine {
 	 * @return the first component being created.
 	 */
 	private static final Component[] execCreate(
-	CreateInfo ci, NodeInfo parentInfo, Component parent) {
+	CreateInfo ci, NodeInfo parentInfo, Component parent, Component insertBefore) {
 		String fulfillURI = null;
 		if (parentInfo instanceof ComponentInfo) {
 			final ComponentInfo pi = (ComponentInfo)parentInfo;
@@ -589,26 +626,29 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		Component[] cs = execCreate0(ci, parentInfo, parent);
+		Component[] cs = execCreate0(ci, parentInfo, parent, insertBefore);
 
 		if (fulfillURI != null) {
 			fulfillURI = (String)Evaluators.evaluate(
 				((ComponentInfo)parentInfo).getEvaluator(),
 				parent, fulfillURI, String.class);
 			if (fulfillURI != null) {
-				final Component c =
-					ci.exec.createComponents(fulfillURI, parent, null);
-				if (c != null) {
-					cs = (Component[])ArraysX.resize(cs, cs.length + 1);
-					cs[cs.length - 1] = c;
-				}
+				cs = merge(cs,
+					ci.exec.createComponents(fulfillURI, parent, insertBefore, null));
 			}
 		}
 
 		return cs;
 	}
-	private static final Component[] execCreate0(
-	CreateInfo ci, NodeInfo parentInfo, Component parent) {
+	private static Component[] merge(Component[] cs, Component c) {
+		if (c != null) {
+			cs = (Component[])ArraysX.resize(cs, cs.length + 1);
+			cs[cs.length - 1] = c;
+		}
+		return cs;
+	}
+	private static final Component[] execCreate0(CreateInfo ci,
+	NodeInfo parentInfo, Component parent, Component insertBefore) {
 		final List<Component> created = new LinkedList<Component>();
 		final Page page = ci.page;
 		final PageDefinition pagedef = parentInfo.getPageDefinition();
@@ -623,7 +663,8 @@ public class UiEngineImpl implements UiEngine {
 				if (forEach == null) {
 					if (isEffective(childInfo, page, parent)) {
 						final Component[] children =
-							execCreateChild(ci, parent, childInfo, replaceableText);
+							execCreateChild(ci, parent, childInfo,
+								replaceableText, insertBefore);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
 					}
@@ -631,7 +672,30 @@ public class UiEngineImpl implements UiEngine {
 					while (forEach.next()) {
 						if (isEffective(childInfo, page, parent)) {
 							final Component[] children =
-								execCreateChild(ci, parent, childInfo, replaceableText);
+								execCreateChild(ci, parent, childInfo,
+									replaceableText, insertBefore);
+							for (int j = 0; j < children.length; ++j)
+								created.add(children[j]);
+						}
+					}
+				}
+			} else if (meta instanceof ZkInfo) {
+				final ZkInfo childInfo = (ZkInfo)meta;
+				final ForEach forEach = childInfo.resolveForEach(page, parent);
+				if (forEach == null) {
+					if (isEffective(childInfo, page, parent)) {
+						final Component[] children =
+							execCreateChild(ci, parent, childInfo,
+								replaceableText, insertBefore);
+						for (int j = 0; j < children.length; ++j)
+							created.add(children[j]);
+					}
+				} else {
+					while (forEach.next()) {
+						if (isEffective(childInfo, page, parent)) {
+							final Component[] children =
+								execCreateChild(ci, parent, childInfo,
+									replaceableText, insertBefore);
 							for (int j = 0; j < children.length; ++j)
 								created.add(children[j]);
 						}
@@ -641,8 +705,8 @@ public class UiEngineImpl implements UiEngine {
 				//parent must be a native component
 				final String s = ((TextInfo)meta).getValue(parent);
 				if (s != null && s.length() > 0)
-					parent.appendChild(
-						((Native)parent).getHelper().newNative(s));
+					parent.insertBefore(
+						((Native)parent).getHelper().newNative(s), insertBefore);
 			} else {
 				execNonComponent(ci, parent, meta);
 			}
@@ -650,17 +714,20 @@ public class UiEngineImpl implements UiEngine {
 		return created.toArray(new Component[created.size()]);
 	}
 	private static Component[] execCreateChild(
+	CreateInfo ci, Component parent, ZkInfo childInfo,
+	ReplaceableText replaceableText, Component insertBefore) {
+		return childInfo.withSwitch() ?
+			execSwitch(ci, childInfo, parent, insertBefore):
+			execCreate0(ci, childInfo, parent, insertBefore);
+	}
+	private static Component[] execCreateChild(
 	CreateInfo ci, Component parent, ComponentInfo childInfo,
-	ReplaceableText replaceableText) {
-		if (childInfo instanceof ZkInfo) {
-			final ZkInfo zkInfo = (ZkInfo)childInfo;
-			return zkInfo.withSwitch() ?
-				execSwitch(ci, zkInfo, parent):
-				execCreate0(ci, childInfo, parent);
-		}
-
+	ReplaceableText replaceableText, Component insertBefore) {
 		final ComponentDefinition childdef = childInfo.getComponentDefinition();
 		if (childdef.isInlineMacro()) {
+			if (insertBefore != null)
+				throw new UnsupportedOperationException("The inline macro doesn't support template");
+
 			final Map<String, Object> props = new HashMap<String, Object>();
 			props.put("includer", parent);
 			childInfo.evalProperties(props, ci.page, parent, true);
@@ -678,12 +745,14 @@ public class UiEngineImpl implements UiEngine {
 				//and it is ok since it is onl blank string
 			}
 
-			Component child = execCreateChild0(ci, parent, childInfo, rt);
+			Component child =
+				execCreateChild0(ci, parent, childInfo, rt, insertBefore);
 			return child != null ? new Component[] {child}: new Component[0];
 		}
 	}
 	private static Component execCreateChild0(CreateInfo ci,
-	Component parent, ComponentInfo childInfo, String replaceableText) {
+	Component parent, ComponentInfo childInfo, String replaceableText,
+	Component insertBefore) {
 		Composer composer = childInfo.resolveComposer(ci.page, parent);
 		ComposerExt composerExt = null;
 		boolean bPopComposer = false;
@@ -707,7 +776,7 @@ public class UiEngineImpl implements UiEngine {
 			if (childInfo == null)
 				return null;
 
-			child = ci.uf.newComponent(ci.page, parent, childInfo);
+			child = ci.uf.newComponent(ci.page, parent, childInfo, insertBefore);
 
 			if (replaceableText != null) {
 				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
@@ -723,7 +792,7 @@ public class UiEngineImpl implements UiEngine {
 				composerExt.doBeforeComposeChildren(child);
 			ci.doBeforeComposeChildren(child, bRoot);
 
-			execCreate(ci, childInfo, child); //recursive
+			execCreate(ci, childInfo, child, null); //recursive (and appendChild)
 
 			if (bNative)
 				setEpilog(ci, child, (NativeInfo)childInfo);
@@ -777,7 +846,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Handles <zk switch>. */
 	private static Component[] execSwitch(CreateInfo ci, ZkInfo switchInfo,
-	Component parent) {
+	Component parent, Component insertBefore) {
 		final Page page = ci.page;
 		final Object switchCond = switchInfo.resolveSwitch(page, parent);
 		for (Iterator it = switchInfo.getChildren().iterator(); it.hasNext();) {
@@ -786,7 +855,7 @@ public class UiEngineImpl implements UiEngine {
 			if (forEach == null) {
 				if (isEffective(caseInfo, page, parent)
 				&& isCaseMatched(caseInfo, page, parent, switchCond)) {
-					return execCreateChild(ci, parent, caseInfo, null);
+					return execCreateChild(ci, parent, caseInfo, null, insertBefore);
 				}
 			} else {
 				final List<Component> created = new LinkedList<Component>();
@@ -794,7 +863,7 @@ public class UiEngineImpl implements UiEngine {
 					if (isEffective(caseInfo, page, parent)
 					&& isCaseMatched(caseInfo, page, parent, switchCond)) {
 						final Component[] children =
-							execCreateChild(ci, parent, caseInfo, null);
+							execCreateChild(ci, parent, caseInfo, null, insertBefore);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
 						return (Component[])created.toArray(new Component[created.size()]);
@@ -834,25 +903,32 @@ public class UiEngineImpl implements UiEngine {
 	private static final void execNonComponent(
 	CreateInfo ci, Component comp, Object meta) {
 		final Page page = ci.page;
-		if (meta instanceof ZScript) {
-			final ZScript zscript = (ZScript)meta;
-			if (zscript.isDeferred()) {
-				((PageCtrl)page).addDeferredZScript(comp, zscript);
-					//isEffective is handled later
-			} else if (isEffective(zscript, page, comp)) {
-				final Scope scope =
-					Scopes.beforeInterpret(comp != null ? (Scope)comp: page);
-				try {
-					page.interpret(zscript.getLanguage(),
-						zscript.getContent(page, comp), scope);
-				} finally {
-					Scopes.afterInterpret();
+		if (meta instanceof ZScriptInfo) {
+			//Spec fix since 5.1.0: if/unless shall be evaluated first
+			final ZScriptInfo zsInfo = (ZScriptInfo)meta;
+			if (isEffective(zsInfo, page, comp)) {
+				if (zsInfo.isDeferred()) {
+					((PageCtrl)page).addDeferredZScript(comp, zsInfo.getZScript());
+						//isEffective is handled later
+				} else {
+					final Scope scope =
+						Scopes.beforeInterpret(comp != null ? (Scope)comp: page);
+					try {
+						page.interpret(zsInfo.getLanguage(),
+							zsInfo.getContent(page, comp), scope);
+					} finally {
+						Scopes.afterInterpret();
+					}
 				}
 			}
 		} else if (meta instanceof AttributesInfo) {
 			final AttributesInfo attrs = (AttributesInfo)meta;
 			if (comp != null) attrs.apply(comp); //it handles isEffective
 			else attrs.apply(page);
+		} else if (meta instanceof TemplateInfo) {
+			final TemplateInfo tempInfo = (TemplateInfo)meta;
+			if (isEffective(tempInfo, page, comp))
+				comp.setTemplate(tempInfo.getName(), new TemplateImpl(tempInfo, comp));
 		} else if (meta instanceof VariablesInfo) {
 			final VariablesInfo vars = (VariablesInfo)meta;
 			if (comp != null) vars.apply(comp); //it handles isEffective
@@ -869,7 +945,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public Component[] createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent, Map arg) {
+	PageDefinition pagedef, Page page, Component parent,
+	Component insertBefore, VariableResolver resolver, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
 
@@ -917,13 +994,15 @@ public class UiEngineImpl implements UiEngine {
 		final IdSpace prevIS = fakeIS ?
 			ExecutionsCtrl.setVirtualIdSpace(
 				fakepg ? (IdSpace)page: new SimpleIdSpace()): null;
+		if (resolver != null)
+			exec.addVariableResolver(resolver);
 		try {
 			if (fakepg) pagedef.init(page, false);
 
 			final Component[] comps = execCreate(
 				new CreateInfo(((WebAppCtrl)wapp).getUiFactory(),
 					exec, page, null), //technically sys composer can be used but we don't (to make it simple)
-				pagedef, parent);
+				pagedef, parent, insertBefore);
 			inits.doAfterCompose(page, comps);
 
 			if (fakepg)
@@ -939,6 +1018,8 @@ public class UiEngineImpl implements UiEngine {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);
 		} finally {
+			if (resolver != null)
+				exec.removeVariableResolver(resolver);
 			exec.popArg();
 			execCtrl.setCurrentPage(prevpg); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
@@ -1011,7 +1092,7 @@ public class UiEngineImpl implements UiEngine {
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			desktopCtrl.piggyResponse(getResponses(exec, uv, errs), false);
+			desktopCtrl.piggyResponse(getResponses(exec, uv, errs, true), false);
 
 			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 			config.invokeExecutionCleanups(exec, null, errs);
@@ -1115,7 +1196,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
-			final List<AuResponse> responses = getResponses(exec, uv, errs);
+			final List<AuResponse> responses = getResponses(exec, uv, errs, true);
 
 			doneReqIds = rque.clearPerfRequestIds();
 
@@ -1202,7 +1283,7 @@ public class UiEngineImpl implements UiEngine {
 			ui.abrn.execute(); //always execute even if !isAborting
 
 		//3. Retrieve responses
-		final List<AuResponse> responses = getResponses(exec, ui.uv, errs);
+		final List<AuResponse> responses = getResponses(exec, ui.uv, errs, false);
 
 		final JSONArray rs = new JSONArray();
 		for (Iterator it = responses.iterator(); it.hasNext();)
@@ -1288,8 +1369,12 @@ public class UiEngineImpl implements UiEngine {
 
 		errs.add(ex);
 	}
-	/** Returns the list of response of the given execution. */
-	private final List<AuResponse> getResponses(Execution exec, UiVisualizer uv, List<Throwable> errs) {
+	/** Returns the list of response of the given execution.
+	 * @since bAfterRender whether to call back {@link #afterRender}
+	 * for the attached components (topmost only)
+	 */
+	private final List<AuResponse> getResponses(Execution exec, UiVisualizer uv,
+	List<Throwable> errs, boolean bAfterRender) {
 		List<AuResponse> responses;
 		try {
 			//Note: we have to call visualizeErrors before uv.getResponses,
@@ -1297,7 +1382,11 @@ public class UiEngineImpl implements UiEngine {
 			if (!errs.isEmpty())
 				visualizeErrors(exec, uv, errs);
 
-			responses = uv.getResponses();
+			final List<Component> renderedComps =
+				bAfterRender ? new LinkedList<Component>(): null;
+			responses = uv.getResponses(renderedComps);
+			if (bAfterRender)
+				afterRenderComponents(renderedComps);
 		} catch (Throwable ex) {
 			responses = new LinkedList<AuResponse>();
 			responses.add(new AuAlert(Exceptions.getMessage(ex)));
@@ -1883,7 +1972,7 @@ public class UiEngineImpl implements UiEngine {
 		final Native nc = (Native)comp;
 		final Native.Helper helper = nc.getHelper();
 		StringBuffer sb = null;
-		final List<Object> prokids = compInfo.getPrologChildren();
+		final List<NodeInfo> prokids = compInfo.getPrologChildren();
 		if (!prokids.isEmpty()) {
 			sb = new StringBuffer(256);
 			getNativeContent(ci, sb, comp, prokids, helper);
@@ -1913,7 +2002,7 @@ public class UiEngineImpl implements UiEngine {
 			getNativeSecondHalf(ci, sb, comp, splitInfo, helper);
 		}
 
-		final List<Object> epikids = compInfo.getEpilogChildren();
+		final List<NodeInfo> epikids = compInfo.getEpilogChildren();
 		if (!epikids.isEmpty()) {
 			if (sb == null) sb = new StringBuffer(256);
 			getNativeContent(ci, sb, comp, epikids, helper);
@@ -1923,7 +2012,7 @@ public class UiEngineImpl implements UiEngine {
 			nc.setEpilogContent(
 				sb.append(nc.getEpilogContent()).toString());
 	}
-	public String getNativeContent(Component comp, List<Object> children,
+	public String getNativeContent(Component comp, List<NodeInfo> children,
 	Native.Helper helper) {
 		final StringBuffer sb = new StringBuffer(256);
 		getNativeContent(
@@ -1936,8 +2025,8 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comp the native component
 	 */
 	private static final void getNativeContent(CreateInfo ci,
-	StringBuffer sb, Component comp, List<Object> children, Native.Helper helper) {
-		for (Object meta: children) {
+	StringBuffer sb, Component comp, List<NodeInfo> children, Native.Helper helper) {
+		for (NodeInfo meta: children) {
 			if (meta instanceof NativeInfo) {
 				final NativeInfo childInfo = (NativeInfo)meta;
 				final ForEach forEach = childInfo.resolveForEach(ci.page, comp);
@@ -1987,7 +2076,7 @@ public class UiEngineImpl implements UiEngine {
 				evalProperties(comp, childInfo.getProperties()),
 				childInfo.getDeclaredNamespaces());
 
-		final List<Object> prokids = childInfo.getPrologChildren();
+		final List<NodeInfo> prokids = childInfo.getPrologChildren();
 		if (!prokids.isEmpty())
 			getNativeContent(ci, sb, comp, prokids, helper);
 
@@ -2003,7 +2092,7 @@ public class UiEngineImpl implements UiEngine {
 		if (splitInfo != null && splitInfo.isEffective(comp))
 			getNativeSecondHalf(ci, sb, comp, splitInfo, helper); //recursive
 
-		final List<Object> epikids = childInfo.getEpilogChildren();
+		final List<NodeInfo> epikids = childInfo.getEpilogChildren();
 		if (!epikids.isEmpty())
 			getNativeContent(ci, sb, comp, epikids, helper);
 
@@ -2026,6 +2115,41 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//Supporting Classes//
+	private static class TemplateImpl implements Template, java.io.Serializable {
+		private final TemplateInfo _tempInfo;
+		private final Map _params;
+		private final String _src;
+
+		private TemplateImpl(TemplateInfo tempInfo, Component comp) {
+			_tempInfo = tempInfo;
+			_params = tempInfo.resolveParameters(comp);
+			_src = tempInfo.getSrc(comp);
+		}
+		public Component[] create(Component parent, Component insertBefore,
+		VariableResolver resolver) {
+			final Execution exec = Executions.getCurrent();
+			final Component[] cs;
+			if (resolver != null)
+				exec.addVariableResolver(resolver);
+			try {
+				cs = execCreate0(
+					new CreateInfo(
+						((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+						exec, parent.getPage(), null), //technically sys composer can be used but we don't (to simplify it)
+					_tempInfo, parent, insertBefore);
+			} finally {
+				if (resolver != null)
+					exec.removeVariableResolver(resolver);
+			}
+
+			final Component c2 = _src != null ?
+				exec.createComponents(_src, parent, insertBefore, resolver): null;
+			return merge(cs, c2);
+		}
+		public Map getParameters() {
+			return _params;
+		}
+	}
 	/** The listener to create children when the fulfill condition is
 	 * satisfied.
 	 */
@@ -2098,7 +2222,7 @@ public class UiEngineImpl implements UiEngine {
 				new CreateInfo(
 					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
 					exec, _comp.getPage(), null), //technically sys composer can be used but we don't (to simplify it)
-				_compInfo, _comp);
+				_compInfo, _comp, null);
 
 			if (_uri != null) {
 				final String uri = (String)Evaluators.evaluate(
@@ -2261,6 +2385,49 @@ public class UiEngineImpl implements UiEngine {
 			pfmeter.requestCompleteAtServer(pfReqId, exec, System.currentTimeMillis());
 		} catch (Throwable ex) {
 			log.warning("Ingored: failed to invoke "+pfmeter, ex);
+		}
+	}
+
+	/** An interface used to extend the UI engine.
+	 * The class name of the extension shall be specified in
+	 * the library properties called org.zkoss.zk.ui.impl.UiEngineImpl.extension.
+	 * <p>Notice that it is used only internally.
+	 * @since 5.0.8
+	 */
+	public static interface Extension {
+		/** Called after the whole component tree has been created by
+		 * this engine.
+		 * <p>The implementation might implement this method to process
+		 * the components, such as merging, if necessary.
+		 * @param comps the components being created. It is never null but
+		 * it might be a zero-length array.
+		 */
+		public void afterCreate(Component[] comps);
+		/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+		 * has been called).
+		 * <p>Notice that it is called in the rendering phase (the last phase),
+		 * so it is not allowed to post events or to invoke invalidate or smartUpdate
+		 * in this method.
+		 * <p>Notice that it is not called if an old page is redrawn.
+		 * <p>The implementation shall process the components such as merging
+		 * if necessary.
+		 * @see #execNewPage
+		 */
+		public void afterRenderNewPage(Page page);
+		/** Called when this engine renders the given components.
+		 * It is designed to be overriden if you'd like to alter the component
+		 * and its children after they are rendered.
+		 * @param comps the collection of components that have been redrawn.
+		 * @since 5.1.0
+		 */
+		public void afterRenderComponents(Collection comps);
+	}
+	private static class DefaultExtension implements Extension {
+		public void afterCreate(Component[] comps) {
+		}
+		public void afterRenderNewPage(Page page) {
+		}
+		public void afterRenderComponents(Collection comps) {
 		}
 	}
 }

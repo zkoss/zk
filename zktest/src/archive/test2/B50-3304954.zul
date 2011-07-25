@@ -1,0 +1,134 @@
+<zk>
+	1. For all types of ImageLabels (the following component with an icon), the icon should change when you hover the mouse on it, and the icon should change back when you move mouse out.
+	<separator />
+	2. In addition, open the Menu and click on Menuitem. When you open the Menu again, you should see the ORIGINAL icon on the Menuitem.
+	<separator />
+	3. In addition, open the Combobox and click on the Comboitem. When you open the Combobox again, you should see the ORIGINAL icon on the Comboitem.
+	<separator bar="true" /> 
+	<window width="1000px" height="800px">
+		<caption label="this is a caption"
+			image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+			hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		<a href="http://tw.yahoo.com"
+			image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+			hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		<button image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+			hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		<checkbox label="Apple"
+			image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+			hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		<fisheyebar id="fsb"
+			style="position:absolute;margin:20px 450px;" attachEdge="top"
+			itemWidth="80" itemHeight="80" itemMaxHeight="160"
+			itemMaxWidth="160">
+			<fisheye label="Folder"
+				image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+				hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		</fisheyebar>
+		<grid width="300px">
+			<auxhead>
+				<auxheader label="H1'07" colspan="2"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</auxhead>
+			<columns>
+				<column label="Type" width="200px"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+				<column label="Content" />
+			</columns>
+			<rows>
+				<row>
+					<label value="File:" />
+					<textbox />
+				</row>
+				<row>
+					<label value="Type:" />
+					<textbox />
+				</row>
+			</rows>
+			<foot>
+				<footer
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png">
+					footer1
+				</footer>
+				<footer>
+					footer2
+				</footer>
+			</foot>
+		</grid>
+		<listbox>
+			<listhead>
+				<listheader label="name" sort="auto"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</listhead>
+			<listitem>
+				<listcell label="Mary"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</listitem>
+			<listfoot>
+				<listfooter
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png">
+					<label value="This is footer1" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+		<tree>
+			<treecols sizable="true">
+				<treecol label="Name"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1"
+							image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+							hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+			<treefoot>
+				<treefooter label="Count"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</treefoot>
+		</tree>
+		<tabbox width="400px">
+			<tabs>
+				<tab label="Tab 1"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+				<tab label="Tab 2"
+					image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+					hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>This is panel 1</tabpanel>
+				<tabpanel>This is panel 2</tabpanel>
+			</tabpanels>
+		</tabbox>
+		Menubar:
+		<menubar id="menubar">
+			<menu label="Project"
+				image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+				hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png">
+				<menupopup>
+					<menuitem label="New"
+						image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+						hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+				</menupopup>
+			</menu>
+		</menubar>
+		Combobox:
+		<combobox>
+			<comboitem label="Simple and Rich"
+				image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+				hoverImage="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" />
+		</combobox>
+	</window>
+</zk>

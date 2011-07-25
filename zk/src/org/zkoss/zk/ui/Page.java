@@ -404,6 +404,7 @@ public interface Page extends IdSpace, Scope {
 	/** Adds a name resolver that will be used to resolve a variable
 	 * by {@link #getXelVariable}.
 	 *
+	 * <p>The new added variable resolver has the higher priority.
 	 * <p>Note: the variables resolved by the specified resolver are
 	 * accessible to both zscript and EL expressions.
 	 *

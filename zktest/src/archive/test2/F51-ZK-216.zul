@@ -1,0 +1,57 @@
+<window>
+	<html><![CDATA[
+	<ul><li>You shall see three items and each has two colums</li></ul>
+	]]></html>
+	<zscript>
+	ListModel infos = new ListModelArray(
+		new String[][] {
+			{"Apple", "10kg"},
+			{"Orange", "20kg"},
+			{"Mango", "12kg"}
+		});
+	</zscript>			
+	<listbox model="${infos}">
+		<template name="model">
+			<listitem>
+				<listcell label="${each[0]}"/>
+				<listcell label="${each[1]}"/>
+			</listitem>
+		</template>
+	</listbox>
+
+	<html><![CDATA[
+	<ul><li>You shall see 20,000 items and each has two colums.</li></ul>
+	]]></html>
+	<zscript>
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(20000);
+	</zscript>
+	<listbox rows="10" model="${strset}">
+		<listhead>
+			<listheader label="Sequence" sort="auto"/>
+			<listheader label="Options" sort="auto"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="#${self.parent.index}"/>
+				<listcell label=":${each}"/>
+			</listitem>
+		</template>
+	</listbox>
+	<!-- used for debugging
+	<zscript><![CDATA[
+	public class MyRender implements ListitemRenderer {
+		public void render(Listitem item, Object data) {
+			item.appendChild(new Listcell("#" + item.getIndex()));
+			item.appendChild(new Listcell(":" + data));
+		}
+	}
+	ListitemRenderer render = new MyRender();
+	]]></zscript>
+	<listbox rows="10" model="${strset}" itemRenderer="${render}">
+		<listhead>
+			<listheader label="Sequence" sort="auto"/>
+			<listheader label="Options" sort="auto"/>
+		</listhead>
+	</listbox>
+	-->
+</window>

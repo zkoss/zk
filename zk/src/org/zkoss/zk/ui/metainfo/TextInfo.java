@@ -19,7 +19,7 @@ package org.zkoss.zk.ui.metainfo;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * Represents a text.
@@ -27,18 +27,17 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @author tomyeh
  * @since 3.0.0
  */
-public class TextInfo extends EvalRefStub implements java.io.Serializable {
+public class TextInfo extends LeafInfo {
 	private final ExValue _text;
 
-	/**
-	 * @param evalr the evaluator reference. It cannot be null.
-	 * Retrieve it from {@link LanguageDefinition#getEvaluatorRef}
-	 * or {@link PageDefinition#getEvaluatorRef}, depending which it
-	 * belongs.
+	/** Constructor
+	 * @since 5.1.0
 	 */
-	public TextInfo(EvaluatorRef evalr, String text) {
-		if (evalr == null) throw new IllegalArgumentException();
-		_evalr = evalr;
+	public TextInfo(String text) {
+		_text = text != null ? new ExValue(text, String.class): null;
+	}
+	public TextInfo(NodeInfo parent, String text) {
+		super(parent);
 		_text = text != null ? new ExValue(text, String.class): null;
 	}
 

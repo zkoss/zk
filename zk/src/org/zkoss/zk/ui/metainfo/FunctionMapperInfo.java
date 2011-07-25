@@ -34,15 +34,18 @@ import org.zkoss.zk.xel.Evaluator;
  * Why not? Since there is no way to run zscript before the function-mapper
  * directive (and better performance).
  * </p>
- * 
+ * <p>Note: it is not serializable.</p>
  * @author tomyeh
  * @since 3.5.0
  */
-public class FunctionMapperInfo extends ArgumentInfo {
+public class FunctionMapperInfo extends ArgumentInfo { //directive
 	/** A class, an ExValue or an FunctionMapper. */
 	private final Object _mapper;
 
 	/** Constructs with a class.
+	 * @param args the map of arguments. Ignored if null.<br/>
+	 * Notice that, once assigned, the map belongs to this object, and the caller
+	 * shall not access it again
 	 * @since 3.6.1
 	 */
 	public FunctionMapperInfo(Class<? extends FunctionMapper> cls, Map<String, String> args) {

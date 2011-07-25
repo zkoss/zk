@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.json.JSONArray;
+import org.zkoss.xel.VariableResolver;
+
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -33,6 +35,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.NodeInfo;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
@@ -233,13 +236,19 @@ public interface UiEngine {
 	 * to any page.
 	 * @param parent the parent component, or null if no parent compoent.
 	 * If parent is specified, page is ignored.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
 	 * @param arg a map of parameters that is accessible by the arg variable
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @return the components being created.
+	 * @since 5.1.0
 	 */
 	public Component[] createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent, Map<?, ?> arg);
+	PageDefinition pagedef, Page page, Component parent,
+	Component insertBefore, VariableResolver resolver, Map<?, ?> arg);
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -418,7 +427,7 @@ public interface UiEngine {
 	 * @see org.zkoss.zk.ui.metainfo.Property
 	 * @since 3.5.0
 	 */
-	public String getNativeContent(Component comp, List<Object> children,
+	public String getNativeContent(Component comp, List<NodeInfo> children,
 	Native.Helper helper);
 
 	/** Returns if any suspended event processing thread in the

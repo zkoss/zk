@@ -143,9 +143,8 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
-		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
-		_clkFilterDelay = 0;
+		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -1406,6 +1405,22 @@ public class Configuration {
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
+	/** Specifies the maximal allowed upload size, in kilobytes.
+	 *
+	 * <p>Default: 5120.
+	 *
+	 * @param sz the maximal allowed upload size.
+	 * A negative value indicates there is no limit.
+	 */
+	public void setFileSizeThreshold(int sz) {
+		_fileSizeThreshold = sz;
+	}
+	/** Returns the maximal allowed upload size, in kilobytes, or 
+	 * a negative value if no limit.
+	 */
+	public int getFileSizeThreshold() {
+		return _fileSizeThreshold;
+	}
 	/** Returns the charset used to encode the uploaded text file
 	 * (never null).
 	 *
@@ -1487,7 +1502,8 @@ public class Configuration {
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
-	/** Specifies the time, in milliseconds, to filter out consecutive
+	/**
+	 * Specifies the time, in milliseconds, to filter out consecutive
 	 * click events.
 	 * If two click events (also onOK and onCancel) come too close, the
 	 * second one will be removed to avoid the denial-of-service attack.
@@ -1500,17 +1516,18 @@ public class Configuration {
 	 * @param minisecs the delay to filtering the second click event
 	 * if it happens shorter than the second value.
 	 * If a non-positive value is specified, no click event is ignored.
+	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
 	 * @since 3.6.0
 	 */
 	public void setClickFilterDelay(int minisecs) {
-		_clkFilterDelay = minisecs;
 	}
 	/** Returns the time, in milliseconds, to filter out consecutive
 	 * click events.
+	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
 	 * @since 3.6.0
 	 */
 	public int getClickFilterDelay() {
-		return _clkFilterDelay;
+		return 0;
 	}
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
@@ -1794,7 +1811,7 @@ public class Configuration {
 		return connType != null && "server-push".equals(connType) ?
 			"s:" + deviceType: deviceType;
 	}
-	
+
 	/**  Specifies the time, in seconds, between client requests
 	 * before ZK will invalidate the session.
 	 *
@@ -2006,7 +2023,7 @@ public class Configuration {
 	}
 
 	/** Returns the execution monitor for this application, or null if not set.
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public ExecutionMonitor getExecutionMonitor() {
 		return _execmon;
@@ -2024,7 +2041,7 @@ public class Configuration {
 	 * @param monitor the execution monitor. If null, the monitor function
 	 * is disabled.
 	 * @return the previous execution monitor, or null if not available.
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public ExecutionMonitor setExecutionMonitor(ExecutionMonitor monitor) {
 		final ExecutionMonitor old = _execmon;

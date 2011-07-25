@@ -53,7 +53,8 @@ var _defaultIgnore = {draggable: 'false', droppable: 'false', mold: 'default', c
 	},
 	// put these attributes in the end of the tag.
 	attrsLater = {
-		getText: 1
+		getText: 1,
+		getMold: 1
 	};
 
 function _dumpAttrs0(out, nm, wgt) {
@@ -164,6 +165,8 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 			var n = wgt.$n('css');
 			if (n)
 				out.push('&gt;<br/>', n.innerHTML, _space(--nLevel), '&lt;/', nm, '&gt;<br/>');
+			else
+				out.push('/&gt;<br/>');
 		} else if (noChildable)
 			out.push('/&gt;--&gt;<br/>');
 		else

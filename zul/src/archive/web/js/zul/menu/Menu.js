@@ -268,10 +268,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = false;
+		this._updateImageNode(); // remove hover image if any
 		if (!zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	
-		var	topmost = this.isTopmost(),
+		var topmost = this.isTopmost(),
 			menupopup = this.menupopup;
 		if (topmost) { //implies menubar
 			this.$class._rmOver(this);
@@ -284,6 +285,18 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this.$class._rmActive(this);
 		else if (menupopup && menubar && menubar._autodrop)
 			menubar._closeOnOut();
+	},
+	//@Override
+	getImageNode: function () {
+		if (!this._eimg && (this._image || this._hoverImage)) {
+			var n = this.$n();
+			if (n) 
+				this._eimg = jq(this.$n('b'));
+		}
+		return this._eimg;
+	},
+	changeImageNodeSrc_: function (n, img) {
+		n.css('background-image', 'url('+img+')');
 	}
 }, {
 	_isActive: function (wgt) {

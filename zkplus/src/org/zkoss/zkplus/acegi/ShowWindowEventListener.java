@@ -88,11 +88,7 @@ public class ShowWindowEventListener implements EventListener {
     		throw new UiException("The page must enclosed with a Window component. Check url definition: "+url);
     	}
     	modalwin.setPage(page);
-    	try {
-	    	((Window)modalwin).doModal();
-    	} catch(java.lang.InterruptedException ex) {
-    		//ignore
-    	}
+    	((Window)modalwin).doModal();
 	}		
 
 	//Object[0]: url, Object[1]: Map

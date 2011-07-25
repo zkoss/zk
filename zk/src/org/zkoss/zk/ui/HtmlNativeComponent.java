@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.ext.render.Merger;
@@ -61,7 +62,7 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  * @since 3.0.0
  */
 public class HtmlNativeComponent extends AbstractComponent
-implements DynamicTag, Native {
+implements DynamicTag, Native { //cannot be RawId since two native might have the same ID
 	private static final Helper _helper = new HtmlHelper();
 	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
@@ -113,30 +114,6 @@ implements DynamicTag, Native {
 	 */
 	public String getTag() {
 		return _tag;
-	}
-
-	/** Returns whether this component is stub-only.
-	 * By stub-only, we mean we don't need to maintain the states of
-	 * the component at the server side.
-	 * <p>Unlike other kind of components, this method always return "true",
-	 * i.e., stub-only. In additions, its child component does not inherit
-	 * this value even if the child's {@link Component#getStubonly} is "inherit"
-	 * (and assumed to "false" if "inherit").
-	 * @since 5.0.4
-	 */
-	public String getStubonly() {
-		return "true";
-	}
-	/** Sets whether this component is stub-only.
-	 * By stub-only, we mean we don't need to maintain the states of
-	 * the component at the server side.
-	 * <p>Default: "true".
-	 * @exception UiException if stubonly is not "true".
-	 * @since 5.0.4
-	 */
-	public void setStubonly(String stubonly) {
-		if (!"true".equals(stubonly))
-			throw new UiException("Not allowed: "+stubonly);
 	}
 
 	//Native//

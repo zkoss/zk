@@ -514,4 +514,13 @@ public class Dates {
 		
 		return dateCal.getTime();
 	}
+	/**
+	 * Returns the timezone offset.
+	 * @param timezone The time zone.
+	 * @param date
+	 * @return long
+	 */
+	public static final long getTimezoneOffset(TimeZone timezone, Date date) {
+		return timezone.getRawOffset() + (timezone.inDaylightTime(date) ? timezone.getDSTSavings(): 0);
+	}
 }

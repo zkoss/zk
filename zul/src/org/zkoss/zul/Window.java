@@ -421,18 +421,12 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 *
 	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Window">Overlapped, Popup, Modal, Highlighted and Embedded</a>
 	 * for more information.
-	 * 
+	 *
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
-	 *
-	 * @exception InterruptedException thrown if "modal" is specified,
-	 * and one of the following conditions occurs:
-	 * 1) the desktop or the Web application is being destroyed, or
-	 * 2) {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
-	 * To tell the difference, check the getMessage method of InterruptedException.
 	 */
-	public void setMode(String name) throws InterruptedException {
+	public void setMode(String name) {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
@@ -448,7 +442,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 *
 	 * @see #setMode(String)
 	 */
-	public void setMode(int mode) throws InterruptedException {
+	public void setMode(int mode) {
 		switch (mode) {
 		case POPUP: doPopup(); break;
 		case OVERLAPPED: doOverlapped(); break;
@@ -504,20 +498,9 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 * but {@link #doModal} will.
 	 * {@link #doModal} can be called only in an event listener,
 	 * while {@link #setMode} can be called anytime.
-	 *
-	 * @exception SuspendNotAllowedException if
-	 * 1) not in an event listener;<br/>
-	 * 2) the event thread is disabled.<br/>
-	 * 3) there are too many suspended processing thread than the deployer allows.
-	 * By default, there is no limit of # of suspended threads.
-	 * @exception InterruptedException thrown if the desktop or
-	 * the Web application is being destroyed, or
-	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
-	 * To tell the difference, check the getMessage method of InterruptedException.
 	 * @since 3.0.4
 	 */
-	public void doModal()
-	throws InterruptedException, SuspendNotAllowedException {
+	public void doModal() {
 		if (!isEventThreadEnabled(true)) {
 			checkOverlappable(_MODAL_);
 			setNonModalMode(_MODAL_);
@@ -599,12 +582,16 @@ public class Window extends XulElement implements Framable, IdSpace {
 	}
 
 	/** Set mode to MODAL and suspend this thread. */
-	private void enterModal() throws InterruptedException {
+	private void enterModal() {
 		_mode = MODAL;
 		smartUpdate("mode", modeToString(_mode));
 
 		//no need to synchronized (_mutex) because no racing is possible
-		Executions.wait(_mutex);
+		try {
+			Executions.wait(_mutex);
+		} catch (InterruptedException ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
 	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
 	private void leaveModal(int mode) {
@@ -745,7 +732,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	}
 	/** Process the onModal event by making itself a modal window.
 	 */
-	public void onModal() throws InterruptedException {
+	public void onModal() {
 		doModal();
 	}
 

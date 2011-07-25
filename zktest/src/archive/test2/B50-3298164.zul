@@ -18,7 +18,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  	<separator/>
  	And the bottom border of the bottom listbox shouldn't be covered or cut. 
 	<div id="firstDiv" width="250px" height="250px" style="overflow:hidden">
-		<hbox hflex="1" vflex="1" style="background:red;">
+		<hbox hflex="1" vflex="1"  pack="stretch"  style="background:red;">
 			<div vflex="1">
 				<div vflex="min">Listbox</div>
 				<div vflex="min">Listbox</div>

@@ -36,10 +36,13 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
+import org.zkoss.xel.VariableResolver;
+
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SerializableEventListener;
@@ -52,7 +55,6 @@ import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
@@ -92,8 +94,10 @@ import org.zkoss.zul.impl.Utils;
  * </dl>
  * @author tomyeh
  */
-public class Tree extends MeshElement implements Paginated {
+public class Tree extends MeshElement {
 	private static final Log log = Log.lookup(Tree.class);
+	private static final String ATTR_ON_INIT_RENDER_POSTED =
+		"org.zkoss.zul.Tree.onInitLaterPosted";
 
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
@@ -123,7 +127,6 @@ public class Tree extends MeshElement implements Paginated {
 	 */
 	private transient Paging _paging;
 	private EventListener _pgListener, _pgImpListener;
-	private String _pagingPosition = "bottom";
 
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -244,30 +247,7 @@ public class Tree extends MeshElement implements Paginated {
 	}
 
 	//--Paging--//
-	/**
-	 * Sets how to position the paging of tree at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
-	 * "top", or "both".
-	 * @since 3.0.7
-	 */
-	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null || (!pagingPosition.equals("top") &&
-			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
-			throw new WrongValueException("Unsupported position : "+pagingPosition);
-		if(!Objects.equals(_pagingPosition, pagingPosition)){
-			_pagingPosition = pagingPosition;
-			smartUpdate("pagingPosition", pagingPosition);
-		}
-	}
-	/**
-	 * Returns how to position the paging of tree at the client screen.
-	 * It is meaningless if the mold is not in "paging".
-	 * @since 3.0.7
-	 */
-	public String getPagingPosition() {
-		return _pagingPosition;
-	}
+	
 	/** Returns the paging controller, or null if not available.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -383,26 +363,7 @@ public class Tree extends MeshElement implements Paginated {
 		pgi().setPageSize(pgsz);
 	}
 
-	/** Returns the number of pages.
-	 * Note: there is at least one page even no item at all.
-	 * @since 3.0.7
-	 */
-	public int getPageCount() {
-		return pgi().getPageCount();
-	}
-	/** Returns the active page (starting from 0).
-	 * @since 3.0.7
-	 */
-	public int getActivePage() {
-		return pgi().getActivePage();
-	}
-	/** Sets the active page (starting from 0).
-	 * @since 3.0.7
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-		pgi().setActivePage(pg);
-	}
-	private Paginal pgi() {
+	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi;
@@ -1176,9 +1137,8 @@ public class Tree extends MeshElement implements Paginated {
 	}
 
 	//-- ComponentCtrl --//
-	/*
+	/**
 	 * Handles when the tree model's content changed
-	 * <p>Author: jeffliu
 	 */
 	private void onTreeDataChange(TreeDataEvent event){
 		//if the treeparent is empty, render tree's treechildren
@@ -1327,7 +1287,6 @@ public class Tree extends MeshElement implements Paginated {
 
 	/*
 	 * Initial Tree data listener
-	 * <p>Author: jeffliu
 	 */
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -1367,7 +1326,7 @@ public class Tree extends MeshElement implements Paginated {
 				initDataListener();
 			}
 			doSort(this);
-			syncModel();
+			postOnInitRender();
 		} else if (_model != null) {
 			_model.removeTreeDataListener(_dataListener);
 			_model = null;
@@ -1380,6 +1339,22 @@ public class Tree extends MeshElement implements Paginated {
 	@SuppressWarnings("unchecked")
 	private final void setModelDirectly(TreeModel model) {
 		_model = (TreeModel<Object>)model;
+	}
+
+	/** Handles a private event, onInitRender. It is used only for
+	 * implementation, and you rarely need to invoke it explicitly.
+	 * @since 5.1.0
+	 */
+	public void onInitRender() {
+		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		renderTree();
+	}
+	private void postOnInitRender() {
+		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
+		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
+			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
+			Events.postEvent("onInitRender", this, null);
+		}
 	}
 
 	//--TreeModel dependent codes--//
@@ -1408,13 +1383,6 @@ public class Tree extends MeshElement implements Paginated {
 		return false;
 	}
 	
-	/** Synchronizes the tree to be consistent with the specified model.
-	 * <p>Author: jeffliu
-	 */
-	private void syncModel() {
-		renderTree();
-	}
-
 	/** Sets the renderer which is used to render each item
 	 * if {@link #getModel} is not null.
 	 *
@@ -1430,7 +1398,7 @@ public class Tree extends MeshElement implements Paginated {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 			if (_model != null)
-				syncModel();
+				postOnInitRender();
 		}
 	}
 
@@ -1502,6 +1470,9 @@ public class Tree extends MeshElement implements Paginated {
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);
 			renderer.render(ti, childNode);
+			Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
+			if (v != null) //a new item is created to replace the existent one
+				(ti = (Treeitem)v).setOpen(false);
 			if(!_model.isLeaf(childNode) && ti.getTreechildren() == null){
 				Treechildren tc = new Treechildren();
 				tc.setParent(ti);
@@ -1514,29 +1485,46 @@ public class Tree extends MeshElement implements Paginated {
 		return ti;
 	}
 
-	private static TreeitemRenderer getDefaultItemRenderer() {
-		return _defRend;
-	}
-	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, Object node){
-			Treecell tc = new Treecell(Objects.toString(node));
-			Treerow tr = null;
-			ti.setValue(node);
-			if(ti.getTreerow()==null){
-				tr = new Treerow();
-				tr.setParent(ti);
-			}else{
-				tr = ti.getTreerow();
-				tr.getChildren().clear();
-			}
-			tc.setParent(tr);
-		}
-	};
 	/** Returns the renderer used to render items.
 	 */
 	private TreeitemRenderer getRealRenderer() {
-		return _renderer != null ? _renderer: getDefaultItemRenderer();
+		return _renderer != null ? _renderer: _defRend;
 	}
+	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
+		public void render(Treeitem ti, final Object node){
+			Tree tree = ti.getTree();
+			final Template tm = tree.getTemplate("model");
+			if (tm == null) {
+				Treecell tc = new Treecell(Objects.toString(node));
+				Treerow tr = null;
+				ti.setValue(node);
+				if(ti.getTreerow()==null){
+					tr = new Treerow();
+					tr.setParent(ti);
+				}else{
+					tr = ti.getTreerow();
+					tr.getChildren().clear();
+				}
+				tc.setParent(tr);
+			} else {
+				final Component[] items = tm.create(ti.getParent(), ti,
+					new VariableResolver() {
+						public Object resolveVariable(String name) {
+							return "each".equals(name) ? node: null;
+						}
+					});
+				if (items.length != 1)
+					throw new UiException("The model template must have exactly one item, not "+items.length);
+
+				final Treeitem nti = (Treeitem)items[0];
+				if (nti.getValue() == null) //template might set it
+					nti.setValue(node);
+				ti.setAttribute("org.zkoss.zul.model.renderAs", nti);
+					//indicate a new item is created to replace the existent one
+				ti.detach();
+			}
+		}
+	};
 
 	/** Used to render treeitem if _model is specified. */
 	private class Renderer implements java.io.Serializable {
@@ -1674,6 +1662,10 @@ public class Tree extends MeshElement implements Paginated {
 
 			renderChildren(renderer, tc, node);
 		}
+
+		Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+		if (v != null) //a new item is created to replace the existent one
+			(item = (Treeitem)v).setOpen(false);
 		item.setLoaded(true);
 	}
 
@@ -1874,8 +1866,6 @@ public class Tree extends MeshElement implements Paginated {
 		if (_model != null)
 			render(renderer, "model", true);
 
-		if (!"bottom".equals(_pagingPosition))
-			render(renderer, "pagingPosition", _pagingPosition);
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
 		if (isCheckmarkDeselectOther())

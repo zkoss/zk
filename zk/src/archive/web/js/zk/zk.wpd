@@ -45,6 +45,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="mount.js" jsdoc="true"/>
 	<script src="bookmark.js"/>
 	<script src="au.js" jsdoc="true"/>
+	<script src="flex.js"/>
 
 	<script src="ext/jquery.json.js"/>
 	<script src="ext/jquery.mousewheel.js"/>

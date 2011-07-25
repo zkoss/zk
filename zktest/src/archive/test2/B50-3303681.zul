@@ -13,7 +13,11 @@ B50-3303681.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk><style>
+ol, li {
+	margin: 0px;
+}
+</style>
 	<html><![CDATA[
 		<ol>
 			<li>Make sure "b" is under the panel of "a", and "b" is visible.</li>
@@ -41,11 +45,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 						<tab label="b"/>
 					</tabs>
 					<tabpanels>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
 					</tabpanels>
 				</tabbox>
@@ -71,11 +75,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 						<tab label="b"/>
 					</tabs>
 					<tabpanels>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
-						<tabpanel style="overflow:auto">
-							<div height="290px" width="290px"/>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
 						</tabpanel>
 					</tabpanels>
 				</tabbox>

@@ -17,8 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	You shall see the background color changed when
 	pressing the buttons in order.
     <separator/>
-    The 3rd botton work slow in IE6, IE7 and doesn't work in SA, it won't be fixed.
-    <separator/>
 	<div id="anchor">
 	<zscript><![CDATA[
 	void setStyle(String id, String cnt) {

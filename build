@@ -500,9 +500,9 @@ if [ "$javadocAll" = "true" ] ; then
 	sort javadoctmp/tmp | uniq >> javadoctmp/classpath
 	rm javadoctmp/tmp
 	cp zk/version zk/format javadoctmp
-	invoke_ant javadoc javadoctmp ZK
+	invoke_ant javadoc javadoctmp zk
 	rm -rf javadoctmp
-	exit 1
+	exit 0
 else
 	echo "targets: ${targetList}"
 	for target in $targetList ; do

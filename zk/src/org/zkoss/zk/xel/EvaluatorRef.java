@@ -14,10 +14,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.xel.impl;
+package org.zkoss.zk.xel;
 
 import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.xel.Evaluator;
 
 /**
  * A reference to {@link Evaluator}.
@@ -25,7 +24,8 @@ import org.zkoss.zk.xel.Evaluator;
  * ways:
  *
  * <ul>
- * <li>It is serializable, while {@link Evaluator} is not.</li>
+ * <li>It is serializable, while {@link Evaluator} might be not
+ * (depends on the implementation).</li>
  * <li>It is late-binding to the real evaluator.
  * The evaluator is accessed only {@link #evaluate}, {@link #parseExpression},
  * or {@link #getEvaluator} is called.
@@ -33,7 +33,7 @@ import org.zkoss.zk.xel.Evaluator;
  * </ul>
  *
  * @author tomyeh
- * @since 3.0.0
+ * @since 5.1.0
  */
 public interface EvaluatorRef extends Evaluator, java.io.Serializable {
 	/** Returns the real evaluator.

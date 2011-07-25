@@ -16,6 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Paginated;
 
 /**
  * The fundamental class for mesh elements such as {@link org.zkoss.zul.Grid}, {@link org.zkoss.zul.Listbox}, and {@link org.zkoss.zul.Tree}.
@@ -23,10 +26,11 @@ import org.zkoss.lang.Objects;
  * @author henrichen
  * @since 5.0.6
  */
-public class MeshElement extends XulElement {
+abstract public class MeshElement extends XulElement implements Paginated {
 	private String _span;
 	private boolean _sizedByContent;
 	private boolean _autopaging;
+	private String _pagingPosition = "bottom";
 	
 	/**
 	 * Return column span hint of this component.
@@ -140,6 +144,70 @@ public class MeshElement extends XulElement {
 		return _autopaging;
 	}
 	
+	/**
+	 * Sets how to position the paging of mesh element at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @param pagingPosition how to position. It can only be "bottom" (the default), or
+	 * "top", or "both".
+	 * @since 3.0.4
+	 */
+	public void setPagingPosition(String pagingPosition) {
+		if (pagingPosition == null || (!pagingPosition.equals("top") &&
+			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : "+pagingPosition);
+		if(!Objects.equals(_pagingPosition, pagingPosition)){
+			_pagingPosition = pagingPosition;
+			smartUpdate("pagingPosition", pagingPosition);
+		}
+	}
+
+	/**
+	 * Returns how to position the paging of mesh element at the client screen.
+	 * It is meaningless if the mold is not in "paging".
+	 * @since 3.0.4
+	 */
+	public String getPagingPosition() {
+		return _pagingPosition;
+	}
+	
+	/** Returns the instance of the @{link Paginal}
+	 */
+	protected abstract Paginal pgi();
+
+	/** Returns the page size, aka., the number rows per page.
+	 * @exception IllegalStateException if {@link #pgi} returns null,
+	 * i.e., mold is not "paging" and no external controller is specified.
+	 */
+	public int getPageSize() {
+		return pgi().getPageSize();
+	}
+	/** Sets the page size, aka., the number rows per page.
+	 * @exception IllegalStateException if {@link #pgi} returns null,
+	 * i.e., mold is not "paging" and no external controller is specified.
+	 */
+	public void setPageSize(int pgsz) throws WrongValueException {
+		pgi().setPageSize(pgsz);
+	}
+
+	/** Returns the number of pages.
+	 * Note: there is at least one page even no item at all.
+	 * @since 3.0.4
+	 */
+	public int getPageCount() {
+		return pgi().getPageCount();
+	}
+	/** Returns the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public int getActivePage() {
+		return pgi().getActivePage();
+	}
+	/** Sets the active page (starting from 0).
+	 * @since 3.0.4
+	 */
+	public void setActivePage(int pg) throws WrongValueException {
+		pgi().setActivePage(pg);
+	}
 	//@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -150,5 +218,7 @@ public class MeshElement extends XulElement {
 			renderer.render("span", _span);
 		if (isAutopaging())
 			renderer.render("autopaging", true);
+		if (!"bottom".equals(_pagingPosition))
+			render(renderer, "pagingPosition", _pagingPosition);
 	}
 }

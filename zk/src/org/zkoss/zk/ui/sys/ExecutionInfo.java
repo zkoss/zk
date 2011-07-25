@@ -35,17 +35,18 @@ public interface ExecutionInfo {
 	public Event getEvent();
 	/** Returns the method that serves the event, or null if it
 	 * is served by a listener ({@link #getEventListener}), or
-	 * a zscript ({@link #getEventZscript}).
+	 * a zscript ({@link #getEventZScript}).
 	 */
 	public Method getEventMethod();
 	/** Returns the listener that serves the event, or null if it
 	 * is served by a method ({@link #getEventMethod}), or
-	 * a zscript ({@link #getEventZscript}).
+	 * a zscript ({@link #getEventZScript}).
 	 */
 	public EventListener getEventListener();
 	/** Returns the zscript that serves the event, or null if it
 	 * is served by a listener ({@link #getEventListener}), or
 	 * a method ({@link #getEventMethod}).
+	 * @since 5.0.8
 	 */
-	public ZScript getEventZscript();
+	public ZScript getEventZScript();
 }

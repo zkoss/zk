@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3323594.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jun 21, 2011 7:06:19 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.util.*;
+		import org.zkoss.zul.*;
+		
+		List list = new ArrayList();
+		for (int i = 0; i < 200; i ++) {
+			list.add("item "+i);
+		}
+		ListModel model = new ListModelList(list);
+		
+	]]></zscript>
+	<listbox width="100px" height="300px" model="${model}" initRodSize="30"/>
+	<grid width="100px" height="300px" model="${model}" initRodSize="30"/>
+</zk>

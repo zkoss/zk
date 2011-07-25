@@ -1,17 +1,15 @@
 <zk>
-<html>
-<![CDATA[
-<ol>
-<li>Each column shall occupy exactly match space. The Listbox shall accommodate exactly 3 columns</li>
-<li>Now drag the border between 1st column and 2nd column to left</li>
-<li>The width of the 1st column shall shrink its size to where you dragged to</li>
-<li>The width of the Listbox shall kept as is without change</li>
-<li>Now press the "invalidate" button</li>
-<li>The width of the Listbox shall shrink now to fit the new column sizes</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. Each column shall occupy exactly match space. The Listbox shall accommodate exactly 3 columns
+<separator/>
+2. Now drag the border between 1st column and 2nd column to left
+<separator/>
+3. The width of the 1st column shall shrink its size to where you dragged to
+<separator/>
+4. The width of the Listbox shall kept as is without change
+<separator/>
+5. Now press the "invalidate" button
+<separator/>
+6. The width of the Listbox shall shrink now to fit the new column sizes
 <zscript>
 String[] msgs = {
 	"ZK Ajax Framework",

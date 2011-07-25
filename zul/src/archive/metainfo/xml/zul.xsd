@@ -501,6 +501,11 @@
 		<xs:attributeGroup ref="inputElementAttrGroup" />
 		<xs:attribute name="format" type="xs:string" use="optional" />
 	</xs:attributeGroup>
+	<xs:attributeGroup name="numberInputElementAttrGroup">
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="roundingMode" type="intType" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
+	</xs:attributeGroup>
 	<xs:attributeGroup name="labelElementAttrGroup">
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="label" type="xs:string" use="optional" />
@@ -1039,7 +1044,7 @@
 	<xs:element name="decimalbox" type="decimalboxType" />
 	<xs:complexType name="decimalboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="decimalType" use="optional" />
 		<xs:attribute name="scale" type="intType" use="optional" />
@@ -1069,7 +1074,7 @@
 	<xs:element name="doublebox" type="doubleboxType" />
 	<xs:complexType name="doubleboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1078,7 +1083,7 @@
 	<xs:element name="doublespinner" type="doublespinnerType" />
 	<xs:complexType name="doublespinnerType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="doubleSpinnerConstraintAttrType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1321,7 +1326,6 @@
 		<xs:attribute name="onPaging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
@@ -1483,7 +1487,7 @@
 	<xs:element name="intbox" type="intboxType" />
 	<xs:complexType name="intboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="intType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1492,7 +1496,7 @@
 	<xs:element name="longbox" type="longboxType" />
 	<xs:complexType name="longboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="numberConstraintAttrType" use="optional" />
 		<xs:attribute name="value" type="longType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1583,7 +1587,6 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
@@ -2014,7 +2017,7 @@
 	<xs:element name="spinner" type="spinnerType" />
 	<xs:complexType name="spinnerType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attributeGroup ref="numberInputElementAttrGroup" />
 		<xs:attribute name="constraint" type="spinnerConstraintAttrType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -2319,7 +2322,6 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="pagingPosition" type="pagingPositionAttrType" use="optional" />
-		<xs:attribute name="preloadSize" type="intType" use="optional" />
 		<xs:attribute name="innerWidth" type="xs:string" use="optional" />
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />

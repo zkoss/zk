@@ -57,8 +57,6 @@ public class Library {
 	 *
 	 * @return the string value of the library property, or the system
 	 * property, or null if no such property.
-	 * @exception NullPointerException if key is null
-	 * @exception IllegalArumentException if key is empty
 	 * @see #setProperty
 	 */
 	public static String getProperty(String key) {
@@ -67,7 +65,9 @@ public class Library {
 			v = _props.get(key);
 		}
 		try {
-			return v != null ? v: System.getProperty(key);
+			//Unlike System.getProperty, we make the inocation as safe as possible
+			return v != null || key == null || key.length() == 0 ?
+				v: System.getProperty(key);
 		} catch (SecurityException ex) {
 			return null;
 		}

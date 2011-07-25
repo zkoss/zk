@@ -1,10 +1,7 @@
 <zk>
-<html><![CDATA[
-<ol>
-	<li>If you see TWO grids(3 rows x 2 columns), grid "One" stack on top of grid "Two", then it is OK</li>
-	<li>Otherwise, it is a bug</li>
-</ol>
-]]></html>
+1. If you see TWO grids(3 rows x 2 columns), grid "One" stack on top of grid "Two", then it is OK
+<separator/>
+2. Otherwise, it is a bug
 <borderlayout vflex="min" hflex="min">
     <north vflex="min" hflex="min">
         <grid innerWidth="" hflex="min">

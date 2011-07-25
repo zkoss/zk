@@ -405,7 +405,7 @@
 		</hlayout>
 		<vlayout hflex="1" height="50px"
 			style="border:1px solid black;">
-			<div>
+			<div hflex="1">
 				<div hflex="1" height="20px" forEach="1,2"
 					style="border:1px solid black;float: left;">
 					div
@@ -414,7 +414,7 @@
 		</vlayout>
 		<borderlayout hflex="1" height="50px">
 			<center>
-				<div>
+				<div hflex="1">
 					<div hflex="1" height="20px" forEach="1,2"
 						style="border:1px solid black;float: left;">
 						div
@@ -454,6 +454,92 @@
 							style="border:1px solid black;float: left;">
 							div
 						</div>
+					</panelchildren>
+				</panel>
+			</tablechildren>
+		</tablelayout>
+		<div hflex="min" style="border:1px solid black;">
+			<div width="100px" height="100px"
+				style="border:1px solid black;">div</div>
+		</div>
+		<groupbox hflex="min" forEach="default,3d"
+			mold="${each }">
+			<caption label="groupbox ${each }" />
+			<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+		</groupbox>
+		<window title="win" hflex="min">
+			<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+		</window>
+		<panel title="panel" hflex="min"
+			forEach="none,normal,rounded,rounded+" border="${each}">
+			<panelchildren hflex="min">
+				<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+			</panelchildren>
+		</panel>
+		<tabbox hflex="min">
+			<tabs>
+				<tab label="tab" />
+			</tabs>
+			<tabpanels hflex="min">
+				<tabpanel hflex="min">
+					<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<hbox style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">hbox</div>
+		</hbox>
+		<vbox style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">vbox</div>
+		</vbox>
+		<hlayout hflex="min"
+			style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">hlayout</div>
+		</hlayout>
+		<vlayout hflex="min"
+			style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">vlayout</div>
+		</vlayout>
+		<borderlayout hflex="min" vflex="min">
+			<center hflex="min" vflex="min">
+				<div width="100px" height="100px"
+						style="border:1px solid black;">borderlayout</div>
+			</center>
+		</borderlayout>
+		<columnlayout hflex="min">
+			<columnchildren  hflex="min">
+				<panel title="columnlayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+					</panelchildren>
+				</panel>
+			</columnchildren>
+		</columnlayout>
+		<portallayout   hflex="min">
+			<portalchildren   hflex="min">
+				<panel title="portallayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+					</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+		<tablelayout  hflex="min">
+			<tablechildren  hflex="min">
+				<panel title="tablelayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
 					</panelchildren>
 				</panel>
 			</tablechildren>

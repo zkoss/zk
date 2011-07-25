@@ -52,12 +52,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (s) o.push(s);
 		return o.join(":");
 	}
-	
-var Datebox =
+	var globallocalizedSymbols = {};
 /**
  * An edit box for holding a date.
  * <p>Default {@link #getZclass}: z-datebox.
  */
+var Datebox = 
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
@@ -173,7 +173,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		constraint: function (cst) {
 			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
-				this._cst = new zul.inp.SimpleDateConstraint(cst);
+				this._cst = new zul.inp.SimpleDateConstraint(cst, this);
 			else
 				this._cst = cst;
 			if (this._cst) delete this._lastRawValVld; //revalidate required
@@ -217,6 +217,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		displayedTimeZones: function (dtzones) {
 			this._dtzones = dtzones.split(",");
 		},
+		/**
+		 * Returns the unformater.
+		 */
+		/**
+		 * Sets the unformater function. This method is called from Server side.
+		 */
+		unformater: function (unf) {
+			eval('Datebox._unformater = ' + unf);
+		},
 		/** Sets whether or not date/time parsing is to be lenient.
 		 *
 		 * <p>
@@ -235,7 +244,25 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * inputs must match this object's format.
 		 * @return boolean
 		 */
-		lenient: null
+		lenient: null,
+		localizedSymbols: [
+			function (val) {
+				if(val) {
+					if (!globallocalizedSymbols[val[0]])
+						globallocalizedSymbols[val[0]] = val[1];
+					return globallocalizedSymbols[val[0]];
+				}
+				return val;
+			},
+			function () {
+				
+				// in this case, we cannot use setLocalizedSymbols() for Timebox
+				if (this._tm)
+					this._tm._localizedSymbols = this._localizedSymbols;
+				if (this._pop)
+					this._pop.setLocalizedSymbols(this._localizedSymbols);
+			}
+		]
 	},
 	_setTimeZonesIndex: function () {
 		var select = this.$n('dtzones');
@@ -307,15 +334,23 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		return this._pop && this._pop.isOpen();
 	},
 	coerceFromString_: function (val) {
+		var unf = Datebox._unformater;
+		if (unf && jq.isFunction(unf)) {
+			var cusv = unf(val);
+			if (cusv) {
+				this._shortcut = val;
+				return cusv;
+			}
+		}
 		if (val) {
-			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value);
-			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + this.localizedFormat)};
+			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
+			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(/\'/g, '')))};
 			return d;
 		}
 		return null;
 	},
 	coerceToString_: function (val) {
-		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat()) : '';
+		return val ? new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols) : '';
 	},
 	/** Synchronizes the input element's width of this component
 	 */
@@ -414,11 +449,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this._pop.close();
 		evt.stop();
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace)
+	afterKeyDown_: function (evt, simulated) {
+		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 
-		this.$supers('afterKeyDown_', arguments);
+		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function (){
 		this.$supers(Datebox, 'bind_', arguments);
@@ -433,7 +468,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		zWatch.listen({onSize: this, onShow: this});
-		this._pop.setFormat(this._format);
+		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
 		var btn;
@@ -505,6 +540,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	setFormat: function (fmt) {
 		this._fmt = fmt;
 	},
+	setLocalizedSymbols: function (symbols) {
+		this._localizedSymbols = symbols;
+	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
@@ -552,7 +590,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		pp.style.width = pp.style.height = "auto";
 		pp.style.position = "absolute"; //just in case
-		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zkdemo/userguide/#f9)
+		//pp.style.overflow = "auto"; //don't set since it might turn on scrollbar unexpectedly (IE: http://www.zkoss.org/zksandbox/#f9)
 		pp.style.display = "block";
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
 
@@ -577,15 +615,19 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		var inp = db.getInputNode();
 		zk(pp).position(inp, "after_start");
-
+		delete db._shortcut;
+		
 		setTimeout(function() {
 			_reposition(db, silent);
 		}, 150);
 		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
 		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
-			//we should use UTC date instead of Locale date to our value.
-			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value)).toUTCDate()
+			unf = Datebox._unformater,
+			value = unf ? unf(inp.value) : null;
+		//we should use UTC date instead of Locale date to our value.
+		if (!value)
+			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols), this._localizedSymbols).toUTCDate()
 				|| (inp.value ? db._value: zUtl.today(fmt));
 		
 		if (value)

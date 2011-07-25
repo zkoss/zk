@@ -19,8 +19,8 @@ package org.zkoss.zk.au.out;
 import java.util.Collection;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.au.AuResponse;
 
@@ -43,8 +43,8 @@ public class AuInsertBefore extends AuResponse {
 		super("addBfr", anchor, toArray(anchor, contents));
 	}
 	private static Object[] toArray(Component anchor, Collection<String> contents) {
-		if (anchor instanceof Native || anchor instanceof StubComponent)
-			throw new UiException("Adding a component before a native one not allowed: "+anchor);
+		if (anchor instanceof Native || anchor instanceof StubsComponent)
+			throw new UiException("Adding a component before native or stubs not allowed: "+anchor);
 
 		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}

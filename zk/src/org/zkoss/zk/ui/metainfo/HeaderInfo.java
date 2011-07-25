@@ -26,11 +26,9 @@ import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a header element, such as &lt;?link&gt; and &lt;?meta&gt;
@@ -55,8 +53,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @author tomyeh
  * @see ResponseHeaderInfo
  */
-public class HeaderInfo  extends EvalRefStub
-implements Condition {
+public class HeaderInfo { //directive
 	private final String _name;
 	/** A list of AttrInfo. */
 	private final List<AttrInfo> _attrs;
@@ -70,12 +67,11 @@ implements Condition {
 	 * @param name the tag name, such as link (never null or empty).
 	 * @param attrs a map of (String, String) attributes.
 	 */
-	public HeaderInfo(EvaluatorRef evalr, String name, Map<String, String> attrs, ConditionImpl cond) {
+	public HeaderInfo(String name, Map<String, String> attrs, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("empty");
 
 		_name = name;
-		_evalr = evalr;
 		_cond = cond;
 		if (attrs == null || attrs.isEmpty()) {
 			_attrs = Collections.emptyList();
@@ -94,14 +90,16 @@ implements Condition {
 	}
 
 	/** Returns as HTML tag(s) representing this header element.
-	 * <p>Notice that it does NOT invoke {@link #isEffective}, so the caller
-	 * has to call it first.
 	 *
 	 * @param page the page containing this header element.
 	 * It is used to evaluate EL expression, if any, contained in the value.
-	 * @since 5.0.0
+	 * @since 5.1.0
 	 */
-	public String toHTML(Page page) {
+	public String toHTML(PageDefinition pgdef, Page page) {
+		final Evaluator eval = pgdef.getEvaluator();
+		if (_cond != null && !_cond.isEffective(eval, page))
+			return "";
+
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_name);
 
@@ -110,7 +108,7 @@ implements Condition {
 
 		for (AttrInfo attr: _attrs) {
 			final String nm = attr.name;
-			String val = (String)attr.value.getValue(_evalr, page);
+			String val = (String)attr.value.getValue(eval, page);
 			if (bScript && "content".equals(nm)) {
 				scriptContent = val;
 				continue;
@@ -132,13 +130,6 @@ implements Condition {
 			return sb.append("</script>").toString();
 		}
 		return sb.append("/>").toString();
-	}
-
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 
 	private static class AttrInfo {

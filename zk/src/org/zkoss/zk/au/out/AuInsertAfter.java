@@ -20,8 +20,8 @@ import java.util.Collection;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.au.AuResponse;
 
@@ -46,8 +46,8 @@ public class AuInsertAfter extends AuResponse {
 		super("addAft", anchor, toArray(anchor, contents));
 	}
 	private static Object[] toArray(Component anchor, Collection<String> contents) {
-		if (anchor instanceof Native || anchor instanceof StubComponent)
-			throw new UiException("Adding a component after a native one not allowed: "+anchor);
+		if (anchor instanceof Native || anchor instanceof StubsComponent)
+			throw new UiException("Adding a component after native or stubs not allowed: "+anchor);
 
 		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}

@@ -1,0 +1,32 @@
+<zk xmlns:w="client" xmlns:n="xhtml">
+
+<n:pre>
+	1.Click the "fail" button 
+	2.if you see a log for "size:0" , that's corret,
+	  if you see a dialog that shows "fail to mount" error box , that's wrong.
+	   
+</n:pre>
+
+
+<button label="fail" onClick='p1.invalidate();'/>
+<script><![CDATA[
+zk.afterLoad('zul.wnd',function(){
+var ss = {};
+zk.override(zul.wnd.Panel.prototype,ss,{
+onChildAdded_ : function(){
+ss.onChildAdded_.apply(this,arguments);
+zk.log("size:"+jq("@div").size());
+}
+});
+});
+]]></script>
+<panel id="p1" >
+<panelchildren>
+<div id="div1">
+<div id="div2" >
+<label id="lab" value="a label" />
+</div>
+</div>
+</panelchildren>
+</panel>
+</zk>

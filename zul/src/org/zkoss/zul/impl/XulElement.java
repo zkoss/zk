@@ -64,6 +64,8 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * <dd>Insert</dd>
 	 * <dt>#del</dt>
 	 * <dd>Delete</dd>
+	 * <dt>#bak</dt>
+	 * <dd>Backspace</dd> 
 	 * <dt>#left</dt>
 	 * <dd>Left arrow</dd>
 	 * <dt>#right</dt>

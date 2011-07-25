@@ -59,7 +59,6 @@ import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
@@ -229,13 +228,26 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
- *
+ * 
+ * <dt>org.zkoss.zul.listbox.preloadSize</dt>.(since 5.0.8) 
+ * <dd>Specifies the number of items to preload when receiving
+ * the rendering request from the client.
+ * <p>It is used only if live data ({@link #setModel(ListModel)} and
+ * not paging ({@link #getPagingChild}).</dd>
+ * 
+ * <dt>org.zkoss.zul.listbox.initRodSize</dt>.(since 5.0.8) 
+ * <dd>Specifies the number of items rendered when the Listbox first render.
+ * <p>
+ * It is used only if live data ({@link #setModel(ListModel)} and not paging
+ * ({@link #getPagingChild}).</dd>
+ * 
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends MeshElement implements Paginated {
+public class Listbox extends MeshElement {
+	private static final long serialVersionUID = 2009111111L;
 	public static final String LOADING_MODEL = "org.zkoss.zul.loadingModel";
 	public static final String SYNCING_MODEL = "org.zkoss.zul.syncingModel";
 
@@ -263,8 +275,6 @@ public class Listbox extends MeshElement implements Paginated {
 	private transient Collection<Component> _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
-
-	private String _pagingPosition = "bottom";
 	/** The name. */
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
@@ -296,7 +306,7 @@ public class Listbox extends MeshElement implements Paginated {
 
 	private transient boolean _rod;
 	private String _emptyMessage;
-
+	
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -1129,38 +1139,6 @@ public class Listbox extends MeshElement implements Paginated {
 
 	// --Paging--//
 	/**
-	 * Sets how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 *
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 * @since 3.0.4
-	 */
-	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null
-				|| (!pagingPosition.equals("top")
-						&& !pagingPosition.equals("bottom") && !pagingPosition
-						.equals("both")))
-			throw new WrongValueException("Unsupported position : "
-					+ pagingPosition);
-		if (!Objects.equals(_pagingPosition, pagingPosition)) {
-			_pagingPosition = pagingPosition;
-			smartUpdate("pagingPosition", pagingPosition);
-		}
-	}
-
-	/**
-	 * Returns how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 *
-	 * @since 3.0.4
-	 */
-	public String getPagingPosition() {
-		return _pagingPosition;
-	}
-
-	/**
 	 * Returns the paging controller, or null if not available. Note: the paging
 	 * controller is used only if {@link #getMold} is "paging".
 	 *
@@ -1279,58 +1257,7 @@ public class Listbox extends MeshElement implements Paginated {
 		return _paging;
 	}
 
-	/**
-	 * Returns the page size, aka., the number items per page.
-	 *
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize() {
-		return pgi().getPageSize();
-	}
-
-	/**
-	 * Sets the page size, aka., the number items per page.
-	 *
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException {
-		pgi().setPageSize(pgsz);
-	}
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 *
-	 * @since 3.0.4
-	 */
-	public int getPageCount() {
-		return pgi().getPageCount();
-	}
-
-	/**
-	 * Returns the active page (starting from 0).
-	 *
-	 * @since 3.0.4
-	 */
-	public int getActivePage() {
-		return pgi().getActivePage();
-	}
-
-	/**
-	 * Sets the active page (starting from 0).
-	 *
-	 * @since 3.0.4
-	 * @see #setActivePage(Listitem)
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-		pgi().setActivePage(pg);
-	}
-
-	private Paginal pgi() {
+	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
 		return _pgi;
@@ -1613,8 +1540,7 @@ public class Listbox extends MeshElement implements Paginated {
 					}
 					final int[] g = _groupsInfo.get(getGroupCount() - 1);
 
-					g[2] = ((Listitem) getItems().get(
-							getItems().size() - 1))
+					g[2] = ((Listitem) getItems().get(getItems().size() - 1))
 							.getIndex();
 				} else if (refChild instanceof Listitem) {
 					final int idx = ((Listitem) refChild).getIndex();
@@ -2257,6 +2183,8 @@ public class Listbox extends MeshElement implements Paginated {
 					_model.removeListDataListener(_dataListener);
 					if (_model instanceof GroupsListModel)
 						getItems().clear();
+					
+					resetDataLoader(); // Bug 3357641
 				} else {
 					getItems().clear(); // Bug 1807414
 					if (!inSelectMold())
@@ -2371,6 +2299,13 @@ public class Listbox extends MeshElement implements Paginated {
 					// all
 				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 					getDataLoader().syncModel(-1, -1); // have to recreate all
+				} else {
+					//bug# 3039282, we need to resyncModel if not in a defer mode
+					final Execution exec = Executions.getCurrent();
+					final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Listbox.deferInitModel_"+getUuid()) != null;
+					final boolean rod = evalRod();
+					if (!defer || !rod)
+						getDataLoader().syncModel(-1, -1);
 				}
 			}
 		}
@@ -2388,7 +2323,7 @@ public class Listbox extends MeshElement implements Paginated {
 					.newInstanceByThread(clsnm));
 	}
 
-	/**
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
 	 * Returns the number of items to preload when receiving the rendering
 	 * request from the client.
 	 *
@@ -2410,7 +2345,7 @@ public class Listbox extends MeshElement implements Paginated {
 		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
 
-	/**
+	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
 	 * Sets the number of items to preload when receiving the rendering request
 	 * from the client.
 	 * <p>
@@ -2449,7 +2384,6 @@ public class Listbox extends MeshElement implements Paginated {
 	}
 	
 	private void doInitRenderer() {
-	
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
@@ -2475,11 +2409,12 @@ public class Listbox extends MeshElement implements Paginated {
 			if (realOfs < 0)
 				realOfs = 0;
 			boolean open = true;
-			for (Iterator it = getItems().listIterator(realOfs); j < pgsz
-					&& it.hasNext();) {
-				final Listitem item = (Listitem) it.next();
+			for (Listitem item = getItems().size() <= realOfs ? null: (Listitem)getItems().get(realOfs), nxt;
+			j < pgsz && item != null; item = nxt) {
+				nxt = nextListitem(item); //retrieve first since it might be changed
+
 				if (item.isVisible()
-						&& (open || item instanceof Listgroupfoot || item instanceof Listgroup)) {
+				&& (open || item instanceof Listgroupfoot || item instanceof Listgroup)) {
 					renderer.render(item);
 					++j;
 				}
@@ -2494,6 +2429,11 @@ public class Listbox extends MeshElement implements Paginated {
 			renderer.doFinally();
 		}
 		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the listbox when items have been rendered.
+	}
+	private static Listitem nextListitem(Listitem item) {
+		final Component c = item.getNextSibling();
+		return c instanceof Listitem ? (Listitem)c: null;
+			//listitem must be placed contineously
 	}
 	private void postOnInitRender() {
 		// 20080724, Henri Chen: optimize to avoid postOnInitRender twice
@@ -2562,6 +2502,9 @@ public class Listbox extends MeshElement implements Paginated {
 
 			try {
 				_renderer.render(item, value);
+				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				if (v != null) //a new listitem is created to replace the existent one
+					item = (Listitem)v;
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -2639,8 +2582,10 @@ public class Listbox extends MeshElement implements Paginated {
 
 		final Renderer renderer = new Renderer();
 		try {
-			for (Iterator it = getItems().iterator(); it.hasNext();)
-				renderer.render((Listitem) it.next());
+			for (Listitem item = getItems().size() <= 0 ? null: (Listitem)getItems().get(0), nxt; item != null; item = nxt) {
+				nxt = nextListitem(item); //retrieve first since it might be changed
+				renderer.render(item);
+			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -2689,7 +2634,7 @@ public class Listbox extends MeshElement implements Paginated {
 					removePagingListener(_pgi);
 				}
 				if (getModel() != null) {
-					getDataLoader().syncModel(0, INIT_LIMIT); // change offset back to 0
+					getDataLoader().syncModel(0, initRodSize()); // change offset back to 0
 					postOnInitRender();
 				}
 				invalidate(); // paging mold -> non-paging mold
@@ -2813,7 +2758,7 @@ public class Listbox extends MeshElement implements Paginated {
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			_dataLoader.init(this, 0, INIT_LIMIT);
+			_dataLoader.init(this, 0, initRodSize());
 		}
 		return _dataLoader;
 	}
@@ -2833,6 +2778,7 @@ public class Listbox extends MeshElement implements Paginated {
 		if (_dataLoader != null) {
 			_dataLoader.reset();
 			_dataLoader = null;
+			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
 	}
 
@@ -3001,8 +2947,6 @@ public class Listbox extends MeshElement implements Paginated {
 			if (_model != null)
 				render(renderer, "model", true);
 
-			if (!"bottom".equals(_pagingPosition))
-				render(renderer, "pagingPosition", _pagingPosition);
 			if (!"100%".equals(_innerWidth))
 				render(renderer, "innerWidth", _innerWidth);
 			if (_currentTop != 0)
@@ -3014,8 +2958,12 @@ public class Listbox extends MeshElement implements Paginated {
 			renderer.render("_totalSize", getDataLoader().getTotalSize());
 			renderer.render("_offset", getDataLoader().getOffset());
 
-			if (_rod && ((Cropper)getDataLoader()).isCropper()) { //bug #2936064
-				renderer.render("_listbox$rod", true);
+			if (_rod) { 
+				if (((Cropper)getDataLoader()).isCropper())//bug #2936064
+					renderer.render("_listbox$rod", true);
+				int sz = initRodSize();
+				if (sz != INIT_LIMIT)
+					renderer.render("initRodSize", initRodSize());
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
@@ -3025,6 +2973,8 @@ public class Listbox extends MeshElement implements Paginated {
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
 				renderer.render("groupSelect", true);
+			if (!inPagingMold() && _jsel >= 0)
+				renderer.render("selectedIndex", _jsel); // B50-ZK-56
 		}
 	}
 	/** Returns whether to toggle a list item selection on right click
@@ -3043,6 +2993,41 @@ public class Listbox extends MeshElement implements Paginated {
 			val = Library.getProperty(attr);
 		return val instanceof Boolean ? ((Boolean)val).booleanValue():
 			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+	}
+	
+	/** 
+	 * Returns the number of items to preload when receiving the rendering
+	 * request from the client.
+	 * <p>
+	 * Default: 7.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int preloadSize() {
+		final String size = (String) getAttribute("pre-load-size");
+		int sz = size != null ? Integer.parseInt(size) : _preloadsz;
+		
+		if ((sz = Utils.getIntAttribute(this, 
+				"org.zkoss.zul.listbox.preloadSize", sz, true)) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
+	}
+	
+	/** 
+	 * Returns the number of items rendered when the Listbox first render.
+	 *  <p>
+	 * Default: 100.
+	 * <p>
+	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
+	 * ({@link #getPagingChild}.
+	 */
+	private int initRodSize() {
+		int sz = Utils.getIntAttribute(this, "org.zkoss.zul.listbox.initRodSize",
+				INIT_LIMIT, true);
+		if ((sz) < 0)
+			throw new UiException("nonnegative is required: " + sz);
+		return sz;
 	}
 	
 	/** Returns whether to sort all of item when model or sort direction be changed.
@@ -3090,7 +3075,7 @@ public class Listbox extends MeshElement implements Paginated {
 				Executions.getCurrent().setAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid(), Boolean.TRUE); //indicate doing dataloading
 			}
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
-					getPreloadSize()));
+					preloadSize()));
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
 			final Map data = request.getData();
 			final int oldsize = getPageSize();

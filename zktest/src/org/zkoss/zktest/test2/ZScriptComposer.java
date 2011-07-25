@@ -1,4 +1,4 @@
-/* ZscriptComposer.java
+/* ZScriptComposer.java
 
 {{IS_NOTE
 	Purpose:
@@ -22,13 +22,14 @@ package org.zkoss.zktest.test2;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.GenericAutowireComposer;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
+import org.zkoss.zul.Button;
 
 /**
- * Test whether ZScript variable can be wired.
+ * Test whether zscript's variable can be wired.
  * @author henrichen
  *
  */
-public class ZscriptComposer extends GenericForwardComposer {
+public class ZScriptComposer extends GenericForwardComposer {
 	private Integer zscriptVar;
 	private Button show;
 	

@@ -881,6 +881,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (tl) tl.firstChild.style.width = "";
 				if (hl) hl.firstChild.style.width = "";
 				if (bl) bl.firstChild.style.width = "";
+				
+				// for B50-3317729.zul
+				if (this._hflex == 'min')
+					zk(n).redoCSS();
 			}
 		}
 	} : zk.$void,
@@ -1193,9 +1197,24 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (_isModal(this._mode))
 			_updDomPos(this, true); //force re-position since window width might changed.
 	},
+	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+		if (isFlexMin) {
+			height += this._titleHeight(n) +
+				(zul.wnd.WindowRenderer.shallCheckBorder(this) ? jq(n).find('>div:last')[0].offsetHeight : 0);
+		}
+		this.$supers('setFlexSizeH_', arguments);
+	},
 	//@Override, do not count size of floating window in flex calculation. bug #3172785.
 	ignoreFlexSize_: function (type) {
 		return this._mode != 'embedded';
+	}
+	,
+	insertChildHTML_: function(child, before, desktop){
+		//Bug : 3353521
+		if (child.$instanceof(zul.wgt.Caption))
+			jq(this.$n("cap")).empty().append(child.redrawHTML_());
+		else
+			this.$supers('insertChildHTML_', arguments);
 	}
 },{ //static
 	// drag sizing (also referenced by Panel.js)

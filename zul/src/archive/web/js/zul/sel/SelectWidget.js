@@ -42,15 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
 				$headercm = jq(box._headercm);
-			var checked;
-			for (var it = box.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
-				if (!w.isDisabled() && !w.isSelected()) {
-					checked = false;
-					break;
-				} else
-					checked = true;
-
-			$headercm[checked ? "addClass": "removeClass"](zcls);
+			$headercm[box._isAllSelected() ? "addClass": "removeClass"](zcls);
 		}
 	}
 	function _isButton(evt) {
@@ -417,6 +409,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
 
+			// Fixed for B50-3315594.zul
+			if (zk.opera) {
+				this.ebody.style.height = ''; //reset first to hide scrollbar
+				if (this.ebody.offsetHeight) {} // force to recalculate
+			}
+			
 			this.ebody.style.height = hgh + "px";
 
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
@@ -880,7 +878,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		var focusfound = false, rowfound = false;
-		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
 			if (w.isDisabled()) continue; // Bug: 2030986
 			if (focusfound) {
 				this._changeSelect(w, true);
@@ -890,6 +888,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._changeSelect(w, true);
 				if (this._isFocus(w) || w == this._lastSelectedItem)
 					break;
+			} else if (!si) { // Bug: 3337441
+				if (w != row)
+					continue;
+				this._changeSelect(w, true);
+				break;
 			} else {
 				rowfound = w == row;
 				focusfound = this._isFocus(w) || w == this._lastSelectedItem;
@@ -985,11 +988,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (it[j].isSelected())
 				data.push(it[j]);
 
-		var edata, keep;
+		var edata, keep = true;
 		if (evt) {
-			edata = evt.data
-			if (this._multiple)
-				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+			edata = evt.data;
+			if (this._multiple && this._cdo)
+				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
+					(evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
@@ -1058,6 +1062,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
+	},
+	_isAllSelected: function () {
+		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
+			if (!w.isDisabled() && !w.isSelected())
+				return false;
+		return true;
 	},
 	_ignoreHghExt: function () {
 		return this._rows > 0;

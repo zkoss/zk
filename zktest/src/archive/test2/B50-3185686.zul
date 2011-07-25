@@ -1,9 +1,5 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>In each of the following Divs, only one scrollbar shoule be shown (so there are two in total). Otherwise it is a bug.</li>
-		</ol>
-	]]></html>
+	In each of the following Divs, only one scrollbar shoule be shown (so there are two in total). Otherwise it is a bug.
 	<div width="300px" height="300px" style="overflow: auto">
 		<div hflex="1" height="1000px" style="border: 1px solid green">Div Content</div>
 	</div>

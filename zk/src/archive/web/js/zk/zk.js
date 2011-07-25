@@ -1069,7 +1069,7 @@ zk.endProcessing();
 	 * @see #stamp(String, boolean)
 	 */
 	error: function (msg) {
-		zAu.send(new zk.Event(null, "error", msg, {ignorable: true}), 800);
+		zAu.send(new zk.Event(null, "error", {message: msg}, {ignorable: true}), 800);
 		_zErb.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.

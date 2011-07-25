@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.Utils;
 
@@ -28,11 +28,7 @@ import org.zkoss.zk.xel.impl.Utils;
  * @author tomyeh
  * @since 3.5.0
  */
-public class ZkInfo extends ComponentInfo {
-	/** A special definition to represent the zk component. */
-	/*package*/ final static ComponentDefinition ZK =
-		new ComponentDefinitionImpl(null, null, "zk", Component.class);;
-
+public class ZkInfo extends ForEachBranchInfo {
 	/** The swith condition. */
 	private ExValue _switch;
 	/** The case codition. */
@@ -40,8 +36,8 @@ public class ZkInfo extends ComponentInfo {
 
 	/** Constructs a ZK info.
 	 */
-	public ZkInfo(NodeInfo parent) {
-		super(parent, ZK);
+	public ZkInfo(NodeInfo parent, ConditionImpl cond) {
+		super(parent, cond);
 	}
 
 	/** Returns whether the switch condition is defined.
@@ -67,8 +63,8 @@ public class ZkInfo extends ComponentInfo {
 	public Object resolveSwitch(Page page, Component comp) {
 		return _switch == null ? null:
 			comp != null ?
-				_switch.getValue(getEvaluator(), comp):
-				_switch.getValue(getEvaluator(), page);
+				_switch.getValue(_evalr, comp):
+				_switch.getValue(_evalr, page);
 	}
 	/** Returns whether the case condition is defined.
 	 */
@@ -93,8 +89,14 @@ public class ZkInfo extends ComponentInfo {
 		Object[] ary = new Object[_case.length];
 		for (int j = 0; j < _case.length; ++j)
 			ary[j] = comp != null ?
-				_case[j].getValue(getEvaluator(), comp):
-				_case[j].getValue(getEvaluator(), page);
+				_case[j].getValue(_evalr, comp):
+				_case[j].getValue(_evalr, page);
 		return ary;
+	}
+
+	//Object//
+	//@Override
+	public String toString() {
+		return "[ZkInfo@" + System.identityHashCode(this) + ']';
 	}
 }

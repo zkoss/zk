@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?script src="~./js/zk.debug.wpd"?>
 <!--
 stubonly.zul
 
@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <window title="test of stub-only" border="normal">
 	<zscript>
 	void on(Event event) {
-		inf.appendChild(new Label(event.getClass().getName()+":"+event.getName()));
+		inf.appendChild(new Label(event.getClass().getName()+":"+event.getName()+":"+event.getTarget()));
 	}
 	</zscript>
 	<button label="invalidate window" onClick="self.parent.invalidate()"/>
@@ -40,4 +40,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		</hbox>
 	</vbox>
 	<vbox id="inf"/>
+	<button label="dump dom" w:onClick="zDebug.dumpDomTree(this.parent)" xmlns:w="client"/>
+	<button label="dump wgt" w:onClick="zDebug.dumpWidgetTree(this.parent)" xmlns:w="client"/>
 </window>

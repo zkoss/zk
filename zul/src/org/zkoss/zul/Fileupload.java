@@ -20,9 +20,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.media.Media;
+import org.zkoss.util.logging.Log;
 
+import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -61,6 +62,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @see Filedownload
  */
 public class Fileupload extends Button { //not XulElement since not applicable
+	private static final Log log = Log.lookup(Fileupload.class);
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 	
 	public Fileupload() {
@@ -115,7 +117,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
-	public static Media get() throws InterruptedException {
+	public static Media get() {
 		return get(null, null, false);
 	}
 	/** Opens a modal dialog with the default message and title,
@@ -136,7 +138,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
-	public static Media get(boolean alwaysNative) throws InterruptedException {
+	public static Media get(boolean alwaysNative) {
 		return get(null, null, alwaysNative);
 	}
 	/** Opens a modal dialog with the specified message and title,
@@ -151,8 +153,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
-	public static Media get(String message, String title)
-	throws InterruptedException {
+	public static Media get(String message, String title) {
 		return get(message, title, false);
 	}
 	/** Opens a modal dialog with the specified message and title,
@@ -175,8 +176,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
-	public static Media get(String message, String title, boolean alwaysNative)
-	throws InterruptedException {
+	public static Media get(String message, String title, boolean alwaysNative) {
 		final Media[] result = get(message, title, 1, alwaysNative);
 		return result != null ? result[0]: null;
 	}
@@ -192,7 +192,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
-	public static Media[] get(int max) throws InterruptedException {
+	public static Media[] get(int max) {
 		return get(null, null, max, false);
 	}
 	/** Opens a modal dialog to upload mulitple files with
@@ -215,8 +215,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
 	 */
-	public static Media[] get(int max, boolean alwaysNative)
-	throws InterruptedException {
+	public static Media[] get(int max, boolean alwaysNative) {
 		return get(null, null, max, alwaysNative);
 	}
 	/** Opens a modal dialog to upload multiple files with
@@ -234,8 +233,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * has to listen the onUpload event. For more information, refer to
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
-	public static Media[] get(String message, String title, int max)
-	throws InterruptedException {
+	public static Media[] get(String message, String title, int max) {
 		return get(message, title, max, false);
 	}
 	/** Opens a modal dialog to upload multiple files with
@@ -258,8 +256,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @since 3.0.0
 	 */
 	public static
-	Media[] get(String message, String title, int max, boolean alwaysNative)
-	throws InterruptedException {
+	Media[] get(String message, String title, int max, boolean alwaysNative) {
 		return get(message, title, max, -1, alwaysNative);
 	}
 	/** Opens a modal dialog to upload multiple files with
@@ -283,8 +280,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * @since 3.6.0
 	 */
 	public static
-	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
-	throws InterruptedException {
+	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative) {
 		final Map<String, Object> params = new HashMap<String, Object>(8);
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
@@ -300,9 +296,11 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		try {
 			dlg.doModal();
 		} catch (Throwable ex) {
-			dlg.detach();
-			if (ex instanceof InterruptedException)
-				throw (InterruptedException)ex;
+			try {
+				dlg.detach();
+			} catch (Throwable ex2) {
+				log.warningBriefly("Failed to detach when recovering from an error", ex2);
+			}
 			throw UiException.Aide.wrap(ex);
 		}
 		return dlg.getResult();

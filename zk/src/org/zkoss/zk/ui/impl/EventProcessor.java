@@ -286,7 +286,7 @@ public class EventProcessor {
 	public EventListener getEventListener() {
 		return _listener;
 	}
-	public ZScript getEventZscript() {
+	public ZScript getEventZScript() {
 		return _zscript;
 	}
 	public void update(Method mtd, EventListener ln, ZScript zs) {

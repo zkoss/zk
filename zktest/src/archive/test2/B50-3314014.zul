@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3314014.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>IE 6 only.</li>
+			<li>You should see 3 Separators. a) Horizontal, full width, b) Vertical between red and blue blocks, c) Horizontal between red and blue blocks.</li>
+		</ol>
+	]]></html>
+	<separator bar="true" />
+	<hlayout>
+		<div width="220px" height="270px" style="border:1px solid blue" />
+		<separator orient="vertical" bar="true" vflex="1" />
+		<div width="220px" height="270px" style="border:1px solid red" />
+	</hlayout>
+	<vlayout>
+		<div width="220px" height="270px" style="border:1px solid blue" />
+		<separator bar="true" width="220px" />
+		<div width="220px" height="270px" style="border:1px solid red" />
+	</vlayout>
+</zk>

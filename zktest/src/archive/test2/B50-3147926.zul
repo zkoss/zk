@@ -1,18 +1,17 @@
 <zk>
-<html>
-<![CDATA[
-<ol>
-<li>Double click on the right border of the 3rd column</li>
-<li>The 3rd column shall shrink to just accommodate its content</li>
-<li>Double click on the header border between 2st column and 3rd column</li>
-<li>The 2nd column shall expand to just accommodate its content</li>
-<li>Double click on the header border between 1st column and 2nd column</li>
-<li>The 1st column shall expand to just accommodate its content</li>
-<li>press "invalidate" button, the Listbox shall be as it was(no change)</li>
-<li>done</li>
-</ol>
-]]>
-</html>
+1. Double click on the right border of the 3rd column
+<separator/>
+2. The 3rd column shall shrink to just accommodate its content
+<separator/>
+3. Double click on the header border between 2st column and 3rd column
+<separator/>
+4. The 2nd column shall expand to just accommodate its content
+<separator/>
+5. Double click on the header border between 1st column and 2nd column
+<separator/>
+6. The 1st column shall expand to just accommodate its content
+<separator/>
+7. press "invalidate" button, the Listbox shall be as it was(no change)
 <zscript>
 String[] msgs = {
 	"ZK Ajax Framework",

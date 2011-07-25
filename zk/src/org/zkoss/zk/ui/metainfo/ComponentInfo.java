@@ -25,8 +25,6 @@ import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.zkoss.lang.D;
-import org.zkoss.lang.Strings;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.CollectionsX;
 
@@ -39,14 +37,10 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.ui.util.ForEach;
-import org.zkoss.zk.ui.util.ForEachImpl;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
 
 /**
@@ -61,11 +55,7 @@ import org.zkoss.zk.xel.impl.Utils;
  *
  * @author tomyeh
  */
-public class ComponentInfo extends NodeInfo
-implements Cloneable, Condition, java.io.Externalizable {
-	/** Note: it is NodeInfo's job to serialize _evalr. */
-	private transient EvaluatorRef _evalr;
-	private transient NodeInfo _parent; //it is restored by its parent
+public class ComponentInfo extends ForEachBranchInfo {
 	private transient ComponentDefinition _compdef;
 	/** The implemetation class/component (use). */
 	private ExValue _impl;
@@ -83,10 +73,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
 	private String _tag;
-	/** The effectiveness condition (see {@link #isEffective}).
-	 * If null, it means effective.
-	 */
-	private ConditionImpl _cond;
 	/** The fulfill condition.
 	 */
 	private String _fulfill;
@@ -96,12 +82,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The forward condition.
 	 */
 	private String _forward;
-	/** The forEach content, i.e., what to iterate.
-	 */
-	private ExValue[] _forEach;
-	/** The forEach info: [forEachBegin, forEachEnd].
-	 */
-	private ExValue[] _forEachInfo;
 	/** The widget class. */
 	private ExValue _wgtcls;
 	private String _replaceableText;
@@ -116,14 +96,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef,
 	String tag) {
-		if (parent == null || compdef == null)
-			throw new IllegalArgumentException();
+		super(parent, null);
 
-		_parent = parent;
+		if (compdef == null)
+			throw new IllegalArgumentException();
 		_compdef = compdef;
 		_tag = tag;
-		_parent.appendChildDirectly(this);
-		_evalr = parent.getEvaluatorRef();
 	}
 	/** Constructs the info about how to create a component that is not
 	 * a dynamic tag.
@@ -132,38 +110,17 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
 		this(parent, compdef, null);
 	}
-	/** This constructor is used only for {@link java.io.Externalizable}.
-	 * Don't call it, otherwise.
-	 * @since 3.0.0
-	 */
-	public ComponentInfo() {
-	}
-	/** Constructs the info that doesn't have a parent.
-	 * @since 3.5.0
-	 */
-	public ComponentInfo(EvaluatorRef evalr, ComponentDefinition compdef,
-	String tag) {
-		if (compdef == null)
-			throw new IllegalArgumentException();
-		_compdef = compdef;
-		_tag = tag;
-		_evalr = evalr;
-	}
 	/** Used only by {@link DupComponentInfo}.
 	 */
 	private ComponentInfo(ComponentInfo compInfo) {
-		_parent = compInfo._parent; //direct copy since it is 'virtual'
-		_children = compInfo._children;
-		_evalr = compInfo._evalr;
+		super(compInfo);
+
 		_compdef = compInfo._compdef;
 		_impl = compInfo._impl;
 		_tag = compInfo._tag;
-		_cond = compInfo._cond;
 		_fulfill = compInfo._fulfill;
 		_apply = compInfo._apply;
 		_forward = compInfo._forward;
-		_forEach = compInfo._forEach;
-		_forEachInfo = compInfo._forEachInfo;
 		_replaceableText = compInfo._replaceableText;
 
 		dupProps(compInfo);
@@ -196,19 +153,15 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _compdef;
 	}
 
-	/** Adds a Sting child.
-	 * Note: it is callable only if this is an instance of {@link NativeInfo}
-	 * or {@link #getComponentDefinition} is {@link ZkInfo#ZK}.
+	/** Adds a child.
 	 *
 	 * @exception IllegalStateException if this is not an instance of
-	 * {@link NativeInfo}, nor {@link #getComponentDefinition} is not
-	 * {@link ZkInfo#ZK}.
-	 * @since 3.5.0
+	 * {@link NativeInfo} and the child is {@link TextInfo}.
 	 */
-	public void appendChild(TextInfo text) {
-		if (!(this instanceof NativeInfo) && !(this instanceof ZkInfo))
-			throw new IllegalStateException("NativeInfo or <zk> required");
-		appendChildDirectly(text);
+	public void appendChild(NodeInfo child) {
+		if ((child instanceof TextInfo) && !(this instanceof NativeInfo))
+			throw new IllegalStateException("TextInfo cannot be a child of "+this);
+		super.appendChild(child);
 	}
 
 	/** Returns the tag name, or null if no tag name.
@@ -216,24 +169,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public String getTag() {
 		return _tag;
-	}
-
-	/** Sets the parent.
-	 */
-	public void setParent(NodeInfo parent) {
-		//we don't check if parent is changed (since we have to move it
-		//to the end)
-		if (_parent != null)
-			_parent.removeChildDirectly(this);
-
-		_parent = parent;
-
-		if (_parent != null)
-			_parent.appendChildDirectly(this);
-	}
-	/** Used for implementation only. */
-	/*package*/ void setParentDirectly(NodeInfo parent) {
-		_parent = parent;
 	}
 
 	/** Returns the property name to which the text enclosed within
@@ -619,60 +554,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _wgtcls != null ? (String)_wgtcls.getValue(getEvaluator(), comp): null;
 	}
 
-	/** Sets the effectiveness condition.
-	 */
-	public void setCondition(ConditionImpl cond) {
-		_cond = cond;
-	}
-	/** Tests if the condition is set
-	 * @since 3.6.0
-	 */
-	public boolean withCondition() {
-		return _cond != null;
-	}
-
-	/** Returns the forEach object if the forEach attribute is defined
-	 * (or {@link #setForEach} is called).
-	 *
-	 * <p>If comp is not null, both pagedef and page are ignored.
-	 * If comp is null, page must be specified.
-	 *
-	 * @param page the page. It is used only if comp is null.
-	 * @param comp the component.
-	 * @return the forEach object to iterate this info multiple times,
-	 * or null if this info shall be interpreted only once.
-	 * @since 3.5.0
-	 */
-	public ForEach resolveForEach(Page page, Component comp) {
-		return _forEach == null ? null:
-			comp != null ?
-				ForEachImpl.getInstance(
-					_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1]):
-				ForEachImpl.getInstance(
-					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
-	}
-	/** Sets the forEach attribute, which is usually an expression.
-	 * @param expr the expression to return a collection of objects, or
-	 * null/empty to denote no iteration.
-	 */
-	public void setForEach(String expr, String begin, String end) {
-		_forEach = Utils.parseList(expr, Object.class, false);
-			//forEach="" means to iterate a single-element array and the value
-			//is empty
-		_forEachInfo = _forEach == null ? null:
-			new ExValue[] {
-				begin != null && begin.length() > 0 ?
-					new ExValue(begin, Integer.class): null,
-				end != null && end.length() > 0 ?
-					new ExValue(end, Integer.class): null};
-	}
-	/** Returns whether the forEach condition is defined.
-	 * @since 3.0.0
-	 */
-	public boolean withForEach() {
-		return _forEach != null;
-	}
-
 	/** Returns the class name or an expression returning a class instance,
 	 * a class name, or a component.
 	 * It is the same value that {@link #setImplementation} was called.
@@ -895,13 +776,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_annots.addAnnotation(propName, annotName, annotAttrs);
 	}
 
-	/** Returns the evaluator.
-	 * @since 3.5.0
-	 */
-	public Evaluator getEvaluator() {
-		return _evalr.getEvaluator();
-	}
-
 	/** Duplicates the specified component info but retaining
 	 * the same but virtual parent-child relationship.
 	 * It is designed to use with
@@ -929,226 +803,54 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return new DupComponentInfo(this);
 	}
 
-	//Condition//
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
-	}
-
-	//NodeInfo//
-	public PageDefinition getPageDefinition() {
-		return _evalr.getPageDefinition();
-	}
-	public NodeInfo getParent() {
-		return _parent;
-	}
-	protected EvaluatorRef getEvaluatorRef() {
-		return _evalr;
-	}
-
-	//Cloneable//
-	/** Clones this info.
-	 * After cloned, {@link #getParent} is null.
-	 * The children (@{link #getChildren}) is not cloned, either.
-	 * Thus, it is better to use {@link #duplicate} with
-	 * {@link org.zkoss.zk.ui.util.ComposerExt#doBeforeCompose}
-	 * if you want to override some properties.
-	 */
-	public Object clone() {
-		try {
-			final ComponentInfo info = (ComponentInfo)super.clone();
-			info._parent = null;
-			info.dupProps(this);
-			return info;
-		} catch (CloneNotSupportedException ex) {
-			throw new InternalError();
-		}
-	}
 	//Object//
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(64)
-			.append("[ComponentInfo: ")
-			.append(_compdef.getName());
+			.append('[')
+			.append(this instanceof NativeInfo ? "NativeInfo": "ComponentInfo");
+		if (_compdef != null)
+			sb.append(": ").append(_compdef.getName());
 		if (_tag != null)
 			sb.append(" <").append(_tag).append('>');
 		return sb.append(']').toString();
 	}
 
-	//Externalizable//
-	public final void writeExternal(java.io.ObjectOutput out)
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
-		if (getSerializingEvalRef() != _evalr) {
-			pushSerializingEvalRef(_evalr);
-			try {
-				out.writeObject(_evalr);
-				writeMembers(out);
-			} finally {
-				popSerializingEvalRef();
-			}
-		} else {
-			out.writeObject(null); //to save space, don't need to write evalr
-			writeMembers(out);
-		}
-	}
-	/** Don't override this method. Rather, override {@link #readMembers}.
-	 * @since 3.0.0
-	 */
-	public final void readExternal(java.io.ObjectInput in)
-	throws java.io.IOException, ClassNotFoundException {
-		_evalr = (EvaluatorRef)in.readObject();
-		final EvaluatorRef top = getSerializingEvalRef();
-		if (_evalr == null)
-			_evalr = top;
-
-		if (_evalr != null &&  top != _evalr) {
-			pushSerializingEvalRef(_evalr);
-			try {
-				readMembers(in);
-			} finally {
-				popSerializingEvalRef();
-			}
-		} else {
-			readMembers(in);
-		}
-	}
-	private void writeMembers(java.io.ObjectOutput out)
-	throws java.io.IOException {
-		out.writeObject(_children);
+		s.defaultWriteObject();
 
 		final LanguageDefinition langdef = _compdef.getLanguageDefinition();
 		if (langdef != null) {
-			out.writeObject(langdef.getName());
-			out.writeObject(_compdef.getName());
+			s.writeObject(langdef.getName());
+			s.writeObject(_compdef.getName());
 		} else {
-			out.writeObject(_compdef);
+			s.writeObject(_compdef);
 		}
-
-		out.writeObject(_impl);
-		out.writeObject(_props);
-		out.writeObject(_evthds);
-		out.writeObject(_wgtlsns);
-		out.writeObject(_wgtovds);
-		out.writeObject(_wgtattrs);
-		out.writeObject(_annots);
-		out.writeObject(_tag);
-		out.writeObject(_cond);
-		out.writeObject(_fulfill);
-		out.writeObject(_apply);
-		out.writeObject(_forward);
-		out.writeObject(_forEach);
-		out.writeObject(_forEachInfo);
 	}
-	@SuppressWarnings("unchecked")
-	private void readMembers(java.io.ObjectInput in)
+	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
-		_children = (List)in.readObject();
-		for (Iterator it = _children.iterator(); it.hasNext();) {
-			final Object o = it.next();
-			if (o instanceof ComponentInfo)
-				((ComponentInfo)o).setParentDirectly(this);
-		}
+		s.defaultReadObject();
 
-		final Object v = in.readObject();
+		final Object v = s.readObject();
 		if (v instanceof String) {
 			final LanguageDefinition langdef = LanguageDefinition.lookup((String)v);
-			_compdef = langdef.getComponentDefinition((String)in.readObject());
+			_compdef = langdef.getComponentDefinition((String)s.readObject());
 		} else {
 			_compdef = (ComponentDefinition)v;
 		}
-
-		_impl = (ExValue)in.readObject();
-		_props = (List<Property>)in.readObject();
-		_evthds = (EventHandlerMap)in.readObject();
-		_wgtlsns = (List<WidgetListener>)in.readObject();
-		_wgtovds = (List<WidgetOverride>)in.readObject();
-		_wgtattrs = (List<WidgetAttribute>)in.readObject();
-		_annots = (AnnotationMap)in.readObject();
-		_tag = (String)in.readObject();
-		_cond = (ConditionImpl)in.readObject();
-		_fulfill = (String)in.readObject();
-		_apply = (ExValue[])in.readObject();
-		_forward = (String)in.readObject();
-		_forEach = (ExValue[])in.readObject();
-		_forEachInfo = (ExValue[])in.readObject();
 	}
-
-	/** Writes the evaluator reference.
-	 * It is called by {@link EvalRefStub} to serialize
-	 * the evaluator reference, in order to minimize the number of bytes
-	 * to serialize.
-	 */
-	/*package*/ static final
-	void writeEvalRef(java.io.ObjectOutputStream s, EvaluatorRef evalr)
-	throws java.io.IOException {
-		s.writeObject(getSerializingEvalRef() != evalr ? evalr: null);
-	}
-	/*package*/ static final
-	EvaluatorRef readEvalRef(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		final EvaluatorRef evalr = (EvaluatorRef)s.readObject();
-		return evalr != null ? evalr: getSerializingEvalRef();
-	}
-
-	/** Returns the evaluator reference of the info that is being serialized.
-	 * It is used to minimize the bytes to write when serialized.
-	 */
-	private static final EvaluatorRef getSerializingEvalRef() {
-		final List<EvaluatorRef> stack = _evalRefStack.get();
-		return stack == null || stack.isEmpty() ? null: stack.get(0);
-	}
-	/** Pushes the sepcified evaluator referene to be the current one.
-	 */
-	private static final void pushSerializingEvalRef(EvaluatorRef evalr) {
-		List<EvaluatorRef> stack = _evalRefStack.get();
-		if (stack == null)
-			_evalRefStack.set(stack = new LinkedList<EvaluatorRef>());
-		stack.add(0, evalr);
-	}
-	/** Pops out the current evaluator reference.
-	 */
-	private static final void popSerializingEvalRef() {
-		_evalRefStack.get().remove(0);
-	}
-	private static final ThreadLocal<List<EvaluatorRef>> _evalRefStack = new ThreadLocal<List<EvaluatorRef>>();
 
 	private static class DupComponentInfo extends ComponentInfo {
 		private DupComponentInfo(ComponentInfo compInfo) {
 			super(compInfo);
 		}
 
-		public void appendChild(ZScript zscript) {
+		public void appendChild(NodeInfo child) {
 			throw new UnsupportedOperationException();
 		}
-		public void appendChild(VariablesInfo variables) {
-			throw new UnsupportedOperationException();
-		}
-		public void appendChild(AttributesInfo custAttrs) {
-			throw new UnsupportedOperationException();
-		}
-		public void appendChild(ComponentInfo compInfo) {
-			throw new UnsupportedOperationException();
-		}
-		public boolean removeChild(ZScript zscript) {
-			throw new UnsupportedOperationException();
-		}
-		public boolean removeChild(VariablesInfo variables) {
-			throw new UnsupportedOperationException();
-		}
-		public boolean removeChild(AttributesInfo custAttrs) {
-			throw new UnsupportedOperationException();
-		}
-		public boolean removeChild(ComponentInfo compInfo) {
-			throw new UnsupportedOperationException();
-		}
-		/*pacakge*/ void appendChildDirectly(Object child) {
-			throw new UnsupportedOperationException();
-		}
-		/*package*/ boolean removeChildDirectly(Object child) {
-			throw new UnsupportedOperationException();
-		}
-		public void appendChild(TextInfo text) {
+		public boolean removeChild(NodeInfo child) {
 			throw new UnsupportedOperationException();
 		}
 	}

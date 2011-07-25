@@ -15,7 +15,7 @@
 	<hlayout>
 		<slider orient="vertical" />
 		<slider orient="vertical" width="400px" height="400px" />
-		<div height="400px" style="border: 1px solid green">
+		<div height="400px" hflex="min" style="border: 1px solid green">
 			<slider orient="vertical" vflex="1" />
 		</div>
 	</hlayout>

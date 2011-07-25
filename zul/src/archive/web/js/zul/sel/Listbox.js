@@ -145,10 +145,32 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		after.push(function () {
 			_syncFrozen(w);
 		});
+		this._syncSelInView();
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(Listbox, 'unbind_', arguments);
+	},
+	_syncSelInView: function () {
+		var index = this.getSelectedIndex();
+		if (index >= 0) { // B50-ZK-56
+			var si;
+			for (var it = this.getBodyWidgetIterator(); index-- >=0;)
+				si = it.next();
+			if (si) {
+				zk(si).scrollIntoView(this.ebody);
+				this._tmpScrollTop = this.ebody.scrollTop;
+			}
+		}
+	},
+	_doScroll: function () {
+		// B50-ZK-56
+		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
+		if (this._tmpScrollTop) {
+			this.ebody.scrollTop = this._tmpScrollTop; 
+			this._tmpScrollTop = null;
+		}
+		this.$super(zul.sel.Listbox, '_doScroll');
 	},
 	onResponse: function () {
 		if (this.desktop) {
@@ -368,7 +390,15 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * @see #itemIterator
 	 * @disable(zkgwt)
 	 */
-	getBodyWidgetIterator: _zkf
+	getBodyWidgetIterator: _zkf,
+	_updHeaderCM: function () {
+		// B50-3322970: need to clear Listheader _check cache
+		var lh;
+		if (this._headercm && this._multiple 
+			&& (lh = this.listhead) && (lh = lh.firstChild))
+			lh._checked = this._isAllSelected();
+		this.$supers('_updHeaderCM', arguments);
+	}
 });
 /**
  * The listitem iterator.

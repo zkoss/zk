@@ -1,9 +1,5 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>The height of Panel should be extended to the bottom of Portallayout. Otherwise it is a bug.</li>
-		</ol>
-	]]></html>
+The height of Panel should be extended to the bottom of Portallayout. Otherwise it is a bug.
 	<portallayout maximizedMode="whole" style="border:2px solid red" height="500px">
 		<portalchildren style="padding:5px;border:2px solid gray" vflex="1">
 			<panel title="Panel 1" border="normal" vflex="1">

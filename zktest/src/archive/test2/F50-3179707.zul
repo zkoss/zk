@@ -1,16 +1,11 @@
 <zk>
-<html>
-<![CDATA[
-<ol>
-<li>Each column shall accommodate column contents(i.e. column width >= contents, no contents cutting)</li>
-<li>Now drag browser window border to expand browser window width, the Listbox shall expand accordingly</li>
-<li>Now drag browser window border to shrink browser window width, the Listbox shall shrink accordingly until all widths fits the contents</li>
-<li>Now shrink more and you shall see horizontal scrollbar appear</li>
-<li>done</li>
-</ol>
-</ol>
-]]>
-</html>
+1. Each column shall accommodate column contents(i.e. column width >= contents, no contents cutting)
+<separator/>
+2. Now drag browser window border to expand browser window width, the Listbox shall expand accordingly
+<separator/>
+3. Now drag browser window border to shrink browser window width, the Listbox shall shrink accordingly until all widths fits the contents
+<separator/>
+4. Now shrink more and you shall see horizontal scrollbar appear
 <zscript>
 String[] msgs = {
 	"ZK Ajax Framework",

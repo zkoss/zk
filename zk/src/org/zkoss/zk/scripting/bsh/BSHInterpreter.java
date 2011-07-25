@@ -446,7 +446,10 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = false;
 				final Execution exec = Executions.getCurrent();
 				if (exec != null) {
-					Object val = exec.getAttribute(name);
+					Object val = exec.getXelVariable(name);
+					if (val != null)
+						return val;
+					val = exec.getAttribute(name);
 					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
 						return val;
 				}
@@ -494,7 +497,10 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = false;
 				final Execution exec = Executions.getCurrent();
 				if (exec != null && exec != curr) {
-					Object val = exec.getAttribute(name);
+					Object val = exec.getXelVariable(name);
+					if (val != null)
+						return val;
+					val = exec.getAttribute(name);
 					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
 						return val;
 				}

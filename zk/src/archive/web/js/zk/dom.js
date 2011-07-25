@@ -1127,45 +1127,25 @@ jq(el).zk.center(); //same as 'center'
 	 * @return int the offset width
 	 */
 	offsetWidth: function () {
-		var el = this.jq[0];
-		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetWidth;
-
-		var wd = 0;
-		for (var cells = el.cells, j = cells.length; j--;)
-			wd += cells[j].offsetWidth;
-		return wd;
+		return this.jq[0].offsetWidth;
 	},
 	/** Returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation. 
 	 * @return int the offset height
 	 */
 	offsetHeight: function () {
-		var el = this.jq[0];
-		if (!zk.safari || !jq.nodeName(el, "tr")) return el.offsetHeight;
-
-		var hgh = 0;
-		for (var cells = el.cells, j = cells.length; j--;) {
-			var h = cells[j].offsetHeight;
-			if (h > hgh) hgh = h;
-		}
-		return hgh;
+		return this.jq[0].offsetHeight;
 	},
 	/** Returns the offset top. It is similar to el.offsetTop, except it solves some browser's bug or limitation. 
 	 * @return int the offset top
 	 */
 	offsetTop: function () {
-		var el = this.jq[0];
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
-			el = el.cells[0];
-		return el.offsetTop;
+		return this.jq[0].offsetTop;
 	},
 	/** Returns the offset left. It is similar to el.offsetLeft, except it solves some browser's bug or limitation.
 	 * @return int the offset left
 	 */
 	offsetLeft: function () {
-		var el = this.jq[0];
-		if (zk.safari && jq.nodeName(el, "tr") && el.cells.length)
-			el = el.cells[0];
-		return el.offsetLeft;
+		return this.jq[0].offsetLeft;
 	},
 
 	/** Returns the X/Y coordinates of the first matched element relative to the viewport. 
@@ -1531,6 +1511,19 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 					} catch (e) { //ignore
 					}
 		return this;
+	},
+	/** Tests if all elements are input elements (including textarea).
+	 * @return boolean
+	 * @since 5.0.8
+	 */
+	isInput: function () {
+		var $jq = this.jq,
+			len = $jq.length;
+		for (var j = len, tag, n; j--;)
+			if ((tag = jq.nodeName(n = $jq[j])) != "textarea"
+			&& (tag != "input" || (n.type != "text" && n.type != "password")))
+				return false;
+		return len > 0; //false if nothing selected
 	}
 };
 
@@ -1881,10 +1874,12 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 * <code>org.zkoss.zul.Messagebox.show()</code> at the server.
 <pre><code>
 jq.alert('Hi');
-jq.alert('This is a popup message box', {mode:popup, icon: ERROR});
+jq.alert('This is a popup message box', {mode:"popup", icon: "ERROR"});
 jq.alert('With listener', {
-  YES: function () {jq.alert('Yes clicked')},
-  NO: function () {jq.alert('No clicked')}
+	button : {
+  		YES: function () {jq.alert('Yes clicked')},
+  		NO: function () {jq.alert('No clicked')}
+	}
 });
 </code></pre>
 	 * @param String msg the message to show
@@ -1924,7 +1919,8 @@ jq.alert('With listener', {
 </td></tr>
 <tr>
 <td> button
-</td><td> a map ({@link Map}) of buttons. If null or empty, OK is assumed
+</td><td> a map ({@link Map}) of buttons.
+</td><td> If null or empty, OK is assumed
 </td><td> Specifies what buttons to display. The key is the button name,
 and the value is a function ({@link Function}) to execute when the button
 is clicked.
@@ -2174,7 +2170,7 @@ zk.copy(jq.Event, {
 	zk: function (evt, wgt) {
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
-			data, opts;
+			data;
 
 		if (type.startsWith('mouse')) {
 			if (type.length > 5)
@@ -2186,16 +2182,13 @@ zk.copy(jq.Event, {
 			data = evt.keyData();
 		} else if (type == 'dblclick') {
 			data = evt.mouseData();
-			opts = {ctl:true};
 			type = 'DoubleClick';
 		} else {
-			if (type == 'click') {
+			if (type == 'click')
 				data = evt.mouseData();
-				opts = {ctl:true};
-			}
 			type = type.charAt(0).toUpperCase() + type.substring(1);
 		}
-		return new zk.Event(target, 'on' + type, data, opts, evt);
+		return new zk.Event(target, 'on' + type, data, {}, evt);
 	}
 });
 })(document, window);

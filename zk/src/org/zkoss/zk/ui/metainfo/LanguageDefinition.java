@@ -46,7 +46,7 @@ import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.ui.metainfo.impl.ComponentDefinitionImpl;
@@ -758,9 +758,10 @@ public class LanguageDefinition {
 			new LabelTemplate(compName, propName, raw): null;
 	}
 	/** Constructs and returns an {@link ComponentInfo} for
-	 * the specified parent and text,
+	 * the specified parent and text.
+	 * @since 5.1.0
 	 */
-	public ComponentInfo newLabelInfo(ComponentInfo parent, String text) {
+	public ComponentInfo newLabelInfo(NodeInfo parent, String text) {
 		if (_labeltmpl == null)
 			throw new UiException("No default label component is supported by "+this);
 		return _labeltmpl.newComponentInfo(parent, text);
@@ -883,7 +884,7 @@ public class LanguageDefinition {
 			_prop = prop;
 			this.raw = raw;
 		}
-		private ComponentInfo newComponentInfo(ComponentInfo parent, String text) {
+		private ComponentInfo newComponentInfo(NodeInfo parent, String text) {
 			if (_compdef == null) //no sync since racing is OK
 				_compdef = getComponentDefinition(_name);
 

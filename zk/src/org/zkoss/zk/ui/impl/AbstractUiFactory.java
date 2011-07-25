@@ -88,11 +88,13 @@ abstract public class AbstractUiFactory implements UiFactory {
 		return new PageImpl(richlet, path);
 	}
 	public Component newComponent(Page page, Component parent,
-	ComponentInfo compInfo) {
+	ComponentInfo compInfo, Component insertBefore) {
 		final Component comp = compInfo.newInstance(page, parent);
 
-		if (parent != null) comp.setParent(parent);
-		else comp.setPage(page);
+		if (parent != null)
+			parent.insertBefore(comp, insertBefore);
+		else
+			comp.setPageBefore(page, insertBefore);
 
 		if (comp instanceof BeforeCompose)
 			((BeforeCompose)comp).beforeCompose();
@@ -112,7 +114,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 
 	/** Instantiates a composer of the given class.
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public Composer newComposer(Class klass, Page page) {
 		if (!Composer.class.isAssignableFrom(klass))
@@ -125,7 +127,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	}
 	/** Instantiates a server push of the given class.
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
-	 * @since 6.0.0
+	 * @since 5.1.0
 	 */
 	public ServerPush newServerPush(Class klass, Desktop desktop) {
 		if (!ServerPush.class.isAssignableFrom(klass))

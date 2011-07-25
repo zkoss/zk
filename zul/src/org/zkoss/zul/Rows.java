@@ -234,11 +234,8 @@ public class Rows extends XulElement {
 	}
 
 	private boolean hasModelButNotROD() {
-		if (!WebApps.getFeature("ee")) {
-			final Grid grid = getGrid();
-			return grid != null && grid.getModel() != null;
-		}
-		return false;
+		final Grid grid = getGrid();
+		return (!WebApps.getFeature("ee") || !grid.evalRod()) && grid != null && grid.getModel() != null;
 	}
 	
 	private boolean hasGroupsModel() {
@@ -464,7 +461,7 @@ public class Rows extends XulElement {
 			// 2) If the row is a type of Group, it is always shown.
 			// 3) If the row doesn't belong to any group.
 			// 4) If the group of the row is open.
-			if (row instanceof Groupfoot || row instanceof Group || g == null || g.isOpen())
+			if (row.isVisible() && (row instanceof Groupfoot || row instanceof Group || g == null || g.isOpen())) // B50-3303770
 				addVisibleItemCount(isRemove ? -1 : 1);
 			
 			if (row instanceof Group) {

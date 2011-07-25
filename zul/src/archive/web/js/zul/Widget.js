@@ -333,6 +333,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <dd>Insert</dd>
 	 * <dt>#del</dt>
 	 * <dd>Delete</dd>
+	 * <dt>#bak</dt>
+	 * <dd>Backspace</dd> 
 	 * <dt>#left</dt>
 	 * <dd>Left arrow</dd>
 	 * <dt>#right</dt>
@@ -407,6 +409,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				else if ("down" == s) cc = 40;
 				else if ("ins" == s) cc = 45;
 				else if ("del" == s) cc = 46;
+				else if ("bak" == s) cc = 8;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
@@ -473,7 +476,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (popup) {
 				evt.contextSelected = true;
 				
-				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
@@ -493,7 +496,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (ctx) {
 				evt.contextSelected = true;
 				
-				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
@@ -534,10 +537,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * If found, it calls {@link #beforeCtrlKeys_} for each widget that were
 	 * searched, and then fire the event.
 	 * @param zk.Event evt the widget event.
+	 * @param boolean simulated if the event was not sent to the widget originally (rather,
+	 * it is caused by pressing when none of widget but document gains the focus)
 	 * @return boolean true if the event has been processed
 	 * @see #setCtrlKeys
 	 */
-	afterKeyDown_: function (evt) {
+	afterKeyDown_: function (evt/*, simulated*/) {
 		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
 		switch (keyCode) {
 		case 13: //ENTER
@@ -558,6 +563,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			return;
 		case 45: //Ins
 		case 46: //Del
+		case 8: //Backspace
 			break;
 		default:
 			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
@@ -589,8 +595,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					return;
 				if (w == wgt) break;
 			}
-			wgt.fire(evtnm, zk.copy({reference: target}, evt.data),
-				{ctl: true});
+			wgt.fire(evtnm, zk.copy({reference: target}, evt.data));
 		}, 0);
 
 		evt.stop();

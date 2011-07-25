@@ -27,6 +27,9 @@ import java.io.Reader;
 import java.io.IOException;
 
 import org.zkoss.idom.Document;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
 import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.ui.Sessions;
@@ -70,6 +73,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private Collection<AuResponse> _resps;
 	/** The information of the event being served, or null if not under event processing. */
 	private ExecutionInfo _execinf;
+	private List<VariableResolver> _resolvers;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -235,66 +239,112 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	public Component createComponents(String uri, Component parent,
 	Map arg) {
+		return createComponents0(uri, parent, null, null, arg);
+	}
+	public Component createComponents(String uri, Component parent,
+	Component insertBefore, VariableResolver resolver) {
+		return createComponents0(uri, parent, insertBefore, resolver, null);
+	}
+	private Component createComponents0(String uri, Component parent,
+	Component insertBefore, VariableResolver resolver, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinition(uri), getCurrentPage(), parent, arg);
+			this, getPageDefinition(uri), getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
+
 	public Component createComponents(PageDefinition pagedef,
 	Component parent, Map arg) {
+		return createComponents0(pagedef, parent, null, null, arg);
+	}
+	public Component createComponents(PageDefinition pagedef,
+	Component parent, Component insertBefore, VariableResolver resolver) {
+		return createComponents0(pagedef, parent, insertBefore, resolver, null);
+	}
+	private Component createComponents0(PageDefinition pagedef,
+	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		final Component[] cs = getUiEngine().createComponents(
-			this, pagedef, getCurrentPage(), parent, arg);
+			this, pagedef, getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
+
 	public Component createComponentsDirectly(String content, String ext,
 	Component parent, Map arg) {
+		return createComponentsDirectly0(content, ext, parent, null, null, arg);
+	}
+	public Component createComponentsDirectly(String content, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver) {
+		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
+	}
+	private Component createComponentsDirectly0(String content, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			getCurrentPage(), parent, arg);
+			getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
+
 	public Component createComponentsDirectly(Document content, String ext,
 	Component parent, Map arg) {
+		return createComponentsDirectly0(content, ext, parent, null, null, arg);
+	}
+	public Component createComponentsDirectly(Document content, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver) {
+		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
+	}
+	private Component createComponentsDirectly0(Document content, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			getCurrentPage(), parent, arg);
+			getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
+
 	public Component createComponentsDirectly(Reader reader, String ext,
 	Component parent, Map arg) throws IOException {
+		return createComponentsDirectly0(reader, ext, parent, null, null, arg);
+	}
+	public Component createComponentsDirectly(Reader reader, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver)
+	throws IOException {
+		return createComponentsDirectly0(reader, ext, parent, insertBefore, resolver, null);
+	}
+	private Component createComponentsDirectly0(Reader reader, String ext,
+	Component parent, Component insertBefore, VariableResolver resolver, Map arg)
+	throws IOException {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
-			getCurrentPage(), parent, arg);
+			getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 
 	public Component[] createComponents(String uri, Map arg) {
 		return getUiEngine().createComponents(
-			this, getPageDefinition(uri), null, null, arg);
+			this, getPageDefinition(uri), null, null, null, null, arg);
 	}
 	public Component[] createComponents(PageDefinition pagedef, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
-		return getUiEngine().createComponents(this, pagedef, null, null, arg);
+		return getUiEngine().createComponents(this, pagedef, null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(String content, String ext,
 	Map arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			null, null, arg);
+			null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(Document content, String ext,
 	Map arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			null, null, arg);
+			null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(Reader reader, String ext,
 	Map arg) throws IOException {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
-			null, null, arg);
+			null, null, null, null, arg);
 	}
 
 	public void sendRedirect(String uri) {
@@ -355,6 +405,36 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void setExecutionInfo(ExecutionInfo execinf) {
 		_execinf = execinf;
+	}
+
+	public boolean addVariableResolver(VariableResolver resolver) {
+		if (resolver == null)
+			throw new IllegalArgumentException("null");
+
+		if (_resolvers == null)
+			_resolvers = new LinkedList<VariableResolver>();
+		else if (_resolvers.contains(resolver))
+			return false;
+
+		_resolvers.add(0, resolver); //FILO order
+		return true;
+	}
+	public boolean removeVariableResolver(VariableResolver resolver) {
+		return _resolvers != null && _resolvers.remove(resolver);
+	}
+	public boolean hasVariableResolver(VariableResolver resolver) {
+		return _resolvers != null && _resolvers.contains(resolver);
+	}
+	public Object getXelVariable(String name) {
+		if (_resolvers != null) {
+			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers);
+			it.hasNext();) {
+				Object o = ((VariableResolver)it.next()).resolveVariable(name);
+				if (o != null)
+					return o;
+			}
+		}
+		return null;
 	}
 
 	//Object//

@@ -1,9 +1,5 @@
 <zk>
-	<html><![CDATA[
-		<ol>
-			<li>Drag the right edge of Header A in each of Grid/Listbox/Tree to adjust its size. If the rigth edge of Header B is moved, it is a bug.</li>
-		</ol>
-	]]></html>
+	Drag the right edge of Header A in each of Grid/Listbox/Tree to adjust its size. If the rigth edge of Header B is moved, it is a bug.
 	<grid>
 		<columns sizable="true">
 			<column hflex="min">A (min)</column>

@@ -28,13 +28,17 @@ import org.zkoss.zk.xel.Evaluator;
 
 /**
  * Simplify the parsing of arguments.
+ * <p>Note: it is not serializable.</p>
  * @author tomyeh
  * @since 3.6.2
  */
-/*package*/ class ArgumentInfo {
+/*package*/ class ArgumentInfo { //directive
 	/** The arguments (String name, ExValue value), null if no argument. */
 	private final Map<String, ExValue> _args;
 
+	/**
+	 * @param args the map of arguments. Ignored if null.
+	 */
 	/*package*/ ArgumentInfo(Map<String, String> args) {
 		if (args != null && !args.isEmpty()) {
 			_args = new LinkedHashMap<String, ExValue>();

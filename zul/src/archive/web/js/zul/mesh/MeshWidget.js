@@ -12,8 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The two-dimentional mesh related widgets.
- * A mesh widget is a two-dimentional widgets, such as grid, listbox and tree.
+/** The two-dimensional mesh related widgets.
+ * A mesh widget is a two-dimensional widgets, such as grid, listbox and tree.
  * Classes in this package is the skeletal implementation that can be used
  * to simplify the implementation of grid, listbox and tree.
  */
@@ -37,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn)
-			wgtn.style.whiteSpace = 'pre';//'nowrap';
+			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
 		var eheadtblw,
 			efoottblw,
 			ebodytblw,
@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdws = [],
 			hdcavews = [];
 			
-		if (wgt.eheadtbl) {//clear and backup headers widthes
+		if (wgt.eheadtbl) {//clear and backup headers widths
 			wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
@@ -77,7 +77,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (wgt.head && wgt.head.$n())
 			wgt.head.$n().style.width = '';
-		if (wgt.efoottbl) {//clear and backup footers widthes
+		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
@@ -90,7 +90,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				ftcell.style.width = '';
 			}
 		}
-		if (wgt.ebodytbl) {//clear and backup body fackers widthes
+		if (wgt.ebodytbl) {//clear and backup body faker widths
 			wgt.ebody.style.width = '';
 			ebodytblw = wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
@@ -106,7 +106,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		//calculate widths
-		var	wds = [],
+		var wds = [],
 			width = 0,
 			w = head ? head = head.lastChild : null,
 			headWgt = wgt.getHeadWidget(),
@@ -126,17 +126,32 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.ie < 8 && max < wd) {
 					max = wd;
 					maxj = i;
-				} else if (zk.ff == 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
+				} else if (zk.ff > 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
-				width += wd;
+				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w) w = w.previousSibling;
 			}
-			if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
-				--wds[maxj];
+			/* Fixed for B50-2979776.zul
+			 * if (zk.ie < 8) //* Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
+				--wds[maxj];*/
+		} else {
+			var tr;
+			if (tr = wgt._getSigRow()) {
+				for (var cells = tr.cells, i = cells.length; i--;) {
+					var wd = cells[i].offsetWidth;
+					wds[i] = wd;
+					if (zk.ie < 8 && max < wd) {
+						max = wd;
+						maxj = i;
+					} else if (zk.ff > 4 || zk.ie == 9) // firefox4 & IE9 still cause break line in case B50-3147926 column 1
+						++wds[i];
+					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
+				}
+			}
 		}
 
-		if (wgt.eheadtbl) {//restore headers widthes
+		if (wgt.eheadtbl) {//restore headers widths
 			wgt.eheadtbl.width = eheadtblw||'';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix||'';
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
@@ -147,20 +162,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				headcave.style.width = hdcavews[i];
 			}
 		}
-		if (wgt.efoottbl) {//restore footers widthes
+		if (wgt.efoottbl) {//restore footers widths
 			wgt.efoottbl.width = efoottblw||'';
 			wgt.efoottbl.style.tableLayout = efoottblfix||'';
-			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;)
 				ftfaker.cells[i].style.width = ftfakerws[i];
-			}
 		}
-		if (wgt.ebodytbl) {//restore body fackers widthes
+		if (wgt.ebodytbl) {//restore body fakers widths
 			wgt.ebodytbl.width = ebodytblw||'';
 			wgt.ebodytbl.style.tableLayout = ebodytblfix||'';
 			if (bdfaker)
-				for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+				for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;)
 					bdfaker.cells[i].style.width = bdfakerws[i];
-				}
 		}
 
 		if (wgtn)
@@ -408,7 +421,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
-		if (this.isVflex()) {
+		if ((zk.ie7_ || zk.ie6_) && this.isVflex()) { // B50-ZK-195
 			// added by Jumper for IE to get a correct offsetHeight so we need 
 			// to add this command faster than the this._calcSize() function.
 			var hgh = this.$n().style.height;
@@ -453,28 +466,37 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (!this.inServer && this.desktop)
 			this.onResponse();
 	},
-	_fixHeaders: function () {
+	_fixHeaders: function (force) {
 		if (this.head && this.ehead) {
-			var empty = true;
-			var flex = false;
-			for (var i = this.heads.length; i-- > 0;) {
+			var empty = true,
+				flex = false,
+				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
+			for (var i = this.heads.length; i-- > 0;)
 				for (var w = this.heads[i].firstChild; w; w = w.nextSibling) {
+					if (hdsmin && !w._width && !w._nhflex) {
+						// B50-3357475: assume header hflex min if width/hflex unspecified
+						w._hflex = 'min';
+						w._nhflex = -65500; // min
+						w._nhflexbak = true;
+					}
 					if (!flex && w._nhflex)
 						flex = true;
-					if (w.getLabel() || w.getImage()
-							|| w.nChildren) {
+					if (w.getLabel() || w.getImage() || w.nChildren)
 						empty = false;
-						break;
-					}
 				}
-				if (!empty) break;
-			}
-			var old = this.ehead.style.display; 
+			var old = this.ehead.style.display,
+				tofix = (force || empty) && flex && this.isRealVisible();
 			this.ehead.style.display = empty ? 'none' : '';
 			//onSize is not fired to empty header when loading page, so we have to simulate it here
-			if (empty && flex && this.isRealVisible()) 
-				for (var w = this.head.firstChild; w; w = w.nextSibling)
-					if (w._nhflex) w.fixFlex_();
+			for (var w = this.head.firstChild; w; w = w.nextSibling) {
+				if (tofix && w._nhflex)
+					w.fixFlex_();
+				if (w._nhflexbak) {
+					delete w._hflex;
+					delete w._nhflex;
+					delete w._nhflexbak;
+				}
+			}
 			return old != this.ehead.style.display;
 		}
 	},
@@ -495,8 +517,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_adjMinWd: function () {
 		if (this._hflex == 'min') {
-			this._hflexsz = this._getMinWd(); //override
-			this.$n().style.width = jq.px0(this._hflexsz);
+			var w = this._getMinWd();
+			this._hflexsz = w + zk(this).padBorderWidth(); //override
+			this.$n().style.width = jq.px0(w);
 		}
 	},
 	_getMinWd: function () {
@@ -517,7 +540,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 				++i;
 			}
-		}
+		} else
+			width = this._minWd.width; // no header
 		return width + (zk.ie && !zk.ie8 ? 1 : 0);
 	},
 	_bindDomNode: function () {
@@ -739,21 +763,22 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.ehead.style.width = "";
 			if (this.efoot) 
 				this.efoot.style.width = "";
-				
+		
+			// Bug 3310051
+			if (zk.ie6_ && this._hflex && this._hflex != 'min') {
+				n.style.width = '';
+			}
 			n._lastsz = null;// Bug #3013683: ie6 will do onSize twice
 		}
 		
 		// Bug 2896474
-		if (zk.ie6_ && this._vflex) {
+		if (zk.ie6_ && this._vflex && this._vflex != 'min') {
 			var hgh = this.getHeight();
 			if (!hgh || hgh == "auto" || hgh.indexOf('%') >= 0) {
 				var n = this.$n();
-				
 				n.style.height = '';
-				if (this.ebody) {
-					// check if this or this.parent has _vflex='min' should reset an empty string for B50-2976912.zul
-					this.ebody.style.height = (this._vflex != 'min' && (!this.parent || this.parent._vflex != 'min')) ? '0px' : '';
-				}
+				if (this.ebody) 
+					this.ebody.style.height = "";
 				n._lastsz = null;
 			}
 		}
@@ -920,10 +945,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		if (this.ehead) {
-			if (tblwd) this.ehead.style.width = tblwd + 'px';
+			if (tblwd) 
+				this.ehead.style.width = tblwd + 'px';
 			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
 				this._adjHeadWd();
-			else if (tblwd && this.efoot) this.efoot.style.width = tblwd + 'px';
+			else if (tblwd && this.efoot) 
+				this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
 			if (this.efoottbl.rows.length && this.ebodyrows && this.ebodyrows.length)
@@ -932,7 +959,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//check if need to span width
 		this._adjSpanWd();
-
+		// no header case
+		this._fixBodyMinWd(true);
+		
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
@@ -979,7 +1008,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_isAllWidths: function() {
 		if (this.isSizedByContent())
 			return true;
-		else if (!this.head)
+		if (!this.head)
 			return false;
 		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
@@ -1019,7 +1048,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 		//feature #3025419: flex column to compensate widget width and summation of column widths
-		out.push('<th id="', head.uuid, fakeId, 'flex"', (allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
+		out.push('<th id="', head.uuid, fakeId, 'flex"', 
+				(allwidths || this.isSizedByContent() ? '' : ' style="width:0px"'), '></th></tr></tbody>');
 	},
 
 	//super//
@@ -1030,7 +1060,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.head = child;
 			this._minWd = null;
 		} else if (!child.$instanceof(zul.mesh.Auxhead)) 
-				return;
+			return;
 
 		var nsib = child.nextSibling;
 		if (nsib)
@@ -1055,13 +1085,66 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._hflexsz === undefined && orient == 'w' && this._width === undefined) {
 			if (this.isSizedByContent())
 				this._calcSize();
-			if (this.head)
+			if (this.head) {
+				this._fixHeaders(true/* B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
-						return null;
-			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width 
+						return null;				
+			}
+			this._fixBodyMinWd(); // sized by content without header
+			return this._getMinWd(); //grid.invalidate() with hflex="min" must maintain the width
 		}
 		return null;
+	},
+	_fixBodyMinWd: function (fixMesh) {
+		// effective only when there is no header
+		var sbc = this.isSizedByContent(),
+			meshmin = this._hflex == 'min';
+		if (!this.head && (meshmin || sbc)) {
+			var bdw = zk(this.$n()).padBorderWidth();
+				wd = this._getMinWd() + bdw, // has to call _getMinWd first so this._minWd will be available
+				tr = this.ebodytbl,
+				wds = this._minWd.wds,
+				wlen = wds.length;
+			if (fixMesh && meshmin)
+				this.setFlexSize_({width:wd}, true);
+			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
+				return; // no first tr
+			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
+				c.style.width = (zk.safari ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+			if (sbc && !meshmin) {
+				// add flex <td> if absent
+				var bdfx = tr.lastChild,
+					bdfxid = this.uuid + '-bdflex';
+				if (!bdfx || bdfx.id != bdfxid) {
+					jq(tr).append('<td id="' + bdfxid + '"></td>');
+					bdfx = tr.lastChild;
+				}
+			}
+		}
+	},
+	_getSigRow: function () {
+		// scan for tr with largest number of td children
+		var rw = this.getBodyWidgetIterator().next(),
+			tr = rw ? rw.$n() : null;
+		if (!tr)
+			return;
+		for (var maxtr = tr, len, max = maxtr.cells.length; tr; tr = tr.nextSibling)
+			if ((len = tr.cells.length) > max) {
+				maxtr = tr;
+				max = len;
+			}
+		return maxtr;
+	},
+	// fixed for B50-3315594.zul
+	beforeParentMinFlex_: function (orient) {
+		if (orient == 'w') {
+			if (this.isSizedByContent()) 
+				this._calcSize();
+			if (this.head)
+				this._fixHeaders();
+		} else
+			this._calcSize();
 	},
 	_calcMinWds: function () {
 		if (!this._minWd)
@@ -1270,10 +1353,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-	
 		if (zk.opera && this.isSizedByContent())
 			dst.parentNode.parentNode.style.width = sum + "px";
-	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
 	}

@@ -43,7 +43,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -53,6 +52,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.AbortingReason;
+import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.*;
 
@@ -521,8 +521,13 @@ import org.zkoss.zk.au.out.*;
 
 	/** Returns a list of {@link AuResponse} according to what components
 	 * are invalidated and attached.
+	 * @param renderedComps used to return the components that are rendered.
+	 * It is ignored if null. If not null, it must be mutable and
+	 * this method will add the topmost rendered components to this collection.
+	 * @since 5.1.0
 	 */
-	public List<AuResponse> getResponses() throws IOException {
+	public List<AuResponse> getResponses(Collection<Component> renderedComps)
+	throws IOException {
 /*		if (D.ON && log.finerable())
 			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
@@ -587,8 +592,11 @@ import org.zkoss.zk.au.out.*;
 
 		//3. generate response for invalidated pages
 		if (_pgInvalid != null) {
-			for (Page page: _pgInvalid)
+			for (Page page: _pgInvalid) {
+				if (renderedComps != null)
+					renderedComps.addAll(page.getRoots());
 				responses.add(new AuOuter(page, redraw(page)));
+			}
 		}
 
 /*		if (log.finerable())
@@ -599,6 +607,8 @@ import org.zkoss.zk.au.out.*;
 
 		//5. generate replace for invalidated
 		for (Component comp: _invalidated) {
+			if (renderedComps != null)
+				renderedComps.add(comp);
 			responses.add(new AuOuter(comp, redraw(comp)));
 		}
 
@@ -632,8 +642,11 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 
-		for (Set<Component> newsibs: desktops)
+		for (Set<Component> newsibs: desktops) {
+			if (renderedComps != null)
+				renderedComps.addAll(newsibs);
 			addResponsesForCreatedPerSiblings(responses, newsibs, croppingInfos);
+		}
 
 		//7. Adds smart updates and response at once based on their time stamp
 		final List<TimedValue> tvals = new LinkedList<TimedValue>();
@@ -774,21 +787,21 @@ import org.zkoss.zk.au.out.*;
 			if ((nxt = last.getNextSibling()) == null
 			|| (sibs != null && !sibs.contains(nxt))) { //nextsib not available at client
 				if (parent != null //since page might not available, we try AuInsertAfter first if parent is null
-				&& !(parent instanceof Native) && !(parent instanceof StubComponent)) { //parent valid
+				&& !(parent instanceof Native) && !(parent instanceof StubsComponent)) { //parent valid
 					responses.add(new AuAppendChild(parent, contents));
 				} else {
 					final Component first = (Component)group.get(0);
 					if ((prv = first.getPreviousSibling()) != null
 					&& (sibs == null || sibs.contains(prv)) //prv is available
-					&& !(prv instanceof Native) && !(prv instanceof StubComponent)) { //prv valid
+					&& !(prv instanceof Native) && !(prv instanceof StubsComponent)) { //prv valid
 						responses.add(new AuInsertAfter(prv, contents));
 					} else {
 						if (parent != null)
-							throw new UiException("Adding child to a native component not allowed: "+parent);
+							throw new UiException("Adding child to native or stubs not allowed: "+parent);
 						responses.add(new AuAppendChild(page, contents));
 					}
 				}
-			} else if (nxt instanceof Native || nxt instanceof StubComponent) { //native
+			} else if (nxt instanceof Native || nxt instanceof StubsComponent) { //native
 				final Component first = (Component)group.get(0);
 				if ((prv = first.getPreviousSibling()) == null
 				|| (sibs != null && !sibs.contains(prv))) //prv is not available

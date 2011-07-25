@@ -28,14 +28,13 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * Information about how to initialize a property (aka., a field of a component).
@@ -45,10 +44,9 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  *
  * @author tomyeh
  */
-public class Property extends EvalRefStub
-implements Condition, java.io.Serializable {
+public class Property extends ConditionValue {
 	private static final Log log = Log.lookup(Property.class);
-    private static final long serialVersionUID = 20060622L;
+	private static final long serialVersionUID = 20060622L;
 
 	private final String _name;
 	/** The value if it is not the native content.
@@ -59,7 +57,6 @@ implements Condition, java.io.Serializable {
 	 * Exactly one of _value and _navval is non-null.
 	 */
 	private final NativeInfo _navval;
-	private final ConditionImpl _cond;
 	/** Used to optimize {@link #resolve}. */
 	private transient Class _lastcls;
 	/** The method, or null if more than two methods are found
@@ -72,7 +69,7 @@ implements Condition, java.io.Serializable {
 	private transient Method[] _mtds;
 
 	/** Constructs a property with a class that is known in advance.
-	 * @exception IllegalArgumentException if evalr or name is null
+	 * @exception IllegalArgumentException if name is null
 	 */
 	public Property(EvaluatorRef evalr, String name, String value,
 	ConditionImpl cond) {
@@ -89,13 +86,12 @@ implements Condition, java.io.Serializable {
 	}
 	private Property(EvaluatorRef evalr, String name, String value,
 	NativeInfo navval, ConditionImpl cond) {
-		if (name == null || evalr == null)
-			throw new IllegalArgumentException();
+		super(evalr, cond);
 
-		_evalr = evalr;
+		if (name == null)
+			throw new IllegalArgumentException("null");
+
 		_name = name;
-
-		_cond = cond;
 		_navval = navval;
 		_value = navval != null ? null: new ExValue(value, Object.class);
 			//type will be fixed when mapped to a method
@@ -331,12 +327,6 @@ implements Condition, java.io.Serializable {
 		return null;
 	}
 
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
-	}
 	public String toString() {
 		return "["+_name+(_navval != null ? "": "="+_value)+']';
 	}

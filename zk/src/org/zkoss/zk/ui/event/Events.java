@@ -213,6 +213,13 @@ public class Events {
 	 */
 	public static final String ON_FULFILL = "onFulfill";
 
+	/** The onStub event (used with {@link StubEvent})
+	 * to denote an event sent from the peer widget of a stub component
+	 * (at the client).
+	 * @since 5.1.0
+	 */
+	public static final String ON_STUB = "onStub";
+
 	/** The onDesktopRecycle event (used with {@link Event})
 	 * to notify that a desktp has been recycled.
 	 * All top-level components will receive this event when

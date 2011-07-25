@@ -13,9 +13,9 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _digitsAfterDecimal(v) {
+	function _digitsAfterDecimal(v, DECIMAL) {
 		var vs = '' + v,
-			i = vs.indexOf(zk.DECIMAL);
+			i = vs.indexOf(DECIMAL);
 		return i < 0 ? 0 : vs.length - i - 1;
 	}
 	function _shiftedSum(v1, v2, exp, asc) {
@@ -32,16 +32,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			res /= mul;
 		return res;
 	}
+	
+	var _allowKeys;
+	
+	// Fixed merging JS issue
+	zk.load('zul.lang', function () {
+		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL+'e';
+	});
 /**
  * An edit box for holding a constrained double.
  *
  * <p>Default {@link #getZclass}: z-doublespinner.
  * @since 5.0.6
  */
-zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
+	$init: function () {
+		this.$supers('$init', arguments);
+		//bug B50-3325041
+		this._allowKeys = _allowKeys;
+	},
 	$define: {
 		/** Return the step of double spinner
 		 * @return double
@@ -50,7 +62,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		 * @param double step
 		 */
 		step: function (v) {
-			this._fixedDigits = _digitsAfterDecimal(v);
+			this._fixedDigits = _digitsAfterDecimal(v, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -82,6 +94,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			return;
 		}
 	},
+	setLocalizedSymbols: function (val) {
+		var old = this._localizedSymbols;
+		this.$supers('setLocalizedSymbols', arguments);
+		if (this._localizedSymbols !== old)
+			this._allowKeys += this._localizedSymbols.DECIMAL + 'e';
+	},
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-doublespinner" + (this.inRoundedMold() ? "-rounded": "");
@@ -105,7 +123,10 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			this.$supers('setConstraint', arguments);
 	},
 	coerceFromString_: function (value) {//copy from doublebox
-		var info = zk.fmt.Number.unformat(this._format, value),
+		// B50-3322816
+		if (!value) return null;
+		
+		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
     		raw = info.raw,
     		val = parseFloat(raw),
     		valstr = ''+val,
@@ -145,13 +166,17 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
     	}
     
     	if (info.divscale) val = val / Math.pow(10, info.divscale);
+		
+		// B50-3322795
+		this._fixedDigits = _digitsAfterDecimal(val, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
     	return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
-		var fmt = this._format;
+		var fmt = this._format,
+			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
 		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, value, this._rounding) : 
-			zk.DECIMAL == '.' ? (''+value) : (''+value).replace('.', zk.DECIMAL);
+			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
+				DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
 	onSize: _zkf = function () {
 		var width = this.getWidth();
@@ -162,10 +187,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
-	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys+zk.DECIMAL))
-			this.$supers('doKeyPress_', arguments);
-	},
 	doKeyDown_: function(evt){
 		var inp = this.inp;
 		if (inp.disabled || inp.readOnly)
@@ -354,11 +375,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 			n.style.width = this.getWidth() || '';
 		}
 	},
-	afterKeyDown_: function (evt) {
-		if (this._inplace)
+	afterKeyDown_: function (evt,simulated) {
+		if(!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 			
-		this.$supers('afterKeyDown_', arguments);
+		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Doublespinner, 'bind_', arguments); 
@@ -367,6 +388,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.FormatWidget, {
 		
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
+		
 		
 		if(btn = this.$n("btn"))
 			this.domListen_(btn, "onZMouseDown", "_btnDown")

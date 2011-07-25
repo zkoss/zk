@@ -1,11 +1,5 @@
 <window vflex="min">
-<html>
-<![CDATA[
-<ol>
-<li>If the content of the tabpanel is not chopped half way, it is OK.</li>
-</ol>
-]]>
-</html>
+If the content of the tabpanel is not chopped half way, it is OK.
 <borderlayout vflex="min">
 <north vflex="min">
 

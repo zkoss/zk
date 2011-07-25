@@ -21,8 +21,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.xel.VariableResolver;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
@@ -161,8 +164,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 		}else{
 			row = newRow(renderer0);
 		}
-		((LoadStatus)(((AbstractComponent)row).getExtraCtrl())).setLoaded(false);
-		((LoadStatus)(((AbstractComponent)row).getExtraCtrl())).setIndex(index);
+		((LoadStatus)row.getExtraCtrl()).setLoaded(false);
+		((LoadStatus)row.getExtraCtrl()).setIndex(index);
 
 		newUnloadedCell(renderer0, row);
 		return row;
@@ -223,13 +226,33 @@ public class GridDataLoader implements DataLoader, Cropper {
 		final RowRenderer renderer = _grid.getRowRenderer();
 		return renderer != null ? renderer : _defRend; 
 	}
-	
 	private static final RowRenderer _defRend = new RowRenderer() {
-		public void render(Row row, Object data) {
-			final Label label = newRenderLabel(Objects.toString(data));
-			label.applyProperties();
-			label.setParent(row);
-			row.setValue(data);
+		public void render(Row row, final Object data) {
+			final Rows rows = (Rows)row.getParent();
+			final Grid grid = (Grid)rows.getParent();
+			final Template tm = grid.getTemplate("model");
+			if (tm == null) {
+				final Label label = newRenderLabel(Objects.toString(data));
+				label.applyProperties();
+				label.setParent(row);
+				row.setValue(data);
+			} else {
+				final Component[] items = tm.create(rows, row,
+					new VariableResolver() {
+						public Object resolveVariable(String name) {
+							return "each".equals(name) ? data: null;
+						}
+					});
+				if (items.length != 1)
+					throw new UiException("The model template must have exactly one row, not "+items.length);
+
+				final Row nr = (Row)items[0];
+				if (nr.getValue() == null) //template might set it
+					nr.setValue(data);
+				row.setAttribute("org.zkoss.zul.model.renderAs", nr);
+					//indicate a new row is created to replace the existent one
+				row.detach();
+			}
 		}
 	};
 	
@@ -284,7 +307,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
 						row.detach(); //remove extra
-					} else if (((LoadStatus)((AbstractComponent)row).getExtraCtrl()).isLoaded()) {
+					} else if (((LoadStatus)((Row)row).getExtraCtrl()).isLoaded()) {
 						if (renderer == null)
 							renderer = (RowRenderer)getRealRenderer();
 						row.detach(); //always detach

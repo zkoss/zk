@@ -9,7 +9,7 @@
 ]]>
 </html>
 <window  border="normal" width="100%">
-<div width="100%">
+<div width="100%" style="overflow:auto;position:relative">
 	<grid sizedByContent ="true">
 		<columns sizable="true">
 		    <column label="1ong long long long longX"/>

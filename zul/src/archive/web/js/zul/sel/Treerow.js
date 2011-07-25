@@ -37,11 +37,14 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		return this.parent ? this.parent.treechildren : null;
 	},
 	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments);
-		if (!no || !no.zclass) {
-			var added = this.parent ? this.parent.isDisabled() ? this.getZclass() + '-disd'
-					: this.parent.isSelected() ? this.getZclass() + '-seld' : '' : '';
-			if (added) scls += (scls ? ' ': '') + added;
+		var scls = this.$supers('domClass_', arguments),
+			p = this.parent;
+		if (p && (!no || !no.zclass)) {
+			var zcls = this.getZclass();
+			if (p.isDisabled())
+				scls += (scls ? ' ': '') + zcls + '-disd';
+			if (p.isSelected())
+				scls += (scls ? ' ': '') + zcls + '-seld';
 		}
 		return scls;
 	},
@@ -51,20 +54,6 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	domTooltiptext_ : function () {
 		return this._tooltiptext || this.parent._tooltiptext || this.parent.parent._tooltiptext;
 	},
-//	/** Returns whether this is visible.
-//	 * whether all its ancestors is open.
-//	 * @return boolean
-//	 */
-	/*
-	isVisible: function () {
-		if (!this.parent || !this.$supers('isVisible', arguments))
-			return false;
-		if (!this.parent._isRealVisible())
-			return false;
-		var child = this.parent.parent;
-		return child && child.isVisible();
-	},
-	*/
 	//@Override
 	domStyle_: function (no) {
 		// patch the case that treerow is hidden by treeitem visibility
@@ -80,7 +69,6 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		}
 		this.$supers('removeChild', arguments);
 	},
-
 	//@Override
 	doClick_: function(evt) {
 		var ti = this.parent;

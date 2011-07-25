@@ -18,38 +18,32 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
 
-import org.zkoss.lang.D;
-import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.util.resource.ContentLoader;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.scripting.Interpreters;
 
 /**
- * Represents a zscript element.
+ * Represents a zscript content.
  *
  * @author tomyeh
  */
-public class ZScript extends EvalRefStub 
-implements Condition, java.io.Serializable {
+public class ZScript implements java.io.Serializable {
 	private static final Log log = Log.lookup(ZScript.class);
 
+	private EvaluatorRef _evalr;
 	private String _zslang;
 	private final String _cnt;
 	/** An URL, an ExValue. */
 	private final Object _url;
 	private final Locator _locator;
-	private final ConditionImpl _cond;
-	private boolean _deferred;
 
 	/** Parses the content into a {@link ZScript} instance.
 	 *
@@ -83,7 +77,7 @@ implements Condition, java.io.Serializable {
 	 * @since 3.6.1
 	 */
 	public static final ZScript parseContent(String content, int lineno) {
-		String prefix = null;
+		String prefix = null, zslang = null;
 		final int len = content != null ? content.length(): 0;
 		if (len > 0) {
 			//Don't generate prefix if content is empty (i.e., keep empty)
@@ -99,13 +93,10 @@ implements Condition, java.io.Serializable {
 				final char cc = content.charAt(j);
 				if (cc == ':') {
 					if (j > 0) {
-						final String zslang = content.substring(0, j);
+						zslang = content.substring(0, j);
 						if (Interpreters.exists(zslang)) {
 							content = content.substring(j + 1);
-							return new ZScript(
-								null, zslang,
-								prefix != null && content.length() > 0 ? prefix+content: content,
-								null);
+							break;
 						} else {
 							log.warning("Ignored: unknown scripting language, "+zslang);
 						}
@@ -116,52 +107,39 @@ implements Condition, java.io.Serializable {
 				}
 			}
 		}
-		return new ZScript(null, null, prefix != null ? prefix+content: content, null);
+		return new ZScript(zslang, prefix != null && content.length() > 0 ? prefix+content: content);
 	}
 
-	/** Creates a zscript object with the content directly.
+	/** Creates a zscript with the content directly.
 	 *
-	 * @param evalr the evaluator reference. It is required if cond is not null.
 	 * @param zslang the scripting language. If null, it is the same as
-	 * {@link Page#getZScriptLanguage}.
+	 * {@link org.zkoss.zk.ui.Page#getZScriptLanguage}.
 	 * @param content the zscript content
-	 * @since 3.0.0
+	 * @see #parseContent
 	 */
-	public ZScript(EvaluatorRef evalr, String zslang, String content, ConditionImpl cond) {
-		_evalr = evalr;
+	public ZScript(String zslang, String content) {
 		_zslang = zslang;
 		_cnt = content != null ? content: "";
 		_url = null;
 		_locator = null;
-		_cond = cond;
 	}
-	/** Create a zscript object with an URL that is used to load the content.
-	 *
-	 * @param evalr the evaluator reference. It is required if cond is not null.
-	 * @param url the URL to load the content of zscript.
-	 * @since 3.0.0
+	/** Creates a zscript with an URL that is used to load the content.
 	 */
-	public ZScript(EvaluatorRef evalr, String zslang, URL url, ConditionImpl cond) {
+	public ZScript(String zslang, URL url) {
 		if (url == null)
-			throw new IllegalArgumentException("null url");
+			throw new IllegalArgumentException("null");
 
-		//TODO: use url's extension to determine zslang
-		_evalr = evalr;
 		_zslang = zslang;
 		_url = url;
 		_cnt = null;
 		_locator = null;
-		_cond = cond;
 	}
-	/** Constructs a {@link ZScript} with an URL, which might contain an EL
-	 * expression.
-	 *
-	 * @param evalr the evaluator reference.
-	 * It is required if cond is not null or url contains EL expression.
-	 * @param url the URL. It may contain XEL expressions.
-	 * @param locator the locator used to locate the zscript file
+	/** Creates a zscript with an URL that is used to load the content.
+	 * @param evalr the evaluator used to evaluate
+	 * @exception IllegalArgumentException if url or locator is null, or
+	 * url contains EL and evalr is null.
 	 */
-	public ZScript(EvaluatorRef evalr, String zslang, String url, ConditionImpl cond, Locator locator) {
+	public ZScript(EvaluatorRef evalr, String zslang, String url, Locator locator) {
 		if (url == null || locator == null)
 			throw new IllegalArgumentException("null");
 
@@ -171,13 +149,9 @@ implements Condition, java.io.Serializable {
 		_url = new ExValue(url, String.class);
 		_cnt = null;
 		_locator = locator;
-		_cond = cond;
-	}
 
-	/** Returns the evaluator reference, or null if not available.
-	 */
-	/*package*/ EvaluatorRef getEvaluatorRef() {
-		return _evalr;
+		if (evalr == null && ((ExValue)_url).isExpression())
+			throw new IllegalArgumentException("evalr required since EL is used: "+url);
 	}
 
 	/** Returns the scripting language, or null if the default scripting language
@@ -194,10 +168,9 @@ implements Condition, java.io.Serializable {
 	public void setLanguage(String zslang) {
 		_zslang = zslang;
 	}
-
 	/** Returns the raw content.
 	 * It is the content specified in the contructor
-	 * ({@link #ZScript(EvaluatorRef, String, String, ConditionImpl)}.
+	 * ({@link #ZScript(String, String)}.
 	 * If URL is specified in the contructor, null is returned.
 	 *
 	 * <p>On the other hand, {@link #getContent} will load the content
@@ -213,13 +186,10 @@ implements Condition, java.io.Serializable {
 	 * If URL is specified, this method loads the content from it.
 	 * If URL is an EL expression, it will be evaluated first.
 	 *
-	 * <p>Note: before evaluating the returned script, you have to invoke
-	 * {@link #isEffective(Component)} or {@link #isEffective(Page)} first.
-	 *
 	 * @param page the page when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, ConditionImpl, Locator)}.
+	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
 	 * @param comp the component when this zscript is interpreted.
-	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, ConditionImpl, Locator)}.
+	 * Used only if this object is contructed with {@link #ZScript(EvaluatorRef, String, String, Locator)}.
 	 * @exception UiException if faied to load the content
 	 */
 	public String getContent(Page page, Component comp) {
@@ -251,24 +221,10 @@ implements Condition, java.io.Serializable {
 		return o;
 	}
 
-	/** Returns whether the evaluation of the zscript shall be deferred.
+	/** Sets the evaluator reference.
 	 */
-	public boolean isDeferred() {
-		return _deferred;
-	}
-	/** Sets whether the evaluation of the zscript shall be deferred.
-	 * <p>Default: false.
-	 */
-	public void setDeferred(boolean deferred) {
-		_deferred = deferred;
-	}
-
-	//Condition//
-	public boolean isEffective(Component comp) {
-		return _cond == null || _cond.isEffective(_evalr, comp);
-	}
-	public boolean isEffective(Page page) {
-		return _cond == null || _cond.isEffective(_evalr, page);
+	/*pacakge*/ void setEvaluatorRef(EvaluatorRef evalr) {
+		_evalr = evalr;
 	}
 
 	//Object//
