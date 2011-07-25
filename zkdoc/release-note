@@ -1,20 +1,20 @@
 	--------
 ZK 5.0.8
 * Features
+  ZK-214: Add a databinding composer instead of initiator
+  3316591: Allow user to specify error-box position
+  3326788: A way to name the composer GenericAutowireComposer
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
   3309539: Timebox and Datebox support different language for different locale
-  3310927: ZK JasperReport support JasperReport
+  3310927: ZK JasperReport support JasperReports 4
   3315689: Optimize the HtmlMacroComponent 
-  3316591: Allow user to specify error-box position
   3323594: Render on Demand for Grid and Listbox supports setInitSize
-  3326788: A way to name the composer GenericAutowireComposer
   3327013: A way to log message to the client
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
-  ZK-214: Add a databinding composer instead of initiator
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
 
 * Bugs
