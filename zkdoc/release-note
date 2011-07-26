@@ -107,8 +107,8 @@ ZK 5.0.8
   3358505: ZK EE with native failed to invalidate (JS error)
   3327522: Visible property for borderlayout panels (west, east, etc)
   3337441: Firefox Listbox Multiselect
-  ZK-210: Style Tag Ignored in IE6/7/8
   3363687: Window onCreate fired twice for Execution#sendRedirect() 
+  ZK-210: Style Tag Ignored in IE6/7/8
   ZK-223: Fine tune ZKThemes and sandbox
   ZK-200: Outside Window border disappear when defer including
   ZK-215: Combobox options width failed in IE
@@ -121,6 +121,7 @@ ZK 5.0.8
   ZK-171: Listbox/Grid columns hflex="1" not correct with hflex="min"
   ZK-206: Set Hflex="min" to listheader fail, FF5 IE6,7
   ZK-198: Splitter issue with double Borderlayout
+  ZK-190: Change style of div in border layout cause error of style
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

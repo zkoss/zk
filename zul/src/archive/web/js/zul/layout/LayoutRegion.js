@@ -12,6 +12,37 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	
+	function _setFirstChildFlex (wgt, flex) {
+		var BL = zul.layout.Borderlayout,
+			cwgt = wgt.firstChild;
+		if(cwgt) {
+			switch (wgt.getPosition()) {
+			case BL.NORTH:
+			case BL.SOUTH:
+				if (flex) {
+					wgt._fcflex = cwgt.getVflex();
+					cwgt.setVflex(true);
+				} else {
+					cwgt.setVflex(wgt._fcflex);
+					delete wgt._fcflex;
+				}
+				break;
+			case BL.WEST:
+			case BL.EAST:
+				if (flex) {
+					wgt._fcflex = cwgt.getHflex();
+					cwgt.setHflex(true);
+				} else {
+					cwgt.setHflex(wgt._fcflex);
+					delete wgt._fcflex;
+				}
+				break;
+			}
+		}
+	}
+	
 /**
  * A layout region in a border layout.
  * <p>
@@ -43,7 +74,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * Default: false.
 		 * @return boolean
 		 */
-		flex: function () {
+		flex: function (v) {
+			_setFirstChildFlex(this, v);
 			this.rerender();
 		},
 		/**
@@ -480,6 +512,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this.firstChild.$n() : this.$n('cave');
 			this.domListen_(bodyEl, "onScroll");
 		}
+		
+		if (this.isFlex())
+			_setFirstChildFlex(this, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
@@ -493,6 +528,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._drag = null;
 			}
 		}
+		
+		if (this.isFlex())
+			_setFirstChildFlex(this, false);
+		
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
@@ -933,3 +972,5 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return jq("#zk_layoutghost")[0];
 	}
 });
+
+})();
