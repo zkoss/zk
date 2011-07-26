@@ -58,12 +58,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			clearTimeout(_timeout); 
 			_timeout = null; 
 		}
-		if(!_activedg) return;
+		var evt = jq.Event.zk(devt);
+		if(!_activedg) {
+			// B50-ZK-221: need to clear _dnEvt here
+			if (evt.which == 1)
+				_dnEvt = null;
+			return;
+		}
 
 		_lastPt = null;
-		var evt,
-			adg = _activedg;
-		_activedg._endDrag(evt = jq.Event.zk(devt));
+		var adg = _activedg;
+		_activedg._endDrag(evt);
 		_activedg = null;
 		if (evt.domStopped) devt.stop();
 		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached

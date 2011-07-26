@@ -124,6 +124,7 @@ ZK 5.0.8
   ZK-190: Change style of div in border layout cause error of style
   ZK-236: Borderlayout North/South failed to concern caption height
   ZK-238: Grid with frozen, scrolled then delete frozen, some columns is hidden
+  ZK-221: problem with events in firefox 4.x and up
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
