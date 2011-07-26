@@ -39,7 +39,6 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
-import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * An implementation of {@link ComponentDefinition}.
@@ -314,19 +313,10 @@ implements ComponentDefinition, java.io.Serializable {
 	public boolean isInstance(Component comp) {
 		Class cls;
 		if (_implcls instanceof String) {
-			final Page page = comp.getPage();
-			if (page != null) {
-				try {
-					cls = resolveImplementationClass(page, null);
-				} catch (ClassNotFoundException ex) {
-					return true; //consider as true if not resolvable
-				}
-			} else {
-				try {
-					cls = Classes.forNameByThread((String)_implcls);
-				} catch (ClassNotFoundException ex) {
-					return true; //consider as true if not found
-				}
+			try {
+				cls = resolveImplementationClass(comp.getPage(), null);
+			} catch (ClassNotFoundException ex) {
+				return true; //consider as true if not resolvable
 			}
 		} else {
 			cls = (Class)_implcls;
@@ -335,26 +325,14 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public Class resolveImplementationClass(Page page, String clsnm)
 	throws ClassNotFoundException {
-		Object cls = clsnm != null ? clsnm: _implcls;
+		final Object cls = clsnm != null ? clsnm: _implcls;
 		if (cls instanceof String) {
 			clsnm = (String)cls;
-			try {
-				final Class found = Classes.forNameByThread(clsnm);
-				if (clsnm == null) _implcls = found;
-					//cache to _implcls (to improve the performance)
-				return found;
-			} catch (ClassNotFoundException ex) {
-				//we don't cache it if it is defined in a interpreter
-				if (page != null) {
-					for (Iterator it = page.getLoadedInterpreters().iterator();
-					it.hasNext();) {
-						Class c = ((Interpreter)it.next()).getClass(clsnm);
-						if (c != null)
-							return c;
-					}
-				}
-				throw ex;
-			}
+			final Class found = page != null ?
+				page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+			if (clsnm.equals(_implcls)) _implcls = found;
+				//cache to _implcls (to improve the performance)
+			return found;
 		}
 		return (Class)cls;
 	}
