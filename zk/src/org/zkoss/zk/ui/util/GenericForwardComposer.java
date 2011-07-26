@@ -75,7 +75,7 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 	 * It is a shortcut of <code>GenericForwardComposer('$',
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "true")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "true")))</code>.
-	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
 	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to true, i.e., 
@@ -93,7 +93,7 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 	 * <p>It is a shortcut of <code>GenericForwardComposer(separator,
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript", "true")),
 	 * !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel", "true")))</code>.
-	 * In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
+	 * <p>In other words, whether to ignore variables defined in ZSCRIPT and XEL depends
 	 * on the library vairables called <code>org.zkoss.zk.ui.composer.autowire.zscript</code>
 	 * and <code>org.zkoss.zk.ui.composer.autowire.xel</code>.
 	 * Furthermore, if not specified, their values are default to true, i.e., 
