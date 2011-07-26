@@ -1,0 +1,24 @@
+<!--
+B50-ZK-198.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 18:52:12 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<borderlayout vflex="1">
+		<center>
+			<borderlayout vflex="1">
+				<center>
+					Move the splitter. If this piece of text disappear, it is a bug.
+				</center>
+			</borderlayout>
+		</center>
+		<east splittable="true" size="50%" />
+	</borderlayout>
+</zk>

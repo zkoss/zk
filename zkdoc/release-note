@@ -120,6 +120,7 @@ ZK 5.0.8
   ZK-195: Tree with vflex causes wrong wd in another tree w/ scrollbar
   ZK-171: Listbox/Grid columns hflex="1" not correct with hflex="min"
   ZK-206: Set Hflex="min" to listheader fail, FF5 IE6,7
+  ZK-198: Splitter issue with double Borderlayout
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
