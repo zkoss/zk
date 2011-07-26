@@ -162,6 +162,10 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 		return _open;
 	}
 	/** Sets whether this container is open.
+	 * 
+	 * <p>Note: if you use a model as the data to render, don't use setOpen(). It'll tangle the lifecycle with model  
+	 * You should control the model directly.
+	 * For example, you can use setClose() of GroupsModelArray
 	 */
 	public void setOpen(boolean open) {
 		if (_open != open) {
