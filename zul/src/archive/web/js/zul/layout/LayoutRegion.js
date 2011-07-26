@@ -275,6 +275,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (v != 'min') v = false;
 		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
 	},
+	// B50-ZK-236: add header height
+	getChildMinSize_: function (o, cwgt) {
+		return (o == 'h' && this.$n('cap') ? this.$n('cap').offsetHeight : 0) + 
+				this.$supers('getChildMinSize_', arguments);
+	},
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
 	 * 
