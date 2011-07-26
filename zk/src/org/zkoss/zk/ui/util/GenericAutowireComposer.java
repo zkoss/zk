@@ -31,6 +31,8 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -120,6 +122,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
+	private static Log log = Log.lookup(GenericAutowireComposer.class);
 	
 	/** Implicit Object; the applied component itself. 
 	 * @since 3.0.7
@@ -298,19 +301,23 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 */
 	private static Method _alert;
 	protected void alert(String m) {
-		//zk.jar cannot depends on zul.jar; thus we call Messagebox.show() via
-		//reflection. kind of weird :-).
-		try {
-			if (_alert == null) {
-				final Class mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
-				_alert = mboxcls.getMethod("show", new Class[] {String.class});
+		if ("ajax".equals(Executions.getCurrent().getDesktop().getDeviceType())) {
+			//zk.jar cannot depends on zul.jar; thus we call Messagebox.show() via
+			//reflection.
+			try {
+				if (_alert == null) {
+					final Class mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
+					_alert = mboxcls.getMethod("show", new Class[] {String.class});
+				}
+				_alert.invoke(null, new Object[] {m});
+				return; //done
+			} catch (Throwable ex) {
+				log.debug("Failed to invoke org.zkoss.zul.Messagebox", ex);
+				//Ignore
 			}
-			_alert.invoke(null, new Object[] {m});
-		} catch (InvocationTargetException e) {
-			throw UiException.Aide.wrap(e);
-		} catch (Exception e) {
-			//ignore
 		}
+
+		org.zkoss.zk.ui.util.Clients.alert(m);
 	}
 	
 	/** Internal use only. Call-back method of CloneComposerListener. You shall 
