@@ -15,30 +15,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	
 	function _setFirstChildFlex (wgt, flex) {
-		var BL = zul.layout.Borderlayout,
-			cwgt = wgt.firstChild;
+		var cwgt = wgt.firstChild;
 		if(cwgt) {
-			switch (wgt.getPosition()) {
-			case BL.NORTH:
-			case BL.SOUTH:
-				if (flex) {
-					wgt._fcflex = cwgt.getVflex();
-					cwgt.setVflex(true);
-				} else {
-					cwgt.setVflex(wgt._fcflex);
-					delete wgt._fcflex;
-				}
-				break;
-			case BL.WEST:
-			case BL.EAST:
-				if (flex) {
-					wgt._fcflex = cwgt.getHflex();
-					cwgt.setHflex(true);
-				} else {
-					cwgt.setHflex(wgt._fcflex);
-					delete wgt._fcflex;
-				}
-				break;
+			if (flex) {
+				wgt._fcvflex = cwgt.getVflex();
+				wgt._fchflex = cwgt.getHflex();
+				cwgt.setVflex(true);
+				cwgt.setHflex(true);
+			} else {
+				cwgt.setVflex(wgt._fcvflex);
+				cwgt.setHflex(wgt._fchflex);
+				delete wgt._fcvflex;
+				delete wgt._fchflex;
 			}
 		}
 	}
