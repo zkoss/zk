@@ -16,6 +16,7 @@ ZK 5.0.8
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
+  ZK-219: Update zk.Event documentation
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

@@ -83,6 +83,22 @@ onClick: function (evt) {
  	 */
  	//name: null,
  	/** The data which depends on the event. Here is the list of Event Data.
+ 	 * <p>Data can be any javascript Object. You can bring Number, String or JSON object to server side with it. 
+ 	 * <p>The javascript JSON object will be transfered to org.zkoss.json.JSONObject at server side as the following:
+<pre><code>
+// at client side
+var json = { "aa" : [{"a11":"11", "a12":12},{"a21":"21","a22":22.2}],                                  
+    "bb":[{"b11":"31","b12":"32"},{"b21":"41","b22":"42","b23":43}]
+  },
+  data = {jsonObject:json};
+
+// at server side
+final JSONObject jsonObject = (JSONObject)data.get("jsonObject"); // get JSONObject
+// will output "22.2"
+System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22"));
+// will output "class java.lang.Double"
+System.out.println(((JSONObject)((JSONArray)jsonObject.get("aa")).get(1)).get("a22").getClass());
+</code></pre>
 	 * <p>However, if data is an instance of Map, its content is copied to the event instance. Thus, you can access them directly with the event instance as follows.
 <pre><code>
 onClick: function (evt) {
