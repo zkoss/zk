@@ -1,0 +1,28 @@
+<test tags="B50-3345912.zul,A,E,Grid,Cell,IE6">
+	<case id="Cell">
+		<server><!--
+<zk>
+	The style of the two row should look the same.
+	<grid width="50px">
+		<rows>
+			<row>
+				<cell>
+					<label value="item" />
+				</cell>
+				<cell>
+					<label value="item" />
+				</cell>
+			</row>
+			<row>
+				<label value="item" />
+				<label value="item" />
+			</row>
+		</rows>
+	</grid>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,43 @@
+<!-- B50-3259479.ztl.java
+
+	Purpose:for testing B50-3259479.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 11:27:58
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3259479.zul,A,E,Zscript">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+	<ul>
+		<li>You shall see HelloZK below.</li>
+	</ul>
+	]]></html>
+	<zscript>
+	List list = new ArrayList();
+	list.add("Hello");
+	list.add("ZK");
+	</zscript>
+	<div>
+		<label forEach="${list}">
+			<zscript>
+			self.setValue(each);
+			</zscript>
+		</label>
+	</div>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyEquals("HelloZK",jq("@label").text());
+		]]></client>
+	</case>
+</test>

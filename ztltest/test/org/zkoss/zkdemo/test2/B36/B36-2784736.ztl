@@ -1,0 +1,46 @@
+<test tags="menubar,menu,menupopup">
+	<case id="menupopup">
+		<server><!--
+			<zk>
+				Please click the "Help" menu, and then the popup menu should display well (IE 7 only).
+			  <zscript>
+				void createMenu(Menupopup popup) {
+				  popup.appendChild(new Menuitem("Index"));
+
+				  Menu about = new Menu("About");
+				  Menupopup p = new Menupopup();
+				  about.appendChild(p);
+				  popup.appendChild(new Menuseparator());
+				  popup.appendChild(about);
+
+				  p.addEventListener("onOpen", new EventListener() {
+				    public void onEvent(Event event) {
+				      event.getTarget().appendChild(new Menuitem("About ZK"));
+				      event.getTarget().appendChild(new Menuitem("About Potix"));
+				    }
+				  });
+				}
+			  </zscript>
+
+			  <menubar>
+			    <menu label="File">
+			      <menupopup>
+				<menuitem label="New"/>
+				<menuitem label="Open"/>
+				<menuseparator/>
+				<menuitem label="Exit"/>
+			      </menupopup>
+			    </menu>
+			    <menu label="Help">
+			      <menupopup onOpen="createMenu(self)"/>
+			    </menu>
+			  </menubar>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(jq("@menu[label=\"Help\"]"));
+			waitResponse();
+			verifyTrue(jq("div.z-menu-popup").outerWidth() > jq("@menu:eq(1)").outerWidth());
+		]]></client>
+	</case>
+</test>

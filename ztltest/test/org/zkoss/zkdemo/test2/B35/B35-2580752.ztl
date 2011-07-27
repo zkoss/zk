@@ -1,0 +1,40 @@
+<test tags="listbox">
+	<case id="select">
+		<server><!--
+			<window title="Test" border="normal">
+				1.Using SHIFT+Click select sereral items, and then click the button on the paging bar to next page.
+				<separator/>
+				2.Click one item on the page, and then go back to the first page.
+				<separator/>
+				3.The first page should select nothing. 
+				<zscript>
+				List items = new org.zkoss.zktest.test2.BigList(100); //a big list of
+				Integer
+				</zscript>
+				<listbox id="lbx" mold="paging" multiple="true">
+					<listitem forEach="${items}">
+						<listcell label="${each}-1"/>
+						<listcell label="${each}-2"/>
+						<listcell label="${each}-3"/>
+						<listcell label="${each}-4"/>
+					</listitem>
+				</listbox>
+			</window> 
+		--></server>
+		<client><![CDATA[
+			click(lbx.firstChild().nextSibling());
+			shiftKeyDown();
+			click(lbx.firstChild().nextSibling().nextSibling().nextSibling());
+			shiftKeyUp();
+			verifyTrue(jq("tr.z-listitem-seld").exists());
+				
+			click(jq("button.z-paging-next"));
+			waitResponse();
+			click(lbx.firstChild().nextSibling());
+				
+			click(jq("button.z-paging-prev"));
+			waitResponse();
+			verifyFalse(jq("tr.z-listitem-seld").exists());
+		]]></client>
+	</case>
+</test>

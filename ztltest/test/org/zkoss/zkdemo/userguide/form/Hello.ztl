@@ -1,0 +1,15 @@
+<test tags="Window"  >
+	<case id="Hello">
+		<server><!--
+		<window title="My First window" border="normal" width="200px">
+			<label value="Hello, World!" />
+			<button label="Hi" onClick='alert("Welcome")'/>
+		</window>
+				  
+		--></server>
+		<client><![CDATA[
+			verifyEquals("My First window", jq(".z-window-embedded-header").text());
+			verifyEquals("Hello, World!", jq(".z-label").text());
+		]]></client>
+	</case>
+</test>

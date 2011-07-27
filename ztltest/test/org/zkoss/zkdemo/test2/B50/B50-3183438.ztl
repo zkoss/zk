@@ -1,0 +1,47 @@
+<!-- B50-3183438.ztl.java
+
+	Purpose:for testing B50-3183438.ztl .
+
+	Description:
+
+	History:
+		05, 27, 2011 17:34:05
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3183438.zul,A,E,Databind,ie9">
+	<case id="ztl">
+		<server><!--
+			<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>The Textbox and Label should show value "B".</li>
+			<li>Change Textbox value to "C" and click on somewhere else. The Label value should also become "C". Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript>
+		java.util.Map map1 = new java.util.HashMap();
+		java.util.Map map2 = new java.util.HashMap();
+		map1.put("class", map2);
+		map2.put("class", "B");
+	</zscript>
+	<textbox value="@{map1.class.class}" />
+	<label value="@{map1.class.class}" />
+</zk>
+
+		--></server>
+		<client><![CDATA[
+		sleep(1000);//for DataBinding
+				verifyEquals("B",jq(".z-textbox").val());
+				verifyEquals("B",jq("@label").text());
+				type(jq("@textbox"),"C");
+				waitResponse();
+				verifyEquals("C",jq(".z-textbox").val());
+				verifyEquals("C",jq("@label").text());
+		]]></client>
+	</case>
+</test>

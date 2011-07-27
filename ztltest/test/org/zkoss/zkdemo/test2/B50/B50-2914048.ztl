@@ -1,0 +1,32 @@
+<test tags="B50-2914048.zul,Box,Hbox,Vbox">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+1.Please click "orient" button, and then click "append" button.
+<separator/>
+2. You can see that the new "Append 1" label is added next to "Second"
+<box id="box">
+First
+<label value="Second"/>
+</box>
+<zscript>int cnt;
+</zscript>
+<button label="orient" onClick='box.setOrient(box.vertical?"horizontal":"vertical")'/>
+<button label="append" onClick='new Label("Append "+ ++cnt).setParent(box)'/>
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+       				click(jq("@button[label=\"orient\"]"));
+      				waitResponse();
+      				click(jq("@button[label=\"append\"]"));
+      				waitResponse();
+      				
+      				String s1 = jq("@label[value=\"Second\"]").parent().next().next().html();
+      				String s2 = jq("@label[value=\"Append 1\"]").parent().html();
+      				verifyEquals(s1, s2);			
+			
+			]]></client>
+	</case>
+</test>

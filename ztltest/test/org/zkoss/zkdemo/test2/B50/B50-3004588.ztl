@@ -1,0 +1,21 @@
+<test tags="B50-3004588.zul,portallayout,panel">
+	<case id="maximized">
+		<server id="zul"><![CDATA[
+			<zk>
+				<portallayout id="pl" width="500px" height="500px" maximizedMode="whole">
+					<portalchildren width="50%" height="100%" >
+						<panel id="panel" border="normal" title="test" height="300px" maximizable="true">
+							<panelchildren>
+								<window width="100%" height="100%" />
+							</panelchildren>
+						</panel>
+					</portalchildren>
+				</portallayout>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			click(panel.$n("max"));
+			verifyEquals(jq(pl).height(), jq(panel).height());
+		]]></client>
+	</case>
+</test>

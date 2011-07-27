@@ -1,0 +1,45 @@
+<test tags="Grid,Auxhead">
+	<case id="Width">
+		<server><!--
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+				<n:p>Grid rows not follow columns's widths when it has the auxhead component.</n:p>
+				<grid height="100px">
+					<auxhead>
+						<auxheader label="Selecteds Items (Grid)" colspan="9"
+							align="center" />
+					</auxhead>
+					<columns>
+						<column id="column0" label="70px" width="70px" />
+						<column id="column1" label="75px" width="75px" />
+						<column id="column2" label="75px" width="75px" />
+						<column id="column3" label="150px" width="150px" />
+						<column id="column4" label="107px" width="107px" />
+						<column id="column5" label="120px" width="120px" />
+						<column id="column6" label="115px" width="115px" />
+						<column id="column7" label="50px" width="50px" />
+						<column id="column8" label="80px" width="80px" />
+					</columns>
+					<rows>
+						<row>
+							<label id="label0" value="1" />
+							<label id="label1" value="2" />
+							<label id="label2" value="3" />
+							<label id="label3" value="4" />
+							<label id="label4" value="5" />
+							<label id="label5" value="6" />
+							<label id="label6" value="7" />
+							<label id="label7" value="8" />
+							<label id="label8" value="9" />
+						</row>
+					</rows>
+				</grid>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			int margin = 10;
+			for (int i = 0; i < 9; i++) {
+			    verifyTolerant(jq("$column" + i).width(), (jq(".z-row-inner:eq(" + i + ")").width() + margin), 5);
+			}
+		]]></client>
+	</case>
+</test>

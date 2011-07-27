@@ -1,0 +1,53 @@
+<test tags="F50-2940704-Grid.zul,A,E,Vflex,Grid,Paging,Autopaging">
+	<case id="Vflex">
+		<server><!--
+<zk>
+	Auto Paging shall re-calculate the page size every time the listbox height is changed.
+	<separator/>
+	1. Click browser's maximize button. The page size shall re-calculate and there should be NO vertical scrollbar appear in grid
+	<separator/>
+	2. Click browser's restore button. The page size shall re-calculate and there should be NO vertical scrollbar appear in grid
+	<separator/>
+	3. Drag to change browser's size, and the page size shall re-calculate and there should be NO vertical scrollbar appear in grid
+	<separator/>
+	4. Click "top" radiobox, the grid shall stay as is, only the paging bar is moved to top
+	<separator/>
+	5. Click "bottom" radiobox, the grid shall stay as is, only the paging bar is moved back to bottom
+	<separator/>
+	6. Click "both" radiobox, the page size shall re-calculate and there should be NO vertical scrollbar appear in grid. Both on top and bottom you can see the paging bar.
+	<separator/>
+	<vlayout>
+	<radiogroup 
+		onCheck="listbox.pagingPosition = self.selectedItem.label">
+		<radio label="top" />
+		<radio label="bottom" checked="true" />
+		<radio label="both" />
+	</radiogroup>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		listbox.pagingChild.mold = "os".equals(listbox.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
+	</vlayout>
+	<zscript>
+		List items = new org.zkoss.zktest.test2.BigList(1000); //a big list of Integer
+	</zscript>
+	<grid id="listbox" autopaging="true" mold="paging" vflex="true">
+	<columns>
+		<column label="column1"/>
+	</columns>
+	<rows>
+		<row forEach="&#36;{items}">
+		 ${each}
+		</row>
+		</rows>
+	</grid>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			windowResizeTo(800,1000);
+			verifyImage();
+		]]></client>
+	</case>
+</test>

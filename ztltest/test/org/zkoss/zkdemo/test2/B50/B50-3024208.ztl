@@ -1,0 +1,38 @@
+<!-- B50-3024208.ztl.java
+
+	Purpose:for testing B50-3024208.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 19:50:06
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3024208.zul,A,E,Datebox">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Check that the icon of datebox button does not move up when mouseover</li>
+</ol>
+]]>
+</html>
+<datebox id="d"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				int x = getElementPositionTop(d.$n("btn")).intValue();
+				mouseOver(d.$n("btn"));
+				sleep(500);
+				int x1 = getElementPositionTop(d.$n("btn")).intValue();
+				verifyEquals(x,x1);
+		]]></client>
+	</case>
+</test>

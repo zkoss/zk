@@ -1,0 +1,66 @@
+<test tags="B50-2956449.zul,A,E,Bandbox,Combobox,Textbox,onCtrlKey,Unstable">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+				    <zscript>
+				        <![CDATA[
+				            import org.zkoss.zk.ui.ext.*;
+						public class TestWin extends Window implements AfterCompose {
+						public void afterCompose() {
+						Components.wireVariables(this, this);
+						Components.addForwards(this, this);
+						}
+						
+						public void onCtrlKey$bd(Event e) {
+						ForwardEvent fe = (ForwardEvent)e;
+						l.setValue(((KeyEvent)fe.getOrigin()).getKeyCode() + "");
+						}
+						public void onCtrlKey$tb(Event e) {
+						ForwardEvent fe = (ForwardEvent)e;
+						l.setValue(((KeyEvent)fe.getOrigin()).getKeyCode() + "");
+						}
+						}
+				        ]]>
+				    </zscript>
+				        1.Please press UP/Down into the two textbox, you should see the UP with 38 and Down with 40.
+				<separator/>
+				 <label id="l"/>
+				    <window title="Hello World!!" border="normal" width="200px"
+				use="TestWin">
+				        <textbox id="tb" ctrlKeys="^d@q#up#down"/>
+				        <bandbox id="bd" autodrop="true" ctrlKeys="^d@q#up#down">
+				            <bandpopup>
+				                <listbox width="200px" onSelect="bd.value=self.selectedItem.label;
+				bd.close();">
+				                    <listitem>
+				                        <listcell label="John" />
+				                    </listitem>
+				                    <listitem>
+				                        <listcell label="Joe" />
+				                    </listitem>
+				                    <listitem>
+				                        <listcell label="Mary" />
+				                    </listitem>
+				                </listbox>
+				            </bandpopup>
+				        </bandbox>
+				    </window>
+				       
+				</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+			
+				focus(jq("$tb"));
+				keyPressNative("38");
+				waitResponse();
+				verifyEquals("38",jq("$l").text());
+				
+				focus(jq("$tb"));
+				keyPressNative("40");
+				waitResponse();
+				verifyEquals("40",jq("$l").text());
+			]]></client>
+	</case>
+</test>

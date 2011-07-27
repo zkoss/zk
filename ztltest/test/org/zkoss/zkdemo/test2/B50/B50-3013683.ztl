@@ -1,0 +1,30 @@
+<test tags="B50-3013683.zul,grid,columns" >
+	<case id="columnsWidth">
+		<server id="zul"><![CDATA[
+			<zk>
+				<div width="100px">
+					<grid height="50px">
+						<columns>
+							<column label="a" />
+							<column label="b" />
+						</columns>
+						<rows>
+							<row>
+								<label value="a" />
+								<label value="b" />
+							</row>
+							<row>
+								<label value="a" />
+								<label value="b" />
+							</row>
+						</rows>
+					</grid>
+				</div>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+		 	sleep(200);
+			verifyEquals(jq("@columns").width(), jq("@row:eq(0)").width());
+		]]></client>
+	</case>
+</test>

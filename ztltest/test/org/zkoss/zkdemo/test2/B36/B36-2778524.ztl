@@ -1,0 +1,24 @@
+<test tags="datebox">
+	<case id="format">
+		<server><!--
+			<zk>
+				<vbox>
+					Choice date at the datebox, it should be ok (the year should not always 1999). 
+					<datebox id="db1" format="dd.MM.yyyy" />
+					Choice date at the datebox, it should not show any error.
+					<datebox id="db2" format="dd.MM.yyyy" lenient="false" />
+				</vbox>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(db1.$n("btn"));
+			click(jq(db1.$n("pp")).find("@calendar td:eq(12)"));
+			verifyFalse(jq(db1.$n("real")).val().indexOf("1999") > 0);
+			
+			click(db2.$n("btn"));
+			click(jq(db2.$n("pp")).find("@calendar td:eq(12)"));
+			blur(db2.$n("real"));
+			verifyFalse(jq("div.z-errbox").exists());
+		]]></client>
+	</case>
+</test>

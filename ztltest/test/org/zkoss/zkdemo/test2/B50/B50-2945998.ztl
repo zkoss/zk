@@ -1,0 +1,29 @@
+<test tags="B50-2945998.zul,B,E,BSH,Interpreter">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+<zscript>
+Label x = new Label();
+</zscript>
+<window id="mywin" border="normal">
+<custom-attributes a="${x}"/>
+A window
+</window>
+Click 
+<button label="test" onClick="new Div().appendChild(mywin)"/>
+and you shall see the above window disappears
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+			
+		verifyTrue(mywin.exists());
+	
+		click(jq("@button"));
+		waitResponse();
+		verifyFalse(mywin.exists());
+		            							
+			]]></client>
+	</case>
+</test>

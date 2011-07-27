@@ -1,0 +1,43 @@
+<test tags="B35-2436434.zul,tabbox">
+	<case id="ztl">
+		<server><!--		
+			<zk>
+			click add and scroll to right, IE 7 should scroll to the right position.
+			  <hbox>
+			    <button id="btn" label="add" onClick="add()" />
+			    <textbox id="txb" value="this is a tab" width="150px" />
+			  </hbox>
+			  <tabbox id="tabbox" width="200px">
+			    <tabs id="tabs">
+			      <tab id="tab1" disabled="true" label="Tab 1" closable="true" />
+			      <tab label="Tab 2" closable="true" />
+			      <tab label="Tab 3" closable="true" />
+			    </tabs>
+			    <tabpanels>
+			      <tabpanel>This is panel 1</tabpanel>
+			      <tabpanel>This is panel 2 The second panel</tabpanel>
+			      <tabpanel>This is panel 3</tabpanel>
+			    </tabpanels>
+			  </tabbox>
+			  <zscript><![CDATA[ //@DECLARATION 
+			    void add() {
+			    Tab tab = new Tab(txb.getValue());
+			    tab.setClosable(true);
+			    tabs.appendChild(tab);
+			    }
+			    ]]></zscript>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			Element header = tabs.$n("header");
+			click(btn);
+			waitResponse();
+			int x = parseInt(header.get("scrollLeft"));
+			click(jq(".z-tabs-right-scroll"));
+			waitResponse();
+			int y = parseInt(header.get("scrollLeft"));
+			verifyTrue(x == 0);
+			verifyTrue(y > x);	
+		]]></client>
+	</case>
+</test>

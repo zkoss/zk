@@ -1,0 +1,48 @@
+<!-- B50-3058028.ztl.java
+
+	Purpose:for testing B50-3058028.ztl .
+
+	Description:
+
+	History:
+		05, 10, 2011 11:47:40
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3058028.zul,Unstable">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+	<ul>
+	<li>Test environment: IE</li>
+	<li>Press TAB to change focus to "bb"</li>
+	<li>Press TAB again and the focus shall switch to "cc"</li>
+	</ul>
+	]]></html>
+
+	<textbox focus="true"/>
+	<combobox value="bb">
+		<comboitem label="aa"/>
+		<comboitem label="bb"/>
+	</combobox>
+	<combobox value="cc">
+		<comboitem label="aa"/>
+		<comboitem label="bb"/>
+	</combobox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				keyPressNative(TAB);
+				waitResponse();			
+				verifyEquals("bb",jq(".z-combobox-focus > input").val());
+				keyPressNative(TAB);
+				waitResponse();
+				verifyEquals("cc",jq(".z-combobox-focus > input").val());
+		]]></client>
+	</case>
+</test>

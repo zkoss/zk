@@ -1,0 +1,61 @@
+<!-- B30-1963607.ztl.java
+
+	Purpose:for testing B30-1963607.ztl .
+
+	Description:
+
+	History:
+		06, 8, 2011 09:21:57
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1963607.zul,Grid,Paging">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window title="Load more than one page at a time">
+	<paging pageSize="5" id="pg"/>
+	<listbox id="l" mold="paging" paginal="${pg}">
+	<listhead/>
+	</listbox>
+	<button label="Test Listbox">
+	 <attribute name="onClick"><![CDATA[
+	 for (int i = 0; i < 6; i++)
+		 new Listitem("li"+i).setParent(l);
+	 ]]></attribute>
+	</button>
+	<grid mold="paging" pageSize="5">
+		<columns/>
+		<rows id="rows"/>
+	</grid>
+	<button label="Test Grid">
+	 <attribute name="onClick"><![CDATA[
+	 for (int i = 0; i < 6; i++) {
+		 Row r= new Row();
+		 new Label("r" + i).setParent(r);
+		 r.setParent(rows);
+	 }
+	 ]]></attribute>
+	</button>
+	
+</window>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button:eq(0)"));
+				waitResponse();
+				verifyNotEquals("/ 1",jq("span.z-paging-text:first").text());
+				verifyEquals(5,jq("@listitem:visible").length());
+				
+				click(jq("@button:eq(1)"));
+				waitResponse();
+				verifyNotEquals("/ 1",jq("span.z-paging-text:last").text());
+				verifyEquals(5,jq("@row:visible").length());
+		]]></client>
+	</case>
+</test>

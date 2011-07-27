@@ -1,0 +1,43 @@
+<!-- B50-3189142.ztl.java
+
+	Purpose:for testing B50-3189142.ztl .
+
+	Description:
+
+	History:
+		06, 1, 2011 09:39:42
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3189142.zul,Combobox,onOpen,IE7,Unstable">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk> 
+Please type a word into the textbox, you shouldn't see the width of the popup is wrong. (IE7 only)
+<combobox id="cb" autodrop="true" onOpen=""> 
+<comboitem label="1"/> 
+<comboitem label="2"/> 
+<comboitem label="3"/> 
+</combobox> 
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(cb.$n("real"));
+				keyPressNative("65");
+				waitResponse();
+				verifyTrue(jq(".z-combobox-pp").exists());
+				verifyTrue(getElementWidth(jq(".z-combobox-pp")).intValue() > 0);
+				
+				int cbx = getElementWidth(jq("i.z-combobox")).intValue();
+				int pp = getElementWidth(jq(".z-combobox-pp")).intValue();
+				verifyTolerant(cbx, pp, 6);
+		]]></client>
+	</case>
+</test>

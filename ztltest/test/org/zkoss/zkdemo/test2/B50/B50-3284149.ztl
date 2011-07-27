@@ -1,0 +1,43 @@
+<!-- B50-3284149.ztl.java
+
+	Purpose:for testing B50-3284149.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 14:52:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3284149.zul,A,E,Datebox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Open the datebox.</li>
+			<li>Click the timebox in datebox popup.</li>
+			<li>The time shall not changed.</li>
+		</ol>
+	]]></html>
+	<datebox format="yyyy-MM-dd HH:mm:ss" readonly="true"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(jq("@datebox .z-datebox-btn"));
+				waitResponse();
+				String x = jq(".z-datebox-pp .z-timebox input").val();
+				focus(jq(".z-datebox-pp .z-timebox input"));
+				waitResponse();
+				String x1 = jq(".z-datebox-pp .z-timebox input").val();
+				verifyEquals(x,x1);
+		]]></client>
+	</case>
+</test>

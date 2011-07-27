@@ -1,0 +1,35 @@
+<test tags="B30-1888104.zul,Popup,Intbox,Constraint,ie9">
+	<case id="ZIndex">
+		<server><!--
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+				<n:ol>
+					<n:li>press click me.</n:li>
+					<n:li>click into the intbox and enter a positive number, say, 5.</n:li>
+					<n:li>[IE,FF,SA]tab away,([Opera]Unfocus the intbox)  and the error message is shown and it should be "ABOVE" the popup.(Use Safari version 3.0.4 or later)</n:li>
+				</n:ol>
+				<window id="mainWindow">
+					<label id="clickLbl" value="click me" popup="mypopup" />
+					<popup id="mypopup" style="border: visible">
+						<window width="200px">
+							<intbox id="myIntbox" constraint="no positive" />
+						</window>
+					</popup>
+				</window>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(clickLbl);
+			waitResponse();
+			verifyTrue(jq(mypopup).height() > 0);
+			focus(myIntbox);
+			waitResponse();
+			type(myIntbox, "5");
+			JQuery errbox = jq(".z-errbox");
+            verifyTrue(errbox.exists());
+            
+            int errboxZIdx = Integer.parseInt(errbox.css("z-index"));
+            int popupZIdx = Integer.parseInt(jq(mypopup).css("z-index"));
+            verifyTrue(errboxZIdx > popupZIdx);
+		]]></client>
+	</case>
+</test>

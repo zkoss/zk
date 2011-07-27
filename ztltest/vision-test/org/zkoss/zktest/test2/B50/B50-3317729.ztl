@@ -1,0 +1,47 @@
+<test tags="B50-3317729.zul,A,E,Window,Grid,Cell,Hbox,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+<window hflex="min" title="Only for Vision Test" border="normal" mode="modal">
+<grid hflex="min">
+<columns>
+<column hflex="min" />
+<column hflex="min" />
+</columns>
+<rows>
+<row>
+<cell>
+<label value="Country Code:" />
+</cell>
+<cell>
+<combobox />
+</cell>
+</row>
+<row>
+<cell>
+<label value="Alpha-3 Country Code:" />
+</cell>
+<cell>
+<textbox hflex="1" />
+</cell>
+</row>
+</rows>
+</grid>
+<hbox hflex="min">
+<cell>
+<button label="i" />
+</cell>
+<cell hflex="1" align="right">
+<button label="Save" />
+<button label="Close" />
+<button label="Help" />
+</cell>
+</hbox>
+</window>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

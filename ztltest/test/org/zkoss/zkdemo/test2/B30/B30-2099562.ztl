@@ -1,0 +1,32 @@
+<!-- B30-2099562.ztl.java
+
+	Purpose:for testing B30-2099562.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 19:22:44
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2099562.zul,Progressmeter,Opera,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	If you can see the height of the progressmeter (not only 1px) in Opera, that is correct.
+	<progressmeter width="100px" id="pm" value="0"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				System.out.println(jq("@progressmeter").height());
+				verifyTrue(jq(".z-progressmeter").height() >= 15);
+		]]></client>
+	</case>
+</test>

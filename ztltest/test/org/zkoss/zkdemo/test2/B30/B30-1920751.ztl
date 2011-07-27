@@ -1,0 +1,21 @@
+<test tags="B30-1920751.zul,B,E,Combobox,Unstable">
+	<case id="combobox">
+		<server><!--
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+				<n:p>Please type the word "s" into the input element, and then press the "Up" button, and the item "Cool!" should be shown.</n:p>
+				<combobox id="cb1" constraint="strict">
+					<comboitem label="Simple and Rich" disabled="true"/>
+					<comboitem label="Cool!"/>
+					<comboitem label="Thumbs Up!" disabled="true"/>
+					<comboitem label="ZK Best!"/>
+					<comboitem label="ZK Best1 ! " disabled="true"/>
+				</combobox>
+			</zk>
+		--></server>
+		<client><![CDATA[
+				focus(cb1.$n("real"));waitResponse();
+				keyDown(cb1.$n("real"),"38");waitResponse();
+				verifyEquals("Cool!",jq(".z-combobox-inp").val());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,55 @@
+<!-- B50-3285032.ztl.java
+
+	Purpose:for testing B50-3285032.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 15:20:52
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3285032.zul,A,E,Grid,Frozen">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Press the button, if an error is shown, it is a bug.</li>
+		</ol>
+	]]></html>
+	<grid>
+		<frozen id="f" columns="3" />
+		<columns>
+			<column label="1" />
+			<column label="2" />
+			<column label="3" />
+			<column label="4" />
+			<column label="5" />
+		</columns>
+		<rows>
+			<row>
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+			</row>
+		</rows>
+	</grid>
+	<button label="Go" onClick='lb.value = "" + f.start' />
+	<label id="lb" />
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				verifyFalse(jq("@window").exists());
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

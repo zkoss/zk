@@ -1,0 +1,20 @@
+<test tags="B30-2202620.zul,A,E,BI,Comet,ServerPush">
+	<case id="combobox">
+		<server><!--
+			<window>
+				After click
+				<button id="btn" label="start" onClick="org.zkoss.zktest.test2.B2202620.start(info)"/>
+				You shall see only one message (Comet received) below
+				<separator/>
+				<div id="info" style="border: 1px solid blue"/>
+			</window>
+		--></server>
+		<client><![CDATA[			
+				click(btn);
+				waitResponse();
+				verifyEquals(1,jq("span.z-label:gt(1)").length());
+				verifyEquals("Comet received",jq("span.z-label:gt(1)").text());
+				verifyEquals("",jq("span.z-label:gt(2)").text());
+		]]></client>
+	</case>
+</test>

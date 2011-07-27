@@ -1,0 +1,26 @@
+<test tags="B50-3004412.zul,combobox,popup,ie9,blur">
+	<case id="zindex">
+		<server id="zul"><![CDATA[
+			<zk>
+				<combobox id="cb">
+					<comboitem tooltip="popup" label="test" id="cbi"/>
+				</combobox>
+				<popup id="popup">
+					<label value="popup"/>
+				</popup>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+		click(cb.$n("btn"));
+		mouseOver(cbi);
+		mouseMoveAt(cbi, "5,1");
+		sleep(1000);
+		verifyTrue(isVisible(popup));
+		String zindex = jq(cb.$n("pp")).css("z-index");
+		int ppZindex = zindex.equals("auto") ? 0 : Integer.parseInt(zindex);
+		zindex = jq(popup).css("z-index");
+		int popipZindex = zindex.equals("auto") ? 0 : Integer.parseInt(zindex);
+		verifyTrue(popipZindex > ppZindex);
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,62 @@
+<test tags="B50-2976323.zul,menu,ie9">
+	<case id="Dragdrop">
+		<server><!--
+		<zk>
+			
+			<window border="none" height="100%">
+			
+			<zscript><![CDATA[
+			
+			public void check(Event event) {
+			
+				Menuitem dragged = (Menuitem)((org.zkoss.zk.ui.event.DropEvent)event).getDragged();
+			
+				Menuitem dropped = (Menuitem)event.getTarget();
+			
+				List a = dropped.getParent().getChildren();
+			
+				if (a.indexOf(dragged) > a.indexOf(dropped)) {
+			
+					a.remove(dragged);
+			
+					a.add(a.indexOf(dropped), dragged);
+			
+				} else {
+			
+					a.remove(dragged);
+			
+					a.add(a.indexOf(dropped)+1, dragged);
+			
+				}
+			
+			}
+			
+			]]></zscript>
+			
+			<menubar id="mb">
+			
+				<menuitem id="one" label="One" draggable="true" droppable="true" onDrop="check(event)"/>
+			
+				<menuitem id="two" label="Two" draggable="true" droppable="true" onDrop="check(event)"/>
+			
+			</menubar>
+			
+			</window>
+			
+			</zk>
+		--></server>
+		<client>
+			dragdropToObject(two, one, "0,10", "0,10");
+			waitResponse();
+			verifyEquals("two", mb.firstChild().get("id"));
+			verifyEquals(0, two.$n().get("cellIndex"));
+			
+			
+			dragdropToObject(one, two, "0,10", "0,10");
+			waitResponse();
+			verifyEquals("one", mb.firstChild().get("id"));
+			verifyEquals(1, two.$n().get("cellIndex"));
+			
+		</client>
+	</case>
+</test>

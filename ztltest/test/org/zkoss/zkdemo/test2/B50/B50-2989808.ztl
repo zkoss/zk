@@ -1,0 +1,35 @@
+<test tags="B50-2989808.zul,decimalbox">
+	<case id="Format">
+		<server><!--
+		<zk>
+			<decimalbox id="d1" format="#####.0##%" value="123.456"/>
+			<decimalbox id="d2" format="##0.##%" value="123"/>
+			<decimalbox id="d3" width="150px" format="R ##,###,###,###.00%" value="123456"/>
+			<decimalbox id="d4" width="150px" format="#,###,###.00%" value="123456"/>			
+		</zk>
+
+		--></server>
+		<client>
+			verifyEquals("12345.6%", jq(d1).val());
+			verifyEquals("12300%", jq(d2).val());
+			verifyEquals("R 12,345,600.00%", jq(d3).val());
+			verifyEquals("12,345,600.00%", jq(d4).val());
+			
+			focus(d1);
+			blur(d1);
+			verifyEquals("12345.6%", jq(d1).val());
+			
+			focus(d2);
+			blur(d2);
+			verifyEquals("12300%", jq(d2).val());
+			
+			focus(d3);
+			blur(d3);
+			verifyEquals("R 12,345,600.00%", jq(d3).val());
+			
+			focus(d4);
+			blur(d4);
+			verifyEquals("12,345,600.00%", jq(d4).val());
+		</client>
+	</case>
+</test>

@@ -1,0 +1,41 @@
+<!-- B50-3285610.ztl.java
+
+	Purpose:for testing B50-3285610.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 15:45:49
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3285610.zul,Unstable,Textbox,InplaceEditing">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Inplace editor doesn't remove the border when focus out</li>
+		</ol>
+	]]></html>
+
+	<textbox id="test1" inplace="true" onFocus="tb.focus();" value="text1"/>
+	<textbox id="tb" inplace="true" value="text2"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq(test1));
+				keyPressNative(TAB);
+				verifyTrue(jq(".z-textbox-focus").length() == 1);
+				System.out.println(jq("input.z-textbox:eq(0)").css("border-width"));
+				if("1px" == jq("input.z-textbox:eq(0)").css("border-width") || "1" == jq("input.z-textbox:eq(0)").css("border-width"))
+				verifyTrue(false);
+				else
+				verifyTrue(true);
+		]]></client>
+	</case>
+</test>

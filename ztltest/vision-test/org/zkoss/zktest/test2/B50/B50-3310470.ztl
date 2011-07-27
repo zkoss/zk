@@ -1,0 +1,21 @@
+<test tags="B50-3310470.zul,A,E,Columnlayout,Vflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+	1. Panel shall occupy the entire height of the green box. If not, it is a bug.
+	<div height="400px" style="border: 1px solid green">
+		<columnlayout vflex="1">
+			<columnchildren vflex="1" hflex="1">
+				<panel title="Panel" border="rounded+" vflex="1">
+					<panelchildren vflex="1">Panel 1</panelchildren>
+				</panel>
+			</columnchildren>
+		</columnlayout>
+	</div>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();			
+		]]></client>
+	</case>
+</test>

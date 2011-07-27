@@ -1,0 +1,33 @@
+<test tags="Server">
+	<case id="GettingResponse">
+		<server>
+			<!-- 
+				<zk>
+					<window title="Test of long operation">
+						Clicks the Test button and you shall see alert after 10 seconds (Bug 1839256).
+						To verify bug 1907640, test this file with Glassfish.
+						<separator/>
+						Moreover, all following clicks are ignored before alert is shown (Feature 1859533).
+						<separator/>
+						<button label="Test" autodisable="self">
+							<attribute name="onClick">
+							org.zkoss.lang.Threads.sleep(10000);
+							alert("Everything goes fine");
+							</attribute>
+						</button>
+					</window>
+				</zk>
+			 -->
+		</server>
+		<client><![CDATA[
+			click(jq("span.z-button"));
+			waitResponse();
+			
+			if (jq(".z-window-highlighted").exists() || jq(".z-window-modal").exists()) {
+			    verifyTrue(true);
+			} else {
+			    verifyTrue(false);
+			}
+		]]></client>
+	</case>
+</test>

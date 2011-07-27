@@ -1,0 +1,41 @@
+<!-- B30-2124391.ztl.java
+
+	Purpose:for testing B30-2124391.ztl .
+
+	Description:
+
+	History:
+		06, 24, 2011 16:38:16
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2124391.zul,Tree,TreeitemRenderer">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window title="dynamic tree" border="normal" id="win">
+	If you can see each item with "Group0", "Group1"..., that is
+	correct.
+	<zscript>	
+		import org.zkoss.zktest.test2.tree.*;
+		HostTreeModel model = new HostTreeModel();
+		HostIconTreeRenderer renderer = new HostIconTreeRenderer();
+	</zscript>
+	<tree model="${model}" treeitemRenderer="${renderer}" />
+</window>
+
+		--></server>
+		<client><![CDATA[
+				verifyEquals(" Group0",jq("@treeitem:eq(0)").text());
+				verifyEquals(" Group1",jq("@treeitem:eq(1)").text());
+				verifyEquals(" Group2",jq("@treeitem:eq(2)").text());
+				verifyEquals(" Group3",jq("@treeitem:eq(3)").text());
+				verifyEquals(" Group4",jq("@treeitem:eq(4)").text());
+		]]></client>
+	</case>
+</test>

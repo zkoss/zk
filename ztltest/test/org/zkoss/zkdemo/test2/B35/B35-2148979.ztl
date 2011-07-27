@@ -1,0 +1,35 @@
+<!-- B35-2148979.ztl.java
+
+	Purpose:for testing B35-2148979.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 10:07:04
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2148979.zul,Window,Caption">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window border="normal" width="350px" sizable="true" minimizable="true"
+	maximizable="true" closable="true">
+	<caption image="/test2/img/inet.png"
+		label="You should see three tool icons here" />
+</window>
+
+		--></server>
+		<client><![CDATA[
+				verifyEquals(3, jq(".z-window-embedded-icon").exists());
+				verifyTrue(jq(".z-window-embedded-max").isVisible());
+				verifyTrue(jq(".z-window-embedded-min").isVisible());
+				verifyTrue(jq(".z-window-embedded-close").isVisible());
+		]]></client>
+	</case>
+</test>

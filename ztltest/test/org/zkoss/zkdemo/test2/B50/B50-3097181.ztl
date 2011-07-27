@@ -1,0 +1,55 @@
+<!-- B50-3097181.ztl.java
+
+	Purpose:for testing B50-3097181.ztl .
+
+	Description:
+
+	History:
+		05, 11, 2011 12:06:17
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3097181.zul,A,E,Tree,ROD,ie9">
+	<case id="ztl">
+		<server><!--
+			
+<zk>
+	<label multiline="true">
+		<attribute name="value"><![CDATA[
+			A colorbox in menu doestn't work with menubar autodrop="true"
+			
+			How to test:
+			1. Mouse over on menubar will auto drop menubar
+			2. Move mouse to Color Picker will popup color picker
+			3. move to color picker and mouse over on a color
+			4. when mouse over a color, if color picker close, it's error
+			]]></attribute>
+	</label>
+	<menubar id="menubar" width="100%" autodrop="true">
+		<menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+			<menupopup>
+				<menu label="Color Picker" content="#color=#184dc6" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				mouseOver(jq(".z-menu-btn"));
+				waitResponse();
+				mouseOver(jq(".z-menu-cnt"));
+				waitResponse();
+				verifyTrue(isVisible(jq(".z-colorpalette")));
+				mouseOver(jq(".z-colorpalette-colorbox:eq(8)"));
+				verifyTrue(isVisible(jq(".z-colorpalette")));
+				mouseOver(jq(".z-colorpalette-colorbox:eq(18)"));
+				verifyTrue(isVisible(jq(".z-colorpalette")));
+				mouseOver(jq(".z-colorpalette-colorbox:eq(28)"));
+				verifyTrue(isVisible(jq(".z-colorpalette")));
+		]]></client>
+	</case>
+</test>

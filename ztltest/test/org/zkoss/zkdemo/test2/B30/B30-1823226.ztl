@@ -1,0 +1,24 @@
+<test tags="Hbox,Splitter,Unstable">
+	<case id="Dragdrop">
+		<server><!--
+<zk>
+Splitter can be dragged over hbox border.
+<window border="normal" width="800px" title="Case 1: hbox and splitter">
+		<hbox height="100px" width="100%">
+		cdacdacdacdacdaca
+		<splitter id="hsplitter" collapse="none"/>
+		cdacdacdacdacacsdc
+		</hbox>
+	</window></zk>
+		 --></server>
+		<client><![CDATA[
+		int width = jq("@box @label").parent().width();
+		dragdropTo(hsplitter, "0,0", "-20, 0");
+		waitResponse();
+		verifyEquals(width - 20, jq("@box @label").parent().width());
+		dragdropTo(hsplitter, "0,0", "20, 0");
+		waitResponse();
+		verifyEquals(width, jq("@box @label").parent().width());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,24 @@
+<test tags="button,vbox,Server,Fulfill">
+	<case id="Fulfill">
+		<server><!--
+			<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+			<n:p>It's true, you should see the image after you click the button.</n:p>
+			<window id="w1" title="Foo">
+			<button id="btn1" label="click me"/>
+			<vbox id="w2" fulfill="btn1.onClick">
+			<div style="padding: 10px; background:
+			url(${c:encodeURL('/img/battery.gif')});">
+			ABCD
+			</div>
+			</vbox>
+			</window>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			verifyFalse(jq("@box @div").exists());
+			click(btn1);
+			verifyTrue(jq("@box @div").exists());
+		]]></client>
+	</case>
+</test>

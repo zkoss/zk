@@ -1,0 +1,27 @@
+<test tags="B50-2972980.zul,A,E,Widget,Listener">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click the "add listener" button first</li>
+<li>Then click "Click Me", and then you shall see a "onClick" dialog shown up</li>
+</ol>
+]]></html>
+	<div id="d" style="border:1px solid blue">Click Me</div>
+	<button label="add listener" onClick='d.setWidgetListener("onClick", "jq.alert(event.name)")'/>
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+			
+   				click(jq("@button"));
+  				waitResponse();
+  				click(jq("@label"));
+  				waitResponse();
+  				verifyTrue(jq(".z-window-modal").exists());
+
+			]]></client>
+	</case>
+</test>

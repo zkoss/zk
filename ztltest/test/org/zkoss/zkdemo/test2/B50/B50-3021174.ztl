@@ -1,0 +1,41 @@
+<!-- B50-3021174.ztl.java
+
+	Purpose:for testing B50-3021174.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 18:51:45
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3021174.zul,A,E,Window">
+	<case id="ztl">
+		<server><!--
+			<zk>
+   <html><![CDATA[
+	<ul>
+	<li>Click "show popup window" shall not cause js error</li>
+	</ul>
+	]]></html>
+	<button id="btn" label="click" >
+		<attribute name="onClick"><![CDATA[
+			createEvent.setLeft("100px");
+			createEvent.visible = true;
+		]]></attribute>
+	</button>
+	<window width="400px" title="Create Event" border="normal"
+			id="createEvent" mode="popup" visible="false"  closable="true"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(btn);
+			waitResponse();
+			verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,37 @@
+<test tags="B50-3032885.zul,Combobox,Bandbox,Datebox,Timebox,Spinner">
+	<case id="Inplace">
+		<server><!--
+<zk>
+<vbox>
+<div><combobox mold="rounded" inplace="true" />&lt;&lt;Combobox Here</div>
+<div><bandbox mold="rounded" inplace="true" />&lt;&lt;Bandbox Here</div>
+<div><datebox mold="rounded" inplace="true" />&lt;&lt;Datebox Here</div>
+<div><timebox mold="rounded" inplace="true" />&lt;&lt;Timebox Here</div>
+<div><spinner mold="rounded" inplace="true" />&lt;&lt;Spinner Here</div>
+<label>When any of the Combo Input above gets focus, this label will be pushed down.</label>
+</vbox>
+</zk>
+		--></server>
+		<client><![CDATA[
+    		int t1 = jq("@label:eq(0)").offsetTop();
+   			focus(jq("@combobox input"));
+   			verifyEquals(t1, jq("@label:eq(0)").offsetTop());
+   			
+   			t1 = jq("@label:eq(1)").offsetTop();
+   			focus(jq("@bandbox input"));
+   			verifyEquals(t1, jq("@label:eq(1)").offsetTop());
+   			
+   			t1 = jq("@label:eq(2)").offsetTop();
+   			focus(jq("@datebox input"));
+   			verifyEquals(t1, jq("@label:eq(2)").offsetTop());
+   			
+   			t1 = jq("@label:eq(3)").offsetTop();
+   			focus(jq("@timebox input"));
+   			verifyEquals(t1, jq("@label:eq(3)").offsetTop());
+
+   			t1 = jq("@label:eq(4)").offsetTop();
+   			focus(jq("@spinner input"));
+   			verifyEquals(t1, jq("@label:eq(4)").offsetTop());
+		]]></client>
+	</case>
+</test>

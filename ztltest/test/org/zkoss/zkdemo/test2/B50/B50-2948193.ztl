@@ -1,0 +1,22 @@
+<test tags="B50-2948193.zul,A,E,Listbox">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					Please click invalidate button, and it will not happen js error.
+					<button id="btn" label="invalidate" onClick="center.invalidate();"/>
+					<borderlayout width="100%" height="100%">
+						<center id="center" >
+							<listbox vflex="true" />
+						</center>
+					</borderlayout>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[
+				click(btn);
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());				
+			]]></client>
+	</case>
+</test>

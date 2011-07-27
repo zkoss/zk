@@ -1,0 +1,42 @@
+<test tags="Button">
+	<case id="URL">
+		<server><!--
+		<window title="HashTest" onOK="setHash()">
+		<html><![CDATA[
+		1. Open new browser. <br/>
+		2. Click the B30-1773575.zul, you should not see "?" appended to the URL. <br/>
+		3. Click the B30-1773575.zul#12345, you should not see "?" in the URL. And press second time should not get js loop.<br/>
+		<br/>
+		]]></html>
+		
+		<vbox>
+		Enter URL fragment (hash):
+		<textbox id="tb" />
+		
+		<hbox>Current fragment for db querries:
+		<label id="hash" />
+		</hbox>
+		<button id="btn1" href="" label="B30-1773575.zul" />
+		<button id="btn2" href="#12345" label="B30-1773575.zul#12345" />
+		</vbox>
+		<zscript>
+		setHash(){
+		desktop.setBookmark(tb.value);
+		hash.setValue(desktop.getBookmark());
+		}
+		</zscript>
+		</window>		
+		-->
+		</server>
+		<client><![CDATA[
+			// In safari, it will reload incorrectly. So ignore.
+	        if (!ZK.is("safari")) {
+	            click(btn1);
+	            verifyTrue(getLocation().indexOf("?") < 0);
+	            click(btn2);
+	            verifyTrue(getLocation().indexOf("?") < 0);
+	            verifyTrue(getLocation().endsWith("#12345"));
+	        }
+		]]></client>
+	</case>
+</test>

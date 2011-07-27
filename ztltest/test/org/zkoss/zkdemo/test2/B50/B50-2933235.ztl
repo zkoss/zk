@@ -1,0 +1,28 @@
+<test tags="B50-2933235.zul,Combobox">
+	<case id="closed">
+		<server>
+			<!--
+<window title="Hello World!!" border="normal" width="400px">
+
+    <combobox id="contentCbx" rows="1" cols="1" readonly="true" width="50px">
+        <comboitem label="AAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+        <comboitem label="BBBBBBBBBBBBBBB" />
+        <comboitem label="CBBB" />
+    </combobox>
+
+    <button label="Click me to change width that it should work.">
+        <attribute name="onClick">
+            contentCbx.setWidth("200px");
+        </attribute>
+    </button>
+</window>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+   				click(jq("@button"));
+  				waitResponse();
+  				verifyEquals("200px", jq("$contentCbx").css("width"));
+			
+			]]></client>
+	</case>
+</test>

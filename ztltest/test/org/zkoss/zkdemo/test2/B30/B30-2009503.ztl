@@ -1,0 +1,36 @@
+<!-- B30-2009503.ztl.java
+
+	Purpose:for testing B30-2009503.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 15:48:47
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2009503.zul,Datebox,Calendar">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	1.Type "May/02/2008" into datebox , if no error , the bug fixed.
+	<separator />
+	format="MMM/dd/yyyy".<datebox  format="MMM/dd/yyyy"/>	
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				type(jq("@datebox input"),"May/02/2008");
+				waitResponse();
+				verifyFalse(jq(".z-errbox").exists());
+				verifyFalse(jq(".z-error").exists());
+				verifyFalse(jq("@window[title=\"ZK Test\"]").exists());
+		]]></client>
+	</case>
+</test>

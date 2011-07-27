@@ -1,0 +1,39 @@
+<!-- B35-2073438.ztl.java
+
+	Purpose:for testing B35-2073438.ztl .
+
+	Description:
+
+	History:
+		11, 2, 2010 21:01:31
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3101558.zul,B,Combobox,bandbox,datebox,timebox,spinner,width">
+	<case id="ztl">
+		<server><!--
+<zk>
+ you shall see 5 "30px" widget in the screen ;
+ <div id="div">
+  <combobox width="30px" />
+  <bandbox width="30px" />
+  <datebox width="30px" />
+  <timebox width="30px" />
+  <spinner width="30px" />
+ </div>
+ 
+ 
+</zk>
+		--></server>
+		<client><![CDATA[
+			JQuery widgets= jq("$div > *");
+			for(int i =0 ,len = widgets.length() ; i< len;++i){
+				int width = Integer.parseInt(widgets.eval("eq("+i+").width()"));
+				verifyEquals(30,width);
+			}
+		]]></client>
+	</case>
+</test>

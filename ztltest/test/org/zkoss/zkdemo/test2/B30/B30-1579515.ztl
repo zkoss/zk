@@ -1,0 +1,15 @@
+<test tags="B30-1579515.zul,menupopup,ie9">
+	<case id="RightClick">
+		<server><!--
+			<window id="win" context="menu" border="normal" contentStyle="background-color:blue">
+				<menupopup id="menu">
+					<menu label="Save"/>
+				</menupopup> 
+			</window>
+		--></server>
+		<client>
+			contextMenu(win);
+			verifyTrue(isVisible(menu));
+		</client>
+	</case>
+</test>

@@ -1,0 +1,18 @@
+<test tags="B50-2980894.zul,datebox,calendar">
+	<case id="selectDate">
+		<server id="zul"><![CDATA[
+			<datebox id="db" readonly="true" />
+		]]></server>
+		<client wait="100"><![CDATA[
+			click(db.$n("btn"));				
+			Widget cal = new Widget(db.$n("pp").firstChild().get("id"));
+			click(cal.$n("ty"));
+			Element mid = cal.$n("mid");				
+			verifyEquals("z-calendar-calyear", mid.get("className"));
+			click(cal.$n("y0"));
+			verifyEquals("z-calendar-calmon", mid.get("className"));				
+			click(cal.$n("m0"));
+			verifyEquals("z-calendar-calday", mid.get("className"));
+		]]></client>
+	</case>
+</test>

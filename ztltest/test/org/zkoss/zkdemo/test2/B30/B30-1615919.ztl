@@ -1,0 +1,29 @@
+<test tags="B30-1615919.zul,window,ie9">
+	<case id="Dragdrop">
+		<server><!--
+			<zk>
+				Click <button id="btn" label="Create" onClick="create2()"/> to open a modal window
+				and test if it is draggable.
+				<zscript><![CDATA[
+				public void create2() {
+					final Window win = (Window) Executions.createComponentsDirectly(
+					"<window border=\"normal\" closable=\"true\" width=\"300px\" title=\"modal\">"
+					+"<listbox><listitem label=\"a1\"/></listbox></window>", null, null, null);
+					win.doModal();
+				}
+				]]></zscript>
+			</zk>
+		--></server>
+		<client><![CDATA[
+				click(btn);
+				waitResponse();
+				JQuery win= jq("@window");
+				int left = parseInt(win.css("left"));
+				int top = parseInt(win.css("top"));
+				dragdropTo(jq("@window div[id$=\"cap\"]"), "10,10", "160,160");
+
+				verifyTolerant((left+150) , parseInt(win.css("left")) ,3);
+				verifyTolerant((top+150) , parseInt(win.css("top")) ,3);
+		]]></client>
+	</case>
+</test>

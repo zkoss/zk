@@ -1,0 +1,46 @@
+<!-- B50-3071613.ztl.java
+
+	Purpose:for testing B50-3071613.ztl .
+
+	Description:
+
+	History:
+		05, 10, 2011 12:03:42
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3071613.zul,A,E,Decimalbox,ie9,blur">
+	<case id="ztl">
+		<server><!--
+			<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<zscript>
+		import java.math.BigDecimal;
+	</zscript>
+	<html><![CDATA[
+		Type <b>"12.123"</b>, then move focus out of textbox, It will show <b>"12.12"</b>.<br />
+		Type <b>"12.125"</b>, then move focus out of textbox, It will show <b>"12.13"</b>.
+	]]></html>
+	<window title="new page title" border="normal">
+		<decimalbox id="myDeci" />
+		<zscript>
+			myDeci.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+			myDeci.setFormat("0.##");
+		</zscript>
+	</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				type(jq("@decimalbox"),"12.123");	
+				waitResponse();
+				verifyEquals("12.12",jq("@decimalbox").val());
+				type(jq("@decimalbox"),"12.125");
+				waitResponse();
+				verifyEquals("12.13",jq("@decimalbox").val());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,16 @@
+<test tags="B50-3343388.zul,A,E,Groupbox,Caption,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+<groupbox hflex="min" mold="3d">
+<caption hflex="min" label="groupbox" />
+<div width="100px" height="100px"
+ style="border:1px solid black;" />
+</groupbox>
+</zk> 
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

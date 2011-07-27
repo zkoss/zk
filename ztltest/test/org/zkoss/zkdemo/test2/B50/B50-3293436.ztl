@@ -1,0 +1,56 @@
+<!-- B50-3293436.ztl.java
+
+	Purpose:for testing B50-3293436.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 10:38:35
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3293436.zul,Grid">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Go to next page of the Grid. If the alternating color on Grid is lost, it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		rows = new String[50];
+	]]></zscript>
+	<grid mold="paging" pageSize="10">
+		<rows>
+			<row forEach="${rows}">${forEachStatus.index}</row>
+		</rows>
+	</grid>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+					click(jq(".z-paging-next"));
+				waitResponse();
+				boolean color = ColorVerifingHelper.getInstance().
+				isEqualColor("alternating",jq(".z-row:eq(1)").css("backgroundColor"));
+				verifyTrue(color);
+				boolean color1 = ColorVerifingHelper.getInstance().
+				isEqualColor("alternating",jq(".z-row:eq(3)").css("backgroundColor"));
+				verifyTrue(color);
+				boolean color2 = ColorVerifingHelper.getInstance().
+				isEqualColor("alternating",jq(".z-row:eq(5)").css("backgroundColor"));
+				verifyTrue(color);
+				boolean color3 = ColorVerifingHelper.getInstance().
+				isEqualColor("alternating",jq(".z-row:eq(7)").css("backgroundColor"));
+				verifyTrue(color);
+				boolean color4 = ColorVerifingHelper.getInstance().
+				isEqualColor("alternating",jq(".z-row:eq(9)").css("backgroundColor"));
+				verifyTrue(color);
+				
+		]]></client>
+	</case>
+</test>

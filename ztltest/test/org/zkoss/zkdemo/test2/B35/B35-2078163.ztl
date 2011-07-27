@@ -1,0 +1,46 @@
+<!-- B35-2078163.ztl.java
+
+	Purpose:for testing B35-2078163.ztl .
+
+	Description:
+
+	History:
+		06, 24, 2011 17:58:54
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2078163.zul,Spinner,Constraint">
+	<case id="ztl">
+		<server><!--
+			<zk>c
+<vbox>
+<label value='1.click "set spinner constraint" button'/>
+<label value="2.click button of spinner"/>
+<label value="3.the number will be increased or decreased by 2 or it is not correct!"/>
+</vbox>
+<window title="Spinner test" border="normal">
+<spinner id="sp"/>
+<separator />
+<button label="set spinner constraint">
+<attribute name="onClick">
+sp.setValue(new Integer(1));
+sp.setStep(2);
+sp.setConstraint("min -10 max 10");
+</attribute>
+</button>
+</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				clickAt(jq(".z-spinner-btn"),"1,1");
+				waitResponse();
+				verifyEquals(3,jq(".z-spinner-inp").val());
+		]]></client>
+	</case>
+</test>

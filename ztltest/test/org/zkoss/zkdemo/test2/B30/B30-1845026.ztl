@@ -1,0 +1,73 @@
+<test tags="B30-1845026.zul,B,E,Tree,Textbox,ie9">
+	<case id="changeLabel">
+		<server><!--
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>click on item 1</n:li>
+		<n:li>in the text box enter "a"</n:li>
+		<n:li>click on item 2</n:li>
+	</n:ol>
+	Notice that item 1's label will change to "a".
+	<window id="win" title="tree demo" width="400px" border="normal">
+		<tree id="tree" width="300px" height="200px" rows="5"
+			onSelect="
+                 tbox.detach();
+                 tbox.setParent(win);">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem selected="true">
+					<treerow draggable="x" droppable="y">
+						<treecell id="item1" label="Item 1" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow draggable="x" droppable="y">
+						<treecell id="item2" label="Item 2" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+		Change label:
+		<textbox id="txtbox" onChange="changeLabel()" />
+		<zscript>
+			tbox = win.getFellow("txtbox");
+			void changeLabel() {
+				tree.selectedItem.children.get(0).children.get(0).setLabel(tbox.value);
+			}
+		</zscript>
+	</window>
+</zk>
+
+		 --></server>
+		<client><![CDATA[
+		 	/**
+		 	 * 2010/10/27:TonyQ
+			 * @browsers ie6,ie7,ie8,chrome,firefox,safari402
+			 * @version zk505
+			*/
+			JQuery $txtbox = jq("$txtbox");
+			JQuery firstRow = jq("@treerow:eq(0)");
+
+			click(firstRow);//get selected
+			waitResponse();
+			click(firstRow);//get selected
+			waitResponse();
+
+			focus($txtbox);
+
+			type($txtbox, "a");
+			waitResponse();
+
+			click(jq("@treerow:eq(1)"));
+			//when textbox onChange , the first row will be changed
+			waitResponse();
+
+			String rowtext = firstRow.text();
+			//"item 1 should be change to a but it is:"+ rowtext
+			verifyTrue(rowtext !=null && rowtext.indexOf("a") != -1);
+		]]></client>
+	</case>
+</test>

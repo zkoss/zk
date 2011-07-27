@@ -1,0 +1,22 @@
+<test tags="B50-2943346.zul,A,E,Label">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+				    <window id="win" title="You should see the first label is 'A long text which is...' " border="normal" width="200px">
+				        <zscript>
+				            String abc = "A long text which is not truncated even if it should.\n" +
+						"Or not?";
+				        </zscript>
+				        <label id="lb1" maxlength="20" value="${abc}"/>
+				        <separator bar="true"/>
+				        <label id="lb2" maxlength="20" multiline="true" value="${abc}"/>
+				    </window>
+				</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+				verifyEquals("A long text which is...",jq("span.z-label:eq(0)").text());
+			]]></client>
+	</case>
+</test>

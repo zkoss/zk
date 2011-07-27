@@ -1,0 +1,20 @@
+<test tags="B50-3006313.zul,Slider,ie9">
+	<case id="SliderGetCurpos">
+		<server><![CDATA[
+			<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+				<slider id="sld" curpos="50" />
+				<button id="btn1" label="Show getCurpos()" 
+					onClick='ib1.value = sld.curpos'
+					w:onClick='this.$f("ib2").setValue(this.$f("sld").getCurpos());' />
+				<intbox id="ib1" value="0"/>
+				<intbox id="ib2" value="0"/>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			dragdropTo(sld.$n("btn"), "0,0", "50,0");
+			click(btn1);
+			verifyEquals("75", jq(ib1).val());
+			verifyEquals("75", jq(ib2).val());
+		]]></client>
+	</case>
+</test>

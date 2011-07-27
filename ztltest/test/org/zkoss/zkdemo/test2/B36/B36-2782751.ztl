@@ -1,0 +1,42 @@
+<test tags="listbox,listitem">
+	<case id="model">
+		<server><!--
+			<zk>
+				<zscript><![CDATA[ 
+				
+						ArrayList data = new ArrayList();
+						for (int i = 1; i <= 42; i++) {
+							data.add("Data " + i);
+						}
+				
+						ListModel dataModel = new SimpleListModel(data);
+						 ]]></zscript>
+				<listbox id="listbox" mold="paging"
+				pageSize="10" pagingPosition="top" model="${dataModel}" activePage="4">
+				<listhead>
+				<listheader value="Data"/>
+				</listhead>
+				</listbox>
+				
+				<button id="button" label="Click Me, you should see the item stay at Data 41">
+				<attribute name="onClick"><![CDATA[ 
+				
+						ArrayList data = new ArrayList();
+						for (int i = 1; i <= 41; i++) {
+							data.add("Data " + i);
+						}
+				
+						ListModel dataModel = new SimpleListModel(data);
+						listbox.setModel(dataModel);
+						 ]]></attribute>
+				</button>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(button);
+			waitResponse();
+			verifyEquals(1,jq("div.z-listcell-cnt").length());
+			verifyEquals("Data 41",jq("div.z-listcell-cnt").html());
+		]]></client>
+	</case>
+</test>

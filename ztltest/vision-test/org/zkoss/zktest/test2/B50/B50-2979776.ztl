@@ -1,0 +1,20 @@
+<test tags="B50-2979776.zul,A,E,Hflex,Grid,Safari,Chrome">
+	<case id="Vflex">
+		<server><!--
+<zk>
+You should see a textbox inside a square box. If not, it is a bug.
+<grid hflex="min">
+  <columns>
+	<column hflex="min"/>
+  </columns>
+  <rows>
+     <row><textbox /></row>
+  </rows>
+</grid>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

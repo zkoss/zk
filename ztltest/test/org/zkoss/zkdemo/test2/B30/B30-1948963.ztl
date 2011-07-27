@@ -1,0 +1,49 @@
+<!-- B30-1948963.ztl.java
+
+	Purpose:for testing B30-1948963.ztl .
+
+	Description:
+
+	History:
+		06, 8, 2011 08:56:32
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1948963.zul,Timebox,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:ol>
+		<n:li>Type a time into the Timebox, then click the button, then you should not see any error box.</n:li>
+	</n:ol>
+	<window title="My First Window" border="normal" width="200px">
+	<timebox id="time"/>
+	<button label="validate" onClick="validate()"/>
+	<zscript>
+	void validate()
+	{
+	if(time.getValue() == null)
+		throw new WrongValueException(time, &quot;Empty&quot;);
+	}
+	</zscript>
+	</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq("@timebox input"));
+				clickAt(jq("@timebox i.z-timebox-btn"),"1,1");
+				blur(jq("@timebox input"));
+				waitResponse();
+				click(jq("@button"));
+				waitResponse();
+				verifyFalse(jq(".z-errbox").exists());
+		]]></client>
+	</case>
+</test>

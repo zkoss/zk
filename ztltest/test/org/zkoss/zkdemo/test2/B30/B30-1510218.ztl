@@ -1,0 +1,71 @@
+<test tags="window,messagebox">
+	<case id="Popup">
+		<server><!--
+			<zk>
+				<window id="win" title="root" border="normal">
+					<zscript>
+					void popup(){
+						Window w=new Window();
+						w.setId("inner1");
+						w.setTitle("popup");
+						w.setBorder("normal");
+						w.setHeight("200px");
+						w.setWidth("200px");
+						w.setSizable(true);
+						w.setStyle("overflow:visible;");
+						w.setPage(page);
+						w.appendChild(btn1);
+						w.doPopup();
+					}
+					void overlapped(){
+						Window w=new Window();
+						w.setId("inner2");
+						w.setTitle("oeverlapped");
+						w.setSizable(true);
+						w.setStyle("overflow:visible;");
+						w.setHeight("200px");
+						w.setWidth("200px");
+						w.setBorder("normal");
+						w.setPage(page);
+						w.appendChild(btn2);
+						w.doOverlapped();
+					}
+					</zscript>
+					<button id="popup" label="popup" onClick="popup()"/>
+					<button id="overlapped" label="overlapped" onClick="overlapped()"/>
+					<button id="btn1" label="Btn1" onClick='alert("btn1 OK")'/>
+					<button id="btn2" label="Btn2" onClick='alert("btn2 OK")'/>
+				</window>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			// Test Popup
+			click(popup);
+			waitResponse();
+			clickAt(inner1, "15,15");
+			verifyTrue(isVisible(inner1));
+			click(btn1);
+			waitResponse();
+			verifyEquals("btn1 OK", jq(".z-messagebox > span").text());
+
+			//here is clicking the alert
+			//modify for compatiable event-thread enable/disable
+			click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
+			verifyFalse(isVisible(inner1));
+
+			// Test Overlapped
+			click(overlapped);
+			waitResponse();
+			clickAt(inner2, "15,15");
+			verifyTrue(isVisible(inner2));
+			click(btn2);
+			waitResponse();
+			verifyEquals("btn2 OK", jq(".z-messagebox > span").text());
+
+			//here is clicking the alert
+			//modify for compatiable event-thread enable/disable
+			click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
+			verifyTrue(isVisible(inner2));
+		]]></client>
+	</case>
+</test>

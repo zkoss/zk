@@ -1,0 +1,60 @@
+<!-- B30-1882277.ztl.java
+
+	Purpose:for testing B30-1882277.ztl .
+
+	Description:
+
+	History:
+		11, 9, 2010 20:20:28
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1882277.zul,C,E,Tabbox,Tabpanel,Accordion,Safari">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Click tab1 and then click tab2, you should see the tabpanel of tab2 with scrollbar(Safari only).</n:p>
+<tabbox width="400px" mold="accordion">
+	<tabs>
+		<tab label="Tab 1"/>
+		<tab label="Tab 2" selected="true"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel height="100px" style="background:yellow">This
+		is panel 1</tabpanel>
+		<tabpanel height="100px"
+		style="background:blue;overflow:auto">This is panel 2
+		<div height="200px">___</div>The second panel
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(jq(".z-tab-accordion-hm").eq(0));
+			waitResponse();
+			//I leave some time let animate works , 
+			//make sure it works. 				
+			
+			JQuery $cave = jq(".z-tabpanel-accordion-cnt:eq(0) > div");
+			$cave.scrollTop(50);
+			verifyEquals(0,$cave.scrollTop());
+			
+			click(jq(".z-tab-accordion-hm").eq(1));
+			waitResponse();
+			//I leave some time let animate works , 
+			//make sure it works. 
+			
+			$cave = jq(".z-tabpanel-accordion-cnt:eq(1) > div");
+			$cave.scrollTop(50);
+			verifyNotEquals(50,$cave.scrollTop());		
+		]]></client>
+	</case>
+</test>

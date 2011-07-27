@@ -1,0 +1,32 @@
+<test tags="Panel">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+<separator/>
+1.Click on Datebox, the Calendar popup, and pick any date
+<separator/>
+2.The Calendar should close, if not, it's wrong
+<separator height="20px"/>
+<datebox id="db" readonly="true" onCreate="db.value = new Date();">
+</datebox>
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+		        //not work as I think
+ 				click(jq("$db i.z-datebox-btn"));
+				waitResponse();
+				verifyTrue(jq("@calendar").exists());
+				click(jq("@calendar .z-calendar-wkday:eq(10)"));
+				//waitResponse();
+
+				//TonyQ:the origin test case expected the calendar will remove ,
+				//but the source code just hide the datebox-pp ,
+				//so I change the rule for test datebox-pp is hide or not .
+				//verifyFalse(jq("@calendar").exists());
+				verifyEquals(jq("@calendar").parent().css("display"),"none");
+
+			]]></client>
+	</case>
+</test>

@@ -1,0 +1,74 @@
+<!-- B50-3096342.ztl.java
+
+	Purpose:for testing B50-3096342.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 19:13:02
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3096342.zul,A,E,Datebox,Timebox,Unstable" import="java.util.Calendar">
+	<case id="ztl">
+		<server><!--
+			<vlayout id="inf">
+				<html id="desp"><![CDATA[
+				<ol>
+				<li>Case 1: Drop down and change the time in the timebox (of the popup).</li>
+				<li>Then, click anywhere other than the datebox and popup to cause onChange</li>
+				<li>Then, you shall see some message appended to the end of this page saying onChange:...</li>
+				<li>Case 2: clean the content of datebox (delete all characters) and press TAB</li>
+				<li>Then, you shall see onChange being fired with a null value (shown in the message being added)</li>
+				</ol>
+				]]></html>
+				<zscript>
+				int cnt = 0;
+				void out(Object e, Object o) {
+					inf.appendChild(new Label(e.target.id + ":" + e.name + ": "+o));
+				}
+				</zscript>
+				<hlayout>
+					<datebox id="d2" width="150px" format="MMM d, yyyy HH:mm:ss"
+						onChange='out(event, self.value)'
+						onChangingx='out(event, event.value)'
+						onCreate="self.value = new Date()"/>
+					<button label="reset" onClick='d2.setValue(new Date())'/>
+				</hlayout>
+			</vlayout>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-datebox-btn"));
+				mouseDownAt(jq(".z-timebox-btn"),"20,20");
+				waitResponse();
+				mouseUp(jq(".z-timebox-btn"));
+				int index = 19;
+				JQuery dayOnCalendar = jq(".z-calendar-wkday:eq(" + index + ")");
+				int dayOfMonth = Integer.parseInt(dayOnCalendar.text());
+				Calendar calendar = Calendar.getInstance();
+				if (dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH)) {
+				index = dayOfMonth == 1 ? dayOfMonth + 1 : dayOfMonth - 1;
+				dayOnCalendar = jq(".z-calendar-wkday:eq(" + index + ")");
+				}
+				click(dayOnCalendar);
+				waitResponse();
+				clickAt(jq("$desp"),"10,10");
+				waitResponse();
+				String msg = jq("@label:last").text();
+				verifyTrue(msg.indexOf("d2:onChange:")!=-1 && msg.indexOf("null") == -1);
+				JQuery dateInput = jq(".z-datebox-inp");
+				focus(dateInput);
+				dateInput.eval("val(\"\")");
+				keyPressNative(TAB);
+				waitResponse();
+				msg = jq("@label:last").text();
+				verifyEquals("d2:onChange: null",jq("@label:last").text());
+				verifyTrue(msg.indexOf("d2:onChange:")!=-1 && msg.indexOf("null") != -1);
+				
+		]]></client>
+	</case>
+</test>

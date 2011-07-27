@@ -1,0 +1,21 @@
+<test tags="grid">
+	<case id="jsError">
+		<server><!--
+			<zk>
+			You should not see any Javascript error in IE only
+			<grid>
+			<columns>
+			<column label='column 1'/>
+			<column label='column 2'/>
+			<column label='column 3'/>
+			<column label='column 4'/>
+			<column label='column 5'/>
+			</columns>
+			</grid>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			verifyFalse(jq("div.z-error").exists());
+		]]></client>
+	</case>
+</test>

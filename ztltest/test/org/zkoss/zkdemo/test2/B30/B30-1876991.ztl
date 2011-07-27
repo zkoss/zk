@@ -1,0 +1,28 @@
+<test tags="B30-1876991.zul,Textbox,Intbox,Constraint,ie9">
+	<case id="Constraint">
+		<server><!--
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+			<html><![CDATA[
+			<ul>
+			<li>
+			1. Type 100 and tab out, it should not show any error
+			</li>
+			<li>
+			2.Type -100 and it should show "Only positive number is allowed" in English locale
+			</li>
+			</ul>
+			]]></html>
+				<intbox id="myIntbox" constraint="no negative,no zero"/>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			type(myIntbox, "100");
+            waitResponse();
+            verifyFalse(jq(".z-errbox").exists());
+            
+			type(myIntbox, "-100");
+			waitResponse();
+            verifyTrue(jq(".z-errbox").exists());
+		]]></client>
+	</case>
+</test>

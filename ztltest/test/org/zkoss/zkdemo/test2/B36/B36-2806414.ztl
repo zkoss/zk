@@ -1,0 +1,38 @@
+<!-- B36-2806414.ztl.java
+
+	Purpose:for testing B36-2806414.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 10:52:48
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B36-2806414.zul,Textbox,OnChanging,OnOK,Unstable">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+Please type some words into the textbox and press "Enter", you should not see any Javascript error on the browser's status bar.
+<window  onOK='self.detach()'>
+<textbox onChanging=""/>
+</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq("input.z-textbox"));
+				keyPressNative("65");
+				keyPressNative("65");
+				keyPressNative("65");
+				keyPressNative(ENTER);
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

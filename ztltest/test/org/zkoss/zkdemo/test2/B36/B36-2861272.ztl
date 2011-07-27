@@ -1,0 +1,37 @@
+<!-- B36-2861272.ztl.java
+
+	Purpose:for testing B36-2861272.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 11:57:01
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B36-2861272.zul,Listbox,IE,Chrome,Opera,Safari">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	You should see both item "One" and "Three" into the list.
+	<listbox rows="1" mold="select">
+	<listitem label="One"/>
+	<listitem label="Two" visible="false"/>
+	<listitem label="Three"/>
+	</listbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyEquals(2,jq("select option").length());
+				verifyEquals("One",jq("select option:eq(0)").text());
+				verifyEquals("Three",jq("select option:eq(1)").text());
+		]]></client>
+	</case>
+</test>

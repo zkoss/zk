@@ -1,0 +1,43 @@
+<test tags="Listbox,Databind,Listheader">
+	<case id="Sorting">
+		<server><!--
+			<window id="win">
+			The bug is that the first column of data disappear when i press the
+			header to sort by a column.
+			    <zscript><![CDATA[
+					import java.util.*;
+			                      
+					List names = new ArrayList(3);
+					names.add("Tom");
+					names.add("John");
+					names.add("Mary");
+				]]></zscript>
+			
+				<listbox width="500px" id="boxListado" height="200px" model="@{names}">
+					<listhead>
+						<listheader label="name" sort="auto"/>
+					</listhead>
+					<listitem self="@{each=obj}">
+						<listcell><label value="@{obj}"/></listcell>
+					</listitem>
+				</listbox>
+				
+			<zscript>
+					import org.zkoss.zkplus.databind.*;
+					
+					AnnotateDataBinder binder = new AnnotateDataBinder(win);
+					binder.loadAll();
+			</zscript>
+			</window>
+		--></server>
+		<client><![CDATA[
+			click(jq(".z-listheader-cnt"));
+			waitResponse();
+			click(jq(".z-listheader-cnt"));
+			waitResponse();
+			verifyEquals("Tom", jq(".z-listcell:eq(0)").text());
+			verifyEquals("Mary", jq(".z-listcell:eq(1)").text());
+			verifyEquals("John", jq(".z-listcell:eq(2)").text());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,23 @@
+<test tags="B50-2976912.zul,A,E,BorderLayout,Grid,Vflex,Hflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+<window title="listbox" border="normal">
+<listbox hflex="1">
+<listhead>
+<listheader label="c1" />
+</listhead>
+<listitem>
+<listcell label="a" />
+</listitem>
+</listbox>
+</window>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			windowResizeTo(800,1000);
+			verifyImage();
+		]]></client>
+	</case>
+</test>
