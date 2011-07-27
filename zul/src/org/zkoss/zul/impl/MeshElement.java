@@ -121,7 +121,8 @@ abstract public class MeshElement extends XulElement implements Paginated, org.z
 	 * Sets whether the auto-paging facility is turned on when mold is
 	 * "paging". If it is set to true, the {@link #setPageSize} is ignored;
 	 * rather, the page size is automatically determined by the height of the
-	 * Listbox dynamically.
+	 * Listbox dynamically. Note: Due to performance concern, Autopaging 
+	 * functionality does not support {@link org.zkoss.zul.Detail} components.
 	 * @param autopaging true to turn on the auto-paging facility.
 	 * @since 5.0.2
 	 */
