@@ -446,11 +446,11 @@ public interface Page extends IdSpace, Scope {
 	public Object getXelVariable(
 	XelContext ctx, Object base, Object name, boolean ignoreExec);
  
-	/** Adds a name resolver that will be used to resolve a variable
+	/** Adds a variable resolver that will be used to resolve a variable
 	 * by {@link #getXelVariable}.
 	 *
 	 * <p>The new added variable resolver has the higher priority.
-	 * <p>Note: the variables resolved by the specified resolver are
+	 * <p>Note: the variables resolver by the specified resolver are
 	 * accessible to both zscript and EL expressions.
 	 *
 	 * @return wether the resolver is added successfully.
@@ -458,12 +458,12 @@ public interface Page extends IdSpace, Scope {
 	 * and this method returns false.
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
-	/** Removes a name resolve that was added by {@link #addVariableResolver}.
+	/** Removes a variable resolver that was added by {@link #addVariableResolver}.
 	 *
-	 * @return false if resolved is not added before.
+	 * @return false if the resolver is not added before.
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
-	/** Returns if the specified variable resolved has been registered
+	/** Returns if the specified variable resolver has been registered
 	 * @see #addVariableResolver
 	 * @since 5.0.3
 	 */
@@ -631,6 +631,7 @@ public interface Page extends IdSpace, Scope {
 	//metainfo//
 	/** Returns the function mapper for resolving XEL functions, or null if
 	 * not available.
+	 * The function mapper represents all function mappers being added.
 	 *
 	 * @since 3.0.0
 	 */
@@ -643,6 +644,17 @@ public interface Page extends IdSpace, Scope {
 	 * @param mapper the new function mapper (null to ignore).
 	 */
 	public void addFunctionMapper(FunctionMapper mapper);
+	/** Removes a function mapper that was added by {@link #addFunctionMapper}.
+	 *
+	 * @return false if the mapper is not added before.
+	 * @since 5.0.8
+	 */
+	public boolean removeFunctionMapper(FunctionMapper mapper);
+	/** Returns if the specified function mapper has been registered
+	 * @see #addFunctionMapper
+	 * @since 5.0.8
+	 */
+	public boolean hasFunctionMapper(FunctionMapper mapper);
 
 	/** Returns the language definition that this page belongs to (never null).
 	 */

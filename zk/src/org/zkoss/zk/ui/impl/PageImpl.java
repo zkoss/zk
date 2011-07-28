@@ -39,6 +39,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
+import org.zkoss.util.DualCollection;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
@@ -47,7 +48,7 @@ import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.util.DualFunctionMapper;
+import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.mesg.MZk;
@@ -131,8 +132,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
 	/** The reason to store it is PageDefinition is not serializable. */
-	private FunctionMapper _mapper;
-	/** The reason to store it is PageDefinition is not serializable. */
 	private ComponentDefinitionMap _compdefs;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private transient LanguageDefinition _langdef;
@@ -150,6 +149,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
+	/** The mapper representing all mappers being added to this page. */
+	private final FunctionMapper _mapper = new PageFuncMapper();
+	/** A list of {@link FunctionMapper}. */
+	private transient List _mappers;
 	/** A list of {@link VariableResolver}. */
 	private transient List _resolvers;
 	private boolean _complete;
@@ -235,7 +238,22 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _mapper;
 	}
 	public void addFunctionMapper(FunctionMapper mapper) {
-		_mapper = DualFunctionMapper.combine(mapper, _mapper);
+		if (mapper == null)
+			return /*false*/;
+
+		if (_mappers == null)
+			_mappers = new LinkedList();
+		else if (_mappers.contains(mapper))
+			return /*false*/;
+
+		_mappers.add(0, mapper); //FILO order
+		return /*true*/;
+	}
+	public boolean removeFunctionMapper(FunctionMapper mapper) {
+		return _mappers != null && _mappers.remove(mapper);
+	}
+	public boolean hasFunctionMapper(FunctionMapper mapper) {
+		return _mappers != null && _mappers.contains(mapper);
 	}
 
 	public String getRequestPath() {
@@ -531,7 +549,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	public boolean addVariableResolver(VariableResolver resolver) {
 		if (resolver == null)
-			throw new IllegalArgumentException("null");
+			return false;
 
 		if (_resolvers == null)
 			_resolvers = new LinkedList();
@@ -684,6 +702,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_listeners = null;
 		_ns = null;
 		_resolvers = null;
+		_mappers = null;
 		_attrs.getAttributes().clear();
 	}
 	public boolean isAlive() {
@@ -993,6 +1012,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				willPassivate((Collection)it.next());
 
 		willPassivate(_resolvers);
+		willPassivate(_mappers);
 
 		//backward compatible (we store variables in attributes)
 		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
@@ -1022,6 +1042,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				didActivate((Collection)it.next());
 
 		didActivate(_resolvers);
+		didActivate(_mappers);
 
 		//backward compatible (we store variables in attributes)
 		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
@@ -1117,6 +1138,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		willSerialize(_resolvers);
 		Serializables.smartWrite(s, _resolvers);
 
+		willSerialize(_mappers);
+		Serializables.smartWrite(s, _mappers);
+
 		//Handles interpreters
 		for (Iterator it = _ips.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
@@ -1166,6 +1190,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 
 		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
+		_mappers = (List)Serializables.smartRead(s, _mappers); //might be null
 
 		//Handles interpreters
 		for (;;) {
@@ -1179,6 +1204,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didDeserialize(attrs.values());
 		didDeserialize(lns);
 		didDeserialize(_resolvers);
+		didDeserialize(_mappers);
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				didDeserialize((Collection)it.next());
@@ -1241,5 +1267,48 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		public boolean removeChangeListener(NamespaceChangeListener listener) {
 			return false;
 		}
+	}
+	private class PageFuncMapper implements FunctionMapper, java.io.Serializable {
+		public Function resolveFunction(String prefix, String name)
+		throws XelException {
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					final Function f =
+						((FunctionMapper)it.next()).resolveFunction(prefix, name);
+					if (f != null)
+						return f;
+				}
+			}
+			return null;
+		}
+		public Collection getClassNames() {
+			Collection coll = null;
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					coll = combine(coll,
+						((FunctionMapper)it.next()).getClassNames());
+				}
+			}
+			return coll != null ? coll: Collections.EMPTY_LIST;
+		}
+		public Class resolveClass(String name) throws XelException {
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					final Class c =
+						((FunctionMapper)it.next()).resolveClass(name);
+					if (c != null)
+						return c;
+				}
+			}
+			return null;
+		}
+	}
+	private static Collection combine(Collection first, Collection second) {
+		return DualCollection.combine(
+			first != null && !first.isEmpty() ? first: null,
+			second != null && !second.isEmpty() ? second: null);
 	}
 }
