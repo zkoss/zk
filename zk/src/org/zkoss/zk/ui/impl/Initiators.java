@@ -59,8 +59,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 			}
 		}
 
-		final List inits = pagedef.doInit(page);
-		if (sysinits.length == 0 && inits.isEmpty())
+		final List inits = pagedef != null ? pagedef.doInit(page): null;
+		if (sysinits.length == 0 && (inits == null || inits.isEmpty()))
 			return new Initiators();
 		return new RealInits(sysinits, inits);
 	}

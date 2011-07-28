@@ -372,8 +372,8 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).preInit();
 				pagedef.initXelContext(page);
 
-				final Initiators inits = Initiators.doInit(pagedef, page,
-					config.getInitiators());
+				final Initiators inits = Initiators.doInit(
+					pagedef, page, config.getInitiators());
 					//F1472813: sendRedirect in init; test: redirectNow.zul
 				try {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
@@ -403,39 +403,50 @@ public class UiEngineImpl implements UiEngine {
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
 				((PageCtrl)page).preInit();
-				((PageCtrl)page).init(new PageConfig() {
-					public String getId() {return null;}
-					public String getUuid() {return null;}
-					public String getTitle() {return null;}
-					public String getStyle() {return null;}
-					public String getBeforeHeadTags() {return "";}
-					public String getAfterHeadTags() {return "";}
-					/** @deprecated */
-					public String getHeaders(boolean before) {return "";}
-					/** @deprecated */
-					public String getHeaders() {return "";}
-					public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
-				});
-				final Composer composer = config.getComposer(page);
-				try {
-					richlet.service(page);
 
-					for (Component root = page.getFirstRoot(); root != null;
-					root = root.getNextSibling()) {
-						if (composer != null)
-							composer.doAfterCompose(root);
-						afterCreate(new Component[] {root});
-							//root's next sibling might be changed
+				final Initiators inits = Initiators.doInit(
+					null, page, config.getInitiators());
+				try {
+					((PageCtrl)page).init(new PageConfig() {
+						public String getId() {return null;}
+						public String getUuid() {return null;}
+						public String getTitle() {return null;}
+						public String getStyle() {return null;}
+						public String getBeforeHeadTags() {return "";}
+						public String getAfterHeadTags() {return "";}
+						/** @deprecated */
+						public String getHeaders(boolean before) {return "";}
+						/** @deprecated */
+						public String getHeaders() {return "";}
+						public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
+					});
+
+					final Composer composer = config.getComposer(page);
+					try {
+						richlet.service(page);
+
+						for (Component root = page.getFirstRoot(); root != null;
+						root = root.getNextSibling()) {
+							if (composer != null)
+								composer.doAfterCompose(root);
+							afterCreate(new Component[] {root});
+								//root's next sibling might be changed
+						}
+					} catch (Throwable t) {
+						if (composer instanceof ComposerExt)
+							if (((ComposerExt)composer).doCatch(t))
+								t = null; //ignored
+						if (t != null)
+							throw t;
+					} finally {
+						if (composer instanceof ComposerExt)
+							((ComposerExt)composer).doFinally();
 					}
-				} catch (Throwable t) {
-					if (composer instanceof ComposerExt)
-						if (((ComposerExt)composer).doCatch(t))
-							t = null; //ignored
-					if (t != null)
-						throw t;
+				} catch(Throwable ex) {
+					if (!inits.doCatch(ex))
+						throw UiException.Aide.wrap(ex);
 				} finally {
-					if (composer instanceof ComposerExt)
-						((ComposerExt)composer).doFinally();
+					inits.doFinally();
 				}
 			}
 			if (exec.isVoided())
@@ -912,7 +923,7 @@ public class UiEngineImpl implements UiEngine {
 		final boolean fakepg = page == null;
 		if (fakepg) {
 			fakeIS = true;
-			page = new PageImpl(pagedef);
+			page = new PageImpl(pagedef); //fake
 		}
 
 		final Desktop desktop = exec.getDesktop();
