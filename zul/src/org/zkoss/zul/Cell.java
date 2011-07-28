@@ -29,7 +29,6 @@ import org.zkoss.zul.impl.XulElement;
  * @since 5.0.0
  */
 public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
-	private int _colspan = 1, _rowspan = 1;
 	private AuxInfo _auxinf;
 	
 	/** Returns the horizontal alignment.
@@ -67,7 +66,7 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	 * Default: 1.
 	 */
 	public int getColspan() {
-		return _colspan;
+		return _auxinf != null ? _auxinf.colspan : 1;
 	}
 	/** Sets the number of columns to span.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
@@ -75,9 +74,9 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	public void setColspan(int colspan) throws WrongValueException {
 		if (colspan <= 0)
 			throw new WrongValueException("Positive only");
-		if (_colspan != colspan) {
-			_colspan = colspan;
-			smartUpdate("colspan", _colspan);
+		if (getColspan() != colspan) {
+			initAuxInfo().colspan = colspan;
+			smartUpdate("colspan", getColspan());
 		}
 	}
 
@@ -85,7 +84,7 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	 * Default: 1.
 	 */
 	public int getRowspan() {
-		return _rowspan;
+		return _auxinf != null ? _auxinf.rowspan: 1;
 	}
 	/** Sets the number of rows to span.
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
@@ -93,9 +92,9 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	public void setRowspan(int rowspan) throws WrongValueException {
 		if (rowspan <= 0)
 			throw new WrongValueException("Positive only");
-		if (_rowspan != rowspan) {
-			_rowspan = rowspan;
-			smartUpdate("rowspan", _rowspan);
+		if (getRowspan() != rowspan) {
+			initAuxInfo().rowspan = rowspan;
+			smartUpdate("rowspan", getRowspan());
 		}
 	}
 	
@@ -103,14 +102,23 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	public String getZclass() {
 		return _zclass == null ? "z-cell" : _zclass;
 	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Cell clone = (Cell)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_colspan != 1)
-			renderer.render("colspan", _colspan);
-		if (_rowspan != 1)
-			renderer.render("rowspan", _rowspan);
+		if (getColspan() != 1)
+			renderer.render("colspan", getColspan());
+		if (getRowspan() != 1)
+			renderer.render("rowspan", getRowspan());
 		
 		renderer.render("align", getAlign());
 		renderer.render("valign", getValign());
@@ -125,7 +133,10 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String align = null;
 		private String valign = null;
-
+		private int colspan = 1;
+		private int rowspan = 1;
+		
+		
 		public Object clone() {
 			try {
 				return super.clone();

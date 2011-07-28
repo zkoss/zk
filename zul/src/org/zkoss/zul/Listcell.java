@@ -60,6 +60,15 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	public String getZclass() {
 		return _zclass == null ? "z-listcell" : _zclass;
 	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Listcell clone = (Listcell)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+	
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */

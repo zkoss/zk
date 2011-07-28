@@ -139,6 +139,14 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 		return _zclass == null ? "z-treecell" : _zclass;
 	}
 
+	//Cloneable//
+	public Object clone() {
+		final Treecell clone = (Treecell)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+
 	//-- super --//
 	/** Returns the width which the same as {@link #getTreecol}'s width.
 	 */
