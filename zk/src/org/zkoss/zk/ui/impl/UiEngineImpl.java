@@ -37,7 +37,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Threads;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
 import org.zkoss.mesg.Messages;
@@ -381,10 +380,10 @@ public class UiEngineImpl implements UiEngine {
 			//init's zscirpt might depend on it.
 			if (pagedef != null) {
 				((PageCtrl)page).preInit();
-				pagedef.initXelContext(page);
+				pagedef.preInit(page);
 
-				final Initiators inits = Initiators.doInit(pagedef, page,
-					config.getInitiators());
+				final Initiators inits = Initiators.doInit(
+					pagedef, page, config.getInitiators());
 					//F1472813: sendRedirect in init; test: redirectNow.zul
 				try {
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
@@ -414,34 +413,44 @@ public class UiEngineImpl implements UiEngine {
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
 				((PageCtrl)page).preInit();
-				((PageCtrl)page).init(new PageConfig() {
-					public String getId() {return null;}
-					public String getUuid() {return null;}
-					public String getTitle() {return null;}
-					public String getStyle() {return null;}
-					public String getBeforeHeadTags() {return "";}
-					public String getAfterHeadTags() {return "";}
-					public Collection<Object[]> getResponseHeaders() {return Collections.emptyList();}
-				});
-				final Composer composer = config.getComposer(page);
-				try {
-					richlet.service(page);
 
-					for (Component root = page.getFirstRoot(); root != null;
-					root = root.getNextSibling()) {
-						doAfterCompose(composer, root);
-						afterCreate(new Component[] {root});
-							//root's next sibling might be changed
+				final Initiators inits = Initiators.doInit(
+					null, page, config.getInitiators());
+				try {
+					((PageCtrl)page).init(new PageConfig() {
+						public String getId() {return null;}
+						public String getUuid() {return null;}
+						public String getTitle() {return null;}
+						public String getStyle() {return null;}
+						public String getBeforeHeadTags() {return "";}
+						public String getAfterHeadTags() {return "";}
+						public Collection<Object[]> getResponseHeaders() {return Collections.emptyList();}
+					});
+					final Composer composer = config.getComposer(page);
+					try {
+						richlet.service(page);
+
+						for (Component root = page.getFirstRoot(); root != null;
+						root = root.getNextSibling()) {
+							doAfterCompose(composer, root);
+							afterCreate(new Component[] {root});
+								//root's next sibling might be changed
+						}
+					} catch (Throwable t) {
+						if (composer instanceof ComposerExt)
+							if (((ComposerExt)composer).doCatch(t))
+								t = null; //ignored
+						if (t != null)
+							throw t;
+					} finally {
+						if (composer instanceof ComposerExt)
+							((ComposerExt)composer).doFinally();
 					}
-				} catch (Throwable t) {
-					if (composer instanceof ComposerExt)
-						if (((ComposerExt)composer).doCatch(t))
-							t = null; //ignored
-					if (t != null)
-						throw t;
+				} catch(Throwable ex) {
+					if (!inits.doCatch(ex))
+						throw UiException.Aide.wrap(ex);
 				} finally {
-					if (composer instanceof ComposerExt)
-						((ComposerExt)composer).doFinally();
+					inits.doFinally();
 				}
 			}
 			if (exec.isVoided())
@@ -969,7 +978,7 @@ public class UiEngineImpl implements UiEngine {
 		final boolean fakepg = page == null;
 		if (fakepg) {
 			fakeIS = true;
-			page = new PageImpl(pagedef);
+			page = new PageImpl(pagedef); //fake
 		}
 
 		final Desktop desktop = exec.getDesktop();
@@ -985,7 +994,7 @@ public class UiEngineImpl implements UiEngine {
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
 		if (fakepg) ((PageCtrl)page).preInit();
-		pagedef.initXelContext(page);
+		pagedef.preInit(page);
 
 		//Note: the forward directives are ignore in this case
 

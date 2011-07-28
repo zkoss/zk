@@ -1,0 +1,50 @@
+<test tags="B50-3315594.zul,A,E,Listbox,Vflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+You shall see "item 19" in the window and panel.
+	<hlayout hflex="min">
+		<window border="normal" vflex="min" hflex="min">
+		<listbox rows="20" hflex="min">
+			<listhead>
+				<listheader hflex="min" label="column" />
+				<listheader hflex="min" label="column" />
+			</listhead>
+			<zscript><![CDATA[
+				List list = new ArrayList();
+				for (int i = 0; i < 20; i++)
+					list.add("item " + i);
+			]]></zscript>
+			<listitem forEach="${list}">
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+			</listitem>
+		</listbox>
+	</window>
+	<panel border="normal" vflex="min" hflex="min" framable="true">
+	<panelchildren vflex="min" hflex="min">
+		<listbox rows="20" hflex="min">
+			<listhead>
+				<listheader hflex="min" label="column" />
+				<listheader hflex="min" label="column" />
+			</listhead>
+			<zscript><![CDATA[
+				List list = new ArrayList();
+				for (int i = 0; i < 20; i++)
+					list.add("item " + i);
+			]]></zscript>
+			<listitem forEach="${list}">
+				<listcell label="${each}"/>
+				<listcell label="${each}"/>
+			</listitem>
+		</listbox>
+		</panelchildren>
+	</panel>
+	</hlayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

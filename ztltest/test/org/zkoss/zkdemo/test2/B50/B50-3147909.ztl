@@ -1,0 +1,52 @@
+<!-- B50-3147909.ztl.java
+
+	Purpose:for testing B50-3147909.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 18:03:50
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3147909.zul,A,E,Listbox,DragDrop,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on both listboxes. Their drop down should appear normally.</li>
+			<li>Drag the inner Div. Only the inner Div part should move.</li>
+			
+			<b>Note. when you drag the inner Div, you shall only drag the light blue area, if also drag brown area, that 's bug </b>
+		</ol>
+	]]></html>
+	<div draggable="true" style="background: #CCCC99" width="200px">
+		<listbox mold="select">
+			<listitem label="A1" />
+			<listitem label="A2" />
+		</listbox>
+		<div id="inner" draggable="true" style="background: #99CCCC" width="100px">Inner Div</div>
+	</div>
+	<listbox mold="select" draggable="true">
+		<listitem label="B1" />
+		<listitem label="B2" />
+	</listbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				mouseMoveAt(jq(inner),"3,3");waitResponse();
+				mouseDownAt(jq(inner),"3,3");waitResponse();
+				mouseMoveAt(jq(inner),"10,3");waitResponse();
+				verifyEquals(15,getElementHeight(jq(".z-drag-ghost")).intValue());
+				verifyEquals(100,getElementWidth(jq(".z-drag-ghost")).intValue());
+				mouseUpAt(jq(inner),"10,3");waitResponse();
+		]]></client>
+	</case>
+</test>

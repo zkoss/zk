@@ -1,0 +1,66 @@
+<!-- B50-2997037.ztl.jav9
+
+	Purpose:for testing B50-2997037.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 12:45:00
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-2997037.zul,Unstable">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Press "setLong" button. You shall see 9223372036854775807 show in the longbox.</li>
+<li>In the longbox, change the last digit from 7 to 8, so the number become 9223372036854775808 and Tab away.</li>
+<li>You shall see pop errorbox "Out of range(-9223372036854775808 - 9223372036854775807)"</li>
+<li>In the longbox, add before the first digit with a negative sign, so the number become -9223372036854775808 and Tab away.</li>
+<li>You shall NOT see any errorbox</li>
+<li>In the longbox, change the last digit from 8 to 9, so the number become -9223372036854775809 and Tab away.</li>
+<li>You shall see pop errorbox "Out of range(-9223372036854775808 - 9223372036854775807)"</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+<vbox>
+longbox:<longbox id="longbx" width="300px"/>
+<button id="btn" label="setLong" onClick="longbx.setValue(new Long(9223372036854775807L))"/>
+</vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(btn);
+				waitResponse();
+				verifyEquals("9223372036854775807",jq(".z-longbox").val());
+				focus(longbx.$n());
+				keyPressNative(END);
+				keyPressNative(BACKSPACE);
+				keyPressNative("56");//8
+				keyPressNative(TAB);waitResponse();
+				verifyEquals("9223372036854775808",jq(".z-longbox").val());
+				verifyTrue(jq(".z-errbox").exists());
+				focus(longbx.$n());
+				keyPressNative(HOME);
+				keyPressNative("45");//-
+				keyPressNative(TAB);waitResponse();
+				verifyEquals("-9223372036854775808",jq(".z-longbox").val());
+				verifyFalse(jq(".z-errbox").exists());
+				focus(longbx.$n());
+				keyPressNative(END);
+				keyPressNative(BACKSPACE);
+				keyPressNative("57");//9
+				blur(longbx.$n());waitResponse();	
+				verifyEquals("-9223372036854775809",jq(".z-longbox").val());				
+				verifyTrue(jq(".z-errbox").exists());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,33 @@
+<test tags="datebox,calendar">
+	<case id="format">
+		<server><!--
+		<zk>
+			<vbox>
+				Click the first button and click the second button.
+				Then click the datebox popup.
+				<separator />
+				
+				you should not see any error message
+				
+			</vbox>
+			<datebox id="DTbox" />
+			<button id="b1" label="hh:mm">
+				<attribute name="onClick"><![CDATA[
+				DTbox.setFormat("hh:mm");
+			]]></attribute>
+			</button>
+			<button id="b2" label="ddMMyy">
+				<attribute name="onClick"><![CDATA[
+				DTbox.setFormat("ddMMyy");
+			]]></attribute>
+			</button>
+		</zk>
+		 --></server>
+		<client><![CDATA[
+            click(b1);
+			click(b2);
+			click(DTbox.$n("btn"));
+			verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

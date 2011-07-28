@@ -1,0 +1,58 @@
+<!-- B50-3190987.ztl.java
+
+	Purpose:for testing B50-3190987.ztl .
+
+	Description:
+
+	History:
+		06, 2, 2011 19:34:10
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3190987.zul,A,E,Tabbox,Tabpanel">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "add" button.</li>
+			<li>The content of the tabbox shall be "new".</li>
+			<li>The "old" shall be hided.</li>
+		</ol>
+	]]></html>
+	<button label="add">
+		<attribute name="onClick"><![CDATA[
+			Tab tab = new Tab("Tab");
+			tab.setSelected(true);
+			tabs.insertBefore(tab, tabs.getFirstChild());
+			Tabpanel panel = new Tabpanel();
+			new Label("new").setParent(panel);
+			tabpanels.insertBefore(panel, tabpanels.getFirstChild());
+		]]></attribute>
+	</button>
+	<tabbox id="tabbox">
+		<tabs id="tabs">
+			<tab label="tab" />
+		</tabs>
+		<tabpanels id="tabpanels">
+			<tabpanel>old</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
+
+
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals("new",jq("@tabpanel:visible").text());
+		]]></client>
+	</case>
+</test>

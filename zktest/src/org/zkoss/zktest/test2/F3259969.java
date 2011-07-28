@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.util.InitiatorExt;
 import org.zkoss.zul.Label;
 
 /**

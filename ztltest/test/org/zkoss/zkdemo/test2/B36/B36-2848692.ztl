@@ -1,0 +1,45 @@
+<!-- B36-2848692.ztl.java
+
+	Purpose:for testing B36-2848692.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 11:23:00
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B36-2848692.zul,Combobox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+0: Use IE
+<separator/>
+1.Please select the first item from the combobox, and then click the OK button.
+<separator/>
+2.You should see the result is "CMB selected = 0"
+<combobox id="cmb">
+<comboitem label='Valor1  "'/>
+</combobox>
+<button id="ok" label="OK" onClick='alert("CMB selected = "
++ cmb.getSelectedIndex())'/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-combobox-btn"));
+				waitResponse();
+				click(jq(".z-comboitem:eq(0)"));
+				waitResponse();
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals("CMB selected = 0",getAlertMessage());
+		]]></client>
+	</case>
+</test>

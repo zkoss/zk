@@ -1,0 +1,48 @@
+<!-- B50-3029341.ztl.java
+
+	Purpose:for testing B50-3029341.ztl .
+
+	Description:
+
+	History:
+		05, 10, 2011 09:34:06
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3029341.zul,A,E,Listbox">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Click "a link"</li>
+	<li>Check the row of the listbox will not be selected</li>
+</ol>
+]]>
+</html>
+	<listbox width="300px">
+		<listitem>
+			<listcell>
+				<a label="a link" />
+			</listcell>
+			<listcell>
+				<button label="button" />
+			</listcell>
+		</listitem>
+		<listitem label="second item" />
+	</listbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@a"));
+				waitResponse();
+				verifyFalse(jq("@listitem:eq(1)").is("selected"));
+				verifyFalse(jq(".z-listitem-seld").exists());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,50 @@
+<!-- B50-3152754.ztl.java
+
+	Purpose:for testing B50-3152754.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 19:08:26
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3152754.zul,A,E,Client,ROD">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Show + Invalidate, if Div Content is not shown it is a bug.</li>
+			<li>Click on Hide + Invalidate and then Show + Invalidate, if Div Content is not shown it is a bug.</li>
+		</ol>
+	]]></html>
+	<div id="inc" visible="false">
+		<window border="normal">
+			<label value="Div Content" />
+		</window>
+	</div>
+	<div>
+		<button label="Show + Invalidate" onClick='inc.visible = true; inc.invalidate();' />
+		<button label="Hide + Invalidate" onClick='inc.visible = false; inc.invalidate();' />
+	</div>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyFalse(isVisible(jq(inc)));
+				click(jq("@button:eq(0)"));waitResponse();
+				verifyTrue(isVisible(jq(inc)));
+				click(jq("@button:eq(1)"));waitResponse();
+				verifyFalse(isVisible(jq(inc)));
+				click(jq("@button:eq(0)"));waitResponse();
+				verifyTrue(isVisible(jq(inc)));
+		]]></client>
+	</case>
+</test>

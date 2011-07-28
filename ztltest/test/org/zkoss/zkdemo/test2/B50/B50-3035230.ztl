@@ -1,0 +1,54 @@
+<test tags="B50-3035230.zul,Grid,SizedByContent">
+	<case id="ColumnSize">
+		<server><!--
+<zk>
+	<zscript><![CDATA[
+	String[] datas = new String[50];
+]]></zscript>
+	<html><![CDATA[ <h1>Grid sizedByContent</h1> ]]></html>
+	<hbox>
+		<vbox>
+			<label value="grid has 300px width" />
+			<grid sizedByContent="true" height="200px" width="300px">
+				<columns>
+					<column id="c1" label="col 1" />
+					<column id="c2" label="col 2" />
+				</columns>
+				<rows>
+					<row forEach="${datas}">
+						<label value="item" />
+						<label value="item" />
+					</row>
+				</rows>
+			</grid>
+		</vbox>
+		<separator orient="vertical" />
+		<vbox>
+			<label value="grid without width in a div with 300px width" />
+			<div width="300px">
+				<grid sizedByContent="true" height="200px">
+					<columns>
+						<column id="c3" label="col 1" />
+						<column id="c4" label="col 2" />
+					</columns>
+					<rows>
+						<row forEach="${datas}">
+							<label value="item" />
+							<label value="item" />
+						</row>
+					</rows>
+				</grid>
+			</div>
+		</vbox>
+	</hbox>
+</zk>
+		--></server>
+		<client><![CDATA[
+        	int diffC1C2 = Math.abs(jq(c1).outerWidth() - jq(c2).outerWidth());
+			int diffC3C4 = Math.abs(jq(c3).outerWidth() - jq(c4).outerWidth());
+			
+			verifyTrue(diffC1C2 <= 3);
+			verifyTrue(diffC3C4 <= 3);
+		]]></client>
+	</case>
+</test>

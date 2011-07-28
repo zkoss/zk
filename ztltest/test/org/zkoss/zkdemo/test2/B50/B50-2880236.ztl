@@ -1,0 +1,159 @@
+<!-- B50-2880236.ztl.java
+
+	Purpose:for testing B50-2880236.ztl .
+
+	Description:
+
+	History:
+		11, 2, 2010 14:48:55
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-2880236.zul,Decimalbox,ie9,blur">
+	<case id="ztl">
+		<server><!--
+			
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+<html><![CDATA[
+<ol>
+<li>Enter "A" and "123" and press "Add" button.</li> 
+<li>You shall see "A" and "123" added as the last row on the grid.</li>
+<li>Enter "B" and "-123" and press "Add" button.</li> 
+<li>You shall see "B" and "-123" added as the last row on the grid.</li>
+<li>Enter "C" and "1.255" and press "Add" button.</li> 
+<li>You shall see "C" and "1.26" added as the last row on the grid.</li>
+<li>Enter "D" and "1.285" and press "Add" button.</li> 
+<li>You shall see "D" and "1.28" added as the last row on the grid.</li>
+<li>Enter "E" and "12345678901234567890" and press "Add" button.</li> 
+<li>You shall see "E" and "12,345,678,901,234,567,890" added as the last row on the grid.</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+<zscript><![CDATA[
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+class Person {
+
+	public BigDecimal balance;
+	
+	public String name;
+	
+	public Person(BigDecimal balance, String name) {
+		this.balance = balance;
+		this.name = name;
+	}
+
+}
+
+List peopleList = new ArrayList();
+
+peopleList.add(new Person(new BigDecimal("1.99"), "foo1"));
+peopleList.add(new Person(new BigDecimal("2.99"), "foo2"));
+peopleList.add(new Person(new BigDecimal("3.99"), "foo3"));
+
+ListModel people = new BindingListModelList(peopleList, true);
+]]></zscript>
+<window border="none">
+<groupbox>
+<grid id="peopleGrid" model="@{people}">
+	<columns>
+		<column label="Name" />
+		<column label="Balance" />
+		<column />
+	</columns>
+	<rows>
+		<row self="@{each='person'}" value="@{person}">
+			<textbox value="@{person.name}"/>
+			<decimalbox value="@{person.balance}" format="##,###.##" hflex="1"/>
+			<button label="Remove">
+				<attribute name="onClick"><![CDATA[
+				people.remove(self.parent.value);
+				]]></attribute>
+			</button>
+		</row>
+	</rows>
+	<foot>
+		<footer>
+			<textbox id="newName" />
+		</footer>
+		<footer>
+			<decimalbox id="newBalance" format="##,###.##" hflex="1"/>
+		</footer>
+		<footer>
+			<button id="add" label="Add">
+				<attribute name="onClick"><![CDATA[
+				people.add(new Person(newBalance.value, newName.value));
+				newName.rawValue = null;
+				newBalance.rawValue = null;
+				]]></attribute>
+			</button>
+		</footer>
+	</foot>
+</grid>
+</groupbox>
+</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+		sleep(1000);//for DataBinding
+			// A, 123
+			type(jq(newName), "A");
+            type(jq(newBalance), "123");
+            click(jq(add));
+            waitResponse();
+            JQuery lastRecName = jq(".z-textbox:eq(" + (jq(".z-textbox").length() - 2) + ")");
+            verifyTrue("The name of last row is not match. Name: " + lastRecName.val(), lastRecName.val().equals("A"));
+            JQuery lastRecBalance = jq(".z-decimalbox:eq(" + (jq(".z-decimalbox").length() - 2) + ")");
+            verifyTrue("The balance of last row is not match. Balance: " + lastRecBalance.val(), lastRecBalance.val().equals("123"));
+            
+            // B, -123
+            type(jq(newName), "B");
+            type(jq(newBalance), "-123");
+            click(jq(add));
+            waitResponse();
+            lastRecName = jq(".z-textbox:eq(" + (jq(".z-textbox").length() - 2) + ")");
+            verifyTrue("The name of last row is not match. Name: " + lastRecName.val(), lastRecName.val().equals("B"));
+            lastRecBalance = jq(".z-decimalbox:eq(" + (jq(".z-decimalbox").length() - 2) + ")");
+            verifyTrue("The balance of last row is not match. Balance: " + lastRecBalance.val(), lastRecBalance.val().equals("-123"));
+            
+            // C, 1.255
+            type(jq(newName), "C");
+            type(jq(newBalance), "1.255");
+            click(jq(add));
+            waitResponse();
+            lastRecName = jq(".z-textbox:eq(" + (jq(".z-textbox").length() - 2) + ")");
+            verifyTrue("The name of last row is not match. Name: " + lastRecName.val(), lastRecName.val().equals("C"));
+            lastRecBalance = jq(".z-decimalbox:eq(" + (jq(".z-decimalbox").length() - 2) + ")");
+            verifyTrue("The balance of last row is not match. Balance: " + lastRecBalance.val(), lastRecBalance.val().equals("1.26"));
+            
+            // D, 1.285
+            type(jq(newName), "D");
+            type(jq(newBalance), "1.285");
+            click(jq(add));
+            waitResponse();
+            lastRecName = jq(".z-textbox:eq(" + (jq(".z-textbox").length() - 2) + ")");
+            verifyTrue("The name of last row is not match. Name: " + lastRecName.val(), lastRecName.val().equals("D"));
+            lastRecBalance = jq(".z-decimalbox:eq(" + (jq(".z-decimalbox").length() - 2) + ")");
+            verifyTrue("The balance of last row is not match. Balance: " + lastRecBalance.val(), lastRecBalance.val().equals("1.28"));
+            
+            // E, 12345678901234567890
+            type(jq(newName), "E");
+            type(jq(newBalance), "12345678901234567890");
+            click(jq(add));
+            waitResponse();
+            lastRecName = jq(".z-textbox:eq(" + (jq(".z-textbox").length() - 2) + ")");
+            verifyTrue("The name of last row is not match. Name: " + lastRecName.val(), lastRecName.val().equals("E"));
+            lastRecBalance = jq(".z-decimalbox:eq(" + (jq(".z-decimalbox").length() - 2) + ")");
+            verifyTrue("The balance of last row is not match. Balance: " + lastRecBalance.val(), 
+                    lastRecBalance.val().equals("12,345,678,901,234,567,890"));
+		]]></client>
+	</case>
+</test>

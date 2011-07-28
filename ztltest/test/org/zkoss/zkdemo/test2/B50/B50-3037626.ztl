@@ -1,0 +1,30 @@
+<test tags="B50-3037626.zul,Hbox,Splitter,Grid">
+	<case id="Splitter">
+		<server><!--
+<hbox width="100%" height="100%">
+	<cell id="cell1">
+		<grid id="grid">
+			<rows>
+				<row>row</row>
+			</rows>
+		</grid>
+	</cell>
+	<splitter />
+	<cell>
+		<grid>
+			<rows>
+				<row>row</row>
+			</rows>
+		</grid>
+	</cell>
+</hbox>	
+		--></server>
+		<client><![CDATA[
+		int i = jq("$cell1").width();
+		mouseDownAt(jq("@splitter"), "0,138");
+		mouseMoveAt(jq("@splitter"), "-250,138");
+		mouseUpAt(jq("@splitter"), "-250,138");
+		verifyTrue(i - 250 - jq("$cell1").width() < 2);
+		]]></client>
+	</case>
+</test>

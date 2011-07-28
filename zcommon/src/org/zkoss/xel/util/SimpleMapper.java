@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.zkoss.util.DualCollection;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.FunctionMapperExt;
 
 /**
  * A simmple function mapper.
@@ -55,14 +56,17 @@ public class SimpleMapper extends TaglibMapper {
 		return m != null ? m:
 			_parent != null ? _parent.resolveFunction(prefix, name): null;
 	}
+	//-- FunctionMapperExt --//
 	public Collection<String> getClassNames() {
 		return combine(super.getClassNames(),
-			_parent != null ? _parent.getClassNames(): null);
+			_parent instanceof FunctionMapperExt ?
+				((FunctionMapperExt)_parent).getClassNames(): null);
 	}
 	public Class resolveClass(String name) {
 		Class m = super.resolveClass(name);
 		return m != null ? m:
-			_parent != null ? _parent.resolveClass(name): null;
+			_parent instanceof FunctionMapperExt ?
+				((FunctionMapperExt)_parent).resolveClass(name): null;
 	}
 	private static Collection<String> combine(Collection<String> first, Collection<String> second) {
 		return DualCollection.combine(

@@ -1,0 +1,72 @@
+<!-- B30-2056760.ztl.java
+
+	Purpose:for testing B30-2056760.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 17:05:51
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2056760.zul,Listbox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	Please click the "setWidth 350" button, then the width of each column of the listbox will recalculate.
+	<listbox id="listbox" width="250px">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto" />
+			<listheader label="gender" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+		</listitem>
+	</listbox>
+	<button label="setWidth 350">
+		<attribute name="onClick">listbox.setWidth("350px");</attribute>
+	</button>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyEquals("250",jq("@listbox").width());
+				int header = jq("@listheader:eq(0)").width();
+				int header1 = jq("@listheader:eq(1)").width();
+				int column = jq("@listcell:eq(0)").width();
+				int column1 = jq("@listcell:eq(1)").width();
+				click(jq("@button"));
+				waitResponse();
+				
+				int headerx = jq("@listheader:eq(0)").width();
+				int header1x = jq("@listheader:eq(1)").width();
+				int columnx = jq("@listcell:eq(0)").width();
+				int column1x = jq("@listcell:eq(1)").width();
+				
+				verifyEquals("350",jq("@listbox").width());
+				verifyEquals(50, headerx - header);
+				verifyEquals(50, header1x - header1);
+				verifyEquals(50, columnx - column);
+				verifyEquals(50, column1x - column1);
+		]]></client>
+	</case>
+</test>

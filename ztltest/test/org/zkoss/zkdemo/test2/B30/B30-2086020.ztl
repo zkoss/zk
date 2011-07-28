@@ -1,0 +1,48 @@
+<!-- B30-2086020.ztl.java
+
+	Purpose:for testing B30-2086020.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 17:55:51
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2086020.zul,Combobox,OnChanging,Unstable">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+<vbox>
+1. focus combobox by clicking into it
+<separator/>
+2. type "aa", than ENTER. onchanging event should be fired, and textbox
+value should be "aa". (if the value is "a", it is wrong)
+</vbox>
+
+<combobox onChanging="copy.value=event.value" autodrop="true">
+<comboitem label="aa" />
+<comboitem label="aabc" />
+<comboitem label="bb" />
+<comboitem label="bbde" />
+<comboitem label="cc" />
+<comboitem label="ccdf" />
+</combobox>
+<textbox id="copy" readonly="true" />
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq("@combobox input"));
+				keyPressNative("65");keyPressNative("65");
+				blur(jq("@combobox input"));
+				verifyEquals("aa",jq(copy).val());
+		]]></client>
+	</case>
+</test>

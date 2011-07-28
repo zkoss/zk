@@ -1,0 +1,41 @@
+<!-- B35-2111900.ztl.java
+
+	Purpose:for testing B35-2111900.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 18:53:09
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2111900.zul,A,E,Textbox,Multiline,onChanging,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window title="The onChanging event" border="normal">
+	Please type some words in the textbox, then the instant-copy should work well.
+	<grid width="80%">
+	<rows>
+		<row>onChanging textbox: <textbox multiline="true" rows="2"  onChanging="copy.value = event.value"/></row>
+		<row>instant copy: <textbox id="copy" readonly="true"/></row>
+	</rows>
+	</grid>
+</window>
+
+		--></server>
+		<client><![CDATA[
+			String testWord ="i am tester~happy~tester~~";
+			type(jq("@textbox"),testWord);
+			
+			waitResponse();
+			
+			verifyEquals(testWord, copy.get("value"));
+		]]></client>
+	</case>
+</test>

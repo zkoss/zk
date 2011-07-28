@@ -1,0 +1,57 @@
+<!-- B50-3155985.ztl.java
+
+	Purpose:for testing B50-3155985.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 19:14:40
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3155985.zul,A,E,Timer">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<zscript><![CDATA[
+long begin = 0;
+class MyComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
+	public void onClick$btn() {
+		timer.stop();
+		timer.start();
+		begin = System.currentTimeMillis();
+		inf.appendChild(new Label("timer started"));
+	}
+	public void onTimer$timer() {
+		inf.appendChild(new Label("timer fired: " + (System.currentTimeMillis() - begin) /1000));
+	}
+}
+]]></zscript>
+<div apply="MyComposer">
+<html><![CDATA[
+	<ol>
+	<li>Click the Fire button</li>
+	<li>Then, "timer started" apears, and after 5 seconds, "timer fired: 5" appears</li>
+	</ol>
+]]></html>
+
+<timer id="timer" running="false" repeats="false" delay="5000" />
+<button id="btn" label="Fire"/>
+<vlayout id="inf"/>
+</div>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(btn);
+				verifyEquals("timer started", (jq("@label:eq(0)").text()));
+				sleep(4500);
+				verifyEquals("", (jq("@label:eq(1)").text()));
+				sleep(500);
+				verifyEquals("timer fired: 5", (jq("@label:eq(1)").text()));
+		]]></client>
+	</case>
+</test>

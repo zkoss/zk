@@ -1,0 +1,40 @@
+<!-- B35-2150566.ztl.java
+
+	Purpose:for testing B35-2150566.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 10:13:41
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2150566.zul,Listgroup,Listbox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+<listbox width="200px">
+<listgroup label="Listgroup" id="lg"/>
+<listitem label="Listitem"/>
+</listbox>
+<button label="After click me, and then click the 'open/close' icon should be open/close well"
+onClick='lg.label="test"'/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				verifyTrue(jq("@listcell").isVisible());
+				click(jq(".z-listgroup-img-open"));
+				waitResponse();
+				verifyFalse(jq("@listcell").isVisible());
+		]]></client>
+	</case>
+</test>

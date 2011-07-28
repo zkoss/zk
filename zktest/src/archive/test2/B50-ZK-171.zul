@@ -1,0 +1,37 @@
+<!--
+B50-ZK-171.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 11:45:27 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		IE 6/7 only. Drag the browser border to shorten the browser width. You should NOT see extra space near the bottom of the Listbox.
+	</div>
+	<listbox>
+		<listhead>
+			<listheader label="Product" hflex="min"/>
+			<listheader label="Description" hflex="min"/>
+			<listheader label="Comment" hflex="2"/>
+			<listheader label="Comment 2" hflex="1"/>
+		</listhead>
+		<listitem>
+			<listcell>ZK Ajax Framework</listcell>
+			<listcell>Server + Client Fusion is a good approach Server + Client Fusion is a good approach</listcell>
+			<listcell>I Love it!</listcell>
+			<listcell>Great Job</listcell>
+		</listitem>
+		<listitem>
+			<listcell>ZK Spreadsheet</listcell>
+			<listcell>The Only Solution of Java Web Excel</listcell>
+			<listcell>Awesome! What a framework!</listcell>
+			<listcell>The best!</listcell>
+		</listitem>
+	</listbox>
+</zk>

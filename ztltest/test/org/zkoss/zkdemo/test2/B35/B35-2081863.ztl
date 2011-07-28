@@ -1,0 +1,69 @@
+<!-- B35-2081863.ztl.java
+
+	Purpose:for testing B35-2081863.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 09:53:06
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2081863.zul,Tabbox">
+	<case id="ztl">
+		<server><!--
+			
+
+	
+<window id="win1" title="ztl" >
+	After the page loaded, if you don't see any popup or alert , this bug fixed
+<hbox spacing="0" width="150px">
+<tabbox id="Tab1" onSelect="refresh()" width="780px">
+<tabs>
+<tab label="Tp1" />
+<tab label="Tp2" />
+<tab label="Exit" />
+</tabs>
+<tabpanels>
+
+<tabpanel id="tp1">
+</tabpanel>
+
+<tabpanel id="tp2">
+</tabpanel>
+
+<tabpanel id="exit">
+</tabpanel>
+</tabpanels>
+</tabbox>
+</hbox>
+<zscript>
+
+public void refresh() {
+
+if (Tab1.getSelectedPanel().getId().equals("tp1"))
+{
+alert("tp1");
+}
+if (Tab1.getSelectedPanel().getId().equals("tp2"))
+{
+alert("tp2");
+}
+if (Tab1.getSelectedPanel().getId().equals("exit"))
+{
+alert("exit");
+}
+}
+</zscript>
+</window>
+
+		--></server>
+		<client><![CDATA[
+				verifyFalse(jq("@window:not(@window[title=\"ztl\"])").exists());
+				verifyFalse(jq(".z-popup").exists());
+		]]></client>
+	</case>
+</test>

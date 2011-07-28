@@ -37,6 +37,7 @@ import java.net.URL;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -148,6 +149,7 @@ public class Parser {
 		//1. parse the page and import directive if any
 		final List<ProcessingInstruction> pis = new LinkedList<ProcessingInstruction>();
 		final List<String[]> imports = new LinkedList<String[]>();
+		final List<String> impclses = new LinkedList<String>();
 		String lang = null;
 		for (Object o: doc.getChildren()) {
 			if (!(o instanceof ProcessingInstruction)) continue;
@@ -169,11 +171,18 @@ public class Parser {
 				final Map params = pi.parseData();
 				final String src = (String)params.remove("src");
 				final String dirs = (String)params.remove("directives");
+				final String cls = (String)params.remove("class");
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-				noELnorEmpty("src", src, pi);
-				noEL("directives", dirs, pi);
-				imports.add(new String[] {src, dirs});
+				if (src != null) {
+					noELnorEmpty("src", src, pi);
+					noEL("directives", dirs, pi);
+					imports.add(new String[] {src, dirs});
+				}
+				if (cls != null) {
+					noELnorEmpty("class", cls, pi);
+					impclses.add(cls);
+				}
 			} else {
 				pis.add(pi);
 			}
@@ -186,7 +195,7 @@ public class Parser {
 				LanguageDefinition.lookup(lang);
 		final PageDefinition pgdef = new PageDefinition(langdef, getLocator());
 
-		//3. resolve imports
+		//3a. resolve imports
 		if (!imports.isEmpty()) {
 			final RequestInfo ri =
 				new RequestInfoImpl(_wapp, null, null, null, getLocator());
@@ -204,6 +213,9 @@ public class Parser {
 				}
 			}
 		}
+		//3b. resolve impclses
+		for (String impcls: impclses)
+			pgdef.addImportedClass(impcls);
 
 		//4. Processing the rest of processing instructions at the top level
 		for (Iterator it = pis.iterator(); it.hasNext();)
@@ -214,16 +226,6 @@ public class Parser {
 		if (root != null)
 			parse(pgdef, pgdef, root, new AnnotationHelper(), false);
 		return pgdef;
-	}
-	@SuppressWarnings("unchecked")
-	private static <T> Class<? extends T> locateClass(String clsnm, Class<?>... clses)
-	throws Exception {
-		final Class<?> c = Classes.forNameByThread(clsnm);
-		if (clses != null)
-			for (Class<?> cls: clses)
-				if (!cls.isAssignableFrom(c))
-					throw new UiException(c + " must implement "+cls);
-		return (Class<? extends T>)c;
 	}
 	/** Parses a list of string separated by comma, into a String array.
 	 */
@@ -257,25 +259,10 @@ public class Parser {
 				throw new UiException("The class attribute is required, "+pi.getLocator());
 
 			final Map<String, String> args = new LinkedHashMap<String, String>(params);
-			if ("variable-resolver".equals(target)) {
-				final VariableResolverInfo vri;
-				if (clsnm.indexOf("${") >= 0) {
-					vri = new VariableResolverInfo(clsnm, args);
-				} else {
-					Class<? extends VariableResolver> cls = locateClass(clsnm, VariableResolver.class);
-					vri = new VariableResolverInfo(cls, args);
-				}
-				pgdef.addVariableResolverInfo(vri);
-			} else {
-				final FunctionMapperInfo fmi;
-				if (clsnm.indexOf("${") >= 0) {
-					fmi = new FunctionMapperInfo(clsnm, args);
-				} else {
-					Class<? extends FunctionMapper> cls = locateClass(clsnm, FunctionMapper.class);
-					fmi = new FunctionMapperInfo(cls, args);
-				}
-				pgdef.addFunctionMapperInfo(fmi);
-			}
+			if ("variable-resolver".equals(target))
+				pgdef.addVariableResolverInfo(new VariableResolverInfo(clsnm, args));
+			else
+				pgdef.addFunctionMapperInfo(new FunctionMapperInfo(clsnm, args));
 		} else if ("component".equals(target)) { //declare a component
 			parseComponentDirective(pgdef, pi, params);
 		} else if ("taglib".equals(target)) {
@@ -353,16 +340,7 @@ public class Parser {
 			if (!isEmpty(zsrc))
 				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
 
-			final InitiatorInfo ii;
-			if (clsnm.indexOf("${") >= 0) {
-				ii = new InitiatorInfo(clsnm, args);
-			} else {
-				Class<? extends Initiator> cls = locateClass(clsnm, Initiator.class);
-				ii = new InitiatorInfo(cls, args);
-			}
-			pgdef.addInitiatorInfo(ii);
-				//Note: we don't resolve the class name later because
-				//no zscript run before init (and better performance)
+			pgdef.addInitiatorInfo(new InitiatorInfo(clsnm, args));
 		}
 	}
 	/** Process the page directive. */
@@ -450,7 +428,7 @@ public class Parser {
 				ref = langdef.getComponentDefinition(extds);
 			} else {
 				try {
-					final Class cls = Classes.forNameByThread(clsnm);
+					final Class cls = pgdef.getImportedClassResolver().resolveClass(clsnm);
 					if (lang != null) {
 						ref = langdef.getComponentDefinition(cls);
 							//throw exception if not found
@@ -519,8 +497,8 @@ public class Parser {
 		final String clsnm = (String)params.remove("class");
 		if (clsnm != null && clsnm.length() > 0) {
 			noELnorEmpty("class", clsnm, pi);
-			Class<? extends ExpressionFactory> cls = locateClass(clsnm, ExpressionFactory.class);
-			pgdef.setExpressionFactoryClass(cls);
+			pgdef.setExpressionFactoryClass(
+				pgdef.getImportedClassResolver().resolveClass(clsnm));
 		} else { //name has the lower priorty
 			final String nm = (String)params.remove("name");
 			if (nm != null)
@@ -538,12 +516,16 @@ public class Parser {
 				String cn = (k >= 0 ? im.substring(k + 1): im).trim();
 
 				if (cn.length() != 0) {
-					final Class cs = locateClass(cn);
 					if (nm == null || nm.length() == 0) {
 						final int j = cn.lastIndexOf('.');
 						nm = j >= 0 ? cn.substring(j + 1): cn;
 					}
-					pgdef.addExpressionImport(nm, cs);
+					pgdef.addExpressionImport(nm, Classes.forNameByThread(cn));
+						//evaluator's import does not support <?import class?>,
+						//since it looks strange.
+						//FUTURE: it is better to deprecate this attribute, and
+						//have FunctionMapperExt to depend on <?import class?>
+						//(however, it is worth since only MVEL/OGNL uses it)
 				}
 			}
 		}
@@ -562,8 +544,9 @@ public class Parser {
 
 		final Method mtd;
 		try {
-			final Class cls = Classes.forNameByThread(clsnm);
-			mtd = Classes.getMethodBySignature(cls, sig, null);
+			final ClassResolver clsresolver = pgdef.getImportedClassResolver();
+			final Class cls = clsresolver.resolveClass(clsnm);
+			mtd = Classes.getMethodBySignature(cls, sig, null, clsresolver);
 		} catch (ClassNotFoundException ex) {
 			throw new UiException("Class not found: "+clsnm+", "+pi.getLocator());
 		} catch (Exception ex) {

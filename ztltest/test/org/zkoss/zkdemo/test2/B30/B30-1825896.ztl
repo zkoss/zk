@@ -1,0 +1,34 @@
+<test tags="Grid">
+	<case id="ResizeColumn">
+		<server>
+			<!-- 
+				<zk>
+					<vbox>
+						1.In IE only, Resize the column of datebox as small as possible, and you should not see the button of datebox.
+						<grid id="g1" width="400px">
+							<columns id="cols" sizable="true">
+								<column label="A" id="col1" align="center" width="50px"/>
+								<column label="B" id="col2" align="right"/>
+								<column label="C" id="col3"/>
+								<column label="D" id="col4"/>
+							</columns>
+							<rows id="rows">
+								<row>
+								Label ABCDEFG<datebox/>Label EFGHIJK<datebox/>
+								
+								</row>
+							</rows>
+						</grid>
+					</vbox>
+				</zk>
+			 -->
+		</server>
+		<client><![CDATA[
+			int colWidth = jq(".z-column:eq(5)").width();
+			//System.out.println("Original column width: " + colWidth);
+			dragdropTo(jq(".z-column:eq(5)"), (colWidth - 2) + ",5", (colWidth / 2) + ",5");
+			//System.out.println("Current column width: " + jq(".z-datebox:eq(0)").width());
+			verifyTrue(colWidth > jq(".z-datebox:eq(0)").width());
+		]]></client>
+	</case>
+</test>

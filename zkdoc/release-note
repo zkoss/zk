@@ -14,10 +14,6 @@ ZK 6.0.0
   + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
     They are replaced with org.zkoss.zul.DefaultTreeNode and
     org.zkoss.zul.DefaultTreeModel.
-  + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
-	and GenericAutowireComposer ignore the variables defined
-	in zscript and XEL. If it causes problems, please use the construactor
-	with full control (GenericAutowireComposer(separator,boolean,boolean)).
   + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
   + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
     are removed.
@@ -27,6 +23,7 @@ ZK 5.1.0
 * Features
   ZK-139: A way to define a template that component could use
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
+  ZK-237: <?import?> supprts the importing of classes
   ZK-217: A way to add a temporary variable resolver to an execution
   2974464: A way to customize message with i3-label
   ZK-233: Execution.createComponents support inserting before particular component and variable resolver
@@ -39,6 +36,13 @@ ZK 5.1.0
 * Upgrade Notes
   + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
     are removed.
+  + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
+	and GenericAutowireComposer ignore the variables defined
+	in zscript and XEL. If it causes problems, please use the construactor
+	with full control (GenericAutowireComposer(separator,boolean,boolean)).
+  + The getClassNames and resolveClass methods of org.zkoss.xel.FunctionMapper
+    are removed. Rather, FunctionMapperExt are introduced, so you could implement
+    both FunctionMapper and FunctionMapperExt to have the function.
   + The Window, Messagebox and Fileupload components won't throw InterruptedException.
     Rather, it is wrapped with UiException (because the event processing thread is
     deprecated)
@@ -46,6 +50,8 @@ ZK 5.1.0
     Two new methods are, newComposer and newServerPush, added to UiFactory
     to allow developers to customize the instantiation of a composer or 
     a server push implementation.
+  + The org.zkoss.zk.ui.sys.SEORenderer.class perference is no longer supported.
+    Please use the org.zkoss.zk.ui.sys.SEORenderer listener instead.
   + Tree's model rendering is deferred to the onInitRender event
   + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
     Override getChildren() and getExtraCtrl() instead.
@@ -57,21 +63,24 @@ ZK 5.1.0
 	--------
 ZK 5.0.8
 * Features
+  ZK-214: Add a databinding composer instead of initiator
+  3316591: Allow user to specify error-box position
+  3326788: A way to name the composer GenericAutowireComposer
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
   3309539: Timebox and Datebox support different language for different locale
-  3310927: ZK JasperReport support JasperReport
+  3310927: ZK JasperReport support JasperReports 4
   3315689: Optimize the HtmlMacroComponent 
-  3316591: Allow user to specify error-box position
   3323594: Render on Demand for Grid and Listbox supports setInitSize
-  3326788: A way to name the composer GenericAutowireComposer
   3327013: A way to log message to the client
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
-  ZK-214: Add a databinding composer instead of initiator
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
+  ZK-219: Update zk.Event documentation
+  ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
+  ZK-248: System-level initiator shall be applied to richlet too
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -163,8 +172,8 @@ ZK 5.0.8
   3358505: ZK EE with native failed to invalidate (JS error)
   3327522: Visible property for borderlayout panels (west, east, etc)
   3337441: Firefox Listbox Multiselect
-  ZK-210: Style Tag Ignored in IE6/7/8
   3363687: Window onCreate fired twice for Execution#sendRedirect() 
+  ZK-210: Style Tag Ignored in IE6/7/8
   ZK-223: Fine tune ZKThemes and sandbox
   ZK-200: Outside Window border disappear when defer including
   ZK-215: Combobox options width failed in IE
@@ -174,6 +183,13 @@ ZK 5.0.8
   ZK-182: Header of grid scroll fail after remove the Frozen
   ZK-163: The Flashchart didn't compatible with jre / jdk 1.4.x
   ZK-195: Tree with vflex causes wrong wd in another tree w/ scrollbar
+  ZK-171: Listbox/Grid columns hflex="1" not correct with hflex="min"
+  ZK-206: Set Hflex="min" to listheader fail, FF5 IE6,7
+  ZK-198: Splitter issue with double Borderlayout
+  ZK-190: Change style of div in border layout cause error of style
+  ZK-236: Borderlayout North/South failed to concern caption height
+  ZK-238: Grid with frozen, scrolled then delete frozen, some columns is hidden
+  ZK-221: problem with events in firefox 4.x and up
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

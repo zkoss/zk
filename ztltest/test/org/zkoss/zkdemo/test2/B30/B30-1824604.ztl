@@ -1,0 +1,71 @@
+<!-- B30-1824604.ztl
+
+	Purpose:for testing B30-1824604.ztl .
+
+	Description:
+
+	History:
+		11, 11, 2010 17:35:51
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1824604.zul,A,E,Grid,Paging,BI">
+	<case id="ztl">
+		<server><!--
+			
+
+<zk>
+        1.click paging to 2rd page..
+2.click sort twice, grid shouldn't become empty.
+	<separator/>
+	<zscript>
+		import org.zkoss.zul.*;
+		import java.util.*;
+		import org.zkoss.zktest.util.*;
+		
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel();
+		Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
+	</zscript>
+	<vbox>
+		<grid mold="paging"  model="${strset}" width="350px">
+			<columns sizable="true">
+				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"/>
+			</columns>
+		</grid>
+	</vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+
+			if (true) return;
+			click(jq("@paging").toWidget().$n("next"));
+			waitResponse();
+
+			int i = 20;
+			for (JQuery $row : jq("@row")) {
+				verifyTrue($row.text().indexOf(""+i)!=-1);
+				++i;
+			}
+
+			click(jq("@column"));
+			waitResponse();
+			
+			verifyTrue( jq("@row").first().text().indexOf("20")!=-1);
+
+			click(jq("@column"));
+			waitResponse();
+
+			i = 9979;
+			for (JQuery $row : jq("@row")) {
+				verifyTrue($row.text().indexOf(""+i)!=-1);
+				--i;
+			}
+
+		]]></client>
+	</case>
+</test>

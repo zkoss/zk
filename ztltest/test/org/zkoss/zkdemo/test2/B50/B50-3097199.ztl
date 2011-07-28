@@ -1,0 +1,22 @@
+<test tags="B50-3097199.zul,Combobox,Constraint,ie9">
+	<case id="Constraint">
+		<server><![CDATA[
+			<zk>
+				<combobox id="cb" constraint="strict:Please select">
+					<comboitem label="Simple and Rich"
+						description="The simplest way to make Web applications rich" />
+					<comboitem label="Cool!" description="The coolest technology" />
+					<comboitem label="Ajax and RIA"
+						description="Rich Internet Application by Ajax" />
+				</combobox>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			Element inp = cb.$n("real");
+			type(inp, "Test");
+			keyPress(inp, "\\9");
+			verifyTrue(jq("div.z-errbox").exists());
+			verifyEquals("Please select", jq(".z-errbox-center").html());
+		]]></client>
+	</case>
+</test>

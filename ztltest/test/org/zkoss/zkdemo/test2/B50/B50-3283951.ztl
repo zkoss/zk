@@ -1,0 +1,46 @@
+<!-- B50-3283951.ztl.java
+
+	Purpose:for testing B50-3283951.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 12:13:14
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3283951.zul,A,E,Tree,Treeitem">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "set select" button, the item shall be selected.</li>
+			<li>Click "select item" button, the select item shall not be null.</li>
+		</ol>
+	]]></html>
+	<button label="set select" onClick="titem.selected=true;"/>
+	<button label="select item" onClick="alert(tree.selectedItem);"/>
+	<tree id="tree" width="100px" multiple="true">
+		<treechildren>
+			<treeitem label="item" id="titem"/>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button:eq(0)"));
+				verifyTrue(titem.is("selected"));
+				click(jq("@button:eq(1)"));
+				waitResponse();
+				verifyEquals("<Treeitem titem>",getAlertMessage());
+		]]></client>
+	</case>
+</test>

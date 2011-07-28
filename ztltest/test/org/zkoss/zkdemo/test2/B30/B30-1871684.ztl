@@ -1,0 +1,31 @@
+<test tags="Tree" action="test2/B30-1871684.zul">
+	<case id="Visible">
+		<server><!--
+				<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+					<n:p>You should see one item only, and click "Try" to make it invisible.</n:p>
+					<window title="tree demo" border="normal">
+						<tree id="tree" width="90%">
+							<treechildren>
+								<treeitem id="itemVisible"
+									label="Make me invisible by click try " />
+								<treeitem label="You should not see me" visible="false" />
+							</treechildren>
+						</tree>
+						<button onClick="itemVisible.visible = !itemVisible.visible;"
+							label="Try">
+						</button>
+					</window>
+				</zk>
+		--></server>
+		<client><![CDATA[
+		verifyTrue(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
+		mouseOver(jq("@button td.z-button-cm"));
+		click(jq("@button td.z-button-cm"));
+
+		verifyFalse(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
+		mouseOver(jq("@button td.z-button-cm"));
+		click(jq("@button td.z-button-cm"));
+		verifyTrue(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
+		]]></client>
+	</case>
+</test>

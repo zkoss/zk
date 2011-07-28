@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 			}
 		}
 
-		final List<Initiator> inits = pagedef.doInit(page);
+		final List<Initiator> inits = pagedef != null ? pagedef.doInit(page): null;
 		boolean sysinitEx = false;
 		for (int j = 0; j < sysinits.length; ++j)
 			if (sysinits[j] instanceof InitiatorExt) {
@@ -67,11 +67,12 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 			}
 
 		boolean initEx = false;
-		for (Initiator init: inits)
-			if (init instanceof InitiatorExt) {
-				initEx = true;
-				break;
-			}
+		if (inits != null)
+			for (Initiator init: inits)
+				if (init instanceof InitiatorExt) {
+					initEx = true;
+					break;
+				}
 
 		if (!sysinitEx && !initEx)
 			return new Initiators();

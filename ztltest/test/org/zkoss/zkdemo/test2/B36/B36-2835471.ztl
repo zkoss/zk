@@ -1,0 +1,15 @@
+<test tags="panel,caption">
+	<case id="title">
+		<server><!--
+			<panel title="My First Window" border="normal" width="250px">
+			<caption label="Hello, World!"/>
+			<panelchildren>
+			You should see the title is "My First Window - Hello, World!"
+			</panelchildren>
+			</panel>
+		 --></server>
+		<client><![CDATA[
+			verifyEquals("My First Window - Hello, World!", getText(jq("@caption td.z-caption-l")));
+		]]></client>
+	</case>
+</test>

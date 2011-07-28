@@ -1,0 +1,68 @@
+<test tags="tree,treeitem">
+	<case id="UI">
+		<server><!--
+			<zk>
+				You should see the both tree are the same display.
+				<tree zclass="z-dottree">
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="a" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="b" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell label="c" id="treecell1"/>
+											</treerow>
+										</treeitem>
+										<treeitem visible="false">
+												<treerow>
+													<treecell label="d" />
+												</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+								<treeitem   visible="false" >
+									<treerow>
+										<treecell label="e"/>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
+				<tree zclass="z-dottree" id="tree2">
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="a" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="b" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell label="c" id="treecell2"/>
+											</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			verifyEquals(jq(treecell1).find("span:eq(1)").attr("class"), jq(treecell2).find("span:eq(1)").attr("class"));
+		]]></client>
+	</case>
+</test>

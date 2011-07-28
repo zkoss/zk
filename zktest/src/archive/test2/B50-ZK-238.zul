@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-ZK-238.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Tue Jul 26 15:01:41 TST 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+<separator/>
+1.click "add frozen"
+<separator/>
+2.scroll right to column 5
+<separator/>
+3.click "delete frozen"
+<separator/>
+4.see if column 1 to column5 can be see by scroll left and right
+<separator/>
+	<button label="add Frozen ">
+		<attribute name="onClick"><![CDATA[
+	Frozen fz = new Frozen();
+	fz.setColumns(1);
+	grid.appendChild(fz);
+]]></attribute>
+	</button>
+	<button label="delete Frozen ">
+		<attribute name="onClick"><![CDATA[
+	grid.getFrozen().detach();
+]]></attribute>
+	</button>
+	<grid id="grid" width="250px">
+		<columns>
+			<column label="column ${each}" forEach="1,2,3,4,5"
+				width="100px" />
+		</columns>
+		<rows>
+			<row forEach="1,2,3,4,5">
+				<label value="item ${each}" forEach="1,2,3,4,5" />
+			</row>
+		</rows>
+	</grid>
+</zk>

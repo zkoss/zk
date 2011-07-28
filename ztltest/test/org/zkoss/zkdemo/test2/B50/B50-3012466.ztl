@@ -1,0 +1,20 @@
+<test tags="B50-3012466.zul,Listbox,Select">
+	<case id="Select">
+		<server><!-- 
+		<zk>
+Please select 'a' or 'b', you should see the result as you selected.
+<listbox mold="select" onSelect="self.selectedItem.invalidate();">
+<listitem label="a"/>
+<listitem label="b"/>
+<listitem label="c" selected="true"/>
+</listbox>
+</zk>
+	 --></server>
+		<client><![CDATA[
+			select(jq("@select"), "label=b");
+			verifyEquals(getSelectedLabel(jq("@select")), "b"); 
+			select(jq("@select"), "label=a");
+			verifyEquals(getSelectedLabel(jq("@select")), "a");
+		]]></client>
+	</case>
+</test>

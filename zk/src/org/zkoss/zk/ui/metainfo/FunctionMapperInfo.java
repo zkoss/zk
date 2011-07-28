@@ -40,7 +40,7 @@ import org.zkoss.zk.xel.Evaluator;
  */
 public class FunctionMapperInfo extends ArgumentInfo { //directive
 	/** A class, an ExValue or an FunctionMapper. */
-	private final Object _mapper;
+	private Object _mapper;
 
 	/** Constructs with a class.
 	 * @param args the map of arguments. Ignored if null.<br/>
@@ -75,12 +75,16 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 			throw new IllegalArgumentException("empty");
 
 		if (clsnm.indexOf("${") < 0) {
-			try {
-				final Class<?> cls = Classes.forNameByThread(clsnm);
-				checkClass(cls);
-				_mapper = cls;
-			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+			if (clsnm.indexOf('.') >= 0) { //resolve it now
+				try {
+					final Class<?> cls = Classes.forNameByThread(clsnm);
+					checkClass(cls);
+					_mapper = cls;
+				} catch (ClassNotFoundException ex) {
+					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+				}
+			} else { //it might depend on <?import?>
+				_mapper = clsnm;
 			}
 		} else {
 			_mapper = new ExValue(clsnm, String.class);
@@ -119,21 +123,29 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 		if (_mapper instanceof FunctionMapper)
 			return (FunctionMapper)_mapper;
 
-		final Class<?> cls;
+		String clsnm = null;
 		if (_mapper instanceof ExValue) {
-			final String clsnm = (String)((ExValue)_mapper).getValue(eval, page);
+			clsnm = (String)((ExValue)_mapper).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 				return null; //ignore it!!
 			}
+		} else if (_mapper instanceof String) {
+			clsnm = (String)_mapper;
+		}
 
+		final Class<?> cls;
+		if (clsnm != null) {
 			try {
-				cls = Classes.forNameByThread(clsnm);
+				cls = page != null ?
+					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
 				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_mapper+")", ex);
 			}
+			if (clsnm.equals(_mapper))
+				_mapper = cls; //cache it for better performance
 		} else {
-			cls = (Class)_mapper;
+			cls = (Class<?>)_mapper;
 		}
 
 		return (FunctionMapper)newInstance(cls, eval, page);

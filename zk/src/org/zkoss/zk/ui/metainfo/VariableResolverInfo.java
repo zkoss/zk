@@ -43,7 +43,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 //	private static final Log log = Log.lookup(VariableResolverInfo.class);
 
 	/** A class, an ExValue or an VariableResolver. */
-	private final Object _resolver;
+	private Object _resolver;
 
 	/** Constructs with a class.
 	 * @param args the map of arguments. Ignored if null.<br/>
@@ -79,12 +79,16 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 			throw new IllegalArgumentException("empty");
 
 		if (clsnm.indexOf("${") < 0) {
-			try {
-				final Class<?> cls = Classes.forNameByThread(clsnm);
-				checkClass(cls);
-				_resolver = cls;
-			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+			if (clsnm.indexOf('.') >= 0) { //resolve it now
+				try {
+					final Class<?> cls = Classes.forNameByThread(clsnm);
+					checkClass(cls);
+					_resolver = cls;
+				} catch (ClassNotFoundException ex) {
+					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+				}
+			} else { //it might depend on <?import?>
+				_resolver = clsnm;
 			}
 		} else {
 			_resolver = new ExValue(clsnm, String.class);
@@ -123,21 +127,28 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 		if (_resolver instanceof VariableResolver)
 			return (VariableResolver)_resolver;
 
-		final Class<?> cls;
+		String clsnm = null;
 		if (_resolver instanceof ExValue) {
-			final String clsnm = (String)((ExValue)_resolver)
-				.getValue(eval, page);
+			clsnm = (String)((ExValue)_resolver).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 //				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!
 			}
+		} else if (_resolver instanceof String) {
+			clsnm = (String)_resolver;
+		}
 
+		final Class<?> cls;
+		if (clsnm != null) {
 			try {
-				cls = Classes.forNameByThread(clsnm);
+				cls = page != null ?
+					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
 				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_resolver+")", ex);
 			}
+			if (clsnm.equals(_resolver))
+				_resolver = cls; //cache it for better performance
 		} else {
 			cls = (Class<?>)_resolver;
 		}

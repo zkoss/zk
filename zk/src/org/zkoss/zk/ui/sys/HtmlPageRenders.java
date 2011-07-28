@@ -31,8 +31,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.io.Files;
@@ -652,34 +650,8 @@ public class HtmlPageRenders {
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
 		if (page != null && ((PageCtrl)page).getOwner() == null) { //only the topmost page shall generate SEO
-			final WebApp wapp = page.getDesktop().getWebApp();
-			final Configuration config = wapp.getConfiguration();
-
-			//backward compatible with 5.0.6
-			final String attrnm = "org.zkoss.zk.ui.sys.SEORenderer";
-			Object seo = wapp.getAttribute(attrnm);
-			if (seo == null) {
-				synchronized (HtmlPageRenders.class) {
-					seo = wapp.getAttribute(attrnm);
-					if (seo == null) {
-						final String clsnm = config
-							.getPreference("org.zkoss.zk.ui.sys.SEORenderer.class", null);
-						if (clsnm != null)
-							try {
-								seo = (SEORenderer)Classes.newInstanceByThread(clsnm);
-							} catch (Throwable t) {
-								throw new UiException("Failed to instantiate " + clsnm, t);
-							}
-						if (seo == null)
-							seo = "n/a";
-						wapp.setAttribute(attrnm, seo);
-					}
-				}
-			}
-			if (seo instanceof SEORenderer)
-				((SEORenderer)seo).render(page, out);
-
-			final SEORenderer[] sds = config.getSEORenderers();
+			final SEORenderer[] sds = page.getDesktop().getWebApp()
+				.getConfiguration().getSEORenderers();
 			for (int j = 0; j < sds.length; ++j)
 				sds[j].render(page, out);
 		}

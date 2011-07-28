@@ -1,0 +1,33 @@
+<test tags="B30-1876198.zul,Textbox,BI,ie9">
+	<case id="Validation">
+		<server><!--
+			<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+			<window>
+			<html><![CDATA[
+			<p>1. If you see a textbox and no any input error message appears ,that means this case works . </p>
+			<p>2. When you click the textbox and click outside of textbox ,it will shows the input is not corret.</p>
+			]]></html>
+			<zscript>
+			public class MyConstraint extends SimpleConstraint implements CustomConstraint {
+				public MyConstraint() {
+					super(NO_EMPTY);
+				}
+				public void showCustomError(Component comp, WrongValueException ex) {
+					comp.getFellow("errlb").setValue(ex.getMessage());
+				}
+			}
+			MyConstraint ms = new MyConstraint();
+			</zscript>
+			<textbox id="txtbox" value="@{val}" constraint="${ms}"/>
+			<label id="errlb"/>
+			</window> 
+		--></server>
+		<client><![CDATA[
+		sleep(1000);//for DataBinding
+			focus(txtbox);
+			blur(txtbox);
+			// In safari, error message display may delay a few seconds.
+			verifyTrue(jq(errlb).text().length() > 0);
+		]]></client>
+	</case>
+</test>

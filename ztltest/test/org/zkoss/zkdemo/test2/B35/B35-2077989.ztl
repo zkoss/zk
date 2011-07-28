@@ -1,0 +1,50 @@
+<!-- B35-2077989.ztl.java
+
+	Purpose:for testing B35-2077989.ztl .
+
+	Description:
+
+	History:
+		11, 8, 2010 19:18:31
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2077989.zul,A,E,Window">
+	<case id="hideWin">
+		<server id="zulCode"><!--
+			
+
+
+<window id="win" title="doModal" mode="modal" minimizable="true" width="400px" height="300px">
+<button id="hidebtn" label="Set Window to be invisible" onClick="win.setVisible(false)"/>
+In this case, you have to test two cases as follows.
+<separator/>
+1. When you click the Minimize icon of the window, the window should disappeared.(That is correct)
+<separator/>
+2. When you click the "Set Window to be invisible" button, the window should disappeared.(That is correct)
+</window>
+
+		--></server>
+		<client><![CDATA[
+			verifyEquals(true, jq("$win").isVisible());
+			click(jq("$hidebtn"));
+			
+			waitResponse();
+			verifyEquals(false, jq("$win").isVisible());				
+			
+		]]></client>
+	</case>
+	<case id="minWin">
+		<server ref="zulCode"/>
+		<client><![CDATA[
+			verifyEquals(true, jq("$win").isVisible());
+			click(win.$n("min"));
+			waitResponse();
+			verifyEquals(false, jq("$win").isVisible());				
+		]]></client>
+	</case>
+
+</test>

@@ -49,7 +49,7 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 //	private static final Log log = Log.lookup(InitiatorInfo.class);
 
 	/** A class, an ExValue or an Initiator. */
-	private final Object _init;
+	private Object _init;
 
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
@@ -72,7 +72,25 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 	public InitiatorInfo(String clsnm, Map<String, String> args)
 	throws ClassNotFoundException {
 		super(args);
-		_init = toClass(clsnm);
+
+		if (clsnm == null || clsnm.length() == 0)
+			throw new IllegalArgumentException();
+
+		if (clsnm.indexOf("${") < 0) {
+			if (clsnm.indexOf('.') >= 0) { //resolve it now
+				try {
+					final Class cls = Classes.forNameByThread(clsnm);
+					checkClass(cls);
+					_init = cls;
+				} catch (ClassNotFoundException ex) {
+					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+				}
+			} else { //it might depend on <?import?>
+				_init = clsnm;
+			}
+		} else {
+			_init = new ExValue(clsnm, String.class);
+		}
 	}
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
@@ -85,22 +103,6 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 		_init = init;
 	}
 
-	private static Object toClass(String clsnm) throws ClassNotFoundException {
-		if (clsnm == null || clsnm.length() == 0)
-			throw new IllegalArgumentException();
-
-		if (clsnm.indexOf("${") < 0) {
-			try {
-				final Class<?> cls = Classes.forNameByThread(clsnm);
-				checkClass(cls);
-				return cls;
-			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm, ex);
-			}
-		} else {
-			return new ExValue(clsnm, String.class);
-		}
-	}
 	private static void checkClass(Class<?> cls) {
 		if (!Initiator.class.isAssignableFrom(cls))
 			throw new UiException(Initiator.class+" must be implemented: "+cls);
@@ -122,21 +124,28 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 		if (_init instanceof Initiator)
 			return doInit((Initiator)_init, eval, page);
 
-		final Class<?> cls;
+		String clsnm = null;
 		if (_init instanceof ExValue) {
-			final String clsnm = (String)
-				((ExValue)_init).getValue(eval, page);
+			clsnm = (String)((ExValue)_init).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 //				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
 				return null; //ignore it!!
 			}
+		} else if (_init instanceof String) {
+			clsnm = (String)_init;
+		}
 
+		final Class<?> cls;
+		if (clsnm != null) {
 			try {
-				cls = Classes.forNameByThread(clsnm);
+				cls = page != null ?
+					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
 				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_init+")", ex);
 			}
+			if (clsnm.equals(_init))
+				_init = cls; //cache it for better performance
 		} else {
 			cls = (Class<?>)_init;
 		}

@@ -1,0 +1,51 @@
+<!-- B35-2073438.ztl.java
+
+	Purpose:for testing B35-2073438.ztl .
+
+	Description:
+
+	History:
+		11, 2, 2010 21:01:31
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2073438.zul,A,E,Menu,Menupopup">
+	<case id="ztl">
+		<server><!--
+			
+<?page title="Welcome to ZK Demo"?>
+	
+<window title="Menu Demo" border="normal">
+	<label value='When user click the menu item "Dynamically Attribute" the window should not scroll top automatically'/>
+	<div height="1000px"> 123</div>
+	<window>
+		<menubar>
+			<menu label="Dynamically Attribute">
+				<menupopup>
+				</menupopup>
+			</menu>
+		</menubar>
+	</window>
+</window>
+
+		--></server>
+		<client><![CDATA[
+				
+			//Notice here we got the browser window , not the window widget.
+			jq("window").scrollTop(jq("window").height());			
+			int scrollTop= jq("window").scrollTop();
+			
+			verifyTrue(jq("@menu").exists());
+			focus(jq("@menu"));
+			click(jq("@menu"));
+			sleep(500);
+			
+			//we assumed the scrolltop should not change after click
+			verifyEquals(scrollTop, jq("window").scrollTop());
+		
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,44 @@
+<test tags="Listbox,Auxhead">
+	<case id="Width">
+		<server><!--
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+				<n:p>Grid rows not follow columns's widths when it has the auxhead component.(This example also apply to listbox)</n:p>
+				<listbox>
+					<auxhead>
+						<auxheader label="Selecteds Items (Listbox)" colspan="9"
+							align="center" />
+					</auxhead>
+					<listhead>
+						<listheader id="header0" label="70px" width="70px" />
+						<listheader id="header1" label="75px" width="75px" />
+						<listheader id="header2" label="75px" width="75px" />
+						<listheader id="header3" label="150px" width="150px" />
+						<listheader id="header4" label="107px" width="107px" />
+						<listheader id="header5" label="120px" width="120px" />
+						<listheader id="header6" label="115px" width="115px" />
+						<listheader id="header7" label="50px" width="50px" />
+						<listheader id="header8" label="80px" width="90px" />
+					</listhead>
+					<listitem>
+						<listcell id="cell0" label="1" />
+						<listcell id="cell1" label="2" />
+						<listcell id="cell2" label="3" />
+						<listcell id="cell3" label="4" />
+						<listcell id="cell4" label="5" />
+						<listcell id="cell5" label="6" />
+						<listcell id="cell6" label="7" />
+						<listcell id="cell7" label="8" />
+						<listcell id="cell8" label="9" />
+					</listitem>
+				</listbox>
+		</zk>
+		--></server>
+		<client><![CDATA[
+			int margin = 10;
+			
+			for (int i = 0; i < 9; i++) {
+			    verifyTolerant(jq("$header" + i).width(), (jq("$cell" + i).width() + margin), 5);
+			}
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,39 @@
+<test tags="Databind,BI">
+	<case id="Binding">
+		<server><!--
+			<window>
+			<html><![CDATA[
+			<p>
+			1. You shall see a button "Click Me!".<br/>
+			2. Click the button, and you shall see an error window popup: "arg0/root has to be String, Component, or Page: null".<br/>
+			3. Done.<br/>
+			</p>
+			]]></html>
+			<button id="myBtn" label="Click Me!">
+				<attribute name="onClick"><![CDATA[
+					final Window zulUI= (Window) Executions.createComponents(
+							"test2/B30_2024223_1.zul", null, null);
+					try 
+					{
+						zulUI.doModal();
+					} 
+					catch (SuspendNotAllowedException e) 
+					{
+						return;
+					} 
+					catch (InterruptedException e) 
+					{
+						return;
+					}
+				]]></attribute>
+			</button>
+			</window>
+		--></server>
+		<client><![CDATA[
+			click(myBtn);
+			waitResponse();
+			verifyTrue(jq(".z-window-modal").exists());
+			verifyEquals("arg0/root has to be String, Component, or Page: null", jq(".z-window-modal .z-label").text());
+		]]></client>
+	</case>
+</test>

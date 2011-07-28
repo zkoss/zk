@@ -1,0 +1,28 @@
+<test tags="intbox,Unstable">
+	<case id="paste">
+		<server><!--
+			<zk>
+				now support copy paste by ctrl key in intbox
+				<intbox value="1234567"/><button id="blur" label="here"/>
+			</zk>
+		--></server>
+		<client><![CDATA[	
+				focus(jq("@intbox"));
+				keyDownNative(CTRL);waitResponse();
+				keyPressNative(A);waitResponse();
+				keyUpNative(CTRL);waitResponse();
+				keyDownNative(CTRL);waitResponse();
+				keyPressNative(X);waitResponse();
+				keyUpNative(CTRL);waitResponse();
+				clickAt(blur,"6,6");waitResponse();
+				verifyFalse(jq(".z-intbox-focus").exists());
+				verifyEquals("", getValue(jq("@intbox")));
+				focus(jq("@intbox"));
+				verifyTrue(jq(".z-intbox-focus").exists());
+				keyDownNative(CTRL);waitResponse();
+				keyPressNative(V);waitResponse();
+				keyUpNative(CTRL);waitResponse();
+				verifyEquals("1234567", getValue(jq("@intbox")));
+		]]></client>
+	</case>
+</test>

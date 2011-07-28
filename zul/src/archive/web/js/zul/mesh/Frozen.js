@@ -67,7 +67,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					2;/* fixed a bug related to the feature #3025419*/
 			
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
-			wgt.syncScorll();
+			wgt.syncScroll();
 		}
 	}
 
@@ -94,7 +94,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			if (this._columns) {
 				if (this.desktop) {
 					this.onShow();
-					this.syncScorll();
+					this.syncScroll();
 				}
 			} else this.rerender();
 		}],
@@ -109,13 +109,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		 * @param int start the column number
 		 */
 		start: function () {
-			this.syncScorll();
+			this.syncScroll();
 		}
 	},
 	/**
 	 * Synchronizes the scrollbar according to {@link #getStart}.
 	 */
-	syncScorll: function () {
+	syncScroll: function () {
 		var scroll = this.$n('scrollX');
 		if (scroll)
 			scroll.scrollLeft = this._start * 50;
@@ -168,6 +168,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this, onSize: this});
+		
+		//bug B50-ZK-238
+		this.$n('scrollX').scrollLeft = 0;
+		this._doScroll();
+		
 		this.parent.unlisten({onScroll: this.proxy(this._onScroll)});
 		var p;
 		if ((p = this.parent) && (p = p.$n('body')))

@@ -1,0 +1,91 @@
+<!-- B35-2107058.ztl.java
+
+	Purpose:for testing B35-2107058.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 16:03:51
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2107058.zul,A,E,Textbox,Unstable">
+	<case id="ztl">
+		<server><!--
+			
+
+
+
+<zk>
+	<div>
+		1. enter something in acc/pwd , then click login , you will see the
+		message with "login button is clicked"
+	</div>
+	<div>
+		2. you press Enter key , you will get the message for "onOK is
+		triggered, pwd = " , and you should check the pwd is correct or not.
+	</div>
+	<window id="login_window" title="Login" border="normal" width="420px"
+		sizable="false" mode="overlapped" position="center"
+		onOK='alert("Window.onOK triggered, password=" + password.getValue())'
+		xmlns:h="http://www.w3.org/1999/xhtml">
+		<timer id="timer" running="true" delay="30000" repeats="true"
+			onTimer="" />
+		<grid fixedLayout="false">
+			<rows>
+				<row>
+					ACC
+					<hbox>
+						<textbox id="username" constraint="no empty"
+							onChange='realname.setValue("your real name")' />
+						<label id="realname" />
+					</hbox>
+					<zscript>
+	username.focus();
+</zscript>
+
+				</row>
+				<row>
+					PWD
+					<textbox type="password" constraint="no empty"
+						id="password" />
+				</row>
+				<row>
+					<label />
+					<checkbox id='ldapauth' label="Test" checked='true' />
+				</row>
+
+				<row>
+					<label />
+					<vbox>
+						<button id="btn" label=" login"
+							onClick='alert("Login button
+clicked")' />
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+		<label id="info" style="color:red;" />
+	</window>
+
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			type(jq("$username"),"hello");
+			type(jq("$password"),"world");
+			click(jq("$btn"));
+			waitResponse();
+			verifyEquals("Login buttonclicked",jq(".z-window-highlighted .z-label").text());
+			click(jq(".z-messagebox-btn"));
+			waitResponse();
+			focus(jq("$password"));
+			keyPressNative(ENTER);
+			waitResponse();
+			verifyEquals("Window.onOK triggered, password=world",jq(".z-window-highlighted .z-label").text());
+		]]></client>
+	</case>
+</test>

@@ -12,6 +12,25 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	
+	function _setFirstChildFlex (wgt, flex) {
+		var cwgt = wgt.firstChild;
+		if(cwgt) {
+			if (flex) {
+				wgt._fcvflex = cwgt.getVflex();
+				wgt._fchflex = cwgt.getHflex();
+				cwgt.setVflex(true);
+				cwgt.setHflex(true);
+			} else {
+				cwgt.setVflex(wgt._fcvflex);
+				cwgt.setHflex(wgt._fchflex);
+				delete wgt._fcvflex;
+				delete wgt._fchflex;
+			}
+		}
+	}
+	
 /**
  * A layout region in a border layout.
  * <p>
@@ -43,7 +62,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * Default: false.
 		 * @return boolean
 		 */
-		flex: function () {
+		flex: function (v) {
+			_setFirstChildFlex(this, v);
 			this.rerender();
 		},
 		/**
@@ -242,6 +262,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	setHflex: function (v) { //hflex ignored for LayoutRigion
 		if (v != 'min') v = false;
 		this.$super(zul.layout.LayoutRegion, 'setHflex', v);
+	},
+	// B50-ZK-236: add header height
+	getChildMinSize_: function (o, cwgt) {
+		return (o == 'h' && this.$n('cap') ? this.$n('cap').offsetHeight : 0) + 
+				this.$supers('getChildMinSize_', arguments);
 	},
 	/**
 	 * Returns the collapsed margins, which is a list of numbers separated by comma.
@@ -480,6 +505,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this.firstChild.$n() : this.$n('cave');
 			this.domListen_(bodyEl, "onScroll");
 		}
+		
+		if (this.isFlex())
+			_setFirstChildFlex(this, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
@@ -493,6 +521,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._drag = null;
 			}
 		}
+		
+		if (this.isFlex())
+			_setFirstChildFlex(this, false);
+		
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
@@ -933,3 +965,5 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return jq("#zk_layoutghost")[0];
 	}
 });
+
+})();

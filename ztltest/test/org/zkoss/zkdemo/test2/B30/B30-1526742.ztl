@@ -1,0 +1,27 @@
+<test tags="space,window,caption">
+	<case id="Spacing">
+		<server id="zul"><!--
+			<window title="OpMenu" border="normal" width="100%">
+				<caption id="parent">
+					<label value="USERNAME" tooltip="pop_userInfo" />
+					<space id="space" bar="true" spacing="20%" />
+					<toolbarbutton label="Hilfe" tooltip="pop_about" />
+					<toolbarbutton label="LogOut" onClick="winMain.performLogOut()" />
+					<space bar="true" spacing="20px" />
+				</caption>
+				The correct behavior is there is about 20% spacing between USERNAME
+				and Hilfe LogOut
+			</window>
+		--></server>
+		<client wait="100"><![CDATA[
+			int totalWidth = jq("td.z-caption-r").outerWidth();
+			int spaceWidth = jq(space).outerWidth();
+			int spaceOuterWidth = jq(space).outerWidth(true);
+			if (spaceWidth != spaceOuterWidth)// FF will add the width of self's body 
+				spaceOuterWidth -= spaceWidth;
+			
+			long widthDiff = Math.abs(Math.round(totalWidth * 0.2) - spaceOuterWidth);
+			verifyTrue(widthDiff <= 3L);
+		]]></client>
+	</case>
+</test>

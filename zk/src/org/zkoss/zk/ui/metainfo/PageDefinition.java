@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.ClassResolver;
+import org.zkoss.lang.ImportedClassResolver;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
@@ -95,8 +98,10 @@ public class PageDefinition implements NodeInfo {
 	/** Map(String name, ExValue value). */
 	private Map<String, ExValue> _rootAttrs;
 	private ExValue _contentType, _docType, _firstLine, _wgtcls;
-	/** The expression factory (ExpressionFactory).*/
+	/** The class of the expression factory (ExpressionFactory).*/
 	private Class<? extends ExpressionFactory> _expfcls;
+	/** The class resolver. */
+	private final ImportedClassResolver _clsresolver = new ImportedClassResolver();
 	private final ComponentDefinitionMap _compdefs;
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
@@ -257,6 +262,9 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.2
 	 */
 	public void imports(PageDefinition pgdef, String[] directives) {
+		if (directives == null || contains(directives, "import"))
+			_clsresolver.addAll(pgdef._clsresolver);
+
 		if (pgdef._initdefs != null
 		&& (directives == null || contains(directives, "init")))
 			for (InitiatorInfo ii: pgdef._initdefs)
@@ -324,7 +332,32 @@ public class PageDefinition implements NodeInfo {
 		imports(pgdef, null);
 	}
 
-	/** Adds a defintion of {@link org.zkoss.zk.ui.util.Initiator}. */
+	/** Adds an imported class
+	 * Like Java, it is used to import a class or a package of classes, so
+	 * that it simplifies the use of the apply attribute, the init directive
+	 * and others.
+	 * 
+	 * @param clsptn the class's full-qualitified name, e.g., <code>com.foo.FooComposer</code>,
+	 * a wildcard representing all classes of the give pacakge, e.g., <code>com.foo.*</code>.
+	 * @since 5.1.0
+	 */
+	public void addImportedClass(String clsptn) throws ClassNotFoundException {
+		_clsresolver.addImportedClass(clsptn);
+	}
+	/** Returns a readonly list of the imported class.
+	 * @since 5.1.0
+	 */
+	public List getImportedClasses() {
+		return _clsresolver.getImportedClasses();
+	}
+	/** Returns the class resolver represented by {@link #getImportedClasses}.
+	 * @since 5.1.0
+	 */
+	public ClassResolver getImportedClassResolver() {
+		return _clsresolver;
+	}
+
+	/** Adds a defintion of {@link Initiator}. */
 	public void addInitiatorInfo(InitiatorInfo init) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
@@ -382,42 +415,12 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public void addXelMethod(String prefix, String name, Function func) {
+		checkXelModifiable();
 		if (name == null || prefix == null || func == null)
 			throw new IllegalArgumentException();
 		if (_xelfuncs == null)
 			_xelfuncs = new LinkedList<FunctionDefinition>();
 		_xelfuncs.add(new FunctionDefinition(prefix, name, func));
-		_eval = null; //ask for re-gen
-		_mapper = null; //ask for re-parse
-	}
-	/** Initializes XEL context for the specified page.
-	 *
-	 * @param page the page to initialize the context. It cannot be null.
-	 */
-	public void initXelContext(Page page) {
-		page.addFunctionMapper(getTaglibMapper());
-
-		if (_mapperdefs != null)
-			for (FunctionMapperInfo fmi: _mapperdefs) {
-				try {
-					FunctionMapper mapper = fmi.newFunctionMapper(this, page);
-					if (mapper != null) 
-						page.addFunctionMapper(mapper);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-
-		if (_resolvdefs != null)
-			for (VariableResolverInfo vri: _resolvdefs) {
-				try {
-					VariableResolver resolver = vri.newVariableResolver(this, page);
-					if (resolver != null) 
-						page.addVariableResolver(resolver);
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
 	}
 
 	/** Adds a response header.
@@ -776,26 +779,29 @@ public class PageDefinition implements NodeInfo {
 
 	/** Adds a tag lib. */
 	public void addTaglib(Taglib taglib) {
+		checkXelModifiable();
 		if (taglib == null)
 			throw new IllegalArgumentException("null");
 
 		if (_taglibs == null)
 			_taglibs = new LinkedList<Taglib>();
 		_taglibs.add(taglib);
-		_eval = null; //ask for re-gen
-		_mapper = null; //ask for re-parse
 	}
 	/** Adds an imported class to the expression factory.
 	 * @since 3.0.0
 	 */
 	public void addExpressionImport(String nm, Class<?> cls) {
+		checkXelModifiable();
 		if (nm == null || cls == null)
 			throw new IllegalArgumentException();
+
 		if (_expimps == null)
 			_expimps = new HashMap<String, Class<?>>(4);
 		_expimps.put(nm, cls);
-		_eval = null; //ask for re-gen
-		_mapper = null; //ask for re-parse
+	}
+	private void checkXelModifiable() {
+		if (_eval != null || _mapper != null)
+			throw new IllegalStateException("getEvaluator() has been called, and no further change is allowed");
 	}
 	/** Sets the implementation of the expression factory that shall
 	 * be used by this page.
@@ -806,12 +812,15 @@ public class PageDefinition implements NodeInfo {
 	 * Note: expfcls must implement {@link ExpressionFactory}.
 	 * If null is specified, the class defined in
 	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
+	 * @exception IllegalArgumentException if expfcls does not implement ExpressionFactory
 	 * @since 3.0.0
 	 */
-	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
+	@SuppressWarnings("unchecked")
+	public void setExpressionFactoryClass(Class<?> expfcls) {
+		checkXelModifiable();
 		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
-			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
-		_expfcls = expfcls;
+			throw new IllegalArgumentException(ExpressionFactory.class+" must be implemented: "+expfcls);
+		_expfcls = (Class)expfcls;
 	}
 	/** Returns the implementation of the expression factory that
 	 * is used by this page, or null if
@@ -860,8 +869,46 @@ public class PageDefinition implements NodeInfo {
 		return _mapper != Expressions.EMPTY_MAPPER ? _mapper: null;
 	}
 
+	/** Initializes the context for the given page before rendering
+	 * this page definition.
+	 * <p>It is called before {@link Initiator#doInit} and {@link #init}.
+	 *
+	 * @param page the page to initialize the context. It cannot be null.
+	 */
+	public void preInit(Page page) {
+		page.addClassResolver(_clsresolver);
+
+		page.addFunctionMapper(getTaglibMapper());
+
+		if (_mapperdefs != null)
+			for (Iterator it = _mapperdefs.iterator(); it.hasNext();) {
+				final FunctionMapperInfo def = (FunctionMapperInfo)it.next();
+				try {
+					FunctionMapper mapper =
+						def.newFunctionMapper(this, page);
+					if (mapper != null) 
+						page.addFunctionMapper(mapper);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+
+		if (_resolvdefs != null)
+			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
+				final VariableResolverInfo def = (VariableResolverInfo)it.next();
+				try {
+					VariableResolver resolver =
+						def.newVariableResolver(this, page);
+					if (resolver != null) 
+						page.addVariableResolver(resolver);
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			}
+	}
 	/** Initializes a page after execution is activated.
 	 * It setup the identifier and title, and adds it to desktop.
+	 * <p>It is called after {@link #preInit} and {@link Initiator#doInit}.
 	 */
 	public void init(final Page page, final boolean evalHeaders) {
 		final PageCtrl pageCtrl = (PageCtrl)page;

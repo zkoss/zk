@@ -1,0 +1,48 @@
+<!-- B30-1963547.ztl.java
+
+	Purpose:for testing B30-1963547.ztl .
+
+	Description:
+
+	History:
+		06, 8, 2011 09:17:17
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1963547.zul,Listbox,Listfoot,Listhead,Paging">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+It is true, if don't have any JS error after you go through the following steps
+<vbox>
+<listbox width="250px" id="list">
+<listhead/>
+</listbox>
+<button label="Click Me Three Times" onClick='new Listitem("WithListhead").parent=list;'/>
+
+<listbox width="250px" id="list1">
+<listfoot/>
+</listbox>
+<button label="Click Me Three Times"  onClick='new Listitem("WithListfoot").parent=list1;'/>
+<listbox width="250px" id="list2" mold="paging"/>
+<button label="Click Me Three Times"  onClick='new Listitem("OnlyPaging").parent=list2;'/>
+</vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button:eq(0)"));waitResponse();
+				verifyFalse(jq(".z-error").exists());
+				click(jq("@button:eq(1)"));waitResponse();
+				verifyFalse(jq(".z-error").exists());
+				click(jq("@button:eq(2)"));waitResponse();
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

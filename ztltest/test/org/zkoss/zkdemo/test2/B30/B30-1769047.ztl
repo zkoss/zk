@@ -1,0 +1,223 @@
+<test tags="B30-1769047.zul,Listbox,Databind,Grid,ie9">
+	<case id="Databinding">
+		<server><!--
+		<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+		<zk>
+		<html><![CDATA[
+		1: Select an item and update the street of the item in the listbox. Now tab away, the two grids should get the updated value<br/>
+		2: Update the street in the edit grid on the right side and tab away, the bottom grid and the listbox should gets the updated value<br/>
+		3: Update the street in the bottom grid("after save" ) and tab away, the right hand side grid and listbox should NOT change.<br/>
+		4. Now press save button, the right hand side grid and the listbox should gets the updated value now.<br/>
+		]]></html>
+			<zscript src="/test2/B30-1769047-1.zs"/>
+		
+			<window id="mainwin" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+			<hbox>
+				<listbox id="listbox" model="@{personList}" selectedItem="@{selected}" width="600px" rows="8">
+					<listhead>
+						<listheader width="200px"/>
+						<listheader width="200px"/>
+						<listheader width="200px"/>
+						<listheader width="200px"/>
+						<listheader width="200px"/>
+					</listhead>
+					<listitem _var="@{person}" onDoubleClick="alert(&quot;doubleclick&quot;);">
+						<listcell style="white-space:nowrap;overflow:hidden">
+							<textbox value="@{person.firstName}"/>
+						</listcell>
+						<listcell style="white-space:nowrap;overflow:hidden">
+							<textbox value="@{person.lastName}"/>
+						</listcell>
+			
+						<listcell style="white-space:nowrap;overflow:hidden">
+							<textbox value="@{person.address.street}"/>
+						</listcell>
+						<listcell style="white-space:nowrap;overflow:hidden">
+							<label maxlength="20" value="@{person.fullName}"/>
+						</listcell>
+						<listcell>
+							<listbox mold="select" rows="1" model="@{emailList}" selectedItem="@{person.email}">
+								<listitem _var="@{email}" label="@{email}"/>
+							</listbox>
+						</listcell>
+					</listitem>
+				</listbox>
+		
+				<grid sizedByContent="true">
+				<rows>
+					<row>
+						First Name: <textbox value="@{selected.firstName}" id="firstName"/>
+					</row>
+					<row>
+						Last Name: <textbox value="@{selected.lastName}" id="lastName"/>
+					</row>
+					<row>
+						Email: 
+						<listbox id="email1" model="@{emailList}" selectedItem="@{selected.email}" mold="select" rows="1">
+							<listitem _var="@{email}" label="@{email}"/>
+						</listbox>
+					</row>
+					<row>
+						Email:
+						<listbox id="email2" model="@{emailList}" selectedItem="@{selected.email}" mold="select" rows="1">
+							<listitem _var="@{email}" label="@{email}"/>
+						</listbox>
+					</row>
+					<row>
+						Street:	<textbox value="@{selected.address.street}" id="street"/>
+					</row>
+					<row>
+						City: <textbox value="@{selected.address.city}" id="city"/>
+					</row>
+				</rows>
+				</grid>
+			</hbox>
+			
+			<grid>
+			<columns>
+				<column width="50%"/>
+				<column width="50%"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="FirstName, after Save button:" />
+					<textbox value="@{selected.firstName,save-when='SaveButton.onClick'}" id="firstName2"/>
+				</row>
+				<row>
+					<label value="LastName, after Save button:" />
+					<textbox value="@{selected.lastName,save-when='SaveButton.onClick'}" id="lastName2"/>
+				</row>
+			
+				<row>
+					<label value="Street, after Save button:" />
+					<textbox value="@{selected.address.street,save-when='SaveButton.onClick'}" id="street2"/>
+				</row>
+			</rows>
+			</grid>
+			
+			<button id="SaveButton" label="Save" onClick="doNothing()"/>
+			
+			<zscript>
+				doNothing() { }
+		
+				//prepare collection list
+				setupPerson(Person person, int j) {
+					person.setFirstName("First"+j);
+					person.setLastName("Last"+j);
+					person.setEmail("email"+j+"@potix.com");
+					person.setAddress(new Address("Street"+j, "City"+j));
+				}
+		
+				//prepare a selected person
+				Person selected = new Person();
+		
+				//prepare the example person List
+				int count = 30;
+				List personList = new ArrayList();
+				// self.setVariable("personList", personList, false);
+				for(int j= 0; j &lt; count; ++j) {
+					Person personx = new Person();
+					setupPerson(personx, j);
+					personList.add(personx);
+				}
+				selected = personList.get(1);
+				
+				//prepare email list
+				Set emailList = new LinkedHashSet();
+				for(int j= 0; j &lt; count; ++j) {
+					emailList.add("email"+j+"@potix.com");
+				}
+			</zscript>
+			</window>
+		</zk>
+		 --></server>
+		<client><![CDATA[
+		sleep(1000);//for DataBinding
+			JQuery listitem = jq("@listbox > @listitem:first-child");
+			click(listitem);
+			JQuery fn = listitem.find("> @listcell:nth-child(1) @textbox");
+			JQuery ln = listitem.find("> @listcell:nth-child(2) @textbox");
+			JQuery pa = listitem.find("> @listcell:nth-child(3) @textbox");
+			JQuery full = listitem.find("> @listcell:nth-child(4) @label");
+			JQuery email = listitem.find("> @listcell:nth-child(5) @select");
+			verifyEquals(jq(firstName).val(), fn.val());
+			verifyEquals(jq(firstName2).val(), fn.val());
+			verifyEquals(jq(lastName).val(), ln.val());
+			verifyEquals(jq(lastName2).val(), ln.val());
+			verifyEquals(jq(full).html(), fn.val() + " " + ln.val());
+			verifyEquals(jq(email1).val(), email.val());
+			verifyEquals(jq(email2).val(), email.val());
+			verifyEquals(jq(street).val(), pa.val());
+			verifyEquals(jq(street2).val(), pa.val());
+			type(fn, "FirstName");
+			waitResponse();
+			verifyEquals("FirstName", fn.val());
+			verifyEquals(jq(firstName).val(), fn.val());
+			verifyEquals(jq(firstName2).val(), fn.val());
+			type(ln, "LastName");
+			waitResponse();
+			verifyEquals("LastName", ln.val());
+			verifyEquals(jq(lastName).val(), ln.val());
+			verifyEquals(jq(lastName2).val(), ln.val());
+			verifyEquals(jq(full).html(), fn.val() + " " + ln.val());
+			type(pa, "ZKoss");
+			waitResponse();
+			verifyEquals("ZKoss", pa.val());
+			verifyEquals(jq(street).val(), pa.val());
+			verifyEquals(jq(street2).val(), pa.val());
+			select(email, "email11@potix.com");
+			waitResponse();
+			verifyEquals("email11@potix.com", email.val());
+			verifyEquals(jq(email1).val(), email.val());
+			verifyEquals(jq(email2).val(), email.val());
+			type(firstName, "FirstName1");
+			waitResponse();
+			verifyEquals("FirstName1", fn.val());
+			verifyEquals(jq(firstName).val(), fn.val());
+			verifyEquals(jq(firstName2).val(), fn.val());
+			type(lastName, "LastName1");
+			waitResponse();
+			verifyEquals("LastName1", ln.val());
+			verifyEquals(jq(lastName).val(), ln.val());
+			verifyEquals(jq(lastName2).val(), ln.val());
+			verifyEquals(jq(full).html(), fn.val() + " " + ln.val());
+			type(street, "ZKoss1");
+			waitResponse();
+			verifyEquals("ZKoss1", pa.val());
+			verifyEquals(jq(street).val(), pa.val());
+			verifyEquals(jq(street2).val(), pa.val());
+			select(email1, "email1@potix.com");
+			waitResponse();
+			verifyEquals("email1@potix.com", email.val());
+			verifyEquals(jq(email1).val(), email.val());
+			verifyEquals(jq(email2).val(), email.val());
+			// test for nothing change
+			type(firstName2, "FirstName2");
+			waitResponse();
+			verifyEquals("FirstName2", jq(firstName2).val());
+			verifyEquals("FirstName1", fn.val());
+			verifyEquals(jq(firstName).val(), fn.val());
+			type(lastName2, "LastName2");
+			waitResponse();
+			verifyEquals("LastName2", jq(lastName2).val());
+			verifyEquals("LastName1", ln.val());
+			verifyEquals(jq(lastName).val(), ln.val());
+			verifyEquals(jq(full).html(), fn.val() + " " + ln.val());
+			type(street2, "ZKoss2");
+			waitResponse();
+			verifyEquals("ZKoss2", jq(street2).val());
+			verifyEquals("ZKoss1", pa.val());
+			verifyEquals(jq(street).val(), pa.val());
+			// test for change
+			click(SaveButton);
+			waitResponse();
+			verifyEquals("FirstName2", fn.val());
+			verifyEquals(jq(firstName).val(), fn.val());
+			verifyEquals("LastName2", ln.val());
+			verifyEquals(jq(lastName).val(), ln.val());
+			verifyEquals(jq(full).html(), fn.val() + " " + ln.val());
+			verifyEquals("ZKoss2", pa.val());
+			verifyEquals(jq(street).val(), pa.val());
+		]]></client>
+	</case>
+</test>

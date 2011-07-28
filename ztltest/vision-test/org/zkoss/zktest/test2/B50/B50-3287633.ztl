@@ -1,0 +1,15 @@
+<test tags="B50-3287633.zul,A,E,Label,Hflex,Vflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+	1. There should not be javascript error, and the purple area should be as wide as the text.
+	<div vflex="min" hflex="min" style="background: #FF00FF">
+		<label vflex="min" hflex="min">text</label>
+	</div>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

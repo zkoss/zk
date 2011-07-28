@@ -1,0 +1,17 @@
+<test tags="timebox,Unstable">
+	<case id="type">
+		<server><!--
+			<zk>
+				You should not type non-number character inside the input element(Opera only)
+				<timebox/>
+			</zk>
+		 --></server>
+		<client><![CDATA[
+			focus(jq("@timebox input.z-timebox-inp"));
+			String old = jq("@timebox input.z-timebox-inp").val();
+			keyPressNative(A);
+			keyPressNative(X);
+			verifyEquals(old, jq("@timebox input.z-timebox-inp").val());
+		]]></client>
+	</case>
+</test>

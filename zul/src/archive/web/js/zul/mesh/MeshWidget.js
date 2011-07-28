@@ -129,6 +129,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				} else if (zk.ff > 4 || zk.ie == 9) {// firefox4 & IE9 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				}
+				if (zk.ie < 8) // B50-ZK-206
+					wds[i] += 2;
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w) w = w.previousSibling;
 			}
@@ -146,6 +148,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						maxj = i;
 					} else if (zk.ff > 4 || zk.ie == 9) // firefox4 & IE9 still cause break line in case B50-3147926 column 1
 						++wds[i];
+					if (zk.ie < 8) // B50-ZK-206
+						wds[i] += 2;
 					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				}
 			}
@@ -685,6 +689,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (this._fixPageSize(rows)) return; //need to reload with new page size
 		
+		if (zk.ie7_ || zk.ie6_)
+			this._syncBodyHeight(); // B50-ZK-171
+		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
 		//Note: we have to calculate from top to bottom because each row's
@@ -704,6 +711,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		if (items.length)
 			this.fire('onRender', {items: items}, {implicit:true});
+	},
+	_syncBodyHeight: function () {
+		var ebody = this.ebody,
+			ebodytbl = this.$n('cave');
+		// no scroll bar, but extra height on ebody
+		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
+				ebody.offsetWidth >= ebodytbl.offsetWidth) 
+			ebody.style.height = (ebodytbl.offsetHeight) + 'px';
 	},
 	_fixPageSize: function(rows) {
 		var ebody = this.ebody;

@@ -1,0 +1,51 @@
+<!-- B50-3167027.ztl.java
+
+	Purpose:for testing B50-3167027.ztl .
+
+	Description:
+
+	History:
+		05, 19, 2011 10:17:08
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3167027.zul,A,E,Tree,Treeitem,Treerow">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "add node" button.</li>
+			<li>A "new item" shall appear.</li>
+		</ol>
+	]]></html>
+	<button label="add node">
+		<attribute name="onClick"><![CDATA[
+			Treerow tr = new Treerow();
+			item.appendChild(tr);
+			tr.appendChild(new Treecell("new Item"));
+		]]></attribute>
+	</button>
+	<tree>
+		<treechildren>
+			<treeitem id="item"/>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyFalse(jq("@treecell:eq(0)").exists());
+				click(jq("@button"));
+				waitResponse();
+				verifyTrue(isVisible(jq("@treecell:eq(0)")));
+				verifyEquals(" new Item",jq("@treecell:eq(0)").text());
+		]]></client>
+	</case>
+</test>

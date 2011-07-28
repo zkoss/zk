@@ -16,13 +16,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel;
 
-import java.util.Collection;
-
 /**
  * Used to customize the way to map between the XEL function names
  * and the {@link Function} methods.
  *
  * @author tomyeh
+ * @see FunctionMapperExt
  * @since 3.0.0
  */
 public interface FunctionMapper {
@@ -40,24 +39,4 @@ public interface FunctionMapper {
 	 */
 	public Function resolveFunction(String prefix, String name)
 	throws XelException;
-
-	/** Returns a readonly collection of the logic names of the class
-	 * (never null).
-	 * Note: it is the name to resolve class, not the real class name.
-	 * In other words, it is the logical name maintained by this
-	 * function mapper.
-	 */
-	public Collection<String> getClassNames();
-	/** Resolves a class with the specified logic name,
-	 * or null if not found.
-	 *
-	 * <p>Note: not all EL evaluator support {@link #resolveClass}.
-	 * JSP 2.0/2.1 EL-based expression factories don't support
-	 * this method.
-	 * You can check {@link ExpressionFactory#isSupported} for this
-	 * support.
-	 *
-	 * @return the class of the specified logic name.
-	 */
-	public Class<?> resolveClass(String name) throws XelException;
 }

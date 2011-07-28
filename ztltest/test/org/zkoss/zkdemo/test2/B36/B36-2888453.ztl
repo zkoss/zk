@@ -1,0 +1,34 @@
+<!-- B36-2888453.ztl.java
+
+	Purpose:for testing B36-2888453.ztl .
+
+	Description:
+
+	History:
+		07, 1, 2011 12:36:50
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B36-2888453.zul,Textbox,Constraint,IE">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window id="win" title="Bug in IE">
+please click the close button, and no JavaScript error is correct. (IE only)
+<textbox constraint="no empty" focus="true"/>
+<button label="close" forward="onClose"/>
+</window>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

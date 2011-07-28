@@ -1,0 +1,35 @@
+<test tags="B36-2806448.zul,menupopup,ie9">
+	<case id="clear">
+		<server><!--
+			<zk>
+			Right-click on the 'female' item to show a menu popup and left-click on
+			the 'Mary' item, and then all the listbox should be removed, especially
+			menupopup's shadow.
+			<separator/>
+			<div id="outer">
+			<listbox width="250px" context="popup">
+			<listhead sizable="true">
+			<listheader label="Name"/>
+			<listheader label="Gender"/>
+			</listhead>
+			<listitem onClick="outer.detach();">
+			<listcell label="Mary"/>
+			<listcell label="female"/>
+			</listitem>
+			</listbox>
+			<menupopup id="popup">
+			<menuitem label="Index" onClick="alert(self.label)"/>
+			</menupopup>
+			</div>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			contextMenu(jq("@listcell[label=\"female\"] div.z-overflow-hidden"));
+			waitResponse();
+			verifyTrue(jq("@menupopup").exists());
+			click(jq("@listcell[label=\"Mary\"] div.z-overflow-hidden"));
+			waitResponse();
+			verifyFalse(jq("@menupopup").exists());
+		]]></client>
+	</case>
+</test>

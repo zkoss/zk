@@ -1,0 +1,79 @@
+<!-- B30-1899699.ztl
+
+	Purpose:for testing B30-1899699.ztl .
+
+	Description:
+
+	History:
+		11, 15, 2010 19:10:13
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1899699.zul,B,E,Listbox">
+	<case id="ztl">
+		<server><!--
+			
+
+	<zk:window xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:zk="http://www.zkoss.org/2005/zul"
+		xmlns:a="http://www.zkoss.org/2005/zk/annotation"
+		xsi:schemaLocation="http://www.zkoss.org/2005/zul
+http://www.zkoss.org/2005/zul/zul.xsd "
+		id="prova" border="normal" width="100%" height="250"
+		contentStyle="position:relative;">
+
+		<zk:label value="Check column size in listbox is correct"></zk:label>
+
+		<zk:listbox id="vociPreventivoList" rows="10" width="100%">
+			<zk:listhead>
+				<zk:listheader width="20%" label="Descrizione (20%)"
+					align="right" />
+				<zk:listheader width="10%" label="Quantita(10" align="right" />
+				<zk:listheader width="20%" label="Imponibile (20%)"
+					align="right" />
+				<zk:listheader width="20%" label="Iva(20%)" align="right" />
+				<zk:listheader width="20%" label="Totale (20%)" align="right" />
+			</zk:listhead>
+			<zk:listitem>
+				<zk:listcell>aaa</zk:listcell>
+				<zk:listcell>aaa</zk:listcell>
+				<zk:listcell>aaa</zk:listcell>
+				<zk:listcell>aaa</zk:listcell>
+				<zk:listcell>aaa</zk:listcell>
+			</zk:listitem>
+			<zk:listitem>
+				<zk:listcell>bbb</zk:listcell>
+				<zk:listcell>bbb</zk:listcell>
+				<zk:listcell>bbb</zk:listcell>
+				<zk:listcell>bbb</zk:listcell>
+				<zk:listcell>bbb</zk:listcell>
+			</zk:listitem>
+		</zk:listbox>
+
+	</zk:window>
+
+		--></server>
+		<client><![CDATA[
+		int fullwidth = jq("@listhead").width();
+		int[] percents = {20,10,20,20,20};
+		int i=0;
+		for(JQuery $item:jq("@listheader")){
+		verifyTolerant( percents[i] ,$item.width()*100 / fullwidth ,2);
+		i++;
+		}
+		
+		for(int k = 0; k < 2; k++) {
+		    String jqselector = "@listitem:eq("+ k + ") @listcell";
+		    int m = 0;
+		    for(JQuery $listcell:jq(jqselector)){
+                verifyTolerant( percents[m] ,$listcell.width()*100 / fullwidth ,2);
+                m++;
+            }
+		}
+	
+		]]></client>
+	</case>
+</test>

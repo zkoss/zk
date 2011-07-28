@@ -1,0 +1,32 @@
+<test tags="B50-2947988.zul,A,E,Tree,Model">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+
+    <zscript>
+        java.util.ArrayList children = new java.util.ArrayList();
+        children.add(new SimpleTreeNode("1", new java.util.ArrayList()));
+       SimpleTreeModel model = new SimpleTreeModel(new SimpleTreeNode("ROOT",children));
+
+        void removeItem () {
+			testTree.setModel(null);
+        }
+    </zscript>
+    <tree id="testTree" model="${model}"/>
+    <button id="add" label="Click me shouldn't have any error." onClick="removeItem()"/>
+
+
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+			
+			click(jq("$add"));
+			waitResponse();
+			verifyFalse(jq(".z-errbox").exists());
+			verifyFalse(jq(".z-error").exists());
+			
+			]]></client>
+	</case>
+</test>

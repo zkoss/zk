@@ -613,6 +613,50 @@ public class Classes {
 	}
 	
 	/**
+	 * Gets the method based on the signature with a class resolver.
+	 * It also returns the parameter names to the params list.
+	 *
+	 * <p>Like {@link #getMethodInPublic(Class, String, Class[])}, it returns
+	 * only public method in a public class/interface.
+	 *
+	 * <p>For example, "find(java.lang.String name)" will return
+	 * the method with one String-typed argument and params will hold "name".
+	 * The return type is optional (actualy ignored).
+	 *
+	 * <p>If params is null, the parameter names are not returned and
+	 * the signature could be simplified as "find(java.lang.String)".
+	 *
+	 * <p>A cache mechanism is implemented, so you don't need to cache it
+	 * again in the caller.
+	 *
+	 * @param cls the class to look
+	 * @param signature the method signature; the return type is optional
+	 * @param params the collection to hold the parameter names returned;
+	 * null means no parameter names to return
+	 * @param resolver the class resolver used to resolve the class specified
+	 * in the signature. Ignored if null.
+	 * @since 5.1.0
+	 */
+	public static final Method
+	getMethodBySignature(Class<?> cls, String signature, Collection<String> params,
+	ClassResolver resolver)
+	throws NoSuchMethodException, ClassNotFoundException {
+		MethodInfo mi = parseMethod(signature);
+
+		LinkedList<Class<?>> argTypes = new LinkedList<Class<?>>();
+		for (int i = 0; i < mi.argTypes.length; i++) {
+			final String clsnm = mi.argTypes[i];
+			argTypes.add(
+				resolver != null ?
+					resolver.resolveClass(clsnm): forNameByThread(clsnm));
+			if (params != null)
+				params.add(mi.argNames[i]);	//param name found
+		}
+		
+		return getMethodInPublic(cls, mi.method,
+			argTypes.toArray(new Class<?>[argTypes.size()]));
+	}
+	/**
 	 * Gets the method based on the signature. It also returns the parameter
 	 * names to the params list.
 	 *
@@ -637,17 +681,7 @@ public class Classes {
 	public static final Method
 	getMethodBySignature(Class<?> cls, String signature, Collection<String> params)
 	throws NoSuchMethodException, ClassNotFoundException {
-		MethodInfo mi = parseMethod(signature);
-
-		LinkedList<Class<?>> argTypes = new LinkedList<Class<?>>();
-		for (int i = 0; i < mi.argTypes.length; i++) {
-			argTypes.add(forNameByThread(mi.argTypes[i]));
-			if (params != null)
-				params.add(mi.argNames[i]);	//param name found
-		}
-		
-		return getMethodInPublic(cls, mi.method,
-			argTypes.toArray(new Class<?>[argTypes.size()]));
+		return getMethodBySignature(cls, signature, params, null);
 	}
 
 	/**

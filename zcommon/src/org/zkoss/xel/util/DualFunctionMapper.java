@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.zkoss.util.DualCollection;
 import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.FunctionMapperExt;
 import org.zkoss.xel.Function;
 
 /**
@@ -28,7 +29,8 @@ import org.zkoss.xel.Function;
  * @author tomyeh
  * @since 3.0.0
  */
-public class DualFunctionMapper implements FunctionMapper, java.io.Serializable {
+public class DualFunctionMapper
+implements FunctionMapper, FunctionMapperExt, java.io.Serializable {
 	private FunctionMapper _first, _second;
 
 	/** Returns a function mapper by combining two function mappers.
@@ -64,15 +66,20 @@ public class DualFunctionMapper implements FunctionMapper, java.io.Serializable 
 		return m != null ? m:
 			_second != null ? _second.resolveFunction(prefix, name): null;
 	}
+	//-- FunctionMapperExt --//
 	public Collection<String> getClassNames() {
 		return combine(
-			_first != null ? _first.getClassNames(): null,
-			_second != null ? _second.getClassNames(): null);
+			_first instanceof FunctionMapperExt ?
+				((FunctionMapperExt)_first).getClassNames(): null,
+			_second instanceof FunctionMapperExt ?
+				((FunctionMapperExt)_second).getClassNames(): null);
 	}
 	public Class<?> resolveClass(String name) {
-		Class<?> m = _first != null ? _first.resolveClass(name): null;
+		Class<?> m = _first instanceof FunctionMapperExt ?
+			((FunctionMapperExt)_first).resolveClass(name): null;
 		return m != null ? m:
-			_second != null ? _second.resolveClass(name): null;
+			_second instanceof FunctionMapperExt ?
+				((FunctionMapperExt)_second).resolveClass(name): null;
 	}
 	private static final <T> Collection<T> combine(Collection<T> first, Collection<T> second) {
 		return DualCollection.combine(

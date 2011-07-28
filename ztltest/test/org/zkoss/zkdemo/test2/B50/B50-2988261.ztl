@@ -1,0 +1,25 @@
+<test tags="B50-2988261.zul,portallayout,panel,popup">
+	<case id="Popup">
+		<server><!--
+		<zk>
+		<portallayout width="100%" height="100%" maximizedMode="whole">
+		<portalchildren width="50%" height="100%">
+		<panel id="panel" border="normal" title="test" height="400px" maximizable="true">
+		<toolbar>
+		<combobox id="cb"/>
+		</toolbar>
+		<panelchildren>
+		<window width="100%" height="100%" />
+		</panelchildren>
+		</panel>
+		</portalchildren>
+		</portallayout>
+		</zk>
+		--></server>
+		<client>
+			click(panel.$n("max"));
+			click(cb.$n("btn"));
+			verifyTrue(parseInt(jq(cb.$n("pp")).css("zIndex")) > parseInt(jq(panel).css("zIndex")));
+		</client>
+	</case>
+</test>

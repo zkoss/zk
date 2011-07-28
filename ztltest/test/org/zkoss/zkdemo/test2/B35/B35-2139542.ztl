@@ -1,0 +1,39 @@
+<!-- B35-2139542.ztl.java
+
+	Purpose:for testing B35-2139542.ztl .
+
+	Description:
+
+	History:
+		10, 29, 2010 16:34:24
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2139542.zul,A,E,Datebox,Calendar,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<hbox>
+	<datebox id="db" />
+	<button label="Click Me without error, that is correct!" onClick='db.setFormat("dd-MMM-yyyy")'/>
+</hbox>
+
+		--></server>
+		<client><![CDATA[
+			click(jq("@button"));
+			verifyFalse(jq(".z-errbox").exists());
+			
+			Element $db = db.$n("real");
+			focus($db);
+			type($db,"asd");
+			blur($db);
+			verifyTrue(jq(".z-errbox").exists());
+	
+		]]></client>
+	</case>
+</test>

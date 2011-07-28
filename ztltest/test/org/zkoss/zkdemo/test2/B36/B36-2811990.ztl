@@ -1,0 +1,32 @@
+<test tags="B36-2811990.zul,slider,ie9">
+	<case id="title">
+		<server><!--
+			<window title="My First Window" border="normal" width="600px">
+			<html><![CDATA[
+			<ol>
+			<li>Move mouse to the Slider's nob, the tooltiptext shall be "50"; if it
+			does not show, it is a bug</li>
+			<li>Drag the nob of the slider to "70"; move mouse to slider's nob, the
+			tooltiptext shall be "70"; if it does not showw, it is a bug</li>
+			<li>Press button to change curpos to 10</li>
+			<li>Move mouse to the Slider's nobe, the tooltiptext shall be "10"; if it
+			is NOT "10", it is a bug.</li>
+			</ol>
+			]]>
+			</html>
+			<slider id="sl" curpos="50"/>
+			<button label="change slider's curpos to 10" onClick="sl.curpos=10"/>
+			</window>
+		--></server>
+		<client><![CDATA[
+			verifyEquals(jq("$sl div.z-slider-hor-btn").attr("title"), "50");
+			mouseDownAt(jq("$sl div.z-slider-hor-btn"), "8,6");
+			mouseMoveAt(jq("$sl div.z-slider-hor-btn"), "47,8");
+			mouseUpAt(jq("$sl div.z-slider-hor-btn"), "47,8");
+			verifyEquals(jq("$sl div.z-slider-hor-btn").attr("title"), "70");
+			click(jq("@button td.z-button-cm"));
+			waitResponse();
+			verifyEquals(jq("$sl div.z-slider-hor-btn").attr("title"), "10");
+		]]></client>
+	</case>
+</test>

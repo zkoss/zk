@@ -1,0 +1,70 @@
+<!-- B50-3296607.ztl.java
+
+	Purpose:for testing B50-3296607.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 11:12:02
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3296607.zul,Datebox,Dateformat">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:w="client">
+	<script type="text/javascript">
+		function setText(txt, id) {
+			var db = zk.Widget.$(id),
+				inp = db.getInputNode();
+			inp.value = txt;
+			jq(inp).blur();
+			var index = id.charAt(3),
+				res = (index == '4' || index == '5') ? db.getErrorMesssage() ? 'O': 'X': db.getErrorMesssage() ? 'X' : 'O';
+			jq(db.previousSibling.previousSibling).html(res).css('background-color', res == 'O' ? 'blue': 'red').css('color',  'white');
+		}
+	</script>
+	<button label="click me, then check wether pass.">
+		<attribute w:name="onClick"><![CDATA[
+			setText('16-02-1998', '$db0');
+			setText('16-Mar-1998', '$db1');
+			setText('16-09-1998', '$db2');
+			setText('189', '$db3');
+			setText('1890', '$db4');
+			setText('18999', '$db5');
+			setText('18', '$db6');
+		]]></attribute>
+	</button>
+	<grid width="300px">
+		<columns>
+			<column width="30px"/>
+			<column width="120px"/>
+			<column/>
+		</columns>
+		<rows>
+			<row forEach="16-02-1998,16-Mar-1998,16-09-1998,189,1890,18999,18">
+				<div/>
+				<label value="${each}"/>
+				<datebox id="db${forEachStatus.index}" format="dd-MMM-yyyy" width="100px"/>
+			</row>
+		</rows>
+	</grid>
+</zk>
+
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals(2,jq(".z-errbox").length());
+				for(int i=0;i<6;i++)
+				verifyEquals("O",jq("@row:eq("+i+") td.z-row-inner:eq(0)").text());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,53 @@
+<!-- B30-1883262.ztl.java
+
+	Purpose:for testing B30-1883262.ztl .
+
+	Description:
+
+	History:
+		10, 29, 2010 14:48:59
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1883262.zul,B,E,Textbox,Constraint,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>1.Please focus in and out the input element, you should not see any error dialog.</n:p>
+<n:p>2.The textbox shall disappear.</n:p>
+
+	<window id="win">	 
+	<zscript><![CDATA[
+Constraint ctt = new Constraint() {
+	public void validate(Component comp, Object value) throws WrongValueException { 
+		try {
+			throw new WrongValueException( comp, "Error" );
+		}finally{
+			Events.postEvent(new Event("onChange", comp, null));
+		}
+	} 
+} 
+	]]></zscript>
+	<button id="blur" label="blur"/>
+	<textbox id="txtbox" constraint="${ctt}" onChange="self.clearErrorMessage();win.detach();"/>
+	</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			focus(txtbox.$n());
+			JQuery error=jq(".z-errbox");
+			verifyFalse(error.exists());//error box should not exist
+			mouseDown(blur);
+			waitResponse();
+			verifyFalse(jq(txtbox).exists()); //txtbox should disappear
+			
+		]]></client>
+	</case>
+</test>

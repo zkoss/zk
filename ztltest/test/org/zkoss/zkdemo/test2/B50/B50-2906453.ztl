@@ -1,0 +1,105 @@
+<!-- B50-2906453.ztl.java
+
+	Purpose:for testing B50-2906453.ztl .
+
+	Description:
+
+	History:
+		11, 2, 2010 16:40:08
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="Doublebox,Decimalbox,numfmt,ie9,blur" 
+import="java.text.DecimalFormat,java.util.ArrayList,java.util.Map,java.util.HashMap,org.zkoss.ztl.ClientWidget">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<html><![CDATA[
+<ol>
+<li>For each input box, enter number and then tab away, the number in the input box and the one show after the input box shall be the same.</li>
+<li>Enter 0</li>
+<li>Enter 00.00</li>
+<li>Enter .12</li>
+<li>Enter 0.12</li>
+<li>Enter 1.2</li>
+<li>Enter 1.30</li>
+<li>Enter 1.400</li>
+<li>Enter 1.5000</li>
+<li>Enter 12</li>
+<li>Enter 12. (note the decimal point at the end)</li>
+<li>Enter 100</li>
+<li>Enter 123456789</li>
+<li>done</li>
+</ol>
+]]></html>
+<vbox>
+<hbox>doublebox (#.00#): <doublebox id="db1" format="#.00#" width="140px" onChange='format("l2")'/><label id="l2"/></hbox>
+<hbox>doublebox (#.00): <doublebox id="db2" format="#.00" width="140px" onChange='format("l1")'/><label id="l1"/></hbox>
+<hbox>decimalbox(#.0#): <decimalbox id="db3" format="#.0#" width="140px" onChange='format("l3")'/><label id="l3"/></hbox>
+<hbox>decimalbox(#.##): <decimalbox id="db4" format="#.##" width="140px" onChange='format("l4")'/><label id="l4"/></hbox>
+<hbox>doublebox (#0.00#): <doublebox id="db5" format="#0.00#" width="140px" onChange='format("l5")'/><label id="l5"/></hbox>
+<hbox>doublebox (#00.00): <doublebox id="db6" format="#00.00" width="140px" onChange='format("l6")'/><label id="l6"/></hbox>
+<hbox>doublebox (#,#00.00): <doublebox id="db7" format="#,#00.00" width="140px" onChange='format("l7")'/><label id="l7"/></hbox>
+</vbox> 
+<zscript><![CDATA[
+import java.text.DecimalFormat;
+import org.zkoss.zul.Label;
+void format(String xid) {
+	Object rawval = self.getRawValue();
+	Label lbl = self.getFellow(xid);
+	if (rawval != null) {
+		DecimalFormat fmt = new DecimalFormat(self.getFormat());
+		lbl.setValue(fmt.format(rawval));
+	} else {
+		lbl.setValue("");
+	}
+}
+]]></zscript>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			// This case's target is: Testing the format does match Java's
+            // rule or not.
+            ArrayList<String> testValues = new ArrayList<String>();
+            testValues.add("0");
+            testValues.add("00.00");
+            testValues.add(".12");
+            testValues.add("0.12");
+            testValues.add("1.2");
+            testValues.add("1.30");
+            testValues.add("1.400");
+            testValues.add("1.5000");
+            testValues.add("12");
+            testValues.add("12.");
+            testValues.add("100");
+            testValues.add("123456789");
+
+            Map<String, ClientWidget> verifyValueMap = new HashMap<String, ClientWidget>();
+            verifyValueMap.put("#.00#", jq("$db2"));
+            verifyValueMap.put("#.00", jq("$db1"));
+            verifyValueMap.put("#.0#", jq("$db3"));
+            verifyValueMap.put("#.##", jq("$db4"));
+            verifyValueMap.put("#0.00#", jq("$db5"));
+            verifyValueMap.put("#00.00", jq("$db6"));
+            verifyValueMap.put("#,#00.00", jq("$db7"));
+
+            for (String testValue : testValues) {
+                for (String key : verifyValueMap.keySet()) {
+                    ClientWidget clientWidget = verifyValueMap.get(key);
+                    type(clientWidget, testValue);
+                    waitResponse();
+                    DecimalFormat formatter = new DecimalFormat(key);
+                    StringBuffer msgBuffer = new StringBuffer("Format does not match. Format: ");
+                    msgBuffer.append(key);
+                    msgBuffer.append(", value: ");
+                    msgBuffer.append(jq(clientWidget).val());
+                    verifyTrue(msgBuffer.toString(), jq(clientWidget).val().equals(formatter.format(Double.parseDouble(testValue))));
+                }
+            }
+		]]></client>
+	</case>
+</test>

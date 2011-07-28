@@ -1,0 +1,35 @@
+<test tags="B50-2936095.zul,A,E,Combobox,onOpen">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+    Please click dropdown button, and then the listitem displays well.
+    <combobox id='cb' onOpen='if(self.getItems().size()==0) if
+(event.isOpen()) GetTableNames()'/>
+    <zscript>
+        <![CDATA[
+            public void GetTableNames ()
+{
+for (int i=1; i<=100; i++)
+{
+Comboitem ci = new Comboitem ("TableName" + i);
+cb.appendChild (ci);
+}
+}
+        ]]>
+    </zscript>
+</zk>
+			-->
+		</server>
+		<client wait="100">	<![CDATA[
+   				//Strange. throw exception in next statement. Then, how can we test if exist?
+  				//verifyFalse(jq(".z-combobox-pp").exists());
+  				click(jq("$cb i.z-combobox-btn"));				
+  				waitResponse();
+  				verifyTrue(jq(".z-combobox-pp").exists());
+		            				
+		            				
+			
+			]]></client>
+	</case>
+</test>

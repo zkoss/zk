@@ -1,0 +1,30 @@
+<test tags="datebox,calendar">
+	<case id="popup">
+		<server><!--
+			<zk>
+			<style>
+			.z-calendar {
+				width: 360px;
+			}
+			.z-calendar-calmon td, .z-calendar-calday td, .z-calendar-calday td a, .z-calendar-calday td a:visited, .z-datebox-calmon td, .z-datebox-calday td, .z-datebox-calday td a, .z-datebox-calday td a:visited {
+			   font-size: 20px;
+			}
+			</style>
+			Please press the icon on the right of the box, and then the popup should not appear with a scroll bar.
+			<datebox id="db"/>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(db.$n("btn"));
+			waitResponse();
+			Element pp = db.$n("pp");
+			// gecko = firefox(all version)
+            if (ZK.is("gecko") || ZK.is("opera")) {
+                verifyEquals(pp.get("scrollHeight"), jq(pp).outerHeight());
+            } else {
+				//it seems fine in safari . when scrollHeight is bigger then clientHeight 6
+				verifyTolerant( parseInt(pp.get("scrollHeight")), parseInt(pp.get("clientHeight")), 6);
+            }
+		]]></client>
+	</case>
+</test>

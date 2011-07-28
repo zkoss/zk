@@ -1,0 +1,31 @@
+<!--
+B50-ZK-206.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 15:42:11 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<listbox width="800px">
+		<listhead>
+			<listheader label="Product" width="102px" />
+			<listheader label="Description" hflex="min" />
+			<listheader label="Comment" hflex="1" />
+		</listhead>
+		<listitem>
+			<listcell>Application Developer's Perspective</listcell>
+			<listcell>Very Long Long Long Long Long Long Long Long Long Long Text</listcell>
+			<listcell>Server+client Fusion architecture</listcell>
+		</listitem>
+		<listitem>
+			<listcell>Execution Flow of Serving an Ajax Request</listcell>
+			<listcell>Very Long Long Long Long Long Long Long Long Long Long Text</listcell>
+			<listcell>When to Send an Ajax Request</listcell>
+		</listitem>
+	</listbox>
+</zk>

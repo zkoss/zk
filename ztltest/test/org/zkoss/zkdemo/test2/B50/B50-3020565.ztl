@@ -1,0 +1,67 @@
+<!-- B50-3020565.ztl.java
+
+	Purpose:for testing B50-3020565.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 18:24:22
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3020565.zul,A,E,Listbox,ROD">
+	<case id="ztl">
+		<server><!--
+			<zk>
+    <tabbox>
+     <tabs>
+      <tab label="a" />
+      <tab label="b" id="b"/>
+     </tabs>
+     <tabpanels>
+      <tabpanel>Click "header" and then "item" buttons. Then, click the "b" tab to see
+      the listbox has a header and an item.</tabpanel>
+      <tabpanel>
+       <listbox id="lb" width="300px"></listbox>
+      </tabpanel>
+     </tabpanels>
+    </tabbox>
+    
+    <button id="btn" label="header">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+  ]]></attribute>
+ </button>
+ <button id="btn1" label="item">
+     <attribute name="onClick"><![CDATA[
+   lb.appendChild(new Listitem("item"));
+  ]]></attribute>
+ </button>
+  <button id="btn2" label="all">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+   
+   for(int i = 0; i < 20;i++)
+    lb.appendChild(new Listitem("item"));
+   
+  ]]></attribute>
+ </button>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+					click(btn);waitResponse();
+					click(btn1);waitResponse();
+					click(b);waitResponse();
+					verifyTrue(jq("@listbox @listheader").exists());
+					verifyTrue(jq("@listbox @listitem").exists());
+		]]></client>
+	</case>
+</test>

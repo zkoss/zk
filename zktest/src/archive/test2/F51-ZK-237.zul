@@ -1,0 +1,21 @@
+<?import class="org.zkoss.zktest.test2.*"?>
+<?import class="org.zkoss.zul.*"?>
+<?import class="org.zkoss.zktest.test2.F327Init"?>
+<?import class="org.zkoss.zktest.test2.*"?>
+<?import class="java.lang.*"?>
+
+<?init class="F327Init"?>
+<?variable-resolver class="F327Resolver"?>
+<?function-mapper class="F327Mapper"?>
+<?xel-method prefix="c" name="forName"
+	class="Class"
+	signature="Class forName(String)"?>
+
+<window border="normal" apply="F327Composer" use="Window">
+	If you saw this page, it runs correctly.
+	<separator/>
+	<button id="hi" label="hi"/>
+	${resolver}
+	<separator/>
+	${c:forName('java.util.List')}
+</window>

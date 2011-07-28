@@ -1,0 +1,42 @@
+<test tags="grid,detail,listbox">
+	<case id="check">
+		<server><!--
+			<zk>
+				Please open the item, and check some checkboxes, then close and open the item, all of the checkboxes you checked should be checked. (IE 6 Only)
+				<window title="Detail demo" border="normal" width="450px">
+					<grid sizedByContent="true">
+						<columns>
+							<column label=""></column>
+							<column label=""></column>
+						</columns>
+						<rows>
+							<row>
+								<label value="Non detail"></label>
+								<detail>
+									<listbox checkmark="true" multiple="true" sizedByContent="true">
+										<listhead>
+											<listheader label="Select All"></listheader>
+										</listhead>
+										<listitem>
+											<listcell label="aaaaaaa"></listcell>
+										</listitem>
+										<listitem>
+											<listcell label="ffffffff"></listcell>
+										</listitem>
+									</listbox>
+								</detail>
+							</row>
+						</rows>
+					</grid>
+				</window>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(jq("@detail div.z-detail-img"));
+			click(jq("@listitem[label=\"aaaaaaa\"] span.z-listitem-img-checkbox"));
+			click(jq("@detail div.z-detail-img"));
+			click(jq("@detail div.z-detail-img"));
+			verifyEquals(1, jq("tr.z-listitem-seld").length());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,17 @@
+<test tags="B30-2446672.zul,A,E,Toolbarbutton">
+	<case id="combobox">
+		<server><!--
+			<zk>
+			Please click on the image, you should not see any dialog.
+			<toolbarbutton id="tbb" disabled="true" image="/test2/img/defender.gif"
+							onClick='alert("Defender")' />
+			</zk>
+		--></server>
+		<client><![CDATA[
+				click(tbb);
+				waitResponse();
+				verifyFalse(jq(".z-window-highlighted").exists());
+		
+		]]></client>
+	</case>
+</test>

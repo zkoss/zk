@@ -1,0 +1,16 @@
+<test tags="B50-3008276.zul,Listbox,Focus" timeout="5000">
+	<case id="Focus">
+		<server><![CDATA[
+<zk>
+<listbox>
+<listhead>
+<listheader hflex="1"/>
+</listhead>
+</listbox>
+</zk>
+		]]></server>
+		<client><![CDATA[
+		verifyFalse(jq(".z-modal-mask").exists());
+		]]></client>
+	</case>
+</test>

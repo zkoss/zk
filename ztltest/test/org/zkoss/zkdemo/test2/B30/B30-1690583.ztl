@@ -1,0 +1,35 @@
+<test tags="vbox,hbox,box">
+	<case id="Visible">
+		<server><!--
+			<vbox>
+				<hbox>
+					<popup width="300px" id="help">
+					Help is coming.
+					</popup>
+					<textbox id="t" visible="false"/>
+					<label tooltip="help" value="Help" />
+				</hbox>
+				align
+				<button label="toggle" id="btn" onClick="t.visible = !t.visible"/>
+			</vbox> 
+		--></server>
+		<client><![CDATA[
+			// Test visible
+			if (help.exists())
+				verifyFalse(isVisible(help));
+			verifyFalse(isVisible(t));
+			click(btn);
+			waitResponse();
+			if (help.exists())
+				verifyFalse(isVisible(help));
+			verifyTrue(isVisible(t));
+			
+			// Test invisible
+			click(btn);
+			waitResponse();
+			if (help.exists())
+				verifyFalse(isVisible(help));
+			verifyFalse(isVisible(t));
+		]]></client>
+	</case>
+</test>

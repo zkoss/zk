@@ -1,0 +1,258 @@
+<test tags="grid,onClick,onRightClick,context,ie9">
+	<case id="Add">
+		<server id="zul"><![CDATA[
+			<zk>
+				<zscript>
+					void addRow1(){
+						Row row = new Row();
+						row.setParent(rows);
+						new Label("Label x").setParent(row);
+						new Textbox().setParent(row);
+						new Datebox().setParent(row);
+					};
+					void addRow2(){
+						Row row = new Row();
+						new Label("Label 0").setParent(row);
+						new Textbox().setParent(row);
+						new Datebox().setParent(row);
+						rows.getChildren().add(0,row);
+					};
+					void removeRow1(){
+						if(rows.getChildren().size()>0){
+							rows.getChildren().remove(rows.getChildren().size()-1);
+						}
+					};
+					void removeRow2(){
+						if(rows.getChildren().size()>0){
+							rows.getChildren().remove(0);
+						}
+					};
+					
+				</zscript>
+				<vbox>
+					<grid id="grid" width="400px" fixedLayout="true">
+						<columns id="cols">
+							<column label="Type 50px" id="col1" align="center" width="50px"/>
+							<column label="Content" id="col2" align="right"/>
+							<column label="AA-BB" id="col3"/>
+						</columns>
+						<rows id="rows">
+							<row>
+							Labelx<textbox/><datebox/>
+							
+							</row>
+						</rows>
+					</grid>
+				</vbox>
+			</zk>
+		]]></server>
+		<server id="zulbtn"><![CDATA[
+			<hbox>
+				<button id="btn1" label="add row(end)" onClick="addRow1()"/>
+				<button id="btn2" label="add row(begin)" onClick="addRow2()"/>
+				<button id="btn3" label="remove row(last)" onClick="removeRow1()"/>
+				<button id="btn4" label="remove row(first)" onClick="removeRow2()"/>
+			</hbox>
+		]]></server>
+		<client><![CDATA[
+			verifyEquals("1", rows.nChildren());	
+			
+			click(btn1);
+			waitResponse();
+			verifyEquals("2", rows.nChildren());
+			verifyEquals("2", rows.$n().get("rows.length"));
+			verifyEquals("Label x", rows.lastChild().firstChild().get("value"));
+				
+			click(btn2);
+			waitResponse();
+			verifyEquals("3", rows.nChildren());
+			verifyEquals("3", rows.$n().get("rows.length"));
+			verifyEquals("Label 0", rows.firstChild().firstChild().get("value"));
+		]]></client>
+	</case>
+	<case id="Delete">
+		<server ref="zul"/>
+		<server ref="zulbtn"/>
+		<client><![CDATA[
+			Element $n = rows.$n();
+			verifyEquals("1", rows.nChildren());
+				
+			click(btn2);
+			waitResponse();
+			verifyEquals("2", rows.nChildren());
+			verifyEquals("2", $n.get("rows.length"));
+			
+			click(btn3);
+			waitResponse();
+			verifyEquals("1", rows.nChildren());
+			verifyEquals("1", $n.get("rows.length"));
+			verifyEquals("Label 0", rows.firstChild().firstChild().get("value"));
+			
+			click(btn4);
+			waitResponse();
+			verifyEquals("0", rows.nChildren());
+			verifyEquals("0", $n.get("rows.length"));
+		]]></client>
+	</case>
+	<case id="Size">
+		<server ref="zul"/>
+		<server><![CDATA[
+			<hbox>
+				<button id="width200" label="setWidth200px" onClick='grid.setWidth("200px")'/>
+				<button id="width600" label="setWidth600px" onClick='grid.setWidth("600px")'/>
+				<button id="widthNull" label="setWidth null" onClick='grid.setWidth(null)'/>
+				<button id="height200" label="setHeight 200px" onClick='grid.setHeight("200px")'/>
+				<button id="height600" label="setHeight 600px" onClick='grid.setHeight("600px")'/>
+				<button id="heightNull" label="setHeight null" onClick='grid.setHeight(null)'/>
+			</hbox>
+		]]></server>
+		<client><![CDATA[
+			// Test setting width
+			Element $head = grid.$n("head");			
+			Element $body = grid.$n("body");
+			verifyEquals("400px", grid.get("width"));
+				
+			click(width200);
+			waitResponse();
+			verifyEquals("200px", grid.get("width"));
+			
+			verifyEquals("200px", $head.get("style.width"));
+			
+			click(width600);
+			waitResponse();
+			verifyEquals("600px", grid.get("width"));
+			verifyEquals("600px", $head.get("style.width"));
+			
+			click(widthNull);
+			waitResponse();
+			verifyEquals("null", grid.get("width"));
+			verifyNotEquals("", $head.get("style.width"));
+
+			// Test setting height
+			verifyEquals("null", grid.get("height"));
+			String height = $body.get("style.height");
+			
+			click(height200);
+			waitResponse();
+			verifyEquals("200px", grid.get("height"));
+			
+			int hh = Integer.parseInt($head.get("offsetHeight"));
+			int bh = Integer.parseInt($body.get("offsetHeight"));
+			verifyEquals(200, hh + bh);
+			
+			click(height600);	
+			waitResponse();			
+			verifyEquals("600px", grid.get("height"));
+
+			hh = Integer.parseInt($head.get("offsetHeight"));
+			bh = Integer.parseInt($body.get("offsetHeight"));
+			verifyEquals(600, 600);
+			
+			click(heightNull);
+			waitResponse();
+			verifyEquals("null", grid.get("height"));
+			verifyEquals(height, $body.get("style.height"));
+		]]></client>
+	</case>
+	<case id="ColumnSize">
+		<server ref="zul"/>
+		<server><![CDATA[
+			<hbox>
+				<button id="width20" label="setColumnWidth20px" onClick='col1.setWidth("20px")'/>
+				<button id="width100" label="setColumnWidth100px" onClick='col1.setWidth("100px")'/>
+				<button id="width200" label="setColumnWidth200px" onClick='col1.setWidth("200px")'/>
+				<button id="width20b" label="setColumnWidth20px" onClick='col2.setWidth("20px")'/>
+				<button id="width100b" label="setColumnWidth100px" onClick='col2.setWidth("100px")'/>
+				<button id="width20c" label="setColumnWidth20px" onClick='col3.setWidth("20px")'/>
+				<button id="width100c" label="setColumnWidth100px" onClick='col3.setWidth("100px")'/>
+			</hbox>
+		]]></server>
+		<client><![CDATA[
+			Element $col1 = col1.$n();
+			Element $col2 = col2.$n();
+			Element $col3 = col3.$n();
+			
+			verifyEquals("50px", col1.get("width"));
+				
+			click(width20);
+			waitResponse();
+			verifyEquals("20px", col1.get("width"));
+			verifyEquals("20px", $col1.get("style.width"));
+			
+			click(width100);
+			waitResponse();
+			verifyEquals("100px", col1.get("width"));
+			verifyEquals("100px", $col1.get("style.width"));
+			
+			click(width200);
+			waitResponse();
+			verifyEquals("200px", col1.get("width"));
+			verifyEquals("200px", $col1.get("style.width"));
+
+			// col12 
+			verifyEquals("null", col2.get("width"));
+			
+			click(width20b);
+			waitResponse();
+			verifyEquals("20px", col2.get("width"));
+			verifyEquals("20px", $col2.get("style.width"));
+			
+			click(width100b);
+			waitResponse();
+			verifyEquals("100px", col2.get("width"));
+			verifyEquals("100px", $col2.get("style.width"));
+			
+
+			// col3 
+			verifyEquals("null", col3.get("width"));
+			click(width20c);
+			waitResponse();
+			verifyEquals("20px", col3.get("width"));
+			verifyEquals("20px", $col3.get("style.width"));
+			
+			click(width100c);
+			waitResponse();
+			verifyEquals("100px", col3.get("width"));
+			verifyEquals("100px", $col3.get("style.width"));
+		]]></client>
+	</case>
+	<case id="Sizable">
+		<server ref="zul"/>
+		<server><![CDATA[
+			<hbox>
+				<button id="enable" label="setSizable" onClick="cols.sizable = !cols.sizable"/>
+				<button id="disable" label="setSizable false" onClick="cols.setSizable(false)"/>
+			</hbox>
+		]]></server>
+		<client><![CDATA[
+			Element $col1 = col1.$n();
+			verifyFalse(cols.is("sizable"));
+			JQuery $jq = jq($col1);
+				
+			click(enable);
+			waitResponse();
+			verifyTrue(cols.is("sizable"));
+			
+			String width = $col1.get("offsetWidth");
+			mouseMoveAt(col1, width + ",0");
+			verifyTrue($jq.hasClass("z-column-sizing"));
+
+			click(disable);
+			waitResponse();
+			verifyFalse(cols.is("sizable"));
+			
+			mouseMoveAt(col1, width + ",0");
+			verifyFalse($jq.hasClass("z-column-sizing"));
+			
+			//drag-drop test
+			click(enable);
+			waitResponse();
+			dragdropTo(col1, width + ",0", Integer.parseInt(width) + 10 + ",0");
+			
+			if(ZK.is("ie6_"))
+				verifyTrue(60 - parseInt($col1.get("offsetWidth")) < 2);
+			else
+				verifyEquals("60", $col1.get("offsetWidth"));
+		]]></client>
+	</case>
+</test>

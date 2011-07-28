@@ -1,0 +1,91 @@
+<!-- B50-3131173.ztl.java
+
+	Purpose:for testing B50-3131173.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 17:01:28
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3131173.zul,B,H,Tree">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window title="tree demo" border="normal" width="100%" height="100%">
+	<tree id="tree" width="100%" height="200%" rows="30" multiple="true"
+		checkmark="true">
+		
+		<attribute name="onSelect"><![CDATA[
+		  	Treeitem treeitem = (Treeitem)((SelectEvent)event).getReference();
+            if (treeitem.getLastChild() != null && treeitem.getLastChild() instanceof Treechildren)
+            {
+                Treechildren tchildren = (Treechildren)treeitem.getLastChild();
+                
+                List list = tchildren.getChildren();//Treeitem list
+                for (Treeitem ti : list)
+                {
+                    ti.setSelected(treeitem.isSelected());
+                }
+            }
+            self.getFellow("cell").setLabel("Item 4: / selected:"+treeitem.isSelected());
+	        ]]></attribute>
+		
+		<treecols>
+			<treecol label="Name" />
+			<treecol label="Description" />
+		</treecols>
+		<treechildren>
+
+			<treeitem>
+				<treerow>
+					<treecell id="cell" label="Item 4" />
+					<treecell label="Item 4 description" />
+				</treerow>
+
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3" />
+							<treecell label="Item 3 description" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3a" />
+							<treecell label="Item 3a description" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 3b" />
+							<treecell label="Item 3b description" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</window>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();				
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				verifyEquals(" Item 4: / selected:true",jq("@treecell:eq(0)").text());
+				click(jq(".z-treerow-img-checkbox:eq(0)"));waitResponse();
+				verifyEquals(" Item 4: / selected:false",jq("@treecell:eq(0)").text());
+		]]></client>
+	</case>
+</test>

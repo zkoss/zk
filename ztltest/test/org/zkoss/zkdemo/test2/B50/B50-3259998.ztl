@@ -1,0 +1,46 @@
+<!-- B50-3259998.ztl.java
+
+	Purpose:for testing B50-3259998.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 11:29:59
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3259998.zul,A,E,Tabbox,Tab,Tabpanels,Tabpanel">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Close tab2 shall not cause js error.</li>
+		</ol>
+	]]></html>
+	<tabbox width="500px">
+		<tabs>
+			<tab label="Tab 1" closable="true" />
+			<tab label="Tab 2" closable="true" selected="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>This is panel 1</tabpanel>
+			<tabpanel>This is panel 2</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-tab-close:eq(1)"));
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>
