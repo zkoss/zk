@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.ztl</groupId>
 	<artifactId>ztltest</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<name>ZTL Test cases</name>
 	<description>A sets of testing cases for ZK project</description>
 	<licenses>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>org.zkoss.ztl</groupId>
 			<artifactId>ztl</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>

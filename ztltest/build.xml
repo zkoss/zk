@@ -115,7 +115,6 @@ Usage:
 	<target name="junitTag" depends="generate,compileztl">
 		<junit printsummary="on" fork="true" forkmode="once" haltonfailure="false"
 			   showoutput="true">
-			<sysproperty key="webdriver.chrome.driver" value="${lib.dir}/chromedriver.exe" />
 			<classpath refid="dependency.classpath" />
 			<classpath>
 				<pathelement path="${test.dir}" />
@@ -134,7 +133,6 @@ Usage:
 	<target name="junitOne" depends="generate,compileztl">
 		<junit printsummary="on" fork="true" forkmode="once" haltonfailure="false"
 			   showoutput="true">
-			<sysproperty key="webdriver.chrome.driver" value="${lib.dir}/chromedriver.exe" />
 			<classpath refid="dependency.classpath" />
 			<classpath>
 				<pathelement path="${test.dir}" />
@@ -153,7 +151,6 @@ Usage:
 	<target name="junit" depends="generate,compileztl">
 		<junit printsummary="on" fork="true" haltonfailure="false"
 			   showoutput="true">
-			<sysproperty key="webdriver.chrome.driver" value="${lib.dir}/chromedriver.exe" />
 			<classpath refid="dependency.classpath" />
 			<classpath>
 				<pathelement path="${test.dir}" />
