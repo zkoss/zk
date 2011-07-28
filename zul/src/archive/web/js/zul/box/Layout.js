@@ -38,7 +38,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	$define: {
 		/** Sets the spacing between adjacent children.
 	 	 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-	 	 * or null to use the default spacing
+	 	 * or null to use the default spacing. If the spacing is set to "auto",
+	 	 * the DOM style is left intact, so the spacing can be customized from 
+	 	 * CSS.
 	 	 * @see #getSpacing
 	 	 */
 		/** Returns the spacing between adjacent children, or null if the default
@@ -51,9 +53,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			return v ? v : '0.3em';
 		}, function () {
 			var n = this.$n(),
-				vert = this.isVertical_();
+				vert = this.isVertical_(),
+				spc = this._spacing;
 			if (n)
-				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), this._spacing || '');
+				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
 		}]
 	},
 	_chdextr: function (child) {
@@ -63,8 +66,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (before)
 			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
 		else {
-			var jqn = jq(this.$n());
-			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), this._spacing || '');
+			var jqn = jq(this.$n()),
+			spc = this._spacing;
+			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
 			jqn.append(this.encloseChildHTML_(child));
 		}
 		child.bind(desktop);
@@ -92,7 +96,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
 		var rmsp = this.lastChild == child;
-		if(this.lastChild == child)
+		if(this._spacing != 'auto' && this.lastChild == child)
 			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},
 	/** Enclose child with HTML tag such as DIV, 
@@ -103,11 +107,12 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 */
 	encloseChildHTML_: function (child, out) {
 		var oo = [],
-			vert = this.isVertical_();
+			vert = this.isVertical_(),
+			spc = this._spacing;
 		
 		oo.push('<div id="', child.uuid, '-chdex" class="', this.getZclass(), '-inner"');
-		if(this._spacing && child.nextSibling)
-			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + this._spacing + '"');
+		if(spc && spc != 'auto' && child.nextSibling)
+			oo.push(' style="padding-' + (vert ? 'bottom:' : 'right:') + spc + '"');
 		oo.push('>');
 		child.redraw(oo);
 		oo.push('</div>');

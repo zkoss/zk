@@ -19,6 +19,7 @@ ZK 5.0.8
   ZK-219: Update zk.Event documentation
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
   ZK-248: System-level initiator shall be applied to richlet too
+  ZK-239: vlayout inner padding issue
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
