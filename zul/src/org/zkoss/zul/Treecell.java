@@ -16,12 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -35,8 +34,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Treecell {
-	private int _span = 1;
-
+	private AuxInfo _auxinf;
+	
 	public Treecell() {
 	}
 	public Treecell(String label) {
@@ -114,15 +113,15 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	 * Default: 1.
 	 */
 	public int getSpan() {
-		return _span;
+		return _auxinf != null ? _auxinf.span : 1;
 	}
 	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
 	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("colspan", _span);
+		if (getSpan() != span) {
+			initAuxInfo().span = span;
+			smartUpdate("colspan", getSpan());
 		}
 	}
 
@@ -156,12 +155,30 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		if (_span > 1)
-			renderer.render("colspan", _span);
+		if (getSpan() > 1)
+			renderer.render("colspan", getSpan());
 	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treerow))
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
+	}
+	
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		private int span = 1;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

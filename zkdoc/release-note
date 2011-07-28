@@ -17,6 +17,7 @@ ZK 5.0.8
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
   ZK-219: Update zk.Event documentation
+  ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

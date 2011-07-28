@@ -29,37 +29,37 @@ import org.zkoss.zul.impl.XulElement;
  * @since 5.0.0
  */
 public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
-	private String _align, _valign;
 	private int _colspan = 1, _rowspan = 1;
-
+	private AuxInfo _auxinf;
+	
 	/** Returns the horizontal alignment.
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */
 	public String getAlign() {
-		return _align;
+		return _auxinf != null ? _auxinf.align : null;
 	}
 	/** Sets the horizontal alignment.
 	 * Allowed values: left,right,center,justify,char. 
 	 */
 	public void setAlign(String align) {
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
+		if (!Objects.equals(getAlign(), align)) {
+			initAuxInfo().align = align;
+			smartUpdate("align", getAlign());
 		}
 	}
 	/** Returns the vertical alignment.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
-		return _valign;
+		return _auxinf != null ? _auxinf.valign : null;
 	}
 	/** Sets the vertical alignment of this grid.
 	 * Allowed values: 	top, middle, bottom, baseline
 	 */
 	public void setValign(String valign) {
-		if (!Objects.equals(_valign, valign)) {
-			_valign = valign;
-			smartUpdate("valign", _valign);
+		if (!Objects.equals(getValign(), valign)) {
+			initAuxInfo().valign = valign;
+			smartUpdate("valign", getValign());
 		}
 	}
 
@@ -112,8 +112,26 @@ public class Cell extends XulElement implements org.zkoss.zul.api.Cell {
 		if (_rowspan != 1)
 			renderer.render("rowspan", _rowspan);
 		
-		renderer.render("align", _align);
-		renderer.render("valign", _valign);
+		renderer.render("align", getAlign());
+		renderer.render("valign", getValign());
 	}
 
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		private String align = null;
+		private String valign = null;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
+	}
 }
