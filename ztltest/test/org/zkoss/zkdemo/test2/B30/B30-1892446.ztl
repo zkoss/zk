@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			<window id="win" title="Dynamically Change by Model">
 	<zscript>
 		
-		import org.zkoss.zkdemo.test2.tree.TreeModelA;
+		import org.zkoss.zktest.test2.tree.TreeModelA;
 		//An ArrayList is created to be the root of tree
 		ArrayList mother = new ArrayList();
 		
@@ -83,13 +83,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 			for(JQuery $tree:jq("@tree")){
-				verifyEquals("[Tommy, Juile, [Gray, [Paul, Eric]]]",$tree.find("@treecell").eq(3).text());
+			verifyContains($tree.find("@treecell").eq(2).text(), "[Tommy, Juile, [Gray, [Paul, Eric]]]");
 			}
 			click(jq("@button"));
 			waitResponse();
-			
 			for(JQuery $tree:jq("@tree")){
-				verifyEquals("[Clinton, Obama]",$tree.find("@treecell").eq(3).text());
+			verifyContains($tree.find("@treecell").eq(2).text(), " [Clinton, Obama]");
 			}
 		]]></client>
 	</case>

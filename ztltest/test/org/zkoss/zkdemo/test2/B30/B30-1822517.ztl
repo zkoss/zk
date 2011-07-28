@@ -99,12 +99,14 @@
 		 --></server>
 		<client><![CDATA[
 			click(btn1);
+			waitResponse();
 			verifyEquals("3", jq("$l1 > @listitem").length());
 			verifyEquals("change1.key1", jq("$l1 > @listitem:eq(0) div").html());
 			verifyEquals("change1.key2", jq("$l1 > @listitem:eq(1) div").html());
 			verifyEquals("change1.key3", jq("$l1 > @listitem:eq(2) div").html());
 			
 			click(btn2);
+			waitResponse();
 			verifyEquals("3", jq("$l2 > @listitem").length());
 			verifyEquals("change2.key1", jq("$l2 > @listitem:eq(0) @label").html());
 			verifyEquals("change2.key2", jq("$l2 > @listitem:eq(1) @label").html());
@@ -112,6 +114,7 @@
 			
 			for (int i = 0; i < 3; i++) {
 				click(btn3);
+				waitResponse();
 				verifyEquals("4", jq("$l2 > @listitem").length());
 				verifyEquals("change3.val1", jq("$l2 > @listitem:eq(0) @label").html());
 				verifyEquals("change3.val2", jq("$l2 > @listitem:eq(1) @label").html());
