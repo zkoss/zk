@@ -109,37 +109,65 @@ implements Condition {
 	 * @since 5.0.0
 	 */
 	public String toHTML(Page page) {
-		final StringBuffer sb = new StringBuffer(128)
-			.append('<').append(_name);
+		final boolean bScript = "script".equals(_name),
+			bStyle = !bScript && "style".equals(_name);
 
-		final boolean bScript = "script".equals(_name);
-		String scriptContent = null;
+		//1. scan content
+		final StringBuffer sb = new StringBuffer(128);
+		if (bScript || bStyle) {
+			String content = null;
+			boolean srcFound = false;
+			for (Iterator it = _attrs.iterator(); it.hasNext();) {
+				final Object[] p = (Object[])it.next();
+				final String nm = (String)p[0];
+				String val = (String)((ExValue)p[1]).getValue(_evalr, page);
+				if ("content".equals(nm)) {
+					content = val;
+				} else {
+					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
+				}
+			}
 
+			if (content != null) {
+				sb.append('<').append(_name).append(" type=\"text/")
+					.append(bScript ? "javascript": "css").append("\">\n")
+					.append(content)
+					.append("\n</").append(_name).append('>');
+				if (srcFound) sb.append('\n');
+			}
+			if (!srcFound)
+				return sb.toString(); //no more to generate
+		}
+
+		
+		sb.append('<').append(bStyle ? "link": _name);
+		boolean relFound = false, typeFound = false;
 		for (Iterator it = _attrs.iterator(); it.hasNext();) {
 			final Object[] p = (Object[])it.next();
 			final String nm = (String)p[0];
+			if ((bScript || bStyle) && "content".equals(nm))
+				continue; //skip
+
+			relFound = bStyle && (relFound || "rel".equals(nm));
+			typeFound = (bScript || bStyle) && (typeFound || "type".equals(nm));
+
 			String val = (String)((ExValue)p[1]).getValue(_evalr, page);
-			if (bScript && "content".equals(nm)) {
-				scriptContent = val;
-				continue;
-			}
+			if (val == null || val.length() == 0)
+				val = "";
+			else if ("href".equals(nm) || ((bScript || bStyle) && "src".equals(nm)))
+				val = Executions.encodeURL(val);
 
-			if (val == null || val.length() == 0) {
-				sb.append(' ').append(nm).append("=\"\"");
-			} else {
-				if ("href".equals(nm) || (bScript && "src".equals(nm)))
-					val = Executions.encodeURL(val);
-				HTMLs.appendAttribute(sb, nm, val);
-			}
+			HTMLs.appendAttribute(sb,
+				bStyle && "src".equals(nm) ? "href":
+				bScript && "href".equals(nm) ? "src": nm, val);
 		}
 
-		if (bScript) {
-			sb.append(">\n");
-			if (scriptContent != null)
-				sb.append(scriptContent).append('\n');
-			return sb.append("</script>").toString();
-		}
-		return sb.append("/>").toString();
+		if (bStyle && !relFound)
+				sb.append(" rel=\"stylesheet\"");
+		if ((bScript || bStyle) && !typeFound)
+			sb.append(" type=\"text/")
+				.append(bScript ? "javascript": "css").append('"');
+		return sb.append(bScript ? ">\n</script>": "/>").toString();
 	}
 	/** @deprecated As of release 5.0.0, replaced with {@link #toHTML(Page)}.
 	 */

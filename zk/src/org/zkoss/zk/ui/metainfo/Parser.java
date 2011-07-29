@@ -276,7 +276,7 @@ public class Parser {
 		} else if ("xel-method".equals(target)) {
 			parseXelMethod(pgdef, pi, params);
 		} else if ("link".equals(target) || "meta".equals(target)
-		|| "script".equals(target)) { //declare a header element
+		|| "script".equals(target) || "style".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(
 				pgdef.getEvaluatorRef(), target, params,
 				ConditionImpl.getInstance(

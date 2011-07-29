@@ -22,10 +22,11 @@ zktest.Div = zk.$extends(zul.wgt.Div, {
 	}
 })});
 "?>
-<zk>
-	<style>
+<?style content="
 	div {border: 1px solid blue; margin: 3px}
-	</style>
+"?>
+
+<zk>
 	<div id="a">
 		Test of zWatch: beforeSize, onFitSize and onSize
 		<div id="a.a">
