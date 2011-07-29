@@ -53,7 +53,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (sib && open)
 			zWatch.fireDown('onShow', sibwgt);
 		if (sib2)
-			zWatch.fireDown('onSize', zk.Widget.$(sib2));
+			zUtl.fireSized(zk.Widget.$(sib2), true);
 
 		wgt._fixNSDomClass();
 		wgt._fixbtn();
@@ -387,14 +387,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (bfcolps) w.style.overflow = 'hidden';
 		}
 
-		if (w = run.nextwgt) {
-			zWatch.fireDown('onFitSize', w);
-			zWatch.fireDown('onSize', w);
-		}
-		if (w = run.prevwgt) {
-			zWatch.fireDown('onFitSize', w);
-			zWatch.fireDown('onSize', w);
-		}
+		if (w = run.nextwgt)
+			zUtl.fireSized(w, true);
+		if (w = run.prevwgt)
+			zUtl.fireSized(w, true);
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it

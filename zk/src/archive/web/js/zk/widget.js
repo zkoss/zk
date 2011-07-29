@@ -862,7 +862,7 @@ new zul.wnd.Window{
 						_unlistenFlex(this);
 				} else
 					_listenFlex(this);
-				zWatch.fireDown('onSize', this.parent);
+				zUtl.fireSized(this.parent, true);
 			}
 		},
 		/**
@@ -896,9 +896,8 @@ new zul.wnd.Window{
 		 */
 		hflex: function(v) {
 			this.setHflex_(v);
-			if (_binds[this.uuid] === this) { //if already bind
-				zWatch.fireDown('onSize', this.parent);
-			}
+			if (_binds[this.uuid] === this) //if already bind
+				zUtl.fireSized(this.parent, true);
 		},
 		/** Returns the number of milliseconds before rendering this component
 		 * at the client.
