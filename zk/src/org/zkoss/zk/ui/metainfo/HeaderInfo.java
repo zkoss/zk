@@ -120,9 +120,8 @@ implements Condition {
 			for (Iterator it = _attrs.iterator(); it.hasNext();) {
 				final Object[] p = (Object[])it.next();
 				final String nm = (String)p[0];
-				String val = (String)((ExValue)p[1]).getValue(_evalr, page);
 				if ("content".equals(nm)) {
-					content = val;
+					content = (String)((ExValue)p[1]).getValue(_evalr, page);
 				} else {
 					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
 				}
