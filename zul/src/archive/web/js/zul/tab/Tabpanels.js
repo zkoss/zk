@@ -64,9 +64,8 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		if (isVer) {
 			if (n.style.width)
 				this.__width = n.style.width;
-				
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
+
+			zUtl.fireSized(this);
 		}
 	},
 	setStyle: function (val) {
@@ -81,9 +80,8 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		if (isVer) {
 			if (n.style.width)
 				this.__width = n.style.width;
-				
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
+
+			zUtl.fireSized(this);
 		}
 	},
 	//bug #3014664

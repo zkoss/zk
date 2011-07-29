@@ -2292,10 +2292,8 @@ function () {
 			this.bind(desktop, skipper);
 		}
 
-		if (!skipper) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
-		}
+		if (!skipper)
+			zUtl.fireSized(this);
 
 		_rsFocus(cf);
 		return this;
@@ -2384,8 +2382,7 @@ function () {
 
 						zWatch.fireDown('onRestore', this);
 							//to notify it is restored from rerender with skipper
-						zWatch.fireDown('beforeSize', this);
-						zWatch.fireDown('onSize', this);
+						zUtl.fireSized(this);
 
 						_rsFocus(cf);
 					}

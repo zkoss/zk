@@ -1,0 +1,36 @@
+<?component name="div" extends="div" widgetClass="zktest.Div"?>
+<?script content="
+zk.$package('zktest');
+zk.load('zul.wgt', function () {
+zktest.Div = zk.$extends(zul.wgt.Div, {
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		zWatch.listen({beforeSize: this, fitSize: this, onSize: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({beforeSize: this, fitSize: this, onSize: this});
+		this.$supers('unbind_', arguments);
+	},
+	beforeSize: function () {
+		zk.log('beforeSize', this);
+	},
+	fitSize: function () {
+		zk.log('fitSize', this);
+	},
+	onSize: function () {
+		zk.log('onSize', this);
+	}
+})});
+"?>
+<zk>
+	<style>
+	div {border: 1px solid blue; margin: 3px}
+	</style>
+	<div id="a">
+		Test of zWatch: beforeSize, fitSize and onSize
+		<div id="a.a">
+			<div id="a.a.a">a.a.a</div>
+			<div id="a.a.b">a.a.b</div>
+		</div>
+	</div>
+</zk>

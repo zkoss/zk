@@ -487,8 +487,7 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 		var ret = _jq[nm].call(this, w.redrawHTML_());
 		if (!w.z_rod) {
 			w.bind(desktop);
-			zWatch.fireDown('beforeSize', w);
-			zWatch.fireDown('onSize', w);
+			zUtl.fireSized(w);
 		}
 		return ret;
 	};
