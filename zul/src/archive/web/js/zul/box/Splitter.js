@@ -388,11 +388,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 
 		if (w = run.nextwgt) {
-			zWatch.fireDown('fitSize', w);
+			zWatch.fireDown('onFitSize', w);
 			zWatch.fireDown('onSize', w);
 		}
 		if (w = run.prevwgt) {
-			zWatch.fireDown('fitSize', w);
+			zWatch.fireDown('onFitSize', w);
 			zWatch.fireDown('onSize', w);
 		}
 

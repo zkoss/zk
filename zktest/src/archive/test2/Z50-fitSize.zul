@@ -5,17 +5,17 @@ zk.load('zul.wgt', function () {
 zktest.Div = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zWatch.listen({beforeSize: this, fitSize: this, onSize: this});
+		zWatch.listen({beforeSize: this, onFitSize: this, onSize: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({beforeSize: this, fitSize: this, onSize: this});
+		zWatch.unlisten({beforeSize: this, onFitSize: this, onSize: this});
 		this.$supers('unbind_', arguments);
 	},
 	beforeSize: function () {
 		zk.log('beforeSize', this);
 	},
-	fitSize: function () {
-		zk.log('fitSize', this);
+	onFitSize: function () {
+		zk.log('onFitSize', this);
 	},
 	onSize: function () {
 		zk.log('onSize', this);
@@ -27,7 +27,7 @@ zktest.Div = zk.$extends(zul.wgt.Div, {
 	div {border: 1px solid blue; margin: 3px}
 	</style>
 	<div id="a">
-		Test of zWatch: beforeSize, fitSize and onSize
+		Test of zWatch: beforeSize, onFitSize and onSize
 		<div id="a.a">
 			<div id="a.a.a">a.a.a</div>
 			<div id="a.a.b">a.a.b</div>
