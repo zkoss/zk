@@ -29,7 +29,7 @@
 			type(jq(".z-datebox-inp:eq(0)"), "12-13-98");
 				waitResponse();
 				verifyTrue(jq(".z-errbox").exists());
-				click(jq(".z-errbox-close"));
+				closeErrorBox();
 				waitResponse();
 				type(jq(".z-datebox-inp:eq(1)"), "12-13-98");
 				waitResponse();
