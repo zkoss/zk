@@ -23,6 +23,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//super//
 	domDependent_: true, //DOM content depends on parent
 	rerender: function () {
+		this.parent.clearCache();
 		if (this.parent && this.parent.$instanceof(zul.wgt.Groupbox)
 				&& this.parent.isLegend())
 			this.parent.rerender();

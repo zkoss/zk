@@ -131,6 +131,7 @@ ZK 5.0.8
   ZK-238: Grid with frozen, scrolled then delete frozen, some columns is hidden
   ZK-221: problem with events in firefox 4.x and up
   ZK-241: Hflex fail with grid in grid case
+  ZK-244: window cannot maximize when caption changed
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
