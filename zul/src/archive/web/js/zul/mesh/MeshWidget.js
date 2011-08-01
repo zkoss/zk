@@ -714,7 +714,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_syncBodyHeight: function () {
 		var ebody = this.ebody,
-			ebodytbl = this.$n('cave');
+			ebodytbl = this.ebodytbl;
 		// no scroll bar, but extra height on ebody
 		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
 				ebody.offsetWidth >= ebodytbl.offsetWidth) 
