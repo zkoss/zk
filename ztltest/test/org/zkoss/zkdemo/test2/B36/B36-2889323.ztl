@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		<client><![CDATA[
 				click(jq("@button"));
 				waitResponse();
-				verifyFalse(jq("@window").exists());
+				verifyFalse(jq("@window .z-msgbox-error").exists());
 				verifyFalse(jq(".z-error").exists());
 		]]></client>
 	</case>

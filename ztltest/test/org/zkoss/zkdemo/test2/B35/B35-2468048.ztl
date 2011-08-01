@@ -43,11 +43,16 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(btn);
-			verifyEquals("A",jq(".z-messagebox > span.z-label:eq(0)").text());
-			click(jq("@button.z-button:eq(1)"));
-			click(btn);
-			verifyEquals("B",jq(".z-messagebox > span.z-label:eq(1)").text());
+				click(btn);
+				waitResponse();
+				verifyEquals("A",jq(".z-messagebox > span.z-label:eq(0)").text());
+				click(jq(".z-messagebox-window @button"));
+				waitResponse();
+				click(jq("@button.z-button:eq(1)"));
+				waitResponse();
+				click(btn);
+				waitResponse();
+				verifyEquals("B",jq(".z-messagebox > span.z-label:eq(0)").text());
 		]]></client>
 	</case>
 </test>

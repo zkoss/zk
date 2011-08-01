@@ -88,7 +88,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			click(jq("@button"));
 			waitResponse();
 			for(JQuery $tree:jq("@tree")){
-			verifyContains($tree.find("@treecell").eq(2).text(), " [Clinton, Obama]");
+			verifyContains($tree.find("@treecell").eq(2).text(), "[Clinton, Obama]");
 			}
 		]]></client>
 	</case>

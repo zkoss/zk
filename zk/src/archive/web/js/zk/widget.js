@@ -4089,15 +4089,36 @@ _doFooSelect: function (evt) {
 		var els = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName) {
-				var n = _binds[wid].$n();
+				var n = _binds[wid].$n(), w;
 				//Bug B50-3310406 need to check if widget is removed or not.
-				if (n && zk.Widget.$(_binds[wid])) els.push(n);
+				if (n && (w = zk.Widget.$(_binds[wid]))) {
+					var index = 0;
+					if (w.widgetName.indexOf('treecell') >= 0) {
+						var parent = w.parent ? w.parent.parent : null;
+						if (parent)
+					 		index = parent.getChildIndex();
+					} else {
+						index = w.getChildIndex();
+					}
+					els.push({
+						n: n,
+						level: w.bindLevel,
+						index: index
+					});
+				}
 			}
 		}
-		if (els.length)
-			els.sort(function (a, b) {
-				return zk.Widget.$(a).$oid - zk.Widget.$(b).$oid;
+		if (els.length) {
+			// fixed the order of the component that have been changed dynamically.(Bug in B30-1892446.ztl)
+			els.sort(function(a, b) {
+				var level = b.level - a.level;
+				return level || a.index - b.index;
 			});
+			var tmp = [];
+			for (var i = els.length; i--;)
+				tmp.unshift(els[i].n);
+			els = tmp;
+		}
 		return els;
 	},
 	/**
