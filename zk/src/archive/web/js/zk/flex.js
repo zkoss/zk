@@ -326,6 +326,16 @@ zFlex = { //static methods
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
 	},
+	fixMinFlexX: function () {
+		var wgt = this,
+			c = wgt.$n();
+		if (c && zk(c).isVisible()) {
+			if (wgt._hflex == 'min' && wgt._hflexsz === undefined)
+				zFlex.fixMinFlex.apply(wgt, [c, 'w']);
+			if (wgt._vflex == 'min' && wgt._vflexsz === undefined)
+				zFlex.fixMinFlex.apply(wgt, [c, 'h']);
+		}
+	},
 	fixMinFlex: function (wgtn, o) {
 		var wgt = this,
 			min = wgt.beforeMinFlex_(o);

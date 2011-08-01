@@ -248,6 +248,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	ignoreChildNodeOffset_: function(attr) {
 		return true;
 	},
+	listenOnFitSize_: zk.$void, // skip flex
+	unlistenOnFitSize_: zk.$void,
 	//@Override to find the minimum width of listheader
 	beforeMinFlex_: function(o) {
 		if (o == 'w') {

@@ -272,12 +272,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
 			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			if (wgt._hflex == 'min' || wgt._vflex == 'min')
+				wgt.listenOnFitSize_();
+			else
+				wgt.unlistenOnFitSize_();
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
 			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
 	}
@@ -3897,6 +3902,30 @@ _doFooSelect: function (evt) {
 		}
 		return this;
 	},
+	/**
+	 * Listens to onFitSize event. Override if a subclass wants to skip listening
+	 * or have extra processing. 
+	 * @see #unlistenOnFitSize_
+	 * @since 5.0.8
+	 */
+	listenOnFitSize_: function () {
+		if (!this._fitSizeListened && (this._hflex == 'min' || this._vflex == 'min')){
+			zWatch.listen({onFitSize: [this, zFlex.fixMinFlexX]});
+			this._fitSizeListened = true;
+		}
+	},
+	/**
+	 * Unlistens to onFitSize event. Override if a subclass wants to skip listening
+	 * or have extra processing. 
+	 * @see #listenOnFitSize_
+	 * @since 5.0.8
+	 */
+	unlistenOnFitSize_: function () {
+		if (this._fitSizeListened) {
+			zWatch.unlisten({onFitSize: [this, zFlex.fixMinFlexX]});
+			delete this._fitSizeListened;
+		}
+	},
 	/** Converts a coordinate related to the browser window into the coordinate
 	 * related to this widget.
 	 * @param int x the X coordinate related to the browser window
@@ -3909,13 +3938,13 @@ _doFooSelect: function (evt) {
 		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	},
-	/* Returns if the given watch shall be fired for this widget.
+	/** Returns if the given watch shall be fired for this widget.
 	 * It is called by {@link zWatch} to check if the given watch shall be fired
 	 * @param String name the name of the watch, such as onShow
 	 * @param zk.Widget p the parent widget causing the watch event.
 	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
 	 * @return boolean
-	 * @5.0.3
+	 * @since 5.0.3
 	 */
 	isWatchable_: function (name, p) {
 		var strict = name != 'onShow';
