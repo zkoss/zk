@@ -4102,6 +4102,7 @@ _doFooSelect: function (evt) {
 					}
 					els.push({
 						n: n,
+						w: w,
 						level: w.bindLevel,
 						index: index
 					});
@@ -4110,9 +4111,52 @@ _doFooSelect: function (evt) {
 		}
 		if (els.length) {
 			// fixed the order of the component that have been changed dynamically.(Bug in B30-1892446.ztl)
+			// and B50-3095549.ztl
 			els.sort(function(a, b) {
-				var level = b.level - a.level;
-				return level || a.index - b.index;
+				var level = a.level - b.level;
+				if (level == 0)
+					return a.index - b.index;
+					
+				// We have to compare each ancestor to make the result as CSS selector.
+				// The performance is bad but it is only used for testing purpose.
+				if (level < 0) {
+					var w = b.w.parent;
+					while (w && w.bindLevel > a.level) {
+						w = w.parent;
+					}
+					var w1 = a.w,
+						w2 = w,
+						wp1 = w1.parent,
+						wp2 = w2.parent;
+					while (wp1 && wp2 && wp1 != wp2) {
+						w1 = wp1;
+						w2 = wp2;
+						wp1 = wp1.parent;
+						wp2 = wp2.parent;
+					}
+					if (w1 && w2)
+						return w1.getChildIndex() - w2.getChildIndex();
+					return 0;
+				} else if (level > 0) {
+					var w = a.w.parent;
+					while (w && w.bindLevel > b.level) {
+						w = w.parent;
+					}
+					var w1 = w,
+						w2 = b.w,
+						wp1 = w1.parent,
+						wp2 = w2.parent;
+					while (wp1 && wp2 && wp1 != wp2) {
+						w1 = wp1;
+						w2 = wp2;
+						wp1 = wp1.parent;
+						wp2 = wp2.parent;
+					}
+					if (w1 && w2)
+						return w1.getChildIndex() - w2.getChildIndex();
+						
+					return 0;
+				}
 			});
 			var tmp = [];
 			for (var i = els.length; i--;)

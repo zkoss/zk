@@ -30,7 +30,9 @@
 		<client><![CDATA[
 			click(t2);
 			click(btn);
+			waitResponse();
 			click(t1);
+			waitResponse();
 			verifyEquals(200, jq(east.$n("real")).width());
 		]]></client>
 	</case>

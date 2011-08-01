@@ -19,6 +19,7 @@
 		--></server>
 		<client>
 			click(btn);
+			waitResponse();
 			verifyTrue(isVisible(pp));
 		</client>
 	</case>

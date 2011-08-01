@@ -47,7 +47,6 @@
 			-->
 		</server>
 		<client>	<![CDATA[
-			sleep(1000);//for DataBinding
    				click(jq("@button"));
   				waitResponse();
   				verifyEquals("154.23", jq(".z-decimalbox").attr("value"));			
