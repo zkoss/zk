@@ -881,7 +881,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (this._hflex != 'min') n.style.width = '';
 				if (head) head.style.width = '';
 			} else {
-				if (zk.ie && !zk.ie8 && this._hflex == 'min' && this._hflexsz === undefined)
+				if (zk.ie && !zk.ie8 && head && this._hflex == 'min' && this._hflexsz === undefined)
 					sz.width += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
