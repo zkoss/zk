@@ -4092,71 +4092,42 @@ _doFooSelect: function (evt) {
 				var n = _binds[wid].$n(), w;
 				//Bug B50-3310406 need to check if widget is removed or not.
 				if (n && (w = zk.Widget.$(_binds[wid]))) {
-					var index = 0;
-					if (w.widgetName.indexOf('treecell') >= 0) {
-						var parent = w.parent ? w.parent.parent : null;
-						if (parent)
-					 		index = parent.getChildIndex();
-					} else {
-						index = w.getChildIndex();
-					}
 					els.push({
 						n: n,
-						w: w,
-						level: w.bindLevel,
-						index: index
+						w: w
 					});
 				}
 			}
 		}
 		if (els.length) {
-			// fixed the order of the component that have been changed dynamically.(Bug in B30-1892446.ztl)
-			// and B50-3095549.ztl
+			// fixed the order of the component that have been changed dynamically.
+			// (Bug in B30-1892446.ztl, B50-3095549.ztl, and B50-3131173.ztl)
 			els.sort(function(a, b) {
-				var level = a.level - b.level;
-				if (level == 0)
-					return a.index - b.index;
-					
+				var w1 = a.w,
+					w2 = b.w;
 				// We have to compare each ancestor to make the result as CSS selector.
 				// The performance is bad but it is only used for testing purpose.
-				if (level < 0) {
-					var w = b.w.parent;
-					while (w && w.bindLevel > a.level) {
-						w = w.parent;
-					}
-					var w1 = a.w,
-						w2 = w,
-						wp1 = w1.parent,
-						wp2 = w2.parent;
-					while (wp1 && wp2 && wp1 != wp2) {
-						w1 = wp1;
-						w2 = wp2;
-						wp1 = wp1.parent;
-						wp2 = wp2.parent;
-					}
-					if (w1 && w2)
-						return w1.getChildIndex() - w2.getChildIndex();
-					return 0;
-				} else if (level > 0) {
-					var w = a.w.parent;
-					while (w && w.bindLevel > b.level) {
-						w = w.parent;
-					}
-					var w1 = w,
-						w2 = b.w,
-						wp1 = w1.parent,
-						wp2 = w2.parent;
-					while (wp1 && wp2 && wp1 != wp2) {
-						w1 = wp1;
-						w2 = wp2;
-						wp1 = wp1.parent;
-						wp2 = wp2.parent;
-					}
-					if (w1 && w2)
-						return w1.getChildIndex() - w2.getChildIndex();
-						
-					return 0;
+				if (w1.bindLevel < w2.bindLevel) {
+					do {
+						w2 = w2.parent;
+					} while (w1 && w1.bindLevel < w2.bindLevel);
+				} else if (w1.bindLevel > w2.bindLevel) {
+					do {
+						w1 = w1.parent;
+					} while (w2 && w1.bindLevel > w2.bindLevel);
 				}
+				var wp1 = w1.parent,
+					wp2 = w2.parent;
+				while (wp1 && wp2 && wp1 != wp2) {
+					w1 = wp1;
+					w2 = wp2;
+					wp1 = wp1.parent;
+					wp2 = wp2.parent;
+				}
+				if (w1 && w2) {
+					return w1.getChildIndex() - w2.getChildIndex();
+				}	
+				return 0;
 			});
 			var tmp = [];
 			for (var i = els.length; i--;)
