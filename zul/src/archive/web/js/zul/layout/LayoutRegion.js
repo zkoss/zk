@@ -208,10 +208,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (fromServer) {
 					
 					// Bug 2995770
-					if (!this.isRealVisible()) {
+					if (!zk(this.$n()).isRealVisible()) {
 						if (colled) {
-							jq(real)[open ? 'show' : 'hide']();
-							jq(colled)[open ? 'show' : 'hide']();
+							jq(real).show();
+							jq(colled).hide();
 						}
 						return;
 					}
