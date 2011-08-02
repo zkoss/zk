@@ -1592,7 +1592,7 @@ wgt.$f().main.setTitle("foo");
 		var dom = opts && opts.dom,
 			wgt = this;
 		while (wgt) {
-			if (dom) {
+			if (dom && !wgt.$instanceof(zk.Native)) { // B50-ZK-258: $n() will be null for natives
 				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return false;
 			} else if (!wgt._visible)
