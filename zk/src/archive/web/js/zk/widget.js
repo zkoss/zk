@@ -4569,6 +4569,10 @@ zk.Native = zk.$extends(zk.Widget, {
 	widgetName: "native",
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
+	$n: function (subId) {
+		return !subId && (subId = this.id) ? jq('#' + subId): null;
+	},
+
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) {
