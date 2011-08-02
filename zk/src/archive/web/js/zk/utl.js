@@ -314,7 +314,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		var x = jq.innerX(), y = jq.innerY(),
-			style = ' style="left:'+x+'px;top:'+y+'px"',
+			style = ' style="left:'+(x+3)+'px;top:'+(y+3)+'px"',
 			idtxt = id + '-t',
 			idmsk = id + '-m',
 			html = '<div id="'+id+'"';
