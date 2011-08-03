@@ -22,16 +22,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -58,7 +49,7 @@ import java.util.Iterator;
  * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
  */
-public class ShowWindowEventListener implements EventListener {
+public class ShowWindowEventListener implements SerializableEventListener {
 	public void onEvent(Event event) {
 		//fetch old Event stored in Session and post again
 		final Component comp = event.getTarget();
