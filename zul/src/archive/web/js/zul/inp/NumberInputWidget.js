@@ -70,6 +70,10 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 			}
 		]
 	},
+	/** Returns a string of keystrokes that are allowed.
+	 * @return String
+	 * @since 5.0.8
+	 */
 	getAllowedKeys_: function () {
 		return this._allowKeys || _allowKeys;
 	},

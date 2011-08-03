@@ -118,6 +118,9 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * Change image URI of the image node.
+	 * @param DOMElement n the element to change the image
+	 * @param String img the URL of the image
+	 * @since 5.0.8
 	 */
 	changeImageNodeSrc_: function (n, img) {
 		n.src = img;
