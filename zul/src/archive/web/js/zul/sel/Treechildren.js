@@ -202,13 +202,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop)
-			this.getTree()._shallSize = true;
+			this.getTree()._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		var selItems = this._selItems, len;
 		if (this.desktop)
-			this.getTree()._shallSize = true;
+			this.getTree()._syncSize();
 	}
 });
 
