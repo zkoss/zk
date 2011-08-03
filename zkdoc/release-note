@@ -133,6 +133,7 @@ ZK 5.0.8
   ZK-244: window cannot maximize when caption changed
   ZK-239: vlayout inner padding issue
   ZK-261: Panelchildren fail to serialize in Panel
+  ZK-242: Set postion to window fail with Firefox 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
