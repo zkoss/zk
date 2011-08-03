@@ -467,7 +467,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_syncSize: function () {
 		this._shallSize = true;
-		if (!this.inServer && this.desktop)
+		if (!this.inServer && this.desktop) //client widget
 			this.onResponse();
 	},
 	_fixHeaders: function (force) {
