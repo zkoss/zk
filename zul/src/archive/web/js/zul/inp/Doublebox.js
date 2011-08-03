@@ -12,30 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _allowKeys;
-	
-	// Fixed merging JS issue
-	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL+'e';
-	});
-		//supports 1e2
 /**
  * An edit box for holding an float point value (double).
  * <p>Default {@link #getZclass}: z-doublebox.
  */
 zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
-	$init: function () {
-		this.$supers('$init', arguments);
-		//bug B50-3325041
-		this._allowKeys = _allowKeys;
-	},
-	setLocalizedSymbols: function (val) {
-		var old = this._localizedSymbols;
-		this.$supers('setLocalizedSymbols', arguments);
-		if (this._localizedSymbols !== old)
-			this._allowKeys += this._localizedSymbols.DECIMAL + 'e';
-	},
 	onSize: _zkf = function() {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
@@ -100,14 +81,21 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format,
-			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
+			symbols = this._localizedSymbols,
+			DECIMAL = (symbols ? symbols: zk).DECIMAL;
 		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
+			zk.fmt.Number.format(fmt, value, this._rounding, symbols) : 
 			DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-doublebox" + (this.inRoundedMold() ? "-rounded": "");
+	},
+	getAllowedKeys_: function () {
+		var symbols = this._localizedSymbols;
+		return this.$supers('getAllowedKeys_', arguments)
+			+ (symbols ? symbols: zk).DECIMAL + 'e';
+		//supports scientific expression such as 1e2
 	},
 	bind_: function(){
 		this.$supers(zul.inp.Doublebox, 'bind_', arguments);
@@ -120,5 +108,3 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 		this.$supers(zul.inp.Doublebox, 'unbind_', arguments);
 	}
 });
-
-})();

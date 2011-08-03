@@ -12,23 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	var _allowKeys;
-    
-	// Fixed merging JS issue
-	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL;
-	});
 /**
  * An edit box for holding BigDecimal.
  * <p>Default {@link #getZclass}: z-decimalbox.
  */
 zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
-	$init: function () {
-		this.$supers('$init', arguments);
-		//bug B50-3325041
-		this._allowKeys = _allowKeys;
-	},	
 	$define: { //zk.def
 		/** Returns the precision scale.
 		 * @return int
@@ -37,12 +25,6 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 		 * @param int scale
 		 */
 		scale: null
-	},
-	setLocalizedSymbols: function (val) {
-		var old = this._localizedSymbols;
-		this.$supers('setLocalizedSymbols', arguments);
-		if (this._localizedSymbols !== old)
-			this._allowKeys += this._localizedSymbols.DECIMAL;
 	},
 	onSize: _zkf = function() {
 		var width = this.getWidth();
@@ -85,6 +67,11 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 	unmarshall_: function(val) {
 		return val ? new zk.BigDecimal(val) : val; 
 	},
+	getAllowedKeys_: function () {
+		var symbols = this._localizedSymbols;
+		return this.$supers('getAllowedKeys_', arguments)
+			+ (symbols ? symbols: zk).DECIMAL; //not support scientific expression
+	},
 	bind_: function(){
 		this.$supers(zul.inp.Decimalbox, 'bind_', arguments);
 		if (this.inRoundedMold())
@@ -96,5 +83,3 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 		this.$supers(zul.inp.Decimalbox, 'unbind_', arguments);
 	}
 });
-
-})();
