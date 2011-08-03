@@ -169,17 +169,13 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this.parent);
-			zWatch.fireDown('onSize', this.parent);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this.parent);
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this.parent);
-			zWatch.fireDown('onSize', this.parent);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this.parent);
 	},
 	//protected
 	doClick_: function(evt) {

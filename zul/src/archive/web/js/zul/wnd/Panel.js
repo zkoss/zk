@@ -394,8 +394,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 				if (isRealVisible) {
 					this.__maximized = true;
-					zWatch.fireDown('beforeSize', this);
-					zWatch.fireDown('onSize', this);
+					zUtl.fireSized(this);
 				}
 			}
 		},
@@ -477,17 +476,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	setHeight: function () {
 		this.$supers('setHeight', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
 	},
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
 	},
 	setTop: function () {
 		this._hideShadow();
@@ -502,10 +497,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
 	},
 	/**
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
@@ -574,8 +567,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.zsync();
 		var self = this;
 		setTimeout(function() {
-			zWatch.fireDown('beforeSize', self);
-			zWatch.fireDown('onSize', self);
+			zUtl.fireSized(self);
 		}, zk.ie6_ ? 800: 0);
 	},
 	setFlexSizeH_: function(n, zkn, height, isFlexMin) {

@@ -209,7 +209,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 	onResponse: function () {
 		if (this._shallSize) {
-			zWatch.fire('onSize', this);
+			zUtl.fireSized(this, true);
 			this._shallSize = false;
 		}
 	},
@@ -249,11 +249,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
 		if (this.desktop)
-			zWatch.fireDown('onSize', this);
+			zUtl.fireSized(this, true);
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop)
-			zWatch.fireDown('onSize', this);
+			zUtl.fireSized(this, true);
 	}
 });

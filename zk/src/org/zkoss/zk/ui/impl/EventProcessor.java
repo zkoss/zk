@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.util.ExecutionMonitor;
@@ -141,7 +140,7 @@ public class EventProcessor {
 					execmon.eventStart(_event);
 
 				Scopes.setImplicit("event", _event); //_event might change
-				process0(scope);
+				((ComponentCtrl)_comp).service(_event, scope);
 				((DesktopCtrl)_desktop).afterProcessEvent(_event);
 			}
 		} finally {
@@ -152,80 +151,6 @@ public class EventProcessor {
 				execmon.eventComplete(_event);
 			Scopes.afterInterpret();
 		}
-	}
-	private void process0(Scope scope) throws Exception {
-		final Page page = getPage();
-		if (page == null || !page.isAlive()) {
-			String msg = (page == null ? "No page is available in "+_desktop: "Page "+page+" was destroyed");
-			if (_desktop.isAlive())
-				msg += " (but desktop is alive)";
-			else
-				msg += " because desktop was destroyed.\n"
-				+"It is usually caused by invalidating the native session directly. "
-				+"If it is required, please set Attributes.RENEW_NATIVE_SESSION first.";
-			log.warning(msg);
-		}
-
-		final ExecInfo execinf;
-		((ExecutionCtrl)_desktop.getExecution())
-			.setExecutionInfo(execinf = new ExecInfo(_event));
-		final String evtnm = _event.getName();
-		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm); it.hasNext();) {
-		//Note: CollectionsX.comodifiableIterator is used so OK to iterate
-			final EventListener el = it.next();
-			execinf.update(null, el, null);
-			if (el instanceof Express) {
-				el.onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
-			}
-		}
-		
-		if (page != null && _comp.getDesktop() != null) {
-			final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
-			execinf.update(null, null, zscript);
-			if (zscript != null) {
-				page.interpret(
-						zscript.getLanguage(), zscript.getContent(page, _comp), scope);
-				if (!_event.isPropagatable())
-					return; //done
-			}
-		}
-
-		for (Iterator<EventListener> it = _comp.getListenerIterator(evtnm); it.hasNext();) {
-		//Note: CollectionsX.comodifiableIterator is used so OK to iterate
-			final EventListener el = it.next();
-			execinf.update(null, el, null);
-			if (!(el instanceof Express)) {
-				el.onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
-			}
-		}
-
-		final Method mtd =
-			ComponentsCtrl.getEventMethod(_comp.getClass(), evtnm);
-		if (mtd != null) {
-//			if (log.finerable()) log.finer("Method for event="+evtnm+" comp="+_comp+" method="+mtd);
-			execinf.update(mtd, null, null);
-
-			if (mtd.getParameterTypes().length == 0)
-				mtd.invoke(_comp);
-			else
-				mtd.invoke(_comp, _event);
-			if (!_event.isPropagatable())
-				return; //done
-		}
-
-		if (page != null)
-			for (Iterator<EventListener> it = page.getListenerIterator(evtnm); it.hasNext();) {
-			//Note: CollectionsX.comodifiableIterator is used so OK to iterate
-				final EventListener el = it.next();
-				execinf.update(null, el, null);
-				el.onEvent(_event);
-				if (!_event.isPropagatable())
-					return; //done
-			}
 	}
 
 	/** Setup this processor before processing the event by calling
@@ -261,37 +186,5 @@ public class EventProcessor {
 	//Object//
 	public String toString() {
 		return "[comp: "+_comp+", event: "+_event+']';
-	}
-}
-/*package*/ class ExecInfo implements org.zkoss.zk.ui.sys.ExecutionInfo {
-	private final Thread _thread;
-	private final Event _event;
-	private Method _method;
-	private EventListener _listener;
-	private ZScript _zscript;
-
-	/*package*/ ExecInfo(Event event) {
-		_thread = Thread.currentThread();
-		_event = event;
-	}
-	public Thread getThread() {
-		return _thread;
-	}
-	public Event getEvent() {
-		return _event;
-	}
-	public Method getEventMethod() {
-		return _method;
-	}
-	public EventListener getEventListener() {
-		return _listener;
-	}
-	public ZScript getEventZScript() {
-		return _zscript;
-	}
-	public void update(Method mtd, EventListener ln, ZScript zs) {
-		_method = mtd;
-		_listener = ln;
-		_zscript = zs;
 	}
 }

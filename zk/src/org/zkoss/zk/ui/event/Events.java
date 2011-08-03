@@ -374,13 +374,11 @@ public class Events {
 	 * the earlier the event being posted is processed earlier
 	 * (first-in-first-out).
 	 *
-	 * <p>The priority posted by posted by {@link #postEvent(Event)} is
-	 * 0.
+	 * @param priority the priority of the event. The higher the priority is, the ealier it
+	 * is handled.<br/>
+	 * The priority posted by {@link #postEvent(Event)} is 0.
 	 * Applications shall not use the priority higher than 10,000 and
-	 * lower than -10,000 since they are reserved for component
-	 * development.
-	 *
-	 * @param priority the priority of the event.
+	 * lower than -10,000 since they are reserved for component development.
 	 * @since 3.0.7
 	 */
 	public static final void postEvent(int priority, Event event) {

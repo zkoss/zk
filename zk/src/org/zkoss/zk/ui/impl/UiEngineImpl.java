@@ -52,7 +52,6 @@ import org.zkoss.zk.ui.sys.*;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.event.FulfillEvent;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.EventListener;
@@ -2163,7 +2162,7 @@ public class UiEngineImpl implements UiEngine {
 	 * satisfied.
 	 */
 	private static class FulfillListener
-	implements EventListener, Express, java.io.Serializable, Cloneable,
+	implements EventListener, java.io.Serializable, Cloneable,
 		ComponentCloneListener {
 		private String[] _evtnms;
 		private Component[] _targets;
@@ -2181,7 +2180,7 @@ public class UiEngineImpl implements UiEngine {
 			init();
 
 			for (int j = _targets.length; --j >= 0;)
-				_targets[j].addEventListener(_evtnms[j], this);
+				_targets[j].addEventListener(10000, _evtnms[j], this);
 		}
 		private void init() {
 			_uri = null;

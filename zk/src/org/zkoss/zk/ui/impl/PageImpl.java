@@ -577,15 +577,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (_listeners == null)
 			_listeners = new HashMap<String, List<EventListener>>(2);
 
-		List<EventListener> ls = _listeners.get(evtnm);
-		if (ls != null) {
-			for (EventListener li: ls)
-				if (listener.equals(li))
-					return false;
+		List<EventListener> l = _listeners.get(evtnm);
+		if (l != null) {
+			if (duplicateListenerIgnored()) {
+				for (EventListener li: l) {
+					if (listener.equals(li))
+						return false;
+				}
+			}
 		} else {
-			_listeners.put(evtnm, ls = new LinkedList<EventListener>());
+			_listeners.put(evtnm, l = new LinkedList<EventListener>());
 		}
-		ls.add(listener);
+		l.add(listener);
 		return true;
 	}
 	public boolean removeEventListener(String evtnm, EventListener listener) {
@@ -609,6 +612,13 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return false;
 	}
+	private static boolean duplicateListenerIgnored() {
+		if (dupListenerIgnored == null)
+			dupListenerIgnored = Boolean.valueOf(
+				"true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
+		return dupListenerIgnored.booleanValue();
+	}
+	private static Boolean dupListenerIgnored;
 
 	public boolean isComplete() {
 		return _complete;

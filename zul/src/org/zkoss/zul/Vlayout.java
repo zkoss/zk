@@ -30,7 +30,7 @@ public class Vlayout extends HtmlBasedComponent {
 	private String _spacing = "0.3em";
 	
 	/** Returns the spacing between adjacent children, or null if the default
-	 * spacing is used.
+	 * spacing is used. 
 	 * <p>Default: 0.3em (means to use the default spacing).
 	 */
 	public String getSpacing() {
@@ -38,7 +38,8 @@ public class Vlayout extends HtmlBasedComponent {
 	}
 	/** Sets the spacing between adjacent children.
 	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-	 * or null to use the default spacing
+	 * or null to use the default spacing. If the spacing is set to "auto", 
+	 * the DOM style is left intact, so the spacing can be customized from CSS.
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {

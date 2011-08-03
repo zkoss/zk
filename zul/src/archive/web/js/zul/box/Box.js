@@ -286,7 +286,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				n.style.height = "";
 				n.style.width = "";
 			}
-			zWatch.fireDown('onSize', this);
+			zUtl.fireSized(this, true);
 		}
 	},
 	_fixChildDomVisible: function (child, visible) {

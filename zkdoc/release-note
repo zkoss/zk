@@ -23,10 +23,11 @@ ZK 5.1.0
 * Features
   ZK-139: A way to define a template that component could use
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
-  ZK-237: <?import?> supprts the importing of classes
+  ZK-237: <?import class="..."?> allows users to import classes
   ZK-217: A way to add a temporary variable resolver to an execution
   2974464: A way to customize message with i3-label
   ZK-233: Execution.createComponents support inserting before particular component and variable resolver
+  ZK-264: addEventListener support 'priority'
   3025389: A way to monitor the execution and event processing
   2947727: The instantiation of Composer & Server Push customizable
   ZK-224: Tree shall render the model in the onInitRender event listener
@@ -34,12 +35,20 @@ ZK 5.1.0
 * Bugs
 
 * Upgrade Notes
-  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
-    are removed.
+  + The addEventListner method of org.zkoss.zk.ui.Component won't check whether
+    the same event listener is registered twice. In other words,
+    it will be invoked multiple times if a listener is registered multiple times.
+    If you want to ignore the second registration of the same listener
+    (i.e., backward compatible with 5.0 or earlier), you could specify a library
+    property called org.zkoss.zk.ui.EventListener.duplicateIgnored to true
+  + The org.zkoss.zk.ui.event.Expression interface is deprecated, and replaced
+    with the addEventListener(int, String, EventListener) (and priority as 1000).
   + The default constructors of org.zkoss.zk.ui.util.GenericForwardComposer
 	and GenericAutowireComposer ignore the variables defined
 	in zscript and XEL. If it causes problems, please use the construactor
 	with full control (GenericAutowireComposer(separator,boolean,boolean)).
+  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
+    are removed.
   + The getClassNames and resolveClass methods of org.zkoss.xel.FunctionMapper
     are removed. Rather, FunctionMapperExt are introduced, so you could implement
     both FunctionMapper and FunctionMapperExt to have the function.
@@ -66,6 +75,7 @@ ZK 5.0.8
   ZK-214: Add a databinding composer instead of initiator
   3316591: Allow user to specify error-box position
   3326788: A way to name the composer GenericAutowireComposer
+  ZK-250: Support <?style?> to generate CSS directly without using a component
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
@@ -81,6 +91,7 @@ ZK 5.0.8
   ZK-219: Update zk.Event documentation
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
   ZK-248: System-level initiator shall be applied to richlet too
+  ZK-239: vlayout inner padding issue
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

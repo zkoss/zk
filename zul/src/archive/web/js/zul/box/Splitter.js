@@ -53,7 +53,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (sib && open)
 			zWatch.fireDown('onShow', sibwgt);
 		if (sib2)
-			zWatch.fireDown('onSize', zk.Widget.$(sib2));
+			zUtl.fireSized(zk.Widget.$(sib2), true);
 
 		wgt._fixNSDomClass();
 		wgt._fixbtn();
@@ -353,7 +353,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
 			bfcolps = "before" == wgt.getCollapse(),
-			run = draggable.run, diff, fd;
+			run = draggable.run, diff, fd, w;
 
 		if (vert) {
 			diff = run.z_point[1];
@@ -368,27 +368,29 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 		if (!diff) return; //nothing to do
 
-		if (run.nextwgt) zWatch.fireDown('beforeSize', run.nextwgt);
-		if (run.prevwgt) zWatch.fireDown('beforeSize', run.prevwgt);
+		if (w = run.nextwgt) zWatch.fireDown('beforeSize', w);
+		if (w = run.prevwgt) zWatch.fireDown('beforeSize', w);
 		
 		var ns = 0;
-		if (run.next) {
-			var s = zk.parseInt(run.next.style[fd]);
+		if (w = run.next) {
+			var s = zk.parseInt(w.style[fd]);
 			s -= diff;
 			if (s < 0) s = 0;
-			run.next.style[fd] = s + "px";
-			if (!bfcolps) run.next.style.overflow = 'hidden';
+			w.style[fd] = s + "px";
+			if (!bfcolps) w.style.overflow = 'hidden';
 		}
-		if (run.prev) {
-			var s = zk.parseInt(run.prev.style[fd]);
+		if (w = run.prev) {
+			var s = zk.parseInt(w.style[fd]);
 			s += diff;
 			if (s < 0) s = 0;
-			run.prev.style[fd] = s + "px";
-			if (bfcolps) run.prev.style.overflow = 'hidden';
+			w.style[fd] = s + "px";
+			if (bfcolps) w.style.overflow = 'hidden';
 		}
 
-		if (run.nextwgt) zWatch.fireDown('onSize', run.nextwgt);
-		if (run.prevwgt) zWatch.fireDown('onSize', run.prevwgt);
+		if (w = run.nextwgt)
+			zUtl.fireSized(w, true);
+		if (w = run.prevwgt)
+			zUtl.fireSized(w, true);
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it

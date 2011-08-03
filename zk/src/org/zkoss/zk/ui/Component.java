@@ -672,14 +672,58 @@ w:use="foo.MyWindow"&gt;
 	public void setMold(String mold);
 
 	//-- event listener --//
-	/** Adds an event listener to specified event name for this component.
-	 * The second registration is ignored and false is returned.
+	/** Adds an event listener to specified event name for this component
+	 * with the given priority.
 	 *
 	 * <p>You could register listener to all components in the same page
 	 * by use of {@link Page#addEventListener}.
 	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, the second registration is ignored if an event
+	 * listener has been registered twice.
+	 * However, since 5.1 and later, it won't be ignored. If a listener has
+	 * been registered multiple times, it will be invoked multiple times.
+	 * <p>If you prefer to ignore the second registration, you could specify
+	 * a library property called "org.zkoss.zk.ui.EventListener.duplicateIgnored"
+	 * to true.
+	 *
+	 * @param priority the priority of the event. The higher the priority is, the ealier it
+	 * is invoked.<br/>
+	 * <b>Notice:</b>
+	 * <ul>
+	 * <li>If the priority equals or is greater than 1000, the event listener will
+	 * be invoked before the event handlers registered in a ZUML page
+	 * (i.e., the onXxx attribute declared in ZUML).
+	 * On the other hand, if the priority is lower than 1000, it is invoked
+	 * after the ZUML's event handler.</li>
+	 * <li>The priority registered by {@link #addEventListener(String, EventListener)} is 0.</li>
+	 * <li>Applications shall not use the priority higher than 10,000 and
+	 * lower than -10,000 since they are reserved for component development.</li>
+	 * </ul>
 	 * @param evtnm what event to listen (never null)
-	 * @return whether the listener is added; false if it was added before
+	 * @return whether the listener is added successfully
+	 * @see Page#addEventListener
+	 * @since 5.1.0
+	 */
+	public boolean addEventListener(int priority, String evtnm, EventListener listener);
+	/** Adds an event listener to specified event name for this component.
+	 * The second registration is ignored and false is returned.
+	 * The priority is assumed to 0.
+	 *
+	 * <p>You could register listener to all components in the same page
+	 * by use of {@link Page#addEventListener}.
+	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, the second registration is ignored if an event
+	 * listener has been registered twice.
+	 * However, since 5.1 and later, it won't be ignored. If a listener has
+	 * been registered multiple times, it will be invoked multiple times.
+	 * <p>If you prefer to ignore the second registration, you could specify
+	 * a library property called "org.zkoss.zk.ui.EventListener.duplicateIgnored"
+	 * to true.
+	 *
+	 * @param evtnm what event to listen (never null)
+	 * @return whether the listener is added successfully
 	 * @see Page#addEventListener
 	 */
 	public boolean addEventListener(String evtnm, EventListener listener);
@@ -687,6 +731,7 @@ w:use="foo.MyWindow"&gt;
 	 * @return whether the listener is removed; false if it was never added.
 	 */
 	public boolean removeEventListener(String evtnm, EventListener listener);
+
 	/** Returns whether the event listener is available.
 	 *
 	 * <p>Unlike {@link org.zkoss.zk.ui.event.Events#isListened},

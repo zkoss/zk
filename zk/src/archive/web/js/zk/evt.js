@@ -216,41 +216,48 @@ zWatch = (function () {
 		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 		_dirty,
 		_Gun = zk.$extends(zk.Object, {
-			$init: function (name, xinfs, args, org) {
+			$init: function (name, xinfs, args, org, fns) {
 				this.name = name;
 				this.xinfs = xinfs;
 				this.args = args;
 				this.origin = org;
+				this.fns = fns;
 			},
 			fire: function (ref) {
 				var infs, inf, xinf,
 					name = this.name,
 					xinfs = this.xinfs,
-					args = this.args;
+					args = this.args,
+					fns = this.fns;
 				if (ref) {
 					for (var j = 0, l = xinfs.length; j < l; ++j)
 						if (xinfs[j][0] == ref) {
 							infs = xinfs[j][1]
 							xinfs.splice(j--, 1);
 							--l;
-							_invoke(name, infs, ref, args);
+							_invoke(name, infs, ref, args, fns);
 						}
 				} else
 					while (xinf = xinfs.shift())
-						_invoke(name, xinf[1], xinf[0], args);
+						_invoke(name, xinf[1], xinf[0], args, fns);
 			},
 			fireDown: function (ref) {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
-				(new _Gun(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin))
+				(new _Gun(this.name, _visiChildSubset(this.name, this.xinfs, ref, true), this.args, this.origin, this.fns))
 				.fire();
 			}
 		});
 
-	function _invoke(name, infs, o, args) {
-		for (var j = 0, l = infs.length; j < l;)
-			_fn(infs[j++], o, name).apply(o, args);
+	function _invoke(name, infs, o, args, fns) {
+		for (var j = 0, l = infs.length; j < l;) {
+			var f = _fn(infs[j++], o, name);
+			if (fns)
+				fns.push([f, o]); //store it fns first
+			else
+				f.apply(o, args);
+		}
 	}
 	//Returns if c is visible
 	function _visible(name, c) {
@@ -321,6 +328,13 @@ zWatch = (function () {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
 			jq.zsync(org);
 	}
+	function _fns(fns, args) {
+		if (fns) {
+			var f;
+			while (f = fns.pop())
+				f[0].apply(f[1], args);
+		}
+	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
 		if (wts && wts.length) {
@@ -328,17 +342,23 @@ zWatch = (function () {
 			if (down) _sync();
 
 			var args = [],
+				fns = opts && opts.reverse ? []: null,
 				gun = new _Gun(name,
 					down ? _visiChildSubset(name, wts, org): _visiSubset(name, wts),
-					args, org);
+					args, org, fns);
 			args.push(gun);
 			for (var j = 2, l = vararg.length; j < l;) //skip name and origin
 				args.push(vararg[j++]);
 
 			if (opts && opts.timeout >= 0)
-				setTimeout(function () {gun.fire();_zsync(name, org);}, opts.timeout);
+				setTimeout(function () {
+					gun.fire();
+					_fns(fns, args);
+					_zsync(name, org);
+				}, opts.timeout);
 			else {
 				gun.fire();
+				_fns(fns, args);
 				_zsync(name, org);
 			}
 		} else
@@ -520,7 +540,11 @@ onX: function (ctl) {
 	* @param String name the watch name, such as onShow.
 	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
 	* @param Map opts [optional] options:
-	* <ul><li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
+	* <ul><li>reverse - whether to reverse the execution order.
+	* If false or omitted, the parent is called first.
+	* If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
+	* <code>ctl.fireDown</code> in the callback.</li>
+	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li></ul>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called. 
 	*/
 	fireDown: function (name, org, opts) {

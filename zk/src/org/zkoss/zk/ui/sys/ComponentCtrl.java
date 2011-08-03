@@ -32,6 +32,8 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -377,6 +379,18 @@ public interface ComponentCtrl {
 	 * @see Component#setAuService
 	 */
 	public void service(AuRequest request, boolean everError);
+
+	/** Hanldes an event.
+	 * This method will invoke the event handlers registered in a ZUML page,
+	 * the event listeners registerd in Java, and the event handlers
+	 * declared as part of the component.
+	 *
+	 * @param event the event to handle
+	 * @param scope the scope to evaluate the zscript, if any.
+	 * (see also {@link Page#interpret}.
+	 * @since 5.1.0
+	 */
+	public void service(Event event, Scope scope) throws Exception;
 
 	/** Sets whether to disable the update of the client widgets of
 	 * this component and its descendants.

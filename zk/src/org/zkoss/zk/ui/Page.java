@@ -337,10 +337,10 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException;
 
 	/** Adds a class resolver to this page.
-	 * @see Page#resolverClass
 	 * @param resolver the class resolver to be added.
 	 * Currently it supports only {@link org.zkoss.lang.ImportedClassResolver}.
 	 * @since 5.1.0
+	 * @see #resolveClass
 	 */
 	public boolean addClassResolver(ClassResolver resolver);
 
@@ -441,8 +441,17 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * all event listeners for the page are deferrable, no matter
 	 * {@link org.zkoss.zk.ui.event.Deferrable} is implemented or not.
 	 *
+	 * <h2>Version Difference</h2>
+	 * <p>ZK 5.0 and earlier, the second registration is ignored if an event
+	 * listener has been registered twice.
+	 * However, since 5.1 and later, it won't be ignored. If a listener has
+	 * been registered multiple times, it will be invoked multiple times.
+	 * <p>If you prefer to ignore the second registration, you could specify
+	 * a library property called "org.zkoss.zk.ui.EventListener.duplicateIgnored"
+	 * to true.
+	 *
 	 * @param evtnm what event to listen (never null)
-	 * @return whether the listener is added; false if it was added before.
+	 * @return whether the listener is added successfully
 	 * @see Component#addEventListener
 	 */
 	public boolean addEventListener(String evtnm, EventListener listener);

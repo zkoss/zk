@@ -539,8 +539,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (isRealVisible) {
 					this.__maximized = true;
-					zWatch.fireDown('beforeSize', this);
-					zWatch.fireDown('onSize', this);
+					zUtl.fireSized(this);
 				}
 			}
 		},
@@ -786,8 +785,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.zsync();
 		var self = this;
 		setTimeout(function() {
-			zWatch.fireDown('beforeSize', self);
-			zWatch.fireDown('onSize', self);
+			zUtl.fireSized(self);
 		}, zk.ie6_ ? 800: 0);
 	},
 	onZIndex: _zkf = function (evt) {
@@ -972,17 +970,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this); // Note: IE6 is broken, because its offsetHeight doesn't update.
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
+				// Note: IE6 is broken, because its offsetHeight doesn't update.
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this);
-			zWatch.fireDown('onSize', this);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
 	},
 	setTop: function () {
 		_hideShadow(this);

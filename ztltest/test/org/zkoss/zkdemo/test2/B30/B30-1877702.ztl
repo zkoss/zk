@@ -25,7 +25,7 @@
 			
 			click(reset);
 			waitResponse();
-			verifyTrue(jq(".z-combobx-inp").val().equals("null"));
+			verifyTrue(jq(".z-combobx-inp").val().isEmpty());
 			
 			click(jq(".z-combobox-btn"));
             waitResponse();

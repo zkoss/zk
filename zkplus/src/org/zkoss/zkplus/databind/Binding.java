@@ -40,7 +40,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.impl.InputElement;
@@ -507,7 +506,7 @@ public class Binding implements java.io.Serializable {
 					if (listener == null) {
 						listener = new SaveEventListener();
 						target.setAttribute("zk.SaveEventListener."+evtname, listener);
-						target.addEventListener(evtname, listener);
+						target.addEventListener(1000, evtname, listener);
 					}
 					listener.addDataTarget(this, comp);
 				}
@@ -550,7 +549,7 @@ public class Binding implements java.io.Serializable {
 					if (listener == null) {
 						listener = new LoadEventListener();
 						target.setAttribute("zk.LoadEventListener."+evtname, listener);
-						target.addEventListener(evtname, listener);
+						target.addEventListener(1000, evtname, listener);
 					}
 					listener.addDataTarget(this, comp);
 				}
@@ -645,10 +644,9 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static class LoadEventListener extends BaseLoadEventListener implements Express {
+	private static class LoadEventListener extends BaseLoadEventListener {
 		private static final long serialVersionUID = 200808191313L;
 		public LoadEventListener() {
-			super();
 		}
 		public void onEvent(Event event) {
 			handleEvent(event);
@@ -695,10 +693,9 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static class SaveEventListener extends BaseSaveEventListener implements Express {
+	private static class SaveEventListener extends BaseSaveEventListener {
 		private static final long serialVersionUID = 200808191313L;
 		public SaveEventListener() {
-			super();
 		}
 		public void onEvent(Event event) {
 			handleEvent(event);

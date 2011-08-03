@@ -50,10 +50,8 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	},
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
-		if (this.desktop) {
-			zWatch.fireDown('beforeSize', this.parent);
-			zWatch.fireDown('onSize', this.parent);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this.parent);
 	},
 	// bug for B50-3312936.zul
 	getParentSize_: function (p) {

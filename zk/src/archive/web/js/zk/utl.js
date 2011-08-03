@@ -527,6 +527,17 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	appendAttr: function (nm, val, force)  {
 		return val || force ? ' ' + nm + '="' + val + '"': "";
+	},
+	/** Fires beforeSize, onFitSize and onSize
+	 * @param zk.Widget wgt the widget which the zWatch event will be fired against.
+	 * @param boolean noBeforeSize whether not to fire <code>beforeSize</code>.
+	 * @since 5.0.8
+	 */
+	fireSized: function (wgt, noBeforeSize) {
+		if (!noBeforeSize)
+			zWatch.fireDown('beforeSize', wgt);
+		zWatch.fireDown('onFitSize', wgt, {reverse: true});
+		zWatch.fireDown('onSize', wgt);
 	}
 };
 })();

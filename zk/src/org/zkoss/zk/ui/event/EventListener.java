@@ -34,18 +34,13 @@ import org.zkoss.zk.ui.UiException;
  * <p>By default (i.e., if {@link Deferrable} is not implemented), the event
  * listener is not deferrable. It is also called the ASAP event listener.
  *
- * <p>If an event listener also implements {@link Express}, the event
- * listener is evaluated before all other listeners, including the onXxx members
- * declared in the ZUML page.
- *
- * <p>By default (i.e., if {@link Express} is not implemented,
- * the event listener is eveluated after the onXxx members declared
- * in the ZUML page, but before the onXxx methods declared in the
- * component class.
- *
+ * <p>By default, The event listener is invoked after the event handlers registered
+ * in a ZUML page (i.e., the onXXX attribute).
+ * If you prefer a listener to invoke earlier than the ZUML's event handlers,
+ * you could register it with a priority equaling or higher than 1000
+ * (with {@link org.zkoss.zk.ui.Component#addEventListener(int, String, EventListener)}).
  * @author tomyeh
  * @see Deferrable
- * @see Express
  * @see SerializableEventListener
  */
 public interface EventListener {
