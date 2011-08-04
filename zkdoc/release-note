@@ -16,10 +16,11 @@ ZK 5.0.8
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
+  ZK-274: A way to prevent the developers from using zscript
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
-  ZK-219: Update zk.Event documentation
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
   ZK-248: System-level initiator shall be applied to richlet too
+  ZK-219: Update zk.Event documentation
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

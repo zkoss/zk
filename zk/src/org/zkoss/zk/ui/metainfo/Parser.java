@@ -315,10 +315,11 @@ public class Parser {
 		final String zsrc = (String)params.remove("zscript");
 
 		final Map args = new LinkedHashMap(params);
-		if (isEmpty(clsnm)) {
-			if (isEmpty(zsrc))
+		if (clsnm == null) {
+			if (zsrc == null)
 				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
 
+			checkZScriptEnabled(pi.getLocator());
 			ZScript zs =  null;
 			final String zslang = pgdef.getZScriptLanguage();
 			if (zsrc.indexOf("${") < 0) {
@@ -334,7 +335,7 @@ public class Parser {
 			pgdef.addInitiatorInfo(
 				new InitiatorInfo(new ZScriptInitiator(zs), args));
 		} else {
-			if (!isEmpty(zsrc))
+			if (zsrc != null)
 				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
 
 			pgdef.addInitiatorInfo(
@@ -344,6 +345,13 @@ public class Parser {
 				//Note: we don't resolve the class name later because
 				//no zscript run before init (and better performance)
 		}
+	}
+	private void checkZScriptEnabled(Element el) {
+		checkZScriptEnabled(el.getLocator());
+	}
+	private void checkZScriptEnabled(org.zkoss.xml.Locator loc) {
+		if (!_wapp.getConfiguration().isZScriptEnabled())
+			throw new UiException("zscript is not allowed since <disable-zscript> is configured, "+loc);
 	}
 	/** Process the page directive. */
 	private static void parsePageDirective(PageDefinition pgdef,
@@ -706,6 +714,7 @@ public class Parser {
 		final String uri = ns != null ? ns.getURI(): "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			checkZScriptEnabled(el);
 			parseZScript(parent, el, annHelper);
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			if (!(parent instanceof ComponentInfo))
@@ -1133,7 +1142,7 @@ public class Parser {
 
 	/** Parse an attribute and adds it to the definition.
 	 */
-	private static void addAttribute(ComponentInfo compInfo, Namespace attrns,
+	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
 	String name, String value, ConditionImpl cond, org.zkoss.xml.Locator xl)
 	throws Exception {
 		if (Events.isValid(name)) {
@@ -1162,6 +1171,7 @@ public class Parser {
 						|| "zk".equals(uri);
 			}
 			if (bZkAttr) {
+				checkZScriptEnabled(xl);
 				final int lno = xl != null ? xl.getLineNumber(): 0;
 				final ZScript zscript = ZScript.parseContent(value, lno);
 				if (zscript.getLanguage() == null)
