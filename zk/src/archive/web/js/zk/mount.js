@@ -704,9 +704,11 @@ jq(function() {
 		}
 	});
 
+	zjq._fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
+
 	jq(window).resize(function () {
 		if (zk.mounting || zk.skipResize)
-			return; //IE6: it sometimes fires an "extra" onResize in loading
+			return;
 
 	//Tom Yeh: 20051230:
 	//1. In certain case, IE will keep sending onresize (because

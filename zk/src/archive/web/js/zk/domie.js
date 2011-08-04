@@ -97,16 +97,6 @@ zk.copy(zjq, {
 	_beforeOuter: zk.$void, //overridden by domie6.js
 	_afterOuter: zk.$void
 });
-/* Bug 3092040 but not sure it is worth to fix
-  (there might be side effect since skipResize is not reset immediately)
-if (zk.ie8_) //ie8 only
-	zjq._fixedVParent = function (el, make) {
-		if (make) {
-			zk.skipResize = true;
-			setTimeout(function () {zk.skipResize = false;}, 0);
-		}
-	};
-*/
 
 	function _dissel() {
 		this.onselectstart = _dissel0;
@@ -149,6 +139,15 @@ zk.override(jq.event, zjq._evt = {}, {
 
 //IE: use query string if possible to avoid incomplete-request problem
 if (zk.ie < 8) {
+	zjq._fixOnResize = function (tmout) {
+		//IE6/7: it sometimes fires an "extra" onResize in loading
+		//so we have to filter it out (to improve performance)
+		//The other case is an extra onResize is fired if a position=absolute
+		//element is created (such zk.log) -- but we don't try to fix it
+		//(since it might not be worth; fix it only if really necessary)
+		zk.skipResize = (zk.skipResize||0) + 1;
+		setTimeout(function () {--zk.skipResize;}, tmout);
+	};
 	zjq._useQS = function (reqInf) {
 		var s = reqInf.content, j = s.length, prev, cc;
 		if (j + reqInf.uri.length < 2000) {
