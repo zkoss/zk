@@ -30,8 +30,8 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			verifyEquals(0, jq("div.z-listbox-body").outerHeight());
-			verifyEquals(0, jq("div.z-grid-body").outerHeight());
+			verifyTolerant(0, jq("div.z-listbox-body").outerHeight(), 1);
+			verifyTolerant(0, jq("div.z-grid-body").outerHeight(), 1);
 		]]></client>
 	</case>
 </test>

@@ -44,7 +44,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				click(jq(".z-panel-icon"));
 				waitResponse();
 				int x1 = getElementWidth(jq("@panel")).intValue();
-				verifyTrue(x1 > x);
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
+					verifyTrue(x1 >= x);
+				else
+					verifyTrue(x1 > x);
 				verifyTrue(screenwidth < x1+10);
 				click(jq(".z-panel-icon"));
 				waitResponse();

@@ -41,6 +41,7 @@ It still doesn't work even add row after creation.
 				w--;
 			verifyTrue(w <= jq(col1).outerWidth());
 			click(btn1);
+			waitResponse();
 			dragdropTo(col1, w + ",0", w + 10 + ",0");
 			w += 10;
 			if (ZK.is("ie6_"))
@@ -48,12 +49,15 @@ It still doesn't work even add row after creation.
 			verifyTrue(w <= jq(col1).outerWidth());
 			// the following is the rough test, because the grid is sized by content.
 			click(btn2);
+			waitResponse();
 			verifyTrue(20 <= jq(col1).outerWidth());
 			verifyEquals(jq(col1).outerWidth(), jq("@row > td").outerWidth());
 			click(btn3);
+			waitResponse();
 			verifyTrue(100 >= jq(col1).outerWidth());
 			verifyEquals(jq(col1).outerWidth(), jq("@row > td").outerWidth());
 			click(btn4);
+			waitResponse();
 			verifyTrue(200 >= jq(col1).outerWidth());
 			verifyEquals(jq(col1).outerWidth(), jq("@row > td").outerWidth());
 		]]></client>

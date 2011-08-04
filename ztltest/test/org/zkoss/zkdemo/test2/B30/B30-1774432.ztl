@@ -58,29 +58,37 @@
 		 --></server>
 		<client><![CDATA[
 			click(item2);
+			waitResponse();
 			click(remove);
+			waitResponse();
 			verifyFalse(item2.exists());
 			verifyFalse(jq(".z-error").exists());
 			click(append);
+			waitResponse();
 			verifyEquals(2, tc.nChildren());
 			verifyEquals(2, parseInt(t.$n("rows").get("rows.length")));
 			verifyFalse(jq(".z-error").exists());
 			click(append);
+			waitResponse();
 			verifyEquals(3, tc.nChildren());
 			verifyEquals(3, parseInt(t.$n("rows").get("rows.length")));
 			verifyFalse(jq(".z-error").exists());
 
 			click(append);
+			waitResponse();
 			verifyFalse(jq(".z-error").exists());
 			verifyTrue(isVisible(t.getChild("paging")));
 
 			click(removelast);
+			waitResponse();
 			click(removelast);
+			waitResponse();
 			verifyEquals(2, tc.nChildren());
 			verifyEquals(2, parseInt(t.$n("rows").get("rows.length")));
 			verifyFalse(jq(".z-error").exists());
 			verifyFalse(isVisible(t.getChild("paging")));
 			click(redraw);
+			waitResponse();
 			verifyEquals(2, parseInt(t.$n("rows").get("rows.length")));
 			verifyFalse(jq(".z-error").exists());
 			verifyFalse(isVisible(t.getChild("paging")));

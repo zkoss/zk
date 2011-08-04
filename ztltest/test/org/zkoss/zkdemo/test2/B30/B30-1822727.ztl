@@ -59,15 +59,20 @@ Henry should <b>NOT</b> be selected.<br/>
 		 --></server>
 		<client><![CDATA[
 			click(li1.$n("cm"));
+			waitResponse();
 			click(li2.$n("cm"));
+			waitResponse();
 			click(btn1);
+			waitResponse();
 			verifyTrue(li1.is("selected"));
 			verifyFalse(li2.is("selected"));
 			click(btn1);
 			waitResponse();
 			click(li1.$n("cm"));
+			waitResponse();
 			verifyFalse(li1.is("selected"));
 			click(btn2);
+			waitResponse();
 			verifyFalse(li1.is("selected"));
 			verifyFalse(li2.is("selected"));
 		]]></client>

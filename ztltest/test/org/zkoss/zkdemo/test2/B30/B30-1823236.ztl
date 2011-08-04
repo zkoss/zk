@@ -60,8 +60,8 @@ NOTE: The mentioned bug occurs only if you add item via ListModel and ListDataEv
 				verifyTrue(jq(h2).height() > 10);
 				verifyTrue(jq(h2).width() > 30);
 				verifyEquals(jq(lb).width(), jq(lb.$n("head")).outerWidth());
-				verifyEquals(jq(lb).height(), jq(lb.$n("head")).outerHeight());
-				verifyEquals(0, jq(lb.$n("body")).height());
+				verifyTolerant(jq(lb).height(), jq(lb.$n("head")).outerHeight(), 1);
+				verifyTolerant(0, jq(lb.$n("body")).height(), 1);
 				click(btn);
 				waitResponse();
 				verifyEquals(jq(lb).height(), jq(lb.$n("head")).outerHeight() +

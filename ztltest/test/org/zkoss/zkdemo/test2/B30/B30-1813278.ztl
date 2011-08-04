@@ -53,6 +53,7 @@ is the same as what is shown on the page<br/>
 				verifyEquals("http://jp.zkoss.org/", jq("a:eq(1)").attr("href"));
 				verifyEquals("http://zh.zkoss.org/", jq("a:eq(2)").attr("href"));
 				click(btn);
+				waitResponse();
 				if (ZK.is("ie6_"))
 					verifyEquals("http://www.potix.com", jq("a:eq(0)").attr("href"));
 				else
@@ -62,6 +63,7 @@ is the same as what is shown on the page<br/>
 				verifyEquals("http://jp.zkoss.org", jq("a:eq(1)").attr("href"));
 				verifyEquals("http://zh.zkoss.org", jq("a:eq(2)").attr("href"));
 				click(btn);
+				waitResponse();
 				verifyEquals("http://www.potix.com", jq("a:eq(0)").attr("href"));
 			}
 		]]></client>

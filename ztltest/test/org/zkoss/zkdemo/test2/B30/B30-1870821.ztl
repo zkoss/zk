@@ -9,24 +9,19 @@
 			 -->
 		</server>
 		<client><![CDATA[
-			focus(jq(".z-decimalbox:eq(0)"));
-			waitResponse();
-			type(jq(".z-decimalbox:eq(0)"), "6");
-			waitResponse();
-			keyPressNative(TAB);
-			waitResponse();
-			type(jq(".z-decimalbox:eq(1)"), "1");
-			waitResponse();
-			verifyEquals(jq(".z-decimalbox:eq(1)").val(), "1");
-			
-			keyDownNative(SHIFT);
-			keyDownNative(TAB);
-			keyUpNative(TAB);
-			keyUpNative(SHIFT);
-			
-			type(jq(".z-decimalbox:eq(0)"), "3");
-			waitResponse();
-			verifyEquals(jq(".z-decimalbox:eq(0)").val(), "3");
+				focus(jq(".z-decimalbox:eq(0)"));
+				waitResponse();
+				type(jq(".z-decimalbox:eq(0)"), "6");
+				waitResponse();
+				sendKeys(jq(".z-decimalbox:eq(0)"), Keys.TAB);
+				waitResponse();
+				type(jq(".z-decimalbox:eq(1)"), "1");
+				waitResponse();
+				verifyEquals(jq(".z-decimalbox:eq(1)").val(), "1");
+				focus(jq(".z-decimalbox:eq(0)"));
+				type(jq(".z-decimalbox:eq(0)"), "3");
+				waitResponse();
+				verifyEquals(jq(".z-decimalbox:eq(0)").val(), "3");
 		]]></client>
 	</case>
 </test>

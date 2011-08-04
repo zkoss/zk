@@ -140,6 +140,7 @@
 			JQuery pa = listitem.find("> @listcell:nth-child(3) @textbox");
 			JQuery full = listitem.find("> @listcell:nth-child(4) @label");
 			JQuery email = listitem.find("> @listcell:nth-child(5) @select");
+			waitResponse();
 			verifyEquals(jq(firstName).val(), fn.val());
 			verifyEquals(jq(firstName2).val(), fn.val());
 			verifyEquals(jq(lastName).val(), ln.val());

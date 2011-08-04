@@ -40,6 +40,8 @@
 			</vbox>
 		]]></server>
 		<client><![CDATA[
+		// ie9 driver doesn't work with doubleclick
+		if (!ZK.is("ie9")) {
 			click(col1);
 			waitResponse();
 			verifyEquals("Click on column 1", label.get("value"));
@@ -63,6 +65,7 @@
 			doubleClick(col4);
 			waitResponse();
 			verifyEquals("onDoubleClick on column 4", label.get("value"));
+		}
 		]]></client>
 	</case>
 </test>

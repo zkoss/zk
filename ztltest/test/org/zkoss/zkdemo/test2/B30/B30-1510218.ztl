@@ -52,6 +52,7 @@
 			//modify for compatiable event-thread enable/disable
 			click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
 			verifyFalse(isVisible(inner1));
+			waitResponse();
 
 			// Test Overlapped
 			click(overlapped);

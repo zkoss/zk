@@ -9,6 +9,7 @@
 		--></server>
 		<client>
 			contextMenu(win);
+			waitResponse();
 			verifyTrue(isVisible(menu));
 		</client>
 	</case>
