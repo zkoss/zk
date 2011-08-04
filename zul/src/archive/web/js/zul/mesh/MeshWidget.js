@@ -459,16 +459,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			= this.ehdfaker = this.ebdfaker = null;
 	},
 
-	onResponse: function () {
-		if (this.desktop && this._shallSize) {
+	/** Synchronizes the size immediately.
+	 * This method is called automatically if the widget is created
+	 * at the server (i.e., {@link #inServer} is true).
+	 * You have to invoke this method only if you create this widget
+	 * at client and add or remove children from this widget.
+	 * @since 5.0.8
+	 */
+	syncSize: function () {
+		if (this.desktop) {
 			this.$n()._lastsz = null; //reset
 			this.onSize();
 		}
 	},
+	onResponse: function () {
+		if (this._shallSize)
+			this.syncSize();
+	},
 	_syncSize: function () {
 		this._shallSize = true;
-		if (!this.inServer && this.desktop) //client widget
-			this.onResponse();
 	},
 	_fixHeaders: function (force) {
 		if (this.head && this.ehead) {

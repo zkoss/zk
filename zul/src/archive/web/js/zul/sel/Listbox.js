@@ -178,8 +178,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	/**
 	 * Stripes the class for each item.
@@ -340,8 +338,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	_fixForEmpty: function () {
 		if (this.desktop) {

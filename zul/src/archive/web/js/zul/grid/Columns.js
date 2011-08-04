@@ -123,18 +123,16 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		zWatch.unlisten({onResponse: this});
 		if (this._mpop) {
 			this._mpop.parent.removeChild(this._mpop);
-			this._shallSync = this._mpop = null;			
+			this._shallColMenu = this._mpop = null;
 		}
 		this.$supers(zul.grid.Columns, 'unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallSync)
+		if (this._shallColMenu)
 			this.syncColMenu();
 	},
 	_syncColMenu: function () {
-		this._shallSync = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
+		this._shallColMenu = true;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -150,14 +148,16 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			this._mpop.parent.removeChild(this._mpop);
 		this._mpop = new zul.grid.ColumnMenupopup({columns: this});
 	},
-	/** Synchronizes the menu of this component
-	 * @return zul.grid.Columns
+	/** Synchronizes the menu of this widget.
+	 * This method is called automatically if the widget is created
+	 * at the server (i.e., {@link #inServer} is true).
+	 * You have to invoke this method only if you create this widget
+	 * at client and change the content of the column's menu.
 	 */
 	syncColMenu: function () {
-		this._shallSync = false;
-		if (this._mpop)
+		this._shallColMenu = false;
+		if (this._mpop) //it shall do even if !this.desktop
 			this._mpop.syncColMenu();
-		return this;
 	},
 	_onColVisi: function (evt) {
 		var item = evt.currentTarget,

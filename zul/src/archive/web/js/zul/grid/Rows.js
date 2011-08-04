@@ -90,18 +90,14 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 				this.getGrid().onSize();
 			}
 			if(this._shallFixEmpty)
-				this.getGrid().fixForEmpty_();			
+				this.getGrid().fixForEmpty_();
 		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	_syncEmptyState: function () {
 		this._shallFixEmpty = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	/**
 	 * Stripes the class for each row.
