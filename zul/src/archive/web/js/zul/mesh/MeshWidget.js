@@ -724,6 +724,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_syncBodyHeight: function () {
 		var ebody = this.ebody,
 			ebodytbl = this.ebodytbl;
+		if (this._height || (this._vflex && this._vflex != 'min'))
+			return; // height is predetermined, skip sync
 		// no scroll bar, but extra height on ebody
 		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
 				ebody.offsetWidth >= ebodytbl.offsetWidth) 

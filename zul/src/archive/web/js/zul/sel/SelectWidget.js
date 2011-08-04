@@ -1063,6 +1063,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
 	},
+	_syncBodyHeight: function () {
+		if(this._rows == 0)
+			this.$supers('_syncBodyHeight', arguments);
+	},
 	_isAllSelected: function () {
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)
 			if (!w.isDisabled() && !w.isSelected())
