@@ -137,7 +137,6 @@ ZK 5.0.8
   ZK-267: DelegatingVariableResolver cannot be serialize
   ZK-266: Sort call to model not receiving the right parameters
   ZK-269: If listbox with an empty content, the head's size in Opera is wrong
-  ZK-273: Listbox's scrollbar will jump to the selectedItem even if the selectedItem's viewport is visible
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
