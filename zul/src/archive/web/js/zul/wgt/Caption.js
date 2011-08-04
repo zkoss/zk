@@ -86,10 +86,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//shall ignore it when calculate width. @see widget#setMinFlexSize
 	getMarginSize_: function () {
 		var parent = this.parent;
-		if (zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend())
-			return 0;
-		else
-			return this.$supers('getMarginSize_', arguments);  
+		return zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend() ?
+			0: this.$supers('getMarginSize_', arguments);  
 	},
 	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
 		if (o == 'w')
