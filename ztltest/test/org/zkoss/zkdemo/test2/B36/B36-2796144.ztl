@@ -26,33 +26,36 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			Element inp = returnDate.$n("real");
-			focus(inp);
-			click(returnDate.$n("btn"));
-			String time = jq("@timebox input").val();
-			click(jq("td.z-calendar-seld"));
-			blur(inp);
-			waitResponse();
-			verifyTrue(dateValue2.get("value").indexOf(time) > 0);
+				Element inp = returnDate.$n("real");
+				focus(inp);
+				click(returnDate.$n("btn"));
+				waitResponse();
+				String time = jq("@timebox input").val();
+				click(jq("td.z-calendar-seld"));
+				waitResponse();
+				blur(inp);
+				waitResponse();
+				verifyTrue(dateValue2.get("value").indexOf(time) > 0);
 		]]></client>
 	</case>
 	<case id="time2">
 		<server ref="zulCode"/>
 		<client><![CDATA[
-			Element inp = returnDate.$n("real");
-			JQuery timeInp = jq("@timebox input");
-			focus(inp);
-			click(returnDate.$n("btn"));
-			click(timeInp);
-			keyDown(timeInp, END);
-			keyDown(timeInp, DOWN);
-			String time = timeInp.val();
-			blur(timeInp);
-			click(jq("td.z-calendar-seld"));
-			blur(inp);
-			waitResponse();
-			sleep(500);
-			verifyTrue(dateValue2.get("value").indexOf(time) > 0);
+				Element inp = returnDate.$n("real");
+				JQuery timeInp = jq("@timebox input");
+				focus(inp);
+				click(returnDate.$n("btn"));
+				waitResponse();
+				click(timeInp);
+				sendKeys(timeInp, Keys.END);
+				sendKeys(timeInp, Keys.DOWN);
+				String time = timeInp.val();
+				click(jq("td.z-calendar-seld"));
+				waitResponse();
+				blur(inp);
+				waitResponse();
+				sleep(500);
+				verifyTrue(dateValue2.get("value").indexOf(time) > 0);
 		]]></client>
 	</case>
 

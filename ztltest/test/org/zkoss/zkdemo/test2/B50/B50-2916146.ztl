@@ -9,11 +9,11 @@
 		</server>
 		<client wait="100">	<![CDATA[
 				//TODO ,even if keypressnative not works , it still pass the test 
-       			keyPressNative(END);
-				keyPressNative(BACKSPACE);
+       			sendKeys(jq("@textbox"), Keys.END);
+				sendKeys(jq("@textbox"), Keys.BACK_SPACE);
 				waitResponse();
 				verifyTrue(jq("@textbox").exists());
-				keyPressNative(BACKSPACE);
+				sendKeys(jq("@textbox"), Keys.BACK_SPACE);
 				waitResponse();
 				verifyTrue(jq("@textbox").exists());
 			]]></client>

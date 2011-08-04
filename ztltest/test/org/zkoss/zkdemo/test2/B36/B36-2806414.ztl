@@ -28,10 +28,8 @@ Please type some words into the textbox and press "Enter", you should not see an
 		--></server>
 		<client><![CDATA[
 				focus(jq("input.z-textbox"));
-				keyPressNative("65");
-				keyPressNative("65");
-				keyPressNative("65");
-				keyPressNative(ENTER);
+				type(jq("input.z-textbox"), "AAA");
+				sendKeys(jq("input.z-textbox"), Keys.ENTER);
 				verifyFalse(jq(".z-error").exists());
 		]]></client>
 	</case>

@@ -135,6 +135,7 @@
 		sleep(1000);//for DataBinding
 			JQuery listitem = jq("@listbox > @listitem:first-child");
 			click(listitem);
+			waitResponse();
 			JQuery fn = listitem.find("> @listcell:nth-child(1) @textbox");
 			JQuery ln = listitem.find("> @listcell:nth-child(2) @textbox");
 			JQuery pa = listitem.find("> @listcell:nth-child(3) @textbox");

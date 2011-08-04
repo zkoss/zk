@@ -18,10 +18,11 @@
 		</zk>
 		 --></server>
 		<client wait="1"><![CDATA[
-			click(jq("@button td.z-button-cm"));
-			click(jq("@listcell[label=\"option 5\"] div.z-overflow-hidden"));
-			waitResponse();
-			verifyEquals("block", jq("@groupbox .z-groupbox-cnt").css("display"));
+		click(jq("@button td.z-button-cm"));
+		waitResponse();
+		click(jq("@listcell[label=\"option 5\"] div.z-overflow-hidden"));
+		waitResponse();
+		verifyEquals("block", jq("@groupbox .z-groupbox-cnt").css("display"));
 		]]></client>
 	</case>
 </test>

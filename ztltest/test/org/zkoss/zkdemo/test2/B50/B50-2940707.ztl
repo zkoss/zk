@@ -187,7 +187,9 @@
 				verifyEquals(7,jq(".z-treechildren tr.z-treerow").length());
 				verifyEquals(" Item 3",jq(".z-treechildren tr.z-treerow:eq(6)").text());
 				click(jq(".z-treerow-img-checkbox:eq(2)"));
+				waitResponse();
 				click(jq(".z-treerow-img-checkbox:eq(3)"));
+				waitResponse();
 				click(jq(".z-treerow-img-checkbox:eq(4)"));
 				verifyEquals(3,jq(".z-treerow-seld").length());
 				click(btn2);

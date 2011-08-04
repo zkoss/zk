@@ -46,22 +46,17 @@ If you can use keyboard to up/down each item, that is correct.
 
 		--></server>
 		<client><![CDATA[
-			click(jq(".z-listitem-seld"));
-			
-			verifyEquals(0,jq(".z-item-seld").eval("index()"));
-			
-			keyPressNative(DOWN);
-			waitResponse();
-			verifyEquals(1,jq(".z-item-seld").eval("index()"));
-			
-			keyPressNative(DOWN);
-			waitResponse();
-			verifyEquals(2,jq(".z-item-seld").eval("index()"));
-			
-			keyPressNative(UP);
-			waitResponse();
-			verifyEquals(1,jq(".z-item-seld").eval("index()"));
-			
+				click(jq(".z-listitem-seld"));
+				verifyEquals(0,jq(".z-item-seld").eval("index()"));
+				sendKeys(jq("@listbox").toWidget().$n("a"), Keys.DOWN);
+				waitResponse();
+				verifyEquals(1,jq(".z-item-seld").eval("index()"));
+				sendKeys(jq("@listbox").toWidget().$n("a"), Keys.DOWN);
+				waitResponse();
+				verifyEquals(2,jq(".z-item-seld").eval("index()"));
+				sendKeys(jq("@listbox").toWidget().$n("a"), Keys.UP);
+				waitResponse();
+				verifyEquals(1,jq(".z-item-seld").eval("index()"));
 		]]></client>
 	</case>
 </test>

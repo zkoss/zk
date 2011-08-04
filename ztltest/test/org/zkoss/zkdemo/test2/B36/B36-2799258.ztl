@@ -22,6 +22,7 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
+		if (!ZK.is("ie9")) {
 			JQuery header = jq("@listheader:eq(0)");
 			int x = header.outerWidth();
 			// Distance of dragging must be very large because you
@@ -31,7 +32,8 @@
 			JQuery body = jq("@listbox .z-listbox-body");
 			int bodyHeight = body.outerHeight();
 			int caveHeight = body.find("table").outerHeight();
-			verifyTrue((bodyHeight - 15) > caveHeight);//15: the height of the scroll bar 
+			verifyTrue((bodyHeight - 15) > caveHeight);//15: the height of the scroll bar
+		} 
 		]]></client>
 	</case>
 </test>

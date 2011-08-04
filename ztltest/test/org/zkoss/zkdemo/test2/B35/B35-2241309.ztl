@@ -21,6 +21,7 @@
 		--></server>
 		<client><![CDATA[
 			click(btn2);
+			waitResponse();
 			verifyEquals("NewLabel",jq("td.z-button-cm:eq(1)").text());
 		]]></client>
 	</case>

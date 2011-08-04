@@ -32,11 +32,15 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(jq("@detail div.z-detail-img"));
-			click(jq("@listitem[label=\"aaaaaaa\"] span.z-listitem-img-checkbox"));
-			click(jq("@detail div.z-detail-img"));
-			click(jq("@detail div.z-detail-img"));
-			verifyEquals(1, jq("tr.z-listitem-seld").length());
+				click(jq("@detail div.z-detail-img"));
+				waitResponse();
+				click(jq("@listitem[label=\"aaaaaaa\"] span.z-listitem-img-checkbox"));
+				waitResponse();
+				click(jq("@detail div.z-detail-img"));
+				waitResponse();
+				click(jq("@detail div.z-detail-img"));
+				waitResponse();
+				verifyEquals(1, jq("tr.z-listitem-seld").length());
 		]]></client>
 	</case>
 </test>

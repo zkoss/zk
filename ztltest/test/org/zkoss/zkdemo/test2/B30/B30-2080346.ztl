@@ -37,10 +37,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-				focus(jq("@combobox input"));
-				keyPressNative("65");
-				blur(jq("@combobox input"));
-				verifyEquals("a",jq(copy).val());
+			focus(jq("@combobox input"));
+			type(jq("@combobox input"), "a");
+			blur(jq("@combobox input"));
+			waitResponse();
+			verifyEquals("a",jq(copy).val());
 		]]></client>
 	</case>
 </test>

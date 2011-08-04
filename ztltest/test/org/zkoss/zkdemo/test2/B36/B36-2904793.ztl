@@ -33,7 +33,7 @@ after input any words into following textbox." />
 			waitResponse();
 			verifyTrue("onChange event was not triggered!", jq(changeEvtLabel).isVisible());
 			focus(jq(myTextbox));
-			keyPressNative("10");
+			sendKeys(myTextbox, Keys.ENTER);
 			waitResponse();
 			verifyTrue("onOk event was not triggered!", jq(okEvtLabel).isVisible());
 		]]></client>

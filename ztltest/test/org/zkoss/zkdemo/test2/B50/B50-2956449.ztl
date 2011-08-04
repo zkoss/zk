@@ -51,14 +51,12 @@
 			-->
 		</server>
 		<client wait="100">	<![CDATA[
-			
 				focus(jq("$tb"));
-				keyPressNative("38");
+				sendKeys(jq("$tb"), Keys.UP);
 				waitResponse();
 				verifyEquals("38",jq("$l").text());
-				
 				focus(jq("$tb"));
-				keyPressNative("40");
+				sendKeys(jq("$tb"), Keys.DOWN);
 				waitResponse();
 				verifyEquals("40",jq("$l").text());
 			]]></client>

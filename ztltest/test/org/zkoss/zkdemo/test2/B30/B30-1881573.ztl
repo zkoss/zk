@@ -36,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			verifyEquals($cave.height(),$cave.scrollHeight());
 			
 			click(jq("$btn"));
-			
+			waitResponse();	
 			verifyNotEquals($cave.height(),$cave.scrollHeight());
 		]]></client>
 	</case>

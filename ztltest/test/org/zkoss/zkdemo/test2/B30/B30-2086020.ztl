@@ -40,8 +40,9 @@ value should be "aa". (if the value is "a", it is wrong)
 		--></server>
 		<client><![CDATA[
 				focus(jq("@combobox input"));
-				keyPressNative("65");keyPressNative("65");
+				type(jq("@combobox input"), "aa");
 				blur(jq("@combobox input"));
+				waitResponse();
 				verifyEquals("aa",jq(copy).val());
 		]]></client>
 	</case>

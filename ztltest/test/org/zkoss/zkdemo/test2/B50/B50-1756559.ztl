@@ -37,12 +37,13 @@ result.value = lb.getSelectedItem().getLabel();
 
 		--></server>
 		<client><![CDATA[
-				keyPressNative("40");
-				keyPressNative(ENTER);
+				sendKeys(jq("select"), Keys.DOWN);
+				sendKeys(jq("select"), Keys.ENTER);
+				waitResponse();
 				verifyEquals("option2",jq(result).text());
 				select(lb,"option1");
+				sendKeys(jq("select"), Keys.ENTER);
 				waitResponse();
-				keyPressNative(ENTER);
 				verifyEquals("option1",jq(result).text());
 		]]></client>
 	</case>

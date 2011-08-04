@@ -20,11 +20,15 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(jq("@page @treerow span.z-treerow-img-checkbox:eq(0)"));
-			click(jq("@page @treerow span.z-treerow-img-checkbox:eq(0)"));
-			click(jq("@paging button.z-paging-next"));
-			click(jq("@paging button.z-paging-prev"));
-			verifyFalse(jq("@treerow:eq(0)").hasClass("z-treerow-seld"));
+				click(jq("@page @treerow span.z-treerow-img-checkbox:eq(0)"));
+				waitResponse();
+				click(jq("@page @treerow span.z-treerow-img-checkbox:eq(0)"));
+				waitResponse();
+				click(jq("@paging button.z-paging-next"));
+				waitResponse();
+				click(jq("@paging button.z-paging-prev"));
+				waitResponse();
+				verifyFalse(jq("@treerow:eq(0)").hasClass("z-treerow-seld"));
 		]]></client>
 	</case>
 </test>
