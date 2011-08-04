@@ -83,7 +83,6 @@ ZK 5.0.8
   3357475: Grid with hflex min should imply default header hflex
   3303877: IE6 only, vflex fail with tabbox  
   3305038: Fileupload.get() cause javascript error
-  3357931: WrongValueException Thrown On Valid Component
   3353121: Grid in Tabbox vflex issue, IE7 only
   3303872: IE8 only, tabpanel disappear after hide then show
   3303874: IE7 only, the scroll bar do not appear in the tabpanel
