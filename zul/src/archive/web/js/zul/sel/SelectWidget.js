@@ -278,7 +278,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			anchor.style.display = 'none';
 
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this.ebody.clientWidth;
+		var tblwd = zk.opera && this.ebody.offsetHeight == 0 ? // B50-ZK-269
+				this.ebody.offsetWidth : this.ebody.clientWidth;
 
 		if (zk.safari)
 			anchor.style.display = '';
