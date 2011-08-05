@@ -1343,6 +1343,8 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 							_paging.detach();
 						_pgi.setTotalSize(getDataLoader().getTotalSize());
 						addPagingListener(_pgi);
+						if (_pgi instanceof Paging)
+							smartUpdate("$u$paginal", ((Paging) _pgi).getUuid());
 					}
 				}
 			}
@@ -3173,6 +3175,8 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			if (!inPagingMold() && _jsel >= 0)
 				renderer.render("selectedIndex", _jsel); // B50-ZK-56
 		}
+		if (_pgi != null && _pgi instanceof Paging)
+			renderer.render("$u$paginal", ((Paging) _pgi).getUuid());
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

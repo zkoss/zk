@@ -1,0 +1,50 @@
+<!--
+	B50-ZK-259.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Aug 5 17:24:14 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		Integer[] items = new Integer[30];
+		for (int i = 0; i < 30; i++)
+			items[i] = i;
+	]]></zscript>
+	<div>Each of the Grid/Listbox/Tree should have no scroll bar (autopaging).</div>
+	<hlayout vflex="1">
+		<div vflex="1" hflex="1">
+			<paging id="paging1" />
+			<grid mold="paging" paginal="${paging1}" vflex="1" autopaging="true">
+				<rows>
+					<row forEach="${items}">${each}</row>
+				</rows>
+			</grid>
+		</div>
+		<div vflex="1" hflex="1">
+			<paging id="paging2" />
+			<listbox mold="paging" paginal="${paging2}" vflex="1" autopaging="true">
+				<listitem forEach="${items}">
+					<listcell>${each}</listcell>
+				</listitem>
+			</listbox>
+		</div>
+		<div vflex="1" hflex="1">
+			<paging id="paging3" />
+			<tree mold="paging" paginal="${paging3}" vflex="1" autopaging="true">
+				<treechildren>
+					<treeitem forEach="${items}">
+						<treerow>
+							<treecell>${each}</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</tree>
+		</div>
+	</hlayout>
+</zk>

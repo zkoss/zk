@@ -484,6 +484,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 						if (_paging != null) _paging.detach();
 						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 						addPagingListener(_pgi);
+						if (_pgi instanceof Paging)
+							smartUpdate("$u$paginal", ((Paging) _pgi).getUuid());
 					}
 				}
 			}
@@ -1415,6 +1417,10 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			if (sz != INIT_LIMIT)
 				renderer.render("initRodSize", initRodSize());
 		}
+		
+		if (_pgi != null && _pgi instanceof Paging)
+			renderer.render("$u$paginal", ((Paging) _pgi).getUuid());
+
 	}
 	/*package*/ boolean isRod() {
 		return _rod;

@@ -286,6 +286,8 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 						if (_paging != null) _paging.detach();
 						_pgi.setTotalSize(getItemCount());
 						addPagingListener(_pgi);
+						if (_pgi instanceof Paging)
+							smartUpdate("$u$paginal", ((Paging) _pgi).getUuid());
 					}
 				}
 			}
@@ -1970,6 +1972,8 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			renderer.render("_cdo", true);
 		if (!isRightSelect())
 			renderer.render("rightSelect", false);
+		if (_pgi != null && _pgi instanceof Paging)
+			renderer.render("$u$paginal", ((Paging) _pgi).getUuid());
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

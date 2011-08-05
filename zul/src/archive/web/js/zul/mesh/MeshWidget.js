@@ -283,6 +283,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		autopaging: _zkf,
 		/**
+		 * Returns the external Paging widget, if any.
+		 * @return Paging
+		 */
+		/**
+		 * Sets the external Paging widget.
+		 * @param Paging paging
+		 */
+		paginal: _zkf,
+		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
 		 */
@@ -326,14 +335,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageSize
 	 */
 	getPageSize: function () {
-		return this.paging.getPageSize();
+		var pag = this.paging || this._paginal;
+		return pag.getPageSize();
 	},
 	/** Sets the page size, aka., the number rows per page.
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
 	setPageSize: function (pgsz) {
-		this.paging.setPageSize(pgsz);
+		var pag = this.paging || this._paginal;
+		pag.setPageSize(pgsz);
 	},
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
@@ -341,21 +352,24 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount: function () {
-		return this.paging.getPageCount();
+		var pag = this.paging || this._paginal;
+		return pag.getPageCount();
 	},
 	/** Returns the active page (starting from 0).
 	 * @return int
 	 * @see Paging#getActivePage
 	 */
 	getActivePage: function () {
-		return this.paging.getActivePage();
+		var pag = this.paging || this._paginal;
+		return pag.getActivePage();
 	},
 	/** Sets the active page (starting from 0).
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
 	setActivePage: function (pg) {
-		this.paging.setActivePage(pg);
+		var pag = this.paging || this._paginal;
+		pag.setActivePage(pg);
 	},
 	/**
 	 * Returns whether the widget is in paging mold.
@@ -671,7 +685,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._currentLeft = l;
 		}
 		
-		if (!this.paging)
+		if (!this.paging && !this._paginal)
 			this.fireOnRender(zk.gecko ? 200 : 60);
 
 		if (scrolled)
