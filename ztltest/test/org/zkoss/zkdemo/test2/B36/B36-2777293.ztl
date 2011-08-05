@@ -42,13 +42,12 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(jq("@button[label=\"Test new model\"] button"));
-			waitResponse();
-			verifyEquals(2, jq("tr.z-treerow").length());
-			
-			click(jq("@button[label=\"Test null model\"] button"));
-			waitResponse();
-			verifyEquals(0, jq("tr.z-treerow").length());
+				click(jq("@button[label=\"Test new model\"]"));
+				waitResponse();
+				verifyEquals(2, jq("tr.z-treerow").length());
+				click(jq("@button[label=\"Test null model\"]"));
+				waitResponse();
+				verifyEquals(0, jq("tr.z-treerow").length());
 		]]></client>
 	</case>
 </test>

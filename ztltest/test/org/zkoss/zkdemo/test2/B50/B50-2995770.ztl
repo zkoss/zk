@@ -29,6 +29,7 @@
 		]]></server>
 		<client><![CDATA[
 			click(t2);
+			waitResponse();
 			click(btn);
 			waitResponse();
 			click(t1);

@@ -7,7 +7,7 @@
 	<grid id="grid1">
 		<rows>
 			<row>
-				<detail id="detail">
+				<detail id="detail" width="32px">
 					<grid id="grid">
 						<columns>
 							<column width="15%" />
@@ -51,7 +51,7 @@
 
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				int x = jq(grid1).height();
 				click(detail.$n("img"));
 				int x1 = jq(grid1).height();
@@ -59,6 +59,7 @@
 				waitResponse();
 				verifyEquals(x1,jq(grid1).height());
 				click(detail.$n("img"));
+				waitResponse();
 				verifyEquals(x,jq(grid1).height());
 			]]></client>
 	</case>

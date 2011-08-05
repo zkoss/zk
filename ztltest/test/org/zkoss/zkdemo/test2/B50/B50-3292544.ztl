@@ -27,9 +27,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				focus(jq("@doublespinner input"));
-				keyPressNative(END);
-				keyPressNative("46");
-				keyPressNative("53");
+				sendKeys(jq("@doublespinner input"), Keys.END);
+				sendKeys(jq("@doublespinner input"), Keys.DECIMAL);
+				sendKeys(jq("@doublespinner input"), Keys.NUMPAD5);
 				verifyEquals("0.5",jq("@doublespinner input").val());
 		]]></client>
 	</case>

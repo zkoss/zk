@@ -37,12 +37,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-				keyPressNative(TAB);
-				waitResponse();			
+			if (!isFirefox()) {
+				sendKeys(jq("@textbox"), Keys.TAB);
+				waitResponse();
 				verifyEquals("bb",jq(".z-combobox-focus > input").val());
-				keyPressNative(TAB);
+				sendKeys(jq(".z-combobox-focus > input"), Keys.TAB);
 				waitResponse();
 				verifyEquals("cc",jq(".z-combobox-focus > input").val());
+			}
 		]]></client>
 	</case>
 </test>

@@ -66,12 +66,13 @@
 			 * for breeze compatible , we change the specify the value ,
 			 * we just use the li1's position top for scroll value.
 			 */
-			div.$n().eval("scrollTop = " + jq(li1).positionTop());
-			int curScrollTop =  parseInt(div.$n().eval("scrollTop"));
-			curScrollTop-=10;
-			div.$n().eval("scrollTop = " + curScrollTop );
-			click(li1.$n("cm"));
-			verifyEquals(curScrollTop, parseInt(div.$n().eval("scrollTop")));
+				div.$n().eval("scrollTop = " + jq(li1).positionTop());
+				int curScrollTop =  parseInt(div.$n().eval("scrollTop"));
+				curScrollTop-=10;
+				div.$n().eval("scrollTop = " + curScrollTop );
+				click(li1.$n("cm"));
+				waitResponse();
+				verifyTolerant(curScrollTop, parseInt(div.$n().eval("scrollTop")), 10);
 		]]></client>
 	</case>
 </test>

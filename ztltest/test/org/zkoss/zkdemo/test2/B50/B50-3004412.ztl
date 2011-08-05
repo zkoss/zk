@@ -12,6 +12,7 @@
 		]]></server>
 		<client><![CDATA[
 		click(cb.$n("btn"));
+		waitResponse();
 		mouseOver(cbi);
 		mouseMoveAt(cbi, "5,1");
 		sleep(1000);

@@ -43,13 +43,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//I leave some time let animate works ,
 				//make sure it works.
 				JQuery $cave = jq(".z-tabpanel-accordion-cnt:eq(0)");
-				verifyTolerant($cave.outerHeight(), $cave.scrollHeight(), 10);
+				verifyTrue($cave.outerHeight() >= $cave.scrollHeight());
 				click(jq(".z-tab-accordion-hm").eq(1));
 				waitResponse();
 				//I leave some time let animate works ,
 				//make sure it works.
 				$cave = jq(".z-tabpanel-accordion-cnt:eq(1)");
-				verifyNotEquals($cave.scrollHeight(), $cave.outerHeight() - 10);	
+				verifyTrue($cave.outerHeight() < $cave.scrollHeight());	
 		]]></client>
 	</case>
 </test>

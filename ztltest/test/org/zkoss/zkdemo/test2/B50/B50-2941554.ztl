@@ -19,11 +19,16 @@
 				</tabbox>
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				verifyFalse(jq(".z-popup").exists());
 				verifyFalse(jq(".z-errbox").exists());
-				mouseDown(jq(".z-button-cm"));
-				mouseUp(jq(".z-button-cm"));
+				if (isIE()) {
+					mouseOver(jq(".z-button-cm"));
+					mouseDown(jq(".z-button-cm"));
+					mouseUp(jq(".z-button-cm"));
+				} else {
+					click(jq(".z-button-cm"));
+				}
 				waitResponse();
 				sleep(1000);
 				verifyTrue(isVisible(jq(".z-popup")));

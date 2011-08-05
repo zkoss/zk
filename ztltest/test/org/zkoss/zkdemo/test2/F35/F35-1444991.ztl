@@ -20,16 +20,19 @@
 		</zk>
 		 --></server>
 		<client><![CDATA[
-			click(win.$n("max"));
-			waitResponse();
-			verifyEquals("The window is maximized!", getAlertMessage());
-			click(jq("@window @button"));
-			verifyEquals(jq("body").outerWidth(), jq(win).outerWidth());
-			verifyEquals(jq("body").outerHeight(), jq(win).outerHeight());
-			click(win.$n("min"));
-			verifyEquals("The window is minimized!", getAlertMessage());
-			click(jq("@window @button"));
-			verifyFalse(isVisible(win));
+				click(win.$n("max"));
+				waitResponse();
+				verifyEquals("The window is maximized!", getAlertMessage());
+				click(jq("@window @button"));
+				waitResponse();
+				verifyEquals(jq("body").outerWidth(), jq(win).outerWidth());
+				verifyEquals(jq("body").outerHeight(), jq(win).outerHeight());
+				click(win.$n("min"));
+				waitResponse();
+				verifyEquals("The window is minimized!", getAlertMessage());
+				click(jq("@window @button"));
+				waitResponse();
+				verifyFalse(isVisible(win));
 		]]></client>
 	</case>
 </test>

@@ -12,12 +12,12 @@
 		</window>
 		 --></server>
 		<client><![CDATA[
-			click(btn);// here there doesn't exsit anything in zk session
-			waitResponse();
-			verifyTrue(btn.exists());
-			click(btn);// here will be a timeout
-			sleep(1000);
-			verifyFalse(btn.exists());
+				click(btn);// here there doesn't exsit anything in zk session
+				waitResponse();
+				verifyTrue(btn.exists());
+				click(btn);// here will be a timeout
+				sleep(1000);
+				verifyContains(getWebDriver().getCurrentUrl(), "timeout.zul");
 		]]></client>
 	</case>
 </test>

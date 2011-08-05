@@ -23,10 +23,11 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(jq("@treecell[label=\"1\"] div.z-overflow-hidden"));
-			waitResponse();
-			click(jq("@button td.z-button-cm"));
-			verifyEquals("Not Null", jq("@button td.z-button-cm").html());
+				clickAt(jq("@treecell[label=\"1\"] div.z-overflow-hidden"), "2,2");
+				waitResponse();
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals("Not Null", jq("@button td.z-button-cm").html());
 		]]></client>
 	</case>
 </test>

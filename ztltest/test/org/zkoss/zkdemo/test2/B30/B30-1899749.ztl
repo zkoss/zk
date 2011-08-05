@@ -54,6 +54,7 @@ Case 2: With IE6,
 		<client wait="1500"><![CDATA[
 				JQuery $progress = jq("@progressmeter");
 				JQuery $img = jq($progress.toWidget().$n("img"));
+				waitResponse();
 				verifyTolerant(30,($img.width()*100)/$progress.width(), 3);
 				verifyEquals(30,$img.width());
 				verifyEquals(100,$progress.width());

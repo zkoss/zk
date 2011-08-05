@@ -22,10 +22,11 @@
 			</zk> 
 		--></server>
 		<client><![CDATA[
-			mouseOver(toolbarbutton1);
-			click(toolbarbutton1);
-			mouseOut(toolbarbutton1);
-			verifyTrue(jq(toolbarbutton1).find("img").attr("src").indexOf("defender") > 1);
+				mouseOver(toolbarbutton1);
+				click(toolbarbutton1);
+				waitResponse();
+				mouseOut(toolbarbutton1);
+				verifyTrue(jq(toolbarbutton1).find("img").attr("src").indexOf("defender") > 1);
 		]]></client>
 	</case>
 </test>

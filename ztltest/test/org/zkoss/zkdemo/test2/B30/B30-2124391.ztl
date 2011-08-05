@@ -31,11 +31,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-				verifyEquals(" Group0",jq("@treeitem:eq(0)").text());
-				verifyEquals(" Group1",jq("@treeitem:eq(1)").text());
-				verifyEquals(" Group2",jq("@treeitem:eq(2)").text());
-				verifyEquals(" Group3",jq("@treeitem:eq(3)").text());
-				verifyEquals(" Group4",jq("@treeitem:eq(4)").text());
+				verifyContains(jq("@treeitem:eq(0)").text(), "Group0");
+				verifyContains(jq("@treeitem:eq(1)").text(), "Group1");
+				verifyContains(jq("@treeitem:eq(2)").text(), "Group2");
+				verifyContains(jq("@treeitem:eq(3)").text(), "Group3");
+				verifyContains(jq("@treeitem:eq(4)").text(), "Group4");
 		]]></client>
 	</case>
 </test>

@@ -37,6 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				click(jq("@button:eq(0)"));
+				waitResponse();
 				verifyTrue(titem.is("selected"));
 				click(jq("@button:eq(1)"));
 				waitResponse();
