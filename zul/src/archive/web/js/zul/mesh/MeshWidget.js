@@ -425,7 +425,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
-		if ((zk.ie7_ || zk.ie6_) && this.isVflex()) { // B50-ZK-195
+		if (zk.ie < 8 && this.isVflex()) { // B50-ZK-195
 			// added by Jumper for IE to get a correct offsetHeight so we need 
 			// to add this command faster than the this._calcSize() function.
 			var hgh = this.$n().style.height;
@@ -698,7 +698,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (this._fixPageSize(rows)) return; //need to reload with new page size
 		
-		if (zk.ie7_ || zk.ie6_)
+		if (zk.ie < 8)
 			this._syncBodyHeight(); // B50-ZK-171
 		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
