@@ -93,11 +93,11 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		return img ? label ? img + ' ' + label: img: label;
 	},
 	doMouseOver_: function () {
-		this._updateImageNode(true);
+		this._updateHoverImage(true);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
-		this._updateImageNode();
+		this._updateHoverImage();
 		this.$supers('doMouseOut_', arguments);
 	},
 	/**
@@ -111,7 +111,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		}
 		return this._eimg;
 	},
-	_updateImageNode: function (inHover) {
+	_updateHoverImage: function (inHover) {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {

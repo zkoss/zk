@@ -268,7 +268,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = false;
-		this._updateImageNode(); // remove hover image if any
+		this._updateHoverImage(); // remove hover image if any
 		if (!zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	

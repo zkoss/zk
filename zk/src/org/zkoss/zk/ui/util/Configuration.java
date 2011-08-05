@@ -1423,6 +1423,7 @@ public class Configuration {
 	}
 	/** Returns the maximal allowed upload size, in kilobytes, or 
 	 * a negative value if no limit.
+	 * @since 5.0.8
 	 */
 	public int getFileSizeThreshold() {
 		return _fileSizeThreshold;
