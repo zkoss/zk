@@ -1416,6 +1416,7 @@ public class Configuration {
 	 *
 	 * @param sz the maximal allowed upload size.
 	 * A negative value indicates there is no limit.
+	 * @since 5.0.8
 	 */
 	public void setFileSizeThreshold(int sz) {
 		_fileSizeThreshold = sz;
