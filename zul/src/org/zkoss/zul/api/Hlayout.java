@@ -16,14 +16,12 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.api;
 
-import org.zkoss.zk.ui.api.HtmlBasedComponent;
-
 /**
  * A horizontal layout
  * @author jumperchen
  * @since 5.0.4
  */
-public interface Hlayout extends HtmlBasedComponent {
+public interface Hlayout extends Layout {
 	
 	/** Returns the spacing between adjacent children, or null if the default
 	 * spacing is used.

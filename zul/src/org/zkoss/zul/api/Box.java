@@ -77,7 +77,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * Sets the spacing between adjacent children.
 	 * 
 	 * @param spacing
-	 *            the spacing (such as "0", "5px", "3pt" or "1em"), or null to
+	 *            the spacing (such as "0", "5px", "3pt" or "1em"), or null/empty/"auto" to
 	 *            use the default spacing
 	 * @see #getSpacing
 	 */

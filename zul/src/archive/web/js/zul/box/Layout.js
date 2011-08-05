@@ -32,15 +32,13 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 	 * <p>Default: 0.3em (means to use the default spacing).
 	 	 * @return String
 	 	 */
-		spacing: [function (v) {
-			return v ? v : '0.3em';
-		}, function () {
+		spacing: function () {
 			var n = this.$n(),
 				vert = this.isVertical_(),
 				spc = this._spacing;
 			if (n)
 				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
-		}]
+		}
 	},
 	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();
@@ -346,7 +344,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (wd > max)
     					max = wd;
     			}
-    			n.style.width = jq.px0(max);				
+    			n.style.width = jq.px0(max);
 			}
 		}
 	}

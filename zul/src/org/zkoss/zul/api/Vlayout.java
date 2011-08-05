@@ -16,15 +16,13 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.api;
 
-import org.zkoss.zk.ui.api.HtmlBasedComponent;
-
 /**
  * A vertical layout
  * @author jumperchen
  * @since 5.0.4
  *
  */
-public interface Vlayout extends HtmlBasedComponent {
+public interface Vlayout extends Layout {
 	
 	/** Returns the spacing between adjacent children, or null if the default
 	 * spacing is used.
