@@ -112,18 +112,14 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		return this._eimg;
 	},
 	_updateImageNode: function (inHover) {
-		var n = this.getImageNode();
-		if (n && this._hoverImage)
-			this.changeImageNodeSrc_(n, inHover ? this._hoverImage : this._image);
-	},
-	/**
-	 * Change image URI of the image node.
-	 * @param DOMElement n the element to change the image
-	 * @param String img the URL of the image
-	 * @since 5.0.8
-	 */
-	changeImageNodeSrc_: function (n, img) {
-		n.src = img;
+		var n = this.getImageNode(),
+			img = inHover ? this._hoverImage : this._image;
+		if (n && this._hoverImage) {
+			if (!n.zk && n.nodeName.toLowerCase() == 'img')
+				n.src = img;
+			else
+				n.css('background-image', 'url('+img+')');
+		}
 	},
 	//@Override
 	clearCache: function () {

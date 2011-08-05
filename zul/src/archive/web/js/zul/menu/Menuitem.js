@@ -356,9 +356,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this._eimg = this.$n('b') ? jq(this.$n('b')) : jq(this.$n('a').firstChild);
 		}
 		return this._eimg;
-	},
-	changeImageNodeSrc_: function (n, img) {
-		n.css('background-image', 'url('+img+')');
 	}
 }, {
 	_isActive: function (wgt) {
