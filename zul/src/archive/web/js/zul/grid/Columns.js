@@ -180,11 +180,9 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		this._mref.fire('onGroup');
 	},
 	_onAsc: function (evt) {
-		//if (this._mref.getSortDirection() != 'ascending')
 		this._mref.fire('onSort', true); // B50-ZK-266, always fire
 	},
 	_onDesc: function (evt) {
-		//if (this._mref.getSortDirection() != 'descending')
 		this._mref.fire('onSort', false); // B50-ZK-266, always fire
 	},
 	_onMenuPopup: function (evt) {

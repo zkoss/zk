@@ -335,16 +335,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageSize
 	 */
 	getPageSize: function () {
-		var pag = this.paging || this._paginal;
-		return pag.getPageSize();
+		return (this.paging || this._paginal).getPageSize();
 	},
 	/** Sets the page size, aka., the number rows per page.
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
 	setPageSize: function (pgsz) {
-		var pag = this.paging || this._paginal;
-		pag.setPageSize(pgsz);
+		(this.paging || this._paginal).setPageSize(pgsz);
 	},
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
@@ -352,24 +350,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount: function () {
-		var pag = this.paging || this._paginal;
-		return pag.getPageCount();
+		return (this.paging || this._paginal).getPageCount();
 	},
 	/** Returns the active page (starting from 0).
 	 * @return int
 	 * @see Paging#getActivePage
 	 */
 	getActivePage: function () {
-		var pag = this.paging || this._paginal;
-		return pag.getActivePage();
+		return (this.paging || this._paginal).getActivePage();
 	},
 	/** Sets the active page (starting from 0).
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
 	setActivePage: function (pg) {
-		var pag = this.paging || this._paginal;
-		pag.setActivePage(pg);
+		(this.paging || this._paginal).setActivePage(pg);
 	},
 	/**
 	 * Returns whether the widget is in paging mold.
@@ -569,7 +564,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		} else
 			width = this._minWd.width; // no header
-		return width + (zk.ie && !zk.ie8 ? 1 : 0);
+		return width + (zk.ie < 8 ? 1 : 0);
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
@@ -896,7 +891,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				n.style.height = '';
 				if (head) head.style.height = '';
 			} else {
-				if (zk.ie && !zk.ie8 && this._vflex == 'min' && this._vflexsz === undefined)
+				if (zk.ie < 8 && this._vflex == 'min' && this._vflexsz === undefined)
 					sz.height += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
@@ -906,7 +901,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (this._hflex != 'min') n.style.width = '';
 				if (head) head.style.width = '';
 			} else {
-				if (zk.ie && !zk.ie8 && head && this._hflex == 'min' && this._hflexsz === undefined)
+				if (zk.ie < 8 && head && this._hflex == 'min' && this._hflexsz === undefined)
 					sz.width += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
@@ -1065,7 +1060,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
 		var allwidths = true,
 			// IE6/7 bug in F30-1904532.zul
-			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
+			totalWidth = 0, shallCheckSize = zk.ie < 8;
 		
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
@@ -1222,8 +1217,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			++i;
 		}
-		var hgh = zk.ie && !zk.ie8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
-		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie && !zk.ie8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
+		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
 			extSum = total - width; 
 		
 		var count = total,
