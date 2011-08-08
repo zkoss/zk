@@ -139,6 +139,7 @@ ZK 5.0.8
   ZK-269: If listbox with an empty content, the head's size in Opera is wrong
   ZK-281: Hlayout.setSpacing with null or an empty string shall mean auto
   ZK-259: Using custom paging component in grid when autopaging is used
+  ZK-275: Window render Caption in a wrong place
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
