@@ -484,8 +484,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 						if (_paging != null) _paging.detach();
 						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 						addPagingListener(_pgi);
-						if (_pgi instanceof Paging)
-							smartUpdate("$u$paginal", ((Paging) _pgi).getUuid());
+						if (_pgi instanceof Component)
+							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
 					}
 				}
 			}
@@ -522,7 +522,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
-		//theorectically, _rows shall not be null if _model is not null when
+		//theoretically, _rows shall not be null if _model is not null when
 		//this method is called. But, just in case -- if sent manually
 			final Paginal pgi = getPaginal();
 			int pgsz = pgi.getPageSize();
