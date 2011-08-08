@@ -21,15 +21,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			uplder.destroy(finish);
 		delete o.uploaders[key];
 	}
-	function _start(o, form, val) { //start upload		
-		var key = o.getKey(o.sid);
-		//Bug 3305038: Fileupload.get() cause javascript error
-		o.sid++;
-		o.initContent();
-
-		var uplder = new zul.Uploader(o, key, form, val);
+	function _initUploader(o, form, val) {
+		var key = o.getKey(o.sid),
+			uplder = new zul.Uploader(o, key, form, val);
 		zul.Upload.start(uplder);
 		o.uploaders[key] = uplder;
+	}
+	function _start(o, form, val) { //start upload	
+		if (!o._clsnm) { // not initialized yet
+			//B50-ZK-255: FileUploadBase$SizeLimitExceededException
+			//will not warning in browser
+			_initUploader(o, form, val);
+			o.sid++;
+			o.initContent();
+		} else {
+			//Bug 3305038: Fileupload.get() cause javascript error
+			o.sid++;
+			o.initContent();
+			_initUploader(o, form, val);
+		}
 	}
 
 	function _onchange(evt) {
