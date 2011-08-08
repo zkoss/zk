@@ -79,8 +79,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
 		
+		this.setFloating_(true); // B50-ZK-280: setFloating_ first
 		this.setVisible(true);
-		this.setFloating_(true);
 		this.setTopmost();
 		
 		if ((!opts || !opts.disableMask) && this.isListen("onOpen", {asapOnly:true})) {
