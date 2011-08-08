@@ -353,7 +353,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n) 
-				this._eimg = this.$n('b') ? jq(this.$n('b')) : jq(this.$n('a').firstChild);
+				this._eimg = this.$n('b') || this.$n('a').firstChild;
 		}
 		return this._eimg;
 	}

@@ -115,10 +115,10 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		var n = this.getImageNode(),
 			img = inHover ? this._hoverImage : this._image;
 		if (n && this._hoverImage) {
-			if (!n.zk && n.nodeName.toLowerCase() == 'img')
+			if (jq.nodeName(n, 'img'))
 				n.src = img;
 			else
-				n.css('background-image', 'url('+img+')');
+				jq(n).css('background-image', 'url('+img+')');
 		}
 	},
 	//@Override
