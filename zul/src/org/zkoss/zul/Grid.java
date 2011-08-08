@@ -1418,8 +1418,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 				renderer.render("initRodSize", initRodSize());
 		}
 		
-		if (_pgi != null && _pgi instanceof Paging)
-			renderer.render("$u$paginal", ((Paging) _pgi).getUuid());
+		if (_pgi != null && _pgi instanceof Component)
+			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
 
 	}
 	/*package*/ boolean isRod() {
