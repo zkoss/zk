@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-ZK-287.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 8, 2011 6:14:37 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<label>Click event A button, then click event B button.</label>
+		<label>Wait 3 seconds, The labels shall show "A done: {now}" and "B done: {now}"</label>
+	</vlayout>
+	<window title="test of long operation" border="normal">
+	    <zscript> <![CDATA[
+			import org.zkoss.zk.ui.event.*;
+			import org.zkoss.zk.ui.event.EventListener;
+			import java.util.*;
+			
+			EventQueue eq = EventQueues.lookup("longop");
+			
+			String resultA = "";
+			String resultB = "";
+			
+			eq.subscribe(new EventListener() {
+				public void onEvent(Event evt) { //asynchronous
+					String evtName = evt.getName();
+					
+					if ("A".equals(evtName)) {
+						org.zkoss.lang.Threads.sleep(3000);
+						resultA = "A done: " + new Date().toString();
+					} else if ("B".equals(evtName)) {
+						org.zkoss.lang.Threads.sleep(2000);
+						resultB = "B done: " + new Date().toString();
+					}
+					
+				}
+			}, new EventListener() { //callback
+				public void onEvent(Event evt) {
+					String evtName = evt.getName();
+					
+					if ("A".equals(evtName)) {
+						lb.value = resultA;
+					} else if ("B".equals(evtName)) {
+						lb2.value = resultB;
+					}
+				}
+			});
+			]]> </zscript>
+	    <button label="A Event" onClick='eq.publish(new Event("A"));'/>
+	    <button label="B Event" onClick='eq.publish(new Event("B"));'/>
+	    <vlayout>
+		    <label id="lb"/>
+	    	<label id="lb2"/>
+	    </vlayout>
+	</window>
+</zk>

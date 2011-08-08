@@ -194,7 +194,7 @@ public class DesktopEventQueue implements EventQueue, java.io.Serializable {
 								_que.publish((Event)it.next());
 
 						if (_inf.callback != null)
-							_inf.callback.onEvent(null);
+							_inf.callback.onEvent(_event);
 					} finally {
 						Executions.deactivate(_desktop);
 					}

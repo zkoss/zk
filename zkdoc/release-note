@@ -21,6 +21,7 @@ ZK 5.0.8
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
   ZK-248: System-level initiator shall be applied to richlet too
   ZK-219: Update zk.Event documentation
+  ZK-287: The event instance shall be passed to the callback event listener of EventQueue
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
