@@ -22,17 +22,17 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.2.0</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.2.0</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-htmlunit-driver</artifactId>
-			<version>2.2.0</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
@@ -57,9 +57,7 @@
 		<dependency>
 			<groupId>com.opera</groupId>
 			<artifactId>operadriver</artifactId>
-			<version>0.5.2</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/operadriver-v0.5.2.jar</systemPath>
+			<version>0.6</version>
 		</dependency>
 	</dependencies>
 </project>
