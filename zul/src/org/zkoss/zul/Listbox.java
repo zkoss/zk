@@ -3163,6 +3163,8 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				int sz = initRodSize();
 				if (sz != INIT_LIMIT)
 					renderer.render("initRodSize", initRodSize());
+				if (!inPagingMold() && _jsel >= 0)
+					renderer.render("_selInView", _jsel); // B50-ZK-56
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
@@ -3172,8 +3174,6 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
 				renderer.render("groupSelect", true);
-			if (!inPagingMold() && _jsel >= 0)
-				renderer.render("selectedIndex", _jsel); // B50-ZK-56
 		}
 		if (_pgi != null && _pgi instanceof Paging)
 			renderer.render("$u$paginal", ((Paging) _pgi).getUuid());
