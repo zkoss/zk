@@ -5,10 +5,10 @@
   <a:bind model="personList"/>
   <grid width="800px" height="200px">
     <columns>
-      <column width="200px"/>
-      <column width="200px"/>
-      <column width="200px"/>
-      <column width="200px"/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
     </columns>
     <rows>
 	    <a:bind _var="person"/>
