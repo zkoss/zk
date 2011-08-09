@@ -66,6 +66,14 @@
 	center something
 	</center>
 
-	<div>This shall not have &lt;span&gt;</div>
+	<div>
+	This shall not have &lt;span&gt;
+	</div>
+	<textarea>
+	This shall not have &lt;span&gt;
+	</textarea>
+	<script>
+	zk.log("IE6/7? " + (zk.ie &lt; 8));
+	</script>
 </body>
 </html>
