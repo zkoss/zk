@@ -560,6 +560,7 @@
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
+			<xs:element ref="fusionchart" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -631,6 +632,7 @@
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
+				<xs:element ref="fusionchart" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -1173,6 +1175,29 @@
 		<xs:attribute name="xAxis" type="xs:string" use="optional" />
 		<xs:attribute name="yAxis" type="xs:string" use="optional" />
 		<xs:attribute name="chartStyle" type="xs:string" use="optional" />
+	</xs:complexType>
+	
+	<!-- fusionchart -->
+	<xs:element name="fusionchart" type="fusionchartType" />
+	<xs:complexType name="fusionchartType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="type" type="xs:string" use="required" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="tableModel" type="xs:string" use="optional" />
+		<xs:attribute name="chartRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="tableRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="engine" type="xs:string" use="optional" />
+		<xs:attribute name="dataXMLPath" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attribute name="subTitle" type="xs:string" use="optional" />
+		<xs:attribute name="xAxis" type="xs:string" use="optional" />
+		<xs:attribute name="yAxis" type="xs:string" use="optional" />
+		<xs:attribute name="threeD" type="booleanType" use="optional" />
+		<xs:attribute name="showLegend" type="booleanType" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="onClick" use="optional"/>
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 
     <!-- foot -->
@@ -2158,12 +2183,10 @@
     <!-- toolbar -->
 	<xs:element name="toolbar" type="toolbarType" />
 	<xs:complexType name="toolbarType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="toolbarbutton" />
-			<xs:element ref="button" />
-			<xs:element ref="image" />
-		</xs:choice>
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
