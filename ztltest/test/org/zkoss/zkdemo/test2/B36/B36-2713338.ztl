@@ -23,7 +23,7 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-				clickAt(jq("@treecell[label=\"1\"] div.z-overflow-hidden"), "2,2");
+				clickAt(jq("@treecell"), "50,2");
 				waitResponse();
 				click(jq("@button"));
 				waitResponse();
