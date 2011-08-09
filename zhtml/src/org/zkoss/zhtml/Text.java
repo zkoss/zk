@@ -21,6 +21,7 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -43,6 +44,7 @@ import org.zkoss.zhtml.impl.TagRenderContext;
  */
 public class Text extends AbstractComponent implements RawId {
 	private String _value = "";
+	private boolean _encode = true;
 
 	public Text() {
 	}
@@ -82,6 +84,23 @@ public class Text extends AbstractComponent implements RawId {
 		return langdef != null && langdef.isRawLabel();
 	}
 
+	/** Returns whether to encode the text, such as converting &lt;
+	 * to &amp;lt;.
+	 * <p>Default: true.
+	 * @since 5.0.8
+	 */
+	public boolean isEncode() {
+		return _encode;
+	}
+	/** Sets whether to encode the text, such as converting &lt;
+	 * to &amp;lt;.
+	 * <p>Default: true.
+	 * @since 5.0.8
+	 */
+	public void setEncode(boolean encode) {
+		_encode = encode;
+	}
+
 	//-- Component --//
 	/** Returns the widget class, "zhtml.Text".
 	 * @since 5.0.0
@@ -117,7 +136,7 @@ public class Text extends AbstractComponent implements RawId {
 			out.write("\">");
 		}
 
-		out.write(_value);
+		out.write(_encode ? XMLs.encodeText(_value): _value);
 
 		if (idRequired)
 			out.write("</span>");
@@ -134,6 +153,8 @@ public class Text extends AbstractComponent implements RawId {
 
 		render(renderer, "value", _value);
 		render(renderer, "idRequired", isIdRequired());
+		if (!_encode)
+			renderer.render("encode", false);
 	}
 	protected boolean isChildable() {
 		return false;

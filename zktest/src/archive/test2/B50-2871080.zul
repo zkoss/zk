@@ -19,7 +19,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 	import org.zkoss.zhtml.*;
 	import org.zkoss.zul.*;
-	new Text("t[&nbsp;]").setParent(self);
+	Text t = new Text("t[&nbsp;]");
+	t.setEncode(false);
+	t.setParent(self);
 	new Label("l[&nbsp;]").setParent(self);
 	]]></zscript>
 </window>

@@ -143,6 +143,7 @@ ZK 5.0.8
   ZK-259: Using custom paging component in grid when autopaging is used
   ZK-275: Window render Caption in a wrong place
   ZK-286: Vlayout shall not appear horizontal scroll bar (hflex)
+  ZK-294: &lt; not shown up if it is enclosed in a ZHTML component
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

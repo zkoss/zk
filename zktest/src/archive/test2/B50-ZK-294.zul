@@ -1,0 +1,7 @@
+<zk>
+	You shall see "This shall not have &lt;span&gt;" below
+	<separator bar="true"/>
+<h:div xmlns:h="xhtml">
+	This shall not have &lt;span&gt;
+</h:div>
+</zk>
