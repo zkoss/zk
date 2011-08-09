@@ -131,15 +131,6 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	public void setHyphen(boolean hyphen) {
 	}
 
-	private static boolean isEmpty(String s) {
-		return s == null || s.length() == 0;
-	}
-	private static boolean isRawLabel(Component comp) {
-		final LanguageDefinition langdef =
-			comp.getDefinition().getLanguageDefinition();
-		return langdef != null && langdef.isRawLabel();
-	}
-
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
