@@ -144,12 +144,14 @@ public interface EventQueue {
 	 *
 	 * @param listener the asynchronous listener to invoke when an event
 	 * is received
-	 * @param callback the callback listener, which will be invoked if the asynchronous
-	 * listen has been invoked.
+	 * @param callback the callback listener, which will be invoked if
+	  * the asynchronous listen has been invoked.
 	 * Unlike the asynchronous listener, the callback listener works
 	 * like a normal listener. You can access the current execution,
-	 * and update the desktop. Notice that the event argument is null
-	 * when the callback listener is called.
+	 * and update the desktop.<br/>
+	 * <b>Version Difference</b>: since 5.0.8, the event argument is the same
+	 * as the one passed to <code>listener</code>. In the prior version,
+	 * it is always null for the callback listener.
 	 * @see #subscribe(EventListener)
 	 * @see #subscribe(EventListener,boolean)
 	 */
