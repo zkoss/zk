@@ -30,7 +30,7 @@
 			</window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 			verifyTrue(jq("div.z-grid").exists());
 						

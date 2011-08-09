@@ -24,7 +24,7 @@
 				</vbox>			
 			-->
 		</server>
-		<client wait="100">	<![CDATA[	
+		<client>	<![CDATA[	
 				verifyTrue(jq("@select > option ").exists());
 				click(show);
 				waitResponse();

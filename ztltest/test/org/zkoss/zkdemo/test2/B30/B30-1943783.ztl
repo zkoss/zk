@@ -31,12 +31,12 @@ Press 'ESC' key and you will see a messagebox is shown.
 
 		--></server>
 		<client><![CDATA[
-				sendKeys(jq("@timebox"), Keys.ENTER);
+				sendKeys(jq("@timebox input"), Keys.ENTER);
 				waitResponse();
 				verifyNotEquals("OK:null",getAlertMessage());
 				clickAlert();
 				waitResponse();
-				sendKeys(jq("@timebox"), Keys.ESCAPE);
+				sendKeys(jq("@timebox input"), Keys.ESCAPE);
 				waitResponse();
 				verifyNotEquals("ESC:null",getAlertMessage());
 		]]></client>

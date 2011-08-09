@@ -20,7 +20,7 @@
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 			click(jq("$add"));
 			waitResponse();

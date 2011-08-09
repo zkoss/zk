@@ -9,7 +9,7 @@ Please type "-0" into the inputbox, and then click outside of it, you should not
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
  				type(jq("@intbox"), "-0");				
 				waitResponse();				
 				blur(jq("@intbox"));				

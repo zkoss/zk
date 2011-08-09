@@ -80,7 +80,7 @@
 			
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			click(cell);
 			waitResponse();
 			verifyEquals(msg.get("value"), "");

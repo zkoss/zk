@@ -21,7 +21,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				click(c.$n("btn"));
 				waitResponse();
 				click(jq(".z-combobox-pp .z-comboitem:eq(0)"));

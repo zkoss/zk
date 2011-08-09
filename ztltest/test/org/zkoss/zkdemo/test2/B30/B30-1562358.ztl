@@ -14,7 +14,7 @@
 				</grid> 
 			</groupbox>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			if (true) return;
 			verifyTrue(getElementHeight(row.firstChild()).intValue() < 35);
 			Element body = grid.$n("body");

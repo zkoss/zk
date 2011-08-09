@@ -32,7 +32,7 @@
 
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
     			click(jq("$aa a.z-tab-close"));
    				waitResponse();
    				verifyEquals("aa", jq(".z-messagebox .z-label").html());

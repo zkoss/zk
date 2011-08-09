@@ -10,7 +10,7 @@ be closed.
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				focus(tb);
 				blur(tb);
 				waitResponse();

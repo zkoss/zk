@@ -18,7 +18,7 @@
 				</tree>
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			click(setBtn);
 			waitResponse();
 			click(getBtn);

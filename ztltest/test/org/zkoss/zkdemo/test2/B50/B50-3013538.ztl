@@ -16,7 +16,7 @@
 				<label id="msg" style="color: red;"></label>
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			click(btn);
 			waitResponse();
 			verifyEquals(msg.get("value"), "");

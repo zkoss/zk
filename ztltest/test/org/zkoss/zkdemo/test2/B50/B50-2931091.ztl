@@ -18,7 +18,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
  				verifyFalse(jq(".z-menu-body-over").exists());
 				mouseOver(jq(".z-menu-btn").parent()) ;
 				waitResponse();

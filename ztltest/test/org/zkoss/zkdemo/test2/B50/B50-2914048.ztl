@@ -17,7 +17,7 @@ First
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
        				click(jq("@button[label=\"orient\"]"));
       				waitResponse();
       				click(jq("@button[label=\"append\"]"));

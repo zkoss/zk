@@ -21,7 +21,7 @@
 				</tree>
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			Element openIcon = treerow.$n("open");
 			click(openIcon);
 			click(btn);

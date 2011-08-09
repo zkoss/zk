@@ -11,7 +11,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				verifyTrue(jq(".z-listitem-seld").exists());
 				click(btn);
 				waitResponse();

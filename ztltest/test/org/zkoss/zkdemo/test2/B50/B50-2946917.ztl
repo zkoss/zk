@@ -28,7 +28,7 @@
 				</window>
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				for(int i = 0; i<3 ; i++){
 					focus(tbx);
 					blur(tbx);

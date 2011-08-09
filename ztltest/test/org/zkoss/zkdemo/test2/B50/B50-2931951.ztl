@@ -38,7 +38,7 @@ Please click addRow button, than you should see a paging toolbar.
 </div>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
    				Widget paging = grid.getChild("paging");
   				
   				verifyFalse(isVisible(paging));

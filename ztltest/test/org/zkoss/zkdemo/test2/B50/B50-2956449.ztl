@@ -50,7 +50,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				focus(jq("$tb"));
 				sendKeys(jq("$tb"), Keys.UP);
 				waitResponse();

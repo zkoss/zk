@@ -28,7 +28,7 @@ after input any words into following textbox." />
 </vbox>
 
 		--></server>
-		<client wait="2000"><![CDATA[
+		<client><![CDATA[
 			type(jq(myTextbox), "k");
 			waitResponse();
 			verifyTrue("onChange event was not triggered!", jq(changeEvtLabel).isVisible());

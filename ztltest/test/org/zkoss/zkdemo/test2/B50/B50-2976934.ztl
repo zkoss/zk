@@ -7,7 +7,7 @@
 						</div>
 					</zk>
                 --></server>
-                <client wait="100">
+                <client>
                         click(cb.$n("real"));
                         verifyEquals("true", jq(cb.$n("real")).attr("checked"));
                 </client>

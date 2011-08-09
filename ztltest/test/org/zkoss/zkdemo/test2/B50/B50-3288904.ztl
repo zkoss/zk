@@ -26,7 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		import java.util.Date;
 		Date d = new Date();
 	]]></zscript>
-	<datebox value="${d}" />
+	<datebox value="${d}" locale="en_US"/>
 </zk>
 
 		--></server>

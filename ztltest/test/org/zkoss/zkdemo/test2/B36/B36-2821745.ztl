@@ -17,7 +17,7 @@
 		    </groupbox>
 		</zk>
 		 --></server>
-		<client wait="1"><![CDATA[
+		<client><![CDATA[
 		click(jq("@button td.z-button-cm"));
 		waitResponse();
 		click(jq("@listcell[label=\"option 5\"] div.z-overflow-hidden"));

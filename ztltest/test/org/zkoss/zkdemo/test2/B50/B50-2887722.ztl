@@ -59,7 +59,7 @@ Please check the dot in the tree displays correctly. (Item 2.2 should not connec
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 verifyEquals(1, jq("@treecell[label=\"Item 3\"] div.z-overflow-hidden").children().length());			
 			]]></client>

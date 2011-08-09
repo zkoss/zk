@@ -16,7 +16,7 @@ and you shall see the above window disappears
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 		verifyTrue(mywin.exists());
 	

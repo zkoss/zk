@@ -17,7 +17,7 @@
 				</tree>
 			</zk>
 		 --></server>
-		<client wait="300"><![CDATA[
+		<client><![CDATA[
 				click(jq("@treecell[label=\"3\"] div.z-overflow-hidden"));
 				waitResponse();
 				click(jq("@page @treerow span.z-tree-root-open"));

@@ -8,7 +8,7 @@
 			</zk>	
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				click(db.$n("btn"));
 				waitResponse();
 				verifyTrue(isVisible(jq(".z-datebox-pp")));

@@ -41,7 +41,7 @@ Messagebox.show("If you can see the message, the bug is fixed.");
 </window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 			click(jq("$btn"));
 			waitResponse();				

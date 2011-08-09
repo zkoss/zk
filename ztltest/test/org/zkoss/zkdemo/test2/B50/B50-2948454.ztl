@@ -30,7 +30,7 @@
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
    				click(jq("@button[label=\"move button\"]"));
   				waitResponse();

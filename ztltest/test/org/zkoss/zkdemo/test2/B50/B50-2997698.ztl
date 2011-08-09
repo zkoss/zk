@@ -17,7 +17,7 @@
 </window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			//strange, the result is different between FF and selenium started FF			
 			verifyEquals("% 1,235", jq("@window @decimalbox:eq(0)").val());
 			verifyEquals("% 1,235", jq("@window @decimalbox:eq(1)").val());

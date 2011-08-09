@@ -15,7 +15,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				verifyEquals("A long text which is...",jq("span.z-label:eq(0)").text());
 			]]></client>
 	</case>

@@ -4,7 +4,7 @@
 			<!--
 <zk>You should see "$123.3" in the decimalbox: <decimalbox format="$###.##" value="123.30" width="150px" /></zk>			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 			verifyEquals("$123.3", jq("@decimalbox").val());			
 			]]></client>

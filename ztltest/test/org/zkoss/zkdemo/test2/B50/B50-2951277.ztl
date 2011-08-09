@@ -13,7 +13,7 @@ l.setValue("Just a \"test\" with quotes");
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 verifyEquals("Just a \"test\" with quotes", test.get("value"));			
 			]]></client>

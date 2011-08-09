@@ -80,7 +80,7 @@ tempnew.setParent(tcn);
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 
 			click(jq("@treecell[label=\"Item 2.2\"] div.z-overflow-hidden"));

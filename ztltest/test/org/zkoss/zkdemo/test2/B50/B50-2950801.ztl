@@ -15,7 +15,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				verifyFalse(jq(".z-error").exists());
 			]]></client>
 	</case>

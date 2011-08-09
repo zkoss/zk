@@ -51,7 +51,7 @@ Case 2: With IE6,
 </window>
 
 		--></server>
-		<client wait="1500"><![CDATA[
+		<client><![CDATA[
 				JQuery $progress = jq("@progressmeter");
 				JQuery $img = jq($progress.toWidget().$n("img"));
 				waitResponse();

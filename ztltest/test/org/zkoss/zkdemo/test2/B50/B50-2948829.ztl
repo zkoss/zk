@@ -106,7 +106,7 @@ The second tabpanel
 
 			-->
 		</server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 				click(jq(".z-bandbox-btn"));
 				waitResponse();
 				verifyEquals(6,jq(".z-treerow").length());
