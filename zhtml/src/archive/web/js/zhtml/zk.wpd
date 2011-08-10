@@ -14,5 +14,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <package name="zhtml" language="xhtml">
 	<widget name="Widget"/>
 	<widget name="Text"/>
-	<widget name="Direct"/>
+	<widget name="Content"/>
 </package>

@@ -1,5 +1,11 @@
 <zk>
-	You shall see "This shall not have &lt;span&gt;" below
+	<html><![CDATA[
+	You shall see the following below.
+	<ul>
+		<li>A lable: This shall not have &lt;span&gt;</li>
+		<li>An textarea: &lt;span&gt;</li>
+	</ul>
+	]]></html>
 	<separator bar="true"/>
 <h:div xmlns:h="xhtml">
 	This shall not have &lt;span&gt;

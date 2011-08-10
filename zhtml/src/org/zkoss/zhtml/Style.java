@@ -16,14 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zhtml.impl.DirectOutputTag;
-
 /**
  * The STYLE tag.
  * 
  * @author tomyeh
  */
-public class Style extends DirectOutputTag {
+public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	public Style() {
 		super("style");
 	}

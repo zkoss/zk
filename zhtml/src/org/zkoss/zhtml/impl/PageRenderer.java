@@ -221,6 +221,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		final AbstractTag tag = (AbstractTag)comp;
 		sb.append(tag.getPrologHalf(true)); //don't generate UUID if possible
 
+		if (comp instanceof ContentTag)
+			sb.append(((ContentTag)comp).getContent());
+
 		for (Component c = tag.getFirstChild(); c != null; c = c.getNextSibling())
 			childrenToContent(owner, c, sb);
 

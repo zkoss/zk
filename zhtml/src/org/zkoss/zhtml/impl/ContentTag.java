@@ -1,4 +1,4 @@
-/* DirectOutputTag.java
+/* ContentTag.java
 
 	Purpose:
 		
@@ -13,7 +13,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml.impl;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.ext.AfterCompose;
 
 /**
  * Represents a tag that shall generate the child elements directly.
@@ -22,25 +21,38 @@ import org.zkoss.zk.ui.ext.AfterCompose;
  * @author tomyeh
  * @since 5.0.8
  */
-public class DirectOutputTag extends AbstractTag implements AfterCompose {
-	private String _content;
+public class ContentTag extends AbstractTag {
+	private String _content = "";
 
-	public DirectOutputTag(String tagnm) {
+	public ContentTag(String tagnm) {
 		super(tagnm);
 	}
+	public ContentTag(String tagnm, String content) {
+		this(tagnm);
+		_content = content != null ? content: "";
+	}
 
-	/** Returns the widget class, "zhtml.Direct".
+	/** Returns the widget class, "zhtml.Content".
 	 */
 	public String getWidgetClass() {
-		return "zhtml.Direct";
+		return "zhtml.Content";
 	}
 
-	//@Override
-	public void afterCompose() {
-		String content = PageRenderer.childrenToContent(this);
-		if (content != null)
-			_content = content;
+	/** Returns the content.
+	 */
+	public String getContent() {
+		return _content;
 	}
+	/** Sets the content.
+	 */
+	public void setContent(String content) {
+		if (content == null) content = "";
+		if (!content.equals(_content)) {
+			_content = content;
+			smartUpdate("content", content);
+		}
+	}
+
 	//@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

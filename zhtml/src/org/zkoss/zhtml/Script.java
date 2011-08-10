@@ -16,14 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zhtml.impl.DirectOutputTag;
-
 /**
  * The SCRIPT tag.
  * 
  * @author tomyeh
  */
-public class Script extends DirectOutputTag {
+public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	public Script() {
 		super("script");
 	}

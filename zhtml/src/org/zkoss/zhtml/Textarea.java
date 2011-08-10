@@ -28,6 +28,9 @@ import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The TEXTAREA tag.
+ *
+ * <p>If you instantiate {@link Textarea} directly, you shall use {@link #setValue}
+ * to set up the value. You shall not add children to it.
  * 
  * @author tomyeh
  */
