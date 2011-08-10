@@ -25,4 +25,7 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	public Script() {
 		super("script");
 	}
+	public Script(String content) {
+		super("script", content);
+	}
 }

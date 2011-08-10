@@ -46,6 +46,10 @@ public class Textarea extends Input implements AfterCompose {
 	public Textarea() {
 		super("textarea");
 	}
+	public Textarea(String value) {
+		super("textarea");
+		_value = value != null ? value: "";
+	}
 
 	//@Override
 	public void afterCompose() {

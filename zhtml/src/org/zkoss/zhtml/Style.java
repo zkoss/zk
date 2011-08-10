@@ -25,4 +25,7 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	public Style() {
 		super("style");
 	}
+	public Style(String content) {
+		super("style", content);
+	}
 }
