@@ -22,7 +22,6 @@ ZK 5.0.8
   ZK-248: System-level initiator shall be applied to richlet too
   ZK-219: Update zk.Event documentation
   ZK-287: The event instance shall be passed to the callback event listener of EventQueue
-  ZK-290: Provide a plug-in that can parse the ZK annotation @{...}
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error

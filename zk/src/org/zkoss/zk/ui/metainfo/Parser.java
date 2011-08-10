@@ -206,7 +206,7 @@ public class Parser {
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
 		if (root != null)
-			parse(pgdef, pgdef, root, newAnnotationHelper(), false);
+			parse(pgdef, pgdef, root, new AnnotationHelper(), false);
 		return pgdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
@@ -225,31 +225,7 @@ public class Parser {
 		return (String[])ims.toArray(new String[ims.size()]);
 	}
 
-	/** Instantiates an annotation helper. */
-	private static AnnotationHelper newAnnotationHelper() throws Exception {
-		if (_annotHelper == null) {
-			final String clsnm = Library.getProperty("org.zkoss.zk.ui.metainfo.AnnotationHelper.class");
-			Class klass = null;
-			if (clsnm != null) {
-				try {
-					klass = Classes.forNameByThread(clsnm);
-				} catch (Throwable ex) {
-					log.warningBriefly("Ignored: failed to load "+clsnm, ex);
-				}
-				if (klass != null && !AnnotationHelper.class.isAssignableFrom(klass)) {
-					klass = null;
-					log.warning("Ignored: "+clsnm+" doesn't implement "+AnnotationHelper.class.getName());
-				}
-			}
-			_annotHelper = klass != null ? klass: Object.class;
-		}
-
-		if (Object.class.equals(_annotHelper)) //Object.class means: not customized
-			return new AnnotationHelper();
-		return (AnnotationHelper)_annotHelper.newInstance();
-	}
-	private static Class _annotHelper;
-
+	//-- derive to override --//
 	/** returns locator for locating resources. */
 	public Locator getLocator() {
 		return _locator;
@@ -838,7 +814,7 @@ public class Parser {
 					if (bzk) warnWrongZkAttr(attr);
 					else {
 						if (attrAnnHelper == null)
-							attrAnnHelper = newAnnotationHelper();
+							attrAnnHelper = new AnnotationHelper();
 						attrAnnHelper.addByRawValue(attnm, attval);
 					}
 				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -886,7 +862,7 @@ public class Parser {
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						if (isAttrAnnot(attval)) { //annotation
 							if (attrAnnHelper == null)
-								attrAnnHelper = newAnnotationHelper();
+								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval, true);
 						} else {
 							addAttribute(compInfo, attrns, attnm, attval, null,
@@ -1055,7 +1031,7 @@ public class Parser {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else if (isAttrAnnot(attval) && parent instanceof ComponentInfo) {
 				if (attrAnnHelper == null)
-					attrAnnHelper = newAnnotationHelper();
+					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
 					attnm, attval, false);
 			} else {
