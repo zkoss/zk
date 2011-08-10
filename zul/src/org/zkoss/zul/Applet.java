@@ -234,7 +234,7 @@ org.zkoss.zul.api.Applet {
 	//super//
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

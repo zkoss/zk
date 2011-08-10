@@ -54,6 +54,12 @@ public class ContentTag extends AbstractTag {
 	}
 
 	//@Override
+	/** No child is allowed.
+	 */
+	protected boolean isChildable() {
+		return false;
+	}
+	//@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);

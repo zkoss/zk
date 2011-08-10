@@ -319,15 +319,22 @@ implements DynamicPropertied, RawId {
 			}
 		}
 
-		if (!isChildable())
+		if (!isOrphanTag())
 			sb.append('/');
 
 		return sb.append('>').toString();
 	}
 	/*package*/ String getEpilogHalf() {
-		return isChildable() ? "</" + _tagnm + '>': "";
+		return isOrphanTag() ? "</" + _tagnm + '>': "";
 	}
 	protected boolean isChildable() {
+		return isOrphanTag();
+	}
+	/** Returns whether this tag is an orphan tag, i.e., it shall be in the
+	 * form of &lt;tag/&gt;.
+	 * @since 5.0.8
+	 */
+	protected boolean isOrphanTag() {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 
