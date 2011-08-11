@@ -148,6 +148,7 @@ ZK 5.0.8
   ZK-299: Detail component should not initial the width (18px) by default, if the theme is not in classic-blue 
   ZK-297: Combox's onSelect will keep to fire when invalidate the component 
   ZK-300: Paging mold with listbox cannot change its mold by configuration
+  ZK-282: Menuitem with popup is not always worked on IE6 only 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
