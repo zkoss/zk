@@ -145,6 +145,7 @@ ZK 5.0.8
   ZK-286: Vlayout shall not appear horizontal scroll bar (hflex)
   ZK-294: &lt; not shown up if it is enclosed in a ZHTML component
   ZK-272: Place component in auxheader is not align with headers' 
+  ZK-299: Detail component should not initial the width (18px) by default, if the theme is not in classic-blue 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

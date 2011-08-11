@@ -51,10 +51,6 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 		addClientEvent(Detail.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
 	
-	public Detail() {
-		setWidth("18px");
-	}
-
 	/** 
 	 * Returns the CSS style for the content block of the window.
 	 */
