@@ -146,6 +146,7 @@ ZK 5.0.8
   ZK-294: &lt; not shown up if it is enclosed in a ZHTML component
   ZK-272: Place component in auxheader is not align with headers' 
   ZK-299: Detail component should not initial the width (18px) by default, if the theme is not in classic-blue 
+  ZK-297: Combox's onSelect will keep to fire when invalidate the component 
   ZK-300: Paging mold with listbox cannot change its mold by configuration
   
 * Upgrade Notes
