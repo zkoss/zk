@@ -68,7 +68,7 @@ import org.zkoss.zk.ui.UiException;
  * 
  * <p> Configuration:
  * you can disable the animation effects by specifying a library
- * property named <code>org.zkoss.zul.Borderlayout.disabledAnimation</code> to
+ * property named <code>org.zkoss.zul.borderlayout.animation.disabled</code> to
  * disable all borderlayouts. (since 5.0.8) 
  * @author jumperchen
  * @since 5.0.0
@@ -110,14 +110,14 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 
 	private transient Center _center;
 	
-	private boolean _disabledAnimation = isDefaultDisabledAnimation();
+	private boolean _animationDisabled = isDefaultAnimationDisabled();
 
 	public Borderlayout() {
 	}
 
-	private static boolean isDefaultDisabledAnimation() {
+	private static boolean isDefaultAnimationDisabled() {
 		if (_defAnimation == null)
-			_defAnimation = Boolean.valueOf(Library.getProperty("org.zkoss.zul.Borderlayout.disabledAnimation", "false"));
+			_defAnimation = Boolean.valueOf(Library.getProperty("org.zkoss.zul.borderlayout.animation.disabed", "false"));
 		return _defAnimation.booleanValue();
 	}
 	private static Boolean _defAnimation;
@@ -127,18 +127,18 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 	 * <p>Default: false.
 	 * @since 5.0.8
 	 */
-	public boolean isDisabledAnimation() {
-		return _disabledAnimation;
+	public boolean isAnimationDisabled() {
+		return _animationDisabled;
 	}
 	
 	/**
 	 * Sets to disable animation effects.
 	 * @since 5.0.8
 	 */
-	public void setDisabledAnimation(boolean disabledAnimation) {
-		if (_disabledAnimation != disabledAnimation) {
-			_disabledAnimation = disabledAnimation;
-			smartUpdate("_disabledAnimation", disabledAnimation);
+	public void setAnimationDisabled(boolean animationDisabled) {
+		if (_animationDisabled != animationDisabled) {
+			_animationDisabled = animationDisabled;
+			smartUpdate("_animationDisabled", animationDisabled);
 		}
 	}
 	public North getNorth() {
@@ -243,7 +243,7 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "_disabledAnimation", _disabledAnimation);
+		render(renderer, "_animationDisabled", _animationDisabled);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);

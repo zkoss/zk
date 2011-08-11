@@ -84,7 +84,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!--  Turn on following if you want to disable the animation effects of
 		Borderlayout for all. Since 5.0.8
 	<library-property>
-		<name>org.zkoss.zul.Borderlayout.disabledAnimation</name>
+		<name>org.zkoss.zul.borderlayout.animation.disabed</name>
 		<value>true</value>
 	</library-property>
 	-->
