@@ -11,7 +11,7 @@ B50-ZK-241.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
-	<div>This is a Grid in a Grid. The both Grids should be sized by content.</div>
+	<div>These are Grids in Grids. All Grids should be sized by content.</div>
 	<grid id="grid1" hflex="min">
 		<rows>
 			<row>
@@ -19,6 +19,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					<columns>
 						<column label="Col 2" />
 						<column label="Col 3" />
+					</columns>
+				</grid>
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<columns>
+			<column />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<label>State</label>
+				<grid hflex="min">
+					<columns>
+						<column hflex="min" label="Code" />
+						<column hflex="min" label="Name" />
 					</columns>
 				</grid>
 			</row>

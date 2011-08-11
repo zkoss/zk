@@ -441,7 +441,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (!hgh || hgh == "auto") this.$n().style.height = "99%"; // avoid border 1px;
 		}
 		this._bindDomNode();
-		this._fixHeaders();
+		if (this._hflex != 'min')
+			this._fixHeaders();
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
