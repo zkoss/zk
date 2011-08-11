@@ -12,7 +12,7 @@ onClick() called<br/>
 <br/>
 3.If you see NullPointerException, it is a bug.<br/>
 ]]></html> 
-<window xmlns:a="http://www.zkoss.org/2005/zk/annotation" style="margin: 0 auto" title="bindingValidation Test"> 
+<window style="margin: 0 auto" title="bindingValidation Test"> 
  
 <zscript><![CDATA[ 
 public class User{  

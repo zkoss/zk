@@ -19,7 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk:window xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:zk="http://www.zkoss.org/2005/zul"
-xmlns:a="http://www.zkoss.org/2005/zk/annotation"
 xsi:schemaLocation="http://www.zkoss.org/2005/zul
 http://www.zkoss.org/2005/zul/zul.xsd "
 id="prova"

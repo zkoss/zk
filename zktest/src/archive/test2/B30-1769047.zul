@@ -8,7 +8,7 @@
 ]]></html>
 	<zscript src="B30-1769047-1.zs"/>
 
-	<window id="mainwin" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+	<window id="mainwin">
 	<hbox>
 		<listbox model="@{personList}" selectedItem="@{selected}" width="600px" rows="8">
 			<listhead>

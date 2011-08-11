@@ -24,7 +24,7 @@ validationForGrid called:WA - bean:User - property:state<br/>
 onBindingValidate() called<br/>
 onClick() called<br/>
 ]]></html> 
-<window xmlns:a="http://www.zkoss.org/2005/zk/annotation" style="margin: 0 auto" title="Binding#getBean Test"> 
+<window style="margin: 0 auto" title="Binding#getBean Test"> 
  
 <zscript><![CDATA[ 
 public class User{  

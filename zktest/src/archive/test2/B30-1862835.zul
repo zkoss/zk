@@ -21,7 +21,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 <window id="testwin" xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:a="http://www.zkoss.org/2005/zk/annotation"
 	xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:h5>Please click the cell "Second" twice or triple, the second grid will recalculate its width as it original has.</n:h5>
 	<zscript>
