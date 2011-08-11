@@ -300,9 +300,9 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 //		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
-		paging.applyProperties();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
+		paging.applyProperties();
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
 		if (_pgi != null)
