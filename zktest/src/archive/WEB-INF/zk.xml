@@ -80,6 +80,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.Button.mold</name>
 		<value>trendy</value>
 	</library-property>
+	
+	<!--  Turn on following if you want to disable the animation effects of
+		Borderlayout for all. Since 5.0.8
+	<library-property>
+		<name>org.zkoss.zul.Borderlayout.disabledAnimation</name>
+		<value>true</value>
+	</library-property>
+	-->
 
 	<!-- Turn on the following if you want to use the defer mode as the default,
 		which is compatible to 3.x

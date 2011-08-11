@@ -798,6 +798,7 @@
 			<xs:element ref="east" minOccurs="0" maxOccurs="1" />
 		</xs:all>
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="disabledAnimation" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- box -->
 	<xs:element name="box" type="boxType" />

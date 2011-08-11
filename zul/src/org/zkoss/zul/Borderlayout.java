@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
@@ -65,6 +66,10 @@ import org.zkoss.zk.ui.UiException;
  * 
  * <p>Default {@link #getZclass}: z-borderlayout. (since 3.5.0)
  * 
+ * <p> Configuration:
+ * you can disable the animation effects by specifying a library
+ * property named <code>org.zkoss.zul.Borderlayout.disabledAnimation</code> to
+ * disable all borderlayouts. (since 5.0.8) 
  * @author jumperchen
  * @since 5.0.0
  */
@@ -104,10 +109,38 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 	private transient East _east;
 
 	private transient Center _center;
+	
+	private boolean _disabledAnimation = isDefaultDisabledAnimation();
 
 	public Borderlayout() {
 	}
 
+	private static boolean isDefaultDisabledAnimation() {
+		if (_defAnimation == null)
+			_defAnimation = Boolean.valueOf(Library.getProperty("org.zkoss.zul.Borderlayout.disabledAnimation", "false"));
+		return _defAnimation.booleanValue();
+	}
+	private static Boolean _defAnimation;
+	
+	/**
+	 * Returns whether disable animation effects
+	 * <p>Default: false.
+	 * @since 5.0.8
+	 */
+	public boolean isDisabledAnimation() {
+		return _disabledAnimation;
+	}
+	
+	/**
+	 * Sets to disable animation effects.
+	 * @since 5.0.8
+	 */
+	public void setDisabledAnimation(boolean disabledAnimation) {
+		if (_disabledAnimation != disabledAnimation) {
+			_disabledAnimation = disabledAnimation;
+			smartUpdate("_disabledAnimation", disabledAnimation);
+		}
+	}
 	public North getNorth() {
 		return _north;
 	}
@@ -206,6 +239,12 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 		return true;
 	}
 	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "_disabledAnimation", _disabledAnimation);
+	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		if (_north == child) _north = null;
