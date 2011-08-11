@@ -1416,14 +1416,14 @@ public class Configuration {
 	 * <p>Default: 128.
 	 *
 	 * @param sz the file size threshold
-	 * A negative value indicates there is no limit.
+	 *  A negative value implies default setting.
 	 * @since 5.0.8
 	 */
 	public void setFileSizeThreshold(int sz) {
 		_fileSizeThreshold = sz;
 	}
 	/** Returns the threshold at which a temporary file is created as a 
-	 * buffer, in kilobytes, or a negative value if no limit.
+	 * buffer, in kilobytes, or a negative value which implies default setting.
 	 * @since 5.0.8
 	 */
 	public int getFileSizeThreshold() {
