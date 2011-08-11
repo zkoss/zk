@@ -45,7 +45,7 @@
 				click(jq("@button[label=\"update list model of grid on third tab panel\"] td.z-button-cm"));
 				waitResponse();
 				verifyFalse(jq(".z-error").exists());
-				clickAt(t3, "3,3");
+				clickAt(jq(t3).find(".z-tab-text"), "3,3");
 				waitResponse();
 				verifyEquals("Grid", getText(jq("@column div.z-column-cnt")));
 				verifyEquals("element", getText(jq("@label")));
