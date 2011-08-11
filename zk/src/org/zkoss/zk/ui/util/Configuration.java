@@ -1410,19 +1410,20 @@ public class Configuration {
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
-	/** Specifies the maximal allowed upload size, in kilobytes.
+	/** Specifies the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes.
 	 *
-	 * <p>Default: 5120.
+	 * <p>Default: 128.
 	 *
-	 * @param sz the maximal allowed upload size.
+	 * @param sz the file size threshold
 	 * A negative value indicates there is no limit.
 	 * @since 5.0.8
 	 */
 	public void setFileSizeThreshold(int sz) {
 		_fileSizeThreshold = sz;
 	}
-	/** Returns the maximal allowed upload size, in kilobytes, or 
-	 * a negative value if no limit.
+	/** Returns the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes, or a negative value if no limit.
 	 * @since 5.0.8
 	 */
 	public int getFileSizeThreshold() {
