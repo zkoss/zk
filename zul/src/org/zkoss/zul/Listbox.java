@@ -1359,6 +1359,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 //		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
+		paging.applyProperties();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
 		paging.setTotalSize(getDataLoader().getTotalSize());

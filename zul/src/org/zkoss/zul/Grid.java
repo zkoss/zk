@@ -498,6 +498,7 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 //		assert D.OFF || (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
+		paging.applyProperties();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
