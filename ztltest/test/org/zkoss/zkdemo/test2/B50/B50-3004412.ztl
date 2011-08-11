@@ -16,7 +16,7 @@
 		mouseOver(cbi);
 		mouseMoveAt(cbi, "5,1");
 		sleep(1000);
-		verifyTrue(isVisible(popup));
+		verifyTrue(jq(popup).isVisible());
 		String zindex = jq(cb.$n("pp")).css("z-index");
 		int ppZindex = zindex.equals("auto") ? 0 : Integer.parseInt(zindex);
 		zindex = jq(popup).css("z-index");
