@@ -46,7 +46,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<row forEach="16-02-1998,16-Mar-1998,16-09-1998,189,1890,18999,18">
 				<div/>
 				<label value="${each}"/>
-				<datebox id="db${forEachStatus.index}" format="dd-MMM-yyyy" width="100px"/>
+				<datebox id="db${forEachStatus.index}" format="dd-MMM-yyyy" width="100px" locale="en_US"/>
 			</row>
 		</rows>
 	</grid>

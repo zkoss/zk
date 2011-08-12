@@ -13,6 +13,7 @@
 		<client><![CDATA[
 			dragdropTo(sld.$n("btn"), "0,0", "50,0");
 			click(btn1);
+			waitResponse();
 			verifyEquals("75", jq(ib1).val());
 			verifyEquals("75", jq(ib2).val());
 		]]></client>

@@ -110,9 +110,8 @@ public class HeaderInfo { //directive
 			boolean srcFound = false;
 			for (AttrInfo attr: _attrs) {
 				final String nm = attr.name;
-				String val = (String)((ExValue)attr.value).getValue(eval, page);
 				if ("content".equals(nm)) {
-					content = val;
+					content = (String)((ExValue)attr.value).getValue(eval, page);
 				} else {
 					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
 				}

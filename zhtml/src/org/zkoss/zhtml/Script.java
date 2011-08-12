@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zhtml.impl.AbstractTag;
-import org.zkoss.zhtml.impl.PageRenderer;
-
 /**
  * The SCRIPT tag.
  * 
  * @author tomyeh
  */
-public class Script extends AbstractTag {
+public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	public Script() {
 		super("script");
+	}
+	public Script(String content) {
+		super("script", content);
 	}
 }

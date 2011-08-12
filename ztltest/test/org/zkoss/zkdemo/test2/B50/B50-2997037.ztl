@@ -42,24 +42,27 @@ longbox:<longbox id="longbx" width="300px"/>
 				waitResponse();
 				verifyEquals("9223372036854775807",jq(".z-longbox").val());
 				focus(longbx.$n());
-				keyPressNative(END);
-				keyPressNative(BACKSPACE);
-				keyPressNative("56");//8
-				keyPressNative(TAB);waitResponse();
+				sendKeys(longbx.$n(), Keys.END);
+				sendKeys(longbx.$n(), Keys.BACK_SPACE);
+				keyPress(longbx.$n(), "8");//8
+				blur(longbx.$n());
+				waitResponse();
 				verifyEquals("9223372036854775808",jq(".z-longbox").val());
 				verifyTrue(jq(".z-errbox").exists());
 				focus(longbx.$n());
-				keyPressNative(HOME);
-				keyPressNative("45");//-
-				keyPressNative(TAB);waitResponse();
+				sendKeys(longbx.$n(), Keys.HOME);
+				keyPress(longbx.$n(), "-");//-
+				blur(longbx.$n());
+				waitResponse();
 				verifyEquals("-9223372036854775808",jq(".z-longbox").val());
 				verifyFalse(jq(".z-errbox").exists());
 				focus(longbx.$n());
-				keyPressNative(END);
-				keyPressNative(BACKSPACE);
-				keyPressNative("57");//9
-				blur(longbx.$n());waitResponse();	
-				verifyEquals("-9223372036854775809",jq(".z-longbox").val());				
+				sendKeys(longbx.$n(), Keys.END);
+				sendKeys(longbx.$n(), Keys.BACK_SPACE);
+				keyPress(longbx.$n(), "9");//9
+				blur(longbx.$n());
+				waitResponse();
+				verifyEquals("-9223372036854775809",jq(".z-longbox").val());
 				verifyTrue(jq(".z-errbox").exists());
 		]]></client>
 	</case>

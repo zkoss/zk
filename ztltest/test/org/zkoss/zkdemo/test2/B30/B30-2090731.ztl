@@ -35,14 +35,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-				System.out.println(jq("@button:eq(0) img").attr("src"));
-				String ori = jq("@button:eq(0) img").attr("src");
-				click(jq("@button[label=\"change\"]"));
-				String aft = jq("@button:eq(0) img").attr("src");
-				verifyNotEquals(ori, aft);
-				click(jq("@button[label=\"reset\"]"));
-				String ori1 = jq("@button:eq(0) img").attr("src");
-				verifyEquals(ori, ori1);
+		String ori = jq("@button:eq(0) img").attr("src");
+		click(jq("@button[label=\"change\"]"));
+		waitResponse();
+		String aft = jq("@button:eq(0) img").attr("src");
+		verifyNotEquals(ori, aft);
+		click(jq("@button[label=\"reset\"]"));
+		waitResponse();
+		String ori1 = jq("@button:eq(0) img").attr("src");
+		verifyEquals(ori, ori1);
 		]]></client>
 	</case>
 </test>

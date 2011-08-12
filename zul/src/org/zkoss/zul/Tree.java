@@ -290,6 +290,8 @@ public class Tree extends MeshElement {
 						if (_paging != null) _paging.detach();
 						_pgi.setTotalSize(getItemCount());
 						addPagingListener(_pgi);
+						if (_pgi instanceof Component)
+							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
 					}
 				}
 			}
@@ -304,6 +306,7 @@ public class Tree extends MeshElement {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
+		paging.applyProperties();
 		paging.setTotalSize(getVisibleItemCount());
 		paging.setParent(this);
 		if (_pgi != null)
@@ -1872,6 +1875,8 @@ public class Tree extends MeshElement {
 			renderer.render("_cdo", true);
 		if (!isRightSelect())
 			renderer.render("rightSelect", false);
+		if (_pgi != null && _pgi instanceof Component)
+			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

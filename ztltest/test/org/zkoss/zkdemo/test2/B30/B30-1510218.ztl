@@ -39,33 +39,31 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			// Test Popup
-			click(popup);
-			waitResponse();
-			clickAt(inner1, "15,15");
-			verifyTrue(isVisible(inner1));
-			click(btn1);
-			waitResponse();
-			verifyEquals("btn1 OK", jq(".z-messagebox > span").text());
-
-			//here is clicking the alert
-			//modify for compatiable event-thread enable/disable
-			click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
-			verifyFalse(isVisible(inner1));
-
-			// Test Overlapped
-			click(overlapped);
-			waitResponse();
-			clickAt(inner2, "15,15");
-			verifyTrue(isVisible(inner2));
-			click(btn2);
-			waitResponse();
-			verifyEquals("btn2 OK", jq(".z-messagebox > span").text());
-
-			//here is clicking the alert
-			//modify for compatiable event-thread enable/disable
-			click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
-			verifyTrue(isVisible(inner2));
+				// Test Popup
+				click(popup);
+				waitResponse();
+				clickAt(inner1, "15,15");
+				verifyTrue(jq(inner1).isVisible());
+				click(btn1);
+				waitResponse();
+				verifyEquals("btn1 OK", jq(".z-messagebox > span").text());
+				//here is clicking the alert
+				//modify for compatiable event-thread enable/disable
+				click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
+				verifyFalse(isVisible(inner1));
+				waitResponse();
+				// Test Overlapped
+				click(overlapped);
+				waitResponse();
+				clickAt(inner2, "15,15");
+				verifyTrue(jq(inner2).isVisible());
+				click(btn2);
+				waitResponse();
+				verifyEquals("btn2 OK", jq(".z-messagebox > span").text());
+				//here is clicking the alert
+				//modify for compatiable event-thread enable/disable
+				click(jq("div.z-window-modal-close,div.z-window-highlighted-close"));
+				verifyTrue(jq(inner2).isVisible());
 		]]></client>
 	</case>
 </test>

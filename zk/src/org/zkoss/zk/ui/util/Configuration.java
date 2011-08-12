@@ -153,7 +153,9 @@ public class Configuration {
 	/** A map of attributes. */
 	private final Map<String, Object> _attrs = Collections.synchronizedMap(new HashMap<String, Object>());
 	/** whether to use the event processing thread. */
-	private boolean _useEvtThd; //disabled by default since ZK 5
+	private boolean _evtThdEnabled; //disabled by default since ZK 5
+	/** whether zscript is enabled. */
+	private boolean _zscriptEnabled = true;
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
 	/** Whether to keep the session alive when receiving onTimer.
@@ -1146,10 +1148,10 @@ public class Configuration {
 	public String[] getThemeURIs() {
 		return _themeURIs.toArray();
 	}
-	/** Enables or disables the default theme of the specified language.
+	/** Specifies what theme URI to be disabled.
 	 *
-	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
-	 * the final theme URIs generated depend on {@link ThemeProvider#getThemeURIs}.
+	 * <p>Note: if {@link ThemeProvider} is used ({@link #setThemeProvider}),
+	 * the URIs of the theme depend on {@link ThemeProvider#getThemeURIs}.
 	 *
 	 * @param uri the theme URI to disable
 	 * @since 3.0.0
@@ -1405,18 +1407,21 @@ public class Configuration {
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
-	/** Specifies the maximal allowed upload size, in kilobytes.
+	/** Specifies the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes.
 	 *
-	 * <p>Default: 5120.
+	 * <p>Default: 128.
 	 *
-	 * @param sz the maximal allowed upload size.
-	 * A negative value indicates there is no limit.
+	 * @param sz the file size threshold
+	 *  A negative value implies default setting.
+	 * @since 5.0.8
 	 */
 	public void setFileSizeThreshold(int sz) {
 		_fileSizeThreshold = sz;
 	}
-	/** Returns the maximal allowed upload size, in kilobytes, or 
-	 * a negative value if no limit.
+	/** Returns the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes, or a negative value which implies default setting.
+	 * @since 5.0.8
 	 */
 	public int getFileSizeThreshold() {
 		return _fileSizeThreshold;
@@ -1949,7 +1954,7 @@ public class Configuration {
 	}
 	/** Sets whether to use the event processing thread.
 	 *
-	 * <p>Default: disabled.
+	 * <p>Default: false (disabled).
 	 *
 	 * @exception IllegalStateException if there is suspended thread
 	 * and use is false.
@@ -1962,12 +1967,28 @@ public class Configuration {
 					throw new IllegalStateException("Unable to disable due to suspended threads");
 			}
 		}
-		_useEvtThd = enable;
+		_evtThdEnabled = enable;
 	}
 	/** Returns whether to use the event processing thread.
+	 * <p>Default: false (disabled).
 	 */
 	public boolean isEventThreadEnabled() {
-		return _useEvtThd;
+		return _evtThdEnabled;
+	}
+
+	/** Sets whether zscript is allowed.
+	 * <p>Default: true (enabled).
+	 * @since 5.1.0
+	 */
+	public void enableZScript(boolean enable) {
+		_zscriptEnabled = enable;
+	}
+	/** Returns whether zscript is allowed.
+	 * <p>Default: true (enabled).
+	 * @since 5.1.0
+	 */
+	public boolean isZScriptEnabled() {
+		return _zscriptEnabled;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

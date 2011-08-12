@@ -21,7 +21,7 @@ cb.appendChild (ci);
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
    				//Strange. throw exception in next statement. Then, how can we test if exist?
   				//verifyFalse(jq(".z-combobox-pp").exists());
   				click(jq("$cb i.z-combobox-btn"));				

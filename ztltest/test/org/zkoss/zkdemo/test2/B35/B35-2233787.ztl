@@ -18,11 +18,11 @@
 			</window>	
 		--></server>
 		<client><![CDATA[
-			click(r2.$n("real"));
-			keyPressNative("39");
-			keyUpNative("39");
-			verifyNotEquals("null",jq(fruit).text());
-			verifyNotEquals("",jq(fruit).text());
+				click(r2.$n("real"));
+				sendKeys(r2.$n("real"), Keys.ARROW_RIGHT);
+				waitResponse();
+				verifyNotEquals("null",jq(fruit).text());
+				verifyNotEquals("",jq(fruit).text());
 		]]></client>
 	</case>
 </test>

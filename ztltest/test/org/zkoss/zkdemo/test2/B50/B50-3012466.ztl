@@ -11,9 +11,11 @@ Please select 'a' or 'b', you should see the result as you selected.
 </zk>
 	 --></server>
 		<client><![CDATA[
-			select(jq("@select"), "label=b");
+			select(jq("@select"), "b");
+			waitResponse();
 			verifyEquals(getSelectedLabel(jq("@select")), "b"); 
-			select(jq("@select"), "label=a");
+			select(jq("@select"), "a");
+			waitResponse();
 			verifyEquals(getSelectedLabel(jq("@select")), "a");
 		]]></client>
 	</case>

@@ -5,7 +5,7 @@
 	 			<listitem id="li" label="label" value="value"/>	 		
 	 		</listbox>
 		]]></server>
-		<client wait="100"><![CDATA[		
+		<client><![CDATA[		
 			verifyEquals("value",jq(li).val());
 		]]></client>
 	</case>

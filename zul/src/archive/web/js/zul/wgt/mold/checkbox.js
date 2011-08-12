@@ -20,7 +20,7 @@ function (out) {
 	//Fix bug 3290873 ,for ie6/7 if label is empty , ignore the "for" attribute 
 	//on label to prevent the bug . We left the label here ,so it won't break 
 	//user's style customization if exist.
-	if(!(zk.ie7_ || zk.ie6_) || jq.trim(content))
+	if(!(zk.ie < 8)/*not the same as zk.ie >= 8*/ || jq.trim(content))
 		out.push('for="', uuid, '-real"');
 	
 	out.push(this.domTextStyleAttr_(), 

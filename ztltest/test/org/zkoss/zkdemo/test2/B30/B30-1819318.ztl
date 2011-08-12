@@ -117,7 +117,9 @@ for(int i = 0; i < 20; i++)
 </zk>
 		 --></server>
 		<client><![CDATA[
-sleep(1000);//for DataBinding
+			// ie9 driver doesn't work with doubleclick
+			if (!ZK.is("ie9")) {
+				sleep(1000);//for DataBinding
 				verifyFalse(jq("@listbox > @listitem").exists());
 				select(select, "Blah 2");
 				waitResponse();
@@ -133,16 +135,20 @@ sleep(1000);//for DataBinding
 				//for event thread compatible
 				verifyEquals("[Blah 2, Blah 4, Blah 9]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				click(parents);
 				waitResponse();
 				sleep(500);
 				verifyEquals("[Blah 2, Blah 4, Blah 9]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				click(jq("@listbox > @listitem:last-child"));
+				waitResponse();
 				click(selectionInModel);
 				waitResponse();
 				verifyEquals("[Blah 9]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				doubleClick(jq("@listbox > @listitem:last-child"));
 				waitResponse();
 				verifyEquals("Blah 4", widget(jq("@listbox > @listitem:last-child")).get("label"));
@@ -150,10 +156,12 @@ sleep(1000);//for DataBinding
 				waitResponse();
 				verifyEquals("[Blah 2, Blah 4]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				click(parentModel);
 				waitResponse();
 				verifyEquals("[Blah 2, Blah 4]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				doubleClick(jq("@listbox > @listitem:first-child"));
 				waitResponse();
 				verifyEquals("Blah 4", widget(jq("@listbox > @listitem")).get("label"));
@@ -161,14 +169,15 @@ sleep(1000);//for DataBinding
 				waitResponse();
 				verifyEquals("[Blah 4]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				click(parentModel);
 				waitResponse();
 				verifyEquals("[Blah 4]", getAlertMessage());
 				clickAlert();
+				waitResponse();
 				// including listhead
 				verifyEquals("2", parentsList.nChildren());
-				
-
+			}
 		]]></client>
 	</case>
 </test>

@@ -18,7 +18,7 @@
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 		             				click(jq("@combobox i.z-combobox-btn"));
 		            				waitResponse();
 		            				click(jq("@comboitem[label=\"Cool!\"] td.z-comboitem-text"));

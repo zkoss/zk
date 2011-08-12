@@ -16,9 +16,9 @@
 				focus(tb.$n());
 				waitResponse();
 				verifyTrue(jq(".z-textbox-focus").exists());
-				keyPressNative(HOME);waitResponse();
+				sendKeys(tb.$n(), Keys.END);
 				waitResponse();
-				keyPressNative(BACKSPACE);
+				sendKeys(tb.$n(), Keys.BACK_SPACE);
 				waitResponse();
 				verifyFalse(jq(".z-textbox").val().equals(before));
 		]]></client>

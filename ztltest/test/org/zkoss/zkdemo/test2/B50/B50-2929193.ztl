@@ -13,7 +13,7 @@
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 		        //not work as I think
  				click(jq("$db i.z-datebox-btn"));
 				waitResponse();

@@ -6,9 +6,10 @@
 			   <popup id="popup"/>
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
-			click(btn);
-			verifyTrue(popup.exists());
+		<client><![CDATA[
+				click(btn);
+				waitResponse();
+				verifyTrue(popup.exists());
 		]]></client>
 	</case>
 </test>

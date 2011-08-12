@@ -40,7 +40,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
        			focus(jq(".z-combobox-inp"));
 				shiftKeyDown();
 				keyPressNative("65");

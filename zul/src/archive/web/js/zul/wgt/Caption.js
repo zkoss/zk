@@ -23,11 +23,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//super//
 	domDependent_: true, //DOM content depends on parent
 	rerender: function () {
-		if (this.parent && this.parent.$instanceof(zul.wgt.Groupbox)
-				&& this.parent.isLegend())
-			this.parent.rerender();
-		else
-			this.$supers('rerender', arguments);
+		var p = this.parent;
+		if (p) {
+			p.clearCache(); // B50-ZK-244
+			if (p.$instanceof(zul.wgt.Groupbox) && p.isLegend()) {
+				p.rerender();
+				return;
+			}
+		}
+		this.$supers('rerender', arguments);
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -85,10 +89,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//shall ignore it when calculate width. @see widget#setMinFlexSize
 	getMarginSize_: function () {
 		var parent = this.parent;
-		if (zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend())
-			return 0;
-		else
-			return this.$supers('getMarginSize_', arguments);  
+		return zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend() ?
+			0: this.$supers('getMarginSize_', arguments);  
 	},
 	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
 		if (o == 'w')

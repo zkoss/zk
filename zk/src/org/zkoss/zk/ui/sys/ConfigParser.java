@@ -399,6 +399,7 @@ public class ConfigParser {
 			} else if ("system-config".equals(elnm)) {
 			//system-config
 			//  disable-event-thread
+			//	disable-zscript
 			//	max-spare-threads
 			//  max-suspended-threads
 			//	event-time-warning
@@ -568,6 +569,9 @@ public class ConfigParser {
 			if (!enable) log.info("The event processing thread is disabled");
 			config.enableEventThread(enable);
 		}
+		s = el.getElementValue("disable-zscript", true);
+		if (s != null)
+			config.enableZScript(!"true".equals(s));
 
 		Integer v = parseInteger(el, "max-spare-threads", false);
 		if (v != null) config.setMaxSpareThreads(v.intValue());

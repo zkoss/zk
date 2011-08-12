@@ -55,13 +55,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>8760</value>
 	</library-property>
 	-->
-	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified
-		here. It is designed for testing purpose.
-		Notice ${page will be replaced with page's UUID. If you don't want it,
-		remove it.
-	<desktop-config>
-		<id-to-uuid-prefix>_zid_${page}_</id-to-uuid-prefix>
-	</desktop-config>
+	<!-- Turn on if you want to disable the use of zscript
+	<system-config>
+		<disable-zscript>true</disable-zscript>
+	</system-config>
 	-->
 	<!-- Turn on if you want to use the same UUID sequence for the desktops
 		after reboot. It is mainly for testing purpose.
@@ -83,6 +80,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.Button.mold</name>
 		<value>trendy</value>
 	</library-property>
+	
+	<!--  Turn on following if you want to disable the animation effects of
+		Borderlayout for all. Since 5.0.8
+	<library-property>
+		<name>org.zkoss.zul.borderlayout.animation.disabed</name>
+		<value>true</value>
+	</library-property>
+	-->
 
 	<!-- Turn on the following if you want to use the defer mode as the default,
 		which is compatible to 3.x

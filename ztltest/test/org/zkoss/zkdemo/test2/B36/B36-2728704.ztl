@@ -59,7 +59,7 @@
 		--></server>
 		<client><![CDATA[
 		sleep(1000);//for DataBinding
-			click(jq("@button button"));
+			click(jq("@button"));
 			waitResponse();
 			verifyFalse(jq("div.z-window-modal").exists());
 		]]></client>

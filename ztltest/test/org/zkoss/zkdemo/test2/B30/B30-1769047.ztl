@@ -135,11 +135,13 @@
 		sleep(1000);//for DataBinding
 			JQuery listitem = jq("@listbox > @listitem:first-child");
 			click(listitem);
+			waitResponse();
 			JQuery fn = listitem.find("> @listcell:nth-child(1) @textbox");
 			JQuery ln = listitem.find("> @listcell:nth-child(2) @textbox");
 			JQuery pa = listitem.find("> @listcell:nth-child(3) @textbox");
 			JQuery full = listitem.find("> @listcell:nth-child(4) @label");
 			JQuery email = listitem.find("> @listcell:nth-child(5) @select");
+			waitResponse();
 			verifyEquals(jq(firstName).val(), fn.val());
 			verifyEquals(jq(firstName2).val(), fn.val());
 			verifyEquals(jq(lastName).val(), ln.val());

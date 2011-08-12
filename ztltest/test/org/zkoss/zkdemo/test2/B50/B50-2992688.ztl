@@ -5,7 +5,7 @@
 			    <combobox id="cb" disabled="true"/> 
 			</zk>
 		]]></server>
-		<client wait="1"><![CDATA[			
+		<client><![CDATA[			
 			verifyTrue(jq(cb.$n("real")).hasClass("z-combobox-text-disd"));
 		]]></client>
 	</case>

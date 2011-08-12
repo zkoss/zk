@@ -13,7 +13,7 @@
 				</window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
    				click(cb.$n("btn"));            				
 				verifyFalse(jq(".z-combobox-pp").exists());
 			]]></client>

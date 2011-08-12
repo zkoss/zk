@@ -14,7 +14,7 @@
 		--></server>
 		<client><![CDATA[
 				focus(cb1.$n("real"));waitResponse();
-				keyDown(cb1.$n("real"),"38");waitResponse();
+				sendKeys(cb1.$n("real"),Keys.DOWN);waitResponse();
 				verifyEquals("Cool!",jq(".z-combobox-inp").val());
 		]]></client>
 	</case>

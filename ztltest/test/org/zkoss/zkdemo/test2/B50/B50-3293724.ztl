@@ -80,16 +80,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				click(jq("@button[label=\"Hide 1\"]"));
+				waitResponse();
 				verifyEquals(1,jq(".z-treerow:visible").length());
 				verifyContains(jq(".z-treerow:visible").text(),"item5");
 				click(jq("@button[label=\"Show 1\"]"));
+				waitResponse();
 				verifyEquals(5,jq(".z-treerow:visible").length());
 				click(jq("@button[label=\"Hide 2\"]"));
+				waitResponse();
 				verifyEquals(3,jq(".z-treerow:visible").length());
 				verifyContains(jq(".z-treerow:visible").text(),"item5");
 				verifyContains(jq(".z-treerow:visible").text(),"item4");
 				verifyContains(jq(".z-treerow:visible").text(),"item1");
 				click(jq("@button[label=\"Show 2\"]"));
+				waitResponse();
 				verifyEquals(5,jq(".z-treerow:visible").length());
 		]]></client>
 	</case>

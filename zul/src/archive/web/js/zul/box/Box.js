@@ -28,7 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			spacing = box._spacing,
 			spacing0 = _spacing0(spacing),
 			vert = box.isVertical(),
-			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
+			spstyle = spacing && spacing != 'auto' ? (vert?'height:':'width:') + spacing: '';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
 			'-chdex2" class="', box.getZclass(), '-sep"');
@@ -151,10 +151,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		 * <p>Default: start</p>
 		 * @return String
 		 */
-		align: 
-		    _zkf = function () {
-		    	this.rerender(); //TODO: a better algoithm
-		    },
+		align:  _zkf = function () {
+			this.rerender(); //TODO: a better algoithm
+		},
 		/** Sets the alignment of cells of this box
 	 	 * (start, center, end) plus an <i>stretch</i> option.
 	 	 *

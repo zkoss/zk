@@ -16,50 +16,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-
-
 /**
  * A horizontal layout
  *<p>Default {@link #getZclass}: z-hlayout.
  * @author jumperchen
  * @since 5.0.4
  */
-public class Hlayout extends HtmlBasedComponent {
-
-	private String _spacing = "0.3em";
-	
-	/** Returns the spacing between adjacent children, or null if the default
-	 * spacing is used.
-	 * <p>Default: 0.3em (means to use the default spacing).
-	 */
-	public String getSpacing() {
-		return _spacing;
-	}
-	/** Sets the spacing between adjacent children.
-	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-	 * or null to use the default spacing. If the spacing is set to "auto", 
-	 * the DOM style is left intact, so the spacing can be customized from CSS.
-	 * @see #getSpacing
-	 */
-	public void setSpacing(String spacing) {
-		if (spacing == null || spacing.length() == 0) spacing = "0.3em";
-		if (!Objects.equals(_spacing, spacing)) {
-			_spacing = spacing;
-			smartUpdate("spacing", _spacing);
-		}
-	}
+public class Hlayout extends Layout {
 	public String getZclass() {
 		return _zclass == null ? "z-hlayout" : _zclass;
-	}
-	
-	//-- super --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
-		super.renderProperties(renderer);
-		
-		if (!"0.3em".equals(_spacing))
-			render(renderer, "spacing", _spacing);
 	}
 }

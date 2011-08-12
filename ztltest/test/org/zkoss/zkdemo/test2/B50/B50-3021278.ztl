@@ -43,7 +43,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				clickAt(c1.$n("btn"),"6,6");
+				waitResponse();
 				clickAt(jq(".z-column-btn:eq(1)"), "6,6");
+				waitResponse();
 				boolean color = ColorVerifingHelper.getInstance().isEqualColor("white",jq("@row:eq(1)").css("backgroundColor"));
 				verifyNotEquals(jq("@row:eq(0)").css("backgroundColor"),jq("@row:eq(1)").css("backgroundColor"));
 				verifyFalse(color);

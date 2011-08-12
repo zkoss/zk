@@ -117,8 +117,9 @@ public class Box extends XulElement {
 		return _spacing;
 	}
 	/** Sets the spacing between adjacent children.
-	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-	 * or null to use the default spacing
+	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em").
+	 * If null, empty ("") or "auto", the default spacing is used (i.e.,
+	 * controlled by CSS alone)
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {

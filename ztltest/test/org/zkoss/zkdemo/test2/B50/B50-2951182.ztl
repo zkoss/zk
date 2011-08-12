@@ -17,7 +17,7 @@ If you can see the words, the bug is fixed.
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			sleep(500);
 			verifyFalse(jq(".z-error").exists());
 			verifyTrue(isVisible(jq("$testWindow")));			

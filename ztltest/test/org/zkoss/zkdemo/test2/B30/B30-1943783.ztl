@@ -31,12 +31,14 @@ Press 'ESC' key and you will see a messagebox is shown.
 
 		--></server>
 		<client><![CDATA[
-				keyPressNative(ENTER);waitResponse();
-				verifyEquals("OK:Wed Jun 08 00:00:00 CST 2011",getAlertMessage());
+				sendKeys(jq("@timebox input"), Keys.ENTER);
+				waitResponse();
+				verifyNotEquals("OK:null",getAlertMessage());
 				clickAlert();
 				waitResponse();
-				keyPressNative(ESC);waitResponse();
-				verifyEquals("ESC:Wed Jun 08 00:00:00 CST 2011",getAlertMessage());
+				sendKeys(jq("@timebox input"), Keys.ESCAPE);
+				waitResponse();
+				verifyNotEquals("ESC:null",getAlertMessage());
 		]]></client>
 	</case>
 </test>

@@ -16,11 +16,11 @@
 			-->
 		</server>
 		<client><![CDATA[	
-				verifyNotEquals("",jq(".datebox-inp").val());
-				String x = jq(".datebox-inp").val();
+				verifyNotEquals("",jq(".z-datebox-inp").val());
+				String x = jq(".z-datebox-inp").val();
 				click(btn1);
 				waitResponse();
-				verifyEquals("null",jq(".datebox-inp").val());
+				verifyEquals("",jq(".z-datebox-inp").val());
 				click(btn2);
 				waitResponse();
 				verifyEquals("null",jq(".z-window-highlighted-cl .z-messagebox .z-label").text());
@@ -28,7 +28,7 @@
 				waitResponse();
 				click(btn3);
 				waitResponse();
-				verifyEquals(x,jq(".datebox-inp").val());	
+				verifyEquals(x,jq(".z-datebox-inp").val());	
 		]]></client>
 	</case>
 </test>

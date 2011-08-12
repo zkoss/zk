@@ -125,11 +125,11 @@
 			
 			click(widthNull);
 			waitResponse();
-			verifyEquals("null", grid.get("width"));
+			verifyEquals("", grid.get("width"));
 			verifyNotEquals("", $head.get("style.width"));
 
 			// Test setting height
-			verifyEquals("null", grid.get("height"));
+			verifyEquals("", grid.get("height"));
 			String height = $body.get("style.height");
 			
 			click(height200);
@@ -150,7 +150,7 @@
 			
 			click(heightNull);
 			waitResponse();
-			verifyEquals("null", grid.get("height"));
+			verifyEquals("", grid.get("height"));
 			verifyEquals(height, $body.get("style.height"));
 		]]></client>
 	</case>
@@ -190,7 +190,7 @@
 			verifyEquals("200px", $col1.get("style.width"));
 
 			// col12 
-			verifyEquals("null", col2.get("width"));
+			verifyEquals("", col2.get("width"));
 			
 			click(width20b);
 			waitResponse();
@@ -204,7 +204,7 @@
 			
 
 			// col3 
-			verifyEquals("null", col3.get("width"));
+			verifyEquals("", col3.get("width"));
 			click(width20c);
 			waitResponse();
 			verifyEquals("20px", col3.get("width"));

@@ -9,5 +9,5 @@
 		import java.util.Date;
 		Date d = new Date();
 	]]></zscript>
-	<datebox value="${d}" />
+	<datebox value="${d}" locale="en_US"/>
 </zk>

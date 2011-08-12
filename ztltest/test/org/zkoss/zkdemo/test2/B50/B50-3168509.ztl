@@ -33,6 +33,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				click(jq(".z-calendar-seld").next());
 				waitResponse();
 				verifyEquals("01/01/2001",jq(".z-datebox-inp").val());
+				click(db.$n("btn"));
+				waitResponse();
 				click(jq(".z-calendar-seld").next());
 				waitResponse();
 				verifyEquals("01/02/2001",jq(".z-datebox-inp").val());

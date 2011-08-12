@@ -20,8 +20,10 @@
 		--></server>
 		<client><![CDATA[
 				clickAt(jq(".z-listcell-cnt"),"0,0");
+				waitResponse();
 				verifyTrue(isVisible(popup));
 				clickAt(lh.$n("cave"),"0,0");
+				waitResponse();
 				verifyFalse(isVisible(popup));
 		]]></client>
 	</case>

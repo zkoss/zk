@@ -33,7 +33,7 @@
 
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
     			verifyEquals("99.00%", jq(percent).val());				
    				verifyEquals("(200,000)", jq(value).val());				

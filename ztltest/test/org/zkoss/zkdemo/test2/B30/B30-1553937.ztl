@@ -17,7 +17,7 @@
 			</hbox>
 		</zk>
 		--></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			int w = Integer.valueOf(list.$n().parentNode().get("offsetWidth"));
 			verifyEquals(202, w);
 		]]></client>

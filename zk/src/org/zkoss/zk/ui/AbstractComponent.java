@@ -2393,11 +2393,11 @@ w:use="foo.MyWindow"&gt;
 			}
 		}
 	}
-	public void addAnnotation(String annotName, Map<String,String> annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(annotName, annotAttrs);
 	}
-	public void addAnnotation(String propName, String annotName, Map<String,String> annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs);
 	}

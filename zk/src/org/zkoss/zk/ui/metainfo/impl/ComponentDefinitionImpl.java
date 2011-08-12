@@ -175,7 +175,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
@@ -188,7 +188,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);

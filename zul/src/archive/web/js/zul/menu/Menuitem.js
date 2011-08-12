@@ -286,12 +286,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
 						if (!p.isOpen() || this._uplder /*Bug #2911385 && !this._popup*/)
 							break;
-						this._updateImageNode(); // remove hover image
+						this._updateHoverImage(); // remove hover image
 						p.close({sendOnOpen:true});
 					} else if (!p.$instanceof(zul.menu.Menu)) //either menubar or non-menu*
 						break;
 					else
-						p._updateImageNode(); // remove parent Menu hover image
+						p._updateHoverImage(); // remove parent Menu hover image
 
 			var menubar;
 			if (zk.safari && (menubar=this.getMenubar()) && menubar._autodrop)
@@ -353,12 +353,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n) 
-				this._eimg = this.$n('b') ? jq(this.$n('b')) : jq(this.$n('a').firstChild);
+				this._eimg = this.$n('b') || this.$n('a').firstChild;
 		}
 		return this._eimg;
-	},
-	changeImageNodeSrc_: function (n, img) {
-		n.css('background-image', 'url('+img+')');
 	}
 }, {
 	_isActive: function (wgt) {

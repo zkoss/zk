@@ -19,6 +19,7 @@
 			</window>
 		--></server>
 		<client><![CDATA[
+		if (!ZK.is("ie9")) {
 			verifyEquals(jq("$sl div.z-slider-hor-btn").attr("title"), "50");
 			mouseDownAt(jq("$sl div.z-slider-hor-btn"), "8,6");
 			mouseMoveAt(jq("$sl div.z-slider-hor-btn"), "47,8");
@@ -27,6 +28,7 @@
 			click(jq("@button td.z-button-cm"));
 			waitResponse();
 			verifyEquals(jq("$sl div.z-slider-hor-btn").attr("title"), "10");
+		}
 		]]></client>
 	</case>
 </test>

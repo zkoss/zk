@@ -199,6 +199,7 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
+	_fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)

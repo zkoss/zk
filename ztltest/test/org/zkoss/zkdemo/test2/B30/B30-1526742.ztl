@@ -13,7 +13,7 @@
 				and Hilfe LogOut
 			</window>
 		--></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			int totalWidth = jq("td.z-caption-r").outerWidth();
 			int spaceWidth = jq(space).outerWidth();
 			int spaceOuterWidth = jq(space).outerWidth(true);

@@ -122,10 +122,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		}
 	},
 	_fixOnAdd: function (child, ignoreDom, _noSync) {
-		var isRows;
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
-			isRows = true;
 			this.fixForEmpty_();
 		} else if (child.$instanceof(zul.grid.Columns)) 
 			this.columns = child;
@@ -138,8 +136,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (!ignoreDom)
 			this.rerender();
-						
-		if (!_noSync)//bug#3301498 
+		if (!_noSync)//bug#3301498: we have to sync even if child is rows
 			this._syncSize();  //sync-size required
 	},
 	onChildRemoved_: function (child) {

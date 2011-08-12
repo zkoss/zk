@@ -64,6 +64,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				verifyFalse(jq(".z-menubar-hor-right-scroll").exists());
 				verifyFalse(jq(".z-menubar-hor-left-scroll").exists());
 				click(cb.$n("real"));
+				waitResponse();
 				verifyTrue(jq(".z-menubar-hor-right-scroll").exists());
 				verifyTrue(jq(".z-menubar-hor-left-scroll").exists());
 		]]></client>

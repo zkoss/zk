@@ -12,23 +12,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
-	
-	function _fireOnSize(wgt) {
-		if (wgt._shallSize) {
-			wgt._shallSize = false;
-			if (wgt.desktop)
-				zWatch.fire('onSize', wgt);
-		}
-	}
-	function _syncSize(wgt) {
-		if (wgt.desktop) {
-			wgt._shallSize = true;
-			if (!wgt.inServer)
-				_fireOnSize(wgt);
-		}
-	}
-	
 /**
  * A skeleton of Vlayout and Hlayout.
  * @since 5.0.4
@@ -49,15 +32,13 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 	 * <p>Default: 0.3em (means to use the default spacing).
 	 	 * @return String
 	 	 */
-		spacing: [function (v) {
-			return v ? v : '0.3em';
-		}, function () {
+		spacing: function () {
 			var n = this.$n(),
 				vert = this.isVertical_(),
 				spc = this._spacing;
 			if (n)
 				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
-		}]
+		}
 	},
 	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();
@@ -81,16 +62,31 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.box.Layout, 'unbind_', arguments);
 	},
+	/** Synchronizes the size immediately.
+	 * This method is called automatically if the widget is created
+	 * at the server (i.e., {@link #inServer} is true).
+	 * You have to invoke this method only if you create this widget
+	 * at client and add or remove children from this widget.
+	 * @since 5.0.8
+	 */
+	syncSize: function () {
+		this._shallSize = false;
+		if (this.desktop) {
+			zWatch.fire('onFitSize', this, {reverse:true});
+			zWatch.fire('onSize', this);
+		}
+	},
 	onResponse: function () {
-		_fireOnSize(this);
+		if (this._shallSize)
+			this.syncSize();
 	},
 	onChildAdded_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		_syncSize(this);
+		this._shallSize = true;
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
-		_syncSize(this);
+		this._shallSize = true;
 	},
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
@@ -146,8 +142,13 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			offhgh = p.offsetHeight,
 			offwdh = p.offsetWidth,
 			curhgh = this._vflexsz !== undefined ? this._vflexsz - zkp.sumStyles("tb", jq.margins) : offhgh,
-			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh,
-			hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
+			curwdh = this._hflexsz !== undefined ? this._hflexsz - zkp.sumStyles("lr", jq.margins) : offwdh;
+		// B50-ZK-286: subtract scroll bar width
+		if (zkp.hasHScroll())
+			offhgh -= jq.scrollbarWidth();
+		if (zkp.hasVScroll())
+			offwdh -= jq.scrollbarWidth();
+		var hgh = zkp.revisedHeight(curhgh < offhgh ? curhgh : offhgh),
 			wdh = zkp.revisedWidth(curwdh < offwdh ? curwdh : offwdh);
 		return zkp ? {height: hgh, width: wdh} : {};
 	},
@@ -348,9 +349,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				if (wd > max)
     					max = wd;
     			}
-    			n.style.width = jq.px0(max);				
+    			n.style.width = jq.px0(max);
 			}
 		}
 	}
 });
-})();

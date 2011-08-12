@@ -36,16 +36,16 @@
 				 * @version zk505
 				*/
 				JQuery $nickname = jq("$nickname");
-				type($nickname, "123");
-				focus($nickname);
-				keyPressNative(ENTER);
+				type(nickname, "123");
+				focus(nickname);
+				sendKeys(nickname, Keys.ENTER);
 				waitResponse();
 				JQuery $msg = jq("$msg");
 				verifyTrue($msg.isVisible());
 				type($msg, "ryan is boring");
 				waitResponse();
 				focus($msg);
-				keyPressNative(ENTER);
+				sendKeys($msg, Keys.ENTER);
 				waitResponse();
 				verifyEquals("ryan is boring", ms.get("value"));
 

@@ -207,16 +207,24 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.tab.Tabbox, 'unbind_', arguments);
 	},
-	onResponse: function () {
-		if (this._shallSize) {
+	/** Synchronizes the size immediately.
+	 * This method is called automatically if the widget is created
+	 * at the server (i.e., {@link #inServer} is true).
+	 * You have to invoke this method only if you create this widget
+	 * at client and add or remove children from this widget.
+	 * @since 5.0.8
+	 */
+	syncSize: function () {
+		this._shallSize = false;
+		if (this.desktop)
 			zUtl.fireSized(this, true);
-			this._shallSize = false;
-		}
+	},
+	onResponse: function () {
+		if (this._shallSize)
+			this.syncSize();
 	},
 	_syncSize: function () {
 		this._shallSize = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	//super//
 	removeChildHTML_: function (child) {

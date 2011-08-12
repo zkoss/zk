@@ -38,23 +38,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-			click(jq(".z-tab-accordion-hm").eq(0));
-			waitResponse();
-			//I leave some time let animate works , 
-			//make sure it works. 				
-			
-			JQuery $cave = jq(".z-tabpanel-accordion-cnt:eq(0) > div");
-			$cave.scrollTop(50);
-			verifyEquals(0,$cave.scrollTop());
-			
-			click(jq(".z-tab-accordion-hm").eq(1));
-			waitResponse();
-			//I leave some time let animate works , 
-			//make sure it works. 
-			
-			$cave = jq(".z-tabpanel-accordion-cnt:eq(1) > div");
-			$cave.scrollTop(50);
-			verifyNotEquals(50,$cave.scrollTop());		
+				click(jq(".z-tab-accordion-hm").eq(0));
+				waitResponse(true);
+				//I leave some time let animate works ,
+				//make sure it works.
+				JQuery $cave = jq(".z-tabpanel-accordion-cnt:eq(0)");
+				verifyTrue($cave.outerHeight() >= $cave.scrollHeight());
+				click(jq(".z-tab-accordion-hm").eq(1));
+				waitResponse(true);
+				//I leave some time let animate works ,
+				//make sure it works.
+				$cave = jq(".z-tabpanel-accordion-cnt:eq(1)");
+				verifyTrue($cave.outerHeight() < $cave.scrollHeight());	
 		]]></client>
 	</case>
 </test>

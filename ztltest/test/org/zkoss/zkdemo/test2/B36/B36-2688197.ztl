@@ -44,10 +44,10 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-				JQuery setWidth = jq("@button[label=\"set width\"] button");
-				JQuery noWidth = jq("@button[label=\"no width\"] button");
-				JQuery setHeight = jq("@button[label=\"set height\"] button");
-				JQuery noHeight = jq("@button[label=\"no height\"] button");
+				JQuery setWidth = jq("@button[label=\"set width\"]");
+				JQuery noWidth = jq("@button[label=\"no width\"]");
+				JQuery setHeight = jq("@button[label=\"set height\"]");
+				JQuery noHeight = jq("@button[label=\"no height\"]");
 				JQuery label = jq("@label");
 
 				click(setWidth);

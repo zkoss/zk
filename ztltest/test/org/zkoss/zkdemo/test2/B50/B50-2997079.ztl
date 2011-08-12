@@ -16,7 +16,7 @@
 			-->
 		</server>
 
-		<client wait="100">	<![CDATA[				
+		<client>	<![CDATA[				
 			click(jq("@button[label=\"test1\"]"));
 			waitResponse();
 			click(jq("@button[label=\"test2\"]"));

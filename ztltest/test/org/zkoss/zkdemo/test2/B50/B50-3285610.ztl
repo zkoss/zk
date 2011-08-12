@@ -29,9 +29,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				focus(jq(test1));
-				keyPressNative(TAB);
+				sendKeys(test1, Keys.TAB);
 				verifyTrue(jq(".z-textbox-focus").length() == 1);
-				System.out.println(jq("input.z-textbox:eq(0)").css("border-width"));
 				if("1px" == jq("input.z-textbox:eq(0)").css("border-width") || "1" == jq("input.z-textbox:eq(0)").css("border-width"))
 				verifyTrue(false);
 				else

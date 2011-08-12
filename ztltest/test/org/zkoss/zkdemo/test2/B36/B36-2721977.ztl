@@ -29,7 +29,7 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			JQuery btn = jq("@button button");
+			JQuery btn = jq("@button");
 			click(btn);
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());

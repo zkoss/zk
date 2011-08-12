@@ -31,7 +31,7 @@
 </window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 
      				click(jq("@button[label=\"add/remove listener\"]"));
     				waitResponse();

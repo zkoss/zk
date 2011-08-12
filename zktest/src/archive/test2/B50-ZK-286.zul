@@ -1,0 +1,17 @@
+<!--
+B50-ZK-286.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 9 14:53:12 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout height="700px" width="500px" style="overflow:auto;">
+		<div hflex="1" forEach="1,2,3,4,5" height="300px" style="border:1px solid black;" />
+	</vlayout>
+</zk>

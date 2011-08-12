@@ -38,7 +38,7 @@ and tab2 will be selected
 </zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
      				click(jq("@button[label=\"close 1 and select 5\"]"));
     				waitResponse();				
     				verifyTrue(jq("$tab5").hasClass("z-tab-seld"));				

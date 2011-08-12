@@ -755,9 +755,10 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 *
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
+	 * The attribute must be in a pair of strings (String name, String value),
+	 * or (String name, String[] value).
 	 */
-	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(annotName, annotAttrs);
@@ -768,9 +769,10 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * @param propName the property name (never nul, nor empty).
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
+	 * The attribute must be in a pair of strings (String name, String value),
+	 * or (String name, String[] value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs);

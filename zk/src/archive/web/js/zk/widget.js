@@ -272,12 +272,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
 			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			if (wgt._hflex == 'min' || wgt._vflex == 'min')
+				wgt.listenOnFitSize_();
+			else
+				wgt.unlistenOnFitSize_();
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
 			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
 	}
@@ -1594,7 +1599,7 @@ wgt.$f().main.setTitle("foo");
 		var dom = opts && opts.dom,
 			wgt = this;
 		while (wgt) {
-			if (dom) {
+			if (dom && !wgt.$instanceof(zk.Native)) { // B50-ZK-258: $n() will be null for natives
 				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return false;
 			} else if (!wgt._visible)
@@ -3904,6 +3909,30 @@ _doFooSelect: function (evt) {
 		}
 		return this;
 	},
+	/**
+	 * Listens to onFitSize event. Override if a subclass wants to skip listening
+	 * or have extra processing. 
+	 * @see #unlistenOnFitSize_
+	 * @since 5.0.8
+	 */
+	listenOnFitSize_: function () {
+		if (!this._fitSizeListened && (this._hflex == 'min' || this._vflex == 'min')){
+			zWatch.listen({onFitSize: [this, zFlex.fixMinFlexX]});
+			this._fitSizeListened = true;
+		}
+	},
+	/**
+	 * Unlistens to onFitSize event. Override if a subclass wants to skip listening
+	 * or have extra processing. 
+	 * @see #listenOnFitSize_
+	 * @since 5.0.8
+	 */
+	unlistenOnFitSize_: function () {
+		if (this._fitSizeListened) {
+			zWatch.unlisten({onFitSize: [this, zFlex.fixMinFlexX]});
+			delete this._fitSizeListened;
+		}
+	},
 	/** Converts a coordinate related to the browser window into the coordinate
 	 * related to this widget.
 	 * @param int x the X coordinate related to the browser window
@@ -3916,13 +3945,13 @@ _doFooSelect: function (evt) {
 		var ofs = zk(this).revisedOffset();
 		return [x - ofs[0], y - ofs[1]];
 	},
-	/* Returns if the given watch shall be fired for this widget.
+	/** Returns if the given watch shall be fired for this widget.
 	 * It is called by {@link zWatch} to check if the given watch shall be fired
 	 * @param String name the name of the watch, such as onShow
 	 * @param zk.Widget p the parent widget causing the watch event.
 	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
 	 * @return boolean
-	 * @5.0.3
+	 * @since 5.0.3
 	 */
 	isWatchable_: function (name, p) {
 		var strict = name != 'onShow';
@@ -4067,15 +4096,51 @@ _doFooSelect: function (evt) {
 		var els = [];
 		for (var wid in _binds) {
 			if (name == '*' || name == _binds[wid].widgetName) {
-				var n = _binds[wid].$n();
+				var n = _binds[wid].$n(), w;
 				//Bug B50-3310406 need to check if widget is removed or not.
-				if (n && zk.Widget.$(_binds[wid])) els.push(n);
+				if (n && (w = zk.Widget.$(_binds[wid]))) {
+					els.push({
+						n: n,
+						w: w
+					});
+				}
 			}
 		}
-		if (els.length)
-			els.sort(function (a, b) {
-				return zk.Widget.$(a).$oid - zk.Widget.$(b).$oid;
+		if (els.length) {
+			// fixed the order of the component that have been changed dynamically.
+			// (Bug in B30-1892446.ztl, B50-3095549.ztl, and B50-3131173.ztl)
+			els.sort(function(a, b) {
+				var w1 = a.w,
+					w2 = b.w;
+				// We have to compare each ancestor to make the result as CSS selector.
+				// The performance is bad but it is only used for testing purpose.
+				if (w1.bindLevel < w2.bindLevel) {
+					do {
+						w2 = w2.parent;
+					} while (w1 && w1.bindLevel < w2.bindLevel);
+				} else if (w1.bindLevel > w2.bindLevel) {
+					do {
+						w1 = w1.parent;
+					} while (w2 && w1.bindLevel > w2.bindLevel);
+				}
+				var wp1 = w1.parent,
+					wp2 = w2.parent;
+				while (wp1 && wp2 && wp1 != wp2) {
+					w1 = wp1;
+					w2 = wp2;
+					wp1 = wp1.parent;
+					wp2 = wp2.parent;
+				}
+				if (w1 && w2) {
+					return w1.getChildIndex() - w2.getChildIndex();
+				}	
+				return 0;
 			});
+			var tmp = [];
+			for (var i = els.length; i--;)
+				tmp.unshift(els[i].n);
+			els = tmp;
+		}
 		return els;
 	},
 	/**
@@ -4516,6 +4581,10 @@ zk.Native = zk.$extends(zk.Widget, {
 	 */
 	widgetName: "native",
 	//rawId: true, (Bug 3358505: it cannot be rawId)
+
+	$n: function (subId) {
+		return !subId && (subId = this.id) ? jq('#' + subId): null;
+	},
 
 	redraw: function (out) {
 		var s = this.prolog;

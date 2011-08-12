@@ -466,6 +466,8 @@ public class Grid extends MeshElement {
 						if (_paging != null) _paging.detach();
 						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 						addPagingListener(_pgi);
+						if (_pgi instanceof Component)
+							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
 					}
 				}
 			}
@@ -480,6 +482,7 @@ public class Grid extends MeshElement {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
+		paging.applyProperties();
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 		paging.setParent(this);
 		if (_pgi != null)
@@ -502,7 +505,7 @@ public class Grid extends MeshElement {
 			_pgImpListener = new SerializableEventListener() {
 	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
-		//theorectically, _rows shall not be null if _model is not null when
+		//theoretically, _rows shall not be null if _model is not null when
 		//this method is called. But, just in case -- if sent manually
 			final Paginal pgi = getPaginal();
 			int pgsz = pgi.getPageSize();
@@ -1387,6 +1390,10 @@ public class Grid extends MeshElement {
 			if (sz != INIT_LIMIT)
 				renderer.render("initRodSize", initRodSize());
 		}
+		
+		if (_pgi != null && _pgi instanceof Component)
+			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+
 	}
 	/*package*/ boolean isRod() {
 		return _rod;

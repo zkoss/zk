@@ -8,7 +8,7 @@
 			
 					<columns>
 			
-						<column width="25px" />
+						<column width="38px" />
 			
 						<column label="Product Name" />
 			
@@ -127,6 +127,7 @@
 		 --></server>
 		<client><![CDATA[
             click(detail.$n("img"));
+            waitResponse();
 			verifyEquals(2, parseInt(jq(detail.$n("fake")).find(" > td:first").attr("colspan")));			
 		]]></client>
 	</case>

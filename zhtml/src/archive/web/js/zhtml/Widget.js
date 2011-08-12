@@ -12,8 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zhtml.Widget = zk.$extends(zk.Native, {
+zhtml.Widget = zk.$extends(zk.Widget, {
 	rawId: true,
+	/** The class name (<code>zhtml.Widget</code>)
+	 * @type String
+	 */
+	className: "zhtml.Widget",
+	/** The widget name (<code>zhtml</code>).
+	 * @type String
+	 */
+	widgetName: "zhtml",
 
 	setDynamicProperty: function (prop) {
 		var n = this.$n();
@@ -94,5 +102,6 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	unbind_: function () {
 		this.domUnlisten_(this.$n(), 'onChange');
 		this.$supers(zhtml.Widget, 'unbind_', arguments);
-	}
+	},
+	redraw: zk.Native.prototype.redraw
 });

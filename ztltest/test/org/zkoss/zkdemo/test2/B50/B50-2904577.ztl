@@ -50,7 +50,7 @@
 			</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
     			int before = jq("tr.z-treerow").length();
    				click(jq("@treecell div.z-overflow-hidden"));

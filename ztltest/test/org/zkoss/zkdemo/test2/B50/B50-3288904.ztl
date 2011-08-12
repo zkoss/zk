@@ -26,16 +26,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		import java.util.Date;
 		Date d = new Date();
 	]]></zscript>
-	<datebox value="${d}" />
+	<datebox value="${d}" locale="en_US"/>
 </zk>
 
 		--></server>
 		<client><![CDATA[
 				focus(jq("@datebox input"));
-				keyPressNative(END);
-				keyPressNative("48");
-				keyPressNative("48");
-				keyPressNative("48");
+				sendKeys(jq("@datebox input"), Keys.END);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
 				blur(jq("@datebox input"));
 				verifyContains(jq("@datebox input").val(),"200000");
 				verifyNotContains(jq("@datebox input").val(),"undefined");

@@ -283,6 +283,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		autopaging: _zkf,
 		/**
+		 * Returns the external Paging widget, if any.
+		 * @return Paging
+		 */
+		/**
+		 * Sets the external Paging widget.
+		 * @param Paging paging
+		 */
+		paginal: _zkf,
+		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
 		 */
@@ -326,14 +335,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageSize
 	 */
 	getPageSize: function () {
-		return this.paging.getPageSize();
+		return (this.paging || this._paginal).getPageSize();
 	},
 	/** Sets the page size, aka., the number rows per page.
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
 	setPageSize: function (pgsz) {
-		this.paging.setPageSize(pgsz);
+		(this.paging || this._paginal).setPageSize(pgsz);
 	},
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
@@ -341,21 +350,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount: function () {
-		return this.paging.getPageCount();
+		return (this.paging || this._paginal).getPageCount();
 	},
 	/** Returns the active page (starting from 0).
 	 * @return int
 	 * @see Paging#getActivePage
 	 */
 	getActivePage: function () {
-		return this.paging.getActivePage();
+		return (this.paging || this._paginal).getActivePage();
 	},
 	/** Sets the active page (starting from 0).
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
 	setActivePage: function (pg) {
-		this.paging.setActivePage(pg);
+		(this.paging || this._paginal).setActivePage(pg);
 	},
 	/**
 	 * Returns whether the widget is in paging mold.
@@ -425,14 +434,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
-		if ((zk.ie7_ || zk.ie6_) && this.isVflex()) { // B50-ZK-195
+		if (zk.ie < 8 && this.isVflex()) { // B50-ZK-195
 			// added by Jumper for IE to get a correct offsetHeight so we need 
 			// to add this command faster than the this._calcSize() function.
 			var hgh = this.$n().style.height;
 			if (!hgh || hgh == "auto") this.$n().style.height = "99%"; // avoid border 1px;
 		}
 		this._bindDomNode();
-		this._fixHeaders();
+		if (this._hflex != 'min')
+			this._fixHeaders();
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
@@ -459,16 +469,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			= this.ehdfaker = this.ebdfaker = null;
 	},
 
-	onResponse: function () {
-		if (this.desktop && this._shallSize) {
+	/** Synchronizes the size immediately.
+	 * This method is called automatically if the widget is created
+	 * at the server (i.e., {@link #inServer} is true).
+	 * You have to invoke this method only if you create this widget
+	 * at client and add or remove children from this widget.
+	 * @since 5.0.8
+	 */
+	syncSize: function () {
+		if (this.desktop) {
 			this.$n()._lastsz = null; //reset
 			this.onSize();
 		}
 	},
+	onResponse: function () {
+		if (this._shallSize)
+			this.syncSize();
+	},
 	_syncSize: function () {
 		this._shallSize = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	_fixHeaders: function (force) {
 		if (this.head && this.ehead) {
@@ -546,7 +565,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		} else
 			width = this._minWd.width; // no header
-		return width + (zk.ie && !zk.ie8 ? 1 : 0);
+		return width + (zk.ie < 8 ? 1 : 0);
 	},
 	_bindDomNode: function () {
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
@@ -662,7 +681,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._currentLeft = l;
 		}
 		
-		if (!this.paging)
+		if (!this.paging && !this._paginal)
 			this.fireOnRender(zk.gecko ? 200 : 60);
 
 		if (scrolled)
@@ -689,7 +708,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
 			if (this._fixPageSize(rows)) return; //need to reload with new page size
 		
-		if (zk.ie7_ || zk.ie6_)
+		if (zk.ie < 8)
 			this._syncBodyHeight(); // B50-ZK-171
 		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
@@ -714,7 +733,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_syncBodyHeight: function () {
 		var ebody = this.ebody,
-			ebodytbl = this.$n('cave');
+			ebodytbl = this.ebodytbl;
+		if (this._height || (this._vflex && this._vflex != 'min'))
+			return; // height is predetermined, skip sync
 		// no scroll bar, but extra height on ebody
 		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
 				ebody.offsetWidth >= ebodytbl.offsetWidth) 
@@ -871,7 +892,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				n.style.height = '';
 				if (head) head.style.height = '';
 			} else {
-				if (zk.ie && !zk.ie8 && this._vflex == 'min' && this._vflexsz === undefined)
+				if (zk.ie < 8 && this._vflex == 'min' && this._vflexsz === undefined)
 					sz.height += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
@@ -881,7 +902,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (this._hflex != 'min') n.style.width = '';
 				if (head) head.style.width = '';
 			} else {
-				if (zk.ie && !zk.ie8 && this._hflex == 'min' && this._hflexsz === undefined)
+				if (zk.ie < 8 && head && this._hflex == 'min' && this._hflexsz === undefined)
 					sz.width += 1;
 				return this.$supers('setFlexSize_', arguments);
 			}
@@ -1040,7 +1061,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				head.uuid, fakeId, '" class="', zcls, '-faker">');
 		var allwidths = true,
 			// IE6/7 bug in F30-1904532.zul
-			totalWidth = 0, shallCheckSize = zk.ie && !zk.ie8;
+			totalWidth = 0, shallCheckSize = zk.ie < 8;
 		
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
@@ -1197,8 +1218,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			++i;
 		}
-		var hgh = zk.ie && !zk.ie8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
-		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie && !zk.ie8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
+		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
 			extSum = total - width; 
 		
 		var count = total,

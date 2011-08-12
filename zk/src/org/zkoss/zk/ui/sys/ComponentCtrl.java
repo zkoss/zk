@@ -250,12 +250,12 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if propName is null or empty
 	 */
 	public Annotation getAnnotation(String propName, String annotName);
-	/** Returns a read-only collection of all annotations associated with this
-	 * component (never null).
+	/** Returns a read-only collection of all annotations ({@link Annotation})
+	 * associated with this component (never null).
 	 */
 	public Collection getAnnotations();
-	/** Returns a read-only collection of all annotations associated with the
-	 * specified property (never null).
+	/** Returns a read-only collection of all annotations ({@link Annotation})
+	 * associated with the specified property (never null).
 	 *
 	 * @param propName the property name, e.g., "value".
 	 * @exception IllegalArgumentException if propName is null or empty
@@ -285,17 +285,19 @@ public interface ComponentCtrl {
 	 *
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute.
-	 * The attribute must be in a pair of strings (String name, String value).
+	 * The attribute must be in a pair of strings (String name, String value),
+	 * or (String name, String[] value).
 	 */
-	public void addAnnotation(String annotName, Map<String, String> annotAttrs);
+	public void addAnnotation(String annotName, Map<String, Object> annotAttrs);
 	/** Adds an annotation to the specified proeprty of this component.
 	 *
 	 * @param propName the property name (never nul, nor empty).
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
+	 * The attribute must be in a pair of strings (String name, String value),
+	 * or (String name, String[] value).
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs);
+	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs);
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).

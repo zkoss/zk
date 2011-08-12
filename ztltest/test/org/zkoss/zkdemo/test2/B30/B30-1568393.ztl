@@ -56,7 +56,7 @@
 			]]></zscript>
 			</window> 
 		--></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			int x = getElementPositionLeft(overlapped).intValue();
 			int y = getElementPositionTop(overlapped).intValue();
 

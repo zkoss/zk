@@ -21,10 +21,11 @@
 		verifyTrue(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
 		mouseOver(jq("@button td.z-button-cm"));
 		click(jq("@button td.z-button-cm"));
-
+		waitResponse();
 		verifyFalse(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
 		mouseOver(jq("@button td.z-button-cm"));
 		click(jq("@button td.z-button-cm"));
+		waitResponse();
 		verifyTrue(isVisible(jq("@treecell[label=\"Make me invisible by click try \"] div.z-overflow-hidden")));
 		]]></client>
 	</case>

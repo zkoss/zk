@@ -22,19 +22,21 @@
 		--></server>
 		<client><![CDATA[
 			
-			mouseOver(c1);
+				mouseOver(c1);
 				clickAt(jq(".z-column-btn:eq(0)"), "6,6");
 				clickAt(jq(".z-menu-item-cnt:eq(0)"),"6,6");
+				waitResponse();
 				verifyFalse(jq(".z-window-modal").exists());
 				mouseOver(c1);
 				clickAt(jq(".z-column-btn:eq(0)"), "6,6");
 				clickAt(jq(".z-menu-item-cnt:eq(1)"),"6,6");
+				waitResponse();
 				verifyFalse(jq(".z-window-modal").exists());
 				mouseOver(c1);
 				clickAt(jq(".z-column-btn:eq(0)"), "6,6");
 				clickAt(jq(".z-menu-item-cnt:eq(2)"),"6,6");
+				waitResponse();
 				verifyFalse(jq(".z-window-modal").exists());
-	
 		]]></client>
 	</case>
 </test>

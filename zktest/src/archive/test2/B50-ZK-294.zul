@@ -1,0 +1,19 @@
+<zk>
+	<html><![CDATA[
+	You shall see the following below.
+	<ul>
+		<li>A lable: This shall not have &lt;span&gt;</li>
+		<li>An textarea: &lt;span&gt;</li>
+	</ul>
+	]]></html>
+	<separator bar="true"/>
+<h:div xmlns:h="xhtml">
+	This shall not have &lt;span&gt;
+	<h:script>
+	zk.log("IE6/7? " + (zk.ie &lt; 8));
+	</h:script>
+	<h:textarea>
+	&lt;span&gt; inside textarea
+	</h:textarea>
+</h:div>
+</zk>

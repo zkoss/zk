@@ -41,11 +41,21 @@ public interface Annotation extends java.io.Serializable {
 	 * name.
 	 */
 	public String getName();
-	/** Returns the map of attributes (String name, String value) (never null).
-	 * The returned map is read-only.
+	/** Returns the map of attributes(never null).
+	 * The key is a String instance, while the value is either an instance
+	 * of String, or an array of String instances (String[]).
+	 * <p>The returned map is read-only.
 	 */
-	public Map<String, String> getAttributes();
-	/** Returns the attribute of the given name, or null if not found.
+	public Map<String, Object> getAttributes();
+	/** Returns the value of the given attribute, or null if not found.
+	 * If the value is an array of String instances, the first String instance
+	 * is returned.
 	 */
 	public String getAttribute(String name);
+	/** Returns all values of the given attribute, or null if not found.
+	 * If the value is a single instance of String, a single-element array
+	 * is returned.
+	 * @since 5.1.0
+	 */
+	public String[] getAttributeValues(String name);
 }

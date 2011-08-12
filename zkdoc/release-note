@@ -24,6 +24,8 @@ ZK 5.1.0
   ZK-139: A way to define a template that component could use
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
   ZK-237: <?import class="..."?> allows users to import classes
+  ZK-292: Annotation supports an array of values and string-type value and so on
+  ZK-278: Enhance stubonly to merge more components and better control of event handling
   ZK-217: A way to add a temporary variable resolver to an execution
   2974464: A way to customize message with i3-label
   ZK-233: Execution.createComponents support inserting before particular component and variable resolver
@@ -31,6 +33,8 @@ ZK 5.1.0
   3025389: A way to monitor the execution and event processing
   2947727: The instantiation of Composer & Server Push customizable
   ZK-224: Tree shall render the model in the onInitRender event listener
+  ZK-288: Make GenericEventListener (and derives, GenericForwardComposer and GenericAutowireComposer) as serializable
+  ZK-279: Simplify PageDefinition and related metainfo
 
 * Bugs
 
@@ -87,11 +91,13 @@ ZK 5.0.8
   3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
+  ZK-274: A way to prevent the developers from using zscript
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
-  ZK-219: Update zk.Event documentation
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
   ZK-248: System-level initiator shall be applied to richlet too
-  ZK-239: vlayout inner padding issue
+  ZK-219: Update zk.Event documentation
+  ZK-287: The event instance shall be passed to the callback event listener of EventQueue
+  ZK-295: Animation effect of Borderlayout can be configured
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -155,7 +161,6 @@ ZK 5.0.8
   3357475: Grid with hflex min should imply default header hflex
   3303877: IE6 only, vflex fail with tabbox  
   3305038: Fileupload.get() cause javascript error
-  3357931: WrongValueException Thrown On Valid Component
   3353121: Grid in Tabbox vflex issue, IE7 only
   3303872: IE8 only, tabpanel disappear after hide then show
   3303874: IE7 only, the scroll bar do not appear in the tabpanel
@@ -201,11 +206,33 @@ ZK 5.0.8
   ZK-236: Borderlayout North/South failed to concern caption height
   ZK-238: Grid with frozen, scrolled then delete frozen, some columns is hidden
   ZK-221: problem with events in firefox 4.x and up
+  ZK-241: Hflex fail with grid in grid case
+  ZK-244: window cannot maximize when caption changed
+  ZK-239: vlayout inner padding issue
+  ZK-261: Panelchildren fail to serialize in Panel
+  ZK-242: Set postion to window fail with Firefox 
+  ZK-267: DelegatingVariableResolver cannot be serialize
+  ZK-266: Sort call to model not receiving the right parameters
+  ZK-269: If listbox with an empty content, the head's size in Opera is wrong
+  ZK-281: Hlayout.setSpacing with null or an empty string shall mean auto
+  ZK-259: Using custom paging component in grid when autopaging is used
+  ZK-275: Window render Caption in a wrong place
+  ZK-286: Vlayout shall not appear horizontal scroll bar (hflex)
+  ZK-294: &lt; not shown up if it is enclosed in a ZHTML component
+  ZK-272: Place component in auxheader is not align with headers' 
+  ZK-299: Detail component should not initial the width (18px) by default, if the theme is not in classic-blue 
+  ZK-297: Combox's onSelect will keep to fire when invalidate the component 
+  ZK-300: Paging mold with listbox cannot change its mold by configuration
+  ZK-282: Menuitem with popup is not always worked on IE6 only 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
     selected - Bug 2973303)
+  + To make API consistent, Hlayout and Vlayout's setSpacing() will consider
+    null and empty ("") as "auto" rather than the default spacing (i.e., "0.3em")
+  + org.zkoss.zhtml.Text will encode the text by default. If it is not the case
+    you want, please specify encode="fasle" to disable it.
   + Listheader's selectAll checkmark will disable when Listbox in ROD mode. Here
 	is the feature tracker - http://tracker.zkoss.org/browse/ZK-220
   + If enable the autopaging function of Tree, Listbox, and Grid, the height of

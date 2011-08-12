@@ -41,12 +41,7 @@
 				click(jq(".z-combobox-pp .z-comboitem:eq(0)"));
 				waitResponse();
 				click(insideHeaderCombobox.$n("btn"));waitResponse();
-				click(jq(".z-combobox-pp .z-comboitem:eq(1)"));
-				waitResponse();
-				click(insideHeaderCombobox.$n("btn"));waitResponse();
-				click(jq(".z-combobox-pp .z-comboitem:eq(2)"));
-				waitResponse();
-				verifyEquals("6",jq(".z-listitem").length());
+				verifyEquals("Add 1 item",jq(".z-comboitem-seld .z-comboitem-text").text());
 		]]></client>
 	</case>
 </test>

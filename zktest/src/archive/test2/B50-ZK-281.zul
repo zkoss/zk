@@ -1,0 +1,13 @@
+<div>
+hlayout:
+<hlayout><hlayout>aa<datebox/></hlayout> (default; spacing is 0.3em)</hlayout>
+<hlayout><hlayout spacing="">aa<datebox/></hlayout> (empty =&gt; css default =&gt; no spacing)</hlayout>
+<hlayout><hlayout spacing="auto">aa<datebox/></hlayout> (auto =&gt; css default =&gt; no spacing)</hlayout>
+<hlayout><hlayout spacing="0">aa<datebox/></hlayout> (0 =&gt; no spacing)</hlayout>
+<separator bar="true"/>
+hbox:
+<hlayout><hbox>aa<datebox/></hbox> (default; spacing is 0.3em)</hlayout>
+<hlayout><hbox spacing="">aa<datebox/></hbox> (empty =&gt; css default =&gt; 0.3em)</hlayout>
+<hlayout><hbox spacing="auto">aa<datebox/></hbox> (auto =&gt; css default =&gt; 0.3em)</hlayout>
+<hlayout><hbox spacing="0">aa<datebox/></hbox> (0 =&gt; no spacing)</hlayout>
+</div>

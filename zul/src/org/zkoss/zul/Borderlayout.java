@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
@@ -65,6 +66,10 @@ import org.zkoss.zk.ui.UiException;
  * 
  * <p>Default {@link #getZclass}: z-borderlayout. (since 3.5.0)
  * 
+ * <p> Configuration:
+ * you can disable the animation effects by specifying a library
+ * property named <code>org.zkoss.zul.borderlayout.animation.disabled</code> to
+ * disable all borderlayouts. (since 5.0.8) 
  * @author jumperchen
  * @since 5.0.0
  */
@@ -104,10 +109,38 @@ public class Borderlayout extends HtmlBasedComponent {
 	private transient East _east;
 
 	private transient Center _center;
+	
+	private boolean _animationDisabled = isDefaultAnimationDisabled();
 
 	public Borderlayout() {
 	}
 
+	private static boolean isDefaultAnimationDisabled() {
+		if (_defAnimation == null)
+			_defAnimation = Boolean.valueOf(Library.getProperty("org.zkoss.zul.borderlayout.animation.disabed", "false"));
+		return _defAnimation.booleanValue();
+	}
+	private static Boolean _defAnimation;
+	
+	/**
+	 * Returns whether disable animation effects
+	 * <p>Default: false.
+	 * @since 5.0.8
+	 */
+	public boolean isAnimationDisabled() {
+		return _animationDisabled;
+	}
+	
+	/**
+	 * Sets to disable animation effects.
+	 * @since 5.0.8
+	 */
+	public void setAnimationDisabled(boolean animationDisabled) {
+		if (_animationDisabled != animationDisabled) {
+			_animationDisabled = animationDisabled;
+			smartUpdate("_animationDisabled", animationDisabled);
+		}
+	}
 	public North getNorth() {
 		return _north;
 	}
@@ -188,6 +221,12 @@ public class Borderlayout extends HtmlBasedComponent {
 		return true;
 	}
 	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "_animationDisabled", _animationDisabled);
+	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		if (_north == child) _north = null;

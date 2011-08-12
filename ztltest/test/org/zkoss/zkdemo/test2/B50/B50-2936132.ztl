@@ -61,7 +61,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
    				click(jq(".z-tree-root-close:eq(0)"));
 				waitResponse();
 				click(btn);
@@ -134,7 +134,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
    				click(btn);
 				waitResponse();
 				click(jq(".z-tree-root-close:eq(0)"));

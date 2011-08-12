@@ -15,6 +15,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _allowKeys,
 		globallocalizedSymbols = {};
+
+	// Fixed merging JS issue
+	zk.load('zul.lang', function () {
+		_allowKeys = "0123456789"+zk.MINUS+zk.PERCENT+(zk.groupingDenied ? '': zk.GROUPING);
+	});
 /**
  * A skeletal implementation for number-type input box.
  * @since 5.0.8
@@ -57,24 +62,24 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 				return val;
 			},
 			function () {
-				if (this._localizedSymbols) {
-					this._allowKeys = "0123456789"+this._localizedSymbols.MINUS+this._localizedSymbols.PERCENT +
-						 			(zk.groupingDenied ? '': this._localizedSymbols.GROUPING);
-				} else {
-					this._allowKeys = null;
-				}
+				var symbols = this._localizedSymbols;
+				this._allowKeys = symbols ?
+					"0123456789"+symbols.MINUS+symbols.PERCENT +
+					(zk.groupingDenied ? '': symbols.GROUPING): null;
 				this.rerender();
 			}
 		]
 	},
+	/** Returns a string of keystrokes that are allowed.
+	 * @return String
+	 * @since 5.0.8
+	 */
+	getAllowedKeys_: function () {
+		return this._allowKeys || _allowKeys;
+	},
 	doKeyPress_: function(evt){
-		if (!this._shallIgnore(evt, this._allowKeys || _allowKeys))
+		if (!this._shallIgnore(evt, this.getAllowedKeys_()))
 			this.$supers('doKeyPress_', arguments);
 	}
 });
-	// Fixed merging JS issue
-	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.NumberInputWidget._allowKeys = "0123456789"+zk.MINUS+zk.PERCENT
-			+(zk.groupingDenied ? '': zk.GROUPING);
-	});
 })();

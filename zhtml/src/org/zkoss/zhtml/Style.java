@@ -16,15 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zhtml.impl.AbstractTag;
-
 /**
  * The STYLE tag.
  * 
  * @author tomyeh
  */
-public class Style extends AbstractTag {
+public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	public Style() {
 		super("style");
+	}
+	public Style(String content) {
+		super("style", content);
 	}
 }

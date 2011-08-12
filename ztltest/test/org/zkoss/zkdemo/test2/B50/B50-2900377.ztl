@@ -12,7 +12,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 			
 			verifyEquals("none", jq("div.z-panel-body").css("display"));			
 			]]></client>

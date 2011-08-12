@@ -138,7 +138,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
-		zWatch.listen({onResponse: this});
 		this._shallStripe = true;
 		var w = this;
 		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
@@ -146,10 +145,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_syncFrozen(w);
 		});
 		this._syncSelInView();
-	},
-	unbind_: function () {
-		zWatch.unlisten({onResponse: this});
-		this.$supers(Listbox, 'unbind_', arguments);
 	},
 	_syncSelInView: function () {
 		var index = this.getSelectedIndex();
@@ -174,18 +169,15 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	onResponse: function () {
 		if (this.desktop) {
-			if (this._shallStripe) {
+			if (this._shallStripe)
 				this.stripe();
-				if (this._shallSize) this.$supers('onResponse', arguments);
-			}
 			if (this._shallFixEmpty) 
 				this._fixForEmpty();
 		}
+		this.$supers('onResponse', arguments);
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	/**
 	 * Stripes the class for each item.
@@ -346,8 +338,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
-		if (!this.inServer && this.desktop)
-			this.onResponse();
 	},
 	_fixForEmpty: function () {
 		if (this.desktop) {

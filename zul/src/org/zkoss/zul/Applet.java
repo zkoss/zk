@@ -232,7 +232,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	//super//
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

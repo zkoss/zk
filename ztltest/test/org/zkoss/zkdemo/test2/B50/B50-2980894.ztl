@@ -3,7 +3,7 @@
 		<server id="zul"><![CDATA[
 			<datebox id="db" readonly="true" />
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			click(db.$n("btn"));				
 			Widget cal = new Widget(db.$n("pp").firstChild().get("id"));
 			click(cal.$n("ty"));

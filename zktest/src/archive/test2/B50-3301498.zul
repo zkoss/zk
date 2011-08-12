@@ -74,10 +74,10 @@
 		Treeitem treeitem = new Treeitem();
 		Treerow treerow = new Treerow();
 		treeitem.appendChild(treerow);
-		treerow.appendChild(new Treecell("cell"));
-		treerow.appendChild(new Treecell("cell"));
-		treerow.appendChild(new Treecell("cell"));
-		treerow.appendChild(new Treecell("cell"));
+		treerow.appendChild(new Treecell("Cell"));
+		treerow.appendChild(new Treecell("Cell"));
+		treerow.appendChild(new Treecell("Cell"));
+		treerow.appendChild(new Treecell("Cell"));
 		treechildren.appendChild(treeitem);
 	}
 ]]></attribute>

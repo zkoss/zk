@@ -27,7 +27,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-import org.zkoss.html.HTMLs;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -35,10 +34,12 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Sortable;
 
@@ -587,8 +588,19 @@ public class Column extends HeaderElement {
 	}
 
 	//-- event listener --//
+	/**
+	 * Invokes a sorting action based on a {@link SortEvent} and maintains
+	 * {@link #getSortDirection}.
+	 * @since 5.0.8
+	 */
+	public void onSort(SortEvent event) {
+		sort(event.isAscending());
+	}
+	
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
+	 * @deprecated As of release 5.0.8, use or override {@link #onSort(SortEvent)}
+	 * instead.
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
@@ -618,7 +630,22 @@ public class Column extends HeaderElement {
 		super.beforeParentChanged(parent);
 	}
 	
-
+	/** Processes an AU request.
+	 * <p>Default: in addition to what are handled by its superclass, it also 
+	 * handles onSort.
+	 * @since 5.0.8
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SORT)) {
+			SortEvent evt = SortEvent.getSortEvent(request);
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
+	}
+	
+	
+	
 	//Cloneable//
 	public Object clone() {
 		final Column clone = (Column)super.clone();

@@ -38,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				focus(jq("@timebox input"));
-				clickAt(jq("@timebox i.z-timebox-btn"),"1,1");
+				clickAt(jq("@timebox i.z-timebox-btn"),"5,5");
 				blur(jq("@timebox input"));
 				waitResponse();
 				click(jq("@button"));

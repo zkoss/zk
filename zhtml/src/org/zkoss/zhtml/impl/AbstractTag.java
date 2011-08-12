@@ -271,9 +271,11 @@ implements DynamicPropertied, RawId {
 	}
 	/** Renders the children directly to the given output.
 	 * Notice it is called only if {@link #redraw} is going to render
-	 * the content directly (such as generating <input>; rather than
-	 * generating JavaScript). If it is about to generate the JavaScript code
+	 * the content (HTML tags) directly.
+	 * If it is about to generate the JavaScript code
 	 * {@link #redrawChildren} will be called instead.
+	 * <p>You have to override this method if the deriving class
+	 * has additional information to render.
 	 * @since 5.0.7
 	 */
 	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
@@ -317,15 +319,22 @@ implements DynamicPropertied, RawId {
 			}
 		}
 
-		if (!isChildable())
+		if (!isOrphanTag())
 			sb.append('/');
 
 		return sb.append('>').toString();
 	}
 	/*package*/ String getEpilogHalf() {
-		return isChildable() ? "</" + _tagnm + '>': "";
+		return isOrphanTag() ? "</" + _tagnm + '>': "";
 	}
 	protected boolean isChildable() {
+		return isOrphanTag();
+	}
+	/** Returns whether this tag is an orphan tag, i.e., it shall be in the
+	 * form of &lt;tag/&gt;.
+	 * @since 5.0.8
+	 */
+	protected boolean isOrphanTag() {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 

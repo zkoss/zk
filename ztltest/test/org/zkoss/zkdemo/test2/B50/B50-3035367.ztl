@@ -6,7 +6,7 @@
 <tabs>
 <tab label="Visible (selected) Tab" selected="true"></tab>
 <tab label="Not visible (selected) by default" selected="false"></tab>
-<tab label="Not visible (selected) by default" selected="false"></tab>
+<tab id="t3" label="Not visible (selected) by default" selected="false"></tab>
 </tabs>
 <tabpanels>
 <tabpanel>
@@ -33,19 +33,22 @@
 </window>		
 ]]></server>
 		<client><![CDATA[
-		click(jq("@button[label=\"update list model of listbox on second tab panel\"] td.z-button-cm"));
-		verifyFalse(jq(".z-error").exists());
-		click(jq("@window @tab[label=\"Not visible (selected) by default\"] span.z-tab-text:eq(0)"));
-		verifyEquals("Listbox", getText(jq("@listheader div.z-listheader-cnt")));
-		verifyEquals("element", getText(jq("@listcell div.z-overflow-hidden")));
-		click(jq("@tab[label=\"Visible (selected) Tab\"] span.z-tab-text"));
-		
-		click(jq("@button[label=\"update list model of grid on third tab panel\"] td.z-button-cm"));
-
-		verifyFalse(jq(".z-error").exists());
-		click(jq("@window @tab[label=\"Not visible (selected) by default\"] span.z-tab-text:eq(1)"));
-		verifyEquals("Grid", getText(jq("@column div.z-column-cnt")));
-		verifyEquals("element", getText(jq("@label")));
+				click(jq("@button[label=\"update list model of listbox on second tab panel\"] td.z-button-cm"));
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());
+				click(jq("@window @tab[label=\"Not visible (selected) by default\"] span.z-tab-text:eq(0)"));
+				waitResponse();
+				verifyEquals("Listbox", getText(jq("@listheader div.z-listheader-cnt")));
+				verifyEquals("element", getText(jq("@listcell div.z-overflow-hidden")));
+				click(jq("@tab[label=\"Visible (selected) Tab\"] span.z-tab-text"));
+				waitResponse();
+				click(jq("@button[label=\"update list model of grid on third tab panel\"] td.z-button-cm"));
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());
+				clickAt(jq(t3).find(".z-tab-text"), "3,3");
+				waitResponse();
+				verifyEquals("Grid", getText(jq("@column div.z-column-cnt")));
+				verifyEquals("element", getText(jq("@label")));
 		]]></client>
 	</case>
 </test>

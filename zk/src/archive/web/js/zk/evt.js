@@ -497,6 +497,10 @@ onX: function (ctl) {
 	* It could be anything and it will become the origin member of the special controller (the first argument of the listener)
 	* @param Map opts [optional] options:
 	* <ul>
+	*<li>reverse - whether to reverse the execution order.
+	* If false or omitted, the parent is called first.
+	* If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
+	* <code>ctl.fire</code> in the callback.</li>
 	* <li>timeout - how many miliseconds to wait before calling the listeners. If Omitted or negative, the listeners are invoked immediately.</li>
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the second, third and following arguments when the listener is called. 
 	*/
@@ -540,7 +544,8 @@ onX: function (ctl) {
 	* @param String name the watch name, such as onShow.
 	* @param Object origin [optional] the reference object used to decide what listeners to invoke (required). Notice, unlike {@link #fire}, it cannot be null. It will become the origin member of the controller (i.e., the first argument when the listener is called).
 	* @param Map opts [optional] options:
-	* <ul><li>reverse - whether to reverse the execution order.
+	* <ul>
+	*<li>reverse - whether to reverse the execution order.
 	* If false or omitted, the parent is called first.
 	* If true, the child is called first. Notice that there is a limitation: if reverse, you can invoke
 	* <code>ctl.fireDown</code> in the callback.</li>

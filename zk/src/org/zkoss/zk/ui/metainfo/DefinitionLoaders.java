@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Enumeration;
 import java.net.URL;
 
@@ -676,7 +677,11 @@ public class DefinitionLoaders {
 	private static void parseAnnots(ComponentDefinitionImpl compdef, Element top) {
 		for (Element el: top.getElements("annotation")) {
 			final String annotName = IDOMs.getRequiredElementValue(el, "annotation-name");
-			final Map<String, String> annotAttrs = parseAttrs(el);
+			final Map<String, Object> annotAttrs = new LinkedHashMap<String, Object>();
+			for (Map.Entry<String, String> me: parseAttrs(el).entrySet())
+				annotAttrs.put(me.getKey(),
+					AnnotationHelper.parseAttributeValue(me.getValue().trim()));
+
 			final String prop = el.getElementValue("property-name", true);
 			if (prop == null || prop.length() == 0)
 				compdef.addAnnotation(annotName, annotAttrs);

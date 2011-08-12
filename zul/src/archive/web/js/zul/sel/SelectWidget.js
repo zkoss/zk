@@ -159,6 +159,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (w) {
 						this._selectOne(w, true);
 						zk(w).scrollIntoView(this.ebody);
+						if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+							this._currentTop = this.ebody.scrollTop; 
+							this._currentLeft = this.ebody.scrollLeft;
+						}
 					}
 				}
 			}
@@ -236,6 +240,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		else if (item = zk.Widget.$(item)) {
 			this._selectOne(item, true);
 			zk(item).scrollIntoView(this.ebody);
+			if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+				this._currentTop = this.ebody.scrollTop; 
+				this._currentLeft = this.ebody.scrollLeft;
+			}
 		}
 	},
 	/**
@@ -278,7 +286,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			anchor.style.display = 'none';
 
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
-		var tblwd = this.ebody.clientWidth;
+		var tblwd = zk.opera && this.ebody.offsetHeight == 0 ? // B50-ZK-269
+				this.ebody.offsetWidth : this.ebody.clientWidth;
 
 		if (zk.safari)
 			anchor.style.display = '';
@@ -1062,6 +1071,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
+	},
+	_syncBodyHeight: function () {
+		if(this._rows == 0)
+			this.$supers('_syncBodyHeight', arguments);
 	},
 	_isAllSelected: function () {
 		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());)

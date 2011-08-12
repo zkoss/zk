@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -38,6 +37,7 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.ClassResolver;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -318,10 +318,11 @@ public class Parser {
 		final String zsrc = (String)params.remove("zscript");
 
 		final Map<String, String> args = new LinkedHashMap<String, String>(params);
-		if (isEmpty(clsnm)) {
-			if (isEmpty(zsrc))
+		if (clsnm == null) {
+			if (zsrc == null)
 				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
 
+			checkZScriptEnabled(pi.getLocator());
 			ZScript zs =  null;
 			final String zslang = pgdef.getZScriptLanguage();
 			if (zsrc.indexOf("${") < 0) {
@@ -337,11 +338,18 @@ public class Parser {
 			pgdef.addInitiatorInfo(
 				new InitiatorInfo(new ZScriptInitiator(zs), args));
 		} else {
-			if (!isEmpty(zsrc))
+			if (zsrc != null)
 				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
 
 			pgdef.addInitiatorInfo(new InitiatorInfo(clsnm, args));
 		}
+	}
+	private void checkZScriptEnabled(Element el) {
+		checkZScriptEnabled(el.getLocator());
+	}
+	private void checkZScriptEnabled(org.zkoss.xml.Locator loc) {
+		if (!_wapp.getConfiguration().isZScriptEnabled())
+			throw new UiException("zscript is not allowed since <disable-zscript> is configured, "+loc);
 	}
 	/** Process the page directive. */
 	private static void parsePageDirective(PageDefinition pgdef,
@@ -706,6 +714,7 @@ public class Parser {
 		final String uri = ns != null ? ns.getURI(): "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+			checkZScriptEnabled(el);
 			parseZScript(parent, el, annHelper);
 		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			if (!(parent instanceof ComponentInfo))
@@ -802,7 +811,13 @@ public class Parser {
 				|| "annotation".equals(attURI)) {
 					if (attrAnnHelper == null)
 						attrAnnHelper = new AnnotationHelper();
-					attrAnnHelper.addByRawValue(attnm, attval);
+					final String attvaltrim = attval.trim();
+					if (attvaltrim.startsWith("@")) {
+						//since 5.1, attnm is the property name (than annot name)
+						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
+					} else {
+						attrAnnHelper.addByRawValue(attnm, attvaltrim);
+					}
 				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -820,14 +835,15 @@ public class Parser {
 				} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setFulfill(attval);
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
-					final String attPref = attrns != null ? attrns.getPrefix(): "";
+					final String attPref = attrns != null ? attrns.getPrefix(): "",
+						attvaltrim;
 					if (!"xmlns".equals(attPref)
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						if (isAttrAnnot(attval)) { //annotation
+						if (isAttrAnnot(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
-							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval, true);
+							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
 						} else {
 							addAttribute(compInfo, attrns, attnm, attval, null,
 								attr.getLocator());
@@ -850,15 +866,26 @@ public class Parser {
 				optimizeNativeInfos((NativeInfo)compInfo);
 		} //end-of-else//
 	}
+	/** @param val the value (it was trimmed before called). */
 	private static boolean isAttrAnnot(String val) {
 		final int len = val.length();
-		return len >= 3 && val.charAt(0) == '@'
-			&& val.charAt(1) == '{' && val.charAt(len-1) == '}';
+		if (len >= 4 && val.charAt(0) == '@') {
+			if (val.charAt(1) == '{') {
+				if (val.charAt(len - 1) == '}') //format 1
+					return true;
+			} else if (val.charAt(len - 1) == ')' && val.indexOf('(', 1) > 0) {
+				final char cc = val.charAt(Strings.skipWhitespaces(val, 1));
+				return (cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z')
+					|| (cc >= '0' && cc <= '9') || cc == '_' || cc == '$';
+				//we have to be conserative since a non-annotation value might carry @
+			}
+		}
+		return false;
 	}
+	/** @param val the value (it was trimmed before called). */
 	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
 	ComponentInfo compInfo, String nm, String val, boolean selfAllowed) {
-		attrAnnHelper.addByCompoundValue(
-			val.substring(2, val.length() -1));
+		attrAnnHelper.addByCompoundValue(val.trim());
 		attrAnnHelper.applyAnnotations(compInfo,
 			selfAllowed && "self".equals(nm) ? null: nm, true);
 	}
@@ -972,7 +999,7 @@ public class Parser {
 			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator()); //old style annotation not supported
 
 		String ifc = null, unless = null, scope = null, composite = null;
-		final Map<String, String> attrs = new HashMap<String, String>();
+		final Map<String, String> attrs = new LinkedHashMap<String, String>();
 		AnnotationHelper attrAnnHelper = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -980,6 +1007,7 @@ public class Parser {
 			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
+			final String attvaltrim;
 			if ("if".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				ifc = attval;
 			} else if ("unless".equals(attnm) && isZkElementAttr(langdef, attrns)) {
@@ -990,11 +1018,12 @@ public class Parser {
 				composite = attval;
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
-			} else if (isAttrAnnot(attval) && parent instanceof ComponentInfo) {
+			} else if (parent instanceof ComponentInfo
+			&& isAttrAnnot(attvaltrim = attval.trim())) {
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
-					attnm, attval, false);
+					attnm, attvaltrim, false);
 			} else {
 				attrs.put(attnm, attval);
 			}
@@ -1014,7 +1043,7 @@ public class Parser {
 
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
-		final Map<String, String> vars = new HashMap<String, String>();
+		final Map<String, String> vars = new LinkedHashMap<String, String>();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -1044,11 +1073,12 @@ public class Parser {
 		if (!el.getElements().isEmpty())
 			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
 
-		final Map<String, String> attrs = new HashMap<String, String>();
+		final Map<String, Object> attrs = new LinkedHashMap<String, Object>();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
-			attrs.put(attr.getLocalName(), attr.getValue());
+			attrs.put(attr.getLocalName(),
+				AnnotationHelper.parseAttributeValue(attr.getValue().trim()));
 		}
 		annHelper.add(el.getLocalName(), attrs);
 	}
@@ -1186,7 +1216,7 @@ public class Parser {
 
 	/** Parse an attribute and adds it to the definition.
 	 */
-	private static void addAttribute(ComponentInfo compInfo, Namespace attrns,
+	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
 	String name, String value, ConditionImpl cond, org.zkoss.xml.Locator xl)
 	throws Exception {
 		if (Events.isValid(name)) {
@@ -1215,6 +1245,7 @@ public class Parser {
 						|| "zk".equals(uri);
 			}
 			if (bZkAttr) {
+				checkZScriptEnabled(xl);
 				final int lno = xl != null ? xl.getLineNumber(): 0;
 				final ZScript zscript = ZScript.parseContent(value, lno);
 				if (zscript.getLanguage() == null)

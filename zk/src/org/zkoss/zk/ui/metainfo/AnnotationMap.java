@@ -19,11 +19,12 @@ package org.zkoss.zk.ui.metainfo;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+
+import org.zkoss.lang.Objects;
 
 /**
  * A map of annotations used with {@link ComponentDefinition} and
@@ -146,14 +147,14 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	}
 	/** Adds an annotation.
 	 */
-	public void addAnnotation(String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		addAnnotation0(null, annotName, annotAttrs);
 	}
 	/** Adds an annotation to a proeprty.
 	 *
 	 * @param propName the property name.
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, String> annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		if (propName == null || propName.length() == 0)
 			throw new IllegalArgumentException("The property name is required");
 		addAnnotation0(propName, annotName, annotAttrs);
@@ -179,7 +180,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		return Collections.emptyList();
 	}
 
-	private void addAnnotation0(String propName, String annotName, Map<String, String> annotAttrs) {
+	private void addAnnotation0(String propName, String annotName, Map<String, Object> annotAttrs) {
 		initAnnots();
 
 		Map<String, AnnotImpl> ans = _annots.get(propName);
@@ -196,7 +197,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 */
 	private void initAnnots() {
 		if (_annots == null)
-			_annots = new HashMap<String, Map<String, AnnotImpl>>(4);
+			_annots = new LinkedHashMap<String, Map<String, AnnotImpl>>(4);
 	}
 	/** Create a map used for (String name, AnnotImpl annot).
 	 */
@@ -216,7 +217,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		}
 
 		if (_annots != null) {
-			clone._annots = new HashMap<String, Map<String, AnnotImpl>>(_annots);
+			clone._annots = new LinkedHashMap<String, Map<String, AnnotImpl>>(_annots);
 
 			for (Map.Entry<String, Map<String, AnnotImpl>> me:
 			clone._annots.entrySet()) {
@@ -235,7 +236,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 */
 	private static class AnnotImpl implements Annotation {
 		private final String _name;
-		private Map<String, String> _attrs;
+		private Map<String, Object> _attrs;
 
 		private AnnotImpl(String name) {
 			_name = name;
@@ -247,21 +248,21 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		 * @param name the attribute name. "value" is assumed if name is null or empty.
 		 * @param value the attribute value. If null, "" is assumed (not removal).
 		 */
-		private void addAttribute(String name, String value) {
+		private void addAttribute(String name, Object value) {
 			if (name == null || name.length() == 0)
 				name = "value";
 			if (value == null)
 				value = "";
 
 			if (_attrs == null)
-				_attrs = new LinkedHashMap<String, String>(3);
+				_attrs = new LinkedHashMap<String, Object>(4);
 			_attrs.put(name, value);
 		}
 		/** Adds a map of attributes, (String name, String value), to the annotation.
 		 */
-		private void addAttributes(Map<String, String> attrs) {
+		private void addAttributes(Map<String, Object> attrs) {
 			if (attrs != null)
-				for (Map.Entry<String, String> me: attrs.entrySet())
+				for (Map.Entry<String, Object> me: attrs.entrySet())
 					addAttribute(me.getKey(), me.getValue());
 		}
 
@@ -270,16 +271,45 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			return _name;
 		}
 		@SuppressWarnings("unchecked")
-		public Map<String, String> getAttributes() {
+		public Map<String, Object> getAttributes() {
 			if (_attrs != null)
 				return _attrs;
 			return Collections.emptyMap();
 		}
 		public String getAttribute(String name) {
-			return _attrs != null ? _attrs.get(name): null;
+			if (_attrs != null) {
+				Object val = _attrs.get(name);
+				if (val instanceof String[]) {
+					final String[] vs = (String[])val;
+					return vs.length > 0 ? vs[0]: null;
+				}
+				return (String)val;
+			}
+			return null;
+		}
+		public String[] getAttributeValues(String name) {
+			if (_attrs != null) {
+				Object val = _attrs.get(name);
+				if (val instanceof String[])
+					return (String[])val;
+				if (val != null)
+					return new String[] {(String)val};
+			}
+			return null;
 		}
 		public String toString() {
-			return '[' + _name + ": " + _attrs + ']';
+			final StringBuffer sb =
+				new StringBuffer().append('@').append(_name).append('(');
+			if (_attrs != null) {
+				boolean first = true;
+				for (Iterator it = _attrs.entrySet().iterator(); it.hasNext(); first = false) {
+					Map.Entry me = (Map.Entry)it.next();
+					if (!first) sb.append(", ");
+					sb.append(me.getKey()).append('=')
+						.append(Objects.toString(me.getValue()));
+				}
+			}
+			return sb.append(')').toString();
 		}
 	}
 }

@@ -143,69 +143,88 @@
 			</window>
 		--></server>
 		<client><![CDATA[
-		    // first time to access this page will take a long time.
-			waitResponse();
-			click(jq("$view @textbox:eq(0)"));
-			type(jq("$view @textbox:eq(0)"), "Jumper");
-			verifyEquals("Jumper", getValue(jq("$view @textbox:eq(0)")));
-			click(jq("$view @textbox:eq(1)"));
-			type(jq("$view @textbox:eq(1)"), "1234");
-			verifyEquals("1234", getValue(jq("$view @textbox:eq(1)")));
-			click(jq("$view @textbox:eq(2)"));
-			type(jq("$view @textbox:eq(2)"), "1234");
-			verifyEquals("1234", getValue(jq("$view @textbox:eq(2)")));
-			click(jq("$view @intbox:eq(0)"));
-			type(jq("$view @intbox:eq(0)"), "1234");
-			verifyEquals("1234", getValue(jq("$view @intbox:eq(0)")));
-			click(jq("$view @intbox:eq(1)"));
-			type(jq("$view @intbox:eq(1)"), "12345");
-			verifyEquals("12345", getValue(jq("$view @intbox:eq(1)")));
-			click(jq("@decimalbox"));
-			type(jq("@decimalbox"), "12.345");
-			verifyEquals("12.34", getValue(jq("@decimalbox")));
-			/** datebox (it may fail on different browser language)*/
-			click(jq("$db i.z-datebox-btn"));
-			click(jq("@calendar td:eq(23)"));
-			type(jq("$db input"), "Jun 10, 2010");
-			verifyEquals("Jun 10, 2010", getValue(jq("$db input.z-datebox-inp")));
-			click(jq("@select"));
-			select(jq("@select"), "label=yyyy/MM/dd hh:mm a");
-			click(jq("@option[label=\"yyyy/MM/dd hh:mm a\"]"));
-			String dateTimeStr = getValue(jq("$db input.z-datebox-inp"));
-			String datePattern = "[1-9][0-9][0-9][0-9]/((0[1-9])|(1[0-2]))/(([1-9])|(1[0-9])|(2[0-9])|(3[0-1]))" +
-                    " ((0[1-9])|(1[0-2])):((0[0-9])|(1[0-9])|(2[0-9])|(3[0-9])|(4[0-9])|(5[0-9])) ((A|P)M)";
-            verifyTrue("Date time: " + dateTimeStr, dateTimeStr.matches(datePattern));
-			click(jq("@select"));
-			select(jq("@select"), "label=yyyy/MM/dd");
-			click(jq("@option[label=\"yyyy/MM/dd\"]"));
-			verifyEquals("2010/06/10", getValue(jq("$db input.z-datebox-inp")));
-			click(jq("@select"));
-			select(jq("@select"), "label=MM-dd-yy");
-			click(jq("@option[label=\"MM-dd-yy\"]"));
-			verifyEquals("06-10-10", getValue(jq("$db input.z-datebox-inp")));
-			/** constraint */
-			type(jq("$view @textbox:eq(4)"), "zk");
-			verifyEquals("Please enter an e-mail address", getText(jq("@errorbox div.z-errbox-center")));
-			click(jq("$view @textbox:eq(4)"));
-			type(jq("$view @textbox:eq(4)"), "zk@zkoss.org");
-			click(jq("$intro"));
-			verifyFalse(jq("@errorbox div.z-errbox-center").exists());
-			/** spinner */
-			mouseDownAt(jq("@spinner i.z-spinner-btn"), "0,0");
-			mouseUp(jq("@spinner i.z-spinner-btn"));
-			verifyTrue(3 < parseInt(jq("@spinner input.z-spinner-inp").val()));
-			mouseDownAt(jq("@spinner i.z-spinner-btn"), "3,20");
-			mouseUp(jq("@spinner i.z-spinner-btn"));
-			verifyTrue(4 > parseInt(jq("@spinner input.z-spinner-inp").val()));
-			/** colorbox */
-			click(jq("@colorbox i.z-colorbox-currcolor"));
-			click(jq("$view @widget div.z-colorpalette-colorbox:eq(56)"));
-			click(jq("@colorbox i.z-colorbox-currcolor"));
-			click(jq(".z-colorbox-picker-btn"));
-			verifyEquals("153", getValue(jq("$view @widget input.z-colorpicker-r-inp")));
-			verifyEquals("51", getValue(jq("$view @widget input.z-colorpicker-g-inp")));
-			verifyEquals("102", getValue(jq("$view @widget input.z-colorpicker-b-inp")));
-			click(jq("$view @widget button.z-colorpicker-ok-btn"));
+				// first time to access this page will take a long time.
+				waitResponse();
+				click(jq("$view @textbox:eq(0)"));
+				type(jq("$view @textbox:eq(0)"), "Jumper");
+				waitResponse();
+				verifyEquals("Jumper", getValue(jq("$view @textbox:eq(0)")));
+				click(jq("$view @textbox:eq(1)"));
+				type(jq("$view @textbox:eq(1)"), "1234");
+				waitResponse();
+				verifyEquals("1234", getValue(jq("$view @textbox:eq(1)")));
+				click(jq("$view @textbox:eq(2)"));
+				type(jq("$view @textbox:eq(2)"), "1234");
+				waitResponse();
+				verifyEquals("1234", getValue(jq("$view @textbox:eq(2)")));
+				click(jq("$view @intbox:eq(0)"));
+				type(jq("$view @intbox:eq(0)"), "1234");
+				waitResponse();
+				verifyEquals("1234", getValue(jq("$view @intbox:eq(0)")));
+				click(jq("$view @intbox:eq(1)"));
+				type(jq("$view @intbox:eq(1)"), "12345");
+				waitResponse();
+				verifyEquals("12345", getValue(jq("$view @intbox:eq(1)")));
+				click(jq("@decimalbox"));
+				type(jq("@decimalbox"), "12.345");
+				waitResponse();
+				verifyEquals("12.34", getValue(jq("@decimalbox")));
+				/** datebox (it may fail on different browser language)*/
+				click(jq("$db i.z-datebox-btn"));
+				click(jq("@calendar td:eq(23)"));
+				type(jq("$db input"), "Jun 10, 2010");
+				waitResponse();
+				verifyEquals("Jun 10, 2010", getValue(jq("$db input.z-datebox-inp")));
+				click(jq("@select"));
+				select(jq("@select"), "yyyy/MM/dd hh:mm a");
+				
+				waitResponse();
+				String dateTimeStr = getValue(jq("$db input.z-datebox-inp"));
+				String datePattern = "[1-9][0-9][0-9][0-9]/((0[1-9])|(1[0-2]))/(([1-9])|(1[0-9])|(2[0-9])|(3[0-1]))" +
+				" ((0[1-9])|(1[0-2])):((0[0-9])|(1[0-9])|(2[0-9])|(3[0-9])|(4[0-9])|(5[0-9])) ((A|P)M)";
+
+				waitResponse();
+				verifyTrue("Date time: " + dateTimeStr, dateTimeStr.matches(datePattern));
+				select(jq("@select"), "yyyy/MM/dd");
+
+				waitResponse();
+				verifyContains(getValue(jq("$db input.z-datebox-inp")), "2010/06/10");
+				select(jq("@select"), "MM-dd-yy");
+
+				waitResponse();
+				verifyEquals("06-10-10", getValue(jq("$db input.z-datebox-inp")));
+				/** constraint */
+				type(jq("$view @textbox:eq(4)"), "zk");
+
+				waitResponse();
+				verifyEquals("Please enter an e-mail address", getText(jq("@errorbox div.z-errbox-center")));
+				type(jq("$view @textbox:eq(4)"), "zk@zkoss.org");
+				focus(jq("$intro"));
+
+				waitResponse();
+				verifyFalse(jq("@errorbox div.z-errbox-center").exists());
+				/** spinner */
+				mouseDownAt(jq("@spinner i.z-spinner-btn"), "0,0");
+				mouseUp(jq("@spinner i.z-spinner-btn"));
+
+				waitResponse();
+				verifyTrue(3 < parseInt(jq("@spinner input.z-spinner-inp").val()));
+				mouseDownAt(jq("@spinner i.z-spinner-btn"), "3,20");
+				mouseUp(jq("@spinner i.z-spinner-btn"));
+
+				waitResponse();
+				verifyTrue(4 >= parseInt(jq("@spinner input.z-spinner-inp").val()));
+				/** colorbox */
+				click(jq("@colorbox i.z-colorbox-currcolor"));
+				click(jq("$view @widget div.z-colorpalette-colorbox:eq(56)"));
+				click(jq("@colorbox i.z-colorbox-currcolor"));
+				click(jq(".z-colorbox-picker-btn"));
+
+				waitResponse();
+				verifyEquals("153", getValue(jq("$view @widget input.z-colorpicker-r-inp")));
+				verifyEquals("51", getValue(jq("$view @widget input.z-colorpicker-g-inp")));
+				verifyEquals("102", getValue(jq("$view @widget input.z-colorpicker-b-inp")));
+				click(jq("$view @widget button.z-colorpicker-ok-btn"));
 		]]></client>
 	</case>
 </test>

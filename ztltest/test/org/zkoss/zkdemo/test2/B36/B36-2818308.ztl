@@ -95,6 +95,7 @@
 				tableScrollTop++;//IE6,7 has a border at the upper of the first item of the listbox
 			verifyEquals(tableScrollTop, scrollTop);
 			click(jq("@button[label=\"add upon top\"] td.z-button-cm"));
+			waitResponse();
 			String expected = "0";
 			if (ZK.is("ie6_") || ZK.is("ie7_"))
 				expected = "1";//IE6,7 has a border at the upper of the first item of the listbox

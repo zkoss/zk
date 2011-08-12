@@ -12,7 +12,7 @@
 			waitResponse();
 			String zHtmlClass = jq("div.z-msgbox").attr("class");
 			click(jq("@window div.z-window-modal-close,@window div.z-window-highlighted-close"));
-
+			waitResponse();
 			click(jq("@button[label=\"zul click\"] td.z-button-cm"));
 			waitResponse();
 			String zulClass = jq("div.z-msgbox").attr("class");

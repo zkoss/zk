@@ -40,22 +40,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		<client><![CDATA[
 				type(jq("@textbox:eq(0)"),"test");
 				verifyTrue(jq(".z-errbox").exists());
-				click(jq(".z-errbox-close"));
+				closeErrorBox();
 				type(jq("@textbox:eq(0)"),"123");
 				verifyFalse(jq(".z-errbox").exists());
 				type(jq("@textbox:eq(0)"),"12A3");
 				verifyTrue(jq(".z-errbox").exists());
-				click(jq(".z-errbox-close"));
+				closeErrorBox();
 				type(jq("@textbox:eq(0)"),"123");
 				
 				type(jq("@textbox:eq(1)"),"test");
 				verifyTrue(jq(".z-errbox").exists());
-				click(jq(".z-errbox-close"));
+				closeErrorBox();
 				type(jq("@textbox:eq(1)"),"123");
 				verifyFalse(jq(".z-errbox").exists());
 				type(jq("@textbox:eq(1)"),"12A3");
 				verifyTrue(jq(".z-errbox").exists());
-				click(jq(".z-errbox-close"));
+				closeErrorBox();
 		]]></client>
 	</case>
 </test>

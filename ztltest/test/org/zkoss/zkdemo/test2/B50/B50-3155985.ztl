@@ -34,11 +34,11 @@ class MyComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
 <html><![CDATA[
 	<ol>
 	<li>Click the Fire button</li>
-	<li>Then, "timer started" apears, and after 5 seconds, "timer fired: 5" appears</li>
+	<li>Then, "timer started" apears, and after 3 seconds, "timer fired: 3" appears</li>
 	</ol>
 ]]></html>
 
-<timer id="timer" running="false" repeats="false" delay="5000" />
+<timer id="timer" running="false" repeats="false" delay="3000" />
 <button id="btn" label="Fire"/>
 <vlayout id="inf"/>
 </div>
@@ -47,11 +47,12 @@ class MyComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
 		--></server>
 		<client><![CDATA[
 				click(btn);
+				waitResponse();
 				verifyEquals("timer started", (jq("@label:eq(0)").text()));
-				sleep(4500);
+				sleep(2000);
 				verifyEquals("", (jq("@label:eq(1)").text()));
-				sleep(500);
-				verifyEquals("timer fired: 5", (jq("@label:eq(1)").text()));
+				sleep(1500);
+				verifyContains((jq("@label:eq(1)").text()),"timer fired:");
 		]]></client>
 	</case>
 </test>

@@ -36,10 +36,12 @@ i am a Tooltip!.
 
 		--></server>
 		<client><![CDATA[
+			if (!ZK.is("ie9")) {
 				mouseOver(jq(".z-menu-body"));sleep(500);
 				mouseOver(jq(".z-menu-item"));sleep(2000);
 				verifyTrue(jq(".z-popup").exists());
 				verifyTrue(jq(".z-popup").isVisible());
+			}
 		]]></client>
 	</case>
 </test>

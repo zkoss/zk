@@ -62,8 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					<label />
 					<vbox>
 						<button id="btn" label=" login"
-							onClick='alert("Login button
-clicked")' />
+							onClick='alert("Login button clicked")' />
 					</vbox>
 				</row>
 			</rows>
@@ -75,17 +74,18 @@ clicked")' />
 
 		--></server>
 		<client><![CDATA[
-			type(jq("$username"),"hello");
-			type(jq("$password"),"world");
-			click(jq("$btn"));
-			waitResponse();
-			verifyEquals("Login buttonclicked",jq(".z-window-highlighted .z-label").text());
-			click(jq(".z-messagebox-btn"));
-			waitResponse();
-			focus(jq("$password"));
-			keyPressNative(ENTER);
-			waitResponse();
-			verifyEquals("Window.onOK triggered, password=world",jq(".z-window-highlighted .z-label").text());
+				type(jq("$username"),"hello");
+				type(jq("$password"),"world");
+				click(jq("$btn"));
+				waitResponse();
+				verifyEquals("Login button clicked",jq(".z-window-highlighted .z-label").text());
+				click(jq(".z-messagebox-btn"));
+				waitResponse();
+				focus(jq("$password"));
+				sendKeys(jq("$password"), Keys.ENTER);
+				waitResponse();
+				verifyEquals("Window.onOK triggered, password=world",jq(".z-window-highlighted .z-label").text());
+				
 		]]></client>
 	</case>
 </test>

@@ -33,12 +33,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return res;
 	}
 	
-	var _allowKeys;
-	
-	// Fixed merging JS issue
-	zk.load('zul.lang', function () {
-		_allowKeys = zul.inp.NumberInputWidget._allowKeys+zk.DECIMAL+'e';
-	});
 /**
  * An edit box for holding a constrained double.
  *
@@ -49,11 +43,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_value: 0,
 	_step: 1,
 	_buttonVisible: true,
-	$init: function () {
-		this.$supers('$init', arguments);
-		//bug B50-3325041
-		this._allowKeys = _allowKeys;
-	},
 	$define: {
 		/** Return the step of double spinner
 		 * @return double
@@ -93,12 +82,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this.onSize();
 			return;
 		}
-	},
-	setLocalizedSymbols: function (val) {
-		var old = this._localizedSymbols;
-		this.$supers('setLocalizedSymbols', arguments);
-		if (this._localizedSymbols !== old)
-			this._allowKeys += this._localizedSymbols.DECIMAL + 'e';
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -380,6 +363,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
 			
 		return this.$supers('afterKeyDown_', arguments);
+	},
+	getAllowedKeys_: function () {
+		var symbols = this._localizedSymbols;
+		return this.$supers('getAllowedKeys_', arguments)
+			+ (symbols ? symbols: zk).DECIMAL + 'e';
+		//supports scientific expression such as 1e2
 	},
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Doublespinner, 'bind_', arguments); 

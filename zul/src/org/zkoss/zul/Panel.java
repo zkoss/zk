@@ -51,9 +51,9 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Panel extends XulElement implements Framable {
-	private transient Toolbar _tbar, _bbar, _fbar;
-	private transient Panelchildren _panelchildren;
-	private transient Caption _caption;
+	private Toolbar _tbar, _bbar, _fbar;
+	private Panelchildren _panelchildren;
+	private Caption _caption;
 
 	private String _border = "none";
 	private String _title = "";
@@ -620,7 +620,7 @@ public class Panel extends XulElement implements Framable {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		afterUnmarshal();
+		//afterUnmarshal(); // B50-ZK-261: no afterUnmarshal() as now the fields are non-transient
 	}
 	
 	// super

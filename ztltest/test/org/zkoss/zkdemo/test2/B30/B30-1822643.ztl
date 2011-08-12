@@ -54,6 +54,7 @@ pageSize
 			verifyEquals("[ 1 - 2 / 30 ]", jq(".z-paging-info").text());
 			verifyEquals(2, jq(".z-treechildren tr").length());
 			click(btn);
+			waitResponse();
 			verifyEquals("[ 1 - 10 / 30 ]", jq(".z-paging-info").text());
 			verifyEquals(10, jq(".z-treechildren tr").length());
 		]]></client>

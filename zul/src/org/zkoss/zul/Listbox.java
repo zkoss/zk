@@ -1187,6 +1187,8 @@ public class Listbox extends MeshElement {
 							_paging.detach();
 						_pgi.setTotalSize(getDataLoader().getTotalSize());
 						addPagingListener(_pgi);
+						if (_pgi instanceof Component)
+							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
 					}
 				}
 			}
@@ -1203,6 +1205,7 @@ public class Listbox extends MeshElement {
 		final Paging paging = new Paging();
 		paging.setAutohide(true);
 		paging.setDetailed(true);
+		paging.applyProperties();
 		paging.setTotalSize(getDataLoader().getTotalSize());
 		paging.setParent(this);
 		if (_pgi != null)
@@ -2964,6 +2967,8 @@ public class Listbox extends MeshElement {
 				int sz = initRodSize();
 				if (sz != INIT_LIMIT)
 					renderer.render("initRodSize", initRodSize());
+				if (!inPagingMold() && _jsel >= 0)
+					renderer.render("_selInView", _jsel); // B50-ZK-56
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
@@ -2973,9 +2978,9 @@ public class Listbox extends MeshElement {
 				renderer.render("rightSelect", false);
 			if (isListgroupSelectable())
 				renderer.render("groupSelect", true);
-			if (!inPagingMold() && _jsel >= 0)
-				renderer.render("selectedIndex", _jsel); // B50-ZK-56
 		}
+		if (_pgi != null && _pgi instanceof Component)
+			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

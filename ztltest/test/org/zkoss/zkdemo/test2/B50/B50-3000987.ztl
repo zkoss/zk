@@ -19,6 +19,7 @@
 		]]></server>
 		<client><![CDATA[
 			click(jq("@button"));
+			waitResponse();
 			verifyEquals("D", jq("@option:eq(2)").text());
    		]]></client>
 	</case>

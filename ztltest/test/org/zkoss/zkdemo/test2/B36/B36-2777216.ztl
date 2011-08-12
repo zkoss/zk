@@ -21,7 +21,7 @@
 		--></server>
 		<client><![CDATA[
 			for (int i = 0; i < 5; i++) {
-				click(jq("@button button"));
+				click(jq("@button"));
 				waitResponse();
 			}
 			verifyEquals(jq(itemlist.$n("body")).outerWidth(), jq(itemlist.$n("pgib")).outerWidth());

@@ -55,7 +55,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  * @since 3.0.1
  *
  */
-abstract public class GenericEventListener implements EventListener {
+abstract public class GenericEventListener implements SerializableEventListener {
 
 	/* Process the event by forwarding the invocation to
 	 * the corresponding method called onXxx.

@@ -1,0 +1,38 @@
+<zk>
+	<div>1. Do NOT left click on the Column. Open the menu popup at the upper right corner of the Grid.</div>
+	<div>2. Choose "Sort Descending".</div>
+	<div>3. You should see the data is sorted in descending order.</div>
+	<div>4. Open the menu again and choose "Sort Ascending", the data should be sorted in ascending order.</div>
+	<div>5. Click on the Column 2 times. The sorting order should toggle.</div>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(10);
+		class MyRowComparator implements Comparator {
+			private boolean _asc;
+	
+			public MyRowComparator(boolean ascending) {
+				_asc = ascending;
+			}
+	
+			public int compare(Object o1, Object o2) {
+				Row r1 = (Row) o1, r2 = (Row) o2;
+				int v = ((Comparable) r1.getValue()).compareTo(r2.getValue());
+				return _asc ? v : -v;
+			}
+	
+			public String toString() {
+				return "MyRowComparator [_asc=" + _asc + "]";
+			}
+	
+		}
+		Comparator asc = new MyRowComparator(true);
+		Comparator dsc = new MyRowComparator(false);
+	]]>
+	</zscript>
+	<grid id="grid" width="200px" model="${strset}">
+		<columns menupopup="auto">
+			<column label="Column" sort="auto"
+				sortAscending="${asc}" sortDescending="${dsc}" />
+		</columns>
+	</grid>
+</zk>

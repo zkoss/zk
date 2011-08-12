@@ -28,12 +28,12 @@
 				</window>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
-				verifyEquals(1,jq(".z-treerow").length());	
+		<client><![CDATA[
+				verifyEquals(1,jq(".z-treerow").length());
 				click(jq(".z-tree-root-close"));
 				waitResponse();
 				verifyEquals(2,jq(".z-treerow").length());
-				click(jq(".z-overflow-hidden"));
+				clickAt(jq(".z-overflow-hidden"), "50,2");
 				waitResponse();
 				verifyTrue(isVisible(jq(".z-window-highlighted")));
 			]]></client>

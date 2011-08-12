@@ -58,6 +58,7 @@
 			verifyEquals("Failed!!!", jq("@window .z-messagebox .z-label").html());
 			//for event thread compatible
 			click(jq("@window[mode=\"modal\"] @button,@window[mode=\"highlighted\"] @button"));
+			waitResponse();
 			click(btn5);
 			waitResponse();
 			//for event thread compatible

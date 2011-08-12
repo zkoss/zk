@@ -29,12 +29,12 @@ onClick='lg.label="test"'/>
 
 		--></server>
 		<client><![CDATA[
-				click(jq("@button"));
-				waitResponse();
-				verifyTrue(jq("@listcell").isVisible());
-				click(jq(".z-listgroup-img-open"));
-				waitResponse();
-				verifyFalse(jq("@listcell").isVisible());
+			click(jq("@button"));
+			waitResponse();
+			verifyTrue(jq("@listitem @listcell").isVisible());
+			click(jq(".z-listgroup-img-open"));
+			waitResponse();
+			verifyFalse(jq("@listitem @listcell").isVisible());
 		]]></client>
 	</case>
 </test>

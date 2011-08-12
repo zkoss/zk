@@ -32,7 +32,7 @@ void test() {
 			verifyEquals(0, jq(".z-label").length());
 			type(jq("$test"),"I am test string");
 			focus(jq("$test"));
-			keyPressNative(ENTER);
+			sendKeys(jq("$test"), Keys.ENTER);
 			waitResponse();
 			verifyEquals("I am test string" , jq(".z-label").text());
 		]]></client>

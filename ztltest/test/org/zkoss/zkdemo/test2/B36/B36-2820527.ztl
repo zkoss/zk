@@ -42,29 +42,30 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-			clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-			click(jq("@menuitem[label=\"Hardcover\"] a.z-menu-item-cnt-ck"));
-			waitResponse();
-			verifyEquals("none", jq("@window @column[label=\"Hardcover\"]").css("display"));
-			
-			mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-			clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-			click(jq("@menuitem[label=\"Publisher\"] a.z-menu-item-cnt-ck"));
-			waitResponse();
-			verifyEquals("none", jq("@window @column[label=\"Publisher\"]").css("display"));
-			
-			mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-			clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-			click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
-			waitResponse();
-			verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(0)").css("display"));
-			
-			mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"));
-			clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"), "1,1");
-			click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
-			waitResponse();
-			verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(1)").css("display"));
+				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
+				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
+				waitResponse();
+				click(jq("@menuitem[label=\"Hardcover\"] a.z-menu-item-cnt-ck"));
+				waitResponse();
+				verifyEquals("none", jq("@window @column[label=\"Hardcover\"]").css("display"));
+				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
+				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
+				waitResponse();
+				click(jq("@menuitem[label=\"Publisher\"] a.z-menu-item-cnt-ck"));
+				waitResponse();
+				verifyEquals("none", jq("@window @column[label=\"Publisher\"]").css("display"));
+				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
+				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
+				waitResponse();
+				click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
+				waitResponse();
+				verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(0)").css("display"));
+				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"));
+				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"), "1,1");
+				waitResponse();
+				click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
+				waitResponse();
+				verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(1)").css("display"));
 		]]></client>
 	</case>
 </test>

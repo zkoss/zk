@@ -50,7 +50,7 @@ import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
  * @author henrichen
  * @since 5.0.0
  */
-public class ListboxDataLoader implements DataLoader, Cropper {
+public class ListboxDataLoader implements DataLoader, Cropper { //no need to serialize since Listbox assumes it
 	private transient Listbox _listbox;
 
 	//--DataLoader--//

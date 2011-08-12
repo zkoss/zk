@@ -567,7 +567,7 @@ jq(function() {
 		_reszInf.inResize = true;
 		try {
 			zWatch.fire('beforeSize'); //notify all
-			zWatch.fire('onFitSize'); //notify all
+			zWatch.fire('onFitSize', null, {reverse:true}); //notify all
 			zWatch.fire('onSize'); //notify all
 			_reszInf.lastTime = jq.now() + 8;
 		} finally {
@@ -706,9 +706,11 @@ jq(function() {
 		}
 	});
 
+	zjq._fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
+
 	jq(window).resize(function () {
 		if (zk.mounting || zk.skipResize)
-			return; //IE6: it sometimes fires an "extra" onResize in loading
+			return;
 
 	//Tom Yeh: 20051230:
 	//1. In certain case, IE will keep sending onresize (because

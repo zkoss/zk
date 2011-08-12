@@ -45,12 +45,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		return "z-tabs" + (tabbox.getMold() == "default" && tabbox.isVertical() ? '-ver' : '');
 	},
 	// fixed for bug 3013433 on IE6
-	beforeSize: function () {
+	beforeSize: zk.ie6_ ? function () {
 		var w = this.getWidth(),
 			hflex = this.getHflex();
 		if (!w && hflex != 'min') // fixed for F50-2831389.zul
 			this.$n('header').style.width = this.$n().style.width = '';
-	},
+	}: zk.$void,
 	onSize: _zkf = function () {
 		this._fixWidth();
 		
@@ -95,9 +95,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
 		zWatch.listen({onSize: this, onShow: this});
-		if (zk.ie6_) {
+		if (zk.ie6_)
 			zWatch.listen({beforeSize: this});
-		}
+
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
 				this.domListen_(btn, "onClick");

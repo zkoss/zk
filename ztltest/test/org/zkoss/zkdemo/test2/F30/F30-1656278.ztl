@@ -15,7 +15,7 @@
 							onClick="alert(self.label)" disabled="true" />
 						<menuitem label="Save" />
 						<menuseparator />
-		                                <menuitem label="Disable Open" onClick="open.disabled=true"/>
+		                                <menuitem id="menuitem1" label="Disable Open" onClick="open.disabled=true"/>
 		                                <menuitem label="Enable Open" onClick="open.disabled=false"/>
 						<menuitem label="Exit" />
 					</menupopup>
@@ -41,6 +41,7 @@
 			click(menuitem);
 			waitResponse();
 			verifyFalse(jq("@window").exists());
+			click(menuitem1);
 			click(menu2);
 			click(menu3);
 			click(menuitem2);

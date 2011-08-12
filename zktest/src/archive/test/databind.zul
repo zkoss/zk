@@ -6,10 +6,10 @@
   <a:bind model="personList" selectedItem="selected"/>
   <listbox width="800px" rows="8">
     <listhead>
-      <listheader width="200px"/>
-      <listheader width="200px"/>
-      <listheader width="200px"/>
-      <listheader width="200px"/>
+      <listheader/>
+      <listheader/>
+      <listheader/>
+      <listheader/>
     </listhead>
     <a:bind _var="person"/>
     <listitem onDoubleClick="alert(&quot;doubleclick&quot;);">

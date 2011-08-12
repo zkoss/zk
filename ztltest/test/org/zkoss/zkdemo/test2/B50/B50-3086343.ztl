@@ -43,8 +43,7 @@ Then click the red area, it shall become the first child.
 					int y = i+1;
 					verifyEquals("Item B." + y, jq("div > div > div:eq(1) > h1:eq(" + i + ")").text());
 				}
-					
-				click(jq("div > div > div:eq(1)"));
+				clickAt(second, "10,10");
 				waitResponse();
 				for(int i=0;i<3;i++){
 					int y = i+1;

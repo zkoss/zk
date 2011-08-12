@@ -194,7 +194,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ofs = this._dragsz ? zk(n).revisedOffset() : false;
 		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
 		!jq.nodeName(evt.domTarget, "input") && (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))) {
-			this.fire('onSort');
+			this.fire('onSort', "ascending" != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
 		} else {
 			if (jq.nodeName(evt.domTarget, "input"))
@@ -248,6 +248,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	ignoreChildNodeOffset_: function(attr) {
 		return true;
 	},
+	listenOnFitSize_: zk.$void, // skip flex
+	unlistenOnFitSize_: zk.$void,
 	//@Override to find the minimum width of listheader
 	beforeMinFlex_: function(o) {
 		if (o == 'w') {

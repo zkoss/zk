@@ -17,16 +17,16 @@
 				</tree>
 			</zk>
 		 --></server>
-		<client wait="300"><![CDATA[
-			click(jq("@treecell[label=\"3\"] div.z-overflow-hidden"));
+		<client><![CDATA[
+				click(jq("@treecell[label=\"3\"] div.z-overflow-hidden"));
 				waitResponse();
 				click(jq("@page @treerow span.z-tree-root-open"));
 				waitResponse();
 				click(jq("@page @treerow span.z-tree-root-close"));
 				waitResponse();
-				keyPressNative(DOWN);
-				keyPressNative(DOWN);
-				keyPressNative(UP);
+				sendKeys(tree.$n("a"), Keys.DOWN);
+				sendKeys(tree.$n("a"), Keys.DOWN);
+				sendKeys(tree.$n("a"), Keys.UP);
 				verifyTrue(jq("@treecell[label=\"7\"]").parent(".z-treerow").hasClass("z-treerow-seld"));
 		]]></client>
 	</case>

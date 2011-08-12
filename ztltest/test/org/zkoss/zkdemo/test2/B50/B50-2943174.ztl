@@ -27,7 +27,7 @@
 				</zk>
 			-->
 		</server>
-		<client wait="100">	<![CDATA[
+		<client>	<![CDATA[
 				int x = jq("body").width();				
 				int y = jq(".z-textbox").width();				
 				int z = jq("select").width();				

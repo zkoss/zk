@@ -43,6 +43,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				click(jq(".z-datebox-btn"));
+				waitResponse();
 				mouseDownAt(jq(".z-timebox-btn"),"20,20");
 				waitResponse();
 				mouseUp(jq(".z-timebox-btn"));
@@ -62,8 +63,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				verifyTrue(msg.indexOf("d2:onChange:")!=-1 && msg.indexOf("null") == -1);
 				JQuery dateInput = jq(".z-datebox-inp");
 				focus(dateInput);
-				dateInput.eval("val(\"\")");
-				keyPressNative(TAB);
+				waitResponse();
+				type(dateInput, "");
+				blur(dateInput);
 				waitResponse();
 				msg = jq("@label:last").text();
 				verifyEquals("d2:onChange: null",jq("@label:last").text());

@@ -85,11 +85,14 @@
 		</server>
 		<client><![CDATA[			
 			click(btn1);
+			waitResponse();
 			verifyEquals(8,jq(".z-treechildren tr.z-treerow").length());
 			click(btn2);
+			waitResponse();
 			verifyEquals(8,jq(".z-treechildren tr.z-treerow").length());
 			verifyEquals(" Item 2.2.1",jq(".z-treechildren tr.z-treerow:eq(6)").text());
 			click(btn3);
+			waitResponse();
 			verifyEquals(7,jq(".z-treechildren tr.z-treerow").length());
 			verifyEquals(" Item 3",jq(".z-treechildren tr.z-treerow:eq(6)").text());
 		]]></client>
@@ -184,7 +187,9 @@
 				verifyEquals(7,jq(".z-treechildren tr.z-treerow").length());
 				verifyEquals(" Item 3",jq(".z-treechildren tr.z-treerow:eq(6)").text());
 				click(jq(".z-treerow-img-checkbox:eq(2)"));
+				waitResponse();
 				click(jq(".z-treerow-img-checkbox:eq(3)"));
+				waitResponse();
 				click(jq(".z-treerow-img-checkbox:eq(4)"));
 				verifyEquals(3,jq(".z-treerow-seld").length());
 				click(btn2);

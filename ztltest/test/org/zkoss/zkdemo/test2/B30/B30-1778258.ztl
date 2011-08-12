@@ -18,6 +18,7 @@
 		<client><![CDATA[
 			verifyFalse(jq("@box @div").exists());
 			click(btn1);
+			waitResponse();
 			verifyTrue(jq("@box @div").exists());
 		]]></client>
 	</case>

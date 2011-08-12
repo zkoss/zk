@@ -5,7 +5,7 @@
 				<combobox id="cb" width="80px" />
 			</zk>
 		]]></server>
-		<client wait="100"><![CDATA[
+		<client><![CDATA[
 			int inpWidth = Integer.valueOf(cb.$n("real").get("offsetWidth"));
 			int btnWidth = Integer.valueOf(cb.$n("btn").get("offsetWidth"));			
 			verifyTrue(inpWidth + btnWidth == 80);
