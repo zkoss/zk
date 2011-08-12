@@ -1,0 +1,290 @@
+<window title="My First Window" border="normal" width="600px">
+<borderlayout id="b1" vflex="min" hflex="min">
+<east id="e1" vflex="min" hflex="min">
+<borderlayout id="b2" vflex="min" hflex="min">
+<east id="e2" vflex="1" hflex="min">
+<groupbox vflex="1" hflex="min">
+<caption label="EAST" vflex="min" hflex="min"/>
+<grid vflex="min" hflex="min">
+<rows>
+<row>
+<cell>
+itemA
+</cell>
+</row>
+<row>
+<cell>
+itemA
+</cell>
+</row>
+<row>
+<cell>
+itemA
+</cell>
+</row>
+</rows>
+</grid>
+</groupbox>
+</east>
+<west id="w1" vflex="1" hflex="min">
+	<groupbox vflex="1" hflex="min">
+	<caption label="WEST" vflex="min" hflex="min"/>
+	<grid vflex="min" hflex="min">
+	<rows>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</groupbox>
+</west>
+</borderlayout>
+</east>
+<west id="w2" vflex="min" hflex="min">
+
+	<groupbox vflex="min" hflex="min">
+	<caption label="WEST" vflex="min" hflex="min"/>
+	<grid vflex="min" hflex="min">
+	<rows>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</groupbox>
+
+</west>
+<center id="c1" vflex="1" hflex="min">
+	<groupbox vflex="1" hflex="min">
+	<caption label="CENTER" vflex="min" hflex="min"/>
+	<grid vflex="min" hflex="min">
+	<rows>
+	<row>
+	<cell>
+	itemA and more stuff here
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</groupbox>
+</center>
+<north id="n1" vflex="min" hflex="1">
+	<groupbox vflex="min" hflex="1">
+	<caption label="NORTH" vflex="min" hflex="1"/>
+	<grid vflex="min" hflex="min">
+	<rows>
+	<row>
+	<cell>
+	itemA and more stuff here
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</groupbox>
+	</north>
+<south id="s1" vflex="min" hflex="1">
+	<groupbox vflex="min" hflex="1">
+	<caption label="SOUTH" vflex="min" hflex="min"/>
+	<grid vflex="min" hflex="min">
+	<rows>
+	<row>
+	<cell>
+	itemA and more stuff here
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	<row>
+	<cell>
+	itemA
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</groupbox>
+</south>
+
+</borderlayout>
+</window>
