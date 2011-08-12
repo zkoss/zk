@@ -859,7 +859,7 @@ new zul.wnd.Window{
 			this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 			if (this._nvflex < 0 && v != 'min')
 				this._nvflex = 0;
-			if (_binds[this.uuid] === this) { //if already bind
+			if (this.desktop) { //if already bind
 				if (!this._nvflex) {
 					this.setFlexSize_({height: ''}); //clear the height
 					delete this._vflexsz;
@@ -867,7 +867,9 @@ new zul.wnd.Window{
 						_unlistenFlex(this);
 				} else
 					_listenFlex(this);
-				zUtl.fireSized(this.parent, true);
+
+				if (!this.isBinding()) //ZK-307
+					zUtl.fireSized(this.parent, true);
 			}
 		},
 		/**
@@ -901,7 +903,7 @@ new zul.wnd.Window{
 		 */
 		hflex: function(v) {
 			this.setHflex_(v);
-			if (_binds[this.uuid] === this) //if already bind
+			if (this.desktop/*if already bind*/ && !this.isBinding()/*ZK-307*/)
 				zUtl.fireSized(this.parent, true);
 		},
 		/** Returns the number of milliseconds before rendering this component
@@ -2589,6 +2591,19 @@ function () {
 			page: (dt._bpg = new zk.Body(dt));
 	},
 
+	/** Returns whether this widget is being bound to DOM.
+	 * In other words, it returns true if {@link #bind} is called
+	 * against this widget or any of its ancestors.
+	 * @return boolean
+	 * @since 5.0.8
+	 */
+	isBinding: function () {
+		if (this.desktop)
+			for (var w = this; w; w = w.parent)
+				if (w._binding)
+					return true;
+	},
+
 	/** Binds this widget.
 	 * It is called to assoicate (aka., attach) the widget with
 	 * the DOM tree.
@@ -2606,6 +2621,8 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	bind: function (desktop, skipper) {
+		this._binding = true;
+
 		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
@@ -2615,6 +2632,8 @@ function () {
 			while (fn = after.shift())
 				fn();
 		}
+
+		delete this._binding;
 		return this;
 	},
 	/** Unbinds this widget.
@@ -2687,7 +2706,6 @@ bind_: function (desktop, skipper, after) {
 			_listenFlex(this);
 
 		this.bindChildren_(desktop, skipper, after);
-
 		if (this.isListen('onBind')) {
 			var self = this;
 			zk.afterMount(function () {
