@@ -112,6 +112,9 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$supers(zul.tab.Tabpanels, 'unbind_', arguments);
 	},
 	onSize: _zkf = function () {
+		this._fixWidth();
+	},
+	_fixWidth: function () {
 		var parent = this.parent.$n();
 		if (this.__width || !zk(parent).isRealVisible())
 			return;

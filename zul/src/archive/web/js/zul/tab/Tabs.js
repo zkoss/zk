@@ -422,6 +422,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
 			this._fixHgh();
 			if (this.parent.isVertical()) {
+				var panels = tabbox.getTabpanels();
+				if (panels)
+					panels._fixWidth();
 				var most = 0;
 				//LI in IE doesn't have width...
 				if (tabs.style.width) {
@@ -481,12 +484,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (tabbox.isVertical()) {
 			var child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
-			if (tbx.style.height) {
-				this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
-			} else {
-				this._forceStyle(tbx, "h", jq.px0(allTab.length * 35));//give it default height
-				this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
+			if (!tabbox.getHeight()) {
+				var tabsHgh = allTab.length * 35, // default height
+					panelsHgh = tabbox.getSelectedPanel().$n().offsetHeight, // B50-ZK-298: concern panel height
+					realHgh = Math.max(tabsHgh, panelsHgh);
+				this._forceStyle(tbx, "h", jq.px0(realHgh));
 			}
+			this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
 				this._forceStyle(head, "h", jq.px0(tabs.offsetHeight - btnsize));
