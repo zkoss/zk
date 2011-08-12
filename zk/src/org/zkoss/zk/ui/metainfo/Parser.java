@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -1011,7 +1010,7 @@ public class Parser {
 			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null, scope = null, composite = null;
-		final Map attrs = new HashMap();
+		final Map attrs = new LinkedHashMap();
 		AnnotationHelper attrAnnHelper = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
@@ -1054,7 +1053,7 @@ public class Parser {
 
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
-		final Map vars = new HashMap();
+		final Map vars = new LinkedHashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -1085,7 +1084,7 @@ public class Parser {
 		if (!el.getElements().isEmpty())
 			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
 
-		final Map attrs = new HashMap();
+		final Map attrs = new LinkedHashMap();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
