@@ -225,7 +225,7 @@ public class JpaUtil {
 	private static EntityManager initEntityManger(String puName,Map properties) {
 		EntityManager em;
 		if (properties == null) {
-			em = (EntityManager) getEmMap().get(puName);
+			em = (EntityManager) getEmMap().get(getPersistenceUnitName(puName));
 			if (em == null) {
 				em = createEntityManager(puName, null);
 				getEmMap().put(getPersistenceUnitName(puName), em);
