@@ -212,7 +212,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 });
 
 zWatch = (function () {
-	var _visiEvts = {onSize: true, onShow: true, onHide: true, beforeSize: true},
+	var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true},
 		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 		_dirty,
 		_Gun = zk.$extends(zk.Object, {

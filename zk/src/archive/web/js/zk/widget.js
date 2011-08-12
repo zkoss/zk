@@ -271,7 +271,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.listen({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -281,7 +281,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.unlisten({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
@@ -2896,26 +2896,13 @@ unbind_: function (skipper, after) {
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	},
 	fixFlex_: function() {
-		zFlex.fixFlex.apply(this);
+		zFlex.fixFlex(this);
 	},
 	fixMinFlex_: function(n, orient) { //internal use
-		return zFlex.fixMinFlex.apply(this, arguments);
+		return zFlex.fixMinFlex(this, n, orient);
 	},
 	resetSize_: function(orient) {
 		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
-	},
-	beforeSize: function () {
-		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
-		if (this.isRealVisible()) {
-			if (this._hflex && this._hflex != 'min') {
-				this.resetSize_('w');
-				this.parent.afterResetChildSize_('w');
-			}
-			if (this._vflex && this._vflex != 'min') {
-				this.resetSize_('h');
-				this.parent.afterResetChildSize_('h');
-			}
-		}
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).
@@ -3910,7 +3897,7 @@ _doFooSelect: function (evt) {
 	 */
 	listenOnFitSize_: function () {
 		if (!this._fitSizeListened && (this._hflex == 'min' || this._vflex == 'min')){
-			zWatch.listen({onFitSize: [this, zFlex.fixMinFlexX]});
+			zWatch.listen({onFitSize: [this, zFlex.onFitSize]});
 			this._fitSizeListened = true;
 		}
 	},
@@ -3922,7 +3909,7 @@ _doFooSelect: function (evt) {
 	 */
 	unlistenOnFitSize_: function () {
 		if (this._fitSizeListened) {
-			zWatch.unlisten({onFitSize: [this, zFlex.fixMinFlexX]});
+			zWatch.unlisten({onFitSize: [this, zFlex.onFitSize]});
 			delete this._fitSizeListened;
 		}
 	},

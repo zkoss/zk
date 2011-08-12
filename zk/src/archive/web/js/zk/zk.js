@@ -105,7 +105,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function wgt2s(w) {
 		var s = w.widgetName;
-		return w.id ? s + '$' + w.id: s + '#' + w.uuid + '$' + w.$oid;
+		return s + (w.id ? '$' + w.id: '') + '#' + w.uuid + '$' + w.$oid;
 	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];

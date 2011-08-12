@@ -606,10 +606,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doClick_', arguments);		
 	},
-	isWatchable_: function(name) {
-		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
-		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
-	},
 	_docClick: function (evt) {
 		var target = evt.target;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {

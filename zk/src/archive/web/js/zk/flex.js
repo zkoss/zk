@@ -30,11 +30,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			oldVal[3] = ps.marginRight;
 			
 			// clean margin
-			zs.marginLeft = '0px';
-			zs.marginRight = '0px';
-			ps.marginLeft = '0px';
-			ps.marginRight = '0px';
-			
+			zs.marginLeft = zs.marginRight = ps.marginLeft = ps.marginRight = '0px';
+
 			start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
 		} else {
 			start = zkpOffset[0] + zkp.sumStyles("l", jq.paddings) + zkp.sumStyles("l", jq.borders);
@@ -141,52 +138,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	} 
 zFlex = { //static methods
-	fixFlexX: function (ctl, opts, resize) {
-		var wgt = this;
-		//avoid firedown("onShow") firedown("onSize") calling in again
-		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
-			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min'))) 
-			return;
-		
-		//a resize fired by myself, simply call directly to fixFlex
-		if (resize) {
-			zFlex.fixFlex.apply(wgt);
-			return;
-		}
-		
-		//normal triggering
-		var r1 = wgt, p1 = r1,
-			j1 = -1;
-		if (wgt._hflex == 'min' && wgt._hflexsz === undefined && !wgt.ignoreFlexSize_('w')) {
-			++j1;
-			while ((p1 = p1.parent) && p1._hflex == 'min') {
-				delete p1._hflexsz;
-				r1 = p1;
-				++j1;
-				if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
-					break;
+	beforeSize: function () {
+		var wgt = this, p;
+		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
+		if (wgt.isRealVisible()) {
+			if (wgt._hflex && wgt._hflex != 'min') {
+				wgt.resetSize_('w');
+				if (p = wgt.parent)
+					p.afterResetChildSize_('w');
+			}
+			if (wgt._vflex && wgt._vflex != 'min') {
+				wgt.resetSize_('h');
+				if (p = wgt.parent)
+					p.afterResetChildSize_('h');
 			}
 		}
-		var r2 = wgt, p2 = r2,
-			j2 = -1;
-		if (wgt._vflex == 'min' && wgt._vflexsz === undefined && !wgt.ignoreFlexSize_('h')) {
-			++j2;
-			while ((p2 = p2.parent) && p2._vflex == 'min') {
-				delete p2._vflexsz;
-				r2 = p2;
-				++j2;
-				if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
-					break;
-			}
-		}
-		if (j1 > 0 || j2 > 0)
-			zWatch.fireDown('onSize', j1 > j2 ? r1 : r2, null, true); //true to indicate wgt is a resize
-		else
-			zFlex.fixFlex.apply(r2);
-
 	},
-	fixFlex: function () {
-		var wgt = this;
+	onSize: function () {
+		zFlex.fixFlex(this);
+	},
+	fixFlex: function (wgt) {
 		//avoid firedown("onSize") calling in again
 		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
 			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min'))) 
@@ -249,7 +220,7 @@ zFlex = { //static methods
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						wdh -= zFlex.fixMinFlex.apply(cwgt, [c, 'w']);
+						wdh -= zFlex.fixMinFlex(cwgt, c, 'w');
 					} else {
 						if (pretxt) {
 							wdh -= _getTextWidth(zkc, zkp, zkpOffset);
@@ -267,7 +238,7 @@ zFlex = { //static methods
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						hgh -= zFlex.fixMinFlex.apply(cwgt, [c, 'h']);
+						hgh -= zFlex.fixMinFlex(cwgt, c, 'h');
 					} else {
 						if (pretxt) {
 							hgh -= _getTextHeight(zkc, zkp, zkpOffset);
@@ -326,20 +297,19 @@ zFlex = { //static methods
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
 	},
-	fixMinFlexX: function () {
+	onFitSize: function () {
 		var wgt = this,
 			c = wgt.$n();
 		if (c && zk(c).isVisible()) {
 			if (wgt._hflex == 'min' && wgt._hflexsz === undefined)
-				zFlex.fixMinFlex.apply(wgt, [c, 'w']);
+				zFlex.fixMinFlex(wgt, c, 'w');
 			if (wgt._vflex == 'min' && wgt._vflexsz === undefined)
-				zFlex.fixMinFlex.apply(wgt, [c, 'h']);
+				zFlex.fixMinFlex(wgt, c, 'h');
 		}
 	},
-	fixMinFlex: function (wgtn, o) {
-		var wgt = this,
-			min = wgt.beforeMinFlex_(o);
-			
+	fixMinFlex: function (wgt, wgtn, o) {
+		var min = wgt.beforeMinFlex_(o);
+
 		//find the max size of all children
 		if (o == 'h') {
 			if (wgt._vflexsz === undefined) { //cached?
@@ -364,7 +334,7 @@ zFlex = { //static methods
 										sz = 0; 
 									if (cwgt._vflex == 'min') {
 										if (zkc.isVisible()) {
-											sz += cwgt._vflexsz === undefined ? zFlex.fixMinFlex.apply(cwgt, [c, o]) : cwgt._vflexsz;
+											sz += cwgt._vflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._vflexsz;
 										}/** Fixed for B50-3356022.zul
 										 else
 											sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
@@ -439,7 +409,7 @@ zFlex = { //static methods
 						max = totalsz;
 				}
 				
-				var margin = this.getMarginSize_(o);
+				var margin = wgt.getMarginSize_(o);
 				if (zk.safari && margin < 0) 
 					margin = 0;
 
@@ -472,7 +442,7 @@ zFlex = { //static methods
 										sz = 0;
 									if (cwgt._hflex == 'min') {
 										if (zkc.isVisible()) {
-											sz += cwgt._hflexsz === undefined ? zFlex.fixMinFlex.apply(cwgt, [c, o]) : cwgt._hflexsz;
+											sz += cwgt._hflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._hflexsz;
 										}/** Fixed for B50-3356022.zul
 										 else {
 											sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
@@ -545,7 +515,7 @@ zFlex = { //static methods
 					
 				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
 				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
-				var margin = this.getMarginSize_(o);
+				var margin = wgt.getMarginSize_(o);
 				if (zk.safari && margin < 0)
 					margin = 0;
 				var sz = wgt.setFlexSize_({width:(max + _getContentEdgeWidth(wgt) + margin)}, true);
