@@ -1,3 +1,13 @@
+###
+# The ignore key should match in config.properties
+#For example, (without '#')
+#key={
+#caseName1
+#caseName2
+#caseName3
+#}
+###
+all={
 B30-1813518.ztl
 B30-2009958.ztl
 B30-1852304.ztl
@@ -27,16 +37,17 @@ B50-3096342.ztl
 B50-3284144.ztl
 B50-3293436.ztl
 F50-0000001.ztl
-
-##IE9
-#B30-1820180.ztl
-#B30-1822564.ztl
-#B30-1822585.ztl
-#B30-1823207.ztl
-#B30-1823226.ztl
-#B30-1823354.ztl
-#Z30-grid-0005.ztl
-#B50-3006313.ztl
-#B50-3166873.ztl
-#Z30-grid-0001.ztl
-#B50-2976323.ztl
+}
+IE9={
+B30-1820180.ztl
+B30-1822564.ztl
+B30-1822585.ztl
+B30-1823207.ztl
+B30-1823226.ztl
+B30-1823354.ztl
+Z30-grid-0005.ztl
+B50-3006313.ztl
+B50-3166873.ztl
+Z30-grid-0001.ztl
+B50-2976323.ztl
+}

@@ -46,21 +46,23 @@
 </zk>
 		--></server>
 		<client><![CDATA[
-			verifyImage();
-			click(tabb);
-			verifyImage();
-			click(tab2);
-			verifyImage();
-			click(tab1);
-			click(taba);
-			verifyImage();
-			click(ck1.$n("real"));
-			verifyImage();
-			click(tab2);
-			verifyImage();
-			click(ck2.$n("real"));
-			click(tab1);
-			verifyImage();
+		verifyImage();
+		click(tabb);
+		verifyImage();
+		click(tab2);
+		verifyImage();
+		click(tab1);
+		waitResponse(true);
+		click(taba);
+		verifyImage();
+		click(ck1.$n("real"));
+		verifyImage();
+		click(tab2);
+		verifyImage();
+		click(ck2.$n("real"));
+		waitResponse(true);
+		click(tab1);
+		verifyImage();
 		]]></client>
 	</case>
 </test>
