@@ -229,7 +229,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						zk(colled).slideOut(this, {
 							anchor: this.sanchor,
 							duration: 200,
-							afterAnima: this.$class.afterSlideOut
+							afterAnima: fromServer ? this.$class.afterSlideOut : 
+								this.$class._afterSlideOutX
 						});
 					else {
 						jq(real).show();
@@ -242,7 +243,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					zk(real).slideOut(this, {
 							anchor: this.sanchor,
 							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: this.$class.afterSlideOut
+							afterAnima: fromServer ? this.$class.afterSlideOut : 
+								this.$class._afterSlideOutX
 						});
 				else {
 					if (colled)
@@ -251,7 +253,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 			if (nonAnima) this.parent.resize();
-			if (!fromServer) this.fire('onOpen', {open:open});
+			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
+				this.fire('onOpen', {open:open});
 		}
 	},
 	//bug #3014664
@@ -791,6 +794,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.zIndex = 1;
 		this.parent.resize();
 	},
+	_afterSlideOutX: function (n) {
+		// B50-ZK-301: fire onOpen after animation
+		this.$class.afterSlideOut.apply(this, n);
+		this.fire('onOpen', {open: this._open});
+	},
 	// a callback function after the component slides out.
 	afterSlideOut: function (n) {
 		if (this._open) 
@@ -804,7 +812,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			s.zIndex = ""; // reset z-index refered to the beforeSlideOut()
 			s.visibility = "";
 			zk(colled).slideIn(this, {
-				anchor: this.sanchor,				
+				anchor: this.sanchor,
 				duration: 200
 			});
 		}
@@ -926,7 +934,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (y < b.mins + b.top) y = b.mins + b.top;
 			w = x;
 			h = y - b.top;
-			break;				
+			break;
 		case BL.SOUTH:
 			if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
 				y = b.top + b.bottom - b.maxs - split.offsetHeight;
@@ -942,8 +950,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (x < b.mins + b.left) x = b.mins + b.left;
 			w = x - b.left;
 			h = y;
-			break;		
-		case BL.EAST:			
+			break;
+		case BL.EAST:
 			if (b.left + b.right - x - split.offsetWidth > b.maxs) {
 				x = b.left + b.right - b.maxs - split.offsetWidth;
 				w = b.maxs;
@@ -952,7 +960,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				w = b.mins;
 			} else w = b.left - x + b.right - split.offsetWidth;
 			h = y;
-			break;						
+			break;
 		}
 		dg._point = [w, h];
 		return [x, y];
