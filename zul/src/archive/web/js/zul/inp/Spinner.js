@@ -97,13 +97,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
 				: value != null ? ''+value: '';
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
 	doKeyDown_: function(evt){
@@ -316,14 +315,14 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		var btn = this.$n("btn");
 		if(btn)
 			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")

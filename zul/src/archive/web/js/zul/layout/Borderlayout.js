@@ -96,10 +96,10 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(Borderlayout, 'bind_', arguments);
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(Borderlayout, 'unbind_', arguments);
 	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
@@ -246,10 +246,10 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		}
 	},
 	//zWatch//
-	onSize: _zkf = function () {
+	onSize: function () {
 		this._resize(true);
 	},
-	onShow: _zkf,
+
 	isWatchable_: function(name) {
 		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
 		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());

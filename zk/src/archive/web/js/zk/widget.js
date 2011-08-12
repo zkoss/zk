@@ -271,7 +271,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], beforeSize: wgt});
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -281,7 +281,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], beforeSize: wgt});
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
@@ -1681,7 +1681,7 @@ wgt.$f().main.setTitle("foo");
 					
 					this.fire('onShow');
 					if (!zk.animating())
-						zWatch.fireDown('onShow', this);
+						zUtl.fireShown(this);
 				} else {
 					this.fire('onHide');
 					if (!zk.animating())

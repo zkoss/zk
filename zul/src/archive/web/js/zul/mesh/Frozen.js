@@ -123,7 +123,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-frozen" : this._zclass;
 	},
-	onShow: _zkf = function () {
+	onSize: function () {
 		if (!this._columns) return;
 		var self = this;
 		// Bug 3218078, to do the sizing after the 'setAttr' command
@@ -131,7 +131,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			_onSizeLater(self);
 		});
 	},
-	onSize: _zkf,
+
 	_onScroll: function (evt) {
 		if (!evt.data || !zk.currentFocus) return;
 		var p, index, td, frozen = this, 
@@ -153,7 +153,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
-		zWatch.listen({onShow: this, onSize: this});
+		zWatch.listen({onSize: this});
 		var scroll = this.$n('scrollX'),
 			gbody = this.parent.$n('body');
 
@@ -167,7 +167,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			jq(gbody).addClass('z-word-nowrap').css('overflow-x', 'hidden');
 	},
 	unbind_: function () {
-		zWatch.unlisten({onShow: this, onSize: this});
+		zWatch.unlisten({onSize: this});
 		
 		//bug B50-ZK-238
 		this.$n('scrollX').scrollLeft = 0;

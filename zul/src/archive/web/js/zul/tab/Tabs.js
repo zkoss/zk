@@ -51,13 +51,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (!w && hflex != 'min') // fixed for F50-2831389.zul
 			this.$n('header').style.width = this.$n().style.width = '';
 	}: zk.$void,
-	onSize: _zkf = function () {
+	onSize: function () {
 		this._fixWidth();
 		
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck("init");
 	},
-	onShow: _zkf,
+
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
 		if (before) 
@@ -94,7 +94,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 		if (zk.ie6_)
 			zWatch.listen({beforeSize: this});
 
@@ -113,7 +113,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		);
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this});
+		zWatch.unlisten({onSize: this, beforeSize: this});
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
 				this.domUnlisten_(btn, "onClick");

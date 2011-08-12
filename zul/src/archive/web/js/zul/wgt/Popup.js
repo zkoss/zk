@@ -284,7 +284,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop)
-			zWatch.fireDown('onShow', this);
+			zUtl.fireShown(this);
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);

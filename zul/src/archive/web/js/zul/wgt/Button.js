@@ -38,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _initUpld(wgt) {
 		if (!zk.ie && wgt._mold == 'trendy')
-			zWatch.listen({onShow: wgt, onSize: wgt});
+			zWatch.listen({onSize: wgt});
 		var v;
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
@@ -48,7 +48,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var v;
 		if (v = wgt._uplder) {
 			if (!zk.ie && wgt._mold == 'trendy')
-				zWatch.unlisten({onShow: wgt, onSize: wgt});
+				zWatch.unlisten({onSize: wgt});
 			wgt._uplder = null;
 			v.destroy();
 		}
@@ -319,7 +319,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(this.$n('box')).disableSelection();
 
 			n = this.$n('btn');
-			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
+			if (zk.ie) zWatch.listen({onSize: this}); //always listen if zk.ie
 		}
 
 		this.domListen_(n, "onFocus", "doFocus_")
@@ -337,7 +337,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				.domUnlisten_(n, "onBlur", "doBlur_");
 		}
 		if (zk.ie && trendy)
-			zWatch.unlisten({onSize: this, onShow: this});
+			zWatch.unlisten({onSize: this});
 
 		this.$supers(Button, 'unbind_', arguments);
 	},
@@ -357,7 +357,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('setHeight', arguments);
 	},
 
-	onSize: _zkf = zk.ie ? function () {
+	onSize: zk.ie ? function () {
 		_fixhgh(this);
 		_fixwidth(this);
 		if (this._uplder)
@@ -366,7 +366,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (this._uplder)
 			this._uplder.sync();
 	},
-	onShow: _zkf,
+
 	doFocus_: function (evt) {
 		if (this._mold == 'trendy')
 			jq(this.$n('box')).addClass(this.getZclass() + "-focus");

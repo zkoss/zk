@@ -299,7 +299,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-timebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth(),
 			inp = this.getInputNode();
 		if (!width || width.indexOf('%') != -1)
@@ -310,7 +310,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		this.syncWidth();
 	},
-	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
 	doClick_: function(evt) {
@@ -607,14 +606,14 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		var btn = this.$n("btn");
 		if (btn) {
 			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")

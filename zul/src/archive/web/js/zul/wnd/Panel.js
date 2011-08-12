@@ -420,7 +420,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', this);
+					zUtl.fireShown(this);
 				}
 				if (!fromServer) {
 					this._visible = false;
@@ -583,7 +583,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.$n().style.width="";
 	},
 	//watch//
-	onSize: _zkf = (function() {
+	onSize: (function() {
 		function syncMaximized (wgt) {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n(),
@@ -626,7 +626,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.zsync();
 		};
 	})(),
-	onShow: _zkf,
 	onHide: function () {
 		this._hideShadow();
 	},
@@ -769,7 +768,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.wnd.Panel, 'bind_', arguments);
 
-		zWatch.listen({onSize: this, onShow: this, onHide: this});
+		zWatch.listen({onSize: this, onHide: this});
 
 		// Bug 2974370
 		if (zk.ie6_)
@@ -811,7 +810,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 			this._inWholeMode = false;
 		}
-		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
+		zWatch.unlisten({onSize: this, onHide: this, onFloatUp: this});
 		if (zk.ie6_)
 			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);

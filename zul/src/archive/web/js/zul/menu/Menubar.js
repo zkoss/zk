@@ -102,7 +102,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					.domUnlisten_(right, 'onMouseover', '_onOver')
 					.domUnlisten_(right, 'onMouseout', '_onOut');
 			}
-			zWatch.unlisten({onSize: this, onShow: this});
+			zWatch.unlisten({onSize: this});
 		}
 
 		this._lastTarget = null;
@@ -121,7 +121,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					.domListen_(right, 'onMouseover', '_onOver')
 					.domListen_(right, 'onMouseout', '_onOut');
 			}
-			zWatch.listen({onSize: this, onShow: this});
+			zWatch.listen({onSize: this});
 		}
 		this._syncChdWidth(); //Merge breeze
 	},
@@ -131,10 +131,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	checkScrollable: function () {
 		return this._scrollable && ("horizontal" == this.getOrient());
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		this._checkScrolling();
 	},
-	onShow: _zkf,
+
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();

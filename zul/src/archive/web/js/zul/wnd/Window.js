@@ -565,7 +565,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', this);
+					zUtl.fireShown(this);
 				}
 				if (!fromServer) {
 					this._visible = false;
@@ -800,7 +800,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zk(this.$n()).cleanVisibility();
 			this.zsync();
 		}
-		this.onSize(w);
 	},
 	onHide: function (ctl) {
 		var w = ctl.origin;

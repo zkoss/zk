@@ -235,7 +235,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					else {
 						jq(real).show();
 						jq(colled).hide();
-						zWatch.fireDown('onShow', this);
+						zUtl.fireShown(this);
 					}
 				}
 			} else {

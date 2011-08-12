@@ -650,12 +650,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_bindWatch: function () {
 		if (!this._watchBound) {
 			this._watchBound = true;
-			zWatch.listen({onSize: this, onShow: this, onHide: this});
+			zWatch.listen({onSize: this, onHide: this});
 		}
 	},
 	_unbindWatch: function() {
 		if (this._watchBound) {
-			zWatch.unlisten({onSize: this, onShow: this, onHide: this});
+			zWatch.unlisten({onSize: this, onHide: this});
 			delete this._watchBound;
 		}
 	},
@@ -676,12 +676,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_bindAlign: function() {
 		if (!this._watchAlign) {
 			this._watchAlign = true;
-			zWatch.listen({onSize: [this, this._fixAlign], onShow: [this, this._fixAlign], onHide: [this, this._fixAlign]});
+			zWatch.listen({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 		}
 	},
 	_unbindAlign: function() {
 		if (this._watchAlign) {
-			zWatch.unlisten({onSize: [this, this._fixAlign], onShow: [this, this._fixAlign], onHide: [this, this._fixAlign]});
+			zWatch.unlisten({onSize: [this, this._fixAlign], onHide: [this, this._fixAlign]});
 			delete this._watchAlign;
 		}
 	},
@@ -706,12 +706,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_bindFixTd: function() {
 		if (!this._watchTd) {
 			this._watchTd = true;
-			zWatch.listen({onSize: [this, _fixTd], onShow: [this, _fixTd], onHide: [this, _fixTd]});
+			zWatch.listen({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 		}
 	},
 	_unbindFixTd: function() {
 		if (this._watchTd) {
-			zWatch.unlisten({onSize: [this, _fixTd], onShow: [this, _fixTd], onHide: [this, _fixTd]});
+			zWatch.unlisten({onSize: [this, _fixTd], onHide: [this, _fixTd]});
 			delete this._watchTd;
 		}
 	},
@@ -787,7 +787,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 		}
 	},
-	onShow: _zkf,
 	onHide: _zkf
 },{ //static
 	_toValign: function (v) {

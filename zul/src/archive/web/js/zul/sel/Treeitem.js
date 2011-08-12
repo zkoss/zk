@@ -92,7 +92,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			if (!open) zWatch.fireDown('onHide', this);
 			this._showKids(open);
-			if (open) zWatch.fireDown('onShow', this);
+			if (open)
+				zUtl.fireShown(this);
 			if (tree) {
 				_sizeOnOpen(tree);
 

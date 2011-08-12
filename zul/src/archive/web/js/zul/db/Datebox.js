@@ -265,13 +265,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
+
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
@@ -451,7 +451,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -465,7 +465,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {

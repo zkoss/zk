@@ -449,7 +449,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efrozen)
 				jq(this.ebody).addClass('z-word-nowrap').css('overflow-x', 'hidden');// keep non line break
 		}
-		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
+		zWatch.listen({onSize: this, beforeSize: this, onResponse: this});
 		var paging;
 		if (zk.ie7_ && (paging = this.$n('pgib')))
 			zk(paging).redoCSS();
@@ -458,7 +458,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ebody)
 			this.domUnlisten_(this.ebody, 'onScroll');
 
-		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this, onResponse: this});
+		zWatch.unlisten({onSize: this, beforeSize: this, onResponse: this});
 		
 		this.$supers(zul.mesh.MeshWidget, 'unbind_', arguments);
 	},
@@ -820,7 +820,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
@@ -862,7 +862,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._shallSize = false;
 		}
 	},
-	onShow: _zkf,
+
 	_vflexSize: function (hgh) {
 		var n = this.$n();
 		if (zk.ie6_) { 

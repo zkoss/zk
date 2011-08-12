@@ -362,7 +362,7 @@ zk.copy(zjq.prototype, {
 			if (prop) _restoreProp(self, prop);
 			if (visible) {
 				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
-				zWatch.fireDown('onShow', wgt);
+				zUtl.fireShown(wgt);
 			} else {
 				self.jq.hide();
 			}
