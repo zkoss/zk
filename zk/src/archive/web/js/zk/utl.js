@@ -539,13 +539,14 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		zWatch.fireDown('onFitSize', wgt, {reverse: true});
 		zWatch.fireDown('onSize', wgt);
 	},
-	/** Fires onShow, onFitSize, and onSize
+	/** Fires onBeforeSize, onShow, onFitSize, and onSize
 	 * @param zk.Widget wgt the widget which the zWatch event will be fired against.
+	 * @param boolean noBeforeSize whether not to fire <code>beforeSize</code>.
 	 * @since 5.0.8
 	 */
-	fireShown: function (wgt) {
+	fireShown: function (wgt, noBeforeSize) {
 		zWatch.fireDown('onShow', wgt);
-		zUtl.fireSized(wgt);
+		zUtl.fireSized(wgt, noBeforeSize);
 	}
 };
 })();
