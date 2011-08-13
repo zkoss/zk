@@ -285,7 +285,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				n.style.height = "";
 				n.style.width = "";
 			}
-			zUtl.fireSized(this, true);
+			zUtl.fireSized(this, -1); //no beforeSize
 		}
 	},
 	_fixChildDomVisible: function (child, visible) {

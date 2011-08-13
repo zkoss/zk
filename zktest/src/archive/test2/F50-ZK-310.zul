@@ -1,0 +1,8 @@
+<div>
+	<button label="enlarge" xmlns:w="client"
+	 w:onClick="jq(this.nextSibling.nextSibling)[0].style.width='300px';"/>
+	<button label="resize back" onClick="Clients.resize(self.parent)"/>
+	<div style="border: 1px solid blue" hflex="min">
+	This is a div with min
+	</div>
+</div>

@@ -283,6 +283,19 @@ public class Clients {
 		response(new AuClearBusy(comp));
 	}
 
+	/** Forces the client to re-calculate the size of the given component.
+	 * For better performance, ZK Client Engine will cache the size of
+	 * components with hflex=min or vflex=min, and recalculate it only
+	 * necessary. However, sometimes it is hard (too costly) to know
+	 * if the size of a component with flex=min is changed. For example,
+	 * If another component is added to it and causes the size changed.
+	 * In this case, you could use this method to enforce the re-calculation.
+	 * @since 5.0.8
+	 */
+	public static final void resize(Component comp) {
+		response(new AuResizeWidget(comp));
+	}
+
 	/** Reloads the client-side messages in the specified locale.
 	 * It is used if you allow the user to change the locale dynamically.
 	 *

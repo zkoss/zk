@@ -870,7 +870,7 @@ new zul.wnd.Window{
 
 				var p;
 				if (!(p = this.parent).isBinding()) //ZK-307
-					zUtl.fireSized(p, true);
+					zUtl.fireSized(p, -1); //no beforeSize
 			}
 		},
 		/**
@@ -907,7 +907,7 @@ new zul.wnd.Window{
 
 			var p = this.parent;
 			if (this.desktop/*if already bind*/ && !p.isBinding()/*ZK-307*/)
-				zUtl.fireSized(p, true);
+				zUtl.fireSized(p, -1); //no beforeSize
 		},
 		/** Returns the number of milliseconds before rendering this component
 		 * at the client.

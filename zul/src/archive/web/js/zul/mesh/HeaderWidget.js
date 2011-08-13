@@ -454,7 +454,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		meshn._lastsz = null;
 		
 		// bug #2799258
-		zUtl.fireSized(mesh, true);
+		zUtl.fireSized(mesh, -1); //no beforeSize
 		
 		// fixed for B50-3147926.zul
 		if (zk.ie < 8)
