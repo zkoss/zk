@@ -1,4 +1,4 @@
-<window title="My First Window" border="normal" width="600px">
+<window title="Everything below shall be min" border="normal" width="600px">
 <borderlayout id="b1" vflex="min" hflex="min">
 <east id="e1" vflex="min" hflex="min">
 <borderlayout id="b2" vflex="min" hflex="min">
