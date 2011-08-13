@@ -13,7 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
+(function (undefined) {
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]
@@ -868,8 +868,9 @@ new zul.wnd.Window{
 				} else
 					_listenFlex(this);
 
-				if (!this.isBinding()) //ZK-307
-					zUtl.fireSized(this.parent, true);
+				var p;
+				if (!(p = this.parent).isBinding()) //ZK-307
+					zUtl.fireSized(p, true);
 			}
 		},
 		/**
@@ -903,8 +904,10 @@ new zul.wnd.Window{
 		 */
 		hflex: function(v) {
 			this.setHflex_(v);
-			if (this.desktop/*if already bind*/ && !this.isBinding()/*ZK-307*/)
-				zUtl.fireSized(this.parent, true);
+
+			var p = this.parent;
+			if (this.desktop/*if already bind*/ && !p.isBinding()/*ZK-307*/)
+				zUtl.fireSized(p, true);
 		},
 		/** Returns the number of milliseconds before rendering this component
 		 * at the client.
