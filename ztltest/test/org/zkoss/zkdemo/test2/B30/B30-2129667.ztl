@@ -75,6 +75,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		<client><![CDATA[
 				click(jq("@button[label=\"Change Renderer 1\"]"));
 				waitResponse();
+				// wait ROD to render
+				sleep(200);
 				for(int i=0;i<10;i++){
 					verifyEquals("option "+i,jq("@listitem:eq("+i+")").text());
 					verifyEquals("option "+i,jq("@row:eq("+i+")").text());
@@ -82,6 +84,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				
 				click(jq("@button[label=\"Change Renderer 2\"]"));
 				waitResponse();
+				// wait ROD to render
+				sleep(200);
 				for(int i=0;i<10;i++){
 					verifyEquals("plan "+i,jq("@listitem:eq("+i+")").text());
 					verifyEquals("plan "+i,jq("@row:eq("+i+")").text());

@@ -1,42 +1,42 @@
 ###
 # The ignore key should match in config.properties
-#For example, (without '#')
-#key={
-#caseName1
-#caseName2
-#caseName3
-#}
+# For example, (without '#')
+# key={
+# caseName1
+# caseName2
+# caseName3
+# }
+# 
+# Or for multi-keys
+#
+# key1,key2,key3={
+# caseName1
+# caseName2
+# caseName3
+# }
+#
+# Or use * to ignore all matched keys
+# key*={
+# caseName1
+# caseName2
+# caseName3
+# }
 ###
 all={
-B30-1813518.ztl
+// unsupported
 B30-2009958.ztl
-B30-1852304.ztl
-B30-1876988.ztl
-B30-1979088.ztl
-B30-2009503.ztl
-B30-2009958.ztl
-B30-2041674.ztl
-B30-2129667.ztl
 B35-2580752.ztl
-B36-2660443.ztl
-B36-2685842.ztl
-B36-2688197.ztl
-B36-2797773.ztl
-B36-2805177.ztl
-B36-2813877.ztl
-B36-2820527.ztl
-B36-2821745.ztl
-B50-2906453.ztl
-B50-2925493.ztl
-B50-2961834.ztl
-B50-2961834.ztl
-B50-2990657.ztl
+}
+### ignore all firefox
+firefox*={
+// unsupported
 B50-3026819.ztl
 B50-3058028.ztl
-B50-3096342.ztl
-B50-3284144.ztl
-B50-3293436.ztl
 F50-0000001.ztl
+}
+opera={
+// unsupported
+B36-2797773.ztl
 }
 ie9={
 B30-1820180.ztl
@@ -50,8 +50,9 @@ B50-3006313.ztl
 B50-3166873.ztl
 Z30-grid-0001.ztl
 B50-2976323.ztl
+B36-2813877.ztl
 }
 ie6={
-## unstable
+// unstable
 B50-3006762.ztl
 }

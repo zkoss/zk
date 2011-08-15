@@ -38,6 +38,7 @@ Integer
 		--></server>
 		<client><![CDATA[
 				click(jq("@button"));
+				waitResponse();
 				boolean color = org.zkoss.ztl.util.ColorVerifingHelper
 						.getInstance().isEqualColor("red",
 								jq(".z-paging:eq(0)").css("backgroundColor"));

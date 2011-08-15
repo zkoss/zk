@@ -9,6 +9,7 @@
 		--></server>
 		<client><![CDATA[
 			click(tb);
+			waitResponse();
 			verifyFalse(jq(".z-error").exists());
 		]]></client>
 	</case>

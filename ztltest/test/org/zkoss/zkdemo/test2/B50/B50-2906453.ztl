@@ -63,43 +63,47 @@ void format(String xid) {
 		--></server>
 		<client><![CDATA[
 			// This case's target is: Testing the format does match Java's
-            // rule or not.
-            ArrayList<String> testValues = new ArrayList<String>();
-            testValues.add("0");
-            testValues.add("00.00");
-            testValues.add(".12");
-            testValues.add("0.12");
-            testValues.add("1.2");
-            testValues.add("1.30");
-            testValues.add("1.400");
-            testValues.add("1.5000");
-            testValues.add("12");
-            testValues.add("12.");
-            testValues.add("100");
-            testValues.add("123456789");
-
-            Map<String, ClientWidget> verifyValueMap = new HashMap<String, ClientWidget>();
-            verifyValueMap.put("#.00#", jq("$db2"));
-            verifyValueMap.put("#.00", jq("$db1"));
-            verifyValueMap.put("#.0#", jq("$db3"));
-            verifyValueMap.put("#.##", jq("$db4"));
-            verifyValueMap.put("#0.00#", jq("$db5"));
-            verifyValueMap.put("#00.00", jq("$db6"));
-            verifyValueMap.put("#,#00.00", jq("$db7"));
-
-            for (String testValue : testValues) {
-                for (String key : verifyValueMap.keySet()) {
-                    ClientWidget clientWidget = verifyValueMap.get(key);
-                    type(clientWidget, testValue);
-                    waitResponse();
-                    DecimalFormat formatter = new DecimalFormat(key);
-                    StringBuffer msgBuffer = new StringBuffer("Format does not match. Format: ");
-                    msgBuffer.append(key);
-                    msgBuffer.append(", value: ");
-                    msgBuffer.append(jq(clientWidget).val());
-                    verifyTrue(msgBuffer.toString(), jq(clientWidget).val().equals(formatter.format(Double.parseDouble(testValue))));
-                }
-            }
+			// rule or not.
+			ArrayList<String> testValues = new ArrayList<String>();
+			testValues.add("0");
+			testValues.add("00.00");
+			testValues.add(".12");
+			testValues.add("0.12");
+			testValues.add("1.2");
+			testValues.add("1.30");
+			testValues.add("1.400");
+			testValues.add("1.5000");
+			testValues.add("12");
+			testValues.add("12.");
+			testValues.add("100");
+			testValues.add("123456789");
+			Map<String, ClientWidget> verifyValueMap = new HashMap<String, ClientWidget>();
+			verifyValueMap.put("#.00#", jq("$db2"));
+			verifyValueMap.put("#.00", jq("$db1"));
+			verifyValueMap.put("#.0#", jq("$db3"));
+			verifyValueMap.put("#.##", jq("$db4"));
+			verifyValueMap.put("#0.00#", jq("$db5"));
+			verifyValueMap.put("#00.00", jq("$db6"));
+			verifyValueMap.put("#,#00.00", jq("$db7"));
+			for (String testValue : testValues) {
+				for (String key : verifyValueMap.keySet()) {
+					type(verifyValueMap.get(key), testValue);
+				}
+				for (String key : verifyValueMap.keySet()) {
+					ClientWidget clientWidget = verifyValueMap.get(key);
+					DecimalFormat formatter = new DecimalFormat(key);
+					StringBuffer msgBuffer = new StringBuffer(
+							"Format does not match. Format: ");
+					msgBuffer.append(key);
+					msgBuffer.append(", value: ");
+					msgBuffer.append(jq(clientWidget).val());
+					verifyTrue(
+							msgBuffer.toString(),
+							jq(clientWidget).val().equals(
+									formatter.format(Double
+											.parseDouble(testValue))));
+				}
+			}
 		]]></client>
 	</case>
 </test>
