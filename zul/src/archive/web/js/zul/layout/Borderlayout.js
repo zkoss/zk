@@ -42,6 +42,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			center.w -= ambit.ts;
 		}
 	};
+	
+	function _getRegionSize (wgt, hor, ext) {
+		if (!wgt)
+			return 0;
+		var n = wgt.$n('real'),
+			sz = hor ? 'offsetWidth' : 'offsetHeight',
+			sum = n[sz];
+		if (ext) {
+			var cn = wgt.$n('colled'),
+				sn = wgt.$n('split');
+			if (cn)
+				sum += cn[sz];
+			if (sn)
+				sum += sn[sz];
+		}
+		return sum;
+	}
 
 var Borderlayout =
 /**
@@ -102,6 +119,26 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this});
 		this.$supers(Borderlayout, 'unbind_', arguments);
 	},
+	beforeMinFlex_: function (o) {
+		// B50-ZK-309
+		var east = this.east,
+			west = this.west,
+			north = this.north,
+			south = this.south,
+			center = this.center;
+		if (o == 'w') {
+			return Math.max(
+					_getRegionSize(north, true), _getRegionSize(south, true),
+					_getRegionSize(east, true, true) + _getRegionSize(west, true, true) +
+					_getRegionSize(center, true));
+		} else {
+			return _getRegionSize(north, false, true) + 
+					_getRegionSize(south, false, true) +
+					Math.max(
+						_getRegionSize(east), _getRegionSize(west),
+						_getRegionSize(center));
+		}
+	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenFlex_: function () {
 		//region's min vflex/hflex resolved and try the border resize
@@ -114,7 +151,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		//region's min vflex/hflex resolved and try the border resize
 		//@see #_resize
 		if (!this._isOnSize) {
-			this._resize(true);
+			//this._resize(true);
 			this._isOnSize = false;
 		}
 	},
