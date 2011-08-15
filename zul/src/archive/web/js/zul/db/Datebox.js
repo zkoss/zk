@@ -617,7 +617,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			tm.setVisible(true);
 			tm.setFormat(fmt);
 			tm.setValue(value || new Date());
-			tm.onShow();
+			tm.onSize();
 		} else {
 			db._tm.setVisible(false);
 		}

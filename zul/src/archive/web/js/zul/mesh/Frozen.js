@@ -93,7 +93,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		}, function(v) {
 			if (this._columns) {
 				if (this.desktop) {
-					this.onShow();
+					this.onSize();
 					this.syncScroll();
 				}
 			} else this.rerender();
