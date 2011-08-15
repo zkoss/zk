@@ -622,12 +622,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				ctl.fireDown(this.bbar);
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
+			this._syncBodyWidth();
 			this._fixHgh();
 			this.zsync();
 		};
 	})(),
 	onHide: function () {
 		this._hideShadow();
+	},
+	_syncBodyWidth: function () {
+		if (zk.ie6_) // B50-ZK-304
+			this.$n('body').style.width = this.$n().offsetWidth;
 	},
 	_fixHgh: function () {
 		var pc;
