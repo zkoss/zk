@@ -152,6 +152,7 @@ ZK 5.0.8
   ZK-282: Menuitem with popup is not always worked on IE6 only 
   ZK-298: vertical tabbox height is not correct 
   ZK-301: Invalidate Borderlayout while west opening cause javascript error
+  ZK-306: DefaultTreeModel does not properly synchronize deselection state
   ZK-307: Center fires redudant onSize if borderlayout's isFlex() is true
   
 * Upgrade Notes

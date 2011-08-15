@@ -1,0 +1,27 @@
+<zk>
+	<div>1. Click on a Treeitem and click on "show selected" Button. You will see the selected item shown after the Button.</div>
+	<div>2. Click on another Treeitem and click on "show selected" Button again. You should only see 1 Treeitem displayed after the Button. Otherwise it is a bug.</div>
+	<tree id="tree" width="830px">
+		<treecols>
+			<treecol hflex="3" label="Path" />
+			<treecol hflex="5" label="Description" />
+			<treecol hflex="2" label="Size" />
+		</treecols>
+	</tree>
+	<button label="show selected">
+		<attribute name="onClick"><![CDATA[
+			Set s = ((org.zkoss.zul.ext.Selectable) tree.getModel()).getSelection();
+			Iterator it = s.iterator();
+			StringBuffer sb = new StringBuffer();
+			while (it.hasNext()) {
+				sb.append(it.next()).append("\n");
+			}
+			tb.setValue(sb.toString());
+		]]></attribute>
+	</button>
+	<label id="tb" />
+	<zscript><![CDATA[
+		tree.setItemRenderer(new org.zkoss.zktest.test2.tree.DirectoryTreeitemRenderer());
+		tree.setModel(new org.zkoss.zul.DefaultTreeModel(org.zkoss.zktest.test2.tree.PackageData.getRoot()));
+	]]></zscript>
+</zk>

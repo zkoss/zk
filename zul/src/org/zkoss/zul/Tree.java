@@ -751,8 +751,14 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				
-				if (_model instanceof Selectable)
-					((Selectable) _model).addSelection(item.getTreeNode());
+				if (_model instanceof Selectable) {
+					// B50-ZK-306: DefaultTreeModel does not properly
+					// synchronize deselection state -- 
+					// _model should clear at first too
+					Selectable sltb = ((Selectable) _model);
+					sltb.clearSelection();
+					sltb.addSelection(item.getTreeNode());
+				}
 
 				smartUpdate("selectedItem", item.getUuid());
 			}
