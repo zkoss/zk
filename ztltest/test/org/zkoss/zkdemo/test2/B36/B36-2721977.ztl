@@ -29,15 +29,16 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			click(btn.$n("btn"));
+			Element b = isIE() ? btn.$n("btn") : btn.$n();
+			click(b);
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
 			
-			click(btn.$n("btn"));
+			click(b);
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
 			
-			click(btn.$n("btn"));
+			click(b);
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
 		]]></client>
