@@ -60,7 +60,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * Here we have these states :
 		 * 1.down for mouse down in the widget  (down)
 		 * 2.mouse up in the widget but click not fired (up in timeout)
-		 * 3.mouse up in the wiget and click event fired (null in timeout)
+		 * 3.mouse up in the widget and click event fired (null in timeout)
 		 * 4.mouse up not in the widget (null)
 		 */
 		if ( wgt._fxcfg == 1 ) {
@@ -378,6 +378,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
+		//zk.log('doClick_');
 		_fixClick(this);
 		
 		if (!this._disabled) {
