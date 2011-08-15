@@ -11,6 +11,8 @@
 		--></server>
 		<client><![CDATA[			
 				click(btn);
+				// wait for comet push
+				waitResponse();
 				waitResponse();
 				verifyEquals(1,jq("span.z-label:gt(1)").length());
 				verifyEquals("Comet received",jq("span.z-label:gt(1)").text());
