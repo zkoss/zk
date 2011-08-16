@@ -24,6 +24,7 @@ ZK 5.0.8
   ZK-219: Update zk.Event documentation
   ZK-287: The event instance shall be passed to the callback event listener of EventQueue
   ZK-295: Animation effect of Borderlayout can be configured
+  ZK-78:  A better Hungarian message file
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
