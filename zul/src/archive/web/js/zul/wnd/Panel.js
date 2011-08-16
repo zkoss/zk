@@ -630,10 +630,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	onHide: function () {
 		this._hideShadow();
 	},
-	_syncBodyWidth: function () {
-		if (zk.ie6_) // B50-ZK-304
-			this.$n('body').style.width = this.$n().offsetWidth;
-	},
+	_syncBodyWidth: zk.ie6_ ? function () {
+		this.$n('body').style.width = this.$n().offsetWidth; // B50-ZK-304
+	} : zk.$void,
 	_fixHgh: function () {
 		var pc;
 		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
