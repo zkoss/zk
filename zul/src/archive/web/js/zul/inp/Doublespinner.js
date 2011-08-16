@@ -51,7 +51,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		 * @param double step
 		 */
 		step: function (v) {
-			this._fixedDigits = _digitsAfterDecimal(v, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
+			this._updateFixedDigits();
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -151,8 +151,14 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
     	if (info.divscale) val = val / Math.pow(10, info.divscale);
 		
 		// B50-3322795
-		this._fixedDigits = _digitsAfterDecimal(val, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
+    	this._updateFixedDigits(val);
     	return val;
+	},
+	_updateFixedDigits: function (val) {
+		var decimal = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL,
+			stepd = _digitsAfterDecimal(this._step, decimal),
+			vald = _digitsAfterDecimal(val || this._value, decimal);
+		this._fixedDigits = Math.max(stepd, vald);
 	},
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format,
