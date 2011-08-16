@@ -60,8 +60,6 @@
 			mouseUpAt(newBtn, "15,8");
 			click(newBtn);
 			waitResponse(true);
-			if(ZK.is("ie8_"))
-			verifyFalse(jq(".z-textbox-focus").exists());//manual test is OK, but in here it can't focus automatically
 			click(jq(".z-window-highlighted-icon"));
 			waitResponse(true);
 			verifyTrue(jq("$newBtn .z-button-focus").exists());

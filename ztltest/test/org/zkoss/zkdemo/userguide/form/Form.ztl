@@ -208,8 +208,13 @@
 				mouseUp(jq(".z-spinner-btn-upper"));
 				waitResponse();
 				verifyTrue(3 < parseInt(jq("@spinner input.z-spinner-inp").val()));
-				mouseDownAt(jq(".z-spinner-btn-lower"), "1,1");
-				mouseUp(jq(".z-spinner-btn-lower"));
+				if (ZK.is("ie8")) {
+					mouseDownAt(jq(".z-spinner-btn-lower"), "1,1");
+					mouseUp(jq(".z-spinner-btn-lower"));
+				} else {
+					mouseDownAt(jq("@spinner i.z-spinner-btn"), "3,20");
+					mouseUp(jq("@spinner i.z-spinner-btn"));
+				}
 				waitResponse();
 				verifyTrue(4 >= parseInt(jq("@spinner input.z-spinner-inp").val()));
 				

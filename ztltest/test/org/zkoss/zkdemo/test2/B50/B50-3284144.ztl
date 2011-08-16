@@ -78,37 +78,79 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-				clickAt(jq("@datebox:eq(0) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(0) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(1) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(1) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(2) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(2) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(3) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("06:20:30 PM",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(3) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(4) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("PM 06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(4) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(5) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(5) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(6) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
-				click(jq("@datebox:eq(6) .z-datebox-btn"));
-				clickAt(jq("@datebox:eq(7) .z-datebox-btn"), "1,1");
-				waitResponse();
-				verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+		if (ZK.is("ie9")) {
+			clickAt(jq("@datebox:eq(0) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(0) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(1) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(1) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(2) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(2) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(3) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("06:20:30 PM",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(3) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(4) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("PM 06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(4) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(5) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(5) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(6) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(6) .z-datebox-btn"));
+			clickAt(jq("@datebox:eq(7) .z-datebox-btn"), "1,1");
+			waitResponse();
+			verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+		} else {
+			click(jq("@datebox:eq(0) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(0) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(1) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(1) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(2) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(2) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(3) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("06:20:30 PM",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(3) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(4) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("PM 06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(4) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(5) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("06:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(5) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(6) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(6) .z-datebox-btn"));
+			
+			click(jq("@datebox:eq(7) .z-datebox-btn"));
+			waitResponse();
+			verifyEquals("18:20:30",jq(".z-datebox-pp @timebox:visible input").val());
+			click(jq("@datebox:eq(7) .z-datebox-btn"));
+		}
 		]]></client>
 	</case>
 </test>
