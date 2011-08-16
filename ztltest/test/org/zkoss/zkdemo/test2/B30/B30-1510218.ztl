@@ -42,7 +42,7 @@
 				// Test Popup
 				click(popup);
 				waitResponse();
-				clickAt(inner1, "5,5");
+				Scripts.triggerMouseEventAt(getWebDriver(), inner1, "click", "5,5");
 				verifyTrue(jq(inner1).isVisible());
 				click(btn1);
 				waitResponse();
