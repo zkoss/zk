@@ -378,7 +378,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
-		//zk.log('doClick_');
 		_fixClick(this);
 		
 		if (!this._disabled) {

@@ -126,18 +126,16 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			north = this.north,
 			south = this.south,
 			center = this.center;
-		if (o == 'w') {
-			return Math.max(
-					_getRegionSize(north, true), _getRegionSize(south, true),
-					_getRegionSize(east, true, true) + _getRegionSize(west, true, true) +
-					_getRegionSize(center, true));
-		} else {
-			return _getRegionSize(north, false, true) + 
-					_getRegionSize(south, false, true) +
-					Math.max(
-						_getRegionSize(east), _getRegionSize(west),
-						_getRegionSize(center));
-		}
+		return o == 'w' ?
+			Math.max(
+				_getRegionSize(north, true), _getRegionSize(south, true),
+				_getRegionSize(east, true, true) + _getRegionSize(west, true, true) +
+				_getRegionSize(center, true)):
+			_getRegionSize(north, false, true) + 
+				_getRegionSize(south, false, true) +
+				Math.max(
+					_getRegionSize(east), _getRegionSize(west),
+					_getRegionSize(center));
 	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenFlex_: function () {
