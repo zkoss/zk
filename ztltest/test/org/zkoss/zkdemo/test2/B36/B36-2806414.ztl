@@ -28,8 +28,7 @@ Please type some words into the textbox and press "Enter", you should not see an
 		--></server>
 		<client><![CDATA[
 				focus(jq("input.z-textbox"));
-				type(jq("input.z-textbox"), "AAA");
-				sendKeys(jq("input.z-textbox"), Keys.ENTER);
+				sendKeys(jq("input.z-textbox"), "AAA", Keys.ENTER);
 				verifyFalse(jq(".z-error").exists());
 		]]></client>
 	</case>

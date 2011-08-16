@@ -42,7 +42,7 @@
 				// Test Popup
 				click(popup);
 				waitResponse();
-				clickAt(inner1, "15,15");
+				clickAt(inner1, "5,5");
 				verifyTrue(jq(inner1).isVisible());
 				click(btn1);
 				waitResponse();
@@ -55,7 +55,7 @@
 				// Test Overlapped
 				click(overlapped);
 				waitResponse();
-				clickAt(inner2, "15,15");
+				clickAt(inner2, "5,5");
 				verifyTrue(jq(inner2).isVisible());
 				click(btn2);
 				waitResponse();
