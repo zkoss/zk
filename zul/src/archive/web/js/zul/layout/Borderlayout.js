@@ -146,15 +146,18 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (this._isOnSize)
 			this._resize(true);
 	},
+	/*
+	// B50-ZK-309: done by beforeMinFlex_
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenMinFlex_: function() {
 		//region's min vflex/hflex resolved and try the border resize
 		//@see #_resize
 		if (!this._isOnSize) {
-			//this._resize(true);
+			this._resize(true);
 			this._isOnSize = false;
 		}
 	},
+	*/
 	/**
 	 * Re-sizes this layout component.
 	 */
