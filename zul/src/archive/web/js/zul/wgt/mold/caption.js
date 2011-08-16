@@ -17,7 +17,7 @@ function (out) {
 		uuid = this.uuid,
 		cnt = this.domContent_();
 	if (parent.isLegend && parent.isLegend()) {
-		out.push('<legend', this.domAttrs_(), '><span id="', uuid, '-dcnt">', cnt);
+		out.push('<legend', this.domAttrs_(), '><span id="', uuid, '-cnt">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</span></legend>');
@@ -28,7 +28,7 @@ function (out) {
 		puuid = parent.uuid,
 		pzcls = parent.getZclass();
 	out.push('<table', this.domAttrs_(), zUtl.cellps0,
-			' width="100%"><tr valign="middle"><td id="', uuid, '-dcnt" align="left" class="',
+			' width="100%"><tr valign="middle"><td id="', uuid, '-cnt" align="left" class="',
 			zcls, '-l">', (cnt?cnt:'&nbsp;'), //Bug 1688261: nbsp required
 			'</td><td align="right" class="', zcls,
 			'-r" id="', uuid, '-cave">');
