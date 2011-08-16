@@ -48,6 +48,13 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return label ? img + ' ' + label: img;
 	},
+	updateDomContent_: function () { // B50-ZK-313: only replace innerHTML
+		var p = this.parent,
+			cnt = this.domContent_(),
+			dn = this.$n('dcnt');
+		if (dn)
+			dn.innerHTML = (p && p.isLegend && p.isLegend()) || cnt ? cnt : '&nbsp;';
+	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
 			parent = this.parent;

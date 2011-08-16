@@ -154,6 +154,7 @@ ZK 5.0.8
   ZK-301: Invalidate Borderlayout while west opening cause javascript error
   ZK-306: DefaultTreeModel does not properly synchronize deselection state
   ZK-307: Center fires redudant onSize if borderlayout's isFlex() is true
+  ZK-313: Strange behavior of ProgressMeter's setValue
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

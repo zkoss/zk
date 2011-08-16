@@ -13,9 +13,11 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	var parent = this.parent;
+	var parent = this.parent,
+		uuid = this.uuid,
+		cnt = this.domContent_();
 	if (parent.isLegend && parent.isLegend()) {
-		out.push('<legend', this.domAttrs_(), '><span>', this.domContent_());
+		out.push('<legend', this.domAttrs_(), '><span id="', uuid, '-dcnt">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</span></legend>');
@@ -23,14 +25,13 @@ function (out) {
 	}
 
 	var zcls = this.getZclass(),
-		cnt = this.domContent_(),
 		puuid = parent.uuid,
 		pzcls = parent.getZclass();
 	out.push('<table', this.domAttrs_(), zUtl.cellps0,
-			' width="100%"><tr valign="middle"><td align="left" class="',
+			' width="100%"><tr valign="middle"><td id="', uuid, '-dcnt" align="left" class="',
 			zcls, '-l">', (cnt?cnt:'&nbsp;'), //Bug 1688261: nbsp required
 			'</td><td align="right" class="', zcls,
-			'-r" id="', this.uuid, '-cave">');
+			'-r" id="', uuid, '-cave">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 

@@ -365,7 +365,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * <p>Default: empty.
 		 * @return String
 		 */
-		title: _zkf,
+		title: function () {
+			if (this.caption)
+				this.caption.updateDomContent_(); // B50-ZK-313
+			else
+				_updDomOuter(this);
+		},
 		/** 
 		 * Sets the border (either none or normal).
 		 * @param String border the border. If null or "0", "none" is assumed.

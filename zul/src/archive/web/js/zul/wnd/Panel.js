@@ -217,7 +217,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <p>Default: empty.
 		 * @return String
 		 */
-		title: _zkf,
+		title: function () {
+			if (this.caption)
+				this.caption.updateDomContent_(); // B50-ZK-313
+			else
+				this.rerender(this._skipper);
+		},
 		/** 
 		 * Opens or closes this Panel.
 		 * @param boolean open
