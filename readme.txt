@@ -23,7 +23,7 @@ Simply Java
 
 Server+client Fusion
 
-    ZK’s Server+client Fusion gives developers the freedom to leverage the best
+    ZK's Server+client Fusion gives developers the freedom to leverage the best
     of both sides.
 
     The server-centric solution to Ajax brings a productivity boost, robustness,
