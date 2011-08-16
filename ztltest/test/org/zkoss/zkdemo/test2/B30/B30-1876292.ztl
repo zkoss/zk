@@ -21,7 +21,7 @@
 		<client><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
-            type(combobox, "aaa");
+            sendKeys(combobox, "aaa");
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());
@@ -76,7 +76,7 @@
 		<client><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
-            type(combobox, "ttt");
+            sendKeys(combobox, "ttt");
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());
