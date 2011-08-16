@@ -792,15 +792,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_afterSlideOutX: function (n) {
 		// B50-ZK-301: fire onOpen after animation
-		this.$class.afterSlideOut.apply(this, n);
-		this.fire('onOpen', {open: this._open});
+		this.$class.afterSlideOut.apply(this, [n, true]);
 	},
 	// a callback function after the component slides out.
-	afterSlideOut: function (n) {
+	afterSlideOut: function (n, fireOnOpen) {
 		if (this._open) 
 			zk(this.$n('real')).slideIn(this, {
 				anchor: this.sanchor,
-				afterAnima: this.$class.afterSlideIn
+				afterAnima: fireOnOpen ? this.$class._afterSlideInX : this.$class.afterSlideIn
 			});
 		else {
 			var colled = this.$n('colled'),
@@ -809,9 +808,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			s.visibility = "";
 			zk(colled).slideIn(this, {
 				anchor: this.sanchor,
-				duration: 200
+				duration: 200,
+				// B50-ZK-301: fire onOpen after animation
+				afterAnima: fireOnOpen ? function (n) {this.fire('onOpen', {open: this._open});} : zk.$void
 			});
 		}
+	},
+	_afterSlideInX: function (n) {
+		// B50-ZK-301: fire onOpen after animation
+		this.$class.afterSlideIn.apply(this, n);
+		this.fire('onOpen', {open: this._open});
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
 	afterSlideIn: function (n) {
