@@ -44,7 +44,7 @@
 		<client><![CDATA[
 		String offset = ZK.is("ie8_") ? "2,2" : "1,1";
 		mouseOver(col0.$n("btn"));
-		clickAt(col0.$n("btn"), offset);
+		Scripts.triggerMouseEventAt(getWebDriver(), col0.$n("btn"), "click", offset);
 		waitResponse();
 		click(jq("@menuitem[label=\"Hardcover\"] a.z-menu-item-cnt-ck"));
 		waitResponse();
