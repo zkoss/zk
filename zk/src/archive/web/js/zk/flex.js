@@ -196,6 +196,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							var zkc = zk(c),
 								sz = 0;
 							if (ignore) {
+								var el = c.firstChild;
 								for(; el; el = el.nextSibling) {
 									var txt = el && el.nodeType == 3 ? el.nodeValue : null,
 										zel;
