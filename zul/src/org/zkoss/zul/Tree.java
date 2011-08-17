@@ -823,7 +823,10 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 				
 				if(_sel == item) //bug fix:3131173 
 					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
-								
+				
+				if (_model instanceof Selectable) // B50-ZK-306
+					((Selectable) _model).removeSelection(item.getTreeNode());
+				
 				smartUpdateSelection();
 			}
 		}
