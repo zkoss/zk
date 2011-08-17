@@ -792,7 +792,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_afterSlideOutX: function (n) {
 		// B50-ZK-301: fire onOpen after animation
-		this.$class.afterSlideOut.apply(this, [n, true]);
+		this.$class.afterSlideOut.call(this, n, true);
 	},
 	// a callback function after the component slides out.
 	afterSlideOut: function (n, fireOnOpen) {
@@ -816,7 +816,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_afterSlideInX: function (n) {
 		// B50-ZK-301: fire onOpen after animation
-		this.$class.afterSlideIn.apply(this, n);
+		this.$class.afterSlideIn.call(this, n);
 		this.fire('onOpen', {open: this._open});
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
