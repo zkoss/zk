@@ -740,6 +740,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (ebody.offsetHeight - ebodytbl.offsetHeight > 11 &&
 				ebody.offsetWidth >= ebodytbl.offsetWidth) 
 			ebody.style.height = (ebodytbl.offsetHeight) + 'px';
+		zjq._fixOnResize(0); // defer detection of doc resize
 	},
 	_fixPageSize: function(rows) {
 		var ebody = this.ebody;
