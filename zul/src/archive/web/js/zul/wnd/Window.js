@@ -1027,6 +1027,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.rerender(this._skipper); // B50-ZK-275
 		}
 	},
+	insertChildHTML_: function (child, before, desktop) {
+		if (!child.$instanceof(zul.wgt.Caption)) // B50-ZK-275
+			this.$supers('insertChildHTML_', arguments);
+	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);
 		if ((!no || !no.visible) && this._minimized)
