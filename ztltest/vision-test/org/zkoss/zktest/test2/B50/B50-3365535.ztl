@@ -1,0 +1,20 @@
+<test tags="B50-3365535.zul,A,E,Hlayout,Groupbox,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+The text "Div Content " cannot cover the text "Groupbox Content"
+<hlayout>
+<groupbox hflex="min">
+Groupbox Content
+</groupbox>
+<div>
+Div Content
+</div>
+</hlayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

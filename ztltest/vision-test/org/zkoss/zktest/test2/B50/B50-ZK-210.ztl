@@ -1,0 +1,84 @@
+<test tags="B50-3343388.zul,A,E,Groupbox,Caption,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+<style id="s3" src="/test2/Z5-style.css"/>
+<div id="main" class="css1">
+Click add and the yellow background shall be applied.
+Click remove the yellow background will be removed.
+	<zscript><![CDATA[
+	void addStyle(String style) {
+		if (main.lastChild instanceof Style) {
+			alert("already added");
+		} else {
+			Style s = new Style();
+			s.setContent(style);
+			main.appendChild(s);
+		}
+	}
+	void removeStyle() {
+		if (main.lastChild instanceof Style)
+			main.lastChild.detach();
+	}
+	void updateStyle(content) {
+		if (main.lastChild instanceof Style)
+			main.lastChild.setContent(content);
+		else
+			alert("not added yet");
+	}
+	]]></zscript>
+	<separator bar="true"/>
+	<button label="add" onClick='addStyle(".css1 {background: yellow}")'/>
+	<button label="update to red" onClick='updateStyle(".css1 {background: red}")'/>
+	<button label="change to gray" onClick='updateStyle(".css1 {background: gray}")'/>
+	<button label="remove" onClick='removeStyle()'/>
+</div>
+<separator bar="true"/>
+<div class="css2">
+	This is a test of updating the content of a style.
+	<button label="change to gray" onClick='s2.setContent(".css2 {background: gray}")'/>
+	<style id="s2">
+	.css2 {
+		background: #0cc
+	}
+	</style>
+</div>
+<separator bar="true"/>
+<div class="css3">
+	This is a test of using a style with src
+	<button label="change to gray" onClick='s3.setContent(".css3 {background: gray}")'/>
+	<button label="change to src (purple)" onClick='s3.setSrc("/test2/Z5-style.css")'/>
+	<button label="remove" onClick='ts3 = s3; s3.detach();'/>
+	<button label="add back" onClick="self.parent.appendChild(ts3)"/>
+</div>
+<include/>
+<button label="include" onClick='self.previousSibling.setSrc("/test2/B50-ZK-210.zul")'/>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq("@button:eq(0)"));
+			verifyImage();
+			click(jq("@button:eq(1)"));
+			verifyImage();
+			click(jq("@button:eq(2)"));
+			verifyImage();
+			click(jq("@button:eq(3)"));
+			verifyImage();
+			click(jq("@button:eq(4)"));
+			verifyImage();
+			click(jq("@button:eq(5)"));
+			verifyImage();
+			click(jq("@button:eq(6)"));
+			verifyImage();
+			click(jq("@button:eq(7)"));
+			verifyImage();
+			click(jq("@button:eq(8)"));
+			verifyImage();
+			click(jq("@button:eq(9)"));
+			verifyImage();
+			click(jq("@button:eq(10)"));
+			verifyImage();
+		]]></client>
+	</case>
+</test>

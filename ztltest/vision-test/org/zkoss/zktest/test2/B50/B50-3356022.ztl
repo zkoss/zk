@@ -1,0 +1,58 @@
+<test tags="B50-3356022.zul,A,E,Borderlayout,Tabbox,Vflex,Hflex">
+	<case id="Hflex">
+		<server><!--
+<window title="Add Tupperware" border="normal" closable="true">
+	<borderlayout vflex="min" hflex="min">
+		<east vflex="min" hflex="min" border="normal" title="east">
+			<tabbox height="125px" hflex="min" tabscroll="true"
+				orient="horizontal">
+				<tabs id="tabs">
+					<tab label="Inner Tab One" />
+					<tab id="tab2" label="Inner Tab Two" />
+				</tabs>
+				<tabpanels height="125px" hflex="min">
+					<tabpanel height="125px" hflex="min">
+						<groupbox vflex="min" hflex="min">
+							<caption vflex="min" hflex="1"
+								label="Inside Inner Tab One" />
+						</groupbox>
+					</tabpanel>
+					<tabpanel height="125px" hflex="min">
+						<grid vflex="min" hflex="min">
+							<columns>
+								<column align="right" />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<cell rowspan="1">
+										<label
+											tooltip="uuid(zb_pageHome_Popup_6)" value="Weight(lb):"
+											maxlength="0" />
+									</cell>
+									<cell hflex="1" rowspan="1">
+										<textbox sclass="zebra-field"
+											id="tupperWeightGrams" maxlength="0" type="text" rows="1" />
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</east>
+		<west vflex="min" hflex="min" border="normal" title="west">
+			west
+		</west>
+	</borderlayout>
+</window>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(tabs.$n("right"));
+			waitResponse();
+			click(tab2);
+			verifyImage();
+		]]></client>
+	</case>
+</test>
