@@ -208,23 +208,47 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_config.invokeWebAppInits();
 	}
 	public void destroy() {
-		_config.invokeWebAppCleanups();
-
-		_config.detroyRichlets();
+		try {
+			_config.invokeWebAppCleanups();
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
+		}
+		try {
+			_config.detroyRichlets();
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
+		}
 
 		try {
 			_sesscache.destroy(this);
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (AbstractMethodError ex) { //backward compatible
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
 		}
-		_factory.stop(this);
-		_provider.stop(this);
-		_engine.stop(this);
+
+		try {
+			_factory.stop(this);
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
+		}
+		try {
+			_provider.stop(this);
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
+		}
+		try {
+			_engine.stop(this);
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
+		}
 		if (_failover != null) {
 			try {
 				_failover.stop(this);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (AbstractMethodError ex) { //backward compatible
+			} catch (Throwable ex) {
+				log.realCauseBriefly(ex);
 			}
 			_failover = null;
 		}
@@ -237,6 +261,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			org.zkoss.util.Cleanups.cleanup();
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
+		} catch (Throwable ex) {
+			log.realCauseBriefly(ex);
 		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
