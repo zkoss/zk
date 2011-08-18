@@ -211,12 +211,12 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		try {
 			_config.invokeWebAppCleanups();
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 		try {
 			_config.detroyRichlets();
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 
 		try {
@@ -224,23 +224,23 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (AbstractMethodError ex) { //backward compatible
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 
 		try {
 			_factory.stop(this);
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 		try {
 			_provider.stop(this);
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 		try {
 			_engine.stop(this);
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 		if (_failover != null) {
 			try {
@@ -248,7 +248,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (AbstractMethodError ex) { //backward compatible
 			} catch (Throwable ex) {
-				log.realCauseBriefly(ex);
+				ex.printStackTrace(); //not using log since it might be cleaned up
 			}
 			_failover = null;
 		}
@@ -262,7 +262,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			org.zkoss.util.Cleanups.cleanup();
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
