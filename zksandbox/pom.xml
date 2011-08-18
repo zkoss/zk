@@ -20,7 +20,7 @@
 		<gmapsz.version>2.0.51</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
-		<zuljsp.version>1.4.1</zuljsp.version>
+		<zuljsp.version>1.5</zuljsp.version>
 	</properties>
 	<version>5.0.8-SNAPSHOT</version>
 	<packaging>war</packaging>
