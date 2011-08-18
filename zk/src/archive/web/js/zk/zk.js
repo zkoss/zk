@@ -1219,6 +1219,8 @@ zk.log('value is", value);
 		zk.css3 = zk.opera >= 10.5;
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
+			//zk.iex is the Browser Mode (aka., Compatibility View)
+			//while zk.ie is the Document Mode
 		if (zk.iex) {
 			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
 				zk.ie = 6; //assume quirk mode
