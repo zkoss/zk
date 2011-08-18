@@ -1251,6 +1251,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else
 			this._calcSize();
 	},
+	clearCachedSize_: function() {
+		this.$supers('clearCachedSize_', arguments);
+		this._clearCachedSize();
+		
+		if (!this.ebdfaker && (tr = this._getSigRow())) { //empty head case
+			for (var cells = tr.cells, i = cells.length; i--;)
+				cells[i].style.width = '';
+		}
+	},
+	_clearCachedSize: function() {
+		var n, tr;
+		if (n = this.$n())
+			n._lastsz = this._minWd = null;
+	},
 	_calcMinWds: function () { //used in HeaderWidgets
 		if (!this._minWd)
 			this._minWd = _calcMinWd(this); 

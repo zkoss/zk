@@ -359,10 +359,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zFlex = { //static methods
 	beforeSize: function (ctl, opts, cleanup) {
 		var wgt = this, p;
-		if (cleanup) {
-			delete wgt._hflexsz;
-			delete wgt._vflexsz;
-		}
+		if (cleanup)
+			wgt.clearCachedSize_();
 
 		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
 		if (wgt.isRealVisible()) {

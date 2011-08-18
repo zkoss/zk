@@ -265,6 +265,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
+	clearCachedSize_: function() {
+		this.$supers('clearCachedSize_', arguments);
+		var mw;
+		if (mw = this.getMeshWidget())
+			mw._clearCachedSize();
+	},
 	//@Override to get width/height of MeshWidget 
 	getParentSize_: function() {
 		//to be overridden

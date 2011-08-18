@@ -2922,6 +2922,10 @@ unbind_: function (skipper, after) {
 	fixMinFlex_: function(n, orient) { //internal use
 		return zFlex.fixMinFlex(this, n, orient);
 	},
+	clearCachedSize_: function() {
+		delete this._hflexsz;
+		delete this._vflexsz;
+	},
 	resetSize_: function(orient) {
 		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
 	},
