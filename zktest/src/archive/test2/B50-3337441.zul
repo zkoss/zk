@@ -6,7 +6,7 @@
 		2. Unselect Item 2. (so none of the items is selected now)
 	</div>
 	<div>
-		3. Shift-click Item 4. Only Item 4,5 should be selected. If you see Item 2,3,4 are selected, it is a bug.
+		3. Shift-click Item 4. Only Item 4 should be selected. If you see Item 2,3,4 are selected, it is a bug.
 	</div>
 	<listbox multiple="true" checkmark="true">
 		<listitem>
