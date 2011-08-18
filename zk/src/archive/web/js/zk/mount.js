@@ -704,7 +704,7 @@ jq(function() {
 		}
 	});
 
-	zjq._fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
+	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
 
 	jq(window).resize(function () {
 		if (zk.mounting || zk.skipResize)

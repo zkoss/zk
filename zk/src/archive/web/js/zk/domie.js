@@ -139,7 +139,7 @@ zk.override(jq.event, zjq._evt = {}, {
 
 //IE: use query string if possible to avoid incomplete-request problem
 if (zk.ie < 8) {
-	zjq._fixOnResize = function (tmout) {
+	zjq.fixOnResize = function (tmout) {
 		//IE6/7: it sometimes fires an "extra" onResize in loading
 		//so we have to filter it out (to improve performance)
 		//The other case is an extra onResize is fired if a position=absolute
