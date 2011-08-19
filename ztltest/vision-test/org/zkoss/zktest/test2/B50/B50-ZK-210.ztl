@@ -77,7 +77,7 @@ Click remove the yellow background will be removed.
 			verifyImage();
 			click(jq("@button:eq(9)"));
 			verifyImage();
-			click(jq("@button:eq(10)"));
+			click(jq("@button:eq(9)"));
 			verifyImage();
 		]]></client>
 	</case>
