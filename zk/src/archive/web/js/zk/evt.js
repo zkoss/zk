@@ -328,12 +328,22 @@ zWatch = (function () {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
 			jq.zsync(org);
 	}
-	function _fns(fns, args) {
-		if (fns) {
-			var f;
-			while (f = fns.pop())
-				f[0].apply(f[1], args);
-		}
+	//invoke fns in the reverse order
+	function _reversefns(fns, args) {
+		if (fns)
+			//we group methods together if their parents are the same
+			//then we invoke them in the normal order (not reverse), s.t.,
+			//child invokes firsd, but also superclass invoked first (first register, first call if same object)
+			for (var j = fns.length, k = j, i, f, oldp, newp; j >= 0;) {
+				if (--j < 0 || (oldp != (newp=fns[j][1].parent) && oldp)) {
+					for (i = j; ++i < k;) {
+						f = fns[i];
+						f[0].apply(f[1], args);
+					}
+					k = j + 1;
+				}
+				oldp = newp;
+			}
 	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
@@ -353,12 +363,12 @@ zWatch = (function () {
 			if (opts && opts.timeout >= 0)
 				setTimeout(function () {
 					gun.fire();
-					_fns(fns, args);
+					_reversefns(fns, args);
 					_zsync(name, org);
 				}, opts.timeout);
 			else {
 				gun.fire();
-				_fns(fns, args);
+				_reversefns(fns, args);
 				_zsync(name, org);
 			}
 		} else
