@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;
 		var node = wgt.$n(),
+			zkn = zk(node),
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
@@ -31,9 +32,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 		if (!floated) {
 			sw -= $op.zk.paddingWidth();
-			sw = $op.zk.revisedWidth(sw);
+			sw = zkn.revisedWidth(sw);
 			sh -= $op.zk.paddingHeight();
-			sh = $op.zk.revisedHeight(sh);
+			sh = zkn.revisedHeight(sh);
 		}
 
 		s.width = jq.px0(sw);
@@ -542,10 +543,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 						fromServer: fromServer
 					});
 				}
-				if (isRealVisible) {
-					this.__maximized = true;
+				if (isRealVisible)
 					zUtl.fireSized(this);
-				}
 			}
 		},
 		/**
@@ -820,16 +819,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized && !this.__maximized) 
+		if (this._maximized) 
 			this.$n().style.width="";
 	},
 	onSize: function() {
 		_hideShadow(this);
-		if (this._maximized) {
-			if (!this.__maximized)
-				_syncMaximized(this);
-			this.__maximized = false; // avoid deadloop
-		}
+		if (this._maximized)
+			_syncMaximized(this);
 		this._fixHgh();
 		this._fixWdh();
 		if (this._mode != 'embedded')
