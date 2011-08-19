@@ -14,14 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	
-	function _setFirstChildFlex (wgt, flex) {
+	function _setFirstChildFlex (wgt, flex, ignoreMin) {
 		var cwgt = wgt.firstChild;
 		if(cwgt) {
 			if (flex) {
 				wgt._fcvflex = cwgt.getVflex();
 				wgt._fchflex = cwgt.getHflex();
-				cwgt.setVflex(true);
-				cwgt.setHflex(true);
+				if (!ignoreMin || cwgt._vflex != 'min') // B50-ZK-237
+					cwgt.setVflex(true);
+				if (!ignoreMin || cwgt._hflex != 'min') // B50-ZK-237
+					cwgt.setHflex(true);
 			} else {
 				cwgt.setVflex(wgt._fcvflex);
 				cwgt.setHflex(wgt._fchflex);
@@ -511,7 +513,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		
 		if (this.isFlex())
-			_setFirstChildFlex(this, true);
+			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
