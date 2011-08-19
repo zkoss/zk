@@ -84,7 +84,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				zcls = this.getZclass();
 			if (n) {
 				if (!this.inRoundedMold()) {
-					jq(n)[v ? 'show': 'hide']();
+					if (!this._inplace || !v)
+						jq(n)[v ? 'show': 'hide']();
+					else
+						n.style.display = '';
 					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';

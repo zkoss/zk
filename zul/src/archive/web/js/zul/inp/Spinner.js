@@ -41,7 +41,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 				zcls = this.getZclass();
 			if (!n) return;
 			if (!this.inRoundedMold()) {
-				jq(n)[v ? 'show': 'hide']();
+				if (!this._inplace || !v)
+					jq(n)[v ? 'show': 'hide']();
+				else
+					n.style.display = '';
 				jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 			} else {
 				var fnm = v ? 'removeClass': 'addClass';
@@ -56,7 +59,6 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 				}
 			}
 			this.onSize();
-			return;
 		}
 	},
 	getZclass: function () {

@@ -157,6 +157,7 @@ ZK 5.0.8
   ZK-307: Center fires redudant onSize if borderlayout's isFlex() is true
   ZK-313: Strange behavior of ProgressMeter's setValue
   ZK-58:  Desktop.setBookmark does not allow ? character
+  ZK-323: Inplace input element may fail when set button visible dynamically 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
