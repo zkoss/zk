@@ -398,7 +398,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					});
 				}
 				if (isRealVisible) {
-					this.__maximized = true;
+					// B50-ZK-324: always counts on onSize to do the work
+					//this.__maximized = true; 
 					zUtl.fireSized(this);
 				}
 			}
