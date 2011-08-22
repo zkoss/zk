@@ -25,7 +25,7 @@ function (out) {
 		out.push(' ', zcls, '-right-edge');
 		
 	out.push('"', this.textAttrs_(),'/>', '<i id="', uuid,'-btn"',
-			'class="', zcls, '-btn');
+			'class="', zcls,'-btn ');
 	
 	if (isRounded) {
 		if (!isButtonVisible)
@@ -34,9 +34,10 @@ function (out) {
 			out.push(' ', zcls, '-btn-readonly');	
 		if (zk.ie6_ && !isButtonVisible && this._readonly)
 			out.push(' ', zcls, '-btn-right-edge-readonly');
-		out.push('">');
 	} else if (!isButtonVisible)
-		out.push('" style="display:none">');
+		out.push('" style="display:none');	
+	
+	out.push('">');
 	//Merge breeze: for splitting timebox/spinner button to two pieces
 	zul.inp.Renderer.renderSpinnerButton(out, this);
 	out.push('</i></i>');
