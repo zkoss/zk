@@ -22,6 +22,7 @@
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
             sendKeys(combobox, "aaa");
+            waitResponse();
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());
@@ -77,6 +78,7 @@
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
             sendKeys(combobox, "ttt");
+            waitResponse();
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());

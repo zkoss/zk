@@ -43,7 +43,7 @@ calling setOpen method.
 				click(s2.$n("btn"));
 				waitResponse();
 				int h1 = jq(".z-vbox:eq(0)").height() + jq(".z-vbox:eq(1)").height();
-				verifyTolerant(h1, h, 4);
+				verifyTolerant(h1, h, 5);
 		]]></client>
 	</case>
 </test>
