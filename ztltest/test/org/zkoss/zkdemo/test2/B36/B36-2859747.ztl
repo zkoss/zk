@@ -53,11 +53,11 @@ Please click the "Text" header (it means upon the word.), and it should be sorte
 
 		--></server>
 		<client><![CDATA[
-				click(jq("@column:eq(0)"));
-				waitResponse();
-				verifyEquals("File:",jq("@row:eq(0) @label").text());
-				verifyEquals("Options:",jq("@row:eq(1) @label").text());
-				verifyEquals("Type:",jq("@row:eq(2) @label").text());
+			Scripts.triggerMouseEventAt(getWebDriver(), jq("@column:eq(0)"), "click", "2,2");
+			waitResponse();
+			verifyEquals("File:",jq("@row:eq(0) @label").text());
+			verifyEquals("Options:",jq("@row:eq(1) @label").text());
+			verifyEquals("Type:",jq("@row:eq(2) @label").text());
 		]]></client>
 	</case>
 </test>
