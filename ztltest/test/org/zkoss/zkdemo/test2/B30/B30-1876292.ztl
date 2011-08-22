@@ -22,7 +22,7 @@
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
             sendKeys(combobox, "aaa");
-            waitResponse();
+            blur(combobox);
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());
