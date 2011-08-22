@@ -17,6 +17,24 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<id>jumper</id>
+			<name>Jumper</name>
+			<email>jumperchen@potix.com</email>
+			<url>http://www.zkoss.org</url>
+			<organization>Potix</organization>
+			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>8</timezone>
+			<properties>
+				<picUrl>http://www.zkoss.org</picUrl>
+			</properties>
+		</developer>
+	</developers>
 	<scm>
 		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zweb</url>
 	</scm>
