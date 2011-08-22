@@ -28,7 +28,7 @@
 			</window>
 			</zk>
 		--></server>
-		<client><![CDATA[
+		<client wait="200"><![CDATA[
 			Element b = isIE() ? btn.$n("btn") : btn.$n();
 			click(b);
 			waitResponse();

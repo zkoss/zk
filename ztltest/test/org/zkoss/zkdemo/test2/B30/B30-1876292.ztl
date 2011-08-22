@@ -18,7 +18,7 @@
 				</vbox>
 			</zk>
 		--></server>
-		<client><![CDATA[
+		<client wait="200"><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
             sendKeys(combobox, "aaa");
@@ -74,7 +74,7 @@
 				</vbox>
 			</zk>
 		--></server>
-		<client><![CDATA[
+		<client wait="200"><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
             sendKeys(combobox, "ttt");
