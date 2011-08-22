@@ -25,7 +25,7 @@ function (out) {
 		out.push(' ', zcls, '-right-edge');
 		
 	out.push('"', this.textAttrs_(),'/>', '<i id="', uuid,'-btn"',
-			'class="', zcls,'-btn ');
+			'class="', zcls, '-btn');
 	
 	if (isRounded) {
 		if (!isButtonVisible)
