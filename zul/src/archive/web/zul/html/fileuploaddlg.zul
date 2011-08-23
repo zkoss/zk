@@ -68,9 +68,8 @@ if (!zk.ModalFileViewer) {
 
 			this.max = ${empty arg.max? 0: arg.max};
 			if (this.max > 0 && this.max <= uploaded.$n().childNodes.length)
-				uploaded.$f("fileupload").setVisible(false);
-				
-				
+				zul.LabelImageWidget.prototype.setVisible.call(uploaded.$f("fileupload"), false); // B50-ZK-340: need to skip rerender
+			
 			this.viewer = jq('#'+ id)[0];
 			jq('#' + id + '-cancel').click(function() {
 				wgt.$f('submit').revert();
@@ -83,7 +82,7 @@ if (!zk.ModalFileViewer) {
 				}
 				
 				if (self.max > 0 && self.max > uploaded.$n().childNodes.length)
-					uploaded.$f("fileupload").setVisible(true);
+					zul.LabelImageWidget.prototype.setVisible.call(uploaded.$f("fileupload"), true); // B50-ZK-340: need to skip rerender
 			});
 		},
 		update: function (sent, total) {

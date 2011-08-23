@@ -28,20 +28,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		o.uploaders[key] = uplder;
 	}
 	function _start(o, form, val) { //start upload	
-		if (!o._clsnm) { // not initialized yet
-			//B50-ZK-255: FileUploadBase$SizeLimitExceededException
-			//will not warning in browser
-			_initUploader(o, form, val);
-			o.sid++;
-			o.initContent();
-		} else {
-			//Bug 3305038: Fileupload.get() cause javascript error
-			o.sid++;
-			o.initContent();
-			_initUploader(o, form, val);
-		}
+		//B50-ZK-255: FileUploadBase$SizeLimitExceededException
+		//will not warning in browser
+		_initUploader(o, form, val);
+		o.sid++;
+		o.initContent();
 	}
-
 	function _onchange(evt) {
 		var n = this,
 			upload = n._ctrl,
