@@ -172,10 +172,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
 		
-		//bug B50-ZK-238
-		this.$n('scrollX').scrollLeft = 0;
-		this._doScroll();
-		
 		var p, body, fakerflex;
 		if (p = this.parent) {
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
@@ -188,6 +184,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if ((p = this.parent) && (p = p.$n('body')))
 			jq(p).removeClass('z-word-nowrap').css('overflow-x', '');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
+	},
+	beforeParentChanged_: function (p) {
+		//bug B50-ZK-238
+		if (this._lastScale) //if large then 0
+			this._doScrollNow(0);
+		
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	_doScroll: function (evt) {
 		var scroll = this.$n('scrollX'),
@@ -209,7 +212,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			}, 10);
 	},
 	_doScrollNow: function (num, force) {
-		var width = this.$n('cave').offsetWidth,
+		var width = this.desktop ? this.$n('cave').offsetWidth: null,
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
@@ -239,7 +242,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				shallUpdate = false;
 				if (cnt-- <= 0) {// show
 					if (force || parseInt(n.style.width) == 0) {
-						cellWidth = hdWgt._origWd || n.style.width;
+						cellWidth = hdWgt._origWd || n.style.width|| jq.px0(jq(n).outerWidth());
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
@@ -280,9 +283,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if ((r = hdrs[i]) != hdr) //skip Column
 					_fixaux(r.cells, this._columns, this._columns + num);
 
-			for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
-					n; n = n.nextSibling)
-				width += zk.parseInt(n.style.width);
+			if (width)
+				for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
+						n; n = n.nextSibling)
+					width += zk.parseInt(n.style.width);
 
 		} else if (!rows || !rows.length) {
 			return;
@@ -305,7 +309,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				width += zk.parseInt(c.style.width);
 		}
 
-		width = jq.px0(width);
+		width = width ? jq.px0(width): '';
 		if (mesh.eheadtbl)
 			mesh.eheadtbl.style.width = width;
 		if (mesh.ebodytbl)
