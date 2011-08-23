@@ -1134,7 +1134,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_removeScrollbar: function() { //see HeadWidget#afterChildrenFlex_
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
 		if (zk.ie && !this.isVflex() && (!hgh || hgh == "auto")) {
-			if(!zk.ie8) { 
+			if(zk.ie < 8) { 
 				var $ebody;
 				if (($ebody=zk(this.ebody)).hasVScroll()) { //v-scroll, expand body height to remove v-scroll
 					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
@@ -1143,6 +1143,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			} else if (!this.efrozen) {
 				//IE8 sometimes will fail to show the h-scrollbar; enforce it!
+				//IE9: Bug ZK-238
 				this.ebody.style.overflowX = 
 					this.ebodytbl.offsetWidth > this.ebody.offsetWidth ?
 					'scroll': '';
@@ -1224,6 +1225,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.heads.$remove(child);
 		} else if (child.$instanceof(zul.mesh.Auxhead))
 			this.heads.$remove(child);
+		else if (child.$instanceof(zul.mesh.Frozen))
+			this.efrozen = null;
 	},
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {

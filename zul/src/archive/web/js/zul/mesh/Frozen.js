@@ -155,16 +155,19 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
 		zWatch.listen({onSize: this});
 		var scroll = this.$n('scrollX'),
-			gbody = this.parent.$n('body');
+			p = this.parent,
+			gbody = p.$n('body');
 
 		this.$n().style.height = this.$n('cave').style.height = scroll.style.height
 			 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
 
-		this.parent.listen({onScroll: this.proxy(this._onScroll)}, -1000);
+		p.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 		this.domListen_(scroll, 'onScroll');
 
-		if (gbody)
+		if (gbody) {
 			jq(gbody).addClass('z-word-nowrap').css('overflow-x', 'hidden');
+			p._currentLeft = 0;			
+		}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
@@ -173,8 +176,15 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this.$n('scrollX').scrollLeft = 0;
 		this._doScroll();
 		
-		this.parent.unlisten({onScroll: this.proxy(this._onScroll)});
-		var p;
+		var p, body, fakerflex;
+		if (p = this.parent) {
+			p.unlisten({onScroll: this.proxy(this._onScroll)});
+			if (body = p.$n('body'))
+				jq(body).removeClass('z-word-nowrap').css('overflow-x', '');
+			if (p.head && (fakerflex = p.head.$n('hdfakerflex')))
+				fakerflex.style.width = '';
+		}
+		
 		if ((p = this.parent) && (p = p.$n('body')))
 			jq(p).removeClass('z-word-nowrap').css('overflow-x', '');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
