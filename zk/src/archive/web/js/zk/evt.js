@@ -334,13 +334,13 @@ zWatch = (function () {
 			//we group methods together if their parents are the same
 			//then we invoke them in the normal order (not reverse), s.t.,
 			//child invokes firsd, but also superclass invoked first (first register, first call if same object)
-			for (var j = fns.length, k = j, i, f, oldp, newp; j >= 0;) {
+			for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
 				if (--j < 0 || (oldp != (newp=fns[j][1].parent) && oldp)) {
-					for (i = j; ++i < k;) {
+					for (i = j; ++i <= k;) {
 						f = fns[i];
 						f[0].apply(f[1], args);
 					}
-					k = j + 1;
+					k = j;
 				}
 				oldp = newp;
 			}
