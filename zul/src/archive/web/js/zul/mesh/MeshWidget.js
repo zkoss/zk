@@ -1131,9 +1131,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//bug#3186596: unwanted v-scrollbar
 		this._removeScrollbar();
 	},
-	_removeScrollbar: function() { //see HeadWidget#afterChildrenFlex_
+	_removeScrollbar: zk.ie ? function() { //see HeadWidget#afterChildrenFlex_
+		if (this._vflex) return;
+		
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
-		if (zk.ie && !this.isVflex() && (!hgh || hgh == "auto")) {
+		if (!hgh || hgh == "auto") {
 			if(zk.ie < 8) { 
 				var $ebody;
 				if (($ebody=zk(this.ebody)).hasVScroll()) { //v-scroll, expand body height to remove v-scroll
@@ -1149,7 +1151,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					'scroll': '';
 			}
 		}
-	},
+	}: zk.$void,
 	//return if all widths of columns are fixed (directly or indirectly)
 	_isAllWidths: function() {
 		if (this.isSizedByContent())
