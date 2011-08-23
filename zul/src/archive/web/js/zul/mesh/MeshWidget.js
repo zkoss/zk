@@ -1136,18 +1136,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		var hgh = this.getHeight() || this.$n().style.height || (this.getRows && this.getRows()); // bug in B36-2841185.zul
 		if (!hgh || hgh == "auto") {
+			var ebody = this.ebody,
+				ebodytbl = this.ebodytbl;
 			if(zk.ie < 8) { 
 				var $ebody;
-				if (($ebody=zk(this.ebody)).hasVScroll()) { //v-scroll, expand body height to remove v-scroll
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
+				if (($ebody=zk(ebody)).hasVScroll()) { //v-scroll, expand body height to remove v-scroll
+					ebody.style.height = jq.px0(ebodytbl.offsetHeight);
 					if ($ebody.hasVScroll()) //still v-scroll, expand body height for extra h-scroll space to remove v-scroll 
-						this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight+jq.scrollbarWidth());
+						ebody.style.height = jq.px0(ebodytbl.offsetHeight+jq.scrollbarWidth());
 				}
 			} else if (!this.efrozen) {
 				//IE8 sometimes will fail to show the h-scrollbar; enforce it!
 				//IE9: Bug ZK-238
-				this.ebody.style.overflowX = 
-					this.ebodytbl.offsetWidth > this.ebody.offsetWidth ?
+				ebody.style.overflowX = 
+					ebodytbl.offsetWidth > ebody.offsetWidth ?
 					'scroll': '';
 			}
 		}
