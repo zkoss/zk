@@ -104,7 +104,14 @@ if (!zk.ModalFileViewer) {
 	});
 }
 ]]></script>
-	<label value="${arg.message}"/>	
+	<style>
+		span.opera-float {
+			float: left;
+			padding-right: 4px;
+		}
+	</style>
+	<label value="${arg.message}" unless="${c:isOpera()}" />
+	<label value="${arg.message}" sclass="opera-float" if="${c:isOpera()}" />
 	<fileupload id="fileupload" forward="onUpload=" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
 		upload="zk.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
 	<separator bar="true"/>
