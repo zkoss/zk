@@ -23,6 +23,7 @@ listbox's horizontal scrollbar causes side effects
 <separator/>
 <hbox width="300px">
 	<listbox width="200px" height="200px" sizedByContent="true">
+		<listhead><listheader/></listhead>
 		<listitem>
 			<listcell style="white-space: nowrap;"
 label="xxxx x xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxx
