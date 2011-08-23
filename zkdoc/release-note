@@ -160,6 +160,7 @@ ZK 5.0.8
   ZK-58:  Desktop.setBookmark does not allow ? character
   ZK-323: Inplace input element may fail when set button visible dynamically
   ZK-343: Frozen column added to Listbox with paging causes problem
+  ZK-326: Panelchildren's vflex fail in a model window on IE6
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
