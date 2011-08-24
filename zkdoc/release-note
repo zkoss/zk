@@ -163,7 +163,8 @@ ZK 5.0.8
   ZK-326: Panelchildren's vflex fail in a model window on IE6
   ZK-338: Timebox cannot auto-change the hour by pressing the arrow icon in zh_TW locale (IE and Webkit only)
   ZK-332: Set disabled to treeitem shall not disable open function
-
+  ZK-337: Disabled Button should not appear pointer cursor
+  
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
     are selected (in the prior version, the first item will be shown though it is not
