@@ -420,6 +420,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
+		// cache it for IE
+		this._lastPos = this._getPos();
+			
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
 		if (isOverUpBtn) { //up
@@ -437,8 +440,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._currentbtn = btn;
 		}
 		
-		// cache it for IE
-		this._lastPos = this._getPos();
 		this._changed = true;
 		
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus

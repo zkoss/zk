@@ -161,6 +161,7 @@ ZK 5.0.8
   ZK-323: Inplace input element may fail when set button visible dynamically
   ZK-343: Frozen column added to Listbox with paging causes problem
   ZK-326: Panelchildren's vflex fail in a model window on IE6
+  ZK-338: Timebox cannot auto-change the hour by pressing the arrow icon in zh_TW locale (IE and Webkit only)
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
