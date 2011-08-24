@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		zul.fud - Fileupload Dialog
+	Description:
+		It is used with fileuploaddlg.zul
+	History:
+		Wed Aug 24 15:37:04 TST 2011, Created by tomyeh
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.fud" language="xul/html" depends="zul.wgt, zul.wnd">
+	<widget name="FileuploadDlg"/>
+	<widget name="Submit"/>
+</package>

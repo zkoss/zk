@@ -163,7 +163,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 					if (zclass)
 						jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
 				} else
-					this.rerender(); //bind and unbind required
+					this.rerender(); //bind and unbind required (because of many CSS classes to update)
 			}
 		},
 		image: function (v) {
@@ -275,7 +275,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
 			if (this._mold == 'trendy')
-				this.rerender();
+				this.onSize();
 		}
 		return this;
 	},
