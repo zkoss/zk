@@ -13,7 +13,10 @@ F50-3323594.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk xmlns:w="client">
+	<div>ZK Max only.</div>
+	<div>1. Click the button.</div>
+	<div>2. You shall see the both of count are "30".</div>
 	<zscript><![CDATA[
 		import java.util.*;
 		import org.zkoss.zul.*;
@@ -27,6 +30,15 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	]]></zscript>
 	<custom-attributes org.zkoss.zul.listbox.initRodSize="30"/>
 	<custom-attributes org.zkoss.zul.grid.initRodSize="30"/>
+	<button label="click me">
+		<attribute w:name="onClick"><![CDATA[
+			var cnt1 = jq(zk.Widget.$(jq("@listbox")).getBodyWidgetIterator().next().$n().parentNode).children().length,
+				cnt2 = jq(zk.Widget.$(jq("@grid")).getBodyWidgetIterator().next().$n().parentNode).children().length;
+
+			
+			alert('count1: '+ cnt1+', count2: '+ cnt1);
+		]]></attribute>
+	</button>
 	<listbox width="100px" height="300px" model="${model}"/>
 	<grid width="100px" height="300px" model="${model}"/>
 </zk>
