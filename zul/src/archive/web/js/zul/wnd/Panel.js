@@ -587,18 +587,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
 		if (this._maximized)
 			this.$n().style.width="";
-		if (!this._flexListened) {
-			// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
-			// have to clear width here if not listen to flex
+		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
+		// have to clear width here if not listen to flex
+		if (!this._flexListened) 
 			this.$n('body').style.width="";
-		}
-
 	},
 	// 
 	resetSize_: function(orient) {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// also reset the size of body
-		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
+		this.$supers(zul.wnd.Panel, 'resetSize_', arguments);
 		(this.$n('body')).style[orient == 'w' ? 'width': 'height'] = '';
 	},
 	//watch//
