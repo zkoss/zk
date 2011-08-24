@@ -1092,8 +1092,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ehead) {
 			if (tblwd) 
 				this.ehead.style.width = tblwd + 'px';
-			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
-				this._adjHeadWd();
 			else if (tblwd && this.efoot) 
 				this.efoot.style.width = tblwd + 'px';
 		} else if (this.efoot) {
@@ -1367,55 +1365,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (zk.opera) 
 			zk(this.$n()).redoCSS();
 		
-	},
-	_adjHeadWd: function () { //used in HeadWidget
-		var hdfaker = this.ehdfaker,
-			bdfaker = this.ebdfaker,
-			ftfaker = this.eftfaker,
-			fakerflex = this.head ? this.head.$n('hdfakerflex') : null;
-		if (!hdfaker || !bdfaker || !hdfaker.cells.length
-		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
-		|| !this.getBodyWidgetIterator().hasNext()) return;
-		
-		var hdtable = this.ehead.firstChild, head = this.head.$n();
-		if (!head) return;
-		
-		// Bug #1886788 the size of these table must be specified a fixed size.
-		var bdtable = this.ebody.firstChild;
-		
-		var	total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
-			tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
-			
-		if (total == this.ebody.offsetWidth && 
-			this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
-			total = tblwd;
-		this._calcMinWds(); //i.e. this._minWd = _calcMinWd(this);
-		var xwds = this._minWd,
-			wds = xwds.wds,
-			width = xwds.width;
-
-		for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-			if (!zk(hdfaker.cells[i]).isVisible()) continue;
-			var wd = wds[i];
-			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
-			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			var cpwd = zk(head.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
-			head.cells[i].style.width = cpwd + "px";
-			var cell = head.cells[i].firstChild;
-			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
-		}
-		
-		// in some case, the total width of this table may be changed.
-		if (total != hdtable.offsetWidth) {
-			total = hdtable.offsetWidth;
-			tblwd = Math.min(this.ebody.clientWidth, bdtable.offsetWidth);
-			if (total == this.ebody.offsetWidth && 
-				this.ebody.offsetWidth > tblwd && this.ebody.offsetWidth - tblwd < 20)
-				total = tblwd;
-		}
-		
-		_adjMinWd(this);
 	}
 });
 })();
