@@ -25,6 +25,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		ListModel model = new ListModelList(list);
 		
 	]]></zscript>
-	<listbox width="100px" height="300px" model="${model}" initRodSize="30"/>
-	<grid width="100px" height="300px" model="${model}" initRodSize="30"/>
+	<custom-attributes org.zkoss.zul.listbox.initRodSize="30"/>
+	<custom-attributes org.zkoss.zul.grid.initRodSize="30"/>
+	<listbox width="100px" height="300px" model="${model}"/>
+	<grid width="100px" height="300px" model="${model}"/>
 </zk>
