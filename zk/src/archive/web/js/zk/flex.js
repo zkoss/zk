@@ -478,7 +478,9 @@ zFlex = { //static methods
 				
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		var lastsz = hgh > 0 ? hgh : 0;
+		if (hgh < 0)
+			hgh = 0;
+		var lastsz = hgh;
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
@@ -500,7 +502,9 @@ zFlex = { //static methods
 		
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		lastsz = wdh > 0 ? wdh : 0;
+		if (wdh < 0)
+			wdh = 0;
+		lastsz = wdh;
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
