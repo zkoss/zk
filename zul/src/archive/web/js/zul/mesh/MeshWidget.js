@@ -856,6 +856,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		if (zk.ie < 8)
 			this._syncBodyHeight(); // B50-ZK-171
+		if (zk.ie7_)
+			zk(this.ebody).redoCSS(); // B50-ZK-335: Grid, Tree may have extra horizonal scroll bar
 		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
@@ -1065,6 +1067,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.efoot.style.width = wd;
 		}
 		
+		if (zk.ie7_ && this.ebodytbl) { // B50-ZK-335: re-sync ebodytbl width
+			var s = this.ebodytbl.style,
+				sw = s.width;
+			if (!sw) {
+				this.ebodytbl.style.width = '100%';
+				this.ebodytbl.style.width = sw;
+			}
+		}
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this._getEbodyWd(),
 			hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
