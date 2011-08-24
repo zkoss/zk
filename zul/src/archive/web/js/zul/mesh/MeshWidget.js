@@ -36,8 +36,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _calcMinWd(wgt) {
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
-		if (wgtn)
-			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
+		if (wgtn) {
+			if (zk.ie < 8)
+				jq(wgtn).addClass('z-word-nowrap'); // B50-ZK-333
+			else
+				wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
+		}
 		var eheadtblw,
 			efoottblw,
 			ebodytblw,
@@ -180,8 +184,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					bdfaker.cells[i].style.width = bdfakerws[i];
 		}
 
-		if (wgtn)
-			wgtn.style.whiteSpace = ws;
+		if (wgtn) {
+			if (zk.ie < 8)
+				jq(wgtn).removeClass('z-word-nowrap'); // B50-ZK-333
+			else
+				wgtn.style.whiteSpace = ws;
+		}
 		return {width: width, wds: wds};
 	}
 	function _fixBodyMinWd(wgt, fixMesh) {

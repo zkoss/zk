@@ -1,4 +1,3 @@
-<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <zk>
 <div>
 1. You shall see a Listbox with 4 columns. The first two column width fit the content exactly. The 3rd and 4th column width is 2 : 1
@@ -25,9 +24,6 @@ String[] msgs = {
 	"The best!",
 };
 </zscript>
-	<style if="${c:browser('ie6-') || c:browser('ie7-')}">
-		.z-row-cnt, .z-listcell-cnt, .z-treecell-cnt { white-space: nowrap; }
-	</style>
 	<listbox id="lbx">
 		<listhead sizable="true">
 			<listheader label="Product" hflex="min"/>
