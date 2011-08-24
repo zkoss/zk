@@ -44,4 +44,32 @@ public interface Treerow extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public org.zkoss.zul.api.Treechildren getLinkedTreechildrenApi();
 
+	/** Returns the label of the {@link Treecell} it contains, or null
+	 * if no such cell.
+	 * @since 5.0.8
+	 */
+	public String getLabel();
+	/** Sets the label of the {@link Treecell} it contains.
+	 *
+	 * <p>If treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treecell automatically
+	 * if they don't exist.
+	 * @since 5.0.8
+	 */
+	public void setLabel(String label);
+	/** Returns the image of the {@link Treecell} it contains, or null
+	 * if no such cell.
+	 * @since  5.0.8
+	 */
+	public String getImage();
+	/** Sets the image of the {@link Treecell} it contains.
+	 *
+	 * <p>If treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treerow and treecell automatically
+	 * if they don't exist.
+	 * @since 5.0.8
+	 */
+	public void setImage(String image);
 }

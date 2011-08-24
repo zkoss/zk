@@ -2429,6 +2429,7 @@
 			</xs:choice>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
@@ -2436,6 +2437,7 @@
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treerow -->
 	<xs:element name="treerow" type="treerowType" />
@@ -2446,6 +2448,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- variables -->
 	<xs:element name="variables" type="variablesType" />

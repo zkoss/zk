@@ -301,8 +301,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		final Treecell cell = getFirstCell();
-		return cell != null ? cell.getLabel(): null;
+		return _treerow != null ? _treerow.getLabel(): null;
 	}
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
@@ -313,25 +312,15 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	 * set an image or a label.
 	 */
 	public void setLabel(String label) {
-		autoFirstCell().setLabel(label);
+		autoTreerow().setLabel(label);
 	}
-	private Treecell getFirstCell() {
-		return _treerow != null ? (Treecell)_treerow.getFirstChild(): null;
-	}
-	private Treecell autoFirstCell() {
+	private Treerow autoTreerow() {
 		if (_treerow == null) {
 			final Treerow row = new Treerow();
 			row.applyProperties();
 			row.setParent(this);
 		}
-
-		Treecell cell = (Treecell)_treerow.getFirstChild();
-		if (cell == null) {
-			cell = new Treecell();
-			cell.applyProperties();
-			cell.setParent(_treerow);
-		}
-		return cell;
+		return _treerow;
 	}
 
 	/** @deprecated As of release 3.5.0, it is redundant since it
@@ -349,8 +338,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	/** Returns the image of the {@link Treecell} it contains.
 	 */
 	public String getImage() {
-		final Treecell cell = getFirstCell();
-		return cell != null ? cell.getImage(): null;
+		return _treerow != null ? _treerow.getImage(): null;
 	}
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
@@ -361,7 +349,7 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 	 * set an image or a label.
 	 */
 	public void setImage(String image) {
-		autoFirstCell().setImage(image);
+		autoTreerow().setImage(image);
 	}
 
 	/** Returns the parent tree item,

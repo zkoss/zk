@@ -26,6 +26,15 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
+	public Treerow() {
+	}
+	/** Instantiates a treerow with a treecel holding the given label.
+	 * @since 5.0.8
+	 */
+	public Treerow(String label) {
+		setLabel(label);
+	}
+
 	/** Returns the {@link Tree} instance containing this element.
 	 */
 	public Tree getTree() {
@@ -68,6 +77,54 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 	 */
 	public org.zkoss.zul.api.Treechildren getLinkedTreechildrenApi() {
 		return getLinkedTreechildren();
+	}
+
+	/** Returns the label of the {@link Treecell} it contains, or null
+	 * if no such cell.
+	 * @since 5.0.8
+	 */
+	public String getLabel() {
+		final Treecell cell = (Treecell)getFirstChild();
+		return cell != null ? cell.getLabel(): null;
+	}
+	/** Sets the label of the {@link Treecell} it contains.
+	 *
+	 * <p>If treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treecell automatically
+	 * if they don't exist.
+	 * @since 5.0.8
+	 */
+	public void setLabel(String label) {
+		autoFirstCell().setLabel(label);
+	}
+	/** Returns the image of the {@link Treecell} it contains, or null
+	 * if no such cell.
+	 * @since  5.0.8
+	 */
+	public String getImage() {
+		final Treecell cell = (Treecell)getFirstChild();
+		return cell != null ? cell.getImage(): null;
+	}
+	/** Sets the image of the {@link Treecell} it contains.
+	 *
+	 * <p>If treecell are not created, we automatically create it.
+	 *
+	 * <p>Notice that this method will create a treerow and treecell automatically
+	 * if they don't exist.
+	 * @since 5.0.8
+	 */
+	public void setImage(String image) {
+		autoFirstCell().setImage(image);
+	}
+	private Treecell autoFirstCell() {
+		Treecell cell = (Treecell)getFirstChild();
+		if (cell == null) {
+			cell = new Treecell();
+			cell.applyProperties();
+			cell.setParent(this);
+		}
+		return cell;
 	}
 
 	//-- Component --//
