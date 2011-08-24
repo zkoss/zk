@@ -166,6 +166,7 @@ ZK 5.0.8
   ZK-338: Timebox cannot auto-change the hour by pressing the arrow icon in zh_TW locale (IE and Webkit only)
   ZK-332: Set disabled to treeitem shall not disable open function
   ZK-337: Disabled Button should not appear pointer cursor
+  ZK-355: Listbox's scrollbar position is not currect after invalidate() (zk max only)
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
