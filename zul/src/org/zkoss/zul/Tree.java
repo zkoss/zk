@@ -123,6 +123,9 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 	private transient Paging _paging;
 	private EventListener _pgListener, _pgImpListener;
 
+	private int _currentTop = 0; // since 5.0.8 scroll position
+	private int _currentLeft = 0;
+	
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -237,6 +240,8 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
 				setFixedLayout(true);
+				_currentTop = 0;
+				_currentLeft = 0;
 				invalidate(); //non-paging mold -> paging mold
 			}
 		}
@@ -1984,6 +1989,11 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			renderer.render("rightSelect", false);
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+		
+		if (_currentTop != 0)
+			renderer.render("_currentTop", _currentTop);
+		if (_currentLeft != 0)
+			renderer.render("_currentLeft", _currentLeft);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
@@ -2098,6 +2108,10 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
+		} else if (cmd.equals("onScrollPos")) {
+			final Map data = request.getData();
+			_currentTop = AuRequests.getInt(data, "top", 0);
+			_currentLeft = AuRequests.getInt(data, "left", 0);
 		} else
 			super.service(request, everError);
 	}

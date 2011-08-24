@@ -167,6 +167,7 @@ ZK 5.0.8
   ZK-332: Set disabled to treeitem shall not disable open function
   ZK-337: Disabled Button should not appear pointer cursor
   ZK-355: Listbox's scrollbar position is not currect after invalidate() (zk max only)
+  ZK-353: Listbox with listgroup's scrollbar position is not currect after invalidate() 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

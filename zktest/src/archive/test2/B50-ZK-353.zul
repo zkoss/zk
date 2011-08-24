@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-353.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 24 19:08:50 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please scroll the scrollbar to the middle of the tree lists, and click the "click me" button.
+<separator/>
+2. You should see the scrollbar is placed at the same area.
+<zscript><![CDATA[
+Object[] o = new Object[30];
+]]></zscript>
+<button label="click me" >
+<attribute name="onClick">
+lb.invalidate();
+grid.invalidate();
+tree.invalidate();
+
+</attribute>
+</button>
+<hlayout>
+<listbox id="lb" width="100px" height="300px">
+<listitem label="item" forEach="${o}" />
+</listbox>
+
+<grid id="grid" width="100px" height="300px">
+<rows>
+<row forEach="${o}">item</row>
+</rows>
+</grid>
+
+<tree id="tree" width="100px" height="300px">
+<treechildren>
+<treeitem label="item" forEach="${o}" />
+</treechildren>
+</tree>
+</hlayout>
+</zk>
