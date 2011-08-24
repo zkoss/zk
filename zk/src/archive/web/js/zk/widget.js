@@ -1684,13 +1684,15 @@ wgt.$f().main.setTitle("foo");
 					if (ocvCalled = p) p.onChildVisible_(this);
 						//after setDomVisible_ and before onShow (Box depends on it)
 					
-					this.fire('onShow');
 					if (!zk.animating())
 						zUtl.fireShown(this);
+					else
+						this.fire('onShow');
 				} else {
-					this.fire('onHide');
 					if (!zk.animating())
 						zWatch.fireDown('onHide', this);
+					else
+						this.fire('onHide');
 
 					for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
 						var w = _floatings[j].widget;
