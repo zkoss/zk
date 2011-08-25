@@ -1085,8 +1085,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var s = this.ebodytbl.style,
 				sw = s.width;
 			if (!sw) {
-				this.ebodytbl.style.width = '100%';
-				this.ebodytbl.style.width = sw;
+				s.width = '100%';
+				s.width = sw;
 			}
 		}
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
