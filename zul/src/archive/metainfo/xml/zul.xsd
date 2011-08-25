@@ -561,6 +561,7 @@
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
 			<xs:element ref="fusionchart" />
+			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -633,6 +634,7 @@
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
 				<xs:element ref="fusionchart" />
+				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -1218,6 +1220,18 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
+	
+	<!-- frozen -->
+	<xs:element name="frozen" type="frozenType" />
+	<xs:complexType name="frozenType">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="columns" type="intType" use="required" />
+		<xs:attribute name="start" type="intType" use="optional" />
+	</xs:complexType>
+	
     <!-- grid -->
 	<xs:element name="grid" type="gridType" />
 	<xs:complexType name="gridType">
@@ -1225,6 +1239,7 @@
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:group ref="baseGroup" />
 				<xs:element ref="auxhead" />
+				<xs:element ref="frozen" />
 			</xs:choice>
 			<xs:choice>
 				<xs:sequence>
@@ -1548,6 +1563,7 @@
 				<xs:element ref="listitem" />
 				<xs:element ref="listgroup" />
 				<xs:element ref="listgroupfoot" />
+				<xs:element ref="frozen" />
 			</xs:choice>
 			<xs:choice>
 				<xs:sequence>
