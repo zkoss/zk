@@ -25,14 +25,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <uploaddlg title="${arg.title}" shadow="false" border="normal" width="360px" closable="true"
 xmlns:w="http://www.zkoss.org/2005/zk/client"
 	w:onClose="this.cancel()" w:max="${arg.max}">
-	<style>
-		span.opera-float {
-			float: left;
-			padding-right: 4px;
+	<style if="${c:isOpera()}">
+		span.opera-fix {
+			display: inline-block;
+			vertical-align: top;
 		}
 	</style>
-	<label value="${arg.message}" unless="${c:isOpera()}" />
-	<label value="${arg.message}" sclass="opera-float" if="${c:isOpera()}" />
+	<label value="${arg.message}" sclass="opera-fix" />
 	<fileupload id="fileupload" forward="onUpload=" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
 		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
 	<separator bar="true"/>
