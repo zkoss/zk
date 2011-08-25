@@ -26,8 +26,6 @@ ZK 5.0.8
   ZK-295: Animation effect of Borderlayout can be configured
   ZK-78:  A better Hungarian message file
   ZK-348: iZUML shall use #{} instead of ${} so it is easy to use in a ZUML or JSP page
-  ZK-352: hflex/vflex wrong calculation with negative leftover size 
-  ZK-349: Listbox with sizedByContent and hflex="min", the header's size is wrong 
 
 * Bugs
   3301375: native component in vbox stretch align show javascript error
@@ -169,6 +167,8 @@ ZK 5.0.8
   ZK-355: Listbox's scrollbar position is not currect after invalidate() (zk max only)
   ZK-353: Listbox with listgroup's scrollbar position is not currect after invalidate() 
   ZK-357: Deserialization error with ZK 5.0.8 build
+  ZK-352: hflex/vflex wrong calculation with negative leftover size 
+  ZK-349: Listbox with sizedByContent and hflex="min", the header's size is wrong 
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
