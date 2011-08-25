@@ -49,8 +49,7 @@ import org.zkoss.zk.ui.Execution;
  * @author henrichen
  * @author ashish
  */
-public class DelegatingVariableResolver implements VariableResolver {
-
+public class DelegatingVariableResolver implements VariableResolver, java.io.Serializable  {
 	/**
 	 * Holds list of variable resolvers for Spring core (3.0RC and later),
 	 * Spring security(3.0RC and later) and Spring webflow(only for 1.x)

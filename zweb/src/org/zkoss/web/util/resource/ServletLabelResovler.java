@@ -29,7 +29,7 @@ import org.zkoss.web.servlet.xel.RequestContexts;
  *
  * @author tomyeh
  */
-public class ServletLabelResovler implements VariableResolver {
+public class ServletLabelResovler implements VariableResolver, java.io.Serializable {
 	public ServletLabelResovler() {
 	}
 

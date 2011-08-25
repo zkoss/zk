@@ -23,11 +23,15 @@ import org.zkoss.xel.XelException;
 
 /**
  * A simple resolver that retrieve variable from a map.
+ * <p>Note: since 5.0.8, it becomes serializable. Thus, the parent and
+ * vars parameter
+ * of {@link #SimpleResolver(VariableResolver, Map)} have to serializable
+ * in the clustering environment.
  *
  * @author tomyeh
  * @since 3.0.0
  */
-public class SimpleResolver implements VariableResolver {
+public class SimpleResolver implements VariableResolver, java.io.Serializable {
 	/** The parent resolver. */
 	private VariableResolver _parent;
 	/** The variable maps. */

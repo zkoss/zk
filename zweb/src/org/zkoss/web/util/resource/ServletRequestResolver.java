@@ -28,7 +28,7 @@ import org.zkoss.web.servlet.xel.RequestContexts;
  * @author tomyeh
  * @since 5.0.7
  */
-public class ServletRequestResolver implements VariableResolver {
+public class ServletRequestResolver implements VariableResolver, java.io.Serializable {
 	public ServletRequestResolver() {
 	}
 

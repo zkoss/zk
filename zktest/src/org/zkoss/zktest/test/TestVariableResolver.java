@@ -31,7 +31,7 @@ import org.zkoss.xel.VariableResolver;
  *
  * @author tomyeh
  */
-public class TestVariableResolver implements VariableResolver {
+public class TestVariableResolver implements VariableResolver, java.io.Serializable {
 	private final List _friends = new LinkedList();
 
 	public TestVariableResolver() {

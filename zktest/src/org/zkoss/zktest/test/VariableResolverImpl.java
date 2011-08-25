@@ -23,7 +23,7 @@ package org.zkoss.zktest.test;
  *
  * @author tomyeh
  */
-public class VariableResolverImpl implements org.zkoss.xel.VariableResolver {
+public class VariableResolverImpl implements org.zkoss.xel.VariableResolver, java.io.Serializable {
 	public VariableResolverImpl() {
 		System.out.println("VariableResolverImpl()");
 	}
