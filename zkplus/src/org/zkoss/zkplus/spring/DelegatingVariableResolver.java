@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zkplus.spring;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +55,7 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 	 * Holds list of variable resolvers for Spring core (3.0RC and later),
 	 * Spring security(3.0RC and later) and Spring webflow(only for 1.x)
 	 */
-	protected List _variableResolvers = new ArrayList();
+	protected transient List _variableResolvers = new ArrayList();
 
 	public DelegatingVariableResolver() {
 		final Execution exec = Executions.getCurrent();
@@ -110,6 +111,33 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 	public boolean equals(Object obj) {
 		return this == obj || (obj instanceof DelegatingVariableResolver
 				&& Objects.equals(_variableResolvers, ((DelegatingVariableResolver) obj)._variableResolvers));
+	}
+	
+	// -- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+		s.defaultWriteObject();
+		s.writeInt(_variableResolvers.size());
+		for (Iterator it = _variableResolvers.iterator(); it.hasNext();) {
+			Object o = it.next();
+			if (o instanceof DefaultDelegatingVariableResolver) {
+				s.writeObject("");
+			} else
+				s.writeObject(o);
+		}
+	}
+	
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException,
+			ClassNotFoundException {
+		s.defaultReadObject();
+		_variableResolvers = new ArrayList();
+		int size = s.readInt();
+		for (int i=0; i<size; i++) {
+			Object o = s.readObject();
+			if (o instanceof String) {
+				_variableResolvers.add(new DefaultDelegatingVariableResolver());
+			} else
+				_variableResolvers.add(o); 
+		}
 	}
 	
 	/**
