@@ -14,13 +14,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-1. Please scroll the scrollbar to the middle of the tree lists, and click the "click me" button.
+1. Please scroll the scrollbar to the middle of the three lists, and click the "click me" button.
 <separator/>
 2. You should see the scrollbar is placed at the same area.
+<separator/>
+3. Please scroll the scrollbar to the top of the three lists, and click the "click me" button.
+<separator/>
+4. You should see the scrollbar is placed at the same area.
+<separator/>
+5. Please scroll the scrollbar to the bottom of the three lists, and click the "click me" button.
+<separator/>
+6. You should see the scrollbar is placed at the same area.
 <zscript><![CDATA[
 Object[] o = new Object[30];
+Object[] o2 = new Object[300];
 ]]></zscript>
-<button label="click me" >
+<button label="click me">
 <attribute name="onClick">
 lb.invalidate();
 grid.invalidate();
@@ -42,6 +51,46 @@ tree.invalidate();
 <tree id="tree" width="100px" height="300px">
 <treechildren>
 <treeitem label="item" forEach="${o}" />
+</treechildren>
+</tree>
+</hlayout>
+<div>Test for ROD
+<separator/>
+1. Please scroll the scrollbar to the end of the three lists, and click the "click me" button.
+<separator/>
+2. You should see the scrollbar is placed at the same area.
+<separator/>
+3. Please scroll (quickly) the scrollbar to the top of the three lists, and click the "click me" button.
+<separator/>
+4. You should see the scrollbar is placed at the same area.
+<separator/>
+5. Please scroll (quickly) the scrollbar to the bottom of the three lists, and click the "click me" button.
+<separator/>
+6. You should see the scrollbar is placed at the same area.
+<separator/>
+<button label="click me">
+<attribute name="onClick">
+lb2.invalidate();
+grid2.invalidate();
+tree2.invalidate();
+
+</attribute>
+</button>
+</div>
+<hlayout>
+<listbox id="lb2" width="100px" height="300px">
+<listitem label="item" forEach="${o2}" />
+</listbox>
+
+<grid id="grid2" width="100px" height="300px">
+<rows>
+<row forEach="${o2}">item</row>
+</rows>
+</grid>
+
+<tree id="tree2" width="100px" height="300px">
+<treechildren>
+<treeitem label="item" forEach="${o2}" />
 </treechildren>
 </tree>
 </hlayout>

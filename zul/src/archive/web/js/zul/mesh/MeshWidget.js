@@ -829,7 +829,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var t = this.ebody.scrollTop,
 			l = this.ebody.scrollLeft,
 			scrolled = (t != this._currentTop || l != this._currentLeft);
-		if (scrolled) {
+		if (scrolled && 
+				// Bug ZK-353 ignore in rod
+				!this._listbox$rod && !this._grid$rod) {
 			this._currentTop = t; 
 			this._currentLeft = l;
 		}
