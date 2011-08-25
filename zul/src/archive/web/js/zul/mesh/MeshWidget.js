@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.mesh');
 
 (function () {
-	var _shellFocusBack;
+	var _shallFocusBack;
 	
 	function _setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn) {
 		bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
@@ -609,12 +609,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			(frozen = zk.Widget.$(this.efrozen.firstChild)) &&
 			(index = index - frozen.getColumns()) >= 0) {
 			frozen.setStart(index);
-			_shellFocusBack = true;
+			_shallFocusBack = true;
 		}
 	},
 	_restoreFocus: function () { //used in Frozen
-		if (_shellFocusBack && zk.currentFocus) {
-			_shellFocusBack = false;
+		if (_shallFocusBack && zk.currentFocus) {
+			_shallFocusBack = false;
 			zk.currentFocus.focus();
 		}
 	},
