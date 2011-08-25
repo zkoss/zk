@@ -176,7 +176,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (anc) {
 			if(zk(anc).isRealVisible()) {
 				anc.focus();
-				zk.currentFocus = this; // IE's Bug in B36-2807475.zul
+				zk.currentFocus = this; //Bug 2807475: (IE only) s.t. _docMouseDown will focus later (since menupop becomes invisible)
 			}
 		}
 	},

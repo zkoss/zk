@@ -280,7 +280,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return this;
 	},
 	focus_: function (timeout) {
-		zk(this.$n('btn')||this.$n()).focus(timeout);
+		//Bug ZK-354: refer to _docMouseDown in mount.js for details
+		if (!zk.focusBackFix || !this._upload)
+			zk(this.$n('btn')||this.$n()).focus(timeout);
 		return true;
 	},
 
