@@ -166,7 +166,6 @@ ZK 5.0.8
   ZK-337: Disabled Button should not appear pointer cursor
   ZK-355: Listbox's scrollbar position is not currect after invalidate() (zk max only)
   ZK-353: Listbox with listgroup's scrollbar position is not currect after invalidate() 
-  ZK-357: Deserialization error with ZK 5.0.8 build
   ZK-352: hflex/vflex wrong calculation with negative leftover size 
   ZK-349: Listbox with sizedByContent and hflex="min", the header's size is wrong 
   
