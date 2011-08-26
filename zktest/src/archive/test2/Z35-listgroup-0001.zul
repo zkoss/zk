@@ -79,7 +79,6 @@
 		<button onClick='lb1.setMold("paging");lb1.setPageSize(7)'
 			label="set Paging" />
 		<button onClick="lb1.invalidate();" label="invalidate" />
-		<button onClick="lb1.getChildren().clear();" label="Any time clear() wont cause exceptions(not paging mold)" />
 	</hbox>
 	<listbox id="lb1" width="500px" height="500px" model="${model2}"
 		itemRenderer="${renderer}">
