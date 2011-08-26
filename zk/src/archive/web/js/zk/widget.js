@@ -534,7 +534,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//a map of actions. Notice: it is initialized as a shared empty map
 	//setAction shall replace it with another map
-	actions_: {},
+	actions_: {}, //yes, it is shared
 
 	_floating: false,
 

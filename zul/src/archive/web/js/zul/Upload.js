@@ -77,7 +77,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.Upload = zk.$extends(zk.Object, {
 	sid: 0,
-	uploaders: {},
 	/** Constructor
 	 * @param zk.Widget wgt the widget belongs to the file upload 
 	 * @param DOMElement parent the element representing where the upload element
@@ -85,6 +84,8 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param String clsnm the CSS class name of the fileupload
 	 */
 	$init: function(wgt, parent, clsnm) {
+		this.uploaders = {};
+
 		var cls;
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
 			var attr = attrs[i].trim(); 
@@ -467,9 +468,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 			 * Users can add/delete the file upon the panel. 
 			 */
 			zul.UploadManager = zk.$extends(zul.wgt.Popup, {
-				_files: {},
 				$init: function () {
 					this.$supers('$init', arguments);
+					this._files = {};
 					this.setSclass('z-fileupload-manager');
 				},
 				onFloatUp: function(ctl) {
