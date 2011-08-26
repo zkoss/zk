@@ -58,6 +58,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					_showDOM(w, visible);
 	}
 	
+	function _syncTreeBodyHeight(wgt) {
+		if (zk.ie < 8) {
+			var tree = wgt.getTree();
+			if (tree) {
+				tree.ebody.style.height = '';
+				tree._syncBodyHeight();
+			}
+		}
+	}
+	
 /**
  * A treeitem.
  *
@@ -317,9 +327,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	onChildRemoved_: function(child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child == this.treerow) 
+		if (child == this.treerow) {
 			this.treerow = null;
-		else if (child == this.treechildren) {
+			_syncTreeBodyHeight(this);
+		} else if (child == this.treechildren) {
 			this.treechildren = null;
 			if (!this.childReplacing_) //NOT called by onChildReplaced_
 				this._syncIcon(); // remove the icon
@@ -329,6 +340,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
+		if (this.desktop && child.$instanceof(zul.sel.Treerow))
+			_syncTreeBodyHeight(this);
 		//else was handled by insertBefore/appendChild
 	},
 	removeHTML_: function (n) {
