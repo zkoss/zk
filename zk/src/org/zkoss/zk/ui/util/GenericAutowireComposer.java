@@ -193,15 +193,15 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * By default, it is '$'. For Grooy and other environment that '$'
 	 * is not applicable, you can specify '_'.
 	 */
-	protected final char _separator;
+	protected /*final*/ char _separator;
 	/** Indicates whether to ignore variables defined in zscript when wiring
 	 * a member.
 	 */
-	private final boolean _ignoreZScript;
+	private /*final*/ boolean _ignoreZScript; //don't make it final ZK Grails depends on it
 	/** Indicates whether to ignore variables defined in varible resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
-	private final boolean _ignoreXel;
+	private /*final*/ boolean _ignoreXel;
 
 	/** The default constructor.
 	 * It is a shortcut of <code>GenericAutowireComposer('$',
