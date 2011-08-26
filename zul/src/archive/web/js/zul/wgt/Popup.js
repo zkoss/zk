@@ -76,6 +76,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._openInfo = arguments;
 
 		$n.css({position: "absolute"}).zk.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
 		
@@ -176,6 +178,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		this.setVisible(false);
 		zk(this.$n()).undoVParent();
+		zWatch.fireDown("onVParent", this);
+
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open:false});
 	},

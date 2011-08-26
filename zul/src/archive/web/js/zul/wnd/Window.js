@@ -119,6 +119,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_posByParent(wgt);
 
 		$n.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		wgt.zsync();
 		_updDomPos(wgt);
 		wgt.setTopmost();
@@ -131,6 +133,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (pos == "parent") _posByParent(wgt);
 
 		$n.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
 
@@ -1097,7 +1101,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mask = null;
 		}
 
-		zk(node).undoVParent();
+		zk(node).undoVParent(); //no need to fire onVParent in unbind_
 		zWatch.unlisten({
 			onFloatUp: this,
 			onSize: this,

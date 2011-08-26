@@ -298,7 +298,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							var oldinfo = this._oldNodeInfo = { _scrollTop: p.parentNode.scrollTop };
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
-							
+							zWatch.fireDown("onVParent", this);
+
 							oldinfo._pos = s.position;
 							oldinfo._ppos = ps.position;
 							oldinfo._zIndex = s.zIndex;
@@ -373,6 +374,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						
 					if (this._inWholeMode) {
 						$n.undoVParent();
+						zWatch.fireDown("onVParent", this);
+
 						var oldinfo = this._oldNodeInfo;
 						node.style.position = oldinfo ? oldinfo._pos : "";
 						this.setZIndex((oldinfo ? oldinfo._zIndex : ""), {fire:true});
@@ -822,7 +825,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._inWholeMode) {
 			var node = this.$n(),
 				oldinfo;
-			zk(node).undoVParent();
+			zk(node).undoVParent(); //no need to fire onVParent in unbind_
+
 			var p = this.parent;
 			if (p && (p = p.parent) && (p = p.$n()) && (oldinfo = this._oldNodeInfo)) {
 				p.style.position = oldinfo._ppos;

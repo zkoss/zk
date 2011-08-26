@@ -169,6 +169,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		//than invalidate!!
 		var $pp = zk(pp);
 		$pp.makeVParent();
+		zWatch.fireDown('onVParent', this);
 
 		// throw in
 		pp.style.left = "";
@@ -229,7 +230,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_afterSlideDown: function (n) {
 		if (!this.desktop) {
 			//Bug 3035847: close (called by unbind) won't remove popup when animating
-			zk(n).undoVParent();
+			zk(n).undoVParent(); //no need to fire onVParent since it will be removed
 			jq(n).remove();
 		}
 		if (this._shadow) this._shadow.sync();
@@ -255,8 +256,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	close: function (opts) {
 		if (!this._open) return;
+
+		var self = this;
 		if (zk.animating()) {
-			var self = this;
 			setTimeout(function() {self.close(opts);}, 50);
 			return;
 		}
@@ -275,6 +277,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		zk.afterAnimate(function() {
 			zk(pp).undoVParent();
+			zWatch.fireDown('onVParent', self);
 		}, -1);
 		
 		if (this._shadow) {

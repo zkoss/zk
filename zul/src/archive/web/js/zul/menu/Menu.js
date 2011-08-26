@@ -393,6 +393,8 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		pp.style.zIndex = "88000";
 			
 		jq(pp).zk.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		zk(pp).position(wgt.$n(), this.getPosition());
 		this.syncShadow();
 	 },
@@ -402,7 +404,9 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 
 		pp.style.display = "none";
 		jq(pp).zk.undoVParent();
-		this.hideShadow();	
+		zWatch.fireDown("onVParent", this);
+
+		this.hideShadow();
 	 },
 	 onFloatUp: function (ctl) {
 		if (!zUtl.isAncestor(this._wgt, ctl.origin))
