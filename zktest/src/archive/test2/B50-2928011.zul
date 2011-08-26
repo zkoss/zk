@@ -19,7 +19,7 @@ Please check the doModal windows will not dragged out the browser top
 <button label="Hello.doModal">
 	<attribute name="onClick">{
 		final Window win = (Window) Executions.createComponents(
-				"/layout/hello-template.zul", null, null);
+				"hello-template.zul", null, null);
 		win.setMaximizable(true);
 		win.doModal();
 	}</attribute>

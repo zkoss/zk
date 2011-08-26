@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 You should see the window displays on the center.
-<window title="Position Issue" closable="true" position="center"
+<window width="300px" title="Position Issue" closable="true" position="center"
 border="normal" mode="overlapped">
 <label value="Hello world!" />
 </window>
