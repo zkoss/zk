@@ -60,7 +60,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		function _addSyncQue(upld) {
 			if (!_syncQue.length)
-				_syncId = setInterval(_syncNow, 1000);
+				_syncId = setInterval(_syncNow, 1500);
 
 			_syncQue.push(upld);
 		}
