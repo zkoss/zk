@@ -1,0 +1,34 @@
+<zk>
+	<zscript>
+	void upload(Event event) {
+		org.zkoss.util.media.Media media = event.getMedia();
+		if (media instanceof org.zkoss.image.Image) {
+			org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+			image.setContent(media);
+			image.setParent(pics);
+		} else {
+			Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+			break; //not to show too many errors
+		}
+	}
+	</zscript>
+<html><![CDATA[
+Test it in Opera:
+<ol>
+ <li>Try to click the upload button. It shall bring up a fileupload dialog.</li>
+ <li>Scroll the box, and do Step 1 again.</li>
+</ol>
+]]></html>
+<div height="100px" style="overflow:auto;border:1px solid #555">
+<div height="200px">
+	Test 1:
+	<button label="Upload" upload="true" onUpload="upload(event)"/> AAAQ
+	<separator/>
+	<label value="Test 2:" style="font-size: 30px"/>
+	<toolbarbutton label="Upload" upload="true" onUpload="upload(event)"/>
+	<separator/>
+	<button label="Upload" upload="true" onUpload="upload(event)"/>
+</div>
+</div>
+	<vbox id="pics" />
+</zk>

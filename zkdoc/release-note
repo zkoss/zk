@@ -169,6 +169,7 @@ ZK 5.0.8
   ZK-352: hflex/vflex wrong calculation with negative leftover size 
   ZK-349: Listbox with sizedByContent and hflex="min", the header's size is wrong 
   ZK-361: Fulfill with include component causes Javascript error
+  ZK-363: Opera only: if the upload button is placed after a label, it won't be clicked
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
