@@ -1,28 +1,28 @@
 	--------
 ZK 5.0.8
 * Features
+  3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
+  3309539: Timebox and Datebox support different language for different locale
   ZK-214: Add a databinding composer instead of initiator
   3316591: Allow user to specify error-box position
   3326788: A way to name the composer GenericAutowireComposer
+  3310927: ZK JasperReport support JasperReports 4
   ZK-250: Support <?style?> to generate CSS directly without using a component
+  ZK-274: A way to prevent the developers from using zscript
+  3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   2971889: Way to notify server of JS error
   3306718: Treeitem allows draggable/droppable (in addion to treerow)
-  3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
-  3309539: Timebox and Datebox support different language for different locale
-  3310927: ZK JasperReport support JasperReports 4
   3315689: Optimize the HtmlMacroComponent 
   3323594: Render on Demand for Grid and Listbox supports setInitSize
   3327013: A way to log message to the client
-  3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
   3307322: Control Keys support backspace
   3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
-  ZK-274: A way to prevent the developers from using zscript
+  ZK-287: The event instance shall be passed to the callback event listener of EventQueue
+  ZK-248: System-level initiator is applied to richlet too
   ZK-310: Support Clients.resize(wgt) to force the client to re-calculate the size, such as hflex/vflex
   ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
   ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
-  ZK-248: System-level initiator shall be applied to richlet too
   ZK-219: Update zk.Event documentation
-  ZK-287: The event instance shall be passed to the callback event listener of EventQueue
   ZK-295: Animation effect of Borderlayout can be configured
   ZK-78:  A better Hungarian message file
   ZK-348: iZUML shall use #{} instead of ${} so it is easy to use in a ZUML or JSP page
