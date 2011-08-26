@@ -486,7 +486,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				allTab = jq(cave).children();
 			if (!tabbox.getHeight()) {
 				var tabsHgh = allTab.length * 35, // default height
-					panelsHgh = tabbox.getSelectedPanel().$n().offsetHeight, // B50-ZK-298: concern panel height
+					seldPanel = tabbox.getSelectedPanel(),
+					panelsHgh = seldPanel ? seldPanel.$n().offsetHeight : 0, // B50-ZK-298: concern panel height
 					realHgh = Math.max(tabsHgh, panelsHgh);
 				this._forceStyle(tbx, "h", jq.px0(realHgh));
 			}
