@@ -173,6 +173,7 @@ ZK 5.0.8
   ZK-322: Fronzen column glitch on dinamically generated grids
   ZK-369: window resize when scrolling listbox contents
   ZK-368: Header component can not listen mouseout
+  ZK-371: Selecting a tab containing a tree with hflex=min failed to display correctly
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
