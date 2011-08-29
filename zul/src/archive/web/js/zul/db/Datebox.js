@@ -54,6 +54,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	
 var globallocalizedSymbols = {},
+	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
 	Datebox =
 /**
  * An edit box for holding a date.
@@ -331,7 +332,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (val) {
 		if (val) {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
-			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(/\'/g, '')))};
+			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			return d;
 		}
 		return null;
