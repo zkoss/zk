@@ -138,7 +138,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w) w = w.previousSibling;
 			}
-			/** Fixed for B50-2979776.zul
+			/* Fixed for B50-2979776.zul
 			 * if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
 				--wds[maxj];*/
 		} else {
@@ -1268,7 +1268,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.isSizedByContent())
 				this._calcSize();
 			if (this.head) {
-				this._fixHeaders(true/** B50-3315594.zul */);
+				this._fixHeaders(true/* B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;				
