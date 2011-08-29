@@ -305,11 +305,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return {};
 	},
-	isWatchable_: function (name) {//Bug 3164504: Hflex will not recalculate when the colum without label
-		var n,
-			strict = name!='onShow';
-		return (n=this.$n()) && zk(n).isVisible(strict) && 
-			(n=this.getMeshWidget()) && zk(n).isRealVisible(strict);
+	isWatchable_: function (name, p, cache) {
+		//Bug 3164504: Hflex will not recalculate when the colum without label
+		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
+		var wp;
+		return this._visible && (wp=this.parent) && wp._visible //check this and HeadWidget
+			&& (wp=wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;

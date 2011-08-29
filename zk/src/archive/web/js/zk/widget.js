@@ -1600,6 +1600,8 @@ wgt.$f().main.setTitle("foo");
 	 * <li>until - specifies the ancestor to search up to. If not specified, this method searches all ancestors. If specified, this method searches only this widget and ancestors up to the specified one.</li>
 	 * <li>strict - whether to check DOM element's style.visibility.
 	 * It is used only if <code>dom</code> is also specified.</li>
+	 * <li>cache - a map of cached result (since 5.0.8). Ignored if null.
+	 * If specified, the result will be stored and used to speed up the processing.</li>
 	 * </ul>
 	 * @return boolean
 	 * @see #isVisible
