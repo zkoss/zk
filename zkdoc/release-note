@@ -171,6 +171,7 @@ ZK 5.0.8
   ZK-361: Fulfill with include component causes Javascript error
   ZK-363: Opera only: if the upload button is placed after a label, it won't be clicked
   ZK-322: Fronzen column glitch on dinamically generated grids
+  ZK-369: window resize when scrolling listbox contents
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems

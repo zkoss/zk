@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-369.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 29 11:54:38 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please scroll down the listbox, and it shouldn't resize the window.
+<zscript><![CDATA[
+ArrayList list = new ArrayList();
+for(int i=0; i<50; i++)
+list.add(i + "");
+ListModel listModel = new ListModelList(list);
+]]></zscript>
+<window title="window" border="normal" sizable="true">
+<listbox id="box" model="${listModel}" mold="select"></listbox>
+</window>
+</zk>

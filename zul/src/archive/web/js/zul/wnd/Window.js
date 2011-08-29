@@ -1280,7 +1280,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		if (wgt._maximized) return true;
+		if (wgt._maximized || evt.target != wgt) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);
