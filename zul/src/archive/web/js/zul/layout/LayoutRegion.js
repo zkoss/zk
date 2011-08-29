@@ -441,7 +441,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		
 		// Bug for B36-2841185.zul, resync flex="true"
-		_setFirstChildFlex(this, this._flex);
+		if (this.isFlex())
+			_setFirstChildFlex(this, true, true);
 		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
@@ -450,6 +451,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
+		
+		// check before "if (child.$instanceof(zul.layout.Borderlayout)) {"
+		if (this.isFlex())
+			_setFirstChildFlex(this, false);
+				
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
 			jq(this.$n()).removeClass(this.getZclass() + "-nested");
@@ -459,12 +465,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop && !this.childReplacing_)
 			this.parent.resize();
-	},
-	onChildReplaced_: function () {
-		this.$supers('onChildReplaced_', arguments);
-		
-		// Bug for B36-2841185.zul, resync flex="true"
-		_setFirstChildFlex(this, this._flex);
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
