@@ -1070,7 +1070,7 @@ zk.endProcessing();
 	 */
 	error: function (msg) {
 		zAu.send(new zk.Event(null, "error", {message: msg}, {ignorable: true}), 800);
-		_zErb.push(msg);
+		zk._Erbx.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example:
@@ -1078,7 +1078,7 @@ zk.endProcessing();
 	 * @see #error
 	 */
 	errorDismiss: function () {
-		_zErb.remove();
+		zk._Erbx.remove();
 	},
 	/** Logs an message for debugging purpose.
 	 * Example:
@@ -1496,7 +1496,7 @@ zk.copy(regClass(zk.Class = function () {}, zk.Object), _zkf);
 //error box//
 var _erbx, _errcnt = 0;
 
-_zErb = zk.$extends(zk.Object, {
+zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 	$init: function (msg) {
 		var id = "zk_err",
 			$id = "#" + id,
@@ -1505,8 +1505,8 @@ _zErb = zk.$extends(zk.Object, {
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
  					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >';
 		if (!zk.zkuery)
-			html += '<div class="btn redraw" onclick="_zErb.redraw()"></div>';
-		html += '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
+			html += '<div class="btn redraw" onclick="zk._Erbx.redraw()"></div>';
+		html += '<div class="btn close" onclick="zk._Erbx.remove()"></div></div></td></tr></table></div>';
 		jq(document.body).append(html);
 		_erbx = this;
 		this.id = id;
@@ -1533,7 +1533,7 @@ _zErb = zk.$extends(zk.Object, {
 	},
 	push: function (msg) {
 		if (!_erbx)
-			return new _zErb(msg);
+			return new zk._Erbx(msg);
 
 		var id = _erbx.id;
 		jq("#" + id + " .errnum").html(++_errcnt + " Errors");
