@@ -473,6 +473,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_rdque.splice(j, 1);
 	}
 
+	//@param p the invisible widget, if any, to cache
+	function _markCache(cache, visited, p) {
+		if (cache) {
+			if (p)
+				cache[p.uuid] = false; //invisible
+
+			while (p = visited.pop())
+				cache[p.uuid] = true; //visible
+		}
+	}
+
 	var _dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
@@ -1595,26 +1606,41 @@ wgt.$f().main.setTitle("foo");
 	 */
 	isRealVisible: function (opts) {
 		var dom = opts && opts.dom,
+			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
 		while (wgt) {
+			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined) {
+				_markCache(cache, visited);
+				return ck;
+			}
+	
 			if (dom && !wgt.$instanceof(zk.Native)) { // B50-ZK-258: $n() will be null for natives
-				if (!zk(wgt.$n()).isVisible(opts.strict))
+				if (!zk(wgt.$n()).isVisible(opts.strict)) {
+					_markCache(cache, visited, wgt);
 					return false;
-			} else if (!wgt._visible)
+				}
+			} else if (!wgt._visible) {
+				_markCache(cache, visited, wgt);
 				return false;
+			}
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var wp = wgt.parent, p, n;
 			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
-					if ((n.style||{}).display == 'none')
+					if ((n.style||{}).display == 'none') {
+						_markCache(cache, visited, wgt);
 						return false; //hidden by parent
+					}
 
+			if (cache)
+				visited.push(wgt);
 			if (opts && opts.until == wgt)
 				break;
 
 			wgt = wp;
 		}
+		_markCache(cache, visited);
 		return true;
 	},
 	/** Returns if this widget is visible
@@ -3957,13 +3983,15 @@ _doFooSelect: function (evt) {
 	 * @param String name the name of the watch, such as onShow
 	 * @param zk.Widget p the parent widget causing the watch event.
 	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
+	 * @param cache a map of cached result (since 5.0.8). Ignored if null.
+	 * If specified, the result will be stored and used to speed up the processing
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	isWatchable_: function (name, p) {
+	isWatchable_: function (name, p, cache) {
 		var strict = name != 'onShow';
 		if (p)
-			return this.isRealVisible({dom:true, strict:strict, until:p});
+			return this.isRealVisible({dom:true, strict:strict, until:p, cache: cache});
 
 		return (p=this.$n()) && zk(p).isRealVisible(strict);
 		//if onShow, we don't check visibility since window uses it for

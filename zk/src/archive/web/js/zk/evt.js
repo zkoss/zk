@@ -264,27 +264,27 @@ zWatch = (function () {
 		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
 	}
 	//Returns if c is a visible child of p (assuming p is visible)
-	function _visibleChild(name, p, c, shallCheck) {
+	function _visibleChild(name, p, c, cache) {
 		for (var w = c; w; w = w.parent) {
-			if (shallCheck && !w._visible) //quick filtering (not required but faster if skip earlier)
+			if (cache && !w._visible) //quick filtering (not required but faster if skip earlier)
 				break;
 
 			if (p == w) //yes, c is a child of p
-				return !shallCheck || c.isWatchable_(name, p);
+				return !cache || c.isWatchable_(name, p, cache);
 		}
 		return false;
 	}
 	//Returns subset of xinfs that are visible and childrens of p
 	function _visiChildSubset(name, xinfs, p, remove) {
-		var found = [], bindLevel = p.bindLevel, shallCheck;
+		var found = [], bindLevel = p.bindLevel, cache;
 		if (p.isWatchable_ //in future, w might not be a widget
-		&& (!(shallCheck=_visiEvts[name]) || _visible(name, p))) //check p first (since _visibleChild checks only c
+		&& (!(cache=_visiEvts[name]&&{}) || _visible(name, p))) //check p first (since _visibleChild checks only c
 			for (var j = xinfs.length; j--;) {
 				var xinf = xinfs[j],
 					o = xinf[0],
 					diff = bindLevel > o.bindLevel;
 				if (diff) break;//nor ancestor, nor this (&sibling)
-				if (_visibleChild(name, p, o, shallCheck)) {
+				if (_visibleChild(name, p, o, cache)) {
 					if (remove)
 						xinfs.splice(j, 1);
 					found.unshift(xinf); //parent first
