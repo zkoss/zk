@@ -1607,7 +1607,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #isVisible
 	 */
 	isRealVisible: function (opts) {
-		var dom = opts && opts.dom,
+		var dom = opts && opts.dom, p, n,
 			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
 		while (wgt) {
@@ -1616,8 +1616,8 @@ wgt.$f().main.setTitle("foo");
 				return ck;
 			}
 	
-			if (dom && !wgt.$instanceof(zk.Native)) { // B50-ZK-258: $n() will be null for natives
-				if (!zk(wgt.$n()).isVisible(opts.strict)) {
+			if (dom && (n = wgt.$n())) { // B50-ZK-258: $n() will be null for natives
+				if (!zk(n).isVisible(opts.strict)) {
 					_markCache(cache, visited, wgt);
 					return false;
 				}
@@ -1627,7 +1627,7 @@ wgt.$f().main.setTitle("foo");
 			}
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
-			var wp = wgt.parent, p, n;
+			var wp = wgt.parent;
 			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
 					if ((n.style||{}).display == 'none') {
@@ -3999,13 +3999,24 @@ _doFooSelect: function (evt) {
 	 * @since 5.0.3
 	 */
 	isWatchable_: function (name, p, cache) {
+		//if onShow, we don't check visibility since window uses it for
+		//non-embedded window that becomes invisible because of its parent
 		var strict = name != 'onShow';
 		if (p)
 			return this.isRealVisible({dom:true, strict:strict, until:p, cache: cache});
 
-		return (p=this.$n()) && zk(p).isRealVisible(strict);
-		//if onShow, we don't check visibility since window uses it for
-		//non-embedded window that becomes invisible because of its parent
+		for (var w = this;;) {
+			if (!w._visible)
+				return false;
+			if (p = w.$n())
+				break;
+
+			//it might be native or others, so we look up parent
+			if (!(w = w.parent))
+				return true; //consider as visible if it is root
+		}
+
+		return zk(p).isRealVisible(strict);
 	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
