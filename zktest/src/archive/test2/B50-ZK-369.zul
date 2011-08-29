@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please scroll down the listbox, and it shouldn't resize the window.
+Please scroll down the listbox, and it shouldn't resize the window or the panel.
 <zscript><![CDATA[
 ArrayList list = new ArrayList();
 for(int i=0; i<50; i++)
@@ -24,4 +24,9 @@ ListModel listModel = new ListModelList(list);
 <window title="window" border="normal" sizable="true">
 <listbox id="box" model="${listModel}" mold="select"></listbox>
 </window>
+<panel title="Panel" border="normal" sizable="true">
+<panelchildren>
+<listbox id="box" model="${listModel}" mold="select"></listbox>
+</panelchildren>
+</panel>
 </zk>
