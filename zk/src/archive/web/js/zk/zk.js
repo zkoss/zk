@@ -902,9 +902,9 @@ wgt.setSomething(somevalue, {force:true});
 		return klass;
 	},
 
-	/** A does-nothing function.
+	/** A does-nothing-but-returns-false function.
 	 */
-	$void: function () {},
+	$void: function () {return false;},
 
 	/** Parses a string to an integer.
 	 * <p>It is the same as the built-in parseInt method except it never return

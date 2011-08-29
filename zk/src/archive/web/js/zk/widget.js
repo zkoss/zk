@@ -287,11 +287,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-	// Bug for B50-3306835.zul
-	function returnFalse() {
-		return false;
-	}
-
 	/** @class zk.DnD
 	 * Drag-and-drop utility.
 	 * It is the low-level utility reserved for overriding for advanced customization.
@@ -2972,10 +2967,9 @@ unbind_: function (skipper, after) {
 	initDrag_: function () {
 		var n = this.getDragNode();
 		this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
-		// Bug for B50-3306835.zul
-		if (zk.ie9 && jq.nodeName(n, "img")) {
-			jq(n).bind('mousedown', returnFalse);
-		}
+		// B50-3306835.zul
+		if (zk.ie9 && jq.nodeName(n, "img"))
+			jq(n).bind('mousedown', zk.$void);
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
 	 * is cleaned (or unbound).
@@ -2986,9 +2980,9 @@ unbind_: function (skipper, after) {
 		var drag = this._drag;
 		if (drag) {
 			var n;
-			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, "img")) {
-				jq(n).unbind('mousedown', returnFalse);
-			}
+			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, "img"))
+				jq(n).unbind('mousedown', zk.$void);
+
 			this._drag = null;
 			drag.destroy();
 		}
