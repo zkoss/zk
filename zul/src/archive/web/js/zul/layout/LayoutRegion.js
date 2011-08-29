@@ -440,6 +440,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			jq(this.$n()).addClass(this.getZclass() + "-nested");
 		}
 		
+		// Bug for B36-2841185.zul, resync flex="true"
+		_setFirstChildFlex(this, this._flex);
+		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
@@ -456,6 +459,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop && !this.childReplacing_)
 			this.parent.resize();
+	},
+	onChildReplaced_: function () {
+		this.$supers('onChildReplaced_', arguments);
+		
+		// Bug for B36-2841185.zul, resync flex="true"
+		_setFirstChildFlex(this, this._flex);
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
