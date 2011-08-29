@@ -286,6 +286,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			delete wgt._flexListened;
 		}
 	}
+	
+	// Bug for B50-3306835.zul
+	function returnFalse() {
+		return false;
+	}
 
 	/** @class zk.DnD
 	 * Drag-and-drop utility.
@@ -2965,7 +2970,12 @@ unbind_: function (skipper, after) {
 	 * @see #cleanDrag_
 	 */
 	initDrag_: function () {
-		this._drag = new zk.Draggable(this, this.getDragNode(), this.getDragOptions_(_dragoptions));
+		var n = this.getDragNode();
+		this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
+		// Bug for B50-3306835.zul
+		if (jq.nodeName(n, "img")) {
+			jq(n).bind('mousedown', returnFalse);
+		}
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
 	 * is cleaned (or unbound).
@@ -2975,6 +2985,10 @@ unbind_: function (skipper, after) {
 	cleanDrag_: function () {
 		var drag = this._drag;
 		if (drag) {
+			var n = this.getDragNode();
+			if (n && jq.nodeName(n, "img")) {
+				jq(n).unbind('mousedown', returnFalse);
+			}
 			this._drag = null;
 			drag.destroy();
 		}
