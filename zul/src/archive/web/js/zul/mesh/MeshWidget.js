@@ -833,6 +833,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				// Bug ZK-353 ignore in rod
 				!this._listbox$rod && !this._grid$rod) {
 			this._currentTop = t; 
+		}
+		
+		if (scrolled) {
+			// always sync for B30-1737660.zul
 			this._currentLeft = l;
 		}
 		
