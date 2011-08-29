@@ -17,7 +17,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <zk>
 <html><![CDATA[
 1. Press the "submit" button. You should not see any change on the screen.<br/>
-2. The server console should show following five lines:<br/>
+2. The console should show following five lines:<br/>
 validationForGrid called:CA - bean:User - property:state<br/>
 validationForGrid called:TX - bean:User - property:state<br/>
 validationForGrid called:WA - bean:User - property:state<br/>
@@ -64,11 +64,11 @@ public String getPropertyName(String express) {
 }
 
 public void validationForGrid(Event ev) {  
-	System.out.println("validationForGrid called:"+ ev.getValue()+" - bean:"+ev.getBinding().getBean(ev.getTarget()).getClass().getName()+" - property:"+getPropertyName(ev.getBinding().getExpression()));  
+	Clients.log("validationForGrid called:"+ ev.getValue()+" - bean:"+ev.getBinding().getBean(ev.getTarget()).getClass().getName()+" - property:"+getPropertyName(ev.getBinding().getExpression()));  
 }  
  
 public void validationForEntry(Event ev) {  
-	System.out.println("validationForEntry called");  
+	Clients.log("validationForEntry called");  
 }  
  
 ]]></zscript>  
@@ -86,10 +86,10 @@ public void validationForEntry(Event ev) {
  
 <button id="submit" label="submit"> 
 <attribute name="onBindingValidate"> 
-	System.out.println("onBindingValidate() called"); 
+	Clients.log("onBindingValidate() called"); 
 </attribute> 
 <attribute name="onClick"> 
-	System.out.println("onClick() called"); 
+	Clients.log("onClick() called"); 
 </attribute> 
 </button> 
  
