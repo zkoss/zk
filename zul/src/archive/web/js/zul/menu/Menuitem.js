@@ -30,13 +30,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	
-/**
+(/**
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
  * <p>Default {@link #getZclass}: z-menu-item.
  */
-(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
+zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
 
 	$define: {

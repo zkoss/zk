@@ -139,7 +139,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (w) w = w.previousSibling;
 			}
 			/* Fixed for B50-2979776.zul
-			 * if (zk.ie < 8) //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
+			 * if (zk.ie < 8) //*Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it! 
 				--wds[maxj];*/
 		} else {
 			var tr;
