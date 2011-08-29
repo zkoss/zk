@@ -2973,7 +2973,7 @@ unbind_: function (skipper, after) {
 		var n = this.getDragNode();
 		this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
 		// Bug for B50-3306835.zul
-		if (jq.nodeName(n, "img")) {
+		if (zk.ie9 && jq.nodeName(n, "img")) {
 			jq(n).bind('mousedown', returnFalse);
 		}
 	},
@@ -2985,8 +2985,8 @@ unbind_: function (skipper, after) {
 	cleanDrag_: function () {
 		var drag = this._drag;
 		if (drag) {
-			var n = this.getDragNode();
-			if (n && jq.nodeName(n, "img")) {
+			var n;
+			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, "img")) {
 				jq(n).unbind('mousedown', returnFalse);
 			}
 			this._drag = null;
