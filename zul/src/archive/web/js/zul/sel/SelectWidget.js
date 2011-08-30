@@ -425,7 +425,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 			
 			this.ebody.style.height = hgh + "px";
-
+			
+			// bug fixed for B50-3315594.zul on safari and chrome latest version
+			if (zk.safari) {
+				zk(this.ebody).redoCSS();	
+			}
+			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
 			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
