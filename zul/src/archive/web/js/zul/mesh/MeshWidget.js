@@ -60,7 +60,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdws = [],
 			hdcavews = [];
 			
-		if (wgt.eheadtbl) {//clear and backup headers widths
+		if (wgt.eheadtbl && headn) {//clear and backup headers widths
 			wgt.ehead.style.width = '';
 			eheadtblw = wgt.eheadtbl.width;
 			wgt.eheadtbl.width = '';
@@ -115,7 +115,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			w = head ? head = head.lastChild : null,
 			headWgt = wgt.getHeadWidget(),
 			max = 0, maxj;
-		if (bdfaker) {
+		if (bdfaker && w) {
 			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				var wd = bdwd = bdfaker.cells[i].offsetWidth,
 					$cv = zk(w.$n('cave')),
@@ -159,7 +159,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 
-		if (wgt.eheadtbl) {//restore headers widths
+		if (wgt.eheadtbl && headn) {//restore headers widths
 			wgt.eheadtbl.width = eheadtblw||'';
 			wgt.eheadtbl.style.tableLayout = eheadtblfix||'';
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
@@ -904,7 +904,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_syncBodyHeight: function () { //called only if ie6/7 (overriden in SelectWidget)
 		var ebody = this.ebody,
 			ebodytbl = this.ebodytbl;
-		if (this._height || (this._vflex && this._vflex != 'min'))
+
+		// fixed B50-3175465.zul for IE6 if this.desktop is null
+		if (!this.desktop || this._height || (this._vflex && this._vflex != 'min'))
 			return; // height is predetermined, skip sync
 		
 		// fixed for B30-1919180.zul and B30-1822564.zul,
@@ -1306,7 +1308,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._clearCachedSize();
 		
 		var tr;
-		if (!this.ebdfaker && (tr = this._getSigRow())) { //empty head case
+		if (!this.ebdfaker && (tr = _getSigRow(this))) { //empty head case
 			for (var cells = tr.cells, i = cells.length; i--;)
 				cells[i].style.width = '';
 		}
