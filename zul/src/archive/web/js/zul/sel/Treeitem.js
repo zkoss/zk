@@ -39,14 +39,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_addSelItemsDown(items, w);
 	}
 
-	function _sizeOnOpen(tree) {
-		var w, wd;
-		if ((w = tree.treecols) && w.nChildren > 1)
-			for (w = w.firstChild; w; w = w.nextSibling)
-				if (!(wd = w._width) || wd == "auto")
-					return tree.onSize();
-	}
-
 	function _showDOM(wgt, visible) {
 		var n = wgt.$n();
 		if (n)
@@ -105,7 +97,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (open)
 				zUtl.fireShown(this);
 			if (tree) {
-				_sizeOnOpen(tree);
+				tree._sizeOnOpen();
 
 				if (!fromServer)
 					this.fire('onOpen', {open: open},

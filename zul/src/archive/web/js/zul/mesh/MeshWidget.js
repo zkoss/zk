@@ -665,8 +665,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 */
 	syncSize: function () {
 		if (this.desktop) {
-			this.$n()._lastsz = null; //reset
-			this.onSize();
+			this.clearCachedSize_();
+			if (this._hflex == 'min') {
+				zFlex.onFitSize.apply(this);
+			} else {
+				this._calcMinWds();
+				this._fixHeaders();
+				this.onSize();
+			}
 		}
 	},
 	onResponse: function () {
@@ -1276,7 +1282,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this._fixHeaders(true/* B50-3315594.zul */);
 				for(var w = this.head.firstChild; w; w = w.nextSibling) 
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
-						return null;				
+						return null;
 			}
 			_fixBodyMinWd(this); // sized by content without header
 			return _getMinWd(this); //grid.invalidate() with hflex="min" must maintain the width
@@ -1297,13 +1303,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers('clearCachedSize_', arguments);
 		this._clearCachedSize();
 		
+		var tr;
 		if (!this.ebdfaker && (tr = this._getSigRow())) { //empty head case
 			for (var cells = tr.cells, i = cells.length; i--;)
 				cells[i].style.width = '';
 		}
+		var head = this.getHeadWidget();
+		if (head) {
+			for (var w = head.firstChild, wn; w; w = w.nextSibling)
+				delete w._hflexsz;
+		}
 	},
 	_clearCachedSize: function() {
-		var n, tr;
+		var n;
 		if (n = this.$n())
 			n._lastsz = this._minWd = null;
 	},
