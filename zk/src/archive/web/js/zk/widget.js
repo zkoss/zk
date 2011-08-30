@@ -4016,7 +4016,7 @@ _doFooSelect: function (evt) {
 				return true; //consider as visible if it is root
 		}
 
-		return (p=wgt.$n()) && zk(p).isRealVisible(strict);
+		return zk(wgt.$n()).isRealVisible(strict);
 	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
