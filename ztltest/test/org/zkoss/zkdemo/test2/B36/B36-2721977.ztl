@@ -30,15 +30,13 @@
 		--></server>
 		<client wait="200"><![CDATA[
 			Element b = isIE() ? btn.$n("btn") : btn.$n();
-			click(b);
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
-			
-			click(b);
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
-			
-			click(b);
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
 		]]></client>
