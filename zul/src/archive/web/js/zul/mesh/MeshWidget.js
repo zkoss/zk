@@ -1179,8 +1179,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_removeHorScrollbar: (zk.ie == 8) ? function () {
 		var h = this._height;
-		if ((!h || h == 'auto') && !this._rows && 
-				this.ebody.offsetWidth >= this.ebodytbl.offsetWidth) {
+		if (!this._vflex && (!h || h == 'auto') && !this._rows 
+			&& this.ebody.offsetWidth >= this.ebodytbl.offsetWidth) {
+			
 			var ebodyhghbak = this.ebody.style.height,
 				wgt = this;
 			this.ebody.style.height = this.ebodytbl.offsetHeight + 'px';
