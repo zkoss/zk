@@ -2979,6 +2979,12 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			_dataLoader = null;
 			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
+
+		// Bug ZK-373
+		smartUpdate("resetDataLoader", true);
+		_currentTop = 0;
+		_currentLeft = 0;
+		_topPad = 0;
 	}
 
 	private class ModelInitListener implements SerializableEventListener {

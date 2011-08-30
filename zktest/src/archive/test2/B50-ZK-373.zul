@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-373.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 30 10:35:50 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	1. Please scroll to the middle of the list, and then press the button "Refresh !".
+	<separator/>
+	2. You should see the list reset to the top of the list and display well.
+	<button id="btnRefresh" label="Refresh !">
+		<attribute name="onClick">
+		 list.setModel(new org.zkoss.zktest.test2.grid.FakeListModel(200));
+		 grid.setModel(new org.zkoss.zktest.test2.grid.FakeListModel(200));
+		</attribute>
+	</button>
+	<zscript>
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(2000);
+	</zscript>
+	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+	<grid id="grid" width="200px" height="300px" model="&#36;{strset}">
+		<columns>
+			<column label="Load on Demend" sort="auto"/>
+		</columns>
+	</grid>
+</window>
