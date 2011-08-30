@@ -175,6 +175,7 @@ ZK 5.0.8
   ZK-368: Header component can not listen mouseout
   ZK-371: Selecting a tab containing a tree with hflex=min failed to display correctly
   ZK-373: Listbox/Grid in ROD fail to reset model when scrolling in middle of the list
+  ZK-372: breeze.jar Manifest Classpath issue
   
 * Upgrade Notes
   + Listbox in the select mold will show up an empty selection if none of listitems
