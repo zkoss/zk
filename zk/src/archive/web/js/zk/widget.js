@@ -1617,6 +1617,9 @@ wgt.$f().main.setTitle("foo");
 			}
 	
 			if (dom && !wgt.$instanceof(zk.Native)) { //B50-ZK-258: if native, $n() might be null or wrong (if two with same ID)
+			//Except native, we have to assume it is invsibile if $n() is null
+			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
+			//Alertinative is to introduce another isVisibleXxx but not worth
 				if (!zk(wgt.$n()).isVisible(opts.strict)) {
 					_markCache(cache, visited, wgt);
 					return false;
