@@ -90,7 +90,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	domStyle_: function (no) {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
-			style = 'width:'+ this._hflexWidth+';';
+			style = 'width: ' + this._hflexWidth + 'px;';
 			
 			if (no) no.width = true;
 			else no = {width:true};
