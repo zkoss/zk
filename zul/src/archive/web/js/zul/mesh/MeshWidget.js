@@ -1172,10 +1172,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Bug in B36-2841185.zul
 		if (zk.ie8 && this.isModel() && this.inPagingMold())
 			zk(this).redoCSS();
-
+		
+		this._removeHorScrollbar();
 		//bug#3186596: unwanted v-scrollbar
 		this._removeScrollbar();
 	},
+	_removeHorScrollbar: (zk.ie == 8) ? function () {
+		if (this.ebody.offsetWidth >= this.ebodytbl.offsetWidth) {
+			var ebodyhghbak = this.ebody.style.height,
+				wgt = this;
+			this.ebody.style.height = this.ebodytbl.offsetHeight + 'px';
+			setTimeout(function () { wgt.ebody.style.height = ebodyhghbak }, 0);
+		}
+	} : zk.$void,
 	_removeScrollbar: zk.ie ? function() { //see HeadWidget#afterChildrenFlex_
 		if (this._vflex) return;
 		

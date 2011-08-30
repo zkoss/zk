@@ -1,0 +1,23 @@
+<window position="center" mode="overlapped" title="Add Biff"
+	border="normal" closable="true">
+	<borderlayout vflex="min" hflex="min">
+		<center border="normal" vflex="min" hflex="min">
+			<grid hflex="min">
+				<columns>
+					<column hflex="min" />
+					<column hflex="min" />
+					<column hflex="min" />
+					<column hflex="min" />
+				</columns>
+				<rows>
+					<row>
+						<label value="First Name:" />
+						<textbox hflex="1" />
+						<label value="Last Name:" />
+						<textbox hflex="1" />
+					</row>
+				</rows>
+			</grid>
+		</center>
+	</borderlayout>
+</window>
