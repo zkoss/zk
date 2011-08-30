@@ -680,7 +680,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.syncSize();
 	},
 	_syncSize: function () {
-		this._shallSize = true;
+		// fixed for F50-3025422.zul on ZTL
+		if (this.desktop)
+			this._shallSize = true;
 	},
 	_fixHeaders: function (force) { //used in HeadWidget
 		if (this.head && this.ehead) {
