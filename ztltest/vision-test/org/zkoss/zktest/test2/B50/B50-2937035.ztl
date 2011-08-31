@@ -1,3 +1,6 @@
+<test tags="B50-2937035.zul,A,E,Borderlayout,Tabpanel,Tabbox">
+	<case id="Display">
+		<server><!--
 <zk>
 	<tabbox height="100%">
 		<tabs>
@@ -25,3 +28,9 @@
 		</tabpanels>
 	</tabbox>
 </zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>
