@@ -9,7 +9,7 @@
 	<properties>
 		<org.springframework.version>2.0.6</org.springframework.version>
 	</properties>
-	<version>5.0.8-SNAPSHOT</version>
+	<version>5.0.8</version>
 	<name>ZK Plus Utilities</name>
 	<url>http://www.zkoss.org/zkplus</url>
 	<description>ZK plus utilities</description>
