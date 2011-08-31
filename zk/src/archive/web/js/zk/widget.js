@@ -3996,7 +3996,7 @@ _doFooSelect: function (evt) {
 	 * @param String name the name of the watch, such as onShow
 	 * @param zk.Widget p the parent widget causing the watch event.
 	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
-	 * @param cache a map of cached result (since 5.0.8). Ignored if null.
+	 * @param Map cache a map of cached result (since 5.0.8). Ignored if null.
 	 * If specified, the result will be stored and used to speed up the processing
 	 * @return boolean
 	 * @since 5.0.3
@@ -4450,7 +4450,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	_ndt: 0, //used in au.js/dom.js
 	/** Checks if any desktop becomes invalid, and removes the invalid desktops.
 	 * This method is called automatically when a new desktop is added. Application developers rarely need to access this method.
-	 * @param timeout how many miliseconds to wait before doing the synchronization
+	 * @param int timeout how many miliseconds to wait before doing the synchronization
 	 * @return zk.Desktop the first desktop, or null if no desktop at all. 
 	 */
 	sync: function (timeout) {

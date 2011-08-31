@@ -556,7 +556,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return val || force ? ' ' + nm + '="' + val + '"': "";
 	},
 	/** Fires beforeSize, onFitSize and onSize
-	 * @param zk.Widget wgt the widget which the zWatch event will be fired against.
+	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
 	 * <ul>
 	 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
@@ -574,7 +574,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		zWatch.fireDown('onSize', wgt);
 	},
 	/** Fires onBeforeSize, onShow, onFitSize, and onSize
-	 * @param zk.Widget wgt the widget which the zWatch event will be fired against.
+	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
 	 * <ul>
 	 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
