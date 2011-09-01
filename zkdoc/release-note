@@ -177,6 +177,7 @@ ZK 5.0.8
   ZK-371: Selecting a tab containing a tree with hflex=min failed to display correctly
   ZK-373: Listbox/Grid in ROD fail to reset model when scrolling in middle of the list
   ZK-372: breeze.jar Manifest Classpath issue
+  ZK-382: about listen onShow and OnHide
   ZK-385: window return to old position after move and resize if not embedded 
   
 * Upgrade Notes
