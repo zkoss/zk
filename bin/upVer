@@ -22,6 +22,7 @@ echo "Working directory $maindir"
 stamp=$(date +%Y%m%d)
 oldVersion=$1
 newVersion=$2
+isFL=$3
 
 if [ "$oldVersion" == "" ] || [ "$newVersion" == "" ] ; then
 	echo "Usage: upVer [ oldVersion ] [ newVersion ] [options]"
@@ -30,9 +31,15 @@ if [ "$oldVersion" == "" ] || [ "$newVersion" == "" ] ; then
 fi
 
 function upVer {
-	sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion<\//" $maindir/$1/pom.xml
-	echo "$1 pom.xml"
-	grep -n --color=auto $newVersion $maindir/$1/pom.xml
+	if [ "$isFL" == "FL" ] ; then
+		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion-SNAPSHOT<\//" $maindir/$1/pom.xml
+		echo "$1 pom.xml"
+		grep -n --color=auto $newVersion"-SNAPSHOT" $maindir/$1/pom.xml
+	else
+		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion<\//" $maindir/$1/pom.xml
+		echo "$1 pom.xml"
+		grep -n --color=auto $newVersion $maindir/$1/pom.xml
+	fi
 	
 	sed -i "s/$oldVersion.*/$newVersion/g" $maindir/$1/version
 	echo "$1 version"
