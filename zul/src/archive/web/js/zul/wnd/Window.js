@@ -103,6 +103,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _aftermove(dg, evt) {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
+		
+		// Bug for ZK-385 clear position value after move
+        if (wgt._position && wgt._position != "parent") {
+			wgt._position = null;
+		}
 		wgt.zsync();
 		wgt._fireOnMove(evt.data);
 	}
