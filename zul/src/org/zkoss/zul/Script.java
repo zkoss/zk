@@ -17,70 +17,83 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Iterator;
+import java.io.Writer;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 
 /**
- * A component to represent script codes running at the client.
- * It is the same as HTML SCRIPT tag.
+ * A component to generate script codes that will be evaluated at the client.
+ * It is similar to HTML SCRIPT tag, except the defer option ({@link #setDefer})
+ * will cause the evaluation of JavaScript until the widget has been
+ * instantiated and mounted to the DOM tree.
  *
- * <p>Note: it is the scripting codes running at the client, not at the
+ * <p>Note: it is the script codes running at the client, not at the
  * server. Don't confuse it with the <code>zscript</code> element.
  *
- * <p>There are three formats when used in a ZUML page:
+ * <p>There are several way to embed script codes in a ZUML page:
  *
- * <p>Method 1: Specify the URL of the JS file
- * <pre><code>&lt;script type="text/javascript" src="my.js"/&gt;
+ * <p>Approach 1: Specify the URL of the JS file without defer.
+ * The JavaScript codes are evaluated as soon as the file is loaded.
+ * <pre><code>&lt;script src="my.js"/&gt;
  * </code></pre>
  *
- * <p>Method 2: Specify the JavaScript codes directly
- * <pre><code>&lt;script type="text/javascript"&gt;
- * some_js_at_browser();
+ * <p>Approach 2: Specify the JavaScript codes directly without defer.
+ * The JavaScript codes are evaluated immediately before the widget is
+ * instantiated, so you cannot access any widget. Rather, it is used to
+ * do desktop-level initialization, such as defining a widget class, and 
+ * a global function.
+ * <pre><code>&lt;script defer="true"&gt;
+ * zk.$package('foo');
+ * zk.load('zul.wgt', function () {
+ * foo.Foo = zk.$extends(zul.Widget, {
+ * //...
  *&lt;/script&gt;
  * </code></pre>
  *
- * <p>Method 3: Specify the JavaScript codes by use of the content
- * property ({@link #setContent}).
- * <pre><code>&lt;script type="text/javascript"&gt;
- * &lt;attribute name="content"&gt;
- *  some_js_at_browser();
- * &lt;/attribute&gt;
+ * <p>Approach 3: Specify the JavaScript codes directly with defer.
+ * The JavaScipt codes are evaluated after the widget is instantiated and
+ * mounted. Moreover, <code>this</code> references to the script widget,
+ * so you can access the widgets as follows.
+ * <pre><code>&lt;script defer="true"&gt;
+ * this.getFellow('l').setValue('new value');
+ * //...
  *&lt;/script&gt;
  * </code></pre>
+ *
+ * <p>Alternative to {@link Script}, you can use the script directive
+ * as shown below..
+ *
+ * <pre><code>&lt:?script src="/js/mine.js"?/&gt;
+ *&lt:?script content="jq.IE6_ALPHAFIX=/.png/"?/&gt;
+ </code></pre>
  *
  * @author tomyeh
  */
 public class Script extends AbstractComponent implements org.zkoss.zul.api.Script {
-	private String _src, _type = "text/javascript", _charset;
+	private String _src, _charset;
 	private String _content;
+	private String _packages;
 	private boolean _defer;
 
 	public Script() {
 	}
 
-	/** Returns the type of this client script.
-	 * <p>Default: text/javascript.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public String getType() {
-		return _type;
+		return "text/javascript";
 	}
-	/** Sets the type of this client script.
-	 * For JavaScript, it is <code>text/javascript</code>
-	 *
-	 * <p>Note: this property is NOT optional. You must specify one.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public void setType(String type) {
-		if (type == null || type.length() == 0)
-			throw new IllegalArgumentException("non-empty is required");
-
-		if (!Objects.equals(_type, type)) {
-			_type = type;
-			invalidate();
-		}
 	}
 	/** Returns the character enconding of the source.
 	 * It is used with {@link #getSrc}.
@@ -92,6 +105,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	}
 	/** Sets the character encoding of the source.
 	 * It is used with {@link #setSrc}.
+	 * <p>Refer to <a href="http://www.w3schools.com/TAGS/ref_charactersets.asp">HTML Character Sets</a>for more information.
 	 */
 	public void setCharset(String charset) {
 		if (charset != null && charset.length() == 0)
@@ -99,7 +113,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_charset, charset)) {
 			_charset = charset;
-			invalidate();
+			smartUpdate("charset", _charset);
 		}
 	}
 
@@ -124,24 +138,31 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			invalidate();
+			smartUpdate("src", new EncodedSrcURL());
 		}
 	}
 
-	/** Returns whether to defer the execution of the script codes.
+	/** Returns whether to defer the execution of the script codes
+	 * until the widget is instantiated and mounted.
 	 *
 	 * <p>Default: false.
+	 *
+	 * <p>Specifying false (default), if you want to do the desktop-level
+	 * (or class-level) initialization, such as defining a widget class
+	 * or a global function.
+	 * <p>Specifying true, if you want to access widgets. Notice that
+	 * <code>this</code> references to this script widget.
 	 */
 	public boolean isDefer() {
 		return _defer;
 	}
 	/** Sets whether to defer the execution of the script codes.
+	 * @see #isDefer
 	 */
 	public void setDefer(boolean defer) {
-		if (_defer != defer) {
-			_defer = defer;
-			invalidate();
-		}
+		_defer = defer;
+		//no smart update nor invalidate, since it is meaningless if
+		//the peer widget has been created
 	}
 
 	/** Returns the content of the script element.
@@ -150,6 +171,8 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	 *
 	 * <p>Default: null.
 	 *
+	 * <p>Deriving class can override this method to return whatever
+	 * it prefers (ingored if null).
 	 * @since 3.0.0
 	 */
 	public String getContent() {
@@ -167,36 +190,87 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", getContent());
+				//allow deriving to override getContent()
 		}
 	}
 
-	//-- Component --//
+	/** Returns the list of packages to load before evaluating the script
+	 * defined in {@link #getContent}.
+	 * It is meaning only if {@link #getContent} not null.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public String getPackages() {
+		return _packages;
+	}
+	/** Sets the list of packages to load before evaluating the script
+	 * defined in {@link #getContent}.
+	 * If more than a package to load, separate them with comma.
+	 * @since 5.0.0
+	 */
+	public void setPackages(String packages) {
+		if (packages != null && packages.length() == 0)
+			packages = null;
+
+		if (!Objects.equals(_packages, packages)) {
+			_packages = packages;
+			smartUpdate("packages", _packages);
+		}
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		final String cnt = getContent();
+			//allow deriving to override getContent()
+		if (cnt != null)
+			if (_defer)
+				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
+			else {
+				Writer out = ComponentRedraws.getScriptBuffer();
+				out.write(cnt);
+				out.write('\n');
+			}
+
+		if (_src != null) {
+			final HtmlPageRenders.RenderContext rc =
+				_defer ? null: HtmlPageRenders.getRenderContext(null);
+			if (rc != null && rc.perm != null) {
+				final Writer cwout = rc.perm;
+				cwout.write("\n<script type=\"text/javascript\" src=\"");
+				cwout.write(getEncodedSrcURL());
+				cwout.write('"');
+				if (_charset != null) {
+					cwout.write(" charset=\"");
+					cwout.write(_charset);
+					cwout.write('"');
+				}
+				cwout.write(">\n</script>\n");
+			} else
+				render(renderer, "src", getEncodedSrcURL());
+		}
+
+		render(renderer, "charset", _charset);
+		render(renderer, "packages", _packages);
+	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		final StringBuffer sb = new StringBuffer(256).append("\n<script");
-		HTMLs.appendAttribute(sb, "id",  getUuid());
-		HTMLs.appendAttribute(sb, "type",  _type);
-		HTMLs.appendAttribute(sb, "charset",  _charset);
 
-		if (_src != null)
-			HTMLs.appendAttribute(sb, "src",
-				getDesktop().getExecution().encodeURL(_src));
+	private String getEncodedSrcURL() {
+		if (_src == null)
+			return null;
 
-		if (_defer)
-			sb.append(" defer=\"defer\"");
-
-		out.write(sb.append(">\n").toString());
-
-		final String content = getContent();
-		if (content != null) {
-			out.write(content);
-			out.write('\n');
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null ? dt.getExecution().encodeURL(_src): null;
+	}
+	private class EncodedSrcURL implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrcURL();
 		}
-
-		out.write("</script>");
 	}
 }

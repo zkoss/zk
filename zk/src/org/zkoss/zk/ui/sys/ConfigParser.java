@@ -1,18 +1,16 @@
 /* ConfigParser.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sun Mar 26 18:09:10     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,11 +19,15 @@ package org.zkoss.zk.ui.sys;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.HashMap;
 import java.net.URL;
+import java.io.InputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Utils;
 import org.zkoss.util.resource.Locator;
@@ -46,10 +48,12 @@ import org.zkoss.zk.ui.util.URIInfo;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.au.AuWriter;
 
 /**
  * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
@@ -64,12 +68,27 @@ public class ConfigParser {
 	 */
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static int[] _zkver;
+	private static List _parsers;
+	// Map<int, boolean>: whether an instance of Configuration
+	private static final Map _syscfgLoadedConfigs = new HashMap(4);
 	private static boolean _syscfgLoaded;
 
 	/** Checks and returns whether the loaded document's version is correct.
+	 * It is the same as checkVersion(url, doc, false).
 	 * @since 3.5.0
 	 */
 	public static boolean checkVersion(URL url, Document doc)
+	throws Exception {
+		return checkVersion(url, doc, false);
+	}
+	/** Checks and returns whether the loaded document's version is correct.
+	 * @param zk5required whether ZK 5 or later is required.
+	 * If true and zk-version is earlier than 5, doc will be ignored
+	 * (and false is returned).
+	 * @since 5.0.0
+	 */
+	public static
+	boolean checkVersion(URL url, Document doc, boolean zk5required)
 	throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
 		if (el == null)
@@ -78,11 +97,17 @@ public class ConfigParser {
 		if (_zkver == null)
 			_zkver = Utils.parseVersion(Version.UID);
 
-		final String reqzkver = el.getElementValue("zk-version", true);
-		if (reqzkver != null
-		&& Utils.compareVersion(_zkver,	Utils.parseVersion(reqzkver)) < 0) {
-			log.info("Ignore "+url+"\nCause: ZK version must be "+reqzkver+" or later, not "+Version.UID);
-			return false;
+		String s = el.getElementValue("zk-version", true);
+		if (s != null) {
+			final int[] reqzkver = Utils.parseVersion(s);
+			if (Utils.compareVersion(_zkver, reqzkver) < 0) {
+				log.info("Ignore "+url+"\nCause: ZK version must be "+s+" or later, not "+Version.UID);
+				return false;
+			}
+			if (zk5required && reqzkver.length > 0 && reqzkver[0] < 5) {
+				log.info("Ingore "+url+"\nCause: version "+s+" not supported");
+				return false;
+			}
 		}
 
 		final String clsnm = el.getElementValue("version-class", true);
@@ -120,9 +145,16 @@ public class ConfigParser {
 	 */
 	public void parseConfigXml(Configuration config) {
 		boolean syscfgLoaded;
+		boolean syscfgLoadedConfig;
 		synchronized (ConfigParser.class) {
 			syscfgLoaded = _syscfgLoaded;
 			_syscfgLoaded = true;
+			syscfgLoadedConfig = config != null ?
+				_syscfgLoadedConfigs.put(
+					new Integer(System.identityHashCode(config)),
+						//chance of two instances with same code is almost zero
+					Boolean.TRUE) != null:
+				syscfgLoaded;
 		}
 		if (!syscfgLoaded)
 			log.info("Loading system default");
@@ -142,12 +174,19 @@ public class ConfigParser {
 						if (!syscfgLoaded) {
 							parseSubZScriptConfig(el);
 							parseSubDeviceConfig(el);
-							parseSubSystemConfig(el);
+						}
+						if (!syscfgLoadedConfig) { //config not null
+							parseSubSystemConfig(config, el);
 							parseSubClientConfig(config, el);
+						}
+						if (!syscfgLoaded) {
+							parseProperties(el);
+							parseLangConfigs(locator, el);
 						}
 
 						if (config != null) {
 							parseListeners(config, el);
+							parsePreferences(config, el);
 						}
 					}
 				} catch (Exception ex) {
@@ -174,23 +213,37 @@ public class ConfigParser {
 			Devices.add(el);
 		}
 	}
-	private static void parseSubSystemConfig(Element root) throws Exception {
+	private static
+	void parseSubSystemConfig(Configuration config, Element root)
+	throws Exception {
 		for (Iterator it = root.getElements("system-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			String s = el.getElementValue("au-writer-class", true);
-			if (s != null)
-				AuWriters.setImplementationClass(
-					s.length() == 0 ? null: Classes.forNameByThread(s));
+			if (config != null) {
+				parseSystemConfig(config, el);
+			} else {
+				Class cls = parseClass(el, "au-writer-class", AuWriter.class);
+				if (cls != null)
+					AuWriters.setImplementationClass(cls);
+				cls = parseClass(el, "config-parser-class", org.zkoss.zk.ui.util.ConfigParser.class);
+				if (cls != null) {
+					if (_parsers == null)
+						_parsers = new LinkedList();
+					_parsers.add(cls.newInstance());
+				}
+			}
 		}
 	}
 	/** Unlike other private parseXxx, config might be null. */
-	private static void parseSubClientConfig(Configuration config, Element root) throws Exception {
+	private static
+	void parseSubClientConfig(Configuration config, Element root)
+	throws Exception {
 		for (Iterator it = root.getElements("client-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			if (config != null) parseClientConfig(config, el);
-			else {
+			if (config != null) {
+				parseClientConfig(config, el);
+			} else {
 				Integer v = parseInteger(el, "resend-delay", false);
 				if (v != null)
 					Library.setProperty(Attributes.RESEND_DELAY, v.toString());
@@ -205,12 +258,10 @@ public class ConfigParser {
 		}
 	}
 	private static void parseListener(Configuration config, Element el) {
-		final String clsnm = IDOMs.getRequiredElementValue(el, "listener-class");
 		try {
-			final Class cls = Classes.forNameByThread(clsnm);
-			config.addListener(cls);
-		} catch (Throwable ex) {
-			throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+			config.addListener(parseClass(el, "listener-class", null, true));
+		} catch (Exception ex) {
+			log.error("Unable to load a listenr, "+el.getLocator(), ex);
 		}
 	}
 
@@ -226,11 +277,23 @@ public class ConfigParser {
 		parse(new SAXBuilder(true, false, true).build(url).getRootElement(),
 			config, locator);
 	}
+	/** Parses zk.xml from an input stream into the configuration.
+	 * @param is the input stream of zk.xml
+	 * @since 5.0.7
+	 */
+	public void parse(InputStream is, Configuration config, Locator locator)
+	throws Exception {
+		if (is == null || config == null)
+			throw new IllegalArgumentException("null");
+		parse(new SAXBuilder(true, false, true).build(is).getRootElement(),
+			config, locator);
+	}
 	/** Parses zk.xml, specified by the root element.
 	 * @since 3.0.1
 	 */
 	public void parse(Element root, Configuration config, Locator locator)
 	throws Exception {
+		l_out:
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
@@ -254,7 +317,7 @@ public class ConfigParser {
 						config.addRichlet(name, clsnm, params);
 						config.addRichletMapping(name, path);
 					} catch (Throwable ex) {
-						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at "+el.getLocator(), ex);
 					}
 				} else { //syntax since 2.4.0
 					final String nm =
@@ -262,7 +325,7 @@ public class ConfigParser {
 					try {
 						config.addRichlet(nm, clsnm, params);
 					} catch (Throwable ex) {
-						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at "+el.getLocator(), ex);
 					}
 				}
 			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
@@ -273,7 +336,7 @@ public class ConfigParser {
 				try {
 					config.addRichletMapping(nm, path);
 				} catch (Throwable ex) {
-					throw new UiException("Illegal richlet mapping at "+el.getLocator(), ex);
+					log.error("Illegal richlet mapping at "+el.getLocator(), ex);
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
@@ -290,7 +353,6 @@ public class ConfigParser {
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
 			//	click-filter-delay
-			//  disable-behind-modal
 			//  keep-across-visits
 			//  processing-prompt-delay
 			//	error-reload
@@ -327,7 +389,7 @@ public class ConfigParser {
 			} else if ("language-config".equals(elnm)) {
 			//language-config
 			//	addon-uri
-				parseLangAddon(locator, el);
+				parseLangConfig(locator, el);
 			} else if ("language-mapping".equals(elnm)) {
 			//language-mapping
 			//	language-name/extension
@@ -340,6 +402,7 @@ public class ConfigParser {
 			} else if ("system-config".equals(elnm)) {
 			//system-config
 			//  disable-event-thread
+			//	disable-zscript
 			//	max-spare-threads
 			//  max-suspended-threads
 			//	event-time-warning
@@ -357,73 +420,8 @@ public class ConfigParser {
 			//	method-cache-class
 			//	url-encoder-class
 			//	au-writer-class
-				String s = el.getElementValue("disable-event-thread", true);
-				if (s != null) {
-					final boolean enable = "false".equals(s);
-					if (!enable) log.info("The event processing thread is disabled");
-					config.enableEventThread(enable);
-				}
-
-				Integer v = parseInteger(el, "max-spare-threads", false);
-				if (v != null) config.setMaxSpareThreads(v.intValue());
-				
-				v = parseInteger(el, "max-suspended-threads", false);
-				if (v != null) config.setMaxSuspendedThreads(v.intValue());
-
-				v = parseInteger(el, "event-time-warning", false);
-				if (v != null) config.setEventTimeWarning(v.intValue());
-				
-				v = parseInteger(el, "max-upload-size", false);
-				if (v != null) config.setMaxUploadSize(v.intValue());
-
-				v = parseInteger(el, "max-process-time", true);
-				if (v != null) config.setMaxProcessTime(v.intValue());
-
-				s = el.getElementValue("upload-charset", true);
-				if (s != null) config.setUploadCharset(s);
-
-				s = el.getElementValue("response-charset", true);
-				if (s != null) config.setResponseCharset(s);
-
-				Class cls = parseClass(el, "upload-charset-finder-class",
-					CharsetFinder.class);
-				if (cls != null)
-					config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
-
-				cls = parseClass(el, "cache-provider-class",
-					DesktopCacheProvider.class);
-				if (cls != null) config.setDesktopCacheProviderClass(cls);
-
-				cls = parseClass(el, "ui-factory-class", UiFactory.class);
-				if (cls != null) config.setUiFactoryClass(cls);
-
-				cls = parseClass(el, "failover-manager-class", FailoverManager.class);
-				if (cls != null) config.setFailoverManagerClass(cls);
-
-				cls = parseClass(el, "engine-class", UiEngine.class);
-				if (cls != null) config.setUiEngineClass(cls);
-
-				cls = parseClass(el, "id-generator-class", IdGenerator.class);
-				if (cls != null) config.setIdGeneratorClass(cls);
-
-				cls = parseClass(el, "session-cache-class", SessionCache.class);
-				if (cls != null) config.setSessionCacheClass(cls);
-
-				cls = parseClass(el, "web-app-class", WebApp.class);
-				if (cls != null) config.setWebAppClass(cls);
-
-				cls = parseClass(el, "method-cache-class", Cache.class);
-				if (cls != null)
-					ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
-
-				cls = parseClass(el, "url-encoder-class", Encodes.URLEncoder.class);
-				if (cls != null)
-					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
-
-				s = el.getElementValue("au-writer-class", true);
-				if (s != null)
-					AuWriters.setImplementationClass(
-						s.length() == 0 ? null: Classes.forNameByThread(s));
+			//	au-decoder-class
+				parseSystemConfig(config, el);
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
@@ -445,39 +443,65 @@ public class ConfigParser {
 					org.zkoss.util.logging.LogService.init(base, null); //start the log service
 			} else if ("error-page".equals(elnm)) {
 			//error-page
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "exception-type");
+				final Class cls =
+					parseClass(el, "exception-type", Throwable.class, true);
 				final String loc =
 					IDOMs.getRequiredElementValue(el, "location");
 				String deviceType = el.getElementValue("device-type", true);
 				if (deviceType == null) deviceType = "ajax";
 				else if (deviceType.length() == 0)
-					throw new UiException("device-type not specified at "+el.getLocator());
-
-				final Class cls;
-				try {
-					cls = Classes.forNameByThread(clsnm);
-				} catch (Throwable ex) {
-					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
-				}
+					log.error("device-type not specified at "+el.getLocator());
 
 				config.addErrorPage(deviceType, cls, loc);
 			} else if ("preference".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				config.setPreference(nm, val);
+				parsePreference(config, el);
 			} else if ("library-property".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				Library.setProperty(nm, val);
+				parseLibProperty(el);
 			} else if ("system-property".equals(elnm)) {
-				final String nm = IDOMs.getRequiredElementValue(el, "name");
-				final String val = IDOMs.getRequiredElementValue(el, "value");
-				System.setProperty(nm, val);
+				parseSysProperty(el);
 			} else {
-				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
+				if (_parsers != null)
+					for (Iterator e = _parsers.iterator(); e.hasNext();) {
+						org.zkoss.zk.ui.util.ConfigParser parser =
+							(org.zkoss.zk.ui.util.ConfigParser)e.next();
+						if (parser.parse(config, el))
+							continue l_out;
+					}
+				log.error("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
+	}
+
+	private static void parseProperties(Element root) {
+		for (Iterator it = root.getElements("library-property").iterator();
+		it.hasNext();) {
+			parseLibProperty((Element)it.next());
+		}
+		for (Iterator it = root.getElements("system-property").iterator();
+		it.hasNext();) {
+			parseSysProperty((Element)it.next());
+		}
+	}
+	private static void parseLibProperty(Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		Library.setProperty(nm, val);
+	}
+	private static void parseSysProperty(Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		System.setProperty(nm, val);
+	}
+	private static void parsePreferences(Configuration config, Element root) {
+		for (Iterator it = root.getElements("preference").iterator();
+		it.hasNext();) {
+			parsePreference(config, (Element)it.next());
+		}
+	}
+	private static void parsePreference(Configuration config, Element el) {
+		final String nm = IDOMs.getRequiredElementValue(el, "name");
+		final String val = IDOMs.getRequiredElementValue(el, "value");
+		config.setPreference(nm, val);
 	}
 
 	/** Parses timeout-uri an other info. */
@@ -487,6 +511,10 @@ public class ConfigParser {
 		String s = conf.getElementValue("timeout-uri", true);
 		if (s != null)
 			config.setTimeoutURI(deviceType, s, URIInfo.SEND_REDIRECT);
+
+		s = conf.getElementValue("timeout-message", true);
+		if (s != null)
+			config.setTimeoutMessage(deviceType, s);
 
 		s = conf.getElementValue("automatic-timeout", true);
 		if (s != null)
@@ -538,9 +566,97 @@ public class ConfigParser {
 		if (s != null) config.setRepeatUuid(!"false".equals(s));
 
 		s = conf.getElementValue("id-to-uuid-prefix", true);
-		if (s != null)
+		if (s != null) {
+			log.warning("id-to-uuid-prefix deprecated, " + conf.getLocator());
 			Library.setProperty(Attributes.ID_TO_UUID_PREFIX, s);
 			//library-wide property
+		}
+	}
+	/** Parses client-config. */
+	private static void parseSystemConfig(Configuration config, Element el)
+	throws Exception {
+		String s = el.getElementValue("disable-event-thread", true);
+		if (s != null) {
+			final boolean enable = "false".equals(s);
+			if (!enable) log.info("The event processing thread is disabled");
+			config.enableEventThread(enable);
+		}
+		s = el.getElementValue("disable-zscript", true);
+		if (s != null)
+			config.enableZScript(!"true".equals(s));
+
+		Integer v = parseInteger(el, "max-spare-threads", false);
+		if (v != null) config.setMaxSpareThreads(v.intValue());
+		
+		v = parseInteger(el, "max-suspended-threads", false);
+		if (v != null) config.setMaxSuspendedThreads(v.intValue());
+
+		v = parseInteger(el, "event-time-warning", false);
+		if (v != null) config.setEventTimeWarning(v.intValue());
+		
+		v = parseInteger(el, "max-upload-size", false);
+		if (v != null) config.setMaxUploadSize(v.intValue());
+
+		v = parseInteger(el, "file-size-threshold", false);
+		if (v != null) config.setFileSizeThreshold(v.intValue());
+
+		v = parseInteger(el, "max-process-time", true);
+		if (v != null) config.setMaxProcessTime(v.intValue());
+
+		s = el.getElementValue("upload-charset", true);
+		if (s != null) config.setUploadCharset(s);
+
+		s = el.getElementValue("response-charset", true);
+		if (s != null) config.setResponseCharset(s);
+
+		s = el.getElementValue("crawlable", true);
+		if (s != null) config.setCrawlable(!"false".equals(s));
+		
+		//bug B50-3316543
+		for (Iterator it = el.getElements("label-location").iterator();it.hasNext();) {
+			final Element elinner = (Element)it.next();
+			final String path = elinner.getText(true);
+			if (!Strings.isEmpty(path))
+				config.addLabelLocation(path);
+		}
+		
+		Class cls = parseClass(el, "upload-charset-finder-class",
+			CharsetFinder.class);
+		if (cls != null)
+			config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
+
+		cls = parseClass(el, "cache-provider-class",
+			DesktopCacheProvider.class);
+		if (cls != null) config.setDesktopCacheProviderClass(cls);
+
+		cls = parseClass(el, "ui-factory-class", UiFactory.class);
+		if (cls != null) config.setUiFactoryClass(cls);
+
+		cls = parseClass(el, "failover-manager-class", FailoverManager.class);
+		if (cls != null) config.setFailoverManagerClass(cls);
+
+		cls = parseClass(el, "engine-class", UiEngine.class);
+		if (cls != null) config.setUiEngineClass(cls);
+
+		cls = parseClass(el, "id-generator-class", IdGenerator.class);
+		if (cls != null) config.setIdGeneratorClass(cls);
+
+		cls = parseClass(el, "session-cache-class", SessionCache.class);
+		if (cls != null) config.setSessionCacheClass(cls);
+
+		cls = parseClass(el, "au-decoder-class", AuDecoder.class);
+		if (cls != null) config.setAuDecoderClass(cls);
+
+		cls = parseClass(el, "web-app-class", WebApp.class);
+		if (cls != null) config.setWebAppClass(cls);
+
+		cls = parseClass(el, "method-cache-class", Cache.class);
+		if (cls != null)
+			ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
+
+		cls = parseClass(el, "au-writer-class", AuWriter.class);
+		if (cls != null)
+			AuWriters.setImplementationClass(cls);
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {
@@ -553,18 +669,18 @@ public class ConfigParser {
 		v = parseInteger(conf, "resend-delay", false);
 		if (v != null) config.setResendDelay(v.intValue());
 
-		v = parseInteger(conf, "click-filter-delay", false);
-		if (v != null) config.setClickFilterDelay(v.intValue());
-
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));
 
-		s = conf.getElementValue("disable-behind-modal", true);
-		if (s != null) config.enableDisableBehindModal(!"false".equals(s));
-
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));
+
+		//client (JS) pacakges
+		for (Iterator it = conf.getElements("package").iterator();
+		it.hasNext();) {
+			config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
+		}
 
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();
@@ -583,8 +699,15 @@ public class ConfigParser {
 		}
 	}
 
+	/** Parse language-config */
+	private static void parseLangConfigs(Locator locator, Element root) {
+		for (Iterator it = root.getElements("language-config").iterator();
+		it.hasNext();) {
+			parseLangConfig(locator, (Element)it.next());
+		}
+	}
 	/** Parse language-config/addon-uri. */
-	private static void parseLangAddon(Locator locator, Element conf) {
+	private static void parseLangConfig(Locator locator, Element conf) {
 		for (Iterator it = conf.getElements("addon-uri").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -596,24 +719,51 @@ public class ConfigParser {
 			else
 				DefinitionLoaders.addAddon(locator, url);
 		}
+		for (Iterator it = conf.getElements("language-uri").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String path = el.getText(true);
+
+			final URL url = locator.getResource(path);
+			if (url == null)
+				log.error("File not found: "+path+", at "+el.getLocator());
+			else
+				DefinitionLoaders.addLanguage(locator, url);
+		}
 	}
 	/** Parse a class, if specified, whether it implements cls.
 	 */
 	private static Class parseClass(Element el, String elnm, Class cls) {
+		return parseClass(el, elnm, cls, false);
+	}
+	private static
+	Class parseClass(Element el, String elnm, Class cls, boolean required) {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
 				final Class klass = Classes.forNameByThread(clsnm);
-				if (cls != null && !cls.isAssignableFrom(klass))
-					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
+				if (cls != null && !cls.isAssignableFrom(klass)) {
+					String msg = clsnm+" must implement "+cls.getName()+", "+el.getLocator();
+					if (required)
+						throw new UiException(msg);
+					log.error(msg);
+					return null;
+				}
 //				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return klass;
 			} catch (Throwable ex) {
-				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+				String msg = ex instanceof ClassNotFoundException ?
+					clsnm + " not found": "Unable to load "+clsnm;
+				msg += ", at "+el.getLocator();
+				if (required)
+					throw new UiException(msg, ex);
+				log.error(msg);
+				return null;
 			}
-		}
+		} else if (required)
+			throw new UiException(elnm+" required, at "+el.getLocator());
 		return null;
 	}
 

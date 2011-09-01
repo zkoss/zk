@@ -1,17 +1,15 @@
 /* DateFormats.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	91/01/17 15:22:22, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,33 +30,206 @@ import org.zkoss.util.TimeZones;
  * @author tomyeh
  */
 public class DateFormats {
+	private final static
+		InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
+
+	/** Sets the info of date/time format for the current thread.
+	 * It does not have effect on other threads.
+	 * <p>When Invoking this method under a thread,
+	 * remember to clean up the setting upon completing each request.
+	 *
+	 * <pre><code>DateFormatInfo old = DateFormats.setLocalFormatFormatInfo(info);
+	 *try { 
+	 *  ...
+	 *} finally {
+	 *  DateFormats.setLocalFormatInfo(old);
+	 *}</code></pre>
+	 * @param info the format info. It could be null (and the JVM's default
+	 * is used).
+	 * @return the previous format info being set, or null if not set.
+	 * @since 5.0.7
+	 */
+	public static DateFormatInfo setLocalFormatInfo(DateFormatInfo info) {
+		DateFormatInfo old = (DateFormatInfo)_thdLocale.get();
+		_thdLocale.set(info);
+		return old;
+	}
+	/** Returns the info of date/time format  for the current thread,
+	 * or null if not set.
+	 * @since 5.0.7
+	 */
+	public static DateFormatInfo getLocalFormatInfo() {
+		return (DateFormatInfo)_thdLocale.get();
+	}
+	/** Returns the current date format; never null.
+	 * <p>If a format info is set by {@link #setLocalFormatInfo},
+	 * {@link DateFormatInfo#getDateFormat} of the info will be called first.
+	 * If no info is set or the info returns null,
+	 * <code>java.text.DateFormat.getDateInstance(style, locale)</code>
+	 * will be called instead.
+	 * If no format is found and the value of <code>defaultFormat</code> is not null,
+	 * <code>defaultFormat</code> will be returned.
+	 * Otherwise, "M/d/yy" is returned.
+	 *
+	 * @param style the giving formatting style. For example,
+	 * {@link DateFormat#SHORT} for "M/d/yy" in the US locale.
+	 * @param locale the locale. If null, {@link Locales#getCurrent}
+	 * is assumed.
+	 * @param defaultFormat the default format. It is used if no default
+	 * format. If null, "M/d/yy" is assumed.
+	 * @since 5.0.7
+	 */
+	public static
+	String getDateFormat(int style, Locale locale, String defaultFormat) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+
+		final DateFormatInfo info = getLocalFormatInfo();
+		if (info != null) {
+			final String fmt = info.getDateFormat(style, locale);
+			if (fmt != null)
+				return fmt;
+		}
+
+		final DateFormat df = DateFormat.getDateInstance(style, locale);
+		if (df instanceof SimpleDateFormat) {
+			final String fmt = ((SimpleDateFormat)df).toPattern();
+			if (fmt != null && !"M/d/yy h:mm a".equals(fmt))
+				return fmt; // note: JVM use "M/d/yy h:mm a" if not found!
+		}
+		return defaultFormat != null ? defaultFormat: "M/d/yy";
+	}
+
+	/** Returns the current time format; never null.
+	 * <p>If a format info is set by {@link #setLocalFormatInfo},
+	 * {@link DateFormatInfo#getTimeFormat} of the info will be called first.
+	 * If no info is set or the info returns null,
+	 * <code>java.text.DateFormat.getTimeInstance(style, locale)</code>
+	 * will be called instead.
+	 * If no format is found and the value of <code>defaultFormat</code> is not null,
+	 * <code>defaultFormat</code> will be returned.
+	 * Otherwise, "h:mm a" is returned.
+	 *
+	 * @param style the giving formatting style. For example,
+	 * {@link DateFormat#SHORT} for "h:mm a" in the US locale.
+	 * @param locale the locale. If null, {@link Locales#getCurrent}
+	 * is assumed.
+	 * @param defaultFormat the default format. It is used if no default
+	 * format. If null, "h:mm a" is assumed.
+	 * @since 5.0.7
+	 */
+	public static final
+	String getTimeFormat(int style, Locale locale, String defaultFormat) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+
+		final DateFormatInfo info = getLocalFormatInfo();
+		if (info != null) {
+			final String fmt = info.getTimeFormat(style, locale);
+			if (fmt != null)
+				return fmt;
+		}
+
+		final DateFormat df = DateFormat.getTimeInstance(style, locale);
+		if (df instanceof SimpleDateFormat) {
+			final String fmt = ((SimpleDateFormat)df).toPattern();
+			if (fmt != null && !"M/d/yy h:mm a".equals(fmt))
+				return fmt; // note: JVM use "M/d/yy h:mm a" if not found!
+		}
+		return "h:mm a";
+	}
+
+	/** Returns the current date/time format; never null.
+	 * <p>If a format info is set by {@link #setLocalFormatInfo},
+	 * {@link DateFormatInfo#getDateTimeFormat} of the info will be called first.
+	 * If no info is set or the info returns null,
+	 * <code>java.text.DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale)</code>
+	 * will be called instead.
+	 * If no format is found and the value of <code>defaultFormat</code> is not null,
+	 * <code>defaultFormat</code> will be returned.
+	 * Otherwise, "M/d/yy h:mm a" is returned.
+	 *
+	 * @param dateStyle the giving formatting style. For example,
+	 * {@link DateFormat#SHORT} for "M/d/yy" in the US locale.
+	 * @param timeStyle the giving formatting style. For example,
+	 * {@link DateFormat#SHORT} for "h:mm a" in the US locale.
+	 * @param locale the locale. If null, {@link Locales#getCurrent}
+	 * is assumed.
+	 * @since 5.0.7
+	 */
+	public static final
+	String getDateTimeFormat(int dateStyle, int timeStyle, Locale locale,
+	String defaultFormat) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+
+		final DateFormatInfo info = getLocalFormatInfo();
+		if (info != null) {
+			final String fmt = info.getDateTimeFormat(dateStyle, timeStyle, locale);
+			if (fmt != null)
+				return fmt;
+		}
+
+		final DateFormat df =
+			DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+		if (df instanceof SimpleDateFormat) {
+			final String fmt = ((SimpleDateFormat)df).toPattern();
+			if (fmt != null)
+				return fmt;
+		}
+		return defaultFormat != null ? defaultFormat: "M/d/yy h:mm a";
+	}
+
+	/** Formats a Date object based on the current Locale
+	 * and the default date format ({@link DateFormat#DEFAULT}.
+	 *
+	 * @param dateOnly indicates whether to show only date; false to show
+	 * both date and time
+	 */
+	public static final String format(Date d, boolean dateOnly) {
+		return getDateFormat(dateOnly).format(d);
+	}
 	/**
-	 * Parses a string to a date.
-	 * It is smart enough to know whether to use DateFormat.getDateInstance
-	 * and DateFormat.getDateTimeInstance.
-	 * It also uses {@link Locales#getCurrent}.
+	 * Parses a string, that is formatted by {@link #format}, to a date.
+	 * It assumes the current locale is {@link Locales#getCurrent}.
+	 *
+	 * @param dateOnly indicates whether to show only date; false to show
+	 * both date and time
+	 * @since 5.0.5
+	 */
+	public static final Date parse(String s, boolean dateOnly)
+	throws ParseException {
+		return getDateFormat(dateOnly).parse(s);
+	}
+	private static final DateFormat getDateFormat(boolean dateOnly) {
+		final Locale locale = Locales.getCurrent();
+		return dateOnly ?
+			DateFormat.getDateInstance(DateFormat.DEFAULT, locale):
+			DateFormat.getDateTimeInstance(
+					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
+	}
+
+	/**
+	 * @deprecated As of release 5.0.5, replaced with {@link #parse(String, boolean)}.
+	 * Unlike {@link #parse(String, boolean)}, it detects the format by
+	 * searching the existence of colon. However, it is not safe so
+	 * {@link #parse(String, boolean)} shall be used.
 	 */
 	public static final Date parse(String s)
 	throws ParseException {
 		final Locale locale = Locales.getCurrent();
 		
 		if (s.indexOf(':') < 0) { //date only
-			final DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.parse(s);
+			return getDateFormat(true).parse(s);
 		} else {
-			try {
-				return getDateFormat().parse(s);
+			try { //backward compatible (wrong spec)
+				return getHttpDateFormat().parse(s);
 			} catch (ParseException ex) { //ignore it
 			}
-
-			final DateFormat df =
-				DateFormat.getDateTimeInstance(
-					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.parse(s);
+			return getDateFormat(false).parse(s);
 		}
 	}
-	private static final SimpleDateFormat getDateFormat() {
+	private static final SimpleDateFormat getHttpDateFormat() {
 		SimpleDateFormat df = (SimpleDateFormat)_df.get();
 		if (df == null)
 			_df.set(df = new SimpleDateFormat(
@@ -67,24 +238,4 @@ public class DateFormats {
 		return df;
 	}
 	private static final ThreadLocal _df = new ThreadLocal();
-
-	/** Formats a Date object based on the current Locale.
-	 *
-	 * @param dateOnly indicates whether to show only date; false to show
-	 * both date and time
-	 */
-	public static final String format(Date d, boolean dateOnly) {
-		Locale locale = Locales.getCurrent();
-
-		if (dateOnly) {
-			DateFormat df =
-				DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-			return df.format(d);
-		} else {
-			DateFormat df =
-				DateFormat.getDateTimeInstance(
-					DateFormat.DEFAULT, DateFormat.DEFAULT, locale);
-			return df.format(d);
-		}
-	}
 }

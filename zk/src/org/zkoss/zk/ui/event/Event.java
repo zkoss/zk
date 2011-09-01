@@ -1,25 +1,28 @@
 /* Event.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sat Jun 11 10:41:14     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An event sent to the event handler of a component.
@@ -27,12 +30,38 @@ import org.zkoss.zk.ui.Page;
  * @author tomyeh
  * @see Component
  */
-public class Event {
+public class Event implements java.io.Serializable {
 	private final String _name;
 	private final Component _target;
 	private final Object _data;
 	private boolean _propagatable = true;
 
+	/** Creates an instance of {@link Event} based on the specified request.
+	 */
+	public static Event getEvent(AuRequest request) {
+		final String name = request.getCommand();
+		final Component comp = request.getComponent();
+		final Map data = request.getData();
+		final Object data2 = data != null ? data.get(""): null;
+		if (data2 == null)
+			return new Event(name, comp);
+		if (data2 instanceof List) {
+			final List ary = (List)data2;
+			final Object[] data3 = new Object[ary.size()];
+			int j = 0;
+			for (Iterator it = ary.iterator(); it.hasNext();)
+				data3[j++] = it.next();
+			return new Event(name, comp, data3);
+		}
+		return new Event(name, comp, data2);
+	}
+
+	/** Constructs a simple event without target.
+	 * @since 5.0.0
+	 */
+	public Event(String name) {
+		this(name, null);
+	}
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
@@ -47,7 +76,7 @@ public class Event {
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
-	 * @param data an arbitary data
+	 * @param data an arbitrary data
 	 */
 	public Event(String name, Component target, Object data) {
 		if (name == null)

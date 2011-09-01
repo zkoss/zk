@@ -1,18 +1,16 @@
 /* ThreadLocalCache.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Sep  6 16:33:52     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,6 +22,9 @@ import java.util.Map;
  * A cache that resides on the thread local memory.
  * The performance is excellent since no need to synchronize the access.
  * However, it takes more memory since each thread has its own map.
+ * In addition, it might cause hot re-deployment failed to free old
+ * classes if the map stores the references of the classes loaded by
+ * the Web Application class loader.
  *
  * @author tomyeh
  * @since 3.0.0
@@ -43,8 +44,7 @@ public class ThreadLocalCache implements Cache {
 	 * max size=128 and lifetime=30minutes.
 	 */
 	public ThreadLocalCache() {
-		_lifetime = DEFAULT_LIFETIME;
-		_maxsize = 128;
+		this(DEFAULT_LIFETIME, 128);
 	}
 
 	//extra//

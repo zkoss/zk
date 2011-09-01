@@ -1,0 +1,49 @@
+<!-- B50-3086452.ztl.java
+
+	Purpose:for testing B50-3086452.ztl .
+
+	Description:
+
+	History:
+		05, 11, 2011 10:12:19
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3086452.zul,B,E,Hbox,Splitter,close">
+	<case id="ztl">
+		<server><!--
+			<zk>
+Clicks the collapse button to open/close the following two boxes.
+Their behavior shall be the same: the total height won't be changed.
+
+<vbox height="200px" style="border:3px black solid">
+Column 1-1: The left-top box. To know whether a splitter is
+collapsed, you can listen to the onOpen event.
+<splitter id="s1" collapse="after" open="false"></splitter>
+Column 1-2: You can enforce to open or collapse programming by
+calling setOpen method.
+</vbox>
+<vbox height="200px" style="border:3px black solid">
+Column 1-1: The left-top box. To know whether a splitter is
+collapsed, you can listen to the onOpen event.
+<splitter id="s2" collapse="after" open="true"></splitter>
+Column 1-2: You can enforce to open or collapse programming by
+calling setOpen method.
+</vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				int h = jq(".z-vbox:eq(0)").height() + jq(".z-vbox:eq(1)").height();
+				click(s1.$n("btn"));
+				waitResponse();
+				click(s2.$n("btn"));
+				waitResponse();
+				int h1 = jq(".z-vbox:eq(0)").height() + jq(".z-vbox:eq(1)").height();
+				verifyTolerant(h1, h, 5);
+		]]></client>
+	</case>
+</test>

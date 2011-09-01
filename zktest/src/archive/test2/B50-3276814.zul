@@ -1,0 +1,29 @@
+<zk>
+
+	<h:pre xmlns:h="xhtml"><![CDATA[
+	                                
+	    Tracker https://sourceforge.net/tracker/?func=detail&aid=3276814&group_id=152762&atid=785191	                                
+		It's bug for firefox3,chrome,safari.
+		
+		It's a difficult one to test it.
+		Please see the video ,you could download the snoop online.
+		 
+		http://grail.cs.washington.edu/software-data/snoop/
+		
+		download link
+		http://grail.cs.washington.edu/software-data/snoop/snoop.exe
+		
+		
+		The problem is sometime you click the button , 
+		it didn't show up the message.
+		
+		For the test routine ,please see the video .(it's working.)
+		http://www.screencast.com/users/TonyQ/folders/Jing/media/4245ba32-4d8b-492f-9280-ad13a1b3817c
+			
+		If you don't know how to test it , please ask Simon/Tony directly.
+		
+	]]></h:pre>
+	<button label="f" xmlns:w="client" 
+		w:onClick="if(!window.i)window.i =0;zk.log('hi:'+(i++));" mold="trendy" />
+	
+</zk>

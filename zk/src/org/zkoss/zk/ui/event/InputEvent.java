@@ -1,62 +1,114 @@
 /* InputEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 14 17:39:00     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's input something at the client.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.InputableX
- * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {
 	private final String _val;
+	private final Object _oldVal;
 	private final boolean _selbk;
 	private final int _start;
 
+	/** Converts an AU request to an input event.
+	 * Notice that this method will convert the value to a string object.
+	 * If it is not what you want, you have to parse it by yourself.
+	 * @param oldValue the previous value
+	 * @since 5.0.4
+	 */
+	public static final
+	InputEvent getInputEvent(AuRequest request, Object oldValue) {
+		final Map data = request.getData();
+		final Object val = data.get("value");
+		return new InputEvent(request.getCommand(), request.getComponent(),
+			val == null ? "" : val.toString(),
+			oldValue,
+			AuRequests.getBoolean(data, "bySelectBack"),
+			AuRequests.getInt(data, "start", 0));
+	}
 	/** Constructs a input-relevant event.
 	 * @param val the new value
+	 * @param oldValue the previous value
+	 * @since 5.0.4
 	 */
-	public InputEvent(String name, Component target, String val) {
-		this(name, target, val, false, 0);
+	public InputEvent(String name, Component target, String val, Object oldValue) {
+		this(name, target, val, oldValue, false, 0);
 	}
-	/** Constructs an event for <code>onChanging</code>.
-	 *
+	/** Constructs an input event
+	 * @param val the new value
+	 * @param oldValue the previous value
 	 * @param selbk whether this event is caused by user's selecting a list
 	 * of items. Currently, only combobox might set it to true for the onChanging
 	 * event. See {@link #isChangingBySelectBack} for details.
+	 * @since 5.0.4
 	 */
-	public InputEvent(String name, Component target, String val, boolean selbk, int start) {
+	public InputEvent(String name, Component target, String val, Object oldValue,
+	boolean selbk, int start) {
 		super(name, target);
 		_val = val;
+		_oldVal = oldValue;
 		_selbk = selbk;
 		_start = start;
 	}
+
+	/** @deprecated As of release 5.0.4, replaced with {@link #getInputEvent(AuRequest, Object)}.
+	 */
+	public static final InputEvent getInputEvent(AuRequest request) {
+		return getInputEvent(request, null);
+	}
+	/** @deprecated As of release 5.0.4, replaced with {@link #InputEvent(String, Component, String, Object)}.
+	 * @param val the new value
+	 */
+	public InputEvent(String name, Component target, String val) {
+		this(name, target, val, null);
+	}
+	/** @deprecated As of release 5.0.4, replaced with {@link #InputEvent(String, Component, String, Object, boolean, int)}.
+	 */
+	public InputEvent(String name, Component target, String val,
+	boolean selbk, int start) {
+		this(name, target, val, null, selbk, start);
+	}
+
 	/** Returns the value that user input.
 	 */
 	public final String getValue() {
 		return _val;
 	}
+	/** Returns the previous value before user's input.
+	 * Notice that the class of the return value depends on the component.
+	 * For example, an instance of Double is returned if {@link org.zkoss.zul.Doublebox}
+	 * is used.
+	 * @since 5.0.4
+	 */
+	public Object getPreviousValue() {
+		return _oldVal;
+	}
 	/** Returns whether this event is <code>onChanging</code>, and caused by
-	 * user's selecting a list of items.
+	 * user's selecting a list of predefined values (aka., items).
 	 *
 	 * <p>It is always false if it is caused by the <code>onChange</code> event.
 	 *

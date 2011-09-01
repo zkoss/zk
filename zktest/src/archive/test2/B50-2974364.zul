@@ -1,0 +1,30 @@
+<zk>
+<html><![CDATA[
+<ul>
+ <li>Click siwtchStyle then the text shall become green and bold</li>
+ <li>Click again and the text shall become black and normal</li>
+</ul>
+]]></html>
+<bandbox id="bb" value="something">
+<bandpopup>
+<listbox width="100px">
+<listitem label="A" />
+<listitem label="B" />
+<listitem label="C" />
+</listbox>
+</bandpopup>
+</bandbox>
+<button id="btn" label="switchStyle" onClick="switchStyle()" />
+<zscript>
+void switchStyle() {
+Object tag = btn.getAttribute("tag");
+if (tag == null) {
+btn.setAttribute("tag", "1");
+bb.setStyle("color:green;font-weight:bold");
+} else {
+btn.removeAttribute("tag");
+bb.setStyle("");
+}
+}
+</zscript>
+</zk>

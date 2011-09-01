@@ -1,18 +1,16 @@
 /* SimpleConstraint.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 28 13:58:11     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,6 +21,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.Dates;
 
 import org.zkoss.zk.ui.Component;
@@ -32,7 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.mesg.MZul;
 
 /**
- * A simple constraint that you could build based the predefined constants.
+ * The default constraint supporting no empty, regular expressions and so on.
  *
  * <p>Depending on the component (such as {@link Intbox} and {@link Datebox},
  * you could combine the flags, such as {@link #NO_POSITIVE} + {@link #NO_ZERO}
@@ -58,6 +57,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * The value must match inside the data from ListModel only.
 	 */
 	public static final int STRICT = 0x0200;
+	/** Indicates this contraint requires the server validation.
+	 * It means, after the client validates the value successfully, it
+	 * will send the value to the server for further validation (by calling
+	 * {@link #validate}.
+	 * It is useful if the result of the regular expressions is different
+	 * at the client (with JavaScript) and the server 9with ava).
+	 */
+	public static final int SERVER = 0x0400;
 	/** Date in the future is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_FUTURE = NO_POSITIVE;
@@ -67,11 +74,55 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	/** Today is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_TODAY = NO_ZERO;
+	/** The Error-box position. 
+	 */
+	public static final int BEFORE_START = 0x1000;
+	/** The Error-box position. 
+	 */
+	public static final int BEFORE_END = 0x2000;
+	/** The Error-box position. 
+	 */
+	public static final int END_BEFORE = 0x3000;
+	/** The Error-box position. 
+	 */
+	public static final int END_AFTER = 0x4000;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_END = 0x5000;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_START = 0x6000;
+	/** The Error-box position. 
+	 */
+	public static final int START_AFTER = 0x7000;
+	/** The Error-box position. 
+	 */
+	public static final int START_BEFORE = 0x8000;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP = 0x9000;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_END = 0xa000;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_BEFORE = 0xb000;
+	/** The Error-box position. 
+	 */
+	public static final int OVERLAP_AFTER = 0xc000;
+	/** The Error-box position. 
+	 */
+	public static final int AT_POINTER = 0xd000;
+	/** The Error-box position. 
+	 */
+	public static final int AFTER_POINTER = 0xe000;
+	
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */
 	protected int _flags;
 	private Pattern _regex;
 	private String _errmsg;
+	private String _raw;
 
 	/** Constructs a constraint with flags.
 	 *
@@ -110,6 +161,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		_regex = regex == null || regex.length() == 0 ?
 			null: Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
+		_raw = null;
 	}
 	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
@@ -161,10 +213,11 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 					break;
 				}
 			}
-
+			
 			_flags |= parseConstraint(s.trim().toLowerCase());
 		}
 
+		_raw = constraint;
 		_regex = regex == null || regex.length() == 0 ?
 			null: Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
@@ -176,7 +229,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * @param constraint a list of constraints separated by comma.
 	 * Example: no positive, no zero
 	 */
-	public static final SimpleConstraint getInstance(String constraint) {
+	public static SimpleConstraint getInstance(String constraint) {
 		return new SimpleConstraint(constraint);
 	}
 	/** Parses a constraint into an integer value.
@@ -203,6 +256,36 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			return NO_TODAY;
 		else if (constraint.equals("strict"))
 			return STRICT;
+		else if (constraint.equals("server"))
+			return SERVER;
+		else if (constraint.equals("before_start"))
+			return BEFORE_START;
+		else if (constraint.equals("before_end"))
+			return BEFORE_END;
+		else if (constraint.equals("end_before"))
+			return END_BEFORE;
+		else if (constraint.equals("end_after"))
+			return END_AFTER;
+		else if (constraint.equals("after_end"))
+			return AFTER_END;
+		else if (constraint.equals("after_start"))
+			return AFTER_START;
+		else if (constraint.equals("start_after"))
+			return START_AFTER;
+		else if (constraint.equals("start_before"))
+			return START_BEFORE;
+		else if (constraint.equals("overlap"))
+			return OVERLAP;
+		else if (constraint.equals("overlap_end"))
+			return OVERLAP_END;
+		else if (constraint.equals("overlap_before"))
+			return OVERLAP_BEFORE;
+		else if (constraint.equals("overlap_after"))
+			return OVERLAP_AFTER;
+		else if (constraint.equals("at_pointer"))
+			return AT_POINTER;
+		else if (constraint.equals("after_pointer"))
+			return AFTER_POINTER;
 		else if (constraint.length() > 0)
 			throw new UiException("Unknown constraint: "+constraint);
 		return 0;
@@ -215,6 +298,12 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 */
 	public int getFlags() {
 		return _flags;
+	}
+	/** Returns the custom error message that shall be shown if an error occurs,
+	 * or null if no custom error message specified.
+	 */
+	public String getErrorMessage(Component comp) {
+		return _errmsg;
 	}
 
 	//-- Constraint --//
@@ -316,15 +405,34 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		throw new InternalError();
 	}
 	//ClientConstraint//
-	public String getClientValidation() {
-		return (_flags & NO_EMPTY) != 0 ? (_flags & STRICT) != 0 ? "zkVld.noEmptyAndStrict" 
-				: "zkVld.noEmpty": (_flags & STRICT) != 0 ? "zkVld.strict": null;
-			//FUTURE: support more validation in client
+	public String getClientConstraint() {
+		if (_raw != null)
+			return '\'' + Strings.escape(_raw, Strings.ESCAPE_JAVASCRIPT) + '\'';
+
+		final StringBuffer sb = new StringBuffer("new zul.inp.SimpleConstraint(");
+		if (_flags != 0 || _regex != null || _errmsg != null) {
+			sb.append(_flags);
+			if (_regex != null || _errmsg != null) {
+				sb.append(',');
+				if (_regex != null) {
+					sb.append('\'');
+					Strings.escape(sb, _regex.pattern(), Strings.ESCAPE_JAVASCRIPT);
+					sb.append('\'');
+				} else
+					sb.append("null");
+				if (_errmsg != null) {
+					sb.append(",'");
+					Strings.escape(sb, _errmsg, Strings.ESCAPE_JAVASCRIPT);
+					sb.append('\'');
+				}
+			}
+		}
+		return sb.append(")").toString();
 	}
-	public String getErrorMessage(Component comp) {
-		return _errmsg;
-	}
-	public boolean isClientComplete() {
-		return (_flags == 0 || _flags == NO_EMPTY || _flags == STRICT) && _regex == null;
+	/** Default: null (since it depends on zul.inp which is loaded for
+	* all input widgets).
+	 */
+	public String getClientPackages() {
+		return null;
 	}
 }

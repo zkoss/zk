@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2025262.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 16 10:00:43     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+Please click the "Clear All" button, and then all the error boxes should disappear.
+<vbox>
+<intbox id="t1" value="-1" constraint="no negative" focus="true" onFocus='t2.focus()'/>
+<intbox id="t2" value="-1" constraint="no negative" onFocus='t3.focus()'/>
+<intbox id="t3" value="-1" constraint="no negative" onFocus='t4.focus()'/>
+<intbox id="t4" value="-1" constraint="no negative" onFocus='t5.focus()'/>
+<intbox id="t5" value="-1" constraint="no negative" onFocus='b1.focus()'/>
+<button id="b1" label="Clear All">
+	<attribute name="onClick">
+		List l = new ArrayList();
+		l.add(t1);
+		l.add(t2);
+		l.add(t3);
+		l.add(t4);
+		l.add(t5);
+		Clients.clearWrongValue(l);
+	</attribute>
+</button>
+</vbox>
+</zk>

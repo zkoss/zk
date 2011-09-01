@@ -1,0 +1,19 @@
+<test tags="B50-2928109.zul,Window,Hflex">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					If you see in the "my window" the content sentence "my window is here" is in
+					the same line then it is OK; otherwise if the "here" is wrapped to the 2nd
+					line because window is too narrow, it is bug.
+					<window title="my window" border="normal" hflex="min">
+					my window is here
+					</window>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[			
+			verifyTrue(jq(".z-window-embedded-cnt").height() <16);
+		]]></client>
+	</case>
+</test>

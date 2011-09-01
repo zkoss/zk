@@ -1,17 +1,15 @@
 /* XMLs.java
 
-{{IS_NOTE
 
 Purpose: 
 Description: 
 History:
 91/01/07 17:36:07, Create, Tom M. Yeh
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -112,8 +110,39 @@ public class XMLs {
 	 */
 	public static final
 	StringBuffer encodeText(StringBuffer sb, String value) {
-		if (sb == null) sb = new StringBuffer(value.length());
-		for (int j = 0, len = value.length(); j < len; ++j) {
+		int len = value.length();
+		if (sb == null) sb = new StringBuffer(len);
+		for (int j = 0; j < len; ++j) {
+			final char cc = value.charAt(j);
+			final String rep;
+			switch (cc) {
+			case '<': sb.append("&lt;"); break;
+			case '>': sb.append("&gt;"); break;
+			case '&': sb.append("&amp;"); break;
+			case '"': sb.append("&quot;"); break;
+			default: sb.append(cc); break;
+			}
+		}
+		return sb;
+	}
+	/** Encodes a value of the specified range,
+	 * and appends it to a string buffer,
+	 * such that it could be enclosed by a XML elemnt.
+	 *
+	 * <p>Note: It is sometime inproper to use CDATA if the text contains
+	 * CDATA, too. The simplest way is NOT to use CDATA but encoding
+	 * the string by this method.
+	 *
+	 * @param value the string to encode
+	 * @param begin the beginning index, inclusive, of the string to encode (i.e., value), includinge
+	 * @param end the ending index, exclusive of the string to encode (i.e., value), excluded
+	 * @since 5.0.0
+	 */
+	public static final
+	StringBuffer encodeText(StringBuffer sb, String value, int begin, int end) {
+		if (end > value.length()) end = value.length();
+		if (sb == null) sb = new StringBuffer(end - begin + 8);
+		for (int j = begin; j < end; ++j) {
 			final char cc = value.charAt(j);
 			final String rep;
 			switch (cc) {

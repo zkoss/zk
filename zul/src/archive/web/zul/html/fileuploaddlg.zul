@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?page language="xul/html"?>
 <!--
 fileuploaddlg.zul
 
-{{IS_NOTE
 	Purpose:
 		The fileupload modal dialog
 	Description:
 
 	History:
 		Tue Jul 19 12:06:22     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 -->
-<window title="${arg.title}" border="normal" width="360px" closable="true"
-use="org.zkoss.zul.impl.FileuploadDlg">
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page language="xul/html"?>
+<?component name="uploaddlg" extends="window"
+ class="org.zkoss.zul.impl.FileuploadDlg" widgetClass="zul.fud.FileuploadDlg"?>
+<?component name="submit" extends="button" widgetClass="zul.fud.Submit"?>
+
+<uploaddlg title="${arg.title}" shadow="false" border="normal" width="360px" closable="true"
+xmlns:w="http://www.zkoss.org/2005/zk/client"
+	w:onClose="this.cancel()" w:max="${arg.max}">
 	<label value="${arg.message}"/>
-	<!-- Note: 100% becomes too big in IE6 -->
-	<iframe width="97%" style="border: 1px solid #aaa"
-	src="~./zul/html/fileupload.html.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;max=${arg.max}&amp;native=${arg.native}&amp;maxsize=${arg.maxsize}"/>
-</window>
+	<fileupload id="fileupload" forward="onUpload=" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
+		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
+	<separator bar="true"/>
+	<div id="uploaded" visible="false"></div>
+	<div id="btns">
+	<submit id="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
+		w:onClick="this.submit()"/>
+	<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" w:onClick="this.$o().cancel(true)"/>
+	</div>
+</uploaddlg>

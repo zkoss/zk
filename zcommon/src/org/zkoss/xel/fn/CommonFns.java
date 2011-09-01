@@ -1,29 +1,32 @@
 /* CommonFns.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Apr 20 18:35:21     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.xel.fn;
 
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.List;
 import java.util.Collection;
 import java.util.Map;
 import java.lang.reflect.Field;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
@@ -142,25 +145,183 @@ public class CommonFns {
 			return ((Collection)o).size();
 		} else if (o instanceof Map) {
 			return ((Map)o).size();
-		} else if (o instanceof Object[]) {
-			return ((Object[])o).length;
-		} else if (o instanceof int[]) {
-			return ((int[])o).length;
-		} else if (o instanceof long[]) {
-			return ((long[])o).length;
-		} else if (o instanceof short[]) {
-			return ((short[])o).length;
-		} else if (o instanceof byte[]) {
-			return ((byte[])o).length;
-		} else if (o instanceof char[]) {
-			return ((char[])o).length;
-		} else if (o instanceof double[]) {
-			return ((double[])o).length;
-		} else if (o instanceof float[]) {
-			return ((float[])o).length;
+		} else if (o.getClass().isArray()) {
+			return Array.getLength(o);
 		} else {
 			throw new IllegalArgumentException("Unknown object for length: "+o.getClass());
 		}
+	}
+
+	/** Returns the index of the given element.
+	 * @param o the array/collection of objects to examine, or a string.
+	 * If o is a map, then {@link Map#keySet} is assumed.
+	 * @since 5.0.7
+	 */
+	public static final int indexOf(Object o, Object element) {
+		if (o instanceof String) {
+			return element instanceof String ?
+				((String)o).indexOf((String)element): -1;
+		} else if (o instanceof Collection) {
+			int j = 0;
+			for (Iterator it = ((Collection)o).iterator(); it.hasNext(); ++j)
+				if (Objects.equals(it.next(), element))
+					return j;
+		} else if (o instanceof Map) {
+			return indexOf(((Map)o).keySet(), element);
+		} else if (o instanceof Object[]) {
+			final Object[] ary = (Object[])o;
+			for (int j = 0; j < ary.length; j++)
+				if (Objects.equals(ary[j], element))
+					return j;
+		} else if (o instanceof int[]) {
+			if (element instanceof Number) {
+				int v = ((Number)element).intValue();
+				final int[] ary = (int[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof long[]) {
+			if (element instanceof Number) {
+				long v = ((Number)element).longValue();
+				final long[] ary = (long[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof short[]) {
+			if (element instanceof Number) {
+				short v = ((Number)element).shortValue();
+				final short[] ary = (short[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof byte[]) {
+			if (element instanceof Number) {
+				byte v = ((Number)element).byteValue();
+				final byte[] ary = (byte[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof double[]) {
+			if (element instanceof Number) {
+				double v = ((Number)element).doubleValue();
+				final double[] ary = (double[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof float[]) {
+			if (element instanceof Number) {
+				float v = ((Number)element).floatValue();
+				final float[] ary = (float[])o;
+				for (int j = 0; j < ary.length; j++)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof char[]) {
+			char v;
+			if (element instanceof Character)
+				v = ((Character)element).charValue();
+			else if (element instanceof String && ((String)element).length() > 0)
+				v = ((String)element).charAt(0);
+			else
+				return -1;
+
+			final char[] ary = (char[])o;
+			for (int j = 0; j < ary.length; j++)
+				if (ary[j] == v)
+					return j;
+		} else if (o != null) {
+			throw new IllegalArgumentException("Unknown object for indexOf: "+o.getClass());
+		}
+		return -1;
+	}
+	/** Returns the last index of the given element.
+	 * @param o the array/list of objects to examine, or a string.
+	 * @since 5.0.7
+	 */
+	public static final int lastIndexOf(Object o, Object element) {
+		if (o instanceof String) {
+			return element instanceof String ?
+				((String)o).lastIndexOf((String)element): -1;
+		} else if (o instanceof List) {
+			int j = ((List)o).size();
+			for (ListIterator it = ((List)o).listIterator(j); it.hasPrevious(); j--)
+				if (Objects.equals(it.previous(), element))
+					return j - 1;
+		} else if (o instanceof Object[]) {
+			final Object[] ary = (Object[])o;
+			for (int j = ary.length; --j >= 0;)
+				if (Objects.equals(ary[j], element))
+					return j;
+		} else if (o instanceof int[]) {
+			if (element instanceof Number) {
+				int v = ((Number)element).intValue();
+				final int[] ary = (int[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof long[]) {
+			if (element instanceof Number) {
+				long v = ((Number)element).longValue();
+				final long[] ary = (long[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof short[]) {
+			if (element instanceof Number) {
+				short v = ((Number)element).shortValue();
+				final short[] ary = (short[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof byte[]) {
+			if (element instanceof Number) {
+				byte v = ((Number)element).byteValue();
+				final byte[] ary = (byte[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof double[]) {
+			if (element instanceof Number) {
+				double v = ((Number)element).doubleValue();
+				final double[] ary = (double[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof float[]) {
+			if (element instanceof Number) {
+				float v = ((Number)element).floatValue();
+				final float[] ary = (float[])o;
+				for (int j = ary.length; --j >= 0;)
+					if (ary[j] == v)
+						return j;
+			}
+		} else if (o instanceof char[]) {
+			char v;
+			if (element instanceof Character)
+				v = ((Character)element).charValue();
+			else if (element instanceof String && ((String)element).length() > 0)
+				v = ((String)element).charAt(0);
+			else
+				return -1;
+
+			final char[] ary = (char[])o;
+			for (int j = ary.length; --j >= 0;)
+				if (ary[j] == v)
+					return j;
+		} else if (o != null) {
+			throw new IllegalArgumentException("Unknown object for indexOf: "+o.getClass());
+		}
+		return -1;
 	}
 
 	/** Instantiates the specified class.
@@ -170,6 +331,50 @@ public class CommonFns {
 			return Classes.newInstanceByThread((String)o);
 		} else if (o instanceof Class) {
 			return ((Class)o).newInstance();
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
+	/** Instantiates the specified class, and argument.
+	 * @param o the class name or class
+	 * @param arg the argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg});
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
+	/** Instantiates the specified class, and two arguments.
+	 * @param o the class name or class
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg1, Object arg2) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg1, arg2});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg1, arg2});
+		} else {
+			throw new IllegalArgumentException("Unknow object for new: "+o);
+		}
+	}
+	/** Instantiates the specified class, and two arguments.
+	 * @param o the class name or class
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @since 5.0.5
+	 */
+	public static final Object new_(Object o, Object arg1, Object arg2, Object arg3) throws Exception {
+		if (o instanceof String) {
+			return Classes.newInstance(Classes.forNameByThread((String)o), new Object[] {arg1, arg2, arg3});
+		} else if (o instanceof Class) {
+			return Classes.newInstance((Class)o, new Object[] {arg1, arg2, arg3});
 		} else {
 			throw new IllegalArgumentException("Unknow object for new: "+o);
 		}

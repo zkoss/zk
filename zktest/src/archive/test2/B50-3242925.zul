@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3242925.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 25 17:53:19 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+		 <li>IE8 only</li>
+		 <li>Dragging the splitter several times.</li>
+		 <li>The splitter shall not became small.</li>
+		</ol>
+	]]></html>
+	<hbox height="500px" sizedByContent="false">
+		<cell style="background-color:blue;" />
+		<splitter />
+		<cell style="background-color:red;" />
+	</hbox>
+</zk>

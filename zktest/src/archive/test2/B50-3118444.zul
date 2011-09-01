@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3118444.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Jan  5 09:42:00 TST 2011, Created by jimmy
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+		 <li>IE6 only.</li>
+		 <li>Open the menu.</li>
+		 <li>The menupopup shall not a wired point appear on the left top corner.</li>
+		</ol>
+	]]></html>
+	<menubar id="menubar" width="100%">
+		<menu label="Project"
+			image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+			<menupopup>
+				<menuitem
+					image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png"
+					label="New" onClick="alert(self.label)" />
+			</menupopup>
+		</menu>
+	</menubar>
+
+</zk>

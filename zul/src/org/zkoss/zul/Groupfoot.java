@@ -1,18 +1,16 @@
 /* Groupfoot.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		2008/5/21 11:23:09 , Created by robbiecheng
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,9 +21,10 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * GroupFoot serves as a summary row of group.
+ * Groupfoot serves as a summary row of group.
+ * <p>Available in ZK PE and EE.
  * 
- * <p>Default {@link #getZclass}: z-group-foot.
+ * <p>Default {@link #getZclass}: z-groupfoot (since 5.0.0)
  *
  *<p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -63,12 +62,7 @@ public class Groupfoot extends Row implements org.zkoss.zul.api.Groupfoot {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-group-foot" : _zclass;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		return sb.toString();
+		return _zclass == null ? "z-groupfoot" : _zclass;
 	}
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();

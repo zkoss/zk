@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+combobox.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+	<html><![CDATA[
+	<h4>Comboboxes</h4>
+	<p>A combination of a text box with a listbox, which allows the user to select items from the list or enter a new value.<br />
+	Press Alt+DOWN to drop the list, then use UP and DOWN to select
+	an item.</p>
+	]]></html>
+	<separator/>
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<hbox width="100%" widths="200px">
+	<vbox>
+		Combobox:
+		<combobox>
+			<comboitem label="Simple and Rich" />
+			<comboitem label="Cool!" />
+			<comboitem label="Thumbs Up!" />
+		</combobox>
+		Combobox with description:
+		<combobox>
+			<comboitem label="Simple and Rich"
+				description="The simplest way to make Web applications rich" />
+			<comboitem label="Cool!"
+				description="The coolest technology" />
+			<comboitem label="Ajax and RIA"
+				description="Rich Internet Application by Ajax" />
+		</combobox>
+		Combobox with description and icons:
+		<combobox>
+			<comboitem label="Simple and Rich" image="/img/Centigrade-Widget-Icons/GoldBar-32x32.gif"
+				description="The simplest way to make Web applications rich" />
+			<comboitem label="Cool!" image="/img/Centigrade-Widget-Icons/CogwheelEye-32x32.gif"
+				description="The coolest technology" />
+			<comboitem label="Ajax and RIA" image="/img/Centigrade-Widget-Icons/WindowGlobe-32x32.gif"
+				description="Rich Internet Application by Ajax" />
+		</combobox>
+	</vbox>
+	<splitter collapse="before" />
+	<vbox>
+		Auto-complete Combobox:
+		<combobox id="combo" autodrop="true" mold="rounded"/>
+		<hbox>
+			<checkbox checked="true"
+				onCheck="combo.autodrop = self.checked"
+				label="auto drop popup when typing" />
+			<checkbox checked="true"
+				onCheck="combo.buttonVisible = self.checked" label="button visible" />			
+		</hbox>
+		<checkbox label="Use rounded combobox" checked="true"
+			onCheck='combo.mold=self.checked? "rounded": "default"'/>
+	</vbox>
+	<zscript>
+	String[] _dict = { 
+		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+		"bible", "bird", "bingle", "blog",
+		"cabane", "cape", "cease", "cedar",
+		"dacron", "defacto", "definable", "deluxe",
+		"each", "eager", "effect", "efficacy",
+		"far", "far from",
+		"girl", "gigantean", "giant",
+		"home", "honest", "huge",
+		"information", "inner",
+		"jump", "jungle", "jungle fever",
+		"kaka", "kale", "kame",
+		"lamella", "lane", "lemma",
+		"master", "maxima", "music",
+		"nerve", "new", "number",
+		"omega", "opera",
+		"pea", "peace", "peaceful",
+		"rock", "RIA",
+		"sound", "spread", "student", "super",
+		"tea", "teacher",
+		"unit", "universe",
+		"vector", "victory",
+		"wake", "wee", "weak", "web2.0",
+		"xeme",
+		"yea", "yellow",
+		"zebra", "zk",
+		
+	};
+	 ListModel dictModel= new SimpleListModel(_dict);
+	 combo.setModel(dictModel);
+	</zscript>
+</hbox>]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

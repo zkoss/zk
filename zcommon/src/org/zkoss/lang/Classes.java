@@ -1,48 +1,41 @@
 /* Classes.java
 
-{{IS_NOTE
 
 	Purpose: Utilities to handle Class
 	Description:
 	History:
 	 2001/4/19, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.lang;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Collection;
-import java.util.Arrays;
-import java.util.Date;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.zkoss.mesg.MCommon;
-import org.zkoss.mesg.Messages;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Objects;
 import org.zkoss.math.BigDecimals;
 import org.zkoss.math.BigIntegers;
-import org.zkoss.util.MultiCache;
+import org.zkoss.mesg.MCommon;
+import org.zkoss.mesg.Messages;
 import org.zkoss.util.Cache;
 import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -53,6 +46,8 @@ import org.zkoss.util.logging.Log;
 public class Classes {
 	private static final Log log = Log.lookup(Classes.class);
 
+	private static final Object NOT_FOUND = new Object();
+	
 	/**
 	 * Instantiates a new instance of the specified class with
 	 * the specified arguments and argument types.
@@ -92,35 +87,101 @@ public class Classes {
 		if (args == null || args.length == 0)
 			return cls.newInstance();
 
-		final Constructor[] cs = cls.getConstructors();
-		for (int j = 0; j < cs.length; ++j) {
-			final Class[] types = cs[j].getParameterTypes();
-			if (types.length == args.length) {
-				for (int k = args.length;;) {
-					if (--k < 0)
-						return cs[j].newInstance(args);
+		final Constructor[] cxs = cls.getConstructors();
+		Constructor cx = match(cxs, args, false);
+		if (cx == null)
+			cx = match(cxs, args, true);
+		if (cx != null)
+			return cx.newInstance(args);
 
-					final Object arg = args[k];
-					final Class type = types[k];
-					if (arg == null)
-						if (type.isPrimitive()) break; //mismatch
-						else continue; //match
+		throw new NoSuchMethodException(cls.getName()+": no constructor for "+Objects.toString(args));
+	}
+	/**
+	 * @param loosely whether to match Long with Integer and so on.
+	 */
+	private static
+	Constructor match(Constructor[] cxs, Object[] args, boolean loosely) {
+		for (int j = 0; j < cxs.length; ++j)
+			if (matched(cxs[j].getParameterTypes(), args, loosely))
+				return cxs[j];
+		return null;
+	}
+	/**
+	 * @param loosely whether to match Long with Integer and so on.
+	 */
+	private static
+	Method match(Class cls, String name, Object[] args, boolean loosely) {
+		final Method[] ms = cls.getMethods();
+		for (int j = 0; j < ms.length; ++j) {
+			if (!ms[j].getName().equals(name)
+			|| !matched(ms[j].getParameterTypes(), args, loosely))
+				continue; //not found; next
 
-					if (type.isInstance(arg)) continue; //match
-					if (!type.isPrimitive()
-					|| !Primitives.toWrapper(type).isInstance(arg))
-						break; //mismatch
-				}
+			if (Modifier.isPublic(ms[j].getDeclaringClass().getModifiers()))
+				return ms[j]; //found
+			try {
+				return getMethodInPublic(
+					cls, ms[j].getName(), ms[j].getParameterTypes());
+			} catch (NoSuchMethodException ex) { //not found; next
 			}
 		}
+		return null;
+	}
+	private static boolean matched(Class[] types, Object[] args, boolean loosely) {
+		if (types.length == args.length) {
+			final Object[] argcvt = loosely ? new Object[args.length]: args;
+			boolean cvted = false;
+			for (int k = args.length;;) {
+				if (--k < 0) {
+					if (cvted)
+						System.arraycopy(argcvt, 0, args, 0, args.length);
+						//copy converted only if all matched
+					return true;
+				}
 
-		final StringBuffer sb = new StringBuffer(80)
-			.append("No contructor compatible with ");
-		for (int j = 0; j < args.length; ++j)
-			sb.append(j != 0 ? ", ": "[")
-				.append(args[j] != null ? args[j].getClass().getName(): null);
-		throw new NoSuchMethodException(
-			sb.append("] in ").append(cls.getName()).toString());
+				final Object arg = argcvt[k] = args[k];
+				final Class type = types[k];
+				if (arg == null)
+					if (type.isPrimitive()) break; //mismatch
+					else continue; //matched
+
+				if (type.isInstance(arg) || (type.isPrimitive()
+				&& Primitives.toWrapper(type).isInstance(arg)))
+					continue; //matched
+
+				if (loosely) {
+					argcvt[k] = looselyCast(type, arg);
+					if (argcvt[k] != null) {
+						cvted = true;
+						continue; //matched
+					}
+				}
+				break; //mismatch
+			}
+		}
+		return false;
+	}
+	private static Object looselyCast(Class type, Object arg) {
+		if (type == Integer.class || type == int.class) {
+			if (arg instanceof Number)
+				return new Integer(((Number)arg).intValue());
+		} else if (type == Long.class || type == long.class) {
+			if (arg instanceof Number)
+				return new Long(((Number)arg).longValue());
+		} else if (type == Double.class || type == double.class) {
+			if (arg instanceof Number)
+				return new Double(((Number)arg).doubleValue());
+		} else if (type == Short.class || type == short.class) {
+			if (arg instanceof Number)
+				return new Short(((Number)arg).shortValue());
+		} else if (type == Float.class || type == float.class) {
+			if (arg instanceof Number)
+				return new Float(((Number)arg).floatValue());
+		} else if (type == Byte.class || type == byte.class) {
+			if (arg instanceof Number)
+				return new Byte(((Number)arg).byteValue());
+		}
+		return null; //not castable
 	}
 
 	/**
@@ -623,22 +684,29 @@ public class Classes {
 			} catch (NoSuchMethodException ex) { //ignore it
 			}
 
-		throw new NoSuchMethodException(cls+": "+name+" "+Objects.toString(argTypes));
+		throw newNoSuchMethodException(cls, name, argTypes);
+	}
+	private static NoSuchMethodException newNoSuchMethodException(Class cls,
+	String name, Object[] args) {
+		return new NoSuchMethodException(cls.getName()+": no method called "+name+" for "+Objects.toString(args));
 	}
 
 	/** Gets one of the close method by specifying the arguments, rather
 	 * than the argument types. It actually calls {@link #getCloseMethod}.
 	 */
-	public static final Method
-	getMethodByObject(Class cls, String name, Object[] args)
+	public static final
+	Method getMethodByObject(Class cls, String name, Object[] args)
 	throws NoSuchMethodException {
 		if (args == null)
 			return getMethodInPublic(cls, name, null);
 
-		final Class[] argTypes = new Class[args.length];
-		for (int j = 0; j < args.length; ++j)
-			argTypes[j] = args[j] != null ? args[j].getClass(): null;
-		return getCloseMethod(cls, name, argTypes);
+		Method mtd = match(cls, name, args, false);
+		if (mtd == null) {
+			mtd = match(cls, name, args, true);
+			if (mtd == null)
+				throw newNoSuchMethodException(cls, name, args);
+		}
+		return mtd;
 	}
 	/**
 	 * Gets one of the close methods -- a close method is a method
@@ -675,13 +743,22 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
-		Method m = (Method)_closms.get(aoi);
-		if (m != null)
-			return m;
+		Object m = (Object)_closms.get(aoi);
+		if( m == NOT_FOUND)
+			throw newNoSuchMethodException(cls, name, argTypes);
+		
+		if (m != null) 
+			return (Method) m;
+		
 
-		m = myGetCloseMethod(cls, name, argTypes, false);
+		try{
+			m = myGetCloseMethod(cls, name, argTypes, false);
+		}catch(NoSuchMethodException ex){
+			_closms.put(aoi, NOT_FOUND);
+			throw ex;
+		}
 		_closms.put(aoi, m);
-		return m;
+		return (Method) m;
 	}
 	/**
 	 * Like {@link #getCloseMethod} to get a 'close' method, but
@@ -696,20 +773,28 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
-		Method m = (Method)_closms.get(aoi);
-		if (m != null)
-			return m;
+		Object m = (Object)_closms.get(aoi);
+		if( m == NOT_FOUND)
+			throw newNoSuchMethodException(cls, name, argTypes);
+		
+		if (m != null) 
+			return (Method) m;
 
-		m = myGetCloseMethod(cls, name, argTypes, true);
+		try{
+			m = myGetCloseMethod(cls, name, argTypes, true);
+		}catch(NoSuchMethodException ex){
+			_closms.put(aoi, NOT_FOUND);
+			throw ex;
+		}
 		_closms.put(aoi, m);
-		return m;
+		return (Method) m;
 	}
 	private static Cache _closms = new MultiCache(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
 		4*60*60*1000);
-	private static final Method
-	myGetCloseMethod(final Class cls, final String name,
+	private static final
+	Method myGetCloseMethod(final Class cls, final String name,
 	final Class[] argTypes, final boolean bySubclass)
 	throws NoSuchMethodException {
 		assert D.OFF || argTypes != null: "Caller shall handle null";
@@ -759,7 +844,7 @@ public class Classes {
 					break; //not match
 			}
 		}
-		throw new NoSuchMethodException(cls+": "+name+" argTypes: "+Objects.toString(argTypes));
+		throw newNoSuchMethodException(cls, name, argTypes);
 	}
 
 	/** Returns all close methods that match the specified condition, or
@@ -953,7 +1038,7 @@ public class Classes {
 		}
 
 		if (argTypes != null && argTypes.length > 1)
-			throw new NoSuchMethodException(cls+": "+name+" "+Objects.toString(argTypes));
+			throw newNoSuchMethodException(cls, name, argTypes);
 
 		try {
 			//try public field
@@ -967,7 +1052,7 @@ public class Classes {
 			//try any field
 			return getAnyField(cls, name);
 		} catch (NoSuchFieldException ex) { //ignore
-			throw new NoSuchMethodException(cls+": name="+name+" args="+Objects.toString(argTypes));
+			throw newNoSuchMethodException(cls, name, argTypes);
 		}
 	}
 	/** The infomation of the access object. */

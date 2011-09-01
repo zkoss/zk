@@ -1,24 +1,22 @@
 /* ListX.java
 
-{{IS_NOTE
 
 	Purpose: The extended list interface.
 	Description: 
 	History:
 	 2001/5/9, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.util;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * The extended list interface. It provides methods
  * to access the entry of each node in the list.
  *

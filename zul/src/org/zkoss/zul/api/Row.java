@@ -1,18 +1,16 @@
 /* Row.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -104,6 +102,8 @@ public interface Row extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * 
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getSpans();
 
@@ -114,6 +114,7 @@ public interface Row extends org.zkoss.zul.impl.api.XulElement {
 	 * For example, "1,2,3" means the second column will span two columns and
 	 * the following column span three columns, while others occupies one
 	 * column.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setSpans(String spans) throws WrongValueException;
 

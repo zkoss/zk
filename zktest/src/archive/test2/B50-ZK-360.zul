@@ -1,0 +1,21 @@
+<zk>
+	<div>Add and remove Treerow by clicking on the Button. You shall see the Treerow upon adding.</div>
+	<button label="Add Treerow">
+		<attribute name="onClick"><![CDATA[
+			if (item.firstChild == null) {
+				Treerow tr = new Treerow();
+				item.appendChild(tr);
+				tr.appendChild(new Treecell("new Item"));
+				self.label = "Remove Treerow";
+			} else {
+				item.firstChild.detach();
+				self.label = "Add Treerow";
+			}
+		]]></attribute>
+	</button>
+	<tree>
+		<treechildren>
+			<treeitem id="item" />
+		</treechildren>
+	</tree>
+</zk>

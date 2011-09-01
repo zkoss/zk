@@ -1,18 +1,16 @@
 /* BSHInterpreter.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun  1 14:28:43     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -39,15 +37,21 @@ import bsh.Primitive;
 import bsh.EvalError;
 import bsh.UtilEvalError;
 
+import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.NamespaceChangeListener;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.HierachicalAware;
@@ -59,15 +63,26 @@ import org.zkoss.zk.scripting.HierachicalAware;
  * scopes ({@link HierachicalAware}).
  * That is, it uses an independent BeanShell NameSpace
  * (aka. interpreter's scope) to store the variables/classes/methods
- * defined in BeanShell script for each ZK namespace ({@link Namespace}).
- * Since one-to-one relationship between BeanShell's scope and ZK namespace,
+ * defined in BeanShell script for each ZK scope ({@link Scope}).
+ * Since one-to-one relationship between BeanShell's scope and ZK scope,
  * the invocation of BeanShell methods can execute correctly without knowing
- * what namespace it is.
+ * what scope it is.
  * However, if you want your codes portable across different interpreters,
  * you had better to call
- * {@link org.zkoss.zk.scripting.Namespaces#beforeInterpret}
- * to prepare the proper namespace, before calling any method defined in
+ * {@link org.zkoss.zk.ui.ext.Scopes#beforeInterpret}
+ * to prepare the proper scope, before calling any method defined in
  * zscript.
+ *
+ * <h2>How serialization work?</p>
+ *
+ * <p>First, all NameSpace objects have to serialize. Second,
+ * the top-level namespace (GlobalNS) is wrapped with NSWrap, which
+ * is not serializable. It is serialized when {@link SerializableAware#write}
+ * is called (trigged by PageImpl's write).
+ *
+ * <p>On the other hand, all non-top-level namespaces (NS) are wrapped with
+ * NSWrapSR which is serializable, so they are serialized with
+ * the attributes of a ID space owner being serialized.
  *
  * @author tomyeh
  */
@@ -75,7 +90,7 @@ public class BSHInterpreter extends GenericInterpreter
 implements SerializableAware, HierachicalAware {
 	/*package*/ static final Log log = Log.lookup(BSHInterpreter.class);
 
-	/** A variable of {@link Namespace}. The value is an instance of
+	/** A variable in {@link Scope}. The value is an instance of
 	 * BeanShell's NameSpace.
 	 */
 	private static final String VAR_NSW = "z_bshnsw";
@@ -94,7 +109,7 @@ implements SerializableAware, HierachicalAware {
 	}
 
 	//Deriving to override//
-	/** Called when the top-level BeanShell namespace is created.
+	/** Called when the top-level BeanShell scope is created.
 	 * By default, it does nothing.
 	 *
 	 * <p>Note: to speed up the performance, this implementation
@@ -115,8 +130,8 @@ implements SerializableAware, HierachicalAware {
 	//GenericInterpreter//
 	protected void exec(String script) {
 		try {
-			final Namespace ns = getCurrent();
-			if (ns != null) _ip.eval(script, prepareNS(ns));
+			final Scope scope = getCurrent();
+			if (scope != null) _ip.eval(script, prepareNS(scope));
 			else _ip.eval(script); //unlikely (but just in case)
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
@@ -154,9 +169,9 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 
-	protected boolean contains(Namespace ns, String name) {
-		if (ns != null) {
-			final NameSpace bshns = prepareNS(ns);
+	protected boolean contains(Scope scope, String name) {
+		if (scope != null) {
+			final NameSpace bshns = prepareNS(scope);
 				//note: we have to create NameSpace (with prepareNS)
 				//to have the correct chain
 			if (bshns != _bshns) {
@@ -169,9 +184,9 @@ implements SerializableAware, HierachicalAware {
 		}
 		return contains(name);
 	}
-	protected Object get(Namespace ns, String name) {
-		if (ns != null) {
-			final NameSpace bshns = prepareNS(ns);
+	protected Object get(Scope scope, String name) {
+		if (scope != null) {
+			final NameSpace bshns = prepareNS(scope);
 				//note: we have to create NameSpace (with prepareNS)
 				//to have the correct chain
 			if (bshns != _bshns) {
@@ -184,9 +199,9 @@ implements SerializableAware, HierachicalAware {
 		}
 		return get(name);
 	}
-	protected void set(Namespace ns, String name, Object val) {
-		if (ns != null) {
-			final NameSpace bshns = prepareNS(ns);
+	protected void set(Scope scope, String name, Object val) {
+		if (scope != null) {
+			final NameSpace bshns = prepareNS(scope);
 				//note: we have to create NameSpace (with prepareNS)
 				//to have the correct chain
 			if (bshns != _bshns) {
@@ -201,9 +216,9 @@ implements SerializableAware, HierachicalAware {
 		}
 		set(name, val);
 	}
-	protected void unset(Namespace ns, String name) {
-		if (ns != null) {
-			final NameSpace bshns = prepareNS(ns);
+	protected void unset(Scope scope, String name) {
+		if (scope != null) {
+			final NameSpace bshns = prepareNS(scope);
 				//note: we have to create NameSpace (with prepareNS)
 				//to have the correct chain
 			if (bshns != _bshns) {
@@ -225,7 +240,7 @@ implements SerializableAware, HierachicalAware {
 		_ip.setNameSpace(_bshns);
 	}
 	public void destroy() {
-		getOwner().getNamespace().unsetVariable(VAR_NSW, false);
+		getOwner().removeAttribute(VAR_NSW);
 		
 		//bug 1814819 ,clear variable, dennis
 		try{
@@ -259,8 +274,8 @@ implements SerializableAware, HierachicalAware {
 	public Function getFunction(String name, Class[] argTypes) {
 		return getFunction0(_bshns, name, argTypes);
 	}
-	public Function getFunction(Namespace ns, String name, Class[] argTypes) {
-		return getFunction0(prepareNS(ns), name, argTypes);
+	public Function getFunction(Scope scope, String name, Class[] argTypes) {
+		return getFunction0(prepareNS(scope), name, argTypes);
 	}
 	private Function getFunction0(NameSpace bshns, String name, Class[] argTypes) {
 		try {
@@ -272,42 +287,48 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 
-	/** Prepares the namespace for non-top-level namespace.
+	/** Prepares the namespace for non-top-level scope.
 	 */
-	private NameSpace prepareNS(Namespace ns) {
-		if (ns == getOwner().getNamespace())
+	private NameSpace prepareNS(Scope scope) {
+		scope = getIdSpace(scope);
+		if (scope == null || scope == getOwner())
 			return _bshns;
 
-		NSWrap nsw = (NSWrap)ns.getVariable(VAR_NSW, true);
+		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW);
 		if (nsw != null)
-			return nsw.unwrap(ns);
+			return nsw.unwrap(scope);
 
-		//bind bshns and ns
-		final NS bshns = newNS(ns);
-		ns.setVariable(VAR_NSW, NSWrap.getInstance(bshns), true);
+		//bind bshns and scope
+		final NS bshns = newNS(scope);
+		scope.setAttribute(VAR_NSW, NSWrap.getInstance(bshns));
 		return bshns;
 	}
-	/*package*/ NS newNS(Namespace ns) {
-		Namespace p = ns.getParent();
-		return new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
+	/*package*/ NS newNS(Scope scope) {
+		scope = getIdSpace(scope);
+		Scope p = getParentIdSpace(scope);
+		return new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), scope);
 			//Bug 1831534: we have to pass class manager
 			//Bug 1899353: we have to use _bshns instead of null (Reason: unknown)
 	}
 	/** Prepares the namespace for detached components. */
-	private static NameSpace prepareDetachedNS(Namespace ns) {
-		NSWrap nsw = (NSWrap)ns.getVariable(VAR_NSW, true);
-		if (nsw != null)
-			return nsw.unwrap(ns);
+	private static NameSpace prepareDetachedNS(Scope scope) {
+		scope = getIdSpace(scope);
+		if (scope == null)
+			return null;
 
-		//bind bshns and ns
-		Namespace p = ns.getParent();
-		NameSpace bshns = new NS(p != null ? prepareDetachedNS(p): null, null, ns);
-		ns.setVariable(VAR_NSW, NSWrap.getInstance(bshns), true);
+		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW);
+		if (nsw != null)
+			return nsw.unwrap(scope);
+
+		//bind bshns and scope
+		Scope p = getParentIdSpace(scope);
+		NameSpace bshns = new NS(p != null ? prepareDetachedNS(p): null, null, scope);
+		scope.setAttribute(VAR_NSW, NSWrap.getInstance(bshns));
 		return bshns;
 	}
 
-	/*package*/ static BSHInterpreter getInterpreter(Namespace ns) {
-		Page owner = ns.getOwnerPage();
+	/*package*/ static BSHInterpreter getInterpreter(Scope scope) {
+		Page owner = getPage(scope);
 		if (owner != null) {
 			for (Iterator it = owner.getLoadedInterpreters().iterator();
 			it.hasNext();) {
@@ -319,10 +340,34 @@ implements SerializableAware, HierachicalAware {
 		return null;
 	}
 
+	/** Returns the nearest IdSpace (scope), never null. */
+	private static Scope getIdSpace(Scope scope) {
+		if (scope instanceof IdSpace)
+			return scope;
+		if (scope instanceof Component) {
+			scope = ((Component)scope).getSpaceOwner();
+			if (scope != null) return scope;
+		}
+		return null;
+	}
+	/** Returns the parent IdSpace (scope), or null if no parent. */
+	private static Scope getParentIdSpace(Scope scope) {
+		if (scope == null || !(scope instanceof Component))
+			return null;
+		final Component p = ((Component)scope).getParent();
+		return p != null ? p.getSpaceOwner(): null;
+	}
+	private static Page getPage(Scope scope) {
+		return scope instanceof Component ?
+				((Component)scope).getPage():
+			scope instanceof Page ? ((Page)scope): null;
+	}
+
 	//supporting classes//
 	/** The global namespace. */
 	private static abstract class AbstractNS extends NameSpace {
 		private boolean _inGet;
+		protected boolean _firstGet;
 
 		protected AbstractNS(NameSpace parent, BshClassManager classManager,
 		String name) {
@@ -330,7 +375,7 @@ implements SerializableAware, HierachicalAware {
 		}
 
 		/** Deriver has to override this method. */
-		abstract protected Object getFromNamespace(String name);
+		abstract protected Object getFromScope(String name);
 
 		//super//
 		protected Variable getVariableImpl(String name, boolean recurse)
@@ -340,15 +385,16 @@ implements SerializableAware, HierachicalAware {
 
 			//Tom M Yeh: 20060606:
 			//We cannot override getVariable because BeanShell use
-			//getVariableImpl to resolve a variable recusrivly
+			//getVariableImpl to resolve a variable recursively
 			//
 			//setVariable will callback this method,
 			//so use _inGet to prevent dead loop
 			Variable var = super.getVariableImpl(name, false);
 			if (!_inGet && var == null) {
-				Object v = getFromNamespace(name);
+				_firstGet = true;
+				Object v = getFromScope(name);
 				if (v != UNDEFINED) {
-			//Variable has no public/protected contructor, so we have to
+			//Variable has no public/protected constructor, so we have to
 			//store the value back (with setVariable) and retrieve again
 					_inGet = true;
 					try {
@@ -391,56 +437,106 @@ implements SerializableAware, HierachicalAware {
 		String name) {
 			super(null, classManager, name);
 		}
-		protected Object getFromNamespace(String name) {
-			if (getCurrent() == null)
-				return getImplicit(name); //ignore ns
+		protected Object getFromScope(String name) {
+			final Scope curr = getCurrent();
+			if (curr == null) //no scope allowed
+				return getImplicit(name);
 
-			final Namespace ns = getOwner().getNamespace();
-			Object v = ns.getVariable(name, true);
-			return v != null || ns.containsVariable(name, true) ? v: getImplicit(name); 
-				//local-only since getVariableImpl will look up its parent
+			if (_firstGet) {
+				_firstGet = false;
+				final Execution exec = Executions.getCurrent();
+				if (exec != null) {
+					Object val = exec.getAttribute(name);
+					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
+						return val;
+				}
+
+				//page is the IdSpace, so it might not be curr
+				if (curr instanceof Component) {
+					for (Component c = (Component)curr; c != null; c = c.getParent()) {
+						Object val = c.getAttribute(name);
+						if (val != null || c.hasAttribute(name))
+							return val;
+					}
+				}
+			}
+
+			final Page page = getOwner();
+			Object val = page.getAttributeOrFellow(name, true); //page/desktop/session
+			if (val != null || page.hasAttributeOrFellow(name, true))
+				return val;
+			val = page.getXelVariable(null, null, name, true);
+			return val != null ? val: getImplicit(name); 
 		}
 		public void loadDefaultImports() {
 			BSHInterpreter.this.loadDefaultImports(this);
 		}
 	}
-	/** The per-Namespace NameSpace. */
+	/** The per-IdSpace NameSpace. */
 	/*package*/ static class NS extends AbstractNS {
-		private Namespace _ns;
+		private Scope _scope;
 
-		private NS(NameSpace parent, BshClassManager classManager, Namespace ns) {
-			super(parent, classManager, "ns" + System.identityHashCode(ns));
-			_ns = ns;
-			_ns.addChangeListener(new NSCListener(this));
+		private NS(NameSpace parent, BshClassManager classManager, Scope scope) {
+			super(parent, classManager, "scope" + System.identityHashCode(scope));
+			_scope = scope;
+			_scope.addScopeListener(new NSCListener(this));
 		}
 
 		//super//
-		/** Search _ns instead. */
-		protected Object getFromNamespace(String name) {
-			final BSHInterpreter ip = getInterpreter(_ns);
-			if (ip != null && ip.getCurrent() == null)
-				return getImplicit(name); //ignore ns
+		/** Search _scope instead. */
+		protected Object getFromScope(String name) {
+			final BSHInterpreter ip = getInterpreter(_scope);
+			final Scope curr = ip != null ? ip.getCurrent(): null;
+			if (curr == null)
+				return getImplicit(name); //ignore scope
 
-			Object v = _ns.getVariable(name, true);
-			return v != null || _ns.containsVariable(name, true) ? v: getImplicit(name); 
-				//local-only since getVariableImpl will look up its parent
+			if (_firstGet) {
+				_firstGet = false;
+				final Execution exec = Executions.getCurrent();
+				if (exec != null && exec != curr) {
+					Object val = exec.getAttribute(name);
+					if (val != null /*||exec.hasAttribute(name)*/) //exec not support hasAttribute
+						return val;
+				}
+
+				//_scope is the nearest IdSpace so it might not be curr
+				if (curr != _scope && curr instanceof Component) {
+					for (Component c = (Component)curr;
+					c != null && c != _scope; c = c.getParent()) {
+						Object val = c.getAttribute(name);
+						if (val != null || c.hasAttribute(name))
+							return val;
+					}
+				}
+			}
+
+			Component comp = (Component)_scope;
+			//local-only since getVariableImpl will look up its parent
+			Object val = comp.getAttributeOrFellow(name, false);
+			return val != null || comp.hasAttributeOrFellow(name, false) ?
+				val: getImplicit(name); 
+				//No need to invoke getXelVariable since it is not 'recurse'
 		}
 	}
-	private static class NSCListener implements NamespaceChangeListener {
+	private static class NSCListener implements ScopeListener {
 		private final NS _bshns;
 		private NSCListener(NS bshns) {
 			_bshns = bshns;
 		}
-		public void onAdd(String name, Object value) {
+		public void attributeAdded(Scope scope, String name, Object value) {
 		}
-		public void onRemove(String name) {
+		public void attributeReplaced(Scope scope, String name, Object value) {
 		}
-		public void onParentChanged(Namespace newparent) {
-			if (newparent != null) {
-				final BSHInterpreter ip = getInterpreter(_bshns._ns);
+		public void attributeRemoved(Scope scope, String name) {
+		}
+		public void parentChanged(Scope scope, Scope newparent) {
+		}
+		public void idSpaceChanged(Scope scope, IdSpace newIdSpace) {
+			if (newIdSpace instanceof Scope) { //i.e., != null (but safer)
+				final BSHInterpreter ip = getInterpreter(_bshns._scope);
 				_bshns.setParent(
-					ip != null ? ip.prepareNS(newparent):
-						prepareDetachedNS(newparent));
+					ip != null ? ip.prepareNS((Scope)newIdSpace):
+						prepareDetachedNS((Scope)newIdSpace));
 				return;
 			}
 
@@ -464,11 +560,13 @@ implements SerializableAware, HierachicalAware {
 		final String[] vars = ns.getVariableNames();
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
-			if (nm != null && !"bsh".equals(nm)) {
+			if (nm != null && !"bsh".equals(nm)
+			&& isVariableSerializable(nm)) {
 				try {
 					final Object val = ns.getVariable(nm, false);
 					if ((val == null || (val instanceof Serializable)
 						|| (val instanceof Externalizable))
+					&& !(val instanceof Component)
 					&& (filter == null || filter.accept(nm, val))) {
 						s.writeObject(nm);
 						s.writeObject(val);
@@ -483,30 +581,33 @@ implements SerializableAware, HierachicalAware {
 		s.writeObject(null); //denote end-of-vars
 
 		//2. methods
-		final BshMethod[] mtds = ns.getMethods();
-		for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
-			final String nm = mtds[j].getName();
-			if (filter == null || filter.accept(nm, mtds[j])) {
-				//hack BeanShell 2.0b4 which cannot be serialized correctly
-				Field f = null;
-				boolean acs = false;
-				try {
-					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
-					acs = f.isAccessible();
-					Fields.setAccessible(f, true);
-					final Object old = f.get(mtds[j]);
+		if (shallSerializeMethod()) {
+			final BshMethod[] mtds = ns.getMethods();
+			for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
+				final String nm = mtds[j].getName();
+				if (isMethodSerializable(nm)
+				&& (filter == null || filter.accept(nm, mtds[j]))) {
+					//hack BeanShell 2.0b4 which cannot be serialized correctly
+					Field f = null;
+					boolean acs = false;
 					try {
-						f.set(mtds[j], null);
-						s.writeObject(mtds[j]);
+						f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
+						acs = f.isAccessible();
+						Fields.setAccessible(f, true);
+						final Object old = f.get(mtds[j]);
+						try {
+							f.set(mtds[j], null);
+							s.writeObject(mtds[j]);
+						} finally {
+							f.set(mtds[j], old);
+						}
+					} catch (IOException ex) {
+						throw ex;
+					} catch (Throwable ex) {
+						log.warning("Ignored failure to write "+nm, ex);
 					} finally {
-						f.set(mtds[j], old);
+						if (f != null) Fields.setAccessible(f, acs);
 					}
-				} catch (IOException ex) {
-					throw ex;
-				} catch (Throwable ex) {
-					log.warning("Ignored failure to write "+nm, ex);
-				} finally {
-					if (f != null) Fields.setAccessible(f, acs);
 				}
 			}
 		}
@@ -559,6 +660,27 @@ implements SerializableAware, HierachicalAware {
 		}
 		s.writeObject(null); //denote end-of-cls
 	}
+	private static boolean isVariableSerializable(String name) {
+		//we have to filter out them since BeanShell will store variables
+		//that was accessed (by getFromScope)
+		for (int j = _nonSerNames.length; --j >= 0;)
+			if (_nonSerNames[j].equals(name))
+				return false;
+		return true;
+	}
+	private static final String[] _nonSerNames = {
+		"log", "page", "desktop", "pageScope", "desktopScope",
+		"applicationScope", "requestScope", "spaceOwner",
+		"session", "sessionScope", "execution"
+	};
+	private static boolean isMethodSerializable(String name) {
+		return !"alert".equals(name);
+	}
+	private static boolean shallSerializeMethod() {
+		final String s = Library.getProperty("org.zkoss.zk.scripting.bsh.method.serializable");
+		return s == null || !"false".equals(s);
+	}
+
 	/*package*/ static void read(NameSpace ns, ObjectInputStream s)
 	throws IOException {
 		for (;;) {
@@ -654,7 +776,7 @@ implements SerializableAware, HierachicalAware {
 /*package*/ class NSWrap {
 	protected NameSpace _bshns;
 	/*package*/ static NSWrap getInstance(NameSpace ns) {
-		if (ns instanceof BSHInterpreter.NS) return new NSWrapX(ns);
+		if (ns instanceof BSHInterpreter.NS) return new NSWrapSR(ns);
 		return new NSWrap(ns);
 	}
 	protected NSWrap(NameSpace ns) {
@@ -662,23 +784,25 @@ implements SerializableAware, HierachicalAware {
 	}
 	public NSWrap() {
 	}
-	public NameSpace unwrap(Namespace ns) {
+	/** Returns the associated NameSpace. */
+	public NameSpace unwrap(Scope ns) {
 		return _bshns;
 	}
 }
-/*package*/ class NSWrapX extends NSWrap implements Serializable {
+/*package*/ class NSWrapSR extends NSWrap implements Serializable {
 	private static final Log log = BSHInterpreter.log;
 	private Map _vars;
 	private List _mtds, _clses, _pkgs;
 
-	/*package*/ NSWrapX(NameSpace ns) {
+	/*package*/ NSWrapSR(NameSpace ns) {
 		super(ns);
 	}
-	public NSWrapX() {
+	public NSWrapSR() {
 	}
-	public NameSpace unwrap(Namespace ns) {
+	/** Returns the associated NameSpace. */
+	public NameSpace unwrap(Scope scope) {
 		if (_bshns == null) {
-			_bshns = BSHInterpreter.getInterpreter(ns).newNS(ns);
+			_bshns = BSHInterpreter.getInterpreter(scope).newNS(scope);
 			if (_vars != null) {
 				for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
 					final Map.Entry me = (Map.Entry)it.next();

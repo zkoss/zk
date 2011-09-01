@@ -1,18 +1,16 @@
 /* Extendlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul  4 15:43:39     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -59,10 +57,9 @@ public interface Extendlet {
 	/** Process the specified request.
 	 *
 	 * @param path the path mapped to this resource processor.
-	 * @param extra an additional string to output (to response.getWriter).
-	 * Ignored if null.
+	 * @since 5.0.0
 	 */
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException;
 }

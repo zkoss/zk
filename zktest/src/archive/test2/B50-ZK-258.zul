@@ -1,0 +1,27 @@
+<!--
+	B50-ZK-258.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Aug 2 09:06:15 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	You should see the "Tab Last" is selected and scrolled to the right-most closed to the "->" icon.
+	<n:div>
+		<tabbox width="100%">
+			<tabs>
+				<tab label="Tab Long Long Long Long Label" closable="true" 
+					forEach="1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8" />
+				<tab label="Tab Last" closable="true" selected="true"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel forEach="1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8">Tabpanel Content</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</n:div>
+</zk>

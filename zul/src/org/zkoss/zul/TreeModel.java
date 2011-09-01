@@ -1,18 +1,16 @@
 /* TreeModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Web Aug 10  2007, Created by Jeff Liu
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -29,16 +27,20 @@ import org.zkoss.zul.event.TreeDataEvent;
  * If you want it to re-render, you could assign the same model again 
  * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
  *
+ * <p>For introduction, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer's_Reference/MVC/Model/Tree_Model">ZK Developer's Reference: Tree Model</a>.
+ *
  * @author Jeff Liu
- * @since ZK 3.0.0
+ * @since 3.0.0
  *
  */
 public interface TreeModel {
-	
 	/**
 	 * Returns true if node is a leaf.
+	 * Notice that not all non-leaf nodes have children.
+	 * In file-system terminology, a leaf node is a file, while a non-leaf node is a folder.
 	 * @param node a node in the tree, obtained from this data source
-	 * @return true if node is a leafs
+	 * @return true if node is a leaf.
 	 */
 	public boolean isLeaf(Object node);
 
@@ -55,7 +57,17 @@ public interface TreeModel {
 	 * @return the number of children of the node parent
 	 */
 	public int getChildCount(Object parent);
-	
+
+	/**
+	 * Returns the index of child in parent.
+	 * If either parent or child is null, returns -1. If either parent or child don't belong to this tree model, returns -1. 
+	 * @param parent a node in the tree, obtained from this data source
+     * @param child the node we are interested in 
+	 * @return the index of the child in the parent, or -1 if either child or parent are null or don't belong to this tree model
+	 * @since 5.0.6
+	 */
+	public int getIndexOfChild(Object parent, Object child);
+
 	/**
 	 * Returns the root of the tree.
 	 * @return the root of Tree.
@@ -73,21 +85,13 @@ public interface TreeModel {
 	 * @param l the listener to remove
 	 */
 	public void removeTreeDataListener(TreeDataListener l);
-	
+
 	/**
-	 * Returns an integer array to represent the path from parent(exclusive) to lastNode(inclusive).
-	 * <br>notice:<br>
-	 * The path has to be in "parent" to "lastNode" order<br>
-	 * Ex: {1,0,2}<br>
-	 * 	1. Go to the parent's child at index(1);<br>
-	 *  2. Go to the index(1)'s child at index(0);<br>
-	 *  3. Go to the index(0)'s child at idnex(2) -- the lastNode;<br>
-	 * If parent is the same as lastNode, return null or empty array. 
-	 * 
-	 * @param parent the origin of Path
-	 * @param lastNode the destination of Path
-	 * @return an integer array to represent the path from parent to lastNode.
+	 * @deprecated As of release 5.0.6, it was replaced by {@link #getIndexOfChild}.
+	 * You don't have to implement this method if you extends from
+	 * {@link AbstractTreeModel}.
+	 * If you implement {@link TreeModel} from scratch, you could implement
+	 * this method by just returning null, since none of ZK's code depends on it.
 	 */
 	public int[] getPath(Object parent, Object lastNode);
-	
 }

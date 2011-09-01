@@ -1,0 +1,43 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Each column shall accommodate column contents(i.e. column width >= contents, no contents cutting)</li>
+<li>Now drag browser window border to expand browser window width, the Listbox shall expand accordingly</li>
+<li>Now drag browser window border to shrink browser window width, the Listbox shall shrink accordingly until all widths fits the contents</li>
+<li>Now shrink more and you shall see horizontal scrollbar appear</li>
+<li>done</li>
+</ol>
+]]>
+</html>
+<zscript>
+String[] msgs = {
+	"ZK Ajax Framework",
+	"Server + Client Fusion is a good approach Server + Client Fusion is a good approach",
+	"I Love it!",
+	"Great Job",
+	"ZK Spreadsheet",
+	"The Only Solution of Java Web Excel",
+	"Awesome!",
+	"The best!",
+};
+</zscript>
+	<listbox id="lbx" sizedByContent="true" span="true">
+		<listhead sizable="true">
+			<listheader label="Product" width="100px"/>
+			<listheader label="Description" width="100px"/>
+			<listheader label="Comment"/>
+		</listhead>
+		<listitem>
+			<listcell ><label value="${msgs[0]}"></label></listcell>
+			<listcell ><label value="${msgs[1]}"></label></listcell>
+			<listcell ><label value="${msgs[2]}"></label></listcell>
+		</listitem>
+		<listitem>
+			<listcell ><label value="${msgs[4]}"></label></listcell>
+			<listcell ><label value="${msgs[5]}"></label></listcell>
+			<listcell ><label value="${msgs[6]}"></label></listcell>
+		</listitem>
+	</listbox>
+	<button label="invalidate" onClick="lbx.invalidate()"/>
+</zk>

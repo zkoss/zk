@@ -1,18 +1,16 @@
 /* ZScript.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun  2 10:46:03     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -86,29 +84,36 @@ implements Condition, java.io.Serializable {
 	 */
 	public static final ZScript parseContent(String content, int lineno) {
 		String prefix = null;
-		if (content != null && lineno > 1) {
-			final StringBuffer sb = new StringBuffer(lineno);
-			while (--lineno > 0)
-				sb.append('\n');
-			prefix = sb.toString();
-		}
-
 		final int len = content != null ? content.length(): 0;
-		for (int j = 0; j < len; ++j) {
-			final char cc = content.charAt(j);
-			if (cc == ':') {
-				if (j > 0) {
-					final String zslang = content.substring(0, j);
-					if (Interpreters.exists(zslang)) {
-						return new ZScript(
-							null, zslang, content.substring(j + 1), null);
-					} else {
-						log.warning("Ignored: unknown scripting language, "+zslang);
+		if (len > 0) {
+			//Don't generate prefix if content is empty (i.e., keep empty)
+			//so PageImpl.interpret() could optimize it (not to execute at all)
+			if (lineno > 1) {
+				final StringBuffer sb = new StringBuffer(lineno);
+				while (--lineno > 0)
+					sb.append('\n');
+				prefix = sb.toString();
+			}
+
+			for (int j = 0; j < len; ++j) {
+				final char cc = content.charAt(j);
+				if (cc == ':') {
+					if (j > 0) {
+						final String zslang = content.substring(0, j);
+						if (Interpreters.exists(zslang)) {
+							content = content.substring(j + 1);
+							return new ZScript(
+								null, zslang,
+								prefix != null && content.length() > 0 ? prefix+content: content,
+								null);
+						} else {
+							log.warning("Ignored: unknown scripting language, "+zslang);
+						}
 					}
+					break;
+				} if (!Interpreters.isLegalName(cc)) {
+					break; //done
 				}
-				break;
-			} if (!Interpreters.isLegalName(cc)) {
-				break; //done
 			}
 		}
 		return new ZScript(null, null, prefix != null ? prefix+content: content, null);

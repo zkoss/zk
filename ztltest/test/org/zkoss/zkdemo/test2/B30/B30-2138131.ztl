@@ -1,0 +1,43 @@
+<!-- B30-2138131.ztl.java
+
+	Purpose:for testing B30-2138131.ztl .
+
+	Description:
+
+	History:
+		06, 24, 2011 16:59:43
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2138131.zul,Forward,BI">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<zscript><![CDATA[
+//@DECLARATION
+public class MyComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
+	public void onClick$btn() {
+		alert("Hi! w2.");
+	}
+}
+]]>
+MyComposer mycomp = new MyComposer();
+</zscript>
+<html><![CDATA[
+<p>Load this page and there is no exception message, then it is correct.</p>               
+]]>
+</html>
+<window title="ztl" id="w2" apply="${mycomp}">
+	<label value="Hello! GenericForwardComposer"/>
+</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+verifyFalse(jq("@window:not(@window[title=\"ztl\"])").exists());
+		]]></client>
+	</case>
+</test>

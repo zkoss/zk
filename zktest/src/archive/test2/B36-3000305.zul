@@ -1,0 +1,20 @@
+
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window>
+	<zscript><![CDATA[
+	String str = null;
+	]]>
+	</zscript>
+	<html><![CDATA[
+	<ol>
+	  <li>Type X</li>
+	  <li>Press TAB and shift-TAB to change focus</li>
+	  <li>Delete X and then click "Set new String" button.</li>
+	  <li>Expected result: no error message at all.</li>
+	</ol>
+	]]></html>
+	<vbox>
+		<button label="Set new String" onClick='str = "X"; binder.loadAll();' />
+		<textbox value="@{str}" constraint="no empty" />
+	</vbox>
+</window>

@@ -1,18 +1,16 @@
 /* Listheader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug  5 13:06:59     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -33,13 +31,14 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Scopes;
 
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
 
 /**
- * The list header which defines the attributes and header of a columen
+ * The list header which defines the attributes and header of a column
  * of a list box.
  * Its parent must be {@link Listhead}.
  *
@@ -48,7 +47,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <li>There is no listcol in ZUL because it is merged into {@link Listheader}.
  * Reason: easier to write Listbox.</li>
  * </ol>
- * <p>Default {@link #getZclass}: z-list-header.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listheader.(since 5.0.0)
  * @author tomyeh
  */
 public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listheader {
@@ -56,21 +55,29 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
+	private String _sortAscNm = "none";
+	private String _sortDscNm = "none";
 	private Object _value;
 	private int _maxlength;
+	private boolean _ignoreSort = false;
+	private boolean _isCustomAscComparator = false;
+	private boolean _isCustomDscComparator = false;
 
+	static {
+		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+	}
+	
 	public Listheader() {
 	}
 	public Listheader(String label) {
-		setLabel(label);
+		super(label);
 	}
 	/* Constructs a list header with label and image.
 	 *
 	 * @param src the URI of the image. Ignored if null or empty.
 	 */
 	public Listheader(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	/* Constructs a list header with label, image and width.
 	 *
@@ -79,8 +86,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 * @since 3.0.4
 	 */
 	public Listheader(String label, String src, String width) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 		setWidth(width);
 	}
 
@@ -123,7 +129,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the list is sorted.
+	 * as an indicator as to how the list is sorted. (unless the listbox has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort list items,
 	 * the sort direction is maintained automatically.
@@ -138,13 +144,29 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
-			smartUpdate("z.sort", _sortDir); //don't use null because sel.js assumes it
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Listbox listbox = getListbox();
+				if (listbox != null && listbox.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
+			smartUpdate("sortDirection", _sortDir); //don't use null because sel.js assumes it
 		}
 	}
 
 	/** Sets the type of the sorter.
-	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.6.0) or "none".
-	 *
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3),
+	 * "auto(<i>number</i>)" (since 5.0.6) or "none".
+	 * 
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case. (since 5.0.0)
+	 * 
 	 * <p>If "auto" is specified,
 	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
 	 * are called with {@link ListitemComparator}, if
@@ -158,13 +180,26 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.
-
+	 *
+	 * <p>If "auto(<i>number</i>)" is specified, 
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ArrayComparator}. Notice that the data must
+	 * be an array and the number-th element must be comparable ({@link Comparable}).
+	 *
 	 * <p>If "none" is specified, both {@link #setSortAscending} and
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
 	 */
 	public void setSort(String type) {
-		if ("auto".equals(type)) {
+		if (type == null) return;
+		if (type.startsWith("client")) {
+			try {
+				setSortAscending(type);
+				setSortDescending(type);
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex); //not possible to throw ClassNotFoundException...
+			}
+		} else if ("auto".equals(type)) {
 			if (getSortAscending() == null)
 				setSortAscending(new ListitemComparator(this, true, true));
 			if (getSortDescending() == null)
@@ -173,11 +208,26 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String fieldnames = type.substring(j+1, k);
-				if (getSortAscending() == null)
-					setSortAscending(new FieldComparator(fieldnames, true));
-				if (getSortDescending() == null)
-					setSortDescending(new FieldComparator(fieldnames, false));
+				final String name = type.substring(j+1, k);
+				char cc;
+				int index = -1;
+				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
+					if ((index = Integer.parseInt(name)) < 0)
+						throw new IllegalArgumentException("Nonnegative number is required: "+name);
+				if (getSortAscending() == null || !_isCustomAscComparator) {
+					if (index < 0)
+						setSortAscending(new FieldComparator(name, true));
+					else
+						setSortAscending(new ArrayComparator(index, true));
+					_isCustomAscComparator = false;
+				}
+				if (getSortDescending() == null || !_isCustomDscComparator) {
+					if (index < 0)
+						setSortDescending(new FieldComparator(name, false));
+					else
+						setSortDescending(new ArrayComparator(index, false));
+					_isCustomDscComparator = false;
+				}
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
@@ -207,9 +257,13 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("z.asc", null);
-			else if (_sortAsc == null) smartUpdate("z.asc", "true");
 			_sortAsc = sorter;
+			_isCustomAscComparator = _sortAsc != null;
+			String nm = _isCustomAscComparator ? "fromServer": "none";
+			if (!_sortAscNm.equals(nm)) {
+				_sortAscNm = nm;
+				smartUpdate("sortAscending", _sortAscNm);
+			}
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
@@ -218,7 +272,11 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortAscending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
+			_sortAscNm = clsnm;
+			smartUpdate("sortAscending", clsnm);
+		} else
+			setSortAscending(toComparator(clsnm));
 	}
 
 	/** Returns the descending sorter, or null if not available.
@@ -241,9 +299,13 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("z.dsc", null);
-			else if (_sortDsc == null) smartUpdate("z.dsc", "true");
 			_sortDsc = sorter;
+			_isCustomDscComparator = _sortDsc != null;
+			String nm = _isCustomDscComparator ? "fromServer": "none";
+			if (!_sortDscNm.equals(nm)) {
+				_sortDscNm = nm;
+				smartUpdate("sortDescending", _sortDscNm);
+			}
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
@@ -252,7 +314,11 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortDescending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
+			_sortDscNm = clsnm;
+			smartUpdate("sortDescending", clsnm);
+		} else
+			setSortDescending(toComparator(clsnm));
 	}
 
 	private Comparator toComparator(String clsnm)
@@ -271,18 +337,21 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	/** Returns the maximal length of each item's label.
-	 * Default: 0 (no limit).
+	 * <p>Default: 0 (no limit).
 	 */
 	public int getMaxlength() {
 		return _maxlength;
 	}
 	/** Sets the maximal length of each item's label.
+	 * <p>Default: 0 (no limit).
+	 * <p>Notice that maxlength will be applied to this header and all
+	 * listcell of the same column.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidateCells();
+			smartUpdate("maxlength", maxlength);
 		}
 	}
 
@@ -295,21 +364,6 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			if (it.next() == this)
 				break;
 		return j;
-	}
-
-	/** Invalidates the relevant cells. */
-	private void invalidateCells() {
-		final Listbox listbox = getListbox();
-		if (listbox == null || listbox.inSelectMold())
-			return;
-
-		final int jcol = getColumnIndex();
-		for (Iterator it = listbox.getItems().iterator(); it.hasNext();) {
-			final Listitem li = (Listitem)it.next();
-			final List chs = li.getChildren();
-			if (jcol < chs.size())
-				((Component)chs.get(jcol)).invalidate();
-		}
 	}
 
 	/** Sorts the list items based on {@link #getSortAscending}
@@ -346,7 +400,9 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
-
+		return doSort(ascending);
+	}
+	/**/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -354,7 +410,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		if (box == null) return false;
 
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = box.getModel();
 			boolean isPagingMold = box.inPagingMold();
@@ -376,9 +432,10 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 				// the wrong active page when dynamically add/remove the item (i.e. sorting).
 				// Therefore, we have to reset the correct active page.
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = box.getListhead().getChildren().iterator();
 		it.hasNext();) {
@@ -386,6 +443,11 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
+
+		// sometimes the items at client side are out of date
+		box.invalidate();
+		
 		return true;
 	}
 	/** Sorts the items. If with group, each group is sorted independently.
@@ -426,55 +488,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	//-- super --//
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
-		return scls != null ? scls + ' ' + added : added;
-	}
-
 	public String getZclass() {
-		return _zclass == null ? "z-list-header" : _zclass;
-	}
-
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80);
-		if (_sortAsc != null) sb.append(" z.asc=\"true\"");
-		if (_sortDsc != null) sb.append(" z.dsc=\"true\"");
-		
-		if (!"natural".equals(_sortDir))
-			HTMLs.appendAttribute(sb, "z.sort", _sortDir);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final String attrs = super.getOuterAttrs();
-		if (sb.length() == 0) return attrs;
-		return sb.insert(0, attrs).toString();
-	}
-
-
-	//-- Internal use only --//
-	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listheader.dsp.
-	 * @since 3.0.1
-	 */
-	public String getColumnHtmlPrefix() {
-		final Listbox listbox = getListbox();
-		if (listbox != null && getParent().getFirstChild() == this 
-				&& listbox.isCheckmark() && listbox.isMultiple()) {
-			final StringBuffer sb = new StringBuffer(64);
-				sb.append("<input type=\"checkbox\"");
-				sb.append(" id=\"").append(getUuid())
-					.append("!cm\" z.type=\"Lhfc\"/>");
-			return sb.toString();
-		}
-		return null;
-	}
-	
-	/** Invalidates the whole box. */
-	protected void invalidateWhole() {
-		final Listbox box = getListbox();
-		if (box != null) box.invalidate();
+		return _zclass == null ? "z-listheader" : _zclass;
 	}
 
 	//-- Component --//
@@ -484,6 +499,26 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		super.beforeParentChanged(parent);
 	}
 
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!"none".equals(_sortDscNm))
+			render(renderer, "sortDescending", _sortDscNm);
+
+		if (!"none".equals(_sortAscNm))
+			render(renderer, "sortAscending", _sortAscNm);
+		
+		if (!"natural".equals(_sortDir))
+			render(renderer, "sortDirection", _sortDir);
+
+		if (_maxlength > 0)
+			renderer.render("maxlength", _maxlength);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
+	}
+	
 	//Cloneable//
 	public Object clone() {
 		final Listheader clone = (Listheader)super.clone();

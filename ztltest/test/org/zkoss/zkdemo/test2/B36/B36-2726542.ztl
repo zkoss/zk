@@ -1,0 +1,18 @@
+<test tags="div">
+	<case id="scorll">
+		<server><!--
+			<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+				<div id="outer" style="overflow-y: scroll; height: 200px;">
+				<button label="test" w:onClick='this.$f("outer").$n().scrollTop=200;jq(this.$f("l1")).val(zk(this.$f("outer")).revisedOffset()[1]);'/>
+				<div style="height: 800px;background:red;"/> </div>
+				<label id="l1"/>
+				After click the test button, you should see the message "top, 0".
+			</zk>
+		--></server>
+		<client><![CDATA[
+			click(jq("@button td.z-button-cm"));
+			waitResponse();
+			verifyEquals("0", jq(l1).val().trim());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,67 @@
+<test tags="Combobox,Databind,Java6,BI">
+	<case id="Binding">
+		<server><!--
+			<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+			<n:p>This bug is only caused by running Tomcat with Java6, so if the test case runs on Tomcat with Java6 without any error that is correct.</n:p>
+			<window width="500px" xmlns:n="http://www.zkoss.org/2005/zk/native">
+			   <zscript>
+			public class Order {
+				private String _orderName;
+				private String _orderNumber;
+				
+				public void setOrderName(String o) {
+					_orderName = o;
+				}
+				
+				public String getOrderName() {
+					return _orderName;
+				}
+				
+				public void setOrderNumber(String n) {
+					_orderNumber = n;
+				}
+				
+				public String getOrderNumber() {
+					return _orderNumber;
+				}
+			}   
+			    int count = 30;
+			    List orders = new LinkedList();
+			    for(int j= 0; j &lt; count; ++j) {
+			      Order o = new Order();
+			      o.setOrderName("OrderName - " + j );
+			      o.setOrderNumber("OrderNumber - " + j);
+			      orders.add(o);
+			    }   
+			    selected = orders.get(0);
+			  </zscript>
+			
+			  <combobox model="@{orders}" selectedItem="@{selected}">
+			       <comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"/>
+			   </combobox>
+			  <grid>
+				<auxhead><auxheader align="center" colspan="2">Order Information</auxheader></auxhead>
+			  	<columns>
+			  		<column align="center" width="200px" label="Item"/>
+			  		<column align="center" width="200px" label="Value"/>
+				</columns>	
+			  	<rows>
+			  		<row>OrderNumber: <label id="oNumberLbl" value="@{selected.orderNumber}"/></row>
+			  		<row>OrderName: <label id="oNameLbl"  value="@{selected.orderName}"/></row>
+			  	</rows>
+			  </grid>
+			</window>
+			</zk>
+		--></server>
+		<client><![CDATA[
+		sleep(1000);//for DataBinding
+			click(jq(".z-combobox-btn"));
+			waitResponse();
+			click(jq(".z-comboitem:eq(5)"));
+			waitResponse();
+			verifyEquals("OrderNumber - 5", jq(oNumberLbl).text());
+			verifyEquals("OrderName - 5", jq(oNameLbl).text());
+		]]></client>
+	</case>
+</test>

@@ -1,17 +1,15 @@
 /* CheckableTreeArray.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/05 14:43:05, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,7 +18,7 @@ package org.zkoss.util;
 import java.util.Collection;
 import java.util.Iterator;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * The checkable TreeArray. It extends TreeArray such that deriving
  * classes could add validation when an element is added, removed or set.
  * It is also useful to maintain the modification flag.

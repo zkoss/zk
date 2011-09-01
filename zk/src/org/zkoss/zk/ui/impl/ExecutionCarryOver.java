@@ -1,18 +1,16 @@
 /* ExecutionCarryOver.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Aug 14 17:07:35     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -76,9 +74,9 @@ public class ExecutionCarryOver {
 		else
 			_timeZone = null;
 
-		final Collection pages = _exec.getDesktop().getPages();
-		if (!pages.isEmpty())
-			execCtrl.setCurrentPage((Page)pages.iterator().next());
+		final Page page = _exec.getDesktop().getFirstPage();
+		if (page != null)
+			execCtrl.setCurrentPage(page);
 	}
 	/** Cleans up the info carried from onPiggyback to the current thread.
 	 * <p>Note: {@link #carryOver} and {@link #cleanup} must be

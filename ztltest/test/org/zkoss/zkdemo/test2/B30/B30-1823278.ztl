@@ -1,0 +1,43 @@
+<test tags="B30-1823278.zul,Listbox,ie9,Unstable">
+	<case id="KeyDownUp">
+		<server><!--
+<zk>
+<zscript><![CDATA[
+	import java.util.ArrayList;
+	ArrayList list = new ArrayList();
+
+	for(int i=1;i<=50;i++)
+	{
+		list.add("entry "+i);
+	}
+]]></zscript>
+	<listbox id="listbox" width="250px" rows="6">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto"/>
+		</listhead>
+		<listitem forEach="${list}" label="${each}"/>
+	</listbox>
+</zk>
+		 --></server>
+		<client ><![CDATA[
+				click(jq(".z-listitem:eq(0)"));
+				waitResponse();
+				int temp = 0;
+				for (int i = 0; i < 15; i++) {
+				sendKeys(listbox.$n("a"), Keys.DOWN);
+				sleep(30);
+				temp = i;
+				}
+				int scrollTop = parseInt(listbox.$n("body").get("scrollTop"));
+				verifyTrue("Times of pressing Down: " + temp + ", scrollTop: " + scrollTop, 150 < scrollTop);
+				temp = 0;
+				for (int i = 0; i < 15; i++) {
+				sendKeys(listbox.$n("a"), Keys.UP);
+				sleep(30);
+				temp = i;
+				}
+				scrollTop = parseInt(listbox.$n("body").get("scrollTop"));
+				verifyTrue("Times of pressing Down: " + temp + ", scrollTop: " + scrollTop, 3 > scrollTop);
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+
+	<listbox if="${!empty arg.listbox1}" rows="1" mold="select">
+		<listitem label="option1" />
+		<listitem label="option2" />
+		<listitem label="option3" />
+	</listbox>
+	<listbox if="${!empty arg.listbox2}">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto" />
+			<listheader label="gender" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+		</listitem>
+	</listbox>
+
+	<tree width="90%" rows="5" if="${!empty arg.tree1}">
+		<treecols sizable="true">
+			<treecol label="Name" />
+			<treecol label="Description" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+					<treecell label="Item 1 description" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+					<treecell label="Item 2 description" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2" />
+							<treecell label="Item 2.2 is something who cares" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3" />
+		</treechildren>
+	</tree>
+
+	<tabbox width="400px" mold="accordion" if="${!empty arg.tabbox1}">
+		<tabs>
+			<tab label="Tab 1" />
+			<tab label="Tab 2" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<tabbox>
+					<tabs width="20px">
+						<tab label="A" />
+						<tab label="B" />
+						<tab label="C" />
+						<tab label="D" />
+						<tab label="E" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>This is panel A</tabpanel>
+						<tabpanel>This is panel B</tabpanel>
+						<tabpanel>This is panel C</tabpanel>
+						<tabpanel>This is panel D</tabpanel>
+						<tabpanel>This is panel E</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</tabpanel>
+			<tabpanel>This is panel 2 The second panel</tabpanel>
+		</tabpanels>
+	</tabbox>
+
+	<groupbox mold="3d" width="300px"  if="${!empty arg.groupbox1}">
+			<caption image="/test2/img/inet.png" label="fruits"/>
+			<radiogroup onCheck="fruit.value = self.selectedItem.label">
+				<radio label="Apple"/>
+				<radio label="Orange"/>
+				<radio label="Grape"/>
+			</radiogroup>
+		</groupbox>
+	<panel framable="true" width="250px"
+		title="Panel component"
+		maximizable="true" minimizable="true" border="normal"
+		collapsible="true" closable="true"  if="${!empty arg.panel1}">
+		<panelchildren>
+		<window border="normal" width="200px" sizable="true">
+			<caption image="/test2/img/inet.png" label="Hi there!"/>
+			<checkbox label="Hello, World!"/>
+			<separator bar="true"/>
+			Auto-position (applicable if not embedded)
+			<separator/>
+			<button label="left,center" onClick='spaceOwner.position = "left,center"'/>
+			<button label="right,bottom" onClick='spaceOwner.position = "right,bottom"'/>
+			<button label="center" onClick='spaceOwner.position = "center"'/>
+		</window>
+		</panelchildren>
+	</panel>
+</zk>

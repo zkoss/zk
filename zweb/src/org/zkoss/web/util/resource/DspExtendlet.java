@@ -1,18 +1,16 @@
 /* DspExtendlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul  4 15:57:24     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -51,9 +49,9 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
  * DSP can change by use of the page directive.
  *
  * @author tomyeh
- * @since 2.4.1
+ * @since 2.4.1 (public since 5.0.5)
  */
-/*package*/ class DspExtendlet implements Extendlet {
+public class DspExtendlet implements Extendlet {
 	private static final Log log = Log.lookup(DspExtendlet.class);
 
 	private ExtendletContext _webctx;
@@ -73,7 +71,7 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 		return feature == ALLOW_DIRECT_INCLUDE;
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		final Interpretation cnt = (Interpretation)_cache.get(path);
 		if (cnt == null) {
@@ -87,8 +85,6 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 			_webctx.shallCompress(request, get2ndExtension(path)) ?
 				new StringWriter(4096): null;
 		cnt.interpret(new ExtendletDspContext(_webctx, request, response, path, sw));
-		if (extra != null)
-			(sw != null ? (Writer)sw: response.getWriter()).write(extra);
 
 		if (sw != null) {
 			final String result = sw.toString();
@@ -135,7 +131,8 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 		}
 
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			final String content =
 				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 

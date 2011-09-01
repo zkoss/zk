@@ -1,18 +1,16 @@
 /* DefinitionLoaders.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Aug 29 21:57:08     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -47,6 +45,9 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.sys.ConfigParser;
+import org.zkoss.zk.ui.sys.PageRenderer;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.device.Device;
 
 /**
  * Utilities to load language definitions.
@@ -57,6 +58,7 @@ public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
 	private static List _addons;
+	private static List _langs;
 	/** A map of (String ext, String lang). */
 	private static Map _exts;
 	private static boolean _loaded, _loading;
@@ -77,19 +79,40 @@ public class DefinitionLoaders {
 	//2) deserialize LanguageDefinition (and maybe ComponentDefinition)
 
 	/** Adds a language addon.
+	 * It is usually used when an application want to load additional addons.
+	 * For example, if you want to load an addon only if
+	 * the professional edition is ready, you can register a
+	 * {@link org.zkoss.zk.ui.util.WebAppInit} listener.
 	 */
 	public static void addAddon(Locator locator, URL url) {
 		if (locator == null || url == null)
 			throw new IllegalArgumentException("null");
 
 		if (_loaded) {
-			loadAddon(locator, url);
+			loadLang(locator, url, true); //addon
 		} else {
 			if (_addons == null)
 				_addons = new LinkedList();
 			_addons.add(new Object[] {locator, url});
 		}
 	}
+	/** Adds a language.
+	 * It is usually used when application want to load additional language.
+	 * @since 5.0.7
+	 */
+	public static void addLanguage(Locator locator, URL url) {
+		if (locator == null || url == null)
+			throw new IllegalArgumentException("null");
+
+		if (_loaded) {
+			loadLang(locator, url, false);
+		} else {
+			if (_langs == null)
+				_langs = new LinkedList();
+			_langs.add(new Object[] {locator, url});
+		}
+	}
+
 	/** Associates an extension to a language.
 	 *
 	 * @param lang the language name. It cannot be null.
@@ -143,7 +166,7 @@ public class DefinitionLoaders {
 			if (log.debugable()) log.debug("Loading "+url);
 			try {
 				final Document doc = new SAXBuilder(true, false, true).build(url);
-				if (ConfigParser.checkVersion(url, doc))
+				if (ConfigParser.checkVersion(url, doc, true))
 					parseLang(doc, locator, url, false);
 			} catch (Exception ex) {
 				log.error("Failed to load "+url, ex);
@@ -152,13 +175,22 @@ public class DefinitionLoaders {
 			}
 		}
 
-		//3. process lang-addon.xml (with dependency)
+		//5. process other language (from addLanguage)
+		if (_langs != null) {
+			for (Iterator it = _langs.iterator(); it.hasNext();) {
+				final Object[] p = (Object[])it.next();
+				loadLang((Locator)p[0], (URL)p[1], false);
+			}
+			_langs = null; //free memory
+		}
+
+		//4. process lang-addon.xml (with dependency)
 		final List xmls = locator.getDependentXMLResources(
 			"metainfo/zk/lang-addon.xml", "addon-name", "depends");
 		for (Iterator it = xmls.iterator(); it.hasNext();) {
 			final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 			try {
-				if (ConfigParser.checkVersion(res.url, res.document))
+				if (ConfigParser.checkVersion(res.url, res.document, true))
 					parseLang(res.document, locator, res.url, true);
 			} catch (Exception ex) {
 				log.realCauseBriefly("Failed to load "+res.url, ex);
@@ -166,16 +198,16 @@ public class DefinitionLoaders {
 			}
 		}
 
-		//4. process other addon (from addAddon)
+		//5. process other addon (from addAddon)
 		if (_addons != null) {
 			for (Iterator it = _addons.iterator(); it.hasNext();) {
 				final Object[] p = (Object[])it.next();
-				loadAddon((Locator)p[0], (URL)p[1]);
+				loadLang((Locator)p[0], (URL)p[1], true); //addon
 			}
 			_addons = null; //free memory
 		}
 
-		//5. process the extension
+		//6. process the extension
 		if (_exts != null) {
 			for (Iterator it = _exts.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
@@ -190,14 +222,14 @@ public class DefinitionLoaders {
 			_exts = null;
 		}
 	}
-	/** Loads a language addon.
+	/** Loads a language.
 	 */
-	private static void loadAddon(Locator locator, URL url) {
+	private static void loadLang(Locator locator, URL url, boolean addon) {
 		try {
 			parseLang(
-				new SAXBuilder(true, false, true).build(url), locator, url, true);
+				new SAXBuilder(true, false, true).build(url), locator, url, addon);
 		} catch (Exception ex) {
-			log.error("Failed to load addon: "+url, ex);
+			log.error("Failed to load "+(addon?"addon":"language")+": "+url, ex);
 			//keep running
 		}
 	}
@@ -208,9 +240,11 @@ public class DefinitionLoaders {
 		final Element root = doc.getRootElement();
 		final String lang = IDOMs.getRequiredElementValue(root, "language-name");
 		final LanguageDefinition langdef;
+		final Device device;
 		if (addon) {
 			if (log.debugable()) log.debug("Addon language to "+lang+" from "+root.getElementValue("addon-name", true));
 			langdef = LanguageDefinition.lookup(lang);
+			device = Devices.getDevice(langdef.getDeviceType());
 
 			if (root.getElement("case-insensitive") != null)
 				throw new UiException("case-insensitive not allowed in addon");
@@ -222,20 +256,9 @@ public class DefinitionLoaders {
 
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
-			final Map pagemolds = parseSimpleMolds(root);
-			final String desktopURI = (String)pagemolds.get("desktop");
-			final String pageURI = (String)pagemolds.get("page");
-			if (desktopURI == null || desktopURI.length() == 0 || pageURI == null
-			|| pageURI.length() == 0)
-				throw new UiException("Both desktop and page molds must be specified, "+root.getLocator());
-			if (desktopURI.startsWith("class:") || pageURI.startsWith("class:"))
-				throw new UiException("Both desktop and page molds don't support 'class:', "+root.getLocator());
-
-			String completeURI = (String)pagemolds.get("complete");
-			if (completeURI == null)
-				completeURI = desktopURI;
-			else if (completeURI.length() == 0)
-				throw new UiException("Empty complete mold not allowed");
+			PageRenderer pageRenderer = (PageRenderer)
+				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"))
+				.newInstance();
 
 			final List exts = parseExtensions(root);
 			if (exts.isEmpty())
@@ -245,8 +268,9 @@ public class DefinitionLoaders {
 			String bNative = root.getElementValue("native-namespace", true);
 
 			langdef = new LanguageDefinition(
-				deviceType, lang, ns, exts, completeURI, desktopURI, pageURI,
+				deviceType, lang, ns, exts, pageRenderer,
 				"true".equals(ignoreCase), "true".equals(bNative), locator);
+			device = Devices.getDevice(deviceType);
 		}
 
 		parsePI(langdef, doc);
@@ -273,10 +297,30 @@ public class DefinitionLoaders {
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
-			final String src = el.getAttributeValue("src");
+			String src = el.getAttributeValue("src"),
+				pkg = el.getAttributeValue("package");
+			final boolean merge = "true".equals(el.getAttributeValue("merge"));
+			final boolean ondemand = "true".equals(el.getAttributeValue("ondemand"));
+			if (pkg != null) {
+				if (src != null)
+					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
+				if (!ondemand && !merge) {
+					src = "~." + device.packageToPath(pkg);
+					pkg = null;
+				}
+			}
+
 			final String ctn = el.getText(true);
 			final JavaScript js;
-			if (src != null && src.length() > 0) {
+			if (pkg != null && pkg.length() > 0) {
+				if (ondemand) {
+					langdef.removeJavaScript("~." + device.packageToPath(pkg));
+					langdef.removeMergeJavaScriptPackage(pkg);
+				} else {
+					langdef.addMergeJavaScriptPackage(pkg);
+				}
+				continue; //TODO
+			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
 					throw new UiException("You cannot specify the content if the src attribute is specified, "+el.getLocator());
 				final String charset = el.getAttributeValue("charset");
@@ -284,7 +328,8 @@ public class DefinitionLoaders {
 			} else if (ctn != null && ctn.length() > 0) {
 				js = new JavaScript(ctn);
 			} else {
-				throw new UiException("You must specify either the src attribute or the content, "+el.getLocator());
+				log.warning("Ignored: none of the src or package attribute, or the content specified, "+el.getLocator());
+				continue;
 			}
 			langdef.addJavaScript(js);
 		}
@@ -296,7 +341,6 @@ public class DefinitionLoaders {
 				IDOMs.getRequiredAttributeValue(el, "version"));
 		}
 
-
 		for (Iterator it = root.getElements("stylesheet").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -306,9 +350,9 @@ public class DefinitionLoaders {
 			if (href != null && href.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
 					throw new UiException("You cannot specify the content if the href attribute is specified, "+el.getLocator());
-				ss = new StyleSheet(href, el.getAttributeValue("type"));
+				ss = new StyleSheet(href, el.getAttributeValue("type"), el.getAttributeValue("media"), false);
 			} else if (ctn != null && ctn.length() > 0) {
-				ss = new StyleSheet(ctn, el.getAttributeValue("type"), true);
+				ss = new StyleSheet(ctn, el.getAttributeValue("type"), el.getAttributeValue("media"), true);
 			} else {
 				throw new UiException("You must specify either the href attribute or the content, "+el.getLocator());
 			}
@@ -362,6 +406,7 @@ public class DefinitionLoaders {
 
 			final String macroURI = el.getElementValue("macro-uri", true);
 			final ComponentDefinitionImpl compdef;
+			boolean extend = false;
 			if (macroURI != null && macroURI.length() != 0) {
 				if (log.finerable()) log.finer("macro component definition: "+name);
 
@@ -378,9 +423,10 @@ public class DefinitionLoaders {
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
 			} else if (el.getElement("extends") != null) { //extends
-				if (log.finerable()) log.finer("Extends component definition: "+name);
+				extend = true;
 
 				final String extnm = el.getElementValue("extends", true);
+				if (log.finerable()) log.finer("Extends component definition, "+name+", from "+extnm);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
 				if (ref == null) {
 					log.warning("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
@@ -429,6 +475,16 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
+			String wgtnm = el.getElementValue("widget-class", true);
+			WidgetDefinition wgtdef = null;
+			if (wgtnm == null && extend)
+				wgtnm = compdef.getDefaultWidgetClass(null);
+			if (wgtnm != null) {
+				if (!withEL(wgtnm))
+					wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
+				compdef.setDefaultWidgetClass(wgtnm);
+			}
+
 			s = el.getElementValue("component-apply", true);
 			if (s == null) s = el.getElementValue("apply", true); //backward-compatible
 			compdef.setApply(s);
@@ -436,10 +492,40 @@ public class DefinitionLoaders {
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
 				final Element e = (Element)i.next();
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
-				final String val = IDOMs.getRequiredElementValue(e, "mold-uri");
-				final String z2c = e.getElementValue("z2c-uri", true);
-				compdef.addMold(nm, val,
-					z2c != null && z2c.length() > 0 ? z2c: null);
+				final String moldURI = e.getElementValue("mold-uri", true);
+				String cssURI = e.getElementValue("css-uri", true);
+				final String wn = e.getElementValue("widget-class", true);
+				noEL("mold-uri", moldURI, e); //5.0 limitation
+				noEL("css-uri", cssURI, e);
+
+				compdef.addMold(nm, wn != null ? wn: wgtnm);
+
+				WidgetDefinition wd = wn == null ? wgtdef:
+					withEL(wn) ? null: getWidgetDefinition(langdef, compdef, wn);
+				if (moldURI != null) {
+					if (wd != null)
+						wd.addMold(nm, moldURI);
+					else
+						log.error("Mold "+nm+" for "+name+" ignored because "+
+							((wn != null && withEL(wn)) || (wgtnm != null && withEL(wgtnm)) ?
+								"widget-class contains EL expressions":"widget-class is required")
+							+", "+e.getLocator());
+				}
+
+				if (cssURI != null && cssURI.length() > 0) {
+					final char cc = cssURI.charAt(0);
+					if (cc != '/' && cc != '~') {
+						String n = wn != null ? wn: wgtnm;
+						if (!withEL(n)) {
+							int k = n.lastIndexOf('.');
+							cssURI = "~." + device.toAbsolutePath(
+								n.substring(0, k).replace('.', '/') + '/' + cssURI);
+						} else {
+							log.error("Absolute path required for cssURI, since the widget class contains EL expressions, "+e.getLocator());
+						}
+					}
+					langdef.addCSSURI(cssURI);
+				}
 			}
 
 			for (Iterator e = parseCustAttrs(el).entrySet().iterator(); e.hasNext();) {
@@ -455,13 +541,26 @@ public class DefinitionLoaders {
 			parseAnnots(compdef, el);
 		}
 	}
+	private static WidgetDefinition getWidgetDefinition(
+	LanguageDefinition langdef, ComponentDefinition compdef, String wgtnm) {
+		WidgetDefinition wgtdef = langdef.getWidgetDefinitionIfAny(wgtnm);
+		if (wgtdef != null)
+			return wgtdef;
+
+		wgtdef = new WidgetDefinitionImpl(wgtnm, compdef.isBlankPreserved());
+		langdef.addWidgetDefinition(wgtdef);
+		return wgtdef;
+	}
 	private static Class locateClass(String clsnm) throws Exception {
 		return Classes.forNameByThread(clsnm);
 	}
 	private static void noEL(String nm, String val, Element el)
 	throws UiException {
-		if (val != null && val.indexOf("${") >= 0)
+		if (withEL(val))
 			throw new UiException(nm+" does not support EL expressions, "+el.getLocator());
+	}
+	private static boolean withEL(String val) {
+		return val != null && val.indexOf("${") >= 0;
 	}
 	/** Parse the processing instructions. */
 	private static void parsePI(LanguageDefinition langdef, Document doc)
@@ -507,8 +606,7 @@ public class DefinitionLoaders {
 		el = el.getElement("macro-template");
 		if (el != null) {
 			langdef.setMacroTemplate(
-				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")),
-				IDOMs.getRequiredElementValue(el, "macro-uri"));
+				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")));
 		}
 	}
 	private static
@@ -556,10 +654,6 @@ public class DefinitionLoaders {
 	private static Map parseProps(Element elm) {
 		return IDOMs.parseParams(elm, "property", "property-name", "property-value");
 	}
-	/** Parses mold without z2c-uri. */
-	private static Map parseSimpleMolds(Element elm) {
-		return IDOMs.parseParams(elm, "mold", "mold-name", "mold-uri");
-	}
 	private static Map parseCustAttrs(Element elm) {
 		return IDOMs.parseParams(elm, "custom-attribute", "attribute-name", "attribute-value");
 	}
@@ -596,28 +690,5 @@ public class DefinitionLoaders {
 			}
 		}
 		return null;
-	}
-
-	private static class Addon {
-		private final Document document;
-		private final int priority;
-		private Addon(Document document) {
-			this.document = document;
-
-			final String p = document.getRootElement().getElementValue("priority", true);
-			this.priority = p != null && p.length() > 0 ? Integer.parseInt(p): 0;
-		}
-		private static void add(List addons, Document document) {
-			final Addon addon = new Addon(document);
-			for (ListIterator it = addons.listIterator(); it.hasNext();) {
-				final Addon a = (Addon)it.next();
-				if (a.priority < addon.priority) {
-					it.previous();
-					it.add(addon);
-					return; //done
-				}
-			}
-			addons.add(addon);
-		}
 	}
 }

@@ -1,0 +1,19 @@
+<test tags="B50-2931348.zul,Iframe">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+1. Click this <button label="Set Iframe Name" onClick='iframe1.setName("iframe1")'></button>, if popup a error message box, it's wrong
+<separator height="20px"/>
+<iframe id="iframe1"/>
+</zk>
+			-->
+		</server>
+		<client>	<![CDATA[
+			
+			click(jq("@button"));
+			waitResponse();
+			verifyFalse(jq(".z-errbox").exists());
+			]]></client>
+	</case>
+</test>

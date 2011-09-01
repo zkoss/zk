@@ -1,0 +1,23 @@
+<zk>
+<html><![CDATA[
+In IE, if model size is zero (start from zero or after clear)
+then when add new one in to model, the listbox will miss the onRender au
+event which should send to server,
+but it is work in FF.<br/>
+<br/>
+]]></html>
+<button label="add" onClick="add()" />
+<listbox id="lb"/>
+<zscript>
+ListModelList model = new ListModelList();
+//model.add("Item 1");
+lb.setModel(model);
+public void add(){
+if(model.size()>10){
+model.clear();
+}else{
+model.add(">>Item Y :"+new java.util.Date());
+}
+}
+</zscript>
+</zk>

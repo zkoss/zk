@@ -1,18 +1,16 @@
 /* Head.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Dec 13 10:49:25     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,10 +20,13 @@ import java.io.StringWriter;
 
 import org.zkoss.lang.Strings;
 
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The HEAD tag.
@@ -50,29 +51,17 @@ public class Head extends AbstractTag {
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		addZkHeadHtmlTags(buf, getPage(), "head");
+		final Execution exec = Executions.getCurrent();
+		if (exec != null)
+			Utils.addHeaderZkTags(exec, getPage(), buf, "head");
 
 		out.write(buf.toString());
 		out.write('\n');
 	}
-	/** Adds ZkFns.outZkHeadHtmlTags if necessary.
-	 * @param tag the tag name, such as "head" and "body"
-	 */
-	/*package*/ static
-	void addZkHeadHtmlTags(StringBuffer buf, Page page, String tag) {
-		final String zktags = ZkFns.outZkHeadHtmlTags(page);
-		if (zktags != null && zktags.length() > 0) {
-			int j = buf.indexOf("<" + tag);
-			if (j >= 0) {
-				j += tag.length() + 1;
-				for (int len = buf.length(); j < len; ++j) {
-					if (buf.charAt(j) == '>') {
-						buf.insert(j + 1, zktags);
-						return; //done
-					}
-				}
-			}
-			buf.append(zktags);
-		}
+
+	public void beforeParentChanged(Component parent) {
+		if (parent != null && !(parent instanceof Html))
+			throw new UiException("Head's parent must be Html, not "+parent);
+		super.beforeParentChanged(parent);
 	}
 }

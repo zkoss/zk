@@ -1,18 +1,16 @@
 /* Span.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Sep  2 17:08:00     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -33,12 +31,5 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Span extends XulElement implements org.zkoss.zul.api.Span {
 	public Span() {
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String clkattrs = getAllOnClickAttrs();
-		final String attrs = super.getOuterAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
 	}
 }

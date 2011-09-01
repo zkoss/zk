@@ -1,18 +1,16 @@
 /* ListModelArray.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Feb 26 17:02:14     2007, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +23,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -141,7 +141,7 @@ implements ListModelExt, java.io.Serializable {
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
 		Arrays.sort(_array, cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
 	//Object//

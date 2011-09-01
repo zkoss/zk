@@ -1,18 +1,16 @@
 /* Listfooter.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 13 12:42:38     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,11 +19,10 @@ package org.zkoss.zul;
 import java.util.List;
 import java.util.Iterator;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.FooterElement;
+import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A column of the footer of a list box ({@link Listbox}).
@@ -33,21 +30,19 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Unlike {@link Listheader}, you could place any child in a list footer.
  * <p>Note: {@link Listcell} also accepts children.
- * <p>Default {@link #getZclass}: z-list-footer.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listfooter.(since 5.0.0)
  * 
  * @author tomyeh
  */
-public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.Listfooter {
-	private int _span = 1;
+public class Listfooter extends FooterElement implements org.zkoss.zul.api.Listfooter {
 
 	public Listfooter() {
 	}
 	public Listfooter(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Listfooter(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the listbox that this belongs to.
@@ -96,42 +91,14 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 		return getListheader();
 	}
 
-	/** Returns number of columns to span this footer.
-	 * Default: 1.
-	 */
-	public int getSpan() {
-		return _span;
-	}
-	/** Sets the number of columns to span this footer.
-	 * <p>It is the same as the colspan attribute of HTML TD tag.
-	 */
-	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("colspan", Integer.toString(_span));
-		}
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final Listheader header = getListheader();
-		if (header != null) sb.append(header.getColAttrs());
-
-		if (_span != 1)
-			HTMLs.appendAttribute(sb, "colspan", _span);
-
-		return sb.toString();
-	}
-
 	//-- Component --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
+	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-footer" : _zclass;
+		return _zclass == null ? "z-listfooter" : _zclass;
 	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listfoot))

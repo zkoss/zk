@@ -1,18 +1,16 @@
 /* GroupsModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Sep  1 10:10:34     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,6 +24,9 @@ import org.zkoss.zul.event.GroupsDataListener;
  *
  * <p>If the data model is used with sortable listbox or grid,
  * the developer must also implement {@link GroupsModelExt}.
+ *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  *
  * @author tomyeh
  * @since 3.5.0
@@ -53,7 +54,8 @@ public interface GroupsModel {
 	 */
 	public int getChildCount(int groupIndex);
 
-	/** Returns the foot value of the specified group.
+	/** Returns the foot value of the specified group, or null if the specified group
+	 * does not have any foot.
 	 * It is used to render {@link Groupfoot} and {@link Listgroupfoot}.
 	 *
 	 * <p>Note: it is ignored if {@link #hasGroupfoot} returns false.
@@ -73,4 +75,17 @@ public interface GroupsModel {
      * a change to the data model occurs. 
      */
 	public void removeGroupsDataListener(GroupsDataListener l) ;
+	/** Whether the group is close at the specified index.
+	 * It is used to render {@link Group} and {@link Listgroup}.
+	 * @param groupIndex the index of the group.
+	 * @since 5.0.0
+	 */
+	public boolean isClose(int groupIndex);
+	/** Sets whether the group is close at the specified index.
+	 * It is used to render {@link Group} and {@link Listgroup}.
+	 * @param groupIndex the index of the group.
+	 * @param close true to close the Group.
+	 * @since 5.0.0
+	 */
+	public void setClose(int groupIndex, boolean close);
 }

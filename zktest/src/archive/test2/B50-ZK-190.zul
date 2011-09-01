@@ -1,0 +1,30 @@
+<!--
+B50-ZK-190.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 18:52:12 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<borderlayout height="450px">
+		<north id="north" title="North" size="40%" flex="true" maxsize="250"
+			splittable="true" collapsible="true">
+			<div id="div" style="background:#B8D335">
+				<label value="25%" style="color:white;font-size:50px" />
+			</div>
+		</north>
+		<center>
+			<div>
+				<div>1. Press "Change Color". You shall see the color is changed to red and the size of colored block does NOT change.</div>
+				<div>2. Press "Toggle Flex". You shall see the red block height decreased.</div>
+			</div>
+		</center>
+	</borderlayout>
+	<button label="Change Color" onClick='div.setStyle("background: red")' />
+	<button label="Toggle Flex" onClick='north.flex = !north.flex' />
+</zk>

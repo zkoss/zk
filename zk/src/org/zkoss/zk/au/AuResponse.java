@@ -1,27 +1,30 @@
 /* AuResponse.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 11:35:49     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.au;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONAware;
+import org.zkoss.json.JSONs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -40,26 +43,37 @@ import org.zkoss.zk.ui.util.DeferredValue;
  * @author tomyeh
  */
 public class AuResponse {
+	/** ZK-Error (5501) indicating the request is out-of-sequence.
+	 * ZK-Error is returned as the response header of a failed AU request.
+	 * @since 5.0.4
+	 */
+	public static final int SC_OUT_OF_SEQUENCE = 5501;
+
 	protected String _cmd;
 	private final Object _depends;
 	/** Either String or DeferredValue. */
 	protected Object[] _data;
-	/** Data that has been evaluated. */
-	private String[] _evdata;
 
 	/** Constructs a component-independent response.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd) {
-		this(cmd, (Component)null, (String[])null);
+	public AuResponse(String cmd) {
+		this(cmd, (Component)null, (Object[])null);
 	}
 	/** Constructs a component-independent response.
+	 *
+	 * @param data the data. It can be null, String, Date,
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, String data) {
+	public AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a component-independent response.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, String[] data) {
+	public AuResponse(String cmd, Object[] data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a response with one or zero data.
@@ -75,43 +89,26 @@ public class AuResponse {
 	 * It is used only to optimize what responses to send.
 	 *
 	 * @param data specifies the data to be sent. If null, no data at all.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Component depends, String data) {
-		this(cmd, depends, data != null ? new String[] {data}: null);
+	public AuResponse(String cmd, Component depends, Object data) {
+		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Component depends, String[] data) {
-		this(cmd, depends, (Object[])data);
+	public AuResponse(String cmd, Component depends, Object[] data) {
+		if (cmd == null || cmd.length() == 0)
+			throw new IllegalArgumentException("cmd");
+		_cmd = cmd;
+		_depends = depends;
+		_data = data;
 	}
 	/** Constructs a response with single data.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Page depends, String data) {
-		this(cmd, depends,  data != null ? new String[] {data}: null);
-	}
-	/** Constructs a response with multiple data.
-	 */
-	protected AuResponse(String cmd, Page depends, String[] data) {
-		this(cmd, depends, (Object[])data);
-	}
-
-	/** Constructs a component-independent deferred response.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, DeferredValue data) {
-		this(cmd, (Component)null, data);
-	}
-	/** Constructs a component-independent response.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Object[] data) {
-		this(cmd, (Component)null, data);
-	}
-	/** Constructs a response with one or zero deferred data.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Component depends, DeferredValue data) {
-		this(cmd, depends, data != null ? new DeferredValue[] {data}: null);
+	public AuResponse(String cmd, Page depends, Object data) {
+		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
 	 * @param data an array of data (null to ignore).
@@ -119,45 +116,14 @@ public class AuResponse {
 	 * or null.
 	 * @exception IllegalArgumentException if an element of data
 	 * is neither String nor DeferredValue.
-	 * @since 3.0.5
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Component depends, Object[] data) {
+	public AuResponse(String cmd, Page depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
-		checkData(data);
 		_cmd = cmd;
 		_depends = depends;
 		_data = data;
-	}
-	/** Constructs a response with single deferred data.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Page depends, DeferredValue data) {
-		this(cmd, depends,  data != null ? new DeferredValue[] {data}: null);
-	}
-	/** Constructs a response with multiple data.
-	 * @param data an array of data (null to ignore).
-	 * Each element must be an instance of String, {@link DeferredValue}
-	 * or null.
-	 * @exception IllegalArgumentException if an element of data
-	 * is neither String nor DeferredValue.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Page depends, Object[] data) {
-		if (cmd == null || cmd.length() == 0)
-			throw new IllegalArgumentException("cmd");
-		checkData(data);
-		_cmd = cmd;
-		_depends = depends;
-		_data = data;
-	}
-	private static void checkData(Object[] data) {
-		if (data != null && !(data instanceof String[])
-		&& !(data instanceof DeferredValue[]))
-			for (int j = data.length; --j >= 0;)
-				if (data[j] != null && !(data[j] instanceof String)
-				&& !(data[j] instanceof DeferredValue))
-					throw new IllegalArgumentException("Data "+j+" cannot be "+data[j].getClass());
 	}
 
 	/** Returns the command of this response (never null).
@@ -167,31 +133,39 @@ public class AuResponse {
 	}
 	/** Returns the evaluated result of the associated data of
 	 * this response (might be null).
+	 * 
 	 * <p>Note: when this method is called, {@link DeferredValue}
 	 * will be evaluated. Thus, don't call it until the rendering phase.
 	 * If you want to access it other than the render phase,
 	 * use {@link #getRawData} instead.
-	 * <p>Note: it is a readonly array. Don't change its value.
+	 *
+	 * <p>Note: it is a copy, so any modification to it won't affect
+	 * the data of this response.
+	 *
 	 * @see #getRawData
+	 * @since 5.0.0
 	 */
-	public String[] getData() {
-		if (_data == null || (_data instanceof String[]))
-			return (String[])_data;
+	public List getEncodedData() {
+		if (_data == null)
+			return null;
 
-		if (_evdata == null) {
-			_evdata = new String[_data.length];
-			for (int j = 0; j < _data.length; ++j) {
-				final Object d = _data[j];
-				_evdata[j] = d instanceof DeferredValue ?
-					((DeferredValue)d).getValue():
-					Objects.toString(d);
-			}
+		final JSONArray encdata = new JSONArray();
+		for (int j = 0; j < _data.length; ++j) {
+			Object d = _data[j];
+			if (d instanceof DeferredValue)
+				d = ((DeferredValue)d).getValue();
+			if (d instanceof Component)
+				d = ((Component)d).getUuid();
+			if (d instanceof Date)
+				d = new JSONDate((Date)d);
+			encdata.add(d);
 		}
-		return _evdata;
+		return encdata;
 	}
 	/** Returns the associated data of this response in the original
 	 * format (might be null).
 	 * <p>Note: it is a readonly array. Don't change its value.
+	 * @see #getEncodedData
 	 * @since 3.0.5
 	 */
 	public Object[] getRawData() {
@@ -207,6 +181,22 @@ public class AuResponse {
 	 */
 	public final Object getDepends() {
 		return _depends;
+	}
+	/** Returns the override key. If null, this response will be appended.
+	 * If not null, it overrides the previous response, if any, with
+	 * the same override key and the same depends ({@link #getDepends}).
+	 * <p>Default: return null.
+	 * The derived class shall override this method if it prefers to send
+	 * the last response in the same category.
+	 * <p>Notice that if depends is null and the override key is not null,
+	 * they are sharing a single namespace of an execution.
+	 * <p>Notice that if {@link org.zkoss.zk.ui.AbstractComponent#response(String,AuResponse)}
+	 * is called, this override key is ignored (and the first argument of
+	 * the invocation is used).
+	 * @since 5.0.2
+	 */
+	public String getOverrideKey() {
+		return null;
 	}
 
 	//-- Object --//
@@ -233,5 +223,14 @@ public class AuResponse {
 		if (s == null) return null;
 		s = s.trim();
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
+	}
+}
+/*package*/ class JSONDate implements JSONAware {
+	private Date _d;
+	/*package*/ JSONDate(Date d) {
+		_d = d;
+	}
+	public String toJSONString() {
+		return "jq.j2d('" + JSONs.d2j(_d) + "')";
 	}
 }

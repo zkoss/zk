@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2919062.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 22 09:55:39 TST 2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please type "-0" into the inputbox, and then click outside of it, you should not see any error message.
+<separator/>
+<intbox constraint="no negative"/>
+</zk>

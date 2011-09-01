@@ -1,0 +1,29 @@
+<test tags="Combobox,BI">
+	<case id="Selection">
+		<server><!--
+			<window>
+				Click the test button and you shall see "OK" being appended.
+				<button id="ok" label="test">
+					<attribute name="onClick"><![CDATA[
+				cb.setText("BB");
+				Comboitem ci = cb.getSelectedItem();
+				new Label(ci != null && "BB".equals(ci.label) ? "OK": "Failed "+ci)
+					.setParent(self.parent);
+					]]></attribute>
+				</button>
+				<combobox id="cb">
+					<comboitem label="AA"/>
+					<comboitem label="BB"/>
+					<comboitem label="CC"/>
+				</combobox>
+			</window>
+		--></server>
+		<client><![CDATA[
+			click(cb.$n("btn"));
+			click(ok);
+			waitResponse();
+			verifyEquals("BB", jq(".z-combobox-inp").val());
+			verifyEquals("OK", jq(".z-label:eq(1)").text());
+		]]></client>
+	</case>
+</test>

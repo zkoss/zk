@@ -1,18 +1,16 @@
 /* Loader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 09:13:02     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,9 +34,36 @@ public interface Loader {
 	 */
 	public long getLastModified(Object src);
 	/** Loads the resource.
+	 *
+	 * <p>The returned resource could be anything. It will be returned
+	 * by {@link ResourceCache#get}.
+	 * However, if you want to have more control (e.g., whether to cache),
+	 * you can return an instance
+	 * of {@link Resource}. Then, the return value of {@link ResourceCache#get}
+	 * will be {@link Resource#resource}.
+	 *
 	 * @return null if not found
 	 * @exception Exception you might throw any exception which will be
 	 * passed back to the caller of {@link ResourceCache#get}
 	 */
 	public Object load(Object src) throws Exception;
+
+	/** Represents the more information about an object loaded by
+	 * {@link Loader#load}.
+	 *
+	 * @since 5.0.0
+	 */
+	public class Resource {
+		/** The real resource that shall be returned by {@link ResourceCache#get}.
+		 */
+		public final Object resource;
+		/** Whether the resource shall be cached in {@link ResourceCache}.
+		 */
+		public final boolean cacheable;
+
+		public Resource(Object resource, boolean cacheable) {
+			this.cacheable = cacheable;
+			this.resource = resource;
+		}
+	}
 }

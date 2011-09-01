@@ -1,0 +1,43 @@
+<!-- B30-1881573.ztl.java
+
+	Purpose:for testing B30-1881573.ztl .
+
+	Description:
+
+	History:
+		11, 8, 2010 19:48:40
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1881573.zul,B,E,Window,IE">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+  <n:p>	IE6 only: You shall see scrollbar after clicking the 100 button.</n:p>
+  <window id="t" title="sizing test" contentStyle="overflow:auto;background:pink" width="250px">
+	<hbox>
+	<button id="btn" label="100" onClick='t.height = "100px"'/>
+	<button label="200" onClick='t.height = "200px"'/>
+	<button label="300" onClick='t.height = "300px"'/>
+	</hbox>
+	<div height="100px">abc</div>
+  </window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			JQuery $cave = jq(t.$n("cave"));
+			verifyEquals($cave.height(),$cave.scrollHeight());
+			
+			click(jq("$btn"));
+			waitResponse();	
+			verifyNotEquals($cave.height(),$cave.scrollHeight());
+		]]></client>
+	</case>
+</test>

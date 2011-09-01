@@ -1,0 +1,57 @@
+<test tags="B50-2974364.zul,A,E,Style">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					<html><![CDATA[
+					<ul>
+					 <li>Click siwtchStyle then the text shall become green and bold</li>
+					 <li>Click again and the text shall become black and normal</li>
+					</ul>
+					]]></html>
+					<bandbox id="bb" value="something">
+					<bandpopup>
+					<listbox width="100px">
+					<listitem label="A" />
+					<listitem label="B" />
+					<listitem label="C" />
+					</listbox>
+					</bandpopup>
+					</bandbox>
+					<button id="btn" label="switchStyle" onClick="switchStyle()" />
+					<zscript>
+					void switchStyle() {
+					Object tag = btn.getAttribute("tag");
+					if (tag == null) {
+					btn.setAttribute("tag", "1");
+					bb.setStyle("color:green;font-weight:bold");
+					} else {
+					btn.removeAttribute("tag");
+					bb.setStyle("");
+					}
+					}
+					</zscript>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[
+				click(btn);
+				waitResponse();
+				boolean color = ColorVerifingHelper.getInstance().
+				isEqualColor("green",jq(".z-bandbox-inp").css("color"));
+				verifyTrue(color);
+				if (!("bold".equals(jq(bb.$n("real")).css("font-weight"))|| "700".equals(jq(bb.$n("real")).css("font-weight"))))
+				verifyTrue(false);
+				click(btn);
+				waitResponse();
+				boolean color1 = ColorVerifingHelper.getInstance().
+				isEqualColor("black",jq(".z-bandbox-inp").css("color"));
+				verifyTrue(color1);
+				if (!("normal".equals(jq(bb.$n("real"))
+				.css("font-weight"))
+				|| "400".equals(jq(bb.$n("real")).css(
+				"font-weight"))))
+				verifyTrue(false);
+			]]></client>
+	</case>
+</test>

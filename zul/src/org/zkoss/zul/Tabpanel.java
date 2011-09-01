@@ -1,18 +1,16 @@
 /* Tabpanel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jul 12 10:43:10     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,11 +18,8 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -91,15 +86,6 @@ public class Tabpanel extends XulElement implements org.zkoss.zul.api.Tabpanel {
 	}
 
 	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null)
-			sb.append(clkattrs);
-		HTMLs.appendAttribute(sb, "z.box", getTabbox().getUuid());
-		return sb.toString();
-	}
 	/** Returns the style class.
 	 *
 	 * @since 3.5.0

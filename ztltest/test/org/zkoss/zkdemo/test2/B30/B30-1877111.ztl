@@ -1,0 +1,41 @@
+<test tags="B30-1877111.zul,Datebox,Calendar,ie9">
+	<case id="Lenient">
+		<server><!--
+			<zk>
+				<html>
+					<![CDATA[ <ol> <li>Type 12-13-98 in the first datebox</li>
+					<li>Type TAB to move focus away</li> </ol> Then, an error
+					message shall show up. However, no error message in the second
+					one. ]]>
+				</html>
+				<hbox>
+					lenient=false, MM.dd.yy:
+					<datebox id="d" format="MM.dd.yy" lenient="false" />
+				</hbox>
+				<hbox>
+					lenient=true, MM.dd.yy:
+					<datebox id="d2" format="MM.dd.yy" lenient="true" />
+				</hbox>
+				<hbox>
+					lenient=false, MMM d, yyyy:
+					<datebox id="d3" format="MMM d, yyyy" lenient="false" />
+				</hbox>
+				<zscript>
+				    d.focus();
+				</zscript>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			type(jq(".z-datebox-inp:eq(0)"), "12-13-98");
+				waitResponse();
+				verifyTrue(jq(".z-errbox").exists());
+				closeErrorBox();
+				waitResponse();
+				type(jq(".z-datebox-inp:eq(1)"), "12-13-98");
+				waitResponse();
+				type(jq(".z-datebox-inp:eq(2)"), "12-13-98");
+				waitResponse();
+				verifyTrue(jq(".z-errbox").exists());
+		]]></client>
+	</case>
+</test>

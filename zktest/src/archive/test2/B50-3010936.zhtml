@@ -1,0 +1,7 @@
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:z="http://www.zkoss.org/2005/zul">
+
+<body>
+<z:window title="Correct if no JS error"/>
+</body>
+</html>

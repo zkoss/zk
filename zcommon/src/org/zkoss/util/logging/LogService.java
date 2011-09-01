@@ -1,18 +1,16 @@
 /* LogService.java
 
-{{IS_NOTE
 
 	Purpose: The MBean-able log service
 	Description: 
 	History:
 	 2001/6/4, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -73,8 +71,12 @@ public class LogService {
 	 * {@link #init} is invoked.
 	 */
 	public static final boolean isInited(String rootnm) {
+		final Logger root = Logger.getLogger(rootnm);
+			//Tomcat has one root per Web app, while Logger.global is shared
+			//Thus we have to use getLogger to verify whether it is installed
+
 		synchronized (_svcs) {
-			return _svcs.containsKey(rootnm);
+			return _svcs.containsKey(root);
 		}
 	}
 

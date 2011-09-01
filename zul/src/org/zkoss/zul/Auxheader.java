@@ -1,28 +1,22 @@
 /* Auxheader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Oct 24 10:07:12     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
@@ -41,11 +35,10 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 	public Auxheader() {
 	}
 	public Auxheader(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Auxheader(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns number of columns to span this header.
@@ -62,10 +55,7 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 			throw new WrongValueException("Positive only");
 		if (_colspan != colspan) {
 			_colspan = colspan;
-			final Execution exec = Executions.getCurrent();
-			if (exec != null && exec.isExplorer())
-				invalidate();
-			else smartUpdate("colspan", Integer.toString(_colspan));
+			smartUpdate("colspan", _colspan);
 		}
 	}
 
@@ -83,10 +73,7 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 			throw new WrongValueException("Positive only");
 		if (_rowspan != rowspan) {
 			_rowspan = rowspan;
-			final Execution exec = Executions.getCurrent();
-			if (exec != null && exec.isExplorer())
-				invalidate();
-			else smartUpdate("rowspan", Integer.toString(_rowspan));
+			smartUpdate("rowspan", _rowspan);
 		}
 	}
 
@@ -94,26 +81,14 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 	public String getZclass() {
 		return _zclass == null ? "z-auxheader" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs == null && _colspan == 1 && _rowspan == 1)
-			return attrs;
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_colspan != 1) HTMLs.appendAttribute(sb, "colspan", _colspan);
-		if (_rowspan != 1) HTMLs.appendAttribute(sb, "rowspan", _rowspan);
-		return sb.toString();
-	}
-
-	protected void invalidateWhole() {
-		Component p = getParent();
-		if (p != null) {
-			p = p.getParent();
-			if (p != null)
-				p.invalidate();
-		}
+		if (_colspan != 1)
+			renderer.render("colspan", _colspan);
+		if (_rowspan != 1)
+			renderer.render("rowspan", _rowspan);
 	}
 
 	//Component//

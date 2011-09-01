@@ -1,0 +1,79 @@
+<!-- B50-3081315.ztl.java
+
+	Purpose:for testing B50-3081315.ztl .
+
+	Description:
+
+	History:
+		11, 10, 2010 18:32:46
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3081315.zul,A,E,Tabbox,Tab">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+			<li>Click close button in tab1, a confirm dialog will appear.</li>
+			<li>Click no</li>
+			<li>the tab1 shall be selected</li>
+			</ol>
+		]]>
+	</html>
+	<zscript><![CDATA[
+		public void doClose(Event event) {
+			Tab tab = (Tab) event.getTarget();
+			Messagebox.show("Delete?", "Prompt", Messagebox.YES | Messagebox.NO,
+					Messagebox.QUESTION, new EventListener() {
+						public void onEvent(Event evt) {
+							if (Messagebox.YES == ((Integer) evt.getData())
+									.intValue()) {
+								tab.close();
+							}
+						}
+					});
+			event.stopPropagation();
+		}
+	]]></zscript>
+	<tabbox>
+		<tabs>
+			<tab label="tab1" closable="true" onClose="doClose(event);" />
+			<tab label="tab2" closable="true" onClose="doClose(event);" />
+			<tab label="tab3" closable="true" onClose="doClose(event);" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>Tab1</tabpanel>
+			<tabpanel>Tab2</tabpanel>
+			<tabpanel>Tab3</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				
+			verifyEquals(3, jq(".z-tab").length());
+			
+			click(jq(".z-tab-close:eq(1)"));
+			waitResponse();
+			click(jq(".z-button-cm:eq(0)"));
+			waitResponse();
+			verifyEquals(2, jq(".z-tab").length());
+			
+			click(jq(".z-tab-close:eq(0)"));
+			waitResponse();
+			click(jq(".z-button-cm:eq(1)"));
+			waitResponse();
+			verifyEquals(2, jq(".z-tab").length());
+			
+		]]></client>
+	</case>
+</test>

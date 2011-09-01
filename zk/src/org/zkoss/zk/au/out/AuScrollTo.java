@@ -1,18 +1,16 @@
 /* AuScrollTo.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul 28 15:40:08     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,6 +30,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuScrollTo extends AuResponse {
 	public AuScrollTo(int x, int y) {
-		super("scrollTo", new String[] {Integer.toString(x), Integer.toString(y)});
+		super("scrollTo", new Integer[] {new Integer(x), new Integer(y)});
 	}
 }

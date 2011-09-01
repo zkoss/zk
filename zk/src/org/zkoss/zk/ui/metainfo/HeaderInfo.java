@@ -23,10 +23,14 @@ import java.util.LinkedList;
 import java.util.Collections;
 
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a header element, such as &lt;?link&gt; and &lt;?meta&gt;
@@ -35,14 +39,28 @@ import org.zkoss.zk.xel.Evaluator;
  * For example, the link and meta directives represent &lt;link&gt;
  * and &lt;meta&gt; HTML tags, respectively.
  *
+ * <p>Notice
+ * <ul>
+ * <li>Directives are evaluated before all other tags. Thus, it is not
+ * possible to set a value in zscript and then reference it in an attribute
+ * of the directive.</li>
+ * <li>If a page is included by another page with the instant mode
+ * ({@link org.zkoss.zul.Include#getMode}), the directives will be ignored.</li>
+ * <li>EL is allowed for every attribute.</li>
+ * <li>Since 5.0.0, the if and unless attributes are supported.</li>
+ * </ul>
+ *
  * <p>It is not serializable.
  *
  * @author tomyeh
+ * @see ResponseHeaderInfo
  */
-public class HeaderInfo {
+public class HeaderInfo  extends EvalRefStub
+implements Condition {
 	private final String _name;
 	/** A list of [String nm, ExValue val]. */
 	private final List _attrs;
+	private final ConditionImpl _cond;
 
 	/** Constructor.
 	 *
@@ -52,11 +70,13 @@ public class HeaderInfo {
 	 * @param name the tag name, such as link (never null or empty).
 	 * @param attrs a map of (String, String) attributes.
 	 */
-	public HeaderInfo(String name, Map attrs) {
+	public HeaderInfo(EvaluatorRef evalr, String name, Map attrs, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("empty");
 
 		_name = name;
+		_evalr = evalr;
+		_cond = cond;
 		if (attrs == null || attrs.isEmpty()) {
 			_attrs = Collections.EMPTY_LIST;
 		} else {
@@ -81,41 +101,83 @@ public class HeaderInfo {
 	}
 
 	/** Returns as HTML tag(s) representing this header element.
+	 * <p>Notice that it does NOT invoke {@link #isEffective}, so the caller
+	 * has to call it first.
 	 *
 	 * @param page the page containing this header element.
 	 * It is used to evaluate EL expression, if any, contained in the value.
+	 * @since 5.0.0
 	 */
-	public String toHTML(PageDefinition pgdef, Page page) {
-		final StringBuffer sb = new StringBuffer(128)
-			.append('<').append(_name);
+	public String toHTML(Page page) {
+		final boolean bScript = "script".equals(_name),
+			bStyle = !bScript && "style".equals(_name);
 
-		final boolean bScript = "script".equals(_name);
-		String scriptContent = null;
-		final Evaluator eval = pgdef.getEvaluator();
+		//1. scan content
+		final StringBuffer sb = new StringBuffer(128);
+		if (bScript || bStyle) {
+			String content = null;
+			boolean srcFound = false;
+			for (Iterator it = _attrs.iterator(); it.hasNext();) {
+				final Object[] p = (Object[])it.next();
+				final String nm = (String)p[0];
+				if ("content".equals(nm)) {
+					content = (String)((ExValue)p[1]).getValue(_evalr, page);
+				} else {
+					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
+				}
+			}
+
+			if (content != null) {
+				sb.append('<').append(_name).append(" type=\"text/")
+					.append(bScript ? "javascript": "css").append("\">\n")
+					.append(content)
+					.append("\n</").append(_name).append('>');
+				if (srcFound) sb.append('\n');
+			}
+			if (!srcFound)
+				return sb.toString(); //no more to generate
+		}
+
+		
+		sb.append('<').append(bStyle ? "link": _name);
+		boolean relFound = false, typeFound = false;
 		for (Iterator it = _attrs.iterator(); it.hasNext();) {
 			final Object[] p = (Object[])it.next();
 			final String nm = (String)p[0];
-			String val = (String)((ExValue)p[1]).getValue(eval, page);
-			if (bScript && "content".equals(nm)) {
-				scriptContent = val;
-				continue;
-			}
+			if ((bScript || bStyle) && "content".equals(nm))
+				continue; //skip
 
-			if (val == null || val.length() == 0) {
-				sb.append(' ').append(nm).append("=\"\"");
-			} else {
-				if ("href".equals(nm) || (bScript && "src".equals(nm)))
-					val = Executions.encodeURL(val);
-				HTMLs.appendAttribute(sb, nm, val);
-			}
+			relFound = bStyle && (relFound || "rel".equals(nm));
+			typeFound = (bScript || bStyle) && (typeFound || "type".equals(nm));
+
+			String val = (String)((ExValue)p[1]).getValue(_evalr, page);
+			if (val == null || val.length() == 0)
+				val = "";
+			else if ("href".equals(nm) || ((bScript || bStyle) && "src".equals(nm)))
+				val = Executions.encodeURL(val);
+
+			HTMLs.appendAttribute(sb,
+				bStyle && "src".equals(nm) ? "href":
+				bScript && "href".equals(nm) ? "src": nm, val);
 		}
 
-		if (bScript) {
-			sb.append(">\n");
-			if (scriptContent != null)
-				sb.append(scriptContent).append('\n');
-			return sb.append("</script>").toString();
-		}
-		return sb.append("/>").toString();
+		if (bStyle && !relFound)
+				sb.append(" rel=\"stylesheet\"");
+		if ((bScript || bStyle) && !typeFound)
+			sb.append(" type=\"text/")
+				.append(bScript ? "javascript": "css").append('"');
+		return sb.append(bScript ? ">\n</script>": "/>").toString();
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #toHTML(Page)}.
+	 */
+	public String toHTML(PageDefinition pgdef, Page page) {
+		return toHTML(page);
+	}
+
+	public boolean isEffective(Component comp) {
+		return _cond == null || _cond.isEffective(_evalr, comp);
+	}
+	public boolean isEffective(Page page) {
+		return _cond == null || _cond.isEffective(_evalr, page);
 	}
 }

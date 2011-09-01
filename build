@@ -100,7 +100,7 @@ else
 fi
 
 #-- parsing cmd
-cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc help"
+cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc jsdoc help"
 if [ \( $# != 0 \) -a \( "${cmdList#* $1 }" != "$cmdList" \) ] ; then
 	cmd=$1
 	shift
@@ -281,9 +281,9 @@ function invoke_ant
 	cd $2
 	
 	if [ $3 ] ; then
-		pronm=$3
+		prjnm=$3
 	else
-		pronm=$2
+		prjnm=$2
 	fi
 	
 	#handle class.test.local
@@ -352,15 +352,6 @@ function invoke_ant
 		ear_libs=nonexist
 	fi
 
-	local import_libs=
-	if [ -f import.libs ] ; then
-		import_libs=$(cat import.libs | tr '\n' ',')
-		import_libs=${import_libs%,}
-	fi
-	if [ "$import_libs" = "" ] ; then
-		import_libs=nonexist
-	fi
-
 	local deploy=
 	local unziplist=
 	if [ -f deploy ] ; then
@@ -412,6 +403,11 @@ function invoke_ant
 	if [ "$tgtver" = "" ] ; then
 		tgtver=1.4
 	fi
+	deprecation=$(grep '^deprecation=' version)
+	deprecation=${deprecation#deprecation=}
+	if [ "$deprecation" = "" ] ; then
+		deprecation=on
+	fi
 
 	this_dflag=$dflag
 	dflagtmp=$(grep '^debug=' version)
@@ -428,6 +424,12 @@ function invoke_ant
 		this_oflag=on
 	elif [ "$oflagtmp" = "false" ] ; then
 		this_oflag=off
+	fi
+
+	prjtitle=$(grep '^project=' version)
+	prjtitle=${prjtitle#project=}
+	if [ "$prjtitle" = "" ] ; then
+		prjtitle=$prjnm
 	fi
 
 	format="$(head -1 format)"
@@ -453,9 +455,10 @@ function invoke_ant
 		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
-		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
-		-Dproject.name="$pronm" -Dproject.version="$prjver" \
+		-Dear.libs="$ear_libs" \
+		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
+		-Ddeprecation="$deprecation" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \
@@ -482,7 +485,7 @@ if [ "$javadocAll" = "true" ] ; then
 	touch javadoctmp/tmp
 	for target in $targetList ; do
 		echo "copy $target"
-		if [ "$target" != "zkdemo" ] ; then
+		if [ "$target" != "zksandbox" ] && [ "$target" != "zktest" ] ; then
 			if [ -d $target/src/org ] ; then
 				cp -rp $target/src/org* javadoctmp/src
 			fi
@@ -497,9 +500,9 @@ if [ "$javadocAll" = "true" ] ; then
 	sort javadoctmp/tmp | uniq >> javadoctmp/classpath
 	rm javadoctmp/tmp
 	cp zk/version zk/format javadoctmp
-	invoke_ant javadoc javadoctmp ZK
+	invoke_ant javadoc javadoctmp zk
 	rm -rf javadoctmp
-	exit 1
+	exit 0
 else
 	echo "targets: ${targetList}"
 	for target in $targetList ; do

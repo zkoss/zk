@@ -1,18 +1,16 @@
 /* Checkbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun 16 23:45:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,8 +21,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Checkable;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -39,21 +36,29 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Checkbox {
+public class Checkbox extends LabelImageElement
+implements org.zkoss.zul.api.Checkbox, org.zkoss.zk.ui.ext.Disable {
+	private String _value = "";
 	/** The name. */
 	private String _name;
-	private int _tabindex = -1;
-	private boolean _checked;
+	private int _tabindex;
+	/** Whether it is checked. */
+	/*package*/ boolean _checked;
 	private boolean _disabled;
-
+	
+	static {
+		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+	}
+	
 	public Checkbox() {
 	}
 	public Checkbox(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Checkbox(String label, String image) {
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
 
 	/** Returns whether it is disabled.
@@ -86,6 +91,26 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 		}
 	}
 
+	/** Returns the value.
+	 * <p>Default: "".
+	 * @since 5.0.4
+	 */
+	public String getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value; If null, it is considered as empty.
+	 * @since 5.0.4
+	 */
+	public void setValue(String value) {
+		if (value == null)
+			value = "";
+		if (!Objects.equals(_value, value)) {
+			_value = value;
+			smartUpdate("value", _value);
+		}
+	}
+	
 	/** Returns the name of this component.
 	 * <p>Default: null.
 	 * <p>Don't use this method if your application is purely based
@@ -117,7 +142,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	}
 
 	/** Returns the tab order of this component.
-	 * <p>Default: -1 (means the same as browser's default).
+	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
 		return _tabindex;
@@ -127,55 +152,17 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", null);
-			else smartUpdate("tabindex", Integer.toString(_tabindex));
+			smartUpdate("tabindex", _tabindex);
 		}
 	}
 
-	/** Returns the attributes used by the embedded HTML LABEL tag.
-	 * It returns text-relevant styles only.
-	 * <p>Used only by component developer.
-	 */
-	public String getLabelAttrs() {
-		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
-		return style.length() > 0 ? " style=\""+style+'"': "";
-	}
-
 	//-- super --//
-	/** Appends interior attributes for generating the HTML checkbox tag
-	 * (the name, disabled and other attribute).
-	 * <p>Used only by component developers.
+	/** Default: not childable.
 	 */
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-
-		HTMLs.appendAttribute(sb, "name", getName());
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "disabled",  "disabled");
-		if (isChecked())
-			HTMLs.appendAttribute(sb, "checked",  "checked");
-		if (_tabindex >= 0)
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
-		return sb.toString();
+	protected boolean isChildable() {
+		return false;
 	}
-	/** Appends exterior attributes for generating the HTML span tag
-	 * (the event relevant attribute).
-	 * <p>Used only by component developers.
-	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_FOCUS);
-		appendAsapAttr(sb, Events.ON_BLUR);
-		appendAsapAttr(sb, Events.ON_CHECK);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
-			//no z.lfclk since it is handled by widget.js
-
-		return sb.toString();
-	}
+	
 	/** Returns the Style of checkbox label
 	 *
 	 * <p>Default: "z-checkbox"
@@ -183,19 +170,36 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	 * 
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-checkbox" : _zclass;	}
-	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
+		return _zclass == null ? "z-checkbox" : _zclass;
 	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_value != null)
+			render(renderer, "value", _value);
+		if (_tabindex != 0)
+			renderer.render("tabindex", _tabindex);
+
+		render(renderer, "disabled", _disabled);
+		render(renderer, "name", _name);
+		if (_checked)
+			render(renderer, "checked", _checked);
+	}
+	//-- ComponentCtrl --//
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#service},
+	 * it also handles onCheck.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
-	implements Checkable {
-		//-- Checkable --//
-		public void setCheckedByClient(boolean checked) {
-			_checked = checked;
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CHECK)) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			_checked = evt.isChecked();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

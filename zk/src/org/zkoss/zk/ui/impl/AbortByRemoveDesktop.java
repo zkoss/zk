@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import org.zkoss.util.logging.Log;
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.au.AuResponse;
@@ -30,6 +30,8 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  */
 public class AbortByRemoveDesktop implements AbortingReason {
+	private static final Log log = Log.lookup(AbortByRemoveDesktop.class);
+
 	public AbortByRemoveDesktop() {
 	}
 
@@ -49,8 +51,6 @@ public class AbortByRemoveDesktop implements AbortingReason {
 		((ExecutionCtrl)exec).getVisualizer().disable();
 
 		//Bug 1868371: we shall postpone the cleanup to the last step
-		final Desktop dt = exec.getDesktop();
-		final WebAppCtrl wappc = (WebAppCtrl)dt.getWebApp();
-		wappc.getDesktopCache(dt.getSession()).removeDesktop(dt);
+		DesktopRecycles.removeDesktop(exec);
 	}
 }

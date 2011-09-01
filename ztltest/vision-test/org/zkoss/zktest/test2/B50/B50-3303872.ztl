@@ -1,0 +1,26 @@
+<test tags="B50-3303872.zul,A,E,Groupbox,Tabbox,IE">
+	<case id="Tabbox">
+		<server><!--
+<zk>
+<groupbox mold="3d" width="400px" height="300px" contentStyle="overflow:auto;position:relative">
+<caption label="tabbox bug" />
+<tabbox orient="vertical" height="400px">
+<tabs>
+<tab label="A" />
+</tabs>
+<tabpanels>
+<tabpanel>This is panel A</tabpanel>
+</tabpanels>
+</tabbox>
+</groupbox>
+</zk> 
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq("@caption"));
+			waitResponse();
+			click(jq("@caption"));
+			verifyImage();
+		]]></client>
+	</case>
+</test>

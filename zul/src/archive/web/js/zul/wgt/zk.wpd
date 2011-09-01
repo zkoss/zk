@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		Widget Package Descriptor
+	Description:
+		
+	History:
+		Sun Oct  5 12:51:58     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.wgt" language="xul/html" depends="zul">
+	<widget name="A"/>
+	<widget name="Cell"/>	
+	<widget name="Div"/>
+	<widget name="Span"/>
+	<widget name="Include"/>
+	<widget name="Label"/>
+	<widget name="Button"/>
+	<widget name="Separator"/>
+	<widget name="Space"/>
+	<widget name="Caption"/>
+	<widget name="Checkbox"/>
+	<widget name="Groupbox"/>
+	<widget name="Html"/>
+	<widget name="Popup"/>
+	<widget name="Radio"/>
+	<widget name="Radiogroup"/>
+	<widget name="Toolbar"/>
+	<widget name="Toolbarbutton"/>
+	<widget name="Image"/>
+	<widget name="Imagemap"/>
+	<widget name="Area"/>
+	<widget name="Chart"/>
+	<widget name="Captcha"/>
+	<widget name="Progressmeter"/>
+	<widget name="Fileupload"/>
+</package>

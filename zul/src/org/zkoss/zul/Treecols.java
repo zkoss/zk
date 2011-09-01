@@ -1,18 +1,16 @@
 /* Treecols.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul  6 18:55:52     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,7 +24,7 @@ import org.zkoss.zul.impl.HeadersElement;
 
 /**
  * A treecols.
- * <p>Default {@link #getZclass}: z-tree-cols.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treecols (since 5.0.0)
  * @author tomyeh
  */
 public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treecols {
@@ -45,24 +43,8 @@ public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treeco
 	}
 
 	//super//
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		final Tree tree = getTree();
-		if (tree != null)
-			tree.invalidate();
-		return vis;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		final Tree tree = getTree();
-		if (tree != null)
-			HTMLs.appendAttribute(sb, "z.rid", tree.getUuid());
-		return sb.toString();
-	}
-
 	public String getZclass() {
-		return _zclass == null ? "z-tree-cols" : _zclass;
+		return _zclass == null ? "z-treecols" : _zclass;
 	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

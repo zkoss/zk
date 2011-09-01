@@ -1,0 +1,22 @@
+<test tags="button,onClick">
+	<case id="Click">
+		<server><!--
+			<window>
+				button.onClick should always work.(Click more times)
+				<separator />
+				<button id="btn" label="test" onClick="label.value += &quot; click&quot;" />
+				<textbox onChange="label.value=self.value" />
+				<label id="label" />
+			</window>
+		--></server>
+		<client><![CDATA[
+			String value = "click";
+			for (int i = 0; i < 5; i++) {
+				click(btn);
+				waitResponse();
+				verifyEquals(getText(label), value);
+				value += " click";
+			}
+		]]></client>
+	</case>
+</test>

@@ -1,18 +1,16 @@
 /* ComponentInfo.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 11:27:13     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -45,7 +43,7 @@ import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
-import org.zkoss.zk.ui.metainfo.impl.MultiComposer;
+import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
@@ -73,8 +71,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private ExValue _impl;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List _props;
-	/** A Map of event handler to handle events. */
+	/** A Map of event handlers to handle events. */
 	private EventHandlerMap _evthds;
+	/** A list of event listeners for the peer widget. */
+	private List _wgtlsns;
+	/** A list of method/property overrides for the peer widget. */
+	private List _wgtovds;
+	/** A list of DOM attributes for the peer widget. */
+	private List _wgtattrs;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
@@ -98,6 +102,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** The forEach info: [forEachBegin, forEachEnd].
 	 */
 	private ExValue[] _forEachInfo;
+	/** The widget class. */
+	private ExValue _wgtcls;
 	private String _replaceableText;
 
 	/** Constructs the information about how to create component.
@@ -170,6 +176,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_props = new LinkedList(compInfo._props);
 		if (compInfo._evthds != null)
 			_evthds = (EventHandlerMap)compInfo._evthds.clone();
+		if (compInfo._wgtlsns != null)
+			_wgtlsns = new LinkedList(compInfo._wgtlsns);
+		if (compInfo._wgtovds != null)
+			_wgtovds = new LinkedList(compInfo._wgtovds);
+		if (compInfo._wgtattrs != null)
+			_wgtattrs = new LinkedList(compInfo._wgtattrs);
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -186,11 +198,11 @@ implements Cloneable, Condition, java.io.Externalizable {
 
 	/** Adds a Sting child.
 	 * Note: it is callable only if this is an instance of {@link NativeInfo}
-	 * or {@link #getComponentDefinition} is {@link ComponentDefinition#ZK}.
+	 * or {@link #getComponentDefinition} is {@link ZkInfo#ZK}.
 	 *
 	 * @exception IllegalStateException if this is not an instance of
 	 * {@link NativeInfo}, nor {@link #getComponentDefinition} is not
-	 * {@link ComponentDefinition#ZK}.
+	 * {@link ZkInfo#ZK}.
 	 * @since 3.5.0
 	 */
 	public void appendChild(TextInfo text) {
@@ -345,16 +357,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveComposer}.
-	 */
-	public Composer getComposer(Page page) {
-		return getComposer(page, null);
-	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveComposer}.
-	 */
-	public Composer getComposer(Page page, Component comp) {
-		return resolveComposer(page, comp);
-	}
 	private static void toComposers(List composers, ExValue[] apply,
 	Evaluator eval, Page page, Component comp)
 	throws Exception {
@@ -412,7 +414,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * instances, or null if no apply attribute.
 	 *
 	 * @since 3.0.0
-	 * @see #getComposer
+	 * @see #resolveComposer
 	 */
 	public String getApply() {
 		if (_apply == null)
@@ -552,6 +554,78 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public Set getEventHandlerNames() {
 		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
 	}
+	/** Adds an event listener for the peer widget.
+	 * @since 5.0.0
+	 */
+	public void addWidgetListener(String name, String script, ConditionImpl cond) {
+		final WidgetListener listener =
+			new WidgetListener(_evalr, name, script, cond);
+		if (_wgtlsns == null)
+			_wgtlsns = new LinkedList();
+		_wgtlsns.add(listener);
+	}
+	/** Adds a method or a value to the peer widget.
+	 * If there was a method with the same name, it will be renamed to
+	 * <code>$<i>name</i></code> so can you access it for callback purpose.
+	 * <pre><code>&lt;label w:setValue="function (value) {
+	 *  this.$setValue(value); //old method
+	 *}"/&gt;</code></pre>
+	 * @param script the client side script. EL expressions are allowed.
+	 * @see #addWidgetAttribute
+	 * @since 5.0.0
+	 */
+	public void addWidgetOverride(String name, String script, ConditionImpl cond) {
+		final WidgetOverride mtd =
+			new WidgetOverride(_evalr, name, script, cond);
+		if (_wgtovds == null)
+			_wgtovds = new LinkedList();
+		_wgtovds.add(mtd);
+	}
+	/** Adds a custom DOM attribute to the peer widget.
+	 * <p>Unlike {@link #addWidgetOverride}, the attributes added here are
+	 * generated directly as DOM attributes at the client.
+	 * In other words, it is not a property or method of the peer widget.
+	 * @param name the name of the attribute.
+	 * Unlike {@link #addWidgetOverride}, the name might contain
+	 * no alphanumeric characters, such as colon and dash.
+	 * @since 5.0.3
+	 * @see #addWidgetOverride
+	 */
+	public void addWidgetAttribute(String name, String value, ConditionImpl cond) {
+		final WidgetAttribute attr =
+			new WidgetAttribute(_evalr, name, value, cond);
+		if (_wgtattrs == null)
+			_wgtattrs = new LinkedList();
+		_wgtattrs.add(attr);
+	}
+
+	/** Sets the widget class.
+	 * @param wgtcls the widget class (at the client side).
+	 * EL expressions are allowed.
+	 * @since 5.0.2
+	 */
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ?
+			new ExValue(wgtcls, String.class): null;
+	}
+	/** Returns the widget class (might contain EL expressions), or null
+	 * if not available.
+	 * @since 5.0.2
+	 */
+	public String getWidgetClass() {
+		return _wgtcls != null ? _wgtcls.getRawValue(): null;
+	}
+	/** Resolves the widget class, or null if the default is expected.
+	 * It will evaluate EL expressions if any.
+	 * <p>You rarely need to invoke this method since it is called
+	 * automatically when {@link #applyProperties} is called.
+	 * @param comp the component that the widget class represents at the client.
+	 * @since 5.0.2
+	 */
+	public String resolveWidgetClass(Component comp) {
+		return _wgtcls != null ? (String)_wgtcls.getValue(getEvaluator(), comp): null;
+	}
+
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(ConditionImpl cond) {
@@ -584,11 +658,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 				ForEachImpl.getInstance(
 					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
 	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveForEach}.
-	 */
-	public ForEach getForEach(Page page, Component comp) {
-		return resolveForEach(page, comp);
-	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
@@ -611,16 +680,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _forEach != null;
 	}
 
-	/** @deprecated As of release 3.6.0, replaced with {@link #getImplementation}.
-	 */
-	public String getImplementationClass() {
-		return getImplementation();
-	}
-	/** @deprecated As of release 3.6.0, replaced with {@link #setImplementation}.
-	 */
-	public void setImplementationClass(String clsnm) {
-		setImplementation(clsnm);
-	}
 	/** Returns the class name or an expression returning a class instance,
 	 * a class name, or a component.
 	 * It is the same value that {@link #setImplementation} was called.
@@ -686,7 +745,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Creates an component based on this info (never null).
 	 * It is the same as newInstance(page, null).
 	 *
-	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * <p>If the implementation class ({@link #getImplementation})
 	 * doesn't have any EL expression, or its EL expresson doesn't
 	 * referece to the self variable, the result is the same.
 	 *
@@ -700,7 +759,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Resolves and returns the class for the component represented
 	 * by this info (never null).
 	 *
-	 * <p>Unlike {@link #getImplementationClass},
+	 * <p>Unlike {@link #getImplementation},
 	 * this method will resolve a class name (String) to a class (Class),
 	 * if necessary.
 	 *
@@ -724,7 +783,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * by this info (never null).
 	 * It is the same as resolveImplementationClass(page, null).
 	 *
-	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * <p>If the implementation class ({@link #getImplementation})
 	 * doesn't have any EL expression, or its EL expresson doesn't
 	 * referece to the self variable, the result is the same.
 	 *
@@ -748,12 +807,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 *
 	 * <p>It also invokes {@link ComponentDefinition#applyProperties}.
 	 *
-	 * <p>Note: custom attributes are not part of {@link ComponentInfo},
+	 * <p>Note: custom attributes are <i>not</i> part of {@link ComponentInfo},
 	 * so they won't be applied here.
 	 *
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
 	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
+	 *
+	 * <p>Note: the widget class ({@link #setWidgetClass}) is set by this method.
 	 *
 	 * @since 3.0.0
 	 */
@@ -763,12 +824,23 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_evthds != null)
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
-		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
-				prop.assign(comp);
-			}
-		}
+		if (_props != null)
+			for (Iterator it = _props.iterator(); it.hasNext();)
+				((Property)it.next()).assign(comp);
+
+		if (_wgtlsns != null)
+			for (Iterator it = _wgtlsns.iterator(); it.hasNext();)
+				((WidgetListener)it.next()).assign(comp);
+
+		if (_wgtovds != null)
+			for (Iterator it = _wgtovds.iterator(); it.hasNext();)
+				((WidgetOverride)it.next()).assign(comp);
+
+		if (_wgtattrs != null)
+			for (Iterator it = _wgtattrs.iterator(); it.hasNext();)
+				((WidgetAttribute)it.next()).assign(comp);
+
+		comp.setWidgetClass(resolveWidgetClass(comp));
 	}
 
 	/** Evaluates and retrieves properties to the specified map from
@@ -961,6 +1033,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_impl);
 		out.writeObject(_props);
 		out.writeObject(_evthds);
+		out.writeObject(_wgtlsns);
+		out.writeObject(_wgtovds);
+		out.writeObject(_wgtattrs);
 		out.writeObject(_annots);
 		out.writeObject(_tag);
 		out.writeObject(_cond);
@@ -990,6 +1065,9 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_impl = (ExValue)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
+		_wgtlsns = (List)in.readObject();
+		_wgtovds = (List)in.readObject();
+		_wgtattrs = (List)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();

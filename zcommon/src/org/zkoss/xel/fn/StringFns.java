@@ -1,24 +1,23 @@
 /* StringFns.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Mar 31 12:25:57     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.xel.fn;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -56,6 +55,64 @@ public class StringFns {
 		return cat(cat(cat(cat(s1, s2), s3), s4), s5);
 	}
 
+	/** Converts all of the characters in this String to upper case using the rules of the current Locale.
+	 * @see Locales#getCurrent
+	 * @since 5.0.7
+	 */
+	public static String toLowerCase(String s) {
+		return s != null ? s.toLowerCase(Locales.getCurrent()): null;
+	}
+	/** Converts all of the characters in this String to upper case using the rules of the current Locale.
+	 * @see Locales#getCurrent
+	 * @since 5.0.7
+	 */
+	public static String toUpperCase(String s) {
+		return s != null ? s.toUpperCase(Locales.getCurrent()): null;
+	}
+	/** Returns a copy of the string, with leading and trailing whitespace omitted.
+	 * @since 5.0.7
+	 */
+	public static String trim(String s) {
+		return s != null ? s.trim(): null;
+	}
+	/** Splits a string.
+	 * @since 5.0.7
+	 */
+	public static String[] split(String s, String separator) {
+		return s != null ? s.split(separator): null;
+	}
+	/** Joins an array of string.
+	 * since 5.0.7
+	 */
+	public static String join(Object[] ss, String separator) {
+		if (ss == null) return null;
+
+		final StringBuffer sb = new StringBuffer();
+		for (int j = 0; j < ss.length; ++j) {
+			if (j != 0)
+				sb.append(separator);
+			sb.append(ss[j]);
+		}
+		return ss.toString();
+	}
+	/** Tests if this string starts with the specified prefix.
+	 * @since 5.0.7
+	 */
+	public static boolean startsWith(String s1, String s2) {
+		return s1 != null && s2 != null && s1.startsWith(s2);
+	}
+	/** Tests if this string ends with the specified suffix.
+	 * @since 5.0.7
+	 */
+	public static boolean endsWith(String s1, String s2) {
+		return s1 != null && s2 != null && s1.endsWith(s2);
+	}
+	/** Returns a new string that is a substring of this string.
+	 * @since 5.0.7
+	 */
+	public static String substring(String s, int from, int to) {
+		return s != null ? s.substring(from, to): null;
+	}
 	/** Replaces all occurrances of 'from' in 'src' with 'to'
 	 */
 	public static String replace(String src, String from, String to) {

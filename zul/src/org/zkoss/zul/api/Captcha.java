@@ -1,18 +1,16 @@
 /* Captcha.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -144,6 +142,17 @@ public interface Captcha extends org.zkoss.zul.api.Image {
 	 * Whether generate noise; default to true.
 	 */
 	public boolean isNoise();
+
+	/** Sets whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public void setFrame(boolean frame);
+	/** Returns whether generate border.
+	 * <p> Default to false.
+	 * @since 5.0.4
+	 */
+	public boolean isFrame();
 
 	/**
 	 * Regenerates new captcha text value and redraw.

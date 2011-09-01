@@ -1,18 +1,16 @@
 /* Applet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Sep 19 17:32:48 TST 2008, Created by davidchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -24,13 +22,17 @@ import java.util.Iterator;
 import java.util.Map;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.au.out.AuInvoke;
+
+import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A generic applet component.
+ * <p>See also <a href="http://www.w3schools.com/TAGS/tag_applet.asp">HTML applet tag</a>.
  * 
  * <p>
  * Non XUL extension.
@@ -39,36 +41,131 @@ import org.zkoss.zul.impl.XulElement;
  * @author Tomyeh
  * @since 3.6.0
  */
-public class Applet extends XulElement implements DynamicPropertied,
+public class Applet extends HtmlBasedComponent implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
-	private String _code = "";
-	private String _codebase = "";
+	private String _code, _codebase, _archive,
+		_align, _hspace, _vspace;
 	private final Map _params = new LinkedHashMap();
+	private boolean _mayscript;
 
-	/** Return the code of the applet, i.e., the URI of the Java class.
+	/** Return the applet class to run.
+	 * Example: MyApplet.
 	 */
 	public String getCode() {
 		return _code;
 	}
-	/** Sets the code of the applet, i.e., the URI of the Java class.
+	/** Sets the applet class to run.
 	 */
 	public void setCode(String code) {
-		_code = code;
-		invalidate();
+		if (!Objects.equals(_code, code)) {
+			_code = code;
+			invalidate();
+		}
 	}
 	
-	/** Return the codebase of the applet, i.e., the URI of the Java class.
+	/** Returns a relative base URL for applets specified in {@link #setCode} (URL).
+	 * <p>Default: null (no codebase at all).
 	 * @since 3.6.2
 	 */
 	public String getCodebase() {
 		return _codebase;
 	}
-	/** Sets the codebase of the applet, i.e., the URI of the Java class.
+	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 3.6.2
 	 */
 	public void setCodebase(String codebase) {
-		_codebase = codebase;
-		invalidate();
+		if (!Objects.equals(_codebase, codebase)) {
+			_codebase = codebase;
+			invalidate();
+		}
+	}
+	/** Returns whether the applet is allowed to access the scripting object.
+	 * <p>Default: false.
+	 * <p>It is only necessary for the applet to control the page script objects.
+	 * It is not necessary for the page objects to control the applet.
+	 * @since 5.0.3
+	 */
+	public boolean isMayscript() {
+		return _mayscript;
+	}
+	/** Sets whether the applet is allowed to access the scripting object.
+	 * @since 5.0.3
+	 */
+	public void setMayscript(boolean mayscript) {
+		if (_mayscript != mayscript) {
+			_mayscript = mayscript;
+			invalidate();
+		}
+	}
+
+	/** Returns the location of an archive file (URL).
+	 * <p>Default: null (no archive at all)
+	 * @since 5.0.3
+	 */
+	public String getArchive() {
+		return _archive;
+	}
+	/** Sets the location of an archive file (URL).
+	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
+	 * @since 5.0.3
+	 */
+	public void setArchive(String  archive) {
+		if (!Objects.equals(_archive, archive)) {
+			_archive = archive;
+			invalidate();
+		}
+	}
+
+	/** Returns the alignment of an applet according to surrounding elements.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getAlign() {
+		return _align;
+	}
+	/** Sets the alignment of an applet according to surrounding elements.
+	 * <p>Refer to <a href="http://www.w3schools.com/tags/tag_applet.asp">HTML &lt;applet> Tag</a>for more information.
+	 * @since 5.0.3
+	 */
+	public void setAlign(String align) {
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			invalidate();
+		}
+	}
+
+	/** Returns the horizontal spacing around an applet.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getHspace() {
+		return _hspace;
+	}
+	/** Sets the horizontal spacing in pixels around an applet.
+	 * @since 5.0.3
+	 */
+	public void setHspace(String hspace) {
+		if (!Objects.equals(_hspace, hspace)) {
+			_hspace = hspace;
+			invalidate();
+		}
+	}
+	/** Returns the vertical spacing around an applet.
+	 * <p>Default: null (browser default)
+	 * @since 5.0.3
+	 */
+	public String getVspace() {
+		return _vspace;
+	}
+	/** Sets the vertical spacing in pixels around an applet.
+	 * @since 5.0.3
+	 */
+	public void setVspace(String vspace) {
+		if (!Objects.equals(_vspace, vspace)) {
+			_vspace = vspace;
+			invalidate();
+		}
 	}
 
 	/** Sets a map of parameters (all existent parameters are removed first).
@@ -92,20 +189,6 @@ org.zkoss.zul.api.Applet {
 			(String)_params.remove(name);
 	}
 
-	/** Used only internally for component development.
-	 */
-	public String getParamsHtml() {
-		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator iter = _params.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry me = (Map.Entry) iter.next();
-			sb.append("<param");
-			HTMLs.appendAttribute(sb, "name", Objects.toString(me.getKey()));
-			HTMLs.appendAttribute(sb, "value", Objects.toString(me.getValue()));
-			sb.append("/>");
-		}
-		return sb.toString();
-	}
-
 	public Object getDynamicProperty(String name) {
 		return _params.get(name);
 	}
@@ -122,13 +205,13 @@ org.zkoss.zul.api.Applet {
 	/** Invokes the function of the applet running at the client.
 	 */
 	public void invoke(String function) {
-		response(null, new AuInvoke(this, "invoke", function));
+		response(new AuInvoke(this, "invoke", function));
 	}
 	/** Invokes the function of the applet running at the client with
 	 * one argument.
 	 */
 	public void invoke(String function, String argument) {
-		response(null, new AuInvoke(this, "invoke", function, argument));
+		response(new AuInvoke(this, "invoke", function, argument));
 	}
 	/** Invokes the function of the applet running at the client with
 	 * variable number argument.
@@ -139,28 +222,48 @@ org.zkoss.zul.api.Applet {
 		args[0] = function;
 		for (int j = 0; j < len; ++j)
 			args[j + 1] = arguments[j];
-		response(null, new AuInvoke(this, "invoke", args));
+		response(new AuInvoke(this, "invoke", args));
 	}
 
 	/** Sets the value of the specified filed.
 	 */
 	public void setField(String field, String value) {
-		response(null, new AuInvoke(this, "field", field, value));
+		response(new AuInvoke(this, "setField", field, value));
 	}
-	
-	protected String getRealStyle() {
-		// bug #2815049
-		return super.getRealStyle() + "visibility: visible;";
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "code", _code);
-		HTMLs.appendAttribute(sb, "codebase", _codebase);
-		return sb.toString();
-	}
+
+	//super//
 	/** No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "code", getCode());
+		render(renderer, "codebase", encode(getCodebase(), true));
+		render(renderer, "archive", encode(getArchive(), false));
+		render(renderer, "align", getAlign());
+		render(renderer, "hspace", getHspace());
+		render(renderer, "vspace", getVspace());
+		if (isMayscript())
+			renderer.render("mayscript", true);
+		render(renderer, "params", _params);
+	}
+
+	/**
+	 * @param appendable whether the URL is used as a base that can append
+	 * other URI.
+	 */
+	private String encode(String uri, boolean appendable) {
+		final Desktop dt = getDesktop();
+		if (uri != null && dt != null) { //if desktop is null, it doesn't belong to any execution
+			uri = dt.getExecution().encodeURL(uri);
+			final int j = uri.lastIndexOf(";jsession");
+			if (j >= 0)
+				uri = uri.substring(0, j);
+		}
+		return uri;
 	}
 }

@@ -1,18 +1,16 @@
 /* Iframe.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jul 21 11:11:18     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,8 +22,10 @@ import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.URIEvent;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -37,10 +37,13 @@ import org.zkoss.zul.impl.Utils;
  * property. Rather, use the CSS style to customize the border (like
  * any other components).
  *
+ * <p>To handle the onload event, you have to use the client-attribute namespace.
+ * Please refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Iframe#onload">ZK Component Reference: iframe</a> fore more information.
+ *
  * @author tomyeh
  * @see Include
  */
-public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
+public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Iframe {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */
@@ -49,6 +52,10 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	private byte _medver;
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
 	private boolean _autohide;
+
+	static {
+		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, 0);
+	}
 
 	public Iframe() {
 	}
@@ -66,7 +73,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 		if (scrolling == null) scrolling = "auto";
 		if (!scrolling.equals(_scrolling)) {
 			_scrolling = scrolling;
-			invalidate();
+			smartUpdate("scrolling", _scrolling);
 		}
 	}
 	
@@ -114,22 +121,25 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	 *
 	 * <p>Default: false.
 	 *
-	 * <p>If an iframe contains PDF or other embeds, it will be placed
-	 * on top of other components. It may then make popups and dropdowns
-	 * obscure. In this case, you have to specify autohide="true" to
-	 * ask ZK to hide the iframe when popups or dropdowns is overlapped
-	 * with the iframe.
+	 * <p>If an iframe contains PDF or other non-HTML resource,
+	 * it is possible that it obscues the popup that shall be shown
+	 * above it. To resolve this, you have to specify autohide="true"
+	 * to this component, and specify the following in the page:
+	 * <pre><code>&lt;?script content="zk.useStack='auto';"?>
+	 * <p>Please refer to <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Stackup_and_Shadow">Stackup and Shadow</a>
+	 * for more information.
 	 */
 	public boolean isAutohide() {
 		return _autohide;
 	}
 	/** Sets whether to automatically hide this component if
 	 * a popup or dropdown is overlapped with it.
+	 * Refer to {@link #isAutohide} for more information
 	 */
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			smartUpdate("z.autohide", _autohide ? "true": null);
+			smartUpdate("autohide", _autohide);
 		}
 	}
 
@@ -154,7 +164,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 		if (_media != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_media = null;
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the encoded src ({@link #getSrc}).
@@ -162,8 +172,8 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	protected String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _media != null ? getMediaSrc(): //already encoded
-			dt != null ? dt.getExecution().encodeURL(
-				_src != null ? _src: "~./img/spacer.gif"):  "";
+			dt != null && _src != null ?
+				dt.getExecution().encodeURL(_src):  "";
 	}
 
 	/** Sets the content directly.
@@ -182,7 +192,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 				//if the component is invalidated or overlapped wnd (Bug 1896797)
 			_src = null;
 			if (_media != null) ++_medver; //enforce browser to reload
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the content set by {@link #setContent}.
@@ -201,37 +211,42 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 			this, _medver, _media.getName(), _media.getFormat());
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs())
-			.append(" frameborder=\"0\"");
-			//frameborder is default to 0
-			//User has to use style to customize the border
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "name", _name);
-		HTMLs.appendAttribute(sb, "src", getEncodedSrc());
-		appendAsapAttr(sb, Events.ON_URI_CHANGE);
-
+		render(renderer, "src", getEncodedSrc());
 		if (!"auto".equals(_scrolling))
-			HTMLs.appendAttribute(sb, "scrolling", 
-				"true".equals(_scrolling) ? "yes":
-				"false".equals(_scrolling) ? "no": _scrolling);
-		if (_autohide)
-			HTMLs.appendAttribute(sb, "z.autohide", _autohide);
-		return sb.toString();
+			render(renderer, "scrolling", _scrolling);
+		render(renderer, "align", _align);
+		render(renderer, "name", _name);
+		render(renderer, "autohide", _autohide);
+	}
+
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onURIChange.
+	 * @since 5.0.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (Events.ON_URI_CHANGE.equals(cmd)) {
+			Events.postEvent(URIEvent.getURIEvent(request));
+		} else
+			super.service(request, everError);
 	}
 
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
@@ -246,7 +261,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	}
 
 	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedSrc();
 		}
 	}

@@ -1,18 +1,16 @@
 /* AuDynaMediar.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 11 19:14:17     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -38,6 +36,7 @@ import org.zkoss.web.servlet.http.Https;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
@@ -58,15 +57,25 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  * @author tomyeh
  * @since 3.0.2
  */
-public class AuDynaMediar implements AuProcessor {
+public class AuDynaMediar implements AuExtension {
 	private static final Log log = Log.lookup(AuDynaMediar.class);
+
+	private ServletContext _ctx;
+
+	public AuDynaMediar() {
+	}
+	public void init(DHtmlUpdateServlet servlet) {
+		_ctx = servlet.getServletContext();
+	}
+	public void destroy() {
+	}
 
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.
 	 */
-	public void process(Session sess, ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, String pi)
+	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
 //		if (D.ON && log.debugable()) log.debug("View "+pi);
+		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
 			return;
@@ -92,7 +101,7 @@ public class AuDynaMediar implements AuProcessor {
 
 			final Execution oldexec = Executions.getCurrent();
 			final Execution exec = new ExecutionImpl(
-				ctx, request, response, desktop, null);
+				_ctx, request, response, desktop, null);
 			uieng.activate(exec);
 
 			final Configuration config = wapp.getConfiguration();
@@ -109,7 +118,9 @@ public class AuDynaMediar implements AuProcessor {
 					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
 					if (!(cc instanceof DynamicMedia))
 						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
-					media = ((DynamicMedia)cc).getMedia(l >= 0 ? pi.substring(l): "");
+					int m = l >= 0 ? pi.indexOf('/', l + 1): -1;
+					if (m < 0) m = l;
+					media = ((DynamicMedia)cc).getMedia(m >= 0 ? pi.substring(m): "");
 					if (media == null) {
 						response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
 						return;

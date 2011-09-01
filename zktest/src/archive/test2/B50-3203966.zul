@@ -1,0 +1,22 @@
+<zk>
+	<html><![CDATA[
+	       <ol>
+				<li>Click the first button to change flash src</li>
+				<li>Click the "Confirm" button, if message show error, that is bug</li>
+			</ol>
+	]]></html>
+	<label id="msg" />
+	<flash id="f" src="http://www.zkoss.org/Steps/learn.swf"
+		height="300" width="800">
+	</flash>
+	<button label="Click this first" onClick='f.src="http://www.zkoss.org" ' />
+	<button label="Confirm">
+		<attribute name="onClick">
+			Clients.evalJavaScript("var src = jq('embed').attr('src');" + 
+			" var msgWgt = zk.Widget.$('" + msg.getUuid() + "'); " + 
+			"if (src == 'http://www.zkoss.org') {msgWgt.setValue('Correct');}" + 
+			"else { msgWgt.setValue('Error: src not change !, This is bug'); jq(msgWgt.$n()).css('color', 'red');}");
+		</attribute>
+	</button>
+	
+</zk>

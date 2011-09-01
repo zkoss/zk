@@ -1,17 +1,15 @@
 /* AbstractItem.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/21 16:26:46, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -73,25 +71,12 @@ implements Item, Node, Serializable, Cloneable {
 	private Group _parent;
 	/** The locator. */
 	private Locator _loc;
-	/** The read-only flag. */
-	private boolean _readonly;
 	/** The map of user data. */
 	private Map _usrdta;
-	/** The modification flag. */
-	protected transient boolean _modified;
 
 	/** Constructor.
 	 */
 	protected AbstractItem() {
-	}
-
-	//-- utilities --//
-	/** Checks whether this item is writable (ie, isReady).
-	 * @exception DOMException with NO_MODIFICATION_ALLOWED_ERR if not writable
-	 */
-	protected final void checkWritable() {
-		if (isReadonly())
-			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, _loc);
 	}
 
 	//-- utilities --//
@@ -125,29 +110,33 @@ implements Item, Node, Serializable, Cloneable {
 	}
 
 	//-- Item --//
+	/**
+	 * @deprecated As of release 5.0.8, it always returns false.
+	 */
 	public boolean isReadonly() {
-		return _readonly || (_parent!=null && _parent.isReadonly());
+		return false;
 	}
 	/**
-	 * Sets the read-only flag of this item. It causes this item
-	 * and all its descendants read-only, see {@link #isReadonly}.
-	 *
-	 * <p>Deriving class might restrict more conditions here.
+	 * @deprecated As of release 5.0.8, it does nothing.
 	 */
 	public void setReadonly(boolean readonly) {
-		_readonly = readonly;
 	}
 
+	/**
+	 * @deprecated As of release 5.0.8, it always returns false.
+	 */
 	public boolean isModified() {
-		return _modified;
+		return false;
 	}
+	/**
+	 * @deprecated As of release 5.0.8, it does nothing.
+	 */
 	public void clearModified(boolean includingDescendant) {
-		_modified = false;
 	}
+	/**
+	 * @deprecated As of release 5.0.8, it does nothing.
+	 */
 	public void setModified() {
-		_modified = true;
-		if (_parent != null)
-			_parent.setModified();
 	}
 
 	public void setName(String name) {
@@ -168,45 +157,29 @@ implements Item, Node, Serializable, Cloneable {
 	}
 
 	public Item detach() {
-		checkWritable();
 		if (_parent != null) {
 			_parent.getChildren().remove(this);
 			assert(_parent == null);
-			assert(isModified());
 		}
 		return this;
 	}
-	public Item clone(boolean preserveModified) {
-		try {
-			AbstractItem v = (AbstractItem)super.clone();
-			v._readonly = false;
-			v._parent = null;
-			if (!preserveModified)
-				v._modified = false;
-			return v;
-		}catch(CloneNotSupportedException ex) {
-			throw new InternalError();
-		}
+	/**
+	 * @deprecated As of release 5.0.8, replaced with {@link #clone()}.
+	 */
+	public Item clone(boolean reserved) {
+		return (Item)clone();
 	}
 	public final Group getParent() {
 		return _parent;
 	}
 	public void setParent(Group parent) {
-		checkWritable();
-		if (_parent != parent) {
-			//Note: new parent and old parent's setModified must be called
-			if (_parent != null)
-				_parent.setModified();
-			_parent = parent;
-			setModified(); //then, parent.setModified is called
-		}
+		_parent = parent;
 	}
 
 	public final Locator getLocator() {
 		return _loc;
 	}
 	public final void setLocator(Locator loc) {
-		checkWritable();
 		_loc = loc;
 	}
 
@@ -227,7 +200,7 @@ implements Item, Node, Serializable, Cloneable {
 	public final Node cloneNode(boolean deep) {
 		if (!deep)
 			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "always deep", _loc); //NOT YET
-		return (Node)clone(false);
+		return (Node)clone();
 	}
 
 	public final Node getParentNode() {
@@ -365,6 +338,12 @@ implements Item, Node, Serializable, Cloneable {
 	 * and the parent becomes null (i.e., detached).
 	 */
 	public Object clone() {
-		return clone(false);
+		try {
+			AbstractItem v = (AbstractItem)super.clone();
+			v._parent = null;
+			return v;
+		}catch(CloneNotSupportedException ex) {
+			throw new InternalError();
+		}
 	}
 }

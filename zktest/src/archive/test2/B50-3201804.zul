@@ -1,0 +1,211 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk>
+	<html><![CDATA[
+	       <p style="color:red;">Test under NonMax version</p>
+	       <ol>
+	       		<li>Select more than one item on page 1: for example, select row 1 and row 2</li>
+				<li>Click the paging button to go to page 2</li>
+				<li>If stay on page 1, it's bug</li>
+				<li>If you can go to page 2, click paging button again to go to page 1</li>
+				<li>If the selection on page 1 doesn't remain the same, it's bug</li>
+			</ol>
+	]]></html>
+<style>
+.cardSys .topic,
+.cardSys .topic .z-label,
+.cardSys .z-window-embedded-header {
+font-weight: bold;
+font-size: 14px;
+}
+.cardSys .z-grid,
+.cardSys .z-listbox {
+border: 1px solid #9F9F9F;
+}
+.cardSys .z-listbox {
+border-right: 0 none;
+border-bottom: 0 none;
+}
+.employee-list .z-listcell-cnt {
+text-align: center;
+}
+.card-pre .card {
+margin: 70px 50px 50px;
+text-align: center;
+width: 300px;
+height: 168px;
+-moz-box-shadow: 0px 0px 8px gray;
+-webkit-box-shadow: 0px 0px 8px gray;
+box-shadow: 0px 0px 8px gray;
+background-color: #008BB6; 
+}
+.card-pre .card .title {
+margin-top: 10px;
+}
+.card-pre .card .title,
+.card-pre .card .z-label {
+color: white;
+font-size: 0.95em ;
+font-family: monospace;
+text-shadow: 1px 1px 3px #3C3C3C;
+}
+.card-pre .card .name {
+font-family: monospace;
+font-size: 14px;
+font-weight: bold;
+color: #ECECEC;
+text-shadow: 1px 1px 3px #3C3C3C;
+}
+.card-pre .card .number {
+margin-top: 15px;
+font-size: 12px;
+color: white;
+}
+</style>
+<window sclass="cardSys" border="none">
+<zscript><![CDATA[
+class Contributor {
+private String title;
+private String firstName;
+private String lastName;
+private Integer extension;
+
+public Contributor(String firstName, String lastName, String title, Integer ext) {
+	setFirstName(firstName);
+	setLastName(lastName);
+	setTitle(title);
+	setExtension(ext);
+}
+
+public String getFirstName() {
+	return firstName;
+}
+
+public void setFirstName(String fn) {
+	firstName = fn;
+}
+
+public String getLastName() {
+	return lastName;
+}
+
+public void setLastName(String ln) {
+	lastName = ln;
+}
+
+public String getTitle() {
+	return title;
+}
+
+public void setTitle(String tl) {
+	title = tl;
+}
+
+public Integer getExtension() {
+	return extension;
+}
+
+public void setExtension(Integer ext) {
+	extension = ext;
+}
+
+public String getFullName() {
+	return getFirstName() + " " + getLastName();
+}
+}
+                  
+                  
+List titles = new ArrayList();
+titles.add("Code");
+titles.add("Bug");
+titles.add("Docs");
+titles.add("Arts");
+ListModel titleModel = new BindingListModelList(titles, true);
+List allContributor = new ArrayList();
+allContributor.add(new Contributor("Kaleb", "Leonel", titles.get(0).toString(), 321));
+allContributor.add(new Contributor("Balu", "Haben", titles.get(0).toString(), 321));
+allContributor.add(new Contributor("Trey", "Wyatt", titles.get(0).toString(), 323));
+allContributor.add(new Contributor("Balu", "Haben", titles.get(0).toString(), 324));
+allContributor.add(new Contributor("Terry", "Tornado", titles.get(0).toString(), 711));
+allContributor.add(new Contributor("Jesse", "Miles", titles.get(1).toString(), 712));
+allContributor.add(new Contributor("Sadira", "Jobs", titles.get(1).toString(), 713));
+allContributor.add(new Contributor("Jaquan", "Frederick", titles.get(2).toString(), 451));
+allContributor.add(new Contributor("Avery", "Katrina", titles.get(2).toString(), 453));
+allContributor.add(new Contributor("Heidi", "Nikolas", titles.get(2).toString(), 455));
+allContributor.add(new Contributor("Katelyn", "Clara", titles.get(2).toString(), 457));
+allContributor.add(new Contributor("Branden", "Shane", titles.get(2).toString(), 459));
+allContributor.add(new Contributor("Dacey", "Obert", titles.get(2).toString(), 450));
+allContributor.add(new Contributor("Julianna", "Allison", titles.get(3).toString(), 643));
+allContributor.add(new Contributor("Rachel", "Elisabeth", titles.get(3).toString(), 644));
+allContributor.add(new Contributor("Clarissa", "Francesca", titles.get(3).toString(), 645));
+allContributor.add(new Contributor("Gabby", "Taffy", titles.get(3).toString(), 646));
+Contributor selected = allContributor.get(0);
+]]></zscript>
+	<style src="/widgets/grid/data_binding/Customize.css" />
+	<hlayout spacing="0">
+		<listbox sclass="employee-list" model="@{allContributor}"
+			selectedItem="@{selected}" mold="paging" rows="10" pageSize="10" width="401px" vflex="true"
+			 multiple="true" checkmark="true">
+			<attribute name="onAfterRender">
+				//int size = self.getItemCount();
+				System.out.println("onAfterRender: " + size);
+			</attribute>
+			<auxhead>
+				<auxheader colspan="3" class="topic">
+					Contributor List
+				</auxheader>
+			</auxhead>
+			<listhead>
+				<listheader label="Title" width="80px" align="center" />
+				<listheader label="Full Name" align="center" />
+				<listheader label="Extension" width="80px"
+					align="center" />
+			</listhead>
+			<listitem self="@{each=Contributor}">
+				<listcell label="@{Contributor.title}" />
+				<listcell label="@{Contributor.fullName}" />
+				<listcell label="@{Contributor.extension}" />
+			</listitem>
+		</listbox>
+		<window sclass="card-pre" title="Name Card Preview"
+			width="430px" height="400px" border="normal">
+			<div sclass="card">
+				<image sclass="logo" src="/images/ZK-Logo.gif" />
+				<vlayout sclass="title">
+					<label sclass="name" value="@{selected.fullName}" />
+					<hlayout sclass="dept">
+						<label value="@{selected.title}" />
+						Contributor
+					</hlayout>
+				</vlayout>
+				<div sclass="number">
+					Tel:+1-23-456-789 ext
+					<label value="@{selected.extension}" />
+				</div>
+			</div>
+		</window>
+	</hlayout>
+	<grid width="830px">
+		<auxhead>
+			<auxheader colspan="5" class="topic">Edit Data</auxheader>
+		</auxhead>
+		<columns>
+			<column label="Title" align="center" />
+			<column label="First Name" align="center" />
+			<column label="Last Name" align="center" />
+			<column label="Extension" align="center" />
+			<column label="Full Name" align="center" />
+		</columns>
+		<rows>
+			<row>
+				<!-- Selected contributor's title value is same as title model's data-->
+				<combobox id="deptcb" model="${titleModel}"
+					selectedItem="@{selected.title}" width="99%" />
+				<textbox value="@{selected.firstName}" width="150px" />
+				<textbox value="@{selected.lastName}" width="150px" />
+				<intbox value="@{selected.extension}" width="150px" />
+				<label value="@{selected.fullName}" />
+			</row>
+		</rows>
+	</grid>
+</window>
+</zk>

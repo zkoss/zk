@@ -1,18 +1,16 @@
 /* SessionsCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon May 30 22:03:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,10 +34,52 @@ public class SessionsCtrl extends Sessions {
 	public static final void setCurrent(Session sess) {
 		_sess.set(sess);
 	}
+	/** Sets the session for the current thread.
+	 * Unlike {@link #setCurrent(Session)}, the session is resovled
+	 * later (when {@link #getCurrent} is called).
+	 * @since 5.0.0
+	 */
+	public static final void setCurrent(SessionResolver sr) {
+		_sess.set(sr);
+	}
 	/** Returns the current {@link SessionCtrl}.
 	 */
 	public static final SessionCtrl getCurrentCtrl() {
 		return (SessionCtrl)getCurrent();
+	}
+
+	/** Returns the current session or the current session resolver.
+	 * The returned value is either {@link Session} or {@link SessionResolver}.
+	 * @see #setRawCurrent
+	 * @see #setCurrent(Session)
+	 * @see #setCurrent(SessionResolver)
+	 * @since 5.0.0
+	 */
+	public static final Object getRawCurrent() {
+		return _sess.get();
+	}
+	/** Sets the current session or the current session resolver.
+	 * @param rawsess the raw session. It can be null, an instance of
+	 * {@link Session} and {@link SessionResolver}.
+	 * Notice: it is usually the return value of {@link #getRawCurrent}.
+	 * @see #getRawCurrent
+	 * @since 5.0.0
+	 */
+	public static final void setRawCurrent(Object rawsess) {
+		if (rawsess != null && !(rawsess instanceof Session) && !(rawsess instanceof SessionResolver))
+			throw new IllegalArgumentException(rawsess.getClass().getName());
+		_sess.set(rawsess);
+	}
+
+	/** Update the session count.
+	 * <p>Called only internally.
+	 * @since 5.0.0
+	 */
+	public static final void updateCount(boolean inc) {
+		synchronized (SessionsCtrl.class) {
+			if (inc) ++_cnt;
+			else --_cnt;
+		}
 	}
 
 	/** Called when a servlet/portlet starts to serve a request.
@@ -80,7 +120,8 @@ public class SessionsCtrl extends Sessions {
 	private static final String ATTR_REQUEST_COUNT
 		= "org.zkoss.zk.ui.sys.RequestCount";
 
-	/** Returns the ZK session associated with the specified native session.
+	/** Returns the ZK session associated with the specified native session,
+	 * or null if not found.
 	 *
 	 * @param navsess the native session (never null).
 	 * If HTTP, it is HttpSession. If portlet, it is PortletSession.

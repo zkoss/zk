@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3362731.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 16:16:21 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please use mouse-wheel to rapidly scroll the left grid(listbox) to the end, it shouldn't show any JS error on IE only.
+<separator/>
+The right grid has no problem.
+<zscript><![CDATA[
+import java.util.*;
+import org.zkoss.zul.*;
+
+List lst = new ArrayList();
+for (int i = 0; i < 500; i++) {
+lst.add("item " +i);
+}
+ListModelList model = new ListModelList(lst);
+]]></zscript>
+<hlayout>
+<listbox width="100px" height="300px" model="${model}"/>
+<grid width="100px" height="300px" model="${model}"/>
+</hlayout>
+</zk>

@@ -1,0 +1,25 @@
+<test tags="listbox">
+	<case id="Width">
+		<server id="zul"><!--
+		<zk>
+			listbox's horizontal scrollbar causes side effects
+			<separator />
+			<hbox width="300px">
+				<listbox id="list" width="200px" height="200px" sizedByContent="true">
+					<listitem>
+						<listcell style="white-space: nowrap;"
+							label="xxxx x xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxx
+		xxxxxxxxx xxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxx
+		xxxxxxxxxxxxxxxxx" />
+					</listitem>
+				</listbox>
+				<label value="Hi" style="font-size: 16px; font-weight: bold" />
+			</hbox>
+		</zk>
+		--></server>
+		<client><![CDATA[
+			int w = Integer.valueOf(list.$n().parentNode().get("offsetWidth"));
+			verifyEquals(202, w);
+		]]></client>
+	</case>
+</test>

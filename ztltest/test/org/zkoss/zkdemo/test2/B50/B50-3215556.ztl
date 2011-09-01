@@ -1,0 +1,50 @@
+<!-- B50-3215556.ztl.java
+
+	Purpose:for testing B50-3215556.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 10:37:34
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3215556.zul,A,E,Portallayout,Panel">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+	       <ol>
+	       		<li>IE only</li>
+	      	 	<li>Click maximal icon of the panel.</li>
+				<li>Click close icon of the panel.</li>
+				<li>It shall not js error happen.</li>
+			</ol>
+	]]></html>
+	<portallayout maximizedMode="whole">
+		<portalchildren>
+			<panel maximizable="true" closable="true">
+				<caption>aaa</caption>
+				<panelchildren>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-panel-max"));
+				waitResponse();
+				click(jq(".z-panel-close"));
+				waitResponse();
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

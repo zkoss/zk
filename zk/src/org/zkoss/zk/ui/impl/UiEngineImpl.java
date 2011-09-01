@@ -1,18 +1,16 @@
 /* UiEngineImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun  9 13:05:28     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -46,28 +44,32 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.json.*;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.*;
 import org.zkoss.zk.ui.sys.*;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.xel.Evaluators;
-import org.zkoss.zk.scripting.*;
+import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
 
 /**
- * An implementation of {@link UiEngine}.
+ * An implementation of {@link UiEngine} to create and update components.
  *
  * @author tomyeh
  */
 public class UiEngineImpl implements UiEngine {
-	private static final Log log = Log.lookup(UiEngineImpl.class);
+	/*package*/ static final Log log = Log.lookup(UiEngineImpl.class);
 
 	/** The Web application this engine belongs to. */
 	private WebApp _wapp;
@@ -84,6 +86,9 @@ public class UiEngineImpl implements UiEngine {
 	/** # of suspended event processing threads.
 	 */
 	private int _suspCnt;
+	/** the extension.
+	 */
+	private Extension _ext;
 
 	public UiEngineImpl() {
 	}
@@ -187,11 +192,12 @@ public class UiEngineImpl implements UiEngine {
 			//Bug 2015878: exec is null if it is caused by session invalidated
 			//while listener (ResumeAbort and so) might need it
 			exec = new PhantomExecution(desktop);
-			activate(exec);
+			boolean activated = activate(exec, getDestroyTimeout());
 			try {
 				desktopDestroyed0(desktop);
 			} finally {
-				deactivate(exec);
+				if (activated)
+					deactivate(exec);
 			}
 		} else {
 			desktopDestroyed0(desktop);
@@ -199,37 +205,41 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private void desktopDestroyed0(Desktop desktop) {
 		final Configuration config = _wapp.getConfiguration();
-		final Map map;
-		synchronized (_suspended) {
-			map = (Map)_suspended.remove(desktop);
-		}
-		if (map != null) {
-			synchronized (map) {
-				for (Iterator it = map.values().iterator(); it.hasNext();) {
-					final List list = (List)it.next();
-					for (Iterator i2 = list.iterator(); i2.hasNext();) {
-						final EventProcessingThreadImpl evtthd =
-							(EventProcessingThreadImpl)i2.next();
-						evtthd.ceaseSilently("Destroy desktop "+desktop);
-						config.invokeEventThreadResumeAborts(
-							evtthd.getComponent(), evtthd.getEvent());
+		if (!_suspended.isEmpty()) { //no need to sync (better performance)
+			final Map map;
+			synchronized (_suspended) {
+				map = (Map)_suspended.remove(desktop);
+			}
+			if (map != null) {
+				synchronized (map) {
+					for (Iterator it = map.values().iterator(); it.hasNext();) {
+						final List list = (List)it.next();
+						for (Iterator i2 = list.iterator(); i2.hasNext();) {
+							final EventProcessingThreadImpl evtthd =
+								(EventProcessingThreadImpl)i2.next();
+							evtthd.ceaseSilently("Destroy desktop "+desktop);
+							config.invokeEventThreadResumeAborts(
+								evtthd.getComponent(), evtthd.getEvent());
+						}
 					}
 				}
 			}
 		}
 
-		final List list;
-		synchronized (_resumed) {
-			list = (List)_resumed.remove(desktop);
-		}
-		if (list != null) {
-			synchronized (list) {
-				for (Iterator it = list.iterator(); it.hasNext();) {
-					final EventProcessingThreadImpl evtthd =
-						(EventProcessingThreadImpl)it.next();
-					evtthd.ceaseSilently("Destroy desktop "+desktop);
-					config.invokeEventThreadResumeAborts(
-						evtthd.getComponent(), evtthd.getEvent());
+		if (!_resumed.isEmpty()) { //no need to sync (better performance)
+			final List list;
+			synchronized (_resumed) {
+				list = (List)_resumed.remove(desktop);
+			}
+			if (list != null) {
+				synchronized (list) {
+					for (Iterator it = list.iterator(); it.hasNext();) {
+						final EventProcessingThreadImpl evtthd =
+							(EventProcessingThreadImpl)it.next();
+						evtthd.ceaseSilently("Destroy desktop "+desktop);
+						config.invokeEventThreadResumeAborts(
+							evtthd.getComponent(), evtthd.getEvent());
+					}
 				}
 			}
 		}
@@ -243,11 +253,8 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalStateException("Components can be accessed only in event listeners");
 		return (UiVisualizer)execCtrl.getVisualizer();
 	}
-	public void pushOwner(Component comp) {
-		getCurrentVisualizer().pushOwner(comp);
-	}
-	public void popOwner() {
-		getCurrentVisualizer().popOwner();
+	public Component setOwner(Component comp) {
+		return getCurrentVisualizer().setOwner(comp);
 	}
 	public boolean isInvalidated(Component comp) {
 		return getCurrentVisualizer().isInvalidated(comp);
@@ -262,20 +269,18 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
-	public void addSmartUpdate(Component comp, String attr, String value) {
-		if (comp == null)
-			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
+	 */
+	public void addSmartUpdate(Component comp, String attr, Object value) {
+		addSmartUpdate(comp, attr, value, false);
 	}
-	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value, append);
 	}
-	public void addSmartUpdate(Component comp, String attr, Object[] values) {
-		if (comp == null)
-			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, values);
+	public void addResponse(AuResponse response) {
+		getCurrentVisualizer().addResponse(response);
 	}
 	public void addResponse(String key, AuResponse response) {
 		getCurrentVisualizer().addResponse(key, response);
@@ -285,15 +290,10 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addMoved(comp, oldparent, oldpg, newpg);
 	}
-	/** Called before changing the component's UUID.
-	 *
-	 * @param addOnlyMoved if true, it is added only if it was moved
-	 * before (see {@link #addMoved}).
-	 */
-	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
+	public void addUuidChanged(Component comp) {
 		if (comp == null)
 			throw new IllegalArgumentException();
-		getCurrentVisualizer().addUuidChanged(comp, addOnlyMoved);
+		getCurrentVisualizer().addUuidChanged(comp);
 	}
 	public boolean disableClientUpdate(Component comp, boolean disable) {
 		return getCurrentVisualizer().disableClientUpdate(comp, disable);
@@ -308,9 +308,8 @@ public class UiEngineImpl implements UiEngine {
 	Page page, Writer out) throws IOException {
 		execNewPage0(exec, pagedef, null, page, out);
 	}
-	/** It assumes exactly one of pagedef and richlet is not null.
-	 */
-	public void execNewPage0(final Execution exec, final PageDefinition pagedef,
+	/** It assumes exactly one of pagedef and richlet is not null. */
+	private void execNewPage0(final Execution exec, final PageDefinition pagedef,
 	final Richlet richlet, final Page page, final Writer out) throws IOException {
 		//Update the device type first. If this is the second page and not
 		//belonging to the same device type, an exception is thrown
@@ -339,7 +338,7 @@ public class UiEngineImpl implements UiEngine {
 			uv = doReactivate(exec, olduv);
 			pfmeter = null; //don't count included pages
 		} else {
-			uv = doActivate(exec, false, false);
+			uv = doActivate(exec, false, false, null, -1);
 		}
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
@@ -351,7 +350,6 @@ public class UiEngineImpl implements UiEngine {
 		final String pfReqId =
 			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
 		AbortingReason abrn = null;
-		boolean cleaned = false;
 		try {
 			config.invokeExecutionInits(exec, oldexec);
 			desktopCtrl.invokeExecutionInits(exec, oldexec);
@@ -374,9 +372,10 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).preInit();
 				pagedef.initXelContext(page);
 
-				final Initiators inits = Initiators.doInit(pagedef, page);
+				final Initiators inits = Initiators.doInit(
+					pagedef, page, config.getInitiators());
+					//F1472813: sendRedirect in init; test: redirectNow.zul
 				try {
-					//Request 1472813: sendRedirect in init; test: sendRedirectNow.zul
 					pagedef.init(page, !uv.isEverAsyncUpdate() && !uv.isAborting());
 
 					final Component[] comps;
@@ -385,13 +384,16 @@ public class UiEngineImpl implements UiEngine {
 						comps = new Component[0];
 						exec.forward(uri);
 					} else {
-						comps = uv.isAborting() || exec.isVoided() ? null:
+						comps = uv.isAborting() || exec.isVoided() ?
+							new Component[0]:
 							execCreate(new CreateInfo(
-								((WebAppCtrl)wapp).getUiFactory(), exec, page),
+								((WebAppCtrl)wapp).getUiFactory(), exec, page,
+								config.getComposer(page)),
 							pagedef, null);
 					}
 
 					inits.doAfterCompose(page, comps);
+					afterCreate(comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
 						throw UiException.Aide.wrap(ex);
@@ -401,15 +403,51 @@ public class UiEngineImpl implements UiEngine {
 			} else {
 				//FUTURE: a way to allow richlet to set page ID
 				((PageCtrl)page).preInit();
-				((PageCtrl)page).init(new PageConfig() {
-					public String getId() {return null;}
-					public String getUuid() {return null;}
-					public String getTitle() {return null;}
-					public String getStyle() {return null;}
-					public String getHeaders(boolean before) {return null;}
-					public String getHeaders() {return null;}
-				});
-				richlet.service(page);
+
+				final Initiators inits = Initiators.doInit(
+					null, page, config.getInitiators());
+				try {
+					((PageCtrl)page).init(new PageConfig() {
+						public String getId() {return null;}
+						public String getUuid() {return null;}
+						public String getTitle() {return null;}
+						public String getStyle() {return null;}
+						public String getBeforeHeadTags() {return "";}
+						public String getAfterHeadTags() {return "";}
+						/** @deprecated */
+						public String getHeaders(boolean before) {return "";}
+						/** @deprecated */
+						public String getHeaders() {return "";}
+						public Collection getResponseHeaders() {return Collections.EMPTY_LIST;}
+					});
+
+					final Composer composer = config.getComposer(page);
+					try {
+						richlet.service(page);
+
+						for (Component root = page.getFirstRoot(); root != null;
+						root = root.getNextSibling()) {
+							if (composer != null)
+								composer.doAfterCompose(root);
+							afterCreate(new Component[] {root});
+								//root's next sibling might be changed
+						}
+					} catch (Throwable t) {
+						if (composer instanceof ComposerExt)
+							if (((ComposerExt)composer).doCatch(t))
+								t = null; //ignored
+						if (t != null)
+							throw t;
+					} finally {
+						if (composer instanceof ComposerExt)
+							((ComposerExt)composer).doFinally();
+					}
+				} catch(Throwable ex) {
+					if (!inits.doCatch(ex))
+						throw UiException.Aide.wrap(ex);
+				} finally {
+					inits.doFinally();
+				}
 			}
 			if (exec.isVoided())
 				return; //don't generate any output
@@ -426,6 +464,7 @@ public class UiEngineImpl implements UiEngine {
 						handleError(ex, uv, errs);
 					}
 				}
+
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
@@ -443,16 +482,20 @@ public class UiEngineImpl implements UiEngine {
 				//(example: ZUL's include).
 				//If so, we cannot generate the responses in the page.
 				//Rather, we shall add them to the async update.
+			else
+				execCtrl.setResponses(responses);
 
-			((PageCtrl)page).redraw(responses, out);
+			((PageCtrl)page).redraw(out);
+			afterRenderNewPage(page);
+
+			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
+			config.invokeExecutionCleanups(exec, oldexec, errs);
 		} catch (Throwable ex) {
-			cleaned = true;
 			final List errs = new LinkedList();
 			errs.add(ex);
 
 			desktopCtrl.invokeExecutionCleanups(exec, oldexec, errs);
 			config.invokeExecutionCleanups(exec, oldexec, errs);
-				//CONSIDER: whether to pass cleanup's error to users
 
 			if (!errs.isEmpty()) {
 				ex = (Throwable)errs.get(0);
@@ -460,11 +503,6 @@ public class UiEngineImpl implements UiEngine {
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, oldexec, null);
-				config.invokeExecutionCleanups(exec, oldexec, null);
-				//CONSIDER: whether to pass cleanup's error to users
-			}
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -483,11 +521,81 @@ public class UiEngineImpl implements UiEngine {
 				meterLoadServerComplete(pfmeter, pfReqId, exec);
 		}
 	}
+	public void recycleDesktop(Execution exec, Page page, Writer out)
+	throws IOException {
+		PerformanceMeter pfmeter = page.getDesktop().getWebApp().getConfiguration().getPerformanceMeter();
+		final long startTime = pfmeter != null ? System.currentTimeMillis(): 0;
+		final String pfReqId =
+			pfmeter != null ? meterLoadStart(pfmeter, exec, startTime): null;
+
+		final UiVisualizer uv = doActivate(exec, false, false, null, -1);
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		execCtrl.setCurrentPage(page);
+		try {
+			Events.postEvent(new Event(Events.ON_DESKTOP_RECYCLE));
+
+			final List errs = new LinkedList();
+			final Desktop desktop = exec.getDesktop();
+			Event event = nextEvent(uv);
+			do {
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
+				resumeAll(desktop, uv, null);
+			} while ((event = nextEvent(uv)) != null);
+
+			execCtrl.setResponses(getResponses(exec, uv, errs));
+
+			((PageCtrl)page).redraw(out);
+		} finally {
+			doDeactivate(exec);
+			if (pfmeter != null)
+				meterLoadServerComplete(pfmeter, pfReqId, exec);
+		}
+	}
+	/** Called after the whole component tree has been created by
+	 * this engine.
+	 * @param comps the components being created. It is never null but
+	 * it might be a zero-length array.
+	 */
+	private void afterCreate(Component[] comps) {
+		getExtension().afterCreate(comps);
+	}
+	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+	 * has been called).
+	 */
+	private void afterRenderNewPage(Page page) {
+		getExtension().afterRenderNewPage(page);
+	}
+	private Extension getExtension() {
+		if (_ext == null) {
+			synchronized (this) {
+				if (_ext == null) {
+					String clsnm = Library.getProperty("org.zkoss.zk.ui.impl.UiEngineImpl.extension");
+					if (clsnm != null) {
+						try {
+							_ext = (Extension)Classes.newInstanceByThread(clsnm);
+						} catch (Throwable ex) {
+							log.realCauseBriefly("Unable to instantiate "+clsnm, ex);
+						}
+					}
+					if (_ext == null)
+						_ext = new DefaultExtension();
+				}
+			}
+		}
+		return _ext;
+	}
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl)uv.getExecution()).getNextEvent();
 		return evt != null && !uv.isAborting() ? evt: null;
 	}
+
 	/** Cycle 1:
 	 * Creates all child components defined in the specified definition.
 	 * @return the first component being created.
@@ -609,23 +717,23 @@ public class UiEngineImpl implements UiEngine {
 		Composer composer = childInfo.resolveComposer(ci.page, parent);
 		ComposerExt composerExt = null;
 		boolean bPopComposer = false;
-		if (composer != null)
-			if (composer instanceof FullComposer) {
-				ci.pushFullComposer(composer);
-				bPopComposer = true;
-				composer = null; //ci will handle it
-			} else if (composer instanceof ComposerExt) {
-				composerExt = (ComposerExt)composer;
-			}
+		if (composer instanceof FullComposer) {
+			ci.pushFullComposer(composer);
+			bPopComposer = true;
+			composer = null; //ci will handle it
+		} else if (composer instanceof ComposerExt) {
+			composerExt = (ComposerExt)composer;
+		}
 
 		Component child = null;
+		final boolean bRoot = parent == null;
 		try {
 			if (composerExt != null) {
 				childInfo = composerExt.doBeforeCompose(ci.page, parent, childInfo);
 				if (childInfo == null)
 					return null;
 			}
-			childInfo = ci.doBeforeCompose(ci.page, parent, childInfo);
+			childInfo = ci.doBeforeCompose(ci.page, parent, childInfo, bRoot);
 			if (childInfo == null)
 				return null;
 
@@ -643,7 +751,7 @@ public class UiEngineImpl implements UiEngine {
 
 			if (composerExt != null)
 				composerExt.doBeforeComposeChildren(child);
-			ci.doBeforeComposeChildren(child);
+			ci.doBeforeComposeChildren(child, bRoot);
 
 			execCreate(ci, childInfo, child); //recursive
 
@@ -655,7 +763,7 @@ public class UiEngineImpl implements UiEngine {
 
 			if (composer != null)
 				composer.doAfterCompose(child);
-			ci.doAfterCompose(child);
+			ci.doAfterCompose(child, bRoot);
 
 			ComponentsCtrl.applyForward(child, childInfo.getForward());
 				//applies the forward condition
@@ -679,7 +787,7 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 			if (!ignore) {
-				ignore = ci.doCatch(ex);
+				ignore = ci.doCatch(ex, bRoot);
 				if (!ignore)
 					throw UiException.Aide.wrap(ex);
 			}
@@ -690,7 +798,7 @@ public class UiEngineImpl implements UiEngine {
 			try {
 				if (composerExt != null)
 					composerExt.doFinally();
-				ci.doFinally();
+				ci.doFinally(bRoot);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			} finally {
@@ -763,14 +871,13 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).addDeferredZScript(comp, zscript);
 					//isEffective is handled later
 			} else if (isEffective(zscript, page, comp)) {
-				final Namespace ns = comp != null ?
-					Namespaces.beforeInterpret(comp):
-					Namespaces.beforeInterpret(page);
+				final Scope scope =
+					Scopes.beforeInterpret(comp != null ? (Scope)comp: page);
 				try {
 					page.interpret(zscript.getLanguage(),
-						zscript.getContent(page, comp), ns);
+						zscript.getContent(page, comp), scope);
 				} finally {
-					Namespaces.afterInterpret();
+					Scopes.afterInterpret();
 				}
 			}
 		} else if (meta instanceof AttributesInfo) {
@@ -798,24 +905,31 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException("pagedef");
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		boolean fakeIS = false;
 		if (parent != null) {
 			if (parent.getPage() != null)
 				page = parent.getPage();
-			if (page == null)
+			else
+				fakeIS = true;
+			if (page == null) {
+				fakeIS = true;
 				page = execCtrl.getCurrentPage();
-		} else if (page != null) {
-			parent = ((PageCtrl)page).getDefaultParent();
+			}
 		}
 
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
 		final boolean fakepg = page == null;
-		if (fakepg) page = new PageImpl(pagedef);
+		if (fakepg) {
+			fakeIS = true;
+			page = new PageImpl(pagedef); //fake
+		}
 
 		final Desktop desktop = exec.getDesktop();
-		final Page old = execCtrl.getCurrentPage();
-		if (page != null && page != old)
+		final WebApp wapp = desktop.getWebApp();
+		final Page prevpg = execCtrl.getCurrentPage();
+		if (page != null && page != prevpg)
 			execCtrl.setCurrentPage(page);
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPageDefinition(pagedef);
@@ -829,14 +943,17 @@ public class UiEngineImpl implements UiEngine {
 
 		//Note: the forward directives are ignore in this case
 
-		final Initiators inits = Initiators.doInit(pagedef, page);
+		final Initiators inits = Initiators.doInit(pagedef, page,
+			wapp.getConfiguration().getInitiators());
+		final IdSpace prevIS = fakeIS ?
+			ExecutionsCtrl.setVirtualIdSpace(
+				fakepg ? (IdSpace)page: new SimpleIdSpace()): null;
 		try {
 			if (fakepg) pagedef.init(page, false);
 
 			final Component[] comps = execCreate(
-				new CreateInfo(
-					((WebAppCtrl)desktop.getWebApp()).getUiFactory(),
-					exec, page),
+				new CreateInfo(((WebAppCtrl)wapp).getUiFactory(),
+					exec, page, null), //technically sys composer can be used but we don't (to make it simple)
 				pagedef, parent);
 			inits.doAfterCompose(page, comps);
 
@@ -846,14 +963,18 @@ public class UiEngineImpl implements UiEngine {
 					if (parent != null)
 						parent.appendChild(comps[j]);
 				}
+
+			afterCreate(comps);
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
 			throw UiException.Aide.wrap(ex);
 		} finally {
 			exec.popArg();
-			execCtrl.setCurrentPage(old); //restore it
+			execCtrl.setCurrentPage(prevpg); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
+			if (fakeIS)
+				ExecutionsCtrl.setVirtualIdSpace(prevIS);
 
 			inits.doFinally();
 
@@ -885,7 +1006,7 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final Session sess = desktop.getSession();
 
-		doActivate(exec, false, true); //it must not return null
+		doActivate(exec, false, true, null, -1); //it must not return null
 		try {
 			failover.recover(sess, exec, desktop);
 		} finally {
@@ -894,75 +1015,50 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	public boolean isRequestDuplicate(Execution exec, AuWriter out)
-	throws IOException {
-		final String sid = ((ExecutionCtrl)exec).getRequestId();
-		if (sid != null) {
-			doActivate(exec, true, false);
-			try {
-				return isReqDup0(exec, out, sid);
-			} finally {
-				doDeactivate(exec); //deactive
-			}
-		}
-		return false;
-	}
-	private boolean isReqDup0(Execution exec, AuWriter out, String sid)
-	throws IOException {
-		final Object[] resInfo = (Object[])((DesktopCtrl)exec.getDesktop())
-			.getLastResponse(out.getChannel(), sid);
-		if (resInfo != null) {
-			if (log.debugable()) {
-				final Object req = exec.getNativeRequest();
-				log.debug("Repeat request\n"+
-					(req instanceof ServletRequest ? Servlets.getDetail((ServletRequest)req):"sid: "+sid));
-			}
-
-			out.writeResponseId(((Integer)resInfo[0]).intValue());
-			out.write((Collection)resInfo[1]);
-			return true; //replicate
-		}
-		return false;
-	}
 	public void beginUpdate(Execution exec) {
-		final UiVisualizer uv = doActivate(exec, true, false);
+		final UiVisualizer uv = doActivate(exec, true, false, null, -1);
 		final Desktop desktop = exec.getDesktop();
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
 	}
-	public void endUpdate(Execution exec, AuWriter out)
+	public void endUpdate(Execution exec)
 	throws IOException {
-		boolean cleaned = false;
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final UiVisualizer uv = (UiVisualizer)execCtrl.getVisualizer();
 		try {
+			final List errs = new LinkedList();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			List responses = uv.getResponses();
-			final int resId = desktopCtrl.getResponseId(true);
-			desktopCtrl.responseSent(
-				out.getChannel(), execCtrl.getRequestId(),
-				new Object[] {new Integer(resId), responses});
-			out.writeResponseId(resId);
-			out.write(responses);
+			desktopCtrl.piggyResponse(getResponses(exec, uv, errs), false);
 
-			cleaned = true;
-			desktopCtrl.invokeExecutionCleanups(exec, null, null);
-			config.invokeExecutionCleanups(exec, null, null);
-		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, null, null);
-				config.invokeExecutionCleanups(exec, null, null);
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+		} catch (Throwable ex) {
+			final List errs = new LinkedList();
+			errs.add(ex);
+
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+
+			if (!errs.isEmpty()) {
+				ex = (Throwable)errs.get(0);
+				if (ex instanceof IOException) throw (IOException)ex;
+				throw UiException.Aide.wrap(ex);
 			}
-
+		} finally {
 			doDeactivate(exec);
 		}
 	}
@@ -985,10 +1081,11 @@ public class UiEngineImpl implements UiEngine {
 			meterAuClientComplete(pfmeter, exec);
 		}
 
-		final UiVisualizer uv = doActivate(exec, true, false);
-		final String sid = ((ExecutionCtrl)exec).getRequestId();
-		if (sid != null && isReqDup0(exec, out, sid)) {
-			doDeactivate(exec); //deactive
+		final Object[] resultOfRepeat = new Object[1];
+		final UiVisualizer uv = doActivate(exec, true, false, resultOfRepeat, -1);
+		if (resultOfRepeat[0] != null) {
+			out.resend(resultOfRepeat[0]);
+			doDeactivate(exec);
 			return;
 		}
 
@@ -1005,7 +1102,6 @@ public class UiEngineImpl implements UiEngine {
 			pfmeter != null ? meterAuStart(pfmeter, exec, startTime): null;
 		Collection doneReqIds = null; //request IDs that have been processed
 		AbortingReason abrn = null;
-		boolean cleaned = false;
 		try {
 			final RequestQueue rque = desktopCtrl.getRequestQueue();
 			rque.addRequests(requests);
@@ -1016,22 +1112,14 @@ public class UiEngineImpl implements UiEngine {
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List errs = new LinkedList();
-			final long tmexpired =
-				System.currentTimeMillis() + config.getMaxProcessTime();
-				//Tom Yeh: 20060120
-				//Don't process all requests if this thread has processed
-				//a while. Thus, user could see the response sooner.
-			for (AuRequest request; System.currentTimeMillis() < tmexpired
-			&& (request = rque.nextRequest()) != null;) {
+			//Process all; ignore getMaxProcessTime();
+			//we cannot handle them partially since UUID might be recycled
+			for (AuRequest request; (request = rque.nextRequest()) != null;) {
 				//Cycle 1: Process one request
 				//Don't process more such that requests will be queued
 				//and we have the chance to optimize them
 				try {
 					process(exec, request, !errs.isEmpty());
-				} catch (ComponentNotFoundException ex) {
-					//possible because the previous might remove some comp
-					//so ignore it
-//					if (log.finable()) log.fine("Component not found: "+request);
 				} catch (Throwable ex) {
 					handleError(ex, uv, errs);
 					//we don't skip request to avoid mis-match between c/s
@@ -1060,44 +1148,37 @@ public class UiEngineImpl implements UiEngine {
 			//Cycle 3: Generate output
 			final List responses = getResponses(exec, uv, errs);
 
-			if (rque.isEmpty())
-				doneReqIds = rque.clearPerfRequestIds();
-			else
-				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
+			doneReqIds = rque.clearPerfRequestIds();
 
-			final int resId = desktopCtrl.getResponseId(true);
-			desktopCtrl.responseSent(out.getChannel(), sid,
-				new Object[] {new Integer(resId), responses});
-			out.writeResponseId(resId);
+			final List prs = desktopCtrl.piggyResponse(null, true);
+			if (prs != null) responses.addAll(0, prs);
+
+			out.writeResponseId(desktopCtrl.getResponseId(true));
 			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
 //				else log.debug("Responses: "+responses.subList(0, 5)+"...");
 
-			cleaned = true;
+			final String seqId = ((ExecutionCtrl)exec).getRequestId();
+			if (seqId != null)
+				desktopCtrl.responseSent(seqId, out.complete());
+
 			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
 			config.invokeExecutionCleanups(exec, null, errs);
 		} catch (Throwable ex) {
-			if (!cleaned) {
-				cleaned = true;
-				final List errs = new LinkedList();
-				errs.add(ex);
-				desktopCtrl.invokeExecutionCleanups(exec, null, errs);
-				config.invokeExecutionCleanups(exec, null, errs);
-				ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
-			}
+			final List errs = new LinkedList();
+			errs.add(ex);
 
-			if (ex != null) {
+			desktopCtrl.invokeExecutionCleanups(exec, null, errs);
+			config.invokeExecutionCleanups(exec, null, errs);
+
+			if (!errs.isEmpty()) {
+				ex = (Throwable)errs.get(0);
 				if (ex instanceof IOException) throw (IOException)ex;
 				throw UiException.Aide.wrap(ex);
 			}
 		} finally {
-			if (!cleaned) {
-				desktopCtrl.invokeExecutionCleanups(exec, null, null);
-				config.invokeExecutionCleanups(exec, null, null);
-			}
-
 			if (abrn != null) {
 				try {
 					abrn.finish();
@@ -1119,6 +1200,72 @@ public class UiEngineImpl implements UiEngine {
 				meterAuServerComplete(pfmeter, doneReqIds, exec);
 		}
 	}
+	public Object startUpdate(Execution exec) throws IOException {
+		final Desktop desktop = exec.getDesktop();
+		UiVisualizer uv = doActivate(exec, true, false, null, -1);
+		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
+		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
+		return new UpdateInfo(uv);
+	}
+	public JSONArray finishUpdate(Object ctx) throws IOException {
+		final UpdateInfo ui = (UpdateInfo)ctx;
+		final Execution exec = ui.uv.getExecution();
+		final Desktop desktop = exec.getDesktop();
+		final List errs = new LinkedList();
+
+		//1. process events
+		Event event = nextEvent(ui.uv);
+		do {
+			for (; event != null; event = nextEvent(ui.uv)) {
+				try {
+					process(desktop, event);
+				} catch (Throwable ex) {
+					handleError(ex, ui.uv, errs);
+				}
+			}
+
+			resumeAll(desktop, ui.uv, errs);
+		} while ((event = nextEvent(ui.uv)) != null);
+
+		//2. Handle aborting reason
+		ui.abrn = ui.uv.getAbortingReason();
+		if (ui.abrn != null)
+			ui.abrn.execute(); //always execute even if !isAborting
+
+		//3. Retrieve responses
+		final List responses = getResponses(exec, ui.uv, errs);
+
+		final JSONArray rs = new JSONArray();
+		for (Iterator it = responses.iterator(); it.hasNext();)
+			rs.add(AuWriters.toJSON((AuResponse)it.next()));
+		return rs;
+	}
+	public void closeUpdate(Object ctx) throws IOException {
+		final UpdateInfo ui = (UpdateInfo)ctx;
+		final Execution exec = ui.uv.getExecution();
+
+		final Desktop desktop = exec.getDesktop();
+		((DesktopCtrl)desktop).invokeExecutionCleanups(exec, null, null);
+		desktop.getWebApp().getConfiguration().invokeExecutionCleanups(exec, null, null);
+
+		if (ui.abrn != null) {
+			try {
+				ui.abrn.finish();
+			} catch (Throwable t) {
+				log.warning(t);
+			}
+		}
+
+		doDeactivate(exec);
+	}
+	private static class UpdateInfo {
+		private final UiVisualizer uv;
+		private AbortingReason abrn;
+		private UpdateInfo(UiVisualizer uv) {
+			this.uv = uv;
+		}
+	}
+
 	/** Handles each error. The erros will be queued to the errs list
 	 * and processed later by {@link #visualizeErrors}.
 	 */
@@ -1130,7 +1277,7 @@ public class UiEngineImpl implements UiEngine {
 			|| ex instanceof org.zkoss.zk.ui.metainfo.PropertyNotFoundException)
 				log.error(Exceptions.getMessage(ex));
 			else
-				log.realCauseBriefly(ex);
+				log.realCause(ex);//Briefly(ex);
 		} else {
 			ex = t;
 			if (log.debugable()) log.debug(Exceptions.getRealCause(ex));
@@ -1144,7 +1291,7 @@ public class UiEngineImpl implements UiEngine {
 				if (wve != null) {
 					Component c = wve.getComponent();
 					if (c == null) c = comp;
-					uv.addResponse("wrongValue",
+					uv.addResponse(
 						new AuWrongValue(c, Exceptions.getMessage(wve)));
 				}
 				return;
@@ -1165,13 +1312,14 @@ public class UiEngineImpl implements UiEngine {
 					}
 				}
 			}
-			uv.addResponse("wrongValue",
+			uv.addResponse(
 				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
 			return;
 		}
 
 		errs.add(ex);
 	}
+	/** Returns the list of response of the given execution. */
 	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
 		List responses;
 		try {
@@ -1242,7 +1390,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 
-		uv.addResponse(null, new AuAlert(msg)); //default handling
+		uv.addResponse(new AuAlert(msg)); //default handling
 	}
 
 	/** Processing the request and stores result into UiVisualizer.
@@ -1254,13 +1402,20 @@ public class UiEngineImpl implements UiEngine {
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(request.getPage());
-		request.getCommand().process(request, everError);
+		((DesktopCtrl)request.getDesktop()).service(request, everError);
 	}
 	/** Processing the event and stores result into UiVisualizer. */
 	private void process(Desktop desktop, Event event) {
 //		if (log.finable()) log.finer("Processing event: "+event);
 
-		final Component comp = event.getTarget();
+		final Component comp;
+		if (event instanceof ProxyEvent) {
+			final ProxyEvent pe = (ProxyEvent)event;
+			comp = pe.getRealTarget();
+			event = pe.getProxiedEvent();
+		} else {
+			comp = event.getTarget();
+		}
 		if (comp != null) {
 			processEvent(desktop, comp, event);
 		} else {
@@ -1413,7 +1568,7 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private void resumeAll(Desktop desktop, UiVisualizer uv, List errs) {
 		//We have to loop because a resumed thread might resume others
-		for (;;) {
+		while (!_resumed.isEmpty()) { //no need to sync (better performance)
 			final List list;
 			synchronized (_resumed) {
 				list = (List)_resumed.remove(desktop);
@@ -1510,9 +1665,12 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	public void activate(Execution exec) {
+		activate(exec, -1);
+	}
+	public boolean activate(Execution exec, int timeout) {
 		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
 			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
-		doActivate(exec, false, false);
+		return doActivate(exec, false, false, null, timeout) != null;
 	}
 	public void deactivate(Execution exec) {
 		doDeactivate(exec);
@@ -1526,11 +1684,20 @@ public class UiEngineImpl implements UiEngine {
 	 * @param recovering whether it is in recovering, i.e.,
 	 * cause by {@link FailoverManager#recover}.
 	 * If true, the requests argument must be null.
-	 * @return the visualizer once the execution is granted (never null).
+	 * @param resultOfRepeat a single element array to return a value, or null
+	 * if it is not called by execUpdate.
+	 * If a non-null value is assigned to the first element of the array,
+	 * it means it is a repeated request, and the caller shall return
+	 * the result directly without processing the request.
+	 * @param timeout how many milliseconds to wait before timeout.
+	 * If non-negative and it waits more than it before granted, null is turned
+	 * to indicate failure.
+	 * @return the visualizer once the execution is granted, or null
+	 * if timeout is specified and it takes longer than the given value.
 	 */
 	private static
 	UiVisualizer doActivate(Execution exec, boolean asyncupd,
-	boolean recovering) {
+	boolean recovering, Object[] resultOfRepeat, int timeout) {
 		if (Executions.getCurrent() != null)
 			throw new IllegalStateException("Use doReactivate instead");
 		assert D.OFF || !recovering || !asyncupd; 
@@ -1539,18 +1706,30 @@ public class UiEngineImpl implements UiEngine {
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Session sess = desktop.getSession();
+		final String seqId =
+			resultOfRepeat != null ? ((ExecutionCtrl)exec).getRequestId(): null;
 //		if (log.finerable()) log.finer("Activating "+desktop);
 
 		//lock desktop
 		final UiVisualizer uv;
 		final Object uvlock = desktopCtrl.getActivationLock();
+		final int tmout = timeout >= 0 ? timeout: getRetryTimeout();
 		synchronized (uvlock) {
-			for (;;) {
+			for (boolean tried = false;;) {
 				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
+				if (tried && timeout >= 0)
+					return null; //failed
 
+				if (seqId != null) {
+					final String oldSeqId =
+						((ExecutionCtrl)old.getExecution()).getRequestId();
+					if (oldSeqId != null && !oldSeqId.equals(seqId))
+						throw new RequestOutOfSequenceException(seqId, oldSeqId);
+				}
 				try {
-					uvlock.wait(getRetryTimeout());
+					uvlock.wait(tmout);
+					tried = true;
 				} catch (InterruptedException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -1579,14 +1758,23 @@ public class UiEngineImpl implements UiEngine {
 			}
 			throw UiException.Aide.wrap(ex);
 		}
+
+		if (seqId != null) {
+			if (log.debugable()) {
+				final Object req = exec.getNativeRequest();
+				log.debug("replicate request, SID: " + seqId
+					+(req instanceof ServletRequest ? "\n" + Servlets.getDetail((ServletRequest)req): ""));
+			}
+			resultOfRepeat[0] = desktopCtrl.getLastResponse(seqId);
+		}
 		return uv;
 	}
 
-	private static Integer _retryTimeout;
+	private static Integer _retryTimeout, _destroyTimeout;
 	private static final int getRetryTimeout() {
 		if (_retryTimeout == null) {
 			int v = 0;
-			final String s = Library.getProperty("org.zkoss.zk.ui.activate.wait.retry.timeout");
+			final String s = Library.getProperty(Attributes.ACTIVATE_RETRY_DELAY);
 			if (s != null) {
 				try {
 					v = Integer.parseInt(s);
@@ -1596,6 +1784,20 @@ public class UiEngineImpl implements UiEngine {
 			_retryTimeout = new Integer(v > 0 ? v: 120*1000);
 		}
 		return _retryTimeout.intValue();
+	}
+	private static final int getDestroyTimeout() {
+		if (_destroyTimeout == null) {
+			int v = 0;
+			final String s = Library.getProperty("org.zkoss.zk.ui.activate.wait.destroy.timeout");
+			if (s != null) {
+				try {
+					v = Integer.parseInt(s);
+				} catch (Throwable t) {
+				}
+			}
+			_destroyTimeout = new Integer(v > 0 ? v: 20*1000); //20 sec
+		}
+		return _destroyTimeout.intValue();
 	}
 
 	/** Returns whether the desktop is being recovered.
@@ -1741,7 +1943,7 @@ public class UiEngineImpl implements UiEngine {
 		final StringBuffer sb = new StringBuffer(256);
 		getNativeContent(
 			new CreateInfo(((WebAppCtrl)_wapp).getUiFactory(),
-				Executions.getCurrent(), comp.getPage()),
+				Executions.getCurrent(), comp.getPage(), null),
 			sb, comp, children, helper);
 		return sb.toString();
 	}
@@ -1912,7 +2114,7 @@ public class UiEngineImpl implements UiEngine {
 			execCreate0(
 				new CreateInfo(
 					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
-					exec, _comp.getPage()),
+					exec, _comp.getPage(), null), //technically sys composer can be used but we don't (to simplify it)
 				_compInfo, _comp);
 
 			if (_uri != null) {
@@ -1929,7 +2131,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		//ComponentCloneListener//
-		public Object clone(Component comp) {
+		public Object willClone(Component comp) {
 			final FulfillListener clone;
 			try {
 				clone = (FulfillListener)clone();
@@ -1939,79 +2141,6 @@ public class UiEngineImpl implements UiEngine {
 			clone._comp = comp;
 			clone.init();
 			return clone;
-		}
-	}
-	/** Info used with execCreate
-	 */
-	private static class CreateInfo {
-		private final Execution exec;
-		private final Page page;
-		private final UiFactory uf;
-		private List _composers, _composerExts;
-		private CreateInfo(UiFactory uf, Execution exec, Page page) {
-			this.exec = exec;
-			this.page = page;
-			this.uf = uf;
-		}
-
-		private void pushFullComposer(Composer composer) {
-			if (_composers == null)
-				_composers = new LinkedList();
-			_composers.add(0, composer);
-			if (composer instanceof ComposerExt) {
-				if (_composerExts == null)
-					_composerExts = new LinkedList();
-				_composerExts.add(0, composer);
-			}
-		}
-		private void popFullComposer() {
-			Object o = _composers.remove(0);
-			if (_composers.isEmpty()) _composers = null;
-			if (o instanceof ComposerExt) {
-				_composerExts.remove(0);
-				if (_composerExts.isEmpty()) _composerExts = null;
-			}
-		}
-		private void doAfterCompose(Component comp) throws Exception {
-			if (_composers != null)
-				for (Iterator it = _composers.iterator(); it.hasNext();) {
-					((Composer)it.next()).doAfterCompose(comp);
-				}
-		}
-		private ComponentInfo doBeforeCompose(Page page, Component parent,
-		ComponentInfo compInfo) throws Exception {
-			if (_composerExts != null)
-				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-					compInfo = ((ComposerExt)it.next()).doBeforeCompose(page, parent, compInfo);
-					if (compInfo == null)
-						return null;
-				}
-			return compInfo;
-		}
-		private void doBeforeComposeChildren(Component comp) throws Exception {
-			if (_composerExts != null)
-				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-					((ComposerExt)it.next()).doBeforeComposeChildren(comp);
-				}
-		}
-		private boolean doCatch(Throwable ex) {
-			if (_composerExts != null)
-				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-					final ComposerExt composerExt = (ComposerExt)it.next();
-					try {
-						if (composerExt.doCatch(ex))
-							return true; //ignore
-					} catch (Throwable t) {
-						log.error("Failed to invoke doCatch for "+composerExt, t);
-					}
-				}
-			return false;
-		}
-		private void doFinally() throws Exception {
-			if (_composerExts != null)
-				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
-					((ComposerExt)it.next()).doFinally();
-				}
 		}
 	}
 	private static class ReplaceableText {
@@ -2151,5 +2280,177 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			log.warning("Ingored: failed to invoke "+pfmeter, ex);
 		}
+	}
+
+	/** An interface used to extend the UI engine.
+	 * The class name of the extension shall be specified in
+	 * the library properties called org.zkoss.zk.ui.impl.UiEngineImpl.extension.
+	 * <p>Notice that it is used only internally.
+	 * @since 5.0.8
+	 */
+	public static interface Extension {
+		/** Called after the whole component tree has been created by
+		 * this engine.
+		 * <p>The implementation might implement this method to process
+		 * the components, such as merging, if necessary.
+		 * @param comps the components being created. It is never null but
+		 * it might be a zero-length array.
+		 */
+		public void afterCreate(Component[] comps);
+		/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
+		 * has been called).
+		 * <p>Notice that it is called in the rendering phase (the last phase),
+		 * so it is not allowed to post events or to invoke invalidate or smartUpdate
+		 * in this method.
+		 * <p>Notice that it is not called if an old page is redrawn.
+		 * <p>The implementation shall process the components such as merging
+		 * if necessary.
+		 * @see #execNewPage
+		 */
+		public void afterRenderNewPage(Page page);
+	}
+	private static class DefaultExtension implements Extension {
+		public void afterCreate(Component[] comps) {
+		}
+		public void afterRenderNewPage(Page page) {
+		}
+	}
+}
+
+/** Info used with execCreate
+ */
+/*package*/ class CreateInfo {
+	/*package*/ final Execution exec;
+	/*package*/ final Page page;
+	/*package*/ final UiFactory uf;
+	private List _composers, _composerExts;
+	private Composer _syscomposer;
+	/*package*/ CreateInfo(UiFactory uf, Execution exec, Page page, Composer composer) {
+		this.exec = exec;
+		this.page = page;
+		this.uf = uf;
+		if (composer instanceof FullComposer)
+			pushFullComposer(composer);
+		else
+			_syscomposer = composer;
+	}
+
+	/*package*/ void pushFullComposer(Composer composer) {
+		assert composer instanceof FullComposer; //illegal state
+		if (_composers == null)
+			_composers = new LinkedList();
+		_composers.add(0, composer);
+		if (composer instanceof ComposerExt) {
+			if (_composerExts == null)
+				_composerExts = new LinkedList();
+			_composerExts.add(0, composer);
+		}
+	}
+	/*package*/ void popFullComposer() {
+		Object o = _composers.remove(0);
+		if (_composers.isEmpty()) _composers = null;
+		if (o instanceof ComposerExt) {
+			_composerExts.remove(0);
+			if (_composerExts.isEmpty()) _composerExts = null;
+		}
+	}
+
+	/** Invoke setFullComposerOnly to ensure only composers that implement
+	 * FullComposer are called.
+	 */
+	private static boolean beforeInvoke(Composer composer, boolean bRoot) {
+		//If bRoot (implies system-level composer), always invoke (no setFullxxx)
+		return !bRoot && composer instanceof MultiComposer &&
+			((MultiComposer)composer).setFullComposerOnly(true);
+	}
+	private static void afterInvoke(Composer composer, boolean bRoot, boolean old) {
+		if (!bRoot && composer instanceof MultiComposer)
+			((MultiComposer)composer).setFullComposerOnly(old);
+	}
+	/*package*/ void doAfterCompose(Component comp, boolean bRoot)
+	throws Exception {
+		if (_composers != null)
+			for (Iterator it = _composers.iterator(); it.hasNext();) {
+				final Composer composer = (Composer)it.next();
+				final boolean old = beforeInvoke(composer, bRoot);
+
+				composer.doAfterCompose(comp);
+
+				afterInvoke(composer, bRoot, old);
+			}
+
+		if (bRoot && _syscomposer != null)
+			_syscomposer.doAfterCompose(comp);
+	}
+	/*package*/ ComponentInfo doBeforeCompose(Page page, Component parent,
+	ComponentInfo compInfo, boolean bRoot) throws Exception {
+		if (_composerExts != null)
+			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+				final Composer composer = (Composer)it.next();
+				final boolean old = beforeInvoke(composer, bRoot);
+
+				compInfo = ((ComposerExt)composer)
+					.doBeforeCompose(page, parent, compInfo);
+
+				afterInvoke(composer, bRoot, old);
+				if (compInfo == null)
+					return null;
+			}
+
+		if (bRoot && _syscomposer instanceof ComposerExt)
+			compInfo = ((ComposerExt)_syscomposer)
+				.doBeforeCompose(page, parent, compInfo);
+		return compInfo;
+	}
+	/*package*/ void doBeforeComposeChildren(Component comp, boolean bRoot)
+	throws Exception {
+		if (_composerExts != null)
+			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+				final Composer composer = (Composer)it.next();
+				final boolean old = beforeInvoke(composer, bRoot);
+
+				((ComposerExt)composer).doBeforeComposeChildren(comp);
+
+				afterInvoke(composer, bRoot, old);
+			}
+
+		if (bRoot && _syscomposer instanceof ComposerExt)
+			((ComposerExt)_syscomposer).doBeforeComposeChildren(comp);
+	}
+	/*package*/ boolean doCatch(Throwable ex, boolean bRoot) {
+		if (_composerExts != null)
+			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+				final Composer composer = (Composer)it.next();
+				final boolean old = beforeInvoke(composer, bRoot);
+				try {
+					final boolean ret = ((ComposerExt)composer).doCatch(ex);
+					afterInvoke(composer, bRoot, old);
+					if (ret) return true; //ignore
+				} catch (Throwable t) {
+					UiEngineImpl.log.error("Failed to invoke doCatch for "+composer, t);
+				}
+			}
+			
+		if (bRoot && _syscomposer instanceof ComposerExt)
+			try {
+				return ((ComposerExt)_syscomposer).doCatch(ex);
+			} catch (Throwable t) {
+				UiEngineImpl.log.error("Failed to invoke doCatch for "+_syscomposer, t);
+			}
+		return false;
+	}
+	/*package*/ void doFinally(boolean bRoot) throws Exception {
+		if (_composerExts != null)
+			for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+				final Composer composer = (Composer)it.next();
+				final boolean old = beforeInvoke(composer, bRoot);
+
+				((ComposerExt)composer).doFinally();
+
+				afterInvoke(composer, bRoot, old);
+			}
+
+		if (bRoot && _syscomposer instanceof ComposerExt)
+			((ComposerExt)_syscomposer).doFinally();
 	}
 }

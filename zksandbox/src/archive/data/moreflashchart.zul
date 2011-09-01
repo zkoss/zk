@@ -1,0 +1,128 @@
+<!--
+moreflashchart.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec  3 16:27:06     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="FlashChart Demo" contentType="text/html;charset=UTF-8"?>
+<zk>
+<hbox>
+	<vbox>
+		<label value="Pie Chart" style="font-weight:bold"/>
+		<grid width="400px">
+			<columns>
+				<column label="category" width="150px" />
+				<column label="value" />
+			</columns>
+			<rows>
+				<row>
+					<label id="c0" value="C/C++" />
+					<doublebox id="v0" value="21.2" constraint="no empty"
+						onChange="update(0)" />
+				</row>
+				<row>
+					<label id="c1" value="VB" />
+					<doublebox id="v1" value="10.2" constraint="no empty"
+						onChange="update(1)" />
+				</row>
+				<row>
+					<label id="c2" value="Java" />
+					<doublebox id="v2" value="40.4" constraint="no empty"
+						onChange="update(2)" />
+				</row>
+				<row>
+					<label id="c3" value="PHP" />
+					<doublebox id="v3" value="28.2" constraint="no empty"
+						onChange="update(3)" />
+				</row>
+			</rows>
+		</grid>
+		<flashchart id="chart" width="400" height="300" type="pie">
+			<zscript>
+				void update(int rowIndex) {
+					Label lb = (Label) self.getFellow("c"+rowIndex);
+					Doublebox db = (Doublebox) self.getFellow("v"+rowIndex);
+					model.setValue(lb.value, new Double(db.getValue().doubleValue()));
+			  	}  
+			  	PieModel model = new SimplePieModel();
+				for(int j=0; j &lt; 4; ++j) {
+					update(j);
+			  	}
+			  	chart.setModel(model);
+			</zscript>
+		</flashchart>
+	</vbox>
+	<vbox>
+		<vbox>
+			<label value="Bar Chart" style="font-weight:bold"/>
+			<flashchart id="chart2" type="bar" />
+		</vbox>
+		<vbox>
+			<label value="Line Chart" style="font-weight:bold"/>
+			<flashchart id="chart3" type="line" />
+		</vbox>
+		<vbox>
+			<label value="Column Chart" style="font-weight:bold"/>
+			<flashchart id="chart4" type="column" />
+		</vbox>
+	</vbox>
+</hbox>
+<button label="change pie chart" onClick="updatePie()" />
+<button label="change bar chart" onClick="updateBar()" />
+<button label="change line chart" onClick="updateLine()" />
+<button label="change column chart" onClick="updateColumn()" />
+<zscript>
+	<![CDATA[	
+	    import org.zkoss.zul.*;
+		
+		SimpleCategoryModel demoModel = new SimpleCategoryModel();
+		demoModel.setValue("2009", "Joy", new Integer(123));
+		demoModel.setValue("2008", "Peter", new Integer(234));
+		demoModel.setValue("2007", "Betty", new Integer(456));
+		demoModel.setValue("2006", "Wing", new Integer(567));
+		chart2.setModel(demoModel);
+		chart3.setModel(demoModel);
+		chart4.setModel(demoModel);
+		
+		void updatePie(){
+			SimplePieModel tempModel = new SimplePieModel();
+			tempModel.setValue("Joy", new Integer(555));
+			tempModel.setValue("Peter", new Integer(444));
+			tempModel.setValue("Betty", new Integer(333));
+			tempModel.setValue("Wing", new Integer(222));
+			chart.setModel(tempModel);
+		}		
+		void updateBar(){
+			SimpleCategoryModel tempModel = new SimpleCategoryModel();
+			tempModel.setValue("2009", "Joy", new Integer(888));
+			tempModel.setValue("2008", "Peter", new Integer(157));
+			tempModel.setValue("2007", "Betty", new Integer(670));
+			tempModel.setValue("2006", "Wing", new Integer(390));
+			chart2.setModel(tempModel);
+		}
+		void updateLine(){
+			SimpleCategoryModel tempModel = new SimpleCategoryModel();
+			tempModel.setValue("2009", "Joy", new Integer(888));
+			tempModel.setValue("2008", "Peter", new Integer(157));
+			tempModel.setValue("2007", "Betty", new Integer(670));
+			tempModel.setValue("2006", "Wing", new Integer(390));
+			chart3.setModel(tempModel);
+		}
+		void updateColumn(){
+			SimpleCategoryModel tempModel = new SimpleCategoryModel();
+			tempModel.setValue("2009", "Joy", new Integer(888));
+			tempModel.setValue("2008", "Peter", new Integer(157));
+			tempModel.setValue("2007", "Betty", new Integer(670));
+			tempModel.setValue("2006", "Wing", new Integer(390));
+			chart4.setModel(tempModel);
+		}
+	]]>
+</zscript>
+</zk>

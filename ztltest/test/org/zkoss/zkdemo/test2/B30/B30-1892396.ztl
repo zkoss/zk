@@ -1,0 +1,58 @@
+<!-- B30-1892396.ztl.java
+
+	Purpose:for testing B30-1892396.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 15:02:08
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1892396.zul,A,E,Textbox,Clone,BI,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window title="Clone test">
+	<vbox>
+<html><![CDATA[
+Steps:<br/>
+1. Type "mm" to the first textbox<br/>
+2. Type "kk" to the second textbox, and you shall see "kk" is shown instead of "mm". 
+]]></html>
+
+	<label style="background:blue;color:white;" id="l"/>
+	<textbox id="t1" onChange="l.value = self.value"/>
+	</vbox>
+	<zscript>
+	Textbox t2 = t1.clone();
+	t2.setId("t2");
+	t2.setParent(t1.parent);
+	</zscript>
+</window>
+
+		--></server>
+		<client><![CDATA[
+		focus(t1);
+		type(t1,"mm");
+
+		blur(t1);
+		waitResponse();
+		
+		verifyEquals("mm",l.get("value"));
+
+		focus(t2);
+		type(t2,"kk");
+
+		blur(t2);
+		waitResponse();
+		
+		verifyEquals("kk",l.get("value"));
+		]]></client>
+	</case>
+</test>

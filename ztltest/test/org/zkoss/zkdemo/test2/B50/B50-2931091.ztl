@@ -1,0 +1,33 @@
+<test tags="B50-2931091.zul,Menu,ie9">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					Please check the menu will change style after mouse over and out
+					<menubar>
+						<menu id="m" label="test">
+							<menupopup>
+								<menu label="test" />
+								<menu label="test" />
+								<menu label="test" />
+								<menu label="test" />
+								<menu label="test" />
+							</menupopup>
+						</menu>
+					</menubar>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[
+				verifyFalse(jq(".z-menu-body-over").exists());
+				mouseOver(jq(".z-menu-btn").parent()) ;
+				waitResponse();
+				sleep(500);
+				verifyTrue(jq(".z-menu-body-over").exists());
+				mouseOut(jq(".z-menu-btn").parent()) ;
+				waitResponse();
+				sleep(300);
+				verifyFalse(jq(".z-menu-body-over").exists());       						
+		]]></client>
+	</case>
+</test>

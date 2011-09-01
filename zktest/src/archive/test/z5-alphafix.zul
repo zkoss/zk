@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+z5-alphafix.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 15 09:29:42     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<?script content="jq.IE6_ALPHAFIX='.png';"?>
+<window title="Test of alphafix" border="normal">
+	<image src="/test2/img/circle.png" draggable="true"/>
+	<image src="/test2/img/circle.png" draggable="true" width="200px" height="160px"/>
+	<image src="/test2/img/sun.jpg" draggable="true" droppable="true" onDrop='alert("What are you expecting?")'/>
+</window>

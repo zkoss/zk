@@ -1,26 +1,28 @@
 /* AbstractListModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 18 15:19:43     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.zkoss.io.Serializables;
 
@@ -28,6 +30,7 @@ import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A skeletal implementation for {@link ListModel}.
@@ -35,9 +38,10 @@ import org.zkoss.zul.event.ListDataListener;
  * @author tomyeh
  */
 abstract public class AbstractListModel
-implements ListModel, java.io.Serializable {
+implements ListModel, Selectable, java.io.Serializable {
 	private transient List _listeners = new LinkedList();
-
+	private Set _selection = new HashSet();
+	
 	/** Fires a {@link ListDataEvent} for all registered listener
 	 * (thru {@link #addListDataListener}.
 	 *
@@ -59,6 +63,31 @@ implements ListModel, java.io.Serializable {
 		_listeners.remove(l);
 	}
 
+	//Selectable
+	public Set getSelection() {
+		return Collections.unmodifiableSet(_selection);
+	}
+	
+	public void addSelection(Object obj) {
+		_selection.add(obj);
+	}
+	
+	public void removeSelection(Object obj) {
+		_selection.remove(obj);
+	}
+	
+	public void clearSelection() {
+		_selection.clear();
+	}
+	
+	protected void removeAllSelection(Collection c) {
+		_selection.removeAll(c);
+	}
+	
+	protected void retainAllSelection(Collection c) {
+		_selection.retainAll(c);
+	}
+	
 	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {

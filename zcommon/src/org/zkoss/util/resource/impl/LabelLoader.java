@@ -1,13 +1,11 @@
 /* LabelLoader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun 12 13:05:05     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
@@ -21,22 +19,28 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Enumeration;
+import java.util.Collections;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
 
-import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
+import org.zkoss.util.FilterMap;
 import org.zkoss.util.Maps;
 import org.zkoss.util.Locales;
 import org.zkoss.util.resource.LabelLocator;
+import org.zkoss.util.resource.LabelLocator2;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.WaitLock;
 import org.zkoss.xel.Expressions;
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.util.SimpleXelContext;
@@ -46,40 +50,101 @@ import org.zkoss.xel.util.SimpleXelContext;
  *
  * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
- * <p>Notice that the encoding of i3-label.properties is assumed to be
- * UTF-8. If it is not the case, please refer to 
- * <a href="http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Library_Properties">Libraries Properties</a>
- * for configuration (avaible since 3.6.0).
+ * <p>Notice that the encoding of the Locale dependent file (*.properties)
+ * is assumed to be UTF-8. If it is not the case, please refer to 
+ * <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_library-property_Element/Library_Properties#org.zkoss.util.label.web.charset">ZK Configuration Reference</a>
+ * for more information.
  *
  * @author tomyeh
  */
 public class LabelLoader {
 	private static final Log log = Log.lookup(LabelLoader.class);
 
-	/** A map of (Locale l, Map(String key, String label)). */
-	private final Map _labels = new HashMap(6);
-	/** A list of LabelLocator. */
-	private final List _locators = new LinkedList();
+	/** A map of (Locale l, Map(String key, ExValue label)).
+	 * We use two maps to speed up the access of labels.
+	 * _labels allows concurrent access without synchronization.
+	 * _syncLabels requires synchronization and used for update.
+	 */
+	private Map _labels = Collections.EMPTY_MAP;
+	/** A map of (Locale 1, Map<String key1, Map<String key2...> or ExValue label>)
+	 * It is used by variable resolver and allows ${labels.key1.key2}.
+	 * _segLabels allows concurrent access without synchronization.
+	 * See also {@link #getSegmentedLabels}.
+	 */
+	private Map _segLabels = Collections.EMPTY_MAP;
+	/** Map<Locale, Map<String, String>>.
+	 */
+	private final Map _syncLabels = new HashMap(8);
+	/** A set of LabelLocator or LabelLocator2. */
+	private final Set _locators = new LinkedHashSet(4); //order is important
 	/** The XEL context. */
-	private XelContext _xelc;
+	private final SimpleXelContext _xelc;
 	private String _jarcharset, _warcharset;
+	private final ExpressionFactory _expf;
+	private final FilterMap.Filter _fmfilter;
 
-	/** Returns the label of the specified key, or null if not found.
+	public LabelLoader() {
+		_fmfilter = new FilterMap.Filter() {
+			public Object filter(Object key, Object value) {
+				return value instanceof ExValue ?
+					((ExValue)value).getValue(): value;
+			}
+		};
+		_expf = Expressions.newExpressionFactory();
+		_xelc = new SimpleXelContext(new Resolver(), null);
+	}
+
+	/** Returns the label of the specified key for the current locale,
+	 * or null if not found.
+	 * @see #getSegmentedLabels
 	 */
 	public String getLabel(String key) {
-		final String label =
-			getProperty(Locales.getCurrent(), key);
-		if (label == null || label.length() == 0 || label.indexOf("${") < 0)
-			return label;
-
-		//Interpret it
-		try {
-	    	return (String)
-	    		Expressions.evaluate(_xelc, label, String.class);
-	    } catch (Throwable ex) {
-	    	log.error("Illegal label: key="+key+" value="+label, ex);
-	    	return label; //recover it
-	    }
+		return getLabel(Locales.getCurrent(), key);
+	}
+	/** Returns the label of the specified key for the specified locale,
+	 * or null if not found.
+	 * @since 5.0.7
+	 */
+	public String getLabel(Locale locale, String key) {
+		Map map = (Map)_labels.get(locale);
+		if (map == null)
+			map = loadLabels(locale);
+		final ExValue exVal = (ExValue)map.get(key);
+		return exVal != null ? exVal.getValue(): null;
+	}
+	/** Returns a map of segmented labels for the current locale (never null).
+	 * Unlike {@link #getLabel}, if a key of the label contains dot, it will
+	 * be splitted into multiple keys and then grouped into map. It is so-called
+	 * segmented.
+	 * <p>For example, the following property file will parsed into a couple of maps,
+	 * and <code>getSegmentedLabels()</code> returns a map containing
+	 * a single entry. The entry's key is <code>"a"</code> and the value
+	 * is another map with two entries <code>"b"</code> and <code>"c"</code>.
+	 * And, the value for <code>"b"</code> is another two-entries map (containing
+	 * <code>"c"</code> and <code>"d"</code>).
+	 * <pre><code>
+	 * a.b.c=1
+	 * a.b.d=2
+	 * a.e=3</pre></code>
+	 * <p>This method is designed to make labels easier to be accessed in
+	 * EL expressions.
+	 * <p>On the other hand, {@link #getLabel} does not split them, and
+	 * you could access them by, say, <code>getLabel("a.b.d")</code>.
+	 * @since 5.0.7
+	 */
+	public Map getSegmentedLabels() {
+		return getSegmentedLabels(Locales.getCurrent());
+	}
+	/** Returns a map of segmented labels for the specified locale (never null).
+	 * Refer to {@link #getSegmentedLabels()} for details.
+	 * @since 5.0.7
+	 */
+	public Map getSegmentedLabels(Locale locale) {
+		final Map map = (Map)_segLabels.get(locale);
+		if (map != null)
+			return map;
+		loadLabels(locale);
+		return (Map)_segLabels.get(locale);
 	}
 
 	/** Sets the variable resolver, which is used if an EL expression
@@ -88,77 +153,54 @@ public class LabelLoader {
 	 * @since 3.0.0
 	 */
 	public VariableResolver setVariableResolver(VariableResolver resolv) {
-		final VariableResolver old =
-			_xelc != null ? _xelc.getVariableResolver(): null;
-		_xelc = resolv != null ? new SimpleXelContext(resolv, null): null;
+		final Resolver resolver = (Resolver)_xelc.getVariableResolver();
+		final VariableResolver old = resolver.custom;
+		resolver.custom = resolv;
 		return old;
 	}
-	/** Registers a locator which is used to load i3-label*.properties
+	/** Registers a locator which is used to load the Locale-dependent labels
 	 * from other resource, such as servlet contexts.
 	 */
 	public void register(LabelLocator locator) {
+		register0(locator);
+	}
+	/** Registers a locator which is used to load the Locale-dependent labels
+	 * from other resource, such as database.
+	 * @since 5.0.5
+	 */
+	public void register(LabelLocator2 locator) {
+		register0(locator);
+	}
+	private void register0(Object locator) {
 		if (locator == null)
 			throw new NullPointerException("locator");
 
 		synchronized (_locators) {
-			//no need to use hashset because # of locators are few
-			for (Iterator it = _locators.iterator(); it.hasNext();)
-				if (it.next().equals(locator)) {
-					log.warning("Ignored because of replication: "+locator);
-					return; //replicated
-				}
-			_locators.add(locator);
+			if (!_locators.add(locator))
+				log.warning("Replace the old one, because it is replicated: "+locator);
 		}
 
 		reset(); //Labels might be loaded before, so...
 	}
 	/** Resets all cached labels and next call to {@link #getLabel}
-	 * will cause re-loading i3-label*.proerties.
+	 * will cause re-loading the Locale-dependent labels.
 	 */
 	public void reset() {
-		synchronized (_labels) {
-			_labels.clear();
+		synchronized (_syncLabels) {
+			_syncLabels.clear();
+			_labels = Collections.EMPTY_MAP;
 		}
-	}
-
-	//-- deriver to override --//
-	/** Returns the property without interprets any expression.
-	 * It searches properties defined in i3-label*.properties
-	 * All label accesses are eventually done by this method.
-	 *
-	 * <p>To alter its behavior, you might override this method.
-	 */
-	protected String getProperty(Locale locale, String key) {
-		String label = (String)getLabels(locale).get(key);
-		if (label != null)
-			return label;
-
-		final String lang = locale.getLanguage();
-		final String cnty = locale.getCountry();
-		final String var = locale.getVariant();
-		if (var != null && var.length() > 0) {
-			label = (String)getLabels(new Locale(lang, cnty)).get(key);
-			if (label != null)
-				return label;
-		}
-		if (cnty != null && cnty.length() > 0) {
-			label = (String)getLabels(new Locale(lang, "")).get(key);
-			if (label != null)
-				return label;
-		}
-		return (String)getLabels(null).get(key);
 	}
 
 	//-- private utilities --//
-	/** Returns Map(String key, String label) of the specified locale. */
-	private final Map getLabels(Locale locale) {
+	private final Map loadLabels(Locale locale) {
 		WaitLock lock = null;
 		for (;;) {
 			final Object o;
-			synchronized (_labels) {	
-				o = _labels.get(locale);
+			synchronized (_syncLabels) {	
+				o = _syncLabels.get(locale);
 				if (o == null)
-					_labels.put(locale, lock = new WaitLock()); //lock it
+					_syncLabels.put(locale, lock = new WaitLock()); //lock it
 			}
 
 			if (o instanceof Map)
@@ -182,8 +224,9 @@ public class LabelLoader {
 
 		try {
 			//get the class name
-			log.info("Loading labels for "+locale);
-			final Map labels = new HashMap(512);
+			if (locale != null)
+				log.info("Loading labels for "+locale);
+			Map labels = new HashMap(512);
 
 			//1. load from modules
 			final ClassLocator locator = new ClassLocator();
@@ -196,33 +239,136 @@ public class LabelLoader {
 			}
 
 			//2. load from extra resource
-			for (Iterator it = _locators.iterator(); it.hasNext();) {
-				final URL url = ((LabelLocator)it.next()).locate(locale);
-				if (url != null)
-					load(labels, url, _warcharset);
+			final List locators;
+			synchronized (_locators) {
+				locators = new LinkedList(_locators);
+			}
+			for (Iterator it = locators.iterator(); it.hasNext();) {
+				Object o = it.next();
+				if (o instanceof LabelLocator) {
+					final URL url = ((LabelLocator)o).locate(locale);
+					if (url != null)
+						load(labels, url, _warcharset);
+				} else {
+					final LabelLocator2 loc = (LabelLocator2)o;
+					final InputStream is = loc.locate(locale);
+					if (is != null) {
+						final String cs = loc.getCharset();
+						load(labels, is, cs != null ? cs: _warcharset);
+					}
+				}
+			}
+
+			//Convert values to ExValue
+			toExValue(labels);
+
+			//merge with labels from 'super' locale
+			if (locale != null) {
+				final String lang = locale.getLanguage();
+				final String cnty = locale.getCountry();
+				final String var = locale.getVariant();
+				final Map superlabels = loadLabels(
+					var != null && var.length() > 0 ? new Locale(lang, cnty):
+					cnty != null && cnty.length() > 0 ? new Locale(lang, ""): null);
+				if (labels.isEmpty()) {
+					labels = superlabels.isEmpty() ?
+						Collections.EMPTY_MAP: superlabels;
+				} else if (!superlabels.isEmpty()) {
+					Map combined = new HashMap(superlabels);
+					combined.putAll(labels);
+					labels = combined;
+				}
 			}
 
 			//add to map
-			synchronized (_labels) {
-				_labels.put(locale, labels);
+			synchronized (_syncLabels) {
+				_syncLabels.put(locale, labels);
+				cloneLables();
 			}
-
 			return labels;
 		} catch (Throwable ex) {
-			synchronized (_labels) {
-				_labels.remove(locale);
+			synchronized (_syncLabels) {
+				_syncLabels.remove(locale);
+				cloneLables();
 			}
 			throw SystemException.Aide.wrap(ex);
 		} finally {
 			lock.unlock(); //unlock (always unlock to avoid deadlock)
 		}
 	}
+	private void toExValue(Map labels) {
+		if (!labels.isEmpty())
+			for (Iterator it = labels.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				me.setValue(new ExValue((String)me.getValue()));
+			}
+	}
+	//Copy _syncLabels to _labels. It must be called in synchronized(_syncLabels)
+	private void cloneLables() {
+		final Map labels = new HashMap(),
+			segLabels = new HashMap();
+		for (Iterator it = _syncLabels.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final Object value = me.getValue();
+			if (value instanceof Map) {
+				final Object key = me.getKey();
+				labels.put(key, value);
+				segLabels.put(key, segment((Map)value));
+			}
+		}
+		_labels = labels;
+		_segLabels = segLabels;
+	}
+	private Map segment(Map map) {
+		for (Iterator it = map.keySet().iterator(); it.hasNext();) {
+			final String key = (String)it.next();
+			if (key.indexOf(".") >= 0)
+				return segmentInner(new HashMap(map)); //clone since we'll modify it
+		}
+		return new FilterMap(map, _fmfilter); //no special key
+	}
+	private FilterMap segmentInner(Map map) {
+		final Map segFound = new HashMap();
+		for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String key = (String)me.getKey();
+			final Object val = me.getValue();
+			final int index = key.indexOf('.');
+			if (index >= 0) {
+				it.remove(); //remove it
+
+				final String newkey = key.substring(0, index);
+				Map vals = (Map)segFound.get(newkey);
+				if (vals == null)
+					segFound.put(newkey, vals = new HashMap());
+				vals.put(key.substring(index + 1), val);
+			}
+		}
+
+		for (Iterator it = segFound.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final FilterMap seged;
+			Object o = map.put(me.getKey(), seged = segmentInner((Map)me.getValue()));
+			if (o != null && !(o instanceof Map)/*just in case*/) {
+				final Map m = seged.getOrigin();
+				o = m.put("$", o);
+				if (o != null)
+					m.put("$", o); //restore
+			}
+		}
+		return new FilterMap(map, _fmfilter);
+	}
+
 	/** Loads all labels from the specified URL. */
 	private static final void load(Map labels, URL url, String charset)
 	throws IOException {
-		log.info(MCommon.FILE_OPENING, url);
+		log.info("Opening "+url); //don't use MCommon since Messages might call getLabel
+		load(labels, url.openStream(), charset);
+	}
+	/** Loads all labels from the specified URL. */
+	private static final void load(Map labels, InputStream is, String charset)
+	throws IOException {
 		final Map news = new HashMap();
-		final InputStream is = url.openStream();
 		try {
 			Maps.load(news, is, charset);
 		} finally {
@@ -230,9 +376,38 @@ public class LabelLoader {
 		}
 		for (Iterator it = news.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
-			final Object key = me.getKey();
-			if (labels.put(key, me.getValue()) != null)
-				log.warning("Label of "+key+" is replaced by "+url);
+			labels.put(me.getKey(), me.getValue());
+		}
+	}
+	private class ExValue {
+		private Expression _expr;
+		private String _val;
+		public ExValue(String val) {
+			int j;
+			if ((j = val.indexOf("${")) >= 0 && val.indexOf('}', j + 2) >= 0) {
+				try {
+					_expr = _expf.parseExpression(_xelc, val, String.class);
+					return;
+				} catch (Throwable ex) {
+					log.error("Illegal expression: "+val, ex);
+				}
+			}
+			_expr = null;
+			_val = val;
+		}
+		public String getValue() {
+			return _expr != null ? (String)_expr.evaluate(_xelc): _val;
+		}
+	}
+	private class Resolver implements VariableResolver, java.io.Serializable {
+		private VariableResolver custom;
+		public Object resolveVariable(String name) {
+			if (custom != null) {
+				final Object o = custom.resolveVariable(name);
+				if (o != null)
+					return o;
+			}
+			return getSegmentedLabels().get(name);
 		}
 	}
 }

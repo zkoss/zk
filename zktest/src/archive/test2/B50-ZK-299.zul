@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-299.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 24 19:23:17 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	the detail's icon (+/-) should display correctly in each theme
+	<grid width="600px">
+		<rows>
+
+			<row>
+
+				<detail>
+
+					<vbox>
+
+						<label value="Item Specifics - Item Condition" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Apple" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Technology:" />
+
+							<label value="DVI" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+
+				<label value="US $202.50" />
+
+				<label value="tulsa, ok, United States" />
+
+			</row>
+
+			<row>
+
+				<detail fulfill="onOpen">
+
+					<vbox>
+
+						<label value="Item Specifics" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Kyocera" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Phone Type:" />
+
+							<label
+								value="Phones without Service Contrac" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Product Type:" />
+
+							<label value="Cell Phones" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+
+				<label value="US $74.99" />
+
+				<label value="Speedy Shipping, USA, United States" />
+
+			</row>
+
+		</rows>
+
+	</grid>
+	<button label="change to classic blue">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "classicblue");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+
+</zk>

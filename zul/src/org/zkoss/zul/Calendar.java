@@ -16,21 +16,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.Date;
 import java.util.TimeZone;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.ext.client.InputableX;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.au.AuRequests;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -42,35 +42,30 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
-	private TimeZone _tzone;
 	private Date _value;
 	/** The name. */
 	private String _name;
-	private boolean _compact;
 
 	/** Contructs a calendar whose value is default to today.
 	 */
+	static {
+		addClientEvent(Calendar.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
+	}
 	public Calendar() {
 		this(null);
 	}
 	public Calendar(Date value) {
 		_value = value != null ? value: Dates.today();
-		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
 
-	/** Returns the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public TimeZone getTimeZone() {
-		return _tzone;
+		return null;
 	}
-	/** Sets the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/** As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
 	public void setTimeZone(TimeZone tzone) {
-		_tzone = tzone;
 	}
 
 	/** Returns the value that is assigned to this component, never null.
@@ -85,31 +80,15 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("z.value", getDateFormat().format(_value));
+			smartUpdate("value", _value);
 		}
 	}
 
-	private final DateFormat getDateFormat() {
+	private DateFormat getDateFormat() {
 		final DateFormat df =
 			new SimpleDateFormat("yyyy/MM/dd", Locales.getCurrent());
-		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
-		df.setTimeZone(tz);
+		df.setTimeZone(TimeZones.getCurrent());
 		return df;
-	}
-
-	/** Returns whether to use a compact layout.
-	 * <p>Default: true if zh_TW or zh_CN; false otherwise.
-	 */
-	public boolean isCompact() {
-		return _compact;
-	}
-	/** Sets whether to use a compact layout.
-	 */
-	public void setCompact(boolean compact) {
-		if (_compact != compact) {
-			_compact = compact;
-			invalidate();
-		}
 	}
 
 	/** Returns the name of this component.
@@ -140,7 +119,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			smartUpdate("z.name", _name);
+			smartUpdate("name", _name);
 		}
 	}
 
@@ -148,38 +127,38 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	public String getZclass() {
 		return _zclass == null ? "z-calendar" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_CHANGE);
-
-		HTMLs.appendAttribute(sb, "z.name", _name);
-		HTMLs.appendAttribute(sb, "z.value", getDateFormat().format(_value));
-		if (_compact) sb.append(" z.compact=\"true\"");
-		return sb.toString();
-	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onChange, onChanging and onError.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements InputableX {
-		//-- InputableX --//
-		public boolean setTextByClient(String value) throws WrongValueException {
-			try {
-				final Date newval = getDateFormat().parse(value);
-				if (!Objects.equals(_value, newval)) {
-					_value = newval;
-					return true;
-				}
-				return false;
-			} catch (ParseException ex) {
-				throw new InternalError(value);
-			}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CHANGE)) {
+			final Map data = request.getData();
+			final Object value = data.get("value");
+			if (Objects.equals(_value, value))
+				return; //nothing happen
+
+			_value = (Date)value;
+			final InputEvent evt = new InputEvent(cmd, this,
+				getDateFormat().format(value), value,
+				AuRequests.getBoolean(data, "bySelectBack"),
+				AuRequests.getInt(data, "start", 0));
+			Events.postEvent(evt);
+		} else {
+			
+			super.service(request, everError);
 		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_name != null)
+			render(renderer, "name", _name);
+		render(renderer, "value", _value);
 	}
 }

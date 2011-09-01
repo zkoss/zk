@@ -1,18 +1,16 @@
 /* Comboitem.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -25,13 +23,14 @@ package org.zkoss.zul.api;
  * Non-XUL extension. Refer to {@link Combobox}.
  * 
  * <p>
- * Default {@link #getZclass}: z-combo-item. (since 3.5.0)
+ * Default {@link #getZclass}: z-comboitem. (since 5.0.0)
  * 
  * @author tomyeh
  * @see Combobox
  * @since 3.5.2
  */
-public interface Comboitem extends org.zkoss.zul.impl.api.LabelImageElement {
+public interface Comboitem extends org.zkoss.zul.impl.api.LabelImageElement,
+org.zkoss.zk.ui.ext.Disable {
 
 	/**
 	 * Sets whether it is disabled.

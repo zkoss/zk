@@ -1,0 +1,39 @@
+<test tags="B30-2188572.zul,A,E,forEach">
+	<case id="ztl">
+		<server><!--
+			<zk>
+				There shall be two listbox (side-by-side)
+				The first listbox has two items, and the second has three items.
+				<hbox>
+				<zscript>
+				classes = new String[] {"College", "Graduate"};
+				grades = new Object[] {
+				new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}
+				};
+				</zscript>
+			
+				<listbox width="200px" forEach="${classes}" >
+					<listhead>
+					<listheader label="${each}: ${forEachStatus.index}"/>
+					</listhead>
+					<listitem label="${forEachStatus.previous.each}: ${each}"
+						forEach="${grades[forEachStatus.index]}"/>
+					</listbox>
+				</hbox>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			verifyEquals("College: 0",jq(".z-listbox:eq(0) div.z-listheader-cnt").text());
+			verifyEquals("College: Best",jq(".z-listbox:eq(0) div.z-listcell-cnt:eq(0)").text());
+			verifyEquals("College: Better",jq(".z-listbox:eq(0) div.z-listcell-cnt:eq(1)").text());
+			verifyEquals("",jq(".z-listbox:eq(0) div.z-listcell-cnt:eq(2)").text());
+			verifyEquals(2,jq(".z-listbox:eq(0) div.z-listcell-cnt").length());
+			verifyEquals("Graduate: 1",jq(".z-listbox:eq(1) div.z-listheader-cnt").text());
+			verifyEquals("Graduate: A++",jq(".z-listbox:eq(1) div.z-listcell-cnt:eq(0)").text());
+			verifyEquals("Graduate: A+",jq(".z-listbox:eq(1) div.z-listcell-cnt:eq(1)").text());
+			verifyEquals("Graduate: A",jq(".z-listbox:eq(1) div.z-listcell-cnt:eq(2)").text());	
+			verifyEquals("",jq(".z-listbox:eq(1) div.z-listcell-cnt:eq(3)").text());
+			verifyEquals(3,jq(".z-listbox:eq(1) div.z-listcell-cnt").length());
+		]]></client>
+	</case>
+</test>

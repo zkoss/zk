@@ -1,18 +1,16 @@
 /* Script.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -65,19 +63,13 @@ package org.zkoss.zul.api;
  */
 public interface Script {
 
-	/**
-	 * Returns the type of this client script.
-	 * <p>
-	 * Default: text/javascript.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public String getType();
 
-	/**
-	 * Sets the type of this client script. For JavaScript, it is
-	 * <code>text/javascript</code>
-	 * 
-	 * <p>
-	 * Note: this property is NOT optional. You must specify one.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public void setType(String type);
 
@@ -116,16 +108,21 @@ public interface Script {
 	 */
 	public void setSrc(String src);
 
-	/**
-	 * Returns whether to defer the execution of the script codes.
-	 * 
-	 * <p>
-	 * Default: false.
+	/** Returns whether to defer the execution of the script codes
+	 * until the widget is instantiated and mounted.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>Specifying false (default), if you want to do the desktop-level
+	 * (or class-level) initialization, such as defining a widget class
+	 * or a global function.
+	 * <p>Specifying true, if you want to access widgets. Notice that
+	 * <code>this</code> references to this script widget.
 	 */
 	public boolean isDefer();
 
-	/**
-	 * Sets whether to defer the execution of the script codes.
+	/** Sets whether to defer the execution of the script codes.
+	 * @see #isDefer
 	 */
 	public void setDefer(boolean defer);
 

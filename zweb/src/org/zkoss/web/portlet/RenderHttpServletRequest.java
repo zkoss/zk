@@ -1,23 +1,22 @@
 /* RenderHttpServletRequest.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jan 17 00:58:56     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.web.portlet;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +37,7 @@ import org.zkoss.web.Attributes;
  */
 public class RenderHttpServletRequest implements HttpServletRequest {
 	private final RenderRequest _req;
+	private final HttpServletRequest _hreq;
 	private String _enc = "UTF-8";
 	private final Map _attrs = new HashMap(9);
 
@@ -50,6 +50,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		if (req == null)
 			throw new IllegalArgumentException("null");
 		_req = req;
+		_hreq = getHttpServletRequest(req);
 
 		String ctxpath = req.getContextPath();
 		if (ctxpath == null) ctxpath = "";
@@ -58,6 +59,23 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		_attrs.put(Attributes.INCLUDE_PATH_INFO, "");
 		_attrs.put(Attributes.INCLUDE_QUERY_STRING, "");
 		_attrs.put(Attributes.INCLUDE_REQUEST_URI, ctxpath);
+	}
+	/** Returns the HTTP servlet rquest associated with the render request,
+	 * or null if not found.
+	 * @since 5.0.6
+	 */
+	protected HttpServletRequest getHttpServletRequest(RenderRequest req) {
+		try {
+			Method m;
+			try {
+				m = req.getClass().getMethod("getHttpServletRequest", null);
+			} catch (NoSuchMethodException ex) {
+				m = req.getClass().getMethod("getRequest", null);
+			}
+			return (HttpServletRequest)m.invoke(req, null);
+		} catch (Throwable ex) {
+			return null;
+		}		
 	}
 
 	//-- ServletRequest --//
@@ -95,6 +113,9 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 			}
 		};
    }
+	public RenderRequest getRenderRequest() {
+		return _req;
+	}
 	public String getCharacterEncoding() {
 		return _enc;
 	}
@@ -111,7 +132,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		};
 	}
 	public String getLocalAddr() {
-		return "";
+		return _hreq != null ? _hreq.getLocalAddr(): "";
 	}
 	public java.util.Locale getLocale() {
 		return _req.getLocale();
@@ -120,10 +141,10 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getLocales();
 	}
 	public String getLocalName() {
-		return "";
+		return _hreq != null ? _hreq.getLocalName(): "";
 	}
 	public int getLocalPort() {
-		return -1;
+		return _hreq != null ? _hreq.getLocalPort(): -1;
 	}
 	public String getParameter(String name) {
 		return _req.getParameter(name);
@@ -147,19 +168,19 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 	 * @deprecated
 	 */
 	public String getRealPath(String path) {
-		return null;
+		return _hreq != null ? _hreq.getRealPath(path): null;
 	}
 	public String getRemoteAddr() {
-		return "";
+		return _hreq != null ? _hreq.getRemoteAddr(): "";
 	}
 	public String getRemoteHost() {
-		return "";
+		return _hreq != null ? _hreq.getRemoteHost(): "";
 	}
 	public int getRemotePort() {
-		return -1;
+		return _hreq != null ? _hreq.getRemotePort(): -1;
 	}
 	public javax.servlet.RequestDispatcher getRequestDispatcher(String path) {
-		return null; //implies we don't support relative URI
+		return _hreq != null ? _hreq.getRequestDispatcher(path): null; //implies we don't support relative URI
 	}
 	public String getScheme() {
 		return _req.getScheme();
@@ -197,34 +218,34 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return (String)_attrs.get(Attributes.INCLUDE_CONTEXT_PATH);
 	}
 	public javax.servlet.http.Cookie[] getCookies() {
-		return new javax.servlet.http.Cookie[0];
+		return _hreq != null ? _hreq.getCookies(): new javax.servlet.http.Cookie[0];
 	}
 	public long getDateHeader(String name) {
-		return -1; //not available
+		return _hreq != null ? _hreq.getDateHeader(name): -1;
 	}
 	public String getHeader(String name) {
-		return null;
+		return _hreq != null ? _hreq.getHeader(name) : null;
 	}
 	public java.util.Enumeration getHeaderNames() {
-		return CollectionsX.EMPTY_ENUMERATION;
+		return _hreq != null ? _hreq.getHeaderNames(): CollectionsX.EMPTY_ENUMERATION;
 	}
 	public java.util.Enumeration getHeaders(String name) {
-		return CollectionsX.EMPTY_ENUMERATION;
+		return _hreq != null ? _hreq.getHeaders(name): CollectionsX.EMPTY_ENUMERATION;
 	}
 	public int getIntHeader(String name) {
-		return -1; //not available
+		return _hreq != null ? _hreq.getIntHeader(name): -1;
 	}
 	public String getMethod() {
-		return "GET";
+		return _hreq != null ? _hreq.getMethod(): "GET";
 	}
 	public String getPathInfo() {
-		return (String)_attrs.get(Attributes.INCLUDE_PATH_INFO);
+		return _hreq != null ? _hreq.getPathInfo(): (String)_attrs.get(Attributes.INCLUDE_PATH_INFO);
 	}
 	public String getPathTranslated() {
-		return null;
+		return _hreq != null ? _hreq.getPathTranslated(): null;
 	}
 	public String getQueryString() {
-		return (String)_attrs.get(Attributes.INCLUDE_QUERY_STRING);
+		return _hreq != null ? _hreq.getQueryString(): (String)_attrs.get(Attributes.INCLUDE_QUERY_STRING);
 	}
 	public String getRemoteUser() {
 		return _req.getRemoteUser();
@@ -233,13 +254,13 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		return _req.getRequestedSessionId();
 	}
 	public String getRequestURI() {
-		return (String)_attrs.get(Attributes.INCLUDE_REQUEST_URI);
+		return _hreq != null ? _hreq.getRequestURI(): (String)_attrs.get(Attributes.INCLUDE_REQUEST_URI);
 	}
 	public StringBuffer getRequestURL() {
-		return new StringBuffer();
+		return _hreq != null ? _hreq.getRequestURL(): new StringBuffer();
 	}
 	public String getServletPath() {
-		return (String)_attrs.get(Attributes.INCLUDE_SERVLET_PATH);
+		return _hreq != null ? _hreq.getServletPath(): (String)_attrs.get(Attributes.INCLUDE_SERVLET_PATH);
 	}
 	public HttpSession getSession() {
 		return PortletHttpSession.getInstance(_req.getPortletSession());

@@ -1,0 +1,62 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>In first and second columns, you should see "A" in all 4 cells.</li>
+			<li>Open the two Combobox on the right. You should see "A" as an option in each of the boxes.</li>
+		</ol>
+	]]></html>
+	<zscript>
+		String[] model = new String[] {"A"};
+	</zscript>
+	<grid model="@{model}">
+		<rows>
+			<row self="@{each=line}">
+				<grid>
+					<rows>
+						<row>
+							<label value="@{line}" />
+						</row>
+					</rows>
+				</grid>
+				<listbox>
+					<listitem>
+						<listcell>
+							<label value="@{line}" />
+						</listcell>
+					</listitem>
+				</listbox>
+				<combobox>
+					<comboitem label="@{line}" />
+				</combobox>
+			</row>
+		</rows>
+	</grid>
+	<listbox model="@{model}">
+		<listitem self="@{each=line}">
+			<listcell>
+				<grid>
+					<rows>
+						<row>
+							<label value="@{line}" />
+						</row>
+					</rows>
+				</grid>
+			</listcell>
+			<listcell>
+				<listbox>
+					<listitem>
+						<listcell>
+							<label value="@{line}" />
+						</listcell>
+					</listitem>
+				</listbox>
+			</listcell>
+			<listcell>
+				<combobox>
+					<comboitem label="@{line}" />
+				</combobox>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>

@@ -1,18 +1,16 @@
 /* Listbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -27,7 +25,7 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.event.ListDataEvent;//for javadoc
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.impl.api.MeshElement;
 
 /**
  * A listbox.
@@ -86,30 +84,29 @@ import org.zkoss.zul.ext.Paginated;
  * @see org.zkoss.zul.ListitemRendererExt
  * @since 3.5.2
  */
-public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
-
+public interface Listbox extends MeshElement {	
 	/**
-	 * Sets the outline of listbox whether is fixed layout. If true, the outline
-	 * of listbox will be depended on browser. It means, we don't calculate the
-	 * width of each cell. Otherwise, the outline will count on the content of
-	 * body. In other words, the outline of listbox is like ZK 2.4.1 version
-	 * that the header's width is only for reference.
+	 * Sets the outline of listbox whether is fixed layout. If true, the outline of
+	 * grid will be depended on browser. It means, we don't calculate the width
+	 * of each cell. Otherwise, the outline will count on the content of body.
+	 * In other words, the outline of grid is like ZK 2.4.1 version that the
+	 * header's width is only for reference.
 	 * 
 	 * <p>
 	 * You can also specify the "fixed-layout" attribute of component in
 	 * lang-addon.xml directly, it's a top priority.
-	 * 
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 */
 	public void setFixedLayout(boolean fixedLayout);
 
 	/**
-	 * Returns the outline of list box whether is fixed layout.
+	 * Returns the outline of listbox whether is fixed layout.
 	 * <p>
 	 * Default: false.
 	 * <p>
 	 * Note: if the "fixed-layout" attribute of component is specified, it's
 	 * prior to the original value.
-	 * 
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
 	 */
 	public boolean isFixedLayout();
 
@@ -260,7 +257,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * event-driven model.
 	 */
 	public String getName();
-
 	/**
 	 * Sets the name of this component.
 	 * <p>
@@ -275,6 +271,23 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 *            the name of this component.
 	 */
 	public void setName(String name);
+
+	/** Sets a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Default: null (it means button, input, textarea and a). If you want
+	 * to select no matter which tag is clicked, please specify an empty string.
+	 * @param tags a list of HTML tag names that will <i>not</i> cause the list item
+	 * being selected if clicked. Specify null to use the default and "" to
+	 * indicate none.
+	 * @since 5.0.5
+	 */
+	public void setNonselectableTags(String tags);
+	/** Returns a list of HTML tag names that shall <i>not</i> cause the list item
+	 * being selected if they are clicked.
+	 * <p>Refer to {@link #setNonselectableTags} for details.
+	 * @since 5.0.5
+	 */
+	public String getNonselectableTags();
 
 	/**
 	 * Returns a live list of all {@link Listitem}. By live we mean you can add
@@ -407,95 +420,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public org.zkoss.zul.api.Listitem removeItemAtApi(int index);
 
 	// --Paging--//
-	/**
-	 * Sets how to position the paging of listbox at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 * 
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 */
-	public void setPagingPosition(String pagingPosition);
-
-	/**
-	 * Returns the paging controller, or null if not available. Note: the paging
-	 * controller is used only if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
-	 * developers with {@link #setPaginal}).
-	 * 
-	 * <p>
-	 * If a paging controller is specified (either by {@link #setPaginal}, or by
-	 * {@link #setMold} with "paging"), the listbox will rely on the paging
-	 * controller to handle long-content instead of scrolling.
-	 */
-	public Paginal getPaginal();
-
-	/**
-	 * Specifies the paging controller. Note: the paging controller is used only
-	 * if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * It is OK, though without any effect, to specify a paging controller even
-	 * if mold is not "paging".
-	 * 
-	 * @param pgi
-	 *            the paging controller. If null and {@link #getMold} is
-	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingApi}).
-	 */
-	public void setPaginal(Paginal pgi);
-
-	/**
-	 * Returns the child paging controller that is created automatically, or
-	 * null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * 
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi();
-
-	public org.zkoss.zul.api.Paging getPagingApi();
-
-	/**
-	 * Returns the page size, aka., the number items per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize();
-
-	/**
-	 * Sets the page size, aka., the number items per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException;
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 * 
-	 */
-	public int getPageCount();
-
-	/**
-	 * Returns the active page (starting from 0).
-	 * 
-	 */
-	public int getActivePage();
-
-	/**
-	 * Sets the active page (starting from 0).
-	 * 
-	 * @see #setActivePage(Listitem)
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
-
 	/**
 	 * Sets the active page in which the specified item is. The active page will
 	 * become the page that contains the specified item.
@@ -651,7 +575,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingApi}.
+	 * ({@link #getPagingChildApi}.
 	 * 
 	 * <p>
 	 * Note: if the "pre-load-size" attribute of component is specified, it's
@@ -664,7 +588,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * from the client.
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingApi}.
+	 * ({@link #getPagingChildApi}.
 	 * 
 	 * @param sz
 	 *            the number of items to preload. If zero, no preload at all.
@@ -696,6 +620,7 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public void renderAll();
 
+	/** Renders the given set of list items.
+	 */
 	public void renderItems(Set items);
-
 }

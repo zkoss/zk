@@ -1,18 +1,16 @@
 /* Combobox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Dec 15 17:33:01     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,24 +24,27 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
-
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
-import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.Selectable;
 
 /**
- * A combo box.
+ * A combobox.
  *
  * <p>Non-XUL extension. It is used to replace XUL menulist. This class
  * is more flexible than menulist, such as {@link #setAutocomplete}
@@ -51,12 +52,13 @@ import org.zkoss.zul.impl.Utils;
  *
  * <p>Default {@link #getZclass}: z-combobox.(since 3.5.0)
  *
- * <p>Events: onOpen, onSelect<br/>
+ * <p>Events: onOpen, onSelect, onAfterRender<br/>
  * Developers can listen to the onOpen event and initializes it
  * when {@link org.zkoss.zk.ui.event.OpenEvent#isOpen} is true, and/or
- * clean up if false.
+ * clean up if false.<br/>
+ * onAfterRender is sent when the model's data has been rendered.(since 5.0.4)
  *
- * * <p>Besides assign a list model, you could assign a renderer
+ * <p>Besides assign a list model, you could assign a renderer
  * (a {@link ComboitemRenderer} instance) to a combobox, such that
  * the combobox will use this renderer to render the data returned by 
  * {@link ListModel#getElementAt}.
@@ -80,13 +82,25 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	private static final Log log = Log.lookup(Combobox.class);
-	private boolean _autodrop, _autocomplete, _btnVisible = true;
+	private boolean _autodrop, _autocomplete = true, _btnVisible = true;
+	//Note: _selItem is maintained loosely, i.e., its value might not be correct
+	//unless reIndex is called. So call getSelectedItem/getSelectedIndex if you
+	//want the correct value
 	private transient Comboitem _selItem;
+	/** The last checked value for selected item.
+	 * If null, it means reIndex is required.
+	 */
+	private transient String _lastCkVal;
 	private ListModel _model;
 	private ComboitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener _eventListener;
-	
+
+	static {
+		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT);
+	}
+
 	public Combobox() {
 	}
 	public Combobox(String value) throws WrongValueException {
@@ -230,7 +244,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	
 	/** Creates an new and unloaded Comboitem. */
-	private final Comboitem newUnloadedItem(ComboitemRenderer renderer) {
+	private Comboitem newUnloadedItem(ComboitemRenderer renderer) {
 		Comboitem item = null;
 		if (renderer instanceof ComboitemRendererExt)
 			item = ((ComboitemRendererExt)renderer).newComboitem(this);
@@ -255,14 +269,18 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
 			for (Iterator it = getItems().listIterator(ofs);
-			j < pgsz && it.hasNext(); ++j)
-				renderer.render(subset, (Comboitem)it.next());
+			j < pgsz && it.hasNext(); ++j){
+				Comboitem item = (Comboitem)it.next();
+				renderer.render(subset, item);
+				fixSelectOnRender(item);// comboitem can be selected after set a label
+			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
 			renderer.doFinally();
 		}
 		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
 	}
 	
 	private void postOnInitRender(String idx) {
@@ -274,7 +292,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		}
 	}
 
-	private static final ComboitemRenderer getDefaultItemRenderer() {
+	private static ComboitemRenderer getDefaultItemRenderer() {
 		return _defRend;
 	}
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
@@ -346,21 +364,21 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z.adr", autodrop);
+			smartUpdate("autodrop", autodrop);
 		}
 	}
 	/** Returns whether to automatically complete this text box
 	 * by matching the nearest item ({@link Comboitem}.
+	 * It is also known as auto-type-ahead.
 	 *
-	 * <p>Default: false.
+	 * <p>Default: true (since 5.0.0).
 	 *
 	 * <p>If true, the nearest item will be searched and the text box is
 	 * updated automatically.
 	 * If false, user has to click the item or use the DOWN or UP keys to
 	 * select it back.
 	 *
-	 * <p>Note: this feature is reserved and not yet implemented.
-	 * Don't confuse it with the auto-completion feature mentioned by
+	 * <p>Don't confuse it with the auto-completion feature mentioned by
 	 * other framework. Such kind of auto-completion is supported well
 	 * by listening to the onChanging event.
 	 */
@@ -373,7 +391,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setAutocomplete(boolean autocomplete) {
 		if (_autocomplete != autocomplete) {
 			_autocomplete = autocomplete;
-			smartUpdate("z.aco", autocomplete);
+			smartUpdate("autocomplete", autocomplete);
 		}
 	}
 
@@ -393,7 +411,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.1
 	 */
 	public void open() {
-		response("dropdn", new AuInvoke(this, "dropdn", true));
+		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 	/** Closes the list of combo items ({@link Comboitem} if it was
 	 * dropped down.
@@ -402,7 +420,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("dropdn", new AuInvoke(this, "dropdn", false));
+		response("open", new AuInvoke(this, "setOpen", false));//don't use smartUpdate
 	}
 
 	/** Returns whether the button (on the right of the textbox) is visible.
@@ -416,25 +434,8 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
-	}
-
-	/** Returns the URI of the button image.
-	 * <p>Default: null. (since 3.5.0)
-	 * @since 2.4.1
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage() {
-		return null;
-	}
-	/** Sets the URI of the button image.
-	 *
-	 * @param img the URI of the button image.
-	 * @since 2.4.1
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img) {
 	}
 
 	/** Returns a 'live' list of all {@link Comboitem}.
@@ -496,6 +497,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
+		reIndex();
 		return _selItem;
 	}
 	/** Returns the selected item.
@@ -513,7 +515,23 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.2
 	 */
 	public void setSelectedItem(Comboitem item) {
-		setSelectedIndex(getItems().indexOf(item));
+		if (item != null && item.getParent() != this)
+			throw new UiException("Not a child: "+item);
+
+		if (item != _selItem) {
+			_selItem = item;
+			if (item != null) {
+				setValue(item.getLabel());
+			} else {
+				//Don't call setRawValue(), or the error message will be cleared
+				if (_value != null && !"".equals(_value)) {
+					_value = "";
+					smartUpdate("value", coerceToString(_value));
+				}
+			}
+			_lastCkVal = getValue();
+			syncSelectionToModel();
+		}
 	}
 	/**  Deselects the currently selected items and selects the given item.
 	 * <p>Note: if the label of comboitem has the same more than one, the first 
@@ -538,27 +556,19 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Out of bound: "+jsel+" while size="+getItemCount());
 		if (jsel < -1) 
 			jsel = -1;
-		if (jsel < 0) {
-			_selItem = null;
-			//Bug#2919037: SetSelectedIndex(-1) shall unselect even with constraint
-			setRawValue(null);
-		} else {
-			_selItem = getItemAtIndex(jsel);
-			setValue(_selItem.getLabel());
-		}
+		setSelectedItem(jsel >= 0 ? getItemAtIndex(jsel): null);
+			//Bug#2919037: setSelectedIndex(-1) shall unselect even with constraint
 	}
+	
 	/** Returns the index of the selected item, or -1 if not selected.
 	 * @since 3.0.1
 	 */
 	public int getSelectedIndex() {
+		reIndex();
 		return _selItem != null ? getItems().indexOf(_selItem) : -1;
 	}
 
 	//-- super --//
-	public void setText(String value) throws WrongValueException {
-		super.setText(value);
-		reIndex();
-	}
 	public void setMultiline(boolean multiline) {
 		if (multiline)
 			throw new UnsupportedOperationException("Combobox doesn't support multiline");
@@ -567,40 +577,73 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		if (rows != 1)
 			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
 	}
-
+	
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 *
+	 * <p>If a component requires more client controls, it is suggested to
+	 * override {@link #getExtraCtrl} to return an instance that extends from
+	 * this class.
+	 */
+	protected class ExtraCtrl extends Textbox.ExtraCtrl implements Blockable {
+		public boolean shallBlock(AuRequest request) {
+			// B50-3316103: special case of readonly component: do not block onChange and onSelect
+			final String cmd = request.getCommand();
+			if(Events.ON_OPEN.equals(cmd))
+				return false;
+			return !Components.isRealVisible(Combobox.this) || isDisabled() || 
+				(isReadonly() && Events.ON_CHANGING.equals(cmd));
+		}
+	}
+	
+	private void syncSelectionToModel() {
+		if (_model instanceof Selectable) {
+			Selectable model = (Selectable) _model;
+			model.clearSelection();
+			
+			if (_selItem != null)
+				model.addSelection(_model.getElementAt(getChildren().indexOf(_selItem)));
+		}
+	}
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-		final boolean aco = isAutocomplete(), adr = isAutodrop();
-		
-		if (!isAsapRequired(Events.ON_OPEN) && !isAsapRequired(Events.ON_SELECT) && !aco && !adr)
-			return sb.toString();
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_SELECT);
-		if (aco) HTMLs.appendAttribute(sb, "z.aco", "true");
-		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
-		return sb.toString();
+		render(renderer, "autodrop", _autodrop);
+		if (!_autocomplete)
+			renderer.render("autocomplete", false);
+		if (!_btnVisible)
+			renderer.render("buttonVisible", false);
 	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	/** Returns RS_NO_WIDTH|RS_NO_HEIGHT.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link Textbox#service},
+	 * it also handles onOpen and onSelect.
+	 * @since 5.0.0
 	 */
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			Events.postEvent(OpenEvent.getOpenEvent(request));
+		}else if (cmd.equals(Events.ON_SELECT)) {
+			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			Set selItems = evt.getSelectedItems();
+			_selItem = selItems != null && !selItems.isEmpty()?
+				(Comboitem)selItems.iterator().next(): null;
+			_lastCkVal = getValue(); //onChange is sent before onSelect
+			
+			syncSelectionToModel();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 
 	//-- Component --//
@@ -609,22 +652,37 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
+	private void fixSelectOnRender(Comboitem item) {
+		if (_model instanceof Selectable) {
+			Iterator it = ((Selectable) _model).getSelection().iterator();
+			if (!it.hasNext()) return;
+			
+			if (Objects.equals(it.next(),
+					_model.getElementAt(getItems().indexOf(item)))) {
+				setSelectedItem(item);
+			}
+		}
+	}
+	
 	/** Childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		smartUpdate("repos", "true");
+		smartUpdate("repos", true);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		smartUpdate("repos", "true");
+		if (child == _selItem)
+			reIndexRequired();
+		smartUpdate("repos", true);
 	}
 	
-	/*package*/ final void reIndex() {
+	private void reIndex() {
 		final String value = getValue();
-		if (_selItem == null || !Objects.equals(value, _selItem.getLabel())) {
+		if (!Objects.equals(_lastCkVal, value)) {
+			_lastCkVal = value;
 			_selItem = null;
 			for (Iterator it = getItems().iterator(); it.hasNext();) {
 				final Comboitem item = (Comboitem)it.next();
@@ -633,15 +691,22 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 					break;
 				}					
 			}
+			syncSelectionToModel();
 		}
 	}
-	
+	/*package*/ void reIndexRequired() {
+		_lastCkVal = null;
+	}
+	/*package*/ Comboitem getSelectedItemDirectly() {
+		return _selItem;
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final int idx = getSelectedIndex();
 		final Combobox clone = (Combobox)super.clone();
-		clone._selItem = idx > -1 && clone.getItemCount() > idx ?
-			clone.getItemAtIndex(idx): null;
+		clone._selItem = null;
+		clone.reIndexRequired();
 		if (clone._model != null) {
 			clone._dataListener = null;
 			clone._eventListener = null;
@@ -651,43 +716,11 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	
 	//	Serializable//
-	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		s.defaultWriteObject();
-
-		s.writeInt(getSelectedIndex());
-	}
-	
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final int idx = s.readInt();
-		if (idx > -1 && getItemCount() > idx)
-			_selItem = getItemAtIndex(idx);
-		
+		reIndexRequired();
 		if (_model != null) initDataListener();
-	}
-	
-	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends Textbox.ExtraCtrl
-	implements ChildChangedAware, Selectable {
-		//ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return true;
-		}
-
-		public void selectItemsByClient(Set selItems) {
-			_selItem = selItems != null && !selItems.isEmpty()?
-				(Comboitem)selItems.iterator().next(): null;
-		}
-		public void clearSelectionByClient(){}
 	}
 }

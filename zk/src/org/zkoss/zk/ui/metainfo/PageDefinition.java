@@ -1,18 +1,16 @@
 /* PageDefinition.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 11:27:07     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,11 +85,13 @@ public class PageDefinition extends NodeInfo {
 	private List _hdBfrDefs;
 	/** List(HeaderInfo). They are generated after ZK default headers. */
 	private List _hdAftDefs;
+	/** List(ResponseHeaderInfo). */
+	private List _hdResDefs;
 	/** List(ForwardInfo). */
 	private List _forwdefs;
 	/** Map(String name, ExValue value). */
 	private Map _rootAttrs;
-	private ExValue _contentType, _docType, _firstLine;
+	private ExValue _contentType, _docType, _firstLine, _wgtcls;
 	/** The expression factory (ExpressionFactory).*/
 	private Class _expfcls;
 	private final ComponentDefinitionMap _compdefs;
@@ -213,6 +214,23 @@ public class PageDefinition extends NodeInfo {
 		_style = style != null && style.length() > 0 ? style: null;
 	}
 
+	/** Returns the widget class of the given page, or null if the default is used.
+	 * @since 5.0.5
+	 */
+	public String getWidgetClass(Page page) {
+		return _wgtcls != null ?
+			(String)_wgtcls.getValue(_evalr, page): null;
+	}
+	/** Sets the widget class of the page.
+	 * @param wgtcls the widget class. It may contain EL expressions.
+	 * If null or empty, the default widget class is assumed.
+	 * @since 5.0.5
+	 */
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ?
+			new ExValue(wgtcls, String.class): null;
+	}
+
 	/** Returns the request path of this page definition, or ""
 	 * if not available.
 	 * <p>It is the same as the servlet path
@@ -288,6 +306,12 @@ public class PageDefinition extends NodeInfo {
 			for (Iterator it = pgdef._hdAftDefs.iterator(); it.hasNext();)
 				addHeaderInfo((HeaderInfo)it.next(), false);
 		}
+
+		if (pgdef._hdResDefs != null
+		&& directives != null && contains(directives, "header")) {
+			for (Iterator it = pgdef._hdResDefs.iterator(); it.hasNext();)
+				addResponseHeaderInfo((ResponseHeaderInfo)it.next());
+		}
 	}
 	private static boolean contains(String[] dirs, String dir) {
 		for (int j = dirs.length; --j >= 0;)
@@ -324,14 +348,14 @@ public class PageDefinition extends NodeInfo {
 			return Collections.EMPTY_LIST;
 
 		final List inits = new LinkedList();
-		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
-			final InitiatorInfo def = (InitiatorInfo)it.next();
-			try {
-				final Initiator init = def.newInitiator(getEvaluator(), page);
-				if (init != null) inits.add(init);
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
+		try {
+			for (Iterator it = _initdefs.iterator(); it.hasNext();) {
+				final InitiatorInfo def = (InitiatorInfo)it.next();
+					final Initiator init = def.newInitiator(getEvaluator(), page);
+					if (init != null) inits.add(init);
 			}
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
 		}
 		return inits;
 	}
@@ -407,6 +431,35 @@ public class PageDefinition extends NodeInfo {
 			}
 	}
 
+	/** Adds a response header.
+	 * @since 5.0.2
+	 */
+	public void addResponseHeaderInfo(ResponseHeaderInfo header) {
+		if (header == null)
+			throw new IllegalArgumentException();
+		if (_hdResDefs == null)
+			_hdResDefs = new LinkedList();
+		_hdResDefs.add(header);
+	}
+	/** Returns a map of response headers (never null).
+	 * The value of each entry is a two-element object array. The
+	 * first element of the array is the value which is an instance of {@link java.util.Date}
+	 * or {@link String} (and never null).
+	 * The second element indicates whether to add (rather than set)
+	 * theader. It is an instance of Boolean (and never null).
+	 */
+	public Collection getResponseHeaders(Page page) {
+		final List headers = new LinkedList();
+		if (_hdResDefs != null)
+			for (Iterator it = _hdResDefs.iterator(); it.hasNext();) {
+				final ResponseHeaderInfo rhi = (ResponseHeaderInfo)it.next();
+				headers.add(new Object[] {
+					rhi.getName(), rhi.getValue(page),
+					Boolean.valueOf(rhi.shallAppend(page))});
+			}
+		return headers;
+	}
+
 	/** Adds a header definition ({@link HeaderInfo}).
 	 * @param before whether to place the header <b>before</b> ZK's
 	 * CSS/JS headers. If false, it is placed after ZK's CSS/JS headers.
@@ -414,7 +467,7 @@ public class PageDefinition extends NodeInfo {
 	 */
 	public void addHeaderInfo(HeaderInfo header, boolean before) {
 		if (header == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException();
 
 		if (before) {
 			if (_hdBfrDefs == null)
@@ -433,36 +486,57 @@ public class PageDefinition extends NodeInfo {
 	public void addHeaderInfo(HeaderInfo header) {
 		addHeaderInfo(header, "meta".equals(header.getName()));
 	}
-	/** Converts the header definitions (added by {@link #addHeaderInfo}) to
-	 * HTML tags.
+	/** Returns the content that shall be generated inside the head element
+	 * and before ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
 	 *
-	 * @param before whether to return the headers that shall be shown
-	 * before ZK's CSS/JS headers.
-	 * If true, only the headers that shall be shown before (such as meta)
-	 * are returned.
-	 * If true, only the headers that shall be shown after (such as link)
-	 * are returned.
-	 * @see #getHeaders(Page)
-	 * @since 3.6.1
+	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
+	 * it cannot override ZK's default behaviors.
+	 *
+	 * @see #getAfterHeadTags
+	 * @since 5.0.5
 	 */
-	public String getHeaders(Page page, boolean before) {
-		final List defs = before ? _hdBfrDefs: _hdAftDefs;
+	public String getBeforeHeadTags(Page page) {
+		return getHeadTags(page, _hdBfrDefs);
+	}
+	/** Returns the content that shall be generated inside the head element
+	 * and after ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 *
+	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
+	 * it could override ZK's default behaviors.
+	 *
+	 * @see #getBeforeHeadTags
+	 * @since 5.0.5
+	 */
+	public String getAfterHeadTags(Page page) {
+		return getHeadTags(page, _hdAftDefs);
+	}
+	private String getHeadTags(Page page, List defs) {
 		if (defs == null)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator it = defs.iterator(); it.hasNext();)
-			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
+		for (Iterator it = defs.iterator(); it.hasNext();) {
+			final HeaderInfo hi = (HeaderInfo)it.next();
+			if (hi.isEffective(page))
+				sb.append(hi.toHTML(page)).append('\n');
+		}
 		return sb.toString();
 	}
-	/** Converts all header definitions (added by {@link #addHeaderInfo}) to
-	 * HTML tags, no matter that shall be shown before or after ZK's
-	 * CSS/JS headers.
-	 * To have better control, use {@link #getHeaders(Page,boolean)} instead.
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
+	 */
+	public String getHeaders(Page page, boolean before) {
+		return before ? getBeforeHeadTags(page): getAfterHeadTags(page);
+	}
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
 	 */
 	public String getHeaders(Page page) {
-		return getHeaders(page, true) + getHeaders(page, false);
+		return getBeforeHeadTags(page) + getAfterHeadTags(page);
 	}
+
 	/** Adds a forward definition ({@link ForwardInfo}).
 	 */
 	public void addForwardInfo(ForwardInfo forward) {
@@ -519,19 +593,19 @@ public class PageDefinition extends NodeInfo {
 	 * @since 3.0.0
 	 */
 	public String getDocType(Page page) {
-		return _docType != null ?
-			(String)_docType.getValue(_evalr, page): null;
+		return _docType != null ? (String)_docType.getValue(_evalr, page): null;
 	}
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (use the device default).
 	 *
 	 * @param docType the doc type. It may coontain EL expressions.
+	 * If null, it means device's default will be used.
+	 * If empty, it means no doc type will be generated.
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType) {
-		_docType = docType != null && docType.length() > 0 ?
-			new ExValue(docType, String.class): null;
+		_docType = docType != null ? new ExValue(docType, String.class): null;
 	}
 	/** Returns the first line to be generated to the output
 	 * (after evaluation), or null if nothing to generate.
@@ -692,11 +766,11 @@ public class PageDefinition extends NodeInfo {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(name);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -712,11 +786,11 @@ public class PageDefinition extends NodeInfo {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(cls);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -786,7 +860,7 @@ public class PageDefinition extends NodeInfo {
 		return _eval;
 	}
 	private Evaluator newEvaluator() {
-		return new SimpleEvaluator(getFunctionMapper(), _expfcls);
+		return new SimpleEvaluator(getTaglibMapper(), _expfcls);
 	}
 	/** Returns the evaluator reference (never null).
 	 *
@@ -801,11 +875,6 @@ public class PageDefinition extends NodeInfo {
 		return new PageEvalRef(this);
 	}
 
-	/** @deprecated As of release 3.5.0, replaced by {@link #getTaglibMapper}.
-	 */
-	public FunctionMapper getFunctionMapper() {
-		return getTaglibMapper();
-	}
 	/** Returns the mapper representing the functions defined in
 	 * taglib and xel-method.
 	 *
@@ -833,13 +902,26 @@ public class PageDefinition extends NodeInfo {
 				public String getUuid() {return null;}
 				public String getTitle() {return _title;}
 				public String getStyle() {return _style;}
-				public String getHeaders(boolean before) {
+				public String getBeforeHeadTags() {
 					return evalHeaders ?
-						PageDefinition.this.getHeaders(page, before): "";
+						PageDefinition.this.getBeforeHeadTags(page): "";
 				}
-				public String getHeaders() {
+				public String getAfterHeadTags() {
 					return evalHeaders ?
-						PageDefinition.this.getHeaders(page): "";
+						PageDefinition.this.getAfterHeadTags(page): "";
+				}
+				/** @deprecated */
+				public String getHeaders(boolean before) {
+					return before ? getBeforeHeadTags(): getAfterHeadTags();
+				}
+				/** @deprecated */
+				public String getHeaders() {
+					return getBeforeHeadTags() + getAfterHeadTags();
+				}
+				public Collection getResponseHeaders() {
+					return evalHeaders ?
+						PageDefinition.this.getResponseHeaders(page):
+							Collections.EMPTY_LIST;
 				}
 			});
 
@@ -854,6 +936,9 @@ public class PageDefinition extends NodeInfo {
 
 		s = getFirstLine(page);
 		if (s != null) pageCtrl.setFirstLine(s);
+
+		s = getWidgetClass(page);
+		if (s != null) pageCtrl.setWidgetClass(s);
 
 		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
 		if (_autoTimeout != null) pageCtrl.setAutomaticTimeout(_autoTimeout);

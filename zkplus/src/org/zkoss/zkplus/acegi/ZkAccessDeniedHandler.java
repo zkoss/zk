@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  * Used by ExceptionTranslationFilter to handle an
  * <code>AccessDeniedException</code>. This handler will popup the specified error page so it
  * must be a Window that can be doModel.
- * 
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
  */
 public class ZkAccessDeniedHandler implements AccessDeniedHandler {

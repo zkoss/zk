@@ -1,18 +1,16 @@
 /* UiEngine.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun  9 12:58:20     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,6 +22,7 @@ import java.util.Collection;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.zkoss.json.JSONArray;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -32,7 +31,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuResponse;
@@ -72,12 +70,19 @@ public interface UiEngine {
 	 *
 	 * <p>If a new page is created, the specified component will become
 	 * the owner of the new page.
+	 *
+	 * <p>It must reset the owner in the finally clause.
+	 * <pre><code>old = ue.setOwner(this);
+	 *try{
+	 *  ...
+	 *} finally {
+	 *  ue.setOwner(old);
+	 *}</code></pre>
+	 * <p>Since 5.0.6, the owner must implement {@link org.zkoss.zk.ui.ext.Includer}.
+	 * @return the previous owner
+	 * @since 5.0.0
 	 */
-	public void pushOwner(Component comp);
-	/** Called after a component redraws itself if it ever calls
-	 * {@link #pushOwner}.
-	 */
-	public void popOwner();
+	public Component setOwner(Component comp);
 
 	/** Returns if this component needs to be redrawn.
 	 * <p>Note:
@@ -98,32 +103,31 @@ public interface UiEngine {
 	 * Called when {@link Component#invalidate} is called.
 	 */
 	public void addInvalidate(Component comp);
-	/** Smart updates an attribute of a component.
-	 * Called when {@link ComponentCtrl#smartUpdate(String,String)} is called.
-	 *
-	 * <p>The second invocation of this method
-	 * in the same execution with the same attr will override the previous one.
+	/** @deprecated As of release 5.0.2, replaced with {@link #addSmartUpdate(Component comp, String, Object, boolean)}.
 	 */
-	public void addSmartUpdate(Component comp, String attr, String value);
-	/** Smart updates an attribute of a component with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
+	public void addSmartUpdate(Component comp, String attr, Object value);
+	/** Smart-updates a property of the peer widget.
 	 *
-	 * @since 3.0.1
-	 * @see ComponentCtrl#smartUpdateDeferred(String, DeferredValue)
+	 * @param append whether to append the updates of properties with the same
+	 * name. If false, only the last value of the same property will be sent
+	 * to the client.
+	 * @since 5.0.2
 	 */
-	public void addSmartUpdate(Component comp, String attr, DeferredValue value);
-	/** Smart updates an attribute of a component with an array of values.
-	 * Each element of values must be an instance of String or
-	 * {@link DeferredValue}.
+	public void addSmartUpdate(Component comp, String attr, Object value, boolean append);
+	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
+	 * as the override key.
+	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>
 	 *
-	 * @since 3.0.5
-	 * @see ComponentCtrl#smartUpdateValues(String, Object[])
+	 * <p>If the response is component-dependent, {@link AuResponse#getDepends}
+	 * must return a component. And, if the component is removed, the response
+	 * is removed, too.
+	 * @since 5.0.2
+	 * @see #addResponse(String, AuResponse)
 	 */
-	public void addSmartUpdate(Component comp, String attr, Object[] values);
+	public void addResponse(AuResponse response);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
-	 * Called when {@link ComponentCtrl#response} is called.
+	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#response}.
 	 *
 	 * <p>Note: {@link Execution#addAuResponse} is a shortcut to this method,
 	 * and it is used by application developers.
@@ -133,8 +137,11 @@ public interface UiEngine {
 	 * is removed if the component is removed.
 	 * If it is null, the response is component-independent.
 	 *
-	 * @param key could be anything. The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * @param key could be anything. If null, the response is appended.
+	 * If not null, the second invocation of this method
+	 * in the same execution with the same key and the same depends ({@link AuResponse#getDepends})
+	 * will override the previous one.
+	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response);
 	/** Called to update (redraw) a component, when a component is moved.
@@ -147,11 +154,9 @@ public interface UiEngine {
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg);
 	/** Called before changing the component's UUID.
-	 *
-	 * @param addOnlyMoved if true, it is added only if it was moved
-	 * before (see {@link #addMoved}).
+	 * @since 5.0.3
 	 */
-	public void addUuidChanged(Component comp, boolean addOnlyMoved);
+	public void addUuidChanged(Component comp);
 
 	//-- execution --//
 	/** Creates components specified in the given page definition.
@@ -165,6 +170,12 @@ public interface UiEngine {
 	public void execNewPage(Execution exec, Richlet richlet, Page page,
 	Writer out) throws IOException;
 
+	/** Reuse the desktop and generate the outout.
+	 * @since 5.0.0
+	 */
+	public void recycleDesktop(Execution exec, Page page, Writer out)
+	throws IOException;
+
 	/** Executs an asynchronous update to a component (or page).
 	 * It is the same as execUpdate(exec, requests, null, out).
 	 *
@@ -174,6 +185,35 @@ public interface UiEngine {
 	 */
 	public void execUpdate(Execution exec, List requests, AuWriter out)
 	throws IOException;
+
+	/** Activates an execution that will allow developers to update
+	 * the state of components.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 *
+	 * @return a context that shall be passed to {@link #finishUpdate}.
+	 * @since 5.0.5
+	 * @see #finishUpdate
+	 * @see #closeUpdate
+	 */
+	public Object startUpdate(Execution exec) throws IOException;
+	/** Finishes the update and returns the result in an array of JSON object.
+	 * Notice it does not deactivate the execution. Rather, the caller
+	 * has to invoke {@link #closeUpdate}.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 *
+	 * @param ctx the context returned by the previous call to {@link #startUpdate}
+	 * @since 5.0.5
+	 * @see #startUpdate
+	 * @see #closeUpdate
+	 */
+	public JSONArray finishUpdate(Object ctx) throws IOException;
+	/** Deactivates the execution and cleans up.
+	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
+	 * @since 5.0.5
+	 * @see #startUpdate
+	 * @see #finishUpdate
+	 */
+	public void closeUpdate(Object ctx) throws IOException;
 
 	/** Executes the recovering.
 	 */
@@ -189,8 +229,8 @@ public interface UiEngine {
 	 *
 	 * @param exec the execution (never null).
 	 * @param pagedef the page definition (never null).
-	 * @param page the page. Ignored if parent is specified (and
-	 * parent's page is used).
+	 * @param page the page. Ignored if parent is specified and
+	 * parent's page is not null (parent's page will be used).
 	 * If both page and parent are null, the created components won't belong
 	 * to any page.
 	 * @param parent the parent component, or null if no parent compoent.
@@ -332,37 +372,30 @@ public interface UiEngine {
 	 * invalidate and do any smart updates. In other words, READ ONLY.
 	 */
 	public void activate(Execution exec);
+	/** Activates an execution such that you can access a component.
+	 * Unlike {@link #activate(Execution)}, you could specify an amount of
+	 * time (timeout), and it returns false if it takes longer than the given
+	 * amount of time before granted.
+	 * @param timeout the number of milliseconds to wait before giving up.
+	 * It is ignored if negative, i.e., it waits until granted if negative.
+	 * @return whether the activation succeeds
+	 * @since 5.0.6
+	 */
+	public boolean activate(Execution exec, int timeout);
 	/** Deactivates an execution, such that other threads could activate
 	 * and access components.
 	 */
 	public void deactivate(Execution exec);
 
-	/** Checks whether the request is duplicated.
-	 * Due to HTTP (and ZK Client Engine), the same request might be sent
-	 * multiple times.
-	 * And, this method is used to handle the duplicate request.
-	 *
-	 * <p>It must be called before {@link #beginUpdate} and {@link #endUpdate}.
-	 * And, you shall not call {@link #beginUpdate} and {@link #endUpdate},
-	 * if this method return true.
-	 *
-	 * @return whether the request is duplicated.
-	 * If duplicate (true), the response is generated automatically
-	 * and no more processing is required.
-	 * @since 3.5.0
-	 */
-	public boolean isRequestDuplicate(Execution exec, AuWriter out)
-	throws IOException;
 	/** Activates and prepare for asynchronous update
 	 * @since 3.5.0
 	 */
 	public void beginUpdate(Execution exec);
 	/** Executes posted events, deactive and ends the asynchronous update.
 	 *
-	 * @param out the AU writer to generate the responses to; never null.
-	 * @since 3.5.0
+	 * @since 5.0.0
 	 */
-	public void endUpdate(Execution exec, AuWriter out)
+	public void endUpdate(Execution exec)
 	throws IOException;
 
 	/** Retrieve the native content for a property of the specified component.

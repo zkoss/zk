@@ -1,18 +1,16 @@
 /* ComponentDefinitionImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 17:54:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,13 +34,11 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
-import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * An implementation of {@link ComponentDefinition}.
@@ -61,10 +57,10 @@ implements ComponentDefinition, java.io.Serializable {
 	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A map of molds (String mold, ExValue moldURI). */
-	private transient Map _molds;
-	/** A map of z2cs (String mold, ExValue). */
-	private Map _z2cs;
+	/** A map of (String mold, ExValue widgetClass). */
+	private Map _molds;
+	/** The default widget class. */
+	private ExValue _defWgtClass;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -140,6 +136,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * as part of a page definition
 	 * @param pgdef the page definition. It is null if it is defined
 	 * as part of a language definition.
+	 * @param macroURI the URI of the ZUML page to representing this macro.
 	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newMacroDefinition(
@@ -316,19 +313,10 @@ implements ComponentDefinition, java.io.Serializable {
 	public boolean isInstance(Component comp) {
 		Class cls;
 		if (_implcls instanceof String) {
-			final Page page = comp.getPage();
-			if (page != null) {
-				try {
-					cls = resolveImplementationClass(page, null);
-				} catch (ClassNotFoundException ex) {
-					return true; //consider as true if not resolvable
-				}
-			} else {
-				try {
-					cls = Classes.forNameByThread((String)_implcls);
-				} catch (ClassNotFoundException ex) {
-					return true; //consider as true if not found
-				}
+			try {
+				cls = resolveImplementationClass(comp.getPage(), null);
+			} catch (ClassNotFoundException ex) {
+				return true; //consider as true if not resolvable
 			}
 		} else {
 			cls = (Class)_implcls;
@@ -337,26 +325,14 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public Class resolveImplementationClass(Page page, String clsnm)
 	throws ClassNotFoundException {
-		Object cls = clsnm != null ? clsnm: _implcls;
+		final Object cls = clsnm != null ? clsnm: _implcls;
 		if (cls instanceof String) {
 			clsnm = (String)cls;
-			try {
-				final Class found = Classes.forNameByThread(clsnm);
-				if (clsnm == null) _implcls = found;
-					//cache to _implcls (to improve the performance)
-				return found;
-			} catch (ClassNotFoundException ex) {
-				//we don't cache it if it is defined in a interpreter
-				if (page != null) {
-					for (Iterator it = page.getLoadedInterpreters().iterator();
-					it.hasNext();) {
-						Class c = ((Interpreter)it.next()).getClass(clsnm);
-						if (c != null)
-							return c;
-					}
-				}
-				throw ex;
-			}
+			final Class found = page != null ?
+				page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+			if (clsnm.equals(_implcls)) _implcls = found;
+				//cache to _implcls (to improve the performance)
+			return found;
 		}
 		return (Class)cls;
 	}
@@ -402,20 +378,23 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public void applyProperties(Component comp) {
 		//Note: it doesn't apply annotations since it is done
-		//by AbstractComponent's initial with getAnnotationMap()
+		//by AbstractComponent's constructor
+		//AbstractComponent's constructor also invokes applyAttributes automatically
 
+		if (_props != null) {
+			for (Iterator it = _props.iterator(); it.hasNext();) {
+				final Property prop = (Property)it.next();
+				prop.assign(comp);
+			}
+		}
+	}
+	public void applyAttributes(Component comp) {
 		if (_custAttrs != null) {
 			for (Iterator it = _custAttrs.entrySet().iterator();
 			it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				comp.setAttribute((String)me.getKey(),
 					((ExValue)me.getValue()).getValue(_evalr, comp));
-			}
-		}
-		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
-				prop.assign(comp);
 			}
 		}
 	}
@@ -439,57 +418,22 @@ implements ComponentDefinition, java.io.Serializable {
 		return propmap;
 	}
 
-	public void addMold(String name, String moldURI, String z2cURI) {
-		if (moldURI.startsWith("class:")) {
-			final String clsnm = moldURI.substring(6);
-			try {
-				addMold(name,
-					(ComponentRenderer)Classes.newInstanceByThread(clsnm));
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Failed to instantiate "+clsnm);
-			}
-		} else {
-			if (moldURI.length() == 0)
-				throw new IllegalArgumentException();
-			addMold0(name, new ExValue(moldURI, String.class), z2cURI);
-		}
-	}
-	public void addMold(String name, ComponentRenderer renderer, String z2cURI) {
-		addMold0(name, renderer, z2cURI);
-	}
-	/** @deprecated */
-	public void addMold(String name, String moldURI) {
-		addMold(name, moldURI, null);
-	}
-	/** @deprecated */
-	public void addMold(String name, ComponentRenderer renderer) {
-		addMold(name, renderer, null);
-	}
-	private void addMold0(String name, Object mold, String z2cURI) {
-		if (name == null || name.length() == 0 || mold == null)
+	public void addMold(String name, String widgetClass) {
+		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
-			_molds = new HashMap(4);
-		_molds.put(name, mold);
-
-		if (z2cURI != null) {
-			if (_z2cs == null)
-				_z2cs = new HashMap(4);
-			_z2cs.put(name, new ExValue(z2cURI, String.class));
-		}
+			_molds = new HashMap(2);
+		_molds.put(name, new ExValue(widgetClass, String.class));
 	}
-	public Object getMoldURI(Component comp, String name) {
-		if (_molds == null)
-			return null;
-
-		final Object mold = _molds.get(name);
-		if (mold instanceof ExValue) {
-			return toAbsoluteURI((String)((ExValue)mold).getValue(_evalr, comp));
-		} else {
-			return mold;
-		}
+	/** @deprecated As of release 5.0.0, replaced with {@link #addMold(String,String)}
+	 * and {@link WidgetDefinition#addMold}.
+	 * <p>It always throws UnsupportedOperationException.
+	 */
+	public void addMold(String name, String moldURI, String z2cURI) {
+		throw new UnsupportedOperationException();
 	}
+
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}
@@ -497,11 +441,38 @@ implements ComponentDefinition, java.io.Serializable {
 		return _molds != null ?
 			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
+	public String getWidgetClass(Component comp, String moldName) {
+		if (_molds != null) {
+			final ExValue wc = (ExValue)_molds.get(moldName);
+			if (wc != null) {
+				final String s = (String)wc.getValue(_evalr, comp);
+				if (s != null)
+					return s;
+			}
+		}
+		return getDefaultWidgetClass(comp);
+	}
+	public String getDefaultWidgetClass(Component comp) {
+		return _defWgtClass != null ?
+			(String)_defWgtClass.getValue(_evalr, comp): null;
+	}
+	public String getWidgetClass(String moldName) {
+		return getWidgetClass(null, moldName);
+	}
+	public String getDefaultWidgetClass() {
+		return getDefaultWidgetClass(null);
+	}
+	public void setDefaultWidgetClass(String widgetClass) {
+		final ExValue oldwc = _defWgtClass;
+		_defWgtClass = new ExValue(widgetClass, String.class);
 
-	public String getZ2CURI(Component comp, String name) {
-		final ExValue z2c = (ExValue)_z2cs.get(name);
-		return z2c != null ?
-			toAbsoluteURI((String)z2c.getValue(_evalr, comp)): null;
+		//replace mold's widget class if it is the old default one
+		if (oldwc != null && _molds != null)
+			for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				if (oldwc.equals(me.getValue()))
+					me.setValue(_defWgtClass);
+			}
 	}
 
 	private String toAbsoluteURI(String uri) {
@@ -530,23 +501,6 @@ implements ComponentDefinition, java.io.Serializable {
 		s.defaultWriteObject();
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
-
-		//write _molds
-		for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			s.writeObject(me.getKey());
-			final Object o = me.getValue();
-			if ((o instanceof java.io.Serializable)
-			|| (o instanceof java.io.Externalizable)) {
-				s.writeObject(o);
-			} else {
-				assert o instanceof ComponentRenderer: "Unexpected "+o;
-				s.writeObject(o.getClass());
-			}
-		}
-
-		//Note: _z2cs is serializable
-		s.writeObject(null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -555,23 +509,6 @@ implements ComponentDefinition, java.io.Serializable {
 		final String langnm = (String)s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
-
-		//read _molds
-		_molds = new HashMap(4);
-		for (;;) {
-			final Object nm = s.readObject();
-			if (nm == null) break; //no more
-
-			Object val = s.readObject();
-			if (val instanceof Class) {
-				try {
-					val = ((Class)val).newInstance();
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
-				}
-			}
-			_molds.put(nm, val);
-		}
 	}
 
 	//Object//
@@ -594,8 +531,6 @@ implements ComponentDefinition, java.io.Serializable {
 			compdef._props = new LinkedList(_props);
 		if (_molds != null)
 			compdef._molds = new HashMap(_molds);
-		if (_z2cs != null)
-			compdef._z2cs = new HashMap(_z2cs);
 		if (_custAttrs != null)
 			compdef._custAttrs = new HashMap(_custAttrs);
 		return compdef;

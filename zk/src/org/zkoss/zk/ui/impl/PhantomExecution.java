@@ -1,18 +1,16 @@
 /* PhantomExecution.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul 16 13:23:51     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,6 +19,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Date;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
@@ -32,6 +31,8 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.impl.SimpleScope;
 
 /**
  * A 'phantom' execution that is used when no request/response available.
@@ -40,6 +41,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  * @author tomyeh
  */
 /*package*/ class PhantomExecution extends AbstractExecution {
+	private final SimpleScope _scope = new SimpleScope(this);
 	private boolean _voided;
 
 	public PhantomExecution(Desktop desktop) {
@@ -90,11 +92,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		return "n/a";
 	}
 	public String getRemoteHost() {
-		return "n/a";
-	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getRemoteName() {
 		return "n/a";
 	}
 	public String getRemoteAddr() {
@@ -163,6 +160,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isSafari() {
 		return false;
 	}
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
+	 */
 	public boolean isMilDevice() {
 		return false;
 	}
@@ -197,16 +196,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public void addDateHeader(String name, long value) {
 		throw new UnsupportedOperationException();
 	}
-
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
-	 */
-	public Object getRequestAttribute(String name) {
-		return getAttribute(name);
-	}
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value) {
-		setAttribute(name, value);
+	public void setContentType(String contentType) {
+		throw new UnsupportedOperationException();
 	}
 
 	public Object getNativeRequest() {
@@ -216,16 +207,26 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 		return null;
 	}
 	public Object getAttribute(String name) {
-		return null;
+		return _scope.getAttribute(name);
 	}
-	public void setAttribute(String name, Object value) {
-		throw new UnsupportedOperationException();
+	public boolean hasAttribute(String name) {
+		return _scope.hasAttribute(name);
 	}
-	public void removeAttribute(String name) {
-		throw new UnsupportedOperationException();
+	public Object setAttribute(String name, Object value) {
+		return _scope.setAttribute(name, value);
+	}
+	public Object removeAttribute(String name) {
+		return _scope.removeAttribute(name);
 	}
 	public Map getAttributes() {
-		return Collections.EMPTY_MAP;
+		return _scope.getAttributes();
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _scope.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _scope.removeScopeListener(listener);
 	}
 
 	public String getHeader(String name) {
@@ -240,7 +241,13 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public void setResponseHeader(String name, String value) {
 		throw new UnsupportedOperationException();
 	}
+	public void setResponseHeader(String name, Date value) {
+		throw new UnsupportedOperationException();
+	}
 	public void addResponseHeader(String name, String value) {
+		throw new UnsupportedOperationException();
+	}
+	public void addResponseHeader(String name, Date value) {
 		throw new UnsupportedOperationException();
 	}
 	public boolean containsResponseHeader(String name) {

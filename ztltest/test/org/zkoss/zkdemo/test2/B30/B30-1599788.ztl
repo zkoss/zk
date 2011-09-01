@@ -1,0 +1,57 @@
+<test tags="grid,timer">
+	<case id="Timer">
+		<server><!--
+			<zk>			
+			<vbox>
+				<grid width="200px">
+			 		<columns>
+				        <column label="aa"/>
+				        <column label="bb"/>
+			       </columns>
+			       <rows id="serverRows">
+			       </rows>
+				</grid>
+				Rows: <label id="rowNr"/>
+			 </vbox>
+			<zscript>
+			int cnt = 0;
+			</zscript>
+			<timer id="timer" delay="50" repeats="true" running="false">
+					<attribute name ="onTimer">
+						serverRows.getChildren().clear();
+						Row row = new Row();
+						row.setParent(serverRows);
+						Label label = new Label();
+						label.setParent(row);
+						label.setId("l" + ++cnt);
+						label.setValue(cnt + "");
+						label = new Label();
+						label.setParent(row);
+						label.setValue("label1_1-"+ cnt);
+						row = new Row();
+						row.setParent(serverRows);
+						Label label = new Label();
+						label.setParent(row);
+						label.setValue("label2-" + cnt);
+						label = new Label();
+						label.setParent(row);
+						label.setValue("label2_2-" + cnt);
+						rowNr.setValue(cnt + "");
+					</attribute>
+			</timer>
+				<button id="stop" label="Stops timer" onClick="timer.stop()"/>
+				<button id="start" label="Starts timer" onClick="timer.start()"/>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			for (int i = 0; i < 5; i++) {
+				click(start);
+				waitResponse();
+				click(stop);
+				waitResponse();
+				verifyEquals(rowNr.get("value"), serverRows.firstChild().firstChild().get("value"));
+			}
+			
+		]]></client>
+	</case>
+</test>

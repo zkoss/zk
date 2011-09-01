@@ -1,0 +1,38 @@
+<zk>
+	<zscript><![CDATA[
+		int allstep = 4;
+		int step = 1;
+		void go(int s, String label) {
+			int percent = s * 100 / allstep;
+			panel.title = win.title = label;
+			met2.value = win.getFellow("met").value = percent;
+		}
+	]]></zscript>
+	<div>1. When you click on each Button, the titles of Window and Panel should change , and each of the 2 Progressmeters should only move 1 time.</div>
+	<window id="win" border="normal" width="600px">
+		<caption label="Join ZK World">
+			<progressmeter id="met" value="${step/allstep*100}" width="300px" />
+		</caption>
+		<hlayout spacing="35px">
+			<button label="Register" width="80px" height="80px" onClick='go(1,self.label)'>
+			</button>
+			>
+			<button label="Login" width="80px" height="80px" onClick='go(2,self.label)'>
+			</button>
+			>
+			<button label="Download" width="80px" height="80px" onClick="go(3,self.label)">
+			</button>
+			>
+			<button label="Enjoy" width="80px" height="80px" onClick='go(4,self.label+"!!")'>
+			</button>
+		</hlayout>
+	</window>
+	<panel id="panel" border="normal" width="600px">
+		<caption label="Join ZK World">
+			<progressmeter id="met2" value="${step/allstep*100}" width="300px" />
+		</caption>
+		<panelchildren>
+			Panel Content
+		</panelchildren>
+	</panel>
+</zk>

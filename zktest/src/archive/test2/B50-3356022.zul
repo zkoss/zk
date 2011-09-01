@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B50-3356022.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Jul 7 17:10:11 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<window title="Add Tupperware" border="normal" closable="true">
+	<borderlayout vflex="min" hflex="min">
+		<east vflex="min" hflex="min" border="normal" title="east">
+			<tabbox height="125px" hflex="min" tabscroll="true"
+				orient="horizontal">
+				<tabs>
+					<tab label="Inner Tab One" />
+					<tab label="Inner Tab Two" />
+				</tabs>
+				<tabpanels height="125px" hflex="min">
+					<tabpanel height="125px" hflex="min">
+						<groupbox vflex="min" hflex="min">
+							<caption vflex="min" hflex="1"
+								label="Inside Inner Tab One" />
+						</groupbox>
+					</tabpanel>
+					<tabpanel height="125px" hflex="min">
+						<grid vflex="min" hflex="min">
+							<columns>
+								<column align="right" />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<cell rowspan="1">
+										<label
+											tooltip="uuid(zb_pageHome_Popup_6)" value="Weight(lb):"
+											maxlength="0" />
+									</cell>
+									<cell hflex="1" rowspan="1">
+										<textbox sclass="zebra-field"
+											id="tupperWeightGrams" maxlength="0" type="text" rows="1" />
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</east>
+		<west vflex="min" hflex="min" border="normal" title="west">
+		west
+		</west>
+	</borderlayout>
+</window>

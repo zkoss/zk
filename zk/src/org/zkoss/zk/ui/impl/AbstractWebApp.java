@@ -1,18 +1,16 @@
 /* AbstractWebApp.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Mar 15 17:28:15     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,7 @@ package org.zkoss.zk.ui.impl;
 
 import java.io.InputStream;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.Utils;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
@@ -43,6 +42,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.SessionCache;
 import org.zkoss.zk.ui.impl.SessionDesktopCacheProvider;
 import org.zkoss.zk.ui.impl.UiEngineImpl;
+import org.zkoss.zk.au.AuDecoder;
 
 /**
  * A skeletal implementation of {@link WebApp}.
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private static final Log log = Log.lookup(AbstractWebApp.class);
 
-	private String _appnm = "ZK";
+	private String _appnm;
 	private Configuration _config;
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
@@ -60,6 +60,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
 	private SessionCache _sesscache;
+	private AuDecoder _audec;
 
 	private static String _build;
 
@@ -76,7 +77,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public String getAppName() {
-		return _appnm;
+		return _appnm != null ? _appnm: "ZK";
 	}
 	public void setAppName(String name) {
 		_appnm = name != null ? name: "";
@@ -96,6 +97,19 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return _config;
 	}
 
+	public Object getAttribute(String name, boolean recurse) {
+		return getAttribute(name);
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name);
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		return removeAttribute(name);
+	}
+
 	//WebAppCtrl//
 	public void init(Object context, Configuration config) {
 		if (_config != null)
@@ -107,6 +121,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
 
 		_config = config;
+		if (_appnm == null)
+			_appnm = _config.getPreference("org.zkoss.zk.ui.WebApp.name", "ZK");
 		_config.setWebApp(this);
 
 		Class cls = _config.getUiEngineClass();
@@ -170,6 +186,14 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			}
 		}
 
+		cls = _config.getAuDecoderClass();
+		if (cls != null) {
+			try {
+				_audec = (AuDecoder)cls.newInstance();
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		}
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
@@ -184,34 +208,61 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_config.invokeWebAppInits();
 	}
 	public void destroy() {
-		_config.invokeWebAppCleanups();
-
-		_config.detroyRichlets();
+		try {
+			_config.invokeWebAppCleanups();
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
+		}
+		try {
+			_config.detroyRichlets();
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
+		}
 
 		try {
 			_sesscache.destroy(this);
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
 		} catch (AbstractMethodError ex) { //backward compatible
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
-		_factory.stop(this);
-		_provider.stop(this);
-		_engine.stop(this);
+
+		try {
+			_factory.stop(this);
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
+		}
+		try {
+			_provider.stop(this);
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
+		}
+		try {
+			_engine.stop(this);
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
+		}
 		if (_failover != null) {
 			try {
 				_failover.stop(this);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (AbstractMethodError ex) { //backward compatible
+			} catch (Throwable ex) {
+				ex.printStackTrace(); //not using log since it might be cleaned up
 			}
 			_failover = null;
 		}
 		_factory = null;
-		_provider = null;
+//		_provider = null;
+//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
 		_engine = null;
 		_sesscache = null;
 
 		try {
 			org.zkoss.util.Cleanups.cleanup();
 		} catch (NoClassDefFoundError ex) { //Bug 3046360
+		} catch (Throwable ex) {
+			ex.printStackTrace(); //not using log since it might be cleaned up
 		}
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
@@ -272,6 +323,12 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_sesscache = cache;
 		_sesscache.init(this);
 	}		
+	public AuDecoder getAuDecoder() {
+		return _audec;
+	}
+	public void setAuDecoder(AuDecoder audec) {
+		_audec = audec;
+	}
 
 	/** Invokes {@link #getDesktopCacheProvider}'s
 	 * {@link DesktopCacheProvider#sessionWillPassivate}.

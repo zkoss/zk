@@ -1,18 +1,16 @@
 /* SelectEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun 16 18:05:51     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,8 +18,14 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Set;
 import java.util.Collections;
+import java.util.Map;
+import java.util.List;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's the list selection is changed
@@ -32,7 +36,6 @@ import org.zkoss.zk.ui.Component;
 public class SelectEvent extends Event {
 	private final Set _selectedItems;
 	private final Component _ref;
-
 	private final int _keys;
 
 	/** Indicates whether the Alt key is pressed.
@@ -47,6 +50,18 @@ public class SelectEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
+
+	/** Converts an AU request to a select event.
+	 * @since 5.0.0
+	 */
+	public static final SelectEvent getSelectEvent(AuRequest request) {
+		final Map data = request.getData();
+		final Desktop desktop = request.getDesktop();
+		return new SelectEvent(request.getCommand(), request.getComponent(),
+			AuRequests.convertToItems(desktop, (List)data.get("items")),
+			desktop.getComponentByUuidIfAny((String)data.get("reference")),
+			AuRequests.parseKeys(data));
+	}
 
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
@@ -91,7 +106,7 @@ public class SelectEvent extends Event {
 	 */
 	public Component getReference() {
 		return _ref;
-	} 
+	}
 
 	/** Returns what keys were pressed when the mouse is clicked, or 0 if
 	 * none of them was pressed.

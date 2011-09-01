@@ -1,18 +1,16 @@
 /* Popup.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Sep 23 09:49:49     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,13 +18,9 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.render.ZidRequired;
-import org.zkoss.zk.ui.ext.render.Floating;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.au.out.AuPopup;
 
 /**
  * A container that is displayed as a popup.
@@ -40,6 +34,10 @@ import org.zkoss.zul.au.out.AuPopup;
  * @author tomyeh
  */
 public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
+	static {
+		addClientEvent(Popup.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
+	
 	public Popup() {
 		super.setVisible(false);
 	}
@@ -59,7 +57,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void open(String x, String y) {
-		response("popup", new AuPopup(this, x, y));
+		response("popup", new AuInvoke(this, "open", new Object[] {null, new Object[] {x, y}, null}));
 	}
 	/**
 	 * Opens this popup to the specified location at the client.
@@ -79,14 +77,8 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 		open(Integer.toString(x), Integer.toString(y));
 	}
 	/**
-	 * Opens this popup right below the specified component at the cleint.
-	 * <p>In most cases, the popup is shown automatically when specified
-	 * in the tooltip, popup and context properties
-	 * ({@link XulElement#setTooltip}, {@link XulElement#setPopup},
-	 * and {@link XulElement#setContext}).
-	 * However, if you want to show it manually, you can invoke this
-	 * method directly.
-	 * <p>By default the position "at_pointer" is assumed.(since 3.6.1)
+	 * Opens this popup right below the specified component at the client.
+	 * <p>By default the position "at_pointer" is assumed.(since 5.0.0)
 	 * 
 	 * @see Popup#open(Component, String)
 	 * @param ref the reference component to position the popup.
@@ -96,7 +88,6 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	public void open(Component ref) {
 		open(ref, "at_pointer");
 	}
-	
 	/**
 	 * Opens this popup right below the specified component at the client.
 	 * <p>In most cases, the popup is shown automatically when specified
@@ -137,7 +128,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.6.1
 	 */
 	public void open(Component ref, String position) {
-		response("popup", new AuInvoke(this, "context", new Object[] {ref.getUuid(), position}));
+		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position}));
 	}
 	/**
 	 * Closes this popup at the client.
@@ -147,11 +138,11 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void close() {
-		response("popup", new AuPopup(this, false));
+		response("popup", new AuInvoke(this, "close"));
 	}
 
 	//super//
-	/** Not allowd.
+	/** Not allowed.
 	 * Use {@link #open} to open, and {@link #close} to close.
 	 */
 	public boolean setVisible(boolean visible) {
@@ -160,36 +151,26 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	public String getZclass() {
 		return _zclass == null ? "z-popup" : _zclass;
 	}
-	public String getOuterAttrs() {
-	//Note: don't generate z.type here because Menupopup's z.type diff
-		final StringBuffer sb = appendAsapAttr(null, Events.ON_OPEN);
-		final String attrs = super.getOuterAttrs();
-		return sb != null ? sb.append(attrs).toString(): attrs;
-	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ZidRequired, Floating, Openable {
-		//ZidRequired//
-		public boolean isZidRequired() {
-			return !(getParent() instanceof Menu);
-		}
-		//Floating//
-		public boolean isFloating() {
-			return true;
-		}
-		/**
-		 * @since 3.5.0
-		 */
-		public void setOpenByClient(boolean open) {
-			if (open) smartUpdate("z.closemask", true);
-				//make sure to remove the progress bar at client side, if open.
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			disableClientUpdate(true);
+			try {
+				super.setVisible(evt.isOpen()); // Bug B50-3178065
+			} finally {
+				disableClientUpdate(false);
+			}
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2869942.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 10:33:52     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    You should see the icon with the input element is display well. (Not be separated)
+    <combobox style="position:absolute;left:409px;top:60px;height:25px;width:82px;"/>
+</zk>

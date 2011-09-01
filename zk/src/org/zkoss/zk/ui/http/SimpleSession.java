@@ -1,18 +1,16 @@
 /* SimpleSession.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 17:05:30     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -39,6 +37,8 @@ import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -47,7 +47,8 @@ import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.SessionSerializationListener;
 import org.zkoss.zk.ui.util.SessionActivationListener;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
@@ -94,6 +95,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** When the last client request is recieved.
 	 */
 	private long _tmLastReq = System.currentTimeMillis();
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
 	private boolean _invalid;
 	/** Indicates if {@link #invalidateNow} was called. */
 	private boolean _invalidated;
@@ -127,6 +129,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		if (wapp == null || navsess == null)
 			throw new IllegalArgumentException();
 
+		SessionsCtrl.updateCount(true);
 		_wapp = wapp;
 		_navsess = navsess;
 
@@ -219,7 +222,11 @@ public class SimpleSession implements Session, SessionCtrl {
 					.getAttribute(name, PortletSession.APPLICATION_SCOPE):
 				null;
 	}
-	public void setAttribute(String name, Object value) {
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
+	}
+	public Object setAttribute(String name, Object value) {
+		final Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
 			final boolean bStore = value instanceof Serializable || value instanceof Externalizable;
 			synchronized (this) {
@@ -238,14 +245,57 @@ public class SimpleSession implements Session, SessionCtrl {
 		} else {
 			setAttr(name, value);
 		}
+		return old;
 	}
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		return val != null || !recurse || _wapp == null ?
+			val: _wapp.getAttribute(name, true);
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name)
+		|| (recurse && _wapp != null && _wapp.hasAttribute(name, true));
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _scopeListeners.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
+	}
+
 	private void setAttr(String name, Object value) {
 		if (_navsess instanceof HttpSession)
 			((HttpSession)_navsess).setAttribute(name, value);
 		else if (_navsess != null)
 			((PortletSession)_navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
 	}
-	public void removeAttribute(String name) {
+	public Object removeAttribute(String name) {
+		Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
 			synchronized (this) {
 				rmAttr(name);
@@ -257,6 +307,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		} else {
 			rmAttr(name);
 		}
+		return old;
 	}
 	private void rmAttr(String name) {
 		if (_navsess instanceof HttpSession)
@@ -282,16 +333,6 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	public String getLocalAddr() {
 		return _localAddr;
-	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteAddr}.
-	 */
-	public String getClientAddr() {
-		return getRemoteAddr();
-	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getClientHost() {
-		return getRemoteHost();
 	}
 
 	public void invalidateNow() {
@@ -353,9 +394,6 @@ public class SimpleSession implements Session, SessionCtrl {
 		_cache = cache;
 	}
 	public void recover(Object nativeSession) {
-		if (_invalidated)
-			log.info("Recover an invalidated session, "+this);
-
 		_invalidated = _invalid = false;
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
@@ -367,6 +405,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public void onDestroyed() {
+		SessionsCtrl.updateCount(false);
+
 		_invalidated = _invalid = true;
 
 		final Configuration config = getWebApp().getConfiguration();
@@ -393,7 +433,6 @@ public class SimpleSession implements Session, SessionCtrl {
 	protected SimpleSession() {}
 	/** Used by the deriving class to write this object,
 	 * only if the deriving class implements java.io.Serializable.
-	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void writeThis(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
@@ -419,7 +458,6 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	/** Used by the deriving class to read back this object,
 	 * only if the deriving class implements java.io.Serializable.
-	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void readThis(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -437,11 +475,9 @@ public class SimpleSession implements Session, SessionCtrl {
 
 	/** Used by the deriving class to pre-process a session before writing
 	 * the session
-	 *
-	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionWillPassivate() {
-		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
 			((WebAppCtrl)_wapp).sessionWillPassivate(this);
@@ -451,21 +487,19 @@ public class SimpleSession implements Session, SessionCtrl {
 				willPassivate(getAttribute(nm));
 			}
 		} finally {
-			SessionsCtrl.setCurrent(old);
+			SessionsCtrl.setRawCurrent(old);
 		}
 	}
 	/** Used by the deriving class to post-process a session after
 	 * it is read back.
 	 *
 	 * <p>Application shall not call this method directly.
-	 *
-	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionDidActivate(HttpSession hsess) {
 		//Note: in Tomcat, servlet is activated later, so we have to
 		//add listener to WebManager instead of process now
 
-		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
 			_navsess = hsess;
@@ -485,7 +519,7 @@ public class SimpleSession implements Session, SessionCtrl {
 				didActivate(getAttribute(nm));
 			}
 		} finally {
-			SessionsCtrl.setCurrent(old);
+			SessionsCtrl.setRawCurrent(old);
 		}
 	}
 	private void willPassivate(Object o) {

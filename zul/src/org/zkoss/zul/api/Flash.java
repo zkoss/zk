@@ -1,18 +1,16 @@
 /* Flash.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -60,12 +58,6 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 */
 	public void setLoop(boolean loop);
 
-	/** @deprecated As of release 3.6.1, use {@link #isAutoplay} instead.
-	 */
-	public boolean isAutoPlay();
-	/** @deprecated As of release 3.6.1, use {@link #setAutoplay} instead.
-	 */
-	public void setAutoPlay(boolean autoplay);
 	/**
 	 * Return true if the Flash movie starts playing automatically
 	 * <p>Default: true.s
@@ -96,6 +88,32 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 *            Possible values: window, opaque, transparent.
 	 */
 	public void setWmode(String wmode);
+
+	/**
+	 * Returns the quality of the Flash movie 
+	 * <p>Default: "high".
+	 * @return the quality of the Flash movie 
+	 * @since 5.0.0
+	 */
+	public String getQuality();
+	/**
+	 * Sets the quality of the Flash movie.
+	 * @param quality the quality of the Flash movie.
+	 * @since 5.0.0
+	 */
+	public void setQuality(String quality);
+
+	/**
+	 * Returns the expected version of the Flash player.
+	 * <p>Default: "6,0,0,0"
+	 * @since 5.0.0
+	 */
+	public String getVersion();
+	/**
+	 * Sets the expected version of the Flash player.
+	 * @since 5.0.0
+	 */
+	public void setVersion(String version);
 
 	/**
 	 * Gets the source path of Flash movie

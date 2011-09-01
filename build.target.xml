@@ -20,14 +20,20 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		<arg value="${bin.dir}/genprop"/>
 		<arg value="-x"/>
 		<arg value="${src.mesg.dir}"/>
-		<arg value="${codegen.dir}"/>
+		<arg value="${src.dir}"/>
 	</exec>
 </target>
 
 <!-- ======= -->
 <!-- COMPILE -->
 <!-- ======= -->
-<target name="compile" depends="codegen.mesg" if="compile.required">
+<target name="compile0" depends="codegen.mesg" if="srcpv.dir.exist">
+	<mkdir dir="${out.dir}"/>
+	<javac srcdir="${srcpv.dir}" destdir="${out.dir}"
+	 debug="false" optimize="true" encoding="UTF-8"
+	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
+</target>
+<target name="compile1" depends="codegen.mesg,compile0" if="src.dir.exist">
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>
@@ -35,16 +41,17 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>
+<target name="compile5" depends="codegen.mesg, compile1" if="src5.dir.exist">
+	<javac srcdir="${src5.dir}:${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
+	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
+	 target="1.5" deprecation="${deprecation}" source="1.5"/>
+</target>
+<target name="compile" depends="compile0,compile1,compile5" if="compile.required">
+</target>
 
 <!-- ====== -->
 <!-- DEPLOY -->
 <!-- ====== -->
-<target name="deploy.export" depends="config.build" if="src.export.dir.exist">
-	<copy todir="${dist.export.dir}" preservelastmodified="yes">
-		<fileset dir="${src.export.dir}"/>
-	</copy>
-</target>
-
 <target name="deploy.lib" depends="config.build" if="deploy.lib.required">
 	<copy todir="${dist.lib.dir}" preservelastmodified="yes">
 		<fileset dir="${out.dir}" includes="${xar.name}, ${jad.name}"/>
@@ -133,20 +140,21 @@ if="deploy.jboss.required">
 	</copy>
 </target>
 
-<target name="deploy"
-depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
+<target name="deploy" depends="deploy.lib, deploy.tomcat, deploy.jboss">
 </target>
 
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
-<target name="build.jar" depends="gentime, compile, copy.web.jar" if="build.jar.required">
+<target name="build.jar" depends="gentime, compile" if="build.jar.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/zipjs"/>
 		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		<arg value="${dist.lib.ext.dir}/bsh.jar"/>
+		<arg value="${bin.dir}/rmcomment.java"/>
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
 	</exec>
@@ -158,15 +166,28 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
 	</exec>
 	
+	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
+	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
 </target>
-<target name="build.jad" depends="compile, copy.web.jar" if="build.jad.required">
+<target name="build.jar2" depends="build.jar" if="build.jar2.required">
+	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
+		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
+		<fileset dir="${src.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
+		<fileset dir="${codegen.archive.dir}" includes="**"
+		 excludes="META-INF/MANIFEST.MF, **/*.src.js"/>
+	</jar>
+</target>
+<target name="build.jad" depends="compile" if="build.jad.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
@@ -191,16 +212,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${out.dir}/${jad.name}"/>
 	</exec>
 </target>
-<!-- copy WEB-relevant resource  to jar (into codegen.archive.web.dir) -->
-<target name="copy.web.jar" depends="deploy.export" if="copy.web.jar.required">
-	<mkdir dir="${codegen.archive.web.dir}"/>
-	<copy todir="${codegen.archive.web.dir}" preservelastmodified="yes"
-	failonerror="false">
-		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
-		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
-		<fileset dir="${src.export.dir}" includes="${import.libs}"/>
-	</copy>
-</target>
 <target name="gentime" depends="config" if="gentime.required">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/gentime"/>
@@ -217,8 +228,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	manifest="${war.dir}/META-INF/MANIFEST.MF">
 		<fileset dir="${war.dir}" includes="**"
 		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF"/>
-		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
-		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
 
 		<lib dir="${dist.lib.ext.dir}" includes="${war.libs}"/>
 		<lib dir="${dist.lib.dir}" includes="${war.libs}"/>
@@ -239,26 +248,17 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 </target>
 
 <target name="build"
- depends="config.build, build.war, build.jad, build.jar, build.ear, deploy">
+ depends="config.build, build.war, build.jad, build.jar, build.jar2, build.ear, deploy">
 </target>
 
 <!-- ===== -->
 <!-- CLEAN -->
 <!-- ===== -->
-<target name="clean.all" depends="config" if="clean.all.required">
-	<delete quiet="true" includeEmptyDirs="true">
-		<fileset dir="${dist.export.dir}" includes="**"/>
-	</delete>
-	<!--delete quiet="true">
-		<fileset dir="${dist.lib.dir}" includes="*.?ar, *.jad"/>
-	</delete-->
-</target>
-
 <target name="clean.bin" depends="config" if="clean.bin.required">
 	<delete quiet="true" dir="${bin.dir}"/>
 </target>
 
-<target name="clean" depends="clean.all, clean.bin">
+<target name="clean" depends="clean.bin">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
 	<delete quiet="true" dir="${outv.dir}"/>
@@ -275,12 +275,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ========= -->
 <!-- UNIT TEST -->
 <!-- ========= -->
-<target name="deploy.test" depends="config" if="dist.test.dir.exist">
-	<copy todir="${jboss.app.test.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.test.dir}" includes="**"/>
-	</copy>
-</target>
-<target name="utest" depends="build, deploy.test">
+<target name="utest" depends="build">
 	<property name="class.test" value="**/*Test.java"/><!-- test all if not defined -->
 
 	<echo message="Test ${class.test}..."/>
@@ -301,25 +296,19 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- MISCELLANEOUS -->
 <!-- ============= -->
 <target name="javadoc" depends="config.build">
-	<javadoc packagenames="org.zkoss.*"
+	<javadoc 
 	 destdir="${working.javadoc.dir}"
+	 sourcepath="${src.dir}:${src5.dir}:${codegen.dir}"
 	 author="true" protected="true" version="true" use="true"
-	 windowtitle="${project.name} ${project.version} API"
-	 doctitle="${project.name} ${project.version} API"
+	 windowtitle="${project.title} ${project.version} API"
+	 doctitle="${project.title} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}">
-	 <bottom><![CDATA[Copyright &copy; 2005-2010 Potix Corporation. All Rights Reserved.
+	 <bottom><![CDATA[Copyright &copy; 2005-2011 Potix Corporation. All Rights Reserved.
 	 	<!--{{JAVASCRIPT_OUTPUT}}-->
 	 ]]></bottom>
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
-		<packageset dir="${src.dir}">
-			<include name="org/zkoss/**"/>
-		</packageset>
-		<fileset dir="${codegen.dir}">
-			<include name="org/zkoss/**"/>
-			<exclude name="**/*$$*"/>
-		</fileset>
 	</javadoc>
 
 	<delete quiet="true" dir="${dist.javadoc.dir}"/>
@@ -336,4 +325,190 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		 includes="org/zkoss/**/*.xml, org/zkoss/**/*.html"
 		 excludes="**/package.html" />
 	</copy>
+</target>
+
+<target name="jsdoc">
+	<!-- generate JavaScript Doc -->
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/jsdoc"/>
+		<arg value="${project.name}"/>
+	</exec>
+</target>
+
+
+<!-- ============= -->
+<!-- VERSION CHECK -->
+<!-- ============= -->
+<target name="check.version.freshly" if="${freshly}">
+	<echo message="check version files for freshly version."/>
+	<antcall target="check.version.file">
+		<param name="path" value="build.setting"/>
+		<param name="regexp" value="${version.text.freshly}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="zk/**/Version.java"/>
+		<param name="regexp" value="${version.java.release.freshly}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+</target>
+
+<target name="check.version.official" unless="${freshly}" depends="check.version.freshly">
+	<echo message="check version files for official version."/>
+	<antcall target="check.version.file">
+		<param name="path" value="build.setting"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="zk/**/Version.java"/>
+		<param name="regexp" value="${version.java.release}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+</target>
+
+<target name="check.version" depends="check.version.freshly, check.version.official">
+	<antcall target="check.version.file">
+		<param name="path" value="deploy/version"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="jsdoc/version"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	
+	<!-- app -->
+	<antcall target="check.version.app">
+		<param name="package" value="zksandbox"/>
+	</antcall>
+	<antcall target="check.version.app">
+		<param name="package" value="zksandboxs"/>
+	</antcall>
+	<antcall target="check.version.app">
+		<param name="package" value="zktest"/>
+	</antcall>
+	
+	<!-- packages -->
+	<antcall target="check.version.package">
+		<param name="package" value="zcommon"/>
+		<param name="check.xel.config.uid" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zhtml"/>
+		<param name="check.lang.uid" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zk"/>
+		<param name="check.tld.config.uid" value="true"/>
+		<param name="check.zk.config.uid" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zkplus"/>
+		<param name="check.lang-addon.uid" value="true"/>
+		<param name="check.lang-addon.zk-version" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zul"/>
+		<param name="check.lang.uid" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zweb"/>
+		<param name="check.tld.config.uid" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zkex"/>
+		<param name="check.zk.config.uid" value="true"/>
+		<param name="check.zk.config.zk-version" value="true"/>
+		<param name="check.lang-addon.uid" value="true"/>
+		<param name="check.lang-addon.zk-version" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zkmax"/>
+		<param name="check.xel.config.uid" value="true"/>
+		<param name="check.zk.config.uid" value="true"/>
+		<param name="check.lang-addon.uid" value="true"/>
+		<param name="check.lang-addon.zk-version" value="true"/>
+	</antcall>
+	<antcall target="check.version.package">
+		<param name="package" value="zml"/>
+		<param name="check.zk.config.uid" value="true"/>
+		<param name="check.lang.uid" value="true"/>
+	</antcall>
+</target>
+
+<target name="check.version.file" if="${doCheck}">
+	<echo message="checking ${path}"/>
+	<fileset id="file" dir="." includes="${path}">
+		<containsregexp expression="${regexp}"/>
+	</fileset>
+	<fail message="error in ${path}.">
+		<condition>
+			<resourcecount when="eq" count="0" refid="file" />
+		</condition>
+	</fail>
+</target>
+
+<target name="check.version.app">
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/version"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/META-INF/MANIFEST.MF"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+</target>
+
+<target name="check.version.package">
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/version"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/META-INF/MANIFEST.MF"/>
+		<param name="regexp" value="${version.text}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/**/Version.java"/>
+		<param name="regexp" value="${version.java.uid}"/>
+		<param name="doCheck" value="true"/>
+	</antcall>
+	
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/xel/config.xml"/>
+		<param name="regexp" value="${version.tag.uid}"/>
+		<param name="doCheck" value="${check.xel.config.uid}"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/tld/config.xml"/>
+		<param name="regexp" value="${version.tag.uid}"/>
+		<param name="doCheck" value="${check.tld.config.uid}"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/zk/config.xml"/>
+		<param name="regexp" value="${version.tag.uid}"/>
+		<param name="doCheck" value="${check.zk.config.uid}"/>
+	</antcall>
+	
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/zk/lang.xml"/>
+		<param name="regexp" value="${version.tag.uid}"/>
+		<param name="doCheck" value="${check.lang.uid}"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/zk/lang-addon.xml"/>
+		<param name="regexp" value="${version.tag.uid}"/>
+		<param name="doCheck" value="${check.lang-addon.uid}"/>
+	</antcall>
+	<antcall target="check.version.file">
+		<param name="path" value="${package}/src/archive/metainfo/zk/lang-addon.xml"/>
+		<param name="regexp" value="${version.tag.zk-version}"/>
+		<param name="doCheck" value="${check.lang-addon.zk-version}"/>
+	</antcall>
 </target>

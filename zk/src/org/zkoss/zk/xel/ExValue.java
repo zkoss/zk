@@ -1,18 +1,16 @@
 /* ExValue.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug 31 10:19:38     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -28,7 +26,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
- * A string value that might carries an expression.
+ * Used to represent a string value that might contain an expression.
  * It is serializable and the expression is parsed by demand.
  *
  * @author tomyeh

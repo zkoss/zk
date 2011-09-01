@@ -1,18 +1,16 @@
 /* AbstractUiFactory.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Apr 19 11:32:23     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,6 +29,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.ext.BeforeCompose;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -92,6 +91,8 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (parent != null) comp.setParent(parent);
 		else comp.setPage(page);
 
+		if (comp instanceof BeforeCompose)
+			((BeforeCompose)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
 		return comp;
 	}

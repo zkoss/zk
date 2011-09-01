@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="include" extends="include" mode="defer" ?>
+
+<!--
+Z35-protal-0001.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May  6 09:29:59 TST 2008, Created by DennisChen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Grid with Group feature" border="normal">
+<style>.btn1 a.z-button-btn {color:red}</style>
+	<groupbox open="false"><caption label="instructions(click to open)"/><html><![CDATA[  
+	Move/Detach Multiple Panel in one Time 
+	1.add 3 portal children<br/>
+	2.add 1 panel to each protal children<br/>
+	3.move panels by clockwise direction<br/>
+	4.remove first children of each protal children
+	]]></html></groupbox>
+	<zscript>
+	<![CDATA[//@IMPORT
+	    import org.zkoss.zkmax.zul.*;     
+	]]>
+	<![CDATA[//@DECLARATION
+	    Portalchildren pc1;
+	    Portalchildren pc2;
+	    Portalchildren pc3;
+	    List panels = new ArrayList();
+		void addPortalChidren(){
+			pc1 = new Portalchildren();
+			pc2 = new Portalchildren();
+			pc3 = new Portalchildren();
+			pc1.setWidth("40%");
+			pc2.setWidth("30%");
+			pc3.setWidth("30%");
+			pc1.setParent(pl);
+			pc2.setParent(pl);
+			pc3.setParent(pl);
+		}
+		
+		void addPaneltoprotal(){
+			newPanel(pc1);
+			newPanel(pc2);
+			newPanel(pc3);
+		}
+		
+		int count=1;
+		Panelchildren newPanel(Component parent){
+			Panel panel = new Panel();
+			panel.setTitle("panel"+count);
+			Panelchildren pc = new Panelchildren();
+			pc.setParent(panel);
+			panel.setParent(parent);
+			panels.add(panel);
+			Button btn = new Button(panel.getTitle());
+			if(count==1){
+				btn.setSclass("btn1");
+			}
+			btn.setParent(pc);
+			count++;
+			return pc;
+		}
+		
+		void moveMultiplePanel(){
+			Panel p1 = (Panel)pc1.getFirstChild();
+			Panel p2 = (Panel)pc2.getFirstChild();
+			Panel p3 = (Panel)pc3.getLastChild();
+			Panel p4 = (Panel)pc2.getLastChild();
+			
+			
+			if(p4!=null){
+				p4.setParent(pc1);
+			}
+			if(p3!=null){
+				p3.setParent(pc2);
+			}
+			if(p2!=null){
+				pc3.getChildren().add(0,p2);
+			}
+			if(p1!=null){
+				pc2.getChildren().add(0,p1);
+			}
+		}
+		void removeMultiplePanel(){
+			Panel p1 = (Panel)pc1.getFirstChild();
+			Panel p2 = (Panel)pc2.getFirstChild();
+			Panel p3 = (Panel)pc3.getLastChild();
+			Panel p4 = (Panel)pc2.getLastChild();
+			
+			
+			if(p4!=null){
+				p4.detach();
+			}
+			if(p3!=null){
+				p3.detach();
+			}
+			if(p2!=null){
+				p2.detach();
+			}
+			if(p1!=null){
+				p1.detach();
+			}
+		}
+		
+		
+	]]>
+	<![CDATA[
+		
+	]]>
+	</zscript>
+	<div>
+		<button label="1.add portal child" onClick="addPortalChidren()"/>
+		<button label="2.add Panel" onClick="addPaneltoprotal()"/>
+		<button label="3 move multiple Panel" onClick="moveMultiplePanel()"/>
+		<button label="4 remove multiple Panel" onClick="removeMultiplePanel()"/>
+		
+		<button label="-.3.invalidate" onClick="pl.invalidate()"/>
+		<portallayout id="pl">
+		
+		</portallayout>
+	</div>
+	
+	
+</window>

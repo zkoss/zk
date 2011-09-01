@@ -1,0 +1,26 @@
+<test tags="B50-2951182.zul,B,E,Window">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+    <window id="testWindow" width="200px">
+If you can see the words, the bug is fixed.
+          <button id="addBtn" label="Add" />
+    </window>
+    <zscript>
+        testWindow.doHighlighted();
+        testWindow.getFellow("addBtn").visible = false;
+
+    </zscript>
+
+
+</zk>
+			-->
+		</server>
+		<client>	<![CDATA[
+			sleep(500);
+			verifyFalse(jq(".z-error").exists());
+			verifyTrue(isVisible(jq("$testWindow")));			
+			]]></client>
+	</case>
+</test>

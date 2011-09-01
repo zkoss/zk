@@ -1,25 +1,26 @@
 /* Visualizer.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 20 23:06:03     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.sys;
 
 import java.util.List;
+import java.io.Writer;
+
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A part of {@link Execution} for visualizing the components whose
@@ -34,6 +35,12 @@ public interface Visualizer {
 	/** Returns the execution that this visualizer is associated with.
 	 */
 	public Execution getExecution();
+	/** Returns the owner component for this execution, or null if
+	 * this execution is not owned by any component.
+	 * <p>The include component is a typical owner.
+	 * @since 5.0.0
+	 */
+	public Component getOwner();
 	/** Whether the execution associated with this visualizer
 	 * is caued by an async-update.
 	 *

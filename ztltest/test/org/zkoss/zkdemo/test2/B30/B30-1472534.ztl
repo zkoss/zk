@@ -1,0 +1,26 @@
+<test tags="Listbox">
+	<case id="Errbox">
+		<server>
+			<!-- 
+				<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+					<n:p>
+						Click the "messageBox" button, and then the Error box should be
+						moved over the listbox.(IE6only)
+					</n:p>
+					<vbox>
+						<listbox mold="select" rows="1" id="list1" width="200px" />
+						<listbox mold="select" rows="1" id="list2" width="200px" />
+						<listbox mold="select" rows="1" id="list3" width="200px" />
+						<button label="messageBox"
+							onClick="throw new WrongValueException(list2, &quot;!!!!!!!!!!&quot;);" />
+					</vbox>
+				</zk>
+			 -->
+		</server>
+		<client><![CDATA[
+			click(jq("span.z-button"));
+			waitResponse();
+			verifyTrue(jq(".z-errbox").exists());
+		]]></client>
+	</case>
+</test>

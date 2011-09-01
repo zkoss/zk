@@ -33,4 +33,9 @@ public class ZulEvents {
 	/** The onColSize event used with {@link ColSizeEvent}.
 	 */
 	public static final String ON_COL_SIZE = "onColSize";
+	/**The onAfterRender event
+	 * It will notify the component (with a setModel method) when the model's data has been rendered
+	 * @since 5.0.4
+	 */
+	public static final String ON_AFTER_RENDER = "onAfterRender";
 }

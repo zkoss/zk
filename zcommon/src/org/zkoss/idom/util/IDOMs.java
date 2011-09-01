@@ -1,17 +1,15 @@
 /* IDOMs.java
 
-{{IS_NOTE
 
 Purpose:
 Description:
 History:
-C91/01/08 10:37:16, reate, Tom M. Yeh
-}}IS_NOTE
+	2002/01/08 10:37:16, Create, Tom M. Yeh
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -264,8 +262,6 @@ public class IDOMs {
 	dumpTree(PrintWriter s, Item vtx, String prefix) {
 		s.print(prefix);
 		s.print(vtx);
-		s.print(vtx.isReadonly() ? 'R' : ' ');
-		s.println(vtx.isModified() ? 'M' : ' ');
 		if (vtx instanceof Group) {
 			prefix = prefix + "  ";
 			for (Iterator it = ((Group)vtx).getChildren().iterator();

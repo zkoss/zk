@@ -17,7 +17,7 @@ package org.zkoss.zkplus.databind;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.GroupsModel;
-import org.zkoss.zul.GroupsListModel;
+import org.zkoss.zul.impl.GroupsListModel;
 
 /**
  * <p>This is the {@link BindingListModel} as a {@link GroupsListModel} to be used with 
@@ -26,7 +26,7 @@ import org.zkoss.zul.GroupsListModel;
  * Add or remove the contents of this model as a GroupListModel would cause the associated Listbox or Grid to change accordingly.</p> 
  *
  * @author henrichen
- * @since 3.6.5
+ * @since 5.0.6
  */
 public class BindingGroupsListModel extends GroupsListModel implements BindingListModel, java.io.Serializable {
 	public BindingGroupsListModel(GroupsModel model) {

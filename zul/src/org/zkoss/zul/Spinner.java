@@ -1,25 +1,22 @@
 /* Spinner.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Mar 14 10:26:55 TST 2008, Created by gracelin
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import java.io.IOException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.NumberInputElement;
 import org.zkoss.zul.mesg.MZul;
@@ -84,7 +81,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public void setStep(int step) {
 		if (_step != step) {
 			_step = step;
-			smartUpdate("z.step", _step);
+			smartUpdate("step", _step);
 		}
 	}
 	
@@ -99,7 +96,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
 	}
 
@@ -107,37 +104,11 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public String getZclass() {
 		return _zclass == null ?  "z-spinner" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		if (getConstraint() instanceof SimpleSpinnerConstraint) {
-			final SimpleSpinnerConstraint st = (SimpleSpinnerConstraint) getConstraint();
-			Integer min = st.getMin();
-			Integer max = st.getMax();
-			if (min != null)
-				HTMLs.appendAttribute(sb, "z.min", min.toString());
-			if (max != null)
-				HTMLs.appendAttribute(sb, "z.max", max.toString());
-		}
-		HTMLs.appendAttribute(sb, "z.step", _step);
-		HTMLs.appendAttribute(sb, "z.onchange", "true");
-		return sb.toString();
-	}
 	
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: no positive, no zero
+	 */
 	// -- super --//
 	public void setConstraint(String constr) {
 		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr): null); //Bug 2564298
@@ -164,5 +135,13 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	protected String coerceToString(Object value) {
 		return value != null && getFormat() == null ? value.toString()
 				: formatNumber(value, null);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(_step != 1)
+			renderer.render("step", _step);
+		if(_btnVisible != true)
+			renderer.render("buttonVisible", _btnVisible);
 	}
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3187231.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 21 10:49:47 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+If you can't see anything in this page, that is a bug.
+<include
+src="~./zul/html/fileuploaddlg.zul"
+mode="defer"/>
+</zk>

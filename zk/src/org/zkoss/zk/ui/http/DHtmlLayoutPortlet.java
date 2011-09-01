@@ -1,18 +1,16 @@
 /* DHtmlLayoutPortlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jan 11 13:59:27     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,7 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -34,10 +33,14 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
@@ -51,11 +54,13 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.PageRenderPatch;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
@@ -84,6 +89,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinitions;
  * processed by this portlet.</li>
  * </ul>
  *
+ * <p>To patch the rendering result of a ZK portlet, you can implement
+ * {@link PageRenderPatch} (and specified it in {@link org.zkoss.zk.ui.sys.Attributes#PORTLET_RENDER_PATCH_CLASS}).
  * @author tomyeh
  */
 public class DHtmlLayoutPortlet extends GenericPortlet {
@@ -142,7 +149,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			handleError(sess, request, response, path, ex, null);
 		} finally {
 			SessionsCtrl.requestExit(sess);
-			SessionsCtrl.setCurrent(null);
+			SessionsCtrl.setCurrent((Session)null);
 		}
 	}
 
@@ -170,50 +177,111 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
-		final Desktop desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
-		if (desktop == null) //forward or redirect
-			return true;
+		final ServletContext svlctx = (ServletContext)wapp.getNativeContext();
 
-		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, httpreq, PageDefinitions.getLocator(wapp, path));
-		((SessionCtrl)sess).notifyClientRequest(true);
+		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
+		Desktop desktop = dtrc != null ?
+			DesktopRecycles.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
 
-		final UiFactory uf = wappc.getUiFactory();
-		if (uf.isRichlet(ri, bRichlet)) {
-			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet == null)
-				return false; //not found
+		try {
+			if (desktop != null) { //recycle
+				final Page page = Utils.getMainPage(desktop);
+				if (page != null) {
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine()
+						.recycleDesktop(exec, page, response.getWriter());
+				} else
+					desktop = null; //something wrong (not possible; just in case)
+			}
 
-			final Page page = WebManager.newPage(uf, ri, richlet, httpres, path);
-			final Execution exec =
-				new ExecutionImpl(
-					(ServletContext)wapp.getNativeContext(),
-					httpreq, httpres, desktop, page);
+			if (desktop == null) {
+				desktop = webman.getDesktop(sess, httpreq, httpres, path, true);
+				if (desktop == null) //forward or redirect
+					return true;
 
-			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-			if (response.getContentType() == null)
-				response.setContentType("text/html;charset=UTF-8");
+				final RequestInfo ri = new RequestInfoImpl(
+					wapp, sess, desktop, httpreq,
+					PageDefinitions.getLocator(wapp, path));
+				((SessionCtrl)sess).notifyClientRequest(true);
 
-			wappc.getUiEngine().execNewPage(exec, richlet, page, response.getWriter());
-		} else if (path != null) {
-			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef == null)
-				return false; //not found
+				final Page page;
+				final PageRenderPatch patch = getRenderPatch();
+				final Writer out = patch.beforeRender(ri);
+				final UiFactory uf = wappc.getUiFactory();
+				if (uf.isRichlet(ri, bRichlet)) {
+					final Richlet richlet = uf.getRichlet(ri, path);
+					if (richlet == null)
+						return false; //not found
 
-			final Page page = WebManager.newPage(uf, ri, pagedef, httpres, path);
-			final Execution exec =
-				new ExecutionImpl(
-					(ServletContext)wapp.getNativeContext(),
-					httpreq, httpres, desktop, page);
+					page = WebManager.newPage(uf, ri, richlet, httpres, path);
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine().execNewPage(exec, richlet, page,
+						out != null ? out: response.getWriter());
+				} else if (path != null) {
+					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+					if (pagedef == null)
+						return false; //not found
 
-			//Bug 1548478: content-type is required for some implementation (JBoss Portal)
-			if (response.getContentType() == null)
-				response.setContentType("text/html;charset=UTF-8");
+					page = WebManager.newPage(uf, ri, pagedef, httpres, path);
+					final Execution exec =
+						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					fixContentType(response);
+					wappc.getUiEngine().execNewPage(exec, pagedef, page,
+						out != null ? out: response.getWriter());
+				} else
+					return true; //nothing to do
 
-			wappc.getUiEngine()
-				.execNewPage(exec, pagedef, page, response.getWriter());
+				if (out != null)
+					patch.patchRender(ri, page, out, response.getWriter());
+			}
+		} finally {
+			if (dtrc != null)
+				DesktopRecycles.afterService(dtrc, desktop);
 		}
 		return true; //success
+	}
+	private static PageRenderPatch getRenderPatch() {
+		if (_prpatch != null)
+			return _prpatch;
+
+		synchronized (DHtmlLayoutPortlet.class) {
+			if (_prpatch != null)
+				return _prpatch;
+
+			final PageRenderPatch patch;
+			final String clsnm = Library.getProperty(
+				org.zkoss.zk.ui.sys.Attributes.PORTLET_RENDER_PATCH_CLASS);
+			if (clsnm == null) {
+				patch = new PageRenderPatch() {
+					public Writer beforeRender(RequestInfo reqInfo) {
+						return null;
+					}
+					public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
+					throws IOException {
+					}
+				};
+			} else {
+				try {
+					patch = (PageRenderPatch)Classes.newInstanceByThread(clsnm);
+				} catch (ClassCastException ex) {
+					throw new UiException(clsnm+" must implement "+PageRenderPatch.class.getName());
+				} catch (Throwable ex) {
+					throw UiException.Aide.wrap(ex, "Unable to instantiate");
+				}
+			}
+			return _prpatch = patch;
+		}
+	}
+	private static PageRenderPatch _prpatch;
+
+	private static void fixContentType(RenderResponse response) {
+		//Bug 1548478: content-type is required for some implementation (JBoss Portal)
+		if (response.getContentType() == null)
+			response.setContentType("text/html;charset=UTF-8");
 	}
 
 	/** Returns the layout servlet.

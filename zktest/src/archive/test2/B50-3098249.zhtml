@@ -1,0 +1,16 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<html xmlns:zul="http://www.zkoss.org/2005/zul">
+<body>
+	<zscript>
+		boolean flag = false;
+	</zscript>
+		<div id="formatDiv" visible="@{flag,load-after=toggle.onClick}">
+			<p>Test Text</p>
+		</div>
+	<zul:button id="toggle" label="clickMe">
+		<attribute name="onClick">
+			flag = !flag;
+		</attribute>
+	</zul:button>
+</body>
+</html>

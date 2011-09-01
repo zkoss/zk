@@ -1,0 +1,139 @@
+<test tags="Groupbox,Combobox,Vbox">
+	<case id="Layout">
+		<server><!--
+			<window title="checkbox demo" border="normal">
+			See if the position of combobox image is right.
+				<groupbox mold="3d" height="100%" width="100%">
+					<caption label="test something" />
+					Combobox:
+					<vbox>
+						<combobox id="cb1">
+							<comboitem label="Simple and Rich"/>
+							<comboitem label="Cool!"/>
+							<comboitem label="Thumbs Up!"/>
+						</combobox>
+						<combobox id="cb2">
+							<comboitem label="Simple and Rich"
+							description="The simplest way to make Web applications rich"/>
+							<comboitem label="Cool!"
+							description="The coolest technology"/>
+							<comboitem label="Ajax and RIA"
+							description="Rich Internet Application by Ajax"/>
+						</combobox>
+						<combobox  id="cb3">
+							<comboitem label="Simple and Rich" image="/test2/img/coffee.gif"
+							description="The simplest way to make Web applications rich"/>
+							<comboitem label="Cool!" image="/test2/img/corner.gif"
+							description="The coolest technology"/>
+							<comboitem label="Ajax and RIA" image="/test2/img/cubfirs.gif"
+							description="Rich Internet Application by Ajax"/>
+						</combobox>
+			
+						<separator bar="true"/>
+						Auto-complete:
+						<combobox autodrop="true"  id="cb4"/>
+						<zscript>
+				String[] _dict = { 
+					"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+					"bible", "bird", "bingle", "blog",
+					"cabane", "cape", "cease", "cedar",
+					"dacron", "defacto", "definable", "deluxe",
+					"each", "eager", "effect", "efficacy",
+					"far", "far from",
+					"girl", "gigantean", "giant",
+					"home", "honest", "huge",
+					"information", "inner",
+					"jump", "jungle", "jungle fever",
+					"kaka", "kale", "kame",
+					"lamella", "lane", "lemma",
+					"master", "maxima", "music",
+					"nerve", "new", "number",
+					"omega", "opera",
+					"pea", "peace", "peaceful",
+					"rock", "RIA",
+					"sound", "spread", "student", "super",
+					"tea", "teacher",
+					"unit", "universe",
+					"vector", "victory",
+					"wake", "wee", "weak", "web2.0",
+					"xeme",
+					"yea", "yellow",
+					"zebra", "zk",
+					
+				};
+				 ListModel dictModel= new SimpleListModel(_dict);
+				 cb4.setModel(dictModel);
+				</zscript>
+						<hbox>
+							<checkbox checked="true" onCheck="combo.autodrop = self.checked"
+							label="auto drop popup when typing"/>
+							<checkbox checked="true" onCheck="combo.buttonVisible = self.checked"
+							label="button visible"/>
+						</hbox>
+					</vbox>
+				</groupbox>
+			</window>
+		--></server>
+		<client><![CDATA[
+		if (ZK.is("ie") && !ZK.is("ie8")) {
+			int[] offset1 = zk(cb1).revisedOffset();
+			int[] offset2 = zk(cb1.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1] + 1, offset2[1]);
+			verifyEquals(jq(cb1.$n("real")).outerHeight(),
+					jq(cb1.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb1).outerWidth() - jq(cb1.$n("btn")).outerWidth(),
+					offset2[0]);
+			offset1 = zk(cb2).revisedOffset();
+			offset2 = zk(cb2.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1] + 1, offset2[1]);
+			verifyEquals(jq(cb2.$n("real")).outerHeight(), jq(cb2.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb2).outerWidth() - jq(cb2.$n("btn")).outerWidth(),
+					offset2[0]);
+			offset1 = zk(cb3).revisedOffset();
+			offset2 = zk(cb3.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1] + 1, offset2[1]);
+			verifyEquals(jq(cb3.$n("real")).outerHeight(), jq(cb3.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb3).outerWidth() - jq(cb3.$n("btn")).outerWidth(),
+					offset2[0]);
+			offset1 = zk(cb4).revisedOffset();
+			offset2 = zk(cb4.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1] + 1, offset2[1]);
+			verifyEquals(jq(cb4.$n("real")).outerHeight(), jq(cb4.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb4).outerWidth() - jq(cb4.$n("btn")).outerWidth(),
+					offset2[0]);
+		} else {
+			int[] offset1 = zk(cb1).revisedOffset();
+			int[] offset2 = zk(cb1.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1], offset2[1]);
+			verifyEquals(jq(cb1.$n("real")).outerHeight(),
+					jq(cb1.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb1).outerWidth() - jq(cb1.$n("btn")).outerWidth(),
+					offset2[0]);
+			offset1 = zk(cb2).revisedOffset();
+			offset2 = zk(cb2.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1], offset2[1]);
+			verifyEquals(jq(cb2.$n("real")).outerHeight(), jq(
+			cb2.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb2).outerWidth()
+				- jq(cb2.$n("btn")).outerWidth(),
+				offset2[0]);
+			offset1 = zk(cb3).revisedOffset();
+			offset2 = zk(cb3.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1], offset2[1]);
+			verifyEquals(jq(cb3.$n("real")).outerHeight(), jq(
+			cb3.$n("btn")).outerHeight());
+			verifyEquals(offset1[0]	+ jq(cb3).outerWidth()
+					- jq(cb3.$n("btn")).outerWidth(),
+					offset2[0]);
+			offset1 = zk(cb4).revisedOffset();
+			offset2 = zk(cb4.$n("btn")).revisedOffset();
+			verifyEquals(offset1[1], offset2[1]);
+			verifyEquals(jq(cb4.$n("real")).outerHeight(), jq(
+			cb4.$n("btn")).outerHeight());
+			verifyEquals(offset1[0] + jq(cb4).outerWidth()
+					- jq(cb4.$n("btn")).outerWidth(),
+					offset2[0]);
+		}
+		]]></client>
+	</case>
+</test>

@@ -30,8 +30,9 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <!-- property name="out.dir" value="debug"/ --> <!-- invoker must provide -->
 
 <property name="src.dir" value="src"/>
+<property name="src5.dir" value="src5"/>
+<property name="srcpv.dir" value="srcpv"/>
 <property name="src.archive.dir" value="${src.dir}/archive"/>
-<property name="src.export.dir" value="${src.dir}/export"/>
 <property name="src.mesg.dir" value="${src.archive.dir}/metainfo/mesg"/>
 <property name="manifest.mf" value="${src.archive.dir}/META-INF/MANIFEST.MF"/>
 <property name="application.xml" value="${src.archive.dir}/META-INF/application.xml"/>
@@ -41,6 +42,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="codegen.archive.web.dir" value="${codegen.archive.dir}/web"/>
 
 <property name="jar.name" value="${project.name}.jar"/>
+<property name="jar2.name" value="${project.name}.nosrc.jar"/>
 <property name="war.name" value="${project.name}.war"/>
 <property name="ear.name" value="${project.name}.ear"/>
 <property name="jad.name" value="${project.name}.jad"/>
@@ -55,10 +57,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="dist.lib.dir" value="${dist.dir}/lib"/>
 <property name="dist.lib.ext.dir" value="${dist.lib.dir}/ext"/>
 <property name="dist.conf.dir" value="${dist.dir}/conf"/>
-<property name="dist.install.dir" value="${dist.conf.dir}/install"/>
-<property name="dist.upgrade.dir" value="${dist.conf.dir}/upgrade"/>
-<property name="dist.test.dir" value="${dist.conf.dir}/test"/>
-<property name="dist.export.dir" value="${dist.dir}/export"/>
 <property name="working.javadoc.dir" value="${working.dir}/javadoc/${project.name}"/>
 <property name="dist.javadoc.dir" value="${share.javadoc.dir}/${project.name}"/>
 <property name="out.metainf.dir" value="${out.dir}/META-INF"/>
@@ -82,3 +80,11 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 <property name="exclude.list" value="tmp/**, temp/**, ${xar.name}, conf/*.properties"/>
 
+<property name="version.text.freshly" value="${zk.version}-FL$"/>
+<property name="version.text" value="${zk.version}$"/>
+<property name="version.tag.version" value="version&gt;${zk.version}&lt;/version"/>
+<property name="version.tag.zk-version" value="zk-version&gt;${zk.version}&lt;/zk-version"/>
+<property name="version.tag.uid" value="version-uid&gt;${zk.version}&lt;/version-uid"/>
+<property name="version.java.uid" value='UID = &quot;${zk.version}&quot;;$'/>
+<property name="version.java.release" value='RELEASE = &quot;${zk.version}&quot;;'/>
+<property name="version.java.release.freshly" value='RELEASE = &quot;${zk.version}-FL&quot;;'/>

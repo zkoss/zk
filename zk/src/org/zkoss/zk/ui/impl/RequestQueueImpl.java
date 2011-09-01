@@ -1,18 +1,16 @@
 /* RequestQueueImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 20 09:51:39     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,7 +30,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.sys.RequestQueue;
 import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.Command;
 
 /**
  * An implementation of {@link RequestQueue} behaving as
@@ -106,7 +103,7 @@ public class RequestQueueImpl implements RequestQueue {
 		}
 	}
 	private void addRequest(AuRequest request) {
-		//case 1, IGNORABLE: Drop any existent ignorable requests
+		//case 1, BUSY_IGNORE: Drop any existent ignorable requests
 		//We don't need to iterate all because requests is added one-by-one
 		//In other words, if any temporty request, it must be the last
 		{
@@ -117,7 +114,7 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 
 			final AuRequest req2 = (AuRequest)_requests.get(last);
-			if ((req2.getCommand().getFlags() & Command.IGNORABLE) != 0) {
+			if ((req2.getOptions() & AuRequest.BUSY_IGNORE) != 0) {
 				_requests.remove(last); //drop it
 				if (last == 0) {
 					_requests.add(request);
@@ -126,30 +123,30 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 		}
 
-		final Command cmd = request.getCommand();
-		final int flags = cmd.getFlags();
+		final String name = request.getCommand();
+		final int opts = request.getOptions();
 
-		//Since 3.0.2, redudant CTRL_GROUP is removed at the client
+		//Since 3.0.2, redundant CTRL_GROUP is removed at the client
 
-		//case 2, IGNORE_OLD_EQUIV: drop existent request if they are the same
+		//case 2, DUPLICATE_IGNORE: drop existent request if they are the same
 		//as the arrival.
-		if ((flags & Command.IGNORE_OLD_EQUIV) != 0) {
+		if ((opts & AuRequest.DUPLICATE_IGNORE) != 0) {
 			final String uuid = getUuid(request);
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
-				if (req2.getCommand() == cmd
+				if (req2.getCommand().equals(name)
 				&& Objects.equals(getUuid(req2), uuid)) {
-					it.remove(); //drop req2
+					it.remove(); //drop req2 (the old one)
 					break; //no need to iterate because impossible to have more
 				}
 			}
 
-		//Case 3, IGNORE_IMMEDIATE_OLD_EQUIV: drop existent if the immediate
+		//Case 3, REPEAT_IGNORE: drop existent if the immediate
 		//following is the same
-		} else if ((flags & Command.IGNORE_IMMEDIATE_OLD_EQUIV) != 0) {
+		} else if ((opts & AuRequest.REPEAT_IGNORE) != 0) {
 			final int last = _requests.size() - 1;
 			final AuRequest req2 = (AuRequest)_requests.get(last);
-			if (req2.getCommand() == cmd
+			if (req2.getCommand().equals(name)
 			&& Objects.equals(getUuid(req2), getUuid(request))) {
 				_requests.remove(last);
 			}

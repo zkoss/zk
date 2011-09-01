@@ -1,18 +1,16 @@
 /* SimpleCategoryModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 14 11:25:51     2006, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -114,14 +112,13 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 	}
 	
 	public void removeValue(Comparable series, Comparable category) {
+		//key was created by 2 length of array, do not add more elements.
 		List key = new ArrayList(2);
 		key.add(series);
 		key.add(category);
-		if (!_valueMap.containsKey(key)) {
+						
+		if (_valueMap.remove(key) == null)
 			return;
-		}
-				
-		_valueMap.remove(key);
 		
 		int ccount = ((Integer) _categoryMap.get(category)).intValue();
 		if (ccount > 1) {

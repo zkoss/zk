@@ -1,18 +1,16 @@
 /* CustomConstraint.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Apr 11 17:59:43     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -27,9 +25,12 @@ import org.zkoss.zk.ui.WrongValueException;
  * If this interface is implemented, the default error box won't be
  * displayed. Rather, {@link #showCustomError} is called.
  *
- * <p>Note: if this interface is implemented,
- * {@link ClientConstraint} is ignored, since all validation will be done
- * at the server.
+ * <p>Since 5.0.0, {@link ClientConstraint} has the higher priority than
+ * {@link CustomConstraint}. In other words, {@link CustomConstraint}
+ * is ignored if both defined.
+ * On the other hand, the client validation object ({@link ClientConstraint#getClientConstraint})
+ * can implement the showCustomError method to do the similar job
+ * at the client.
  *
  * @author tomyeh
  * @see Constraint

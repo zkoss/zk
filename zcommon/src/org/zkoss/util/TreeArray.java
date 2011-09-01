@@ -1,18 +1,16 @@
 /* TreeArray.java
 
-{{IS_NOTE
 
 	Purpose: Red-black tree based array implementation of List interface.
 	Description:
 	History:
 	 2001/5/9, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,11 +18,11 @@ package org.zkoss.util;
 
 import java.util.*;
 
-/**
+/** @deprecated As of release 5.0.8, it is not used and no longer maintained.
  * Red-black tree based array implementation of List interface.
  * Unlike LinkedList, the random access by index is as fast as log(n).
  * Unlike ArrayList, the insertion is as fast as log(n). It is
- * a great compromise between randown and sequential access.
+ * a great compromise between random and sequential access.
  *
  * <p>In additions, it extends the features by also implementing
  * ListX.
@@ -34,7 +32,7 @@ import java.util.*;
  * override delete(RbEntry) for removing element; clear() for
  * clearing the whole list.
  *
- * <p>Also, RbEntry.setElement might be overrided if the deriving class
+ * <p>Also, RbEntry.setElement might be overridden if the deriving class
  * wants to do something when the set method is called.
  *
  * <p>The iterator method is designed such that next() will proceed correctly
@@ -117,7 +115,7 @@ implements ListX, Cloneable, java.io.Serializable {
 					return p;
 		}
 		/**
-		 * Gets the rihtmost leaf of the specified subtree.
+		 * Gets the rightmost leaf of the specified subtree.
 		 * It is the entry with highest index in the subtree.
 		 */
 		protected final RbEntry rightMost() {
@@ -139,7 +137,7 @@ implements ListX, Cloneable, java.io.Serializable {
 		/**
 		 * Gets the first parent at the right of the specified entry.
 		 * "At the right" we mean the returned ancesor's right is the entry
-		 * or its ancestor. It is also the first parent with higer index.
+		 * or its ancestor. It is also the first parent with higher index.
 		 */
 		protected final RbEntry firstRightAncestor() {
 			for (RbEntry p=this; p.parent != null; p = p.parent)

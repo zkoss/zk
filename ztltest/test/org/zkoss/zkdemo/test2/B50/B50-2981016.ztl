@@ -1,0 +1,14 @@
+<test tags="B50-2981016.zul,combobox">
+	<case id="width">
+		<server id="zul"><![CDATA[
+			<zk>
+				<combobox id="cb" width="80px" />
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			int inpWidth = Integer.valueOf(cb.$n("real").get("offsetWidth"));
+			int btnWidth = Integer.valueOf(cb.$n("btn").get("offsetWidth"));			
+			verifyTrue(inpWidth + btnWidth == 80);
+		]]></client>
+	</case>
+</test>

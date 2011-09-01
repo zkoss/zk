@@ -1,0 +1,37 @@
+<!-- B50-3122159.ztl.java
+
+	Purpose:for testing B50-3122159.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 16:50:11
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3122159.zul,A,E,Databox" import="java.util.*">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+Please click upon the date icon to choose a date and it should immediately alert a dialog to display a date that you selected.
+<datebox id="dt" onChange="alert(self.value)"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				Calendar cal=Calendar.getInstance();
+				int year=cal.get(Calendar.YEAR);
+				click(dt.$n("btn"));
+				waitResponse();
+				click(jq(".z-calendar-seld"));
+				waitResponse();
+				verifyContains(getAlertMessage()+"00:00:00 CST "+year ,jq(".z-calendar-seld").text());
+		]]></client>
+	</case>
+</test>

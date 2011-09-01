@@ -1,18 +1,16 @@
 /* URIInterceptor.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 19 17:05:53     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -55,7 +53,10 @@ public interface URIInterceptor {
 	/** Called when the current user requests to load
 	 * the page of the specified URI.
 	 *
-	 * <p>To deny the access, the class shall throw an excetion.
+	 * <p>To deny the access, the class shall throw an exception.
+	 * If you want to redirect to another page, you can configure it
+	 * with  &lt;error-page&gt; by speciying the corresponding page and exception
+	 * in WEB-INF/zk.xml.
 	 */
 	public void request(String uri) throws Exception;
 }

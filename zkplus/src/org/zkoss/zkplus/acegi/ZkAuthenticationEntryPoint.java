@@ -55,7 +55,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>This implementation would forward to onAcegiLogin event and popup a login page.</p>
- *
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @see ZkAuthenticationProcessingFilter
  * @see ShowWindowEventListener
  * @author Henri

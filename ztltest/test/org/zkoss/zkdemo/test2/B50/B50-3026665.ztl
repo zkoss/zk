@@ -1,0 +1,22 @@
+<test tags="B50-3026665.zul,Bandbox,Focus">
+	<case id="FocusStyle">
+		<server><![CDATA[
+<?page title="Bandbox gets focus from children focus" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<bandbox>
+		<bandpopup>
+			<intbox />
+		</bandpopup>
+	</bandbox>
+	<intbox/>
+</zk>
+		]]></server>
+		<client><![CDATA[
+		click(jq("@bandbox i.z-bandbox-btn"));
+		focus(jq("@bandbox input.z-bandbox-inp"));
+		focus(jq(".z-bandpopup @intbox"));
+		focus(jq("@page @intbox:eq(1)"));
+		verifyFalse(jq("@bandbox").hasClass("z-bandbox-focus"));
+		]]></client>
+	</case>
+</test>

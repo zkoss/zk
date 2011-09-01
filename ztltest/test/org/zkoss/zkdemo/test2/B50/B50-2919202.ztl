@@ -1,0 +1,47 @@
+<test tags="B50-2919202.zul,Errorbox,wrongValue">
+	<case id="closed">
+		<server>
+			<!--
+				<vbox>
+				<html><![CDATA[
+				Test listbox + constraint:
+				<ul>
+					<li>Click show, then an error box shall be shown beside the listbox</li>
+					<li>Click close, then the box shall disappear</li>
+					<li>Click show again, and click toggle several times to see if
+					the box shows and disappears with the listbox</li>
+				</ul>
+				]]></html>
+				<listbox id="mylistbox" rows="1" mold="select">
+				<listitem label="Inbox"/>
+				<listitem label="Received"/>
+				<listitem label="Draft"/>
+				</listbox>
+				<button id="show" label="show" onClick='throw new WrongValueException(mylistbox,
+				"error")'/>
+				<button id="close" label="close" onClick="Clients.closeErrorBox(mylistbox)"/>
+				<button id="toggle" label="toggle" onClick="mylistbox.visible = !mylistbox.visible"/>
+				</vbox>			
+			-->
+		</server>
+		<client>	<![CDATA[	
+				verifyTrue(jq("@select > option ").exists());
+				click(show);
+				waitResponse();
+				verifyTrue(jq(".z-errbox").exists());
+				click(close);
+				waitResponse();
+				verifyFalse(jq(".z-errbox").exists());
+				click(show);
+				waitResponse();
+				click(toggle);
+				waitResponse();
+				sleep(500);
+				verifyFalse(isVisible(jq(".z-errbox")));
+				verifyFalse(isVisible(jq("@select > option ")));
+				click(toggle);
+				waitResponse();
+				verifyTrue(isVisible(jq("@select > option ")));	
+			]]></client>
+	</case>
+</test>

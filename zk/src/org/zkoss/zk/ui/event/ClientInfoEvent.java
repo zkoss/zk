@@ -1,25 +1,31 @@
 /* ClientInfoEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jul 25 16:34:05     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
 import java.util.TimeZone;
+import java.util.List;
+import java.util.Map;
+
 import org.zkoss.util.TimeZones;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * The onClientInfo event is used to notify the client's information, such
@@ -38,6 +44,21 @@ public class ClientInfoEvent extends Event {
 	private final TimeZone _timeZone;
 	private final int _scrnwd, _scrnhgh, _colorDepth;
 	private final int _dtwd, _dthgh, _dtx, _dty;
+
+	/** Converts an AU request to a client-info event.
+	 * @since 5.0.0
+	 */
+	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
+		final Map data = request.getData();
+		//Note: ClientInfoEvent is a broadcast event
+		final List inf = (List)data.get("");
+		return new ClientInfoEvent(request.getCommand(),
+			getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
+			getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7));
+	}
+	private static final int getInt(List inf, int j) {
+		return ((Integer)inf.get(j)).intValue();
+	}
 
 	/** Constructs an event to hold the client-info.
 	 *

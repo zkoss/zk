@@ -1,0 +1,127 @@
+<test tags="popup">
+	<case id="size">
+		<server><!--
+			<zk>
+				<html><![CDATA[
+				Test 3 Cases:
+				<ol>
+					<li>In IE 7, the popup have width but no height.</li>
+					<li>In all browser, the popup have height but no width.</li>
+					<li>In all browser, the popup have no height and no width</li>
+				</ol>
+				]]></html>
+				<vbox>
+					<hbox>
+						<button label="set width">
+							<attribute name="onClick"><![CDATA[
+						 title.setWidth("300px");
+					]]></attribute>
+						</button>
+						<button label="no width">
+							<attribute name="onClick"><![CDATA[
+						title.setWidth("");
+					]]></attribute>
+						</button>
+						<button label="set height">
+							<attribute name="onClick"><![CDATA[
+						title.setHeight("100px");
+					]]></attribute>
+						</button>
+						<button label="no height">
+							<attribute name="onClick"><![CDATA[
+						title.setHeight("");
+					]]></attribute>
+						</button>
+					</hbox>
+					<label value="Click me to Show Popup!" popup="title" />
+				</vbox>
+				<popup id="title">
+					<html>Input the subject of this letter. Problem report :</html>
+					<toolbarbutton label="ZK Forum" target="zkdemo"
+						href="http://www.zkoss.org/forum" />
+				</popup>
+
+			</zk>
+		--></server>
+		<client><![CDATA[
+				JQuery setWidth = jq("@button[label=\"set width\"]");
+				JQuery noWidth = jq("@button[label=\"no width\"]");
+				JQuery setHeight = jq("@button[label=\"set height\"]");
+				JQuery noHeight = jq("@button[label=\"no height\"]");
+				JQuery label = jq("@label");
+
+				click(setWidth);
+				waitResponse();
+				click(noHeight);
+				waitResponse();
+				click(label);
+				waitResponse();
+				JQuery node = jq(title.$n());
+
+				JQuery tl = jq("div.z-popup-tl");
+				JQuery bl = jq("div.z-popup-bl");
+				JQuery cl = jq("div.z-popup-cl");
+
+				boolean tlExist = jq("div.z-popup-tl").exists();
+
+				int sumHeight = -1;
+
+				if (tlExist) { // for which is not ie7!
+					sumHeight = tl.outerHeight() + cl.outerHeight() + bl.outerHeight();
+					int tlWidth = tl.outerWidth() + parseInt(tl.css("margin-right"));
+					int blWidth = tl.outerWidth() + parseInt(bl.css("margin-right"));
+					verifyEquals(300, tlWidth);
+					verifyEquals(300, blWidth);
+				} else {// for ie7 , whhich has not tl and bl
+					sumHeight = cl.outerHeight();
+					verifyEquals(node.outerHeight(), sumHeight);
+				}
+
+				verifyEquals(node.outerHeight(), sumHeight);
+				verifyEquals(300, node.outerWidth());
+				verifyEquals(300, cl.outerWidth());
+				click(noWidth);
+				waitResponse();
+				click(setHeight);
+				waitResponse();
+				click(label);
+				waitResponse();
+
+				int width = node.outerWidth();
+				if (tlExist) {
+					int tlWidth = tl.outerWidth() + parseInt(tl.css("margin-right"));
+					int blWidth = tl.outerWidth() + parseInt(bl.css("margin-right"));
+					verifyEquals(width, tlWidth);
+					verifyEquals(width, blWidth);
+					sumHeight = tl.outerHeight() + cl.outerHeight() + bl.outerHeight();
+				}else{// for ie7 , whhich has not tl and bl
+					sumHeight = cl.outerHeight();
+				}
+				verifyEquals(width, cl.outerWidth());
+				verifyEquals(100, node.outerHeight());
+				verifyTolerant(100, sumHeight, 1);
+
+
+				click(noWidth);
+				waitResponse();
+				click(noHeight);
+				waitResponse();
+				click(label);
+				waitResponse();
+				if(tlExist){
+					sumHeight = tl.outerHeight() + cl.outerHeight() + bl.outerHeight();
+					int tlWidth = tl.outerWidth() + parseInt(tl.css("margin-right"));
+					int blWidth = tl.outerWidth() + parseInt(bl.css("margin-right"));
+					verifyEquals(width, tlWidth);
+					verifyEquals(width, blWidth);
+
+				} else { // for ie7 , whhich has not tl and bl
+					sumHeight = cl.outerHeight();
+				}
+				width = node.outerWidth();
+				verifyEquals(node.outerHeight(), sumHeight);
+				verifyEquals(width, cl.outerWidth());
+
+		]]></client>
+	</case>
+</test>

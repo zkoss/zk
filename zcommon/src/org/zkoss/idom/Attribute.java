@@ -1,17 +1,15 @@
 /* Attribute.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/22 17:11:10, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,7 +29,7 @@ import org.zkoss.idom.impl.*;
  * The iDOM attribute.
  *
  * <p>Design decision: Attribute is also a item. The reason is
- * it simplifies the use of xpath. A xpath migt return either
+ * it simplifies the use of xpath. An xpath might return either
  * elements or attributes, so...
  *
  * @author tomyeh
@@ -106,8 +104,6 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * @param value the new value; null is considered as empty
 	 */
 	public final void setValue(String value) {
-		checkWritable();
-
 		if (value == null)
 			value = "";
 //		else
@@ -117,7 +113,6 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 		if (!Objects.equals(_value, value)) {
 			Verifier.checkCharacterData(value, getLocator());
 			_value = value;
-			setModified();
 		}
 	}
 
@@ -135,17 +130,9 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * automatically, so user never needs to update it.
 	 */
 	public final void setOwner(Item owner) {
-		checkWritable();
 		if (_owner != owner) {
 			_ns = reuseNamespace(owner, _ns); //check and reuse
-
-			//Note: new owner and old owner's setModified must be called
-			if (_owner != null
-			&& ((Attributable)_owner).isAttributeModificationAware())
-				_owner.setModified();
-
 			_owner = owner;
-			setModified(); //then, owner.setModified is called
 		}
 	}
 	/** Search for the namespace to see any possible to reuse.
@@ -180,8 +167,6 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * a namespace that has an URI but without a prefix.
 	 */
 	public final void setNamespace(Namespace ns) {
-		checkWritable();
-
 		if (ns != null && ns.getPrefix().length() == 0
 		&& ns.getURI().length() != 0)
 			throw new DOMException(DOMException.NAMESPACE_ERR,
@@ -192,10 +177,7 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 		else
 			ns = reuseNamespace(_owner, ns); //check and reuse
 
-		if (!Objects.equals(_ns, ns)) {
-			_ns = ns;
-			setModified();
-		}
+		_ns = ns;
 	}
 	public final Namespace getNamespace() {
 		return _ns;
@@ -211,15 +193,12 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * names which won't be detected by this method.
 	 */
 	public final void setTagName(String tname) {
-		checkWritable();
-
 		if (!Objects.equals(tname, getName())) {
 			int kp = tname.indexOf(':');
 			String prefix = kp >= 0 ? tname.substring(0, kp): "";
 			String lname  = kp >= 0 ? tname.substring(kp + 1): tname;
 			setPrefix(prefix);
 			setLocalName(lname);
-			setModified();
 		}
 	}
 
@@ -233,32 +212,13 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * names which won't be detected by this method.
 	 */
 	public final void setLocalName(String lname) {
-		checkWritable();
 		if (!Objects.equals(lname, getLocalName())) {
 			Verifier.checkAttributeName(lname, getLocator());
 			_lname = lname;
-			setModified();
 		}
 	}		
 
 	//-- Item --//
-	/**
-	 * Tests whether this attribute is read-only.
-	 * Note: An attribute is read-only if the read-only flag is set (setReadonly)
-	 * or any of its owner item is read-only (getOwner().isReadonly()).
-	 */
-	public final boolean isReadonly() {
-		return super.isReadonly() || (_owner != null && _owner.isReadonly());
-	}
-
-	public void setModified() {
-		assert(getParent() == null);
-		_modified = true;
-		if (_owner != null
-		&& ((Attributable)_owner).isAttributeModificationAware())
-			_owner.setModified();
-	}
-
 	public final String getName() {
 		return getTagName();
 	}
@@ -269,7 +229,7 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 		return getValue();
 	}
 	public final void setText(String text) {
-		setValue(text); //and checkWritable and setModified
+		setValue(text);
 	}
 
 	/**
@@ -287,11 +247,9 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 	 * add it to another item).
 	 */
 	public Item detach() {
-		checkWritable();
 		if (_owner != null) {
 			((Attributable)_owner).getAttributeItems().remove(this);
 			assert(_owner == null);
-			setModified();
 		}
 		return this;
 	}
@@ -344,8 +302,8 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 		return "[Attribute: " + getTagName() + "=\"" + _value + "\"]";
 	}
 
-	public Item clone(boolean preserveModified) {
-		Attribute v = (Attribute)super.clone(preserveModified);
+	public Object clone() {
+		Attribute v = (Attribute)super.clone();
 		v._owner = null;
 		return v;
 	}

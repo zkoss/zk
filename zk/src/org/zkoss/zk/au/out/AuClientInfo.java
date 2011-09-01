@@ -43,4 +43,12 @@ public class AuClientInfo extends AuResponse {
 	public AuClientInfo() {
 		this(null);
 	}
+
+	/** Default: zk.clientInfo (i.e., only one response of this class
+	 * will be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.clientInfo";
+	}
 }

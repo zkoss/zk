@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3299404.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 10, 2011 10:44:55 AM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+<window width="600px">
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.event.EventListener;
+		import org.zkoss.zul.*;
+		
+		
+		class MyRowrenderer implements RowRenderer {
+		    public void render(Row row, Object data) throws Exception {
+		        for (int i=0; i<5; i++) {
+		            Cell c = new Cell();
+		            c.setParent(row);
+		
+		            Label l = new Label("label" + i);
+		            l.setParent(c);
+		        }
+		    }
+		}
+		
+		RowRenderer renderer = new MyRowrenderer();
+	]]></zscript>
+	<button label="IE only, click me, it shall not error happen.">
+		<attribute name="onClick"><![CDATA[
+			Columns columns = grid.getColumns();
+			columns.setParent(null);
+			
+			columns = new Columns();
+			columns.setParent(grid);
+			columns.setSizable(true);
+			
+			for (int i=0; i<5; i++) {
+			    Column c = new Column("column" + i);
+			    c.setParent(columns);
+			}
+			
+			ListModelList model = new ListModelList();
+	        model.add("Null");
+	        model.add("Null");
+	        grid.setModel(model);
+	        
+		]]></attribute>
+	</button>
+    <grid id="grid" sizedByContent="true" span="true" rowRenderer="${renderer}">
+        <columns sizable="true">
+            <column width="30px"></column>
+            <column label="22"></column>
+            <column label="0123456789"></column>
+            <column label="44444"></column>
+        </columns>
+    </grid>
+</window>
+</zk>

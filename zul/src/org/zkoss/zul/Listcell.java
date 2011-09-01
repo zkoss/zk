@@ -1,53 +1,46 @@
 /* Listcell.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug  5 13:06:17     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
-
-import org.zkoss.xml.HTMLs;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * A list cell.
  * 
- * <p>Default {@link #getZclass}: z-list-cell. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listcell (since 5.0.0)
  *
  * @author tomyeh
  */
 public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Listcell {
 	private Object _value;
-	private int _span = 1;
-
+	private AuxInfo _auxinf;
+	
 	public Listcell() {
 	}
 	public Listcell(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Listcell(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the list box that it belongs to.
@@ -63,22 +56,19 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	public org.zkoss.zul.api.Listbox getListboxApi() {
 		return getListbox();
 	}
-	
-	protected String getRealStyle() {
-		final Listheader h = getListheader();
-		return isVisible() && h != null && !h.isVisible() ? super.getRealStyle() +
-				"display:none;" : super.getRealStyle();
-	}
-	public String getRealSclass() {
-		HtmlBasedComponent p = (HtmlBasedComponent) getParent();
-		if (!(p instanceof Listgroup) && !(p instanceof Listgroupfoot)) return super.getRealSclass();
-		String clx = super.getRealSclass();
-		return clx != null ? clx + " " + p.getZclass() + "-inner" : p.getZclass() + "-inner";
-	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-cell" : _zclass;
+		return _zclass == null ? "z-listcell" : _zclass;
 	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Listcell clone = (Listcell)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
+	}
+	
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */
@@ -153,15 +143,15 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	 * Default: 1.
 	 */
 	public int getSpan() {
-		return _span;
+		return _auxinf != null ? _auxinf.span : 1;
 	}
 	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
 	public void setSpan(int span) {
-		if (_span != span) {
-			_span = span;
-			smartUpdate("colspan", Integer.toString(_span));
+		if (getSpan() != span) {
+			initAuxInfo().span = span;
+			smartUpdate("colspan", getSpan());
 		}
 	}
 	
@@ -170,94 +160,36 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 		throw new UnsupportedOperationException("Set listheader's width instead");
 	}
 
-	//-- Internal use only --//
-	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.dsp.
-	 */
-	public String getColumnHtmlPrefix() {
-		final Listitem item = (Listitem)getParent();
-		final Listbox listbox = getListbox();
-		if (listbox != null && item.getFirstChild() == this) {
-			final StringBuffer sb = new StringBuffer(64);
-			if (item instanceof Listgroup) {
-				sb.append("<img src=\"")
-				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-				.append("\" class=\"").append(item.getZclass()+"-img ")
-				.append(item.getZclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
-				.append("\" align=\"absmiddle\"/>");
-			}
-			if (listbox.isCheckmark()) {
-				final boolean isCheckable = item.isCheckable();
-				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
-					.append('"');
-				if (!isCheckable || item.isDisabled())
-					sb.append(" disabled=\"disabled\"");
-				if (item.isSelected())
-					sb.append(" checked=\"checked\"");
-				if (!listbox.isMultiple()) 
-					sb.append(" name=\"").append(listbox.getUuid()).append("\"");
-				if (!isCheckable)
-					sb.append(" style=\"visibility:hidden;\"/>");
-				else
-					sb.append(" id=\"").append(item.getUuid())
-						.append("!cm\" z.type=\"Lcfc\"/>");
-				return sb.toString();
-			} else if (sb.length() > 0) return sb.toString();
-		}
-		
-		//To make the listbox's height more correct, we have to generate &nbsp;
-		//for empty cell. Otherwise, IE will make the height too small
-		final boolean empty = getImage() == null
-		&& getLabel().length() == 0 && getChildren().isEmpty();
-		return empty ? "&nbsp;": null;
-		
-	}
-	/** Returns the postfix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listcell.jsp.
-	 */
-	public String getColumnHtmlPostfix() {
-		return null;
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-
-		final Listheader header = getListheader();
-		final String clkattrs = getAllOnClickAttrs();
-		if (header == null && clkattrs == null && _span == 1)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (header != null) sb.append(header.getColAttrs());
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_span != 1) HTMLs.appendAttribute(sb, "colspan", _span);
-
-		return sb.toString();
-	}
-
-	/** Returns the attributes used by the embedded HTML LABEL tag.
-	 * It returns text-relevant styles only.
-	 * <p>Used only by component developer.
-	 */
-	public String getLabelAttrs() {
-		final String style = HTMLs.getTextRelevantStyle(getRealStyle());
-		return style.length() > 0 ? " style=\""+style+'"': "";
-	}
-	
 	//-- Component --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (getSpan() > 1)
+			renderer.render("colspan", getSpan());
+	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listitem))
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
 	}
-	public void invalidate() {
-		final Listbox listbox = getListbox();
-		if ((listbox != null && listbox.inSelectMold()) || getParent() instanceof Listgroup) {
-			getParent().invalidate();
-			//if HTML select, the cell doesn't exists in client
-		} else {
-			super.invalidate();
+
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
+		private int span = 1;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
 		}
 	}
+	
 }

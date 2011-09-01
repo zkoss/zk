@@ -1,18 +1,16 @@
 /* ExecutionResolver.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun 24 12:22:23     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,8 +18,12 @@ package org.zkoss.zk.xel.impl;
 
 import java.util.Collections;
 
+import org.zkoss.util.resource.Labels;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -36,7 +38,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * @author tomyeh
  * @since 3.0.0
  */
-public class ExecutionResolver implements VariableResolver {
+public class ExecutionResolver implements VariableResolverX {
 	/** The parent resolver. */
 	private final VariableResolver _parent;
 	private final Execution _exec;
@@ -66,79 +68,79 @@ public class ExecutionResolver implements VariableResolver {
 
 	//-- VariableResolver --//
 	public Object resolveVariable(String name) throws XelException {
+		return resolveVariable(null, null, name);
+	}
+	//-- VariableResolverX --//
+	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
+		if (base != null) {
+			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
+			return page != null ? page.getXelVariable(ctx, base, onm, true): null;
+		}
+
+		if (onm == null)
+			return null;
+
+		final String name = onm.toString();
 		if (name == null || name.length() == 0) //just in case
 			return null;
 
 		//Note: we have to access keyword frist (rather than component's ns)
-		//since our BeanShell interpreter will store back variables
+		//since 1) BeanShell interpreter will store back variables
 		//and page.getZScriptVariable will return the old value
-		//we have 
-		switch (name.charAt(0)) {
-		case 'a':
-			if ("arg".equals(name))
-				return _exec.getArg();
-			break;
-		case 'c':
-			if ("componentScope".equals(name)) {
-				if (_self instanceof Component)
-					return ((Component)_self).getAttributes(Component.COMPONENT_SCOPE);
-				return Collections.EMPTY_MAP;
-			}
-			break;
-		case 'd':
-			if ("desktopScope".equals(name))
-				return _exec.getDesktop().getAttributes();
-			if ("desktop".equals(name))
-				return _exec.getDesktop();
-			break;
-		case 'e':
-			if ("execution".equals(name))
-				return _exec;
-			break;
-		case 'p':
-			if ("pageScope".equals(name)) {
-				if (_self instanceof Component)
-					return ((Component)_self).getAttributes(Component.PAGE_SCOPE);
-				if (_self instanceof Page)
-					return ((Page)_self).getAttributes();
-				final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
-				return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
-			}
-			if ("page".equals(name)) {
-				if (_self instanceof Component)
-					return getPage((Component)_self);
-				if (_self instanceof Page)
-					return (Page)_self;
-				return ((ExecutionCtrl)_exec).getCurrentPage();
-			}
-			break;
-		case 'r':
-			if ("requestScope".equals(name))
-				return _exec.getAttributes();
-			break;
-		case 's':
-			if ("self".equals(name))
-				return _self;
-			if ("sessionScope".equals(name))
-				return _exec.getDesktop().getSession().getAttributes();
-			if ("session".equals(name))
-				return _exec.getDesktop().getSession();
-			if ("spaceOwner".equals(name)) {
-				if (_self instanceof Component)
-					return ((Component)_self).getSpaceOwner();
-				if (_self instanceof Page)
-					return (Page)_self;
-				return null;
-			}
-			if ("spaceScope".equals(name)) {
-				if (_self instanceof Component)
-					return ((Component)_self).getAttributes(Component.SPACE_SCOPE);
-				if (_self instanceof Page)
-					return ((Page)_self).getAttributes();
-				return Collections.EMPTY_MAP;
-			}
-			break;
+		//2) ZK 5, getAttributeOrFellow doesn't look for variable resolvers and implicit objects 
+		if ("arg".equals(name))
+			return _exec.getArg();
+		if ("componentScope".equals(name)) {
+			if (_self instanceof Component)
+				return ((Component)_self).getAttributes(Component.COMPONENT_SCOPE);
+			return Collections.EMPTY_MAP;
 		}
+		if ("desktopScope".equals(name))
+			return _exec.getDesktop().getAttributes();
+		if ("desktop".equals(name))
+			return _exec.getDesktop();
+		if ("execution".equals(name))
+			return _exec;
+		if ("pageScope".equals(name)) {
+			if (_self instanceof Component)
+				return ((Component)_self).getAttributes(Component.PAGE_SCOPE);
+			if (_self instanceof Page)
+				return ((Page)_self).getAttributes();
+			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
+			return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
+		}
+		if ("page".equals(name)) {
+			if (_self instanceof Component)
+				return getPage((Component)_self);
+			if (_self instanceof Page)
+				return (Page)_self;
+			return ((ExecutionCtrl)_exec).getCurrentPage();
+		}
+		if ("requestScope".equals(name))
+			return _exec.getAttributes();
+		if ("self".equals(name))
+			return _self;
+		if ("sessionScope".equals(name))
+			return _exec.getDesktop().getSession().getAttributes();
+		if ("session".equals(name))
+			return _exec.getDesktop().getSession();
+		if ("spaceOwner".equals(name)) {
+			if (_self instanceof Component)
+				return ((Component)_self).getSpaceOwner();
+			if (_self instanceof Page)
+				return (Page)_self;
+			return null;
+		}
+		if ("spaceScope".equals(name)) {
+			if (_self instanceof Component)
+				return ((Component)_self).getAttributes(Component.SPACE_SCOPE);
+			if (_self instanceof Page)
+				return ((Page)_self).getAttributes();
+			return Collections.EMPTY_MAP;
+		}
+		if ("param".equals(name) || "paramValues".equals(name))
+			return Evaluators.resolveVariable(_parent, name);
+			//Bug 3131983: cannot go through getZScriptVariable
 
 		if (_self instanceof Component) {
 			final Component comp = (Component)_self;
@@ -147,15 +149,24 @@ public class ExecutionResolver implements VariableResolver {
 			//so it is in the same order of interpreter
 			final Page page = getPage(comp);
 			if (page != null) {
-				final Object o =
-					page.getZScriptVariable(comp.getNamespace(), name);
+				final Object o = page.getZScriptVariable(comp, name);
 				if (o != null)
 					return o;
 			}
 
-			final Object o = comp.getVariable(name, false);
+			Object o = _exec.getAttribute(name);
+			if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
+				return o;
+
+			o = comp.getAttributeOrFellow(name, true);
 			if (o != null)
 				return o;
+
+			if (page != null) {
+				o = page.getXelVariable(ctx, null, name, true);
+				if (o != null)
+					return o;
+			}
 		} else {
 			Page page;
 			if (_self instanceof Page) {
@@ -169,13 +180,33 @@ public class ExecutionResolver implements VariableResolver {
 				if (o != null)
 					return o;
 
-				o = page.getVariable(name);
+				o = _exec.getAttribute(name);
+				if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
+					return o;
+
+				o = page.getAttributeOrFellow(name, true);
 				if (o != null)
+					return o;
+
+				o = page.getXelVariable(ctx, null, name, true);
+				if (o != null)
+					return o;
+			} else {
+				Object o = _exec.getAttribute(name, true);
+				if (o != null/* || _exec.hasAttribute(name, true)*/) //ServletRequest not support hasAttribute
 					return o;
 			}
 		}
 
-		return _parent != null ? _parent.resolveVariable(name): null;
+		Object o = Evaluators.resolveVariable(_parent, name);
+		if (o != null)
+			return o;
+
+		//lower priority (i.e., user could override it)
+		//Reason: they were introduced later, and have to maintain backward comparibility
+		if ("labels".equals(name))
+			return Labels.getSegmentedLabels();
+		return null;
 	}
 	private static Page getPage(Component comp) {
 		Page page = comp.getPage();

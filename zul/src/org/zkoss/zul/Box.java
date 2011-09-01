@@ -1,20 +1,16 @@
 /* Box.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun 20 21:51:32     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 package org.zkoss.zul;
 
@@ -27,7 +23,6 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.ext.render.Floating;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -42,6 +37,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	private String _align = "start", _pack = "start";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
+	private boolean _sizedByContent = true;
 
 	/** Default: vertical ({@link Vbox}).
 	 */
@@ -121,52 +117,19 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _spacing;
 	}
 	/** Sets the spacing between adjacent children.
-	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em"),
-	 * or null to use the default spacing
+	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em").
+	 * If null, empty ("") or "auto", the default spacing is used (i.e.,
+	 * controlled by CSS alone)
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {
 		if (spacing != null && spacing.length() == 0) spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			invalidate();
+			smartUpdate("spacing", _spacing);
 		}
 	}
 
-	/** Returns the vertical alignment of the adjacent cells of a box
-	 * (top, middle or bottom).
-	 * <p>Default: null (i.e., use the browser default, usually middle).
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
-	 * Use {@link #getAlign} and {@link #getPack} instead.
-	 */
-	public String getValign() {
-		return toValign(isVertical() ? getPack(): getAlign());
-	}
-	/** Sets the vertical alignment of the adjacent cells of a box.
-	 *
-	 * @param valign the vertical alignment: top, middle and bottom.
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
-	 * Use {@link #setAlign} and {@link #setPack} instead.
-	 */
-	public void setValign(String valign) {
-		valign = valign == null ? null:
-			"top".equals(valign) ? "start": 
-			"middle".equals(valign) ? "center":
-			"bottom".equals(valign) ? "end": valign;
-
-		if (isVertical()) setPack(valign);
-		else setAlign(valign);
-	}
-	private static String toValign(String v) {
-		return v == null ? null: "start".equals(v) ? "top": 
-			"center".equals(v) ? "middle":
-			"end".equals(v) ? "bottom": v;
-	}
-	private static String toHalign(String v) {
-		return v == null ? null: "start".equals(v) ? "left": 
-			"end".equals(v) ? "right": v;
-	}
-	
 	/** Returns the alignment of cells of a box in the 'opposite' direction
 	 * (<i>null</i>, start, center, end).
 	 *
@@ -176,7 +139,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * when the size of the box is larger than the total size of the children. For
 	 * boxes that have horizontal orientation, it specifies how its children will
 	 * be aligned vertically. For boxes that have vertical orientation, it is used
-	 * to specify how its children are algined horizontally. The pack attribute
+	 * to specify how its children are aligned horizontally. The pack attribute
 	 * ({@link #getPack}) is
 	 * related to the alignment but is used to specify the position in the
 	 * opposite direction.
@@ -193,6 +156,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <dd>Child elements are placed on the right or bottom edge of the box. If
 	 * the box is larger than the total size of the children, the extra space is
 	 * placed on the left or top side.</dd>
+	 * <dt>stretch(since 5.0)</dt>
+	 * <dd>Child elements are stretched to fill the box.</dd>
 	 * </dl>
 	 *
 	 * @since 3.0.0
@@ -201,25 +166,27 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _align;
 	}
 	/** Sets the alignment of cells of this box in the 'opposite' direction
-	 * (<i>null</i>, start, center, end).
+	 * (<i>start</i>, center, end, stretch).
 	 *
+	 * <p>Refer to {@link #getAlign} for more information
+	 * 
 	 * @param align the alignment in the 'opposite' direction.
-	 * Allowed values: start, center, end.
+	 * Allowed values: start, center, end, stretch.
 	 * If empty or null, the browser's default is used
 	 * (IE center and FF left, if vertical).
 	 * @since 3.0.0
 	 */
 	public void setAlign(String align) {
+		if (align != null && align.length() == 0) align = null;
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			if (isVertical()) invalidate();
-			else smartUpdate("valign", toValign(align));
+			smartUpdate("align", _align);
 		}
 	}
-	/** Returns the alignment of cells of this box
-	 * (<i>null</i>, start, center, end).
+	/** Returns the pack alignment of cells of this box
+	 * (start, center, end) plus an indication <i>stretch</i> option.
 	 *
-	 * <p>Default: null.
+	 * <p>Default: start.
 	 *
 	 * <p>The pack attribute specifies where child elements of the box are placed
 	 * when the box is larger that the size of the children. For boxes with
@@ -228,12 +195,12 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * the position of children vertically. The align attribute 
 	 * ({@link #getAlign})is used to specify
 	 * the position in the opposite direction.
-	 *
+	 * 
 	 * <dl>
 	 * <dt>start</dt>
 	 * <dd>Child elements are aligned starting from the left or top edge of
 	 * the box. If the box is larger than the total size of the children, the
-	 * extra space is placed on the right or bottom side.</dd>
+	 * Extra space is placed on the right or bottom side.</dd>
 	 * <dt>center</dt>
 	 * <dd>Extra space is split equally along each side of the child
 	 * elements, resulting in the children being placed in the center of the box.</dd>
@@ -241,6 +208,21 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <dd>Child elements are placed on the right or bottom edge of the box. If
 	 * the box is larger than the total size of the children, the extra space is
 	 * placed on the left or top side.</dd>
+	 * <dt>stretch(since 5.0)</dt>
+	 * <dd>This is an extra option in addition to the (start, center, end) options.
+	 * When add this extra option in the pack attribute, the Extra space is placed
+	 * proportionally and evenly along each child elements. If you specify 
+	 * "stretch,start", then the Extra proportionally and evenly allocated space 
+	 * for each child is placed on the right or bottom side of the child. 
+	 * If you specify "stretch,center", then the Extra proportionally and evenly 
+	 * allocated space for each child is split equally along each side of the
+	 * child. If you specify "stretch,end", then the Extra proportionally and 
+	 * evenly allocated space for each child is placed on the left or top side of 
+	 * the child. Note that if there are {@link Splitter} child inside this Box, 
+	 * then this Box behaves as if the pack attribute has been set the "stretch"
+	 * option; no matter you really specify "stretch" in pack attribute or not. 
+	 * If you give null to the pack attribute, it is the same as "start". If simply 
+	 * give "stretch" to this pack attribute then it is the same as "stretch,start"</dd> 
 	 * </dl>
 	 *
 	 * @since 3.0.0
@@ -249,16 +231,18 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _pack;
 	}
 	/** Sets the alignment of cells of this box
-	 * (<i>null</i>, start, center, end).
+	 * (start, center, end) plus an <i>stretch</i> option.
 	 *
-	 * @param pack the alignment. Allowed values: start, center, end.
-	 * If empty or null, the browser's default is used.
+	 * @param pack the alignment. Allowed values: (start, center, end) plus an 
+	 * <i>stretch</i> option. If empty or null, it defaults to "start".
 	 * @since 3.0.0
+	 * @see #getPack()
 	 */
 	public void setPack(String pack) {
+		if (pack != null && pack.length() == 0) pack = null;
 		if (!Objects.equals(_pack, pack)) {
 			_pack = pack;
-			invalidate(); //generated to all cells
+			smartUpdate("pack", _pack);
 		}
 	}
 
@@ -272,6 +256,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <p>It is the same as {@link #getHeights}.
 	 *
 	 * <p>Default: empty.
+	 * 
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getWidths() {
 		return Utils.arrayToString(_sizes);
@@ -286,6 +272,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <p>It is the same as {@link #getWidths}.
 	 *
 	 * <p>Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getHeights() {
 		return getWidths();
@@ -305,146 +292,63 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * 30% width, and the rest of cells don't specify any width.
 	 * Of course, the real widths depend on the interpretation of
 	 * the browser.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setWidths(String widths) throws WrongValueException {
 		final String[] sizes = Utils.stringToArray(widths, null);
 		if (!Objects.equals(sizes, _sizes)) {
 			_sizes = sizes;
-			invalidate();
+			smartUpdate("widths", _sizes);
 		}
 	}
 	/** Sets the widths/heights, which is a list of numbers separated
 	 * by comma to denote the width/height of each cell in a box.
 	 *
 	 * <p>It is the same as {@link #setWidths}.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setHeights(String heights) throws WrongValueException {
 		setWidths(heights);
 	}
 
-	/** Returns the outer attributes used to wrap the children (never null).
-	 * It is used only for the vertical layout.
+	/**
+	 * Sets whether sizing the cell's size by its content.
+	 * <p>Default: true. It means the cell's size is depended on its content.
+	 * 
+	 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
+	 * for resizing smoothly, if it contains a grid or other sophisticated
+	 * components.
+	 * @param byContent 
+	 * @since 5.0.4
 	 */
-	public String getChildOuterAttrs(Component child) {
-		final StringBuffer sb = new StringBuffer(64)
-			.append(" z.coexist=\"true\"");
-			//coexist: the visibility of exterior is the same as child.
-
-		final boolean vert = isVertical();
-		if (child instanceof Splitter) {
-			sb.append(" class=\"")
-				.append(((Splitter)child).getZclass())
-				.append("-outer\"");
-			if (!child.isVisible())
-				sb.append(" style=\"display:none\"");
-			return sb.toString();
+	public void setSizedByContent(boolean byContent) {
+		if(_sizedByContent != byContent) {
+			_sizedByContent = byContent;
+			smartUpdate("sizedByContent", byContent);
 		}
-		
-		//Note: style is handled in getChildInnerAttrs if horizontal layout
-		//so we don't need to handle valign and visible if vertical
-		if (vert) {
-			HTMLs.appendAttribute(sb, "valign", toValign(_pack));
-			if (!child.isVisible()) {
-				final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-				if (!(xc instanceof Floating) || !((Floating)xc).isFloating())
-					sb.append(" style=\"display:none\"");
-			}
-		}
-		return sb.toString();
 	}
-	/** Returns the inner attributes used to wrap the children (never null).
-	 * Used only by component development to generate HTML tags.
+	/**
+	 * Returns whether sizing the cell's size by its content.
+	 * <p>Default: true.
+	 * @since 5.0.4
+	 * @see #setSizedByContent
 	 */
-	public String getChildInnerAttrs(Component child) {
-		final boolean vert = isVertical();
-		if (child instanceof Splitter)
-			return vert ? " class=\"" + ((Splitter)child).getZclass()
-					+ "-outer-td\"": "";
-				//no need to handle visible here (see getChildOuterAttrs)
-
-		final StringBuffer sb = new StringBuffer(64);
-		final String align = toHalign(vert ? _align: _pack);
-		if (align != null && align.length() > 0) {
-			HTMLs.appendAttribute(sb, "align", align);
-		}
-
-		String size = null;
-		if (_sizes != null) {
-			int j = 0;
-			for (Iterator it = getChildren().iterator(); it.hasNext();) {
-				final Object o = it.next();
-				if (child == o) {
-					size = _sizes[j];
-					break;
-				} else if (!(o instanceof Splitter)) {
-					if (++j >= _sizes.length)
-						break; //not found
-				}
-			}
-		}
-
-		final Object xc = ((ComponentCtrl)child).getExtraCtrl();
-		final boolean floating =
-			(xc instanceof Floating) && ((Floating)xc).isFloating();
-		final boolean visible = vert || floating || child.isVisible();
-			//if vert, visible is handled by getChildOutAttrs
-
-		if (size != null || floating || !visible) {
-			sb.append(" style=\"");
-			if (!visible)
-				sb.append("display:none;");
-
-			if (floating || size != null)
-				sb.append(vert ? "height": "width")
-					.append(':').append(floating ? "0": size);
-
-			sb.append('"');
-		}
-		return sb.toString();
+	public boolean isSizedByContent() {
+		return _sizedByContent;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			if (it.next() instanceof Splitter) {
-				HTMLs.appendAttribute(sb, "z.hasSplt", true);
-				break;
-			}
-		if ("vertical".equals(getOrient())) 
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		return sb.toString();
-	}
-	/** Returns the attributes used by the 'cave' element (never null).
-	 * Used only by component development to generate HTML tags.
-	 * @since 3.0.0
-	 */
-	public String getCaveAttrs() {
-		if (isVertical())
-			return "";
-
-		final String valign = toValign(_align);
-		return valign != null ? " valign=\"" + valign + '"': null;
-	}
-
 	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "spacing", _spacing);
+		render(renderer, "_sizes", _sizes);
+
+		if (!"start".equals(_align)) render(renderer, "align", _align);
+		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
+		if (!isSizedByContent()) renderer.render("sizedByContent", false);
+	}
 	public String getZclass() {
 		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;
-	}
-	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
-		//Bug 1828702: onChildAdded not called if only moved
-		if (super.insertBefore(newChild, refChild)) {
-			invalidate();
-			return true;
-		}
-		return false;
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		throw new InternalError(); //impossible since we always invalidate
 	}
 }

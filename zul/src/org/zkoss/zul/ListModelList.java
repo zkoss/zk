@@ -16,10 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zk.ui.UiException;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -33,6 +35,9 @@ import java.util.SortedSet;
  * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.
  * Add or remove the contents of this model as a List would cause the associated Listbox to change accordingly.</p> 
  *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
+ *
  * @author Henri Chen
  * @see ListModel
  * @see ListModelList
@@ -42,14 +47,6 @@ public class ListModelList extends AbstractListModel
 implements ListModelExt, List, java.io.Serializable {
 	protected List _list;
 
-	/**
-	 * Creates an instance which accepts a "live" List as its inner List.
-	 * @param list the inner List storage
-	 * @deprecated As of release 2.4.0, replaced by {@link #ListModelList(List,boolean)}
-	 */
-	public static ListModelList instance(List list) {
-		return new ListModelList(list, true);
-	}	
 	/**
 	 * Constructor
 	 *
@@ -123,7 +120,8 @@ implements ListModelExt, List, java.io.Serializable {
 		}
 		int index = fromIndex;
 		for (final Iterator it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
-			it.next();
+			final Object obj = it.next();
+			removeSelection(obj);
 			it.remove();
 		}
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, fromIndex, index - 1);
@@ -186,6 +184,7 @@ implements ListModelExt, List, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
+		clearSelection();
 		_list.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -234,6 +233,7 @@ implements ListModelExt, List, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
+				removeSelection(_current);
 				final int index = indexOf(_current);
 				_it.remove();
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
@@ -246,7 +246,7 @@ implements ListModelExt, List, java.io.Serializable {
     }
 	
 	public ListIterator listIterator() {
-		return _list.listIterator();
+		return listIterator(0);
 	}
 	
 	public ListIterator listIterator(final int index) {
@@ -263,6 +263,7 @@ implements ListModelExt, List, java.io.Serializable {
 			public void remove() {
 				final int index = _list.indexOf(_current);
 				if (index >= 0) {
+					removeSelection(_current);
 					_it.remove();
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				}
@@ -296,6 +297,7 @@ implements ListModelExt, List, java.io.Serializable {
 	}
 	
 	public Object remove(int index) {
+		removeSelection(_list.get(index));
 		Object ret = _list.remove(index);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 		return ret;
@@ -305,12 +307,14 @@ implements ListModelExt, List, java.io.Serializable {
 		int index = indexOf(o);
 		if (index >= 0) {
 			remove(index);
+			return true;
 		}
 		return false;
 	}
 	
 	public boolean removeAll(Collection c) {
 		if (_list == c || this == c) { //special case
+			clearSelection();
 			clear();
 			return true;
 		}
@@ -335,6 +339,7 @@ implements ListModelExt, List, java.io.Serializable {
 					begin = index;
 				}
 				removed = true;
+				removeSelection(item);
 				it.remove();
 			} else {
 				if (begin >= 0) {
@@ -384,6 +389,6 @@ implements ListModelExt, List, java.io.Serializable {
 	 */
 	public void sort(Comparator cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 }

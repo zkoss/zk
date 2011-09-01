@@ -1,18 +1,16 @@
 /* LanguageDefinition.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 18:01:38     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,11 +21,15 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.util.FastReadArray;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.taglib.Taglibs;
@@ -40,6 +42,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
@@ -62,6 +65,8 @@ public class LanguageDefinition {
 	private static final Map _ldefsByExt = new HashMap();
 	/** A map of (String deviceType, List(LanguageDefinition). */
 	private static final Map _ldefsByClient = new HashMap();
+	/** A map of (String widgetClass, WidgetDefinition). */
+	private static final Map _wgtdefs = new HashMap();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
 	 * and attributes, such as zscript and use.
@@ -70,10 +75,31 @@ public class LanguageDefinition {
 	/** The namespace for ZK annotations.
 	 */
 	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
-	/** The namespace for ZK native namespace.
+	/** The namespace for ZK native components.
 	 * @since 3.0.0
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
+	/*** The namespace for ZK client (aka., widget). It is used to specify
+	 * the widget's properties and event listeners.
+	 * <p>Notice that {@link #CLIENT_NAMESPACE} specifies the property
+	 * or event listener for a widget, while {@link #CLIENT_ATTRIBUTE_NAMESPACE}
+	 * specifies the DOM attributes. In other words, the attribute specified
+	 * with {@link #CLIENT_ATTRIBUTE_NAMESPACE} are generated directly.
+	 * @since 5.0.0
+	 */
+	public static final String CLIENT_NAMESPACE = "http://www.zkoss.org/2005/zk/client";
+	/*** The namespace for ZK client attributes. It is used to specify
+	 * custom DOM attributes.
+	 * <p>Notice that {@link #CLIENT_NAMESPACE} specifies the property
+	 * or event listener for a widget, while {@link #CLIENT_ATTRIBUTE_NAMESPACE}
+	 * specifies the DOM attributes. In other words, the attribute specified
+	 * with {@link #CLIENT_ATTRIBUTE_NAMESPACE} are generated directly.
+	 * <p>You can use it to listen DOM events such as onload and specify
+	 * browser-specific attributes (such as accessibility related attributes).
+	 * @since 5.0.3
+	 */
+	public static final String CLIENT_ATTRIBUTE_NAMESPACE = "http://www.zkoss.org/2005/zk/client/attribute";
+
 	/** The namespace for ZK native namespace prefix.
 	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("native:"),
 	 * it means it is also a native space ({@link #NATIVE_NAMESPACE}
@@ -113,29 +139,31 @@ public class LanguageDefinition {
 	private final Map _initscripts = new HashMap();
 	/** Map(String lang, String script). */
 	private final Map _eachscripts = new HashMap();
-	/** The URI to render a page. */
-	private final String _completeURI, _desktopURI, _pageURI;
 	/** A list of Taglib. */
-	private final List _taglibs = new LinkedList();
+	private final FastReadArray _taglibs = new FastReadArray(Taglib.class);
 	/** A list of JavaScript. */
-	private final List _js = new LinkedList(),
-		_rojs = Collections.unmodifiableList(_js);
+	private final FastReadArray _js = new FastReadArray(JavaScript.class);
+	/** A list of deferrable JavaScript package. */
+	private final FastReadArray _mergepkgs = new FastReadArray(String.class);
 	private final Map _jsmods = new HashMap(5),
 		_rojsmods = Collections.unmodifiableMap(_jsmods);
 	/** A list of StyleSheet. */
-	private final List _ss = new LinkedList(),
-		_ross = Collections.unmodifiableList(_ss);
+	private final FastReadArray _ss = new FastReadArray(StyleSheet.class);
 	private final Locator _locator;
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
-	private MacroTemplate _macrotmpl;
+	private Class _macrocls;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
 	private Evaluator _eval;
 	/** The evaluator reference. */
 	private EvaluatorRef _evalr;
+	/** The page renderer. */
+	private PageRenderer _pgrend;
+	/** A set of CSS URI. */
+	private final Set _cssURIs = new LinkedHashSet();
 	/** Whether it is a native language. */
 	private final boolean _native;
 
@@ -165,6 +193,14 @@ public class LanguageDefinition {
 		final LanguageDefinition langdef;
 		synchronized (_ldefByName) {
 			langdef = (LanguageDefinition)_ldefByName.get(name);
+			if (langdef == null) {
+				final String nm = "/" + name;
+				for (Iterator it = _ldefByName.entrySet().iterator(); it.hasNext();) {
+					Map.Entry me = (Map.Entry)it.next();
+					if (((String)me.getKey()).endsWith(nm))
+						return (LanguageDefinition)me.getValue();
+				}
+			}
 		}
 		if (langdef == null)
 			if (ZK_NAMESPACE.equals(name))
@@ -276,42 +312,17 @@ public class LanguageDefinition {
 	 * {@link #lookup}.
 	 *
 	 * @param deviceType the device type; never null or empty
-	 * @param desktopURI the URI used to render a full page (i.e., the topmost page); never null.
-	 * @param pageURI the URI used to render a included page; never null.
+	 * @param pageRenderer the page renderer used to render a page; never null.
 	 * @param ignoreCase whether the component name is case-insensitive
 	 * @param bNative whether it is native (i.e., all tags are
 	 * {@link org.zkoss.zk.ui.ext.Native}).
 	 * If native, the namespaces found in a ZUML page is no longer
 	 * used to specified a language. Rather, it is output to the client
 	 * directly.
+	 * @since 5.0.0
 	 */
 	public LanguageDefinition(String deviceType, String name, String namespace,
-	List extensions, String desktopURI, String pageURI, boolean ignoreCase,
-	boolean bNative, Locator locator) {
-		this(deviceType, name, namespace, extensions, desktopURI, desktopURI,
-			pageURI, ignoreCase, bNative, locator);
-	}
-	/** Constructs a language defintion.
-	 *			
-	 * <p>Note: the name and namespace of any language cannot be the same.
-	 * In other words, each language has two names, name and namespace.
-	 * You can find the language back by either of them via
-	 * {@link #lookup}.
-	 *
-	 * @param deviceType the device type; never null or empty
-	 * @param completeURI the URI used to render a complete page; never null.
-	 * @param desktopURI the URI used to render a full page (i.e., the topmost page); never null.
-	 * @param pageURI the URI used to render a included page; never null.
-	 * @param ignoreCase whether the component name is case-insensitive
-	 * @param bNative whether it is native (i.e., all tags are
-	 * {@link org.zkoss.zk.ui.ext.Native}).
-	 * If native, the namespaces found in a ZUML page is no longer
-	 * used to specified a language. Rather, it is output to the client
-	 * directly.
-	 * @since 3.0.5
-	 */
-	public LanguageDefinition(String deviceType, String name, String namespace,
-	List extensions, String completeURI, String desktopURI, String pageURI,
+	List extensions, PageRenderer pageRenderer,
 	boolean ignoreCase, boolean bNative, Locator locator) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
@@ -321,20 +332,15 @@ public class LanguageDefinition {
 			throw new UiException(ZK_NAMESPACE+" is reserved.");
 		if (name == null || name.length() == 0
 		|| namespace == null || namespace.length() == 0
-		|| completeURI == null || completeURI.length() == 0
-		|| desktopURI == null || desktopURI.length() == 0
-		|| pageURI == null || pageURI.length() == 0
-		|| locator == null)
+		|| pageRenderer == null || locator == null)
 			throw new IllegalArgumentException();
 
 		_deviceType = deviceType;
 		_name = name;
 		_ns = namespace;
-		_completeURI = completeURI;
-		_desktopURI = desktopURI;
-		_pageURI = pageURI;
 		_locator = locator;
 		_native = bNative;
+		_pgrend = pageRenderer;
 		_compdefs = new ComponentDefinitionMap(ignoreCase);
 
 		boolean replWarned = false;
@@ -480,7 +486,49 @@ public class LanguageDefinition {
 	/** Adds a component definition.
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
+		if (compdef == null)
+			throw new IllegalArgumentException();
 		_compdefs.add(compdef);
+	}
+
+	/** Returns whether the specified widget is defined.
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
+	 * @since 5.0.0
+	 */
+	public boolean hasWidgetDefinition(String widgetClass) {
+		return _wgtdefs.containsKey(widgetClass);
+	}
+	/** Returns the widget of the specified class name.
+	 *
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
+	 * @exception DefinitionNotFoundException is thrown if the definition
+	 * is not found
+	 * @since 5.0.0
+	 */
+	public WidgetDefinition getWidgetDefinition(String widgetClass) {
+		final WidgetDefinition wgtdef = getWidgetDefinitionIfAny(widgetClass);
+		if (wgtdef == null)
+			throw new DefinitionNotFoundException("Widget definition not found: "+widgetClass);
+		return wgtdef;
+	}
+	/** Returns the widget of the specified class name, or null if not found.
+	 * It is the same as {@link #getWidgetDefinition}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
+	 * @since 5.0.0
+	 */
+	public WidgetDefinition getWidgetDefinitionIfAny(String widgetClass) {
+		return (WidgetDefinition)_wgtdefs.get(widgetClass);
+	}
+	/** Adds a widget definition.
+	 * @since 5.0.0
+	 */
+	public void addWidgetDefinition(WidgetDefinition wgtdef) {
+		_wgtdefs.put(wgtdef.getWidgetClass(), wgtdef);
 	}
 
 	/** Adds the script that shall execute when a page's interpreter
@@ -549,16 +597,54 @@ public class LanguageDefinition {
 	 */
 	public void addJavaScript(JavaScript js) {
 		if (js == null)
-			throw new IllegalArgumentException("null js");
-		synchronized (_js) {
-			_js.add(js);
+			throw new IllegalArgumentException();
+		_js.add(js);
+	}
+	/** Removes a {@link JavaScript} of the give source required by this language.
+	 * @see #addJavaScript
+	 * @since 5.0.4
+	 */
+	public void removeJavaScript(String src) {
+		final Object[] ary = _js.toArray();
+		for (int j = 0; j < ary.length; ++j) {
+			final JavaScript js = (JavaScript)ary[j];
+			if (Objects.equals(src, js.getSrc())) {
+				_js.remove(js);
+				return; //found
+			}
 		}
 	}
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
-	public List getJavaScripts() {
-		return _rojs;
+	public Collection getJavaScripts() {
+		return new CollectionsX.ArrayCollection(_js.toArray());
+	}
+
+	/** Adds a mergeable JavaScript package required by this langauge.
+	 * The mergeable packages are packages that will be merged into
+	 * the zk package (to minimize the number of packages to load).
+	 * It reduces the load time if the package's footprint is small.
+	 * @param pkg the package name, such as "foo.fly"
+	 * @since 5.0.4
+	 */
+	public void addMergeJavaScriptPackage(String pkg) {
+		if (pkg == null || pkg.length() == 0)
+			throw new IllegalArgumentException();
+		_mergepkgs.add(pkg);
+	}
+	/** Removes a mergeable JavaScript package required by this language.
+	 * @since 5.0.4
+	 */
+	public boolean removeMergeJavaScriptPackage(String pkg) {
+		return _mergepkgs.remove(pkg);
+	}
+	/** Returns a list of mergeable JavaScript package (String)
+	 * required by this language.
+	 * @since 5.0.4
+	 */
+	public Collection getMergeJavaScriptPackages() {
+		return new CollectionsX.ArrayCollection(_mergepkgs.toArray());
 	}
 
 	/** Adds the definition of a JavaScript module to this language.
@@ -583,16 +669,14 @@ public class LanguageDefinition {
 	 */
 	public void addStyleSheet(StyleSheet ss) {
 		if (ss == null)
-			throw new IllegalArgumentException("null ss");
-		synchronized (_ss) {
-			_ss.add(ss);
-		}
+			throw new IllegalArgumentException();
+		_ss.add(ss);
 	}
 	/** Returns a readonly list of all {@link StyleSheet} required
 	 * by this language.
 	 */
-	public List getStyleSheets() {
-		return _ross;
+	public Collection getStyleSheets() {
+		return new CollectionsX.ArrayCollection(_ss.toArray());
 	}
 
 	/** Returns whether the component names are case-insensitive.
@@ -601,52 +685,42 @@ public class LanguageDefinition {
 		return _compdefs.isCaseInsensitive();
 	}
 
-	/** Return the URI to render a full page (which might be an expression).
-	 * A full page is the topmost page of a desktop
-	 * (and its {@link Page#isComplete} is false).
+	/** Returns the page render for this language.
+	 * @since 5.0.0
 	 */
-	public String getDesktopURI() {
-		return _desktopURI;
-	}
-	/** Return the URI to render an included page (which might be an expression).
-	 */
-	public String getPageURI() {
-		return _pageURI;
-	}
-	/** Return the URI to render a complete page (which might be an expression).
-	 * A complete page is a page whose {@link Page#isComplete} is true.
-	 * @since 3.0.5
-	 */
-	public String getCompleteURI() {
-		return _completeURI;
+	public PageRenderer getPageRenderer() {
+		return _pgrend;
 	}
 
 	/** Sets the macro template.
 	 *
-	 * @param moldURI the mold URI. If it starts with "class:", it
-	 * means a class that implements {@link org.zkoss.zk.ui.render.ComponentRenderer}.
+	 * @since 5.0.0
 	 */
-	public void setMacroTemplate(Class klass, String moldURI) {
-		_macrotmpl = klass != null ? new MacroTemplate(klass, moldURI): null;
+	public void setMacroTemplate(Class klass) {
+		if (klass == null || !Component.class.isAssignableFrom(klass)
+		|| !Macro.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal macro class: "+klass);
+		_macrocls = klass;
 	}
 	/** Instantiates and returns the component definition for the specified condition.
 	 *
 	 * @param pgdef the page definition the macro definitioin belongs to.
 	 * If null, it belongs to this language definition.
+	 * @param macroURI the ZUML page's URI that is used to render
+	 * instances of this macro definition.
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the macros
 	 * @since 3.0.0
 	 */
 	public ComponentDefinition getMacroDefinition(
 	String name, String macroURI, boolean inline, PageDefinition pgdef) {
-		if (_macrotmpl == null)
+		if (_macrocls == null)
 			throw new UiException("Macro not supported by "+this);
 
 		final ComponentDefinition compdef =
 			ComponentDefinitionImpl.newMacroDefinition(
 				pgdef != null ? null: this, pgdef,
-				name, _macrotmpl.klass, macroURI, inline);
-		compdef.addMold("default", _macrotmpl.moldURI, null);
+				name, _macrocls, macroURI, inline);
 		return compdef;
 	}
 
@@ -740,10 +814,8 @@ public class LanguageDefinition {
 
 	/** Adds a tag lib. */
 	public void addTaglib(Taglib taglib) {
-		synchronized (_taglibs) {
-			_taglibs.add(taglib);
-			_eval = null; //ask for re-gen
-		}
+		_taglibs.add(taglib);
+		_eval = null; //ask for re-gen
 	}
 
 	/** Returns the evaluator based on this language definition (never null).
@@ -756,7 +828,8 @@ public class LanguageDefinition {
 	}
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(
-			Taglibs.getFunctionMapper(_taglibs, _locator), null);
+			Taglibs.getFunctionMapper(
+				new CollectionsX.ArrayCollection(_taglibs.toArray()), _locator), null);
 	}
 	/** Returns the evaluator reference (never null).
 	 * <p>This method is used only for implementation only.
@@ -771,24 +844,27 @@ public class LanguageDefinition {
 		return new LangEvalRef(this);
 	}
 
+	/** Adds the URI of a CSS file that is part of this language.
+	 * @param cssURI the URI of a CSS file
+	 * @since 5.0.0
+	 */
+	public void addCSSURI(String cssURI) {
+		if (cssURI == null || cssURI.length() == 0)
+			throw new IllegalArgumentException();
+		_cssURIs.add(cssURI);
+	}
+	/** Returns a readonly collection of the URIs of CSS files of this language.
+	 * @since 5.0.0
+	 */
+	public Collection getCSSURIs() {
+		return _cssURIs;
+	}
+
 	//Object//
 	public String toString() {
 		return "[LanguageDefinition: "+_name+']';
 	}
 
-	private static class MacroTemplate {
-		private final Class klass;
-		private final String moldURI;
-		private MacroTemplate(Class klass, String moldURI) {
-			if (moldURI == null || moldURI.length() == 0)
-				throw new IllegalArgumentException("Macro mold UI required");
-			if (klass == null || !Component.class.isAssignableFrom(klass)
-			|| !Macro.class.isAssignableFrom(klass))
-				throw new IllegalArgumentException("Illegal macro class: "+klass);
-			this.klass = klass;
-			this.moldURI = moldURI;
-		}
-	}
 	private class LabelTemplate {
 		/** The component definition. */
 		private ComponentDefinition _compdef;

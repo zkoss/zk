@@ -1,18 +1,16 @@
 /* Doublebox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sat Oct 14 12:59:39     2006, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -91,6 +89,10 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 	public String getZclass() {
 		return _zclass == null ? "z-doublebox" : _zclass;
 	}
+	public Object unmarshall(Object value) {
+		return value instanceof Number ? //sometimes Json might interpret value to Integer
+			new Double(((Number)value).doubleValue()) : value;
+	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String)vals[0];
@@ -109,6 +111,7 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value, "0.##########");
+		return value != null && getFormat() == null ?
+				value.toString(): formatNumber(value, null);
 	}
 }

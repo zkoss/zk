@@ -1,18 +1,16 @@
 /* Library.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug  1 09:06:36     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -59,8 +57,6 @@ public class Library {
 	 *
 	 * @return the string value of the library property, or the system
 	 * property, or null if no such property.
-	 * @exception NullPointerException if key is null
-	 * @exception IllegalArumentException if key is empty
 	 * @see #setProperty
 	 */
 	public static String getProperty(String key) {
@@ -69,7 +65,9 @@ public class Library {
 			v = (String)_props.get(key);
 		}
 		try {
-			return v != null ? v: System.getProperty(key);
+			//Unlike System.getProperty, we make the inocation as safe as possible
+			return v != null || key == null || key.length() == 0 ?
+				v: System.getProperty(key);
 		} catch (SecurityException ex) {
 			return null;
 		}

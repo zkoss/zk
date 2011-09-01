@@ -1,18 +1,16 @@
 /* Tree.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -25,7 +23,7 @@ import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.event.TreeDataEvent;//for javadoc
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
+import org.zkoss.zul.impl.api.MeshElement;
 
 /**
  * A container which can be used to hold a tabular or hierarchical set of rows
@@ -45,95 +43,8 @@ import org.zkoss.zul.ext.Paginated;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
-
-	/**
-	 * Sets how to position the paging of tree at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 * 
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 */
-	public void setPagingPosition(String pagingPosition);
-
-	/**
-	 * Returns the paging controller, or null if not available. Note: the paging
-	 * controller is used only if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
-	 * developers with {@link #setPaginal}).
-	 * 
-	 * <p>
-	 * If a paging controller is specified (either by {@link #setPaginal}, or by
-	 * {@link #setMold} with "paging"), the tree will rely on the paging
-	 * controller to handle long-content instead of scrolling.
-	 * 
-	 */
-	public Paginal getPaginal();
-
-	/**
-	 * Specifies the paging controller. Note: the paging controller is used only
-	 * if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * It is OK, though without any effect, to specify a paging controller even
-	 * if mold is not "paging".
-	 * 
-	 * @param pgi
-	 *            the paging controller. If null and {@link #getMold} is
-	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingChildApi} ).
-	 * 
-	 */
-	public void setPaginal(Paginal pgi);
-
-	/**
-	 * Returns the child paging controller that is created automatically, or
-	 * null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * 
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi();
-
-	/**
-	 * Returns the page size, aka., the number items per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize();
-
-	/**
-	 * Sets the page size, aka., the number items per page.
-	 * <p>
-	 * Note: mold is not "paging" and no external controller is specified.
-	 * 
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException;
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 * 
-	 */
-	public int getPageCount();
-
-	/**
-	 * Returns the active page (starting from 0).
-	 * 
-	 */
-	public int getActivePage();
-
-	/**
-	 * Sets the active page (starting from 0).
-	 * 
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
-
+public interface Tree extends MeshElement {
+	
 	/**
 	 * Sets the outline of grid whether is fixed layout. If true, the outline of
 	 * grid will be depended on browser. It means, we don't calculate the width
@@ -144,7 +55,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * You can also specify the "fixed-layout" attribute of component in
 	 * lang-addon.xml directly, it's a top priority.
-	 * 
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 */
 	public void setFixedLayout(boolean fixedLayout);
 
@@ -155,7 +66,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * Note: if the "fixed-layout" attribute of component is specified, it's
 	 * prior to the original value.
-	 * 
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
 	 */
 	public boolean isFixedLayout();
 
@@ -209,7 +120,6 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * event-driven model.
 	 */
 	public String getName();
-
 	/**
 	 * Sets the name of this component.
 	 * <p>
@@ -224,6 +134,23 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 *            the name of this component.
 	 */
 	public void setName(String name);
+
+	/** Sets a list of HTML tag names that shall <i>not</i> cause the tree item
+	 * being selected if they are clicked.
+	 * <p>Default: null (it means button, input, textarea and a). If you want
+	 * to select no matter which tag is clicked, please specify an empty string.
+	 * @param tags a list of HTML tag names that will <i>not</i> cause the tree item
+	 * being selected if clicked. Specify null to use the default and "" to
+	 * indicate none.
+	 * @since 5.0.5
+	 */
+	public void setNonselectableTags(String tags);
+	/** Returns a list of HTML tag names that shall <i>not</i> cause the tree item
+	 * being selected if they are clicked.
+	 * <p>Refer to {@link #setNonselectableTags} for details.
+	 * @since 5.0.5
+	 */
+	public String getNonselectableTags();
 
 	/**
 	 * Sets whether the check mark shall be displayed in front of each item.
@@ -398,9 +325,6 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * it to re-render, you could assign the same model again (i.e.,
 	 * setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 * 
-	 * <p>
-	 * Author: jeffliu
-	 * 
 	 * @param model
 	 *            the tree model to associate, or null to dis-associate any
 	 *            previous model.
@@ -413,8 +337,6 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	/**
 	 * Returns the list model associated with this tree, or null if this tree is
 	 * not associated with any tree data model.
-	 * <p>
-	 * Author: jeffliu
 	 * 
 	 * @return the list model associated with this tree
 	 */
@@ -429,8 +351,31 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * it to re-render, you could assign the same model again (i.e.,
 	 * setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 * 
+	 * @param renderer
+	 *            the renderer, or null to use the default.
+	 * @exception UiException
+	 *                if failed to initialize with the model
+	 * @since 5.0.6
+	 */
+	public void setItemRenderer(TreeitemRenderer renderer);
+
+	/**
+	 * Returns the renderer to render each item, or null if the default renderer
+	 * is used.
+	 * 
+	 * @return the renderer to render each item, or null if the default
+	 * @since 5.0.6
+	 */
+	public TreeitemRenderer getItemRenderer();
+
+	/**@deprecated As of release 5.0.6, replaced with {@link #setItemRenderer}.
+	 * Sets the renderer which is used to render each item if {@link #getModel}
+	 * is not null.
+	 * 
 	 * <p>
-	 * Author: jeffliu
+	 * Note: changing a render will not cause the tree to re-render. If you want
+	 * it to re-render, you could assign the same model again (i.e.,
+	 * setModel(getModel())), or fire an {@link TreeDataEvent} event.
 	 * 
 	 * @param renderer
 	 *            the renderer, or null to use the default.
@@ -439,7 +384,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public void setTreeitemRenderer(TreeitemRenderer renderer);
 
-	/**
+	/**@deprecated As of release 5.0.6, replaced with {@link #getItemRenderer}.
 	 * Returns the renderer to render each item, or null if the default renderer
 	 * is used.
 	 * 
@@ -449,7 +394,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 
 	/**
 	 * Renders the specified {@link Treeitem}, if not loaded yet, with
-	 * {@link #getTreeitemRenderer}.
+	 * {@link #getItemRenderer}.
 	 * 
 	 * <p>
 	 * It does nothing if {@link #getModel} returns null.
@@ -462,7 +407,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 
 	/**
 	 * Renders the specified {@link Treeitem}, if not loaded yet, with
-	 * {@link #getTreeitemRenderer}.
+	 * {@link #getItemRenderer}.
 	 * 
 	 * <p>
 	 * It does nothing if {@link #getModel} returns null.
@@ -480,7 +425,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 
 	/**
 	 * Renders the specified {@link Treeitem} if not loaded yet, with
-	 * {@link #getTreeitemRenderer}.
+	 * {@link #getItemRenderer}.
 	 * 
 	 * <p>
 	 * It does nothing if {@link #getModel} returns null.
@@ -491,16 +436,22 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public void renderItems(Set items);
 
+	/** Load the treeitems by the given node.
+	 * This method must be used with a tree model, and the node is
+	 * one of the value returned by {@link TreeModel#getChild}.
+	 * @exception IllegalStateException if no model is assigned ({@link #setModel}).
+	 * @since 5.0.6
+	 */
+	public org.zkoss.zul.api.Treeitem renderItemByNodeApi(Object node);
 	/**
 	 * Load treeitems through path <b>path</b> <br>
 	 * Note: By using this method, all treeitems in path will be rendered and
 	 * opened ({@link Treeitem#setOpen}). If you want to visit the rendered item
 	 * in paging mold, please invoke {@link #setActivePageApi(Treeitem)}.
 	 * 
-	 * @param path
-	 *            - an int[] path, see {@link TreeModel#getPath}
+	 * @param path - an index path. The first element is the index at the first level
+	 * of the tree structure.
 	 * @return the treeitem from tree by given path
 	 */
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path);
-
 }

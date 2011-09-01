@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 25 19:20:00     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.med" language="xul/html" depends="zul">
+	<widget name="Applet"/>
+	<widget name="Audio"/>
+	<widget name="Flash"/>
+</package>

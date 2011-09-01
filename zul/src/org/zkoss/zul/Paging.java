@@ -16,17 +16,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.mesg.Messages;
-import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 
 /**
  * Paging of long content.
@@ -51,6 +47,9 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	/** Whether to show detailed info. */
 	private boolean _detailed;
 
+	static {
+		addClientEvent(Paging.class, ZulEvents.ON_PAGING, CE_IMPORTANT);
+	}
 	public Paging() {
 	}
 
@@ -64,46 +63,22 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		setTotalSize(totalsz);
 		setPageSize(pagesz);
 	}
-
-	public void smartUpdate(String attr, String value) {
-		super.smartUpdate(attr, value);
-		invalidateWholeIfAny();
-	}
-	public void smartUpdate(String attr, int value) {
-		super.smartUpdate(attr, Integer.toString(value));
-		invalidateWholeIfAny();
-	}
-	public void smartUpdate(String attr, boolean value) {
-		super.smartUpdate(attr, Boolean.toString(value));
-		invalidateWholeIfAny();
-	}
-	public void invalidate() {
-		if (isBothPaging())
-			getParent().invalidate();
-		else
-			super.invalidate();
-	}
-	protected void invalidateWholeIfAny() {
-		if (isBothPaging())
-			getParent().invalidate();
-	}
-	private boolean isBothPaging () {
-		Component parent = getParent();
-		if (parent instanceof Paginated)
-			return "both".equals(((Paginated)parent).getPagingPosition());
-		return false;
-	}
 	
 	//Paginal//
 	public int getPageSize() {
 		return _pgsz;
 	}
+	
+	/**Sets the items to show in each page
+	 * 
+	 */
 	public void setPageSize(int size) throws WrongValueException {
 		if (size <= 0)
 			throw new WrongValueException("positive only");
 
 		if (_pgsz != size) {
 			_pgsz = size;
+			smartUpdate("pageSize", _pgsz);
 			updatePageNum();
 			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
 				//onPagingImpl is used for implementation purpose only
@@ -112,16 +87,18 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getTotalSize() {
 		return _ttsz;
 	}
+	
+	/**Sets total size of items
+	 * 
+	 */
 	public void setTotalSize(int size) throws WrongValueException {
 		if (size < 0)
 			throw new WrongValueException("non-negative only");
 
 		if (_ttsz != size) {
 			_ttsz = size;
+			smartUpdate("totalSize", _ttsz);
 			updatePageNum();
-			if (_detailed) {
-				smartUpdate("z.info", getInfoText());
-			}
 		}
 	}
 	private void updatePageNum() {
@@ -129,10 +106,11 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		if (v == 0) v = 1;
 		if (v != _npg) {
 			_npg = v;
-			if (_actpg >= _npg)
+			smartUpdate("pageCount", _npg);
+			if (_actpg >= _npg) {
 				_actpg = _npg - 1;
-
-			invalidate();
+				smartUpdate("activePage", _actpg);
+			}
 		}
 	}
 
@@ -142,12 +120,16 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getActivePage() {
 		return _actpg;
 	}
+	/**
+	 * Set the active page
+	 * <p>Note: In server side, active page starts from 0. But in browser UI, it starts from 1
+	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		if (pg >= _npg || pg < 0)
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
 		if (_actpg != pg) {
 			_actpg = pg;
-			invalidate();
+			smartUpdate("activePage", pg);
 			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
 				//onPagingImpl is used for implementation purpose only
 		}
@@ -156,22 +138,30 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public int getPageIncrement() {
 		return _pginc;
 	}
+	
+	/**
+	 * Sets the number of page list icon when mold is "os"
+	 */
 	public void setPageIncrement(int pginc) throws WrongValueException {
 		if (pginc <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			invalidate();
+			smartUpdate("pageIncrement", pginc);
 		}
 	}
 
 	public boolean isDetailed() {
 		return _detailed;
 	}
+	
+	/** Sets whether to show total size and index of items in current page
+	 * 
+	 */
 	public void setDetailed(boolean detailed) {
 		if (_detailed != detailed) {
 			_detailed = detailed;
-			invalidate();
+			smartUpdate("detailed", detailed);
 		}
 	}
 
@@ -189,106 +179,49 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			if (_npg == 1) invalidate();
+			smartUpdate("autohide", autohide);
 		}
-	}
-	
-	/**
-	 * Returns the information text of the paging, if {@link #isDetailed()} is enabled.
-	 * @since 3.6.2
-	 */
-	protected String getInfoText() {
-		int lastItem = (_actpg+1) * _pgsz;
-		return "[ " + (_actpg * _pgsz + 1) + (!"os".equals(getMold()) ? " - " + (lastItem > _ttsz ? _ttsz : lastItem) : "")+ " / " + _ttsz + " ]";
-	}
-	/**
-	 * Returns the HTML tags of paging information.
-	 * <p>Default: <code>active-page-number / total-numbers-of-pages</code>
-	 * <p>Developers can override this method to show different information.
-	 * @since 3.5.0
-	 * @see #getInfoText()
-	 */
-	public String getInfoTags() {
-		if (_ttsz == 0)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(512);
-		sb.append("<div id=\"").append(getUuid()).append("!info\" class=\"").append(getZclass()).append("-info\">").append(getInfoText()).append("</div>");
-		return sb.toString();
-	}
-	
-	/** Returns the inner HTML tags of this component.
-	 * <p>Used only for component development. Not accessible by
-	 * application developers.
-	 * @since 3.5.2
-	 * @see #getInfoText()
-	 */
-	public String getInnerTags() {
-		final StringBuffer sb = new StringBuffer(512);
-
-		int half = _pginc / 2;
-		int begin, end = _actpg + half - 1;
-		if (end >= _npg) {
-			end = _npg - 1;
-			begin = end - _pginc + 1;
-			if (begin < 0) begin = 0;
-		} else {
-			begin = _actpg - half;
-			if (begin < 0) begin = 0;
-			end = begin + _pginc - 1;
-			if (end >= _npg) end = _npg - 1;
-		}
-		String zcs = getZclass();
-		if (_actpg > 0) {
-			if (begin > 0) //show first
-				appendAnchor(zcs, sb, Messages.get(MZul.FIRST), 0);
-			appendAnchor(zcs, sb, Messages.get(MZul.PREV), _actpg - 1);
-		}
-
-		boolean bNext = _actpg < _npg - 1;
-		for (; begin <= end; ++begin) {
-			if (begin == _actpg) {
-				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin, true); //sb.append(begin + 1).append("&nbsp;");
-			} else {
-				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin);
-			}
-		}
-
-		if (bNext) {
-			appendAnchor(zcs, sb, Messages.get(MZul.NEXT), _actpg + 1);
-			if (end < _npg - 1) //show last
-				appendAnchor(zcs, sb, Messages.get(MZul.LAST), _npg - 1);
-		}
-		if (_detailed)
-			sb.append("<span id=\"" + getUuid() + "!info\">").append(getInfoText()).append("</span>");
-		return sb.toString();
-	}
-	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val) {
-		appendAnchor(zclass, sb, label, val, false);
-	}
-	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val, boolean seld) {
-		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
-		sb.append("<a class=\"").append(zclass).append("\" href=\"javascript:;\" onclick=\"zkPgOS.go(this,")
-			.append(val).append(")\">").append(label).append("</a>&nbsp;");
 	}
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_ttsz != 0) renderer.render("totalSize", _ttsz);
+		if (_pgsz != 20) renderer.render("pageSize", _pgsz);
+		if (_actpg != 0) renderer.render("activePage", _actpg);
+		if (_npg != 1) renderer.render("pageCount", _npg);
+		if (_pginc != 10) renderer.render("pageIncrement", _pginc);
+		render(renderer, "detailed", _detailed);
+		render(renderer, "autohide", _autohide);
+	}
+	
 	public String getZclass() {
 		String added = "os".equals(getMold()) ? "-os" : "";
 		return _zclass == null ? "z-paging" + added : _zclass;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.actpg", _actpg);
-		HTMLs.appendAttribute(sb, "z.numpg", _npg);
-		return sb.toString();
 	}
 
 	// -- Component --//
 	public boolean isVisible() {
 		return super.isVisible() && (_npg > 1 || !_autohide);
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
+	}
+	//-- ComponentCtrl --//
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onSelect.
+	 * @since 5.0.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getCommand();
+		if (name.equals(ZulEvents.ON_PAGING)) {
+			PagingEvent evt = PagingEvent.getPagingEvent(request);
+			setActivePage(evt.getActivePage());
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

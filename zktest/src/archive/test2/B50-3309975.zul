@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3309975.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jul 1, 2011 4:33:38 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div draggable="true">
+		<textbox width="400px"
+			value="focus me, the text shall not be selected, Chrome,Safari only." />
+		<textbox width="400px"
+			value="focus me, the input cursor shall place in mouse down place,Firefox only." />
+	</div>
+</zk>

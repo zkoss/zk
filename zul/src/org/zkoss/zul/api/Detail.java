@@ -1,18 +1,16 @@
 /* Detail.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -63,20 +61,6 @@ public interface Detail extends org.zkoss.zul.impl.api.XulElement {
 	 * Sets the style class used for the content block.
 	 */
 	public void setContentSclass(String scls);
-
-	/**
-	 * Returns the URI of the button image.
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img
-	 *            the URI of the button image. If null or empty, the default URI
-	 *            is used.
-	 */
-	public void setImage(String img);
 
 	/**
 	 * Sets whether the detail is open.

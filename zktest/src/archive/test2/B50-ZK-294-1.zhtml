@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>ZK-294</title>
+<zkhead/>
+</head>
+<body style="height:auto">
+	<div>
+	You shall see the following below.
+	<ul>
+		<li>A lable: This shall not have &lt;span&gt;</li>
+		<li>A textarea: This shall not have &lt;span&gt;more&lt;/span&gt;</li>
+		<li>A log: IE6/7? false</li>
+	</ul>
+	</div>
+	<textarea>This shall not have <span>more</span></textarea>
+	<script>
+	zk.log("IE6/7? " + (zk.ie &lt; 8));
+	</script>
+</body>
+</html>

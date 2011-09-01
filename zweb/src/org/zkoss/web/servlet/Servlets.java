@@ -1,26 +1,28 @@
 /* Servlets.java
 
-{{IS_NOTE
 	Purpose:
 	Description:
 	History:
 	90/12/10 22:24:28, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.web.servlet;
 
+import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Checksums;
 import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
@@ -59,7 +62,9 @@ import org.zkoss.web.util.resource.ServletContextLocator;
  * @see org.zkoss.web.servlet.Charsets
  */
 public class Servlets {
-//	private static final Log log = Log.lookup(Servlets.class);
+	private static final Log log = Log.lookup(Servlets.class);
+
+	private static BrowserIdentifier _bwid;
 
 	private static final boolean _svl24, _svl23;
 	static {
@@ -114,7 +119,7 @@ public class Servlets {
 	}
 
 	//-- resource locator --//
-	/** Locates a page based on the specified Locale. It never returns null.
+	/** Locates a page based on the current Locale. It never returns null.
 	 *
 	 * <p>Notice that it cannot resolve a path starting with '~', and containing
 	 * '*', because it cannot access the content of the other servlet context.
@@ -148,6 +153,7 @@ public class Servlets {
 	 * is assumed.
 	 * @return the path that matches the wildcard; <code>pgpath</code>, otherwise
 	 * never null
+	 * @see Locales#getCurrent
 	 */
 	public static final String locate(ServletContext ctx,
 	ServletRequest request, String pgpath, Locator locator)
@@ -202,7 +208,7 @@ public class Servlets {
 			return qstr != null ? pgpath + qstr: pgpath; //not by locale
 
 
-		final String PGPATH_CACHE = "s_pgpath_cache";
+		final String PGPATH_CACHE = "org.zkoss.web.pgpath.cache";
 		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
 			map = Collections.synchronizedMap( //10 min
@@ -243,13 +249,34 @@ public class Servlets {
 		}
 	}
 
+	/** Sets the browser identifier that is used to assist {@link #isBrowser}
+	 * to identify a client.
+	 *
+	 * <p>Notice that the browser identifier must be thread-safe.
+	 *
+	 * @param bwid the browser identifier. If null, only the default types
+	 * are recognized.
+	 * @see BrowserIdentifier
+	 * @since 5.0.0
+	 */
+	public static void setBrowserIdentifier(BrowserIdentifier bwid) {
+		_bwid = bwid;
+	}
+	/** Returns the browser identifier, or null if no such plugin.
+	 * @see BrowserIdentifier
+	 * @since 5.0.0
+	 */
+	public static BrowserIdentifier getBrowserIdentifier() {
+		return _bwid;
+	}
+
 	/** Returns whether the client is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-".<br/>
+	 * "hil", "ios".<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
@@ -261,10 +288,10 @@ public class Servlets {
 	/** Returns whether the user agent is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie9",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
+	 * "hil", "ios". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @param userAgent represents a client.
@@ -272,29 +299,40 @@ public class Servlets {
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
+		final BrowserIdentifier bwid = _bwid;
+		if (bwid != null && bwid.isBrowser(userAgent, type))
+			return true;
+
 		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer(userAgent);
 		if ("ie6-".equals(type)) return getIEVer(userAgent) == 6;
 		if ("ie7".equals(type)) return isExplorer7(userAgent);
 		if ("ie7-".equals(type)) return getIEVer(userAgent) == 7;
 		if ("ie8".equals(type)) return getIEVer(userAgent) >= 8;
 		if ("ie8-".equals(type)) return getIEVer(userAgent) == 8;
+		if ("ie9".equals(type)) return getIEVer(userAgent) >= 9;
+		if ("ie9-".equals(type)) return getIEVer(userAgent) == 9;
 
 		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
 		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
 		if ("gecko3".equals(type)) return isGecko3(userAgent);
 		if ("gecko3.5".equals(type)) return getGeckoVer(userAgent, true) >= 35;
 		if ("gecko3-".equals(type)) return getGeckoVer(userAgent) == 3;
+		if ("gecko4".equals(type)) return getGeckoVer(userAgent) >= 4;
+		if ("gecko4-".equals(type)) return getGeckoVer(userAgent) == 4;
 
 		if ("safari".equals(type)) return isSafari(userAgent);
 		if ("opera".equals(type)) return isOpera(userAgent);
 
-		if ("mil".equals(type)) return isMilDevice(userAgent);
-		if ("mil-".equals(type)) return isMilDevice(userAgent) && !isHilDevice(userAgent);
 		if ("hil".equals(type)) return isHilDevice(userAgent);
 
 		if ("robot".equals(type)) return isRobot(userAgent);
-		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
-	}
+
+		final String ua = userAgent != null ? userAgent.toLowerCase(): "";
+		if ("ios".equals(type))
+			return isSafari(userAgent)
+				&& (ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0);
+		return type != null && ua.indexOf(type.toLowerCase()) >= 0;
+	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -317,8 +355,10 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
+		boolean ie = userAgent.indexOf("MSIE ") >= 0;
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
+		return !ie && userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
 			&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0
 			&& userAgent.indexOf("zk") < 0 && userAgent.indexOf("rmil") < 0;
 	}
@@ -340,8 +380,10 @@ public class Servlets {
 		if (userAgent == null)
 			return false;
 
+		boolean ie = userAgent.indexOf("MSIE ") >= 0;
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		return userAgent.indexOf("msie ") >= 0 && userAgent.indexOf("opera") < 0;
+		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
 	 */
@@ -373,8 +415,11 @@ public class Servlets {
  * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0)
  * 
  */
+		int j = userAgent.indexOf("MSIE ");
+			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
 		userAgent = userAgent.toLowerCase();
-		int j = userAgent.indexOf("msie ");
+		if (j < 0)
+			j = userAgent.indexOf("msie ");
 		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
 
 		return parseVer(userAgent, j + 5)[0];
@@ -503,20 +548,13 @@ public class Servlets {
 		return userAgent.indexOf("opera") >= 0;
 	}
 
-	/** Returns whether the client is a mobile device supporting MIL
-	 * (Mobile Interactive Language).
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
 	 */
 	public static final boolean isMilDevice(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
 			&& isMilDevice(((HttpServletRequest)req).getHeader("user-agent"));
 	}
-	/** Returns whether the client is a mobile device supporting MIL
-	 * (Mobile Interactive Language).
-	 *
-	 * @param userAgent represents a client.
-	 * For HTTP clients, It is the user-agent header.
-	 * @since 3.5.1
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
 	 */
 	public static final boolean isMilDevice(String userAgent) {
 		if (userAgent == null)
@@ -528,10 +566,7 @@ public class Servlets {
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
-	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
+	 * For example, ZK Mobile for Android.
 	 *
 	 * @since 3.0.2
 	 */
@@ -541,10 +576,7 @@ public class Servlets {
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
-	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
+	 * For example, ZK Mobile for Android.
 	 *
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
@@ -793,18 +825,58 @@ public class Servlets {
 	/** Returns the resource of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
-	public static final URL getResource(ServletContext ctx, String uri)
-	throws MalformedURLException {
-		return new ParsedURI(ctx, uri).getResource();
+	public static final URL getResource(ServletContext ctx, String uri) {
+		try {
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
+				return file.exists() ? file.toURI().toURL(): null;
+					//spec: return null if not found
+			}
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url; //unfortunately, we cannot detect if it exists
+			return new ParsedURI(ctx, uri).getResource();
+		} catch (Throwable ex) {
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
 	}
 	/** Returns the resource stream of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
+	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
 	public static final InputStream getResourceAsStream(
-	ServletContext ctx, String uri) {
-		return new ParsedURI(ctx, uri).getResourceAsStream();
+	ServletContext ctx, String uri)
+	throws IOException {
+		try {
+			if (uri != null && uri.toLowerCase().startsWith("file://")) {
+				final File file = new File(new URI(uri));
+				return file.exists() ?
+					new BufferedInputStream (new FileInputStream(file)): null;
+					//spec: return null if not found
+			}
+
+			URL url = toURL(uri);
+			if (url != null)
+				return url.openStream();
+			return new ParsedURI(ctx, uri).getResourceAsStream();
+		} catch (Throwable ex) {
+			log.warningBriefly("Ignored: failed to load "+uri, ex);
+			return null; //spec: return null if not found
+		}
+	}
+	/** Converts URI to URL if starts with http:/, https:/ or ftp:/ */
+	private static URL toURL(String uri)
+	throws MalformedURLException {
+		String s;
+		if (uri != null && ((s = uri.toLowerCase()).startsWith("http://")
+		|| s.startsWith("https://") || s.startsWith("ftp://")))
+			return new URL(uri);
+		return null;
 	}
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {
@@ -1124,6 +1196,20 @@ public class Servlets {
 		sb.append(' ')
 			.append(header).append(": ").append(request.getHeader(header))
 			.append('\n');
+	}
+
+	/** A plugin used to assist {@link #isBrowser} to identify
+	 * if a client is the given type.
+	 * @since 5.0.0
+	 * @see #setBrowserIdentifier
+	 */
+	public static interface BrowserIdentifier {
+		/** Tests if a client is the givent type.
+		 * @param userAgent represents a client.
+		 * @param type the type of the browser.
+		 * @return true if it matches, false if unable to identify
+		 */
+		public boolean isBrowser(String userAgent, String type);
 	}
 	
 	/** Returns the normal path; that is, will elminate the double dots 

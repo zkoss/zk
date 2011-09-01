@@ -1,0 +1,100 @@
+<!-- B50-3293724.ztl.java
+
+	Purpose:for testing B50-3293724.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 10:55:55
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3293724.zul,Tree">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on "Hide 1". You should see item 5 left. Otherwise it is a bug.</li>
+			<li>Click on "Show 1". You should see all items. Otherwise it is a bug.</li>
+			<li>Click on "Hide 2". You should see item 1,4,5 left. Otherwise it is a bug.</li>
+			<li>Click on "Show 2". You should see all items again. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<div>
+		<button label="Hide 1" width="70px" onClick="t1.visible = false" />
+		<button label="Hide 2" width="70px" onClick="t2.visible = false" />
+	</div>
+	<div>
+		<button label="Show 1" width="70px" onClick="t1.visible = true" />
+		<button label="Show 2" width="70px" onClick="t2.visible = true" />
+	</div>
+	<tree id="tree" rows="12">
+		<treechildren>
+			<treeitem id="t1">
+				<treerow>
+					<treecell>
+						<label value="item1" />
+					</treecell>
+				</treerow>
+				<treechildren>
+					<treeitem id="t2">
+						<treerow>
+							<treecell>
+								<label value="item2" />
+							</treecell>
+						</treerow>
+						<treechildren>
+							<treeitem id="t3">
+								<treerow>
+									<treecell>
+										<label value="item3" />
+									</treecell>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem id="t4">
+						<treerow>
+							<treecell>
+								<label value="item4" />
+							</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem id="t5">
+				<treerow>
+					<treecell>
+						<label value="item5" />
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button[label=\"Hide 1\"]"));
+				waitResponse();
+				verifyEquals(1,jq(".z-treerow:visible").length());
+				verifyContains(jq(".z-treerow:visible").text(),"item5");
+				click(jq("@button[label=\"Show 1\"]"));
+				waitResponse();
+				verifyEquals(5,jq(".z-treerow:visible").length());
+				click(jq("@button[label=\"Hide 2\"]"));
+				waitResponse();
+				verifyEquals(3,jq(".z-treerow:visible").length());
+				verifyContains(jq(".z-treerow:visible").text(),"item5");
+				verifyContains(jq(".z-treerow:visible").text(),"item4");
+				verifyContains(jq(".z-treerow:visible").text(),"item1");
+				click(jq("@button[label=\"Show 2\"]"));
+				waitResponse();
+				verifyEquals(5,jq(".z-treerow:visible").length());
+		]]></client>
+	</case>
+</test>

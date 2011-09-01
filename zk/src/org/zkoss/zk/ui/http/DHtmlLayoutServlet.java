@@ -1,18 +1,16 @@
 /* DHtmlLayoutServlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon May 30 21:11:28     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -52,12 +50,15 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DesktopRecycle;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Used to process the request for a ZUML page. Though it is called
@@ -79,27 +80,15 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
-	private static final String ATTR_LAYOUT_SERVLET
-		= "org.zkoss.zk.ui.http.LayoutServlet";
 
 	private ServletContext _ctx;
 	private WebManager _webman;
 	private boolean _webmanCreated;
 	private boolean _compress = true;
 
-	/** @deprecated As of release 3.6.0, removed in favor of 
-	 * {@link WebManager#getWebManager}.
-	 */
-	public static DHtmlLayoutServlet getLayoutServlet(WebApp wapp) {
-		return (DHtmlLayoutServlet)
-			((ServletContext)wapp.getNativeContext())
-				.getAttribute(ATTR_LAYOUT_SERVLET);
-	}
-
 	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
+		super.init(config); // B50-3310020: save config
 
 		String param = config.getInitParameter("log-level");
 		if (param != null && param.length() > 0) {
@@ -116,26 +105,11 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		if (_webman != null) {
 			log.info("Web Manager was created before ZK loader");
 		} else {
-			String updateURI = config.getInitParameter("update-uri");
-			if (updateURI == null
-			|| (updateURI = updateURI.trim()).length() == 0
-			|| updateURI.charAt(0) != '/')
-				throw new ServletException("The update-uri parameter must be specified and starts with /");
-			if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
-				throw new ServletException("The update-uri parameter cannot contain ';' or '?'");
-				//Jetty will encode URL by appending ';jsess..' and we have to
-				//remove it under certain situations, so not alow it
-			if (updateURI.charAt(updateURI.length() - 1) == '\\') {
-				if (updateURI.length() == 1)
-					throw new ServletException("The update-uri parameter cannot contain only '/'");
-				updateURI = updateURI.substring(0, updateURI.length() - 1);
-					//remove the trailing '\\' if any
-			}
+			String updateURI = Utils.checkUpdateURI(
+				config.getInitParameter("update-uri"), "The update-uri parameter");
 			_webman = new WebManager(_ctx, updateURI);
 			_webmanCreated = true;
 		}
-
-		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 	}
 	public void destroy() {
 		if (_webman != null) {
@@ -143,7 +117,6 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				_webman.destroy();
 			_webman = null;
 		}
-		_ctx.removeAttribute(ATTR_LAYOUT_SERVLET);
 	}
 	public ServletContext getServletContext() {
 		return _ctx;
@@ -198,66 +171,87 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	throws ServletException, IOException {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final Configuration config = wapp.getConfiguration();
 
-		final Desktop desktop =
-			_webman.getDesktop(sess, request, response, path, true);
-		if (desktop == null) //forward or redirect
-			return true;
+		final boolean bInclude = Servlets.isIncluded(request);
+		final boolean compress = _compress && !bInclude;
+		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
+		final DesktopRecycle dtrc = bInclude ? null: config.getDesktopRecycle();
+		Desktop desktop = dtrc != null ?
+			DesktopRecycles.beforeService(dtrc, _ctx, sess, request, response, path): null;
 
-		final RequestInfo ri = new RequestInfoImpl(
-			wapp, sess, desktop, request,
-			PageDefinitions.getLocator(wapp, path));
-		sess.setAttribute("_z_gae_fix", new Integer(0));
-		((SessionCtrl)sess).notifyClientRequest(true);
-
-		final boolean compress = _compress && !Servlets.isIncluded(request);
-		final Writer out;
-		final UiFactory uf = wappc.getUiFactory();
-		if (uf.isRichlet(ri, bRichlet)) {
-			final Richlet richlet = uf.getRichlet(ri, path);
-			if (richlet == null)
-				return false; //not found
-
-			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
-			final Execution exec = new ExecutionImpl(
-				_ctx, request, response, desktop, page);
-			out = compress ? (Writer)new StringWriter(): response.getWriter();
-			wappc.getUiEngine().execNewPage(exec, richlet, page, out);
-				//no need to set device type here, since UiEngine will do it later
-		} else {
-			final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-			if (pagedef == null)
-				return false; //not found
-
-			final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
-			final Execution exec = new ExecutionImpl(
-				_ctx, request, response, desktop, page);
-			out = compress ? (Writer)new StringWriter(): response.getWriter();
-			wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
-		}
-
-		if (compress) {
-			final String result = ((StringWriter)out).toString();
-
-			try {
-				final OutputStream os = response.getOutputStream();
-					//Call it first to ensure getWrite() is not called yet
-
-				byte[] data = result.getBytes(wapp.getConfiguration().getResponseCharset());
-				if (data.length > 200) {
-					byte[] bs = Https.gzip(request, response, null, data);
-					if (bs != null) data = bs; //yes, browser support compress
-				}
-
-				response.setContentLength(data.length);
-				os.write(data);
-				response.flushBuffer();
-			} catch (IllegalStateException ex) { //getWriter is called
-				response.getWriter().write(result);
+		try {
+			if (desktop != null) { //recycle
+				final Page page = Utils.getMainPage(desktop);
+				if (page != null) {
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					_webman.setDesktop(request, desktop);
+					wappc.getUiEngine().recycleDesktop(exec, page, out);
+				} else
+					desktop = null; //something wrong (not possible; just in case)
 			}
+			if (desktop == null) {
+				desktop = _webman.getDesktop(sess, request, response, path, true);
+				if (desktop == null) //forward or redirect
+					return true;
+
+				final RequestInfo ri = new RequestInfoImpl(
+					wapp, sess, desktop, request,
+					PageDefinitions.getLocator(wapp, path));
+				sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
+				((SessionCtrl)sess).notifyClientRequest(true);
+
+				final UiFactory uf = wappc.getUiFactory();
+				if (uf.isRichlet(ri, bRichlet)) {
+					final Richlet richlet = uf.getRichlet(ri, path);
+					if (richlet == null)
+						return false; //not found
+
+					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
+						//no need to set device type here, since UiEngine will do it later
+				} else {
+					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+					if (pagedef == null)
+						return false; //not found
+
+					final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
+					final Execution exec = new ExecutionImpl(
+						_ctx, request, response, desktop, page);
+					wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
+				}
+			}
+
+			if (compress) {
+				final String result = ((StringWriter)out).toString();
+
+				try {
+					final OutputStream os = response.getOutputStream();
+						//Call it first to ensure getWrite() is not called yet
+
+					byte[] data = result.getBytes(config.getResponseCharset());
+					if (data.length > 200) {
+						byte[] bs = Https.gzip(request, response, null, data);
+						if (bs != null) data = bs; //yes, browser support compress
+					}
+
+					response.setContentLength(data.length);
+					os.write(data);
+					response.flushBuffer();
+				} catch (IllegalStateException ex) { //getWriter is called
+					response.getWriter().write(result);
+				}
+			}
+		} finally {
+			if (dtrc != null)
+				DesktopRecycles.afterService(dtrc, desktop);
 		}
 		return true; //success
 	}
+
 	/** Handles exception being thrown when rendering a page.
 	 * @param err the exception being throw. If null, it means the page
 	 * is not found.
@@ -265,6 +259,8 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private void handleError(Session sess, HttpServletRequest request,
 	HttpServletResponse response, String path, Throwable err)
 	throws ServletException, IOException {
+		Utils.resetOwner();
+
 		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1714094: we have to handle err, because Web container

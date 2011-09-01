@@ -1,24 +1,21 @@
 /* Fileupload.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jul 19 10:26:42     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -26,17 +23,11 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.media.Media;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Updatable;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.util.Configuration;
-
 import org.zkoss.zul.impl.FileuploadDlg;
 
 /**
@@ -49,138 +40,80 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
  *
+ * <p>5.0.2: If the event thread is disabled, an onUpload event ({@link UploadEvent})
+ * is posted to all root components when the upload dialog is closed.
+ * If you want the event being sent to a particular component, specify the
+ * component in the desktop's attribute called <code>org.zkoss.zul.Fileupload.target</code>.
+ * For example,
+ *
+ * <pre><code>desktop.setAttribute("org.zkoss.zul.Fileupload.target", mainWindow);
+ *Fileupload.get();</code></pre>
+ *
  * <h3>2. Embed as part of the page:</h3>
  *
  * <p>You can create it as a component and then listen to
  * the onUpload event ({@link UploadEvent}).
- * If the cancel button is pressed or file(s) is uploaded, the onClose event
- * ({@link org.zkoss.zk.ui.event.Event}).
- * is sent to notify the application. By default, it does nothing but
- * invalidate the component, i.e., all fields are cleared.
  *
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload">ZK Component Reference: Fileupload</a>.
  * <p>A non-XUL extension.
  *
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
+public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
-
-	//Used when embedded as a component
-	/** The maximal alllowed number of files to upload. */
-	private int _maxnum = 1;
-	/** Wether to treat the uploaded file(s) as binary. */
-	private boolean _native;
-	private int _maxsize = -1;
 	
-	/**
-	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
-	 * a negative value if no limit.
-	 * <p> Default: -1.
-	 * @since 3.6.0
+	public Fileupload() {
+		setUpload("true");
+	}
+	public Fileupload(String label) {
+		this();
+		setLabel(label);
+	}
+	public Fileupload(String label, String image) {
+		this(label);
+		setImage(image);
+	}
+	
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getMaxsize() {
-		return _maxsize;
+		return -1;
 	}
-	/**
-	 * Sets the maximal allowed upload size of the component, in kilobytes.
-	 * <p>Note: {@link Configuration#setMaxUploadSize(int)} is also allowed to limit the size,
-	 * if the maximal size is -1.
-	 * @since 3.6.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setMaxsize(int maxsize) {
-		_maxsize = maxsize;
-	}
-	/** No child is allowed. */
-	public boolean isChildable() {
-		return false;
 	}
 
-	/** Returns the maximal allowed number of files to upload.
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getNumber() {
-		return _maxnum;
+		return 1;
 	}
-	/** Sets the maximal allowed number of files to upload.
-	 * <p>Default: 1.
-	 * @param maxnum the maximal allowed number (positive or negative).
-	 * Since 3.0.2, the value can be negative, which means no limitation at all and the end user can upload
-	 * any numbers he wants (since 3.0.2)
-	 * @exception WrongValueException if non-positive, or it exceeds 1000
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
-		if (maxnum < -1000 || maxnum == 0 || maxnum > 1000)
-			throw new WrongValueException(
-				maxnum == 0 ? "Positive or Negative is required": "Number too big (maximal 1000)");
-		_maxnum = maxnum;
 	}
-	/** Returns whether to treat the uploaded file(s) as binary, i.e.,
-	 * not to convert it to image, audio or text files.
-	 * <p>Default: false.
-	 * @since 3.0.0
-	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
-	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public boolean isNative() {
-		return _native;
+		return false;
 	}
-	/** Sets whether to treat the uploaded file(s) as binary, i.e.,
-	 * not to convert it to image, audio or text files.
-	 *
-	 * @param alwaysNative  whether to treat the uploaded file as binary
-	 * stream, regardless its content type.
-	 * If false (the default), it will convert to
-	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
-	 * binary stream, or text files depending on the content type.
-	 * @since 3.0.0
-	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharset
-	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharsetFinder
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNative(boolean alwaysNative) {
-		_native = alwaysNative;
-	}
-
-	/** Hanldes the onClose event which is sent when file(s) is uploaded
-	 * or when the cancel button is pressed.
-	 *
-	 * <p>By default, it simply invalidates itself, i.e.,
-	 * all fields are cleared.
-	 * If you want to do something different, you can intercept the onClose
-	 * event.
-	 * @since 2.4.0
-	 */
-	public void onClose() {
-		invalidate();
-	}
-
-	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Updatable {
-		//-- Updatable --//
-		/** Updates the result from the client.
-		 * Callback by the system only. Don't invoke it directly.
-		 *
-		 * @param result a list of media instances, or null
-		 */
-		public void setResult(Object result) {
-			Events.postEvent(
-				new UploadEvent(Events.ON_UPLOAD, Fileupload.this,
-				FileuploadDlg.parseResult((List)result)));
-		}
 	}
 
 	/////Open as a Modal Dialog/////
 	/** Opens a modal dialog with the default message and title,
 	 * and let user upload a file.
 	 *
-	 * @return the uploaded content, or null if not uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
 	public static Media get() throws InterruptedException {
 		return get(null, null, false);
@@ -193,7 +126,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * If false (the default), it will convert to
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
-	 * @return the uploaded content, or null if not uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
@@ -206,7 +144,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 *
 	 * @param message the message. If null, the default is used.
 	 * @param title the title. If null, the default is used.
-	 * @return the uploaded content, or null if not ready.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
 	public static Media get(String message, String title)
 	throws InterruptedException {
@@ -222,7 +165,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * If false (the default), it will convert to
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
-	 * @return the uploaded content, or null if not ready.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
@@ -237,8 +185,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 *
 	 * @param max the maximal allowed number that an user can upload
 	 * at once. If nonpositive, 1 is assumed.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
 	public static Media[] get(int max) throws InterruptedException {
 		return get(null, null, max, false);
@@ -253,8 +205,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * If false (the default), it will convert to
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
 	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
@@ -271,8 +227,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * @param max the maximal allowed number that an user can upload
 	 * at once. If nonpositive, 1 is assumed.
 	 * If max is larger than 1000, 1000 is assumed.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 */
 	public static Media[] get(String message, String title, int max)
 	throws InterruptedException {
@@ -289,8 +249,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * If false (the default), it will convert to
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
 	 */
 	public static
@@ -310,8 +274,12 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * If false (the default), it will convert to
 	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
 	 * binary stream, or text files depending on the content type.
-	 * @return an array of files that an users has uploaded,
-	 * or null if uploaded.
+	 * @return null if the uploaded content, or null if not uploaded.
+	 * Notice, by default, the event thread is disabled, and this
+	 * method won't suspend and always returns null.
+	 * To retrive the uploaded content, the developer
+	 * has to listen the onUpload event. For more information, refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.6.0
 	 */
 	public static

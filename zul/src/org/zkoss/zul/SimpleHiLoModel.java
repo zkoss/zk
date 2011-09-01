@@ -1,18 +1,16 @@
 /* SimpleHiLoModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 14 21:19:30     2006, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -76,13 +74,34 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 	}
 	
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volume) {
-		_hlTuples.add(new HiLoTuple(date, open, high, low, close, volume));
+		addValue(date, open, high, low, close, volume, -1);
+	}
+	
+	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
+		addValue0(date, open, high, low, close, volume, index);
+		fireEvent(ChartDataEvent.CHANGED, null, null);
+	}
+
+	public void setValue(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
+		removeValue0(index);
+		addValue0(date, open, high, low, close, volume, index);
 		fireEvent(ChartDataEvent.CHANGED, null, null);
 	}
 	
+	private void addValue0(Date date, Number open, Number high, Number low, Number close, Number volume, int index) {
+		if (index >= 0)
+			_hlTuples.add(index, new HiLoTuple(date, open, high, low, close, volume));
+		else
+			_hlTuples.add(new HiLoTuple(date, open, high, low, close, volume));
+	}
+	
 	public void removeValue(int index) {
-		_hlTuples.remove(index);
+		removeValue0(index);
 		fireEvent(ChartDataEvent.REMOVED, null, null);
+	}
+	
+	private void removeValue0(int index) {
+		_hlTuples.remove(index);
 	}
 	
 	public void clear() {

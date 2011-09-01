@@ -25,9 +25,12 @@ import org.zkoss.lang.SystemException;
  * @since 3.6.3
  */
 public class URLs {
-	private static URLEncoder _enc;
+	/** @deprecated As of release 5.0.5, for simple ZK core. */
+	private static Object _enc; //use Object instead of URLEncoder to avoid compiler warning
 
-	/** Translates a string into x-www-form-urlencoded  format.
+	/**
+	 * @deprecated As of release 5.0.5, for simple ZK core.
+	 * Translates a string into x-www-form-urlencoded  format.
 	 *
 	 * <p>By default, java.net.URLEncoder.encode(s, "UTF-8") is used
 	 * to translate the string.
@@ -56,6 +59,6 @@ public class URLs {
 				};
 			}
 		}
-		return _enc.encode(s);
+		return ((URLEncoder)_enc).encode(s);
 	}
 }

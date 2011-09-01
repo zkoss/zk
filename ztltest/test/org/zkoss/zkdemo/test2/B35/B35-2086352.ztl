@@ -1,0 +1,52 @@
+<!-- B35-2086352.ztl
+
+	Purpose:for testing B35-2086352.ztl .
+
+	Description:
+
+	History:
+		11, 15, 2010 20:19:03
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B35-2086352.zul,A,E,Window">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	1. Click "doHighlighted" button.
+	<separator />
+	2. Minimize window.
+	<separator />
+	3. If the mask still appears, that is wrong.
+	<button onClick="win.doHighlighted()" label="doHighlighted" />
+
+	<window id="win" title="Window Component" width="300px" minimizable="true"
+		border="normal">
+	</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+		verifyFalse(win.$n("mask").exists());
+		
+		click(jq("@button"));
+		waitResponse();
+		
+		verifyTrue(win.$n("mask").exists());
+		
+		click(win.$n("min"));
+		waitResponse();
+		
+		verifyTrue(win.$n("mask").exists());
+		verifyFalse(jq(win.$n("mask")).isVisible());
+		
+		
+		]]></client>
+	</case>
+</test>

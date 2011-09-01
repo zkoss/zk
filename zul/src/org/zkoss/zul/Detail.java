@@ -1,35 +1,31 @@
 /* Detail.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Jul 25, 2008 5:15:48 PM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * The detail component is used to display a detailed section where a master row and 
  * multiple detail rows are on the same row.
- * 
+ * <p>Available in ZK PE and ZK EE.
  * <p>Event:
  * <ol>
  * <li>onOpen is sent when this component is opened or closed by user.</li>
@@ -51,10 +47,10 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	/** The style class used for the content block. */
 	private String _cntscls;
 	
-	public Detail() {
-		setWidth("18px");
+	static {
+		addClientEvent(Detail.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
-
+	
 	/** 
 	 * Returns the CSS style for the content block of the window.
 	 */
@@ -69,7 +65,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", getContentStyle());
+			smartUpdate("contentStyle", getContentStyle());
 		}
 	}
 
@@ -85,29 +81,17 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public void setContentSclass(String scls) {
 		if (!Objects.equals(_cntscls, scls)) {
 			_cntscls = scls;
-			smartUpdate("z.cntScls", _cntscls);
+			smartUpdate("contentSclass", _cntscls);
 		}
 	}
-	/**
-	 * @deprecated As of release 3.5.2
-	 */
-	public String getImage() {
-		return null;
-	}
-	
-	/** 
-	 * @deprecated As of release 3.5.2
-	 */
-	public void setImage(String img) {
-	}
-	
+
 	/**
 	 * Sets whether the detail is open.
 	 */
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 	
@@ -121,31 +105,37 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public String getZclass() {
 		return _zclass == null ? "z-detail" : _zclass;
 	}
+
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "open", this.isOpen());
+		render(renderer, "contentSclass", this.getContentSclass());
+		render(renderer, "contentStyle", this.getContentStyle());
+	}
+	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Row))
 			throw new UiException("Unsupported parent for detail: "+parent);
 		super.beforeParentChanged(parent);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_OPEN);
-		if (_open)
-			HTMLs.appendAttribute(sb, "z.open", _open);
-		return sb.toString();
-	}
+
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Openable {
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			_open = open;
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

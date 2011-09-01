@@ -1,18 +1,16 @@
 /* ForEachImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Mar  8 14:21:08     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,6 +29,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
@@ -242,8 +241,7 @@ public class ForEachImpl implements ForEach {
 		&& _it.hasNext()) {
 			++_status.index;
 			_status.each = _it.next();
-			if (_comp != null) _comp.setVariable("each", _status.each, true);
-			else _page.setVariable("each", _status.each);
+			getScope().setAttribute("each", _status.each);
 			return true;
 		}
 
@@ -253,37 +251,25 @@ public class ForEachImpl implements ForEach {
 		return false;
 	}
 	private void setupStatus() {
-		if (_comp != null) {
-			_oldEach = _comp.getVariable("each", true);
-			_status = new Status(_comp.getVariable("forEachStatus", true));
-			_comp.setVariable("forEachStatus", _status, true);
-		} else {
-			_oldEach = _page.getVariable("each");
-			_status = new Status(_page.getVariable("forEachStatus"));
-			_page.setVariable("forEachStatus", _status);
-		}
+		final Scope scope = getScope();
+		_oldEach = scope.getAttribute("each", true);
+		_status = new Status(scope.getAttribute("forEachStatus", true));
+		scope.setAttribute("forEachStatus", _status);
 	}
 	private void restoreStatus() {
-		if (_comp != null) {
-			if (_status.previous != null)
-				_comp.setVariable("forEachStatus", _status.previous, true);
-			else
-				_comp.unsetVariable("forEachStatus", true);
-			if (_oldEach != null)
-				_comp.setVariable("each", _oldEach, true);
-			else
-				_comp.unsetVariable("each", true);
-		} else {
-			if (_status.previous != null)
-				_page.setVariable("forEachStatus", _status.previous);
-			else
-				_page.unsetVariable("forEachStatus");
-			if (_oldEach != null)
-				_page.setVariable("each", _oldEach);
-			else
-				_page.unsetVariable("each");
-		}
+		final Scope scope = getScope();
+		if (_status.previous != null)
+			scope.setAttribute("forEachStatus", _status.previous);
+		else
+			scope.removeAttribute("forEachStatus");
+		if (_oldEach != null)
+			scope.setAttribute("each", _oldEach);
+		else
+			scope.removeAttribute("each");
 		_it = null; _status = null; //recycle (just in case)
+	}
+	private Scope getScope() {
+		return _comp != null ? (Scope)_comp: _page;
 	}
 
 	private void prepare(Object o, final int begin) {
@@ -471,6 +457,10 @@ public class ForEachImpl implements ForEach {
 		}
 		public Integer getEnd() {
 			return this.end;
+		}
+
+		public String toString() {
+			return "[index=" + index + ']';
 		}
 	}
 }

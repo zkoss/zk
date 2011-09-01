@@ -1,17 +1,15 @@
 /* Document.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/21 16:36:39, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -27,7 +25,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMConfiguration;
 
-import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.util.NotableLinkedList;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
@@ -73,10 +71,9 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 	 * Sets the root element.
 	 */
 	public final void setRootElement(Element root) {
-		checkWritable();
 		if (root == null) {
 			if (_root != null)
-				_children.remove(_root); //then calls this.setModified
+				_children.remove(_root);
 		} else {
 			if (_root != null)
 				_children.set(_children.indexOf(_root), root);
@@ -94,10 +91,9 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 	 * Sets the document type.
 	 */
 	public final void setDocType(DocType docType) {
-		checkWritable();
 		if (docType == null) {
 			if (_docType != null)
-				_children.remove(_docType); //then calls this.setModified
+				_children.remove(_docType);
 		} else {
 			if (_docType != null)
 				_children.set(_children.indexOf(_docType), docType);
@@ -250,7 +246,7 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 	}
 
 	//-- ChildArray --//
-	protected class ChildArray extends CheckableTreeArray {
+	protected class ChildArray extends NotableLinkedList {
 		protected ChildArray() {
 		}
 		protected void onAdd(Object newElement, Object followingElement) {
@@ -261,8 +257,6 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 			checkAdd(newElement, replaced, true);
 		}
 		private void checkAdd(Object newVal, Object other, boolean replace) {
-			checkWritable();
-
 			//allowed type?
 			if (!(newVal instanceof Element) && !(newVal instanceof DocType)
 			&& !(newVal instanceof Comment)
@@ -297,8 +291,6 @@ public class Document extends AbstractGroup implements org.w3c.dom.Document {
 				Document.this._docType = (DocType)newItem;
 		}
 		protected void onRemove(Object item) {
-			checkWritable();
-
 			((Item)item).setParent(null); //then calls this.setModified
 
 			if (item instanceof Element)

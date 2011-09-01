@@ -22,7 +22,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.impl.Utils;
 
@@ -50,6 +50,10 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	private transient Bandpopup _drop;
 	private boolean _autodrop, _btnVisible = true;
 
+	static {
+		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+	}
+
 	public Bandbox() {
 	}
 	public Bandbox(String value) throws WrongValueException {
@@ -68,11 +72,6 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	public org.zkoss.zul.api.Bandpopup getDropdownApi() {
 		return getDropdown();
 	}
-	/** @deprecated As of release 3.6.1, use {@link #close} instead.
-	 */
-	public void closeDropdown() {
-		close();
-	}
 
 	/** Returns whether to automatically drop the list if users is changing
 	 * this text box.
@@ -87,7 +86,7 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z.adr", autodrop);
+			smartUpdate("autodrop", autodrop);
 		}
 	}
 
@@ -102,25 +101,8 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
-	}
-
-	/** Returns the image URI that is displayed as the button to open
-	 * {@link Bandpopup}.
-	 * Default: null. (since 3.5.0)
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage() {
-		return null;
-	}
-	/** Sets the image URI that is displayed as the button to open
-	 * {@link Bandpopup}.
-	 *
-	 * @param img the image URI.
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img) {
 	}
 
 	/** Drops down or closes the child.
@@ -139,7 +121,7 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	 * @since 3.0.1
 	 */
 	public void open() {
-		response("dropdn", new AuInvoke(this, "dropdn", true));
+		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 	/** Closes the child if it was dropped down.
 	 * The same as setOpen(false).
@@ -147,7 +129,7 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("dropdn", new AuInvoke(this, "dropdn", false));
+		response("open", new AuInvoke(this, "setOpen", false)); //don't use smartUpdate
 	}
 
 	/**
@@ -170,32 +152,26 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	public String getZclass() {
 		return _zclass == null ? "z-bandbox" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-		final boolean adr = isAutodrop();
-		if (!isAsapRequired(Events.ON_OPEN) && !adr)
-			return sb.toString();
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		appendAsapAttr(sb, Events.ON_OPEN);
-		if (adr) HTMLs.appendAttribute(sb, "z.adr", "true");
-		return sb.toString();
+		render(renderer, "autodrop", _autodrop);
+		if (!_btnVisible)
+			renderer.render("buttonVisible", false);
 	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		final String style = getInnerStyle();
-		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
-	}
-	private String getInnerStyle() {
-		final StringBuffer sb = new StringBuffer(32)
-			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
-		HTMLs.appendStyle(sb, "width", getWidth());
-		HTMLs.appendStyle(sb, "height", getHeight());
-		return sb.toString();
-	}
-	/** Returns RS_NO_WIDTH|RS_NO_HEIGHT.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link Textbox#service},
+	 * it also handles onOpen and onSelect.
+	 * @since 5.0.0
 	 */
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags()|RS_NO_WIDTH|RS_NO_HEIGHT;
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			Events.postEvent(OpenEvent.getOpenEvent(request));
+		} else
+			super.service(request, everError);
 	}
 
 	//-- Component --//
@@ -208,14 +184,13 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (super.insertBefore(newChild, refChild)) {
-			invalidate();
 			_drop = (Bandpopup)newChild;
 			return true;
 		}
 		return false;
 	}
 	/** Childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return true;
 	}
 	public void onChildRemoved(Component child) {

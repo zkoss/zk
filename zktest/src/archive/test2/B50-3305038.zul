@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B50-3305038.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Jul 7 17:54:11 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+	        <attribute name="onUpload"><![CDATA[
+            org.zkoss.util.media.Media[] medias = event.getMedias();
+            String result = "";
+            for(int i = 0 ; i < medias.length; i++){
+            	result += medias[i].getName()+"  ";
+            }
+            Messagebox.show("uploaded: "+ result);
+        ]]></attribute>
+		<separator/>
+		you can choose one file to upload :
+		<button label="Fileupload.get()" onClick="Fileupload.get();" />
+		<separator/>
+		you can choose unlimited file to upload :
+		<button label="Fileupload.get(-1)" onClick="Fileupload.get(-1);" />
+		<separator/>
+		you can choose one file to upload :
+		<button label="Fileupload.get(1)" onClick="Fileupload.get(1);" />
+		<separator/>
+		you can choose two file to upload :
+		<button label="Fileupload.get(2)" onClick="Fileupload.get(2);" />
+		<separator/>
+		you can choose three file to upload :
+		<button label="Fileupload.get(3)" onClick="Fileupload.get(3);" />
+		<separator/>
+	</div>
+</zk>

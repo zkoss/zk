@@ -1,18 +1,16 @@
 /* Toolbar.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun 23 11:33:31     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -74,27 +72,18 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 			throw new WrongValueException("align cannot be "+align);
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			invalidate();
+			smartUpdate("align", _align);
 		}
 	}
-	/*package*/ final boolean inPanelMold() {
+	/*package*/ boolean inPanelMold() {
 		return "panel".equals(getMold());
 	}
 	
-	public boolean insertBefore(Component newChild, Component refChild) {
-		if (super.insertBefore(newChild, refChild)) {
-			if (inPanelMold()) invalidate();
-			return true;
-		}
-		return false;
-	}
-
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-toolbar" + (getParent() instanceof Tabbox ? "-tabs" : "") +
 				(inPanelMold() ? "-panel" : "") : _zclass;
 	}
-	
 
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
@@ -107,18 +96,20 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
-			throw new WrongValueException("orient cannot be "+orient);
+			throw new WrongValueException("orient cannot be " + orient);
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (!"horizontal".equals(_orient))
+			render(renderer, "orient", _orient);
+		if (!"start".equals(_align))
+			render(renderer, "align", _align);
 	}
 }

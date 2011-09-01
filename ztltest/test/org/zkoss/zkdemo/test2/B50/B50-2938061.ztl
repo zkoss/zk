@@ -1,0 +1,54 @@
+<test tags="B50-2938061.zul,A,E,Combobox">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+				    Please select a comboitem, then the background of the combobox should be changed.
+				    <combobox id="c" onSelect="setColor()" style="background: violet;">
+				        <comboitem label="Comboitem 1" />
+				        <comboitem label="Comboitem 2" />
+				        <comboitem label="Comboitem 3" />
+				    </combobox>
+				    <zscript>
+				        <![CDATA[
+				            void setColor() {
+								if (c.getSelectedIndex() == 1) c.setStyle("background: blue;");
+								else if (c.getSelectedIndex() == 2) c.setStyle("background: red;");
+								else c.setStyle("background: green;");
+							}
+				        ]]>
+				    </zscript>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[
+				click(c.$n("btn"));
+				waitResponse();
+				click(jq(".z-combobox-pp .z-comboitem:eq(0)"));
+				waitResponse();
+				
+				boolean color = ColorVerifingHelper.getInstance().
+				isEqualColor("green",jq(c).css("backgroundColor"));				
+				verifyTrue(color);
+
+				click(c.$n("btn"));
+				waitResponse();
+				click(jq(".z-combobox-pp .z-comboitem:eq(1)"));
+				waitResponse();
+				
+				boolean color1 = ColorVerifingHelper.getInstance().
+				isEqualColor("blue",jq(c).css("backgroundColor"));				
+				verifyTrue(color1);
+
+				click(c.$n("btn"));
+				waitResponse();
+				click(jq(".z-combobox-pp .z-comboitem:eq(2)"));
+				waitResponse();				
+				
+				boolean color2 = ColorVerifingHelper.getInstance().
+				isEqualColor("red",jq(c).css("backgroundColor"));				
+				verifyTrue(color2);
+				
+			]]></client>
+	</case>
+</test>

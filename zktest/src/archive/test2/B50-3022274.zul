@@ -1,0 +1,79 @@
+<zk>
+   <html><![CDATA[
+	<ul>
+	<li>open each container by click header or button</li>
+	<li>tabbox in a container should not show an extremely large height/width and then suddenly recover, under all cases</li>
+	</ul>
+	]]></html>
+	<hbox>
+		<tabbox id="tb" width="400px" mold="accordion">
+			<tabs>
+				<tab label="Tab 1" />
+				<tab label="Tab 2" selected="true" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<tabbox orient="vertical">
+						<tabs width="20px">
+							<tab label="A" />
+							<tab label="B" />
+						</tabs>
+						<tabpanels>
+							<tabpanel>This is panel A</tabpanel>
+							<tabpanel>This is panel B</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</tabpanel>
+				<tabpanel>This is panel 2 The second panel</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<vbox>
+		<panel title="panel" collapsible="true" open="false" border="normal"
+			width="400px">
+			<custom-attributes org.zkoss.zul.client.rod="true"/>
+			<panelchildren>
+				<tabbox orient="vertical">
+					<tabs width="20px">
+						<tab label="A" />
+						<tab label="B" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>This is panel A</tabpanel>
+						<tabpanel>This is panel B</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</panelchildren>
+		</panel>
+		<panel title="panel" collapsible="true" open="false" border="normal"
+			width="400px">
+			<panelchildren>
+				<tabbox orient="vertical">
+					<tabs width="20px">
+						<tab label="A" />
+						<tab label="B" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>This is panel A</tabpanel>
+						<tabpanel>This is panel B</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</panelchildren>
+		</panel>
+		</vbox>
+		<groupbox closable="true" open="false" mold="3d"
+			width="400px" height="300px">
+			<caption label="group" />
+			<tabbox orient="vertical" vflex="1">
+				<tabs width="20px">
+					<tab label="A" />
+					<tab label="B" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>This is panel A</tabpanel>
+					<tabpanel>This is panel B</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+		</groupbox>
+	</hbox>
+</zk>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-1952402.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 13 12:09:06 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window width="300px" height="300px" id="test">
+	<button id="btnOpen" width="100px" height="21px"
+		label="Open window(Firefox only)">
+
+		<attribute name="onClick">
+	Window w = new Window();
+	w.setParent(test);
+	Iframe f = new Iframe();
+	f.setSrc("/test2/B50-1952402_1.zul");
+	w.setWidth("400px");
+	w.setHeight("400px");
+
+	f.setWidth("100%");
+	f.setHeight("100%");
+	f.setParent(w);
+
+	w.doModal();
+</attribute>
+	</button>
+</window>

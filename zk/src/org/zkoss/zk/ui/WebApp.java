@@ -1,18 +1,16 @@
 /* WebApp.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Dec  9 16:23:08     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -82,11 +80,13 @@ public interface WebApp extends Scope, Locator {
 	 */
 	public Object getAttribute(String name);
 	/** Sets the value of the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void setAttribute(String name, Object value);
+	public Object setAttribute(String name, Object value);
 	/** Removes the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void removeAttribute(String name);
+	public Object removeAttribute(String name);
 
 	/** Returns a map of custom attributes associated with this object.
 	 */
@@ -170,12 +170,22 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 
 	/** Returns the URI for asynchronous update.
 	 * <p>Both {@link #getUpdateURI} and {@link Desktop#getUpdateURI}
-	 * are encoded with {@link Execution#encodeURL}, if the current
-	 * execution is available.
+	 * are encoded with {@link Execution#encodeURL}
 	 * @see Desktop#getUpdateURI
+	 * @exception NullPointerException if the current execution is not available
 	 * @since 3.6.2
 	 */
 	public String getUpdateURI();
+	/** Returns the URI for asynchronous update that can be encoded or
+	 * not.
+	 *
+	 * @param encode whether to encode with {@link Execution#encodeURL}.
+	 * It is the same as {@link #getUpdateURI()} if <code>encode</code> is true.
+	 * @since 5.0.0
+	 * @exception NullPointerException if the current execution is not available
+	 * and encode is true.
+	 */
+	public String getUpdateURI(boolean encode);
 
 	/** Returns the configuration.
 	 */

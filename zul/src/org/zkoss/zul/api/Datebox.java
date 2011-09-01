@@ -1,18 +1,16 @@
 /* Datebox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -62,15 +60,10 @@ public interface Datebox extends org.zkoss.zul.impl.api.FormatInputElement {
 	 */
 	public void setLenient(boolean lenient);
 
-	/**
-	 * Returns whether to use a compact layout.
-	 * <p>
-	 * Default: true if zh_TW or zh_CN; false otherwise.
+	/** @deprecated As of release 5.0.0, it is no longer supported.
 	 */
 	public boolean isCompact();
-
-	/**
-	 * Sets whether to use a compact layout.
+	/** @deprecated As of release 5.0.0, it is no longer supported.
 	 */
 	public void setCompact(boolean compact);
 

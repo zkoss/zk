@@ -1,18 +1,16 @@
 /* Decimalbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 28 13:40:20     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,7 @@ package org.zkoss.zul;
 
 import java.math.BigDecimal;
 
+import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -84,6 +83,9 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		validate(value);
 		setRawValue(value);
 	}
+	public void setValue(String str){
+		this.setValue(new BigDecimal(str));
+	}
 
 	/** Returns the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
@@ -94,19 +96,43 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 	public int getScale() {
 		return _scale;
 	}
-	/** Returns the scale for the decimal number storing in this component,
+	/** Sets the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).
 	 *
+	 * <p>For example, set the scale of 1234.1234 to 2, the result will be 1234.12
 	 * <p>Default: {@link #AUTO}.
 	 */
 	public void setScale(int scale) {
-		_scale = scale;
+		//bug #3089502: setScale in decimalbox not working
+		if (_scale != scale) {
+			_scale = scale;
+			smartUpdate("scale", scale);
+			if(scale != AUTO) {
+				BigDecimal v = (BigDecimal)_value;
+				if (v != null) {
+					setValue(v);
+				}
+			}
+		}
 	}
 
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-decimalbox" : _zclass;
+	}
+	protected Object marshall(Object value) {
+		return value != null ? BigDecimals.toPlainString((BigDecimal)value) : value;
+	}
+	protected Object unmarshall(Object value) {
+		return value != null ? new BigDecimal((String)value) : value;
+	}
+	public void setRawValue(Object value) {
+		//bug #3089502: setScale in decimalbox not working
+		if (_scale != AUTO && value != null) {
+			value = ((BigDecimal)value).setScale(_scale, getRoundingMode());
+		}
+		super.setRawValue(value);
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
@@ -134,6 +160,15 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value, "0.##########");
+		return value != null && getFormat() == null ?
+			value instanceof BigDecimal ? BigDecimals.toPlainString((BigDecimal)value):
+				value.toString()/*just in case*/: formatNumber(value, null);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_scale != AUTO)
+			renderer.render("scale", _scale);
 	}
 }

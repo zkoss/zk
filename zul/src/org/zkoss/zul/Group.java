@@ -1,18 +1,16 @@
 /* Group.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Apr 25, 2008 4:15:11 PM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,12 +24,13 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * Adds the ability for single level grouping to the Grid.
+ * <p>Available in ZK PE and EE.
  * 
  * <p>Event:
  * <ol>
@@ -49,6 +48,10 @@ import org.zkoss.zul.impl.XulElement;
 public class Group extends Row implements org.zkoss.zul.api.Group {
 	private boolean _open = true;	
 	private transient List _items;
+	
+	static {
+		addClientEvent(Group.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+	}
 	
 	public Group() {
 		init();
@@ -116,7 +119,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 		int count = getItemCount();
 		int visibleCount = 0;
 		Row row = (Row) getNextSibling();
-		while (count-- > 0) {
+		while (count-- > 0 && row != null) {
 			if(row.isVisible())
 				visibleCount++;
 			row = (Row) row.getNextSibling();
@@ -159,11 +162,15 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 		return _open;
 	}
 	/** Sets whether this container is open.
+	 * 
+	 * <p>Note: if you use a model as the data to render, don't use setOpen(). It'll tangle the lifecycle with model  
+	 * You should control the model directly.
+	 * For example, you can use setClose() of GroupsModelArray
 	 */
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 			final Rows rows = (Rows) getParent();
 			if (rows != null)
 				rows.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
@@ -216,31 +223,40 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	public String getZclass() {
 		return _zclass == null ? "z-group" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.open", isOpen());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		if (getGrid().inPagingMold())
-			HTMLs.appendAttribute(sb, "z."+Events.ON_OPEN, true);
-		else appendAsapAttr(sb, Events.ON_OPEN);
-		return sb.toString();
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!isOpen()) renderer.render("open", false);
 	}
+	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Openable {
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			_open = open;
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
 			final Rows rows = (Rows) getParent();
-			if (rows != null)
+			if (rows != null) {
 				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
-		}
+				final Grid grid = getGrid();
+				if (grid != null) {
+					final ListModel model = grid.getModel(); 
+					if (model instanceof GroupsListModel) {
+						((GroupsListModel)model).getGroupsModel().setClose(rows.getGroupIndex(getIndex()), !_open);
+					}
+				}
+			}
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 	/**
 	 * An iterator used by _items.
@@ -260,14 +276,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 			throw new UnsupportedOperationException();
 		}
 	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		invalidate();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
+
 	//Cloneable//
 	public Object clone() {
 		final Group clone = (Group)super.clone();

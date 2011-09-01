@@ -1,0 +1,21 @@
+<test tags="B50-2936294.zul,A,E,Listbox,Selection">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					<listbox id="listbox">
+						<listitem label="listitem 1"/>
+						<listitem label="listitem 2" selected="true"/>
+					</listbox>
+					<button id="btn" label="Click Me to clear the selection" onClick='listbox.setSelectedItem(null)'/>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[
+				verifyTrue(jq(".z-listitem-seld").exists());
+				click(btn);
+				waitResponse();
+				verifyFalse(jq(".z-listitem-seld").exists());
+			]]></client>
+	</case>
+</test>

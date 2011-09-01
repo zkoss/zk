@@ -1,24 +1,27 @@
 /* OpenEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul  8 17:00:03     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's openning or closing
@@ -36,12 +39,22 @@ import org.zkoss.zk.ui.Component;
  * And, the server can not prevent the client from opening or closing.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.Openable
  */
 public class OpenEvent extends Event {
 	private final boolean _open;
 	private final Component _ref;
 	private final Object _val;
+
+	/** Converts an AU request to an open event.
+	 * @since 5.0.0
+	 */
+	public static final OpenEvent getOpenEvent(AuRequest request) {
+		final Map data = request.getData();
+		return new OpenEvent(request.getCommand(), request.getComponent(),
+			AuRequests.getBoolean(data, "open"),
+			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")),
+			data.get("value"));
+	}
 
 	/** Constructs an onOpen event.
 	 * @param open whether the new status is open

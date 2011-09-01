@@ -18,6 +18,7 @@ package org.zkoss.zkplus.databind;
 
 import java.util.Map;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
@@ -29,7 +30,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * <p>This initiator class do following things:</p>
  * <ol>
  * <li>New an {@link AnnotateDataBinder} instance.</li>
- * <li>Set the AnnotateDataBinder instance as a variable with the name as specified in 
+ * <li>Set the AnnotateDataBinder instance as a custom attribute with the name as specified in 
  * arg2 (default to "binder") and store it in the component as specified in arg0 "component-path".(if arg0 is not 
  * specified, use Page instead.)</li>
  * <li>call {@link AnnotateDataBinder#loadAll()} in to {@link #doAfterCompose(Page)} and
@@ -40,30 +41,47 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" 
  * 	[root="component|component-path"] 
  *  [loadDefault="true|false"]
- *  [name="binder's name"] ?>
+ *  [name="binder's name"]
+ *  [loadOnSave="true|false"] ?>
  * </pre>
  * <p>Where the root attribute is the component itself (via EL expression) or the component path that 
  * specifies the component the AnnotateDataBinder covers. You can use absolute path that 
  * starts with "//" (search from Desktop) or "/" (search from Page); or you can use relative
  * path(supported since ZK 3.0.8) that starts with "./" or "../" (relative to the Id Space of 
- * the page's root components). If the root attribute is not specified or set to string "page", 
+ * the root component). If the root attribute is not specified or set to string "page", 
  * the AnnotateDataBinder will default to cover the whole page.</p>
  * <p>Where the loadDefault attribute is used to decide whether to load default binding configuration defined in lang-addon.xml. 
  * If the loadDefault attribute is not specified it is default to true.</p>
  * <p>(since 3.6.2) Where the name attribute is used to specify the created DataBinder's name (default to "binder")
- * which you can access it via EL or component.getVariable() later.
+ * which you can access it via EL or component.getAttribute(name) later.
+ * <p>(since 5.0.5) Where the loadOnSave attribute(default to true) is used to specify whether DataBinder shall automatically "load" associated 
+ * binding value back into UI component after doing a "save" operation to the binding bean.</p>
  *
  * <p>For application design to run ZK prior to 3.6.2, it can use arg0 instead
  * of root, and arg1 instead of loadDefault.
+ * 
+ * <p>Note that since 5.0, the created DataBinder is stored in component scope of the root component 
+ * rather than in the IdSpace scope of the root component. If that is important to you, you can specify
+ * compatible library property in WEB-INF/zk.xml to true to make it work as it was prior version 5; 
+ * i.e. store the created DataBinder in IdSpace scope of the root component.
+ * 
+ * <pre>
+ * 	&lt;library-property>
+ *		&lt;name>org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible&lt;/name>
+ *		&lt;value>true&lt;/value>
+ *	&lt;/library-property>
+ * </pre>
  *
  * @author Henri Chen
  * @see AnnotateDataBinder
  */
  public class AnnotateDataBinderInit implements Initiator, InitiatorExt {
+	private static final String COMPATIBLE = "org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible";
 	private Component _comp;
 	private String _compPath;
 	private String _defaultConfig;
 	private String _name;
+	private boolean _loadOnSave;
 	
 	/** The AnnotateDataBinder created in doAfterCompose() */
 	protected AnnotateDataBinder _binder; 
@@ -109,20 +127,38 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		if (_name == null) {
 			_name = "binder";
 		}
+		
+		Object loadOnSave = args.get("loadOnSave");
+		if (loadOnSave == null) {
+			_loadOnSave = true;
+		} else if (loadOnSave instanceof String) {
+			_loadOnSave = !"false".equals(loadOnSave);
+		} else if (loadOnSave instanceof Boolean) {
+			_loadOnSave = ((Boolean)loadOnSave).booleanValue();
+		}
 	}
 	
 	//-- InitiatorExt --//
+	private void saveBinder(Component comp) {
+		final String val = Library.getProperty(COMPATIBLE);
+		if ("true".equals(val)) {
+			comp.setAttribute(_name, _binder, Component.SPACE_SCOPE);
+		} else {
+			comp.setAttribute(_name, _binder);
+		}
+	}
+	
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		boolean b = _defaultConfig != null ? Boolean.valueOf(_defaultConfig).booleanValue() : true;
 		if (_comp instanceof Component) { //a specified component instance
 			_binder = new AnnotateDataBinder(_comp, b);
-			_comp.setVariable(_name, _binder, true);
+			saveBinder(_comp);//_comp.setAttribute(_name, _binder);
 		} else if (_compPath == null || "page".equals(_compPath)) { //page
 			_binder = new AnnotateDataBinder(page, b);
-			if (page.getVariable(_name) != null) { //already a binder on the page
+			if (page.getAttribute(_name) != null) { //already a binder on the page
 				throw new UiException("Page is already covered by another Data Binder. Cannot be covered by this Data Binder again. Page:"+page.getId());
 			} else {
-				page.setVariable(_name, _binder);
+				page.setAttribute(_name, _binder);
 			}
 		} else if (_compPath.startsWith("/")) { //absolute path
 			final Component comp = Path.getComponent(_compPath);
@@ -130,14 +166,14 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 				throw new UiException("Cannot find the specified component. Absolute Path:"+_compPath);
 			}
 			_binder = new AnnotateDataBinder(comp, b);
-			comp.setVariable(_name, _binder, true);
+			saveBinder(comp);//comp.setAttribute(_name, _binder);
 		} else if (_compPath.startsWith("./") || _compPath.startsWith("../")) { //relative path
 			for (int j = 0; j < comps.length; ++j) {
 				final Component vroot = comps[j];
 				final Component comp = Path.getComponent(vroot.getSpaceOwner(), _compPath);
 				if (comp != null) { //found
 					_binder = new AnnotateDataBinder(comp, b);
-					comp.setVariable(_name, _binder, true);
+					saveBinder(comp);//comp.setAttribute(_name, _binder);
 					break;
 				}
 			}
@@ -147,8 +183,9 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		} else {
 			final Component comp = page.getFellow(_compPath);
 			_binder = new AnnotateDataBinder(comp, b);
-			comp.setVariable(_name, _binder, true);
+			saveBinder(comp);//comp.setAttribute(_name, _binder);
 		}
+		_binder.setLoadOnSave(_loadOnSave);
 		_binder.loadAll(); //load data bean properties into UI components
 	}
 }

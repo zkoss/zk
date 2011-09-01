@@ -1,0 +1,21 @@
+<test tags="B50-2951277.zul,A,E,Textbox">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+You should see the value <label id="l" style="font-weight:bold"/> in the textbox.
+<separator/>
+<textbox id="test" cols="35"/>
+<zscript>
+test.setText("Just a \"test\" with quotes");
+l.setValue("Just a \"test\" with quotes");
+</zscript>
+</zk>
+			-->
+		</server>
+		<client>	<![CDATA[
+			
+verifyEquals("Just a \"test\" with quotes", test.get("value"));			
+			]]></client>
+	</case>
+</test>

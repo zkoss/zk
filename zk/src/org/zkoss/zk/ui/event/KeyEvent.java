@@ -1,24 +1,27 @@
 /* KeyEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Sep 27 09:15:39     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents a key pressed by the user.
@@ -50,6 +53,17 @@ public class KeyEvent extends Event {
 
 	public static final int INSERT = 45;
 	public static final int DELETE = 46;
+
+	/** Converts an AU request to a key event.
+	 * @since 5.0.0
+	 */
+	public static final KeyEvent getKeyEvent(AuRequest request) {
+		final Map data = request.getData();
+		return new KeyEvent(request.getCommand(), request.getComponent(),
+			AuRequests.getInt(data, "keyCode", 0), AuRequests.getBoolean(data, "ctrlKey"),
+			AuRequests.getBoolean(data, "shiftKey"), AuRequests.getBoolean(data, "altKey"),
+			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")));
+	}
 
 	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;

@@ -1,18 +1,16 @@
 /* AuWriters.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Dec  4 11:20:33     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,6 +19,7 @@ package org.zkoss.zk.au;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.json.*;
 import org.zkoss.idom.Verifier;
 
 import org.zkoss.zk.ui.UiException;
@@ -68,101 +67,33 @@ public class AuWriters {
 		return new HttpAuWriter();
 	}
 
-	/** The first few characters of the output content.
-	 * @since 3.5.0
+	/** Returns a JSON object representing the output that will be sent
+	 * to the client.
+	 * <p>You could add the responses to the given array by invoking
+	 * {@link #toJSON}.
+	 *
+	 * @param rs the array to hold the responses.
+	 * To output a response, invoke {@link #toJSON} as follows:
+	 * <code>rs.add(AuWriters.toJSON(response))</code>.
+	 * @since 5.0.5
 	 */
-	public static final String CONTENT_HEAD =
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	public static JSONObject getJSONOutput(JSONArray rs) {
+		final JSONObject out = new JSONObject();
+		out.put("rs", rs);
+		return out;
+	}
+	/** Converts a response to a JSON object.
+	 *@since 5.0.5
+	 */
+	public static JSONArray toJSON(AuResponse response) {
+		final JSONArray r = new JSONArray();
+		r.add(response.getCommand());
+		r.add(response.getEncodedData());
+		return r;
+	}
+
 	/** The content type of the output.
 	 * @since 3.5.0
 	 */
-	public static final String CONTENT_TYPE = "text/xml;charset=UTF-8";
-
-	/** Wites a XML fragment representing the response ID.
-	 * @since 3.5.0
-	 */
-	public static void writeResponseId(Writer out, int resId) throws IOException {
-		out.write("<rid>");
-		out.write(Integer.toString(resId));
-		out.write("</rid>\n");
-	}
-	/** Writes a XML fragment representing the response to the output.
-	 * @since 3.5.0
-	 */
-	public static void write(Writer out, AuResponse response)
-	throws IOException {
-		out.write("\n<r><c>");
-		out.write(response.getCommand());
-		out.write("</c>");
-		final String[] data = response.getData();
-		if (data != null) {
-			for (int j = 0; j < data.length; ++j) {
-				out.write("\n<d>");
-				encodeXML(out, data[j]);
-				out.write("</d>");
-			}
-		}
-		out.write("\n</r>");
-	}
-	//Private Utilities//
-	private static void encodeXML(Writer out, String data)
-	throws IOException {
-		if (data == null || data.length() == 0)
-			return;
-
-		//20051208: Tom Yeh
-		//The following codes are tricky.
-		//Reason:
-		//1. Nested CDATA is not allowed
-		//2. Illegal character must be encoded
-		//3. Firefox (1.0.7)'s XML parser cannot handle over 4096 chars
-		//	if CDATA is not used
-		int k = 0, len = data.length();
-		for (int j = 0; j < len;) {
-			final char cc = data.charAt(j);
-			if (cc == ']') {
-				if (j + 2 < len && data.charAt(j + 1) == ']'
-				&& data.charAt(j + 2) == '>') { //]]>
-					encodeByCData(out, data.substring(k, j + 2));
-					out.write("&gt;");
-					k = j += 3;
-					continue;
-				}
-			} else if (!Verifier.isXMLCharacter(cc)) {
-				encodeByCData(out, data.substring(k, j));
-				out.write('?');
-					//No way to represent illegal character (&#xn not allowed, either)
-					//FUTURE: consider to use a special escape sequence
-					//and restore it at the client. But, it slows down
-					//the performance and might not be worth
-				k = ++j;
-				continue;
-			}
-			++j;
-		}
-
-		if (k < len)
-			encodeByCData(out, data.substring(k));
-	}
-	private static void encodeByCData(Writer out, String data)
-	throws IOException {
-		int j = data.length();
-		if (j > 100) { //Not to scan if it is long
-			out.write("<![CDATA[");
-			out.write(data);
-			out.write("]]>");
-			return;
-		}
-
-		while (--j >= 0) {
-			final char cc = data.charAt(j);
-			if (cc == '<' || cc == '>' || cc == '&') {
-				out.write("<![CDATA[");
-				out.write(data);
-				out.write("]]>");
-				return;
-			}
-		}
-		out.write(data);
-	}
+	public static final String CONTENT_TYPE = "text/plain;charset=UTF-8";
 }

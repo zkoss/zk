@@ -1,18 +1,16 @@
 /* Menubar.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Sep 22 10:34:31     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -69,7 +67,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 	
@@ -100,12 +98,13 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	
 	/**
 	 * Sets whether to enable the menubar scrolling
+	 * When enable, if menubar is shorter than total width of menu, left,right arrow will appear.
 	 * @since 3.6.3
 	 */
 	public void setScrollable(boolean scrollable){
 		if (isHorizontal() && _scrollable != scrollable) {
 			_scrollable = scrollable;
-			invalidate();
+			smartUpdate("scrollable", scrollable);
 		}
 	}
 
@@ -113,7 +112,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	 * over it.
 	 * <p>Default: false.
 	 */
-	public final boolean isAutodrop() {
+	public boolean isAutodrop() {
 		return _autodrop;
 	}
 	/** Sets whether to automatically drop down menus if user moves mouse
@@ -122,7 +121,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z.autodrop", autodrop);
+			smartUpdate("autodrop", autodrop);
 		}
 	}
 
@@ -131,49 +130,20 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		return _zclass == null ? "z-menubar" +
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		if (_autodrop)
-			HTMLs.appendAttribute(sb, "z.autodrop", _autodrop);
-		if (isHorizontal() && _scrollable)
-			HTMLs.appendAttribute(sb, "z.scrollable", _scrollable);
-		
-		return sb.toString();
-	}
-	
-	public void onChildAdded(Component child) {
-		if (isHorizontal() && _scrollable)
-			smartUpdate("z.chchg", true);
-		super.onChildAdded(child);
-	}
-	
-	public void onChildRemoved(Component child) {
-		if (isHorizontal() && _scrollable)
-			smartUpdate("z.chchg", true);
-		super.onChildRemoved(child);
-	}
-	
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))
 			throw new UiException("Unsupported child for menubar: "+child);
 		super.beforeChildAdded(child, refChild);
 	}
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		if ("vertical".equals(getOrient())) {
-			final StringBuffer sb = new StringBuffer(32)
-				.append("<tr id=\"").append(child.getUuid()).append("!chdextr\"");
-			if (child instanceof HtmlBasedComponent) {
-				final String height = ((HtmlBasedComponent)child).getHeight();
-				if (height != null)
-					sb.append(" height=\"").append(height).append('"');
-			}
-			sb.append('>');
-			if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-			else out.insert(0, sb.toString());
-			out.append("</tr>");
-		}
+		render(renderer, "autodrop", _autodrop);
+		if ("vertical".equals(getOrient())) render(renderer, "orient", _orient);
+		if (isHorizontal() && _scrollable) render(renderer, "scrollable", _scrollable);
+		
 	}
+	
 }

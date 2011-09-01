@@ -1,0 +1,79 @@
+<test tags="B50-3255116.zul,A,E,Listbox,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+After you see this page, you should not see the horizontal scrollbar shown in the grid.
+<panel border="normal"
+	width="580px" height="250px" sclass="bg-tree-panel"
+	framable="true" id="homeContext" style="min-height">
+	<caption
+		label="Listbox test" />
+	<panelchildren
+		style="padding:0px; background:transparent; border:0px;">
+	<listbox  vflex="1" style="margin:15px 5px 10px 5px;"  span="0">
+        <listhead >
+            <listheader label="Author" sort="auto" hflex="1"/>
+            <listheader label="Title" sort="auto" hflex="3" />
+            <listheader label="Publisher" sort="auto" hflex="1"/>
+            <listheader hflex="min"/>
+        </listhead>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+            </listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+ 		    </listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+			</listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+            </listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+            </listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+            </listcell>
+        </listitem>
+        <listitem height="42px">
+            <listcell label="Philip Hensher" image="/img/live.gif"/>
+            <listcell label="The Northern Clemency" />
+            <listcell label="Knopf (October 30, 2008)" />
+            <listcell ><label value="XX" />
+            </listcell>
+        </listitem>
+      </listbox>  
+</panelchildren>
+</panel>
+     
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

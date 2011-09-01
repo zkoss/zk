@@ -1,18 +1,16 @@
 /* ComponentsCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Aug  9 19:41:22     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,15 +18,16 @@ package org.zkoss.zk.ui.sys;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Date;
+import java.io.StringWriter;
 import java.net.URL;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
@@ -38,7 +37,9 @@ import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -49,9 +50,13 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
+import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.xel.ExValue;
 
 /**
@@ -60,10 +65,8 @@ import org.zkoss.zk.xel.ExValue;
  * @author tomyeh
  */
 public class ComponentsCtrl {
-	/** The prefix for auto generated ID. */
-	private static final String
-		AUTO_ID_PREFIX = "z_";
-	/** The anonymous UUID. Used only internally.
+	/** @deprecated
+	 * The anonymous UUID. Used only internally.
 	 */
 	public static final String ANONYMOUS_ID = "z__i";
 
@@ -71,25 +74,92 @@ public class ComponentsCtrl {
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
-	public static final String toAutoId(String prefix, int id) {
-		final StringBuffer sb = new StringBuffer(16)
-			.append(AUTO_ID_PREFIX).append(prefix).append('_');
-		Strings.encode(sb, id);
+	public static final String toAutoId(String prefix, int val) {
+		return encodeId(new StringBuffer(16).append(prefix), val);
+	}
+	/** Returns an ID representing the specified number
+	 * The ID consists of 0-9, a-z and _.
+	 * @since 5.0.5
+	 */
+	public static final String encodeId(StringBuffer sb, int val) {
+		//Thus, the number will 0, 1... max, 0, 1..., max, 0, 1 (less conflict)
+		if (val < 0 && (val += Integer.MIN_VALUE) < 0)
+			val = -val; //impossible but just in case
+
+		do {
+			//IE6/7's ID case insensitive (safer, though jQuery fixes it)
+			int v = val % 37;
+			val /= 37;
+			if (v-- == 0) {
+				sb.append('_');
+			} else if (v < 10) {
+				sb.append((char)('0' + v));
+//			} else if (v < 36) {
+			} else {
+				sb.append((char)(v + ((int)'a' - 10)));
+//			} else {
+//				sb.append((char)(v + ((int)'A' - 36)));
+			}
+		} while (val != 0);
 		return sb.toString();
 	}
 
-	/** Returns whether an ID is generated automatically.
-	 * Note: true is returned if id is null.
+	/** @deprecated As of release 5.0.3, replaced with {@link #isAutoUuid(String)}.
 	 */
 	public static final boolean isAutoId(String id) {
-		return id == null || (id.startsWith(AUTO_ID_PREFIX)
-			&& id.indexOf('_', AUTO_ID_PREFIX.length()) > 0);
+		return isAutoUuid(id);
 	}
-	/** Returns whether an ID is a valid UUID.
+	/** Returns whether an ID is generated automatically.
 	 * Note: true is returned if id is null.
+	 * Also notice that this method doesn't check if a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
+	 * @since 5.0.3
+	 */
+	public static final boolean isAutoUuid(String id) {
+		if (id == null)
+			return true;
+
+		//0: lower, 1: digit or upper, 2: letter or digit, 3: upper
+		//See also DesktopImpl.updateUuidPrefix
+		if (id.length() < 5)
+			return false;
+		char cc;
+		return isLower(id.charAt(0))
+			&& (isUpper(cc = id.charAt(1))  || isDigit(cc))
+			&& (isUpper(cc = id.charAt(2)) || isLower(cc) || isDigit(cc))
+			&& isUpper(id.charAt(3));
+		
+	}
+	private static boolean isUpper(char cc) {
+		return cc >= 'A' && cc <= 'Z';
+	}
+	private static boolean isLower(char cc) {
+		return cc >= 'a' && cc <= 'z';
+	}
+	private static boolean isDigit(char cc) {
+		return cc >= '0' && cc <= '9';
+	}
+	/** @deprecated As of release 5.0.2, replaced with {@link #isAutoUuid(String)}.
+	 * If you want to varify UUID, use {@link #checkUuid}.
 	 */
 	public static final boolean isUuid(String id) {
-		return isAutoId(id);
+		return isAutoUuid(id);
+	}
+	/** Checks if the given UUID is valid.
+	 * UUID cannot be empty and can only have alphanumeric characters or underscore.
+	 * @exception UiException if uuid is not valid.
+	 */
+	public static void checkUuid(String uuid) {
+		int j;
+		if (uuid == null || (j = uuid.length()) == 0)
+			throw new UiException("uuid cannot be null or empty");
+
+		while (--j >= 0) {
+			final char cc = uuid.charAt(j);
+			if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z')
+			&& (cc < '0' || cc > '9') && cc != '_')
+				throw new UiException("Illegal character, "+cc+", not allowed in uuid, "+uuid);
+		}
 	}
 
 	/** Returns if the attribute name is reserved.
@@ -234,9 +304,10 @@ public class ComponentsCtrl {
 	}
 	private static final
 	void applyForward0(Component comp, String orgEvent, String cond) {
-		final int len;
+		int len;
 		if (cond == null || (len = cond.length()) == 0)
-			return;
+			len = (cond = orgEvent).length();
+			//if condition not specified, assume same as orgEvent (to space owenr)
 
 		Object data = null;
 		for (int j = 0; j < len; ++j) {
@@ -277,49 +348,10 @@ public class ComponentsCtrl {
 			comp.addForward(orgEvent, (Component)target, (String)result[1], data);
 	}
 
-	/** Parses a script by resolving #{xx} to make it executable
-	 * at the client.
-	 *
-	 * @param comp the component used to resolve the EL expression.
-	 * @param script the Java script to convert
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, use the script component instead.
 	 */
 	public static String parseClientScript(Component comp, String script) {
-		StringBuffer sb = null;
-		for (int j = 0, len = script.length();;) {
-			final int k = script.indexOf("#{", j);
-			if (k < 0)
-				return sb != null ?
-					sb.append(script.substring(j)).toString(): script;
-
-			final int l = script.indexOf('}', k + 2);
-			if (l < 0)
-				throw new WrongValueException("Illegal script: unclosed EL expression.\n"+script);
-
-			if (sb == null) sb = new StringBuffer(len);
-			sb.append(script.substring(j, k));
-
-			//eval EL
-			Object val = Executions.evaluate(comp,
-				'$' + script.substring(k + 1, l + 1), Object.class);
-			if (val == null || (val instanceof Number)) {
-				sb.append(val);
-			} else if (val instanceof Component) {
-				sb.append(" $e('")
-					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
-					.append("')");
-			} else if (val instanceof Date) {
-				sb.append(" new Date(").append(((Date)val).getTime())
-					.append(')');
-			} else { //FUTURE: regex
-				sb.append('\'')
-					.append(Strings.escape(val.toString(), "'\\"))
-					.append('\'');
-			}
-
-			//next
-			j = l + 1;
-		}
+		return "";
 	}
 
 	/** Returns the method for handling the specified event, or null
@@ -367,7 +399,29 @@ public class ComponentsCtrl {
 		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
 		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
 		4*60*60*1000);
-	
+
+	/** An utilities to create an array of JavaScript objects
+	 * ({@link JavaScriptValue}) that can be used
+	 * to mount the specified widget at the clients.
+	 *
+	 * @since 5.0.0
+	 */
+	public static final Collection redraw(Collection comps) {
+		try {
+			final StringWriter out = new StringWriter(1024*8);
+			final List js = new LinkedList();
+			for (Iterator it = comps.iterator(); it.hasNext();) {
+				((ComponentCtrl)it.next()).redraw(out);
+				final StringBuffer sb = out.getBuffer();
+				js.add(new JavaScriptValue(sb.toString()));
+				sb.setLength(0);
+			}
+			return js;
+		} catch (java.io.IOException ex) {
+			throw new InternalError();
+		}
+	}
+
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
 	new ComponentDefinition() {
@@ -417,25 +471,29 @@ public class ComponentsCtrl {
 		public Component newInstance(Class cls) {
 			throw new UnsupportedOperationException();
 		}
+		public void addMold(String name, String widgetClass) {
+			throw new UnsupportedOperationException();
+		}
+		/** @deprecated */
 		public void addMold(String name, String moldURI, String z2cURI) {
 			throw new UnsupportedOperationException();
 		}
-		public void addMold(String name, ComponentRenderer renderer, String z2cURI) {
-			throw new UnsupportedOperationException();
-		}
 		/** @deprecated */
-		public void addMold(String name, String moldURI) {
-			throw new UnsupportedOperationException();
-		}
-		/** @deprecated */
-		public void addMold(String name, ComponentRenderer renderer) {
-			throw new UnsupportedOperationException();
-		}
-		public Object getMoldURI(Component comp, String name) {
+		public String getWidgetClass(String moldName) {
 			return null;
 		}
-		public String getZ2CURI(Component comp, String name) {
+		/** @deprecated */
+		public String getDefaultWidgetClass() {
 			return null;
+		}
+		public String getWidgetClass(Component comp, String moldName) {
+			return null;
+		}
+		public String getDefaultWidgetClass(Component comp) {
+			return null;
+		}
+		public void setDefaultWidgetClass(String widgetClass) {
+			throw new UnsupportedOperationException();
 		}
 		public boolean hasMold(String name) {
 			return false;
@@ -447,6 +505,8 @@ public class ComponentsCtrl {
 			throw new UnsupportedOperationException();
 		}
 		public void applyProperties(Component comp) {
+		}
+		public void applyAttributes(Component comp) {
 		}
 		public Map evalProperties(Map propmap, Page owner, Component parent) {
 			return propmap != null ? propmap: new HashMap(3);

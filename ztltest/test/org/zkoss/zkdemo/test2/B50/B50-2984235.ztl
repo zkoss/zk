@@ -1,0 +1,20 @@
+<test tags="B50-2984235.zul,combobox,textbox,ie9">
+	<case id="popup">
+		<server id="zul"><![CDATA[
+			<zk>
+				<textbox id="tb" tooltip="popup" />
+				<combobox id="cb" tooltip="popup"/>
+				<popup id="popup"/>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			Element tbNode = tb.$n();
+			mouseOver(tbNode);
+			sleep(1000);
+			verifyTrue(popup.exists());
+			mouseOut(tbNode);
+			mouseOver(cb.$n());
+			verifyTrue(popup.exists());
+		]]></client>
+	</case>
+</test>

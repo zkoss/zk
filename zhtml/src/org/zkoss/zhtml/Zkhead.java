@@ -1,28 +1,32 @@
 /* Zkhead.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 21 16:16:34     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The component used to generate CSS and JavaScrpt declarations.
@@ -40,7 +44,19 @@ public class Zkhead extends AbstractComponent {
 
 	//Component//
 	public void redraw(Writer out) throws IOException {
-		final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
-		if (zktags != null) out.write(zktags);
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			if (!HtmlPageRenders.isDirectContent(exec))
+				throw new UnsupportedOperationException("The parent of zkhead must be head");
+
+			final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
+			if (zktags != null) out.write(zktags);
+		}
+	}
+
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
 	}
 }

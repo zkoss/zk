@@ -1,17 +1,15 @@
 /* Text.java
 
-{{IS_NOTE
 
 Purpose: 
 Description: 
 History:
 C2001/10/22 20:48:21, reate, Tom M. Yeh
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

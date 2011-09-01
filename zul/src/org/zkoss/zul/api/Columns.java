@@ -1,22 +1,22 @@
 /* Columns.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
 package org.zkoss.zul.api;
+
+import org.zkoss.zul.Popup;
 
 /**
  * Defines the columns of a grid. Each child of a columns element should be a
@@ -69,6 +69,7 @@ public interface Columns extends org.zkoss.zul.impl.api.HeadersElement {
 	 */
 	public boolean isColumnsgroup();
 
+
 	/**
 	 * Returns the ID of the Menupopup ({@link Menupopup}) that should appear
 	 * when the user clicks on the element.
@@ -108,15 +109,7 @@ public interface Columns extends org.zkoss.zul.impl.api.HeadersElement {
 	public void setMenupopup(String mpop);
 
 	/**
-	 * Sets the UUID of the popup menu that should appear when the user clicks
-	 * on the element.
-	 * 
-	 * <p>
-	 * Note: it actually invokes
-	 * <code>setMenupopup("uuid(" + menupop.getUuid() + ")")</code>
-	 * 
-	 * @see #setMenupopup(String)
+	 * @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
 	 */
 	public void setPopupApi(org.zkoss.zul.api.Menupopup mpop);
-
 }

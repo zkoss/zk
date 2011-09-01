@@ -1,18 +1,18 @@
 /* HtmlBasedComponent.java
 
- {{IS_NOTE
+
  Purpose:
 
  Description:
 
  History:
  Tue Oct 23 09:22:13     2008, Created by Flyworld
- }}IS_NOTE
+
 
  Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
  {{IS_RIGHT
- This program is distributed under GPL Version 3.0 in the hope that
+ This program is distributed under LGPL Version 3.0 in the hope that
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
@@ -25,7 +25,7 @@ package org.zkoss.zk.ui.api;
  * <p>
  * It supports
  * <ul>
- * <li>{@link #getSclass} and {@link #getStyle}.</li>
+ * <li>{@link #getSclass}, {@link #getZclass}, and {@link #getStyle}.</li>
  * <li>{@link #getWidth}, {@link #getHeight}, {@link #getLeft}, {@link #getTop},
  * {@link #getZIndex}</li>
  * <li>{@link #focus}</li>
@@ -128,7 +128,6 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 * adjustments, use {@link #setSclass} instead.
 	 * 
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getSclass
-	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getRealSclass
 	 */
 	public String getZclass();
 
@@ -155,7 +154,6 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 * {@link #getSclass}, unless you override it. To replace the default style
 	 * completely, use {@link #setZclass} instead.
 	 * 
-	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getRealSclass
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getZclass
 	 */
 	public String getSclass();
@@ -240,4 +238,29 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 *            whether to set focus. If false, this method has no effect.
 	 */
 	public void setFocus(boolean focus);
+
+	/** Returns the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 * @since 5.0.2
+	 */
+	public int getRenderdefer();
+	/** Sets the number of milliseconds before rendering this component
+	 * at the client.
+	 * <p>Default: -1 (don't wait).
+	 *
+	 * <p>This method is useful if you have a sophiscated page that takes
+	 * long to render at a slow client. You can specify a non-negative value
+	 * as the render-defer delay such that the other part of the UI can appear
+	 * earlier. The styling of the render-deferred widget is controlled by
+	 * a CSS class called <code>z-renderdefer</code>.
+	 *
+	 * <p>Notice that it has no effect if the component has been rendered
+	 * at the client.
+	 * @param ms time to wait in milliseconds before rendering.
+	 * Notice: 0 also implies deferring the rendering (just right after
+	 * all others are renderred).
+	 * @since 5.0.2
+	 */
+	public void setRenderdefer(int ms);
 }

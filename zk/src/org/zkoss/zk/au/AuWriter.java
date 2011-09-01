@@ -1,18 +1,16 @@
 /* AuWriter.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Dec  3 16:37:03     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -38,12 +36,6 @@ public interface AuWriter {
 	 * @since 3.6.3
 	 */
 	public void setCompress(boolean compress);
-	/** Returns the request channel.
-	 * A channel is a kind of connections between client and server.
-	 * For example, AU is "au", while Comet is "cm".
-	 * @since 3.5.0
-	 */
-	public String getChannel();
 	/** Initializes the writer.
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
@@ -61,8 +53,38 @@ public interface AuWriter {
 	 * @param request the request (HttpServletRequest if HTTP)
 	 * @param response the response (HttpServletResponse if HTTP)
 	 */
-	public void close(Object request, Object response)
-	throws IOException;
+	public void close(Object request, Object response) throws IOException;
+
+	/** Indicates the writing has been completed.
+	 * Invokes this method before {@link #close},
+	 * if the caller supports the resend mechanism.
+	 * The caller usually stores the return value to a desktop by
+	 * {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent}).
+	 * <p>Unlike {@link #close}, this method must be called
+	 * in an activated execution.
+	 * <p>Once this method is called, the caller shall not invoke
+	 * ay other write method. It shall invoke only {@link #close}
+	 * to end the writer.
+	 * @since 5.0.4
+	 */
+	public Object complete() throws IOException;
+	/** Resend the content of the previous request returned by {@link #complete}.
+	 * <p>The content is usually stored to a desktop
+	 * by {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent},
+	 * and retrieved by {@link org.zkoss.zk.ui.sys.DesktopCtrl#getLastResponse}.
+	 *
+	 * <p>Once this method is called, the caller shall not invoke
+	 * ay other write method nor {@link #complete}.
+	 * It shall invoke only {@link #close} to end the writer.
+	 *
+	 * @param prevContent the previous content returned by
+	 * {@link #close} of the previous {@link AuWriter}.
+	 * @exception IllegalArgumentException if prevContent is null.
+	 * @exception IllegalStateException if any of write methods
+	 * (such as {@link #write}) is called.
+	 * @since 5.0.4
+	 */
+	public void resend(Object prevContent) throws IOException;
 
 	/** Generates the response ID to the output.
 	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#getResponseId

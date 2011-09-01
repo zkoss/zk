@@ -1,0 +1,44 @@
+<!-- B50-3201879.ztl.java
+
+	Purpose:for testing B50-3201879.ztl .
+
+	Description:
+
+	History:
+		06, 2, 2011 20:19:12
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3201879.zul,A,E,Window,Button,Popup,doModal">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<popup id="pop">
+		<button label="Click me if you cannot see a dialog, that is a bug!" onClick="alert(&quot;yes! The bug is fixed!&quot;)"/>
+	</popup>
+	<window border="none" height="100%">
+		<window id="win" visible="false" position="center">
+			<button label="click again" onClick="pop.open(self)"/>
+		</window>
+		<button label="Click Me first." onClick="win.doModal()"/>
+	</window>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button[label=\"Click Me first.\"]"));
+				waitResponse();
+				click(jq("@button[label=\"click again\"]"));
+				waitResponse();
+				click(jq("@button[label=\"Click me if you cannot see a dialog, that is a bug!\"]"));
+				waitResponse();
+				verifyEquals("yes! The bug is fixed!",getAlertMessage());
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2947988.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb  9 09:48:33 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+    <zscript>
+        java.util.ArrayList children = new java.util.ArrayList();
+        children.add(new SimpleTreeNode("1", new java.util.ArrayList()));
+       SimpleTreeModel model = new SimpleTreeModel(new SimpleTreeNode("ROOT",children));
+
+        void removeItem () {
+			testTree.setModel(null);
+        }
+    </zscript>
+    <tree id="testTree" model="${model}"/>
+    <button id="add" label="Click me shouldn't have any error." onClick="removeItem()"/>
+
+
+</zk>

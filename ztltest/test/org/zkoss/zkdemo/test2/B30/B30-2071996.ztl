@@ -1,0 +1,46 @@
+<!-- B30-2071996.ztl.java
+
+	Purpose:for testing B30-2071996.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 17:19:20
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2071996.zul,Listbox,Paging">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	Press next page twice to go to the last page
+	Then, check if all listitem can be selected (by moving mouse over them and click upon it).
+	<zscript>
+	String[] data = new String[] {
+		"Albert", "Bob", "Candy", "Elva", "Elva2", "Gaby", "Gavin", "Jason",
+		"John", "Jean", "Janet", "Jamie", "Jessica", "Peter",
+		"Rex", "Richard", "Sam", "Sidney", "Simon", "Sky", "Tony", "Vicky",
+		"Winnie", "Wendy", "Zera", "Zenobia" };
+	ListModel strset = new SimpleListModel(data);
+	</zscript>
+	<listbox id="search" model="&#36;{strset}" />
+	<paging onCreate='search.setMold("paging");search.paginal=self;search.pageSize=10;' />
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("button.z-paging-next"));waitResponse();
+				click(jq("button.z-paging-next"));waitResponse();
+				for(int i = 0; i < 6; i++){
+					click(jq("@listitem:eq("+i+")"));waitResponse();
+					verifyTrue(jq("@listitem:eq("+i+")").hasClass("z-listitem-seld"));
+				}
+		]]></client>
+	</case>
+</test>

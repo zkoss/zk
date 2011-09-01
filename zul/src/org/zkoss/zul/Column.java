@@ -1,18 +1,16 @@
 /* Column.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 25 16:02:36     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -29,16 +27,19 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.scripting.Namespaces;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SortEvent;
+import org.zkoss.zk.ui.ext.Scopes;
 
+import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -58,13 +59,22 @@ import org.zkoss.zul.mesg.MZul;
 public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
+	private String _sortAscNm = "none";
+	private String _sortDscNm = "none";
 	private Object _value;
+	private boolean _ignoreSort = false;
+	private boolean _isCustomAscComparator = false;
+	private boolean _isCustomDscComparator = false;
 
+	static {
+		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+		addClientEvent(Column.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
+	}
+	
 	public Column() {
 	}
 	public Column(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	/* Constructs a grid header with label and image.
 	 *
@@ -72,9 +82,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * @param src the URI of the image, or null to ignore.
 	 */
 	public Column(String label, String src) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	/* Constructs a grid header with label, image and width.
 	 *
@@ -84,9 +92,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * @since 3.0.4
 	 */
 	public Column(String label, String src, String width) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 		setWidth(width);
 	}
 
@@ -101,7 +107,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public org.zkoss.zul.api.Grid getGridApi() {		
 		return getGrid();
 	}
-
+	
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
 	 */
@@ -109,12 +115,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		return _sortDir;
 	}
 	/** Sets the sort direction. This does not sort the data, it only serves
-	 * as an indicator as to how the grid is sorted.
+	 * as an indicator as to how the grid is sorted. (unless the grid has "autosort" attribute)
 	 *
 	 * <p>If you use {@link #sort(boolean)} to sort rows ({@link Row}),
 	 * the sort direction is maintained automatically.
 	 * If you want to sort it in customized way, you have to set the
-	 * sort direction manaully.
+	 * sort direction manually.
 	 *
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
@@ -124,13 +130,29 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
-			smartUpdate("z.sort", _sortDir); //don't use null because sel.js assumes it
+			if (!"natural".equals(sortDir) && !_ignoreSort) {
+				Grid grid = getGrid();
+				if (grid != null && grid.isAutosort()) {
+					doSort("ascending".equals(sortDir));
+				}
+			}
+			smartUpdate("sortDirection", _sortDir);
 		}
 	}
 
 	/** Sets the type of the sorter.
-	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.0.9) or "none".
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3),
+	 * "auto(<i>number</i>)" (since 5.0.6) or "none".
 	 *
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case. (since 5.0.0)
+	 * 
 	 * <p>If "auto" is specified,
 	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
 	 * are called with {@link RowComparator}, if
@@ -144,26 +166,54 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.
-
+	 *
+	 * <p>If "auto(<i>number</i>)" is specified, 
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ArrayComparator}. Notice that the data must
+	 * be an array and the number-th element must be comparable ({@link Comparable}).
+	 *
 	 * <p>If "none" is specified, both {@link #setSortAscending} and
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
+	 * @since 3.5.3
 	 */
-	public void setSort(String type) {
-		if ("auto".equals(type)) {
+	public void setSort(String type) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (type == null) return;
+		if (type.startsWith("client")) {
+			setSortAscending(type);
+			setSortDescending(type);
+		} else if ("auto".equals(type)) {
 			if (getSortAscending() == null)
 				setSortAscending(new RowComparator(this, true, false, false));
 			if (getSortDescending() == null)
 				setSortDescending(new RowComparator(this, false, false, false));
-		} else if (!Strings.isBlank(type) && type.startsWith("auto")) {
+		} else if (type.startsWith("auto")) {
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String fieldnames = type.substring(j+1, k);
-				if (getSortAscending() == null)
-					setSortAscending(new FieldComparator(fieldnames, true));
-				if (getSortDescending() == null)
-					setSortDescending(new FieldComparator(fieldnames, false));
+				final String name = type.substring(j+1, k);
+				char cc;
+				int index = -1;
+				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
+					if ((index = Integer.parseInt(name)) < 0)
+						throw new IllegalArgumentException("Nonnegative number is required: "+name);
+				if (getSortAscending() == null || !_isCustomAscComparator) {
+					if (index < 0)
+						setSortAscending(new FieldComparator(name, true));
+					else
+						setSortAscending(new ArrayComparator(index, true));
+					_isCustomAscComparator = false;
+				}
+				if (getSortDescending() == null || !_isCustomDscComparator) {
+					if (index < 0)
+						setSortDescending(new FieldComparator(name, false));
+					else
+						setSortDescending(new ArrayComparator(index, false));
+					_isCustomDscComparator = false;
+				}
 			} else {
 				throw new UiException("Unknown sort type: "+type);
 			}
@@ -172,7 +222,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			setSortDescending((Comparator)null);
 		}
 	}
-	
+
 	/** Returns the ascending sorter, or null if not available.
 	 */
 	public Comparator getSortAscending() {
@@ -194,7 +244,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
-			invalidate();
+			_isCustomAscComparator = _sortAsc != null;
+			String nm = _isCustomAscComparator ? "fromServer": "none";
+			if (!_sortAscNm.equals(nm)) {
+				_sortAscNm = nm;
+				smartUpdate("sortAscending", _sortAscNm);
+			}
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
@@ -203,7 +258,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortAscending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
+			_sortAscNm = clsnm;
+			smartUpdate("sortAscending", clsnm);
+		} else
+			setSortAscending(toComparator(clsnm));
 	}
 
 	/** Returns the descending sorter, or null if not available.
@@ -227,7 +286,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
-			invalidate();
+			_isCustomDscComparator = _sortDsc != null;
+			String nm = _isCustomDscComparator ? "fromServer": "none";
+			if (!_sortDscNm.equals(nm)) {
+				_sortDscNm = nm;
+				smartUpdate("sortDescending", _sortDscNm);
+			}
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
@@ -236,7 +300,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortDescending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
+			_sortDscNm = clsnm;
+			smartUpdate("sortDescending", clsnm);
+		} else
+			setSortDescending(toComparator(clsnm));
 	}
 
 	private Comparator toComparator(String clsnm)
@@ -282,13 +350,16 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * null but {@link ListModelExt} is not implemented.
 	 */
 	public boolean sort(boolean ascending) {
-		final String dir = getSortDirection();		
+		final String dir = getSortDirection();
 		if (ascending) {
 			if ("ascending".equals(dir)) return false;
 		} else {
 			if ("descending".equals(dir)) return false;
 		}
 
+		return doSort(ascending);
+	}
+	/*package*/ boolean doSort(boolean ascending) {
 		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
 		if (cmpr == null) return false;
 
@@ -298,7 +369,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (rows == null) return false;
 
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = grid.getModel();
 			boolean isPagingMold = grid.inPagingMold();
@@ -321,10 +392,12 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 				// the wrong active page when dynamically add/remove the item (i.e. sorting).
 				// Therefore, we have to reset the correct active page.
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 		fixDirection(grid, ascending);
-		
+
+		// sometimes the items at client side are out of date
+		grid.getRows().invalidate();
 		return true;
 	}
 	/** Sorts the rows. If with group, each group is sorted independently.
@@ -341,6 +414,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 	
 	private void fixDirection(Grid grid, boolean ascending) {
+		_ignoreSort = true;
 		//maintain
 		for (Iterator it = grid.getColumns().getChildren().iterator();
 		it.hasNext();) {
@@ -348,6 +422,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
+		_ignoreSort = false;
 	}
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}.
@@ -390,7 +465,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (grid == null) return false;
 		
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = grid.getModel();
 			int index = grid.getColumns().getChildren().indexOf(this);
@@ -456,26 +531,33 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 					sort0(grid, cmpr); //need to sort each group
 			}
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 
 		fixDirection(grid, ascending);
+	
+		// sometimes the items at client side are out of date
+		grid.getRows().invalidate();
 		return true;
 	}
-	
-	public void setLabel(String label) {
-		super.setLabel(label);
-		if (getParent() != null)
-			((Columns)getParent()).postOnInitLater();
-	}
-	
-	public boolean setVisible(boolean visible) {
-		boolean old = super.setVisible(visible);
-		if (getParent() != null)
-			((Columns)getParent()).postOnInitLater();
-		return old;
-	}
 
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!"none".equals(_sortDscNm))
+			render(renderer, "sortDescending", _sortDscNm);
+
+		if (!"none".equals(_sortAscNm))
+			render(renderer, "sortAscending", _sortAscNm);
+		
+		if (!"natural".equals(_sortDir))
+			render(renderer, "sortDirection", _sortDir);
+
+		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
+	}
+	
 	/** Returns the value.
 	 * <p>Default: null.
 	 * <p>Note: the value is application dependent, you can place
@@ -496,8 +578,19 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 
 	//-- event listener --//
+	/**
+	 * Invokes a sorting action based on a {@link SortEvent} and maintains
+	 * {@link #getSortDirection}.
+	 * @since 5.0.8
+	 */
+	public void onSort(SortEvent event) {
+		sort(event.isAscending());
+	}
+	
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
+	 * @deprecated As of release 5.0.8, use or override {@link #onSort(SortEvent)}
+	 * instead.
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
@@ -505,35 +598,19 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		else if ("descending".equals(dir)) sort(true);
 		else if (!sort(true)) sort(false);
 	}
+	
+	/** It invokes {@link #group(boolean)} to group list items and maintain
+	 * {@link #getSortDirection}.
+	 */
+	public void onGroup() {
+		final String dir = getSortDirection();
+		if ("ascending".equals(dir)) group(false);
+		else if ("descending".equals(dir)) group(true);
+		else if (!group(true)) group(false);
+	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-column" : _zclass;
-	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = _sortAsc != null || _sortDsc != null ?  getZclass() + "-sort": "";
-		return scls != null ? scls + ' ' + added : added;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80);
-		if (_sortAsc != null) sb.append(" z.asc=\"true\"");
-		if (_sortDsc != null) sb.append(" z.dsc=\"true\"");
-
-		if (!"natural".equals(_sortDir))
-			HTMLs.appendAttribute(sb, "z.sort", _sortDir);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-
-		final String attrs = super.getOuterAttrs();
-		if (sb.length() == 0) return attrs;
-		return sb.insert(0, attrs).toString();
-	}
-
-	/** Invalidates the whole grid. */
-	protected void invalidateWhole() {
-		final Grid grid = getGrid();
-		if (grid != null) grid.invalidate();
 	}
 
 	//-- Component --//
@@ -543,7 +620,22 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		super.beforeParentChanged(parent);
 	}
 	
-
+	/** Processes an AU request.
+	 * <p>Default: in addition to what are handled by its superclass, it also 
+	 * handles onSort.
+	 * @since 5.0.8
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SORT)) {
+			SortEvent evt = SortEvent.getSortEvent(request);
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
+	}
+	
+	
+	
 	//Cloneable//
 	public Object clone() {
 		final Column clone = (Column)super.clone();

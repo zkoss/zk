@@ -1,18 +1,16 @@
 /* ClassWebResource.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Sep 20 16:49:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -87,11 +85,13 @@ public class ClassWebResource {
 	/** An array of extensions that have to be compressed (with gzip). */
 	private Set _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map _extlets = new HashMap(4);
+	private final Map _extlets = new HashMap();
 	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
 	private final Map _reqfilters = new HashMap(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
 	private final Map _incfilters = new HashMap(2);
+	/** Additional locator. */
+	private Locator _extraloc;
 	/** The prefix used to encode URL. */
 	private String _encURLPrefix;
 	/** Whether to debug JavaScript files. */
@@ -116,16 +116,51 @@ public class ClassWebResource {
 	public static final int FILTER_INCLUDE = 0x2;
 
 	/** Returns the URL of the resource of the specified URI by searching
-	 * the class path (with {@link #PATH_PREFIX}).
+	 * only the class path (with {@link #PATH_PREFIX}).
+	 * <p>On the other hand, {@link #getResource} will search
+	 * the extra locator first ({@link #getExtraLocator}) and then
+	 * the class path.
+	 * @since 5.0.0
 	 */
-	public static URL getResource(String uri) {
+	public static URL getClassResource(String uri) {
 		return Locators.getDefault().getResource(PATH_PREFIX + fixURI(uri));
 	}
 	/** Returns the resource in a stream of the specified URI by searching
-	 * the class path (with {@link #PATH_PREFIX}).
+	 * only the class path (with {@link #PATH_PREFIX}).
+	 * <p>On the other hand, {@link #getResourceAsStream} will search
+	 * the extra locator first ({@link #getExtraLocator}) and then
+	 * the class path.
+	 * @since 5.0.0
 	 */
-	public static InputStream getResourceAsStream(String uri) {
+	public static InputStream getClassResourceAsStream(String uri) {
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + fixURI(uri));
+	}
+	/** Returns the URL of the resource of the specified URI by searching
+	 * the extra locator, if any, and then the class path
+	 * (with {@link #PATH_PREFIX}).
+	 * <p>This method becomes non-static since 5.0.0, and it
+	 * will search the extra locator ({@link #getExtraLocator}) first.
+	 */
+	public URL getResource(String uri) {
+		uri = fixURI(uri);
+		if (_extraloc != null) {
+			final URL url = _extraloc.getResource(uri);
+			if (url != null) return url;
+		}
+		return Locators.getDefault().getResource(PATH_PREFIX + uri);
+	}
+	/** Returns the resource in a stream of the specified URI by searching
+	 * the extra locator, if any, and then, the class path (with {@link #PATH_PREFIX}).
+	 * <p>This method becomes non-static since 5.0.0, and it
+	 * will search the extra locator ({@link #getExtraLocator}) first.
+	 */
+	public InputStream getResourceAsStream(String uri) {
+		uri = fixURI(uri);
+		if (_extraloc != null) {
+			final InputStream is = _extraloc.getResourceAsStream(uri);
+			if (is != null) return is;
+		}
+		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
 	}
 	private static String fixURI(String uri) {
 		int j = uri.lastIndexOf('?');
@@ -178,6 +213,24 @@ public class ClassWebResource {
 		_cwc = new CWC();
 
 		addExtendlet("dsp", new DspExtendlet());
+	}
+	/** Returns the extra locator, or null if not available.
+	 * The extra locator, if specified, has the higher priority than
+	 * the class path.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public Locator getExtraLocator() {
+		return _extraloc;
+	}
+	/** Sets the extra locator.
+	 * The extra locator, if specified, has the higher priority than
+	 * the class path.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public void setExtraLocator(Locator loc) {
+		_extraloc = loc;
 	}
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
@@ -256,6 +309,13 @@ public class ClassWebResource {
 		extlet.init(new ExtendletConfig() {
 			public ExtendletContext getExtendletContext() {
 				return _cwc;
+			}
+			public void addCompressExtension(String ext) {
+				synchronized (ClassWebResource.this) {
+					if (_compressExts == null)
+						_compressExts = new LinkedHashSet();
+					_compressExts.add(ext);
+				}
 			}
 		});
 
@@ -443,7 +503,7 @@ public class ClassWebResource {
 	 * Java (i.e., uncompressed) file instead of the compressed one.
 	 * For example, if {@link #service} is called to load abc.js,
 	 * and {@link #isDebugJS}, then {@link #service} will try
-	 * to load abc.org.js first. If not found, it load ab.js insted.
+	 * to load abc.src.js first. If not found, it load ab.js insted.
 	 *
 	 * <p>If {@link #isDebugJS} is false (default),
 	 * abc.js is always loaded.
@@ -478,32 +538,25 @@ public class ClassWebResource {
 				pi = pi.substring(len2);
 		}
 
-		//Notify the browser by calling back zk.ald(nm) if _zcb
-		String jsextra = null;
-		if (pi.startsWith("/_zcb/")) {
-			pi = pi.substring(5);
-			jsextra = "\nzk.ald('" + (pi.startsWith("/js")?pi.substring(3):pi) + "');";
-		}
-
 		final String ext = Servlets.getExtension(pi, false); //complete ext
 		final Filter[] filters = getFilters(ext,
 			Servlets.isIncluded(request) ? FILTER_INCLUDE: FILTER_REQUEST);
 		if (filters == null) {
-			web0(request, response, pi, ext, jsextra);
+			web0(request, response, pi, ext);
 		} else {
-			new FilterChainImpl(filters, pi, ext, jsextra)
+			new FilterChainImpl(filters, pi, ext)
 				.doFilter(request, response);
 		}
 	}
 	/** Processes the request without calling filter. */
 	private void web0(HttpServletRequest request,
-	HttpServletResponse response, String pi, String ext, String jsextra)
+	HttpServletResponse response, String pi, String ext)
 	throws ServletException, IOException {
 		if (ext != null) {
 			//Invoke the resource processor (Extendlet)
 			final Extendlet extlet = getExtendlet(ext);
 			if (extlet != null) {
-				extlet.service(request, response, pi, jsextra);
+				extlet.service(request, response, pi);
 				return;
 			}
 		}
@@ -531,20 +584,19 @@ public class ClassWebResource {
 				setClientCacheForever(response);
 		}
 
-		byte[] extra = jsextra != null ? jsextra.getBytes("UTF-8"): null;
 		InputStream is = null;
 
 		if (_debugJS && "js".equals(ext)) {
 			final String orgpi = Servlets.locate(_ctx, request,
-				pi.substring(0, pi.length() - 3) + ".org.js",
+				pi.substring(0, pi.length() - 3) + ".src.js",
 				_cwc.getLocator());
 			is = getResourceAsStream(orgpi);
 			if (is != null) pi = orgpi;
 		}
 
 		if (is == null) {
-			pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-			is = getResourceAsStream(pi);
+			final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
+			is = getResourceAsStream(p);
 		}
 
 		boolean compressed = false;
@@ -563,20 +615,15 @@ public class ClassWebResource {
 		} else {
 			//Note: don't compress images
 			data = shallCompress(request, ext) ?
-				Https.gzip(request, response, is, extra): null;
-			if (data != null) { //compressed
-				compressed = true;
-				extra = null;
-			} else {
+				Https.gzip(request, response, is, null): null;
+			if (!(compressed = (data != null)))
 				data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely
-			}
 
 			Files.close(is);
 		}
 
 		int len = data.length;
-		if (extra != null) len += extra.length;
 		response.setContentLength(len);
 
 		OutputStream out;
@@ -606,7 +653,6 @@ public class ClassWebResource {
 			}
 		}
 		out.write(data);
-		if (extra != null) out.write(extra);
 		out.flush();
 	}
 	private boolean shallCompress(ServletRequest request, String ext) {
@@ -652,10 +698,11 @@ public class ClassWebResource {
 				return null;
 			}
 			public URL getResource(String name) {
-				return ClassWebResource.getResource(name);
+				return ClassWebResource.this.getResource(name);
 			}
 			public InputStream getResourceAsStream(String name) {
-				return ClassWebResource.getResourceAsStream(name);
+				return ClassWebResource.this.getResourceAsStream(name);
+					//Note: it doesn't handle _debugJS
 			}
 		};
 
@@ -720,6 +767,7 @@ public class ClassWebResource {
 		public void include(HttpServletRequest request,
 		HttpServletResponse response, String uri, Map params)
 		throws ServletException, IOException {
+			//Note: it is caller's job to convert related path to ~./
 			if (uri.startsWith("~./") && uri.indexOf('?') < 0
 			&& isDirectInclude(uri)) {
 				Object old = request.getAttribute(Attributes.ARG);
@@ -731,7 +779,8 @@ public class ClassWebResource {
 				request.setAttribute(attrnm, Boolean.TRUE);
 					//so Servlets.isIncluded returns correctly
 				try {
-					service(request, response, uri.substring(2));
+					service(request, response,
+						Servlets.locate(_ctx, request, uri.substring(2), _cwc.getLocator()));
 				} finally {
 					request.removeAttribute(attrnm);
 					request.setAttribute(Attributes.ARG, old);
@@ -755,25 +804,34 @@ public class ClassWebResource {
 			return true;
 		}
 		public URL getResource(String uri) {
-			return ClassWebResource.getResource(uri);
+			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
+				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
+				URL url = ClassWebResource.this.getResource(orgpi);
+				if (url != null) return url;
+			}
+			return ClassWebResource.this.getResource(uri);
 		}
 		public InputStream getResourceAsStream(String uri) {
-			return ClassWebResource.getResourceAsStream(uri);
+			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
+				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
+				InputStream is = ClassWebResource.this.getResourceAsStream(orgpi);
+				if (is != null) return is;
+			}
+			return ClassWebResource.this.getResourceAsStream(uri);
 		}
 	}
 	private class FilterChainImpl implements FilterChain {
 		private final Filter[] _filters;
-		private final String _pi, _ext, _jsextra;
+		private final String _pi, _ext;
 
 		/** Which filter to process. */
 		private int _j;
 		private FilterChainImpl(
-		Filter[] filters, String pi, String ext, String jsextra)
+		Filter[] filters, String pi, String ext)
 		throws ServletException, IOException {
 			_pi = pi;
 			_filters = filters;
 			_ext = ext;
-			_jsextra = jsextra;
 		}
 		public void doFilter(HttpServletRequest request,
 		HttpServletResponse response)
@@ -782,7 +840,7 @@ public class ClassWebResource {
 				throw new IllegalStateException("Out of bound: "+_j+", filter="+Objects.toString(_filters));
 			final int j = _j++;
 			if (j == _filters.length) {
-				web0(request, response, _pi, _ext, _jsextra);
+				web0(request, response, _pi, _ext);
 			} else {
 				_filters[j].doFilter(request, response, _pi, this);
 			}

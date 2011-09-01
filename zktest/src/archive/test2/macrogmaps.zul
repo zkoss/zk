@@ -1,0 +1,12 @@
+<window width="400px" height="300px" closable="true" title="gmaps">
+ <gmaps width="400px" height="250px" showLargeCtrl="true"
+  showTypeCtrl="true" lat="18.51912660542399" lng="73.85640621185303"
+  zoom="16" style="Draggablecursor: crosshair!important;">
+  
+  <gmarker lat="18.51912660542399"
+   lng="73.85640621185303">
+  </gmarker>
+
+ </gmaps>
+ <button label="modal" onClick="spaceOwner.doModal()"/>
+</window>

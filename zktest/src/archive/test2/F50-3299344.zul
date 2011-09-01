@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3299344.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  9 17:25:12 TST 2011, Created by henrichen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?> 
+<zk>
+<html><![CDATA[
+1. Press the "submit" button. You should not see any change on the screen.<br/>
+2. The console should show following five lines:<br/>
+validationForGrid called:CA - bean:User - property:state<br/>
+validationForGrid called:TX - bean:User - property:state<br/>
+validationForGrid called:WA - bean:User - property:state<br/>
+onBindingValidate() called<br/>
+onClick() called<br/>
+]]></html> 
+<window style="margin: 0 auto" title="Binding#getBean Test"> 
+ 
+<zscript><![CDATA[ 
+public class User{  
+	public String state;  
+ 
+	public String getState() { 
+		return(state); 
+	} 
+ 
+	public void setState(String st) { 
+		state = st; 
+	} 
+}  
+ 
+List list = new LinkedList(); 
+u = new User(); 
+u.state="CA";  
+list.add(u);  
+u = new User(); 
+u.state="TX";  
+list.add(u);  
+u = new User(); 
+u.state="WA";  
+list.add(u);  
+ 
+u = new User(); 
+u.state="ENTRY";  
+ 
+public String getPropertyName(String express) {
+	if (express != null) {
+		int j  = express.lastIndexOf(".");
+		if (j >= 0) {
+			return express.substring(j+1);
+		}
+	}
+	return null;
+}
+
+public void validationForGrid(Event ev) {  
+	Clients.log("validationForGrid called:"+ ev.getValue()+" - bean:"+ev.getBinding().getBean(ev.getTarget()).getClass().getName()+" - property:"+getPropertyName(ev.getBinding().getExpression()));  
+}  
+ 
+public void validationForEntry(Event ev) {  
+	Clients.log("validationForEntry called");  
+}  
+ 
+]]></zscript>  
+<grid id="griid" width="415px" model="@{list}"> 
+	<columns>  
+		<column label="State" align="center" width="60px"/>  
+	</columns>  
+	<rows> 
+		<row self="@{each=item}" align="center">
+			<textbox id="@{item.state}" value="@{item.state, save-when='submit.onClick'}" onBindingSave="validationForGrid(event)"/>
+		</row> 
+	</rows> 
+</grid> 
+<textbox value="@{u.state}" onBindingSave="validationForEntry(event)"/>  
+ 
+<button id="submit" label="submit"> 
+<attribute name="onBindingValidate"> 
+	Clients.log("onBindingValidate() called"); 
+</attribute> 
+<attribute name="onClick"> 
+	Clients.log("onClick() called"); 
+</attribute> 
+</button> 
+ 
+</window> 
+</zk>

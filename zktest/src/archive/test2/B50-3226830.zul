@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" ?>
+
+<!--
+B50-3226830.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 27 16:18:47 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click the button, and then if you see the top gap(between white and dark black) of the popup window is greater than 5px, that is a bug.(All the IE version only)
+<button label="Click Me">
+<attribute name="onClick"><![CDATA[
+testWin.doHighlighted();
+]]></attribute>
+</button>
+
+<window id="testWin" visible="false">
+<grid>
+<rows>
+<row>
+<label value="Philip Hensher"/>
+<label value="The Northern Clemency"/>
+<label value="Knopf (October 30, 2008)"/>
+<label value="608 pages"/>
+</row>
+</rows>
+</grid>
+</window>
+</zk>

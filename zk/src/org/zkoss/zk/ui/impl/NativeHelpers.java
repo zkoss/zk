@@ -1,18 +1,16 @@
 /* NativeHelpers.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 23 17:33:59     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -29,7 +27,6 @@ import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
  * Utilities for implementing {@link org.zkoss.zk.ui.ext.Native.Helper}.
@@ -68,12 +65,5 @@ public class NativeHelpers {
 					Objects.toString(me.getValue()));
 			}
 		}
-	}
-
-	/** @deprecated As of release 3.5.0, replaced with
-	 * {@link ZkFns#outZkHtmlTags}.
-	 */
-	public static String outZKHtmlTags() {
-		return ZkFns.outZkHtmlTags();
 	}
 }

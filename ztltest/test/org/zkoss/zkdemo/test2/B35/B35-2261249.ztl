@@ -1,0 +1,41 @@
+
+<test tags="B35-2261249.zul,contextmenu,grid">
+	<case id="ztl">
+		<server><!--
+			<window title="Grid" border="normal" width="100%">
+				Click the context menu option of grid "Group", "Sort Ascending", and "Sort Descending". if no exception, it is fixed!
+				 
+				<zscript><![CDATA[//@IMPORT
+					import org.zkoss.zktest.util.*;                  
+				]]>
+				Comparator asc = new RowLabelComparator(true),
+					dsc = new RowLabelComparator(false);
+				</zscript>
+				<grid>
+					<columns sizable="true" menupopup="auto">
+						<column id="c1" label="Type" sortAscending="&#36;{asc}"
+							sortDescending="&#36;{dsc}" onSelect='alert("xx")'/>
+						<column id="c2" label="Content" />
+					</columns>
+				</grid>
+			</window>
+		--></server>
+		<client><![CDATA[
+				mouseOver(c1);
+				click(jq(".z-column-btn:eq(0)"));
+				clickAt(jq(".z-menu-item-cnt:eq(0)"),"6,6");
+				waitResponse();
+				verifyFalse(jq(".z-window-modal").exists());
+				mouseOver(c1);
+				click(jq(".z-column-btn:eq(0)"));
+				clickAt(jq(".z-menu-item-cnt:eq(1)"),"6,6");
+				waitResponse();
+				verifyFalse(jq(".z-window-modal").exists());
+				mouseOver(c1);
+				click(jq(".z-column-btn:eq(0)"));
+				clickAt(jq(".z-menu-item-cnt:eq(2)"),"6,6");
+				waitResponse();
+				verifyFalse(jq(".z-window-modal").exists());
+		]]></client>
+	</case>
+</test>

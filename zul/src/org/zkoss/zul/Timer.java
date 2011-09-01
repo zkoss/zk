@@ -1,18 +1,16 @@
 /* Timer.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Sep 26 12:45:22     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * Fires one or more {@link org.zkoss.zk.ui.event.Event} after
@@ -38,12 +37,15 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	private int _delay;
 	private boolean _repeats, _running = true;
 
+	static {
+		addClientEvent(Timer.class, Events.ON_TIMER, CE_DUPLICATE_IGNORE);
+	}
+
 	public Timer() {
-		super.setVisible(false);
 	}
 	public Timer(int delay) {
 		this();
-		_delay = delay;
+		_delay = Math.max(0, delay);
 	}
 
 	/** Returns the delay, the number of milliseconds between
@@ -55,16 +57,13 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	}
 	/** Sets the delay, the number of milliseconds between
 	 * successive action events.
+	 * @param delay If negative, 0 is assumed.
 	 */
-	public void setDelay(int delay)
-	throws WrongValueException {
-		if (delay < 0)
-			throw new WrongValueException("Negative delay is not allowed: "+delay);
+	public void setDelay(int delay) {
+		delay = Math.max(0, delay);
 		if (delay != _delay) {
 			_delay = delay;
-			smartUpdate("z.delay", Integer.toString(_delay));
-			if (_running)
-				smartUpdate("z.init", true); //init
+			smartUpdate("delay", _delay);
 		}
 	}
 	/** Returns whether the timer shall send Event repeatly.
@@ -78,9 +77,7 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	public void setRepeats(boolean repeats) {
 		if (_repeats != repeats) {
 			_repeats = repeats;
-			smartUpdate("z.repeats", Boolean.toString(_repeats));
-			if (_running)
-				smartUpdate("z.init", true); //init
+			smartUpdate("repeats", _repeats);
 		}
 	}
 	/** Returns whether this timer is running.
@@ -103,7 +100,7 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	public void stop() {
 		if (_running) {
 			_running = false;
-			smartUpdate("z.running", false);
+			smartUpdate("running", Boolean.FALSE, true); //Bug 3155985: shall allow restore
 		}
 	}
 	/** Starts the timer.
@@ -111,43 +108,38 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	public void start() {
 		if (!_running) {
 			_running = true;
-			smartUpdate("z.running", true);
+			smartUpdate("running", Boolean.TRUE, true); //Bug 3155985: shall allow restore
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.delay", _delay);
-		HTMLs.appendAttribute(sb, "z.repeats", _repeats);
-		if (!_running)
-			sb.append(" z.running=\"false\"");
-		return sb.toString();
-	}
-
 	//-- Component --//
-	/** Not allowd. */
-	public boolean setVisible(boolean visible) {
-		throw new UnsupportedOperationException("timer is always invisible");
-	}
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl
-	implements org.zkoss.zk.ui.ext.client.Timer {
-		//Timer//
-		public void onTimer() {
-			if (!_repeats) stop(); //Bug 1829397
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_TIMER)) {
+			if (!_repeats) _running = false; //Bug 1829397
 		}
+		super.service(request, everError);
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "repeats", _repeats);
+		if (_delay != 0) renderer.render("delay", _delay);
+		if (!_running) renderer.render("running", false);
 	}
 }

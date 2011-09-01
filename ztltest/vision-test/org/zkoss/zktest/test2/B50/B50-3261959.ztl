@@ -1,0 +1,75 @@
+<test tags="B50-3261959.zul,A,E,Tree,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+<div style="padding: 0px; border: 0px; height: 100%">
+<borderlayout>
+	<north border="0" size="90px" >
+		<div height="90px">
+Please click the "show west" button, and you should see there is a horizontal scrollbar shown in the tree.		</div>
+	</north>
+	<west id="west" visible="false" title="navigation" width="20%" collapsible="true" flex="true" maxsize="500" splittable="true">
+		<div>
+    		<div vflex="1" hflex="min" > 
+			<tree id="tree" vflex="1" hflex="1" span="true">
+		 		<treecols>
+		        	<treecol hflex="min"/>
+		    	</treecols>	
+		    	<treechildren>
+			        <treeitem>
+			            <treerow>
+			                <treecell label="Item 1 xxxxxx"/>
+			            </treerow>
+			        </treeitem>
+			        <treeitem>
+			            <treerow>
+			                <treecell label="Item 2 xxxxxxx"/>
+			            </treerow>
+			            <treechildren>
+			                <treeitem id="treeitem" open="false">
+			                    <treerow>
+			                        <treecell label="Item 2.1 xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			                    </treerow>
+			                    <treechildren>
+			                        <treeitem>
+			                            <treerow>
+			                                <treecell label="Item 2.1.1 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			                            </treerow>
+			                        </treeitem>
+			                        <treeitem>
+			                            <treerow>
+			                                <treecell label="Item 2.1.2 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			                            </treerow>
+			                        </treeitem>
+			                    </treechildren>
+			                </treeitem>
+			                <treeitem>
+			                    <treerow>
+			                        <treecell label="Item 2.2 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+			                    </treerow>
+			                </treeitem>
+			            </treechildren>
+			        </treeitem>
+			        <treeitem label="Item 3 xxxxxxx"/>
+		    	</treechildren>
+	   		</tree>
+	    	</div>
+		</div>
+	</west>
+	<center  autoscroll="true">
+		<div style="background: yellow" vflex="1">
+			<button label="show west" onClick='west.visible=true'/>
+		</div>
+	</center>
+	</borderlayout> 
+</div>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq("@button"));
+			waitResponse();
+			verifyImage();
+		]]></client>
+	</case>
+</test>

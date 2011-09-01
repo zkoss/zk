@@ -1,18 +1,16 @@
 /* BigDecimals.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Apr 17 10:25:07     2003, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
 
+import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 import org.zkoss.math.BigIntegers;
 
@@ -141,5 +140,42 @@ public class BigDecimals {
 	 */
 	public static final BigDecimal toBigDecimal(Byte v) {
 		return toBigDecimal(v.byteValue());
+	}
+
+	/**
+	 * Returns a string representation of this BigDecimal without an exponent field.
+	 * It is the same as {@link BigDecimal#toPlainString} except it works under
+	 * JDK 1.4.
+	 * @since 5.0.6
+	 */
+	public static final String toPlainString(BigDecimal bd) {
+		if (JVMs.isJava5())
+			return bd.toPlainString();
+
+		final int scale = bd.scale();
+		if (scale <= 0) {
+			if (scale < 0)
+				bd = bd.setScale(0);
+			return bd.unscaledValue().toString();
+		}
+
+		final int signum = bd.signum();
+		final String intString = bd.unscaledValue().abs().toString();
+		int insertionPoint = intString.length() - scale;
+	 	if (insertionPoint == 0) //Point goes right before intVal
+	 	    return (signum<0 ? "-0." : "0.") + intString;
+		final StringBuffer sb = new StringBuffer(32);
+		if (insertionPoint > 0) { //Point goes inside intVal
+			sb.append(intString)
+			  .insert(insertionPoint, '.');
+			if (signum < 0)
+				sb.insert(0, '-');
+		} else { //We must insert zeros between point and intVal
+			sb.append(signum<0 ? "-0." : "0.");
+			for (int i=0; i<-insertionPoint; i++)
+				sb.append('0');
+			sb.append(intString);
+		}
+		return sb.toString();
 	}
 }

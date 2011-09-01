@@ -1,18 +1,16 @@
 /* Audio.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Nov 16 11:48:27     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -126,26 +124,28 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		if (_audio != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_audio = null;
-			updateSrc();
+			smartUpdate("src", new EncodedSrc());
 		}
 	}
 	private String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _audio != null ? getAudioSrc(): //already encoded
 			dt != null ? dt.getExecution().encodeURL(
-				_src != null ? _src: "~./aud/mute.mid"): "";
+					_src != null ? _src: "~./aud/mute.mid"):
+					//mute.mid is required. otherwise, quicktime failed to identify audio
+				"";
 	}
 
 	/** Returns whether to auto start playing the audio.
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean isAutostart() {
+	public boolean isAutostart() {
 		return _autostart;
 	}
 	/** Sets whether to auto start playing the audio.
 	 */
-	public final void setAutostart(boolean autostart) {
+	public void setAutostart(boolean autostart) {
 		if (_autostart != autostart) {
 			_autostart = autostart;
 			smartUpdate("autostart", _autostart);
@@ -157,13 +157,13 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 	 * <p>Default: false;
 	 * @since 3.6.1
 	 */
-	public final boolean isLoop() {
+	public boolean isLoop() {
 		return _loop;
 	}
 	/** Sets whether to play the audio repeatedly.
 	 * @since 3.6.1
 	 */
-	public final void setLoop(boolean loop) {
+	public void setLoop(boolean loop) {
 		if (_loop != loop) {
 			_loop = loop;
 			smartUpdate("loop", _loop);
@@ -184,12 +184,8 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 			_audio = audio;
 			_src = null;
 			if (_audio != null) ++_audver; //enforce browser to reload
-			updateSrc();
+			smartUpdate("src", new EncodedSrc());
 		}
-	}
-	private void updateSrc() {
-		invalidate();
-			//IE won't work if we only change the src attribute
 	}
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
@@ -207,28 +203,27 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 			this, _audver, _audio.getName(), _audio.getFormat());
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "src",  getEncodedSrc());
-		HTMLs.appendAttribute(sb, "autostart",  _autostart);
-		HTMLs.appendAttribute(sb, "loop",  _loop);
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "border",  _border);
-		sb.append(" z.autohide=\"true\"");
-		return sb.toString();
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "src", getEncodedSrc());
+		render(renderer, "align", _align);
+		render(renderer, "border", _border);
+		render(renderer, "autostart", _autostart);
+		render(renderer, "loop", _loop);
 	}
 
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
@@ -239,6 +234,12 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _audio;
+		}
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrc();
 		}
 	}
 }

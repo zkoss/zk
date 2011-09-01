@@ -1,43 +1,37 @@
 /* Treechildren.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul  6 18:55:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.AbstractCollection;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.LinkedHashSet;
-
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.ext.Paginal;
 
 /**
  * A treechildren.
@@ -86,22 +80,29 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	public org.zkoss.zul.api.Treerow getLinkedTreerowApi() {
 		return getLinkedTreerow();
 	}
-	/** Returns whether this is visible.
-	 * <p>Besides depends on {@link #setVisible}, it also depends on
-	 * whether all its ancestors is open.
-	 */
+//	/** Returns whether this is visible.
+//	 * <p>Besides depends on {@link #setVisible}, it also depends on
+//	 * whether all its ancestors is open.
+//	 */
+	/*
 	public boolean isVisible() {
 		if (!super.isVisible())
 			return false;
-
 		Component comp = getParent();
-		if (!(comp instanceof Treeitem))
-			return true;
-		if (!((Treeitem)comp).isOpen())
+		return !(comp instanceof Treeitem) || 
+			((Treeitem)comp).isOpen() && ((Treeitem)comp).isVisible(); //recursive
+	}
+	*/
+	/*package*/ boolean isRealVisible() {
+		if(!isVisible())
 			return false;
-		comp = comp.getParent();
-		return !(comp instanceof Treechildren)
-			|| ((Treechildren)comp).isVisible(); //recursive
+		Component comp = getParent();
+		if(comp == null)
+			return true;
+		if(!(comp instanceof Treeitem))
+			return comp.isVisible();
+		Treeitem item = (Treeitem) comp;
+		return item.isOpen() && item.isRealVisible();
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
@@ -173,73 +174,23 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		super.onChildRemoved(child);
 		addVisibleItemCount(-((Treeitem)child).getVisibleItemCount());
 	}
-	void addVisibleItemCount(int count) {
+	/*package*/ void addVisibleItemCount(int count) {
 		if (count == 0) return;
-		Component parent = (Component) getParent();
+		Component parent = getParent();
 		if (parent instanceof Treeitem) {
 			if (((Treeitem)parent).isOpen())
-				((Treeitem)parent).addVisibleItemCount(count, false);
+				((Treeitem)parent).addVisibleItemCount(count);
 		} else if (parent instanceof Tree)
 			((Tree)parent).addVisibleItemCount(count);
 		_visibleItemCount += count;
 	}
-	
 	//bug #3051305: Active Page not update when drag & drop item to the end
 	public boolean insertBefore(Component newChild, Component refChild) {
 		final Tree tree = getTree();
-		if (newChild.getParent() == this && tree != null && tree.inPagingMold() && !tree.isInvalidated()) { //might change page, have to invalidate 
+		if (newChild.getParent() == this && tree != null && tree.inPagingMold() && !tree.isInvalidated()) {//might change page, have to invalidate 
 			tree.invalidate();
 		}
 		return super.insertBefore(newChild, refChild);
-	}
-	
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return -1 since 3.0.7.
-	 */
-	public int getPageSize() {
-		return -1;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always does nothing since 3.0.7
-	 */
-	public void setPageSize(int size) throws WrongValueException {
-	}
-
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return 1 since 3.0.7.
-	 */
-	public int getPageCount() {
-		return 1;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return 0 since 3.0.7.
-	 */
-	public int getActivePage() {
-		return 0;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always does nothing since 3.0.7
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always returns 0 since 3.0.7
-	 */
-	public int getVisibleBegin() {
-		return 0;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always returns Integer.MAX_VALUE since 3.0.7
-	 */
-	public int getVisibleEnd() {
-		return Integer.MAX_VALUE;
 	}
 
 	//-- Component --//
@@ -271,43 +222,30 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			throw new UiException("Unsupported child for treechildren: "+child);
 		super.beforeChildAdded(child, refChild);
 	}
-	public void invalidate() {
-		final Component parent = getParent();
-		if (parent instanceof Tree) {
-			//Browser Limitation (IE/FF): we cannot update TBODY only
-			parent.invalidate();
-		} else if (!getChildren().isEmpty()) {
-		//Don't invalidate if no child at all, since there is no
-		//counter-part at the client
-			super.invalidate();
-		}
-	}
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-children" : _zclass;
+		return _zclass == null ? "z-treechildren" : _zclass;
 	}
-	public void smartUpdate(String name, String value) {
+	protected void smartUpdate(String name, Object value) {
 		Component comp = getParent();
-		if (comp instanceof Treeitem)
-			comp = ((Treeitem)comp).getTreerow();
-		if (comp != null)
-			((ComponentCtrl)comp).smartUpdate(name, value);
+		if (comp instanceof Treeitem) {
+			Treerow tr = ((Treeitem)comp).getTreerow();
+			if (tr != null)
+				tr.smartUpdate(name, value);
+		} else
+			((Tree)comp).smartUpdate(name, value);
 	}
-	/** Returns an iterator to iterate thru all visible children.
-	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * @since 3.0.7
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		return new VisibleChildrenIterator();
-	}
+
 	/**
 	 * An iterator used by visible children.
 	 */
 	private class VisibleChildrenIterator implements Iterator {
 		private final Iterator _it = getChildren().iterator();
 		private Tree _tree = getTree();
+
+		private VisibleChildrenIterator() {
+		}
 
 		public boolean hasNext() {
 			if (_tree == null || !_tree.inPagingMold()) return _it.hasNext();
@@ -324,8 +262,15 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			throw new UnsupportedOperationException();
 		}
 	}
+	
+	protected void redrawChildren(Writer out) throws IOException {
+		if (getAttribute(Attributes.SHALL_RENDER_ITEM) == null) {
+			for (Iterator it = new VisibleChildrenIterator(); it.hasNext();)
+				((ComponentCtrl)it.next()).redraw(out);
+		}
+	}
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.

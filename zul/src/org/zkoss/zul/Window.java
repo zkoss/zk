@@ -1,18 +1,16 @@
 /* Window.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 19:29:13     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,24 +23,22 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
-import org.zkoss.zk.ui.ext.client.Maximizable;
-import org.zkoss.zk.ui.ext.client.Minimizable;
-import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.render.Floating;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MinimizeEvent;
+import org.zkoss.zk.ui.event.*;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * A generic window.
+ * A window.
  *
  * <p>Unlike other elements, each {@link Window} is an independent ID space
  * (by implementing {@link org.zkoss.zk.ui.IdSpace}).
@@ -75,24 +71,25 @@ import org.zkoss.zul.impl.XulElement;
  * The application cannot prevent the window from being hidden.
  * 
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
- *
  * @author tomyeh
  */
-public class Window extends XulElement implements org.zkoss.zul.api.Window {
+public class Window extends XulElement
+implements org.zkoss.zul.api.Window, Framable, IdSpace {
 	private static final Log log = Log.lookup(Window.class);
-	private static String _onshow = null;
+	private static final long serialVersionUID = 20100721L;
+
 	private transient Caption _caption;
 
 	private String _border = "none";
 	private String _title = "";
-	/** One of MODAL, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
+	/** One of MODAL, _MODAL_, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
-	private transient Object _mutex;
+	private Mutex _mutex = new Mutex();
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
-	private String _cntscls;
+	private String _cntSclass;
 	/** How to position the window. */
 	private String _pos;
 	/** Whether to show a close button. */
@@ -106,7 +103,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private int _minheight = 100, _minwidth = 200; 
 
 	/** Embeds the window as normal component. */
-	private static final int EMBEDDED = 0;
+	public static final int EMBEDDED = 0;
 	/** Makes the window as a modal dialog. once {@link #doModal}
 	 * is called, the execution of the event processing thread
 	 * is suspended until one of the following occurs.
@@ -123,16 +120,18 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 *
 	 * @see #HIGHLIGHTED
 	 */
-	private static final int MODAL = 1;
+	public static final int MODAL = 1;
+	//Represent a modal when the event thread is disabled (internal)
+	private static final int _MODAL_ = -100;
 	/** Makes the window as overlapped other components.
 	 */
-	private static final int OVERLAPPED = 2;
+	public static final int OVERLAPPED = 2;
 	/** Makes the window as popup.
 	 * It is similar to {@link #OVERLAPPED}, except it is auto hidden
 	 * when user clicks outside of the window.
 	 */
-	private static final int POPUP = 3;
-	/** Makes the window as hilighted.
+	public static final int POPUP = 3;
+	/** Makes the window as highlighted.
 	 * Its visual effect is the same as {@link #MODAL}.
 	 * However, from the server side's viewpoint, it is similar to
 	 * {@link #OVERLAPPED}. The execution won't be suspended when
@@ -141,10 +140,20 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @see #MODAL
 	 * @see #OVERLAPPED
 	 */
-	private static final int HIGHLIGHTED = 4;
+	public static final int HIGHLIGHTED = 4;
+
+	static {
+		addClientEvent(Window.class, Events.ON_CLOSE, 0);
+		addClientEvent(Window.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Window.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+	}
 
 	public Window() {
-		init();
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).
@@ -156,9 +165,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		setTitle(title);
 		setBorder(border);
 		setClosable(closable);
-	}
-	private void init() {
-		_mutex = new Object();
 	}
 
 	/**
@@ -190,7 +196,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 				_minimized = false;
 				setVisible0(true); //avoid dead loop
 			}
-			smartUpdate("z.maximized", _maximized);
+			smartUpdate("maximized", _maximized);
 		}
 	}
 	/**
@@ -215,7 +221,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setMaximizable(boolean maximizable) {
 		if (_maximizable != maximizable) {
 			_maximizable = maximizable;
-			invalidate();
+			smartUpdate("maximizable", _maximizable);
 		}
 	}
 
@@ -243,7 +249,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
 			} else setVisible0(true);
-			smartUpdate("z.minimized", _minimized);
+			smartUpdate("minimized", _minimized);
 		}
 	}
 	/**
@@ -270,7 +276,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setMinimizable(boolean minimizable) {
 		if (_minimizable != minimizable) {
 			_minimizable = minimizable;
-			invalidate();
+			smartUpdate("minimizable", _minimizable);
 		}
 	}
 	/**
@@ -283,7 +289,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if (minheight < 0) minheight = 100;
 		if (_minheight != minheight) {
 			_minheight = minheight;
-			smartUpdate("z.minheight", _minheight);
+			smartUpdate("minheight", _minheight);
 		}
 	}
 	/**
@@ -304,7 +310,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if (minwidth < 0) minwidth = 200;
 		if (_minwidth != minwidth) {
 			_minwidth = minwidth;
-			smartUpdate("z.minwidth", _minwidth);
+			smartUpdate("minwidth", _minwidth);
 		}
 	}
 	/**
@@ -316,43 +322,16 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return _minwidth;
 	}
 	/**
-	 * Sets the action of window component to show the animating effect by default.
-	 * 
-	 * <p>Default: null. In other words, if the property is null, it will refer to
-	 * the configuration of zk.xml to find the preference with 
-	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. For example,
-	 * <pre>&lt;preference&gt;
-     *   &lt;name&gt;org.zkoss.zul.Window.defaultActionOnShow&lt;/name&gt;
-     *   &lt;value&gt;moveDown&lt;/value&gt;
-	 * &lt;/preference&gt;</pre>
-	 *  Otherwise, the animating 
-	 * effect is depended on component itself.</p>
-	 * <p>In JavaScript, the property will match the same function name with the
-	 * prefix "anima.". For example, if the property is "moveDown", the function name
-	 * should be "anima.moveDown" accordingly.</p>
-	 * <p><strong>Node:</strong> The method is available in modal mode only. And if 
-	 * the onshow command of client-side action has been assigned on the 
-	 * component, its priority is higher than this method.<br/>
-	 * For example, 
-	 * <pre>action="onshow:anima.appear(#{self});"</pre>
-	 * </p>
-	 * 
-	 * @param onshow the function name in JavaScript. You could use the following
-	 * animations, e.g. "moveDown", "moveRight", "moveDiagonal", "appear", 
-	 * "slideDown", and so forth.
-	 * @since 3.0.2
+	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
 	 */
 	public static void setDefaultActionOnShow(String onshow) {
-		if (!Objects.equals(_onshow, onshow))
-			_onshow = onshow;
 	}
 	
 	/**
-	 * Returns the animating name of function.
-	 * @since 3.0.2
+	 * @deprecated As release of 5.0.0, replaced with {@link org.zkoss.zk.ui.HtmlBasedComponent#setAction}.
 	 */
 	public static String getDefaultActionOnShow() {
-		return _onshow;
+		return null;
 	}
 	
 	/** Returns the caption of this window.
@@ -369,10 +348,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 
 	/** Returns the border.
-	 * The border actually controls what the content style class is
-	 * is used. In fact, the name of the border (except "normal")
-	 * is generate as part of the style class used for the content block.
-	 * Refer to {@link #getContentSclass} for more details.
 	 *
 	 * <p>Default: "none".
 	 */
@@ -381,16 +356,26 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 	/** Sets the border (either none or normal).
 	 *
-	 * @param border the border. If null or "0", "none" is assumed.
-	 * Since 2.4.1, We assume "0" to be "none".
+	 * @param border the border. If null, "0" or "false", "none" is assumed.
+	 * If "true", "normal" is assumed (since 5.0.8).
 	 */
 	public void setBorder(String border) {
-		if (border == null || "0".equals(border))
+		if (border == null || "0".equals(border) || "false".equals(border))
 			border = "none";
+		else if ("true".equals(border))
+			border = "normal";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			invalidate();
+			smartUpdate("border", border);
 		}
+	}
+	/** Enables or disables the border.
+	 * @param border whether to have a border. If true is specified,
+	 * it is the same as <code>setBorder("normal")</code>.
+	 * @since 5.0.8
+	 */
+	public void setBorder(boolean border) {
+		setBorder(border ? "normal": "none");
 	}
 
 	/** Returns the title.
@@ -410,8 +395,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			title = "";
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			if (_caption != null) _caption.invalidate();
-			else invalidate();
+			smartUpdate("title", title);
 		}
 	}
 
@@ -423,7 +407,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	}
 	private static String modeToString(int mode) {
 		switch (mode) {
-		case MODAL: return "modal";
+		case MODAL:
+		case _MODAL_:
+			return "modal";
 		case POPUP: return "popup";
 		case OVERLAPPED: return "overlapped";
 		case HIGHLIGHTED: return "highlighted";
@@ -441,11 +427,18 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * suspends the execution if executed in an event listener, or
 	 * throws an exception if <em>not</em> executed in an event listener.
 	 *
+	 * <p>Refer to <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Window">Overlapped, Popup, Modal, Highlighted and Embedded</a>
+	 * for more information.
+	 *
+	 * <p>If the event processing thread is disabled (it is the default),
+	 * InterruptedException won't be thrown.
+	 * 
 	 * @param name the mode which could be one of
 	 * "embedded", "overlapped", "popup", "modal", "highlighted".
 	 * Note: it cannot be "modal". Use {@link #doModal} instead.
 	 *
-	 * @exception InterruptedException thrown if "modal" is specified,
+	 * @exception InterruptedException thrown if "modal" is specified
+	 * the event thread is enabled (disabled by default),
 	 * and one of the following conditions occurs:
 	 * 1) the desktop or the Web application is being destroyed, or
 	 * 2) {@link org.zkoss.zk.ui.sys.DesktopCtrl#ceaseSuspendedThread}.
@@ -455,9 +448,12 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if ("popup".equals(name)) doPopup();
 		else if ("overlapped".equals(name)) doOverlapped();
 		else if ("embedded".equals(name)) doEmbedded();
-		else if ("modal".equals(name))
-			Events.postEvent(Events.ON_MODAL, this, null);
-		else if ("highlighted".equals(name)) doHighlighted();
+		else if ("modal".equals(name)) {
+			if (isEventThreadEnabled(false))
+				Events.postEvent(Events.ON_MODAL, this, null);
+			else
+				doModal();
+		} else if ("highlighted".equals(name)) doHighlighted();
 		else throw new WrongValueException("Uknown mode: "+name);
 	}
 	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
@@ -470,7 +466,10 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		case OVERLAPPED: doOverlapped(); break;
 		case EMBEDDED: doEmbedded(); break;
 		case MODAL:
-			Events.postEvent(Events.ON_MODAL, this, null);
+			if (isEventThreadEnabled(false))
+				Events.postEvent(Events.ON_MODAL, this, null);
+			else
+				doModal();
 			break;
 		case HIGHLIGHTED: doHighlighted(); break;
 		default:
@@ -481,7 +480,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	/** Returns whether this is a modal dialog.
 	 */
 	public boolean inModal() {
-		return _mode == MODAL;
+		return _mode == MODAL || _mode == _MODAL_;
 	}
 	/** Returns whether this is embedded with other components (Default).
 	 * @see #doEmbedded
@@ -531,10 +530,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 */
 	public void doModal()
 	throws InterruptedException, SuspendNotAllowedException {
-		Desktop desktop = getDesktop();
-		if (desktop == null) desktop = Executions.getCurrent().getDesktop();
-		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
-			doHighlighted();
+		if (!isEventThreadEnabled(true)) {
+			checkOverlappable(_MODAL_);
+			setNonModalMode(_MODAL_);
 			return;
 		}
 
@@ -547,7 +545,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 			int oldmode = _mode;
 			boolean oldvisi = isVisible();
 
-			invalidate();
 			setVisible(true); //if MODAL, it must be visible; vice versa
 
 			try {
@@ -604,9 +601,11 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	/* Set non-modal mode. */
 	private void setNonModalMode(int mode) {
 		if (_mode != mode) {
-			if (_mode == MODAL) leaveModal();
-			_mode = mode;
-			invalidate();
+			if (_mode == MODAL) leaveModal(mode);
+			else {
+				_mode = mode;
+				smartUpdate("mode", modeToString(_mode));
+			}
 		}
 		setVisible(true);
 	}
@@ -614,20 +613,37 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	/** Set mode to MODAL and suspend this thread. */
 	private void enterModal() throws InterruptedException {
 		_mode = MODAL;
+		smartUpdate("mode", modeToString(_mode));
+
 		//no need to synchronized (_mutex) because no racing is possible
 		Executions.wait(_mutex);
 	}
 	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
-	private void leaveModal() {
-		_mode = OVERLAPPED;
+	private void leaveModal(int mode) {
+		_mode = mode;
+		smartUpdate("mode", modeToString(_mode));
+
 		Executions.notifyAll(_mutex);
 	}
+	private boolean isEventThreadEnabled(boolean attachedRequired) {
+		Desktop desktop = getDesktop();
+		if (desktop == null) {
+			if (attachedRequired)
+				throw new SuspendNotAllowedException("Not attached, "+this);
+
+			final Execution exec = Executions.getCurrent();
+			if (exec == null || (desktop = exec.getDesktop()) == null)
+				return true; //assume enabled (safer)
+		}
+		return desktop.getWebApp().getConfiguration().isEventThreadEnabled();
+	}
+
 	/** Makes sure it is not draggable. */
 	private void checkOverlappable(int mode) {
 		if (!"false".equals(getDraggable()))
 			throw new UiException("Draggable window cannot be modal, overlapped, popup, or highlighted: "+this);
 
-		if (mode == MODAL || mode == HIGHLIGHTED)
+		if (mode == MODAL)
 			for (Component comp = this; (comp = comp.getParent()) != null;)
 				if (!comp.isVisible())
 					throw new UiException("One of its ancestors, "+comp+", is not visible, so unable to be modal or highlighted");
@@ -652,7 +668,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); //re-init is required
+			smartUpdate("closable", closable); //re-init is required
 		}
 	}
 	/** Returns whether the window is sizable.
@@ -667,7 +683,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setSizable(boolean sizable) {
 		if (_sizable != sizable) {
 			_sizable = sizable;
-			smartUpdate("z.sizable", sizable);
+			smartUpdate("sizable", sizable);
 		}
 	}
 	/** Returns whether to show the shadow of an overlapped/popup/modal
@@ -685,7 +701,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setShadow(boolean shadow) {
 		if (_shadow != shadow) {
 			_shadow = shadow;
-			smartUpdate("z.shadow", shadow);
+			smartUpdate("shadow", shadow);
 		}
 	}
 	/** Returns how to position the window at the client screen.
@@ -707,6 +723,10 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * <dt>center</dt>
 	 * <dd>Position the window at the center. {@link #setTop} and {@link #setLeft}
 	 * are both ignored.</dd>
+	 * <dt>nocenter</dt>
+	 * <dd>Not to position the window at the center. A modal window, by default,
+	 * will be position at the center. By specifying this value could
+	 * prevent it and the real position depends on {@link #setTop} and {@link #setLeft} (since 5.0.4)</dd>
 	 * <dt>left</dt>
 	 * <dd>Position the window at the left edge. {@link #setLeft} is ignored.</dd>
 	 * <dt>right</dt>
@@ -726,8 +746,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setPosition(String pos) {
 		//Note: we always update since the window might be dragged by an user
 		_pos = pos;
-		if (_mode != EMBEDDED)
-			smartUpdate("z.pos", pos);
+		smartUpdate("position", pos);
 	}
 
 	/** Process the onClose event sent when the close button is pressed.
@@ -754,7 +773,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", _cntStyle);
+			smartUpdate("contentStyle", _cntStyle);
 		}
 	}
 
@@ -763,7 +782,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @see #setContentSclass
 	 */
 	public String getContentSclass() {
-		return _cntscls;
+		return _cntSclass;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -771,23 +790,43 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * @since 3.0.0
 	 */
 	public void setContentSclass(String scls) {
-		if (!Objects.equals(_cntscls, scls)) {
-			_cntscls = scls;
-			invalidate();
+		if (!Objects.equals(_cntSclass, scls)) {
+			_cntSclass = scls;
+			smartUpdate("contentSclass", scls);
 		}
 	}
 
-	/** Returns the style class used for the title.
-	 *
-	 * <p>It returns "wt-<i>sclass</i>" is returned,
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
-	 * @deprecated As of release 3.5.0
+	/** Makes this window as topmost.
+	 * It has no effect if this window is embedded.
+	 * @since 5.0.0
 	 */
-	public String getTitleSclass() {
-		return null;
+	public void setTopmost() {
+		smartUpdate("topmost", true);
 	}
-	
+
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "title", _title);
+		render(renderer, "maximized", _maximized);
+		render(renderer, "maximizable", _maximizable);
+		render(renderer, "minimized", _minimized);
+		render(renderer, "minimizable", _minimizable);
+		render(renderer, "closable", _closable);
+		render(renderer, "sizable", _sizable);
+		render(renderer, "position", _pos);
+		render(renderer, "contentStyle", _cntStyle);
+		render(renderer, "contentSclass", _cntSclass);
+		if (_minheight != 100) renderer.render("minheight", _minheight);
+		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
+		if (!"none".equals(_border)) renderer.render("border", _border);
+		if (!isShadow())
+			renderer.render("shadow", false);
+		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
+			//render mode as the last property
+	}
 	public String getZclass() {
 		return _zclass == null ? "z-window-" + getMode() : _zclass;
 	}
@@ -808,7 +847,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 				//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
 				_caption = (Caption)child;
-				invalidate();
 				return true;
 			}
 			return false;
@@ -816,38 +854,40 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return super.insertBefore(child, refChild);
 	}
 	public void onChildRemoved(Component child) {
-		if (child instanceof Caption) {
+		if (child instanceof Caption)
 			_caption = null;
-			invalidate();
-		}
 		super.onChildRemoved(child);
 	}
 
 	public void onPageDetached(Page page) {
 		if (_mode == MODAL && getPage() == null)
-			leaveModal();
+			leaveModal(OVERLAPPED);
 	}
 
 	/** Changes the visibility of the window.
 	 *
-	 * <p>Note: If a modal dialog becomes invisible, the modal state
+	 * <p>Note if you turned on the event thread:<br/>
+	 * If a modal dialog becomes invisible, the modal state
 	 * will be ended automatically. In other words, the mode ({@link #getMode})
 	 * will become {@link #OVERLAPPED} and the suspending thread is resumed.
+	 * In other words, the modal window ({@link #MODAL}) can not be invisible
+	 * (while a window in other modes could be invisible).
+	 * <p>However, if the event thread is not enabled (default), there is no
+	 * such limitation. In other words, it remains the same mode when becoming
+	 * invisible.
 	 */
 	public boolean setVisible(boolean visible) {
-		if (visible == _visible)
+		if (visible == isVisible())
 			return visible;
 		_maximized = _minimized = false;
 		return setVisible0(visible);
 	}
 	private boolean setVisible0(boolean visible) {
-		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
-			if (_mode == MODAL)
-				leaveModal();
-			else _mode = OVERLAPPED;
-			invalidate();
-		} else if ( _mode != EMBEDDED) {
-			smartUpdate("z.visible", visible);
+		if (!visible && _mode == MODAL) {
+			//Hide first to avoid unpleasant effect
+			super.setVisible(false);
+			leaveModal(OVERLAPPED);
+			return true;
 		}
 		return super.setVisible(visible);
 	}
@@ -861,72 +901,11 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		}
 		super.setDraggable(draggable);
 	}
-	protected String getRealStyle() {
-		final String style = super.getRealStyle() + (isVisible() && isMinimized() ? "display:none;" : "");
-		return _mode != EMBEDDED ? 
-			(isVisible() ? "position:absolute;visibility:hidden;" : "position:absolute;") + style: style;
-			//If no absolute, Opera ignores left and top
-			//
-			//If not embedded we always generate visibility:hidden to have
-			//better visual effect (the client will turn it on in zkWnd.init)
-	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_MOVE);
-		appendAsapAttr(sb, Events.ON_SIZE);
-		appendAsapAttr(sb, Events.ON_Z_INDEX);
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_MAXIMIZE);
-		
-		if (inModal() || inHighlighted()) HTMLs.appendAttribute(sb, "z." + Events.ON_MINIMIZE, true);
-		else appendAsapAttr(sb, Events.ON_MINIMIZE);
-		
-		//no need to generate ON_CLOSE since it is always sent (as ASAP)
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-			//though widget.js handles onclick (if 3d), it is useful
-			//to support onClick for groupbox
-		String aos = getDefaultActionOnShow();
-		if (aos == null)
-			aos = getDesktop().getWebApp().getConfiguration()
-					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
-		if (aos != null)
-			HTMLs.appendAttribute(sb, "z.aos", aos.length() == 0 ?  "z_none" : aos);
-		if (_closable)
-			sb.append(" z.closable=\"true\"");
-		if (_sizable)
-			sb.append(" z.sizable=\"true\"");
-		if (!_shadow)
-			sb.append(" z.shadow=\"false\"");
-
-		if (_mode != EMBEDDED) {
-			if (_pos != null)
-				HTMLs.appendAttribute(sb, "z.pos", _pos);
-			HTMLs.appendAttribute(sb, "z.mode", getMode());
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		}
-
-		if (_maximizable)
-			sb.append(" z.maximizable=\"true\"");
-		if (_minimizable)
-			sb.append(" z.minimizable=\"true\"");
-		if (_maximized)
-			sb.append(" z.maximized=\"true\"");
-		if (_minimized)
-			sb.append(" z.minimized=\"true\"");
-
-		HTMLs.appendAttribute(sb, "z.minheight", getMinheight());
-		HTMLs.appendAttribute(sb, "z.minwidth", getMinwidth());
-		return sb.toString();
-	}
 
 	//Cloneable//
 	public Object clone() {
 		final Window clone = (Window)super.clone();
-		clone.init();
+		clone._mutex = new Mutex();
 		if (clone._caption != null) clone.afterUnmarshal();
 		return clone;
 	}
@@ -944,50 +923,48 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		init();
 		afterUnmarshal();
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating, Maximizable, Minimizable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			setVisible(open);
-		}
-		//Floating//
-		public boolean isFloating() {
-			return _mode != EMBEDDED;
-		}
-		public void setMaximizedByClient(boolean maximized) {
-			_maximized = maximized;
-			if (_maximized) _visible = true;
-		}
-		public void setMinimizedByClient(boolean minimized) {
-			_minimized = minimized;
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			setVisible(evt.isOpen());
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_MAXIMIZE)) {
+			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
+			_maximized = evt.isMaximized();
+			if (_maximized) setVisibleDirectly(true);
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_MINIMIZE)) {
+			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
+			_minimized = evt.isMinimized();
 			if (_minimized) {
-				_visible = false;
-				if (_mode == MODAL) {
-					leaveModal();
-					invalidate();
-				} else if (_mode == HIGHLIGHTED) {
-					_mode = OVERLAPPED; // according to leaveModal()
-					invalidate();
-				}
+				setVisibleDirectly(false);
+				if (_mode == MODAL)
+					leaveModal(OVERLAPPED);
 			}
-		}
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
-	
+
 	/**
 	 * Always return false.
 	 * @since 3.6.2
@@ -996,3 +973,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		return false;
 	}
 }
+/** Any serializable object. */
+/*package*/ class Mutex implements java.io.Serializable {
+}
+

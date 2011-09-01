@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -336,6 +337,23 @@ public class Binding implements java.io.Serializable {
 		myLoadAttribute(comp, bean);
 	}
 
+	/** Returns the associated bean of this binding; e.g., for a binding to the bean "a.b.c", this will return the bean associated to "a.b" 
+	 * (and c is the property name).
+	 * <p>Note if the expression is associated to a single variable; e.g. "a" only, this method returns null. 
+	 * @param comp
+	 * @return the associated bean of this binding.
+	 * @since 5.0.7
+	 */
+	public Object getBean(Component comp) {
+		if (_expression != null) {
+			int j = _expression.lastIndexOf('.');
+			if (j >= 0) {
+				return _binder.getBeanWithExpression(comp, _expression.substring(0, j));
+			}
+		}
+		return null;
+	}
+	
 	/** load bean value into the attribute of the specified component.
 	 * @param comp the component.
 	 * @param bean the bean value.
@@ -398,8 +416,8 @@ public class Binding implements java.io.Serializable {
  				} else {
  					throw UiException.Aide.wrap(ex);
  				}
-			} else {
-				throw UiException.Aide.wrap(ex);
+			} else { //Feature# 2855116. Save into component custom-attribute(also a variable in ZK5).
+				comp.setAttribute(_attr, bean);
 			}
 		} catch (ModificationException ex) {
 			throw UiException.Aide.wrap(ex);
@@ -428,15 +446,15 @@ public class Binding implements java.io.Serializable {
 	public void saveAttribute(Component comp) {
 		final Object[] vals = getAttributeValues(comp);
 		if (vals != null)
-			saveAttributeValue(comp, vals, null);
+			saveAttributeValue(comp, vals, null, null);
 	}
 	
-	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos) {
+	private void saveAttributeValue(Component comp, Object[] vals, List loadOnSaveInfos, String triggerEventName) {
 		if (vals == null) return;
 		
 		final Object val = vals[0];
 		final Object rawval = vals[1];
-		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval, loadOnSaveInfos);
+		_binder.setBeanAndRegisterBeanSameNodes(comp, val, this, _expression, _converter == null, rawval, loadOnSaveInfos, triggerEventName);
 	}		
 	
 	/** Get converted value and original value of this Binding.
@@ -457,6 +475,8 @@ public class Binding implements java.io.Serializable {
  				} else {
  					throw UiException.Aide.wrap(ex);
  				}
+			} else if (comp.getAttributes().containsKey(_attr)) { //Feature #2855116. Get value from component custom-attribute(also a variable in ZK5).
+				rawval = comp.getAttribute(_attr);
 			} else {
 				throw UiException.Aide.wrap(ex);
 			}
@@ -693,7 +713,11 @@ public class Binding implements java.io.Serializable {
 		}
 		protected void handleEvent(Event event) {
 			final Component target = event.getTarget();
+			final String triggerEventName = event.getName();
 			final List tmplist = new ArrayList(_dataTargets.size());
+			final List values = new LinkedList();
+			final List refs = new LinkedList();
+			final List bindings = new LinkedList();
 			
 			//fire onSave for each binding
 			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
@@ -710,6 +734,9 @@ public class Binding implements java.io.Serializable {
 					final Object[] vals = binding.getAttributeValues(dataTarget);
 					if (vals != null) {
 						tmplist.add(new BindingInfo(binding, dataTarget, vals));
+						values.add(vals[0]);
+						refs.add(dataTarget);
+						bindings.add(binding);
 						Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget, target, binding, vals[0]));
 					}
 				} else {
@@ -721,6 +748,9 @@ public class Binding implements java.io.Serializable {
 						final Object[] vals = binding.getAttributeValues(dataTarget1);
 						if (vals != null) {
 							tmplist.add(new BindingInfo(binding, dataTarget1, vals));
+							values.add(vals[0]);
+							refs.add(dataTarget1);
+							bindings.add(binding);
 							Events.sendEvent(new BindingSaveEvent("onBindingSave", dataTarget1, target, binding, vals[0]));
 						}
 					}
@@ -729,7 +759,7 @@ public class Binding implements java.io.Serializable {
 			}
 			
 			//fire onValidate for target component
-			Events.sendEvent(new Event("onBindingValidate", target));
+			Events.sendEvent(new BindingValidateEvent("onBindingValidate", target, refs, bindings, values));
 			
 			//saveAttribute for each binding
 			Component loadOnSaveProxy = null;
@@ -744,7 +774,7 @@ public class Binding implements java.io.Serializable {
 					binder = binding.getBinder();
 				}
 				final Object[] vals = bi.getAttributeValues();
-				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos);
+				binding.saveAttributeValue(dataTarget, vals, loadOnSaveInfos, triggerEventName);
 				if (loadOnSaveProxy == null && dataTarget.isListenerAvailable("onLoadOnSave", true)) {
 					loadOnSaveProxy = dataTarget;
 				}

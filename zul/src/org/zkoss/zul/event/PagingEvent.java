@@ -16,7 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
+import java.util.Map;
+
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 
 import org.zkoss.zul.ext.Pageable;
@@ -33,6 +38,25 @@ public class PagingEvent extends Event {
 	private final Pageable _pgi;
 	private final int _actpg;
 
+	/** Converts an AU request to a render event.
+	 * @since 5.0.0
+	 */
+	public static final PagingEvent getPagingEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		final Map data = request.getData();
+		int pgi = AuRequests.getInt(data, "", 0);
+		final Pageable pageable = (Pageable)comp;
+		if (pgi < 0) pgi = 0;
+		else {
+			final int pgcnt = pageable.getPageCount();
+			if (pgi >= pgcnt) {
+				pgi = pgcnt - 1;
+				if (pgi < 0) pgi = 0;
+			}
+		}
+		return new PagingEvent(request.getCommand(), comp, pgi);
+	}
+	
 	/** Construct a paging event.
 	 *
 	 * @param target the target must be a paginal component, i.e.,

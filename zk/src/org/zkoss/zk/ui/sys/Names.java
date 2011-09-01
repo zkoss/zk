@@ -1,18 +1,16 @@
 /* Names.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Aug  2 15:03:50     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -50,7 +48,7 @@ public class Names {
 	 * It also invokes {@link #isReserved}.
 	 */
 	public static final boolean isValid(String name) {
-		if (ComponentsCtrl.isAutoId(name) || isReserved(name))
+		if (isReserved(name))
 			return false;
 
 		for (int j = name.length(); --j >= 0;) {

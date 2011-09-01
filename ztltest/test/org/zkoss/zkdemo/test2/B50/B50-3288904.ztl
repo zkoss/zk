@@ -1,0 +1,44 @@
+<!-- B50-3288904.ztl.java
+
+	Purpose:for testing B50-3288904.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 09:22:29
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3288904.zul,Unstable,Datebox">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type '000' to the end of year (so it becomes 2011000, for example). Click outside the Datebox.</li>
+			<li>The year should be capped to '200000'. If the date value become 'undefined', it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import java.util.Date;
+		Date d = new Date();
+	]]></zscript>
+	<datebox value="${d}" locale="en_US"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq("@datebox input"));
+				sendKeys(jq("@datebox input"), Keys.END);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
+				sendKeys(jq("@datebox input"), Keys.NUMPAD0);
+				blur(jq("@datebox input"));
+				verifyContains(jq("@datebox input").val(),"200000");
+				verifyNotContains(jq("@datebox input").val(),"undefined");
+		]]></client>
+	</case>
+</test>

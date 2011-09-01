@@ -1,24 +1,25 @@
 /* AuInsertBefore.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Oct 13 11:30:18     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.au.out;
 
+import java.util.Collection;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.StubComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.au.AuResponse;
@@ -33,12 +34,18 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuInsertBefore extends AuResponse {
-	public AuInsertBefore(Component anchor, String content) {
-		super("addBfr", anchor, new String[] {getRefId(anchor), content});
+	/**
+	 * @param contents a collection of contents (in String objects).
+	 * Each content is the output of a component.
+	 * @since 5.0.7
+	 */
+	public AuInsertBefore(Component anchor, Collection contents) {
+		super("addBfr", anchor, toArray(anchor, contents));
 	}
-	private static String getRefId(Component anchor) {
-		if (anchor instanceof Native)
+	private static Object[] toArray(Component anchor, Collection contents) {
+		if (anchor instanceof Native || anchor instanceof StubComponent)
 			throw new UiException("Adding a component before a native one not allowed: "+anchor);
-		return anchor.getUuid();	
+
+		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}
 }

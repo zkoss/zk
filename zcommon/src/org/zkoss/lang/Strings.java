@@ -1,34 +1,22 @@
 /* Strings.java
 
-{{IS_NOTE
 
 	Purpose: String utilities and constants
 	Description:
 	History:
 	 2001/4/17, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.lang;
 
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.zkoss.mesg.MCommon;
-import org.zkoss.text.DateFormats;
-import org.zkoss.util.Locales;
 import org.zkoss.util.IllegalSyntaxException;
 
 /**
@@ -37,6 +25,10 @@ import org.zkoss.util.IllegalSyntaxException;
  * @author tomyeh
  */
 public class Strings {
+	/** Used with {@link #escape} to escape a string in
+	 * JavaScript. It assumes the string will be enclosed with a single quote.
+	 */
+	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -151,6 +143,31 @@ public class Strings {
 		return encode(new StringBuffer(20), val).toString();
 	}
 
+	/** Returns the index of the give character in the given string buffer,
+	 * or -1 if not found.
+	 * It is equivalent to <code>sb.indexOf(""+cc, j);</code>, but faster.
+	 * @since 5.0.3
+	 */
+	public static final int indexOf(StringBuffer sb, char cc, int j) {
+		for (int len = sb.length(); j < len; ++j)
+			if (sb.charAt(j) == cc)
+				return j;
+		return -1;
+	}
+	/** Returns the last index of the give character in the given string buffer,
+	 * or -1 if not found.
+	 * It is equivalent to <code>sb.lastIndexOf(""+cc, j);</code>, but faster.
+	 * @since 5.0.3
+	 */
+	public static final int lastIndexOf(StringBuffer sb, char cc, int j) {
+		if (j >= sb.length())
+			j = sb.length() - 1;
+		for (; j >= 0; --j)
+			if (sb.charAt(j) == cc)
+				return j;
+		return -1;
+	}
+
 	/**
 	 * Returns the index that is one of delimiters, or the length if none
 	 * of delimiter is found.
@@ -251,61 +268,140 @@ public class Strings {
 	 * backspace. Thus, if you want to preserve backslash, you have
 	 * invoke escape(s, "\\") before calling Maps.parse().
 	 *
-	 * @param s the string to process. If null, null is returned.
+	 * @param src the string to process. If null, null is returned.
 	 * @param specials a string of characters that shall be escaped/quoted
+	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
 	 * @see #unescape
 	 */
-	public static final String escape(String s, String specials) {
-		if (s == null)
+	public static final String escape(String src, String specials) {
+		if (src == null)
 			return null;
 
 		StringBuffer sb = null;
 		int j = 0;
-		for (int k, len = s.length(); (k = anyOf(s, specials, j)) < len;) {
+		l_out:
+		for (int j2 = 0, len = src.length();;) {
+			String enc = null;
+			char cc;
+			int k = j2;
+			for (;; ++k) {
+				if (k >= len)
+					break l_out;
+
+				cc = src.charAt(k);
+				if (shallEncodeUnicode(cc, specials)) {
+					enc = encodeUnicode(cc);
+					break;
+				}
+				if (specials.indexOf(cc) >= 0)
+					break;
+			}
+
+			if (enc == null)
+				switch (cc) {
+				case '\n': cc = 'n'; break;
+				case '\t': cc = 't'; break;
+				case '\r': cc = 'r'; break;
+				case '\f': cc = 'f'; break;
+				case '/':
+					//escape </script>
+					if (specials == ESCAPE_JAVASCRIPT //handle it specially
+					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+						|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
+						j2 = k + 1;
+						continue;
+					}
+				}
+
 			if (sb == null)
 				sb = new StringBuffer(len + 4);
-			
-			char cc = s.charAt(k);
-			switch (cc) {
-			case '\n': cc = 'n'; break;
-			case '\t': cc = 't'; break;
-			case '\r': cc = 'r'; break;
-			case '\f': cc = 'f'; break;
-			}
-			sb.append(s.substring(j, k)).append('\\').append(cc);
-			j = k + 1;
+			sb.append(src.substring(j, k)).append('\\');
+			if (enc != null) sb.append(enc);
+			else sb.append(cc);
+			j2 = j = k + 1;
 		}
 		if (sb == null)
-			return s; //nothing changed
-		return sb.append(s.substring(j)).toString();
+			return src; //nothing changed
+		return sb.append(src.substring(j)).toString();
+	}
+	/** @deprecated As of release 5.0.0, use {@link #escape(StringBuffer,CharSequence,String)}
+	 * instead.
+	 */
+	public static final StringBuffer
+	appendEscape(StringBuffer sb, String src, String specials) {
+		return escape(sb, (CharSequence)src, specials);
 	}
 	/** Escapes (aka. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
+	 *
+	 * @param dst the destination buffer to append to.
+	 * @param src the source to escape from.
+	 * @param specials a string of characters that shall be escaped/quoted
+	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
+	 * @since 5.0.0
 	 */
-	public static final StringBuffer
-	appendEscape(StringBuffer sb, String s, String specials) {
-		if (s == null)
-			return sb;
+	public static final
+	StringBuffer escape(StringBuffer dst, CharSequence src, String specials) {
+		if (src == null)
+			return dst;
 
-		for (int j = 0, len = s.length();;) {
-			final int k = Strings.anyOf(s, specials, j);
-			if (k >= len)
-				return sb.append(s.substring(j));
+		for (int j = 0, j2 = 0, len = src.length();;) {
+			String enc = null;
+			char cc;
+			int k = j2;
+			for (;; ++k) {
+				if (k >= len)
+					return dst.append((Object)src.subSequence(j, src.length()));
 
-			char cc = s.charAt(k);
-			switch (cc) {
-			case '\n': cc = 'n'; break;
-			case '\t': cc = 't'; break;
-			case '\r': cc = 'r'; break;
-			case '\f': cc = 'f'; break;
+				cc = src.charAt(k);
+				if (shallEncodeUnicode(cc, specials)) {
+					enc = encodeUnicode(cc);
+					break;
+				}
+				if (specials.indexOf(cc) >= 0)
+					break;
 			}
-			sb.append(s.substring(j, k)).append('\\').append(cc);
-			j = k + 1;
+
+			if (enc == null)
+				switch (cc) {
+				case '\n': cc = 'n'; break;
+				case '\t': cc = 't'; break;
+				case '\r': cc = 'r'; break;
+				case '\f': cc = 'f'; break;
+				case '/':
+					//escape </script>
+					if (specials == ESCAPE_JAVASCRIPT //handle it specially
+					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+						|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
+						j2 = k + 1;
+						continue;
+					}
+				}
+
+			dst.append((Object)src.subSequence(j, k)).append('\\');
+			if (enc != null) dst.append(enc);
+			else dst.append(cc);
+			j2 = j = k + 1;
 		}
 	}
+	private static final boolean shallEncodeUnicode(char cc, String specials) {
+		return specials == ESCAPE_JAVASCRIPT && cc > (char)255
+			&& !Character.isLetterOrDigit(cc);
+			//don't check isSpaceChar since \u2028 will return true and it
+			//is not recoginized by firefox
+	}
+	/** Return "u????". */
+	private static final String encodeUnicode(int cc) {
+		final StringBuffer sb = new StringBuffer(6)
+			.append('u').append(Integer.toHexString(cc));
+		while (sb.length() < 5)
+			sb.insert(1, '0');
+		return sb.toString();
+	}
+		
+
 	/** Un-escape the quoted string.
 	 * @see #escape
-	 * @see #appendEscape
 	 */
 	public static final String unescape(String s) {
 		if (s == null)

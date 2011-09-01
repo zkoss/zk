@@ -1,18 +1,16 @@
 /* ComponentDefinition.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue May 31 17:54:45     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,7 +23,6 @@ import java.net.URL;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.xel.ExValue;
 
 /**
@@ -39,10 +36,6 @@ import org.zkoss.zk.xel.ExValue;
  * @author tomyeh
  */
 public interface ComponentDefinition extends Cloneable {
-	/** @deprecated As of release 3.5.0, replaced by {@link ZkInfo}.
-	 */
-	public final static ComponentDefinition ZK = ZkInfo.ZK;
-
 	/** Returns the language definition, or null if it is a temporty definition
 	 * belonging to a page.
 	 */
@@ -230,67 +223,50 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public Component newInstance(Class cls);
 
-	/** Adds a mold based on an URI.
+	/** Adds a mold.
 	 *
-	 * @param moldURI an URI of the mold; never null nor empty.
-	 * If it starts with "class:", the following substring is assumed to be
-	 * the class name of {@link ComponentRenderer}, and then it invokes
-	 * {@link #addMold(String, ComponentRenderer)}.
-	 * If not staring with "class:", it is pure an URI, and it may
-	 * contain XEL expressions.
-	 * @param z2cURI the URI of ZCS-to-CSS converter.
-	 * Ignored if null.
-	 * @since 3.5.1
+	 * @param name the mold name.
+	 * @param widgetClass the widget class (aka., name).
+	 * Ingored if null.
+	 * @since 5.0.0 (the 2nd argument is the class name of the peer widget)
+	 */
+	public void addMold(String name, String widgetClass);
+	/** @deprecated As of release 5.0.0, replaced with {@link #addMold(String,String)}
+	 * and {@link WidgetDefinition#addMold}.
 	 */
 	public void addMold(String name, String moldURI, String z2cURI);
-	/** Adds a mold based on {@link ComponentRenderer}.
-	 *
-	 * @param renderer a component renderer. It is shared
-	 * by all component instances belonging to this definition.
-	 * @param z2cURI the URI of ZCS-to-CSS converter.
-	 * Ignored if null.
-	 * @since 3.5.1
-	 */
-	public void addMold(String name, ComponentRenderer renderer, String z2cURI);
 
-	/** @deprecated As of release 3.5.1, replaced with
-	 * {@link #addMold(String, String, String)}.
+	/** Returns the widget class assoicated with specified mold,
+	 * or the default widget class ({@link #getWidgetClass}) if not available.
+	 * The returned widget class includes the package name (JavaScript class).
+	 * @param comp the component used to evaluate EL expression, if any,
+	 * when retreiving the widget class. Ignored if null.
+	 * @param moldName the mold name
+	 * @since 5.0.4
 	 */
-	public void addMold(String name, String moldURI);
-	/** @deprecated As of release 3.5.1, replaced with
-	 * {@link #addMold(String, ComponentRenderer, String)}.
+	public String getWidgetClass(Component comp, String moldName);
+	/** Returns the default widget class, or null if not available.
+	 * @param comp the component used to evaluate EL expression, if any,
+	 * when retreiving the widget class. Ignored if null.
+	 * @since 5.0.4
 	 */
-	public void addMold(String name, ComponentRenderer renderer);
-
-	/** Returns the URI (String) or an instance of {@link ComponentRenderer}
-	 * of the mold, or null if no such mold available.
-	 * In other words, if a String instance is returned, it is the URI
-	 * of the mold. If a {@link ComponentRenderer}
-	 * instance is returned, it is the object responsible to handle
-	 * the generation of the component's output.
-	 *
-	 * <p>If the mold URI contains an expression, it will be evaluated first
-	 * before returning.
-	 *
-	 * @param name the mold name
-	 * @return an URI in String, or a {@link ComponentRenderer},
-	 * as of release 3.0.0
-	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
+	public String getDefaultWidgetClass(Component comp);
+	/** @deprecated As of release 5.0.4, replaced with {@link #getWidgetClass(Component, String)}.
 	 */
-	public Object getMoldURI(Component comp, String name);
-	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
-	 * <p>ZCS is ZK cacasding style that allows developers to customize
-	 * CSS with the component names.
-	 *
-	 * @param name the mold name
-	 * @since 3.5.1
+	public String getWidgetClass(String moldName);
+	/** @deprecated As of release 5.0.4, replaced with {@link #getDefaultWidgetClass(Component)}.
 	 */
-	public String getZ2CURI(Component comp, String name);
+	public String getDefaultWidgetClass();
+	/** Sets the default widget class.
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
+	 * @since 5.0.0
+	 */
+	public void setDefaultWidgetClass(String widgetClass);
 	/** Returns whether the specified mold exists.
 	 */
 	public boolean hasMold(String name);
-	/** Returns a readonly collection of mold names supported by
-	 * this definition.
+	/** Returns a readonly collection of the names of the mold.
 	 */
 	public Collection getMoldNames();
 
@@ -302,14 +278,25 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param value the value. It might contain expressions (${}).
 	 */
 	public void addProperty(String name, String value);
-	/** Applies the properties and custom attributes defined in
+	/** Applies the properties defined in
 	 * this definition to the specified component.
 	 *
 	 * <p>Note: annotations are applied to the component when a component
 	 * is created. So, this method doesn't and need not to copy them.
-	 * See also {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}.
+	 * <p>Also notice that, since 5.0.7, custom-attributes are applied automatically
+	 * in the constructor of {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}
+	 * (by invoking {@link #applyAttributes},
+	 * so they are always available no mather this method is called or not.
 	 */
 	public void applyProperties(Component comp);
+	/** Applies the custom attributes defined in this definition
+	 * to the specified component.
+	 * <p>It is called automatically in 
+	 * {@link org.zkoss.zk.ui.AbstractComponent#AbstractComponent}, so
+	 * you rarely need to invoke this method.
+	 * @since 5.0.7
+	 */
+	public void applyAttributes(Component comp);
 	/** Evaluates and retrieves properties to the specified map.
 	 *
 	 * @param propmap the map to store the retrieved properties.

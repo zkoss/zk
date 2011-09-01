@@ -1,18 +1,16 @@
 /* FastReadArray.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 17 19:19:19     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,7 +30,7 @@ import org.zkoss.lang.Objects;
  *
  * <p>Typical use:
  * <pre><code>Object[] ary = fra.toArray();
- *for (int j = 0; j < ary.length; ++J)
+ *for (int j = 0; j < ary.length; ++j)
  *  <i>whatever</i>;</code></pre>
  *
  * @author tomyeh

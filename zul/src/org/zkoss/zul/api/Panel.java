@@ -1,23 +1,22 @@
 /* Panel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
 package org.zkoss.zul.api;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zk.ui.IdSpace;//for javadoc
 import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 /**
@@ -47,7 +46,7 @@ import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
  * @author jumperchen
  * @since 3.5.2
  */
-public interface Panel extends org.zkoss.zul.impl.api.XulElement {
+public interface Panel extends org.zkoss.zul.impl.api.XulElement, Framable {
 
 	/**
 	 * Returns whether this Panel is open.
@@ -62,6 +61,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	public void setOpen(boolean open);
 
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #getBorder}.
 	 * Returns whether to render the panel with custom rounded borders.
 	 * <p>
 	 * Default: false.
@@ -69,6 +69,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	public boolean isFramable();
 
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
 	 * Sets whether to render the panel with custom rounded borders.
 	 * 
 	 * <p>
@@ -247,11 +248,9 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	public org.zkoss.zul.api.Caption getCaptionApi();
 
 	/**
-	 * Returns the border. The border actually controls via
-	 * {@link org.zkoss.zul.Panelchildren#getRealSclass()}. In fact, the name of
+	 * Returns the border. In fact, the name of
 	 * the border (except "normal") is generate as part of the style class used
-	 * for the content block. Refer to
-	 * {@link org.zkoss.zul.Panelchildren#getRealSclass()} for more details.
+	 * for the content block.
 	 * 
 	 * <p>
 	 * Default: "none".
@@ -270,7 +269,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 * Returns the title. Besides this attribute, you could use {@link Caption}
 	 * to define a more sophiscated caption (aka., title).
 	 * <p>
-	 * If a window has a caption whose label ({@link Caption#getLabel}) is not
+	 * If a panel has a caption whose label ({@link Caption#getLabel}) is not
 	 * empty, then this attribute is ignored.
 	 * <p>
 	 * Default: empty.
@@ -282,6 +281,60 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setTitle(String title);
 
+
+	/**
+	 * Sets the minimum height in pixels allowed for this panel. If negative,
+	 * 100 is assumed.
+	 * <p>
+	 * Default: 100.
+	 * <p>
+	 * Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinheight(int minheight);
+
+	/**
+	 * Returns the minimum height.
+	 * <p>
+	 * Default: 100.
+	 * @since 5.0.0
+	 */
+	public int getMinheight();
+
+	/**
+	 * Sets the minimum width in pixels allowed for this panel. If negative,
+	 * 200 is assumed.
+	 * <p>
+	 * Default: 200.
+	 * <p>
+	 * Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinwidth(int minwidth);
+
+	/**
+	 * Returns the minimum width.
+	 * <p>
+	 * Default: 200.
+	 * @since 5.0.0
+	 */
+	public int getMinwidth();
+
+	/**
+	 * Returns whether the panel is sizable.
+	 * @since 5.0.0
+	 */
+	public boolean isSizable();
+
+	/**
+	 * Sets whether the panel is sizable. If true, an user can drag the border
+	 * to change the panel width.
+	 * <p>
+	 * Default: false.
+	 * @since 5.0.0
+	 */
+	public void setSizable(boolean sizable);
+	
 	/**
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
 	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,

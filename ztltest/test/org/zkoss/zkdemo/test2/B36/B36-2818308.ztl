@@ -1,0 +1,107 @@
+<test tags="tree">
+	<case id="scrollIntoView">
+		<server><!--
+			<zk>
+			    Please press on the two buttons twice, and then the scroll bar should be placed as the position as the selected item (blue background).
+			    <tree id="tree" width="400px" rows="3">
+			        <treecols sizable="true">
+			            <treecol label="Name" />
+			            <treecol label="Description" />
+			        </treecols>
+			        <treechildren id="t">
+			            <treeitem>
+			                <treerow>
+			                    <treecell label="Item 1" />
+			                    <treecell label="Item 1 description" />
+			                </treerow>
+			            </treeitem>
+			            <treeitem>
+			                <treerow>
+			                    <treecell label="Item 2" />
+			                    <treecell label="Item 2 description" />
+			                </treerow>
+			                <treechildren>
+			                    <treeitem>
+			                        <treerow>
+			                            <treecell label="Item 2.1" />
+			                        </treerow>
+			                        <treechildren>
+			                            <treeitem>
+			                                <treerow>
+			                                    <treecell label="Item 2.1.1" />
+			                                </treerow>
+			                            </treeitem>
+			                            <treeitem>
+			                                <treerow>
+			                                    <treecell label="Item 2.1.2" />
+			                                </treerow>
+			                            </treeitem>
+			                        </treechildren>
+			                    </treeitem>
+			                    <treeitem>
+			                        <treerow>
+			                            <treecell label="Item 2.2" />
+			                        </treerow>
+			                        <treechildren id="tc">
+			                            <treeitem>
+			                                <treerow>
+			                                    <treecell label="Item 2.2.1" />
+			                                </treerow>
+			                            </treeitem>
+			                        </treechildren>
+			                    </treeitem>
+			                </treechildren>
+			            </treeitem>
+			            <treeitem label="Item 3" />
+			        </treechildren>
+			    </tree>
+			    <button label="add under bottom">
+			        <attribute name="onClick">
+			            Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			tr.appendChild(new Treecell("test"));
+			ti.appendChild(tr);
+			tc.appendChild(ti);
+			ti.setSelected(true);
+			        </attribute>
+			    </button>
+			    <button label="add upon top">
+			        <attribute name="onClick">
+			            Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			tr.appendChild(new Treecell("test"));
+			ti.appendChild(tr);
+			t.insertBefore(ti, t.firstChild);
+			ti.setSelected(true);
+			        </attribute>
+			    </button>
+			</zk>
+		--></server>
+		<client><![CDATA[
+				JQuery body = jq(tree.$n("body"));
+				JQuery table = body.find("table");
+				click(jq("@button[label=\"add under bottom\"]"));
+				waitResponse();
+				int tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
+				int scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
+				tableScrollTop++;//IE6,7 has a border at the upper of the first item of the listbox
+				verifyEquals(tableScrollTop, scrollTop);
+				click(jq("@button[label=\"add under bottom\"]"));
+				waitResponse();
+				tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
+				scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
+				tableScrollTop++;//IE6,7 has a border at the upper of the first item of the listbox
+				verifyEquals(tableScrollTop, scrollTop);
+				click(jq("@button[label=\"add upon top\"]"));
+				waitResponse();
+				String expected = "0";
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
+				expected = "1";//IE6,7 has a border at the upper of the first item of the listbox
+				verifyEquals(expected, body.attr("scrollTop"));
+				click(jq("@button[label=\"add upon top\"]"));
+				verifyEquals(expected, body.attr("scrollTop"));
+		]]></client>
+	</case>
+</test>

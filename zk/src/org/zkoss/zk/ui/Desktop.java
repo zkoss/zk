@@ -1,18 +1,16 @@
 /* Desktop.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Dec  9 16:27:21     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,8 +22,6 @@ import java.util.Collection;
 import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.util.EventInterceptor;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.device.Device;
 
 /**
@@ -121,6 +117,11 @@ public interface Desktop extends Scope {
 	/** Returns a readonly collection of all {@link Page} in this desktop.
 	 */
 	public Collection getPages();
+	/** Returns the first page, or null if no page at all (happens when the desktop
+	 * has been destroyed)
+	 * @since 5.0.3
+	 */
+	public Page getFirstPage();
 	/** Returns whether a page exists.
 	 */
 	public boolean hasPage(String pageId);
@@ -165,13 +166,20 @@ public interface Desktop extends Scope {
 	 * In other words, it is the request path of the first page
 	 * (see {@link Page#getRequestPath}).
 	 *
-	 * <p>For example, "/userguide/index.zul" (a ZUML page is requested)
+	 * <p>For example, "/foo/index.zul" (a ZUML page is requested)
 	 * or /test (a richlet).
 	 *
 	 * @see Page#getRequestPath
 	 * @since 3.0.0
 	 */
 	public String getRequestPath();
+	/** Returns the query string that is contained in the request URL after the
+	 * path ({@link #getRequestPath}), or null if the URL does not have a query
+	 * string.
+	 * @since 5.0.2
+	 */
+	public String getQueryString();
+
 	/** Returns the current directory (never null).
 	 * It is empty if no current directory at all.
 	 * Otherwise, it must end with '/'.
@@ -239,44 +247,12 @@ public interface Desktop extends Scope {
 	 * feature.
 	 * @see Executions#activate
 	 * @see Device#getServerPushClass
+	 * @see org.zkoss.zk.ui.sys.DesktopCtrl#enableServerPush(org.zkoss.zk.ui.sys.ServerPush)
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
-	/** Sets the delay between each polling.
-	 * It can be called only the server push is enabled for this desktop
-	 * (by use of {@link #enableServerPush}).
-	 *
-	 * <p>Note: not all server-push controllers support this method.
-	 * Currently, only on the client-polling-based controller (the default)
-	 * supports this method.
-	 *
-	 * <p>To make the system more scalable, the implementation usually
-	 * change the delay dynamically based on the loading.
-	 * By specifying the minimal and maximal values, you can control
-	 * the frequence to poll the server depending on the character
-	 * of your Web applications.
-	 *
-	 * <p>Default: It looks up the value defined in the preferences
-	 * ({@link Configuration#getPreference}):
-	 * <code>PollingServerPush.delay.min</code>
-	 * <code>PollingServerPush.delay.max</code>,
-	 and <code>PollingServerPush.delay.factor</code>.
-	 * If not defined, min is 1100, max is 10000 and factor is 5.
-	 *
-	 * @param min the minimal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param max the maximal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param factor the delay factor. The real delay is the processing
-	 * time multiplies the delay factor. For example, if the last request
-	 * took 1 second to process, then the client polling will be delayed
-	 * for 1 x factor seconds, unless it is value 
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * @since 3.0.0
+
+	/** @deprecated As of release 5.0.2
 	 */
 	public void setServerPushDelay(int min, int max, int factor);
 	/** Returns whether the server-push feature is enabled for this
@@ -287,13 +263,6 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public boolean isServerPushEnabled();
-
-	/** @deprecated As of release 3.0.6, replaced by {@link #addListener}.
-	 */
-	public void addEventInterceptor(EventInterceptor ei);
-	/** @deprecated As of release 3.0.6, replaced by {@link #removeListener}.
-	 */
-	public boolean removeEventInterceptor(EventInterceptor ei);
 
 	/** Adds a listener.
 	 *
@@ -306,8 +275,10 @@ public interface Desktop extends Scope {
 	 * {@link org.zkoss.zk.ui.util.ExecutionInit},
 	 * {@link org.zkoss.zk.ui.util.ExecutionCleanup},
 	 * {@link org.zkoss.zk.ui.util.UiLifeCycle},
-	 * and/or {@link EventInterceptor}.<br/>
-	 * Note: {@link org.zkoss.zk.ui.event.EventThreadInit},
+	 * {@link org.zkoss.zk.ui.util.EventInterceptor}
+	 * and/or {@link org.zkoss.zk.au.AuService}.<br/>
+	 * Note: {@link org.zkoss.zk.ui.util.DesktopInit},
+	 * {@link org.zkoss.zk.ui.event.EventThreadInit},
 	 * {@link org.zkoss.zk.ui.event.EventThreadCleanup},
 	 * {@link org.zkoss.zk.ui.event.EventThreadSuspend} and
 	 * {@link org.zkoss.zk.ui.event.EventThreadResume} are not supported.

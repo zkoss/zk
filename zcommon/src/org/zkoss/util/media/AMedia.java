@@ -1,18 +1,16 @@
 /* AMedia.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu May 27 15:10:46     2004, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +23,8 @@ import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.net.URL;
 
+import org.zkoss.lang.SystemException;
+import org.zkoss.io.Files;
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
 import org.zkoss.io.RepeatableInputStream;
@@ -33,9 +33,13 @@ import org.zkoss.io.RepeatableReader;
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
  *
+ * <p>AMedia is serializable, but, if you are using InputStream or Reader,
+ * you have to extend this class, and provide the implementation to
+ * serlialize and deserialize {@link #_isdata} or {@link #_rddata}
+ * (they are both transient).
  * @author tomyeh
  */
-public class AMedia implements Media {
+public class AMedia implements Media, java.io.Serializable {
 	/** Used if you want to implement a meida whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AMedia(String,String,String,InputStream)
@@ -52,9 +56,9 @@ public class AMedia implements Media {
 	/** The text data, {@link #getStringData}. */
 	private String _strdata;
 	/** The input stream, {@link #getStreamData} */
-	private InputStream _isdata;
+	protected transient InputStream _isdata;
 	/** The input stream, {@link #getReaderData} */
-	private Reader _rddata;
+	protected transient Reader _rddata;
 	/** The content type. */
 	private String _ctype;
 	/** The format (e.g., pdf). */
@@ -282,12 +286,31 @@ public class AMedia implements Media {
 		return _bindata != null || _strdata != null;
 	}
 	public byte[] getByteData() {
-		if (_bindata == null) throw newIllegalStateException();
-		return _bindata;
+		if (_bindata != null) return _bindata;
+		if (_isdata != null) {
+			try {
+				byte[] bs = Files.readAll(_isdata);
+				_isdata.close();
+				return bs;
+			} catch (java.io.IOException ex) {
+				throw SystemException.Aide.wrap(ex);
+			}
+		}
+		throw newIllegalStateException();
 	}
 	public String getStringData() {
-		if (_strdata == null) throw newIllegalStateException();
-		return _strdata;
+		if (_strdata != null) return _strdata;
+		if (_rddata != null) {
+			try {
+				String ct = Files.readAll(_rddata).toString();
+				_rddata.close();
+				return ct;
+			} catch (java.io.IOException ex) {
+				throw SystemException.Aide.wrap(ex);
+			}
+		}
+		throw newIllegalStateException();
+		
 	}
 	/** Returns the input stream of this media.
 	 *

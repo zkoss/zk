@@ -1,0 +1,36 @@
+<zk>
+	<div>
+		1. Click "Button Visible" and focus on the inplace input elements. The DOM layout should be correct.
+	</div>
+	<div>
+		2. Click "Button Visible" again. The DOM layout should be correct.
+	</div>
+	<div>
+		Combobox
+		<combobox id="cb" buttonVisible="false" inplace="true" />
+	</div>
+	<div>
+		Datebox: 
+		<datebox id="db" buttonVisible="false" inplace="true" />
+	</div>
+	<div>
+		Spinner: 
+		<spinner id="sp" buttonVisible="false" inplace="true" value="0" />
+	</div>
+	<div>
+		Timebox: 
+		<timebox id="tb" buttonVisible="false" inplace="true" />
+	</div>
+	<div>
+		Doublespinner: 
+		<doublespinner id="ds" buttonVisible="false" inplace="true" value="0" />
+	</div>
+	<button label="Button Visible">
+		<attribute name="onClick">
+			boolean v = !sp.buttonVisible;
+			cb.buttonVisible = ds.buttonVisible = tb.buttonVisible = db.buttonVisible = sp.buttonVisible = v;
+			lb.value = "" + v;
+		</attribute>
+	</button>
+	<label id="lb" value="false" />
+</zk>

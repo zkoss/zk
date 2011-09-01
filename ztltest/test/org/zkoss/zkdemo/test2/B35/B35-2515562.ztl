@@ -1,0 +1,43 @@
+<!-- B35-2515562.ztl.java
+
+	Purpose:for testing B35-2515562.ztl .
+
+	Description:
+
+	History:
+		10, 29, 2010 16:14:59
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="Datebox,Calendar" import="org.zkoss.ztl.util.ColorVerifingHelper">
+	<case id="ztl">
+		<server><!--
+			
+
+
+
+<zk>
+<style dynamic="true">
+.mycss .z-calendar-ctrler, .mycss .z-datebox-rounded-pp, .mycss .z-datebox-pp td span{
+	font-family: monospace;
+	color: yellow;
+}
+</style>
+Click the button. If the font-color of year is yellow, it is correct.
+<datebox sclass='mycss'/>
+</zk>
+		
+
+		--></server>
+		<client><![CDATA[
+			click(jq(".z-datebox-btn"));
+			boolean color = org.zkoss.ztl.util.ColorVerifingHelper.getInstance().
+				isEqualColor("yellow",jq(".z-calendar-ctrler").css("color"));
+			
+			verifyTrue(color);
+		]]></client>
+	</case>
+</test>

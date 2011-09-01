@@ -1,29 +1,26 @@
 /* Slider.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Sep 29 20:16:03     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import java.io.IOException;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Scrollable;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -39,11 +36,17 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	private String _orient = "horizontal";
-	private int _curpos, _maxpos = 100, _pginc = 10;
+	private int _curpos, _maxpos = 100, _pginc = -1;
 	/** The name. */
 	private String _name;
 	private String _slidingtext = "{0}";
 
+	static {
+		addClientEvent(Slider.class, Events.ON_SCROLL, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
+		addClientEvent(Slider.class, Events.ON_SCROLLING, CE_DUPLICATE_IGNORE);
+	}
+
+	
 	public Slider() {
 		setWidth("207px");
 	}
@@ -54,10 +57,10 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 		this();
 		setCurpos(curpos);
 	}
-	/*package*/ final boolean inScaleMold() {
+	/*package*/ boolean inScaleMold() {
 		return "scale".equals(getMold());
 	}
-	/*package*/ final boolean inSphereMold() {
+	/*package*/ boolean inSphereMold() {
 		return "sphere".equals(getMold());
 	}
 	
@@ -89,17 +92,9 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException("orient cannot be "+orient);
-
-		if (!Objects.equals(_orient, orient)) {
+		if (!_orient.equals(orient)) {
 			_orient = orient;
-			if ("vertical".equals(_orient)) {
-				setWidth(null);
-				setHeight("207px");
-			} else {
-				setWidth("207px");
-				setHeight(null);
-			}
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 	/**
@@ -121,28 +116,28 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			slidingtext = "{0}";
 		if (!_slidingtext.equals(slidingtext)) {
 			_slidingtext = slidingtext;
-			smartUpdate("z.slidingtext", _slidingtext);
+			smartUpdate("slidingtext", _slidingtext);
 		}
 	}
 	/** Returns the current position of the slider.
 	 *
 	 * <p>Default: 0.
 	 */
-	public final int getCurpos() {
+	public int getCurpos() {
 		return _curpos;
 	}
 	/** Sets the current position of the slider.
 	 * If negative, 0 is assumed. If larger than {@link #getMaxpos},
 	 * {@link #getMaxpos} is assumed.
 	 */
-	public final void setCurpos(int curpos)
+	public void setCurpos(int curpos)
 	throws WrongValueException {
 		if (curpos < 0) curpos = 0;
 		else if (curpos > _maxpos) curpos = _maxpos;
 
 		if (_curpos != curpos) {
 			_curpos = curpos;
-			smartUpdate("z.curpos", _curpos);
+			smartUpdate("curpos", _curpos);
 		}
 	}
 
@@ -150,14 +145,14 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 *
 	 * <p>Default: 100.
 	 */
-	public final int getMaxpos() {
+	public int getMaxpos() {
 		return _maxpos;
 	}
 	/** Sets the maximum position of the slider.
 	 *
 	 * @exception WrongValueException if non-positive maxpos is passed
 	 */
-	public final void setMaxpos(int maxpos)
+	public void setMaxpos(int maxpos)
 	throws WrongValueException {
 		if (maxpos <= 0)
 			throw new WrongValueException("Nonpositive is not allowed: "+maxpos);
@@ -166,7 +161,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			if (_curpos > maxpos)
 				setCurpos(maxpos);
 			_maxpos = maxpos;
-			smartUpdate("z.maxpos", _maxpos);
+			smartUpdate("maxpos", _maxpos);
 		}
 	}
 	
@@ -182,21 +177,22 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	/** Returns the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked. 
 	 *
-	 * <p>Default: 10.
+	 * <p>Default: -1 (means it will scroll to the position the user clicks).
 	 */
-	public final int getPageIncrement() {
+	public int getPageIncrement() {
 		return _pginc;
 	}
 	/** Sets the amount that the value of {@link #getCurpos}
 	 * changes by when the tray of the scroll bar is clicked.
+	 * <p>Default: -1 (means it will scroll to the position the user clicks).
+	 * @param pginc the page increment. If negative, slider will scroll
+	 * to the position that user clicks.
 	 */
-	public final void setPageIncrement(int pginc)
+	public void setPageIncrement(int pginc)
 	throws WrongValueException {
-		if (pginc <= 0)
-			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			smartUpdate("z.pginc", _pginc);
+			smartUpdate("pageIncrement", _pginc);
 		}
 	}
 
@@ -228,7 +224,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			smartUpdate("z.name", _name);
+			smartUpdate("name", _name);
 		}
 	}
 	
@@ -251,46 +247,48 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	}
 
 	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		if ("vertical".equals(getOrient()))
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		
-		HTMLs.appendAttribute(sb, "z.name", _name);
-		HTMLs.appendAttribute(sb, "z.curpos", _curpos);
-		HTMLs.appendAttribute(sb, "z.maxpos", _maxpos);
-		HTMLs.appendAttribute(sb, "z.pginc", _pginc);
-		HTMLs.appendAttribute(sb, "z.slidingtext", getSlidingtext());		
-		
-		appendAsapAttr(sb, Events.ON_SCROLL);
-		appendAsapAttr(sb, Events.ON_SCROLLING);
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-			//no z.dbclk to avoid confusion
-			//no z.lfclk since it will be supported by sld.js
-
-		return sb.toString();
-	}
 
 	//-- Component --//
 	/** Not childable. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** The extra control that will be returned by {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Scrollable {
-		//-- Scrollable --//
-		public final void setCurposByClient(int curpos) {
-			if (curpos < 0)
-				throw new WrongValueException("Negative is not allowed: "+curpos);
-			_curpos = curpos;
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SCROLL)) {
+			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
+			int curpos = evt.getPos();
+			_curpos = curpos >= 0 ? curpos: 0;
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_SCROLLING)) {
+			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
+	}
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(!_orient.equals("horizontal"))
+			renderer.render("orient", _orient);
+		if(!_slidingtext.equals("{0}"))
+			renderer.render("slidingtext", _slidingtext);
+		if(_curpos != 0)
+			renderer.render("curpos", _curpos);
+		if(_maxpos != 100)
+			renderer.render("maxpos", _maxpos);
+		if(_pginc >= 0)
+			renderer.render("pageIncrement", _pginc);
+		if(_name != null)
+			renderer.render("name", _name);
 	}
 }

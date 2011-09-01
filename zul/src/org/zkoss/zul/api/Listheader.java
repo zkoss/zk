@@ -1,18 +1,16 @@
 /* Listheader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -33,7 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Reason: easier to write Listbox.</li>
  * </ol>
  * <p>
- * Default {@link #getZclass}: z-list-header.(since 3.5.0)
+ * Default {@link #getZclass}: z-listheader (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2
@@ -82,7 +80,8 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * {@link #setSortDescending} are called with null. Therefore, no more
 	 * sorting is available to users for this column.
 	 */
-	public void setSort(String type);
+	public void setSort(String type) throws ClassNotFoundException,
+	InstantiationException, IllegalAccessException;
 
 	/**
 	 * Returns the ascending sorter, or null if not available.

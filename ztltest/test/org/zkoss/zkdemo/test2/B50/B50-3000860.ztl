@@ -1,0 +1,19 @@
+<test tags="B50-3000860.zul,tabbox">
+	<case id="TabHeight">
+		<server><![CDATA[
+<tabbox>
+<tabs>
+	<tab id="tab1"/>
+	<tab label="tab2"/>
+</tabs>
+<tabpanels>
+	<tabpanel/>
+</tabpanels>
+</tabbox>
+
+		]]></server>
+		<client><![CDATA[
+   			verifyTrue(jq("$tab1").outerHeight() > 16);
+   		]]></client>
+	</case>
+</test>

@@ -1,18 +1,16 @@
 /* ServerPush.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug  3 16:39:18     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,8 @@ package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 
 /**
  * Represents a server-push controller.
@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.DesktopUnavailableException;
  * That is, the client polls the server for executing any pending
  * server-push threads.
  * The client can adjust the frequency based on the response time
- * (in proportion to the server load).
+ * (in proportion to the server load) (see {@link org.zkoss.zk.ui.impl.PollingServerPush} for details).
  * To poll, the client usually send the dummy command that does nothing
  * but trigger {@link #onPiggyback} to be execute.
  *
@@ -75,31 +75,26 @@ public interface ServerPush {
 	 */
 	public void stop();
 
-	/** Sets the delay between each polling.
-	 * It can be called only this controller is started
-	 * (by use of {@link #start}).
-	 *
-	 * <p>Note: whether to support this method is up to the implementation.
-	 * Currently, only on the client-polling-based controller (the default)
-	 * supports this method.
-	 * If not supported, just return (don't throw exception).
-	 *
-	 * @param min the minimal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param max the maximal delay to poll the server for any pending
-	 * server-push threads.
-	 * Ignore (aka., the default value is used) if non-positive.
-	 * Unit: milliseconds.
-	 * @param factor the delay factor. The real delay is the processing
-	 * time multiplies the delay factor. For example, if the last request
-	 * took 1 second to process, then the client polling will be delayed
-	 * for 1 x factor seconds, unless it is value 
-	 * Ignore (aka., the default value is used) if non-positive.
+	/** @deprecated As of release 5.0.0, use the preferences instead.
+	 * Refer to {@link org.zkoss.zk.ui.impl.PollingServerPush}
 	 */
 	public void setDelay(int min, int max, int factor);
 
+	/** Called by the associated desktop to schedule a task to execute
+	 * asynchronously.
+	 * <p>The implementation usually delegates the scheduling to
+	 * the scheduler passed as the third argument, which is controlled
+	 * by the desktop.
+	 * Of course, it could schedule it by itself.
+	 * @param task the task to execute
+	 * @param event the event to be passed to the task (i.e., the event listener).
+	 * It could null or any instance as long as the task recognizes it.
+	 * @param scheduler the default scheduler to schedule the task.
+	 * The implementation usually delegates the scheduling back to it.
+	 * If you prefer to handle it by yourself, you could ignore it.
+	 * @since 5.0.6
+	 */
+	public void schedule(EventListener task, Event event, Scheduler scheduler);
 	/** Activate the current thread (which must be a server-push thread).
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,

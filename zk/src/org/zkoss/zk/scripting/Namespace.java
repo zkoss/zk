@@ -1,18 +1,16 @@
 /* Namespace.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Apr 10 15:59:29     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,7 +21,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
- * To represent the name space for storing variables.
+ * @deprecated As of release 5.0, replaced with {@link org.zkoss.zk.ui.ext.Scope}.
+ *
+ * <p>To represent the name space for storing variables.
  * There are two ways to declare variables: by zscirpt, or by
  * {@link org.zkoss.zk.ui.Component#setVariable}/
  * {@link org.zkoss.zk.ui.Page#setVariable}.
@@ -98,11 +98,13 @@ public interface Namespace {
 	 * @return wether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
+	 * @deprecated
 	 */
 	public boolean addChangeListener(NamespaceChangeListener listener);
 	/** Removes a change listener from this namespace.
 	 *
 	 * @return false if resolved is not added before.
+	 * @deprecated
 	 */
 	public boolean removeChangeListener(NamespaceChangeListener listener);
 }

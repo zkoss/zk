@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3081315.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  5 15:17:11 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+			<li>Click close button in tab1, a confirm dialog will appear.</li>
+			<li>Click no</li>
+			<li>the tab1 shall be selected</li>
+			</ol>
+		]]>
+	</html>
+	<zscript><![CDATA[
+		public void doClose(Event event) {
+			Tab tab = (Tab) event.getTarget();
+			Messagebox.show("Delete?", "Prompt", Messagebox.YES | Messagebox.NO,
+					Messagebox.QUESTION, new EventListener() {
+						public void onEvent(Event evt) {
+							if (Messagebox.YES == ((Integer) evt.getData())
+									.intValue()) {
+								tab.close();
+							}
+						}
+					});
+			event.stopPropagation();
+		}
+	]]></zscript>
+	<tabbox>
+		<tabs>
+			<tab label="tab1" closable="true" onClose="doClose(event);" />
+			<tab label="tab2" closable="true" onClose="doClose(event);" />
+			<tab label="tab3" closable="true" onClose="doClose(event);" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>Tab1</tabpanel>
+			<tabpanel>Tab2</tabpanel>
+			<tabpanel>Tab3</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

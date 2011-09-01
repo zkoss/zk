@@ -1,24 +1,24 @@
 /* InputElement.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
 package org.zkoss.zul.impl.api;
 
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Readonly;
+import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zul.ext.Constrainted;
 
 /**
@@ -29,7 +29,7 @@ import org.zkoss.zul.ext.Constrainted;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface InputElement extends XulElement, Constrainted {
+public interface InputElement extends XulElement, Constrainted, Readonly, Disable {
 	/**
 	 * Returns whether it is disabled.
 	 * <p>
@@ -335,13 +335,4 @@ public interface InputElement extends XulElement, Constrainted {
 	 *            the end position of the text (excluded)
 	 */
 	public void setSelectionRange(int start, int end);
-
-	/**
-	 * Returns the text for HTML AREA (Internal Use Only).
-	 * 
-	 * <p>
-	 * Used only for component generation. Not for applications.
-	 */
-	public String getAreaText();
-
 }

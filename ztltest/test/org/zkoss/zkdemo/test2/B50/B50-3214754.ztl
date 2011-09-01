@@ -1,0 +1,61 @@
+<!-- B50-3214754.ztl.java
+
+	Purpose:for testing B50-3214754.ztl .
+
+	Description:
+
+	History:
+		06, 3, 2011 10:26:22
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3214754.zul,Textbox,Constraint,ie9">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	Please test the following cases:
+	<separator/>
+	1. type "test" into the textbox and focus out, it should alert an error.
+	<separator/>
+
+	2. clear the error popup and type "123" into the textbox and focus out, it shouldn't alert an error.
+	<separator/>
+	3. clear the error popup and type "12A3" into the textbox and focus out, they should alert an error.
+	<separator/>
+	<textbox constraint="/\d+/"/>
+	<separator/>
+	4. Please test the step 1~3 with the following textbox as well.
+	<separator/>
+	<textbox constraint="/\d*/"/>
+</zk>
+
+
+		--></server>
+		<client><![CDATA[
+				type(jq("@textbox:eq(0)"),"test");
+				verifyTrue(jq(".z-errbox").exists());
+				closeErrorBox();
+				type(jq("@textbox:eq(0)"),"123");
+				verifyFalse(jq(".z-errbox").exists());
+				type(jq("@textbox:eq(0)"),"12A3");
+				verifyTrue(jq(".z-errbox").exists());
+				closeErrorBox();
+				type(jq("@textbox:eq(0)"),"123");
+				
+				type(jq("@textbox:eq(1)"),"test");
+				verifyTrue(jq(".z-errbox").exists());
+				closeErrorBox();
+				type(jq("@textbox:eq(1)"),"123");
+				verifyFalse(jq(".z-errbox").exists());
+				type(jq("@textbox:eq(1)"),"12A3");
+				verifyTrue(jq(".z-errbox").exists());
+				closeErrorBox();
+		]]></client>
+	</case>
+</test>

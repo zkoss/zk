@@ -1,18 +1,16 @@
 /* Area.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Mar 28 00:27:29     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -45,15 +43,15 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	/** Returns the shape of this area.
 	 * <p>Default: null (means rectangle).
 	 */
-	public final String getShape() {
+	public String getShape() {
 		return _shape;
 	}
 	/** Sets the shape of this area.
 	 *
 	 * @exception WrongValueException if shape is not one of
-	 * null, "rect", "rectangle", "circle", "circ", "ploygon", and "poly".
+	 * null, "rect", "rectangle", "circle", "circ", "polygon", and "poly".
 	 */
-	public final void setShape(String shape) throws WrongValueException {
+	public void setShape(String shape) throws WrongValueException {
 		if (shape != null)
 			if (shape.length() == 0) shape = null;
 			else if (!"rect".equals(shape) && !"rectangle".equals(shape)
@@ -68,7 +66,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 
 	/** Returns the coordination of this area.
 	 */
-	public final String getCoords() {
+	public String getCoords() {
 		return _coords;
 	}
 	/** Sets the coords of this area.
@@ -86,7 +84,7 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	 *
 	 * <p>Note: (0, 0) is the upper-left corner.
 	 */
-	public final void setCoords(String coords) {
+	public void setCoords(String coords) {
 		if (coords != null && coords.length() == 0) coords = null;
 		if (!Objects.equals(coords, _coords)) {
 			_coords = coords;
@@ -107,34 +105,28 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("title", _tooltiptext);
+			smartUpdate("tooltiptext", getTooltiptext());
 		}
 	}
-	/** Returns the attributes for generating the  HTML tag; never return null.
-	 *
-	 * <p>Used only by component developers.
+
+	/** Default: not childable.
 	 */
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64)
-			.append(" href=\"javascript:;\"");
-		HTMLs.appendAttribute(sb, "shape", _shape);
-		HTMLs.appendAttribute(sb, "coords", _coords);
-		HTMLs.appendAttribute(sb, "title", _tooltiptext);
-		HTMLs.appendAttribute(sb, "z.aid", getId());
-		return sb.toString();
+	protected boolean isChildable() {
+		return false;
 	}
-
+	
 	//-- super --//
-	public void setId(String id) {
-		final String old = getId();
-		super.setId(id);
-
-		id = getId();
-		if (!old.equals(id)) smartUpdate("z.aid", id);
-	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
 			throw new UiException("Area's parent must be imagemap, not "+parent);
 		super.beforeParentChanged(parent);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "coords", _coords);
+		render(renderer, "shape", _shape);
+		render(renderer, "tooltiptext", _tooltiptext);
 	}
 }

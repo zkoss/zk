@@ -1,18 +1,16 @@
 /* AuInvoke.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul  6 22:52:34     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -38,77 +36,113 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuInvoke extends AuResponse {
-	/** Construct AuInvoke to call a client function with one argument,
-	 * the component itself.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * no argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
 	 */
 	public AuInvoke(Component comp, String function) {
 		super("invoke", comp, new String[] {comp.getUuid(), function});
 	}
-	/** Construct AuInvoke to call a client function with two arguments,
-	 * the component itself and arg.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg)</code>
+	 * <p>Notice that if you want to pass an array-type argument, you have to cast
+	 * it to Object as follows:<br/>
+	 * <code>new AuInvoke(comp, "setOverride", (Object)new Object[] {"a", "b"})</code>.<br/>
+	 * Otherwise, the third argument will be handled by
+	 * {@link #AuInvoke(Component, String, Object[])}, and then considered
+	 * as an array of arguments (rather than an argument with an array-type value.
 	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @param arg the additional argument
+	 * @param arg the additional argument. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+	 * @since 5.0.0
 	 */
-	public AuInvoke(Component comp, String function, String arg) {
+	public AuInvoke(Component comp, String function, Object arg) {
 		super("invoke", comp,
-			new String[] {comp.getUuid(), function, arg});
+			new Object[] {comp.getUuid(), function, arg});
 	}
-	/** Construct AuInvoke to call a client function with two arguments,
-	 * the component itself and arg.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one boolean argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @param arg the additional argument. "false" if false, "true" if true.
-	 * @since 3.0.1
+	 * @param arg the additional argument.
+	 * Different devices might support more types.
+	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, boolean arg) {
 		super("invoke", comp,
-			new String[] {comp.getUuid(), function, arg ? "true": "false"});
+			new Object[] {comp.getUuid(), function, Boolean.valueOf(arg)});
 	}
-	/** Construct AuInvoke to call a client function with three arguments,
-	 * the component itself, arg1 and arg2.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one int argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg1, arg2)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
+	 * @param arg the additional argument.
+	 * @since 5.0.0
 	 */
-	public AuInvoke(Component comp, String function, String arg1, String arg2) {
-		super("invoke", comp, new String[] {comp.getUuid(), function,
+	public AuInvoke(Component comp, String function, int arg) {
+		super("invoke", comp,
+			new Object[] {comp.getUuid(), function, new Integer(arg)});
+	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one double argument.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg the additional argument.
+	 * @since 5.0.0
+	 */
+	public AuInvoke(Component comp, String function, double arg) {
+		super("invoke", comp,
+			new Object[] {comp.getUuid(), function, new Double(arg)});
+	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * two arguments.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg1 the additional argument. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+	 * @param arg2 the 2nd additional argument.
+	 * @since 5.0.0
+	 */
+	public AuInvoke(Component comp, String function, Object arg1, Object arg2) {
+		super("invoke", comp, new Object[] {comp.getUuid(), function,
 			arg1, arg2});
 	}
-	/** Construct AuInvoke to call a client function with four arguments,
-	 * the component itself, arg1, arg2 and arg3.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * three arguments.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg1, arg2, arg3)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
+	 * @param arg1 the additional argument. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+	 * @param arg2 the 2nd additional argument.
+	 * @param arg3 the 3rd additional argument.
+	 * @since 5.0.0
 	 */
-	public AuInvoke(Component comp, String function, String arg1, String arg2,
-	String arg3) {
-		super("invoke", comp, new String[] {comp.getUuid(), function,
+	public AuInvoke(Component comp, String function, Object arg1, Object arg2,
+	Object arg3) {
+		super("invoke", comp, new Object[] {comp.getUuid(), function,
 			arg1, arg2, arg3});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
@@ -119,7 +153,8 @@ public class AuInvoke extends AuResponse {
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue},
-	 * and any kind of objects.
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON since 5.0.0).
 	 * @since 3.6.1
 	 */
 	public AuInvoke(Component comp, String function, Object[] args) {
@@ -141,16 +176,13 @@ public class AuInvoke extends AuResponse {
 	public AuInvoke(Component comp, String function, String[] args) {
 		super("invoke", comp, toData(comp, function, args));
 	}
-	private static
+	private static final
 	Object[] toData(Component comp, String function, Object[] args) {
-		if (args == null)
-			return new String[] {comp.getUuid(), function};
-
-		final Object[] data = new Object[args.length + 2];
+		final Object[] data = new Object[2 + (args != null ? args.length: 0)];
 		data[0] = comp.getUuid();
 		data[1] = function;
-		for (int j = 0; j < args.length; ++j)
-			data[2 + j] = args[j];
+		for (int j = 2; j < data.length; ++j)
+			data[j] = args[j - 2];
 		return data;
 	}
 }

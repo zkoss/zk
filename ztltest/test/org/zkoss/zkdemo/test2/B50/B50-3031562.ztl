@@ -1,0 +1,25 @@
+<test tags="B50-3031562.zul,clients">
+	<case id="hbox">
+		<server id="zul"><![CDATA[
+		<zk>
+			<label
+				value="The AA and BB should be in the same line, if iin different line, it's wrong" />
+			<hbox id="hbox">
+				<div>AA</div>
+				<div>BB</div>
+			</hbox>
+
+			<label id="msg" style="color:red;">
+				<attribute name="onCreate">
+				if ("default".equals(hbox.getOrient()))
+					self.setValue("The hbox's mold should be horizontal, not "
+							+ hbox.getOrient());
+				</attribute>
+			</label>
+		</zk>
+		]]></server>
+		<client><![CDATA[
+			verifyEquals(msg.get("value"), "");
+		]]></client>
+	</case>
+</test>

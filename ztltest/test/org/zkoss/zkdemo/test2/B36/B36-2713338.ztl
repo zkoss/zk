@@ -1,0 +1,33 @@
+<test tags="tree,treeitem">
+	<case id="getSelectedItem">
+		<server><!--
+			<zk>
+				Select any tree item at the tree then click the button,
+			
+				the button should show "Not Null", if "Null" the it's a BUG.
+				<zscript>
+				    import org.zkoss.zktest.test2.tree.BinaryTreeModel;
+				    import java.util.*;
+				    BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(1000)));
+				</zscript>
+					<tree id="tree" model="&#36;{btm}" />
+					<button label="Test">
+						<attribute name="onClick">
+						    if (tree.getSelectedItem().getValue() == null) {
+						        self.label = "Null";
+						    } else {
+						        self.label = "Not Null";
+						    }
+						</attribute>
+					</button>
+			</zk>
+		--></server>
+		<client><![CDATA[
+				clickAt(jq("@treecell"), "50,2");
+				waitResponse();
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals("Not Null", jq("@button td.z-button-cm").html());
+		]]></client>
+	</case>
+</test>

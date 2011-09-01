@@ -1,0 +1,46 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<separator width="20px" height="20px"/>
+1. Before click any radio on the window, click "show progressbar" button first
+<separator/>
+2. The progressbar's position should be default value, show at the left, top corner
+<separator/>
+3. After progressbar vanished, then Click the radio and button one by one, the progressbar's position will follow the radio label you chose
+<separator/>
+Note. Don't click radio before the progressbar disappear.
+<separator/>
+<window id="w" title="Progressbar's Position" border="normal" mode="overlapped" left="200px" top="200px">
+  <radiogroup>
+  	<attribute name="onCheck">
+  		org.zkoss.lang.Library.setProperty("org.zkoss.zul.progressbox.position", self.getSelectedItem().getLabel());
+  		Executions.sendRedirect(null);
+  	</attribute>
+	<attribute name="onCreate">
+		<![CDATA[
+		String pos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
+
+		for (int i = 0; i < self.getItemCount(); i++) {
+			String val = self.getItemAtIndex(i).getLabel();
+			if (pos.equals(val)) {
+				self.setSelectedIndex(i);
+				return;
+			}
+		}]]>
+	</attribute>
+	<vbox>
+	  	<radio label="left, top"></radio>
+	  	<radio label="left, center"></radio>
+	  	<radio label="left, bottom"></radio>
+	  	<radio label="center, top"></radio>
+	  	<radio label="center"></radio>
+	  	<radio label="center, bottom"></radio>
+	  	<radio label="right, top"></radio>
+	  	<radio label="right, center"></radio>
+	  	<radio label="right, bottom"></radio>
+	  	<radio label="mouse"></radio>
+  	</vbox>
+  </radiogroup>
+  <button label="show progressbar" onClick="Thread.sleep(3000);">
+  </button>
+</window>
+</zk>

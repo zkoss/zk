@@ -1,0 +1,35 @@
+<?component name="row" class="org.zkoss.zul.Row"
+	style="border:1px solid blue;background:#E3EBF6; color: #333333"?>
+<html xmlns:x="http://www.zkoss.org/2005/zul"
+ xmlns:zk="http://www.zkoss.org/2005/zk">
+<head>
+</head>
+<body>
+	<x:window title="test!!" border="normal">
+	<h1>zhtml use custom row component</h1>
+	<p>It shall have border and background</p>
+
+	<x:grid>
+	<x:rows>
+	<row>test:<x:label value="test1"/></row>
+	<row>test:<x:label value="test2"/></row>
+	<row>test:<x:label value="test3"/></row>
+	<row>test:<x:label value="test4"/></row>
+	</x:rows>
+	</x:grid>
+	
+	<h1>zhtml use the default row component</h1>
+	<p>It shall not have border and background</p>
+
+	<x:grid>
+	<x:rows>
+	<x:row>test:<x:label value="test1"/></x:row>
+	<x:row>test:<x:label value="test2"/></x:row>
+	<x:row>test:<x:label value="test3"/></x:row>
+	<x:row>test:<x:label value="test4"/></x:row>
+	</x:rows>
+	
+	</x:grid>
+	</x:window>
+</body>
+</html>

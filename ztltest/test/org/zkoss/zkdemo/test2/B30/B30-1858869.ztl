@@ -1,0 +1,40 @@
+<!-- B30-1858869.ztl.java
+
+	Purpose:for testing B30-1858869.ztl .
+
+	Description:
+
+	History:
+		11, 11, 2010 15:27:38
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1858869.zul,A,E,Textbox,Unstable">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window id="w" title="Test of textbox with onOK">
+	<textbox id="test" onOK="test()"/>
+	<zscript>
+void test() {
+	new Label(test.getValue()).setParent(w);
+}
+	</zscript>
+</window>
+
+		--></server>
+		<client><![CDATA[
+			verifyEquals(0, jq(".z-label").length());
+			type(jq("$test"),"I am test string");
+			focus(jq("$test"));
+			sendKeys(jq("$test"), Keys.ENTER);
+			waitResponse();
+			verifyEquals("I am test string" , jq(".z-label").text());
+		]]></client>
+	</case>
+</test>

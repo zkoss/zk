@@ -1,18 +1,16 @@
 /* Grid.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -21,13 +19,12 @@ package org.zkoss.zul.api;
 import java.util.Collection;
 import java.util.Set;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.event.ListDataEvent;//for javadoc
+import org.zkoss.zul.impl.api.MeshElement;
 
 /**
  * A grid is an element that contains both rows and columns elements. It is used
@@ -78,14 +75,14 @@ import org.zkoss.zul.event.ListDataEvent;//for javadoc
  * @see RowRenderer
  * @see org.zkoss.zul.RowRendererExt
  */
-public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
+public interface Grid extends MeshElement {
 	/**
 	 * Sets whether to grow and shrink vertical to fit their given space, so
 	 * called vertial flexibility.
 	 * 
 	 */
 	public void setVflex(boolean vflex);
-
+	
 	/**
 	 * Sets the outline of grid whether is fixed layout. If true, the outline of
 	 * grid will be depended on browser. It means, we don't calculate the width
@@ -96,7 +93,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * You can also specify the "fixed-layout" attribute of component in
 	 * lang-addon.xml directly, it's a top priority.
-	 * 
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 */
 	public void setFixedLayout(boolean fixedLayout);
 
@@ -107,7 +104,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * Note: if the "fixed-layout" attribute of component is specified, it's
 	 * prior to the original value.
-	 * 
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
 	 */
 	public boolean isFixedLayout();
 
@@ -143,108 +140,12 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public Component getCell(int row, int col);
 
-	/**
-	 * Returns the horizontal alignment of the whole grid.
-	 * <p>
-	 * Default: null (system default: left unless CSS specified).
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public String getAlign();
-
-	/**
-	 * Sets the horizontal alignment of the whole grid.
-	 * <p>
-	 * Allowed: "left", "center", "right"
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align);
-
-	// --Paging--//
-	/**
-	 * Sets how to position the paging of grid at the client screen. It is
-	 * meaningless if the mold is not in "paging".
-	 * 
-	 * @param pagingPosition
-	 *            how to position. It can only be "bottom" (the default), or
-	 *            "top", or "both".
-	 */
-	public void setPagingPosition(String pagingPosition);
-
-	/**
-	 * Returns the paging controller, or null if not available. Note: the paging
-	 * controller is used only if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * If mold is "paging", this method never returns null, because a child
-	 * paging controller is created automcatically (if not specified by
-	 * developers with {@link #setPaginal}).
-	 * 
-	 * <p>
-	 * If a paging controller is specified (either by {@link #setPaginal}, or by
-	 * {@link #setMold} with "paging"), the grid will rely on the paging
-	 * controller to handle long-content instead of scrolling.
-	 */
-	public Paginal getPaginal();
-
-	/**
-	 * Specifies the paging controller. Note: the paging controller is used only
-	 * if {@link #getMold} is "paging".
-	 * 
-	 * <p>
-	 * It is OK, though without any effect, to specify a paging controller even
-	 * if mold is not "paging".
-	 * 
-	 * @param pgi
-	 *            the paging controller. If null and {@link #getMold} is
-	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingApi}).
-	 */
-	public void setPaginal(Paginal pgi);
-
-	/**
-	 * Returns the child paging controller that is created automatically, or
-	 * null if mold is not "paging", or the controller is specified externally
-	 * by {@link #setPaginal}.
-	 * 
-	 */
-	public org.zkoss.zul.api.Paging getPagingChildApi();
-
-	public org.zkoss.zul.api.Paging getPagingApi();
-
-	/**
-	 * Returns the page size, aka., the number rows per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public int getPageSize();
-
-	/**
-	 * Sets the page size, aka., the number rows per page.
-	 * 
-	 * @exception IllegalStateException
-	 *                if {@link #getPaginal} returns null, i.e., mold is not
-	 *                "paging" and no external controller is specified.
-	 */
-	public void setPageSize(int pgsz) throws WrongValueException;
-
-	/**
-	 * Returns the number of pages. Note: there is at least one page even no
-	 * item at all.
-	 * 
-	 */
-	public int getPageCount();
-
-	/**
-	 * Returns the active page (starting from 0).
-	 * 
-	 */
-	public int getActivePage();
-
-	/**
-	 * Sets the active page (starting from 0).
-	 * 
-	 */
-	public void setActivePage(int pg) throws WrongValueException;
 
 	// -- ListModel dependent codes --//
 	/**
@@ -350,7 +251,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingApi}.
+	 * ({@link #getPagingChildApi}.
 	 * 
 	 * <p>
 	 * Note: if the "pre-load-size" attribute of component is specified, it's
@@ -364,7 +265,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * from the client.
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
-	 * ({@link #getPagingApi}.
+	 * ({@link #getPagingChildApi}.
 	 * 
 	 * @param sz
 	 *            the number of rows to preload. If zero, no preload at all.
@@ -439,5 +340,4 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * 
 	 */
 	public void setOddRowSclass(String scls);
-
 }

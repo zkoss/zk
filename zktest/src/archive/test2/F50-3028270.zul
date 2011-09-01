@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3028270.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 10 14:34:23 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+				<li>click each slider, it will move to the position of the cursor</li>
+			</ol>
+		]]>
+	</html>
+	<hbox>
+		<vbox>
+			<groupbox mold="3d" width="250px">
+				<caption label="Default" />
+				<slider id="slider1" onScroll="zoom(slider1, img1)" />
+				<image id="img1" src="/img/sun.jpg" width="10px" />
+			</groupbox>
+			<groupbox mold="3d" width="250px">
+				<caption label="Scale" />
+				<slider id="slider3" onScroll="zoom(slider3, img3)"
+					mold="scale" />
+				<image id="img3" src="/img/sun.jpg" width="10px" />
+			</groupbox>
+		</vbox>
+		<groupbox mold="3d" width="280px">
+			<caption label="Sphere slider:" />
+			<slider id="slider21"
+				onScroll="zoom(slider21, img2);syncs(-1)" mold="sphere" />
+			<hbox width="250px">
+				<hbox width="225px">
+					<image id="img2" src="/img/sun.jpg" width="10px" />
+				</hbox>
+				<slider id="slider22"
+					onScroll="zoom(slider22, img2);syncs(1)" mold="sphere"
+					orient="vertical" />
+			</hbox>
+		</groupbox>
+	</hbox>
+	<zscript><![CDATA[
+		void syncs(int slid ){
+			(slid > 0 ? slider21.setCurpos(slider22.getCurpos()):
+			slider22.setCurpos(slider21.getCurpos()));
+		}
+		void zoom(Slider slider, Image img) {
+			int v = slider.getCurpos();
+			int w = v*1.5 > 10 ? v*1.5 :10;
+			img.setWidth(w + "px");
+		}
+	]]></zscript>
+</zk>
+			

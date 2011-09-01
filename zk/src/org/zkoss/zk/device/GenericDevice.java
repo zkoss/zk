@@ -1,18 +1,16 @@
 /* GenericDevice.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug 23 18:44:47     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -91,6 +89,42 @@ abstract public class GenericDevice implements Device {
 	}
 	public String getEmbedded() {
 		return _embed;
+	}
+
+	/** Tests if a client is the givent type.
+	 * <p>This implementation always return false.
+	 * @param userAgent represents a client.
+	 * @param type the type of the browser.
+	 * @return true if it matches, false if unable to identify
+	 * @since 5.0.0
+	 */
+	public boolean isClient(String userAgent, String type) {
+		return false;
+	}
+
+	/** Reloads the client-side messages in the specified locale.
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public void reloadMessages(java.util.Locale locale)
+	throws java.io.IOException {
+		throw new UnsupportedOperationException();
+	}
+	/** Converts a package to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public String packageToPath(String pkg) {
+		throw new UnsupportedOperationException();
+	}
+	/** Converts a relative path to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * <p>Default: throw UnsupportedOperationException.
+	 * @since 5.0.4
+	 */
+	public String toAbsolutePath(String path) {
+		throw new UnsupportedOperationException();
 	}
 
 	public void init(String type, DeviceConfig config) {

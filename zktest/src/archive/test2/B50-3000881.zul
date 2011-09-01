@@ -1,0 +1,14 @@
+<hbox>
+<tabbox>
+	<tabs>
+		<tab label="tab1" />
+		<tab label="tab2" />
+		<tab label="tab3" />
+	</tabs>
+	<tabpanels>
+		<tabpanel />
+		<tabpanel />
+		<tabpanel />
+	</tabpanels>
+</tabbox>
+</hbox>

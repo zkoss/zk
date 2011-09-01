@@ -1,18 +1,16 @@
 /* GroupsModelExt.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Sep  1 10:40:49     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -42,12 +40,19 @@ public interface GroupsModelExt {
 	 * is passed to method as the cmpr argument.
 	 * Thus, developers could use it as a tag to know which column
 	 * or what kind of order to sort.
+	 * Notice that the comparator is capable to sort under the order specified
+	 * in the ascending parameter. In other words, you could ignore the
+	 * ascending parameter (which is used only for providing additional information)
 	 *
 	 * @param cmpr the comparator assigned to {@link Listheader#setSortAscending}
 	 * and other relative methods. If developers didn't assign any one,
 	 * the default comparator is used.
+	 * Notice that it is capable to sort the data in the correct order,
+	 * you could ignore the ascending parameter.
 	 * @param ascending whether to sort in the ascending order (or in
-	 * the descending order)
+	 * the descending order, if false). Notice that it is used only to
+	 * provide additional information. To sort the data correctly, you could
+	 * count on the cmpr parameter only.
 	 * @param colIndex the index of the column
 	 */
 	public void sort(Comparator cmpr, boolean ascending, int colIndex);

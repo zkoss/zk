@@ -1,0 +1,76 @@
+###
+# The ignore key should match in config.properties
+# For example, (without '#')
+# key={
+# caseName1
+# caseName2
+# caseName3
+# }
+# 
+# Or for multi-keys
+#
+# key1,key2,key3={
+# caseName1
+# caseName2
+# caseName3
+# }
+#
+# Or use * to ignore all matched keys
+# key*={
+# caseName1
+# caseName2
+# caseName3
+# }
+###
+all={
+// unsupported
+B30-2009958.ztl
+B35-2580752.ztl
+}
+### ignore all firefox
+firefox*={
+// unsupported
+B50-3026819.ztl
+B50-3058028.ztl
+F50-0000001.ztl
+}
+opera={
+// unsupported
+B36-2797773.ztl
+}
+ie9={
+B30-1820180.ztl
+B30-1822564.ztl
+B30-1822585.ztl
+B30-1823207.ztl
+B30-1823226.ztl
+B30-1823354.ztl
+Z30-grid-0005.ztl
+B50-3006313.ztl
+B50-3166873.ztl
+Z30-grid-0001.ztl
+B50-2976323.ztl
+B36-2813877.ztl
+// unstable
+B36-2818308.ztl
+B50-2925493.ztl
+B50-2941554.ztl
+}
+ie8={
+// unstable
+B30-1876292.ztl
+B36-2796144.ztl
+}
+ie7={
+// unstable
+Form.ztl
+}
+ie6={
+// unstable
+B30-1876292.ztl
+B50-3006762.ztl
+}
+chrome={
+// unstable
+B36-2818308.ztl
+}

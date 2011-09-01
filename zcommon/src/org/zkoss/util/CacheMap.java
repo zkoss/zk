@@ -1,17 +1,15 @@
 /* CacheMap.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/11/23 15:26:21, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -73,10 +71,6 @@ import org.zkoss.util.logging.Log;
 public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20070907L;
 	//private static final Log log = Log.lookup(CacheMap.class);
-
-	/** @deprecated As of release 3.0.0, replaced by {@link Cache#DEFAULT_MAX_SIZE}.
-	 */
-	public static final int DEFAULT_MAXSIZE = 1024;
 
 	/** The map to store the mappings. */
 	private Map _map; //it is OK to serialized

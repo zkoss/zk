@@ -1,18 +1,16 @@
 /* Messagebox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jul 18 19:07:13     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -27,6 +25,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.impl.MessageboxDlg;
@@ -79,6 +78,35 @@ public class Messagebox {
 	/** A IGNORE button. */
 	public static final int IGNORE = 0x0400;
 
+	/** The event to indicate the Yes button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_YES = "onYes";
+	/** The event to indicate the No button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_NO = "onNo";
+	/** The event to indicate the RETRY button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_RETRY = "onRetry";
+	/** The event to indicate the Abort button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_ABORT = "onAbort";
+	/** The event to indicate the Ignore button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_IGNORE = "onIgnore";
+	/** The event to indicate the OK button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_OK = Events.ON_OK;
+	/** The event to indicate the Cancel button being clicked.
+	 * @since 5.0.8
+	 */
+	public static final String ON_CANCEL = Events.ON_CANCEL;
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -94,7 +122,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
+	public static 
 	int show(String message, String title, int buttons, String icon)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, 0, null);
@@ -123,13 +151,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button Name</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -138,8 +166,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon,
+	public static int show(String message, String title, int buttons, String icon,
 	EventListener listener)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, 0, listener);
@@ -164,8 +191,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon, int focus)
+	public static int show(String message, String title, int buttons, String icon, int focus)
 	throws InterruptedException {
 		return show(message, title, buttons, icon, focus, null);
 	}
@@ -197,13 +223,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -212,8 +238,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(String message, String title, int buttons, String icon,
+	public static int show(String message, String title, int buttons, String icon,
 	int focus, EventListener listener)
 	throws InterruptedException {
 		final Map params = new HashMap();
@@ -266,7 +291,7 @@ public class Messagebox {
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).
 	 */
-	public static final int show(String message)
+	public static int show(String message)
 	throws InterruptedException {
 		return show(message, null, OK, INFORMATION, 0, null);
 	}
@@ -281,8 +306,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon)
 	throws InterruptedException {
 		return show(messageCode, args, titleCode, buttons, icon, 0, null);
@@ -303,8 +327,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
 		return show(messageCode, args, titleCode, buttons, icon, focus, null);
@@ -333,13 +356,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -348,8 +371,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, Object[] args, int titleCode, int buttons,
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
 	String icon, int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, args),
@@ -367,8 +389,7 @@ public class Messagebox {
 	 * Note: if the event processing thread is disable, it always
 	 * returns {@link #OK}.
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
+	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon)
 	throws InterruptedException {
 		return show(messageCode, arg, titleCode, buttons, icon, 0, null);
 	}
@@ -388,8 +409,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons,
+	public static int show(int messageCode, Object arg, int titleCode, int buttons,
 	String icon, int focus)
 	throws InterruptedException {
 		return show(messageCode, arg, titleCode, buttons, icon, focus, null);
@@ -418,13 +438,13 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -433,8 +453,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, Object arg, int titleCode, int buttons,
+	public static int show(int messageCode, Object arg, int titleCode, int buttons,
 	String icon, int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode, arg),
@@ -447,8 +466,7 @@ public class Messagebox {
 	 * @param titleCode the message code for the title. If non-positive,
 	 * the default title is used.
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon)
+	public static int show(int messageCode, int titleCode, int buttons, String icon)
 	throws InterruptedException {
 		return show(messageCode, titleCode, buttons, icon, 0);
 	}
@@ -463,8 +481,7 @@ public class Messagebox {
 	 * and {@link #IGNORE}.
 	 * @since 3.0.0
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon,
+	public static int show(int messageCode, int titleCode, int buttons, String icon,
 	int focus)
 	throws InterruptedException {
 		return show(messageCode, titleCode, buttons, icon, focus, null);
@@ -493,14 +510,14 @@ public class Messagebox {
 	 * and so on.
 	 * <table border="1">
 	 *<tr><td>Button</td><td>Event Name</td></tr>
-	 *<tr><td>OK</td><td>onOK</td></tr>
-	 *<tr><td>Cancel</td><td>onCancel</td></tr>
-	 *<tr><td>Yes</td><td>onYes</td></tr>
-	 *<tr><td>No</td><td>onNo</td></tr>
-	 *<tr><td>Retry</td><td>onRetry</td></tr>
-	 *<tr><td>Abort</td><td>onAbort</td></tr>
-	 *<tr><td>Ignore</td><td>onIgnore</td></tr>
-	 *<tr><td>The close button on the right-top corner (x)<br>since 3.6.5</td><td>onClose</td></tr>
+	 *<tr><td>OK</td><td>onOK ({@link #ON_OK})</td></tr>
+	 *<tr><td>Cancel</td><td>onCancel ({@link #ON_CANCEL})</td></tr>
+	 *<tr><td>Yes</td><td>onYes ({@link #ON_YES})</td></tr>
+	 *<tr><td>No</td><td>onNo ({@link #ON_NO})</td></tr>
+	 *<tr><td>Retry</td><td>onRetry ({@link #ON_RETRY})</td></tr>
+	 *<tr><td>Abort</td><td>onAbort ({@link #ON_ABORT})</td></tr>
+	 *<tr><td>Ignore</td><td>onIgnore ({@link #ON_IGNORE})</td></tr>
+	 *<tr><td>The close button on the right-top corner (x)<br>since 5.0.2</td><td>onClose</td></tr>
 	 *</table>
 	 * @return the button being pressed (one of {@link #OK}, {@link #CANCEL},
 	 * {@link #YES}, {@link #NO}, {@link #ABORT}, {@link #RETRY},
@@ -509,8 +526,7 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static final
-	int show(int messageCode, int titleCode, int buttons, String icon,
+	public static int show(int messageCode, int titleCode, int buttons, String icon,
 	int focus, EventListener listener)
 	throws InterruptedException {
 		return show(Messages.get(messageCode),

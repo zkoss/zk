@@ -1,18 +1,16 @@
 /* Groupbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul 29 16:55:24     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,15 +22,15 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
-import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * Groups a set of child elements to have a visual effect.
  * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
  * "z-groupbox" is assumed.(since 3.5.0)
+ *
+ * <p>Events: onOpen.
  *
  * @author tomyeh
  */
@@ -41,10 +39,14 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
-	private String _cntscls;
+	private String _cntSclass;
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
-	
+
+	static {
+		addClientEvent(Groupbox.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
+
 	/** Returns the caption of this groupbox.
 	 */
 	public Caption getCaption() {
@@ -69,7 +71,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 
@@ -87,17 +89,21 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			smartUpdate("z.closable", closable);
+			smartUpdate("closable", closable);
 		}
 	}
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "contentStyle", _cntStyle);
+		render(renderer, "contentSclass", _cntSclass);
+		if (!_open) renderer.render("open", false);
+		if (!_closable) renderer.render("closable", false);
+	}
 	public String getZclass() {
 		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : _zclass;
-	}
-	protected String getRealSclass() {
-		final String cls = super.getRealSclass();
-		final String added = isClosable() && !isOpen() ? getZclass() + "-colpsd" : "";
-		return cls == null ? added : cls + " " + added;
 	}
 	
 	/** Returns the CSS style for the content block of the groupbox.
@@ -114,14 +120,14 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", _cntStyle);
+			smartUpdate("contentStyle", _cntStyle);
 		}
 	}
 	/** Returns the style class used for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
 	public String getContentSclass() {
-		return _cntscls;
+		return _cntSclass;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -129,9 +135,9 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	 * @since 3.0.0
 	 */
 	public void setContentSclass(String scls) {
-		if (!Objects.equals(_cntscls, scls)) {
-			_cntscls = scls;
-			invalidate();
+		if (!Objects.equals(_cntSclass, scls)) {
+			_cntSclass = scls;
+			smartUpdate("contentSclass", _cntSclass);
 		}
 	}
 
@@ -158,52 +164,6 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 		_legend = Boolean.valueOf(legend);
 	}
 
-	/** Returns the look of the caption.
-	 * It is, in fact, a portion of the style class that are used
-	 * to generate the style for the caption.
-	 *
-	 * <p>If the style class ({@link #getSclass}) of this groupbox is not
-	 * defined and the mold is "default", then "groupbox" is returned.
-	 *
-	 * <p>If the mold is "default" or "3d", and the style class is defined,
-	 * say "lite", then this method return "groupbox-lite".
-	 *
-	 * <p>If the mold is not "default", and the style class is not defined,
-	 * this method returns:<br>
-	 * <code>"groupbox-" + getMold()</code>
-	 *
-	 * <p>If the mold is not "default" and the style class is defined,
-	 * this method returns<br/>
-	 * <code>"groupbox-" + getMold() + "-" + getSclass()</code>
-	 *
-	 * <p>With this method, the caption generates the style class
-	 * for the caption accordingly. For example, if the mold is "3d"
-	 * and the style class not defined, then
-	 * "groupbox-3d-tl" for the top-left corner of the caption,
-	 * "groupbox-3d-tm" for the top-middle border, and so on.
-	 *
-	 * @since 3.0,0
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getCaptionLook() {
-		return null;
-	}
-
-	//-- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());
-
-		appendAsapAttr(sb, Events.ON_OPEN);
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-			//though widget.js handles onclick (if 3d), it is useful
-			//to support onClick for groupbox
-
-		if (!_closable)
-			sb.append(" z.closable=\"false\"");
-		return sb.toString();
-	}
-
 	//-- Component --//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {
@@ -220,7 +180,6 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 				//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
 				_caption = (Caption)child;
-				invalidate();
 				return true;
 			}
 		} else {
@@ -229,30 +188,26 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 		return false;
 	}
 	public void onChildRemoved(Component child) {
-		if (child instanceof Caption) {
+		if (child instanceof Caption)
 			_caption = null;
-			invalidate();
-		}
 		super.onChildRemoved(child);
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			_open = open;
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 
 	//Cloneable//

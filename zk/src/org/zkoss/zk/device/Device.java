@@ -1,18 +1,16 @@
 /* Device.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon May 14 19:13:14     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -105,13 +103,10 @@ public interface Device {
 	/** Sets the class that implements the server-push feature
 	 * ({@link ServerPush}) for this device, or null to use the default.
 	 *
-	 * <p>Default: null.
+	 * <p>Default: {@link org.zkoss.zk.ui.impl.PollingServerPush}.
 	 *
-	 * <p>If the professional edition (with zkex.jar) is loaded,
-	 * the client-polling-based server push (org.zkoss.zkex.ui.impl.PollingServerPush)
-	 * is the default.
-	 * If the enterprise edition (with zkmax.jar) is loaded,
-	 * the COMET-based server push (org.zkoss.zkmax.ui.comet.CometServerPush)
+	 * <p>If ZK EE (with zkmax.jar) is loaded,
+	 * the COMET-based server push ({@link org.zkoss.zkmax.ui.comet.CometServerPush})
 	 * is the default.
 	 * @return the previous class, or null if not available.
 	 * @since 3.0.0
@@ -166,4 +161,44 @@ public interface Device {
 	 * @since 2.4.0
 	 */
 	public void sessionDidActivate(Desktop desktop);
+
+	/** Tests if a client is the givent type.
+	 * @param userAgent represents a client.
+	 * @param type the type of the browser.
+	 * @return true if it matches, false if unable to identify.
+	 * Note: the default identifies ie*, gecko*, safari, opera and hil.
+	 * So, the implementation needs not to identify them (i.e., simply
+	 * return false), though it is harmless to identify.
+	 * @since 5.0.0
+	 */
+	public boolean isClient(String userAgent, String type);
+
+	/** Reloads the client-side messages in the specified locale.
+	 *
+	 * <p>Notice that this method only reloads the <i>standard</i> messages.
+	 * The application has to update the component's content (such as labels)
+	 * manually if necessary.
+	 *
+	 * <p>Limitation: it reloads only the messages of ZK Client Engine
+	 * and ZUL components. It does not reload messages loaded by your
+	 * own JavaScript codes.
+	 *
+	 * @param locale the locale. If null, {@link org.zkoss.util.Locales#getCurrent}
+	 * is assumed.
+	 * @since 5.0.4
+	 */
+	public void reloadMessages(java.util.Locale locale)
+	throws java.io.IOException;
+	/** Converts a package to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * @since 5.0.4
+	 */
+	public String packageToPath(String pkg);
+	/** Converts a relative path to an absolute path that can be accessible by
+	 * the class loader (classpath).
+	 * @param path the path (never null).
+	 * It is assumed to be a relative path if not starting with '/' or '~'.
+	 * @since 5.0.4
+	 */
+	public String toAbsolutePath(String path);
 }

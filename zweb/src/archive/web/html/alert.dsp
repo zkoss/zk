@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %><%--
 alert.dsp
 
-{{IS_NOTE
 	Purpose:
 		Shows the alert from the request's parameters
 		or from the arg attribute
@@ -13,12 +12,11 @@ alert.dsp
 			The alert message
 	History:
 		Tue Apr 12 11:41:02     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
@@ -27,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="arg" value="${param}" if="${empty arg}"/>
 <c:choose>
 <c:when test="${arg.px_alert_type=='error'}">
- <h:box color="red" caption="${c:l('error')}">
+ <h:box color="#f08080" caption="${c:l('error')}">
 <pre><c:out value="${arg.px_alert}"/></pre>
  </h:box>
 </c:when>

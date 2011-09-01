@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2917947.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 28 11:38:25 TST 2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Grid" border="normal">
+<zscript><![CDATA[
+int[] rownum = {1,2,3,4};
+]]></zscript>
+Please resize the column by dragging the right of each column, it should be work.
+	<grid height="200px">
+		<columns menupopup="auto" sizable="true">
+		<zk forEach="${rownum }">
+			<column sort="auto" label="Column ${each }" draggable="true" droppable="true" />
+		</zk>
+		</columns>
+		<rows>
+			<zk forEach="${rownum }">
+			<row>
+				<label width="99%" value="1${each }" />
+				<label width="99%" value="2${each }" />
+				<label width="99%" value="3${each }" />
+				<label width="99%" value="4${each }" />
+			</row>
+			</zk>
+		</rows>
+	</grid>
+</window>
+

@@ -1,18 +1,16 @@
 /* RepeatableMedia.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mar 12, 2008 9:21:30 AM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -39,7 +37,7 @@ import org.zkoss.io.RepeatableReader;
  * @author tomyeh
  * @since 3.0.4
  */
-public class RepeatableMedia implements Media {
+public class RepeatableMedia implements Media, java.io.Serializable {
 	private final Media _media;
 	private InputStream _isdata;
 	private Reader _rddata;

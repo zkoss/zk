@@ -1,18 +1,16 @@
 /* Session.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon May 30 21:29:17     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -58,11 +56,13 @@ public interface Session extends Scope {
 	 */
 	public Object getAttribute(String name);
 	/** Sets the value of the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void setAttribute(String name, Object value);
+	public Object setAttribute(String name, Object value);
 	/** Removes the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void removeAttribute(String name);
+	public Object removeAttribute(String name);
 
 	/** Returns a map of custom attributes associated with this session.
 	 */
@@ -109,14 +109,6 @@ public interface Session extends Scope {
 	 * @since 3.0.1
 	 */
 	public String getLocalAddr();
-	/** 
-	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteAddr}.
-	 */
-	public String getClientAddr();
-	/** 
-	 * @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
-	 */
-	public String getClientHost();
 
 	/** Invalidates this session then unbinds any objects bound to it.
 	 *

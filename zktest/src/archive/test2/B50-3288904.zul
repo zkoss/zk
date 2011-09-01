@@ -1,0 +1,13 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type '000' to the end of year (so it becomes 2011000, for example). Click outside the Datebox.</li>
+			<li>The year should be capped to '200000'. If the date value become 'undefined', it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import java.util.Date;
+		Date d = new Date();
+	]]></zscript>
+	<datebox value="${d}" locale="en_US"/>
+</zk>

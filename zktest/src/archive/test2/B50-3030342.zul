@@ -1,0 +1,19 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Check "David", "Thomas" and "Steven" in the listbox</li>
+</ol>
+]]>
+</html>
+	<listbox id="listbox" width="100px">
+		<attribute name="onCreate"><![CDATA[
+			List list = new ArrayList();
+			list.add("David");
+			list.add("Thomas");
+			list.add("Steven");
+			
+			listbox.setModel(new ListModelList(list));
+		]]></attribute>
+	</listbox>
+</zk>

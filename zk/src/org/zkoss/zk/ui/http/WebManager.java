@@ -1,18 +1,16 @@
 /* WebManager.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun 15 13:28:19     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.net.URL;
+import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -33,14 +32,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Library;
+import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
 
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
-import org.zkoss.web.util.resource.ServletLabelResovler;
+import org.zkoss.web.util.resource.ServletRequestResolver;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.Execution;
@@ -88,8 +91,6 @@ public class WebManager {
 
 	/** Map(ServletContext, List(WebManagerActivationListener)). */
 	private static final Map _actListeners = new HashMap();
-	/** Used to inter-communicate among portlet. */
-//	private final static ThreadLocal _reqLocal = new ThreadLocal();
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
@@ -117,6 +118,9 @@ public class WebManager {
 		_updateURI = updateURI;
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
+		Servlets.setBrowserIdentifier(new BrowserIdentifier());
+			//plugin device-dependent browser identifier
+
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
 		final ConfigParser parser = new ConfigParser();
@@ -129,10 +133,10 @@ public class WebManager {
 		}
 
 		//load metainfo/zk/zk.xml
+		String XML = "metainfo/zk/zk.xml";
 		try {
 			final ClassLocator loc = new ClassLocator();
-			for (Enumeration en = loc.getResources("metainfo/zk/zk.xml");
-			en.hasMoreElements();) {
+			for (Enumeration en = loc.getResources(XML); en.hasMoreElements();) {
 				final URL cfgUrl = (URL)en.nextElement();
 				try {
 					parser.parse(cfgUrl, config, loc);
@@ -141,24 +145,55 @@ public class WebManager {
 				}
 			}
 		} catch (Throwable ex) {
-			log.error("Unable to load metainfo/zk/zk.xml", ex);
+			log.error("Unable to load " + XML, ex);
 		}
 
 		//load /WEB-INF/zk.xml
+		XML = "/WEB-INF/zk.xml";
 		try {
-			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
+			final URL cfgUrl = _ctx.getResource(XML);
 			if (cfgUrl != null)
-				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx));
+				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx, true));
+					//accept URL, so zk.xml could contain URL
 		} catch (Throwable ex) {
-			log.error("Unable to load /WEB-INF/zk.xml", ex);
+			log.realCauseBriefly("Unable to load " + XML, ex);
+		}
+
+		//load additional configuration file
+		XML = Library.getProperty("org.zkoss.zk.config.path");
+		if (XML != null && XML.length() > 0) {
+			log.info("Parsing "+XML);
+			InputStream is = null;
+			try {
+				is = Servlets.getResourceAsStream(_ctx, XML);
+				if (is != null)
+					parser.parse(is, config, new ServletContextLocator(_ctx, true));
+				else
+					log.error("File not found: " + XML);
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Unable to load " + XML, ex);
+			} finally {
+				if (is != null)
+					try {is.close();} catch (Throwable t) {}
+			}
 		}
 
 		//after zk.xml is loaded since it depends on the configuration
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css", "html", "xml", "zul"});
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
+		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
+		if (s != null && s.length() > 0) {
+			if (s.charAt(0) != '/') s = '/' + s;
+			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s)); //for safety, not accept URL
+		}
 
-		Labels.register(new ServletLabelLocator(_ctx));
-		Labels.setVariableResolver(new ServletLabelResovler());
+		String[] labellocs = config.getLabelLocations();
+		if (labellocs.length == 0)
+			Labels.register(new ServletLabelLocator(_ctx));
+		else
+			for (int j = 0; j < labellocs.length; ++j)
+				Labels.register(new ServletLabelLocator(_ctx, labellocs[j]));
+		Labels.setVariableResolver(new ServletRequestResolver());
 
 		//create a WebApp instance
 		final Class cls = config.getWebAppClass();
@@ -175,6 +210,8 @@ public class WebManager {
 
 		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
 		_cwr.setDebugJS(config.isDebugJS());
+		_cwr.addExtendlet("wpd", new WpdExtendlet()); //add after _cwr.setDebugJS (since it calls back)
+		_cwr.addExtendlet("wcs", new WcsExtendlet());
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml
@@ -194,11 +231,10 @@ public class WebManager {
 
 		final List listeners = (List)_actListeners.remove(_ctx); //called and drop
 		if (listeners != null) {
-			for (Iterator it = listeners.iterator(); it.hasNext();) {
+			for (Iterator it = CollectionsX.comodifiableIterator(listeners);
+			it.hasNext();) {
 				try {
 					((WebManagerActivationListener)it.next()).didActivate(this);
-				} catch (java.util.ConcurrentModificationException ex) {
-					throw ex;
 				} catch (Throwable ex) {
 					log.realCause(ex);
 				}
@@ -207,10 +243,26 @@ public class WebManager {
 	}
 	/** Returns the prefix of URL to represent this build. */
 	private String getCWRURLPrefix() {
-		return Integer.toHexString(
-			_wapp.getVersion().hashCode() 
+		int code = _wapp.getVersion().hashCode() 
 			^ _wapp.getBuild().hashCode()
-			^ WebApps.getEdition().hashCode());
+			^ WebApps.getEdition().hashCode();
+
+		for (Iterator it = LanguageDefinition.getAll().iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
+			e.hasNext();) {
+				final Map.Entry me = (Map.Entry)e.next();
+				code ^= Objects.hashCode(me.getKey())
+					+ Objects.hashCode(me.getValue());
+			}
+			for (Iterator e = langdef.getMergeJavaScriptPackages().iterator();
+			e.hasNext();) {
+				code ^= Objects.hashCode(e.next());
+			}
+		}
+
+		return Integer.toHexString(code);
 			//FF 8-char boundary: http://code.google.com/intl/de/speed/page-speed/docs/caching.html
 	}
 
@@ -229,6 +281,7 @@ public class WebManager {
 	 * <p>Notice that the returned URI is not encoded, i.e., it doesn't
 	 * proceed with the servlet context prefix.
 	 * @see Desktop#getUpdateURI
+	 * @see WebApp#getUpdateURI
 	 * @since 3.6.2
 	 */
 	public String getUpdateURI() {
@@ -243,28 +296,6 @@ public class WebManager {
 	}
 
 	//-- static --//
-	/** Returns the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.getAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 *
-	 * @param name the attribute's name
-	 */
-	public static Object getRequestLocal(ServletRequest request, String name) {
-		return request.getAttribute(name);
-	}
-	/** Sets the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.setAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 * @param name the attribute's name
-	 * @param value the attribute's value
-	 */
-	public static
-	void setRequestLocal(ServletRequest request, String name, Object value) {
-		request.setAttribute(name, value);
-	}
-
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
 	 *
@@ -306,14 +337,42 @@ public class WebManager {
 	public static final WebManager getWebManager(WebApp wapp) {
 		return getWebManager((ServletContext)wapp.getNativeContext());
 	}
-	/** Returns the Web manager, or null if not found.
+	/** Returns the Web manager of the give context, or null if not found.
+	 * @since 5.0.5
 	 */
-	/*package*/ static final WebManager getWebManagerIfAny(ServletContext ctx) {
+	public static final WebManager getWebManagerIfAny(ServletContext ctx) {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
 	}
+	/** Returns the Web manager of the specified {@link WebApp},
+	 * or null if not found.
+	 * @since 5.0.5
+	 */
+	public static final WebManager getWebManagerIfAny(WebApp wapp) {
+		return getWebManagerIfAny((ServletContext)wapp.getNativeContext());
+	}
+	/** Returns the Web application of the specified context.
+	 * @exception UiException if not found (i.e., not initialized
+	 * properly)
+	 * @since 5.0.0
+	 */
+	public static final WebApp getWebApp(ServletContext ctx) {
+		final WebManager webman = getWebManagerIfAny(ctx);
+		final WebApp wapp = webman != null ? webman.getWebApp(): null;
+		if (wapp == null)
+			throw new UiException("The Web application not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
+		return wapp;
+	}
+	/** Returns the Web application of the specified context, or null
+	 * if not available.
+	 * @since 5.0.3
+	 */
+	public static final WebApp getWebAppIfAny(ServletContext ctx) {
+		final WebManager webman = getWebManagerIfAny(ctx);
+		return webman != null ? webman.getWebApp(): null;
+	}
 
-	/**  Returns the current session associated with this request,
-	 * or if the request does not have a session, creates one.
+	/**  Returns the session associated with the specified request request.
+	 * If the request does not have a session, creates one.
 	 */
 	public static final
 	Session getSession(ServletContext ctx, HttpServletRequest request) {
@@ -345,6 +404,7 @@ public class WebManager {
 	 */
 	/*package*/ static final
 	void sessionDestroyed(HttpSession hsess) {
+		//Under JBoss, the servlet might be destroyed before this callback
 		final WebManager webman = getWebManagerIfAny(hsess.getServletContext());
 		if (webman != null) {
 			final WebApp wapp = webman.getWebApp();
@@ -363,10 +423,10 @@ public class WebManager {
 	 */
 	public Desktop getDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path, boolean autocreate) {
-		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
+		Desktop desktop = (Desktop)request.getAttribute(ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
 			if (log.debugable()) log.debug("Create desktop for "+path);
-			setRequestLocal(request, ATTR_DESKTOP,
+			request.setAttribute(ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, response, path));
 		}
 		return desktop;
@@ -399,7 +459,7 @@ public class WebManager {
 	 */
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
-		setRequestLocal(request, ATTR_DESKTOP, desktop);
+		request.setAttribute(ATTR_DESKTOP, desktop);
 	}
 	/** Creates a page.
 	 * It invokes {@link UiFactory#newPage}. However, it prepares
@@ -453,6 +513,13 @@ public class WebManager {
 		} finally {
 			ExecutionsCtrl.setCurrent(exec);
 			desktopCtrl.setExecution(exec);
+		}
+	}
+
+	private static class BrowserIdentifier
+	implements Servlets.BrowserIdentifier {
+		public boolean isBrowser(String userAgent, String type) {
+			return org.zkoss.zk.device.Devices.isClient(userAgent, type);
 		}
 	}
 }

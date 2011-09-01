@@ -1,18 +1,16 @@
 /* BindingComboitemRenderer.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Jan 3, 2008 10:54:54 AM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,12 +19,9 @@ package org.zkoss.zkplus.databind;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 /**
@@ -44,50 +39,7 @@ import org.zkoss.zul.Comboitem;
 		_template = template;
 		_binder = binder;
 	}
-
-	//link cloned components with bindings of templates
-	private void linkTemplates(Component clone, Component template, Map templatemap) {
-		if (_binder.existsBindings(template)) {
-			templatemap.put(template, clone);
-			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);
-			clone.setAttribute(DataBinder.TEMPLATE, template);
-		}
-		
-		final Iterator itt = template.getChildren().iterator();
-		final Iterator itc = clone.getChildren().iterator();
-		while (itt.hasNext()) {
-			final Component t = (Component) itt.next();
-			final Component c = (Component) itc.next();
-			//Skip the Comboitem
-			//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
-			//no need to process down since BindingRowRenderer of the under collection
-			//item will do its own linkTemplates()
-			if (t instanceof Comboitem) { //bug#1968615.
-				continue;
-			}
-			linkTemplates(c, t, templatemap);	//recursive
-		}
-	}
 	
-	//setup id of cloned components (cannot called until the component is attached to Listbox)
-	private void setupCloneIds(Component clone) {
-		//bug #1813271: Data binding generates duplicate ids in grids/listboxes
-		//Bug #1962153: Data binding generates duplicate id in some case (add "_")
-		clone.setId("@" + clone.getUuid() + "_" + x++); //init id to @uuid to avoid duplicate id issue
-
-		for(final Iterator it = clone.getChildren().iterator(); it.hasNext(); ) {
-			final Component kid = (Component) it.next();
-			//Skip the Comboitem
-			//Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, 
-			//no need to process down since BindingRowRenderer of the under collection
-			//item will do its own setupCloneIds()
-			if (kid instanceof Comboitem) { //bug#1968615.
-				continue;
-			}
-			setupCloneIds(kid); //recursive
-		}
-	}
-
 	public void render(Comboitem item, Object bean) throws Exception {
 		final List kids = (List) item.getAttribute(KIDS);
 		item.getChildren().addAll(kids);
@@ -97,7 +49,7 @@ import org.zkoss.zul.Comboitem;
 		_binder.setupTemplateComponent(item, null); 
 			
 		//setup clone id
-		setupCloneIds(item);
+		BindingRendererUtil.setupCloneIds(item);
 
 		//bind bean to the associated listitem and its decendant
 		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
@@ -106,27 +58,30 @@ import org.zkoss.zul.Comboitem;
 
 		//apply the data binding
 		_binder.loadComponent(item);
-	}
 
+		//feature# 3026221: Databinder shall fire onCreate when cloning each items
+		DataBinder.postOnCreateEvents(item); //since 5.0.4
+	}
+	
 	public Comboitem newComboitem(Combobox combobox) {
 		//clone from template
 		final Comboitem clone = (Comboitem)_template.clone();
 		//TODO: see if databinder has this kind of Comboitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		//Bug #1962153: Data binding generates duplicate id in some case add "_".
-		if (!ComponentsCtrl.isAutoId(clone.getId())) {
-			clone.setId("@"+ clone.getUuid() + "_" + x++);
+		if (clone.getId().length() > 0) {
+			clone.setId(null);
 		}
-					
+		
 		//link cloned component with template
 		//each Comboitem and and it decendants share the same templatemap
 		Map templatemap = new HashMap(7);
-		linkTemplates(clone, _template, templatemap);
+		BindingRendererUtil.linkTemplates(clone, _template, templatemap, _binder);
 		
 		//link this template map to parent templatemap (Combobox in Combobox)
 		Map parenttemplatemap = (Map) combobox.getAttribute(DataBinder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {
-				templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
+			templatemap.put(DataBinder.TEMPLATEMAP, parenttemplatemap);
 		}
 		//kept clone kids somewhere to avoid create too many components in browser
 		final List kids = new ArrayList(clone.getChildren());

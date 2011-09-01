@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2787876.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 10:26:39     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please type the word '-' and then focus out the box, you should see a warning box.
+<textbox id="txt_test" constraint="/[a-z\\]*/, server"></textbox>
+</zk>

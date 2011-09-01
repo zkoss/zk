@@ -1,0 +1,30 @@
+<test tags="Vbox,Hbox,Box,Style">
+	<case id="Width">
+		<server><!--
+			<window xmlns:html="http://www.w3.org/1999/xhtml">
+				Won't show in IE due to table structure
+				<style>
+				.blue { background-color: blue; }
+				.green { background-color: green; }
+				</style>
+				
+				Each 25%
+				<hbox pack="stretch" width="100%" >
+				 <vbox id="v1" pack="stretch" sclass="blue" width="50%"> Left </vbox>
+				 <vbox id="v2" pack="stretch" sclass="green" width="50%"> Right </vbox>
+				</hbox>
+				Each 50%
+				<hbox pack="stretch" width="100%" >
+				 <vbox id="v3" pack="stretch" sclass="blue" width="100%"> Left </vbox>
+				 <vbox id="v4" pack="stretch" sclass="green" width="100%"> Right </vbox>
+				</hbox>
+			</window>
+		--></server>
+		<client><![CDATA[
+			verifyTrue(jq(v1).outerWidth() - (jq(v1.$n().parentNode()).outerWidth()/2) <= 2);
+			verifyTrue(jq(v2).outerWidth() - (jq(v2.$n().parentNode()).outerWidth()/2) <= 2);
+			verifyEquals(jq(v3.$n().parentNode()).outerWidth(), jq(v3).outerWidth());
+			verifyEquals(jq(v4.$n().parentNode()).outerWidth(), jq(v4).outerWidth());
+		]]></client>
+	</case>
+</test>

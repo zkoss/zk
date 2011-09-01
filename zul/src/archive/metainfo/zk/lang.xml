@@ -22,19 +22,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zul.Version</version-class>
-		<version-uid>3.6.5</version-uid>
+		<version-uid>5.0.8</version-uid>
 	</version>
 
-	<!-- Note: JavaScript that are listed here will be loaded no matter
-		what language is used.
-		Use zk.load("x.y") if x.y is required only for certain language
-	-->
+	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
 
-	<!-- use zk.js.dsp to package all common js file in one http request.-->
-	<javascript src="~./js/zk/zk.js.dsp" charset="UTF-8"/>
-	<javascript src="~./js/zk/lang.js.dsp" charset="UTF-8"/>
+	<javascript package="zk"/>
+	<javascript package="zul.lang"/>
+	<javascript package="zul" merge="true"/><!-- merge since usually required though optional -->
+	<javascript package="zul.wgt" merge="true"/><!-- merge since usually required though optional -->
 
-	<stylesheet href="~./zul/css/norm*.css.dsp*" type="text/css"/>
+	<stylesheet href="~./zul/css/zk.wcs" type="text/css"/>
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
@@ -49,25 +47,61 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show("" + m);
 	}
 	</zscript>
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.java.lang);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zul);
+	function alert(m) {
+		Messagebox.show(m);
+	}
+	</zscript>
+	<!-- Groovy "forgot" what are imported, so we have to import each time
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import java.lang.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zul.*
+	</zscript>
+	<zscript language="Groovy">
+	alert = {m -> Messagebox.show(m)}
+	</zscript>
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.util'
+		include_package 'java.lang'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zul'
+	end
+	def alert (m)
+		Java::Messagebox.show m
+	end
+	</zscript>
+	<zscript language="Python">
+import java.util
+import java.lang
+import org.zkoss.zk.ui.util.Clients
+import org.zkoss.zk.ui.event
+import org.zkoss.zk.ui
+import org.zkoss.zul
+
+def alert(m):
+	org.zkoss.zul.Messagebox.show(m)
+	</zscript>
 
 	<!-- 
 		Note: '~./' means it is located in the class path starting from
 		'/metainfo/web'. For example, '~./img/abc.gif' means abc.gif located
 		at '/metainfo/web/img'.
 	-->
-	<mold>
-		<mold-name>desktop</mold-name>
-		<mold-uri>~./zul/html/desktop.dsp</mold-uri><!-- it doesn't support class: -->
-	</mold>
-	<mold>
-		<mold-name>page</mold-name>
-		<mold-uri>~./zul/html/page.dsp</mold-uri><!-- it doesn't support class: -->
-	</mold>
-	<mold><!-- Optional. If omitted, it is assumed to be the same as desktop URI -->
-		<mold-name>complete</mold-name>
-		<mold-uri>~./zul/html/complete.dsp</mold-uri><!-- it doesn't support class: -->
-	</mold>
-
 	<!-- Defines the component and attribute names used to represent
 	a label when a plain text is found in ZUL XML.
 	-->
@@ -78,7 +112,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
-		<macro-uri>~./zul/html/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace
 		[Optional] Define it only if the Native namespace is supported.
@@ -90,13 +123,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Specifies a component
 	<component>
 		<component-name>foo</component-name> //the component name
-		<component-class>Foo</component-class> //the component class
+		<component-class>x.Foo</component-class> //the component class
+		<widget-class>x.Foo</widget-class> //the widget class (at client)
+			//EL is allowed in widget-class. However, if EL is used,
+			//mold-uri will be ignored (so zk.Widget's redraw must be implemented)
 
 		//Any number of molds are allowed and
 		//where mold-uri could be an expression or contain '~ctx/'
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./foo/fool.js</mold-uri>
+			//A mold can have a different widget name
+			<widget-class>other.name</widget-class>
 		</mold>
 
 		//Specifies which property to assign the text within the element to.
@@ -123,7 +161,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value></attribute-value>
 			</attribute>
 		</annotation>
-		Annotation of the specified field of this component definition
+		//Annotation of the specified field of this component definition
 		<annotation>
 			<annotation-name></annotation-name>
 			<property-name></property-name>
@@ -146,409 +184,613 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</component>
 	-->
 
+	<component><!-- abstract component but for sharing molds -->
+		<component-name>layoutregion</component-name>
+		<component-class>org.zkoss.zul.LayoutRegion</component-class>
+		<widget-class>zul.layout.LayoutRegion</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+	</component>
+
+	<component>
+		<component-name>a</component-name>
+		<component-class>org.zkoss.zul.A</component-class>
+		<widget-class>zul.wgt.A</widget-class>
+		<text-as>label</text-as><!-- treat text within the element as the label property -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/a.js</mold-uri>
+			<css-uri>css/a.css.dsp</css-uri>
+		</mold>
+	</component>
+
 	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
+		<widget-class>zul.med.Applet</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/applet.dsp</mold-uri>
+			<mold-uri>mold/applet.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>area</component-name>
 		<component-class>org.zkoss.zul.Area</component-class>
+		<widget-class>zul.wgt.Area</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/area.dsp</mold-uri>
+			<mold-uri>mold/area.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>audio</component-name>
 		<component-class>org.zkoss.zul.Audio</component-class>
+		<widget-class>zul.med.Audio</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/audio.dsp</mold-uri>
+			<mold-uri>mold/audio.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>auxhead</component-name>
 		<component-class>org.zkoss.zul.Auxhead</component-class>
+		<widget-class>zul.mesh.Auxhead</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/auxhead.dsp</mold-uri>
+			<mold-uri>mold/auxhead.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>auxheader</component-name>
 		<component-class>org.zkoss.zul.Auxheader</component-class>
+		<widget-class>zul.mesh.Auxheader</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/auxheader.dsp</mold-uri>
+			<mold-uri>mold/auxheader.js</mold-uri>
 		</mold>
 		<preserve-blank/><!-- blank text is converted as a label child -->
 	</component>
 	<component>
 		<component-name>bandbox</component-name>
 		<component-class>org.zkoss.zul.Bandbox</component-class>
+		<widget-class>zul.inp.Bandbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/bandbox2.dsp</mold-uri>
+			<mold-uri>mold/bandbox.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>		
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/bandbox.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>bandpopup</component-name>
 		<component-class>org.zkoss.zul.Bandpopup</component-class>
+		<widget-class>zul.inp.Bandpopup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/bandpopup.dsp</mold-uri>
+			<mold-uri>mold/bandpopup.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
-		<component-name>button</component-name>
-		<component-class>org.zkoss.zul.Button</component-class>
+		<component-name>borderlayout</component-name>
+		<component-class>org.zkoss.zul.Borderlayout</component-class>
+		<widget-class>zul.layout.Borderlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/button2.dsp</mold-uri>
+			<mold-uri>mold/borderlayout.js</mold-uri>
+			<css-uri>css/borderlayout.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>button</component-name>
+		<component-class>org.zkoss.zul.Button</component-class>
+		<widget-class>zul.wgt.Button</widget-class>
+		<text-as>label</text-as><!-- treat text within the element as the label property -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/button-os.js</mold-uri>
+			<css-uri>css/button.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>trendy</mold-name>
+			<mold-uri>mold/button.js</mold-uri>
+			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
-			<mold-uri>~./zul/html/button.dsp</mold-uri>
+			<mold-uri>mold/button-os.js</mold-uri>
+			<css-uri>css/button.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>box</component-name>
 		<component-class>org.zkoss.zul.Box</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
-		</mold>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
+			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>calendar</component-name>
 		<component-class>org.zkoss.zul.Calendar</component-class>
+		<widget-class>zul.db.Calendar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/calendar.dsp</mold-uri>
+			<mold-uri>mold/calendar.js</mold-uri>
+			<css-uri>css/calendar.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>captcha</component-name>
 		<component-class>org.zkoss.zul.Captcha</component-class>
+		<widget-class>zul.wgt.Captcha</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/image.dsp</mold-uri>
+			<mold-uri>mold/image.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>caption</component-name>
 		<component-class>org.zkoss.zul.Caption</component-class>
+		<widget-class>zul.wgt.Caption</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
- 			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
+ 			<mold-uri>mold/caption.js</mold-uri>
+			<css-uri>css/caption.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
-		<component-name>chart</component-name>
-		<component-class>org.zkoss.zul.Chart</component-class>
+		<component-name>cell</component-name>
+		<component-class>org.zkoss.zul.Cell</component-class>
+		<widget-class>zul.wgt.Cell</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+ 			<mold-uri>mold/cell.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>center</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.Center</component-class>
+		<widget-class>zul.layout.Center</widget-class>
+	</component>
+	<component>
+		<component-name>chart</component-name>
+		<component-class>org.zkoss.zul.Chart</component-class>
+		<widget-class>zul.wgt.Chart</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>checkbox</component-name>
 		<component-class>org.zkoss.zul.Checkbox</component-class>
+		<widget-class>zul.wgt.Checkbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/checkbox.dsp</mold-uri>
+			<mold-uri>mold/checkbox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>column</component-name>
 		<component-class>org.zkoss.zul.Column</component-class>
+		<widget-class>zul.grid.Column</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/column.dsp</mold-uri>
+			<mold-uri>mold/column.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>columns</component-name>
 		<component-class>org.zkoss.zul.Columns</component-class>
+		<widget-class>zul.grid.Columns</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/columns.dsp</mold-uri>
+			<mold-uri>mold/columns.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>combobox</component-name>
 		<component-class>org.zkoss.zul.Combobox</component-class>
+		<widget-class>zul.inp.Combobox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/combobox2.dsp</mold-uri>
+			<mold-uri>mold/combobox.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/combobox.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>comboitem</component-name>
 		<component-class>org.zkoss.zul.Comboitem</component-class>
+		<widget-class>zul.inp.Comboitem</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/comboitem.dsp</mold-uri>
+			<mold-uri>mold/comboitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>datebox</component-name>
 		<component-class>org.zkoss.zul.Datebox</component-class>
+		<widget-class>zul.db.Datebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/datebox2.dsp</mold-uri>
+			<mold-uri>mold/datebox.js</mold-uri>
+			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
+		</mold>		
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/datebox.js</mold-uri>
+			<css-uri>css/calendar.css.dsp</css-uri><!-- not combo.css.dsp -->
 		</mold>
 	</component>
 	<component>
 		<component-name>decimalbox</component-name>
 		<component-class>org.zkoss.zul.Decimalbox</component-class>
+		<widget-class>zul.inp.Decimalbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/decimalbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>div</component-name>
 		<component-class>org.zkoss.zul.Div</component-class>
+		<widget-class>zul.wgt.Div</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/div.dsp</mold-uri>
+			<mold-uri>mold/div.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>doublebox</component-name>
 		<component-class>org.zkoss.zul.Doublebox</component-class>
+		<widget-class>zul.inp.Doublebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/doublebox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
-		<component-name>fileupload</component-name>
-		<component-class>org.zkoss.zul.Fileupload</component-class>
+		<component-name>doublespinner</component-name>
+		<component-class>org.zkoss.zul.Doublespinner</component-class>
+		<widget-class>zul.inp.Doublespinner</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/fileupload.dsp</mold-uri>
+			<!-- same as spinner -->
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>east</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.East</component-class>
+		<widget-class>zul.layout.East</widget-class>
+	</component>
+	<component>
+		<component-name>fileupload</component-name>
+		<extends>button</extends>
+		<component-class>org.zkoss.zul.Fileupload</component-class>
+		<widget-class>zul.wgt.Fileupload</widget-class>
 	</component>
 	<component>
 		<component-name>flash</component-name>
 		<component-class>org.zkoss.zul.Flash</component-class>
+		<widget-class>zul.med.Flash</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/flash.dsp</mold-uri>
+			<mold-uri>mold/flash.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>flashchart</component-name>
+		<component-class>org.zkoss.zul.Flashchart</component-class>
+		<widget-class>zul.fchart.Flashchart</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/flashchart.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>foot</component-name>
 		<component-class>org.zkoss.zul.Foot</component-class>
+		<widget-class>zul.grid.Foot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/foot.dsp</mold-uri>
+			<mold-uri>mold/foot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>footer</component-name>
 		<component-class>org.zkoss.zul.Footer</component-class>
+		<widget-class>zul.grid.Footer</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/footer.dsp</mold-uri>
+			<mold-uri>mold/footer.js</mold-uri>
+		</mold>
+		<preserve-blank/>
+	</component>
+	<component>
+		<component-name>frozen</component-name>
+		<component-class>org.zkoss.zul.Frozen</component-class>
+		<widget-class>zul.mesh.Frozen</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/frozen.js</mold-uri>
+			<css-uri>css/frozen.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>grid</component-name>
 		<component-class>org.zkoss.zul.Grid</component-class>
+		<widget-class>zul.grid.Grid</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/grid.dsp</mold-uri>
+			<mold-uri>mold/grid.js</mold-uri>
+			<css-uri>css/grid.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/grid-pg.dsp</mold-uri>
+			<mold-uri>mold/grid.js</mold-uri>
+			<css-uri>css/grid.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>groupbox</component-name>
 		<component-class>org.zkoss.zul.Groupbox</component-class>
+		<widget-class>zul.wgt.Groupbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/groupbox.dsp</mold-uri>
+			<mold-uri>mold/groupbox.js</mold-uri>
+			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
-			<mold-uri>~./zul/html/groupbox2-3d.dsp</mold-uri>
+			<mold-uri>mold/groupbox3d.js</mold-uri>
+			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>	
 	<component>
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
-		</mold>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
+			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>hlayout</component-name>
+		<component-class>org.zkoss.zul.Hlayout</component-class>
+		<widget-class>zul.box.Hlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layout.js</mold-uri>
+			<css-uri>css/layout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>html</component-name>
 		<component-class>org.zkoss.zul.Html</component-class>
+		<widget-class>zul.wgt.Html</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/html.dsp</mold-uri>
+			<mold-uri>mold/html.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>iframe</component-name>
 		<component-class>org.zkoss.zul.Iframe</component-class>
+		<widget-class>zul.utl.Iframe</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/iframe.dsp</mold-uri>
+			<mold-uri>mold/iframe.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>image</component-name>
 		<component-class>org.zkoss.zul.Image</component-class>
+		<widget-class>zul.wgt.Image</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/image.dsp</mold-uri>
+			<mold-uri>mold/image.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>~./zul/html/image.dsp</mold-uri>
+			<mold-uri>mold/image.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>imagemap</component-name>
 		<component-class>org.zkoss.zul.Imagemap</component-class>
+		<widget-class>zul.wgt.Imagemap</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>include</component-name>
 		<component-class>org.zkoss.zul.Include</component-class>
+		<widget-class>zul.wgt.Include</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/include.js</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>intbox</component-name>
 		<component-class>org.zkoss.zul.Intbox</component-class>
+		<widget-class>zul.inp.Intbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/intbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>label</component-name>
 		<component-class>org.zkoss.zul.Label</component-class>
+		<widget-class>zul.wgt.Label</widget-class>
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/label.dsp</mold-uri>
+			<mold-uri>mold/label.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listbox</component-name>
 		<component-class>org.zkoss.zul.Listbox</component-class>
+		<widget-class>zul.sel.Listbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listbox.dsp</mold-uri>
+			<mold-uri>mold/listbox.js</mold-uri>
+			<css-uri>css/listbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>
-			<mold-uri>~./zul/html/listbox-select.dsp</mold-uri>
+			<widget-class>zul.sel.Select</widget-class>
+			<mold-uri>mold/select.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/listbox-pg.dsp</mold-uri>
+			<mold-uri>mold/listbox.js</mold-uri>
+			<css-uri>css/listbox.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listcell</component-name>
 		<component-class>org.zkoss.zul.Listcell</component-class>
+		<widget-class>zul.sel.Listcell</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listcell.dsp</mold-uri>
+			<mold-uri>mold/listcell.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listfoot</component-name>
 		<component-class>org.zkoss.zul.Listfoot</component-class>
+		<widget-class>zul.sel.Listfoot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listfoot.dsp</mold-uri>
+			<mold-uri>mold/listfoot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listfooter</component-name>
 		<component-class>org.zkoss.zul.Listfooter</component-class>
+		<widget-class>zul.sel.Listfooter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
+			<mold-uri>mold/listfooter.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listhead</component-name>
 		<component-class>org.zkoss.zul.Listhead</component-class>
+		<widget-class>zul.sel.Listhead</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listhead.dsp</mold-uri>
+			<mold-uri>mold/listhead.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listheader</component-name>
 		<component-class>org.zkoss.zul.Listheader</component-class>
+		<widget-class>zul.sel.Listheader</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
+			<mold-uri>mold/listheader.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listitem</component-name>
 		<component-class>org.zkoss.zul.Listitem</component-class>
+		<widget-class>zul.sel.Listitem</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
+			<mold-uri>mold/listitem.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>select</mold-name>
+			<widget-class>zul.sel.Option</widget-class>
+			<mold-uri>mold/option.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>longbox</component-name>
 		<component-class>org.zkoss.zul.Longbox</component-class>
+		<widget-class>zul.inp.Longbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/longbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component><!-- Feature 2493161 -->
@@ -559,390 +801,496 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>menu</component-name>
 		<component-class>org.zkoss.zul.Menu</component-class>
+		<widget-class>zul.menu.Menu</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/menu2.dsp</mold-uri>
+			<mold-uri>mold/menu.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>menubar</component-name>
 		<component-class>org.zkoss.zul.Menubar</component-class>
+		<widget-class>zul.menu.Menubar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar2.dsp' : '~./zul/html/vmenubar2.dsp'}</mold-uri>
+			<mold-uri>mold/menubar.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>menuitem</component-name>
 		<component-class>org.zkoss.zul.Menuitem</component-class>
+		<widget-class>zul.menu.Menuitem</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/menuitem2.dsp</mold-uri>
+			<mold-uri>mold/menuitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>menupopup</component-name>
 		<component-class>org.zkoss.zul.Menupopup</component-class>
+		<widget-class>zul.menu.Menupopup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/menupopup2.dsp</mold-uri>
+			<mold-uri>mold/menupopup.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>menuseparator</component-name>
 		<component-class>org.zkoss.zul.Menuseparator</component-class>
+		<widget-class>zul.menu.Menuseparator</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/menuseparator2.dsp</mold-uri>
+			<mold-uri>mold/menuseparator.js</mold-uri>
 		</mold>
 	</component>
 	<component>
+		<component-name>north</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.North</component-class>
+		<widget-class>zul.layout.North</widget-class>
+	</component>	
+	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
+		<widget-class>zul.mesh.Paging</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/paging.dsp</mold-uri>
+			<mold-uri>mold/paging.js</mold-uri>
+			<css-uri>css/paging.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
-			<mold-uri>~./zul/html/paging-os.dsp</mold-uri>
+			<mold-uri>mold/paging.js</mold-uri>
+			<css-uri>css/paging.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>panel</component-name>
 		<component-class>org.zkoss.zul.Panel</component-class>
+		<widget-class>zul.wnd.Panel</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/panel.dsp</mold-uri>
+			<mold-uri>mold/panel.js</mold-uri>
+			<css-uri>css/panel.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>panelchildren</component-name>
 		<component-class>org.zkoss.zul.Panelchildren</component-class>
+		<widget-class>zul.wnd.Panelchildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/panelchildren.dsp</mold-uri>
+			<mold-uri>mold/panelchildren.js</mold-uri>
 		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>popup</component-name>
 		<component-class>org.zkoss.zul.Popup</component-class>
+		<widget-class>zul.wgt.Popup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/popup.dsp</mold-uri>
+			<mold-uri>mold/popup.js</mold-uri>
+			<css-uri>css/popup.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>progressmeter</component-name>
 		<component-class>org.zkoss.zul.Progressmeter</component-class>
+		<widget-class>zul.wgt.Progressmeter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/progressmeter.dsp</mold-uri>
+			<mold-uri>mold/progressmeter.js</mold-uri>
+			<css-uri>css/progressmeter.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>radio</component-name>
 		<component-class>org.zkoss.zul.Radio</component-class>
+		<widget-class>zul.wgt.Radio</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/radio.dsp</mold-uri>
+			<mold-uri>mold/radio.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>radiogroup</component-name>
 		<component-class>org.zkoss.zul.Radiogroup</component-class>
+		<widget-class>zul.wgt.Radiogroup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/radiogroup.dsp</mold-uri>
+			<mold-uri>mold/radiogroup.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>row</component-name>
 		<component-class>org.zkoss.zul.Row</component-class>
+		<widget-class>zul.grid.Row</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/row.dsp</mold-uri>
+			<mold-uri>mold/row.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>rows</component-name>
 		<component-class>org.zkoss.zul.Rows</component-class>
+		<widget-class>zul.grid.Rows</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/rows.dsp</mold-uri>
+			<mold-uri>mold/rows.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>script</component-name>
 		<component-class>org.zkoss.zul.Script</component-class>
+		<widget-class>zul.utl.Script</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 	</component>
 	<component>
 		<component-name>separator</component-name>
 		<component-class>org.zkoss.zul.Separator</component-class>
+		<widget-class>zul.wgt.Separator</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/separator.dsp</mold-uri>
+			<mold-uri>mold/separator.js</mold-uri>
+			<css-uri>css/separator.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>slider</component-name>
 		<component-class>org.zkoss.zul.Slider</component-class>
+		<widget-class>zul.inp.Slider</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>scale</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>sphere</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>scale</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>space</component-name>
 		<component-class>org.zkoss.zul.Space</component-class>
+		<widget-class>zul.wgt.Space</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/separator.dsp</mold-uri>
+			<mold-uri>mold/space.js</mold-uri>
+			<css-uri>css/separator.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>span</component-name>
 		<component-class>org.zkoss.zul.Span</component-class>
+		<widget-class>zul.wgt.Span</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/span.dsp</mold-uri>
+			<mold-uri>mold/span.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>spinner</component-name>
 		<component-class>org.zkoss.zul.Spinner</component-class>
+		<widget-class>zul.inp.Spinner</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/spinner.dsp</mold-uri>
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/spinner.js</mold-uri>
+			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>splitter</component-name>
 		<component-class>org.zkoss.zul.Splitter</component-class>
+		<widget-class>zul.box.Splitter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/splitter.dsp</mold-uri>
+			<mold-uri>mold/splitter.js</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>os</mold-name>
+			<mold-uri>mold/splitter.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>south</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.South</component-class>
+		<widget-class>zul.layout.South</widget-class>
 	</component>
 	<component>
 		<component-name>style</component-name>
 		<component-class>org.zkoss.zul.Style</component-class>
+		<widget-class>zul.utl.Style</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/style.dsp</mold-uri>
+			<mold-uri>mold/style.js</mold-uri>
 		</mold>
 	</component>
-	<!-- 	
-		  
-	-->
 	<component>
 		<component-name>tabbox</component-name>
 		<component-class>org.zkoss.zul.Tabbox</component-class>
+		<widget-class>zul.tab.Tabbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox2.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
+			<mold-uri>mold/tabbox.js</mold-uri>	
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
-			<mold-uri>~./zul/html/tabbox-accd2.dsp</mold-uri>
+			<mold-uri>mold/tabbox-accd.js</mold-uri>
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion-lite</mold-name>
-			<mold-uri>~./zul/html/tabbox-accd2-lite.dsp</mold-uri>
+			<mold-uri>mold/tabbox-accd-lite.js</mold-uri>
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tabs</component-name>
 		<component-class>org.zkoss.zul.Tabs</component-class>
+		<widget-class>zul.tab.Tabs</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs2.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
+			<mold-uri>mold/tabs.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tab</component-name>
 		<component-class>org.zkoss.zul.Tab</component-class>
+		<widget-class>zul.tab.Tab</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab2.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
+			<mold-uri>mold/tab.js</mold-uri>
 		</mold>
 		<preserve-blank/>
+		<text-as>label</text-as>
 	</component>
 	<component>
 		<component-name>tabpanels</component-name>
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
+		<widget-class>zul.tab.Tabpanels</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels2.dsp' : '~./zul/html/tabpanels2.dsp'}</mold-uri>
+			<mold-uri>mold/tabpanels.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tabpanel</component-name>
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
+		<widget-class>zul.tab.Tabpanel</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel2.dsp': '~./zul/html/tabpanel2.dsp'}</mold-uri>
+			<mold-uri>mold/tabpanel.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>textbox</component-name>
 		<component-class>org.zkoss.zul.Textbox</component-class>
+		<widget-class>zul.inp.Textbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/textbox.dsp</mold-uri>
+			<mold-uri>mold/textbox.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/textbox.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>timebox</component-name>
 		<component-class>org.zkoss.zul.Timebox</component-class>
+		<widget-class>zul.db.Timebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/timebox2.dsp</mold-uri>
+			<mold-uri>mold/timebox.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>rounded</mold-name>
+			<mold-uri>mold/timebox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>timer</component-name>
 		<component-class>org.zkoss.zul.Timer</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/timer.dsp</mold-uri>
-		</mold>
+		<widget-class>zul.utl.Timer</widget-class>
 	</component>
 	<component>
 		<component-name>toolbar</component-name>
 		<component-class>org.zkoss.zul.Toolbar</component-class>
+		<widget-class>zul.wgt.Toolbar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/toolbar.dsp</mold-uri>
+			<mold-uri>mold/toolbar.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>panel</mold-name>
-			<mold-uri>~./zul/html/toolbarpanel.dsp</mold-uri>
+			<mold-uri>mold/toolbarpanel.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>toolbarbutton</component-name>
 		<component-class>org.zkoss.zul.Toolbarbutton</component-class>
+		<widget-class>zul.wgt.Toolbarbutton</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/toolbarbutton.dsp</mold-uri>
+			<mold-uri>mold/toolbarbutton.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tree</component-name>
 		<component-class>org.zkoss.zul.Tree</component-class>
+		<widget-class>zul.sel.Tree</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/tree.dsp</mold-uri>
+			<mold-uri>mold/tree.js</mold-uri>
+			<css-uri>css/tree.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/tree-pg.dsp</mold-uri>
+			<mold-uri>mold/tree.js</mold-uri>
+			<css-uri>css/tree.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treecell</component-name>
 		<component-class>org.zkoss.zul.Treecell</component-class>
+		<widget-class>zul.sel.Treecell</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecell.dsp</mold-uri>
+			<mold-uri>mold/treecell.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treechildren</component-name>
 		<component-class>org.zkoss.zul.Treechildren</component-class>
+		<widget-class>zul.sel.Treechildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treechildren.dsp</mold-uri>
+			<mold-uri>mold/treechildren.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treecol</component-name>
 		<component-class>org.zkoss.zul.Treecol</component-class>
+		<widget-class>zul.sel.Treecol</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecol.dsp</mold-uri>
+			<mold-uri>mold/treecol.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treecols</component-name>
 		<component-class>org.zkoss.zul.Treecols</component-class>
+		<widget-class>zul.sel.Treecols</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecols.dsp</mold-uri>
+			<mold-uri>mold/treecols.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treefoot</component-name>
 		<component-class>org.zkoss.zul.Treefoot</component-class>
+		<widget-class>zul.sel.Treefoot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treefoot.dsp</mold-uri>
+			<mold-uri>mold/treefoot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treefooter</component-name>
 		<component-class>org.zkoss.zul.Treefooter</component-class>
+		<widget-class>zul.sel.Treefooter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treefooter.dsp</mold-uri>
+			<mold-uri>mold/treefooter.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treeitem</component-name>
 		<component-class>org.zkoss.zul.Treeitem</component-class>
+		<widget-class>zul.sel.Treeitem</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treeitem.dsp</mold-uri>
+			<mold-uri>mold/treeitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treerow</component-name>
 		<component-class>org.zkoss.zul.Treerow</component-class>
+		<widget-class>zul.sel.Treerow</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treerow.dsp</mold-uri>
+			<mold-uri>mold/treerow.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>vbox</component-name>
 		<component-class>org.zkoss.zul.Vbox</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
-		</mold>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
-			<mold-uri>~./zul/html/hbox.dsp</mold-uri>
+			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
-			<mold-uri>~./zul/html/vbox.dsp</mold-uri>
+			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>vlayout</component-name>
+		<component-class>org.zkoss.zul.Vlayout</component-class>
+		<widget-class>zul.box.Vlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layout.js</mold-uri>
+			<css-uri>css/layout.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>west</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.West</component-class>
+		<widget-class>zul.layout.West</widget-class>
 	</component>
 	<component>
 		<component-name>window</component-name>
 		<component-class>org.zkoss.zul.Window</component-class>
+		<widget-class>zul.wnd.Window</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/window2.dsp</mold-uri>
+			<mold-uri>mold/window.js</mold-uri>
+			<css-uri>css/window.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>

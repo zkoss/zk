@@ -1,27 +1,27 @@
 /* ExecutionImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun  6 14:14:02     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.http;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Enumeration;
+import java.util.Date;
 import java.io.Writer;
 import java.io.Reader;
 import java.io.IOException;
@@ -56,11 +56,12 @@ import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractExecution;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
@@ -71,6 +72,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /**
  * An {@link org.zkoss.zk.ui.Execution} implementation for HTTP request
@@ -86,6 +88,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final Map _attrs;
 	private MyEval _eval;
 	private ExecutionResolver _resolver;
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
 	private boolean _voided;
 
 	/** Constructs an execution for HTTP request.
@@ -154,13 +157,8 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public Evaluator getEvaluator(Page page, Class expfcls) {
-		if (page == null) {
+		if (page == null)
 			page = getCurrentPage();
-			if (page == null) {
-				final Collection c = getDesktop().getPages();
-				if (!c.isEmpty()) page = (Page)c.iterator().next();
-			}
-		}
 
 		if (page != null && expfcls == null)
 			expfcls = page.getExpressionFactoryClass();
@@ -222,29 +220,31 @@ public class ExecutionImpl extends AbstractExecution {
 		//However, the performance is not a major issue, so just skip
 		final ClassWebResource cwr =
 			WebManager.getWebManager(_ctx).getClassWebResource();
+		if (!isDirectInclude(cwr, page))
+			return false;
+		
+		Object old = null;
+		if (mode == PASS_THRU_ATTR) {
+			old = _request.getAttribute(Attributes.ARG);
+			if (params != null)
+				_request.setAttribute(Attributes.ARG, params);
+				//If params=null, use the 'inherited' one (same as Servlets.include)
+		}
+
 		final String attrnm = include ?
 			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
-		if (isDirectInclude(cwr, page)) {
-			Object old = null;
-			if (mode == PASS_THRU_ATTR) {
-				old = _request.getAttribute(Attributes.ARG);
-				if (params != null)
-					_request.setAttribute(Attributes.ARG, params);
-					//If params=null, use the 'inherited' one (same as Servlets.include)
-			}
-
-			_request.setAttribute(attrnm, Boolean.TRUE);
-				//so Servlets.isIncluded returns correctly
-			try {
-				cwr.service(_request,
-					HttpBufferedResponse.getInstance(_response, out),
-					page.substring(2));
-			} finally {
-				_request.removeAttribute(attrnm);
-				if (mode == PASS_THRU_ATTR)
-					_request.setAttribute(Attributes.ARG, old);
-			}
+		_request.setAttribute(attrnm, Boolean.TRUE);
+			//so Servlets.isIncluded returns correctly
+		try {
+			cwr.service(_request,
+				HttpBufferedResponse.getInstance(_response, out),
+				page.substring(2));
+		} finally {
+			_request.removeAttribute(attrnm);
+			if (mode == PASS_THRU_ATTR)
+				_request.setAttribute(Attributes.ARG, old);
 		}
+		
 		return true;
 	}
 	/** Returns whether the page can be directly included.
@@ -334,11 +334,6 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getRemoteHost() {
 		return _request.getRemoteHost();
 	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getRemoteName() {
-		return getRemoteHost();
-	}
 	public String getRemoteAddr() {
 		return _request.getRemoteAddr();
 	}
@@ -358,7 +353,8 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request.getLocalPort();
 	}
 	public String getContextPath() {
-		return _request.getContextPath();
+		final String s = _request.getContextPath();
+		return s == null || "/".equals(s) ? "": s; //to avoid bug in some Web server
 	}
 	public String getScheme() {
 		return _request.getScheme();
@@ -422,16 +418,9 @@ public class ExecutionImpl extends AbstractExecution {
 	public void addDateHeader(String name, long value) {
 		_response.addDateHeader(name, value);
 	}
-
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
-	 */
-	public Object getRequestAttribute(String name) {
-		return getAttribute(name);
-	}
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value) {
-		setAttribute(name, value);
+	public void setContentType(String contentType) {
+		if (_response instanceof HttpServletResponse)
+			((HttpServletResponse)_response).setContentType(contentType);
 	}
 
 	public boolean isBrowser() {
@@ -461,6 +450,8 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
+	 */
 	public boolean isMilDevice() {
 		return Servlets.isMilDevice(_request);
 	}
@@ -481,15 +472,33 @@ public class ExecutionImpl extends AbstractExecution {
 	public Object getAttribute(String name) {
 		return _request.getAttribute(name);
 	}
-	public void setAttribute(String name, Object value) {
-		_request.setAttribute(name, value);
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
 	}
-	public void removeAttribute(String name) {
+	public Object setAttribute(String name, Object value) {
+		Object old = _request.getAttribute(name);
+		_request.setAttribute(name, value);
+		return old;
+	}
+	public Object removeAttribute(String name) {
+		Object old = _request.getAttribute(name);
 		_request.removeAttribute(name);
+		return old;
 	}
 
 	public Map getAttributes() {
 		return _attrs;
+	}
+	public boolean addScopeListener(ScopeListener listener) {
+		return _scopeListeners.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
 	}
 
 	public String getHeader(String name) {
@@ -506,8 +515,14 @@ public class ExecutionImpl extends AbstractExecution {
 	public void setResponseHeader(String name, String value) {
 		_response.setHeader(name, value);
 	}
+	public void setResponseHeader(String name, Date value) {
+		_response.setDateHeader(name, value.getTime());
+	}
 	public void addResponseHeader(String name, String value) {
 		_response.addHeader(name, value);
+	}
+	public void addResponseHeader(String name, Date value) {
+		_response.addDateHeader(name, value.getTime());
 	}
 	public boolean containsResponseHeader(String name) {
 		return _response.containsHeader(name);

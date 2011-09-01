@@ -1,0 +1,61 @@
+<!-- B50-2999696.ztl.java
+
+	Purpose:for testing B50-2999696.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 12:57:05
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-2999696.zul,A,E,Vflex,Grid">
+	<case id="ztl">
+		<server><!--
+			<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>If you see no Exception, then it is OK.</li>
+</ol>
+]]>
+</html>
+<grid hflex="min" vflex="min">
+	<columns>
+		<column hflex="min"/>
+		<column hflex="min"/>
+	</columns>
+	<rows>
+		<row>
+			<label value="File:"/>
+			<textbox width="98%"/>
+		</row>
+		<row>
+			<label value="Type:"/>
+			<hbox>
+				<listbox rows="1" mold="select">
+					<listitem label="Java Files,(*.java)"/>
+					<listitem label="All Files,(*.*)"/>
+				</listbox>
+				<button label="Browse..."/>
+			</hbox>
+		</row>
+		<row>
+			<label value="Options:"/>
+			<textbox rows="3" width="99%"/>
+		</row>
+	</rows>
+</grid>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			if (jq(".z-window-highlighted").exists() || jq(".z-window-modal").exists()) 
+			    verifyTrue(false);
+
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,77 @@
+<!-- B30-2086350.ztl.java
+
+	Purpose:for testing B30-2086350.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 18:25:08
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2086350.zul,Listbox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+Please click the "Click Me!" header of the nested listbox, and then no error appears.(That is correct)
+<listbox width="400px" onSelect='alert(self.selectedItem.uuid);'>
+	<listhead sizable="true">
+		<listheader label="name" sort="auto" />
+		<listheader label="gender" sort="auto" />
+	</listhead>
+	<listitem>
+		<listcell>
+			<listbox width="250px">
+				<listhead sizable="true">
+					<listheader label="Click Me!" sort="auto" />
+					<listheader label="gender" sort="auto" />
+				</listhead>
+				<listitem>
+					<listcell label="Mary" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="John" />
+					<listcell label="MALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Jane" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Henry" />
+					<listcell label="MALE" />
+				</listitem>
+			</listbox>
+
+		</listcell>
+		<listcell label="FEMALE" />
+	</listitem>
+	<listitem>
+		<listcell label="John" />
+		<listcell label="MALE" />
+	</listitem>
+	<listitem>
+		<listcell label="Jane" />
+		<listcell label="FEMALE" />
+	</listitem>
+	<listitem>
+		<listcell label="Henry" />
+		<listcell label="MALE" />
+	</listitem>
+</listbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("div.z-listheader-cnt:eq(2)"));
+				verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

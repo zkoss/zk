@@ -1,5 +1,0 @@
-<?component name="window" extends="window" apply="org.zkoss.zkdemo.test2.F2314655_1"?>
-<window title="test of apply" apply="org.zkoss.zkdemo.test2.F2314655_2">
-	You shall see "first,second," below
-	<separator/>
-</window>

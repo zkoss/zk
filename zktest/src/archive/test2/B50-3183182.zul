@@ -1,0 +1,64 @@
+<zk>
+1. You shall see top and bottom two parts of blocks separate by a horizontal line
+<separator/>
+2. The top part you shall see three rectangles with size fit exactly to its contents
+<separator/>
+3. The bottom part you shall see also three rectangles with the width expand to be as wide as the browser window
+	<grid hflex="min">
+		<columns>
+			<column hflex="min"/>
+		</columns>
+		<rows>
+			<row>Row Content</row>
+		</rows>
+	</grid>
+	<listbox hflex="min">
+		<listhead>
+			<listheader hflex="min"/>
+		</listhead>
+		<listitem>
+			<listcell>Listitem Content</listcell>
+		</listitem>
+	</listbox>
+	<tree hflex="min">
+		<treecols>
+			<treecol hflex="min"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<separator bar="true" spacing="50px"/>
+	<grid>
+		<columns>
+			<column />
+		</columns>
+		<rows>
+			<row>Row Content</row>
+		</rows>
+	</grid>
+	<listbox>
+		<listhead>
+			<listheader/>
+		</listhead>
+		<listitem>
+			<listcell>Listitem Content</listcell>
+		</listitem>
+	</listbox>
+	<tree>
+		<treecols>
+			<treecol />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem Content</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

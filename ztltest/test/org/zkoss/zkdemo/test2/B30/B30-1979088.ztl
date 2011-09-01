@@ -1,0 +1,52 @@
+<!-- B30-1979088.ztl.java
+
+	Purpose:for testing B30-1979088.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 12:44:06
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1979088.zul,Listbox,Paging,BI">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<window>
+	Click the "test" button, then the background of the both paging are changed to red.
+<zscript>
+List items = new org.zkoss.zktest.test2.BigList(100); //a big list of
+Integer
+</zscript>
+<button label="test" onClick='list.pagingChild.setStyle("background:red;");'/>
+<listbox mold="paging" id="list" pagingPosition="both">
+<listitem forEach="&#36;{items}">
+<listcell label="&#36;{each}-1"/>
+<listcell label="&#36;{each}-2"/>
+<listcell label="&#36;{each}-3"/>
+<listcell label="&#36;{each}-4"/>
+</listitem>
+</listbox>
+</window>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();
+				boolean color = org.zkoss.ztl.util.ColorVerifingHelper
+						.getInstance().isEqualColor("red",
+								jq(".z-paging:eq(0)").css("backgroundColor"));
+				verifyTrue(color);
+				boolean color1 = org.zkoss.ztl.util.ColorVerifingHelper
+						.getInstance().isEqualColor("red",
+								jq(".z-paging:eq(1)").css("backgroundColor"));
+				verifyTrue(color1);
+		]]></client>
+	</case>
+</test>

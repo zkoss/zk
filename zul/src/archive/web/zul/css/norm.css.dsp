@@ -1,79 +1,147 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-<%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
-${z:setCSSCacheControl()}
 
+<c:if test="${empty fontSizeM}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeM')}"/>
 <c:set var="fontSizeM" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="fontSizeM" value="12px" scope="request" if="${empty fontSizeM}"/>
+</c:if>
+<c:if test="${empty fontSizeMS}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeMS')}"/>
 <c:set var="fontSizeMS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
+</c:if>
+<c:if test="${empty fontSizeS}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeS')}"/>
 <c:set var="fontSizeS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="fontSizeS" value="11px" scope="request" if="${empty fontSizeS}"/>
+</c:if>
+<c:if test="${empty fontSizeXS}">
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontSizeXS')}"/>
 <c:set var="fontSizeXS" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="fontSizeXS" value="10px" scope="request" if="${empty fontSizeXS}"/>
+</c:if>
+
+<c:if test="${empty fontFamilyT}"><%-- title --%>
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyT')}"/>
 <c:set var="fontFamilyT" value="${val}" scope="request" unless="${empty val}"/>
+<c:set var="fontFamilyT" value="arial, sans-serif"
+	scope="request" if="${empty fontFamilyT}"/>
+</c:if>
+<c:if test="${empty fontFamilyC}"><%-- content --%>
 <c:set var="val" value="${c:property('org.zkoss.zul.theme.fontFamilyC')}"/>
 <c:set var="fontFamilyC" value="${val}" scope="request" unless="${empty val}"/>
-
-<c:set var="fontSizeM" value="12px" scope="request" if="${empty fontSizeM}"/>
-<c:set var="fontSizeMS" value="11px" scope="request" if="${empty fontSizeMS}"/>
-<c:set var="fontSizeS" value="11px" scope="request" if="${empty fontSizeS}"/>
-<c:set var="fontSizeXS" value="10px" scope="request" if="${empty fontSizeXS}"/>
-
-<c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
-	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
-<c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
-	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
+<c:set var="fontFamilyC" value="arial, sans-serif"
+	scope="request" if="${empty fontFamilyC}"/>
+</c:if>
 
 html, body {height:100%}
 
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
-	margin: 0px; padding: 0px 5px;
+	margin: 0; padding: 0 5px;
 }
 </c:if>
 
 <%-- paragraphs --%>
-<c:choose>
-<c:when test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
-.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
-.zk button, .zk input.button, .zk input.file {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-.zk legend {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-.zk th {
-	font-family: ${fontFamilyT};
-	font-weight: bold;
-}
-.zk thead tr {
-	font-family: ${fontFamilyT};
-	font-weight: bold;
-}
-.zk img {border: 0;}
-</c:when>
-<c:otherwise>
 img {border: 0;}
-</c:otherwise>
-</c:choose>
 
-<%-- DSP --%>
-a.gamma {color: #000000; text-decoration: none;}
-a.gamma:hover {color: #000000; text-decoration: underline;}
-tr.gamma {background: #F4F4F4;}
-td.gamma {background: #F4F4F4;}
-
-<%-- ZK JavaScript debug box --%>
-div.z-debugbox {
+<%-- ZK JavaScript utls --%>
+div.z-error {
+	display: none;
+	z-index: 9999999;
 	position: absolute;
-	border: 1px solid #77c;
-	width: 60%;
-	z-index: 99000;
-	background: white;
+	top: 0;
+	left: 40%;
+	height: 90px;
+	width: 450px;
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #BC6464 #940000 #940000 #BC6464;
+	-moz-box-shadow: 0px 0px 6px gray; 
+	-webkit-box-shadow: 0px 0px 6px gray;
+	box-shadow: 0px 0px 6px gray; 
+	background-color: #FFEDED;
+}
+div.z-error .msgcnt {
+	padding: 0;
+	border: 1px solid #EE7373;
+	background-color: white;
+	height: 60px;
+}
+div.z-error .msgs {
+	padding: 2px 3px;
+	height: 60px;
+	width: 440px;
+	word-wrap: break-word;
+	overflow: auto;
+}
+div.z-error .msgs .msg {
+	padding: 3px 0 2px;
+	border-bottom: 1px solid #FF9696
+}
+div.z-error .newmsg {
+	background-color: #FFD6D6;
+	display: none;
+}
+
+div.z-error .btn {
+	cursor: pointer;	
+	color: #333; 
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	margin-left: 10px;
+}
+div.z-error #zk_err-p {
+	cursor: move;
+}
+div.z-error .errnum {
+	padding-left: 20px;
+	color: #C60303;
+	font-weight: bold;	
+}
+<c:if test="${!c:browser('ie6-')}">
+.ie7 div.z-error .btn {
+	display: inline;
+}
+div.z-error .errnum {
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -33px 2px transparent;
+}
+div.z-error .redraw {
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll 0px 2px transparent;
+}
+div.z-error .close {
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 2px transparent;
+}
+</c:if>
+<%-- IE6 --%>
+<c:if test="${c:browser('ie6-')}">
+div.z-error .btn {
+	display: inline;
+	zoom: 1;
+}
+div.z-error .errnum {
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -33px 2px transparent;
+}
+div.z-error .redraw {
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll 0px 2px transparent;
+}
+div.z-error .close {
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 2px transparent;
+}
+</c:if>
+
+div.z-log {
+	text-align:right; width:50%; right:10px; bottom:5px;
+	position:absolute; z-index: 99000;
+}
+div.z-log textarea {
+	width: 100%
+}
+div.z-log button {
+	font-size: ${fontSizeXS};
 }
 
 <%-- General --%>
@@ -101,14 +169,10 @@ div.z-debugbox {
 	opacity: 1;
 }
 
-.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file,
-.z-loading,.z-errbox {
+.z-label, .z-radio-cnt, .z-checkbox-cnt, input.button, input.file,
+.z-loading {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
-}
-.z-upload-icon {
-	overflow: hidden;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
 }
 .z-modal-mask {
 	width: 100%;
@@ -117,9 +181,15 @@ div.z-debugbox {
 	top: 0; left: 0;
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
-	z-index: 30000;
 	zoom: 1;
 	background: #E0E1E3;
+}
+.z-initing {
+	width: 60px; height: 60px;
+	position: absolute; right: 10px; bottom: 10px;
+	z-index: 32000;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/zkpowered.png')});
 }
 .z-loading {
 	background-color: #6eadff;
@@ -129,6 +199,7 @@ div.z-debugbox {
 	white-space: nowrap;
 	border: 1px solid #83B5F7;
 	z-index: 31000;
+	left: 0; top: 0;
 }
 .z-loading-indicator {
 	background-color: #FFFFFF;
@@ -137,12 +208,18 @@ div.z-debugbox {
 	white-space: nowrap;
 	padding:6px;
 }
+
+.z-apply-loading-icon,
+.z-loading-icon,
+.z-renderdefer {
+	height: 16px; width: 16px;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/progress4.gif')});
+}
+
 .z-apply-loading-icon,
 .z-loading-icon {
-	background: transparent no-repeat center;
-	background-image: url(${c:encodeURL('~./zk/img/progress2.gif')});
-	height: 16px;
-	width: 16px;
+	display:-moz-inline-box; vertical-align:top; display:inline-block;
 }
 
 .z-apply-mask {
@@ -183,6 +260,16 @@ div.z-debugbox {
 .z-word-wrap {
 	word-wrap: break-word;
 }
+.z-word-nowrap {
+	white-space: nowrap;
+}
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+.z-word-nowrap  .z-row-inner,
+.z-word-nowrap  .z-cell,
+.z-word-nowrap  .z-listcell {
+	white-space: nowrap;
+}
+</c:if>
 .z-overflow-hidden {
 	overflow: hidden;
 }
@@ -195,15 +282,21 @@ div.z-debugbox {
 	z-index: 16800;
 	background-image: url(${c:encodeURL('~./img/spacer.gif')});
 }
+
+.z-temp * { <%-- temporary --%>
+	color: white; background-color: white; font-size: 5px; text-decoration: none;
+}
+
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both;
-	height: 1px;
-	width: 1px;
+	height: 0;
+	width: 0;
 	line-height: 0;
 	font-size: 0;
 	overflow: hidden;
 }
+
 <%-- Shadow --%>
 .z-shadow {
 	position: absolute;
@@ -217,7 +310,7 @@ div.z-debugbox {
 	height:100%;
 }
 .z-shadow .z-shadow-cl{
-	background: transparent  repeat-y 0 0;
+	background: transparent repeat-y 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cl.png')});
 	padding-left: 6px;
 	overflow: hidden;
@@ -225,7 +318,7 @@ div.z-debugbox {
 	zoom: 1;
 }
 .z-shadow .z-shadow-cr{
-	background: transparent  repeat-y right;
+	background: transparent repeat-y right;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cr.png')});
 	padding-right: 6px;
 	overflow: hidden;
@@ -240,39 +333,22 @@ div.z-debugbox {
 	zoom: 1;
 }
 
-.z-shadow .z-shadow-tl {
-	background:transparent no-repeat scroll 0 top;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:6px;
-	zoom:1;
-}
-.z-shadow .z-shadow-tr {
-	background:transparent no-repeat scroll right -6px;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:-6px;
-	position:relative;
-	zoom:1;
-}
-.z-shadow .z-shadow-bl {
-	background:transparent no-repeat scroll 0 top;
-	font-size:0;
-	height:6px;
-	line-height:0;
-	margin-right:6px;
-	zoom:1;
-}
+.z-shadow .z-shadow-tl,
+.z-shadow .z-shadow-tr,
+.z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br {
-	background:transparent no-repeat scroll right -6px;
+	background:transparent no-repeat 0 top;
 	font-size:0;
 	height:6px;
 	line-height:0;
+	margin-right:6px;
+	zoom:1;
+}
+.z-shadow .z-shadow-tr,
+.z-shadow .z-shadow-br {
+	background-position: right -6px;
 	margin-right:-6px;
 	position:relative;
-	zoom:1;
 }
 .z-shadow .z-shadow-tl,
 .z-shadow .z-shadow-tr{
@@ -320,7 +396,53 @@ div.z-drop-cnt {
 	font-weight: normal;
 	font-family: ${fontFamilyC};
 }
-<%-- ZK Fileupload --%>
+
+<%-- customized by users
+.z-drag-ghost {
+	border: 1px dotted #999;
+}
+--%>
+
+<%-- Focus Anchor --%>
+.z-focus-a {
+	position: absolute;
+	left: 0; top: 0;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+	width:1px !important;
+	height:1px !important;
+	-moz-outline:0 none; outline:0 none;
+	-moz-user-select:text; -khtml-user-select:text;
+	overflow:hidden;
+}
+
+<%-- upload button --%>
+span.z-upload {
+	position: relative;
+	padding: 0; margin: 0;
+	font-size: 0; width: 0; height: 0;
+	display:-moz-inline-box; display:inline-block;
+}
+span.z-upload input {
+	position: absolute;
+	cursor: pointer;
+	font-size: 45pt;
+	z-index: 1; margin: 0; padding: 0;
+	opacity: 0;
+	filter: alpha(opacity=0); <%-- IE --%>
+}
+.z-upload-icon {
+	overflow: hidden;
+	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
+}
+
+<%-- fileupload dialog 
+
+// no longer used since 5.0.0
 .z-fileupload-img {
 	width: 16px;
 	padding-top: 4px;
@@ -332,65 +454,19 @@ div.z-drop-cnt {
 	width: 16px;
 	height: 17px;
 }
-.z-fileupload-delete {
+--%>
+.z-fileupload-rm {
 	cursor: pointer;
 	background: transparent no-repeat 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/misc/fileupload.gif')});
 	width: 16px;
 	height: 17px;
 }
-<%-- ZK Massagebox --%>
-.z-msgbox{
-	display: -moz-inline-box;
-	display: inline-block;
-	background-repeat: no-repeat;
-	vertical-align: top;
-	cursor: pointer;
-	border: 0;
-	width: 32px;
-	height: 32px;
+.z-fileupload-progress {
+	width: 300px;
 }
-.z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.png')});
-}
-.z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.png')});
-}
-.z-msgbox-information {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.png')});
-}
-.z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.png')});
-}
-
-<%-- ZK error message box --%>
-div.z-errbox {
-	margin: 0; padding: 1px; border: 1px outset #DD7870; cursor: pointer;
-	background: #ECAEA9; position: absolute; z-index: 88000;
-}
-
-<%-- Progressmeter --%>
-div.z-progressmeter {
-	background: #E0E8F3 repeat-x scroll 0 0 ;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter_bg.png')});
-	border:1px solid #6F9CDB;
-	text-align: left;
-	height: 17px;
-	overflow: hidden;
-}
-span.z-progressmeter-img {
-	display: -moz-inline-box;
-	display: inline-block;
-	background: #A4C6F2 repeat-x scroll left center;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
-	height: 17px;
-	line-height: 0;
-	font-size: 0;
-}
-
-.z-messagebox-btn {
-	min-width: 45pt;
-	width: 100%;
+.z-fileupload-manager {
+	width: 350px;
 }
 <%-- Auxheader --%>
 .z-auxheader-cnt {
@@ -401,41 +477,60 @@ span.z-progressmeter-img {
 .z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
 }
-<%-- Window --%>
-<c:include page="~./zul/css/cmps/window.css.dsp"/>
-<%-- Caption --%>
-<c:include page="~./zul/css/cmps/caption.css.dsp"/>
-<%-- Groupbox --%>
-<c:include page="~./zul/css/cmps/groupbox.css.dsp"/>
-<%-- Separator --%>
-<c:include page="~./zul/css/cmps/separator.css.dsp"/>
-<%-- Toolbar and Toolbarbutton --%>
-<c:include page="~./zul/css/cmps/toolbar.css.dsp"/>
-<%-- Slider --%>
-<c:include page="~./zul/css/cmps/slider.css.dsp"/>
-<%-- Button --%>
-<c:include page="~./zul/css/cmps/button.css.dsp"/>
-<%-- Paging --%>
-<c:include page="~./zul/css/cmps/paging.css.dsp"/>
-<%-- Panel --%>
-<c:include page="~./zul/css/cmps/panel.css.dsp"/>
-<%-- Combobox, Bandbox, Timebox, Datebox, and Spinner --%>
-<c:include page="~./zul/css/cmps/combo.css.dsp"/>
-<%-- Calendar and Datebox --%>
-<c:include page="~./zul/css/cmps/calendar.css.dsp"/>
-<%-- Widget (Textbox, Intbox, Longbox, and so on) --%>
-<c:include page="~./zul/css/cmps/widget.css.dsp"/>
-<%-- Box, Splitter, Vbox, and Hbox --%>
-<c:include page="~./zul/css/cmps/box.css.dsp"/>
-<%-- Popup --%>
-<c:include page="~./zul/css/cmps/popup.css.dsp"/>
-<%-- Menu --%>
-<c:include page="~./zul/css/cmps/menu.css.dsp"/>
-<%-- Grid --%>
-<c:include page="~./zul/css/cmps/grid.css.dsp"/>
-<%-- Listbox --%>
-<c:include page="~./zul/css/cmps/listbox.css.dsp"/>
-<%-- Tree --%>
-<c:include page="~./zul/css/cmps/tree.css.dsp"/>
-<%-- Tabbox --%>
-<c:include page="~./zul/css/cmps/tabbox.css.dsp"/>
+
+<%-- IE --%>
+<c:if test="${c:isExplorer()}">
+<c:choose>
+<c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
+.zk img	{
+	hspace: 0; vspace: 0
+}
+.zk option {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeXS}; font-weight: normal;
+	overflow: hidden;
+}
+</c:when>
+<c:otherwise>
+img	{
+	hspace: 0; vspace: 0
+}
+option {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeXS}; font-weight: normal;
+}
+</c:otherwise>
+</c:choose>
+
+<%-- IE6  --%>
+<c:if test="${c:browser('ie6-')}">
+.z-shadow {
+	background: #888; zoom: 1; display: none;
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
+}
+span.z-drop-allow,
+span.z-drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
+}
+</c:if><%-- IE6 --%>
+</c:if><%--IE --%>
+
+<%-- Gecko (3.5 supports word-break )--%>
+<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
+.z-word-wrap,
+.z-word-wrap .z-auxheader-cnt {
+	overflow: hidden;
+	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
+}
+span.z-word-wrap {<%-- label use only --%>
+	display: block;
+}
+</c:if>
+
+<%-- Opera --%>
+<c:if test="${c:isOpera()}">
+option {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeXS}; font-weight: normal;
+}
+</c:if>

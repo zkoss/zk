@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+databinding.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>Annotate Data Binding</h4>
+		<p>This example demostrates how to bind data beans to ZK components via annotation.</p>
+	]]></html>
+	<hbox>The Person bean declared with firstName and lastName fields and associated setters and getters methods. This is the source code of <toolbarbutton id="target" label="Person.java" popup="details"/>. </hbox>
+	<separator />
+	<popup id="details" fulfill="target.onClick" width="450px">
+	<div style="border:1px solid #538BA2; background: #FFF; ">
+		<html><![CDATA[
+<pre style='color:#000000;background:#ffffff;'><span style='color:#7f0055; font-weight:bold; '>package</span><span style='color:#7f0055; '> org</span><span style='color:#7f0055; '>.</span><span style='color:#7f0055; '>zkoss</span><span style='color:#7f0055; '>.</span><span style='color:#7f0055; '>zksandbox</span><span style='color:#7f0055; '>.</span><span style='color:#7f0055; '>zksandbox</span><span style='color:#7f0055; '>;</span>
+
+<span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>class</span> Person {
+    <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>String</span> firstName;
+    <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>String</span> lastName;
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> Person(<span style='color:#7f0055; font-weight:bold; '>String</span> f, <span style='color:#7f0055; font-weight:bold; '>String</span> l) {
+        setFirstName(f);
+        setLastName(l);
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>String</span> getFirstName() {
+        <span style='color:#7f0055; font-weight:bold; '>return</span> firstName;
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>void</span> setFirstName(<span style='color:#7f0055; font-weight:bold; '>String</span> f) {
+        firstName = f;
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>String</span> getLastName() {
+        <span style='color:#7f0055; font-weight:bold; '>return</span> lastName;
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>void</span> setLastName(<span style='color:#7f0055; font-weight:bold; '>String</span> l) {
+        lastName = l;
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>String</span> getFullName() {
+        <span style='color:#7f0055; font-weight:bold; '>return</span> getFirstName() + <span style='color:#2a00ff; '>" "</span> + getLastName();
+    }
+}
+</pre>
+		]]></html>
+		</div>
+	</popup>
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./mywin"?>
+<window id="mywin" border="none">
+ZK name check list :
+	<zscript>
+	//init example data beans
+	import org.zkoss.zksandbox.Person;
+	List persons = new ArrayList();
+	persons.add(new Person("Balu", "Haben"));
+	persons.add(new Person("Sadira", "Jobs"));
+	persons.add(new Person("Dacey", "Obert"));
+	persons.add(new Person("Gabby", "Taffy"));
+	Person selected = persons.get(0);
+	</zscript>
+	
+	<listbox model="@{persons}" selectedItem="@{selected}" rows="5">
+		<listhead >
+				<listheader label="Name"/>		
+		</listhead>
+		<listitem self="@{each=person}" label="@{person.fullName}" />
+	</listbox>
+	<grid>
+		<columns>
+			<column label="First Name" />
+			<column label="Last Name" />
+			<column label="Full Name" />
+		</columns>
+		<rows>
+			<row>
+				<textbox value="@{selected.firstName}" />
+				<textbox value="@{selected.lastName}" />
+				<label value="@{selected.fullName}" />
+			</row>
+		</rows>
+	</grid>
+</window>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

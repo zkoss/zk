@@ -1,18 +1,16 @@
 /* AbstractLoader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 09:45:42     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -35,20 +33,16 @@ abstract public class AbstractLoader implements Loader {
 	}
 	public long getLastModified(Object src) {
 		if (src instanceof URL) {
-		//Due to round-trip, we don't retrieve last-modified
-			final URL url = (URL)src;
-			final String protocol = url.getProtocol().toLowerCase();
-			if (!"http".equals(protocol) && !"https".equals(protocol)
-			&& !"ftp".equals(protocol)) {
-				try {
-					return url.openConnection().getLastModified();
-				} catch (IOException ex) {
-					return -1; //reload
-				}
+			try {
+				final long v = ((URL)src).openConnection().getLastModified();
+				return v != -1 ? v: 0; //not to reload if unknown (5.0.6 for better performance)
+			} catch (Throwable ex) {
+				return -1; //reload (might be removed)
 			}
-			return -1; //reload
 		} else if (src instanceof File) {
-			return ((File)src).lastModified();
+			final long v = ((File)src).lastModified();
+			return v == -1 ? 0: //not to reload if unknown (5.0.6 for better performance)
+				v == 0 ? -1: v; //0 means nonexistent so reload
 		} else if (src == null) {
 			throw new NullPointerException();
 		} else {

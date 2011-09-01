@@ -1,36 +1,29 @@
 /* Row.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 25 16:02:43     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
-import java.io.IOException;
 
-import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A single row in a {@link Rows} element.
@@ -43,11 +36,11 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Row extends XulElement implements org.zkoss.zul.api.Row {
+	private static final long serialVersionUID = 20091111L;
+
 	private Object _value;
 	private String _align, _valign;
-	private int[] _spans;
-	/** Used only to generate {@link #getChildAttrs}. */
-	private transient int _rsflags;
+	private String _spans;
 	private boolean _nowrap;
 	/** whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
@@ -55,6 +48,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	private boolean _loaded;
 	
 	private transient Detail _detail;
+	private transient int _index = -1;
 
 	/**
 	 * Returns the child detail component.
@@ -90,6 +84,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		return _align;
 	}
 	/** Sets the horizontal alignment of the whole row.
+	 * Allowed values: right, left, center, justify, char
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
@@ -118,6 +113,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		return _valign;
 	}
 	/** Sets the vertical alignment of the whole row.
+	 * Allowed values: top, middle, bottom, baseline
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
@@ -157,46 +153,42 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	/** Returns the spans, which is a list of numbers separated by comma.
 	 *
 	 * <p>Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getSpans() {
-		return Utils.intsToString(_spans);
+		return _spans;
 	}
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
 	 * <p>For example, "1,2,3" means the second column will span two columns
 	 * and the following column span three columns, while others occupies
 	 * one column.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setSpans(String spans) throws WrongValueException {
-		final int[] ispans = Utils.stringToInts(spans, 1);
-		if (!Objects.equals(ispans, _spans)) {
-			_spans = ispans;
-			invalidate();
+		if (!Objects.equals(spans, _spans)) {
+			_spans = spans;
+			smartUpdate("spans", spans);
 		}
 	}
 
 
-	/** Sets whether the content of this row is loaded; used if
+	/** Internal Use only. Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	/*package*/ final void setLoaded(boolean loaded) {
+	/*package*/ void setLoaded(boolean loaded) {
 		if (loaded != _loaded) {
 			_loaded = loaded;
 
 			final Grid grid = getGrid();
 			if (grid != null && grid.getModel() != null)
-				if (_loaded && !grid.inPagingMold())
-					invalidate();
-					//reason: the client doesn't init (for better performance)
-					//i.e., z.skipsib is specified for unloaded items
-				else
-					smartUpdate("z.loaded", _loaded);
+				smartUpdate("_loaded", _loaded);
 		}
 	}
-	/** Returns whether the content of this row is loaded; used if
+	/** Internal Use Only. Returns whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
-	/*package*/ final boolean isLoaded() {
+	/*package*/ boolean isLoaded() {
 		return _loaded;
 	}
 	/** Returns the index of the specified row.
@@ -204,29 +196,23 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	 */
 	/*package*/ int getIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j) {
-			if (it.next() == this)
-				break;
+		if (_index < 0) {
+			for (Iterator it = getParent().getChildren().iterator();
+			it.hasNext(); ++j) {
+				if (it.next() == this)
+					break;
+			}
+			final Grid grid = getGrid();
+			final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0; 
+			j += (offset < 0 ? 0 : offset);
+		} else {
+			j = _index;
 		}
 		return j;
 	}
 
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return scls;
-		final String sclx = (String) getParent().getAttribute(Attributes.STRIPE_STATE);
-		return scls + (sclx != null ? " " + sclx : "");
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-row" : _zclass;
-	}
-	
-	protected String getRealStyle() {
-		if (this instanceof Group || this instanceof Groupfoot || !isVisible()) return super.getRealStyle();
-		final Group g = getGroup();
-		return super.getRealStyle() + (g != null && !g.isOpen() ? "display:none" : "") ;
 	}
 	
 	/**
@@ -245,120 +231,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	public org.zkoss.zul.api.Group getGroupApi() {
 		return getGroup();
 	}
-	/** Returns the HTML attributes for the child of the specified index.
-	 */
-	public String getChildAttrs(int index) {
-		int realIndex = index, span = 1;
-		if (_spans != null) {
-			for (int j = 0; j < _spans.length; ++j) {
-				if (j == index) {
-					span = _spans[j];
-					break;
-				}
-				realIndex += _spans[j] - 1;
-			}
-		}
-
-		String colattrs = null, visible = null, hgh = null;
-		final Grid grid = getGrid();
-		if (grid != null) {
-			final Columns cols = grid.getColumns();
-			if (cols != null) {
-				final List colchds = cols.getChildren();
-				if (realIndex < colchds.size()) {
-					final Column col = (Column)colchds.get(realIndex);
-					colattrs = col.getColAttrs();
-					//if (span == 1) wd = col.getWidth();
-						//Bug 1633982: don't generate width if span > 1
-						//Side effect: the width might not be the same as specified
-					visible = col.isVisible() ? "" : "display:none";
-					hgh = col.getHeight();
-				}
-			}
-		}
-
-		final Component child = (Component)getChildren().get(index);
-		String style;
-		_rsflags = RS_NO_WIDTH|RS_NO_HEIGHT|RS_NO_DISPLAY;
-		try {
-			style = super.getRealStyle(); // since we overrode the original getRealStyle();
-
-			if (child instanceof Detail) {
-				final String wd = ((Detail) child).getWidth();
-				if (wd != null) style += "width:" + wd + ";";
-			}
-		} finally {
-			_rsflags = 0;
-		}
-
-		if (visible != null || hgh != null) {
-			final StringBuffer sb = new StringBuffer(80).append(style).append(visible);
-			HTMLs.appendStyle(sb, "height", hgh);
-			style = sb.toString();
-		}
-		String clx = child instanceof Detail ? ((Detail)child).getZclass() + "-outer" : getZclass() + "-inner";
-		
-		if (colattrs == null && style.length() == 0 && span == 1)
-			return " class=\"" + clx + "\"";
-
-		final StringBuffer sb = new StringBuffer(100);
-		if (colattrs != null)
-			sb.append(colattrs);
-		if (span != 1)
-			sb.append(" colspan=\"").append(span).append('"');
-		HTMLs.appendAttribute(sb, "style", style);
-		
-		return sb.append(" class=\"").append(clx).append('"').toString();
-	}
-
 	//-- super --//
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags() | _rsflags;
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null)
-			sb.append(clkattrs);
-
-		HTMLs.appendAttribute(sb, "z.rid", getGrid().getUuid());
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "valign", _valign);
-		HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		if (_nowrap)
-			HTMLs.appendAttribute(sb, "nowrap", "nowrap");
-
-		final Grid grid = getGrid();
-		if (grid != null && grid.getModel() != null) {
-			HTMLs.appendAttribute(sb, "z.loaded", _loaded);
-
-			if (_loaded && !grid.inPagingMold()) {
-				final Component c = getNextSibling();
-				if (c instanceof Row && !((Row)c)._loaded)
-					HTMLs.appendAttribute(sb, "z.skipsib", "true");
-			}
-		}
-		return sb.toString();
-	}
-	public void setStyle(String style) {
-		if (style != null && style.length() == 0) style = null;
-
-		final String s = getStyle();
-		if (!Objects.equals(s, style)) {
-			super.setStyle(style);
-			invalidate(); //yes, invalidate
-		}
-	}
-	public void setSclass(String sclass) {
-		if (sclass != null && sclass.length() == 0) sclass = null;
-
-		final String s = getSclass();
-		if (!Objects.equals(s, sclass)) {
-			super.setSclass(sclass);
-			invalidate(); //yes, invalidate
-		}
-	}
 	/** Returns the style class.
 	 * By default, it is the same as grid's stye class, unless
 	 * {@link #setSclass} is called with non-empty value.
@@ -370,7 +243,21 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		final Grid grid = getGrid();
 		return grid != null ? grid.getSclass(): sclass;
 	}
-
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "align", _align);
+		render(renderer, "valign", _valign);
+		render(renderer, "nowrap", _nowrap);
+		render(renderer, "spans", _spans);
+		render(renderer, "_loaded", _loaded);
+		if (_index >= 0)
+			renderer.render("_index", _index);
+	}
+	
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Rows))
@@ -430,29 +317,27 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		afterUnmarshal();
 	}
 	
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws IOException {
-		final StringBuffer sb = new StringBuffer(128)
-			.append("<td z.type=\"Gcl\" id=\"").append(child.getUuid())
-			.append("!chdextr\"");
-
-		final Grid grid = getGrid();
-		if (grid != null) {
-			int j = 0;
-			for (Iterator it = getChildren().iterator(); it.hasNext(); ++j)
-				if (child == it.next())
-					break;
-			sb.append(getChildAttrs(j));
-		}
-		sb.append("><div id=\"").append(child.getUuid())
-		.append("!cell\"").append(" class=\"").append(getZclass())
-		.append("-cnt");
-		if (grid.isFixedLayout())
-			sb.append(" z-overflow-hidden");
-		sb.append("\">");
-		
-		if (JVMs.isJava5()) out.insert(0, sb); //Bug 1682844
-		else out.insert(0, sb.toString());
-		out.append("</div></td>");
+	//-- ComponentCtrl --//
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
 	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements LoadStatus {
+		//-- LoadStatus --//
+		public boolean isLoaded() {
+			return Row.this.isLoaded();
+		}
+
+		public void setLoaded(boolean loaded) {
+			Row.this.setLoaded(loaded);
+		}
+		
+		public void setIndex(int index) {
+			_index = index;
+		}
+	}
+
 }

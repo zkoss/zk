@@ -1,0 +1,29 @@
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+This bug is FF only <h:br/>
+Step1. click btn 1<h:br/>
+Step2. click btn 2<h:br/>
+Then you will see the left side of tabbox is shrinked.
+<tabbox width="400px" id="tb">
+	<tabs align="start">
+		<tab label="Tab 1" id="tab1"/>
+		<tab label="Tab 2" id="tab2"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>This is panel 1</tabpanel>
+		<tabpanel>This is panel 2 The second panel</tabpanel>
+	</tabpanels>
+</tabbox>
+<button label="1" onClick="step1()"/>
+<button label="2" onClick="step2()"/>
+<zscript>
+	void step1(){
+		tab1.setVisible(false);
+		tb.setSelectedTab(tab2);
+	}
+	void step2(){
+		tab1.setVisible(true);
+		tb.setSelectedTab(tab1);
+		
+	}
+</zscript>
+</zk>				

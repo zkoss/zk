@@ -1,18 +1,16 @@
 /* HtmlMacroComponent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Apr 14 13:54:13     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,10 +19,12 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * The implemetation of a macro component for HTML-based clients.
@@ -33,6 +33,34 @@ import org.zkoss.zk.ui.ext.Macro;
  * If a developer wants to create it manually, it has to instantiate from
  * the correct class, and then invoke {@link #afterCompose}.
  *
+ * <p>To do additional application-specific tasks, you could override
+ * {@link #compose}. Both {@link #afterCompose} and {@link #recreate}
+ * depends on {@link #compose}.
+ *
+ * <p>By default, {@link #compose}
+ * supports auto-forward events and wire accessible variables to this component.
+ * You can turn on/off auto wire mechanism by specifying the Library
+ * Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
+ * If you did not specify the Library Property, default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
+ * or turn on/off auto forward events by specifying the Library Property
+ * "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
+ * If you did not specify the Library Property, default is false.</p>
+ * 
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ * 
  * @author tomyeh
  */
 public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
@@ -42,8 +70,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * It is used only if {@link #isInline}
 	 */
 	private Component[] _inlines;
+	private String _tag = "span";
 
 	public HtmlMacroComponent() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 		init();
 	}
 	private void init() {
@@ -51,21 +81,60 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		_props.put("includer", this);
 	}
 
+	/** Returns the component class (aka., widget type), "zk.Macro".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zk.Macro";
+	}
+
+	/** Returns the name of the enclosing tag for this macro component.
+	 * <p>Default: span
+	 * @since 5.0.3
+	 */
+	public String getEnclosingTag() {
+		return _tag;
+	}
+	/**Sets the the name of the enclosing tag for this macro component.
+	 * <p>Default: span
+	 * @since 5.0.3
+	 */
+	public void setEnclosingTag(String tag) {
+		if (tag == null || tag.length() == 0)
+			throw new IllegalArgumentException();
+		if (!_tag.equals(tag)) {
+			_tag = tag;
+			smartUpdate("enclosingTag", _tag);
+		}
+	}
 	//-- Macro --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
 	 *
-	 * <p>The second invocation is ignored. If you want to recreate
-	 * child components, use {@link #recreate} instead.
-	 *
 	 * <p>If a macro component is created by ZK loader, this method is invoked
-	 * automatically. Developers need to invoke this method only if they create
-	 * a macro component manually.
+	 * automatically. Developers rarely need to invoke this method.
 	 *
-	 * <p>If this is an line macro, this method is invoked automatically
-	 * if {@link #setParent} or {@link #setPage} called
+	 * <p>Default: it invokes {@link #compose} to compose the macro component.
+	 *
+	 * <p>Instead of overriding this method, it is suggested to override
+	 * {@link #compose}, since all other methods depend on {@link #compose}
+	 * (rather than {@link #afterCompose}).
 	 */
 	public void afterCompose() {
+		compose();
+	}
+	/** Composes the macro component.
+	 * It is called by {@link #afterCompose} and others
+	 * to do the rendering based on {@link #getMacroURI}.
+	 * <p>The second invocation is ignored. If you want to recreate
+	 * child components, use {@link #recreate} instead.
+	 * <p>If this is an line macro, this method is invoked automatically
+	 * if {@link #setParent} or {@link #setPage} called
+	 * <p>By default, supports auto forward events and wire accessible
+	 * variables to this component.
+	 * @since 5.0.5
+	 */
+	protected void compose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("No execution available");
@@ -84,6 +153,11 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			exec.createComponents(
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
+
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
+			Components.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
+			Components.addForwards(this, this, '$');
 	}
 	public String getMacroURI() {
 		return _uri != null ? _uri: getDefinition().getMacroURI();
@@ -91,12 +165,15 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setMacroURI(String uri) {
 		if (!Objects.equals(_uri, uri)) {
 			if (uri != null && uri.length() == 0)
-				throw new IllegalArgumentException("empty uri");
+				throw new IllegalArgumentException("empty");
 			_uri = uri;
 			if (getParent() != null)
 				recreate();
 		}
 	}
+	/** Detaches all child components and then recreate them by use of
+	 * {@link #compose}.
+	 */
 	public void recreate() {
 		if (_inlines != null) {
 			for (int j = 0; j < _inlines.length; ++j)
@@ -105,8 +182,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		} else {
 			getChildren().clear();
 			invalidate();
+				//invalidate is redudant, but less memory leak in IE
 		}
-		afterCompose();
+		compose();
 	}
 	public boolean isInline() {
 		return getDefinition().isInlineMacro();
@@ -120,13 +198,13 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * from the macro URI.
 	 * In other word, an inline macro behaves like a controller of
 	 * the components it created. It doesn't belong to any page or parent.
-	 * Moreover, {@link #afterCompose} is called automatically if
+	 * Moreover, {@link #compose} is called automatically if
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setParent(Component parent) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setParent(parent);
@@ -139,7 +217,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			throw new InternalError("inline only");
 
 		if (_inlines == null)
-			afterCompose(); //autocreate
+			compose(); //autocreate
 
 		boolean inserted = false;
 		for (int j = 0; j < _inlines.length; ++j) {
@@ -156,13 +234,13 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * from the macro URI.
 	 * In other word, an inline macro behaves like a controller of
 	 * the components it created. It doesn't belong to any page or parent.
-	 * Moreover, {@link #afterCompose} is called automatically if
+	 * Moreover, {@link #compose} is called automatically if
 	 * it is not called (and this is an inline macro).
 	 */
 	public void setPage(Page page) {
 		if (isInline()) {
 			if (_inlines == null)
-				afterCompose(); //autocreate
+				compose(); //autocreate
 
 			for (int j = 0; j < _inlines.length; ++j)
 				_inlines[j].setPage(page);
@@ -170,7 +248,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			super.setPage(page);
 		}
 	}
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return !isInline();
 	}
 
@@ -196,7 +274,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
 		clone.init();
 		clone._props.putAll(_props);
-		clone._props.put("includer", this);
+		clone._props.put("includer", clone);
 
 		if (_inlines != null) { //deep clone
 			clone._inlines = new Component[_inlines.length];
@@ -216,5 +294,13 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void setDynamicProperty(String name, Object value)
 	throws WrongValueException {
 		_props.put(name, value);
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (!"span".equals(_tag))
+			renderer.render("enclosingTag", _tag);
 	}
 }

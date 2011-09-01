@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3306149.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 31, 2011 2:43:21 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Scroll to the end of grid.</li>
+			<li>Click "delete" button of the latest row.</li>
+			<li>The latest row shall be remove.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import java.util.*;
+		import org.zkoss.zul.*;
+		import org.zkoss.zk.ui.event.*;
+		import org.zkoss.zk.ui.event.EventListener;
+		List list = new ArrayList();
+		for (int i = 0; i < 200; i++)
+			list.add("remove " + i);
+		ListModelList model = new ListModelList(list);
+		RowRenderer renderer = new RowRenderer() {
+			public void render(Row row, Object data) throws Exception {
+				Button btn = new Button(String.valueOf(data));
+				btn.addEventListener(Events.ON_CLICK, new EventListener() {
+					public void onEvent(Event arg0) throws Exception {
+						((ListModelList) row.getGrid().getModel()).remove(data);
+					}
+				});
+				row.appendChild(btn);
+			}
+		};
+	]]></zscript>
+	<grid rowRenderer="${renderer}" model="${model}" width="300px"
+		height="250px" />
+</zk>

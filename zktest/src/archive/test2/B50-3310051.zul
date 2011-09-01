@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3310051.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul  6 18:20:53 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please resize browser's window, and the listbox within the window should be shortened (IE6 only)
+<window title="listbox" border="normal">
+<listbox hflex="1">
+<listhead>
+<listheader label="c1" />
+</listhead>
+<listitem>
+<listcell label="a" />
+</listitem>
+</listbox>
+</window>
+</zk>

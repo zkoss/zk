@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2911385.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 28 14:33:32 TST 2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window>
+        <menubar autodrop="true">
+            <menu label="menupopup">
+                <menupopup>
+                    <menuitem
+			label="menuitem"
+			popup="popup" />
+                </menupopup>
+            </menu>
+            <menuitem
+		label="menuitem"
+		popup="popup" />
+        </menubar>
+        <div>
+            1. Click menuitem from menupopup: the popup menu should be closed.
+    This happens in Firefox 3.5 and IE 6   
+        </div>
+        <popup id="popup" >
+            <div>
+                Popup that auto-disappears
+            </div>
+            <listbox>
+                <listitem>
+                    <listcell>
+                        X
+                    </listcell>
+                    <listcell>
+                        Y
+                    </listcell>
+                </listitem>
+            </listbox>
+        </popup>
+    </window>
+</zk>
+

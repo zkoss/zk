@@ -1,18 +1,16 @@
 /* FieldComparator.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Jan 8, 2009 5:49:21 PM, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
@@ -46,9 +45,12 @@ public class FieldComparator implements Comparator, Serializable {
 	/** The field names collection. */
 	private Collection _fieldnames;
 	/** The cached field name string. */
-	private String _orderBy;
+	private transient String _orderBy;
+	/** The original orderBy passed to the constructor. */
+	private String _rawOrderBy;
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
+	private boolean _ascending;
 	
 	/** Compares with the fields per the given "ORDER BY" clause.
 	 * <p>Note: It assumes null as minimum value.
@@ -75,6 +77,8 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		_fieldnames = parseFieldNames(orderBy, ascending);
 		_maxnull = nullAsMax;
+		_rawOrderBy = orderBy;
+		_ascending = ascending;
 	}
 	
 	public int compare(Object o1, Object o2) {
@@ -91,7 +95,10 @@ public class FieldComparator implements Comparator, Serializable {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	
+	/** Returns the order-by clause.
+	 * Notice that is the parsed result, such as <code>name=category ASC</code>.
+	 * For the original format, please use {@link #getRawOrderBy}.
+	 */
 	public String getOrderBy() {
 		if (_orderBy == null) {
 			final StringBuffer sb = new StringBuffer(_fieldnames.size() * 16);
@@ -107,7 +114,23 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		return _orderBy;
 	}
-	
+	/** Returns the original order-by claused passed to the constructor.
+	 * It is usually the field's name, such as <code>category</code>,
+	 * or a concatenation of field names, such as <code>category.name</code>.
+	 * <p>Notice that, with the field's name, you could retrieve the value
+	 * by use of {@link Fields#getByCompound}.
+	 * @since 5.0.6
+	 */
+	public String getRawOrderBy() {
+		return _rawOrderBy;
+	}
+	/** Returns whether the sorting is ascending.
+	 * @since 5.0.6
+	 */
+	public boolean isAscending() {
+		return _ascending;
+	}
+
 	private void appendField(StringBuffer sb, FieldInfo fi) {
 		if (fi.func != null) {
 			sb.append(fi.func).append('(').append(fi.fieldname).append(')');
@@ -117,16 +140,25 @@ public class FieldComparator implements Comparator, Serializable {
 		sb.append(fi.asc ? " ASC" : " DESC");
 	}
 	
-	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException { 
-		final Object f1 = Fields.getByCompound(o1, fieldname);
-		final Object f2 = Fields.getByCompound(o2, fieldname);
+	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException {
+		// Bug B50-3183438: Access to bean shall be consistent
+		final Object f1 = o1 instanceof Map ? ((Map)o1).get(fieldname) : 
+			Fields.getByCompound(getCompareObject(o1), fieldname);
+		final Object f2 = o2 instanceof Map ? ((Map)o2).get(fieldname) : 
+			Fields.getByCompound(getCompareObject(o2), fieldname);
 		final Object v1 = handleFunction(f1, func);
 		final Object v2 = handleFunction(f2, func);
 		
-		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;
-		if (v2 == null) return _maxnull  ? -1: 1;
+		if (v1 == null) return v2 == null ? 0: _maxnull ? 1 : -1;
+		if (v2 == null) return _maxnull ? -1 : 1;
 		final int v = ((Comparable)v1).compareTo(v2);
-		return asc ? v: -v;
+		return asc ? v : -v;
+	}
+
+	private Object getCompareObject(Object o) {
+		if (o instanceof TreeNode)
+			return ((TreeNode) o).getData();
+		return o;
 	}
 
 	private Object handleFunction(Object c, String func) {

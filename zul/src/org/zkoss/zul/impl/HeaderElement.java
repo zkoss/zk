@@ -1,18 +1,16 @@
 /* HeaderElement.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jan 11 11:55:13     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -30,6 +28,19 @@ import org.zkoss.zk.ui.UiException;
 abstract public class HeaderElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
 	private String _align, _valign;
 
+	protected HeaderElement() {
+	}
+	/** @since 5.0.0
+	 */
+	protected HeaderElement(String label) {
+		super(label);
+	}
+	/** @since 5.0.0
+	 */
+	protected HeaderElement(String label, String image) {
+		super(label, image);
+	}
+
 	/** Returns the horizontal alignment of this column.
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */
@@ -41,7 +52,7 @@ abstract public class HeaderElement extends LabelImageElement implements org.zko
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			invalidateWhole();
+			smartUpdate("align", _align);
 		}
 	}
 	/** Returns the vertical alignment of this grid.
@@ -55,36 +66,21 @@ abstract public class HeaderElement extends LabelImageElement implements org.zko
 	public void setValign(String valign) {
 		if (!Objects.equals(_valign, valign)) {
 			_valign = valign;
-			invalidateWhole();
+			smartUpdate("valign", _valign);
 		}
 	}
-	/** Called when this component's content is changed.
-	 *
-	 * <p>Derived must override it to either do nothing, or invalidate
-	 * parent or others.
-	 */
-	abstract protected void invalidateWhole();
-
-	/** Returns the attributes used to generate HTML TD tag for each
-	 * cell of the rows contained in the parent control,
-	 * e.g., {@link org.zkoss.zul.Listcell}.
-	 * <p>Used by component developers.
-	 */
-	public String getColAttrs() {
-		final StringBuffer sb = new StringBuffer(32);
-		HTMLs.appendAttribute(sb, "align", _align);
-		HTMLs.appendAttribute(sb, "valign", _valign);
-		return sb.toString();
+	void setWidthByClient(String width) {
+		setWidthDirectly(width);
 	}
-
-	//-- super --//
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		invalidateWhole();
-		return vis;
+	//feature#3177275: Listheader should override hflex when sized by end user
+	void setHflexByClient(String hflex) {
+		setHflexDirectly(hflex);
 	}
-	public String getOuterAttrs() {
-		return super.getOuterAttrs() + getColAttrs();
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		render(renderer, "valign", _valign);
+		render(renderer, "align", _align);
 	}
-
 }

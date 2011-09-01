@@ -1,0 +1,17 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>The Textbox and Label should show value "B".</li>
+			<li>Change Textbox value to "C" and click on somewhere else. The Label value should also become "C". Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript>
+		java.util.Map map1 = new java.util.HashMap();
+		java.util.Map map2 = new java.util.HashMap();
+		map1.put("class", map2);
+		map2.put("class", "B");
+	</zscript>
+	<textbox value="@{map1.class.class}" />
+	<label value="@{map1.class.class}" />
+</zk>

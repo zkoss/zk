@@ -1,45 +1,44 @@
 /* SimpleTreeNode.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Aug 10 2007, Created by Jeff Liu
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
 import java.util.List;
+import org.zkoss.lang.Objects;
 
 /**
- * 
- * The treenode for {@link SimpleTreeModel}
- * Note: It assumes the content is immutable
+ * @deprecated As of release 5.0.6, replaced with {@link DefaultTreeNode},
+ * which is mutable.
+ *
+ * A simple implementation of {@link TreeNode} to be used with
+ * {@link SimpleTreeModel}.
+ * Note: It assumes the content is immutable.
  * 
  * @author Jeff
- * @since ZK 3.0.0
+ * @since 3.0.0
  */
 public class SimpleTreeNode implements java.io.Serializable {
-
 	private Object _data;
-	
 	private List _children;
 	
 	/**
 	 * Constructor
 	 * @param data  data of the receiver
-	 * @param children children of the receiver
-	 * <br>
-	 * Notice: Only <code>SimpleTreeNode</code> can be contained in The List <code>children</code>
+	 * @param children children of the receiver.
+	 * It must be a list of {@link SimpleTreeNode}.
 	 */
 	public SimpleTreeNode(Object data, List children){
 		_data = data;
@@ -61,15 +60,7 @@ public class SimpleTreeNode implements java.io.Serializable {
 	public List getChildren(){
 		return _children;
 	}
-	
-	/**
-	 * Return data.toString(). If data is null, return String "Data is null"
-	 * @return data.toString(). If data is null, return String "Data is null"
-	 */
-	public String toString(){
-		return (_data == null)?"Data is null":_data.toString();
-	}
-	
+
 	/**
 	 * Returns true if the receiver is a leaf.
 	 * @return true if the receiver is a leaf.
@@ -92,5 +83,17 @@ public class SimpleTreeNode implements java.io.Serializable {
 	 */
 	public int getChildCount(){
 		return _children.size();
+	}
+	/** Returns the index of the given child, or -1 if the child does not belong
+	 * to this.
+	 * @since 5.0.6
+	 */
+	public int getIndex(Object child) {
+		return _children.indexOf(child);
+	}
+
+	//Object//
+	public String toString(){
+		return Objects.toString(_data);
 	}
 }

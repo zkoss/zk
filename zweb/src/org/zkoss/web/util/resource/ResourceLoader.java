@@ -1,18 +1,16 @@
 /* ResourceLoader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Aug 30 18:31:26     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -65,20 +63,17 @@ abstract public class ResourceLoader implements Loader {
 	public long getLastModified(Object src) {
 		final ResourceInfo si =(ResourceInfo)src;
 		if (si.url != null) {
-		//Due to round-trip, we don't retrieve last-modified
-			final String protocol = si.url.getProtocol().toLowerCase();
-			if (!"http".equals(protocol) && !"https".equals(protocol)
-			&& !"ftp".equals(protocol)) {
-				try {
-					return si.url.openConnection().getLastModified();
-				} catch (Throwable ex) {
-					return -1; //reload
-				}
+			try {
+				final long v = si.url.openConnection().getLastModified();
+				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+			} catch (Throwable ex) {
+				return -1; //reload (might be removed)
 			}
-			return -1; //reload
 		}
 
-		return si.file.lastModified();
+		final long v = si.file.lastModified();
+		return v == -1 ? 0: //not to reload if unknown (5.0.6 for better performance)
+			v == 0 ? -1: v; //0 means nonexistent so reload
 	}
 	public Object load(Object src) throws Exception {
 		final ResourceInfo si =(ResourceInfo)src;

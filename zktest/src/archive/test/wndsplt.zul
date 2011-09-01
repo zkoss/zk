@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+wnd.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 18 11:36:54     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<hbox width="100%" height="100%" widths="100px">
+	Left panel
+		<splitter collapse="after"/>
+<window id="main" title="Main" border="normal">
+	<window id="sub" title="Embedded" border="normal" visible="false">
+		${self.parent.title}
+		<window id="sub_sub" title="Overlapped of Embedded" border="normal" mode="overlapped">
+			${self.parent.title}
+			<button label="hide" onClick="sub_sub.visible = false"/>
+		</window>
+		<button label="toggle overlapped's visible" onClick="sub_sub.visible = !sub_sub.visible"/>
+	</window>
+	<button label="toggle embedded's visible" onClick="sub.visible = !sub.visible"/>
+</window>
+</hbox>

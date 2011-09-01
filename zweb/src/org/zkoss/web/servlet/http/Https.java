@@ -1,16 +1,14 @@
 /* Https.java
 
-{{IS_NOTE
 	Purpose: 
 	Description: 
 	History:
 	2001/11/29 13:53:05, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -39,14 +37,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
-import org.zkoss.lang.D;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
-import org.zkoss.net.URLs;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -333,7 +330,7 @@ public class Https extends Servlets {
 		uri = locate(ctx, request, uri, null);
 		final String encodedUrl =
 			encodeRedirectURL(ctx, request, response, uri, params, mode);
-		if (D.ON && log.debugable()) log.debug("redirect to " + encodedUrl);
+		//if (log.debugable()) log.debug("redirect to " + encodedUrl);
 		response.sendRedirect(encodedUrl);
 	}
 	/** Encodes an URL such that it can be used with HttpServletResponse.sendRedirect.
@@ -375,13 +372,12 @@ public class Https extends Servlets {
 	 * @exception ParseException if the string is not valid
 	 */
 	public static final Date toDate(String sdate) throws ParseException {
+		final SimpleDateFormat[] dfs = getDateFormats();
 		for (int j = 0;;) {
 			try {
-				synchronized (_dateFmts[j]) {
-					return _dateFmts[j].parse(sdate);
-				}
+				return dfs[j].parse(sdate);
 			} catch (ParseException ex) {
-				if (++j == _dateFmts.length)
+				if (++j == dfs.length)
 					throw ex;
 			}
 		}
@@ -390,15 +386,19 @@ public class Https extends Servlets {
 	 * Converts a data to a string complaint to HTTP protocol.
 	 */
 	public static final String toString(Date date) {
-		synchronized (_dateFmts[0]) {
-			return _dateFmts[0].format(date);
-		}
+		return getDateFormats()[0].format(date);
 	}
-	private static final SimpleDateFormat _dateFmts[] = {
-		new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
-		new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
-		new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US)
-	};
+	private static final SimpleDateFormat[] getDateFormats() {
+		SimpleDateFormat[] dfs = (SimpleDateFormat[])_dfs.get();
+		if (dfs == null)
+			_dfs.set(dfs = new SimpleDateFormat[] {
+				new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
+				new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
+				new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US)
+			});
+		return dfs;
+	}
+	private static final ThreadLocal _dfs = new ThreadLocal();
 
 	/** Write the specified media to HTTP response.
 	 *
@@ -430,7 +430,7 @@ public class Https extends Servlets {
 				String value = "attachment";
 				final String flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=\"" + URLs.encode(flnm) +'"';
+					value += ";filename=" + encodeFilename(flnm);
 				response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
 			}
@@ -552,6 +552,13 @@ public class Https extends Servlets {
 			}
 			out.flush();
 		}
+	}
+	/** Filename can be quoted-string.
+	 * Refer to http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
+	 * and http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html
+	*/
+	private static String encodeFilename(String flnm) {
+		return '"' + Strings.escape(flnm, "\"") + '"';
 	}
 	static private String getCharset(String contentType) {
 		if (contentType != null) {

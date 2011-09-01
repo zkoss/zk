@@ -1,18 +1,16 @@
 /* SessionSerializationListener.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jun  7 14:50:16     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,9 +34,4 @@ public interface SessionSerializationListener {
 	/** Called when a session is going to serialize this object.
 	 */
 	public void willSerialize(Session session);
-	/** Called when a session has de-serialized this object back.
-	 * @deprecated As of release 3.0.8, no way to find the right
-	 * moment to call back this method.
-	 */
-	public void didDeserialize(Session session);
 }

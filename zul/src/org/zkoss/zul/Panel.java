@@ -1,37 +1,27 @@
 /* Panel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Jun 10, 2008 11:39:33 AM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MinimizeEvent;
-import org.zkoss.zk.ui.ext.client.Maximizable;
-import org.zkoss.zk.ui.ext.client.Minimizable;
-import org.zkoss.zk.ui.ext.client.Openable;
-import org.zkoss.zk.ui.ext.client.Updatable;
-import org.zkoss.zk.ui.ext.render.Floating;
-import org.zkoss.zk.ui.ext.render.MultiBranch;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
@@ -60,20 +50,27 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Panel {
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
-	private transient Component _noSmartParent;
-	private transient Toolbar _tbar, _bbar, _fbar;
-	private transient Panelchildren _panelchildren;
-	private transient Caption _caption;
+public class Panel extends XulElement implements org.zkoss.zul.api.Panel, Framable {
+	private Toolbar _tbar, _bbar, _fbar;
+	private Panelchildren _panelchildren;
+	private Caption _caption;
 
 	private String _border = "none";
 	private String _title = "";
-	private boolean _closable, _collapsible, _floatable, _framable, _movable, 
-		_maximizable, _minimizable, _maximized, _minimized;
-	private boolean  _open = true;
-	
+	private int _minheight = 100, _minwidth = 200; 
+	private boolean _closable, _collapsible, _floatable, _movable, 
+		_maximizable, _minimizable, _maximized, _minimized, _sizable,
+		_open = true, _framableBC/*backward compatible*/;
+
+	static {
+		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
+		addClientEvent(Panel.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+	}
 	/**
 	 * Returns whether this Panel is open.
 	 * <p>Default: true.
@@ -87,26 +84,29 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #getBorder}.
 	 * Returns whether to render the panel with custom rounded borders.
 	 * <p>Default: false.
 	 */
 	public boolean isFramable() {
-		return _framable;
+		return _border.startsWith("rounded"); //rounded or rounded+
 	}
 	/**
+	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
 	 * Sets whether to render the panel with custom rounded borders.
 	 * 
 	 * <p>Default: false.
 	 */
 	public void setFramable(boolean framable) {
-		if (_framable != framable) {
-			_framable = framable;
-			invalidate();
-		}
+		_framableBC = true;
+		boolean bordered = "normal".equals(_border) || "rounded+".equals(_border);
+		setBorder0(
+			framable ?
+				bordered ? "rounded+": "rounded": bordered ? "normal": "none");
 	}
 	/**
 	 * Sets whether to move the panel to display it inline where it is rendered.
@@ -117,7 +117,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setMovable(boolean movable) {
 		if (_movable != movable) {
 			_movable = movable;
-			invalidate();
+			smartUpdate("movable", _movable);
 		}
 	}
 	/**
@@ -135,7 +135,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		return _floatable;
 	}
 	public boolean setVisible(boolean visible) {
-		if (visible == _visible)
+		if (visible == isVisible())
 			return visible;
 		_maximized = _minimized = false;
 		return setVisible0(visible);
@@ -157,7 +157,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setFloatable(boolean floatable) {
 		if (_floatable != floatable) {
 			_floatable = floatable;
-			invalidate();
+			smartUpdate("floatable", _floatable);
 		}
 	}
 	/**
@@ -187,7 +187,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 				_minimized = false;
 				setVisible0(true); //avoid dead loop
 			}
-			smartUpdate("z.maximized", _maximized);
+			smartUpdate("maximized", _maximized);
 		}
 	}
 	/**
@@ -210,7 +210,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setMaximizable(boolean maximizable) {
 		if (_maximizable != maximizable) {
 			_maximizable = maximizable;
-			invalidate();
+			smartUpdate("maximizable", _maximizable);
 		}
 	}
 
@@ -236,7 +236,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
 			} else setVisible0(true);
-			smartUpdate("z.minimized", _minimized);
+			smartUpdate("minimized", _minimized);
 		}
 	}
 	/**
@@ -261,7 +261,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setMinimizable(boolean minimizable) {
 		if (_minimizable != minimizable) {
 			_minimizable = minimizable;
-			invalidate();
+			smartUpdate("minimizable", _minimizable);
 		}
 	}
 	/**
@@ -275,11 +275,12 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	 * Sets whether to show a toggle button on the title bar.
 	 * <p>Default: false.
 	 * <p>Note: the toggle button won't be displayed if no title or caption at all.
+	 * <p>Note: onOpen event will be sent when you click the toggle button
 	 */
 	public void setCollapsible(boolean collapsible) {
 		if (_collapsible != collapsible) {
 			_collapsible = collapsible;
-			invalidate(); //re-init is required
+			smartUpdate("collapsible", _collapsible);
 		}
 	}
 	/** Returns whether to show a close button on the title bar.
@@ -301,9 +302,70 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); //re-init is required
+			smartUpdate("closable", _closable);
 		}
 	}
+
+	/**
+	 * Sets the minimum height in pixels allowed for this panel. If negative, 100 is assumed.
+	 * <p>Default: 100. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinheight(int minheight) {
+		if (minheight < 0) minheight = 100;
+		if (_minheight != minheight) {
+			_minheight = minheight;
+			smartUpdate("minheight", _minheight);
+		}
+	}
+	/**
+	 * Returns the minimum height.
+	 * <p>Default: 100.
+	 * @since 5.0.0
+	 */
+	public int getMinheight() {
+		return _minheight;
+	}
+	/**
+	 * Sets the minimum width in pixels allowed for this panel. If negative, 200 is assumed.
+	 * <p>Default: 200. 
+	 * <p>Note: Only applies when {@link #isSizable()} = true.
+	 * @since 5.0.0
+	 */
+	public void setMinwidth(int minwidth) {
+		if (minwidth < 0) minwidth = 200;
+		if (_minwidth != minwidth) {
+			_minwidth = minwidth;
+			smartUpdate("minwidth", _minwidth);
+		}
+	}
+	/**
+	 * Returns the minimum width.
+	 * <p>Default: 200.
+	 * @since 5.0.0
+	 */
+	public int getMinwidth() {
+		return _minwidth;
+	}
+	/** Returns whether the panel is sizable.
+	 * @since 5.0.0
+	 */
+	public boolean isSizable() {
+		return _sizable;
+	}
+	/** Sets whether the panel is sizable.
+	 * If true, an user can drag the border to change the panel width.
+	 * <p>Default: false.
+	 * @since 5.0.0
+	 */
+	public void setSizable(boolean sizable) {
+		if (_sizable != sizable) {
+			_sizable = sizable;
+			smartUpdate("sizable", sizable);
+		}
+	}
+	
 	/** Returns the caption of this panel.
 	 */
 	public Caption getCaption() {
@@ -316,34 +378,61 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		return getCaption();
 	}
 	/** Returns the border.
-	 * The border actually controls via {@link Panelchildren#getRealSclass()}. 
-	 * In fact, the name of the border (except "normal") is generate as part of 
-	 * the style class used for the content block.
-	 * Refer to {@link Panelchildren#getRealSclass()} for more details.
 	 *
 	 * <p>Default: "none".
 	 */
 	public String getBorder() {
+		if (_framableBC && _border.startsWith("rounded")) //backward compatible
+			return "rounded".equals(_border) ? "none": "normal";
 		return _border;
 	}
-	/** Sets the border (either none or normal).
-	 *
-	 * @param border the border. If null or "0", "none" is assumed.
+	/** Sets the border.
+	 * Allowed values include <code>none</code> (default), <code>normal</code>,
+	 * <code>rounded</code> and <code>rounded+</code>.
+	 * For more information, please refer to
+	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border">ZK Component Reference: Panel</a>.
+	 * @param border the border. If null, "0" or "false", "none" is assumed.
+	 * If "true", "normal" is assumed (since 5.0.8).
 	 */
 	public void setBorder(String border) {
-		if (border == null || "0".equals(border))
+		if (border == null || "0".equals(border) || "false".equals(border))
 			border = "none";
+		else if ("true".equals(border))
+			border = "normal";
+		if (_framableBC) {
+			if (border.startsWith("rounded")) {
+				_framableBC = false;
+			} else if ("normal".equals(border)) {
+				if (_border.startsWith("rounded"))
+					border = "rounded+";
+			} else {
+				if (_border.startsWith("rounded"))
+					border = "rounded";
+			}
+		}
+	
+		setBorder0(border);
+	}
+	/** Enables or disables the border.
+	 * @param border whether to have a border. If true is specified,
+	 * it is the same as <code>setBorder("normal")</code>.
+	 * @since 5.0.8
+	 */
+	public void setBorder(boolean border) {
+		setBorder(border ? "normal": "none");
+	}
+	private void setBorder0(String border) {
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			invalidate();
+			smartUpdate("border", _border);
 		}
 	}
 
 	/** 
 	 * Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophiscated caption (aka., title).
-	 * <p>If a window has a caption whose label ({@link Caption#getLabel})
+	 * a more sophisticated caption (aka., title).
+	 * <p>If a panel has a caption whose label ({@link Caption#getLabel})
 	 * is not empty, then this attribute is ignored.
 	 * <p>Default: empty.
 	 */
@@ -357,8 +446,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			title = "";
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			if (_caption != null) _caption.invalidate();
-			else invalidate();
+			smartUpdate("title", _title);
 		}
 	}
 	
@@ -383,18 +471,20 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			if (_fbar != null)
 				throw new UiException("Only one foot toolbar child is allowed: "+this);
 		} else {
-			throw new UiException("Uknown toolbar: "+name);
+			throw new UiException("Unknown toolbar: "+name);
 		}
 
 		if (super.insertBefore(toolbar, refChild)) {
 			if ("tbar".equals(name)) {
 				_tbar = toolbar;
+				response(new AuSetAttribute(this, "tbar", toolbar.getUuid()));
 			} else if ("bbar".equals(name)) {
 				_bbar = toolbar;
+				response(new AuSetAttribute(this, "bbar", toolbar.getUuid()));
 			} else if ("fbar".equals(name)) {
 				_fbar = toolbar;
+				response(new AuSetAttribute(this, "fbar", toolbar.getUuid()));
 			}
-			invalidate();
 			return true;
 		}
 		return false;
@@ -471,53 +561,10 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	public org.zkoss.zul.api.Panelchildren getPanelchildrenApi() {		
 		return getPanelchildren();
 	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String zcls = getZclass();
-		return scls + ("normal".equals(_border) ? "" : ' ' + zcls + "-noborder")
-			+ (_open ? "" : " " + zcls + "-colpsd");
-	}
+
 	public String getZclass() {
 		return _zclass == null ?  "z-panel" : _zclass;
 	}	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_MOVE);
-		appendAsapAttr(sb, Events.ON_Z_INDEX);
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_MAXIMIZE);
-		appendAsapAttr(sb, Events.ON_MINIMIZE);
-		//no need to generate ON_CLOSE since it is always sent (as ASAP)
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null) sb.append(clkattrs);
-		if (_panelchildren != null)
-			HTMLs.appendAttribute(sb, "z.children", _panelchildren.getUuid());
-		if (_closable)
-			sb.append(" z.closable=\"true\"");
-		if (_floatable)
-			sb.append(" z.floatable=\"true\"");
-		if (_collapsible)
-			sb.append(" z.collapsible=\"true\"");
-		if (_framable)
-			sb.append(" z.framable=\"true\"");
-		if (_movable)
-			sb.append(" z.movable=\"true\"");
-		if (_maximizable)
-			sb.append(" z.maximizable=\"true\"");
-		if (_minimizable)
-			sb.append(" z.minimizable=\"true\"");
-		if (_maximized)
-			sb.append(" z.maximized=\"true\"");
-		if (_minimized)
-			sb.append(" z.minimized=\"true\"");
-		if (_open)
-			sb.append(" z.open=\"true\"");
-		if (isVisible())
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		return sb.toString();
-	}
 	
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
@@ -555,13 +602,11 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 				//always makes caption as the first child
 			if (super.insertBefore(newChild, refChild)) {
 				_caption = (Caption)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Panelchildren) {
 			if (super.insertBefore(newChild, refChild)) {
 				_panelchildren = (Panelchildren) newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Toolbar) {
@@ -576,7 +621,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 						_bbar = (Toolbar) newChild; 
 					}
 				}
-				invalidate();
 				return true;
 			}
 		} else {
@@ -592,7 +636,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		else if (_bbar == child) _bbar = null;
 		else if (_panelchildren == child) _panelchildren = null;
 		else if (_fbar == child) _fbar = null;
-		invalidate();
 	}
 	
 	//Cloneable//
@@ -618,53 +661,71 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			_fbar = (Toolbar) getChildren().get(_fbar.getParent()
 					.getChildren().indexOf(_fbar));
 	}
+
 	//-- Serializable --//
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		afterUnmarshal();
+		//afterUnmarshal(); // B50-ZK-261: no afterUnmarshal() as now the fields are non-transient
 	}
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_title.length() > 0) render(renderer, "title", _title);
+		
+		render(renderer, "closable", _closable);
+		render(renderer, "floatable", _floatable);
+		render(renderer, "collapsible", _collapsible);
+		render(renderer, "movable", _movable);
+		render(renderer, "maximizable", _maximizable);
+		render(renderer, "minimizable", _minimizable);
+		render(renderer, "maximized", _maximized);
+		render(renderer, "minimized", _minimized);
+		render(renderer, "sizable", _sizable);
 
+		if (_minheight != 100) renderer.render("minheight", _minheight);
+		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
+		
+		if (!_open) renderer.render("open", false);
+
+		if (!"none".equals(_border)) renderer.render("border", _border);
+	}
+	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements MultiBranch, Openable, Floating, Maximizable, Minimizable, Updatable {
-		//-- MultiBranch --//
-		public boolean inDifferentBranch(Component child) {
-			return child instanceof Caption; //in different branch
-		}
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			_open = open; 
-		}
-		//Floating//
-		public boolean isFloating() {
-			return _floatable;
-		}
-		public void setMaximizedByClient(boolean maximized) {
-			_maximized = maximized;
-			if (_maximized) _visible = true;
-		}
-		public void setMinimizedByClient(boolean minimized) {
-			_minimized = minimized;
-			if (_minimized) _visible = false;
-		}
-		public void setResult(Object result) {
-			Object[] r = ((Object[]) result);
-			_noSmartUpdate = ((Boolean) r[0]).booleanValue();
-			_noSmartParent = (Component) r[1];
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_MAXIMIZE)) {
+			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
+			_maximized = evt.isMaximized();
+			if (_maximized) setVisibleDirectly(true);
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_MINIMIZE)) {
+			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
+			setLeftDirectly(evt.getLeft());
+			setTopDirectly(evt.getTop());
+			setWidthDirectly(evt.getWidth());
+			setHeightDirectly(evt.getHeight());
+			_minimized = evt.isMinimized();
+			if (_minimized) setVisibleDirectly(false);
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
-
-	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
-		if (!_noSmartUpdate || _noSmartParent != getParent()) {
-			super.addMoved(oldparent, oldpg, newpg);
-		}
-	}
-
 }

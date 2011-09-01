@@ -1,0 +1,54 @@
+<!-- B50-3021278.ztl.java
+
+	Purpose:for testing B50-3021278.ztl .
+
+	Description:
+
+	History:
+		05, 9, 2011 19:04:38
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3021278.zul,A,E,Grid,Rows">
+	<case id="ztl">
+		<server><!--
+			<zk>
+   <html><![CDATA[
+	<ul>
+	<li>Hide the second column by click the menu in the column</li>
+	<li>if the background color of the second row is write, that is bug</li>
+	</ul>
+	]]></html>
+	<grid width="300px">
+		<columns menupopup="auto">
+			<column id="c1" label="Author"/>
+			<column label="Title"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Fit"/>
+			</row>
+		</rows>
+	</grid>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				clickAt(c1.$n("btn"),"6,6");
+				waitResponse();
+				clickAt(jq(".z-column-btn:eq(1)"), "6,6");
+				waitResponse();
+				boolean color = ColorVerifingHelper.getInstance().isEqualColor("white",jq("@row:eq(1)").css("backgroundColor"));
+				verifyNotEquals(jq("@row:eq(0)").css("backgroundColor"),jq("@row:eq(1)").css("backgroundColor"));
+				verifyFalse(color);
+		]]></client>
+	</case>
+</test>

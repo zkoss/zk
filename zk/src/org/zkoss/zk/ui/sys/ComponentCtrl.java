@@ -1,18 +1,16 @@
 /* ComponentCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon May 30 21:06:56     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,8 +20,9 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Set;
 import java.util.Map;
+import java.io.Writer;
+import java.io.IOException;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
@@ -33,12 +32,10 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
-import org.zkoss.zk.ui.util.DeferredValue;
-import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.AuRequest;
 
 /**
- * An addition interface to {@link org.zkoss.zk.ui.Component}
+ * An addition interface to {@link Component}
  * that is used for implementation or tools.
  *
  * <p>Application developers rarely need to access methods in this interface.
@@ -57,9 +54,14 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setDefinition(ComponentDefinition compdef);
-	/** @deprecated As of release 3.6.3, replaced with {@link #setDefinition}.
+	/** Sets the component definition by specifing the name.
+	 *
+	 * @param defname the name of the component definition
+	 * @exception IllegalArgumentException if defname is null
+	 * @exception DefinitionNotFoundException if the component definition not found
+	 * @since 5.0.0
 	 */
-	public void setComponentDefinition(ComponentDefinition compdef);
+	public void setDefinition(String defname);
 
 	/** Called before adding a child.
 	 * If a component accepts only certain types of children, it shall
@@ -94,8 +96,7 @@ public interface ComponentCtrl {
 	 * different. Otherwise, it does nothing.
 	 *
 	 * <p>Note: {@link #onChildAdded} is called in the request-processing
-	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
-	 * See {@link #onDrawNewChild} for more details.
+	 * phase.
 	 *
 	 * <p>It is not a good idea to throw an exception in this method, since
 	 * it is in the middle of modifying the component tree.
@@ -149,121 +150,17 @@ public interface ComponentCtrl {
 	 */
 	public void onPageDetached(Page page);
 
-	/** Called when a new-created child is about to render.
-	 * It gives the parent a chance to fine-tune the output.
-	 * Note: it won't be called if the parent is rendered, too.
-	 * In other words, it is called only if the child is attached dynamically.
-	 *
-	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link Component#invalidate()} or {@link #smartUpdate} in this method.
-	 *
-	 * <p>Note: {@link #onChildAdded} is called in the request-processing
-	 * phase, while {@link #onDrawNewChild} is called in the redrawing phase.
-	 * Component developer might do one of the follows:
-	 * <ul>
-	 * <li>Nothing, if new child can be inserted directly.</li>
-	 * <li>Overwrite {@link #onDrawNewChild} to add special tags, if
-	 * new child needs to be added an exterior with some tags before
-	 * insertion.<br>
-	 * Morever, if you shall add id="${child.uuid}!chdextr" to the added
-	 * exterior.</li>
-	 * <li>Redraw the parent, if it is too complicated.
-	 * How: overwrite {@link #onChildAdded} and calls {@link Component#invalidate()}</li>
-	 * </ul>
-	 *
-	 * @param child the child being rendered
-	 * @param out the rendered result of the child.
-	 * @since 3.5.0
-	 */
-	public void onDrawNewChild(Component child, StringBuffer out)
-	throws java.io.IOException;
-
-	/** Smart-updates a property with the specified value.
-	 * Called by component developers to do precise-update.
-	 *
-	 * <p>The second invocation with the same property will replace the previous
-	 * call. In other words, the same property will be set only once in
-	 * each execution.
-	 *
-	 * <p>This method has no effect if {@link Component#invalidate()} is ever invoked
-	 * (in the same execution), since {@link Component#invalidate()} assumes
-	 * the whole content shall be redrawn and all smart updates to
-	 * this components can be ignored,
-	 *
-	 * <p>Once this method is called, all invocations to {@link #smartUpdate}
-	 * will then be ignored, and {@link Component#redraw} will be invoked later.
-	 *
-	 * <p>It can be called only in the request-processing and event-processing
-	 * phases; excluding the redrawing phase.
-	 *
-	 * <p>There are two ways to draw a component, one is to invoke
-	 * {@link Component#invalidate()}, and the other is {@link #smartUpdate}.
-	 * While {@link Component#invalidate()} causes the whole content to redraw,
-	 * {@link #smartUpdate} let component developer control which part
-	 * to redraw.
-	 *
-	 * @param value the new value. If null, it means removing the property.
-	 * @since 3.5.0
-	 * @see #smartUpdateDeferred
-	 * @see #smartUpdateValues
-	 */
-	public void smartUpdate(String attr, String value);
-	/** Smart-updates a property with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
-	 * In other words, {@link DeferredValue#getValue} won't be called until
-	 * the rendering phase. On the other hand, this method is usually called
-	 * in the event processing phase.
-	 *
-	 * <p>For some old application servers (example, Webshpere 5.1),
-	 * {@link Execution#encodeURL} cannot be called in the event processing
-	 * thread. So, the developers have to use {@link DeferredValue}
-	 * or disable the use of the event processing thread
-	 * (by use of <code>disable-event-thread</code> in zk.xml).
-	 *
-	 * @since 3.5.0
-	 * @see #smartUpdate
-	 * @see #smartUpdateValues
-	 */
-	public void smartUpdateDeferred(String attr, DeferredValue value);
-	/** Smart-updates a property with an array of values.
-	 *
-	 * @param values an array of values. Any of them must be an instance
-	 * of String or {@link DeferredValue}.
-	 * @since 3.5.0
-	 * @see #smartUpdate
-	 * @see #smartUpdateDeferred
-	 */
-	public void smartUpdateValues(String attr, Object[] values);
-	/** Causes a response to be sent to the client.
-	 *
-	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the returned componet.
-	 * In other words, the response is removed if the component is removed.
-	 * If it is null, the response is component-independent and it is
-	 * always sent to the client.
-	 *
-	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
-	 * {@link Component#invalidate()} was called.
-	 * Typical examples include setting the focus, selecting the text and so on.
-	 *
-	 * <p>It can be called only in the request-processing and event-processing
-	 * phases; excluding the redrawing phase.
-	 *
-	 * @param key could be anything.
-	 * The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
-	 * However, if key is null, it won't override any other. All responses
-	 * with key == null will be sent.
-	 * @since 3.5.0
-	 */
-	public void response(String key, AuResponse response);
-
-	/** Returns the event handler of the specified name, or null
+	/** Returns the event listener of the specified name, or null
 	 * if not found.
+	 * @see Component#getWidgetListener
 	 */
 	public ZScript getEventHandler(String evtnm);
 	/** Adds an event handler.
+	 * Note: it is OK to add multiple event handlers to the same event.
+	 * They are evaluated one-by-one.
+	 * On the other hand, {@link Component#setWidgetListener} will
+	 * overwrite the pevious listener if the event name is the same.
+	 * @see Component#setWidgetListener
 	 */
 	public void addEventHandler(String name, EventHandler evthd);
 	/** Adds a map of event handlers which is shared by other components.
@@ -273,14 +170,54 @@ public interface ComponentCtrl {
 	 * The caller shall not change annots after the invocation, too
 	 *
 	 * @param evthds a map of event handler
+	 * @see Component#setWidgetListener
 	 */
 	public void addSharedEventHandlerMap(EventHandlerMap evthds);
 	/** Returns a readonly collection of event names (String), or
 	 * an empty collection if no event name is registered.
 	 *
+	 * @see Component#getWidgetListenerNames
 	 * @since 3.0.2
 	 */
 	public Set getEventHandlerNames();
+
+	/** Returned by {@link #getClientEvents} to indicate the event is important
+	 * and the client must send it back even if no listener is registered.
+	 */
+	public static final int CE_IMPORTANT = 0x0001;
+	/** Returned by {@link #getClientEvents} to indicate the event is 
+	 * no deferrable, i.e., the event has to be sent back immediately.
+	 * It is meaningful only used with {@link #CE_IMPORTANT}
+	 */
+	public static final int CE_NON_DEFERRABLE = 0x0002;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * can be ignored by the server when the server is busy.
+	 */
+	public static final int CE_BUSY_IGNORE = 0x1000;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * can be ignored by the server when the server receives the same AU
+	 * requests but not processed yet.
+	 * In other words, the server will remove the duplicate AU requests
+	 * if it was queued. 
+	 */
+	public static final int CE_DUPLICATE_IGNORE = 0x2000;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * an be ignored by the server when the server receives consecutive
+	 * AU requests. In other words, the server will remove the first request
+	 * if it receives an event listed in this map consecutively.
+	 */
+	public static final int CE_REPEAT_IGNORE = 0x4000;
+	/** Returns a map of event information that the client might send to this component.
+	 * The key of the returned map is a String instance representing the event name,
+	 * and the value an integer representing the flags
+	 * (a combination of {@link #CE_IMPORTANT}, {@link #CE_BUSY_IGNORE},
+	 * {@link #CE_DUPLICATE_IGNORE} and {@link #CE_REPEAT_IGNORE}).
+	 * <p>Default: return the collection of events
+	 * added by {@link #getClientEvents}.
+	 *
+	 * @since 5.0.0
+	 */
+	public Map getClientEvents();
 
 	/** Returns the annotation associated with the component,
 	 * or null if not available.
@@ -290,6 +227,21 @@ public interface ComponentCtrl {
 	public Annotation getAnnotation(String annotName);
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
+	 *
+	 * <p>Notice that the property is not limited the 'real' property.
+	 * For example, the following statement is correct though
+	 * <code>button</code> doesn't have <code>setFoo</code> method.
+	 * And, you can retrieve it by use of this method (<code>getAnnotation("foo", "default")</code>)
+	 *
+	 * <pre><code>&lt;button foo="@{value=123}"/&gt;</code></pre>
+	 *
+	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>
+	  (since ZK 5.0).
+	 * For example, the following is equivalent to the above.
+	 *
+	 * <pre><code>&lt;button>
+	 *  &lt;custom-attribute foo="@{value=123}"&gt;
+	 *&lt;/button></code></pre>
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
@@ -361,8 +313,7 @@ public interface ComponentCtrl {
 	 *
 	 * <p>Application developers need NOT to access this method.
 	 *
-	 * <p>There are two set of extra controls: org.zkoss.zk.ui.ext.client
-	 * and org.zkoss.zk.ui.ext.render.
+	 * <p>There are a set of extra controls: org.zkoss.zk.ui.ext.render.
 	 *
 	 * <p>The first package is used if the content of a component can be changed
 	 * by the user at the client. It is so-called the client controls.
@@ -376,9 +327,8 @@ public interface ComponentCtrl {
 	 * @return null if no special handling required. If the component
 	 * requires some special controls, it could return an object that
 	 * implements one or several interfaces in the org.zkoss.zk.ui.ext.render
-	 * and org.zkoss.zk.ui.ext.client packages.
-	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}
-	 * and {@link org.zkoss.zk.ui.ext.client.InputableX}.
+	 * package.
+	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}.
 	 */
 	public Object getExtraCtrl();
 
@@ -395,16 +345,38 @@ public interface ComponentCtrl {
 	 */
 	public WrongValueException onWrongValue(WrongValueException ex);
 
-	/** Returns the component-specific command of the specified command ID,
-	 * or null if not found.
-	 * It searches only the command specific to this component.
-	 * For global commands, use {@link org.zkoss.zk.au.AuRequest#getCommand}
-	 * instead.
+	/** Render (aka., redraw) this component and all its descendants.
 	 *
-	 * @since 3.0.5
-	 * @see org.zkoss.zk.au.ComponentCommand
+	 * <p>It is called in the redrawing phase by the kernel, so it is too late
+	 * to call {@link Component#invalidate()},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate}
+	 * or {@link org.zkoss.zk.ui.AbstractComponent#response} in this method.
+	 * @since 5.0.0
 	 */
-	public Command getCommand(String cmdId);
+	public void redraw(Writer out) throws IOException;
+
+	/** Handles an AU request.
+	 *
+	 * <p>Notice: don't invoke this method directly. Rather, invoke
+	 * {@link DesktopCtrl#service(AuRequest, boolean)} instead.
+	 * This method is designed to be overriden.
+	 *
+	 * <p>To send reponses to the client, use
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
+	 * or {@link Component#invalidate()}.
+	 * To handle the AU requests sent from the client, override this
+	 * method.
+	 *
+	 * <p>Application developer can plug the custom service to handle
+	 * the AU request by calling {@link Component#setAuService}.
+	 *
+	 * @param everError whether any error ever occured before
+	 * processing this request.
+	 * @since 5.0.0
+	 * @see Component#setAuService
+	 */
+	public void service(AuRequest request, boolean everError);
 
 	/** Sets whether to disable the update of the client widgets of
 	 * this component and its descendants.

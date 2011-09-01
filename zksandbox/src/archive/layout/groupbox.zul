@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+groupbox.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 13 15:57:43     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>Groupbox</h4>
+		<p>Used to group components into a box with an optional title. 
+		3d mold groupbox allow users to "collapse" it 
+		by clicking on the title bar.</p>
+	]]></html>
+	<separator/>
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<groupbox id="gb" mold="3d" width="300px">
+	  <caption image="/img/Centigrade-Widget-Icons/FileDrawer-16x16.png" label="Enable Backups"/>
+	  <hbox>
+	    <label value="Directory:"/>
+	    <textbox/>
+	  </hbox>
+	  <checkbox label="Compress archived files"/>
+	</groupbox>
+	<checkbox label="Use 3d groupbox" checked="true"
+		onCheck='gb.mold=self.checked? "3d": "default"'/>
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

@@ -1,0 +1,34 @@
+<!--
+B50-ZK-56.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 21 16:01:03 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 1000; i++)
+			list.add("item_" + i);
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
+	<div>
+		You should see item 300 selected and visible in the listbox. (Note: need be correct for both ROD and non-ROD.)
+	</div>
+	<listbox width="300px" height="300px" model="${model}" onCreate='self.selectedIndex = 300' >
+			<listhead>
+				<listheader label="Rod"/>
+			</listhead>
+		</listbox>
+		<listbox width="300px" height="300px" model="${model}" onCreate='self.selectedIndex = 300' >
+			<listhead>
+				<listheader label="non-ROD."/>
+			</listhead>
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+		</listbox>
+</zk>

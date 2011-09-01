@@ -1,0 +1,47 @@
+<test tags="B50-2932107.zul,Combobox,Listbox">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+					Please select a drop down list, and than you should see the selected item still exists.
+					<listbox id="listbox" mold="paging" width="200px">
+						<auxhead>
+							<auxheader colspan="1">
+								<combobox id="insideHeaderCombobox" onSelect="loadItemsFromInside()">
+									<comboitem label="Add 1 item" />
+									<comboitem label="Add 2 items" />
+									<comboitem label="Add 3 items" />
+								</combobox>
+							</auxheader>
+						</auxhead>
+					<listhead>
+					<listheader label="Listheader"/>
+					</listhead>
+					</listbox>
+					
+					<zscript>
+					<![CDATA[
+					void loadItemsFromOutside() {
+					for (int i = 0; i < outsideHeaderCombobox.getSelectedIndex()+1; i ++)
+					listbox.appendChild(new Listitem("Element"));
+					}
+					
+					void loadItemsFromInside() {
+					for (int i = 0; i < insideHeaderCombobox.getSelectedIndex()+1; i ++)
+					listbox.appendChild(new Listitem("Element"));
+					}
+					]]>
+					</zscript>
+				</zk>
+			-->
+		</server>
+		<client><![CDATA[	
+				click(insideHeaderCombobox.$n("btn"));
+				waitResponse();
+				click(jq(".z-combobox-pp .z-comboitem:eq(0)"));
+				waitResponse();
+				click(insideHeaderCombobox.$n("btn"));waitResponse();
+				verifyEquals("Add 1 item",jq(".z-comboitem-seld .z-comboitem-text").text());
+		]]></client>
+	</case>
+</test>

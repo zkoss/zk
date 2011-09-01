@@ -1,18 +1,16 @@
 /* AuConfirmClose.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Nov  6 16:44:28     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,5 +30,12 @@ import org.zkoss.zk.au.AuResponse;
 public class AuConfirmClose extends AuResponse {
 	public AuConfirmClose(String mesg) {
 		super("cfmClose", mesg != null ? mesg: "");
+	}
+	/** Default: zk.confirmClose (i.e., only one response of this class will
+	 * be sent to the client in an execution)
+	 * @since 5.0.2
+	 */
+	public final String getOverrideKey() {
+		return "zk.confirmClose";
 	}
 }

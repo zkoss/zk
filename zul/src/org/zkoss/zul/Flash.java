@@ -1,18 +1,18 @@
 /* Flash.java
 
- {{IS_NOTE
+
  Purpose: ZK Flash Component
  
  Description:
  
  History:
  Jul 17, 2007 , Created by jeffliu
- }}IS_NOTE
+
 
  Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
  {{IS_RIGHT
- This program is distributed under GPL Version 3.0 in the hope that
+ This program is distributed under LGPL Version 3.0 in the hope that
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
@@ -40,6 +40,8 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	private String _src;
 	private Media _media;
 	private String _wmode = "transparent";	
+	private String _quality = "high";
+	private String _version = "6,0,0,0";
 	private String _bgcolor;
 	private byte _medver;
 	private boolean _autoplay = true;
@@ -115,7 +117,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	public void setAutoplay(boolean autoplay){
 		if(_autoplay != autoplay){
 			_autoplay = autoplay;
-			smartUpdate("play", autoplay);
+			smartUpdate("autoplay", autoplay);
 		}
 	}
 	
@@ -140,6 +142,46 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	}
 
 	/**
+	 * Returns the expected version of the Flash player.
+	 * <p>Default: "6,0,0,0"
+	 * @since 5.0.0
+	 */
+	public String getVersion() {
+		return _version;
+	}
+	/**
+	 * Sets the expected version of the Flash player.
+	 * @since 5.0.0
+	 */
+	public void setVersion(String version) {
+		if(!Objects.equals(_version, version)){
+			_version = version;
+			smartUpdate("version", version);
+		}
+	}
+
+	/**
+	 * Returns the quality of the Flash movie 
+	 * <p>Default: "high".
+	 * @return the quality of the Flash movie 
+	 * @since 5.0.0
+	 */
+	public String getQuality() {
+		return _quality;
+	}
+	/**
+	 * Sets the quality of the Flash movie.
+	 * @param quality the quality of the Flash movie. Accept "high","medium","low"
+	 * @since 5.0.0
+	 */
+	public void setQuality(String quality) {
+		if(!Objects.equals(_quality, quality)){
+			_quality = quality;
+			smartUpdate("quality", quality);
+		}
+	}
+
+	/**
 	 * Gets the source path of Flash movie
 	 * @return  the source path of Flash movie
 	 */
@@ -158,7 +200,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 		if (_media != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_media = null;
-			invalidate(); //safer for smartUpdate
+			smartUpdate("src", new EncodedSrc());
 		}
 	}
 
@@ -176,10 +218,10 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 		if (_src != null || media != _media) {
 			_media = RepeatableMedia.getInstance(media);
 				//Use RepeatableMedia since it might be reloaded
-				//if the component is invalidated or overlapped wnd (Bug 1896797)
+				//if the component is in an overlapped wnd (Bug 1896797)
 			_src = null;
 			if (_media != null) ++_medver; //enforce browser to reload
-			invalidate(); //safer than smartUpdate
+			smartUpdate("src", new EncodedSrc());
 		}
 	}
 	/** Returns the content set by {@link #setContent}.
@@ -191,11 +233,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 		return _media;
 	}
 
-	/** Returned the encoded URL of the source flash.
-	 * It is used only internally (for component development).
-	 * @since 3.6.1
-	 */
-	public String getEncodedSrc() {
+	private String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _media != null ? getMediaSrc(): //already encoded
 			dt != null && _src != null ?
@@ -204,5 +242,27 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	private String getMediaSrc() {
 		return Utils.getDynamicMediaURI(
 			this, _medver, _media.getName(), _media.getFormat());
+	}
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrc();
+		}
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "src", getEncodedSrc());
+		if (!"transparent".equals(_wmode))
+			render(renderer, "wmode", _wmode);
+		if (!"high".equals(_quality))
+			render(renderer, "quality", _quality);
+		if (!"6,0,0,0".equals(_version))
+			render(renderer, "version", _version);
+		render(renderer, "loop", _loop);
+		if (!_autoplay) renderer.render("autoplay", false);
+		render(renderer, "bgcolor", _bgcolor);
 	}
 }

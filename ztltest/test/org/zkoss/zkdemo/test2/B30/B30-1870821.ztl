@@ -1,0 +1,27 @@
+<test tags="Grid,Unstable">
+	<case id="DataBinding">
+		<server>
+			<!-- 
+				<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+					<n:p>In FF, it should allow user go back to the previous input element by pressing shift + tab.</n:p>
+					<decimalbox/><decimalbox/>
+				</zk>
+			 -->
+		</server>
+		<client><![CDATA[
+				focus(jq(".z-decimalbox:eq(0)"));
+				waitResponse();
+				type(jq(".z-decimalbox:eq(0)"), "6");
+				waitResponse();
+				sendKeys(jq(".z-decimalbox:eq(0)"), Keys.TAB);
+				waitResponse();
+				type(jq(".z-decimalbox:eq(1)"), "1");
+				waitResponse();
+				verifyEquals(jq(".z-decimalbox:eq(1)").val(), "1");
+				focus(jq(".z-decimalbox:eq(0)"));
+				type(jq(".z-decimalbox:eq(0)"), "3");
+				waitResponse();
+				verifyEquals(jq(".z-decimalbox:eq(0)").val(), "3");
+		]]></client>
+	</case>
+</test>

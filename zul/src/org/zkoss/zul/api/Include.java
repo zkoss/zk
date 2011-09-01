@@ -1,18 +1,16 @@
 /* Include.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -138,7 +136,7 @@ DynamicPropertied, AfterCompose, IdSpace {
 	 * operation. This implementation will automatically use an echo event like
 	 * {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} to
 	 * suspend the including progress before using the
-	 * {@link Clients#showBusy(String, boolean)} method to show the
+	 * {@link Clients#showBusy(String)} method to show the
 	 * {@link MZul#PLEASE_WAIT} message at client side.
 	 * 
 	 * <p>
@@ -155,12 +153,6 @@ DynamicPropertied, AfterCompose, IdSpace {
 	 * 
 	 */
 	public boolean getProgressing();
-
-	/**
-	 * Internal use only.
-	 * 
-	 */
-	public void onEchoInclude();
 
 	/**
 	 * Returns the src.
@@ -216,4 +208,9 @@ DynamicPropertied, AfterCompose, IdSpace {
 	 * @since 3.6.2
 	 */
 	public void setMode(String mode) throws WrongValueException;
+
+	/** Removes all dynamic properties.
+	 * @since 5.0.1
+	 */
+	public void clearDynamicProperties();
 }

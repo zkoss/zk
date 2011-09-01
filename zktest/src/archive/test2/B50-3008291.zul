@@ -1,0 +1,15 @@
+<zk>
+	<window border="normal" width="200px">
+		<button label="Remove" onClick='lbx.removeItemAt(0);' />
+		<listbox id="lbx">
+			<listhead>
+				<listheader label="Label" />
+			</listhead>
+			<listitem label="3" />
+			<listitem label="2" />
+			<listitem label="1" />
+			<listitem label="-" />
+			<listitem label="-" selected="true" focus="true" />
+		</listbox>
+	</window>
+</zk>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3178977.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 19 15:34:01 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Focus on textbox.</li>
+			<li>Press "tab" key to navigate each inputs.</li>
+			<li>Then press "shif + tab" key to navigate back to each inputs.</li>
+			<li>They shall be worked fine.</li>
+		</ol>
+	]]></html>
+	<hlayout>
+		<grid width="300px">
+			<columns>
+				<column label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row>
+					<textbox forEach="1,2,3,4,5,6,7"/>
+				</row>
+			</rows>
+		</grid>
+		<listbox width="300px">
+			<listhead>
+				<listheader label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem>
+				<listcell forEach="1,2,3,4,5,6,7"><textbox/></listcell>	
+			</listitem>
+		</listbox>
+	</hlayout>
+	<hlayout>
+		<grid width="300px">
+			<columns>	
+				<column label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row>
+					<textbox/>
+					<a label="a tag"/>
+					<combobox/>
+					<checkbox label="checkbox"/>
+					<button label="button"/>
+					<radio label="radio"/>
+					<spinner/>
+				</row>
+			</rows>
+		</grid>
+		<listbox width="300px">
+			<listhead>
+				<listheader label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem>
+				<listcell><textbox/></listcell>	
+				<listcell><a label="a tag"/></listcell>	
+				<listcell><combobox/></listcell>	
+				<listcell><checkbox label="checkbox"/></listcell>	
+				<listcell><button label="button"/></listcell>	
+				<listcell><radio label="radio"/></listcell>	
+				<listcell><spinner/></listcell>	
+			</listitem>
+		</listbox>
+	</hlayout>
+	<hlayout>
+		<grid width="300px">
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+				<auxheader label="column 5,6,7" colspan="3"/>
+			</auxhead>
+			<columns>
+				<column label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row>
+					<textbox forEach="1,2,3,4,5,6,7"/>
+				</row>
+			</rows>
+		</grid>
+		<listbox width="300px">
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+				<auxheader label="column 5,6,7" colspan="3"/>
+			</auxhead>
+			<listhead>
+				<listheader label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem>
+				<listcell forEach="1,2,3,4,5,6,7"><textbox/></listcell>	
+			</listitem>
+		</listbox>
+	</hlayout>
+	<hlayout>
+		<grid width="300px">
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+				<auxheader label="column 5,6,7" colspan="3"/>
+			</auxhead>
+			<columns>	
+				<column label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row>
+					<textbox/>
+					<a label="a tag"/>
+					<combobox/>
+					<checkbox label="checkbox"/>
+					<button label="button"/>
+					<radio label="radio"/>
+					<spinner/>
+				</row>
+			</rows>
+		</grid>
+		<listbox width="300px">
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+				<auxheader label="column 5,6,7" colspan="3"/>
+			</auxhead>
+			<listhead>
+				<listheader label="column ${each}" forEach="1,2,3,4,5,6,7" width="100px"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem>
+				<listcell><textbox/></listcell>	
+				<listcell><a label="a tag"/></listcell>	
+				<listcell><combobox/></listcell>	
+				<listcell><checkbox label="checkbox"/></listcell>	
+				<listcell><button label="button"/></listcell>	
+				<listcell><radio label="radio"/></listcell>	
+				<listcell><spinner/></listcell>	
+			</listitem>
+		</listbox>
+	</hlayout>
+</zk>

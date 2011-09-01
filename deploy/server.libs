@@ -8,7 +8,9 @@ zkex.jar
 zkmax.jar
 zkplus.jar
 fckez.jar
+ckez.jar
 gmapsz.jar
+breeze.jar
 timelinez.jar
 timeplotz.jar
 zcommons-el.jar
@@ -21,14 +23,11 @@ jcommon.jar
 Filters.jar
 jasperreports.jar
 commons-collections.jar
+commons-digester.jar
 commons-logging.jar
 itext.jar
 jxl.jar
 poi.jar
 bsh.jar
-js.jar
-groovy.jar
-jruby.jar
-jython.jar
 mvel.jar
 ognl.jar

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2165067.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 14 11:03:16     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Before doing anything, you should see 3 "test" labels.</li>
+			<li>Click on "Remove" Button. The "test" labels should disappear, leaving only Button 2. If not, it is a bug.</li>
+		</ol>
+	]]></html>
+	<div id="d">
+		<label value="test"/>
+		<label value="test"/>
+		<label value="test"/>
+		<button label="Button 2"/>
+	</div>
+	<button label="Remove">
+		<attribute name="onClick"><![CDATA[
+			ListIterator it = d.getChildren().listIterator(3);
+			for (int n = 3; --n >= 0;) {
+				it.previous();
+				it.remove();
+			}
+		]]></attribute>
+	</button>
+</zk>

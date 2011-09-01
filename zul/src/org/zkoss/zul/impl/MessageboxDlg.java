@@ -1,25 +1,22 @@
 /* MessageboxDlg.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Aug 17 16:42:20     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul.impl;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.UiException;
@@ -121,13 +118,6 @@ public class MessageboxDlg extends Window {
 		super.onClose();
 	}
 
-	public static class Label extends org.zkoss.zul.Label {
-		public String getOuterAttrs() {
-			final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
-			HTMLs.appendAttribute(sb, "z.type", "zul.wnd2.MsgboxLabel");
-			return sb.toString();
-		}
-	}
 	/**
 	 * Represents a button on the message box.
 	 * @since 3.0.0
@@ -145,31 +135,31 @@ public class MessageboxDlg extends Window {
 			switch (button) {
 			case YES:
 				label = MZul.YES;
-				_evtnm = "onYes";
+				_evtnm = Messagebox.ON_YES;
 				break;
 			case NO:
 				label = MZul.NO;
-				_evtnm = "onNo";
+				_evtnm = Messagebox.ON_NO;
 				break;
 			case RETRY:
 				label = MZul.RETRY;
-				_evtnm = "onRetry";
+				_evtnm = Messagebox.ON_RETRY;
 				break;
 			case ABORT:
 				label = MZul.ABORT;
-				_evtnm = "onAbort";
+				_evtnm = Messagebox.ON_ABORT;
 				break;
 			case IGNORE:
 				label = MZul.IGNORE;
-				_evtnm = "onIgnore";
+				_evtnm = Messagebox.ON_IGNORE;
 				break;
 			case CANCEL:
 				label = MZul.CANCEL;
-				_evtnm = "onCancel";
+				_evtnm = Messagebox.ON_CANCEL;
 				break;
 			default:
 				label = MZul.OK;
-				_evtnm = "onOK";
+				_evtnm = Messagebox.ON_OK;
 				break;
 			}
 			setLabel(Messages.get(label));
@@ -184,6 +174,9 @@ public class MessageboxDlg extends Window {
 					return; //no more processing
 			}
 			dlg.endModal(_button);
+		}
+		protected String getDefaultMold(Class klass) {
+			return super.getDefaultMold(org.zkoss.zul.Button.class);
 		}
 	}
 }

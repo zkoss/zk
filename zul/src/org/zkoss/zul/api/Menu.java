@@ -1,18 +1,16 @@
 /* Menu.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -43,4 +41,28 @@ public interface Menu extends org.zkoss.zul.impl.api.LabelImageElement {
 	 * Returns the {@link Menupopup} it owns, or null if not available.
 	 */
 	public org.zkoss.zul.api.Menupopup getMenupopupApi();
+	
+	
+	/** Returns the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 *
+	 * <p>Default: empty ("").
+	 *
+	 * @since 5.0.0
+	 */
+	public String getContent();
+	
+	/** Sets the embedded content (i.e., HTML tags) that is
+	 * shown as part of the description.
+	 *
+	 * <p>It is useful to show the description in more versatile way.
+	 * 
+	 * <p>There is a way to create Colorbox automatically by using
+	 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
+	 *
+	 * @since 5.0.0
+	 */
+	public void setContent(String content);
 }

@@ -1,20 +1,16 @@
 /* Include.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Sep 28 18:01:03     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 package org.zkoss.zul;
 
@@ -22,29 +18,40 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
+import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.AfterCompose;
 
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -52,12 +59,8 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Non-XUL extension.
  *
- * <p>Since 3.6.2, there are three modes: auto, instant and defer (default).
- * The behavior prior to 3.6.2 is the same as the defer mode.
- * To be fully backward compatible, the default mode is <code>defer</code>.
- * However, we recommend you change it by specifying a library variable named
- * <code>org.zkoss.zul.include.mode</code> to be <code>auto</code>,
- * since the auto mode is more intuitive and easier to handle.
+ * <p>If this component is the only child of its parent, the default width
+ * and height will become 100%.
  *
  * <h3>The instant mode</h3>
  *
@@ -68,12 +71,20 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Notices:
  * <ul>
- * <li>The instant mode supports only ZUML pages.</li>
- * <li>The isntance mode doesn't support {@link #setProgressing} nor
+ * <li>The instant mode is supported automatically if the include component
+ * is created by a ZUML page.
+ * If you want to create it programmingly, you have to invoke {@link #afterCompose}
+ * after assigning the source ({@link #setSrc}).</li>
+ * <li>The instant mode doesn't support {@link #setProgressing} nor
  * {@link #setLocalized}</li>
+ * <li>The directives of the included page won't be included.
+ * It means &lt;?style?&gt; won't be evaluated.
+ * Thus, if you want to embed JavaScript files or codes in a page
+ * that might be included, it is better to use the script component
+ * ({@link Script}).</li>
  * </ul>
  *
- * <h3>The defer mode (default)</h3>
+ * <h3>The defer mode</h3>
  *
  * <p>In the defer mode (the only mode supported by ZK prior to 3.6.2),
  * the page is included by servlet container (the <code>include</code> method
@@ -85,7 +96,15 @@ import org.zkoss.zul.mesg.MZul;
  * is created and added to the current desktop.
  * You can access them only via inter-page API (see{@link org.zkoss.zk.ui.Path}).
  *
- * <h3>The auto mode</h3>
+ * <p>Notice that if a non-ZUML page, such as HTML fragment, is included,
+ * the content might be evaluated before ZK widgets are instantiated and
+ * rendered (so-called mounted). Thus, the embedded JavaScript code might be
+ * evaluated early. If you prefer to run them later, you could either use
+ * <code>zk.afterMount(function(){...})</code> to defer the execute, or
+ * specify the custom attribute called <code>org.zkoss.zul.include.html.defer</code>
+ * to true.
+ *
+ * <h3>The auto mode (default)</h3>
  *
  * <p>In the auto mode, the include component decides the mode based on
  * the name specified in the src property ({@link #setSrc}).
@@ -97,6 +116,14 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
  * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
+ *
+ * <p><b>Backward Compatibility:<b/>
+ * Since 3.6.2, there are three modes: auto (default), instant and defer.
+ * The behavior prior to 3.6.2 is the same as the defer mode.
+ * The default mode is <code>auto</code> since 5.0.
+ * However, you can change it to <code>defer</code> by specifying a library
+ * property named <code>org.zkoss.zul.include.mode</code> (for backward
+ * compatibility).
  *
  * <h3>Passing Parameters</h3>
  *
@@ -124,7 +151,7 @@ import org.zkoss.zul.mesg.MZul;
  * <h3>Macro Component versus {@link Include}</h3>
  *
  * If the include component is in the instant mode, it is almost the same as
- * a macro component. On the other hand, if in the pag mode, they are different:
+ * a macro component. On the other hand, if in the defer mode, they are different:
  * <ol>
  * <li>{@link Include} (in defer mode) could include anything include ZUML,
  * JSP or any other
@@ -147,32 +174,50 @@ import org.zkoss.zul.mesg.MZul;
  * attribute as follows:
  * <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;
  *
+ * <h3>Custom Attribute</h3>
+ * <dl>
+ * <dt>org.zkoss.zul.include.html.defer</dt>
+ * <dd>[default: false] Whether to defer the rendering of non-ZUML page until all widgets are
+ * instantiated and rendered at client (so-called mounted).</dd>
+ * </dl>
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement implements org.zkoss.zul.api.Include {
+public class Include extends XulElement
+implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private static final Log log = Log.lookup(Include.class);
+	private static final String ATTR_RENDERED =
+		"org.zkoss.zul.Include.rendered";
 	private String _src;
 	private Map _dynams;
+	/** The child page. Note: it is recovered by PageImpl. */
+	private transient Page _childpg;
 	private String _mode = getDefaultMode();
+	private String _renderResult;
 	private boolean _localized;
 	private boolean _progressing;
 	private boolean _afterComposed;
 	private boolean _instantMode;
+	private boolean _comment;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
 	private byte _progressStatus;
 
 	public Include() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
 	public Include(String src) {
+		this();
 		setSrc(src);
 	}
 
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
 	 * This implementation will automatically use an echo event like {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} 
-	 * to suspend the including progress before using the {@link Clients#showBusy(String, boolean)} 
+	 * to suspend the including progress before using the {@link Clients#showBusy(String)} 
 	 * method to show the {@link MZul#PLEASE_WAIT} message at client side. 
+	 *
+	 * <p>If setProgressing(true) is called, the <code>defer</code> mode is enabled automatically
+	 * if the current mode is <code>auto</code>.
 	 * 
 	 * <p>Default: false.
 	 * @since 3.0.4
@@ -183,9 +228,14 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 				throw new UnsupportedOperationException("progressing not allowed in instant mode");
 
 			_progressing = progressing;
-			if (_progressing)
-				fixMode(); //becomes defer mode if auto
+			fixMode(); //becomes defer mode if auto
 			checkProgressing();
+			
+			if (!_instantMode) {
+				getChildren().clear();
+				invalidate();
+			} else
+				super.invalidate();
 		}
 	}
 	/**
@@ -201,7 +251,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	 *@since 3.0.4
 	 */
 	public void onEchoInclude() {
-		Clients.showBusy(null , false);
+ 		Clients.clearBusy();
 		super.invalidate();
 	}
 	/** Returns the src.
@@ -238,10 +288,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	/** Returns the inclusion mode.
 	 * There are three modes: auto, instant and defer.
 	 * The behavior prior to 3.6.2 is the same as the defer mode.
-	 * <p>It is recommended to use the auto mode if possible
-	 * The reason to have <code>defer</code> as the default is to
-	 * be backward compatible.
-	 * <p>Default: defer.
+	 * <p>Default: auto (since 5.0.0).
 	 * @since 3.6.2
 	 */
 	public String getMode() {
@@ -257,19 +304,20 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			&& !"defer".equals(mode))
 				throw new WrongValueException("Unknown mode: "+mode);
 			if ((_localized || _progressing) && "instant".equals(mode))
-				throw new UnsupportedOperationException("localized/progressing not allowed in instant mold");
+				throw new UnsupportedOperationException("localized/progressing not allowed in the instant mode");
 
 			_mode = mode;
 			fixMode();
+			if (!_instantMode) invalidate();
+			else super.invalidate();
 		}
 	}
 	private void fixMode() {
 		fixModeOnly();
-		if (_instantMode && _afterComposed)
-			afterCompose();
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
 	}
 	private void fixModeOnly() { //called by afterCompose
-		boolean oldInstantMode = _instantMode;
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
 				_instantMode = _src.endsWith(".zul") || _src.endsWith(".zhtml");
@@ -277,36 +325,102 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 				_instantMode = false;
 		} else
 			_instantMode = "instant".equals(_mode);
-
-		getChildren().clear();
-
-		if (_instantMode != oldInstantMode)
-			invalidate();
 	}
-
+	private void applyChangesToContent(){
+		// FIX: 2011.01.18 Iantsai
+		// in fixModeOnly(), we set _instantMode to false, and which means afterCompose() 
+		// won't be called, but we got no logic to clear the content!
+		// We assumed that the onPageAttached will handle this, 
+		// but if setSrc(null); happened in a button click, this wont work.
+		if (_instantMode && _afterComposed)
+			afterCompose();
+		else if(_src == null && !getChildren().isEmpty())
+			// !getChildren().isEmpty() is for performance.
+			getChildren().clear();
+	}
+	
 	/** Returns whether the source depends on the current Locale.
 	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
 	 * for the proper content, where src is assumed to be xxx.yyy.
 	 *
 	 * <p>Default: false;
 	 */
-	public final boolean isLocalized() {
+	public boolean isLocalized() {
 		return _localized;
 	}
 	/** Sets whether the source depends on the current Locale.
 	 */
-	public final void setLocalized(boolean localized) {
+	public void setLocalized(boolean localized) {
 		if (_localized != localized) {
 			if (localized && "instant".equals(_mode))
 				throw new UnsupportedOperationException("localized not supported in instant mode yet");
 
 			_localized = localized;
 			if (_localized)
-				fixMode();  //becomes defer mode if auto
+				fixMode(); //becomes defer mode if auto
 			if (!_instantMode) invalidate();
 			else super.invalidate();
 				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
+	}
+
+	/** Returns whether to generate the included content inside
+	 * the HTML comment.
+	 * <p>Default: false.
+	 *
+	 * <p>It is useful if you want to include non-HTML content.
+	 * For example, 
+	 * <pre><code><include src="a.xml" comment="true"/></code></pre>
+	 * Then, it will generate
+	 * <pre><code>&lt;div id="uuid"&gt;
+	 *&lt;!--
+	 * //the content of a.xml
+	 *--&gt;
+	 *</div></code></pre>
+	 *
+	 * <p>Notice that it is ignored in the instance mode ({@link #getMode}).
+	 * @since 5.0.0
+	 */
+	public boolean isComment() {
+		return _comment;
+	}
+	/** Sets  whether to generate the included content inside
+	 * the HTML comment.
+	 * @see #isComment
+	 * @since 5.0.0
+	 */
+	public void setComment(boolean comment) {
+		_comment = comment;
+	}
+
+	//Includer//
+	//@Override
+	public Page getChildPage() {
+		return _childpg;
+	}
+	//@Override
+	public void setChildPage(Page page) {
+		if (_childpg != null && page == null) {
+			final Desktop desktop = getDesktop();
+			if (desktop != null)
+				((DesktopCtrl)desktop).removePage(_childpg);
+		}
+		_childpg = page;
+	}
+	//@Override
+	public void setRenderingResult(String result) {
+		_renderResult = result;
+	}
+
+	//@Override
+	public void onPageAttached(Page newpage, Page oldpage) {
+		if (newpage != null)
+			Events.postEvent("onAfterCompose", this, null);
+		super.onPageAttached(newpage, oldpage);
+	}
+	public void onAfterCompose() {
+		if (!_afterComposed)
+			afterCompose();
 	}
 
 	//AfterCompose//
@@ -316,16 +430,26 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map old = setupDynams(exec);
-			try {
-				final int j = _src.indexOf('?');
-				exec.createComponents(j >= 0 ? _src.substring(0, j): _src, this, null);
-					//TODO: convert query string to arg
-			} finally {
-				restoreDynams(exec, old);
+			final String attrRenderedKey = ATTR_RENDERED+'$'+getUuid(); 
+			final String oldSrc  = (String) exec.getAttribute(attrRenderedKey);
+			if (!Objects.equals(oldSrc, _src)) {
+				try {
+					getChildren().clear();
+					final int j = _src.indexOf('?');
+					exec.createComponents(j >= 0 ? _src.substring(0, j) : _src,
+							this, _dynams);
+					// TODO: convert query string to arg
+					exec.setAttribute(attrRenderedKey, _src);
+				} finally {
+					restoreDynams(exec, old);
+				}
 			}
+		} else {
+			// just in case
+			getChildren().clear();
 		}
 	}
-	private final Execution getExecution() {
+	private Execution getExecution() {
 		final Desktop desktop = getDesktop();
 		return desktop != null ? desktop.getExecution(): Executions.getCurrent();
 	}
@@ -360,7 +484,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		_dynams.put(name, value);
 	}
 	/** Removes all dynamic properties.
-	 * @since 3.6.4
+	 * @since 5.0.1
 	 */
 	public void clearDynamicProperties() {
 		_dynams = null;
@@ -368,18 +492,17 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 
 	//-- Component --//
 	/** Invalidates this component.
-	 * Notice that all children will be detached and the page will be
-	 * reloaded (and new children will be created).
+	 * It works for both the instant and defer mode.
+	 * Notice that all children will be detached (the instant mode) and
+	 * the page will be reloaded (and new children will be created).
 	 */
 	public void invalidate() {
 		super.invalidate();
 			//invalidate is redudant in instant mode, but less memory leak in IE
-
-		if (_instantMode && _afterComposed) {
-			getChildren().clear();
-			afterCompose();
-		}
-
+		
+		// see the comment inside applyChangesToContent();
+		applyChangesToContent();
+		
 		if (_progressStatus >= 2) _progressStatus = 0;
 		checkProgressing();
 	}
@@ -388,59 +511,86 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	private void checkProgressing() {
 		if(_progressing && _progressStatus == 0) {
 			_progressStatus = 1;
-			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT), true);
+			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT));
 			Events.echoEvent("onEchoInclude", this, null);
 		}
 	}
 
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return _instantMode;
 	}
-	public void redraw(Writer out) throws IOException {
-		if (_instantMode && _afterComposed) { //afterCompose might not be called if it is created manually
-			drawTagBegin(out);
-			for (Component c = getFirstChild(); c != null; c = c.getNextSibling())
-				c.redraw(out);
-			drawTagEnd(out);
-			return; //done
-		}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		setChildPage(null);
+		render(renderer, "comment", _comment);
+
+		if (_instantMode &&_afterComposed)
+			return; //instant mode (done by redrawChildren())
 
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
-		ueng.pushOwner(this);
+		Component old = ueng.setOwner(this);
 		try {
-			drawTagBegin(out);
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
-				include(out);
+				final StringBuffer incsb;
+				{
+					final StringWriter sw = new StringWriter();
+					include(sw);
+					incsb = sw.getBuffer();
+				}
+
+				//Don't output sw directly if getChildPage() is not null
+				//Otherwise, script of the included zul page will be evaluated
+				//first (since it is part of rc.temp)
+
+				boolean done = false;
+				if (getChildPage() == null //only able to handle non-ZUL page
+				&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
+					final HtmlPageRenders.RenderContext rc =
+						HtmlPageRenders.getRenderContext(null);
+					if (rc != null && !rc.included) { //Use z$ea only if not included
+						final Writer cwout = rc.temp;
+						cwout.write("<div id=\"");
+						cwout.write(getUuid());
+						cwout.write("\" style=\"display:none\">");
+						if (_comment)
+							cwout.write("\n<!--\n");
+						Files.write(cwout, incsb);
+						if (_comment)
+							cwout.write("\n-->\n");
+						cwout.write("</div>");
+
+						renderer.render("z$ea", "content");
+						done = true;
+					}
+				}
+				if (!done) {
+					renderer.render("content", incsb.toString());
+					if (_renderResult != null && _renderResult.length() > 0)
+						renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
+				}
 			}
-			drawTagEnd(out);
 		} finally {
-			ueng.popOwner();
+			_renderResult = null;
+			ueng.setOwner(old);
 		}
-	}
-	private void drawTagBegin(Writer out) throws IOException {
-		out.write("<div id=\"");
-		out.write(getUuid());
-		out.write('"');
-		out.write(getOuterAttrs());
-		out.write(getInnerAttrs());
-		out.write(">\n");
-	}
-	private void drawTagEnd(Writer out) throws IOException {
-		out.write("\n</div>");
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();
 		final Execution exec = getExecution();
 		final String src = exec.toAbsoluteURI(_src, false);
 		final Map old = setupDynams(exec);
+		ComponentRedraws.beforeRedraw(true); //starting a new page
 		try {
 			exec.include(out, src, null, 0);
 		} catch (Throwable err) {
+			setChildPage(null);
 		//though DHtmlLayoutServlet handles exception, we still have to
 		//handle it because src might not be ZUML
 			final String errpg =
@@ -469,6 +619,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			exec.include(out,
 				"~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
 		} finally {
+			ComponentRedraws.afterRedraw();
 			restoreDynams(exec, old);
 		}
 	}
@@ -502,7 +653,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	}
 	private static String getDefaultMode() {
 		if (_defMode == null)
-			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "defer");
+			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "auto");
 		return _defMode;
 	}
 	private static String _defMode;

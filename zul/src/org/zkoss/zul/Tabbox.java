@@ -1,18 +1,16 @@
 /* Tabbox.java
 
-{{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 10:42:31     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -30,19 +28,18 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A tabbox.
- * 
+ *
  * <p>
  * Event:
  * <ol>
  * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes the tab.</li>
  * </ol>
- * 
+ *
  * <p>
  * Mold:
  * <dl>
@@ -51,12 +48,12 @@ import org.zkoss.zul.impl.XulElement;
  * <dt>accordion</dt>
  * <dd>The accordion tabbox.</dd>
  * </dl>
- * 
+ *
  * <p>{@link Toolbar} only works in the horizontal default mold and
  * the {@link #isTabscroll()} to be true. (since 3.6.3)
  *  
  * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
- * 
+ *
  * @author tomyeh
  */
 public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
@@ -73,7 +70,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	public Tabbox() {
 		init();
 	}
-	
+
 	private void init() {
 		_listener = new Listener();
 	}
@@ -121,7 +118,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return getTabpanels();
 	}
 	/**
-	 * Returns whether the tab scrolling is enabled. 
+	 * Returns whether the tab scrolling is enabled.
 	 * Default: true.
 	 * @since 3.5.0
 	 */
@@ -130,13 +127,14 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 
 	/**
-	 * Sets whether to eable the tab scrolling
+	 * Sets whether to enable the tab scrolling.
+	 * When enabled, if tab list is wider than tab bar, left, right arrow will appear.
 	 * @since 3.5.0
 	 */
 	public void setTabscroll(boolean tabscroll) {
 		if (_tabscroll != tabscroll) {
 			_tabscroll = tabscroll;
-			invalidate();
+			smartUpdate("tabscroll", _tabscroll);
 		}
 	}
 
@@ -160,7 +158,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 		if (!Objects.equals(_panelSpacing, panelSpacing)) {
 			_panelSpacing = panelSpacing;
-			invalidate();
+			smartUpdate("panelSpacing", _panelSpacing);
 		}
 	}
 
@@ -171,7 +169,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return _seltab != null ? _seltab.getIndex() : -1;
 	}
 
-	/***
+	/**
 	 * Sets the selected index.
 	 */
 	public void setSelectedIndex(int j) {
@@ -208,7 +206,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 	/**
 	 * Sets the selected tab panel.
-	 * @param panelApi assume as a {@link org.zkoss.zul.Tabpanel}   
+	 * @param panelApi assume as a {@link org.zkoss.zul.Tabpanel}
 	 * @since 3.5.2
 	 */
 	public void setSelectedPanelApi(org.zkoss.zul.api.Tabpanel panelApi) {
@@ -235,10 +233,10 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	public void setSelectedTab(Tab tab) {
 		selectTabDirectly(tab, false);
 	}
-	
+
 	/**
-	 * Sets the selected tab.	 
-	 * @param tabApi assume as a {@link org.zkoss.zul.Tab}   
+	 * Sets the selected tab.
+	 * @param tabApi assume as a {@link org.zkoss.zul.Tab}
 	 * @since 3.5.2
 	 */
 	public void setSelectedTabApi(org.zkoss.zul.api.Tab tabApi) {
@@ -259,16 +257,16 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				smartUpdate("z.sel", _seltab.getUuid());
+				smartUpdate("selectedTab", _seltab.getUuid());
 		}
 	}
 
 	/**
 	 * Returns the orient.
-	 * 
+	 *
 	 * <p>
 	 * Default: "horizontal".
-	 * 
+	 *
 	 * <p>
 	 * Note: only the default mold supports it (not supported if accordion).
 	 */
@@ -277,41 +275,41 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 	/**
 	 * Sets the mold.
-	 * 
-	 * @param mold default , accordion and accordion-lite 
-	 *            
+	 *
+	 * @param mold default , accordion and accordion-lite
+	 *
 	 */
 	public void setMold(String mold){
 		if (isVertical()){
 			if (mold.startsWith("accordion")){
 				throw new WrongValueException("Unsupported vertical orient in mold : "+mold);
 			}else{
-				super.setMold(mold);				
+				super.setMold(mold);
 			}
 		}else{
-			super.setMold(mold);			
+			super.setMold(mold);
 		}
 	}
 	/**
 	 * Sets the orient.
-	 * 
+	 *
 	 * @param orient
 	 *            either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
-			throw new WrongValueException(orient);
+			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 
 	/**
 	 * Returns whether it is a horizontal tabbox.
-	 * 
+	 *
 	 * @since 3.0.3
 	 */
 	public boolean isHorizontal() {
@@ -320,7 +318,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 	/**
 	 * Returns whether it is a vertical tabbox.
-	 * 
+	 *
 	 * @since 3.0.3
 	 */
 	public boolean isVertical() {
@@ -331,37 +329,8 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return  _zclass == null ? "z-tabbox" + (inAccordionMold() ? "-" + getMold() : isVertical() ? "-ver" : "") :
 			_zclass;
 	}
-	
-	/**
-	 * @deprecated As of release 3.5.2
-	 */
-	public String getTabLook() {		
-		String scls = getZclass();		
-		if ("vertical".equals(_orient)){
-			String postfix = "-v";
-			return scls != null ? scls + postfix: postfix;
-		}else{
-			return scls;
-		}
-		
-	}
 
 	// -- Component --//
-	/**
-	 * Auto-creates {@link Tabpanel} and select one of tabs if necessary.
-	 */
-	public void onCreate() {
-		if (_tabs != null) {
-			final int sz = _tabs.getChildren().size();
-			if (_tabpanels == null)
-				insertBefore(new Tabpanels(), null);
-			for (int n = _tabpanels.getChildren().size(); n < sz; ++n)
-				_tabpanels.insertBefore(new Tabpanel(), null);
-			if (sz > 0 && _seltab == null)
-				setSelectedTab((Tab) _tabs.getFirstChild());
-		}
-	}
-
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Toolbar) {
 			if (_toolbar != null && _toolbar != child)
@@ -390,19 +359,16 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 				}
 
 				addTabsListeners();
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else if (child instanceof Tabpanels) {
 			if (super.insertBefore(child, refChild)) {
 				_tabpanels = (Tabpanels) child;
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else if (child instanceof Toolbar) {
 			if (super.insertBefore(child, refChild)) {
 				_toolbar = (Toolbar) child;
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else {
@@ -443,27 +409,6 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 				tab.addEventListener(Events.ON_SELECT, _listener);
 			}
 		}
-	}
-
-	// -- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_RIGHT_CLICK);
-		// no z.dbclk/z.lfclk since it is covered by both Tab and Tabpanel
-
-		if (isVertical())
-			HTMLs.appendAttribute(sb, "z.orient", "v");
-		if (_tabs != null && !inAccordionMold())
-			HTMLs.appendAttribute(sb, "z.tabs", _tabs.getUuid());
-		if (!inAccordionMold() && _tabscroll) {
-			HTMLs.appendAttribute(sb, "z.tabscrl", _tabscroll);
-			if (_toolbar != null)
-				HTMLs.appendAttribute(sb, "z.toolbar", _toolbar.getUuid());
-		}
-		 if (inAccordionMold())
-			HTMLs.appendAttribute(sb, "z.accd", true);
-		return sb.toString();
 	}
 
 	// Cloneable//
@@ -523,24 +468,6 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		afterUnmarshal(-1);
 	}
 
-	// -- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-
-	/**
-	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
-	 * component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements
-			ChildChangedAware {
-		// ChildChangedAware//
-		public boolean isChildChangedAware() {
-			return !inAccordionMold();
-			// we have to adjust the width of last cell
-		}
-	}
-
 	private class Listener implements EventListener, Deferrable {
 		public void onEvent(Event event) {
 			Events.sendEvent(Tabbox.this, event);
@@ -549,5 +476,15 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		public boolean isDeferrable() {
 			return !Events.isListened(Tabbox.this, Events.ON_SELECT, true);
 		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_panelSpacing != null )
+			render(renderer, "panelSpacing", _panelSpacing);
+		if (!"horizontal".equals(_orient))
+			render(renderer, "orient", _orient);
+		if (!_tabscroll)
+			renderer.render("tabscroll", _tabscroll);
 	}
 }

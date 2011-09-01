@@ -1,18 +1,16 @@
 /* ResourceCache.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 08:59:12     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -131,10 +129,19 @@ public class ResourceCache extends CacheMap {
 
 		//load it
 		try {
+			boolean cache;
 			final Info ri = new Info(src);
-			final Object resource = ri.getResource();
+			Object resource = ri.getResource();
+
+			if (resource instanceof Loader.Resource) {
+				final Loader.Resource lr = (Loader.Resource)resource;
+				resource = lr.resource;
+				cache = lr.cacheable;
+			} else
+				cache = resource != null;
+
 			synchronized (this) {
-				if (resource != null) {
+				if (cache) {
 					super.put(src, ri);
 				} else {
 					super.remove(src); //remove lock

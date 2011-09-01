@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3292545.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 28 16:41:07 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<html><![CDATA[
+		<ol>
+			<li>Check all of number are the same.</li>
+			<li>Except latest five elements, they will less 2px.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		void doInit(Component comp) {
+			Div div = new Div();
+			div.setHflex("1");
+			div.appendChild(new Label("0"));
+			div.setWidgetListener("onBind", "this.firstChild.setValue(jq(this).width());");
+			comp.appendChild(div);
+		}
+	]]></zscript>
+	<vlayout>
+		<hlayout onCreate="doInit(self);"><combobox mold="rounded" width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><bandbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><datebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><spinner width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><timebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublespinner  mold="rounded" width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><textbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><decimalbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><intbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublebox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><longbox width="300px" mold="rounded"/></hlayout>
+		<hlayout onCreate="doInit(self);"><combobox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><bandbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><datebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><spinner width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><timebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublespinner  width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><textbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><decimalbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><intbox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><doublebox width="300px"/></hlayout>
+		<hlayout onCreate="doInit(self);"><longbox width="300px"/></hlayout>
+	</vlayout>
+</zk>

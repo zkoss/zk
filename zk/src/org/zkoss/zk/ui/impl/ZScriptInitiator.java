@@ -1,18 +1,16 @@
 /* ZScriptInitiator.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu May 25 10:50:36     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,8 +21,8 @@ import java.util.Map;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 
 /**
  * An initiator used to evaluate a zscript file.
@@ -42,12 +40,12 @@ public class ZScriptInitiator implements Initiator {
 		_zscript = script;
 	}
 	public void doInit(Page page, Map args) throws Exception {
-		final Namespace ns = Namespaces.beforeInterpret(page);
+		final Scope scope = Scopes.beforeInterpret(page);
 		try {
 			page.interpret(
-				_zscript.getLanguage(), _zscript.getContent(page, null), ns);
+				_zscript.getLanguage(), _zscript.getContent(page, null), scope);
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 	}
 	public void doAfterCompose(Page page) throws Exception {

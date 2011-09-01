@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3190987.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Mar  6 14:54:27     2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "add" button.</li>
+			<li>The content of the tabbox shall be "new".</li>
+			<li>The "old" shall be hided.</li>
+		</ol>
+	]]></html>
+	<button label="add">
+		<attribute name="onClick"><![CDATA[
+			Tab tab = new Tab("Tab");
+			tab.setSelected(true);
+			tabs.insertBefore(tab, tabs.getFirstChild());
+			Tabpanel panel = new Tabpanel();
+			new Label("new").setParent(panel);
+			tabpanels.insertBefore(panel, tabpanels.getFirstChild());
+		]]></attribute>
+	</button>
+	<tabbox id="tabbox">
+		<tabs id="tabs">
+			<tab label="tab" />
+		</tabs>
+		<tabpanels id="tabpanels">
+			<tabpanel>old</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
+
+

@@ -1,0 +1,14 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Click the focus button</li>
+	<li>Check the checkbox shall be focus</li>
+</ol>
+]]>
+</html>
+	<zk>
+		<checkbox id="cb"/>
+		<button label="focus" onClick="cb.focus();"/>
+	</zk>
+</zk>

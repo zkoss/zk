@@ -1,18 +1,16 @@
 /* InterpreterServlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Sep  5 17:06:34     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -96,7 +94,7 @@ public class InterpreterServlet extends HttpServlet {
 					try {
 						url = _ctx.getResource(name);
 						if (bClsRes && url == null)
-							url = ClassWebResource.getResource(name);
+							url = ClassWebResource.getClassResource(name);
 					} catch (java.net.MalformedURLException ex) { //eat it
 					}
 				}
@@ -105,7 +103,7 @@ public class InterpreterServlet extends HttpServlet {
 			public InputStream getResourceAsStream(String name) {
 				InputStream is = _ctx.getResourceAsStream(name);
 				return !bClsRes || is != null ? is:
-					ClassWebResource.getResourceAsStream(name);
+					ClassWebResource.getClassResourceAsStream(name);
 			}
 		};
 

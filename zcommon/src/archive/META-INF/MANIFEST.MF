@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: Potix Common Library
-Specification-Version: 3.6.5
+Specification-Version: 5.0.8
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss
-Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 3.6.5
+Implementation-URL: http://www.zkoss.org/prj/zcommon
+Implementation-Version: 5.0.8
 Implementation-Vendor: Potix Corporation

@@ -1,0 +1,18 @@
+<test tags="B30-1773652.zul">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	abc.zs doesn't exist and it shall show up a more readable message, For example:
+	<separator/>
+	org.zkoss.zk.ui.UiException: File not found: abc.zs, at ...
+	<separator/>
+	<iframe id="frameid" src="/test2/B30-1773652_1.zul" width="500px" height="500px"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			selectFrame(frameid);
+			verifyTrue( getHtmlSource().toLowerCase().contains("file not found") && getHtmlSource().toLowerCase().contains("abc.zs"));
+		]]></client>
+	</case>
+</test>

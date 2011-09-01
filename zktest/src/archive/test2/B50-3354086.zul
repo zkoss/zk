@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B50-3354086.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Jul 13 14:25:12 TST 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+	
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk>
+<zscript><![CDATA[ 
+     //prepare the example persons List
+     	import org.zkoss.zktest.test.Person;
+     	import org.zkoss.zul.event.ListDataListener;	
+     
+		int count = 5;
+		List persons = new ArrayList();
+		for(int j= 0; j < count; ++j) {
+			Person personx = new Person("Tom"+j,"Hanks"+j);
+			persons.add(personx);
+		}
+		
+			
+		class SimpleListModel implements ListModel{
+			private List _list;
+			SimpleListModel(List list){
+				_list = list;
+			}
+			public Object getElementAt(int index){
+				return _list.get(index);
+			}
+			public int getSize(){
+				return _list.size();
+			}
+			public void addListDataListener(ListDataListener l){}
+			public void removeListDataListener(ListDataListener l){} 			
+		}
+	
+		SimpleListModel personLM = new SimpleListModel(persons);
+     ]]>
+ 	</zscript>
+	<separator/>
+	Should see a selectable listbox, no exception thrown
+	<separator/>
+	<listbox mold="select" model="@{personLM}"/>
+</zk>

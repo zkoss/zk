@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3297287.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May  6 17:50:54 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window>
+Please upload the image to check each upload button works well.
+<vlayout>
+<label id="lab"/>
+<button label="Upload 1" upload="true,maxsize=-1" onUpload="myProcessUpload(event.getMedia())" />
+<fileupload label="Upload 2" upload="true,maxsize=-1" onUpload="myProcessUpload(event.getMedia())" />
+
+<button label="Upload fail 1" upload="maxsize=-1,true" onUpload="myProcessUpload(event.getMedia())" />
+<fileupload label="Upload fail 2" upload="maxsize=-1" onUpload="myProcessUpload(event.getMedia())" />
+</vlayout>
+<zscript><![CDATA[
+
+void myProcessUpload(org.zkoss.image.AImage media) throws Exception {
+lab.setValue("myProcessUpload " + media.getName());
+}
+]]></zscript>
+</window>
+</zk>

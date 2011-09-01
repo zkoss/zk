@@ -1,18 +1,16 @@
 /* ExtendletLoader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed May 28 17:01:32     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -32,6 +30,9 @@ import org.zkoss.util.resource.Loader;
  * All you have to do is to implement {@link #parse}
  * and {@link #getExtendletContext}.
  *
+ * <p>If the real path is not the same as the path specified in URL,
+ * you can override {@link #getRealPath}.
+ *
  * @author tomyeh
  * @see Extendlet
  * @since 3.0.6
@@ -43,6 +44,23 @@ abstract public class ExtendletLoader implements Loader {
 
 	protected ExtendletLoader() {
 		_checkPeriod = getInitCheckPeriod();
+	}
+
+	/** Returns the real path for the specified path.
+	 *
+	 * <p>Default: return path, i.e., the path specified in URL is
+	 * the real path.
+	 *
+	 * <p>Notice that {@link #parse} will receive the original path
+	 * (rather than the returned path).
+	 *
+	 * @param path the path specified in URL.
+	 * Notice that it does NOT start with "~./". Rather it starts with
+	 * "/". For example, "/zul/css/zk.wcs".
+	 * @since 5.0.0
+	 */
+	protected String getRealPath(String path) {
+		return path;
 	}
 
 	//Loader//
@@ -57,14 +75,17 @@ abstract public class ExtendletLoader implements Loader {
 
 		try {
 			final URL url = getExtendletContext().getResource((String)src);
-			return url != null ? url.openConnection().getLastModified(): -1;
+			if (url != null) {
+				final long v = url.openConnection().getLastModified();
+				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+			}
 		} catch (Throwable ex) {
-			return -1; //reload
 		}
+		return -1; //reload (might be removed)
 	}
 	public Object load(Object src) throws Exception {
 //		if (D.ON && log.debugable()) log.debug("Parse "+src);
-		final String path = (String)src;
+		final String path = getRealPath((String)src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
 			//Due to Web server might cache the result, we use URL if possible
@@ -84,14 +105,9 @@ abstract public class ExtendletLoader implements Loader {
 		}
 
 		try {
-			return parse(is, path);
-		} catch (Exception ex) {
-			if (log.debugable())
-				log.realCauseBriefly("Failed to parse "+path, ex);
-			else
-				log.error("Failed to parse "+path
-				+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-				+"\n"+Exceptions.getBriefStackTrace(ex));
+			return parse(is, path, (String)src);
+		} catch (Throwable ex) {
+			log.realCauseBriefly("Failed to parse "+src, ex);
 			return null; //as non-existent
 		} finally {
 			Files.close(is);
@@ -101,10 +117,21 @@ abstract public class ExtendletLoader implements Loader {
 	/** It is called to parse the resource into an intermediate format
 	 * depending on {@link Extendlet}.
 	 *
+	 * <p>The object is returned directly by {@link #load}, so
+	 * you can return an instance of org.zkoss.util.resource.Loader.Resource
+	 * to have more control on {@link org.zkoss.util.resource.ResourceCache}.
+	 *
 	 * @param is the content of the resource
-	 * @param path the path of the resource
+	 * @param path the path of the resource.
+	 * It is the value returned by {@link #getRealPath}, so called
+	 * the real path
+	 * @param orgpath the original path.
+	 * It is the path passed to the <code>path</code> argument
+	 * of {@link #getRealPath}. It is useful if you want to retrieve
+	 * the additional information encoded into the URI.
+	 * @since 5.0.0
 	 */
-	abstract protected Object parse(InputStream is, String path)
+	abstract protected Object parse(InputStream is, String path, String orgpath)
 	throws Exception;
 	/** Returns the extendlet context.
 	 */

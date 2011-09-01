@@ -1,0 +1,21 @@
+<test tags="B50-2942150.zul,A,E,Combobox,IE">
+	<case id="closed">
+		<server>
+			<!--
+				<window title="" border="normal">
+						Please click the combobox in IE, the dropdown list can't be shown.
+					<combobox id="cb" disabled="true" readonly="true">
+						<comboitem label="A"></comboitem>
+						<comboitem label="B"></comboitem>
+						<comboitem label="C"></comboitem>
+						<comboitem label="D"></comboitem>
+					</combobox>
+				</window>
+			-->
+		</server>
+		<client>	<![CDATA[
+   				click(cb.$n("btn"));            				
+				verifyFalse(jq(".z-combobox-pp").exists());
+			]]></client>
+	</case>
+</test>

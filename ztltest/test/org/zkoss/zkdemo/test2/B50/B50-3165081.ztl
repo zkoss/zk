@@ -1,0 +1,54 @@
+<!-- B50-3165081.ztl.java
+
+	Purpose:for testing B50-3165081.ztl .
+
+	Description:
+
+	History:
+		05, 18, 2011 20:44:17
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3165081.zul,A,E,Splitter">
+	<case id="ztl">
+		<server><!--
+			
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Try to drag all 4 splitters, you should not be able to move any of them.</li>
+		</ol>
+	]]></html>
+	<hbox width="200px" height="200px">
+		<splitter id="s1"/>
+		Content
+		<splitter id="s2"/>
+	</hbox>
+	<vbox width="200px" height="200px">
+		<splitter id="s3"/>
+		Content
+		<splitter id="s4"/>
+	</vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				int s1l = getElementPositionLeft(s1).intValue();
+				int s2l = getElementPositionLeft(s2).intValue();
+				int s3t = getElementPositionTop(s3).intValue();
+				int s4t = getElementPositionTop(s4).intValue();
+				dragdropTo(s1,"0,0","30,0");
+				dragdropTo(s2,"0,0","30,0");
+				dragdropTo(s3,"0,0","0,30");
+				dragdropTo(s4,"0,0","0,30");
+				verifyEquals(s1l,getElementPositionLeft(s1).intValue());
+				verifyEquals(s2l,getElementPositionLeft(s2).intValue());
+				verifyEquals(s3t,getElementPositionTop(s3).intValue());
+				verifyEquals(s4t,getElementPositionTop(s4).intValue());
+		]]></client>
+	</case>
+</test>

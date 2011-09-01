@@ -1,0 +1,31 @@
+<test tags="B50-3353121.zul,A,E,Tabbox,Grid,Hflex,Vflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+<div height="30px" style="border: 1px solid green">The height in this Div will affect the height error on the inner Grid.</div>
+<tabbox hflex="min" vflex="min">
+<tabs>
+<tab label="Tab One" />
+</tabs>
+<tabpanels hflex="min" vflex="min">
+<tabpanel hflex="min" vflex="min">
+<grid hflex="min" vflex="min">
+<columns>
+<column hflex="min" />
+</columns>
+<rows>
+<row>
+<label value="Top East" />
+</row>
+</rows>
+</grid>
+</tabpanel>
+</tabpanels>
+</tabbox>
+</zk>
+--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

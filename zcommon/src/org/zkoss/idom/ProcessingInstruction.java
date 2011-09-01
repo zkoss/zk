@@ -1,17 +1,15 @@
 /* ProcessingInstruction.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/22 20:53:28, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -64,11 +62,9 @@ implements org.w3c.dom.ProcessingInstruction {
 		return _target;
 	}
 	public final void setTarget(String target) {
-		checkWritable();
 		if (!Objects.equals(_target, target)) {
 			Verifier.checkPITarget(target, getLocator());
 			_target = target;
-			setModified();
 		}
 	}
 
@@ -76,15 +72,10 @@ implements org.w3c.dom.ProcessingInstruction {
 		return _rawData;
 	}
 	public final void setData(String data) {
-		checkWritable();
-
 		if (data == null)
 			data = "";
 
-		if (!Objects.equals(_rawData, data)) {
-			_rawData = data;
-			setModified();
-		}
+		_rawData = data;
 	}
 	/** Returns the parsed data in the form of Map (never null).
 	 */

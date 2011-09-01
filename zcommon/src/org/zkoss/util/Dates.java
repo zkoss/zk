@@ -1,18 +1,16 @@
 /*	Dates.java
 
-{{IS_NOTE
 
 	Purpose:
 	Description:
 	History:
 		2001/12/3, Henri Chen: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -515,5 +513,14 @@ public class Dates {
 		dateCal.set(Calendar.MILLISECOND, msillisecond);
 		
 		return dateCal.getTime();
+	}
+	/**
+	 * Returns the timezone offset.
+	 * @param timezone The time zone.
+	 * @param date
+	 * @return long
+	 */
+	public static final long getTimezoneOffset(TimeZone timezone, Date date) {
+		return timezone.getRawOffset() + (timezone.inDaylightTime(date) ? timezone.getDSTSavings(): 0);
 	}
 }

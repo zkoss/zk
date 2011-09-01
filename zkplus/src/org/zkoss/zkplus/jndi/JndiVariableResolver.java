@@ -23,10 +23,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
+import org.zkoss.zkplus.cdi.DelegatingVariableResolver;
 
 /**
  * JndiVariableResolver, a jndi variableResolver 
@@ -142,4 +144,13 @@ public class JndiVariableResolver implements VariableResolver {
 		return obj;
 	}
 
+	public int hashCode() {
+		return Objects.hashCode(_jndiMapping) + Objects.hashCode(_jndiPrepend);
+	}
+
+	public boolean equals(Object obj) {
+		return this == obj || (obj instanceof JndiVariableResolver 
+				&& Objects.equals(_jndiMapping, ((JndiVariableResolver) obj)._jndiMapping)
+				&& Objects.equals(_jndiPrepend, ((JndiVariableResolver) obj)._jndiPrepend));
+	}
 }

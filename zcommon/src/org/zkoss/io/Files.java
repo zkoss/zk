@@ -1,18 +1,16 @@
 /* Files.java
 
-{{IS_NOTE
 
 	Purpose: File related utilities.
 	Description:
 	History:
 	 2001/6/29, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,10 +29,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.util.ArraysX;
+import org.zkoss.util.Locales;
 
 /**
  * File related utilities.
@@ -210,6 +210,10 @@ public class Files {
 	 * @see #copy(File, File, int)
 	 */
 	public static int CP_OVERWRITE = 0x0004;
+	/** Skips the SVN related files.
+	 * @since 5.0.0
+	 */
+	public static int CP_SKIP_SVN = 0x1000;
 
 	/** Copies a file or a directory into another.
 	 *
@@ -274,6 +278,9 @@ public class Files {
 	/** Assumes both dst and src is a directory. */
 	private static final void copyDir(File dst, File src, int flags)
 	throws IOException {
+		if ((flags & CP_SKIP_SVN) != 0 && ".svn".equals(src.getName()))
+			return; //skip
+
 		assert D.OFF || src.isDirectory();
 		final File[] srcs = src.listFiles();
 		for (int j = 0; j < srcs.length; ++j) {
@@ -314,6 +321,192 @@ public class Files {
 			} catch (IOException ex) { //ignore it
 //				System.out.println("Unable to close a reader");
 			}
+		}
+	}
+	/** Close an output stream without throwing an exception.
+	 * @since 5.0.4
+	 */
+	public static final void close(OutputStream strm) {
+		if (strm != null) {
+			try {
+				strm.close();
+			} catch (IOException ex) { //ignore it
+//				System.out.println("Unable to close an output stream");
+			}
+		}
+	}
+	/** Close a writer without throwing an exception.
+	 * @since 5.0.4
+	 */
+	public static final void close(Writer writer) {
+		if (writer != null) {
+			try {
+				writer.close();
+			} catch (IOException ex) { //ignore it
+//				System.out.println("Unable to close a writer");
+			}
+		}
+	}
+
+	/** Normalizes the catenation of two paths.
+	 *
+	 * @param parentPath the parent's path
+	 * @param childPath the child's path
+	 * If it starts with "/", parentPath is ignored.
+	 * @since 5.0.0
+	 */
+	public static final String normalize(String parentPath, String childPath) {
+		if (childPath == null || childPath.length() == 0)
+			return normalize(parentPath);
+		if ((parentPath == null || parentPath.length() == 0)
+		|| childPath.charAt(0) == '/')
+			return normalize(childPath);
+		if (parentPath.charAt(parentPath.length() - 1) == '/')
+			return normalize(parentPath + childPath);
+		return normalize(parentPath + '/' + childPath);
+	}
+	/**
+	 * Normalizes the specified path.
+	 * It removes consecutive slahses, ending slahes,
+	 * redudant . and ...
+	 * <p>Unlike {@link File}, {@link #normalize} always assumes
+	 * the separator to be '/', and it cannot handle the device prefix
+	 * (e.g., c:). However, it handles //.
+	 *
+	 * @param path the path to normalize. If null, an empty string is returned.
+	 * @since 5.0.0
+	 */
+	public static final String normalize(String path) {
+		if (path == null)
+			return "";
+
+		//remove consecutive slashes
+		final StringBuffer sb = new StringBuffer(path);
+		boolean slash = false;
+		for (int j = 0, len = sb.length(); j < len; ++j) {
+			final boolean curslash = sb.charAt(j) == '/';
+			if (curslash && slash && j != 1) {
+				sb.deleteCharAt(j);
+				--j; --len;
+			}
+			slash = curslash;
+		}
+
+		if (sb.length() > 1 && slash) //remove ending slash except "/"
+			sb.setLength(sb.length() - 1);
+
+		//remove ./
+		while (sb.length() >= 2 && sb.charAt(0) == '.' && sb.charAt(1) == '/')
+			sb.delete(0, 2); // "./" -> ""
+
+		//remove /./
+		for (int j = 0; (j = sb.indexOf( "/./", j)) >= 0;)
+			sb.delete(j + 1, j + 3); // "/./" -> "/"
+
+		//ends with "/."
+		int len = sb.length();
+		if (len >= 2 && sb.charAt(len - 1) == '.' && sb.charAt(len - 2) == '/')
+			if (len == 2) return "/";
+			else sb.delete(len - 2, len);
+
+		//remove /../
+		for (int j = 0; (j = sb.indexOf("/../", j)) >= 0;)
+			j = removeDotDot(sb, j);
+
+		// ends with "/.."
+		len = sb.length();
+		if (len >= 3 && sb.charAt(len - 1) == '.' && sb.charAt(len - 2) == '.'
+		&& sb.charAt(len - 3) == '/') 
+			if (len == 3) return "/";
+			else removeDotDot(sb, len - 3);
+
+		return sb.length() == path.length() ? path: sb.toString();
+	}
+	/** Removes "/..".
+	 * @param j points '/' in "/.."
+	 * @return the next index to search from
+	 */
+	private static int removeDotDot(StringBuffer sb, int j) {
+		int k = j;
+		while (--k >= 0 && sb.charAt(k) != '/') 
+			;
+
+		if (k + 3 == j && sb.charAt(k + 1) == '.' && sb.charAt(k + 2) == '.')
+			return j + 4; // don't touch: "../.."
+
+		sb.delete(j, j + 3); // "/.." -> ""
+
+		if (j == 0) // "/.."
+			return 0;
+
+		if (k < 0) { // "a/+" => kill "a/", "a" => kill a
+			sb.delete(0, j < sb.length() ? j + 1: j);
+			return 0;
+		}
+
+		// "/a/+" => kill "/a", "/a" => kill "a"
+		if (j >= sb.length()) ++k;
+		sb.delete(k, j);
+		return k;
+	}
+
+	/** Writes the specified string buffer to the specified writer.
+	 * Use this method instead of out.write(sb.toString()), if sb.length()
+	 * is large.
+	 * @since 5.0.0
+	 */
+	public static final void write(Writer out, StringBuffer sb)
+	throws IOException {
+		//Don't convert sb to String to save the memory use
+		for (int j = 0, len = sb.length(); j < len; ++j)
+			out.write(sb.charAt(j));
+	}
+
+	/** Locates a file based o the current Locale. It never returns null.
+	 *
+	 * <p>If the filename contains "*", it will be replaced with a proper Locale.
+	 * For example, if the current Locale is zh_TW and the resource is
+	 * named "ab*.cd", then it searches "ab_zh_TW.cd", "ab_zh.cd" and
+	 * then "ab.cd", until any of them is found.
+	 *
+	 * <blockquote>Note: "*" must be right before ".", or the last character.
+	 * For example, "ab*.cd" and "ab*" are both correct, while
+	 * "ab*cd" and "ab*\/cd" are ignored.</blockquote>
+	 *
+	 * <p>Unlike {@link org.zkoss.util.resource.Locators#locate}, the filename
+	 * must contain '*', while {@link org.zkoss.util.resource.Locators#locate}
+	 * always tries to locate the file by
+	 * inserting the locale before '.'. In other words,
+	 * Files.locate("/a/b*.c") is similar to
+	 * Locators.locate(("/a/b.c", null, a_file_locator);
+	 *
+	 * @param flnm the filename to locate. If it doesn't contain any '*',
+	 * it is returned directly. If the file is not found, flnm is returned, too.
+	 * @see Locales#getCurrent
+	 * @since 5.0.0
+	 */
+	public static final String locate(String flnm) {
+		int j = flnm.indexOf('*');
+		if (j < 0) return flnm;
+
+		final String postfix = flnm.substring(j + 1);
+		final Locale locale = Locales.getCurrent();
+		final String[] secs = new String[] {
+			locale.getLanguage(), locale.getCountry(), locale.getVariant()
+		};
+
+		final StringBuffer sb = new StringBuffer(flnm.substring(0, j));
+		final int prefixlen = sb.length();
+		for (j = secs.length;;) {
+			if (--j >= 0 && secs[j].length() == 0)
+				continue;
+
+			sb.setLength(prefixlen);
+			for (int k = 0; k <= j; ++k)
+				sb.append('_').append(secs[k]);
+			sb.append(postfix);
+			flnm = sb.toString();
+			if (j < 0 || new File(flnm).exists()) return flnm;
 		}
 	}
 }

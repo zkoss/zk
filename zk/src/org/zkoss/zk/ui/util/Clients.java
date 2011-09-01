@@ -1,18 +1,16 @@
 /* Clients.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri May 26 14:25:06     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,17 +19,11 @@ package org.zkoss.zk.ui.util;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.io.InputStream;
-import java.io.IOException;
-
-import org.zkoss.util.Locales;
-import org.zkoss.io.Files;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.fn.DspFns;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.*;
 
@@ -45,28 +37,16 @@ import org.zkoss.zk.au.out.*;
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
 public class Clients {
-	/** Sends an AU response ({@link AuResponse})to the client
-	 * with response's command ({@link AuResponse#getCommand}) as the key.
-	 *
-	 * <p>Since response's command is used as the key, so the second
-	 * invocation of this method with a response that has the same command
-	 * will override the previous one. For example, the first one will be
-	 * ignored since both have the same command.
-	 * <pre><code>
-	 *	response(new AuShowBusy("this will have no effect", true));
-	 *	response(new AuShowBusy(null, false));</code></pre>
-	 *
-	 * <p>If this is an issue, use {@link #response(String, AuResponse)}
-	 * instead.
+	/** Sends an AU response ({@link AuResponse}) to the client.
+	 * It is the same as <code>response(response.getOverrideKey(), response)</code>.
 	 *
 	 * @since 3.0.0
 	 */
 	public static final void response(AuResponse response) {
-		Executions.getCurrent()
-			.addAuResponse(response.getCommand(), response);
+		Executions.getCurrent().addAuResponse(response);
 	}
 	/** Sends an AU response ({@link AuResponse}) to the client
-	 * with the specified key.
+	 * with the given key (instead of {@link AuResponse#getOverrideKey}).
 	 *
 	 * @param key could be anything. The second invocation of this method
 	 * in the same execution with the same key will override the previous one.
@@ -74,6 +54,7 @@ public class Clients {
 	 * If null is specified, the response is simply appended to the end
 	 * without overriding any previous one.
 	 * @since 3.0.4
+	 * @see #response
 	 */
 	public static final void response(String key, AuResponse response) {
 		Executions.getCurrent().addAuResponse(key, response);
@@ -94,26 +75,69 @@ public class Clients {
 		response(new AuConfirmClose(mesg));
 	}
 
-	/** Closes the error box at the browser belonging to
-	 * the specified component, if any.
+	/** Shows an error message at the browser.
+	 * It is similar to {@link org.zkoss.zul.Messagebox}.
+	 * @since 5.0.3
 	 */
-	public static final void closeErrorBox(Component owner) {
-		response(new AuCloseErrorBox(owner));
+	public static final void alert(String msg) {
+		response(new AuAlert(msg));
+	}
+	/** Shows an error message at the browser.
+	 * It is similar to {@link org.zkoss.zul.Messagebox}.
+	 * @param msg the message to display.
+	 * @param title the title of the message box
+	 * @param icon the icon to show. It could null,
+	 "QUESTION", "EXCLAMATION", "INFORMATION", "ERROR", "NONE".
+	 * If null, "ERROR" is assumed
+	 * @since 5.0.3
+	 */
+	public static final void alert(String msg, String title, String icon) {
+		response(new AuAlert(msg, title, icon));
+	}
+	/** Shows an error message for the specified component, if any,
+	 * at the browser.
+	 * <p>You have to clear the error message manually with {@link #clearWrongValue}.
+	 * @since 5.0.0
+	 */
+	public static final void wrongValue(Component comp, String msg) {
+		response(new AuWrongValue(comp, msg));
+	}
+	/** Closes the error message of the specified component, if any,
+	 * at the browser.
+	 * @since 5.0.0
+	 */
+	public static final void clearWrongValue(Component comp) {
+		response(new AuClearWrongValue(comp));
 	}
 	
-	/** Closes all the error boxes at the browser belonging to
-	 * the specified list of components, if any.
-	 * @since 3.6.0
+	/** Closes the error message of the specified components, if any,
+	 * at the browser.
+	 * @since 5.0.0
+	 */
+	public static final void clearWrongValue(List comps) {
+		response(new AuClearWrongValue(comps)); //append, not overwrite
+	}
+	/** Closes the error message of the specified components, if any,
+	 * at the browser.
+	 * @since 5.0.0
+	 */
+	public static final void clearWrongValue(Component[] comps) {
+		response(new AuClearWrongValue(comps)); //append, not overwrite
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component)}.
+	 */
+	public static final void closeErrorBox(Component comp) {
+		clearWrongValue(comp);
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(List)}.
 	 */
 	public static final void closeErrorBox(List comps) {
-		response(new AuCloseErrorBox(comps));
+		clearWrongValue(comps);
 	}
-	/** Closes all the error boxes at the browser belonging to
-	 * the specified array of components, if any.
-	 * @since 3.6.1
+	/** @deprecated As of release 5.0.0, replaced with {@link #clearWrongValue(Component[])}.
 	 */
 	public static final void closeErrorBox(Component[] comps) {
-		response(new AuCloseErrorBox(comps));
+		clearWrongValue(comps);
 	}
 	
 	/** Submits the form with the specified ID.
@@ -195,19 +219,81 @@ public class Clients {
 		response(new AuScript(null, javaScript));
 	}
 
-	/** Asks the browser to show the busy message such that
+	/** Shows the busy message at the brower such that
 	 * the user knows the system is busy.
 	 *
 	 * <p>It is usually used with {@link org.zkoss.zk.ui.event.Events#echoEvent}
 	 * to prevent the user to click another buttons or components.
 	 *
+	 * <p>To cover only a particular component, use {@link #showBusy(Component, String)}.
+	 * To close, use {@link #clearBusy()}.
+	 *
 	 * @param msg the message to show. If null, the default message (processing)
-	 * is shown. It is ignored if the open argument is false.
-	 * @param open whether to open or to close the busy message.
-	 * @since 3.0.2
+	 * is shown.
+	 * @see #clearBusy()
+	 * @since 5.0.0
+	 */
+	public static final void showBusy(String msg) {
+		response(new AuShowBusy(msg));
+	}
+	/** Cleans the busy message at the browser.
+	 * @see #showBusy(String)
+	 * @since 5.0.0
+	 */
+	public static final void clearBusy() {
+		response(new AuClearBusy());
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #showBusy(String)}
+	 * and {@link #clearBusy()}.
 	 */
 	public static final void showBusy(String msg, boolean open) {
-		response(new AuShowBusy(msg, open));
+		if (open) showBusy(msg);
+		else clearBusy();
+	}
+	/** Shows the busy message at the browser that covers only the specified
+	 * component.
+	 * It is used to denote a portion of the desktop is busy, and
+	 * the user still can access the other part.
+	 * In other words, it means there is a long operation taking place.
+	 * <p>To execute a long operation asynchronously, the developer can use
+	 * a working thread,
+	 * or use {@link org.zkoss.zk.ui.event.EventQueue#subscribe(org.zkoss.zk.ui.event.EventListener,boolean)}.
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Patterns/Long_Operations">Long Operations</a>
+	 *
+	 * @param comp the component that the busy message to cover.
+	 * Ignored if null. Notice that if the component is not found,
+	 * the busy message won't be shown. In additions, the busy message
+	 * is removed automatically if the component is detached later.
+	 * To manually remove the busy message, use {@link #clearBusy(Component)}
+	 * @param msg the message to show. If null, the default message (processing)
+	 * is shown.
+	 * @see #clearBusy(Component)
+	 * @since 5.0.0
+	 */
+	public static final void showBusy(Component comp, String msg) {
+		response(new AuShowBusy(comp, msg));
+	}
+	/** Clears the busy message at the browser that covers only the specified
+	 * component.
+	 * @param comp the component that the busy message to cover.
+	 * @see #showBusy(Component, String)
+	 * @since 5.0.0
+	 */
+	public static final void clearBusy(Component comp) {
+		response(new AuClearBusy(comp));
+	}
+
+	/** Forces the client to re-calculate the size of the given component.
+	 * For better performance, ZK Client Engine will cache the size of
+	 * components with hflex=min or vflex=min, and recalculate it only
+	 * necessary. However, sometimes it is hard (too costly) to know
+	 * if the size of a component with flex=min is changed. For example,
+	 * If another component is added to it and causes the size changed.
+	 * In this case, you could use this method to enforce the re-calculation.
+	 * @since 5.0.8
+	 */
+	public static final void resize(Component comp) {
+		response(new AuResizeWidget(comp));
 	}
 
 	/** Reloads the client-side messages in the specified locale.
@@ -221,35 +307,21 @@ public class Clients {
 	 * and ZUL components. It does not reload messages loaded by your
 	 * own JavaScript codes.
 	 *
-	 * @param locale the locale. If null, {@link Locales#getCurrent}
+	 * @param locale the locale. If null, {@link org.zkoss.util.Locales#getCurrent}
 	 * is assumed.
+	 * @exception UnsupportedOperationException if the device is not ajax.
 	 * @since 3.6.3
 	 */
 	public static final void reloadMessages(Locale locale)
-	throws IOException {
-		if (locale == null)
-			locale = Locales.getCurrent();
-
-		final StringBuffer sb = new StringBuffer(4096);
-		final Locale oldl = Locales.setThreadLocal(locale);
-		try {
-			final Execution exec = Executions.getCurrent();
-			sb.append(loadJS(exec, "~./js/zk/html/lang/mesg*.js"));
-			sb.append(DspFns.outLocaleJavaScript());
-			sb.append(loadJS(exec, "~./js/zul/lang/msgzul*.js"));
-		} finally {
-			Locales.setThreadLocal(oldl);
-		}
-		response(new AuScript(null, sb.toString()));
+	throws java.io.IOException {
+		Executions.getCurrent().getDesktop().getDevice().reloadMessages(locale);
 	}
-	private static String loadJS(Execution exec, String path)
-	throws IOException {
-		path = exec.locate(path);
-		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
-		if (is == null)
-			throw new UiException("Unable to load "+path);
-		final byte[] bs = Files.readAll(is);
-		Files.close(is);
-		return new String(bs, "UTF-8"); //UTF-8 is assumed
+
+	/** Logs the message to the client.
+	 *  <p>data[0]: the title
+	 * @since 5.0.8
+	 */
+	public static final void log(String msg) {
+		response(new AuLog(msg));
 	}
 }

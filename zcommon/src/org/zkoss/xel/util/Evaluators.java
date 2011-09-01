@@ -1,18 +1,16 @@
 /* Evaluators.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Sep 14 12:24:23     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -33,6 +31,9 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 
 /**
  * It mapps a name with an evaluator implementation.
@@ -175,5 +176,51 @@ public class Evaluators {
 		it.hasNext();) {
 			add((Element)it.next());
 		}
+	}
+
+	/** Resolves the variable based on the the specified context and
+	 * variable resolver.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(XelContext ctx,
+	VariableResolver resolver, Object base, Object name) {
+		if (resolver instanceof VariableResolverX) {
+			if (ctx == null)
+				ctx = new SimpleXelContext(resolver);
+			return  ((VariableResolverX)resolver).resolveVariable(ctx, base, name);
+		} else if (resolver != null && base == null && name != null)
+			return resolver.resolveVariable(name.toString());
+		return null;
+	}
+	/** Resolves the variable based on the specified context.
+	 * If the variable resolver ({@link XelContext#getVariableResolver}
+	 * is an instance of {@link VariableResolverX}, then
+	 * {@link VariableResolverX#resolveVariable(XelContext,Object,Object)}
+	 * will be invoked.
+	 * @param ctx the context. If null, null will be returned.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(XelContext ctx, Object base, Object name) {
+		if (ctx != null) {
+			VariableResolver resolver = ctx.getVariableResolver();
+			if (resolver instanceof VariableResolverX)
+				return  ((VariableResolverX)resolver).resolveVariable(ctx, base, name);
+			else if (resolver != null && base == null && name != null)
+				return resolver.resolveVariable(name.toString());
+		}
+		return null;
+	}
+	/** Resolves the variable based on the specified resolver.
+	 * If the resolver is an instance of {@link VariableResolverX}, then
+	 * {@link VariableResolverX#resolveVariable(XelContext,Object,Object)}
+	 * will be invoked.
+	 * <p>Notice that it is always better to invoke {@link #resolveVariable(XelContext,Object,Object)}
+	 * if {@link XelContext} is available.
+	 * @param resolver the variable resolver. If null, null will be returned.
+	 * @since 5.0.0
+	 */
+	public static Object resolveVariable(VariableResolver resolver, String name) {
+		return resolver != null ?
+			resolveVariable(new SimpleXelContext(resolver), null, name): null;
 	}
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+html.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>HTML</h4>
+		<p>Develper can embed a section of .html code inside the .zul page 
+		by using the html component.</p>
+		<p>The "content" attribute of the html component is where the .html 
+		code resides.</p>
+		<p>Using the special &lt;h:xxx&gt; tag, html code can be mixed in the component elements.</p>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk xmlns:h="xhtml" xmlns:zk="zk">
+	<html>
+		<attribute name="content" >
+		This is a shopping &lt;font color=red&gt;Cart&lt;/font&gt;
+		</attribute>
+	</html>
+	<h:table border="1">
+		<h:tr>
+			<h:td>Drinks</h:td>
+			<h:td>
+				<listbox id="list" mold="select">
+					<listitem selected="true" label="----" />
+					<listitem label="Coke" />
+					<listitem label="Sprite" />
+					<listitem label="Fanta" />
+				</listbox>
+			</h:td>
+			<h:td>
+				<h:ul id="ul">
+					<h:li>Nestle Coffee</h:li>
+					<h:li>Evian Water</h:li>
+				</h:ul>
+				<h:input type="button" value="Add Item"
+					zk:onClick="addItem()" />
+			</h:td>
+		</h:tr>
+	</h:table>
+	<zscript>
+		import org.zkoss.zhtml.Li;
+		import org.zkoss.zhtml.Text;
+		void addItem() {
+			if ("----".equals(list.getSelectedItem().getLabel())) {
+				alert("Please select one item.");
+				return;
+			}
+			Li li = new Li();
+			li.setParent(ul);
+			new Text(list.getSelectedItem() == null ? "Null" :
+					list.getSelectedItem().getLabel() ).setParent(li);
+		}
+	</zscript>
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

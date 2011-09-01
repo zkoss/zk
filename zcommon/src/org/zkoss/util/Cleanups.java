@@ -7,7 +7,7 @@
 	History:
 		Fri Mar 12 11:55:59 TST 2010, Created by tomyeh
 
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 */
 package org.zkoss.util;
@@ -34,7 +34,7 @@ import org.zkoss.util.logging.Log;
  * is stopping</p>.
  *
  * @author tomyeh
- * @since 5.0.2
+ * @since 3.6.5
  */
 public class Cleanups {
 	private static final Log log = Log.lookup(Cleanups.class);
@@ -83,7 +83,7 @@ public class Cleanups {
 	}
 	/** The interface to implement for each cleanup.
 	 * It is used with {@link Cleanups#add}.
-	 * @since 5.0.2
+	 * @since 3.6.5
 	 */
 	public static interface Cleanup {
 		/** Cleanups the thread local variables.

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3152268.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Jan 30 17:21:10 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<menupopup id="menupopup">
+		<attribute name="onOpen"><![CDATA[
+			if (!event.isOpen()) return;
+			DefaultTreeNode node = (DefaultTreeNode) tree.getSelectedItem().getValue();
+			addItem.setVisible(!node.isLeaf());
+		]]></attribute>
+		<menuitem id="addItem" label="add" onClick='node.add(new DefaultTreeNode(new FileInfo("new treeitem " + index++, "new treeitem " + index)));'/>
+		<menuitem label="insert before">
+			<attribute name="onClick"><![CDATA[
+				DefaultTreeNode p = node.getParent();
+				p.insert(new DefaultTreeNode(new FileInfo("new treeitem " + index++, "new treeitem " + index)), p.getIndex(node));
+			]]></attribute>
+		</menuitem>
+		<menuitem label="insert after">
+			<attribute name="onClick"><![CDATA[
+				DefaultTreeNode p = node.getParent();
+				p.insert(new DefaultTreeNode(new FileInfo("new treeitem " + index++, "new treeitem " + index)), p.getIndex(node) + 1);
+			]]></attribute>
+		</menuitem>
+		<menuitem label="update" onClick='node.setData(new FileInfo("update treeitem " + index++, "update treeitem " + index));'/>
+		<menuitem label="remove" onClick="node.removeFromParent();"/>
+	</menupopup>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		public class FileInfo {
+		    public String path;
+		    public String description;
+		    public FileInfo(String path, String description) {
+		   	    this.path = path;
+		   	    this.description = description;
+		    }
+		}
+		
+		public class FiledInfoRenderer implements TreeitemRenderer {
+			public void render(Treeitem item, Object data) throws Exception {
+				FileInfo fi = (FileInfo) ((DefaultTreeNode)data).getData();
+				Treerow tr;
+				if (item.getTreerow()==null) {
+					tr = new Treerow();
+					tr.setParent(item);
+				} else {
+					tr = item.getTreerow();
+					tr.getChildren().clear();
+				}
+				tr.appendChild(new Treecell(fi.path));
+				tr.appendChild(new Treecell(fi.description));
+				item.setValue(data);
+				item.setContext(menupopup);
+			}
+		}
+		TreeitemRenderer render = new FiledInfoRenderer();
+		
+		import org.zkoss.util.CollectionsX;
+		
+		TreeModel model = new DefaultTreeModel(
+		  new DefaultTreeNode(null,
+		    new DefaultTreeNode[] {
+		      new DefaultTreeNode(new FileInfo("/doc", "Release and License Notes")),
+		      new DefaultTreeNode(new FileInfo("/dist", "Distribution"),
+		        new DefaultTreeNode[] {
+		          new DefaultTreeNode(new FileInfo("/lib", "ZK Libraries"),
+		            new DefaultTreeNode[] {
+		              new DefaultTreeNode(new FileInfo("zcommon.jar", "ZK Common Library")),
+		              new DefaultTreeNode(new FileInfo("zk.jar", "ZK Core Library"))
+		            }),
+		          new DefaultTreeNode(new FileInfo("/src", "Source Code")),
+		          new DefaultTreeNode(new FileInfo("/xsd", "XSD Files"))
+		        })
+		      }
+		  ));
+		int index = 0;
+	]]></zscript>
+	<tree id="tree" model="${model}" itemRenderer="${render}">
+	    <treecols>
+	        <treecol label="Path"/>
+	        <treecol label="Description"/>
+	    </treecols>
+	</tree>
+</zk>

@@ -19,6 +19,7 @@ package org.zkoss.zkplus.seasar;
 import org.seasar.framework.container.ComponentNotFoundRuntimeException;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 
 /**
@@ -32,7 +33,7 @@ import org.zkoss.xel.VariableResolver;
  * 
  * in your zul file:<br/>
  * <code>&lt;?variable-resolver class="org.zkoss.zkplus.seasar.DelegatingVariableResolver"?&gt;</code>
- *
+ * <p>Applicable to Sesar Framework version 2.4 or later</p>
  * @author Dennis.Chen
  * @since 3.0.0
  */
@@ -53,5 +54,13 @@ public class DelegatingVariableResolver implements VariableResolver {
 			}
 		}
 		return null;
+	}
+	
+	public int hashCode() {
+		return Objects.hashCode(getClass());
+	}
+	
+	public boolean equals(Object obj) {
+		return this == obj || (obj instanceof DelegatingVariableResolver && getClass() == obj.getClass());
 	}
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3192194.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 25 15:14:38 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please click the button "show current selection", you should see the dialog "[David]"
+<separator/>
+1. Please select the item("Steven") and click the button "show current selection", you should see the dialog "[Steven]"
+<separator/>
+<combobox id="combobox" width="100px">
+		<attribute name="onCreate"><![CDATA[
+			List list2 = new ArrayList();
+			list2.add("David");
+			list2.add("Thomas");
+			list2.add("Steven");
+			ListModelList lm2 = new ListModelList(list2);
+			lm2.addSelection(lm2.get(0));
+			combobox.setModel(lm2);
+		]]></attribute>
+	</combobox>
+	<button label="show current selection" onClick="alert(combobox.getModel().getSelection())"/>
+</zk>

@@ -1,0 +1,38 @@
+<test tags="B50-3025674.zul,clients">
+	<case id="reloadMessages">
+		<server id="zul"><![CDATA[
+			<zk>
+				<vbox>
+					<listbox id="selectList" rows="1" mold="select">
+						<listhead id="listhead" >
+							<listheader label="column1"/>
+						</listhead>
+						<auxhead id="auxhead" >
+							<auxheader label="test"/>
+						</auxhead>
+						<listitem>
+							<listcell label="cell 1"></listcell>
+						</listitem>
+						<listitem>
+							<listcell label="cell 2"></listcell>
+						</listitem>
+						<listitem>
+							<listcell label="cell 3"></listcell>
+						</listitem>
+					</listbox>	
+				</vbox>
+				<label id="msg" style="color: red;" xmlns:w="http://www.zkoss.org/2005/zk/client">
+					<attribute w:name="onBind">
+						var listhead = jq('.z-listhead')[0],
+							auxhead = jq('.z-auxhead')[0];
+						if (listhead || auxhead)
+							this.setValue("Listbox should not render Listhead when mold is select");
+					</attribute>
+				</label>
+			</zk>
+		]]></server>
+		<client><![CDATA[
+			verifyEquals(msg.get("value"), "");
+		]]></client>
+	</case>
+</test>

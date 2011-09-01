@@ -1,18 +1,16 @@
 /* Image.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jul 18 20:57:18     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,15 +34,11 @@ import org.zkoss.zul.impl.Utils;
 /**
  * An image.
  *
- * <p>Note: IE 5.5/6 (not 7) has a bug that failed to render PNG with
- * alpha transparency. See http://homepage.ntlworld.com/bobosola/index.htm for details.
- * Thus, if you want to display such image, you have to use the alphafix mold.
- * <code>&lt;image mold="alphafix"/&gt;</code>
- *
+ * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Customization/Alphafix_for_IE6">how to fix the alpha transparency problem of PNG files found in IE6?</a>
  * @author tomyeh
  */
 public class Image extends XulElement implements org.zkoss.zul.api.Image{
-	private String _align, _border, _hspace, _vspace;
+	private String _align, _hspace, _vspace;
 	private String _src;
 	/** The image. _src and _image cannot be nonnull at the same time.  */
 	private org.zkoss.image.Image _image;
@@ -81,22 +75,15 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			smartUpdate("align", _align);
 		}
 	}
-	/** Returns the width of the border.
-	 * <p>Default: null (use browser default).
+	/** 
+	 * @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public String getBorder() {
-		return _border;
+		return null;
 	}
-	/** Sets the width of the border.
+	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public void setBorder(String border) {
-		if (border != null && border.length() == 0)
-			border = null;
-
-		if (!Objects.equals(_border, border)) {
-			_border = border;
-			smartUpdate("border", _border);
-		}
 	}
 	/** Returns number of pixels of extra space to the left and right
 	 * side of the image.
@@ -160,7 +147,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_image = null;
-			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
+			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
 	/** Sets the content directly.
@@ -178,7 +165,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			_image = image;
 			_src = null;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
+			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
 	/** Sets the content directly with the rendered image.
@@ -252,7 +239,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
+			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -271,7 +258,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
+			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.
@@ -293,62 +280,29 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 		}
 	}
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		final String clkattrs = getAllOnClickAttrs();
-		final boolean bHover = _hoversrc != null || _hoverimg != null;
-		final boolean bAlphafix = alphafix();
-		if (!bAlphafix && !bHover)
-			return clkattrs == null ? attrs: attrs + clkattrs;
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		//Request 1522329
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		if (clkattrs != null) sb.append(clkattrs);
-		if (bAlphafix)
-			sb.append(" z.alpha=\"true\"");
-		if (bHover)
-			HTMLs.appendAttribute(sb, "z.hvig", getEncodedHoverURL());
-		return sb.toString();
+		render(renderer, "src", getEncodedURL());
+		if (_hoversrc != null || _hoverimg != null)
+			render(renderer, "hover", getEncodedHoverURL());
+		render(renderer, "align", _align);
+		render(renderer, "hspace", _hspace);
+		render(renderer, "vspace", _vspace);
 	}
-	/** Tests whether to apply Request 1522329.
-	 * To limit the side effect, enable it only if mold is alphafix (and IE6).
-	 */
-	private boolean alphafix() {
-		if ("alphafix".equals(getMold())) {
-			final Desktop dt = getDesktop();
-			if (dt != null) {
-				final Execution exec = dt.getExecution();
-				return exec != null && exec.isExplorer() && !exec.isExplorer7();
-			}
-		}
-		return false;		
-	}
-	public String getInnerAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getInnerAttrs());
-		HTMLs.appendAttribute(sb, "align",  _align);
-		HTMLs.appendAttribute(sb, "border",  _border);
-		HTMLs.appendAttribute(sb, "hspace",  _hspace);
-		HTMLs.appendAttribute(sb, "vspace",  _vspace);
-		HTMLs.appendAttribute(sb, "src",  getEncodedURL());
-		return sb.toString();
-	}
+
 
 	//-- Component --//
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
-	}
-	public void smartUpdate(String attr, String value) {
-		//Request 1522329: to simplify the client, we always invalidate if alphafix
-		if (alphafix()) invalidate();
-		else super.smartUpdate(attr, value);
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
@@ -371,12 +325,12 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	}
 
 	private class EncodedURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedURL();
 		}
 	}
 	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedHoverURL();
 		}
 	}

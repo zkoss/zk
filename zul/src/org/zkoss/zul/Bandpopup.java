@@ -27,6 +27,8 @@ import org.zkoss.zul.impl.XulElement;
  * {@link Bandbox} and then creates proper components as children
  * of this component.
  *
+ * <p>z-class: z-bandpopup
+ *
  * @author tomyeh
  */
 public class Bandpopup extends XulElement implements org.zkoss.zul.api.Bandpopup {
@@ -35,7 +37,7 @@ public class Bandpopup extends XulElement implements org.zkoss.zul.api.Bandpopup
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-band-popup" : _zclass;
+		return _zclass == null ? "z-bandpopup" : _zclass;
 	}
 
 	public boolean setVisible(boolean visible) {

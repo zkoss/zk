@@ -1,0 +1,21 @@
+<zk>
+<html><![CDATA[
+<ul>
+<li>Click the open icon of the B node, and you shall be able to close and open it freely.</li>
+</ul>
+]]></html>
+
+<tree>
+	<treechildren>
+		<treeitem label="A">
+		</treeitem>
+		<treeitem disabled="true">
+			<treerow label="B"/>
+			<treechildren>
+				<treeitem label="C"/>
+				<treeitem label="D"/>
+			</treechildren>
+		</treeitem>
+	</treechildren>
+</tree>
+</zk>

@@ -1,18 +1,16 @@
 /* Tabs.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jul 12 10:43:14     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,7 +19,7 @@ package org.zkoss.zul;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -37,7 +35,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
-	
 	private String _align = "start";
 	/** Returns the tabbox owns this component.
 	 * <p>It is the same as {@link #getParent}.
@@ -54,25 +51,22 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 	}
 	public String getWidth() {
 		String width = super.getWidth();
-		if (getTabbox().isVertical()){
-			if (width == null) width = "50px";
-		}
+		Tabbox tabbox = getTabbox();
+		if (width == null && tabbox != null && tabbox.isVertical())
+			width = "50px";
 		return width;
 	}
 	
 	/** Returns the alignment of tab.
-	 *(not supported in mold accordion and version 3.5)
-	 * <p>Default: "start".
-	 *
-	 * <p>Note: only the default mold supports it (not supported in mold accordion and version 3.5).
-	 * 
+	 * Reserved for future extension; not supported yet.
 	 * @since 3.0.0
 	 */
 	public String getAlign() {
 		return _align;
 	}
 	/** Sets the alignment of tab.
-	 * (not supported in mold accordion and version 3.5)
+	 * Reserved for future extension; not supported yet.
+	 * <p>Default: "start".
 	 * @param align must be "start" or "center" or "end".
 	 * @since 3.0.0
 	 */
@@ -82,18 +76,16 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			Tabbox tabbox = getTabbox();
-			if(!tabbox.inAccordionMold()){
-				//getTabbox().invalidate();
-				invalidate();				
-			}
+			smartUpdate("align", _align);
 		}
 	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null && tabbox.isTabscroll() ? getZclass() +  "-scroll" : "";
-		return scls != null && scls.length() > 0 ? scls + " " + added : added;
+	
+	public void invalidate() {
+		Tabbox tbox = getTabbox();
+		if (tbox != null && tbox.isVertical())
+			tbox.invalidate();
+		else
+			super.invalidate();
 	}
 	public String getZclass() {
 		if (_zclass != null) return _zclass;
@@ -107,13 +99,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
 	}
-	public void setParent(Component parent) {
-		final Tabbox oldp = (Tabbox)getParent();
-		super.setParent(parent);
-
-		invalidateIfAccordion(oldp);
-		invalidateIfAccordion((Tabbox)parent);
-	}
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tab))
 			throw new UiException("Unsupported child for tabs: "+child);
@@ -121,7 +106,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 	}
 	public boolean insertBefore(Component child, Component refChild) {
 		boolean sel = getChildren().isEmpty(), desel = false;
-		if (sel) invalidate();
 		final Tab newtab = (Tab)child;
 		if (!sel && newtab.isSelected()) {
 			newtab.setSelectedDirectly(false);	//turn off first
@@ -145,8 +129,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 							}
 						}
 				}
-
-			invalidateIfAccordion(tabbox);
 			return true;
 		}
 		return false;
@@ -164,38 +146,13 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
 			((Tab)child).addEventListener(Events.ON_SELECT, tabbox._listener);
-		//
-		if (tabbox == null || !tabbox.inAccordionMold())
-			smartUpdate("z.initscroll", true); //fixWidth
 	}
-	public void invalidate() {
-		Tabbox tabbox = getTabbox();
-		if (tabbox != null && tabbox.isVertical()) {
-			
-			// Bug 2313445 for vtabs2.dsp, it needs to put a div outside root div 
-			// to show the separator bar.
-			tabbox.invalidate();		
-		} else {
-			super.invalidate();
-		}
-	}
-	/** Invalidates the tabbox if it is accordion.
-	 */
-	private static void invalidateIfAccordion(Tabbox tabbox) {
-		if (tabbox != null && tabbox.inAccordionMold())
-			tabbox.invalidate();
-	}
-	
-	//-- super --//
-	public String getOuterAttrs() {
-		Tabbox tabbox = getTabbox();
-		if(!tabbox.inAccordionMold()){
-			final StringBuffer sb =
-				new StringBuffer(64).append(super.getOuterAttrs());
-			if (!"start".equals(_align))
-				HTMLs.appendAttribute(sb, "z.align", _align.substring(0,1));
-			return sb.toString();
-		}
-		return super.getOuterAttrs();
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (!"start".equals(_align))
+			render(renderer, "align", _align);
 	}
 }

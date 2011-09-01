@@ -1,18 +1,16 @@
 /* Box.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 22 09:27:29     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -79,7 +77,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * Sets the spacing between adjacent children.
 	 * 
 	 * @param spacing
-	 *            the spacing (such as "0", "5px", "3pt" or "1em"), or null to
+	 *            the spacing (such as "0", "5px", "3pt" or "1em"), or null/empty/"auto" to
 	 *            use the default spacing
 	 * @see #getSpacing
 	 */
@@ -185,6 +183,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getWidths();
 
@@ -200,6 +199,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getHeights();
 
@@ -222,6 +222,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * Another example, ",,30%" means the third cell shall occupy 30% width, and
 	 * the rest of cells don't specify any width. Of course, the real widths
 	 * depend on the interpretation of the browser.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setWidths(String widths) throws WrongValueException;
 
@@ -231,7 +232,25 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * It is the same as {@link #setWidths}.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setHeights(String heights) throws WrongValueException;
-
+	/**
+	 * Sets whether sizing the cell's size by its content.
+	 * <p>Default: true. It means the cell's size is depended on its content.
+	 * 
+	 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
+	 * for resizing smoothly
+	 * @param byContent 
+	 * @since 5.0.4
+	 */
+	public void setSizedByContent(boolean byContent);
+	
+	/**
+	 * Returns whether sizing the cell's size by its content.
+	 * <p>Default: true.
+	 * @since 5.0.4
+	 * @see #setSizedByContent
+	 */
+	public boolean isSizedByContent();
 }

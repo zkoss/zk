@@ -1,18 +1,16 @@
 /* Listitem.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jun 15 17:38:52     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,17 +18,18 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 
+import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A list item.
  *
- * <p>Default {@link #getZclass}: z-list-item.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listitem (since 5.0.0)
  *
  * @author tomyeh
  */
@@ -71,14 +70,9 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 	/** Returns whether the HTML's select tag is used.
 	 */
-	private final boolean inSelectMold() {
+	private boolean inSelectMold() {
 		final Listbox listbox = getListbox();
 		return listbox != null && listbox.inSelectMold();
-	}
-	protected String getRealStyle() {
-		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return super.getRealStyle();
-		final Listgroup lg = getListgroup();
-		return super.getRealStyle() + (lg != null && !lg.isOpen() ? "display:none" : "") ;
 	}
 	
 	/**
@@ -99,16 +93,9 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public org.zkoss.zul.api.Listgroup getListgroupApi() {
 		return getListgroup();
 	}
-	protected String getRealSclass() {
-		String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd" : isSelected() ? getZclass() + "-seld" : "";
-		if (this instanceof Listgroup || this instanceof Listgroupfoot || !isVisible()) return scls;
-		final String sclx = (String) getListbox().getAttribute(Attributes.STRIPE_STATE);
-		return scls + (sclx != null ? " " + sclx : "") + " " + added ;
-	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-item" : _zclass;
+		return _zclass == null ? "z-listitem" : _zclass;
 	}
 	/** Returns whether it is checkable.
 	 * <p>Default: true.
@@ -118,13 +105,15 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		return _checkable;
 	}
 	/** Sets whether it is checkable.
+	 * 
+	 * <p>Note that it is only applied when isCheckmark() of Listbox is true.
 	 * <p>Default: true.
 	 * @since 3.0.4
 	 */
 	public void setCheckable(boolean checkable) {
 		if (_checkable != checkable) {
 			_checkable = checkable;
-			invalidate();
+			smartUpdate("checkable", checkable);
 		}
 	}
 	
@@ -163,16 +152,16 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 			final Listbox listbox = getListbox();
 			if (listbox != null)
 				if (listbox.inSelectMold())
-					smartUpdate("value", Objects.toString(_value));
+					smartUpdate("value", _value);
 				else if (listbox.getName() != null)
-					smartUpdate("z.value", Objects.toString(_value));
+					smartUpdate("value", _value);
 		}
 	}
 
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return _disabled;
 	}
 	/** Sets whether it is disabled.
@@ -180,10 +169,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			if (inSelectMold())
-				smartUpdate("disabled", _disabled);
-			else
-				invalidate();
+			smartUpdate("disabled", _disabled);
 		}
 	}
 	/** Returns whether it is selected.
@@ -258,25 +244,20 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 
 	/** Returns the index of this item (aka., the order in the listbox).
 	 */
-	public final int getIndex() {
+	public int getIndex() {
 		return _index;
 	}
 
 	/** Sets whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
 	 */
-	/*package*/ final void setLoaded(boolean loaded) {
+	/*package*/ void setLoaded(boolean loaded) {
 		if (loaded != _loaded) {
 			_loaded = loaded;
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				if (_loaded && !listbox.inPagingMold())
-					invalidate();
-					//reason: the client doesn't init (for better performance)
-					//i.e., z.skipsib is specified for unloaded items
-				else
-					smartUpdate("z.loaded", _loaded);
+				smartUpdate("_loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded.
@@ -290,19 +271,19 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 
 	//-- Utilities for implementation only (called by Listbox) */
-	/*package*/ final void setIndexDirectly(int index) {
+	/*package*/ void setIndexDirectly(int index) {
 		setIndex(index);
 	}
 	
 	protected void setIndex(int index) {
 		_index = index;	
 	}
-	/*package*/ final void setSelectedDirectly(boolean selected) {
+	/*package*/ void setSelectedDirectly(boolean selected) {
 		_selected = selected;
 	}
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
-			smartUpdate("z.visible", visible);
+			smartUpdate("visible", visible);
 			final Listbox listbox = (Listbox) getParent();
 			if (listbox != null) {
 				if (listbox.inSelectMold())
@@ -315,21 +296,49 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		return super.setVisible(visible);
 	}
 
-	public void smartUpdate(String attr, String value) {
+	protected void smartUpdate(String name, Object value) { //make it accessible in this package
 		Listbox box = getListbox();
 		if (isVisible() || box == null || !box.inSelectMold())
-			super.smartUpdate(attr, value);
+			super.smartUpdate(name, value);
 	}
-	public void smartUpdate(String attr, boolean value) {
+	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
 		Listbox box = getListbox();
 		if (isVisible() || box == null || !box.inSelectMold())
-			super.smartUpdate(attr, value);
+			super.smartUpdate(name, value);
 	}
-	public void smartUpdate(String attr, int value) {
+	protected void smartUpdate(String name, int value) {
 		Listbox box = getListbox();
 		if (isVisible() || box == null || !box.inSelectMold())
-			super.smartUpdate(attr, value);
+			super.smartUpdate(name, value);
 	}
+	
+	public String getMold() {
+		return getParent() != null ? "select".equals(getParent().getMold()) ?
+				"select" : super.getMold(): super.getMold();
+	}
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "selected", isSelected());
+		render(renderer, "disabled", isDisabled());
+		render(renderer, "_loaded", _loaded);
+		renderer.render("_index", _index);
+		
+		if (_value instanceof String && getListbox().getName() != null)
+			render(renderer, "value", _value);
+		
+		if (!isCheckable())
+			renderer.render("checkable", false);
+	}
+	
+	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
+		if (oldparent == null || !((Listbox)oldparent).isLoadingModel()) {
+			super.addMoved(oldparent, oldpg, newpg);
+		}
+	}
+	
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
@@ -341,59 +350,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 			throw new UiException("Unsupported child for listitem: "+child);
 		super.beforeChildAdded(child, refChild);
 	}
-	public void invalidate() {
-		if (inSelectMold()) {
-			//Both IE and Mozilla are buggy if we update options by outerHTML
-			getParent().invalidate();
-			return;
-		}
-		super.invalidate();
-	}
-	public void onChildAdded(Component child) {
-		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
-		super.onChildAdded(child);
-	}
-	public void onChildRemoved(Component child) {
-		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
-		super.onChildRemoved(child);
-	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
 
-		if (inSelectMold()) {
-			HTMLs.appendAttribute(sb, "value",  Objects.toString(_value));
-			if (isDisabled())
-				HTMLs.appendAttribute(sb, "disabled",  "disabled");
-			if (isSelected())
-				HTMLs.appendAttribute(sb, "selected", "selected");
-		} else {
-			final Listbox listbox = getListbox();
-			if (listbox != null) {
-				if (listbox.getName() != null)
-					HTMLs.appendAttribute(sb, "z.value",  Objects.toString(_value));
-				if (listbox.getModel() != null) {
-					HTMLs.appendAttribute(sb, "z.loaded", _loaded);
-					if (_loaded && !listbox.inPagingMold()) {
-						final Component c = getNextSibling();
-						if (c instanceof Listitem && !((Listitem)c)._loaded)
-							HTMLs.appendAttribute(sb, "z.skipsib", "true");
-					}
-				}
-			}
-
-			if (isDisabled())
-				HTMLs.appendAttribute(sb, "z.disd", true);
-			if (isSelected())
-				HTMLs.appendAttribute(sb, "z.sel", true);
-
-			final String clkattrs = getAllOnClickAttrs();
-			if (clkattrs != null) sb.append(clkattrs);
-			HTMLs.appendAttribute(sb, "z.rid", getListbox().getUuid());
-			HTMLs.appendAttribute(sb, "z.visible", isVisible());
-		}
-		return sb.toString();
-	}
 	//Clone//
 	public Object clone() {
 		final Listitem clone = (Listitem)super.clone();
@@ -402,4 +359,28 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 			//that a parent-less listitem's index is -1
 		return clone;
 	}
+	
+	//-- ComponentCtrl --//
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements LoadStatus {
+		//-- LoadStatus --//
+		public boolean isLoaded() {
+			return Listitem.this.isLoaded();
+		}
+
+		public void setLoaded(boolean loaded) {
+			Listitem.this.setLoaded(loaded);
+		}
+		
+		public void setIndex(int index) {
+			Listitem.this.setIndex(index);
+		}
+	}
+
 }

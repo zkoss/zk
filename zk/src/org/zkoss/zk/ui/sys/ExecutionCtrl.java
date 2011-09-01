@@ -1,22 +1,23 @@
 /* ExecutionCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun  6 14:36:47     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.sys;
+
+import java.io.Writer;
+import java.util.Collection;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -66,6 +67,12 @@ public interface ExecutionCtrl {
 
 	/** Returns the next event queued by
 	 * {@link org.zkoss.zk.ui.Execution#postEvent}, or null if no event queued.
+	 * <p>Implementation Notes:
+	 * {@link org.zkoss.zk.ui.Execution#postEvent(int,Component,Event)}
+	 * proxies the event with {@link org.zkoss.zk.ui.impl.ProxyEvent}
+	 * if the real target is different from {@link Event#getTarget}.
+	 * Of course, it is transparent to the event listeners since the real
+	 * event will be passed to the listener (rather than the proxy event).
 	 */
 	public Event getNextEvent();
 
@@ -138,12 +145,10 @@ public interface ExecutionCtrl {
 	 */
 	public void addDateHeader(String name, long value);
 
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
+	/** Sets the content type.
+	 * @since 5.0.0
 	 */
-	public Object getRequestAttribute(String name);
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value);
+	public void setContentType(String contentType);
 
 	/** Sets the desktop associated with this execution.
 	 * You rarely need to use this method, since the desktop is associated
@@ -168,4 +173,28 @@ public interface ExecutionCtrl {
 	 * @since 3.0.5
 	 */
 	public String getRequestId();
+
+	/** Returns the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	 * that shall be generated to the output, or null if not available.
+	 * @since 5.0.0
+	 */
+	public Collection getResponses();
+	/** Sets the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	 * that shall be generated to the output.
+	 * @since 5.0.0
+	 */
+	public void setResponses(Collection responses);
+
+	/** Returns the information of the event being served, or null
+	 * if the execution is not under serving an event.
+	 * <p>Unlike most of other methods, this method could be accessed
+	 * by another thread.
+	 * @since 5.0.6
+	 */
+	public ExecutionInfo getExecutionInfo();
+	/** Sets the information of the event being served, or null if not under
+	 * serving an event.
+	 * @since 5.0.6
+	 */
+	public void setExecutionInfo(ExecutionInfo evtinf);
 }

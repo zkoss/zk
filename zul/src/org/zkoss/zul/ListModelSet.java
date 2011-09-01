@@ -17,9 +17,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.lang.Objects;
 
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.List;
 import java.util.SortedSet;
@@ -192,6 +192,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
+		clearSelection();
 		_set.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -232,6 +233,7 @@ implements ListModelExt, Set, java.io.Serializable {
 			}
 			public void remove() {
 				//bug #1819318 Problem while using SortedSet with Databinding
+				ListModelSet.this.removeSelection(_current);
 				if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 					final int index = indexOf(_current);
 					_it.remove();
@@ -248,6 +250,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		boolean ret = false;
 		if (_set.contains(o)) {
 			//bug #1819318 Problem while using SortedSet with Databinding
+			removeSelection(o);
 			if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 				final int index = indexOf(o);
 				ret = _set.remove(o);
@@ -279,6 +282,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 			return removePartial(c, true);
 		} else { //bug #1839634 Problem while using HashSet with Databinding
+			removeAllSelection(c);
 			final boolean ret = _set.removeAll(c);
 			if (ret) {
 				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -295,6 +299,7 @@ implements ListModelExt, Set, java.io.Serializable {
 		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 			return removePartial(c, false);
 		} else { //bug #1839634 Problem while using HashSet with Databinding
+			retainAllSelection(c);
 			final boolean ret = _set.retainAll(c);
 			if (ret) {
 				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -317,6 +322,7 @@ implements ListModelExt, Set, java.io.Serializable {
 					begin = index;
 				}
 				++removed;
+				removeSelection(item);
 				it.remove();
 			} else {
 				++retained;
@@ -358,6 +364,6 @@ implements ListModelExt, Set, java.io.Serializable {
 		Collections.sort(copy, cmpr);
 		_set.clear();
 		_set.addAll(copy);
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 }

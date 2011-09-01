@@ -1,0 +1,39 @@
+<zk>
+Check there shall be only one icon next to "Grouping", and no icon in front of "listgroupfoot"
+
+<listbox width="250px" checkmark="true">
+<listhead sizable="true">
+<listheader label="name" sort="auto" />
+<listheader label="gender" sort="auto" />
+</listhead>
+<listgroup label="Grouping" />
+<listitem >
+<listcell label="testing" />
+<listcell label="listitem" />
+</listitem>
+<listitem>
+<listcell label="John" />
+<listcell label="MALE" />
+</listitem>
+<listitem>
+<listcell label="Jane" />
+<listcell label="FEMALE" />
+</listitem>
+<listitem>
+<listcell label="Henry" />
+<listcell label="MALE" />
+</listitem>
+<listgroupfoot>
+<listcell label="listgroupfoot" />
+<listcell label="listgroupfoot" />
+</listgroupfoot>
+<listfoot>
+<listfooter>
+<label value="This is footer1" />
+</listfooter>
+<listfooter>
+<label value="This is footer2" />
+</listfooter>
+</listfoot>
+</listbox>
+</zk>

@@ -1,0 +1,68 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>All the pagings should work in the following components. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<div id="divA">
+		<grid id="grid1" mold="paging" pageSize="4">
+			<rows>
+				<row>1</row>
+				<row>2</row>
+				<row>3</row>
+				<row>4</row>
+				<row>5</row>
+				<row>6</row>
+				<row>7</row>
+				<row>8</row>
+				<row>9</row>
+				<row>10</row>
+			</rows>
+		</grid>
+	</div>
+	<div id="divB">
+		<listbox id="listbox1" mold="paging" pageSize="4">
+			<listitem><listcell>1</listcell></listitem>
+			<listitem><listcell>2</listcell></listitem>
+			<listitem><listcell>3</listcell></listitem>
+			<listitem><listcell>4</listcell></listitem>
+			<listitem><listcell>5</listcell></listitem>
+			<listitem><listcell>6</listcell></listitem>
+			<listitem><listcell>7</listcell></listitem>
+			<listitem><listcell>8</listcell></listitem>
+			<listitem><listcell>9</listcell></listitem>
+			<listitem><listcell>10</listcell></listitem>
+		</listbox>
+	</div>
+	<div id="divC">
+		<tree id="tree1" mold="paging" pageSize="4">
+			<treechildren>
+				<treeitem><treerow><treecell>1</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>2</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>3</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>4</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>5</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>6</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>7</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>8</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>9</treecell></treerow></treeitem>
+				<treeitem><treerow><treecell>10</treecell></treerow></treeitem>
+			</treechildren>
+		</tree>
+	</div>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.Component;
+		
+		Component clone = grid1.clone();
+		clone.setId("grid2");
+		clone.setParent(divA);
+		
+		clone = listbox1.clone();
+		clone.setId("listbox2");
+		clone.setParent(divB);
+		
+		clone = tree1.clone();
+		clone.setId("tree2");
+		clone.setParent(divC);
+	]]></zscript>
+</zk>

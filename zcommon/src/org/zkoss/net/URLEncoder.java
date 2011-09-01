@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.net;
 
 /**
+ * @deprecated As of release 5.0.5, for simple ZK core.
  * A plugin to allow developer to customize the encoding of URL.
  *
  * <p>By default, java.net.URLEncoder.encode(s, "UTF-8") is used.

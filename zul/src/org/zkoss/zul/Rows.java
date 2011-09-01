@@ -1,38 +1,38 @@
 /* Rows.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct 25 16:02:39     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
 import java.util.AbstractList;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.render.Cropper;
-
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.impl.GroupsListModel;
+import org.zkoss.zul.impl.LoadStatus;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Defines the rows of a grid.
@@ -45,6 +45,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	private int _visibleItemCount;
 	
 	private transient List _groupsInfo, _groups;
+
 	public Rows() {
 		init();
 	}
@@ -58,10 +59,19 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				return new IterGroups();
 			}
 			public Object get(int index) {
-				return getChildren().get(((int[])_groupsInfo.get(index))[0]);
+				final int realIndex = getRealIndex(((int[])_groupsInfo.get(index))[0]);
+				return (realIndex >=0 && realIndex < getChildren().size()) ?
+						getChildren().get(realIndex) : null;
 			}
 		};
 	}
+	
+	private int getRealIndex(int index) {
+		final Grid grid = getGrid();
+		final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0;
+		return index - (offset < 0 ? 0 : offset); 
+	}
+
 	/** Returns the grid that contains this rows.
 	 * <p>It is the same as {@link #getParent}.
 	 */
@@ -110,37 +120,41 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		if (count != 0) {
 			_visibleItemCount += count;
 			final Grid grid = getGrid();
-			if (grid != null && grid.inPagingMold()) {
-				final Paginal pgi = grid.getPaginal();
-				pgi.setTotalSize(_visibleItemCount);
-				if (grid.getModel() != null)
-					grid.invalidate();
-				else invalidate(); // the set of visible items might change
+			if (grid != null) {
+				if (grid.inPagingMold()) {
+					final Paginal pgi = grid.getPaginal();
+					pgi.setTotalSize(grid.getDataLoader().getTotalSize());
+					if (grid.getModel() != null)
+						grid.invalidate();
+					else {
+						invalidate();
+						grid.getDataLoader().updateModelInfo();
+					}
+				} else if (((Cropper)grid.getDataLoader()).isCropper()){
+					invalidate();
+					grid.getDataLoader().updateModelInfo();
+				} else {
+					smartUpdate("visibleItemCount", _visibleItemCount);
+				}
 			}
 		}
 	}
-	/** 
-	 * @deprecated As of release As of release 3.5.1 
-	 */
-	public int getVisibleBegin() {
-		return 0;
-	}
-	/** 
-	 * @deprecated As of release As of release 3.5.1 
-	 */
-	public int getVisibleEnd() {
-		return Integer.MAX_VALUE;
-	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
-		for (Iterator it = getChildren().listIterator(j);
-		it.hasNext() && (to < 0 || j <= to); ++j) {
-			Object o = it.next();
-			if (o instanceof Group) {
-				int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
-				if (g != null) {
-					g[0] = j;
-					if (g[2] != -1) g[2] += (infront ? 1 : -1);
+		int realj = getRealIndex(j);
+		if (realj < 0) {
+			realj = 0;
+		} 
+		if (realj < getChildren().size()) {
+			for (Iterator it = getChildren().listIterator(realj);
+			it.hasNext() && (to < 0 || j <= to); ++j) {
+				Object o = it.next();
+				if (o instanceof Group) {
+					int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
+					if (g != null) {
+						g[0] = j;
+						if (g[2] != -1) g[2] += (infront ? 1 : -1);
+					}
 				}
 			}
 		}
@@ -148,7 +162,14 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	/*package*/ Group getGroup(int index) {
 		if (_groupsInfo.isEmpty()) return null;
 		final int[] g = getGroupsInfoAt(index);
-		if (g != null) return (Group)getChildren().get(g[0]);
+		if (g != null) {
+			final int realIndex = getRealIndex(g[0]); 
+			//if realIndex < 0 means g is half loaded, Group head is not in server
+			if (realIndex >= 0 && realIndex < getChildren().size()) {
+				Row row = (Row) getChildren().get(realIndex);
+				return (Group) row;
+			}
+		}
 		return null;
 	}
 	/*package*/ int[] getGroupsInfoAt(int index) {
@@ -177,10 +198,27 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			int[] g = (int[])it.next();
 			if (isGroup) {
 				if (index == g[0]) return g;
-			} else if ((index > g[0] && index <= g[0] + g[1]))
+			} else if (index > g[0] && index <= (g[0] + g[1]))
 				return g;
 		}
 		return null;
+	}
+	/**
+	 * Returns the last groups index which matches with the same index.
+	 * @param index the row index in Rows.
+	 * @return the associated group index of the row index.
+	 */
+	/*package*/ int getGroupIndex(int index) {
+		int j = 0, gindex = -1;
+		int[] g = null;
+		for (Iterator it = _groupsInfo.iterator(); it.hasNext(); ++j) {
+			g = (int[])it.next();
+			if (index == g[0]) gindex = j;
+			else if (index < g[0]) break;
+		}
+		return gindex != -1 ? gindex : 
+			g != null && index < (g[0]+g[1]) ? (j-1) : 
+			g != null && index == (g[0]+g[1]) && g[2] == -1 ? (j-1) : gindex;
 	}
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
@@ -201,11 +239,39 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+
+	private boolean hasModelButNotROD() {
+		final Grid grid = getGrid();
+		return (!WebApps.getFeature("ee") || !grid.evalRod()) && grid != null && grid.getModel() != null;
+	}
+	
+	private boolean hasGroupsModel() {
+		final Grid grid = getGrid();
+		return grid != null && grid.getModel() instanceof GroupsListModel;
+	}
 	public boolean insertBefore(Component child, Component refChild) {
+		final Grid grid = getGrid();
+		final boolean isReorder = child.getParent() == this;
+		//bug #3051305: Active Page not update when drag & drop item to the end
+		if (isReorder) {
+			checkInvalidateForMoved(child, true);
+		}
+		if (grid != null && grid.isRod() && hasGroupsModel()) {
+			if (_groupsInfo.isEmpty())
+				_groupsInfo = ((GroupsListModel)grid.getModel()).getGroupsInfo();
+			if (super.insertBefore(child, refChild)) {
+				//bug #3049167: Bug in drag & drop demo
+				if (!isReorder) {
+					afterInsert(child);
+				}
+				return true;
+			}
+			return false;
+		}
+		
 		Row newItem = (Row) child;
 		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
 
-		final boolean isReorder = child.getParent() == this;
 		if (newItem instanceof Groupfoot){
 			if (refChild == null) {
 				if (isReorder) {
@@ -237,10 +303,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					}
 				}
 			}							
-		}
-		//bug #3051305: Active Page not update when drag & drop item to the end
-		if (isReorder) {
-			checkInvalidateForMoved(newItem, true);
 		}
 		if (super.insertBefore(child, refChild)) {
 			if(hasGroup()) {
@@ -283,13 +345,13 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]++;
-					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2]++;
+					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2] = g[0] + g[1] - 1;
 				}
 				
 			}
 			
-			//bug #3049167: Total size increase when drag & drop item in listbox/Grid
-			if (!isReorder) { 
+			//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+			if (!isReorder) {
 				afterInsert(child);
 			}
 			return true;
@@ -302,7 +364,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	public boolean removeChild(Component child) {
 		if (child.getParent() == this)
 			beforeRemove(child);
-		int index = hasGroup() ? ((Row)child).getIndex() : -1;
+		
+		final boolean hasGroup = hasGroup();
+		final boolean hasModelButNotROD = hasModelButNotROD();
+		int index = hasGroup || hasModelButNotROD ? ((Row)child).getIndex() : -1;
 		if(super.removeChild(child)) {
 			if (child instanceof Group) {
 				int[] prev = null, remove = null;
@@ -322,12 +387,12 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
 					if (idx != -1) {
-						removeChild((Component) getChildren().get(idx -1));
-							// Because the fixGroupIndex will skip the first groupinfo,
-							// we need to subtract 1 from the idx variable
+						final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
+						if (realIndex >= 0 && realIndex < getChildren().size())
+							removeChild((Component) getChildren().get(realIndex));
 					}
 				}
-			} else if (hasGroup()) {
+			} else if (hasGroup) {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]--;
@@ -341,11 +406,38 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 						g1[2] = -1;
 					}
 				}
+			} else if (hasModelButNotROD) {
+				fixRowIndices(index, -1);
 			}
+			
+			if (hasGroupsModel() && getChildren().size() <= 0) { //remove to empty, reset _groupsInfo
+				_groupsInfo = new LinkedList();
+			}
+			
 			return true;
 		}
 		return false;
 	}
+	/**
+	 * Fix Childitem._index since j-th item.
+	 *
+	 * @param j
+	 *            the start index (inclusion)
+	 * @param to
+	 *            the end index (inclusion). If -1, up to the end.
+	 */
+	private void fixRowIndices(int j, int to) {
+		int realj = getRealIndex(j);
+		if (realj < 0)
+			realj = 0;
+		List items = getChildren();
+		if (realj < items.size()) {
+			for (Iterator it = items.listIterator(realj); it.hasNext()
+					&& (to < 0 || j <= to); ++j)
+				((LoadStatus)(((AbstractComponent)it.next()).getExtraCtrl())).setIndex(j);
+		}
+	}
+	
 	/** Callback if a child has been inserted.
 	 * <p>Default: invalidate if it is the paging mold and it affects
 	 * the view of the active page.
@@ -376,7 +468,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			// 2) If the row is a type of Group, it is always shown.
 			// 3) If the row doesn't belong to any group.
 			// 4) If the group of the row is open.
-			if (row instanceof Groupfoot || row instanceof Group || g == null || g.isOpen())
+			if (row.isVisible() && (row instanceof Groupfoot || row instanceof Group || g == null || g.isOpen())) // B50-3303770
 				addVisibleItemCount(isRemove ? -1 : 1);
 			
 			if (row instanceof Group) {
@@ -405,7 +497,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 		final Grid grid = getGrid();
 		if (grid != null && grid.inPagingMold())
-			grid.getPaginal().setTotalSize(getVisibleItemCount());
+			grid.getPaginal().setTotalSize(grid.getDataLoader().getTotalSize());
 	}
 	/** Checks whether to invalidate, when a child has been added or 
 	 * or will be removed.
@@ -440,24 +532,16 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 	}
 
-	/** Returns an iterator to iterate thru all visible children.
-	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * @since 3.5.1
-	 */
-	public Iterator getVisibleChildrenIterator() {
-		final Grid grid = getGrid();
-		if (grid != null && grid.inSpecialMold())
-			return grid.getDrawerEngine().getVisibleChildrenIterator();
-		return new VisibleChildrenIterator();
-	}
 	/**
 	 * An iterator used by visible children.
 	 */
+/** Not used
 	private class VisibleChildrenIterator implements Iterator {
 		private final ListIterator _it = getChildren().listIterator();
 		private Grid _grid = getGrid();
 		private int _count = 0;
+		private VisibleChildrenIterator() {
+		}
 		public boolean hasNext() {
 			if (_grid == null || !_grid.inPagingMold()) return _it.hasNext();
 			
@@ -498,6 +582,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			throw new UnsupportedOperationException();
 		}
 	}
+*/
+
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : _zclass;
 	}
@@ -513,20 +599,31 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		s.defaultReadObject();
 		init();
 	}
-	protected List newChildren() {
+	public List getChildren() {
 		return new Children();
 	}
 	protected class Children extends AbstractComponent.Children {
 	    protected void removeRange(int fromIndex, int toIndex) {
 	        ListIterator it = listIterator(toIndex);
-	        for (int n = toIndex - fromIndex; --n >= 0;) {
+	        for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
 	            it.previous();
 	            it.remove();
 	        }
 	    }
 	};
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		final Grid grid = getGrid();
+		renderer.render("_offset", grid == null ? 0 : grid.getDataLoader().getOffset()); //go with each cropping
+		renderer.render("visibleItemCount", _visibleItemCount); //go with each cropping
+	}
+	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 	/** A utility class to implement {@link #getExtraCtrl}.
@@ -536,50 +633,14 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		//--Cropper--//
 		public boolean isCropper() {
 			final Grid grid = getGrid();
-			return grid != null &&
-				((grid.inPagingMold()
-					&& grid.getPageSize() <= getChildren().size())
-				|| grid.inSpecialMold());
-				//Single page is considered as not a cropper.
-				//isCropper is called after a component is removed, so
-				//we have to test >= rather than >
+			return grid != null && ((Cropper)grid.getDataLoader()).isCropper();
 		}
 		public Component getCropOwner() {
 			return getGrid();
 		}
 		public Set getAvailableAtClient() {
-			if (!isCropper())
-				return null;
-
 			final Grid grid = getGrid();
-			if (grid.inSpecialMold())
-				return grid.getDrawerEngine().getAvailableAtClient();
-
-			final Set avail = new LinkedHashSet(32);
-			final Paginal pgi = grid.getPaginal();
-			int pgsz = pgi.getPageSize();
-			int ofs = pgi.getActivePage() * pgsz;
-			
-			Row row = (Row) getFirstChild();
-			while(row != null) {
-				if (pgsz == 0) break;
-				if (row.isVisible()) {
-					if (--ofs < 0) {
-						--pgsz;
-						avail.add(row);
-					}
-				}
-				if (row instanceof Group) {
-					final Group g = (Group) row;
-					if (!g.isOpen()) {
-						for (int j = 0, len = g.getItemCount(); j < len; j++)
-							row = (Row) row.getNextSibling();
-					}
-				}
-				if (row != null)
-					row = (Row) row.getNextSibling();
-			}
-			return avail;
+			return grid != null ? ((Cropper)grid.getDataLoader()).getAvailableAtClient() : null;
 		}
 	}
 	/**
@@ -593,9 +654,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			return _j < getGroupCount();
 		}
 		public Object next() {
-			final Object o = getChildren().get(((int[])_it.next())[0]);
 			++_j;
-			return o;
+			final int realIndex = getRealIndex(((int[])_it.next())[0]);
+			return (realIndex >=0 && realIndex < getChildren().size()) ?
+				getChildren().get(realIndex) : null;
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();

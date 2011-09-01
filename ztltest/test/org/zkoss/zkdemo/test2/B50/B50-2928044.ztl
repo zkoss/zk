@@ -1,0 +1,34 @@
+<!-- B50-2928044.ztl.java
+
+	Purpose:for testing B50-2928044.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 19:01:04
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-2928044.zul,B,E,Textbox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+You can not type the words more than 3.
+<textbox id="txt"  maxlength="3"/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			focus(txt);
+			JQuery $txt = jq("$txt");
+			type($txt, "AAAA");
+			verifyEquals(jq($txt).val().length(), 3);
+		]]></client>
+	</case>
+</test>

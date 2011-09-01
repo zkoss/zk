@@ -1,17 +1,15 @@
 /* AbstractGroup.java
 
-{{IS_NOTE
 
 	Purpose:
 	Description:
 	History:
 	2001/10/21 16:31:30, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -34,7 +32,7 @@ import java.util.Collections;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.zkoss.util.CheckableTreeArray;
+import org.zkoss.util.NotableLinkedList;
 import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.*;
 
@@ -81,34 +79,6 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	}
 
 	//-- Group --//
-	public void clearModified(boolean includingDescendant) {
-		if (includingDescendant) {
-			for (final Iterator it = _children.iterator(); it.hasNext();)
-				((Item)it.next()).clearModified(true);
-		}
-		super.clearModified(includingDescendant);
-	}
-	public Item clone(boolean preserveModified) {
-		AbstractGroup group = (AbstractGroup)super.clone(preserveModified);
-
-		group._children = group.newChildren();
-		for (final Iterator it = _children.iterator(); it.hasNext();) {
-			Item v = ((Item)it.next()).clone(preserveModified);
-			boolean bClearModified = !preserveModified || !v.isModified();
-
-			group._children.add(v); //v becomes modified (v.setParent is called)
-
-			if (bClearModified)
-				v.clearModified(false);
-		}
-
-		if (group._children instanceof ChildArray)
-			((ChildArray)group._children).afterClone();
-
-		group._modified = preserveModified && _modified;
-		return group;
-	}
-
 	public final List getChildren() {
 		return _children;
 	}
@@ -299,7 +269,6 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		return !_children.isEmpty();
 	}
 
-	//No need to call checkWritable here because _children is smart enough
 	public final Node insertBefore(Node newChild, Node refChild) {
 		if (refChild == null)
 			return appendChild(newChild);
@@ -325,6 +294,19 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	public final Node appendChild(Node newChild) {
 		_children.add(newChild);
 		return newChild;
+	}
+
+	//Cloneable//
+	public Object clone() {
+		AbstractGroup group = (AbstractGroup)super.clone();
+
+		group._children = group.newChildren();
+		for (Iterator it = _children.iterator(); it.hasNext();)
+			group._children.add((Item)((Item)it.next()).clone());
+
+		if (group._children instanceof ChildArray)
+			((ChildArray)group._children).afterClone();
+		return group;
 	}
 
 	//-- Serializable --//
@@ -422,7 +404,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 	//-- ChildArray --//
 	/** The array to hold children.
 	 */
-	protected class ChildArray extends CheckableTreeArray {
+	protected class ChildArray extends NotableLinkedList {
 		protected ChildArray() {
 			_elemMap = new ElementMap();
 		}
@@ -454,8 +436,6 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			checkAdd(newElement, replaced, true);
 		}
 		private void checkAdd(Object newVal, Object other, boolean replace) {
-			checkWritable();
-
 			//allowed type?
 			if (!(newVal instanceof Element) && !(newVal instanceof Text)
 			&& !(newVal instanceof CData) && !(newVal instanceof Comment)
@@ -501,12 +481,11 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			
 			if (replace)
 				onRemove(other);
-			newItem.setParent(AbstractGroup.this); //it will call this.setModified
+			newItem.setParent(AbstractGroup.this);
 		}
 		protected void onRemove(Object item) {
-			checkWritable();
 			final Item removeItem = (Item)item;
-			removeItem.setParent(null); //it will call this.setModified
+			removeItem.setParent(null);
 
 			if (removeItem instanceof Element) //Element remove from map
 				_elemMap.remove((Element)removeItem);

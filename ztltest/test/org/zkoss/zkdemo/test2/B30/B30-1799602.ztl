@@ -1,0 +1,41 @@
+<test tags="Tabbox,Grid,Combobox">
+	<case id="ForEach">
+		<server><!--
+<window>
+If the popup of combox out of position, that is wrong.
+	<tabbox width="100%">
+		<tabs>
+			<tab label="Geral" />
+		</tabs>
+		<tabpanels>
+			<tabpanel height="240px">
+				<grid>
+					<rows>
+						<row>
+							<combobox id="cb" width="150px" readonly="true">
+								<comboitem label="Pessoa Física" />
+								<comboitem label="Pessoa Jurídica" />
+							</combobox>
+						</row>
+					</rows>
+				</grid>
+			</tabpanel>
+
+		</tabpanels>
+	</tabbox>
+</window>
+		--></server>
+		<client><![CDATA[
+		int[] offset1 = zk(cb).revisedOffset();
+		click(cb.$n("btn"));
+		int[] offset2 = zk(cb.$n("pp")).revisedOffset();
+		if (ZK.is("ie") && !ZK.is("ie8")) {
+			verifyEquals(offset1[0], offset2[0]);
+			verifyEquals(offset1[1] + jq(cb).outerHeight() - 1, offset2[1]);
+		} else {
+			verifyEquals(offset1[0], offset2[0]);
+			verifyEquals(offset1[1] + jq(cb).outerHeight(), offset2[1]);
+		}
+		]]></client>
+	</case>
+</test>

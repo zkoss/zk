@@ -1,18 +1,16 @@
 /* Filedownload.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Apr 16 09:29:44     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,7 +24,6 @@ import java.net.URL;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
-import org.zkoss.net.URLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
@@ -56,7 +53,7 @@ public class Filedownload {
 	public static void save(Media media, String flnm) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		((WebAppCtrl)desktop.getWebApp())
-			.getUiEngine().addResponse(null,
+			.getUiEngine().addResponse(
 				new AuDownload(new DownloadURL(media, flnm))); //Bug 2114380
 	}
 	/** Open a download dialog to save the specified content at the client
@@ -170,7 +167,7 @@ public class Filedownload {
 			final StringBuffer sb = new StringBuffer(32);
 			if (flnm != null && flnm.length() != 0) {
 				sb.append('/');
-				sb.append(URLs.encode(flnm));
+				sb.append(flnm);
 				if (flnm.lastIndexOf('.') < 0) {
 					final String format = media.getFormat();
 					if (format != null)
@@ -179,7 +176,7 @@ public class Filedownload {
 			}
 			_path = sb.toString();
 		}
-		public String getValue() {
+		public Object getValue() {
 			return Executions.getCurrent().getDesktop()
 				.getDownloadMediaURI(_media, _path);
 		}

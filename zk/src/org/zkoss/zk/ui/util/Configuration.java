@@ -1,18 +1,16 @@
 /* Configuration.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sun Mar 26 16:06:56     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,6 +29,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.reflect.Fields;
@@ -39,6 +38,7 @@ import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
+import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WebApp;
@@ -54,17 +54,22 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
-import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.au.AuDecoder;
 
 /**
  * The ZK configuration.
@@ -97,13 +102,19 @@ public class Configuration {
 		_dtInits = new FastReadArray(Class.class),
 		_dtCleans = new FastReadArray(Class.class),
 		_execInits = new FastReadArray(Class.class),
-		_execCleans = new FastReadArray(Class.class);
-	private FastReadArray _uiCycles = new FastReadArray(UiLifeCycle.class);
+		_execCleans = new FastReadArray(Class.class),
+		_composers = new FastReadArray(Class.class),
+		_initiators = new FastReadArray(Class.class),
+		_seoRends = new FastReadArray(Class.class),
+		_resolvers = new FastReadArray(Class.class);
 		//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
 	private final FastReadArray
 		_uriIntcps = new FastReadArray(URIInterceptor.class),
-		_reqIntcps = new FastReadArray(RequestInterceptor.class);
+		_reqIntcps = new FastReadArray(RequestInterceptor.class),
+		_uiCycles = new FastReadArray(UiLifeCycle.class),
+		_propRends = new FastReadArray(PropertiesRenderer.class),
+		_labellocs = new FastReadArray(String.class);
 	private final Map _prefs  = Collections.synchronizedMap(new HashMap());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map _richlets = new HashMap();
@@ -117,34 +128,40 @@ public class Configuration {
 	private final Map _timeoutURIs = Collections.synchronizedMap(new HashMap());
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
+	private DesktopRecycle _dtRecycle;
 	private final FastReadArray _themeURIs = new FastReadArray(String.class);
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
 	private Set _disThemeURIs;
+	/** A list of client packages. */
+	private final FastReadArray _clientpkgs = new FastReadArray(String.class);
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
-		_failmancls, _idgencls, _sesscachecls;
+		_failmancls, _idgencls, _sesscachecls, _audeccls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
-		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
-		_clkFilterDelay = 0;
+		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private int _evtTimeWarn = 600; //sec
+	/** A map of attributes. */
+	private final Map _attrs = Collections.synchronizedMap(new HashMap());
 	/** whether to use the event processing thread. */
-	private boolean _useEvtThd = true;
+	private boolean _evtThdEnabled; //disabled by default since ZK 5
+	/** whether zscript is enabled. */
+	private boolean _zscriptEnabled = true;
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
-	/** Whether to disable components that don't belong to the modal window. */
-	private boolean _disableBehindModal;
 	/** Whether to keep the session alive when receiving onTimer.
 	 */
 	private boolean _timerKeepAlive;
 	/** Whether to debug JavaScript. */
 	private boolean _debugJS;
+	/** Whether the ZK application is crawlable. */
+	private boolean _crawlable;
 	/** Whether to use the same UUID sequence. */
 	private boolean _repeatUuid;
 
@@ -168,14 +185,38 @@ public class Configuration {
 
 	/** Adds a listener class.
 	 *
+	 * <p>Notice that there is only one listener allowed for the following classes:
+	 * {@link Monitor}, {@link PerformanceMeter}, and {@link DesktopRecycle}.
+	 * On the other hand, any number listeners are allowed for other classes.
+	 *
+	 * <p>Notice that if the listener implements {@link Composer}, it can also
+	 * implement {@link org.zkoss.zk.ui.util.ComposerExt} and/or {@link org.zkoss.zk.ui.util.FullComposer} to have
+	 * more detailed control. However, ComposerExt and FullComposer are meaningless
+	 * to richlets. In additions, an independent
+	 * composer is instantiated for each page so there is synchronization required.
+	 *
+	 * <p>By default, a listener is instantiated when required, and dropped
+	 * after invoked. In other words, a new instance will be instantiated in
+	 * the next invocation. It means you don't have to worry the threading,
+	 * <p>However, for better performance, the following listeners will be instantiated
+	 * in {@link #addListener}, and then used repeatedly. It means it has
+	 * to be thread safe. These listeners include
+	 * {@link URIInterceptor}, {@link RequestInterceptor},
+	 * {@link EventInterceptor}, {@link UiLifeCycle},
+	 * and {@link PropertiesRenderer}.
+	 *
 	 * @param klass the listener class must implement at least one of
 	 * {@link Monitor}, {@link PerformanceMeter}, {@link EventThreadInit},
 	 * {@link EventThreadCleanup}, {@link EventThreadSuspend},
 	 * {@link EventThreadResume}, {@link WebAppInit}, {@link WebAppCleanup},
 	 * {@link SessionInit}, {@link SessionCleanup}, {@link DesktopInit},
 	 * {@link DesktopCleanup}, {@link ExecutionInit}, {@link ExecutionCleanup},
+	 * {@link Composer}, {@link Initiator} (since 5.0.7), {@link SEORenderer} (since 5.0.7),
+	 * {@link PropertiesRenderer} (since 5.0.7),
+	 * {@link VariableResolver},
 	 * {@link URIInterceptor}, {@link RequestInterceptor},
-	 * {@link UiLifeCycle}, and/or {@link EventInterceptor} interfaces.
+	 * {@link UiLifeCycle}, {@link DesktopRecycle},
+	 * and/or {@link EventInterceptor} interfaces.
 	 * @see Desktop#addListener
 	 */
 	public void addListener(Class klass) throws Exception {
@@ -184,14 +225,20 @@ public class Configuration {
 
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
-				throw new UiException("Monitor listener can be assigned only once");
+				throw new UiException("Monitor can be assigned only once");
 			_monitor = (Monitor)(listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (PerformanceMeter.class.isAssignableFrom(klass)) {
 			if (_pfmeter != null)
-				throw new UiException("PerformanceMeter listener can be assigned only once");
+				throw new UiException("PerformanceMeter can be assigned only once");
 			_pfmeter = (PerformanceMeter)(listener = getInstance(klass, listener));
+			added = true;
+		}
+		if (DesktopRecycle.class.isAssignableFrom(klass)) {
+			if (_dtRecycle != null)
+				throw new UiException("DesktopRecycle can be assigned only once");
+			_dtRecycle = (DesktopRecycle)(listener = getInstance(klass, listener));
 			added = true;
 		}
 
@@ -247,6 +294,25 @@ public class Configuration {
 			_execCleans.add(klass);
 			added = true;
 		}
+		if (Composer.class.isAssignableFrom(klass)) {
+			_composers.add(klass); //not instance
+			added = true;
+		}
+		if (Initiator.class.isAssignableFrom(klass)) {
+			_initiators.add(klass); //not instance
+			added = true;
+		}
+		if (SEORenderer.class.isAssignableFrom(klass)) {
+			_seoRends.add(klass);
+			added = true;
+		}
+		if (VariableResolver.class.isAssignableFrom(klass)) {
+			_resolvers.add(klass); //not instance
+			added = true;
+		}
+
+		//for better performance, the following listeners are instantiated
+		//here and shared in the whole application
 
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
@@ -281,6 +347,14 @@ public class Configuration {
 			}
 			added = true;
 		}
+		if (PropertiesRenderer.class.isAssignableFrom(klass)) {
+			try {
+				_propRends.add(listener = getInstance(klass, listener));
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+klass, ex);
+			}
+			added = true;
+		}
 
 		if (!added)
 			throw new UiException("Unknown listener: "+klass);
@@ -297,6 +371,8 @@ public class Configuration {
 			_monitor = null;
 		if (_pfmeter != null && _pfmeter.getClass().equals(klass))
 			_pfmeter = null;
+		if (_dtRecycle != null && _dtRecycle.getClass().equals(klass))
+			_dtRecycle = null;
 
 		_evtInits.remove(klass);
 		_evtCleans.remove(klass);
@@ -315,10 +391,16 @@ public class Configuration {
 		_execInits.remove(klass);
 		_execCleans.remove(klass);
 
+		_composers.remove(klass);
+		_initiators.remove(klass);
+		_seoRends.remove(klass);
+		_resolvers.remove(klass);
+
 		final SameClass sc = new SameClass(klass);
 		_uriIntcps.removeBy(sc, true);
 		_reqIntcps.removeBy(sc, true);
 		_uiCycles.removeBy(sc, true);
+		_propRends.removeBy(sc, true);
 
 		_eis.removeEventInterceptor(klass);
 	}
@@ -435,11 +517,6 @@ public class Configuration {
 		}
 		return cleanups.isEmpty() ? null: cleanups;
 	}
-	/** @deprecated As of release 3.6.3, replaced with {@link #newEventThreadCleanups(Component,Event,List,boolean)}
-	 */
-	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
-		return newEventThreadCleanups(comp, evt, errs, false);
-	}
 
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
@@ -471,12 +548,6 @@ public class Configuration {
 					log.error("Failed to invoke "+fn, ex);
 			}
 		}
-	}
-	/** @deprecated As of release 3.6.3, replaced with {@link #invokeEventThreadCompletes(List,Component,Event,List,boolean)}
-	 */
-	public void invokeEventThreadCompletes(List cleanups, Component comp, Event evt,
-	List errs) {
-		invokeEventThreadCompletes(cleanups, comp, evt, errs, false);
 	}
 
 	/** Constructs a list of {@link EventThreadSuspend} instances and invokes
@@ -893,6 +964,106 @@ public class Configuration {
 		}
 	}
 
+	/** Adds the location of a properties file for i18n labels.
+	 * <p>Default: none (/WEB-INF/i3-label.properties are assumed).
+	 * <p>Notice that this method has no effect after the web server has been
+	 * started. Thus, it is suggested to use the label-location element in zk.xml instead.
+	 * @since 5.0.7
+	 */
+	public void addLabelLocation(String location) {
+		if (location == null || location.length() == 0)
+			throw new IllegalArgumentException();
+		_labellocs.add(location);
+	}
+	/** Returns an array of the locations of properties files registered
+	 * by {@link #addLabelLocation}.
+	 * @since 5.0.7
+	 */
+	public String[] getLabelLocations() {
+		return (String[])_labellocs.toArray();
+	}
+
+	/** Returns the system-level composer or null if none is registered.
+	 * To register a system-levelcomposer, use {@link #addListener}.
+	 * <p>Notice that any number of composers can be registered,
+	 * and a single composer is returned to represent them all.
+	 * @since 5.0.1
+	 */
+	public Composer getComposer(Page page) throws Exception {
+		return MultiComposer.getComposer(page, (Class[])_composers.toArray());
+	}
+
+	/** Returns a readonly list of the system-level initiators.
+	 * It is empty if none is registered.
+	 * To register a system-level initiator, use {@link #addListener}.
+	 * @since 5.0.7
+	 */
+	public Initiator[] getInitiators() {
+		final Class[] initclses = (Class[])_initiators.toArray();
+		if (initclses.length == 0)
+			return new Initiator[0];
+
+		final List inits = new LinkedList();
+		for (int j = 0; j < initclses.length; ++j) {
+			final Initiator init;
+			try {
+				inits.add((Initiator)initclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + initclses[j]);
+			}
+		}
+		return (Initiator[])inits.toArray(new Initiator[inits.size()]);
+	}
+	/** Returns a readonly list of the system-level SEO renderer.
+	 * It is empty if none is registered.
+	 * To register a system-level SEO renderers, use {@link #addListener}.
+	 * <p>Notice that, once registered, an instance is instantiated before
+	 * invoking {@link SEORenderer#render}.
+	 * @since 5.0.7
+	 */
+	public SEORenderer[] getSEORenderers() {
+		final Class[] sdclses = (Class[])_seoRends.toArray();
+		if (sdclses.length == 0)
+			return new SEORenderer[0];
+
+		final List sds = new LinkedList();
+		for (int j = 0; j < sdclses.length; ++j) {
+			final SEORenderer sd;
+			try {
+				sds.add((SEORenderer)sdclses[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate " + sdclses[j]);
+			}
+		}
+		return (SEORenderer[])sds.toArray(new SEORenderer[sds.size()]);
+	}
+	
+	/** Initializes the given page with the variable resolvers registered
+	 * by {@link #addListener}.
+	 * It must be called before accessing a page (actually in {@link org.zkoss.zk.ui.sys.PageCtrl#preInit}).
+	 * @since 5.0.4
+	 */
+	public void init(Page page) {
+		final Class[] classes = (Class[])_resolvers.toArray();
+		for (int j = 0; j < classes.length; ++j) {
+			try {
+				page.addVariableResolver((VariableResolver)classes[j].newInstance());
+			} catch (Throwable ex) {
+				log.error("Failed to instantiate "+classes[j], ex);
+			}
+		}
+	}
+
+	/** Returns a readonly list of the system-level properties renders.
+	 * It is empty if none is registered.
+	 * To register a system-level properties renders, use {@link #addListener}.
+	 * <p>Notice that, once registered, it is instantiated immeidately,
+	 * and the same instance is shared for rendering the properties of every component.
+	 * @since 5.0.7
+	 */
+	public PropertiesRenderer[] getPropertiesRenderers() {
+		return (PropertiesRenderer[])_propRends.toArray();
+	}
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
 	 * when a component is attached to a page.
 	 * @since 3.0.6
@@ -982,10 +1153,10 @@ public class Configuration {
 	public String[] getThemeURIs() {
 		return (String[])_themeURIs.toArray();
 	}
-	/** Enables or disables the default theme of the specified language.
+	/** Specifies what theme URI to be disabled.
 	 *
-	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
-	 * the final theme URIs generated depend on {@link ThemeProvider#getThemeURIs}.
+	 * <p>Note: if {@link ThemeProvider} is used ({@link #setThemeProvider}),
+	 * the URIs of the theme depend on {@link ThemeProvider#getThemeURIs}.
 	 *
 	 * @param uri the theme URI to disable
 	 * @since 3.0.0
@@ -1037,22 +1208,26 @@ public class Configuration {
 		_themeProvider = provider;
 	}
 
-	/** Sets the class that implements {@link UiEngine}, or null to
+	/** Sets the class used to handle UI loading and updates, or null to
 	 * use the default.
+	 * It must implement {@link UiEngine}.
 	 */
 	public void setUiEngineClass(Class cls) {
 		if (cls != null && !UiEngine.class.isAssignableFrom(cls))
 			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
 		_uiengcls = cls;
 	}
-	/** Returns the class that implements {@link UiEngine}, or null if default is used.
+	/** Returns the class used to handle UI loading and updates,
+	 * or null if default is used.
+	 * It must implement {@link UiEngine}.
 	 */
 	public Class getUiEngineClass() {
 		return _uiengcls;
 	}
 
-	/** Sets the class that implements {@link WebApp} and
-	 * {@link WebAppCtrl}, or null to use the default.
+	/** Sets the class used to represent a Web application,
+	 * or null to use the default.
+	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1063,15 +1238,17 @@ public class Configuration {
 			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
 		_wappcls = cls;
 	}
-	/** Returns the class that implements {@link WebApp} and
-	 * {@link WebAppCtrl}, or null if default is used.
+	/** Returns the class used to represent a Web application,
+	 * or null if default is used.
+	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 */
 	public Class getWebAppClass() {
 		return _wappcls;
 	}
 
-	/** Sets the class that implements {@link DesktopCacheProvider}, or null to
+	/** Sets the class used to provide the desktop cache, or null to
 	 * use the default.
+	 * It must implement {@link DesktopCacheProvider}.
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1081,14 +1258,17 @@ public class Configuration {
 			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
 		_dcpcls = cls;
 	}
-	/** Returns the class that implements the UI engine, or null if default is used.
+	/** Returns the class used to provide the desktop cache, or null
+	 * if default is used.
+	 * It must implement {@link DesktopCacheProvider}.
 	 */
 	public Class getDesktopCacheProviderClass() {
 		return _dcpcls;
 	}
 
-	/** Sets the class that implements {@link UiFactory}, or null to
-	 * use the default.
+	/** Sets the class used to instantiate desktops, pages and components, or
+	 * null to use the default.
+	 * It must implement {@link UiFactory},
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1098,14 +1278,17 @@ public class Configuration {
 			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
 		_uiftycls = cls;
 	}
-	/** Returns the class that implements the UI engine, or null if default is used.
+	/** Returns the class used to instantiate desktops, pages and components,
+	 * or null if default is used.
+	 * It must implement {@link UiFactory},
 	 */
 	public Class getUiFactoryClass() {
 		return _uiftycls;
 	}
 
-	/** Sets the class that implements {@link FailoverManager}, or null if
+	/** Sets the class used to handle the failover mechanism, or null if
 	 * no custom failover mechanism.
+	 * It must implement {@link FailoverManager}.
 	 *
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
@@ -1115,8 +1298,9 @@ public class Configuration {
 			throw new IllegalArgumentException("FailoverManager not implemented: "+cls);
 		_failmancls = cls;
 	}
-	/** Returns the class that implements the failover manger,
+	/** Returns the class used to handle the failover mechanism,
 	 * or null if no custom failover mechanism.
+	 * It must implement {@link FailoverManager}.
 	 */
 	public Class getFailoverManagerClass() {
 		return _failmancls;
@@ -1135,8 +1319,9 @@ public class Configuration {
 			throw new IllegalArgumentException("IdGenerator not implemented: "+cls);
 		_idgencls = cls;
 	}
-	/** Returns the class that implements {@link IdGenerator},
-	 * or null if the default shall be used.
+	/** Returns the class used to generate UUID/ID for desktop,
+	 * page and components, or null if the default shall be used.
+	 * It must implement {@link IdGenerator}
 	 * @since 2.4.1
 	 */
 	public Class getIdGeneratorClass() {
@@ -1146,6 +1331,9 @@ public class Configuration {
 	/** Sets the class that is used to store ZK sessions,
 	 * or null to use the default.
 	 * It must implement {@link SessionCache}.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
 	 * @since 3.0.5
 	 */
 	public void setSessionCacheClass(Class cls) {
@@ -1153,23 +1341,45 @@ public class Configuration {
 			throw new IllegalArgumentException("SessionCache not implemented: "+cls);
 		_sesscachecls = cls;
 	}
-	/** Returns the class that implements {@link SessionCache}, or null
+	/** Returns the class used to store ZK sessions, or null
 	 * if the default shall be used.
+	 * It must implement {@link SessionCache}.
 	 * @since 3.0.5
 	 */
 	public Class getSessionCacheClass() {
 		return _sesscachecls;
 	}
 
+	/** Sets the class that is used to decode AU requests,
+	 * or null to use the default.
+	 * It must implement {@link AuDecoder}.
+	 *
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
+	 * @since 5.0.4
+	 */
+	public void setAuDecoderClass(Class cls) {
+		if (cls != null && !AuDecoder.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("AuDecoder not implemented: "+cls);
+		_audeccls = cls;
+	}
+	/** Returns the class used to decode AU requests, or null
+	 * if the default shall be used.
+	 * It must implement {@link AuDecoder}.
+	 * @since 5.0.4
+	 */
+	public Class getAuDecoderClass() {
+		return _audeccls;
+	}
+
 	/** Specifies the maximal allowed time to process events, in milliseconds.
-	 * ZK will keep processing the requests sent from
-	 * the client until all requests are processed, or the maximal allowed
-	 * time expires.
+	 * ZK will keep processing the requests until all requests are processed,
+	 * or the maximal allowed time expires.
 	 *
 	 * <p>Default: 3000.
 	 *
-	 * <p>Note: since 3.0.0, this setting has no effect on Ajax devices.
-	 * Ajax devices send the requests synchronously.
+	 * <p>Note: since 3.0.0, this setting has no effect on AU requests.
+	 * It controls only the requests from the client-polling server push.
 	 *
 	 * @param time the maximal allowed time to process events.
 	 * It must be positive.
@@ -1178,7 +1388,7 @@ public class Configuration {
 		_maxProcTime = time;
 	}
 	/** Returns the maximal allowed time to process events, in milliseconds.
-	 * It is always positive
+	 * It is always positive.
 	 */
 	public int getMaxProcessTime() {
 		return _maxProcTime;
@@ -1199,6 +1409,25 @@ public class Configuration {
 	 */
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
+	}
+	/** Specifies the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes.
+	 *
+	 * <p>Default: 128.
+	 *
+	 * @param sz the file size threshold
+	 *  A negative value implies default setting.
+	 * @since 5.0.8
+	 */
+	public void setFileSizeThreshold(int sz) {
+		_fileSizeThreshold = sz;
+	}
+	/** Returns the threshold at which a temporary file is created as a 
+	 * buffer, in kilobytes, or a negative value which implies default setting.
+	 * @since 5.0.8
+	 */
+	public int getFileSizeThreshold() {
+		return _fileSizeThreshold;
 	}
 	/** Returns the charset used to encode the uploaded text file
 	 * (never null).
@@ -1281,7 +1510,8 @@ public class Configuration {
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
-	/** Specifies the time, in milliseconds, to filter out consecutive
+	/**
+	 * Specifies the time, in milliseconds, to filter out consecutive
 	 * click events.
 	 * If two click events (also onOK and onCancel) come too close, the
 	 * second one will be removed to avoid the denial-of-service attack.
@@ -1294,17 +1524,18 @@ public class Configuration {
 	 * @param minisecs the delay to filtering the second click event
 	 * if it happens shorter than the second value.
 	 * If a non-positive value is specified, no click event is ignored.
+	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
 	 * @since 3.6.0
 	 */
 	public void setClickFilterDelay(int minisecs) {
-		_clkFilterDelay = minisecs;
 	}
 	/** Returns the time, in milliseconds, to filter out consecutive
 	 * click events.
+	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
 	 * @since 3.6.0
 	 */
 	public int getClickFilterDelay() {
-		return _clkFilterDelay;
+		return 0;
 	}
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
@@ -1324,8 +1555,7 @@ public class Configuration {
 	 * the request to the server.
 	 *
 	 * <p>Default: -1 (i.e., disabled).
-	 * However, if zkmax.jar was installed (or with ZK 3.0.1 and 3.0.2),
-	 * the default is 9000.
+	 * However, if ZK 5.0.3 EE or prior, the default is 9000.
 	 *
 	 * <p>There are many reasons an Ajax request is not received by
 	 * the server. With the resending mechanism, ZK ensures the reliable
@@ -1347,6 +1577,23 @@ public class Configuration {
 	 */
 	public int getResendDelay() {
 		return _resendDelay;
+	}
+
+	/** Returns whether this Web application can be crawled by search engies.
+	 * Notice that there is some performance loss for huge web pages.
+	 * <p>Default: false.
+	 * @since 5.0.0
+	 */
+	public boolean isCrawlable() {
+		return _crawlable;
+	}
+	/** Sets whether this Web application is crawlable.
+	 * Make a Web application that allows search engines to crawl the application.
+	 * Notice that there is some performance loss for huge web pages.
+	 * @since 5.0.0
+	 */
+	public void setCrawlable(boolean crawlable) {
+		_crawlable = crawlable;
 	}
 
 	/** Returns the timeout URI for this device.
@@ -1387,6 +1634,44 @@ public class Configuration {
 		TimeoutURIInfo oldi = (TimeoutURIInfo)_timeoutURIs.put(deviceType, newi);
 		if (oldi != null) newi.auto = oldi.auto;
 		return oldi != null && oldi.uri != null ? oldi: null;
+	}
+
+	/** Returns the timeout message for this device, or null if the default
+	 * message is preferred.
+	 * It is used only if {@link #getTimeoutURI} returns null.
+	 * @since 5.0.5
+	 * @see #setTimeoutMessage
+	 */
+	public String getTimeoutMessage(String deviceType) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		return inf != null ? inf.message: null;
+	}
+	/** Sets the timeout message for this device, or null if the default
+	 * message is preferred.
+	 * It is used only if {@link #getTimeoutURI} returns null.
+	 * <p>To specify an I18N label, prefix the key with <code>label:</code>.
+	 * To specify the JavaScript code, prefix the code with <code>script:</code>.
+	 * Refer to <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element#The_timeout-message_Element">ZK Configuration Reference</a>
+	 * for more information.
+	 * @return the previous message, if any
+	 * @since 5.0.5
+	 */
+	public String setTimeoutMessage(String deviceType, String message) {
+		if (deviceType == null) deviceType = "ajax";
+
+		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		if (inf != null) {
+			String old = inf.message;
+			inf.message = message;
+			return old;
+		}
+
+		inf = new TimeoutURIInfo();
+		inf.message = message;
+		_timeoutURIs.put(deviceType, inf);
+		return null;
 	}
 
 	/** Returns whether to automatically trigger the timeout at the client.
@@ -1599,12 +1884,6 @@ public class Configuration {
 	public void setSessionMaxDesktops(int max) {
 		_sessDktMax = max;
 	}
-	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
-	 */
-	public void setMaxDesktops(int max) {
-		setSessionMaxDesktops(max);
-	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
@@ -1612,12 +1891,6 @@ public class Configuration {
 	 */
 	public int getSessionMaxDesktops() {
 		return _sessDktMax;
-	}
-	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
-	 */
-	public int getMaxDesktops() {
-		return getSessionMaxDesktops();
 	}
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
@@ -1711,7 +1984,7 @@ public class Configuration {
 	}
 	/** Sets whether to use the event processing thread.
 	 *
-	 * <p>Default: enabled.
+	 * <p>Default: false (disabled).
 	 *
 	 * @exception IllegalStateException if there is suspended thread
 	 * and use is false.
@@ -1724,30 +1997,28 @@ public class Configuration {
 					throw new IllegalStateException("Unable to disable due to suspended threads");
 			}
 		}
-		_useEvtThd = enable;
+		_evtThdEnabled = enable;
 	}
 	/** Returns whether to use the event processing thread.
+	 * <p>Default: false (disabled).
 	 */
 	public boolean isEventThreadEnabled() {
-		return _useEvtThd;
+		return _evtThdEnabled;
 	}
 
-	/** Returns whether to disable the components that don't belong to
-	 * the active modal window.
-	 *
-	 * <p>Default: false (ZK 3.0.3 or earlier, the default is true).
-	 * @since 2.4.1
+	/** Sets whether zscript is allowed.
+	 * <p>Default: true (enabled).
+	 * @since 5.1.0
 	 */
-	public boolean isDisableBehindModalEnabled() {
-		return _disableBehindModal;
+	public void enableZScript(boolean enable) {
+		_zscriptEnabled = enable;
 	}
-	/** Sets whether to disable the components that don't belong to
-	 * the active modal window.
-	 *
-	 * @since 2.4.1
+	/** Returns whether zscript is allowed.
+	 * <p>Default: true (enabled).
+	 * @since 5.1.0
 	 */
-	public void enableDisableBehindModal(boolean enable) {
-		_disableBehindModal = enable;
+	public boolean isZScriptEnabled() {
+		return _zscriptEnabled;
 	}
 
 	/** Returns the monitor for this application, or null if not set.
@@ -1799,6 +2070,33 @@ public class Configuration {
 	public PerformanceMeter setPerformanceMeter(PerformanceMeter meter) {
 		final PerformanceMeter old = _pfmeter;
 		_pfmeter = meter;
+		return old;
+	}
+
+	/** Returns the desktop recycle for this application, or null if not set.
+	 * @since 5.0.0
+	 */
+	public DesktopRecycle getDesktopRecycle() {
+		return _dtRecycle;
+	}
+	/** Sets the desktop recycler for this application, or null to disable it.
+	 *
+	 * <p>Default: null.
+	 *
+	 * <p>There is at most one desktop recycle for each Web application.
+	 * The previous instance will be replaced when this method is called.
+	 *
+	 * <p>In addition to call this method, you could specify
+	 * a desktop recycle in zk.xml
+	 *
+	 * @param dtRecycle the desktop recycle. If null, the recycle function
+	 * is disabled.
+	 * @return the previous desktop recycle, or null if not available.
+	 * @since 5.0.0
+	 */
+	public DesktopRecycle setDesktopRecycle(DesktopRecycle dtRecycle) {
+		final DesktopRecycle old = _dtRecycle;
+		_dtRecycle = dtRecycle;
 		return old;
 	}
 
@@ -2111,6 +2409,9 @@ public class Configuration {
 	 * <p>If {@link #isDebugJS} is false (default),
 	 * abc.js is always loaded.
 	 *
+	 * <p>Prior to 5.0.3, the setting won't affect JavaScript files that have been
+	 * loaded. That is, the reboot is required.
+	 *
 	 * @param debug whether to debug JavaScript files.
 	 * If true, the original JavaScript files shall be
 	 * loaded instead of the compressed files.
@@ -2118,6 +2419,8 @@ public class Configuration {
 	 */
 	public void setDebugJS(boolean debug) {
 		_debugJS = debug;
+		if (_wapp != null)
+			org.zkoss.zk.ui.http.Utils.updateDebugJS(_wapp, debug);
 	}
 
 	/** Returns whether to use the same UUID sequence for desktops after
@@ -2202,6 +2505,61 @@ public class Configuration {
 	 */
 	public void afterProcessEvent(Event event) {
 		_eis.afterProcessEvent(event);
+	}
+
+	/** Returns a map of application-specific attributes.
+	 * @since 5.0.0
+	 */
+	public Map getAttributes() {
+		return _attrs;
+	}
+	/** Returns the value of an application-specific attribute, or
+	 * null if not found.
+	 * @since 5.0.0
+	 */
+	public Object getAttribute(String name) {
+		return _attrs.get(name);
+	}
+	/** Returns the value of an application-specific attribute.
+	 * @param value the value of the attribute. If null, it means removal,
+	 * i.e., {@link #removeAttribute}.
+	 * @return the previous value, or null if no such value.
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value) {
+		return value != null ? _attrs.put(name, value): removeAttribute(name);
+	}
+	/** Removes the value of an application-specific attribute.
+	 * @return the previous value, or null if no such value.
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name) {
+		return _attrs.remove(name);
+	}
+
+	/** Adds a client (JavaScript) pacakge that is provided by this server.
+	 * <p>Default: none.
+	 * <p>If no package is defined (default), ZK Client Engine assumes
+	 * all packages coming from the server generating the HTML page.
+	 *
+	 * <p>However, it might not be true if you want to load some client
+	 * codes from different server (such as Ajax-asService).
+	 * Therefore, you have to invoke this method to add the client packages
+	 * if this server is going to provide JavaScript codes for other servers.
+	 * @since 5.0.0
+	 */
+	public void addClientPackage(String pkg) {
+		if (pkg == null || pkg.length() == 0)
+			throw new IllegalArgumentException("empty");
+		_clientpkgs.add(pkg);
+	}
+	/** Returns a readonly list of the names of the client pages
+	 * that are provided by this server
+	 *
+	 * @since 5.0.0
+	 */
+	public String[] getClientPackages() {
+		return (String[])_clientpkgs.toArray();
 	}
 
 	/** Returns the time, in seconds, to show a warning message
@@ -2301,8 +2659,20 @@ public class Configuration {
 		public int compareTo(Object o) {
 			return o.getClass().equals(_klass) ? 0: 1;
 		}
+
+		//Object//
+		public String toString() {
+			return Objects.toString(_klass);
+		}
+		public boolean equals(Object o) {
+			return Objects.equals(_klass, o instanceof SameClass ? ((SameClass)o)._klass: o);
+		}
+		public int hashCode() {
+			return Objects.hashCode(_klass);
+		}
 	}
 	private static class TimeoutURIInfo extends URIInfo {
+		private String message;
 		private boolean auto;
 		private TimeoutURIInfo() {
 			super(null);

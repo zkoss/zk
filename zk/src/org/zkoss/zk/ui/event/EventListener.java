@@ -1,18 +1,16 @@
 /* EventListener.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul 22 16:06:46     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,7 +19,7 @@ package org.zkoss.zk.ui.event;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * An listener that will be notified when an event occurs, if it is
+ * An event listener that will be notified when an event occurs, if it is
  * registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
  * <p>If an event listener also implements {@link Deferrable}
@@ -48,6 +46,7 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  * @see Deferrable
  * @see Express
+ * @see SerializableEventListener
  */
 public interface EventListener {
 	/** Notifies this listener that an event occurs.

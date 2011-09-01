@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>get rememberme from request's attribute rather than request's parameter.</p>
- *
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
  */
 public class ZkTokenBasedRememberMeServices extends TokenBasedRememberMeServices {

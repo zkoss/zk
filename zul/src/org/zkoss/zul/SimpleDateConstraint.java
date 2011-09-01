@@ -1,18 +1,16 @@
 /* SimpleDateConstraint.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Dec 25 12:06:30     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -154,6 +152,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		SimpleDateFormat df = (SimpleDateFormat)_df.get();
 		if (df == null)
 			_df.set(df = new SimpleDateFormat("yyyyMMdd"));
+				//OK not to use Locales.getCurrent() since yyyyMMdd all numbers
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
@@ -162,7 +161,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	public void validate(Component comp, Object value)
 	throws WrongValueException {
 		if (value instanceof Date) {
-			final Date d = (Date)value;
+			final Date d =  Dates.beginOfDate((Date)value, TimeZones.getCurrent());
 			if (_beg != null && _beg.compareTo(d) > 0)
 				throw outOfRangeValue(comp);
 			if (_end != null && _end.compareTo(d) < 0)

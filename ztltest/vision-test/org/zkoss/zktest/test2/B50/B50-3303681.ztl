@@ -1,0 +1,93 @@
+<test tags="B50-3303681.zul,A,E,Tabbox,Vflex">
+	<case id="Vflex">
+		<server><!--
+<zk><style>
+ol, li {
+	margin: 0px;
+}
+</style>
+	<html><![CDATA[
+		<ol>
+			<li>Make sure "b" is under the panel of "a", and "b" is visible.</li>
+			<li>click "b" and click "a", then "b" is visible.</li>
+		</ol>
+	]]></html>
+	<vlayout>
+		<hlayout>
+			<div height="300px" width="300px" style="border:1px solid black;">
+				<tabbox mold="accordion-lite" vflex="1">
+					<tabs>
+						<tab id="a1" label="a"/>
+						<tab id="b1" label="b"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel style="overflow:scroll"/>
+						<tabpanel style="overflow:scroll"/>
+					</tabpanels>
+				</tabbox>
+			</div>
+			<div height="300px" width="300px" style="border:1px solid black;">
+				<tabbox mold="accordion-lite" vflex="1">
+					<tabs>
+						<tab id="a2" label="a"/>
+						<tab id="b2" label="b"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
+						</tabpanel>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</div>
+		</hlayout>
+		<hlayout>
+			<div height="300px" width="300px" style="border:1px solid black;">
+				<tabbox mold="accordion" vflex="1">
+					<tabs>
+						<tab id="a3" label="a"/>
+						<tab id="b3" label="b"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel style="overflow:scroll"/>
+						<tabpanel style="overflow:scroll"/>
+					</tabpanels>
+				</tabbox>
+			</div>
+			<div height="300px" width="300px" style="border:1px solid black;">
+				<tabbox mold="accordion" vflex="1">
+					<tabs>
+						<tab id="a4" label="a"/>
+						<tab id="b4" label="b"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
+						</tabpanel>
+						<tabpanel style="overflow:auto" width="290px">
+							<div height="290px"/>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</div>
+		</hlayout>
+	</vlayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(b1);
+			click(b2);
+			click(b3);
+			click(b4);
+			verifyImage();
+			click(a1);
+			click(a2);
+			click(a3);
+			click(a4);
+			verifyImage();
+		]]></client>
+	</case>
+</test>

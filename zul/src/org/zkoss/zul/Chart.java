@@ -1,18 +1,16 @@
 /* Chart.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jul 10 16:57:48     2006, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zul.impl.ChartEngine;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
@@ -30,6 +29,7 @@ import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Library;
 
 import java.awt.Font;
 import java.io.Serializable;
@@ -40,7 +40,12 @@ import java.util.TimeZone;
 
 /**
  * The generic chart component. Developers set proper chart type, data model,
- * and the threeD (3D) attribute to draw proper chart. The model and type must
+ * and the threeD (3D) attribute to draw proper chart.
+ *
+ * <p>Chart requires an implementation of an engine ({@link ChartEngine}).
+ * The default engine is based on JFreeChart and available in ZK PE and ZK EE.
+ *
+ * <p>The model and type must
  * match to each other; or the result is unpredictable. The 3D chart is not supported
  * on all chart type.
  *
@@ -210,7 +215,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		}
 	}
 	
-	private class SmartDrawListener implements EventListener, Serializable {
+	private class SmartDrawListener implements SerializableEventListener {
 		private static final long serialVersionUID = 20091008183610L;
 		public void onEvent(Event event) throws Exception {
 			doSmartDraw();
@@ -829,9 +834,10 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
 	 *
-	 * <p>By default, it looks up the component attribute called
-	 * chart-engine. If found, the value is assumed to be the class
-	 * or the class name of the default engine (it must implement
+	 * <p>By default, it looks up the library property called
+	 * org.zkoss.zul.chart.engine.class.
+	 * If found, the value is assumed to be
+	 * the class name of the chart engine (it must implement
 	 * {@link ChartEngine}).
 	 * If not found, {@link UiException} is thrown.
 	 *
@@ -842,22 +848,14 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	 * @since 3.0.0
 	 */
 	protected ChartEngine newChartEngine() throws UiException {
-		Object v = getAttribute("chart-engine");
-		if (v == null)
-			v = "org.zkoss.zkex.zul.impl.JFreeChartEngine";
+		final String PROP = "org.zkoss.zul.chart.engine.class";
+		final String klass = Library.getProperty(PROP);
+		if (klass == null)
+			throw new UiException("Library property,  "+PROP+", required");
 
+		final Object v;
 		try {
-			final Class cls;
-			if (v instanceof String) {
-				cls = Classes.forNameByThread((String)v);
-			} else if (v instanceof Class) {
-				cls = (Class)v;
-			} else {
-				throw new UiException(v != null ? "Unknown chart-engine, "+v:
-					"The chart-engine attribute is not defined");
-			}
-	
-			v = cls.newInstance();
+			v = Classes.newInstanceByThread(klass);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -865,7 +863,6 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 			throw new UiException(ChartEngine.class + " must be implemented by "+v);
 		return (ChartEngine)v;
 	}
-	
 	/** Sets the chart engine.
 	 */
 	public void setEngine(ChartEngine engine) {

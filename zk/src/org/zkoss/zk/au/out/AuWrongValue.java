@@ -1,18 +1,16 @@
 /* AuWrongValue.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed May  2 10:51:43     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -41,5 +39,13 @@ public class AuWrongValue extends AuResponse {
 	 */
 	public AuWrongValue(String[] data) {
 		super("wrongValue", data);
+	}
+
+	/** Default: "zk.wrongValue" if {@link #getDepends} is not null (component-level),
+	 * or null if {@link #getDepends} is null (desktop level)
+	 * @since 5.0.2
+	 */
+	public String getOverrideKey() {
+		return getDepends() != null ? "zk.wrongValue": null;
 	}
 }

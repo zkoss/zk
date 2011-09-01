@@ -1,32 +1,31 @@
 /* MoveEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug 12 08:34:35     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by a component being moved.
  *
- * <p>Component Implementation Note:<br/>
- * A movable component must implement {@link org.zkoss.zk.ui.ext.client.Movable}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
- * 
  * @author tomyeh
  */
 public class MoveEvent extends Event {
@@ -45,6 +44,16 @@ public class MoveEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
+
+	/** Converts an AU request to a move event.
+	 * @since 5.0.0
+	 */
+	public static final MoveEvent getMoveEvent(AuRequest request) {
+		final Map data = request.getData();
+		return new MoveEvent(request.getCommand(), request.getComponent(),
+			(String)data.get("left"), (String)data.get("top"),
+			AuRequests.parseKeys(data));
+	}
 
 	/** Constructs a mouse relevant event.
 	 */

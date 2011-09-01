@@ -1,18 +1,16 @@
 /* TreeDataEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Aug 10 2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -24,15 +22,17 @@ import org.zkoss.zul.TreeModel;
  * Defines an event that encapsulates changes to a tree. 
  *
  * @author Jeff Liu
- * @since ZK 3.0.0
+ * @since 3.0.0
  */
 public class TreeDataEvent {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
-    /** Identifies the addition of children to a node. */    
+	/** Identifies the addition of children to a node. */    
 	public static final int INTERVAL_ADDED = 1;
-    /** Identifies the removal of children to a node. */   
+	/** Identifies the removal of children to a node. */   
 	public static final int INTERVAL_REMOVED = 2;
+	/** Identifies the structure of the tree has changed. @since 5.0.6  */
+	public static final int STRUCTURE_CHANGED = 3;
 
 	private final TreeModel _model;
 	private final int _type;

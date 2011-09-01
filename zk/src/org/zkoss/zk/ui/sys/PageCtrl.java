@@ -1,18 +1,16 @@
 /* PageCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jun  8 13:55:09     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,22 +21,21 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
- * Addition interface to {@link org.zkoss.zk.ui.Page} for implementation
- * purpose.
+ * Addition interface to {@link Page} for implementation purpose.
  *
  * <p>Application developers shall never access any of this methods.
  *
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** The execution attribute used to control {@link #redraw} to use
-	 * include instead of forward to redraw the page
+	/** @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zk.ui.sys.Attributes#PAGE_REDRAW_CONTROL}.
 	 */
 	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
 
@@ -75,32 +72,66 @@ public interface PageCtrl {
 	 */
 	public void destroy();
 
-	/** Returns the content of the specified condition
-	 * that shall be generated inside the header element
-	 * (never null).
+	/** Returns the tags that shall be generated inside the head element
+	 * and before ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
 	 *
-	 * <p>For HTML, the header element is the HEAD element.
+	 * <p>Since it is generated before ZK's default tags (such as CSS and JS),
+	 * it cannot override ZK's default behaviors.
 	 *
-	 * @param before whether to return the headers that shall be shown
-	 * before ZK's CSS/JS headers.
-	 * If true, only the headers that shall be shown before (such as meta)
-	 * are returned.
-	 * If true, only the headers that shall be shown after (such as link)
-	 * are returned.
-	 * @see #getHeaders()
-	 * @since 3.6.1
+	 * @see #getAfterHeadTags
+	 * @since 5.0.5
+	 */
+	public String getBeforeHeadTags();
+	/** Returns the tags that shall be generated inside the head element
+	 * and after ZK's default tags (never null).
+	 * For example, it might consist of &ltmeta&gt; and &lt;link&gt;.
+	 *
+	 * <p>Since it is generated after ZK's default tags (such as CSS and JS),
+	 * it could override ZK's default behaviors.
+	 *
+	 * @see #getBeforeHeadTags
+	 * @since 5.0.5
+	 */
+	public String getAfterHeadTags();
+	/** Adds the tags that will be generated inside the head element
+	 * and before ZK's default tags. For example,
+	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 *
+	 * <p>You could specify the link, meta and script directive to have the similar
+	 * result.
+	 * @since 5.0.5
+	 */
+	public void addBeforeHeadTags(String tags);
+	/** Adds the tags that will be generated inside the head element
+	 * and after ZK's default tags. For example,
+	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
+	 *
+	 * <p>You could specify the link, meta and script directive to have the similar
+	 * result.
+	 * @since 5.0.5
+	 */
+	public void addAfterHeadTags(String tags);
+
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
 	 */
 	public String getHeaders(boolean before);
-	/** Returns all content that will be generated inside the header element
-	 * (never null).
-	 * <p>For HTML, the header element is the HEAD element.
-	 * <p>It returns all header no matter it shall be shown before or
-	 * after ZK's CSS/JS headers. To have more control, use
-	 * {@link #getHeaders(boolean)} instead.
-	 *
-	 * @see #getHeaders(boolean)
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
 	 */
 	public String getHeaders();
+
+	/** Returns a readonly collection of response headers (never null).
+	 * The entry is a three-element object array.
+	 * The first element is the header name.
+	 * The second element of the array is the value which is an instance of
+	 * {@link java.util.Date} or {@link String} (and never null).
+	 * The third element indicates whether to add (rather than set)
+	 * theader. It is an instance of Boolean (and never null).
+	 * @since 5.0.2
+	 */
+	public Collection getResponseHeaders();
 	/** Returns the attributes of the root element declared in this page
 	 * (never null).
 	 * An empty string is returned if no special attribute is declared.
@@ -153,6 +184,19 @@ public interface PageCtrl {
 	 */
 	public void setContentType(String contentType);
 
+	/** Returns the widget class of this page, or null to use the device default.
+	 *
+	 * @since 5.0.5
+	 */
+	public String getWidgetClass();
+	/** Sets the widget class of this page.
+	 *
+	 * @param wgtcls the widget class. The device default is assumed if wgtcls
+	 * is null or empty.
+	 * @since 5.0.5
+	 */
+	public void setWidgetClass(String wgtcls);
+
 	/** Returns if the client can cache the rendered result, or null
 	 * to use the device default.
 	 *
@@ -190,58 +234,24 @@ public interface PageCtrl {
 	/** Returns the owner of this page, or null if it is not owned by
 	 * any component.
 	 * A page is included by a component. We say it is owned by the component.
+	 * <p>Note: the owner, if not null, must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 */
 	public Component getOwner();
 	/** Sets the owner of this page.
-	 * <p>Used only internally.
+	 * <p>Called only internally
+	 * <p>Since 5.0.6, the owner must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 */
 	public void setOwner(Component comp);
 
 	/** Redraws the whole page into the specified output.
 	 *
-	 * <p>You could use {@link #ATTR_REDRAW_BY_INCLUDE} to control
-	 * whether to include, instead of forward, the page content.
-	 * By default, {@link Execution#forward } is used if possible.
+	 * <p>You could use {@link org.zkoss.zk.ui.sys.Attributes#PAGE_REDRAW_CONTROL}
+	 * and/or {@link org.zkoss.zk.ui.sys.Attributes#PAGE_RENDERER}
+	 * to control how to render manually.
 	 *
-	 * @param responses a list of responses that the page has to generate
-	 * corresponding javascript to process them; or null if no such responses.
-	 * The responses is not null, if and only if the page is creating
+	 * @since 5.0.0
 	 */
-	public void redraw(Collection responses, Writer out) throws IOException;
-
-	//-- Used for component implementation --//
-	/** Adds a root component to a page.
-	 * <p>It is used internally and developers shall not invoke it
-	 * explicityly.
-	 * @see Component#setPage
-	 */
-	public void addRoot(Component comp);
-	/** Detaches a root component from this page.
-	 * <p>It is used internally and developers shall not invoke it
-	 * explicitly
-	 * @see Component#setPage
-	 */
-	public void removeRoot(Component comp);
-	/** Moves a root component before the reference component.
-	 *
-	 * <p>Note: it assumes removeRoot was called before for comp.
-	 * Otherwise, nothing happens.
-	 *
-	 * <p>It is used internally and developers shall not invoke it
-	 * explicitly
-	 *
-	 * @since 3.0.0
-	 * @see Component#setPageBefore
-	 */
-	public void moveRoot(Component comp, Component refRoot);
-
-	/** Adds a fellow. */
-	public void addFellow(Component comp);
-	/** Removes a fellow. */
-	public void removeFellow(Component comp);
-	/** Returns whether a fellow exists with the specified component ID.
-	 */
-	public boolean hasFellow(String compId);
+	public void redraw(Writer out) throws IOException;
 
 	/** Adds a deferred zscript.
 	 *
@@ -251,22 +261,10 @@ public interface PageCtrl {
 	 * when the interpreter of the same language is being loaded.
 	 */
 	public void addDeferredZScript(Component parent, ZScript zscript);
- 	/** Returns the default parent, or null if no such parent.
- 	 * If a default parent is defined (by use of {@link #setDefaultParent}),
- 	 * {@link org.zkoss.zk.ui.Executions#createComponents(String, Component, java.util.Map)} will
- 	 * use it as the default parent, if developers didn't specify one.
+ 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
  	 */
  	public Component getDefaultParent();
- 	/** Sets the default parent.
- 	 *
- 	 * <p>It is rarely used by application developers. Rather, it is used
- 	 * by ZHTML's body to make sure new created compnents are placed
- 	 * correctly.
- 	 *
- 	 * <p>Caller has to ensure the comp is part of the page. Otherwise,
- 	 * the result is unpreditable.
- 	 *
- 	 * @see #getDefaultParent
+ 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
  	 */
  	public void setDefaultParent(Component comp);
 

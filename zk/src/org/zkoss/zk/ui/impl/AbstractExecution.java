@@ -1,18 +1,16 @@
 /* AbstractExecution.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun  6 12:18:25     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.ListIterator;
 import java.io.Reader;
@@ -30,6 +29,8 @@ import java.io.IOException;
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
 
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -44,6 +45,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.ExecutionInfo;
 import org.zkoss.zk.au.AuResponse;
 
 /**
@@ -64,6 +66,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private final Page _creating;
 	/** The sequence ID of the current request. */
 	private String _reqId;
+	/** A collection of the AU responses that shall be generated to client */
+	private Collection _resps;
+	/** The information of the event being served, or null if not under event processing. */
+	private ExecutionInfo _execinf;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -74,20 +80,27 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	 */
 	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
-		_creating = creating;
-
-		if (desktop != null) {
-			final Iterator it = desktop.getPages().iterator();
-			if (it.hasNext()) _curpage = (Page)it.next();
-		}
+		_curpage = _creating = creating;
+		if (_curpage == null)
+			_curpage = getPage(desktop);
+	}
+	private static Page getPage(Desktop desktop) {
+		return desktop != null ? desktop.getFirstPage(): null;
 	}
 
 	//-- Execution --//
 	public final boolean isAsyncUpdate(Page page) {
-		return _creating == null || (page != null && _creating != page);
+		if (page != null)
+			return _creating != page;
+		Visualizer uv;
+		return _creating == null
+			|| ((uv = getVisualizer()) != null && uv.isEverAsyncUpdate());
 	}
 	public Desktop getDesktop() {
 		return _desktop;
+	}
+	public Session getSession() {
+		return _desktop != null ? _desktop.getSession(): Sessions.getCurrent();
 	}
 
 	public void postEvent(Event evt) {
@@ -110,13 +123,49 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			}
 		}	
 	}
+	public void postEvent(int priority, Component realTarget, Event evt) {
+		postEvent(priority,
+			realTarget != evt.getTarget() ? new ProxyEvent(realTarget, evt): evt);
+	}
 
 	//-- ExecutionCtrl --//
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		Desktop desktop;
+		return val != null || !recurse || (desktop=getDesktop()) == null ?
+			val: desktop.getAttribute(name, true);
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		Desktop desktop;
+		return hasAttribute(name)
+		|| (recurse && (desktop=getDesktop()) != null && desktop.hasAttribute(name, true));
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			Desktop desktop = getDesktop();
+			if (desktop != null) {
+				if (desktop.hasAttribute(name, true))
+					return desktop.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			Desktop desktop = getDesktop();
+			if (desktop != null) {
+				if (desktop.hasAttribute(name, true))
+					return desktop.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
+
 	public final Page getCurrentPage() {
-		if (_curpage != null)
-			return _curpage;
-		final Iterator it = _desktop.getPages().iterator();
-		return it.hasNext() ? (Page)it.next(): null;
+		if (_curpage == null)
+			_curpage = getPage(_desktop);
+		return _curpage;
 	}
 	public final void setCurrentPage(Page curpage) {
 		if (_curpage != null && curpage != null && _curpage != curpage) {
@@ -271,6 +320,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 				_args.remove(0);
 		}
 	}
+	public void addAuResponse(AuResponse response) {
+		getUiEngine().addResponse(response);
+	}
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
 	}
@@ -287,6 +339,20 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public String getRequestId() {
 		return _reqId;
+	}
+
+	public Collection getResponses() {
+		return _resps;
+	}
+	public void setResponses(Collection responses) {
+		_resps = responses;
+	}
+
+	public ExecutionInfo getExecutionInfo() {
+		return _execinf;
+	}
+	public void setExecutionInfo(ExecutionInfo execinf) {
+		_execinf = execinf;
 	}
 
 	//Object//

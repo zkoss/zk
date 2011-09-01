@@ -1,18 +1,16 @@
 /* HtmlNativeComponent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Jul 19 18:05:01     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,29 +18,37 @@ package org.zkoss.zk.ui;
 
 import java.util.Collections;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.io.StringWriter;
 import java.io.Writer;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.ext.render.Merger;
 import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
- * A comonent used to represent XML elements that are associated
- * with the inline namespace (http://www.zkoss.org/2005/zk/inline).
+ * A component used to represent XML elements that are associated
+ * with the native namespace (http://www.zkoss.org/2005/zk/native).
  *
  * <p>It contains the content that shall be sent directly to client.
  * It has three parts: prolog, children and epilog.
@@ -56,14 +62,18 @@ import org.zkoss.zk.fn.ZkFns;
  * @since 3.0.0
  */
 public class HtmlNativeComponent extends AbstractComponent
-implements DynamicTag, Native {
-	private static Helper _helper = new HtmlHelper();
-	private static final String ATTR_ZKHEAD_FOUND = "org.zkoss.zk.ui.zkheadFound";
+implements DynamicTag, Native { //cannot be RawId since two native might have the same ID
+	private static final Helper _helper = new HtmlHelper();
+	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
+
+	//---------
+	//structure: _prefix <_tag> _prolog children _epilog </_tag> _postifx
+	//---------
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";
 	/** The text before the tag name. */
-	private String _prefix;
+	private String _prefix, _postfix;
 	private Map _props;
 	/** Declared namespaces ({@link Namespace}). */
 	private List _dns;
@@ -82,7 +92,10 @@ implements DynamicTag, Native {
 	}
 
 	/** Contructs a {@link HtmlNativeComponent} component with the specified
-	 * prolog ad epilog.
+	 * prolog and epilog.
+	 * @param tag the tag name. If null or empty, plain text is assumed.
+	 * @param prolog the content right before the children, if any.
+	 * @param epilog the content right after the children, if any.
 	 */
 	public HtmlNativeComponent(String tag, String prolog, String epilog) {
 		this(tag);
@@ -91,6 +104,12 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
+	/** Returns the widget class, "zk.Native".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zk.Native";
+	}
 	/** Returns the tag name, or null if plain text.
 	 */
 	public String getTag() {
@@ -136,6 +155,153 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws java.io.IOException {
+		//Note: _tag == null can NOT be handled specially
+		final Execution exec = Executions.getCurrent();
+		final boolean root = getParent() == null && (getPage().isComplete()
+		|| (exec != null && "complete".equals(ExecutionsCtrl.getPageRedrawControl(exec))));
+		if (exec == null || exec.isAsyncUpdate(null)
+		|| (!root && !HtmlPageRenders.isDirectContent(exec))) {
+			super.redraw(out); //renderProperties (assume in zscript)
+			return;
+		}
+
+		Writer oldout = null;
+		if (exec != null && !HtmlPageRenders.isZkTagsGenerated(exec)
+		&& exec.getAttribute(ATTR_TOP_NATIVE) == null) { //need to check topmost native only
+			String tn;
+			if (root || "html".equals(tn = _tag != null ? _tag.toLowerCase(): "")
+			|| "body".equals(tn) || "head".equals(tn)) {
+				exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
+				oldout = out;
+				out = new StringWriter();
+			}
+		}
+
+		out.write(getPrologHalf());
+
+		//children
+		Component child = getFirstChild();
+		if (child == null) {
+			//need to invoke outStandalone to generate response if any (Bug 3009925)
+			//however, it is not required if not root (since others will invoke)
+			if (root)
+				HtmlPageRenders.outStandalone(exec, null, out);
+		} else {
+			if (root)
+				HtmlPageRenders.setDirectContent(exec, true);
+			do {
+				Component next = child.getNextSibling();
+				if (child instanceof Native
+				|| ((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
+					((ComponentCtrl)child).redraw(out);
+				} else {
+					HtmlPageRenders.setDirectContent(exec, false);
+					HtmlPageRenders.outStandalone(exec, child, out);
+					HtmlPageRenders.setDirectContent(exec, true);
+				}
+				child = next;
+			} while (child != null);
+		}
+
+		out.write(getEpilogHalf());
+
+		if (oldout != null) {
+			exec.removeAttribute(ATTR_TOP_NATIVE);
+
+			//order: <html><head><zkhead><body>
+			//1. replace <zkhead/> if found
+			//2. insert before </head> if found
+			//3. insert after <body> if found
+			//4. insert after <html> if found
+			//5. insert at the end if none of above found
+			final StringBuffer sb = ((StringWriter)out).getBuffer();
+			if (!HtmlPageRenders.isZkTagsGenerated(exec)) {
+				int jhead = -1, //anchor of header
+					junav = -1, //anchor of unavailable
+					head = -1, //index of <head>
+					heade = -1, //index of </head>
+					html = -1; //index of <html>
+				boolean unavailDone = false;
+				for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
+					++j;
+					if (jhead < 0 && startsWith(sb, "zkhead", j)) {
+						int l = Strings.indexOf(sb, '>', j) + 1;
+						sb.delete(jhead = --j, l); //jhead found
+						len = sb.length();
+					} else if (head < 0 && startsWith(sb, "head", j)) {
+						head = Strings.indexOf(sb, '>', j) + 1;
+					} else if (html < 0 && startsWith(sb, "html", j)) {
+						html = Strings.indexOf(sb, '>', j) + 1;
+					} else if (junav < 0 && startsWith(sb, "body", j)) {
+						junav = Strings.indexOf(sb, '>', j) + 1; //junav found
+						break; //done
+					} else if (sb.charAt(j) == '/' && startsWith(sb, "head", ++j)) {
+						heade = j - 2;
+					}
+				}
+
+				boolean disableUnavailable = false;
+				if (jhead < 0 && ((jhead = heade) < 0) //use </head> if no <zkhead>
+				&& ((jhead = head) < 0) //use <head> if no </head> (though unlikely)
+				&& ((jhead = junav) < 0) //use <body> if no <head>
+				&& ((jhead = html) < 0)) { //use <html> if no <body>
+					if (_tag != null) {
+						final String tn = _tag.toLowerCase();
+						if ("div".equals(tn) || "span".equals(tn)) {
+							l_loop:
+							for (int j = 0, len = sb.length(); j < len; ++j)
+								switch (sb.charAt(j)) {
+								case '>':
+									disableUnavailable = true; //make output cleaner
+									jhead = j + 1; //found
+								case '=':  //it might have something depends on JS
+								case '"':
+									break l_loop;
+								}
+						}
+					}
+					if (jhead < 0)
+						jhead = 0; //insert at head if not found
+				}
+
+				final String msg = HtmlPageRenders.outUnavailable(exec);
+					//called if disableUnavailable (so it won't be generated later)
+				if (msg != null && !disableUnavailable) {
+					if (junav < 0) {
+						if (html >= 0)
+							junav = sb.lastIndexOf("</html");
+					}
+					if (junav >= 0)
+						sb.insert(junav < jhead ? jhead: junav, msg);
+					else
+						sb.append(msg);
+				}
+
+				final String zktags = HtmlPageRenders.outHeaderZkTags(exec, getPage());
+				if (zktags != null)
+					sb.insert(jhead, zktags);
+			}
+
+			oldout.write(sb.toString());
+		}
+	}
+
+	/** Used to indicate the redrawing of the top native is found. */
+	private static final String ATTR_TOP_NATIVE = "zkHtmlTopNative";
+	private static boolean startsWith(StringBuffer sb, String tag, int start) {
+		int end = start + tag.length();
+		char cc;
+		return sb.length() > end && tag.equalsIgnoreCase(sb.substring(start, end))
+			&& ((cc=sb.charAt(end)) < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z');
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "prolog", getPrologHalf());
+		render(renderer, "epilog", getEpilogHalf());
+	}
+	private String getPrologHalf() {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 			//don't use _helper directly, since the derive might override it
@@ -148,87 +314,27 @@ implements DynamicTag, Native {
 
 		//prolog
 		sb.append(_prolog); //no encoding
-		boolean zktagGened = replaceZkhead(sb, false);
-		final String tn = _tag != null ? _tag.toLowerCase(): "";
-		if (!zktagGened && ("html".equals(tn) || "body".equals(tn)
-		|| "head".equals(tn))) {//<head> might be part of _prolog
-			final int j = indexOfHead(sb);
-			if (j >= 0) {
-				zktagGened = true;
-				final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
-				if (zktags != null)
-					sb.insert(j, zktags);
-			}
-		}
-		write(out, sb);
-
-		//children
-		for (Iterator it = getChildren().iterator(); it.hasNext();)
-			((Component)it.next()).redraw(out);
+		return sb.toString();
+	}
+	private String getEpilogHalf() {
+		final StringBuffer sb = new StringBuffer(128);
+		final Helper helper = getHelper();
 
 		//epilog
 		sb.append(_epilog);
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
-		zktagGened = replaceZkhead(sb, zktagGened);
-		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
-			final int j = sb.lastIndexOf("</" + _tag);
-			if (j >= 0) {
-				final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
-				if (zktags != null)
-					sb.insert(j, zktags);
-			}
-		}
-		out.write(sb.toString());
-	}
-	private boolean replaceZkhead(StringBuffer sb, boolean zktagGened) {
-		final Execution exec = Executions.getCurrent();
-		if (exec == null || exec.getAttribute(ATTR_ZKHEAD_FOUND) == null) {
-			final int j = sb.indexOf("<zkhead/>");
-			if (j >= 0) {
-				if (exec != null)
-					exec.setAttribute(ATTR_ZKHEAD_FOUND, Boolean.TRUE);
-					//Note: we allow only one zkhead (for better performance)
 
-				if (!zktagGened) {
-					final String zktags = ZkFns.outZkHeadHtmlTags(getPage());
-					if (zktags != null) {
-						sb.replace(j, j + 9, zktags);
-						return true;
-					}
-					zktagGened = true;
-				}
-				sb.delete(j, j + 9);
-			}
-		}
-		return zktagGened;
+		if (_postfix != null)
+			sb.append(_postfix);
+		return sb.toString();
 	}
-	/** Writes the content of stringbuffer to the writer.
-	 * After written, stringbuffer is reset.
+	/** Return the full content, getPrologHalf() + getFullLast().
+	 * It assumes it has no children.
 	 */
-	private static void write(Writer out, StringBuffer sb)
-	throws java.io.IOException {
-		out.write(sb.toString());
-		sb.setLength(0);
-	}
-	/** Search <head> case-insensitive. */
-	private static int indexOfHead(StringBuffer sb) {
-		for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
-			if (j + 6 > len) break; //not found
-
-			char cc = sb.charAt(++j);
-			if (cc != 'h' && cc != 'H') continue;
-			cc = sb.charAt(++j);
-			if (cc != 'e' && cc != 'E') continue;
-			cc = sb.charAt(++j);
-			if (cc != 'a' && cc != 'A') continue;
-			cc = sb.charAt(++j);
-			if (cc != 'd' && cc != 'D') continue;
-			j = sb.indexOf(">", j + 1);
-			return j >= 0 ? j + 1: -1;
-		}
-		return -1;
+	private final String getFullContent() {
+		return getPrologHalf() + getEpilogHalf();
 	}
 
 	//DynamicTag//
@@ -298,16 +404,113 @@ implements DynamicTag, Native {
 			sb.append(text); //don't encode (bug 2689443)
 		}
 	}
+	private final Component mergeNext() {
+		final AbstractComponent parent = (AbstractComponent)getParent();
+		if (parent != null) {
+			final AbstractComponent n = (AbstractComponent)getNextSibling();
+			if (n instanceof HtmlNativeComponent) {
+				final DesktopCtrl desktopCtrl = _page != null ?
+					(DesktopCtrl)_page.getDesktop(): null;
+			 	if (n.getFirstChild() == null) {
+			 		//remove n
+			 		final AbstractComponent n2 = (AbstractComponent)n.getNextSibling();
+			 		parent.setNext(this, n2);
+			 		parent.setPrev(n2, this);
+			 		parent.incNChild(-1);
 
-	protected Object newExtraCtrl() {
+					final String s = ((HtmlNativeComponent)n).getFullContent();
+			 		_postfix = _postfix != null ? _postfix + s: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(n, false); //ok but no need to recycle
+					return this;
+			 	}
+			 	if (getFirstChild() == null) {
+			 		//remove this
+			 		final AbstractComponent p = (AbstractComponent)getPreviousSibling();
+			 		parent.setNext(p, n);
+			 		parent.setPrev(n, p);
+			 		parent.incNChild(-1);
+
+			 		final String s = getFullContent(),
+			 			prefix = ((HtmlNativeComponent)n)._prefix;
+			 		((HtmlNativeComponent)n)._prefix = prefix != null ? s + prefix: s;
+					if (desktopCtrl != null)
+						desktopCtrl.removeComponent(this, false); //ok but no need to recycle
+					return n;
+			 	}
+			}
+		}
+		return null;
+	}
+	private final Component mergeChild() {
+		Component child = getFirstChild();
+		if (child != null) {
+			HtmlNativeComponent childWithChild = null;
+			for (; child != null; child = child.getNextSibling()) {
+				if (!(child instanceof HtmlNativeComponent))
+					return null;
+				final Component cc = child.getFirstChild();
+				if (cc != null) {
+					if (childWithChild != null)
+						return null; //only one child-with-child is allowed
+					childWithChild = (HtmlNativeComponent)child;
+				}
+			}
+
+			final DesktopCtrl desktopCtrl = _page != null ?
+				(DesktopCtrl)_page.getDesktop(): null;
+			boolean bEpilog = false;
+			final StringBuffer prolog = new StringBuffer(_prolog),
+				epilog = new StringBuffer();
+			for (child = getFirstChild(); child != null;
+			child = child.getNextSibling()) {
+				final HtmlNativeComponent nc = (HtmlNativeComponent)child;
+				if (bEpilog) { //after childWithChild
+					epilog.append(nc.getFullContent());
+				} else if (child != childWithChild) { //in front of childWithChild
+					prolog.append(nc.getFullContent());
+				} else { //childWithChild
+					prolog.append(nc.getPrologHalf());
+					epilog.append(nc.getEpilogHalf());
+					bEpilog = true;
+				}
+				if (desktopCtrl != null)
+					desktopCtrl.removeComponent(nc, false); //ok but no need to recycle
+			}
+
+			_prolog = prolog.toString();
+			_epilog = epilog.append(_epilog).toString();
+
+			if (childWithChild == null) {
+				nChild(null, null, 0);
+			} else {
+				nChild(
+					(AbstractComponent)(child = childWithChild.getFirstChild()),
+					(AbstractComponent)childWithChild.getLastChild(),
+					childWithChild.nChild());
+			}
+			return this;
+		}
+		return null;
+	}
+
+	//@Override
+	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	protected class ExtraCtrl implements PrologAllowed {
+	protected class ExtraCtrl implements DirectContent, PrologAllowed, Merger {
 		//-- PrologAware --//
 		public void setPrologContent(String prolog) {
 			_prefix = prolog;
 				//Notice: it is used as prefix (shown before the tag and children)
 				//while _prolog is the text shown after the tag and before the children
+		}
+		//Merger//
+		public Component mergeNextSibling() {
+			return mergeNext();
+		}
+		public Component mergeChildren() {
+			return mergeChild();
 		}
 	}
 }

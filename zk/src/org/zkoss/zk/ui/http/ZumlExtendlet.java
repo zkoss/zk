@@ -1,18 +1,16 @@
 /* ZumlExtendlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jul  4 17:35:14     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -58,9 +56,9 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  * loaded from the classpath.
  *
  * @author tomyeh
- * @since 2.4.1
+ * @since 2.4.1 (public since 5.0.5)
  */
-/*package*/ class ZumlExtendlet implements Extendlet {
+public class ZumlExtendlet implements Extendlet {
 	private static final Log log = Log.lookup(ZumlExtendlet.class);
 	private ExtendletContext _webctx;
 	/** PageDefinition cache. */
@@ -85,16 +83,15 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		_cache.setLifetime(60*60*1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
 		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
+
+		config.addCompressExtension("zul");
 	}
 	public boolean getFeature(int feature) {
 		return false; //not support ALLOW_DIRECT_INCLUDE
 	}
 	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path, String extra)
+	HttpServletResponse response, String path)
 	throws ServletException, IOException {
-		if (extra != null)
-			log.warning("extra is not supported by ZumlExtendlet: "+extra);
-
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final PageDefinition pagedef = (PageDefinition)_cache.get(path);
 		if (pagedef == null) {
@@ -170,6 +167,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	private void handleError(Session sess, HttpServletRequest request,
 	HttpServletResponse response, String path, Throwable err)
 	throws ServletException, IOException {
+		Utils.resetOwner();
+
 		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1802487 and 1714094
@@ -200,7 +199,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 		//-- super --//
 		//-- super --//
-		protected Object parse(InputStream is, String path) throws Exception {
+		protected Object parse(InputStream is, String path, String orgpath)
+		throws Exception {
 			return PageDefinitions.getPageDefinitionDirectly(
 				getWebApp(), _webctx.getLocator(),
 				new java.io.InputStreamReader(is, "UTF-8"),

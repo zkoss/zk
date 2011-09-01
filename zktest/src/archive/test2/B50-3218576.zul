@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3218576.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  2 17:05:39 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click the button "Click Me", you should see the toolbar of "T3" is outside the border of the "Panel Content".</li>
+</ol>
+]]></html>
+<panel id="panel" title="Panel" border="normal" framable="true">
+<panelchildren>
+Panel Content
+</panelchildren>
+</panel>
+<button label="Click Me">
+<attribute name="onClick">
+<![CDATA[
+import org.zkoss.zul.*;
+Toolbar t1 = new Toolbar();
+t1.appendChild(new Label("T1"));
+Toolbar t3 = new Toolbar();
+t3.appendChild(new Label("T3"));
+panel.addToolbar("tbar", t1);
+panel.addToolbar("fbar", t3);
+]]>
+</attribute>
+</button>
+</zk>

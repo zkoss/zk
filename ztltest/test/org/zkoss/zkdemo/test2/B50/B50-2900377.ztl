@@ -1,0 +1,20 @@
+<test tags="Panel">
+	<case id="closed">
+		<server>
+			<!--
+				<zk>
+				You should see the panel is closed.
+				<panel id="panel" title="Panel" border="normal" collapsible="true" open="false">
+				<panelchildren>
+				<label>test</label>
+				</panelchildren>
+				</panel>
+				</zk>
+			-->
+		</server>
+		<client>	<![CDATA[
+			
+			verifyEquals("none", jq("div.z-panel-body").css("display"));			
+			]]></client>
+	</case>
+</test>

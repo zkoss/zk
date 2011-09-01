@@ -1,24 +1,25 @@
 /* Html.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jul 25 11:39:49     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
+import java.io.Writer;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -63,7 +64,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>If you need to generate the HTML tags directly
  * without enclosing with SPAN, you can use the Native namespace,
  * http://www.zkoss.org/2005/zk/native.
- * Refer to the Developer's Guide for more information.
+ * Refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Patterns/HTML_Tags">ZK Developer's Reference</a> for more information.
  *
  * <p>A non-XUL extension.
  *
@@ -84,25 +85,59 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 	}
 
 	/** Returns the embedded content (i.e., HTML tags).
-	 * <p>Default: empty ("").
 	 */
 	public String getContent() {
 		return _content;
 	}
 	/** Sets the embedded content (i.e., HTML tags).
+	 * <p>Default: empty ("").
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
+	 *
+	 * <h3>Security Note</h3>
+	 * <p>Unlike other methods, the content assigned to this method
+	 * is generated directly to the browser without escaping.
+	 * Thus, it is better not to have something input by the user to avoid
+	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
+	 * attach.
 	 */
 	public void setContent(String content) {
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", getContent());
+			//allow deriving to override getContent()
 		}
 	}
 
-	//-- Component --//
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		String cnt = getContent();
+			//allow deriving to override getContent()
+		if (cnt.length() > 0) {
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null) {
+				final Writer cwout = rc.temp;
+				cwout.write("<div id=\"");
+				cwout.write(getUuid());
+				cwout.write("\" style=\"display:none\">");
+				cwout.write(cnt);
+				cwout.write("</div>\n");
+				if (!rc.included) //Use z$ea only if not included (since the included page is rendered a bit late because of Include handles _childjs in bind_)
+					cnt = null; //means already generated
+			}
+			if (cnt == null) renderer.render("z$ea", "content");
+			else render(renderer, "content", cnt);
+		}
+	}
+
 	/** Default: not childable.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 }

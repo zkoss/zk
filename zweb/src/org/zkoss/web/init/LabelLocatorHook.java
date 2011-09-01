@@ -1,18 +1,16 @@
 /* LabelLocatorHook.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Apr  7 16:49:15     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -26,7 +24,7 @@ import javax.servlet.ServletContext;
 //import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.util.resource.ServletLabelLocator;
-import org.zkoss.web.util.resource.ServletLabelResovler;
+import org.zkoss.web.util.resource.ServletRequestResolver;
 
 /**
  * Used to hook a label locator to locate resources from the servlet context.
@@ -56,6 +54,6 @@ public class LabelLocatorHook implements ServletContextListener {
 		//if (log.debugable()) log.debug("Hook label locator for "+ctx);
 
 		Labels.register(new ServletLabelLocator(ctx));
-		Labels.setVariableResolver(new ServletLabelResovler());
+		Labels.setVariableResolver(new ServletRequestResolver());
 	}
 }

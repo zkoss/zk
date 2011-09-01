@@ -1,18 +1,16 @@
 /* ListenerIterator.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun  4 16:12:35     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,8 @@ import java.util.List;
 import java.util.Iterator;
 
 /**
+ * @deprecated As of release 5.0.6, replaced with
+ * {@link org.zkoss.util.CollectionsX#comodifiableIterator}.
  * Used to iterate the event listener.
  *
  * <p>It resolves a bug of LinkedList:

@@ -1,32 +1,29 @@
 /* SizeEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Dec  7 11:46:12     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by a component being re-sized.
  *
- * <p>Component Implementation Note:<br/>
- * A sizable component must implement {@link org.zkoss.zk.ui.ext.client.Sizable}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
- * 
  * @author tomyeh
  */
 public class SizeEvent extends Event {
@@ -45,6 +42,16 @@ public class SizeEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
+
+	/** Converts an AU request to a size event.
+	 * @since 5.0.0
+	 */
+	public static final SizeEvent getSizeEvent(AuRequest request) {
+		final java.util.Map data = request.getData();
+		return new SizeEvent(request.getCommand(), request.getComponent(),
+			(String)data.get("width"), (String)data.get("height"),
+			AuRequests.parseKeys(data));
+	}
 
 	/** Constructs a mouse relevant event.
 	 */

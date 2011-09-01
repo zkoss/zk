@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3142509.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 23 15:27:11 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<listbox mold="select" id="list">
+		<listhead/>
+		<listitem label="item1"/>
+		<listitem label="item2" selected="true"/>
+		<listitem label="item3"/>
+		<listitem label="item4"/>
+	</listbox>
+	<button label="Please click to select item 4, if item 3 that's bug" onClick="list.selectedIndex=3"/>
+</zk>
+

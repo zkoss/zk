@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3316035.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	The 3 Grids should look identical.
+	<grid hflex="min">
+		<columns>
+			<column hflex="min" />
+			<column hflex="min" />
+		</columns>
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min" sizedByContent="true">
+		<rows>
+			<row>
+				Label aligned:
+				<textbox cols="35"></textbox>
+			</row>
+			<row>
+				<label value=" * "></label>
+				<label value="username"></label>
+			</row>
+		</rows>
+	</grid>
+</zk>

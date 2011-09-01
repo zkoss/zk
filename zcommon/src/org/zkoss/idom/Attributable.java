@@ -1,17 +1,15 @@
 /* Attributable.java
 
-{{IS_NOTE
 
 Purpose: 
 Description: 
 History:
 C2001/10/23 12:38:28, reate, Tom M. Yeh
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -155,12 +153,10 @@ public interface Attributable {
 	 */
 	public Attribute setAttributeValue(String tname, String value);
 
-	/** Returns whether it is aware of the modificatioin of attributes.
-	 * If true, the modified flag is set if any of its attribute is modified.
-	 * <p>Default: false.
+	/** @deprecated As of release 5.0.8, it always returns false.
 	 */
 	public boolean isAttributeModificationAware();
-	/** Sets whether it is aware of the modificatioin of attributes.
+	/** @deprecated As of release 5.0.8, it does nothing.
 	 */
 	public void setAttributeModificationAware(boolean aware);
 }

@@ -1,0 +1,57 @@
+<!-- B50-3190542.ztl.java
+
+	Purpose:for testing B50-3190542.ztl .
+
+	Description:
+
+	History:
+		06, 1, 2011 10:03:26
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3190542.zul,A,E,Portallayout,Panel,Unstable,bug">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click Maximize icon. the panel will become lagger.</li>
+			<li>Click restore icon. that shall not error happen.</li>
+		</ol>
+	]]></html>
+	<portallayout id="pl" maximizedMode="whole">
+		<portalchildren >
+			<panel height="150px" title="panel" border="normal" 
+				maximizable="true" onMaximize="">
+				<panelchildren>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				Element pll = pl.$n();
+				int screenwidth = getElementWidth(pll.parentNode()).intValue();
+				int x = getElementWidth(jq("@panel")).intValue();
+				click(jq(".z-panel-icon"));
+				waitResponse();
+				int x1 = getElementWidth(jq("@panel")).intValue();
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
+					verifyTrue(x1 >= x);
+				else
+					verifyTrue(x1 > x);
+				verifyTrue(screenwidth < x1+10);
+				click(jq(".z-panel-icon"));
+				waitResponse();
+				verifyFalse(jq("@window").exists());
+		]]></client>
+	</case>
+</test>

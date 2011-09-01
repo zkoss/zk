@@ -1,0 +1,48 @@
+<?component name="imageDetails" macroURI="F50-3315689-2.zul"?>
+
+<zk >
+	<zscript>
+		String resultString ="";
+	</zscript>
+	<div apply="org.zkoss.zktest.test2.TestWireComposer"></div>
+  <zscript><![CDATA[
+    import java.util.*;
+    import org.zkoss.zul.*;
+    List list = new ArrayList();
+    for (int i = 0; i < 1000; i++)
+    list.add("item " + i);
+  ]]>
+</zscript>
+<zscript>
+	Date d= new Date();
+</zscript>
+<zk forEach="${list}">
+	<zk value="${each}" />
+</zk>
+<zscript>
+	Date ed= new Date();
+	resultString+=(ed.getTime() -d.getTime() ) +"\n";
+	d= new Date();
+</zscript>
+
+<zk forEach="${list}">
+	<imageDetails num="${each}" />
+</zk>
+<zscript>
+	ed= new Date();
+	resultString+=(ed.getTime() -d.getTime())  +"\n";
+	d= new Date();
+</zscript>
+
+<zk forEach="${list}">
+	<include src="F50-3315689-2.zul" num="${each}"  />
+</zk>
+<zscript>
+	ed= new Date();
+	resultString+= (ed.getTime() -d.getTime() )  +"\n";
+</zscript>
+
+<n:pre xmlns:n="native">
+${resultString}
+</n:pre>
+</zk>

@@ -1,18 +1,16 @@
 /* Comboitem.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Dec 15 17:33:35     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,8 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 
-import org.zkoss.xml.HTMLs;
-import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -33,60 +29,25 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Non-XUL extension. Refer to {@link Combobox}.
  * 
- * <p>Default {@link #getZclass}: z-combo-item. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-comboitem. (since 5.0.0)
  *
  * @author tomyeh
  * @see Combobox
  */
-public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Comboitem {
+public class Comboitem extends LabelImageElement
+implements org.zkoss.zul.api.Comboitem, org.zkoss.zk.ui.ext.Disable {
 	private String _desc = "";
 	private Object _value;
 	private String _content = "";
-	private boolean _disabled = false;
+	private boolean _disabled;
 
 	public Comboitem() {
 	}
 	public Comboitem(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	public Comboitem(String label, String image) {
-		this();
-		setLabel(label);
-		setImage(image);
-	}
-
-
-	// super
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final String added = isDisabled() ? getZclass() + "-disd": "";
-		return scls != null && scls.length() > 0 ? scls + " " + added
-				: added;
-	}
-
-	public String getZclass() {
-		return _zclass == null ? "z-combo-item" : _zclass;
-	}
-	
-	public void setLabel(String label) {
-		final String old = getLabel();
-		if (!Objects.equals(old, label)) {
-			final Combobox cb = (Combobox)getParent();
-			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
-
-			super.setLabel(label);
-			
-			if (reIndex) {
-				final Constraint constr = cb.getConstraint();
-				if (constr != null && constr instanceof SimpleConstraint 
-						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
-					cb.setValue(label);
-				} else {
-					cb.reIndex();
-				}
-			}
-		}
+		super(label, image);
 	}
 	
 	/**
@@ -96,7 +57,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", disabled);
 		}
 	}
 	
@@ -112,6 +73,8 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
 	 * <p>Default: "".
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
 	 */
 	public String getDescription() {
 		return _desc;
@@ -122,7 +85,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
-			invalidate();
+			smartUpdate("description", getDescription()); //alow overriding
 		}
 	}
 
@@ -130,8 +93,6 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 * shown as part of the description.
 	 *
 	 * <p>It is useful to show the description in more versatile way.
-	 *
-	 * <p>Default: empty ("").
 	 *
 	 * @see #getDescription
 	 * @since 3.0.0
@@ -144,6 +105,17 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	 *
 	 * <p>It is useful to show the description in more versatile way.
 	 *
+	 * <p>Default: empty ("").
+	 *
+	 * <p>Deriving class can override it to return whatever it wants
+	 * other than null.
+	 *
+	 * <h3>Security Note</h3>
+	 * <p>Unlike other methods, the content assigned to this method
+	 * is generated directly to the browser without escaping.
+	 * Thus, it is better not to have something input by the user to avoid
+	 * any <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Security_Tips/Cross-site_scripting">XSS</a>
+	 * attach.
 	 * @see #setDescription
 	 * @since 3.0.0
 	 */
@@ -151,7 +123,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", getContent()); //allow overriding getContent()
 		}
 	}
 
@@ -181,42 +153,45 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 
 	//-- super --//
+	public String getZclass() {
+		return _zclass == null ? "z-comboitem" : _zclass;
+	}	
+	public void setLabel(String label) {
+		final String old = getLabel();
+		if (!Objects.equals(old, label)) {
+			final Combobox cb = (Combobox)getParent();
+			final boolean reIndex = cb != null && cb.getSelectedItemDirectly() == this;
+
+			super.setLabel(label);
+			
+			if (reIndex) {
+				final Constraint constr = cb.getConstraint();
+				if (constr != null && constr instanceof SimpleConstraint 
+						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
+					cb.setValue(label);
+				} else {
+					cb.reIndexRequired();
+				}
+			}
+		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "disabled", _disabled);
+		render(renderer, "description", getDescription()); //allow overriding getDescription()
+		render(renderer, "content", getContent()); //allow overriding getContent()
+	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
 			throw new UiException("Comboitem's parent must be Combobox");		
 		super.beforeParentChanged(parent);
 	}
-	public void setParent(Component parent) {
-		final Combobox old = (Combobox)getParent();
-		final boolean reIndex =
-			parent != old && old != null && old.getSelectedItem() == this;
-
-		super.setParent(parent);
-		
-		if (reIndex) postOnReIndex(old);
-	}
-	
-	/** re-index later */
-	private void postOnReIndex(Combobox old) {
-		Events.postEvent("onReIndex", this, old);
-	}
-	
-	public void onReIndex (Event evt) {
-		final Combobox cb = (Combobox) evt.getData();
-		if (cb != null) cb.reIndex();
-	} 
 
 	/** No child is allowed. */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
-	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(60).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.label", XMLs.escapeXML(getLabel()));
-			
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
-		return sb.toString();
 	}
 }

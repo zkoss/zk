@@ -1,24 +1,20 @@
 /* Textbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 14 15:48:28     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
-
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
 
@@ -28,14 +24,12 @@ import org.zkoss.zul.impl.InputElement;
  * A textbox.
  *
  * <p>See <a href="package-summary.html">Specification</a>.</p>
- * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)</p>
+ * <p>When multiline is true, only default mold is available.<p>
  * @author tomyeh
  */
-public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
-	private String _type = "text";
-	private int _rows = 1;
-	private boolean _multiline;
-	private boolean _tabbable;
+public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox {
+	private AuxInfo _auxinf;
 
 	public Textbox() {
 		setValueDirectly("");
@@ -81,7 +75,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	 * <p>Default: text.
 	 */
 	public String getType() {
-		return _type;
+		return _auxinf != null ? _auxinf.type: TEXT;
 	}
 	/** Sets the type.
 	 * @param type the type. Acceptable values are "text" and "password".
@@ -89,12 +83,12 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	 * onChanging is added.
 	 */
 	public void setType(String type) throws WrongValueException {
-		if (!"text".equals(type) && !"password".equals(type))
+		if (!TEXT.equals(type) && !"password".equals(type))
 			throw new WrongValueException("Illegal type: "+type);
 
-		if (!_type.equals(type)) {
-			_type = type;
-			invalidate();
+		if (!type.equals(_auxinf != null ? _auxinf.type: TEXT)) {
+			initAuxInfo().type = type;
+			smartUpdate("type", getType());
 		}
 	}
 
@@ -102,7 +96,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	 * <p>Default: 1.
 	 */
 	public int getRows() {
-		return _rows;
+		return _auxinf != null ? _auxinf.rows: 1;
 	}
 	/** Sets the rows.
 	 */
@@ -110,26 +104,25 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 		if (rows <= 0)
 			throw new WrongValueException("Illegal rows: "+rows);
 
-		if (_rows != rows) {
-			_rows = rows;
-			if (_rows > 1)
+		if ((_auxinf != null ? _auxinf.rows: 1) != rows) {
+			initAuxInfo().rows = rows;
+			if (rows > 1)
 				setMultiline(true); //auto-enable
-
-			smartUpdate("rows", Integer.toString(_rows));
+			smartUpdate("rows", getRows());
 		}
 	}
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 */
 	public boolean isMultiline() {
-		return _multiline;
+		return _auxinf != null && _auxinf.multiline;
 	}
 	/** Sets whether it is multiline.
 	 */
 	public void setMultiline(boolean multiline) {
-		if (_multiline != multiline) {
-			_multiline = multiline;
-			invalidate(); //different element
+		if ((_auxinf != null && _auxinf.multiline) != multiline) {
+			initAuxInfo().multiline = multiline;
+			smartUpdate("multiline", isMultiline());
 		}
 	}
 
@@ -140,7 +133,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	 * @since 3.6.0
 	 */
 	public boolean isTabbable() {
-		return _tabbable;
+		return _auxinf != null && _auxinf.tabbable;
 	}
 	/** Sets whether TAB is allowed.
 	 * If true, the user can enter TAB in the textbox, rather than change
@@ -149,30 +142,54 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	 * @since 3.6.0
 	 */
 	public void setTabbable(boolean tabbable) {
-		if (_tabbable != tabbable) {
-			_tabbable = tabbable;
-			smartUpdate("z.tabbable", tabbable);
+		if ((_auxinf != null && _auxinf.tabbable) != tabbable) {
+			initAuxInfo().tabbable = tabbable;
+			smartUpdate("tabbable", isTabbable());
 		}
 	}
 
-	//-- super --//
-	public String getZclass() {
-		return _zclass == null ? "z-textbox" : _zclass;
+	//Cloneable//
+	public Object clone() {
+		final Textbox clone = (Textbox)super.clone();
+		if (_auxinf != null)
+			clone._auxinf = (AuxInfo)_auxinf.clone();
+		return clone;
 	}
-	public String getInnerAttrs() {
-		final String attrs = super.getInnerAttrs();
-		if (!_multiline) return attrs;
 
-		final StringBuffer sb = new StringBuffer(64).append(attrs);
-		HTMLs.appendAttribute(sb, "rows",  _rows);
-		return sb.toString();
+	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "multiline", isMultiline());
+		final int rows = getRows();
+		if (rows > 1) renderer.render("rows", rows);
+		render(renderer, "tabbable", isTabbable());
+		final String type = getType();
+		if (!TEXT.equals(type)) renderer.render("type", type);
 	}
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (!_multiline && !_tabbable) return attrs;
-		final StringBuffer sb = new StringBuffer(128).append(attrs);
-		if (_multiline) sb.append(" z.skipOK=\"true\"");
-		if (_tabbable) sb.append(" z.tabbable=\"true\"");
-		return sb.toString();
+	public String getZclass() {
+		return _zclass != null ? _zclass: "z-textbox";
+	}
+
+	private static final String TEXT = "text";
+	private AuxInfo initAuxInfo() {
+		if (_auxinf == null)
+			_auxinf = new AuxInfo();
+		return _auxinf;
+	}
+	private static class AuxInfo implements java.io.Serializable, Cloneable  {
+		private String type = TEXT;
+		private int rows = 1;
+		private boolean multiline;
+		private boolean tabbable;
+
+		public Object clone() {
+			try {
+				return super.clone();
+			} catch (CloneNotSupportedException e) {
+				throw new InternalError();
+			}
+		}
 	}
 }

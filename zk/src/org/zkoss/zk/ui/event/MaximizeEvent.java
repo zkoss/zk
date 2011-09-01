@@ -1,37 +1,49 @@
 /* MaximizeEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Jun 23, 2008 5:36:42 PM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by a component being maximized.
  *
- * <p>Component Implementation Note:<br/>
- * A maximizable component must implement {@link org.zkoss.zk.ui.ext.client.Maximizable}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * @author jumperchen
  * @since 3.5.0
  */
 public class MaximizeEvent extends Event {
 	private final String _width, _height, _left, _top;
 	private final boolean _maximized;
+
+	/** Converts an AU request to a maximize event.
+	 * @since 5.0.0
+	 */
+	public static final MaximizeEvent getMaximizeEvent(AuRequest request) {
+		final Map data = request.getData();
+		return new MaximizeEvent(request.getCommand(), request.getComponent(),
+			(String)data.get("left"), (String)data.get("top"),
+			(String)data.get("width"), (String)data.get("height"),
+			AuRequests.getBoolean(data, "maximized"));
+	}
+
 	public MaximizeEvent(String name, Component target, String left, String top,
 			String width, String height, boolean maximized) {
 		super(name, target);

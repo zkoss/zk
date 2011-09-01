@@ -1,18 +1,16 @@
 /* AbstractPage.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sun Oct 26 17:42:22     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,7 +23,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.mesg.MZk;
@@ -74,13 +71,11 @@ implements Page, PageCtrl, java.io.Serializable {
 	public boolean hasFellow(String compId) {
 		return _fellows.containsKey(compId);
 	}
-	public Component getFellow(String compId) {
+	public Component getFellow(String compId)
+	throws ComponentNotFoundException {
 		final Component comp = (Component)_fellows.get(compId);
 		if (comp == null)
-			if (compId != null && ComponentsCtrl.isAutoId(compId))
-				throw new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
-			else
-				throw new ComponentNotFoundException("Fellow component not found: "+compId);
+			throw new ComponentNotFoundException("Fellow component not found: "+compId);
 		return comp;
 	}
 	public Component getFellowIfAny(String compId) {
@@ -89,12 +84,32 @@ implements Page, PageCtrl, java.io.Serializable {
 	public Collection getFellows() {
 		return Collections.unmodifiableCollection(_fellows.values());
 	}
+	/** The same as {@link #getFellow(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public Component getFellow(String compId, boolean recurse)
+	throws ComponentNotFoundException {
+		return getFellow(compId);
+	}
+	/** The same as {@link #getFellowIfAny(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public Component getFellowIfAny(String compId, boolean recurse) {
+		return getFellowIfAny(compId);
+	}
+	/** The same as {@link #hasFellow(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String compId, boolean recurse) {
+		return hasFellow(compId);
+	}
 
 	//PageCtrl//
-	public void addFellow(Component comp) {
+	/*package*/ void addFellow(Component comp) {
 		final String compId = comp.getId();
-		assert D.OFF || !ComponentsCtrl.isAutoId(compId);
-
 		final Object old = _fellows.put(compId, comp);
 		if (old != comp) { //possible due to recursive call
 			if (old != null) {
@@ -103,16 +118,12 @@ implements Page, PageCtrl, java.io.Serializable {
 			}
 		}
 	}
-	public void removeFellow(Component comp) {
+	/*package*/ void removeFellow(Component comp) {
 		_fellows.remove(comp.getId());
 	}
 
-	public void addRoot(Component comp) {
+	/*package*/ void addRoot(Component comp) {
 		final AbstractComponent nc = (AbstractComponent)comp;
-		if (nc.getParent() != null || nc._next != null || nc._prev != null) {
-			log.warning("Ignored adding "+comp+": attached?");
-			return; //ignore
-		}
 		for (AbstractComponent ac = _firstRoot; ac != null; ac = ac._next) {
 			if (ac == nc) {
 				log.warning("Ignored adding "+comp+" twice");
@@ -134,7 +145,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		}
 		++_nRoot;
 	}
-	public void removeRoot(Component comp) {
+	/*package*/ void removeRoot(Component comp) {
 		//Note: when AbstractComponent.setPage0 is called, parent is already
 		//null. Thus, we have to check if it is a root component
 		if (isMyRoot(comp)) {
@@ -145,10 +156,16 @@ implements Page, PageCtrl, java.io.Serializable {
 			--_nRoot;
 		}
 	}
+	/** Called when a root compent's {@link AbstractComponent#replaceWith}
+	 * is called.
+	 */
+	/*package*/ void onReplaced(AbstractComponent from, AbstractComponent to) {
+		if (_firstRoot == from)
+			_firstRoot = to;
+		if (_lastRoot == from)
+			_lastRoot = to;
+	}
 	private boolean isMyRoot(Component comp) {
-		if (comp.getParent() != null || comp.getPage() != this)
-			return false;
-
 		for (AbstractComponent ac = _firstRoot;; ac = ac._next) {
 			if (ac == null)
 				return false; //ignore (not a root)
@@ -166,7 +183,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		if (comp != null) comp._prev = prev;
 		else _lastRoot = prev;
 	}
-	public void moveRoot(Component comp, Component refRoot) {
+	/*package*/ void moveRoot(Component comp, Component refRoot) {
 		final AbstractComponent nc = (AbstractComponent)comp;
 		if (!isMyRoot(comp) || nc._next == refRoot/*nothing changed*/)
 			return; 
@@ -241,7 +258,7 @@ implements Page, PageCtrl, java.io.Serializable {
 		for (Iterator it = c.iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			final String compId = comp.getId();
-			if (!ComponentsCtrl.isAutoId(compId))
+			if (compId.length() > 0)
 				addFellow(comp);
 			if (!(comp instanceof IdSpace))
 				fixFellows(comp.getChildren()); //recursive

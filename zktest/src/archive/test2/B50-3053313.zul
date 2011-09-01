@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3053313.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 26 10:10:13 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<hbox>No Past:
+<datebox constraint="no past"/>
+Today can be selected
+</hbox>
+<hbox>No Today:
+<datebox constraint="no today"/>
+Today can't be selected
+</hbox>
+<hbox>No After:
+<datebox constraint="no future"/>
+Today can be selected
+</hbox>
+</zk>

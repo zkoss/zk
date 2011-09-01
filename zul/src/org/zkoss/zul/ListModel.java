@@ -1,24 +1,23 @@
 /* ListModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Aug 17 17:44:08     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * This interface defines the methods that components like {@link Listbox}
@@ -27,11 +26,18 @@ import org.zkoss.zul.event.ListDataListener;
  * <p>If the list model is used with sortable listbox or grid,
  * the developer must also implement {@link ListModelExt}.
  *
+ * <p>If the model also provides the selection, it could implement
+ * {@link Selectable}.
+ *
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
+ *
  * @author tomyeh
  * @see Grid
  * @see Listbox
  * @see ListitemRenderer
  * @see ListModelExt
+ * @see Selectable
  */
 public interface ListModel {
 	/** Returns the value at the specified index.

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3184673.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 17 17:44:32 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	In IE6, there is a small gap(less than 10px) between the blue and red block, if not, that is a bug.
+	<hlayout>
+		<div width="220px" height="270px" style="border:1px solid blue"/>
+		<separator bar="true"/>
+		<div width="220px" height="270px" style="border:1px solid red"/>
+	</hlayout>
+</zk>

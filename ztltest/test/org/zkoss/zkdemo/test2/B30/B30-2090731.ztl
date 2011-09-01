@@ -1,0 +1,49 @@
+<!-- B30-2090731.ztl.java
+
+	Purpose:for testing B30-2090731.ztl .
+
+	Description:
+
+	History:
+		06, 13, 2011 18:36:58
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-2090731.zul,Button,Image">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	Click the change button, and the image of the button shall change.
+	Then, click the reset button, and the image shall change back.
+	<separator/>
+	<button id="b" label="Left" image="/test2/img/m1.gif" width="125px"/>
+	<separator/>
+	<zscript>
+	import org.zkoss.image.*;
+	</zscript>
+	<button label="change"
+		onClick='b.setImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/test2/img/folder.gif")))'/>
+	<button label="reset" 
+		onClick='b.setImage("/test2/img/m1.gif"); '/>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+		String ori = jq("@button:eq(0) img").attr("src");
+		click(jq("@button[label=\"change\"]"));
+		waitResponse();
+		String aft = jq("@button:eq(0) img").attr("src");
+		verifyNotEquals(ori, aft);
+		click(jq("@button[label=\"reset\"]"));
+		waitResponse();
+		String ori1 = jq("@button:eq(0) img").attr("src");
+		verifyEquals(ori, ori1);
+		]]></client>
+	</case>
+</test>

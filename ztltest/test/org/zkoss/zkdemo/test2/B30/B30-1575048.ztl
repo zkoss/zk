@@ -1,0 +1,206 @@
+<test tags="B30-1575048.zul,listbox,paging,ie9">
+	<case id="Delete">
+		<server lang="java"><![CDATA[
+		import org.zkoss.zul.Listitem;
+		import org.zkoss.zul.event.ListDataEvent;
+		import org.zkoss.zul.event.ListDataListener;
+
+		class Item
+		{
+			private int id;
+			private String name;
+			
+			public Item(int id,String name)
+			{
+				this.id=id;
+				this.name=name;
+			}
+			
+			public int getId()
+			{
+				return id;
+			}
+			
+			public void setId(int id)
+			{
+				this.id=id;
+			}
+			
+			public String getName()
+			{
+				return name;
+			}
+			
+			public void setName(String name)
+			{
+				this.name=name;
+			}
+		}
+		
+		class ItemModel extends AbstractListModel implements ListModel
+		{
+			private List data;
+			
+			public int getSize()
+			{
+				return data.size();
+			}
+			
+			public Object getElementAt(int index)
+			{
+				return data.get(index);
+			}
+			
+			public List getData()
+			{
+				return data;
+			}
+			
+			public void setData(List data)
+			{
+				this.data=data;
+			}
+			
+			public void add( Object obj )
+			{
+				data.add(obj);
+				fireEvent(ListDataEvent.CONTENTS_CHANGED,0,data.size()-1);
+			}
+			
+			public void remove( Object obj, int index )
+			{
+				data.remove(obj); 
+				fireEvent(ListDataEvent.INTERVAL_REMOVED ,index,index);  
+			}
+		}
+		
+		public class ItemModelRenderer implements ListitemRenderer
+		{
+	
+			public void render( Listitem item, java.lang.Object data )
+			{
+				Item itemData = (Item)data;
+
+				item.setAttribute("item",itemData,Component.COMPONENT_SCOPE);
+		
+				cell = new Listcell(""+itemData.getId());
+				cell.setParent(item);
+		
+				cell = new Listcell(itemData.getName());
+				cell.setParent(item);
+			}
+		}
+		
+		class aaa implements ListDataListener
+		{
+			public void onChange(ListDataEvent event)
+			{
+//				event.getModel().refresh();
+			}
+		}
+		
+		List data=new ArrayList();
+		ItemModel model = new ItemModel();
+
+		model.addListDataListener(new aaa());
+
+
+		ItemModelRenderer modelRenderer = new ItemModelRenderer();
+		
+		data.add(new Item(1,"One"));
+		data.add(new Item(2,"Two"));
+		data.add(new Item(3,"Three"));
+		data.add(new Item(4,"Four"));
+		data.add(new Item(5,"Five"));
+		data.add(new Item(6,"Six"));
+		model.setData(data);
+		
+		class Event
+		{
+			public static void delSelected( Listbox listBox, ListModel model )
+			{
+				if ( listBox.getSelectedCount() == 0 )
+				{
+					alert("Select min one element");
+				}
+				else
+				{
+					Set items = listBox.getSelectedItems();
+	
+					for ( Object tmp: items )
+					{
+						Listitem listItem = (Listitem)tmp;
+						Item item = (Item)listItem.getAttribute("item");
+						int index = listBox.getItems().indexOf(listItem); 
+						model.remove(item, index);  						
+					}
+				}
+			}
+			
+			public static void add( Listbox listBox, ListModel model, String id, String  name)
+			{
+				if ( name.equals("") || id.equals("") )
+				{
+					alert("id or name empty");
+				}
+				else
+				{
+					Item item = new Item(Integer.parseInt(id),name);
+					model.add(item);
+				}
+			}
+			
+		}
+		]]></server>
+		<server><!--
+		<zk>
+			<listbox
+				style="margin-bottom: 10px"
+				mold="paging"
+				pageSize="4"
+				id="userList"
+				model="${model}"
+				itemRenderer="${modelRenderer}">
+				<listhead>
+					<listheader label="id"/>
+					<listheader label="name"/>
+				</listhead>
+			</listbox>
+			<button id="del" label="Delete Selected" onClick="Event.delSelected(userList,model)"/>
+			ID: <intbox id="itemId" /> NAME: <textbox id="itemName" />
+			<button id="add" label="Add" onClick="Event.add(userList,model,itemId.getText(),itemName.getText())"/>
+			<button id="redraw" label="Redraw" onClick="userList.invalidate()"/>
+		</zk>
+		--></server>
+		<client><![CDATA[
+			click(userList.getChild("getBodyWidgetIterator().next()"));
+			waitResponse();
+			click(del);
+			waitResponse();
+			verifyEquals("2", userList.getChild("getBodyWidgetIterator().next()").get("label"));
+			
+			Widget paging = userList.getChild("paging");
+			verifyEquals("5", paging.get("totalSize"));
+			
+			click(userList.getChild("getBodyWidgetIterator().next()"));
+			waitResponse();
+			click(del);
+			waitResponse();
+			verifyEquals("3", userList.getChild("getBodyWidgetIterator().next()").get("label"));
+			verifyEquals("4", paging.get("totalSize"));
+			verifyFalse(isVisible(paging));
+			
+			// Test adding
+			type(itemId, "123");
+			type(itemName, "123");
+			click(add);
+			waitResponse();
+			
+			click(paging.uuid() + "-next");
+			waitResponse();
+			verifyEquals("123", userList.lastChild().get("label"));
+			verifyEquals("5", paging.get("totalSize"));
+			verifyTrue(isVisible(paging));
+		]]></client>
+	</case>
+</test>

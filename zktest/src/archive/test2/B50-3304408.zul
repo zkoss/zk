@@ -1,0 +1,22 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Listbox Select Issue" border="normal" mode="highlighted" width="350px">
+ <listbox width="150px" id="lbx" mold="select" xmlns:w="client" onSelect='lbl.value=self.getSelectedItem().getLabel()'>
+  <listitem label="abc"/>
+  <listitem label="def"/>
+  <listitem label="ghi"/>
+ </listbox>
+ <label id="lbl" width="200px"/>
+</window>
+<h:pre xmlns:h="xhtml">
+if you run that in zk sandbox with IE 6
+do you have IE 6 installed? if not, this seems to work too:
+http://www.my-debugbar.com/wiki/IETester/HomePage
+anyway, if you:
+1. click the downward arrow button
+2. type in a, or d, or g
+3. then press "tab"
+
+the label on the right should show the value, however, the event was not fired.
+</h:pre>
+</zk>

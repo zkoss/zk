@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+timer.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>Timer</h4>
+		<p>Timer is a non-visible component that is used to periodically 
+		refresh information constantly (e.g. show the newest stock index, etc.).</p>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<label id="now" />
+	<timer id="timer" delay="1000" repeats="true">
+		<attribute name="onTimer">
+			now.setValue(new Date().toString());
+			pm.value = pm.value == 100 ? 0 : pm.value + 10;
+		</attribute>
+	</timer>
+	<separator bar="true" />
+	<progressmeter id="pm" value="0" />
+	<separator bar="true" />
+	<button label="Stops timer" onClick="timer.stop()" />
+	<button label="Starts timer" onClick="timer.start()" />
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

@@ -1,0 +1,14 @@
+<zk>
+	<div>Scroll to the right. You should NOT see the last 2 Columns.</div>
+	<listbox width="400px">
+		<listhead>
+			<listheader label="Column 1" width="250px" />
+			<listheader label="Column 2" width="250px" />
+			<listheader label="Column 3" hflex="2" />
+			<listheader label="Column 4" hflex="1" />
+		</listhead>
+		<listitem forEach="1,2,3">
+			<listcell forEach="1,2,3,4">Listcell</listcell>
+		</listitem>
+	</listbox>
+</zk>

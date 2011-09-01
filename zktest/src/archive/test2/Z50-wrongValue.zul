@@ -1,0 +1,12 @@
+<zk>
+	<div id="a" width="100px" style="border:1px solid blue">first</div>
+	<div id="b" width="100px" style="border:1px solid green">second</div>
+	<div id="c" width="100px" style="border:1px solid purple">third</div>
+	Click
+	<button label="show err" onClick='Clients.wrongValue(a, "first error");Clients.wrongValue(b, "second error");Clients.wrongValue(c, "third error");'/>
+	and three error message boxes are shown. Try to close one by clicking x
+	<separator/>
+	Then, click
+	<button label="close err" onClick='Clients.clearWrongValue(a);Clients.clearWrongValue(b);Clients.clearWrongValue(c);'/>
+	to close all error messages
+</zk>

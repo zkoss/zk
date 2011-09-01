@@ -1,30 +1,28 @@
 /* Listgroupfoot.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		2008/5/21 11:23:09 , Created by robbiecheng
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zul;
 
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 
 /**
- * GroupFooter serves as a summary listitem of listgroup.
+ * Listgroupfoot serves as a summary listitem of listgroup.
+ * <p>Available in ZK PE and EE.
  * 
- * <p>Default {@link #getZclass}: z-list-group-foot.
+ * <p>Default {@link #getZclass}: z-listgroupfoot (since 5.0.0).
  *
  *<p>Note: All the {@link Label} child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -62,13 +60,9 @@ public class Listgroupfoot extends Listitem implements org.zkoss.zul.api.Listgro
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-group-foot" : _zclass;
+		return _zclass == null ? "z-listgroupfoot" : _zclass;
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.nostripe", true);
-		return sb.toString();
-	}
+
 	private Listcell autoFirstCell() {
 		Listcell cell = (Listcell)getFirstChild();
 		if (cell == null) {

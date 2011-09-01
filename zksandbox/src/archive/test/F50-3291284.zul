@@ -1,0 +1,23 @@
+<zk>
+	<h:pre xmlns:h="xhtml">
+		(If you are part-time tester , please just skip this test case if you don't see any javascript error.)
+		
+		For RD:
+		
+		It need to set a zk.xml config for 
+		<library-property>
+			<name>org.zkoss.web.classWebResource.ZKJScache</name>
+			<value>false</value>
+		</library-property>	
+
+		Then you update the code in widget , 
+		it should update without restart the server.
+
+		https://sourceforge.net/tracker/?func=detail&aid=3291284&group_id=152762&atid=785194
+	</h:pre>
+	<window title="Hello World!!" border="normal" width="200px">
+
+		<label value="Hello" />
+
+	</window>
+</zk>

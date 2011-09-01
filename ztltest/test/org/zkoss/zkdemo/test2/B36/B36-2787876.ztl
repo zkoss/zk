@@ -1,0 +1,15 @@
+<test tags="B36-2787876.zul,textbox,ie9">
+	<case id="constraint">
+		<server><!--
+			<zk>
+			Please type the word '-' and then focus out the box, you should see a warning box.
+			<textbox id="txt_test" constraint="/[a-z\\]*/, server"></textbox>
+			</zk>
+		--></server>
+		<client><![CDATA[
+			type(txt_test,"-");
+			blur(txt_test);
+			verifyTrue(jq("div.z-errbox").exists());
+		]]></client>
+	</case>
+</test>

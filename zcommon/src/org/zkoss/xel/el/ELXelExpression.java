@@ -1,18 +1,16 @@
 /* ELXelExpression.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug 31 17:12:56     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -27,7 +25,7 @@ import org.zkoss.xel.XelException;
 import org.zkforge.apache.commons.el.ELExpression;
 
 /** 
- * A XEL expression that is based on a EL expression.
+ * A XEL expression based on zcommons-el latest version.
  *
  * @author tomyeh
  */
@@ -44,7 +42,7 @@ import org.zkforge.apache.commons.el.ELExpression;
 	public Object evaluate(XelContext ctx) {
 		//Test case: B30-1957661.zul where a function mapper is created
 		//by zscript so it is different from one page to page
-		return _expr.evaluate(ctx.getVariableResolver(), ctx.getFunctionMapper());
+		return _expr.evaluate(ctx);
 	}
 
 	//Object//

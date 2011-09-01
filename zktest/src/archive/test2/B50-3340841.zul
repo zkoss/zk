@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3340841.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 6 16:07:21 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	The first Listitem/Treeitem should be selected (and the checkmark should be checked).
+	<listbox multiple="true" checkmark="true" width="200px"
+		sclass="readonly-listbox">
+		<listhead>
+			<listheader>Population</listheader>
+		</listhead>
+		<listitem selected="true" disabled="true">
+			<listcell>A. Graduate</listcell>
+		</listitem>
+		<listitem disabled="true">
+			<listcell>B. College</listcell>
+		</listitem>
+	</listbox>
+	<tree multiple="true" checkmark="true" width="200px">
+		<treecols>
+			<treecol>Population</treecol>
+		</treecols>
+		<treechildren>
+			<treeitem selected="true" disabled="true">
+				<treerow>
+					<treecell>A. Graduate</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem disabled="true">
+				<treerow>
+					<treecell>B. College</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

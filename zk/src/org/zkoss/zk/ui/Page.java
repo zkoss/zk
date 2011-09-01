@@ -1,18 +1,16 @@
 /* Page.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 18:17:32     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,10 +23,10 @@ import java.util.List;
 
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.Function;
 
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.EventListener;
@@ -154,6 +152,13 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public String getRequestPath();
 
+	/** Returns whether the desktop is still alive.
+	 * It returns false once it is destroyed.
+	 * @see org.zkoss.zk.ui.sys.PageCtrl#destroy
+	 * @since 5.0.3
+	 */
+	public boolean isAlive();
+
 	/** Returns the desktop that this page belongs to.
 	 *
 	 * <p>Note: it returns null when
@@ -205,7 +210,8 @@ public interface Page extends IdSpace, Scope {
 	public static final int REQUEST_SCOPE = Component.REQUEST_SCOPE;
 
 	/** Returns all custom attributes of the specified scope.
-	 * You could reference them thru componentScope, spaceScope, pageScope,
+	 * You could reference them directly, or
+	 * thru componentScope, spaceScope, pageScope,
 	 * requestScope and desktopScope in zscript and EL.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -226,6 +232,12 @@ public interface Page extends IdSpace, Scope {
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
+	/** Returns if an attribute exists.
+	 * <p>Notice that <code>null</code> is a valid value, so you need this
+	 * method to really know if an atribute is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -253,55 +265,62 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the value of the specified attribute associated with this page.
 	 */
 	public Object getAttribute(String name);
+	/** Returns if an attribute exists.
+	 * <p>Notice that <code>null</code> is a valid value, so you need this
+	 * method to really know if an atribute is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
 	/** Sets the value of the specified custom attribute associated with this page.
-	 *
-	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
-	 * if value is null, while {@link #setVariable} considers null as a legal value.
-	 *
-	 * @param value the value. If null, the attribute is removed.
+	 * @param value the value.
 	 */
 	public Object setAttribute(String name, Object value);
 	/** Removes the specified attribute custom associated with the page.
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets a variable to the namespace ({@link #getNamespace}).
+	/** Returns the custom attribute associated with this page,
+	 * or the fellow of this page; or null if no found.
 	 *
-	 * <p>It is the same as getNamespace().setVariable(name, value, true).
+	 * <p>Notice that this method will NOT check for any variable defined in
+	 * the variable resolver ({@link #addVariableResolver}).
+	 * You have to invoke {@link #getXelVariable(XelContext,Object,Object,boolean)}
+	 * or {@link #getXelVariable(String)} manually.
 	 *
-	 * @see Component#setVariable
-	 * @see Component#getNamespace
+	 * @param recurse whether to look up the desktop/session for the
+	 * existence of the attribute.
+	 * @since 5.0.0
+	 */
+	public Object getAttributeOrFellow(String name, boolean recurse);
+	/** Returns if a custom attribute is associated with this page,
+	 * or a fellow of this page.
+	 *
+	 * <p>Notice that this method will NOT check for any variable defined in
+	 * the variable resolver ({@link #addVariableResolver}).
+	 * You have to invoke {@link #getXelVariable(XelContext,Object,Object,boolean)}
+	 * or {@link #getXelVariable(String)} manually.
+	 *
+	 * @param recurse whether to look up the desktop/session for the
+	 * existence of the attribute.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttributeOrFellow(String name, boolean recurse);
+
+	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
+	 *
+	 * <p>Sets a variable to the namespace ({@link #getNamespace}).
 	 */
 	public void setVariable(String name, Object val);
-	/** Returns whether the specified variable is defined.
-	 *
-	 * <p>Note: null is a valid value for variable, so this method is used
-	 * to know whether a variable is defined.
-	 * On the other hand, {@link #setAttribute} actually remove
-	 * an attribute (by {@link #removeAttribute} if value is null.
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttributeOrFellow}.
+	 * <p>Returns whether the specified variable is defined.
 	 */
 	public boolean containsVariable(String name);
-	/** Returns the value of a variable defined in the namespace ({@link #getNamespace}).
-	 *
-	 * <p>It is the same as getNamespace().getVariable(name, true).
-	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
-	 * On the other hand, {@link #getZScriptVariable} returns these variables
-	 * and those defined when executing zscripts.
-	 *
-	 * @see Component#getVariable
-	 * @see Component#getNamespace
+	/** @deprecated As of release 5.0.0, replaced with {@link #getAttributeOrFellow}.
+	 * <p>Returns the value of a variable defined in the namespace ({@link #getNamespace}).
 	 */
 	public Object getVariable(String name);
-	/** Unsets a variable from the namespace ({@link #getNamespace}).
-	 *
-	 * <p>It is the same as getNamespace().unsetVariable(name, true).
-	 *
-	 * @see Component#unsetVariable
-	 * @see Component#getNamespace
+	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}.
+	 * <p>Unsets a variable from the namespace ({@link #getNamespace}).
 	 */
 	public void unsetVariable(String name);
 
@@ -333,7 +352,7 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public Class resolveClass(String clsnm) throws ClassNotFoundException;
 
-	/** Returns the variable of the specified name by searching
+	/** Returns the function of the specified name by searching
 	 * the loaded interpreters.
 	 *
 	 * @return the method, or null if not found
@@ -341,15 +360,11 @@ public interface Page extends IdSpace, Scope {
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(String name, Class[] argTypes);
-	/** Returns the variable of the specified name by searching
-	 * the logical scope of the specified namespace for all
-	 * the loaded interpreters.
+	/** @deprecated As of release 5.0.0, replaced with {@link #getZScriptFunction(Component,String,Class[])}
 	 *
-	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
-	 * it uses the specified namespace as a reference to identify the
-	 * correct scope for searching the variable.
-	 * If the interpreter does NOT support hierachical scopes,
-	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 * <p>Returns the function of the specified name by searching
+	 * the logical scope of the specified namespace in all
+	 * the loaded interpreters.
 	 *
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
@@ -359,12 +374,15 @@ public interface Page extends IdSpace, Scope {
 	 * @see #getLoadedInterpreters
 	 * @since 2.4.1
 	 */
-	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes);
-	/** Returns the variable of the specified name by searching
-	 * the logical scope of the namespace of the specified component
-	 * for all the loaded interpreters.
+	public Function getZScriptFunction(org.zkoss.zk.scripting.Namespace ns, String name, Class[] argTypes);
+	/** Returns the function of the specified name by searching
+	 * the logical scope of the specified component
+	 * in all the loaded interpreters.
 	 *
-	 * <p>It is a shortcut: getZScriptFunction(comp.getNamespace(), name, argTypes);
+	 * @param comp the component to start the search. If null, this
+	 * method searches only the page's attributes.
+	 * In other words, if comp is null, this method is the same as
+	 * {@link #getZScriptFunction(String, Class[])}.
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(Component comp, String name, Class[] argTypes);
@@ -372,57 +390,67 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
 	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns variables defined by
-	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
-	 * On the other hand, {@link #getZScriptVariable} returns the variables
-	 * that are defined when executing zscripts.
-	 *
 	 * @return the value of the variable, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
 	public Object getZScriptVariable(String name);
-	/** Returns the value of the variable of the specified name by searching
-	 * the logical scope of the specified namespace for all
-	 * the loaded interpreters, if any.
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #getZScriptVariable(Component, String)}.
 	 *
-	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
-	 * it uses the specified namespace as a reference to identify the
-	 * correct scope for searching the variable.
-	 * If the interpreter does NOT support hierachical scopes,
-	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 * <p>Returns the value of the variable of the specified name by searching
+	 * the logical scope of the specified namespace in all
+	 * the loaded interpreters, if any.
 	 *
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
 	 * It is ignored if the interpreter doesn't support hierachical scopes.
 	 * Note: this method doesn't look for any variable stored in ns.
 	 */
-	public Object getZScriptVariable(Namespace ns, String name);
+	public Object getZScriptVariable(org.zkoss.zk.scripting.Namespace ns, String name);
 	/** Returns the value of the variable of the specified name by searching
-	 * the logical scope of the namespace of the specified component
-	 * for all the loaded interpreters, if any.
+	 * the logical scope of the specified component
+	 * in all the loaded interpreters, if any.
 	 *
-	 * <p>It is a shortcut: getZScriptVariable(comp.getNamespace(), name);
+	 * @param comp the component as the context to look for the variable
+	 * defined in an interpreter. If null, the context is assumed to
+	 * be this page.
 	 * @since 3.0.0
 	 */
 	public Object getZScriptVariable(Component comp, String name);
 
 	/** Returns a variable that is visible to XEL expressions.
+	 * It is a shortcut of <code>getXelVariable(null, null, name, false)</code>.
 	 *
 	 * <p>This method is mainly used to access special variable, such as
 	 * request parameters (if this page is requested by HTTP).
-	 *
-	 * <p>Note: components that are specified with an ID are already accessible
-	 * by {@link #getVariable}.
+	 * @see #getXelVariable(XelContext, Object, Object, boolean)
 	 * @since 3.0.0
 	 */
 	public Object getXelVariable(String name);
+	/** Returns a vairable that is visible to XEL expressions.
+	 * <p>Unlike {@link #getXelVariable(String)}, this method
+	 * can utilitize {@link org.zkoss.xel.VariableResolverX} introduced in ZK 5.0.
+	 * @param ctx the XEL context
+	 * @param base the base object. If null, it looks for a top-level variable.
+	 * If not null, it looks for a member of the base object (such as getter).
+	 * @param name the property to retrieve.
+	 * @param ignoreExec whether to ignore the current execution
+	 * ({@link Execution#getVariableResolver}.
+	 * If true, it invokes only the variable resolvers define in this page
+	 *({@link #addVariableResolver}).
+	 * If false, it will first check the execution, so the implicit objects
+	 * such as <code>page</code> and <code>desktop</code> will be resolved.
+	 * @see #getXelVariable(String)
+	 * @since 5.0.0
+	 */
+	public Object getXelVariable(
+	XelContext ctx, Object base, Object name, boolean ignoreExec);
  
-	/** Adds a name resolver that will be used to resolve a variable
-	 * by {@link #getVariable}.
+	/** Adds a variable resolver that will be used to resolve a variable
+	 * by {@link #getXelVariable}.
 	 *
-	 * <p>Note: the variables resolved by the specified resolver are
+	 * <p>The new added variable resolver has the higher priority.
+	 * <p>Note: the variables resolver by the specified resolver are
 	 * accessible to both zscript and EL expressions.
 	 *
 	 * @return wether the resolver is added successfully.
@@ -430,14 +458,14 @@ public interface Page extends IdSpace, Scope {
 	 * and this method returns false.
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
-	/** Removes a name resolve that was added by {@link #addVariableResolver}.
+	/** Removes a variable resolver that was added by {@link #addVariableResolver}.
 	 *
-	 * @return false if resolved is not added before.
+	 * @return false if the resolver is not added before.
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
-	/** Returns if the specified variable resolved has been registered
+	/** Returns if the specified variable resolver has been registered
 	 * @see #addVariableResolver
-	 * @since 3.6.5
+	 * @since 5.0.3
 	 */
 	public boolean hasVariableResolver(VariableResolver resolver);
 
@@ -462,6 +490,9 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public boolean isListenerAvailable(String evtnm);
 	/** Returns an iterator for iterating listener for the specified event.
+	 * <p>Since 5.0.6, the iterator is an instance returned by
+	 * {@link org.zkoss.util.CollectionsX#comodifiableIterator}, so it
+	 * is OK to add or remove listeners among the invocation of next().
 	 */
 	public Iterator getListenerIterator(String evtnm);
 
@@ -476,13 +507,20 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public void invalidate();
 
-	/** Returns the namespace used to store variables belonging to
+	/** @deprecated As of release 5.0.0, the concept of namespace is
+	 * deprecated, and please use the attributes of an ID space (such as page)
+	 * instead.
+	 *
+	 * <p>Returns the namespace used to store variables belonging to
 	 * the ID space of this page.
 	 *
 	 * @see #interpret
 	 */
-	public Namespace getNamespace();
-	/** Interpret a script of the specified scripting language against
+	public org.zkoss.zk.scripting.Namespace getNamespace();
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #interpret(String,String,Scope)}.
+	 *
+	 * <p>Interpret a script of the specified scripting language against
 	 * the specified namespace.
 	 *
 	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
@@ -493,7 +531,20 @@ public interface Page extends IdSpace, Scope {
 	 * if the thread is processing an event.
 	 * Otherwise, the current namespace is this page's namespace
 	 */
-	public void interpret(String zslang, String script, Namespace ns);
+	public void interpret(String zslang, String script, org.zkoss.zk.scripting.Namespace ns);
+	/** Interprets a script in the sepcified scripting language in
+	 * the context of the specified scope.
+	 *
+	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
+	 * is assumed.
+	 * @param scope the scope used as the context.
+	 * Since a component is a scope, you can pass a component as the context.
+	 * By context we mean the attribute of the scope, its space owner,
+	 * spacer owner's space owner, page and desktop will be searched.
+	  *If null, this page is assumed.
+	 * @since 5.0.0
+	 */
+	public void interpret(String zslang, String script, Scope scope);
 	/** Returns the interpreter of the specified scripting language.
 	 *
 	 * <p>The interpreter will be loaded and initialized,
@@ -550,8 +601,12 @@ public interface Page extends IdSpace, Scope {
 	 * For example, for HTML browsers, the page will generate
 	 * the HTML, HEAD and BODY tags.
 	 *
-	 * <p>Default: false. It means that we assume a page is complete
-	 * if and only if it is <em>not</em> included by other page.
+	 * <p>It is meaningful only if it is the top-level page (i.e.,
+	 * not included by the <code>include</code> component).
+	 *
+	 * <p>Default: false. It means ZK loader will enclose
+	 * the page content with HTML/HEAD/BODY if necessary (such as
+	 * not included by other Servlet).
 	 *
 	 * <p>If you have a page that has a complete HTML page and
 	 * it is included by other page, you have to specify the complete flag
@@ -576,6 +631,7 @@ public interface Page extends IdSpace, Scope {
 	//metainfo//
 	/** Returns the function mapper for resolving XEL functions, or null if
 	 * not available.
+	 * The function mapper represents all function mappers being added.
 	 *
 	 * @since 3.0.0
 	 */
@@ -588,6 +644,17 @@ public interface Page extends IdSpace, Scope {
 	 * @param mapper the new function mapper (null to ignore).
 	 */
 	public void addFunctionMapper(FunctionMapper mapper);
+	/** Removes a function mapper that was added by {@link #addFunctionMapper}.
+	 *
+	 * @return false if the mapper is not added before.
+	 * @since 5.0.8
+	 */
+	public boolean removeFunctionMapper(FunctionMapper mapper);
+	/** Returns if the specified function mapper has been registered
+	 * @see #addFunctionMapper
+	 * @since 5.0.8
+	 */
+	public boolean hasFunctionMapper(FunctionMapper mapper);
 
 	/** Returns the language definition that this page belongs to (never null).
 	 */
@@ -607,9 +674,9 @@ public interface Page extends IdSpace, Scope {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(String name, boolean recur);
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse);
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 *
@@ -617,7 +684,7 @@ public interface Page extends IdSpace, Scope {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur);
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse);
 }

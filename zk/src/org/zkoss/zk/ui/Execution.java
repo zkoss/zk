@@ -1,18 +1,16 @@
 /* Execution.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 17:55:01     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,7 @@ package org.zkoss.zk.ui;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Date;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
@@ -57,10 +56,14 @@ import org.zkoss.zk.au.AuResponse;
  * @see Page
  */
 public interface Execution extends Scope {
-	/** Returns the desktop for this execution.
+	/** Returns the desktop associated with this execution.
 	 * Each execution is against exactly one desktop.
 	 */
 	public Desktop getDesktop();
+	/** Returns the session this execution belongs to.
+	 * @since 5.0.0
+	 */
+	public Session getSession();
 
 	/** Returns whether this execution is asynchronous updating the
 	 * specified page (thru ZK Update Engine).
@@ -68,10 +71,10 @@ public interface Execution extends Scope {
 	 * @return whether the specified page is being asynchronous updated
 	 * by this execution.
 	 * If the specified page is null, this method returns
-	 * whether this execution is asynchronous updating a page
-	 * (rather than creating/loading a new page).
-	 * Each execution remembers the page being creating.
-	 * All other pages are consided as being asynchronous updated.
+	 * whether this execution is an asynchronous update
+	 * (rather than a request starting a new desktop).<br/>
+	 * Note: since 5.0.0, isAsyncUpdate(null) return if the fisrt execution
+	 * is caused by aysnchronous update (not just the current execution).
 	 */
 	public boolean isAsyncUpdate(Page page);
 
@@ -164,12 +167,20 @@ public interface Execution extends Scope {
 	 * In other words, the event is placed to the event queue.
 	 *
 	 * <p>The priority of the event is assumed to be 0. Refer to
-	 * {@link #postEvent(int, Event)}.
+	 * {@link #postEvent(int, Event)} for more information.
+	 * @see #postEvent(int, Event)
+	 * @see #postEvent(int, Component, Event)
 	 */
 	public void postEvent(Event evt);
 	/** Queues an event with the specified priority to this execution.
 	 * In other words, the event is placed to the event queue
 	 * with the specified prority.
+	 *
+	 * <p>The event will be sent to the component specified in {@link Event#getTarget}.
+	 * If {@link Event#getTarget} is null, it means broadcast, i.e.,
+	 * all root components will receive this event.
+	 * If you prefer a different target, you could use {@link #postEvent(int, Component, Event)}
+	 * instead.
 	 *
 	 * <p>The posted events are processed from the higher priority to the 
 	 * lower one. If two events are posted with the same priority,
@@ -182,10 +193,24 @@ public interface Execution extends Scope {
 	 * lower than -10,000 since they are reserved for component
 	 * development.
 	 *
-	 * @param priority the priority of the event.
+	 * @param priority the priority of the event. The default priority is 0
+	 * and the higher value means higher priority.
+	 * @see #postEvent(int, Component, Event)
 	 * @since 3.0.7
 	 */
 	public void postEvent(int priority, Event evt);
+	/** Queues the give event for the specified target to this execution.
+	 * The target could be different from {@link Event#getTarget}.
+	 * @param priority the priority of the event. The default priority is 0
+	 * and the higher value means higher priority.
+	 * @param realTarget the target component that will receive the event.
+	 * If null, it means broadcast, i.e., all root components will receive
+	 * this event.
+	 * <br/>Notice that postEvent(n, event) is the same as postEvent(n, event.getTarget(), event),
+	 * but different from postEvent(n, 0, event).
+	 * @since 5.0.7
+	 */
+	public void postEvent(int priority, Component realTarget, Event evt);
 
 	/** Whether to overwrite uri if both uri and params contain the same
 	 * parameter.
@@ -279,7 +304,9 @@ public interface Execution extends Scope {
 	public String locate(String path);
 
 	/** Returns whether the execution is voided.
-	 * By void we mean the request is taken charged by other servlet.
+	 * By void we mean ZK Loader shall stop evaluation of a ZUML document,
+	 * since the request will be taken charged by other servlet
+	 * or redirect to another page.
 	 * The execution shall not do anything more. In other words,
 	 * the execution is avoided and won't generate any ouput.
 	 *
@@ -290,12 +317,17 @@ public interface Execution extends Scope {
 	 */
 	public boolean isVoided();
 	/** Sets whether the execution is voided.
-	 * By void we mean the request is taken charged by other servlet.
+	 * By void we mean ZK Loader shall stop evaluation of a ZUML document,
+	 * since the request will be taken charged by other servlet
+	 * or redirect to another page.
 	 *
 	 * <p>If you invoke {@link #forward}, this method is called automatically
 	 * with true. Thus, you rarely need to invoke this method, unless
 	 * you forward to other servlet by use javax.servlet.RequestDispatcher
 	 * directly.
+	 *
+	 * <p>The other case to invoke this method is if you'd likd to redirect
+	 * to another (by specifying the refresh header).
 	 *
 	 * @since 2.4.1
 	 */
@@ -361,9 +393,6 @@ public interface Execution extends Scope {
 	 * the IP address.
 	 */
 	public String getRemoteHost();
-	/** @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
-	 */
-	public String getRemoteName();
 	/**  Returns the Internet Protocol (IP) address of the client or last
 	 * proxy that sent the request.
 	 */
@@ -793,14 +822,28 @@ public interface Execution extends Scope {
 
 	/** Adds an asynchronous response ({@link AuResponse}) which will be
 	 * sent to client at the end of the execution.
+	 * It is the same as <code>addAuResponse(response.getOverrideKey(), resposne)</code>
 	 *
 	 * <p>If {@link AuResponse#getDepends} is not null, the response
 	 * depends on the returned componet. In other words, the response
 	 * is removed if the component is removed.
 	 * If it is null, the response is component-independent.
 	 *
-	 * @param key could be anything. The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
+	 * @since 5.0.2
+	 */
+	public void addAuResponse(AuResponse resposne);
+	/** Adds an asynchronous response ({@link AuResponse}) with the given
+	 * key instead of {@link AuResponse#getOverrideKey}.
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the returned componet. In other words, the response
+	 * is removed if the component is removed.
+	 * If it is null, the response is component-independent.
+	 *
+	 * @param key could be anything.
+	 * If not null, the second invocation of this method
+	 * in the same execution with the same key and the same depends
+	 * ({@link AuResponse#getDepends}) will override the previous one.
 	 * In other words, the previous one will be dropped.
 	 * If null is specified, the response is simply appended to the end
 	 * without overriding any previous one.
@@ -851,17 +894,11 @@ public interface Execution extends Scope {
 	 * @since 3.5.1
 	 */
 	public boolean isOpera();
-	/** Returns whether the client is a mobile device supporting MIL
-	 * (Mobile Interactive Language).
-	 * @since 2.4.1
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
 	 */
 	public boolean isMilDevice();
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
-	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
 	 *
 	 * @since 3.0.2
 	 */
@@ -898,11 +935,13 @@ public interface Execution extends Scope {
 	/** Sets the value of the specified request attribute.
 	 *
 	 * @param value the value. If null, the attribute is removed.
+	 * @return the previous value if any (since ZK5)
 	 */
-	public void setAttribute(String name, Object value);
+	public Object setAttribute(String name, Object value);
 	/** Removes the specified request attribute.
+	 * @return the previous value if any (since ZK5)
 	 */
-	public void removeAttribute(String name);
+	public Object removeAttribute(String name);
 	/** Returns a map of request attributes associated with this session.
 	 */
 	public Map getAttributes();
@@ -942,6 +981,10 @@ public interface Execution extends Scope {
 	 * @see #containsResponseHeader
 	 */
 	public void setResponseHeader(String name, String value);
+	/** Sets a response header with the given name and date-value.
+	 * @since 5.0.2
+	 */
+	public void setResponseHeader(String name, Date value);
 	/** Adds a response header with the give name and value.
 	 *  This method allows response headers to have multiple values.
 	 * @param value the additional header value If it contains octet string,
@@ -950,6 +993,10 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public void addResponseHeader(String name, String value);
+	/** Adds a response header with the given name and date-value.
+	 * @since 5.0.2
+	 */
+	public void addResponseHeader(String name, Date value);
 	/** Returns whether the named response header has already been set.
 	 * @since 3.5.0
 	 */

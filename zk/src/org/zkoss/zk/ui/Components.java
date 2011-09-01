@@ -1,18 +1,16 @@
 /* Components.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun 13 20:55:18     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,13 +21,14 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.Principal;
 import java.util.AbstractCollection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,18 +36,26 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.xel.Evaluator;
 
@@ -59,7 +66,21 @@ import org.zkoss.zk.xel.Evaluator;
  */
 public class Components {
 	private static final Log log = Log.lookup(Components.class);
+	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
+
 	protected Components() {}
+
+	/** Returns the parent of the ID space, or null if not found.
+	 * @since 5.0.0
+	 */
+	public static IdSpace getParentIdSpace(IdSpace idspace) {
+		if (idspace instanceof Component) {
+			final Component c = (Component)idspace;
+			final Component p = c.getParent();
+			return p != null ? p.getSpaceOwner(): c.getPage();
+		}
+		return null;
+	}
 
 	/** Sorts the components in the list.
 	 *
@@ -169,17 +190,39 @@ public class Components {
 	}
 
 	/** Removes all children of the specified component.
+	 * It is the same as <code>comp.getChildren().clear()</code>.
 	 */
 	public static void removeAllChildren(Component comp) {
-		final List children = comp.getChildren();
-		if (children.isEmpty()) return;
+		comp.getChildren().clear();
+	}
 
-		for (Iterator it = new ArrayList(children).iterator(); it.hasNext();)
-			((Component)it.next()).setParent(null); //detach
+	/** Returns the component definition of the specified class in all
+	 * language of the specified device, or null if not found
+	 *
+	 * @param deviceType the device type ({@link org.zkoss.zk.device.Device}),
+	 * such as ajax. It cannot be null.
+	 * @param cls the implementation class of the component.
+	 * @since 5.0.0
+	 */
+	public static final ComponentDefinition
+	getDefinitionByDeviceType(String deviceType, Class cls) {
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			final LanguageDefinition ld = (LanguageDefinition)it.next();
+			try {
+				return ld.getComponentDefinition(cls);
+			} catch (DefinitionNotFoundException ex) { //ignore
+			}
+		}
+		return null;
 	}
 
 	/** Returns whether this component is real visible (all its parents
 	 * are visible).
+	 * <p>Note: true is returned if comp is null.
+	 * In other words, it can be used to examine parent's real visibity
+	 * even if it is a root component,
+	 * such as <code>Components.isRealVisible(getParent())</code>.
 	 * @see Component#isVisible
 	 */
 	public static boolean isRealVisible(Component comp) {
@@ -267,10 +310,15 @@ public class Components {
 		throw new IllegalArgumentException("Unknown scope: "+scope);
 	}
 
-	/** Returns whether an ID is generated automatically.
+	/** @deprecated As of release 5.0.3, replaced with {@link ComponentsCtrl#isAutoUuid(String)}.
+	 * Returns whether an ID is generated automatically.
+	 * Note: true is returned if id is null.
+	 * Also notice that this method doesn't check if a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is assigned.
+	 * If so, this method is not applicable.
 	 */
 	public static final boolean isAutoId(String id) {
-		return org.zkoss.zk.ui.sys.ComponentsCtrl.isAutoId(id);
+		return ComponentsCtrl.isAutoUuid(id);
 	}
 
 	/** Converts a component to a path (relavant to another component).
@@ -303,7 +351,7 @@ public class Components {
 	 		return ".";
 		} else {
 			final String id = comp.getId();
-			if (!(comp instanceof IdSpace) && isAutoId(id))
+			if (!(comp instanceof IdSpace) && id.length() == 0)
 				throw new UnsupportedOperationException("comp must be assigned with ID or a space owner: "+comp);
 
 			final StringBuffer sb = new StringBuffer(128);
@@ -397,7 +445,20 @@ public class Components {
 	void wireFellows(IdSpace idspace, Object controller, char separator) {
 		new Wire(controller, separator).wireFellows(idspace);
 	}
-		
+	/** Wire fellow components and space owner with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireFellows(IdSpace idspace, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireFellows(idspace);
+	}
+
 	/** <p>Wire accessible variable objects of the specified component into a 
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
@@ -447,7 +508,20 @@ public class Components {
 	void wireVariables(Component comp, Object controller, char separator) {
 		new Wire(controller, separator).wireVariables(comp);
 	}
-	
+	/** Wire controller as a variable objects of the specified component with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireVariables(Component comp, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireVariables(comp);
+	}
+
 	/** <p>Wire accessible variables of the specified page into a 
 	 * controller Java object. This implementation checks the 
 	 * setXxx() method names first then the field names. If a setXxx() method 
@@ -496,6 +570,19 @@ public class Components {
 	void wireVariables(Page page, Object controller, char separator) {
 		new Wire(controller, separator).wireVariables(page);
 	}
+	/** Wire accessible variable objects of the specified page with complete control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireVariables(Page page, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireVariables(page);
+	}
 
 	/** Wire controller as a variable objects of the specified component with a custom separator.
 	 * The separator is used to separate the component ID and the controller.
@@ -508,7 +595,7 @@ public class Components {
 	void wireController(Component comp, Object controller) {
 		new Wire(controller).wireController(comp, comp.getId());
 	}
-	
+
 	/** Wire controller as a variable objects of the specified component with a custom separator.
 	 * The separator is used to separate the component ID and the controller.
 	 * By default, it is '$'. However, for Groovy or other environment that
@@ -520,7 +607,20 @@ public class Components {
 	void wireController(Component comp, Object controller, char separator) {
 		new Wire(controller, separator).wireController(comp, comp.getId());
 	}
-	
+	/** Wire controller as a variable objects of the specified component with full control.
+	 * @param separator the separator used to separate the component ID and event name.
+	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
+	 * a member.
+	 * @param ignoreXel whether to ignore variables defined in varible resolver
+	 * ({@link Page#addVariableResolver}) when wiring a member.
+	 * @since 5.0.3
+	 */
+	public static final
+	void wireController(Component comp, Object controller, char separator,
+	boolean ignoreZScript, boolean ignoreXel) {
+		new Wire(controller, separator, ignoreZScript, ignoreXel).wireController(comp, comp.getId());
+	}
+
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 
@@ -528,7 +628,7 @@ public class Components {
 	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
 	 * codes). This utility method search such onXxx$myid methods and adds 
 	 * forward condition to the source myid component looked up by   
-	 * {@link Component#getVariable} of the specified component, so you 
+	 * {@link Component#getAttributeOrFellow} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
 	 * not a component, this method will log the error and ignore it.
@@ -565,8 +665,7 @@ public class Components {
 		for (int j = 0; j < mtds.length; ++j) {
 			final Method md = mtds[j];
 			String mdname = md.getName();
-			if (mdname.length() > 5 && mdname.startsWith("on") 
-			&& Character.isUpperCase(mdname.charAt(2))) {
+			if (mdname.length() >= 5 && Events.isValid(mdname)) { //onX$Y
 				Component xcomp = comp;
 				int k = 0;
 				do { //handle cascade $. e.g. onClick$btn$win1
@@ -575,7 +674,12 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = xcomp.getVariable(srccompid, false);
+							Object srccomp = xcomp.getAttributeOrFellow(srccompid, true);
+							if (srccomp == null) {
+								Page page = xcomp.getPage();
+								if (page != null)
+									srccomp = page.getXelVariable(null, null, srccompid, true);
+							}
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
@@ -626,68 +730,96 @@ public class Components {
 		IMPLICIT_NAMES.add("requestScope");
 		IMPLICIT_NAMES.add("param");
 	}
-	
-	/** Internal Use only. 
-	 * @since 3.6.0
+
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 *
+	 * <p>Notice that it does check for the current scope
+	 * ({@link org.zkoss.zk.ui.ext.Scopes#getCurrent}).
+	 * Rather, {@link org.zkoss.zk.ui.ext.Scopes#getImplicit}
+	 * depends on this method.
+	 *
+	 * @param page the page. If page is null and comp is not,
+	 * comp.getPage() is assumed
+	 * @see org.zkoss.zk.ui.ext.Scopes#getImplicit
+	 * @since 5.0.0
 	 */
-	public static Object getImplicit(Component comp, String fdname) {
-		//initialize implicit objects
-		if ("self".equals(fdname))
-			return comp;
-		if ("spaceOwner".equals(fdname))
-			return comp.getSpaceOwner();
-		if ("page".equals(fdname))
-			return getPage(comp);
-		if ("desktop".equals(fdname))
-			return getDesktop(comp);
-		if ("session".equals(fdname))
-			return getSession(comp);
-		if ("application".equals(fdname))
-			return getWebApp(comp);
-		if ("componentScope".equals(fdname))
-			return comp.getAttributes();
-		if ("spaceScope".equals(fdname)) {
-			final IdSpace spaceOwner = comp.getSpaceOwner();
-			return spaceOwner instanceof Page ? ((Page)spaceOwner).getAttributes():
-				spaceOwner instanceof Component ? ((Component)spaceOwner).getAttributes():
-					Collections.EMPTY_MAP;
+	public static
+	Object getImplicit(Page page, Component comp, String name) {
+		if (comp != null && page == null)
+			page = getPage(comp);
+
+		if ("log".equals(name))
+			return _zklog;
+		if ("self".equals(name))
+			return comp != null ? comp: (Object)page;
+		if ("spaceOwner".equals(name))
+			return comp != null ? comp.getSpaceOwner(): (Object)page;
+		if ("page".equals(name))
+			return page;
+		if ("desktop".equals(name))
+			return comp != null ? getDesktop(comp): page.getDesktop();
+		if ("session".equals(name))
+			return comp != null ? getSession(comp): page.getDesktop().getSession();
+		if ("application".equals(name))
+			return comp != null ? getWebApp(comp): page.getDesktop().getWebApp();
+		if ("componentScope".equals(name))
+			return comp != null ? comp.getAttributes(): Collections.EMPTY_MAP;
+		if ("spaceScope".equals(name)) {
+			final Scope scope = comp != null ? (Scope)comp.getSpaceOwner(): (Scope)page;
+			return scope != null ? scope.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("pageScope".equals(fdname)) {
-			final Page page = getPage(comp);
+		if ("pageScope".equals(name))
 			return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
-		}
-		if ("desktopScope".equals(fdname)) {
-			final Desktop dt = getDesktop(comp);
+		if ("desktopScope".equals(name)) {
+			final Desktop dt = comp != null ? getDesktop(comp): page.getDesktop();
 			return dt != null ? dt.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("sessionScope".equals(fdname)) {
-			final Session sess = getSession(comp);
+		if ("sessionScope".equals(name)) {
+			final Session sess = comp != null ? getSession(comp): page.getDesktop().getSession();
 			return sess != null ? sess.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("applicationScope".equals(fdname)) {
-			final WebApp app = getWebApp(comp);
+		if ("applicationScope".equals(name)) {
+			final WebApp app = comp != null ? getWebApp(comp): page.getDesktop().getWebApp();
 			return app != null ? app.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("requestScope".equals(fdname))
+		if ("requestScope".equals(name))
 			return REQUEST_SCOPE_PROXY;
-		if ("execution".equals(fdname))
+		if ("execution".equals(name))
 			return EXECUTION_PROXY;
-		if ("arg".equals(fdname)) {
-			final Execution exec = Executions.getCurrent();
+		if ("arg".equals(name)) {
+			final Execution exec = Executions.getCurrent(); 
 			return exec != null ? exec.getArg() : null;
-			//bug 2937096: Lifecycle of composer.arg 
+			//bug 2937096: composer.arg shall be statically wired 
 			//arg is a Map prepared by application developer, so can be wired statically 
 		}
-		if ("param".equals(fdname)) {
+		if ("param".equals(name)) {
 			final Execution exec = Executions.getCurrent(); 
 			return exec != null ? exec.getParameterMap() : null;
 			//bug 2945974: composer.param shall be statically wired
 			//Note that request parameter is prepared by servlet container, you shall not
 			//copy the reference to this map; rather, you shall clone the key-value pair one-by-one.
 		}
-		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
+		//20090314, Henri Chen: No way to suppport "event" with an event proxy because org.zkoss.zk.Event is not an interface
 		return null;
 	}
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 * <p>It is the same as getImplicit(null, comp, name).
+	 * @since 3.6.0
+	 */
+	public static Object getImplicit(Component comp, String name) {
+		return getImplicit(null, comp, name);
+	}
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 * <p>It is the same as getImplicit(page, null, name).
+	 * @since 3.6.0
+	 */
+	public static Object getImplicit(Page page, String name) {
+		return getImplicit(page, null, name);
+	}
+
 	private static Desktop getDesktop(Component comp) {
 		final Desktop dt = comp.getDesktop();
 		if (dt != null) return dt;
@@ -707,92 +839,66 @@ public class Components {
 		if (page != null) return page;
 
 		final Execution exec = Executions.getCurrent();
-		if (exec != null) {
-			page = ((ExecutionCtrl)exec).getCurrentPage();
-			if (page != null) return page;
-
-			final Desktop dt = exec.getDesktop();
-			if (dt != null) { //just in case
-				final Collection pgs = dt.getPages();
-				if (pgs != null && !pgs.isEmpty())
-					return (Page)pgs.iterator().next();
-			}
-		}
-		return null;
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
 
-	/** Internal Use only. 
-	 * @since 3.6.0
-	 */
-	public static Object getImplicit(Page page, String fdname) {
-		//initialize implicit objects
-		if ("self".equals(fdname))
-			return page;
-		if ("spaceOwner".equals(fdname))
-			return page;
-		if ("page".equals(fdname))
-			return page;
-		if ("desktop".equals(fdname))
-			return page.getDesktop();
-		if ("session".equals(fdname))
-			return page.getDesktop().getSession();
-		if ("application".equals(fdname))
-			return page.getDesktop().getWebApp();
-		if ("componentScope".equals(fdname))
-			return new HashMap(0);
-		if ("spaceScope".equals(fdname))
-			return page.getAttributes();
-		if ("pageScope".equals(fdname))
-			return page.getAttributes();
-		if ("desktopScope".equals(fdname))
-			return page.getDesktop().getAttributes();
-		if ("sessionScope".equals(fdname))
-			return page.getDesktop().getSession().getAttributes();
-		if ("applicationScope".equals(fdname))
-			return page.getDesktop().getWebApp().getAttributes();
-		if ("requestScope".equals(fdname))
-			return REQUEST_SCOPE_PROXY;
-		if ("execution".equals(fdname))
-			return EXECUTION_PROXY;
-		if ("arg".equals(fdname)) {
-			final Execution exec = Executions.getCurrent();
-			return exec != null ? exec.getArg() : null;
-			//bug 2937096: composer.arg shall be statically wired
-			//arg is a Map prepared by application developer, so can be wired statically 
-		}
-		if ("param".equals(fdname)) {
-			final Execution exec = Executions.getCurrent(); 
-			return exec != null ? exec.getParameterMap() : null;
-			//bug 2945974: composer.param shall be statically wired
-			//Note that request parameter is prepared by servlet container, you shall not
-			//copy the reference to this map; rather, you shall clone the key-value pair one-by-one.
-		}
-		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
-		return null;
+	private static boolean ignoreFromWire(Class cls) {
+		Package pkg;
+		return cls != null && (_ignoreWires.contains(cls.getName())
+		|| ((pkg = cls.getPackage()) != null && _ignoreWires.contains(pkg.getName())));
 	}
-	
+	private static Set _ignoreWires = new HashSet(16);
+	static {
+		final Class[] clses = new Class[] {
+			HtmlBasedComponent.class,
+			HtmlMacroComponent.class,
+			HtmlNativeComponent.class,
+			AbstractComponent.class,
+			org.zkoss.zk.ui.util.GenericComposer.class,
+			Object.class
+		};
+		for (int j = 0; j < clses.length; ++j)
+			_ignoreWires.add(clses[j].getName());
+
+		//5.0.5: ignore zul by default (but able to enable for backward compatible)
+		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.wire.zul.enabled"))) {
+			//a dirty solution but no better way until we use annotation instead
+			_ignoreWires.add("org.zkoss.zul");
+			_ignoreWires.add("org.zkoss.zkex.zul");
+			_ignoreWires.add("org.zkoss.zkmax.zul");
+			_ignoreWires.add("org.zkoss.zhtml");
+		}
+	}
+
 	/**
 	 * Utility class for wiring variables
 	 * @author henrichen
-	 * @since 3.0.8
 	 */
 	private static class Wire {
 		private final Object _controller;
 		private final Set _injected;
 		private final Map _fldMaps;
 		private final char _separator;
-		
-		public Wire(Object controller) {
-			this(controller, '$');
+		private final boolean _ignoreZScript;
+		private final boolean _ignoreXel;
+
+		private Wire(Object controller) {
+			this(controller, '$', false, false);
 		}
-		public Wire(Object controller, char separator) {
+		private Wire(Object controller, char separator) {
+			this(controller, separator, false, false);
+		}
+		private Wire(Object controller, char separator,
+		boolean ignoreZScript, boolean ignoreXel) {
 			_controller = controller;
 			_separator = separator;
+			_ignoreZScript = ignoreZScript;
+			_ignoreXel = ignoreXel;
 			_injected = new HashSet();
 			_fldMaps = new LinkedHashMap(64);
 			
 			Class cls = _controller.getClass();
-			do {
+			while (cls != null && !ignoreFromWire(cls)) {
 				Field[] flds = cls.getDeclaredFields();
 				for (int j = 0; j < flds.length; ++j) {
 					final Field fd = flds[j];
@@ -801,38 +907,45 @@ public class Components {
 						_fldMaps.put(fdname, fd);
 				}
 				cls = cls.getSuperclass();
-			} while (cls != null && !Object.class.equals(cls));
+			}
 		}
+
 		/**
-		 * Inject controller as variable of the specified component. You can
-		 * then access the controller with the name pattern of 
-		 * id + separator + "composer" 
-		 * or id + separator + controller's class name.
-		 * e.g. if the given id is "xwin" and the controller class name is "org.zkoss.MyController"
-		 * then you can access the controller with the name of "xwin$MyController" or "xwin$composer".
-		 *   
-		 * @param comp component to be assigned the variable
-		 * @param id the id used in controller name pattern
-		 * @since 3.6.1
+		 * Inject controller as variable of the specified component.
 		 */
-		public void wireController(Component comp, String id) {
+		private void wireController(Component comp, String id) {
+			//feature #3326788: support custom name
+			Object onm = comp.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				comp.setAttribute((String)onm, _controller);
+
 			//feature #2778513, support {id}$composer name
-			final String composerid =  id + _separator + "composer";
-			if (!comp.containsVariable(composerid, true)) {
-				comp.setVariable(composerid, _controller, true);
-			}
-			comp.setVariable(varname(id, _controller.getClass()), _controller, true);
+			final String nm = composerNameById(id);
+			if (!comp.hasAttributeOrFellow(nm, false))
+				comp.setAttribute(nm, _controller);
+
+			//support {id}$ClassName
+			comp.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
-		public void wireController(Page page, String id) {
-			final String composerid =  id + _separator + "composer";
-			if (!page.containsVariable(composerid)) {
-				page.setVariable(composerid, _controller);
-			}
-			page.setVariable(varname(id, _controller.getClass()), _controller);
+		/**
+		 * Inject controller as variable of the specified page.
+		 */
+		private void wireController(Page page, String id) {
+			Object onm = page.getAttribute("composerName");
+			if (onm instanceof String && ((String)onm).length() > 0)
+				page.setAttribute((String)onm, _controller);
+
+			final String nm = composerNameById(id);
+			if (!page.hasAttributeOrFellow(nm, false))
+				page.setAttribute(nm, _controller);
+
+			page.setAttribute(
+				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
-		public void wireFellows(IdSpace idspace) {
+		private void wireFellows(IdSpace idspace) {
 			//inject fellows
 			final Collection fellows = idspace.getFellows();
 			for(final Iterator it = fellows.iterator(); it.hasNext();) {
@@ -858,11 +971,11 @@ public class Components {
 				injectFellow((Page) idspace);
 			}
 		}
-		public void wireVariables(Page page) {
+		private void wireVariables(Page page) {
 			wireController(page, page.getId());
 			myWireVariables(page);
 		}
-		public void wireVariables(Component comp) {
+		private void wireVariables(Component comp) {
 			wireController(comp, comp.getId());
 			myWireVariables(comp);
 		}
@@ -871,6 +984,10 @@ public class Components {
 			wireOthers(x);
 		}
 		private void wireImplicit(Object x) {
+			//Feature #3315689 
+			if(ignoreFromWire(_controller.getClass()))
+				return;
+			
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
 				//we cannot inject event proxy because it is not an Interface
@@ -883,7 +1000,8 @@ public class Components {
 				if ("param".equals(fdname) && arg != null) {
 					arg = new HashMap((Map) arg); 
 				}
-				injectByName(arg, fdname);
+				injectByName(arg, fdname,
+					x instanceof Component && "page".equals(fdname));
 			}
 		}
 		private void wireOthers(Object x) {
@@ -893,16 +1011,26 @@ public class Components {
 			for (int j = 0; j < mtds.length; ++j) {
 				final Method md = mtds[j];
 				final String mdname = md.getName();
-				if (mdname.length() > 3 && mdname.startsWith("set") 
-				&& Character.isUpperCase(mdname.charAt(3))) {
+				if ((md.getModifiers() & Modifier.STATIC) == 0
+				&& mdname.length() > 3 && mdname.startsWith("set") 
+				&& Character.isUpperCase(mdname.charAt(3))
+				&& !ignoreFromWire(md.getDeclaringClass())) {
 					final String fdname = Classes.toAttributeName(mdname);
 					if (!_injected.contains(fdname)) { //if not injected yet
 						final Class[] parmcls = md.getParameterTypes();
 						if (parmcls.length == 1) {
 							if (containsVariable(x, fdname)) {
 								final Object arg = getVariable(x, fdname);
-								final Class argcls = arg == null ? null : arg.getClass();
-								injectByMethod(md, parmcls[0], argcls, arg, fdname);
+								if (!injectByMethod(md, parmcls[0], arg == null ? null : arg.getClass(), arg, fdname)) {
+									final Object arg2 = getFellow(x, fdname);
+									if (arg2 != arg && arg2 != null)
+										injectByMethod(md, parmcls[0], arg2.getClass(), arg2, fdname);
+								}
+							} else if ((x instanceof Component || x instanceof Page) &&
+							fdname.indexOf(_separator) >= 0) {
+								final Object arg = getFellowByPath(x, fdname);
+								if (arg != null)
+									injectByMethod(md, parmcls[0], arg.getClass(), arg, fdname);
 							}
 						}
 					}
@@ -913,70 +1041,97 @@ public class Components {
 			for (final Iterator it=_fldMaps.entrySet().iterator();it.hasNext();) {
 				final Entry entry = (Entry) it.next();
 				final String fdname = (String) entry.getKey();
-				if (!_injected.contains(fdname)) { //if not injected by setXxx yet
+				final Field fd = (Field) entry.getValue();
+				if ((fd.getModifiers() & Modifier.STATIC) == 0
+				&& !_injected.contains(fdname)) { //if not injected by setXxx yet
 					if (containsVariable(x, fdname)) {
 						final Object arg = getVariable(x, fdname);
-						final Class argcls = arg == null ? null : arg.getClass();
-						final Field fd = (Field) entry.getValue();
-						injectField(arg, argcls, fd);
+						if (!injectField(arg, arg == null ? null : arg.getClass(), fd)) {
+							final Object arg2 = getFellow(x, fdname);
+							if (arg2 != arg && arg2 != null)
+								injectField(arg2, arg2.getClass(), fd);
+						}
+					} else if ((x instanceof Component || x instanceof Page) &&
+					fdname.indexOf(_separator) >= 0) {
+						final Object arg = getFellowByPath(x, fdname);
+						if (arg != null)
+							injectField(arg, arg.getClass(), fd);
 					}
 				}
 			}
 		}
 
+		/** @param x either a page or component. It cannot be null.*/
+		private Object getFellowByPath(Object x, String name) {
+			return Path.getComponent(
+				x instanceof Page ? (Page)x: ((Component)x).getSpaceOwner(),
+					name.replace(_separator, '/'));
+		}
+
 		private boolean containsVariable(Object x, String fdname) {
 			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
 			if (x instanceof Page) {
-				final Page pg = (Page) x;
-				return pg.getZScriptVariable(fdname) != null
-					|| pg.containsVariable(fdname);
+				final Page page = (Page) x;
+				return (!_ignoreZScript && page.getZScriptVariable(fdname) != null)
+					|| page.hasAttributeOrFellow(fdname, true)
+					|| (!_ignoreXel && page.getXelVariable(null, null, fdname, true) != null);
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
-				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
-					|| cmp.containsVariable(fdname, false);
+				return (!_ignoreZScript && page != null && page.getZScriptVariable(cmp, fdname) != null)
+					|| cmp.hasAttributeOrFellow(fdname, true)
+					|| (!_ignoreXel && page != null && page.getXelVariable(null, null, fdname, true) != null);
 			}
 		}
 		
 		private Object getVariable(Object x, String fdname) {
 			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
 			if (x instanceof Page) {
-				final Page pg = (Page) x;
-				Object arg = pg.getZScriptVariable(fdname);
+				final Page page = (Page) x;
+				Object arg = _ignoreZScript ? null: page.getZScriptVariable(fdname);
 				if (arg == null) {
-					arg = pg.getVariable(fdname);
+					arg = page.getAttributeOrFellow(fdname, true);
+					if (!_ignoreXel && arg == null)
+						arg = page.getXelVariable(null, null, fdname, true);
 				}
 				return arg;
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
-				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
+				Object arg = !_ignoreZScript && page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
-					arg = cmp.getVariable(fdname, false);
+					arg = cmp.getAttributeOrFellow(fdname, true);
+					if (!_ignoreXel && arg == null && page != null)
+						arg = page.getXelVariable(null, null, fdname, true);
 				}
 				return arg;
 			}
+		}
+		private Object getFellow(Object x, String fdname) {
+			return x instanceof Page ? ((Page)x).getFellowIfAny(fdname, true):
+				x instanceof Component ? ((Component)x).getFellowIfAny(fdname, true): null;
 		}
 		
 		private void injectFellow(Object arg) {
 			//try setXxx
 			final String fdname = (arg instanceof Page) ? 
 					((Page)arg).getId() : ((Component)arg).getId();
-			if (!Components.isAutoId(fdname)) {
-				injectByName(arg, fdname);
+			if (fdname.length() > 0) {
+				injectByName(arg, fdname, false);
 			}
 		}
 		
-		private void injectByName(Object arg, String fdname) {
+		private void injectByName(Object arg, String fdname, boolean fieldOnly) {
 			//argument to be injected is null; then no need to inject
 			if (arg != null) {
 				final String mdname = Classes.toMethodName(fdname, "set");
 				final Class parmcls = arg.getClass();
 				final Class tgtcls = _controller.getClass();
 				try {
-					final Method md = 
+					final Method md = fieldOnly ? null:
 						Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
-					if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+					if (fieldOnly
+					|| !injectByMethod(md, parmcls, parmcls, arg, fdname)) {
 						injectFieldByName(arg, tgtcls, parmcls, fdname);
 					}
 				} catch (NoSuchMethodException ex) {
@@ -987,7 +1142,6 @@ public class Components {
 				}
 			}
 		}
-		
 		private void injectFieldByName(Object arg, Class tgtcls, Class parmcls, String fdname) {
 			try {
 				final Field fd = Classes.getAnyField(tgtcls, fdname);
@@ -999,10 +1153,13 @@ public class Components {
 			}
 		}
 		
+		/** Returns false if there is such field but the target class doesn't match.
+		 * In other words, false means the caller can try another object (arg).
+		 */
 		private boolean injectByMethod(Method md, Class parmcls, Class argcls, Object arg, String fdname) {
 			if (argcls == null || parmcls.isAssignableFrom(argcls)) {
 				final Field fd = (Field) _fldMaps.get(fdname);
-				if (fd != null) {
+				if (fd != null && fd.getType().equals(parmcls)) {
 					final boolean old = fd.isAccessible();
 					try {
 						//check field value
@@ -1010,11 +1167,11 @@ public class Components {
 						final Object value = fd.get(_controller);
 						if (value == null) {
 							md.invoke(_controller, new Object[] {arg});
-							if (fd.get(_controller) != null) { //field is set
+							if (fd.get(_controller) == arg) { //field is set
 								_injected.add(fdname); //mark as injected
-								return true;
 							}
 						}
+						return true;
 					} catch (Exception ex) {
 						throw UiException.Aide.wrap(ex);
 					} finally {
@@ -1030,9 +1187,12 @@ public class Components {
 					}
 				}
 			}
-			return false;
+			return false; //mismatch try again
 		}
-		
+
+		/** Returns false if there is such field but the target class doesn't match.
+		 * In other words, false means the caller can try another object (arg).
+		 */
 		private boolean injectField(Object arg, Class argcls, Field fd) {
 			final boolean old = fd.isAccessible();
 			try {
@@ -1043,27 +1203,33 @@ public class Components {
 					if (value == null) {
 						fd.set(_controller, arg);
 						_injected.add(fd.getName());
-						return true;
 					}
+					return true;
 				}
+				return false; //mismatch (and try other)
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			} finally {
 				fd.setAccessible(old);
 			}
-			return false;
 		}
 		
 		private Object myGetImplicit(Object x, String fdname) {
 			return x instanceof Page ?
-				getImplicit((Page)x, fdname) : getImplicit((Component)x, fdname);
+					getImplicit((Page)x, fdname) :
+					getImplicit((Component)x, fdname);
 		}
-		private String varname(String id, Class cls) {
+
+		private String composerNameById(String id) {
+			return id + _separator + "composer";
+		}
+		private String composerNameByClass(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
 			return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
 		}
 	}
+
 	/** Execution Proxy */
 	public static final Exec EXECUTION_PROXY = new Exec();
 	
@@ -1076,6 +1242,9 @@ public class Components {
 			return Executions.getCurrent();
 		}
 		
+		public void addAuResponse(AuResponse response) {
+			exec().addAuResponse(response);
+		}
 		public void addAuResponse(String key, AuResponse response) {
 			exec().addAuResponse(key, response);
 		}
@@ -1155,6 +1324,27 @@ public class Components {
 
 		public Object getAttribute(String name) {
 			return exec().getAttribute(name);
+		}
+		public boolean hasAttribute(String name) {
+			return exec().hasAttribute(name);
+		}
+		public Object getAttribute(String name, boolean recurse) {
+			return exec().getAttribute(name, recurse);
+		}
+		public boolean hasAttribute(String name, boolean recurse) {
+			return exec().hasAttribute(name, recurse);
+		}
+		public Object setAttribute(String name, Object value, boolean recurse) {
+			return exec().setAttribute(name, value, recurse);
+		}
+		public Object removeAttribute(String name, boolean recurse) {
+			return exec().removeAttribute(name, recurse);
+		}
+		public boolean addScopeListener(ScopeListener listener) {
+			return exec().addScopeListener(listener);
+		}
+		public boolean removeScopeListener(ScopeListener listener) {
+			return exec().removeScopeListener(listener);
 		}
 
 		public Map getAttributes() {
@@ -1236,12 +1426,6 @@ public class Components {
 			return exec().getRemoteHost();
 		}
 
-		/** @deprecated
-		 */
-		public String getRemoteName() {
-			return exec().getRemoteName();
-		}
-
 		public String getRemoteUser() {
 			return exec().getRemoteUser();
 		}
@@ -1278,10 +1462,6 @@ public class Components {
 
 		public void include(String page) throws IOException {
 			exec().include(page);
-		}
-
-		public String locate(String path) {
-			return exec().locate(path);
 		}
 
 		public boolean isAsyncUpdate(Page page) {
@@ -1326,6 +1506,8 @@ public class Components {
 			return exec().isIncluded();
 		}
 
+		/** @deprecated As of release 5.0.0, MIL is no longer supported.
+		 */
 		public boolean isMilDevice() {
 			return exec().isMilDevice();
 		}
@@ -1358,12 +1540,16 @@ public class Components {
 			exec().postEvent(priority, evt);
 		}
 
+		public void postEvent(int priority, Component realTarget, Event evt) {
+			exec().postEvent(priority, realTarget, evt);
+		}
+
 		public void pushArg(Map arg) {
 			exec().pushArg(arg);
 		}
 
-		public void removeAttribute(String name) {
-			exec().removeAttribute(name);
+		public Object removeAttribute(String name) {
+			return exec().removeAttribute(name);
 		}
 
 		public void sendRedirect(String uri) {
@@ -1374,8 +1560,8 @@ public class Components {
 			exec().sendRedirect(uri, target);
 		}
 
-		public void setAttribute(String name, Object value) {
-			exec().setAttribute(name, value);
+		public Object setAttribute(String name, Object value) {
+			return exec().setAttribute(name, value);
 		}
 
 		public void setVoided(boolean voided) {
@@ -1387,6 +1573,10 @@ public class Components {
 		}
 
 		public void addResponseHeader(String name, String value) {
+			exec().addResponseHeader(name, value);
+		}
+
+		public void addResponseHeader(String name, Date value) {
 			exec().addResponseHeader(name, value);
 		}
 
@@ -1409,8 +1599,31 @@ public class Components {
 		public void setResponseHeader(String name, String value) {
 			exec().setResponseHeader(name, value);
 		}
-	}
+		public void setResponseHeader(String name, Date value) {
+			exec().setResponseHeader(name, value);
+		}
 
+		public Session getSession() {
+			return exec().getSession();
+		}
+
+		public String locate(String path) {
+			return exec().locate(path);
+		}
+
+		public String toString() {
+			return Objects.toString(exec());
+		}
+		public int hashCode() {
+			return Objects.hashCode(exec());
+		}
+		public boolean equals(Object o) {
+			if (o instanceof Exec)
+				return Objects.equals(exec(), ((Exec)o).exec());
+			return Objects.equals(exec(), o);
+		}
+	}
+	
 	//Proxy to read current requestScope
 	private static class RequestScope implements Map {
 		protected Map req() {
@@ -1451,6 +1664,18 @@ public class Components {
 		}
 		public Collection values() {
 			return req().values();
+		}
+
+		public String toString() {
+			return Objects.toString(req());
+		}
+		public int hashCode() {
+			return Objects.hashCode(req());
+		}
+		public boolean equals(Object o) {
+			if (o instanceof RequestScope)
+				return Objects.equals(req(), ((RequestScope)o).req());
+			return Objects.equals(req(), o);
 		}
 	}
 }

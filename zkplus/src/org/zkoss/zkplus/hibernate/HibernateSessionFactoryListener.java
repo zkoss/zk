@@ -1,18 +1,16 @@
 /* HibernateSessionFactoryListener.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Sep  5 10:11:55     2006, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -64,7 +62,7 @@ import org.hibernate.SessionFactory;
  *		&lt;listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class>
  *	&lt;/listener>
  * </code></pre>
- *
+ * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
  */
 public class HibernateSessionFactoryListener 

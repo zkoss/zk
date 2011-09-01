@@ -1,0 +1,36 @@
+<!-- B50-3292544.ztl.java
+
+	Purpose:for testing B50-3292544.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 09:53:48
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3292544.zul,Doublespinner,Unstable">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type 0.5 in the Doublespinner and click on somewhere else. If you can't type in the decimal sign ".", it is a bug.</li>
+		</ol>
+	]]></html>
+	<doublespinner step="0.5" />
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				focus(jq("@doublespinner input"));
+				sendKeys(jq("@doublespinner input"), Keys.END);
+				sendKeys(jq("@doublespinner input"), Keys.DECIMAL);
+				sendKeys(jq("@doublespinner input"), Keys.NUMPAD5);
+				verifyEquals("0.5",jq("@doublespinner input").val());
+		]]></client>
+	</case>
+</test>

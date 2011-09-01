@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3003180.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 18 17:28:13 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="IE8 only" border="normal">
+Please resize one column to shorten, the total width of the columns should be expanded(IE8).
+<listbox>
+<listhead sizable="true">
+<listheader label="C1" align="center" width="30%" />
+<listheader label="C2" align="center" width="20%" />
+<listheader label="C3" align="center" width="25%" />
+<listheader label="C4" align="center" width="10%" />
+<listheader label="C5" visible="false" align="center"
+width="15%" />
+</listhead>
+<listitem>
+<listcell label="column1" />
+<listcell label="column2column2" />
+<listcell label="column3column3column3" />
+<listcell label="column4column4column4column4" />
+<listcell label="column5column5column5column5" />
+</listitem>
+</listbox>
+</window>

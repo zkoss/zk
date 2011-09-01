@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -130,6 +131,7 @@ implements ListModelExt, Map, java.io.Serializable {
 		if (i2 < 0) {
 			return;
 		}
+		clearSelection();
 		_map.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
@@ -164,9 +166,9 @@ implements ListModelExt, Map, java.io.Serializable {
 	public boolean isEmpty() {
 		return _map.isEmpty();
 	}
-    
+
 	public Set keySet() {
-		return new MyKeySet(_map.keySet());
+		return new MySet(_map.keySet(), true);
 	}
 
 	public Object put(Object key, Object o) {
@@ -269,6 +271,7 @@ implements ListModelExt, Map, java.io.Serializable {
 		if (_map.containsKey(key)) {
 			//bug #1819318 Problem while using SortedSet with Databinding
 			Object ret = null;
+			removeSelectionByKey(key);
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				int index = indexOfKey(key);
 				ret = _map.remove(key);
@@ -280,6 +283,25 @@ implements ListModelExt, Map, java.io.Serializable {
 			return ret;
 		}
 		return null;
+	}
+	
+	private void removeSelectionByKey(Object key) {
+		for(final Iterator it = getSelection().iterator(); it.hasNext();) {
+			final Map.Entry entry = (Map.Entry) it.next();
+			if (Objects.equals(key, entry.getKey())) {
+				removeSelection(entry);
+				break;
+			}
+		}
+	}
+	private void removeSelectionByValue(Object value) {
+		for(final Iterator it = getSelection().iterator(); it.hasNext();) {
+			final Map.Entry entry = (Map.Entry) it.next();
+			if (Objects.equals(value, entry.getValue())) {
+				removeSelection(entry);
+				return;
+			}
+		}
 	}
 
 	public int size() {
@@ -305,10 +327,10 @@ implements ListModelExt, Map, java.io.Serializable {
 			Entry entry = (Entry) it.next();
 			_map.put(entry.getKey(), entry.getValue());
 		}
-		fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
+		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
-	private boolean removePartial(Collection master, Collection c, boolean isRemove) {
+	private boolean removePartial(Collection master, Collection c, boolean isRemove, boolean byKey, boolean byValue) {
 		int sz = c.size();
 		int removed = 0;
 		int retained = 0;
@@ -322,6 +344,9 @@ implements ListModelExt, Map, java.io.Serializable {
 					begin = index;
 				}
 				++removed;
+				if (byKey) removeSelectionByKey(item);
+				else if (byValue) removeSelectionByValue(item);
+				else removeSelection(item);
 				it.remove();
 			} else {
 				++retained;
@@ -341,6 +366,7 @@ implements ListModelExt, Map, java.io.Serializable {
 	
 	private class MyIterator implements Iterator {
 		private Iterator _it;
+		private Object _current;
 		private int _index = -1;
 		
 		public MyIterator(Iterator inner) {
@@ -354,12 +380,14 @@ implements ListModelExt, Map, java.io.Serializable {
 		
 		public Object next() {
 			++_index;
-			return _it.next();
+			_current = _it.next(); 
+			return _current;
 		}
 		
 		public void remove() {
 			if (_index >= 0) {
 				//bug #1819318 Problem while using SortedSet with Databinding
+				removeSelection(_current);
 				_it.remove();
 				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
@@ -371,12 +399,14 @@ implements ListModelExt, Map, java.io.Serializable {
 		}
 	}
 
-	/** Represents the key set.
+	/** Represents a set.
 	 */
-	private class MyKeySet implements Set {
+	private class MySet implements Set {
 		private final Set _set;
-		public MyKeySet(Set inner) {
+		private final boolean _keyset;
+		public MySet(Set inner, boolean keyset) {
 			_set = inner;
+			_keyset = keyset;
 		}
 		
 		public void clear() {
@@ -384,6 +414,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (i2 < 0) {
 				return;
 			}
+			clearSelection();
 			_set.clear();
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 		}
@@ -392,6 +423,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			boolean ret = false;
 			if (_set.contains(o)) {
 				//bug #1819318 Problem while using SortedSet with Databinding
+				removeSelection(o);
 				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 					final int index = indexOf(o);
 					ret = _set.remove(o);
@@ -415,8 +447,9 @@ implements ListModelExt, Map, java.io.Serializable {
 
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_set, c, true);
+				return removePartial(_set, c, true, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
+				removeAllSelection(c);
 				final boolean ret = _set.removeAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -431,8 +464,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_set, c, false);
+				return removePartial(_set, c, false, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
+				retainAllSelection(c);
 				final boolean ret = _set.retainAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -465,8 +499,8 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (this == o) {
 				return true;
 			}
-			if (o instanceof MyKeySet) {
-				return Objects.equals(((MyKeySet)o)._set, _set);
+			if (o instanceof MySet) {
+				return Objects.equals(((MySet)o)._set, _set);
 			} else {
 				return Objects.equals(_set, o);
 			}
@@ -492,9 +526,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			return _set == null ? a : _set.toArray(a);
 		}
 	}
-	private class MyEntrySet extends MyKeySet {
+	private class MyEntrySet extends MySet {
 		private MyEntrySet(Set inner) {
-			super(inner);
+			super(inner, false);
 		}
 		protected int indexOf(Object o) {
 			return ListModelMap.this.indexOf(o);
@@ -513,6 +547,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			if (i2 < 0) {
 				return;
 			}
+			clearSelection();
 			_inner.clear();
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 		}
@@ -522,6 +557,7 @@ implements ListModelExt, Map, java.io.Serializable {
 			for(Iterator it = _inner.iterator(); it.hasNext();++j) {
 				final Object val = it.next();
 				if (Objects.equals(val, o)) {
+					removeSelection(o);
 					it.remove();
 					return j;
 				}
@@ -539,6 +575,7 @@ implements ListModelExt, Map, java.io.Serializable {
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				return true;
 			} else {
+				removeSelection(o);
 				final boolean ret = _inner.remove(o);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -549,13 +586,15 @@ implements ListModelExt, Map, java.io.Serializable {
 
 		public boolean removeAll(Collection c) {
 			if (_inner == c || this == c) { //special case
+				clearSelection();
 				clear();
 				return true;
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_inner, c, true);
+				return removePartial(_inner, c, true, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
+				removeAllSelection(c);
 				final boolean ret = _inner.removeAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -570,8 +609,9 @@ implements ListModelExt, Map, java.io.Serializable {
 			}
 			//bug #1819318 Problem while using SortedSet with Databinding
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-				return removePartial(_inner, c, false);
+				return removePartial(_inner, c, false, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
+				retainAllSelection(c);
 				final boolean ret = _inner.retainAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);

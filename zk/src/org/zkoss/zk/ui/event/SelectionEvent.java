@@ -1,24 +1,29 @@
 /* SelectionEvent.java
 
- {{IS_NOTE
+
  Purpose:
  
  Description:
  
  History:
  Wed April 18 15:18:32     2007, Created by jumperchen
- }}IS_NOTE
+
 
  Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
  {{IS_RIGHT
- This program is distributed under GPL Version 3.0 in the hope that
+ This program is distributed under LGPL Version 3.0 in the hope that
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's the active selection which is a
@@ -28,8 +33,18 @@ import org.zkoss.zk.ui.Component;
  */
 public class SelectionEvent extends Event {
 	private final int _start, _end;
-
 	private final String _txt;
+
+	/** Converts an AU request to a selection event.
+	 * @since 5.0.0
+	 */
+	public static final SelectionEvent getSelectionEvent(AuRequest request) {
+		final Map data = request.getData();
+		return new SelectionEvent(request.getCommand(), request.getComponent(),
+			AuRequests.getInt(data, "start", 0),
+			AuRequests.getInt(data, "end", 0),
+			(String)data.get("selected"));
+	}
 
 	/**
 	 * Constructs a selection event.

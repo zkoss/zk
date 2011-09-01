@@ -1,23 +1,22 @@
 /* AbstractTag.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Oct  4 09:15:59     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zhtml.impl;
 
+import java.lang.Object;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -28,16 +27,23 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.render.DirectContent;
+
+import org.zkoss.zhtml.Text;
+import org.zkoss.zhtml.Zkhead;
 
 /**
  * The raw component used to generate raw HTML elements.
@@ -50,6 +56,10 @@ import org.zkoss.zk.ui.ext.RawId;
  */
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
+	static {
+		addClientEvent(AbstractTag.class, Events.ON_CLICK, 0);
+	}
+
 	/** The tag name. */
 	protected String _tagnm;
 	private Map _props;
@@ -125,10 +135,12 @@ implements DynamicPropertied, RawId {
 			throw new WrongValueException("Attribute not allowed: "+name+"\nSpecify the ZK namespace if you want to use special ZK attributes");
 
 		String sval = Objects.toString(value);
-		if ("style".equals(name)) sval = filterStyle(sval);
-
-		setDynaProp(name, sval);
-		smartUpdate(name, sval);
+		if ("style".equals(name)) {
+			sval = filterStyle(sval);
+			setDynaProp(name, sval);
+		} else
+			setDynaProp(name, value);
+		smartUpdate("dynamicProperty", new String[] {name, sval});
 	}
 	/** Processes the style. */
 	private String filterStyle(String style) {
@@ -150,7 +162,7 @@ implements DynamicPropertied, RawId {
 		return style;
 	}
 	/** Set the dynamic property 'blindly'. */
-	private void setDynaProp(String name, String value) {
+	private void setDynaProp(String name, Object value) {
 		if (value == null) {
 			if (_props != null) _props.remove(name);
 		} else {
@@ -163,7 +175,7 @@ implements DynamicPropertied, RawId {
 	/** Whether to hide the id attribute.
 	 * <p>Default: false.
 	 * <p>Some tags, such as {@link org.zkoss.zhtml.Html}, won't generate the id attribute.
-	 * They will override this method to return true.
+	 * They shall override this method to return true.
 	 */
 	protected boolean shallHideId() {
 		return false;
@@ -178,7 +190,7 @@ implements DynamicPropertied, RawId {
 	public boolean setVisible(boolean visible) {
 		final boolean old = super.setVisible(visible);
 		if (old != visible) {
-			final String style = (String)getDynamicProperty("style");
+			final String style = getStyle();
 			if (visible) {
 				if (style != null) {
 					final int j = HTMLs.getSubstyleIndex(style, "display");
@@ -217,105 +229,112 @@ implements DynamicPropertied, RawId {
 		}
 		return old;
 	}
-	public boolean addEventListener(String evtnm, EventListener listener) {
-		final EventInfo ei;
-		for (int j = 0;; ++j) {
-			if (j >= _evts.length)
-				throw new UiException("Not supported event: "+evtnm);
-			if (_evts[j].name.equals(evtnm)) { //found
-				ei = _evts[j];
-				break;
-			}
-		}
 
-		final boolean bAddType = ei.typed && !isTypeDeclared();
-		final boolean ret = super.addEventListener(evtnm, listener);
-		if (ret) {
-			smartUpdate(ei.attr,
-				Events.isListened(this, evtnm, true) ? "true": null);
-				//Bug 1477271: Tom M Yeh: 
-				//We check non-deferable only. Otherwise, if users add a page
-				//event listener, all ZHTML will generate z.onChange.
-			if (bAddType && isTypeDeclared()) {
-				smartUpdate("z.type", "zhtml.main.Raw");
-				smartUpdate("z.init", true);
-			}
-		}
-		return ret;
-	}
-	private boolean isTypeDeclared() {
-		for (int j = 0; j < _evts.length; ++j)
-			if (_evts[j].typed
-			&& Events.isListened(this, _evts[j].name, true)) //asap only
-				return true;
-		return false;
+	/** Returns the widget class, "zhtml.Widget".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Widget";
 	}
 
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (_tagnm == null)
 			throw new UiException("The tag name is not initialized yet");
 
-		out.write('<');
-		out.write(_tagnm);
+		final Execution exec = Executions.getCurrent();
+		if (exec == null || exec.isAsyncUpdate(null)
+		|| !HtmlPageRenders.isDirectContent(exec)) {
+			super.redraw(out); //generate JavaScript
+			return;
+		}
 
-		boolean typeDeclared = false;
-		for (int j = 0; j < _evts.length; ++j) {
-			if (Events.isListened(this, _evts[j].name, true)) { //asap only
-				if (_evts[j].typed) typeDeclared = true;
-				out.write(' ');
-				out.write(_evts[j].attr);
-				out.write("=\"true\"");
+		TagRenderContext rc = PageRenderer.getTagRenderContext(exec);
+		final boolean rcRequired = rc == null;
+		Object ret = null;
+		if (rcRequired) {
+			ret = PageRenderer.beforeRenderTag(exec);
+			rc = PageRenderer.getTagRenderContext(exec);
+		}
+
+		out.write(getPrologHalf(false));
+		rc.renderBegin(this, getClientEvents(), false);
+
+		redrawChildrenDirectly(rc, exec, out);
+
+		out.write(getEpilogHalf());
+		rc.renderEnd(this);
+
+		if (rcRequired) {
+			out.write(rc.complete());
+			PageRenderer.afterRenderTag(exec, ret);
+		}
+	}
+	/** Renders the children directly to the given output.
+	 * Notice it is called only if {@link #redraw} is going to render
+	 * the content (HTML tags) directly.
+	 * If it is about to generate the JavaScript code
+	 * {@link #redrawChildren} will be called instead.
+	 * <p>You have to override this method if the deriving class
+	 * has additional information to render.
+	 * @since 5.0.7
+	 */
+	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
+	java.io.Writer out) throws java.io.IOException {
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			if (((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
+				((ComponentCtrl)child).redraw(out);
+			} else {
+				HtmlPageRenders.setDirectContent(exec, false);
+				rc.renderBegin(child, null, true);
+				HtmlPageRenders.outStandalone(exec, child, out);
+				rc.renderEnd(child);
+				HtmlPageRenders.setDirectContent(exec, true);
 			}
+			child = next;
 		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		render(renderer, "prolog", getPrologHalf(false));
+		render(renderer, "epilog", getEpilogHalf());
+	}
+	/**
+	 * @param hideUuidIfNoId whether not to generate UUID if possible
+	 */
+	/*package*/ String getPrologHalf(boolean hideUuidIfNoId) {
+		final StringBuffer sb = new StringBuffer(128)
+			.append('<').append(_tagnm);
 
-		if (typeDeclared)
-			out.write(" z.type=\"zhtml.main.Raw\"");
-
-		if (typeDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
-			out.write(" id=\"");
-			out.write(getUuid());
-			out.write('"');
-		}
+		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
+			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				final String key = (String)me.getKey();
-				final String val = (String)me.getValue();
-				out.write(' ');
-				out.write(key);
-				out.write("=\"");
-				out.write(XMLs.encodeAttribute(val));
-				out.write('"');
+				sb.append(' ').append(me.getKey()).append("=\"")
+					.append(XMLs.encodeAttribute(Objects.toString(me.getValue())))
+					.append('"');
 			}
 		}
 
-		if (isChildable()) {
-			boolean divGened = false;
-			if ("body".equals(_tagnm)) {
-				if (_props != null && _props.containsKey("class")) {
-					out.write("><div class=\"zk\">\n");
-					divGened = true;
-				} else {
-					out.write(" class=\"zk\">\n");
-				}
-			} else {
-				out.write('>');
-			}
+		if (!isOrphanTag())
+			sb.append('/');
 
-			for (Iterator it = getChildren().iterator(); it.hasNext();)
-				((Component)it.next()).redraw(out);
-
-			if (divGened)
-				out.write("\n</div>");
-			out.write("</");
-			out.write(_tagnm);
-			out.write('>');
-		} else {
-			out.write("/>");
-		}
+		return sb.append('>').toString();
 	}
-	public boolean isChildable() {
+	/*package*/ String getEpilogHalf() {
+		return isOrphanTag() ? "</" + _tagnm + '>': "";
+	}
+	protected boolean isChildable() {
+		return isOrphanTag();
+	}
+	/** Returns whether this tag is an orphan tag, i.e., it shall be in the
+	 * form of &lt;tag/&gt;.
+	 * @since 5.0.8
+	 */
+	protected boolean isOrphanTag() {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 
@@ -332,24 +351,9 @@ implements DynamicPropertied, RawId {
 		return "["+_tagnm+' '+super.toString()+']';
 	}
 
-	private static class EventInfo {
-		/** The event name.
-		 */
-		private final String name;
-		/** The attribute that will be generated to the client side.
-		 */
-		private final String attr;
-		/** Whether to generate z.type
-		 */
-		private final boolean typed;
-		private EventInfo(String name, String attr, boolean typed) {
-			this.name = name;
-			this.attr = attr;
-			this.typed = typed;
-		}
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
 	}
-	private static final EventInfo[] _evts = {
-		new EventInfo(Events.ON_CLICK, "z.lfclk", false),
-		new EventInfo(Events.ON_CHANGE, "z.onChange", true)
-	};
+	protected class ExtraCtrl implements DirectContent {
+	}
 }

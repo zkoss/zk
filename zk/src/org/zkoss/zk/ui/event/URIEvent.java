@@ -1,24 +1,28 @@
 /* URIEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Aug  7 09:19:15     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * The URI update event used with <code>onURIChange</code>
@@ -38,6 +42,31 @@ import org.zkoss.zk.ui.Component;
 public class URIEvent extends Event {
 	/** The URI. */
 	private final String _uri;
+
+	/** Converts an AU request to an URI event.
+	 * @since 5.0.0
+	 */
+	public static final URIEvent getURIEvent(AuRequest request) {
+		final Map data = request.getData();
+		String uri = (String)data.get("");
+		int urilen = uri.length();
+		if (urilen > 0 && uri.charAt(0) == '/') {
+			//Convert URL to URI if starting with the context path
+			String ctx = Executions.getCurrent().getContextPath();
+			int ctxlen = ctx != null ? ctx.length(): 0;
+			if (ctxlen > 0 && !"/".equals(ctx)) {
+				if (ctx.charAt(0) != '/') { //just in case
+					ctx = '/' + ctx;
+					++ctxlen;
+				}
+				if (uri.startsWith(ctx)
+				&& (urilen == ctxlen || uri.charAt(ctxlen) == '/'))
+					uri = uri.substring(ctxlen);
+			}
+		}
+
+		return new URIEvent(request.getCommand(), request.getComponent(), uri);
+	}
 
 	/** Constructs an URI update event.
 	 * @param target the component to receive the event.

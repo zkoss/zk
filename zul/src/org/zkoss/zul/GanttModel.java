@@ -1,18 +1,16 @@
 /* GanttModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Apr 30, 2008 2:01:47 PM, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -112,8 +110,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setStart(Date start) {
 			if (!Objects.equals(start, _start)) {
 				this._start = start;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -124,8 +121,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setEnd(Date end) {
 			if (!Objects.equals(end, _end)) {
 				this._end = end;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -136,8 +132,7 @@ public class GanttModel extends AbstractChartModel {
 		public void setDescription(String description) {
 			if (!Objects.equals(description, _description)) {
 				this._description = description;
-				if (_owner != null)
-					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
+				fireChartChange();
 			}
 		}
 
@@ -187,6 +182,11 @@ public class GanttModel extends AbstractChartModel {
 		
 		private void setOwner(GanttModel owner) {
 			_owner = owner;
+		}
+		
+		protected void fireChartChange() {
+			if (_owner != null)
+				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
 		}
 	}
 }

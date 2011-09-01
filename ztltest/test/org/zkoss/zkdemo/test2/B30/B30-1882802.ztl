@@ -1,0 +1,51 @@
+<!-- B30-1882802.ztl.java
+
+	Purpose:for testing B30-1882802.ztl .
+
+	Description:
+
+	History:
+		11, 1, 2010 12:59:40
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B30-1882802.zul,B,E,Textbox,Combobox,Datebox,Calendar,Intbox">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+      click enable/disable and make sure every one is disable/enabled
+      <vbox>
+	<button label="enable/disable"
+		onClick="a1.disabled= !a1.disabled;a2.disabled= !a2.disabled;a3.disabled= !a3.disabled;a4.disabled= !a4.disabled;a5.disabled= !a5.disabled;a6.disabled= !a6.disabled;a7.disabled= !a7.disabled;" />
+	<textbox id="a1" rows="5" cols="40">
+		<attribute name="value">text line1... text line2...</attribute>
+	</textbox>
+	<datebox id="a2" />
+	<combobox id="a3">
+		<comboitem label="item1" value="item1value" />
+		<comboitem label="item1" value="item1value" />
+	</combobox>
+	<textbox id="a4" />
+	<intbox id="a5" />
+	<radiogroup>
+		<radio id="a6" label="Apple" />
+	</radiogroup>
+	<checkbox id="a7" label="Apple" />
+      </vbox>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			verifyEquals(0,jq(":disabled").length());
+			click(jq("@button"));
+			waitResponse();
+			verifyEquals(7,jq(":disabled").length());
+		]]></client>
+	</case>
+</test>

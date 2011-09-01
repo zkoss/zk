@@ -1,18 +1,16 @@
 /* WebAppInit.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jun 21 19:13:09     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -22,6 +20,12 @@ import org.zkoss.zk.ui.WebApp;
 
 /**
  * Used to initialize a ZK application when it is created.
+ *
+ * <p>Notice that, when {@link #init} was called, {@link WebApp} has been
+ * created. In other words, it is too late to change the implementation
+ * class of UiEngine via {@link Configuration}.
+ * Rather, use {@link org.zkoss.zk.ui.sys.WebAppCtrl#setUiFactory}
+ * and other methods instead.
  *
  * <p>How this interface is used.
  * <ol>

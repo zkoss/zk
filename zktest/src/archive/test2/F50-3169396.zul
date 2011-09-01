@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3169396.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb  1 14:55:35 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+	import java.util.*;
+	import org.zkoss.zul.*;
+	
+	public class FileInfo implements Comparable {
+		public String path;
+		public String description;
+
+		public FileInfo(String path, String description) {
+			this.path = path;
+			this.description = description;
+		}
+
+		public String toString() {
+			return path;
+		}
+
+		public int compareTo(Object o) {
+			return path.compareTo(((FileInfo) o).path);
+		}
+	}
+	
+	 List getRandom(int level1, int range) {
+		List nums = new ArrayList();
+		Random rand = new Random(new Random().nextLong());
+		while (nums.size() < level1) {
+			int next = rand.nextInt(range);
+			if (!nums.contains(next)) {
+				nums.add(next);
+			}
+		}
+		return nums;
+	}
+	 
+	 Object[][] getRandomArray(int level1, int range) {
+		List n1 = getRandom(level1, range);
+		List n2 = getRandom(level1, range);
+		
+		Object[][] nums = new Object[level1][2];
+		
+		for (int i = 0; i < level1; i++) {
+			nums[i] =  new Object[] {n1.get(i), n2.get(i)};
+		}
+		
+		return nums;
+	}
+	 
+	 TreeModel initTreeModel() {
+			int level1 = 3;
+			int level2 = 3;
+			int level3 = 3;
+			List list = new ArrayList();
+
+			List nums = getRandom(level1, 10);
+			List nums2 = getRandom(level1, 10);
+
+			List nums3 = getRandom(level2, 10);
+			List nums4 = getRandom(level2, 10);
+
+			List nums5 = getRandom(level3, 10);
+			List nums6 = getRandom(level3, 10);
+
+			for (int i = 0; i < level1; i++) {
+				List subList = new ArrayList();
+				int n1 = (Integer) nums.get(i);
+				int n2 = (Integer) nums2.get(i);
+
+				for (int j = 0; j < level2; j++) {
+					List subSubList = new ArrayList();
+					int n3 = (Integer) nums3.get(j);
+					int n4 = (Integer) nums4.get(j);
+					for (int k = 0; k < level3; k++) {
+						int n5 = (Integer) nums5.get(k);
+						int n6 = (Integer) nums6.get(k);
+						subSubList.add(new DefaultTreeNode(new FileInfo("item "
+								+ n1 + n3 + n5, "item " + n2 + n4 + n6)));
+					}
+					subList.add(new DefaultTreeNode(new FileInfo("item " + n1 + n3,
+							"item " + n2 + n4), subSubList));
+				}
+
+				list.add(new DefaultTreeNode(new FileInfo("item " + n1, "item "
+						+ n2), subList));
+			}
+			return new DefaultTreeModel(new DefaultTreeNode(null, list));
+		}
+
+		TreeModel initTreeModelArray() {
+			int level1 = 3;
+			int level2 = 3;
+			int level3 = 3;
+			List list = new ArrayList();
+
+			List nums = getRandom(level1, 10);
+			List nums2 = getRandom(level1, 10);
+
+			List nums3 = getRandom(level2, 10);
+			List nums4 = getRandom(level2, 10);
+
+			List nums5 = getRandom(level3, 10);
+			List nums6 = getRandom(level3, 10);
+
+			for (int i = 0; i < level1; i++) {
+				List subList = new ArrayList();
+				int n1 = (Integer) nums.get(i);
+				int n2 = (Integer) nums2.get(i);
+
+				for (int j = 0; j < level2; j++) {
+					List subSubList = new ArrayList();
+					int n3 = (Integer) nums3.get(j);
+					int n4 = (Integer) nums4.get(j);
+					for (int k = 0; k < level3; k++) {
+						int n5 = (Integer) nums5.get(k);
+						int n6 = (Integer) nums6.get(k);
+						subSubList.add(new DefaultTreeNode(new String[] {
+								"item " + n1 + n3 + n5, "item " + n2 + n4 + n6 }));
+					}
+					subList.add(new DefaultTreeNode(new String[] {
+							"item " + n1 + n3, "item " + n2 + n4 }, subSubList));
+				}
+
+				list.add(new DefaultTreeNode(new String[] { "item " + n1,
+						"item " + n2 }, subList));
+			}
+			return new DefaultTreeModel(new DefaultTreeNode(null, list));
+		}
+		
+		ListModel initListModel() {
+			int level1 = 10;
+			List nums = getRandom(level1, 10);
+			List nums2 = getRandom(level1, 10);
+			List list = new ArrayList();
+			for (int i = 0; i < level1; i++) {
+				list.add(new FileInfo("item " + nums.get(i), "item " + nums2.get(i)));
+			}
+			return new ListModelList(list);
+		}
+		ListModel initListModelArray() {
+			int level1 = 10;
+			List nums = getRandom(level1, 10);
+			List nums2 = getRandom(level1, 10);
+			List list = new ArrayList();
+			for (int i = 0; i < level1; i++) {
+				list.add(new String[]{"item " + nums.get(i), "item " + nums2.get(i)});
+			}
+			return new ListModelList(list);
+		}
+	
+	TreeitemRenderer render = new TreeitemRenderer() {
+		public void render(Treeitem item, Object data) throws Exception {
+			FileInfo fi = (FileInfo) ((DefaultTreeNode) data).getData();
+			Treerow tr;
+			if (item.getTreerow() == null) {
+				tr = new Treerow();
+				tr.setParent(item);
+			} else {
+				tr = item.getTreerow();
+				tr.getChildren().clear();
+			}
+			tr.appendChild(new Treecell(fi.path));
+			tr.appendChild(new Treecell(fi.description));
+			item.setOpen(true);
+		}
+	};
+	ListitemRenderer itemRender = new ListitemRenderer() {
+		public void render(Listitem item, Object data) throws Exception {
+			FileInfo fi = (FileInfo) data;
+			item.appendChild(new Listcell(fi.path));
+			item.appendChild(new Listcell(fi.description));
+		}
+	};
+	
+	TreeitemRenderer render2 = new TreeitemRenderer() {
+		public void render(Treeitem item, Object data) throws Exception {
+			String[] fi = (String[]) ((DefaultTreeNode) data).getData();
+			Treerow tr;
+			if (item.getTreerow() == null) {
+				tr = new Treerow();
+				tr.setParent(item);
+			} else {
+				tr = item.getTreerow();
+				tr.getChildren().clear();
+			}
+			tr.appendChild(new Treecell(fi[0]));
+			tr.appendChild(new Treecell(fi[1]));
+			item.setOpen(true);
+		}
+	};
+	
+	ListitemRenderer itemRender2 = new ListitemRenderer() {
+		public void render(Listitem item, Object data) throws Exception {
+			String[] fi = (String[]) data;
+			item.appendChild(new Listcell(fi[0]));
+			item.appendChild(new Listcell(fi[1]));
+		}
+	};
+	
+	TreeModel model = initTreeModel();
+	TreeModel model2 = initTreeModel();
+	TreeModel model3 = initTreeModelArray();
+
+	ListModel lmodel = initListModel();
+	ListModel lmodel2 = initListModel();
+	ListModel lmodel3 = initListModelArray();
+	
+	Object[][] list = getRandomArray(2, 11);
+	Object[][] sublist = getRandomArray(2, 11);
+	Object[][] subsublist = getRandomArray(11, 11);
+	
+	Object[][] list2 = getRandomArray(11, 11);
+	
+	]]></zscript>
+	<html>
+	<![CDATA[
+	<ol>
+	<li>Click each headers of tree.</li>
+	<li>All of tree shell be sorted correctly.</li>
+	</ol>
+	]]>
+	</html>
+	<tabbox>
+		<tabs>
+			<tab label="model auto(attr)" />
+			<tab label="model auto(index)" />
+			<tab label="model auto" />
+			<tab label="component auto" />
+			<tab label="component client(number)" />
+			<tab label="component client" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<hlayout sclass="z-valign-top">
+					<tree model="${model}" itemRenderer="${render}"
+						hflex="1">
+						<treecols>
+							<treecol label="Path" sort="auto(path)" />
+							<treecol label="Description"
+								sort="auto(description)" />
+						</treecols>
+					</tree>
+					<vlayout hflex="1" vflex="1">
+						<listbox model="${lmodel}"
+							itemRenderer="${itemRender}">
+							<listhead>
+								<listheader label="path"
+									sort="auto(path)" />
+								<listheader label="description"
+									sort="auto(description)" />
+							</listhead>
+						</listbox>
+						<listbox model="${lmodel}"
+							itemRenderer="${itemRender}" mold="paging" pageSize="2">
+							<listhead>
+								<listheader label="path"
+									sort="auto(path)" />
+								<listheader label="description"
+									sort="auto(description)" />
+							</listhead>
+						</listbox>
+						<tree model="${model}" itemRenderer="${render}"
+							mold="paging" pageSize="5">
+							<treecols>
+								<treecol label="Path" sort="auto(path)" />
+								<treecol label="Description"
+									sort="auto(description)" />
+							</treecols>
+						</tree>
+					</vlayout>
+				</hlayout>
+			</tabpanel>
+			<tabpanel>
+				<hlayout sclass="z-valign-top">
+					<tree model="${model3}" itemRenderer="${render2}"
+						hflex="1">
+						<treecols>
+							<treecol label="Path" sort="auto(0)" />
+							<treecol label="Description" sort="auto(1)" />
+						</treecols>
+					</tree>
+					<vlayout hflex="1" vflex="1">
+						<listbox model="${lmodel3}"
+							itemRenderer="${itemRender2}">
+							<listhead>
+								<listheader label="path" sort="auto(0)" />
+								<listheader label="description"
+									sort="auto(1)" />
+							</listhead>
+						</listbox>
+						<listbox model="${lmodel3}"
+							itemRenderer="${itemRender2}" mold="paging" pageSize="2">
+							<listhead>
+								<listheader label="path" sort="auto(0)" />
+								<listheader label="description"
+									sort="auto(1)" />
+							</listhead>
+						</listbox>
+						<tree model="${model3}"
+							itemRenderer="${render2}" mold="paging" pageSize="5">
+							<treecols>
+								<treecol label="Path" sort="auto(0)" />
+								<treecol label="Description"
+									sort="auto(1)" />
+							</treecols>
+						</tree>
+					</vlayout>
+				</hlayout>
+			</tabpanel>
+			<tabpanel>
+				<hlayout sclass="z-valign-top">
+					<tree model="${model2}" itemRenderer="${render}"
+						hflex="1">
+						<treecols>
+							<treecol label="Path" sort="auto" />
+							<treecol label="Description" sort="auto" />
+						</treecols>
+					</tree>
+					<vlayout hflex="1" vflex="1">
+						<listbox model="${lmodel2}"
+							itemRenderer="${itemRender}">
+							<listhead>
+								<listheader label="path"
+									sort="auto(path)" />
+								<listheader label="description"
+									sort="auto" />
+							</listhead>
+						</listbox>
+						<listbox model="${lmodel2}"
+							itemRenderer="${itemRender}" mold="paging" pageSize="2">
+							<listhead>
+								<listheader label="path" sort="auto" />
+								<listheader label="description"
+									sort="auto(description)" />
+							</listhead>
+						</listbox>
+						<tree model="${model2}" itemRenderer="${render}"
+							mold="paging" pageSize="5">
+							<treecols>
+								<treecol label="Path" sort="auto" />
+								<treecol label="Description"
+									sort="auto" />
+							</treecols>
+						</tree>
+					</vlayout>
+				</hlayout>
+			</tabpanel>
+			<tabpanel forEach="auto,client(number),client">
+				<hlayout sclass="z-valign-top">
+					<tree hflex="1">
+						<treecols>
+							<treecol label="Path" sort="${each}" />
+							<treecol label="Description" sort="${each}" />
+						</treecols>
+						<treechildren>
+							<treeitem forEach="${list}">
+								<treerow>
+									<treecell label="${each[0]}" />
+									<treecell label="${each[1]}" />
+								</treerow>
+								<treechildren>
+									<treeitem forEach="${sublist}">
+										<treerow>
+											<treecell
+												label="${each[0]}" />
+											<treecell
+												label="${each[1]}" />
+										</treerow>
+										<treechildren>
+											<treeitem
+												forEach="${subsublist}">
+												<treerow>
+													<treecell
+														label="${each[0]}" />
+													<treecell
+														label="${each[1]}" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+								</treechildren>
+							</treeitem>
+						</treechildren>
+					</tree>
+					<vlayout hflex="1">
+						<listbox>
+							<listhead>
+								<listheader label="h1" sort="${each}" />
+								<listheader label="h2" sort="${each}" />
+							</listhead>
+							<listitem forEach="${list2}">
+								<listcell label="${each[0]}" />
+								<listcell label="${each[1]}" />
+							</listitem>
+						</listbox>
+						<listbox mold="paging" pageSize="2">
+							<listhead>
+								<listheader label="h1" sort="${each}" />
+								<listheader label="h2" sort="${each}" />
+							</listhead>
+							<listitem forEach="${list2}">
+								<listcell label="${each[0]}" />
+								<listcell label="${each[1]}" />
+							</listitem>
+						</listbox>
+						<tree hflex="1" mold="paging" pageSize="5">
+							<treecols>
+								<treecol label="Path" sort="${each}" />
+								<treecol label="Description"
+									sort="${each}" />
+							</treecols>
+							<treechildren>
+								<treeitem forEach="${list}">
+									<treerow>
+										<treecell label="${each[0]}" />
+										<treecell label="${each[1]}" />
+									</treerow>
+									<treechildren>
+										<treeitem
+											forEach="${sublist}">
+											<treerow>
+												<treecell
+													label="${each[0]}" />
+												<treecell
+													label="${each[1]}" />
+											</treerow>
+											<treechildren>
+												<treeitem
+													forEach="${subsublist}">
+													<treerow>
+														<treecell
+															label="${each[0]}" />
+														<treecell
+															label="${each[1]}" />
+													</treerow>
+												</treeitem>
+											</treechildren>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+							</treechildren>
+						</tree>
+					</vlayout>
+				</hlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

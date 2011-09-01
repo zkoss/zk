@@ -1,32 +1,29 @@
 /* Tab.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jul 12 10:43:18     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
 package org.zkoss.zul;
 
-import java.util.Set;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Selectable;
-
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -35,7 +32,6 @@ import org.zkoss.zul.impl.LabelImageElement;
  * Default {@link #getZclass}: z-tab. (since 3.5.0)
  * 
  * @author tomyeh
- * 
  */
 public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	private boolean _selected;
@@ -43,19 +39,20 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	private boolean _closable;
 
 	private boolean _disabled;
-
-	public Tab() {}		
+	static {
+		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
+		addClientEvent(Tab.class, Events.ON_SELECT, CE_IMPORTANT);
+	}
+	public Tab() {}
 
 	public Tab(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 
 	public Tab(String label, String image) {
-		this();
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
+
 	//-- super --//
 	public void setWidth(String width) {
 		Tabbox tb = getTabbox();
@@ -86,35 +83,55 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); // re-init is required
+			smartUpdate("closable", _closable);
 		}
 	}
 
 	/**
 	 * Process the onClose event sent when the close button is pressed.
 	 * <p>
-	 * Default: detach itself and the corresponding {@link Tabpanel}.
+	 * Default: invoke {@link #close} to detach itself and the corresponding {@link Tabpanel}.
 	 */
 	public void onClose() {
-		if (_selected) {
-			final Tabs tabs = (Tabs) getParent();
-			if (tabs != null) {
-				Tab t = null;
-				t = this.getPreviousSibling() != null ? 
-						(Tab)this.getPreviousSibling() :
-							this.getNextSibling() != null ? 
-								(Tab)this.getNextSibling():
-									null;
-				if (t != null ) t.setSelected(true);
-			}
-		}
-
-		final Tabpanel panel = getLinkedPanel();
-		if (panel != null)
-			panel.detach();
-		detach();
+		close();
 	}
 
+	/** Closes this tab and the linked tabpanel.
+	 * This method detaches this component and the linked {@link Tabpanel}).
+	 * @since 5.0.0
+	 */
+	public void close() {
+		if (_selected) {
+			final Tab tab = selectNextTab();
+			if (tab != null) {
+				final Set selItems = new HashSet(2);
+				selItems.add(tab);
+				Events.postEvent(new SelectEvent(Events.ON_SELECT, tab, selItems));
+			}
+		}
+		
+		//Cache panel before detach , or we couldn't get it after tab is detached.
+		final Tabpanel panel = getLinkedPanel();
+		
+		detach();
+		if (panel != null)
+			panel.detach();		
+	}
+
+	private Tab selectNextTab() {
+		for (Tab tab = (Tab) getNextSibling(); tab != null; tab = (Tab) tab.getNextSibling())
+			if (!tab.isDisabled()) {
+				tab.setSelected(true);
+				return tab;
+			}
+		for (Tab tab = (Tab) getPreviousSibling(); tab != null; tab = (Tab) tab.getPreviousSibling())
+			if (!tab.isDisabled()) {
+				tab.setSelected(true);
+				return tab;
+			}
+		return null;
+	}
+	
 	/**
 	 * Returns the tabbox owns this component.
 	 */
@@ -156,7 +173,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	/**
 	 * Returns whether this tab is selected.
 	 */
-	public final boolean isSelected() {
+	public boolean isSelected() {
 		return _selected;
 	}
 
@@ -170,8 +187,8 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 				// Note: we don't update it here but let its parent does the job
 				tabbox.setSelectedTab(this);
 			} else {
-				_selected = selected;
-				invalidate();
+				_selected = selected;				
+				smartUpdate("selected", _selected);
 			}
 		}
 	}
@@ -183,7 +200,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * 
 	 * @since 3.0.0
 	 */
-	public final boolean isDisabled() {
+	public boolean isDisabled() {
 		return _disabled;
 	}
 
@@ -197,7 +214,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			smartUpdate("z.disabled", _disabled);
+			smartUpdate("disabled", _disabled);
 		}
 	}
 
@@ -222,23 +239,6 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	}
 
 	// -- super --//
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(64).append(super
-				.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_SELECT);
-
-		final String clkattrs = getAllOnClickAttrs();
-		if (clkattrs != null)
-			sb.append(clkattrs);
-		HTMLs.appendAttribute(sb, "z.sel", isSelected());
-		HTMLs.appendAttribute(sb, "z.box", getTabbox().getUuid());
-		final Tabpanel panel = getLinkedPanel();
-		if (panel != null)
-			HTMLs.appendAttribute(sb, "z.panel", panel.getUuid());
-		HTMLs.appendAttribute(sb, "z.disabled", isDisabled());
-		return sb.toString();
-	}
-	
 	public String getZclass() {
 		if (_zclass != null) return _zclass;
 		final Tabbox tabbox = getTabbox();
@@ -246,30 +246,12 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			tabbox.isVertical() ? "-ver" : "" : "";
 		return "z-tab" + added;
 	}
-	protected String getRealSclass() {
-		String cls = super.getRealSclass();
-		String added = getZclass();
-		if (isDisabled())
-			added += "-disd";
-		if (isSelected())
-			added += "-seld";
-		return cls != null ? cls + " " + added : added;
-	}
 
 	// -- Component --//
-	public void invalidate() {
-		final Tabbox tabbox = getTabbox();
-		if (tabbox != null && tabbox.inAccordionMold()) {
-			tabbox.invalidate();			
-		} else {			
-			super.invalidate();
-		}
-	}
-
 	/**
 	 * No child is allowed.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
 	}
 
@@ -280,28 +262,35 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	}
 
 	// -- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-
-	/**
-	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
-	 * component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#service},
+	 * it also handles onSelect.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl implements
-			Selectable {
-		// -- Selectable --//
-		public void selectItemsByClient(Set selItems) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SELECT)) {
+			final SelectEvent evt = SelectEvent.getSelectEvent(request);
+			final Set selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)
-				throw new UiException("Exactly one selected tab is required: "
-						+ selItems); // debug purpose
-
+				throw new UiException("Exactly one selected tab is required: " + selItems); // debug purpose
 			final Tabbox tabbox = getTabbox();
 			if (tabbox != null)
-				tabbox
-						.selectTabDirectly((Tab) selItems.iterator().next(),
-								true);
-		}
-		public void clearSelectionByClient(){}
+				tabbox.selectTabDirectly((Tab) selItems.iterator().next(), true);
+
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_disabled)
+			render(renderer, "disabled", _disabled);
+		if (_selected)
+			render(renderer, "selected", _selected);
+		if (_closable)
+			render(renderer, "closable", _closable);
 	}
 }

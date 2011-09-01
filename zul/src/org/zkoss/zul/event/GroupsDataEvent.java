@@ -1,18 +1,16 @@
 /* GroupsDataEvent.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Sep  1 11:05:31     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -49,6 +47,8 @@ public class GroupsDataEvent {
 	 * <p>Note: {@link #getGroupIndex} must be non-negative.
      */   
 	public static final int INTERVAL_REMOVED = 2;
+	/** Identifies the structure of the lists has changed. @since 5.0.7*/
+	public static final int STRUCTURE_CHANGED = 3;
 	/** Identifies one or more changes in the groups contents.
 	 * The indices ({@link #getIndex0} and {@link #getIndex1} ) are
 	 * the indices of groups.
@@ -68,6 +68,11 @@ public class GroupsDataEvent {
      */
 	public static final int GROUPS_REMOVED = 6;
 
+	/** Identifies the Group is reset.
+	 *  @since 5.0.0
+	 */
+	public static final int GROUPS_RESET = 7;
+	
 	private final GroupsModel _model;
 	private final int _type, _groupIndex, _index0, _index1;
 
@@ -91,7 +96,7 @@ public class GroupsDataEvent {
 	int groupIndex, int index0, int index1) {
 		if (model == null)
 			throw new IllegalArgumentException();
-		if (type < GROUPS_CHANGED && groupIndex < 0)
+		if (type < STRUCTURE_CHANGED && groupIndex < 0)
 			throw new IllegalArgumentException("groupIndex required for type "+type);
 		_model = model;
 		_type = type;

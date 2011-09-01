@@ -1,0 +1,27 @@
+<!--
+B50-ZK-255.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 8 10:24:13 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Add the following to zk.xml and upload a large file (larger than 1 MB).</div>
+	<div style="white-space: pre"><![CDATA[
+		<system-config>
+			<max-upload-size>1000</max-upload-size>
+		</system-config>
+	]]></div>
+	<div>2. You should see an Exception thrown.</div>
+	<button label="B50-ZK-255" upload="true">
+		<attribute name="onUpload"><![CDATA[
+			org.zkoss.util.media.Media media = event.getMedia();
+			alert("uploaded with B50-ZK-255");
+		]]></attribute>
+	</button>
+</zk>

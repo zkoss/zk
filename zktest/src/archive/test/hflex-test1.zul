@@ -1,0 +1,548 @@
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<vlayout>
+		<label value='hflex="1"' style="font-size: 20px" />
+		<div hflex="1" height="50px" style="border:1px solid black;">
+			div
+		</div>
+		<groupbox hflex="1" height="50px" forEach="default,3d"
+			mold="${each }">
+			<caption label="groupbox ${each }" />
+		</groupbox>
+		<window title="win" hflex="1" height="50px" />
+		<panel title="panel" hflex="1" height="50px"
+			forEach="none,normal,rounded,rounded+" border="${each}">
+			<panelchildren />
+		</panel>
+		<tabbox hflex="1" height="50px">
+			<tabs>
+				<tab label="tab" />
+			</tabs>
+			<tabpanels>
+				<tabpanel />
+			</tabpanels>
+		</tabbox>
+		<hbox hflex="1" height="50px" style="border:1px solid black;">
+			hbox
+		</hbox>
+		<vbox hflex="1" height="50px" style="border:1px solid black;">
+			vbox
+		</vbox>
+		<hlayout hflex="1" height="50px" style="border:1px solid black;">
+			hlayout
+		</hlayout>
+		<vlayout hflex="1" height="50px" style="border:1px solid black;">
+			vlayout
+		</vlayout>
+		<grid hflex="1" height="60px">
+			<columns>
+				<column label="column" />
+			</columns>
+			<rows>
+				<row>item</row>
+			</rows>
+		</grid>
+		<listbox hflex="1" height="60px">
+			<listhead>
+				<listheader label="column" />
+			</listhead>
+			<listitem label="item" />
+		</listbox>
+		<tree hflex="1" height="60px">
+			<treecols>
+				<treecol label="colimn" />
+			</treecols>
+			<treechildren>
+				<treeitem label="item" />
+			</treechildren>
+		</tree>
+		<borderlayout hflex="1" height="50px">
+			<center>borderlayout</center>
+		</borderlayout>
+		<columnlayout hflex="1" height="50px">
+			<columnchildren width="100%" >
+				<panel title="columnlayout" />
+			</columnchildren>
+		</columnlayout>
+		<portallayout hflex="1" height="50px">
+			<portalchildren width="100%">
+				<panel title="portallayout"/>
+			</portalchildren>
+		</portallayout>
+		<tablelayout hflex="1" height="50px">
+			<tablechildren width="100%">
+				<panel title="tablelayout"/>
+			</tablechildren>
+		</tablelayout>
+		<label value='long label' style="font-size: 20px" />
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<div hflex="1" height="50px"
+				style="border:1px solid black;">
+				div
+			</div>
+		</div>
+		<div forEach="default,3d">
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<groupbox hflex="1" height="50px"
+				mold="${each }">
+				<caption label="groupbox ${each }" />
+			</groupbox>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<window title="win" hflex="1" height="50px" />
+		</div>
+		<div forEach="none,normal,rounded,rounded+">
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<panel title="panel" hflex="1" height="50px"
+				border="${each}">
+				<panelchildren />
+			</panel>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<tabbox hflex="1" height="50px">
+				<tabs>
+					<tab label="tab" />
+				</tabs>
+				<tabpanels>
+					<tabpanel />
+				</tabpanels>
+			</tabbox>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<hbox hflex="1" height="50px"
+				style="border:1px solid black;">
+				hbox
+			</hbox>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<vbox hflex="1" height="50px"
+				style="border:1px solid black;">
+				vbox
+			</vbox>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<hlayout hflex="1" height="50px"
+				style="border:1px solid black;">
+				hlayout
+			</hlayout>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<vlayout hflex="1" height="50px"
+				style="border:1px solid black;">
+				vlayout
+			</vlayout>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<grid hflex="1" height="60px">
+				<columns>
+					<column label="column" />
+				</columns>
+				<rows>
+					<row>item</row>
+				</rows>
+			</grid>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<listbox hflex="1" height="60px">
+				<listhead>
+					<listheader label="column" />
+				</listhead>
+				<listitem label="item" />
+			</listbox>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<tree hflex="1" height="60px">
+				<treecols>
+					<treecol label="colimn" />
+				</treecols>
+				<treechildren>
+					<treeitem label="item" />
+				</treechildren>
+			</tree>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<borderlayout hflex="1" height="50px">
+				<center>borderlayout</center>
+			</borderlayout>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<columnlayout hflex="1" height="50px">
+				<columnchildren width="100%">
+					<panel title="columnlayout" />
+				</columnchildren>
+			</columnlayout>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<portallayout hflex="1" height="50px">
+				<portalchildren width="100%">
+					<panel title="portallayout" />
+				</portalchildren>
+			</portallayout>
+		</div>
+		<div>
+			<label
+				value='loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong' />
+			<tablelayout hflex="1" height="50px">
+				<tablechildren width="100%">
+					<panel title="tablelayout" />
+				</tablechildren>
+			</tablelayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<div hflex="1" height="50px"
+				style="border:1px solid black;">
+				div
+			</div>
+		</div>
+		<div forEach="default,3d">
+			<n:h3>native h3</n:h3>
+			<groupbox hflex="1" height="50px"
+				mold="${each }">
+				<caption label="groupbox ${each }" />
+			</groupbox>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<window title="win" hflex="1" height="50px" />
+		</div>
+		<div forEach="none,normal,rounded,rounded+">
+			<n:h3>native h3</n:h3>
+			<panel title="panel" hflex="1" height="50px"
+				border="${each}">
+				<panelchildren />
+			</panel>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<tabbox hflex="1" height="50px">
+				<tabs>
+					<tab label="tab" />
+				</tabs>
+				<tabpanels>
+					<tabpanel />
+				</tabpanels>
+			</tabbox>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<hbox hflex="1" height="50px"
+				style="border:1px solid black;">
+				hbox
+			</hbox>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<vbox hflex="1" height="50px"
+				style="border:1px solid black;">
+				vbox
+			</vbox>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<hlayout hflex="1" height="50px"
+				style="border:1px solid black;">
+				hlayout
+			</hlayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<vlayout hflex="1" height="50px"
+				style="border:1px solid black;">
+				vlayout
+			</vlayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<grid hflex="1" height="60px">
+				<columns>
+					<column label="column" />
+				</columns>
+				<rows>
+					<row>item</row>
+				</rows>
+			</grid>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<listbox hflex="1" height="60px">
+				<listhead>
+					<listheader label="column" />
+				</listhead>
+				<listitem label="item" />
+			</listbox>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<tree hflex="1" height="60px">
+				<treecols>
+					<treecol label="colimn" />
+				</treecols>
+				<treechildren>
+					<treeitem label="item" />
+				</treechildren>
+			</tree>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<borderlayout hflex="1" height="50px">
+				<center>borderlayout</center>
+			</borderlayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<columnlayout hflex="1" height="50px">
+				<columnchildren width="100%">
+					<panel title="columnlayout" />
+				</columnchildren>
+			</columnlayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<portallayout hflex="1" height="50px">
+				<portalchildren width="100%">
+					<panel title="portallayout" />
+				</portalchildren>
+			</portallayout>
+		</div>
+		<div>
+			<n:h3>native h3</n:h3>
+			<tablelayout hflex="1" height="50px">
+				<tablechildren width="100%">
+					<panel title="tablelayout" />
+				</tablechildren>
+			</tablelayout>
+		</div>
+		<div hflex="1" height="30px" style="border:1px solid black;">
+			<div hflex="1" height="20px" forEach="1,2"
+				style="border:1px solid black;float: left;">
+				div
+			</div>
+		</div>
+		<groupbox hflex="1" height="60px" forEach="default,3d"
+			mold="${each }">
+			<caption label="groupbox ${each }" />
+			<div hflex="1" height="20px" forEach="1,2"
+				style="border:1px solid black;float: left;">
+				div
+			</div>
+		</groupbox>
+		<window title="win" hflex="1" height="60px">
+			<div hflex="1" height="20px" forEach="1,2"
+				style="border:1px solid black;float: left;">
+				div
+			</div>
+		</window>
+		<panel title="panel" hflex="1" height="80px"
+			forEach="none,normal,rounded,rounded+" border="${each}">
+			<panelchildren>
+				<div hflex="1" height="20px" forEach="1,2"
+					style="border:1px solid black;float: left;">
+					div
+				</div>
+			</panelchildren>
+		</panel>
+		<tabbox hflex="1" height="60px">
+			<tabs>
+				<tab label="tab" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<div hflex="1" height="20px" forEach="1,2"
+						style="border:1px solid black;float: left;">
+						div
+					</div>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<hbox hflex="1" height="50px" style="border:1px solid black;">
+			<div hflex="1" height="20px" forEach="1,2"
+				style="border:1px solid black;float: left;">
+				div
+			</div>
+		</hbox>
+		<vbox hflex="1" height="50px" style="border:1px solid black;">
+			<div hflex="1" >
+				<div hflex="1" height="20px" forEach="1,2"
+					style="border:1px solid black;float: left;">
+					div
+				</div>
+			</div>
+		</vbox>
+		<hlayout hflex="1" height="50px"
+			style="border:1px solid black;">
+			<div hflex="1" height="20px" forEach="1,2"
+				style="border:1px solid black;float: left;">
+				div
+			</div>
+		</hlayout>
+		<vlayout hflex="1" height="50px"
+			style="border:1px solid black;">
+			<div hflex="1">
+				<div hflex="1" height="20px" forEach="1,2"
+					style="border:1px solid black;float: left;">
+					div
+				</div>
+			</div>
+		</vlayout>
+		<borderlayout hflex="1" height="50px">
+			<center>
+				<div hflex="1">
+					<div hflex="1" height="20px" forEach="1,2"
+						style="border:1px solid black;float: left;">
+						div
+					</div>
+				</div>
+			</center>
+		</borderlayout>
+		<columnlayout hflex="1" height="60px">
+			<columnchildren width="100%">
+				<panel title="columnlayout">
+					<panelchildren>
+						<div hflex="1" height="20px" forEach="1,2"
+							style="border:1px solid black;float: left;">
+							div
+						</div>
+					</panelchildren>
+				</panel>
+			</columnchildren>
+		</columnlayout>
+		<portallayout hflex="1" height="60px">
+			<portalchildren width="100%">
+				<panel title="portallayout">
+					<panelchildren>
+						<div hflex="1" height="20px" forEach="1,2"
+							style="border:1px solid black;float: left;">
+							div
+						</div>
+					</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+		<tablelayout hflex="1" height="60px">
+			<tablechildren width="100%">
+				<panel title="tablelayout">
+					<panelchildren>
+						<div hflex="1" height="20px" forEach="1,2"
+							style="border:1px solid black;float: left;">
+							div
+						</div>
+					</panelchildren>
+				</panel>
+			</tablechildren>
+		</tablelayout>
+		<div hflex="min" style="border:1px solid black;">
+			<div width="100px" height="100px"
+				style="border:1px solid black;">div</div>
+		</div>
+		<groupbox hflex="min" forEach="default,3d"
+			mold="${each }">
+			<caption label="groupbox ${each }" />
+			<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+		</groupbox>
+		<window title="win" hflex="min">
+			<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+		</window>
+		<panel title="panel" hflex="min"
+			forEach="none,normal,rounded,rounded+" border="${each}">
+			<panelchildren hflex="min">
+				<div width="100px" height="100px"
+				style="border:1px solid black;"/>
+			</panelchildren>
+		</panel>
+		<tabbox hflex="min">
+			<tabs>
+				<tab label="tab" />
+			</tabs>
+			<tabpanels hflex="min">
+				<tabpanel hflex="min">
+					<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<hbox style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">hbox</div>
+		</hbox>
+		<vbox style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">vbox</div>
+		</vbox>
+		<hlayout hflex="min"
+			style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">hlayout</div>
+		</hlayout>
+		<vlayout hflex="min"
+			style="border:1px solid black;">
+			<div width="100px" height="100px"
+						style="border:1px solid black;">vlayout</div>
+		</vlayout>
+		<borderlayout hflex="min" vflex="min">
+			<center hflex="min" vflex="min">
+				<div width="100px" height="100px"
+						style="border:1px solid black;">borderlayout</div>
+			</center>
+		</borderlayout>
+		<columnlayout hflex="min">
+			<columnchildren  hflex="min">
+				<panel title="columnlayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+					</panelchildren>
+				</panel>
+			</columnchildren>
+		</columnlayout>
+		<portallayout   hflex="min">
+			<portalchildren   hflex="min">
+				<panel title="portallayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+					</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+		<tablelayout  hflex="min">
+			<tablechildren  hflex="min">
+				<panel title="tablelayout"  hflex="min">
+					<panelchildren  hflex="min">
+						<div width="100px" height="100px"
+						style="border:1px solid black;"/>
+					</panelchildren>
+				</panel>
+			</tablechildren>
+		</tablelayout>
+	</vlayout>
+</zk>

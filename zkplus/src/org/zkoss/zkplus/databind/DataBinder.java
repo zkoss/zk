@@ -36,16 +36,18 @@ import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.Combobox;
@@ -62,6 +64,7 @@ import org.zkoss.zul.Row;
  * @author Henri Chen
  */
 public class DataBinder implements java.io.Serializable {
+	public static final String LOAD_ON_SAVE_TRIGGER_COMPONENT = "zkoss.DataBinder.LOAD_ON_SAVE_TRIGGER_COMPONENT";
 	private static final long serialVersionUID = 200808191508L;
 	public static final String NULLIFY = "none"; //used to nullify default configuration
 	public static final String ARGS = "bindingArgs"; //extra arguments specified in annotation
@@ -73,7 +76,7 @@ public class DataBinder implements java.io.Serializable {
 	private static final String IAMOWNER = "zkplus.databind.IAMOWNER"; //I am the collection owner
 	private static final String HASTEMPLATEOWNER = "zkplus.databind.HASTEMPLATEOWNER"; //whether has template owner (collection in collection)
 	private static final Object NA = new Object();
-
+	
 	private Map _compBindingMap = new LinkedHashMap(29); //(comp, Map(attr, Binding))
 	private Map _beans = new HashMap(29); //bean local to this DataBinder
 	private Map _beanSameNodes = new HashMap(29); //(bean, Set(BindingNode)) bean same nodes, diff expression but actually hold the same bean
@@ -91,7 +94,7 @@ public class DataBinder implements java.io.Serializable {
 	/**
 	 * Sets whether this DataBinder shall do load-on-save automatically.
 	 * @param b true to have this DataBinder shall do load-on-save automatically.
-	 * @since 3.6.5
+	 * @since 5.0.4
 	 */
 	public void setLoadOnSave(boolean b) {
 		_loadOnSave = b;
@@ -100,7 +103,7 @@ public class DataBinder implements java.io.Serializable {
 	/**
 	 * Returns whether this DataBinder shall do load-on-save automatically(default is true).
 	 * @return whether this DataBinder shall do load-on-save automatically(default is true).
-	 * @since 3.6.5
+	 * @since 5.0.4
 	 */
 	public boolean isLoadOnSave() {
 		return _loadOnSave;
@@ -812,14 +815,16 @@ public class DataBinder implements java.io.Serializable {
 	    		final List comps = new ArrayList(sz);
 	    		for (int j = 0; j < sz; ++j) {
 	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, indexes[j]), comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 	    		}
 	    		return (Component[]) comps.toArray(new Component[comps.size()]);
 	    	} else 	if (xmodel instanceof BindingListModel) {
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(bean);
 	  			if (index >= 0) {
-	    			return new Component[] {lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp)};
+	  				final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, index), comp);
+	  				return xcomp != null ? new Component[] {xcomp} : new Component[0];
 	    		}
 	    	}
 		} else { 
@@ -832,12 +837,14 @@ public class DataBinder implements java.io.Serializable {
 				for (final Iterator it = items.iterator(); it.hasNext(); ) {
 					final Component cloneitem = (Component) it.next();
 	    			final Component xcomp = lookupClone(cloneitem, comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 				}
 			} else {
 				for (int j = 0; j < sz; ++j) {
 	    			final Component xcomp = lookupClone(decor.getComponentAtIndexByOwner(owner, j), comp);
-	    			comps.add(xcomp);
+	    			if (xcomp != null)
+	    				comps.add(xcomp);
 				}
 			}
     		return (Component[]) comps.toArray(new Component[sz]);
@@ -982,7 +989,7 @@ public class DataBinder implements java.io.Serializable {
 		return myGetBeanWithExpression(comp, path, true);
 	}
 	
-	private Object getBeanWithExpression(Component comp, String path) {
+	/* package */ Object getBeanWithExpression(Component comp, String path) {
 		return myGetBeanWithExpression(comp, path, false);
 	}
 	
@@ -1033,7 +1040,7 @@ public class DataBinder implements java.io.Serializable {
 					//have to ignore the exception
 					
 					//ignore the exception
-					
+					//throw UiException.Aide.wrap(ex);
 				}
 			}
 		}
@@ -1045,11 +1052,11 @@ public class DataBinder implements java.io.Serializable {
 	
 
 	/* package */ void setBeanAndRegisterBeanSameNodes(Component comp, Object val, Binding binding, 
-	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos) {
+	String path, boolean autoConvert, Object rawval, List loadOnSaveInfos, String triggerEventName) {
 		Object orgVal = null;
 		Object bean = null;
 		BindingNode currentNode = _pathTree;
-		boolean refChanged = false; //wether this setting change the reference
+		boolean refChanged = false; // whether this setting change the reference
 		String beanid = null;
 		final List nodeids = parseExpression(path, ".");
 		final List nodes = new ArrayList(nodeids.size());
@@ -1074,7 +1081,7 @@ public class DataBinder implements java.io.Serializable {
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
 			} else if (!setZScriptVariable(comp, beanid, val)) {
-				comp.setVariable(beanid, val, false);
+				comp.getSpaceOwner().setAttribute(beanid, val, true);
 			}
 			refChanged = true;
 		} else {
@@ -1089,13 +1096,13 @@ public class DataBinder implements java.io.Serializable {
 					throw new UiException("Cannot find the specified databind bean expression:" + path);
 				}
 				nodes.add(currentNode);
-				try {
-					bean = Fields.get(bean, beanid);
-				} catch (NoSuchMethodException ex) {
-					//feature#1766905 Binding to Map
-					if (bean instanceof Map) {
-						bean = ((Map)bean).get(beanid);
-					} else {
+				// Bug B50-3183438: Access to bean shall be consistent
+				if (bean instanceof Map) {
+					bean = ((Map)bean).get(beanid); //feature#1766905 Binding to Map
+				} else {
+					try {
+						bean = Fields.get(bean, beanid);
+					} catch (NoSuchMethodException ex) {
 						throw UiException.Aide.wrap(ex);
 					}
 				}
@@ -1104,22 +1111,22 @@ public class DataBinder implements java.io.Serializable {
 				return; //no bean to set value, skip
 			}
 			beanid = (String) it.next();
-			try {
-				orgVal = Fields.get(bean, beanid);
-				if(Objects.equals(orgVal, val)) {
-					return; //same value, no need to do anything
-				}
-				Fields.set(bean, beanid, val, autoConvert);
-			} catch (NoSuchMethodException ex) {
-				//feature#1766905 Binding to Map
-				if (bean instanceof Map) {
-					((Map)bean).put(beanid, val);
-				} else {
+			// Bug B50-3183438: Access to bean shall be consistent
+			if (bean instanceof Map)
+				((Map)bean).put(beanid, val); //feature#1766905 Binding to Map
+			else {
+				try {
+					orgVal = Fields.get(bean, beanid);
+					if(Objects.equals(orgVal, val))
+						return; //same value, no need to do anything
+					Fields.set(bean, beanid, val, autoConvert);
+				} catch (NoSuchMethodException ex) {
+					throw UiException.Aide.wrap(ex);
+				} catch (ModificationException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
-			} catch (ModificationException ex) {
-				throw UiException.Aide.wrap(ex);
 			}
+			
 			if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
 				currentNode = (BindingNode) currentNode.getKidNode(beanid);
 				if (currentNode == null) {
@@ -1157,7 +1164,7 @@ public class DataBinder implements java.io.Serializable {
 		}
 
 		Object[] loadOnSaveInfo = 
-			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp};
+			new Object[] {this, currentNode, binding, (refChanged ? val : bean), Boolean.valueOf(refChanged), nodes, comp, triggerEventName};
 		if (loadOnSaveInfos != null) {
 			loadOnSaveInfos.add(loadOnSaveInfo);
 		} else if (isLoadOnSave()) { //feature#2990932, allow disable load-on-save mechanism
@@ -1220,14 +1227,13 @@ public class DataBinder implements java.io.Serializable {
 	private boolean setZScriptVariable(Component comp, String beanid, Object val) {
 		//for all loaded interperter, assign val to beanid
 		boolean found = false;
-		final Namespace ns = comp.getNamespace();
 		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Interpreter ip = (Interpreter) it.next();
 			if (ip instanceof HierachicalAware) {
 				final HierachicalAware ha = (HierachicalAware)ip;
-				if (ha.containsVariable(ns, beanid)) {
-					ha.setVariable(ns, beanid, val);
+				if (ha.containsVariable(comp, beanid)) {
+					ha.setVariable(comp, beanid, val);
 					found = true;
 				}
 			} else if (ip.containsVariable(beanid)) {
@@ -1265,20 +1271,25 @@ public class DataBinder implements java.io.Serializable {
 			if (page != null) { //Bug #2823591, try to "load" into a detached(no page) component and NPE
 				//bug #2932475, NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
 				bean = Components.getImplicit(comp, beanid);
+				//bug #2945974
+				//dirty patch
+				if ("param".equals(beanid) && bean != null) {
+					bean = new HashMap((Map) bean); 
+				}
 				if (bean == null) {
-					bean = page.getZScriptVariable(comp.getNamespace(), beanid);
+					bean = page.getZScriptVariable(comp, beanid);
 					if (bean == null) {
-						final Object self = 
-							page.getNamespace().getVariableNames().contains("self") ? 
-							page.getNamespace().getVariable("self", true) : null; 
+						final Object self = page.getAttribute("self");
 						try {
-							page.setVariable("self", comp);
-							bean = comp.getVariable(beanid, false);
+							page.setAttribute("self", comp);
+							bean = comp.getAttributeOrFellow(beanid, true);
+							if (bean == null)
+								bean = page.getXelVariable(null, null, beanid, true);
 						} finally {
 							if (self == null) {
-								page.unsetVariable("self");
+								page.removeAttribute("self");
 							} else {
-								page.setVariable("self", self);
+								page.setAttribute("self", self);
 							}
 						}
 					}
@@ -1308,7 +1319,7 @@ public class DataBinder implements java.io.Serializable {
 
 	//given a clone and a template, return the associated clone of that template.
 	/*package*/ static Component lookupClone(Component srcClone, Component srcTemplate) {
-		if (isTemplate(srcTemplate)) {
+		if (isTemplate(srcTemplate) && srcClone != null) {
 			Map templatemap = (Map) srcClone.getAttribute(TEMPLATEMAP);
 			return myLookupClone(srcTemplate, templatemap);
 		}
@@ -1427,8 +1438,16 @@ public class DataBinder implements java.io.Serializable {
 			final boolean refChanged = ((Boolean) data[4]).booleanValue(); //whether bean itself changed
 			final List nodes = (List) data[5]; //the complete nodes along the path to the node
 			final Component savecomp = (Component) data[6]; //saved comp that trigger this load-on-save event
+			final String triggerEventName = (String) data[7]; //event that trigger the save
 			if (savecomp != null) {
-				loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
+				final Execution exec = Executions.getCurrent(); 
+				final Object old = exec.getAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT);
+				exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, new Object[] {savecomp, triggerEventName});
+				try {
+					loadAllNodes(bean, node, savecomp, savebinding, refChanged, nodes, walkedNodes, loadedComps);
+				} finally {
+					exec.setAttribute(LOAD_ON_SAVE_TRIGGER_COMPONENT, old);
+				}
 			}
 		}
 		
@@ -1610,6 +1629,17 @@ public class DataBinder implements java.io.Serializable {
 				final Dual o = (Dual) other;
 				return o._comp == _comp && o._binding == _binding;
 			}
+		}
+	}
+	
+	//feature #3026221: Databinder shall fire onCreate when cloning each items
+	/*package*/ static void postOnCreateEvents(Component item) {
+		for(final Iterator it = item.getChildren().iterator(); it.hasNext();) {
+			final Component child = (Component) it.next();
+			postOnCreateEvents(child); //recursive
+		}
+		if (Events.isListened(item, Events.ON_CREATE, false)) {
+			Events.postEvent(new CreateEvent(Events.ON_CREATE, item, null));
 		}
 	}
 }

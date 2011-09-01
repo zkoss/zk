@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1835369.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 26 12:21:03 TST 2007, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<div>
+Please click the buttons("addRow", "changeHeight(100px)", and "changeHeight(150px)"), and then the display shouldn't look strange. 
+	<grid id="grid" mold="paging" height="60px">
+		<columns>
+			<column label="column1" align="Center" />
+			<column label="column2" align="Center" />
+			<column label="column3" align="Center" />
+			<column label="column4" align="Center" />
+			<column label="column5" align="Center" />
+			<column label="column6" align="Center" />
+		</columns>
+		<rows id="rows">
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+			<row>
+				<label value="column1" />
+				<label value="column2" />
+				<label value="column3" />
+				<label value="column4" />
+				<label value="column5" />
+				<label value="column6" />
+			</row>
+		</rows>
+	</grid>
+	<button label="addRow">
+		<attribute name="onClick">
+			Row rw = new Row(); rw.setParent(rows); 
+			new Label("Column1").setParent(rw); 
+			new Label("Column1").setParent(rw); 
+			new Label("Column1").setParent(rw); 
+			new Label("Column1").setParent(rw); 
+			new Label("Column1").setParent(rw); 
+			new Label("Column1").setParent(rw); 
+		</attribute>
+	</button>
+	<button label="changeHeight(100px)">
+		<attribute name="onClick">grid.setHeight("100px");</attribute>
+	</button>
+	<button label="changeHeight(150px)">
+		<attribute name="onClick">grid.setHeight("150px");</attribute>
+	</button>
+</div>

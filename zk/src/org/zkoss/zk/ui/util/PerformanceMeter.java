@@ -1,18 +1,16 @@
 /* PerformanceMeter.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Aug 24 16:03:07     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,7 +19,7 @@ package org.zkoss.zk.ui.util;
 import org.zkoss.zk.ui.Execution;
 
 /**
- * A listener to measure the performance of the processing of client
+ * An application-level listener to measure the performance of the processing of client
  * requests.
  *
  * <p>Note: ZK doesn't fork another low-priority thread to call the

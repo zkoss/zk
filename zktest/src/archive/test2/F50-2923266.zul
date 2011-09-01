@@ -1,0 +1,10 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+1. Click on the Colorbox, will popup a color pallette
+<separator/>
+2. Click this <button label="set Disabled" onClick="cb.setDisabled(true);"/>
+<separator/>
+3. Click Colorbox again, it will not popup a color pallette (if it the popup shows up, it is wrong)
+<separator height="20px"/>
+<colorbox id="cb" color="#FFFFFF" ></colorbox>
+</zk>

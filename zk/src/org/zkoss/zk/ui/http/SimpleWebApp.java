@@ -1,18 +1,16 @@
 /* SimpleWebApp.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Feb 27 09:27:03     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,7 +34,9 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /**
  * A servlet-based Web application.
@@ -45,6 +45,8 @@ import org.zkoss.zk.ui.impl.AbstractWebApp;
  */
 public class SimpleWebApp extends AbstractWebApp {
 	private ServletContext _ctx;
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
+
 	public SimpleWebApp() {
 	}
 
@@ -75,20 +77,41 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Object getAttribute(String name) {
 		return _ctx.getAttribute(name);
 	}
-	public void setAttribute(String name, Object value) {
-		_ctx.setAttribute(name, value);
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
 	}
-	public void removeAttribute(String name) {
+	public Object setAttribute(String name, Object value) {
+		Object old = _ctx.getAttribute(name);
+		_ctx.setAttribute(name, value);
+		return old;
+	}
+	public Object removeAttribute(String name) {
+		Object old = _ctx.getAttribute(name);
 		_ctx.removeAttribute(name);
+		return old;
 	}
 	public Map getAttributes() {
 		return _attrs;
 	}
 
+	public boolean addScopeListener(ScopeListener listener) {
+		return _scopeListeners.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
+	}
+
 	public String getUpdateURI() {
+		return getUpdateURI(true);
+	}
+	public String getUpdateURI(boolean encode) {
 		final String uri = getWebManager().getUpdateURI();
-		final Execution exec = Executions.getCurrent();
-		return exec != null ? exec.encodeURL(uri): uri;
+		return encode ? Executions.getCurrent().encodeURL(uri): uri;
 	}
 	private WebManager getWebManager() {
 		return WebManager.getWebManager(this);

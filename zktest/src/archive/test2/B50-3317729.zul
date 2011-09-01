@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3317729.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 29 15:41:58 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window title="Only for Vision Test" hflex="min" border="normal" mode="modal">
+<grid hflex="min">
+<columns>
+<column hflex="min" />
+<column hflex="min" />
+</columns>
+<rows>
+<row>
+<cell>
+<label value="Country Code:" />
+</cell>
+<cell>
+<combobox />
+</cell>
+</row>
+<row>
+<cell>
+<label value="Alpha-3 Country Code:" />
+</cell>
+<cell>
+<textbox hflex="1" />
+</cell>
+</row>
+</rows>
+</grid>
+<hbox hflex="min">
+<cell>
+<button label="i" />
+</cell>
+<cell hflex="1" align="right">
+<button label="Save" />
+<button label="Close" />
+<button label="Help" />
+</cell>
+</hbox>
+</window>
+</zk>

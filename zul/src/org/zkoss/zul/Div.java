@@ -1,18 +1,16 @@
 /* Div.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Dec 30 17:49:49     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -20,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
+
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -42,7 +41,7 @@ public class Div extends XulElement implements org.zkoss.zul.api.Div {
 	public String getAlign() {
 		return _align;
 	}
-	/** Sets the alignment: one of left, center, right, ustify,
+	/** Sets the alignment: one of left, center, right, justify,
 	 */
 	public void setAlign(String align) {
 		if (align != null && align.length() == 0)
@@ -53,17 +52,12 @@ public class Div extends XulElement implements org.zkoss.zul.api.Div {
 			smartUpdate("align", _align);
 		}
 	}
+	
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-	//-- super --//
-	public String getOuterAttrs() {
-		final String clkattrs = getAllOnClickAttrs();
-		final String attrs = super.getOuterAttrs();
-		if (_align == null && clkattrs == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		HTMLs.appendAttribute(sb, "align",  _align);
-		if (clkattrs != null) sb.append(clkattrs);
-		return sb.toString();
+		render(renderer, "align", _align);
 	}
 }

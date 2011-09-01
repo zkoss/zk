@@ -1,18 +1,16 @@
 /* LabelElement.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun 17 09:45:54     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -43,7 +41,26 @@ abstract public class LabelElement extends XulElement implements org.zkoss.zul.i
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			invalidate();
+			smartUpdate("label", _label);
 		}
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "label", _label);
+		renderCrawlable(_label);
+	}
+	/** Renders the crawlable information.
+	 * It is called by {@link #renderProperties},
+	 * and designed to be overriden if the deriving class wants to generate
+	 * it differently.
+	 * <p>Default: <code>org.zkoss.zul.impl.Utils.renderCrawlableText(label)</code>
+	 * @since 5.0.5
+	 */
+	protected void renderCrawlable(String label) throws java.io.IOException {
+		org.zkoss.zul.impl.Utils.renderCrawlableText(label);
 	}
 }

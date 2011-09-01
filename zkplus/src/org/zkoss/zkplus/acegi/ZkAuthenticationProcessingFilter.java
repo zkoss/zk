@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  * "onLoginOK" event would be fired to the component that fired the event and caused the login 
  * processing. Since it will be tedious to register "onLoginOK" handler on every possible component, it is
  * better to register an onLoginOK event handler on the concerned page.</p>
- *
+ * <p>Applicable to Acegi Security version 1.0.3</p>
  * @see ZkAuthenticationEntryPoint
  * @see ShowWindowEventListener
  * @author Henri

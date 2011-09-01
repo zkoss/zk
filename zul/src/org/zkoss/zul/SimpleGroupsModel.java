@@ -1,18 +1,16 @@
 /* SimpleGroupsModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sep 2, 2008 9:50:12 AM     2008, Created by Dennis.Chen
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,10 +23,16 @@ import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * A simple implementation of {@link GroupsModel}.
- * Note: It assumes the content is immutable.
+ * This implementation assumes the data is grouped, and the grouping structure
+ * is immutable.
+ * If you allow the user to re-group the content, use {@link GroupsModelArray}
+ * instead.
+ * <p>For more information, please refer to
+ * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  * @author Dennis.Chen
  * @since 3.5.0
  * @see GroupsModel
+ * @see GroupsModelArray
  */
 public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsModelExt{
 	
@@ -46,6 +50,11 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 	 * member field to store group foot data
 	 */
 	protected Object[] _foots;
+	
+	/**
+	 * memeber field to store group close status
+	 */
+	protected boolean[] _closes;
 	
 	/**
 	 * Constructs a groups data model with a two-dimensional array of data.
@@ -97,6 +106,29 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		_foots = foots;
 	}
 
+	/**
+	 * Constructor
+	 * When using this constructor , 
+	 * {@link #getGroup(int)} will return the corresponding Object depends on heads.  
+	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
+	 * are depends on foots. 
+	 *   
+	 * @param data a 2 dimension array to represent groups data
+	 * @param heads an array to represent head data of group
+	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
+	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
+	 * @param closes an array of boolean to represent close status of group. If not specified, then
+	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
+	 */
+	public SimpleGroupsModel(Object[][] data,Object[] heads,Object[] foots, boolean[] closes){
+		if (data == null)
+			throw new NullPointerException();
+		_data = data;
+		_heads = heads;
+		_foots = foots;
+		_closes = closes;
+	}
+	
 	public Object getChild(int groupIndex, int index) {
 		return _data[groupIndex][index];
 	}
@@ -124,7 +156,20 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		return _foots == null ? false:_foots[groupIndex]!=null;
 	}
 
+	public boolean isClose(int groupIndex) {
+		return _closes == null ? false : _closes[groupIndex];
+	}
 
+	public void setClose(int groupIndex, boolean close) {
+		if (_closes == null) {
+			_closes = new boolean[getGroupCount()];
+		}
+		if (_closes[groupIndex] != close) {
+			_closes[groupIndex] = close;
+			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex,-1,-1);
+		}
+	}
+	
 	/**
 	 * Do nothing in default implementation, however developer can override it to 
 	 * re-group by manipulating {@link #_data},{@link #_heads},{@link #_foots}
@@ -141,7 +186,7 @@ public class SimpleGroupsModel extends AbstractGroupsModel implements GroupsMode
 		for(int i=0;i<_data.length;i++){
 			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
 		}
-		fireEvent(GroupsDataEvent.GROUPS_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
 	}
 
 	protected void sortGroupData(Object group,Object[] groupdata,Comparator cmpr,boolean ascending, int colIndex){

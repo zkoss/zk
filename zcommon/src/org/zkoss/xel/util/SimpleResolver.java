@@ -1,18 +1,16 @@
 /* SimpleResolver.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Oct 28 15:15:04     2004, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,11 +23,15 @@ import org.zkoss.xel.XelException;
 
 /**
  * A simple resolver that retrieve variable from a map.
+ * <p>Note: since 5.0.8, it becomes serializable. Thus, the parent and
+ * vars parameter
+ * of {@link #SimpleResolver(VariableResolver, Map)} have to serializable
+ * in the clustering environment.
  *
  * @author tomyeh
  * @since 3.0.0
  */
-public class SimpleResolver implements VariableResolver {
+public class SimpleResolver implements VariableResolver, java.io.Serializable {
 	/** The parent resolver. */
 	private VariableResolver _parent;
 	/** The variable maps. */

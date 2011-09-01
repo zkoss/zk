@@ -1,18 +1,16 @@
 /* InterpretResolver.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sat Sep 17 17:03:58     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +23,7 @@ import java.util.Collections;
 import org.zkoss.lang.D;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.Evaluators;
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
 
@@ -51,13 +50,13 @@ class InterpretResolver implements VariableResolver {
 		if (_parent != null) {
 			switch (scope) {
 			case ActionContext.REQUEST_SCOPE:
-				attrs = (Map)_parent.resolveVariable("requestScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "requestScope");
 				break;
 			case ActionContext.SESSION_SCOPE:
-				attrs = (Map)_parent.resolveVariable("sessionScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "sessionScope");
 				break;
 			case ActionContext.APPLICATION_SCOPE:
-				attrs = (Map)_parent.resolveVariable("applicationScope");
+				attrs = (Map)Evaluators.resolveVariable(_parent, "applicationScope");
 				break;
 			}
 		}
@@ -69,7 +68,6 @@ class InterpretResolver implements VariableResolver {
 		if ("pageScope".equals(name))
 			return _attrs;
 		final Object o = _attrs.get(name);
-		if (o != null) return o;
-		return _parent != null ? _parent.resolveVariable(name): null;
+		return o != null ? o: Evaluators.resolveVariable(_parent, name);
 	}
 }

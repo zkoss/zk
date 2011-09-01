@@ -1,28 +1,30 @@
 /* Text.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Thu Nov 24 15:17:07     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 package org.zkoss.zhtml;
 
+import java.lang.Object;
 import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.xml.XMLs;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -30,7 +32,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+
+import org.zkoss.zhtml.impl.PageRenderer;
+import org.zkoss.zhtml.impl.TagRenderContext;
 
 /**
  * Represents a piece of text (of DOM).
@@ -39,6 +44,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  */
 public class Text extends AbstractComponent implements RawId {
 	private String _value = "";
+	private boolean _encode = true;
 
 	public Text() {
 	}
@@ -59,7 +65,10 @@ public class Text extends AbstractComponent implements RawId {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			invalidate();
+			if (isIdRequired())
+				smartUpdate("value", _value);
+			else
+				invalidate();
 		}
 	}
 
@@ -67,7 +76,7 @@ public class Text extends AbstractComponent implements RawId {
 	private boolean isIdRequired() {
 		final Component p = getParent();
 		return p == null || !isVisible()
-			|| !Components.isAutoId(getId()) || !isRawLabel(p);
+			|| getId().length() > 0 || !isRawLabel(p);
 	}
 	private static boolean isRawLabel(Component comp) {
 		final LanguageDefinition langdef =
@@ -75,22 +84,51 @@ public class Text extends AbstractComponent implements RawId {
 		return langdef != null && langdef.isRawLabel();
 	}
 
+	/** Returns whether to encode the text, such as converting &lt;
+	 * to &amp;lt;.
+	 * <p>Default: true.
+	 * @since 5.0.8
+	 */
+	public boolean isEncode() {
+		return _encode;
+	}
+	/** Sets whether to encode the text, such as converting &lt;
+	 * to &amp;lt;.
+	 * <p>Default: true.
+	 * @since 5.0.8
+	 */
+	public void setEncode(boolean encode) {
+		_encode = encode;
+	}
+
 	//-- Component --//
+	/** Returns the widget class, "zhtml.Text".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Text";
+	}
 	public void setParent(Component parent) {
-		if (!isIdRequired()) {
-			final Component old = getParent();
-			if (old != parent) {
-				if (old != null) old.invalidate();
-				if (parent != null) parent.invalidate();
-			}
-		}
+		final Component old = getParent();
+		if (old != null && old != parent && !isIdRequired())
+			old.invalidate();
+
 		super.setParent(parent);
+
+		if (parent != null && old != parent && !isIdRequired())
+			parent.invalidate();
 	}
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
+		final Execution exec = Executions.getCurrent();
+		if (!HtmlPageRenders.isDirectContent(exec)) {
+			super.redraw(out);
+			return;
+		}
+
 		final boolean idRequired = isIdRequired();
 		if (idRequired) {
 			out.write("<span id=\"");
@@ -98,12 +136,33 @@ public class Text extends AbstractComponent implements RawId {
 			out.write("\">");
 		}
 
-		out.write(_value);
+		out.write(_encode ? XMLs.encodeText(_value): _value);
 
 		if (idRequired)
 			out.write("</span>");
+
+		final TagRenderContext rc = PageRenderer.getTagRenderContext(exec);
+		if (rc != null) {
+			rc.renderBegin(this, getClientEvents(), false);
+			rc.renderEnd(this);
+		}
 	}
-	public boolean isChildable() {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "value", _value);
+		render(renderer, "idRequired", isIdRequired());
+		if (!_encode)
+			renderer.render("encode", false);
+	}
+	protected boolean isChildable() {
 		return false;
+	}
+
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
 	}
 }

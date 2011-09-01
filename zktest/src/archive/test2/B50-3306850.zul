@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3306850.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 24 16:47:34 TST 2011, Created by peterkuo
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Click button show -> Click button inplace
+	<separator/> 
+	2. Click on outer window blank space -> Press Ctrl,
+	<separator/>
+	3. see if the button will show At wron positioin
+	<separator/>
+	4. refresh the browser, for next test
+	<separator/>
+	5. Click button inplace -> click button show,
+	<separator/>
+	6. see if anything strange happen 
+
+	<separator />
+	<doublespinner id="a1" mold="rounded" buttonVisible="false"
+		constraint="no zero" />
+	<spinner id="a2" buttonVisible="false" constraint="no zero" />
+	<separator />
+	<button label="button show">
+		<attribute name="onClick">
+			a1.setButtonVisible(!a1.isButtonVisible());
+			a2.setButtonVisible(!a2.isButtonVisible());
+		</attribute>
+	</button>
+	<button label="read only">
+		<attribute name="onClick">
+			a1.setReadonly(!a1.isReadonly());
+			a2.setReadonly(!a2.isReadonly());
+		</attribute>
+	</button>
+	<button label="Disable">
+		<attribute name="onClick">
+			a1.setDisabled(!a1.isDisabled());
+			a2.setDisabled(!a2.isDisabled());
+		</attribute>
+	</button>
+	<button label="Inplace">
+		<attribute name="onClick">
+			a1.setInplace(!a1.isInplace());
+			a2.setInplace(!a2.isInplace());
+		</attribute>
+	</button>
+</zk>

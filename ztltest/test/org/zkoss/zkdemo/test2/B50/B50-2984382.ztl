@@ -1,0 +1,20 @@
+<test tags="B50-2984382.zul,grid,combobox">
+        <case id="dropdownList">
+                <server><!--
+					<zk>
+						<grid>
+							<rows>
+								<row>
+									<label value="name" />
+									<combobox id="cb"/>
+								</row>			
+							</rows>
+						</grid>
+					</zk>
+                --></server>
+                <client>
+                        click(cb.$n("btn"));
+                        verifyEquals(jq(cb.$n()).offsetLeft() + "px", jq(cb.$n("pp")).css("left"));
+                </client>
+        </case>
+</test>

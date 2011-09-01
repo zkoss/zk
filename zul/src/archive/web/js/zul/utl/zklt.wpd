@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zklt.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat May  9 19:26:17     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.utl" language="xul/html">
+	<widget name="Timer"/>
+	<widget name="Iframe"/>
+</package>

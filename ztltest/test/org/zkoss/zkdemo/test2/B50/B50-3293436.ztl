@@ -1,0 +1,51 @@
+<!-- B50-3293436.ztl.java
+
+	Purpose:for testing B50-3293436.ztl .
+
+	Description:
+
+	History:
+		06, 7, 2011 10:38:35
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3293436.zul,Grid">
+	<case id="ztl">
+		<server><!--
+			<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Go to next page of the Grid. If the alternating color on Grid is lost, it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		rows = new String[50];
+	]]></zscript>
+	<grid mold="paging" pageSize="10">
+		<rows>
+			<row forEach="${rows}">${forEachStatus.index}</row>
+		</rows>
+	</grid>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-paging-next"));
+				waitResponse();
+				String color = jq(".z-row:eq(1)").css("backgroundColor");
+				verifyEquals(color, jq(".z-row:eq(3)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(5)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(7)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(9)").css("backgroundColor"));
+				String color2 = jq(".z-row:eq(0)").css("backgroundColor");
+				verifyNotEquals(color, color2);
+				verifyEquals(color2, jq(".z-row:eq(2)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(4)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(6)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(8)").css("backgroundColor"));
+		]]></client>
+	</case>
+</test>

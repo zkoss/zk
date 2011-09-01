@@ -1,18 +1,16 @@
 /* UiFactory.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Apr 19 10:50:48     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,6 +34,16 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 /**
  * Used to create {@link Desktop}, {@link Page} and to convert path/URL
  * to {@link PageDefinition}.
+ *
+ * <p>To customize the implementation of {@link WebApp}, please
+ * specify <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-class_Element">web-app-class</a>
+ * instead (of implementing this interface).
+ *
+ * <p>Rather than implementing this interface from scratch, you could
+ * extend from {@link org.zkoss.zk.ui.http.SimpleUiFactory}
+ * (for non-clustering environment)
+ * or {@link org.zkoss.zk.ui.http.SerializableUiFactory}
+ * (for clustering environment).
  *
  * @author tomyeh
  */

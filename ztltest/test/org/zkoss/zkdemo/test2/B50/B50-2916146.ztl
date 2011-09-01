@@ -1,0 +1,21 @@
+<test tags="B50-2916146.zul,Textbox,InputWidget,Unstable">
+	<case id="closed">
+		<server>
+			<!--
+<zk>
+<textbox width="500px" value="Please press Backspace, the browser should do nothing." focus="true" readonly="true"/>
+</zk>
+			-->
+		</server>
+		<client>	<![CDATA[
+				//TODO ,even if keypressnative not works , it still pass the test 
+       			sendKeys(jq("@textbox"), Keys.END);
+				sendKeys(jq("@textbox"), Keys.BACK_SPACE);
+				waitResponse();
+				verifyTrue(jq("@textbox").exists());
+				sendKeys(jq("@textbox"), Keys.BACK_SPACE);
+				waitResponse();
+				verifyTrue(jq("@textbox").exists());
+			]]></client>
+	</case>
+</test>

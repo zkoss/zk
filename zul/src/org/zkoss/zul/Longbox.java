@@ -1,18 +1,16 @@
 /* Longbox.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Tue Jun 28 13:39:37     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -72,6 +70,12 @@ public class Longbox extends NumberInputElement implements org.zkoss.zul.api.Lon
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-longbox" : _zclass;
+	}
+	protected Object marshall(Object value) {
+		return value != null ? ((Long)value).toString() : value;
+	}
+	protected Object unmarshall(Object value) {
+		return value != null ? new Long((String)value) : value;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

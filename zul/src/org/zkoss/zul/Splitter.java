@@ -21,8 +21,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.Openable;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -48,9 +47,26 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	private String _collapse = "none";
 	private boolean _open = true;
 
+	static {
+		addClientEvent(Splitter.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
+
 	public Splitter() {
-	}	
-	
+	}
+	/** Returns if the orientation of this splitter is vertical.
+	 * @since 5.0.0
+	 */
+	public boolean isVertical() {
+		final Box box = (Box)getParent();
+		return box == null || box.isVertical();
+	}
+	/** Returns if the orientation of this splitter is horizontal.
+	 * @since 5.0.0
+	 */
+	public boolean isHorizontal() {
+		final Box box = (Box)getParent();
+		return box != null && box.isHorizontal();
+	}
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
 	 */
@@ -104,11 +120,11 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 
 		if (!Objects.equals(_collapse, collapse)) {
 			_collapse = collapse;
-			smartUpdate("z.colps", collapse);
+			smartUpdate("collapse", collapse);
 		}
 	}
 
-	/** Returns whether it is opne (i.e., not collapsed.
+	/** Returns whether it is open (i.e., not collapsed.
 	 * Meaningful only if {@link #getCollapse} is not "none".
 	 */
 	public boolean isOpen() {
@@ -120,29 +136,11 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", open);
+			smartUpdate("open", open);
 		}
 	}
 
 	//super//
-	public String getZclass() {
-		return _zclass == null ? "z-splitter" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
-	}
-	
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(80).append(super.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_OPEN);
-
-		if ("vertical".equals(getOrient()))
-			HTMLs.appendAttribute(sb, "z.vert", "true");
-		
-		if (!"none".equals(_collapse))
-			HTMLs.appendAttribute(sb, "z.colps", _collapse);
-		if (!_open) sb.append(" z.open=\"false\"");
-		return sb.toString();
-	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Box))
 			throw new UiException("Wrong parent: "+parent);
@@ -150,21 +148,35 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	}
 	/** Not allow any children.
 	 */
-	public boolean isChildable() {
+	protected boolean isChildable() {
 		return false;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (!_open) renderer.render("open", false);
+		if (!"none".equals(_collapse)) render(renderer, "collapse", _collapse);
+	}
+	public String getZclass() {
+		return _zclass != null ? _zclass:
+			"z-splitter" + (isVertical() ? "-ver" : "-hor");
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Openable {
-		//-- Openable --//
-		public void setOpenByClient(boolean open) {
-			_open = open;
-		}
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

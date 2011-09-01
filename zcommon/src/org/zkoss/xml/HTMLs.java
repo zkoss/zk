@@ -1,18 +1,16 @@
 /* HTMLs.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Sat Dec 31 12:46:27     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -39,6 +37,25 @@ public class HTMLs {
 			sb.append(' ').append(name).append("=\"")
 				.append(XMLs.encodeAttribute(val)).append('"');
 	}
+	/** Appends an attribute to the string buffer for HTML/XML (name="val").
+	 * If emptyIgnored is true and val is null or empty (if String),
+	 * nothing is generated.
+	 *
+	 * <p>Note: {@link XMLs#encodeAttribute} is called automatically
+	 * to encode val.
+	 *
+	 * @param emptyIgnored whether to ignore a null or empty string.
+	 * If false, it is always generated (null is generated as "null").
+	 * @since 5.0.0
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, String val,
+	boolean emptyIgnored) {
+		if (!emptyIgnored || (val != null && val.length() != 0))
+			sb.append(' ').append(name).append("=\"")
+				.append(val != null ? XMLs.encodeAttribute(val): null)
+				.append('"');
+	}
 	/** Appends an attribute with a int value to the string buffer for HTML/XML (name="val").
 	 */
 	public static final
@@ -50,6 +67,13 @@ public class HTMLs {
 	 */
 	public static final
 	void appendAttribute(StringBuffer sb, String name, long val) {
+		sb.append(' ').append(name).append("=\"").append(val).append('"');
+	}
+	/** Appends an attribute with a long value to the string buffer for HTML/XML (name="val").
+	 * @since 5.0.0
+	 */
+	public static final
+	void appendAttribute(StringBuffer sb, String name, double val) {
 		sb.append(' ').append(name).append("=\"").append(val).append('"');
 	}
 	/** Appends an attribute with a short value to the string buffer for HTML/XML (name="val").

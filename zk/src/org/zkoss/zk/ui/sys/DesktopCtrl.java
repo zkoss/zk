@@ -1,18 +1,16 @@
 /* DesktopCtrl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jul 29 08:47:19     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,7 +29,9 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An addition interface to {@link Desktop}
@@ -49,13 +49,30 @@ public interface DesktopCtrl {
 	/** Returns the next available key which is unique in the whole desktop.
 	 */
 	public int getNextKey();
+	/** Returns the next available UUID for a page.
+	 * The returned UUID is unique in the desktop.
+	 * You can consider it as unique in the whole session, though
+	 * it may not be true if {@link org.zkoss.zk.ui.ext.RawId} is used
+	 * (developer's responsibility to avoid conflict),
+	 * integer overflow (too many UUID in one session, which
+	 * can be considered as impossible), or a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is used.
+	 * @since 5.0.3
+	 */
+	public String getNextUuid(Page page);
 	/** Returns the next available UUID for a component.
 	 * The returned UUID is unique in the desktop.
 	 * You can consider it as unique in the whole session, though
 	 * it may not be true if {@link org.zkoss.zk.ui.ext.RawId} is used
 	 * (developer's responsibility to avoid conflict),
-	 * or integer overflow (too many UUID in one session, which
-	 * can be considered as impossible).
+	 * integer overflow (too many UUID in one session, which
+	 * can be considered as impossible), or a custom ID generator
+	 * ({@link org.zkoss.zk.ui.sys.IdGenerator}) is used.
+	 * @since 5.0.3
+	 */
+	public String getNextUuid(Component comp);
+	/** As of release 5.0.3, replaced with {@link #getNextUuid(Page)}
+	 * or {@link #getNextUuid(Component)}.
 	 */
 	public String getNextUuid();
 
@@ -66,7 +83,15 @@ public interface DesktopCtrl {
 	public void addComponent(Component comp);
 	/** Removes a component to this page.
 	 * <p>It is used internally and developers shall not invoke it
-	 * explicityly.
+	 * explicitly.
+	 * @param recycleUuidAllowed whether it is OK to recycle UUID.
+	 * @return whether UUID is recycled. If true, the caller shall
+	 * reset UUID of the give component.
+	 * @since 5.0.4
+	 */
+	public boolean removeComponent(Component comp, boolean recycleUuidAllowed);
+	/** @deprecated As of release 5.0.4, replaced with
+	* {@link #removeComponent(Component, boolean)}.
 	 */
 	public void removeComponent(Component comp);
 
@@ -82,11 +107,6 @@ public interface DesktopCtrl {
 	 * You shall just GC it.
 	 */
 	public void removePage(Page page);
-
-	/** Sets the bookmark when receiving the onBookmarkChange command
-	 * from the client.
-	 */
-	public void setBookmarkByClient(String name);
 
 	/** Sets the desktop identifier.
 	 *
@@ -114,6 +134,12 @@ public interface DesktopCtrl {
 	/** Called when the desktop is about to be destroyed.
 	 */
 	public void destroy();
+	/** Called when the desktop has been recycled.
+	 * More precisely, it is called when the desktop is no longer used
+	 * and ready to be re-used later.
+	 * @since 5.0.7
+	 */
+	public void recycle();
 
 	/** Returns a collection of suspended event processing threads, or empty
 	 * if no suspended thread at all.
@@ -175,9 +201,11 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public void onPiggybackListened(Component comp, boolean listen);
-	/** Called each time ZK Update Engine processes all events.
-	 * It is used to implement the piggyback feature
-	 * (see {@link Events#ON_PIGGYBACK}).
+	/** Called each time when ZK Update Engine retrieves events.
+	 * It is used to implement the piggyback feature by posting
+	 * the events (see {@link Events#ON_PIGGYBACK}).
+	 * The implementation could post events here. It should not process
+	 * event here (since event thread might be used).
 	 *
 	 * <p>Used only internally. Application develepers shall not call it.
 	 *
@@ -190,6 +218,14 @@ if (c.isEmpty()) {
 	public ServerPush getServerPush();
 	/** Enables the server-push feature with the specified server-push
 	 * controller.
+	 * If you want to use the default serverpush, use {@link Desktop#enableServerPush}
+	 * instead. This method allows the caller to provide a server push
+	 * for more control.
+	 * <p>Example:
+	 * <pre><code>desktop.enableServerPush(new PollingServerPush(1000,6000,5));</code></pre>
+	 *
+	 * <p>Notice: a server push controller can be used in one desktop.
+	 * It cannot be shared.
 	 *
 	 * @param serverpush the server-push controller. If null,
 	 * the server-push feature is disabled (for this desktop).
@@ -226,7 +262,7 @@ if (c.isEmpty()) {
 	 * automatically.
 	 * @since 3.0.0
 	 */
-	public Event beforeProcessEvent(Event event);
+	public Event beforeProcessEvent(Event event) throws Exception;
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
 	 * registered by {@link Desktop#addListener}.
 	 *
@@ -235,7 +271,7 @@ if (c.isEmpty()) {
 	 * automatically.
 	 * @since 3.0.0
 	 */
-	public void afterProcessEvent(Event event);
+	public void afterProcessEvent(Event event) throws Exception;
 	/** Invokes {@link org.zkoss.zk.ui.util.DesktopCleanup#cleanup} for each relevant
 	 * listener registered by {@link Desktop#addListener}.
 	 *
@@ -297,29 +333,20 @@ if (c.isEmpty()) {
 	//Response Utilities//
 	/** Called when ZK Update Engine has sent a response to the client.
 	 *
-	 * <p>Note: the implementation has to maintain one last-sent
-	 * response information for each channel, since a different channel
-	 * has different set of request IDs and might resend in a different
-	 * condition.
-	 *
-	 * @param channel the request channel.
-	 * For example, "au" for AU requests and "cm" for Comet requests.
 	 * @param reqId the request ID that the response is generated for.
 	 * Ingore if null.
-	 * @param resInfo the response infomation. Ignored if reqId is null.
-	 * The real value depends on the caller.
-	 * @since 3.5.0
+	 * @param resInfo the response. Ignored if reqId is null.
+	 * @since 5.0.0
 	 */
-	public void responseSent(String channel, String reqId,
-	Object resInfo);
-	/** Returns the information of response for the last request, or null
+	public void responseSent(String reqId, Object resInfo);
+	/** Returns the response for the last request, or null
 	 * if no response yet, or the specified request ID doesn't match
 	 * the last one (passed to {@link #responseSent}).
 	 * <p>The return value is the value passed to resInfo when calling
-	 * {@link #responseSent}. The real value depends on the caller.
-	 * @since 3.5.0
+	 * {@link #responseSent}.
+	 * @since 5.0.0
 	 */
-	public Object getLastResponse(String channel, String reqId);
+	public Object getLastResponse(String reqId);
 	/** Returns the sequence ID of the response.
 	 * The client and server uses the sequence ID to make sure
 	 * the responses are processed in the correct order.
@@ -342,24 +369,110 @@ if (c.isEmpty()) {
 	 * @since 3.5.0
 	 */
 	public void setResponseId(int resId);
-
-	/** Activates the server push.
-	 * It is called by {@link org.zkoss.zk.ui.Executions#activate}.
+	/** Adds the responses to the so-called piggy-back queue.
+	 * The responses in the piggy-back queue will be sent in
+	 * the next AU request.
+	 * <p>This method is useful for working thread that
+	 * wants to sent the responses back to the client.
+	 * A typical example is the Comet-based server push.
 	 *
+	 * @param response the responses to be appended to the piggy-back queue.
+	 * @param reset whether to reset the piggy-back queue after
+	 * returning the queued responses.
+	 * @return all responses in the piggy-back queue, or null
+	 * if nothing in the queue.
+	 * @since 5.0.0
+	 */
+	public List piggyResponse(List response, boolean reset);
+
+	/** Schedules a task to run under the server push of the given desktop asynchronously.
+	 * It is called by {@link org.zkoss.zk.ui.Executions#schedule}.
+	 * Don't call it directly.
+	 * <p>Like {@link #activateServerPush} and {@link #deactivateServerPush}, this method could
+	 * be called in any thread, so it has to be safe for concurrent access.
+	 * @param task the task to execute
+	 * @param event the event to be passed to the task (i.e., the event listener).
+	 * It could null or any instance as long as the task recognizes it.
+	 * @exception IllegalStateException if the server push is not enabled.
+	 * @exception DesktopUnavailableException if the desktop is removed
+	 * (when activating).
+	 * @since 5.0.6
+	 */
+	public void scheduleServerPush(EventListener task, Event event);
+	/** Returns if there is any scheduled task for server push.
+	 * @since 5.0.6
+	 */
+	public boolean scheduledServerPush();
+
+	/** Activates the current thread for accessing this desktop by the server push.
+	 * It is called by {@link org.zkoss.zk.ui.Executions#activate}.
+	 * Don't call it directly.
+	 *
+	 * <p>Like {@link #scheduleServerPush}, this method could
+	 * be called in any thread, so it has to be safe for concurrent access.
 	 * <p>Note: the server push must be enabled first (by use of
 	 * {@link Desktop#enableServerPush}).
 	 *
 	 * @param timeout the maximum time to wait in milliseconds.
 	 * Ingored (i.e., never timeout) if non-positive.
+	 * @exception IllegalStateException if the server push is not enabled.
 	 * @since 3.5.2
 	 */
 	public boolean activateServerPush(long timeout)
 	throws InterruptedException;
-	/** Deactivates the server push.
+	/** Deactivates the thread that has invoked {@link #activateServerPush}
+	 * successfully.
 	 * It is called by {@link org.zkoss.zk.ui.Executions#deactivate}.
+	 * Don't call it directly.
 	 * @since 3.5.2
 	 */
 	public void deactivateServerPush();
+
+	/** Processes an AU request.
+	 * Notice that not only the requests for a deskop but also the requests
+	 * for any component in the deskop will go thru this method.
+	 *
+	 * <p>To override the default processing, register an AU request service
+	 * {@link org.zkoss.zk.au.AuService} by invoking {@link Desktop#addListener}.
+	 *
+	 * <ol>
+	 * <li>This method first invokes the registered AU request service
+	 * ({@link org.zkoss.zk.au.AuService}) one-by-one, until
+	 * the first one returns true.</li>
+	 * <li>If none of them returns true or no AU service at all,
+	 * it checks if the request is targeting a component
+	 * (i.e., {@link AuRequest#getComponent} is not null).</li>
+	 * <li>If it is targeting a component, it invokes
+	 * {@link ComponentCtrl#service} to handle the service.</li>
+	 * <li>If it is not targeting a component (i.e., targeting to
+	 * this desktop), it handles as follows.
+	 * <ul>
+	 * <li>It handles the recognized requests, including
+	 * onBookmarkChange, onURIChange and onClientInfo.</li>
+	 * <li>If the request is not one of above, it converts the request to
+	 * an event (by {@link Event#getEvent}) and then posts the event
+	 * (by {@link Events#postEvent}).</li></ul></li>
+	 * </ol>
+	 *
+	 * <p>Notice that the registered AU request service
+	 * ({@link org.zkoss.zk.au.AuService}) will be called, no matter
+	 * the request is targeting a component or a desktop.
+	 * And, it can 'intercept' or 'filter' it by returning false.
+	 *
+	 * <p>To send reponses to the client, use
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
+	 * or {@link Component#invalidate()}.
+	 *
+	 * <p>If you want to intercept events, you can register a listener implementing
+	 * {@link EventInterceptor}, or overriding {@link #afterProcessEvent}.
+	 *
+	 * @param everError if any error ever occured before
+	 * processing this request. In other words, indicates if the previous
+	 * request causes any exception.
+	 * @since 5.0.0
+	 */
+	public void service(AuRequest request, boolean everError);
 
 	/** Sets the execution (used to represent a lock).
 	 * <p>Used only to implement {@link UiEngine}.

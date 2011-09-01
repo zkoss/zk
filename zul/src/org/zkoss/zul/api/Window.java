@@ -8,7 +8,7 @@ import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 import org.zkoss.zul.ext.Framable;
 
 /**
- * A generic window.
+ * A window.
  * 
  * <p>
  * Unlike other elements, each {@link Window} is an independent ID space (by

@@ -1,18 +1,16 @@
 /* Treefoot.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jan 19 15:36:05     2007, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -27,7 +25,7 @@ import org.zkoss.zul.impl.XulElement;
  * A row of {@link Treefooter}.
  *
  * <p>Like {@link Treecols}, each tree has at most one {@link Treefoot}.
- * <p>Default {@link #getZclass}: z-tree-foot.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treefoot (since 5.0.0)
  * @author tomyeh
  */
 public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
@@ -46,7 +44,7 @@ public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-foot" : _zclass;
+		return _zclass == null ? "z-treefoot" : _zclass;
 	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

@@ -1,18 +1,16 @@
 /* PageImpl.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Jun  3 18:17:32     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -21,6 +19,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,6 +28,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -36,16 +36,20 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
+import org.zkoss.util.DualCollection;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.util.DualFunctionMapper;
+import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.WebApp;
@@ -71,27 +75,24 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.util.PageActivationListener;
+import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.out.AuSetTitle;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.scripting.HierachicalAware;
-import org.zkoss.zk.scripting.SerializableAware;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
-import org.zkoss.zk.scripting.NamespaceActivationListener;
-import org.zkoss.zk.scripting.InterpreterNotFoundException;
-import org.zkoss.zk.scripting.util.AbstractNamespace;
+import org.zkoss.zk.scripting.*;
 
 /**
  * An implmentation of {@link Page} and {@link PageCtrl}.
@@ -113,39 +114,34 @@ import org.zkoss.zk.scripting.util.AbstractNamespace;
  */
 public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
-	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
-    private static final long serialVersionUID = 20091008L;
+    private static final long serialVersionUID = 20101025L;
 
-	/** URI for redrawing as a desktop or part of another desktop. */
-	private final ExValue _cplURI, _dkURI, _pgURI;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
 	/** Used to retore _owner. */
 	private transient String _ownerUuid;
 	private transient Desktop _desktop;
-	private String _id, _uuid;
+	private String _id = "", _uuid;
 	private String _title = "", _style = "";
 	private final String _path;
 	private String _zslang;
 	/** A list of deferred zscript [Component parent, {@link ZScript}]. */
 	private List _zsDeferred;
 	/** A map of attributes. */
-	private transient Map _attrs;
+	private transient SimpleScope _attrs;
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
-	/** The default parent. */
-	private transient Component _defparent;
-	/** The reason to store it is PageDefinition is not serializable. */
-	private FunctionMapper _mapper;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private ComponentDefinitionMap _compdefs;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private transient LanguageDefinition _langdef;
 	/** The header tags. */
 	private String _hdbfr = "", _hdaft = "";
+	/** The response headers. */
+	private Collection _hdres;
 	/** The root attributes. */
 	private String _rootAttrs = "";
-	private String _contentType, _docType, _firstLine;
+	private String _contentType, _docType, _firstLine, _wgtcls;
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
 	/** The expression factory (ExpressionFactory).*/
@@ -153,6 +149,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map _ips;
 	private transient NS _ns;
+	/** The mapper representing all mappers being added to this page. */
+	private final FunctionMapper _mapper = new PageFuncMapper();
+	/** A list of {@link FunctionMapper}. */
+	private transient List _mappers;
 	/** A list of {@link VariableResolver}. */
 	private transient List _resolvers;
 	private boolean _complete;
@@ -187,9 +187,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		init();
 
 		_langdef = langdef;
-		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
-		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = compdefs != null ? compdefs:
 			new ComponentDefinitionMap(
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
@@ -213,9 +210,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		init();
 
 		_langdef = richlet.getLanguageDefinition();
-		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
-		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = new ComponentDefinitionMap(
 			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
@@ -225,8 +219,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 */
 	protected void init() {
 		_ips = new LinkedHashMap(4);
-		_ns = new NS();
-		_attrs = new HashMap();
+		_ns = new NS(); //backwad compatible
+		_attrs = new SimpleScope(this);
 	}
 
 	/** Returns the UI engine.
@@ -244,7 +238,22 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _mapper;
 	}
 	public void addFunctionMapper(FunctionMapper mapper) {
-		_mapper = DualFunctionMapper.combine(mapper, _mapper);
+		if (mapper == null)
+			return /*false*/;
+
+		if (_mappers == null)
+			_mappers = new LinkedList();
+		else if (_mappers.contains(mapper))
+			return /*false*/;
+
+		_mappers.add(0, mapper); //FILO order
+		return /*true*/;
+	}
+	public boolean removeFunctionMapper(FunctionMapper mapper) {
+		return _mappers != null && _mappers.remove(mapper);
+	}
+	public boolean hasFunctionMapper(FunctionMapper mapper) {
+		return _mappers != null && _mappers.contains(mapper);
 	}
 
 	public String getRequestPath() {
@@ -258,8 +267,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public void setId(String id) {
 		if (_desktop != null && _desktop.getPages().contains(this))
-			throw new UiException("Unable to change ID after initialized");
-		if (id != null && id.length() > 0) _id = id;
+			throw new UiException("ID cannot be changed after initialized");
+		_id = id != null ? id: "";
 		//No need to update client since it is allowed only before init(...)
 	}
 	public String getTitle() {
@@ -277,7 +286,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				}
 
 				if (exec.isAsyncUpdate(this))
-					getUiEngine().addResponse("setTitle", new AuSetTitle(_title));
+					getUiEngine().addResponse(new AuSetTitle(_title));
 			}
 		}
 	}
@@ -311,7 +320,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _desktop != null ?
 				_desktop.getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case PAGE_SCOPE:
-			return _attrs;
+			return _attrs.getAttributes();
 		case REQUEST_SCOPE:
 			final Execution exec = getExecution();
 			if (exec != null) return exec.getAttributes();
@@ -323,15 +332,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public Object getAttribute(String name, int scope) {
 		return getAttributes(scope).get(name);
 	}
+	public boolean hasAttribute(String name, int scope) {
+		return getAttributes(scope).containsKey(name);
+	}
 	public Object setAttribute(String name, Object value, int scope) {
-		if (value != null) {
-			final Map attrs = getAttributes(scope);
-			if (attrs == Collections.EMPTY_MAP)
-				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
-			return attrs.put(name, value);
-		} else {
-			return removeAttribute(name, scope);
-		}
+		final Map attrs = getAttributes(scope);
+		if (attrs == Collections.EMPTY_MAP)
+			throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
+		return attrs.put(name, value);
 	}
 	public Object removeAttribute(String name, int scope) {
 			final Map attrs = getAttributes(scope);
@@ -341,16 +349,71 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Map getAttributes() {
-		return _attrs;
+		return _attrs.getAttributes();
 	}
 	public Object getAttribute(String name) {
-		return _attrs.get(name);
+		return _attrs.getAttribute(name);
+	}
+	public boolean hasAttribute(String name) {
+		return _attrs.hasAttribute(name);
 	}
 	public Object setAttribute(String name, Object value) {
-		return value != null ? _attrs.put(name, value): removeAttribute(name);
+		return _attrs.setAttribute(name, value);
 	}
 	public Object removeAttribute(String name) {
-		return _attrs.remove(name);
+		return _attrs.removeAttribute(name);
+	}
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		return val != null || !recurse || hasAttribute(name) ? val:
+			_desktop != null ? _desktop.getAttribute(name, true): null;
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name)
+			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_desktop != null) {
+				if (_desktop.hasAttribute(name, true))
+					return _desktop.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_desktop != null) {
+				if (_desktop.hasAttribute(name, true))
+					return _desktop.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
+
+	public Object getAttributeOrFellow(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		if (val != null || hasAttribute(name))
+			return val;
+
+		val = getFellowIfAny(name);
+		if (val != null)
+			return val;
+
+		return recurse && _desktop != null ?
+			_desktop.getAttribute(name, true): null;
+	}
+	public boolean hasAttributeOrFellow(String name, boolean recurse) {
+		return hasAttribute(name) || hasFellow(name)
+			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _attrs.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _attrs.removeScopeListener(listener);
 	}
 
 	public void invalidate() {
@@ -370,15 +433,19 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			throw ex;
 		}
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}. */
 	public void setVariable(String name, Object val) {
 		_ns.setVariable(name, val, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttribute}. */
 	public boolean containsVariable(String name) {
 		return _ns.containsVariable(name, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #getAttribute}. */
 	public Object getVariable(String name) {
 		return _ns.getVariable(name, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}. */
 	public void unsetVariable(String name) {
 		_ns.unsetVariable(name, true);
 	}
@@ -406,24 +473,27 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes) {
+	public Function getZScriptFunction(
+	Component comp, String name, Class[] argTypes) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Object ip = it.next();
 			Function mtd =
 				ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getFunction(ns, name, argTypes):
+				((HierachicalAware)ip).getFunction(comp, name, argTypes):
 				((Interpreter)ip).getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public Function getZScriptFunction(
-	Component comp, String name, Class[] argTypes) {
-		return getZScriptFunction(comp != null ? comp.getNamespace(): null,
-			name, argTypes);
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #getZScriptFunction(Component,String,Class[])}.
+	 */
+	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes) {
+		return getZScriptFunction(ns != null ? ns.getOwner(): null, name, argTypes);
 	}
+
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
@@ -433,44 +503,53 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public Object getZScriptVariable(Namespace ns, String name) {
+	public Object getZScriptVariable(Component comp, String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Object ip = it.next();
 			final Object val = ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getVariable(ns, name):
+				((HierachicalAware)ip).getVariable(comp, name):
 				((Interpreter)ip).getVariable(name);
 			if (val != null)
 				return val;
 		}
 		return null;
 	}
-	public Object getZScriptVariable(Component comp, String name) {
-		return getZScriptVariable(comp != null ? comp.getNamespace(): null,
-			name);
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #getZScriptVariable(Component,String)}.
+	 */
+	public Object getZScriptVariable(Namespace ns, String name) {
+		return getZScriptVariable(ns != null ? ns.getOwner(): null, name);
 	}
 
 	public Object getXelVariable(String name) {
-		final VariableResolver resolv =
-			getExecution().getVariableResolver();
-		return resolv != null ? resolv.resolveVariable(name): null;
+		return getXelVariable(null, null, name, false);
 	}
-
-	/** Resolves the variable defined in variable resolvers.
-	 */
-	private Object resolveVariable(String name) {
+	public Object getXelVariable(
+	XelContext ctx, Object base, Object name, boolean ignoreExec) {
+		if (!ignoreExec) {
+			final Execution exec = getExecution();
+			if (exec != null)
+				return Evaluators.resolveVariable(
+					ctx, exec.getVariableResolver(), base, name);
+					//note: ExecutionResolver will call back this method
+		}
+		
 		if (_resolvers != null) {
-			for (Iterator it = _resolvers.iterator(); it.hasNext();) {
-				Object o = ((VariableResolver)it.next()).resolveVariable(name);
+			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers);
+			it.hasNext();) {
+				Object o = Evaluators.resolveVariable(
+					ctx, (VariableResolver)it.next(), base, name);
 				if (o != null)
 					return o;
 			}
 		}
 		return null;
 	}
+
 	public boolean addVariableResolver(VariableResolver resolver) {
 		if (resolver == null)
-			throw new IllegalArgumentException("null");
+			return false;
 
 		if (_resolvers == null)
 			_resolvers = new LinkedList();
@@ -547,11 +626,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_desktop = exec.getDesktop();
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
+
+		_desktop.getWebApp().getConfiguration().init(this);
 	}
 	public void init(PageConfig config) {
 		final Execution exec = Executions.getCurrent();
-
-		initVariables();
 
 		if (((ExecutionCtrl)exec).isRecovering()) {
 			final String uuid = config.getUuid(), id = config.getId();
@@ -560,33 +639,26 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			_uuid = uuid;
 			_id = id;
 		} else {
-			final IdGenerator idgen =
-				((WebAppCtrl)_desktop.getWebApp()).getIdGenerator();
-			if (idgen != null)
-				_uuid = idgen.nextPageUuid(this);
-			if (_uuid == null)
-				_uuid = ((DesktopCtrl)_desktop).getNextUuid();
+			_uuid = ((DesktopCtrl)_desktop).getNextUuid(this);
 
-			if (_id == null) {
-				final String id = config.getId();
-				if (id != null && id.length() != 0) _id = id;
-			}
+			if (_id == null || _id.length() == 0)
+				_id = config.getId();
 			if (_id != null)
 				_id = (String)exec.evaluate(this, _id, String.class);
-			if (_id != null && _id.length() != 0) {
+			if (_id == null) {
+				_id = "";
+			} else if (_id.length() != 0) {
 				final String INVALID = ".&\\%";
 				if (Strings.anyOf(_id, INVALID, 0) < _id.length())
 					throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
-			} else {
-				_id = _uuid;
 			}
 		}
 
-		String s = config.getHeaders(true);
-		if (s != null) _hdbfr = s;
-		s = config.getHeaders(false);
-		if (s != null) _hdaft = s;
+		//Note: the evaluation order was changed since 5.0.2
+		((DesktopCtrl)_desktop).addPage(this);
+			//add page before evaluate title and others
 
+		String s;
 		if (_title.length() == 0) {
 			s = config.getTitle();
 			if (s != null) setTitle(s);
@@ -596,82 +668,76 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (s != null) setStyle(s);
 		}
 
-		((DesktopCtrl)_desktop).addPage(this);	
-	}
-	private void initVariables() {
-		setVariable("log", _zklog);
-		setVariable("page", this);
-		setVariable("pageScope", getAttributes());
-		setVariable("requestScope", REQUEST_ATTRS);
-		setVariable("spaceOwner", this);
-
-		if (_desktop != null) {
-			setVariable("desktop", _desktop);
-			setVariable("desktopScope", _desktop.getAttributes());
-			final WebApp wapp = _desktop.getWebApp();
-			setVariable("application", wapp);
-			setVariable("applicationScope", wapp.getAttributes());
-			final Session sess = _desktop.getSession();
-			setVariable("session", sess);
-			setVariable("sessionScope",
-				sess != null ? sess.getAttributes(): Collections.EMPTY_MAP);
-		}
+		s = config.getBeforeHeadTags();
+		if (s != null) _hdbfr = s;
+		s = config.getAfterHeadTags();
+		if (s != null) _hdaft = s;
+		_hdres = config.getResponseHeaders();
+		if (_hdres.isEmpty()) _hdres = null;
 	}
 	public void destroy() {
 		super.destroy();
 
-		for (Iterator it = getLoadedInterpreters().iterator(); it.hasNext();) {
-			final Interpreter ip = (Interpreter)it.next();
-			try {
-				ip.destroy();
-			} catch (Throwable ex) {
-				log.error("Failed to destroy "+ip, ex);
+		try {
+			if (_ips != null) {
+				final List ips = new ArrayList(_ips.values());
+				_ips.clear();
+				_ips = null; //not just clear since it is better to NPE than memory leak
+				for (Iterator it = ips.iterator(); it.hasNext();) {
+					final Interpreter ip = (Interpreter)it.next();
+					try {
+						ip.destroy();
+					} catch (Throwable ex) {
+						log.warning("Failed to destroy "+ip, ex);
+					}
+				}
 			}
+		} catch (Throwable ex) { //avoid racing
+			log.warning("Failed to clean up interpreters of "+this, ex);
 		}
-		_ips.clear();
 
 		//theorectically, the following is not necessary, but, to be safe...
-		_attrs.clear();
-		_ips = null; //not clear since it is better to NPE than memory leak
 		_desktop = null;
-		_owner = _defparent = null;
+		_owner = null;
 		_listeners = null;
 		_ns = null;
 		_resolvers = null;
+		_mappers = null;
+		_attrs.getAttributes().clear();
+	}
+	public boolean isAlive() {
+		return _ips != null;
 	}
 
-	private static final Map REQUEST_ATTRS = new AbstractMap() {
-		public Set entrySet() {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return Collections.EMPTY_SET;
-			return exec.getAttributes().entrySet();
-		}
-		public Object put(Object name, Object value) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) throw new IllegalStateException("No execution at all");
-			return exec.getAttributes().put(name, value);
-		}
-		public boolean containsKey(Object name) {
-			final Execution exec = Executions.getCurrent();
-			return exec != null && exec.getAttributes().containsKey(name);
-		}
-		public Object get(Object name) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return null;
-			return exec.getAttributes().get(name);
-		}
-		public Object remove(Object name) {
-			final Execution exec = Executions.getCurrent();
-			if (exec == null) return null;
-			return exec.getAttributes().remove(name);
-		}
-	};
+	public String getBeforeHeadTags() {
+		return _hdbfr;
+	}
+	public String getAfterHeadTags() {
+		return _hdaft;
+	}
+	public void addBeforeHeadTags(String tags) {
+		if (tags != null && tags.length() > 0)
+			_hdbfr += '\n' + tags;
+	}
+	public void addAfterHeadTags(String tags) {
+		if (tags != null && tags.length() > 0)
+			_hdaft += '\n' + tags;
+	}
 
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
+	 */
 	public String getHeaders(boolean before) {
 		return before ? _hdbfr: _hdaft;
 	}
+	/** @deprecated As of release 5.0.5, replaced with {@link #getBeforeHeadTags}
+	 * and {@link #getAfterHeadTags}.
+	 */
 	public String getHeaders() {
 		return _hdbfr + _hdaft;
+	}
+	public Collection getResponseHeaders() {
+		return _hdres != null ? _hdres: Collections.EMPTY_LIST;
 	}
 	public String getRootAttributes() {
 		return _rootAttrs;
@@ -684,6 +750,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 	public void setContentType(String contentType) {
 		_contentType = contentType;
+	}
+	public String getWidgetClass() {
+		return _wgtcls;
+	}
+	public void setWidgetClass(String wgtcls) {
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls: null;
 	}
 	public String getDocType() {
 		return _docType;
@@ -714,50 +786,22 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _desktop;
 	}
 
-	public void redraw(Collection responses, Writer out) throws IOException {
+	public void redraw(Writer out)
+	throws IOException {
+		String ctl;
 		final Execution exec = getExecution();
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
-		final boolean proxy = isProxy(exec);
-		boolean bIncluded = exec.isIncluded()
-			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null
-			|| proxy;
-		final String uri = (String)
-			(_complete ? _cplURI: bIncluded ? _pgURI: _dkURI)
-				.getValue(_langdef.getEvaluator(), this);
-				//desktop and page URI is defined in language
+		final boolean au = exec.isAsyncUpdate(null);
+		if (!au && !exec.isIncluded()
+		&& ((ctl=ExecutionsCtrl.getPageRedrawControl(exec)) == null
+			|| "desktop".equals(ctl))) {
+			if (!au && shallIE7Compatible())
+				try {
+					if (exec.isBrowser("ie8")
+					&& !exec.containsResponseHeader("X-UA-Compatible"))
+						exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+				} catch (Throwable ex) { //ignore (it might not be allowed)
+				}
 
-		if (!bIncluded && asyncUpdate) //Bug 2522437
-			bIncluded = getOwner() != null
-				|| _desktop.getPages().iterator().next() != this;
-		if (bIncluded)
-			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
-			//maintain original state since desktop.dsp will include page.dsp
-		else
-			bIncluded |= asyncUpdate;
-
-		//a temporary solution before IE8 really mature
-		if (!asyncUpdate)
-			try {
-				if (exec.isBrowser("ie8")
-				&& !exec.containsResponseHeader("X-UA-Compatible"))
-					exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
-			} catch (Throwable ex) { //ignore (it might not be allowed)
-			}
-
-		final Map attrs = new HashMap(8);
-		attrs.put("page", this);
-		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
-			//whether it is caused by AU request
-		attrs.put("proxy", Boolean.valueOf(proxy));
-			//whether it is caused by ZK Proxy
-		attrs.put("embed", Boolean.valueOf(asyncUpdate || proxy));
-			//if embed, not to generate JavaScript and CSS
-		attrs.put("responses",
-			responses != null ? responses: Collections.EMPTY_LIST);
-		if (bIncluded) {
-			exec.include(out, uri, attrs, Execution.PASS_THRU_ATTR);
-		} else {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content
 //Why no: browsers seems fail to handle DHTML correctly (when BACK to
@@ -780,37 +824,84 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				exec.setResponseHeader("Expires", "-1");
 
 				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
-				//so ZkFns.outLangJavaScripts generates zk.keepDesktop correctly
+				//so HtmlPageRenderers.outLangJavaScripts generates JS's keepDesktop correctly
 			}
+			if (_hdres != null)
+				for (Iterator it = _hdres.iterator(); it.hasNext();) {
+					final Object[] vals = (Object[])it.next();
+					final String nm = (String)vals[0];
+					final Object val = vals[1];
+					final boolean add = ((Boolean)vals[2]).booleanValue();
+					if (val instanceof Date) {
+						if (add) exec.addResponseHeader(nm, (Date)val);
+						else exec.setResponseHeader(nm, (Date)val);
+					} else {
+						if (add) exec.addResponseHeader(nm, (String)val);
+						else exec.setResponseHeader(nm, (String)val);
+					}
+				}
+		}
 
-			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
-				//Don't use include. Otherwise, headers will be gone.
+		final PageRenderer renderer = (PageRenderer)
+			exec.getAttribute(Attributes.PAGE_RENDERER);
+		final Object oldrendering =
+			exec.setAttribute(Attributes.PAGE_RENDERING, Boolean.TRUE);
+		try {
+			(renderer != null ? renderer: _langdef.getPageRenderer())
+				.render(this, out);
+		} finally {
+			if (oldrendering != null)
+				exec.setAttribute(Attributes.PAGE_RENDERING, oldrendering);
+			else
+				exec.removeAttribute(Attributes.PAGE_RENDERING);
 		}
 	}
-	/** Tests if the request is sent by ZK Proxy. */
-	private static boolean isProxy(Execution exec) {
-		final String ua = exec.getHeader("User-Agent");
-		return ua != null && ua.indexOf("ZK Proxy") >= 0;
+	private static boolean shallIE7Compatible() {
+		if (_ie7compat == null)
+			_ie7compat = Boolean.valueOf("true".equals(
+				Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
+		return _ie7compat.booleanValue();
 	}
+	private static Boolean _ie7compat;
 
+	/** @deprecated As of release 5.0.0, the concept of namespace is
+	 * deprecated and replaced with the attributes of a scope (such as
+	 * a page and a component).
+	 */
 	public final Namespace getNamespace() {
 		return _ns;
 	}
+	public void interpret(String zslang, String script, Scope scope) {
+		if (script != null && script.length() > 0) //optimize for better performance
+			getInterpreter(zslang).interpret(script, scope);
+	}
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #interpret(String,String,Scope)}.
+	 */
 	public void interpret(String zslang, String script, Namespace ns) {
-		getInterpreter(zslang).interpret(script, ns);
+		interpret(zslang, script, getScope(ns));
+	}
+	/** @deprecated
+	 */
+	private static Scope getScope(Namespace ns) {
+		if (ns == null) return null;
+		Scope s = ns.getOwner();
+		return s != null ? s: ns.getOwnerPage();
 	}
 	public Interpreter getInterpreter(String zslang) {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
 		Interpreter ip = (Interpreter)_ips.get(zslang);
 		if (ip == null) {
+			if (!_desktop.getWebApp().getConfiguration().isZScriptEnabled())
+				throw new UiException("zscript is not allowed since <disable-zscript> is configured");
+
 			ip = Interpreters.newInterpreter(zslang, this);
 			_ips.put(zslang, ip);
 				//set first to avoid dead loop if script calls interpret again
 
 			final String script = _langdef.getInitScript(zslang);
 			if (script != null)
-				ip.interpret(script, _ns);
-
+				ip.interpret(script, this);
 		}
 
 		//evaluate deferred zscripts, if any
@@ -857,13 +948,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					final Component parent = (Component)zsInfo[0];
 					if ((parent == null || parent.getPage() == this)
 					&& isEffective(zscript, parent)) {
-						final Namespace ns = parent != null ? 
-							Namespaces.beforeInterpret(parent):
-							Namespaces.beforeInterpret(this);
+						final Scope scope =
+							Scopes.beforeInterpret(parent != null ? (Scope)parent: this);
 						try {
-							ip.interpret(zscript.getContent(this, parent), ns);
+							ip.interpret(zscript.getContent(this, parent), scope);
 						} finally {
-							Namespaces.afterInterpret();
+							Scopes.afterInterpret();
 						}
 					}
 				}
@@ -888,7 +978,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (_listeners != null) {
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null)
-				return new ListenerIterator(l);
+				return CollectionsX.comodifiableIterator(l);
 		}
 		return CollectionsX.EMPTY_ITERATOR;
 	}
@@ -900,32 +990,38 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (_owner != null)
 			throw new IllegalStateException("owner can be set only once");
 		_owner = comp;
+		if (_owner instanceof Includer)
+			((Includer)_owner).setChildPage(this);
 	}
 
+	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
  	public Component getDefaultParent() {
- 		return _defparent;
+ 		return null;
  	}
+	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
  	public void setDefaultParent(Component comp) {
- 		_defparent = comp;
  	}
 
 	public void sessionWillPassivate(Desktop desktop) {
-		for (Iterator it = getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).sessionWillPassivate(this);
+		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
+			((ComponentCtrl)root).sessionWillPassivate(this);
 
-		willPassivate(_attrs.values());
+		willPassivate(_attrs.getAttributes().values());
+		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+			for (Iterator it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
 				willPassivate((Collection)it.next());
 
 		willPassivate(_resolvers);
+		willPassivate(_mappers);
 
-		for (Iterator it = _ns.getVariableNames().iterator();
+		//backward compatible (we store variables in attributes)
+		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
 		it.hasNext();) {
-			final Object val = _ns.getVariable((String)it.next(), true);
-			willPassivate(val);
-			if (val instanceof NamespaceActivationListener)
+			final Object val = it.next();
+			if (val instanceof NamespaceActivationListener) //backward compatible
 				((NamespaceActivationListener)val).willPassivate(_ns);
 		}
 	}
@@ -933,28 +1029,29 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_desktop = desktop;
 
 		if (_ownerUuid != null) {
-			_owner = _desktop.getComponentByUuid(_ownerUuid);
+			setOwner(_desktop.getComponentByUuid(_ownerUuid));
 			_ownerUuid = null;
 		}
 
-		for (Iterator it = getRoots().iterator(); it.hasNext();)
-			((ComponentCtrl)it.next()).sessionDidActivate(this);
+		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
+			((ComponentCtrl)root).sessionDidActivate(this);
 
-		initVariables(); //since some variables depend on desktop
-
-		didActivate(_attrs.values());
+		didActivate(_attrs.getAttributes().values());
+		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+			for (Iterator it = CollectionsX.comodifiableIterator(_listeners.values());
+			it.hasNext();)
 				didActivate((Collection)it.next());
 
 		didActivate(_resolvers);
+		didActivate(_mappers);
 
-		for (Iterator it = _ns.getVariableNames().iterator();
+		//backward compatible (we store variables in attributes)
+		for (Iterator it = CollectionsX.comodifiableIterator(_attrs.getAttributes().values());
 		it.hasNext();) {
-			final Object val = _ns.getVariable((String)it.next(), true);
-			didActivate(val);
-			if (val instanceof NamespaceActivationListener)
+			final Object val = it.next();
+			if (val instanceof NamespaceActivationListener) //backward compatible
 				((NamespaceActivationListener)val).didActivate(_ns);
 		}
 	}
@@ -983,9 +1080,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
 	}
-	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(name);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -994,9 +1091,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(cls);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -1022,10 +1119,13 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
 		s.writeObject(_owner != null ? _owner.getUuid(): null);
-		s.writeObject(_defparent != null ? _defparent.getUuid(): null);
 
-		willSerialize(_attrs.values());
-		Serializables.smartWrite(s, _attrs);
+		final Map attrs = _attrs.getAttributes();
+		willSerialize(attrs.values());
+		Serializables.smartWrite(s, attrs);
+		final List lns = _attrs.getListeners();
+		willSerialize(lns);
+		Serializables.smartWrite(s, lns);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
@@ -1041,20 +1141,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		willSerialize(_resolvers);
 		Serializables.smartWrite(s, _resolvers);
 
-		//handle namespace
-		for (Iterator it = _ns._vars.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
-			final Object val = me.getValue();
-			willSerialize(val); //always called even not serializable
-
-			if (isVariableSerializable(nm, val)
-			&& (val == null || val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
-				s.writeObject(nm);
-				s.writeObject(val);
-			}
-		}
-		s.writeObject(null); //denote end-of-namespace
+		willSerialize(_mappers);
+		Serializables.smartWrite(s, _mappers);
 
 		//Handles interpreters
 		for (Iterator it = _ips.entrySet().iterator(); it.hasNext();) {
@@ -1063,13 +1151,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (ip instanceof SerializableAware) {
 				s.writeObject((String)me.getKey()); //zslang
 
-				((SerializableAware)ip).write(s,
-					new SerializableAware.Filter() {
-						public boolean accept(String name, Object value) {
-							return isVariableSerializable(name, value)
-							&& (value == null || value instanceof java.io.Serializable || value instanceof java.io.Externalizable);
-						}
-					});
+				((SerializableAware)ip).write(s, null);
 			}
 		}
 		s.writeObject(null); //denote end-of-interpreters
@@ -1096,11 +1178,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_ownerUuid = (String)s.readObject();
 			//_owner is restored later when sessionDidActivate is called
 
-		final String pid = (String)s.readObject();
-		if (pid != null)
-			_defparent = fixDefaultParent(getRoots(), pid);
-
-		Serializables.smartRead(s, _attrs);
+		final Map attrs = _attrs.getAttributes();
+		Serializables.smartRead(s, attrs);
+		final List lns = _attrs.getListeners();
+		Serializables.smartRead(s, lns);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -1112,18 +1193,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 
 		_resolvers = (List)Serializables.smartRead(s, _resolvers); //might be null
-
-		//handle namespace
-		List vars = new LinkedList();
-		initVariables();
-		for (;;) {
-			final String nm = (String)s.readObject();
-			if (nm == null) break; //no more
-
-			Object val = s.readObject();
-			_ns.setVariable(nm, val, true);
-			vars.add(val);
-		}
+		_mappers = (List)Serializables.smartRead(s, _mappers); //might be null
 
 		//Handles interpreters
 		for (;;) {
@@ -1134,9 +1204,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 
 		//didDeserialize
-		didDeserialize(_attrs.values());
+		didDeserialize(attrs.values());
+		didDeserialize(lns);
 		didDeserialize(_resolvers);
-		didDeserialize(vars);
+		didDeserialize(_mappers);
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				didDeserialize((Collection)it.next());
@@ -1150,39 +1221,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (o instanceof PageSerializationListener)
 			((PageSerializationListener)o).didDeserialize(this);
 	}
-	private static boolean isVariableSerializable(String name, Object value) {
-		return !_nonSerNames.contains(name) && !(value instanceof Component);
-	}
-	private final static Set _nonSerNames = new HashSet();
-	static {
-		final String[] nms = {
-			"alert", "log", "page", "desktop", "pageScope", "desktopScope",
-			"applicationScope", "requestScope", "spaceOwner",
-			"session", "sessionScope", "execution"};
-		for (int j = 0; j < nms.length; ++j)
-			_nonSerNames.add(nms[j]);
-	}
-	private static final
-	Component fixDefaultParent(Collection c, String uuid) {
-		for (Iterator it = c.iterator(); it.hasNext();) {
-			Component comp = (Component)it.next();
-			if (uuid.equals(comp.getUuid()))
-				return comp; //found
-
-			comp = fixDefaultParent(comp.getChildren(), uuid);
-			if (comp != null) return comp;
-		}
-		return null;
-	}
 
 	//-- Object --//
 	public String toString() {
-		return "[Page "+_id+']';
+		return "[Page "+(_id.length() > 0 ? _id: _uuid)+']';
 	}
 
-	private class NS extends AbstractNamespace {
-		private final Map _vars = new HashMap();
-
+	/** @deprecated */
+	private class NS implements Namespace {
 		//Namespace//
 		public Component getOwner() {
 			return null;
@@ -1191,34 +1237,81 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return PageImpl.this;
 		}
 		public Set getVariableNames() {
-			return _vars.keySet();
+			return _attrs.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name) || hasFellow(name)
-				|| resolveVariable(name) != null;
+			return hasAttributeOrFellow(name, !local)
+				|| getXelVariable(null, null, name, true) != null;
 		}
 		public Object getVariable(String name, boolean local) {
-			Object val = _vars.get(name);
-			if (val != null || _vars.containsKey(name))
-				return val;
-
-			val = getFellowIfAny(name);
-			return val != null ? val: resolveVariable(name);
+			final Object o = getAttributeOrFellow(name, !local);
+			return o != null ? o: getXelVariable(null, null, name, true);
 		}
 		public void setVariable(String name, Object value, boolean local) {
-			_vars.put(name, value);
-			notifyAdd(name, value);
+			setAttribute(name, value);
 		}
 		public void unsetVariable(String name, boolean local) {
-			_vars.remove(name);
-			notifyRemove(name);
+			removeAttribute(name);
 		}
 
+		/** @deprecated */
 		public Namespace getParent() {
 			return null;
 		}
+		/** @deprecated */
 		public void setParent(Namespace parent) {
 			throw new UnsupportedOperationException();
 		}
+		/** @deprecated */
+		public boolean addChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+		/** @deprecated */
+		public boolean removeChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+	}
+	private class PageFuncMapper implements FunctionMapper, java.io.Serializable {
+		public Function resolveFunction(String prefix, String name)
+		throws XelException {
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					final Function f =
+						((FunctionMapper)it.next()).resolveFunction(prefix, name);
+					if (f != null)
+						return f;
+				}
+			}
+			return null;
+		}
+		public Collection getClassNames() {
+			Collection coll = null;
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					coll = combine(coll,
+						((FunctionMapper)it.next()).getClassNames());
+				}
+			}
+			return coll != null ? coll: Collections.EMPTY_LIST;
+		}
+		public Class resolveClass(String name) throws XelException {
+			if (_mappers != null) {
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
+				it.hasNext();) {
+					final Class c =
+						((FunctionMapper)it.next()).resolveClass(name);
+					if (c != null)
+						return c;
+				}
+			}
+			return null;
+		}
+	}
+	private static Collection combine(Collection first, Collection second) {
+		return DualCollection.combine(
+			first != null && !first.isEmpty() ? first: null,
+			second != null && !second.isEmpty() ? second: null);
 	}
 }

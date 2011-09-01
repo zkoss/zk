@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-338.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 24, 2011 10:00:35 AM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>IE, Chrome, Safari Only.</div>
+	<div>1. Please put the cursor in the hour area, and keep pressing the UP/DOWN arrow.</div>
+	<div>2. The cursor will jump to the 上午/下午(AM/PM) area (that is a bug).</div>
+	<timebox id="tb2" cols="30" format="long" locale="zh_TW"/>
+</zk>

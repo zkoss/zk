@@ -1,55 +1,1302 @@
 	--------
-ZK 3.6.5
+ZK 5.0.8
 * Features
-  2990932: Allow disable load-on-save mechanism in databinder
-  2866506: Data Binding shall support GroupsModel with Listbox/Grid
-  
+  3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
+  3309539: Timebox and Datebox support different language for different locale
+  ZK-214: Add a databinding composer instead of initiator
+  3316591: Allow user to specify error-box position
+  3326788: A way to name the composer GenericAutowireComposer
+  3310927: ZK JasperReport support JasperReports 4
+  ZK-250: Support <?style?> to generate CSS directly without using a component
+  ZK-274: A way to prevent the developers from using zscript
+  3355806: Feature Update: custom-attributes shall be allowed to specify page's attrs (without specifying the scope attribute explicity)
+  2971889: Way to notify server of JS error
+  3306718: Treeitem allows draggable/droppable (in addion to treerow)
+  3315689: Optimize the HtmlMacroComponent 
+  3323594: Render on Demand for Grid and Listbox supports setInitSize
+  3327013: A way to log message to the client
+  3307322: Control Keys support backspace
+  3326111: A way to specify fileSizeThreshold for fileupload in zk.xml
+  ZK-287: The event instance shall be passed to the callback event listener of EventQueue
+  ZK-248: System-level initiator is applied to richlet too
+  ZK-310: Support Clients.resize(wgt) to force the client to re-calculate the size, such as hflex/vflex
+  ZK-230: org.zkoss.zkplus.embed.Renders provides an option to control whether to generate addtion DOM element for the page
+  ZK-240: Optimize the memory footprint of Cell/Listcell/Treecell
+  ZK-219: Update zk.Event documentation
+  ZK-295: Animation effect of Borderlayout can be configured
+  ZK-78:  A better Hungarian message file
+  ZK-348: iZUML shall use #{} instead of ${} so it is easy to use in a ZUML or JSP page
+  ZK-377: Upgrade jython to 2.5.2
+
 * Bugs
-  2973036: ScalableTimer shall stop when hot redeployed (memory issue)
-  2975362: Unable to close Messagebox using ceaseSuspendedThread()
-  2976519: Messagebox onClose with event thread disabled
-  2979245: The combobox's button disappear on IE6
-  2978400: Positioned tooltip causes zkPop.context error.
-  2976409: No vertical scroll in listbox
-  2973306: Bad detail rendering if the grid has invisible column
-  2976483: Fade effect to fast in FF 3.6
-  2982663: CSS for dynamically disabled password textbox
-  2991247: Invoking tab.setSelected() shouldn't fire onSelect to tabbox
-  2997111: BlackBerry mouse click error
-  2999154: Request a non-existent resource thru /zkau causes download
-  2997548: Whitespace and native components
-  3002536: Datebox can't select month with ZK3 and 5 on FF in French
-  2997527: IE6: datebox / combobox button disappears
-  3019383: Failed to change the position of a root component to the end
-  3020609: Dragging modal window might fail if dragging too fast
-  3023619: inline macro cause nRoot to become a negative number
-  3014817: DateFormat set timezone from TimeZones
-  3039363: Listbox will hide the popup after the popup add height(IE6)
-  3042165: Misplaced drop-down list of auto-complete combobox on iPad
-  3034638: Listcell cannot remove style (3.6)
-  3000305: DataBinder cannot set a value when constraint error
-  2975020: Image component behaves wrongly (3.6)
-  3042935: ZK 3.6 send extra onSort for listheader
-  3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
-  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
-  3051305: Active Page not update when drag & drop item to the end
-  3091160: WrongValueException not handled if thrown in onCreate listener
-  3147518: Memory leak with IE 7 and dynamic Grid Updates
-  3165075: msgzul.js didn't loal the correct language (3.6.4)
-  3162596: mesg.TRY_AGAIN not translated in zk.jar
-  1968615: Data binding problem in listfooter inside a nested listbox
+  3301375: native component in vbox stretch align show javascript error
+  3303684: Panel sizable has incorrect moving constraint
+  3301517: Double spinner show 0.000000000001
+  3304408: Listbox[mold=select], onChange event not fired in IE6
+  2973303: listbox mold select and selectedIndex -1
+  3306079: Spinner/Doublespinner has unnecessary methods
+  3002530: glitches with autopaging and renderdefer
+  3306824: NullPointer when combobox's model has null
+  3304877: Upload fail when the component with autodisable
+  3308335: Fail to dynamically change the roundingMode for subclass...
+  3309174: Remove items from the  model of a non-rod grid cause error
+  3309256: Datebox and Timebox with long format will display wrong
+  3306149: Cannot remove the latest element in grid model (grid in rod)
+  3309632: Upload may incorrectly terminate
+  3307255: Panel in Portallayout missing top and bottom in IE7
+  3310470: Columnlayout does not work with vflex
+  3310055: Timebox issue with daylight saving timezone
+  3309583: Auxheader HTML Error 
+  3315594: Vflex fail with a window contain a listbox with rows
+  3317170: Datebox without rod render a incorrect dom (FF3.6 only)
+  3322903: onTimer may cancel onClick request
+  3322892: emptyMessage fail when Grid has height
+  3309557: Rod render the empty content with listbox
+  3322909: emptyMessage fail when Listbox has height
+  3322970: Listhead checkmark state is not synchronized
+  3310020: init(SCfg) of DhtmlLayoutS. breaks contract of GenericSrvlet
+  3307376: The datebox shall fire onError after the error is cleared.
+  3322795: double spinner weird action
+  3322816: Doublespinner cannot accept empty value
+  3306850: doublespinner has weird actions
+  3303770: WrongValueException in Grid with paging mold
+  3314014: Separator bar not showing in IE6
+  3315668: doModal Window sometimes can't close with a cluster weblogic
+  3340252: Set vflex to cell in Vbox cause js error
+  3336745: getBoundingClientRect cause error on IE/FF
+  3323593: Timebox with long format shows meanless "z"
+  3314513: Datebox validate fail with different locale
+  3317729: Textbox with hflex="1" shall occupied column's width (IE)
+  3312936: Panel vflex issue (IE6/7)
+  3309193: Chrome returns wrong margin value on InputElement
+  3310406: ztag selector throws error when mounting
+  3339315: Mesh Element with hflex min causes zero width
+  3316035: Grid with sizedByContent and hflex:min display wrong
+  3345636: Chrome, Set hflex="1" to Datebox do not align with Textbox
+  3309975: Textbox in a  draggable component get selection while focus 
+  3310017: The textbox's cursor position cannot be changed
+  3313028: Grid hflex fail while the label in a div with FF4
+  3330762: DoubleSpinner's ClassCastException on value get
+  3348943: ZK JPA cause Exception
+  3316030: Column with hflex:min, but it is not real displayed as min 
+  3325041: doublespinner can't type in floating number
+  3316543: Only load the first property file
+  3304954: HoverImage doesn't show up in menus
+  3340841: Listitem doesn't show selection if disabled
+  3316665: setVflex to Window calculate a wrong height
+  3306729: vflex of listbox not work well on IE6
+  3310051: Listbox with hflex cannot shorten its width on IE6
+  3301498: Alignment of rows and header broken
+  3357475: Grid with hflex min should imply default header hflex
+  3303877: IE6 only, vflex fail with tabbox  
+  3305038: Fileupload.get() cause javascript error
+  3353121: Grid in Tabbox vflex issue, IE7 only
+  3303872: IE8 only, tabpanel disappear after hide then show
+  3303874: IE7 only, the scroll bar do not appear in the tabpanel
+  3306835: can not drag image into listbox on IE9
+  3343388: Set hflex="min" to Groupbox fail
+  3353521: Window render Caption in a wrong place
+  3357573: child in the groupbox cannot resize correctly
+  3345912: IE6 only, use Cell in Grid,it appears a strange line
+  3356022: borderlayout and tabpanel bug
+  3355680: hflex fail in combobox while select options
+  3304968: IE9 only, tab will be hide after open then close
+  3362731: IE Rod, use mouse wheel scrol down to end cause js error
+  3309122: ROD issue when use oncreate
+  3317743: Listbox checkmarks don't work as expected in paging mold
+  3365535: Groupbox default mold hflex min may have wrong size
+  3300935: (ipad)Tooltip shall not appear while taps on a component
+  3314143: Treeitem in a close dot tree does not render correctly
+  3306281: onClick in Flash with IE not working
+  3343001: IE6 7 only, Tree will not increase height when open treeitem
+  3352909: Listbox ROD will not render item in a correct position
+  3354086: Model attribute will not accept a ListModel
+  3343077: IE only, column of Grid and Tree do not sync with scroll bar
+  3316103: InaccessibleWidgetBlockService wrongly blocks Combobox
+  3357641: listbox scroll bar position issue if ROD is true
+  3358505: ZK EE with native failed to invalidate (JS error)
+  3327522: Visible property for borderlayout panels (west, east, etc)
+  3337441: Firefox Listbox Multiselect
+  3363687: Window onCreate fired twice for Execution#sendRedirect() 
+  ZK-210: Style Tag Ignored in IE6/7/8
+  ZK-223: Fine tune ZKThemes and sandbox
+  ZK-200: Outside Window border disappear when defer including
+  ZK-215: Combobox options width failed in IE
+  ZK-56:  setSelectedIndex not scroll the selectedItem 
+  ZK-232: Server push fail in cluster environment
+  ZK-159: Hflex fail with nest container
+  ZK-182: Header of grid scroll fail after remove the Frozen
+  ZK-163: The Flashchart didn't compatible with jre / jdk 1.4.x
+  ZK-195: Tree with vflex causes wrong wd in another tree w/ scrollbar
+  ZK-171: Listbox/Grid columns hflex="1" not correct with hflex="min"
+  ZK-206: Set Hflex="min" to listheader fail, FF5 IE6,7
+  ZK-198: Splitter issue with double Borderlayout
+  ZK-190: Change style of div in border layout cause error of style
+  ZK-236: Borderlayout North/South failed to concern caption height
+  ZK-238: Grid with frozen, scrolled then delete frozen, some columns is hidden
+  ZK-221: problem with events in firefox 4.x and up
+  ZK-241: Hflex fail with grid in grid case
+  ZK-244: window cannot maximize when caption changed
+  ZK-239: vlayout inner padding issue
+  ZK-261: Panelchildren fail to serialize in Panel
+  ZK-242: Set postion to window fail with Firefox 
+  ZK-267: DelegatingVariableResolver cannot be serialize
+  ZK-266: Sort call to model not receiving the right parameters
+  ZK-269: If listbox with an empty content, the head's size in Opera is wrong
+  ZK-281: Hlayout.setSpacing with null or an empty string shall mean auto
+  ZK-259: Using custom paging component in grid when autopaging is used
+  ZK-275: Window render Caption in a wrong place
+  ZK-286: Vlayout shall not appear horizontal scroll bar (hflex)
+  ZK-294: &lt; not shown up if it is enclosed in a ZHTML component
+  ZK-272: Place component in auxheader is not align with headers' 
+  ZK-299: Detail component should not initial the width (18px) by default, if the theme is not in classic-blue 
+  ZK-297: Combox's onSelect will keep to fire when invalidate the component 
+  ZK-300: Paging mold with listbox cannot change its mold by configuration
+  ZK-282: Menuitem with popup is not always worked on IE6 only 
+  ZK-298: vertical tabbox height is not correct 
+  ZK-301: Invalidate Borderlayout while west opening cause javascript error
+  ZK-306: DefaultTreeModel does not properly synchronize deselection state
+  ZK-307: Center fires redudant onSize if borderlayout's isFlex() is true
+  ZK-313: Strange behavior of ProgressMeter's setValue
+  ZK-58:  Desktop.setBookmark does not allow ? character
+  ZK-323: Inplace input element may fail when set button visible dynamically
+  ZK-343: Frozen column added to Listbox with paging causes problem
+  ZK-326: Panelchildren's vflex fail in a model window on IE6
+  ZK-338: Timebox cannot auto-change the hour by pressing the arrow icon in zh_TW locale (IE and Webkit only)
+  ZK-332: Set disabled to treeitem shall not disable open function
+  ZK-337: Disabled Button should not appear pointer cursor
+  ZK-355: Listbox's scrollbar position is not currect after invalidate() (zk max only)
+  ZK-353: Listbox with listgroup's scrollbar position is not currect after invalidate() 
+  ZK-352: hflex/vflex wrong calculation with negative leftover size 
+  ZK-349: Listbox with sizedByContent and hflex="min", the header's size is wrong 
+  ZK-361: Fulfill with include component causes Javascript error
+  ZK-363: Opera only: if the upload button is placed after a label, it won't be clicked
+  ZK-322: Fronzen column glitch on dinamically generated grids
+  ZK-369: window resize when scrolling listbox contents
+  ZK-368: Header component can not listen mouseout
+  ZK-371: Selecting a tab containing a tree with hflex=min failed to display correctly
+  ZK-373: Listbox/Grid in ROD fail to reset model when scrolling in middle of the list
+  ZK-372: breeze.jar Manifest Classpath issue
   
-* Upgrade Notes:
+* Upgrade Notes
+  + Listbox in the select mold will show up an empty selection if none of listitems
+    are selected (in the prior version, the first item will be shown though it is not
+    selected - Bug 2973303)
+  + To make API consistent, Hlayout and Vlayout's setSpacing() will consider
+    null and empty ("") as "auto" rather than the default spacing (i.e., "0.3em")
+  + org.zkoss.zhtml.Text will encode the text by default. If it is not the case
+    you want, please specify encode="fasle" to disable it.
+  + Listheader's selectAll checkmark will disable when Listbox in ROD mode. Here
+	is the feature tracker - http://tracker.zkoss.org/browse/ZK-220
+  + If enable the autopaging function of Tree, Listbox, and Grid, the height of
+	each row will be applied the following CSS by default. If you want to change
+	the height, please overwrite the CSS rule as your preference.
+.z-grid-autopaging .z-row-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+.z-listbox-autopaging .z-listcell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+.z-tree-autopaging .z-treecell-cnt,
+.z-dottree-autopaging .z-treecell-cnt,
+.z-filetree-autopaging .z-treecell-cnt,
+.z-vfiletree-autopaging .z-treecell-cnt {
+	height: 30px;
+	overflow: hidden;
+}
+  + iDOM is simplified and the concept of readonly and modification is removed.
+  + Add org.zkoss.zkplus.cluster.ClusterSessionPatch listener to zk.xml
+  	enforcing GAE to write session states for each Ajax request
 
 	--------
-ZK 3.6.4
-March 18, 2010
+ZK 5.0.7.1
+May 19, 2011
+* Bugs
+  3301353: Unneeded vert-scrollbar when using Portallayout
+  3303725: Wrong Panel size in Portallayout
+  3301374: datebox onChange event not fired
+  3303681: tabbox with wrong height
+  
+	--------
+ZK 5.0.7
+May 11, 2011
 * Features
-  2902880: Renderer and Model in Listbox/Grid shall be transient
-  2927147: Replace bookmark command and bookmark encoding
-  2954280: Include component shall have clearDynamicProperties method
+  3263584: Support drag and drop with ipad
+  3256604: Support double click event with ipad
+  3202692: Support more EL utilties: toUpperCase, toLowerCase...
+  3243015: Easier way to access I18N labels in EL
+  3252169: Easier way to specify multiple properties files for i18n labels
+  3287163: Allow user to pick up format regardless the locale
+  3290020: Datebox/timebox allows user to specify locale
+  3215020: Speed up Labels.getLabel, c:l(), by not to synchronize
+  3226332: Timebox supports selection all and delete
+  3259969: Support system-level initiator
+  3278536: Include shall allow the included page to be rendered later
+  3239819: AbstractComponent's constructor applies custom attributes defined in lang.xml
+  3163700: Client: zk.getVersion() shall handle sub-packages
+  3185445: Tree Sorting Enhancement - keep collapsed/selected state
+  3195870: Listbox and others shall sort model based on current state
+  3196789: Listbox supports Listgroup selection
+  3285074: Add no-cache for the zkau request for security concern
+  3285723: Throws an exception when creates too much duplicated uuid
+  2520010: new 'emptyMessage' attribute for Grid/Listbox
+  3287024: Able to load extra zk.xml specified in a library property
+  3290172: A plugin to generate custom properties for particular widget
+  3290092: Allow SEORenderer to be a application-level listener
+  3291332: adding unload desktop support for Chrome/Safari
+  3294710: Log not-serializable and ignored objects
+  3294843: Disable update-by-client by default and an option to enable
+  3297288: A way to post an event to a speicif component; not getTarget
+  3298165: Allow multiple lang.xml or lang-addon.xml in a jar file
+  3299209: Menuitem support autodisable
+  3299234: A way to get the list of data from onBindingValidate evt
+  3299344: A way to get associated bean of a Binding
+  3299827: Support Mac listbox multiple selection
+  
+* Bugs
+  3286462: native component cause issue in fulfill
+  3178977: Frozen Grid cannot navigating to the textbox in hiddin col 
+  3199288: IE memory leaks when reload ZK page (JQuery.ajax() issue)
+  3190987: Dyanmic tab,tabpanel are disorder
+  3214829: c:l() causes ConcurrentModificationException if registered dynamically
+  3203966: Flash.setSrc not working
+  3215556: Close miximal panel will cause js error with IE8
+  3201804: ZK CE only. Paging not working when Listbox selected
+  3218078: Frozen fail after change paging size
+  3196813: Give Spinner a Constraint will cause ZK client error
+  3214754: Problem of constraint
+  3219005: Problem when remove data from model of grid(CE&PE only)
+  3242925: Splitter become smaller after drag with IE8  
+  3255116: Hflex with min and number, the hor. scrollbar is redundant
+  3251279: zk.ajaxURI not respecting ignoreSession
+  3247017: SSL/IE6 iframe combination produces warnings
+  3259479: Cannot retrieve the forEach element in zscript
+  3259998: Close the tab cause js error
+  3261959: Tree with hflex=min won't appear the hor. scrollbar
+  3201748: Data-Binding and non-existing Map keys  
+  3210356: DateFormat.getTimeInstance cause Timebox error
+  3275778: AMedia: java.io.NotSerializableException: FileInputStream
+  3278524: Included HTML page might fail to call zk.afterMount
+  3283943: Row#getGroup() inconsistent between server and client
+  3283951: Select item in multiSel tree via API can't retrieve selitem
+  3284149: Click timebox in a readonly datebox will increase time 
+  3284216: Upgrade the version of chart.swf for Security risk
+  3285023: Frozen.getStrat() should be getStart()
+  3285594: InaccessibleWidgetBlockService shall block updates of readonly components
+  3285153: Column resize ghost bar does not appear in model window
+  3285158: Columns with sizable and menupopup has confusing dragging
+  3245960: Textarea content should not be interpret as span
+  3284976: Longbox parsing is to lenient
+  3287633: Label hflex property with min set
+  3205292: Vflex does not work in Groupbox with default mold
+  3210336: Vflex on panel is not working with portallayout
+  3212613: Problem with live data and frozen
+  3280506: Listbox issue on ZK5
+  3263841: Timer constructor allows negative delay time
+  3288904: Date failed to convert when year value is too large
+  3251564: Position of constraint message (error box)
+  3285635: Style issue on slider in vertical
+  3289412: Vertical slider set height not work
+  3285610: Inplace editor doesn't remove the border when focus out
+  3222965: java.io.NotSerializableException: org.zkoss.io.RepeatableFileInputStream
+  3185686: hflex does not take vertical scrollbar width into account
+  3288779: Column cannot set a new sort rule 
+  3290873: Checkbox didn't show up focus effect when label is empty
+  3291272: Cloning Grid/Listbox/Tree in paging mold
+  3290858: combobox with autodrop and setModel in onChanging
+  3236331: Flex issues in Vlayout/Hlayout
+  3212409: Some issues on zul.xsd
+  3284663: Radio always sends onCheck event
+  3192194: Combobox does't propagate selection to Selectable Models
+  3287366: Databinding Grid inside a Row template doesn't work
+  3183438: Access to bean shall be consistent
+  3204554: doublespinner and italian locale
+  3292544: Can't type "." into Doublespinner
+  3196910: Cell in grid group doesn't display a expected look
+  3201879: window.doModal opens a non-functioning popup
+  3290321: Listboxheader jumps on sort when horizontal scrolled
+  3292606: ZHTML Textarea onChange not work (an extra onchange fired)
+  3291371: Listbox scroll to top when page changes
+  3195768: showCustomError is called twice
+  3285148: Vertical scroll bar wrongly appears with autopaging
+  3285142: Drag fails to clear up ghost when widget is detached
+  3276814: Trendy button onClick not fired on specific area
+  3226830: zul Window dohighlight failed with IE7 simulate meta
+  3293422: Window sizable has incorrect moving constraint
+  3284144: The databox format parse a wrong result with hh:mm:ss
+  3285714: Grid in ROD shall fall back when not using model
+  3287082: Bandbox will recieve onChanging event when edit page number
+  3292545: InputElement in rounded mold doesn't support the width
+  3293492: doublespinner rounded mold not support width
+  3204965: onChangePageSize is not fired in autopaging scenario
+  3244126: Horizontal scrollbar malfunction with Grid on IE
+  3201762: Borderlayout flex has issue with listbox hflex in IE 6 
+  3280125: Frozen grid has horizontal scroll bar with IE
+  3293724: treeitem.setVisible() not work normally
+  3291394: Menu text overlapped by split line
+  3196064: Clients.ScrollIntoView in FF2 error
+  3242714: <applet> tag causes entire browser to hang
+  3218576: Panel#addToolBar() may result in wrong position
+  3296056: Tablelayout with hflex won't resize its width after resizing
+  3296607: Datebox do not show the error
+  3263436: DesktopRecycle works in zk 5.0.4 but not in 5.0.6 
+  3297378: autodisable shall not enable a button that was originally disabled
+  3298164: vflex issue in nested container
+  3297864: type ",01" doesn't got "0,01" (de locale)
+  3297287: fileupload issue if the properties used without in order
+  3297746: opera bug for listbox rendering
+  3215657: Upload button not working in Opera
+  
+* Upgrade Notes
+  + The default format of datebox and timebox becomes an empty string.
+    To retrieve the real format, please use Datebox/Timebox's getRealFomrat() instead.
+  + zk.Widget.smartUpdate() is disabled by default. If your client-side application
+    depends on it, you have to turn on an attribute of the component called
+    org.zkoss.zk.ui.updateByClient.
+    If your component depends on it, you have to override AbstractComponent.updateByClient
+    to handle it explicitly (please refer to JavaDoc API)
+
+	--------
+ZK 5.0.6
+February 24, 2011
+* Features
+  3143403: A way to customize the effect of showing/hiding a widget
+  3175503: A way to specify the application's name in zk.xml
+  3138362: Add a Doublespinner comopnent to support double value
+  3159644: Message translated to Slovak. Thank Ondrej Jombik for his contribution
+  3148425: GroupsModelArray shall handle tabular data better
+  3166334: Provide a way to intercept document-level key events
+  2957665: Round mold for Textbox, Decimalbox, Intbox, Longbox and Doublebox
+  3105037: Show the locale format in error messages
+  3148523: Simplify TreeModel (to be the same as Swing's TreeModel)
+  3152268: TreeModel: provide an implementation that is mutable
+  3169396: Tree supports sorting
+  3115054: A way not to use Thread for Event Queue+Server Push
+  3116100: Progressmeter has animation effect
+  3118161: When desktop destroyed, better to force cleanup if timeout
+  3139008: Add Vietnamese language
+  3158054: Optimize UiVisualizer for hug number of updates
+  3161425: Panel's border and framable shall be merged into one
+  2866506: Data Binding shall support GroupsModel with Listbox/Grid
+  3175481: A way to ignore the wiring of zscript and xel globally
+  3166312: A way to know detail of a long exec blocking others
+  3175487: Datebox should fire onChange when select date via Calendar
+  3177275: Listheader should override hflex when sized by end user
+  3179707: Support hflex="min" + span
+  3184415: Grid/Listbox/Tree shall allow to span a specific column
+  3186996: Listbox/tree's nonselectableTags supports "*" to disable all
+  3187996: A way to generate custom SEO content
 
 * Bugs
+  3102812: Using databinding with onCreate event, target is null
+  3109358: Recycle uuid causes image's URI caching in browser
+  3117370: Tree ROD fail
+  3117384: renderdefer fails in tree on IE and Chrome
+  3122159: onChange shall fire immediately for datebox if select a date
+  3131983: EL's param shall not Map<String,String[]> if zscript used
+  3131173: Tree checkmark/multiple issue
+  3131458: The column setSortDirection fail with breeze theme
+  3134159: Progressmeter animation error
+  3136243: Bug within JQuery 1.4.3, please upgrade to 1.4.4
+  3136453: H/Vlayout inheritance
+  3136963: doAfterCompose invoke twice when the zul  include by setSrc
+  3142509: SelectedIndex fails when listbox(select) contain listhead
+  3142583: include dynamic property doesn't work
+  3132167: In IE6, hflex="min" miscalculate the combobox's width
+  3141549: Hlayout not handle hflex well (onSize not fired if empty)
+  3109311: listbox sizedByContent cause javascript
+  3106676: Datebox allows selection of past days when no empty, no past
+  3126388: Flahschart could not work with type stackcolumn
+  3141610: Unavailable to change Menubar scrolling
+  3118324: Possible bug in Grid with Frozen + Footer + horizontal scroll
+  3150160: listheader hflex="min" give 0 column width
+  3118444: IE 6  Menu popup have wired point 
+  3152311: The between constraint of datebox cause infinite loop
+  3154189: The file upload cause NoSuchMethodError with JDK 1.4
+  3153941: Decimalbox didn't compatible with jre / jdk 1.4.x
+  3154168: Doublespinner didn't compatible with jre / jdk 1.4.x
+  3156026: H/Vlayout sync size busy
+  3159604: The font of the button in the caption become smaller
+  3160695: The x/y Axis label of GanttChart was in wrong position 
+  3152754: Include#setVisible() has issue with invalidate()
+  3162238: Include fails when set source to null dynamically
+  3151694: decimalbox input 25- cause exception
+  3164504: Hflex will not recalculate when the colum without label
+  3164514: Jasperreport does not close JDBC connection after doReport()
+  3158641: Implementing IdSpace not enough; Client-side shall handle it
+  3085855: Children of Treeitem shown when Treeitem is not visible
+  3132161: Datebox getValue returning date+time
+  3165081: Splitter as first or last child fails when dragged
+  3155985: timer doesn't stop and restart
+  3147518: Memory leak with IE 7 and dynamic Grid Updates
+  3109926: Splitter javascript error in IE8
+  3147909: Listbox of select mold fails inside draggable component (Webkit)
+  3165056: Textbox in popup didn't  trigger onblur  with Firefox 3.6.x
+  3165646: Right-click shouldn't deselect the one that is selected
+  3161667: Doublebox formatting/rounding bug for near-zero value
+  3165164: onSelect event is not fired when a tab is closed
+  3132199: use hflex="min" in hlayout and div, cause wrong UI
+  3105728: Incorrect Datebox formatting with no year input
+  3105860: Portallayout fails to set Panel's ZIndex on 2nd maximization
+  3166404: The hidden column  in a frozen grid will appear
+  3166399: Crawlable feature isn't working when the cnt is in include
+  3165195: Strange dotted line on Menuitem
+  3166478: Portallayout maximize panel, panel behind will sticking out
+  3157031: V/Hlayout with h/vflex calculate wrong value
+  3081580: Toolbarbutton with upload and disabled not work
+  3166875: Failed to invalidate an included page
+  3166909: Javascript error if put a listhead inside a listbox(select)
+  3162596: mesg.TRY_AGAIN not translated in zk.jar
+  3167027: Cannot append a treerow in a treeitem
+  3141977: Navigating paging grid with native elem in it causes error (EE only)
+  3159848: Closing error box does not update InputElement value (ZK 5 part)
+  3168509: Datebox sets wrong date when going from 12/31 to 1/1 next yr
+  3106514: sizedByContent with not visible columns
+  3166874: Clicking on Toolbarbutton in Caption does not blur textbox
+  3147199: ZUL schema not allow tablelayout used in div
+  3107026: Button can't be clicked if locale is TR in IE8
+  3512678: Panel does not resize when its Toolbar toggles visibility
+  3169411: Cannot show custom error message in Spinner
+  3172791: trendy button don't pick up style
+  3172785: None-embedded window shall not affect flex size of its parent component
+  3166485: Height of listbox sync error
+  3175558: Use zkplus JpaUtil can not close default EntityManger
+  3170417: Paging in Tree is broken
+  3176990: Liferay fail to work because wrong zk.wpd url link
+  3147926: Auto-fitting bug
+  3177013: Grid fail shrink/expand, sizedByContent="true", span="true"
+  3175465: Paging tree doesn't render the close node
+  3176345: Splitter's icon doesn't work for mouse-over style on IE6/7/8
+  3177128: Chrome Only. Incorrect scrollbar size
+  3115825: toolbarbutton onClick not fired using  5.0.5 with Liferay
+  3176297: Row's mouse-over style keeps changing in IE6/8
+  3177265: listbox/grid hflex="min" does not work
+  3161535: grid column align doesn't work with breeze theme in IE 7
+  3178065: Menuitem onClick is incorrectly blocked in zkmax
+  3178359: Combobox's popup is positioned wrong in vertical tabbox
+  3147382: confirmClose message under timeout scenario
+  3180189: Sizing on Listbox/Grid with hflex="min" causes expanding
+  3094720: Last child of Hlayout/Vlayout should have no right/bottom padding
+  3180824: Listbox, mold="select", multiple rows
+  3181881: Listbox/Grid sizedByContent="true" cannot resize column
+  3182114: Listbox/Grid columns hflex="1" not correct with hflex="min"
+  2987511: Class extends Map can miss calling Getters in DataBinding
+  3183172: hflex="min" on Grid/Listbox/Tree cause js error
+  3183182: Inconsistent behavior on Grid/Listbox/Tree with hflex="min"
+  3183228: Grid/Listbox/Tree has wrong sizing when header sizable=true
+  3183691: Send response to client cannot found the widget
+  3184673: Separator in Hlayout on IE6 looks strange
+  3184756: A window with a scroll menubar render a wrong sibling
+  3185508: Internal event listener of tree/grid/... not seralized
+  3187231: include is not work when using  '~.' & defer without params
+  3184369: Hflex doesn't work with native html table on IE 8
+  1968615: Data binding problem in listfooter inside a nested listbox
+  3189142: Combobox popup width is wrong. IE7 only
+  3189758: Date constraint parsing gives wrong result with end of today  
+  3190542: ClassCastException in un-maximize of panel
+  
+* Upgrade Notes
+  + Panel's border supports none, normal, rounded and rounded+, and
+    framable is deprecated.
+    For more info: http://books.zkoss.org/wiki/ZK_Component_Reference/Containers/Panel#Border
+  + org.zkoss.zul.TreeModel is simplified: getPath is removed and getIndexOfChild
+    is added (the same as javax.swing.tree.TreeModel).
+    Notice it is backward compatible if you don't re-compile, or extend from
+    AbstractTreeModel
+  + org.zkoss.zul.Tree's getTreeitemRenderer and setTreeitemRender are deprecated
+    and replaced with getItemRenderer and setItemRenderer
+    (so the naming is consistent with Listbox and others)
+
+	--------
+ZK 5.0.5
+November 02, 2010
+* Features
+  3017896: A way to specify whether clicking input will select listitem
+  3081432: An option clicking on listitem with checkmark will toggle
+  3085801: A way to specify vertical alignment for hlayout
+  3097933: A way to customize the timeout message
+  3101960: A way to compose a macro component before setting property
+  3067232: A way to access components in 3rd framework (e.g. JSF 2)
+  3087902: Make a ZUL page generating as a HTML fragment
+  3061671: Databinding foreach keep cloned cmp's id when in spaceowner
+  3061676: Autodrop menubar shall be closed automatically when move out
+  3076418: XmlMacroComponent supports autowire
+  3077084: Able to specify the last word identify a component namespace
+  3081910: AnnotateDataBinderInit add "loadOnSave" config attribute
+  3085654: LabelLocator allows to return InputStream instead of URL
+  3091085: Upgrade to jQuery 1.4.3
+  3091086: The A component shall allow children
+  3091764: Able to prevent users enter the grouping character
+  3092641: Listbox/Tree support whether to toggle selection or not when right click on item
+  3094640: A way to specify page's widget class (in the page directive)
+  3095460: Listbox/Grid support span attribute, extend column width when there are available extra space 
+  3096119: Smart-update supports the Date object
+  3096990: The mold attrs of the window shall be public
+  3097894: EL supports more instantiation functions, e.g., new1, new2
+  3098249: Component not updated after onClick
+  
+* Bugs
+  3057902: zk bug for window showbusy
+  3061764: Opera only. Cannot sizing a column with width
+  3061765: Unexpected horizontal scrollbar when sizing listheader
+  3064997: Listen onPiggyback event threw NoSuchElementException
+  3074492: Slider default  curpos not work
+  3076840: DHtmlUpdateServlet's init mishandles processor params
+  3076384: ComponentNotFoundException by closing AMedia
+  3079449: sendRedirect called in Initiator causes NPE (ZK EE 5.0.4)
+  3079480: Child popup not removed if its parent removed
+  3079879: datebox and colorbox shall close popup when detached
+  3079636: onHide should be fired before the widget hidden
+  3079363: Opening a treeitem whose parent is closed  shows children
+  3079346: Textbox setType not workin in IE
+  3080682: Calendar shall not gain focus by default
+  3079203: datebox not open when specified open=true
+  3078523: 3D Caption in Groupbox  never show on right end
+  3077878: buttons in grid,  setDisabled problem with autodisabled
+  3078580: Filename of Filedownload.save() shall not be encoded
+  3077716: Failed to set spillter close if collapse=after
+  3074253: Drag and Drop nested components incorrect in Chrome
+  3073531: portallayout.getPosition() don't work if dragged in same column
+  3058028: Combobox need two keypress of <TAB> in IE
+  3059019: Datebox bug with format "Day in week" (EEEE)
+  3059251: Datebox- value is not updated on server if  time changed
+  3081315: Fire onClose event shall not select next tab automatically
+  3059280: Dateboxin Listbox- Unable to change month in calendar popup
+  3065040: the return value is alway False in ListModelList.remove()
+  3067998: save-when crash with WrongValuesException
+  3071275: onChanging different in IE and Firefox with Bandbox
+  3081372: Load on demand not load
+  3066507: Panel in portallayout maxmize button style not change back
+  3071613: problem with decimalbox' format and rounding mode
+  3073199: Grid sorting with "auto" breaks with hidden rows
+  3082093: Paging settle error when modify the grid content
+  3083980: Components.wireVariables() causes an exception if mode defined
+  3077791: panelSpacing in tabbox has error (breeze only)
+  3085744: readonly+inplace datebox not become inplace if select day
+  3086343: JavaScript error stub unknown if moved
+  3086348: Tooltip doesn't display when listitems use same tooltip
+  3086333: typo in setCmargins in LayoutRegion.java
+  3086352: audio autostart="false" not work
+  3086840: JSP including a ZUL with native html will disappear
+  3087139: listbox mold="select" has js error if contains textbox
+  3087219: checkmark="true" in listbox, has extra icon
+  3087097: <row nowrap="true"> has no effect
+  3086452: open="false" in splitter behavior not consistent
+  3078476: Groupbox cursor problem
+  3067572: Cannot fire Group children's on click event in breeze
+  3060550: setDisabled(boolean) doesn't apply inmediatly
+  3087421: autodisable doesn't work for toolbarbutton
+  3087949: Crawlable doesn't work with listbox
+  3085854: maxlength in listheader has no effect
+  3087270: maxlength in treecol has no effect
+  3089492: Sets a width to the tabs before setParent cause error
+  3089641: use HtmlNativeComponent with zkmax cause UI error
+  3088034: datebox string convert error (shall show error message)
+  3089502: setScale in decimalbox not working
+  3090979: typo (_quality="hight") in Flash.java
+  3091160: WrongValueException not handled if thrown in onCreate listener
+  3091045: Non integer Page number in paging mold="os"
+  3091153: selectAll(), clearSelection() in Tree
+  3091949: Calendar/Combobox above pdf not display popup correctly
+  3093594: Decimalbox does not respect current Locales if no format
+  3094118: Tree.onTreeDataChange does not update the tree correctly
+  3094686: border in image not work
+  3092890: Rows.invalidate does not respect frozen state
+  3096210: Listbox/Grid rod show blank view in special scroll pattern
+  3096342: onChange not fired if change time in timebox (of popup)
+  3095469: tree should resize header while scrollbar appear
+  3095549: rod in tree make add child not work
+  3095453: tree can't expand if model is set in button onClick
+  3097181: Colorbox in menu, doesn't work with menubar autodrop="true"
+  3097199: Combobox strict constraint not using custom message
+  3098096: The comboitem cannot be selected with iphone safari
+  3097458: Right click on Tree and also Listbox in IE8
+  3099277: Listbox : value of Listitem with space
+  3100455: Something wrong at frozen grid when updating live data
+  3101558: Spinner default width not work in bounded parents at IE 6
+  
+* Upgrade Notes
+  + org.zkoss.zul.ArrayGroupsModel is deprecated and renamed to GroupsModelArray
+    (such that the naming is consistent with ListModel's implementations)
+  + zul.inp.Timebox is renamed to zul.db.Timebox (JavaScript)
+  + For listbox and tree, if checkmark is enabled, clicking an item will toggle
+    the selection rather than deselect all others.
+    If you want to deselect all others (as 5.0.4 or ealier did), please
+    specify true to library properties called
+    org.zkoss.zul.listbox.checkmarkDeselectOthers
+    and org.zkoss.zul.tree.checkmarkDeselectOthers
+  + Autowire ignores the fields and methods declared in any class belong to
+    org.zkoss.zul and org.zkoss.zhtml, because it is error-proning.
+    However, if you want to wire them as 5.0.4 did, you could specify the library
+    property called org.zkoss.zk.ui.wire.zul.enabled with true.
+  + South and north's collapsed margins are changed from [5, 5, 5, 5]
+    to [3, 0, 0, 3]
+  + The DOM structure of the pagging component's os mold has been modified, 
+	if you ever customized it, you might have to add the following CSS into your
+	customization: 
+	div.z-paging-os-cnt-l,
+	div.z-paging-os-cnt-r,
+	div.z-paging-os-cnt-m,
+	div.z-paging-os-cnt-seld-l,
+	div.z-paging-os-cnt-seld-r,
+	div.z-paging-os-cnt-seld-m,
+	div.z-paging-os-cnt-l-over {
+		display: inline-block;
+		*display: inline;
+		zoom: 1;
+	}
+	.z-paging-os a.z-paging-os-cnt {
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+  + Rename caption.css to caption.css.dsp
+  + Rename tablelayout.css to tablelayout.css.dsp
+
+	--------
+ZK 5.0.4
+August 31, 2010
+* Features
+  3026623: Able to communicate among iframes without server push
+  3040368: Provide a simple horizontal/vertical layout
+  3031544: Allow to specify a shortcut instead of full namespace
+  3046952: Clients.echoEvent supports any kind of object
+  3041822: A way to minimize memory by not maintaining state at server
+  3030392: Minimized the memory print of AbstractComponent and HtmlBasedComponent
+  3030481: Combobox support Selectable (used with ListModel)
+  3048583: Allow radiogroup not ancestor of radio so it can be anywhere
+  3049306: A way to control the position of a modal window by left/top
+  3034530: The footer of components supports content alignment
+  3047459: Include old value in InputEvent
+  3038615: Include data of old width in ColSizeEvent
+  3027193: Add CSS, z-drag-ghost, to the ghosting when dragging
+  3025422: The listbox in a container support fixed header
+  3026221: Databinder shall fire onCreate when cloning each items
+  3025279: Client: Able to listen the Ajax error
+  3035171: <widget-class> (in lang.xml) shall support EL
+  3032033: A way to customize the data format of AU requests
+  3027238: A way to customize the resource loader of PageDefinitions
+  3025419: The fixed header in listbox without width has correct size
+  3029931: Post onAfterRender after onInitRender/onInitRenderLater
+  3042290: Provide utility to make component complaint with JSF easily
+  3038128: Allow all system-config (eg, engine-class) in zk/config.xml  
+  3028270: Slider support for clicking to increment or decrement
+  1860341: Button support type="submit"
+  2990932: Allow disable load-on-save mechanism in databinder
+  3024156: Make Spring DelegatingVariableResolver execution-independent
+  3050359: A way to merge serveral Javascript packages into the zk package
+  2142143: Support for Value property in checkbox
+  3051362: A way to specify system-wide variable resolver
+  3052723: Avoid unnecessary onScrollPos from being fired
+  3052761: Calendar supports moving to next/prev mon by mouse scrolling
+  3052857: Provide a utile class for ListModel to support ListSubModel
+  3057903: Slider setPageIncrement shall be supported
+  3040358: Create an option to turn off Combobox/Bandbox animation
+
+* Bugs
+  3023619: inline macro might cause nRoot to become a negative number
+  3025339: incorrect implementation in Timebox and Spinner widget
+  3026819: InputElement.setTabindex(-1) doesn't work
+  3027158: The checkbox set focus dosen't work
+  3029341: Click at "a" comp  in the listbox will trigger select event
+  3027322: draggable & sizeable conflicts
+  3024208: Datebox rounded mold has error in image
+  3030342: setModel to Listbox fail when onCreate and turn ROD on
+  3031526: Focus-look incorrect if window changes overlapped/embed
+  3033334: Reset listbox'smodel cause ClassCastException if UUID recycled
+  3031562: hbox, vbox layout has error in ZK5.0.4
+  3033010: Listbox with hflex listheader can expand but can not shrink
+  3033016: Extra empty row when shrink fixed width Listbox
+  3034505: A listbox in poup, open it first-time, the position is wrong
+  3035079: Dom elem doesn't exist when parent do appendChild and rerender
+  3034771: <script> shall have the type attribute to W3C compliant
+  3035818: The longbox,  doublebox receive a wrong value on server side
+  3035847: The popup of combobox shall be destroyed when detached
+  3035897: The longbox parse a wrong result when paste '100%'
+  3032997: Applet params are passed incorrectly
+  3036584: poup window disappears when mouseOver menuitem
+  3023305: Typo in DateFormatConverter API page
+  3039843: Paging Listbox without rod, ListModel shall not fully loaded
+  3039282: NullPointerException when assign a model to Grid at onCreate
+  3032567: No border is shown for captcha
+  3025747: Fisheyebar UI strange when vertical=true, attachEdge=bottom
+  3039948: Unable to turn on rod for Listbox if defined in its parent
+  3039339: Column is not aligned in some special combination of sizes
+  3037627: Cell with hflex in hbox causes JavaScript Error
+  3036398: frozen scrollbar disappear when listbox with vflex="1"
+  3040363: Datebox cannot select February
+  3039364: Open the popup cause js error with IE
+  3042165: Misplaced drop-down list of auto-complete combobox on iPad
+  3033439: Listfooter missing font CSS
+  3041907: drag-drop problem in tree (appendChild issue)
+  3025750: Fisheyebar CSS file should use .css.dsp
+  3035274: Doublebox not updating server when client side .smartUpdate
+  3035121: Missing setErrorMessage method in InputElement.java
+  3026665: Bandbox gets focus from children element focus
+  3031511: drag and drop intbox not triggerign onDrop event (FF only)
+  3014817: DateFormat set timezone from TimeZones
+  3026667: Messagebox button does not have a min width on IE
+  3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
+  3027214: Button of the default mold shall not submit the form
+  3037626: Splitter Doesn't Resize Cells Containing Grid
+  3032885: Inplace rounded Combo Inputs have incorrect height
+  3032892: Inplace Combo Input with no button have a tight width
+  3033022: Accordion Tabbox gets wrong height by closing unselected tab
+  3026669: Tabbox accordion animation strange
+  3035230: Sets sizedByContent to a grid with width doesn't work
+  3000305: DataBinder cannot set a value when constraint error
+  3043561: decimalbox format error
+  1952402: IFRAME inside Window load multiple times in FF if overlapped
+  3034550: Window header should use fontFamilyT
+  3035367: Updating not yet rendered llistbox model when vflex="true"
+  3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
+  3046850: Decimalbox failed to handle very small number, 0.00000000001
+  3046852: Doublebox wrong message for very small number, 0.00000000001
+  3047534: The breeze theme's bandpopup is not high enough w/ listbox
+  3048567: IE.Listbox rod.Drag huge data to bottom.Select and jump up
+  3048564: IE only.Listbox rod, drag scroll to bottom, thumb jump up
+  3049192: createComponents with parent but w/o page fail if fellow
+  3049181: Checkbox problem (bug) with Banbbox + tree
+  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+  3051182: Nested box's splitter not fixed correctly if size inner one
+  3051305: Active Page not update when drag & drop item to the end
+  3042016: Grid rod does not work if new Grid with Java code
+  3051987: Readonly combobox has a border between button and input
+  3052381: Client side dateformater parse a wrong value in italian 
+  3052208: Hovers on menu are a bit hit and miss with IE
+  3053311: A colorbox in menu doesn't has same color when change orient
+  3053313: Constraint with no past can't select today
+  3055849: IE6 hangs if ZK used in a very complex page (incl. tables)
+  3054784: Native parameter in Button.setUpload() is not effective
+  3057311: Select list fires a unnecessary onSelect on IE
+  3057288: Listbox in ROD, the items will disappear
+  3058547: In Liferay, if page has two portlet,  won't work 
+
+* Upgrade Notes
+  + The default value of tabindex is changed from -1 to 0.
+    Components that support tabbox include InputWidget, Button, A, Checkbox,
+    Listbox and derives.
+  + By default, HtmlMacroComponent supports auto forward events and wire
+    accessible variables.
+    You can turn on/off auto wire mechanism by specifying the Library
+    Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
+    If you did not specify the Library Property, default is false. 
+    <library-property>
+    	<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
+    	<value>true</value>
+    </library-property>
+   or turn on/off auto forward events by specifying the Library Property
+   "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
+   If you did not specify the Library Property, default is false.
+    <library-property>
+   		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
+    	<value>true</value>
+    </library-property>
+  + SimpleListModel's getSubModel returns an empty list if the value user entered
+    is empty. In additions, inSubModel is added to simplify the overriding.
+  + Specify type as submit to make a button to submit a form when clicked.
+  + The protected _visible member of AbstractComponent is removed.
+    Use setVisibleDirectly() instead.
+  + The protected _left, _top, _width and _height members of HtmlBasedComponent
+    are removed. Use setLeftDirectly(), setTopDirecty(), setWidthDirectly()
+    and setHeightDirectly() instead.
+  + AbstractComponent's newChildren() and newExtraCtrl() are both deprecated.
+    Override getChildren() and getExtraCtrl() instead.
+  + The class name of the engine of chart and captcha must be specified in
+    the library properties called org.zkoss.zul.chart.engine.class and
+    org.zkoss.zul.captcha.engine.class respectively.
+
+	--------
+ZK 5.0.3
+June 29, 2010
+* Features
+  3000873: Tabbox can auto grow size when select a larger size tabpanel
+  3015861: Able to specify the first day of a week for each session
+  3016379: Able to control if a panel is draggable in portallayout
+  3000339: sizedByContent="true" considers both header and row content
+  3014112: A way to specify custom DOM attributes, such as onload
+  2824949: Calendar: different color for previous and next month
+  2019205: Customization of Calendar's disabled days
+  2824946: Calendar Day Renderer
+  2997091: Media attribute support on style sheets
+  3001081: Reuse UUID if possible to minimize memory use at client
+  3006351: Able to specify the tag name for a macro component
+  3012360: Applet supports all attributes, e.g., archive and mayscript  
+  3010188: disable ZScriptVariables lookup for performance
+  3016605: Support onMouseOver and onMouseOut at the server
+  2936220: Grid/Listbox/Tree sizedByContent="true" determins width
+  
+* Bugs
+  3005129: Multiple VariableResolver added to PageImpl
+  3000881: Tabbox inside hbox should not expand 5 thousand width
+  3000860: tab without label looks strange
+  3000936: Javascript error when change tree size with autopaging on
+  3000987: Listcell.setLabel() fails when listbox is on mold 'select'
+  3002536: Datebox can't select month with ZK3 and 5 on FF in French
+  3002607: The textbox in readonly bandbox can't use "backspace" key
+  3003180: Resizing header don't work on IE8 if one column is invisible
+  3004412: The bandpopup over the popup
+  2997402: Imagemap rightclick/doubleclick wrong coordinates
+  3004588: The height of the panel will not set the max height
+  3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
+  3006276: East bottom cut if East higher than Center.
+  3005632: Listbox fails to replace with empty model if in ROD mode
+  3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
+  3006718: The hflex listbox after separator cause wrong width on IE6
+  3006762: The scroll bar appear after select a child node and close
+  3006772: The focus arrow will not clean after close and open the tree
+  3006796: Some ZHTML widgets won't be bound (bind_ not called)
+  3007194: The lastest tab right edge will not align with scroll button
+  3007217: Button.mold=trendy isn't applied to buttons in Messagebox
+  3005122: Colorbox#setColor on client side
+  3007908: modal window not centered if child sized with hflex="min"
+  3007911: Borderlayout in Borderlayout with hflex="min" not resize OK
+  3008291: Listbox _syncFocus not properly called
+  3008276: Listheader hflex with no label gives js error
+  3008898: Bandpopup hflex="min" not properly sized
+  3008277: (Chrome/Safari)hflex breaks Listbox layout
+  3010663: boxes do not resize when browser window is resized
+  3006341: Slider UI broken
+  3006313: Slider#getCurpos() does not work
+  3010936: A ZHTML with native namespace without head causes JavaScript error
+  3009925: Clients.evalJavaScript is broken in zhtml with native namespace
+  3012310: enable crawlable will show unwanted labels
+  3010511: Applet in content of Html Tag
+  3011489: Decimalbox format issue
+  3012994: Grid with menu and Upload failed in zhtml (native namespace)
+  3013126: Treeitem will disappeare when setDisabled on the treeitem
+  3013538: Clients.reloadMessages throw exception
+  3013539: Treecell can't change its label when others items disabled
+  3007738: The setImage of the comboitem isn't works
+  3013433: (Chrome) grid in tabpanel not resize when browser resize
+  3011477: Clear the frozen in the grid cause JavaScript error
+  3012466: Listbox's selection issue
+  3013683: The column in grid without width will calculator wrong width
+  3011319: Datebox may select wrong month
+  3014084: Press "Enter" in a multiline and inplace  textbox lose text
+  3008328: Intbox uneditable on FF if treerow draggable/droppable=true
+  3010419: Auxiliary Headers don't render in iPhone
+  3014660: Combobox setValue issue when onChanging
+  3014664: tabs & tabpanels cut half width if set hflex="1"
+  3014668: intbox doesn't accept 09
+  3014743: longbox and decimalbox doesn't reject 33ee34
+  3013637: Popup can't conver listbox in select mold (IE6)
+  3017010: Listbox - combination of checkmark and sorting does not work
+  3015032: Flashchart generated IndexoutOfBoundsException
+  3017526: Panel height calculation bug
+  3017859: decimalbox fail to handle 3.5%
+  3017606: Browser window might lose focus
+  3017938: The menupopup appears at a wrong position
+  3018735: listbox/grid/tree sizedByContent="true" shall show header  
+  3018688: Recursive Loop in class XmlContentRenderer
+  2997698: quoted special characters in decimalbox
+  3019383: Failed to change the position of a root component to the end
+  3019360: button in os mold, setDisable() not add class -disd well
+  3019524: Window/panel does position wrong if only left specified
+  3019517: Listbox selectAll checkmark bugs
+  3020040: Listbox.removeItemFromselection not work correctly
+  3020565: Failed if add listhead and listitem to ROD listbox (zkmax)
+  3020609: Dragging modal window might fail if dragging too fast
+  3010511: Removing Applet causes JavaScript error in FF2
+  3021174: setLeft at a invisible window case js error
+  3021217: Put a invisible Panel in a portallayout cause js error
+  3021278: Hide the column of the grid, the css of the odd row is gone
+  3013640: Incorrect scrolling of auxheads if used with frozen columns
+  3021591: Window position parent not working repeatedly
+  3021739: Form's reset button unable to reset textbox
+  3022161: setVisible on a window that in second tab cause js error
+  3022197: Set 2nd tab of  tabbox in 2nd tab be selected isn't work
+  3022274: Vertical tabbox in invisible comp has big height when onShow
+  3022237: Image of toolbarbutton not disabled correctly (ie8)
+  3022178: Extra bottom border for selected tab
+  3022174: Scroll remains upon closing tabs
+  3022669: listbox hflex="min" sizedByContent="true" not work
+  3022839: (IE8) Clients.confirmClose & A component image without href
+  3025674: When Listbox mold=select, add listhead cause html error
+
+* Upgrade Notes
+  + To retrieve the area of a chart (when implementing drilldrop), use
+    desktop.getComponentByUuid(event.getArea()) instead of getFellow().
+  + The default font size is changed to "arial, sans-serif". If you prefer the
+    original one, please specify the following in WEB-INF/zk.xml
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyT</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.theme.fontFamilyC</name>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
+	</library-property>
+  + Component's ID and page's ID are default to be an empty string
+   (rather than an auto-generated ID).
+  + The codebase of the applet component will be encoded by including the session ID
+    and application's context. See also Bug 3012486.
+  + HtmlMacroComponent introduces a new method called setEnclosingTag. If one of
+    your macro components uses this property, you have to rename it.
+  + The id-to-uuid-prefix configuration is deprecated. Please use IdGenerator
+    or jQuery selector instead.
+  + JavaScript API: zk.Widget.removeChildHTML_ is changed
+
+	--------
+ZK 5.0.2
+May 12, 2010
+* Features
+  2988039: A way to defer rendering of client widgets
+  2972509: Enhance jQuery selector to handle zk widget's ID and tag name
+  2940704: auto-set pageSize in paging mold per the component height
+  2994541: A way to specify the widget class
+  2979894: Widget's client script supports EL
+  2982454: A way to make AU work with, say, Google Analytics
+  2974340: Generate zul's HTML content with JavaScript array/map
+  2985686: A simpler way to change the implementation of FileuploadDlg
+  2989181: Notify a desktop that it has been recycled- onDesktopRecycle
+  2992673: A directive allow set custom HTTP response header key-value in zul page
+  2983365: Able to get application event queue on a worker thread
+  2998003: An option to control whether to use IE 7 Compatible mode
+
+* Bugs
+  2972950: Dynamic adding a SimpleConstraint caues js error
+  2972980: Failed to add widget listener dynamically(addWidgetListener)
+  2979875: Widget's method/field cannot be overriden dynamically
+  2973036: ScalableTimer shall stop when hot redeployed (memory issue)
+  2974364: bandbox setStyle not work correctly
+  2973059: getValue() does not reflect last state in Safari/Chrome
+  2974370: The maximizable comp in panel cause size problem with IE6
+  2975362: Unable to close Messagebox using ceaseSuspendedThread()
+  2976912: vflex="min" not work proper in borderlayout + grid
+  2979680: dom.src.js using zk.innerX which is re-packaged
+  2976519: Messagebox onClose with event thread disabled
+  2979776: Safari+Chrome only. hflex="min" hides the grid
+  2977948: IE6: sizable=true windows generate 404 errors
+  2973306: Bad detail rendering if the grid has invisible column
+  2980383: Tab scrolling places wrong position
+  2980977: the stripe of the row will be disappeared by row.setSpans()
+  2980478: Javadoc error Box.setPack(): "stretch" is not set by default
+  2980425: Listfooter not alignign after listheader
+  2980254: sendRedirect problem
+  2981273: datebox display year incorrect
+  2976323: Dragging menuitems on menubar
+  2976934: Checkbox cannot be checked in a comp with listener onClick
+  2984382: The dropdown list of the combobox is not align
+  2980894: datebox year selection on ubuntu does not work
+  2986282: The input of combobox is misalign on ubuntu
+  2986413: DOM content generated not ending correctly  
+  2984412: On 2nd refresh app stucked if DesktopRecycle and defer include
+  2986891: DesktopRecycle shall not reuse cache if query string changed
+  2986905: The value of select mold listbox is wrong in Servlet
+  2975748: Component with popup and onClick handler  in ZK5
+  2987076: The tooltip of treerow is null
+  2984235: Tooltips not supported on textbox and combobox
+  2981016: The combobox has wrong width when sets width "80px" with IE6
+  2988327: When clicking draggable, 2nd browser window showup (FF only)
+  2974195: Flashchart generates Exception for line/bar/column types
+  2986227: The splitter can't drag well when cursor move to iframe
+  2988261: Dropdown list of combobox disappear in panel and portallayout
+  2989172: DesktopRecycle failed to send onClientInfo after reused
+  2987059: Fileupload /include error on any version of Internet Explore
+  2976395: Cannot open tree nodes(ZK JSP+Liferay)
+  2990657: Combobox autocomplete="false" not work
+  2990719: JsContentRenderer.java  renderValue() missed  "Boolean" type
+  2990659: Decimalbox doesn't support the format with "R"
+  2989808: decimalbox does not support "%" as input
+  2988404: DecimalBox error formatting , and . (loss the scale!!)
+  2991309: Tree: select tree row, then open, get wrong selected item
+  2988046: Bookmarking in IE 7/8 doesn't work correctly
+  2992688: The disabled attribute in combobox will not set the background
+  2992785: Databind assigned an unallowed uuid format with @ sign
+  2993604: The tree can't close after sets a new label on the treecell
+  2994060: Set treeitem disable="true", append duplicate treeitem
+  2994592: East/South appears on the wrong side
+  2994634: Vflex calculate height incorrectly
+  2995800: The height of portallayout down to 1 after panel maximized
+  2995770: Region disappears when setOpen(true)
+  2996359: Listbox unselectable after modal confirm from modal window 
+  2987885: Graphical glich on datebox and timebox
+  2996589: Unrecognized Unicode-Character in Textbox cause JS error
+  2997034: scrolling bug
+  2997079: Unable to define global func if <script> loaded dynamically
+  2997037: cannot enter large long integer into longbox
+  2997402: Imagemap rightclick/doubleclick wrong coordinates
+  2997111: BlackBerry mouse click error
+  2997040: Fileupload.get(1) is not work with the limit
+  2997975: datebox in readonly with buttonVisible="false"
+  2998028: Include created in Java doesn't become instant mode
+  2997862: vflex="min" not working on nested tabpanel
+  2999154: Request a non-existent resource thru /zkau causes download
+  2997548: Whitespace and native components
+  2998196: Problem with dynamic setting of format pattern
+  2999696: Exception when set <grid vflex="min"> (grid rod on)
+  2999786: borderlayout in window with vflex="min" chop the bottom
+  2999664: JsContentRenderer: Map is rendered twice, causes parse error
+  
+* Upgrade Notes
+  * UUID generated by org.zkoss.zk.ui.sys.IdGenerator can only consist of
+    alphanumeric number and underscore (i.e., a-z, A-Z, 0-9 and _).
+  * Client Engine (JavaScript): zk.Event's tags options is renamed to rtags.
+
+	--------
+ZK 5.0.1
+March 18, 2010
+* Features
+  2943477: ZK integrates JQuery 1.4.2
+  2053421: Jasperreport to work with Hibernate reports
+  2941466: Jasperreport can work with SQL Connection
+  2943475: Way to customize progressbox position
+  2965270: A system-wide composer to process all pages
+  2942015: Treerow shall allow context, tooltip and popup
+  2927147: Replace bookmark command and bookmark encoding
+  2954280: Include component shall have clearDynamicProperties method
+  2962487: Timeout popup translation and reload page
+  2780660: Delay the onChanging event for autocomplete comboboxes
+
+* Bugs
+  2941343: The combobox's popup widens to the entire width(IE6 only)
+  2941387: Listcell.setSpan(int) not work, again!
+  2940707: Tree item is not removed on the client side
+  2940739: Today value of the Datebox is incorrect when locale is TH
+  2941554: Popups and Contraint Violation messages are not hidden (Tab)
+  2941611: ZK5.0/Liferay portlet causes freeze in Internet Explorer 6. 
+  2941933: Right-click always select the first tree item
+  2942150: combobox disabled="true" not work
+  2943346: Label's maxlength property seems to have no effect
+  2942242: DHtmlLayoutPortlet getTitle() hard coded
+  2943174: Listbox with hflex and select-mold not aligned in FF
+  2944355: ZK5.0 Combobox autodrop and autocomplete problem
+  2943533: grid menupopup="auto" conflict with Messagebox.show()
+  2945107: different style of menuitems between IE and FF after ZK 5.0.
+  2945219: Function Key Handling in ZK 5 is not working
+  2945761: ZK popup should be closed when click outside zk page(zhtml)
+  2946333: The position of the spliter in borderlayout can't be changed
+  2946917: Text are sent even not changed server-side validate required
+  2946498: WVE on listbox don't dissapear when parent window is closed
+  2947638: deferred zscript not evaluated against the right component
+  2947627: zscript deferred attribute was broken
+  2945998: Has BeanShell attribute, NPE  when change to detached parent
+  2947657: Listbox with HTML form doesn't work
+  2937096: composer.param shall be clone and static wired
+  2947988: _selItems is not defined when removing last item in a tree
+  2948193: The center calls invalidate() has js error
+  2948829: Tree can't open in ROD mode
+  2949346: Removing multiple rows from a tree does not work
+  2949559: Combobox/Datebox Button does not move when scrolling in IE6
+  2950309: Set readonly datebox to disabled  that still open calendar
+  2950364: Menupopup in IE7 display wrong
+  2950801: Adding vflex to hbox throws javascript error
+  2951825: script inside vbox throws javascript error
+  2951184: Click event does not propagate to tree opener
+  2955382: BUG problem with combobox when timer is on the desktop
+  2951277: Textbox with quotes in text is broken
+  2956449: bandbox onCtrlKey event incomplete
+  2949947: Timebox usability for keyboard users is broken
+  2957015: grid detail can't auto shrink with bandpopup open
+  2956421: The listitem can't be selected when add onClick on listcell
+  2956457: Comboitem/groupbox miss placed after remove and adding
+  2957773: Wrong day in datebox (when locale is TH)
+  2958057: Include and setBoomark
+  2959308: el is undefined when invoke popup#close in ROD mode
+  2959024: Events.echoEvent data is not sent
+  2898413: FF and DSP caching
+  2959487: The button browse is not translated spanish on fileupload
+  2948454: zscript not interpreted correctly if IdSpace owner changed
+  2949287: Printing demo page from Webkit browsers prints blank page
+  2961834: Combobox autocomplete fail if add/remove comboitem
+  2849074: Add the autocomplete attribute in XSD for combobox component
+  2965789: zDom is undefined in treecell
+  2966241: Databinding + combobox errorly change selected comboitem
+  2966200: Include's construct will not set the src
+  2968752: Not possible to change menu image
+  2970460: window onMaximize not modify height
+  2961772: Redeploy memory leaks
+  2970902: Whitespace-only comboitem has height 0
+  2970695: Constraints on non-input fields spawns several error dialogs
+  2970664: SimpleDateConstraint should not use static SimpleDateFormat
+  2971730: ClientConstraint can't work with Datebox
+  2831389: Tab Mold accordion should be able to take all the space
+  2971982: The treefooter and the listfooter setSpan does not work
+
+* Upgrade Notes
+  * org.zkoss.zk.ui.ext.ScopeListener supports the idSpaceChanged method
+  * To simplify the handling of onChanging, at least one onChanging event
+    will be sent before the onChange event, if the user has modified
+    the content and the application registers an onChanging listener.
+    To disable it (and make it behave as 5.0.0), you can put the following
+    in the zul file.
+    <?script content="zk.afterLoad('zul.inp',function(){zul.inp.InputWidget.onChangingForced=false;})"?>
+  * org.zkoss.zk.ui.metainfo.impl.MultiComposer is replaced with
+    org.zkoss.zk.ui.impl.MultiComposer
+  * org.zkoss.zk.ui.WebApps's getEdition method returns EE, PE or CE.
+
+	--------
+ZK 5.0.0
+January, 2010
+* Features
+  2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
+  2825713: EventQueue support application-level publish (by sever-push)
+  2822404: Fileupload shall be a feature attachable to button, menuitem
+  2822395: Adds component for HTML A, rather than overuse toolbarbutton
+  2787713: Button automatically disable itself after clicked
+  2848804: Readonly combobox supports selection by keystrokes
+  2866325: A simple way to change the default mold
+  2815551: Include supports non-HTML content (by use of comment)
+  2491275: ZHTML checkbox fire onCheck (in addition to onClick)
+  2794752: Fisheye supports dynamic images
+  2794753: An option to specify whether the content can be crawled
+  2831852: Allow developer to specify directory to load JavaScript file
+  2834187: A way to load client (JavaScript) packages from diff servers
+  2831854: A way to run certain JavaScript codes w/o load it explicitly
+  2816083: Spec change: definition in page has lower priority from class
+  2816588: A way to parse app-specific configuration in zk.xml
+  2817315: Support client-centric programming model
+  2832982: Button supports Ctrl+Click if href is specified
+  2822834: Button supports toolbar mold and toolbarbutton d. from it
+  2839350: Timebox supports date format like "a hh:mm:ss"
+  2841695: Enhance Datebox and Calendar layout
+  1832887: InputElement support in-place editing
+  2121859: New component: Cell
+  2845947: vflex/hflex supported in every component
+  2845956: vflex/hfex supports proportion and min
+  2783102: Borderlayout and flex and vflex improvement
+  2849793: Replace fixedLayout with sizedByContent in Gird/Listbox/Tree
+  2840886: Freezing Columns on Listbox and Grid
+  2853314: ZK Client Engine support canvas
+  1811700: XUL box model: align and pack
+  2858441: Merge attributes of ID space and component for space owner
+  2855804: EL/zscript read attributes directly, and deprecate Namespace
+  2859159: A way to listen changes of attribute in session/execution/appplication
+  2859867: forward="onX=" shall be shortcut of forward="onX=onX"
+  2860482: A way to specify language for component definition (<?component?>)
+  2861283: hbox/vbox pack attribute supports stretch option
+  2855116: add data binding support for custom attribute tag
+  2879519: More control of ThemeProvider against widget's CSS
+  2887668: Ignore client command if component is invisible/disabled
+  2893117: The include comp's default width/height 100% if the only child
+  2867437: Borderlayout shows a collapse button on splitter
+  2898291: a way to maximize the panel  according to portal layout
+  2037509: Auto fit column width when double clicking on header
+  2187771: Panel re-sizeable
+  2903592: A way to wire component in a nested ID space
+  1594070: Listbox should raise onBlur/onFocus event
+  1481860: add onBlur/onFocus event to Tree
+  1831148: Support of ColorChooser
+  2904894: Add new Flash Chart component
+  2908598: The script directive supports the if/unless attribute
+  2909551: ZK Client engine support Google AJAX API loader
+  2905982: A way to reuse the desktop across the requests
+  2919807: Make EventQueue available to CE
+  2930316: Support client-polling server-push in ZK CE
+  2920529: Session-scope EventQueue
+  2830237: jasperreport support media
+  2926746: Variable Resolver that resolve CDI(JaveEE 6) managed bean
+  2927319: EventQueue supports asynchronous listener
+  2928011: provide a customization for zk.Draggable
+  2932595: New mold for combobox, datebox, timebox, spinner, bandbox
+  2931798: Clients.showBusy allows to cover only specific widget
+  
+* RC/RC2 Bugs  
+  2870616: Unclosed progress mask on opening menupopup
+  2870620: No menupopup onOpen reference when right click gmaps
+  2870652: Button(mold == trendy) is not resized with hflex/vflex
+  2870663: No value doublebox/decimalbox show 'null'
+  2871082: Menuitem's href shall resolved as servlet-context relative
+  2871080: ZHTML Text shall not encode & or <
+  2871100: The default zclass of toolbarbutton shall be z-toolbarbutton
+  2871135: Unclosed progress mask on opening popup
+  2871627: zscript failed to load a zscript file if w/ absolute path
+  2873290: DOCTYPE not generated for zhtml pages
+  2873478: Always "Processing" Status when Row's Visible is False
+  2874709: tree doesn't work properly during redraw
+  2880236: Decimalbox generates JavaScript error
+  2882293: Failed to render a ZUL Page containing ZHTML's HTML
+  2883117: Modal dialog grayout disappear after window resize
+  2869942: combobox with style error
+  2885313: Datebox with hour format select wrong time if null
+  2884635: Datebox click on time's btn, cursor will change position(IE)
+  2783590: Correct the display of grid headers in IE8
+  2887722: dottree style in ZK5 RC is wrong
+  2887987: Framable panel on IE7 with ZK 5RC
+  2890514: Row's align/valign property doesn't work
+  2890515: datebox constraint with "before" fails
+  2893132: ZK 5 RC: Tabpanel's new children is added to wrong position
+  2900274: Window with PDF not shown if doOverlapped (IE)
+  2900377: Panel collapsible not open in closed status
+  2902880: Renderer and Model in Listbox/Grid shall be transient
+  2903271: Unable to select a tab from the server
+  2904577: Dynamic tree doesn't draw
+  2906453: doublebox complains wrong format for number end with 0
+  2909817: Treecol setAlign() with right fails
+  2909820: Dynamically add treeitem, the item is rendered wrong place
+  2909957: hflex="1", grid in vbox, can expand but CANNOT shrink 
+  2911743: listbox rod + databind save-when not working
+  2897202: load-when and load-after not triggered when binded to template
+  2913931: First loading of listbox/grid rod is not optimized
+  2914048: Box renders child at wrong place when add dynamically
+  2916077: Checkmark disappears in listgroup
+  2916148: Errorbox cannot be closed in IE6 only
+  2919062: Intbox should allow -0 as its value without error message
+  2918388: Javascript error when close a "whole" maximized portallayout
+  2918527: Align property ignored in DIV
+  2916146: Input components with readonly should prevent Backspace key
+  2919175: Unexpected error message in combobox with constraint
+  2917947: resize grid's column with draggable
+  2911385: menuitem with popup problems in 5 RC2
+  2922661: Enhance VariableResolver to reslove property, not just var
+  2922762: tabscroll="false" doesn't work
+  2923185: Datebox click on timebox result '00:00' when format 'HH:mm'
+  2924049: Wrong target when dragging a sub div in IE browsers
+  2884572: deploy error when upgrade to ZK5 on weblogic 8.x
+  2912533: Clients.showBusy the underneath should lose focus
+  2926939: paging.getActivePage() is not correct in onPaging event
+  2922847: font-weight has no effect on zk5 toolbarbutton
+  2925493: OnChange Event does not work in Listbox with autodrop
+  2925671: Problem clicking twice the combobox triangle
+  2926718: Decimal box format problem
+  2928044: maxlength didn't work in input element
+  2928109: <window hflex="min"> not correctly handled  
+  2911379: doublebox format="" broken in ZK 5 RC2
+  2928125: Dynamically add onClick EventListener not working
+  2926070: ZK 5 RC doesn't support Servlet 2.3
+  2929189: if tabscroll="false", problems making tabbox visible
+  2929193: Problem with a readonly datebox
+  2929590: Window cannot be dragged in modal when put a large div (FF)
+  2931091: Menu will not change the style after mouse over and out
+  2931212: selected tab is not corrent in onClose event
+  2931348: iframe component error
+  2931951: Add rows over page size but fail to see the paginal appear
+  2932137: ZK Session implementation is not working on GAE
+  2932559: Dateformt is not correct
+  2932360: Problems with http-equiv="refresh" (<h:meta>)
+  2932514: listheader.visible=false & footer.span not work well
+  2932107: Strange listbox behaviour with mold="paging"
+  2932443: Doublebox and Decimalbox shall handle special Locale
+  2926128: Problem setting value to a datebox
+  2914010: Position of Messagebox is not at the center of scroll view
+  2933235: combobox setWidth not work
+  2921902: ZK and Liferay 5.2.x : Conflict with JQuery?
+  2934252: datebox display year incorect(Thailand locale)
+  2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
+  2935509: Javascript error on runtime columns creation
+  2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
+  2936064: Remove Group in Grid shall not remove next Group
+  2936095: drop list display issue when filled combobox in onOpen
+  2936132: Add treeitem with open="false", append to wrong position
+  2936294: Clearing Selection in Lisbox don't work
+  2936568: timebox don't permit blank/null value once focused
+  2923479: Vbox/Hbox align="center" not works as XUL spec.
+  2936994: Calendar is not display correct if inside a borderlayout
+  2937035: IE6 only: Borderlayout inside tabpanel has no height
+  2938061: Combobox background color does not change
+  2937374: Readonly Combobox automatically opened in a highlighted win
+  2939118: Tree reset model causes Javascript error
+  2939268: Ugly view when dragging long Listitems
+  
+* Bugs
+  1999145: Combobox with Width of 100% Overruns
+  2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
+  2863287: Unable to access param in zscript
+  2379135: Context menu with Listbox when event is added
+  2898352: Groupbox (default mold)'s caption cannot have toolbarbutton
+  2900962: OnCreate events of components not propagated properly
   2895706: Encoding of italian message is wrong
   2895193: Vertical separator not center aligned in IE
   2902877: Include's invalidate doesn't reload the page in instant mode
@@ -70,31 +1317,113 @@ March 18, 2010
   2910663: NullPointerException after failover when fulfill onEvent
   2929887: zscript fails on missing src even if it is not required
   2925964: Menupopup's shadow don't display correctly
-  2929688: constraint on hidden tab panel problem
   2928837: Cannot remove bindable collection item from the DataBinder
-  2932559: Dateformt is not correct
+  2919202: Listbox+WrongValueException does not show error box
+  2090169: Button's width with "100%" is wrong
   2932475: NoSuchMethodException in DataBinder (SpaceOwner-Mixup)
-  2935398: Clients.scrollIntoView fails if the scrollbar is HTML/Body
-  2935985: Dynamically adding a long menuitem displays wrong (IE7 only)
   2936019: Execption when Listbox insertBefore() group + groupfoot
   2937096: composer.arg shall be statically wired
-  2939911: datebox display year incorectly(Thai locale)
-  2942242: DHtmlLayoutPortlet getTitle() hard coded
-  2947638: deferred zscript not evaluated against the right component
-  2947627: zscript deferred attribute was broken
-  2937096: composer.param shall be clone and static wired
-  2948875: The onPaging event will fire again after type new value
-  2948342: last selected item in a tree 
-  2962483: Show error box has js error on IE
-  2849074: Add the autocomplete attribute in XSD for combobox component
-  2966200: Include's construct will not set the src
-  2970664: SimpleDateConstraint should not use static SimpleDateFormat
-  
-* Upgrade Notes:
 
---------
+* Upgrade Notes
+  + Recompile your application since the return type of setAttribute 
+    and removeAttribute of Execution, Session, and WebApp is changed 
+	(to be the same as Component and Page and then implement the same 
+	interface, Scope)
+  + The attributes of the ID space of a space owner are the same
+    the component attributes.
+  + The namespace (org.zkoss.zk.scripting.Namespace) is deprecated.
+    Rather, use the attributes directly.
+  + Event processing thread is disabled by default. It means doModal
+    will be degenerated to doHighlighted.
+    To turn it on, specify the following in zk.xml:
+   	<system-config>
+		<disable-event-thread>false</disable-event-thread>
+	</system-config>
+  + The callback method of org.zkoss.zk.ui.util.ComponentCloneListener
+    is renamed to willClone.
+  + The signature of ClientConstraint is changed.
+  + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
+    are replaced by getPageRenderer.
+  + Mold URIs are no longer stored in ComponentDefinition.
+    Rather, they are in a new class, WidgetDefinition.
+  + Macro URI is no longer supported.
+  + disable-behind-modal is deprecated (always false)
+  + PageCtrl: addRoot, removeRoot, moveRoot, addFellow and removeFellow
+    are removed
+  + toolbarbutton is revised to look better in toolbar. Meanwhile,
+    a new component called a is introduced for generate HTML A tag.
+    Use it instead of toolbarbutton if HTML A is what you want
+  + The client-side action has been replaced with the custom JavaScript
+  	events.
+  + Overlapped window in overlapped won't be cropped
+    In older version, developers have to specify overflow:visible
+  + The alphafix mold of image and imagemap is deprecated. They are handled
+    automatically.
+  + org.zkoss.zul.theme.enableZKPrefix is deprecated.
+    Use the library properties, such as org.zkoss.zul.theme.fontSizeM,
+    to use the same font for ZK and non-ZK content
+  + org.zkoss.zul.Style's dynamic is deprecated since it is decided
+    automatically
+  + org.zkoss.zul.Applet and Iframe extends from HtmlBasedComponent
+    rather than XulElement
+  + The Z-class name of comboitem, bandpopup, groupfoot, listcell, listfoot,
+	listfooter, listgroup, listgroupfoot, listhead, listheader, listitem,
+	treecell, treechildren, treecol, treecols, treefoot, treefooter, treerow,
+	table-children, and table-layout
+	are renamed to be consistent with the component name. For example,
+    z-combo-item is renamed to z-comboitem, and z-list-cell renamed to z-listcell.
+  + The default mold of the button is changed as the os mold, and the default mold of the button
+    in ZK 3.6.x called the trendy mold.
+  + When instantiating a component manually, the component definition
+    will be resolved from the language definition first, and then page
+    definition if the definition in a page does not specify a class.
+  + org.zkoss.zk.au.http.AuProcessor is replaced with
+    org.zkoss.zk.au.http.AuExtension
+  + fixedLayout property is deprecated in Grid/Listbox/Tree/. Use "sizedByContent" instead.
+    Note that if you used to set fixedLayout=true, then you shall set sizedByContent=false 
+	and if you used to set fixedLayout=false, then you shall set sizedByContent=true. By default, 
+	the sizedByContent is false (i.e. fixedLayout is true).
+  + By default, the constraint of the input elements is validated by client side, but you can specify
+	it with 'server', for example, 'no empty, server', the constraint with 'server' would be validated
+	by server side, if no error at client.
+  + The meaning of hbox/vbox pack property is changed to follow XUL's spec. That is, "start" means 
+    extra space is placed on the right/bottom side of the hbox/vbox, "center" means extra space is 
+	split equally and placed on two sides(left and right/top and bottom of the hbox/vbox), 
+	"end" means extra space is placed on the left/top of the hbox/vbox. If you would like the 
+	hbox/vbox behaves just like in old version, you can add a "stretch" option on pack property to 
+	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
+  + When the value specified in custom-attributes starts with "@{" and ends with "}",
+    it is considered as an annotation.
+  + Two extra methods are added to ThemeProvider for better control of
+    the theme customization.
+  + The JavaScript method called confirmRetry is renamed to zAu.confirmRetry
+  + Encodes.URLEncoder is changed to allow the developer to encode in his
+    own way. Furthermore, the configuration is by use of the library
+    property called org.zkoss.web.servlet.http.URLEncoder.
+  + Two extra methods are added to org.zkoss.zul.XYModel for better control (insert and replace value
+    at a specified index) of the series value.
+  + Two extra methods are added to org.zkoss.zul.XYZModel for better control (insert and replace value
+    at a specified index) of the series value.
+  + Two extra methods are added to org.zkoss.zul.HiLoModel for better control (insert and replace value
+    at a specified index).
+  + EventQueue is not part of ZK CE. Use org.zkoss.zk.ui.event.EventQueues
+    and org.zkoss.zk.ui.event.EventQueue instead.
+  + PortalMoveEvent is moved to the org.zkoss.zkmax.ui.event package
+  + Tabpanels and Tabpanel won't be created automatically by default, if the size is inconsistent.
+  + org.zkoss.zkplus.databind.AnnotateDataBinderInit used to store created data binder with name 
+    "binder" in IdSpace scope of the covered root component but now it is stored at the custom 
+	attributes of the covered root component or page. To make it backward compatible and store created 
+	data binder in IdSpace scope as in 3.6.x, specify the following in zk.xml:
+	<library-property>
+		<name>org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible</name>
+		<value>true</value>
+	</library-property>
+  + org.zkoss.zk.ui.impl.Attributes is deprecated and replaced with
+    org.zkoss.zk.ui.sys.Attributes
+  
+	--------
 ZK 3.6.3
-November 3, 2009
+October, 2009
 * Features
   2889241: Message translated to Korean. Thank Deok-su Lee for his contribution
   2821761: Tabbox support extra tabs to display other cmps on the bar
@@ -304,7 +1633,6 @@ April 28, 2009
   2681775: Resumable filedownload supports relative path
   2689696: Native namespace supports zkhead
   2708855: A way to customize CometServerPush for diff device
-  2675648: Server Push and number of browser windows issue
   2713463: Audio supports the loop attribute
   2718665: Flash supports  the dynamic content (setContent)
   2770471: GenericAutowireComposer shall support wiring ZScript varible
@@ -325,6 +1653,7 @@ April 28, 2009
   2691017: Filedownload with InputStream results empty file if blocked
   2669197: filedownload.save(reader, content, filename) not working
   2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
+  2675648: Server Push and number of browser windows issue
   2673128: Impossible to select some date
   2705040: Navigating Combobox causes JS error
   2711600: Applet generates the wrong param tags
@@ -383,7 +1712,7 @@ March 2, 2009
   2495058: A way to use the same desktop UUID after reboot
   2512695: Able to change UiFactory, IdGenerator.. in WebAppInit
   2494920: Enhance <listheader> auto sorting to sort on fieldnames
-  2512555: Converter convert date to String with annotated format  
+  2512555: Converter convert date to String with annotated format
   2530133: Column support default comparator like listheader
   2559476: A way to turn off the filtering of clicks
   1733461: throw new WrongValuesException(WrongValueException[])
@@ -844,7 +2173,7 @@ April 30, 2008
   1882277: Overflow:auto lost when swiching accord tabbox (Safari only)
   1752907: groupbox mold=3d FF animation jumping
   1920793: The focused style of selected item differences Firefox/IE
-  1936366: focus don��t work after Messagebox
+  1936366: focus don't work after Messagebox
   1933050: onSelect fail in Listbox's select mold when use key(FF&Sa)
   1936804: combobox.onInitRender(Event data) triggers validation.
   1472534: error popup is shown behind select inputs(IE6 only)

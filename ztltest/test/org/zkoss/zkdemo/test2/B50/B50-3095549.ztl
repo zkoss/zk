@@ -1,0 +1,135 @@
+<!-- B50-3095549.ztl.java
+
+	Purpose:for testing B50-3095549.ztl .
+
+	Description:
+
+	History:
+		05, 11, 2011 11:44:21
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-3095549.zul,A,E,Tree,ROD">
+	<case id="ztl">
+		<server><!--
+			
+
+
+<zk>
+	If we open the tree node 'Item 1' and click button to add 'Item
+	1-3', the order is correct.
+	<separator />
+	Reload again, If we don't open the tree node and click button to add
+	'Item 1-3', open the tree node 'Item 1', the order should be correct
+	as the same as previous.
+	<separator />
+	<button label="Add Item 1-3">
+		<attribute name="onClick">
+	Treeitem item = new Treeitem();
+	item.setParent(treechildren1);
+	Treerow row = new Treerow();
+	row.setParent(item);
+	row.appendChild(new Treecell("Item 1-3"));
+</attribute>
+	</button>
+	<separator height="50px" />
+	<tree width="500px">
+		<treecols>
+			<treecol label="treecol 1" />
+		</treecols>
+		<treechildren>
+			<treeitem open="false">
+				<treerow>
+					<treecell label="Item 1" />
+				</treerow>
+				<treechildren id="treechildren1">
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 1-1" />
+						</treerow>
+					</treeitem>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 1-2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq(".z-tree-root-close"));
+				waitResponse();
+				verifyEquals(3,jq("@treerow"));
+				click(jq("@button"));
+				waitResponse();
+				verifyEquals(4,jq("@treerow"));
+				verifyEquals(" Item 1-3",jq("@treerow:eq(3)").text());
+		]]></client>
+	</case>
+	<case id="ztl1">
+		<server><!--
+			
+
+
+<zk>
+	If we open the tree node 'Item 1' and click button to add 'Item
+	1-3', the order is correct.
+	<separator />
+	Reload again, If we don't open the tree node and click button to add
+	'Item 1-3', open the tree node 'Item 1', the order should be correct
+	as the same as previous.
+	<separator />
+	<button label="Add Item 1-3">
+		<attribute name="onClick">
+	Treeitem item = new Treeitem();
+	item.setParent(treechildren1);
+	Treerow row = new Treerow();
+	row.setParent(item);
+	row.appendChild(new Treecell("Item 1-3"));
+</attribute>
+	</button>
+	<separator height="50px" />
+	<tree width="500px">
+		<treecols>
+			<treecol label="treecol 1" />
+		</treecols>
+		<treechildren>
+			<treeitem open="false">
+				<treerow>
+					<treecell label="Item 1" />
+				</treerow>
+				<treechildren id="treechildren1">
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 1-1" />
+						</treerow>
+					</treeitem>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="Item 1-2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+				click(jq("@button"));
+				waitResponse();	
+				click(jq(".z-tree-root-close"));
+				waitResponse();
+				verifyEquals(4,jq("@treerow"));
+				verifyEquals(" Item 1-3",jq("@treerow:eq(3)").text());
+		]]></client>
+	</case>
+</test>
