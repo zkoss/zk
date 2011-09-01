@@ -4010,6 +4010,9 @@ _doFooSelect: function (evt) {
 			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
 				break;
 
+			if (!wgt._visible)
+				return false;
+
 			//it might be native or others, so we look up parent
 			if (!(wgt = wgt.parent))
 				return true; //consider as visible if it is root
