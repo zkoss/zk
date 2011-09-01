@@ -62,7 +62,7 @@ var SelectWidget =
  */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_rows: 0,
-	/** Whether to toggle a list item selection on right click
+	/** Whether to change a list item selection on right click
 	 * <p>Default: true (unless the server changes the setting)
 	 * @since 5.0.5
 	 * @type boolean
@@ -722,7 +722,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					this._selectUpto(row, evt, skipFocus);
 				else if (evt.data.ctrlKey || evt.data.metaKey)
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
-				else // Bug: 1973470
+				else if (!alwaysSelect || !row.isSelected())// Bug: 1973470
 					this._select(row, evt, skipFocus);
 			} else
 				this._select(row, evt, skipFocus);
