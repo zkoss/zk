@@ -4010,6 +4010,11 @@ _doFooSelect: function (evt) {
 			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
 				break;
 
+			//Note: we check _visible only if native, since, when onHide is fired,
+			//_visible is false but DOM element is visible (so it is watchable)
+			if (!wgt._visible)
+				return false;
+
 			//it might be native or others, so we look up parent
 			if (!(wgt = wgt.parent))
 				return true; //consider as visible if it is root

@@ -62,7 +62,7 @@ var SelectWidget =
  */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_rows: 0,
-	/** Whether to toggle a list item selection on right click
+	/** Whether to change a list item selection on right click
 	 * <p>Default: true (unless the server changes the setting)
 	 * @since 5.0.5
 	 * @type boolean
@@ -427,9 +427,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.ebody.style.height = hgh + "px";
 			
 			// bug fixed for B50-3315594.zul on safari and chrome latest version
-			if (zk.safari) {
-				zk(this.ebody).redoCSS();	
-			}
+//	fail on B50-ZK-373
+//		if (zk.safari) {
+//				zk(this.ebody).redoCSS();	
+//			}
 			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
 			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
@@ -722,7 +723,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					this._selectUpto(row, evt, skipFocus);
 				else if (evt.data.ctrlKey || evt.data.metaKey)
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
-				else // Bug: 1973470
+				else if (!alwaysSelect || !row.isSelected())// Bug: 1973470
 					this._select(row, evt, skipFocus);
 			} else
 				this._select(row, evt, skipFocus);

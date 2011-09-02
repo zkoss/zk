@@ -204,7 +204,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				return; //nothing changed
 	
 			nonAnima = this.parent._animationDisabled || nonAnima;
-			
+	
 			var colled = this.$n('colled'),
 				real = this.$n('real');
 			if (open) {
