@@ -427,10 +427,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this.ebody.style.height = hgh + "px";
 			
 			// bug fixed for B50-3315594.zul on safari and chrome latest version
-//	fail on B50-ZK-373
-//		if (zk.safari) {
-//				zk(this.ebody).redoCSS();	
-//			}
+			// Note: also test with B50-ZK-373 (since zk.safari.redoCSS will hide and show)
+			if (zk.safari)
+				zk(this.ebody).redoCSS();	
 			
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
 			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
