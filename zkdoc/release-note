@@ -1,4 +1,11 @@
 	--------
+ZK 5.0.9
+* Features
+
+* Bugs
+  ZK-386: sclass is not applying when div visible false
+
+	--------
 ZK 5.0.8
 * Features
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale
