@@ -265,13 +265,9 @@ zWatch = (function () {
 	}
 	//Returns if c is a visible child of p (assuming p is visible)
 	function _visibleChild(name, p, c, cache) {
-		for (var w = c; w; w = w.parent) {
-			if (cache && !w._visible) //quick filtering (not required but faster if skip earlier)
-				break;
-
+		for (var w = c; w; w = w.parent)
 			if (p == w) //yes, c is a child of p
 				return !cache || c.isWatchable_(name, p, cache);
-		}
 		return false;
 	}
 	//Returns subset of xinfs that are visible and childrens of p
