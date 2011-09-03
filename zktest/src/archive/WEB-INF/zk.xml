@@ -491,9 +491,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<label-location>/WEB-INF/label/foo.properties</label-location>
 	</system-config>
 	-->
+	<!-- for testing B50-3316543 -->
 	<system-config>
-		<label-location>/WEB-INF/prop/mdm.properties</label-location>
-    	<label-location>/WEB-INF/prop/wtb.properties</label-location>
+		<label-location>/WEB-INF/prop/B50-3316543-mdm.properties</label-location>
+    	<label-location>/WEB-INF/prop/B50-3316543-wtb.properties</label-location>
 	</system-config>	
 	
 	<!-- Uncommet to control the encoding of the labe properties files
