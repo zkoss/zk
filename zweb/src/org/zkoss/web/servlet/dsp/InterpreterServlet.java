@@ -73,8 +73,11 @@ public class InterpreterServlet extends HttpServlet {
 	private boolean _compress = true;
 
 	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
+		try {
+			super.init(config); //B50-3310020: save config; some util depends on it
+		} catch (Throwable ex) {
+			//ZK-389: WS 5.1 throws NPE but it won't affect ZK so ignore it
+		}
 
 		_ctx = config.getServletContext();
 

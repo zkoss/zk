@@ -4,6 +4,7 @@ ZK 5.0.9
 
 * Bugs
   ZK-386: sclass is not applying when div visible false
+  ZK-389: Exception after upgraded to zk 5.0.8 in WebSphere 5.1
 
 	--------
 ZK 5.0.8

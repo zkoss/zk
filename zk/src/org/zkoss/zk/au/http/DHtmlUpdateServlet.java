@@ -133,7 +133,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
+		try {
+			super.init(config); //B50-3310020: save config; some util depends on it
+		} catch (Throwable ex) {
+			//ZK-389: WS 5.1 throws NPE but it won't affect ZK so ignore it
+		}
 
 //		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
