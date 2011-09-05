@@ -54,8 +54,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${dist.lib.ext.dir}/CVS" property="lib.ext.CVS.dir.exist"/>
 		<available file="${dist.lib.ext.dir}/.svn" property="lib.ext.svn.dir.exist"/>
 
-		<available file="${src.archive.dir}/META-INF/${jad.name}" property="jad.exist"/>
-
 		<condition property="war.dir" value="${src.archive.dir}">
 			<available file="${src.archive.dir}" type="dir"/>
 		</condition>
@@ -69,33 +67,14 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<condition property="build.ear.required">
 			<equals arg1="${format}" arg2="ear"/>
 		</condition>
-		<condition property="build.jad.required">
-			<and>
-				<or>
-					<equals arg1="${format}" arg2="jar"/>
-					<equals arg1="${format}" arg2="jar2"/>
-				</or>
-				<isset property="jad.exist"/>
-			</and>
-		</condition>
 		<condition property="build.jar.required">
-			<and>
-				<or>
-					<equals arg1="${format}" arg2="jar"/>
-					<equals arg1="${format}" arg2="jar2"/>
-				</or>
-				<not>
-					<isset property="jad.exist"/>
-				</not>
-			</and>
+			<or>
+				<equals arg1="${format}" arg2="jar"/>
+				<equals arg1="${format}" arg2="jar2"/>
+			</or>
 		</condition>
 		<condition property="build.jar2.required">
-			<and>
-				<equals arg1="${format}" arg2="jar2"/>
-				<not>
-					<isset property="jad.exist"/>
-				</not>
-			</and>
+			<equals arg1="${format}" arg2="jar2"/>
 		</condition>
 		<condition property="build.war.required">
 			<equals arg1="${format}" arg2="war"/>
@@ -123,28 +102,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		</condition>
 		<condition property="deploy.server.required">
 			<equals arg1="${deploy}" arg2="server"/>
-		</condition>
-
-		<!-- deploy jboss -->
-		<condition property="deploy.jboss.required">
-			<and>
-				<isset property="deploy.server.required"/>
-				<equals arg1="${format}" arg2="ear"/>
-			</and>
-		</condition>
-		<condition property="deploy.jboss.intact.required">
-			<and>
-				<isset property="deploy.jboss.required"/>
-				<not>
-					<isset property="deploy.unzip.list"/>
-				</not>
-			</and>
-		</condition>
-		<condition property="deploy.jboss.unzip.required">
-			<and>
-				<isset property="deploy.jboss.required"/>
-				<isset property="deploy.unzip.list"/>
-			</and>
 		</condition>
 
 		<!-- deploy tomcat -->

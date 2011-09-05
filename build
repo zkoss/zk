@@ -61,23 +61,11 @@ else
 	fi
 fi
 
-jboss_profile=$(grep '^jboss.deploy' $setting)
-jboss_profile=${jboss_profile#jboss.deploy=}
-if [ "$jboss_profile" != "" ] ; then
-	jboss_ear=${jboss_profile#*/}
-	if [ "$jboss_ear" = "" ] ; then
-		echo "Illegal jboss.deploy: $jboss_profile. It must be xxx/yyy."
-	fi
-	jboss_profile=${jboss_profile%/*}
-fi
-jboss_home=/usr/jboss
 tomcat_home="$CATALINA_HOME"
 if [ ! -d "$tomcat_home" ]; then
   tomcat_home=/usr/tomcat
 fi
 if [ "$TERM" = "cygwin" ] ; then
-	jboss_home=$(cygpath -w $jboss_home)
-	jboss_home=${jboss_home%\\}
 	tomcat_home=$(cygpath -w $tomcat_home)
 	tomcat_home=${tomcat_home%\\}
 fi
@@ -450,8 +438,7 @@ function invoke_ant
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
-		-Djboss.profile="$jboss_profile" -Djboss.ear="$jboss_ear" \
-		-Djboss.home="$jboss_home" -Dtomcat.home="$tomcat_home" \
+		-Dtomcat.home="$tomcat_home" \
 		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
