@@ -25,19 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!menubar._noFloatUp && !menubar._bOver && zul.menu._nOpen)
 			zWatch.fire('onFloatUp', menubar); //notify all
 	}
-/** @class zul.menu.Renderer
- * The renderer used to render a menu.
- * It is designed to be overriden
- * @since 5.0.5
- */
-zul.menu.Renderer = {
-	/** render the spinner's(timebox) button
-	* @param Array out an array of HTML fragments.
-	* @param zul.inp.ComboWidget wgt the combowidget
-	*/
-	renderSpinnerButton: function (out, wgt) {
-	}
-};
+	
 /**
  * A container that usually contains menu elements.
  *
