@@ -60,14 +60,7 @@ for f in $*; do
 		echo "cp dist/lib/$f /usr/tomcat/webapps/$dst"
 		cpweb $f/src/archive /usr/tomcat/webapps/$dst
 	fi
-	if [ -f dist/lib/$f.jad ] ; then
-		dstdir=/usr/WTK/apps/$f
-		echo "cp $f.jad $dstdir"
-		cp -u -p -v dist/lib/$f.jad dist/lib/$f.jar $f/src/archive/META-INF/MANIFEST.MF $dstdir/bin
-		cp -urp $f/src/org $dstdir/src
-		cp -urp $f/src/archive/icons $dstdir/res
-		cp -urp $f/debugv/org $dstdir/classes
-	elif [ -f dist/lib/$f.jar ] ; then
+	if [ -f dist/lib/$f.jar ] ; then
 		jar_found=true
 	fi
 done
@@ -88,7 +81,7 @@ if [ "$jar_found" = "true" ] ; then
 
 	for f in $*; do
 		f=${f%/}
-		if [ ! -f dist/lib/$f.jad ] && [ -f dist/lib/$f.jar ] ; then
+		if [ -f dist/lib/$f.jar ] ; then
 			#echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
 			chmod 644 dist/lib/$f.jar
 			cp -p -u -v -f dist/lib/$f.jar /usr/tomcat/shared/lib
