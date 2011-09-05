@@ -114,7 +114,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static final String ATTR_AU_PROCESSORS
 		= "org.zkoss.zk.au.http.auProcessors";
 
-	private ServletContext _ctx;
 	private long _lastModified;
 	/** (String name, AuExtension). */
 	private Map _aues = new HashMap(8);
@@ -132,18 +131,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	//Servlet//
-	public void init(ServletConfig config) throws ServletException {
-		try {
-			super.init(config); //B50-3310020: save config; some util depends on it
-		} catch (Throwable ex) {
-			//ZK-389: WS 5.1 throws NPE but it won't affect ZK so ignore it
-		}
+	public void init() throws ServletException {
+		final ServletConfig config = getServletConfig();
+		final ServletContext ctx = getServletContext();
+		ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 
-//		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
-		_ctx = config.getServletContext();
-		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
-
-		final WebManager webman = WebManager.getWebManager(_ctx);
+		final WebManager webman = WebManager.getWebManager(ctx);
 		String param = config.getInitParameter("compress");
 		_compress = param == null || param.length() == 0 || "true".equals(param);
 		if (!_compress)
@@ -224,9 +217,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				log.warningBriefly("Unable to stop "+aue, ex);
 			}
 		}
-	}
-	public ServletContext getServletContext() {
-		return _ctx;
 	}
 
 	/* Returns whether to compress the output.
@@ -368,7 +358,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		return -1;
 	}
 	private ClassWebResource getClassWebResource() {
-		return WebManager.getWebManager(_ctx).getClassWebResource();
+		return WebManager.getWebManager(getServletContext()).getClassWebResource();
 	}
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -376,6 +366,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String pi = Https.getThisPathInfo(request);
 //		if (log.finerable()) log.finer("Path info: "+pi);
 
+		final ServletContext ctx = getServletContext();
 		final boolean withpi = pi != null && pi.length() != 0;
 		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 			//use HttpSession to avoid loading SerializableSession in GAE
@@ -386,14 +377,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			Object oldsess = null;
 			if (hsess == null) {
 				oldsess = SessionsCtrl.getRawCurrent();
-				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
+				SessionsCtrl.setCurrent(new SessionResolverImpl(ctx, request));
 				//it might be created later
 			}
 
 			WebApp wapp;
 			Session sess;
 			final Object old = hsess != null?
-				(wapp = WebManager.getWebAppIfAny(_ctx)) != null &&
+				(wapp = WebManager.getWebAppIfAny(ctx)) != null &&
 				(sess = SessionsCtrl.getSession(wapp, hsess)) != null ?
 					I18Ns.setup(sess, request, response, "UTF-8"):
 					I18Ns.setup(hsess, request, response, "UTF-8"):
@@ -411,7 +402,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return; //done
 		}
 
-		final Session sess = WebManager.getSession(_ctx, request, false);
+		final Session sess = WebManager.getSession(ctx, request, false);
 		if (withpi) {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
@@ -423,7 +414,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			Object oldsess = null;
 			if (sess == null) {
 				oldsess = SessionsCtrl.getRawCurrent();
-				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
+				SessionsCtrl.setCurrent(new SessionResolverImpl(ctx, request));
 				//it might be created later
 			}
 
@@ -448,7 +439,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			//Bug 1849088: rmDesktop might be sent after invalidate
 			//Bug 1859776: need send response to client for redirect or others
-			final WebApp wapp = WebManager.getWebAppIfAny(_ctx);
+			final WebApp wapp = WebManager.getWebAppIfAny(ctx);
 			final String dtid = getAuDecoder(wapp).getDesktopId(request);
 			if (dtid != null)
 				sessionTimeout(request, response, wapp, dtid);
@@ -557,7 +548,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 //		if (log.debugable()) log.debug("AU request: "+aureqs);
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Execution exec = 
-			new ExecutionImpl(_ctx, request, response, desktop, null);
+			new ExecutionImpl(getServletContext(), request, response, desktop, null);
 		if (sid != null)
 			((ExecutionCtrl)exec).setRequestId(sid);
 
@@ -616,7 +607,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final AuResponse resp;
 			if (uri != null) {
 				if (uri.length() != 0)
-					uri = Encodes.encodeURL(_ctx, request, response, uri);
+					uri = Encodes.encodeURL(getServletContext(), request, response, uri);
 				resp = new AuSendRedirect(uri, null);
 			} else {
 				String msg = wapp.getConfiguration().getTimeoutMessage(deviceType);
@@ -661,15 +652,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final FailoverManager failover = wappc.getFailoverManager();
 		if (failover != null) {
 			Desktop desktop = null;
+			final ServletContext ctx = getServletContext();
 			try {
 				if (failover.isRecoverable(sess, dtid)) {
-					desktop = WebManager.getWebManager(_ctx)
+					desktop = WebManager.getWebManager(ctx)
 						.getDesktop(sess, request, response, null, true);
 					if (desktop == null) //forward or redirect
 						throw new IllegalStateException("sendRediect or forward not allowed in recovering");
 
 					wappc.getUiEngine().execRecover(
-						new ExecutionImpl(_ctx, request, response, desktop, null),
+						new ExecutionImpl(ctx, request, response, desktop, null),
 						failover);
 					return desktop; //success
 				}
