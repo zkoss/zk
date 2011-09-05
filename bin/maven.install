@@ -19,7 +19,7 @@
 #
 maindir="$(pwd)"
 version=$1
-if [ "$version" == "" ] ; then
+if [ "$2" == "" ] ; then
       version=$version.FL.$(date +%Y%m%d)
 fi
 
@@ -29,6 +29,8 @@ function upVer {
 	cd $maindir/$1
 	mvn install
 	mv -f $maindir/$1/pom.xml.bak $maindir/$1/pom.xml
+	#Remove local files and folders
+	rm -f $maindir/$1/debug/*.jar
 	cd ..
 }
 
