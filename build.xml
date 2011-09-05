@@ -49,11 +49,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${src5.dir}" property="src5.dir.exist"/>
 		<available file="${srcpv.dir}" property="srcpv.dir.exist"/>
 
-		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
-		<available file="${bin.dir}/.svn" property="bin.svn.dir.exist"/>
-		<available file="${dist.lib.ext.dir}/CVS" property="lib.ext.CVS.dir.exist"/>
-		<available file="${dist.lib.ext.dir}/.svn" property="lib.ext.svn.dir.exist"/>
-
 		<condition property="war.dir" value="${src.archive.dir}">
 			<available file="${src.archive.dir}" type="dir"/>
 		</condition>
@@ -140,17 +135,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<!-- clean relevant -->
 		<condition property="clean.all.required">
 			<isset property="do.all"/>
-		</condition>
-		<condition property="clean.bin.required">
-			<and>
-				<isset property="do.all"/>
-				<not>
-					<or>
-						<isset property="bin.CVS.dir.exist"/>
-						<isset property="bin.svn.dir.exist"/>
-					</or>
-				</not>
-			</and>
 		</condition>
 	</target>
 	<target name="config.build" depends="config">
