@@ -174,12 +174,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zhtml</artifactId>
+			<artifactId>zul</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zml</artifactId>
+			<artifactId>zhtml</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
