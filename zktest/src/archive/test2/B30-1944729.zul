@@ -43,8 +43,8 @@ After you click the "Click Me" button, the "Ciao 3" label is properly embedded i
 					</hbox>
 				</tabpanel> -->
 				<tabpanel height="100%">
-					<hbox width="100%" height="100%" style="border: red solid 1px">
-						<window border="normal" width="100%" height="100%" style="border: blue solid 1px">
+					<hbox pack="stretch" width="100%" height="100%" style="border: red solid 1px">
+						<window border="normal" hflex="1" height="100%" style="border: blue solid 1px">
 							<label value="Ciao 3"/>
 						</window>
 					</hbox>

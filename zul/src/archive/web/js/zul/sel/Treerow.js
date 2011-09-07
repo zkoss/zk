@@ -72,11 +72,11 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	//@Override
 	doClick_: function(evt) {
 		var ti = this.parent;
-		if (ti.isDisabled()) return;
 		if (evt.domTarget == this.$n('open')) {
 			ti.setOpen(!ti._open);
 			evt.stop();
-		} else this.$supers('doClick_', arguments);
+		} else if (!ti.isDisabled())
+			this.$supers('doClick_', arguments);
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');

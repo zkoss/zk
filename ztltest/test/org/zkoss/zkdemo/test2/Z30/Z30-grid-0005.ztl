@@ -77,12 +77,12 @@
 			click(checkId);
 			waitResponse();
 			Number width = getElementWidth(uuid);
-			mouseMoveAt(uuid, width + ",0");
+			mouseMoveAt(column, width + ",0");
 			verifyTrue($jq.hasClass("z-column-sizing"));
 			
 			//a workaround to chrome, move 10px per drag
-			dragdropTo(uuid, width + ",0", width.intValue() - 10 + ",0");
-			dragdropTo(uuid, width.intValue() - 10 + ",0", width.intValue() - 20 + ",0");
+			dragdropTo(column, width + ",0", width.intValue() - 10 + ",0");
+			dragdropTo(column, width.intValue() - 10 + ",0", width.intValue() - 20 + ",0");
 			if (!ZK.is("ie6_"))
 				verifyEquals(width.intValue() - 20, getElementWidth(uuid).intValue());
 			else

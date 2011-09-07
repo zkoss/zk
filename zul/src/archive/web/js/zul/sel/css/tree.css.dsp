@@ -48,7 +48,7 @@ tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 } <%-- these above css cannot be overrided--%>
 <%-- tree icons --%>
 span.z-tree-ico, span.z-tree-line, span.checkmark-spacer {
-	width: 18px; min-height: 18px; height: 100%;
+	width: 18px; height: 18px;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }

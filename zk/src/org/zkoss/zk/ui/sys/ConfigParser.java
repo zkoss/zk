@@ -638,6 +638,9 @@ public class ConfigParser {
 		cls = parseClass(el, "web-app-class", WebApp.class);
 		if (cls != null) config.setWebAppClass(cls);
 
+		cls = parseClass(el, "web-app-factory-class", WebAppFactory.class);
+		if (cls != null) config.setWebAppFactoryClass(cls);
+
 		cls = parseClass(el, "method-cache-class", Cache.class);
 		if (cls != null)
 			ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());

@@ -143,7 +143,7 @@ Contributor selected = allContributor.get(0);
 	<style src="/widgets/grid/data_binding/Customize.css" />
 	<hlayout spacing="0">
 		<listbox sclass="employee-list" model="@{allContributor}"
-			selectedItem="@{selected}" rows="10" width="401px" vflex="true"
+			selectedItem="@{selected}" mold="paging" rows="10" pageSize="10" width="401px" vflex="true"
 			 multiple="true" checkmark="true">
 			<attribute name="onAfterRender">
 				//int size = self.getItemCount();

@@ -2552,10 +2552,10 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public void service(Event event, Scope scope) throws Exception {
-		final Page page = getPage();
 		final Execution exec = Executions.getCurrent();
+		final Desktop desktop = exec.getDesktop();
+		final Page page = _page != null ? _page: desktop.getFirstPage();
 		if (page == null || !page.isAlive()) {
-			final Desktop desktop = exec.getDesktop();
 			String msg = (page == null ? "No page is available in "+desktop: "Page "+page+" was destroyed");
 			if (desktop.isAlive())
 				msg += " (but desktop is alive)";
@@ -2566,6 +2566,7 @@ w:use="foo.MyWindow"&gt;
 			log.warning(msg);
 		}
 
+		//EventListener always is called even if comp isn't attached (e.g., EventQueue)
 		final ExecInfo execinf;
 		((ExecutionCtrl)exec).setExecutionInfo(execinf = new ExecInfo(event));
 		final String evtnm = event.getName();
@@ -2582,8 +2583,9 @@ w:use="foo.MyWindow"&gt;
 				if (!event.isPropagatable())
 					return; //done
 			}
-		
-		if (page != null && getDesktop() != null) {
+
+		//ZScript called only if comp attached to an active page
+		if (page != null && getDesktop() != null) { //this.desktop, not exec.desktop
 			final ZScript zscript = getEventHandler(evtnm);
 			execinf.update(null, null, zscript);
 			if (zscript != null) {
@@ -2605,8 +2607,8 @@ w:use="foo.MyWindow"&gt;
 				}
 			}
 
-		final Method mtd =
-			ComponentsCtrl.getEventMethod(getClass(), evtnm);
+		//Like EventListener, method is always called
+		final Method mtd = ComponentsCtrl.getEventMethod(getClass(), evtnm);
 		if (mtd != null) {
 //			if (log.finerable()) log.finer("Method for event="+evtnm+" comp="+this+" method="+mtd);
 			execinf.update(mtd, null, null);

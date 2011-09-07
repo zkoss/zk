@@ -18,10 +18,11 @@
 				</vbox>
 			</zk>
 		--></server>
-		<client><![CDATA[
+		<client wait="200"><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
-            type(combobox, "aaa");
+            sendKeys(combobox, "aaa");
+            blur(combobox);
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());
@@ -73,10 +74,11 @@
 				</vbox>
 			</zk>
 		--></server>
-		<client><![CDATA[
+		<client wait="200"><![CDATA[
 			JQuery combobox = jq(".z-combobox-inp");
             focus(combobox);
-            type(combobox, "ttt");
+            sendKeys(combobox, "ttt");
+            blur(combobox);
             click(reset);
             waitResponse();
             verifyTrue(combobox.val().isEmpty());

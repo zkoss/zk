@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<column>Column</column>
 		</columns>
 		<rows>
-			<row>Row</row>
+			<row>The right side of THIS Column/Row should touch the right border of the Grid.</row>
 		</rows>
 	</grid>
 	<grid vflex="1" />

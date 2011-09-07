@@ -70,10 +70,10 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 				<column label="Author"/>
 			</columns>
 			<rows>
-				<row forEach="&#36;{_.infos}">
-					<label value="&#36;{each.title}"/>
-					<label value="&#36;{each.author1}"/>
-					<label value="&#36;{each.author2}"/>
+				<row forEach="#{_.infos}">
+					<label value="#{each.title}"/>
+					<label value="#{each.author1}"/>
+					<label value="#{each.author2}"/>
 				</row>
 			</rows>
 		</grid> 

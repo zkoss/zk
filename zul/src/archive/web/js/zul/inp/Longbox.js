@@ -17,13 +17,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-longbox.
  */
 zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
-	onSize: _zkf = function() {
+	onSize: function() {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
+
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
@@ -79,11 +79,11 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 	bind_: function(){
 		this.$supers(zul.inp.Longbox, 'bind_', arguments);
 		if (this.inRoundedMold())
-			zWatch.listen({onSize: this, onShow: this});
+			zWatch.listen({onSize: this});
 	},	
 	unbind_: function(){
 		if (this.inRoundedMold())
-			zWatch.unlisten({onSize: this, onShow: this});
+			zWatch.unlisten({onSize: this});
 		this.$supers(zul.inp.Longbox, 'unbind_', arguments);
 	}
 });

@@ -24,13 +24,13 @@ import org.zkoss.lang.Objects;
  *
  * @author tomyeh
  */
-public class Pair implements java.io.Serializable {
+public class Pair<X, Y> implements java.io.Serializable {
 	/** The first key. */
-	public final Object x;
+	public final X x;
 	/** The second key. */
-	public final Object y;
+	public final Y y;
 
-	public Pair(Object x, Object y) {
+	public Pair(X x, Y y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -40,12 +40,12 @@ public class Pair implements java.io.Serializable {
 
 	/** Returns the first value of the pair.
 	 */
-	public Object getX() {
+	public X getX() {
 		return this.x;
 	}
 	/** Returns the second value of the pair.
 	 */
-	public Object getY() {
+	public Y getY() {
 		return this.y;
 	}
 

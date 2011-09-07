@@ -42,6 +42,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			center.w -= ambit.ts;
 		}
 	};
+	
+	function _getRegionSize (wgt, hor, ext) {
+		if (!wgt)
+			return 0;
+		var n = wgt.$n('real'),
+			sz = hor ? 'offsetWidth' : 'offsetHeight',
+			sum = n[sz];
+		if (ext) {
+			var cn = wgt.$n('colled'),
+				sn = wgt.$n('split');
+			if (cn)
+				sum += cn[sz];
+			if (sn)
+				sum += sn[sz];
+		}
+		return sum;
+	}
 
 var Borderlayout =
 /**
@@ -96,11 +113,29 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(Borderlayout, 'bind_', arguments);
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(Borderlayout, 'unbind_', arguments);
+	},
+	beforeMinFlex_: function (o) {
+		// B50-ZK-309
+		var east = this.east,
+			west = this.west,
+			north = this.north,
+			south = this.south,
+			center = this.center;
+		return o == 'w' ?
+			Math.max(
+				_getRegionSize(north, true), _getRegionSize(south, true),
+				_getRegionSize(east, true, true) + _getRegionSize(west, true, true) +
+				_getRegionSize(center, true)):
+			_getRegionSize(north, false, true) + 
+				_getRegionSize(south, false, true) +
+				Math.max(
+					_getRegionSize(east), _getRegionSize(west),
+					_getRegionSize(center));
 	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenFlex_: function () {
@@ -109,6 +144,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (this._isOnSize)
 			this._resize(true);
 	},
+	/*
+	// B50-ZK-309: done by beforeMinFlex_
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
 	afterChildrenMinFlex_: function() {
 		//region's min vflex/hflex resolved and try the border resize
@@ -118,6 +155,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			this._isOnSize = false;
 		}
 	},
+	*/
 	/**
 	 * Re-sizes this layout component.
 	 */
@@ -246,13 +284,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		}
 	},
 	//zWatch//
-	onSize: _zkf = function () {
+	onSize: function () {
 		this._resize(true);
-	},
-	onShow: _zkf,
-	isWatchable_: function(name) {
-		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
-		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
 	}
 }, {
 	/**

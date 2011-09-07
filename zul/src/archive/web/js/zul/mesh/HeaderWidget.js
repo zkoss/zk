@@ -90,7 +90,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	domStyle_: function (no) {
 		var style = '';
 		if (this._hflexWidth) { //handle hflex
-			style = 'width:'+ this._hflexWidth+';';
+			style = 'width: ' + this._hflexWidth + 'px;';
 			
 			if (no) no.width = true;
 			else no = {width:true};
@@ -265,6 +265,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
+	clearCachedSize_: function() {
+		this.$supers('clearCachedSize_', arguments);
+		var mw;
+		if (mw = this.getMeshWidget())
+			mw._clearCachedSize();
+	},
 	//@Override to get width/height of MeshWidget 
 	getParentSize_: function() {
 		//to be overridden
@@ -299,11 +305,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return {};
 	},
-	isWatchable_: function (name) {//Bug 3164504: Hflex will not recalculate when the colum without label
-		var n,
-			strict = name!='onShow';
-		return (n=this.$n()) && zk(n).isVisible(strict) && 
-			(n=this.getMeshWidget()) && zk(n).isRealVisible(strict);
+	isWatchable_: function (name, p, cache) {
+		//Bug 3164504: Hflex will not recalculate when the colum without label
+		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
+		var wp;
+		return this._visible && (wp=this.parent) && wp._visible //check this and HeadWidget
+			&& (wp=wp.parent) && wp.isWatchable_(name, p, cache); //then MeshWidget.isWatchable_
 	},
 	_insizer: function (x) {
 		return x >= this.$n().offsetWidth - 10;
@@ -454,7 +461,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		meshn._lastsz = null;
 		
 		// bug #2799258
-		zUtl.fireSized(mesh, true);
+		zUtl.fireSized(mesh, -1); //no beforeSize
 		
 		// fixed for B50-3147926.zul
 		if (zk.ie < 8)

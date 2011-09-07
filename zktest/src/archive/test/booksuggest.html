@@ -59,10 +59,10 @@
 				<column label="Author"/>
 			</columns>
 			<rows>
-				<row forEach="${_.infos}">
-					<label value="${each.title}"/>
-					<label value="${each.author1}"/>
-					<label value="${each.author2}"/>
+				<row forEach="#{_.infos}">
+					<label value="#{each.title}"/>
+					<label value="#{each.author1}"/>
+					<label value="#{each.author2}"/>
 				</row>
 			</rows>
 		</grid> 

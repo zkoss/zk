@@ -38,9 +38,13 @@ zk.copy(zjq, {
 			// visible will cause elements that shall be cropped become visible, but we need do it if it has INPUT
 	},
 	_fixCSS: function (el) { 
-		var olddisp = el.style.display; //force redraw
-		el.style.display='none';
+		var old = el.style.display,
+			top = el.scrollTop,
+			lft = el.scrollLeft;
+		el.style.display = 'none'; //force redraw
 		var dummy = el.offsetWidth; //force recalc
-		el.style.display=olddisp;
+		el.style.display = old;
+		el.scrollTop = top;
+		el.scrollLeft = lft;
 	}
 });

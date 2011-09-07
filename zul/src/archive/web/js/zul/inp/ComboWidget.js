@@ -31,7 +31,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				zcls = this.getZclass();
 			if (n) {
 				if (!this.inRoundedMold()) {
-					jq(n)[v ? 'show': 'hide']();
+					if (!this._inplace || !v)
+						jq(n)[v ? 'show': 'hide']();
+					else
+						n.style.display = '';
 					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
@@ -65,13 +68,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.onSize();
 		}
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
 	
 	onFloatUp: function (ctl) {
 		if (jq(this.getPopupNode_()).is(':animated') || (!this._inplace && !this.isOpen()))
@@ -167,6 +169,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		//than invalidate!!
 		var $pp = zk(pp);
 		$pp.makeVParent();
+		zWatch.fireDown('onVParent', this);
 
 		// throw in
 		pp.style.left = "";
@@ -227,7 +230,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_afterSlideDown: function (n) {
 		if (!this.desktop) {
 			//Bug 3035847: close (called by unbind) won't remove popup when animating
-			zk(n).undoVParent();
+			zk(n).undoVParent(); //no need to fire onVParent since it will be removed
 			jq(n).remove();
 		}
 		if (this._shadow) this._shadow.sync();
@@ -253,8 +256,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	close: function (opts) {
 		if (!this._open) return;
+
+		var self = this;
 		if (zk.animating()) {
-			var self = this;
 			setTimeout(function() {self.close(opts);}, 50);
 			return;
 		}
@@ -273,6 +277,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		zk.afterAnimate(function() {
 			zk(pp).undoVParent();
+			zWatch.fireDown('onVParent', self);
 		}, -1);
 		
 		if (this._shadow) {
@@ -440,7 +445,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		
-		zWatch.listen({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
+		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
@@ -453,7 +458,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this, onResponse: this});
+		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this});
 		if (!zk.css3) jq.unzsync(this);
 		
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);

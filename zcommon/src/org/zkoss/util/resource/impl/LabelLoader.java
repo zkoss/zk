@@ -43,7 +43,6 @@ import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.util.SimpleXelContext;
 
 /**
@@ -406,7 +405,7 @@ public class LabelLoader {
 			return _expr != null ? (String)_expr.evaluate(_xelc): _val;
 		}
 	}
-	private class Resolver implements VariableResolver {
+	private class Resolver implements VariableResolver, java.io.Serializable {
 		private VariableResolver custom;
 		public Object resolveVariable(String name) {
 			if (custom != null) {

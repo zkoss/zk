@@ -46,26 +46,22 @@
 			mouseDownAt(modalBtn, "15,8");
 			mouseUpAt(modalBtn, "15,8");
 			click(modalBtn);
-			waitResponse();
+			waitResponse(true);
 			click(invalidateBtn);
-			waitResponse();
+			waitResponse(true);
 			verifyTrue(jq("$hideBtn .z-button-focus").exists());
-			keyDownNative(SHIFT);
-			keyDownNative(TAB);
-			keyUpNative(TAB);
-			keyUpNative(SHIFT);
+			getActions().sendKeys(Keys.LEFT_SHIFT, Keys.TAB).perform();
+			waitResponse(true);
 			verifyTrue(jq("$hideBtn .z-button-focus").exists());
 			click(jq(".z-window-modal-icon"));
-			waitResponse();
+			waitResponse(true);
 			mouseMoveAt(newBtn, "15,8");
 			mouseDownAt(newBtn, "15,8");
 			mouseUpAt(newBtn, "15,8");
 			click(newBtn);
-			waitResponse();
-			if(ZK.is("ie8"))
-			verifyFalse(jq(".z-textbox-focus").exists());//manual test is OK, but in here it can't focus automatically 			
+			waitResponse(true);
 			click(jq(".z-window-highlighted-icon"));
-			waitResponse();
+			waitResponse(true);
 			verifyTrue(jq("$newBtn .z-button-focus").exists());
 		]]></client>
 	</case>

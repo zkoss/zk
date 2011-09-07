@@ -34,11 +34,13 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
- * Used to create {@link Desktop}, {@link Page} and to convert path/URL
- * to {@link PageDefinition}.
+ * Used to create {@link Session}, {@link Desktop}, {@link Page} and
+ * {@link Component}. It is also used to load path/URL
+ * into {@link PageDefinition}.
  *
  * <p>To customize the implementation of {@link WebApp}, please
  * specify <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-class_Element">web-app-class</a>
+ * or <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-factory-class_Element">web-app-factory-class</a>
  * instead (of implementing this interface).
  *
  * <p>Rather than implementing this interface from scratch, you could
@@ -48,6 +50,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * (for clustering environment).
  *
  * @author tomyeh
+ * @see WebAppFactory
  */
 public interface UiFactory {
 	/** Starts this factory.

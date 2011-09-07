@@ -33,24 +33,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-					click(jq(".z-paging-next"));
+				click(jq(".z-paging-next"));
 				waitResponse();
-				boolean color = ColorVerifingHelper.getInstance().
-				isEqualColor("alternating",jq(".z-row:eq(1)").css("backgroundColor"));
-				verifyTrue(color);
-				boolean color1 = ColorVerifingHelper.getInstance().
-				isEqualColor("alternating",jq(".z-row:eq(3)").css("backgroundColor"));
-				verifyTrue(color);
-				boolean color2 = ColorVerifingHelper.getInstance().
-				isEqualColor("alternating",jq(".z-row:eq(5)").css("backgroundColor"));
-				verifyTrue(color);
-				boolean color3 = ColorVerifingHelper.getInstance().
-				isEqualColor("alternating",jq(".z-row:eq(7)").css("backgroundColor"));
-				verifyTrue(color);
-				boolean color4 = ColorVerifingHelper.getInstance().
-				isEqualColor("alternating",jq(".z-row:eq(9)").css("backgroundColor"));
-				verifyTrue(color);
-				
+				String color = jq(".z-row:eq(1)").css("backgroundColor");
+				verifyEquals(color, jq(".z-row:eq(3)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(5)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(7)").css("backgroundColor"));
+				verifyEquals(color, jq(".z-row:eq(9)").css("backgroundColor"));
+				String color2 = jq(".z-row:eq(0)").css("backgroundColor");
+				verifyNotEquals(color, color2);
+				verifyEquals(color2, jq(".z-row:eq(2)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(4)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(6)").css("backgroundColor"));
+				verifyEquals(color2, jq(".z-row:eq(8)").css("backgroundColor"));
 		]]></client>
 	</case>
 </test>

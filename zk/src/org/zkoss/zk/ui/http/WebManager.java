@@ -64,6 +64,7 @@ import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.WebAppFactory;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.RequestInfo;
@@ -197,14 +198,23 @@ public class WebManager {
 		Labels.setVariableResolver(new ServletRequestResolver());
 
 		//create a WebApp instance
-		final Class cls = config.getWebAppClass();
-		if (cls == null) {
-			_wapp = new SimpleWebApp();
-		} else {
+		Class cls = config.getWebAppFactoryClass();
+		if (cls != null) {
 			try {
-				_wapp = (WebApp)cls.newInstance();
+				_wapp = ((WebAppFactory)cls.newInstance()).newWebApp(_ctx);
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+			}
+		} else {
+			cls = config.getWebAppClass();
+			if (cls != null) {
+				try {
+					_wapp = (WebApp)cls.newInstance();
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				}
+			} else {
+				_wapp = new SimpleWebApp();
 			}
 		}
 		((WebAppCtrl)_wapp).init(_ctx, config);

@@ -307,11 +307,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_fixPos: function() {
 		this.$n("btn").style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
 	},
-	onSize: _zkf = function() {
+	onSize: function() {
 		this._fixHgh();
 		this._fixPos();
 	},
-	onShow: _zkf,
+
 	/** Return whether this widget in scale mold
 	 * @return boolean
 	 */
@@ -347,7 +347,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this._fixHgh();
 		this._makeDraggable();
 		
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 		this.updateFormData(this._curpos);
 		this._fixPos();
 	},
@@ -357,7 +357,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(zul.inp.Slider, 'unbind_', arguments);
 	}
 });

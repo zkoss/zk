@@ -40,13 +40,12 @@
 				</zk>
 			-->
 		</server>
-		<client>	<![CDATA[
-       			focus(jq(".z-combobox-inp"));
-				shiftKeyDown();
-				keyPressNative("65");
-				shiftKeyUp();
-				waitResponse();		
+		<client><![CDATA[
+				focus(jq(".z-combobox-inp"));
+				sendKeys(jq(".z-combobox-inp"), "a");
+				waitResponse(true);
 				verifyNotEquals("A",jq(".z-combobox-inp").val());
+				waitResponse(true);
 				verifyTrue(isVisible(jq(".z-comboitem")));
 				click(jq(".z-comboitem:eq(0)"));
 				waitResponse();

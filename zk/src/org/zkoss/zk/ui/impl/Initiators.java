@@ -47,24 +47,22 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	@SuppressWarnings("unchecked")
 	public static final Initiators doInit(PageDefinition pagedef, Page page,
 	Initiator[] sysinits) {
-		if (sysinits == null) {
-			sysinits = new Initiator[0];
-		} else {
+		if (sysinits != null)
 			try {
 				for (int j = 0; j < sysinits.length; ++j)
 					sysinits[j].doInit(page, Collections.EMPTY_MAP);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			}
-		}
 
 		final List<Initiator> inits = pagedef != null ? pagedef.doInit(page): null;
 		boolean sysinitEx = false;
-		for (int j = 0; j < sysinits.length; ++j)
-			if (sysinits[j] instanceof InitiatorExt) {
-				sysinitEx = true;
-				break;
-			}
+		if (sysinits != null)
+			for (int j = 0; j < sysinits.length; ++j)
+				if (sysinits[j] instanceof InitiatorExt) {
+					sysinitEx = true;
+					break;
+				}
 
 		boolean initEx = false;
 		if (inits != null)

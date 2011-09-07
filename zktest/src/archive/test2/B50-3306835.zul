@@ -22,7 +22,7 @@ else
 alert("Sorry, no food here");
 }
 </zscript>
-<window title="In IE9, you should drag drop the image in listbox" width="400px" border="normal">
+<window title="You should be able to drag and drop the image in listbox" width="400px" border="normal">
 <listbox id="src" multiple="true" width="300px">
 <listhead>
 <listheader label="Country/Area"/>

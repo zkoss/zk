@@ -204,16 +204,20 @@
 				waitResponse();
 				verifyFalse(jq("@errorbox div.z-errbox-center").exists());
 				/** spinner */
-				mouseDownAt(jq("@spinner i.z-spinner-btn"), "0,0");
-				mouseUp(jq("@spinner i.z-spinner-btn"));
-
+				mouseDownAt(jq(".z-spinner-btn-upper"), "1,1");
+				mouseUp(jq(".z-spinner-btn-upper"));
 				waitResponse();
 				verifyTrue(3 < parseInt(jq("@spinner input.z-spinner-inp").val()));
-				mouseDownAt(jq("@spinner i.z-spinner-btn"), "3,20");
-				mouseUp(jq("@spinner i.z-spinner-btn"));
-
+				if (ZK.is("ie8")) {
+					mouseDownAt(jq(".z-spinner-btn-lower"), "1,1");
+					mouseUp(jq(".z-spinner-btn-lower"));
+				} else {
+					mouseDownAt(jq("@spinner i.z-spinner-btn"), "3,20");
+					mouseUp(jq("@spinner i.z-spinner-btn"));
+				}
 				waitResponse();
 				verifyTrue(4 >= parseInt(jq("@spinner input.z-spinner-inp").val()));
+				
 				/** colorbox */
 				click(jq("@colorbox i.z-colorbox-currcolor"));
 				click(jq("$view @widget div.z-colorpalette-colorbox:eq(56)"));

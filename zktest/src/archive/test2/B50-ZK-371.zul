@@ -1,0 +1,26 @@
+<zk>
+	<html>
+	Click the Go button and you shall see the tabbox switched and the tree being shown
+	with the minimal width
+	</html>
+	<tabbox>
+		<custom-attributes org.zkoss.zul.client.rod="false" />
+		<tabs>
+			<tab>1</tab>
+			<tab id="t2">2</tab>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				Tabpanel 1
+			</tabpanel>
+			<tabpanel id="p2">
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<button label="Go" onClick='t2.selected = true'>
+		<attribute name="onClick">
+			Executions.createComponents("B50-ZK-371-cnt.zul", p2, null);
+			t2.selected = true;
+		</attribute>
+	</button>
+</zk>

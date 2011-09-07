@@ -22,11 +22,14 @@
 			</zk>
 		]]></server>
 		<client><![CDATA[
-			Element openIcon = treerow.$n("open");
-			click(openIcon);
-			click(btn);
-			click(openIcon);
-			verifyTrue(jq(openIcon).hasClass("z-tree-root-open"));			
+				Element openIcon = treerow.$n("open");
+				click(openIcon);
+				waitResponse();
+				click(btn);
+				waitResponse();
+				click(openIcon);
+				waitResponse();
+				verifyTrue(jq(openIcon).hasClass("z-tree-root-open"));			
 		]]></client>
 	</case>
 </test>

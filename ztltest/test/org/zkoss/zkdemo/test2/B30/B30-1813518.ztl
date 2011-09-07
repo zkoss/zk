@@ -4,12 +4,12 @@
 		<client><![CDATA[
 			String borderCss = jq("@rows:eq(0) td").eval("get(0).style.border");
 				
-			if (ZK.is("ie")) {
+			if (ZK.is("ie < 9")) {
 				verifyEquals("blue 1px solid", borderCss);
 				verifyEquals("#333333", jq("@rows:eq(0) td").css("color"));
 				verifyEquals("#e3ebf6", jq("@rows:eq(0) td").css(
 						"backgroundColor"));
-				verifyEquals("null", jq("@rows:eq(1) td").css("border"));
+				verifyEquals("", jq("@rows:eq(1) td").css("border"));
 				verifyEquals("#000000", jq("@rows:eq(1) td").css("color"));
 				verifyEquals("white", jq("@rows:eq(1) td").css(
 						"backgroundColor"));

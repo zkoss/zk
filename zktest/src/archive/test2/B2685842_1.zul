@@ -13,13 +13,13 @@ B2685842_1.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<box width="1004" height="650">
+<box hflex="min" height="650">
 	<vbox>
-		<panel framable="true" title="My First Panel" border="normal" width="811px"
+		<panel framable="true" title="My First Panel" border="normal" hflex="min"
 			height="200px">
 			<panelchildren><div width="800px" height="162px" id="tl"/></panelchildren>
 		</panel>
-		<window title="My First Window" border="normal" width="811px"
+		<window title="My First Window" border="normal"  hflex="min"
 			height="200px">
 			<div width="800px" height="162px" id="tl"/>
 		</window>

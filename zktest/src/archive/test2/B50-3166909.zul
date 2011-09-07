@@ -19,8 +19,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <html><![CDATA[
 <p>
 1. You shall see two listboxes.<br/> 
-2. The first one is Name-0 ~ Name-4, and Name-0 is selected<br/>
-3. The second one is A ~ C, and A is selected.<br/>
+2. The first one is Name-0 ~ Name-4, and the Listbox shows blank (none is selected).<br/>
+3. The second one is A ~ C, and the Listbox shows blank (none is selected).<br/>
 4. Please select Name-0 to Name-3<br/>
 5. You should not see any JavaScript error, and the last listbox selects the A.<br/>
 </p>

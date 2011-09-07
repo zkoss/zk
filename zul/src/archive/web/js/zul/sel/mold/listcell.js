@@ -16,7 +16,8 @@ function (out) {
 	out.push('<td', this.domAttrs_(), '><div id="', this.uuid,
 		'-cave" class="', this.getZclass() + '-cnt');
 	
-	if (this.getListbox())
+	var box = this.getListbox();
+	if (box && !box.isSizedByContent())
 		out.push(' z-overflow-hidden');
 
 	out.push('"', this.domTextStyleAttr_(), '>', this.domContent_());

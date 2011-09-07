@@ -562,6 +562,7 @@
 			<xs:element ref="flash" />
 			<xs:element ref="flashchart" />
 			<xs:element ref="fusionchart" />
+			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -634,6 +635,7 @@
 				<xs:element ref="flash" />
 				<xs:element ref="flashchart" />
 				<xs:element ref="fusionchart" />
+				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -947,6 +949,7 @@
 		<xs:attribute name="color" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- column -->
@@ -1187,7 +1190,7 @@
 		<xs:attribute name="type" type="xs:string" use="required" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="tableModel" type="xs:string" use="optional" />
-		<xs:attribute name="chartRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="chartConfig" type="xs:string" use="optional" />
 		<xs:attribute name="tableRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="engine" type="xs:string" use="optional" />
 		<xs:attribute name="dataXMLPath" type="xs:string" use="optional" />
@@ -1218,6 +1221,18 @@
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 	</xs:complexType>
+	
+	<!-- frozen -->
+	<xs:element name="frozen" type="frozenType" />
+	<xs:complexType name="frozenType">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="columns" type="intType" use="required" />
+		<xs:attribute name="start" type="intType" use="optional" />
+	</xs:complexType>
+	
     <!-- grid -->
 	<xs:element name="grid" type="gridType" />
 	<xs:complexType name="gridType">
@@ -1225,6 +1240,7 @@
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:group ref="baseGroup" />
 				<xs:element ref="auxhead" />
+				<xs:element ref="frozen" />
 			</xs:choice>
 			<xs:choice>
 				<xs:sequence>
@@ -1548,6 +1564,7 @@
 				<xs:element ref="listitem" />
 				<xs:element ref="listgroup" />
 				<xs:element ref="listgroupfoot" />
+				<xs:element ref="frozen" />
 			</xs:choice>
 			<xs:choice>
 				<xs:sequence>
@@ -2429,6 +2446,7 @@
 			</xs:choice>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
@@ -2436,6 +2454,7 @@
 		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- treerow -->
 	<xs:element name="treerow" type="treerowType" />
@@ -2446,6 +2465,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- variables -->
 	<xs:element name="variables" type="variablesType" />

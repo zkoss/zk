@@ -42,6 +42,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 		<menuitem label="item 2" />
 	</menupopup>
 	1. Check Listbox Right Click
+	<custom-attributes org.zkoss.zul.listbox.rightSelect="false"/>
 	<listbox id="lb" checkmark="true" multiple="true">
 		<listhead>
 			<listheader label="header" sort="auto" />
@@ -51,6 +52,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 		</listitem>
 	</listbox>
 	2. Check Tree Right Click
+	<custom-attributes org.zkoss.zul.tree.rightSelect="false"/>
 	<tree checkmark="true" multiple="true">
 		<treecols>
 			<treecol label="header" />

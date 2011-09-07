@@ -98,7 +98,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$supers(zul.tab.Tabpanels, 'bind_', arguments);
 		if (this.getTabbox().isVertical()) {
 			this._zwatched = true;
-			zWatch.listen({onSize: this, beforeSize: this, onShow: this});			
+			zWatch.listen({onSize: this, beforeSize: this});
 			var n = this.$n();
 			if (n.style.width)
 				this.__width = n.style.width;
@@ -106,12 +106,15 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		if (this._zwatched) {
-			zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
+			zWatch.unlisten({onSize: this, beforeSize: this});
 			this._zwatched = false;
 		}
 		this.$supers(zul.tab.Tabpanels, 'unbind_', arguments);
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
+		this._fixWidth();
+	},
+	_fixWidth: function () {
 		var parent = this.parent.$n();
 		if (this.__width || !zk(parent).isRealVisible())
 			return;
@@ -124,7 +127,6 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 
 		n.style.width = jq.px0(zk(n).revisedWidth(width));
 	},
-	onShow: _zkf,
 	beforeSize: function () {
 		this.$n().style.width = this.__width || '';
 	},

@@ -51,9 +51,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			c.style[fd] = diff + "px";
 		}
 		if (sib && open)
-			zWatch.fireDown('onShow', sibwgt);
+			zUtl.fireShown(sibwgt);
 		if (sib2)
-			zUtl.fireSized(zk.Widget.$(sib2), true);
+			zUtl.fireSized(zk.Widget.$(sib2), -1); //no beforeSize
 
 		wgt._fixNSDomClass();
 		wgt._fixbtn();
@@ -162,7 +162,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var box = this.parent;
 		if (box && !box._splitterKid) box._bindWatch();
 
-		zWatch.listen({onSize: this, beforeSize: this, onShow: this});
+		zWatch.listen({onSize: this, beforeSize: this});
 
 		this._fixDomClass();
 			//Bug 1921830: if spiltter is invalidated...
@@ -195,7 +195,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//3077716: next sibling is not bound yet
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
+		zWatch.unlisten({onSize: this, beforeSize: this});
 
 		var Splitter = this.$class,
 			btn;
@@ -297,7 +297,6 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			_setOpen(this, false, {sendOnOpen:false});
 		}
 	},
-	onShow: _zkf,
 	onSize: _zkf,
 	beforeSize: function () {
 		this.$n().style[this.isVertical() ? "width": "height"] = "";
@@ -388,9 +387,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 
 		if (w = run.nextwgt)
-			zUtl.fireSized(w, true);
+			zUtl.fireSized(w, -1); //no beforeSize
 		if (w = run.prevwgt)
-			zUtl.fireSized(w, true);
+			zUtl.fireSized(w, -1); //no beforeSize
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it

@@ -212,7 +212,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 });
 
 zWatch = (function () {
-	var _visiEvts = {onSize: true, onShow: true, onHide: true, beforeSize: true},
+	var _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true},
 		_watches = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 		_dirty,
 		_Gun = zk.$extends(zk.Object, {
@@ -263,32 +263,29 @@ zWatch = (function () {
 	function _visible(name, c) {
 		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
 	}
-	//Returns if c is a visible child of p
-	function _visibleChild(name, p, c) {
-		if (c.isWatchable_) //in future, w might not be a widget
-			for (var w = c; w; w = w.parent) {
-				if (!w._visible) //much faster to check _visible than DOM element
-					break;
-
-				if (p == w)
-					return c.isWatchable_(name, p);
-			}
+	//Returns if c is a visible child of p (assuming p is visible)
+	function _visibleChild(name, p, c, cache) {
+		for (var w = c; w; w = w.parent)
+			if (p == w) //yes, c is a child of p
+				return !cache || c.isWatchable_(name, p, cache);
 		return false;
 	}
-	//Returns subset of xinfs that are visible childrens of p
+	//Returns subset of xinfs that are visible and childrens of p
 	function _visiChildSubset(name, xinfs, p, remove) {
-		var found = [], bindLevel = p.bindLevel;
-		for (var j = xinfs.length; j--;) { //child first
-			var xinf = xinfs[j],
-				o = xinf[0],
-				diff = bindLevel > o.bindLevel;
-			if (diff) break;//nor ancestor, nor this (&sibling)
-			if (_visibleChild(name, p, o)) {
-				if (remove)
-					xinfs.splice(j, 1);
-				found.unshift(xinf); //parent first
+		var found = [], bindLevel = p.bindLevel, cache;
+		if (p.isWatchable_ //in future, w might not be a widget
+		&& (!(cache=_visiEvts[name]&&{}) || _visible(name, p))) //check p first (since _visibleChild checks only c
+			for (var j = xinfs.length; j--;) {
+				var xinf = xinfs[j],
+					o = xinf[0],
+					diff = bindLevel > o.bindLevel;
+				if (diff) break;//nor ancestor, nor this (&sibling)
+				if (_visibleChild(name, p, o, cache)) {
+					if (remove)
+						xinfs.splice(j, 1);
+					found.unshift(xinf); //parent first
+				}
 			}
-		}
 		return found;
 	}
 	function _visiSubset(name, xinfs) {
@@ -328,12 +325,22 @@ zWatch = (function () {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
 			jq.zsync(org);
 	}
-	function _fns(fns, args) {
-		if (fns) {
-			var f;
-			while (f = fns.pop())
-				f[0].apply(f[1], args);
-		}
+	//invoke fns in the reverse order
+	function _reversefns(fns, args) {
+		if (fns)
+			//we group methods together if their parents are the same
+			//then we invoke them in the normal order (not reverse), s.t.,
+			//child invokes firsd, but also superclass invoked first (first register, first call if same object)
+			for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
+				if (--j < 0 || (oldp != (newp=fns[j][1].parent) && oldp)) {
+					for (i = j; ++i <= k;) {
+						f = fns[i];
+						f[0].apply(f[1], args);
+					}
+					k = j;
+				}
+				oldp = newp;
+			}
 	}
 	function _fire(name, org, opts, vararg) {
 		var wts = _watches[name];
@@ -353,12 +360,12 @@ zWatch = (function () {
 			if (opts && opts.timeout >= 0)
 				setTimeout(function () {
 					gun.fire();
-					_fns(fns, args);
+					_reversefns(fns, args);
 					_zsync(name, org);
 				}, opts.timeout);
 			else {
 				gun.fire();
-				_fns(fns, args);
+				_reversefns(fns, args);
 				_zsync(name, org);
 			}
 		} else

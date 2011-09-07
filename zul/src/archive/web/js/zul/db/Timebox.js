@@ -214,7 +214,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				zcls = this.getZclass();
 			if (n) {
 				if (!this.inRoundedMold()) {
-					jq(n)[v ? 'show': 'hide']();
+					if (!this._inplace || !v)
+						jq(n)[v ? 'show': 'hide']();
+					else
+						n.style.display = '';
 					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
@@ -317,7 +320,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-timebox" + (this.inRoundedMold() ? "-rounded": "");
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth(),
 			inp = this.getInputNode();
 		if (!width || width.indexOf('%') != -1)
@@ -328,7 +331,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		this.syncWidth();
 	},
-	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
 	doClick_: function(evt) {
@@ -442,6 +444,9 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!inp.value)
 			inp.value = this.coerceToString_();
 			
+		// cache it for IE
+		this._lastPos = this._getPos();
+			
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight/2;
 		if (isOverUpBtn) { //up
@@ -459,8 +464,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._currentbtn = btn;
 		}
 		
-		// cache it for IE
-		this._lastPos = this._getPos();
 		this._changed = true;
 		delete this._shortcut;
 		
@@ -632,14 +635,14 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		var btn = this.$n("btn");
 		if (btn) {
 			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")

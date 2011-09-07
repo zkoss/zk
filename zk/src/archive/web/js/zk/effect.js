@@ -360,9 +360,6 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		this.wgt = zk.Widget.$(opts.anchor);
 		if (this.wgt) {
 			zWatch.listen( {
-				onShow: [
-					this.wgt, this.onShow
-				],
 				onHide: [
 					this.wgt, this.onHide
 				],
@@ -429,18 +426,16 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		this.mask.style.visibility = "";
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		this.__mask.sync();
 	},
-	onShow: _zkf,
+
 	/** Removes the mask.
 	 */
 	destroy: function () {
 		jq(this.mask).remove();
 		if (this.wgt) {
-			zWatch.unlisten({onShow: [this.wgt, this.onShow],
-			      			 onHide: [this.wgt, this.onHide],
-			      			onSize: [this.wgt, this.onSize]});
+			zWatch.unlisten({onHide: [this.wgt, this.onHide], onSize: [this.wgt, this.onSize]});
 			delete this.wgt.__mask;
 		}
 		this.mask = this.wgt = null;

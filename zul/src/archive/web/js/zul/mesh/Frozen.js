@@ -93,7 +93,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		}, function(v) {
 			if (this._columns) {
 				if (this.desktop) {
-					this.onShow();
+					this.onSize();
 					this.syncScroll();
 				}
 			} else this.rerender();
@@ -123,7 +123,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-frozen" : this._zclass;
 	},
-	onShow: _zkf = function () {
+	onSize: function () {
 		if (!this._columns) return;
 		var self = this;
 		// Bug 3218078, to do the sizing after the 'setAttr' command
@@ -131,7 +131,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			_onSizeLater(self);
 		});
 	},
-	onSize: _zkf,
+
 	_onScroll: function (evt) {
 		if (!evt.data || !zk.currentFocus) return;
 		var p, index, td, frozen = this, 
@@ -153,31 +153,44 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
-		zWatch.listen({onShow: this, onSize: this});
+		zWatch.listen({onSize: this});
 		var scroll = this.$n('scrollX'),
-			gbody = this.parent.$n('body');
+			p = this.parent,
+			gbody = p.$n('body');
 
 		this.$n().style.height = this.$n('cave').style.height = scroll.style.height
 			 = scroll.firstChild.style.height = jq.px0(jq.scrollbarWidth());
 
-		this.parent.listen({onScroll: this.proxy(this._onScroll)}, -1000);
+		p.listen({onScroll: this.proxy(this._onScroll)}, -1000);
 		this.domListen_(scroll, 'onScroll');
 
-		if (gbody)
+		if (gbody) {
 			jq(gbody).addClass('z-word-nowrap').css('overflow-x', 'hidden');
+			p._currentLeft = 0;			
+		}
 	},
 	unbind_: function () {
-		zWatch.unlisten({onShow: this, onSize: this});
+		zWatch.unlisten({onSize: this});
 		
-		//bug B50-ZK-238
-		this.$n('scrollX').scrollLeft = 0;
-		this._doScroll();
+		var p, body, fakerflex;
+		if (p = this.parent) {
+			p.unlisten({onScroll: this.proxy(this._onScroll)});
+			if (body = p.$n('body'))
+				jq(body).removeClass('z-word-nowrap').css('overflow-x', '');
+			if (p.head && (fakerflex = p.head.$n('hdfakerflex')))
+				fakerflex.style.width = '';
+		}
 		
-		this.parent.unlisten({onScroll: this.proxy(this._onScroll)});
-		var p;
 		if ((p = this.parent) && (p = p.$n('body')))
 			jq(p).removeClass('z-word-nowrap').css('overflow-x', '');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
+	},
+	beforeParentChanged_: function (p) {
+		//bug B50-ZK-238
+		if (this._lastScale) //if large then 0
+			this._doScrollNow(0);
+		
+		this.$supers("beforeParentChanged_", arguments);
 	},
 	_doScroll: function (evt) {
 		var scroll = this.$n('scrollX'),
@@ -199,7 +212,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			}, 10);
 	},
 	_doScrollNow: function (num, force) {
-		var width = this.$n('cave').offsetWidth,
+		var width = this.desktop ? this.$n('cave').offsetWidth: null,
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows;
@@ -229,7 +242,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				shallUpdate = false;
 				if (cnt-- <= 0) {// show
 					if (force || parseInt(n.style.width) == 0) {
-						cellWidth = hdWgt._origWd || n.style.width;
+						cellWidth = hdWgt._origWd || n.style.width|| jq.px0(jq(n).outerWidth());
 						hdWgt._origWd = null;
 						shallUpdate = true;
 					}
@@ -257,7 +270,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							var tBodies = eFootTbl.tBodies;
 							
 							if (tBodies) {
-								tBodies[tBodies.length - 1].rows[0].cells[ofs].style.width = cellWidth;
+								tBodies[tBodies.length - 1].rows[0].cells[index].style.width = cellWidth;
 							}
 						}
 					}
@@ -270,9 +283,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if ((r = hdrs[i]) != hdr) //skip Column
 					_fixaux(r.cells, this._columns, this._columns + num);
 
-			for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
-					n; n = n.nextSibling)
-				width += zk.parseInt(n.style.width);
+			if (width)
+				for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
+						n; n = n.nextSibling)
+					width += zk.parseInt(n.style.width);
 
 		} else if (!rows || !rows.length) {
 			return;
@@ -295,7 +309,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				width += zk.parseInt(c.style.width);
 		}
 
-		width = jq.px0(width);
+		width = width ? jq.px0(width): '';
 		if (mesh.eheadtbl)
 			mesh.eheadtbl.style.width = width;
 		if (mesh.ebodytbl)

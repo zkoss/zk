@@ -13,7 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function () {
+(function (undefined) {
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]
@@ -271,7 +271,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.listen({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -281,12 +281,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, zFlex.fixFlexX], onShow: [wgt, zFlex.fixFlexX], beforeSize: wgt});
+			zWatch.unlisten({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
 	}
-
+	
 	/** @class zk.DnD
 	 * Drag-and-drop utility.
 	 * It is the low-level utility reserved for overriding for advanced customization.
@@ -473,6 +473,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_rdque.splice(j, 1);
 	}
 
+	//@param p the invisible widget, if any, to cache
+	function _markCache(cache, visited, p) {
+		if (cache) {
+			if (p)
+				cache[p.uuid] = false; //invisible
+
+			while (p = visited.pop())
+				cache[p.uuid] = true; //visible
+		}
+	}
+
 	var _dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
@@ -544,7 +555,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//a map of actions. Notice: it is initialized as a shared empty map
 	//setAction shall replace it with another map
-	actions_: {},
+	actions_: {}, //yes, it is shared
 
 	_floating: false,
 
@@ -866,7 +877,7 @@ new zul.wnd.Window{
 			this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 			if (this._nvflex < 0 && v != 'min')
 				this._nvflex = 0;
-			if (_binds[this.uuid] === this) { //if already bind
+			if (this.desktop) { //if already bind
 				if (!this._nvflex) {
 					this.setFlexSize_({height: ''}); //clear the height
 					delete this._vflexsz;
@@ -874,7 +885,10 @@ new zul.wnd.Window{
 						_unlistenFlex(this);
 				} else
 					_listenFlex(this);
-				zUtl.fireSized(this.parent, true);
+
+				var p;
+				if (!(p = this.parent).isBinding()) //ZK-307
+					zUtl.fireSized(p, -1); //no beforeSize
 			}
 		},
 		/**
@@ -908,8 +922,10 @@ new zul.wnd.Window{
 		 */
 		hflex: function(v) {
 			this.setHflex_(v);
-			if (_binds[this.uuid] === this) //if already bind
-				zUtl.fireSized(this.parent, true);
+
+			var p = this.parent;
+			if (this.desktop/*if already bind*/ && !p.isBinding()/*ZK-307*/)
+				zUtl.fireSized(p, -1); //no beforeSize
 		},
 		/** Returns the number of milliseconds before rendering this component
 		 * at the client.
@@ -1591,32 +1607,52 @@ wgt.$f().main.setTitle("foo");
 	 * <li>until - specifies the ancestor to search up to. If not specified, this method searches all ancestors. If specified, this method searches only this widget and ancestors up to the specified one.</li>
 	 * <li>strict - whether to check DOM element's style.visibility.
 	 * It is used only if <code>dom</code> is also specified.</li>
+	 * <li>cache - a map of cached result (since 5.0.8). Ignored if null.
+	 * If specified, the result will be stored and used to speed up the processing.</li>
 	 * </ul>
 	 * @return boolean
 	 * @see #isVisible
 	 */
 	isRealVisible: function (opts) {
 		var dom = opts && opts.dom,
+			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
 		while (wgt) {
-			if (dom && !wgt.$instanceof(zk.Native)) { // B50-ZK-258: $n() will be null for natives
-				if (!zk(wgt.$n()).isVisible(opts.strict))
+			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined) {
+				_markCache(cache, visited);
+				return ck;
+			}
+	
+			if (dom && !wgt.$instanceof(zk.Native)) { //B50-ZK-258: if native, $n() might be null or wrong (if two with same ID)
+			//Except native, we have to assume it is invsibile if $n() is null
+			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
+			//Alertinative is to introduce another isVisibleXxx but not worth
+				if (!zk(wgt.$n()).isVisible(opts.strict)) {
+					_markCache(cache, visited, wgt);
 					return false;
-			} else if (!wgt._visible)
+				}
+			} else if (!wgt._visible) {
+				_markCache(cache, visited, wgt);
 				return false;
+			}
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var wp = wgt.parent, p, n;
 			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
-					if ((n.style||{}).display == 'none')
+					if ((n.style||{}).display == 'none') {
+						_markCache(cache, visited, wgt);
 						return false; //hidden by parent
+					}
 
+			if (cache)
+				visited.push(wgt);
 			if (opts && opts.until == wgt)
 				break;
 
 			wgt = wp;
 		}
+		_markCache(cache, visited);
 		return true;
 	},
 	/** Returns if this widget is visible
@@ -1688,7 +1724,7 @@ wgt.$f().main.setTitle("foo");
 					
 					this.fire('onShow');
 					if (!zk.animating())
-						zWatch.fireDown('onShow', this);
+						zUtl.fireShown(this);
 				} else {
 					this.fire('onHide');
 					if (!zk.animating())
@@ -2596,6 +2632,19 @@ function () {
 			page: (dt._bpg = new zk.Body(dt));
 	},
 
+	/** Returns whether this widget is being bound to DOM.
+	 * In other words, it returns true if {@link #bind} is called
+	 * against this widget or any of its ancestors.
+	 * @return boolean
+	 * @since 5.0.8
+	 */
+	isBinding: function () {
+		if (this.desktop)
+			for (var w = this; w; w = w.parent)
+				if (w._binding)
+					return true;
+	},
+
 	/** Binds this widget.
 	 * It is called to assoicate (aka., attach) the widget with
 	 * the DOM tree.
@@ -2613,6 +2662,8 @@ function () {
 	 * @return zk.Widget this widget
 	 */
 	bind: function (desktop, skipper) {
+		this._binding = true;
+
 		_rerenderDone(this); //cancel pending async rerender
 		if (this.z_rod) 
 			_bindrod(this);
@@ -2622,6 +2673,8 @@ function () {
 			while (fn = after.shift())
 				fn();
 		}
+
+		delete this._binding;
 		return this;
 	},
 	/** Unbinds this widget.
@@ -2694,7 +2747,6 @@ bind_: function (desktop, skipper, after) {
 			_listenFlex(this);
 
 		this.bindChildren_(desktop, skipper, after);
-
 		if (this.isListen('onBind')) {
 			var self = this;
 			zk.afterMount(function () {
@@ -2903,26 +2955,17 @@ unbind_: function (skipper, after) {
 		return zk(this).sumStyles(attr == 'h' ? 'tb' : 'lr', jq.margins);
 	},
 	fixFlex_: function() {
-		zFlex.fixFlex.apply(this);
+		zFlex.fixFlex(this);
 	},
 	fixMinFlex_: function(n, orient) { //internal use
-		return zFlex.fixMinFlex.apply(this, arguments);
+		return zFlex.fixMinFlex(this, n, orient);
+	},
+	clearCachedSize_: function() {
+		delete this._hflexsz;
+		delete this._vflexsz;
 	},
 	resetSize_: function(orient) {
 		(this.$n()).style[orient == 'w' ? 'width': 'height'] = '';
-	},
-	beforeSize: function () {
-		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
-		if (this.isRealVisible()) {
-			if (this._hflex && this._hflex != 'min') {
-				this.resetSize_('w');
-				this.parent.afterResetChildSize_('w');
-			}
-			if (this._vflex && this._vflex != 'min') {
-				this.resetSize_('h');
-				this.parent.afterResetChildSize_('h');
-			}
-		}
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).
@@ -2932,7 +2975,11 @@ unbind_: function (skipper, after) {
 	 * @see #cleanDrag_
 	 */
 	initDrag_: function () {
-		this._drag = new zk.Draggable(this, this.getDragNode(), this.getDragOptions_(_dragoptions));
+		var n = this.getDragNode();
+		this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
+		// B50-3306835.zul
+		if (zk.ie9 && jq.nodeName(n, "img"))
+			jq(n).bind('mousedown', zk.$void);
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
 	 * is cleaned (or unbound).
@@ -2942,6 +2989,10 @@ unbind_: function (skipper, after) {
 	cleanDrag_: function () {
 		var drag = this._drag;
 		if (drag) {
+			var n;
+			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, "img"))
+				jq(n).unbind('mousedown', zk.$void);
+
 			this._drag = null;
 			drag.destroy();
 		}
@@ -3917,7 +3968,7 @@ _doFooSelect: function (evt) {
 	 */
 	listenOnFitSize_: function () {
 		if (!this._fitSizeListened && (this._hflex == 'min' || this._vflex == 'min')){
-			zWatch.listen({onFitSize: [this, zFlex.fixMinFlexX]});
+			zWatch.listen({onFitSize: [this, zFlex.onFitSize]});
 			this._fitSizeListened = true;
 		}
 	},
@@ -3929,7 +3980,7 @@ _doFooSelect: function (evt) {
 	 */
 	unlistenOnFitSize_: function () {
 		if (this._fitSizeListened) {
-			zWatch.unlisten({onFitSize: [this, zFlex.fixMinFlexX]});
+			zWatch.unlisten({onFitSize: [this, zFlex.onFitSize]});
 			delete this._fitSizeListened;
 		}
 	},
@@ -3950,17 +4001,33 @@ _doFooSelect: function (evt) {
 	 * @param String name the name of the watch, such as onShow
 	 * @param zk.Widget p the parent widget causing the watch event.
 	 * It is null if it is not caused by {@link _global_.zWatch#fireDown}.
+	 * @param Map cache a map of cached result (since 5.0.8). Ignored if null.
+	 * If specified, the result will be stored and used to speed up the processing
 	 * @return boolean
 	 * @since 5.0.3
 	 */
-	isWatchable_: function (name, p) {
-		var strict = name != 'onShow';
-		if (p)
-			return this.isRealVisible({dom:true, strict:strict, until:p});
-
-		return (p=this.$n()) && zk(p).isRealVisible(strict);
+	isWatchable_: function (name, p, cache) {
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
+		var strict = name != 'onShow', wgt;
+		if (p)
+			return this.isRealVisible({dom:true, strict:strict, until:p, cache: cache});
+
+		for (wgt = this;;) {
+			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
+				break;
+
+			//Note: we check _visible only if native, since, when onHide is fired,
+			//_visible is false but DOM element is visible (so it is watchable)
+			if (!wgt._visible)
+				return false;
+
+			//it might be native or others, so we look up parent
+			if (!(wgt = wgt.parent))
+				return true; //consider as visible if it is root
+		}
+
+		return zk(wgt.$n()).isRealVisible(strict);
 	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
@@ -4391,7 +4458,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	_ndt: 0, //used in au.js/dom.js
 	/** Checks if any desktop becomes invalid, and removes the invalid desktops.
 	 * This method is called automatically when a new desktop is added. Application developers rarely need to access this method.
-	 * @param timeout how many miliseconds to wait before doing the synchronization
+	 * @param int timeout how many miliseconds to wait before doing the synchronization
 	 * @return zk.Desktop the first desktop, or null if no desktop at all. 
 	 */
 	sync: function (timeout) {

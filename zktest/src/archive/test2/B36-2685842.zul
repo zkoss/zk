@@ -18,7 +18,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	xmlns="http://www.zkoss.org/2005/zul"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	<box>
-		<window id="mainWindow" border="normal" width="1024px"
+		<window id="mainWindow" border="normal" hflex="min"
 			height="768px">
 			<!-- The height for the include is important or IE will interpret the height as 100% of the screen -->
 			<hbox pack="center" align="center"
@@ -28,7 +28,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			</hbox>
 			After you press the "Click Me!" button, the both windows inside the tabpanel should display well, especially the right corner of the window(IE only)
 			<button label="Click Me!" onClick="addTag()" />
-			<tabbox id="bidSessionSelectorTabBox" width="1016px"
+			<div>
+			<tabbox id="bidSessionSelectorTabBox" hflex="1"
 				height="685px">
 				<tabs>
 					<tab id="homeTab" label="Home" />
@@ -48,7 +49,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
       			bidSessionSelectorTabBox.getTabpanels().appendChild(tabPanel);
       			tab.setSelected(true);
    			}
-			 ]]></zscript>
+			 ]]></zscript></div>
 		</window>
 	</box>
 

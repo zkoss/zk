@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletSession;
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -103,9 +102,8 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	/** The default page. */
 	private String _defpage;
 
-	public void init(PortletConfig conf) throws PortletException {
-		super.init(conf);
-		_defpage = conf.getInitParameter(ATTR_PAGE);
+	public void init() throws PortletException {
+		_defpage = getPortletConfig().getInitParameter(ATTR_PAGE);
 	}
 
 	protected void doView(RenderRequest request, RenderResponse response)

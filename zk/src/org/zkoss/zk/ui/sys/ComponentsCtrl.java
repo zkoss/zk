@@ -331,7 +331,7 @@ public class ComponentsCtrl {
 	 * if not available.
 	 */
 	public static final Method getEventMethod(Class<?> cls, String evtnm) {
-		final Pair key = new Pair(cls, evtnm);
+		final Pair<Class<?>, String> key = new Pair<Class<?>, String>(cls, evtnm);
 		final Object o = _evtmtds.get(key);
 		if (o != null)
 			return o == Objects.UNKNOWN ? null: (Method)o;
@@ -369,10 +369,11 @@ public class ComponentsCtrl {
 		_evtmtds = cache;
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
-	private static Cache<Pair, Object> _evtmtds = new MultiCache<Pair, Object> (
-		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
-		Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
-		4*60*60*1000);
+	private static Cache<Pair<Class<?>, String>, Object> _evtmtds =
+		new MultiCache<Pair<Class<?>, String>, Object> (
+			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
+			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
+			4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript objects
 	 * ({@link JavaScriptValue}) that can be used

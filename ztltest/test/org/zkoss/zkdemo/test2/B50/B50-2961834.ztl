@@ -21,13 +21,13 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-				focus(mycombo.$n("real"));
-				keyPressNative("82");
-				waitResponse();
-				verifyEquals("Richard",jq(".z-combobox-inp").val());
-				click(btn);
-				waitResponse();
-				verifyEquals("Richard",jq(".z-combobox-inp").val());
+			focus(mycombo.$n("real"));
+			sendKeys(mycombo.$n("real"), "R");
+			waitResponse();
+			verifyEquals("Richard",jq(".z-combobox-inp").val());
+			click(btn);
+			waitResponse();
+			verifyEquals("Richard",jq(".z-combobox-inp").val());
 		]]></client>
 	</case>
 </test>

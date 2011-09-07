@@ -40,7 +40,10 @@ span.z-button {
 	width: 3px !important;
 }
 .z-button-disd {
-	color: gray; cursor: default; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
+	color: gray; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
+}
+.z-button-disd tr td {
+	cursor: default;
 }
 <%-- default --%>
 .z-button .z-button-tl, .z-button .z-button-tr, .z-button .z-button-bl, .z-button .z-button-br{

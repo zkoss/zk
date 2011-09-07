@@ -128,6 +128,9 @@ public class Tree extends MeshElement {
 	private transient Paging _paging;
 	private EventListener _pgListener, _pgImpListener;
 
+	private int _currentTop = 0; // since 5.0.8 scroll position
+	private int _currentLeft = 0;
+	
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -241,6 +244,8 @@ public class Tree extends MeshElement {
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
 				setFixedLayout(true);
+				_currentTop = 0;
+				_currentLeft = 0;
 				invalidate(); //non-paging mold -> paging mold
 			}
 		}
@@ -721,7 +726,10 @@ public class Tree extends MeshElement {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				
-				addSelectionToModel(item);
+				addSelectionToModel(item, true);
+					// B50-ZK-306: DefaultTreeModel does not properly
+					// synchronize deselection state -- 
+					// _model should clear at first too
 
 				smartUpdate("selectedItem", item.getUuid());
 			}
@@ -730,9 +738,13 @@ public class Tree extends MeshElement {
 		}
 	}
 	@SuppressWarnings("unchecked")
-	private void addSelectionToModel(Treeitem item) {
-		if (_model instanceof Selectable)
-			((Selectable) _model).addSelection(item.getTreeNode());
+	private void addSelectionToModel(Treeitem item, boolean clearFirst) {
+		if (_model instanceof Selectable) {
+			Selectable model = (Selectable) _model;
+			if (clearFirst)
+				model.clearSelection();
+			model.addSelection(item.getTreeNode());
+		}
 	}
 
 	/** Selects the given item, without deselecting any other items
@@ -748,7 +760,7 @@ public class Tree extends MeshElement {
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				addSelectionToModel(item);
+				addSelectionToModel(item, false);
 				if(_sel == null)
 					_sel = (Treeitem)_selItems.iterator().next();
 				smartUpdateSelection();
@@ -770,7 +782,10 @@ public class Tree extends MeshElement {
 				
 				if(_sel == item) //bug fix:3131173 
 					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
-								
+				
+				if (_model instanceof Selectable) // B50-ZK-306
+					((Selectable) _model).removeSelection(item.getTreeNode());
+				
 				smartUpdateSelection();
 			}
 		}
@@ -825,7 +840,7 @@ public class Tree extends MeshElement {
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
 				changed = true;
-				addSelectionToModel(item);
+				addSelectionToModel(item, false);
 			}
 			if (first) {
 				_sel = item;
@@ -960,7 +975,7 @@ public class Tree extends MeshElement {
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
-				addSelectionToModel(item);
+				addSelectionToModel(item, false);
 
 			}
 		}
@@ -1106,7 +1121,7 @@ public class Tree extends MeshElement {
 				if (ti.isSelected()) {
 					if (_sel == null) _sel = ti;
 					_selItems.add(ti);
-					addSelectionToModel(ti);
+					addSelectionToModel(ti, false);
 					if (--cntSel == 0) break;
 				}
 			}
@@ -1877,6 +1892,11 @@ public class Tree extends MeshElement {
 			renderer.render("rightSelect", false);
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+		
+		if (_currentTop != 0)
+			renderer.render("_currentTop", _currentTop);
+		if (_currentLeft != 0)
+			renderer.render("_currentLeft", _currentLeft);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
@@ -1991,6 +2011,10 @@ public class Tree extends MeshElement {
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
+		} else if (cmd.equals("onScrollPos")) {
+			final Map data = request.getData();
+			_currentTop = AuRequests.getInt(data, "top", 0);
+			_currentLeft = AuRequests.getInt(data, "left", 0);
 		} else
 			super.service(request, everError);
 	}

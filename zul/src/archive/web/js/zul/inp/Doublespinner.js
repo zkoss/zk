@@ -32,6 +32,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			res /= mul;
 		return res;
 	}
+	function _updateFixedDigits(wgt, val) {
+		var decimal = wgt._localizedSymbols ? wgt._localizedSymbols.DECIMAL : zk.DECIMAL,
+				stepd = _digitsAfterDecimal(wgt._step, decimal),
+				vald = _digitsAfterDecimal(val || wgt._value, decimal);
+		wgt._fixedDigits = Math.max(stepd, vald);
+	}
 	
 /**
  * An edit box for holding a constrained double.
@@ -51,7 +57,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		 * @param double step
 		 */
 		step: function (v) {
-			this._fixedDigits = _digitsAfterDecimal(v, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
+			_updateFixedDigits(this);
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -65,7 +71,10 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 				zcls = this.getZclass();
 			if (!n) return;
 			if (!this.inRoundedMold()) {
-				jq(n)[v ? 'show': 'hide']();
+				if (!this._inplace || !v)
+					jq(n)[v ? 'show': 'hide']();
+				else
+					n.style.display = '';
 				jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 			} else {
 				var fnm = v ? 'removeClass': 'addClass';
@@ -151,7 +160,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
     	if (info.divscale) val = val / Math.pow(10, info.divscale);
 		
 		// B50-3322795
-		this._fixedDigits = _digitsAfterDecimal(val, this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL);
+    	_updateFixedDigits(this, val);
     	return val;
 	},
 	coerceToString_: function (value) {//copy from intbox
@@ -161,13 +170,13 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols) : 
 				DECIMAL == '.' ? (''+value) : (''+value).replace('.', DECIMAL);
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
+
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
 	doKeyDown_: function(evt){
@@ -385,14 +394,14 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 				.domListen_(btn, "onMouseOut", "_btnOut")
 				.domListen_(btn, "onMouseOver", "_btnOver");
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
 		if(this.timerId){
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		var btn = this.$n("btn");
 		if(btn)
 			this.domUnlisten_(btn, "onZMouseDown", "_btnDown")

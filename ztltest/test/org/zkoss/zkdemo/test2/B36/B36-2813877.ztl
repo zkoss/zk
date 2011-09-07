@@ -79,8 +79,8 @@
 		<client><![CDATA[
 			click(jq("@button[label=\"Overlap\"] td.z-button-cm"));
 			waitResponse();
-			mouseDownAt(jq("$win div.z-window-overlapped-cr"), "340,292");
-			mouseMoveAt(jq("$win div.z-window-overlapped-cr"), "618,298");
+			mouseDownAt(jq("$win div.z-window-overlapped-cr"), "341,292");
+			mouseMoveAt(jq("$win div.z-window-overlapped-cr"), "619,298");
 			verifyEquals(jq("#zk_ddghost").css("border-top-width"), "1px");
 			mouseUpAt(jq("$win div.z-window-overlapped-cr"), "618,298");
 			mouseDownAt(jq("@caption td.z-caption-l"), "174,19");

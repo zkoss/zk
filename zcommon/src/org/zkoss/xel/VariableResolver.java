@@ -16,8 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel;
 
-import java.io.Serializable;
-
 /**
  * Used to customize the way an {@link Expression} resolves variable
  * references at evaluation time.
@@ -32,7 +30,7 @@ import java.io.Serializable;
  * @since 3.0.0
  * @see VariableResolverX
  */
-public interface VariableResolver extends Serializable {
+public interface VariableResolver {
 	/** Resolves the specified variable.
 	 *
 	 * @param name the name of the variable to resolve

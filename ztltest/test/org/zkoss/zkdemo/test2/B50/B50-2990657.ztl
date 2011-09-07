@@ -32,13 +32,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		--></server>
 		<client><![CDATA[
 				focus(combo.$n("real"));
-				shiftKeyDown();
-				keyPressNative("65");
-				keyPressNative("66");
-				shiftKeyUp();
-				keyPressNative("10");
-				verifyEquals("ab",jq(".z-combobox-inp").val());
-			
+				sendKeys(combo.$n("real"), "ab", Keys.ENTER);
+				verifyEquals("ab",jq(".z-combobox-inp").val());			
 		]]></client>
 	</case>
 </test>

@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
 import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppFactory;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
@@ -138,7 +139,7 @@ public class Configuration {
 	private Set<String> _disThemeURIs;
 	/** A list of client packages. */
 	private final FastReadArray<String> _clientpkgs = new FastReadArray<String>(String.class);
-	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
+	private Class _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _sesscachecls, _audeccls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessPushMax = -1,
@@ -1222,7 +1223,7 @@ public class Configuration {
 		return _uiengcls;
 	}
 
-	/** Sets the class used to represent a Web application,
+	/** Sets the class used to represent this Web application,
 	 * or null to use the default.
 	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 *
@@ -1235,12 +1236,36 @@ public class Configuration {
 			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
 		_wappcls = cls;
 	}
-	/** Returns the class used to represent a Web application,
+	/** Returns the class used to represent this Web application,
 	 * or null if default is used.
 	 * It must implement {@link WebApp} and {@link WebAppCtrl}
 	 */
 	public Class getWebAppClass() {
 		return _wappcls;
+	}
+
+	/** Sets the class used to instantiate an instance representing this Web application,
+	 * or null to use the default.
+	 *
+	 * <p>Note: {@link #setWebAppClass} has the higher priority if not null.
+	 * <p>Note: you have to set the class before {@link WebApp} is created.
+	 * Otherwise, it won't have any effect.
+	 * @param cls the class that implements {@link WebAppFactory}.
+	 * @since 5.1.0
+	 */
+	public void setWebAppFactoryClass(Class cls) {
+		if (cls != null && !WebAppFactory.class.isAssignableFrom(cls))
+			throw new IllegalArgumentException("WebAppFactory not implemented: "+cls);
+		_wappftycls = cls;
+	}
+	/** Returns the class used to instantiate an instance representing this Web application,
+	 * or null if default is used.
+	 * It must implement {@link WebAppFactory}.
+	 * <p>Note: {@link #getWebAppClass} has the higher priority if not null.
+	 * @since 5.1.0
+	 */
+	public Class getWebAppFactoryClass() {
+		return _wappftycls;
 	}
 
 	/** Sets the class used to provide the desktop cache, or null to

@@ -78,30 +78,30 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-			JQuery body = jq(tree.$n("body"));
-			JQuery table = body.find("table");
-			click(jq("@button[label=\"add under bottom\"] td.z-button-cm"));
-			waitResponse();
-			int tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
-			int scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
-			if (ZK.is("ie6_") || ZK.is("ie7_"))
+				JQuery body = jq(tree.$n("body"));
+				JQuery table = body.find("table");
+				click(jq("@button[label=\"add under bottom\"]"));
+				waitResponse();
+				int tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
+				int scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
 				tableScrollTop++;//IE6,7 has a border at the upper of the first item of the listbox
-			verifyEquals(tableScrollTop, scrollTop);
-			click(jq("@button[label=\"add under bottom\"] td.z-button-cm"));
-			waitResponse();
-			tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
-			scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
-			if (ZK.is("ie6_") || ZK.is("ie7_"))
+				verifyEquals(tableScrollTop, scrollTop);
+				click(jq("@button[label=\"add under bottom\"]"));
+				waitResponse();
+				tableScrollTop = table.outerHeight() - table.find("tr:last").outerHeight();
+				scrollTop = Integer.parseInt(body.attr("scrollTop")) + body.outerHeight();
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
 				tableScrollTop++;//IE6,7 has a border at the upper of the first item of the listbox
-			verifyEquals(tableScrollTop, scrollTop);
-			click(jq("@button[label=\"add upon top\"] td.z-button-cm"));
-			waitResponse();
-			String expected = "0";
-			if (ZK.is("ie6_") || ZK.is("ie7_"))
+				verifyEquals(tableScrollTop, scrollTop);
+				click(jq("@button[label=\"add upon top\"]"));
+				waitResponse();
+				String expected = "0";
+				if (ZK.is("ie6_") || ZK.is("ie7_"))
 				expected = "1";//IE6,7 has a border at the upper of the first item of the listbox
-			verifyEquals(expected, body.attr("scrollTop"));
-			click(jq("@button[label=\"add upon top\"] td.z-button-cm"));
-			verifyEquals(expected, body.attr("scrollTop"));
+				verifyEquals(expected, body.attr("scrollTop"));
+				click(jq("@button[label=\"add upon top\"]"));
+				verifyEquals(expected, body.attr("scrollTop"));
 		]]></client>
 	</case>
 </test>

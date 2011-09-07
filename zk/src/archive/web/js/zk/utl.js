@@ -32,6 +32,33 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
 			_frames(ary, fs[j]);
 	}
+	/* Returns the onSize target of the given wiget.
+	 * The following code is dirty since it checks _hflexsz (which is implementation)
+	 * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
+	 * this method considers only if _hflex is min
+	 */
+	function _onSizeTarget(wgt) {
+		var r1 = wgt, p1 = r1,
+			j1 = -1;
+		for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
+			delete p1._hflexsz;
+			r1 = p1;
+			++j1;
+			if (p1.ignoreFlexSize_('w')) //p1 will not affect its parent's flex size
+				break;
+		}
+
+		var r2 = wgt, p2 = r2,
+			j2 = -1;
+		for (; p2 && p2._vflex == 'min'; p2 = p2.parent) {
+			delete p2._vflexsz;
+			r2 = p2;
+			++j2;
+			if (p2.ignoreFlexSize_('h')) //p2 will not affect its parent's flex size
+				break;
+		}
+		return j1 > 0 || j2 > 0 ? j1 > j2 ? r1 : r2: wgt;
+	}
 
 /** @class zUtl
  * @import zk.Widget
@@ -529,15 +556,37 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		return val || force ? ' ' + nm + '="' + val + '"': "";
 	},
 	/** Fires beforeSize, onFitSize and onSize
-	 * @param zk.Widget wgt the widget which the zWatch event will be fired against.
-	 * @param boolean noBeforeSize whether not to fire <code>beforeSize</code>.
+	 * @param Widget wgt the widget which the zWatch event will be fired against.
+	 * @param int bfsz the beforeSize mode:
+	 * <ul>
+	 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
+	 * <li>-1: beforeSize won't be sent.</li>
+	 * <li>1: beforeSize will be sent with an additional cleanup option,
+	 * which will clean up the cached minimal size (if flex=min).</li>
+	 * </ul>
 	 * @since 5.0.8
 	 */
-	fireSized: function (wgt, noBeforeSize) {
-		if (!noBeforeSize)
-			zWatch.fireDown('beforeSize', wgt);
+	fireSized: function (wgt, bfsz) {
+		wgt = _onSizeTarget(wgt);
+		if (!(bfsz < 0)) //don't use >= (because bfsz might be undefined)
+			zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
 		zWatch.fireDown('onFitSize', wgt, {reverse: true});
 		zWatch.fireDown('onSize', wgt);
+	},
+	/** Fires onBeforeSize, onShow, onFitSize, and onSize
+	 * @param Widget wgt the widget which the zWatch event will be fired against.
+	 * @param int bfsz the beforeSize mode:
+	 * <ul>
+	 * <li>0 (null/undefined/false): beforeSize sent normally.</li>
+	 * <li>-1: beforeSize won't be sent.</li>
+	 * <li>1: beforeSize will be sent with an additional cleanup option,
+	 * which will clean up the cached minimal size (if flex=min).</li>
+	 * </ul>
+	 * @since 5.0.8
+	 */
+	fireShown: function (wgt, bfsz) {
+		zWatch.fireDown('onShow', wgt);
+		zUtl.fireSized(wgt, bfsz);
 	}
 };
 })();

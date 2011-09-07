@@ -15,7 +15,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- CODEGEN -->
 <!-- ======= -->
 <target name="codegen.mesg" depends="config.build" if="src.mesg.dir.exist">
-	<!-- generate MxxConst.java -->
+	<!-- generate Mxx.java (e.g., MCommon.java) -->
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/genprop"/>
 		<arg value="-x"/>
@@ -53,7 +53,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ====== -->
 <target name="deploy.lib" depends="config.build" if="deploy.lib.required">
 	<copy todir="${dist.lib.dir}" preservelastmodified="yes">
-		<fileset dir="${out.dir}" includes="${xar.name}, ${jad.name}"/>
+		<fileset dir="${out.dir}" includes="${xar.name}"/>
 	</copy>
 </target>
 
@@ -94,52 +94,7 @@ depends="config.build, stop.service, deploy.tomcat.files, start.service"
 if="deploy.tomcat.required">
 </target>
 
-<target name="deploy.jboss.intact" depends="config.build"
-if="deploy.jboss.intact.required">
-	<!-- deploy to server intact -->
-	<copy todir="${jboss.deploy1.dir}" preservelastmodified="yes">
-		<fileset dir="${out.dir}" includes="${xar.name}"/>
-	</copy>
-</target>
-<target name="deploy.jboss.unzip" depends="config.build"
-if="deploy.jboss.unzip.required">
-	<!-- deploy to server by unzip -->
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/deploy.unzip"/>
-		<arg value="${out.dir}/${xar.name}"/>
-		<arg value="${jboss.deploy1.dir}"/>
-		<arg value="${deploy.unzip.list}"/>
-	</exec>
-</target>
-
-<target name="deploy.jboss"
-depends="config.build, deploy.jboss.unzip, deploy.jboss.intact"
-if="deploy.jboss.required">
-	<mkdir dir="${dist.conf.dir}"/>
-
-	<!-- deploy configuration files -->
-	<copy tofile="${jboss.conf.dir}/i3-log.conf" file="${dist.conf.dir}/i3-log.conf.local"
-	preservelastmodified="yes" failonerror="false"/>
-
-	<copy todir="${jboss.conf.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.conf.dir}"
-		includes="*-service.xml,i3-ks,*-policy.xml,*.properties"/>
-	</copy>
-	<copy todir="${jboss.app.conf.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.conf.dir}"
-		includes="i3-*.xml" excludes="*-service.xml,i3-ks"/>
-	</copy>
-
-	<!-- deploy external library -->
-	<copy todir="${jboss.lib.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.lib.ext.dir}" includes="${server.libs}"/>
-	</copy>
-	<copy todir="${jboss.lib.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.lib.dir}" includes="${server.libs}"/>
-	</copy>
-</target>
-
-<target name="deploy" depends="deploy.lib, deploy.tomcat, deploy.jboss">
+<target name="deploy" depends="deploy.lib, deploy.tomcat">
 </target>
 
 <!-- ===== -->
@@ -186,31 +141,6 @@ if="deploy.jboss.required">
 		 excludes="META-INF/MANIFEST.MF, **/*.src.js"/>
 	</jar>
 </target>
-<target name="build.jad" depends="compile" if="build.jad.required">
-	<mkdir dir="${src.archive.dir}"/>
-	<mkdir dir="${codegen.archive.dir}"/>
-
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/preverify"/>
-		<arg value="${out.dir}"/>
-		<arg value="${outv.dir}"/>
-	</exec>
-	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
-		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${jad.name}"/>
-		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, META-INF/${jad.name}, ${zipjs}/**, ${zipcss}/**"/>
-		<fileset dir="${codegen.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF"/>
-	</jar>
-
-	<!-- generate ${out.dir}/${project-name}.jad -->
-	<exec executable="bash" dir="." failonerror="true">
-		<arg value="${bin.dir}/genjad"/>
-		<arg value="${out.dir}/${jar.name}"/>
-		<arg value="${src.archive.dir}/META-INF/${jad.name}"/>
-		<arg value="${out.dir}/${jad.name}"/>
-	</exec>
-</target>
 <target name="gentime" depends="config" if="gentime.required">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/gentime"/>
@@ -247,25 +177,19 @@ if="deploy.jboss.required">
 </target>
 
 <target name="build"
- depends="config.build, build.war, build.jad, build.jar, build.jar2, build.ear, deploy">
+ depends="config.build, build.war, build.jar, build.jar2, build.ear, deploy">
 </target>
 
 <!-- ===== -->
 <!-- CLEAN -->
 <!-- ===== -->
-<target name="clean.bin" depends="config" if="clean.bin.required">
-	<delete quiet="true" dir="${bin.dir}"/>
-</target>
-
-<target name="clean" depends="clean.bin">
+<target name="clean">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
 	<delete quiet="true" dir="${outv.dir}"/>
 	<delete quiet="true" dir="${codegen.dir}"/>
 	<delete quiet="true">
-		<fileset dir="${dist.lib.dir}" includes="${xar.name}, ${jad.name}"/>
-		<!--fileset dir="${jboss.lib.dir}" includes="${xar.name}"/-->
-		<fileset dir="${jboss.deploy1.dir}" includes="${xar.name}"/>
+		<fileset dir="${dist.lib.dir}" includes="${xar.name}"/>
 		<!--fileset dir="${tomcat.lib.dir}" includes="${xar.name}"/-->
 		<fileset dir="${tomcat.webapps.dir}" includes="${xar.name}"/>
 	</delete>

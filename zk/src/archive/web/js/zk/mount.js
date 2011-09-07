@@ -91,8 +91,8 @@ function zkmprops(uuid, props) {
 (function () {
 	var Widget = zk.Widget,
 		_wgt_$ = Widget.$, //the original zk.Widget.$
-		_createInf0 = [], //create info
-		_createInf1 = [], //create info
+		_crInfBL0 = [], _crInfBL1 = [], //create info for BL
+		_crInfAU0 = [], //create info for AU
 		_aftMounts = [], //afterMount
 		_mntctx = {}, //the context
 		_paci = {s: 0, e: -1, f0: [], f1: []}, //for handling page's AU responses
@@ -170,10 +170,10 @@ function zkmprops(uuid, props) {
 		return _mntctx.curdt || (_mntctx.curdt = zk.Desktop.$());
 	}
 	//Load all required packages
-	function mountpkg() {
+	function mountpkg(infs) {
 		var types = {};
-		for (var j = _createInf0.length; j--;) {
-			var inf = _createInf0[j];
+		for (var j = infs.length; j--;) {
+			var inf = infs[j];
 			if (!inf.pked) { //mountpkg might be called multiple times before mount()
 				inf.pked = true;
 				getTypes(types, inf[0], inf[1]);
@@ -208,16 +208,16 @@ function zkmprops(uuid, props) {
 		if (zk.loading)
 			return zk.afterLoad(mtBL);
 
-		var inf = _createInf0.shift();
+		var inf = _crInfBL0.shift();
 		if (inf) {
-			_createInf1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
+			_crInfBL1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
 				//inf[3]: owner passed from zkx
 				//inf[2]: bindOnly
-				//inf[4]: aucmds
+				//inf[4]: aucmds (if BL)
 				//true: don't update DOM
 
-			if (_createInf0.length)
+			if (_crInfBL0.length)
 				return run(mtBL);
 		}
 
@@ -225,7 +225,7 @@ function zkmprops(uuid, props) {
 	}
 	function mtBL0() {
 		for (;;) {
-			if (_createInf0.length)
+			if (_crInfBL0.length)
 				return; //another page started
 
 			if (zk.loading)
@@ -234,7 +234,7 @@ function zkmprops(uuid, props) {
 			if (zk.ie && !jq.isReady) //3055849: ie6/ie7 has to wait until isReady (tonyq reported ie8 has similar issue)
 				return jq(mtBL0);
 
-			var inf = _createInf1.shift();
+			var inf = _crInfBL1.shift();
 			if (!inf) break;
 
 			var wgt = inf[1];
@@ -249,7 +249,7 @@ function zkmprops(uuid, props) {
 		mtBL1();
 	}
 	function mtBL1() {
-		if (_createInf0.length || _createInf1.length)
+		if (_crInfBL0.length || _crInfBL1.length)
 			return; //another page started
 
 		zk.booted = true;
@@ -274,20 +274,20 @@ function zkmprops(uuid, props) {
 		}
 
 		try {
-			var inf = _createInf0.shift(),
+			var inf = _crInfAU0.shift(),
 				filter, wgt;
 			if (inf) {
-				if (filter = inf[4][1])
+				if (filter = inf[4][1]) //inf[4] is extra if AU
 					Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
 				try {
 					wgt = create(null, inf[1]);
 				} finally {
 					if (filter) Widget.$ = _wgt_$;
 				}
-				inf[4][0](wgt);
+				inf[4][0](wgt); //invoke stub
 			}
 		} finally {
-			if (_createInf0.length)
+			if (_crInfAU0.length)
 				run(mtAU); //loop back to check if loading
 			else
 				mtAU0();
@@ -400,7 +400,7 @@ function zkmprops(uuid, props) {
 		try {
 			if (js) jq.globalEval(js);
 
-			var delay, mount = mtAU, owner;
+			var mount = mtAU, infs = _crInfAU0, delay, owner;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)
 				delay = extra;
 				if (wi) {
@@ -408,6 +408,7 @@ function zkmprops(uuid, props) {
 					aucmds = null;
 				}
 				mount = mtBL;
+				infs = _crInfBL0;
 			} //else assert(!aucmds); //no aucmds if AU
 
 			if (wi) {
@@ -418,8 +419,9 @@ function zkmprops(uuid, props) {
 						owner = Widget.$(owner);
 				}
 
-				_createInf0.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
-				mountpkg();
+				infs.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+					//extra is [stub-fn, filter] if AU,  aucmds if BL
+				mountpkg(infs);
 			}
 
 			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
@@ -444,7 +446,7 @@ function zkmprops(uuid, props) {
 		doAuCmds(arguments);
 	},
 
-	//mount and zkx
+	//mount and zkx (BL)
 	zkmx: function () {
 		zkmb();
 		try {
@@ -535,20 +537,26 @@ jq(function() {
 			
 		_doEvt(evt);
 		
-		// bug 2799334 and 2635555, need to enforce a focus event (IE only)
+		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
+		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
 		if (old && zk.ie) {
 			var n = jq(old)[0];
 			if (n)
 				setTimeout(function () {
 					try {
 						var cf = zk.currentFocus;
-						if (cf != old && !n.offsetWidth && !n.offsetHeight)
+						if (cf != old && !n.offsetWidth && !n.offsetHeight) {
+							zk.focusBackFix = true;
 							cf.focus();
-					} catch (e) {}
+						}
+					} catch (e) { //ignore
+					} finally {
+						delete zk.focusBackFix;
+					}
 				});
 		}
 	}
-	
+
 	function _docResize() {
 		if (!_reszInf.time) return; //already handled
 
@@ -706,7 +714,7 @@ jq(function() {
 		}
 	});
 
-	zjq._fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
+	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
 
 	jq(window).resize(function () {
 		if (zk.mounting || zk.skipResize)

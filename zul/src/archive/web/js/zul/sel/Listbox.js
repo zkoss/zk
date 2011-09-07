@@ -136,6 +136,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	inSelectMold: function () {
 		return "select" == this.getMold();
 	},
+	// bug ZK-56 for non-ROD to scroll after onSize ready
+	onSize: function () {
+		this.$supers("onSize", arguments);
+		this._syncSelInView();
+	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
@@ -144,18 +149,22 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		after.push(function () {
 			_syncFrozen(w);
 		});
-		this._syncSelInView();
+		this._shallScrollIntoView = true;
 	},
 	_syncSelInView: function () {
-		var index = this.getSelectedIndex();
-		if (index >= 0) { // B50-ZK-56
-			var si;
-			for (var it = this.getBodyWidgetIterator(); index-- >=0;)
-				si = it.next();
-			if (si) {
-				zk(si).scrollIntoView(this.ebody);
-				this._tmpScrollTop = this.ebody.scrollTop;
+		if (this._shallScrollIntoView) {
+			var index = this.getSelectedIndex();
+			if (index >= 0) { // B50-ZK-56
+				var si;
+				for (var it = this.getBodyWidgetIterator(); index-- >= 0;) 
+					si = it.next();
+				if (si) {
+					zk(si).scrollIntoView(this.ebody);
+					this._tmpScrollTop = this.ebody.scrollTop;
+				}
 			}
+			// do only once
+			this._shallScrollIntoView = false;
 		}
 	},
 	_doScroll: function () {

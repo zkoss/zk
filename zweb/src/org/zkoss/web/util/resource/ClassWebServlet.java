@@ -18,8 +18,6 @@ package org.zkoss.web.util.resource;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,17 +38,11 @@ import org.zkoss.web.servlet.http.Https;
 public class ClassWebServlet extends HttpServlet {
 	private static final Log log = Log.lookup(ClassWebServlet.class);
 
-	private ServletContext _ctx;
 	private String _mappingURI;
 	private ClassWebResource _cwr;
 
-	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
-
-		_ctx = config.getServletContext();
-
-		_mappingURI = config.getInitParameter("mapping-uri");
+	public void init() throws ServletException {
+		_mappingURI = getServletConfig().getInitParameter("mapping-uri");
 		if (_mappingURI == null || _mappingURI.length() == 0
 		|| _mappingURI.charAt(0) != '/')
 			throw new ServletException("The mapping-uri parameter must be specified and starts with /");
@@ -61,7 +53,7 @@ public class ClassWebServlet extends HttpServlet {
 				//remove the trailing '\\' if any
 		}
 
-		_cwr = ClassWebResource.getInstance(_ctx, _mappingURI);
+		_cwr = ClassWebResource.getInstance(getServletContext(), _mappingURI);
 	}
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)

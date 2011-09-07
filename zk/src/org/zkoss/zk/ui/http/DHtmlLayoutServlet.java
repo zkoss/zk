@@ -81,15 +81,13 @@ import org.zkoss.zk.ui.sys.Attributes;
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
 
-	private ServletContext _ctx;
 	private WebManager _webman;
 	private boolean _webmanCreated;
 	private boolean _compress = true;
 
 	//Servlet//
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config); // B50-3310020: save config
-
+	public void init() throws ServletException {
+		final ServletConfig config = getServletConfig();
 		String param = config.getInitParameter("log-level");
 		if (param != null && param.length() > 0) {
 			final Level level = Log.getLevel(param);
@@ -100,14 +98,14 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		param = config.getInitParameter("compress");
 		_compress = param == null || param.length() == 0 || "true".equals(param);
 
-		_ctx = config.getServletContext();
-		_webman = WebManager.getWebManagerIfAny(_ctx);
+		final ServletContext ctx = getServletContext();
+		_webman = WebManager.getWebManagerIfAny(ctx);
 		if (_webman != null) {
 			log.info("Web Manager was created before ZK loader");
 		} else {
 			String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
-			_webman = new WebManager(_ctx, updateURI);
+			_webman = new WebManager(ctx, updateURI);
 			_webmanCreated = true;
 		}
 	}
@@ -117,9 +115,6 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				_webman.destroy();
 			_webman = null;
 		}
-	}
-	public ServletContext getServletContext() {
-		return _ctx;
 	}
 
 	//-- super --//
@@ -177,15 +172,16 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final boolean compress = _compress && !bInclude;
 		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
 		final DesktopRecycle dtrc = bInclude ? null: config.getDesktopRecycle();
+		final ServletContext ctx = getServletContext();
 		Desktop desktop = dtrc != null ?
-			DesktopRecycles.beforeService(dtrc, _ctx, sess, request, response, path): null;
+			DesktopRecycles.beforeService(dtrc, ctx, sess, request, response, path): null;
 
 		try {
 			if (desktop != null) { //recycle
 				final Page page = Utils.getMainPage(desktop);
 				if (page != null) {
 					final Execution exec = new ExecutionImpl(
-						_ctx, request, response, desktop, page);
+						ctx, request, response, desktop, page);
 					_webman.setDesktop(request, desktop);
 					wappc.getUiEngine().recycleDesktop(exec, page, out);
 				} else
@@ -210,7 +206,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
 					final Execution exec = new ExecutionImpl(
-						_ctx, request, response, desktop, page);
+						ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
 						//no need to set device type here, since UiEngine will do it later
 				} else {
@@ -220,7 +216,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 					final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
 					final Execution exec = new ExecutionImpl(
-						_ctx, request, response, desktop, page);
+						ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 				}
 			}
@@ -284,6 +280,6 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			}
 		}
 
-		Utils.handleError(_ctx, request, response, path, err);
+		Utils.handleError(getServletContext(), request, response, path, err);
 	}
 }

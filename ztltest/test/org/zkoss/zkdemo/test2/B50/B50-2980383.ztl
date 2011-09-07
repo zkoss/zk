@@ -50,7 +50,7 @@
 			</zk>
 		 --></server>
 		<client><![CDATA[
-				
+				waitResponse(true);		
             	Element header = tabs.$n("header");
             	Element tab = last.$n();
 

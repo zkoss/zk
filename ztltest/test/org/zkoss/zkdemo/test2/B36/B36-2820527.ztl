@@ -6,10 +6,10 @@
 			  maximizable="true" closable="true" sizable="true" top="0px">Mouse-over the "Author" label to click the extra menu icon, and uncheck one of the menu-items, and then it should work as expected
 			  <grid>
 			    <columns menupopup="auto">
-			      <column label="Author"/>
-			      <column label="Title"/>
-			      <column label="Publisher"/>
-			      <column label="Hardcover"/>
+			      <column id="col0" label="Author"/>
+			      <column id="col1" label="Title"/>
+			      <column id="col2" label="Publisher"/>
+			      <column id="col3" label="Hardcover"/>
 			    </columns>
 			    <rows>
 			      <row>
@@ -28,7 +28,7 @@
 			  </grid>
 			  <grid>
 			    <columns menupopup="auto">
-			      <column label="Author"/>
+			      <column id="col4" label="Author"/>
 			      <column label="Title"/>
 			    </columns>
 			    <rows>
@@ -42,30 +42,31 @@
 			</zk>
 		--></server>
 		<client><![CDATA[
-				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-				waitResponse();
-				click(jq("@menuitem[label=\"Hardcover\"] a.z-menu-item-cnt-ck"));
-				waitResponse();
-				verifyEquals("none", jq("@window @column[label=\"Hardcover\"]").css("display"));
-				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-				waitResponse();
-				click(jq("@menuitem[label=\"Publisher\"] a.z-menu-item-cnt-ck"));
-				waitResponse();
-				verifyEquals("none", jq("@window @column[label=\"Publisher\"]").css("display"));
-				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"));
-				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(0)"), "1,1");
-				waitResponse();
-				click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
-				waitResponse();
-				verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(0)").css("display"));
-				mouseOver(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"));
-				clickAt(jq("@window @column[label=\"Author\"] a.z-column-btn:eq(1)"), "1,1");
-				waitResponse();
-				click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
-				waitResponse();
-				verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(1)").css("display"));
+		String offset = ZK.is("ie8_") ? "2,2" : "1,1";
+		mouseOver(col0.$n("btn"));
+		Scripts.triggerMouseEventAt(getWebDriver(), col0.$n("btn"), "click", offset);
+		waitResponse();
+		click(jq("@menuitem[label=\"Hardcover\"] a.z-menu-item-cnt-ck"));
+		waitResponse();
+		verifyEquals("none", jq("@window @column[label=\"Hardcover\"]").css("display"));
+		mouseOver(col0.$n("btn"));
+		Scripts.triggerMouseEventAt(getWebDriver(), col0.$n("btn"), "click", offset);
+		waitResponse();
+		click(jq("@menuitem[label=\"Publisher\"] a.z-menu-item-cnt-ck"));
+		waitResponse();
+		verifyEquals("none", jq("@window @column[label=\"Publisher\"]").css("display"));
+		mouseOver(col0.$n("btn"));
+		Scripts.triggerMouseEventAt(getWebDriver(), col0.$n("btn"), "click", offset);
+		waitResponse();
+		click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
+		waitResponse();
+		verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(0)").css("display"));
+		mouseOver(col4.$n("btn"));
+		Scripts.triggerMouseEventAt(getWebDriver(), col4.$n("btn"), "click", offset);
+		waitResponse();
+		click(jq("@menuitem[label=\"Title\"] a.z-menu-item-cnt-ck"));
+		waitResponse();
+		verifyEquals("none", jq("@window @column[label=\"Title\"]:eq(1)").css("display"));
 		]]></client>
 	</case>
 </test>

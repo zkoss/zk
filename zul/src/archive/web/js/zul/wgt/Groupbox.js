@@ -40,7 +40,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
 					if (zk.ie6_) // Bug Z35-groupbox-002.zul
 						zk(this).redoCSS();
-					if (open) zWatch.fireDown('onShow', this);
+					if (open)
+						zUtl.fireShown(this);
 				} else {
 					zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
 				}
@@ -177,7 +178,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return this.$supers('getParentSize_', arguments);
 	},
 	//watch//
-	onSize: _zkf = function () {
+	onSize: function () {
 		this._fixHgh();
 		if (!this.isLegend()) {
 			setTimeout(this.proxy(this._fixShadow), 500);
@@ -186,7 +187,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			this._fixWdh();
 		} 
 	},
-	onShow: _zkf,
 	_fixShadow: function () {
 		var sdw = this.$n('sdw');
 		if (sdw)
@@ -215,12 +215,12 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
 		// Bug: B50-3205292: vflex with legend Groupbox
 		//if (!this.isLegend())
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
 		// Bug: B50-3205292: vflex with legend Groupbox
 		//if (!this.isLegend())
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
 	},
 	onChildAdded_: function (child) {

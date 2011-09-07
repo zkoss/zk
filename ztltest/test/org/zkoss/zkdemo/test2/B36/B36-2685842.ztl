@@ -46,7 +46,8 @@
 			JQuery tr = jq("$bidSessionSelectorTabBox div.z-window-embedded-tr");
 			JQuery cnt = jq("$bidSessionSelectorTabBox div.z-window-embedded-cl").exists() ?
 			jq("$bidSessionSelectorTabBox div.z-window-embedded-cl") : jq("div.z-window-embedded-cnt:eq(1)");
-			verifyEquals(cnt.offsetLeft() + cnt.outerWidth(), tr.offsetLeft() + tr.outerWidth());
+			int range = ZK.is("ie6_") ? 11 : 0;
+			verifyTolerant(cnt.offsetLeft() + cnt.outerWidth(), tr.offsetLeft() + tr.outerWidth(), range);
 		]]></client>
 	</case>
 </test>

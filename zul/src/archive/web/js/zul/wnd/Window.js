@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;
 		var node = wgt.$n(),
+			zkn = zk(node),
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
@@ -31,9 +32,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
 		if (!floated) {
 			sw -= $op.zk.paddingWidth();
-			sw = $op.zk.revisedWidth(sw);
+			sw = zkn.revisedWidth(sw);
 			sh -= $op.zk.paddingHeight();
-			sh = $op.zk.revisedHeight(sh);
+			sh = zkn.revisedHeight(sh);
 		}
 
 		s.width = jq.px0(sw);
@@ -102,6 +103,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _aftermove(dg, evt) {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
+		
+		// Bug for ZK-385 clear position value after move
+        if (wgt._position && wgt._position != "parent") {
+			wgt._position = null;
+		}
 		wgt.zsync();
 		wgt._fireOnMove(evt.data);
 	}
@@ -118,6 +124,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_posByParent(wgt);
 
 		$n.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		wgt.zsync();
 		_updDomPos(wgt);
 		wgt.setTopmost();
@@ -130,6 +138,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (pos == "parent") _posByParent(wgt);
 
 		$n.makeVParent();
+		zWatch.fireDown("onVParent", this);
+
 		wgt.zsync();
 		_updDomPos(wgt, true, false, true);
 
@@ -365,7 +375,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * <p>Default: empty.
 		 * @return String
 		 */
-		title: _zkf,
+		title: function () {
+			if (this.caption)
+				this.caption.updateDomContent_(); // B50-ZK-313
+			else
+				_updDomOuter(this);
+		},
 		/** 
 		 * Sets the border (either none or normal).
 		 * @param String border the border. If null or "0", "none" is assumed.
@@ -537,10 +552,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 						fromServer: fromServer
 					});
 				}
-				if (isRealVisible) {
-					this.__maximized = true;
+				if (isRealVisible)
 					zUtl.fireSized(this);
-				}
 			}
 		},
 		/**
@@ -565,7 +578,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', this);
+					zUtl.fireShown(this);
 				}
 				if (!fromServer) {
 					this._visible = false;
@@ -800,7 +813,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zk(this.$n()).cleanVisibility();
 			this.zsync();
 		}
-		this.onSize(w);
 	},
 	onHide: function (ctl) {
 		var w = ctl.origin;
@@ -816,16 +828,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized && !this.__maximized) 
+		if (this._maximized) 
 			this.$n().style.width="";
 	},
 	onSize: function() {
 		_hideShadow(this);
-		if (this._maximized) {
-			if (!this.__maximized)
-				_syncMaximized(this);
-			this.__maximized = false; // avoid deadloop
-		}
+		if (this._maximized)
+			_syncMaximized(this);
 		this._fixHgh();
 		this._fixWdh();
 		if (this._mode != 'embedded')
@@ -893,8 +902,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
 
-			if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/*bug #1944729*/)
-				cave.style.height = "0";
+			// not effect bug 1944729, check this bug with bug ZK-326 in Panel.js
+			// if (zk.ie6_ && hgh && hgh != "auto" && hgh != '100%'/*bug #1944729*/)
+			//	cave.style.height = "0";
 
 			if (hgh && hgh != "auto") {
 				zk(cave).setOffsetHeight(this._offsetHeight(n));
@@ -1023,6 +1033,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.rerender(this._skipper); // B50-ZK-275
 		}
 	},
+	insertChildHTML_: function (child, before, desktop) {
+		if (!child.$instanceof(zul.wgt.Caption)) // B50-ZK-275
+			this.$supers('insertChildHTML_', arguments);
+	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);
 		if ((!no || !no.visible) && this._minimized)
@@ -1092,7 +1106,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mask = null;
 		}
 
-		zk(node).undoVParent();
+		zk(node).undoVParent(); //no need to fire onVParent in unbind_
 		zWatch.unlisten({
 			onFloatUp: this,
 			onSize: this,
@@ -1271,7 +1285,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		if (wgt._maximized) return true;
+		if (wgt._maximized || evt.target != wgt) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);

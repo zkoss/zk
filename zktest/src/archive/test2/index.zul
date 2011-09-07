@@ -12,7 +12,7 @@ function newWindow(url){
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1" contentStyle="overflow:auto;position:relative;">
 				<vbox>
-					<tabbox mold="accordion-lite">
+					<tabbox mold="accordion">
 						<tabs>
 							<tab label="Normal" selected="true"/>
 							<tab label="Advance" />

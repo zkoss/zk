@@ -223,13 +223,18 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.sel.Select, 'bind_', arguments);
+
 		var n = this.$n();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
 
-		if (this._selectedIndex < 0)
-			n.selectedIndex = -1;
+		if (!zk.gecko) {
+			var fn = [this,  this._fixSelIndex];
+			zWatch.listen({onRestore: fn, onVParent: fn});
+		}
+
+		this._fixSelIndex();
 	},
 	unbind_: function () {
 		var n = this.$n();
@@ -237,6 +242,13 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.$supers(zul.sel.Select, 'unbind_', arguments);
+
+		var fn = [this,  this._fixSelIndex];
+		zWatch.unlisten({onRestore: fn, onVParent: fn});
+	},
+	_fixSelIndex: function () {
+		if (this._selectedIndex < 0)
+			this.$n().selectedIndex = -1;
 	},
 	_doChange: function (evt) {		
 		var data = [], reference, n = this.$n();

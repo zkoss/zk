@@ -14,8 +14,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<tree id="explorerTree" vflex="true"
-style="overflow-x:auto">
+<tree id="explorerTree" vflex="true">
 <treecols sizable="false">
 <treecol label="Please resize window's height to very small but at least one row exist. Then you should be able to see the down-scroller-button."/>
 </treecols>

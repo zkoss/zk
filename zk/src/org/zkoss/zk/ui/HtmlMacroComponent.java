@@ -33,11 +33,13 @@ import org.zkoss.zk.ui.sys.Attributes;
  * If a developer wants to create it manually, it has to instantiate from
  * the correct class, and then invoke {@link #afterCompose}.
  *
- * <p>[Since 5.0.4] By default, invoking {@link #compose} (and {@link #afterCompose})
- * supports auto
- * forward events and wire accessible variables to this component.
- *  
- * <p>You can turn on/off auto wire mechanism by specifying the Library
+ * <p>To do additional application-specific tasks, you could override
+ * {@link #compose}. Both {@link #afterCompose} and {@link #recreate}
+ * depends on {@link #compose}.
+ *
+ * <p>By default, {@link #compose}
+ * supports auto-forward events and wire accessible variables to this component.
+ * You can turn on/off auto wire mechanism by specifying the Library
  * Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
  * If you did not specify the Library Property, default is false.</p>
  * 
@@ -113,6 +115,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * automatically. Developers rarely need to invoke this method.
 	 *
 	 * <p>Default: it invokes {@link #compose} to compose the macro component.
+	 *
+	 * <p>Instead of overriding this method, it is suggested to override
+	 * {@link #compose}, since all other methods depend on {@link #compose}
+	 * (rather than {@link #afterCompose}).
 	 */
 	public void afterCompose() {
 		compose();
@@ -124,7 +130,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 * child components, use {@link #recreate} instead.
 	 * <p>If this is an line macro, this method is invoked automatically
 	 * if {@link #setParent} or {@link #setPage} called
-	 * <p>[Since 5.0.4] By default, supports auto forward events and wire accessible
+	 * <p>By default, supports auto forward events and wire accessible
 	 * variables to this component.
 	 * @since 5.0.5
 	 */

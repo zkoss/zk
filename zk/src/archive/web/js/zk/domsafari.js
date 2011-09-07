@@ -22,10 +22,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 zk.copy(zjq, {
 	_fixCSS: function (el) { 
-		var olddisp = el.style.display; //force redraw
-		el.style.display='none';
+		//we have to preserve scrollTop
+		//Test case: test2/B50-ZK-373.zul and test2/B50-3315594.zul
+		var old = el.style.display,
+			top = el.scrollTop,
+			lft = el.scrollLeft;
+		el.style.display = 'none'; //force redraw
 		var dummy = el.offsetWidth; //force recalc
-		el.style.display=olddisp;
+		el.style.display = old;
+		el.scrollTop = top;
+		el.scrollLeft = lft;
 	}
 });
 

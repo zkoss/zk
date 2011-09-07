@@ -6,7 +6,7 @@
 			<window title="My First Window" border="normal" width="200px">
 			    <textbox id="txb1"/>
 			    <textbox id="txb2"/>
-			    <button label="save" onClick="save()"/>
+			    <button id="btn" label="save" onClick="save()"/>
 			    <zscript>
 			        public void save() {
 			            ArrayList al = new ArrayList();
@@ -28,17 +28,15 @@
 			</window>
 			</zk>
 		--></server>
-		<client><![CDATA[
-			JQuery btn = jq("@button");
-			click(btn);
+		<client wait="200"><![CDATA[
+			Element b = isIE() ? btn.$n("btn") : btn.$n();
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
-			
-			click(btn);
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
-			
-			click(btn);
+			Scripts.triggerMouseEventAt(getWebDriver(), b, "click", "1,1");
 			waitResponse();
 			verifyEquals(2, jq("div.z-errbox").length());
 		]]></client>

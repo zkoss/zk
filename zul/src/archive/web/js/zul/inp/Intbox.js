@@ -24,7 +24,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
+
 	/** Synchronizes the input element's width of this component
 	 */
 	syncWidth: function () {
@@ -62,11 +62,11 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 	bind_: function(){
 		this.$supers(zul.inp.Intbox, 'bind_', arguments);
 		if (this.inRoundedMold())
-			zWatch.listen({onSize: this, onShow: this});
+			zWatch.listen({onSize: this});
 	},	
 	unbind_: function(){
 		if (this.inRoundedMold())
-			zWatch.unlisten({onSize: this, onShow: this});
+			zWatch.unlisten({onSize: this});
 		this.$supers(zul.inp.Intbox, 'unbind_', arguments);
 	}
 });

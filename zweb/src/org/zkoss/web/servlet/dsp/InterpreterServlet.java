@@ -67,17 +67,13 @@ import org.zkoss.web.util.resource.ClassWebResource;
  */
 public class InterpreterServlet extends HttpServlet {
 	private static final Log log = Log.lookup(InterpreterServlet.class);
-	private ServletContext _ctx;
 	private String _charset = "UTF-8";
 	private Locator _locator;
 	private boolean _compress = true;
 
-	public void init(ServletConfig config) throws ServletException {
-		//super.init(config);
-			//Note callback super to avoid saving config
-
-		_ctx = config.getServletContext();
-
+	public void init() throws ServletException {
+		final ServletContext ctx = getServletContext();
+		final ServletConfig config = getServletConfig();
 		String param = config.getInitParameter("compress");
 		if (param != null)
 			_compress = "true".equals(param);
@@ -92,7 +88,7 @@ public class InterpreterServlet extends HttpServlet {
 				URL url = null;
 				if (name.indexOf("://") < 0) {
 					try {
-						url = _ctx.getResource(name);
+						url = ctx.getResource(name);
 						if (bClsRes && url == null)
 							url = ClassWebResource.getClassResource(name);
 					} catch (java.net.MalformedURLException ex) { //eat it
@@ -101,7 +97,7 @@ public class InterpreterServlet extends HttpServlet {
 				return url != null ? url: Taglibs.getDefaultURL(name);
 			}
 			public InputStream getResourceAsStream(String name) {
-				InputStream is = _ctx.getResourceAsStream(name);
+				InputStream is = ctx.getResourceAsStream(name);
 				return !bClsRes || is != null ? is:
 					ClassWebResource.getClassResourceAsStream(name);
 			}
@@ -109,9 +105,6 @@ public class InterpreterServlet extends HttpServlet {
 
 		param = config.getInitParameter("charset");
 		if (param != null) _charset = param.length() > 0 ? param: null;
-	}
-	public ServletContext getServletContext() {
-		return _ctx;
 	}
 
 	//-- super --//
@@ -122,9 +115,10 @@ public class InterpreterServlet extends HttpServlet {
 		if (D.ON && log.debugable()) log.debug("Get "+path);
 
 		final Object old = Charsets.setup(request, response, _charset);
+		final ServletContext ctx = getServletContext();
 		try {
 			final Interpretation cnt = (Interpretation)
-				ResourceCaches.get(getCache(), _ctx, path, null);
+				ResourceCaches.get(getCache(), ctx, path, null);
 			if (cnt == null) {
 				if (Https.isIncluded(request)) log.error("Not found: "+path);
 					//It might be eaten, so log the error
@@ -135,7 +129,7 @@ public class InterpreterServlet extends HttpServlet {
 			final boolean compress = _compress && !Servlets.isIncluded(request);
 			final StringWriter out = compress ? new StringWriter(): null;
 			cnt.interpret(
-				new ServletDspContext(_ctx, request, response, out, null));
+				new ServletDspContext(ctx, request, response, out, null));
 
 			if (compress) {
 				final String result = out.toString();
@@ -170,15 +164,16 @@ public class InterpreterServlet extends HttpServlet {
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.servlet.dsp.PageCache";
 	@SuppressWarnings("unchecked")
 	private final ResourceCache<Interpretation> getCache() {
-		ResourceCache cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
+		final ServletContext ctx = getServletContext();
+		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (InterpreterServlet.class) {
-				cache = (ResourceCache)_ctx.getAttribute(ATTR_PAGE_CACHE);
+				cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(), 29);
 					cache.setMaxSize(1024);
 					cache.setLifetime(60*60*1000); //1hr
-					_ctx.setAttribute(ATTR_PAGE_CACHE, cache);
+					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}
 		}

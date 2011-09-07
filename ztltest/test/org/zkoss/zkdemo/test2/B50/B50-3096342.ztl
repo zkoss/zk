@@ -55,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				index = dayOfMonth == 1 ? dayOfMonth + 1 : dayOfMonth - 1;
 				dayOnCalendar = jq(".z-calendar-wkday:eq(" + index + ")");
 				}
-				click(dayOnCalendar);
+				Scripts.triggerMouseEventAt(getWebDriver(), dayOnCalendar, "click", "1,1");
 				waitResponse();
 				clickAt(jq("$desp"),"10,10");
 				waitResponse();

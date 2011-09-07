@@ -105,7 +105,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function wgt2s(w) {
 		var s = w.widgetName;
-		return w.id ? s + '$' + w.id: s + '#' + w.uuid + '$' + w.$oid;
+		return s + (w.id ? '$' + w.id: '') + '#' + w.uuid + '$' + w.$oid;
 	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];
@@ -902,9 +902,9 @@ wgt.setSomething(somevalue, {force:true});
 		return klass;
 	},
 
-	/** A does-nothing function.
+	/** A does-nothing-but-returns-false function.
 	 */
-	$void: function () {},
+	$void: function () {return false;},
 
 	/** Parses a string to an integer.
 	 * <p>It is the same as the built-in parseInt method except it never return
@@ -1070,7 +1070,7 @@ zk.endProcessing();
 	 */
 	error: function (msg) {
 		zAu.send(new zk.Event(null, "error", {message: msg}, {ignorable: true}), 800);
-		_zErb.push(msg);
+		zk._Erbx.push(msg);
 	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example:
@@ -1078,7 +1078,7 @@ zk.endProcessing();
 	 * @see #error
 	 */
 	errorDismiss: function () {
-		_zErb.remove();
+		zk._Erbx.remove();
 	},
 	/** Logs an message for debugging purpose.
 	 * Example:
@@ -1219,6 +1219,8 @@ zk.log('value is", value);
 		zk.css3 = zk.opera >= 10.5;
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
+			//zk.iex is the Browser Mode (aka., Compatibility View)
+			//while zk.ie is the Document Mode
 		if (zk.iex) {
 			if ((zk.ie = document.documentMode||zk.iex) < 6) //IE7 has no documentMode
 				zk.ie = 6; //assume quirk mode
@@ -1494,7 +1496,7 @@ zk.copy(regClass(zk.Class = function () {}, zk.Object), _zkf);
 //error box//
 var _erbx, _errcnt = 0;
 
-_zErb = zk.$extends(zk.Object, {
+zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 	$init: function (msg) {
 		var id = "zk_err",
 			$id = "#" + id,
@@ -1502,8 +1504,9 @@ _zErb = zk.$extends(zk.Object, {
  			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
  					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >'
-					+ '<div class="btn redraw" onclick="_zErb.redraw()"></div>'
-					+ '<div class="btn close" onclick="_zErb.remove()"></div></div></td></tr></table></div>';
+					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"></div>'
+					+ '<div class="btn close" onclick="zk._Erbx.remove()"></div></div></td></tr></table></div>';
+
 		jq(document.body).append(html);
 		_erbx = this;
 		this.id = id;
@@ -1530,7 +1533,7 @@ _zErb = zk.$extends(zk.Object, {
 	},
 	push: function (msg) {
 		if (!_erbx)
-			return new _zErb(msg);
+			return new zk._Erbx(msg);
 
 		var id = _erbx.id;
 		jq("#" + id + " .errnum").html(++_errcnt + " Errors");

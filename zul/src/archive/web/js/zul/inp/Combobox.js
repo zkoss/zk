@@ -334,8 +334,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		}
 	},
 	updateChange_: function () {
-		if (this.$supers('updateChange_', arguments)) {
-			this._hilite({/*sendOnSelect:true, */noSelectRange:true}); // B50-ZK-297: only send onSelect from selecting item
+		var chng = this._value != this.getInputNode().value; // B50-ZK-297
+		if (this.$supers('updateChange_', arguments) && chng) {
+			this._hilite({sendOnSelect:true, noSelectRange:true});
 			return true;
 		}
 		this.valueEnter_ = null;

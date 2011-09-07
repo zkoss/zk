@@ -28,20 +28,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		o.uploaders[key] = uplder;
 	}
 	function _start(o, form, val) { //start upload	
-		if (!o._clsnm) { // not initialized yet
-			//B50-ZK-255: FileUploadBase$SizeLimitExceededException
-			//will not warning in browser
-			_initUploader(o, form, val);
-			o.sid++;
-			o.initContent();
-		} else {
-			//Bug 3305038: Fileupload.get() cause javascript error
-			o.sid++;
-			o.initContent();
-			_initUploader(o, form, val);
-		}
+		//B50-ZK-255: FileUploadBase$SizeLimitExceededException
+		//will not warning in browser
+		_initUploader(o, form, val);
+		o.sid++;
+		o.initContent();
 	}
-
 	function _onchange(evt) {
 		var n = this,
 			upload = n._ctrl,
@@ -56,14 +48,35 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		// we don't use jq().remove() in this case, because we have to use its reference.
 		var p = form.parentNode;
 		p.parentNode.removeChild(p);
-		_start(n._ctrl, form, n.value);		
+		upload._formDetached = true;
+		_start(n._ctrl, form, n.value);
+	}
+
+	if (zk.opera) { //opera only
+		var _syncQue = [], _syncId;
+		function _syncNow() {
+			for (var j = _syncQue.length; j--;)
+				_syncQue[j].sync();
+		}
+		function _addSyncQue(upld) {
+			if (!_syncQue.length)
+				_syncId = setInterval(_syncNow, 1500);
+
+			_syncQue.push(upld);
+		}
+		function _rmSyncQue(upld) {
+			_syncQue.$remove(upld);
+			if (_syncId && !_syncQue.length) {
+				clearInterval(_syncId);
+				_syncId = null;
+			}
+		}
 	}
 
 /** Helper class for implementing the fileupload.
  */
 zul.Upload = zk.$extends(zk.Object, {
 	sid: 0,
-	uploaders: {},
 	/** Constructor
 	 * @param zk.Widget wgt the widget belongs to the file upload 
 	 * @param DOMElement parent the element representing where the upload element
@@ -71,6 +84,8 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param String clsnm the CSS class name of the fileupload
 	 */
 	$init: function(wgt, parent, clsnm) {
+		this.uploaders = {};
+
 		var cls;
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
 			var attr = attrs[i].trim(); 
@@ -93,20 +108,22 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * Synchronizes the visual states of the element with fileupload
 	 */
 	sync: function () {
-		var wgt = this._wgt,
-			ref = wgt.$n(),
-			parent = this._parent,
-			outer = parent ? parent.lastChild : ref.nextSibling,
-			inp = outer.firstChild.firstChild,
-			refof = zk(ref).cmOffset(),
-			outerof = jq(outer).css({top: '0', left: '0'}).zk.cmOffset(),
-			diff = inp.offsetWidth - ref.offsetWidth,
-			st = outer.style,
-			dy = refof[1] - outerof[1];
-		st.top = dy + "px";
-		st.left = refof[0] - outerof[0] - diff + "px";
-		inp.style.height = ref.offsetHeight + 'px';
-		inp.style.clip = 'rect(auto,auto,auto,' + diff + 'px)';
+		if (!this._formDetached) {
+			var wgt = this._wgt,
+				ref = wgt.$n(),
+				parent = this._parent,
+				outer = parent ? parent.lastChild : ref.nextSibling,
+				inp = outer.firstChild.firstChild,
+				refof = zk(ref).revisedOffset(),
+				outerof = jq(outer).css({top: '0', left: '0'}).zk.revisedOffset(),
+				diff = inp.offsetWidth - ref.offsetWidth,
+				st = outer.style;
+			st.top = (refof[1] - outerof[1]) + "px";
+			st.left = refof[0] - outerof[0] - diff + "px";
+
+			inp.style.height = ref.offsetHeight + 'px';
+			inp.style.clip = 'rect(auto,auto,auto,' + diff + 'px)';
+		}
 	},
 	initContent: function () {
 		var wgt = this._wgt,
@@ -120,14 +137,20 @@ zul.Upload = zk.$extends(zk.Object, {
 			jq(parent).append(html);
 		else 
 			jq(wgt).after(html);
-			
+		delete this._formDetached;
+
 		//B50-3304877: autodisable and Upload
 		if (!wgt._autodisable_self)
 			this.sync();
-		
+
 		var outer = this._outer = parent ? parent.lastChild : ref.nextSibling,
 			inp = outer.firstChild.firstChild;
-			
+
+		if (zk.opera) { //in opera, relative not correct (test2/B50-ZK-363.zul)
+			outer.style.position = 'absolute';
+			_addSyncQue(this);
+		}
+
 		inp.z$proxy = ref;
 		inp._ctrl = this;
 		
@@ -137,6 +160,9 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * Destroys the fileupload. You cannot use this object any more. 
 	 */
 	destroy: function () {
+		if (zk.opera)
+			_rmSyncQue(this);
+
 		jq(this._outer).remove();
 		this._wgt = this._parent = null;
 		for (var v in this.uploaders) {
@@ -442,9 +468,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 			 * Users can add/delete the file upon the panel. 
 			 */
 			zul.UploadManager = zk.$extends(zul.wgt.Popup, {
-				_files: {},
 				$init: function () {
 					this.$supers('$init', arguments);
+					this._files = {};
 					this.setSclass('z-fileupload-manager');
 				},
 				onFloatUp: function(ctl) {

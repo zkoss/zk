@@ -50,7 +50,7 @@ if [ ! -f "$srcfl" ] ; then
 	exit 3
 fi
 if [ ! -d "$dstdir" ] ; then
-	echo "$dstdir doesn't exist. Make sure /usr/jboss is linked to the JBoss directory"
+	echo "$dstdir doesn't exist"
 	exit 3
 fi
 srcnm=${srcfl##*/}

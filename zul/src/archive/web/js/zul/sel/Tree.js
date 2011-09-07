@@ -183,6 +183,18 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		}
 		return false;
 	},
+	_sizeOnOpen: function () {
+		var cols = this.treecols, w, wd;
+		if (!cols || this.isSizedByContent() || this._hflex == 'min')
+			this.syncSize();
+		else {
+			for (w = cols.firstChild; w; w = w.nextSibling)
+				if (w._hflex || !(wd = w._width) || wd == "auto") {
+					this.syncSize();
+					return;
+				}
+		}
+	},
 	/**
 	 * Returns the head widget class. i.e. {@link Treecols}
 	 * @return zul.sel.Treecols

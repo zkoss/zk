@@ -217,7 +217,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * <p>Default: empty.
 		 * @return String
 		 */
-		title: _zkf,
+		title: function () {
+			if (this.caption)
+				this.caption.updateDomContent_(); // B50-ZK-313
+			else
+				this.rerender(this._skipper);
+		},
 		/** 
 		 * Opens or closes this Panel.
 		 * @param boolean open
@@ -293,7 +298,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							var oldinfo = this._oldNodeInfo = { _scrollTop: p.parentNode.scrollTop };
 							p.parentNode.scrollTop = 0;
 							$n.makeVParent();
-							
+							zWatch.fireDown("onVParent", this);
+
 							oldinfo._pos = s.position;
 							oldinfo._ppos = ps.position;
 							oldinfo._zIndex = s.zIndex;
@@ -368,6 +374,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						
 					if (this._inWholeMode) {
 						$n.undoVParent();
+						zWatch.fireDown("onVParent", this);
+
 						var oldinfo = this._oldNodeInfo;
 						node.style.position = oldinfo ? oldinfo._pos : "";
 						this.setZIndex((oldinfo ? oldinfo._zIndex : ""), {fire:true});
@@ -393,7 +401,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					});
 				}
 				if (isRealVisible) {
-					this.__maximized = true;
+					// B50-ZK-324: always counts on onSize to do the work
+					//this.__maximized = true; 
 					zUtl.fireSized(this);
 				}
 			}
@@ -420,7 +429,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', this);
+					zUtl.fireShown(this);
 				}
 				if (!fromServer) {
 					this._visible = false;
@@ -579,11 +588,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	beforeSize: function() {
 		// Bug 2974370: IE 6 will get the wrong parent's width when self's width greater then parent's
-		if (this._maximized && !this.__maximized)
+		if (this._maximized)
 			this.$n().style.width="";
+		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
+		// have to clear width here if not listen to flex
+		if (!this._flexListened) 
+			this.$n('body').style.width="";
+	},
+	// 
+	resetSize_: function(orient) {
+		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
+		// also reset the size of body
+		this.$supers(zul.wnd.Panel, 'resetSize_', arguments);
+		(this.$n('body')).style[orient == 'w' ? 'width': 'height'] = '';
 	},
 	//watch//
-	onSize: _zkf = (function() {
+	onSize: (function() {
 		function syncMaximized (wgt) {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n(),
@@ -610,11 +630,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		return function(ctl) {
 			this._hideShadow();
-			if (this._maximized) {
-				if (!this.__maximized)
-					syncMaximized(this);
-				this.__maximized = false; // avoid deadloop
-			}
+			if (this._maximized)
+				syncMaximized(this);
 			
 			if (this.tbar)
 				ctl.fireDown(this.tbar);
@@ -622,21 +639,26 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				ctl.fireDown(this.bbar);
 			if (this.fbar)
 				ctl.fireDown(this.fbar);
+			this._syncBodyWidth();
 			this._fixHgh();
 			this.zsync();
 		};
 	})(),
-	onShow: _zkf,
 	onHide: function () {
 		this._hideShadow();
 	},
+	_syncBodyWidth: zk.ie6_ ? function () {
+		this.$n('body').style.width = this.$n().offsetWidth; // B50-ZK-304
+	} : zk.$void,
 	_fixHgh: function () {
 		var pc;
 		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
-		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0";
+		// bug ZK-326: Panelchildren's vflex fail in a model window on IE6
+		// check this bug with bug 1944729 in Panel.js
+		// if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0";		
 		if (hgh && hgh != "auto")
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
@@ -769,7 +791,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.wnd.Panel, 'bind_', arguments);
 
-		zWatch.listen({onSize: this, onShow: this, onHide: this});
+		zWatch.listen({onSize: this, onHide: this});
 
 		// Bug 2974370
 		if (zk.ie6_)
@@ -803,7 +825,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this._inWholeMode) {
 			var node = this.$n(),
 				oldinfo;
-			zk(node).undoVParent();
+			zk(node).undoVParent(); //no need to fire onVParent in unbind_
+
 			var p = this.parent;
 			if (p && (p = p.parent) && (p = p.$n()) && (oldinfo = this._oldNodeInfo)) {
 				p.style.position = oldinfo._ppos;
@@ -811,7 +834,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 			this._inWholeMode = false;
 		}
-		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
+		zWatch.unlisten({onSize: this, onHide: this, onFloatUp: this});
 		if (zk.ie6_)
 			zWatch.unlisten({beforeSize: this});
 		this.setFloating_(false);
@@ -1008,7 +1031,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_ignoresizing: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		if (wgt._maximized || !wgt._open) return true;
+			
+		if (wgt._maximized || !wgt._open || (evt.target != wgt && evt.target != wgt.panelchildren)) return true;
 
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);

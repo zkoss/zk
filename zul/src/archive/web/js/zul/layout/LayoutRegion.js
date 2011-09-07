@@ -14,14 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	
-	function _setFirstChildFlex (wgt, flex) {
+	function _setFirstChildFlex (wgt, flex, ignoreMin) {
 		var cwgt = wgt.firstChild;
 		if(cwgt) {
 			if (flex) {
 				wgt._fcvflex = cwgt.getVflex();
 				wgt._fchflex = cwgt.getHflex();
-				cwgt.setVflex(true);
-				cwgt.setHflex(true);
+				if (!ignoreMin || cwgt._vflex != 'min') // B50-ZK-237
+					cwgt.setVflex(true);
+				if (!ignoreMin || cwgt._hflex != 'min') // B50-ZK-237
+					cwgt.setHflex(true);
 			} else {
 				cwgt.setVflex(wgt._fcvflex);
 				cwgt.setHflex(wgt._fchflex);
@@ -198,9 +200,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer, nonAnima) {
-			nonAnima = this.parent._animationDisabled || nonAnima;
-			if (!this.$n() || !this.isCollapsible())
+			if (!this.$n() || !this.isCollapsible() || !this.parent)
 				return; //nothing changed
+	
+			nonAnima = this.parent._animationDisabled || nonAnima;
 	
 			var colled = this.$n('colled'),
 				real = this.$n('real');
@@ -229,12 +232,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						zk(colled).slideOut(this, {
 							anchor: this.sanchor,
 							duration: 200,
-							afterAnima: this.$class.afterSlideOut
+							afterAnima: fromServer ? this.$class.afterSlideOut : 
+								this.$class._afterSlideOutX
 						});
 					else {
 						jq(real).show();
 						jq(colled).hide();
-						zWatch.fireDown('onShow', this);
+						zUtl.fireShown(this);
 					}
 				}
 			} else {
@@ -242,7 +246,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					zk(real).slideOut(this, {
 							anchor: this.sanchor,
 							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: this.$class.afterSlideOut
+							afterAnima: fromServer ? this.$class.afterSlideOut : 
+								this.$class._afterSlideOutX
 						});
 				else {
 					if (colled)
@@ -251,7 +256,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 			if (nonAnima) this.parent.resize();
-			if (!fromServer) this.fire('onOpen', {open:open});
+			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
+				this.fire('onOpen', {open:open});
 		}
 	},
 	//bug #3014664
@@ -435,6 +441,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			jq(this.$n()).addClass(this.getZclass() + "-nested");
 		}
 		
+		// Bug for B36-2841185.zul, resync flex="true"
+		if (this.isFlex())
+			_setFirstChildFlex(this, true, true);
+		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
@@ -442,6 +452,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
+		
+		// check before "if (child.$instanceof(zul.layout.Borderlayout)) {"
+		if (this.isFlex())
+			_setFirstChildFlex(this, false);
+				
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
 			jq(this.$n()).removeClass(this.getZclass() + "-nested");
@@ -508,7 +523,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		
 		if (this.isFlex())
-			_setFirstChildFlex(this, true);
+			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
@@ -602,10 +617,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			break;
 		}
 		this.$supers('doClick_', arguments);		
-	},
-	isWatchable_: function(name) {
-		//bug 3007911, when hflex == 'min' || vflex == 'min', can mis-judge the visibility
-		return this.$supers('isWatchable_', arguments) || ((this._vflex=='min' || this._hflex=='min') && this.isRealVisible());
 	},
 	_docClick: function (evt) {
 		var target = evt.target;
@@ -791,12 +802,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.zIndex = 1;
 		this.parent.resize();
 	},
+	_afterSlideOutX: function (n) {
+		// B50-ZK-301: fire onOpen after animation
+		this.$class.afterSlideOut.call(this, n, true);
+	},
 	// a callback function after the component slides out.
-	afterSlideOut: function (n) {
+	afterSlideOut: function (n, fireOnOpen) {
 		if (this._open) 
 			zk(this.$n('real')).slideIn(this, {
 				anchor: this.sanchor,
-				afterAnima: this.$class.afterSlideIn
+				afterAnima: fireOnOpen ? this.$class._afterSlideInX : this.$class.afterSlideIn
 			});
 		else {
 			var colled = this.$n('colled'),
@@ -804,10 +819,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			s.zIndex = ""; // reset z-index refered to the beforeSlideOut()
 			s.visibility = "";
 			zk(colled).slideIn(this, {
-				anchor: this.sanchor,				
-				duration: 200
+				anchor: this.sanchor,
+				duration: 200,
+				// B50-ZK-301: fire onOpen after animation
+				afterAnima: fireOnOpen ? function (n) {this.fire('onOpen', {open: this._open});} : zk.$void
 			});
 		}
+	},
+	_afterSlideInX: function (n) {
+		// B50-ZK-301: fire onOpen after animation
+		this.$class.afterSlideIn.call(this, n);
+		this.fire('onOpen', {open: this._open});
 	},
 	// recalculates the size of the whole border layout after the component sildes in.
 	afterSlideIn: function (n) {
@@ -926,7 +948,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (y < b.mins + b.top) y = b.mins + b.top;
 			w = x;
 			h = y - b.top;
-			break;				
+			break;
 		case BL.SOUTH:
 			if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
 				y = b.top + b.bottom - b.maxs - split.offsetHeight;
@@ -942,8 +964,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (x < b.mins + b.left) x = b.mins + b.left;
 			w = x - b.left;
 			h = y;
-			break;		
-		case BL.EAST:			
+			break;
+		case BL.EAST:
 			if (b.left + b.right - x - split.offsetWidth > b.maxs) {
 				x = b.left + b.right - b.maxs - split.offsetWidth;
 				w = b.maxs;
@@ -952,7 +974,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				w = b.mins;
 			} else w = b.left - x + b.right - split.offsetWidth;
 			h = y;
-			break;						
+			break;
 		}
 		dg._point = [w, h];
 		return [x, y];

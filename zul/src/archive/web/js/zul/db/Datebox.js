@@ -52,12 +52,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (s) o.push(s);
 		return o.join(":");
 	}
-	var globallocalizedSymbols = {};
+	
+var globallocalizedSymbols = {},
+	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
+	Datebox =
 /**
  * An edit box for holding a date.
  * <p>Default {@link #getZclass}: z-datebox.
  */
-var Datebox = 
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
@@ -83,7 +85,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				zcls = this.getZclass();
 			if (n) {
 				if (!this.inRoundedMold()) {
-					jq(n)[v ? 'show': 'hide']();
+					if (!this._inplace || !v)
+						jq(n)[v ? 'show': 'hide']();
+					else
+						n.style.display = '';
 					jq(this.getInputNode())[v ? 'removeClass': 'addClass'](zcls + '-right-edge');
 				} else {
 					var fnm = v ? 'removeClass': 'addClass';
@@ -273,13 +278,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 	},
-	onSize: _zkf = function () {
+	onSize: function () {
 		var width = this.getWidth();
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
 	},
-	onShow: _zkf,
+
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-datebox" + (this.inRoundedMold() ? "-rounded": "");
@@ -344,7 +349,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		if (val) {
 			var d = new zk.fmt.Calendar().parseDate(val, this.getFormat(), !this._lenient, this._value, this._localizedSymbols);
-			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(/\'/g, '')))};
+			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			return d;
 		}
 		return null;
@@ -467,7 +472,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -481,7 +486,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
@@ -637,7 +642,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			tm.setVisible(true);
 			tm.setFormat(fmt);
 			tm.setValue(value || new Date());
-			tm.onShow();
+			tm.onSize();
 		} else {
 			db._tm.setVisible(false);
 		}

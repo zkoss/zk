@@ -18,7 +18,7 @@ package org.zkoss.zktest.test2;
  * Used to test B30-2227929-inc.zul.
  * @author tomyeh
  */
-public class B2227929Resolver implements org.zkoss.xel.VariableResolver {
+public class B2227929Resolver implements org.zkoss.xel.VariableResolver, java.io.Serializable {
 	public Object resolveVariable(String name) {
 		return "v2227929".equals(name) ? "2227929": null;
 	}

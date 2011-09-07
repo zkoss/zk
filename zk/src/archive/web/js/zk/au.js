@@ -1376,6 +1376,13 @@ zAu.cmd1 = /*prototype*/ {
 	echo2: function (wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",
 			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
+	},
+	/** Ask the client to re-cacluate the size of the given widget.
+	 * @param zk.Widget wgt the widget to resize
+	 * @since 5.0.8
+	 */
+	resizeWgt: function (wgt) {
+		zUtl.fireSized(wgt, 1); //force cleanup
 	}
 };
 })();

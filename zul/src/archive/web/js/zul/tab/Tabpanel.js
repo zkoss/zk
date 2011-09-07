@@ -81,7 +81,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			if (toSel) {
 				if (!vis) {
 					$pl.show();
-					zWatch.fireDown('onShow', this);
+					zUtl.fireShown(this);
 				}
 			} else if (vis) {
 				zWatch.fireDown('onHide', this);
@@ -136,7 +136,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			cls += ' ' + this.getZclass() + '-cnt';
 		return cls;
 	},
-	onSize: _zkf = function() {
+	onSize: function() {
 		var tabbox = this.getTabbox();
 		if (tabbox.inAccordionMold() && !zk(this.$n("cave")).isVisible())
 			return;
@@ -145,7 +145,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		//Bug 2526699 - (add zk.ie7)
 		if (zk.ie && !zk.ie8) zk(tabbox.$n()).redoCSS();
 	},
-	onShow: _zkf,
+
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabpanel
 		if (v != 'min') v = false;
@@ -160,12 +160,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		if (this.getTabbox().isHorizontal()) {
 			this._zwatched = true;
-			zWatch.listen({onSize: this, onShow: this});
+			zWatch.listen({onSize: this});
 		}
 	},
 	unbind_: function () {
 		if (this._zwatched) {
-			zWatch.unlisten({onSize: this, onShow: this});
+			zWatch.unlisten({onSize: this});
 			this._zwatched = false;
 		}
 		this.$supers(zul.tab.Tabpanel, 'unbind_', arguments);
