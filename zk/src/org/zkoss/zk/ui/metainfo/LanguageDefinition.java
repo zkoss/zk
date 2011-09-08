@@ -759,7 +759,7 @@ public class LanguageDefinition {
 	}
 	/** Constructs and returns an {@link ComponentInfo} for
 	 * the specified parent and text.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public ComponentInfo newLabelInfo(NodeInfo parent, String text) {
 		if (_labeltmpl == null)

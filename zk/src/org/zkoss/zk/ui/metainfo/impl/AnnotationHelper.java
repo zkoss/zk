@@ -217,7 +217,7 @@ public class AnnotationHelper {
 	 * @param val the value. This method assumes val has been trimmed before the
 	 * call.
 	 * @exception NullPointException if val is null.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public static Object parseAttributeValue(String val) {
 		final int len = val.length();

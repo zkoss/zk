@@ -15,7 +15,7 @@
 #
 maindir="$(pwd)"
 version=$1
-if [ "$version" == "" ] ; then
+if [ "$2" == "" ] ; then
       version=$version.FL.$(date +%Y%m%d)
 fi
 
@@ -47,3 +47,4 @@ jvdoc zml
 jvdoc zkex
 jvdoc zkmax
 jvdoc zkplus
+

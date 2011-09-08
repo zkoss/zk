@@ -88,12 +88,14 @@ public class Iframe extends HtmlBasedComponent {
 	
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
+	 * @deprecated as of release 5.5.0, use CSS instead.
 	 */
 	public String getAlign() {
 		return _align;
 	}
 	/** Sets the alignment: one of top, middle, bottom, left, right and
 	 * center.
+	 * @deprecated as of release 5.5.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {

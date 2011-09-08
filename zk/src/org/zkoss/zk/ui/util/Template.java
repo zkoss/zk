@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Component;
  * Represents a UI template that is used to create components.
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public interface Template {
 	/** Creates the components defined in this template.

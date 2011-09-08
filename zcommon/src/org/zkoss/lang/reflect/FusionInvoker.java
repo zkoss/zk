@@ -25,41 +25,41 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The fusion invocation handler. Like the dynamic proxy pattern, this fusion
- * invocation handler is used to wrap two or more instance into one object.
- * <p>
- * This invocation handler assumes the object being wrapped has all methods of
- * these instance (aka, targets), and it might invoke the correspond methods
- * <p>
- * It happens when you need to provide a proxy object form two or more instance.
- * <p>
- * Example:
+ * The fusion invocation handler. It is used to <i>fuse</i>
+ * two or more instance into one object.
+ * It is usefully if you want to have a single object to represent two more
+ * other instances.
+ *
+ * <p>Example:
  * 
- * <pre>
- * &lt;code&gt;class A {
- *   public void f() {...}
- * }
- * class B {
- *   public void f2() {...}
- * }
- * interface IA {
+ * <pre><code>
+ * public interface IA {
  *   public void f();
  * }
- * interface IB {
- *   public void f2();
+ * public interface IB {
+ *   public void g();
  * }
- * &lt;/code&gt;
- * then, you could create a proxy object:
- * &lt;code&gt; Object obj = FusionInvoker.newInstance(new Object[] {A, B });
- * &lt;/code&gt;
- * then use the proxy object anywhere.
- * &lt;code&gt;
+ * public class A implements IA {
+ *   public void f() {...}
+ * }
+ * public class B implements IB {
+ *   public void g() {...}
+ * }
+ * </code></pre>
+ * Then, you could fuse them together as follows:
+ * <pre><code>
+ * Object obj = FusionInvoker.newInstance(new Object[] {new A(), new B()});
+ * </code></pre>
+ *
+ * Thus, the fused proxy object, <code>obj</code>, could be used as if
+ * it implements <code>IA</code> and <code>IB</code>:
+ *
+ * <pre><code>
  *  IA ia = (IA) obj;
  *  ia.f();
  *  IB ib = (IB) obj;
- *  ib.f2();
- *  &lt;/code&gt;
- * </pre>
+ *  ib.g();
+ * </code></pre>
  * 
  * @author RyanWu
  * @since 3.5.2

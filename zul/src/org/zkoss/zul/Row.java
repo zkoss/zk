@@ -180,7 +180,7 @@ public class Row extends XulElement {
 	/** Returns the index of the specified row.
 	 * <p>Notice that the performance is not good if there are a lot of rows.
 	 * Therefore, this method shall not be used with a huge grid.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public int getIndex() {
 		int j = 0;

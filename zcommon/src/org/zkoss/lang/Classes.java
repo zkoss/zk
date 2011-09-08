@@ -635,7 +635,7 @@ public class Classes {
 	 * null means no parameter names to return
 	 * @param resolver the class resolver used to resolve the class specified
 	 * in the signature. Ignored if null.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public static final Method
 	getMethodBySignature(Class<?> cls, String signature, Collection<String> params,

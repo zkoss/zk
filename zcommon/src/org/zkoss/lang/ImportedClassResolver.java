@@ -29,7 +29,7 @@ import java.util.Iterator;
  * resolver.resolveClass("ImportedClassResolver");</code></pre>
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  * @see SimpleClassResolver
  */
 public class ImportedClassResolver implements ClassResolver, java.io.Serializable {

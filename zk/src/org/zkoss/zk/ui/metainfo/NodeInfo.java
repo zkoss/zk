@@ -20,7 +20,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
 /**
  * Represent a node in a ZUML meta-info tree.
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public interface NodeInfo {
 	/** Returns the parent, or null if no parent.

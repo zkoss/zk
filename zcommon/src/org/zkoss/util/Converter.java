@@ -16,7 +16,7 @@ package org.zkoss.util;
  * A converter used to convert a value to another.
  *
  * @author tomyeh
- * @sicne 5.1.0
+ * @since 5.5.0
  * @see CollectionsX#comodifiableIterator(Collection, Converter)
  */
 public interface Converter<F, T> {

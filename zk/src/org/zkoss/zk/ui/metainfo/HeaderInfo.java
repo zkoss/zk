@@ -93,7 +93,7 @@ public class HeaderInfo { //directive
 	 *
 	 * @param page the page containing this header element.
 	 * It is used to evaluate EL expression, if any, contained in the value.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public String toHTML(PageDefinition pgdef, Page page) {
 		final Evaluator eval = pgdef.getEvaluator();

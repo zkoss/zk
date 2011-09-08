@@ -154,21 +154,6 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	<xs:simpleType name="divAlignAttrType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="left" />
-					<xs:enumeration value="right" />
-					<xs:enumeration value="center" />
-					<xs:enumeration value="justify" />
-				</xs:restriction>
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
 	<xs:simpleType name="flashWmodeAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -905,10 +890,6 @@
 	<xs:complexType name="chartType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="border" type="xs:string" use="optional" />
-		<xs:attribute name="align" type="alignAttrType" use="optional" />
-		<xs:attribute name="hspace" type="xs:string" use="optional" />
-		<xs:attribute name="vspace" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="chartTypeAttrType" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
@@ -1072,7 +1053,6 @@
 	<xs:complexType name="divType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="align" type="divAlignAttrType" use="optional" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -1462,7 +1442,6 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="scrolling" type="iframeScrollingAttrType" use="optional" />
-		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="onURIChange" type="xs:string" use="optional" />
@@ -1490,9 +1469,6 @@
 		<xs:attribute name="content" type="mediaType" use="optional" />
 		<xs:attribute name="hover" type="xs:string" use="optional" />
 		<xs:attribute name="hoverContent" type="mediaType" use="optional" />
-		<xs:attribute name="align" type="alignAttrType" use="optional" />
-		<xs:attribute name="hspace" type="xs:string" use="optional" />
-		<xs:attribute name="vspace" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -1504,11 +1480,7 @@
 			<xs:element ref="area" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="border" type="xs:string" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="align" type="alignAttrType" use="optional" />
-		<xs:attribute name="hspace" type="xs:string" use="optional" />
-		<xs:attribute name="vspace" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="mediaType" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />

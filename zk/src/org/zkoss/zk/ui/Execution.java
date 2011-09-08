@@ -711,7 +711,7 @@ public interface Execution extends Scope {
 	 * Ignored if null.
 	 * @return the first component being created.
 	 * @see #createComponents(String, Component, Component, VariableResolver)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component createComponents(PageDefinition pagedef,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -739,7 +739,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component createComponents(String uri, Component parent,
 	Component insertBefore, VariableResolver resolver);
@@ -773,7 +773,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component createComponentsDirectly(String content, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -808,7 +808,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component createComponentsDirectly(Document content, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -843,7 +843,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component createComponentsDirectly(Reader reader, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver)

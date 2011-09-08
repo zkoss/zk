@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
 			_frames(ary, fs[j]);
 	}
-	/* Returns the onSize target of the given wiget.
+	/* Returns the onSize target of the given widget.
 	 * The following code is dirty since it checks _hflexsz (which is implementation)
 	 * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
 	 * this method considers only if _hflex is min

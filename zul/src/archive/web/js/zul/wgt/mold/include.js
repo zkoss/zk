@@ -16,8 +16,8 @@ function (out) {
 		w.redraw(out);
 	if (this._comment)
 		out.push('<!--\n');
-	if (!jq.isArray(this._content)) //z$ea
-		out.push(this._content);
+	if ((w=this._xcnt) && !jq.isArray(w)) //array -> z$ea
+		out.push(w); //not z$ea
 	if (this._comment)
 		out.push('\n-->');
 	out.push('</div>');

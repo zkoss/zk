@@ -390,7 +390,7 @@ public interface ComponentCtrl {
 	 * @param event the event to handle
 	 * @param scope the scope to evaluate the zscript, if any.
 	 * (see also {@link Page#interpret}.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public void service(Event event, Scope scope) throws Exception;
 

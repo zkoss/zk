@@ -15,7 +15,7 @@ package org.zkoss.lang;
 /**
  * A simple resolver that depends on {@link Classes#forNameByThread}.
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  * @see ImportedClassResolver
  */
 public class SimpleClassResolver implements ClassResolver, java.io.Serializable {

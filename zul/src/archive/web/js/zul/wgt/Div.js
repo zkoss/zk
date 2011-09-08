@@ -23,9 +23,11 @@ zul.wgt.Div = zk.$extends(zul.Widget, {
 		/** Returns the alignment.
 		 * <p>Default: null (use browser default).
 		 * @return String
+		 * @deprecated as of release 5.5.0, use CSS instead.
 		 */
 		/** Sets the alignment: one of left, center, right, ustify,
 		 * @param String align
+		 * @deprecated as of release 5.5.0, use CSS instead.
 		 */
 		align: function (v) {
 			var n = this.$n();

@@ -16,30 +16,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * An include widget
  */
 zul.wgt.Include = zk.$extends(zul.Widget, {
-	_content: '',
-
 	$init: function () {
 		this._fellows = {};
 		this.$supers('$init', arguments);
 	},
 
 	$define: {
-		/**
-		 * Returns the html content.
-		 * @return String
-		 */
-		/**
-		 * Sets the html content.
-		 * @param String content
-		 */
-		content: function (v) {
-			var n = this.$n();
-			if (n) {
-				if (v && this._comment)
-					v = '<!--\n' + v + '\n-->';
-				n.innerHTML = v  || '';
-			}
-		},
 		/** Returns whether to generate the included content inside
 		 * the HTML comment.
 		 * <p>Default: false.
@@ -68,14 +50,18 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.wgt.Include, "bind_", arguments);
 		var ctn;
-		if (jq.isArray(ctn = this._content)) //z$ea
+		if (ctn = this._childjs) {
+			ctn();
+			this._childjs = this._xcnt = null;
+				//only once since the content has been created as child widgets
+		}
+
+		if (jq.isArray(ctn = this._xcnt)) //array -> z$ea
 			for (var n = this.$n(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
-		if (ctn = this._childjs)
-			ctn();
 	},
 	unbind_: function () {
-		if (jq.isArray(this._content)) //z$ea
+		if (jq.isArray(this._xcnt)) //array -> z$ea
 			for (var n = this.$n(); n.firstChild;)
 				n.removeChild(n.firstChild);
 		this.$supers(zul.wgt.Include, "unbind_", arguments);

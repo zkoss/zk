@@ -244,7 +244,7 @@ public interface UiEngine {
 	 * in EL, or by {@link Execution#getArg}.
 	 * Ignored if null.
 	 * @return the components being created.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component[] createComponents(Execution exec,
 	PageDefinition pagedef, Page page, Component parent,

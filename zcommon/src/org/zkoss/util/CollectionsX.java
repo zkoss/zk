@@ -518,7 +518,7 @@ public class CollectionsX {
 	 * @param filter the filter used to convert the value of each element
 	 * found in the given collection to the return iterator.
 	 * Ignored if null (and then F must be the same as T or extends from T).
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static <F, T> Iterator<T> comodifiableIterator(Collection<F> col, Converter<F, T> converter) {

@@ -339,7 +339,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/** Adds a class resolver to this page.
 	 * @param resolver the class resolver to be added.
 	 * Currently it supports only {@link org.zkoss.lang.ImportedClassResolver}.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 * @see #resolveClass
 	 */
 	public boolean addClassResolver(ClassResolver resolver);

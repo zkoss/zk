@@ -91,7 +91,7 @@ public interface DesktopCtrl {
 	 * @param comp the component to assoicate with the given UUID.
 	 * If not, the association (i.e., mapping) is removed.
 	 * @return the previous component that was associated with the given UUID.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public Component mapComponent(String uuid, Component comp);
 

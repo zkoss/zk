@@ -31,7 +31,7 @@ public class TextInfo extends LeafInfo {
 	private final ExValue _text;
 
 	/** Constructor
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	public TextInfo(String text) {
 		_text = text != null ? new ExValue(text, String.class): null;

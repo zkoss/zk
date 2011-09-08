@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 /**
  * Used to implement a leaf node that allows the user to specify the if and unless clause
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 /*package*/ abstract class ConditionLeafInfo extends LeafInfo
 implements Condition {

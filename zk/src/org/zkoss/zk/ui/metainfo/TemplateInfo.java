@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 /**
  * Represent a template element.
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public class TemplateInfo extends BranchInfo {
 	private final String _name;

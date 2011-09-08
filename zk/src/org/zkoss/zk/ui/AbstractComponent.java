@@ -163,7 +163,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * with any component definition.
 	 * @param useless an useless argument (it is ignored but used
 	 * to distinquish the default constructor)
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	protected AbstractComponent(boolean useless) {
 		_def = ComponentsCtrl.DUMMY;
@@ -1196,7 +1196,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * If true, the given component's children will belong to this component.
 	 * @exception IllegalStateException if this component has a parent,
 	 * sibling or child.
-	 * @since 5.1.0
+	 * @since 5.5.0
 	 */
 	protected void replace(Component comp, boolean bFellow, boolean bListener,
 	boolean bChildren) {

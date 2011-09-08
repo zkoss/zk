@@ -22,7 +22,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
  * Represents a value that supports {@link Condition}.
  * It is usually used as an attribute of a {@link NodeInfo}.
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 /*package*/ abstract class ConditionValue implements Condition, java.io.Serializable {
 	/*pacakge*/ EvaluatorRef _evalr;

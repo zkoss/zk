@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 /**
  * Represents a zscript element.
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public class ZScriptInfo extends ConditionLeafInfo {
 	private final ZScript _zs;

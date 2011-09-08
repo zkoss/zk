@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  * </ul>
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public interface EvaluatorRef extends Evaluator, java.io.Serializable {
 	/** Returns the real evaluator.

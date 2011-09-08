@@ -201,7 +201,7 @@ public class WebManager {
 		Class cls = config.getWebAppFactoryClass();
 		if (cls != null) {
 			try {
-				_wapp = ((WebAppFactory)cls.newInstance()).newWebApp(_ctx);
+				_wapp = ((WebAppFactory)cls.newInstance()).newWebApp(_ctx, config);
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}

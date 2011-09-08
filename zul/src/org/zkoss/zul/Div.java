@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -37,11 +36,13 @@ public class Div extends XulElement {
 
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
+	 * @deprecated as of release 5.5.0, use CSS instead.
 	 */
 	public String getAlign() {
 		return _align;
 	}
 	/** Sets the alignment: one of left, center, right, justify,
+	 * @deprecated as of release 5.5.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
 		if (align != null && align.length() == 0)

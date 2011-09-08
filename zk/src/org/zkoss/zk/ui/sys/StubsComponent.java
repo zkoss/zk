@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.ext.Native;
  * a single component.
  *
  * @author tomyeh
- * @since 5.1.0
+ * @since 5.5.0
  */
 public class StubsComponent extends StubComponent {
 	private String[] _uuids;
