@@ -1,0 +1,9 @@
+<zk>
+<html><![CDATA[
+<ul><li>Press the Rerender button to see if anything is changed.
+It is correct if nothing is changed.</li></ul>
+]]></html>
+
+<button label="Rerender" w:onClick="this.$f().i.rerender()" xmlns:w="client"/>
+<include id="i" src="B50-ZK-402-inc.zul" mode="defer"/>
+</zk>

@@ -549,7 +549,6 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 				//Otherwise, script of the included zul page will be evaluated
 				//first (since it is part of rc.temp)
 
-				boolean done = false;
 				if (getChildPage() == null //only able to handle non-ZUL page
 				&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
 					final HtmlPageRenders.RenderContext rc =
@@ -566,15 +565,14 @@ implements org.zkoss.zul.api.Include, Includer, DynamicPropertied, AfterCompose,
 							cwout.write("\n-->\n");
 						cwout.write("</div>");
 
-						renderer.render("z$ea", "content");
-						done = true;
+						renderer.render("z$ea", "_xcnt");
+						return; //done
 					}
 				}
-				if (!done) {
-					renderer.render("content", incsb.toString());
-					if (_renderResult != null && _renderResult.length() > 0)
-						renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
-				}
+
+				renderer.render("_xcnt", incsb.toString());
+				if (_renderResult != null && _renderResult.length() > 0)
+					renderer.renderDirectly("_childjs", "function(){" + _renderResult + '}');
 			}
 		} finally {
 			_renderResult = null;

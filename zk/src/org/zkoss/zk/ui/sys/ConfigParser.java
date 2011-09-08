@@ -57,7 +57,7 @@ import org.zkoss.zk.au.AuWriter;
 
 /**
  * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
- * and meta/zk/config.xml into {@link Configuration}.
+ * and metainfo/zk/config.xml into {@link Configuration}.
  *
  * @author tomyeh
  */
@@ -194,7 +194,7 @@ public class ConfigParser {
 						//abort since it is hardly to work then
 				}
 			}
-		} catch (Exception ex) {
+		} catch (java.io.IOException ex) {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 	}
