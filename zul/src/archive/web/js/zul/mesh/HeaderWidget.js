@@ -51,27 +51,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
-			if (wgt) {
-				if (wgt._inUpdateMesh) {//recursive back, cannot rerender now; avoid endless loop
-					wgt._flexRerender = true; //mark to do rerender later
-					return;
-				}
-				wgt._inUpdateMesh = true;
-				try {
-					for(var kid = this.parent.firstChild; kid; kid = kid.nextSibling)
-						delete kid._hflexWidth;
-					wgt.rerender(); //might recursive back via HeadWidget#afterChildrenFlex_()
-					if (wgt._flexRerender) {//was mark to do rerender in #updateMesh_()
-						try {
-							wgt.rerender();
-						} finally {
-							delete wgt._flexRerender;
-						}
-					}
-				} finally {
-					delete wgt._inUpdateMesh;
-				}
-			}
+			if (wgt)
+				wgt.rerender(0); //defer it since it might be called multiple times
 		}
 	},
 	setFlexSize_: function (sz) {
