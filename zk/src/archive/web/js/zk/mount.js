@@ -341,8 +341,6 @@ function zkmprops(uuid, props) {
 				var cls = zk.$import(type), v;
 				if (!cls)
 					throw 'Unknown widget: ' + type;
-				if (zk.cut(props, "z$is"))
-					cls.prototype.z$is = true;
 				(wgt = new cls(zkac)).inServer = true;
 					//zkac used as token to optimize the performance of zk.Widget.$init
 				wgt.uuid = uuid;

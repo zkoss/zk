@@ -648,8 +648,8 @@ new zul.wnd.Window{
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-		//2) Assign class.propotype.z$is to true (used by AbstractComponent.java)
-		if (this.$class.prototype.z$is)
+		//2) Assign this.z$is to true (used by AbstractComponent.java)
+		if (this.z$is)
 			this._fellows = {};
 
 		//zkac is a token used by create() in mount.js for optimizing performance
