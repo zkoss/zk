@@ -75,8 +75,12 @@ public class DspExtendlet implements Extendlet {
 	throws ServletException, IOException {
 		final Interpretation cnt = (Interpretation)_cache.get(path);
 		if (cnt == null) {
-			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
-				//It might be eaten, so log the error
+			if (Servlets.isIncluded(request)) {
+				log.error("Failed to load the resource: "+path);
+					//It might be eaten, so log the error
+				throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
+					//have the includer to handle it
+			}
 			response.sendError(response.SC_NOT_FOUND, path);
 			return;
 		}
