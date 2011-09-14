@@ -397,10 +397,12 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		return this;
 	},
 	bind: function(type, data, fn) {
-		return this.zbind(zjq.eventTypes[type] || type, data, fn);
+		type = zjq.eventTypes[type] || type;
+		return this.zbind.apply(this, arguments);
 	},
 	unbind: function(type, fn){
-		return this.zunbind(zjq.eventTypes[type] || type, fn);
+		type = zjq.eventTypes[type] || type;
+		return this.zunbind.apply(this, arguments);
 	}
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,

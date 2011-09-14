@@ -58,11 +58,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return fps[f] = _domEvtProxy0(wgt, f);
 	}
 	function _domEvtProxy0(wgt, f) {
-		return function (devt) {
-			var args = [], evt;
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-			args.unshift(evt = jq.Event.zk(devt, wgt));
+		return function (evt) {
+			var devt = evt; //make a copy since we will change evt (and arguments) in the following line
+			evt = jq.Event.zk(devt, wgt); //also change arguments[0]
 
 			switch (devt.type){
 			case 'focus':
@@ -84,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					return;
 			}
 
-			var ret = f.apply(wgt, args);
+			var ret = f.apply(wgt, arguments);
 			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
 			return devt.type == 'dblclick' && ret === undefined ? false: ret;

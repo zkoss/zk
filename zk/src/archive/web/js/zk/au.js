@@ -1351,9 +1351,9 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param Object... vararg any number of arguments passed to the function
 	 * invocation.
 	 */
-	invoke: function (wgt, func, vararg) {
+	invoke: function (wgt, func/*, vararg*/) {
 		var args = [];
-		for (var j = arguments.length; --j > 1;)
+		for (var j = arguments.length; --j > 1;) //exclude wgt and func
 			args.unshift(arguments[j]);
 		wgt[func].apply(wgt, args);
 	},
