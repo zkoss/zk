@@ -107,20 +107,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var s = w.widgetName;
 		return s + (w.id ? '$' + w.id: '') + '#' + w.uuid + '$' + w.$oid;
 	}
-	function toLogMsg(ars, isDetailed) {
+	function toLogMsg(ars, detailed) {
 		var msg = [], Widget = zk.Widget;
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
 			if (ar && (jq.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
-				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
-			else if (ar.$instanceof(Widget))
+				msg.push('[' + toLogMsg(ar, detailed) + ']');
+			else if (Widget && Widget.isInstance(ar))
 				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
-				var w = Widget.$(ar);
+				var w = Widget && Widget.$(ar);
 				if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#'+ar.id+'.'+ar.className:''), ':', wgt2s(w));
 				else msg.push(jq.nodeName(ar), '#', ar.id);
-			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
+			} else if (detailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
 				for (var v in ar)
 					s.push(v, ':', ar[v], ',\n');
