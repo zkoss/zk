@@ -7,6 +7,7 @@ ZK 5.0.9
   ZK-389: Exception after upgraded to zk 5.0.8 in WebSphere 5.1
   ZK-402: Duplicate content rendering on redraw when using includes in grid cells
   ZK-409: Open the Messagebox will show a error
+  ZK-417: Scrollbar stops working when the mouse is moved
 
 	--------
 ZK 5.0.8
