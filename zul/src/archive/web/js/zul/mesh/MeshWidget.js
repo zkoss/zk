@@ -970,28 +970,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			
-			//bug #3177128
-			if (zk.safari && this.ebodytbl) {
-				this._ignoreDoScroll = true; //will cause _doScroll, don't change scrolling position
-				try {
-					var oldCSS = this.ebodytbl.style.display,
-						bd = jq('body'),
-						st = bd.scrollTop();
-					zk(this.ebodytbl).redoCSS(-1); //for chrome/safari
-					// Bug: B50-3291371: Listbox scroll to top when page changes
-					// have to set scroll top back
-					bd.scrollTop(st);
-					//bug #3185647: extra space on top of body content
-					oldCss = this.ebody.style.height;
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
-					dummy = this.ebody.offsetHeight; //force recalc					
-					this.ebody.style.height = oldCss;
-					dummy = this.ebody.offsetHeight; //force recalc					
-				} finally {
-					delete this._ignoreDoScroll;
-				}
-			}
-			
 			this.fireOnRender(155);
 			
 			// Bug ZK-355
