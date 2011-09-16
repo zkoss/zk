@@ -19,6 +19,7 @@ package org.zkoss.xel.util;
 import java.util.Map;
 
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
 
 /**
@@ -82,6 +83,8 @@ public class SimpleResolver implements VariableResolver, java.io.Serializable {
 			if (o != null)
 				return o;
 		}
-		return _parent != null ? _parent.resolveVariable(name): null;
+		return _parent instanceof VariableResolverX ?
+			((VariableResolverX)_parent).resolveVariable(null, null, name):
+			_parent != null ? _parent.resolveVariable(name): null;
 	}
 }

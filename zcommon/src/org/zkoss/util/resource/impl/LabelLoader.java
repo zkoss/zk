@@ -43,6 +43,7 @@ import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.util.SimpleXelContext;
 
 /**
@@ -403,7 +404,9 @@ public class LabelLoader {
 		private VariableResolver custom;
 		public Object resolveVariable(String name) {
 			if (custom != null) {
-				final Object o = custom.resolveVariable(name);
+				final Object o = custom instanceof VariableResolverX ?
+					((VariableResolverX)custom).resolveVariable(null, null, name):
+					custom.resolveVariable(name);
 				if (o != null)
 					return o;
 			}

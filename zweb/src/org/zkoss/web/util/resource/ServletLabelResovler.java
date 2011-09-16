@@ -18,6 +18,7 @@ package org.zkoss.web.util.resource;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
 
 import org.zkoss.web.servlet.xel.RequestContext;
@@ -43,7 +44,9 @@ public class ServletLabelResovler implements VariableResolver, java.io.Serializa
 		if (jc != null) {
 			final VariableResolver parent = jc.getVariableResolver();
 			if (parent != null)
-				return parent.resolveVariable(name);
+				return parent instanceof VariableResolverX ?
+					((VariableResolverX)parent).resolveVariable(null, null, name):
+					parent.resolveVariable(name);
 		}
 		return null;
 	}
