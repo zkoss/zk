@@ -19,6 +19,9 @@ function (out) {
 		tbx = this.getTabbox(),
 		uuid = this.uuid;
 	if (tbx.inAccordionMold()) {//Accordion
+		// Bug ZK-419
+		if (!this.getLinkedPanel())
+			return;
 		if (tbx.getMold() == 'accordion-lite') {
 			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
 				'<div align="left" class="', zcls, '-header">');
