@@ -350,6 +350,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	unbind_: function () {
 		this._hilite2();
 		this._sel = this._lastsel = null;
+		// Bug ZK-403
+		if (this.isListen('onOpen'))
+			this.unlisten({onChanging: zk.$void});
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
 	//@Override
