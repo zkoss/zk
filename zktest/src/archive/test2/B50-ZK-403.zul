@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-403.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 16 11:25:47 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+String[] dictionary = { "abacus", "abase", "barcarole", "barefaced", "cadence", "cadenza", "death's-head", "debacle", "endear", "endemic", "endue", "facial", "facile", "facilitate", "gaiety", "gaily", "gainsay", "writhe", "writing", "wry", };
+
+ListModel dictModel= new SimpleListModel(dictionary);
+]]></zscript>
+<div>
+Please test the following steps 4~5 times and each time test you have to reload this case.
+<separator/>
+1. type 'a' in the inputbox and the dropdownlist shall show 2 items. (please focus into the inputbox and type rapidly)
+
+</div>
+<combobox autodrop="true" >
+<attribute name="onOpen"><![CDATA[
+self.setModel(dictModel);
+]]></attribute>
+</combobox>
+</zk>
+

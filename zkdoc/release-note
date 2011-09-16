@@ -10,6 +10,7 @@ ZK 5.0.9
   ZK-417: Scrollbar stops working when the mouse is moved
   ZK-414: Screen jumps back to top when opening an item at the end of a long tree
   ZK-419: Accordion tabbox appendchild issue
+  ZK-403: Set a model to combobox when opening, the dropdown will not show the items
 
 	--------
 ZK 5.0.8
