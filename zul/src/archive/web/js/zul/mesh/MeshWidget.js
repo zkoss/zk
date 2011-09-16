@@ -860,9 +860,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
 	},
 	_onScrollPos: function () {
-		this._currentTop = this.ebody.scrollTop; 
-		this._currentLeft = this.ebody.scrollLeft;
-		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
+		// Bug ZK-414
+		if (this.ebody) {
+			this._currentTop = this.ebody.scrollTop;
+			this._currentLeft = this.ebody.scrollLeft;
+			this.fire('onScrollPos', {
+				top: this._currentTop,
+				left: this._currentLeft
+			});
+		}
 	},
 	_onRender: function () { //overriden in zkmax
 		this._pendOnRender = false;

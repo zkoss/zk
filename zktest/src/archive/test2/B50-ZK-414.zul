@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-414.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 16 09:40:56 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Scrollbar Issue" border="normal" width="700px"
+	height="500px">
+	1. Please scroll to the end of the tree.
+	<separator/>
+	2. Click +/- button to open the treeitem "something".
+	<separator/>
+	3. You should see the scrollbar won't jump to the top of the tree.
+	<tree id="groupTree" mold="paging" pageSize="500" vflex="true"
+		height="100%" zclass="z-dottree">
+		<treecols>
+			<treecol hflex="min" />
+		</treecols>
+		<treechildren>
+			<treeitem open="true" label="something">
+				<treechildren>
+					<zscript>
+	Object o = new Object[30];
+</zscript>
+					<treeitem label="nested" forEach="${o}" />
+				</treechildren>
+			</treeitem>
+			<treeitem open="false" label="something">
+				<treechildren>
+					<zscript>
+            </zscript>
+					<treeitem label="nested" forEach="${o}" />
+
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</window>

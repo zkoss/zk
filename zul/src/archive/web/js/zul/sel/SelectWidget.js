@@ -580,13 +580,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	focus_: function (timeout) {
 		var btn;
 		if (btn = this.$n('a')) {
-			if (this._focusItem)
-				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
+			if (this._focusItem) {
+				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) 
 					if (this._isFocus(w)) {
 						w.focus_(timeout);
 						break;
 					}
-
+			} else {
+				// Bug ZK-414
+				if (this._currentTop)
+					btn.style.top = this._currentTop + "px";
+				if (this._currentLeft)
+					btn.style.left = this._currentLeft + "px"; 	
+			}
 			this.focusA_(btn, timeout);
 			return true;
 		}
