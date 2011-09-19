@@ -62,13 +62,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return code >= 32;
 		},
 
-		_fixReadonly = zk.ie ? function (wgt) { //ZK-426
+		_fixInput = zk.ie ? function (wgt) { //ZK-426
 			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
-				if (wgt == zk.currentFocus) {
-					var $inp = zk(wgt.getInputNode()),
-						pos = $inp.getSelectionRange();
-					$inp.setSelectionRange(pos[0], pos[1]);
-				}
+				if (wgt == zk.currentFocus)
+					zjq.fixInput(wgt.getInputNode());
 			}, 0);
 		}: zk.$void;
 
@@ -202,7 +199,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
-				_fixReadonly(this);
+				_fixInput(this);
 
 				var zcls = this.getZclass(),
 					fnm = readonly ? 'addClass': 'removeClass';

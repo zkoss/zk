@@ -55,6 +55,8 @@ zjq = function (jq) { //ZK extension
 				n.focus();
 				var w = zk.Widget.$(n);
 				if (w) zk.currentFocus = w;
+
+				zjq.fixInput(n);
 			} catch (e) {
 			}
 		}, -1); //FF cannot change focus to a DOM element being animated
@@ -199,6 +201,7 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
+	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';

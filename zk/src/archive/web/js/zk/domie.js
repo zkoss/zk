@@ -69,6 +69,19 @@ zk.copy(zjq, {
 	src0: "javascript:false;",
 		//IE: prevent secure/nonsecure warning with HTTPS
 
+	//IE sometimes won't show caret when setting a focus to an input element
+	//See also Bug ZK-426
+	fixInput: function (el) {
+		try {
+			var $n = zk(el), pos;
+			if ($n.isInput()) {
+				pos = $n.getSelectionRange();
+				$n.setSelectionRange(pos[0], pos[1]);
+			}
+		} catch (e) { //ignore
+		}
+	},
+
 	_fixIframe: function (el) { //used in widget.js (Bug 2900274)
 		try {
 			if (jq.nodeName(el, 'iframe'))
