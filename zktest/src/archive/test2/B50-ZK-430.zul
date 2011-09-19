@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-430.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 19 18:07:12 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please focus into the first timebox and then select all(ctrl+A) to delete the content.
+<separator/>
+2. Type 1212 into the timebox, it should be able to type and display "1212".
+<separator/>
+<timebox id="tb" cols="14" format="HHmm" onCreate="self.value = new Date()" mold="rounded"/>
+<separator/>
+3. Please focus into the second timebox and then select all(ctrl+A) to delete the content.
+<separator/>
+4. Type 121212 into the timebox, it should be able to type and display "PM 12:12:12" or "AM 12:12:12" (depended on when you test it).
+<separator/>
+<timebox format="a HH:mm:ss" width="150px" onCreate="self.value = new Date()" />
+<separator/>
+5. Please focus into the last timebox and put your cursor after "AM00" or "PM00" (depended on when you test it).
+<separator/>
+6. Press the UP or Down arrow key on the keyboard to change it, and then it should be only changed in the number area (not AM or PM)
+<separator/>
+<timebox format="aHH:mm:ss" width="150px" />
+</zk>

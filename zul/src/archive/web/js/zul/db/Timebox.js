@@ -171,7 +171,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			len = 0, th, lastTh;
 		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
-			len += (th.type ? th.getText(val): th.format()).length;
+			if (i == l-1) {
+				len += th.format();
+			} else
+				len += (th.type ? th.getText(val): th.format()).length;
 			if (th.type) lastTh = th;
 		}
 		return (lastTh.digits == 1) ? ++len: len;
@@ -506,12 +509,15 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.getTimeHandler().addTime(this, val);
 	},
 	getTimeHandler: function () {
-		var pos = zk(this.getInputNode()).getSelectionRange()[1];
-			//don't use [0], it may have a bug when the format is aHH:mm:ss 
+		var sr = zk(this.getInputNode()).getSelectionRange(),
+			start = sr[0],
+			end = sr[1];
+			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss 
+			//when use UP/Down key to change the time
 		
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
-			if (f[i].index[0] <= pos && f[i].index[1] + 1 >= pos)
+			if (f[i].index[0] <= start && f[i].index[1] + 1 >= end)
 				return f[i];
 		}
 		return this._fmthdler[0];

@@ -17,6 +17,7 @@ ZK 5.0.9
   ZK-433: Labels.reset() won't clear the cache in which come from the ${labels} instance
   ZK-415: Tabbox selectedPanel binding not working
   ZK-424: jQuery ztag issue
+  ZK-430: When timeformat is defined as HHmm, you cannot type more the 2 characters
 
 	--------
 ZK 5.0.8
