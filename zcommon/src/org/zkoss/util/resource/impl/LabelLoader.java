@@ -189,6 +189,7 @@ public class LabelLoader {
 	public void reset() {
 		synchronized (_syncLabels) {
 			_syncLabels.clear();
+			_segLabels = Collections.EMPTY_MAP;
 			_labels = Collections.EMPTY_MAP;
 		}
 	}
