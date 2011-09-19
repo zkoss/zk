@@ -3521,7 +3521,11 @@ var Expr = Sizzle.selectors = {
 		},
 		/* Jumper Chen, Potix, 20100326*/
 		ZID: function(match, context){
-			return zk.Widget.getElementsById(match[1]);
+			return context == window ?
+				zk.Widget.getElementsById(match[1]) :
+				jq.grep(zk.Widget.getElementsById(match[1]), function (n) {
+					return jq.isAncestor(context, n);
+				});
 		},
 		/* Jumper Chen, Potix, 20100326*/
 		ZTAG: function(match, context){

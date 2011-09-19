@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-424.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 19 12:07:17 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+You should see "111" at the bottom of the inputbox, rather than "333"
+<n:div id="hi">
+<window>
+<textbox id="textbox1" />
+</window>
+</n:div>
+<n:div id="hi2">
+<window>
+<textbox id="textbox1" />
+</window>
+</n:div>
+<n:div id="hi3">
+<window>
+<textbox id="textbox1" />
+</window>
+</n:div>
+<label id="msg"/>
+<script>
+zk.afterMount(function(){ jq("$msg").html("" +jq("#hi $textbox1").size() + jq("#hi2 $textbox1").size() + jq("#hi3 $textbox1").size()); });
+</script>
+
+</zk>
