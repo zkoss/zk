@@ -54,12 +54,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 		}
 	}
+
 	var _keyIgnorable = zk.ie ? function () {return true;}:
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
 		}: function (code) {
 			return code >= 32;
-		}
+		},
+
+		_fixReadonly = zk.ie ? function (wgt) { //ZK-426
+			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
+				if (wgt == zk.currentFocus) {
+					var $inp = zk(wgt.getInputNode()),
+						pos = $inp.getSelectionRange();
+					$inp.setSelectionRange(pos[0], pos[1]);
+				}
+			}, 0);
+		}: zk.$void;
+
 /** @class zul.inp.Renderer
  * The renderer used to render a inputWidget.
  * It is designed to be overridden.
@@ -190,6 +202,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
+				_fixReadonly(this);
+
 				var zcls = this.getZclass(),
 					fnm = readonly ? 'addClass': 'removeClass';
 				
