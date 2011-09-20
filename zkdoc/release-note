@@ -18,6 +18,7 @@ ZK 5.0.9
   ZK-415: Tabbox selectedPanel binding not working
   ZK-424: jQuery ztag issue
   ZK-430: When timeformat is defined as HHmm, you cannot type more the 2 characters
+  ZK-432: Hflex fail when place the listbox in the second tab of the tabbox (IE8 only)
 
 	--------
 ZK 5.0.8
