@@ -20,6 +20,7 @@ ZK 5.0.9
   ZK-430: When timeformat is defined as HHmm, you cannot type more the 2 characters
   ZK-432: Hflex fail when place the listbox in the second tab of the tabbox (IE8 only)
   ZK-434: Set a format "a h:m:s" to the timebox cannot work correctly
+  ZK-436: An empty iframe in IE will cause a false text
 
 	--------
 ZK 5.0.8

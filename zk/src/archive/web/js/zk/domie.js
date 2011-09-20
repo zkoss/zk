@@ -66,7 +66,7 @@ zk.override(zjq, _zjq, {
 	}
 });
 zk.copy(zjq, {
-	src0: "javascript:false;",
+	src0: "javascript:'';",
 		//IE: prevent secure/nonsecure warning with HTTPS
 
 	//IE sometimes won't show caret when setting a focus to an input element
