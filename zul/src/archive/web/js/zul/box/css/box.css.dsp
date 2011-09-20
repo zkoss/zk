@@ -120,8 +120,8 @@ tr.z-vbox-sep {
 .z-splitter-os-ver-btn-b,
 .z-splitter-os-hor-btn-l,
 .z-splitter-os-hor-btn-r  {
+	opacity: 0.5;
 	filter: alpha(opacity=50);  <%-- IE --%>
-	opacity: 0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat;
 }
 .z-splitter-ver-btn-visi, .z-splitter-hor-btn-visi {

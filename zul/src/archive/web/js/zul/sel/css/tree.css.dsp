@@ -483,6 +483,5 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 }
 .z-treerow-img-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }

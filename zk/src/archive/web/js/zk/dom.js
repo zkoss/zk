@@ -1836,7 +1836,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		el = jq(el||[], zk)[0];
 		var ifr = document.createElement("iframe");
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
-		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
+		ifr.style.cssText = "position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
 		ifr.src = zjq.src0;

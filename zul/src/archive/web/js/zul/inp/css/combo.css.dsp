@@ -431,7 +431,6 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-comboitem-disd,
 .z-combobox-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-spinner-rounded-disd, .z-spinner-rounded-disd *,

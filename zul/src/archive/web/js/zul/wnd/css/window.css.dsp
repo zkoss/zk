@@ -26,8 +26,8 @@
 	left: 0;
 	top: 0;
 	background-color: #D7E6F7;
-	filter: alpha(opacity=50); <%-- IE --%>
 	opacity: .5;
+	filter: alpha(opacity=50); <%-- IE --%>
 }
 .z-window-modal-move-ghost,
 .z-window-overlapped-move-ghost,
@@ -37,8 +37,8 @@
 	position: absolute;
 	background: #D7E6F7;
 	overflow: hidden;
-	filter: alpha(opacity=65) !important; <%-- IE --%>
 	opacity: .65 !important;
+	filter: alpha(opacity=65) !important; <%-- IE --%>
 	cursor: move !important;
 }
 .z-window-modal-move-ghost dl,

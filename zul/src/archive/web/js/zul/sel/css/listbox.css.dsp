@@ -305,6 +305,5 @@ tr.z-listitem td.z-listitem-focus {
 }
 .z-listitem-img-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }

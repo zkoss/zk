@@ -5,9 +5,8 @@
 .z-intbox-disd,
 .z-longbox-disd,
 .z-doublebox-disd {
-	 opacity: .6;
-	 -moz-opacity: .6;
-	 filter: alpha(opacity=60);
+	opacity: .6;
+	filter: alpha(opacity=60);
 }
 
 .z-textbox-disd,
@@ -81,7 +80,7 @@
 .z-doublebox-inplace {
 	padding: 3px 2px;
 }
-</c:if>
+</c:if><%-- opera --%>
 <c:if test="${c:isExplorer()}">
 .z-textbox-inplace,
 .z-decimalbox-inplace,
@@ -95,9 +94,10 @@
 .z-intbox-disd *, 
 .z-longbox-disd *, 
 .z-doublebox-disd * {
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
-</c:if>
+</c:if><%- ie --%>
 
 <%-- rounded --%>
 .z-textbox-rounded,
@@ -155,7 +155,6 @@
 .z-longbox-rounded-disd,
 .z-doublebox-rounded-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};

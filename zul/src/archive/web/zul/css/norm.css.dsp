@@ -152,8 +152,8 @@ div.z-log button {
 	z-index: 32000;
 	top: 0;
 	left: 0;
-	filter: alpha(opacity=60);
 	opacity: .6;
+	filter: alpha(opacity=60);
 	zoom: 1;
 	text-align: center;
 	background: #E0E1E3;
@@ -165,8 +165,8 @@ div.z-log button {
 	margin: 10% 15%;
 	padding: 10px 0;
 	border: 1px solid black;
-	filter: alpha(opacity=100);
 	opacity: 1;
+	filter: alpha(opacity=100);
 }
 
 .z-label, .z-radio-cnt, .z-checkbox-cnt, input.button, input.file,
@@ -179,8 +179,8 @@ div.z-log button {
 	height: 100%;
 	position: absolute;
 	top: 0; left: 0;
-	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
+	filter: alpha(opacity=60); <%-- IE --%>
 	zoom: 1;
 	background: #E0E1E3;
 }
@@ -230,8 +230,8 @@ div.z-log button {
 	z-index: 89000;
 	top: 0;
 	left: 0;
-	filter: alpha(opacity=60);
 	opacity: .6;
+	filter: alpha(opacity=60);
 	zoom: 1;
 }
 .z-apply-loading-indicator {

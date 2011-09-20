@@ -15,8 +15,8 @@
 	left: 0;
 	top: 0;
 	background-color: #D7E6F7;
-	filter: alpha(opacity=50); <%-- IE --%>
 	opacity: .5;
+	filter: alpha(opacity=50); <%-- IE --%>
 }
 .z-panel-tl,
 .z-panel-tr,
@@ -119,8 +119,8 @@
 	position: absolute;
 	background: #D7E6F7;
 	overflow: hidden;
-	filter: alpha(opacity=60) !important; <%-- IE --%>
 	opacity: .6 !important;
+	filter: alpha(opacity=60) !important; <%-- IE --%>
 	cursor: move !important;
 }
 .z-panel-move-block {
