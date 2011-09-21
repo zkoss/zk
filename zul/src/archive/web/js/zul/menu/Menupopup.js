@@ -45,6 +45,15 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_previousChild: function (wgt) {
 		wgt = wgt ? wgt.previousSibling : this.lastChild;
 		var lastChild = this.lastChild == wgt;
+		
+		if (lastChild) {
+			this._curIndex = 0;
+			for (var w = this.firstChild; w; w = w.nextSibling)
+			if (this._isActiveItem(w)) {
+				this._curIndex++;
+			}
+		}
+		
 		for (; wgt; wgt = wgt.previousSibling)
 			if (this._isActiveItem(wgt)) {
 				this._curIndex--;
@@ -252,6 +261,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				this.close({sendOnOpen:true});
 			}
 			break;
+		case 9: // TAB
+			// Bug ZK-442
+			return this.$supers('doKeyDown_', arguments);
 		}
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);

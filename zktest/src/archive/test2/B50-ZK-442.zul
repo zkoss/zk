@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-442.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 21 15:53:09 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+ 1. Please click the "Help" menu, and then press the Shift+TAB key twice.
+ <separator/>
+ 2. You should see the focus jumps to the textbox
+ <textbox/>
+	<menubar id="menubar" width="100%">
+		<menu label="Help" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+			<menupopup xmlns:w="client">
+				<menuitem label="Index" onClick="alert(self.label)" />
+				<menu label="About">
+					<menupopup>
+						<menuitem label="About ZK"
+							onClick="alert(self.label)" />
+						<menuitem label="About Potix"
+							onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
+			
