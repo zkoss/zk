@@ -17,6 +17,51 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var p = wgt.parent;
 		return p.$instanceof(zul.menu.Menu) ? p: null;
 	}
+	function _isActiveItem(wgt) {
+		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || (wgt.$instanceof(zul.menu.Menuitem) && !wgt.isDisabled()));
+	}
+	//child must be _currentChild()
+	function _prevChild(popup, child) {
+		if (child)
+			while (child = child.previousSibling)
+				if (_isActiveItem(child)) {
+					popup._curIndex--;
+					return child;
+				}
+
+		//return the last
+		popup._curIndex = -1;
+		for (var w = popup.firstChild; w; w = w.nextSibling)
+			if (_isActiveItem(w)) { //return the first one
+				child = w;
+				popup._curIndex++;
+			}
+		return child;
+	}
+	//child must be _currentChild()
+	function _nextChild(popup, child) {
+		if (child)
+			while (child = child.nextSibling)
+				if (_isActiveItem(child)) {
+					popup._curIndex++;
+					return child;
+				}
+
+		//return the first
+		for (var w = popup.firstChild; w; w = w.nextSibling)
+			if (_isActiveItem(w)) { //return the first one
+				popup._curIndex = 0;
+				return w;
+			}
+	}
+	function _currentChild(popup) {
+		var index = popup._curIndex;
+		if (index >= 0)
+			for (var w = popup.firstChild, k = 0; w; w = w.nextSibling)
+				if (_isActiveItem(w) && k++ == index)
+					return w;
+	}
+
 /**
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
@@ -26,56 +71,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_curIndex: -1,
 
-	_getCurrentIndex: function () {
-		return this._curIndex;
-	},
 	getZclass: function () {
 		return this._zclass == null ? "z-menu-popup" : this._zclass;
-	},
-	_isActiveItem: function (wgt) {
-		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || (wgt.$instanceof(zul.menu.Menuitem) && !wgt.isDisabled()));
-	},
-	_currentChild: function (index) {
-		var index = index != null ? index : this._curIndex;
-		for (var w = this.firstChild, k = -1; w; w = w.nextSibling)
-			if (this._isActiveItem(w) && ++k === index)
-				return w;
-		return null;
-	},
-	_previousChild: function (wgt) {
-		wgt = wgt ? wgt.previousSibling : this.lastChild;
-		var lastChild = this.lastChild == wgt;
-		
-		if (lastChild) {
-			this._curIndex = 0;
-			for (var w = this.firstChild; w; w = w.nextSibling)
-			if (this._isActiveItem(w)) {
-				this._curIndex++;
-			}
-		}
-		
-		for (; wgt; wgt = wgt.previousSibling)
-			if (this._isActiveItem(wgt)) {
-				this._curIndex--;
-				return wgt;
-			}
-		if (lastChild) return null; // avoid deadloop;
-		this.curIndex = 0;
-		for (wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
-			if (this._isActiveItem(wgt)) this._curIndex++;
-		return this._previousChild();
-	},
-	_nextChild: function (wgt) {
-		wgt = wgt ? wgt.nextSibling : this.firstChild;
-		var firstChild = this.firstChild == wgt;
-		for (; wgt; wgt = wgt.nextSibling)
-			if (this._isActiveItem(wgt)) {
-				this._curIndex++;
-				return wgt;
-			}
-		if (firstChild) return null; // avoid deadloop;
-		this._curIndex = -1;
-		return this._nextChild();
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);
@@ -98,7 +95,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if ((menu = _getMenu(this)) && menu.isTopmost())
 			jq(menu.$n('a')).removeClass(menu.getZclass() + "-body-seld");
 
-		var item = this._currentChild();
+		var item = _currentChild(this);
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
@@ -228,14 +225,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('onResponse', arguments); //Bug #2870616
 	},
 	doKeyDown_: function (evt) {
-		var w = this._currentChild(),
+		var w = _currentChild(this),
 			menu,
 			keyCode = evt.keyCode;
 		switch (keyCode) {
 		case 38: //UP
 		case 40: //DOWN
 			if (w) w.$class._rmActive(w);
-			w = keyCode == 38 ? this._previousChild(w) : this._nextChild(w);
+			w = keyCode == 38 ? _prevChild(this, w) : _nextChild(this, w);
 			if (w) w.$class._addActive(w);
 			break;
 		case 37: //LEFT
@@ -261,11 +258,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				this.close({sendOnOpen:true});
 			}
 			break;
-		case 9: // TAB
-			// Bug ZK-442
-			return this.$supers('doKeyDown_', arguments);
 		}
-		evt.stop();
+		if (keyCode != 9) // TAB
+			evt.stop(); // Bug ZK-442
 		this.$supers('doKeyDown_', arguments);
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
