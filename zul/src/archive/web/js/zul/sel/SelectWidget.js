@@ -159,7 +159,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (w) {
 						this._selectOne(w, true);
 						zk(w).scrollIntoView(this.ebody);
-						if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+						if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
+							// B50-ZK-440: ebody can be null when ROD
 							this._currentTop = this.ebody.scrollTop; 
 							this._currentLeft = this.ebody.scrollLeft;
 						}
@@ -240,7 +241,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		else if (item = zk.Widget.$(item)) {
 			this._selectOne(item, true);
 			zk(item).scrollIntoView(this.ebody);
-			if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
+				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop; 
 				this._currentLeft = this.ebody.scrollLeft;
 			}

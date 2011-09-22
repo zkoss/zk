@@ -1,0 +1,27 @@
+<!--
+	B50-ZK-440.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Sep 22 10:16:51 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>Click on "Add Item". There should be no javascript error.</div>
+	<button label="Add Item">
+		<attribute name="onClick"><![CDATA[
+			Listitem item = new Listitem("item");
+			lb.appendChild(item);
+			item.setSelected(true);
+		]]></attribute>
+	</button>
+	<bandbox>
+		<bandpopup>
+			<listbox id="lb" />
+		</bandpopup>
+	</bandbox>
+</zk>
