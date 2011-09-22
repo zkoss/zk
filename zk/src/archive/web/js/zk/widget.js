@@ -3163,7 +3163,8 @@ focus_: function (timeout) {
 		}
 
 		var modal = zk.currentModal;
-		if (modal && !zUtl.isAncestor(modal, this)) {
+		if (modal && !zUtl.isAncestor(modal, this)
+		&& !jq.isAncestor(modal.$n(), this.$n())) { //ZK-393: this might be included
 			var wgt = this.getTopWidget();
 			
 			// Bug #3201879

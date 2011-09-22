@@ -1,0 +1,29 @@
+<div>
+<html><![CDATA[
+<ul>
+<li>Click the open button, and a dialog will show up.</li>
+<li>Click on any of the tree node to see if it can be selected normally.</li>
+</ul>
+]]></html>
+
+<button label="open">
+	<attribute name="onClick"><![CDATA[
+Include topicDetailInclude = new Include();
+topicDetailInclude.setMode("auto");
+topicDetailInclude.setSrc("B50-ZK-393-inc.jsp");
+
+// create a new window and set some attributes
+Window win = (Window) new Window();
+win.setTitle("Add New Category");
+win.setClosable(true);
+win.setWidth("360px");
+win.setHeight("320px");
+win.appendChild(topicDetailInclude);
+
+// attach to the main window
+win.setParent(self.parent);
+
+win.doModal();
+	]]></attribute>
+</button>
+</div>
