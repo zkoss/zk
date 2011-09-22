@@ -26,7 +26,7 @@ ZK 5.0.9
   ZK-440: Append a listitem to the listbox will cause js error (Firefox 4 above only)
   ZK-441: Colorbox will be hide while align right 
   ZK-396: Opera select option and press tab will not change select item
-  ZK-393: Can't click-and-select any tree node in modal dialog window
+  ZK-393: Can't click-and-select any tree node in modal dialog window if included in JSP
 
 	--------
 ZK 5.0.8

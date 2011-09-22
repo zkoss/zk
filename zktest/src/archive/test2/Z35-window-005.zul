@@ -10,7 +10,7 @@
 <button onClick="win.doModal()" label="doModal"/>
 
 <window id="win" title="Becareful, if you doMdal, don't press Minimize Button!!!" 
-		sizable="true"
+		sizable="true" width="700px"
 		minimizable="true" maximizable="true" border="normal">
 	<caption label="Test Caption Label">
 		<button onClick="win.doEmbedded()" label="doEmbedded"/>
