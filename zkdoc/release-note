@@ -24,6 +24,7 @@ ZK 5.0.9
   ZK-435: Listbox with paging mold trigger onAfterRender event twice
   ZK-442: Unable to use TAB to switch focus when a menu item gains the focus (and handles the selection with keystrokes)
   ZK-440: Append a listitem to the listbox will cause js error (Firefox 4 above only)
+  ZK-441: Colorbox will be hide while align right 
 
 	--------
 ZK 5.0.8
