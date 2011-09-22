@@ -966,13 +966,15 @@ public class Parser {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to attribute, "+el.getLocator());
 
-		//Test if native content is used
-		boolean bNativeContent = false;
-		for (Iterator it = el.getChildren().iterator(); it.hasNext();)
-			if (it.next() instanceof Element) {
-				bNativeContent = true;
+		//Test if any element is used
+		String elFound = null;
+		for (Iterator it = el.getChildren().iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof Element) {
+				elFound = ((Element)o).getName();
 				break;
 			}
+		}
 
 		final Attribute attr = el.getAttributeItem(null, "name", 0); //by local name
 		if (attr == null)
@@ -982,9 +984,9 @@ public class Parser {
 		noEmpty("name", attnm, el);
 		final ConditionImpl cond = ConditionImpl.getInstance(
 				el.getAttributeValue("if"), el.getAttributeValue("unless"));
-		if (bNativeContent) {
+		if (elFound != null) {
 			if (Events.isValid(attnm))
-				throw new UiException("Event listeners not support native content");
+				throw new UiException("<" + elFound + "> not allowed in an event listener, "+el.getLocator());
 
 			final NativeInfo nativeInfo = new NativeInfo(
 				parent.getEvaluatorRef(),
