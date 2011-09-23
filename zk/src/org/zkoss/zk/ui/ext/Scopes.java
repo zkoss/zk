@@ -14,15 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.ext;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.Collection;
+import java.util.Set;
 
 import org.zkoss.util.logging.Log;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -40,7 +39,7 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 public class Scopes {
 	private static final Log log = Log.lookup(Scopes.class);
 
-	/** A stack of implict objects ({@link Implicts}. */
+	/** A stack of implicit objects ({@link Implicit}. */
 	private static final ThreadLocal _implicits = new ThreadLocal();
 	/** A stack of current scope. */
 	private static final ThreadLocal _scopes = new ThreadLocal();
@@ -84,8 +83,8 @@ try {
 		impl.setImplicit("self", scope);
 
 		if (scope instanceof Component)
-			impl.setImplicit("componentScope", new DeferredScope(scope));
-				//Use DeferredScope so scope.getAttributes is called only if
+			impl.setImplicit("componentScope", new DeferredAttributes(scope));
+				//Use DeferredAttributes so scope.getAttributes is called only if
 				//required.
 				//Reason: save footprint of AbstractComponent which stores
 				//attrs in _auxinf (and created only if necessary)
@@ -121,10 +120,10 @@ try {
 		((Implicit)((List)_implicits.get()).get(0))
 			.setImplicit(name, value);
 	}
-	/** Returns the implict object.
+	/** Returns the implicit object.
 	 *
 	 * <p>It searches the implicit object stored with {@link #setImplicit},
-	 * and also searches the system implicity objects by use of
+	 * and also searches the system implicit objects by use of
 	 * {@link Components#getImplicit(Page, Component, String)}.
 	 *
 	 * @param name the variable to retrieve
@@ -181,7 +180,7 @@ try {
 			_scopes.set(nss = new LinkedList());
 		nss.add(0, scope);
 	}
-	/** Pops the current namespce (pushed by {@link #push}).
+	/** Pops the current namespace (pushed by {@link #push}).
 	 */
 	private static final void pop() {
 		((List)_scopes.get()).remove(0);
@@ -212,24 +211,53 @@ try {
 		/** Returns the real value. */
 		public Object getValue();
 	}
-	private static class DeferredScope {
+	private static class DeferredAttributes implements Map {
 		private final Scope _scope;
-		private DeferredScope(Scope scope) {
+		private DeferredAttributes(Scope scope) {
 			_scope = scope;
 		}
-		public Object getValue() {
-			return _scope.getAttributes();
+		public void clear() {
+			_scope.getAttributes().clear();
 		}
-
-		public String toString() {
-			return _scope.toString();
+		public boolean containsKey(Object arg0) {
+			return _scope.getAttributes().containsKey(arg0);
 		}
-		public boolean equals(Object o) {
-			return _scope.equals(
-				o instanceof DeferredScope ? ((DeferredScope)o)._scope: o);
+		public boolean containsValue(Object arg0) {
+			return _scope.getAttributes().containsValue(arg0);
+		}
+		public Set entrySet() {
+			return _scope.getAttributes().entrySet();
+		}
+		public Object get(Object arg0) {
+			return _scope.getAttributes().get(arg0);
+		}
+		public boolean isEmpty() {
+			return _scope.getAttributes().isEmpty();
+		}
+		public Set keySet() {
+			return _scope.getAttributes().keySet();
+		}
+		public Object put(Object arg0, Object arg1) {
+			return _scope.getAttributes().put(arg0, arg1);
+		}
+		public void putAll(Map arg0) {
+			_scope.getAttributes().putAll(arg0);
+		}
+		public Object remove(Object arg0) {
+			return _scope.getAttributes().remove(arg0);
+		}
+		public int size() {
+			return _scope.getAttributes().size();
+		}
+		public Collection values() {
+			return _scope.getAttributes().values();
 		}
 		public int hashCode() {
-			return _scope.hashCode();
+			return _scope.getAttributes().hashCode();
+		}
+		public boolean equals(Object o) {
+			return _scope.getAttributes().equals(o instanceof DeferredAttributes ? 
+					((DeferredAttributes) o)._scope.getAttributes() : o);
 		}
 	}
 }

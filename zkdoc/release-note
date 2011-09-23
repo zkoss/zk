@@ -28,6 +28,7 @@ ZK 5.0.9
   ZK-396: Opera select option and press tab will not change select item
   ZK-393: Can't click-and-select any tree node in modal dialog window if included in JSP
   ZK-394: Set hflex to Column calculate a wrong width 
+  ZK-444: componentScope.get() causes error in zul file 
 
 	--------
 ZK 5.0.8
