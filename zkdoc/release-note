@@ -29,6 +29,7 @@ ZK 5.0.9
   ZK-393: Can't click-and-select any tree node in modal dialog window if included in JSP
   ZK-394: Set hflex to Column calculate a wrong width 
   ZK-444: componentScope.get() causes error in zul file 
+  ZK-381: Menu scrolling bug
 
 	--------
 ZK 5.0.8
