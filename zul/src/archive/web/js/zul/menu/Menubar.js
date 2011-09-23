@@ -176,8 +176,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	/**
 	 * Sync each menu's width
 	 */
-	_syncChdWidth: function () {	
-	},
+	_syncChdWidth: zk.$void,
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
 			childs = jq(this.$n('cave')).children();
