@@ -485,3 +485,9 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 	opacity: .6;
 	filter: alpha(opacity=60);
 }
+<c:if test="${c:browser('opera')}">
+tr.z-treerow-disd .z-treerow-img-checkbox,
+tr.z-treerow-disd .z-treerow-img-radio {
+	overflow: visible;<%-- Bug ZK-397 --%>
+}
+</c:if>
