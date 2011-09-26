@@ -1013,9 +1013,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var edata, keep = true;
 		if (evt) {
 			edata = evt.data;
-			if (this._multiple && this._cdo)
+			if (this._multiple) // B50-ZK-421
 				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
-					(evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+					(this._checkmark && (!this._cdo || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'))));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));
