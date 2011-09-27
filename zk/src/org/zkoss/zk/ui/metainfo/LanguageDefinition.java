@@ -194,12 +194,24 @@ public class LanguageDefinition {
 		synchronized (_ldefByName) {
 			langdef = (LanguageDefinition)_ldefByName.get(name);
 			if (langdef == null) {
-				final String nm = "/" + name;
+				final String slashnm = "/" + name;
 				for (Iterator it = _ldefByName.entrySet().iterator(); it.hasNext();) {
-					Map.Entry me = (Map.Entry)it.next();
-					if (((String)me.getKey()).endsWith(nm))
-						return (LanguageDefinition)me.getValue();
+					final Map.Entry me = (Map.Entry)it.next();
+					final String langnm = (String)me.getKey();
+
+					//two kind of names: zul/html and http://.../zul
+					int j = langnm.indexOf('/');
+					if (j >= 0)
+						if (langnm.indexOf('/', j + 1) < 0) { //1st format
+							if (langnm.substring(0, j).equals(name))
+								return (LanguageDefinition)me.getValue();
+						} else if (langnm.endsWith(slashnm)) { //2nd format
+							return (LanguageDefinition)me.getValue();
+						}
 				}
+
+				if ("html".equals(name) || "htm".equals(name))
+					return lookup("xhtml");
 			}
 		}
 		if (langdef == null)

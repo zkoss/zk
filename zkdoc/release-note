@@ -34,6 +34,7 @@ ZK 5.0.9
   ZK-421: Selection bug in Listbox with paging
   ZK-388: about JSdoc issue zul.wgt.Popup.open(Widget ref, Offset offset, String position, Map opts)
   ZK-450: Serializable.smartWrite() shall not invoke LogManager under Google App Engine since it is not allowed
+  ZK-456: xmlns:h="html" shall be interpreted as the XHTML namespace rather than ZUL
 
 	--------
 ZK 5.0.8
