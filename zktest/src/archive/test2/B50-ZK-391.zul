@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-391.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  27 13:13:00 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>mouseover and wait until the tootip showed for each label below twice</li>
+<li>the right side of tooltip should align with the right side of label it belongs.</li>
+</ol>
+]]></html>
+	<window>
+		<popup id="zulPu1"><label>content here</label></popup>
+		<popup id="zulPu2">
+			<attribute name="onOpen">
+				if (zulPu2.getChildren().size() == 0) { zulPu2.appendChild(new Label("content here")); }
+			</attribute>
+		</popup>
+		<popup id="zulPu3">
+			<attribute name="onOpen">
+				self.appendChild(new Label("content here"));
+			</attribute>
+		</popup>
+		<vlayout id="container">
+			<label tooltip="zulPu1, position=after_end">Popup created in zul - good positioning</label>
+			<label tooltip="zulPu2, position=after_end">Popup created in zul, check for children and add child in Java - bad positioning, good on second hover</label>
+			<label tooltip="zulPu3, position=after_end">Popup created in zul 2, add child with no check for children in Java - bad positioning, good on second hover</label>
+			<label id="javaLbl">
+				<attribute name="onCreate">
+					final Popup javaPu = new Popup();
+					container.appendChild(javaPu);
+					javaPu.setId("javaPu");
+					javaPu.addEventListener("onOpen", new EventListener() {
+					
+						public void onEvent(Event e) throws Exception {
+							if (javaPu.getChildren().size() == 0) {
+								javaPu.appendChild(new Label("content here"));
+							}
+						}
+					});
+					javaLbl.setTooltip("javaPu, position=after_end");
+				</attribute>
+				Popup created in java, check for children and add child in Java - bad positioning, good on second hover
+			</label>
+		</vlayout>
+	</window>
+</zk>

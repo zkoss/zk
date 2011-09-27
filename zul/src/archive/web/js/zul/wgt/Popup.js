@@ -86,8 +86,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		// the top is depend on children's height, if child will re-size after onSize/onShow, 
 		// popup need to re-position top after children height has calculated.
-		if (!top)
-			this._openInfo = arguments;
+		// B50-ZK-391
+		// should keep openInfo each time,
+		// maybe have to reposition in onResponse if the child changed with onOpen event,
+		this._openInfo = arguments;
 
 		$n.css({position: "absolute"}).zk.makeVParent();
 		zWatch.fireDown("onVParent", this);
@@ -176,6 +178,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();
+		// B50-ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
+		var openInfo = this._openInfo;
+		if (openInfo) {
+			this.position.apply(this, openInfo);
+			this._openInfo = null;
+		}
 		zWatch.unlisten({onResponse: this});
 		this.mask = null;
 	},
@@ -239,7 +247,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var openInfo = this._openInfo;
 		if (openInfo) {
 			this.position.apply(this, openInfo);
-			this._openInfo = null;
+			// B50-ZK-391
+			// should keep openInfo, maybe used in onResponse later.
 		}
 		this._fixWdh();
 		this._fixHgh();
