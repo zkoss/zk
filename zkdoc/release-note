@@ -35,8 +35,10 @@ ZK 5.0.9
   ZK-388: about JSdoc issue zul.wgt.Popup.open(Widget ref, Offset offset, String position, Map opts)
   ZK-450: Serializable.smartWrite() shall not invoke LogManager under Google App Engine since it is not allowed
   ZK-456: xmlns:h="html" shall be interpreted as the XHTML namespace rather than ZUL
+  ZK-454: Update tabbox and grid will cause js error in IE9
 
 	--------
+Aug 31, 2011
 ZK 5.0.8
 * Features
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale

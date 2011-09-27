@@ -1422,9 +1422,13 @@ wgt.$f().main.setTitle("foo");
 		_rmIdSpaceDown(child);
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
-		if (child.z_rod)
+		if (child.z_rod) {
 			_unbindrod(child);
-		else if (child.desktop)
+			
+			// Bug ZK-454
+			var $n = jq(child.uuid, zk);
+			if ($n.length) $n.remove();
+		} else if (child.desktop) 
 			this.removeChildHTML_(child, ignoreDom);
 
 		if (!_noParentCallback)
