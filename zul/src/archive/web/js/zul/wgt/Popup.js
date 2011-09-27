@@ -64,6 +64,20 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
 	 *  element.
 	 */
+	/**
+	 * Opens the popup.
+	 * <p>Note: the ref with the position parameter is prior to the offset parameter,
+	 * if any.
+	 * @param String ref the uuid of the ref widget.
+	 * @param Offset offset the offset of x and y
+	 * @param String position Possible values for the position attribute
+	 * @param Map opts 
+	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
+	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
+	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
+	 *  element.
+	 *  @see #open(zk.Widget, Offset, String, Map)
+	 */
 	open: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),

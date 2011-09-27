@@ -31,7 +31,8 @@ ZK 5.0.9
   ZK-444: componentScope.get() causes error in zul file 
   ZK-381: Menu scrolling bug
   ZK-397: Opera the checkbox of the disabled listitem is broke (F30-1780792.zul)
-  ZK-421: Selection bug in Listbox with paging 
+  ZK-421: Selection bug in Listbox with paging
+  ZK-388: about JSdoc issue zul.wgt.Popup.open(Widget ref, Offset offset, String position, Map opts) 
 
 	--------
 ZK 5.0.8

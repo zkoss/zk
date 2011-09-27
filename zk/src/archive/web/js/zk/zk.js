@@ -189,16 +189,14 @@ zk.copy(zk, {
 	 */
 	classes: {},
 	/** Returns if the given JS object is a class ({@link zk.Class}).
-	 * @param Object cls the object to test
-	 * @param whether it is a class (aka., a  ZK class)
+	 * @param Object cls the object to test whether it is a class (aka., a  ZK class)
 	 * @since 5.0.9
 	 */
 	isClass: function (cls) {
 		return cls && cls.$class == zk.Class;
 	},
 	/** Returns whether the given JS object is a ZK object ({@link zk.Object}).
-	 * @param Object o the object to test
-	 * @param whether it is a ZK object
+	 * @param Object o the object to test whether it is a ZK object
 	 * @since 5.0.9
 	 */
 	isObject: function (o) {
