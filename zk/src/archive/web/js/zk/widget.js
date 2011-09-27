@@ -1426,8 +1426,7 @@ wgt.$f().main.setTitle("foo");
 			_unbindrod(child);
 			
 			// Bug ZK-454
-			var $n = jq(child.uuid, zk);
-			if ($n.length) $n.remove();
+			jq(child.uuid, zk).remove();
 		} else if (child.desktop) 
 			this.removeChildHTML_(child, ignoreDom);
 
