@@ -309,6 +309,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkplus.cluster.ClusterSessionPatch</listener-class>
 	</listener>
 	-->
+	<!-- Turn on the following if you want to use ZK with a GAE(Google App Engine)
+	environment
+	<library-property>
+		<name>org.zkoss.util.logging.log.hierarchy.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
 	<!-- Disable the serialization of BeanShell methods
 		Default: enable
 		Disable it if Google App Engine is used since it cannot serialize
