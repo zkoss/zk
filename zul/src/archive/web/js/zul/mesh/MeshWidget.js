@@ -81,8 +81,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				headcave.style.width = '';
 			}
 		}
-		if (wgt.head && wgt.head.$n())
-			wgt.head.$n().style.width = '';
+		if (headn)
+			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
@@ -284,7 +284,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0;
 			for (var w = wgt.head.firstChild, i = 0; w; w = w.nextSibling) {
 				if (zk(bdfaker.cells[i]).isVisible()) {
-					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : bdfaker.cells[i].offsetWidth;
+					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? 
+							zk.parseInt(w._width) : bdfaker.cells[i].offsetWidth;
 					width += wd;
 				}
 				++i;
@@ -1335,10 +1336,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return this._minWd;
 	},
 	_adjSpanWd: function () { //used in HeadWidgets
-		if (!this._isAllWidths())
-			return;
-		var isSpan = this.isSpan();
-		if (!isSpan)
+		if (!this._isAllWidths() || !this.isSpan())
 			return;
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
