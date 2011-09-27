@@ -36,6 +36,7 @@ ZK 5.0.9
   ZK-450: Serializable.smartWrite() shall not invoke LogManager under Google App Engine since it is not allowed
   ZK-456: xmlns:h="html" shall be interpreted as the XHTML namespace rather than ZUL
   ZK-454: Update tabbox and grid will cause js error in IE9
+  ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
 
 	--------
 Aug 31, 2011
