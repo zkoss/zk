@@ -1358,13 +1358,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			_minwds = this._minWd.wds;
 		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
 			if (zk(hdfaker.cells[i]).isVisible()) {
-				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfakervisible ? hdfaker.cells[i].offsetWidth : bdfaker.cells[i].offsetWidth;
+				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? 
+						zk.parseInt(w._width) : hdfakervisible ? hdfaker.cells[i].offsetWidth : bdfaker.cells[i].offsetWidth;
 				width += wd;
 			}
 			++i;
 		}
-		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
-		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		//ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
+		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; 
+		//**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), 
 			extSum = total - width; 
 		
 		var count = total,
