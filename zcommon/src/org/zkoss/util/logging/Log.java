@@ -137,14 +137,14 @@ public class Log {
 	 *  
 	 * <pre><code>
 	 *	<library-property>
-	 *		<name>org.zkoss.util.logging.log.hierarchy.disabled</name>
+	 *		<name>org.zkoss.util.logging.hierarchy.disabled</name>
 	 *		<value>true</value>
 	 *	</library-property>
 	 * </code></pre>
 	 * Default: false
 	 */
 	public static final Log lookup(String name) {
-		return Boolean.valueOf(Library.getProperty("org.zkoss.util.logging.log.hierarchy.disabled", "false"))
+		return Boolean.valueOf(Library.getProperty("org.zkoss.util.logging.hierarchy.disabled", "false"))
 					.booleanValue() ? new Log(name) : new HierLog(name);
 	}
 	/** Gets the logger based on the package.
