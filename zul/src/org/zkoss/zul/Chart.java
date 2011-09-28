@@ -141,7 +141,7 @@ public class Chart extends Imagemap {
 	
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
-	private EventListener _smartDrawChartListener; //the smartDrawListner
+	private EventListener<Event> _smartDrawChartListener; //the smartDrawListner
 	private ChartDataListener _dataListener;
 
 	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)
@@ -215,7 +215,7 @@ public class Chart extends Imagemap {
 		}
 	}
 	
-	private class SmartDrawListener implements SerializableEventListener {
+	private class SmartDrawListener implements SerializableEventListener<Event> {
 		private static final long serialVersionUID = 20091008183610L;
 		public void onEvent(Event event) throws Exception {
 			doSmartDraw();
@@ -975,7 +975,7 @@ public class Chart extends Imagemap {
 		return Integer.parseInt(str);
 	}
 
-	public boolean addEventListener(String evtnm, EventListener listener) {
+	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (Events.ON_CLICK.equals(evtnm) && ret)
 			smartDrawChart(); //since Area has to generate

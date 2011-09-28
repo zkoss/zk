@@ -53,7 +53,7 @@ public class MessageboxDlg extends Window {
 	/** Which button is pressed. */
 	private int _result;
 	/** The event lisetener. */
-	private EventListener _listener;
+	private EventListener<Event> _listener;
 
 	public void onOK() {
 		if ((_buttons & OK) != 0) endModal(OK);
@@ -75,7 +75,7 @@ public class MessageboxDlg extends Window {
 	 * @param listener the event listener. If null, no invocation at all.
 	 * @since 3.0.4
 	 */
-	public void setEventListener(EventListener listener) {
+	public void setEventListener(EventListener<Event> listener) {
 		_listener = listener;
 	}
 	/** Sets the focus.

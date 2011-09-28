@@ -73,7 +73,7 @@ public class ZkAuthenticationEntryPoint extends AuthenticationProcessingFilterEn
 		((HttpServletRequest)request).getSession().setAttribute(ZkEventExceptionFilter.EVENT, evt);					
 
 		if (!comp.isListenerAvailable(ON_ACEGILOGIN, true)) {
-			final EventListener listener = new ShowWindowEventListener();
+			final EventListener<Event> listener = new ShowWindowEventListener<Event>();
 			comp.setAttribute(ON_ACEGILOGIN, listener);
 			comp.addEventListener(ON_ACEGILOGIN, listener);
 		}

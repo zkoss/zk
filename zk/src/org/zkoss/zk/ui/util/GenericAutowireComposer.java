@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -298,8 +299,8 @@ implements ComponentCloneListener {
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
 	}
 	
-	private class BeforeCreateWireListener implements SerializableEventListener {
-		public void onEvent(Event event) throws Exception {
+	private class BeforeCreateWireListener implements SerializableEventListener<CreateEvent> {
+		public void onEvent(CreateEvent event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
 			Components.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript, _ignoreXel);
 			//called only once
@@ -359,7 +360,7 @@ implements ComponentCloneListener {
 	}
 	
 	//doAfterCompose, called once after clone
-	private static class CloneDoAfterCompose implements SerializableEventListener {
+	private static class CloneDoAfterCompose implements SerializableEventListener<Event> {
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = (Component) event.getTarget();

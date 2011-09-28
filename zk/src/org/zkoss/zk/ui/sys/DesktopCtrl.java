@@ -408,7 +408,7 @@ if (c.isEmpty()) {
 	 * (when activating).
 	 * @since 5.0.6
 	 */
-	public void scheduleServerPush(EventListener task, Event event);
+	public <T extends Event> void scheduleServerPush(EventListener<T> task, T event);
 	/** Returns if there is any scheduled task for server push.
 	 * @since 5.0.6
 	 */

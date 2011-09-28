@@ -127,7 +127,8 @@ public class Tree extends MeshElement {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private EventListener _pgListener, _pgImpListener, _modelInitListener;
+	private EventListener<PagingEvent> _pgListener;
+	private EventListener<Event> _pgImpListener, _modelInitListener;
 
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
@@ -169,7 +170,7 @@ public class Tree extends MeshElement {
 		}
 	}
 	
-	private class ModelInitListener implements SerializableEventListener {
+	private class ModelInitListener implements SerializableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Tree.this
@@ -353,18 +354,17 @@ public class Tree extends MeshElement {
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new SerializableEventListener() {
-				public void onEvent(Event event) {
-					final PagingEvent evt = (PagingEvent)event;
+			_pgListener = new SerializableEventListener<PagingEvent>() {
+				public void onEvent(PagingEvent event) {
 					Events.postEvent(
-						new PagingEvent(evt.getName(),
-							Tree.this, evt.getPageable(), evt.getActivePage()));
+						new PagingEvent(event.getName(),
+							Tree.this, event.getPageable(), event.getActivePage()));
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new SerializableEventListener() {
+			_pgImpListener = new SerializableEventListener<Event>() {
 	public void onEvent(Event event) {
 		if (inPagingMold()) {
 			invalidate();
@@ -1107,7 +1107,8 @@ public class Tree extends MeshElement {
 		clone.init();
 		
 		// remove cached listeners
-		clone._pgListener = clone._pgImpListener = null;
+		clone._pgListener = null;
+		clone._pgImpListener = null;
 		
 		int cnt = 0;
 		if (_treecols != null) ++cnt;

@@ -25,6 +25,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 
@@ -166,7 +167,7 @@ public class Messagebox {
 	 * @since 3.0.4
 	 */
 	public static int show(String message, String title, int buttons, String icon,
-	EventListener listener) {
+	EventListener<Event> listener) {
 		return show(message, title, buttons, icon, 0, listener);
 	}
 	/** Shows a message box and returns what button is pressed.
@@ -236,7 +237,7 @@ public class Messagebox {
 	 * @since 3.0.4
 	 */
 	public static int show(String message, String title, int buttons, String icon,
-	int focus, EventListener listener) {
+	int focus, EventListener<Event> listener) {
 		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("message", message);
 		params.put("title", title != null ? title:
@@ -363,7 +364,7 @@ public class Messagebox {
 	 * @since 3.0.4
 	 */
 	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
-	String icon, int focus, EventListener listener) {
+	String icon, int focus, EventListener<Event> listener) {
 		return show(Messages.get(messageCode, args),
 			titleCode > 0 ? Messages.get(titleCode): null, buttons,
 			icon, focus, listener);
@@ -442,7 +443,7 @@ public class Messagebox {
 	 * @since 3.0.4
 	 */
 	public static int show(int messageCode, Object arg, int titleCode, int buttons,
-	String icon, int focus, EventListener listener) {
+	String icon, int focus, EventListener<Event> listener) {
 		return show(Messages.get(messageCode, arg),
 			titleCode > 0 ? Messages.get(titleCode): null, buttons,
 			icon, focus, listener);
@@ -512,7 +513,7 @@ public class Messagebox {
 	 * @since 3.0.4
 	 */
 	public static int show(int messageCode, int titleCode, int buttons, String icon,
-	int focus, EventListener listener) {
+	int focus, EventListener<Event> listener) {
 		return show(Messages.get(messageCode),
 			titleCode > 0 ? Messages.get(titleCode): null, buttons,
 			icon, focus, listener);

@@ -89,7 +89,8 @@ public interface ServerPush {
 	 * If you prefer to handle it by yourself, you could ignore it.
 	 * @since 5.0.6
 	 */
-	public void schedule(EventListener task, Event event, Scheduler scheduler);
+	public <T extends Event>
+	void schedule(EventListener<T> task, T event, Scheduler<T> scheduler);
 	/** Activate the current thread (which must be a server-push thread).
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,

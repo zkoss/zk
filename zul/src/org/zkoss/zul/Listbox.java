@@ -286,8 +286,8 @@ public class Listbox extends MeshElement {
 	 * child
 	 */
 	private transient Paging _paging;
-	private EventListener _pgListener, _pgImpListener,
-			_modelInitListener;
+	private EventListener<PagingEvent> _pgListener;
+	private EventListener<Event> _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	private int _tabindex;
@@ -1215,18 +1215,16 @@ public class Listbox extends MeshElement {
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new SerializableEventListener() {
-				public void onEvent(Event event) {
-					final PagingEvent evt = (PagingEvent) event;
-					Events.postEvent(new PagingEvent(evt.getName(),
-							Listbox.this, evt.getPageable(), evt
-									.getActivePage()));
+			_pgListener = new SerializableEventListener<PagingEvent>() {
+				public void onEvent(PagingEvent event) {
+					Events.postEvent(new PagingEvent(event.getName(),
+						Listbox.this, event.getPageable(), event.getActivePage()));
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new SerializableEventListener() {
+			_pgImpListener = new SerializableEventListener<Event>() {
 				public void onEvent(Event event) {
 					if (_model != null && inPagingMold()) {
 						final Paginal pgi = getPaginal();
@@ -2793,7 +2791,7 @@ public class Listbox extends MeshElement {
 		_topPad = 0;
 	}
 
-	private class ModelInitListener implements SerializableEventListener {
+	private class ModelInitListener implements SerializableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Listbox.this.removeEventListener(
@@ -2841,7 +2839,8 @@ public class Listbox extends MeshElement {
 		clone.init();
 		
 		// remove cached listeners
-		clone._pgListener = clone._pgImpListener = null;
+		clone._pgListener = null;
+		clone._pgImpListener = null;
 		
 		clone.afterUnmarshal();
 		if (clone._model != null) {

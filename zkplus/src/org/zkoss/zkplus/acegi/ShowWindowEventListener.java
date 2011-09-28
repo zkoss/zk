@@ -1,4 +1,4 @@
-/* AcegiAuthenticationEntryPoint.java
+/* ShowWindowEventListener.java
 
 {{IS_NOTE
 	Purpose:
@@ -50,8 +50,9 @@ import java.util.Iterator;
  * <p>Applicable to Acegi Security version 1.0.3</p>
  * @author Henri
  */
-public class ShowWindowEventListener implements SerializableEventListener {
-	public void onEvent(Event event) {
+public class ShowWindowEventListener<T extends Event> implements SerializableEventListener<T> {
+	@SuppressWarnings("unchecked")
+	public void onEvent(T event) {
 		//fetch old Event stored in Session and post again
 		final Component comp = event.getTarget();
 		

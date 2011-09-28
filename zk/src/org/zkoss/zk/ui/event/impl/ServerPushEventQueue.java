@@ -40,7 +40,7 @@ import org.zkoss.zk.au.AuRequest;
  * @author tomyeh
  * @since 5.0.0
  */
-public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
+public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, java.io.Serializable {
 	private static final Log log = Log.lookup(ServerPushEventQueue.class);
 
 	/** Map(desktop, DesktopInfo). */
@@ -51,7 +51,7 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 	 * Unlike {@link DesktopEventQueue}, an event can be published
 	 * without the current execution (i.e., not in an event listener).
 	 */
-	public void publish(Event event) {
+	public void publish(T event) {
 		if (event == null)
 			throw new IllegalArgumentException();
 
@@ -60,16 +60,16 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 				di.publish(event);
 		}
 	}
-	public void subscribe(EventListener listener) {
+	public void subscribe(EventListener<T> listener) {
 		subscribe(listener, null, false);
 	}
-	public void subscribe(EventListener listener, EventListener callback) {
+	public void subscribe(EventListener<T> listener, EventListener<T> callback) {
 		subscribe(listener, callback, true);
 	}
-	public void subscribe(EventListener listener, boolean async) {
+	public void subscribe(EventListener<T> listener, boolean async) {
 		subscribe(listener, null, async);
 	}
-	private void subscribe(EventListener listener, EventListener callback, boolean async) {
+	private void subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
 		if (listener == null)
 			throw new IllegalArgumentException();
 		final Execution exec = Executions.getCurrent();
@@ -86,7 +86,7 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 		}
 		di.subscribe(listener, callback, async);
 	}
-	public boolean isSubscribed(EventListener listener) {
+	public boolean isSubscribed(EventListener<T> listener) {
 		if (listener == null)
 			return false;
 
@@ -101,7 +101,7 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 		}
 		return di != null && di.isSubscribed(listener);
 	}
-	public boolean unsubscribe(EventListener listener) {
+	public boolean unsubscribe(EventListener<T> listener) {
 		if (listener == null)
 			throw new IllegalArgumentException();
 
@@ -141,9 +141,9 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 		return _closed;
 	}
 
-	private static class DesktopInfo implements java.io.Serializable {
+	private class DesktopInfo implements java.io.Serializable {
 		private final Desktop _desktop;
-		private final DesktopEventQueue _que;
+		private final DesktopEventQueue<T> _que;
 		private final EQService _service;
 		private final EQCleanup _cleanup;
 		/** Indicates whether the server push is enabled by the event queue. */
@@ -151,7 +151,7 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 
 		private DesktopInfo(Desktop desktop, EQService service, EQCleanup cleanup) {
 			_desktop = desktop;
-			_que = new DesktopEventQueue();
+			_que = new DesktopEventQueue<T>();
 			_spEnabled = !desktop.isServerPushEnabled();
 			if (_spEnabled)
 				desktop.enableServerPush(true);
@@ -160,19 +160,19 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 				//OK to call addListener since it is the current desktop
 		}
 
-		private void publish(Event event) {
-			Executions.schedule(_desktop, new ScheduleListener(_que), event);
+		private void publish(T event) {
+			Executions.schedule(_desktop, new ScheduleListener<T>(_que), event);
 		}
-		private void subscribe(EventListener listener, EventListener callback, boolean async) {
+		private void subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
 			if (callback != null)
 				_que.subscribe(listener, callback);
 			else
 				_que.subscribe(listener, async);
 		}
-		private boolean isSubscribed(EventListener listener) {
+		private boolean isSubscribed(EventListener<T> listener) {
 			return _que.isSubscribed(listener);
 		}
-		private boolean unsubscribe(EventListener listener) {
+		private boolean unsubscribe(EventListener<T> listener) {
 			return _que.unsubscribe(listener);
 		}
 		private boolean isIdle() {
@@ -198,12 +198,12 @@ public class ServerPushEventQueue implements EventQueue, java.io.Serializable {
 			}
 		}
 	}
-	private static class ScheduleListener implements EventListener, java.io.Serializable {
-		private final DesktopEventQueue _que;
-		private ScheduleListener(DesktopEventQueue queue) {
+	private static class ScheduleListener<T extends Event> implements EventListener<T>, java.io.Serializable {
+		private final DesktopEventQueue<T> _que;
+		private ScheduleListener(DesktopEventQueue<T> queue) {
 			_que = queue;
 		}
-		public void onEvent(Event event) {
+		public void onEvent(T event) {
 			if (!_que.isClose()) //just in case
 				_que.publish(event);
 		}

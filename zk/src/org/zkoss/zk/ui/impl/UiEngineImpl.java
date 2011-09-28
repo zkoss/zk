@@ -2162,7 +2162,7 @@ public class UiEngineImpl implements UiEngine {
 	 * satisfied.
 	 */
 	private static class FulfillListener
-	implements EventListener, java.io.Serializable, Cloneable,
+	implements EventListener<Event>, java.io.Serializable, Cloneable,
 		ComponentCloneListener {
 		private String[] _evtnms;
 		private Component[] _targets;

@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * @author tomyeh
  * @since 5.0.0
  */
-public interface EventQueue {
+public interface EventQueue<T extends Event> {
 	/** Publishes an event to the queue.
 	 *
 	 * <p>If the scope of a event queue is desktop or group,
@@ -64,7 +64,7 @@ public interface EventQueue {
 	 * and this is a ({@link EventQueues#DESKTOP}) or {@link EventQueues#GROUP}
 	 * event queue.
 	 */
-	public void publish(Event event);
+	public void publish(T event);
 
 	/** Subscribes a listener to this queue.
 	 * It is the same as <code>subscribe(listener, false)</code>
@@ -92,7 +92,7 @@ public interface EventQueue {
 	 * @see #subscribe(EventListener,EventListener)
 	 * @see #subscribe(EventListener,boolean)
 	 */
-	public void subscribe(EventListener listener);
+	public void subscribe(EventListener<T> listener);
 	
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
@@ -155,7 +155,7 @@ public interface EventQueue {
 	 * @see #subscribe(EventListener)
 	 * @see #subscribe(EventListener,boolean)
 	 */
-	public void subscribe(EventListener listener, EventListener callback);
+	public void subscribe(EventListener<T> listener, EventListener<T> callback);
 
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
@@ -233,7 +233,7 @@ public interface EventQueue {
 	 * @see #subscribe(EventListener)
 	 * @see #subscribe(EventListener, EventListener)
 	 */
-	public void subscribe(EventListener listener, boolean async);
+	public void subscribe(EventListener<T> listener, boolean async);
 	/** Unsubscribes a listener from the queue.
 	 *
 	 * <p>Note: this method must be called within an activated exection,
@@ -246,7 +246,7 @@ public interface EventQueue {
 	 *
 	 * @return true if the listener was subscribed.
 	 */
-	public boolean unsubscribe(EventListener listener);
+	public boolean unsubscribe(EventListener<T> listener);
 
 	/** Returns if an event listener is subscribed.
 	 * <p>Notice that this method only checks the listeners
@@ -254,7 +254,7 @@ public interface EventQueue {
 	 * for other desktops even if this is an application-level or
 	 * session-level event queue.
 	 */
-	public boolean isSubscribed(EventListener listener);
+	public boolean isSubscribed(EventListener<T> listener);
 	/** Closes the event queue.
 	 * After closed, application cannot access any of its method.
 	 * <p>Don't call this method directly. It is called only internally.

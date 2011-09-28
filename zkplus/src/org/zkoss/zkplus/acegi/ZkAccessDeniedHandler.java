@@ -61,7 +61,7 @@ public class ZkAccessDeniedHandler implements AccessDeniedHandler {
 
     	final Component comp = (Component) request.getAttribute(ZkEventExceptionFilter.COMPONENT);
 		if (!comp.isListenerAvailable(ON_ACCESSDENIED, true)) {
-			final EventListener listener = new ShowWindowEventListener();
+			final EventListener<Event> listener = new ShowWindowEventListener<Event>();
 			comp.setAttribute(ON_ACCESSDENIED, listener);
 			comp.addEventListener(ON_ACCESSDENIED, listener);
 		}

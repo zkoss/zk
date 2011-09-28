@@ -65,7 +65,7 @@ public class Tabbox extends XulElement {
 	private String _orient = "horizontal";
 	private boolean _tabscroll = true;
 	/** The event listener used to listen onSelect for each tab. */
-	/* package */transient EventListener _listener;
+	/* package */transient EventListener<Event> _listener;
 
 	public Tabbox() {
 		init();
@@ -421,7 +421,7 @@ public class Tabbox extends XulElement {
 		afterUnmarshal(-1);
 	}
 
-	private class Listener implements EventListener, Deferrable {
+	private class Listener implements EventListener<Event>, Deferrable {
 		public void onEvent(Event event) {
 			Events.sendEvent(Tabbox.this, event);
 		}

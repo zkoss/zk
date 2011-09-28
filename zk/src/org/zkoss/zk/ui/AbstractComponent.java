@@ -2035,10 +2035,10 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	//Event//
-	public boolean addEventListener(String evtnm, EventListener listener) {
+	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
 		return addEventListener(0, evtnm, listener);
 	}
-	public boolean addEventListener(int priority, String evtnm, EventListener listener) {
+	public boolean addEventListener(int priority, String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
@@ -2102,7 +2102,7 @@ w:use="foo.MyWindow"&gt;
 	}
 	private static Boolean dupListenerIgnored;
 
-	public boolean removeEventListener(String evtnm, EventListener listener) {
+	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 
@@ -2242,7 +2242,7 @@ w:use="foo.MyWindow"&gt;
 		}
 		return false;
 	}
-	public Iterator<EventListener> getListenerIterator(String evtnm) {
+	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
 			if (l != null)
@@ -2578,7 +2578,7 @@ w:use="foo.MyWindow"&gt;
 					break; //no more
 
 				execinf.update(null, eli.listener, null);
-				eli.listener.onEvent(event);
+				onEvent(eli.listener, event);
 				if (!event.isPropagatable())
 					return; //done
 			}
@@ -2600,7 +2600,7 @@ w:use="foo.MyWindow"&gt;
 				final EventListenerInfo eli = (EventListenerInfo)it.next();
 				if (eli.priority < 1000) {
 					execinf.update(null, eli.listener, null);
-					eli.listener.onEvent(event);
+					onEvent(eli.listener, event);
 					if (!event.isPropagatable())
 						return; //done
 				}
@@ -2621,14 +2621,18 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		if (page != null)
-			for (Iterator it = page.getListenerIterator(evtnm); it.hasNext();) {
+			for (Iterator<EventListener<? extends Event>> it = page.getListenerIterator(evtnm); it.hasNext();) {
 			//Note: CollectionsX.comodifiableIterator is used so OK to iterate
-				final EventListener el = (EventListener)it.next();
+				final EventListener<? extends Event> el = it.next();
 				execinf.update(null, el, null);
-				el.onEvent(event);
+				onEvent(el, event);
 				if (!event.isPropagatable())
 					return; //done
 			}
+	}
+	@SuppressWarnings("unchecked")
+	private static void onEvent(EventListener listener, Event event) throws Exception {
+		listener.onEvent(event);
 	}
 
 	/** Called when the widget running at the client asks the server
@@ -3067,8 +3071,8 @@ w:use="foo.MyWindow"&gt;
 
 	/** Used to forward events (for the forward conditions).
 	 */
-	private class ForwardListener
-	implements EventListener, ComponentCloneListener, java.io.Serializable {
+	private class ForwardListener implements EventListener<Event>,
+	ComponentCloneListener, java.io.Serializable {
 	//Note: it is not serializable since it is handled by
 	//AbstractComponent.writeObject
 
@@ -3409,10 +3413,10 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 	private static class ForwardInfo {
-		private final EventListener listener;
+		private final EventListener<? extends Event> listener;
 		//List([target or targetPath, targetEvent, eventData])]
 		private final List<Object[]> targets;
-		private ForwardInfo(EventListener listener, List<Object[]> targets) {
+		private ForwardInfo(EventListener<? extends Event> listener, List<Object[]> targets) {
 			this.listener = listener;
 			this.targets = targets;
 		}
@@ -3421,8 +3425,8 @@ w:use="foo.MyWindow"&gt;
 	implements ComponentSerializationListener, ComponentActivationListener,
 	java.io.Serializable {
 		private final int priority;
-		private final EventListener listener;
-		private EventListenerInfo(int priority, EventListener listener) {
+		private final EventListener<? extends Event> listener;
+		private EventListenerInfo(int priority, EventListener<? extends Event> listener) {
 			this.priority = priority;
 			this.listener = listener;
 		}
@@ -3444,8 +3448,8 @@ w:use="foo.MyWindow"&gt;
 			return "[" + this.priority + ": " + this.listener.toString() + "]";
 		}
 	}
-	private static final Converter<EventListenerInfo, EventListener> _listenerInfoConverter = new Converter<EventListenerInfo, EventListener>() {
-		public EventListener convert(EventListenerInfo o) {
+	private static final Converter<EventListenerInfo, EventListener<? extends Event>> _listenerInfoConverter = new Converter<EventListenerInfo, EventListener<? extends Event>>() {
+		public EventListener<? extends Event> convert(EventListenerInfo o) {
 			return o.listener;
 		}
 	};
@@ -3454,7 +3458,7 @@ w:use="foo.MyWindow"&gt;
 	private final Thread _thread;
 	private final Event _event;
 	private Method _method;
-	private EventListener _listener;
+	private EventListener<? extends Event> _listener;
 	private ZScript _zscript;
 
 	/*package*/ ExecInfo(Event event) {
@@ -3470,13 +3474,13 @@ w:use="foo.MyWindow"&gt;
 	public Method getEventMethod() {
 		return _method;
 	}
-	public EventListener getEventListener() {
+	public EventListener<? extends Event> getEventListener() {
 		return _listener;
 	}
 	public ZScript getEventZScript() {
 		return _zscript;
 	}
-	public void update(Method mtd, EventListener ln, ZScript zs) {
+	public void update(Method mtd, EventListener<? extends Event> ln, ZScript zs) {
 		_method = mtd;
 		_listener = ln;
 		_zscript = zs;

@@ -141,7 +141,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** A list of ScheduleInfo; must be thread safe */
-	private final List<ScheduleInfo> _schedInfos = new LinkedList<ScheduleInfo>();
+	private final List<ScheduleInfo<? extends Event>> _schedInfos = new LinkedList<ScheduleInfo<? extends Event>>();
 	/** For handling scheduled task in onSchedule. */
 	private Component _dummyTarget = null;
 	/** Next available key. */
@@ -1372,19 +1372,19 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public ServerPush getServerPush() {
 		return _spush;
 	}
-	public void scheduleServerPush(EventListener listener, Event event) {
+	public <T extends Event> void scheduleServerPush(EventListener<T> listener, T event) {
 		if (listener == null)
 			throw new IllegalArgumentException("null listener");
 		checkSeverPush("schedule");
 
-		_spush.schedule(listener, event, new Scheduler() {
-			public void schedule(EventListener listener, Event event) {
+		_spush.schedule(listener, event, new Scheduler<T>() {
+			public void schedule(EventListener<T> listener, T event) {
 				synchronized (_schedInfos) { //must be thread safe
 					if (_dummyTarget == null) {
 						_dummyTarget = new AbstractComponent();
 						_dummyTarget.addEventListener(ON_SCHEDULE, new ScheduleListener());
 					}
-					_schedInfos.add(new ScheduleInfo(listener, event));
+					_schedInfos.add(new ScheduleInfo<T>(listener, event));
 				}
 			}
 		});
@@ -1500,27 +1500,30 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			return '[' + execId + ": " + uuids + ']';
 		}
 	}
-	private static class ScheduleInfo implements java.io.Serializable {
-		private final EventListener listener;
-		private final Event event;
-		private ScheduleInfo(EventListener listener, Event event) {
-			this.listener = listener;
-			this.event = event;
+	private static class ScheduleInfo<T extends Event> implements java.io.Serializable {
+		private final EventListener<T> _listener;
+		private final T _event;
+		private ScheduleInfo(EventListener<T> listener, T event) {
+			_listener = listener;
+			_event = event;
+		}
+		private void invoke() throws Exception {
+			_listener.onEvent(_event);
 		}
 	}
-	private class ScheduleListener implements EventListener, java.io.Serializable {
+	private class ScheduleListener implements EventListener<Event>, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
 			final long max = System.currentTimeMillis() + 3000; //3 seconds
 			while (!_schedInfos.isEmpty()) {
-				final List<ScheduleInfo> schedInfos;
+				final List<ScheduleInfo<? extends Event>> schedInfos;
 				synchronized (_schedInfos) { //must be thread safe
-					schedInfos = new ArrayList<ScheduleInfo>(_schedInfos);
+					schedInfos = new ArrayList<ScheduleInfo<? extends Event>>(_schedInfos);
 					_schedInfos.clear();
 				}
-				for (Iterator<ScheduleInfo> it = schedInfos.iterator(); it.hasNext();) {
-					final ScheduleInfo si = it.next();
+				for (Iterator<ScheduleInfo<? extends Event>> it = schedInfos.iterator(); it.hasNext();) {
+					final ScheduleInfo<? extends Event> si = it.next();
 					try {
-						si.listener.onEvent(si.event);
+						si.invoke();
 					} catch (Throwable t) {
 						synchronized (_schedInfos) { //add back not called
 							int j = 0;

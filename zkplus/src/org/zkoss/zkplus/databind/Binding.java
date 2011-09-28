@@ -609,7 +609,7 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static abstract class BaseEventListener implements EventListener, java.io.Serializable {
+	private static abstract class BaseEventListener implements EventListener<Event>, java.io.Serializable {
 		protected List<BindingInfo> _dataTargets;
 		
 		public BaseEventListener() {

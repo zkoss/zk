@@ -42,7 +42,7 @@ public interface ExecutionInfo {
 	 * is served by a method ({@link #getEventMethod}), or
 	 * a zscript ({@link #getEventZScript}).
 	 */
-	public EventListener getEventListener();
+	public EventListener<? extends Event> getEventListener();
 	/** Returns the zscript that serves the event, or null if it
 	 * is served by a listener ({@link #getEventListener}), or
 	 * a method ({@link #getEventMethod}).

@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.ext;
 
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 
 /**
@@ -87,9 +88,9 @@ public interface Paginal extends Pageable {
 	 * @return whether the listener is added; false if it was added before
 	 * @see org.zkoss.zul.event.PagingEvent
 	 */
-	public boolean addEventListener(String evtnm, EventListener listener);
+	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener);
 	/** Removes an event listener.
 	 * @return whether the listener is removed; false if it was never added.
 	 */
-	public boolean removeEventListener(String evtnm, EventListener listener);
+	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener);
 }

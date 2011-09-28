@@ -98,7 +98,7 @@ public class Combobox extends Textbox {
 	private ListModel<?> _model;
 	private ComboitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
-	private transient EventListener _eventListener;
+	private transient EventListener<InputEvent> _eventListener;
 
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -180,12 +180,11 @@ public class Combobox extends Textbox {
 				}
 			};
 		if (_eventListener == null)
-			_eventListener = new EventListener() {
-				public void onEvent(Event event) throws Exception {
+			_eventListener = new EventListener<InputEvent>() {
+				public void onEvent(InputEvent event) throws Exception {
 					if (getModel() instanceof ListSubModel) {
-						final InputEvent ie = (InputEvent)event;
-						if (!ie.isChangingBySelectBack())
-							postOnInitRender(ie.getValue());
+						if (!event.isChangingBySelectBack())
+							postOnInitRender(event.getValue());
 					}
 				}
 		};

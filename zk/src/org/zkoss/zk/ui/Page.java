@@ -31,6 +31,7 @@ import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -455,11 +456,11 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @return whether the listener is added successfully
 	 * @see Component#addEventListener
 	 */
-	public boolean addEventListener(String evtnm, EventListener listener);
+	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener);
 	/** Removes an event listener.
 	 * @return whether the listener is removed; false if it was never added.
 	 */
-	public boolean removeEventListener(String evtnm, EventListener listener);
+	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener);
 	/** Returns whether the event listener is available.
 	 */
 	public boolean isListenerAvailable(String evtnm);
@@ -468,7 +469,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * {@link org.zkoss.util.CollectionsX#comodifiableIterator}, so it
 	 * is OK to add or remove listeners among the invocation of next().
 	 */
-	public Iterator<EventListener> getListenerIterator(String evtnm);
+	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
 
 	//-- special control --//
 	/** Removes all components in this page.

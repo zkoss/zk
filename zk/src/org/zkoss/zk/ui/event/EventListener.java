@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.UiException;
  * @see Deferrable
  * @see SerializableEventListener
  */
-public interface EventListener {
+public interface EventListener<T extends Event> {
 	/** Notifies this listener that an event occurs.
 	 * To get the event, you have to register it first by use of
 	 * {@link org.zkoss.zk.ui.Component#addEventListener} or
@@ -52,5 +52,5 @@ public interface EventListener {
 	 * <p>If you want to forward the event to other component,
 	 * use {@link Events#sendEvent}.
 	 */
-	public void onEvent(Event event) throws Exception;
+	public void onEvent(T event) throws Exception;
 }

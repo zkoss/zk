@@ -869,7 +869,7 @@ public void run() {
 	 * (when activating).
 	 * @since 5.0.6
 	 */
-	public static void schedule(Desktop desktop, EventListener task, Event event) {
+	public static <T extends Event> void schedule(Desktop desktop, EventListener<T> task, T event) {
 		((DesktopCtrl)desktop).scheduleServerPush(task, event);
 	}
 	/** Activates a thread to allow it access the given desktop synchronously.

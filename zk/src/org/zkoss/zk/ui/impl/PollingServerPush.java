@@ -263,7 +263,8 @@ public class PollingServerPush implements ServerPush {
 		}
 	}
 
-	public void schedule(EventListener listener, Event event, Scheduler scheduler) {
+	public <T extends Event>
+	void schedule(EventListener<T> listener, T event, Scheduler<T> scheduler) {
 		scheduler.schedule(listener, event); //delegate back
 	}
 

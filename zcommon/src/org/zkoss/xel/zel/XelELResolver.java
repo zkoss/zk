@@ -123,7 +123,7 @@ public class XelELResolver extends ELResolver {
 		return getELResolver().isReadOnly(ctx, base, property);
 	}
 
-	public Iterator getFeatureDescriptors(ELContext ctx, Object base) {
+	public Iterator<java.beans.FeatureDescriptor> getFeatureDescriptors(ELContext ctx, Object base) {
 		return getELResolver().getFeatureDescriptors(ctx, base);
 	}
 

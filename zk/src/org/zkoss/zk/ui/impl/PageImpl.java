@@ -70,6 +70,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -134,7 +135,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** A map of attributes. */
 	private transient SimpleScope _attrs;
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
-	private transient Map<String, List<EventListener>> _listeners;
+	private transient Map<String, List<EventListener<? extends Event>>> _listeners;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private final ComponentDefinitionMap _compdefs;
 	/** The reason to store it is PageDefinition is not serializable. */
@@ -568,38 +569,38 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
 
-	public boolean addEventListener(String evtnm, EventListener listener) {
+	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
 
 		if (_listeners == null)
-			_listeners = new HashMap<String, List<EventListener>>(2);
+			_listeners = new HashMap<String, List<EventListener<? extends Event>>>(2);
 
-		List<EventListener> l = _listeners.get(evtnm);
+		List<EventListener<? extends Event>> l = _listeners.get(evtnm);
 		if (l != null) {
 			if (duplicateListenerIgnored()) {
-				for (EventListener li: l) {
+				for (EventListener<? extends Event> li: l) {
 					if (listener.equals(li))
 						return false;
 				}
 			}
 		} else {
-			_listeners.put(evtnm, l = new LinkedList<EventListener>());
+			_listeners.put(evtnm, l = new LinkedList<EventListener<? extends Event>>());
 		}
 		l.add(listener);
 		return true;
 	}
-	public boolean removeEventListener(String evtnm, EventListener listener) {
+	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
 			throw new NullPointerException();
 
 		if (_listeners != null) {
-			final List<EventListener> ls = _listeners.get(evtnm);
+			final List<EventListener<? extends Event>> ls = _listeners.get(evtnm);
 			if (ls != null) {
-				for (Iterator<EventListener> it = ls.iterator(); it.hasNext();) {
-					final EventListener li = it.next();
+				for (Iterator<EventListener<? extends Event>> it = ls.iterator(); it.hasNext();) {
+					final EventListener<? extends Event> li = it.next();
 					if (listener.equals(li)) {
 						if (ls.size() == 1)
 							_listeners.remove(evtnm);
@@ -947,14 +948,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	public boolean isListenerAvailable(String evtnm) {
 		if (_listeners != null) {
-			final List<EventListener> ls = _listeners.get(evtnm);
+			final List<EventListener<? extends Event>> ls = _listeners.get(evtnm);
 			return ls != null && !ls.isEmpty();
 		}
 		return false;
 	}
-	public Iterator<EventListener> getListenerIterator(String evtnm) {
+	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
 		if (_listeners != null) {
-			final List<EventListener> l = _listeners.get(evtnm);
+			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
 			if (l != null)
 				return CollectionsX.comodifiableIterator(l);
 		}
@@ -980,7 +981,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_listeners.values());
+			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX.comodifiableIterator(_listeners.values());
 			it.hasNext();)
 				willPassivate(it.next());
 		willPassivate(_resolvers);
@@ -1001,7 +1002,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator<List<EventListener>> it = CollectionsX.comodifiableIterator(_listeners.values());
+			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX.comodifiableIterator(_listeners.values());
 			it.hasNext();)
 				didActivate(it.next());
 
@@ -1081,10 +1082,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		Serializables.smartWrite(s, lns);
 
 		if (_listeners != null)
-			for (Map.Entry<String, List<EventListener>> me: _listeners.entrySet()) {
+			for (Map.Entry<String, List<EventListener<? extends Event>>> me: _listeners.entrySet()) {
 				s.writeObject(me.getKey());
 
-				final List<EventListener> ls = me.getValue();
+				final List<EventListener<? extends Event>> ls = me.getValue();
 				willSerialize(ls);
 				Serializables.smartWrite(s, ls);
 			}
@@ -1138,8 +1139,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_listeners == null) _listeners = new HashMap<String, List<EventListener>>();
-			final List<EventListener> ls = Serializables.smartRead(s, (List<EventListener>)null);
+			if (_listeners == null) _listeners = new HashMap<String, List<EventListener<? extends Event>>>();
+			final List<EventListener<? extends Event>> ls = Serializables.smartRead(s, (List<EventListener<? extends Event>>)null);
 			_listeners.put(evtnm, ls);
 		}
 
@@ -1160,7 +1161,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didDeserialize(_resolvers);
 		didDeserialize(_mappers);
 		if (_listeners != null)
-			for (List<EventListener> ls: _listeners.values())
+			for (List<EventListener<? extends Event>> ls: _listeners.values())
 				didDeserialize(ls);
 	}
 	private void didDeserialize(Collection c) {

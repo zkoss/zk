@@ -21,11 +21,11 @@ import org.zkoss.zk.ui.event.EventListener;
  * @author tomyeh
  * @since 5.0.6
  */
-public interface Scheduler {
+public interface Scheduler<T extends Event> {
 	/** Schedules the task to execute asynchronously.
 	 * @param task the task to execute
 	 * @param event the event to be passed to the task (i.e., the event listener).
 	 * It could null or any instance as long as the task recognizes it.
 	 */
-	public void schedule(EventListener task, Event event);
+	public void schedule(EventListener<T> task, T event);
 }

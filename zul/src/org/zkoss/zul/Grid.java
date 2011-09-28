@@ -229,7 +229,8 @@ public class Grid extends MeshElement {
 	 * If exists, it is the last child.
 	 */
 	private transient Paging _paging;
-	private EventListener _pgListener, _pgImpListener, _modelInitListener;
+	private EventListener<PagingEvent> _pgListener;
+	private EventListener<Event> _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
@@ -294,7 +295,7 @@ public class Grid extends MeshElement {
 		_topPad = 0;
 	}
 	
-	private class ModelInitListener implements SerializableEventListener {
+	private class ModelInitListener implements SerializableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Grid.this.removeEventListener("onInitModel", _modelInitListener);
@@ -497,18 +498,17 @@ public class Grid extends MeshElement {
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new SerializableEventListener() {
-				public void onEvent(Event event) {
-					final PagingEvent evt = (PagingEvent)event;
+			_pgListener = new SerializableEventListener<PagingEvent>() {
+				public void onEvent(PagingEvent event) {
 					Events.postEvent(
-						new PagingEvent(evt.getName(), Grid.this,
-							evt.getPageable(), evt.getActivePage()));
+						new PagingEvent(event.getName(), Grid.this,
+							event.getPageable(), event.getActivePage()));
 				}
 			};
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new SerializableEventListener() {
+			_pgImpListener = new SerializableEventListener<Event>() {
 	public void onEvent(Event event) {
 		if (_rows != null && _model != null && inPagingMold()) {
 		//theoretically, _rows shall not be null if _model is not null when
@@ -1276,7 +1276,8 @@ public class Grid extends MeshElement {
 		clone.init();
 		
 		// remove cached listeners
-		clone._pgListener = clone._pgImpListener = null;
+		clone._pgListener = null;
+		clone._pgImpListener = null;
 		
 		//recreate the DataLoader 
 		final int offset = clone.getDataLoader().getOffset(); 

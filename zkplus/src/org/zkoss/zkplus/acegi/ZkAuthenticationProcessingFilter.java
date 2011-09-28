@@ -91,7 +91,7 @@ public class ZkAuthenticationProcessingFilter extends AuthenticationProcessingFi
 
 		//other url, assume login fail
 		if (!comp.isListenerAvailable(ZkAuthenticationEntryPoint.ON_ACEGILOGIN, true)) {
-			final EventListener listener = new ShowWindowEventListener();
+			final EventListener<Event> listener = new ShowWindowEventListener<Event>();
 			comp.setAttribute(ZkAuthenticationEntryPoint.ON_ACEGILOGIN, listener);
 			comp.addEventListener(ZkAuthenticationEntryPoint.ON_ACEGILOGIN, listener);
 		}
