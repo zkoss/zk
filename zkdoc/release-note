@@ -92,6 +92,7 @@ ZK 6.0.0
     setters of hflex and width are deprecated. These components include:
     Treeitem, Treerow, Treecell, Treechildren, Treecols, Treefoot,
     Rows, Columns, Row, Cell, Foot, Listitem, Listcell, Listhead, Listfoot
+  + The deprecated class org.zkoss.web.util.resource.ServletLabelResovler was removed.
 
 	--------
 ZK 5.0.9

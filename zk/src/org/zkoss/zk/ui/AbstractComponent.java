@@ -2036,7 +2036,7 @@ w:use="foo.MyWindow"&gt;
 
 	//Event//
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
-		return addEventListener(0, evtnm, listener);
+		return addEventListener(listener instanceof org.zkoss.zk.ui.event.Express ? 1000: 0, evtnm, listener);
 	}
 	public boolean addEventListener(int priority, String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
