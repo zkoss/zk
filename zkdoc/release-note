@@ -4,23 +4,6 @@ ZK 6.0.0
   3061730: Make ZK complaint to Java 5, such generics
   2920934: A plugin to load lang.xml, config.xml.. from custom location
   2978342: A way to tag AU request for statistic purpose
-
-* Bugs
-
-* Upgrade Notes
-  + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
-    doCatch(Throwable) and doFinally() were removed.
-    And, doCatch(Throwable) and doFinally() are moved to InitiatorExt
-  + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
-    They are replaced with org.zkoss.zul.DefaultTreeNode and
-    org.zkoss.zul.DefaultTreeModel.
-  + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
-  + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
-    are removed.
-
-	--------
-ZK 5.5.0
-* Features
   ZK-139: A way to define a template that component could use
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
   ZK-237: <?import class="..."?> allows users to import classes
@@ -55,6 +38,15 @@ ZK 5.5.0
   ZK-381: Menu scrolling bug
 
 * Upgrade Notes
+  + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
+    doCatch(Throwable) and doFinally() were removed.
+    And, doCatch(Throwable) and doFinally() are moved to InitiatorExt
+  + org.zkoss.zul.SimpleTreeNode and org.zkoss.zul.SimpleTreeModel are removed.
+    They are replaced with org.zkoss.zul.DefaultTreeNode and
+    org.zkoss.zul.DefaultTreeModel.
+  + HTMLs, StyleSheet and JavaScript are moved to the org.zkoss.html package
+  + org.zkoss.util.ListX, org.zkoss.util.TreeArray and org.zkoss.util.CheckableTreeArray
+    are removed.
   + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
     are removed.
   + Component's setVariable is removed (deprecated in 5.0). Please use
