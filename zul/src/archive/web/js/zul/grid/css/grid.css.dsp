@@ -273,3 +273,6 @@ div.z-grid {
 }
 </c:if>
 
+.z-grid-footer .z-footer {
+	overflow: hidden; <%-- B50-ZK-410: Bug on footer labels applied to a grid --%>
+}
