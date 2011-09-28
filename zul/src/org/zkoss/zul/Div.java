@@ -36,13 +36,13 @@ public class Div extends XulElement {
 
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
-	 * @deprecated as of release 5.5.0, use CSS instead.
+	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	public String getAlign() {
 		return _align;
 	}
 	/** Sets the alignment: one of left, center, right, justify,
-	 * @deprecated as of release 5.5.0, use CSS instead.
+	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
 		if (align != null && align.length() == 0)

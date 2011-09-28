@@ -55,7 +55,7 @@ public interface Annotation extends java.io.Serializable {
 	/** Returns all values of the given attribute, or null if not found.
 	 * If the value is a single instance of String, a single-element array
 	 * is returned.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public String[] getAttributeValues(String name);
 }

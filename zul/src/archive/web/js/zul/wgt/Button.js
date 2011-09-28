@@ -471,20 +471,20 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	/** Generates the HTML fragment at the right of the button layout.
 	 * <p>Default: do nothing, override it as need.
 	 * @param Array out an array of HTML fragments.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	renderIcon_: function (out) {
 	},
 	/** Generates the HTML fragment after the button layout table.
 	 * <p>Default: do nothing, override it as need.
 	 * @param Array out an array of HTML fragments.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	renderInner_: function (out) {
 	},
 	/** Returns whether have to listen to onfocus and onblur event on button element.
 	 * @return boolean
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	isTableLayout_: function () {
 		return this._mold == 'trendy';

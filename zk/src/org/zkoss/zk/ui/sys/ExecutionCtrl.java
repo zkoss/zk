@@ -177,7 +177,7 @@ public interface ExecutionCtrl {
 	 * <p>Notice that it looks only for the variables defined
 	 * in {@link #addVariableResolver}. To get a variable an EL expression
 	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Object getExtraXelVariable(String name);
 	/** Returns the object, if any, defined in any variable resolver
@@ -193,7 +193,7 @@ public interface ExecutionCtrl {
 	 * If not null, it looks for a member of the base object (such as getter).
 	 * @param name the property to retrieve.
 	 * @see #getExtraXelVariable(String)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Object getExtraXelVariable(XelContext ctx, Object base, Object name);
 }

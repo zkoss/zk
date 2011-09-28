@@ -4037,7 +4037,7 @@ _doFooSelect: function (evt) {
 	/** A widget call this function of its ancestor if it wants to know whether its ancestor prefer ignore float up event of it self.
 	 * <p>Default: false.
 	 * @return boolean
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	ignoreDescendantFloatUp_: function (des) {
 		return false;

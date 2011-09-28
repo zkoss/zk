@@ -403,14 +403,14 @@ implements Constrainted, Readonly, Disable {
 	/** Returns true if onChange event is sent as soon as user types in the input 
 	 * component.
 	 * <p>Default: false
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean getInstant() {
 		return _auxinf != null && _auxinf.instant;
 	}
 	/** Sets the instant attribute. When the attribute is true, onChange event 
 	 * will be fired as soon as user type in the input component.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void setInstant(boolean instant) {
 		if (getInstant() != instant) {

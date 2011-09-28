@@ -65,7 +65,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A combo button. A combo button consists of a button ({@link Combobutton}) and
  * a popup window ({@link Popup}).
  * It is similar to {@link Bandbox} except the input box is substituded by a button.
- * @since 5.5.0
+ * @since 6.0.0
  * <p>Default {@link #getZclass}: z-combobutton.
  */
 zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {

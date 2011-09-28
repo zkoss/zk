@@ -158,7 +158,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/** Returns the index of this Comboitem.
 	 * <p>Notice that the performance is not good if there are a lot of items.
 	 * Therefore, this method shall not be used with a huge Combobox.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public int getIndex() {
 		int j = 0;

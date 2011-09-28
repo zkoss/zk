@@ -19,7 +19,7 @@ package org.zkoss.xel;
  * <p>Notice it is available only <a href="http://code.google.com/p/zel/">ZEL 2.2</a>
  * is used. Please refer to {@link Expressions#newExpressionFactory} for more information.
  * @author henri
- * @since 5.5.0
+ * @since 6.0.0
  */
 public interface ExpressionX extends Expression {
 	/** Returns whether this is a read only (cannot setValue) expression.

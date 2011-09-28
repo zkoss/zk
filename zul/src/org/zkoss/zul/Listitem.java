@@ -303,13 +303,13 @@ public class Listitem extends XulElement {
 				"select" : super.getMold(): super.getMold();
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setHflex(String flex) {

@@ -28,7 +28,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * It is similar to {@link Bandbox} except the input box is changed
  * to button.
  *
- * <p>Default {@link #getZclass}: z-combobutton.(since 5.5.0)
+ * <p>Default {@link #getZclass}: z-combobutton.(since 6.0.0)
  *
  * <p>Events: onClick<br/>
  * Developers can listen to the onClick event.
@@ -41,7 +41,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * <p>Note: to have better performance, onOpen is sent only if
  * a non-deferrable event listener is registered
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
- * @since 5.5.0
+ * @since 6.0.0
  * @author benbai
  */
 public class Combobutton extends Button {

@@ -66,7 +66,7 @@ public class FastReadArray<T> implements java.io.Serializable, Cloneable {
 		return _ary.length;
 	}
 	/** Removes all of the elements for this array.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void clear() {
 		_ary = (Object[])Array.newInstance(_ary.getClass().getComponentType(), 0);

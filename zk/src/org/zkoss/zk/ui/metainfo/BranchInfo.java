@@ -26,7 +26,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
 /**
  * Used to implement a branch node that allows children.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 /*package*/ abstract class BranchInfo extends LeafInfo implements Condition {
 	/** A list of a children ({@link NodeInfo}). */

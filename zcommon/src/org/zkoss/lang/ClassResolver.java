@@ -15,7 +15,7 @@ package org.zkoss.lang;
 /**
  * A resolver that can resolve the class of the given name.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public interface ClassResolver {
 	/** Resolves the class of the specified name.

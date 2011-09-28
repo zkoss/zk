@@ -44,12 +44,12 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		/** Returns the alignment.
 		 * <p>Default: null (use browser default).
 		 * @return String
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		/** Sets the alignment: one of top, texttop, middle, absmiddle,
 		 * bottom, absbottom, baseline, left, right and center.
 		 * @param String align
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		align: function (v) {
 			var n = this.getImageNode();
@@ -59,12 +59,12 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		 * side of the image.
 		 * <p>Default: null (use browser default).
 		 * @return String
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		/** Sets number of pixels of extra space to the left and right
 		 * side of the image.
 		 * @param String hspace
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		hspace: function (v) {
 			var n = this.getImageNode();
@@ -74,12 +74,12 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		 * side of the image.
 		 * <p>Default: null (use browser default).
 		 * @return String
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		/** Sets number of pixels of extra space to the top and bottom
 		 * side of the image.
 		 * @param String vspace
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		vspace: function (v) {
 			var n = this.getImageNode();

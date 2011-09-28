@@ -36,7 +36,7 @@ import org.zkoss.xel.VariableResolverX;
 /**
  * An XEL implementation of ZEL ELResolver.
  *
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class XelELResolver extends ELResolver {
 	private static final CompositeELResolver DEFAULT;

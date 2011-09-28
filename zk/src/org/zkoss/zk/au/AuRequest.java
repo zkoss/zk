@@ -175,7 +175,7 @@ public class AuRequest {
 	 * However, they are not the same if the component of the UUID has been
 	 * <i>merged</i> (as a stub component, such as {@link org.zkoss.zk.ui.sys.StubComponent})
 	 * into another one.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public String getUuid() {
 		return _uuid;

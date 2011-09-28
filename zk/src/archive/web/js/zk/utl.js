@@ -598,7 +598,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/**
 	 * Loads an image before ZK client engine to calculate the widget's layout.
 	 * @param String url the loading image's localation
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	loadImage: function (url) {
 		if (!_imgMap[url]) {
@@ -609,7 +609,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/**
 	 * Checks whether all the loading images are finish.
 	 * @see #loadImage
-	 * @since 5.5.0 
+	 * @since 6.0.0 
 	 */
 	isImageLoading: function () {
 		for (var n in _imgMap)

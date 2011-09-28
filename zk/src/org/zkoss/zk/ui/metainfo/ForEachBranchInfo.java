@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 /**
  * Used to implement a branch node that supports forEach.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 /*package*/ abstract class ForEachBranchInfo extends BranchInfo {
 	/** The forEach content, i.e., what to iterate. */

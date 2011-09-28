@@ -120,7 +120,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	 * Opens the menupopup that belongs to the menu.
 	 * <p>
 	 * Note that this function is only applied when it is topmost menu, i.e. the parent of the menu is {@link Menubar}
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	open: function () {
 		if (this.desktop && this.isTopmost()) {

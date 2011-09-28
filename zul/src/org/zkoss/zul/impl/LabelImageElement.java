@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * A XUL element with a label ({@link #getLabel}) 
  * and an image ({@link #getImage}).
  * 
- * [Since 5.5.0]
+ * [Since 6.0.0]
  * <p>To turn on the preload image function for this component, you have to specify the component's
  * attribute map with key "org.zkoss.zul.image.preload" to true. That is, for
  * example, if in a zul file, you shall specify &lt;custom-attributes> of the

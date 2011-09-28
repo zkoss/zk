@@ -276,13 +276,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 * input.
 		 * <p>Default: false.
 		 * @return boolean
-		 * @since 5.5.0
+		 * @since 6.0.0
 		 */
 		/**
 		 * Sets whether to send onChange event as soon as user types in the 
 		 * input.
 		 * @param boolean instant
-		 * @since 5.5.0
+		 * @since 6.0.0
 		 */
 		instant: null
 	},

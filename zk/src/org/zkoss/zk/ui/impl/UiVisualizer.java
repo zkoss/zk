@@ -524,7 +524,7 @@ import org.zkoss.zk.au.out.*;
 	 * @param renderedComps used to return the components that are rendered.
 	 * It is ignored if null. If not null, it must be mutable and
 	 * this method will add the topmost rendered components to this collection.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public List<AuResponse> getResponses(Collection<Component> renderedComps)
 	throws IOException {

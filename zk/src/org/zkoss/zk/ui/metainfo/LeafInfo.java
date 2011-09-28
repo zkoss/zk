@@ -25,7 +25,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
  * Also notice that all nodes except the root must be an instance of
  * {@link LeafInfo} or its derives.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 /*package*/ abstract class LeafInfo implements NodeInfo, java.io.Serializable {
 	//Note: getEvaluatorRef() is the same as getPageDefintion().getEvaluatorRef()

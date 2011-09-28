@@ -64,7 +64,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	/** Returns a list of component IDs that shall be disabled when the user
 	 * clicks this checkbox.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public String getAutodisable() {
 		return _autodisable;

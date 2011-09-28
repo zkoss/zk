@@ -23,7 +23,7 @@ import org.zkoss.xel.FunctionMapper;
  * An ZEL function mapper that is based on a XEL function mapper.
  *
  * @author henrichen
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class XelELMapper extends org.zkoss.zel.FunctionMapper {
 	private FunctionMapper _mapper;

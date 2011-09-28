@@ -216,7 +216,7 @@ public class Events {
 	/** The onStub event (used with {@link StubEvent})
 	 * to denote an event sent from the peer widget of a stub component
 	 * (at the client).
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public static final String ON_STUB = "onStub";
 

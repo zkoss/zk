@@ -111,13 +111,13 @@ public class Treerow extends XulElement {
 		return cell;
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {

@@ -1251,7 +1251,7 @@ public class Configuration {
 	 * <p>Note: you have to set the class before {@link WebApp} is created.
 	 * Otherwise, it won't have any effect.
 	 * @param cls the class that implements {@link WebAppFactory}.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void setWebAppFactoryClass(Class cls) {
 		if (cls != null && !WebAppFactory.class.isAssignableFrom(cls))
@@ -1262,7 +1262,7 @@ public class Configuration {
 	 * or null if default is used.
 	 * It must implement {@link WebAppFactory}.
 	 * <p>Note: {@link #getWebAppClass} has the higher priority if not null.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Class getWebAppFactoryClass() {
 		return _wappftycls;
@@ -2003,14 +2003,14 @@ public class Configuration {
 
 	/** Sets whether zscript is allowed.
 	 * <p>Default: true (enabled).
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void enableZScript(boolean enable) {
 		_zscriptEnabled = enable;
 	}
 	/** Returns whether zscript is allowed.
 	 * <p>Default: true (enabled).
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean isZScriptEnabled() {
 		return _zscriptEnabled;
@@ -2069,7 +2069,7 @@ public class Configuration {
 	}
 
 	/** Returns the execution monitor for this application, or null if not set.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ExecutionMonitor getExecutionMonitor() {
 		return _execmon;
@@ -2087,7 +2087,7 @@ public class Configuration {
 	 * @param monitor the execution monitor. If null, the monitor function
 	 * is disabled.
 	 * @return the previous execution monitor, or null if not available.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ExecutionMonitor setExecutionMonitor(ExecutionMonitor monitor) {
 		final ExecutionMonitor old = _execmon;

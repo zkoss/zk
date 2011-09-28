@@ -54,12 +54,12 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		/** Returns the alignment.
 		 * <p>Default: null (use browser default).
 		 * @return String
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		/** Sets the alignment: one of top, middle, bottom, left, right and
 		 * center.
 		 * @param String align
-		 * @deprecated as of release 5.5.0, use CSS instead.
+		 * @deprecated as of release 6.0.0, use CSS instead.
 		 */
 		align: function (v) {
 			var n = this.$n();

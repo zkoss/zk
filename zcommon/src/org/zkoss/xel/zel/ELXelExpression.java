@@ -25,7 +25,7 @@ import org.zkoss.zel.ValueExpression;
  * An XEL Expression that is based on ZEL ValueExpression.
  *
  * @author henrichen
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class ELXelExpression implements ExpressionX, java.io.Serializable {
 	private static final long serialVersionUID = 5843639871525015820L;

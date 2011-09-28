@@ -548,7 +548,7 @@ w:use="foo.MyWindow"&gt;
 	public void setStubonly(String stubonly);
 	/** Sets whether this component is stub-only.
 	 * It is the same as <code>setStubonly(stubonly ? "true": "false")</code>.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void setStubonly(boolean stubonly);
 
@@ -704,7 +704,7 @@ w:use="foo.MyWindow"&gt;
 	 * @param evtnm what event to listen (never null)
 	 * @return whether the listener is added successfully
 	 * @see Page#addEventListener
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean addEventListener(int priority, String evtnm, EventListener<? extends Event> listener);
 	/** Adds an event listener to specified event name for this component.
@@ -1028,7 +1028,7 @@ w:use="foo.MyWindow"&gt;
 	public Set<String> getWidgetAttributeNames();
 
 	/** Returns the template of the given name, or null if not available.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 * @see #setTemplate
 	 */
 	public Template getTemplate(String name);
@@ -1041,7 +1041,7 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Template setTemplate(String name, Template template);
 	/** Returns a readonly set of the names of all templates.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Set<String> getTemplateNames();
 

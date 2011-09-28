@@ -20,7 +20,7 @@ import java.util.Collection;
  * special evaulators such as MVEL and OGNL.
  * In other words, you rarely need to implement this interface.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public interface FunctionMapperExt {
 	/** Returns a readonly collection of the logic names of the class

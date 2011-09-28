@@ -141,7 +141,7 @@ public class Listcell extends LabelImageElement {
 		}
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the hflex of Listcell, please 
+	 * @deprecated as of release 6.0.0. To control the hflex of Listcell, please 
 	 * use {@link Listheader#setHflex(String)} instead.
 	 */
 	public void setHflex(String flex) {

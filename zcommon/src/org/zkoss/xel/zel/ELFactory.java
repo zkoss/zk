@@ -24,7 +24,7 @@ import org.zkoss.zel.ELContext;
  * An XEL ExpressionFactory implementation based on ZEL ExpressionFactory.
  *
  * @author henrichen
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class ELFactory implements ExpressionFactory {
 	protected final org.zkoss.zel.ExpressionFactory _expf;

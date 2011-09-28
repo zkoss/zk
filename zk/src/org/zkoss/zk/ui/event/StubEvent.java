@@ -28,7 +28,7 @@ import org.zkoss.zk.au.AuRequests;
  * found by use of {@link #getId}, if it is assigned with an ID.
  *
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  */
 public class StubEvent extends Event {
 	private final String _cmd, _id;

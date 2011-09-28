@@ -1395,7 +1395,7 @@ public class Tree extends MeshElement {
 
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);

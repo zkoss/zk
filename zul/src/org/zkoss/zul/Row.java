@@ -180,7 +180,7 @@ public class Row extends XulElement {
 	/** Returns the index of the specified row.
 	 * <p>Notice that the performance is not good if there are a lot of rows.
 	 * Therefore, this method shall not be used with a huge grid.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public int getIndex() {
 		int j = 0;
@@ -213,13 +213,13 @@ public class Row extends XulElement {
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {

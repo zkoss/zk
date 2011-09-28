@@ -339,19 +339,19 @@ public class PageDefinition implements NodeInfo {
 	 * 
 	 * @param clsptn the class's full-qualitified name, e.g., <code>com.foo.FooComposer</code>,
 	 * a wildcard representing all classes of the give pacakge, e.g., <code>com.foo.*</code>.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void addImportedClass(String clsptn) throws ClassNotFoundException {
 		_clsresolver.addImportedClass(clsptn);
 	}
 	/** Returns a readonly list of the imported class.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public List getImportedClasses() {
 		return _clsresolver.getImportedClasses();
 	}
 	/** Returns the class resolver represented by {@link #getImportedClasses}.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public ClassResolver getImportedClassResolver() {
 		return _clsresolver;

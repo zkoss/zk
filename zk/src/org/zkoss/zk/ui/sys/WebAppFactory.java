@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * To instantiate UI objects (such as desktop, page, component and session),
  * please implement {@link UiFactory} instead.
  * @author tomyeh
- * @since 5.5.0
+ * @since 6.0.0
  * @see UiFactory
  */
 public interface WebAppFactory {

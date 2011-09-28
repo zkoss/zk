@@ -133,13 +133,13 @@ public class Treecell extends LabelImageElement {
 		return col != null ? col.getWidth(): null;
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the width of Treecell, please 
+	 * @deprecated as of release 6.0.0. To control the width of Treecell, please 
 	 * use {@link Treecol#setWidth(String)} instead.
 	 */
 	public void setWidth(String width) {
 	}
 	/**
-	 * @deprecated as of release 5.5.0. To control the hflex of Treecell, please 
+	 * @deprecated as of release 6.0.0. To control the hflex of Treecell, please 
 	 * use {@link Treecol#setHflex(String)} instead.
 	 */
 	public void setHflex(String flex) {

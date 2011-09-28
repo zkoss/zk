@@ -912,7 +912,7 @@ public class UiEngineImpl implements UiEngine {
 	CreateInfo ci, Component comp, Object meta) {
 		final Page page = ci.page;
 		if (meta instanceof ZScriptInfo) {
-			//Spec fix since 5.5.0: if/unless shall be evaluated first
+			//Spec fix since 6.0.0: if/unless shall be evaluated first
 			final ZScriptInfo zsInfo = (ZScriptInfo)meta;
 			if (isEffective(zsInfo, page, comp)) {
 				if (zsInfo.isDeferred()) {
@@ -2426,7 +2426,7 @@ public class UiEngineImpl implements UiEngine {
 		 * It is designed to be overriden if you'd like to alter the component
 		 * and its children after they are rendered.
 		 * @param comps the collection of components that have been redrawn.
-		 * @since 5.5.0
+		 * @since 6.0.0
 		 */
 		public void afterRenderComponents(Collection comps);
 	}

@@ -181,18 +181,18 @@ public interface Execution extends Scope {
 	 * @return wether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
 	/** Removes a name resolve that was added by {@link #addVariableResolver}.
 	 *
 	 * @return false if resolved is not added before.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
 	/** Returns if the specified variable resolved has been registered
 	 * @see #addVariableResolver
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public boolean hasVariableResolver(VariableResolver resolver);
 
@@ -703,7 +703,7 @@ public interface Execution extends Scope {
 	 * Ignored if null.
 	 * @return the first component being created.
 	 * @see #createComponents(String, Component, Component, VariableResolver)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Component createComponents(PageDefinition pagedef,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -731,7 +731,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Component createComponents(String uri, Component parent,
 	Component insertBefore, VariableResolver resolver);
@@ -765,7 +765,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Component createComponentsDirectly(String content, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -800,7 +800,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Component createComponentsDirectly(Document content, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver);
@@ -835,7 +835,7 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
 	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public Component createComponentsDirectly(Reader reader, String extension,
 	Component parent, Component insertBefore, VariableResolver resolver)

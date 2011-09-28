@@ -64,14 +64,14 @@ public class Panelchildren extends XulElement {
 	}
 	/**
 	 * This method is unsupported. Please use {@link Panel#setHflex(String)} instead.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void setHflex(String flex) {
 		throw new UnsupportedOperationException("readonly");
 	}
 	/**
 	 * This method is unsupported. Please use {@link Panel#setVflex(String)} instead.
-	 * @since 5.5.0
+	 * @since 6.0.0
 	 */
 	public void setVflex(String flex) {
 		throw new UnsupportedOperationException("readonly");
