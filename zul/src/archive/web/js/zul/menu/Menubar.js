@@ -176,8 +176,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	/**
 	 * Sync each menu's width
 	 */
-	_syncChdWidth: function () {	
-	},
+	_syncChdWidth: zk.$void,
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
 			childs = jq(this.$n('cave')).children();
@@ -267,7 +266,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		switch (direction) {
 		case "left":
 			for (var i = 0; i < childLen; i++) {
-				if (childs[i].offsetLeft >= currScrollLeft) {
+				// B50-ZK-381: Menu scrolling bug
+				// child width may be larger than body.offsetWidth 
+				if (childs[i].offsetLeft >= currScrollLeft ||
+						childs[i].offsetLeft+(childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
 					var preChild = childs[i].previousSibling;
 					if (!preChild)	return;
 					movePos = currScrollLeft - (currScrollLeft - preChild.offsetLeft);

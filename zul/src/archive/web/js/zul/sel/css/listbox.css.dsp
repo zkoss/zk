@@ -80,6 +80,12 @@ div.z-listfooter-cnt, div.z-listheader-cnt {
 	.z-word-wrap div.z-listheader-cnt {
 	word-wrap: break-word;
 }
+.z-listheader, .z-listheader .z-listheader-cnt,
+.z-listcell .z-listcell-cnt,
+.z-listfooter .z-listfooter-cnt,
+.z-auxheader, .z-auxheader .z-auxheader-cnt {
+	text-overflow: ellipsis;
+}
 <%-- faker uses only --%>
 tr.z-listbox-faker, tr.z-listbox-faker th, tr.z-listbox-faker div {
 	height: 0 !important;
@@ -194,10 +200,6 @@ td.z-listgroupfoot-inner div.z-listcell-cnt {
 div.z-listbox-header, div.z-listbox-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
 }
-div.z-listbox-header th.z-listheader,
-div.z-listbox-header th.z-auxheader {
-	text-overflow: ellipsis;
-}
 div.z-listheader-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
@@ -305,6 +307,11 @@ tr.z-listitem td.z-listitem-focus {
 }
 .z-listitem-img-disd {
 	opacity: .6;
-	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
+<c:if test="${c:browser('opera')}">
+tr.z-listitem-disd .z-listitem-img-checkbox,
+tr.z-listitem-disd .z-listitem-img-radio {
+	overflow: visible;<%-- Bug ZK-397 --%>
+}
+</c:if>

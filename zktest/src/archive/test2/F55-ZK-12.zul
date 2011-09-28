@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F55-ZK-12.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  27 16:10:13 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click 'ok' checkbox, the 'ok' checkbox should be disabled and enable again in a moment, the 'cancel' checkbox should be disabled.</li>
+<li>Click 'active cancel checkbox' button, the 'cancel' checkbox should be enabled.</li>
+<li>Click 'cancel' checkbox, the 'cancel' checkbox should be disabled and enable again in a moment, the 'ok' checkbox should be disabled.</li>
+<li>Click 'active ok checkbox' button, the 'ok' checkbox should be enabled.</li>
+</ol>
+]]></html>
+	<vbox>
+		<hbox>
+			<checkbox id="ok" onClick="" label="ok" autodisable="self, +cancel" />
+			<checkbox id="cancel" label="cancel" autodisable="self, +ok" />
+		</hbox>
+		<hbox>
+			<button label="active cancel checkbox">
+				<attribute name="onClick">
+					cancel.setDisabled(false);
+				</attribute>
+			</button>
+			<button label="active ok checkbox">
+				<attribute name="onClick">
+					ok.setDisabled(false);
+				</attribute>
+			</button>
+		</hbox>
+	</vbox>
+</zk>

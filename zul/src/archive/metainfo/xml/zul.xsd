@@ -537,6 +537,7 @@
 			<xs:element ref="colorbox" />
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
+			<xs:element ref="combobutton" />
 			<xs:element ref="datebox" />
 			<xs:element ref="decimalbox" />
 			<xs:element ref="div" />
@@ -610,6 +611,7 @@
 				<xs:element ref="colorbox" />
 				<xs:element ref="columnlayout" />
 				<xs:element ref="combobox" />
+				<xs:element ref="combobutton" />
 				<xs:element ref="datebox" />
 				<xs:element ref="decimalbox" />
 				<xs:element ref="div" />
@@ -1006,6 +1008,27 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
+	</xs:complexType>
+	<!-- combobutton -->
+	<xs:element name="combobutton" type="combobuttonType" />
+	<xs:complexType name="combobuttonType">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:element ref="popup" />
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:sequence>
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="dir" type="dirAttrType" use="optional" />
+		<xs:attribute name="type" type="buttonTypeAttrType" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="autodisable" type="xs:string" use="optional" />
+		<xs:attribute name="tabindex" type="intType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- custom-attributes -->
 	<xs:element name="custom-attributes" type="custom-attributesType" />

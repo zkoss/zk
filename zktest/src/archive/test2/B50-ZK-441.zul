@@ -1,0 +1,21 @@
+<!--
+	B50-ZK-441.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Sep 22 11:55:21 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Open the Colorbox on the right.</div>
+	<div>2. Switch from palette to color picker view. The right edge of the popup should not be cut.</div>
+	<div>2. Switch back to the palette view. The right edge of the popup should align to the right border of browser.</div>
+	<div></div>
+	<div style="text-align:right">
+		<colorbox />
+	</div>
+</zk>

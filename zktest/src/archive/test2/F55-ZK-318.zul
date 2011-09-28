@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F55-ZK-318.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  13 16:57:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click test combobutton one, message box should display 'combobutton one clicked'.</li>
+<li>Click right arrow of test combobutton one, message box should display 'combobutton one opened', message box two should display 'popup opened' and a drop down should opened.</li>
+<li>Click left button or right arrow of test combobutton one again, message box should display 'combobutton one closed' and the drop down opened before should closed.</li>
+<li>Do step 1-3 for test combobutton two, the drop down of combobutton two is a menupopup.</li>
+<li>Click right arrow of test combobutton two, a menupopup should opened</li>
+<li>Check whether each level of menu can be opened correctly</li>
+<li>Click Help on menubar at the bottom and mouseover About, then click on the blank place of page to close it.</li>
+<li>Repeat step 5 and 6</li>
+<li>Open the popup of test combobutton one, click listcell in the inner listbox, the popup should be closed and the test combobutton one should not be focused</li>
+<li>Click 'auto drop' check box, the drop down should open while mouseover and close while mouseout the right side drop icon of both combobutton.</li>
+<li>Click change image button, the image of two combobutton should be changed.
+<li>Clear message box one and message box two then click 'open combobutton one' button, both message box should keep blank.
+<li>Clear message box one and message box two then click 'open combobutton two' button, both message box should keep blank.
+<li>Open combobutton two, select a color from About -> Menu -> Color Picker, the background of test win should changed.</li>
+<li>Click change child button, all above should work fine.
+<li>Do above for each theme, everything should be ok.</li>
+</ol>
+]]>
+</html>
+	<zscript>
+		int count = 0;
+	</zscript>
+	<window id="win1" title="test win" border="normal">
+		<vbox>
+			<hbox>
+				<button label="change to classic blue">
+					<attribute name="onClick">
+						org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "classicblue");
+						Executions.sendRedirect(null);
+					</attribute>
+				</button>
+				<button label="change to breeze">
+					<attribute name="onClick">
+						org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+						Executions.sendRedirect(null);
+					</attribute>
+				</button>
+				<button label="change to sapphire">
+					<attribute name="onClick">
+						org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+						Executions.sendRedirect(null);
+					</attribute>
+				</button>
+				<button label="change to silvertail">
+					<attribute name="onClick">
+						org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+						Executions.sendRedirect(null);
+					</attribute>
+				</button>
+			</hbox>
+			<hbox>
+				message box
+				<textbox id="messageBox" width="300px" />
+				message box two
+				<textbox id="messageBoxTwo" width="300px" />
+			</hbox>
+			<hbox>
+				<combobutton id="bd" label="test combobutton one" image="img/circle.png">
+					<attribute name="onClick">
+						messageBox.setValue(count++ + ". combobutton one clicked");
+					</attribute>
+					<attribute name="onOpen">
+						messageBox.setValue(count++ + ". combobutton one " + (event.isOpen()? "opened" : "closed"));
+					</attribute>
+					<popup id="ppOne">
+						<attribute name="onOpen">
+							messageBoxTwo.setValue("popup " + (event.isOpen()? "opened" : "closed"));
+						</attribute>
+						<vbox>
+							<hbox>
+								Search
+								<textbox />
+							</hbox>
+							<listbox width="200px" onClick="self.getParent().getParent().getParent().setOpen(false);">
+								<listhead>
+									<listheader label="Name" />
+									<listheader label="Description" />
+								</listhead>
+								<listitem>
+									<listcell label="John" />
+									<listcell label="CEO" />
+								</listitem>
+								<listitem>
+									<listcell label="Joe" />
+									<listcell label="Engineer" />
+								</listitem>
+								<listitem>
+									<listcell label="Mary" />
+									<listcell label="Supervisor" />
+								</listitem>
+							</listbox>
+						</vbox>
+					</popup>
+				</combobutton>
+				<combobutton id="bd2" label="test combobutton two">
+					<attribute name="onClick">
+						messageBox.setValue(count++ + ". combobutton two clicked");
+					</attribute>
+					<attribute name="onOpen">
+						messageBox.setValue(count++ + ". combobutton two " + (event.isOpen()? "opened" : "closed"));
+					</attribute>
+					<menupopup  id="ppTwo">
+						<attribute name="onOpen">
+							messageBoxTwo.setValue("menu popup " + (event.isOpen()? "opened" : "closed"));
+						</attribute>
+						<menuitem label="Index" onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+								<menu label="others">
+									<menupopup>
+										<menuitem label="About theme"
+											onClick="alert(self.label)" />
+										<menuitem label="About addon"
+											onClick="alert(self.label)" />
+									</menupopup>
+								</menu>
+								<menu label="Menu">
+									<menupopup>
+										<menu label="Color Picker" content="#color=#029BCB">
+											<attribute name="onChange"><![CDATA[
+												win1.setContentStyle("background-color:" + event.value);
+											]]></attribute>
+										</menu>
+									</menupopup>
+								</menu>
+							</menupopup>
+						</menu>
+					</menupopup>
+				</combobutton>
+			</hbox>
+			<menubar id="menubar" width="100%">
+				<menu label="Project" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+					<menupopup>
+						<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
+							onClick="alert(self.label)" />
+						<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
+							onClick="alert(self.label)" />
+						<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
+							onClick="alert(self.label)" />
+						<menuseparator />
+						<menuitem label="Exit" image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+				<menu label="Help" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+					<menupopup>
+						<menuitem label="Index" onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+				<menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+					<menupopup>
+						<menuitem label="Index" onClick="alert(self.label)" />
+						<menu label="Color Picker" content="#color=#184dc6"/>
+					</menupopup>
+				</menu>
+			</menubar>
+			<checkbox label="auto drop">
+				<attribute name="onCheck">
+					bd.setAutodrop(self.checked);
+					bd2.setAutodrop(self.checked);
+				</attribute>
+			</checkbox>
+			<hbox>
+				<button label="change child" onClick="">
+					<attribute name="onClick">
+						Component a = ppOne;
+						Component b = ppTwo;
+						Component pa = ppOne.getParent();
+						Component pb = ppTwo.getParent();
+						ppOne.setParent(null);
+						ppTwo.setParent(null);
+						a.setParent(pb);
+						b.setParent(pa);
+					</attribute>
+				</button>
+				<button label="change image">
+					<attribute name="onClick">
+						String i1 = bd.getImage();
+						String i2 = bd2.getImage();
+						if (i2 == null) {
+							bd.setImage("img/coffee.gif");
+							bd2.setImage("img/circle.png");
+						} else {
+							bd.setImage(i2);
+							bd2.setImage(i1);
+						}
+					</attribute>
+				</button>
+				<button label="open combobutton one">
+					<attribute name="onClick">
+						bd.setOpen(true);
+					</attribute>
+				</button>
+				<button label="open combobutton two">
+					<attribute name="onClick">
+						bd2.setOpen(true);
+					</attribute>
+				</button>
+			</hbox>
+		</vbox>
+	</window>
+</zk>

@@ -31,23 +31,24 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.io.Serializables;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
@@ -56,9 +57,9 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  *  A container which can be used to hold a tabular
@@ -126,7 +127,7 @@ public class Tree extends MeshElement {
 	 * If exists, it is the last child
 	 */
 	private transient Paging _paging;
-	private EventListener _pgListener, _pgImpListener;
+	private EventListener _pgListener, _pgImpListener, _modelInitListener;
 
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
@@ -158,7 +159,39 @@ public class Tree extends MeshElement {
 			}
 		};
 	}
-
+	public void onPageAttached(Page newpage, Page oldpage) {
+		super.onPageAttached(newpage, oldpage);
+		if (oldpage == null) {
+			Executions.getCurrent().setAttribute("zkoss.Tree.deferInitModel_"+getUuid(), Boolean.TRUE);
+			//prepare a right moment to init Tree(must be as early as possible)
+			addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
+			Events.postEvent(20000, new Event("onInitModel", this));
+		}
+	}
+	
+	private class ModelInitListener implements SerializableEventListener {
+		public void onEvent(Event event) throws Exception {
+			if (_modelInitListener != null) {
+				Tree.this
+						.removeEventListener("onInitModel", _modelInitListener);
+				_modelInitListener = null;
+			}
+			if (_model != null) { //rows not created yet
+				if (_treechildren == null) {
+					renderTree();
+				} else
+					initModel();
+			} else {
+				//bug# 3039282: NullPointerException when assign a model to Grid at onCreate
+				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
+				Executions.getCurrent().removeAttribute("zkoss.Tree.deferInitModel_"+getUuid());
+			}
+		}
+		private void initModel() {
+			Executions.getCurrent().removeAttribute("zkoss.Tree.deferInitModel_"+getUuid());
+			setModel(_model);
+		}
+	}
 	void addVisibleItemCount(int count) {
 		if (inPagingMold()) {
 			Paginal pgi = getPaginal();

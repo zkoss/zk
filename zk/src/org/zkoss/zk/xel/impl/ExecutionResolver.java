@@ -73,6 +73,9 @@ public class ExecutionResolver implements VariableResolverX {
 	//-- VariableResolverX --//
 	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
 		if (base != null) {
+			Object o = ((ExecutionCtrl)_exec).getExtraXelVariable(ctx, base, onm);
+			if (o != null)
+				return o;
 			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
 			return page != null ? page.getXelVariable(ctx, base, onm, true): null;
 		}
@@ -154,7 +157,7 @@ public class ExecutionResolver implements VariableResolverX {
 					return o;
 			}
 
-			Object o = _exec.getXelVariable(name);
+			Object o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
 			if (o != null)
 				return o;
 
@@ -184,7 +187,7 @@ public class ExecutionResolver implements VariableResolverX {
 				if (o != null)
 					return o;
 
-				o = _exec.getXelVariable(name);
+				o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
 				if (o != null)
 					return o;
 

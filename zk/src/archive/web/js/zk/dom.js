@@ -55,6 +55,8 @@ zjq = function (jq) { //ZK extension
 				n.focus();
 				var w = zk.Widget.$(n);
 				if (w) zk.currentFocus = w;
+
+				zjq.fixInput(n);
 			} catch (e) {
 			}
 		}, -1); //FF cannot change focus to a DOM element being animated
@@ -199,6 +201,7 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
+	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
@@ -376,7 +379,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
-		var ret = _jq.init.call(this, sel, ctx);
+		var ret = _jq.init.apply(this, arguments);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
@@ -397,10 +400,12 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		return this;
 	},
 	bind: function(type, data, fn) {
-		return this.zbind(zjq.eventTypes[type] || type, data, fn);
+		type = zjq.eventTypes[type] || type;
+		return this.zbind.apply(this, arguments);
 	},
 	unbind: function(type, fn){
-		return this.zunbind(zjq.eventTypes[type] || type, fn);
+		type = zjq.eventTypes[type] || type;
+		return this.zunbind.apply(this, arguments);
 	}
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,
@@ -1815,7 +1820,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		el = jq(el||[], zk)[0];
 		var ifr = document.createElement("iframe");
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
-		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
+		ifr.style.cssText = "position:absolute;overflow:hidden;opacity:0;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
 		ifr.src = zjq.src0;

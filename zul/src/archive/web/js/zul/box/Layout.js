@@ -71,10 +71,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 */
 	syncSize: function () {
 		this._shallSize = false;
-		if (this.desktop) {
-			zWatch.fire('onFitSize', this, {reverse:true});
-			zWatch.fire('onSize', this);
-		}
+		if (this.desktop)
+			zUtl.fireSized(this);
 	},
 	onResponse: function () {
 		if (this._shallSize)

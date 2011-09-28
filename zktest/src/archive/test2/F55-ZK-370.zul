@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F55-ZK-370.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  20 16:57:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>There are four textbox below, single-line, single-line-rounded, multi-line, multi-line-rounded from left to right</li>
+<li>The textbox with rounded should has round corner</li>
+<li>In stead of on older browser such like IE6/7 which does not support CSS3</li>
+<li>Test it with each theme</li>
+</ol>
+]]>
+</html>
+	<hbox>
+		<button label="change to classic blue">
+			<attribute name="onClick">
+				org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "classicblue");
+				Executions.sendRedirect(null);
+			</attribute>
+		</button>
+		<button label="change to breeze">
+			<attribute name="onClick">
+				org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+				Executions.sendRedirect(null);
+			</attribute>
+		</button>
+		<button label="change to sapphire">
+			<attribute name="onClick">
+				org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+				Executions.sendRedirect(null);
+			</attribute>
+		</button>
+		<button label="change to silvertail">
+			<attribute name="onClick">
+				org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+				Executions.sendRedirect(null);
+			</attribute>
+		</button>
+	</hbox>
+	<textbox value="single-line" />
+	<textbox mold="rounded" value="single-line-rounded" />
+	<textbox rows="2" value="multi-line" />
+	<textbox mold="rounded" rows="2" value="multi-line-rounded" />
+</zk>

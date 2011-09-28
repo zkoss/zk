@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
@@ -24,14 +23,12 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.ext.Readonly;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSelect;
@@ -42,7 +39,6 @@ import org.zkoss.zul.Constraint;
 import org.zkoss.zul.ClientConstraint;
 import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.SimpleConstraint;
-import org.zkoss.zul.Timebox;
 import org.zkoss.zul.ext.Constrainted;
 
 /**
@@ -192,14 +188,14 @@ implements Constrainted, Readonly, Disable {
 	 * to call this method.
 	 * However, if a constraint depends on multiple input fields and
 	 * the error can be corrected by changing one of these fields,
-	 * then you may have to clear the error message manullay by invoking
+	 * then you may have to clear the error message manually by invoking
 	 * this method.
 	 *
 	 * <p>For example, assume you have two {@link org.zkoss.zul.Intbox}
 	 * and want the value of the first one to be smaller than that of the
 	 * second one. Then, you have to call this method for the second intbox
 	 * once the validation of the first intbox succeeds, and vice versa.
-	 * Otherwise, the error message for the seoncd intbox remains if
+	 * Otherwise, the error message for the second intbox remains if
 	 * the user fixed the error by lowering down the value of the first one
 	 * Why? The second intbox got no idea to clear the error message
 	 * (since its content doesn't change).
@@ -210,7 +206,7 @@ implements Constrainted, Readonly, Disable {
 	 * If false, the current value is assumed to be correct and
 	 * the following invocation to {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
 	 * won't check the value again.
-	 * Note: when an input element is constrcuted, the initial value
+	 * Note: when an input element is constructed, the initial value
 	 * is assumed to be "not-validated-yet".
 	 * @since 3.0.1
 	 */
@@ -257,7 +253,7 @@ implements Constrainted, Readonly, Disable {
 	 * {@link org.zkoss.zul.Textbox#setValue} and
 	 * {@link org.zkoss.zul.Intbox#setValue}.
 	 *
-	 * <p>It invokes {@link #coerceFromString} fisrt and then {@link #validate}.
+	 * <p>It invokes {@link #coerceFromString} first and then {@link #validate}.
 	 * Derives might override them for type conversion and special
 	 * validation.
 	 *
@@ -335,7 +331,7 @@ implements Constrainted, Readonly, Disable {
 		}
 	}
 	/** Shows the error message in the custom way by calling
-	 * ({@link CustomConstraint#showCustomError}, if the contraint
+	 * ({@link CustomConstraint#showCustomError}, if the constraint
 	 * implements {@link CustomConstraint}.
 	 *
 	 * <p>Derived class shall call this method before throwing
@@ -360,7 +356,7 @@ implements Constrainted, Readonly, Disable {
 	}
 
 	/** Returns the maxlength.
-	 * <p>Default: 0 (non-postive means unlimited).
+	 * <p>Default: 0 (non-positive means unlimited).
 	 */
 	public int getMaxlength() {
 		return _auxinf != null ? _auxinf.maxlength: 0;
@@ -404,6 +400,24 @@ implements Constrainted, Readonly, Disable {
 			smartUpdate("tabindex", getTabindex());
 		}
 	}
+	/** Returns true if onChange event is sent as soon as user types in the input 
+	 * component.
+	 * <p>Default: false
+	 * @since 5.5.0
+	 */
+	public boolean getInstant() {
+		return _auxinf != null && _auxinf.instant;
+	}
+	/** Sets the instant attribute. When the attribute is true, onChange event 
+	 * will be fired as soon as user type in the input component.
+	 * @since 5.5.0
+	 */
+	public void setInstant(boolean instant) {
+		if (getInstant() != instant) {
+			initAuxInfo().instant = instant;
+			smartUpdate("instant", getInstant());
+		}
+	}
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 */
@@ -431,8 +445,7 @@ implements Constrainted, Readonly, Disable {
 		if (!Objects.equals(_auxinf != null ? _auxinf.constr: null, constr)) {
 			initAuxInfo().constr = constr;
 			_valided = false;
-
-			boolean constrDone = false;
+			
 			if (_auxinf.constr instanceof CustomConstraint) { //client ignored if custom
 				smartUpdate("constraint", "[c"); //implies validated at server
 				return;
@@ -511,13 +524,13 @@ implements Constrainted, Readonly, Disable {
 	 * <p>If you feel confusing with setValue, such as {@link org.zkoss.zul.Textbox#setValue},
 	 * it is usually better to use setValue instead. This method
 	 * is reserved for developer that really want to set an 'illegal'
-	 * value (such as an empty string to a textbox with no-empty contraint).
+	 * value (such as an empty string to a textbox with no-empty constraint).
 	 *
 	 * <p>Note: since 3.0.1, the value will be re-validate again if
 	 * {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
 	 * is called. In other words, it is assumed that the specified value
 	 * is not validated yet -- the same state when this component is
-	 * created. If you want to avoid the re-valiation, you have to invoke
+	 * created. If you want to avoid the re-validation, you have to invoke
 	 * {@link #clearErrorMessage()}.
 	 *
 	 * <p>Like setValue, the result is returned back to the server
@@ -570,13 +583,13 @@ implements Constrainted, Readonly, Disable {
 
 	/**
 	 * Sets the text of this InputElement to the specified text which is
-	 * begining with the new start point and ending with the new end point.
+	 * beginning with the new start point and ending with the new end point.
 	 * 
 	 * @param start the start position of the text (included)
 	 * @param end the end position of the text (excluded)
 	 * @param newtxt the new text to be set.
 	 * @param isHighLight
-	 *            Sets whether it will represent highlihgt style or cursor
+	 *            Sets whether it will represent highlight style or cursor
 	 *            style.If the start point same with the end point always
 	 *            represent cursor style.
 	 */
@@ -615,7 +628,7 @@ implements Constrainted, Readonly, Disable {
 	public void setSelectionRange(int start, int end) {
 		response(new AuSelect(this, start, end));
 	}
-
+	
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
 	 * this methid is called when {@link #getText} or {@link #getTargetValue} is
@@ -755,6 +768,7 @@ implements Constrainted, Readonly, Disable {
 		if ((v = getMaxlength()) > 0) renderer.render("maxlength", v);
 		if (_cols > 0) renderer.render("cols", _cols);
 		if ((v = getTabindex()) != 0) renderer.render("tabindex", v);
+		if (getInstant()) renderer.render("instant", true);
 
 		boolean constrDone = false;
 		final Constraint constr = _auxinf != null ? _auxinf.constr: null;
@@ -805,8 +819,10 @@ implements Constrainted, Readonly, Disable {
 		private String name;
 		private int maxlength;
 		private int tabindex;
+		/** Whether to send onChange as soon as possible */
+		private boolean instant;
 		private Constraint constr;
-		/** Whether the validation is calused by {@link #isValid}. */
+		/** Whether the validation is caused by {@link #isValid}. */
 		private transient boolean checkOnly;
 
 		public Object clone() {

@@ -80,7 +80,8 @@ public class Paging extends XulElement implements Paginal {
 			_pgsz = size;
 			smartUpdate("pageSize", _pgsz);
 			updatePageNum();
-			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
+			// B50-ZK-345: speed up onPagingImpl to surpass onInitRender
+			Events.postEvent(10001, new PagingEvent("onPagingImpl", this, _actpg));
 				//onPagingImpl is used for implementation purpose only
 		}
 	}

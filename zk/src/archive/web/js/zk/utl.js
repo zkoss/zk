@@ -567,6 +567,13 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 5.0.8
 	 */
 	fireSized: function (wgt, bfsz) {
+		if (zUtl.isImageLoading()) {
+			var f = arguments.callee;
+			setTimeout(function () {
+				return f(wgt, bfsz);
+			}, 20);
+			return;
+		}
 		wgt = _onSizeTarget(wgt);
 		if (!(bfsz < 0)) //don't use >= (because bfsz might be undefined)
 			zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
@@ -587,6 +594,37 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	fireShown: function (wgt, bfsz) {
 		zWatch.fireDown('onShow', wgt);
 		zUtl.fireSized(wgt, bfsz);
+	},
+	/**
+	 * Loads an image before ZK client engine to calculate the widget's layout.
+	 * @param String url the loading image's localation
+	 * @since 5.5.0
+	 */
+	loadImage: function (url) {
+		if (!_imgMap[url]) {
+			_imgMap[url] = true;
+			_loadImage(url);
+		}
+	},
+	/**
+	 * Checks whether all the loading images are finish.
+	 * @see #loadImage
+	 * @since 5.5.0 
+	 */
+	isImageLoading: function () {
+		for (var n in _imgMap)
+			return true;
+		return false;
 	}
 };
+
+var _imgMap = {};
+function _loadImage(url) {
+	var img = new Image(),
+		f = function () {
+			delete _imgMap[url];
+		};
+	img.onerror = img.onload = f;
+	img.src = url;
+}
 })();

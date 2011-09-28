@@ -107,20 +107,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var s = w.widgetName;
 		return s + (w.id ? '$' + w.id: '') + '#' + w.uuid + '$' + w.$oid;
 	}
-	function toLogMsg(ars, isDetailed) {
-		var msg = [];
+	function toLogMsg(ars, detailed) {
+		var msg = [], Widget = zk.Widget;
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
 			if (ar && (jq.isArray(ar) || ar.zk)) //ar.zk: jq(xx)
-				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
-			else if (zk.Widget.isInstance(ar))
+				msg.push('[' + toLogMsg(ar, detailed) + ']');
+			else if (Widget && Widget.isInstance(ar))
 				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
-				var w = zk.Widget.$(ar);
+				var w = Widget && Widget.$(ar);
 				if (w) msg.push(jq.nodeName(ar), (ar != w.$n() ? '#'+ar.id+'.'+ar.className:''), ':', wgt2s(w));
 				else msg.push(jq.nodeName(ar), '#', ar.id);
-			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
+			} else if (detailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
 				for (var v in ar)
 					s.push(v, ':', ar[v], ',\n');
@@ -188,6 +188,20 @@ zk.copy(zk, {
 	 * @since 5.0.8
 	 */
 	classes: {},
+	/** Returns if the given JS object is a class ({@link zk.Class}).
+	 * @param Object cls the object to test whether it is a class (aka., a  ZK class)
+	 * @since 5.0.9
+	 */
+	isClass: function (cls) {
+		return cls && cls.$class == zk.Class;
+	},
+	/** Returns whether the given JS object is a ZK object ({@link zk.Object}).
+	 * @param Object o the object to test whether it is a ZK object
+	 * @since 5.0.9
+	 */
+	isObject: function (o) {
+		return o && o.$supers != null;
+	},
 	/** The delay before showing the processing prompt (unit: milliseconds).
 	 * <p>Default: 900 (depending on the server's configuration)
 	 * @type int
@@ -1255,6 +1269,7 @@ zk.log('value is", value);
 				return f.apply(o, arguments);
 			};
 	}
+zk.Class = function () {}; //regClass() requires zk.Class
 regClass(zk.Object = newClass());
 /** @class zk.Object
  * The root of the class hierarchy.
@@ -1491,7 +1506,7 @@ if (klass1.isAssignableFrom(klass2)) {
 	}
 };
 zk.copy(zk.Object, _zkf);
-zk.copy(regClass(zk.Class = function () {}, zk.Object), _zkf);
+zk.copy(regClass(zk.Class, zk.Object), _zkf);
 
 //error box//
 var _erbx, _errcnt = 0;

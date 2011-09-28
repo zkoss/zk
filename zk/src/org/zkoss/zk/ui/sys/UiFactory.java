@@ -34,9 +34,9 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
- * Used to create {@link Session}, {@link Desktop}, {@link Page} and
- * {@link Component}. It is also used to load path/URL
- * into {@link PageDefinition}.
+ * Used to create {@link Session}, {@link Desktop}, {@link Page},
+ * {@link Component}, {@link Composer}, and {@link ServerPush}.
+ * It is also used to load path/URL into {@link PageDefinition}.
  *
  * <p>To customize the implementation of {@link WebApp}, please
  * specify <a href="http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_system-config_Element/The_web-app-class_Element">web-app-class</a>

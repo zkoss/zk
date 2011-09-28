@@ -30,11 +30,13 @@ import org.zkoss.zk.xel.EvaluatorRef;
 /*package*/ abstract class LeafInfo implements NodeInfo, java.io.Serializable {
 	//Note: getEvaluatorRef() is the same as getPageDefintion().getEvaluatorRef()
 	//However, we store _evalr since PageDefinition is not serializable
+	//Also notice that _evalr will be initialized later when this node is added
 	/*package*/ EvaluatorRef _evalr;
 	//transient since it is maintained by BranchInfo.readObject()
 	private transient NodeInfo _parent;
 
 	/*package*/ LeafInfo() {
+		//_evalr will be added later when this node is added as child (see BranchInfo)
 	}
 	/*package*/ LeafInfo(NodeInfo parent) {
 		parent.appendChild(this);

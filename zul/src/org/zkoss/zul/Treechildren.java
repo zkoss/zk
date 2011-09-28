@@ -67,19 +67,6 @@ public class Treechildren extends XulElement {
 		return parent instanceof Treeitem ?
 			((Treeitem)parent).getTreerow(): null;
 	}
-//	/** Returns whether this is visible.
-//	 * <p>Besides depends on {@link #setVisible}, it also depends on
-//	 * whether all its ancestors is open.
-//	 */
-	/*
-	public boolean isVisible() {
-		if (!super.isVisible())
-			return false;
-		Component comp = getParent();
-		return !(comp instanceof Treeitem) || 
-			((Treeitem)comp).isOpen() && ((Treeitem)comp).isVisible(); //recursive
-	}
-	*/
 	/*package*/ boolean isRealVisible() {
 		if(!isVisible())
 			return false;
@@ -179,7 +166,19 @@ public class Treechildren extends XulElement {
 		}
 		return super.insertBefore(newChild, refChild);
 	}
-
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * components, please refer to {@link Tree} and {@link Treecol} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * components, please refer to {@link Tree} and {@link Treecol} instead.
+	 */
+	public void setHflex(String flex) {
+	}
+	
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tree)

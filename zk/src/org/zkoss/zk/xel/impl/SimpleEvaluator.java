@@ -80,7 +80,7 @@ public class SimpleEvaluator implements Evaluator {
 	}
 
 	/** Returns the expression factory. */
-	private ExpressionFactory getExpressionFactory() {
+	protected ExpressionFactory getExpressionFactory() {
 		if (_expf == null)
 			_expf = Expressions.newExpressionFactory(_expfcls);
 		return _expf;
@@ -89,7 +89,7 @@ public class SimpleEvaluator implements Evaluator {
 	 * Don't reuse it since it has attributes (that shall not be kept
 	 * after evaluation).
 	 */
-	private XelContext newXelContext(Object ref) {
+	protected XelContext newXelContext(Object ref) {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
 		return new SimpleXelContext(resolver, mapper);

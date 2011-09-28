@@ -61,6 +61,18 @@ public class Listhead extends HeadersElement {
 	public void setValue(Object value) {
 		_value = value;
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setHflex(String flex) {
+	}
 
 	//super//
 	public String getZclass() {

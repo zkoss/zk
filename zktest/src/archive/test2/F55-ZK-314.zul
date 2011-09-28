@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F55-ZK-314.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  9 16:37:38 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<custom-attributes org.zkoss.zul.image.preload="true"/>
+Please check the background of each image is enclosed correct.
+<separator/>
+1. You should see at least a yellow border at the right of the image button.
+<div style="background:yellow" hflex="min">
+<button upload="true" image="http://www.zkoss.org/img/zkpivottable_product_page.png"/>
+</div>
+2. You should see at least a yellow border at the right of the image button.
+<separator/>
+
+<div style="background:yellow" hflex="min">
+<toolbarbutton image="http://www.zkoss.org/resource/img/product/page/zss_notebook.png"/>
+</div>
+3. You should NOT see any blue border around the image below.
+<div style="background:blue" hflex="min">
+<image src="http://www.zkoss.org/img/zkcalendar.png"/>
+</div>
+</window>

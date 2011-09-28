@@ -171,7 +171,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			len = 0, th, lastTh;
 		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
-			len += (th.type ? th.getText(val): th.format()).length;
+			if (i == l-1) {
+				len += th.format().length;
+			} else
+				len += (th.type ? th.getText(val): th.format()).length;
 			if (th.type) lastTh = th;
 		}
 		return (lastTh.digits == 1) ? ++len: len;
@@ -531,15 +534,23 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.getTimeHandler().addTime(this, val);
 	},
 	getTimeHandler: function () {
-		var pos = zk(this.getInputNode()).getSelectionRange()[1];
-			//don't use [0], it may have a bug when the format is aHH:mm:ss 
+		var sr = zk(this.getInputNode()).getSelectionRange(),
+			start = sr[0],
+			end = sr[1];
+			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss 
+			//when use UP/Down key to change the time
 		
+		// Bug ZK-434
+		var hdler;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
-			if (f[i].index[0] <= pos && f[i].index[1] + 1 >= pos)
-				return f[i];
+			if (f[i].index[0] <= start) {
+				hdler = f[i]; 
+				if (f[i].index[1] + 1 >= end)
+					return f[i];
+			}
 		}
-		return this._fmthdler[0];
+		return hdler || this._fmthdler[0];
 	},
 	getNextTimeHandler: function (th) {
 		var f = this._fmthdler,
@@ -1005,6 +1016,25 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 			inp.value = val.substring(0, start) + text + val.substring(end);
 		}
 		this._addNextTime(wgt, num);
+	},
+	// Bug ZK-434, we have to delete a sets of "AM/PM", rather than a single word "A/P/M"
+	deleteTime: function (wgt, backspace) {
+		var inp = wgt.getInputNode(),
+			sel = zk(inp).getSelectionRange(),
+			pos = sel[0],
+			pos1 = sel[1],
+			start = this.index[0],
+			end = this.index[1] + 1,
+			val = inp.value;
+		if (pos1 - pos > end - start) 
+			return this.$supers('deleteTime', arguments);
+			
+		var t = [''];
+		for (var i = end - start; i > 0; i--)
+			t.push(' ');
+		
+		inp.value = val.substring(0, start) + t.join('') + val.substring(end);
+		zk(inp).setSelectionRange(start, start);
 	},
 	increase: function (wgt, up) {
 		var inp = wgt.getInputNode(),

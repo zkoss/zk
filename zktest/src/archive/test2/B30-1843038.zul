@@ -14,7 +14,7 @@ public class AnnotatedDatabinderComposer implements Composer
 	public void doAfterCompose(Component comp) throws Exception
 	{
 		AnnotateDataBinder binder = new AnnotateDataBinder(comp, true);
-		comp.setVariable("binder", binder, true);
+		comp.setAttribute("binder", binder, true);
 		binder.loadAll();
 	}
 

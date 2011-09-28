@@ -1,0 +1,73 @@
+<zk>
+	<div>
+		All the following Header/Cell/Footer should have ellipsis with long text. (The "..." symbol.)
+	</div>
+	<zscript>
+		String longmsg = "Long Long Long Long Long Long Long Long Label";
+	</zscript>
+	<style>
+		.z-footer-cnt, .z-listfooter-cnt, .z-treefooter-cnt,
+		.z-listcell-cnt, .z-treecell-cnt {
+			white-space: nowrap;
+		}
+	</style>
+	Grid:
+	<grid width="400px">
+		<auxhead>
+			<auxheader>Auxheader 1 (Text): ${longmsg}</auxheader>
+			<auxheader label="Auxheader 2 (Label): ${longmsg}" />
+		</auxhead>
+		<columns sizable="true">
+			<column>Column 1 (Text): ${longmsg}</column>
+			<column label="Column 2 (Label): ${longmsg}" />
+		</columns>
+		<rows>
+			<row nowrap="true">
+				Cell 1 (no Cell): ${longmsg}
+				<cell>Cell 2 (with Cell) ${longmsg}</cell>
+			</row>
+		</rows>
+		<foot>
+			<footer>Footer 1 (Text): ${longmsg}</footer>
+			<footer label="Footer 2 (Label): ${longmsg}" />
+		</foot>
+	</grid>
+	Listbox:
+	<listbox width="400px">
+		<listhead sizable="true">
+			<listheader>Listheader 1 (Text): ${longmsg}</listheader>
+			<listheader label="Listheader 2 (Label) ${longmsg}" />
+		</listhead>
+		<listitem>
+			<listcell>Listcell 1: ${longmsg}</listcell>
+			<listcell>Listcell 2: ${longmsg}</listcell>
+		</listitem>
+		<listitem label="Listitem Label: ${longmsg}" />
+		<listfoot>
+			<listfooter>Listfooter 1 (Text): ${longmsg}</listfooter>
+			<listfooter label="Listfooter 2 (Label): ${longmsg}" />
+		</listfoot>
+	</listbox>
+	Tree:
+	<tree width="400px">
+		<treecols sizable="true">
+			<treecol>Treecol 1 (Text): ${longmsg}</treecol>
+			<treecol label="Treecol 2 (Label): ${longmsg}" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treecell 1: ${longmsg}</treecell>
+					<treecell>Treecell 2: ${longmsg}</treecell>
+				</treerow>
+				<treechildren>
+					<treeitem label="Treeitem Label: ${longmsg}" />
+				</treechildren>
+			</treeitem>
+		</treechildren>
+		<treefoot>
+			<treefooter>Treefooter 1 (Text): ${longmsg}</treefooter>
+			<treefooter label="Treefooter 2 (Label): ${longmsg}" />
+		</treefoot>
+	</tree>
+</zk>

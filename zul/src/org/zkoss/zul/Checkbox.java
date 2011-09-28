@@ -45,6 +45,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/** Whether it is checked. */
 	/*package*/ boolean _checked;
 	private boolean _disabled;
+	private String _autodisable;
 	
 	static {
 		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
@@ -61,6 +62,48 @@ implements org.zkoss.zk.ui.ext.Disable {
 		super(label, image);
 	}
 
+	/** Returns a list of component IDs that shall be disabled when the user
+	 * clicks this checkbox.
+	 * @since 5.5.0
+	 */
+	public String getAutodisable() {
+		return _autodisable;
+	}
+	/** Sets a list of component IDs that shall be disabled when the user
+	 * clicks this checkbox.
+	 *
+	 * <p>To represent the checkbox itself, the developer can specify <code>self</code>.
+	 * For example, <code>&lt;checkbox id="ok" autodisable="self,cancel"/></code>
+	 * is the same as <code>&lt;checkbox id="ok" autodisable="ok,cancel"/></code>
+	 * that will disable
+	 * both the ok and cancel checkboxes when an user clicks it.
+	 *
+	 * <p>The checkbox being disabled will be enabled automatically
+	 * once the client receives a response from the server.
+	 * In other words, the server doesn't notice if a checkbox is disabled
+	 * with this method.
+	 *
+	 * <p>However, if you prefer to enable them later manually, you can
+	 * prefix with '+'. For example,
+	 * <code>&lt;checkbox id="ok" autodisable="+self,+cancel"/></code>
+	 *
+	 * <p>Then, you have to enable them manually such as
+	 * <pre><code>if (something_happened){
+	 *  ok.setDisabled(false);
+	 *  cancel.setDisabled(false);
+	 *</code></pre>
+	 *
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public void setAutodisable(String autodisable) {
+		if (autodisable == null)
+			autodisable = "";
+		if (!Objects.equals(_autodisable, autodisable)) {
+			_autodisable = autodisable;
+			smartUpdate("autodisable", _autodisable);
+		}
+	}
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
@@ -178,6 +221,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 		super.renderProperties(renderer);
 		if (_value != null)
 			render(renderer, "value", _value);
+		if (_autodisable != null)
+			render(renderer, "autodisable", _autodisable);
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 
@@ -201,5 +246,13 @@ implements org.zkoss.zk.ui.ext.Disable {
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+	//@Override
+	protected void updateByClient(String name, Object value) {
+		if ("disabled".equals(name))
+			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
+				"true".equals(Objects.toString(value)));
+		else
+			super.updateByClient(name, value);
 	}
 }

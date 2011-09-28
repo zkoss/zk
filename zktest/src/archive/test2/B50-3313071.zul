@@ -15,8 +15,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <window mode="modal" title="Edit Appointment" border="normal"
 position="center" hflex="min">
-<panel hflex="min">
-<panelchildren vflex="min" hflex="min"> 
+<panel hflex="min" vflex="min" >
+<panelchildren> 
 <borderlayout vflex="min" hflex="min">
 <center vflex="min" hflex="min">
 <div style="background-color:red; width:100px;height:100px">

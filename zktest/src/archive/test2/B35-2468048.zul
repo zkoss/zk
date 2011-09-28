@@ -27,11 +27,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 ]]></html>
 
 <window id="levelA" title="A window" width="500px" border="normal">
- <variables x="A"/>
+ <custom-attributes x="A"/>
  <div id="levelC_wrapper">
  Following is C Window :
   <window id="levelC" title="C window" width="400px" border="normal">
-   <button label="show variable x" onClick='alert(self.getVariable("x", false))'/>
+   <button label="show variable x" onClick='alert(self.getAttribute("x", true))'/>
   </window>
  </div>
 </window>

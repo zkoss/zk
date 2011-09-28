@@ -58,11 +58,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return fps[f] = _domEvtProxy0(wgt, f);
 	}
 	function _domEvtProxy0(wgt, f) {
-		return function (devt) {
-			var args = [], evt;
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-			args.unshift(evt = jq.Event.zk(devt, wgt));
+		return function (evt) {
+			var devt = evt; //make a copy since we will change evt (and arguments) in the following line
+			evt = jq.Event.zk(devt, wgt); //also change arguments[0]
 
 			switch (devt.type){
 			case 'focus':
@@ -84,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					return;
 			}
 
-			var ret = f.apply(wgt, args);
+			var ret = f.apply(wgt, arguments);
 			if (ret === undefined) ret = evt.returnValue;
 			if (evt.domStopped) devt.stop();
 			return devt.type == 'dblclick' && ret === undefined ? false: ret;
@@ -655,8 +653,8 @@ new zul.wnd.Window{
 
 		//There are two ways to specify IdSpace at client
 		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-		//2) Assign class.propotype.z$is to true (used by AbstractComponent.java)
-		if (this.$class.prototype.z$is)
+		//2) Assign this.z$is to true (used by AbstractComponent.java)
+		if (this.z$is)
 			this._fellows = {};
 
 		//zkac is a token used by create() in mount.js for optimizing performance
@@ -1431,9 +1429,12 @@ wgt.$f().main.setTitle("foo");
 		_rmIdSpaceDown(child);
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
-		if (child.z_rod)
+		if (child.z_rod) {
 			_unbindrod(child);
-		else if (child.desktop)
+			
+			// Bug ZK-454
+			jq(child.uuid, zk).remove();
+		} else if (child.desktop) 
 			this.removeChildHTML_(child, ignoreDom);
 
 		if (!_noParentCallback)
@@ -3172,7 +3173,8 @@ focus_: function (timeout) {
 		}
 
 		var modal = zk.currentModal;
-		if (modal && !zUtl.isAncestor(modal, this)) {
+		if (modal && !zUtl.isAncestor(modal, this)
+		&& !jq.isAncestor(modal.$n(), this.$n())) { //ZK-393: this might be included
 			var wgt = this.getTopWidget();
 			
 			// Bug #3201879
@@ -4031,6 +4033,14 @@ _doFooSelect: function (evt) {
 	},
 	toJSON: function () { //used by JSON
 		return this.uuid;
+	},
+	/** A widget call this function of its ancestor if it wants to know whether its ancestor prefer ignore float up event of it self.
+	 * <p>Default: false.
+	 * @return boolean
+	 * @since 5.5.0
+	 */
+	ignoreDescendantFloatUp_: function (des) {
+		return false;
 	}
 
 }, {

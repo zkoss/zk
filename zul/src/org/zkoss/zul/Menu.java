@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -100,6 +101,18 @@ public class Menu extends LabelImageElement {
 			smartUpdate("content", content);
 		}
 	}
+	
+	/**
+	 * Opens the menupopup that belongs to the menu.
+	 * <p>
+	 * Note that this function is only applied when it is topmost menu, i.e. the parent of the menu is {@link Menubar}
+	 * @since 5.5.0
+	 */
+	public void open() {
+		if (this.getParent() instanceof Menubar)
+			response("menu", new AuInvoke(this, "open", null));
+	}
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-menu" : _zclass;

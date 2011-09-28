@@ -29,6 +29,7 @@ import java.io.IOException;
 import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.web.servlet.Servlets;
 
@@ -425,11 +426,22 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public boolean hasVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
-	public Object getXelVariable(String name) {
+	//@Override ExecutionCtrl
+	public Object getExtraXelVariable(String name) {
+		return getExtraXelVariable(null, null, name);
+	}
+	//@Override ExecutionCtrl
+	public Object getExtraXelVariable(XelContext ctx, Object base, Object name) {
+		//Note this method searches only _resolvers
 		if (_resolvers != null) {
 			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers);
 			it.hasNext();) {
-				Object o = ((VariableResolver)it.next()).resolveVariable(name);
+				final VariableResolver vr = (VariableResolver)it.next();
+				final Object o =
+					vr instanceof VariableResolverX ?
+						((VariableResolverX)vr).resolveVariable(ctx, base, name):
+					base == null && name != null ?
+						vr.resolveVariable(name.toString()): null;
 				if (o != null)
 					return o;
 			}

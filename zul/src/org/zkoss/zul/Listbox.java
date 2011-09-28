@@ -2447,7 +2447,8 @@ public class Listbox extends MeshElement {
 	}
 	
 	private void postOnPagingInitRender() {
-		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null) {
+		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null && 
+				getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) { // B50-ZK-345
 			setAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED, Boolean.TRUE);
 			Events.postEvent("onPagingInitRender", this, null);
 		}
@@ -2650,7 +2651,8 @@ public class Listbox extends MeshElement {
 				_currentTop = 0;
 				_currentLeft = 0;
 				// enforce a page loading
-				Events.postEvent(new PagingEvent("onPagingImpl",
+				// B50-ZK-345: speed up onPagingImpl to surpass onInitRender
+				Events.postEvent(10001, new PagingEvent("onPagingImpl",
 						(Component) _pgi, _pgi.getActivePage()));
 				invalidate(); // non-paging mold -> paging mold
 			}

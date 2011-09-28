@@ -16,12 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.IOException;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.impl.HeadersElement;
 
 /**
@@ -160,7 +157,19 @@ public class Columns extends HeadersElement {
 	public void setValue(Object value) {
 		_value = value;
 	}
-
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setHflex(String flex) {
+	}
+	
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-columns" : _zclass;

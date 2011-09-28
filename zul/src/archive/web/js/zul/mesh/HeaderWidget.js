@@ -61,7 +61,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			//for faker column, so don't use revisedWidth().
 			//updated: need to concern inner padding due to _getContentEdgeWidth
 			//spec in flex.js
-			var rvw = this.isRealVisible() && this.firstChild ? 
+			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
 					zk(this.$n('cave')).revisedWidth(sz.width) : sz.width;
 			this._hflexWidth = rvw;
 			return {width: rvw};

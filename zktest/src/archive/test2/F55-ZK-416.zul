@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F55-ZK-416.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  23 10:21:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Drag a listitem from one list box to another without select, it should be moved</li>
+<li>Select a listitem then drag it from one list box to another without select, it should be moved</li>
+<li>Select a listitem then drag another one without select from one list box to another without select, both of them should be moved</li>
+<li>Select two or more listitems by select with Ctrl or Shift key, repeat step 2 and 3 again</li>
+</ol>
+]]></html>
+    <hlayout>
+        <listbox id="left" height="250px" width="200px" fixedLayout="true" onDrop="move(event.dragged)"
+            multiple="true" droppable="true" oddRowSclass="non-odd">
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
+            </listitem>
+        </listbox>
+        <separator orient="vertical" spacing="8px" />
+        <listbox id="right" height="250px" width="200px" fixedLayout="true" onDrop="move(event.dragged)"
+            multiple="true" droppable="true" oddRowSclass="non-odd">
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
+            </listitem>
+        </listbox>
+    </hlayout>
+    <zscript><![CDATA[
+        void move(Component dragged) {
+        	List items = dragged.parent.getItems();
+        	List itemForAdd = new ArrayList();
+        	int i = 0;
+        	// get items for move
+        	for (Listitem li : items)
+        		if (li.isSelected() || li.equals(dragged))
+        			itemForAdd.add(li);
+        	// move and deselect items
+        	for (Listitem li : itemForAdd) {
+        		if (self instanceof Listitem) 
+	                self.parent.insertBefore(li, self);
+            	else
+                	self.appendChild(li);
+        		li.setSelected(false);
+        	}
+        }
+    ]]></zscript>
+</zk>

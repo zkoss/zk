@@ -131,10 +131,21 @@ public class Log {
 	/**
 	 * Gets the logger based on the giving name.
 	 * <p>Since 5.0.7, this constructor, unlike others, ignores
-	 * {@link #isHierarchy} and always assumes the hierachy name.
+	 * {@link #isHierarchy} and always assumes the hierarchy name.
+	 * <p>Since 5.0.9, the hierarchy use can be disabled by specifying the following
+	 * setting in the zk.xml.
+	 *  
+	 * <pre><code>
+	 *	<library-property>
+	 *		<name>org.zkoss.util.logging.hierarchy.disabled</name>
+	 *		<value>true</value>
+	 *	</library-property>
+	 * </code></pre>
+	 * Default: false
 	 */
 	public static final Log lookup(String name) {
-		return new HierLog(name);
+		return Boolean.valueOf(Library.getProperty("org.zkoss.util.logging.hierarchy.disabled", "false"))
+					.booleanValue() ? new Log(name) : new HierLog(name);
 	}
 	/** Gets the logger based on the package.
 	 */

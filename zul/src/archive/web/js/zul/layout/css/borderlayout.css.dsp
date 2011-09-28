@@ -204,8 +204,8 @@
 .z-west-splt-btn,
 .z-north-splt-btn,
 .z-south-splt-btn {
+	opacity: 0.5;
 	filter: alpha(opacity=50);  <%-- IE --%>
-	opacity: 0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat;
 	display: -moz-inline-box;
 	vertical-align: top;

@@ -237,7 +237,7 @@ public class HtmlPageRenders {
 	 */
 	public static final
 	String outLangJavaScripts(Execution exec, WebApp wapp, String deviceType) {
-		if (exec.getAttribute(ATTR_LANG_JS_GENED) != null)
+		if (exec.isAsyncUpdate(null) || exec.getAttribute(ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_JS_GENED, Boolean.TRUE);
 
@@ -357,7 +357,7 @@ public class HtmlPageRenders {
 	 */
 	public static final String outLangStyleSheets(Execution exec,
 	WebApp wapp, String deviceType) {
-		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
+		if (exec.isAsyncUpdate(null) || exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 

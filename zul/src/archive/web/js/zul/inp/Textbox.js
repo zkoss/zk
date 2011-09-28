@@ -96,12 +96,20 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-textbox" + 
 				(this.inRoundedMold() && !this.isMultiline() ? "-rounded": "");
-	},	
+	},
+	// override domClass_ for add extra class name as need,
+	// can not use getZclass because InputWidget use it to add/remove class
+	domClass_: function () {
+		var clsnm = this.$supers(zul.inp.Textbox, 'domClass_', arguments);
+		if (this.isMultiline() && this.inRoundedMold())
+			clsnm += ' ' + this.getZclass() + '-ml-rounded';
+		return clsnm;
+	},
 	bind_: function(){
 		this.$supers(zul.inp.Textbox, 'bind_', arguments);
 		if (this.inRoundedMold())
 			zWatch.listen({onSize: this});
-	},	
+	},
 	unbind_: function(){
 		if (this.inRoundedMold())
 			zWatch.unlisten({onSize: this});

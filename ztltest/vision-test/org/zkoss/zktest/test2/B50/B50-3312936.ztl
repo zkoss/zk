@@ -4,7 +4,7 @@
 <zk>
 <div height="400px" style="border: 1px solid green">
 <panel title="Panel" border="rounded+" vflex="1">
-<panelchildren vflex="1">You should see the border of this component to fit the green color border.</panelchildren>
+<panelchildren>You should see the border of this component to fit the green color border.</panelchildren>
 </panel>
 </div>
 </zk>

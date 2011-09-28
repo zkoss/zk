@@ -1,3 +1,4 @@
 ../dist/lib/zcommons-el.jar
+../dist/lib/zel.jar
 ../dist/lib/ext/bsh.jar
 ../dist/lib/ext/servlet-api.jar

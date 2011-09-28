@@ -1,0 +1,26 @@
+<!--
+	B55-ZK-421.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon Sep 26 15:16:17 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Select an item, go to page 2.</div>
+	<div>2. Select another item and go back to page 1. In the first Listbox you 
+should see no item selected in the first page. For the second Listbox, the item 
+shall remain selected unless the Library properties "checkmarkDeselectsOther" is true.</div>
+	Multiple:
+	<listbox mold="paging" pageSize="5" multiple="true">
+		<listitem label="${each}" forEach="1,2,3,4,5,6,7,8,9,10" />
+	</listbox>
+	Multiple, Checkmark:
+	<listbox mold="paging" pageSize="5" multiple="true" checkmark="true">
+		<listitem label="${each}" forEach="1,2,3,4,5,6,7,8,9,10" />
+	</listbox>
+</zk>

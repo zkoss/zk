@@ -7,7 +7,7 @@
 		<columnlayout vflex="1">
 			<columnchildren vflex="1" hflex="1">
 				<panel title="Panel" border="rounded+" vflex="1">
-					<panelchildren vflex="1">Panel 1</panelchildren>
+					<panelchildren>Panel 1</panelchildren>
 				</panel>
 			</columnchildren>
 		</columnlayout>

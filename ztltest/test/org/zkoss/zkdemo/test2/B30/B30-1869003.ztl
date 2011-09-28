@@ -71,10 +71,10 @@
 		sleep(1000);//for DataBinding
 			click(jq(".z-checkbox input[id*=\"real\"]:eq(0)"));
 			waitResponse();
-			verifyTrue(jq(".z-checkbox input[id*=\"real\"]:eq(0)").attr("checked").equals("true"));
+			verifyTrue(jq(".z-checkbox input[id*=\"real\"]:eq(0)").attr("checked").equals("checked"));
 			click(jq(".z-column-cnt:eq(0)"));
 			waitResponse();
-			verifyTrue(jq(".z-checkbox input[id*=\"real\"]:eq(0)").attr("checked").equals("false"));
+			verifyFalse(jq(".z-checkbox input[id*=\"real\"]:eq(0)").attr("checked").equals("checked"));
 		]]></client>
 	</case>
 </test>

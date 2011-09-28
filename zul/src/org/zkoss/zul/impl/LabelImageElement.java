@@ -32,6 +32,25 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * A XUL element with a label ({@link #getLabel}) 
  * and an image ({@link #getImage}).
  * 
+ * [Since 5.5.0]
+ * <p>To turn on the preload image function for this component, you have to specify the component's
+ * attribute map with key "org.zkoss.zul.image.preload" to true. That is, for
+ * example, if in a zul file, you shall specify &lt;custom-attributes> of the
+ * component like this:</p>
+ *
+ * <pre><code>&lt;button ...&gt;
+ *	&lt;custom-attributes org.zkoss.zul.listbox.rod='true'/&gt;
+ *&lt;/button&gt;
+ * </code></pre>
+ * 
+ * Or specify it onto the root component.
+ * For example,
+ * <pre><code>&lt;window ...&gt;
+ * 	&lt;custom-attributes org.zkoss.zul.listbox.rod=&quot;true&quot;/&gt;
+ *  &lt;button .../&gt;
+ * &lt;/window&gt;
+ * </code></pre>
+ * 
  * @author tomyeh
  */
 abstract public class LabelImageElement extends LabelElement {
@@ -242,7 +261,8 @@ abstract public class LabelImageElement extends LabelElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-
+		
+		render(renderer, "_preloadImage", getAttribute("org.zkoss.zul.image.preload", true));
 		render(renderer, "image", getEncodedImageURL());
 		render(renderer, "hoverImage", getEncodedHoverURL());
 	}

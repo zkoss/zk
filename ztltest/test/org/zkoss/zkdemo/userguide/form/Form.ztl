@@ -58,7 +58,7 @@
 													<row>
 														Birthday:
 														<hlayout>
-															<datebox id="db" width="150px" />
+															<datebox id="db" width="150px" locale="en_US"/>
 															<listbox
 																onSelect="db.setFormat(self.selectedItem.value)" mold="select"
 																rows="1">

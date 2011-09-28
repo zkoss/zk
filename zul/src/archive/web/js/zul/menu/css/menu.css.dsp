@@ -175,7 +175,6 @@
 .z-menu-popup-cnt .z-menu-disd .z-menu-img,
 .z-menu-popup-cnt .z-menu-item-disd .z-menu-item-img{
 	opacity: .5;
-	-moz-opacity: .5;
 	filter: alpha(opacity=50);
 }
 <%-- define menupopup effect --%>

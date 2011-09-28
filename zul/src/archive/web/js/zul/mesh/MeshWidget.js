@@ -37,6 +37,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ""; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
+			if (zk.ie8_)
+				wgt._wsbak = ws; // B50-ZK-432
 			if (zk.ie < 8)
 				jq(wgtn).addClass('z-word-nowrap'); // B50-ZK-333
 			else
@@ -79,8 +81,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				headcave.style.width = '';
 			}
 		}
-		if (wgt.head && wgt.head.$n())
-			wgt.head.$n().style.width = '';
+		if (headn)
+			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
 			efoottblw = wgt.efoottbl.width;
@@ -187,7 +189,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgtn) {
 			if (zk.ie < 8)
 				jq(wgtn).removeClass('z-word-nowrap'); // B50-ZK-333
-			else
+			else if (!zk.ie8_) // B50-ZK-432: restore later for IE 8
 				wgtn.style.whiteSpace = ws;
 		}
 		return {width: width, wds: wds};
@@ -282,7 +284,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0;
 			for (var w = wgt.head.firstChild, i = 0; w; w = w.nextSibling) {
 				if (zk(bdfaker.cells[i]).isVisible()) {
-					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : bdfaker.cells[i].offsetWidth;
+					wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? 
+							zk.parseInt(w._width) : bdfaker.cells[i].offsetWidth;
 					width += wd;
 				}
 				++i;
@@ -860,9 +863,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
 	},
 	_onScrollPos: function () {
-		this._currentTop = this.ebody.scrollTop; 
-		this._currentLeft = this.ebody.scrollLeft;
-		this.fire('onScrollPos', {top: this._currentTop, left: this._currentLeft});
+		// Bug ZK-414
+		if (this.ebody) {
+			this._currentTop = this.ebody.scrollTop;
+			this._currentLeft = this.ebody.scrollLeft;
+			this.fire('onScrollPos', {
+				top: this._currentTop,
+				left: this._currentLeft
+			});
+		}
 	},
 	_onRender: function () { //overriden in zkmax
 		this._pendOnRender = false;
@@ -876,6 +885,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
 		
+		if (zk.ie8_ && (this._wsbak !== undefined)) { // B50-ZK-432
+			this.$n().style.whiteSpace = this._wsbak;
+			delete this._wsbak;
+		}
 		if (zk.ie < 8)
 			this._syncBodyHeight(); // B50-ZK-171
 		if (zk.ie7_)
@@ -970,28 +983,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			
-			//bug #3177128
-			if (zk.safari && this.ebodytbl) {
-				this._ignoreDoScroll = true; //will cause _doScroll, don't change scrolling position
-				try {
-					var oldCSS = this.ebodytbl.style.display,
-						bd = jq('body'),
-						st = bd.scrollTop();
-					zk(this.ebodytbl).redoCSS(-1); //for chrome/safari
-					// Bug: B50-3291371: Listbox scroll to top when page changes
-					// have to set scroll top back
-					bd.scrollTop(st);
-					//bug #3185647: extra space on top of body content
-					oldCss = this.ebody.style.height;
-					this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
-					dummy = this.ebody.offsetHeight; //force recalc					
-					this.ebody.style.height = oldCss;
-					dummy = this.ebody.offsetHeight; //force recalc					
-				} finally {
-					delete this._ignoreDoScroll;
-				}
-			}
-			
 			this.fireOnRender(155);
 			
 			// Bug ZK-355
@@ -1058,6 +1049,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	/* set the height. */
 	_setHgh: function (hgh) {
 		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
+			if (zk.safari // Bug ZK-417, ignore to set the same size
+			&& this.ebody.style.height == jq.px(this._vflexSize(hgh)))
+				return;
+
 			this.ebody.style.height = ''; //allow browser adjusting to default size
 			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
@@ -1341,10 +1336,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return this._minWd;
 	},
 	_adjSpanWd: function () { //used in HeadWidgets
-		if (!this._isAllWidths())
-			return;
-		var isSpan = this.isSpan();
-		if (!isSpan)
+		if (!this._isAllWidths() || !this.isSpan())
 			return;
 		var hdfaker = this.ehdfaker,
 			bdfaker = this.ebdfaker,
@@ -1366,13 +1358,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			_minwds = this._minWd.wds;
 		for (var w = this.head.firstChild, i = 0; w; w = w.nextSibling) {
 			if (zk(hdfaker.cells[i]).isVisible()) {
-				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? zk.parseInt(w._width) : hdfakervisible ? hdfaker.cells[i].offsetWidth : bdfaker.cells[i].offsetWidth;
+				wd = wds[i] = w._hflex == 'min' ? _minwds[i] : (w._width && w._width.indexOf('px') > 0) ? 
+						zk.parseInt(w._width) : hdfakervisible ? hdfaker.cells[i].offsetWidth : bdfaker.cells[i].offsetWidth;
 				width += wd;
 			}
 			++i;
 		}
-		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; //ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
-		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), //**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		//ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
+		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; 
+		//**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
+		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), 
 			extSum = total - width; 
 		
 		var count = total,

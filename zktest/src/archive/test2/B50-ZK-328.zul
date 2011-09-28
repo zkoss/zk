@@ -1,0 +1,25 @@
+<!--
+	B50-ZK-328.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Sep 9 10:12:34 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>Both Panels and Panelchildrens shall resize correctly when maximized.</div>
+	<div height="300px" style="border: 2px solid green">
+		<panel title="Panel 1" border="normal" maximizable="true" hflex="min" vflex="min">
+			<panelchildren hflex="min">Panel Content</panelchildren>
+		</panel>
+	</div>
+	<div height="300px" style="border: 2px solid green">
+		<panel title="Panel 2" border="normal" maximizable="true" maximized="true" hflex="min" vflex="min">
+			<panelchildren hflex="min">Panel Content</panelchildren>
+		</panel>
+	</div>
+</zk>

@@ -159,7 +159,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (w) {
 						this._selectOne(w, true);
 						zk(w).scrollIntoView(this.ebody);
-						if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+						if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
+							// B50-ZK-440: ebody can be null when ROD
 							this._currentTop = this.ebody.scrollTop; 
 							this._currentLeft = this.ebody.scrollLeft;
 						}
@@ -240,7 +241,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		else if (item = zk.Widget.$(item)) {
 			this._selectOne(item, true);
 			zk(item).scrollIntoView(this.ebody);
-			if (zk.ff >= 4) { // B50-ZK-293: FF5 misses to fire onScroll
+			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll
+				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop; 
 				this._currentLeft = this.ebody.scrollLeft;
 			}
@@ -400,20 +402,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (nRows) {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
-				else {
-					//use B30-1878840 test case, IE only, scroll down and sort cause javascript error(listbox outer)
-					//if tpad.offsetHeight is zero, then tpadhgh must be zero; otherwise, use the cached value in _padsz if any
-					var tpad = this.$n('tpad'),
-						tpadoffsethgh = (tpad ? tpad.offsetHeight : 0),
-						tpadhgh = tpadoffsethgh > 0 && this._padsz && this._padsz['tpad'] ? this._padsz['tpad'] : tpadoffsethgh < 0 ? 0 : tpadoffsethgh;
-					if (nRows <= nVisiRows) {
-						var $midVisiRow = zk(midVisiRow);
-						hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight() - tpadhgh;
-					} else {
-						var $lastVisiRow = zk(lastVisiRow);
-						hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight() - tpadhgh;
-						hgh = Math.ceil((nRows * hgh) / nVisiRows);
-					}
+				else if (nRows <= nVisiRows) {
+					var $midVisiRow = zk(midVisiRow);
+					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
+				} else {
+					var $lastVisiRow = zk(lastVisiRow);
+					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
+					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
 			}
@@ -580,13 +575,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	focus_: function (timeout) {
 		var btn;
 		if (btn = this.$n('a')) {
-			if (this._focusItem)
-				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
+			if (this._focusItem) {
+				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) 
 					if (this._isFocus(w)) {
 						w.focus_(timeout);
 						break;
 					}
-
+			} else {
+				// Bug ZK-414
+				if (this._currentTop)
+					btn.style.top = this._currentTop + "px";
+				if (this._currentLeft)
+					btn.style.left = this._currentLeft + "px"; 	
+			}
 			this.focusA_(btn, timeout);
 			return true;
 		}
@@ -1005,9 +1006,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var edata, keep = true;
 		if (evt) {
 			edata = evt.data;
-			if (this._multiple && this._cdo)
+			if (this._multiple) // B50-ZK-421
 				keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey || 
-					(evt.domTarget.id && evt.domTarget.id.endsWith('-cm'));
+					(this._checkmark && (!this._cdo || (evt.domTarget.id && evt.domTarget.id.endsWith('-cm'))));
 		}
 
 		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep}, edata));

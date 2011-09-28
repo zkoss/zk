@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * Represents the compmonent infomation about the native components.
@@ -46,12 +47,21 @@ public class NativeInfo extends ComponentInfo {
 	 *
 	 * @param parent the parnet info (never null).
 	 * @param compdef the component definition (never null).
+	 * @param tag the name of the tag
 	 */
-	public NativeInfo(NodeInfo parent, ComponentDefinition compdef,
-	String tagnm) {
-		super(parent, compdef, tagnm);
+	public NativeInfo(NodeInfo parent, ComponentDefinition compdef, String tag) {
+		super(parent, compdef, tag);
 		if (!compdef.isNative())
 			throw new IllegalArgumentException("compdef must be native");
+	}
+	/** Constructs a native info without a parent.
+	 * @param the evaluator (never null).
+	 * @param compdef the component definition (never null).
+	 * @param tag the name of the tag
+	 * @since 3.5.0
+	 */
+	public NativeInfo(EvaluatorRef evlar, ComponentDefinition compdef, String tag) {
+		super(evlar, compdef, tag);
 	}
 
 	/** Returns a readonly list of the declared namespaces (never null).

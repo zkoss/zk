@@ -2,9 +2,9 @@
 After clicking the test button, you shall see "&lt;Button b>:onClick:void" below
 <separator/>
 <label id="i"/>
-<zscript>
-public void test(){i.value = self+":"+event.getName()+":"+b;}
-</zscript>
+<zscript><![CDATA[
+public void test(){i.value = "<" + self.getClass().getSimpleName() + " " + self.id+">:"+event.getName()+":"+b;}
+]]></zscript>
 <window>
 <button id="b" label="test" onClick="test()"/>
 </window>

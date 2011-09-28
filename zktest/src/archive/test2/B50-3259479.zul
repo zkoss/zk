@@ -16,4 +16,12 @@
 			</zscript>
 		</label>
 	</div>
+
+	<html><![CDATA[
+	<ul>
+		<li>You shall see HelloZK below (as a button).</li>
+	</ul>
+	]]></html>
+	<button label="HelloZK">
+	</button>
 </zk>

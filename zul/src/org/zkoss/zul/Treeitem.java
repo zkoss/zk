@@ -368,14 +368,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	//-- super --//
-	/*
-	public boolean isVisible(){
-		if(!super.isVisible()) 
-			return false;
-		Component comp = getParent();
-		return comp == null || comp.isVisible();
-	}
-	*/
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
 			smartUpdate("visible", visible);
@@ -412,6 +404,18 @@ implements org.zkoss.zk.ui.ext.Disable {
 		Treechildren tc = (Treechildren) getParent();
 		if (tc != null && super.isVisible())
 			tc.addVisibleItemCount(count);
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * components, please refer to {@link Tree} and {@link Treecol} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Tree related 
+	 * components, please refer to {@link Tree} and {@link Treecol} instead.
+	 */
+	public void setHflex(String flex) {
 	}
 	
 	//-- Component --//
@@ -502,7 +506,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 
 	// Returns whether the specified should be rendered.
-	static boolean shallRenderTree(Tree tree) {
+	private static boolean shallRenderTree(Tree tree) {
 		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
 		final Paginal pgi = tree.getPaginal();
 		final int ofs = pgi.getActivePage() * pgi.getPageSize();

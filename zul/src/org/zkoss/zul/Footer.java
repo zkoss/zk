@@ -22,7 +22,6 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.FooterElement;
-import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A column of the footer of a grid ({@link Grid}).

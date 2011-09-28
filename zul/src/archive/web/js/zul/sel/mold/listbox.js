@@ -51,24 +51,30 @@ function (out) {
 	if (hgh) out.push(' style="overflow:hidden;height:', hgh, '"');
 	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:', this.getRows() * 15, 'px"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
+
+	if (this.domPad_ && !inPaging)
+		this.domPad_(out, '-tpad');
+	
+	out.push('<table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'">');
+
 	
 	if(this.listhead)
 		this.domFaker_(out, '-bdfaker', zcls);
 
-	if (this.domPad_ && !inPaging)
-		this.domPad_(out, '-tpad');
 	out.push('<tbody id="',uuid,'-rows">');
 	for (var item = this.firstItem; item; item = this.nextItem(item))
 		item.redraw(out);
 	out.push('</tbody>');
-	if (this.domPad_ && !inPaging)
-		this.domPad_(out, '-bpad');
 	
 	this.redrawEmpty_(out);
 
-	out.push('</table><', tag, ' id="', uuid,
+	out.push('</table>');
+
+	if (this.domPad_ && !inPaging)
+		this.domPad_(out, '-bpad');
+	
+	out.push('<', tag, ' id="', uuid,
 		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tag, '>', "</div>");
 

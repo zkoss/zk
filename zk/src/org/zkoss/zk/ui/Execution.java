@@ -181,28 +181,20 @@ public interface Execution extends Scope {
 	 * @return wether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
-	 * @since 5.0.8
+	 * @since 5.5.0
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
 	/** Removes a name resolve that was added by {@link #addVariableResolver}.
 	 *
 	 * @return false if resolved is not added before.
-	 * @since 5.0.8
+	 * @since 5.5.0
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
 	/** Returns if the specified variable resolved has been registered
 	 * @see #addVariableResolver
-	 * @since 5.0.8
+	 * @since 5.5.0
 	 */
 	public boolean hasVariableResolver(VariableResolver resolver);
-	/** Returns the object, if any, defined in any variable resolver
-	 * added by {@link #addVariableResolver}.
-	 * <p>Notice that it looks only for the variables defined
-	 * in {@link #addVariableResolver}. To get a variable an EL expression
-	 * can reference, please use {@link #getVariableResolver} instead.
-	 * @since 5.0.8
-	 */
-	public Object getXelVariable(String name);
 
 	/** Queues an event to this execution.
 	 * In other words, the event is placed to the event queue.

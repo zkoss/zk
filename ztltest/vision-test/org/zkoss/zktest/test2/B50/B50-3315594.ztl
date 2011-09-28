@@ -22,7 +22,7 @@ You shall see "item 19" in the window and panel.
 		</listbox>
 	</window>
 	<panel border="normal" vflex="min" hflex="min" framable="true">
-	<panelchildren vflex="min" hflex="min">
+	<panelchildren>
 		<listbox rows="20" hflex="min">
 			<listhead>
 				<listheader hflex="min" label="column" />

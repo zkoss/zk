@@ -341,9 +341,18 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		}
 		this.valueEnter_ = null;
 	},
+	bind_: function () {
+		this.$supers(zul.inp.Combobox, 'bind_', arguments);
+		// Bug ZK-403
+		if (this.isListen('onOpen'))
+			this.listen({onChanging: zk.$void}, -1000);
+	},
 	unbind_: function () {
 		this._hilite2();
 		this._sel = this._lastsel = null;
+		// Bug ZK-403
+		if (this.isListen('onOpen'))
+			this.unlisten({onChanging: zk.$void});
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
 	},
 	//@Override

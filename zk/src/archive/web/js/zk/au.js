@@ -593,7 +593,7 @@ zAu = {
 			//Use sync request for chrome and safari.
 			//Note: when pressing F5, the request's URL still arrives before this even async:false
 			async: !zk.safari
-		}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
+		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
 	},
 
 	////Ajax////
@@ -1359,9 +1359,9 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param Object... vararg any number of arguments passed to the function
 	 * invocation.
 	 */
-	invoke: function (wgt, func, vararg) {
+	invoke: function (wgt, func/*, vararg*/) {
 		var args = [];
-		for (var j = arguments.length; --j > 1;)
+		for (var j = arguments.length; --j > 1;) //exclude wgt and func
 			args.unshift(arguments[j]);
 		wgt[func].apply(wgt, args);
 	},

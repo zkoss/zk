@@ -77,7 +77,7 @@ public class Treefooter extends FooterElement {
 		}
 		return null;
 	}
-
+	
 	//-- super --//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

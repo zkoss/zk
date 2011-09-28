@@ -112,7 +112,49 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		value: function (v) {
 			var n = this.$n('real');
 			if (n) n.value = v || '';
-		}
+		},
+		/** Returns a list of checkbox component IDs that shall be disabled when the user
+		 * clicks this checkbox.
+		 *
+		 * <p>To represent the checkbox itself, the developer can specify <code>self</code>.
+		 * For example, 
+		 * <pre><code>
+		 * checkbox.setId('ok');
+		 * wgt.setAutodisable('self,cancel');
+		 * </code></pre>
+		 * is the same as
+		 * <pre><code>
+		 * checkbox.setId('ok');
+		 * wgt.setAutodisable('ok,cancel');
+		 * </code></pre>
+		 * that will disable
+		 * both the ok and cancel checkboxes when an user clicks it.
+		 *
+		 * <p>The checkbox being disabled will be enabled automatically
+		 * once the client receives a response from the server or a fixed timeout.
+		 * In other words, the server doesn't notice if a checkbox is disabled
+		 * with this method.
+		 *
+		 * <p>However, if you prefer to enable them later manually, you can
+		 * prefix with '+'. For example,
+		 * <pre><code>
+		 * checkbox.setId('ok');
+		 * wgt.setAutodisable('+self,+cancel');
+		 * </code></pre>
+		 *
+		 * <p>Then, you have to enable them manually such as
+		 * <pre><code>if (something_happened){
+		 *  ok.setDisabled(false);
+		 *  cancel.setDisabled(false);
+		 *</code></pre>
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets whether to disable the checkbox after the user clicks it.
+		 * @param String autodisable
+		 */
+		autodisable: null
 	},
 
 	//super//
@@ -168,6 +210,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		if (!_shallIgnore(evt)) {
+			// F55-ZK-12: Checkbox automatically disable itself after clicked
+			// use the autodisable handler of button directly
+			zul.wgt.ADBS.autodisable(this);
 			var real = this.$n('real'),
 				checked = real.checked;
 			if (checked != this._checked) //changed

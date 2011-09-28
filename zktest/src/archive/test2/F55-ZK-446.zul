@@ -1,0 +1,46 @@
+<!--
+	F55-ZK-446.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Sep 23 14:53:36 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div><![CDATA[
+		Test code: 
+		<textbox instant="true" constraint="/[a-z]*/" />
+	]]></div>
+	<div>
+		1. The onChange event should be fire upon typing (like onChanging).
+	</div>
+	<div>
+		2. Both values (textbox and event) should be identical to the one in the textbox input.
+	</div>
+	<div>
+		3. Value setting should respect constraint validation.
+	</div>
+	<div height="30px" />
+	Input:
+	<textbox instant="true" constraint="/[a-z]*/">
+		<attribute name="onChange">
+			lb.value = self.value;
+			lb2.value = event.value;
+			ib.value++;
+		</attribute>
+	</textbox>
+	<div height="30px" />
+	<div>
+		onChange fired: <intbox id="ib" readonly="true" value="0" />
+	</div>
+	<div>
+		Textbox value: <label id="lb" />
+	</div>
+	<div>
+		Event value: <label id="lb2" />
+	</div>
+</zk>

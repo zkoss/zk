@@ -224,7 +224,7 @@ public class Parser {
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
 		if (root != null)
-			parse(pgdef, pgdef, root, new AnnotationHelper(), false);
+			parseItem(pgdef, pgdef, root, new AnnotationHelper(), false);
 		return pgdef;
 	}
 	/** Parses a list of string separated by comma, into a String array.
@@ -602,13 +602,30 @@ public class Parser {
 	 * @param bNativeContent whether to consider the child element all native
 	 * It is true if a component definition with text-as is found
 	 */
-	private void parse(PageDefinition pgdef, NodeInfo parent,
+	private void parseItems(final PageDefinition pgdef, final NodeInfo parent,
 	Collection items, AnnotationHelper annHelper, boolean bNativeContent)
 	throws Exception {
+		LanguageDefinition parentlang = getLanguageDefinition(parent);
+		if (parentlang == null)
+			parentlang = pgdef.getLanguageDefinition();
+		final boolean bZkSwitch = isZkSwitch(parent);
+
+		ComponentInfo pi = null;
+		String textAs = null;
+		StringBuffer textAsBuffer = null;
+		for (NodeInfo p = parent; p != null; p = p.getParent())
+			if (p instanceof ComponentInfo) {
+				pi = (ComponentInfo)p;
+				textAs = pi.getTextAs();
+				if (textAs != null && pi == parent) //only direct child
+					textAsBuffer = new StringBuffer();
+				break; //found
+			}
+
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
-				parse(pgdef, parent, (Element)o, annHelper, bNativeContent);
+				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent);
 			} else if (o instanceof ProcessingInstruction) {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
@@ -617,18 +634,7 @@ public class Parser {
 				if (label.length() == 0)
 					continue;
 
-				LanguageDefinition parentlang = getLanguageDefinition(parent);
-				if (parentlang == null)
-					parentlang = pgdef.getLanguageDefinition();
-
-				ComponentInfo pi = null;
-				for (NodeInfo p = parent; p != null; p = p.getParent())
-					if (p instanceof ComponentInfo) {
-						pi = (ComponentInfo)p;
-						break; //found
-					}
-
-				if (isZkSwitch(parent)) {
+				if (bZkSwitch) {
 					if (trimLabel.length() == 0)
 						continue;
 					throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
@@ -645,15 +651,13 @@ public class Parser {
 					new TextInfo(parent, label);
 						//Don't trim if native (3.5.0)
 				} else {
-					final String textAs = pi != null ? pi.getTextAs(): null;
 					if (textAs != null) { //implies pi != null (parent is ComponentInfo)
 						if (trimLabel.length() != 0)
-							if (pi == parent) {
-								pi.addProperty(textAs, trimLabel, null);
-							} else if (!(parent instanceof TemplateInfo)) {
+							if (textAsBuffer != null) //implies pi == parent
+								textAsBuffer.append(label); //concatenate all together
+							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
-									(parent instanceof ZkInfo ? "<zk>": parent.toString()) + " not allowed in text-as");
-							}
+									"Not allowed in text-as, "+((Item)o).getParent().getLocator());
 					} else {
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
 							if (trimLabel.length() == 0)
@@ -667,6 +671,12 @@ public class Parser {
 					}
 				}
 			}
+		}
+
+		if (textAsBuffer != null) { //parent might be TempalteInfo
+			final String trimLabel = textAsBuffer.toString().trim();
+			if (trimLabel.length() != 0)
+				pi.addProperty(textAs, trimLabel, null);
 		}
 	}
 	/** Returns whether to trim the leading and trailing whitespaces 
@@ -702,10 +712,10 @@ public class Parser {
 	}
 
 	/** Parse an component definition specified in the given element.
-	 * @param bNativeContent whether to consider the child element all native
+	 * @param bNativeContent whether to consider the child elements all native
 	 * It is true if a component definition with text-as is found
 	 */
-	private void parse(PageDefinition pgdef, NodeInfo parent,
+	private void parseItem(PageDefinition pgdef, NodeInfo parent,
 	Element el, AnnotationHelper annHelper, boolean bNativeContent)
 	throws Exception {
 		final String nm = el.getLocalName();
@@ -716,23 +726,27 @@ public class Parser {
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			checkZScriptEnabled(el);
 			parseZScript(parent, el, annHelper);
-		} else if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("attribute".equals(nm)
+		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			if (!(parent instanceof ComponentInfo))
 				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
 
 			parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
-		} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("custom-attributes".equals(nm)
+		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			parseCustomAttributes(langdef, parent, el, annHelper);
-		} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
+		} else if ("variables".equals(nm)
+		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			parseVariables(langdef, parent, el, annHelper);
 		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)
 		|| "annotation".equals(uri)) {
 			parseAnnotation(el, annHelper);
-		} else if ("template".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parse(pgdef, parseTemplate(parent, el, annHelper),
+		} else if ("template".equals(nm)
+		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+			parseItems(pgdef, parseTemplate(parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-			parse(pgdef, parseZk(parent, el, annHelper),
+			parseItems(pgdef, parseZk(parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else {
 			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
@@ -832,15 +846,18 @@ public class Parser {
 					forEachBegin = attval;
 				} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
 					forEachEnd = attval;
-				} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns)) {
+				} else if ("fulfill".equals(attnm)
+				&& isZkAttr(langdef, attrns, bNativeContent)) {
 					compInfo.setFulfill(attval);
-				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
+				} else if (!"use".equals(attnm)
+				|| !isZkAttr(langdef, attrns, bNativeContent)) {
 					final String attPref = attrns != null ? attrns.getPrefix(): "",
 						attvaltrim;
 					if (!"xmlns".equals(attPref)
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						if (isAttrAnnot(attvaltrim = attval.trim())) { //annotation
+						if (!bNativeContent
+						&& isAttrAnnot(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
@@ -858,13 +875,71 @@ public class Parser {
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
 			annHelper.applyAnnotations(compInfo, null, true);
 
-			parse(pgdef, compInfo, el.getChildren(), annHelper, bNativeContent); //recursive
+			final Collection items = el.getChildren();
+			String textAs = null;
+			if (!bNativeContent && !items.isEmpty() //if empty, no need to check
+			&& (textAs = compInfo.getTextAs()) != null) {
+				//if textAs is specified, we detect if any child element
+				//if so, we parse them as property
+				//if not, we handle it normally and text, if any, will be
+				//trimmed and assigned as a property (in parseItems)
+				String xmlFound = null; //whether a XML fragment
+				String zkElem = null; //a ZK element
+				boolean empty = true; //whether there is anything other than whitespace
+				for (Iterator it = items.iterator();;) {
+					if (zkElem != null && xmlFound != null)
+						throw new UnsupportedOperationException(
+							"Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead.");
+							//might be possible to handle but not worth
+					if (!it.hasNext())
+						break;
+
+					final Object o = it.next();
+					if (empty)
+						empty = (o instanceof Text || o instanceof CData)
+							&& ((Item)o).getText().trim().length() == 0;
+
+					if (o instanceof Element) {
+						final String n = ((Element)o).getName();
+						if ("attribute".equals(n) || "custom-attributes".equals(n)
+						|| "variables".equals(n) || "template".equals(n)
+						|| "zscript".equals(n)) { //we have to skip zscript because of B50-3259479
+							zkElem = n;
+							textAs = null;
+							//unable to handle them because EL/zscript might affect
+							//the result
+						} else {
+							xmlFound = n;
+								//including "zk" (risk if allowed to mix zk with attribute...)
+						}
+					}
+				}
+				if (empty)
+					textAs = null; //only whitespace, so don't handle textAs
+			}
+
+			if (textAs != null)
+				parseAsProperty(pgdef, compInfo, textAs, items, annHelper, null);
+			else
+				parseItems(pgdef, compInfo, items, annHelper, bNativeContent);
 
 			//optimize native components
 			if (compInfo instanceof NativeInfo
 			&& !compInfo.getChildren().isEmpty())
 				optimizeNativeInfos((NativeInfo)compInfo);
 		} //end-of-else//
+	}
+	/** Parses the items as if they are native and they will become a property
+	 * rather than child components.
+	 */
+	private void parseAsProperty(PageDefinition pgdef, ComponentInfo compInfo,
+	String name, Collection items, AnnotationHelper annHelper, ConditionImpl cond)
+	throws Exception {
+		final NativeInfo nativeInfo = new NativeInfo(
+			compInfo.getEvaluatorRef(), pgdef.getLanguageDefinition().getNativeDefinition(), "");
+			//Note: nativeInfo can not be a child. Rather, it will be a property
+		parseItems(pgdef, nativeInfo, items, annHelper, true);
+		compInfo.addProperty(name, nativeInfo, cond);
 	}
 	/** @param val the value (it was trimmed before called). */
 	private static boolean isAttrAnnot(String val) {
@@ -954,13 +1029,15 @@ public class Parser {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException("forEach not applicable to attribute, "+el.getLocator());
 
-		//Test if native content is used
-		boolean bNativeContent = false;
-		for (Iterator it = el.getChildren().iterator(); it.hasNext();)
-			if (it.next() instanceof Element) {
-				bNativeContent = true;
+		//Test if any element is used
+		String elFound = null;
+		for (Iterator it = el.getChildren().iterator(); it.hasNext();) {
+			final Object o = it.next();
+			if (o instanceof Element) {
+				elFound = ((Element)o).getName();
 				break;
 			}
+		}
 
 		final Attribute attr = el.getAttributeItem(null, "name", 0); //by local name
 		if (attr == null)
@@ -970,14 +1047,11 @@ public class Parser {
 		noEmpty("name", attnm, el);
 		final ConditionImpl cond = ConditionImpl.getInstance(
 				el.getAttributeValue("if"), el.getAttributeValue("unless"));
-		if (bNativeContent) {
+		if (elFound != null) {
 			if (Events.isValid(attnm))
-				throw new UiException("Event listeners not support native content");
+				throw new UiException("<" + elFound + "> not allowed in an event listener, "+el.getLocator());
 
-			final NativeInfo nativeInfo = new NativeInfo(
-				parent, pgdef.getLanguageDefinition().getNativeDefinition(), "");
-			parse(pgdef, nativeInfo, el.getChildren(), annHelper, true);
-			parent.addProperty(attnm, nativeInfo, cond);
+			parseAsProperty(pgdef, parent, attnm, el.getChildren(), annHelper, cond);
 		} else {
 			final String trim = el.getAttributeValue("trim");
 			noEL("trim", trim, el);
@@ -1181,23 +1255,33 @@ public class Parser {
 	/** Returns whether it is a ZK element.
 	 * @param pref namespace's prefix
 	 * @param uri namespace's URI
+	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
-	private static final boolean
-	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
+	private static final boolean isZkElement(LanguageDefinition langdef,
+	String nm, String pref, String uri, boolean bNativeContent) {
 		if (isDefaultNS(langdef, pref, uri))
-			return !langdef.hasComponentDefinition(nm);
+			return !bNativeContent && !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri);
 	}
+	private static final boolean
+	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
+		return isZkElement(langdef, nm, pref, uri, false);
+	}
 	/** Returns whether it is a ZK attribute (in a non-ZK element).
+	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
 	private static final boolean
-	isZkAttr(LanguageDefinition langdef, Namespace attrns) {
+	isZkAttr(LanguageDefinition langdef, Namespace attrns, boolean bNativeContent) {
 		//if native we will make sure URI is ZK or lang's namespace
-		if (langdef.isNative()
+		if ((bNativeContent || langdef.isNative())
 		&& attrns != null && "".equals(attrns.getPrefix()))
 			return false; //if navtive, "" means not ZK
 
 		return isZkElementAttr(langdef, attrns);
+	}
+	private static final boolean
+	isZkAttr(LanguageDefinition langdef, Namespace attrns) {
+		return isZkAttr(langdef, attrns, false);
 	}
 	/** Similar to {@link #isZkAttr}, except it doesn't care isNative
 	 * (i.e., we consider it as a ZK attribute unless a namespace

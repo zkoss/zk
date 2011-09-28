@@ -19,6 +19,8 @@ package org.zkoss.zk.ui.sys;
 import java.io.Writer;
 import java.util.Collection;
 
+import org.zkoss.xel.XelContext;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -169,4 +171,29 @@ public interface ExecutionCtrl {
 	 * @since 5.0.6
 	 */
 	public void setExecutionInfo(ExecutionInfo evtinf);
+
+	/** Returns the object, if any, defined in any variable resolver
+	 * added by {@link #addVariableResolver}.
+	 * <p>Notice that it looks only for the variables defined
+	 * in {@link #addVariableResolver}. To get a variable an EL expression
+	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
+	 * @since 5.5.0
+	 */
+	public Object getExtraXelVariable(String name);
+	/** Returns the object, if any, defined in any variable resolver
+	 * added by {@link #addVariableResolver}.
+	 * <p>Notice that it looks only for the variables defined
+	 * in {@link #addVariableResolver}. To get a variable an EL expression
+	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
+	 * <p>Unlike {@link #getExtraXelVariable(String)}, this method
+	 * can utilitize {@link org.zkoss.xel.VariableResolverX} if you'd like
+	 * to retrieve a property of another object.
+	 * @param ctx the XEL context
+	 * @param base the base object. If null, it looks for a top-level variable.
+	 * If not null, it looks for a member of the base object (such as getter).
+	 * @param name the property to retrieve.
+	 * @see #getExtraXelVariable(String)
+	 * @since 5.5.0
+	 */
+	public Object getExtraXelVariable(XelContext ctx, Object base, Object name);
 }

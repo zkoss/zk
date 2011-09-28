@@ -41,7 +41,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				verifyTrue(titem.is("selected"));
 				click(jq("@button:eq(1)"));
 				waitResponse();
-				verifyEquals("<Treeitem titem>",getAlertMessage());
+				verifyTrue(getAlertMessage().matches("<Treeitem .*titem>"));
 		]]></client>
 	</case>
 </test>

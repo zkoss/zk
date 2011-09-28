@@ -47,7 +47,6 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Bandbox extends Textbox {
-	private transient Bandpopup _drop;
 	private boolean _autodrop, _btnVisible = true;
 
 	static {
@@ -64,7 +63,7 @@ public class Bandbox extends Textbox {
 	/** Returns the dropdown window belonging to this band box.
 	 */
 	public Bandpopup getDropdown() {
-		return _drop;
+		return (Bandpopup)getFirstChild();
 	}
 
 	/** Returns whether to automatically drop the list if users is changing
@@ -172,41 +171,12 @@ public class Bandbox extends Textbox {
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Bandpopup))
 			throw new UiException("Unsupported child for Bandbox: "+newChild);
-		if (_drop != null)
+		if (getFirstChild() != null)
 			throw new UiException("At most one bandpopup is allowed, "+this);
 		super.beforeChildAdded(newChild, refChild);
-	}
-	public boolean insertBefore(Component newChild, Component refChild) {
-		if (super.insertBefore(newChild, refChild)) {
-			_drop = (Bandpopup)newChild;
-			return true;
-		}
-		return false;
 	}
 	/** Childable. */
 	protected boolean isChildable() {
 		return true;
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		if (child == _drop) _drop = null; //just in case
-	}
-
-	//Cloneable//
-	public Object clone() {
-		final Bandbox clone = (Bandbox)super.clone();
-		if (clone._drop != null) clone.afterUnmarshal();
-		return clone;
-	}
-	private void afterUnmarshal() {
-		_drop = (Bandpopup)getFirstChild();
-	}
-
-	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		if (!getChildren().isEmpty()) afterUnmarshal();
 	}
 }

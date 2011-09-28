@@ -393,7 +393,8 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	public Object getXelVariable(String name);
 	/** Returns a vairable that is visible to XEL expressions.
 	 * <p>Unlike {@link #getXelVariable(String)}, this method
-	 * can utilitize {@link org.zkoss.xel.VariableResolverX} introduced in ZK 5.0.
+	 * can utilitize {@link org.zkoss.xel.VariableResolverX} if you'd like
+	 * to retrieve a property of another object.
 	 * @param ctx the XEL context
 	 * @param base the base object. If null, it looks for a top-level variable.
 	 * If not null, it looks for a member of the base object (such as getter).

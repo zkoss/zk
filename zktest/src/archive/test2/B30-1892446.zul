@@ -2,6 +2,7 @@
 	<zscript>
 		
 		import org.zkoss.zktest.test2.tree.TreeModelA;
+		import java.util.*;
 		//An ArrayList is created to be the root of tree
 		ArrayList mother = new ArrayList();
 		

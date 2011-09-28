@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-381.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  23 15:51:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click right arrow to scroll menubar to right most side.</li>
+<li>Click left arrow to scroll menubar to left most side.</li>
+<li>The bug is fixed if do above without any problem.</li>
+</ol>
+]]></html>
+	<menubar id="menubar" width="130px" scrollable="true">
+		<menu label="Project" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+			<menupopup>
+				<menuitem label="New" onClick="alert(self.label)"  />
+				<menuitem label="Open" onClick="alert(self.label)" />
+				<menuitem label="Save" onClick="alert(self.label)"  />
+				<menuitem label="Exit" onClick="alert(self.label)"  />
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Bug Report" onClick="alert(self.label)"  />
+				<menu label="About">
+					<menupopup>
+						<menuitem label="About Potix"  onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+		<menuitem label="ZK Web Framework" onClick="alert(self.label)" />
+	</menubar>
+</zk>

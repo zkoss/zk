@@ -167,7 +167,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			}
 		},
 		image: function (v) {
-			if (this._mold == 'trendy') {
+			if (v && this._preloadImage) zUtl.loadImage(v);
+			if (this.isTableLayout_()) {
 				this.rerender();
 			} else {				
 				var n = this.getImageNode();
@@ -313,7 +314,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(Button, 'bind_', arguments);
 
 		var n;
-		if (this._mold != 'trendy') {
+		if (!this.isTableLayout_()) {
 			n = this.$n();
 		} else {
 			if (this._disabled) return;
@@ -333,7 +334,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		_cleanUpld(this);
 
 		var trendy = this._mold == 'trendy',
-			n = !trendy ? this.$n(): this.$n('btn');
+			n = !this.isTableLayout_() ? this.$n(): this.$n('btn');
 		if (n) {
 			this.domUnlisten_(n, "onFocus", "doFocus_")
 				.domUnlisten_(n, "onBlur", "doBlur_");
@@ -370,12 +371,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	doFocus_: function (evt) {
-		if (this._mold == 'trendy')
+		if (this.isTableLayout_())
 			jq(this.$n('box')).addClass(this.getZclass() + "-focus");
 		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
-		if (this._mold == 'trendy')
+		if (this.isTableLayout_())
 			jq(this.$n('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
@@ -466,6 +467,27 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			_fixwidth(this);
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
+	},
+	/** Generates the HTML fragment at the right of the button layout.
+	 * <p>Default: do nothing, override it as need.
+	 * @param Array out an array of HTML fragments.
+	 * @since 5.5.0
+	 */
+	renderIcon_: function (out) {
+	},
+	/** Generates the HTML fragment after the button layout table.
+	 * <p>Default: do nothing, override it as need.
+	 * @param Array out an array of HTML fragments.
+	 * @since 5.5.0
+	 */
+	renderInner_: function (out) {
+	},
+	/** Returns whether have to listen to onfocus and onblur event on button element.
+	 * @return boolean
+	 * @since 5.5.0
+	 */
+	isTableLayout_: function () {
+		return this._mold == 'trendy';
 	}
 });
 //handle autodisabled buttons

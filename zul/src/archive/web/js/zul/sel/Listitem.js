@@ -17,6 +17,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _isPE() {
 		return zk.isLoaded('zkex.sel');
 	}
+	// _dragImg changed to an array, update image node after origional DD_dragging
+	function updateImg(drag) {
+		var dragImg = drag._dragImg;
+		if (dragImg) {
+			// update drag image
+			var cls = jq(drag.node).hasClass('z-drop-allow')? 'z-drop-allow': 'z-drop-disallow';
+			for (var len = 0; len < dragImg.length; len ++)
+				dragImg[len].className = cls;
+		}
+	}
 /**
  * A listitem.
  *
@@ -46,6 +56,52 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	setLabel: function (val) {
 		this._autoFirstCell().setLabel(val);
+	},
+	// override this functino for multiple z-drop-cnt
+	getDragMessage_: function () {
+		var p = this.parent,
+			p_sel = p._selItems,
+			msg,
+			cnt = 2;
+		// if no other listitem selected, return self label
+		// else iterate through all listitems 
+		if (!p_sel.length || (p_sel.length == 1 && p_sel[0] == this))
+			return this.getLabel();
+		for (var w = p.firstChild; w; w = w.nextSibling)
+			if (w.isSelected() || w == this) {
+				var label = w.getLabel();
+				if (label.length > 9)
+					label = label.substring(0, 9) + "...";
+				if (!msg)
+					msg = label;
+				else
+					msg += '</div><div class="z-drop-cnt"><span id="zk_ddghost-img'+(cnt++)+'" class="z-drop-disallow"></span>&nbsp;'+label;
+			}
+		return msg;
+	},
+	// replace the origional DD_dragging
+	getDragOptions_: function (map) {
+		var old = map.change;
+		map.change =  function (drag, pt, evt) {
+			old(drag, pt, evt);
+			// update drag image after origional function
+			updateImg(drag);
+		};
+		return this.$supers('getDragOptions_', arguments);
+	},
+	// override it because msg cut in getDragMessage_,
+	// do not want cut again here, and change _dragImg to array
+	cloneDrag_: function (drag, ofs) {
+		//See also bug 1783363 and 1766244
+		var msg = this.getDragMessage_();
+		var dgelm = zk.DnD.ghost(drag, ofs, msg);
+
+		drag._orgcursor = document.body.style.cursor;
+		document.body.style.cursor = "pointer";
+		jq(this.getDragNode()).addClass('z-dragged'); //after clone
+		// has multi drag image
+		drag._dragImg = jq('span[id^="zk_ddghost-img"]');
+		return dgelm;
 	},
 	/** Sets the image of the {@link Listcell} it contains.
 	 *

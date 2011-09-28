@@ -641,6 +641,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				ctl.fireDown(this.fbar);
 			this._syncBodyWidth();
 			this._fixHgh();
+			this._fixWdh(); // B55-ZK-328
 			this.zsync();
 		};
 	})(),
@@ -662,6 +663,21 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (hgh && hgh != "auto")
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
+	},
+	_fixWdh: function () {
+		var pc = this.panelchildren;
+		if (!pc || pc.z_rod || !this.isRealVisible()) 
+			return;
+		var body = pc.$n(),
+			wdh = this.$n().style.width;
+		if (body && wdh && wdh != "auto") {
+			var w = zk.parseInt(wdh), 
+				cn = body;
+			if (this._rounded())
+				for (var i = 0; i < 3; i++)
+					w = zk(cn = cn.parentNode).revisedWidth(w); // cl, cr, cm
+			body.style.width = zk(body).revisedWidth(w) + 'px';
+		}
 	},
 	//whether rounded border is required
 	_rounded: _zkf = function () {

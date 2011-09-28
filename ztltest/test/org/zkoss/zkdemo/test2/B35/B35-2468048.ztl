@@ -19,7 +19,7 @@
 			 <div id="levelC_wrapper">
 			 Following is C Window :
 			  <window id="levelC" title="C window" width="400px" border="normal">
-			   <button id="btn" label="show variable x" onClick='alert(self.getVariable("x", false))'/>
+			      <button id="btn" label="show variable x" onClick='alert(self.getAttribute("x", true))'/>
 			  </window>
 			 </div>
 			</window>

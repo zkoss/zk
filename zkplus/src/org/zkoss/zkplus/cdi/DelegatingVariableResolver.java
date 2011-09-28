@@ -39,7 +39,7 @@ public class DelegatingVariableResolver implements VariableResolverX {
 		_cdiResolver = CDIUtil.getBeanManager().getELResolver();
 	}
 	public Object resolveVariable(String name) throws XelException {
-		throw new UnsupportedOperationException("Use resolveVariable(XelContext,Object,Object) instead");
+		return resolveVariable(null, null, name);
 	}
 
 	public Object resolveVariable(XelContext ctx, Object base, Object name)

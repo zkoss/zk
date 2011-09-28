@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -527,6 +526,18 @@ public class Rows extends XulElement {
 
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : _zclass;
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setHflex(String flex) {
 	}
 	//Cloneable//
 	public Object clone() {

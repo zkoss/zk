@@ -302,6 +302,18 @@ public class Listitem extends XulElement {
 		return getParent() != null ? "select".equals(getParent().getMold()) ?
 				"select" : super.getMold(): super.getMold();
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setHflex(String flex) {
+	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

@@ -27,6 +27,7 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		 * @param String src the URI of the image source
 		 */
 		src: function (v) {
+			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode();
 			if (n) n.src = v || '';
 		},

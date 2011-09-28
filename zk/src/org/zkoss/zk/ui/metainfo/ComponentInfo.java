@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.Utils;
 
@@ -109,6 +110,17 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
 		this(parent, compdef, null);
+	}
+	/** Constructs the info without a prent.
+	 * Used only by {@link NativeInfo}.
+	 */
+	/*package*/ ComponentInfo(EvaluatorRef evalr, ComponentDefinition compdef,
+	String tag) {
+		if (compdef == null || evalr == null)
+			throw new IllegalArgumentException();
+		_evalr = evalr;
+		_compdef = compdef;
+		_tag = tag;
 	}
 	/** Used only by {@link DupComponentInfo}.
 	 */

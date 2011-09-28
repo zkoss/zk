@@ -39,8 +39,13 @@ function (out) {
 			(zk.ie ? btn : ''),
 			'</td><td class="', zcls, '-cm"',
 			this.domTextStyleAttr_(), '>', this.domContent_(),
-			'</td><td class="', zcls, '-cr"><div></div></td></tr>',
+			'</td><td class="', zcls, '-cr"><div>');
+	this.renderIcon_(out);
+	out.push('</div></td></tr>',
 			'<tr><td class="', zcls, '-bl"></td>',
 			'<td class="', zcls, '-bm"></td>',
-			'<td class="', zcls, '-br"></td></tr></table></span>');
+			'<td class="', zcls, '-br"></td></tr></table>');
+	this.renderInner_(out);
+	
+	out.push('</span>');
 }

@@ -50,4 +50,17 @@ public class Foot extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-foot" : _zclass;
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setHflex(String flex) {
+	}
+	
 }

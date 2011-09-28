@@ -36,6 +36,18 @@ public class Listfoot extends XulElement {
 	public Listbox getListbox() {
 		return (Listbox)getParent();
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Listbox related 
+	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
+	 */
+	public void setHflex(String flex) {
+	}
 
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {

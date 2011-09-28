@@ -50,23 +50,24 @@ function (out) {
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="height:', hgh, '"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
+	if (this.rows && this.domPad_ && !this.inPagingMold())
+		this.domPad_(out, '-tpad');
+	out.push('<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
 		this.domFaker_(out, '-bdfaker', zcls);
 
-	if (this.rows) {
-		if (this.domPad_ && !this.inPagingMold())
-			this.domPad_(out, '-tpad');
+	if (this.rows)
 		this.rows.redraw(out);
-		if (this.domPad_ && !this.inPagingMold())
-			this.domPad_(out, '-bpad');
-	}
 	
 	this.redrawEmpty_(out);
 	
-	out.push('</table></div>');
+	out.push('</table>');
+	if (this.rows && this.domPad_ && !this.inPagingMold())
+		this.domPad_(out, '-bpad');
+	
+	out.push('</div>');
 	
 	if (this.foot) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',

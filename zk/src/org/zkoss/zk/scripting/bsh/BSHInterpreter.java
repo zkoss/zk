@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
@@ -446,7 +447,7 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = false;
 				final Execution exec = Executions.getCurrent();
 				if (exec != null) {
-					Object val = exec.getXelVariable(name);
+					Object val = exec instanceof ExecutionCtrl ? ((ExecutionCtrl)exec).getExtraXelVariable(name): null;
 					if (val != null)
 						return val;
 					val = exec.getAttribute(name);
@@ -497,7 +498,7 @@ implements SerializableAware, HierachicalAware {
 				_firstGet = false;
 				final Execution exec = Executions.getCurrent();
 				if (exec != null && exec != curr) {
-					Object val = exec.getXelVariable(name);
+					Object val = exec instanceof ExecutionCtrl ? ((ExecutionCtrl)exec).getExtraXelVariable(name): null;
 					if (val != null)
 						return val;
 					val = exec.getAttribute(name);

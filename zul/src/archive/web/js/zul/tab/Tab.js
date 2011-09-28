@@ -42,7 +42,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		closable: _zkf = function() {
 			this.rerender();
 		},
-		image: _zkf,
+		image: function (v) {
+			if (v && this._preloadImag) zUtl.loadImage(v);
+			this.rerender();
+		},
 		/**
 		 * Returns whether this tab is disabled.
 		 * <p>

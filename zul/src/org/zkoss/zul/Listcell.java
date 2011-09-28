@@ -140,6 +140,12 @@ public class Listcell extends LabelImageElement {
 			smartUpdate("colspan", getSpan());
 		}
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the hflex of Listcell, please 
+	 * use {@link Listheader#setHflex(String)} instead.
+	 */
+	public void setHflex(String flex) {
+	}
 	
 	//-- super --//
 	public void setWidth(String width) {

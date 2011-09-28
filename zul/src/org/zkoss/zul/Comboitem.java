@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Iterator;
+
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
@@ -40,6 +42,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private Object _value;
 	private String _content = "";
 	private boolean _disabled;
+	private transient int _index = -1;
 
 	public Comboitem() {
 	}
@@ -152,6 +155,25 @@ implements org.zkoss.zk.ui.ext.Disable {
 		_value = value;
 	}
 
+	/** Returns the index of this Comboitem.
+	 * <p>Notice that the performance is not good if there are a lot of items.
+	 * Therefore, this method shall not be used with a huge Combobox.
+	 * @since 5.5.0
+	 */
+	public int getIndex() {
+		int j = 0;
+		if (_index < 0) {
+			final Combobox cb = (Combobox) getParent();
+			for (Iterator it = cb.getChildren().iterator();	it.hasNext(); ++j) {
+				if (it.next() == this)
+					break;
+			}
+		} else {
+			j = _index;
+		}
+		return j;
+	}
+	
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-comboitem" : _zclass;

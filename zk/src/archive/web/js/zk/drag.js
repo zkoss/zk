@@ -586,21 +586,25 @@ String scroll; //DOM Element's ID</code></pre>
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
-		if(_dragging[node] || evt.which != 1)
+		if(_dragging[node] || evt.which != 1
+		|| (zk.safari && jq.nodeName(target, 'select')))
+			return;
+			// Bug B50-3147909: Safari has issue with select and draggable
+			// Now select element is not draggable in Chrome and Safari
+
+		var pt = [evt.pageX, evt.pageY],
+			pos = zk(node).cmOffset(),
+			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
+		if ((ofs[0] > (v=node.clientWidth) && node.offsetWidth > v + 3)
+		|| (ofs[1] > (v=node.clientHeight) && node.offsetHeight > v + 3)) //scrollbar
 			return;
 
-		var pt = [evt.pageX, evt.pageY];
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
 			return;
 		}
-		// Bug B50-3147909: Safari has issue with select and draggable
-		// Now select element is not draggable in Chrome and Safari
-		if(zk.safari && jq.nodeName(target, 'select'))
-			return;
 		
-		var pos = zk(node).cmOffset();
-		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
+		this.offset = ofs;
 		_activate(this, devt, pt);
 
 		if (!zk.ie) {

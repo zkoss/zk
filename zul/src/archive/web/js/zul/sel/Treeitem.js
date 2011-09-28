@@ -73,7 +73,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_open: true,
-	_checkable: true,
 	$define: {
     	/** Returns whether this container is open.
     	 * <p>Default: true.

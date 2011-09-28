@@ -126,9 +126,12 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
-				if (Servlets.isIncluded(request))
+				if (Servlets.isIncluded(request)) {
 					log.error("Failed to load the resource: "+path);
-					//It might be eaten, so log the error
+						//It might be eaten, so log the error
+					throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
+						//have the includer to handle it
+				}
 				response.sendError(response.SC_NOT_FOUND, path);
 				return null;
 			}

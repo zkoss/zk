@@ -34,7 +34,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._tidChg = null;
 		}
 		if (onBlur) {
-			if (zul.inp.InputWidget.onChangingForced && wgt.isListen("onChanging"))
+			if ((zul.inp.InputWidget.onChangingForced && 
+					wgt.isListen("onChanging")) || wgt._instant)
 				_onChanging.call(wgt, -1); //force
 			_clearOnChanging(wgt);
 		}
@@ -50,16 +51,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
-				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
+			if (this.isListen("onChanging"))
+				this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
+					{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
+			if (this._instant)
+				this.updateChange_();
 		}
 	}
+
 	var _keyIgnorable = zk.ie ? function () {return true;}:
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
 		}: function (code) {
 			return code >= 32;
-		}
+		},
+
+		_fixInput = zk.ie ? function (wgt) { //ZK-426
+			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
+				if (wgt == zk.currentFocus)
+					zjq.fixInput(wgt.getInputNode());
+			}, 0);
+		}: zk.$void;
+
 /** @class zul.inp.Renderer
  * The renderer used to render a inputWidget.
  * It is designed to be overridden.
@@ -190,6 +203,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		readonly: function (readonly) {
 			var inp = this.getInputNode();
 			if (inp) {
+				_fixInput(this);
+
 				var zcls = this.getZclass(),
 					fnm = readonly ? 'addClass': 'removeClass';
 				
@@ -256,7 +271,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		inplace: function (inplace) {
 			this.rerender();
-		}
+		},
+		/** Returns whether to send onChange event as soon as user types in the 
+		 * input.
+		 * <p>Default: false.
+		 * @return boolean
+		 * @since 5.5.0
+		 */
+		/**
+		 * Sets whether to send onChange event as soon as user types in the 
+		 * input.
+		 * @param boolean instant
+		 * @since 5.5.0
+		 */
+		instant: null
 	},
 	/** Returns the CSS style of inplace if inplace is not null
 	 * @return String
@@ -805,7 +833,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (this.isListen("onChanging"))
+		if (this.isListen("onChanging") || this._instant)
 			_startOnChanging(this);
 
 		this.$supers('doKeyUp_', arguments);

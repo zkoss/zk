@@ -212,6 +212,18 @@ public class Row extends XulElement {
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setWidth(String width) {
+	}
+	/**
+	 * @deprecated as of release 5.5.0. To control the size of Grid related 
+	 * components, please refer to {@link Grid} and {@link Column} instead.
+	 */
+	public void setHflex(String flex) {
+	}
 
 	//-- super --//
 	/** Returns the style class.

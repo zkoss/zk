@@ -1875,8 +1875,7 @@ w:use="foo.MyWindow"&gt;
 		render(renderer, "autag", getAutag());
 
 		final Desktop desktop = getDesktop();
-		if (this instanceof IdSpace && this.getAttribute("z$is") == null // Used by Window and others to minimize number of bytes
-		&& Utils.markClientInfoPerDesktop(desktop, getWidgetClass() + ":is"))
+		if (this instanceof IdSpace && this.getAttribute("z$is") == null) // Used by Window and others to minimize number of bytes
 			renderer.render("z$is", true);
 
 		Boolean shallHandleImportant = null;

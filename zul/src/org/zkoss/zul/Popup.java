@@ -41,6 +41,11 @@ public class Popup extends XulElement {
 	public Popup() {
 		super.setVisible(false);
 	}
+	protected Popup(boolean visible) {
+		// some sub class should construct without setVisible(false)
+		if (!visible)
+			super.setVisible(false);
+	}
 
 	/**
 	 * Opens this popup to the specified location at the client.

@@ -348,6 +348,18 @@ public class Panel extends XulElement implements Framable {
 	public int getMinwidth() {
 		return _minwidth;
 	}
+	public void setHflex(String flex) {
+		super.setHflex(flex);
+		Panelchildren pc = getPanelchildren();
+		if (pc != null)
+			pc.smartUpdate("hflex", flex);
+	}
+	public void setVflex(String flex) {
+		super.setVflex(flex);
+		Panelchildren pc = getPanelchildren();
+		if (pc != null)
+			pc.smartUpdate("vflex", flex);
+	}
 	/** Returns whether the panel is sizable.
 	 * @since 5.0.0
 	 */

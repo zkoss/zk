@@ -183,7 +183,6 @@ div.z-paging-os-cnt-l-over {
 	color:gray;
 	cursor:default;
 	opacity:0.4;
-	-moz-opacity:0.4;
 	filter: alpha(opacity=40);
 }
 .z-paging .z-paging-btn-disd *{

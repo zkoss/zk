@@ -51,7 +51,7 @@ import org.zkoss.zk.ui.WebApp;
  * @since 5.0.0
  */
 /*package*/ abstract class AbstractExtendlet<V> implements Extendlet {
-	static final Log log = Log.lookup(WpdExtendlet.class);
+	static final Log log = Log.lookup(AbstractExtendlet.class);
 
 	ExtendletContext _webctx;
 	/** DSP interpretation cache. */

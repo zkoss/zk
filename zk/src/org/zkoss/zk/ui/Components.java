@@ -1618,9 +1618,6 @@ public class Components {
 		public boolean hasVariableResolver(VariableResolver resolver) {
 			return exec().hasVariableResolver(resolver);
 		}
-		public Object getXelVariable(String name) {
-			return exec().getXelVariable(name);
-		}
 
 		public String toString() {
 			return Objects.toString(exec());

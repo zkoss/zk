@@ -271,6 +271,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				return;
 		} else {
 			var v = n.selectedIndex;
+			if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
 			if (this._selectedIndex == v)
 				return;
 

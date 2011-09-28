@@ -431,6 +431,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>combobutton</component-name>
+		<component-class>org.zkoss.zul.Combobutton</component-class>
+		<widget-class>zul.wgt.Combobutton</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/button.js</mold-uri>
+			<css-uri>css/combobutton.css.dsp</css-uri>
+		</mold>		
+	</component>
+	<component>
 		<component-name>datebox</component-name>
 		<component-class>org.zkoss.zul.Datebox</component-class>
 		<widget-class>zul.db.Datebox</widget-class>

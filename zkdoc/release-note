@@ -19,27 +19,46 @@ ZK 6.0.0
     are removed.
 
 	--------
-ZK 5.1.0
+ZK 5.5.0
 * Features
   ZK-139: A way to define a template that component could use
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
   ZK-237: <?import class="..."?> allows users to import classes
+  ZK-110: Upgrade to jQuery 1.6.4
+  ZK-61: Support hotkey for user to pick a date
+  ZK-443: Menubar can support keystroke to navigate the menubar
   ZK-292: Annotation supports an array of values and string-type value and so on
+  ZK-408: Allow the text-as content such as html/combitem to have a XML fragment
   ZK-278: Enhance stubonly to merge more components and better control of event handling
   ZK-401: A way to customize the way WebApp is instantiated
   ZK-217: A way to add a temporary variable resolver to an execution
-  2974464: A way to customize message with i3-label
   ZK-233: Execution.createComponents support inserting before particular component and variable resolver
   ZK-264: addEventListener support 'priority'
+  2974464: A way to customize message with i3-label
   3025389: A way to monitor the execution and event processing
   2947727: The instantiation of Composer & Server Push customizable
   ZK-224: Tree shall render the model in the onInitRender event listener
   ZK-288: Make GenericEventListener (and derives, GenericForwardComposer and GenericAutowireComposer) as serializable
   ZK-279: Simplify PageDefinition and related metainfo
+  ZK-314: A way to pre-load images since many UIs depend on the size of an image
+  ZK-114: Provide an JasperReport API to get the generated Media
+  ZK-379: Support "..." for long text in listbox 
+  ZK-370: Multi-line textbox support rounded mold
+  ZK-416: Listbox support multiple drag
+  ZK-446: Add an instant="true" attribute to InputElement(e.g. textbox, intbox, ...) so onChange is fired as quick as possible. 
+  ZK-12: Checkbox automatically disable itself after clicked
 
 * Bugs
+  ZK-328: Panelchildren shall ignore flex in maximized state
+  ZK-428: Hlayout/Vlayout performance issue
+  ZK-392: Set hflex='min' to treeitem will cause javascript error 
+  ZK-381: Menu scrolling bug
 
 * Upgrade Notes
+  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
+    are removed.
+  + Component's setVariable is removed (deprecated in 5.0). Please use
+    Component.setAttribute(name, value, SPACE_SCOPE)
   + The addEventListner method of org.zkoss.zk.ui.Component won't check whether
     the same event listener is registered twice. In other words,
     it will be invoked multiple times if a listener is registered multiple times.
@@ -52,8 +71,6 @@ ZK 5.1.0
 	and GenericAutowireComposer ignore the variables defined
 	in zscript and XEL. If it causes problems, please use the construactor
 	with full control (GenericAutowireComposer(separator,boolean,boolean)).
-  + org.zkoss.zk.ui.api.*, org.zkoss.zul.api.* and all component related interfaces
-    are removed.
   + The getClassNames and resolveClass methods of org.zkoss.xel.FunctionMapper
     are removed. Rather, FunctionMapperExt are introduced, so you could implement
     both FunctionMapper and FunctionMapperExt to have the function.
@@ -75,6 +92,14 @@ ZK 5.1.0
   + StubComponent's package becomes org.zkoss.zk.ui.sys.
   + EvaluatorRef's package becomes org.zkoss.zk.xel.
   + No longer support ZKuery
+  + The hflex/vflex properties of a Panelchildren are determined by its parent
+    Panel. The setter methods of Panelchildren's hflex/vflex will throw 
+    UnsupportedOperationException. 
+  + As the sizing of a few Grid/Listbox/Tree related components are controlled
+    by others, the hflex and width properties of them are irrelevant. Their
+    setters of hflex and width are deprecated. These components include:
+    Treeitem, Treerow, Treecell, Treechildren, Treecols, Treefoot,
+    Rows, Columns, Row, Cell, Foot, Listitem, Listcell, Listhead, Listfoot
 
 	--------
 ZK 5.0.9
@@ -84,8 +109,40 @@ ZK 5.0.9
   ZK-386: sclass is not applying when div visible false
   ZK-389: Exception after upgraded to zk 5.0.8 in WebSphere 5.1
   ZK-402: Duplicate content rendering on redraw when using includes in grid cells
+  ZK-409: Open the Messagebox will show a error
+  ZK-417: Scrollbar stops working when the mouse is moved
+  ZK-414: Screen jumps back to top when opening an item at the end of a long tree
+  ZK-419: Accordion tabbox appendchild issue
+  ZK-403: Set a model to combobox when opening, the dropdown will not show the items
+  ZK-426: Onblur and readonly issue in INTBOX (IE only)
+  ZK-427: Div Scrollbar & Drag issue
+  ZK-428: Hlayout/Vlayout performance issue
+  ZK-433: Labels.reset() won't clear the cache in which come from the ${labels} instance
+  ZK-415: Tabbox selectedPanel binding not working
+  ZK-424: jQuery ztag issue
+  ZK-430: When timeformat is defined as HHmm, you cannot type more the 2 characters
+  ZK-432: Hflex fail when place the listbox in the second tab of the tabbox (IE8 only)
+  ZK-434: Set a format "a h:m:s" to the timebox cannot work correctly
+  ZK-436: An empty iframe in IE will cause a false text
+  ZK-435: Listbox with paging mold trigger onAfterRender event twice
+  ZK-442: Unable to use TAB to switch focus when a menu item gains the focus (and handles the selection with keystrokes)
+  ZK-440: Append a listitem to the listbox will cause js error (Firefox 4 above only)
+  ZK-441: Colorbox will be hide while align right 
+  ZK-396: Opera select option and press tab will not change select item
+  ZK-393: Can't click-and-select any tree node in modal dialog window if included in JSP
+  ZK-394: Set hflex to Column calculate a wrong width 
+  ZK-444: componentScope.get() causes error in zul file 
+  ZK-381: Menu scrolling bug
+  ZK-397: Opera the checkbox of the disabled listitem is broke (F30-1780792.zul)
+  ZK-421: Selection bug in Listbox with paging
+  ZK-388: about JSdoc issue zul.wgt.Popup.open(Widget ref, Offset offset, String position, Map opts)
+  ZK-450: Serializable.smartWrite() shall not invoke LogManager under Google App Engine since it is not allowed
+  ZK-456: xmlns:h="html" shall be interpreted as the XHTML namespace rather than ZUL
+  ZK-454: Update tabbox and grid will cause js error in IE9
+  ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
 
 	--------
+Aug 31, 2011
 ZK 5.0.8
 * Features
   3287044: decimalbox/intbox/longbox/doublebox/doublespiner/spinner allows users to specify locale

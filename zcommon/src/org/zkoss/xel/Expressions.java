@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.JVMs;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -51,9 +52,15 @@ public class Expressions {
 
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
-	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory}.
+	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory},
+	 * which supports EL 2.0.
+	 * If you run under JVM 1.5 or later and deploy
+	 * <a href="http://code.google.com/p/zel/">zel.jar</a> in your class 
+	 * path, the default class is then {@link org.zkoss.xel.zel.ELFactory}
+	 * which supports EL 2.2.
 	 * To override it, you can specify the class by calling
-	 * {@link #setExpressionFactoryClass}.
+	 * {@link #setExpressionFactoryClass}, or use
+	 * {@link #newExpressionFactory(Class)} instead.
 	 *
 	 * <p>For the ZK user, you can override it with zk.xml
 	 * or org.zkoss.zk.ui.util.Configuration.
@@ -67,9 +74,15 @@ public class Expressions {
 	}
 	/** Instantiates an instance of {@link ExpressionFactory}.
 	 *
-	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory}.
+	 * <p>The default class is {@link org.zkoss.xel.el.ELFactory},
+	 * which supports EL 2.0.
+	 * If you run under JVM 1.5 or later and deploy
+	 * <a href="http://code.google.com/p/zel/">zel.jar</a> in your class 
+	 * path, the default class is then {@link org.zkoss.xel.zel.ELFactory}
+	 * which supports EL 2.2.
 	 * To override it, you can specify the class by calling
-	 * {@link #setExpressionFactoryClass}.
+	 * {@link #setExpressionFactoryClass}, or specifying the class you prefer
+	 * in the expfcls argument.
 	 *
 	 * <p>For the ZK user, you can override it with zk.xml
 	 * or org.zkoss.zk.ui.util.Configuration.
@@ -92,7 +105,34 @@ public class Expressions {
 		return newDefautFactory();
 	}
 	private static final ExpressionFactory newDefautFactory() {
-		return new org.zkoss.xel.el.ELFactory();
+		return _provider.newFactory();
+	}
+	
+	private static final FactoryProvider _provider; 
+	static {
+		boolean useZel = JVMs.isJava5();
+		if (useZel)
+			try {
+				Classes.forNameByThread("org.zkoss.zel.impl.ExpressionFactoryImpl");
+			} catch (Throwable e) {
+				useZel = false;
+			}
+		if (useZel) {
+			_provider = new FactoryProvider() {
+				public ExpressionFactory newFactory() {
+					return new org.zkoss.xel.zel.ELFactory();
+				}
+			};
+		} else {
+			_provider = new FactoryProvider() {
+				public ExpressionFactory newFactory() {
+					return new org.zkoss.xel.el.ELFactory();
+				}
+			};
+		}
+	}
+	private interface FactoryProvider {
+		public ExpressionFactory newFactory();
 	}
 
 	/** Evaluates an expression.
@@ -114,7 +154,12 @@ public class Expressions {
 	/** Sets the implementation of the expression factory that shall
 	 * be used by the whole system, or null to use the system default.
 	 *
-	 * <p>Default: null - it means {@link org.zkoss.xel.el.ELFactory}.
+	 * <p>Default: null - it means {@link org.zkoss.xel.el.ELFactory},
+	 * which supports EL 2.0.
+	 * If you run under JVM 1.5 or later and deploy
+	 * <a href="http://code.google.com/p/zel/">zel.jar</a> in your class 
+	 * path, the default class is then {@link org.zkoss.xel.zel.ELFactory}
+	 * which supports EL 2.2.
 	 *
 	 * <p>Note: you can only specify an implementation that is compatible
 	 * with JSP EL here, since all builtin pages depend on it.
