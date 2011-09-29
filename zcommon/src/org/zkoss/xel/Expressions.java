@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.JVMs;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -110,13 +109,12 @@ public class Expressions {
 	
 	private static final FactoryProvider _provider; 
 	static {
-		boolean useZel = JVMs.isJava5();
-		if (useZel)
-			try {
-				Classes.forNameByThread("org.zkoss.zel.impl.ExpressionFactoryImpl");
-			} catch (Throwable e) {
-				useZel = false;
-			}
+		boolean useZel = true;
+		try {
+			Classes.forNameByThread("org.zkoss.zel.impl.ExpressionFactoryImpl");
+		} catch (Throwable e) {
+			useZel = false;
+		}
 		if (useZel) {
 			_provider = new FactoryProvider() {
 				public ExpressionFactory newFactory() {

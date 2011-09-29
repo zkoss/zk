@@ -22,7 +22,6 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.util.logging.Log;
-import org.zkoss.lang.JVMs;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -118,34 +117,17 @@ public class HibernateUtil {
 	/*package*/ static SessionFactory initSessionFactory(String resource) {
 		if (_factory == null) {
 			try {
-			    // Create the SessionFactory per JavaVM version and allow JDK 1.4 compatibility
-				if (JVMs.isJava5()) {
-				    _factory = java5Factory(resource);
-				} else {
-				  	_factory = java4Factory(resource);
-				}
-				log.info("Hibernate configuration file loaded: "+ (resource == null ? "hibernate.cfg.xml" : resource));
+				_factory = resource == null ? 
+					new AnnotationConfiguration().configure().buildSessionFactory() :
+					new AnnotationConfiguration().configure(resource).buildSessionFactory();
+				log.debug("Hibernate configuration file loaded: "+ (resource == null ? "hibernate.cfg.xml" : resource));
 			} catch (Throwable ex) {
-			    // Make sure you log the exception, as it might be swallowed
-			    log.error("Initial SessionFactory creation failed." + ex);
-			    throw new ExceptionInInitializerError(ex);
+				// Make sure you log the exception, as it might be swallowed
+				log.error("Initial SessionFactory creation failed." + ex);
+				throw new ExceptionInInitializerError(ex);
 			}
 		}
 		return _factory;
-	}
-
-	//We have to put the instantiation of AnnotationConfiguration
-	//in a separate method. Otherwise, it will be loaded even if
-	//isJava5 is false
-	/*private*/ static SessionFactory java5Factory(String resource) {
-		return resource == null ? 
-			new AnnotationConfiguration().configure().buildSessionFactory() :
-			new AnnotationConfiguration().configure(resource).buildSessionFactory();
-	}  
-	/*private */ static SessionFactory java4Factory(String resource) {
-		return resource == null ?
-			new Configuration().configure().buildSessionFactory() :
-			new Configuration().configure(resource).buildSessionFactory();
 	}
 
 	/**
