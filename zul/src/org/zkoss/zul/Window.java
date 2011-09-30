@@ -393,6 +393,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 
 	/** Returns the current mode.
 	 * One of "modal", "embedded", "overlapped", "popup", and "highlighted".
+	 * @see #getModeType
 	 */
 	public String getMode() {
 		return modeToString(_mode);
@@ -400,14 +401,39 @@ public class Window extends XulElement implements Framable, IdSpace {
 	private static String modeToString(int mode) {
 		switch (mode) {
 		case MODAL:
-		case _MODAL_:
-			return "modal";
+		case _MODAL_: return "modal";
 		case POPUP: return "popup";
 		case OVERLAPPED: return "overlapped";
 		case HIGHLIGHTED: return "highlighted";
 		default: return "embedded";
 		}
 	}
+
+	/** Sets the mode.
+	 * @since 6.0.0
+	 */
+	public void setMode(Mode mode) {
+		setMode(mode.value);
+	}
+	/** Returns the current mode.
+	 * @see #getMode
+	 * @see #setMode(Mode)
+	 * @since 6.0.0
+	 */
+	public Mode getModeType() {
+		return toModeType(_mode);
+	}
+	private static Mode toModeType(int mode) {
+		switch (mode) {
+		case MODAL:
+		case _MODAL_: return Mode.MODAL;
+		case POPUP: return Mode.POPUP;
+		case OVERLAPPED: return Mode.OVERLAPPED;
+		case HIGHLIGHTED: return Mode.HIGHLIGHTED;
+		default: return Mode.EMBEDDED;
+		}
+	}
+
 	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
 	 *
 	 * <p>Notice: {@link Events#ON_MODAL} is posted if you specify
@@ -946,6 +972,54 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 */
 	public boolean isCollapsible() {
 		return false;
+	}
+
+	/** The window's mode used with {@link Window#setMode(Mode)}.
+	 * @since 6.0.0
+	 */
+	public static enum Mode {
+		/** Embeds the window as normal component. */
+		EMBEDDED (Window.EMBEDDED),
+		/** Makes the window as a modal dialog. once {@link #doModal}
+		 * is called, the execution of the event processing thread
+		 * is suspended until one of the following occurs.
+		 * <ol>
+		 * <li>{@link #setMode(Mode)} is called with a mode other than MODAL.</li>
+		 * <li>Either {@link #doOverlapped}, {@link #doPopup},
+		 * {@link #doEmbedded}, or {@link #doHighlighted} is called.</li>
+		 * <li>{@link #setVisible} is called with false.</li>
+		 * <li>The window is detached from the window.</li>
+		 * </ol>
+		 *
+		 * <p>Note: In the last two cases, the mode becomes {@link #OVERLAPPED}.
+		 * In other words, one might say a modal window is a special overlapped window.
+		 *
+		 * @see #HIGHLIGHTED
+		 */
+		MODAL (Window.MODAL),
+		/** Makes the window as overlapped other components.
+		 */
+		OVERLAPPED (Window.OVERLAPPED),
+		/** Makes the window as popup.
+		 * It is similar to {@link #OVERLAPPED}, except it is auto hidden
+		 * when user clicks outside of the window.
+		 */
+		POPUP (Window.POPUP),
+		/** Makes the window as highlighted.
+		 * Its visual effect is the same as {@link #MODAL}.
+		 * However, from the server side's viewpoint, it is similar to
+		 * {@link #OVERLAPPED}. The execution won't be suspended when
+		 * {@link #doHighlighted} is called.
+		 *
+		 * @see #MODAL
+		 * @see #OVERLAPPED
+		 */
+		HIGHLIGHTED (Window.HIGHLIGHTED);
+
+		private final int value;
+		private Mode(int v) {
+			this.value = v;
+		}
 	}
 }
 /** Any serializable object. */
