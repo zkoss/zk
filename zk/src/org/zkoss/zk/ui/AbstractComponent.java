@@ -2035,6 +2035,7 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	//Event//
+	@SuppressWarnings("deprecation")
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener) {
 		return addEventListener(listener instanceof org.zkoss.zk.ui.event.Express ? 1000: 0, evtnm, listener);
 	}
