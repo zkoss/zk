@@ -40,9 +40,9 @@ public class Themes {
 	private final static String THEME_PRIORITY_PREFIX = "org.zkoss.theme.priority.";
 	private final static String THEME_DISPLAY_NAME_PREFIX = "org.zkoss.theme.display.";
 	
-	public final static String CLASSICBLUE_NAME = "classicblue";
-	public final static String CLASSICBLUE_DISPLAY = "Classic Blue";
-	public final static int CLASSICBLUE_PRIORITY = 1000;
+	public final static String BREEZE_NAME = "breeze";
+	public final static String BREEZE_DISPLAY = "Breeze";
+	public final static int BREEZE_PRIORITY = 500;
 	
 	/**
 	 * Sets the theme name in cookie

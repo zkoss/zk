@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page title="ZK Test" language="xul/html"?>
 <!--
-test.zul
+messagebox.zul
 
 	Purpose:
-		View the specified subject.
+		
 	Description:
 
 	History:
-		Mon May 30 19:13:47     2005, Created by tomyeh
+		Wed Jul 7 12:00:12     2010, Created by simon
 
-Copyright (C) 2005 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-	This program is distributed under LGPL Version 3.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 -->
-<window title="${arg.title}" border="normal" width="250pt" closable="true"
+<window title="${arg.title}" sclass="z-messagebox-window" border="normal" width="250pt" closable="true"
 use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<hbox>
 		<div sclass="${arg.icon}"/>
+		<separator spacing="13px" />
 		<div sclass="z-messagebox">
 			<label value="${arg.message}" multiline="true" >
 				<attribute w:name="onBind">
@@ -48,7 +44,7 @@ use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 			</label>
 		</div>
 	</hbox>
-	<separator bar="true"/>
+	<separator spacing="15px"/>
 	<hbox style="margin-left:auto; margin-right:auto">
 	<button id="btn1" identity="${arg.OK}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
 		if="${!empty arg.OK}"/>

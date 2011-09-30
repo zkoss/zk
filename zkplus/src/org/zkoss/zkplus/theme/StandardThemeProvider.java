@@ -52,7 +52,7 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 	
 	private static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
-		return Themes.CLASSICBLUE_NAME.equals(suffix) ? null : suffix;
+		return Themes.BREEZE_NAME.equals(suffix) ? null : suffix;
 	}
 	
 	private static String getThemeMsgBoxURI(String suffix) {

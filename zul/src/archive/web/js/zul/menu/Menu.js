@@ -360,7 +360,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	// used for overriding from different theme
 	_getArrowWidth: function () {
-		return 15;
+		return 20;
 	},
 	doClick_: function (evt) {
 		if (this.menupopup) {

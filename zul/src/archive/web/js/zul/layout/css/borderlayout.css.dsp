@@ -18,7 +18,7 @@
 	width:100%;
 	height:100%;
 	overflow: hidden;
-	background-color:#CDE6F5;
+	background-color: #F0F0F0;
 	border: 0;	
 }
 
@@ -27,7 +27,7 @@
 .z-west,
 .z-center,
 .z-east {
-	border: 1px solid #9ECAD8;
+	border: 1px solid #C5C5C5;
 	position: absolute;
 	overflow: hidden;
 	background-color: white;
@@ -55,8 +55,8 @@
 .z-north-splt,
 .z-south-splt {
 	position: absolute;
-	height: 8px;
-	width: 8px;
+	height: 6px;
+	width: 6px;
 	background: #C4DCFB left;
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
 	cursor: col-resize;
@@ -103,8 +103,8 @@
 
 .z-borderlayout-icon {
 	overflow: hidden;
-	width: 16px;
-	height: 16px;
+	width: 15px;
+	height: 15px;
 	float: right;
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.png')});
@@ -117,12 +117,12 @@
 .z-east-header,
 .z-north-header,
 .z-south-header {
-	color: #0F3B82;
+	color: #555555;
 	font-size: ${fontSizeMS};
 	font-family: ${fontFamilyT};
 	font-weight: bold;
 	padding: 5px 3px 4px 5px;
-	border-bottom: 1px solid #9ecad8;
+	border-bottom: 1px solid #C5C5C5;
 	background: transparent repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/layout/borderlayout-hm.png')});
 	white-space: nowrap;
@@ -148,40 +148,40 @@
 }
 .z-north-colps-over,
 .z-south-exp-over {
-	background-position: -16px 0;
+	background-position: -15px 0;
 }
 .z-east-colps,
 .z-west-exp {
-	background-position: 0 -16px;
+	background-position: 0 -15px;
 }
 .z-east-colps-over,
 .z-west-exp-over {
-	background-position: -16px -16px;
+	background-position: -15px -15px;
 }
 .z-south-colps,
 .z-north-exp {
-	background-position: 0 -32px;
+	background-position: 0 -30px;
 }
 .z-south-colps-over,
 .z-north-exp-over {
-	background-position: -16px -32px;
+	background-position: -15px -30px;
 }
 .z-west-colps,
 .z-east-exp {
-	background-position: 0 -48px;
+	background-position: 0 -45px;
 }
 .z-west-colps-over,
 .z-east-exp-over {
-	background-position: -16px -48px;
+	background-position: -15px -45px;
 }
 .z-east-colpsd,
 .z-west-colpsd,
 .z-south-colpsd,
 .z-north-colpsd {
-	background-color: #E1F0F2;
+	background-color: #FCFCFC;
 	width: 22px;
 	height: 22px;
-	border: 1px solid #9ECAD8;
+	border: 1px solid #C5C5C5;
 	overflow: hidden;
 	position: absolute;
 	cursor: pointer;
@@ -190,22 +190,16 @@
 .z-west-colpsd-over,
 .z-south-colpsd-over,
 .z-north-colpsd-over {
-	background-color: #EEFCFF;
+	background-color: #E5F5FD;
 }
-
-<c:if test="${c:browser('ie6-')}">
-.z-borderlayout-icon {
-	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.gif')});
-}
-</c:if>
 
 <%-- Splitter button --%>
 .z-east-splt-btn,
 .z-west-splt-btn,
 .z-north-splt-btn,
 .z-south-splt-btn {
-	opacity: 0.5;
 	filter: alpha(opacity=50);  <%-- IE --%>
+	opacity: 0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat;
 	display: -moz-inline-box;
 	vertical-align: top;
@@ -241,3 +235,21 @@
 .z-south-splt-btn {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
+
+<c:if test="${c:browser('ie6-')}">
+.z-borderlayout-icon {
+	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.gif')});
+}
+.z-west-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
+}
+.z-east-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
+}
+.z-north-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
+}
+.z-south-splt-btn {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+}
+</c:if>

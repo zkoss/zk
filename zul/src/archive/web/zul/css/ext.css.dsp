@@ -73,15 +73,6 @@ li, dt, dd, pre, body {
 li	{
 	margin-top: 2pt
 }
-ul li	{
-	list-style: url(${c:encodeURL('~./img/z-bullet1.gif')}) disc
-}
-ul ul li	{
-	list-style: url(${c:encodeURL('~./img/z-bullet2.gif')}) circle
-}
-ul ul ul li	{
-	list-style: url(${c:encodeURL('~./img/z-bullet3.gif')}) square
-}
 
 code {
 	font-family: "Lucida Console", "Courier New", Courier, mono;

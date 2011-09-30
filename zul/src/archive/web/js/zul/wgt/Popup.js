@@ -336,6 +336,6 @@ zul.wgt.PopupRenderer = {
 	 * @param zul.wgt.Popup wgt the window
 	 */
 	isFrameRequired: function () {
-		return true;
+		return false;
 	}
 };

@@ -83,6 +83,12 @@ zul.inp.Renderer = {
 	* @param zul.inp.ComboWidget wgt the combowidget
 	*/
 	renderSpinnerButton: function (out, wgt) {
+		if (wgt.inRoundedMold()) 
+			return;
+		var zcls = wgt.getZclass(),
+			uuid = wgt.uuid;
+		out.push('<div id="', uuid, '-btn-up" class="', zcls, '-btn-upper"></div>',
+				'<div id="', uuid, '-btn-down" class="', zcls, '-btn-lower"></div>');
 	}
 };
 /** @class zul.inp.RoundUtl

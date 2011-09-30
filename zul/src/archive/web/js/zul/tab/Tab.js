@@ -267,6 +267,6 @@ zul.tab.TabRenderer = {
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	isFrameRequired: function (wgt) {
-		return true;
+		return false;
 	}
 };

@@ -46,7 +46,7 @@ body {
 <%-- paragraphs --%>
 img {border: 0;}
 
-<%-- ZK JavaScript utls --%>
+<%-- ZK JavaScript debug box --%>
 div.z-error {
 	display: none;
 	z-index: 9999999;
@@ -132,7 +132,6 @@ div.z-error .close {
 	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 2px transparent;
 }
 </c:if>
-
 div.z-log {
 	text-align:right; width:50%; right:10px; bottom:5px;
 	position:absolute; z-index: 99000;
@@ -143,7 +142,34 @@ div.z-log textarea {
 div.z-log button {
 	font-size: ${fontSizeXS};
 }
-
+.z-debug-domtree {
+	width:80%; right:10px; bottom:5px;
+	position:absolute; z-index: 99000; 
+	overflow: auto; color: #7D9196;
+	height: 300px; background: white;
+	padding: 2px; border: 1px solid gray;
+}
+.z-debug-domtree .z-debug-domtree-header {
+	overflow: hidden; zoom: 1; color: #403E39; font: normal ${fontSizeM} ${fontFamilyT};
+	padding: 5px 3px 4px 5px; border: 1px solid #999884; line-height: 15px; 
+	background:transparent url(${c:encodeURL('~./zk/img/debug/hd-gray.png')}) repeat-x 0 -1px;
+	font-weight:bold;
+}
+.z-debug-domtree .z-debug-domtree-body {
+	border: 1px solid #999884;
+	border-top: 0;
+}
+.z-debug-domtree-close {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zk/img/debug/tool-btn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
+	margin-left: 2px;
+}
+.z-debug-domtree-close-over {
+	background-position: -15px 0;
+}
 <%-- General --%>
 .noscript {<%-- the content of noscript --%>
 	width: 100%;
@@ -152,8 +178,8 @@ div.z-log button {
 	z-index: 32000;
 	top: 0;
 	left: 0;
-	opacity: .6;
 	filter: alpha(opacity=60);
+	opacity: .6;
 	zoom: 1;
 	text-align: center;
 	background: #E0E1E3;
@@ -165,8 +191,8 @@ div.z-log button {
 	margin: 10% 15%;
 	padding: 10px 0;
 	border: 1px solid black;
-	opacity: 1;
 	filter: alpha(opacity=100);
+	opacity: 1;
 }
 
 .z-label, .z-radio-cnt, .z-checkbox-cnt, input.button, input.file,
@@ -179,8 +205,8 @@ div.z-log button {
 	height: 100%;
 	position: absolute;
 	top: 0; left: 0;
-	opacity: .6;
 	filter: alpha(opacity=60); <%-- IE --%>
+	opacity: .6;
 	zoom: 1;
 	background: #E0E1E3;
 }
@@ -192,19 +218,19 @@ div.z-log button {
 	background-image: url(${c:encodeURL('~./zk/img/zkpowered.png')});
 }
 .z-loading {
-	background-color: #6eadff;
+	background-color: #E3E3E3;
 	position: absolute;
 	cursor: wait;
 	padding:3px;
 	white-space: nowrap;
-	border: 1px solid #83B5F7;
+	border: 1px solid #C7C7C7;
 	z-index: 31000;
 	left: 0; top: 0;
 }
 .z-loading-indicator {
 	background-color: #FFFFFF;
-	color: #102B6D;
-	border:1px solid #83B5F7;
+	color: #383838;
+	border:1px solid #D9D9D9;
 	white-space: nowrap;
 	padding:6px;
 }
@@ -214,7 +240,7 @@ div.z-log button {
 .z-renderdefer {
 	height: 16px; width: 16px;
 	background: transparent no-repeat center;
-	background-image: url(${c:encodeURL('~./zk/img/progress4.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/progress_breeze.gif')});
 }
 
 .z-apply-loading-icon,
@@ -230,14 +256,14 @@ div.z-log button {
 	z-index: 89000;
 	top: 0;
 	left: 0;
-	opacity: .6;
 	filter: alpha(opacity=60);
+	opacity: .6;
 	zoom: 1;
 }
 .z-apply-loading-indicator {
 	border:1px solid #A6C5DC;
 	background-color: #FFF;
-	color: #102B6D;
+	color: #383838;
 	white-space: nowrap;
 	padding: 2px;
 	font: normal ${fontSizeM} ${fontFamilyT};
@@ -362,13 +388,14 @@ div.z-log button {
 
 <%-- Drag-Drop --%>
 .z-dragged {
-	background: #E0EAF0; color: #888;
+	background: none no-repeat scroll 0 0 #E0EAF0;
+	color: #888888;
 }
 .z-drag-over {
-	background: #ADD2FF;
+	background: none no-repeat scroll 0 0 #ADD2FF;
 }
 span.z-drop-allow, span.z-drop-disallow {
-	background-repeat: no-repeat;
+	background: none no-repeat scroll 0 0 #FFFFFF;
 	vertical-align: top;
 	display: -moz-inline-box;
 	display: inline-block;
@@ -377,24 +404,43 @@ span.z-drop-allow, span.z-drop-disallow {
 	height: 16px;
 }
 span.z-drop-allow {
-	background: transparent no-repeat 0 -64px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-allow.png')});
 }
 span.z-drop-disallow {
-	background: transparent no-repeat 0 -80px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-disallow.png')});
 }
 div.z-drop-ghost {
-	border:1px solid #6699CE;
+	border: 1px solid #CCCCCC;
 }
 div.z-drop-cnt {
+	background: none no-repeat scroll 0 0 #FFFFFF;
 	width: 120px;
-	height: 18px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/drop-bg.gif')});
-	padding: 2px;
+	height: 16px;
+	padding: 3px;
 	font-size: ${fontSizeM};
 	font-weight: normal;
 	font-family: ${fontFamilyC};
+}
+<%-- 5.0.4 --%>
+div.z-drop-allow {
+	border: 1px solid #99CC99;
+}
+div.z-drop-disallow {
+	border: 1px solid #CC6666;
+}
+div.z-drop-allow div.z-drop-cnt,
+span.z-drop-allow {
+	background: none no-repeat scroll 0 0 #EEFFEE;
+}
+span.z-drop-allow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-allow.png')});
+}
+div.z-drop-disallow div.z-drop-cnt,
+span.z-drop-disallow {
+	background: none no-repeat scroll 0 0 #FFEEEE;
+}
+span.z-drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-disallow.png')});
 }
 
 <%-- customized by users
@@ -440,9 +486,7 @@ span.z-upload input {
 	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
 }
 
-<%-- fileupload dialog 
-
-// no longer used since 5.0.0
+<%-- fileupload dialog --%>
 .z-fileupload-img {
 	width: 16px;
 	padding-top: 4px;
@@ -454,7 +498,6 @@ span.z-upload input {
 	width: 16px;
 	height: 17px;
 }
---%>
 .z-fileupload-rm {
 	cursor: pointer;
 	background: transparent no-repeat 0 0;
@@ -470,9 +513,10 @@ span.z-upload input {
 }
 <%-- Auxheader --%>
 .z-auxheader-cnt {
-	font-size: ${fontSizeM}; font-weight: normal;
-	font-family: ${fontFamilyT};
+	font-size: 12px; font-weight: bold;
+	font-family: arial;
 	border: 0; margin: 0; padding: 0; overflow: hidden;
+	color: #636363;
 }
 .z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
@@ -508,9 +552,11 @@ option {
 	background: #888; zoom: 1; display: none;
 	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
 }
-span.z-drop-allow,
+span.z-drop-allow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-allow.gif')});
+}
 span.z-drop-disallow {
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag-disallow.gif')});
 }
 </c:if><%-- IE6 --%>
 </c:if><%--IE --%>
@@ -534,3 +580,14 @@ option {
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:if>
+
+
+
+
+<%-- Auxheader --%>
+.z-auxheader-cnt {
+	color:#636363;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+}

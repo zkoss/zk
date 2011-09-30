@@ -1,10 +1,13 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-toolbar {
-	border-color: #B1CBD5; border-style: solid; border-width: 0 0 1px 0; display: block;
+	border-color: #C5C5C5; 
+	border-style: solid; 
+	border-width: 0 0 1px; 
+	display: block;
 	padding: 2px;
-	background: #DAF3FF repeat-x 0 center;
-	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
+	background: repeat-x 0 -1px;
+	background-image: url(${c:encodeURL('~./zul/img/common/toolbar-hm.png')});
 	position: relative; zoom: 1;
 }
 .z-caption .z-toolbar {
@@ -61,6 +64,102 @@
 	text-align: center;
 }
 
+
+
+<%-- default --%>
+.z-toolbarbutton .z-toolbarbutton-tl, 
+.z-toolbarbutton .z-toolbarbutton-tr, 
+.z-toolbarbutton .z-toolbarbutton-bl, 
+.z-toolbarbutton .z-toolbarbutton-br{
+	background-image:url(${c:encodeURL('~./zul/img/button/toolbarbtn-corner.gif')});
+}
+.z-toolbarbutton .z-toolbarbutton-tm, 
+.z-toolbarbutton .z-toolbarbutton-bm  {
+	background-image:url(${c:encodeURL('~./zul/img/button/toolbarbtn-x.gif')});
+}
+.z-toolbarbutton .z-toolbarbutton-cl, 
+.z-toolbarbutton .z-toolbarbutton-cr {
+	background-image:url(${c:encodeURL('~./zul/img/button/toolbarbtn-y.gif')});
+}
+.z-toolbarbutton .z-toolbarbutton-cm {
+	background-image:url(${c:encodeURL('~./zul/img/button/toolbarbtn-ctr.gif')});
+}
+
+.z-toolbarbutton .z-toolbarbutton-tl,
+.z-toolbarbutton .z-toolbarbutton-tr,
+.z-toolbarbutton .z-toolbarbutton-cl,
+.z-toolbarbutton .z-toolbarbutton-cr {
+	background-repeat: no-repeat;
+	background-position: -4px 0;
+	width: 4px; padding: 0; margin: 0;
+}
+.z-toolbarbutton .z-toolbarbutton-tl,
+.z-toolbarbutton .z-toolbarbutton-tr {
+	height: 4px;
+}
+.z-toolbarbutton .z-toolbarbutton-tl {
+	background-position: 0 0;
+}
+.z-toolbarbutton .z-toolbarbutton-cl {
+	background-position: 0 0; text-align: right;
+}
+.z-toolbarbutton .z-toolbarbutton-tm {
+	background-repeat: repeat-x;
+	background-position: 0 0;
+}
+.z-toolbarbutton .z-toolbarbutton-tr {
+	background-position: -4px 0;
+}
+.z-toolbarbutton .z-toolbarbutton-cm {
+	margin: 0; overflow: hidden;
+	vertical-align: middle;
+	text-align: center;
+	padding: 0 5px;
+	background-repeat: repeat-x;
+	background-position: 0 0;
+	white-space: nowrap;
+}
+.z-toolbarbutton .z-toolbarbutton-bl,
+.z-toolbarbutton .z-toolbarbutton-br {
+	background-repeat: no-repeat;
+	background-position: 0 -4px;
+	width: 4px; height: 4px;  padding: 0; margin: 0;
+}
+.z-toolbarbutton .z-toolbarbutton-bm {
+	background-repeat: repeat-x;
+	background-position: 0 -4px;
+	height: 4px;
+}
+.z-toolbarbutton .z-toolbarbutton-br {
+	background-position: -4px -4px;
+}
+<%-- mouseover --%>
+.z-toolbarbutton-over .z-toolbarbutton-tl,
+.z-toolbarbutton-over .z-toolbarbutton-cl {
+	background-position: -8px 0;
+}
+.z-toolbarbutton-over .z-toolbarbutton-tm {
+	background-position: 0 -8px;
+}
+.z-toolbarbutton-over .z-toolbarbutton-tr,
+.z-toolbarbutton-over .z-toolbarbutton-cr {
+	background-position: -12px 0;
+}
+.z-toolbarbutton-over .z-toolbarbutton-cm {
+	background-position: 0 -500px;
+}
+.z-toolbarbutton-over .z-toolbarbutton-bl {
+	background-position: -8px -4px;
+}
+.z-toolbarbutton-over .z-toolbarbutton-bm {
+	background-position:0 -12px;
+}
+.z-toolbarbutton-over .z-toolbarbutton-br {
+	background-position: -12px -4px;
+}
+
+
+
 <%-- Toolbarbutton --%>
 .z-toolbarbutton {
 	display:-moz-inline-box;
@@ -97,6 +196,10 @@
 	font-size: ${fontSizeS};
 	font-weight: normal;
 }
+.z-toolbarbutton-over .z-toolbarbutton-cnt {
+	background-image:url(${c:encodeURL('~./zul/img/button/toolbarbtn-ctr.gif')});
+	background-position: 0 -500px;
+}
 
 <c:if test="${c:isExplorer() and not c:browser('ie8')}">
 .z-toolbarbutton {
@@ -121,5 +224,11 @@
 }
 .z-toolbarbutton-disd ${c:isExplorer() ? '*': ''} { <%-- bug 3022237 --%>
 	opacity: .5;
+	-moz-opacity: .5;
 	filter: alpha(opacity=50);
 }
+<c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
+.z-toolbar a:focus {
+	outline: none !important;
+}
+</c:if>

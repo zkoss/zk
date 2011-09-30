@@ -1367,7 +1367,8 @@ zul.wnd.WindowRenderer = {
 	 * @param zul.wnd.Window wgt the window
 	 */
 	shallCheckBorder: function (wgt) {
-		return wgt._mode != 'embedded' && wgt._mode != 'popup';
+		return wgt._mode != 'popup' && 
+			(wgt._mode != 'embedded' || wgt.getBorder() != "none");
 	}
 };
 })();

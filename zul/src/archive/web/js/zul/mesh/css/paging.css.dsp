@@ -2,29 +2,68 @@
 
 <%-- os mold --%>
 .z-paging-os {
-	background: white; padding: 5px; zoom:1;
+	background: #F9F9F9;
+	padding: 6px 5px 6px 10px; zoom:1;
+	position: relative;
 }
 .z-paging-os .z-paging-os-cnt {
-	padding: 2px 3px;
-	background-color:#C7E5F1;
-	background-image:url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
-	background-repeat:repeat-x;
-	border: 1px solid #DAE7F6;
-	font-size: ${fontSizeS}; color: #1725A0; font-weight: normal;
+	background: none;
+	border: 0;
+	font-size: ${fontSizeS};
+	color: #0076a3; 
+	font-weight: normal;
 	text-decoration: none;
+	font-family: arial;
+	font-size: 11px;
+	padding: 2px 2px 2px 4px;
+	position: relative;
+	top: -7px;
 }
 .z-paging-os .z-paging-os-cnt:hover {
-	color: red;
+	color: #0076A3;
+	background-position: -24px 0;
+	text-decoration: underline;
 }
 .z-paging-os .z-paging-os-seld {
-	font-size: ${fontSizeS}; color: white; font-weight: bold;
-	background-image:url(${c:encodeURL('~./zul/img/grid/paging-os-seld.gif')});
+	font-family:arial;
+	font-size: 11px; 
+	color: #363636; 
+	font-weight: bold;
+	background-image:none;
+	background-position: right 0;
 }
 .z-paging-os .z-paging-os-seld:hover {
 	color: #403E39;
 }
 .z-paging-os span {
-	font-size: ${fontSizeS}; color: #555; font-weight: normal;
+	font-family: Arial;
+	font-size: 11px; 
+	color: #363636; 
+	font-weight: normal;
+	position:absolute;
+	right: 8px;
+	top: 10px;
+}
+
+.z-paging-os-btn,
+.z-paging-os-btn-seld {
+	height: 24px;
+	width: 24px;
+	display: inline;
+}
+.z-paging-os-btn-seld {
+	background-position: right 0;
+	color: #363636;
+}
+.z-paging-os .z-paging-os-cnt-label {
+	background-image: none;
+	color: #0076a3;
+}
+div.z-paging-os-cnt-l .z-paging-os-cnt,
+div.z-paging-os-cnt-seld-l .z-paging-os-cnt {
+	position: relative;
+	top: 5px;
+	left: -2px;
 }
 div.z-paging-os-cnt-l,
 div.z-paging-os-cnt-r,
@@ -34,14 +73,62 @@ div.z-paging-os-cnt-seld-r,
 div.z-paging-os-cnt-seld-m,
 div.z-paging-os-cnt-l-over {
 	display: inline-block;
-	<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
-	display: inline;
-	</c:if>
+	*display: inline;
+	background-image:url(${c:encodeURL('~./zul/img/paging/paging-btn.png')});
+	background-position: 0 0;
 	zoom: 1;
 }
-.z-paging-os a.z-paging-os-cnt {
-	margin-left: 3px;
-	margin-right: 3px;
+.z-paging-os div.z-paging-os-cnt-l .z-paging-os-cnt,
+.z-paging-os div.z-paging-os-cnt-l .z-paging-os-cnt:hover,
+.z-paging-os div.z-paging-os-cnt-seld-l .z-paging-os-cnt,
+.z-paging-os div.z-paging-os-cnt-seld-l .z-paging-os-cnt:hover{ 
+	font-weight: normal;
+	text-decoration: none;
+}
+div.z-paging-os-cnt-l,
+div.z-paging-os-cnt-seld-l {
+	padding-left: 5px;
+	background-repeat: no-repeat;
+}
+div.z-paging-os-cnt-r,
+div.z-paging-os-cnt-seld-r {
+	padding-right: 5px;
+	background-position: right -24px;
+	background-repeat: no-repeat;
+}
+div.z-paging-os-cnt-m {
+	background-position: 0 -48px;
+	height: 22px;
+	padding: 1px 0 1px 2px;
+	overflow:hidden;
+}
+
+div.z-paging-os-cnt-seld-l {
+	padding-left: 5px;
+	background-position: 0 -144px;
+	background-repeat: no-repeat;
+}
+div.z-paging-os-cnt-seld-r {
+	padding-right: 5px;
+	background-position: right -168px;
+	background-repeat: no-repeat;
+}
+div.z-paging-os-cnt-seld-m {
+	background-position: 0 -192px;
+	height: 22px;
+	padding: 1px 0 1px 2px;
+	overflow:hidden;
+}
+
+div.z-paging-os-cnt-l-over {
+	padding-left: 5px;
+	background-position: 0 -72px;
+}
+div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-r {
+	background-position: right -96px;
+}
+div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-m {
+	background-position: 0 -120px;
 }
 <%-- default mold --%>
 
@@ -58,18 +145,22 @@ div.z-paging-os-cnt-l-over {
 }
 
 .z-paging {
-	border-color:#B1CBD5;
+	border-color:#CFCFCF;
 	border-style:solid;
 	border-width:0 0 1px;
 	display:block;
-	padding:2px;
+	padding:6px 2px 6px 10px;
 	position:relative;
-	background:#DAF3FF repeat-x 0 center;
-	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
+	background:#F9F9F9;
+	background-image: none;
 }
 
 .z-paging td {
 	vertical-align:middle;
+}
+
+.z-paging-text {
+	padding-left: 4px;
 }
 
 .z-paging .z-paging-btn {
@@ -82,7 +173,7 @@ div.z-paging-os-cnt-l-over {
 }
 
 .z-paging .z-paging-btn {
-	background:transparent none repeat 0 0;
+	background:#F9F9F9 none repeat 0 0;
 	cursor:pointer;
 	text-align:center;
 	vertical-align:middle;
@@ -95,8 +186,8 @@ div.z-paging-os-cnt-l-over {
 .z-paging-btn .z-paging-prev {
 	background-repeat:no-repeat;
 	cursor:pointer;
-	height:21px;
-	width:21px;
+	height:24px;
+	width:24px;
 	padding:0;
 	white-space:nowrap;
 }
@@ -105,6 +196,7 @@ div.z-paging-os-cnt-l-over {
 .z-paging-btn button {
 	background:transparent none repeat 0 0;
 	border:0;
+	padding:0;
 	cursor:pointer;
 	margin:0;
 	min-height:13px;
@@ -127,55 +219,61 @@ div.z-paging-os-cnt-l-over {
 	margin:0 2px;
 	overflow:hidden;
 	width:4px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});
+	background-image:none;
 }
-.z-paging-inp {
-	border:1px solid #86A4BE;
+.z-paging-inp,
+.z-paging input.z-paging-inp {
+	border:1px solid #CFCFCF;
+	height: 20px;
+	line-height: 20px;
+	font-family: arial;
+	font-size: 12px;
+	color: #363636;
 }
 .z-paging-btn .z-paging-next {
 	background-position:0 0;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
 }
 .z-paging-btn .z-paging-prev {
-	background-position:0 -21px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
+	background-position:0 -24px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
 }
 .z-paging-btn .z-paging-last {
-	background-position:0 -42px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
+	background-position:0 -48px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
 }
 .z-paging-btn .z-paging-first {
-	background-position:0 -63px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
+	background-position:0 -72px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
 }
 
 
 
 <%--mouse over a button --%>
 .z-paging-btn-over .z-paging-next {
-	background-position:-21px 0;
+	background-position:-24px 0;
 }
 .z-paging-btn-over .z-paging-prev {
-	background-position:-21px -21px;
+	background-position:-24px -24px;
 }
 .z-paging-btn-over .z-paging-last {
-	background-position:-21px -42px;
+	background-position:-24px -48px;
 }
 .z-paging-btn-over .z-paging-first {
-	background-position:-21px -63px;
+	background-position:-24px -72px;
 }
 <%-- mouse click on a button --%>
 .z-paging-btn-clk .z-paging-next {
-	background-position:-42px 0;
+	background-position:-48px 0;
 }
 .z-paging-btn-clk .z-paging-prev {
-	background-position:-42px -21px;
+	background-position:-48px -24px;
 }
 .z-paging-btn-clk .z-paging-last {
-	background-position:-42px -42px;
+	background-position:-48px -48px;
 }
 .z-paging-btn-clk .z-paging-first {
-	background-position:-42px -63px;
+	background-position:-48px -72px;
 }
 
 <%-- disabled button --%>
@@ -183,6 +281,7 @@ div.z-paging-os-cnt-l-over {
 	color:gray;
 	cursor:default;
 	opacity:0.4;
+	-moz-opacity:0.4;
 	filter: alpha(opacity=40);
 }
 .z-paging .z-paging-btn-disd *{
@@ -191,19 +290,45 @@ div.z-paging-os-cnt-l-over {
 }
 
 <%--paging info--%>
-.z-paging-info {
-	color:#444444;
+.z-paging-info,
+.z-paging div.z-paging-info {
+	color:#363636;
 	position:absolute;
 	right:8px;
-	top:5px;
+	top:11px;
+	font-family:Arial;
+	font-size: 11px;
 }
-
+<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+.z-paging-os .z-paging-os-cnt {
+	top:-4px;
+}
+</c:if>
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 .z-paging-btn .z-paging-next,
 .z-paging-btn .z-paging-prev,
 .z-paging-btn .z-paging-last,
 .z-paging-btn .z-paging-first {	
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.gif')});
+}
+div.z-paging-os-cnt-l,
+div.z-paging-os-cnt-r,
+div.z-paging-os-cnt-m,
+div.z-paging-os-cnt-seld-l,
+div.z-paging-os-cnt-seld-r,
+div.z-paging-os-cnt-seld-m,
+div.z-paging-os-cnt-l-over {
+	background-image:url(${c:encodeURL('~./zul/img/paging/paging-btn.gif')});
+}
+</c:if>
+<c:if test="${c:isSafari()}">
+.z-paging-os .z-paging-os-cnt {
+	top: 4px;
+}
+</c:if>
+<c:if test="${c:isGecko() or c:browser('ie8')}">
+.z-paging-os {
+	padding-bottom: 3px;
 }
 </c:if>

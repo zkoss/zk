@@ -711,10 +711,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return h;
 	},
 	_titleHeight: function (n) {
-		var rounded = this._rounded(),
+		var isFramable = this.isFramable(),
 			cap = this.$n('cap'),
-			top = rounded ? jq(n).find('> div:first-child')[0].offsetHeight: 0;
-		return cap ? (rounded ? jq(n).find('> div:first-child').next()[0]: cap).offsetHeight + top: top;
+			top = isFramable || cap ? jq(n).find('> div:first-child')[0].offsetHeight : 0;
+		return cap ? (isFramable ? 
+				jq(n).find('> div:first-child').next()[0].offsetHeight : 
+					cap.offsetHeight + 2) + top : top;
 	},
 	onFloatUp: function (ctl) {
 		if (!this._visible || !this.isFloatable())
@@ -1099,6 +1101,6 @@ zul.wnd.PanelRenderer = {
 	 * @param zul.wnd.Panel wgt the window
 	 */
 	isFrameRequired: function (wgt) {
-		return wgt._rounded();
+		return true;
 	}
 };
