@@ -205,16 +205,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		n.style.left = jq.px(ofs[0] + zk.parseInt(wgt._left));
 		n.style.top = jq.px(ofs[1] + zk.parseInt(wgt._top));
 	}
-	function _updDomOuter(wgt) {
+	function _updDomOuter(wgt, opts) {
 		// B50-ZK-462
-		wgt._isChangingDomOuter = true;
+		if (opts && !opts.sendOnMaximize)
+			wgt._notSendMaximize = true;
 		wgt._updDOFocus = false; //it might be set by unbind_
 		wgt.rerender(wgt._skipper);
 		var cf;
 		if (cf = wgt._updDOFocus) //asked by unbind_
 			cf.focus(10);
 		delete wgt._updDOFocus;
-		wgt._isChangingDomOuter = null;
+		wgt._notSendMaximize = null;
 	}
 	//minTop - whether to at most 100px
 	function _updDomPos(wgt, force, posParent, minTop) {
@@ -363,7 +364,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		mode: _zkf = function () {
-			_updDomOuter(this);
+			_updDomOuter(this, {sendOnMaximize: false});
 		},
 		/** 
 		 * Sets the title.
@@ -382,7 +383,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (this.caption)
 				this.caption.updateDomContent_(); // B50-ZK-313
 			else
-				_updDomOuter(this);
+				_updDomOuter(this, {sendOnMaximize: false});
 		},
 		/** 
 		 * Sets the border (either none or normal).
@@ -544,17 +545,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					if (body)
 						body.style.width = body.style.height = "";
 				}
-				// B50-ZK-462: Window fire unexpected onMaximize event
-				if (!fromServer || isRealVisible && !this._isChangingDomOuter) {
+				if (!fromServer || isRealVisible) {
 					this._visible = true;
-					this.fire('onMaximize', {
-						left: l,
-						top: t,
-						width: w,
-						height: h,
-						maximized: maximized,
-						fromServer: fromServer
-					});
+					// B50-ZK-462: Window fire unexpected onMaximize event
+					if (!this._notSendMaximize)
+						this.fire('onMaximize', {
+							left: l,
+							top: t,
+							width: w,
+							height: h,
+							maximized: maximized,
+							fromServer: fromServer
+						});
 				}
 				if (isRealVisible)
 					zUtl.fireSized(this);
