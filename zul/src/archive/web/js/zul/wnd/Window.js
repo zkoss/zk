@@ -206,12 +206,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		n.style.top = jq.px(ofs[1] + zk.parseInt(wgt._top));
 	}
 	function _updDomOuter(wgt) {
+		// B50-ZK-462
+		wgt._isChangingDomOuter = true;
 		wgt._updDOFocus = false; //it might be set by unbind_
 		wgt.rerender(wgt._skipper);
 		var cf;
 		if (cf = wgt._updDOFocus) //asked by unbind_
 			cf.focus(10);
 		delete wgt._updDOFocus;
+		wgt._isChangingDomOuter = null;
 	}
 	//minTop - whether to at most 100px
 	function _updDomPos(wgt, force, posParent, minTop) {
@@ -360,10 +363,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		mode: _zkf = function () {
-			// B50-ZK-462
-			this._isChangingDomOuter = true;
 			_updDomOuter(this);
-			this._isChangingDomOuter = null;
 		},
 		/** 
 		 * Sets the title.
@@ -381,12 +381,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		title: function () {
 			if (this.caption)
 				this.caption.updateDomContent_(); // B50-ZK-313
-			else {
-				// B50-ZK-462
-				this._isChangingDomOuter = true;
+			else
 				_updDomOuter(this);
-				this._isChangingDomOuter = null;
-			}
 		},
 		/** 
 		 * Sets the border (either none or normal).

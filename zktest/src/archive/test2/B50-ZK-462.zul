@@ -16,8 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <zk>
 <html><![CDATA[
 <ol>
-<li>Click 'reset label' button.</li>
+<li>Click 'reset label' button, the label should become 'nothing happened'.</li>
 <li>Click each checkbox twice, the label should not be changed.</li>
+<li>Maximize/Restore window by click the maximize/restore icon on the window, the label should become 'oops, test win maximized'.</li>
 </ol>
 ]]></html>
 	<label id="lb" value="nothing happened" />
