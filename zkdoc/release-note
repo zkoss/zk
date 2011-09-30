@@ -138,6 +138,8 @@ ZK 5.0.9
   ZK-454: Update tabbox and grid will cause js error in IE9
   ZK-391: Tooltip loses "position=after_end" positioning if onOpen eventlistener added to popup
   ZK-410: Bug on footer labels applied to a grid
+  ZK-460: Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.
+  ZK-465: Messagebox does not invoke the listener if ESC is pressed
 
 	--------
 Aug 31, 2011

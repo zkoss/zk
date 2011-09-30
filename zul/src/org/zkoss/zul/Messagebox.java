@@ -641,9 +641,6 @@ public class Messagebox {
 		public ClickEvent(String name, Component target, Button button) {
 			super(name, target, button);
 		}
-		public ClickEvent(String name, Component target, int button) {
-			this(name, target, toButtonType(button));
-		}
 		/** Returns the button being clicked. If the close button on the
 		 * title is clicked, this method returns null (and {@link #getName} returns
 		 * onClose).
