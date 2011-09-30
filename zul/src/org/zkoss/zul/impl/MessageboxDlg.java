@@ -62,13 +62,13 @@ public class MessageboxDlg extends Window {
 	public void setButtons(Messagebox.Button[] buttons) {
 		_buttons = buttons;
 
-		final Component parent = getFellow("buttons");
-		if (parent.getFirstChild() == null) {
+		final Component parent = getFellowIfAny("buttons");
+		if (parent != null && parent.getFirstChild() == null) {
 		//Backward compatible to ZK 5
 		//We check if any child since user's old tempalte might create them
 			final String sclass = (String)parent.getAttribute("button.sclass");
 			for (int j = 0; j < _buttons.length; ++j) {
-				final MButton mbtn = new MButton();
+				final Button mbtn = new Button();
 				mbtn.setButton(_buttons[j]);
 				mbtn.setSclass(sclass);
 				parent.appendChild(mbtn);
@@ -90,7 +90,7 @@ public class MessageboxDlg extends Window {
 	 */
 	public void setFocus(Messagebox.Button button) {
 		if (button != null) {
-			final MButton btn = (MButton)getFellowIfAny("btn" + button.id);
+			final Button btn = (Button)getFellowIfAny("btn" + button.id);
 			if (btn != null)
 				btn.focus();
 		}
@@ -131,9 +131,9 @@ public class MessageboxDlg extends Window {
 
 	/**
 	 * Represents a button on the message box.
-	 * @since 6.0.0
+	 * @since 3.0.4
 	 */
-	public static class MButton extends org.zkoss.zul.Button {
+	public static class Button extends org.zkoss.zul.Button {
 		private Messagebox.Button _button;
 
 		public void setButton(Messagebox.Button button) {
@@ -147,11 +147,9 @@ public class MessageboxDlg extends Window {
 		protected String getDefaultMold(Class klass) {
 			return super.getDefaultMold(org.zkoss.zul.Button.class);
 		}
-	}
-	/** @deprecated As of release 6.0.0, replaced with {@link MButton}.
-	 */
-	public static class Button extends MButton {
-		/** Sets the identity.
+
+		/**
+		 * @deprecated As of release 6.0.0, buttons are created in Java
 		 */
 		public void setIdentity(int button) {
 			switch (button) {
