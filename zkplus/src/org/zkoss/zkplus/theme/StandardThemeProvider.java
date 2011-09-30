@@ -37,31 +37,19 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 	public final static String DEFAULT_MSGBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
 	
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
+		
+		Messagebox.setTemplate(DEFAULT_MSGBOX_TEMPLATE_URI);
 		String suffix = getThemeFileSuffix();
-		if (Strings.isEmpty(suffix)) {
-			Messagebox.setTemplate(DEFAULT_MSGBOX_TEMPLATE_URI);
-			return uris;
-		}
 		
-		if (isUsingDefaultTemplate(suffix))
-			Messagebox.setTemplate(getThemeMsgBoxURI(suffix));
+		if (!Strings.isEmpty(suffix))
+			bypassURI(uris, suffix);
 		
-		bypassURI(uris, suffix);
 		return uris;
 	}
 	
 	private static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
 		return Themes.BREEZE_NAME.equals(suffix) ? null : suffix;
-	}
-	
-	private static String getThemeMsgBoxURI(String suffix) {
-		return "~./zul/html/messagebox." + suffix + ".zul";
-	}
-	
-	private static boolean isUsingDefaultTemplate(String suffix){
-		return getThemeMsgBoxURI(suffix).equals(Messagebox.getTemplate()) ||
-			DEFAULT_MSGBOX_TEMPLATE_URI.equals(Messagebox.getTemplate());
 	}
 	
 	private void bypassURI(List<Object> uris, String suffix) {
