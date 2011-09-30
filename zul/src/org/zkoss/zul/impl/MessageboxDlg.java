@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.Window;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Messagebox.Button;
 import org.zkoss.zul.Messagebox.ClickEvent;
 
 /**
@@ -35,24 +34,24 @@ import org.zkoss.zul.Messagebox.ClickEvent;
  */
 public class MessageboxDlg extends Window {
 	/** What buttons are allowed. */
-	private Button[] _buttons;
+	private Messagebox.Button[] _buttons;
 	/** Which button is pressed. */
-	private Button _result;
+	private Messagebox.Button _result;
 	/** The event lisetener. */
 	private EventListener<ClickEvent> _listener;
 
 	public void onOK() throws Exception {
-		if (contains(Button.OK)) endModal(Button.OK);
-		else if (contains(Button.YES)) endModal(Button.YES);
-		else if (contains(Button.RETRY)) endModal(Button.RETRY);
+		if (contains(Messagebox.Button.OK)) endModal(Messagebox.Button.OK);
+		else if (contains(Messagebox.Button.YES)) endModal(Messagebox.Button.YES);
+		else if (contains(Messagebox.Button.RETRY)) endModal(Messagebox.Button.RETRY);
 	}
 	public void onCancel() throws Exception {
-		if (_buttons.length == 1 && _buttons[0] == Button.OK) endModal(Button.OK);
-		else if (contains(Button.CANCEL)) endModal(Button.CANCEL);
-		else if (contains(Button.NO)) endModal(Button.NO);
-		else if (contains(Button.ABORT)) endModal(Button.ABORT);
+		if (_buttons.length == 1 && _buttons[0] == Messagebox.Button.OK) endModal(Messagebox.Button.OK);
+		else if (contains(Messagebox.Button.CANCEL)) endModal(Messagebox.Button.CANCEL);
+		else if (contains(Messagebox.Button.NO)) endModal(Messagebox.Button.NO);
+		else if (contains(Messagebox.Button.ABORT)) endModal(Messagebox.Button.ABORT);
 	}
-	private boolean contains(Button button) {
+	private boolean contains(Messagebox.Button button) {
 		for (int j = 0; j < _buttons.length; ++j)
 			if (_buttons[j] == button)
 				return true;
@@ -60,19 +59,22 @@ public class MessageboxDlg extends Window {
 	}
 
 	/** Sets what buttons are allowed. */
-	public void setButtons(Button[] buttons) {
-		_buttons = buttons != null && buttons.length > 0 ? buttons: DEFAULT_BUTTONS;
+	public void setButtons(Messagebox.Button[] buttons) {
+		_buttons = buttons;
+
 		final Component parent = getFellow("buttons");
-		final String sclass = (String)parent.getAttribute("button.sclass");
-		for (int j = 0; j < _buttons.length; ++j) {
-			if (_buttons[j] == null)
-				throw new IllegalArgumentException("The "+j+"-th button is null");
-			final MessageButton mbtn = new MessageButton(_buttons[j]);
-			mbtn.setSclass(sclass);
-			parent.appendChild(mbtn);
+		if (parent.getFirstChild() == null) {
+		//Backward compatible to ZK 5
+		//We check if any child since user's old tempalte might create them
+			final String sclass = (String)parent.getAttribute("button.sclass");
+			for (int j = 0; j < _buttons.length; ++j) {
+				final MButton mbtn = new MButton();
+				mbtn.setButton(_buttons[j]);
+				mbtn.setSclass(sclass);
+				parent.appendChild(mbtn);
+			}
 		}
 	}
-	private static final Button[] DEFAULT_BUTTONS = new Button[] {Button.OK};
 
 	/** Sets the event listener.
 	 * @param listener the event listener. If null, no invocation at all.
@@ -86,9 +88,9 @@ public class MessageboxDlg extends Window {
 	 * (i.e., the first one) is assumed.
 	 * @since 3.0.0
 	 */
-	public void setFocus(Button button) {
+	public void setFocus(Messagebox.Button button) {
 		if (button != null) {
-			final MessageButton btn = (MessageButton)getFellowIfAny("btn" + button.id);
+			final MButton btn = (MButton)getFellowIfAny("btn" + button.id);
 			if (btn != null)
 				btn.focus();
 		}
@@ -96,7 +98,7 @@ public class MessageboxDlg extends Window {
 
 	/** Called only internally.
 	 */
-	public void endModal(Button button) throws Exception {
+	public void endModal(Messagebox.Button button) throws Exception {
 		_result = button;
 		if (_listener != null) {
 			final ClickEvent evt = new ClickEvent(button.event, this, button);
@@ -108,7 +110,7 @@ public class MessageboxDlg extends Window {
 	}
 	/** Returns the result which is the button being pressed.
 	 */
-	public Button getResult() {
+	public Messagebox.Button getResult() {
 		return _result;
 	}
 
@@ -129,12 +131,12 @@ public class MessageboxDlg extends Window {
 
 	/**
 	 * Represents a button on the message box.
-	 * @since 3.0.0
+	 * @since 6.0.0
 	 */
-	public static class MessageButton extends org.zkoss.zul.Button {
-		private final Button _button;
+	public static class MButton extends org.zkoss.zul.Button {
+		private Messagebox.Button _button;
 
-		public MessageButton(Button button) {
+		public void setButton(Messagebox.Button button) {
 			_button = button;
 			setLabel(Messages.get(_button.label));
 			setId("btn" + _button.id);
@@ -144,6 +146,37 @@ public class MessageboxDlg extends Window {
 		}
 		protected String getDefaultMold(Class klass) {
 			return super.getDefaultMold(org.zkoss.zul.Button.class);
+		}
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link MButton}.
+	 */
+	public static class Button extends MButton {
+		/** Sets the identity.
+		 */
+		public void setIdentity(int button) {
+			switch (button) {
+			case Messagebox.YES:
+				setButton(Messagebox.Button.YES);
+				break;
+			case Messagebox.NO:
+				setButton(Messagebox.Button.NO);
+				break;
+			case Messagebox.RETRY:
+				setButton(Messagebox.Button.RETRY);
+				break;
+			case Messagebox.ABORT:
+				setButton(Messagebox.Button.ABORT);
+				break;
+			case Messagebox.IGNORE:
+				setButton(Messagebox.Button.IGNORE);
+				break;
+			case Messagebox.CANCEL:
+				setButton(Messagebox.Button.CANCEL);
+				break;
+			default:
+				setButton(Messagebox.Button.OK);
+				break;
+			}
 		}
 	}
 }

@@ -148,6 +148,20 @@ public class Messagebox {
 			Executions.getCurrent().getDesktop().getWebApp().getAppName());
 		params.put("icon", icon);
 
+		if (buttons == null || buttons.length == 0)
+			buttons = DEFAULT_BUTTONS;
+
+		int btnmask = 0;
+		for (int j = 0; j < buttons.length; ++j) {
+			if (buttons[j] == null)
+				throw new IllegalArgumentException("The "+j+"-th button is null");
+
+			//Backward compatible to ZK 5: put buttons and id to params
+			btnmask += buttons[j].id;
+			params.put(buttons[j].stringId, buttons[j].id);
+		}
+		params.put("buttons", btnmask);
+
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setEventListener(listener);
@@ -171,6 +185,9 @@ public class Messagebox {
 			return Button.OK;
 		}
 	}
+	private static final Messagebox.Button[] DEFAULT_BUTTONS
+		= new Messagebox.Button[] {Messagebox.Button.OK};
+
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, title, buttons, icon, null, listener).
 	 * @since 6.0.0
@@ -615,19 +632,19 @@ public class Messagebox {
 	 */
 	public static enum Button {
 		/** A OK button. */
-		OK (Messagebox.OK, ON_OK, MZul.OK),
+		OK (Messagebox.OK, ON_OK, MZul.OK, "OK"),
 		/** A Cancel button. */
-		CANCEL (Messagebox.CANCEL, ON_CANCEL, MZul.CANCEL),
+		CANCEL (Messagebox.CANCEL, ON_CANCEL, MZul.CANCEL, "CANCEL"),
 		/** A Yes button. */
-		YES (Messagebox.YES, ON_YES, MZul.YES),
+		YES (Messagebox.YES, ON_YES, MZul.YES, "YES"),
 		/** A No button. */
-		NO (Messagebox.NO, ON_NO, MZul.NO),
+		NO (Messagebox.NO, ON_NO, MZul.NO, "NO"),
 		/** A Abort button. */
-		ABORT (Messagebox.ABORT, ON_ABORT, MZul.ABORT),
+		ABORT (Messagebox.ABORT, ON_ABORT, MZul.ABORT, "ABORT"),
 		/** A Retry button. */
-		RETRY (Messagebox.RETRY, ON_RETRY, MZul.RETRY),
+		RETRY (Messagebox.RETRY, ON_RETRY, MZul.RETRY, "RETRY"),
 		/** A IGNORE button. */
-		IGNORE (Messagebox.IGNORE, ON_IGNORE, MZul.IGNORE);
+		IGNORE (Messagebox.IGNORE, ON_IGNORE, MZul.IGNORE, "IGNORE");
 
 		/** The unique ID to represent this button type. */
 		public final int id;
@@ -637,10 +654,14 @@ public class Messagebox {
 		 * @see Messages
 		 */
 		public final int label;
-		private Button(int id, String event, int label) {
+		/** Used for backward compatibility to ZK 5. */
+		private final String stringId;
+
+		private Button(int id, String event, int label, String stringId) {
 			this.id = id;
 			this.event = event;
 			this.label = label;
+			this.stringId = stringId;
 		}
 	}
 	/** The event that will be received by the listener when the user clicks a button.
