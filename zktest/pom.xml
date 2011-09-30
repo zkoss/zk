@@ -76,11 +76,13 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+		<!--  
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
-			<artifactId>breeze</artifactId>
+			<artifactId>classicblue</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
