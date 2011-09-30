@@ -207,7 +207,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _updDomOuter(wgt, opts) {
 		// B50-ZK-462
-		if (opts && !opts.sendOnMaximize)
+		if (!opts || !opts.sendOnMaximize)
 			wgt._notSendMaximize = true;
 		wgt._updDOFocus = false; //it might be set by unbind_
 		wgt.rerender(wgt._skipper);
@@ -364,7 +364,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		mode: _zkf = function () {
-			_updDomOuter(this, {sendOnMaximize: false});
+			_updDomOuter(this);
 		},
 		/** 
 		 * Sets the title.
@@ -383,7 +383,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (this.caption)
 				this.caption.updateDomContent_(); // B50-ZK-313
 			else
-				_updDomOuter(this, {sendOnMaximize: false});
+				_updDomOuter(this);
 		},
 		/** 
 		 * Sets the border (either none or normal).
