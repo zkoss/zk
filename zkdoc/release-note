@@ -31,6 +31,9 @@ ZK 6.0.0
   ZK-446: Add an instant="true" attribute to InputElement(e.g. textbox, intbox, ...) so onChange is fired as quick as possible. 
   ZK-12: Checkbox automatically disable itself after clicked
   ZK-458: The language definition allows a WPD package to be merged to another
+  ZK-83: Messageboxes buttons should be rendered in the users order
+  ZK-463: Messagebox supports enum to specify the button
+  ZK-464: Window's mode supports enum
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

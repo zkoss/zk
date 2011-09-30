@@ -19,13 +19,15 @@ package org.zkoss.zul.impl;
 import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 
 import org.zkoss.zul.Window;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Messagebox.Button;
+import org.zkoss.zul.Messagebox.ClickEvent;
 
 /**
  * Used with {@link Messagebox} to implement a message box.
@@ -33,49 +35,51 @@ import org.zkoss.zul.Messagebox;
  * @author tomyeh
  */
 public class MessageboxDlg extends Window {
-	/** A OK button. */
-	public static final int OK = Messagebox.OK;
-	/** A Cancel button. */
-	public static final int CANCEL = Messagebox.CANCEL;
-	/** A Yes button. */
-	public static final int YES = Messagebox.YES;
-	/** A No button. */
-	public static final int NO = Messagebox.NO;
-	/** A Abort button. */
-	public static final int ABORT = Messagebox.ABORT;
-	/** A Retry button. */
-	public static final int RETRY = Messagebox.RETRY;
-	/** A IGNORE button. */
-	public static final int IGNORE = Messagebox.IGNORE;
-
 	/** What buttons are allowed. */
-	private int _buttons;
+	private Button[] _buttons;
 	/** Which button is pressed. */
-	private int _result;
+	private Button _result;
 	/** The event lisetener. */
-	private EventListener<Event> _listener;
+	private EventListener<ClickEvent> _listener;
 
 	public void onOK() {
-		if ((_buttons & OK) != 0) endModal(OK);
-		else if ((_buttons & YES) != 0) endModal(YES);
-		else if ((_buttons & RETRY) != 0) endModal(RETRY);
+		if (contains(Button.OK)) endModal(Button.OK);
+		else if (contains(Button.YES)) endModal(Button.YES);
+		else if (contains(Button.RETRY)) endModal(Button.RETRY);
 	}
 	public void onCancel() {
-		if (_buttons == OK) endModal(OK);
-		else if ((_buttons & CANCEL) != 0) endModal(CANCEL);
-		else if ((_buttons & NO) != 0) endModal(NO);
-		else if ((_buttons & ABORT) != 0) endModal(ABORT);
+		if (_buttons.length == 1 && _buttons[0] == Button.OK) endModal(Button.OK);
+		else if (contains(Button.CANCEL)) endModal(Button.CANCEL);
+		else if (contains(Button.NO)) endModal(Button.NO);
+		else if (contains(Button.ABORT)) endModal(Button.ABORT);
+	}
+	private boolean contains(Button button) {
+		for (int j = 0; j < _buttons.length; ++j)
+			if (_buttons[j] == button)
+				return true;
+		return false;
 	}
 
 	/** Sets what buttons are allowed. */
-	public void setButtons(int buttons) {
-		_buttons = buttons;
+	public void setButtons(Button[] buttons) {
+		_buttons = buttons != null && buttons.length > 0 ? buttons: _defaultButtons;
+		final Component parent = getFellow("buttons");
+		final String sclass = (String)parent.getAttribute("button.sclass");
+		for (int j = 0; j < _buttons.length; ++j) {
+			if (_buttons[j] == null)
+				throw new IllegalArgumentException("The "+j+"-th button is not specified");
+			final MessageButton mbtn = new MessageButton(_buttons[j]);
+			mbtn.setSclass(sclass);
+			parent.appendChild(mbtn);
+		}
 	}
+	private static final Button[] _defaultButtons = new Button[] {Button.OK};
+
 	/** Sets the event listener.
 	 * @param listener the event listener. If null, no invocation at all.
 	 * @since 3.0.4
 	 */
-	public void setEventListener(EventListener<Event> listener) {
+	public void setEventListener(EventListener<ClickEvent> listener) {
 		_listener = listener;
 	}
 	/** Sets the focus.
@@ -83,9 +87,9 @@ public class MessageboxDlg extends Window {
 	 * (i.e., the first one) is assumed.
 	 * @since 3.0.0
 	 */
-	public void setFocus(int button) {
-		if (button > 0) {
-			final Button btn = (Button)getFellowIfAny("btn" + button);
+	public void setFocus(Button button) {
+		if (button != null) {
+			final MessageButton btn = (MessageButton)getFellowIfAny("btn" + button.value);
 			if (btn != null)
 				btn.focus();
 		}
@@ -93,20 +97,20 @@ public class MessageboxDlg extends Window {
 
 	/** Called only internally.
 	 */
-	public void endModal(int button) {
+	public void endModal(Button button) {
 		_result = button;
 		detach();
 	}
 	/** Returns the result which is the button being pressed.
 	 */
-	public int getResult() {
+	public Button getResult() {
 		return _result;
 	}
 
 	//Override//
 	public void onClose() {
 		if (_listener != null) {
-			final Event evt = new Event(Events.ON_CLOSE, this, new Integer(-1));
+			final ClickEvent evt = new ClickEvent(Events.ON_CLOSE, this, null);
 			try {
 				_listener.onEvent(evt);
 				if (!evt.isPropagatable())
@@ -122,38 +126,36 @@ public class MessageboxDlg extends Window {
 	 * Represents a button on the message box.
 	 * @since 3.0.0
 	 */
-	public static class Button extends org.zkoss.zul.Button {
-		private int _button;
-		private String _evtnm;
+	public static class MessageButton extends org.zkoss.zul.Button {
+		private final Button _button;
+		private final String _evtnm;
 
-		/** Sets the identity.
-		 */
-		public void setIdentity(int button) {
+		public MessageButton(Button button) {
 			_button = button;
 
 			final int label;
-			switch (button) {
-			case YES:
+			switch (button.value) {
+			case Messagebox.YES:
 				label = MZul.YES;
 				_evtnm = Messagebox.ON_YES;
 				break;
-			case NO:
+			case Messagebox.NO:
 				label = MZul.NO;
 				_evtnm = Messagebox.ON_NO;
 				break;
-			case RETRY:
+			case Messagebox.RETRY:
 				label = MZul.RETRY;
 				_evtnm = Messagebox.ON_RETRY;
 				break;
-			case ABORT:
+			case Messagebox.ABORT:
 				label = MZul.ABORT;
 				_evtnm = Messagebox.ON_ABORT;
 				break;
-			case IGNORE:
+			case Messagebox.IGNORE:
 				label = MZul.IGNORE;
 				_evtnm = Messagebox.ON_IGNORE;
 				break;
-			case CANCEL:
+			case Messagebox.CANCEL:
 				label = MZul.CANCEL;
 				_evtnm = Messagebox.ON_CANCEL;
 				break;
@@ -163,12 +165,12 @@ public class MessageboxDlg extends Window {
 				break;
 			}
 			setLabel(Messages.get(label));
-			setId("btn" + _button);
+			setId("btn" + _button.value);
 		}
 		public void onClick() throws Exception {
 			final MessageboxDlg dlg = (MessageboxDlg)getSpaceOwner();
 			if (dlg._listener != null) {
-				final Event evt = new Event(_evtnm, dlg, new Integer(_button));
+				final ClickEvent evt = new ClickEvent(_evtnm, dlg, _button);
 				dlg._listener.onEvent(evt);
 				if (!evt.isPropagatable())
 					return; //no more processing

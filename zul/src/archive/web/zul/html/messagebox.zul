@@ -45,20 +45,7 @@ use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 		</div>
 	</hbox>
 	<separator spacing="15px"/>
-	<hbox style="margin-left:auto; margin-right:auto">
-	<button id="btn1" identity="${arg.OK}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.OK}"/>
-	<button identity="${arg.CANCEL}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.CANCEL}"/>
-	<button identity="${arg.YES}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.YES}"/>
-	<button identity="${arg.NO}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.NO}"/>
-	<button identity="${arg.RETRY}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.RETRY}"/>
-	<button identity="${arg.ABORT}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.ABORT}"/>
-	<button identity="${arg.IGNORE}" sclass="z-messagebox-btn" use="org.zkoss.zul.impl.MessageboxDlg$Button"
-		if="${!empty arg.IGNORE}"/>
+	<hbox id="buttons" style="margin-left:auto; margin-right:auto">
+		<custom-attributes button.sclass="z-messagebox-btn"/><!-- CSS class for buttons -->
 	</hbox>
 </window>
