@@ -55,16 +55,16 @@ public class MessageboxDlg extends Window {
 	/** The event lisetener. */
 	private EventListener _listener;
 
-	public void onOK() {
-		if ((_buttons & OK) != 0) endModal(OK);
-		else if ((_buttons & YES) != 0) endModal(YES);
-		else if ((_buttons & RETRY) != 0) endModal(RETRY);
+	public void onOK() throws Exception {
+		if ((_buttons & OK) != 0) endModal(Messagebox.ON_OK, OK);
+		else if ((_buttons & YES) != 0) endModal(Messagebox.ON_YES, YES);
+		else if ((_buttons & RETRY) != 0) endModal(Messagebox.ON_RETRY, RETRY);
 	}
-	public void onCancel() {
-		if (_buttons == OK) endModal(OK);
-		else if ((_buttons & CANCEL) != 0) endModal(CANCEL);
-		else if ((_buttons & NO) != 0) endModal(NO);
-		else if ((_buttons & ABORT) != 0) endModal(ABORT);
+	public void onCancel() throws Exception {
+		if (_buttons == OK) endModal(Messagebox.ON_OK, OK);
+		else if ((_buttons & CANCEL) != 0) endModal(Messagebox.ON_CANCEL, CANCEL);
+		else if ((_buttons & NO) != 0) endModal(Messagebox.ON_NO, NO);
+		else if ((_buttons & ABORT) != 0) endModal(Messagebox.ON_ABORT, ABORT);
 	}
 
 	/** Sets what buttons are allowed. */
@@ -93,8 +93,14 @@ public class MessageboxDlg extends Window {
 
 	/** Called only internally.
 	 */
-	public void endModal(int button) {
+	public void endModal(String evtnm, int button) throws Exception {
 		_result = button;
+		if (_listener != null) {
+			final Event evt = new Event(evtnm, this, new Integer(button));
+			_listener.onEvent(evt);
+			if (!evt.isPropagatable())
+				return; //no more processing
+		}
 		detach();
 	}
 	/** Returns the result which is the button being pressed.
@@ -166,14 +172,7 @@ public class MessageboxDlg extends Window {
 			setId("btn" + _button);
 		}
 		public void onClick() throws Exception {
-			final MessageboxDlg dlg = (MessageboxDlg)getSpaceOwner();
-			if (dlg._listener != null) {
-				final Event evt = new Event(_evtnm, dlg, new Integer(_button));
-				dlg._listener.onEvent(evt);
-				if (!evt.isPropagatable())
-					return; //no more processing
-			}
-			dlg.endModal(_button);
+			((MessageboxDlg)getSpaceOwner()).endModal(_evtnm, _button);
 		}
 		protected String getDefaultMold(Class klass) {
 			return super.getDefaultMold(org.zkoss.zul.Button.class);
