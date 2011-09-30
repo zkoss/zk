@@ -144,9 +144,8 @@ public class LanguageDefinition {
 	/** A list of JavaScript. */
 	private final FastReadArray<JavaScript> _js = new FastReadArray<JavaScript>(JavaScript.class);
 	/** A list of deferrable JavaScript package. */
-	private final FastReadArray<String> _mergepkgs = new FastReadArray<String>(String.class);
-	private final Map<String, String> _jsmods = new HashMap<String, String>(),
-		_rojsmods = Collections.unmodifiableMap(_jsmods);
+	private Map<String, FastReadArray<String>> _mergepkgs = new HashMap<String, FastReadArray<String>>(4);
+	private Map<String, String> _jsmods = new HashMap<String, String>();
 	/** A list of StyleSheet. */
 	private final FastReadArray<StyleSheet> _ss = new FastReadArray<StyleSheet>(StyleSheet.class);
 	private final Locator _locator;
@@ -300,6 +299,7 @@ public class LanguageDefinition {
 		}
 		return list;
 	}
+
 	/** Returns a readonly collection of all device types.
 	 * @see #getByDeviceType
 	 */
@@ -632,30 +632,65 @@ public class LanguageDefinition {
 		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
 	}
 
-	/** Adds a mergeable JavaScript package required by this langauge.
-	 * The mergeable packages are packages that will be merged into
-	 * the zk package (to minimize the number of packages to load).
-	 * It reduces the load time if the package's footprint is small.
-	 * @param pkg the package name, such as "foo.fly"
-	 * @since 5.0.4
+	/** Merge a JavaScript package, say pkgFrom, to another package, say pkgTo,
+	 * such that, when loading pkgTo, pkgFrom will be placed in the same WPD file.
+	 * Thus, the number of WPD fiels to load will be reduced, and
+	 * the load time will be improved.
+	 * <p>Notice that
+	 * <ul>
+	 * <li>pkgTo shall be a package that will be pre-loaded, i.e.,
+	 * they will be loaded when a ZUML page is loaded.</li>
+	 * </ul>
+	 * @param pkgFrom the package name, such as "foo.fly", that will
+	 * be merged to <code>pkgTo</code>
+	 * @param pkgTo the target package, such as "zk" and "zul.lang",
+	 * that will contain the code from <code>pkgFrom</code>.<br/>
+	 * @since 6.0.0
 	 */
-	public void addMergeJavaScriptPackage(String pkg) {
-		if (pkg == null || pkg.length() == 0)
+	public void mergeJavaScriptPackage(String pkgFrom, String pkgTo) {
+		if (pkgFrom == null || pkgFrom.length() == 0
+		|| pkgTo == null || pkgTo.length() == 0)
 			throw new IllegalArgumentException();
-		_mergepkgs.add(pkg);
+
+		FastReadArray<String> pkgs = _mergepkgs.get(pkgTo);
+		if (pkgs == null) {
+			synchronized (this) {
+				pkgs = _mergepkgs.get(pkgTo);
+				if (pkgs == null) {
+					Map<String, FastReadArray<String>> mpkgs =
+						new HashMap<String, FastReadArray<String>>(_mergepkgs);
+					mpkgs.put(pkgTo,
+						pkgs = new FastReadArray<String>(String.class));
+					_mergepkgs = mpkgs;
+				}
+			}
+		}
+		pkgs.add(pkgFrom);
 	}
-	/** Removes a mergeable JavaScript package required by this language.
-	 * @since 5.0.4
+	/** Undo the merge of a JavaScript package to another.
+	 * @see #mergeJavaScriptPackage
+	 * @since 6.0.0
 	 */
-	public boolean removeMergeJavaScriptPackage(String pkg) {
-		return _mergepkgs.remove(pkg);
+	public boolean unmergeJavaScriptPackage(String pkgFrom, String pkgTo) {
+		FastReadArray<String> pkgs = _mergepkgs.get(pkgTo);
+		return pkgs != null && pkgs.remove(pkgFrom);
 	}
-	/** Returns a list of mergeable JavaScript package (String)
-	 * required by this language.
-	 * @since 5.0.4
+	/** Returns a list of JavaScript packages that are merged the given
+	 * package, such as "zk" and "zul.lang".
+	 * @since 6.0.0
 	 */
-	public Collection<String> getMergeJavaScriptPackages() {
-		return new CollectionsX.ArrayCollection<String>(_mergepkgs.toArray());
+	public Collection<String> getMergedJavaScriptPackages(String pkg) {
+		FastReadArray<String> pkgs = _mergepkgs.get(pkg);
+		if (pkgs != null)
+			return new CollectionsX.ArrayCollection<String>(pkgs.toArray());
+		return Collections.emptyList();
+	}
+	/** Returns a readonly collection of the packages that will be merged
+	 * by other packages.
+	 * @since 6.0.0
+	 */
+	public Set<String> getJavaScriptPackagesWithMerges() {
+		return _mergepkgs.keySet();
 	}
 
 	/** Adds the definition of a JavaScript module to this language.
@@ -667,13 +702,18 @@ public class LanguageDefinition {
 		if (name == null || name.length() == 0
 		|| version == null || version.length() == 0)
 			throw new IllegalArgumentException();
-		_jsmods.put(name, version);
+
+		synchronized (this) {
+			final Map<String, String> jsmods = new HashMap<String, String>(_jsmods);
+			jsmods.put(name, version);
+			_jsmods = jsmods;
+		}
 	}
-	/** Returns a map of definitions of JavaScript modules,
+	/** Returns a readonly map of definitions of JavaScript modules,
 	 * (String name, String version).
 	 */
 	public Map<String, String> getJavaScriptModules() {
-		return _rojsmods;
+		return Collections.unmodifiableMap(_jsmods);
 	}
 
 	/** Adds a {@link StyleSheet} required by this language.

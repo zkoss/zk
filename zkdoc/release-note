@@ -30,6 +30,7 @@ ZK 6.0.0
   ZK-416: Listbox support multiple drag
   ZK-446: Add an instant="true" attribute to InputElement(e.g. textbox, intbox, ...) so onChange is fired as quick as possible. 
   ZK-12: Checkbox automatically disable itself after clicked
+  ZK-458: The language definition allows a WPD package to be merged to another
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

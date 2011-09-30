@@ -267,7 +267,7 @@ public class WebManager {
 				code ^= Objects.hashCode(me.getKey())
 					+ Objects.hashCode(me.getValue());
 			}
-			for (Iterator e = langdef.getMergeJavaScriptPackages().iterator();
+			for (Iterator e = langdef.getMergedJavaScriptPackages("zk").iterator();
 			e.hasNext();) {
 				code ^= Objects.hashCode(e.next());
 			}

@@ -108,7 +108,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
 		byte[] data;
-		boolean zkpkg = false;
+		String pkg = null;
 		setProvider(new Provider(this, request, response));
 		try {
 			
@@ -144,8 +144,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			} else {
 				final WpdContent wc = (WpdContent)rawdata;
 				data = wc.toByteArray(request);
+				pkg = wc.name;
 				cacheable = wc.cacheable;
-				zkpkg = wc.zkpkg;
 			}
 			if (cacheable)
 				org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
@@ -154,7 +154,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			setProvider(null);
 		}
 
-		return zkpkg ? mergeJavaScript(request, response, data): data;
+		return pkg != null ? mergeJavaScript(request, response, pkg, data): data;
 	}
 	/** Returns the device type for this WpdExtendlet.
 	 * <p>Default: ajax.
@@ -166,20 +166,17 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		return "ajax";
 	}
 	/** Merges the JavaScript code of the mergeable packages defined in
-	 * {@link LanguageDefinition#getMergeJavaScriptPackages}.
+	 * {@link LanguageDefinition#getMergedJavaScriptPackages}.
 	 * @since 5.0.4.
 	 */
 	protected byte[] mergeJavaScript(HttpServletRequest request,
-	HttpServletResponse response, byte[] data)
+	HttpServletResponse response, String pkgTo, byte[] data)
 	throws ServletException, IOException {
 		ByteArrayOutputStream out = null;
 		Device device = null;
 		final String deviceType = getDeviceType();
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			for (Iterator it2 = ((LanguageDefinition)it.next())
-			.getMergeJavaScriptPackages().iterator(); it2.hasNext();) {
-				final String pkg = (String)it2.next();
+		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType)) {
+			for (String pkg: langdef.getMergedJavaScriptPackages(pkgTo)) {
 				if (out == null) {
 					out = new ByteArrayOutputStream(1024*100);
 					out.write(data);
@@ -213,8 +210,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
 
 		final WpdContent wc =
-			zk || aaas || !cacheable || isWpdContentRequired(root) ?
-				new WpdContent(dir, zk, cacheable): null;
+			zk || aaas || !cacheable || isWpdContentRequired(name, root) ?
+				new WpdContent(name, dir, cacheable): null;
 
 		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*16);
@@ -366,7 +363,11 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 		return new ByteContent(out.toByteArray(), cacheable);
 	}
-	private static boolean isWpdContentRequired(Element root) {
+	private boolean isWpdContentRequired(String pkg, Element root) {
+		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(getDeviceType()))
+			if (langdef.getJavaScriptPackagesWithMerges().contains(pkg))
+				return true;
+
 		for (Iterator it = root.getElements("script").iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			if (el.getAttributeValue("browser") != null)
@@ -460,7 +461,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append("','','");
 
 		sb.append("',{");
-		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		for (Iterator it = LanguageDefinition.getByDeviceType(getDeviceType()).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
@@ -493,13 +494,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (config.getPerformanceMeter() != null)
 			sb.append("pf:1,");
 
-		Object[][] infs = config.getClientErrorReloads("ajax", null);
+		final String deviceType = getDeviceType();
+		Object[][] infs = config.getClientErrorReloads(deviceType, null);
 		if (infs != null) {
 			sb.append("eu:{");
 			outErrReloads(config, sb, infs);
 			sb.append("},");
 		}
-		infs = config.getClientErrorReloads("ajax", "server-push");
+		infs = config.getClientErrorReloads(deviceType, "server-push");
 		if (infs != null) {
 			sb.append("eup:{");
 			outErrReloads(config, sb, infs);
@@ -601,17 +603,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	}
 			
 	/*package*/ class WpdContent {
+		/** The package name*/
+		private final String name;
 		private final String _dir;
 		private final List<Object> _cnt = new LinkedList<Object>();
-		private final boolean zkpkg;
+		/** Whether it is cacheable. */
 		private final boolean cacheable;
 
-		/**
-		 * @param zkpkg whether it is the zk package.
-		 */
-		private WpdContent(String dir, boolean zkpkg, boolean cacheable) {
+		private WpdContent(String name, String dir, boolean cacheable) {
+			this.name = name;
 			_dir = dir;
-			this.zkpkg = zkpkg;
 			this.cacheable = cacheable;
 		}
 		private void add(byte[] bs) {

@@ -303,8 +303,11 @@ public class DefinitionLoaders {
 			final Element el = (Element)it.next();
 			String src = el.getAttributeValue("src"),
 				pkg = el.getAttributeValue("package");
-			final boolean merge = "true".equals(el.getAttributeValue("merge"));
+			String mergeTo = el.getAttributeValue("merge");
+			final boolean merge = mergeTo != null && !"false".equals(mergeTo);
+			if (merge && "true".equals(mergeTo)) mergeTo = "zk";
 			final boolean ondemand = "true".equals(el.getAttributeValue("ondemand"));
+				//ondemand means to cancel the previous definition (merge or not)
 			if (pkg != null) {
 				if (src != null)
 					log.warning("The src attribute ignored because package is specified, "+el.getLocator());
@@ -317,11 +320,11 @@ public class DefinitionLoaders {
 			final String ctn = el.getText(true);
 			final JavaScript js;
 			if (pkg != null && pkg.length() > 0) {
-				if (ondemand) {
+				if (ondemand) { //ondemand has the higher priority than merge
 					langdef.removeJavaScript("~." + device.packageToPath(pkg));
-					langdef.removeMergeJavaScriptPackage(pkg);
-				} else {
-					langdef.addMergeJavaScriptPackage(pkg);
+					langdef.unmergeJavaScriptPackage(pkg, mergeTo);
+				} else { //merge must be true
+					langdef.mergeJavaScriptPackage(pkg, mergeTo);
 				}
 				continue; //TODO
 			} else if (src != null && src.length() > 0) {
