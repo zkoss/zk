@@ -402,3 +402,7 @@ div.z-grid-header-bg {
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
 </c:if>
+
+.z-grid-footer .z-footer {
+	overflow: hidden; <%-- B50-ZK-410: Bug on footer labels applied to a grid --%>
+}
