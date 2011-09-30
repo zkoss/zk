@@ -54,7 +54,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	/** groupInfo list used in {@link Rows} */
 	private transient List<int[]> _gpinfo;
 
-	/** Returns the list model ({@link ListModel}) representing the given
+	/** Returns the list model ({@link org.zkoss.zul.ListModel}) representing the given
 	 * groups model.
 	 * @since 6.0.0
 	 */

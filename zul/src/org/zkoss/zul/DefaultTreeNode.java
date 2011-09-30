@@ -43,7 +43,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
 	 * If null or empty, it means
 	 * no children at all. However, it still allows to add children.
-	 * If it is not allowed, please use {@link #DefaultTreeNode(E)} instead.
+	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
 	public DefaultTreeNode(E data, Collection<DefaultTreeNode<E>> children) {
 		this(data, children, false);
@@ -66,7 +66,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 * @param children a collection of children (they must be {@link DefaultTreeNode} too).
 	 * If null or empty, it means
 	 * no children at all. However, it still allows to add children.
-	 * If it is not allowed, please use {@link #DefaultTreeNode(E)} instead.
+	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
 	public DefaultTreeNode(E data, DefaultTreeNode<E>[] children) {
 		this(data, new ArrayCollection<DefaultTreeNode<E>>(children));

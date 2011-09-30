@@ -24,7 +24,7 @@ import org.zkoss.zul.ext.Selectable;
  * and {@link Grid} use to get the content of items.
  *
  * <p>If the list model is used with sortable listbox or grid,
- * the developer must also implement {@link Sortable}.
+ * the developer must also implement {@link org.zkoss.zul.ext.Sortable}.
  *
  * <p>If the model also provides the selection, it could implement
  * {@link Selectable}.
@@ -36,7 +36,7 @@ import org.zkoss.zul.ext.Selectable;
  * @see Grid
  * @see Listbox
  * @see ListitemRenderer
- * @see Sortable
+ * @see org.zkoss.zul.ext.Sortable
  * @see Selectable
  */
 public interface ListModel<E> {
