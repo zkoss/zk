@@ -229,6 +229,12 @@
 			<groupId>org.zkoss.zkforge</groupId>
 			<artifactId>timeplotz</artifactId>
 			<version>${timeplotz.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.zkoss.zkforge</groupId>
+					<artifactId>timelinez</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zkforge</groupId>
