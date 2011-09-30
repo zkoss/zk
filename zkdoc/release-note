@@ -84,10 +84,11 @@ ZK 6.0.0
   + Tree's model rendering is deferred to the onInitRender event
   + AbstractComponent's newChildren() and newExtraCtrl() are both removed.
     Override getChildren() and getExtraCtrl() instead.
+  + The template of Messagebox (~./zul/html/messagebox.zul) is changed.
+    If you customize it, please refer to https://github.com/zkoss/zk/blob/6.0/zul/src/archive/web/zul/html/messagebox.zul
   + The event processing thread is deprecated and might be removed in the future
   + StubComponent's package becomes org.zkoss.zk.ui.sys.
   + EvaluatorRef's package becomes org.zkoss.zk.xel.
-  + No longer support ZKuery
   + The hflex/vflex properties of a Panelchildren are determined by its parent
     Panel. The setter methods of Panelchildren's hflex/vflex will throw 
     UnsupportedOperationException. 
@@ -97,6 +98,7 @@ ZK 6.0.0
     Treeitem, Treerow, Treecell, Treechildren, Treecols, Treefoot,
     Rows, Columns, Row, Cell, Foot, Listitem, Listcell, Listhead, Listfoot
   + The deprecated class org.zkoss.web.util.resource.ServletLabelResovler was removed.
+  + No longer support ZKuery
 
 	--------
 ZK 5.0.9

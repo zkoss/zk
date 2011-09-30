@@ -61,7 +61,7 @@ public class MessageboxDlg extends Window {
 
 	/** Sets what buttons are allowed. */
 	public void setButtons(Button[] buttons) {
-		_buttons = buttons != null && buttons.length > 0 ? buttons: _defaultButtons;
+		_buttons = buttons != null && buttons.length > 0 ? buttons: DEFAULT_BUTTONS;
 		final Component parent = getFellow("buttons");
 		final String sclass = (String)parent.getAttribute("button.sclass");
 		for (int j = 0; j < _buttons.length; ++j) {
@@ -72,7 +72,7 @@ public class MessageboxDlg extends Window {
 			parent.appendChild(mbtn);
 		}
 	}
-	private static final Button[] _defaultButtons = new Button[] {Button.OK};
+	private static final Button[] DEFAULT_BUTTONS = new Button[] {Button.OK};
 
 	/** Sets the event listener.
 	 * @param listener the event listener. If null, no invocation at all.
