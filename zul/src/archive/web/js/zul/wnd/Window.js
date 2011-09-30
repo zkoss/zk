@@ -207,15 +207,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _updDomOuter(wgt, opts) {
 		// B50-ZK-462
-		if (!opts || !opts.sendOnMaximize)
-			wgt._notSendMaximize = true;
+		wgt._notSendMaximize = !opts || !opts.sendOnMaximize;
 		wgt._updDOFocus = false; //it might be set by unbind_
-		wgt.rerender(wgt._skipper);
-		var cf;
-		if (cf = wgt._updDOFocus) //asked by unbind_
-			cf.focus(10);
-		delete wgt._updDOFocus;
-		wgt._notSendMaximize = null;
+		try {
+			wgt.rerender(wgt._skipper);
+			var cf;
+			if (cf = wgt._updDOFocus) //asked by unbind_
+				cf.focus(10);
+		} finally {
+			delete wgt._updDOFocus;
+			delete wgt._notSendMaximize;
+		}
 	}
 	//minTop - whether to at most 100px
 	function _updDomPos(wgt, force, posParent, minTop) {
