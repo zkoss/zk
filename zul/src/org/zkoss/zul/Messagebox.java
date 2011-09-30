@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.WebApp;
@@ -318,7 +319,7 @@ public class Messagebox {
 	int focus, EventListener<Event> listener) {
 		return show(message, title, toButtonTypes(buttons), icon,
 			focus != 0 ? toButtonType(focus): null,
-			toButtonListener(listener)).value;
+			toButtonListener(listener)).id;
 	}
 	private static Button toButtonType(int btn) {
 		switch (btn) {
@@ -614,24 +615,32 @@ public class Messagebox {
 	 */
 	public static enum Button {
 		/** A OK button. */
-		OK (Messagebox.OK),
+		OK (Messagebox.OK, ON_OK, MZul.OK),
 		/** A Cancel button. */
-		CANCEL (Messagebox.CANCEL),
+		CANCEL (Messagebox.CANCEL, ON_CANCEL, MZul.CANCEL),
 		/** A Yes button. */
-		YES (Messagebox.YES),
+		YES (Messagebox.YES, ON_YES, MZul.YES),
 		/** A No button. */
-		NO (Messagebox.NO),
+		NO (Messagebox.NO, ON_NO, MZul.NO),
 		/** A Abort button. */
-		ABORT (Messagebox.ABORT),
+		ABORT (Messagebox.ABORT, ON_ABORT, MZul.ABORT),
 		/** A Retry button. */
-		RETRY (Messagebox.RETRY),
+		RETRY (Messagebox.RETRY, ON_RETRY, MZul.RETRY),
 		/** A IGNORE button. */
-		IGNORE (Messagebox.IGNORE);
+		IGNORE (Messagebox.IGNORE, ON_IGNORE, MZul.IGNORE);
 
-		/** A unique value to represent each button type. */
-		public final int value;
-		private Button(int v) {
-			this.value = v;
+		/** The unique ID to represent this button type. */
+		public final int id;
+		/** The event name associated with this button type. */
+		public final String event;
+		/** The message ID used for loading the label.
+		 * @see Messages
+		 */
+		public final int label;
+		private Button(int id, String event, int label) {
+			this.id = id;
+			this.event = event;
+			this.label = label;
 		}
 	}
 	/** The event that will be received by the listener when the user clicks a button.
@@ -659,7 +668,7 @@ public class Messagebox {
 			final Button btn = event.getButton();
 			_listener.onEvent(
 				new Event(event.getName(), event.getTarget(),
-					btn != null ? btn.value: -1));
+					btn != null ? btn.id: -1));
 		}
 		public String toString() {
 			return _listener.toString();

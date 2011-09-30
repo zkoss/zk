@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.zul.mesg.MZul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -43,15 +42,15 @@ public class MessageboxDlg extends Window {
 	private EventListener<ClickEvent> _listener;
 
 	public void onOK() throws Exception {
-		if (contains(Button.OK)) endModal(Messagebox.ON_OK, Button.OK);
-		else if (contains(Button.YES)) endModal(Messagebox.ON_YES, Button.YES);
-		else if (contains(Button.RETRY)) endModal(Messagebox.ON_RETRY, Button.RETRY);
+		if (contains(Button.OK)) endModal(Button.OK);
+		else if (contains(Button.YES)) endModal(Button.YES);
+		else if (contains(Button.RETRY)) endModal(Button.RETRY);
 	}
 	public void onCancel() throws Exception {
-		if (_buttons.length == 1 && _buttons[0] == Button.OK) endModal(Messagebox.ON_OK, Button.OK);
-		else if (contains(Button.CANCEL)) endModal(Messagebox.ON_CANCEL, Button.CANCEL);
-		else if (contains(Button.NO)) endModal(Messagebox.ON_NO, Button.NO);
-		else if (contains(Button.ABORT)) endModal(Messagebox.ON_ABORT, Button.ABORT);
+		if (_buttons.length == 1 && _buttons[0] == Button.OK) endModal(Button.OK);
+		else if (contains(Button.CANCEL)) endModal(Button.CANCEL);
+		else if (contains(Button.NO)) endModal(Button.NO);
+		else if (contains(Button.ABORT)) endModal(Button.ABORT);
 	}
 	private boolean contains(Button button) {
 		for (int j = 0; j < _buttons.length; ++j)
@@ -67,7 +66,7 @@ public class MessageboxDlg extends Window {
 		final String sclass = (String)parent.getAttribute("button.sclass");
 		for (int j = 0; j < _buttons.length; ++j) {
 			if (_buttons[j] == null)
-				throw new IllegalArgumentException("The "+j+"-th button is not specified");
+				throw new IllegalArgumentException("The "+j+"-th button is null");
 			final MessageButton mbtn = new MessageButton(_buttons[j]);
 			mbtn.setSclass(sclass);
 			parent.appendChild(mbtn);
@@ -89,7 +88,7 @@ public class MessageboxDlg extends Window {
 	 */
 	public void setFocus(Button button) {
 		if (button != null) {
-			final MessageButton btn = (MessageButton)getFellowIfAny("btn" + button.value);
+			final MessageButton btn = (MessageButton)getFellowIfAny("btn" + button.id);
 			if (btn != null)
 				btn.focus();
 		}
@@ -97,10 +96,10 @@ public class MessageboxDlg extends Window {
 
 	/** Called only internally.
 	 */
-	public void endModal(String evtnm, Button button) throws Exception {
+	public void endModal(Button button) throws Exception {
 		_result = button;
 		if (_listener != null) {
-			final ClickEvent evt = new ClickEvent(evtnm, this, button);
+			final ClickEvent evt = new ClickEvent(button.event, this, button);
 			_listener.onEvent(evt);
 			if (!evt.isPropagatable())
 				return; //no more processing
@@ -134,47 +133,14 @@ public class MessageboxDlg extends Window {
 	 */
 	public static class MessageButton extends org.zkoss.zul.Button {
 		private final Button _button;
-		private final String _evtnm;
 
 		public MessageButton(Button button) {
 			_button = button;
-
-			final int label;
-			switch (button.value) {
-			case Messagebox.YES:
-				label = MZul.YES;
-				_evtnm = Messagebox.ON_YES;
-				break;
-			case Messagebox.NO:
-				label = MZul.NO;
-				_evtnm = Messagebox.ON_NO;
-				break;
-			case Messagebox.RETRY:
-				label = MZul.RETRY;
-				_evtnm = Messagebox.ON_RETRY;
-				break;
-			case Messagebox.ABORT:
-				label = MZul.ABORT;
-				_evtnm = Messagebox.ON_ABORT;
-				break;
-			case Messagebox.IGNORE:
-				label = MZul.IGNORE;
-				_evtnm = Messagebox.ON_IGNORE;
-				break;
-			case Messagebox.CANCEL:
-				label = MZul.CANCEL;
-				_evtnm = Messagebox.ON_CANCEL;
-				break;
-			default:
-				label = MZul.OK;
-				_evtnm = Messagebox.ON_OK;
-				break;
-			}
-			setLabel(Messages.get(label));
-			setId("btn" + _button.value);
+			setLabel(Messages.get(_button.label));
+			setId("btn" + _button.id);
 		}
 		public void onClick() throws Exception {
-			((MessageboxDlg)getSpaceOwner()).endModal(_evtnm, _button);
+			((MessageboxDlg)getSpaceOwner()).endModal(_button);
 		}
 		protected String getDefaultMold(Class klass) {
 			return super.getDefaultMold(org.zkoss.zul.Button.class);

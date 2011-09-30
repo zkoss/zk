@@ -413,7 +413,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 * @since 6.0.0
 	 */
 	public void setMode(Mode mode) {
-		setMode(mode.value);
+		setMode(mode.id);
 	}
 	/** Returns the current mode.
 	 * @see #getMode
@@ -1016,9 +1016,9 @@ public class Window extends XulElement implements Framable, IdSpace {
 		 */
 		HIGHLIGHTED (Window.HIGHLIGHTED);
 
-		private final int value;
+		private final int id;
 		private Mode(int v) {
-			this.value = v;
+			this.id = v;
 		}
 	}
 }
