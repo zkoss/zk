@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+
+maindir="$(pwd)"
+libtmp="WEB-INF/lib"
+
+function buildwar {
+	cd $maindir/dist/lib
+	mkdir -p $libtmp
+	cp -f $1.war $1-all.war
+	libs="$(cat $maindir/$1/war.libs.all | tr '\n' ' ')"
+	for lib in $libs ; do
+		if [ -f "$lib" ] ; then
+			cp $lib $libtmp/$lib
+			#jar ufM $1-all.war "$lib"
+		elif [ -f "ext/$lib" ] ; then
+			cp ext/$lib $libtmp/$lib
+			#jar ufM $1-all.war "ext/$lib"
+		fi
+	done
+	jar ufM $maindir/dist/lib/$1-all.war $libtmp/
+	rm -rf WEB-INF
+	mv $maindir/dist/lib/$1-all.war /tmp/$1.war
+}
+
+buildwar zksandbox
+buildwar zktest
