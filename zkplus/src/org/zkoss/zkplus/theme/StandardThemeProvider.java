@@ -24,7 +24,6 @@ import java.util.ListIterator;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zul.Messagebox;
 
 /**
  * A standard implementation of ThemeProvider, which works with the Breeze series
@@ -34,11 +33,8 @@ import org.zkoss.zul.Messagebox;
 public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
 	
 	public final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-	public final static String DEFAULT_MSGBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
 	
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
-		
-		Messagebox.setTemplate(DEFAULT_MSGBOX_TEMPLATE_URI);
 		String suffix = getThemeFileSuffix();
 		
 		if (!Strings.isEmpty(suffix))
