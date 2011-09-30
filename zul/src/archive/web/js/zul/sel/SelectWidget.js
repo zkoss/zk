@@ -50,10 +50,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			|| (zk.isLoaded('zul.wgt')
 			&& evt.target.$instanceof(zul.wgt.Button, zul.wgt.Toolbarbutton));
 	}
+	function _isInputWidget(evt) { // B50-ZK-460
+		return evt.target.$inputWidget //for extension, it makes a widget as a input widget
+			|| (zk.isLoaded('zul.inp') && evt.target.$instanceof(zul.inp.InputWidget));
+	}
 	function _focusable(evt) {
 		return (jq.nodeName(evt.domTarget, "input", "textarea", "button", "select", "option", "a")
 				&& !evt.target.$instanceof(zul.sel.SelectWidget))
-			|| _isButton(evt);
+			|| _isButton(evt) || _isInputWidget(evt);
 	}
 
 var SelectWidget =
