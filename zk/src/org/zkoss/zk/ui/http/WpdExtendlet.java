@@ -460,7 +460,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			sb.append("','','");
 
 		sb.append("',{");
-		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		for (Iterator it = LanguageDefinition.getByDeviceType(getDeviceType()).iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator();
@@ -493,13 +493,13 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (config.getPerformanceMeter() != null)
 			sb.append("pf:1,");
 
-		Object[][] infs = config.getClientErrorReloads("ajax", null);
+		Object[][] infs = config.getClientErrorReloads(getDeviceType(), null);
 		if (infs != null) {
 			sb.append("eu:{");
 			outErrReloads(config, sb, infs);
 			sb.append("},");
 		}
-		infs = config.getClientErrorReloads("ajax", "server-push");
+		infs = config.getClientErrorReloads(getDeviceType(), "server-push");
 		if (infs != null) {
 			sb.append("eup:{");
 			outErrReloads(config, sb, infs);
