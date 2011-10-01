@@ -360,7 +360,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		mode: _zkf = function () {
+			// B50-ZK-462
+			this._isChangingDomOuter = true;
 			_updDomOuter(this);
+			this._isChangingDomOuter = null;
 		},
 		/** 
 		 * Sets the title.
@@ -378,8 +381,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		title: function () {
 			if (this.caption)
 				this.caption.updateDomContent_(); // B50-ZK-313
-			else
+			else {
+				// B50-ZK-462
+				this._isChangingDomOuter = true;
 				_updDomOuter(this);
+				this._isChangingDomOuter = null;
+			}
 		},
 		/** 
 		 * Sets the border (either none or normal).
@@ -541,7 +548,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					if (body)
 						body.style.width = body.style.height = "";
 				}
-				if (!fromServer || isRealVisible) {
+				// B50-ZK-462: Window fire unexpected onMaximize event
+				if (!fromServer || isRealVisible && !this._isChangingDomOuter) {
 					this._visible = true;
 					this.fire('onMaximize', {
 						left: l,

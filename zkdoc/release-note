@@ -40,6 +40,7 @@ ZK 5.0.9
   ZK-410: Bug on footer labels applied to a grid
   ZK-460: Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.
   ZK-465: Messagebox does not invoke the listener if ESC is pressed
+  ZK-462: Window fire unexpected onMaximize event
 
 	--------
 Aug 31, 2011
