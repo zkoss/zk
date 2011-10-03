@@ -12,6 +12,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/**
+ * A light weight dropdown list.
+ * @author jumperchen
+ * @since 6.0.0
+ */
 zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 	$define: {
 		/**
