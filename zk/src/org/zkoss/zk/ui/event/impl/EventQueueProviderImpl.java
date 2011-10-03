@@ -36,7 +36,8 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 	 */
 	protected static final String ATTR_EVENT_QUEUES = "org.zkoss.zk.ui.event.eventQueues";
 
-	public EventQueue lookup(String name, String scope, boolean autoCreate) {
+	public <T extends Event>
+	EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("Not in an execution");
@@ -47,37 +48,40 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 				(Scope)exec.getDesktop().getWebApp(): exec.getSession(), autoCreate);
 		} else  if (EventQueues.DESKTOP.equals(scope)) {
 			final Desktop desktop = exec.getDesktop();
-			Map<String, EventQueue> eqs = cast((Map)desktop.getAttribute(ATTR_EVENT_QUEUES));
+			Map<String, EventQueue<T>> eqs = cast((Map)desktop.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
-				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue>(4));
+				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
 
-			EventQueue eq = eqs.get(name);
+			EventQueue<T> eq = eqs.get(name);
 			if (autoCreate && eq == null)
-				eqs.put(name, eq = new DesktopEventQueue());
+				eqs.put(name, eq = new DesktopEventQueue<T>());
 			return eq;
 		} else
 			throw new UnsupportedOperationException("Unknown scope: "+scope);
 	}
-	public EventQueue lookup(String name, Session sess, boolean autoCreate) {
+	public <T extends Event>
+	EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
 		return lookup0(name, sess, autoCreate);
 	}
-	public EventQueue lookup(String name, WebApp wapp, boolean autoCreate) {
+	public <T extends Event>
+	EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
 		return lookup0(name, wapp, autoCreate);
 	}
 	/** Looks up a session or application scoped event queue. */
-	private EventQueue lookup0(String name, Scope ctxscope, boolean autoCreate) {
-		Map<String, EventQueue> eqs;
+	private <T extends Event>
+	EventQueue<T> lookup0(String name, Scope ctxscope, boolean autoCreate) {
+		Map<String, EventQueue<T>> eqs;
 		synchronized (ctxscope) {
 			eqs = cast((Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
-				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue>(4));
+				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
 		}
 
-		EventQueue eq;
+		EventQueue<T> eq;
 		synchronized (eqs) {
 			eq = eqs.get(name);
 			if (autoCreate && eq == null)
-				eqs.put(name, eq = new ServerPushEventQueue());
+				eqs.put(name, eq = new ServerPushEventQueue<T>());
 		}
 		return eq;
 	}

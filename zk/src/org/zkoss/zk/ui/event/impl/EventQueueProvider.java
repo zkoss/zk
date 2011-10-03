@@ -43,7 +43,7 @@ public interface EventQueueProvider {
 	 * @exception IllegalStateException if not in an activated execution
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
-	public EventQueue lookup(String name, String scope, boolean autoCreate);
+	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate);
 	/** Returns the event queue with the specified name in the
 	 * give session (i.e., the scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -52,7 +52,7 @@ public interface EventQueueProvider {
 	 * the scope)
 	 * @since 5.0.2
 	 */
-	public EventQueue lookup(String name, Session sess, boolean autoCreate);
+	public <T extends Event> EventQueue<T> lookup(String name, Session sess, boolean autoCreate);
 	/** Returns the event queue with the specified name in the
 	 * give application (i.e., the scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -61,7 +61,7 @@ public interface EventQueueProvider {
 	 * the scope)
 	 * @since 5.0.2
 	 */
-	public EventQueue lookup(String name, WebApp wapp, boolean autoCreate);
+	public <T extends Event> EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate);
 
 	/** Removes the event qeueue.
 	 * @param name the name of the event queue.

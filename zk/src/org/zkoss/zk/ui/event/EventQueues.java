@@ -122,8 +122,8 @@ public class EventQueues {
 	 * @exception IllegalStateException if not in an activated execution
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
-	public static
-	EventQueue lookup(String name, String scope, boolean autoCreate) {
+	public static <T extends Event>
+	EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 		return getProvider().lookup(name, scope, autoCreate);
 	}
 	/** Returns the event queue with the specified name in the
@@ -136,7 +136,8 @@ public class EventQueues {
 	 * @see #lookup(String, WebApp, boolean)
 	 * @since 5.0.2
 	 */
-	public static EventQueue lookup(String name, Session sess, boolean autoCreate) {
+	public static <T extends Event>
+	EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
 		return getProvider().lookup(name, sess, autoCreate);
 	}
 	/** Returns the event queue with the specified name in the
@@ -149,21 +150,23 @@ public class EventQueues {
 	 * @see #lookup(String, Session, boolean)
 	 * @since 5.0.2
 	 */
-	public static EventQueue lookup(String name, WebApp wapp, boolean autoCreate) {
+	public static <T extends Event>
+	EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
 		return getProvider().lookup(name, wapp, autoCreate);
 	}
 	/** Returns the desktop-level event queue with the specified name in the current
 	 * desktop.
 	 * It is a shortcut of <code>lookup(name, DESKTOP, autoCreate)</code>.
 	 */
-	public static EventQueue lookup(String name, boolean autoCreate) {
+	public static <T extends Event>
+	EventQueue<T> lookup(String name, boolean autoCreate) {
 		return lookup(name, DESKTOP, autoCreate);
 	}
 	/** Returns the desktop-level event queue with the specified name in the current
 	 * desktop, or if no such event queue, create one.
 	 * It is a shortcut of <code>lookup(name, DESKTOP, true)</code>.
 	 */
-	public static EventQueue lookup(String name) {
+	public static <T extends Event> EventQueue<T> lookup(String name) {
 		return lookup(name, DESKTOP, true);
 	}
 
