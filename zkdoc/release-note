@@ -39,9 +39,7 @@ ZK 6.0.0
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
-  ZK-428: Hlayout/Vlayout performance issue
   ZK-392: Set hflex='min' to treeitem will cause javascript error 
-  ZK-381: Menu scrolling bug
 
 * Upgrade Notes
   + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
