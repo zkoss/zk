@@ -29,6 +29,7 @@ import org.zkoss.zul.event.ListDataListener;
 
 /**
  * A light weight dropdown list.
+ * <p>Default {@link #getZclass}: z-selectbox.
  * It does not create child widgets for each data, so the memory usage is much
  * lower at the server.
  * However, the implementation is based on HTML SELECT and OPTION tags,
@@ -51,6 +52,10 @@ public class Selectbox extends HtmlBasedComponent {
 		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Selectbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Selectbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+	}
+
+	public String getZclass() {
+		return _zclass == null ? "z-selectbox" : _zclass;
 	}
 	/**
 	 * Returns the index of the selected item (-1 if no one is selected).

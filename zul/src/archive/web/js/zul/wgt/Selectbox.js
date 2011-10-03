@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A light weight dropdown list.
+ * <p>Default {@link #getZclass}: z-selectbox.
  * @author jumperchen
  * @since 6.0.0
  */
@@ -90,6 +91,10 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			var n = this.$n();
 			if (n) n.name = name;
 		}
+	},
+	getZclass: function () {
+		var zcls = this._zclass;
+		return zcls != null ? zcls: "z-selectbox";
 	},
 	_fixSelIndex: function () {
 		if (this._selectedIndex < 0)
