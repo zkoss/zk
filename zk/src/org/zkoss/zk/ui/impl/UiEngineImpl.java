@@ -961,8 +961,9 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		boolean fakeIS = false;
 		if (parent != null) {
-			if (parent.getPage() != null)
-				page = parent.getPage();
+			final Page ppg = parent.getPage();
+			if (ppg != null)
+				page = ppg;
 			else
 				fakeIS = true;
 			if (page == null) {
@@ -2136,16 +2137,43 @@ public class UiEngineImpl implements UiEngine {
 		public Component[] create(Component parent, Component insertBefore,
 		VariableResolver resolver) {
 			final Execution exec = Executions.getCurrent();
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final Component[] cs;
+
 			if (resolver != null)
 				exec.addVariableResolver(resolver);
+
+			Page prevPage = null;
+			IdSpace prevIS = null;
+			Page page = parent != null ? parent.getPage(): null;
+			final boolean fakepg = page == null;
+			if (fakepg) {
+				prevPage = execCtrl.getCurrentPage();
+				page = new PageImpl(prevPage);
+				((PageCtrl)page).preInit();
+				execCtrl.setCurrentPage(page);
+				prevIS = ExecutionsCtrl.setVirtualIdSpace(page);
+			}
 			try {
 				cs = execCreate0(
 					new CreateInfo(
 						((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
-						exec, parent.getPage(), null), //technically sys composer can be used but we don't (to simplify it)
+						exec, page, null), //technically sys composer can be used but we don't (to simplify it)
 					_tempInfo, parent, insertBefore);
+
+				if (fakepg && parent == null)
+					for (int j = 0; j < cs.length; ++j)
+						cs[j].detach();
 			} finally {
+				if (fakepg) {
+					execCtrl.setCurrentPage(prevPage);
+					ExecutionsCtrl.setVirtualIdSpace(prevIS);
+					try {
+						((DesktopCtrl)exec.getDesktop()).removePage(page);
+					} catch (Throwable ex) {
+						log.warningBriefly(ex);
+					}
+				}
 				if (resolver != null)
 					exec.removeVariableResolver(resolver);
 			}

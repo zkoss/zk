@@ -204,6 +204,13 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_clsresolver = new SimpleClassResolver();
 	}
+	/** Constructs a page with another page as instance
+	 * @since 6.0.0
+	 */
+	public PageImpl(Page ref) {
+		this(ref.getLanguageDefinition(), ref.getComponentDefinitionMap(),
+			ref.getRequestPath(), ref.getZScriptLanguage());
+	}
 
 	/** Constructs a page by specifying a richlet.
 	 *
