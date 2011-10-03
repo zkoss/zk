@@ -961,6 +961,15 @@ def alert(m):
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 	</component>
 	<component>
+		<component-name>selectbox</component-name>
+		<component-class>org.zkoss.zul.Selectbox</component-class>
+		<widget-class>zul.wgt.Selectbox</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/selectbox.js</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>separator</component-name>
 		<component-class>org.zkoss.zul.Separator</component-class>
 		<widget-class>zul.wgt.Separator</widget-class>

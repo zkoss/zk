@@ -83,7 +83,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		/**
 		 * Returns the tab order of this component.
 		 * <p>
-		 * Default: -1 (means the same as browser's default).
+		 * Default: 0 (means the same as browser's default).
 		 * @return int
 		 */
 		/**
