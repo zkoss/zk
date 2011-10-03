@@ -205,7 +205,6 @@ def alert(m):
 			<css-uri>css/a.css.dsp</css-uri>
 		</mold>
 	</component>
-
 	<component>
 		<component-name>absolutechildren</component-name>
 		<component-class>org.zkoss.zul.Absolutechildren</component-class>
@@ -223,6 +222,25 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/absolutelayout.js</mold-uri>
 			<css-uri>css/absolutelayout.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>anchorchildren</component-name>
+		<component-class>org.zkoss.zul.Anchorchildren</component-class>
+		<widget-class>zul.layout.Anchorchildren</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/anchorchildren.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>anchorlayout</component-name>
+		<component-class>org.zkoss.zul.Anchorlayout</component-class>
+		<widget-class>zul.layout.Anchorlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/anchorlayout.js</mold-uri>
+			<css-uri>css/anchorlayout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

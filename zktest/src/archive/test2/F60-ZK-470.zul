@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-470.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct  3 17:28:29 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window title="anchorlayout Demo" border="normal" width="100%" height="100%">
+    		You should see the following layout display as its description that is according to its parent size.
+            <anchorlayout id="al" width="100%" vflex="1" style="overflow:auto">
+                <anchorchildren height="200px" anchor="-100">
+                    <window title="win1" border="normal" width="100%" height="100%">
+                        height is "200px" and width is its parent size minus 100
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="50% -200">
+                    <window title="win2" border="normal" width="100%" height="100%">
+                       width is its parent size's 50%, and height is its parent size minus 200
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win3" border="normal" width="100%" height="100%">
+                    width is its parent size's 25%, and height is its parent size's 20%
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win4" border="normal" width="100%" height="100%">
+                    width is its parent size's 25%, and height is its parent size's 20%
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win5" border="normal" width="100%" height="100%">
+                    width is its parent size's 25%, and height is its parent size's 20%
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win6" border="normal" width="100%" height="100%">
+                    width is its parent size's 25%, and height is its parent size's 20%
+                    </window>
+                </anchorchildren>
+            </anchorlayout>
+    </window>
+</zk>

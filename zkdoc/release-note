@@ -35,7 +35,8 @@ ZK 6.0.0
   ZK-463: Messagebox supports enum to specify the button
   ZK-464: Window's mode supports enum
   ZK-468: Add Selectbox component to ZK core 
-  ZK-469: Add Absolutelayout component to ZK core 
+  ZK-469: Add Absolutelayout component to ZK core
+  ZK-470: Add Anchorlayout component to ZK core 
   ZK-383: Make breeze as the default theme
   ZK-318: Support combobutton combining a button and a dropdown menu
 
