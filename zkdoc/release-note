@@ -36,6 +36,7 @@ ZK 6.0.0
   ZK-464: Window's mode supports enum
   ZK-468: Add Selectbox component to ZK core 
   ZK-469: Add Absolutelayout component to ZK core 
+  ZK-383: Make breeze as the default theme
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
@@ -99,6 +100,10 @@ ZK 6.0.0
     Rows, Columns, Row, Cell, Foot, Listitem, Listcell, Listhead, Listfoot
   + The deprecated class org.zkoss.web.util.resource.ServletLabelResovler was removed.
   + No longer support ZKuery
+  + Breeze has become the default theme. In other words, ZK 6 uses Breeze as the 
+    default styling, without the need to include breeze.jar in the library
+    directory on in Maven dependencies. Sapphire and Silvertail are packaged and 
+    delivered as they were in ZK 5.
 
 	--------
 ZK 5.0.9
