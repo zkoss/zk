@@ -26,8 +26,8 @@ import org.zkoss.zk.ui.Component;
 public interface Template {
 	/** Creates the components defined in this template.
 	 * @param parent the parent to assign the new component to.
-	 * Like {@link org.zkoss.zk.ui.Execution#createComponents(PageDefinition, Map)}
-	 * (but unlike {@link org.zkoss.zk.ui.Execution#createComponents(PageDefinition, Component, Map)}),
+	 * Unlike {@link org.zkoss.zk.ui.Execution#createComponents(PageDefinition, Component, Map)}
+	 * (but similar to {@link org.zkoss.zk.ui.Execution#createComponents(PageDefinition, Map)}),
 	 * if parent is null or the parent does not belong to any page,
 	 * the created components won't be attached to any page too.
 	 * @param insertBefore the component that the new components shall
