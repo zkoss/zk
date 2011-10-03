@@ -41,6 +41,7 @@ ZK 5.0.9
   ZK-460: Click the arrow of the timebox/spinner that in a listbox will trigger onChange event.
   ZK-465: Messagebox does not invoke the listener if ESC is pressed
   ZK-462: Window fire unexpected onMaximize event
+  ZK-461: Javadoc doesn't match code for grid's setSpan method
 
 	--------
 Aug 31, 2011
