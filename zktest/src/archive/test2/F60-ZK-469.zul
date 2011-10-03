@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-469.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct  3 11:47:26 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="window" extends="window" border="normal" width="300px" height="300px"?>
+<zk>
+	<zscript>
+	 void changePosition(int x, int y) {
+	 	w1.x += x;
+	 	w1.y += y;
+	 	w1.firstChild.title = "X=" + w1.x + ", Y=" + w1.y;
+	 	w2.x += x;
+	 	w2.y += y;
+	 	w2.firstChild.title = "X=" + w2.x + ", Y=" + w2.y;
+	 	w3.x += x;
+	 	w3.y += y;
+	 	w3.firstChild.title = "X=" + w3.x + ", Y=" + w3.y;
+	 }
+	</zscript>
+	<absolutelayout>
+		<absolutechildren>
+		You can test the following button works well as its description.
+		<button label="Add x += 100" onClick="changePosition(100, 0)"/>
+		<button label="Add x -= 100" onClick="changePosition(-100, 0)"/>
+		<button label="Add y += 100" onClick="changePosition(0, 100)"/>
+		<button label="Add y -= 100" onClick="changePosition(0, -100)"/>
+		</absolutechildren>
+		<absolutechildren id="w1" x="60" y="100">
+			<window title="X=60, Y=100">
+			Window 1
+			</window>
+		</absolutechildren>
+		<absolutechildren id="w2" x="160" y="200">
+			<window title="X=60, Y=100">
+			Window 2
+			</window>
+		</absolutechildren>
+		<absolutechildren id="w3" x="260" y="300">
+			<window title="X=60, Y=100">
+			Window 3
+			</window>
+		</absolutechildren>
+	</absolutelayout>
+</zk>

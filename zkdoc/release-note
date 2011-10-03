@@ -35,6 +35,7 @@ ZK 6.0.0
   ZK-463: Messagebox supports enum to specify the button
   ZK-464: Window's mode supports enum
   ZK-468: Add Selectbox component to ZK core 
+  ZK-469: Add Absolutelayout component to ZK core 
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

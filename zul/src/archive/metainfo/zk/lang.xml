@@ -207,6 +207,25 @@ def alert(m):
 	</component>
 
 	<component>
+		<component-name>absolutechildren</component-name>
+		<component-class>org.zkoss.zul.Absolutechildren</component-class>
+		<widget-class>zul.layout.Absolutechildren</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/absolutechildren.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>absolutelayout</component-name>
+		<component-class>org.zkoss.zul.Absolutelayout</component-class>
+		<widget-class>zul.layout.Absolutelayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/absolutelayout.js</mold-uri>
+			<css-uri>css/absolutelayout.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
 		<widget-class>zul.med.Applet</widget-class>

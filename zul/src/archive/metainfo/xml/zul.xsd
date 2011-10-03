@@ -523,6 +523,7 @@
 		<xs:choice>
 			<xs:group ref="baseGroup" />
 			<xs:element ref="a" />
+			<xs:element ref="absolutelayout"/>
 			<xs:element ref="audio" />
 			<xs:element ref="bandbox" />
 			<xs:element ref="borderlayout" />
@@ -598,6 +599,7 @@
 		<xs:sequence>
 			<xs:choice>
 				<xs:element ref="a" />
+				<xs:element ref="absolutelayout"/>
 				<xs:element ref="audio" />
 				<xs:element ref="bandbox" />
 				<xs:element ref="borderlayout" />
@@ -684,6 +686,23 @@
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+    <!-- absolutechildren -->
+	<xs:element name="absolutechildren" type="absolutechildrenType" />
+	<xs:complexType name="absolutechildrenType">		
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="x" type="intType" use="optional" />
+		<xs:attribute name="y" type="intType" use="optional" />
+	</xs:complexType>
+    <!-- absolutelayout -->
+	<xs:element name="absolutelayout" type="absolutelayoutType" />
+	<xs:complexType name="absolutelayoutType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="absolutechildren" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
     <!-- applet -->
 	<xs:element name="applet" type="appletType" />
@@ -2651,7 +2670,6 @@
 			<xs:element ref="center" />
 			<xs:element ref="columns" />
 			<xs:element ref="column" />
-			<xs:element ref="columnchildren" />
 			<xs:element ref="comboitem" />
 			<xs:element ref="detail" />
 			<xs:element ref="east" />
@@ -2679,7 +2697,6 @@
 			<xs:element ref="splitter" />
 			<xs:element ref="south" />
 			<xs:element ref="tab" />
-			<xs:element ref="tablechildren" />
 			<xs:element ref="tabpanel" />
 			<xs:element ref="tabpanels" />
 			<xs:element ref="tabs" />
