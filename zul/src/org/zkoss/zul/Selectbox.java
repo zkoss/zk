@@ -29,6 +29,10 @@ import org.zkoss.zul.event.ListDataListener;
 
 /**
  * A light weight dropdown list.
+ * It does not create child widgets for each data, so the memory usage is much
+ * lower at the server.
+ * However, the implementation is based on HTML SELECT and OPTION tags,
+ * so the functionality is not as rich as {@link Listbox}.
  * @author jumperchen
  * @since 6.0.0
  */
