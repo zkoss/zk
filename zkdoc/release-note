@@ -37,6 +37,7 @@ ZK 6.0.0
   ZK-468: Add Selectbox component to ZK core 
   ZK-469: Add Absolutelayout component to ZK core 
   ZK-383: Make breeze as the default theme
+  ZK-318: Support combobutton combining a button and a dropdown menu
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
