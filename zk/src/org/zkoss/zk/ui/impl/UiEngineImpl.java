@@ -923,7 +923,7 @@ public class UiEngineImpl implements UiEngine {
 		final boolean fakepg = page == null;
 		if (fakepg) {
 			fakeIS = true;
-			page = new PageImpl(pagedef); //fake
+			page = new VolatilePage(pagedef); //fake
 		}
 
 		final Desktop desktop = exec.getDesktop();
@@ -957,12 +957,10 @@ public class UiEngineImpl implements UiEngine {
 				pagedef, parent);
 			inits.doAfterCompose(page, comps);
 
-			if (fakepg)
-				for (int j = 0; j < comps.length; ++j) {
+			//Notice: if parent is not null, comps[j].page == parent.page
+			if (fakepg && parent == null)
+				for (int j = 0; j < comps.length; ++j)
 					comps[j].detach();
-					if (parent != null)
-						parent.appendChild(comps[j]);
-				}
 
 			afterCreate(comps);
 			return comps;
@@ -984,6 +982,7 @@ public class UiEngineImpl implements UiEngine {
 				} catch (Throwable ex) {
 					log.warningBriefly(ex);
 				}
+				((PageCtrl)page).destroy();
 			}
 		}
 	}
