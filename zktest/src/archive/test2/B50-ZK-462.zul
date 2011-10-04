@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-462.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep  29 19:41:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Click 'reset label' button, the label should become 'nothing happened'.</li>
+<li>Click each checkbox twice, the label should not be changed.</li>
+<li>Maximize/Restore window by click the maximize/restore icon on the window, the label should become 'oops, test win maximized'.</li>
+</ol>
+]]></html>
+	<label id="lb" value="nothing happened" />
+	<button label="reset label">
+		<attribute name="onClick">
+			lb.setValue("nothing happened");
+		</attribute>
+	</button>
+	<checkbox label="maximizable" checked="true" onCheck="win.setMaximizable(self.checked);" />
+	<checkbox label="minimizable" onCheck="win.setMinimizable(self.checked);" />
+	<checkbox label="closable" onCheck="win.setClosable(self.checked);" />
+	<checkbox label="border">
+		 <attribute name="onCheck">
+		 	if (self.checked)
+		 		win.setBorder("normal");
+		 	else
+		 		win.setBorder("none");
+		 </attribute>
+	</checkbox>
+	<window id="win" title="test win" maximizable="true" maximized="true" border="normal">
+		<attribute name="onMaximize">
+			lb.setValue("oops, test win maximized!");
+		</attribute>
+	</window>
+</zk>

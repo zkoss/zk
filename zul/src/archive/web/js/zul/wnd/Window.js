@@ -205,13 +205,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		n.style.left = jq.px(ofs[0] + zk.parseInt(wgt._left));
 		n.style.top = jq.px(ofs[1] + zk.parseInt(wgt._top));
 	}
-	function _updDomOuter(wgt) {
+	function _updDomOuter(wgt, opts) {
+		// B50-ZK-462
+		wgt._notSendMaximize = !opts || !opts.sendOnMaximize;
 		wgt._updDOFocus = false; //it might be set by unbind_
-		wgt.rerender(wgt._skipper);
-		var cf;
-		if (cf = wgt._updDOFocus) //asked by unbind_
-			cf.focus(10);
-		delete wgt._updDOFocus;
+		try {
+			wgt.rerender(wgt._skipper);
+			var cf;
+			if (cf = wgt._updDOFocus) //asked by unbind_
+				cf.focus(10);
+		} finally {
+			delete wgt._updDOFocus;
+			delete wgt._notSendMaximize;
+		}
 	}
 	//minTop - whether to at most 100px
 	function _updDomPos(wgt, force, posParent, minTop) {
@@ -543,14 +549,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
-					this.fire('onMaximize', {
-						left: l,
-						top: t,
-						width: w,
-						height: h,
-						maximized: maximized,
-						fromServer: fromServer
-					});
+					// B50-ZK-462: Window fire unexpected onMaximize event
+					if (!this._notSendMaximize)
+						this.fire('onMaximize', {
+							left: l,
+							top: t,
+							width: w,
+							height: h,
+							maximized: maximized,
+							fromServer: fromServer
+						});
 				}
 				if (isRealVisible)
 					zUtl.fireSized(this);

@@ -484,7 +484,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (tabbox.isVertical()) {
 			var child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
-			if (!tabbox.getHeight()) {
+			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
 				var tabsHgh = allTab.length * 35, // default height
 					seldPanel = tabbox.getSelectedPanel(),
 					panelsHgh = seldPanel ? seldPanel.$n().offsetHeight : 0, // B50-ZK-298: concern panel height
