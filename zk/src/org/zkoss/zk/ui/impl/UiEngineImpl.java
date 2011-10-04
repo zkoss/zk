@@ -978,7 +978,7 @@ public class UiEngineImpl implements UiEngine {
 		final boolean fakepg = page == null;
 		if (fakepg) {
 			fakeIS = true;
-			page = new PageImpl(pagedef); //fake
+			page = new VolatilePage(pagedef); //fake
 		}
 
 		final Desktop desktop = exec.getDesktop();
@@ -1014,12 +1014,10 @@ public class UiEngineImpl implements UiEngine {
 				pagedef, parent, insertBefore);
 			inits.doAfterCompose(page, comps);
 
-			if (fakepg)
-				for (int j = 0; j < comps.length; ++j) {
+			//Notice: if parent is not null, comps[j].page == parent.page
+			if (fakepg && parent == null)
+				for (int j = 0; j < comps.length; ++j)
 					comps[j].detach();
-					if (parent != null)
-						parent.appendChild(comps[j]);
-				}
 
 			afterCreate(comps);
 			return comps;
@@ -1043,6 +1041,7 @@ public class UiEngineImpl implements UiEngine {
 				} catch (Throwable ex) {
 					log.warningBriefly(ex);
 				}
+				((PageCtrl)page).destroy();
 			}
 		}
 	}
@@ -2149,7 +2148,7 @@ public class UiEngineImpl implements UiEngine {
 			final boolean fakepg = page == null;
 			if (fakepg) {
 				prevPage = execCtrl.getCurrentPage();
-				page = new PageImpl(prevPage);
+				page = new VolatilePage(prevPage);
 				((PageCtrl)page).preInit();
 				execCtrl.setCurrentPage(page);
 				prevIS = ExecutionsCtrl.setVirtualIdSpace(page);
@@ -2161,6 +2160,7 @@ public class UiEngineImpl implements UiEngine {
 						exec, page, null), //technically sys composer can be used but we don't (to simplify it)
 					_tempInfo, parent, insertBefore);
 
+				//Notice: if parent is not null, cs[j].page == parent.page
 				if (fakepg && parent == null)
 					for (int j = 0; j < cs.length; ++j)
 						cs[j].detach();
@@ -2173,6 +2173,7 @@ public class UiEngineImpl implements UiEngine {
 					} catch (Throwable ex) {
 						log.warningBriefly(ex);
 					}
+					((PageCtrl)page).destroy();
 				}
 				if (resolver != null)
 					exec.removeVariableResolver(resolver);

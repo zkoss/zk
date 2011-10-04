@@ -199,7 +199,7 @@ import org.zkoss.zk.au.out.*;
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (_recovering || _disabled || page == null
+		if (_recovering || _disabled || page == null || page instanceof VolatilePage
 		|| !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
@@ -212,7 +212,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public void addInvalidate(Component comp) {
 		final Page page = comp.getPage();
-		if (_recovering || _disabled || page == null
+		if (_recovering || _disabled || page == null || page instanceof VolatilePage
 		|| !_exec.isAsyncUpdate(page) || isCUDisabled(comp))
 			return; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
@@ -276,7 +276,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	private Map<String, TimedValue> getAttrRespMap(Component comp) {
 		final Page page = comp.getPage();
-		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
+		if (_recovering || _disabled || page == null
+		|| page instanceof VolatilePage || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp) || isCUDisabled(comp))
 			return null; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
@@ -299,8 +300,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		if (_recovering || _disabled || (newpg == null && oldpg == null)
-		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
-		|| (oldpg == null && !_exec.isAsyncUpdate(newpg)) //attach to loading pg
+		|| (newpg == null && (oldpg instanceof VolatilePage || !_exec.isAsyncUpdate(oldpg))) //detach from loading pg
+		|| (oldpg == null && (newpg instanceof VolatilePage || !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 		|| isCUDisabled(comp) || (oldparent != null && isCUDisabled(oldparent)))
 			return; //to avoid redundant AuRemove
 		if (_ending) throw new IllegalStateException("ended");
@@ -490,6 +491,9 @@ import org.zkoss.zk.au.out.*;
 		} while (pgRemovedFound); //loop due to chain effect
 	}
 	private void addPageRemoved(Page page) {
+		if (page == null || page instanceof VolatilePage)
+			return;
+
 		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet<Page>();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);

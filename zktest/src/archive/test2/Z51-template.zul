@@ -28,11 +28,18 @@
 		onClick='self.parent.getTemplate("t1").create(self.parent, null, null)'/>
 	<button label="create before from template"
 		onClick='self.parent.getTemplate("t1").create(self.parent, self, null)'/>
-	<button label="create into blue div">
+	<button label="create 1 into blue div">
 		<attribute name="onClick"><![CDATA[
 			Component[] cs = self.parent.getTemplate("t1").create(null, null, null);
 			for (int j = 0; j < cs.length; ++j)
 				div.appendChild(cs[j]);
+		]]></attribute>
+	</button>
+	<button label="create 2 into blue div">
+		<attribute name="onClick"><![CDATA[
+		Div p = new Div();
+		Component[] cs = self.parent.getTemplate("t1").create(p, null, null);
+		div.appendChild(p);
 		]]></attribute>
 	</button>
 </vlayout>
