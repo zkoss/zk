@@ -17,13 +17,8 @@ package org.zkoss.zksandbox;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.ThemeProvider;
-import org.zkoss.zk.ui.util.ThemeProvider.Aide;
+import org.zkoss.zkplus.theme.StandardThemeProvider;
 
 /**
  * A cacheable theme provider.
@@ -41,15 +36,14 @@ import org.zkoss.zk.ui.util.ThemeProvider.Aide;
  * @author tomyeh / samchuang
  * @since 5.0.0
  */
-public class CacheableThemeProvider implements ThemeProvider{
-	private final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-	private final static String DEFAULT_MSGBOX_TEMPLATE_URI = "~./zul/html/messagebox.zul";
+public class CacheableThemeProvider extends StandardThemeProvider {
 	
-	public Collection getThemeURIs(Execution exec, List uris) {
-		String suffix = getThemeFileSuffix();
+	@Override
+	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
+		
 		String fsc = Themes.getFontSizeCookie(exec);
 		boolean isSilvergray = Themes.isSilvergray() && Themes.hasSilvergrayLib();
-		processSilverAndFontURI(isSilvergray, uris, fsc);
+		processSilverAndFontURI(uris, fsc);
 		
 		if ("lg".equals(fsc)) {
 			uris.add("/css/fontlg.css.dsp");
@@ -60,21 +54,13 @@ public class CacheableThemeProvider implements ThemeProvider{
 			if (isSilvergray)
 				uris.add("/css/silvergraysm.css.dsp");
 		}
-		if (Strings.isEmpty(suffix)) {
-			Messagebox.setTemplate(DEFAULT_MSGBOX_TEMPLATE_URI);
-			return uris;
-		}
-		if (isUsingDefaultTemplate(suffix))
-			Messagebox.setTemplate(getThemeMsgBoxURI(suffix));
-		
-		//slivergray
+		// slivergray
 		if (isSilvergray) {
 			uris.add("~./silvergray/color.css.dsp");
 			uris.add("~./silvergray/img.css.dsp");
 		} 
 		
-		bypassURI(uris, suffix);
-		return uris;
+		return super.getThemeURIs(exec, uris);
 	}
 	
 	/**
@@ -83,7 +69,9 @@ public class CacheableThemeProvider implements ThemeProvider{
 	 * @param uris
 	 * @param fsn
 	 */
-	private static void processSilverAndFontURI (boolean isSilver, List uris, String fsn) {
+	@SuppressWarnings("unchecked")
+	private static void processSilverAndFontURI (List uris, String fsn) {
+		boolean isSilver = Themes.isSilvergray() && Themes.hasSilvergrayLib();
 		for (ListIterator it = uris.listIterator(); it.hasNext();) {
 			final String uri = (String)it.next();
 			if (isSilver) {
@@ -100,13 +88,11 @@ public class CacheableThemeProvider implements ThemeProvider{
 			}
 		}
 	}
-
-	public int getWCSCacheControl(Execution exec, String uri) {
-		return 8760; //safe to cache
-	}
+	
+	@Override
 	public String beforeWCS(Execution exec, String uri) {
 		if(!Themes.isClassicBlue() && !Themes.isSilvergray())
-			return uri;
+			return super.beforeWCS(exec, uri);
 		final String[] dec = Aide.decodeURI(uri);
 		if (dec != null) {
 			if ("lg".equals(dec[1]) || "silvergray-lg".equals(dec[1])) {
@@ -122,49 +108,15 @@ public class CacheableThemeProvider implements ThemeProvider{
 			}
 			return dec[0];
 		}
-		return uri;
+		return super.beforeWCS(exec, uri);
 	}
-
+	
+	@Override
 	public String beforeWidgetCSS(Execution exec, String uri) {
 		if(Themes.isSilvergray() && Themes.hasSilvergrayLib())
 			return uri;
 		
-		String suffix = getThemeFileSuffix();
-		if (Strings.isEmpty(suffix)) return uri;
-
-		if(uri.startsWith("~./js/zul/") || 
-				uri.startsWith("~./js/zkex/") || 
-				uri.startsWith("~./js/zkmax/")){
-			return uri.replaceFirst(".css.dsp", getWidgetCSSName(suffix));
-		}
-		return uri;
-	}
-
-	private static String getThemeFileSuffix() {
-		String suffix = Themes.getCurrentTheme();
-		return Themes.CLASSICBLUE_THEME.equals(suffix) ? null : suffix;
-	}
-
-	private static boolean isUsingDefaultTemplate(String suffix){
-		return getThemeMsgBoxURI(suffix).equals(Messagebox.getTemplate()) ||
-			DEFAULT_MSGBOX_TEMPLATE_URI.equals(Messagebox.getTemplate());
-	}
-
-	private static String getThemeMsgBoxURI(String suffix) {
-		return "~./zul/html/messagebox." + suffix + ".zul";
+		return super.beforeWidgetCSS(exec, uri);
 	}
 	
-	private void bypassURI(List uris, String suffix) {
-		for (ListIterator it = uris.listIterator(); it.hasNext();) {
-			final String uri = (String)it.next();
-			if (uri.startsWith(DEFAULT_WCS)) {
-				it.set(Aide.injectURI(uri, suffix));
-				break;
-			} 
-		}
-	}
-
-	private static String getWidgetCSSName(String suffix) {
-		return "." + suffix + ".css.dsp";
-	}
 }

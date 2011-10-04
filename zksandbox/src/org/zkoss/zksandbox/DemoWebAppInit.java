@@ -49,10 +49,6 @@ public class DemoWebAppInit implements WebAppInit {
 	final static String CATEGORY_TYPE = "CATEGORY";
 	
 	final static String LINK_TYPE = "LINK";
-
-	private final static String THEME_CLASSICBLUE_NAME = Themes.CLASSICBLUE_THEME;
-	private final static String THEME_CLASSICBLUE_DISPLAY = "Classic blue";
-	private final static int THEME_CLASSICBLUE_PRIORITY = 1000;
 	
 	private final static String THEME_SILVERGREY_NAME = "silvergray";
 	private final static String SILVERGREY_DISPLAY = "Silver Gray";
@@ -79,7 +75,7 @@ public class DemoWebAppInit implements WebAppInit {
 	}
 
 	private static void initThemes() {
-		addTheme(THEME_CLASSICBLUE_NAME, THEME_CLASSICBLUE_DISPLAY, THEME_CLASSICBLUE_PRIORITY);
+		//addTheme(THEME_CLASSICBLUE_NAME, THEME_CLASSICBLUE_DISPLAY, THEME_CLASSICBLUE_PRIORITY);
 		if(Themes.hasSilvergrayLib())
 			addTheme(THEME_SILVERGREY_NAME, SILVERGREY_DISPLAY, SILVERGREY_PRIORITY);
 	}
