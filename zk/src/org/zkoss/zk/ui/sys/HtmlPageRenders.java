@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.sys;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.Map;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -27,14 +26,12 @@ import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.io.Files;
-import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
@@ -202,7 +199,7 @@ public class HtmlPageRenders {
 			final AuResponse response = it.next();
 			sb.append("'").append(response.getCommand())
 				.append("',");
-			final List encdata = response.getEncodedData();
+			final List<?> encdata = response.getEncodedData();
 			if (encdata != null)
 				sb.append('\'')
 					.append(Strings.escape(
@@ -387,7 +384,7 @@ public class HtmlPageRenders {
 		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
 
 		final Configuration config = wapp.getConfiguration();
-		final Set disabled = config.getDisabledThemeURIs();
+		final Set<String> disabled = config.getDisabledThemeURIs();
 		final List<StyleSheet> sses = new LinkedList<StyleSheet>(); //a list of StyleSheet
 		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType)) {
 			for (StyleSheet ss: langdef.getStyleSheets()) {
@@ -403,7 +400,7 @@ public class HtmlPageRenders {
 			for (StyleSheet ss:  sses) {
 				final String href = ss.getHref();
 				if (href != null && href.length() > 0)
-					orgss.add(ss.getMedia() != null ? ss: (Object)href); //we don't support getContent
+					orgss.add(ss.getMedia() != null ? ss: href); //we don't support getContent
 			}
 
 			final String[] hrefs = config.getThemeURIs();
@@ -775,9 +772,9 @@ public class HtmlPageRenders {
 	private static final boolean isGroupingAllowed(Desktop desktop) {
 		final String name = "org.zkoss.zk.ui.input.grouping.allowed";
 		if (desktop != null) {
-			final Collection pages = desktop.getPages();
+			final Collection<Page> pages = desktop.getPages();
 			if (!pages.isEmpty()) {
-				final Page page = (Page)pages.iterator().next();
+				final Page page = pages.iterator().next();
 				Object o = page.getAttribute(name);
 				if (o != null)
 					return (o instanceof Boolean && ((Boolean)o).booleanValue())
