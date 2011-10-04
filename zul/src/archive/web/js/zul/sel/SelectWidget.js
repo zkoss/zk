@@ -59,6 +59,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				&& !evt.target.$instanceof(zul.sel.SelectWidget))
 			|| _isButton(evt) || _isInputWidget(evt);
 	}
+	function _fixReplace(w) {
+		return w && (w = w.uuid) ? zk.Widget.$(w): null;
+	}
 
 var SelectWidget =
 /**
@@ -903,7 +906,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return; //nothing changed
 		}
 
-		var focusfound = false, rowfound = false;
+		var focusfound = false, rowfound = false,
+			lastSelected = this._lastSelectedItem || this._focusItem;
 		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
 			if (w.isDisabled()) continue; // Bug: 2030986
 			if (focusfound) {
@@ -912,7 +916,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					break;
 			} else if (rowfound) {
 				this._changeSelect(w, true);
-				if (this._isFocus(w) || w == this._lastSelectedItem)
+				if (this._isFocus(w) || w == lastSelected)
 					break;
 			} else if (!si) { // Bug: 3337441
 				if (w != row)
@@ -921,7 +925,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				break;
 			} else {
 				rowfound = w == row;
-				focusfound = this._isFocus(w) || w == this._lastSelectedItem;
+				focusfound = this._isFocus(w) || w == lastSelected;
 				if (rowfound || focusfound) {
 					this._changeSelect(w, true);
 					if (rowfound && focusfound)
@@ -1102,16 +1106,25 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_ignoreHghExt: function () {
 		return this._rows > 0;
 	},
+	//@Override
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && child.isSelected())
 			this._syncFocus(child);
 	},
+	//@Override
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		var selItems = this._selItems, len;
 		if (this.desktop && child.$instanceof(zul.sel.ItemWidget) && (len = selItems.length))
 			this._syncFocus(selItems[len - 1]);
+	},
+	//@Override
+	replaceWidget: function (newwgt) {
+		this.$supers('replaceWidget', arguments);
+
+		newwgt._lastSelectedItem = _fixReplace(this._lastSelectedItem);
+		newwgt._focusItem = _fixReplace(this._focusItem);
 	}
 });
 
