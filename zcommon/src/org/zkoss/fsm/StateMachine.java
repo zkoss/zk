@@ -42,6 +42,8 @@ public abstract class StateMachine<E, C, IN> {
 		return this;
 	}
 	
+	
+	
 	// definition //
 	/**
 	 * Set the state by token
@@ -95,6 +97,8 @@ public abstract class StateMachine<E, C, IN> {
 	 */
 	protected abstract C getClass(IN input);
 	
+	
+	
 	// event handler //
 	/**
 	 * This method is called at constructor and when reseting the machine.
@@ -109,12 +113,12 @@ public abstract class StateMachine<E, C, IN> {
 	/**
 	 * This method is called before executing a step
 	 */
-	protected void onBeforeStep(IN input, C inputClass) {} // TODO: include current?
+	protected void beforeStep(IN input, C inputClass, E origin) {}
 	
 	/**
 	 * This method is called after executing a step
 	 */
-	protected void onAfterStep(IN input, C inputClass, E origin, E destination) {} // TODO: change name
+	protected void afterStep(IN input, C inputClass, E origin, E destination) {}
 	
 	/**
 	 * This method is called when the machine stops
@@ -166,10 +170,10 @@ public abstract class StateMachine<E, C, IN> {
 		doDebug("Step " + _step);
 		doDebug("* Input: " + input + " (" + inputClass + ")");
 		
-		onBeforeStep(input, inputClass);
-		
 		final E origin = _current;
 		E destination = null;
+		
+		beforeStep(input, inputClass, origin);
 		
 		if(inputClass == null) {
 			doReject(input);
@@ -212,15 +216,14 @@ public abstract class StateMachine<E, C, IN> {
 		
 		doDebug("* State: " + origin + " -> " + destination);
 		
-		onAfterStep(input, inputClass, origin, destination);
+		afterStep(input, inputClass, origin, destination);
 		_step++;
 	}
 	
-	// TODO: reduce API
 	/**
 	 * Starts the machine with a stream of input characters.
 	 */
-	public final void start(Iterator<IN> inputs) {
+	public final void start(Iterator<IN> inputs) { // TODO: take iterable
 		reset();
 		run(inputs);
 	}
@@ -243,7 +246,7 @@ public abstract class StateMachine<E, C, IN> {
 	
 	
 	// status query //
-	// TODO: enhance, support getStates
+	// TODO: enhance
 	/**
 	 * Return the current state
 	 */
@@ -284,7 +287,9 @@ public abstract class StateMachine<E, C, IN> {
 	}
 	
 	/**
-	 * Send a debug message
+	 * Manually send a debug message
+	 * @see #onDebug(String)
+	 * @see #setDebugMode(boolean)
 	 */
 	protected final void doDebug(String message) {
 		if(_debug) onDebug(message);
