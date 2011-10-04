@@ -18,12 +18,15 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 
@@ -276,17 +279,34 @@ public class Selectbox extends HtmlBasedComponent {
 			renderer.render("tabindex", _tabindex);
 		
 		if (_model != null) {
-	        String[] data = new String[_model.getSize()];
-	        OptionRenderer render = getRealRenderer();
-
+	        String[] datas = new String[_model.getSize()];
+	        final Template tm = getTemplate("model");
 			try {
-				for (int i = 0; i < _model.getSize(); i++)
-					data[i] = render.render(_model.getElementAt(i));
+				if (tm == null) {
+			        final OptionRenderer render = getRealRenderer();
+					for (int i = 0; i < _model.getSize(); i++)
+						datas[i] = render.render(_model.getElementAt(i));
+				} else {
+					for (int i = 0; i < _model.getSize(); i++) {
+						final Object data = _model.getElementAt(i);
+						final Component[] items = tm.create(null, null,
+							new VariableResolver() {
+								public Object resolveVariable(String name) {
+									return "each".equals(name) ? data: null;
+								}
+							});
+						if (items.length != 1)
+							throw new UiException("The model template must have exactly one item, not "+items.length);
+						if (!(items[0] instanceof Label))
+							throw new UiException("The model template can only support Label component, not "+items[0]);
+						datas[i] = ((Label)items[0]).getValue();
+					}
+				}
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
 			
-			render(renderer, "items", data);
+			render(renderer, "items", datas);
 		}
 	}
 
