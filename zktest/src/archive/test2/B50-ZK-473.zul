@@ -11,9 +11,8 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
-	<div>
-		The Tabbox's height should occupy the entire Window height.
-	</div>
+	<div>1. The Tabbox's height should occupy the entire Window height.</div>
+	<div>2. The Groupbox's height should also occupy the entire Tabpanel height.</div>
 	<window width="300px" height="300px" sizable="true" border="normal">
 		<tabbox orient="vertical" vflex="1">
 			<tabs>
