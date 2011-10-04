@@ -70,7 +70,7 @@ public class Tokenizer {
 			}
 			
 			@Override
-			protected void onAfterStep(Character input, CharClass inputClass,
+			protected void afterStep(Character input, CharClass inputClass,
 					State origin, State destination) {
 				
 				doDebug("* OP Escaped: " + _opEscaped);

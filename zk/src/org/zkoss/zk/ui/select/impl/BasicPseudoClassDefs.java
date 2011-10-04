@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class BasicPseudoClassDefs {
 	
-	private static Map<String, PseudoClassDef> _defs = 
+	private final static Map<String, PseudoClassDef> _defs = 
 		new HashMap<String, PseudoClassDef>();
 	
 	static {

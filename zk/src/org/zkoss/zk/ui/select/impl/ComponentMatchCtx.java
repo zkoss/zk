@@ -151,18 +151,6 @@ public class ComponentMatchCtx {
 		return ComponentLocalProperties.match(this, seq, defs);
 	}
 	
-	// TODO: remove after testing
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer("");
-		for(boolean[] bs : _qualified) { 
-			sb.append("Q[");
-			for(boolean b : bs) sb.append(b?'1':'0');
-			sb.append("]");
-		}
-		return sb.append(", ").append(_comp).toString();
-	}
-	
 	
 	
 	// helper //

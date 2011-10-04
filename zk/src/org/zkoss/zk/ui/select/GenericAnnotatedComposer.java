@@ -16,7 +16,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.GenericComposer;
@@ -49,7 +48,7 @@ import org.zkoss.zk.ui.util.GenericComposer;
  * 
  * @author simonpai
  */
-public class GenericAnnotatedComposer extends GenericComposer
+public class GenericAnnotatedComposer<T extends Component> extends GenericComposer<T>
 	implements ComponentCloneListener {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
@@ -71,7 +70,7 @@ public class GenericAnnotatedComposer extends GenericComposer
 	}
 	
 	@Override
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
 		_self = comp;
 		autowire(comp);
@@ -89,7 +88,7 @@ public class GenericAnnotatedComposer extends GenericComposer
 		autowire(_self);
 	}
 	
-	private class BeforeCreateWireListener implements EventListener, Express {
+	private class BeforeCreateWireListener implements EventListener<Event> {
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
@@ -133,11 +132,11 @@ public class GenericAnnotatedComposer extends GenericComposer
 		try {
 			final Execution exec = Executions.getCurrent();
 			final int idcode = System.identityHashCode(comp);
-			Composer composerClone = 
-				(Composer) exec.getAttribute(COMPOSER_CLONE+idcode);
+			Composer<?> composerClone = 
+				(Composer<?>) exec.getAttribute(COMPOSER_CLONE + idcode);
 			if (composerClone == null) {
-				composerClone = (Composer) Classes.newInstance(getClass(), null);
-				exec.setAttribute(COMPOSER_CLONE+idcode, composerClone);
+				composerClone = (Composer<?>) Classes.newInstance(getClass(), null);
+				exec.setAttribute(COMPOSER_CLONE + idcode, composerClone);
 				
 				//cannot call doAfterCompose directly because the clone 
 				//component might not be attach to Page yet
@@ -153,8 +152,9 @@ public class GenericAnnotatedComposer extends GenericComposer
 	}
 	
 	//doAfterCompose, called once after clone
-	private static class CloneDoAfterCompose implements EventListener {
+	private static class CloneDoAfterCompose implements EventListener<Event> {
 		// brought from GenericAutowireComposer
+		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = (Component) event.getTarget();
 			final GenericAnnotatedComposer composerClone = 

@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A char Iterator for Selector tokenizer.
+ * A char Iterator implementation for Selector tokenizer.
  * @author simonpai
  */
 public class CharSequenceIterator implements Iterator<Character>{

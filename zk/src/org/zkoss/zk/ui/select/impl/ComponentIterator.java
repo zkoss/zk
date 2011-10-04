@@ -242,14 +242,4 @@ public class ComponentIterator implements Iterator<Component> {
 		return ctx.match(selector.get(index), _localDefs);
 	}
 	
-	// TODO: remove after testing
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("ComponentIterator: \n* index: ").append(_index);
-		for(ComponentMatchCtx c = _currCtx; c != null; c = c.getParent())
-			sb.append("\n").append(c);
-		return sb.append("\n\n").toString();
-	}
-	
 }

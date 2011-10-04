@@ -36,28 +36,34 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  */
 public class Selectors {
 	
-	// TODO: wrap iterable
-	
 	/**
-	 * Returns an iterator that iterates through all Components matched by the
+	 * Returns an Iterable that iterates through all Components matched by the
 	 * selector. 
 	 * @param page the reference page for selector
 	 * @param selector the selector string
-	 * @return an Iterator of Component
+	 * @return an Iterable of Component
 	 */
-	public static Iterator<Component> iterator(Page page, String selector) {
-		return new ComponentIterator(page, selector);
+	public static Iterable<Component> iterable(final Page page, final String selector) {
+		return new Iterable<Component>() {
+			public Iterator<Component> iterator() {
+				return new ComponentIterator(page, selector);
+			}
+		};
 	}
 	
 	/**
-	 * Returns an iterator that iterates through all Components matched by the
+	 * Returns an Iterable that iterates through all Components matched by the
 	 * selector. 
 	 * @param root the reference component for selector
 	 * @param selector the selector string
-	 * @return an Iterator of Component
+	 * @return an Iterable of Component
 	 */
-	public static Iterator<Component> iterator(Component root, String selector){
-		return new ComponentIterator(root, selector);
+	public static Iterable<Component> iterable(final Component root, final String selector){
+		return new Iterable<Component>() {
+			public Iterator<Component> iterator() {
+				return new ComponentIterator(root, selector);
+			}
+		};
 	}
 	
 	/**
@@ -67,7 +73,7 @@ public class Selectors {
 	 * @return a List of Component
 	 */
 	public static List<Component> find(Page page, String selector) {
-		return toList(iterator(page, selector));
+		return toList(iterable(page, selector));
 	}
 	
 	/**
@@ -77,7 +83,7 @@ public class Selectors {
 	 * @return a List of Component
 	 */
 	public static List<Component> find(Component root, String selector) {
-		return toList(iterator(root, selector));
+		return toList(iterable(root, selector));
 	}
 	
 	/**
@@ -192,11 +198,10 @@ public class Selectors {
 				for(String[] strs : splitListenAnnotationValues(anno.value())){
 					String name = strs[0];
 					if(name == null) name = "onClick";
-					Iterator<Component> iter = iterator(component, strs[1]);
+					Iterable<Component> iter = iterable(component, strs[1]);
 					// no forwarding, just add to event listener
-					while(iter.hasNext())
-						iter.next().addEventListener(name, 
-								new ComposerEventListener(method, controller));
+					for (Component c : iter)
+						c.addEventListener(name, new ComposerEventListener(method, controller));
 				}
 			}
 		});
@@ -262,9 +267,10 @@ public class Selectors {
 		return result.toArray(new String[0][0]);
 	}
 	
-	private static <T> List<T> toList(Iterator<T> iterator){
+	private static <T> List<T> toList(Iterable<T> iterable){
 		List<T> result = new ArrayList<T>();
-		while(iterator.hasNext()) result.add(iterator.next());
+		for (T t : iterable)
+			result.add(t);
 		return result;
 	}
 	
@@ -297,7 +303,7 @@ public class Selectors {
 					String selector = anno.value();
 					boolean optional = anno.optional();
 					if(selector.length() > 0) {
-						injectComponent(field, functor.iterator(selector), optional);
+						injectComponent(field, functor.iterable(selector), optional);
 						return;
 					}
 					
@@ -337,31 +343,31 @@ public class Selectors {
 						throw new UiException("Selector is empty on method: " + 
 								method.getName());
 					
-					injectComponent(method, functor.iterator(selector), 
+					injectComponent(method, functor.iterable(selector), 
 							anno.optional());
 				}
 			});
 		}
 		
-		private void injectComponent(Method method, Iterator<Component> iter, 
+		private void injectComponent(Method method, Iterable<Component> iter, 
 				boolean optional) {
 			injectComponent(new MethodFunctor(method), iter, optional);
 		}
 		
-		private void injectComponent(Field field, Iterator<Component> iter, 
+		private void injectComponent(Field field, Iterable<Component> iter, 
 				boolean optional) {
 			injectComponent(new FieldFunctor(field), iter, optional);
 		}
 		
 		@SuppressWarnings("unchecked")
 		private void injectComponent(InjectionFunctor injector, 
-				Iterator<Component> iter, boolean optional) {
+				Iterable<Component> comps, boolean optional) {
 			Class<?> type = injector.getType();
 			boolean isField = injector instanceof FieldFunctor;
 			// Array
 			if(type.isArray()) {
 				injector.inject(_controller, 
-						generateArray(type.getComponentType(), iter));
+						generateArray(type.getComponentType(), comps));
 				return;
 				
 			}
@@ -391,22 +397,19 @@ public class Selectors {
 				
 				// try add to collection
 				collection.clear();
-				Component comp = null;
-				while(iter.hasNext()) {
-					comp = iter.next();
-					if(!Reflections.isAppendableToCollection(
-							injector.getGenericType(), comp)) continue;
-					collection.add(comp);
-				}
-				if(!isField) injector.inject(_controller, collection);
+				for (Component c : comps)
+					if(Reflections.isAppendableToCollection(
+							injector.getGenericType(), c))
+						collection.add(c);
+				if(!isField) 
+					injector.inject(_controller, collection);
 				return;
 			} 
 			// set to field once or invoke method once
-			while(iter.hasNext()) {
-				Component comp = iter.next();
-				if(!type.isInstance(comp)) continue;
-				
-				injector.inject(_controller, comp);
+			for (Component c : comps) {
+				if(!type.isInstance(c)) 
+					continue;
+				injector.inject(_controller, c);
 				return;
 			}
 			if(!optional)
@@ -497,18 +500,16 @@ public class Selectors {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T> T[] generateArray(Class<T> clazz, Iterator<Component> iter){
+	private static <T> T[] generateArray(Class<T> clazz, Iterable<Component> comps){
 		// add to a temporary ArrayList then set to Array
 		ArrayList<T> list = new ArrayList<T>();
-		Component comp = null;
-		while(iter.hasNext()) {
-			comp = iter.next();
-			if(clazz.isAssignableFrom(comp.getClass())) list.add((T) comp);
-		}
+		for (Component c : comps)
+			if(clazz.isAssignableFrom(c.getClass())) 
+				list.add((T) c);
 		return list.toArray((T[]) Array.newInstance(clazz, 0));
 	}
 	
-	private static class ComposerEventListener implements EventListener {
+	private static class ComposerEventListener implements EventListener<Event> {
 		
 		private final Method _ctrlMethod;
 		private final Object _ctrl;
@@ -530,7 +531,7 @@ public class Selectors {
 	
 	// helper: functor //
 	private interface PsdoCompFunctor {
-		public Iterator<Component> iterator(String selector);
+		public Iterable<Component> iterable(String selector);
 		public Object getImplicit(String name);
 		public Object getZScriptVariable(String name);
 		public Object getAttributeOrFellow(String name);
@@ -541,8 +542,8 @@ public class Selectors {
 	private static class PageFunctor implements PsdoCompFunctor {
 		private final Page _page;
 		private PageFunctor(Page page){ _page = page; }
-		public Iterator<Component> iterator(String selector) {
-			return Selectors.iterator(_page, selector);
+		public Iterable<Component> iterable(String selector) {
+			return Selectors.iterable(_page, selector);
 		}
 		public Object getImplicit(String name) {
 			return Components.getImplicit(_page, name);
@@ -564,11 +565,11 @@ public class Selectors {
 	private static class ComponentFunctor implements PsdoCompFunctor {
 		private final Component _comp;
 		private ComponentFunctor(Component comp){ _comp = comp; }
-		public Iterator<Component> iterator(String selector) {
+		public Iterable<Component> iterable(String selector) {
 			IdSpace spaceOwner = _comp.getSpaceOwner();
 			return spaceOwner instanceof Component ?
-					Selectors.iterator((Component) spaceOwner, selector) :
-					Selectors.iterator((Page) spaceOwner, selector);
+					Selectors.iterable((Component) spaceOwner, selector) :
+					Selectors.iterable((Page) spaceOwner, selector);
 		}
 		public Object getImplicit(String name) {
 			return Components.getImplicit(_comp, name);
