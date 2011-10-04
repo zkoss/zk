@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-468.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 12:10:08 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk>
+        <zscript>
+                <![CDATA[
+ 
+        public class MyUserBean{
+                private String[] userList = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+                private int index = 0;
+                public ListModelList getUserList(){
+                        return new ListModelList(Arrays.asList(userList));
+                }
+                public void setUserList(){
+                }
+                public void setIndex(int ind){
+                        index=ind;
+                }
+                public int getIndex(){
+                        return index;
+                }
+                public String getCurrentName(){
+                        return userList[index];
+                }
+        }
+         
+        MyUserBean mybean = new MyUserBean();
+ 
+        org.zkoss.zul.OptionRenderer render = new org.zkoss.zul.OptionRenderer() {
+ 
+                public String render(Object data) throws Exception {
+                        return data.toString();
+                }
+        };
+]]></zscript>
+ Please select each of the item in the dropdown list and the label below should be changed as your selection 
+        <div>
+        Select User:
+        <selectbox id="box" model="@{mybean.userList}"
+                selectedIndex="@{mybean.index}">
+                <template name="model">
+                ${each}
+                </template>
+        </selectbox>
+ 
+        </div>
+        Selected:
+        <label id="val" value="@{mybean.currentName }" />
+</zk>

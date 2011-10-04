@@ -1005,6 +1005,30 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/selectbox.js</mold-uri>
 		</mold>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>converter</attribute-name>
+				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>selectedIndex</property-name>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>load-when</attribute-name>
+				<attribute-value>self.onInitRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 	<component>
 		<component-name>separator</component-name>
