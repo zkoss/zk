@@ -25,7 +25,6 @@ import static org.zkoss.lang.Generics.cast;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 
@@ -37,7 +36,7 @@ import org.zkoss.zk.au.AuRequests;
  */
 public class SelectEvent<T extends Component> extends Event {
 	private final Set<T> _selectedItems;
-	private final Component _ref;
+	private final T _ref;
 	private final int _keys;
 
 	/** Indicates whether the Alt key is pressed.
@@ -56,16 +55,17 @@ public class SelectEvent<T extends Component> extends Event {
 	/** Converts an AU request to a select event.
 	 * @since 5.0.0
 	 */
-	public static final <C extends Component> SelectEvent<C> getSelectEvent(AuRequest request) {
+	@SuppressWarnings("unchecked")
+	public static final <T extends Component> SelectEvent<T> getSelectEvent(AuRequest request) {
 		final Map data = request.getData();
 		final Desktop desktop = request.getDesktop();
 		final List<String> sitems = cast((List)data.get("items"));
-		final Set<C> items = AuRequests.convertToItems(desktop, sitems);
-		return new SelectEvent<C>(request.getCommand(), request.getComponent(),
-			items, desktop.getComponentByUuidIfAny((String)data.get("reference")),
+		final Set<T> items = AuRequests.convertToItems(desktop, sitems);
+		return new SelectEvent<T>(request.getCommand(), request.getComponent(),
+			items, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			AuRequests.parseKeys(data));
 	}
-
+	
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
@@ -76,8 +76,7 @@ public class SelectEvent<T extends Component> extends Event {
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
 	 */
-	public SelectEvent(String name, Component target, Set<T> selectedItems,
-	Component ref) {
+	public SelectEvent(String name, Component target, Set<T> selectedItems, T ref) {
 		this(name, target, selectedItems, ref, 0);
 	}
 	/** Constructs a selection event.
@@ -86,8 +85,7 @@ public class SelectEvent<T extends Component> extends Event {
 	 * and {@link #ALT_KEY}.
 	 * @since 3.6.0
 	 */
-	public SelectEvent(String name, Component target, Set<T> selectedItems,
-	Component ref, int keys) {
+	public SelectEvent(String name, Component target, Set<T> selectedItems, T ref, int keys) {
 		super(name, target);
 
 		if (selectedItems != null)
@@ -110,7 +108,7 @@ public class SelectEvent<T extends Component> extends Event {
 	 * Note: if not multiple, the {@link #getReference} is the same with the first item of {@link #getSelectedItems}.
 	 * @since 3.0.2
 	 */
-	public Component getReference() {
+	public T getReference() {
 		return _ref;
 	}
 
