@@ -1,0 +1,71 @@
+<!-- B50-ZK-403.ztl.java
+
+	Purpose:for testing B50-ZK-403.ztl .
+
+	Description:
+
+	History:
+		10, 4, 2011 12:41:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-403.zul,A,M,Combobox,Model,onOpen">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				<zscript><![CDATA[
+					String[] dictionary = { "abacus", "abase", "barcarole", "barefaced", "cadence", "cadenza", "death's-head", "debacle", "endear", "endemic", "endue", "facial", "facile", "facilitate", "gaiety", "gaily", "gainsay", "writhe", "writing", "wry", };
+					
+					ListModel dictModel= new SimpleListModel(dictionary);
+					]]>
+				</zscript>
+				<div>
+					Please test the following steps 4~5 times and each time test you have to reload this case.
+					<separator/>
+					1. type 'a' in the inputbox and the dropdownlist shall show 2 items. (please focus into the inputbox and type rapidly)
+					
+				</div>
+				<combobox id="cb" autodrop="true" >
+					<attribute name="onOpen"><![CDATA[
+					self.setModel(dictModel);
+					]]></attribute>
+				</combobox>
+				<combobox id="cb2" autodrop="true" >
+					<attribute name="onOpen"><![CDATA[
+					self.setModel(dictModel);
+					]]></attribute>
+				</combobox>
+				<combobox id="cb3" autodrop="true" >
+					<attribute name="onOpen"><![CDATA[
+					self.setModel(dictModel);
+					]]></attribute>
+				</combobox>
+				<combobox id="cb4" autodrop="true" >
+					<attribute name="onOpen"><![CDATA[
+					self.setModel(dictModel);
+					]]></attribute>
+				</combobox>
+				<combobox id="cb5" autodrop="true" >
+					<attribute name="onOpen"><![CDATA[
+					self.setModel(dictModel);
+					]]></attribute>
+				</combobox>
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			Widget[] cbs = {cb, cb2, cb3, cb4, cb5};
+			for (int i = 0;i < cbs.length;i ++) {
+				click(cbs[i].$n("real"));
+				keyPress(cbs[i].$n("real"), "a");
+				waitResponse();
+				waitResponse();
+				verifyTrue(parseInt(cbs[i].$n("cave").firstChild().firstChild().eval("childNodes.length")) == 2);
+			}
+		]]></client>
+	</case>
+</test>
