@@ -1,0 +1,62 @@
+<!-- B50-ZK-414.ztl.java
+
+	Purpose:for testing B50-ZK-414.ztl .
+
+	Description:
+
+	History:
+		10, 4, 2011 12:21:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-414.zul,A,E,Tree,Scrollbar">
+	<case id="ztl">
+		<server><!--
+
+			<window title="Scrollbar Issue" border="normal" width="700px"
+				height="500px">
+				1. Please scroll to the end of the tree.
+				<separator/>
+				2. Click +/- button to open the treeitem "something".
+				<separator/>
+				3. You should see the scrollbar won't jump to the top of the tree.
+				<tree id="groupTree" mold="paging" pageSize="500" vflex="true"
+					height="100%" zclass="z-dottree">
+					<treecols>
+						<treecol hflex="min" />
+					</treecols>
+					<treechildren>
+						<treeitem open="true" label="something">
+							<treechildren>
+								<zscript>
+									Object o = new Object[30];
+								</zscript>
+								<treeitem label="nested" forEach="${o}" />
+							</treechildren>
+						</treeitem>
+						<treeitem id="st" open="false" label="something">
+							<treechildren>
+								<zscript>
+			            </zscript>
+								<treeitem label="nested" forEach="${o}" />
+			
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</window>
+
+		--></server>
+		<client><![CDATA[
+			groupTree.$n("body").eval("scrollTop = 300");
+			waitResponse();
+			click(st.$n("open"));
+			waitResponse();
+			int scrollTop = parseInt(groupTree.$n("body").get("scrollTop"));
+			verifyTrue(scrollTop > 200);
+		]]></client>
+	</case>
+</test>

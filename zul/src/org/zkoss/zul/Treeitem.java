@@ -150,15 +150,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	
 	/**
-	 * return the index of this container 
-	 * @return the index of this container 
-	 * @since 3.0.0
+	 * return the index of this item
+	 * @return the index of this item
+	 * @since 5.0.9
 	 */
-	public int indexOf() {
+	public int getIndex() {
 		List list = this.getParent().getChildren();
 		return list.indexOf(this);
 	}
-	
+	/**
+	 * @deprecated As of release 5.0.9, replaced with {@link #getIndex}.
+	 */
+	public int indexOf() {
+		return getIndex();
+	}
 	
 	/** Returns the treerow that this tree item owns (might null).
 	 * Each tree items has exactly one tree row.

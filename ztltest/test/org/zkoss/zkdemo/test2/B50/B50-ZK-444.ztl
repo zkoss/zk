@@ -1,0 +1,38 @@
+<!-- B50-ZK-444.ztl.java
+
+	Purpose:for testing B50-ZK-444.ztl .
+
+	Description:
+
+	History:
+		10, 4, 2011 19:32:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-444.zul,A,M,componentScope,BI">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				<toolbar>
+					<toolbarbutton id="btn" label="click me" onClick='alert(componentScope.get("key"))' >
+						<custom-attributes key="SomeValue" />
+					</toolbarbutton>
+				</toolbar>
+				<div>
+					Click on the Toolbarbutton. There should be a Messagebox and no javascript error.
+				</div>
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(btn);
+			waitResponse();
+			verifyTrue(jq(".z-messagebox-window").exists());
+			verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

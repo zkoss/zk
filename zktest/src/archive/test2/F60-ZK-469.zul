@@ -42,12 +42,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</window>
 		</absolutechildren>
 		<absolutechildren id="w2" x="160" y="200">
-			<window title="X=60, Y=100">
+			<window title="X=160, Y=200">
 			Window 2
 			</window>
 		</absolutechildren>
 		<absolutechildren id="w3" x="260" y="300">
-			<window title="X=60, Y=100">
+			<window title="X=260, Y=300">
 			Window 3
 			</window>
 		</absolutechildren>
