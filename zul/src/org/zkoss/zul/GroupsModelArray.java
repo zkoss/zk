@@ -279,15 +279,15 @@ implements GroupsModelExt<D> {
 		List<D>[] gd = new List[group.size()];
 		group.toArray(gd);
 
-		_data = (D[][])Array.newInstance(_nativedata.getClass().getComponentType(), gd.length); //new D[gd.length][];
+		Class<?> classD = _nativedata.getClass().getComponentType();
+		_data = (D[][])Array.newInstance(classD, gd.length, 0); //new D[gd.length][];
 		_foots = new Object[gd.length];
 		_heads = new Object[gd.length];
 		_closes = new boolean[_data.length];
 		
 		for(int i=0;i<gd.length;i++){
 			gdata = gd[i];
-			_data[i] = (D[])Array.newInstance(
-				_nativedata.getClass().getComponentType().getComponentType(), gdata.size());
+			_data[i] = (D[])Array.newInstance(classD, gdata.size());
 			gdata.toArray(_data[i]);
 			_heads[i] = createGroupHead(_data[i],i,col);
 			_foots[i] = createGroupFoot(_data[i],i,col);
