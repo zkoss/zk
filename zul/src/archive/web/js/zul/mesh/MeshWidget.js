@@ -989,7 +989,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.ebody.scrollHeight >= this._currentTop)
 				this.ebody.scrollTop = this._currentTop;
 				
-			if (this.ebody.scrollLeft >= this._currentLeft) {
+			if (this.ebody.scrollWidth >= this._currentLeft) {
 				this.ebody.scrollLeft = this._currentLeft;
 				if (this.ehead) 
 					this.ehead.scrollLeft = this._currentLeft;

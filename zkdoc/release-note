@@ -47,6 +47,7 @@ ZK 5.0.9
   ZK-418: Weird selection on listbox if onSelect invalidates and shift+Click
   ZK-475: bandpopup tab key works wrong
   ZK-473: Vflex attribute on tabpanel cannot works (fast model) 
+  ZK-482: The horizontal scrollbar of Listbox won't be sync when after sort
 
 	--------
 Aug 31, 2011
