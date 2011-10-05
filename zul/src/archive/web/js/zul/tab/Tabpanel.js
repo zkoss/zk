@@ -109,7 +109,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 					s.zoom = 1;
 					s.zoom = z;
 				}
-			} else if (tabbox.isHorizontal()) {
+			} else {
 				var n = this.$n(),
 					hgh = zk(tbx).revisedHeight(tbx.offsetHeight);
 				hgh = zk(n.parentNode).revisedHeight(hgh);
