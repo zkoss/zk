@@ -592,18 +592,20 @@ String scroll; //DOM Element's ID</code></pre>
 			// Bug B50-3147909: Safari has issue with select and draggable
 			// Now select element is not draggable in Chrome and Safari
 
-		var pt = [evt.pageX, evt.pageY],
-			pos = zk(node).cmOffset(),
+		var pt = [evt.pageX, evt.pageY];
+		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
+			if (evt.domStopped) devt.stop();
+			return;
+		}
+
+		// Bug ZK-427
+		// and ZK-484 (get the pos variable after invoking ignoredrag function)
+		var pos = zk(node).cmOffset(),
 			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
 		if ((ofs[0] > (v=node.clientWidth) && node.offsetWidth > v + 3)
 		|| (ofs[1] > (v=node.clientHeight) && node.offsetHeight > v + 3)) //scrollbar
 			return;
 
-		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
-			if (evt.domStopped) devt.stop();
-			return;
-		}
-		
 		this.offset = ofs;
 		_activate(this, devt, pt);
 
