@@ -378,7 +378,6 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 		int pgsz = limit;
 		int ofs = offset;
-		
 		if (_listbox.getItemCount() > 0) {
 			Component item = _listbox.getItems().get(0);
 			while(item != null) {
@@ -396,12 +395,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 							item = (Listitem) item.getNextSibling();
 					}
 				}
-				if (item != null) {
-					final Component c = item.getNextSibling();
-					if (c instanceof Listitem)
-						item = (Listitem)c;
-					break; //no more
-				}
+				if (item != null)
+					item = item.getNextSibling();
 			}
 		}
 		return avail;
