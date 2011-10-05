@@ -9,7 +9,7 @@ import java.util.List;
 import org.zkoss.fsm.*;
 import org.zkoss.fsm.StateCtx.TransitionListener;
 import org.zkoss.zk.ui.select.impl.Attribute.Operator;
-import org.zkoss.zk.ui.select.impl.InSequenceStateMachine.SubState;
+import org.zkoss.zk.ui.select.impl.InSeqMachine.SubState;
 import org.zkoss.zk.ui.select.impl.Selector.Combinator;
 import org.zkoss.zk.ui.select.impl.Token.Type;
 
@@ -23,7 +23,7 @@ public class Parser {
 	private List<Selector> _selectorSet = new ArrayList<Selector>();
 	private Selector _selector;
 	
-	private InSequenceStateMachine _submachine;
+	private InSeqMachine _submachine;
 	
 	private StateMachine<State, CharClass, Token> _machine = 
 		new StateMachine<State, CharClass, Token>(){
@@ -37,7 +37,7 @@ public class Parser {
 			
 			setState(State.IN_SELECTOR,
 					new MacroStateCtx<State, CharClass, Token, SubState, Type>(
-							_submachine = new InSequenceStateMachine()))
+							_submachine = new InSeqMachine()))
 				.addReturningClasses(CharClass.SELECTOR_LITERAL)
 				.addTransition(CharClass.WHITESPACE, State.PRE_COMBINATOR)
 				.addTransition(CharClass.SELECTOR_SEPARATOR, State.PRE_SELECTOR, 
@@ -161,18 +161,18 @@ public class Parser {
 	
 }
 
-/*package*/ class InSequenceStateMachine extends StateMachine<SubState, Type, Token> {
+/*package*/ class InSeqMachine extends StateMachine<InSeqMachine.SubState, Token.Type, Token> {
 	
 	private Selector _selector;
 	private String _source;
 	private SimpleSelectorSequence _seq;
 	
-	public InSequenceStateMachine setSource(String source){
+	public InSeqMachine setSource(String source){
 		_source = source;
 		return this;
 	}
 	
-	public InSequenceStateMachine setSelector(Selector selector){
+	public InSeqMachine setSelector(Selector selector){
 		_selector = selector;
 		return this;
 	}
