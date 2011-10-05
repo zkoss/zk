@@ -61,11 +61,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				clickAt(jq(".z-menubar-hor-right").get(0), "5,5");
 				sleep(500);
 			}
+			waitResponse();
 			verifyTrue(parseInt(menubar.$n("body").get("scrollLeft")) == (fullWidth - parseInt(menubar.$n("body").get("offsetWidth"))));
 			for (int j = 0;j < 5;j ++) {
 				clickAt(jq(".z-menubar-hor-left").get(0), "5,5");
 				sleep(500);
 			}
+			waitResponse();
 			verifyTrue(parseInt(menubar.$n("body").get("scrollLeft")) == 0);
 		]]></client>
 	</case>
