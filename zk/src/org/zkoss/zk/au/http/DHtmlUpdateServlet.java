@@ -699,6 +699,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		public String getFirstCommand(Object request) {
 			return ((HttpServletRequest)request).getParameter("cmd.0");
 		}
+		@SuppressWarnings("unchecked")
 		public List<AuRequest> decode(Object request, Desktop desktop) {
 			final List<AuRequest> aureqs = new LinkedList<AuRequest>();
 			final HttpServletRequest hreq = (HttpServletRequest)request;
@@ -709,7 +710,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 				final String uuid = hreq.getParameter("uuid_"+j);
 				final String data = hreq.getParameter("data_"+j);
-				final Map decdata = (Map)JSONValue.parse(data);
+				final Map<String, Object> decdata = (Map)JSONValue.parse(data);
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
 					new AuRequest(desktop, cmdId, decdata):
 					new AuRequest(desktop, uuid, cmdId, decdata));

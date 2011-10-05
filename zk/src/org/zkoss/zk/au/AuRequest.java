@@ -54,7 +54,7 @@ public class AuRequest {
 	private Integer _opts;
 	private Page _page;
 	private Component _comp;
-	private final Map _data;
+	private final Map<String, Object> _data;
 	/** Component's UUID. Used only if _comp is not specified directly. */
 	private String _uuid;
 
@@ -67,13 +67,16 @@ public class AuRequest {
 	 * @since 5.0.0
 	 */
 	public AuRequest(Desktop desktop, String uuid,
-	String cmd, Map data) {
+	String cmd, Map<String, Object> data) {
 		if (desktop == null || uuid == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_uuid = uuid;
 		_cmd = cmd;
-		_data = data != null ? parseType(data): Collections.EMPTY_MAP;
+		if (data != null)
+			_data = parseType(data);
+		else
+			_data = Collections.emptyMap();
 	}
 	/** Constructor for a general request sent from client.
 	 * This is usually used to ask server to log or report status.
@@ -82,29 +85,32 @@ public class AuRequest {
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String cmd, Map data) {
+	public AuRequest(Desktop desktop, String cmd, Map<String, Object> data) {
 		if (desktop == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_cmd = cmd;
-		_data = data != null ? parseType(data): Collections.EMPTY_MAP;
+		if (data != null)
+			_data = parseType(data);
+		else
+			_data = Collections.emptyMap();
 	}
-	@SuppressWarnings("unchecked")
-	private static Map parseType(Map data) {
-		for (Iterator it = data.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final Object key = me.getKey();
-			if (key instanceof String) {
-				Object val = data.get("z_type_" + key);
-				if (val != null)
-					if ("Date".equals(val)) {
-						try {
-							me.setValue(JSONs.j2d((String)me.getValue()));
-						} catch (ParseException ex) {
-							throw new UiException("Failed to convert, "+val+", found in zype_"+key);
-						}
-					} else
-						throw new UiException("Unknow type, "+val+", found in zype_"+key);
+	private static Map<String, Object> parseType(Map<String, Object> data) {
+		for (Map.Entry<String, Object> me: data.entrySet()) {
+			final Object val = me.getValue();
+			final String sval;
+			//Format: $z!t#d:xxx
+			if (val instanceof String && (sval = (String)val).startsWith("$z!t#")
+			&& sval.length() >= 7 && sval.charAt(6) == ':') {
+				switch (sval.charAt(5)) {
+				case 'd':
+					try {
+						me.setValue(JSONs.j2d(sval.substring(7)));
+					} catch (ParseException ex) {
+						throw new UiException("Failed to convert the value of "+me.getKey()+": "+val);
+					}
+				//default: ignore since it could be user's value
+				}
 			}
 		}
 		return data;
@@ -191,7 +197,7 @@ public class AuRequest {
 	 * If no data at all, it simply returns an empty map.
 	 * @since 5.0.0
 	 */
-	public Map getData() {
+	public Map<String, Object> getData() {
 		return _data;
 	}
 

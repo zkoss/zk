@@ -313,13 +313,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				data.y = ofs[1];
 			}
 
-			for (var n in data) {
-				var v;
-				if (jq.type(v = data[n]) == 'date') {
-					data[n] = jq.d2j(v);
-					data["z_type_" + n] = "Date";
-				}
-			}
+			var v;
+			for (var n in data)
+				if (jq.type(v = data[n]) == 'date')
+					data[n] = "$z!t#d:" + jq.d2j(v);
 		}
 		return jq.toJSON(data);
 	}
