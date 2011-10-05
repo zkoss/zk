@@ -45,6 +45,7 @@ ZK 5.0.9
   ZK-461: Javadoc doesn't match code for grid's setSpan method
   ZK-380: Issue: a non-checkable tree item is still selectable
   ZK-418: Weird selection on listbox if onSelect invalidates and shift+Click
+  ZK-477: hlayout shall restore white-space to normal for its children
   ZK-475: bandpopup tab key works wrong
   ZK-473: Vflex attribute on tabpanel cannot works (fast model) 
   ZK-482: The horizontal scrollbar of Listbox won't be sync when after sort
