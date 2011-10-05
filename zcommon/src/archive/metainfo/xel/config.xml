@@ -21,4 +21,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<evaluator-name>default</evaluator-name><!-- case insensitive -->
 		<evaluator-class>org.zkoss.xel.el.ELFactory</evaluator-class>
 	</xel-config>
+	
+	<xel-config>
+		<evaluator-name>zel</evaluator-name><!-- case insensitive -->
+		<evaluator-class>org.zkoss.xel.zel.ELFactory</evaluator-class>
+	</xel-config>
 </config>

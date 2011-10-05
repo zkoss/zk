@@ -20,7 +20,7 @@ package org.zkoss.xel;
  * This represents a base model object and one of its properties (EL 2.2).
  * 
  * @author henri
- * @since 5.5
+ * @since 6.0.0
  */
 public interface ValueReference {
 	/**
