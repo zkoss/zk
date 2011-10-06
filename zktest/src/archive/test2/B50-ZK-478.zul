@@ -12,5 +12,5 @@
 -->
 <zk>
 	<div>The Imagemap size should be 300px by 300px.</div>
-	<imagemap width="300px" height="300px" src="/resource/image/zk-logo.gif" />
+	<imagemap width="300px" height="300px" src="img/icon_browser.png" />
 </zk>
