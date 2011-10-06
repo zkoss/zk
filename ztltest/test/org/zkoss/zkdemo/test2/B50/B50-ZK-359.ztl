@@ -1,0 +1,58 @@
+<!-- B50-ZK-359.ztl.java
+
+	Purpose:for testing B50-ZK-359.ztl .
+
+	Description:
+
+	History:
+		10, 6, 2011 17:14:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-359.zul,A,E,Listbox,select,Chrome,Opera,Gecko">
+	<case id="ztl">
+		<server><!--
+
+			<window title="Test" mode="modal" border="normal" width="80%">
+				<html><![CDATA[
+				<ol>
+				<li>Check the first listbox. No item shall be selected (i.e., it shall be empty).</li>
+				<li>Click embed and check the first listbox. No item shall be selected.</li>
+				<li>Click modal and check again.</li>
+				<li>Click the drop down of the bandbox. It will slide down and the listbox shown shall has no item being selected.</li>
+				</ol>
+				]]></html>
+			
+				<listbox id="lb1" rows="1" mold="select" w:onSelect="zk.log(this)" xmlns:w="client">
+				<listitem label="Test"/>
+				</listbox>
+				<button id="btn1" label="embed" onClick="self.parent.doEmbedded()"/>
+				<button id="btn2" label="modal" onClick="self.parent.doModal()"/>
+				<bandbox id="bb">
+					<bandpopup>
+					<listbox id="lb2" rows="1" mold="select" w:onSelect="zk.log(this)" xmlns:w="client">
+					<listitem label="Test"/>
+					</listbox>
+					</bandpopup>
+				</bandbox>
+			</window>
+
+		--></server>
+		<client><![CDATA[
+			verifyTrue("".equals(lb1.$n().get("value")));
+			click(btn1);
+			waitResponse();
+			verifyTrue("".equals(lb1.$n().get("value")));
+			click(btn2);
+			waitResponse();
+			verifyTrue("".equals(lb1.$n().get("value")));
+
+			click(bb.$n("btn"));
+			waitResponse();
+			verifyTrue("".equals(lb2.$n().get("value")));
+		]]></client>
+	</case>
+</test>
