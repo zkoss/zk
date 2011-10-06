@@ -39,7 +39,7 @@ public class ZScriptInitiator implements Initiator {
 		if (script == null) throw new IllegalArgumentException("null");
 		_zscript = script;
 	}
-	public void doInit(Page page, Map args) throws Exception {
+	public void doInit(Page page, Map<String, Object> args) throws Exception {
 		final Scope scope = Scopes.beforeInterpret(page);
 		try {
 			page.interpret(

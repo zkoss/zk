@@ -32,7 +32,7 @@ import org.zkoss.zk.au.AuRequests;
  */
 public class StubEvent extends Event {
 	private final String _cmd, _id;
-	private final Map _data;
+	private final Map<String, Object> _data;
 
 	/** Converts an AU request to a stub event.
 	 */
@@ -61,7 +61,7 @@ public class StubEvent extends Event {
 	 * @param id the ID of the stub component causes this event.
 	 */
 	public StubEvent(String name, Component target,
-	String cmd, String id, Map data) {
+	String cmd, String id, Map<String, Object> data) {
 		super(name, target);
 		_cmd = cmd;
 		_id = id;
@@ -82,7 +82,7 @@ public class StubEvent extends Event {
 	/** Returns the data carried in the request.
 	 * The content depends on the request ({@link AuRequest}).
 	 */
-	public Map getRequestData() {
+	public Map<String, Object> getRequestData() {
 		return _data;
 	}
 }

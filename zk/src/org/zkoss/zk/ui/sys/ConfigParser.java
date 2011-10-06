@@ -299,7 +299,7 @@ public class ConfigParser {
 			} else if ("richlet".equals(elnm)) {
 				final String clsnm =
 					IDOMs.getRequiredElementValue(el, "richlet-class");
-				final Map params =
+				final Map<String, String> params =
 					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
 
 				String path = el.getElementValue("richlet-url", true);

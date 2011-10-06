@@ -31,13 +31,13 @@ import org.zkoss.zk.ui.RichletConfig;
  */
 public class RichletConfigImpl implements RichletConfig {
 	private final WebApp _wapp;
-	private final Map _params;
+	private final Map<String, String> _params;
 
 	/**
 	 * @param wapp the {@link WebApp} that this config belongs to (never null).
 	 * @param params the initail parameters. Empty is assumed if null.
 	 */
-	public RichletConfigImpl(WebApp wapp, Map params) {
+	public RichletConfigImpl(WebApp wapp, Map<String, String> params) {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
@@ -49,10 +49,11 @@ public class RichletConfigImpl implements RichletConfig {
 		return _wapp;
 	}
 	public String getInitParameter(String name) {
-		return _params != null ? (String)_params.get(name): null;
+		return _params != null ? _params.get(name): null;
 	}
-	public Iterator getInitParameterNames() {
-		return _params != null ? _params.keySet().iterator():
-			CollectionsX.EMPTY_ITERATOR;
+	public Iterator<String> getInitParameterNames() {
+		if (_params != null)
+			return _params.keySet().iterator();
+		return CollectionsX.emptyIterator();
 	}
 }

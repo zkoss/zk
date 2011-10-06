@@ -340,7 +340,7 @@ public class JsContentRenderer implements ContentRenderer {
 	/** Renders the JavaScript code snippet for event listeners
 	 * registered for the peer widget.
 	 */
-	public void renderWidgetListeners(Map listeners) {
+	public void renderWidgetListeners(Map<String, String> listeners) {
 		if (listeners == null || listeners.isEmpty())
 			return;
 
@@ -366,7 +366,7 @@ public class JsContentRenderer implements ContentRenderer {
 	 * Examples of values: <code>function () {}</code>, <code>123</code>,
 	 * <code>new Date()</code>, and <code>"a literal string"</code>
 	 */
-	public void renderWidgetOverrides(Map overrides) {
+	public void renderWidgetOverrides(Map<String, String> overrides) {
 		if (overrides == null || overrides.isEmpty())
 			return;
 
@@ -399,7 +399,7 @@ public class JsContentRenderer implements ContentRenderer {
 	 * is bound to the DOM tree.
 	 * @since 5.0.3
 	 */
-	public void renderWidgetAttributes(Map attrs) {
+	public void renderWidgetAttributes(Map<String, String> attrs) {
 		if (attrs == null || attrs.isEmpty())
 			return;
 

@@ -586,10 +586,10 @@ public class DefinitionLoaders {
 
 			final ProcessingInstruction pi = (ProcessingInstruction)o;
 			final String target = pi.getTarget();
-			final Map params = pi.parseData();
+			final Map<String, String> params = pi.parseData();
 			if ("taglib".equals(target)) {
-				final String uri = (String)params.remove("uri");
-				final String prefix = (String)params.remove("prefix");
+				final String uri = params.remove("uri");
+				final String prefix = params.remove("prefix");
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attribute: "+params+", "+pi.getLocator());
 				if (uri == null || prefix == null)

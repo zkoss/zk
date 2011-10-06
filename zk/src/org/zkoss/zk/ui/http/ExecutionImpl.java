@@ -196,7 +196,7 @@ public class ExecutionImpl extends AbstractExecution {
 			eval.evaluate((Component)self, expression);
 	}
 
-	public void include(Writer out, String page, Map params, int mode)
+	public void include(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		try {
 			if (!dispatch(out, page, params, mode, true))
@@ -266,7 +266,7 @@ public class ExecutionImpl extends AbstractExecution {
 	throws IOException {
 		include(null, page, null, 0);
 	}
-	public void forward(Writer out, String page, Map params, int mode)
+	public void forward(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		final Visualizer uv = getVisualizer();
 			//uv is null if it is called in DesktopInit (with TemporaryExecution)

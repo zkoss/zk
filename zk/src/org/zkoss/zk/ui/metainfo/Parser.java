@@ -158,8 +158,8 @@ public class Parser {
 			final String target = pi.getTarget();
 			if ("page".equals(target)) {
 				//we handle only the language attribute here
-				final Map params = pi.parseData();
-				final String l = (String)params.remove("language");
+				final Map<String, String> params = pi.parseData();
+				final String l = params.remove("language");
 				if (l != null) {
 					noEL("language", l, pi);
 					lang = l;
@@ -168,10 +168,10 @@ public class Parser {
 				if (!params.isEmpty())
 					pis.add(pi); //process it later
 			} else if ("import".equals(target)) { //import
-				final Map params = pi.parseData();
-				final String src = (String)params.remove("src");
-				final String dirs = (String)params.remove("directives");
-				final String cls = (String)params.remove("class");
+				final Map<String, String> params = pi.parseData();
+				final String src = params.remove("src");
+				final String dirs = params.remove("directives");
+				final String cls = params.remove("class");
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 				if (src != null) {
@@ -254,7 +254,7 @@ public class Parser {
 			parseInitDirective(pgdef, pi, params);
 		} else if ("variable-resolver".equals(target)
 		|| "function-mapper".equals(target)) {
-			final String clsnm = (String)params.remove("class");
+			final String clsnm = params.remove("class");
 			if (isEmpty(clsnm))
 				throw new UiException("The class attribute is required, "+pi.getLocator());
 
@@ -284,22 +284,22 @@ public class Parser {
 		|| "script".equals(target) || "style".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params,
 				ConditionImpl.getInstance(
-					(String)params.remove("if"), (String)params.remove("unless"))));
+					params.remove("if"), params.remove("unless"))));
 		} else if ("header".equals(target)) { //declare a response header
 			pgdef.addResponseHeaderInfo(new ResponseHeaderInfo(
-				(String)params.remove("name"), (String)params.remove("value"),
-				(String)params.remove("append"),
+				params.remove("name"), params.remove("value"),
+				params.remove("append"),
 				ConditionImpl.getInstance(
-					(String)params.remove("if"), (String)params.remove("unless"))));
+					params.remove("if"), params.remove("unless"))));
 		} else if ("root-attributes".equals(target)) {
 			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
 			}
 		} else if ("forward".equals(target)) { //forward
-			final String uri = (String)params.remove("uri");
-			final String ifc = (String)params.remove("if");
-			final String unless = (String)params.remove("unless");
+			final String uri = params.remove("uri");
+			final String ifc = params.remove("if");
+			final String unless = params.remove("unless");
 			if (!params.isEmpty())
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 			noEmpty("uri", uri, pi);
@@ -314,8 +314,8 @@ public class Parser {
 	/** Process the init directive. */
 	private void parseInitDirective(PageDefinition pgdef,
 	ProcessingInstruction pi, Map<String, String> params) throws Exception {
-		final String clsnm = (String)params.remove("class");
-		final String zsrc = (String)params.remove("zscript");
+		final String clsnm = params.remove("class");
+		final String zsrc = params.remove("zscript");
 
 		final Map<String, String> args = new LinkedHashMap<String, String>(params);
 		if (clsnm == null) {
@@ -353,11 +353,10 @@ public class Parser {
 	}
 	/** Process the page directive. */
 	private static void parsePageDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) throws Exception {
-		for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
-			final String val = (String)me.getValue();
+	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+		for (Map.Entry<String, String> me: pi.parseData().entrySet()) {
+			final String nm = me.getKey();
+			final String val = me.getValue();
 			if ("language".equals(nm)) {
 				if (!(pi.getParent() instanceof Document))
 					log.warning("Ignored language attribute since the page directive is not at the top level, "+pi.getLocator());
@@ -396,22 +395,22 @@ public class Parser {
 	}
 	/** Process the component directive. */
 	private void parseComponentDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) throws Exception {
-		final String name = (String)params.remove("name");
+	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+		final String name = params.remove("name");
 		noELnorEmpty("name", name, pi);
 
-		String macroURI = (String)params.remove("macroURI");
-		if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)
-		final String extds = (String)params.remove("extends");
-		final String clsnm = (String)params.remove("class");
-		final String lang = (String)params.remove("language");
+		String macroURI = params.remove("macroURI");
+		if (macroURI == null) macroURI = params.remove("macro-uri"); //backward compatible (2.4.x)
+		final String extds = params.remove("extends");
+		final String clsnm = params.remove("class");
+		final String lang = params.remove("language");
 		final LanguageDefinition langdef = lang != null ?
 			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
 		if (macroURI != null) {
 			//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
 
-			final String inline = (String)params.remove("inline");
+			final String inline = params.remove("inline");
 			noEL("inline", inline, pi);
 			noEL("macroURI", macroURI, pi);
 				//no EL because pagedef must be loaded to resolve
@@ -475,9 +474,9 @@ public class Parser {
 			}
 		}
 
-		String wgtnm = (String)params.remove("widgetClass");
+		String wgtnm = params.remove("widgetClass");
 		if (wgtnm == null)
-			wgtnm = (String)params.remove("widget-class");
+			wgtnm = params.remove("widget-class");
 		if (wgtnm != null)
 			compdef.setDefaultWidgetClass(wgtnm);
 
@@ -492,28 +491,27 @@ public class Parser {
 		if (o != null)
 			throw new UnsupportedOperationException("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead, "+pi.getLocator());
 
-		compdef.setApply((String)params.remove("apply"));
+		compdef.setApply(params.remove("apply"));
 
-		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
-			final Map.Entry me = (Map.Entry)e.next();
-			compdef.addProperty((String)me.getKey(), (String)me.getValue());
+		for (Map.Entry<String, String> me: params.entrySet()) {
+			compdef.addProperty(me.getKey(), me.getValue());
 		}
 	}
 	/** Parse the evaluator directive. */
 	private static void parseEvaluatorDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) throws Exception {
-		final String clsnm = (String)params.remove("class");
+	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+		final String clsnm = params.remove("class");
 		if (clsnm != null && clsnm.length() > 0) {
 			noELnorEmpty("class", clsnm, pi);
 			pgdef.setExpressionFactoryClass(
 				pgdef.getImportedClassResolver().resolveClass(clsnm));
 		} else { //name has the lower priorty
-			final String nm = (String)params.remove("name");
+			final String nm = params.remove("name");
 			if (nm != null)
 				pgdef.setExpressionFactoryClass(Evaluators.getEvaluatorClass(nm));
 		}
 
-		final String imports = (String)params.remove("import");
+		final String imports = params.remove("import");
 		if (imports != null && imports.length() > 0) {
 			Collection ims = CollectionsX.parse(null, imports, ',', false); //No EL
 			for (Iterator it = ims.iterator(); it.hasNext();) {
@@ -540,14 +538,14 @@ public class Parser {
 	}
 	/** Parse the XEL method. */
 	private static void parseXelMethod(PageDefinition pgdef,
-	ProcessingInstruction pi, Map params) throws Exception {
-		final String prefix = (String)params.remove("prefix");
+	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+		final String prefix = params.remove("prefix");
 		noELnorEmpty("prefix", prefix, pi);
-		final String nm = (String)params.remove("name");
+		final String nm = params.remove("name");
 		noELnorEmpty("name", nm, pi);
-		final String clsnm = (String)params.remove("class");
+		final String clsnm = params.remove("class");
 		noELnorEmpty("class", clsnm, pi);
-		final String sig = (String)params.remove("signature");
+		final String sig = params.remove("signature");
 		noELnorEmpty("signature", sig, pi);
 
 		final Method mtd;

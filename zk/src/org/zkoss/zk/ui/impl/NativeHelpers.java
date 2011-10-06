@@ -46,10 +46,9 @@ public class NativeHelpers {
 	 * Note: EL expressions is not allowed
 	 */
 	public static final
-	void getAttributes(StringBuffer sb, Map props, Collection namespaces) {
+	void getAttributes(StringBuffer sb, Map<String, Object> props, Collection<Namespace> namespaces) {
 		if (namespaces != null && !namespaces.isEmpty()) {
-			for (Iterator it = namespaces.iterator(); it.hasNext();) {
-				final Namespace ns = (Namespace)it.next();
+			for (Namespace ns: namespaces) {
 				sb.append(" xmlns");
 				if (ns.getPrefix().length() > 0)
 					sb.append(':').append(ns.getPrefix());
@@ -58,11 +57,9 @@ public class NativeHelpers {
 		}
 
 		if (props != null && !props.isEmpty()) {
-			for (Iterator it = props.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
+			for (Map.Entry<String, Object> me: props.entrySet()) {
 				HTMLs.appendAttribute(sb,
-					Objects.toString(me.getKey()),
-					Objects.toString(me.getValue()));
+					me.getKey(), Objects.toString(me.getValue()));
 			}
 		}
 	}

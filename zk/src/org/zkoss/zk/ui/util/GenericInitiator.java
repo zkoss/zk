@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.Component;
  * @since 5.0.5
  */
 abstract public class GenericInitiator implements Initiator, InitiatorExt {
-	public void doInit(Page page, Map args) throws Exception {
+	public void doInit(Page page, Map<String, Object> args) throws Exception {
 	}
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		doAfterCompose(page);

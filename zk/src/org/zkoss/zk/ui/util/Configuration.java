@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.RichletConfig;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
@@ -2178,7 +2179,7 @@ public class Configuration {
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String name, Class richletClass, Map params) {
+	public Object addRichlet(String name, Class richletClass, Map<String, String> params) {
 		if (!Richlet.class.isAssignableFrom(richletClass))
 			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
 
@@ -2197,13 +2198,13 @@ public class Configuration {
 	 * @return the previous richlet class or class-name with the specified name,
 	 * or null if no previous richlet.
 	 */
-	public Object addRichlet(String name, String richletClassName, Map params) {
+	public Object addRichlet(String name, String richletClassName, Map<String, String> params) {
 		if (richletClassName == null || richletClassName.length() == 0)
 			throw new IllegalArgumentException("richletClassName is required");
 
 		return addRichlet0(name, richletClassName, params);
 	}
-	private Object addRichlet0(String name, Object richletClass, Map params) {
+	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
 		final Object o;
 		synchronized (_richlets) {
 			o = _richlets.put(name, new Object[] {richletClass, params});
@@ -2303,7 +2304,7 @@ public class Configuration {
 				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
 
 			final Richlet richlet = (Richlet)o;
-			richlet.init(new RichletConfigImpl(_wapp, (Map)info[1]));
+			richlet.init(newRichletConfig((Map)info[1]));
 
 			synchronized (_richlets) {
 				_richlets.put(name, richlet);
@@ -2318,6 +2319,11 @@ public class Configuration {
 			lock.unlock();
 		}
 	}
+	@SuppressWarnings("unchecked")
+	private RichletConfig newRichletConfig(Map params) {
+		return new RichletConfigImpl(_wapp, params);
+	}
+
 	/** Returns an instance of richlet for the specified path, or
 	 * null if not found.
 	 */

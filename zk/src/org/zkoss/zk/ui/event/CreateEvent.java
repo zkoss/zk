@@ -29,8 +29,8 @@ import org.zkoss.zk.ui.Component;
  * @author tomyeh
  */
 public class CreateEvent extends Event {
-	private final Map _args;
-	public CreateEvent(String name, Component target, Map args) {
+	private final Map<?, ?> _args;
+	public CreateEvent(String name, Component target, Map<?, ?> args) {
 		super(name, target);
 		_args = args != null ? args: Collections.EMPTY_MAP;
 	}
@@ -39,7 +39,7 @@ public class CreateEvent extends Event {
 	 * <p>Note: when onCreate listeners are called, {@link org.zkoss.zk.ui.Execution#getArg}
 	 * is no longer available, you have to use this method instead.
 	 */
-	public Map getArg() {
+	public Map<?, ?> getArg() {
 		return _args;
 	}
 }

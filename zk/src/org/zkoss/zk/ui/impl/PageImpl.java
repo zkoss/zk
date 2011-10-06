@@ -364,7 +364,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return attrs.put(name, value);
 	}
 	public Object removeAttribute(String name, int scope) {
-			final Map attrs = getAttributes(scope);
+			final Map<String, Object> attrs = getAttributes(scope);
 			if (attrs == Collections.EMPTY_MAP)
 				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
 		return attrs.remove(name);

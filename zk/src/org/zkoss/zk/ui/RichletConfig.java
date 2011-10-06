@@ -37,5 +37,5 @@ public interface RichletConfig {
 	 * an Iterator of String objects, or an empty Enumeration
 	 * if the richlet has no initialization parameters.
 	 */
-	public Iterator getInitParameterNames();
+	public Iterator<String> getInitParameterNames();
 }

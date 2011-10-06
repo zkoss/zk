@@ -94,7 +94,7 @@ public interface Native extends NonFellow {
 		 * Note: EL expressions is not allowed
 		 */
 		public void getFirstHalf(StringBuffer sb, String tag,
-		Map<String, Object> props, Collection namespaces);
+		Map<String, Object> props, Collection<Namespace> namespaces);
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.

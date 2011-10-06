@@ -380,7 +380,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 			return nc;
 		}
 		public void getFirstHalf(StringBuffer sb, String tag,
-		Map<String, Object> props, Collection namespaces) {
+		Map<String, Object> props, Collection<Namespace> namespaces) {
 			if (tag != null)
 				sb.append('<').append(tag);
 

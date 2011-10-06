@@ -48,14 +48,14 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 		super(desktop, null);
 	}
 
-	public void include(Writer out, String page, Map params, int mode)
+	public void include(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		throw new UnsupportedOperationException();
 	}
 	public void include(String page) throws IOException {
 		throw new UnsupportedOperationException();
 	}
-	public void forward(Writer out, String page, Map params, int mode)
+	public void forward(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		throw new UnsupportedOperationException();
 	}

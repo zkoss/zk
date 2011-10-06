@@ -45,5 +45,5 @@ public interface Template {
 	 * be evaluated when this object is instantiated and assigned to a component
 	 * (by use of {@link Component#setTemplate}).
 	 */
-	public Map getParameters();
+	public Map<String, Object> getParameters();
 }

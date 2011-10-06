@@ -287,7 +287,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Component createComponentsDirectly(Document content, String ext,
-	Component parent, Map arg) {
+	Component parent, Map<?, ?> arg) {
 		return createComponentsDirectly0(content, ext, parent, null, null, arg);
 	}
 	public Component createComponentsDirectly(Document content, String ext,
@@ -295,7 +295,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
 	}
 	private Component createComponentsDirectly0(Document content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
+	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
 			getCurrentPage(), parent, insertBefore, resolver, arg);
@@ -303,7 +303,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Component createComponentsDirectly(Reader reader, String ext,
-	Component parent, Map arg) throws IOException {
+	Component parent, Map<?, ?> arg) throws IOException {
 		return createComponentsDirectly0(reader, ext, parent, null, null, arg);
 	}
 	public Component createComponentsDirectly(Reader reader, String ext,
@@ -312,7 +312,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return createComponentsDirectly0(reader, ext, parent, insertBefore, resolver, null);
 	}
 	private Component createComponentsDirectly0(Reader reader, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map arg)
+	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg)
 	throws IOException {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
@@ -320,29 +320,29 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return cs.length > 0 ? cs[0]: null;
 	}
 
-	public Component[] createComponents(String uri, Map arg) {
+	public Component[] createComponents(String uri, Map<?, ?> arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinition(uri), null, null, null, null, arg);
 	}
-	public Component[] createComponents(PageDefinition pagedef, Map arg) {
+	public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		return getUiEngine().createComponents(this, pagedef, null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(String content, String ext,
-	Map arg) {
+	Map<?, ?> arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
 			null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(Document content, String ext,
-	Map arg) {
+	Map<?, ?> arg) {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
 			null, null, null, null, arg);
 	}
 	public Component[] createComponentsDirectly(Reader reader, String ext,
-	Map arg) throws IOException {
+	Map<?, ?> arg) throws IOException {
 		return getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
 			null, null, null, null, arg);

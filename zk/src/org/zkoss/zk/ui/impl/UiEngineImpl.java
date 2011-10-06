@@ -144,11 +144,9 @@ public class UiEngineImpl implements UiEngine {
 	public boolean hasSuspendedThread() {
 		if (!_suspended.isEmpty()) {
 			synchronized (_suspended) {
-				for (Iterator it = _suspended.values().iterator(); it.hasNext();) {
-					final Map map = (Map)it.next();
+				for (Map map: _suspended.values())
 					if (!map.isEmpty())
 						return true;
-				}
 			}
 		}
 		return false;
@@ -220,17 +218,14 @@ public class UiEngineImpl implements UiEngine {
 	private void desktopDestroyed0(Desktop desktop) {
 		final Configuration config = _wapp.getConfiguration();
 		if (!_suspended.isEmpty()) { //no need to sync (better performance)
-			final Map map;
+			final Map<Object, List<EventProcessingThreadImpl>> map;
 			synchronized (_suspended) {
-				map = (Map)_suspended.remove(desktop);
+				map = _suspended.remove(desktop);
 			}
 			if (map != null) {
 				synchronized (map) {
-					for (Iterator it = map.values().iterator(); it.hasNext();) {
-						final List list = (List)it.next();
-						for (Iterator i2 = list.iterator(); i2.hasNext();) {
-							final EventProcessingThreadImpl evtthd =
-								(EventProcessingThreadImpl)i2.next();
+					for (List<EventProcessingThreadImpl> list: map.values()) {
+						for (EventProcessingThreadImpl evtthd: list) {
 							evtthd.ceaseSilently("Destroy desktop "+desktop);
 							config.invokeEventThreadResumeAborts(
 								evtthd.getComponent(), evtthd.getEvent());
@@ -954,7 +949,7 @@ public class UiEngineImpl implements UiEngine {
 
 	public Component[] createComponents(Execution exec,
 	PageDefinition pagedef, Page page, Component parent,
-	Component insertBefore, VariableResolver resolver, Map arg) {
+	Component insertBefore, VariableResolver resolver, Map<?,?> arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
 
@@ -1570,19 +1565,19 @@ public class UiEngineImpl implements UiEngine {
 		if (desktop == null || mutex == null)
 			throw new IllegalArgumentException("desktop and mutex cannot be null");
 
-		final Map map;
+		final Map<Object, List<EventProcessingThreadImpl>> map;
 		synchronized (_suspended) {
-			map = (Map)_suspended.get(desktop);
+			map = _suspended.get(desktop);
 		}
 		if (map == null) return; //nothing to notify
 
 		final EventProcessingThreadImpl evtthd;
 		synchronized (map) {
-			final List list = (List)map.get(mutex);
+			final List<EventProcessingThreadImpl> list = map.get(mutex);
 			if (list == null) return; //nothing to notify
 
 			//Note: list is never empty
-			evtthd = (EventProcessingThreadImpl)list.remove(0);
+			evtthd = list.remove(0);
 			if (list.isEmpty()) map.remove(mutex); //clean up
 		}
 		addResumed(desktop, evtthd);
@@ -2125,7 +2120,7 @@ public class UiEngineImpl implements UiEngine {
 	//Supporting Classes//
 	private static class TemplateImpl implements Template, java.io.Serializable {
 		private final TemplateInfo _tempInfo;
-		private final Map _params;
+		private final Map<String, Object> _params;
 		private final String _src;
 
 		private TemplateImpl(TemplateInfo tempInfo, Component comp) {
@@ -2183,7 +2178,7 @@ public class UiEngineImpl implements UiEngine {
 				exec.createComponents(_src, parent, insertBefore, resolver): null;
 			return merge(cs, c2);
 		}
-		public Map getParameters() {
+		public Map<String, Object> getParameters() {
 			return _params;
 		}
 	}

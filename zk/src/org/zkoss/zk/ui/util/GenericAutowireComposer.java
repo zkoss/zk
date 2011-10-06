@@ -153,31 +153,31 @@ implements ComponentCloneListener {
 	/** Implicit Object; a map of attributes defined in the applied component.
 	 * @since 3.0.7
 	 */
-	protected transient Map componentScope;
+	protected transient Map<String, Object> componentScope;
 	/** Implicit Object; a map of attributes defined in the ID space contains the applied component.
 	 * @since 3.0.7
 	 */
-	protected transient Map spaceScope;
+	protected transient Map<String, Object> spaceScope;
 	/** Implicit Object; a map of attributes defined in the page.
 	 * @since 3.0.7
 	 */
-	protected transient Map pageScope;
+	protected transient Map<String, Object> pageScope;
 	/** Implicit Object; a map of attributes defined in the desktop.
 	 * @since 3.0.7
 	 */
-	protected transient Map desktopScope;
+	protected transient Map<String, Object> desktopScope;
 	/** Implicit Object; a map of attributes defined in the session.
 	 * @since 3.0.7
 	 */
-	protected transient Map sessionScope;
+	protected transient Map<String, Object> sessionScope;
 	/** Implicit Object; a map of attributes defined in the web application.
 	 * @since 3.0.7
 	 */
-	protected transient Map applicationScope;
+	protected transient Map<String, Object> applicationScope;
 	/** Implicit Object; a map of attributes defined in the request.
 	 * @since 3.0.7
 	 */
-	protected transient Map requestScope;
+	protected transient Map<String, Object> requestScope;
 	/** Implicit Object; the current execution.
 	 * @since 3.0.7
 	 */
@@ -185,11 +185,11 @@ implements ComponentCloneListener {
 	/** Implicit Object; the arg argument passed to the createComponents method. It is never null.
 	 * @since 3.0.8
 	 */
-	protected transient Map arg;
+	protected transient Map<?, ?> arg;
 	/** Implicit Object; the param argument passed from the http request.
 	 * @since 3.6.1
 	 */
-	protected transient Map param;
+	protected transient Map<String, String[]> param;
 	
 	/** The separator used to separate the component ID and event name.
 	 * By default, it is '$'. For Grooy and other environment that '$'

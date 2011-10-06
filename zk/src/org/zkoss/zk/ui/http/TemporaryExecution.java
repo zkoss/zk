@@ -53,7 +53,7 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 	public void sendRedirect(String uri, String target) {
 		sendRedirect(uri); //target is ignored (not supported)
 	}
-	public void forward(Writer out, String page, Map params, int mode)
+	public void forward(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		ExecutionsCtrl.setCurrent(null);
@@ -64,7 +64,7 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 			ExecutionsCtrl.setCurrent(exec);
 		}
 	}
-	public void include(Writer out, String page, Map params, int mode)
+	public void include(Writer out, String page, Map<String, ?> params, int mode)
 	throws IOException {
 		throw new IllegalStateException("include not allowd in DesktopInit");
 	}

@@ -62,7 +62,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	private ExValue _impl;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List<Property> _props;
-	/** A Map of event handlers to handle events. */
+	/** A map of event handlers to handle events. */
 	private EventHandlerMap _evthds;
 	/** A list of event listeners for the peer widget. */
 	private List<WidgetListener> _wgtlsns;
