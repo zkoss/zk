@@ -53,6 +53,8 @@ ZK 5.0.9
   ZK-489: The layout of the vflex min is wrong when Listbox with rows without listhead 
   ZK-480: Add a draggable item to tree will cause js error
   ZK-483: hflex=min causes unexpected word wrapping (IE9 only)
+  ZK-452: hflex in grid failed in IE 9 only
+  ZK-467: hflex in Listbox failed in IE 9 only 
 
 	--------
 Aug 31, 2011
