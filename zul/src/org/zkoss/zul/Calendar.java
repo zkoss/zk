@@ -138,7 +138,7 @@ public class Calendar extends XulElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			final Object value = data.get("value");
 			if (Objects.equals(_value, value))
 				return; //nothing happen

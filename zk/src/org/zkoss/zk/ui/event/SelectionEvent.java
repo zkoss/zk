@@ -39,7 +39,7 @@ public class SelectionEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final SelectionEvent getSelectionEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new SelectionEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getInt(data, "start", 0),
 			AuRequests.getInt(data, "end", 0),

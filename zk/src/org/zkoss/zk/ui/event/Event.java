@@ -16,7 +16,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Iterator;
 
@@ -41,18 +41,12 @@ public class Event implements java.io.Serializable {
 	public static Event getEvent(AuRequest request) {
 		final String name = request.getCommand();
 		final Component comp = request.getComponent();
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final Object data2 = data != null ? data.get(""): null;
 		if (data2 == null)
 			return new Event(name, comp);
-		if (data2 instanceof List) {
-			final List ary = (List)data2;
-			final Object[] data3 = new Object[ary.size()];
-			int j = 0;
-			for (Iterator it = ary.iterator(); it.hasNext();)
-				data3[j++] = it.next();
-			return new Event(name, comp, data3);
-		}
+		if (data2 instanceof Collection)
+			return new Event(name, comp, ((Collection)data2).toArray());
 		return new Event(name, comp, data2);
 	}
 

@@ -708,7 +708,7 @@ implements Constrainted, Readonly, Disable {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			final Object clientv = data.get("value");
 			final Object oldval = _value;
 			Object value = null;
@@ -735,7 +735,7 @@ implements Constrainted, Readonly, Disable {
 				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGING)) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			final Object clientv = data.get("value");
 			final Object oldval = _value;
 			final InputEvent evt = new InputEvent(cmd, this,

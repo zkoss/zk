@@ -1241,22 +1241,22 @@ public class Components {
 		}
 
 		public Component createComponents(PageDefinition pagedef,
-				Component parent, Map arg) {
+				Component parent, Map<?, ?> arg) {
 			return exec().createComponents(pagedef, parent, arg);
 		}
-		public Component createComponents(String uri, Component parent, Map arg) {
+		public Component createComponents(String uri, Component parent, Map<?, ?> arg) {
 			return exec().createComponents(uri, parent, arg);
 		}
 		public Component createComponentsDirectly(String content,
-				String extension, Component parent, Map arg) {
+				String extension, Component parent, Map<?, ?> arg) {
 			return exec().createComponentsDirectly(content, extension, parent, arg);
 		}
 		public Component createComponentsDirectly(Document content,
-				String extension, Component parent, Map arg) {
+				String extension, Component parent, Map<?, ?> arg) {
 			return exec().createComponentsDirectly(content, extension, parent, arg);
 		}
 		public Component createComponentsDirectly(Reader reader,
-				String extension, Component parent, Map arg) throws IOException {
+				String extension, Component parent, Map<?, ?> arg) throws IOException {
 			return exec().createComponentsDirectly(reader, extension, parent, arg);
 		}
 
@@ -1280,23 +1280,23 @@ public class Components {
 			return exec().createComponentsDirectly(reader, extension, parent, insertBefore, resolver);
 		}
 
-		public Component[] createComponents(PageDefinition pagedef, Map arg) {
+		public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg) {
 			return exec().createComponents(pagedef, arg);
 		}
-		public Component[] createComponents(String uri, Map arg) {
+		public Component[] createComponents(String uri, Map<?, ?> arg) {
 			return exec().createComponents(uri, arg);
 		}
 
 		public Component[] createComponentsDirectly(String content,
-				String extension, Map arg) {
+				String extension, Map<?, ?> arg) {
 			return exec().createComponentsDirectly(content, extension, arg);
 		}
 		public Component[] createComponentsDirectly(Document content,
-				String extension, Map arg) {
+				String extension, Map<?, ?> arg) {
 			return exec().createComponentsDirectly(content, extension, arg);
 		}
 		public Component[] createComponentsDirectly(Reader reader,
-				String extension, Map arg) throws IOException {
+				String extension, Map<?, ?> arg) throws IOException {
 			return exec().createComponentsDirectly(reader, extension, arg);
 		}
 
@@ -1312,7 +1312,7 @@ public class Components {
 			return exec().evaluate(page, expr, expectedType);
 		}
 
-		public void forward(Writer writer, String page, Map params, int mode)
+		public void forward(Writer writer, String page, Map<String, ?> params, int mode)
 				throws IOException {
 			exec().forward(writer, page, params, mode);
 			
@@ -1322,7 +1322,7 @@ public class Components {
 			exec().forward(page);
 		}
 
-		public Map getArg() {
+		public Map<?, ?> getArg() {
 			return exec().getArg();
 		}
 
@@ -1458,7 +1458,7 @@ public class Components {
 			return exec().getVariableResolver();
 		}
 
-		public void include(Writer writer, String page, Map params, int mode)
+		public void include(Writer writer, String page, Map<String, ?> params, int mode)
 				throws IOException {
 			exec().include(writer, page, params, mode);
 			
@@ -1542,7 +1542,7 @@ public class Components {
 			exec().postEvent(priority, realTarget, evt);
 		}
 
-		public void pushArg(Map arg) {
+		public void pushArg(Map<?, ?> arg) {
 			exec().pushArg(arg);
 		}
 

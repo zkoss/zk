@@ -42,7 +42,7 @@ public class InputEvent extends Event {
 	 */
 	public static final
 	InputEvent getInputEvent(AuRequest request, Object oldValue) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final Object val = data.get("value");
 		return new InputEvent(request.getCommand(), request.getComponent(),
 			val == null ? "" : val.toString(),

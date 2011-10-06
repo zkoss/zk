@@ -36,7 +36,7 @@ public class ScrollEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final ScrollEvent getScrollEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new ScrollEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getInt(data, "", 0));
 	}

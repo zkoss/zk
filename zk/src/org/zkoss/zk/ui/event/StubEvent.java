@@ -42,7 +42,7 @@ public class StubEvent extends Event {
 		|| target instanceof StubComponent); target = target.getParent())
 			;
 
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new StubEvent("onStub", target, request.getCommand(),
 			getId(comp, request.getUuid()), data);
 	}

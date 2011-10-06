@@ -711,7 +711,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} else if ("redraw".equals(cmd)) {
 			invalidate();
 		} else if ("error".equals(cmd)) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			if (data != null)
 				log.error(this+" client error: " + data.get("message"));
 		} else

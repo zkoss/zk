@@ -67,7 +67,7 @@ public class MouseEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static MouseEvent getMouseEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final String name = request.getCommand();
 		final int keys = AuRequests.parseKeys(data);
 		final String area = (String)data.get("area");

@@ -57,7 +57,7 @@ public class SelectEvent<T extends Component> extends Event {
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T extends Component> SelectEvent<T> getSelectEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final Desktop desktop = request.getDesktop();
 		final List<String> sitems = cast((List)data.get("items"));
 		final Set<T> items = AuRequests.convertToItems(desktop, sitems);

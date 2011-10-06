@@ -35,7 +35,7 @@ public class SortEvent extends Event {
 	 * Converts an AU request to a sort event.
 	 */
 	public static SortEvent getSortEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new SortEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getBoolean(data, ""));
 	}

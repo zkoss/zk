@@ -57,7 +57,7 @@ public class AuRequests {
 	 * @return a combination of {@link MouseEvent#ALT_KEY},
 	 * {@link MouseEvent#SHIFT_KEY} and {@link MouseEvent#CTRL_KEY},
 	 */
-	public static int parseKeys(Map data) {
+	public static int parseKeys(Map<String, Object> data) {
 		int keys = 0;
 		if (data != null) {
 			if (getBoolean(data, "altKey")) keys |= MouseEvent.ALT_KEY;
@@ -95,7 +95,7 @@ public class AuRequests {
 	 * It is the same as <code>getInt(data, key, defVal, false)</code>.
 	 * @param defVal the default value; used if not found.
 	 */
-	public static int getInt(Map data, String key, int defVal) {
+	public static int getInt(Map<String, Object> data, String key, int defVal) {
 		final Object o = data.get(key);
 		return o != null ? ((Number)o).intValue(): defVal;
 	}
@@ -103,7 +103,7 @@ public class AuRequests {
 	 * It is the same as <code>getLong(data, key, defVal, false)</code>.
 	 * @param defVal the default value; used if not found.
 	 */
-	public static long getLong(Map data, String key, long defVal) {
+	public static long getLong(Map<String, Object> data, String key, long defVal) {
 		final Object o = data.get(key);
 		return o != null ? ((Number)o).longValue(): defVal;
 	}
@@ -112,7 +112,7 @@ public class AuRequests {
 	 * @param silent whether not to throw an exception if failed to convert
 	 * @since 5.0.2
 	 */
-	public static int getInt(Map data, String key, int defVal, boolean silent) {
+	public static int getInt(Map<String, Object> data, String key, int defVal, boolean silent) {
 		if (silent)
 			try {
 				return getInt(data, key, defVal);
@@ -126,7 +126,7 @@ public class AuRequests {
 	 * @param silent whether not to throw an exception if failed to convert
 	 * @since 5.0.2
 	 */
-	public static long getLong(Map data, String key, long defVal, boolean silent) {
+	public static long getLong(Map<String, Object> data, String key, long defVal, boolean silent) {
 		if (silent)
 			try {
 				return getLong(data, key, defVal);
@@ -137,7 +137,7 @@ public class AuRequests {
 	}
 	/** Returns whether the specified key is defined.
 	 */
-	public static boolean getBoolean(Map data, String key) {
+	public static boolean getBoolean(Map<String, Object> data, String key) {
 		final Object o = data.get(key);
 		return o != null
 			&& (!(o instanceof Boolean) || ((Boolean)o).booleanValue());

@@ -37,7 +37,7 @@ public class MinimizeEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final MinimizeEvent getMinimizeEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new MinimizeEvent(request.getCommand(), request.getComponent(),
 			(String)data.get("left"), (String)data.get("top"),
 			(String)data.get("width"), (String)data.get("height"),

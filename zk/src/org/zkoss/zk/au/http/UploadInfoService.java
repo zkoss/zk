@@ -64,7 +64,7 @@ public class UploadInfoService implements AuService {
 	
 	public boolean service(AuRequest request, boolean everError) {
 		if ("updateResult".equals(request.getCommand())) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			Desktop desktop = request.getDesktop();
 			final String uuid = (String) request.getData().get("wid");
 			final String sid = (String) request.getData().get("sid");

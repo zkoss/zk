@@ -188,7 +188,7 @@ public class Menu extends LabelImageElement {
 		if (cmd.equals(Events.ON_CLICK)) {
 			Events.postEvent(MouseEvent.getMouseEvent(request));
 		} else if (cmd.equals(Events.ON_CHANGE)) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			if (getContent().indexOf("#color") == 0) {
 				disableClientUpdate(true);
 				try {

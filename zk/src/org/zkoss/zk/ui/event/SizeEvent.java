@@ -47,7 +47,7 @@ public class SizeEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final SizeEvent getSizeEvent(AuRequest request) {
-		final java.util.Map data = request.getData();
+		final java.util.Map<String, Object> data = request.getData();
 		return new SizeEvent(request.getCommand(), request.getComponent(),
 			(String)data.get("width"), (String)data.get("height"),
 			AuRequests.parseKeys(data));

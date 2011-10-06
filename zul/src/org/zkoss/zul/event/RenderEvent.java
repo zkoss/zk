@@ -40,7 +40,7 @@ public class RenderEvent<T extends Component> extends Event {
 	 * @since 5.0.0
 	 */
 	public static final <C extends Component> RenderEvent<C> getRenderEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final List<String> sitems = cast((List)data.get("items"));
 		final Set<C> items = AuRequests.convertToItems(request.getDesktop(), sitems);
 		return new RenderEvent<C>(request.getCommand(),

@@ -35,7 +35,7 @@ public class CheckEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final CheckEvent getCheckEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new CheckEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getBoolean(data, ""));
 	}

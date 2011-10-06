@@ -644,7 +644,7 @@ public class Servlets {
 	 */
 	public static final
 	void forward(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map<?,?> params, int mode)
+	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
 //		if (D.ON && log.debugable()) log.debug("Forwarding "+uri);
 
@@ -716,7 +716,7 @@ public class Servlets {
 	 */
 	public static final
 	void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map<?,?> params, int mode)
+	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
 //		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
 
@@ -758,15 +758,15 @@ public class Servlets {
 	/** Sets the arg attribute to pass parameters thru request's attribute.
 	 */
 	private static final
-	Map<?,?> setPassThruAttr(ServletRequest request, Map<?,?> params) {
-		final Map<?,?> old = (Map<?,?>)request.getAttribute(Attributes.ARG);
+	Map setPassThruAttr(ServletRequest request, Map params) {
+		final Map old = (Map)request.getAttribute(Attributes.ARG);
 		request.setAttribute(Attributes.ARG, params);
 		return old;
 	}
 	/** Restores what has been done by {@link #setPassThruAttr}.
 	 */
 	private static final
-	void restorePassThruAttr(ServletRequest request, Map<?,?> old) {
+	void restorePassThruAttr(ServletRequest request, Map old) {
 		if (old != null)
 			request.setAttribute(Attributes.ARG, old);
 		else
@@ -789,7 +789,7 @@ public class Servlets {
 	 */
 	public static final RequestDispatcher
 	getRequestDispatcher(ServletContext ctx, ServletRequest request,
-	String uri, Map<?,?> params, int mode)
+	String uri, Map params, int mode)
 	throws ServletException {
 		final char cc = uri.length() > 0 ? uri.charAt(0): (char)0;
 		if (ctx == null || (cc != '/' && cc != '~')) {//... or relevant
@@ -892,7 +892,7 @@ public class Servlets {
 				_uri = uri;
 			}
 		}
-		private RequestDispatcher getRequestDispatcher(Map<?,?> params, int mode) {
+		private RequestDispatcher getRequestDispatcher(Map params, int mode) {
 			if (_extctx == null && _svlctx == null) //not found
 				return null;
 
@@ -941,7 +941,7 @@ public class Servlets {
 	 * not empty.
 	 * @see Encodes#encodeURL(ServletContext, ServletRequest, ServletResponse, String)
 	 */
-	public static final String generateURI(String uri, Map<?,?> params, int mode) {
+	public static final String generateURI(String uri, Map params, int mode) {
 		if (uri.startsWith("~"))
 			throw new IllegalArgumentException("~ctx not supported here: "+uri);
 

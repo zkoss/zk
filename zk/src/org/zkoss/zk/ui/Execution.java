@@ -273,7 +273,7 @@ public interface Execution extends Scope {
 	 * mode is used only if both uri contains query string and params is
 	 * not empty.
 	 */
-	public void include(Writer writer, String page, Map params, int mode)
+	public void include(Writer writer, String page, Map<String, ?> params, int mode)
 	throws IOException;
 	/** A shortcut of include(null, page, null, 0).
 	 */
@@ -295,7 +295,7 @@ public interface Execution extends Scope {
 	 * mode is used only if both uri contains query string and params is
 	 * not empty.
 	 */
-	public void forward(Writer writer, String page, Map params, int mode)
+	public void forward(Writer writer, String page, Map<String, ?> params, int mode)
 	throws IOException;
 	/** A shortcut of forward(null, page, null, 0).
 	 */

@@ -34,7 +34,7 @@ public class ZIndexEvent  extends Event {
 	 * @since 5.0.0
 	 */
 	public static final ZIndexEvent getZIndexEvent(AuRequest request) {
-		final java.util.Map data = request.getData();
+		final java.util.Map<String, Object> data = request.getData();
 		return new ZIndexEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getInt(data, "", -1));
 	}

@@ -36,7 +36,7 @@ public class ErrorEvent extends InputEvent {
 	 */
 	public static final
 	ErrorEvent getErrorEvent(AuRequest request, Object oldValue) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new ErrorEvent(request.getCommand(), request.getComponent(),
 			String.valueOf(data.get("value")), oldValue,
 			String.valueOf(data.get("message")));

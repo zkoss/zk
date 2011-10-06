@@ -239,7 +239,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Component createComponents(String uri, Component parent,
-	Map arg) {
+	Map<?, ?> arg) {
 		return createComponents0(uri, parent, null, null, arg);
 	}
 	public Component createComponents(String uri, Component parent,
@@ -247,14 +247,14 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return createComponents0(uri, parent, insertBefore, resolver, null);
 	}
 	private Component createComponents0(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver, Map arg) {
+	Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinition(uri), getCurrentPage(), parent, insertBefore, resolver, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 
 	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map arg) {
+	Component parent, Map<?, ?> arg) {
 		return createComponents0(pagedef, parent, null, null, arg);
 	}
 	public Component createComponents(PageDefinition pagedef,
@@ -262,7 +262,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return createComponents0(pagedef, parent, insertBefore, resolver, null);
 	}
 	private Component createComponents0(PageDefinition pagedef,
-	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
+	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		final Component[] cs = getUiEngine().createComponents(
@@ -271,7 +271,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public Component createComponentsDirectly(String content, String ext,
-	Component parent, Map arg) {
+	Component parent, Map<?, ?> arg) {
 		return createComponentsDirectly0(content, ext, parent, null, null, arg);
 	}
 	public Component createComponentsDirectly(String content, String ext,
@@ -279,7 +279,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
 	}
 	private Component createComponentsDirectly0(String content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map arg) {
+	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
 			getCurrentPage(), parent, insertBefore, resolver, arg);

@@ -66,7 +66,7 @@ public class ColSizeEvent extends Event {
 	 */
 	@SuppressWarnings("unchecked")
 	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final List wdlist = (List) data.get("widths");
 		return wdlist == null ? 
 			new ColSizeEvent(request.getCommand(), request.getComponent(),

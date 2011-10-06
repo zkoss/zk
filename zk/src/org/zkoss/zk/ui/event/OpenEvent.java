@@ -49,7 +49,7 @@ public class OpenEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final OpenEvent getOpenEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new OpenEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getBoolean(data, "open"),
 			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")),

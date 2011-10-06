@@ -49,7 +49,7 @@ public class ClientInfoEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		//Note: ClientInfoEvent is a broadcast event
 		final List inf = (List)data.get("");
 		return new ClientInfoEvent(request.getCommand(),

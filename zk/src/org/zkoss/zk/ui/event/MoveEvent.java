@@ -49,7 +49,7 @@ public class MoveEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final MoveEvent getMoveEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new MoveEvent(request.getCommand(), request.getComponent(),
 			(String)data.get("left"), (String)data.get("top"),
 			AuRequests.parseKeys(data));

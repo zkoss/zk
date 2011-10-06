@@ -175,7 +175,7 @@ public class Executions {
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 */
 	public static final Component createComponents(
-	String uri, Component parent, Map arg) {
+	String uri, Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponents(uri, parent, arg);
 	}
 	/** Creates components based on the specified page definition.
@@ -194,7 +194,7 @@ public class Executions {
 	 * @see #createComponents(String, Component, Map)
 	 */
 	public static final Component createComponents(PageDefinition pagedef,
-	Component parent, Map arg) {
+	Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponents(pagedef, parent, arg);
 	}
 
@@ -224,7 +224,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public static final Component createComponentsDirectly(String content,
-	String extension, Component parent, Map arg) {
+	String extension, Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
 	}
 	/** Creates components from the raw content specified by a DOM tree.
@@ -252,7 +252,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
 	public static final Component createComponentsDirectly(Document content,
-	String extension, Component parent, Map arg) {
+	String extension, Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
 	}
 	/** Creates components from the raw content read from the specified reader.
@@ -285,7 +285,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(String, String, Component, Map)
 	 */
 	public static Component createComponentsDirectly(Reader reader,
-	String extension, Component parent, Map arg)
+	String extension, Component parent, Map<?, ?> arg)
 	throws IOException {
 		return getCurrent().createComponentsDirectly(reader, extension, parent, arg);
 	}
@@ -310,7 +310,7 @@ public class Executions {
 	 * @see #createComponents(WebApp, String, Map)
 	 * @since 3.6.2
 	 */
-	public static Component[] createComponents(WebApp wapp, PageDefinition pagedef, Map arg) {
+	public static Component[] createComponents(WebApp wapp, PageDefinition pagedef, Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponents(pagedef, arg);
@@ -345,7 +345,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
 	 * @since 3.6.2
 	 */
-	public static Component[] createComponents(WebApp wapp, String uri, Map arg) {
+	public static Component[] createComponents(WebApp wapp, String uri, Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponents(uri, arg);
@@ -389,7 +389,7 @@ public class Executions {
 	 */
 	public static Component[]
 	createComponentsDirectly(WebApp wapp, String content, String extension,
-	Map arg) {
+	Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(content, extension, arg);
@@ -433,7 +433,7 @@ public class Executions {
 	 */
 	public static Component[]
 	createComponentsDirectly(WebApp wapp, Document content, String extension,
-	Map arg) {
+	Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(content, extension, arg);
@@ -478,7 +478,7 @@ public class Executions {
 	 * @since 3.6.2
 	 */
 	public static Component[] createComponentsDirectly(WebApp wapp, Reader reader, String extension,
-	Map arg) throws IOException {
+	Map<?, ?> arg) throws IOException {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(reader, extension, arg);

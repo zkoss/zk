@@ -3089,7 +3089,7 @@ public class Listbox extends MeshElement {
 			Events.postEvent(DataLoadingEvent.getDataLoadingEvent(request,
 					preloadSize()));
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
 			if (size != oldsize) {
@@ -3107,7 +3107,7 @@ public class Listbox extends MeshElement {
 				Events.postEvent(new PageSizeEvent(cmd, this, pgi(), size));
 			}
 		} else if (cmd.equals("onScrollPos")) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
 		} else if (cmd.equals("onTopPad")) {

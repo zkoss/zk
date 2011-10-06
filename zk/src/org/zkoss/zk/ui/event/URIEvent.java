@@ -47,7 +47,7 @@ public class URIEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final URIEvent getURIEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		String uri = (String)data.get("");
 		int urilen = uri.length();
 		if (urilen > 0 && uri.charAt(0) == '/') {

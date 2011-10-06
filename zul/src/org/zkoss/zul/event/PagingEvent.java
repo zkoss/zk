@@ -43,7 +43,7 @@ public class PagingEvent extends Event {
 	 */
 	public static final PagingEvent getPagingEvent(AuRequest request) {
 		final Component comp = request.getComponent();
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		int pgi = AuRequests.getInt(data, "", 0);
 		final Pageable pageable = (Pageable)comp;
 		if (pgi < 0) pgi = 0;

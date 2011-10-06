@@ -714,7 +714,7 @@ the short time styling.
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("onTimeZoneChange")) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			String timezone = (String)data.get("timezone");
 			setTimeZone(timezone);
 		} else 

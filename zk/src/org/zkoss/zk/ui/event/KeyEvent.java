@@ -58,7 +58,7 @@ public class KeyEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final KeyEvent getKeyEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new KeyEvent(request.getCommand(), request.getComponent(),
 			AuRequests.getInt(data, "keyCode", 0), AuRequests.getBoolean(data, "ctrlKey"),
 			AuRequests.getBoolean(data, "shiftKey"), AuRequests.getBoolean(data, "altKey"),

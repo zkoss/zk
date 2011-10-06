@@ -38,7 +38,7 @@ public class DropEvent extends MouseEvent {
 	 * @since 5.0.0
 	 */
 	public static DropEvent getDropEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final int keys = AuRequests.parseKeys(data);
 		return new DropEvent(request.getCommand(), request.getComponent(),
 			request.getDesktop().getComponentByUuid((String)data.get("dragged")),

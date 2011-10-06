@@ -38,7 +38,7 @@ public class DataLoadingEvent extends Event {
 	/** Converts an AU request to a data loading event.
 	 */
 	public static final DataLoadingEvent getDataLoadingEvent(AuRequest request, int preload) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		return new DataLoadingEvent(request.getCommand(),
 			request.getComponent(),
 			AuRequests.getInt(data, "offset", 0), AuRequests.getInt(data, "limit", 20)+preload);

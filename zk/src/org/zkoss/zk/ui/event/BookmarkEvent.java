@@ -41,7 +41,7 @@ public class BookmarkEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final BookmarkEvent getBookmarkEvent(AuRequest request) {
-		final Map data = request.getData();
+		final Map<String, Object> data = request.getData();
 		final String nm = (String)data.get("");
 		return new BookmarkEvent(request.getCommand(), nm);
 	}

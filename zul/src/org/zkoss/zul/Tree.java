@@ -2024,7 +2024,7 @@ public class Tree extends MeshElement {
 
 			Events.postEvent(evt);
 		} else if (inPagingMold() && cmd.equals(ZulEvents.ON_PAGE_SIZE)) { //since 5.0.2
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			final int oldsize = getPageSize();
 			int size = AuRequests.getInt(data, "size", oldsize);
 			if (size != oldsize) {
@@ -2046,7 +2046,7 @@ public class Tree extends MeshElement {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else if (cmd.equals("onScrollPos")) {
-			final Map data = request.getData();
+			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
 		} else
