@@ -180,12 +180,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			}
 		}
 	},
-	getChildMinSize_: zk.ie9 ? function (attr, cwgt) { //'w' for width or 'h' for height
-		var zkc = zk(cwgt.$n().parentNode);
-		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth() + 1; // IE9+ bug ZK-483
-	} : function (attr, cwgt) { //'w' for width or 'h' for height
-		var zkc = zk(cwgt.$n().parentNode);
-		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth();
+	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height
+		var el = wgt.$n().parentNode;
+		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
 	beforeChildrenFlex_: function(child) {
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!

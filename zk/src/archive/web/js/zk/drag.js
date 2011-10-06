@@ -603,8 +603,8 @@ String scroll; //DOM Element's ID</code></pre>
 		var pos = zk(node).cmOffset(),
 			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
-		if ( (v=node.clientWidth) && ofs[0] > (v) && node.offsetWidth > v + 3
-		|| (v=node.clientHeight) && ofs[1] > (v) && node.offsetHeight > v + 3) //scrollbar
+		if ( (v=node.clientWidth) && ofs[0] > v && node.offsetWidth > v + 3
+		|| (v=node.clientHeight) && ofs[1] > v && node.offsetHeight > v + 3) //scrollbar
 			return;
 
 		this.offset = ofs;
