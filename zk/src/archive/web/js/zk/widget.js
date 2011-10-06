@@ -2923,7 +2923,12 @@ unbind_: function (skipper, after) {
 	afterResetChildSize_: function() {
 		//to be overridden, after my children reset the size of (both width and height)
 	},
-	getChildMinSize_: function (attr, cwgt) { //'w' for width or 'h' for height
+	// to overridden this method have to fix the IE9 issue (ZK-483)
+	// you can just add 1 px more for the offsetWidth
+	getChildMinSize_: zk.ie9 ? function (attr, cwgt) { //'w' for width or 'h' for height
+		var zkc = zk(cwgt);
+		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth() + 1; // IE9+ bug ZK-483
+	} : function (attr, cwgt) { //'w' for width or 'h' for height
 		var zkc = zk(cwgt);
 		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth();
 	},

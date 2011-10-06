@@ -180,7 +180,10 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			}
 		}
 	},
-	getChildMinSize_: function (attr, cwgt) { //'w' for width or 'h' for height
+	getChildMinSize_: zk.ie9 ? function (attr, cwgt) { //'w' for width or 'h' for height
+		var zkc = zk(cwgt.$n().parentNode);
+		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth() + 1; // IE9+ bug ZK-483
+	} : function (attr, cwgt) { //'w' for width or 'h' for height
 		var zkc = zk(cwgt.$n().parentNode);
 		return attr == 'h' ? zkc.offsetHeight() : zkc.offsetWidth();
 	},
@@ -339,6 +342,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     				}
     				total += w.offsetWidth;
     			}
+				
+				// IE9+ bug ZK-483
+				if (zk.ie9 && this._hflexsz)
+					total = Math.max(this._hflexsz, total);
+					
     			n.style.width = jq.px0(total);
 			} else {
     			var max = 0;

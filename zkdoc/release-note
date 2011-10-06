@@ -51,7 +51,8 @@ ZK 5.0.9
   ZK-482: The horizontal scrollbar of Listbox won't be sync when after sort
   ZK-485: setVisible(false) of listitem is not work if the height of listbox is specified
   ZK-489: The layout of the vflex min is wrong when Listbox with rows without listhead 
-  ZK-480: Add a draggable item to tree will cause js error 
+  ZK-480: Add a draggable item to tree will cause js error
+  ZK-483: hflex=min causes unexpected word wrapping (IE9 only)
 
 	--------
 Aug 31, 2011
