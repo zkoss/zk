@@ -1,0 +1,21 @@
+<test tags="B50-ZK-483.zul,A,E,Div,Borderlayout,Hlayout,Label,Hflex,Min,IE9">
+	<case id="HflexMin">
+		<server><!--
+<zk>
+	You should see the following three cases that "Groupbox Content" must be aligned at the same line,
+	not two lines (IE9+ only)
+	<separator />
+	<div hflex="min">Groupbox Content</div>
+	<separator />
+	<hlayout hflex="min">Groupbox Content</hlayout>
+	<separator />
+	<borderlayout hflex="min" vflex="min">
+		<center hflex="min">Groupbox Content</center>
+	</borderlayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>
