@@ -282,18 +282,22 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		_selected = selected;
 	}
 	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) {
-			smartUpdate("visible", visible);
-			final Listbox listbox = (Listbox) getParent();
-			if (listbox != null) {
-				if (listbox.inSelectMold())
-					listbox.invalidate();
-				final Listgroup g = listbox.getListgroupAt(getIndex());
-				if (g == null || g.isOpen())
-					listbox.addVisibleItemCount(visible ? 1 : -1);
-			}
+		if (isVisible() == visible)
+			return visible;
+		
+		final boolean result = super.setVisible(visible);
+		final Listbox listbox = (Listbox) getParent();
+		if (listbox != null) {
+			if (listbox.inSelectMold())
+				listbox.invalidate();
+			final Listgroup g = listbox.getListgroupAt(getIndex());
+			if (g == null || g.isOpen())
+				listbox.addVisibleItemCount(visible ? 1 : -1);
 		}
-		return super.setVisible(visible);
+
+		// Bug ZK-485, send after invoking listbox.addVisibleItemCount()
+		smartUpdate("visible", visible);
+		return result;
 	}
 
 	protected void smartUpdate(String name, Object value) { //make it accessible in this package

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-485.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  6 09:45:54 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the hide/show button, then it should work as expected.
+	<button label="hide/show listitem">
+		<attribute name="onClick">
+			li.visible = !li.visible;
+		</attribute>
+	</button>
+	<listbox height="100px">
+		<listitem id="li">
+			<listcell id="lc" label="list cell">
+				<div id="div">div</div>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>
