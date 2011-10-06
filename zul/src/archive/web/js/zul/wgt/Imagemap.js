@@ -16,6 +16,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An image map.
  */
 zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
+	$define: {
+		width: function (v) { // B50-ZK-478
+			var n = this.getImageNode();
+			if (n)
+				n.style.width = v;
+		},
+		height: function (v) { // B50-ZK-478
+			var n = this.getImageNode();
+			if (n)
+				n.style.height = v;
+		}
+	},
 	bind_: function () {
 		this.$supers(zul.wgt.Imagemap, 'bind_', arguments);
 
@@ -55,7 +67,17 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		img.isMap = !bArea;
 	},
 	contentAttrs_: function () {
-		var attr = this.$supers('contentAttrs_', arguments);
+		var attr = this.$supers('contentAttrs_', arguments),
+			w = this._width,
+			h = this._height;
+		if (w || h) { // B50-ZK-478
+			attr += ' style="';
+			if (w)
+				attr += 'width:' + w + ';'
+			if (h)
+				attr += 'height:' + h + ';'
+			attr += '"';
+		}
 		return attr +(this.firstChild ? ' usemap="#' + this.uuid + '-map"':
 			' ismap="ismap"');
 	},

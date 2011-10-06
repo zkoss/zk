@@ -1,0 +1,16 @@
+<!--
+	B50-ZK-478.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Oct 6 15:55:59 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>The Imagemap size should be 300px by 300px.</div>
+	<imagemap width="300px" height="300px" src="/resource/image/zk-logo.gif" />
+</zk>
