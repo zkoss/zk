@@ -95,15 +95,17 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		hgh = tbx.style.height;
 		if (hgh && hgh != "auto") {
 			if (!tabbox.inAccordionMold()) {
-				var n = this.$n();
-				hgh = tabbox.isHorizontal() ?
+				var n = this.$n(),
+					isHor = tabbox.isHorizontal();
+				hgh = isHor ?
 					zk(n.parentNode).vflexHeight(): n.parentNode.clientHeight;
 					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
 				if (zk.ie8)
 					hgh -= 1; // show the bottom border
 				zk(n).setOffsetHeight(hgh);
 
-				if (zk.ie6_) {
+				// Bug ZK-473
+				if (zk.ie6_ && isHor) {
 					var s = this.$n('cave').style,
 					z = s.zoom;
 					s.zoom = 1;
