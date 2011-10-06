@@ -1,0 +1,88 @@
+<!-- B50-ZK-454.ztl.java
+
+	Purpose:for testing B50-ZK-454.ztl .
+
+	Description:
+
+	History:
+		10, 5, 2011 12:20:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-454.zul,A,E,Tabbox,Grid,IE">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				Please click the following buttons by 1, 2, and 3.
+				<separator/>
+				Then you shouldn't see any JS error.
+				<tabbox id="tab">
+					<tabs id="tabs"/>
+					<tabpanels id="tps" />
+				</tabbox>
+				<grid id="grid" />
+				<button id="btn1" label="1">
+					<attribute name="onClick">
+					tabs.appendChild(new Tab("x"));
+					tabs.appendChild(new Tab("y"));
+					Tabpanel tp = new Tabpanel();
+					tp.appendChild(new Label("x"));
+					Tabpanel tp1 = new Tabpanel();
+					tp1.appendChild(new Label("xx"));
+					tps.appendChild(tp);
+					tps.appendChild(tp1);
+					</attribute>
+				</button>
+				
+				<button id="btn2" label="2">
+					<attribute name="onClick">
+					tabs.getChildren().clear();
+					tps.getChildren().clear();
+					tabs.appendChild(new Tab("x"));
+					tabs.appendChild(new Tab("y"));
+					Tabpanel tp = new Tabpanel();
+					tp.appendChild(new Label("x"));
+					Tabpanel tp1 = new Tabpanel();
+					tp1.appendChild(new Label("xx"));
+					tps.appendChild(tp);
+					tps.appendChild(tp1);
+					//tab.invalidate(); //workaround
+					</attribute>
+				</button>
+				<button id="btn3" label="3">
+					<attribute name="onClick">
+					Columns cls = new Columns();
+					Column c1 = new Column("x");
+					Column c2 = new Column("x");
+					Column c3 = new Column("x");
+					Column c4 = new Column("x");
+					cls.setParent(grid);
+					c1.setParent(cls);
+					c2.setParent(cls);
+					c3.setParent(cls);
+					c4.setParent(cls);
+					</attribute>
+				</button>
+				
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(btn1);
+			waitResponse();
+			verifyFalse(jq(".z-error").exists());
+
+			click(btn2);
+			waitResponse();
+			verifyFalse(jq(".z-error").exists());
+
+			click(btn3);
+			waitResponse();
+			verifyFalse(jq(".z-error").exists());
+		]]></client>
+	</case>
+</test>

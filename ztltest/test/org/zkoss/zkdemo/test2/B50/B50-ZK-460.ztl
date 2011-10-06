@@ -1,0 +1,64 @@
+<!-- B50-ZK-460.ztl.java
+
+	Purpose:for testing B50-ZK-460.ztl .
+
+	Description:
+
+	History:
+		10, 5, 2011 13:00:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-460.zul,A,E,Listbox,Tree,Spinner,Timebox,BI">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				<div>Click on the up/down button of Spinner/Timebox. 
+				The value should NOT be shown immediately on the right. 
+				(i.e. onChange shall NOT be fire upon clicking on up/down button.)</div>
+				<listbox width="350px">
+					<listitem>
+						<listcell>
+							<spinner onChange='lc1.value = event.value' />
+						</listcell>
+						<listcell>
+							<textbox  id="lc1" />
+						</listcell>
+					</listitem>
+					<listitem>
+						<listcell>
+							<timebox onChange='lc2.value = event.value' />
+						</listcell>
+						<listcell>
+							<textbox  id="lc2" />
+						</listcell>
+					</listitem>
+				</listbox>
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			click(jq("div.z-spinner-btn-upper"));
+			waitResponse();
+			click(jq("div.z-spinner-btn-upper"));
+			waitResponse();
+			verifyTrue(lc1.$n().get("value").length() == 0);
+			click(jq("div.z-spinner-btn-lower"));
+			waitResponse();
+			verifyTrue(lc1.$n().get("value").length() == 0);
+
+			click(jq("div.z-timebox-btn-upper"));
+			waitResponse();
+			click(jq("div.z-timebox-btn-upper"));
+			waitResponse();
+			verifyTrue(lc2.$n().get("value").length() == 0);
+			click(jq("div.z-timebox-btn-lower"));
+			waitResponse();
+			verifyTrue(lc2.$n().get("value").length() == 0);
+		]]></client>
+	</case>
+</test>
