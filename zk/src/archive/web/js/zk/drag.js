@@ -602,8 +602,9 @@ String scroll; //DOM Element's ID</code></pre>
 		// and ZK-484 (get the pos variable after invoking ignoredrag function)
 		var pos = zk(node).cmOffset(),
 			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
-		if ((ofs[0] > (v=node.clientWidth) && node.offsetWidth > v + 3)
-		|| (ofs[1] > (v=node.clientHeight) && node.offsetHeight > v + 3)) //scrollbar
+		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
+		if ( (v=node.clientWidth) && ofs[0] > v && node.offsetWidth > v + 3
+		|| (v=node.clientHeight) && ofs[1] > v && node.offsetHeight > v + 3) //scrollbar
 			return;
 
 		this.offset = ofs;

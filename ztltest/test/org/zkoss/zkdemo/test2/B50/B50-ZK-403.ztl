@@ -62,8 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			for (int i = 0;i < cbs.length;i ++) {
 				click(cbs[i].$n("real"));
 				keyPress(cbs[i].$n("real"), "a");
-				waitResponse();
-				waitResponse();
+				sleep(2000);
 				verifyTrue(parseInt(cbs[i].$n("cave").firstChild().firstChild().eval("childNodes.length")) == 2);
 			}
 		]]></client>

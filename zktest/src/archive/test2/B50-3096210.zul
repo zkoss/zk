@@ -1,5 +1,6 @@
 <window >
 <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+<custom-attributes org.zkoss.zul.grid.rod="true"/>
 <html><![CDATA[
 <ol>
 <li>Drag scrollbar handle down, pause(~1 sec, DONT release mouse), drag back to top immediately.</li>
@@ -16,4 +17,14 @@ ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(20000);
 <listheader label="Load on Demend" sort="auto"/>
 </listhead>
 </listbox>
+
+<zscript>
+ListModel strset1 = new org.zkoss.zktest.test2.grid.FakeListModel(20000);
+</zscript>
+
+<grid id="grid" width="200px" height="220px" model="&#36;{strset1}">
+<columns>
+<column label="Load on Demend" sort="auto"/>
+</columns>
+</grid>
 </window>

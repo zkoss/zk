@@ -1,0 +1,29 @@
+<!--
+	B50-ZK-452.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Oct 6 15:25:27 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>IE 9 only. The columns and cells should align.</div>
+	<grid width="500px" height="60px">
+		<columns>
+			<column width="80px" label="Name" />
+			<column hflex="1" label="Title" />
+			<column width="80px" label="Analyst" />
+			<column width="80px" label="Symbol" />
+			<column width="80px" label="Source" />
+		</columns>
+		<rows>
+			<row forEach="1,2">
+				<cell forEach="1,2,3,4,5"><label value="name1" /></cell>
+			</row>
+		</rows>
+	</grid>
+</zk>

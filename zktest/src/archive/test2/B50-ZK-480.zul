@@ -1,0 +1,24 @@
+<!--
+	B50-ZK-480.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Oct 6 11:23:35 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>Open the Treeitem. You should NOT see javascript error.</div>
+	<tree>
+		<treechildren>
+			<treeitem label="Item 1" open="false">
+				<treechildren>
+					<treeitem draggable="true" label="Item 2" />
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

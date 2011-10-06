@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-488.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  6 11:39:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Drag listitem from left to right</li>
+<li>Drag listitem from right to left</li>
+<li>The bug is fixed if do above without any problem.</li>
+</ol>
+]]></html>
+	<hbox>
+		<listbox droppable="true" width="100px" height="150px">
+			<attribute name="onDrop">
+				event.getDragged().setParent(self);
+			</attribute>
+			<listitem draggable="true">
+				<listcell label="list cell 1">
+					<div>div</div>
+				</listcell>
+			</listitem>
+		</listbox>
+		<separator spacing="20px" />
+		<listbox droppable="true" width="100px" height="150px">
+			<attribute name="onDrop">
+				event.getDragged().setParent(self);
+			</attribute>
+			<listitem draggable="true">
+				<listcell label="list cell 2">
+					<div>div</div>
+				</listcell>
+			</listitem>
+		</listbox>
+	</hbox>
+</zk>

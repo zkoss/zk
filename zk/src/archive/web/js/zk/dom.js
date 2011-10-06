@@ -201,6 +201,11 @@ zjq = function (jq) { //ZK extension
 	}
 
 zk.copy(zjq, {
+	//Returns the minimal width to hold the given cell called by getChildMinSize_
+	minWidth: function (el) {
+		return zk(el).offsetWidth();
+	},
+
 	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	fixOnResize: zk.$void, //overriden in domie.js to fix the window.onresize issue
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js

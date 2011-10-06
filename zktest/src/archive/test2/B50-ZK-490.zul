@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-490.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  6 17:32:29 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	1. Please scroll to the middle of the list, and then press the button "Refresh !".
+	<separator/>
+	2. You should see the list reset to the top of the list and display well(the first one should display "Option 0").
+	<button id="btnRefresh" label="Refresh !">
+		<attribute name="onClick">
+		 grid.setModel(new org.zkoss.zktest.test2.grid.FakeListModel(200));
+		</attribute>
+	</button>
+	<zscript>
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(2000);
+	</zscript>
+	<custom-attributes org.zkoss.zul.grid.rod="true"/>
+	<grid id="grid" width="200px" height="300px" model="&#36;{strset}">
+		<columns>
+			<column label="Load on Demend" sort="auto"/>
+		</columns>
+	</grid>
+	<separator/>
+	3. Drag scrollbar handle down, pause(~1 sec, DONT release mouse), drag back to top immediately.
+	<separator/>
+	4. If you see blank view, it is a bug!
+	<separator/>
+<zscript>
+ListModel strset1 = new org.zkoss.zktest.test2.grid.FakeListModel(20000);
+</zscript>
+
+<grid id="grid2" width="200px" height="220px" model="&#36;{strset1}">
+<columns>
+<column label="Load on Demend" sort="auto"/>
+</columns>
+</grid>
+</window>
+

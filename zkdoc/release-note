@@ -158,6 +158,14 @@ ZK 5.0.9
   ZK-475: bandpopup tab key works wrong
   ZK-473: Vflex attribute on tabpanel cannot works (fast model) 
   ZK-482: The horizontal scrollbar of Listbox won't be sync when after sort
+  ZK-485: setVisible(false) of listitem is not work if the height of listbox is specified
+  ZK-489: The layout of the vflex min is wrong when Listbox with rows without listhead 
+  ZK-480: Add a draggable item to tree will cause js error
+  ZK-483: hflex=min causes unexpected word wrapping (IE9 only)
+  ZK-452: hflex in grid failed in IE 9 only
+  ZK-467: hflex in Listbox failed in IE 9 only 
+  ZK-478: Imagemap and hflex="min" does not work 
+  ZK-490: Replace Model the display data is not up to date when Grid in ROD 
 
 	--------
 Aug 31, 2011

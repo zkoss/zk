@@ -1598,7 +1598,7 @@ public class Tree extends MeshElement {
 				item.setTreeNode(treeNode);
 				if (_model instanceof Selectable) {
 					final Object value = 
-						_model.getChild(treeNode.getParent(), item.indexOf());
+						_model.getChild(treeNode.getParent(), item.getIndex());
 					if (((Selectable) _model).getSelection().contains(value)) {
 						addItemToSelection(item);
 					}
@@ -1791,7 +1791,7 @@ public class Tree extends MeshElement {
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
 			if(curNode instanceof Treeitem){
-				al.add(new Integer(((Treeitem)curNode).indexOf()));
+				al.add(new Integer(((Treeitem)curNode).getIndex()));
 			}
 			curNode = curNode.getParent();
 		}

@@ -136,7 +136,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				if (hdf) hdf = hdf.nextSibling;
 				if (bdf) bdf = bdf.nextSibling;
 			}
-			if (zk.ie && everFlex) { //ie6/7 will generate horizontal/vertical bar, has to set extra bdfaker to zero pixel(it works) 
+			if (zk.ie < 8 && everFlex) { //ie6/7 will generate horizontal/vertical bar, has to set extra bdfaker to zero pixel(it works) 
 				if (hdf) hdf.style.width='0px';
 				if (bdf) bdf.style.width='0px';
 			}

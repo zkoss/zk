@@ -151,7 +151,11 @@ zk.override(jq.event, zjq._evt = {}, {
 });
 
 //IE: use query string if possible to avoid incomplete-request problem
-if (zk.ie < 8) {
+if (zk.ie >= 9)
+	zjq.minWidth = function (el) {
+		return zk(el).offsetWidth() + 1; //IE9/IE10: bug ZK-483: an extra pixel required
+	};
+else if (zk.ie < 8) {
 	zjq.fixOnResize = function (tmout) {
 		//IE6/7: it sometimes fires an "extra" onResize in loading
 		//so we have to filter it out (to improve performance)
