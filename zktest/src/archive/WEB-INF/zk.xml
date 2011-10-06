@@ -12,6 +12,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	
+	<library-property>
+	    <name>org.zkoss.web.classWebResource.cache.CSS.hours</name>
+	    <value>-1</value>
+	</library-property>
+	
+	<library-property>
+		<name>org.zkoss.zk.WPD.cache</name>
+		<value>false</value>
+	</library-property> 
+	
 	<!-- Defines the application's name -->
 	<preference>
 		<name>org.zkoss.zk.ui.WebApp.name</name>
