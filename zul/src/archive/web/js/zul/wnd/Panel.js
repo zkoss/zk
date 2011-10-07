@@ -668,15 +668,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var pc = this.panelchildren;
 		if (!pc || pc.z_rod || !this.isRealVisible()) 
 			return;
-		var body = pc.$n(),
-			wdh = this.$n().style.width;
-		if (body && wdh && wdh != "auto") {
+		var body = pc.$n(), pcst, pcwd;
+		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != "auto") {
 			var w = this.$n().offsetWidth, 
 				cn = body;
 			if (this._rounded())
 				for (var i = 0; i < 3; i++)
 					w = zk(cn = cn.parentNode).revisedWidth(w); // cl, cr, cm
-			body.style.width = zk(body).revisedWidth(w) + 'px';
+			pcst.width = zk(body).revisedWidth(w) + 'px';
 		}
 	},
 	//whether rounded border is required
