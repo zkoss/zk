@@ -207,7 +207,7 @@ public class IDOMs {
 	 * @param elems the collection of elements
 	 * @param val the value which could be an object, an array or a collection
 	 */
-	public static final void setContents(Collection elems, Object val) {
+	public static final void setContents(Collection<Element> elems, Object val) {
 		Object[] ary = null;
 		if (val instanceof Object[]) {
 			ary = (Object[])val;
@@ -217,9 +217,9 @@ public class IDOMs {
 			ary = new Object[] {val};
 		}
 
-		Iterator it = elems.iterator();
+		Iterator<Element> it = elems.iterator();
 		for (int j = 0; it.hasNext(); ++j) {
-			((Element)it.next()).setContent(j < ary.length ? ary[j]: null);
+			it.next().setContent(j < ary.length ? ary[j]: null);
 		}
 	}
 

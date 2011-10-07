@@ -62,5 +62,5 @@ public interface XelContext {
 	/** Returns all attributes
 	 * @since 5.0.0
 	 */
-	public Map getAttributes();
+	public Map<String, Object> getAttributes();
 }

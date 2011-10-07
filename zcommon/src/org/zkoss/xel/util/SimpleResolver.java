@@ -36,7 +36,7 @@ public class SimpleResolver implements VariableResolver, java.io.Serializable {
 	/** The parent resolver. */
 	private VariableResolver _parent;
 	/** The variable maps. */
-	protected Map _vars;
+	protected Map<String, ?> _vars;
 
 	/** Constructs a resolver. */
 	public SimpleResolver() {
@@ -52,14 +52,14 @@ public class SimpleResolver implements VariableResolver, java.io.Serializable {
 	 * @param parent the parent resolver (null means ignored).
 	 * @param vars the object map (null means ignored)
 	 */
-	public SimpleResolver(VariableResolver parent, Map vars) {
+	public SimpleResolver(VariableResolver parent, Map<String, ?> vars) {
 		_parent = parent;
 		_vars = vars;
 	}
 	/** Constructs a resolver with an object map.
 	 * @param vars the object map (null means ignored)
 	 */
-	public SimpleResolver(Map vars) {
+	public SimpleResolver(Map<String, ?> vars) {
 		this(null, vars);
 	}
 

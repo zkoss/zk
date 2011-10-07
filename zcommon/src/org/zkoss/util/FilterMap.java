@@ -42,11 +42,11 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  * @since 5.0.7
  */
-public class FilterMap extends AbstractMap {
-	private final Map _map;
-	private final Filter _filter;
+public class FilterMap<K, V> extends AbstractMap<K, V> {
+	private final Map<K, V> _map;
+	private final Filter<V> _filter;
 
-	public FilterMap(Map map, Filter filter) {
+	public FilterMap(Map<K, V> map, Filter<V> filter) {
 		if (map == null || filter == null)
 			throw new IllegalArgumentException("null");
 		_map = map;
@@ -56,12 +56,12 @@ public class FilterMap extends AbstractMap {
 	/** Returns the original map being filtered.
 	 * That is, the map passed to the constructor.
 	 */
-	public Map getOrigin() {
+	public Map<K, V> getOrigin() {
 		return _map;
 	}
 
 	//@Override
-	public Object get(Object key) {
+	public V get(Object key) {
 		return _filter.filter(key, _map.get(key));
 	}
 	//@Override
@@ -70,47 +70,44 @@ public class FilterMap extends AbstractMap {
 	}
 
 	//@Override
-	public Set entrySet() {
+	public Set<Map.Entry<K,V>> entrySet() {
 		return new EntrySet();
 	}
-	private class EntrySet extends AbstractSet {
-		private final Set _set;
+	private class EntrySet extends AbstractSet<Map.Entry<K,V>> {
+		private final Set<Map.Entry<K,V>> _set;
 
 		private EntrySet() {
 			_set = _map.entrySet();
 		}
 		public boolean contains(Object o) {
-			return o instanceof Entry
+			return o instanceof Map.Entry
 				&& _set.contains(((Entry)o)._me);
 		}
 		public int size() {
 			return _map.size();
 		}
-		public Iterator iterator() {
+		public Iterator<Map.Entry<K,V>> iterator() {
 			return new EntryIter(_set.iterator());
+		}
+		public void clear() {
+			_map.clear();
 		}
 
 		public String toString() {
 			return _set.toString();
 		}
-		public int hashCode() {
-			return _set.hashCode();
-		}
-		public boolean equals(Object o) {
-			return o instanceof EntrySet && _set.equals(((EntrySet)o)._set);
-		}
 	}
-	private class EntryIter implements Iterator {
-		private final Iterator _it;
+	private class EntryIter implements Iterator<Map.Entry<K,V>> {
+		private final Iterator<Map.Entry<K,V>> _it;
 
-		private EntryIter(Iterator it) {
+		private EntryIter(Iterator<Map.Entry<K,V>> it) {
 			_it = it;
 		}
 		public boolean hasNext() {
 			return _it.hasNext();
 		}
-		public Object next() {
-			return new Entry((Map.Entry)_it.next());
+		public Map.Entry<K,V> next() {
+			return new Entry(_it.next());
 		}
 		public void remove() {
 			throw new UnsupportedOperationException("readonly");
@@ -119,27 +116,24 @@ public class FilterMap extends AbstractMap {
 		public String toString() {
 			return _it.toString();
 		}
-		public int hashCode() {
-			return _it.hashCode();
-		}
-		public boolean equals(Object o) {
-			return o instanceof EntryIter && _it.equals(((EntryIter)o)._it);
-		}
 	}
-	private class Entry implements Map.Entry {
-		private final Map.Entry _me;
+	private class Entry implements Map.Entry<K, V> {
+		private final Map.Entry<K,V> _me;
 
-		private Entry(Map.Entry me) {
+		private Entry(Map.Entry<K,V> me) {
 			_me = me;
 		}
-		public Object getKey() {
+		public K getKey() {
 			return _me.getKey();
 		}
-		public Object getValue() {
+		public V getValue() {
 			return _filter.filter(_me.getKey(), _me.getValue());
 		}
-		public Object setValue(Object value) {
+		public V setValue(V value) {
 			throw new UnsupportedOperationException("readonly");
+		}
+		public void clear() {
+			_map.clear();
 		}
 
 		public String toString() {
@@ -149,19 +143,31 @@ public class FilterMap extends AbstractMap {
 			return _me.hashCode();
 		}
 		public boolean equals(Object o) {
-			final Entry e;
-			return o instanceof Entry && _me.equals(((Entry)o)._me);
+			if (!(o instanceof Map.Entry))
+				return false;
+			Map.Entry e = (Map.Entry)o;
+			Object k1 = getKey();
+			Object k2 = e.getKey();
+			if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+				Object v1 = getValue();
+				Object v2 = e.getValue();
+				if (v1 == v2 || (v1 != null && v1.equals(v2)))
+					return true;
+			}
+			return false;
 		}
 	}
 
 	/** Filters the given value (to evaluate when the value is retrieved).
 	 */
-	public static interface Filter {
+	public static interface Filter<V> {
 		/** Called to filter a value.
-		 * @param key the key associated
+		 * @param key the key associated.
+		 * Notice that this method is called each time Map.get() is called,
+		 * even if the given key is not an instance of K.
 		 * @param value the value to filter (i.e., to evaluate)
 		 */
-		public Object filter(Object key, Object value);
+		public V filter(Object key, V value);
 	}
 
 	//@Override

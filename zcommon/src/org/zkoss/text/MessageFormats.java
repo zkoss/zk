@@ -172,7 +172,7 @@ public class MessageFormats {
 	 * @see #parseByName
 	 */
 	public static final String
-	formatByName(String pattern, Map mapping, Locale locale) {
+	formatByName(String pattern, Map<String, ?> mapping, Locale locale) {
 		final NameInfo ni = parseByName(pattern);
 		final Object[] args = new Object[ni.names.length];
 		for (int j = args.length; --j >= 0;)
@@ -185,7 +185,7 @@ public class MessageFormats {
 	 *
 	 * @see #parseByName
 	 */
-	public static final String formatByName(String pattern, Map mapping) {
+	public static final String formatByName(String pattern, Map<String, ?> mapping) {
 		return formatByName(pattern, mapping, null);
 	}
 }

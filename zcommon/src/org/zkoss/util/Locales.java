@@ -186,7 +186,7 @@ public class Locales {
 	 * By fallback, we mean will try without variant and country.
 	 * Example, if locale is zh_TW, it will try zh_TW and then zh.
 	 */
-	public static Locale getByFallback(Collection values, Locale locale) {
+	public static Locale getByFallback(Collection<Locale> values, Locale locale) {
 		if (values.contains(locale))
 			return locale;
 
@@ -206,8 +206,7 @@ public class Locales {
 
 		//search the first one that matches partially
 		Locale rtn = null;
-		for (final Iterator it = values.iterator(); it.hasNext();) {
-			final Locale l = (Locale)it.next();
+		for (Locale l: values) {
 			if (l.getLanguage().equals(lang)) {
 				//case 1: it matches all but the last element -> done
 				if (var == null || var.length() == 0

@@ -71,7 +71,7 @@ public class XelContextProxy implements XelContext {
 	public Object removeAttribute(String name) {
 		return _ctx.removeAttribute(name);
 	}
-	public Map getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return _ctx.getAttributes();
 	}
 }
