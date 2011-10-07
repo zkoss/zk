@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
 /**
- * An addition interface to {@link Sessions} for implementation.
+ * An additional utilities for implementation related to {@link Session}.
  *
  * @author tomyeh
  */
