@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<html><![CDATA[
 				<h4>Spring Security</h4>
 				<p>This is the second article in a series regarding how to make Spring Security 2.0 work with 
-				ZK Ajax framework. In the previous <a href="http://www.zkoss.org/smalltalks/zkspringsec1/">article</a>, we only discussed 
+				ZK framework. In the previous <a href="http://books.zkoss.org/wiki/Small_Talks/2010/April/Ajax_Based_Login_with_ZK_and_Spring_Security_System">article</a>, we only discussed 
 				about protecting traditional <i>page-based</i> Web applications. In this article, we will focus 
 				on how to deal with <i>Ajax</i> kind of application.</p>
 				<p>Like the previous article, I will focus on the steps to "<b>make it work</b>". If you are 
@@ -33,11 +33,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<object id="obj1" width="720" height="560"
 			codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
 			classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000">
-			<param value="http://www.zkoss.org/smalltalks/zkspringsec2/zkspringsec2.swf" name="movie" />
+			<param value="http://books.zkoss.org/images/8/8c/Zkspringsec2.swf" name="movie" />
 			<param value="High" name="quality" />
 			<embed align="middle" width="720" height="560" name="obj1" type="application/x-shockwave-flash"
 			pluginspage="http://www.macromedia.com/go/getflashplayer"
-			src="http://www.zkoss.org/smalltalks/zkspringsec2/zkspringsec2.swf" /> </object>
+			src="http://books.zkoss.org/images/8/8c/Zkspringsec2.swf" /> </object>
 			<h5>Content:</h5>
 			<ul>
 				<li>The Example</li>
@@ -47,7 +47,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<ul>
 		]]></html>
 	</vbox>
-	For more information, see our
-	<toolbarbutton id="target" label="Smalltalk" target="Smalltalk"
-		href="http://zkoss.org/smalltalks/zkspringsec2/" />
 </window>

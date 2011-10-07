@@ -22,8 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<h4>Spring Webflow</h4>
 				<h5>Integrating ZK and Spring Web Flow</h5>
 				<p>This is the third article in a series regarding how to make Spring work with ZK Ajax framework. 
-				In the previous articles, <a href="http://www.zkoss.org/smalltalks/zkspringsec1/">this</a> and 
-				<a href="http://www.zkoss.org/smalltalks/zkspringsec2/">this</a>, 
+				In the previous articles, <a href="http://books.zkoss.org/wiki/Small_Talks/2010/April/Ajax_Based_Login_with_ZK_and_Spring_Security_System">this</a>, 
 				we have discussed about how to secure ZK pages, ZK events, and Spring backend service methods using 
 				ZK and Spring Security 2.0 frameworks. In this article, we will demonstrate with an example the way 
 				to navigate a work flow with ZK, Spring Security, Spring MVC, and Spring Web Flow.</p>
@@ -39,12 +38,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<object id="obj1" width="786" height="700"
     codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
     classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000">
-    <param value="http://www.zkoss.org/smalltalks/zkspringwf/zkspringwf.swf" name="movie" />
+    <param value="http://books.zkoss.org/images/1/1c/Zkspringwf.swf" name="movie" />
     <param value="High" name="quality" />
     <embed align="middle" width="786" height="700" name="obj1"
         type="application/x-shockwave-flash"
         pluginspage="http://www.macromedia.com/go/getflashplayer"
-        src="http://www.zkoss.org/smalltalks/zkspringwf/zkspringwf.swf" /> </object>
+        src="http://books.zkoss.org/images/1/1c/Zkspringwf.swf" /> </object>
 			<h5>Content:</h5>
 			<ul>
 				<li>The Example</li>
@@ -65,5 +64,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</vbox>
 	For more information, see our
 	<toolbarbutton id="target" label="Smalltalk" target="zksandbox"
-		href="http://www.zkoss.org/smalltalks/zkspringwf/" />
+		href="http://books.zkoss.org/wiki/Small_Talks/2008/December/Integrating_ZK_and_Spring_Web_Flow" />
 </window>

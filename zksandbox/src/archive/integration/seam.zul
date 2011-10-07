@@ -33,17 +33,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			]]></html>		
 		<separator bar="true" />
 		<html><![CDATA[
-			<image src="http://www.zkoss.org/smalltalks/zkseam/1.png" />
+			<image src="http://books.zkoss.org/images/4/4a/1.png" />
 			<h5>Live Demo</h5>
 			<object id="obj1" width="640" height="300"
 			codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
 			classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000">
-			<param value="http://www.zkoss.org/smalltalks/zkseam/part2demo.swf" name="movie" />
+			<param value="http://books.zkoss.org/images/a/a3/Part2demo.swf" name="movie" />
 			<param value="High" name="quality" />
 			<embed align="middle" width="640" height="300" name="obj1"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.macromedia.com/go/getflashplayer"
-				src="http://www.zkoss.org/smalltalks/zkseam/part2demo.swf" /> </object>
+				src="http://books.zkoss.org/images/a/a3/Part2demo.swf" /> </object>
 			<h5>Content:</h5>
 			<ul>
 				<li>Demo Installation</li>
@@ -56,5 +56,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</vbox>
 	For more information, see our
 	<toolbarbutton id="target" label="Smalltalk" target="zksandbox"
-		href="http://www.zkoss.org/smalltalks/zkseam/zkseam.dsp" />
+		href="http://books.zkoss.org/wiki/Small_Talks/2007/August/How_to_Integrate_ZK_with_Seam" />
 </window>

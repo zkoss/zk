@@ -6,7 +6,7 @@
 	<event start="Oct 15 2008 11:00:00 GMT" end="Nov 1 2008 09:00:00 GMT"
 		isDuration="true" title="Writing Style Guide" image="http://simile.mit.edu/images/csail-logo.gif">
 		A few days to write some documentation for
-		<a href="http://www.zkoss.org/doc/styleguide">Timeline</a>
+		<a href="http://books.zkoss.org/wiki/ZK_Style_Guide">Timeline</a>
 		.
 	</event>
 	<event start="Oct 23 2008 06:12:33 GMT" title="Trip to New York"

@@ -27,7 +27,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				a <a target="zksandbox" href="http://static.springframework.org/spring/docs/2.5.x/reference/orm.html">Spring
 				JPA</a> database backend. The sample application
 				"ZkToDo2"&nbsp;demonstrates the&nbsp;MVC&nbsp;approach
-				documented by the <a target="zksandbox" href="http://www.zkoss.org/smalltalks/mvc3/">MVC
+				documented by the <a target="zksandbox" href="http://books.zkoss.org/wiki/Small_Talks/2008/August/ZK_MVC_Made_Easy">MVC
 				Patterns</a>
 				smalltalk. The MVC approach allows you to centralize application logic
 				in one or more classes resulting in code which is easier to maintain
@@ -55,5 +55,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</vbox>
 	For more information, see our
 	<toolbarbutton id="target" label="Smalltalk" target="zksandbox"
-		href="http://www.zkoss.org/smalltalks/mvc4/" />
+		href="http://books.zkoss.org/wiki/Small_Talks/2008/November/ZK_With_Spring_JPA_And_A_Model-View-Controller_Pattern" />
 </window>
