@@ -1,0 +1,51 @@
+<test tags="B50-3184369.zul,A,E,Hflex,table,IE8">
+	<case id="NativeHflex">
+		<server><!--
+<?page title="Login" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="xhtml" xmlns:n="native">
+Youd should see the textbox shall be the same width
+<window title="Login" border="normal" width="545px">
+<h:div>
+<h:table border="0" cellpadding="5" width="100%">
+<h:tbody>
+<h:tr>
+<h:td width="110px">
+<label value="Organization" />
+</h:td>
+<h:td>
+<textbox hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td>
+<label value="Username"/>
+</h:td>
+<h:td>
+<textbox hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td>
+<label value="Password"/>
+</h:td>
+<h:td>
+<textbox type="password" hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td></h:td>
+<h:td align="right">
+<button label="Login"/>
+</h:td>
+</h:tr>
+</h:tbody>
+</h:table>
+</h:div>
+</window>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

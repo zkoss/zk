@@ -1,0 +1,16 @@
+<test tags="B50-3141549.zul,B,E,Hlayout,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+You shall see a blue (at left) and a yellow block (at right) below, and the size is 1:2
+<hlayout hflex="1" vflex="1">
+<div style="background: blue" hflex="1" vflex="1"/>
+<div style="background: yellow" hflex="2" vflex="1"/>
+</hlayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

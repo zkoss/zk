@@ -11,6 +11,7 @@ B50-ZK-206.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+You should see the second column is fitted as its content, and the rest space is assigned to the third column
 	<listbox width="800px">
 		<listhead>
 			<listheader label="Product" width="102px" />
