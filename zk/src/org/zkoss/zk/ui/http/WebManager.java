@@ -61,6 +61,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -206,6 +207,7 @@ public class WebManager {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
 		}
+		WebAppsCtrl.setCurrent(_wapp);
 		((WebAppCtrl)_wapp).init(_ctx, config);
 
 		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
@@ -269,6 +271,7 @@ public class WebManager {
 	public void destroy() {
 		_ctx.removeAttribute(ATTR_WEB_MANAGER);
 		((WebAppCtrl)_wapp).destroy();
+		WebAppsCtrl.setCurrent(null);
 	}
 
 	/** Returns the handler to retrieve resource from class path,
