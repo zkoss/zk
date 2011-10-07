@@ -116,7 +116,7 @@ public class Clients {
 	 * at the browser.
 	 * @since 5.0.0
 	 */
-	public static final void clearWrongValue(List comps) {
+	public static final void clearWrongValue(List<Component> comps) {
 		response(new AuClearWrongValue(comps)); //append, not overwrite
 	}
 	/** Closes the error message of the specified components, if any,

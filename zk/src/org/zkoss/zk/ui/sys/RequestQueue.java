@@ -47,7 +47,7 @@ public interface RequestQueue {
 	 * to queue. If the component is not found or does not belong to
 	 * the current execution, it will be ignored.
 	 */
-	public void addRequests(Collection requests);
+	public void addRequests(Collection<AuRequest> requests);
 
 	/** Adds a request ID that uniquely identifies a request for
 	 * performance measuarement {@link org.zkoss.zk.ui.util.PerformanceMeter}.

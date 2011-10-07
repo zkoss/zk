@@ -526,7 +526,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			(the caller of removeComponent has to reset)
 		 else if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
 			for (RecycleInfo ri: _uuidRecycle) {
-				final List uuids = ri.uuids;
+				final List<String> uuids = ri.uuids;
 				if (uuids.remove(uuid)) {
 					if (uuids.isEmpty())
 						it.remove();

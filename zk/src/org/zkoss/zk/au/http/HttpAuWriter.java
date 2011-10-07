@@ -149,8 +149,8 @@ public class HttpAuWriter implements AuWriter{
 	public void write(AuResponse response) throws IOException {
 		_rs.add(AuWriters.toJSON(response));
 	}
-	public void write(Collection responses) throws IOException {
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			write((AuResponse)it.next());
+	public void write(Collection<AuResponse> responses) throws IOException {
+		for (AuResponse response: responses)
+			write(response);
 	}
 }

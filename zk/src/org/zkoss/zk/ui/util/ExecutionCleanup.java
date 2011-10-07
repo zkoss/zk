@@ -50,6 +50,6 @@ public interface ExecutionCleanup {
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
 	 */
-	public void cleanup(Execution exec, Execution parent, List errs)
+	public void cleanup(Execution exec, Execution parent, List<Throwable> errs)
 	throws Exception;
 }

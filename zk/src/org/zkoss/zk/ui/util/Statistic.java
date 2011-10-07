@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An implementation of {@link Monitor} to accumulate statistic data
@@ -115,7 +116,7 @@ public class Statistic implements Monitor {
 	synchronized public void desktopDestroyed(Desktop desktop) {
 		--_actdt;
 	}
-	synchronized public void beforeUpdate(Desktop desktop, List requests) {
+	synchronized public void beforeUpdate(Desktop desktop, List<AuRequest> requests) {
 		++_nupd; ++_actupd;
 	}
 	synchronized public void afterUpdate(Desktop desktop) {

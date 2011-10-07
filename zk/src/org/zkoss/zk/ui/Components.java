@@ -165,7 +165,7 @@ public class Components {
 			add(list, from + j, ary[j]);
 	}
 	@SuppressWarnings("unchecked")
-	private static void add(List list, int index, Object o) {
+	private static void add(List list, int index, Object o) { //to minimize the unchecked range
 		list.add(index, o);
 	}
 
@@ -240,9 +240,9 @@ public class Components {
 	/** Returns a collection of visible children.
 	 * <p>The performance of the returned collection's size() is NO GOOD.
 	 */
-	public static Collection getVisibleChildren(Component comp) {
-		final Collection children = comp.getChildren();
-		return new AbstractCollection() {
+	public static Collection<Component> getVisibleChildren(Component comp) {
+		final Collection<Component> children = comp.getChildren();
+		return new AbstractCollection<Component>() {
 			public int size() {
 				int size = 0;
 				for (Iterator it = children.iterator(); it.hasNext();) {
@@ -251,16 +251,16 @@ public class Components {
 				}
 				return size;
 			}
-			public Iterator iterator() {
-				return new Iterator() {
-					final Iterator _it = children.iterator();
+			public Iterator<Component> iterator() {
+				return new Iterator<Component>() {
+					final Iterator<Component> _it = children.iterator();
 					Component _next;
 					public boolean hasNext() {
 						if (_next != null) return true;
 						_next = getNextVisible(false);
 						return _next != null;
 					}
-					public Object next() {
+					public Component next() {
 						if (_next != null) {
 							final Component c = _next;
 							_next = null;
@@ -938,11 +938,10 @@ public class Components {
 		
 		private void wireFellows(IdSpace idspace) {
 			//inject fellows
-			final Collection fellows = idspace.getFellows();
-			for(final Iterator it = fellows.iterator(); it.hasNext();) {
-				final Component xcomp = (Component) it.next();
+			final Collection<Component> fellows = idspace.getFellows();
+			for(Component xcomp: fellows)
 				injectFellow(xcomp);
-			}
+
 			//inject space owner ancestors
 			IdSpace xidspace = idspace;
 			if (xidspace instanceof Component) {

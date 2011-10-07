@@ -236,15 +236,13 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		if (!_resumed.isEmpty()) { //no need to sync (better performance)
-			final List list;
+			final List<EventProcessingThreadImpl> list;
 			synchronized (_resumed) {
-				list = (List)_resumed.remove(desktop);
+				list = _resumed.remove(desktop);
 			}
 			if (list != null) {
 				synchronized (list) {
-					for (Iterator it = list.iterator(); it.hasNext();) {
-						final EventProcessingThreadImpl evtthd =
-							(EventProcessingThreadImpl)it.next();
+					for (EventProcessingThreadImpl evtthd: list) {
 						evtthd.ceaseSilently("Destroy desktop "+desktop);
 						config.invokeEventThreadResumeAborts(
 							evtthd.getComponent(), evtthd.getEvent());
@@ -578,7 +576,7 @@ public class UiEngineImpl implements UiEngine {
 	/** Called when this engine renders the given components.
 	 * @param comps the collection of components that have been redrawn.
 	 */
-	protected void afterRenderComponents(Collection comps) {
+	protected void afterRenderComponents(Collection<Component> comps) {
 		getExtension().afterRenderComponents(comps);
 	}
 	private Extension getExtension() {
@@ -1153,7 +1151,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final String pfReqId =
 			pfmeter != null ? meterAuStart(pfmeter, exec, startTime): null;
-		Collection doneReqIds = null; //request IDs that have been processed
+		Collection<String> doneReqIds = null; //request IDs that have been processed
 		AbortingReason abrn = null;
 		try {
 			final RequestQueue rque = desktopCtrl.getRequestQueue();
@@ -1531,7 +1529,7 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			//error recover
 			synchronized (map) {
-				final List list = (List)map.get(mutex);
+				final List<EventProcessingThreadImpl> list = map.get(mutex);
 				if (list != null) {
 					list.remove(evtthd);
 					if (list.isEmpty()) map.remove(mutex);
@@ -2371,11 +2369,10 @@ public class UiEngineImpl implements UiEngine {
 	 * at the server
 	 */
 	private static void meterAuServerComplete(PerformanceMeter pfmeter,
-	Collection pfReqIds, Execution exec) {
+	Collection<String> pfReqIds, Execution exec) {
 		final StringBuffer sb = new StringBuffer(256);
 		long time = System.currentTimeMillis();
-		for (Iterator it = pfReqIds.iterator(); it.hasNext();) {
-			final String pfReqId = (String)it.next();
+		for (String pfReqId: pfReqIds) {
 			if (sb.length() > 0) sb.append(' ');
 			sb.append(pfReqId);
 
@@ -2452,14 +2449,14 @@ public class UiEngineImpl implements UiEngine {
 		 * @param comps the collection of components that have been redrawn.
 		 * @since 6.0.0
 		 */
-		public void afterRenderComponents(Collection comps);
+		public void afterRenderComponents(Collection<Component> comps);
 	}
 	private static class DefaultExtension implements Extension {
 		public void afterCreate(Component[] comps) {
 		}
 		public void afterRenderNewPage(Page page) {
 		}
-		public void afterRenderComponents(Collection comps) {
+		public void afterRenderComponents(Collection<Component> comps) {
 		}
 	}
 }

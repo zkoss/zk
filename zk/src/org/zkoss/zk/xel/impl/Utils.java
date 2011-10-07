@@ -71,12 +71,11 @@ public class Utils {
 
 		if (expr.length() != 0) {
 			List<ExValue> dst = new LinkedList<ExValue>();
-			Collection src = CollectionsX.parse(null, expr, ',', true, true);
-			for (Iterator it = src.iterator(); it.hasNext();) {
-				final String s = (String)it.next();
+			Collection<String> src = CollectionsX.parse(null, expr, ',', true, true);
+			for (String s: src)
 				if (!ignoreEmpty || s.length() > 0)
 					dst.add(new ExValue(s, expcls));
-			}
+
 			if (!dst.isEmpty())
 				return dst.toArray(new ExValue[dst.size()]);
 		}

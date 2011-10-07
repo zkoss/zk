@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * A listener to monitor the status of ZK engine.
@@ -50,10 +51,10 @@ public interface Monitor {
 	/** Called when an asynchronous updated is called (and not yet processed).
 	 *
 	 * @param desktop the desktop that the update is sent to
-	 * @param requests a list of {@link org.zkoss.zk.au.AuRequest} that
+	 * @param requests a list of {@link AuRequest} that
 	 * are being processed.
 	 */
-	public void beforeUpdate(Desktop desktop, List requests);
+	public void beforeUpdate(Desktop desktop, List<AuRequest> requests);
 	/** Called when an asynchronous updated has been processed.
 	 *
 	 * @param desktop the desktop that the update is sent to

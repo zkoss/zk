@@ -164,11 +164,9 @@ public class ConfigParser {
 		try {
 			final XMLResourcesLocator locator =
 				org.zkoss.zk.ui.impl.Utils.getXMLResourcesLocator();
-			final List xmls = locator.getDependentXMLResources(
+			final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources(
 				"metainfo/zk/config.xml", "config-name", "depends");
-			for (Iterator it = xmls.iterator(); it.hasNext();) {
-				final XMLResourcesLocator.Resource res =
-					(XMLResourcesLocator.Resource)it.next();
+			for (XMLResourcesLocator.Resource res: xmls) {
 				if (log.debugable()) log.debug("Loading "+res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {

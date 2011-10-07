@@ -253,22 +253,22 @@ public interface ComponentCtrl {
 	/** Returns a read-only collection of all annotations ({@link Annotation})
 	 * associated with this component (never null).
 	 */
-	public Collection getAnnotations();
+	public Collection<Annotation> getAnnotations();
 	/** Returns a read-only collection of all annotations ({@link Annotation})
 	 * associated with the specified property (never null).
 	 *
 	 * @param propName the property name, e.g., "value".
 	 * @exception IllegalArgumentException if propName is null or empty
 	 */
-	public Collection getAnnotations(String propName);
-	/** Returns a read-only list of the names (String) of the properties
+	public Collection<Annotation> getAnnotations(String propName);
+	/** Returns a read-only list of the names of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
-	public List getAnnotatedPropertiesBy(String annotName);
-	/** Returns a read-only list of the name (String) of properties that
+	public List<String> getAnnotatedPropertiesBy(String annotName);
+	/** Returns a read-only list of the name of properties that
 	 * are associated at least one annotation (never null).
 	 */
-	public List getAnnotatedProperties();
+	public List<String> getAnnotatedProperties();
 	/** Add a map of annotations which is shared by other components.
 	 * In other words, this component shall have all annotations
 	 * defined in the specified map, annots. Meanwhile, this component

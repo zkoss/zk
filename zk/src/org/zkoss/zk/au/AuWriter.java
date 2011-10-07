@@ -96,5 +96,5 @@ public interface AuWriter {
 	public void write(AuResponse response) throws IOException;
 	/** Generates a list of responses to the output.
 	 */
-	public void write(Collection responses) throws IOException;
+	public void write(Collection<AuResponse> responses) throws IOException;
 }

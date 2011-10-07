@@ -231,11 +231,11 @@ public class WebManager {
 		for (Iterator<LanguageDefinition> it = LanguageDefinition.getAll().iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = it.next();
-			final List exts = langdef.getExtensions();
+			final List<String> exts = langdef.getExtensions();
 			if (!exts.isEmpty()) {
 				if (extlet == null)
 					extlet = new ZumlExtendlet();
-				_cwr.addExtendlet((String)exts.get(0), extlet);
+				_cwr.addExtendlet(exts.get(0), extlet);
 				//Add to the first extension only (the main one)
 			}
 		}

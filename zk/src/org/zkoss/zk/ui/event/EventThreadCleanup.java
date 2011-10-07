@@ -61,7 +61,7 @@ public interface EventThreadCleanup {
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
 	 */
-	public void cleanup(Component comp, Event evt, List errs) throws Exception;
+	public void cleanup(Component comp, Event evt, List<Throwable> errs) throws Exception;
 	/** Called in the serlvet thread to clean up.
 	 * It is called after {@link #cleanup} is called.
 	 *

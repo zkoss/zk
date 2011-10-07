@@ -513,10 +513,8 @@ public class Parser {
 
 		final String imports = params.remove("import");
 		if (imports != null && imports.length() > 0) {
-			Collection ims = CollectionsX.parse(null, imports, ',', false); //No EL
-			for (Iterator it = ims.iterator(); it.hasNext();) {
-				final String im = (String)it.next();
-
+			Collection<String> ims = CollectionsX.parse(null, imports, ',', false); //No EL
+			for (String im: ims) {
 				final int k = im.indexOf('=');
 				String nm = k > 0 ? im.substring(0, k).trim(): null;
 				String cn = (k >= 0 ? im.substring(k + 1): im).trim();
@@ -776,7 +774,7 @@ public class Parser {
 					prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
 
 				//add declared namespace if starting with native:
-				final Collection dns = el.getDeclaredNamespaces();
+				final Collection<Namespace> dns = el.getDeclaredNamespaces();
 				if (!dns.isEmpty())
 					addDeclaredNamespace(ni, dns, langdef);
 			} else {
@@ -1364,9 +1362,8 @@ public class Parser {
 	/** Adds the declared namespaces to the native info, if necessary.
 	 */
 	private static void addDeclaredNamespace(
-	NativeInfo nativeInfo, Collection namespaces, LanguageDefinition langdef) {
-		for (Iterator it = namespaces.iterator(); it.hasNext();) {
-			final Namespace ns = (Namespace)it.next();
+	NativeInfo nativeInfo, Collection<Namespace> namespaces, LanguageDefinition langdef) {
+		for (Namespace ns: namespaces) {
 			final String uri = ns.getURI();
 			boolean bNatPrefix =
 				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);

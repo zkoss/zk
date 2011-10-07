@@ -191,11 +191,9 @@ public class DefinitionLoaders {
 		}
 
 		//4. process lang-addon.xml (with dependency)
-		final List xmls = locator.getDependentXMLResources(
+		final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources(
 			"metainfo/zk/lang-addon.xml", "addon-name", "depends");
-		for (Iterator it = xmls.iterator(); it.hasNext();) {
-			final XMLResourcesLocator.Resource res =
-				(XMLResourcesLocator.Resource)it.next();
+		for (XMLResourcesLocator.Resource res: xmls) {
 			try {
 				if (ConfigParser.checkVersion(res.url, res.document, true))
 					parseLang(res.document, locator, res.url, true);

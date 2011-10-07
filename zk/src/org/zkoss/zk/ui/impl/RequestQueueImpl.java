@@ -88,9 +88,8 @@ public class RequestQueueImpl implements RequestQueue {
 		}
 		return null;
 	}
-	public void addRequests(Collection requests) {
-		for (Iterator it = requests.iterator(); it.hasNext();) {
-			final AuRequest request = (AuRequest)it.next();
+	public void addRequests(Collection<AuRequest> requests) {
+		for (AuRequest request: requests) {
 			try {
 				request.activate();
 				if (!isObsolete(request))

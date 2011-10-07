@@ -254,9 +254,8 @@ implements Page, PageCtrl, java.io.Serializable {
 
 		fixFellows(getRoots());
 	}
-	private final void fixFellows(Collection c) {
-		for (Iterator it = c.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
+	private final void fixFellows(Collection<Component> c) {
+		for (Component comp: c) {
 			final String compId = comp.getId();
 			if (compId.length() > 0)
 				addFellow(comp);

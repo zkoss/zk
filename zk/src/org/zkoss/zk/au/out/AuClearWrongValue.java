@@ -37,7 +37,7 @@ public class AuClearWrongValue extends AuResponse {
 	/**
 	 * @param comps a list of components
 	 */
-	public AuClearWrongValue(List comps) {
+	public AuClearWrongValue(List<? extends Component> comps) {
 		super("clearWrongValue", toData(comps)); //component-independent
 	}
 	/**
@@ -46,11 +46,11 @@ public class AuClearWrongValue extends AuResponse {
 	public AuClearWrongValue(Component[] comps) {
 		super("clearWrongValue", toData(comps)); //component-independent
 	}
-	private static String[] toData(List comps) {
+	private static String[] toData(List<? extends Component> comps) {
 		final String[] uuids = new String[comps.size()];
 		int j = 0;
-		for (Iterator it = comps.iterator(); it.hasNext();)
-			uuids[j++] = ((Component)it.next()).getUuid();
+		for (Component comp: comps)
+			uuids[j++] = comp.getUuid();
 		return uuids;
 	}
 	private static String[] toData(Component[] comps) {

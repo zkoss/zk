@@ -344,10 +344,10 @@ public class PageDefinition implements NodeInfo {
 	public void addImportedClass(String clsptn) throws ClassNotFoundException {
 		_clsresolver.addImportedClass(clsptn);
 	}
-	/** Returns a readonly list of the imported class.
+	/** Returns a readonly list of the imported class names.
 	 * @since 6.0.0
 	 */
-	public List getImportedClasses() {
+	public List<String> getImportedClasses() {
 		return _clsresolver.getImportedClasses();
 	}
 	/** Returns the class resolver represented by {@link #getImportedClasses}.
