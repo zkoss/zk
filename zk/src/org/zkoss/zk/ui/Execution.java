@@ -65,16 +65,14 @@ public interface Execution extends Scope {
 	 */
 	public Session getSession();
 
-	/** Returns whether this execution is asynchronous updating the
+	/** Returns whether this execution is an asynchronous update for the
 	 * specified page (thru ZK Update Engine).
 	 *
 	 * @return whether the specified page is being asynchronous updated
 	 * by this execution.
 	 * If the specified page is null, this method returns
-	 * whether this execution is an asynchronous update
-	 * (rather than a request starting a new desktop).<br/>
-	 * Note: since 5.0.0, isAsyncUpdate(null) return if the fisrt execution
-	 * is caused by aysnchronous update (not just the current execution).
+	 * whether this execution is caused by an asynchronous update
+	 * (i.e., caused by an AU request).
 	 */
 	public boolean isAsyncUpdate(Page page);
 

@@ -91,10 +91,9 @@ public class ExecutionImpl extends AbstractExecution {
 	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
 	private boolean _voided;
 
-	/** Constructs an execution for HTTP request.
+	/** Constructs an execution for the given HTTP request.
 	 * @param creating which page is being creating for this execution, or
 	 * null if none is being created.
-	 * {@link #isAsyncUpdate} returns based on this.
 	 */
 	public ExecutionImpl(ServletContext ctx, HttpServletRequest request,
 	HttpServletResponse response, Desktop desktop, Page creating) {

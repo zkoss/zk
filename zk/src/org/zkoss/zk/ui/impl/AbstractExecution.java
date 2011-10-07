@@ -92,9 +92,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public final boolean isAsyncUpdate(Page page) {
 		if (page != null)
 			return _creating != page;
-		Visualizer uv;
-		return _creating == null
-			|| ((uv = getVisualizer()) != null && uv.isEverAsyncUpdate());
+		final Visualizer uv;
+		return (uv = getVisualizer()) != null && uv.isEverAsyncUpdate();
 	}
 	public Desktop getDesktop() {
 		return _desktop;
