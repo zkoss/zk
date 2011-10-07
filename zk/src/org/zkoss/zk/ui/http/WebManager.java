@@ -269,9 +269,12 @@ public class WebManager {
 	}
 
 	public void destroy() {
-		_ctx.removeAttribute(ATTR_WEB_MANAGER);
-		((WebAppCtrl)_wapp).destroy();
-		WebAppsCtrl.setCurrent(null);
+		try {
+			((WebAppCtrl)_wapp).destroy();
+		} finally {
+			_ctx.removeAttribute(ATTR_WEB_MANAGER);
+			WebAppsCtrl.setCurrent(null);
+		}
 	}
 
 	/** Returns the handler to retrieve resource from class path,
