@@ -1,0 +1,33 @@
+<test tags="B50-ZK-467.zul,A,E,Grid,Listbox,Tree,IE9,Hflex">
+	<case id="Hflex">
+		<server><!--
+<zk>
+	<zscript><![CDATA[
+		List items = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			items.add(i);
+		}
+	]]></zscript>
+	<div>IE 9 only. The columns and cells should align.</div>
+	<listbox id="listbox" vflex="true" nonselectableTags=""
+		mold="paging" pagingPosition="bottom" pageSize="50">
+		<listhead>
+			<listheader label="field-1" width="40px" align="center" valign="top" />
+			<listheader label="field-2" width="84px" align="center" valign="top" />
+			<listheader label="field-3" hflex="2" valign="top" />
+			<listheader label="field-4" hflex="1" valign="top" />
+		</listhead>
+		<listitem forEach="${items}">
+			<listcell label="${each}-1" />
+			<listcell label="${each}-2" />
+			<listcell label="${each}-3" />
+			<listcell label="${each}-4" />
+		</listitem>
+	</listbox>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

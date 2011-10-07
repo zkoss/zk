@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3184369.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct  7 11:10:58 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Login" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="xhtml" xmlns:n="native">
+Youd should see the textbox shall be the same width
+<window title="Login" border="normal" width="545px">
+<h:div>
+<h:table border="0" cellpadding="5" width="100%">
+<h:tbody>
+<h:tr>
+<h:td width="110px">
+<label value="Organization" />
+</h:td>
+<h:td>
+<textbox hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td>
+<label value="Username"/>
+</h:td>
+<h:td>
+<textbox hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td>
+<label value="Password"/>
+</h:td>
+<h:td>
+<textbox type="password" hflex="true" />
+</h:td>
+</h:tr>
+<h:tr>
+<h:td></h:td>
+<h:td align="right">
+<button label="Login"/>
+</h:td>
+</h:tr>
+</h:tbody>
+</h:table>
+</h:div>
+</window>
+</zk>

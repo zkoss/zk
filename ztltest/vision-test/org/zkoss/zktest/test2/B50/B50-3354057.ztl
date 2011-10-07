@@ -1,0 +1,32 @@
+<test tags="B50-3354057.zul,A,E,Grid,Listbox,Vflex,Hflex">
+	<case id="Vflex">
+		<server><!--
+<zk>
+	The Grid/Listbox/Tree below should be sized by content. If they have 0 width, it is a bug.
+	<grid vflex="min" hflex="min">
+		<rows>
+			<row>item</row>
+		</rows>
+	</grid>
+	<listbox vflex="min" hflex="min">
+		<listitem>
+			<listcell>item</listcell>
+		</listitem>
+	</listbox>
+	<tree vflex="min" hflex="min">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>item</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>
