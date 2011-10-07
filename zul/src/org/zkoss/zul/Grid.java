@@ -218,7 +218,7 @@ public class Grid extends MeshElement {
 	private transient Columns _cols;
 	private transient Foot _foot;
 	private transient Frozen _frozen;
-	private transient Collection _heads;
+	private transient Collection<Component> _heads;
 	private transient ListModel<?> _model;
 	private transient RowRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -257,7 +257,7 @@ public class Grid extends MeshElement {
 		init();
 	}
 	private void init() {
-		_heads = new AbstractCollection() {
+		_heads = new AbstractCollection<Component>() {
 			public int size() {
 				int sz = getChildren().size();
 				if (_rows != null) --sz;
@@ -266,7 +266,7 @@ public class Grid extends MeshElement {
 				if (_frozen != null) --sz;
 				return sz;
 			}
-			public Iterator iterator() {
+			public Iterator<Component> iterator() {
 				return new Iter();
 			}
 		};
@@ -403,7 +403,7 @@ public class Grid extends MeshElement {
 	 *
 	 * @since 3.0.0
 	 */
-	public Collection getHeads() {
+	public Collection<Component> getHeads() {
 		return _heads;
 	}
 
@@ -1516,12 +1516,12 @@ public class Grid extends MeshElement {
 	}
 	/** An iterator used by _heads.
 	 */
-	private class Iter implements Iterator {
-		private final ListIterator _it = getChildren().listIterator();
+	private class Iter implements Iterator<Component> {
+		private final ListIterator<Component> _it = getChildren().listIterator();
 
 		public boolean hasNext() {
 			while (_it.hasNext()) {
-				Object o = _it.next();
+				Component o = _it.next();
 				if (o instanceof Columns || o instanceof Auxhead) {
 					_it.previous();
 					return true;
@@ -1529,9 +1529,9 @@ public class Grid extends MeshElement {
 			}
 			return false;
 		}
-		public Object next() {
+		public Component next() {
 			for (;;) {
-				Object o = _it.next();
+				Component o = _it.next();
 				if (o instanceof Columns || o instanceof Auxhead)
 					return o;
 			}

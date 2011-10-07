@@ -455,7 +455,7 @@ public class Tree extends MeshElement {
 	 *
 	 * @since 3.0.0
 	 */
-	public Collection getHeads() {
+	public Collection<Component> getHeads() {
 		return _heads;
 	}
 

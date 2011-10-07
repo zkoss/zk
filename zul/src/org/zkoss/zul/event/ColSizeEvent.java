@@ -67,7 +67,7 @@ public class ColSizeEvent extends Event {
 	@SuppressWarnings("unchecked")
 	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		final List wdlist = (List) data.get("widths");
+		final List<String> wdlist = (List<String>) data.get("widths");
 		return wdlist == null ? 
 			new ColSizeEvent(request.getCommand(), request.getComponent(),
 					AuRequests.getInt(data, "index", 0),
@@ -76,7 +76,7 @@ public class ColSizeEvent extends Event {
 			new ColSizeEvent(request.getCommand(), request.getComponent(), //since 5.0.6, to support fix width of multiple columns
 			AuRequests.getInt(data, "index", 0),
 			request.getDesktop().getComponentByUuid((String)data.get("column")),
-			(String[]) wdlist.toArray(new String[wdlist.size()]), AuRequests.parseKeys(data));
+			wdlist.toArray(new String[wdlist.size()]), AuRequests.parseKeys(data));
 	}
 	/** Constructs an instance of {@link ColSizeEvent}.
 	 *
