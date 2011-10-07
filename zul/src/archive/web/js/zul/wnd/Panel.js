@@ -670,7 +670,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			return;
 		var body = pc.$n(), pcst, pcwd;
 		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != "auto") {
-			var w = this.$n().offsetWidth, 
+			var w = this.$n().clientWidth, 
 				cn = body;
 			if (this._rounded())
 				for (var i = 0; i < 3; i++)
