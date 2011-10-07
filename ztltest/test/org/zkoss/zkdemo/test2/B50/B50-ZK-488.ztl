@@ -1,0 +1,70 @@
+<!-- B50-ZK-488.ztl.java
+
+	Purpose:for testing B50-ZK-488.ztl .
+
+	Description:
+
+	History:
+		10, 7, 2011 15:33:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-488.zul,B,E,Listbox,DragDrop,IE9">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				<html><![CDATA[
+				<ol>
+				<li>Drag listitem from left to right</li>
+				<li>Drag listitem from right to left</li>
+				<li>The bug is fixed if do above without any problem.</li>
+				</ol>
+				]]></html>
+				<hbox>
+					<listbox id="lb1" droppable="true" width="100px" height="150px">
+						<attribute name="onDrop">
+							event.getDragged().setParent(self);
+							tb.setValue(event.getDragged().getId() + " in " + self.getId());
+						</attribute>
+						<listitem id="li1" draggable="true">
+							<listcell label="list cell 1">
+								<div>div</div>
+							</listcell>
+						</listitem>
+					</listbox>
+					<separator spacing="20px" />
+					<listbox id="lb2" droppable="true" width="100px" height="150px">
+						<attribute name="onDrop">
+							event.getDragged().setParent(self);
+							tb.setValue(event.getDragged().getId() + " in " + self.getId());
+						</attribute>
+						<listitem id="li2" draggable="true">
+							<listcell label="list cell 2">
+								<div>div</div>
+							</listcell>
+						</listitem>
+					</listbox>
+				</hbox>
+				<textbox id="tb" />
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			mouseDownAt(li1, "5,5");
+			mouseMoveAt(lb2, "25,25");
+			mouseUp(lb2);
+			waitResponse();
+			verifyTrue("li1 in lb2".equals(tb.$n().get("value")));
+
+			mouseDownAt(li2, "5,5");
+			mouseMoveAt(lb1, "25,25");
+			mouseUp(lb1);
+			waitResponse();
+			verifyTrue("li2 in lb1".equals(tb.$n().get("value")));
+		]]></client>
+	</case>
+</test>

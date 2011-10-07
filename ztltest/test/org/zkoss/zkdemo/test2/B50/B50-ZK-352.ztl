@@ -1,0 +1,45 @@
+<!-- B50-ZK-352.ztl.java
+
+	Purpose:for testing B50-ZK-352.ztl .
+
+	Description:
+
+	History:
+		10, 7, 2011 10:35:24
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+This program is distributed under Apache License Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+-->
+<test tags="B50-ZK-352.zul,A,E,Grid,Listbox,Tree,Hflex">
+	<case id="ztl">
+		<server><!--
+
+			<zk>
+				<div>Scroll to the right. You should NOT see the last 2 Columns.</div>
+				<listbox id="lb" width="400px">
+					<listhead>
+						<listheader label="Column 1" width="250px" />
+						<listheader label="Column 2" width="250px" />
+						<listheader id="lh1" label="Column 3" hflex="2" />
+						<listheader id="lh2" label="Column 4" hflex="1" />
+					</listhead>
+					<listitem forEach="1,2,3">
+						<listcell forEach="1,2,3,4">Listcell</listcell>
+					</listitem>
+				</listbox>
+			</zk>
+
+		--></server>
+		<client><![CDATA[
+			lb.$n("body").eval("scrollLeft = 500");
+			waitResponse();
+			verifyTrue(parseInt(lb.$n("body").get("scrollLeft")) < 110);
+			verifyTrue(parseInt(lh1.$n().get("width")) == 0);
+			verifyTrue(parseInt(lh1.$n("cave").get("width")) == 0);
+			verifyTrue(parseInt(lh2.$n().get("width")) == 0);
+			verifyTrue(parseInt(lh2.$n("cave").get("width")) == 0);
+		]]></client>
+	</case>
+</test>
