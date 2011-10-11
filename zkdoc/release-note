@@ -8,6 +8,7 @@ ZK 6.0.0
   ZK-216: Listbox/Tree/Grid/Combobox supports the template for rendering model
   ZK-237: <?import class="..."?> allows users to import classes
   ZK-110: Upgrade to jQuery 1.6.4
+  ZK-496: Make iZUML available to ZK CE
   ZK-61: Support hotkey for user to pick a date
   ZK-443: Menubar can support keystroke to navigate the menubar
   ZK-292: Annotation supports an array of values and string-type value and so on
