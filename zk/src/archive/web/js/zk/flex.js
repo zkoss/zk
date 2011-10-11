@@ -408,9 +408,9 @@ zFlex = { //static methods
 			c = p.firstChild,
 			scrWdh;
 			
-		// Bug 3185686
+		// Bug 3185686, B50-ZK-452
 		// has vertical scrollbar
-		if(p.offsetWidth - p.clientWidth > 11)
+		if((!zk.ie || p.clientWidth > 0) && p.offsetWidth - p.clientWidth > 11)
 			wdh -= (scrWdh = jq.scrollbarWidth());
 			
 		// has horizontal scrollbar
