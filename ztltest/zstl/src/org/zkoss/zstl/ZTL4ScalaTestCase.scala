@@ -28,7 +28,7 @@ class ZTL4ScalaTestCase extends ZKClientTestCase {
         _engine = new Widget(new StringBuffer("zk.Desktop._dt"))
 
         runZscript(
-          zscript toString () replaceAll ("\n", " "))
+          zscript toString () replace("\\", "\\\\") replaceAll ("\n", " "))
 
         waitResponse();
 

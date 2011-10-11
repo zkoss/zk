@@ -81,7 +81,7 @@ Usage:
 		</javac>
 		<!-- compile scala -->
 		<scalac srcdir="${zstl.src}" destdir="${test.dir}"
-			includes="**/*.scala" force="changed">
+			includes="**/*.scala" excludes="test/ExampleTest.scala" force="changed">
 			<classpath refid="dependency.classpath" />
 		</scalac>
 	</target>

@@ -41,10 +41,10 @@ class ExampleTest extends ZTL4ScalaTestCase {
         Click "hello world", if you see the message change, it is ok.
         <zscript><![CDATA[
 			public void doCreate(Event evt) {
-				evt.target.setValue("    hello,\\n  world");
+				evt.target.setValue("    hello,\n  world");
 			}
 			public void doClick(Event evt) {
-				evt.target.setValue("    I have\\n  been   clicked");
+				evt.target.setValue("    I have\n  been   clicked");
 			}
 		]]></zscript>
         <label id="l1" onCreate="doCreate(event);" onClick="doClick(event)" style="font-family: monospace; white-space: pre;"/>
