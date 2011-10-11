@@ -50,12 +50,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-			click(btn1);
+			Scripts.triggerMouseEventAt(getWebDriver(), btn1, "click", "5,5");
 			waitResponse();
 			for (int i = 0;i < 10;i ++) {
 				verifyTrue(("option "+i).equals(jq(list.$n("rows")).find("div.z-listcell-cnt").get(i).get("innerHTML")));
 			}
-			click(btn2);
+			Scripts.triggerMouseEventAt(getWebDriver(), btn2, "click", "5,5");
 			waitResponse();
 			for (int i = 0;i < 10;i ++) {
 				verifyTrue(("plan "+i).equals(jq(list.$n("rows")).find("div.z-listcell-cnt").get(i).get("innerHTML")));
