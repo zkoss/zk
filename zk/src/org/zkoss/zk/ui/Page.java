@@ -464,12 +464,16 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/** Returns whether the event listener is available.
 	 */
 	public boolean isListenerAvailable(String evtnm);
-	/** Returns an iterator for iterating listener for the specified event.
+	/** Returns an iterator for iterating the event listeners for the given event.
 	 * <p>Since 5.0.6, the iterator is an instance returned by
 	 * {@link org.zkoss.util.CollectionsX#comodifiableIterator}, so it
 	 * is OK to add or remove listeners among the invocation of next().
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
+	/** Returns an iterable collection of the event listeners for the given event.
+	 * @since 6.0.0
+	 */
+	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm);
 
 	//-- special control --//
 	/** Removes all components in this page.

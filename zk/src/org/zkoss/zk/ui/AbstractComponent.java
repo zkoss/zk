@@ -2251,6 +2251,9 @@ w:use="foo.MyWindow"&gt;
 		}
 		return CollectionsX.emptyIterator();
 	}
+	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
+		return CollectionsX.iterable(getListenerIterator(evtnm));
+	}
 
 	public void applyProperties() {
 		_def.applyProperties(this);

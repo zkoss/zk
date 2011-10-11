@@ -280,6 +280,17 @@ public class CollectionsX {
 		return EMPTY_ENUMERATION;
 	}
 
+	/** Returns an iterable object of the given iterator.
+	 * @since 6.0.0
+	 */
+	public static final <T> Iterable<T> iterable(final Iterator<T> it) {
+		return new Iterable<T>() {
+			public Iterator<T> iterator() {
+				return it;
+			}
+		};
+	}
+
 	/**
 	 * Returns the specified range of the specified collection into a new array.
 	 * The initial index of the range (<tt>from</tt>) must lie between zero

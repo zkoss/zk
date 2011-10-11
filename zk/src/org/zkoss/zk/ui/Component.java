@@ -747,7 +747,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see Component#addEventListener
 	 */
 	public boolean isListenerAvailable(String evtnm, boolean asap);
-	/** Returns an iterator for iterating listener for the specified event.
+	/** Returns an iterator for iterating the event listeners for the given event.
 	 *
 	 * <p>Since 3.6.3, the listener can be removed directly by invoking
 	 * Iterator.remove().
@@ -756,6 +756,10 @@ w:use="foo.MyWindow"&gt;
 	 * is OK to add or remove listeners among the invocation of next().
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
+	/** Returns an iterable collection of the event listeners for the given event.
+	 * @since 6.0.0
+	 */
+	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm);
 
 	/** Adds a forward condition to forward the event received
 	 * by this component to another component.

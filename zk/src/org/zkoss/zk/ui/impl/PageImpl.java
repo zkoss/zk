@@ -968,6 +968,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return CollectionsX.emptyIterator();
 	}
+	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
+		return CollectionsX.iterable(getListenerIterator(evtnm));
+	}
 
 	public final Component getOwner() {
 		return _owner;
