@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.zkoss.util.CollectionsX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -44,11 +45,7 @@ public class Selectors {
 	 * @return an Iterable of Component
 	 */
 	public static Iterable<Component> iterable(final Page page, final String selector) {
-		return new Iterable<Component>() {
-			public Iterator<Component> iterator() {
-				return new ComponentIterator(page, selector);
-			}
-		};
+		return CollectionsX.iterable(new ComponentIterator(page, selector));
 	}
 	
 	/**
@@ -59,11 +56,7 @@ public class Selectors {
 	 * @return an Iterable of Component
 	 */
 	public static Iterable<Component> iterable(final Component root, final String selector){
-		return new Iterable<Component>() {
-			public Iterator<Component> iterator() {
-				return new ComponentIterator(root, selector);
-			}
-		};
+		return CollectionsX.iterable(new ComponentIterator(root, selector));
 	}
 	
 	/**
