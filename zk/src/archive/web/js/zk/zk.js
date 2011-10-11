@@ -163,10 +163,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	/* Overrides all subclasses. */
-	function _overrideSub(dstpt, nm, oldfn, newfn) {
+	function _overrideSub(dstpt, nm, oldfn, newfn, tobak) {
 		for (var sub = dstpt._$subs, j = sub ? sub.length: 0; --j >= 0;) {
 			var subpt = sub[j];
 			if (subpt[nm] === oldfn) {
+				if (tobak)
+					subpt['$'+nm] = oldfn; // B50-ZK-493
 				subpt[nm] = newfn;
 				_overrideSub(subpt, nm, oldfn, newfn); //recursive
 			}
@@ -806,9 +808,9 @@ zk.override(zul.inp.Combobox.prototype, _xCombobox, {
 			dst = backup;
 			return old;
 		case "string":
-			dst['$' + backup] = dst[backup];
-			dst[backup] = src;
-			//break;
+			// B50-ZK-493: shall update subclasses
+			_overrideSub(dst, backup, dst['$'+backup] = dst[backup], dst[backup] = src, true);
+			return dst;
 		}
 
 		for (var nm in src)

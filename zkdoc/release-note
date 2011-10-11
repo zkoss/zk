@@ -43,6 +43,7 @@ ZK 6.0.0
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)
+  ZK-493: zk.override(Object, String, Function) fails to update subclass methods 
 
 * Upgrade Notes
   + For ease of use, the return type of the following APIs are changed from Iterator
