@@ -238,6 +238,18 @@ public class CollectionsX {
 			throw new UnsupportedOperationException();
 		}
 	};
+	/** An iterable object that iterates through an Enumeration.
+	 * @since 6.0.0
+	 */
+	public static final class EnumerationIterable<E> implements Iterable<E> {
+		private final Iterator<E> _it;
+		public EnumerationIterable(Enumeration<? extends E> enm) {
+			_it = new EnumerationIterator<E>(enm);
+		}
+		public Iterator<E> iterator() {
+			return _it;
+		}
+	}
 
 	/** Empty iterator.
 	 */
@@ -290,6 +302,14 @@ public class CollectionsX {
 			}
 		};
 	}
+	/** Returns an empty iterable object.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> Iterable<T> emptyIterable() {
+		return EMPTY_ITERABLE;
+	}
+	private static final Iterable EMPTY_ITERABLE = iterable(EMPTY_ITERATOR);
 
 	/**
 	 * Returns the specified range of the specified collection into a new array.

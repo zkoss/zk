@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Date;
 import java.io.Reader;
@@ -1135,25 +1134,24 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public String getHeader(String name);
-	/** Returns all the values of the specified header as a {@link Iterator}
-	 * of {@link String} objects.
+	/** Returns all the values of the specified header as an iterable
+	 * {@link String} objects.
 	 *
 	 * <p>If the request did not include any headers of the specified name,
-	 * this method returns an empty {@link Iterator}.
+	 * this method returns an empty iterable.
 	 * If the container does not allow access to header information,
 	 * it returns null.
 	 *
-	 * @since 3.5.0
+	 * @since 6.0.0
 	 */
-	public Iterator<String> getHeaders(String name);
+	public Iterable<String> getHeaders(String name);
 	/** Returns all header names this request contains.
-	 * If the request has no headers, this method returns an empty
-	 * {@link Iterator}.
+	 * If the request has no headers, this method returns an empty iterable.
 	 * If the container does not allow access to header information,
 	 * it returns null.
-	 * @since 3.5.0
+	 * @since 6.0.0
 	 */
-	public Iterator<String> getHeaderNames();
+	public Iterable<String> getHeaderNames();
 
 	/** Sets a response header with the give name and value.
 	 * If the header had already been set, the new value overwrites the previous one.

@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.net.URL;
@@ -163,10 +162,10 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 */
 	public String getInitParameter(String name);
 	/** Returns the names of the context's initialization parameters as
-	 * an Iterator of String objects, or an empty Iterator if the context
-	 * has no initialization parameters.
+	 * an iterable String objects (never null).
+	 * @since 6.0.0
 	 */
-	public Iterator<String> getInitParameterNames();
+	public Iterable<String> getInitParameterNames();
 
 	/** Returns the URI for asynchronous update.
 	 * <p>Both {@link #getUpdateURI} and {@link Desktop#getUpdateURI}

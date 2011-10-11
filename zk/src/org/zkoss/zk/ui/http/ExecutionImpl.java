@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Date;
@@ -477,14 +476,14 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request.getHeader(name);
 	}
 	@SuppressWarnings("unchecked")
-	public Iterator<String> getHeaders(String name) {
+	public Iterable<String> getHeaders(String name) {
 		final Enumeration<String> enm = _request.getHeaders(name);
-		return enm != null ? new CollectionsX.EnumerationIterator<String>(enm): null;
+		return enm != null ? new CollectionsX.EnumerationIterable<String>(enm): null;
 	}
 	@SuppressWarnings("unchecked")
-	public Iterator<String> getHeaderNames() {
+	public Iterable<String> getHeaderNames() {
 		final Enumeration<String> enm = _request.getHeaderNames();
-		return enm != null ? new CollectionsX.EnumerationIterator<String>(enm): null;
+		return enm != null ? new CollectionsX.EnumerationIterable<String>(enm): null;
 	}
 	public void setResponseHeader(String name, String value) {
 		_response.setHeader(name, value);

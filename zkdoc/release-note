@@ -45,6 +45,11 @@ ZK 6.0.0
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)
 
 * Upgrade Notes
+  + For ease of use, the return type of the following APIs are changed from Iterator
+    to Iterable:
+    org.zkoss.zk.ui.Exectuion: getHeaders and getHeaderNames
+    org.zkoss.zk.ui.WebApp: getInitParameterNames
+    org.zkoss.zk.ui.RichletConfig: getInitParameterNames
   + org.zkoss.zk.ui.util.Initiator.doAfterComposer(Page,Component[]),
     doCatch(Throwable) and doFinally() were removed.
     And, doCatch(Throwable) and doFinally() are moved to InitiatorExt

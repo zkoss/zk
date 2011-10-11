@@ -16,7 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Date;
@@ -203,11 +202,11 @@ import org.zkoss.zk.ui.impl.SimpleScope;
 	public String getHeader(String name) {
 		return null;
 	}
-	public Iterator<String> getHeaders(String name) {
-		return CollectionsX.emptyIterator();
+	public Iterable<String> getHeaders(String name) {
+		return CollectionsX.emptyIterable();
 	}
-	public Iterator<String> getHeaderNames() {
-		return CollectionsX.emptyIterator();
+	public Iterable<String> getHeaderNames() {
+		return CollectionsX.emptyIterable();
 	}
 	public void setResponseHeader(String name, String value) {
 		throw new UnsupportedOperationException();

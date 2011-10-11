@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.http;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
 import java.util.Enumeration;
 import java.net.URL;
 import java.net.MalformedURLException;
@@ -151,9 +150,8 @@ public class SimpleWebApp extends AbstractWebApp {
 		return _ctx.getInitParameter(name);
 	}
 	@SuppressWarnings("unchecked")
-	public Iterator<String> getInitParameterNames() {
-		return new CollectionsX.EnumerationIterator(
-			_ctx.getInitParameterNames());
+	public Iterable<String> getInitParameterNames() {
+		return new CollectionsX.EnumerationIterable(_ctx.getInitParameterNames());
 	}
 	public String getRealPath(String path) {
 		return _ctx.getRealPath(path);

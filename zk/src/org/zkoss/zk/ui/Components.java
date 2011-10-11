@@ -1585,11 +1585,11 @@ public class Components {
 			return exec().getHeader(name);
 		}
 
-		public Iterator<String> getHeaderNames() {
+		public Iterable<String> getHeaderNames() {
 			return exec().getHeaderNames();
 		}
 
-		public Iterator<String> getHeaders(String name) {
+		public Iterable<String> getHeaders(String name) {
 			return exec().getHeaders(name);
 		}
 

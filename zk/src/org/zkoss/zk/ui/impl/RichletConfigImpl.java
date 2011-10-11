@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Map;
-import java.util.Iterator;
 
 import org.zkoss.util.CollectionsX;
 
@@ -51,9 +50,9 @@ public class RichletConfigImpl implements RichletConfig {
 	public String getInitParameter(String name) {
 		return _params != null ? _params.get(name): null;
 	}
-	public Iterator<String> getInitParameterNames() {
+	public Iterable<String> getInitParameterNames() {
 		if (_params != null)
-			return _params.keySet().iterator();
-		return CollectionsX.emptyIterator();
+			return _params.keySet();
+		return CollectionsX.emptyIterable();
 	}
 }

@@ -16,8 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Iterator;
-
 /**
  * A richlet configuration object used by a richlet container to pass information
  * to a richlet during initialization.
@@ -34,8 +32,8 @@ public interface RichletConfig {
 	 */
 	public String getInitParameter(String name);
 	/** Returns the names of the richlet's initialization parameters as
-	 * an Iterator of String objects, or an empty Enumeration
-	 * if the richlet has no initialization parameters.
+	 * an iterable String objects (never null).
+	 * @since 6.0.0
 	 */
-	public Iterator<String> getInitParameterNames();
+	public Iterable<String> getInitParameterNames();
 }
