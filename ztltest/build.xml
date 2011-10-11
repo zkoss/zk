@@ -39,9 +39,14 @@ Usage:
 		<mkdir dir="${report.dir}" />
 		<mkdir dir="${test.dir}"/>
 		<mkdir dir="${codegen.dir}"/>
+	
+		<taskdef resource="scala/tools/ant/antlib.xml">
+			<classpath refid="dependency.classpath" />
+		</taskdef>
 	</target>
 	<target name="build" depends="generate,compileztl">
 	</target>
+
 	<target name="genzul" depends="init">
 		<java classname="org.zkoss.ztl.util.ZulGenerator"
            	fork="true">
@@ -71,10 +76,14 @@ Usage:
 	</target>
 	<target name="compileztl" depends="init">
 		<!-- compile -->
-		<javac srcdir="${codegen.dir}" destdir="${test.dir}"
-			classpath="${libs.compile}" includes="**/*.java" debug="true">
+		<javac srcdir="${codegen.dir}" destdir="${test.dir}" includes="**/*.java" debug="true">
 			<classpath refid="dependency.classpath" />
 		</javac>
+		<!-- compile scala -->
+		<scalac srcdir="${zstl.src}" destdir="${test.dir}"
+			includes="**/*.scala" force="changed">
+			<classpath refid="dependency.classpath" />
+		</scalac>
 	</target>
 	<target name="run" depends="compileztl">
 		<echo>Tags: -Dtags=${tags}</echo>
