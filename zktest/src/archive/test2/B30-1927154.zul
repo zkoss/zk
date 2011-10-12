@@ -47,6 +47,7 @@ If failed, the position of the grid is wrong (overlapped with tabbox).
 	</rows>
 	</grid>
 	</tabpanel>
+	<tabpanel/>
 	</tabpanels>
 	</tabbox>
 </window>
