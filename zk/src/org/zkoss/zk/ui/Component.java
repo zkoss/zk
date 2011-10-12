@@ -104,7 +104,7 @@ w:use="foo.MyWindow"&gt;
 	 * {@link #getFellow}.
 	 * See {@link IdSpace} for more details.
 	 *
-	 * <p>The ID space relevant methods include {@link #getFellow},
+	 * <p>The ID space related methods include {@link #getFellow},
 	 * {@link #getAttribute} and {@link #getAttributeOrFellow}.
 	 */
 	public IdSpace getSpaceOwner();
@@ -150,7 +150,7 @@ w:use="foo.MyWindow"&gt;
 	 * is assigned to the current desktop automatically.
 	 * If a component is created not in any event listener, it doesn't
 	 * belong to any desktop and this method returns null.
-	 * Once a component is attached to a desktop (thru {@link #setPage}
+	 * Once a component is attached to a desktop (by use of {@link #setPage}
 	 * or {@link #setParent}), it belongs to the desktop.
 	 *
 	 * <p>Notice: there is no way to detach a component from a desktop,
@@ -321,50 +321,50 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Component getLastChild();
 
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes private to a component is searched.
 	 * <p>It is also known as the component attributes.
 	 * <p>It is the same as {@link Component#getAttributes}.
 	 */
 	public static final int COMPONENT_SCOPE = 0;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the same ID space.
 	 * <p>It is also known as the ID space attributes.
 	 */
 	public static final int SPACE_SCOPE = 1;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the same page.
 	 * <p>It is also known as the page attributes.
 	 * <p>It is the same as {@link Page#getAttributes}.
 	 */
 	public static final int PAGE_SCOPE = 2;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the same desktop.
 	 * <p>It is also known as the desktop attributes.
 	 * <p>It is the same as {@link Desktop#getAttributes}.
 	 */
 	public static final int DESKTOP_SCOPE = 3;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the same session.
 	 * <p>It is also known as the session attributes.
 	 * <p>It is the same as {@link Session#getAttributes}.
 	 */
 	public static final int SESSION_SCOPE = 4;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the whole application.
 	 * <p>It is also known as the application attributes.
 	 * <p>It is the same as {@link WebApp#getAttributes}.
 	 */
 	public static final int APPLICATION_SCOPE = 5;
-	/** Used with {@link #getAttribute} and relevants to denote
+	/** Used with {@link #getAttribute(String, int)} and related to denote
 	 * custom attributes shared by the same request.
-	 * <p>It is also known as the request attributes.
+	 * <p>It is also known as the request attributes, or execution attributes.
 	 * <p>It is the same as {@link Execution#getAttributes}.
 	 */
 	public static final int REQUEST_SCOPE = 6;
 
 	/** Returns all custom attributes of the specified scope.
-	 * You could reference them thru componentScope, spaceScope, pageScope,
+	 * You could reference them by use of componentScope, spaceScope, pageScope,
 	 * requestScope and desktopScope in zscript and EL.
 	 *
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means custom attributes private
@@ -376,7 +376,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktopas this one's.
 	 *
-	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
+	 * @param scope one of {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
@@ -393,7 +393,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktop as this one's.
 	 *
-	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
+	 * @param scope one of {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
@@ -411,7 +411,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>Notice that <code>null</code> is a valid value, so you can
 	 * tell if an attribute is associated by examining the return value
 	 * of {@link #getAttribute}.
-	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
+	 * @param scope one of {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 * @since 5.0.0
@@ -431,7 +431,7 @@ w:use="foo.MyWindow"&gt;
 	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
 	 * by components from the same desktop as this one's.
 	 *
-	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
+	 * @param scope one of {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
 	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 * @param value the value. If null, the attribute is removed.

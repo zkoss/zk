@@ -449,7 +449,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					var ow = this.ebody.offsetWidth,
 						cw = this.ebody.clientWidth,
 						w = ow - cw;
-					if (cw && w > 11) {
+					if (cw && w > 11) { //with vertical scrollbar
 						if (ow == this.ebodytbl.offsetWidth)
 							this.ebodytbl.style.width = jq.px0(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
 					}

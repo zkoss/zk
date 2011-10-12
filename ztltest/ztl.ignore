@@ -37,6 +37,9 @@ F50-0000001.ztl
 opera={
 // unsupported
 B36-2797773.ztl
+// unsupported
+B30-1914104-1.ztl
+B30-1914104-2.ztl
 }
 ie9={
 B30-1820180.ztl
@@ -73,4 +76,7 @@ B50-3006762.ztl
 chrome={
 // unstable
 B36-2818308.ztl
+// unsupported
+B30-1914104-1.ztl
+B30-1914104-2.ztl
 }
