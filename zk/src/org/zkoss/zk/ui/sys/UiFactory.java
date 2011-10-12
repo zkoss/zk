@@ -155,13 +155,22 @@ public interface UiFactory {
 	 * @exception UiException if failed to instantiate
 	 * @since 6.0.0
 	 */
-	public Composer newComposer(Class klass, Page page);
+	public Composer newComposer(Page page, Class klass);
+	/** Creates and initializes a composer of the given class name and page.
+	 * In most cases, the implementation could use {@link Page#resolveClass}
+	 * to resolve the class, if page is not null.
+	 * @param page the page that the composer will be created for.
+	 * @exception UiException if failed to instantiate
+	 * @since 6.0.0
+	 */
+	public Composer newComposer(Page page, String className)
+	throws ClassNotFoundException;
 	/** Creates and initializes the server push of the given class and desktop.
 	 * @param desktop the desktop that the server push will be created for.
 	 * @exception UiException if failed to instantiate
 	 * @since 6.0.0
 	 */
-	public ServerPush newServerPush(Class klass, Desktop desktop);
+	public ServerPush newServerPush(Desktop desktop, Class klass);
 
 	/** Returns the page definition of the specified path, or null if
 	 * not found.

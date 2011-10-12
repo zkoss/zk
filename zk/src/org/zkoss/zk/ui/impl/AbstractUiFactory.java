@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.impl;
 import java.io.Reader;
 import java.io.IOException;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
 
 import org.zkoss.zk.ui.WebApp;
@@ -116,7 +117,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
 	 * @since 6.0.0
 	 */
-	public Composer newComposer(Class klass, Page page) {
+	public Composer newComposer(Page page, Class klass) {
 		if (!Composer.class.isAssignableFrom(klass))
 			throw new UiException(klass + " must implement "+Composer.class);
 		try {
@@ -125,11 +126,21 @@ abstract public class AbstractUiFactory implements UiFactory {
 			throw UiException.Aide.wrap(ex, "Unable to instantiate "+klass);
 		}
 	}
+	/** Instantiates a composer of the given class name.
+	 * <p>Default: use {@link Page#resolveClass} to resolve the class
+	 * and then invoke {@link #newComposer(Page, Class)} to instantiate an instance.
+	 * @since 6.0.0
+	 */
+	public Composer newComposer(Page page, String className)
+	throws ClassNotFoundException {
+		return newComposer(page,
+			page != null ? page.resolveClass(className): Classes.forNameByThread(className));
+	}
 	/** Instantiates a server push of the given class.
 	 * <p>Default: creates an instance of klass by use of its no-arg constructor.
 	 * @since 6.0.0
 	 */
-	public ServerPush newServerPush(Class klass, Desktop desktop) {
+	public ServerPush newServerPush(Desktop desktop, Class klass) {
 		if (!ServerPush.class.isAssignableFrom(klass))
 			throw new UiException(klass + " must implement "+ServerPush.class);
 		try {

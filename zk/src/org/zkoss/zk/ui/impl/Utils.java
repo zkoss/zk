@@ -76,15 +76,19 @@ public class Utils {
 	throws Exception {
 		Class cls;
 		if (o instanceof String) {
-			cls = page != null ? page.resolveClass((String)o):
-				Classes.forNameByThread(((String)o).trim());
+			final String clsnm = ((String)o).trim();
+			if (page != null)
+				return ((WebAppCtrl)page.getDesktop().getWebApp())
+					.getUiFactory().newComposer(page, clsnm);
+			cls = Classes.forNameByThread(clsnm);
 		} else if (o instanceof Class) {
 			cls = (Class)o;
+			if (page != null) 
+				return ((WebAppCtrl)page.getDesktop().getWebApp())
+					.getUiFactory().newComposer(page, cls);
 		} else
 			return (Composer)o;
 
-		if (page != null) 
-			return ((WebAppCtrl)page.getDesktop().getWebApp()).getUiFactory().newComposer(cls, page);
 		return (Composer)cls.newInstance();
 	}
 }
