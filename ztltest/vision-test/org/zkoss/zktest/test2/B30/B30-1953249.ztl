@@ -1,0 +1,41 @@
+<test tags="B30-1953249.zul,A,E,Borderlayout,Tabbox,VisionTest">
+	<case id="Tabbox">
+		<server><![CDATA[
+<borderlayout>
+    <north size="10%">
+        Click the "Two" tab and you shall see a border layout in the tabpanel
+        Then click the "One" tab and the "Two" tab again,
+        you shall see the border layout in the tabpanel again
+    </north>
+    <center>
+        <tabbox>
+            <tabs>
+                <tab id="t1" label="One" />
+                <tab id="t2" label="Two" />
+            </tabs>
+            <tabpanels>
+                <tabpanel height="50px"> Panel One</tabpanel>
+                <tabpanel height="50px">
+                    <borderlayout>
+                        <north >
+                            North of Panel Two
+                        </north>
+                        <center>
+                            Center of Panel Two
+                        </center>
+                    </borderlayout>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </center>
+</borderlayout>
+		]]></server>
+		<client><![CDATA[
+		verifyImage();
+		click(t2);
+		verifyImage();
+		click(t1);
+		verifyImage();
+		]]></client>
+	</case>
+</test>

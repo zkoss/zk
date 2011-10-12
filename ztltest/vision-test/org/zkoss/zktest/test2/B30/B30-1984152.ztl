@@ -1,0 +1,14 @@
+<test tags="B30-1984152.zul,B,E,Separator,VisionTest">
+	<case id="Separator">
+		<server><!-- 
+<window title="Separator Problem" border="normal" width="200px">
+You should see the separator bar below this.
+<separator bar="true"/>
+Below
+</window>
+	--></server>
+		<client><![CDATA[
+		verifyImage();
+		]]></client>
+	</case>
+</test>

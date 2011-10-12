@@ -1,0 +1,29 @@
+<test tags="B30-1979088-1.zul,A,E,Grid,Paging,BI">
+	<case id="Grid">
+		<server><!-- 
+<window>
+	Click the "test" button, then the background of the both paging are changed to blue.
+<zscript>
+List items = new org.zkoss.zktest.test2.BigList(100); //a big list of
+Integer
+</zscript>
+<button label="test" onClick='grid.pagingChild.setStyle("background:blue;");'/>
+<grid mold="paging" id="grid" pagingPosition="both">
+<rows>
+<row forEach="&#36;{items}">
+<label value="&#36;{each}-1"/>
+<label value="&#36;{each}-2"/>
+<label value="&#36;{each}-3"/>
+<label value="&#36;{each}-4"/>
+</row>
+</rows>
+</grid>
+</window>
+	--></server>
+		<client><![CDATA[
+		verifyImage();
+		click(jq("@button"));
+		verifyImage();
+		]]></client>
+	</case>
+</test>

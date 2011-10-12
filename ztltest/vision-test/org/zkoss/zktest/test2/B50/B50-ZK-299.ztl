@@ -1,0 +1,487 @@
+<test tags="B50-ZK-299.zul,B,E,Grid,Detail,Chrome,VisionTest">
+	<case id="DetailsIcon">
+		<server><!--
+<zk>
+	the detail's icon (+/-) should display correctly in each theme
+	<grid width="600px">
+		<rows>
+
+			<row>
+
+				<detail>
+
+					<vbox>
+
+						<label value="Item Specifics - Item Condition" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Apple" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Technology:" />
+
+							<label value="DVI" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+
+				<label value="US $202.50" />
+
+				<label value="tulsa, ok, United States" />
+
+			</row>
+
+			<row>
+
+				<detail fulfill="onOpen">
+
+					<vbox>
+
+						<label value="Item Specifics" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Kyocera" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Phone Type:" />
+
+							<label
+								value="Phones without Service Contrac" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Product Type:" />
+
+							<label value="Cell Phones" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+
+				<label value="US $74.99" />
+
+				<label value="Speedy Shipping, USA, United States" />
+
+			</row>
+
+		</rows>
+
+	</grid>
+	<button label="change to classic blue">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "classicblue");
+		</attribute>
+	</button>
+</zk>
+--></server>
+		<client><![CDATA[
+				verifyImage();
+				click(jq("@button:eq(0)"));
+				refresh();
+		]]></client>
+	
+			<server><!--
+<zk>
+	the detail's icon (+/-) should display correctly in each theme
+	<grid width="600px">
+		<rows>
+
+			<row>
+
+				<detail>
+
+					<vbox>
+
+						<label value="Item Specifics - Item Condition" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Apple" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Technology:" />
+
+							<label value="DVI" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+
+				<label value="US $202.50" />
+
+				<label value="tulsa, ok, United States" />
+
+			</row>
+
+			<row>
+
+				<detail fulfill="onOpen">
+
+					<vbox>
+
+						<label value="Item Specifics" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Kyocera" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Phone Type:" />
+
+							<label
+								value="Phones without Service Contrac" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Product Type:" />
+
+							<label value="Cell Phones" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+
+				<label value="US $74.99" />
+
+				<label value="Speedy Shipping, USA, United States" />
+
+			</row>
+
+		</rows>
+
+	</grid>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+		</attribute>
+	</button>
+</zk>
+--></server>
+		<client><![CDATA[
+				verifyImage();
+				click(jq("@button:eq(0)"));
+				refresh();
+		]]></client>
+				<server><!--
+<zk>
+	the detail's icon (+/-) should display correctly in each theme
+	<grid width="600px">
+		<rows>
+
+			<row>
+
+				<detail>
+
+					<vbox>
+
+						<label value="Item Specifics - Item Condition" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Apple" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Technology:" />
+
+							<label value="DVI" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+
+				<label value="US $202.50" />
+
+				<label value="tulsa, ok, United States" />
+
+			</row>
+
+			<row>
+
+				<detail fulfill="onOpen">
+
+					<vbox>
+
+						<label value="Item Specifics" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Kyocera" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Phone Type:" />
+
+							<label
+								value="Phones without Service Contrac" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Product Type:" />
+
+							<label value="Cell Phones" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+
+				<label value="US $74.99" />
+
+				<label value="Speedy Shipping, USA, United States" />
+
+			</row>
+
+		</rows>
+
+	</grid>
+	
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+		</attribute>
+	</button>
+</zk>
+--></server>
+		<client><![CDATA[
+				verifyImage();
+				click(jq("@button:eq(0)"));
+				refresh();
+		]]></client>
+						<server><!--
+<zk>
+	the detail's icon (+/-) should display correctly in each theme
+	<grid width="600px">
+		<rows>
+
+			<row>
+
+				<detail>
+
+					<vbox>
+
+						<label value="Item Specifics - Item Condition" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Apple" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Technology:" />
+
+							<label value="DVI" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+
+				<label value="US $202.50" />
+
+				<label value="tulsa, ok, United States" />
+
+			</row>
+
+			<row>
+
+				<detail fulfill="onOpen">
+
+					<vbox>
+
+						<label value="Item Specifics" />
+
+						<hbox>
+
+							<label value="Condition:" />
+
+							<label value="Used" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Brand:" />
+
+							<label value="Kyocera" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Phone Type:" />
+
+							<label
+								value="Phones without Service Contrac" />
+
+						</hbox>
+
+						<hbox>
+
+							<label value="Product Type:" />
+
+							<label value="Cell Phones" />
+
+						</hbox>
+
+					</vbox>
+
+				</detail>
+
+				<label
+					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+
+				<label value="US $74.99" />
+
+				<label value="Speedy Shipping, USA, United States" />
+
+			</row>
+
+		</rows>
+
+	</grid>
+	
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+		</attribute>
+	</button>
+</zk>
+--></server>
+		<client><![CDATA[
+				verifyImage();
+				click(jq("@button:eq(0)"));
+				refresh();
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,49 @@
+<test tags="B30-1944729.zul,B,E,Window,Tabbox,VisionTest">
+	<case id="Window">
+		<server><![CDATA[
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<window id="prova"
+           border="normal" 
+           width="80%" 
+           height="80%">
+    <button label="Click Me" onClick="mywin.setVisible(true)"/>
+After you click the "Click Me" button, the "Ciao 3" label is properly embedded in its border.
+	<window id="mywin" height="90%" border="normal" visible="false">
+		<tabbox height="100%">
+			<tabs>
+				<!-- <tab label="Tab 1"/>
+				<tab label="Tab 2"/> -->
+				<tab label="Tab 3"/>
+			</tabs>
+			<tabpanels>
+				<!-- <tabpanel height="100%">
+					<window border="normal" width="100%" height="100%">
+						<label value="Ciao 1"/>
+					</window>
+				</tabpanel>
+				<tabpanel height="100%">
+					<hbox width="100%" height="100%" style="border: red solid 1px">
+						<label value="Ciao 2"/>
+					</hbox>
+				</tabpanel> -->
+				<tabpanel height="100%">
+					<hbox pack="stretch" width="100%" height="100%" style="border: red solid 1px">
+						<window border="normal" hflex="1" height="100%" style="border: blue solid 1px">
+							<label value="Ciao 3"/>
+						</window>
+					</hbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+			 
+</window>
+</zk>
+		]]></server>
+		<client><![CDATA[
+		verifyImage();
+		click(jq("@button"));
+		verifyImage();
+		]]></client>
+	</case>
+</test>
