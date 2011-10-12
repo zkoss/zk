@@ -21,7 +21,7 @@ import org.zkoss.ztl.Tags;
  *
  * @author jumperchen
  */
-@Tags(tags = "Z30-action.zul,C,E,Window,Textbox")
+@Tags(tags = "Z30-action.zul,B,E,Html,UI")
 class Z30_actionTest extends ZTL4ScalaTestCase {
 	def testCase() = {
 		val zscript = {
