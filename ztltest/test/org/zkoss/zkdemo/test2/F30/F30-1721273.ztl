@@ -13,7 +13,7 @@
 			
 			verifyFalse(jq("@window").exists());
 			focus(tb1);
-			sendKeys((tb1), Keys.ENTER);
+			sendKeys(tb1, Keys.ENTER);
 			waitResponse();
 			
 			verifyTrue(jq("@window").exists());
