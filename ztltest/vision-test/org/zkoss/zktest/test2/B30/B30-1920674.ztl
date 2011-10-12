@@ -1,0 +1,30 @@
+<test tags="B30-1920674.zul,B,E,Hbox,Splitter,IE,VisionTest">
+	<case id="IE67">
+		<server><!--
+<zk>
+<html><![CDATA[
+[IE6/7 only] To reproduce
+
+<ol>
+<li>Click the collapse button on the splitter.</li>
+<li>The splitter moved to the end of right side</li>
+<li>If the dark blue bar doesn't overlap the light blue bar, it is a bug
+(see attachement)</li>
+</ol>
+
+]]></html>
+	<hbox width="100%" height="100%">
+	cdacdacdacda
+	<splitter id="hs" collapse="after" />
+	cdaccdacdacda
+	</hbox>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq(".z-splitter-hor-btn-r"));
+			waitResponse();
+			verifyImage();
+		]]></client>
+	</case>
+</test>

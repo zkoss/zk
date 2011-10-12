@@ -1,0 +1,31 @@
+<test tags="B30-1926759.zul,A,E,Splitter,VisionTest">
+	<case id="Splitter">
+		<server><!--
+<hbox spacing="0" width="100%" height="300px">
+	<vbox spacing="0" width="100%" height="100%" heights="200px">
+	Column 1-1: both splitters shall not be visible.
+	Then click the checkbox to see if the visibility of splitter is
+	changed accordingly.
+	<splitter id="s1" collapse="after" visible="false"/>
+	<div>
+	Column 1-2:
+	<checkbox id="ck1" label="splitter visible" onCheck="s1.visible = !s1.visible"
+		checked="${s1.visible}"/>
+	</div>
+	</vbox>
+	<splitter id="s2" collapse="before" visible="false"/>
+	<div>
+	Column 2:
+	<checkbox id="ck2" label="splitter visible" onCheck="s2.visible = !s2.visible"
+		checked="${s2.visible}"/>
+	</div>
+</hbox>	--></server>
+		<client><![CDATA[
+		verifyImage();
+		click(ck1.$n("real"));
+		verifyImage();
+		click(ck2.$n("real"));
+		verifyImage();
+		]]></client>
+	</case>
+</test>
