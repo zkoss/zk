@@ -226,7 +226,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!ebody)
 			return; //not ready yet
 		var max = ebody.offsetHeight;
-		if (max - ebody.clientHeight > 11)
+		if (zk(ebody).hasHScroll()) //with horizontal scrollbar
 			max -= jq.scrollbarWidth();
 		if (max == wgt._prehgh) return false; //same height, avoid fixing page size
 		wgt._prehgh = max;
