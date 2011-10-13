@@ -150,6 +150,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_syncFrozen(w);
 		});
 		this._shallScrollIntoView = true;
+		
+		// Bug in B50-ZK-56.zul
+		if (zk.ie6_ && this.getSelectedIndex() > -1)
+			zk(this).redoCSS();
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {

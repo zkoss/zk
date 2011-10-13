@@ -471,7 +471,7 @@
 
 	</grid>
 	
-	<button label="change to breeze">
+	<button id="reset" label="change to breeze">
 		<attribute name="onClick">
 			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
 		</attribute>
@@ -480,7 +480,7 @@
 --></server>
 		<client><![CDATA[
 				verifyImage();
-				click(jq("@button:eq(0)"));
+				click(reset);
 				refresh();
 		]]></client>
 	</case>

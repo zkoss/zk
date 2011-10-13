@@ -1,0 +1,38 @@
+<test tags="B50-ZK-371.zul,A,E,Tree,zWatch,flex,VisionTest">
+	<case id="Flex">
+		<server><!--
+<zk>
+	<html>
+	Click the Go button and you shall see the tabbox switched and the tree being shown
+	with the minimal width
+	</html>
+	<tabbox>
+		<custom-attributes org.zkoss.zul.client.rod="false" />
+		<tabs>
+			<tab>1</tab>
+			<tab id="t2">2</tab>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				Tabpanel 1
+			</tabpanel>
+			<tabpanel id="p2">
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<button label="Go" onClick='t2.selected = true'>
+		<attribute name="onClick"><![CDATA[
+			Executions.createComponentsDirectly("<tree id=\"tree\" rows=\"8\" hflex=\"min\"><treechildren><treeitem><treerow><treecell label=\"Item 1\" /><treecell label=\"Item 1 description\" /></treerow></treeitem><treeitem><treerow><treecell label=\"Item 2\" /><treecell label=\"Item 2 description\" /></treerow><treechildren><treeitem><treerow><treecell label=\"Item 2.1\" /></treerow><treechildren><treeitem><treerow><treecell label=\"Item 2.1.1\" /></treerow></treeitem><treeitem><treerow><treecell label=\"Item 2.1.2\" /></treerow></treeitem></treechildren></treeitem><treeitem><treerow><treecell label=\"Item 2.2\" /></treerow><treechildren><treeitem><treerow><treecell label=\"Item 2.2.1\" /></treerow></treeitem></treechildren></treeitem></treechildren></treeitem><treeitem label=\"Item 3\" /></treechildren></tree>", null, p2, null);
+			t2.selected = true;
+		]]></attribute>
+	</button>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq("@button"));
+			waitResponse();
+			verifyImage();
+		]]></client>
+	</case>
+</test>
