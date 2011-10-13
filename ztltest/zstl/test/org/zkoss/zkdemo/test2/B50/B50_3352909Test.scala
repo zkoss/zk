@@ -57,7 +57,7 @@ class B50_3352909Test extends ZTL4ScalaTestCase {
 
     }
 
-    def executor() = {
+    def executor = ()=>{
     	var lb: Widget = engine.$f("lb");
 		var grid: Widget = engine.$f("grid");
 		waitResponse();

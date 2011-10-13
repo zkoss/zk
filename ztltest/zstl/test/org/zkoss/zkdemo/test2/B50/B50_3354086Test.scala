@@ -80,7 +80,7 @@ class B50_3354086Test extends ZTL4ScalaTestCase {
 
     }
 
-    def executor() = {
+    def executor = ()=>{
     	var lb: Widget = engine.$f("lb");
     	waitResponse();
     	verifyFalse(jq(".z-window-highlighted").exists());

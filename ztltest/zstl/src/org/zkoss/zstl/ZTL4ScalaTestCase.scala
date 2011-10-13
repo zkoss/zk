@@ -19,7 +19,8 @@ class ZTL4ScalaTestCase extends ZKClientTestCase {
   caseID = getClass().getSimpleName()
 
   var _engine: Widget = null;
-  def runZTL(zscript: scala.xml.Elem, executor: () => Unit) = {
+  
+  def runZTL(zscript: String, executor: () => Unit) {
     for (browser <- browsers) {
       try {
         start(browser);
@@ -30,8 +31,10 @@ class ZTL4ScalaTestCase extends ZKClientTestCase {
         runZscript(
           zscript 
           toString()
+          trim()
           replace("\\", "\\\\")
           replace("'", "\\'")
+          replaceAll("\r", "")
           replaceAll("\n", "\\\\n"))
 
         waitResponse();
@@ -40,7 +43,12 @@ class ZTL4ScalaTestCase extends ZKClientTestCase {
       } finally {
         stop();
       }
-    }
+    }  	  
   }
+  
+  def runZTL(zscript: scala.xml.Elem, executor: () => Unit){
+	runZTL(zscript.toString(),executor);
+  }  
+
   def engine(): Widget = _engine;
 }

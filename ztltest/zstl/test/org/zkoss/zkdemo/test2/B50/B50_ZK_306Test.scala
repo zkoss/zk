@@ -88,7 +88,7 @@ class B50_ZK_306Test extends ZTL4ScalaTestCase {
 			</zk>
     }
 
-    def executor() = {
+    def executor = ()=>{
     	var btn: Widget = engine.$f("btn");
     	var btn2: Widget = engine.$f("btn2");
     	var tree: Widget = engine.$f("tree");

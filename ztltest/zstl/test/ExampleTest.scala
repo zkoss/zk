@@ -52,7 +52,7 @@ class ExampleTest extends ZTL4ScalaTestCase {
       </vbox>
     }
     
-    def executor() = {
+    def executor = ()=> {
         var l1: Widget = engine.$f("l1");
         var l2: Widget = engine.$f("l2");
         waitResponse();
