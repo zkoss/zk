@@ -1,3 +1,6 @@
+<test tags="Z30-alignPack-0005.zul,Z30,A,E,Hbox,VisionTest">
+	<case id="Hbox">
+		<server><!--
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>1. Each space between each other is the same from the first hbox.</n:p>
 	<n:p>2. Each space between each other is the same as each label from the second hbox.</n:p>
@@ -24,3 +27,10 @@
 		<div sclass="obj">600</div>
 	</hbox>
 </zk>
+
+		--></server>
+		<client><![CDATA[
+				verifyImage();
+		]]></client>
+	</case>
+</test>

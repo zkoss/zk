@@ -1,11 +1,11 @@
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>When you choose each radio button, the textbox inside the red line is located properly.</n:p>
+	<n:p>When you choose each radio button, the textbox inside the blue line is located properly.</n:p>
 	<n:p><n:strong>PACK: </n:strong>It means horizontal position.</n:p>
 	<n:p><n:strong>ALIGN: </n:strong>It means vertical position.</n:p>
 	<label value="PACK AND ALIGN - HBOX:" />
 	<style>
 		table.hbox{ 
-			border: solid red 1px; }
+			border: solid blue 1px; }
 	</style>
 	<hbox sclass="hbox" id="hb" height="90px"
 		width="90px" pack="stretch">

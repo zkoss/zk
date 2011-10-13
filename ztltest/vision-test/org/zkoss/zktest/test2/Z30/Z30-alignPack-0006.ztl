@@ -1,3 +1,6 @@
+<test tags="Z30-alignPack-0006.zul,Z30,A,E,Vbox,VisionTest">
+	<case id="Vbox">
+		<server><!--
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:div>1. Each space between each other is the same from the first vbox.</n:div>
 	<n:div>2. Each space between each other is the same as each label from the second vbox.</n:div>
@@ -24,3 +27,9 @@
 		<div sclass="obj">200</div>
 	</vbox>
 </zk>
+		--></server>
+		<client><![CDATA[
+				verifyImage();
+		]]></client>
+	</case>
+</test>
