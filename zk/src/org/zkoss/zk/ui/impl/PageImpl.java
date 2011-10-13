@@ -974,7 +974,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (_listeners != null) {
 			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
 			if (l != null)
-				return CollectionsX.iterable(CollectionsX.comodifiableIterator(l));
+				return new Iterable<EventListener<? extends Event>>() {
+					public Iterator<EventListener<? extends Event>> iterator() {
+						return CollectionsX.comodifiableIterator(l);
+					}
+				};
 		}
 		return CollectionsX.emptyIterable();
 	}

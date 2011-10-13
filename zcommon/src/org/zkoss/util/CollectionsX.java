@@ -238,18 +238,6 @@ public class CollectionsX {
 			throw new UnsupportedOperationException();
 		}
 	};
-	/** An iterable object that iterates through an Enumeration.
-	 * @since 6.0.0
-	 */
-	public static final class EnumerationIterable<E> implements Iterable<E> {
-		private final Iterator<E> _it;
-		public EnumerationIterable(Enumeration<? extends E> enm) {
-			_it = new EnumerationIterator<E>(enm);
-		}
-		public Iterator<E> iterator() {
-			return _it;
-		}
-	}
 
 	/** Empty iterator.
 	 */
@@ -292,16 +280,6 @@ public class CollectionsX {
 		return EMPTY_ENUMERATION;
 	}
 
-	/** Returns an iterable object of the given iterator.
-	 * @since 6.0.0
-	 */
-	public static final <T> Iterable<T> iterable(final Iterator<T> it) {
-		return new Iterable<T>() {
-			public Iterator<T> iterator() {
-				return it;
-			}
-		};
-	}
 	/** Returns an empty iterable object.
 	 * @since 6.0.0
 	 */
@@ -309,7 +287,11 @@ public class CollectionsX {
 	public static final <T> Iterable<T> emptyIterable() {
 		return EMPTY_ITERABLE;
 	}
-	private static final Iterable EMPTY_ITERABLE = iterable(EMPTY_ITERATOR);
+	private static final Iterable EMPTY_ITERABLE = new Iterable() {
+		public Iterator iterator() {
+			return EMPTY_ITERATOR;
+		};
+	};
 
 	/**
 	 * Returns the specified range of the specified collection into a new array.

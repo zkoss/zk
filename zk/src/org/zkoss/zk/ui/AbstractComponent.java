@@ -2257,8 +2257,11 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
 			if (l != null)
-				return CollectionsX.iterable(
-					CollectionsX.comodifiableIterator(l, _listenerInfoConverter));
+				return new Iterable<EventListener<? extends Event>>() {
+					public Iterator<EventListener<? extends Event>> iterator() {
+						return CollectionsX.comodifiableIterator(l, _listenerInfoConverter);
+					}
+				};
 		}
 		return CollectionsX.emptyIterable();
 	}

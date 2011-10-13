@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Enumeration;
@@ -477,13 +478,15 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 	@SuppressWarnings("unchecked")
 	public Iterable<String> getHeaders(String name) {
-		final Enumeration<String> enm = _request.getHeaders(name);
-		return enm != null ? new CollectionsX.EnumerationIterable<String>(enm): null;
+		final Enumeration<String> headers = _request.getHeaders(name);
+		return headers != null ? new Headers(name, headers): null;
+			//Follow Servlet spec: null if not accessible
 	}
 	@SuppressWarnings("unchecked")
 	public Iterable<String> getHeaderNames() {
-		final Enumeration<String> enm = _request.getHeaderNames();
-		return enm != null ? new CollectionsX.EnumerationIterable<String>(enm): null;
+		final Enumeration<String> headers = _request.getHeaderNames();
+		return headers != null ? new HeaderNames(headers): null;
+			//Follow Servlet spec: null if not accessible
 	}
 	public void setResponseHeader(String name, String value) {
 		_response.setHeader(name, value);
@@ -501,6 +504,42 @@ public class ExecutionImpl extends AbstractExecution {
 		return _response.containsHeader(name);
 	}
 
+	private class Headers implements Iterable<String> {
+		private final String _name;
+		private Enumeration<String> _cache;
+		private Headers(String name, Enumeration<String> cache) {
+			_name = name;
+			_cache = cache;
+		}
+		@SuppressWarnings("unchecked")
+		public Iterator<String> iterator() {
+			final Enumeration<String> headers;
+			if (_cache != null) {
+				headers = _cache;
+				_cache = null; //used only once
+			} else {
+				headers = _request.getHeaders(_name);
+			}
+			return new CollectionsX.EnumerationIterator<String>(headers);
+		}
+	}
+	private class HeaderNames implements Iterable<String> {
+		private Enumeration<String> _cache;
+		private HeaderNames(Enumeration<String> cache) {
+			_cache = cache;
+		}
+		@SuppressWarnings("unchecked")
+		public Iterator<String> iterator() {
+			final Enumeration<String> headers;
+			if (_cache != null) {
+				headers = _cache;
+				_cache = null; //used only once
+			} else {
+				headers = _request.getHeaderNames();
+			}
+			return new CollectionsX.EnumerationIterator<String>(headers);
+		}
+	}
 	private class ReqContext implements RequestContext {
 		public Writer getOut() throws IOException {
 			return _response.getWriter();
