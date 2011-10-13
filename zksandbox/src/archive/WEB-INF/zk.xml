@@ -96,7 +96,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	the NumberInputElement when the locale is specified.
 	Note that the format by default is (##,##0.##). Since 5.0.9
 	<library-property>
-		<name>org.zkoss.zul.impl.numberInputElement.format</name>
+		<name>org.zkoss.zul.numberFormat</name>
 		<value>##,##0.##</value>
 	</library-property>
 	-->

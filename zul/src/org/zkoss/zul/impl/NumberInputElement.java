@@ -179,7 +179,7 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 	 * the following setting in zk.xml
 	 * <pre><code>
 	 *	<library-property>
-	 *		<name>org.zkoss.zul.impl.numberInputElement.format</name>
+	 *		<name>org.zkoss.zul.numberFormat</name>
 	 *		<value>##,##0.##</value>
 	 *	</library-property>
 	 * </code></pre>
@@ -187,7 +187,7 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 	 * @see #setLocale(Locale)
 	 */
 	protected String getDefaultFormat() {
-		return Library.getProperty("org.zkoss.zul.impl.numberInputElement.format", "##,##0.##");
+		return Library.getProperty("org.zkoss.zul.numberFormat", "##,##0.##");
 	}
 	//utilities//
 	/** Formats a number (Integer, BigDecimal...) into a string.
