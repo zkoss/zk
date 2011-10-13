@@ -141,6 +141,8 @@
 				// pack start without stretch
 				click(r0.$n("real"));
 				click(r20.$n("real"));
+				click(r3.$n("real"));
+				click(r23.$n("real"));
 				verifyImage();
 				click(r4.$n("real"));
 				click(r24.$n("real"));
