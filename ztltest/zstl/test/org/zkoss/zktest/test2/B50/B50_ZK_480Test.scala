@@ -1,4 +1,4 @@
-/* B50_ZK_332Test.scala
+/* B50_ZK_480Test.scala
 
 {{IS_NOTE
 	Purpose:
@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-package org.zkoss.zkdemo.test2.B50
+package org.zkoss.zktest.test2.B50
 
 import org.zkoss.zstl.ZTL4ScalaTestCase
 import scala.collection.JavaConversions._
@@ -29,51 +29,37 @@ import org.zkoss.ztl.ZKClientTestCase;
 import java.lang._
 
 /**
- * A test class for bug ZK-332
+ * A test class for bug ZK-480
  * @author benbai
  *
  */
-@Tags(tags = "B50-ZK-332.zul,A,E,Tree,disabled,open")
-class B50_ZK_332Test extends ZTL4ScalaTestCase {
+@Tags(tags = "B50-ZK-480.zul,A,E,Tree,ROD,DragDrop")
+class B50_ZK_480Test extends ZTL4ScalaTestCase {
 	
   def testClick() = {
     val zscript = {
-						<zk>
-			<html><![CDATA[
-			<ul>
-			<li>Click the open icon of the B node, and you shall be able to close and open it freely.</li>
-			</ul>
-			]]></html>
-
-			<tree id="tree">
-				<treechildren>
-					<treeitem label="A">
-					</treeitem>
-					<treeitem disabled="true">
-						<treerow id="tr" label="B"/>
-						<treechildren>
-							<treeitem label="C"/>
-							<treeitem label="D"/>
-						</treechildren>
-					</treeitem>
-				</treechildren>
-			</tree>
+			<zk>
+				<div>Open the Treeitem. You should NOT see javascript error.</div>
+				<tree id="tree">
+					<treechildren>
+						<treeitem id="ti" label="Item 1" open="false">
+							<treechildren>
+								<treeitem draggable="true" label="Item 2" />
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
 			</zk>
     }
 
-    def executor = () => {
+    def executor = ()=>{
     	var tree: Widget = engine.$f("tree");
-    	var tr: Widget = engine.$f("tr");
+    	var ti: Widget = engine.$f("ti");
     	waitResponse();
 
-    	click(jq(tr.$n()).find(".z-tree-ico"));
+    	click(jq(ti.$n()).find(".z-tree-ico"));
     	waitResponse();
-    	verifyTrue("none".equals(jq(tree.$n("rows")).find(".z-treerow").get(2).get("style.display")));
-    	verifyTrue("none".equals(jq(tree.$n("rows")).find(".z-treerow").get(3).get("style.display")));
-    	click(jq(tr.$n()).find(".z-tree-ico"));
-    	waitResponse();
-    	verifyTrue("".equals(jq(tree.$n("rows")).find(".z-treerow").get(2).get("style.display")));
-    	verifyTrue("".equals(jq(tree.$n("rows")).find(".z-treerow").get(3).get("style.display")));
+    	verifyFalse(jq(".z-error").exists());
     }
    // Run syntax 1 
    runZTL(zscript, executor);
