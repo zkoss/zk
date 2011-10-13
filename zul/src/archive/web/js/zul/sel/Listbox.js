@@ -151,7 +151,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		});
 		this._shallScrollIntoView = true;
 		
-		// Bug in B50-ZK-56.zul
+		// Bug in B50-ZK-272.zul
 		if (zk.ie6_ && this.getSelectedIndex() > -1)
 			zk(this).redoCSS();
 	},
