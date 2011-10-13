@@ -33,6 +33,7 @@ ZK 6.0.0
   ZK-12: Checkbox automatically disable itself after clicked
   ZK-458: The language definition allows a WPD package to be merged to another
   ZK-83: Messageboxes buttons should be rendered in the users order
+  ZK-501: Messagebox supports custom labels
   ZK-463: Messagebox supports enum to specify the button
   ZK-464: Window's mode supports enum
   ZK-468: Add Selectbox component to ZK core 

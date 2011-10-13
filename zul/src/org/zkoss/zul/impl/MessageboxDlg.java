@@ -59,7 +59,7 @@ public class MessageboxDlg extends Window {
 	}
 
 	/** Sets what buttons are allowed. */
-	public void setButtons(Messagebox.Button[] buttons) {
+	public void setButtons(Messagebox.Button[] buttons, String[] btnLabels) {
 		_buttons = buttons;
 
 		final Component parent = getFellowIfAny("buttons");
@@ -69,7 +69,8 @@ public class MessageboxDlg extends Window {
 			final String sclass = (String)parent.getAttribute("button.sclass");
 			for (int j = 0; j < _buttons.length; ++j) {
 				final Button mbtn = new Button();
-				mbtn.setButton(_buttons[j]);
+				mbtn.setButton(_buttons[j],
+					btnLabels != null && j < btnLabels.length ? btnLabels[j]: null);
 				mbtn.setSclass(sclass);
 				parent.appendChild(mbtn);
 			}
@@ -136,10 +137,17 @@ public class MessageboxDlg extends Window {
 	public static class Button extends org.zkoss.zul.Button {
 		private Messagebox.Button _button;
 
-		public void setButton(Messagebox.Button button) {
+		/** Sets the label's information and label. */
+		public void setButton(Messagebox.Button button, String label) {
 			_button = button;
-			setLabel(Messages.get(_button.label));
+			setLabel(label != null ? label: Messages.get(_button.label));
 			setId("btn" + _button.id);
+			if (label != null && label.length() > 7) //dirty trick (since there is a default width)
+				setWidth("auto");
+		}
+		/** Sets the label's information with a default label. */
+		public void setButton(Messagebox.Button button) {
+			setButton(button, null);
 		}
 		public void onClick() throws Exception {
 			((MessageboxDlg)getSpaceOwner()).endModal(_button);

@@ -118,6 +118,8 @@ public class Messagebox {
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
 	 * @param buttons an array of buttons to show.
 	 * The buttons will be displayed in the same order in the array.
+	 * @param btnLabels the label used for each button specified in the buttons
+	 * argument. If null, the default label will be used.
 	 * @param icon one of predefined images: {@link #QUESTION},
 	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
 	 * name(s) to show an image.
@@ -140,7 +142,8 @@ public class Messagebox {
 	 * returns {@link Button#OK}.
 	 * @since 6.0.0
 	 */
-	public static Button show(String message, String title, Button[] buttons, String icon,
+	public static Button show(String message, String title,
+	Button[] buttons, String[] btnLabels, String icon,
 	Button focus, EventListener<ClickEvent> listener) {
 		final Map<String, Object> params = new HashMap<String, Object>();
 		params.put("message", message);
@@ -165,7 +168,7 @@ public class Messagebox {
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, params);
 		dlg.setEventListener(listener);
-		dlg.setButtons(buttons);
+		dlg.setButtons(buttons, btnLabels);
 		if (focus != null) dlg.setFocus(focus);
 
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
@@ -189,19 +192,50 @@ public class Messagebox {
 		= new Messagebox.Button[] {Messagebox.Button.OK};
 
 	/** Shows a message box and returns what button is pressed.
+	 *
+	 * @param title the title. If null, {@link WebApp#getAppName} is used.
+	 * @param buttons an array of buttons to show.
+	 * The buttons will be displayed in the same order in the array.
+	 * @param icon one of predefined images: {@link #QUESTION},
+	 * {@link #EXCLAMATION}, {@link #ERROR}, {@link #NONE}, or any style class
+	 * name(s) to show an image.
+	 * @param focus one of button to have to focus. If null, the first button
+	 * will gain the focus.
+	 * @param listener the event listener which is invoked when a button
+	 * is clicked. Ignored if null.
+	 * It is useful if the event processing thread is disabled
+	 * ({@link org.zkoss.zk.ui.util.Configuration#enableEventThread}).
+	 * If the event processing thread is disabled (system default), this method always
+	 * return {@link Button#OK}. To know which button is pressed, you have to pass an
+	 * event listener. Then, when the user clicks a button, the event
+	 * listener is invoked with an instance of {@link ClickEvent}.
+	 * You can identify which button is clicked
+	 * by examining {@link ClickEvent#getButton} or {@link ClickEvent#getName}.
+	 * If the close button is clicked, the onClose event is sent and
+	 * {@link ClickEvent#getButton} return null;
+	 * @return the button being pressed.
+	 * Note: if the event processing thread is disabled (system default), it always
+	 * returns {@link Button#OK}.
+	 * @since 6.0.0
+	 */
+	public static Button show(String message, String title, Button[] buttons, String icon,
+	Button focus, EventListener<ClickEvent> listener) {
+		return show(message, title, buttons, null, icon, focus, listener);
+	}
+	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, title, buttons, icon, null, listener).
 	 * @since 6.0.0
 	 */
 	public static Button show(String message, String title, Button[] buttons, String icon,
 	EventListener<ClickEvent> listener) {
-		return show(message, title, buttons, icon, null, listener);
+		return show(message, title, buttons, null, icon, null, listener);
 	}
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, buttons, INFORMATION, null, listener).
 	 * @since 6.0.0
 	 */
 	public static Button show(String message, Button[] buttons, EventListener<ClickEvent> listener) {
-		return show(message, null, buttons, INFORMATION, null, listener);
+		return show(message, null, buttons, null, INFORMATION, null, listener);
 	}
 
 	/** Shows a message box and returns what button is pressed.
@@ -334,7 +368,7 @@ public class Messagebox {
 	 */
 	public static int show(String message, String title, int buttons, String icon,
 	int focus, EventListener<Event> listener) {
-		return show(message, title, toButtonTypes(buttons), icon,
+		return show(message, title, toButtonTypes(buttons), null, icon,
 			focus != 0 ? toButtonType(focus): null,
 			toButtonListener(listener)).id;
 	}
