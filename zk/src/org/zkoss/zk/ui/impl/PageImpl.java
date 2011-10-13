@@ -960,6 +960,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return false;
 	}
+	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
+	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
 		if (_listeners != null) {
 			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
@@ -969,7 +971,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return CollectionsX.emptyIterator();
 	}
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
-		return CollectionsX.iterable(getListenerIterator(evtnm));
+		if (_listeners != null) {
+			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
+			if (l != null)
+				return CollectionsX.iterable(CollectionsX.comodifiableIterator(l));
+		}
+		return CollectionsX.emptyIterable();
 	}
 
 	public final Component getOwner() {

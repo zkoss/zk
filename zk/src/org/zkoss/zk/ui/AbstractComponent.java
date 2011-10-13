@@ -2243,6 +2243,8 @@ w:use="foo.MyWindow"&gt;
 		}
 		return false;
 	}
+	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
+	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
@@ -2252,7 +2254,13 @@ w:use="foo.MyWindow"&gt;
 		return CollectionsX.emptyIterator();
 	}
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
-		return CollectionsX.iterable(getListenerIterator(evtnm));
+		if (_auxinf != null && _auxinf.listeners != null) {
+			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
+			if (l != null)
+				return CollectionsX.iterable(
+					CollectionsX.comodifiableIterator(l, _listenerInfoConverter));
+		}
+		return CollectionsX.emptyIterable();
 	}
 
 	public void applyProperties() {
@@ -2625,9 +2633,8 @@ w:use="foo.MyWindow"&gt;
 		}
 
 		if (page != null)
-			for (Iterator<EventListener<? extends Event>> it = page.getListenerIterator(evtnm); it.hasNext();) {
+			for (EventListener<? extends Event> el: page.getEventListeners(evtnm)) {
 			//Note: CollectionsX.comodifiableIterator is used so OK to iterate
-				final EventListener<? extends Event> el = it.next();
 				execinf.update(null, el, null);
 				onEvent(el, event);
 				if (!event.isPropagatable())
