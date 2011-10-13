@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.zkoss.json.JSONValue;
 import org.zkoss.lang.JVMs;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.math.RoundingModes;
@@ -109,11 +110,17 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 	/** Sets the locale used to identify the symbols of this number input element.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
+	 * <p> If the format of {@link #getFormat()} is null, the format is assumed from
+	 * {@link #getDefaultFormat()}. (since 5.0.9)
 	 * @since 5.0.8
 	 */
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
+			
+			if (getFormat() == null)
+				setFormat(getDefaultFormat());
+			
 			invalidate();
 		}
 	}
@@ -166,6 +173,22 @@ implements org.zkoss.zul.impl.api.NumberInputElement {
 			renderer.render("localizedSymbols", getRealSymbols());
 	}
 	
+	/**
+	 * Return a default format for the number input element when the locale is specified.
+	 * <p> Default: <code>##,##0.##</code>, you can overwrite this by specifying
+	 * the following setting in zk.xml
+	 * <pre><code>
+	 *	<library-property>
+	 *		<name>org.zkoss.zul.impl.numberInputElement.format</name>
+	 *		<value>##,##0.##</value>
+	 *	</library-property>
+	 * </code></pre>
+	 * @since 5.0.9
+	 * @see #setLocale(Locale)
+	 */
+	protected String getDefaultFormat() {
+		return Library.getProperty("org.zkoss.zul.impl.numberInputElement.format", "##,##0.##");
+	}
 	//utilities//
 	/** Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
