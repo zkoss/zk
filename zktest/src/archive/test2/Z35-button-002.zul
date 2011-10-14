@@ -6,10 +6,10 @@
   
   if you see the images are displayed properly according to the direction, test is correct.
   <separator/>
-  <button label="Left" image="../img/folder.gif" width="125px"/>
-  <button label="Right" image="../img/folder.gif" dir="reverse" width="125px"/>
-  <button label="Above" image="../img/folder.gif" orient="vertical" width="125px"/>
-  <button label="Below" image="../img/folder.gif" orient="vertical" dir="reverse" width="125px"/>
+  <button label="Left" image="img/folder.gif" width="125px"/>
+  <button label="Right" image="img/folder.gif" dir="reverse" width="125px"/>
+  <button label="Above" image="img/folder.gif" orient="vertical" width="125px"/>
+  <button label="Below" image="img/folder.gif" orient="vertical" dir="reverse" width="125px"/>
   <h:button>HTML button</h:button>
   </window>
 </zk>
