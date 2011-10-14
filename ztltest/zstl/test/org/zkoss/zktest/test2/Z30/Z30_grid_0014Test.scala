@@ -77,8 +77,8 @@ class Z30_grid_0014Test extends ZTL4ScalaTestCase {
                   
         def clickThenValidate(selector:String,validator:()=>Unit ){
             click(jq(selector));
-        	waitResponse
-        	validator
+        	waitResponse();
+        	validator();
         }
         
         def verifyRowContent(iterator:Iterator[String]) ={
