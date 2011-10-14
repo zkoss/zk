@@ -158,23 +158,12 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	}
 
 	//@Override
-	/** Adds child to this node at the given index.
-     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
-     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception UnsupportedOperationException if this node does not allow children
-     * @exception NullPointerException if <code>child</code> is null
-	 */
 	public void insert(TreeNode child, int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.add(index, child);
 	}
 	//@Override
-	/** Adds a child to this node at the end.
-     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception UnsupportedOperationException if this node does not allow children
-     * @exception NullPointerException if <code>child</code> is null
-	 */
 	public void add(TreeNode child) {
 		insert(child, getChildCount());
 	}
@@ -187,31 +176,17 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	}
 
 	//@Override
-	/**
-     * Removes the child at the specified index from this node's children,
-     * and sets that node's parent to null.
-     *
-     * @param index the index in this node's child array of the child to remove
-     * @exception UnsupportedOperationException if this node does not allow children
-     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
-     */
 	public void remove(int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.remove(index);
 	}
 	//@Override
-	/**
-     * Removes <code>child</code> from this node's children, giving it a null parent.
-     *
-     * @param child a child of this node to remove
-     * @exception UnsupportedOperationException if this node does not allow children
-     * @exception IllegalArgumentException if <code>child</code> is not a child of this node
-     */
 	public void remove(TreeNode child) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
-		_children.remove(child);
+		if(!_children.remove(child))
+			throw new IllegalArgumentException("not a child of this node");
 	}
 	
 	public int compareTo(Object obj) {
