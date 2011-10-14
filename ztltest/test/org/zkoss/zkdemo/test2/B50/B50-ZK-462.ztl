@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					<checkbox id="cb1" label="maximizable" checked="true" onCheck="win.setMaximizable(self.checked);" />
 					<checkbox id="cb2" label="minimizable" onCheck="win.setMinimizable(self.checked);" />
 					<checkbox id="cb3" label="closable" onCheck="win.setClosable(self.checked);" />
-					<checkbox id="cb4" label="border">
+					<checkbox id="cb4" label="border" checked="true">
 						 <attribute name="onCheck">
 						 	if (self.checked)
 						 		win.setBorder("normal");
