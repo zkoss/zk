@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	private DefaultTreeModel _model;
 	private DefaultTreeNode _parent;
 	/** List<DefaultTreeNode> */
-	private ArrayList _children;
+	private List _children = new TreeNodeChildrenList();
 	private Object _data;
 	private final boolean _leaf;
 	/** Whether to treat null as the maximum value. */
@@ -122,7 +123,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	
 	//@Override
 	public List getChildren(){
-		return _children;
+		return isLeaf() ? null : _children;
 	}
 
 	//@Override
@@ -132,7 +133,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	}
 	//@Override
 	public int getChildCount() {
-		return _children != null ? _children.size(): 0;
+		return isLeaf() ? 0 : _children.size();
 	}
 	//@Override
 	public TreeNode getParent() {
@@ -149,7 +150,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 
 	//@Override
 	public int getIndex(TreeNode node) {
-		return _children != null ? _children.indexOf(node): -1;
+		return isLeaf() ? -1 : _children.indexOf(node);
 	}
 
 	//@Override
@@ -166,21 +167,8 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	 */
 	public void insert(TreeNode child, int index) {
 		if (isLeaf())
-			throw new IllegalStateException("child not allowed");
-		if (isAncestor(child, this))
-			throw new IllegalArgumentException("new child is an ancestor");
-
-		TreeNode oldp = child.getParent();
-		if (oldp != null)
-			oldp.remove(child);
-		if (_children == null)
-			_children = new ArrayList();
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.add(index, child);
-		((DefaultTreeNode)child).setParent(this);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null)
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_ADDED);
 	}
 	//@Override
 	/** Adds a child to this node at the end.
@@ -208,16 +196,9 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
      */
 	public void remove(int index) {
-		Object child = _children.remove(index);
-		if (child instanceof DefaultTreeNode)
-			((DefaultTreeNode)child).setParent(null);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null) {
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
-			model.removeSelection(child);
-			model.setOpen(child, false);
-		}
+		if (isLeaf())
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
+		_children.remove(index);
 	}
 	//@Override
 	/**
@@ -227,11 +208,11 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      * @exception IllegalArgumentException if <code>child</code> is not a child of this node
      */
 	public void remove(TreeNode child) {
-		int index = _children.indexOf(child);
-		if (index < 0)
-			throw new IllegalArgumentException("not a child");
-		remove(index);
+		if (isLeaf())
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
+		_children.remove(child);
 	}
+	
 	public int compareTo(Object obj) {
 		DefaultTreeNode node = (DefaultTreeNode) obj;
 		if (_data == null) 
@@ -240,4 +221,68 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 		if (node == null) return _maxnull ? -1: 1;
 		return ((Comparable)_data).compareTo(node.getData());
 	}
+	
+	protected class TreeNodeChildrenList extends AbstractList {
+		
+		protected ArrayList _list = new ArrayList();
+		
+		// required implementation by spec: get, size, add, remove, set
+		// set is not supported
+		public Object get(int index) {
+			return _list.get(index);
+		}
+		
+		public int size() {
+			return _list.size();
+		}
+		
+		public void add(int index, Object obj) {
+			
+			if (!(obj instanceof TreeNode))
+				throw new IllegalArgumentException("New child must be an instance of TreeNode.");
+			
+			TreeNode child = (TreeNode) obj;
+			if (isAncestor(child, DefaultTreeNode.this))
+				throw new IllegalArgumentException("New child is an ancestor");
+			
+			TreeNode oldp = child.getParent();
+			if (oldp != null)
+				oldp.remove(child);
+			
+			_list.add(index, child);
+			
+			if (child instanceof DefaultTreeNode)
+				((DefaultTreeNode) child).setParent(DefaultTreeNode.this);
+			
+			DefaultTreeModel model = getModel();
+			if (model != null)
+				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_ADDED);
+			
+		}
+		
+		public Object remove(int index) {
+			Object child = _list.remove(index);
+			
+			if (child instanceof DefaultTreeNode)
+				((DefaultTreeNode)child).setParent(null);
+			
+			DefaultTreeModel model = getModel();
+			if (model != null) {
+				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+				model.removeSelection(child);
+				model.setOpen(child, false);
+			}
+			
+			return child;
+		}
+		
+		public Object remove(TreeNode child) {
+			int index = _list.indexOf(child);
+			if (index < 0)
+				throw new IllegalArgumentException("not a child");
+			return _list.remove(index);
+		}
+		
+	}
+	
 }
