@@ -35,7 +35,6 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	private DefaultTreeNode _parent;
 	/** List<DefaultTreeNode> */
 	private final List _children;
-	private final boolean _leaf;
 	private Object _data;
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
@@ -57,7 +56,6 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	 */
 	public DefaultTreeNode(Object data, Collection children, boolean nullAsMax) {
 		_data = data;
-		_leaf = false;
 		_children = new TreeNodeChildrenList();
 		if (children != null)
 			for (Iterator it = children.iterator(); it.hasNext();)
@@ -85,7 +83,6 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	 */
 	public DefaultTreeNode(Object data, boolean nullAsMax) {
 		_data = data;
-		_leaf = true;
 		_children = null;
 		_maxnull = nullAsMax;
 	}
@@ -157,7 +154,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 
 	//@Override
 	public boolean isLeaf() {
-		return _leaf;
+		return _children == null;
 	}
 
 	//@Override
