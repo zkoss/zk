@@ -53,7 +53,7 @@ class B50_ZK_421Test extends ZTL4ScalaTestCase {
     		</zk>
     }
 
-    def executor() = {
+    def executor = () => {
     	var lb1: Widget = engine.$f("lb1");
     	var lb2: Widget = engine.$f("lb2");
     	waitResponse();
@@ -61,7 +61,7 @@ class B50_ZK_421Test extends ZTL4ScalaTestCase {
     	testSelect(lb2, true);
     }
 
-    def testSelect(lb: Widget, keep: java.lang.Boolean) = ()=>{
+    def testSelect(lb: Widget, keep: java.lang.Boolean) {
     	click(jq(lb.$n("rows")).find(".z-listitem").get(2));
     	waitResponse();
     	click(jq(lb.$n("pgib")).find(".z-paging-next").get(0));

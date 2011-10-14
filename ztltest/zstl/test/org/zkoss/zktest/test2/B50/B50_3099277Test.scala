@@ -57,10 +57,8 @@ class B50_3099277Test extends ZTL4ScalaTestCase {
 
     def executor = () => {
     	var btn: Widget = engine.$f("btn");
-		waitResponse();
-
 		click(btn);
-		waitResponse();
+		sleep(500)
 		verifyTrue(jq(".z-log").find("textarea").get(0).get("value").contains("value 1"));
     }
    // Run syntax 1 

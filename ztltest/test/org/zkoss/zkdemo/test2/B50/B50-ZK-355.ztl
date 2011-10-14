@@ -37,14 +37,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-			list.$n("body").eval("scrollTop = 33333");
-			// wait for rod
-			waitResponse();
-			int scOne = parseInt(list.$n("body").get("scrollTop"));
-			Scripts.triggerMouseEventAt(getWebDriver(), btn1, "click", "5,5");
-			waitResponse();
-			int scTwo = parseInt(list.$n("body").get("scrollTop"));
-			verifyTrue(scOne == scTwo);
+				list.$n("body").eval("scrollTop = 33333");
+				// wait for rod
+				waitResponse();
+				int scOne = parseInt(list.$n("body").get("scrollTop"));
+				click(btn1);
+				waitResponse();
+				sleep(500);
+				int scTwo = parseInt(list.$n("body").get("scrollTop"));
+				verifyEquals(scOne, scTwo);
 		]]></client>
 	</case>
 </test>

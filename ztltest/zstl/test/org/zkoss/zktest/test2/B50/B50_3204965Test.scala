@@ -76,13 +76,12 @@ class B50_3204965Test extends ZTL4ScalaTestCase {
     def executor = () => {
     	var btn: Widget = engine.$f("btn");
 		var tb: Widget = engine.$f("tb");
-		waitResponse();
-
 		var size1: Int = Integer.parseInt(tb.$n().get("value"));
 		click(btn);
 		waitResponse();
+		sleep(500);
 		var size2: Int = Integer.parseInt(tb.$n().get("value"));
-		verifyTrue(size1 != size2);
+		verifyNotEquals(size1, size2);
     }
    // Run syntax 1 
    runZTL(zscript, executor);

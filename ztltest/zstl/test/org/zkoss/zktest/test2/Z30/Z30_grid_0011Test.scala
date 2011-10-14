@@ -128,16 +128,16 @@ class Z30_grid_0011Test extends ZTL4ScalaTestCase {
         
         verifyRowContent(Iterator("1","2","3"));
         
-		click(jq("@checkbox:first"));
-		verifyFalse(jq("@checkbox:first").get(0).is("checked"));
+		click(jq("@checkbox:first input"));
+		verifyFalse(jq("@checkbox:first input").get(0).is("checked"));
         
         
 		click(jq(".z-paging-next"));
         waitResponse
         
         verifyRowContent(Iterator("4","5","6"));
-		click(jq("@checkbox:first"));
-		verifyFalse(jq("@checkbox:first").get(0).is("checked"));
+		click(jq("@checkbox:first input"));
+		verifyFalse(jq("@checkbox:first input").get(0).is("checked"));
 
 		
 		click(jq(".z-paging-next"));
@@ -145,20 +145,20 @@ class Z30_grid_0011Test extends ZTL4ScalaTestCase {
 		
         
         verifyRowContent(Iterator("7","8"));
-		click(jq("@checkbox:first"));
-		verifyFalse(jq("@checkbox:first").get(0).is("checked"));
+		click(jq("@checkbox:first input"));
+		verifyFalse(jq("@checkbox:first input").get(0).is("checked"));
         
         
 		click(jq(".z-paging-prev"));
         waitResponse
 		verifyRowContent(Iterator("4","5","6"));
-		verifyFalse(jq("@checkbox:first").get(0).is("checked"));		
+		verifyFalse(jq("@checkbox:first input").get(0).is("checked"));		
 
 		
 		click(jq(".z-paging-prev"));
         waitResponse
 		verifyRowContent(Iterator("1","2","3"));
-		verifyFalse(jq("@checkbox:first").get(0).is("checked"));
+		verifyFalse(jq("@checkbox:first input").get(0).is("checked"));
 		
     }
    );

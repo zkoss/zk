@@ -121,7 +121,7 @@ class Z30_grid_0006Test extends ZTL4ScalaTestCase {
 
     runZTL(zscript,
         () => {
-        verifyEquals(jq("$col").outerWidth(),120);
+        verifyTolerant(jq("$col").outerWidth(),120, 2);
         
         click(jq("$btnWid"))
         waitResponse
