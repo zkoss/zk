@@ -162,7 +162,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	/** Adds child to this node at the given index.
      * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
      * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception IllegalStateException if this node does not allow children
+     * @exception UnsupportedOperationException if this node does not allow children
      * @exception NullPointerException if <code>child</code> is null
 	 */
 	public void insert(TreeNode child, int index) {
@@ -173,7 +173,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 	//@Override
 	/** Adds a child to this node at the end.
      * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception IllegalStateException if this node does not allow children
+     * @exception UnsupportedOperationException if this node does not allow children
      * @exception NullPointerException if <code>child</code> is null
 	 */
 	public void add(TreeNode child) {
@@ -193,6 +193,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      * and sets that node's parent to null.
      *
      * @param index the index in this node's child array of the child to remove
+     * @exception UnsupportedOperationException if this node does not allow children
      * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
      */
 	public void remove(int index) {
@@ -205,6 +206,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
      * Removes <code>child</code> from this node's children, giving it a null parent.
      *
      * @param child a child of this node to remove
+     * @exception UnsupportedOperationException if this node does not allow children
      * @exception IllegalArgumentException if <code>child</code> is not a child of this node
      */
 	public void remove(TreeNode child) {

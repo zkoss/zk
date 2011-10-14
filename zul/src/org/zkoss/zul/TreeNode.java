@@ -48,7 +48,7 @@ public interface TreeNode {
 
 	/**
 	 * Return children of the receiver
-	 * @return children of the receiver
+	 * @return children of the receiver. If the node is a leaf, null is returned.
 	 */
 	public List getChildren();
 	
