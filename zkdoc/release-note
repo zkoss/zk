@@ -178,6 +178,7 @@ ZK 5.0.9
   ZK-467: hflex in Listbox failed in IE 9 only 
   ZK-478: Imagemap and hflex="min" does not work 
   ZK-490: Replace Model the display data is not up to date when Grid in ROD 
+  ZK-498: Dynamic Tree demo is broken
 
 	--------
 Aug 31, 2011

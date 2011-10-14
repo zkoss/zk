@@ -48,7 +48,7 @@ public interface TreeNode<E> {
 
 	/**
 	 * Return children of the receiver
-	 * @return children of the receiver
+	 * @return children of the receiver. If the node is a leaf, null is returned.
 	 */
 	public List<? extends TreeNode<E>> getChildren();
 	
@@ -81,19 +81,30 @@ public interface TreeNode<E> {
 	public boolean isLeaf();
 
 	/** Adds child to this node at the given index.
-	 * @exception UnsupportedOperationException if the tree structure is not mutable
+	 * @exception UnsupportedOperationException if the tree structure is not mutable,
+	 * or this node does not allow children
+     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
+     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
+     * @exception NullPointerException if <code>child</code> is null
 	 */
 	public void insert(TreeNode<E> child, int index);
 	/** Adds a child to this node at the end.
-	 * @exception UnsupportedOperationException if the tree structure is not mutable
+	 * @exception UnsupportedOperationException if the tree structure is not mutable,
+	 * or this node does not allow children
+     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
+     * @exception NullPointerException if <code>child</code> is null
 	 */
 	public void add(TreeNode<E> child);
 	/** Removes the child at index from this node.
-	 * @exception UnsupportedOperationException if the tree structure is not mutable
+	 * @exception UnsupportedOperationException if the tree structure is not mutable,
+	 * or this node does not allow children
+     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
 	 */
 	public void remove(int index);
 	/** Removes the child from this node.
 	 * @exception UnsupportedOperationException if the tree structure is not mutable
+	 * or this node does not allow children
+     * @exception IllegalArgumentException if <code>child</code> is not a child of this node
 	 */
 	public void remove(TreeNode<E> child);
 }

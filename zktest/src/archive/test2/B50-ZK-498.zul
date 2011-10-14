@@ -1,0 +1,106 @@
+<!--
+	B50-ZK-498.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Oct 14 14:55:26 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zul.TreeModel;
+		import org.zkoss.zul.DefaultTreeModel;
+		import org.zkoss.zul.DefaultTreeNode;
+		import org.zkoss.zul.TreeitemRenderer;
+		import org.zkoss.zul.Treeitem;
+		import org.zkoss.zul.event.TreeDataListener;
+		import org.zkoss.zul.event.TreeDataEvent;
+		import org.zkoss.zul.Label;
+		DefaultTreeNode root = new DefaultTreeNode("", new DefaultTreeNode[0]);
+		TreeModel model = new DefaultTreeModel(root);
+		TreeDataListener listener = new TreeDataListener() {
+			public void onChange(TreeDataEvent event) {
+				int j = event.type;
+				switch(event.type) {
+				case TreeDataEvent.INTERVAL_ADDED:
+					alert("INTERVAL_ADDED");
+					break;
+				case TreeDataEvent.INTERVAL_REMOVED:
+					alert("INTERVAL_REMOVED");
+					break;
+				}
+			}
+		};
+		model.addTreeDataListener(listener);
+		TreeitemRenderer renderer = new TreeitemRenderer() {
+			public void render(Treeitem item, Object data) {
+				item.setValue(data);
+				item.setLabel("" + ((DefaultTreeNode) data).getData());
+			}
+		};
+		int i = 0;
+	</zscript>
+	<div>1. Add, Insert, Remove tree nodes. </div>
+	<div>2. There shall be Messagebox poped out upon adding/inserting/removing nodes.</div>
+	<div>3. The behavior should be the same regardless whether operate children list directly.</div>
+	<checkbox id="apiBox" label="Operate Children List Directly" checked="true" />
+	<div>
+		<checkbox id="leafBox" label="Leaf" />
+		<button label="Add">
+			<attribute name="onClick">
+				Treeitem item = tree.selectedItem;
+				DefaultTreeNode parent = item == null ? root : (DefaultTreeNode) item.value;
+				if (parent.leaf) {
+					alert("Leaf");
+					return;
+				}
+				String s = "TN-" + i++;
+				DefaultTreeNode newNode = leafBox.checked ? new DefaultTreeNode(s) : 
+					new DefaultTreeNode(s, new DefaultTreeNode[0]);
+				if (apiBox.checked)
+					parent.children.add(newNode);
+				else
+					parent.add(newNode);
+			</attribute>
+		</button>
+		<button label="Insert">
+			<attribute name="onClick">
+				Treeitem item = tree.selectedItem;
+				if (item == null) {
+					alert("No item selected");
+					return;
+				}
+				DefaultTreeNode node = (DefaultTreeNode) item.value;
+				DefaultTreeNode parent = node.parent;
+				int index = parent.getIndex(node);
+				String s = "TN-" + i++;
+				DefaultTreeNode newNode = leafBox.checked ? new DefaultTreeNode(s) : 
+					new DefaultTreeNode(s, new DefaultTreeNode[0]);
+				if (apiBox.checked)
+					parent.children.add(index, newNode);
+				else
+					parent.insert(newNode, index);
+			</attribute>
+		</button>
+		<button label="Remove">
+			<attribute name="onClick">
+				Treeitem item = tree.selectedItem;
+				if (item == null) {
+					alert("No item selected");
+					return;
+				}
+				DefaultTreeNode node = (DefaultTreeNode) item.value;
+				if (apiBox.checked)
+					parent.children.remove(node);
+				else
+					node.parent.remove(node);
+			</attribute>
+		</button>
+		<button label="Clear Selection" onClick="tree.clearSelection()" />
+	</div>
+	<tree id="tree" itemRenderer="${renderer}" model="${model}" onTreeDataEvent='alert(event)' />
+</zk>

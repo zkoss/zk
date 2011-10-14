@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -33,9 +34,8 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	private DefaultTreeModel<E> _model;
 	private DefaultTreeNode<E> _parent;
 	/** List<DefaultTreeNode> */
-	private List<DefaultTreeNode<E>> _children;
+	private final List<TreeNode<E>> _children;
 	private E _data;
-	private final boolean _leaf;
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
 
@@ -45,7 +45,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 * no children at all. However, it still allows to add children.
 	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
-	public DefaultTreeNode(E data, Collection<DefaultTreeNode<E>> children) {
+	public DefaultTreeNode(E data, Collection<? extends TreeNode<E>> children) {
 		this(data, children, false);
 	}
 	/** Creates a branch (non-leaf) node.
@@ -54,11 +54,11 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 * no children at all. However, it still allows to add children.
 	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
-	public DefaultTreeNode(E data, Collection<DefaultTreeNode<E>> children, boolean nullAsMax) {
+	public DefaultTreeNode(E data, Collection<? extends TreeNode<E>> children, boolean nullAsMax) {
 		_data = data;
-		_leaf = false;
+		_children = new TreeNodeChildrenList();
 		if (children != null)
-			for (DefaultTreeNode<E> node: children)
+			for (TreeNode<E> node: children)
 				add(node);
 		_maxnull = nullAsMax;
 	}
@@ -68,8 +68,8 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 * no children at all. However, it still allows to add children.
 	 * If it is not allowed, please use {@link #DefaultTreeNode(Object)} instead.
 	 */
-	public DefaultTreeNode(E data, DefaultTreeNode<E>[] children) {
-		this(data, new ArrayCollection<DefaultTreeNode<E>>(children));
+	public DefaultTreeNode(E data, TreeNode<E>[] children) {
+		this(data, new ArrayCollection<TreeNode<E>>(children));
 	}
 	/** Creates a leaf node, i.e., it won't allow any children.
 	 */
@@ -83,7 +83,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	 */
 	public DefaultTreeNode(E data, boolean nullAsMax) {
 		_data = data;
-		_leaf = true;
+		_children = null;
 		_maxnull = nullAsMax;
 	}
 
@@ -110,11 +110,10 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		return _data;
 	}
 	//@Override
-	@SuppressWarnings("unchecked")
 	public void setData(E data) {
 		_data = data;
-		DefaultTreeModel model = getModel();
-		TreeNode parent = getParent();
+		DefaultTreeModel<E> model = getModel();
+		TreeNode<E> parent = getParent();
 		if (model != null && parent != null) {
 			int index = parent.getIndex(this);
 			model.fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
@@ -123,7 +122,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	
 	//@Override
 	public List<? extends TreeNode<E>> getChildren(){
-		return _children;
+		return isLeaf() ? null : _children;
 	}
 
 	//@Override
@@ -133,7 +132,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	}
 	//@Override
 	public int getChildCount() {
-		return _children != null ? _children.size(): 0;
+		return isLeaf() ? 0 : _children.size();
 	}
 	//@Override
 	public TreeNode<E> getParent() {
@@ -150,52 +149,26 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 
 	//@Override
 	public int getIndex(TreeNode<E> node) {
-		return _children != null ? _children.indexOf(node): -1;
+		return isLeaf() ? -1 : _children.indexOf(node);
 	}
 
 	//@Override
 	public boolean isLeaf() {
-		return _leaf;
+		return _children == null;
 	}
 
 	//@Override
-	/** Adds child to this node at the given index.
-     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
-     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception IllegalStateException if this node does not allow children
-     * @exception NullPointerException if <code>child</code> is null
-	 */
-	@SuppressWarnings("unchecked")
 	public void insert(TreeNode<E> child, int index) {
 		if (isLeaf())
-			throw new IllegalStateException("child not allowed");
-		if (isAncestor(child))
-			throw new IllegalArgumentException("new child is an ancestor");
-
-		TreeNode<E> oldp = child.getParent();
-		if (oldp != null)
-			oldp.remove(child);
-		if (_children == null)
-			_children = new ArrayList<DefaultTreeNode<E>>();
-		_children.add(index, (DefaultTreeNode<E>)child);
-		((DefaultTreeNode<E>)child).setParent(this);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null)
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_ADDED);
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
+		_children.add(index, child);
 	}
 	//@Override
-	/** Adds a child to this node at the end.
-     * @exception IllegalArgumentException if <code>child</code> is an ancestor of this node 
-     * @exception IllegalStateException if this node does not allow children
-     * @exception NullPointerException if <code>child</code> is null
-	 */
 	public void add(TreeNode<E> child) {
 		insert(child, getChildCount());
 	}
 	/** Checks if p is one of ancestors of this node. */
-	private boolean isAncestor(TreeNode<E> p) {
-		TreeNode<E> c = this;
+	private static boolean isAncestor(TreeNode p, TreeNode c) {
 		do {
 			if (p == c)
 				return true;
@@ -204,38 +177,17 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 	}
 
 	//@Override
-	/**
-     * Removes the child at the specified index from this node's children,
-     * and sets that node's parent to null.
-     *
-     * @param index the index in this node's child array of the child to remove
-     * @exception IndexOutOfBoundsException	if <code>index</code> is out of bounds
-     */
-	@SuppressWarnings("unchecked")
 	public void remove(int index) {
-		DefaultTreeNode<E> child = _children.remove(index);
-		child.setParent(null);
-		
-		DefaultTreeModel model = getModel();
-		if (model != null) {
-			model.fireEvent(this, index, index, TreeDataEvent.INTERVAL_REMOVED);
-			model.removeSelection(child);
-			model.setOpen(child, false);
-		}
+		if (isLeaf())
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
+		_children.remove(index);
 	}
 	//@Override
-	/**
-     * Removes <code>child</code> from this node's children, giving it a null parent.
-     *
-     * @param child a child of this node to remove
-     * @exception IllegalArgumentException if <code>child</code> is not a child of this node
-     */
-	@SuppressWarnings("unchecked")
 	public void remove(TreeNode<E> child) {
-		int index = _children.indexOf(child);
-		if (index < 0)
-			throw new IllegalArgumentException("not a child");
-		remove(index);
+		if (isLeaf())
+			throw new UnsupportedOperationException("Child is not allowed in leaf node");
+		if(!_children.remove(child))
+			throw new IllegalArgumentException("not a child of this node");
 	}
 	@SuppressWarnings("unchecked")
 	public int compareTo(DefaultTreeNode<E> node) {
@@ -245,4 +197,64 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		if (node == null) return _maxnull ? -1: 1;
 		return ((Comparable)_data).compareTo(node.getData());
 	}
+	
+	protected class TreeNodeChildrenList extends AbstractList<TreeNode<E>> {
+		
+		protected final ArrayList<TreeNode<E>> _list = new ArrayList<TreeNode<E>>();
+		
+		// required implementation by spec: get, size, add, remove, set
+		// set is not supported
+		public TreeNode<E> get(int index) {
+			return _list.get(index);
+		}
+		
+		public int size() {
+			return _list.size();
+		}
+		
+		public void add(int index, TreeNode<E> child) {
+			if (isAncestor(child, DefaultTreeNode.this))
+				throw new IllegalArgumentException("New child is an ancestor");
+			
+			TreeNode<E> oldp = child.getParent();
+			if (oldp != null)
+				oldp.remove(child);
+			
+			_list.add(index, child);
+			
+			if (child instanceof DefaultTreeNode)
+				((DefaultTreeNode<E>) child).setParent(DefaultTreeNode.this);
+			
+			DefaultTreeModel<E> model = getModel();
+			if (model != null)
+				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_ADDED);
+			
+		}
+		
+		public TreeNode<E> remove(int index) {
+			TreeNode<E> child = _list.remove(index);
+			
+			if (child instanceof DefaultTreeNode)
+				((DefaultTreeNode<E>)child).setParent(null);
+			
+			DefaultTreeModel<E> model = getModel();
+			if (model != null) {
+				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_REMOVED);
+				model.removeSelection(child);
+				model.setOpen(child, false);
+			}
+			
+			return child;
+		}
+		
+		public boolean remove(Object child) {
+			int index = _list.indexOf(child);
+			if (index < 0)
+				return false;
+			remove(index);
+			return true;
+		}
+		
+	}
+	
 }

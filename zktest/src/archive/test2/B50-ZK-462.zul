@@ -30,7 +30,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<checkbox label="maximizable" checked="true" onCheck="win.setMaximizable(self.checked);" />
 	<checkbox label="minimizable" onCheck="win.setMinimizable(self.checked);" />
 	<checkbox label="closable" onCheck="win.setClosable(self.checked);" />
-	<checkbox label="border">
+	<checkbox label="border" checked="true">
 		 <attribute name="onCheck">
 		 	if (self.checked)
 		 		win.setBorder("normal");
