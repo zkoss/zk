@@ -45,9 +45,12 @@ ZK 6.0.0
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)
-  ZK-493: zk.override(Object, String, Function) fails to update subclass methods 
+  ZK-493: zk.override(Object, String, Function) fails to update subclass methods
+  ZK-504: onCreate event not fired if registered in a parent's composer
 
 * Upgrade Notes
+  + zcommons-el.jar is not shipped with the binary distribution.
+    Rather, zel.jar is shipped instead.
   + For ease of use, the return type of the following APIs are changed from Iterator
     to Iterable:
     org.zkoss.zk.ui.Exectuion: getHeaders and getHeaderNames

@@ -395,7 +395,7 @@ public class UiEngineImpl implements UiEngine {
 					}
 
 					inits.doAfterCompose(page, comps);
-					afterCreate(comps);
+					afterCreate(comps, exec.getArg());
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
 						throw UiException.Aide.wrap(ex);
@@ -425,7 +425,7 @@ public class UiEngineImpl implements UiEngine {
 						for (Component root = page.getFirstRoot(); root != null;
 						root = root.getNextSibling()) {
 							doAfterCompose(composer, root);
-							afterCreate(new Component[] {root});
+							afterCreate(new Component[] {root}, exec.getArg());
 								//root's next sibling might be changed
 						}
 					} catch (Throwable t) {
@@ -564,8 +564,21 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comps the components being created. It is never null but
 	 * it might be a zero-length array.
 	 */
-	private void afterCreate(Component[] comps) {
+	private void afterCreate(Component[] comps, Map<?, ?> args) {
 		getExtension().afterCreate(comps);
+
+		//Bug ZK-504: we have to fire onCreate after all composer since
+		//a composer might register an onCreate listener for its child
+		if (comps != null)
+			for (int j = 0; j < comps.length; ++j)
+				postOnCreate(comps[j], args);
+	}
+	private static void postOnCreate(Component comp, Map<?, ?> args) {
+		for (Component child: comp.getChildren()) //child first
+			postOnCreate(child, args);
+
+		if (Events.isListened(comp, Events.ON_CREATE, false))
+			Events.postEvent(new CreateEvent(Events.ON_CREATE, comp, args));
 	}
 	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
 	 * has been called).
@@ -811,10 +824,6 @@ public class UiEngineImpl implements UiEngine {
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
 
-			if (Events.isListened(child, Events.ON_CREATE, false))
-				Events.postEvent(
-					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
-
 			return child;
 		} catch (Throwable ex) {
 			boolean ignore = false;
@@ -1012,7 +1021,7 @@ public class UiEngineImpl implements UiEngine {
 				for (int j = 0; j < comps.length; ++j)
 					comps[j].detach();
 
-			afterCreate(comps);
+			afterCreate(comps, exec.getArg());
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
@@ -2157,6 +2166,8 @@ public class UiEngineImpl implements UiEngine {
 				if (fakepg && parent == null)
 					for (int j = 0; j < cs.length; ++j)
 						cs[j].detach();
+
+				afterCreate(cs, exec.getArg());
 			} finally {
 				if (fakepg) {
 					execCtrl.setCurrentPage(prevPage);
