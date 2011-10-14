@@ -395,7 +395,7 @@ public class UiEngineImpl implements UiEngine {
 					}
 
 					inits.doAfterCompose(page, comps);
-					afterCreate(comps, exec.getArg());
+					afterCreate(exec, comps);
 				} catch(Throwable ex) {
 					if (!inits.doCatch(ex))
 						throw UiException.Aide.wrap(ex);
@@ -425,7 +425,7 @@ public class UiEngineImpl implements UiEngine {
 						for (Component root = page.getFirstRoot(); root != null;
 						root = root.getNextSibling()) {
 							doAfterCompose(composer, root);
-							afterCreate(new Component[] {root}, exec.getArg());
+							afterCreate(exec, new Component[] {root});
 								//root's next sibling might be changed
 						}
 					} catch (Throwable t) {
@@ -564,21 +564,29 @@ public class UiEngineImpl implements UiEngine {
 	 * @param comps the components being created. It is never null but
 	 * it might be a zero-length array.
 	 */
-	private void afterCreate(Component[] comps, Map<?, ?> args) {
-		getExtension().afterCreate(comps);
+	private void afterCreate(Execution exec, Component[] comps) {
+		afterCreate(exec, getExtension(), comps);
+	}
+	private static void afterCreate(Execution exec, Extension ext, Component[] comps) {
+		if (ext == null)
+			ext = ((UiEngineImpl)((WebAppCtrl)exec.getDesktop().getWebApp())
+				.getUiEngine()).getExtension();
+		ext.afterCreate(comps);
 
 		//Bug ZK-504: we have to fire onCreate after all composer since
 		//a composer might register an onCreate listener for its child
 		if (comps != null)
 			for (int j = 0; j < comps.length; ++j)
-				postOnCreate(comps[j], args);
+				postOnCreate(exec, comps[j]);
 	}
-	private static void postOnCreate(Component comp, Map<?, ?> args) {
-		for (Component child: comp.getChildren()) //child first
-			postOnCreate(child, args);
+	private static void postOnCreate(Execution exec, Component comp) {
+		//child first
+		for (Component child = comp.getFirstChild();
+		child != null; child = child.getNextSibling())
+			postOnCreate(exec, child);
 
 		if (Events.isListened(comp, Events.ON_CREATE, false))
-			Events.postEvent(new CreateEvent(Events.ON_CREATE, comp, args));
+			Events.postEvent(new CreateEvent(Events.ON_CREATE, comp, exec.getArg()));
 	}
 	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
 	 * has been called).
@@ -1021,7 +1029,7 @@ public class UiEngineImpl implements UiEngine {
 				for (int j = 0; j < comps.length; ++j)
 					comps[j].detach();
 
-			afterCreate(comps, exec.getArg());
+			afterCreate(exec, comps);
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
@@ -2167,7 +2175,7 @@ public class UiEngineImpl implements UiEngine {
 					for (int j = 0; j < cs.length; ++j)
 						cs[j].detach();
 
-				afterCreate(cs, exec.getArg());
+				afterCreate(exec, null, cs);
 			} finally {
 				if (fakepg) {
 					execCtrl.setCurrentPage(prevPage);
