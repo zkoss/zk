@@ -1,0 +1,34 @@
+<test tags="B30-1920630.zul,C,E,Listbox,IE,VisionTest">
+	<case id="IE7">
+		<server><!--
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>If you can see the bottom border of Listbox is gone, that is a bug. (IE7 only)</n:p>
+	<listbox width="250px" height="200px">
+			<listhead sizable="true">
+				<listheader label="name" sort="auto"/>
+				<listheader label="gender" sort="auto"/>
+			</listhead>
+			<listitem>
+				<listcell label="Mary"/>
+				<listcell label="FEMALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="John"/>
+				<listcell label="MALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="Jane"/>
+				<listcell label="FEMALE"/>
+			</listitem>
+			<listitem>
+				<listcell label="Henry"/>
+				<listcell label="MALE"/>
+			</listitem>
+		</listbox>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

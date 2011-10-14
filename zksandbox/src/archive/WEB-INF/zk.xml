@@ -92,6 +92,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!--  Turn on following if you want to change the default format for
+	the NumberInputElement when the locale is specified.
+	Note that the format by default is (##,##0.##). Since 5.0.9
+	<library-property>
+		<name>org.zkoss.zul.numberFormat</name>
+		<value>##,##0.##</value>
+	</library-property>
+	-->
+	
 	<!-- Turn on the following if you want to use the defer mode as the default,
 		which is compatible to 3.x
 	<library-property>

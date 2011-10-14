@@ -1,4 +1,4 @@
-<test tags="F30-1598234.zul,combobox,ie9">
+<test tags="F30-1598234.zul,A,E,Combobox,ie9">
 	<case id="Constraint">
 		<server><!--
 		<zk xmlns:n="http://www.zkoss.org/2005/zk/native">

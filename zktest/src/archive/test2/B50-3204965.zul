@@ -19,7 +19,7 @@
 	</vlayout>
 	<window id="myWin" height="200px" width="500px" border="normal">
 		<listbox id="list" vflex="1" model="@{rows}" mold="paging" autopaging="true">
-			<attribute name="onChangePageSize">
+			<attribute name="onPageSize">
 				myLabel.value = "" + self.pageSize;
 			</attribute>
 			<listitem self="@{each=r}">

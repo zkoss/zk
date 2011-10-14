@@ -1,4 +1,4 @@
-<test tags="menuitem">
+<test tags="F30-1656278.zul,B,E,Menuitem">
 	<case id="Disable">
 		<server><!--
 		<zk xmlns:n="http://www.zkoss.org/2005/zk/native">

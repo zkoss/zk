@@ -1,0 +1,23 @@
+<test tags="B50-ZK-242.zul,A,E,Grid,Listbox,Tree,Window,VisionTest">
+	<case id="Window">
+		<server><!--
+<zk>
+	<window border="normal" title="Test" closable="true" mode="modal"
+		position="center">
+		<div>
+			The Window should be at the center of the browser.
+			<listbox hflex="min">
+				<listhead>
+					<listheader hflex="min" label="Code" />
+					<listheader hflex="min" label="Name" />
+				</listhead>
+			</listbox>
+		</div>
+	</window>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

@@ -1,0 +1,14 @@
+<test tags="B30-1916332.zul,C,M,Hbox,Splitter,Safari,VisionTest">
+	<case id="Safari">
+		<server><!--
+<hbox height="200px" width="100%">
+Test with Safari to see if the height is 200px
+<splitter id="hsplitter" collapse="after"/>
+cdacdacdacdacacsdc
+</hbox>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

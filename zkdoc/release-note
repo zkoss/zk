@@ -122,6 +122,7 @@ ZK 6.0.0
 ZK 5.0.9
 * Features
   ZK-481: Deprecate Treeitem#indexOf() API and add Treeitem#getIndex() so all components(Listitem, Comboitem, Treeitem) with index concept use the same API name
+  ZK-500: Add a default format for NumberInputElement when the locale is specified
 
 * Bugs
   ZK-386: sclass is not applying when div visible false

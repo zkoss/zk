@@ -5,7 +5,7 @@
 	<label value="PACK AND ALIGN - width:" />
 	<style>
 		table.hbox{ 
-			border: solid red 1px; } 
+			border: solid blue 1px; } 
 		.obj{
 		 height:50px;
 		 width:50px;

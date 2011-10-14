@@ -21,7 +21,7 @@ import org.zkoss.ztl.Tags;
  *
  * @author jumperchen
  */
-@Tags(tags = "")
+@Tags(tags = "B30-1914104-2.zul,C,Window,IE")
 class B30_1914104_2Test extends ZTL4ScalaTestCase {
   def testCase() = {
     val zscript = {

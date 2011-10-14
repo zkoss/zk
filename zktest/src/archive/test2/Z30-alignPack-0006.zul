@@ -1,6 +1,6 @@
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>1. Each space between each other is the same from the first vbox.</n:p>
-	<n:p>2. Each space between each other is the same as each label from the second vbox.</n:p>
+	<n:div>1. Each space between each other is the same from the first vbox.</n:div>
+	<n:div>2. Each space between each other is the same as each label from the second vbox.</n:div>
 	
 	<label value="PACK AND ALIGN - height:" />
 	<style>
@@ -12,15 +12,15 @@
 		 border: solid black 1px;
 		}
 	</style>
-	<vbox width="200px" height="1000px" sclass="vbox">
+	<vbox width="200px" height="300px" sclass="vbox">
 		<div sclass="obj">The same</div>
 		<div sclass="obj">The same</div>
 		<div sclass="obj">The same</div>
 	</vbox>
 	<div>heights</div>
-	<vbox width="200px" heights="100px,300px,600px" sclass="vbox">
-		<div sclass="obj">100</div>
-		<div sclass="obj">300</div>
-		<div sclass="obj">600</div>
+	<vbox width="200px" heights="50px,150px,200px" sclass="vbox">
+		<div sclass="obj">50</div>
+		<div sclass="obj">150</div>
+		<div sclass="obj">200</div>
 	</vbox>
 </zk>
