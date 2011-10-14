@@ -277,11 +277,12 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 			return child;
 		}
 		
-		public Object remove(TreeNode child) {
+		public boolean remove(Object child) {
 			int index = _list.indexOf(child);
 			if (index < 0)
-				throw new IllegalArgumentException("not a child");
-			return remove(index);
+				return false;
+			remove(index);
+			return true;
 		}
 		
 	}
