@@ -17,7 +17,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2.Z30
 
 import org.zkoss.zstl.ZTL4ScalaTestCase
-import org.zkoss.ztl.Tags;
+import org.zkoss.ztl.util.Scripts
+import org.zkoss.ztl.Tags
 
 /**
  * A test class for bug grid-0006
@@ -125,12 +126,11 @@ class Z30_grid_0006Test extends ZTL4ScalaTestCase {
         
         click(jq("$btnWid"))
         waitResponse
-        println(jq("$col").outerWidth());
         verifyNotEquals(String.valueOf(jq("$col").outerWidth()),"120");
         verifyEquals(String.valueOf(jq("$col").outerWidth()),"200");
         
 
-        click(jq("$col"))
+		Scripts.triggerMouseEventAt(getWebDriver(), jq("$col .z-column-cnt"), "click", "2,2")        
         waitResponse
 
 
@@ -139,7 +139,6 @@ class Z30_grid_0006Test extends ZTL4ScalaTestCase {
 	        val list =  jq("@row").iterator();
 	        while(list.hasNext()){
 	          val row = list.next();
-//	          println(row.find(".z-label:first").text());
 			  verifyEquals(row.find(".z-label:first").text(),verify.next());
 			}          
         }
@@ -154,11 +153,12 @@ class Z30_grid_0006Test extends ZTL4ScalaTestCase {
         waitResponse
         verifyRowContent(Iterator("Ins1","A31","Apple","Lemon","Orange","Tomato","A31"));
         
-        click(jq("$col"))
+        Scripts.triggerMouseEventAt(getWebDriver(), jq("$col .z-column-cnt"), "click", "2,2")
         waitResponse
         verifyRowContent(Iterator("Tomato","Orange","Lemon","Ins1","Apple","A31","A31"));
         
-       	click(jq("$col"))
+		Scripts.triggerMouseEventAt(getWebDriver(), jq("$col .z-column-cnt"), "click", "2,2")        
+        
         waitResponse
         verifyRowContent(Iterator("A31","A31","Apple","Ins1","Lemon","Orange","Tomato"));
     }

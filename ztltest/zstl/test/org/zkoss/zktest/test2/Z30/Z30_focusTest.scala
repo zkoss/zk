@@ -16,6 +16,7 @@ package org.zkoss.zktest.test2.Z30
 
 import org.zkoss.zstl.ZTL4ScalaTestCase
 import org.zkoss.ztl.Tags;
+import org.zkoss.ztl.util.Scripts
 
 /**
  *
@@ -47,10 +48,9 @@ and the focus remains on the first textbox</li>
 			click(jq("$tb1"))
 			waitResponse
 			verifyEquals(this.getEval("zk.currentFocus.id"),"t1");
-			click(jq("$tb2"))
+			Scripts.triggerMouseEventAt(getWebDriver(), jq("$tb2"), "click", "2,2")        
 			waitResponse()
 			verifyEquals(this.getEval("zk.currentFocus.id"),"t2");
-			waitResponse
 		})
 	}
 }
