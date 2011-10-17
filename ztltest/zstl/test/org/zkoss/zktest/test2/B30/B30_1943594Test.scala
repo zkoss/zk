@@ -16,6 +16,7 @@ package org.zkoss.zktest.test2.B30
 
 import org.zkoss.zstl.ZTL4ScalaTestCase
 import org.zkoss.ztl.Tags;
+import org.zkoss.ztl.util.Scripts
 
 /**
  *
@@ -79,7 +80,7 @@ class B30_1943594Test extends ZTL4ScalaTestCase {
 			click(jq("$a"))
 			waitResponse
 			verifyTrue(jq(".z-messagebox").exists())
-			click(jq("@button"))
+			Scripts.triggerMouseEventAt(getWebDriver(), jq("@button"), "click", "2,2")
 			waitResponse
 			verifyFalse(jq(".z-messagebox").exists())
 			

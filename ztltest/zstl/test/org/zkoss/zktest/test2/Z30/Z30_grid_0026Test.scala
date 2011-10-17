@@ -156,18 +156,18 @@ class Z30_grid_0026Test extends ZTL4ScalaTestCase {
         verifyEquals(jq("@row:eq(0) @label:eq(0)").text(),"0");
         
         
-        click(jq("$add"));
+        click(jq("$add input"));
         verifyTrue(widget("$add").is("checked"));
         click(jq("$btnStart"));
         
         sleep(3200);
         
         val amount = jq("@row").length;
-        click(jq("$add"));
-        click(jq("$remove"));
+        click(jq("$add input"));
+        click(jq("$remove input"));
         
-        verifyFalse(widget("$add").is("checked"));
-        verifyTrue(widget("$remove").is("checked"));
+        verifyFalse(widget("$add").$n("real").is("checked"));
+        verifyTrue(widget("$remove").$n("real").is("checked"));
         
         verifyNotEquals(jq("@row:eq(0) @label:eq(0)").text(),"0");
         
