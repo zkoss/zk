@@ -18,6 +18,7 @@ package org.zkoss.zktest.test2.Z30
 
 import org.zkoss.zstl.ZTL4ScalaTestCase
 import org.zkoss.ztl.Tags;
+import org.zkoss.ztl.ZK
 
 /**
  * A test class for bug grid-0012
@@ -49,9 +50,9 @@ class Z30_grid_0012Test extends ZTL4ScalaTestCase {
 
     runZTL(zscript,
         () => {
-          verifyEquals(jq("@row").eq(0).outerHeight().toString(),"50")
+          verifyEquals(jq("@row").eq(0).outerHeight().toString(), if (ZK is "ie7_") "60" else "50")
           verifyNotEquals(jq("@row").eq(0).outerHeight().toString(),"51")
-          verifyEquals(jq("@row").eq(1).outerHeight().toString(),"100")
+          verifyEquals(jq("@row").eq(1).outerHeight().toString(), if (ZK is "ie7_") "110" else "100")
           verifyNotEquals(jq("@row").eq(1).outerHeight().toString(),"101")
     }
    );

@@ -42,23 +42,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		--></server>
 		<client><![CDATA[
-			click(jq("div.z-spinner-btn-upper"));
-			waitResponse();
-			click(jq("div.z-spinner-btn-upper"));
-			waitResponse();
-			verifyTrue(lc1.$n().get("value").length() == 0);
-			click(jq("div.z-spinner-btn-lower"));
-			waitResponse();
-			verifyTrue(lc1.$n().get("value").length() == 0);
-
-			click(jq("div.z-timebox-btn-upper"));
-			waitResponse();
-			click(jq("div.z-timebox-btn-upper"));
-			waitResponse();
-			verifyTrue(lc2.$n().get("value").length() == 0);
-			click(jq("div.z-timebox-btn-lower"));
-			waitResponse();
-			verifyTrue(lc2.$n().get("value").length() == 0);
+		click(jq("div.z-spinner-btn-upper"));
+		waitResponse();
+		verifyTrue(lc1.$n().get("value").length() == 0);
+		click(jq("div.z-spinner-btn-lower"));
+		waitResponse();
+		verifyTrue(lc1.$n().get("value").length() == 0);
+		click(jq("div.z-timebox-btn-upper"));
+		waitResponse();
+		click(jq("div.z-timebox-btn-upper"));
+		waitResponse();
+		verifyTrue(lc2.$n().get("value").length() == 0);
+		click(jq("div.z-timebox-btn-lower"));
+		waitResponse();
+		verifyTrue(lc2.$n().get("value").length() == 0);
 		]]></client>
 	</case>
 </test>
