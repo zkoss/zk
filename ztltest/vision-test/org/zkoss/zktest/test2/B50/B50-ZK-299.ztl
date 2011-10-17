@@ -119,6 +119,7 @@
 				verifyImage();
 				click(jq("@button:eq(0)"));
 				refresh();
+				sleep(300);
 		]]></client>
 	
 			<server><!--
@@ -240,6 +241,7 @@
 				verifyImage();
 				click(jq("@button:eq(0)"));
 				refresh();
+				sleep(300);
 		]]></client>
 				<server><!--
 <zk>
@@ -361,6 +363,7 @@
 				verifyImage();
 				click(jq("@button:eq(0)"));
 				refresh();
+				sleep(300);
 		]]></client>
 						<server><!--
 <zk>
@@ -481,7 +484,6 @@
 		<client><![CDATA[
 				verifyImage();
 				click(reset);
-				refresh();
 		]]></client>
 	</case>
 </test>
