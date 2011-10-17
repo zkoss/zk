@@ -658,6 +658,15 @@ public class HtmlPageRenders {
 	}
 	private static void outDivTemplateEnd(Page page, Writer out)
 	throws IOException {
+		outSEOContent(page, out);
+		out.write("</div>");
+	}
+	/** Generates the SEO content for the given page.
+	 * Nothing is generated if the SEO content has been generated or it shall not be generated.
+	 * <p>The SEO content shall be placed inside <code>&lt;div class="z-temp"&gt;</code>.
+	 * @since 5.0.9
+	 */
+	public static void outSEOContent(Page page, Writer out) throws IOException {
 		if (page != null && ((PageCtrl)page).getOwner() == null) { //only the topmost page shall generate SEO
 			final WebApp wapp = page.getDesktop().getWebApp();
 			final Configuration config = wapp.getConfiguration();
@@ -690,7 +699,6 @@ public class HtmlPageRenders {
 			for (int j = 0; j < sds.length; ++j)
 				sds[j].render(page, out);
 		}
-		out.write("</div>");
 	}
 
 	/** Generates end of the function (of zkx).
