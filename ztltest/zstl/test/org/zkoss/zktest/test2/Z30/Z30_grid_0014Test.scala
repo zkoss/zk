@@ -105,11 +105,11 @@ class Z30_grid_0014Test extends ZTL4ScalaTestCase {
         });
         
         clickThenValidate("$btnChangeFirst",()=>{
-        	verifyEquals(jq("@cell").eq(0).find(".z-label").text(),"Updated 0");
+        	verifyEquals(jq(".z-row-cnt:first .z-label").text(),"Updated 0");
         });
         
         clickThenValidate("$btnAdd",()=>{
-          	verifyFalse(jq("@paging").is(":visible"));
+          	verifyTrue(jq("@paging").is(":visible"));
        	  	verifyEquals(jq("@row").length.toString(),"5");
           	verifyRowContent(Iterator("Updated 0","Item 2-L","Item 3-L","Item 4-L","Item 5-L"))
         });
