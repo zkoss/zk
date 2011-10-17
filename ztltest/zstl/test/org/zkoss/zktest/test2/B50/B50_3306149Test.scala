@@ -84,14 +84,14 @@ class B50_3306149Test extends ZTL4ScalaTestCase {
 		}
 		var st1: Int = Integer.parseInt(jq(grid.$n("body")).get(0).get("scrollTop"));
 		var btns = jq(grid.$n("body")).find("span.z-button");
-		var lastBtn: Element = btns.get(btns.length()-1);
+		var lastBtn = btns.last();
 		click(lastBtn);
 		waitResponse();
 		var st2: Int = Integer.parseInt(jq(grid.$n("body")).get(0).get("scrollTop"));
 		verifyTrue(st2 < st1);
 		btns = jq(grid.$n("body")).find(".z-button-cm");
-		lastBtn = btns.get(btns.length()-1);
-		verifyTrue(lastBtn.get("innerHTML").contains("remove 198"))
+		lastBtn = btns.last();
+		verifyTrue(lastBtn.get(0).get("innerHTML").contains("remove 198"))
     }
    // Run syntax 1 
    runZTL(zscript, executor);
