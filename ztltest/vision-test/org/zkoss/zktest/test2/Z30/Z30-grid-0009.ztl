@@ -1,0 +1,52 @@
+<test tags="Z30-grid-0009.zul,Z30,B,E,Grid,VisionTest">
+	<case id="GridDisplay">
+		<server><!--
+<window title="Horz and Vert Scrollbar (200px * 100px)">
+	<grid width="200px" height="100px">
+		<columns>
+			<column width="200px" label="Head 1"/>
+			<column width="200px" label="Head 2" align="center"/>
+			<column width="200px" label="Head 3" align="right"/>
+		</columns>
+		<rows>
+			<row>
+				<listbox mold="select">
+					<listitem label="AB"/>
+					<listitem label="CD"/>
+				</listbox>
+				<datebox/>
+				<textbox rows="3"/>
+			</row>
+			<row>
+				<label value="A11"/>
+				<label value="A12"/>
+				<label value="A13"/>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup>
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+			<row>
+				<checkbox checked="true" label="Option 1"/>
+				<checkbox label="Option 2"/>
+				<radiogroup orient="vertical">
+					<radio label="Apple"/>
+					<radio label="Orange" checked="true"/>
+					<radio label="Lemon"/>
+				</radiogroup>
+			</row>
+		</rows>
+	</grid>
+                     <div style="margin-top:20px;border:1px solid;red;width:200px;height:100px;display:block">This is a 200*100 example div , make sure the grid is same width,height with me.</div>
+</window>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

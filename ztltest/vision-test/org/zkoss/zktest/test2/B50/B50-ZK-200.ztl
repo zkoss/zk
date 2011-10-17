@@ -1,0 +1,14 @@
+<test tags="B50-ZK-200.zul,A,E,Include,Theme,VisionTest">
+	<case id="Display">
+		<server><!--
+<window title="window with border" border="normal">
+You shall see the window having a border.
+<include src="/test2/B50-ZK-200-inc.zul" mode="defer"/>
+</window>
+
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

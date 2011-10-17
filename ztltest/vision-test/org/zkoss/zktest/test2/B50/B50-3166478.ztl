@@ -1,0 +1,38 @@
+<test tags="B50-3166478.zul,A,E,Portallayout,Panel,VisionTest">
+	<case id="Display">
+		<server><!--
+<zk>
+	<html><![CDATA[
+		<ol>
+			<span>IE 7 only</span>
+			<li>Click Panel 1 maximize button.</li>
+			<li>if you can see Panel 2 blue color, it's wrong</li>
+		</ol>
+	]]></html>
+<portallayout maximizedMode="whole" >
+	<portalchildren width="30%" >
+		<panel title="Panel l" id="p1" border="normal" maximizable="true">
+			<panelchildren>
+				<div height="300px" width="100%" style="background: azure;">
+				</div>
+			</panelchildren>
+		</panel>
+	</portalchildren>
+	<portalchildren width="40%">
+		<panel title="Panel 2"  height="100%" width="100%" border="normal" maximizable="true">
+			<panelchildren>
+				<div height="300px" width="100%" style="background: blue;">
+				</div>
+			</panelchildren>
+		</panel>
+	</portalchildren>
+</portallayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(p1.$n("max"));
+			verifyImage();
+		]]></client>
+	</case>
+</test>

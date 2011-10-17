@@ -1,0 +1,54 @@
+<test tags="B50-2887987.zul,A,E,Panel,IE,VisionTest">
+	<case id="Display">
+		<server><!--
+<window>
+In IE, each panel should display well (the corner of each panel should not disappear)
+<vbox>
+    <panel title="Test0" closable="false" framable="true"
+collapsible="true" width="300px">
+        <panelchildren>
+            <listbox>
+                <listitem label="toto1" />
+                <listitem label="toto2" />
+                <listitem label="toto3" />
+            </listbox>
+        </panelchildren>
+    </panel>
+    <panel title="Test1" closable="false" framable="true"
+collapsible="true">
+        <panelchildren>
+            <listbox>
+                <listitem label="toto1" />
+                <listitem label="toto2" />
+                <listitem label="toto3" />
+            </listbox>
+        </panelchildren>
+    </panel>
+    <panel title="Test2" closable="false" framable="false"
+collapsible="true" border="normal">
+        <panelchildren>
+            <listbox>
+                <listitem label="toto1" />
+                <listitem label="toto2" />
+                <listitem label="toto3" />
+            </listbox>
+        </panelchildren>
+    </panel>
+    <panel closable="false" framable="true"
+collapsible="true">
+        <panelchildren>
+            <listbox>
+                <listitem label="toto1" />
+                <listitem label="toto2" />
+                <listitem label="toto3" />
+            </listbox>
+        </panelchildren>
+    </panel>
+</vbox>
+</window>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

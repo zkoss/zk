@@ -1,0 +1,65 @@
+<test tags="B35-2319972.zul,B,E,Listbox,Tree,Checkmark,VisionTest">
+	<case id="Tree">
+		<server><!--
+<zk>
+	The indentation of the non-checkable item should be the same as the checkable item.
+	<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark;"/>
+	<button label="Toggle multiple" onClick="tree.multiple = !tree.multiple;"/>
+	<tree id="tree" multiple="true" checkmark="true">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem checkable="false">
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"  checkable="false"/>
+		</treechildren>
+	</tree>
+</zk>	--></server>
+		<client><![CDATA[
+		verifyImage();
+		click(jq("@button:eq(1)"));
+		waitResponse();
+		verifyImage();
+		click(jq("@button:eq(0)"));
+		waitResponse();
+		verifyImage();
+		]]></client>
+	</case>
+</test>

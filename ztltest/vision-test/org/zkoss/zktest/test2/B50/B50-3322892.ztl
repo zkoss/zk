@@ -1,0 +1,35 @@
+<test tags="B50-3322892.zul,A,E,Grid,emptyMessage,VisionTest">
+	<case id="Display">
+		<server><!--
+<zk>
+
+	<zscript>
+	List list = new ListModelList();
+	list.add("test");
+	list.add("test3");
+</zscript>
+	<grid id="test3" height="350px" model="${list}"
+		emptyMessage="No items match your search">
+		<columns id="test3Cols" sizable="true">
+			<column label="Type" width="520px" />
+			<column label="Content" />
+			<column label="Content" />
+		</columns>
+	</grid>
+	<button label="test remove all rows">
+		<attribute name="onClick"><![CDATA[
+	test3.getModel().clear();
+]]></attribute>
+	</button>
+
+</zk>
+
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+			click(jq("@button"));
+			waitResponse();
+			verifyImage();
+		]]></client>
+	</case>
+</test>
