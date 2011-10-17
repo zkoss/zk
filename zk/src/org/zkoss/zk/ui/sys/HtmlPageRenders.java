@@ -664,6 +664,8 @@ public class HtmlPageRenders {
 	/** Generates the SEO content for the given page.
 	 * Nothing is generated if the SEO content has been generated or it shall not be generated.
 	 * <p>The SEO content shall be placed inside <code>&lt;div class="z-temp"&gt;</code>.
+	 * <p>If a page renderer generates <code>&lt;div class="z-temp"&gt;</code> by itself,
+	 * it must invoke this method.
 	 * @since 5.0.9
 	 */
 	public static void outSEOContent(Page page, Writer out) throws IOException {
