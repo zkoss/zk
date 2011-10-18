@@ -4,7 +4,7 @@
 		<ol>
 			<span>IE 7 only</span>
 			<li>Click Panel 1 maximize button.</li>
-			<li>if you can see Panel 2 red color, it's wrong</li>
+			<li>if you can see Panel 2 blue color, it's wrong</li>
 		</ol>
 	]]></html>
 <portallayout maximizedMode="whole" >
@@ -19,7 +19,7 @@
 	<portalchildren width="40%">
 		<panel title="Panel 2"  height="100%" width="100%" border="normal" maximizable="true">
 			<panelchildren>
-				<div height="300px" width="100%" style="background: red;">
+				<div height="300px" width="100%" style="background: blue;">
 				</div>
 			</panelchildren>
 		</panel>

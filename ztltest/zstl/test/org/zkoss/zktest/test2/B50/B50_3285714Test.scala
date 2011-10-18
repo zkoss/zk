@@ -64,13 +64,12 @@ class B50_3285714Test extends ZTL4ScalaTestCase {
         () => {
         var grid: Widget = engine.$f("grid");
         var rows: Widget = engine.$f("rows");
-        waitResponse();
 
         jq(grid.$n("body")).get(0).eval("scrollTop = 300000");
-        waitResponse();
+        sleep(600);
         var fullHeight: Int = Integer.parseInt(jq(grid.$n("body")).get(0).get("scrollTop"));
         jq(grid.$n("body")).get(0).eval("scrollTop = " + (fullHeight/2));
-        waitResponse();
+        sleep(600);
 
         var rowCnt: Int = jq(rows.$n()).find(".z-row").length();
         

@@ -1,0 +1,42 @@
+<test tags="F30-1843802.zul,B,E,Comboitem,Combobox">
+	<case id="Test">
+		<server><!--
+			
+			<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+				<n:h2>[ 1843802 ] Comboitem supports the disabled property</n:h2>
+				<n:ol>
+					<n:li>You should not select the disabled item.</n:li>
+					<n:li>Even you key the value of disabled item, you still can not selected on it, try typing "Simple and Rich" and you will get a error.</n:li>
+				</n:ol>
+				<button label="show selected" onClick='lb.value = cb1.selectedIndex' />
+				<combobox id="cb" constraint="strict">
+					<comboitem label="item1" disabled="true"/>
+					<comboitem label="item2"/>
+					<comboitem label="item3" disabled="true"/>
+					<comboitem label="item4" />
+				</combobox>
+				<label id="lb" />
+			</zk>
+		--></server>
+		<client><![CDATA[
+			
+			verifyFalse(jq(".z-combobox-pp").isVisible());
+			click(cb.$n("btn"));
+			waitResponse();
+			verifyTrue(jq(".z-combobox-pp").isVisible());
+			
+			click(jq("@comboitem .z-comboitem-text").get(0)); // disabled comboitem, shall do nothing
+			verifyEquals("", cb.$n("real").get("value"));
+			verifyTrue(jq(".z-combobox-pp").isVisible()); // popup shall still be open
+			
+			click(jq("@comboitem .z-comboitem-text").get(1));
+			verifyEquals("item2", cb.$n("real").get("value"));
+			verifyFalse(jq(".z-combobox-pp").isVisible());
+			
+			type(cb.$n("real"), "item1");
+			blur(cb.$n("real"));
+			verifyTrue(jq(".z-errbox").exists());
+			
+		]]></client>
+	</case>
+</test>

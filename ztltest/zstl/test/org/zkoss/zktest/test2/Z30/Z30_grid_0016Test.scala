@@ -16,9 +16,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2.Z30
 
-import org.zkoss.zstl.ZTL4ScalaTestCase
-import org.zkoss.ztl.Tags;
 import scala.collection.mutable.ListBuffer
+
+import org.zkoss.zstl.ZTL4ScalaTestCase
+import org.zkoss.ztl.util.Scripts
+import org.zkoss.ztl.Tags
 
 /**
  * A test class for bug grid-0016
@@ -59,7 +61,7 @@ class Z30_grid_0016Test extends ZTL4ScalaTestCase {
     runZTL(zscript,
         () => {
 	        def clickThenValidate(selector:String,validator:()=>Unit ){
-	            click(jq(selector));
+	          	Scripts.triggerMouseEventAt(getWebDriver(), jq(selector), "click", "2,2")        
 	        	waitResponse()
 	        	validator()
 	        }          
@@ -69,7 +71,6 @@ class Z30_grid_0016Test extends ZTL4ScalaTestCase {
 		        while(list.hasNext()){
 		          val row = list.next() ;
 		          var text = verify.next();
-//		          println(row.find(".z-label:first").text(),text)
 				  verifyEquals(row.find(".z-label:first").text(),text);
 				}          
 	        }          

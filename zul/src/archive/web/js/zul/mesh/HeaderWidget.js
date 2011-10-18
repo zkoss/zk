@@ -262,8 +262,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var w = zkp.revisedWidth(p.offsetWidth);
 			// Bug #3255116
 			if (mw.ebody) {
-				var scroll = zk(mw.ebody).hasVScroll(); //vertical scrollbar
-				if (scroll) {
+				var scroll = mw.ebody.offsetWidth - mw.ebody.clientWidth; // zkq#hasVScroll() cause issue in IE9
+				if (scroll > 11) {
 					w -= scroll;
 					
 					// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.

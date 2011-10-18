@@ -508,6 +508,12 @@
 		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attribute name="valign" type="valignAttrType" use="optional" />
 	</xs:attributeGroup>
+	<xs:attributeGroup name="footerElementAttrGroup">
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
+		<xs:attribute name="valign" type="valignAttrType" use="optional" />
+		<xs:attribute name="span" type="intType" use="optional" />
+	</xs:attributeGroup>
     <!--
     ELEMENTGROUP
     -->
@@ -1260,8 +1266,7 @@
 	<xs:element name="footer" type="footerType" />
 	<xs:complexType name="footerType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="span" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="footerElementAttrGroup" />
 	</xs:complexType>
 	
 	<!-- frozen -->
@@ -1703,8 +1708,7 @@
 	<xs:element name="listfooter" type="listfooterType" />
 	<xs:complexType name="listfooterType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="span" type="intType" use="optional" />
+		<xs:attributeGroup ref="footerElementAttrGroup" />
 	</xs:complexType>
     
     <!-- listgroup -->
@@ -2465,8 +2469,7 @@
 	<xs:element name="treefooter" type="treefooterType" />
 	<xs:complexType name="treefooterType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="span" type="intType" use="optional" />
+		<xs:attributeGroup ref="footerElementAttrGroup" />
 	</xs:complexType>
     <!-- treeitem -->
 	<xs:element name="treeitem" type="treeitemType" />

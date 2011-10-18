@@ -1,0 +1,23 @@
+<test tags="B50-2941387.zul,A,E,Listcell,Listbox,VisionTest">
+	<case id="Display">
+		<server><!--
+<window title="" border="normal">
+	<listbox>
+		<listhead>
+			<listheader label="A" />
+			<listheader label="B" />
+			<listheader label="C" />
+			<listheader label="D" />
+		</listhead>
+		<listitem>
+			<listcell span="4"
+				label="You should see the cell can cross between other cells................................................" />
+		</listitem>
+	</listbox>
+</window>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

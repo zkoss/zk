@@ -207,6 +207,19 @@ zk.copy(zjq, {
 	}
 });
 
+zk.override(zjq.prototype, {}, {
+	hasVScroll: function () {
+		var n, v;
+		// need to read clientWidth twice to get correct value in IE6
+		return (n = this.jq[0]) && n.clientWidth && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v : 0;
+	},
+	hasHScroll: function () {
+		var n, v;
+		// need to read clientHeight twice to get correct value in IE6
+		return (n = this.jq[0]) && n.clientHeight && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
+	}
+});
+
 jq(window).bind("beforeprint", function() {
 		_inPrint = true;
 		for (var ns = _imgFiltered, i = 0, len = ns.length; i < len; i++) {

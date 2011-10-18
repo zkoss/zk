@@ -1,0 +1,22 @@
+<test tags="B50-3307255.zul,A,E,Panel,Portallayout,VisionTest">
+	<case id="Display">
+		<server><!--
+<zk xmlns:n="native">
+
+	<n:pre>
+		If the panel is not looking weird , it's correct.
+	</n:pre>
+	<portallayout>
+		<portalchildren>
+			<panel title="Panel" border="rounded+">
+				<panelchildren>Panel Content</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
+		--></server>
+		<client><![CDATA[
+			verifyImage();
+		]]></client>
+	</case>
+</test>

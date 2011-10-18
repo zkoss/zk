@@ -70,11 +70,8 @@ class B50_3343001Test extends ZTL4ScalaTestCase {
         	verifyTrue("body height ("+bodyHeight+") should larger then rows height ("+rowsHeight+")",
         	    bodyHeight > rowsHeight);
         }
-        clickThenVerify();
-        clickThenVerify();
-        clickThenVerify();
-        clickThenVerify();
-        clickThenVerify();
+        for (i <- 0 until 5)
+        	clickThenVerify();
     }
    );
 
