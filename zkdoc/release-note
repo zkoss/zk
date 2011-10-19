@@ -26,7 +26,6 @@ ZK 6.0.0
   ZK-279: Simplify PageDefinition and related metainfo
   ZK-314: A way to pre-load images since many UIs depend on the size of an image
   ZK-114: Provide an JasperReport API to get the generated Media
-  ZK-379: Support "..." for long text in listbox 
   ZK-370: Multi-line textbox support rounded mold
   ZK-416: Listbox support multiple drag
   ZK-446: Add an instant="true" attribute to InputElement(e.g. textbox, intbox, ...) so onChange is fired as quick as possible. 

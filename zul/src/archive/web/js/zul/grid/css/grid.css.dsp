@@ -91,13 +91,6 @@ div.z-footer-cnt, div.z-column-cnt{
 .z-word-wrap div.z-footer-cnt, .z-word-wrap div.z-column-cnt {
 	word-wrap: break-word;
 }
-.z-column, .z-column .z-column-cnt,
-.z-row .z-row-cnt,
-.z-row .z-cell,
-.z-footer .z-footer-cnt,
-.z-auxheader, .z-auxheader .z-auxheader-cnt {
-	text-overflow: ellipsis;
-}
 <%-- faker uses only --%>
 tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
 	height: 0 !important;
@@ -332,6 +325,9 @@ tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
 <c:if test="${c:isExplorer()}">
 div.z-grid-header, div.z-grid-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
+}
+div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
+	text-overflow: ellipsis;
 }
 div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>

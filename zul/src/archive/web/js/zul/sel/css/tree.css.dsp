@@ -134,12 +134,6 @@ div.z-treecol-cnt, div.z-tree-header div.z-auxheader-cnt {
 	.z-word-wrap div.z-treecol-cnt {
 	word-wrap: break-word;
 }
-.z-treecol, .z-treecol .z-treecol-cnt,
-.z-treecell .z-treecell-cnt,
-.z-treefooter .z-treefooter-cnt,
-.z-auxheader, .z-auxheader .z-auxheader-cnt {
-	text-overflow: ellipsis;
-}
 <%-- ZK Treecol's sizing --%>
 .z-tree-header .z-treecol.z-treecol-sizing, .z-tree-header .z-treecol.z-treecol-sizing .z-treecol-cnt,
 .z-dottree-header .z-treecol.z-treecol-sizing, .z-dottree-header .z-treecol.z-treecol-sizing .z-treecol-cnt,
@@ -546,6 +540,12 @@ div.z-vfiletree div.z-vfiletree-header tr.z-auxhead th:last-child {
 div.z-tree-header, div.z-dottree-header, div.z-filetree-header, div.z-vfiletree-header,
 div.z-tree-footer, div.z-dottree-footer, div.z-filetree-footer, div.z-vfiletree-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
+}
+div.z-tree-header th.z-treecol, div.z-tree-header th.z-auxheader,
+div.z-dottree-header th.z-treecol, div.z-dottree-header th.z-auxheader,
+div.z-filetree-header th.z-treecol, div.z-filetree-header th.z-auxheader,
+div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader {
+	text-overflow: ellipsis;
 }
 div.z-treecol-cnt, div.z-dottreecol-cnt, div.z-filetreecol-cnt,
 div.z-vfiletreecol-cnt, .z-auxheader-cnt {

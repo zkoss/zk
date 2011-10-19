@@ -91,12 +91,6 @@ div.z-listheader-cnt {
 	.z-word-wrap div.z-listheader-cnt {
 	word-wrap: break-word;
 }
-.z-listheader, .z-listheader .z-listheader-cnt,
-.z-listcell .z-listcell-cnt,
-.z-listfooter .z-listfooter-cnt,
-.z-auxheader, .z-auxheader .z-auxheader-cnt {
-	text-overflow: ellipsis;
-}
 div.z-listfooter-cnt, div.z-listcell-cnt, div.z-listheader-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
@@ -303,6 +297,10 @@ div.z-listbox-header th.z-listheader-sort-dsc div.z-listheader-cnt {
 <c:if test="${c:isExplorer()}">
 div.z-listbox-header, div.z-listbox-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
+}
+div.z-listbox-header th.z-listheader,
+div.z-listbox-header th.z-auxheader {
+	text-overflow: ellipsis;
 }
 div.z-listheader-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
