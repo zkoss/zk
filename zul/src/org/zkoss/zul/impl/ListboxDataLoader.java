@@ -329,29 +329,44 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
 	}
-	
-	public Set getAvailableAtClient() {
+	/** Retrieves the children available at client.
+	 * <p>It can not be overriden. Rather, override {@link #getAvailableAtClient(booolean)} instead.
+	 */
+	public final Set getAvailableAtClient() {
+		return getAvailableAtClient(false);
+	}
+	/** Retrieves the children available at client with more control.
+	 * <p>Derived class shall override this method rather than {@link #getAvailableAtClient()}.
+	 * @param itemOnly whether to return only {@link Listitem} and derives.
+	 * @since 5.0.9
+	 */
+	protected Set getAvailableAtClient(boolean itemOnly) {
 		if (!isCropper())
 			return null;
 		
 		final Paginal pgi = _listbox.getPaginal();
 		int pgsz = pgi.getPageSize();
 		int ofs = pgi.getActivePage() * pgsz;
-		return getAvailableAtClient(ofs, pgsz);
+		return getAvailableAtClient(ofs, pgsz, itemOnly);
 	}
-	
-	protected Set getAvailableAtClient(int offset, int limit) {
+	/** Retrieves the children available at the client within the given range.
+	 * @param itemOnly whether to return only {@link Listitem} and derives.
+	 * @since 5.0.9
+	 */
+	protected Set getAvailableAtClient(int offset, int limit, boolean itemOnly) {
 		if (!isCropper())
 			return null;
 
 		final Set avail = new LinkedHashSet(32);
-		avail.addAll(_listbox.getHeads());
-		final Listfoot listfoot = _listbox.getListfoot();
-		if (listfoot != null) avail.add(listfoot);
-		final Paging paging = _listbox.getPagingChild();
-		if (paging != null) avail.add(paging);
-		final Frozen frozen = _listbox.getFrozen();
-		if (frozen != null) avail.add(frozen);
+		if (!itemOnly) {
+			avail.addAll(_listbox.getHeads());
+			final Listfoot listfoot = _listbox.getListfoot();
+			if (listfoot != null) avail.add(listfoot);
+			final Paging paging = _listbox.getPagingChild();
+			if (paging != null) avail.add(paging);
+			final Frozen frozen = _listbox.getFrozen();
+			if (frozen != null) avail.add(frozen);
+		}
 
 		int pgsz = limit;
 		int ofs = offset;
