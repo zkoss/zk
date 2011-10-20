@@ -278,7 +278,7 @@ public class PageDefinition implements NodeInfo {
 
 		if (pgdef._taglibs != null
 		&& directives != null && contains(directives, "taglib"))
-			for (Taglib tl: _taglibs)
+			for (Taglib tl: pgdef._taglibs)
 				addTaglib(tl);
 
 		if (pgdef._resolvdefs != null
@@ -295,7 +295,7 @@ public class PageDefinition implements NodeInfo {
 
 		if (pgdef._xelfuncs != null
 		&& directives != null && contains(directives, "xel-method"))
-			for (FunctionDefinition xfi: _xelfuncs)
+			for (FunctionDefinition xfi: pgdef._xelfuncs)
 				addXelMethod(xfi.prefix, xfi.name, xfi.function);
 
 		if (pgdef._hdBfrDefs != null
