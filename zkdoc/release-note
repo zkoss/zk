@@ -66,6 +66,7 @@ ZK 5.0.9
   ZK-490: Replace Model the display data is not up to date when Grid in ROD 
   ZK-498: Dynamic Tree demo is broken
   ZK-509: contents data missing with ROD and Listboxes without model
+  ZK-507: grid sort failed with paging mold
 
 	--------
 Aug 31, 2011

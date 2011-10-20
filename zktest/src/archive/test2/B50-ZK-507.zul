@@ -1,0 +1,49 @@
+<!--
+	B50-ZK-507.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Oct 20 14:22:26 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import java.util.*;
+		public class Person{
+			private String name;
+			public String getName() {
+			return this.name;
+			}
+			public void setName(String name) {
+			this.name = name;
+			}
+		}
+		List list = new ArrayList();
+		for (int i = 0; i < 20; i++) {
+			Person p = new Person();
+			p.setName("name" + (i < 10 ? "0" : "") + i);
+			list.add(p);
+		}
+		ListModelList listModel = new ListModelList(list);
+		RowRenderer rowRender = new RowRenderer() {
+			public void render(Row row, Object data) throws Exception {
+				Person p = (Person) data;
+				new Label(p.getName()).setParent(row);
+			}
+		}
+	]]></zscript>
+	<div>
+		Sort by the name and go to the second page. The first item should be "name05".
+	</div>
+	<grid mold="paging" pageSize="5" model="${listModel}" rowRenderer="${rowRender}">
+		<custom-attributes org.zkoss.zul.grid.rod="false" />
+		<columns>
+			<column label="name" sort="auto(name)" />
+		</columns>
+	</grid>
+</zk>
