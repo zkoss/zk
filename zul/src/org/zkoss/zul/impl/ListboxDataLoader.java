@@ -338,7 +338,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	/** Retrieves the children available at client with more control.
 	 * <p>Derived class shall override this method rather than {@link #getAvailableAtClient()}.
 	 * @param itemOnly whether to return only {@link Listitem} and derives.
-	 * @since 5.0.9
+	 * @since 5.0.10
 	 */
 	protected Set getAvailableAtClient(boolean itemOnly) {
 		if (!isCropper())
@@ -351,7 +351,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 	/** Retrieves the children available at the client within the given range.
 	 * @param itemOnly whether to return only {@link Listitem} and derives.
-	 * @since 5.0.9
+	 * @since 5.0.10
 	 */
 	protected Set getAvailableAtClient(int offset, int limit, boolean itemOnly) {
 		if (!isCropper())
