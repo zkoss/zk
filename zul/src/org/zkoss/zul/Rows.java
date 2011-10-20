@@ -242,7 +242,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 
 	private boolean hasModelButNotROD() {
 		final Grid grid = getGrid();
-		return (!WebApps.getFeature("ee") || !grid.evalRod()) && grid != null && grid.getModel() != null;
+		return grid != null && (!WebApps.getFeature("ee") || !grid.evalRod()) && grid.getModel() != null;
 	}
 	
 	private boolean hasGroupsModel() {
