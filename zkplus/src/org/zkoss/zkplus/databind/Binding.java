@@ -305,9 +305,10 @@ public class Binding implements java.io.Serializable {
 					throw UiException.Aide.wrap(ex);
 				}
 			} else {
-				cls = _comp.getPage().resolveClass(cvtClsName); 
-				if (cls == null) {
-					throw UiException.Aide.wrap(new ClassNotFoundException(cvtClsName));
+				try {
+					cls = _comp.getPage().resolveClass(cvtClsName); 
+				} catch (ClassNotFoundException ex) {
+					throw UiException.Aide.wrap(ex);
 				}
 			}
 			try {
