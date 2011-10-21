@@ -472,11 +472,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		try {
 			return _clsresolver.resolveClass(clsnm);
 		} catch (ClassNotFoundException ex) {
-			for (Interpreter ip: getLoadedInterpreters()) {
-				final Class<?> c = ip.getClass(clsnm);
-				if (c != null)
-					return c;
-			}
+			final Class<?> cls = getZScriptClass(clsnm);
+			if (cls != null)
+				return cls;
 			throw ex;
 		}
 	}
@@ -486,12 +484,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (cls != null)
 				return cls;
 		}
-
-		try {
-			return _clsresolver.resolveClass(clsnm);
-		} catch (ClassNotFoundException ex) {
-			return null;
-		}
+		return null; //Since ZK 6, we don't look for the current thread's class loader
 	}
 	public Function getZScriptFunction(String name, Class[] argTypes) {
 		for (Interpreter ip: getLoadedInterpreters()) {

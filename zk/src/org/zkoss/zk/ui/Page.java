@@ -309,34 +309,18 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public boolean hasAttributeOrFellow(String name, boolean recurse);
 
-	/** Returns the class of the specified name by searching
-	 * the thread class loader and the classes defined in the
-	 * loaded interpreters.
-	 *
-	 * <p>Note: if not defined in the interpeter, it will also look for
-	 * the class by use of the current thread's class loader.
-	 * See {@link #resolveClass}.
-	 *
-	 * @return the class, or null if not found
-	 * @see #getLoadedInterpreters
-	 */
-	public Class<?> getZScriptClass(String clsnm);
 	/** Resolves the class of the specified name.
-	 * It first looks at Classes and then all loaded interpreters
-	 * {@link #getLoadedInterpreters}.
+	 * It first looks at {@link ClassResolver} (registered with
+	 * {@link #addClassResolver}). If not found, it looks at the current
+	 * thread's class loader. And then, it looks for classes defined
+	 * in any loaded interpreters ({@link #getLoadedInterpreters}).
 	 *
-	 * <p>It is similar to {@link #getZScriptClass}, except
-	 * <ol>
-	 * <li>It searches the current thread's class loader first,
-	 * and then, the loaded interpreters.</li>
-	 * <li>It throws ClassNotFoundException if not found</li>
-	 * </ol>
-	 *
+	 * @param clsnm the class name. It does not have to be a fully qualified name
+	 * (i.e., it could have no package name), if the class is imported by
+	 * use of the import directive (such as &lt;?import class="com.foo.*"?&gt;).
 	 * @since 3.0.1
-	 * @see #getZScriptClass
 	 */
 	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException;
-
 	/** Adds a class resolver to this page.
 	 * @param resolver the class resolver to be added.
 	 * Currently it supports only {@link org.zkoss.lang.ImportedClassResolver}.
@@ -345,6 +329,23 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public boolean addClassResolver(ClassResolver resolver);
 
+	/** Returns the class of the specified name by searching
+	 * the classes defined in the loaded interpreters ({@link #getLoadedInterpreters}).
+	 *
+	 * <p>Note that: since ZK 6, this method will <b>not</b> search 
+	 * the current thread's class loader.
+	 * In other words, you'd like to look for a class from a given page, use {@link #resolveClass} instead.
+	 *
+	 * <p>Also notice that it won't throw an exception if not found. Rather,
+	 * it returns null.
+	 *
+	 * @param clsnm the fully qualified class name. Unlike {@link #resolveClass},
+	 * this method does not support the imported class (by {@link #addClassResolver}).
+	 * @return the class, or null if not found
+	 * @see #resolveClass
+	 * @see #getLoadedInterpreters
+	 */
+	public Class<?> getZScriptClass(String clsnm);
 	/** Returns the function of the specified name by searching
 	 * the loaded interpreters.
 	 *

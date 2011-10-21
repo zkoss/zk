@@ -309,7 +309,7 @@ public class Column extends HeaderElement {
 
 		final Page page = getPage();
 		final Class cls = page != null ?
-			page.getZScriptClass(clsnm): Classes.forNameByThread(clsnm);
+			page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
 		if (cls == null)
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
