@@ -234,7 +234,7 @@ public class Rows extends XulElement {
 
 	private boolean hasModelButNotROD() {
 		final Grid grid = getGrid();
-		return (!WebApps.getFeature("ee") || !grid.evalRod()) && grid != null && grid.getModel() != null;
+		return grid != null && (!WebApps.getFeature("ee") || !grid.evalRod()) && grid.getModel() != null;
 	}
 	
 	private boolean hasGroupsModel() {
@@ -340,6 +340,9 @@ public class Rows extends XulElement {
 					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2] = g[0] + g[1] - 1;
 				}
 				
+			} else if (hasModelButNotROD()) {
+				int index = newItem.getIndex();
+				fixRowIndices(index, -1);
 			}
 			
 			//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
