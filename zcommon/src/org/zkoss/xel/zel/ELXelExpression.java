@@ -59,8 +59,8 @@ public class ELXelExpression implements ExpressionX, java.io.Serializable {
 	}
 	
 	public ValueReference getValueReference(XelContext xelc) {
-		final org.zkoss.zel.ValueReference vr = _expr.getValueReference(newELContext(xelc)); 
-		return new ValueReferenceImpl(vr.getBase(), vr.getProperty());
+		final org.zkoss.zel.ValueReference vr = _expr.getValueReference(newELContext(xelc));
+		return vr==null?null:new ValueReferenceImpl(vr.getBase(), vr.getProperty());
 	}
 	
 	protected ELContext newELContext(XelContext xelc) {
