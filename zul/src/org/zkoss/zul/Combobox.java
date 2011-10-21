@@ -310,28 +310,34 @@ public class Combobox extends Textbox {
 				final Component[] items = tm.create(item.getParent(), item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
-							return new ForEachStatus() {
-								@Override
-								public ForEachStatus getPrevious() {
-									return null;
-								}
-								@Override
-								public Object getEach() {
-									return data;
-								}
-								@Override
-								public int getIndex() {
-									return item.getIndex();
-								}
-								@Override
-								public Integer getBegin() {
-									return 0;
-								}
-								@Override
-								public Integer getEnd() {
-									return cb.getModel().getSize();
-								}
-							};
+							if ("each".equals(name)) {
+								return data;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									@Override
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									@Override
+									public Object getEach() {
+										return data;
+									}
+									@Override
+									public int getIndex() {
+										return item.getIndex();
+									}
+									@Override
+									public Integer getBegin() {
+										return 0;
+									}
+									@Override
+									public Integer getEnd() {
+										return cb.getModel().getSize();
+									}
+								};
+							} else {
+								return null;
+							}
 						}
 					});
 				if (items.length != 1)
