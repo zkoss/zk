@@ -60,7 +60,7 @@ public class Group extends Row {
 		this();
 		setLabel(label);
 	}
-	public Group(String label, Object value) {
+	public <T> Group(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);

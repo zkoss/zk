@@ -141,8 +141,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @see #setValue
 	 * @since 2.4.0
 	 */
-	public Object getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T) _value;
 	}
 	/** Associate the value with this combo item.
 	 * The value is application dependent. It can be anything.
@@ -151,7 +152,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @see #getValue
 	 * @since 2.4.0
 	 */
-	public void setValue(Object value) {
+	public <T> void setValue(T value) {
 		_value = value;
 	}
 

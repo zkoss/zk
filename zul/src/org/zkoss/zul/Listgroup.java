@@ -52,7 +52,7 @@ public class Listgroup extends Listitem {
 		this();
 		setLabel(label);
 	}
-	public Listgroup(String label, Object value) {
+	public <T> Listgroup(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);

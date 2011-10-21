@@ -49,8 +49,9 @@ public class Listhead extends HeadersElement {
 	 * whatever value you want.
 	 * @since 3.6.0
 	 */
-	public Object getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T)_value;
 	}
 	/** Sets the value.
 	 * @param value the value.
@@ -58,7 +59,7 @@ public class Listhead extends HeadersElement {
 	 * whatever value you want.
 	 * @since 3.6.0
 	 */
-	public void setValue(Object value) {
+	public <T> void setValue(T value) {
 		_value = value;
 	}
 	/**

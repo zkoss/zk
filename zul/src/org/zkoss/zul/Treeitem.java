@@ -195,15 +195,16 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Note: the value is not sent to the browser, so it is OK to be
 	 * anything.
 	 */
-	public Object getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T) _value;
 	}
 	/** Sets the value.
 	 * @param value the value.
 	 * Note: the value is not sent to the browser, so it is OK to be
 	 * anything.
 	 */
-	public void setValue(Object value) {
+	public <T> void setValue(T value) {
 		_value = value;
 	}
 	/**

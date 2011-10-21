@@ -113,15 +113,16 @@ public class Listcell extends LabelImageElement {
 	 * <p>Note: the value is application dependent, you can place
 	 * whatever value you want.
 	 */
-	public Object getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T)_value;
 	}
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
 	 * whatever value you want.
 	 */
-	public void setValue(Object value) {
+	public <T> void setValue(T value) {
 		_value = value;
 	}
 

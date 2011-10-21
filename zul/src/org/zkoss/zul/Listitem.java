@@ -50,7 +50,7 @@ public class Listitem extends XulElement {
 	public Listitem(String label) {
 		setLabel(label);
 	}
-	public Listitem(String label, Object value) {
+	public <T> Listitem(String label, T value) {
 		setLabel(label);
 		setValue(value);
 	}
@@ -120,8 +120,9 @@ public class Listitem extends XulElement {
 	 * the name attribute), it is better to specify a String-typed
 	 * value.
 	 */
-	public Object getValue() {
-		return _value;
+	@SuppressWarnings("unchecked")
+	public <T> T getValue() {
+		return (T)_value;
 	}
 	/** Sets the value.
 	 * @param value the value.
@@ -131,7 +132,7 @@ public class Listitem extends XulElement {
 	 * the name attribute), it is better to specify a String-typed
 	 * value.
 	 */
-	public void setValue(Object value) {
+	public <T> void setValue(T value) {
 		if (!Objects.equals(_value, value)) {
 			_value = value;
 

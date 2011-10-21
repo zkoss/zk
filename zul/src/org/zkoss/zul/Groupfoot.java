@@ -40,7 +40,7 @@ public class Groupfoot extends Row {
 		this();
 		setLabel(label);
 	}
-	public Groupfoot(String label, Object value) {
+	public <T> Groupfoot(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);

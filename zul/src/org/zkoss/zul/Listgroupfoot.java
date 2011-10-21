@@ -38,7 +38,7 @@ public class Listgroupfoot extends Listitem {
 		this();
 		setLabel(label);
 	}
-	public Listgroupfoot(String label, Object value) {
+	public <T> Listgroupfoot(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);
