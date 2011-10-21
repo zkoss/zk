@@ -416,6 +416,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<!--                    -->
+	<!-- Date Utilities     -->
+	<!--                    -->
+	<function>
+		<name>formatDate</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.String formatDate(java.util.Date, java.lang.String)</function-signature>
+		<description>
+		Returns the formatted time string.
+		</description>
+	</function>
+	<function>
+		<name>parseDate</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.util.Date parseDate(java.lang.String, java.lang.String)</function-signature>
+		<description>
+		Returns A Date parsed from the string.
+		</description>
+	</function>
+	
+	
+	<!--                    -->
 	<!-- XML/HTML Utilities -->
 	<!--                    -->
 	<function>

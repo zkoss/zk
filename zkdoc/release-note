@@ -40,6 +40,7 @@ ZK 6.0.0
   ZK-470: Add Anchorlayout component to ZK core 
   ZK-383: Make breeze as the default theme
   ZK-318: Support combobutton combining a button and a dropdown menu
+  ZK-526: Add a utile EL function for formatting date and parsing date
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

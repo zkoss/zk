@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.fn;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.List;
@@ -378,5 +380,29 @@ public class CommonFns {
 		} else {
 			throw new IllegalArgumentException("Unknow object for new: "+o);
 		}
+	}
+	
+	/**
+	 * Formats a Date into a date/time string.
+     * @param date the time value to be formatted into a time string.
+	 * @param pattern the pattern describing the date and time format
+     * @return the formatted time string.
+     * @since 6.0.0
+	 */
+	public static final String formatDate(Date date, String pattern) {
+		return new SimpleDateFormat(pattern).format(date);
+	}
+
+	/**
+	 * Parses text from the beginning of the given string to produce a date.
+     * The method may not use the entire text of the given string.
+     * @param source A <code>String</code> whose beginning should be parsed.
+	 * @param pattern the pattern describing the date and time format
+     * @return A <code>Date</code> parsed from the string.
+	 * @throws Exception
+	 * @since 6.0.0
+	 */
+	public static final Date parseDate(String source, String pattern) throws Exception {
+		return new SimpleDateFormat(pattern).parse(source);
 	}
 }
