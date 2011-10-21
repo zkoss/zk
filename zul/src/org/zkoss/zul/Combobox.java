@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -299,7 +300,7 @@ public class Combobox extends Textbox {
 	}
 
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
-		public void render(Comboitem item, final Object data) {
+		public void render(final Comboitem item, final Object data) {
 			final Combobox cb = (Combobox)item.getParent();
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
@@ -309,7 +310,28 @@ public class Combobox extends Textbox {
 				final Component[] items = tm.create(item.getParent(), item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
-							return "each".equals(name) ? data: null;
+							return new ForEachStatus() {
+								@Override
+								public ForEachStatus getPrevious() {
+									return null;
+								}
+								@Override
+								public Object getEach() {
+									return data;
+								}
+								@Override
+								public int getIndex() {
+									return item.getIndex();
+								}
+								@Override
+								public Integer getBegin() {
+									return 0;
+								}
+								@Override
+								public Integer getEnd() {
+									return cb.getModel().getSize();
+								}
+							};
 						}
 					});
 				if (items.length != 1)

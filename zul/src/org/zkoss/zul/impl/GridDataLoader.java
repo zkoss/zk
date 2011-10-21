@@ -25,6 +25,7 @@ import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.Grid;
@@ -227,7 +228,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return renderer != null ? renderer : _defRend; 
 	}
 	private static final RowRenderer _defRend = new RowRenderer() {
-		public void render(Row row, final Object data) {
+		public void render(final Row row, final Object data) {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
 			final Template tm = grid.getTemplate("model");
@@ -240,7 +241,34 @@ public class GridDataLoader implements DataLoader, Cropper {
 				final Component[] items = tm.create(rows, row,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
-							return "each".equals(name) ? data: null;
+							if ("each".equals(name)) {
+								return data;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									@Override
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									@Override
+									public Object getEach() {
+										return data;
+									}
+									@Override
+									public int getIndex() {
+										return row.getIndex();
+									}
+									@Override
+									public Integer getBegin() {
+										return 0;
+									}
+									@Override
+									public Integer getEnd() {
+										return grid.getModel().getSize();
+									}
+								};
+							} else {
+								return null;
+							}
 						}
 					});
 				if (items.length != 1)

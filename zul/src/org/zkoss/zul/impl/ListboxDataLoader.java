@@ -25,6 +25,7 @@ import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.Frozen;
@@ -209,8 +210,9 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		final ListitemRenderer renderer = _listbox.getItemRenderer();
 		return renderer != null ? renderer: _defRend;
 	}
+	
 	private static final ListitemRenderer _defRend = new ListitemRenderer() {
-		public void render(Listitem item, final Object data) {
+		public void render(final Listitem item, final Object data) {
 			final Listbox listbox = (Listbox)item.getParent();
 			final Template tm = listbox.getTemplate("model");
 			if (tm == null) {
@@ -220,7 +222,34 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				final Component[] items = tm.create(listbox, item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
-							return "each".equals(name) ? data: null;
+							if ("each".equals(name)) {
+								return data;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									@Override
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									@Override
+									public Object getEach() {
+										return data;
+									}
+									@Override
+									public int getIndex() {
+										return item.getIndex();
+									}
+									@Override
+									public Integer getBegin() {
+										return 0;
+									}
+									@Override
+									public Integer getEnd() {
+										return listbox.getModel().getSize();
+									}
+								};
+							} else {
+								return null;
+							}
 						}
 					});
 				if (items.length != 1)
