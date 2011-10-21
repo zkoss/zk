@@ -4,8 +4,8 @@ ZK 5.0.10
 * Bugs
 
 	--------
-Oct 18, 2011
 ZK 5.0.9
+Oct 18, 2011
 * Features
   ZK-481: Deprecate Treeitem#indexOf() API and add Treeitem#getIndex() so all components(Listitem, Comboitem, Treeitem) with index concept use the same API name
   ZK-500: Add a default format for NumberInputElement when the locale is specified
