@@ -134,6 +134,9 @@ implements org.w3c.dom.ProcessingInstruction {
 		//so we have to handle them here
 		for (Map.Entry<String, String> me: map.entrySet()) {
 			final String val = me.getValue();
+			if (val == null)
+				continue;
+
 			StringBuffer sb = null;
 			for (int i = 0, j = 0, len = val.length();;) {
 				int k = val.indexOf('&', j);

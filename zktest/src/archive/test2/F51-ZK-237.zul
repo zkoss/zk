@@ -1,8 +1,8 @@
-<?import class="org.zkoss.zktest.test2.*"?>
-<?import class="org.zkoss.zul.*"?>
-<?import class="org.zkoss.zktest.test2.F327Init"?>
-<?import class="org.zkoss.zktest.test2.*"?>
-<?import class="java.lang.*"?>
+<?import org.zkoss.zktest.test2.*?>
+<?import org.zkoss.zul.*?>
+<?import org.zkoss.zktest.test2.F327Init?>
+<?import org.zkoss.zktest.test2.*?>
+<?import java.lang.*?>
 
 <?init class="F327Init"?>
 <?variable-resolver class="F327Resolver"?>

@@ -23,29 +23,32 @@ import java.util.*;
  */
 public class Generics {
 	/** Returns a type-safe generic class of the given type-less class.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> Class<T> cast(Class cls) {
 		return (Class<T>)cls;
 	}
-
+	/** Force to cast an object to the given type.
+	 * Notice that it is not safe to use, unless you are sure that <code>o</code>
+	 * is an instance of T.
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T cast(Object o) {
+		return (T)o;
+	}
 	/** Returns a type-safe generic iterator of the given un-typed iterator.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> Iterator<T> cast(Iterator it) {
 		return it;
 	}
 	/** Returns a type-safe generic list iterator of the given un-typed list iterator.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> ListIterator<T> cast(ListIterator it) {
 		return it;
 	}
 	/** Returns a type-safe generic enumeration of the given un-typed enumeration.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> Enumeration<T> cast(Enumeration en) {
@@ -53,35 +56,30 @@ public class Generics {
 	}
 
 	/** Returns a type-safe generic collection of the given un-typed collection.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> Collection<T> cast(Collection col) {
 		return col;
 	}
 	/** Returns a type-safe generic list of the given un-typed list.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> List<T> cast(List list) {
 		return list;
 	}
 	/** Returns a type-safe generic set of the given un-typed set.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> Set<T> cast(Set set) {
 		return set;
 	}
 	/** Returns a type-safe generic map of the given un-typed map.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <K, V> Map<K, V> cast(Map map) {
 		return map;
 	}
 	/** Returns a type-safe generic thread-local of the given un-typed thread-local.
-	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> ThreadLocal<T> cast(ThreadLocal tl) {

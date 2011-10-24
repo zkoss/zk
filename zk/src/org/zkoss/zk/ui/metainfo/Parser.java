@@ -172,8 +172,6 @@ public class Parser {
 				final String src = params.remove("src");
 				final String dirs = params.remove("directives");
 				final String cls = params.remove("class");
-				if (!params.isEmpty())
-					log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 				if (src != null) {
 					noELnorEmpty("src", src, pi);
 					noEL("directives", dirs, pi);
@@ -182,6 +180,16 @@ public class Parser {
 				if (cls != null) {
 					noELnorEmpty("class", cls, pi);
 					impclses.add(cls);
+				}
+				for (Map.Entry<String, String> me: params.entrySet()) {
+					final String nm = me.getKey();
+					final String val = me.getValue();
+					if (val == null) {
+						noELnorEmpty(nm, nm, pi);
+						impclses.add(nm);
+					} else {
+						log.warning("Ignored unknown attribute for import: "+nm+", "+pi.getLocator());
+					}
 				}
 			} else {
 				pis.add(pi);
