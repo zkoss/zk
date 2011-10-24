@@ -279,9 +279,14 @@ zWatch = (function () {
 				var xinf = xinfs[j],
 					o = xinf[0],
 					diff = bindLevel > o.bindLevel;
-				if (diff //neither ancestor, nor this (nor sibling)
-				|| (cache && !pvisible && !(pvisible = _visible(name, p)))) //check p first (since _visibleChild checks only o)
-					break; //diff or (p is invisible)
+				if (diff) //neither ancestor, nor this (nor sibling)
+					break;
+
+				if (!pvisible && cache) { //not cached yet
+					if (!(pvisible = _visible(name, p))) //check p first (since _visibleChild checks only o)
+						break; //p is NOT visible
+					cache[p.uuid] = true; //cache result to speed up _visiChild
+				}
 
 				if (_visibleChild(name, p, o, cache)) {
 					if (remove)
