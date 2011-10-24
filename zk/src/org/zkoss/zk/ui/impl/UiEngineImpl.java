@@ -1180,14 +1180,16 @@ public class UiEngineImpl implements UiEngine {
 			if (pfReqId != null) rque.addPerfRequestId(pfReqId);
 
 			final List<Throwable> errs = new LinkedList<Throwable>();
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			//Process all; ignore getMaxProcessTime();
 			//we cannot handle them partially since UUID might be recycled
 			for (AuRequest request; (request = rque.nextRequest()) != null;) {
 				//Cycle 1: Process one request
 				//Don't process more such that requests will be queued
 				//and we have the chance to optimize them
+				execCtrl.setCurrentPage(request.getPage());
 				try {
-					process(exec, request, !errs.isEmpty());
+					((DesktopCtrl)desktop).service(request, !errs.isEmpty());
 				} catch (Throwable ex) {
 					handleError(ex, uv, errs);
 					//we don't skip request to avoid mis-match between c/s
@@ -1468,17 +1470,6 @@ public class UiEngineImpl implements UiEngine {
 		uv.addResponse(new AuAlert(msg)); //default handling
 	}
 
-	/** Processing the request and stores result into UiVisualizer.
-	 * @param everError whether any error ever occured before processing this
-	 * request.
-	 */
-	private void process(Execution exec, AuRequest request, boolean everError) {
-//		if (log.finable()) log.finer("Processing request: "+request);
-
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		execCtrl.setCurrentPage(request.getPage());
-		((DesktopCtrl)request.getDesktop()).service(request, everError);
-	}
 	/** Processing the event and stores result into UiVisualizer. */
 	private void process(Desktop desktop, Event event) {
 //		if (log.finable()) log.finer("Processing event: "+event);

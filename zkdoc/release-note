@@ -122,6 +122,7 @@ ZK 6.0.0
 ZK 5.0.10
 * Features
 * Bugs
+  ZK-513: Adding objects to ListModelList causes Firefox to complain slow script
 
 	--------
 ZK 5.0.9
