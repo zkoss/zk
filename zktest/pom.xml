@@ -116,6 +116,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zbind</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zul</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -200,6 +200,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zbind</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zkforge</groupId>
 			<artifactId>ckez</artifactId>
 			<version>${ckez.version}</version>
