@@ -65,6 +65,11 @@ public class BindELResolver extends XelELResolver {
 		tieValue((BindELContext)((EvaluationContext)ctx).getELContext(), base, property, value);
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static List<String> getPathList(BindELContext ctx){
+		return (List<String>)ctx.getContext(Path.class);//get path, see #PathResolver
+	}
+	
 	//update dependency and notify changed
 	private void tieValue(BindELContext ctx, Object base, Object propName, Object value) {
 		if(ctx.ignoreTracker()) return; 
@@ -72,7 +77,7 @@ public class BindELResolver extends XelELResolver {
 		//only there is a binding that needs tie tracking to value
 		if (binding != null) {
         	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
-        	final List<String> path = (List<String>) ctx.getContext(Path.class); //get path, see #PathResolver
+        	final List<String> path = getPathList(ctx);
         	
         	String script = null;
 			if (base instanceof Form) {

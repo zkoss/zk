@@ -59,7 +59,7 @@ public class AnnotateBinderHelper {
 		initFormBindings(comp);//initial form binding on comp, ex self="form(...)"
 		initComponentPropertiesBindings(comp); //initial property binding on comp, ex value="bind(...)"
 		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component kid = (Component) it.next();
+			final Component kid = it.next();
 			initAllComponentsBindings(kid); //recursive to each child
 		}
 	}
@@ -75,8 +75,8 @@ public class AnnotateBinderHelper {
 			String initExpr = null;
 			Map<String, Object> args = null;
 			ValidatorInfo validatorInfo = null;
-			for (final Iterator<?> it = formAnno.getAttributes().entrySet().iterator(); it.hasNext();) {
-				final Map.Entry entry = (Map.Entry) it.next();
+			for (final Iterator<Entry<String,Object>> it = formAnno.getAttributes().entrySet().iterator(); it.hasNext();) {
+				final Entry<String,Object> entry = it.next();
 				final String tag = (String) entry.getKey();
 				final Object tagExpr = entry.getValue();
 				if ("id".equals(tag)) {
@@ -149,11 +149,11 @@ public class AnnotateBinderHelper {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(propName, BIND_ANNO);
 		if (ann != null) {
-			final Map<?, ?> attrs = ann.getAttributes(); //(tag, tagExpr)
+			final Map<String,Object> attrs = ann.getAttributes(); //(tag, tagExpr)
 			Map<String, Object> args = null;
 			final List<String> cmdExprs = new ArrayList<String>();
-			for (final Iterator<?> it = attrs.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry entry = (Map.Entry) it.next();
+			for (final Iterator<Entry<String,Object>> it = attrs.entrySet().iterator(); it.hasNext();) {
+				final Entry<String,Object> entry = it.next();
 				final String tag = (String) entry.getKey();
 				final Object tagExpr = entry.getValue();
 				if ("value".equals(tag)) {
@@ -188,8 +188,8 @@ public class AnnotateBinderHelper {
 			Map<String, Object> args = null;
 			ValidatorInfo validatorInfo = null;
 			ConverterInfo converterInfo = null;
-			for (final Iterator<?> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-				final Map.Entry entry = (Map.Entry) it.next();
+			for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+				final Entry<String,Object> entry = it.next();
 				final String tag = (String) entry.getKey();
 				final Object tagExpr = entry.getValue();
 				if ("init".equals(tag)) {
@@ -246,9 +246,9 @@ public class AnnotateBinderHelper {
 
 	private ConverterInfo parseConverter(ComponentCtrl compCtrl, Annotation anno) {
 		ConverterInfo info = new ConverterInfo();
-		for (final Iterator<?> it = anno.getAttributes().entrySet().iterator(); it
+		for (final Iterator<Entry<String,Object>> it = anno.getAttributes().entrySet().iterator(); it
 				.hasNext();) {
-			final Map.Entry entry = (Map.Entry) it.next();
+			final Entry<String,Object> entry = it.next();
 			final String tag = (String) entry.getKey();
 			final Object tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
@@ -269,8 +269,8 @@ public class AnnotateBinderHelper {
 
 	private ValidatorInfo parseValidator(ComponentCtrl compCtrl, Annotation anno) {
 		ValidatorInfo info = new ValidatorInfo();
-		for (final Iterator<?> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Map.Entry entry = (Map.Entry) it.next();
+		for (final Iterator<Entry<String,Object>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,Object> entry = it.next();
 			final String tag = (String) entry.getKey();
 			final Object tagExpr = entry.getValue();
 			if ("value".equals(tag)) {

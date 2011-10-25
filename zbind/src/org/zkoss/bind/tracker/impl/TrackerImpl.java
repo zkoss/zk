@@ -338,6 +338,7 @@ public class TrackerImpl implements Tracker {
 	}
 	
 	//given base and postfix, found the associated TrackerNode. 
+	@SuppressWarnings("unused")
 	private Set<TrackerNode> getNodes(Object base, String postfix) {
 		Set<TrackerNode> nodes = getTrackerNodesByBean(base);
 		String[] props = postfix.split("\\.");
@@ -464,13 +465,13 @@ public class TrackerImpl implements Tracker {
 	private void dumpPropNameMapping(TrackerNode node, int spaces) {
 		if(((TrackerNodeImpl)node).getPropNameMapping().size()==0) return;//don't dump if empty
 		System.out.println(dumpSpace(spaces)+"[propertys:");
-		for(Entry entry : ((TrackerNodeImpl)node).getPropNameMapping().entrySet()) {
+		for(Entry<Object, Object> entry : ((TrackerNodeImpl)node).getPropNameMapping().entrySet()) {
 			dumpEntry(entry, spaces+4);
 		}
 		System.out.println(dumpSpace(spaces)+"]");
 	}
 	
-	private void dumpEntry(Entry entry, int spaces) {
+	private void dumpEntry(Entry<Object, Object> entry, int spaces) {
 		System.out.println(dumpSpace(spaces)+entry.getKey()+"="+entry.getValue());
 	}
 	

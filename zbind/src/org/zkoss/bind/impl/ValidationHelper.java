@@ -24,6 +24,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 /**
  * a internal stateless helper to helps BindImpl to the validation.
@@ -243,7 +244,7 @@ import org.zkoss.zk.ui.event.Event;
 		Property p = _mainPropertyCache.get(binding);
 		ValidationContextImpl vContext = new ValidationContextImpl(command,p,validates,ctx,valid);
 		binding.validate(vContext);
-		final Set<Property> xnotifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+		final Set<Property> xnotifys = getNotifys(ctx);
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
@@ -259,7 +260,7 @@ import org.zkoss.zk.ui.event.Event;
 		Property p = _mainPropertyCache.get(binding); 
 		ValidationContextImpl vContext = new ValidationContextImpl(command,p,validates,ctx,valid);
 		binding.validate(vContext);
-		final Set<Property> xnotifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+		final Set<Property> xnotifys = getNotifys(ctx);
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
@@ -267,5 +268,9 @@ import org.zkoss.zk.ui.event.Event;
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static Set<Property> getNotifys(BindContext ctx){
+		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
+	}
 	
 }

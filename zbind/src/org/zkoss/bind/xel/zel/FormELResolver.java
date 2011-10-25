@@ -40,7 +40,7 @@ public class FormELResolver extends ELResolver {
         if (base instanceof Form) {
         	//don't care the property, at there, get the path (the key of field in form), the path was built by PathResolver) 
         	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
-        	final List<String> path = (List<String>) ctx.getContext(Path.class); //get path, see #PathResolver
+        	final List<String> path = getPathList(ctx); //get path, see #PathResolver
         	
             ctx.setPropertyResolved(true);
             if (nums == 0) { //last property
@@ -62,7 +62,7 @@ public class FormELResolver extends ELResolver {
 
         if (base instanceof Form) {
             ctx.setPropertyResolved(true);
-        	final List<String> path = (List<String>) ctx.getContext(Path.class); //get path, see #PathResolver
+        	final List<String> path = getPathList(ctx); //get path, see #PathResolver
         	final String fieldName = fieldName(path);
             final Object result = ((Form) base).getField(fieldName);
             if (result != null) {
@@ -74,19 +74,24 @@ public class FormELResolver extends ELResolver {
     }
 
     @Override
-    public void setValue(ELContext context, Object base, Object property, Object value) 
+    public void setValue(ELContext ctx, Object base, Object property, Object value) 
     throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
-        if (context == null) {
+        if (ctx == null) {
             throw new NullPointerException();
         }
 
         if (base instanceof Form) {
-        	final List<String> path = (List<String>) context.getContext(Path.class); //get path, see #PathResolver
+        	final List<String> path = getPathList(ctx);//get path, see #PathResolver
         	final String fieldName = fieldName(path);
-            context.setPropertyResolved(true);
+        	ctx.setPropertyResolved(true);
             ((Form) base).setField(fieldName, value);
         }
     }
+    
+	@SuppressWarnings("unchecked")
+	private static List<String> getPathList(ELContext ctx){
+		return (List<String>)ctx.getContext(Path.class);//get path, see #PathResolver
+	}
     
     /*package*/ static String fieldName(List<String> path) {
     	final StringBuffer sb = new StringBuffer();

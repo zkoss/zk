@@ -31,7 +31,7 @@ public class TrackerNodeImpl implements TrackerNode {
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
 	private final Set<Binding> _bindings; //associated bindings
-	private Object _bean; //associated bean value
+	private WeakReference<Object> _bean; //associated bean value
 	private final Map<Object, Object> _brackets; //property -> bracket script
 	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	
@@ -131,7 +131,7 @@ public class TrackerNodeImpl implements TrackerNode {
 	}
 
 	public Object getBean() {
-		Object bean = _bean == null ? null : ((WeakReference<Object>)_bean).get();
+		Object bean = _bean == null ? null : _bean.get();
 		if (bean == null && _bean != null) { //Help GC
 			setBean(null);
 		}

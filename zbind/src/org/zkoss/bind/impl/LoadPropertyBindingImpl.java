@@ -24,7 +24,6 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
-import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -34,7 +33,7 @@ import org.zkoss.zk.ui.Component;
 public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
-	private Set<Class> _doneConverterDependsOn = new WeakHashSet<Class>(4);
+	private Set<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
 	
 	public LoadPropertyBindingImpl(Binder binder, Component comp,
 		String attr, String loadScript, String converter, Map<String, Object> args,Map<String, Object> converterArgs) {
@@ -63,7 +62,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	}
 	
 	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {
-		final Class convClz = conv.getClass();
+		final Class<? extends Converter> convClz = conv.getClass();
 		if (_doneConverterDependsOn.contains(convClz)) { //avoid to eval converter @DependsOn again if not exists
 			return;
 		}

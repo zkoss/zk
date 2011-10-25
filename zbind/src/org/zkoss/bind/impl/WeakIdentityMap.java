@@ -63,6 +63,7 @@ import java.util.Set;
  *
  * @author Brian S O'Neill
  */
+@SuppressWarnings("unchecked")
 public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Cloneable {
 
     // Types of Iterators
@@ -486,7 +487,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
                     WeakIdentityMap.this.clear();
                 }
                 public String toString() {
-                    return WeakIdentityMap.this.toString(this);
+                    return WeakIdentityMap.toString(this);
                 }
             };
         }
@@ -509,7 +510,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
                     WeakIdentityMap.this.clear();
                 }
                 public String toString() {
-                    return WeakIdentityMap.this.toString(this);
+                    return WeakIdentityMap.toString(this);
                 }
             };
         }
@@ -826,8 +827,9 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
  *
  * @author Brian S O'Neill
  */
+@SuppressWarnings("unchecked")
 class KeyFactory {
-    static final Object NULL = new Comparable() {
+	static final Object NULL = new Comparable() {
         public int compareTo(Object obj) {
             return obj == this || obj == null ? 0 : 1;
         }

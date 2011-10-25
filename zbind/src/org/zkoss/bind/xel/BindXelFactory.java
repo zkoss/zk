@@ -24,6 +24,7 @@ import org.zkoss.zel.ELContext;
  * @author henrichen
  */
 public class BindXelFactory extends ELFactory {
+	@SuppressWarnings("unchecked")
 	public Expression parseExpression(XelContext xelc, String expression, Class expectedType)
 	throws XelException {
 		return new BindXelExpression(

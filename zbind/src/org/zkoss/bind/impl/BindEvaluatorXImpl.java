@@ -52,7 +52,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		}
 	}
 
-	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class expectedType)
+	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
 	throws XelException {
 		return (ExpressionX) getExpressionFactory()
 			.parseExpression(newXelContext(ctx, null), "${"+expression+"}", expectedType);

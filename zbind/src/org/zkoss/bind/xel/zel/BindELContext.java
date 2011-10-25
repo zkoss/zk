@@ -32,6 +32,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELContext;
+import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.VariableMapper;
 import org.zkoss.zel.impl.parser.AstBracketSuffix;
@@ -107,7 +108,7 @@ public class BindELContext extends XelELContext {
 		if (ctx == null) {
 			return;
 		}
-		Set<Property> notifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+		Set<Property> notifys = getNotifys(ctx);
 		if (notifys == null) {
 			notifys = new LinkedHashSet<Property>();
 			ctx.setAttribute(BinderImpl.NOTIFYS, notifys);
@@ -115,12 +116,23 @@ public class BindELContext extends XelELContext {
 		notifys.addAll(props);
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static Set<Property> getNotifys(BindContext ctx){
+		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static Set<Property> getValidates(BindContext ctx){
+		return (Set<Property>)ctx.getAttribute(BinderImpl.VALIDATES);
+	}	
+	
 	//utility method to add validates to BindContext
+	@SuppressWarnings("unused")
 	private static void addValidates(Set<Property> props, BindContext ctx) {
 		if (ctx == null) {
 			return;
 		}
-		Set<Property> validates = (Set<Property>) ctx.getAttribute(BinderImpl.VALIDATES);
+		Set<Property> validates = getValidates(ctx);
 		if (validates == null) {
 			validates = new LinkedHashSet<Property>();
 			ctx.setAttribute(BinderImpl.VALIDATES, validates);

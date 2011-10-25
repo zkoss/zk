@@ -959,7 +959,7 @@ public class BinderImpl implements Binder {
 				log.debug("doValidateSaveEvent result=[%s]",valid);
 				
 				
-				final Set<Property> xnotifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+				final Set<Property> xnotifys = getNotifys(ctx);
 				if (xnotifys != null) {
 					notifys.addAll(xnotifys);
 				}
@@ -1025,7 +1025,7 @@ public class BinderImpl implements Binder {
 						method = Classes.getMethodInPublic(base.getClass(), command, new Class[] {BindContext.class});
 						param = new Object[] {ctx};
 					} catch (NoSuchMethodException e2) {
-						//TODO, DENNIS , if not method to excute, should we just ignore it?
+						//TODO, DENNIS , if not method to execute, should we just ignore it?
 						throw UiException.Aide.wrap(e);
 					}
 				}
@@ -1158,7 +1158,7 @@ public class BinderImpl implements Binder {
 			doAfterPhase(phase, ctx);
 		}
 		
-		final Set<Property> xnotifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+		final Set<Property> xnotifys = getNotifys(ctx);
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
@@ -1191,7 +1191,7 @@ public class BinderImpl implements Binder {
 			doAfterPhase(phase, ctx);
 		}
 		
-		final Set<Property> xnotifys = (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
+		final Set<Property> xnotifys = getNotifys(ctx);
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
@@ -1208,6 +1208,11 @@ public class BinderImpl implements Binder {
 		} finally {
 			doAfterPhase(phase, ctx);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static Set<Property> getNotifys(BindContext ctx){
+		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
 	}
 	
 	/**
@@ -1384,6 +1389,7 @@ public class BinderImpl implements Binder {
 	}
 
 	private class PostCommandListener implements EventListener<Event>{
+		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			Object[] data = (Object[])event.getData();
 			String command = (String)data[0];

@@ -23,19 +23,13 @@ import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.LogUtil;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
-import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.lang.ExpressionBuilder;
-import org.zkoss.zel.impl.parser.AstBracketSuffix;
-import org.zkoss.zel.impl.parser.AstDotSuffix;
 import org.zkoss.zel.impl.parser.AstIdentifier;
-import org.zkoss.zel.impl.parser.AstInteger;
-import org.zkoss.zel.impl.parser.AstString;
 import org.zkoss.zel.impl.parser.AstValue;
 import org.zkoss.zel.impl.parser.Node;
 
@@ -61,6 +55,12 @@ public class BindExpressionBuilder extends ExpressionBuilder {
     	visitNode(node);
     }
 	
+	
+	@SuppressWarnings("unchecked")
+	private static List<String> getSrcList(BindContext ctx){
+		return (List<String>)ctx.getAttribute(BinderImpl.SRCPATH);
+	}
+	
 	//to tracing load property dependency or form field(both save and load)
 	//path example, [vm,.p1,.firstName] or [fx.firstName]
 	private void addTracking(List<String> series) {
@@ -73,8 +73,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			final TrackerImpl tracker = (TrackerImpl) binder.getTracker();
 			
 			final BindContext bctx = (BindContext) _ctx.getAttribute(BinderImpl.BINDCTX);
-			final List<String> srcpath = bctx != null ? 
-					(List<String>) bctx.getAttribute(BinderImpl.SRCPATH) : null;
+			final List<String> srcpath = bctx != null ? getSrcList(bctx) : null;
 			final String[] srcprops = srcpath != null ? properties(srcpath) : null;
 			//check if a PropertyBinding inside a Form
 			final Object base = binding.getComponent().getAttribute(prop, true);

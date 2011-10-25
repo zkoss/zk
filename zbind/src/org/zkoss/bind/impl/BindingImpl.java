@@ -21,6 +21,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Base implementation for implementing a {@link Binding}
@@ -28,7 +29,7 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class BindingImpl implements Binding {
-	private Object _comp;
+	private WeakReference<Component> _comp;
 	private final Binder _binder;
 	private final Map<String, Object> _args;
 	
@@ -39,7 +40,7 @@ public class BindingImpl implements Binding {
 	}
 	
 	public Component getComponent() {
-		Object comp = _comp == null ? null : ((WeakReference<Object>)_comp).get();
+		Object comp = _comp == null ? null : _comp.get();
 		if (comp == null && _comp != null) { //Help GC
 			_comp = null;
 		}
@@ -65,7 +66,7 @@ public class BindingImpl implements Binding {
 
 	
 	protected Object setAttribute(BindContext ctx, Object key, Object value) {
-		Map<Object, Object> bindingBag = (Map<Object, Object>) ctx.getAttribute(this);
+		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		if (bindingBag == null) {
 			bindingBag = new HashMap<Object, Object>();
 			ctx.setAttribute(this, bindingBag);
@@ -74,12 +75,18 @@ public class BindingImpl implements Binding {
 	}
 	
 	protected Object getAttribute(BindContext ctx, Object key) {
-		Map<Object, Object> bindingBag = (Map<Object, Object>) ctx.getAttribute(this);
+		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		return bindingBag != null ? bindingBag.get(key) : null;
 	}
 	
 	protected boolean containsAttribute(BindContext ctx, Object key) {
-		Map<Object, Object> bindingBag = (Map<Object, Object>) ctx.getAttribute(this);
+		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		return bindingBag != null ? bindingBag.containsKey(key) : false;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private Map<Object,Object> getBindingAttribute(BindContext ctx){
+		return (Map<Object,Object>)ctx.getAttribute(this);
 	}
 }
