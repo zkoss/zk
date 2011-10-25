@@ -1,7 +1,0 @@
-<test tags="forward" action="test2/B30-1729253.zul">
-	<case id="Forward">
-		<client><![CDATA[
-			verifyTrue(jq("@window[title=\"My First window\"]").exists());
-		]]></client>
-	</case>
-</test>
