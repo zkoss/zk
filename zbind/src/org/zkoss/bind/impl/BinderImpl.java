@@ -35,6 +35,7 @@ import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.converter.FormatedDateConverter;
+import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -88,6 +89,8 @@ public class BinderImpl implements Binder {
 		//TODO use library-property to initialize default user converters
 		CONVERTERS.put("objectBoolean", new ObjectBooleanConverter());
 		CONVERTERS.put("formatedDate", new FormatedDateConverter());
+		CONVERTERS.put("formatedNumber", new FormatedNumberConverter());
+		
 		CONVERTERS.put("uri", new UriConverter());
 	}
 	
@@ -123,7 +126,6 @@ public class BinderImpl implements Binder {
 	
 	//Command lifecycle result
 	private static final int SUCCESS = 0;
-//	private static final int FAIL_CONFIRM = 1;
 	private static final int FAIL_VALIDATE = 1;
 	
 	private Component _rootComp;
@@ -150,6 +152,12 @@ public class BinderImpl implements Binder {
 	private final Map<String, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
 	private final String _quename;
 	private final String _quescope;
+	
+	//flag to keep info of current vm has converter method or not
+	private boolean _hasGetConverterMethod = true;
+	
+	//flag to keep info of current vm has validator method or not
+	private boolean _hasGetValidatorMethod = true;
 	
 	public BinderImpl(Component comp, Object vm, String qname, String qscope) {
 		_rootComp = comp;
@@ -208,6 +216,8 @@ public class BinderImpl implements Binder {
 	
 	public void setViewModel(Object vm) {
 		_rootComp.setAttribute(BinderImpl.VM, vm);
+		_hasGetConverterMethod = true;//reset to true
+		_hasGetValidatorMethod = true;//reset to true
 	}
 	
 	public Object getViewModel() {
@@ -216,7 +226,21 @@ public class BinderImpl implements Binder {
 	
 	//Note: assume system converter is state-less
 	public Converter getConverter(String name) {
-		Converter converter = CONVERTERS.get(name);
+		Converter converter = null;
+		if(_hasGetConverterMethod){
+			final BindEvaluatorX eval = getEvaluatorX();
+			final ExpressionX vmc = eval.parseExpressionX(null, 
+				new StringBuilder().append(BinderImpl.VM).append(".getConverter('").append(name).append("')").toString(),
+				Converter.class);
+			try{
+				converter = (Converter)eval.getValue(null, _rootComp, vmc);
+			}catch(org.zkoss.zel.MethodNotFoundException x){
+				_hasGetConverterMethod = false;
+			}
+		}
+		if(converter == null){
+			converter = CONVERTERS.get(name);
+		}
 		if (converter == null && name.indexOf('.') > 0) { //might be a class path
 			try {
 				converter = (Converter) Classes.newInstanceByThread(name);
@@ -233,7 +257,21 @@ public class BinderImpl implements Binder {
 	
 	//Note: assume system validator is state-less
 	public Validator getValidator(String name) {
-		Validator validator = VALIDATORS.get(name);
+		Validator validator = null;
+		if(_hasGetValidatorMethod){
+			final BindEvaluatorX eval = getEvaluatorX();
+			final ExpressionX vmv = eval.parseExpressionX(null, 
+				new StringBuilder().append(BinderImpl.VM).append(".getValidator('").append(name).append("')").toString(),
+				Validator.class);
+			try{
+				validator = (Validator)eval.getValue(null, _rootComp, vmv);
+			}catch(org.zkoss.zel.MethodNotFoundException x){
+				_hasGetValidatorMethod = false;
+			}
+		}
+		if(validator == null){
+			validator = VALIDATORS.get(name);
+		}
 		if (validator == null && name.indexOf('.') > 0) { //might be a class path
 			try {
 				validator = (Validator) Classes.newInstanceByThread(name);

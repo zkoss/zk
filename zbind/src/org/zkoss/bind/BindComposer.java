@@ -73,17 +73,11 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	public Converter getConverter(String name) {
 		Converter conv = _converters.get(name);
-		if (conv == null) {
-			conv = _binder.getConverter(name);
-		}
 		return conv;
 	}
 	
 	public Validator getValidator(String name) {
 		Validator validator = _validators.get(name);
-		if (validator == null) {
-			validator = _binder.getValidator(name);
-		}
 		return validator;
 	}
 	

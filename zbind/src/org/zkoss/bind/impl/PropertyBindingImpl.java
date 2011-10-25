@@ -16,6 +16,7 @@ import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.xel.ExpressionX;
@@ -68,15 +69,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		if(obj instanceof Converter){
 			return (Converter)obj;
 		}else if(obj instanceof String){
-			ExpressionX vmconverter = eval.parseExpressionX(null, 
-					new StringBuilder().append(BinderImpl.VM).append(".getConverter('").append(obj).append("')").toString(),
-					Converter.class);
-			
-			obj = eval.getValue(null, getComponent(), vmconverter);
-			if(obj==null){ // try to get it from binder's system level converter
-				obj = getBinder().getConverter((String)obj);
-			}
-			return (Converter)obj;
+			return getBinder().getConverter((String)obj);//binder will throw exception if not found
 		}else{
 			throw new ClassCastException("result of expression '"+_converter.getExpressionString()+"' is not a Converter, is "+obj);
 		}

@@ -1,4 +1,4 @@
-/* FormatedDateConverter.java
+/* FormatedNumberConverter.java
 
 	Purpose:
 		
@@ -11,9 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.converter;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
@@ -22,14 +21,14 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * Converter to convert String to Date.
+ * Converter to convert String to Number.
  * @author henrichen
  *
  */
-public class FormatedDateConverter implements Converter {
+public class FormatedNumberConverter implements Converter {
 	/**
-	 * Convert Date to String.
-	 * @param val date to be converted
+	 * Convert Number to String.
+	 * @param val number to be converted
 	 * @param comp associated component
 	 * @param ctx bind context for associate {@link Binding} and extra parameter (e.g. format)
 	 * @return the converted String
@@ -38,23 +37,23 @@ public class FormatedDateConverter implements Converter {
 		//user sets format in annotation of binding or args when calling binder.addPropertyBinding()  
 		final String format = (String) ctx.getConverterArg("format");
 		if(format==null) throw new NullPointerException("format attribute not found");
-		final Date date = (Date) val;
-		return date == null ? null : new SimpleDateFormat(format).format(date);
+		final Number number = (Number) val;
+		return number == null ? null : new DecimalFormat(format).format(number);
 	}
 	
 	/**
-	 * Convert String to Date.
-	 * @param val date in string form
+	 * Convert String to Number.
+	 * @param val number in string form
 	 * @param comp associated component
 	 * @param ctx bind context for associate {@link Binding} and extra parameter (e.g. format)
-	 * @return the converted Date
+	 * @return the converted Number
 	 */
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		final String format = (String) ctx.getConverterArg("format");
 		if(format==null) throw new NullPointerException("format attribute not found");
-		final String date = (String) val;
+		final String number = (String) val;
 		try {
-			return date == null ? null : new SimpleDateFormat(format).parse(date);
+			return number == null ? null : new DecimalFormat(format).parse(number);
 		} catch (ParseException e) {
 			throw UiException.Aide.wrap(e);
 		}
