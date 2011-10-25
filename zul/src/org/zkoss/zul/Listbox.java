@@ -3321,7 +3321,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 					clearSelection();
 				final boolean paging = inPagingMold();
 				if (!_multiple
-						|| (!paging && (selItems == null || selItems.size() <= 1))) {
+						|| (!_rod && !paging && (selItems == null || selItems.size() <= 1))) {
 					final Listitem item = selItems != null
 							&& selItems.size() > 0 ? (Listitem) selItems
 							.iterator().next() : null;

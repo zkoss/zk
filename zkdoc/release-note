@@ -3,6 +3,7 @@ ZK 5.0.10
 * Features
 * Bugs
   ZK-513: Adding objects to ListModelList causes Firefox to complain slow script
+  ZK-531: Multi-select issue after ROD
 
 	--------
 ZK 5.0.9
