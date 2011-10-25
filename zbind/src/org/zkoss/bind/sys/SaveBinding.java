@@ -39,9 +39,9 @@ public interface SaveBinding extends Binding {
 	public void validate(ValidationContext vctx);
 	
 	/**
-	 * Returns {@Property} to be validated.
+	 * Returns {@link Property} to be validated.
 	 * @param ctx the binding runtime context
-	 * @return {@Property} to be validated.
+	 * @return {@link Property} to be validated.
 	 */
 	public Property getValidate(BindContext ctx);
 //	public Set<Property> getValidates(BindContext ctx);
@@ -53,7 +53,7 @@ public interface SaveBinding extends Binding {
 	public boolean hasValidator();
 	
 	/**
-	 * return {@Validator} to do validation
+	 * return {@link Validator} to do validation
 	 * @return the validator if existed
 	 */
 	public Validator getValidator();

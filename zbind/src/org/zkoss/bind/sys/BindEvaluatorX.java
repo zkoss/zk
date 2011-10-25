@@ -41,7 +41,8 @@ public interface BindEvaluatorX extends Evaluator {
 	/**
 	 * Sets the specified value to the property resolved from the specified expression.
 	 *
-	 * @param xelc XelContext for this operation
+	 * @param ctx the scoped bind context of this operation 
+	 * @param comp the scoped component context of this operation
 	 * @param expression the expression that will resolve a property
 	 * @param value the value to be set into the resolved property
 	 */
@@ -51,9 +52,9 @@ public interface BindEvaluatorX extends Evaluator {
 	/**
 	 * Sets the specified value to the property resolved from the specified expression.
 	 *
-	 * @param xelc XelContext for this operation
+	 * @param ctx the scoped bind context of this operation 
+	 * @param comp the scoped component context of this operation
 	 * @param expression the expression that will resolve a property
-	 * @param value the value to be set into the resolved property
 	 */
 	public Object getValue(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException;

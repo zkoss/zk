@@ -19,7 +19,7 @@ package org.zkoss.bind;
 public interface Property {
 	/**
 	 * Returns the base object of this property.
-	 * @return
+	 * @return the base object of this property.
 	 */
 	public Object getBase();
 	
@@ -31,7 +31,7 @@ public interface Property {
 	
 	/**
 	 * Returns the name of this property. 
-	 * @return
+	 * @return the name of this property. 
 	 */
 	public String getProperty();
 }

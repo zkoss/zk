@@ -21,7 +21,7 @@ public interface ValidationContext {
 
 	/** 
 	 * is valid 
-	 * default true
+	 * @return true of result is valid, Note, default is true if no {@link Validator} called {@link #setInvalid()}
 	 */
 	boolean isValid();
 

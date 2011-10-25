@@ -21,7 +21,7 @@ import org.zkoss.bind.Form;
 public interface FormBinding extends Binding {
 	/**
 	 * Returns the implicit form associated with this form binding.
-	 * @return
+	 * @return the implicit form associated with this form binding.
 	 */
 	public Form getFormBean();
 	

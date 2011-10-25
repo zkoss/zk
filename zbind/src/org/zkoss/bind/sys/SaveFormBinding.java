@@ -25,9 +25,9 @@ import org.zkoss.bind.Property;
  */
 public interface SaveFormBinding extends FormBinding, SaveBinding {
 	/**
-	 * Returns {@Property}s to be validated, includes the member field of the form
+	 * Returns {@link Property}s to be validated, includes the member field of the form
 	 * @param ctx the binding runtime context
-	 * @return {@Property} to be validated.
+	 * @return {@link Property} to be validated.
 	 */
 	public Set<Property> getValidates(BindContext ctx);
 }

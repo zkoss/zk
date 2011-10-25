@@ -29,13 +29,13 @@ public interface TrackerNode {
 	
 	/**
 	 * Returns all direct dependent nodes of this node.
-	 * @return
+	 * @return all direct dependent nodes of this node.
 	 */
 	public Set<TrackerNode> getDirectDependents();
 	
 	/**
 	 * Returns all associate nodes of this node.
-	 * @return
+	 * @return all associate nodes of this node.
 	 */
 	public Set<TrackerNode> getAssociates();
 	
@@ -55,7 +55,7 @@ public interface TrackerNode {
 
 	/**
 	 * Remove a dependent node of this node per the specified field script.
-	 * @param field name that link to the to be removed dependent tracker node.
+	 * @param script field script that link to the to be removed dependent tracker node.
 	 * @return the removed TrackerNode
 	 */
 	public TrackerNode removeDependent(Object script);
@@ -67,7 +67,7 @@ public interface TrackerNode {
 
 	/** Returns associated Binding.
 	 * 
-	 * @return
+	 * @return associated Binding.
 	 */
 	public Set<Binding> getBindings();
 	

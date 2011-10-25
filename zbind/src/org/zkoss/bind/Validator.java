@@ -18,6 +18,6 @@ package org.zkoss.bind;
  *
  */
 public interface Validator {
-//	boolean validate(String command, Set<Property> property, BindContext ctx);
+
 	void validate(ValidationContext ctx);
 }
