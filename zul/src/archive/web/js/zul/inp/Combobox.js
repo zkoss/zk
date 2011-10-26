@@ -160,8 +160,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				var inp = this.getInputNode(),
 					val = sel.getLabel();
 				this.valueEnter_ = inp.value = val;
-				if (!opts.noSelectRange) //Bug 3058028
-					zk(inp).setSelectionRange(0, val.length);
+				//Bug 3058028
+				// ZK-518
+				if (!opts.noSelectRange)
+					if (zk.gecko)
+						inp.select();
+					else
+						zk(inp).setSelectionRange(0, val.length);
 			}
 
 			if (opts.sendOnChange)
@@ -265,8 +270,14 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._hilite2(sel, opts);
 
 		// Fixed IE/Safari/Chrome
+		// ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
+		// setSelectionRange of FF5 or up will set the position to end,
+		// call select() of input element for select all 
 		if (val)
-			zk(inp).setSelectionRange(0, val.length);
+			if (zk.gecko)
+				inp.select();
+			else
+				zk(inp).setSelectionRange(0, val.length);
 	},
 	otherPressed_: function (evt) {
 		var wgt = this,

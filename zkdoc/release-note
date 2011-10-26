@@ -4,6 +4,7 @@ ZK 5.0.10
 * Bugs
   ZK-513: Adding objects to ListModelList causes Firefox to complain slow script
   ZK-531: Multi-select issue after ROD
+  ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
 
 	--------
 ZK 5.0.9
