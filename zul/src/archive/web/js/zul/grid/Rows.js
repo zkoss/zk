@@ -73,7 +73,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		zWatch.listen({onResponse: this});
 		var w = this;
 		after.push(function () {
-			w..stripe();
+			w.stripe();
 			_syncFrozen(w);
 			//bug# 3092890: Rows.invalidate() does not respect frozen state
 		});
