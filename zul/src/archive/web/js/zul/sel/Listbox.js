@@ -148,6 +148,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
 		after.push(function () {
 			_syncFrozen(w);
+			if (!zk.booted && w._shallFixEmpty)
+				w._fixForEmpty();
 		});
 		this._shallScrollIntoView = true;
 		
@@ -343,22 +345,33 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
-			uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
-		((!this._emptyMessage || this._nrows) ? ' style="display:none"' : '' ),
-			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+		var uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="', uuid, '-empty" class="', zcls,
+				'-empty-body" style="display:none"><tr><td>',
+				this._emptyMessage ,'</td></tr></tbody>');
 	},
+	// this function used for Listbox, Listhead
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
 	},
 	_fixForEmpty: function () {
 		if (this.desktop) {
-			if(this._nrows)
-				jq(this.$n("empty")).hide();
-			else
-				jq(this.$n("empty")).show();
+			if (this._nrows) {
+				jq(this.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+			} else {
+				var $jq = jq(this.$n("empty")),
+					colspan = 0;
+				if (this.listhead) {
+					for (var w = this.listhead.firstChild; w; w = w.nextSibling)
+						if (w.isVisible())
+							colspan++;
+				}
+				
+				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.show();
+			}
 		}
+		this._shallFixEmpty = false;
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.$supers('onChildReplaced_', arguments);

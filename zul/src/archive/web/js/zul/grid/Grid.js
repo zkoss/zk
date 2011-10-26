@@ -124,10 +124,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	_fixOnAdd: function (child, ignoreDom, _noSync) {
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
-			this.fixForEmpty_();
-		} else if (child.$instanceof(zul.grid.Columns)) 
+			this._syncEmpty();
+		} else if (child.$instanceof(zul.grid.Columns)) {
 			this.columns = child;
-		else if (child.$instanceof(zul.grid.Foot)) 
+			this._syncEmpty();
+		} else if (child.$instanceof(zul.grid.Foot)) 
 			this.foot = child;
 		else if (child.$instanceof(zul.mesh.Paging)) 
 			this.paging = child;
@@ -146,10 +147,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (child == this.rows) {
 			this.rows = null;
 			isRows = true;
-			this.fixForEmpty_();
-		} else if (child == this.columns) 
+			this._syncEmpty();
+		} else if (child == this.columns) {
 			this.columns = null;
-		else if (child == this.foot) 
+			this._syncEmpty();
+		} else if (child == this.foot) 
 			this.foot = null;
 		else if (child == this.paging) 
 			this.paging = null;
@@ -160,35 +162,57 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this._syncSize();
 	},
 	/**
-	 * empty means no any row .
-	 * @return boolean
-	 */
-	_isEmpty: function () {
-		return this.rows ? this.rows.nChildren : false; 
-	},
-	/**
 	 * a redraw method for the empty message , if you want to customize the message ,
 	 * you could overwrite this.
 	 * @param Array out A array that contains html structure ,
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var cols = this.columns ? this.columns.nChildren : 1,
-			uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
-		( !this._emptyMessage || this._isEmpty()  ? ' style="display:none"' : '' ),
-			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+		var uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="', uuid, '-empty" class="', zcls,
+				'-empty-body" style="display:none"><tr><td>',
+				this._emptyMessage ,'</td></tr></tbody>');
 	},
-	/**
-	 * Fix for the empty message shows up or now. 
-	 */
-	fixForEmpty_: function () {
+	bind_: function (desktop, skipper, after) {
+		this.$supers(zul.grid.Grid, 'bind_', arguments);
+		var w = this;
+		after.push(zk.booted ? function() {
+			setTimeout(function() {
+				w.onResponse();
+			}, 0)
+		} : function() {
+			if (w._shallFixEmpty)
+				w._fixForEmpty();
+		});
+	},
+	onResponse: function () {
+		if (this._shallFixEmpty) 
+			this._fixForEmpty();
+		this.$supers('onResponse', arguments);
+	},
+	// this function is used for Grid, Rows, and Columns
+	_syncEmpty: function () {
+		this._shallFixEmpty = true;
+	},
+	// fix for the empty message shows up or now.
+	_fixForEmpty: function () {
 		if (this.desktop) {
-			if(this._isEmpty())
-				jq(this.$n("empty")).hide();
-			else
-				jq(this.$n("empty")).show();
+			if (this.rows && this.rows.nChildren) {
+				jq(this.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+			} else {
+				var $jq = jq(this.$n("empty")),
+					colspan = 0;
+				if (this.columns) {
+					for (var w = this.columns.firstChild; w; w = w.nextSibling)
+						if (w.isVisible())
+							colspan++;
+				}
+				
+				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.show();
+			}
 		}
+		this._shallFixEmpty = false;
 	},	
 	onChildAdded_: function(child) {
 		this.$supers('onChildAdded_', arguments);
