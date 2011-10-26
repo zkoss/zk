@@ -18,8 +18,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *  <p>Default {@link #getZclass}: z-listhead.
  */
 zul.sel.Listhead = zk.$extends(zul.mesh.HeadWidget, {
+	/** Returns the listbox that this belongs to.
+	 * @return Listbox
+	 */
+	getListbox: zul.mesh.HeadWidget.prototype.getMeshWidget,
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listhead" : this._zclass;
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		var list = this.getListbox();
+		if (list) list._syncEmpty();
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		var list = this.getListbox();
+		if (list) list._syncEmpty();
 	}
 });

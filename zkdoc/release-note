@@ -124,6 +124,10 @@ ZK 5.0.10
 * Features
 * Bugs
   ZK-513: Adding objects to ListModelList causes Firefox to complain slow script
+  ZK-531: Multi-select issue after ROD
+  ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
+  ZK-528: Listcell width failed when some listheader set visible is false in IE7 only
+  ZK-534: Mousedown in textbox drag wrong target
 
 	--------
 ZK 5.0.9

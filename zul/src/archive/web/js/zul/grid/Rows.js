@@ -72,11 +72,10 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers(Rows, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 		var w = this;
-		after.push(zk.booted ? function(){setTimeout( function(){w.onResponse();},0)}: this.proxy(this.stripe));
-
-		//bug# 3092890: Rows.invalidate() does not respect frozen state
 		after.push(function () {
+			w.stripe();
 			_syncFrozen(w);
+			//bug# 3092890: Rows.invalidate() does not respect frozen state
 		});
 	},
 	unbind_: function () {
@@ -89,15 +88,10 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 				this.stripe();
 				this.getGrid().onSize();
 			}
-			if(this._shallFixEmpty)
-				this.getGrid().fixForEmpty_();
 		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-	},
-	_syncEmptyState: function () {
-		this._shallFixEmpty = true;
 	},
 	/**
 	 * Stripes the class for each row.
@@ -125,10 +119,15 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
-		if(this.getGrid() && this.getGrid().fixForRowAdd_) 
-			this.getGrid().fixForRowAdd_();
+		
+		var g;
+		if ((g = this.getGrid())) {
+			if (g.fixForRowAdd_) 
+				g.fixForRowAdd_();
+			g._syncEmpty();
+		}
 		this._syncStripe();
-		this._syncEmptyState();
+		
 		if (this.desktop)
 			_syncFrozen(this);
 	},
@@ -138,7 +137,9 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
-		this._syncEmptyState();
+			
+		var g = this.getGrid();
+		if (g) g._syncEmpty();
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tbody', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tbody>');

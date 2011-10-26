@@ -21,6 +21,25 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt && (wgt = wgt.frozen))
 			wgt._syncFrozen();
 	}
+	function _fixForEmpty(wgt) {
+		if (wgt.desktop) {
+			if (wgt._nrows) {
+				jq(wgt.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+			} else {
+				var $jq = jq(wgt.$n("empty")),
+					colspan = 0;
+				if (wgt.listhead) {
+					for (var w = wgt.listhead.firstChild; w; w = w.nextSibling)
+						if (w.isVisible())
+							colspan++;
+				}
+				
+				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.show();
+			}
+		}
+		wgt._shallFixEmpty = false;
+	}
 
 var Listbox =
 /**
@@ -145,9 +164,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
 		var w = this;
-		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
 		after.push(function () {
+			w.stripe();
 			_syncFrozen(w);
+			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
 		
@@ -185,7 +205,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (this._shallStripe)
 				this.stripe();
 			if (this._shallFixEmpty) 
-				this._fixForEmpty();
+				_fixForEmpty(this);
 		}
 		this.$supers('onResponse', arguments);
 	},
@@ -343,22 +363,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * 			it usually come from mold(redraw_). 
 	 */
 	redrawEmpty_: function (out) {
-		var cols = (this.listhead && this.listhead.nChildren) || 1 , 
-			uuid = this.uuid, zcls = this.getZclass();
-		out.push('<tbody id="',uuid,'-empty" class="',zcls,'-empty-body" ', 
-		((!this._emptyMessage || this._nrows) ? ' style="display:none"' : '' ),
-			'><tr><td colspan="', cols ,'">' , this._emptyMessage ,'</td></tr></tbody>');
+		var uuid = this.uuid, zcls = this.getZclass();
+		out.push('<tbody id="', uuid, '-empty" class="', zcls,
+				'-empty-body" style="display:none"><tr><td>',
+				this._emptyMessage ,'</td></tr></tbody>');
 	},
+	// this function used for Listbox, Listhead
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
-	},
-	_fixForEmpty: function () {
-		if (this.desktop) {
-			if(this._nrows)
-				jq(this.$n("empty")).hide();
-			else
-				jq(this.$n("empty")).show();
-		}
 	},
 	onChildReplaced_: function (oldc, newc) {
 		this.$supers('onChildReplaced_', arguments);
