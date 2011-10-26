@@ -143,9 +143,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				var wgt = this,
 					$n = zk(n),
 					fix = function() {
-					n.style.height = wgt.isLegend()? hgh:
-						$n.revisedHeight($n.vflexHeight(), true)
-						+ "px";
+					// B50-ZK-487: height isuue in the groupbox (with specified caption)
+					n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
 				};
 				fix();
 				if (zk.gecko) setTimeout(fix, 0);
@@ -180,12 +179,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	//watch//
 	onSize: function () {
 		this._fixHgh();
-		if (!this.isLegend()) {
-			setTimeout(this.proxy(this._fixShadow), 500);
-			//shadow rarely needs to fix so OK to delay for better performance
-		} else {
-			this._fixWdh();
-		} 
+		// B50-ZK-487
+		setTimeout(this.proxy(this._fixShadow), 500);
 	},
 	_fixShadow: function () {
 		var sdw = this.$n('sdw');

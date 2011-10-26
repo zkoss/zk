@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-487.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  25 12:51:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Open and clos the groupbox below, it should not be weird.</li>
+<li>Test with each theme.</li>
+</ol>
+]]></html>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<groupbox width="200px" height="200px" open="false">
+		<caption image="/test2/img/inet.png" label="Testing Group Box">
+			
+		</caption>
+		<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+	</groupbox>
+</zk>

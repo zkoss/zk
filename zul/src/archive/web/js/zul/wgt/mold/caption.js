@@ -17,10 +17,10 @@ function (out) {
 		uuid = this.uuid,
 		cnt = this.domContent_();
 	if (parent.isLegend && parent.isLegend()) {
-		out.push('<legend', this.domAttrs_(), '><span id="', uuid, '-cnt">', cnt);
+		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('</span></legend>');
+		out.push('</span></div>');
 		return;
 	}
 

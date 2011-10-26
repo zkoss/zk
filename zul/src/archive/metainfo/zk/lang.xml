@@ -629,7 +629,7 @@ def alert(m):
 		<widget-class>zul.wgt.Groupbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>mold/groupbox.js</mold-uri>
+			<mold-uri>mold/groupbox3d.js</mold-uri>
 			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<mold>

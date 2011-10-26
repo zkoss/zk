@@ -47,6 +47,7 @@ ZK 6.0.0
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)
   ZK-493: zk.override(Object, String, Function) fails to update subclass methods
   ZK-504: onCreate event not fired if registered in a parent's composer
+  ZK-487: Height isuue in the groupbox (with specified caption)
 
 * Upgrade Notes
   + zcommons-el.jar is not shipped with the binary distribution.

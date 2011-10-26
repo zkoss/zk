@@ -7,6 +7,9 @@
 }
 .z-fieldset-cnt {
 	overflow: hidden;
+	padding: 7px;
+	border: 1px solid #B3B3B3;
+	border-top: none;
 }
 .z-fieldset-colpsd {
 	padding-bottom: 0 !important; 
@@ -22,6 +25,41 @@
 }
 .z-fieldset .z-caption-readonly {
 	cursor: default;
+}
+
+.z-fieldset .z-fieldset-hl {
+	background: no-repeat;
+	background-position: 0 center;
+	background-image:url(${c:encodeURL('~./zul/img/layout/groupbox-y.gif')});
+}
+.z-fieldset-colpsd .z-fieldset-hl {
+	background: none;
+}
+.z-fieldset-hm {
+	background: no-repeat;
+	background-position: 0 center;
+	background-image:url(${c:encodeURL('~./zul/img/layout/groupbox-x.gif')});
+}
+.z-fieldset .z-fieldset-hr {
+	background: no-repeat;
+	background-position: right center;
+	background-image:url(${c:encodeURL('~./zul/img/layout/groupbox-y.gif')});
+}
+.z-fieldset-colpsd .z-fieldset-hr {
+	background: none;
+}
+.z-fieldset-header {
+	padding-left: 10px;
+	padding-right: 10px;
+	font-family: ${fontFamilyT};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+	border: 0 none;
+}
+.z-fieldset-header .z-caption span {
+	background-color: #FFFFFF;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 
 <%-- 3D --%>
