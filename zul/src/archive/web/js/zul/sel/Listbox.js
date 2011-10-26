@@ -145,11 +145,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers(Listbox, 'bind_', arguments); //it might invoke replaceHTML and then call bind_ again
 		this._shallStripe = true;
 		var w = this;
-		after.push(zk.booted ? function(){setTimeout(function(){w.onResponse();},0)}: this.proxy(this.stripe));
 		after.push(function () {
+			w.stripe();
 			_syncFrozen(w);
-			if (!zk.booted && w._shallFixEmpty)
-				w._fixForEmpty();
+			w._fixForEmpty();
 		});
 		this._shallScrollIntoView = true;
 		

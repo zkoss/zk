@@ -176,13 +176,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.grid.Grid, 'bind_', arguments);
 		var w = this;
-		after.push(zk.booted ? function() {
-			setTimeout(function() {
-				w.onResponse();
-			}, 0)
-		} : function() {
-			if (w._shallFixEmpty)
-				w._fixForEmpty();
+		after.push(function() {
+			w._fixForEmpty();
 		});
 	},
 	onResponse: function () {
