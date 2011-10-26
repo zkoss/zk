@@ -14,8 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * Groups a set of child elements to have a visual effect.
- * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
- * "z-groupbox" is assumed.
+ * <p>Default {@link #getZclass}: "z-groupbox". If {@link #getMold()} is 3d,
+ * "z-groupbox-3d" is assumed.
  *
  * <p>Events: onOpen.
  *
@@ -195,7 +195,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls ? zcls: this.isLegend() ? "z-fieldset": "z-groupbox";
+		return zcls ? zcls: this.isLegend() ? "z-groupbox": "z-groupbox-3d";
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
