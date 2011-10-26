@@ -125,15 +125,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) this._fixHgh();
 	},
-	_fixWdh: function () {
-		var wdh = this.$n().style.width;
-		if (wdh && wdh.indexOf('px') >= 0) {
-			var n;
-			if (n = this.$n('cave')) {
-				n.style.width = wdh;
-			}
-		}
-	},
 	_fixHgh: function () {
 		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
