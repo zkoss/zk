@@ -31,6 +31,28 @@ zul.grid.Renderer = {
 	}
 };
 
+(function () {
+	// fix for the empty message shows up or now.
+	function _fixForEmpty(wgt) {
+		if (wgt.desktop) {
+			if (wgt.rows && wgt.rows.nChildren) {
+				jq(wgt.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
+			} else {
+				var $jq = jq(wgt.$n("empty")),
+					colspan = 0;
+				if (wgt.columns) {
+					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
+						if (w.isVisible())
+							colspan++;
+				}
+				
+				$jq.find("td").attr("colspan", colspan || 1);
+				$jq.show();
+			}
+		}
+		wgt._shallFixEmpty = false;
+	}
+
 /**
  * A grid is an element that contains both rows and columns elements.
  * It is used to create a grid of elements.
@@ -177,38 +199,18 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers(zul.grid.Grid, 'bind_', arguments);
 		var w = this;
 		after.push(function() {
-			w._fixForEmpty();
+			_fixForEmpty(w);
 		});
 	},
 	onResponse: function () {
 		if (this._shallFixEmpty) 
-			this._fixForEmpty();
+			_fixForEmpty(this);
 		this.$supers('onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
 	},
-	// fix for the empty message shows up or now.
-	_fixForEmpty: function () {
-		if (this.desktop) {
-			if (this.rows && this.rows.nChildren) {
-				jq(this.$n("empty")).hide().find("td").attr("colspan", 1); // colspan 1 fixed IE7 issue ZK-528
-			} else {
-				var $jq = jq(this.$n("empty")),
-					colspan = 0;
-				if (this.columns) {
-					for (var w = this.columns.firstChild; w; w = w.nextSibling)
-						if (w.isVisible())
-							colspan++;
-				}
-				
-				$jq.find("td").attr("colspan", colspan || 1);
-				$jq.show();
-			}
-		}
-		this._shallFixEmpty = false;
-	},	
 	onChildAdded_: function(child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
@@ -257,6 +259,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return new zul.grid.RowIter(this, opts);
 	}
 });
+})();
+
 /**
  * The row iterator.
  * @disable(zkgwt)
