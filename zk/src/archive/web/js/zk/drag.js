@@ -19,12 +19,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _drags = [],
 		_dragging = {},
-		_stackup, _activedg, _timeout, _initPt, _dnEvt,
+		_actTmout, //if not null, it means _activate() is called but not really activated
+		_stackup, _activedg, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
 	function _activate(dg, devt, pt) {
-		_timeout = setTimeout(function () { 
-			_timeout = null; 
+		_actTmout = setTimeout(function () { 
+			_actTmout = null; 
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
 			if (!zk.ie || !_activedg || _activedg.node == dg.node)
 				_activedg = dg; 
@@ -54,9 +55,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			//IMG (but still happens if dragging fast)
 	}
 	function _docmouseup(devt) {
-		if(_timeout) { 
-			clearTimeout(_timeout); 
-			_timeout = null; 
+		if(_actTmout) { 
+			clearTimeout(_actTmout); 
+			_actTmout = null; 
 		}
 		var evt = jq.Event.zk(devt),
 			adg = _activedg;
@@ -586,7 +587,7 @@ String scroll; //DOM Element's ID</code></pre>
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
-		if(_dragging[node] || evt.which != 1
+		if(_actTmout || _dragging[node] || evt.which != 1
 		|| (zk.safari && jq.nodeName(target, 'select')))
 			return;
 			// Bug B50-3147909: Safari has issue with select and draggable

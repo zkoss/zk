@@ -1,0 +1,27 @@
+<zk>
+<html><![CDATA[
+<ul>
+<li>Drag the textbox and you shall see only label and textbox are being dragging
+(not the whole DIV)</li>
+<li>Drag "Sample Application form", then it shall drag the whole DIV</li>
+</ul>
+]]></html>
+	<div style="border:1px solid #c0c0c0;height:150px;width:300px;overflow:auto" draggable="true">
+		<separator/>	
+		<separator/>	
+		<label value="Sample Application form"/>
+		<separator bar="true"/>
+		<separator/>	
+		<separator/>
+		<hbox draggable="element" droppable="element">
+			<label value="First Name :"/>
+			<textbox />	
+		</hbox>
+		<separator/>
+		<hbox draggable="element" droppable="element">
+			<label value="Last Name :"/>
+			<textbox readonly="true"/>
+		</hbox>
+		<separator/>
+	</div>
+</zk>
