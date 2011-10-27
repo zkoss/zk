@@ -170,7 +170,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop, true)
 			.jq.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 400,
+			queue: false, easing: opts.easing, duration: opts.duration || 250,
 			complete: opts.afterAnima
 		});
 	},
@@ -224,7 +224,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop)
 			.jq.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 400,
+			queue: false, easing: opts.easing, duration: opts.duration || 250,
 			complete: opts.afterAnima
 		});
 	},
@@ -274,7 +274,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop)
 			.jq.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 500,
+			queue: false, easing: opts.easing, duration: opts.duration || 350,
 			complete: opts.afterAnima
 		});
 	},
@@ -328,7 +328,7 @@ zk.copy(zjq.prototype, {
 
 		return this.defaultAnimaOpts(wgt, opts, prop, true)
 			.jq.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: opts.duration || 500,
+			queue: false, easing: opts.easing, duration: opts.duration || 350,
 			complete: opts.afterAnima
 		});
 	},
