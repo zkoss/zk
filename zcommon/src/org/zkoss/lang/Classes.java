@@ -630,7 +630,9 @@ public class Classes {
 	 * again in the caller.
 	 *
 	 * @param cls the class to look
-	 * @param signature the method signature; the return type is optional
+	 * @param signature the method signature; the return type is optional.<br/>
+	 * Notice that the argument's type must be a full-qualified class name,
+	 * unless its package is java.lang or it can be resolved by <code>resolver</code>.
 	 * @param params the collection to hold the parameter names returned;
 	 * null means no parameter names to return
 	 * @param resolver the class resolver used to resolve the class specified
@@ -646,9 +648,7 @@ public class Classes {
 		LinkedList<Class<?>> argTypes = new LinkedList<Class<?>>();
 		for (int i = 0; i < mi.argTypes.length; i++) {
 			final String clsnm = mi.argTypes[i];
-			argTypes.add(
-				resolver != null ?
-					resolver.resolveClass(clsnm): forNameByThread(clsnm));
+			argTypes.add(getClassOfSignature(resolver, clsnm));
 			if (params != null)
 				params.add(mi.argNames[i]);	//param name found
 		}
@@ -674,7 +674,9 @@ public class Classes {
 	 * again in the caller.
 	 *
 	 * @param cls the class to look
-	 * @param signature the method signature; the return type is optional
+	 * @param signature the method signature; the return type is optional<br/>
+	 * Notice that the argument's type must be a full-qualified class name,
+	 * unless its package is java.lang.
 	 * @param params the collection to hold the parameter names returned;
 	 * null means no parameter names to return
 	 */
@@ -682,6 +684,25 @@ public class Classes {
 	getMethodBySignature(Class<?> cls, String signature, Collection<String> params)
 	throws NoSuchMethodException, ClassNotFoundException {
 		return getMethodBySignature(cls, signature, params, null);
+	}
+	/** Resolves a class for the method signature.
+	 * This method will try java.lang.X if X is not found.
+	 */
+	private static final
+	Class getClassOfSignature(ClassResolver resolver, String clsnm)
+	throws ClassNotFoundException {
+		try {
+			return resolver != null ?
+				resolver.resolveClass(clsnm): forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			if (clsnm == null || clsnm.indexOf('.') >= 0)
+				throw ex;
+			try {
+				return forNameByThread("java.lang." + clsnm);
+			} catch (Throwable t) {
+				throw ex;
+			}
+		}
 	}
 
 	/**
