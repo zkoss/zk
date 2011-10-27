@@ -35,16 +35,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
-				if (this.isLegend()) { //legend
-					if (!open) zWatch.fireDown('onHide', this);
-					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
-					if (zk.ie6_) // Bug Z35-groupbox-002.zul
-						zk(this).redoCSS();
-					if (open)
-						zUtl.fireShown(this);
-				} else {
-					zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
-				}
+				if (open && this._isDefault())
+						jq(node).removeClass(this.getZclass() + "-colpsd");
+				zk(this.getCaveNode())[open?'slideDown':'slideUp'](this);
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		},
@@ -79,21 +72,20 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		/** Sets the style class used for the content block.
 		 * @param String contentSclass
 		 */
-		contentSclass: _zkf
+		contentSclass: _zkf,
+		/** Returns the title of the groupbox.
+		 * @return String
+		 * @since 6.0
+		 */
+		/** Sets the title of the groupbox.
+		 * @param String title
+		 * @since 6.0
+		 */
+		title: _zkf
 	},
-	/** Returns whether this groupbox is in the legend mold.
-	 * By the legend mold we mean this group box is rendered with
-	 * HTML FIELDSET tag.
-	 *
-	 * <p>Default: the legend mold is assumed if {@link #getMold}
-	 * returns "default".
-	 *
-	 * @return boolean
-	 */
-	isLegend: function () {
+	_isDefault: function () {
 		return this._mold == 'default';
 	},
-
 	_updDomOuter: function () {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
@@ -103,10 +95,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		html += this.getZclass() + '-cnt"';
 
 		s = this._contentStyle;
-		if (!this.isLegend()) {
-			if (this.caption) s = 'border-top:0;' + (s||'');
-			if (!this._open) s = 'display:none;' + (s||'');
-		}
+		if (this.caption) s = 'border-top:0;' + (s||'');
+		if (!this._open) s = 'display:none;' + (s||'');
 		if (s) html += ' style="' + s + '"';
 		return html;
 	},
@@ -195,29 +185,40 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls ? zcls: this.isLegend() ? "z-groupbox": "z-groupbox-3d";
+		return zcls ? zcls: this._isDefault() ? "z-groupbox": "z-groupbox-3d";
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Groupbox, 'bind_', arguments);
-		// Bug: B50-3205292: vflex with legend Groupbox
-		//if (!this.isLegend())
 		zWatch.listen({onSize: this});
+		var tt;
+		if (tt = this.$n('title'))
+			this.domListen_(tt, "onClick");
 	},
 	unbind_: function () {
-		// Bug: B50-3205292: vflex with legend Groupbox
-		//if (!this.isLegend())
 		zWatch.unlisten({onSize: this});
+		var tt;
+		if (tt = this.$n('title'))
+			this.domListen_(tt, "onClick");
 		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
+	},
+	// will be called while click on title and title exists but no caption
+	_doClick: function () {
+		this.setOpen(!this.isOpen());
+		this.$supers('doClick_', arguments);
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.wgt.Caption))
+		if (child.$instanceof(zul.wgt.Caption)) {
 			this.caption = child;
+			this.rerender();
+		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child == this.caption)
+		if (child == this.caption) {
 			this.caption = null;
+			this.rerender();
+		}
 	},
 
 	domClass_: function () {
@@ -227,5 +228,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			html += this.getZclass() + '-colpsd';
 		}
 		return html;
+	},
+	afterAnima_: function (visible) {
+		if (!visible)
+			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
+		this.$supers('afterAnima_', arguments);
 	}
 });

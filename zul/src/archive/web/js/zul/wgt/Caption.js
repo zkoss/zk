@@ -24,13 +24,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	domDependent_: true, //DOM content depends on parent
 	rerender: function () {
 		var p = this.parent;
-		if (p) {
+		if (p)
 			p.clearCache(); // B50-ZK-244
-			if (p.$instanceof(zul.wgt.Groupbox) && p.isLegend()) {
-				p.rerender();
-				return;
-			}
-		}
 		this.$supers('rerender', arguments);
 	},
 	getZclass: function () {
@@ -53,7 +48,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			cnt = this.domContent_(),
 			dn = this.$n('cnt');
 		if (dn)
-			dn.innerHTML = (p && p.isLegend && p.isLegend()) || cnt ? cnt : '&nbsp;';
+			dn.innerHTML = cnt ? cnt : '&nbsp;';
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
@@ -91,13 +86,8 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		var parent = this.parent;
 		return parent.isMaximizable && parent.isMaximizable();
 	},
-	//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
-	//legend in fieledset, the margin in safari/chrome will be huge, 
-	//shall ignore it when calculate width. @see widget#setMinFlexSize
 	getMarginSize_: function () {
-		var parent = this.parent;
-		return zk.safari && parent && parent.$instanceof(zul.wgt.Groupbox) && parent.isLegend() ?
-			0: this.$supers('getMarginSize_', arguments);  
+		return this.$supers('getMarginSize_', arguments);  
 	},
 	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
 		if (o == 'w')

@@ -27,8 +27,8 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * Groups a set of child elements to have a visual effect.
- * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
- * "z-groupbox" is assumed.(since 3.5.0)
+ * <p>Default {@link #getZclass}: "z-groupbox". If {@link #getMold()} is 3d,
+ * "z-groupbox-3d" is assumed.(since 3.5.0)
  *
  * <p>Events: onOpen.
  *
@@ -40,7 +40,7 @@ public class Groupbox extends XulElement {
 	private String _cntStyle;
 	/** The style class used for the content block. */
 	private String _cntSclass;
-	private Boolean _legend;
+	private String _title = "";
 	private boolean _open = true, _closable = true;
 
 	static {
@@ -93,11 +93,12 @@ public class Groupbox extends XulElement {
 
 		render(renderer, "contentStyle", _cntStyle);
 		render(renderer, "contentSclass", _cntSclass);
+		render(renderer, "title", _title);
 		if (!_open) renderer.render("open", false);
 		if (!_closable) renderer.render("closable", false);
 	}
 	public String getZclass() {
-		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : _zclass;
+		return _zclass == null ? "default".equals(getMold()) ? "z-groupbox" : "z-groupbox-3d" : _zclass;
 	}
 	
 	/** Returns the CSS style for the content block of the groupbox.
@@ -134,28 +135,40 @@ public class Groupbox extends XulElement {
 			smartUpdate("contentSclass", _cntSclass);
 		}
 	}
+	/** Returns the title.
+	 * Besides this attribute, you could use {@link Caption} to define
+	 * a more sophiscated caption (aka., title).
+	 * <p> It will be displaied before caption.
+	 * <p>Default: empty.
+	 * @since 6.0
+	 */
+	public String getTitle() {
+		return _title;
+	}
+	/** Sets the title.
+	 * @since 6.0
+	 */
+	public void setTitle(String title) {
+		if (title == null)
+			title = "";
+		if (!Objects.equals(_title, title)) {
+			_title = title;
+			smartUpdate("title", title);
+		}
+	}
 
-	/** Returns whether this groupbox is in the legend mold.
-	 * By the legend mold we mean this group box is rendered with
-	 * HTML FIELDSET tag.
-	 *
-	 * <p>Default: the legend mold is assumed if {@link #getMold}
-	 * returns "default".
-	 *
-	 * <p>If it is not the case, you can call {@link #setLegend} to change
-	 * it.
-	 * @since 3.0.0
+	/** @deprecated As of release 6.0, legend no longer used in groupbox.
 	 */
 	public boolean isLegend() {
-		return _legend != null ?
-			_legend.booleanValue(): "default".equals(getMold());
+		return "default".equals(getMold());
 	}
-	/** Sets whether this groupbox is in the legend mold.
-	 * @see #isLegend
-	 * @since 3.0.0
+	/** @deprecated As of release 6.0, legend no longer used in groupbox.
 	 */
 	public void setLegend(boolean legend) {
-		_legend = Boolean.valueOf(legend);
+		if (legend && "3d".equals(getMold()))
+			setMold("default");
+		else if (!legend && "default".equals(getMold()))
+			setMold("3d");
 	}
 
 	//-- Component --//

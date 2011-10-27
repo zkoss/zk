@@ -38,16 +38,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			Executions.sendRedirect(null);
 		</attribute>
 	</button>
-	<groupbox width="200px" height="200px" open="false">
-		<caption image="/test2/img/inet.png" label="Testing Group Box">
-			
-		</caption>
-		<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
-	</groupbox>
-	<groupbox width="200px" mold="3d" height="200px" open="false">
-		<caption image="/test2/img/inet.png" label="Testing Group Box">
-			
-		</caption>
-		<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
-	</groupbox>
+	<hbox>
+		<groupbox width="200px" height="200px" open="false">
+			<caption image="/test2/img/inet.png" label="Testing Group Box" />
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="false">
+			<caption image="/test2/img/inet.png" label="Testing Group Box" />
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+	</hbox>
 </zk>

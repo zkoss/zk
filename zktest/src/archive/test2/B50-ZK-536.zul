@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-536.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  25 12:51:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>Each groupbox below should have title.</li>
+</ol>
+]]></html>
+	<hbox>
+		<groupbox width="200px" height="200px" title="groupbox one" open="false" />
+		<groupbox width="200px" mold="3d" height="200px" title="groupbox two" open="false" />
+	</hbox>
+</zk>

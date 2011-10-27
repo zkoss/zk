@@ -16,7 +16,7 @@ function (out) {
 	var parent = this.parent,
 		uuid = this.uuid,
 		cnt = this.domContent_();
-	if (parent.isLegend && parent.isLegend()) {
+	if (parent._isDefault && parent._isDefault()) {
 		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

@@ -15,16 +15,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out, skipper) {	
 	var	zcls = this.getZclass(),
 		uuid = this.uuid,
-		cap = this.caption;
+		cap = this.caption,
+		title = this.getTitle();
+
+	title = (title && title != '' && !cap)? title : null;
 
 	out.push('<div', this.domAttrs_(), '>');
 	
-	if (cap) {
+	if (title || cap) {
 		out.push('<div class="', zcls, '-tl"><div class="', zcls,
 			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
 			zcls, '-hr"><div class="', zcls, '-hm',(this._closable? '': ' ' + zcls + '-hm-readonly'),'"><div class="',
 			zcls, '-header">');
-		cap.redraw(out);
+		if (cap)
+			cap.redraw(out);
+		else
+			out.push('<div id="', uuid,'-title" class="', zcls,'-title"><span>', title, '</span></div>');
 		out.push('</div></div></div></div>');
 	}
 	
