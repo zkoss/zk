@@ -160,12 +160,12 @@
 	background: transparent no-repeat right -14px;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
 }
+.z-menubar-ver .z-menu-body-over .z-menu-inner-m  div {
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
+}
 .z-menubar-hor .z-menu-body-clk-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
-}
-.z-menubar-ver .z-menu-body-over .z-menu-inner-m  div {
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
 }
 .z-menubar-ver .z-menu-body-clk-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;

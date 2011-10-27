@@ -184,12 +184,12 @@
 	border: 1px solid #C5C5C5;
 	overflow: hidden;
 	position: absolute;
-	cursor: pointer;
 }
 .z-east-colpsd-over,
 .z-west-colpsd-over,
 .z-south-colpsd-over,
 .z-north-colpsd-over {
+	cursor: pointer;
 	background-color: #E5F5FD;
 }
 

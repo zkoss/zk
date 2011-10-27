@@ -35,7 +35,7 @@
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;
-	background: none repeat-x scroll 0 0 #FFFFFF;
+	background: #FFFFFF;
 	border: 1px solid #CCCCCC;
 	border-right: 0;
 	padding-top: 2px;

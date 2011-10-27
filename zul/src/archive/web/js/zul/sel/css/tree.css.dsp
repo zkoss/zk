@@ -193,27 +193,7 @@ div.z-vfiletree-header th.z-treecol-sort-dsc div.z-treecol-cnt {
 	background-position: 0 -5px;
 }
 
-.z-tree-header-bg,
-.z-dottree-header-bg,
-.z-filetree-header-bg,
-.z-vfiletree-header-bg {
-	position:relative;
-	margin-right: -11px;
-	top: 0;
-	height: 1px;
-	font-size: 0;
-	background-image: url(${c:encodeURL('~./zul/img/grid/head-bg.png')});
-	margin-top: -1px;
-}
 
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
-.z-tree-header-bg,
-.z-dottree-header-bg,
-.z-filetree-header-bg,
-.z-vfiletree-header-bg {
-	display: none;
-}
-</c:if>
 div.z-tree-header th.z-treecol-sort div.z-treecol-cnt,
 div.z-tree-header th.z-treecol-sort-asc div.z-treecol-cnt,
 div.z-tree-header th.z-treecol-sort-dsc div.z-treecol-cnt,
@@ -262,6 +242,27 @@ tr.z-treerow-over {
 tr.z-treerow-over-seld {
 	background: #c5e8fa;
 }
+.z-tree-header-bg,
+.z-dottree-header-bg,
+.z-filetree-header-bg,
+.z-vfiletree-header-bg {
+	position:relative;
+	margin-right: -11px;
+	top: 0;
+	height: 1px;
+	font-size: 0;
+	background-image: url(${c:encodeURL('~./zul/img/grid/head-bg.png')});
+	margin-top: -1px;
+}
+
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+.z-tree-header-bg,
+.z-dottree-header-bg,
+.z-filetree-header-bg,
+.z-vfiletree-header-bg {
+	display: none;
+}
+</c:if>
 <%-- z-dottree --%>
 div.z-dottree {
 	background: #FFF;
