@@ -51,6 +51,9 @@ ZK 6.0.0
   ZK-539: Title background not full-filled in groupbox
 
 * Upgrade Notes
+  + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
+    z-groupbox-3d. In additions, the default mold is implemented with DIV rather than
+    FIELDSET.
   + zcommons-el.jar is not shipped with the binary distribution.
     Rather, zel.jar is shipped instead.
   + For ease of use, the return type of the following APIs are changed from Iterator
