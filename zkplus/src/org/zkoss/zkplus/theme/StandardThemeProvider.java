@@ -73,7 +73,8 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 		String suffix = getThemeFileSuffix();
 		if (Strings.isEmpty(suffix)) return uri;
 		
-		if(uri.startsWith("~./js/zul/") || 
+		if(uri.startsWith("~./zul/css/") ||
+				uri.startsWith("~./js/zul/") || 
 				uri.startsWith("~./js/zkex/") || 
 				uri.startsWith("~./js/zkmax/")){
 			return uri.replaceFirst(".css.dsp", getWidgetCSSName(suffix));

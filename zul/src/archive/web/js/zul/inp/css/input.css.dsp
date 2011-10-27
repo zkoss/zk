@@ -18,6 +18,7 @@
 	background: #FFFFFF repeat-x 0 0;
 	border: 1px solid #E6E6E6;
 	border-top-color: #B2B2B2;
+	border-top-color: #B2B2B2;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;
@@ -37,6 +38,7 @@
 .z-doublebox-focus, .z-doublebox-focus input {
 	background: #FFFFFF repeat-x 0 0;
 	border: 1px solid #D5EAFD;
+	border-top: 1px solid #94B9DA;
 	border-top: 1px solid #94B9DA;
 }
 .z-textbox-text-invalid,
