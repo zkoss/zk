@@ -1,4 +1,4 @@
-/* groupbox3d.js
+/* groupbox.js
 
 	Purpose:
 		

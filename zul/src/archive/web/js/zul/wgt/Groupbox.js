@@ -192,17 +192,17 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		zWatch.listen({onSize: this});
 		var tt;
 		if (tt = this.$n('title'))
-			this.domListen_(tt, "onClick");
+			this.domListen_(tt, 'onClick', '_doTitleClick');
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
 		var tt;
 		if (tt = this.$n('title'))
-			this.domListen_(tt, "onClick");
+			this.domUnlisten_(tt, 'onClick', '_doTitleClick');
 		this.$supers(zul.wgt.Groupbox, 'unbind_', arguments);
 	},
 	// will be called while click on title and title exists but no caption
-	_doClick: function () {
+	_doTitleClick: function () {
 		this.setOpen(!this.isOpen());
 		this.$supers('doClick_', arguments);
 	},
@@ -230,7 +230,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return html;
 	},
 	afterAnima_: function (visible) {
-		if (!visible)
+		if (!visible && this._isDefault())
 			jq(this.$n()).addClass(this.getZclass() + "-colpsd");
 		this.$supers('afterAnima_', arguments);
 	}
