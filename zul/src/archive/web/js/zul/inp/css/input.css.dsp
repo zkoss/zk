@@ -26,6 +26,7 @@
 	background: #FFF repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/misc/text-bg.gif')});
 	border: 1px solid #86A4BE;
+	border-top-color: #B2B2B2;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;
@@ -44,6 +45,7 @@
 .z-longbox-focus,
 .z-doublebox-focus {
 	border: 1px solid #90BCE6;
+	border-top: 1px solid #94B9DA;
 }
 .z-textbox-text-invalid,
 .z-decimalbox-text-invalid,
