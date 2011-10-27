@@ -34,6 +34,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
  * @see GroupsModel
  * @see SimpleGroupsModel
  */
+@SuppressWarnings("unchecked")
 public class ArrayGroupsModel extends GroupsModelArray {
 	/**
 	 * Constructor
