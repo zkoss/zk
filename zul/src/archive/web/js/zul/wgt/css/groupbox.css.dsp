@@ -7,7 +7,7 @@
 }
 .z-groupbox-cnt {
 	overflow: hidden;
-	padding: 7px;
+	padding: 5px;
 	border: 1px solid #B3B3B3;
 	border-top: none;
 }
@@ -95,7 +95,7 @@
 }
 .z-groupbox-3d-hm {
 	background:transparent repeat-x 0 0;
-	background-image:url(${c:encodeURL('~./zul/img/layout/borderlayout-hm.png')});
+	background-image:url(${c:encodeURL('~./zul/img/layout/groupbox-hm.png')});
 	overflow: hidden;
 	border: 1px solid #C5C5C5;
 	zoom: 1;
@@ -154,6 +154,6 @@
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 .z-groupbox-3d-hm {
-	background-image:url(${c:encodeURL('~./zul/img/layout/borderlayout-hm.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/layout/groupbox-hm.gif')});
 }
 </c:if>
