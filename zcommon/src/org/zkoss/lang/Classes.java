@@ -630,7 +630,9 @@ public class Classes {
 	 * again in the caller.
 	 *
 	 * @param cls the class to look
-	 * @param signature the method signature; the return type is optional
+	 * @param signature the method signature; the return type is optional.<br/>
+	 * Notice that the argument's type must be a full-qualified class name,
+	 * unless its package is java.lang.
 	 * @param params the collection to hold the parameter names returned;
 	 * null means no parameter names to return
 	 */
@@ -641,13 +643,30 @@ public class Classes {
 
 		LinkedList argTypes = new LinkedList();
 		for (int i = 0; i < mi.argTypes.length; i++) {
-			argTypes.add(forNameByThread(mi.argTypes[i]));
+			argTypes.add(getClassOfSignature(mi.argTypes[i]));
 			if (params != null)
 				params.add(mi.argNames[i]);	//param name found
 		}
 		
 		return getMethodInPublic(cls, mi.method,
 			(Class[])argTypes.toArray(new Class[argTypes.size()]));
+	}
+	/** Resolves a class for the method signature.
+	 * This method will try java.lang.X if X is not found.
+	 */
+	private static final Class getClassOfSignature(String clsnm)
+	throws ClassNotFoundException {
+		try {
+			return forNameByThread(clsnm);
+		} catch (ClassNotFoundException ex) {
+			if (clsnm == null || clsnm.indexOf('.') >= 0)
+				throw ex;
+			try {
+				return forNameByThread("java.lang." + clsnm);
+			} catch (Throwable t) {
+				throw ex;
+			}
+		}
 	}
 
 	/**
