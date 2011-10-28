@@ -214,10 +214,10 @@ public class Parser {
 				try {
 					final PageDefinition pd = uf.getPageDefinition(ri, path);
 					if (pd == null)
-						throw new UiException("Import page not found: "+path);
+						throw new UiException("The imported page not found: "+path);
 					pgdef.imports(pd, parseToArray(dirs));
 				} catch (PotentialDeadLockException ex) {
-					throw new UiException("Recursive import: "+path, ex);
+					throw new UiException("Recursive import not allowed: "+path, ex);
 				}
 			}
 		}
@@ -879,7 +879,7 @@ public class Parser {
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
 			annHelper.applyAnnotations(compInfo, null, true);
 
-			final Collection items = el.getChildren();
+			final Collection<Item> items = el.getChildren();
 			String textAs = null;
 			if (!bNativeContent && !items.isEmpty() //if empty, no need to check
 			&& (textAs = compInfo.getTextAs()) != null) {
@@ -890,18 +890,19 @@ public class Parser {
 				String xmlFound = null; //whether a XML fragment
 				String zkElem = null; //a ZK element
 				boolean empty = true; //whether there is anything other than whitespace
-				for (Iterator it = items.iterator();;) {
+				for (Iterator<Item> it = items.iterator();;) {
 					if (zkElem != null && xmlFound != null)
 						throw new UnsupportedOperationException(
-							"Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead.");
+							"Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead, "
+							+(it.hasNext() ? it.next().getLocator(): el.getLocator()));
 							//might be possible to handle but not worth
 					if (!it.hasNext())
 						break;
 
-					final Object o = it.next();
+					final Item o = it.next();
 					if (empty)
 						empty = (o instanceof Text || o instanceof CData)
-							&& ((Item)o).getText().trim().length() == 0;
+							&& o.getText().trim().length() == 0;
 
 					if (o instanceof Element) {
 						final String n = ((Element)o).getName();
