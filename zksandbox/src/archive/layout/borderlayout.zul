@@ -44,10 +44,8 @@ Rights Reserved.
 			<attribute name="value"><![CDATA[
 <zk>
 <zscript deferred="true">
-	boolean isBreeze = org.zkoss.zksandbox.Themes.isBreeze(execution) &amp;&amp; org.zkoss.zksandbox.Themes.hasBreezeLib();
-	boolean isSilvergray = org.zkoss.zksandbox.Themes.isSilvergray() &amp;&amp; org.zkoss.zksandbox.Themes.hasSilvergrayLib();
-	String bgColor = isBreeze? "#F7F7F7" : isSilvergray? "#DDDDDD" : "#C5E6EF";
-	String bgStyle = "background: " + bgColor;
+	String tname = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
+	String bgStyle = "background: " + ("sapphire".equals(tname) ? "#C5E6EF" : "#F7F7F7");
 	b.setStyle(bgStyle);
 	n.setStyle(bgStyle);
 	w.setStyle(bgStyle);

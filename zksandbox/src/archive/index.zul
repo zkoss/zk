@@ -25,19 +25,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
 <zk>
 <zscript><![CDATA[
-	String themeSClass = org.zkoss.zksandbox.Themes.isBlueTheme() ? "blue" : org.zkoss.zksandbox.Themes.getCurrentTheme();
+	String themeSClass = org.zkoss.zkplus.theme.Themes.getCurrentTheme();
 ]]></zscript>
 <borderlayout id="main" sclass="${themeSClass}" apply="org.zkoss.zksandbox.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
 			<div sclass="demo-logo pointer">
 				<n:a xmlns:n="native" href="http://www.zkoss.org">
-				<image width="90px" height="80px" src="/img/ZK-Logo.gif"/>
+					<image width="90px" height="80px" src="/img/ZK-Logo.gif"/>
 				</n:a>
 			</div>
 			<categorybar zclass="demo-categorybar" id="header">
-				<category zclass="demo-category" forEach="${main$MainLayoutComposer.categories}" id="${each.id}" image="${each.icon}" label="${each.label}" 
-				forward="onClick=main.onCategorySelect"/>
+				<category zclass="demo-category" forEach="${main$MainLayoutComposer.categories}" 
+					id="${each.id}" image="${each.icon}" label="${each.label}" 
+					forward="onClick=main.onCategorySelect"/>
 			</categorybar>
 		</div>
 	</north>
@@ -45,11 +46,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		minsize="210" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
-				<label value="Search:"/><textbox id="searchBox" ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
+				<label value="Search:"/><textbox id="searchBox" 
+					ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"
-					itemRenderer="${main$MainLayoutComposer.itemRenderer}" model="${main$MainLayoutComposer.selectedModel}" vflex="true">
+					itemRenderer="${main$MainLayoutComposer.itemRenderer}" 
+					model="${main$MainLayoutComposer.selectedModel}" vflex="true">
 					<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				</listbox>
 			</panelchildren>
