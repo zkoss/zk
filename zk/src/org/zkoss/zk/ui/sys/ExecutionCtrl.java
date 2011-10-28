@@ -173,17 +173,17 @@ public interface ExecutionCtrl {
 	public void setExecutionInfo(ExecutionInfo evtinf);
 
 	/** Returns the object, if any, defined in any variable resolver
-	 * added by {@link #addVariableResolver}.
+	 * added by {@link org.zkoss.zk.ui.Execution#addVariableResolver}.
 	 * <p>Notice that it looks only for the variables defined
-	 * in {@link #addVariableResolver}. To get a variable an EL expression
+	 * in {@link org.zkoss.zk.ui.Execution#addVariableResolver}. To get a variable an EL expression
 	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
 	 * @since 6.0.0
 	 */
 	public Object getExtraXelVariable(String name);
 	/** Returns the object, if any, defined in any variable resolver
-	 * added by {@link #addVariableResolver}.
+	 * added by {@link org.zkoss.zk.ui.Execution#addVariableResolver}.
 	 * <p>Notice that it looks only for the variables defined
-	 * in {@link #addVariableResolver}. To get a variable an EL expression
+	 * in {@link org.zkoss.zk.ui.Execution#addVariableResolver}. To get a variable an EL expression
 	 * can reference, please use {@link org.zkoss.zk.ui.Execution#getVariableResolver} instead.
 	 * <p>Unlike {@link #getExtraXelVariable(String)}, this method
 	 * can utilitize {@link org.zkoss.xel.VariableResolverX} if you'd like

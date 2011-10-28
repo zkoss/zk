@@ -32,6 +32,10 @@ import org.zkoss.zk.ui.Components;
  * calling setXxx() method or set xxx field value directly per the variable 
  * name.</p>
  * 
+ * <P>Alternative: the wiring of {@link GenericForwardComposer} is based on naming convention.
+ * If you prefer to use Java annotations for more precise control, please
+ * use {@link org.zkoss.zk.ui.select.GenericAnnotatedComposer} instead.
+ *
  * <p>Notice that since this composer kept references to the components, single
  * instance object cannot be shared by multiple components.</p>
  *  
