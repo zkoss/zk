@@ -77,13 +77,8 @@ public class StandardThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider
 				uri.startsWith("~./js/zul/") || 
 				uri.startsWith("~./js/zkex/") || 
 				uri.startsWith("~./js/zkmax/")){
-			return uri.replaceFirst(".css.dsp", getWidgetCSSName(suffix));
+			return uri.replaceFirst("~./", "~./" + suffix + "/");
 		}
 		return uri;
 	}
-	
-	private static String getWidgetCSSName(String suffix) {
-		return "." + suffix + ".css.dsp";
-	}
-	
 }

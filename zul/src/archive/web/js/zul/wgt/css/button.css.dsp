@@ -2,14 +2,14 @@
 .z-button,
 .z-button tr td {
 	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; 
+	font-size: ${fontSizeM};
 	color: black;
-	cursor: pointer; 
+	cursor: pointer;
 	white-space: nowrap;
 }
 button.z-button {
-	padding:0 !important; 
-	margin:0 !important; 
+	padding:0 !important;
+	margin:0 !important;
 	border:0 !important;
 	background: transparent !important;
 	font-size: 0 !important;
@@ -18,8 +18,8 @@ button.z-button {
 	height: ${c:isGecko()? 0 : 1}px !important;
 }
 .z-button .z-button-cr * {<%-- IE 6 --%>
-	display: block; 
-	width: 4px !important; 
+	display: block;
+	width: 4px !important;
 	overflow: hidden;
 	font-size: 0 !important;
 	line-height: 0 !important;
@@ -29,13 +29,13 @@ table.z-button {
 	table-layout:fixed;
 }
 button.z-button {<%-- remove browser's focus effect to scroll down, if any--%>
-	position: relative; 
+	position: relative;
 	top: -5px;
 }
 </c:if>
 span.z-button {
-	display: -moz-inline-box; 
-	vertical-align: bottom; 
+	display: -moz-inline-box;
+	vertical-align: bottom;
 	display: inline-block;
 	margin: 1px 1px 0 0;
 }
@@ -46,9 +46,9 @@ span.z-button {
 </c:if>
 
 .z-button-disd {
-	color: gray; 
-	opacity: .6; 
-	-moz-opacity: .6; 
+	color: gray;
+	opacity: .6;
+	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-button-disd tr td {
@@ -57,14 +57,14 @@ span.z-button {
 <%-- os mold --%>
 .z-button-os {
 	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; 
+	font-size: ${fontSizeM};
 	font-weight: normal;
 }
 
 <%-- image --%>
-.z-button .z-button-tl, 
-.z-button .z-button-tr, 
-.z-button .z-button-bl, 
+.z-button .z-button-tl,
+.z-button .z-button-tr,
+.z-button .z-button-bl,
 .z-button .z-button-br{
 	background-image:url(${c:encodeURL('~./zul/img/button/btn-corner.gif')});
 }
