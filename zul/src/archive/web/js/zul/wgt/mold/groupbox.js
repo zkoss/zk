@@ -18,7 +18,7 @@ function (out, skipper) {
 		cap = this.caption,
 		title = this.getTitle();
 
-	title = (title && title != '' && !cap)? title : null;
+	title = (title && title != '' && !cap)? title : !cap? '&nbsp' : null;
 
 	out.push('<div', this.domAttrs_(), '>');
 	
