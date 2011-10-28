@@ -63,31 +63,6 @@ function zkamn(pkg, fn) {
 	});
 }
 
-//Handles z$ea and z$al. It is used for customization if necessary.
-//@since 5.0.2
-function zkmprops(uuid, props) {
-	//z$ea: value embedded as element's child nodes
-	var v;
-	if (v = zk.cut(props, "z$ea")) {
-		var embed = jq(uuid, zk)[0];
-		if (embed) {
-			var val = [], n;
-			while (n = embed.firstChild) {
-				val.push(n);
-				embed.removeChild(n);
-			}
-			props[v] = val;
-		}
-	}
-
-	//z$al: afterLoad
-	if (v = zk.cut(props, "z$al"))
-		zk.afterLoad(function () {
-			for (var p in v)
-				props[p] = v[p](); //must be func
-		});
-}
-
 (function () {
 	var Widget = zk.Widget,
 		_wgt_$ = Widget.$, //the original zk.Widget.$
@@ -186,12 +161,8 @@ function zkmprops(uuid, props) {
 				zk._load(type.substring(0, j), types[type]); //use _load for better performance
 		}
 	}
-	//Loads package of a widget tree. Also handle z$pk
+	//Loads package of a widget tree
 	function getTypes(types, dt, wi) {
-		//z$pk: packages to load
-		var v = zk.cut(wi[2], "z$pk");
-		if (v) zk.load(v);
-
 		var type = wi[0];
 		if (type === 0) //page
 			type = wi[2].wc;
@@ -320,7 +291,7 @@ function zkmprops(uuid, props) {
 
 	/* create the widget tree. */
 	function create(parent, wi, ignoreDom) {
-		var wgt, stub,
+		var wgt, stub, v,
 			type = wi[0],
 			uuid = wi[1],
 			props = wi[2]||{};
@@ -340,7 +311,7 @@ function zkmprops(uuid, props) {
 					//if #stubs, we have to reuse the whole subtree (not just wgt), so don't move children
 				wgt.unbind(); //reuse it as new widget
 			} else {
-				var cls = zk.$import(type), v;
+				var cls = zk.$import(type);
 				if (!cls)
 					throw 'Unknown widget: ' + type;
 				(wgt = new cls(zkac)).inServer = true;
@@ -351,7 +322,12 @@ function zkmprops(uuid, props) {
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
-			zkmprops(uuid, props);
+			//z$al: afterLoad
+			if (v = zk.cut(props, "z$al"))
+				zk.afterLoad(function () {
+					for (var p in v)
+						wgt.set(p, v[p]()); //must be func
+				});
 		}
 
 		for (var nm in props)

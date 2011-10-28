@@ -14,5 +14,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<span', this.domAttrs_(), '>',
-		(jq.isArray(this._content) ? ""/*z$ea*/:this._content), '</span>');
+		(jq.isArray(this._content) ? ""/*zk().detachChildren()*/:this._content), '</span>');
 }

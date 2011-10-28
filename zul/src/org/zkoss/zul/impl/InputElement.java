@@ -451,24 +451,36 @@ implements Constrainted, Readonly, Disable {
 				return;
 			} else if (_auxinf.constr instanceof ClientConstraint) {
 				final ClientConstraint cc = (ClientConstraint)_auxinf.constr;
-				final String cpkg = cc.getClientPackages();
-				if (cpkg != null)
-					smartUpdate("z$pk", cpkg);
+				final JavaScriptValue cpkgs = getClientPackages(cc);
+				if (cpkgs != null)
+					smartUpdate("_0", cpkgs); //name doesn't matter
 
-				final String js = cc.getClientConstraint();
-				if (js != null) {
-					final char c = js.length() > 0 ? js.charAt(0): (char)0;
-					if (c != '\'' && c != '"') {
-						smartUpdate("z$al",
-							new JavaScriptValue("{constraint:function(){\nreturn "+js+";}}"));
-					} else {
-						smartUpdate("constraint", js.substring(1, js.length() - 1));
-					}
+				final Object code = getClientConstraintCode(cc);
+				if (code != null) {
+					if (code instanceof JavaScriptValue)
+						smartUpdate("z$al", code);
+					else //must be string
+						smartUpdate("constraint", new JavaScriptValue((String)code));
 					return;
 				}
 			}
 			smartUpdate("constraint", _auxinf.constr != null ? "[s": null);
 		}
+	}
+	private static JavaScriptValue getClientPackages(ClientConstraint cc) {
+		final String cpkg = cc.getClientPackages();
+		return cpkg != null ? new JavaScriptValue("zk.load('" + cpkg + "')"): null;
+	}
+	private static Object getClientConstraintCode(ClientConstraint cc) {
+		final String js = cc.getClientConstraint();
+		if (js != null && js.length() > 0) {
+			final char c =  js.charAt(0);
+			if (c != '\'' && c != '"')
+				return new JavaScriptValue("{constraint:function(){\nreturn "+js+";}}");
+					//some JavaScript code => z$al
+			return js;
+		}
+		return null;
 	}
 	public Constraint getConstraint() {
 		return _auxinf != null ? _auxinf.constr: null;
@@ -777,17 +789,14 @@ implements Constrainted, Readonly, Disable {
 			constrDone = true;
 		} else if (constr instanceof ClientConstraint) {
 			final ClientConstraint cc = (ClientConstraint)constr;
-			render(renderer, "z$pk", cc.getClientPackages());
+			render(renderer, "_0", getClientPackages(cc)); //name doesn't matter
 
-			final String js = cc.getClientConstraint();
-			if (js != null) {
-				final char c = js.length() > 0 ? js.charAt(0): (char)0;
-				if (c != '\'' && c != '"') {
-					renderer.renderDirectly("z$al",
-						"{constraint:function(){\nreturn "+js+";}}");
-				} else {
-					renderer.renderDirectly("constraint", js);
-				}
+			final Object code = getClientConstraintCode(cc);
+			if (code != null) {
+				if (code instanceof JavaScriptValue)
+					renderer.render("z$al", code);
+				else //must be string
+					renderer.renderDirectly("constraint", code);
 				constrDone = true;
 			}
 		}

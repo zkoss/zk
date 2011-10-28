@@ -78,10 +78,8 @@ dbgflag=$(grep '^D.ON' $setting)
 dbgflag=${dbgflag#D.ON=}
 if [ "$dbgflag" = "true" ] ; then
 	cmd=build.debug
-	jstrim=false
 elif [ "$dbgflag" = "false" ] ; then
 	cmd=build.release
-	jstrim=true
 else
 	echo D.ON in $setting must be either true or false -- not $dbgflag
 	exit 1
@@ -439,7 +437,7 @@ function invoke_ant
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Dtomcat.home="$tomcat_home" \
-		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
+		-Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" \

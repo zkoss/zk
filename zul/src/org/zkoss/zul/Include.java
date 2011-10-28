@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
@@ -553,7 +554,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
 					final HtmlPageRenders.RenderContext rc =
 						HtmlPageRenders.getRenderContext(null);
-					if (rc != null && !rc.included) { //Use z$ea only if not included
+					if (rc != null && !rc.included) { //Use zk().detachChildren() only if not included
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
 						cwout.write(getUuid());
@@ -565,7 +566,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 							cwout.write("\n-->\n");
 						cwout.write("</div>");
 
-						renderer.render("z$ea", "_xcnt");
+						renderer.render("_xcnt",
+							new JavaScriptValue("zk('"+getUuid()+"').detachChildren()"));
 						return; //done
 					}
 				}

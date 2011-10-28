@@ -1524,6 +1524,24 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 					}
 		return this;
 	},
+	/** Detaches all child elements and return them as an array.
+	 * @since 5.0.10
+	 * @return Array an array of {@link DOMElement} that are detached,
+	 * or null if no element is selected.
+	 */
+	detachChildren: function () {
+		var embed = this.jq[0];
+		if (embed) {
+			var val = [], n;
+			while (n = embed.firstChild) {
+				val.push(n);
+				embed.removeChild(n);
+			}
+			return val;
+		}
+		return null;
+	},
+
 	/** Tests if all elements are input elements (including textarea).
 	 * @return boolean
 	 * @since 5.0.8

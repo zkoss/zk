@@ -20,6 +20,7 @@ import java.io.Writer;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -127,11 +128,14 @@ public class Html extends XulElement {
 				cwout.write("\" style=\"display:none\">");
 				cwout.write(cnt);
 				cwout.write("</div>\n");
-				if (!rc.included) //Use z$ea only if not included (since the included page is rendered a bit late because of Include handles _childjs in bind_)
+				if (!rc.included) //Use detachChildren() only if not included (since the included page is rendered a bit late because of Include handles _childjs in bind_)
 					cnt = null; //means already generated
 			}
-			if (cnt == null) renderer.render("z$ea", "content");
-			else render(renderer, "content", cnt);
+			if (cnt == null)
+				renderer.render("content",
+					new JavaScriptValue("zk('"+getUuid()+"').detachChildren()"));
+			else
+				render(renderer, "content", cnt);
 		}
 	}
 
