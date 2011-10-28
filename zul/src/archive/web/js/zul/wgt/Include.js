@@ -56,12 +56,12 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 				//only once since the content has been created as child widgets
 		}
 
-		if (jq.isArray(ctn = this._xcnt)) //array -> z$ea
+		if (jq.isArray(ctn = this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n(), j = 0; j < ctn.length; ++j)
 				n.appendChild(ctn[j]);
 	},
 	unbind_: function () {
-		if (jq.isArray(this._xcnt)) //array -> z$ea
+		if (jq.isArray(this._xcnt)) //array -> zk().detachChildren() used
 			for (var n = this.$n(); n.firstChild;)
 				n.removeChild(n.firstChild);
 		this.$supers(zul.wgt.Include, "unbind_", arguments);

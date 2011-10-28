@@ -1037,8 +1037,8 @@ public class HtmlPageRenders {
 		 */
 		public final boolean crawlable;
 		/** Indicated whether this page/execution is included.
-		 * If included, the component shall not use "z$ea", since the page's
-		 * rendering might be delayed.
+		 * If included, the component shall not use zk(x).detachChildren(),
+		 * since the page's rendering might be delayed.
 		 */
 		public final boolean included;
 

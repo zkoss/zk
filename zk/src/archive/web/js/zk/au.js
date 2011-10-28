@@ -1217,8 +1217,7 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param Object value the value of the attribute.
 	 */
 	setAttr: function (wgt, nm, val) {
-		if (nm == 'z$pk') zk.load(val); //load pkgs
-		else if (nm == 'z$al') { //afterLoad
+		if (nm == 'z$al') { //afterLoad
 			zk.afterLoad(function () {
 				for (nm in val)
 					wgt.set(nm, val[nm]()); //must be func
