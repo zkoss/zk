@@ -3,8 +3,11 @@
 .z-groupbox-cnt {
 	overflow: hidden;
 	padding: 5px;
-	border: 1px solid #B3B3B3;
+	border: 1px solid #C5C5C5;
 	border-top: none;
+}
+.z-groupbox-notitle {
+	border-top: 1px solid #C5C5C5;
 }
 .z-groupbox-colpsd {
 	padding-bottom: 0 !important; 
@@ -111,33 +114,9 @@
 	border: 0 none;
 	background: transparent;
 }
-.z-groupbox-3d-title {
-	cursor: pointer;
-}
 .z-groupbox-3d-cnt {<%-- content of 3d groupbox-new2 --%>
 	border: 1px solid #C5C5C5;
 	padding: 5px;
-}
-.z-groupbox-3d-bl, 
-.z-groupbox-3d-br, 
-.z-groupbox-3d-bm {
-	font-size: 0; 
-	line-height: 0;
-	zoom: 1;
-}
-.z-groupbox-3d-bl {
-	background: none;
-	padding-left: 0;
-	height: 0;
-}
-.z-groupbox-3d-br {
-	background: none;
-	padding-right: 0;
-	height: 0;
-}
-.z-groupbox-3d-bm {
-	background: none;
-	height: 0;
 }
 
 <c:if test="${c:isExplorer7()}">

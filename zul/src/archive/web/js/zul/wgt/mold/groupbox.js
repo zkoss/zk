@@ -17,10 +17,11 @@ function (out, skipper) {
 		uuid = this.uuid,
 		cap = this.caption,
 		title = this.getTitle();
-	title = title && !cap ? title : cap ? null: '&nbsp';
+
+	title = (title && title != '' && !cap)? zUtl.encodeXML(title) :  null;
 
 	out.push('<div', this.domAttrs_(), '>');
-
+	
 	if (title || cap) {
 		out.push('<div class="', zcls, '-tl"><div class="', zcls,
 			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
@@ -35,7 +36,7 @@ function (out, skipper) {
 	
 	this._redrawCave(out, skipper);
 
-	//shadow
-	out.push('<div id="', uuid, '-sdw" class="', zcls, '-bl"><div class="',
-		zcls, '-br"><div class="', zcls, '-bm"></div></div></div></div>');
+	// classicblue is deprecated and 
+	// shadow not used in breeze, sapphire and silvertail,
+	out.push('</div>');
 }

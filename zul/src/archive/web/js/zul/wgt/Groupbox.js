@@ -90,12 +90,18 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
-		var html = ' class="', s = this._contentSclass;
+		var html = ' class="', s = this._contentSclass,
+			cap = this.caption,
+			zcls = this.getZclass();
 		if (s) html += s + ' ';
-		html += this.getZclass() + '-cnt"';
+		html += zcls + '-cnt';
+		if (!this.getTitle() && !cap) {
+			html += ' '+ zcls + '-notitle';
+		}
+		html += '"';
 
 		s = this._contentStyle;
-		if (this.caption) s = 'border-top:0;' + (s||'');
+		if (cap) s = 'border-top:0;' + (s||'');
 		if (!this._open) s = 'display:none;' + (s||'');
 		if (s) html += ' style="' + s + '"';
 		return html;
@@ -161,14 +167,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	onSize: function () {
 		this._fixHgh();
 		// B50-ZK-487
-		setTimeout(this.proxy(this._fixShadow), 500);
-	},
-	_fixShadow: function () {
-		var sdw = this.$n('sdw');
-		if (sdw)
-			sdw.style.display =
-				zk.parseInt(jq(this.$n('cave')).css("border-bottom-width")) ? "": "none";
-				//if no border-bottom, hide the shadow
+		// classicblue is deprecated and 
+		// shadow not used in breeze, sapphire and silvertail,
 	},
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
