@@ -17,8 +17,7 @@ function (out, skipper) {
 		uuid = this.uuid,
 		cap = this.caption,
 		title = this.getTitle();
-
-	title = (title && title != '' && !cap)? zUtl.encodeXML(title) :  null;
+	title = title && !cap ? zUtl.encodeXML(title) :  null;
 
 	out.push('<div', this.domAttrs_(), '>');
 	

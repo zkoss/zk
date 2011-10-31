@@ -616,6 +616,17 @@ public class Components {
 		new Wire(controller, separator, ignoreZScript, ignoreXel).wireController(comp, comp.getId());
 	}
 
+	/**Wire implicit variables of the specified component into a controller Java object. 
+	 * 
+	 * @param comp the component
+	 * @param controller the controller object
+	 * @since 5.0.10
+	 */
+	public static final
+	void wireImplicit(Component comp, Object controller) {
+		new Wire(controller, '$', true, true).wireImplicit(comp);
+	}
+	
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 

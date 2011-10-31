@@ -124,7 +124,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
 abstract public class GenericAutowireComposer<T extends Component> extends GenericComposer<T>
-implements ComponentCloneListener {
+implements ComponentCloneListener, ComponentActivationListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
@@ -335,7 +335,8 @@ implements ComponentCloneListener {
 
 		org.zkoss.zk.ui.util.Clients.alert(m);
 	}
-	
+
+	//ComponentCloneListener	
 	/** Internal use only. Call-back method of CloneComposerListener. You shall 
 	 * not call this method directly. Clone this Composer when its applied 
 	 * component is cloned.
@@ -343,6 +344,7 @@ implements ComponentCloneListener {
 	 * @return A clone of this Composer. 
 	 * @since 3.5.2
 	 */
+	@Override
 	public Object willClone(Component comp) {
 		try {
 			final Execution exec = Executions.getCurrent();
@@ -371,6 +373,20 @@ implements ComponentCloneListener {
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
+		}
+	}
+
+	//ComponentActivationListener
+	@Override
+	public void didActivate(Component comp) {
+		//wire variables to reference fields (include implicit objects)
+
+		//Note: we have to check _applied because application might store
+		//the composer somewhere other than the original component
+		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
+			if (self == null) { //Bug #2873310. didActivate only once
+				Components.wireImplicit(comp, this); //Bug ZK-546. Shall re-wire transient implicit variables only
+			}
 		}
 	}
 }
