@@ -9,6 +9,7 @@ ZK 5.0.10
   ZK-534: Mousedown in textbox drag wrong target
   ZK-539: Title background not full-filled in groupbox
   ZK-542: StandardThemeProvider/CacheableThemeProvider cannot load norm.xxx.css.dsp when using different theme 
+  ZK-546: When HTTP session is deserialized, it failed to create session-scoped bean in composer
 
 	--------
 ZK 5.0.9

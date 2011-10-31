@@ -364,7 +364,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		//the composer somewhere other than the original component
 		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
 			if (self == null) { //Bug #2873310. didActivate only once
-				Components.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
+				Components.wireImplicit(comp, this); //Bug ZK-546. Shall re-wire transient implicit variables only
 			}
 		}
 	}
