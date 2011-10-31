@@ -17,11 +17,10 @@ function (out, skipper) {
 		uuid = this.uuid,
 		cap = this.caption,
 		title = this.getTitle();
-
-	title = (title && title != '' && !cap)? title : !cap? '&nbsp' : null;
+	title = title && !cap ? title : cap ? null: '&nbsp';
 
 	out.push('<div', this.domAttrs_(), '>');
-	
+
 	if (title || cap) {
 		out.push('<div class="', zcls, '-tl"><div class="', zcls,
 			'-tr"></div></div><div class="', zcls, '-hl"><div class="',

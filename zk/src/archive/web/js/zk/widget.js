@@ -1605,7 +1605,10 @@ wgt.$f().main.setTitle("foo");
 	 * @param Map opts [optional] the options. Allowed values:
 	 * <ul>
 	 * <li>dom - whether to check DOM element instead of {@link #isVisible}</li>
-	 * <li>until - specifies the ancestor to search up to. If not specified, this method searches all ancestors. If specified, this method searches only this widget and ancestors up to the specified one.</li>
+	 * <li>until - specifies the ancestor to search up to (included).
+	 * If not specified, this method searches all ancestors.
+	 * If specified, this method searches only this widget and ancestors up
+	 * to the specified one (included).</li>
 	 * <li>strict - whether to check DOM element's style.visibility.
 	 * It is used only if <code>dom</code> is also specified.</li>
 	 * <li>cache - a map of cached result (since 5.0.8). Ignored if null.
