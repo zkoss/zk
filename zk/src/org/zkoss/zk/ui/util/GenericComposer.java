@@ -105,7 +105,6 @@ implements Composer, ComposerExt, java.io.Serializable {
 		//do nothing
 	}
 
-	//ScopeActivationListener//
 	/** @deprecated As of release 5.0.0, it is meaningless for
 	 * GenericComposer to implement ComponentActivationListener.
 	 * <p>Default: do nothing
