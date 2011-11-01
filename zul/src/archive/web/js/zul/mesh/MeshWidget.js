@@ -1152,7 +1152,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
 			this._hflexsz = n.offsetWidth;
 		}
-		
+		// B50-ZK-543: Height issue of listbox when sizedByContent is true,
+		// should re-calculate height because
+		// the string height maybe changed after width changed. 
+		this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		
 		this._afterCalcSize();
