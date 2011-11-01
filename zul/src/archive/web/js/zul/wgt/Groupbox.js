@@ -210,12 +210,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
 			this.caption = child;
+			child._preloadImage = true;
 			this.rerender();
 		}
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.caption) {
+			child._preloadImage = null;
 			this.caption = null;
 			this.rerender();
 		}
