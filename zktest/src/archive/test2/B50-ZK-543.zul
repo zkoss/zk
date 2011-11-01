@@ -14,11 +14,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<html><![CDATA[
-<ol>
-<li>There should no extra space below the last row of the listbox.</li>
-</ol>
-]]></html>
+<div>There should no extra space below the last row of the listbox.</div>
+
 	<listbox  width="400px" sizedByContent="true"
 		rows="3">
 		<listhead >
