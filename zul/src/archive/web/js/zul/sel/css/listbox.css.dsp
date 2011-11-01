@@ -313,3 +313,12 @@ tr.z-listitem-disd .z-listitem-img-radio {
 	overflow: visible;<%-- Bug ZK-397 --%>
 }
 </c:if>
+<%-- Bug ZK-535 classicblue only --%>
+.z-listheader-sort-img {
+	position: absolute;
+	float: left;
+	left: 50%;
+	font-size: 0;
+	margin-left: auto;
+    margin-right: auto;
+}
