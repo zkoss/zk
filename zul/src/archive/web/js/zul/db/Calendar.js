@@ -527,7 +527,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							if (bSel) {
 								$cell.addClass(zcls+"-seld");
 								if ($cell.hasClass(zcls + "-over"))
-									$cell.addClass(zcls + "-over-seld");;
+									$cell.addClass(zcls + "-over-seld");
 							} else
 								$cell.removeClass(zcls+"-seld");
 								
