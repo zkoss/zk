@@ -42,6 +42,7 @@ ZK 6.0.0
   ZK-318: Support combobutton combining a button and a dropdown menu
   ZK-526: Add a utile EL function for formatting date and parsing date
   ZK-536: Groupbox supports the title attribute (like Window/Panel)
+  ZK-551: A new data binding system to support MVVM design pattern
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
