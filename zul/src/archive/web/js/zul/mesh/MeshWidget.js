@@ -1107,7 +1107,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this._getEbodyWd(),
-			hgh = this.getHeight() || n.style.height; // bug in B36-2841185.zul
+			hgh = this.getHeight() || n.style.height, // bug in B36-2841185.zul
+			sizedByContent = this.isSizedByContent();
 		if (zk.ie) {//By experimental: see zk-blog.txt
 			if (this.eheadtbl && this.eheadtbl.offsetWidth != this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset
@@ -1132,7 +1133,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ehead) {
 			if (tblwd) 
 				this.ehead.style.width = tblwd + 'px';
-			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
+			if (sizedByContent && this.ebodyrows && this.ebodyrows.length)
 				this._adjHeadWd();
 			else if (tblwd && this.efoot) 
 				this.efoot.style.width = tblwd + 'px';
@@ -1155,7 +1156,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// B50-ZK-543: Height issue of listbox when sizedByContent is true,
 		// should re-calculate height because
 		// the string height maybe changed after width changed. 
-		this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
+		if (sizedByContent)
+			this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		
 		this._afterCalcSize();
