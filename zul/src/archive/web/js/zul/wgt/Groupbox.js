@@ -185,7 +185,19 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			//shadow rarely needs to fix so OK to delay for better performance
 		} else {
 			this._fixWdh();
-		} 
+		}
+		// ZK-549: Height issue of groupbox 3d mold
+		var cap = this.caption,
+			img,
+			h = jq('.' + this.getZclass() + '-hl').height();
+		if (cap && (img = cap.getImageNode())) {
+			var wgt = this,
+				f = function () {
+					if (jq('.' + wgt.getZclass() + '-hl').height() > h)
+						wgt.rerender();
+				};
+			img.onload = img.onerror = f;
+		}
 	},
 	_fixShadow: function () {
 		var sdw = this.$n('sdw');
