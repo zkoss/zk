@@ -161,7 +161,7 @@ Offset snap({@link zk.Draggable} dg, {@link Offset} pos);
 	 * <p>Specifies the effect to execute when the dragging is finished. It usually generates an animation effect.</p>
 	 * <p>Default: a default action. To disable it, pass {@link zk#$void}.
 	 * <ul>
-	 * <li>evt - the DOM event. It is null if cauased by scrolling.
+	 * <li>evt - the DOM event. It is null if caused by scrolling.
 	 * It is not null if caused by dragging. </li>
 	 * </ul>
 	 *
@@ -183,7 +183,7 @@ boolean revert({@link zk.Draggable} dg, {@link Offset} pointer, {@link zk.Event}
 	 * <p>To have a custom revert effect, you can specify a function as the #reverteffect option. It is usually an animation effect; see zEffect;
 	 * <ul>
 	 * <li>pointer - the offset of the mouse pointer</li>
-	 * <li>evt - the DOM event. It is null if cauased by scrolling.
+	 * <li>evt - the DOM event. It is null if caused by scrolling.
 	 * It is a mouse event if caused by dragging. </li>
 	 * </ul>
 	 *

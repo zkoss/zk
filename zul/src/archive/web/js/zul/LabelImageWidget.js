@@ -41,8 +41,9 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode();
-			if (n) n.src = v || '';
-			else (this.desktop) //<IMG> might not be generated (Bug 3007738)
+			if (n) 
+				n.src = v || '';
+			else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
 				this.updateDomContent_();
 		},
 		/** Sets the image URI.

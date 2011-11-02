@@ -597,4 +597,6 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		var tag = this.isTopmost() ? 'td' : 'li';
 		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
 	}
-});})();
+});
+
+})();
