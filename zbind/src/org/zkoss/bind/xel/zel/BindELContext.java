@@ -32,7 +32,6 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELContext;
-import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.VariableMapper;
 import org.zkoss.zel.impl.parser.AstBracketSuffix;

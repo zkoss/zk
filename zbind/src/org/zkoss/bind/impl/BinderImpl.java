@@ -124,6 +124,8 @@ public class BinderImpl implements Binder {
 	
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
+	private static final String ZBIND_COMP_UUID = "$COMPUUID$";
+	
 	//Command lifecycle result
 	private static final int SUCCESS = 0;
 	private static final int FAIL_VALIDATE = 1;
@@ -338,17 +340,32 @@ public class BinderImpl implements Binder {
 		}
 		throw new UiException("the return value of init expression is not a From is :" + obj); 
 	}
+	
+	//find and cache the uuid of component to a attribute, 
+	//because if a component was detached (ex a listitem of listbox) the uuid will also be changed 
+	//then binder is not able to remove its reference by last uuid 
+	private String getBindUuid(Component comp){
+		String uuid = (String)comp.getAttribute(ZBIND_COMP_UUID,Component.COMPONENT_SCOPE);
+		if(uuid==null){
+			uuid = comp.getUuid();
+			comp.setAttribute(ZBIND_COMP_UUID, uuid,Component.COMPONENT_SCOPE);
+		}
+		return uuid;
+	}
+	
+	private void removeBindUuidd(Component comp){
+		comp.removeAttribute(ZBIND_COMP_UUID,Component.COMPONENT_SCOPE);
+	}
 
 	private void addLoadFormBinding(Component comp, String formid, Form form, String loadExpr, Map<String, Object> args) {
-		final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, form, loadExpr, args);
-		final String uuid = comp.getUuid(); 
+		final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, form, loadExpr, args); 
 		final String attr = formid;
 		addBinding(comp, attr, binding);
 		
 		final String command = binding.getCommandName();
 		if (command == null) {
-			final String compId = dualId(uuid, attr);
-			addLoadFormPromptBinding(compId, binding);
+			final String bindDualId = getBindDualId(comp, attr);
+			addLoadFormPromptBinding(bindDualId, binding);
 		} else {
 			final boolean after = binding.isAfter();
 			if (after) {
@@ -512,7 +529,6 @@ public class BinderImpl implements Binder {
 		}
 		
 		LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, converter, args, converterArgs);
-		final String uuid = comp.getUuid();
 		addBinding(comp, attr, binding);
 		
 		final String command = binding.getCommandName();
@@ -520,14 +536,14 @@ public class BinderImpl implements Binder {
 			log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converter);
 			if (evtnm != null) { //special case, load on an event
 				addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
-				final String evtId = dualId(uuid, evtnm);
-				addLoadEventBinding(comp, evtId, binding);
+				final String bindDualId = getBindDualId(comp, evtnm);
+				addLoadEventBinding(comp, bindDualId, binding);
 			}
 			//if no command , always add to prompt binding, a prompt binding will be load when , 
 			//1.load a component property binding
 			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in loadOnPropertyChange, not by prompt-binding 
-			final String compId = dualId(uuid, attr);
-			addLoadPromptBinding(comp, compId, binding);
+			final String bindDualId = getBindDualId(comp, attr);
+			addLoadPromptBinding(comp, bindDualId, binding);
 		} else {
 			final boolean after = binding.isAfter();
 			log.debug("add command-load-binding: comp=[%s],attr=[%s],expr=[%s],after=[%s],converter=[%s]", comp,attr,loadExpr,after,converter);
@@ -561,15 +577,14 @@ public class BinderImpl implements Binder {
 		}
 
 		final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, converter, validator, args, converterArgs, validatorArgs);
-		final String uuid = comp.getUuid();
 		addBinding(comp, attr, binding);
 		
 		final String command = binding.getCommandName();
 		if (command == null) { //save on event
 			log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converter,validator);
 			addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
-			final String evtId = dualId(uuid, evtnm);
-			addSavePromptBinding(comp, evtId, binding);
+			final String bindDualId = getBindDualId(comp, evtnm);
+			addSavePromptBinding(comp, bindDualId, binding);
 		} else {
 			final boolean after = binding.isAfter();
 			log.debug("add command-save-binding: comp=[%s],att=r[%s],expr=[%s],after=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,after,converter,validator);
@@ -581,11 +596,11 @@ public class BinderImpl implements Binder {
 		}
 	}
 	
-	private void addLoadFormPromptBinding(String compId, LoadFormBinding binding) {
-		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(compId); 
+	private void addLoadFormPromptBinding(String bindDualId, LoadFormBinding binding) {
+		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(bindDualId); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadFormBinding>();
-			_loadFormPromptBindings.put(compId, bindings);
+			_loadFormPromptBindings.put(bindDualId, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -626,19 +641,19 @@ public class BinderImpl implements Binder {
 		bindings.add(binding);
 	}
 
-	private void addLoadEventBinding(Component comp, String evtId, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadEventBindings.get(evtId); 
+	private void addLoadEventBinding(Component comp, String bindDualId, LoadPropertyBinding binding) {
+		List<LoadPropertyBinding> bindings = _loadEventBindings.get(bindDualId); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadEventBindings.put(evtId, bindings);
+			_loadEventBindings.put(bindDualId, bindings);
 		}
 		bindings.add(binding);
 	}
-	private void addLoadPromptBinding(Component comp, String compId, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadPromptBindings.get(compId); 
+	private void addLoadPromptBinding(Component comp, String bindDualId, LoadPropertyBinding binding) {
+		List<LoadPropertyBinding> bindings = _loadPromptBindings.get(bindDualId); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadPromptBindings.put(compId, bindings);
+			_loadPromptBindings.put(bindDualId, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -661,11 +676,11 @@ public class BinderImpl implements Binder {
 		bindings.add(binding);
 	}
 
-	private void addSavePromptBinding(Component comp, String compId, SavePropertyBinding binding) {
-		List<SavePropertyBinding> bindings = _saveEventBindings.get(compId); 
+	private void addSavePromptBinding(Component comp, String bindDualId, SavePropertyBinding binding) {
+		List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId); 
 		if (bindings == null) {
 			bindings = new ArrayList<SavePropertyBinding>();
-			_saveEventBindings.put(compId, bindings);
+			_saveEventBindings.put(bindDualId, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -696,12 +711,12 @@ public class BinderImpl implements Binder {
 	
 	//associate event to CommandBinding
 	private void addEventCommandListenerIfNotExists(Component comp, String evtnm, CommandBinding command) {
-		final String evtId = dualId(comp.getUuid(), evtnm);
-		CommandEventListener listener = _listenerMap.get(evtId);
+		final String bindDualId = getBindDualId(comp, evtnm);
+		CommandEventListener listener = _listenerMap.get(bindDualId);
 		if (listener == null) {
 			listener = new CommandEventListener();
 			comp.addEventListener(evtnm, listener);
-			_listenerMap.put(evtId, listener);
+			_listenerMap.put(bindDualId, listener);
 		}
 		//DENNIS, this method will call by
 		//1.addPropertyBinding -> command is null -> means prompt when evtnm is fired.
@@ -712,8 +727,8 @@ public class BinderImpl implements Binder {
 	}
 	
 	private void removeEventCommandListenerIfExists(Component comp, String evtnm) {
-		final String evtId = dualId(comp.getUuid(), evtnm);
-		final CommandEventListener listener = _listenerMap.remove(evtId);
+		final String bindDualId = getBindDualId(comp, evtnm);
+		final CommandEventListener listener = _listenerMap.remove(bindDualId);
 		if (listener != null) {
 			comp.removeEventListener(evtnm, listener);
 		}
@@ -856,8 +871,8 @@ public class BinderImpl implements Binder {
 	private void doSaveEventNoValidate(Component comp, Event evt, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		log.debug("doSaveEventNoValidate comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
-		final String evtId = dualId(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _saveEventBindings.get(evtId);
+		final String bindDualId = getBindDualId(comp, evtnm);
+		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
 				doSavePropertyBinding(comp, binding, null, evt, notifys);
@@ -868,8 +883,8 @@ public class BinderImpl implements Binder {
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName(); 
 		log.debug("doSaveEvent comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
-		final String evtId = dualId(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _saveEventBindings.get(evtId);
+		final String bindDualId = getBindDualId(comp, evtnm);
+		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId);
 		if (bindings != null) {
 			//TODO, DENNIS, ISSUE, What is the Spec of validation of prompt save?, check comment of onEvent also
 			for (SavePropertyBinding binding : bindings) {
@@ -886,8 +901,8 @@ public class BinderImpl implements Binder {
 	//for event -> prompt only, no command
 	private void doLoadEvent(Component comp, String evtnm) {
 		log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evtnm);
-		final String evtId = dualId(comp.getUuid(), evtnm); 
-		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(evtId);
+		final String bindDualId = getBindDualId(comp, evtnm); 
+		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(bindDualId);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
 				doLoadPropertyBinding(comp, binding, null);
@@ -942,8 +957,8 @@ public class BinderImpl implements Binder {
 				public Map<String, List<SavePropertyBinding>> getSaveAfterBindings() {
 					return _saveAfterBindings;
 				}
-				public String dualId(String uuid, String attr) {
-					return BinderImpl.this.dualId(uuid,attr);
+				public String getBindDualId(Component comp, String attr) {
+					return BinderImpl.this.getBindDualId(comp,attr);
 				}
 			});
 			
@@ -1281,14 +1296,13 @@ public class BinderImpl implements Binder {
 	 * @param comp the component
 	 */
 	public void removeBindings(Component comp) {
-		final String uuid = comp.getUuid();
 		final Map<String, List<Binding>> attrMap = _bindings.remove(comp);
 		if (attrMap != null) {
 			final Set<Binding> removed = new HashSet<Binding>();
 			for(Entry<String, List<Binding>> entry : attrMap.entrySet()) {
 				final String key = entry.getKey(); 
-				removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
-				removeBindingsByCompId(uuid, key);
+//				removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
+				removeBindings(comp, key);
 				removed.addAll(entry.getValue());
 			}
 			if (!removed.isEmpty()) {
@@ -1301,6 +1315,7 @@ public class BinderImpl implements Binder {
 		tracker.removeTrackings(comp);
 
 		comp.removeAttribute(BINDER);
+		removeBindUuidd(comp);
 	}
 
 	/**
@@ -1311,13 +1326,20 @@ public class BinderImpl implements Binder {
 	public void removeBindings(Component comp, String key) {
 		removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
 		
-		final String uuid = comp.getUuid();
-		final String dualId = dualId(uuid, key);
+		final String bindDualId = getBindDualId(comp, key);
 		final Set<Binding> bindings = new HashSet<Binding>();
-		bindings.addAll(_loadFormPromptBindings.remove(dualId)); //comp+formid -> bindings (load form _prompt)
-		bindings.addAll(_loadPromptBindings.remove(dualId)); //comp+_fieldExpr -> bindings (load _prompt)
-		bindings.addAll(_loadEventBindings.remove(dualId)); //comp+evtnm -> bindings (load on event)
-		bindings.addAll(_saveEventBindings.remove(dualId)); //comp+evtnm -> bindings (save on event)
+		if(_loadFormPromptBindings.containsKey(bindDualId)){
+			bindings.addAll(_loadFormPromptBindings.remove(bindDualId)); //comp+formid -> bindings (load form _prompt)
+		}
+		if(_loadPromptBindings.containsKey(bindDualId)){
+			bindings.addAll(_loadPromptBindings.remove(bindDualId)); //comp+_fieldExpr -> bindings (load _prompt)
+		}
+		if(_loadEventBindings.containsKey(bindDualId)){
+			bindings.addAll(_loadEventBindings.remove(bindDualId)); //comp+evtnm -> bindings (load on event)
+		}
+		if(_saveEventBindings.containsKey(bindDualId)){
+			bindings.addAll(_saveEventBindings.remove(bindDualId)); //comp+evtnm -> bindings (save on event)
+		}
 
 		removeBindings(bindings);
 	}
@@ -1333,13 +1355,13 @@ public class BinderImpl implements Binder {
 		_saveBeforeBindings.values().removeAll(bindings); //command -> bindings (save before command)
 	}
 	
-	private void removeBindingsByCompId(String uuid, String attr) {
-		final String dualId = dualId(uuid, attr);
-		_loadFormPromptBindings.remove(dualId); //comp+formid -> bindings (load form _prompt)
-		_loadPromptBindings.remove(dualId); //comp+_fieldExpr -> bindings (load _prompt)
-		_loadEventBindings.remove(dualId); //comp+evtnm -> bindings (load on event)
-		_saveEventBindings.remove(dualId); //comp+evtnm -> bindings (save on event)
-	}
+//	private void removeBindingsByCompId(String uuid, String attr) {
+//		final String dualId = dualId(uuid, attr);
+//		_loadFormPromptBindings.remove(dualId); //comp+formid -> bindings (load form _prompt)
+//		_loadPromptBindings.remove(dualId); //comp+_fieldExpr -> bindings (load _prompt)
+//		_loadEventBindings.remove(dualId); //comp+evtnm -> bindings (load on event)
+//		_saveEventBindings.remove(dualId); //comp+evtnm -> bindings (save on event)
+//	}
 	
 	private void addBinding(Component comp, String attr, Binding binding) {
 		Map<String, List<Binding>> attrMap = _bindings.get(comp);
@@ -1376,12 +1398,12 @@ public class BinderImpl implements Binder {
 	}
 	
 	private void loadComponentProperties(Component comp) {
-		final String uuid = comp.getUuid();
+		
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
 		if (compBindings != null) {
 			for(String key : compBindings.keySet()) {
-				final String dualId = dualId(uuid, key);
-				final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(dualId);
+				final String bindDualId = getBindDualId(comp, key);
+				final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(bindDualId);
 				if (formBindings != null) {
 					for (LoadFormBinding binding : formBindings) {
 						final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
@@ -1392,8 +1414,8 @@ public class BinderImpl implements Binder {
 				}
 			}
 			for(String key : compBindings.keySet()) {
-				final String dualId = dualId(uuid, key);
-				final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(dualId);
+				final String bindDualId = getBindDualId(comp, key);
+				final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bindDualId);
 				if (propBindings != null) {
 					for (LoadPropertyBinding binding : propBindings) {
 						final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
@@ -1444,8 +1466,9 @@ public class BinderImpl implements Binder {
 		return EventQueues.lookup(_quename, _quescope, true);
 	}
 
-	// create a unique id base on uuid and attr
-	private String dualId(String uuid, String attr) {
+	// create a unique id base on component's uuid and attr
+	private String getBindDualId(Component comp, String attr) {
+		final String uuid = getBindUuid(comp);
 		return uuid+"#"+attr;
 	}
 

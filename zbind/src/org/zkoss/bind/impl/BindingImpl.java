@@ -21,7 +21,6 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Base implementation for implementing a {@link Binding}

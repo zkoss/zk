@@ -24,7 +24,6 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 /**
  * a internal stateless helper to helps BindImpl to the validation.
@@ -54,7 +53,7 @@ import org.zkoss.zk.ui.event.Event;
 		Map<String, List<SaveFormBinding>> getSaveFormBeforeBindings();
 		Map<String, List<SaveFormBinding>> getSaveFormAfterBindings();
 		Map<String, List<SavePropertyBinding>> getSaveEventBindings();
-		String dualId(String uuid, String attr);
+		String getBindDualId(Component comp, String attr);
 		
 	}
 	
@@ -117,8 +116,8 @@ import org.zkoss.zk.ui.event.Event;
 	//doValidate -> 
 	public void collectSaveEvent(Component comp, String command, Event evt, Set<Property> validates) {
 		final String evtnm = evt == null ? null : evt.getName(); 
-		final String evtId = _infoProvider.dualId(comp.getUuid(), evtnm);;//dualId(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(evtId);//_saveEventBindings.get(evtId);
+		final String bindDualId = _infoProvider.getBindDualId(comp, evtnm);;//dualId(comp.getUuid(), evtnm);
+		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(bindDualId);//_saveEventBindings.get(evtId);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
 				collectSavePropertyBinding(comp, binding, command, evt, validates);
@@ -195,8 +194,8 @@ import org.zkoss.zk.ui.event.Event;
 	
 	public boolean validateSaveEvent(Component comp, String command, Event evt, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName(); 
-		final String evtId = _infoProvider.dualId(comp.getUuid(), evtnm);;//dualId(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(evtId);//_saveEventBindings.get(evtId);
+		final String bindDualId = _infoProvider.getBindDualId(comp, evtnm);;//dualId(comp.getUuid(), evtnm);
+		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(bindDualId);//_saveEventBindings.get(evtId);
 		boolean r = valid;
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
