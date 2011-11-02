@@ -389,4 +389,6 @@ implements ComponentCloneListener, ComponentActivationListener {
 			}
 		}
 	}
+	public void willPassivate(Component comp) {
+	}
 }
