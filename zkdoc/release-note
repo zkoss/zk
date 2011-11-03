@@ -45,6 +45,7 @@ ZK 6.0.0
   ZK-551: A new data binding system to support MVVM design pattern
   ZK-522: Tablelayout support any child not limited to Panel
   ZK-523: Columnlayout support any child not limited to Panel
+  ZK-537: Hlayout supports valign (top, middle and bottom)
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

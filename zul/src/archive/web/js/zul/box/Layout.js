@@ -57,6 +57,8 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	bind_: function () {
 		this.$supers(zul.box.Layout, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
+		// F60-ZK-537: Hlayout supports valign (top, middle and bottom),
+		this._fixAlign();
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -355,5 +357,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
     			n.style.width = jq.px0(max);
 			}
 		}
+	},
+	/**
+	 * update align, for child override
+	 * @since 6.0
+	 */
+	_fixAlign: function () {
 	}
 });

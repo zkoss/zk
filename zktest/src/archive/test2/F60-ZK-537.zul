@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-537.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov  03 11:10:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div>The buttons should aligned correctly.</div>
+	<checkbox id="cbOne" label="hlayout one" />
+	<checkbox id="cbTwo" label="hlayout two" />
+	<checkbox id="cbThree" label="hlayout three" />
+	<radiogroup>
+		<attribute name="onCheck">
+			String s = self.getSelectedItem().getLabel();
+			
+			if (cbOne.isChecked()) {
+				hlOne.setValign(s);
+				lbOne.setLabel("align "+s);
+			}
+			if (cbTwo.isChecked()) {
+				hlTwo.setValign(s);
+				lbTwo.setLabel("align "+s);
+			}
+			if (cbThree.isChecked()) {
+				hlThree.setValign(s);
+				lbThree.setLabel("align "+s);
+			}
+		</attribute>
+		<radio label="top" />
+		<radio label="middle" />
+		<radio label="bottom" />
+	</radiogroup>
+    <hlayout id="hlOne" height="100px">
+    	<button id="lbOne" label="align top" />
+    	<window height="100px" title="test window" border="normal" />
+    </hlayout>
+    <hlayout id="hlTwo" valign="middle" height="100px">
+    	<button id="lbTwo" label="align middle" />
+    	<window height="100px" title="test window" border="normal" />
+    </hlayout>
+    <hlayout id="hlThree" valign="bottom" height="100px">
+    	<button id="lbThree" label="align bottom" />
+    	<window height="100px" title="test window" border="normal" />
+    </hlayout>
+</zk>

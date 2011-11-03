@@ -12,7 +12,7 @@
 	display:-moz-inline-box;
 	display: inline-block;
 	position: relative;
-	vertical-align: middle; <%-- so it aligned better with single-line label --%>
+	vertical-align: top;
 	zoom: 1;
 	white-space: normal; <%-- Bug ZK-477 --%>
 <c:if test="${c:isExplorer() and not c:browser('ie8')}">
