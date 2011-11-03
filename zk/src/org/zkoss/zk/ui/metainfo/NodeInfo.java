@@ -18,22 +18,18 @@ import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
- * Represent a node in a ZUML meta-info tree.
+ * Represent a node in a ZUML metainfo tree.
  * @author tomyeh
  * @since 6.0.0
  */
 public interface NodeInfo {
-	/** Returns the parent, or null if no parent.
+	/** Returns the parent, or null if it has no parent.
 	 */
 	public NodeInfo getParent();
-	/** Returns a list of children.
+	/** Returns a readonly list of children.
 	 *
-	 * <p>Note: the returned list is live but it is not a good idea
-	 * to modify it directly,
-	 * because, unlike {@link org.zkoss.zk.ui.Component}, it doesn't maintain
-	 * {@link NodeInfo#getParent}. Thus, it is better to invoke
-	 * {@link #appendChild} and {@link #removeChild}.
-	 * instead.
+	 * <p>Note: the returned list is readonly. To modify, please use
+	 * {@link #appendChild} and {@link #removeChild} instead.
 	 */
 	public List<NodeInfo> getChildren();
 

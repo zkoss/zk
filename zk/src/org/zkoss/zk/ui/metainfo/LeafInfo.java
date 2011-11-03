@@ -20,10 +20,10 @@ import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
- * Used to implement a leaf node that does not allow any children.
+ * A skeleton used to implement a leaf node that does not allow any children.
  * <p>Notice that it is serializable.
- * Also notice that all nodes except the root must be an instance of
- * {@link LeafInfo} or its derives.
+ * Also notice that the implementation assumes all nodes except the root
+ * must extend from {@link LeafInfo} or its derives.
  * @author tomyeh
  * @since 6.0.0
  */
@@ -48,24 +48,24 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_evalr = from._evalr;
 	}
 
-	//@Override
+	@Override
 	public EvaluatorRef getEvaluatorRef() {
 		return _evalr;
 	}
-	//@Override
+	@Override
 	public PageDefinition getPageDefinition() {
 		return _evalr != null ? _evalr.getPageDefinition(): null;
 	}
-	//@Override
+	@Override
 	public Evaluator getEvaluator() {
 		return _evalr != null ? _evalr.getEvaluator(): null;
 	}
 
-	//@Override
+	@Override
 	public NodeInfo getParent() {
 		return _parent;
 	}
-	//@Override
+	@Override
 	public List<NodeInfo> getChildren() {
 		return Collections.emptyList();
 	}
@@ -76,11 +76,11 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_parent = parent;
 	}
 
-	//@Override
+	@Override
 	public void appendChild(NodeInfo child) {
 		throw new UiException(this+" does not allow any children");
 	}
-	//@Override
+	@Override
 	public boolean removeChild(NodeInfo child) {
 		return false;
 	}

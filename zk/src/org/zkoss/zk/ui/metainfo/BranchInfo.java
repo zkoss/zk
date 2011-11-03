@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -24,7 +23,7 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
- * Used to implement a branch node that allows children.
+ * A skeleton used to implement a branch node that allows children.
  * @author tomyeh
  * @since 6.0.0
  */
@@ -63,7 +62,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
 	}
 
 	//NodeInfo//
-	//@Override
+	@Override
 	public void appendChild(NodeInfo child) {
 		NodeInfo oldp = child.getParent();
 		if (oldp != null)
@@ -83,7 +82,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
 			for (NodeInfo c: children)
 				fixEvaluatorRefDown(c, evalr);
 	}
-	//@Override
+	@Override
 	public boolean removeChild(NodeInfo child) {
 		if (child != null && _children.remove(child)) {
 			((LeafInfo)child).setParentDirectly(null); //except root, all are LeafInfo
@@ -92,17 +91,17 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		}
 		return false;
 	}
-	//@Override
+	@Override
 	public List<NodeInfo> getChildren() {
 		return _children;
 	}
 
 	//Condition//
-	//@Override
+	@Override
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
-	//@Override
+	@Override
 	public boolean isEffective(Page page) {
 		return _cond == null || _cond.isEffective(_evalr, page);
 	}
