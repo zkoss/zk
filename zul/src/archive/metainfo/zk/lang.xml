@@ -675,6 +675,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>idspace</component-name>
+		<component-class>org.zkoss.zul.Idspace</component-class>
+		<widget-class>zul.wgt.Idspace</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/idspace.js</mold-uri>
+		</mold>
+		<preserve-blank/>
+	</component>
+	<component>
 		<component-name>iframe</component-name>
 		<component-class>org.zkoss.zul.Iframe</component-class>
 		<widget-class>zul.utl.Iframe</widget-class>
