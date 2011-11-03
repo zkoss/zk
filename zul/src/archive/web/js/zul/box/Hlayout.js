@@ -18,6 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.4
  */
 zul.box.Hlayout = zk.$extends(zul.box.Layout, {
+	_valign: "top",
 	$define: { //zk.def
 		/** Sets the vertical-align to top or bottom.
 		 *
@@ -28,25 +29,9 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		/** Returns the current valign.
 		 * @return String
 		 */
-		valign: [
-					function (v) {
-						var oldV = this._valign,
-							n;
-						if (oldV == v)
-							return;
-						if (n = this.$n()) {
-							var $n = jq(n);
-							if (oldV == "middle")
-								$n.removeClass("z-valign-middle");
-							else if (oldV == "bottom")
-								$n.removeClass("z-valign-bottom");
-						}
-						return v;
-					},
-					function () {
-						this._fixAlign();
-					}
-		],
+		valign: function () {
+			this._fixAlign();
+		}
 	},
 	isVertical_: function () {
 		return false;
@@ -55,13 +40,11 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		return this._zclass == null ? "z-hlayout" : this._zclass;
 	},
 	_fixAlign: function () {
-		var v = this._valign,
-			n = this.$n();
-		if (n) {
-			if (v == "middle")
-				jq(n).addClass("z-valign-middle");
-			else if (v == "bottom")
-				jq(n).addClass("z-valign-bottom");
-		}
+		var v, n;
+		if ((n = this.$n()) && (v = this._valign))
+			var zcls = this.getZclass()
+			if (v == "top") n.className = zcls;
+			else if (v == "middle") n.className = zcls + " z-valign-middle";
+			else if (v == "bottom") n.className = zcls + " z-valign-bottom";
 	}
 });

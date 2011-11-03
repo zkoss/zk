@@ -20,5 +20,7 @@ package org.zkoss.zul;
  * @author benbai
  */
 public class Idspace extends Div implements org.zkoss.zk.ui.IdSpace {
-
+	public Idspace() {
+		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
+	}
 }
