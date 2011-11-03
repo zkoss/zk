@@ -360,7 +360,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	},
 	/**
 	 * update align, for child override
-	 * @since 6.0
+	 * @since 6.0.0
 	 */
 	_fixAlign: function () {
 	}

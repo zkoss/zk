@@ -16,7 +16,7 @@ package org.zkoss.zul;
 
 /**
  * Just like DIV tag but implements IdSpace.
- * @since 6.0
+ * @since 6.0.0
  * @author benbai
  */
 public class Idspace extends Div implements org.zkoss.zk.ui.IdSpace {

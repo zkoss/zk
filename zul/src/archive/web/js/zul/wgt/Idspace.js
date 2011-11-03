@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * Just like DIV tag but implements IdSpace.
- * @since 6.0
+ * @since 6.0.0
  */
 zul.wgt.Idspace = zk.$extends(zul.wgt.Div, {
 });

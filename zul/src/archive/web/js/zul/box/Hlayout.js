@@ -23,7 +23,7 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		 *
 		 * @param String valign the value of vertical-align property
 		 * "middle", "bottom".
-		 * @since 6.0
+		 * @since 6.0.0
 		 */
 		/** Returns the current valign.
 		 * @return String

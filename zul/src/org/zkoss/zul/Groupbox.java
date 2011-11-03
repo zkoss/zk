@@ -140,13 +140,13 @@ public class Groupbox extends XulElement {
 	 * a more sophiscated caption (aka., title).
 	 * <p> It will be displaied before caption.
 	 * <p>Default: empty.
-	 * @since 6.0
+	 * @since 6.0.0
 	 */
 	public String getTitle() {
 		return _title;
 	}
 	/** Sets the title.
-	 * @since 6.0
+	 * @since 6.0.0
 	 */
 	public void setTitle(String title) {
 		if (title == null)
