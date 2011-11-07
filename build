@@ -150,7 +150,6 @@ else
 		oflag="off"
 	fi
 fi
-echo "dflag=$dflag, oflag=$oflag"
 
 #-- Prepare define list
 dfnList=
