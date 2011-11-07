@@ -25,13 +25,12 @@ import org.zkoss.lang.Objects;
  * @since 5.0.4
  */
 public class Hlayout extends Layout {
-	/** The vertical-align property used for the inner children.
-	 * @since 6.0.0
-	 */
+	
 	private String _valign = "top"; // middle, bottom
 
-	/** Returns the valign.
+	/** Returns the vertical-align property used for the inner children.
 	 * <p>Default: empty.
+	 * @since 6.0.0
 	 */
 	public String getValign() {
 		return _valign;

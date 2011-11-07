@@ -41,14 +41,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</radiogroup>
     <hlayout id="hlOne" height="100px">
     	<button id="lbOne" label="align top" />
-    	<window height="100px" title="test window" border="normal" />
+    	<window width="100px" height="100px" title="test window" border="normal" />
     </hlayout>
     <hlayout id="hlTwo" valign="middle" height="100px">
     	<button id="lbTwo" label="align middle" />
-    	<window height="100px" title="test window" border="normal" />
+    	<window width="100px" height="100px" title="test window" border="normal" />
     </hlayout>
     <hlayout id="hlThree" valign="bottom" height="100px">
     	<button id="lbThree" label="align bottom" />
-    	<window height="100px" title="test window" border="normal" />
+    	<window width="100px" height="100px" title="test window" border="normal" />
     </hlayout>
 </zk>
