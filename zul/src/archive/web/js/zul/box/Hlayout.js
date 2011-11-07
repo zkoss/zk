@@ -45,10 +45,10 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	domClass_: function () {
 		var clsnm = this.$supers('domClass_', arguments),
 			v;
-		if (v = this._valign)
-			if (v == "top") ;
-			else if (v == "middle") clsnm += " z-valign-middle";
-			else if (v == "bottom") clsnm += " z-valign-bottom";
+		if ((v = this._valign) == "middle")
+			clsnm += " z-valign-middle";
+		else if (v == "bottom")
+			clsnm += " z-valign-bottom";
 		return clsnm;
 	}
 });
