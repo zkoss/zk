@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +40,14 @@ import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.PropertyBinding;
+import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
@@ -71,7 +74,7 @@ import org.zkoss.zk.ui.util.Template;
  * @author henrichen
  *
  */
-public class BinderImpl implements Binder {
+public class BinderImpl implements Binder,BinderCtrl {
 	
 	
 	private static final LogUtil log = new LogUtil(BinderImpl.class.getName());
@@ -151,6 +154,12 @@ public class BinderImpl implements Binder {
 	private final Map<String, List<SavePropertyBinding>> _saveAfterBindings; //command -> bindings (save after command)
 	private final Map<String, List<LoadPropertyBinding>> _loadBeforeBindings; //command -> bindings (load before command)
 	private final Map<String, List<SavePropertyBinding>> _saveBeforeBindings; //command -> bindings (save before command)
+	
+	/* the relation of form and inner save-bindings */
+	private Map<Component, Map<String,Set<SaveBinding>>> _assocFormSaveBindings;//form comp -> fromid -> savebindings	
+	private Map<Component, Map<SaveBinding,Set<SaveBinding>>> _reversedAssocFormSaveBindings;////associated comp -> binding -> associated save bindings of _formSaveBindingMap
+	
+
 	private final Map<String, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
 	private final String _quename;
 	private final String _quescope;
@@ -176,6 +185,10 @@ public class BinderImpl implements Binder {
 		_saveAfterBindings = new HashMap<String, List<SavePropertyBinding>>();
 		_loadBeforeBindings = new HashMap<String, List<LoadPropertyBinding>>();
 		_saveBeforeBindings = new HashMap<String, List<SavePropertyBinding>>();
+		
+		_assocFormSaveBindings = new HashMap<Component, Map<String, Set<SaveBinding>>>();
+		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
+		
 		_listenerMap = new HashMap<String, CommandEventListener>();
 		
 		//use same queue name if user was not specified, 
@@ -1310,6 +1323,8 @@ public class BinderImpl implements Binder {
 			}
 		}
 		
+		removeFormAssociatedSaveBinding(comp);
+		
 		//remove trackings
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
@@ -1482,4 +1497,72 @@ public class BinderImpl implements Binder {
 			sendCommand(command, args);
 		}
 	}
+	
+
+	private void removeFormAssociatedSaveBinding(Component comp) {
+		_assocFormSaveBindings.remove(comp);
+		Map<SaveBinding,Set<SaveBinding>> associated = _reversedAssocFormSaveBindings.remove(comp);
+		if(associated!=null){
+			Set<Entry<SaveBinding,Set<SaveBinding>>> entries = associated.entrySet();
+			for(Entry<SaveBinding,Set<SaveBinding>> entry:entries){
+				entry.getValue().remove(entry.getKey());
+			}
+		}
+	}
+	
+	@Override
+	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding){
+		//find the form component by form id and a associated/nested component
+		Component formComp = lookupAossicatedFormComponent(formId,associatedComp);
+		if(formComp==null){
+			throw new UiException("cannot find any form "+formId+" with "+associatedComp);
+		}
+		Map<String,Set<SaveBinding>> formMap = _assocFormSaveBindings.get(formComp);
+		if(formMap==null){
+			formMap = new HashMap<String, Set<SaveBinding>>();
+			_assocFormSaveBindings.put(formComp, formMap);
+		}
+		Set<SaveBinding> bindings = formMap.get(formId);
+		if(bindings==null){
+			bindings = new LinkedHashSet<SaveBinding>();//keep the order
+			formMap.put(formId, bindings);
+		}
+		bindings.add(saveBinding);
+		
+		//keep the reverse association , so we can remove it if the associated component is detached (and the form component is not).
+		Map<SaveBinding,Set<SaveBinding>> reverseMap = _reversedAssocFormSaveBindings.get(associatedComp);
+		if(reverseMap==null){
+			reverseMap = new HashMap<SaveBinding, Set<SaveBinding>>();
+			_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
+		}
+		reverseMap.put(saveBinding,bindings);
+	}
+	
+	private Component lookupAossicatedFormComponent(String formId,Component associatedComp) {
+		Object form = null;
+		Component p = associatedComp;
+		while(p!=null){
+			form = p.getAttribute(formId,Component.COMPONENT_SCOPE);
+			if(form!=null){
+				break;
+			}
+			p = p.getParent();
+		}
+		
+		return p;
+	}
+
+	@Override
+	public Set<SaveBinding> getFormAssociatedSaveBindings(Component comp, String formId){
+		Map<String,Set<SaveBinding>> formMap = _assocFormSaveBindings.get(comp);
+		if(formMap==null){
+			return Collections.emptySet();
+		}
+		Set<SaveBinding> bindings = formMap.get(formId);
+		if(bindings==null){
+			return Collections.emptySet();
+		}
+		return new LinkedHashSet<SaveBinding>(bindings);//keep the order
+	}
+	
 }
