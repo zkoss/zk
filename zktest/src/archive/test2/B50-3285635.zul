@@ -12,7 +12,7 @@
 	<div width="400px" style="border: 1px solid green">
 		<slider hflex="1" />
 	</div>
-	<hlayout>
+	<hlayout valign="middle">
 		<slider orient="vertical" />
 		<slider orient="vertical" width="400px" height="400px" />
 		<div height="400px" hflex="min" style="border: 1px solid green">

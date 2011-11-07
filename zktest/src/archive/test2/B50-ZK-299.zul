@@ -120,12 +120,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		</rows>
 
 	</grid>
-	<button label="change to classic blue">
+	<!-- <button label="change to classic blue">
 		<attribute name="onClick">
 			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "classicblue");
 			Executions.sendRedirect(null);
 		</attribute>
-	</button>
+	</button> -->
 	<button label="change to breeze">
 		<attribute name="onClick">
 			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
