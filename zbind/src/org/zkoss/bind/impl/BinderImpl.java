@@ -1328,17 +1328,18 @@ public class BinderImpl implements Binder {
 		
 		final String bindDualId = getBindDualId(comp, key);
 		final Set<Binding> bindings = new HashSet<Binding>();
-		if(_loadFormPromptBindings.containsKey(bindDualId)){
-			bindings.addAll(_loadFormPromptBindings.remove(bindDualId)); //comp+formid -> bindings (load form _prompt)
+		List<? extends Binding> bindingx;
+		if((bindingx = _loadFormPromptBindings.remove(bindDualId)) !=null){
+			bindings.addAll(bindingx); //comp+formid -> bindings (load form _prompt)
 		}
-		if(_loadPromptBindings.containsKey(bindDualId)){
-			bindings.addAll(_loadPromptBindings.remove(bindDualId)); //comp+_fieldExpr -> bindings (load _prompt)
+		if((bindingx = _loadPromptBindings.remove(bindDualId)) !=null){
+			bindings.addAll(bindingx); //comp+_fieldExpr -> bindings (load _prompt)
 		}
-		if(_loadEventBindings.containsKey(bindDualId)){
-			bindings.addAll(_loadEventBindings.remove(bindDualId)); //comp+evtnm -> bindings (load on event)
+		if((bindingx = _loadEventBindings.remove(bindDualId)) !=null){
+			bindings.addAll(bindingx); //comp+evtnm -> bindings (load on event)
 		}
-		if(_saveEventBindings.containsKey(bindDualId)){
-			bindings.addAll(_saveEventBindings.remove(bindDualId)); //comp+evtnm -> bindings (save on event)
+		if((bindingx = _saveEventBindings.remove(bindDualId)) !=null){
+			bindings.addAll(bindingx); //comp+evtnm -> bindings (save on event)
 		}
 
 		removeBindings(bindings);
