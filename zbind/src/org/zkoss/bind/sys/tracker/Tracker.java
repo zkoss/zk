@@ -13,8 +13,10 @@ package org.zkoss.bind.sys.tracker;
 
 import java.util.Set;
 
+import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
+import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -55,4 +57,22 @@ public interface Tracker {
 	 * @return all LoadBindings that associated with the specified property.
 	 */
 	public Set<LoadBinding> getLoadBindings(Object base, String propName);
+	
+	
+	/**
+	 * Add a tracking between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
+	 * @param associatedComp associated component inside a form binding
+	 * @param formId the form id
+	 * @param saveBinding the nested save binding in side a form binding
+	 */
+	public void addFormSaveBindingTracking(Component associatedComp, String formId, SaveBinding saveBinding);
+	
+	/**
+	 * Get the tracked associated save bindings of a form in a component
+	 * @param formComp the component that contains the form
+	 * @param formId the form id
+	 * @return all nested save binding in the form 
+	 */
+	public Set<SaveBinding> getFormSaveBinding(Component formComp, String formId);
+	
 }

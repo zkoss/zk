@@ -29,12 +29,14 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class FormBindingImpl extends BindingImpl implements FormBinding {
+	final protected String _formId;
 	final protected Form _form;
 	final protected AccessInfo _accessInfo;
 	final private Map<String, ExpressionX> _fieldExprs;
 
-	protected FormBindingImpl(Binder binder, Component comp, Form form, String accessScript, Map<String, Object> args) {
+	protected FormBindingImpl(Binder binder, Component comp, String formId, Form form, String accessScript, Map<String, Object> args) {
 		super(binder, comp, args);
+		this._formId = formId;
 		this._form = form;
 		this._accessInfo = AccessInfo.create(this, accessScript, Form.class, ignoreTracker());
 		_fieldExprs = new HashMap<String, ExpressionX>();
@@ -45,17 +47,17 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return false;
 	}
 	
-	public void addPropertyBinding() { //add associated property binding in this form
-		
-	}
+//	public void addPropertyBinding() { //add associated property binding in this form
+//		
+//	}
 	
 	public Form getFormBean() {
 		return _form;
 	}
 
-//	public String getFormId() {
-//		return _form.getId();
-//	}
+	public String getFormId() {
+		return _formId;
+	}
 
 	public String getPropertyString() {
 		return getPureExpressionString(this._accessInfo.getProperty());

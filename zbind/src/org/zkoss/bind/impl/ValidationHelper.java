@@ -19,8 +19,10 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Form;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.zk.ui.Component;
@@ -222,6 +224,16 @@ import org.zkoss.zk.ui.event.Event;
 	
 	//collect properties form a save-form-binding
 	private void collectSaveFormBinding(Component comp, SaveFormBinding binding, String command, Event evt, Set<Property> validates) {
+		Set<SaveBinding> savebindings = binding.getBinder().getTracker().getFormSaveBinding(binding.getComponent(),binding.getFormId());
+		for(SaveBinding sbinding:savebindings){
+			if(sbinding instanceof SavePropertyBinding){
+				collectSavePropertyBinding(comp,((SavePropertyBinding)sbinding),command,evt,validates);
+			}else{
+				// any other possible to go here?
+			}
+		}
+		
+		
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), evt);
 		
 		Set<Property> cp = new HashSet<Property>();
@@ -252,18 +264,29 @@ import org.zkoss.zk.ui.event.Event;
 	
 	//validate a save-form-binding
 	private boolean validateSaveFormBinding(Component comp, SaveFormBinding binding, String command, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
-		if(!binding.hasValidator()) return true;
+		//validate tracked savebinding
+		Set<SaveBinding> savebindings = binding.getBinder().getTracker().getFormSaveBinding(binding.getComponent(),binding.getFormId());
+		boolean svalid = true;
+		for(SaveBinding sbinding:savebindings){
+			if(sbinding instanceof SavePropertyBinding){
+				svalid &= validateSavePropertyBinding(comp,((SavePropertyBinding)sbinding),command,validates,svalid & valid,notifys);
+			}else{
+				// any other possible to go here?
+			}
+		}
+		if(!binding.hasValidator()) return svalid;
+		
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), null);
 		BindContextUtil.setValidatorArgs(binding.getBinder(), binding.getComponent(), ctx, binding);
 
 		Property p = _mainPropertyCache.get(binding); 
-		ValidationContextImpl vContext = new ValidationContextImpl(command,p,validates,ctx,valid);
+		ValidationContextImpl vContext = new ValidationContextImpl(command,p,validates,ctx,svalid & valid);
 		binding.validate(vContext);
 		final Set<Property> xnotifys = getNotifys(ctx);
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
-		return vContext.isValid();
+		return svalid & vContext.isValid();
 		
 	}
 	

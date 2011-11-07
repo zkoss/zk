@@ -14,10 +14,12 @@ package org.zkoss.bind.tracker.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -28,11 +30,13 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
+import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Primitives;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of dependency tracking.
@@ -44,6 +48,10 @@ public class TrackerImpl implements Tracker {
 	private Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 	private Map<Object, Object> _equalBeanMap = new WeakHashMap<Object, Object>(); //bean -> bean (use to locate proxy bean)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	private Map<Component, Map<String,Set<SaveBinding>>> _formSaveBindingMap = new LinkedHashMap<Component, Map<String, Set<SaveBinding>>>(); //form comp -> fromid -> savebindings
+	
+	//associated comp -> binding -> associated save bindings of _formSaveBindingMap
+	private Map<Component,Map<SaveBinding,Set<SaveBinding>>> _formReversedSaveBindingMap = new LinkedHashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 	
 	public void addTracking(Component comp, String[] series, String[] srcpath, Binding binding) {
 		//Track only LoadBinding
@@ -101,6 +109,19 @@ public class TrackerImpl implements Tracker {
 			}
 			removeNodes(_beanMap.values(), removed);
 			removeNodes(_nullMap.values(), removed);
+		}
+		
+		removeFormTrackings(comp);
+	}
+
+	private void removeFormTrackings(Component comp) {
+		_formSaveBindingMap.remove(comp);
+		Map<SaveBinding,Set<SaveBinding>> associated = _formReversedSaveBindingMap.remove(comp);
+		if(associated!=null){
+			Set<Entry<SaveBinding,Set<SaveBinding>>> entries = associated.entrySet();
+			for(Entry<SaveBinding,Set<SaveBinding>> entry:entries){
+				entry.getValue().remove(entry.getKey());
+			}
 		}
 	}
 
@@ -479,5 +500,58 @@ public class TrackerImpl implements Tracker {
 		char[] spaces = new char[space];
 		Arrays.fill(spaces, ' ');
 		return new String(spaces);
+	}
+	
+	public void addFormSaveBindingTracking(Component associatedComp, String formId, SaveBinding saveBinding){
+		//find the form component by form id and a associated/nested component
+		Component formComp = lookupFormComponent(formId,associatedComp);
+		if(formComp==null){
+			throw new UiException("cannot find any form "+formId+" with "+associatedComp);
+		}
+		Map<String,Set<SaveBinding>> formMap = _formSaveBindingMap.get(formComp);
+		if(formMap==null){
+			formMap = new LinkedHashMap<String, Set<SaveBinding>>();
+			_formSaveBindingMap.put(formComp, formMap);
+		}
+		Set<SaveBinding> bindings = formMap.get(formId);
+		if(bindings==null){
+			bindings = new LinkedHashSet<SaveBinding>();
+			formMap.put(formId, bindings);
+		}
+		bindings.add(saveBinding);
+		
+		//tracking the reverse association , so we can remove it if the associated component is detached (and the form component is not).
+		Map<SaveBinding,Set<SaveBinding>> reverseMaps = _formReversedSaveBindingMap.get(associatedComp);
+		if(reverseMaps==null){
+			reverseMaps = new LinkedHashMap<SaveBinding, Set<SaveBinding>>();
+			_formReversedSaveBindingMap.put(associatedComp, reverseMaps);
+		}
+		reverseMaps.put(saveBinding,bindings);
+	}
+	
+	private Component lookupFormComponent(String formId,Component associatedComp) {
+		Object form = null;
+		Component p = associatedComp;
+		while(p!=null){
+			form = p.getAttribute(formId,Component.COMPONENT_SCOPE);
+			if(form!=null){
+				break;
+			}
+			p = p.getParent();
+		}
+		
+		return p;
+	}
+
+	public Set<SaveBinding> getFormSaveBinding(Component comp, String formId){
+		Map<String,Set<SaveBinding>> formMaps = _formSaveBindingMap.get(comp);
+		if(formMaps==null){
+			return Collections.emptySet();
+		}
+		Set<SaveBinding> bindings = formMaps.get(formId);
+		if(bindings==null){
+			return Collections.emptySet();
+		}
+		return new LinkedHashSet<SaveBinding>(bindings);
 	}
 }

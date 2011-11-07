@@ -36,8 +36,8 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	private int _len;
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
 	
-	public LoadFormBindingImpl(Binder binder, Component comp, Form form, String loadExpr, Map<String, Object> args) {
-		super(binder, comp, form, loadExpr, args);
+	public LoadFormBindingImpl(Binder binder, Component comp, String formId, Form form, String loadExpr, Map<String, Object> args) {
+		super(binder, comp, formId, form, loadExpr, args);
 	}
 
 	public void load(BindContext ctx) {

@@ -353,12 +353,12 @@ public class BinderImpl implements Binder {
 		return uuid;
 	}
 	
-	private void removeBindUuidd(Component comp){
+	private void removeBindUuid(Component comp){
 		comp.removeAttribute(ZBIND_COMP_UUID,Component.COMPONENT_SCOPE);
 	}
 
 	private void addLoadFormBinding(Component comp, String formid, Form form, String loadExpr, Map<String, Object> args) {
-		final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, form, loadExpr, args); 
+		final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formid, form, loadExpr, args); 
 		final String attr = formid;
 		addBinding(comp, attr, binding);
 		
@@ -378,7 +378,7 @@ public class BinderImpl implements Binder {
 
 	private void addSaveFormBinding(Component comp, String formid, Form form, String saveExpr, String validator, Map<String, Object> args, Map<String, Object> validatorArgs) {
 		//register event Command listener 
-		final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, form, saveExpr, validator, args, validatorArgs);
+		final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, validator, args, validatorArgs);
 //		final String formid = form.getId();
 		final String command = binding.getCommandName();
 		if (command == null) {
@@ -1315,7 +1315,7 @@ public class BinderImpl implements Binder {
 		tracker.removeTrackings(comp);
 
 		comp.removeAttribute(BINDER);
-		removeBindUuidd(comp);
+		removeBindUuid(comp);
 	}
 
 	/**

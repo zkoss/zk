@@ -32,6 +32,7 @@ import org.zkoss.zel.impl.lang.ExpressionBuilder;
 import org.zkoss.zel.impl.parser.AstIdentifier;
 import org.zkoss.zel.impl.parser.AstValue;
 import org.zkoss.zel.impl.parser.Node;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Handle value dot series script for Binding.
@@ -76,7 +77,8 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			final List<String> srcpath = bctx != null ? getSrcList(bctx) : null;
 			final String[] srcprops = srcpath != null ? properties(srcpath) : null;
 			//check if a PropertyBinding inside a Form
-			final Object base = binding.getComponent().getAttribute(prop, true);
+			final Component comp = binding.getComponent();
+			final Object base = comp.getAttribute(prop, true);
 			if (base instanceof Form) {
 				final Form formBean = (Form) base;
 				final String fieldName = fieldName(it);
@@ -84,17 +86,18 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 					if (binding instanceof SavePropertyBinding) {
 						log.debug("add save-filed %s to form %s", fieldName,formBean);
 						formBean.addSaveFieldName(fieldName);
+						tracker.addFormSaveBindingTracking(comp, prop,(SavePropertyBinding)binding);
 					} else if (binding instanceof LoadPropertyBinding) {
 						log.debug("add load-filed %s to form %s", fieldName,formBean);
 						formBean.addLoadFieldName(fieldName);
 					}
 					//initialize Tracker per the series (in special Form way)
 					if(dotracker){
-						tracker.addTracking(binding.getComponent(), new String[] {prop, fieldName}, srcprops, binding);
+						tracker.addTracking(comp, new String[] {prop, fieldName}, srcprops, binding);
 					}
 				} else {
 					if(dotracker){
-						tracker.addTracking(binding.getComponent(), new String[] {prop}, srcprops, binding);
+						tracker.addTracking(comp, new String[] {prop}, srcprops, binding);
 					}
 				}
 			
@@ -111,7 +114,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			}
 		}
 	}
-	
+
 	private void visitNode(Node node) {
 		if(_ctx.getBinding()==null) return; //no need to build tracker, we are not in binding expression
 		

@@ -25,11 +25,11 @@ public interface FormBinding extends Binding {
 	 */
 	public Form getFormBean();
 	
-//	/**
-//	 * Returns the associated form id of this Binding.
-//	 * @return the associated attribute name of this component.
-//	 */
-//	public String getFormId();
+	/**
+	 * Returns the associated form id of this Binding.
+	 * @return the associated attribute name of this component.
+	 */
+	public String getFormId();
 	
 	/**
 	 * Returns the associated command name of this binding; null if not speicified.
