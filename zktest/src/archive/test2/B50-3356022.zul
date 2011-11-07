@@ -23,7 +23,7 @@
 				<tabpanels height="125px" hflex="min">
 					<tabpanel height="125px" hflex="min">
 						<groupbox vflex="min" hflex="min">
-							<caption vflex="min" hflex="1"
+							<caption vflex="min" hflex="min"
 								label="Inside Inner Tab One" />
 						</groupbox>
 					</tabpanel>
