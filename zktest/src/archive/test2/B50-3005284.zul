@@ -14,144 +14,144 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <window title="Each region has its content, if you see an empty content within its region that's a bug." border="normal" hflex="min">
-<borderlayout vflex="min" hflex="true">
-<east vflex="min" hflex="min">
-<groupbox vflex="min" hflex="min">
-<caption label="EAST" vflex="min" hflex="min"/>
-<grid height="250px" hflex="min">
-<rows>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-</rows>
-</grid>
-
-</groupbox>
-</east>
-<west vflex="min" hflex="min">
-<groupbox vflex="min" hflex="min">
-<caption label="WEST" vflex="min" hflex="min"/>
-<grid vflex="min" hflex="min">
-<rows>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-</rows>
-</grid>
-
-</groupbox>
-</west>
-<center>
-<groupbox vflex="min" hflex="min">
-<caption label="CENTER" vflex="min" hflex="min"/>
-<grid vflex="min" hflex="min">
-<rows>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-<row>
-<cell>
-itemA
-</cell>
-</row>
-</rows>
-</grid>
-
-</groupbox>
-</center>
-
-</borderlayout>
+	<borderlayout vflex="min" hflex="true">
+		<east vflex="min" hflex="min">
+			<groupbox vflex="min" hflex="min">
+			<caption label="EAST" vflex="min" hflex="min"/>
+				<grid height="250px" hflex="min">
+					<rows>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+					</rows>
+				</grid>
+		
+			</groupbox>
+		</east>
+		<west vflex="min" hflex="min">
+			<groupbox vflex="min" hflex="min">
+			<caption label="WEST" vflex="min" hflex="min"/>
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+					</rows>
+				</grid>
+			
+			</groupbox>
+		</west>
+		<center>
+			<groupbox vflex="min" hflex="min">
+			<caption label="CENTER" vflex="min" hflex="min"/>
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+						<row>
+						<cell>
+						itemA
+						</cell>
+						</row>
+					</rows>
+				</grid>
+			
+			</groupbox>
+		</center>
+	
+	</borderlayout>
 
 
 </window>
