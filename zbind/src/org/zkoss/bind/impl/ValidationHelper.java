@@ -225,7 +225,7 @@ import org.zkoss.zk.ui.event.Event;
 	
 	//collect properties form a save-form-binding
 	private void collectSaveFormBinding(Component comp, SaveFormBinding binding, String command, Event evt, Set<Property> validates) {
-		Set<SaveBinding> savebindings = ((BinderCtrl)binding.getBinder()).getFormAssociatedSaveBindings(binding.getComponent(),binding.getFormId());
+		Set<SaveBinding> savebindings = ((BinderCtrl)binding.getBinder()).getFormAssociatedSaveBindings(binding.getComponent());
 		for(SaveBinding sbinding:savebindings){
 			if(sbinding instanceof SavePropertyBinding){
 				collectSavePropertyBinding(comp,((SavePropertyBinding)sbinding),command,evt,validates);
@@ -266,7 +266,7 @@ import org.zkoss.zk.ui.event.Event;
 	//validate a save-form-binding
 	private boolean validateSaveFormBinding(Component comp, SaveFormBinding binding, String command, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
 		//validate tracked savebinding
-		Set<SaveBinding> savebindings = ((BinderCtrl)binding.getBinder()).getFormAssociatedSaveBindings(binding.getComponent(),binding.getFormId());
+		Set<SaveBinding> savebindings = ((BinderCtrl)binding.getBinder()).getFormAssociatedSaveBindings(binding.getComponent());
 		boolean svalid = true;
 		for(SaveBinding sbinding:savebindings){
 			if(sbinding instanceof SavePropertyBinding){

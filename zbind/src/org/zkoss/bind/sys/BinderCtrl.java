@@ -39,8 +39,7 @@ public interface BinderCtrl {
 	/**
 	 * Get associated save bindings of a form in a component
 	 * @param formComp the component that contains the form
-	 * @param formId the form id
 	 * @return all associated save binding in the form 
 	 */
-	public Set<SaveBinding> getFormAssociatedSaveBindings(Component formComp, String formId);
+	public Set<SaveBinding> getFormAssociatedSaveBindings(Component formComp);
 }

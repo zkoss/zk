@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -127,7 +126,9 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
+	//private control key
 	private static final String ZBIND_COMP_UUID = "$COMPUUID$";
+	private static final String FORM_ID = "$FORM_ID$";
 	
 	//Command lifecycle result
 	private static final int SUCCESS = 0;
@@ -156,7 +157,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private final Map<String, List<SavePropertyBinding>> _saveBeforeBindings; //command -> bindings (save before command)
 	
 	/* the relation of form and inner save-bindings */
-	private Map<Component, Map<String,Set<SaveBinding>>> _assocFormSaveBindings;//form comp -> fromid -> savebindings	
+	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings;//form comp -> savebindings	
 	private Map<Component, Map<SaveBinding,Set<SaveBinding>>> _reversedAssocFormSaveBindings;////associated comp -> binding -> associated save bindings of _formSaveBindingMap
 	
 
@@ -186,7 +187,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		_loadBeforeBindings = new HashMap<String, List<LoadPropertyBinding>>();
 		_saveBeforeBindings = new HashMap<String, List<SavePropertyBinding>>();
 		
-		_assocFormSaveBindings = new HashMap<Component, Map<String, Set<SaveBinding>>>();
+		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 		
 		_listenerMap = new HashMap<String, CommandEventListener>();
@@ -330,8 +331,9 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final ExpressionX idExpr = eval.parseExpressionX(null, idScript, String.class);
 		final String id = (String) eval.getValue(null, comp, idExpr);
 		final Form form = doInitFormBinding(comp,initExpr,args);
-		//after setAttribute, we can access fx in el.
-		comp.setAttribute(id, form);
+		
+		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
+		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
 		for(String loadExpr : loadExprs) {
 			addLoadFormBinding(comp, id, form, loadExpr, args);
 		}
@@ -1517,15 +1519,10 @@ public class BinderImpl implements Binder,BinderCtrl {
 		if(formComp==null){
 			throw new UiException("cannot find any form "+formId+" with "+associatedComp);
 		}
-		Map<String,Set<SaveBinding>> formMap = _assocFormSaveBindings.get(formComp);
-		if(formMap==null){
-			formMap = new HashMap<String, Set<SaveBinding>>();
-			_assocFormSaveBindings.put(formComp, formMap);
-		}
-		Set<SaveBinding> bindings = formMap.get(formId);
+		Set<SaveBinding> bindings = _assocFormSaveBindings.get(formComp);
 		if(bindings==null){
 			bindings = new LinkedHashSet<SaveBinding>();//keep the order
-			formMap.put(formId, bindings);
+			_assocFormSaveBindings.put(formComp, bindings);
 		}
 		bindings.add(saveBinding);
 		
@@ -1539,11 +1536,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	private Component lookupAossicatedFormComponent(String formId,Component associatedComp) {
-		Object form = null;
+		String fid = null;
 		Component p = associatedComp;
 		while(p!=null){
-			form = p.getAttribute(formId,Component.COMPONENT_SCOPE);
-			if(form!=null){
+			fid = (String)p.getAttribute(FORM_ID);//check in default component scope
+			if(fid!=null && fid.equals(formId)){
 				break;
 			}
 			p = p.getParent();
@@ -1553,12 +1550,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 
 	@Override
-	public Set<SaveBinding> getFormAssociatedSaveBindings(Component comp, String formId){
-		Map<String,Set<SaveBinding>> formMap = _assocFormSaveBindings.get(comp);
-		if(formMap==null){
-			return Collections.emptySet();
-		}
-		Set<SaveBinding> bindings = formMap.get(formId);
+	public Set<SaveBinding> getFormAssociatedSaveBindings(Component comp){
+		Set<SaveBinding> bindings = _assocFormSaveBindings.get(comp);
 		if(bindings==null){
 			return Collections.emptySet();
 		}
