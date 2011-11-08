@@ -14,25 +14,50 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<div>The groupboxes below should not overlapped.</div>
+<div>The groupboxes below should not overlapped and have the same height.</div>
+	<custom-attributes org.zkoss.zul.image.preload="true"/>
 	<hbox>
 		<groupbox width="200px" height="200px" open="true">
 			<caption image="/test2/img/inet.png" label="Testing Group Box" />
-			<div style="background:#B8D335" vflex="1">vflex="1"</div>
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
 		</groupbox>
 		<groupbox width="200px" mold="3d" height="200px" open="true">
 			<caption image="/test2/img/inet.png" label="Testing Group Box" />
-			<div style="background:#B8D335" vflex="1">vflex="1"</div>
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" height="200px" open="true" title="Testing Group Box">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="true" title="Testing Group Box">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" height="200px" open="true">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="true">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
 		</groupbox>
 	</hbox>
 	<hbox>
-		<groupbox width="200px" mold="3d" height="200px" open="true">
-			<caption image="/test2/img/inet.png" label="Testing Group Box" />
-			<div style="background:#B8D335" vflex="1">vflex="1"</div>
-		</groupbox>
 		<groupbox width="200px" height="200px" open="true">
 			<caption image="/test2/img/inet.png" label="Testing Group Box" />
-			<div style="background:#B8D335" vflex="1">vflex="1"</div>
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="true">
+			<caption image="/test2/img/inet.png" label="Testing Group Box" />
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" height="200px" open="true" title="Testing Group Box">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="true" title="Testing Group Box">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" height="200px" open="true">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+		</groupbox>
+		<groupbox width="200px" mold="3d" height="200px" open="true">
+			<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
 		</groupbox>
 	</hbox>
 </zk>

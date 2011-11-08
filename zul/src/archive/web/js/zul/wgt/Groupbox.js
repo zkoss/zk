@@ -130,8 +130,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 				var wgt = this,
 					$n = zk(n),
 					fix = function() {
+					// IE6 will count out the height of header in default mold while calculate revisedHeight
+					var fixh = (zk.ie6_ && wgt._isDefault())? jq(wgt.$n()).find('.' + wgt.getZclass() + '-header').height() : 0;
 					// B50-ZK-487: height isuue in the groupbox (with specified caption)
-					n.style.height = $n.revisedHeight($n.vflexHeight(), true) + "px";
+					n.style.height = $n.revisedHeight($n.vflexHeight(), true) + fixh + "px";
 				};
 				fix();
 				if (zk.gecko) setTimeout(fix, 0);
@@ -162,6 +164,27 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					width: wdh || zkp.revisedWidth(p.offsetWidth)};
 	} : function(p) {
 		return this.$supers('getParentSize_', arguments);
+	},
+	// B60-ZK-562: Groupbox vflex=min is wrong
+	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+		var h, 
+			newh = h,
+			margins = zkn.sumStyles("tb", jq.margins);
+		if (isFlexMin && (this.caption || this._title)) {
+			// B60-ZK-562
+			var cave = this.$n('cave'),
+				$cave = jq(cave);
+			h = $cave.outerHeight() + cave.offsetTop;
+		} else
+			h = zkn.revisedHeight(height, true); // excluding margin for F50-3000873.zul and B50-3285635.zul
+		n.style.height = jq.px0(h);
+			
+		// fixed for B50-3317729.zul on webkit
+		if (zk.safari) {
+			margins -= zkn.sumStyles("tb", jq.margins);
+			if (margins) 
+				n.style.height = jq.px0(h + margins);
+		}
 	},
 	//watch//
 	onSize: function () {
