@@ -18,7 +18,7 @@ public class F1 {
 		private String password2;
 		private Date birthday;
 		private boolean isAdult;
-		
+
 		public String getAccount() {
 			return account;
 		}
@@ -52,7 +52,7 @@ public class F1 {
 	}
 
 	private User user = new User();
-	
+
 	public User getUser(){
 		return user;
 	}
@@ -71,13 +71,13 @@ public class F1 {
 				ctx.setInvalid();
 			}
 		}
-		
+
 	}
-	
+
 	public Validator getF1Validator(){
 		return new F1Validator();
 	}
-	
+
 	public class BirthdayAdultConverter implements Converter{
 
 		public Object coerceToUi(Object val, Component component, BindContext ctx) {
@@ -85,29 +85,32 @@ public class F1 {
 		}
 
 		public Object coerceToBean(Object val, Component component, BindContext ctx) {
-			
-			Calendar adultDay = Calendar.getInstance();
-			adultDay.setTime((Date)val);
-			adultDay.add(Calendar.YEAR, 18);
-			Calendar now = Calendar.getInstance();
-			
-			if (now.after(adultDay)){
-				return true;
+
+			boolean isAdult = false;
+			if (val!=null){
+				Calendar adultDay = Calendar.getInstance();
+				adultDay.setTime((Date)val);
+				adultDay.add(Calendar.YEAR, 18);
+				Calendar now = Calendar.getInstance();
+
+				if (now.after(adultDay)){
+					isAdult = true;
+				}
 			}
-			return false;
+			return isAdult;
 		}
 
 	}
-	
+
 	public Converter getBirthdayAdultConverter(){
 		return new BirthdayAdultConverter();
 	}
-	
+
 	@NotifyChange("message")
 	public void register(){
 		System.out.println();
 	}
-	
+
 	public String getMessage(){
 		String message ="";
 		if (user.getAccount()!=null){
