@@ -29,11 +29,11 @@ zul.sel.Listhead = zk.$extends(zul.mesh.HeadWidget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		var list = this.getListbox();
-		if (list) list._syncEmpty();
+		if (list && list.$instanceof(zul.sel.Listbox)) list._syncEmpty();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		var list = this.getListbox();
-		if (list) list._syncEmpty();
+		if (list && list.$instanceof(zul.sel.Listbox)) list._syncEmpty();
 	}
 });
