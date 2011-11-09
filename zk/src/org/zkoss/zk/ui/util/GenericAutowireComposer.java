@@ -117,8 +117,6 @@ import org.zkoss.zk.xel.Evaluator;
  * &lt;/window>
  * </code></pre>
  * 
- * <p>Since 6.0.0, {@link ComponentActivationListener} is no longer implemented
- * by this class.
  * @author henrichen
  * @since 3.0.6
  * @see org.zkoss.zk.ui.Components#wireFellows
