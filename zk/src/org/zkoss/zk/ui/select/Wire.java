@@ -31,4 +31,10 @@ public @interface Wire {
 	 */
 	boolean optional() default false;
 	
+	/**
+	 * If true, the variable will be rewired when the composer is deserialized 
+	 * in cluster environment. Session and Webapp variables are always rewired.
+	 */
+	boolean rewireOnActivate() default false;
+	
 }

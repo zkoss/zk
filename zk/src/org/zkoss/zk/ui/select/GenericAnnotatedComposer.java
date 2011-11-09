@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.GenericComposer;
@@ -49,7 +50,7 @@ import org.zkoss.zk.ui.util.GenericComposer;
  * @author simonpai
  */
 public class GenericAnnotatedComposer<T extends Component> extends GenericComposer<T>
-	implements ComponentCloneListener {
+	implements ComponentCloneListener, ComponentActivationListener {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
@@ -168,5 +169,19 @@ public class GenericAnnotatedComposer<T extends Component> extends GenericCompos
 		// no super
 		Selectors.wireController(comp, this);
 	}
+	
+	@Override
+	public void didActivate(Component comp) {
+		// rewire Session, Webapp and some other variable back, depending on
+		// annotation
+		IdSpace spaceOwner = comp.getSpaceOwner();
+		if(spaceOwner instanceof Page)
+			Selectors.rewireVariables((Page) spaceOwner, this);
+		else
+			Selectors.rewireVariables((Component) spaceOwner, this);
+	}
+	
+	@Override
+	public void willPassivate(Component comp) {} // do nothing
 	
 }

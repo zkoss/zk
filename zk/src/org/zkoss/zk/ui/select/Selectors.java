@@ -22,7 +22,9 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.impl.ComponentIterator;
@@ -115,8 +117,13 @@ public class Selectors {
 	 * @param page the reference page for selector
 	 * @param controller the controller object to be injected with variables
 	 */
-	public static void wireVariables(Page page, Object controller){
-		new Wirer(controller).wireVariables(new PageFunctor(page));
+	public static void wireVariables(Page page, Object controller) {
+		new Wirer(controller, false).wireVariables(new PageFunctor(page));
+	}
+	
+	/*package*/ static void rewireVariables(Page page, Object controller) {
+		// called when activated
+		new Wirer(controller, true).wireVariables(new PageFunctor(page));
 	}
 	
 	/**
@@ -125,8 +132,13 @@ public class Selectors {
 	 * @param component the reference component for selector
 	 * @param controller the controller object to be injected with variables
 	 */
-	public static void wireVariables(Component component, Object controller){
-		new Wirer(controller).wireVariables(new ComponentFunctor(component));
+	public static void wireVariables(Component component, Object controller) {
+		new Wirer(controller, false).wireVariables(new ComponentFunctor(component));
+	}
+	
+	/*package*/ static void rewireVariables(Component component, Object controller) {
+		// called when activated
+		new Wirer(controller, true).wireVariables(new ComponentFunctor(component));
 	}
 	
 	/**
@@ -252,14 +264,16 @@ public class Selectors {
 		private final Object _controller;
 		private final boolean _ignoreXel;
 		private final boolean _ignoreZScript;
+		private final boolean _rewire;
 		
-		private Wirer(Object controller) {
+		private Wirer(Object controller, final boolean rewire) {
 			_controller = controller;
 			Class<?> cls = controller.getClass();
 			WireZScript wz = getAnnotation(cls, WireZScript.class);
 			WireXel wx = getAnnotation(cls, WireXel.class);
 			_ignoreZScript = wz == null || !wz.value();
 			_ignoreXel = wx == null || !wx.value();
+			_rewire = rewire;
 		}
 		
 		private void wireVariables(final PsdoCompFunctor functor) {
@@ -267,13 +281,22 @@ public class Selectors {
 			// wire to fields
 			Reflections.forFields(ctrlClass, Wire.class, new FieldRunner<Wire>(){
 				public void onField(Class<?> clazz, Field field, Wire anno) {
-					if((field.getModifiers() & Modifier.STATIC) != 0)
+					if ((field.getModifiers() & Modifier.STATIC) != 0)
 						throw new UiException("Cannot wire variable to " + 
 								"static field: " + field.getName());
 					
+					Type tp = field.getGenericType();
+					if (_rewire && tp instanceof Class<?>) {
+						Class<?> cls = (Class<?>) tp;
+						if (!anno.rewireOnActivate() && 
+								!Session.class.isAssignableFrom(cls) && 
+								!WebApp.class.isAssignableFrom(cls))
+							return; // skipped, not rewired
+					}
+					
 					String selector = anno.value();
 					boolean optional = anno.optional();
-					if(selector.length() > 0) {
+					if (selector.length() > 0) {
 						injectComponent(field, functor.iterable(selector), optional);
 						return;
 					}
@@ -281,15 +304,15 @@ public class Selectors {
 					// no selector value, wire implicit object by naming convention
 					Object value = 
 						getObjectByName(functor, field.getName(), field.getType());
-					if(value != null) {
+					if (value != null) {
 						Reflections.setFieldValue(_controller, field, value);
 						return;
 					} 
-					if(optional) return;
+					if (optional) return;
 					
 					// no matched Object or Component
 					String name = field.getName();
-					if(name.contains("$")) throw new UiException(
+					if (name.contains("$")) throw new UiException(
 							"GenericAnnotatedComposer does not support " + 
 							"syntax with '$'. Please use selector as alternative.");
 					throw new UiException("Cannot wire variable to field: " + name);
@@ -300,17 +323,25 @@ public class Selectors {
 				public void onMethod(Class<?> clazz, Method method, Wire anno) {
 					// check method signature
 					String name = method.getName();
-					if((method.getModifiers() & Modifier.STATIC) != 0) 
+					if ((method.getModifiers() & Modifier.STATIC) != 0) 
 						throw new UiException("Cannot wire variable by static" + 
 								" method: " + name);
 					Class<?>[] paramTypes = method.getParameterTypes();
-					if(paramTypes.length != 1) 
+					if (paramTypes.length != 1) 
 						throw new UiException("Setter method should have only" + 
 								" one parameter: " + name);
 					
+					if (_rewire) {
+						Class<?> cls = paramTypes[0];
+						if (!anno.rewireOnActivate() && 
+								!Session.class.isAssignableFrom(cls) && 
+								!WebApp.class.isAssignableFrom(cls))
+							return; // skipped, not rewired
+					}
+					
 					String selector = anno.value();
 					// check selector string: nonempty
-					if(selector.length() == 0)
+					if (selector.length() == 0)
 						throw new UiException("Selector is empty on method: " + 
 								method.getName());
 					
@@ -336,14 +367,13 @@ public class Selectors {
 			Class<?> type = injector.getType();
 			boolean isField = injector instanceof FieldFunctor;
 			// Array
-			if(type.isArray()) {
+			if (type.isArray()) {
 				injector.inject(_controller, 
 						generateArray(type.getComponentType(), comps));
 				return;
-				
 			}
 			// Collection
-			if(Collection.class.isAssignableFrom(type)) {
+			if (Collection.class.isAssignableFrom(type)) {
 				
 				Collection collection = null;
 				if(isField) {
@@ -383,7 +413,7 @@ public class Selectors {
 				injector.inject(_controller, c);
 				return;
 			}
-			if(!optional)
+			if (!optional)
 				// failed to inject, throw exception
 				throw new UiException("Failed to inject to field " + 
 						injector.getName() + "on controller " + _controller);

@@ -48,6 +48,7 @@ ZK 6.0.0
   ZK-537: Hlayout supports valign (top, middle and bottom)
   ZK-503: Add a new component, idspace: as light as div but implements IdSpace
   ZK-541: GenericAnnotatedComposer uses annotation to control whether to write zscript and XEL variables 
+  ZK-553: GenericAnnotatedComposer shall implement ComponentActivationListener and rewire Session/WebApp 
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
