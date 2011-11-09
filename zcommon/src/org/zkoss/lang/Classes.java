@@ -1280,8 +1280,6 @@ public class Classes {
 	/** Converts an object to the specified class.
 	 * It is the same as coerce(cls, val, true).
 	 *
-	 * <p>Future: use org.apache.commons.el.Coercions
-	 *
 	 * @param val the value.
 	 * @exception ClassCastException if failed to convert
 	 * @see #coerce(Class, Object, boolean)

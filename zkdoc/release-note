@@ -58,8 +58,6 @@ ZK 6.0.0
   ZK-487: Height isuue in the groupbox (with specified caption)
   ZK-539: Title background not full-filled in groupbox
   ZK-549: Height issue of groupbox 3d mold
-  ZK-554: Cannot delete last 2 List items when using Collection binding with command
-  ZK-561: Nested validation in form issue
   ZK-562: Groupbox vflex=min is wrong (reopen B50-3005284.zul)
 
 * Upgrade Notes
