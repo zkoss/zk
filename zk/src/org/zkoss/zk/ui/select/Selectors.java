@@ -3,6 +3,7 @@
  */
 package org.zkoss.zk.ui.select;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -119,21 +120,6 @@ public class Selectors {
 	}
 	
 	/**
-	 * Wire variables to controller, including components from the page, 
-	 * implicit variables, ZScript variables and XEL variables depending on the
-	 * boolean flags.
-	 * @param page the reference page for selector
-	 * @param controller the controller object to be injected with variables
-	 * @param ignoreZScript if true, ZScript variables are not wired
-	 * @param ignoreXel if true, XEL variables are not wired
-	 */
-	public static void wireVariables(Page page, Object controller, 
-			boolean ignoreZScript, boolean ignoreXel) {
-		new Wirer(controller, ignoreZScript, ignoreXel)
-				.wireVariables(new PageFunctor(page));
-	}
-	
-	/**
 	 * Wire variables to controller, including components, implicit variables, 
 	 * ZScript variables and XEL variables.
 	 * @param component the reference component for selector
@@ -141,20 +127,6 @@ public class Selectors {
 	 */
 	public static void wireVariables(Component component, Object controller){
 		new Wirer(controller).wireVariables(new ComponentFunctor(component));
-	}
-	
-	/**
-	 * Wire variables to controller, including components, implicit variables, 
-	 * ZScript variables and XEL variables depending on the boolean flags.
-	 * @param component the reference component for selector
-	 * @param controller the controller object to be injected with variables
-	 * @param ignoreZScript if true, ZScript variables are not wired
-	 * @param ignoreXel if true, XEL variables are not wired
-	 */
-	public static void wireVariables(Component component, Object controller, 
-			boolean ignoreZScript, boolean ignoreXel) {
-		new Wirer(controller, ignoreZScript, ignoreXel)
-				.wireVariables(new ComponentFunctor(component));
 	}
 	
 	/**
@@ -281,14 +253,13 @@ public class Selectors {
 		private final boolean _ignoreXel;
 		private final boolean _ignoreZScript;
 		
-		private Wirer(Object controller){
-			this(controller, true, true);
-		}
-		
-		private Wirer(Object controller, boolean ignoreZScript, boolean ignoreXel){
+		private Wirer(Object controller) {
 			_controller = controller;
-			_ignoreZScript = ignoreZScript;
-			_ignoreXel = ignoreXel;
+			Class<?> cls = controller.getClass();
+			WireZScript wz = getAnnotation(cls, WireZScript.class);
+			WireXel wx = getAnnotation(cls, WireXel.class);
+			_ignoreZScript = wz == null || !wz.value();
+			_ignoreXel = wx == null || !wx.value();
 		}
 		
 		private void wireVariables(final PsdoCompFunctor functor) {
@@ -485,6 +456,18 @@ public class Selectors {
 			}
 		}
 		
+	}
+	
+	private static <A extends Annotation> A getAnnotation(Class<?> ctrlClass, 
+			Class<A> annoClass) {
+		Class<?> cls = ctrlClass;
+		while (cls != null && !cls.equals(GenericAnnotatedComposer.class)) {
+			A anno = cls.getAnnotation(annoClass);
+			if (anno != null)
+				return anno;
+			cls = cls.getSuperclass();
+		}
+		return null;
 	}
 	
 	private static boolean isValidValue(Object value, Class<?> clazz){

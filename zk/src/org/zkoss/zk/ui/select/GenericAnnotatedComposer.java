@@ -57,17 +57,6 @@ public class GenericAnnotatedComposer<T extends Component> extends GenericCompos
 		ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	
 	private Component _self;
-	private final boolean _ignoreZScript;
-	private final boolean _ignoreXel;
-	
-	protected GenericAnnotatedComposer(){
-		this(true, true);
-	}
-	
-	protected GenericAnnotatedComposer(boolean ignoreZScript, boolean ignoreXel){
-		_ignoreZScript = ignoreZScript;
-		_ignoreXel = ignoreXel;
-	}
 	
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
@@ -169,11 +158,9 @@ public class GenericAnnotatedComposer<T extends Component> extends GenericCompos
 	private void autowire(Component comp){
 		IdSpace spaceOwner = comp.getSpaceOwner();
 		if(spaceOwner instanceof Page)
-			Selectors.wireVariables(
-					(Page) spaceOwner, this, _ignoreZScript, _ignoreXel);
+			Selectors.wireVariables((Page) spaceOwner, this);
 		else
-			Selectors.wireVariables(
-					(Component) spaceOwner, this, _ignoreZScript, _ignoreXel);
+			Selectors.wireVariables((Component) spaceOwner, this);
 	}
 	
 	@Override

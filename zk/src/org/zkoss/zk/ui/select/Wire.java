@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for specifying components or objects to wire in 
- * GenericAnnotatedComposer.
+ * @{GenericAnnotatedComposer}.
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)
