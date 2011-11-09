@@ -15,6 +15,6 @@ Test listbox + constraint:
 </listbox>
 <button label="show" onClick='throw new WrongValueException(mylistbox,
 "error")'/>
-<button label="close" onClick="Clients.closeErrorBox(mylistbox)"/>
+<button label="close" onClick="Clients.clearWrongValue(mylistbox)"/>
 <button label="toggle" onClick="mylistbox.visible = !mylistbox.visible"/>
 </vbox>

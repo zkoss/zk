@@ -27,7 +27,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client"
 	w:onClose="this.cancel()" w:max="${arg.max}">
 	<label value="${arg.message}"/>
 	<fileupload id="fileupload" forward="onUpload=" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
-		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
+		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg['native'] ? ',native':''}"/>
 	<separator bar="true"/>
 	<div id="uploaded" visible="false"></div>
 	<div id="btns">

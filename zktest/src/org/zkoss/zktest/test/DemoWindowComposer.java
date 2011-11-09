@@ -49,7 +49,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		((Window)comp).setContentSclass("demo-main-cnt");
 		((Window)comp).setSclass("demo-main");
 		final Div inc = new Div();
-		Executions.createComponents("/bar.zul", inc, null);
+		//Executions.createComponents("/bar.zul", inc, null);
 		inc.setStyle("float:right");
 		comp.insertBefore(inc, comp.getFirstChild());
 		if (view != null) execute();
