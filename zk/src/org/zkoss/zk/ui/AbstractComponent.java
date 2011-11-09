@@ -593,9 +593,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	public String getUuid() {
 		if (_uuid == null) {
-			final Execution exec = Executions.getCurrent();
-			_uuid = exec == null ?
-				ANONYMOUS_ID: nextUuid(exec.getDesktop());
+			final Execution exec = _page != null ? Executions.getCurrent(): null;
+			_uuid = exec == null ? ANONYMOUS_ID: nextUuid(exec.getDesktop());
 		}
 		return _uuid;
 	}
