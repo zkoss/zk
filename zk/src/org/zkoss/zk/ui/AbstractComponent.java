@@ -3328,7 +3328,7 @@ w:use="foo.MyWindow"&gt;
 				clone.listeners = new HashMap<String, List<EventListenerInfo>>(4);
 				for (Map.Entry<String, List<EventListenerInfo>> me: listeners.entrySet()) {
 					final List<EventListenerInfo> list = new LinkedList<EventListenerInfo>();
-					for (EventListenerInfo val: list) {
+					for (EventListenerInfo val: me.getValue()) {
 						if (val instanceof ComponentCloneListener) {
 							val = (EventListenerInfo)((ComponentCloneListener)val).willClone(owner);
 							if (val == null) continue; //don't use it in clone
