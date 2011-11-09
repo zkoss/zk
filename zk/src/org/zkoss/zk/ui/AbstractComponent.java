@@ -488,11 +488,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//assert D.OFF || _parent == null || _parent.getPage() == page;
 		//detach
 		final boolean bRoot = _parent == null;
+		boolean resetUuid = false;
 		if (_page != null) {
 			if (bRoot) ((AbstractPage)_page).removeRoot(this);
 			if (page == null
 			&& ((DesktopCtrl)_page.getDesktop()).removeComponent(this, true))
-				_uuid = null; //recycled (so reset it -- refer to DesktopImpl for reason)
+				resetUuid = true; //recycled (so reset it -- refer to DesktopImpl for reason)
 		}
 
 		final Page oldpage = _page;
@@ -518,7 +519,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
 			p.setPage0(page); //recursive
-	}
+
+ 		if (resetUuid)
+ 			_uuid = null; //reset it after everything is done since some tool might depend on it
+ 	}
 
 	private String nextUuid(Desktop desktop) {
 		Set<String> gened = null;
