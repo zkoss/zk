@@ -1258,10 +1258,7 @@ zk.log('value is", value);
 
 	if (bodycls)
 		jq(function () {
-			var n = document.body,
-				cn = n.className;
-			if (cn) cn += ' ';
-			n.className = cn + bodycls;
+			jq(document.body).addClass(bodycls);
 		});
 })();
 

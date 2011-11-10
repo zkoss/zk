@@ -274,7 +274,7 @@ zWatch = (function () {
 	function _visiChildSubset(name, xinfs, p, remove) {
 		var found = [], bindLevel = p.bindLevel,
 			cache = _visiEvts[name] && {}, pvisible;
-			if (p.isWatchable_) //in future, w might not be a widget
+		if (p.isWatchable_) //in future, w might not be a widget
 			for (var j = xinfs.length; j--;) {
 				var xinf = xinfs[j],
 					o = xinf[0],

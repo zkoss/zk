@@ -13,6 +13,22 @@ This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	//handle theme
+	jq(function () {
+		var cookies = document.cookie.split(";"),
+			len = cookies.length,
+			tname = 'breeze'; // shall sync with default theme name
+		for (var i = 0, c, j; i < len; i++) {
+			c = cookies[i];
+			j = c.indexOf("=");
+			if ("zktheme" == jq.trim(c.substr(0, j))) { // shall sync with zkplus Themes.java
+				tname = jq.trim(c.substr(j+1));
+				break;
+			}
+		}
+		jq(document.body).addClass(tname);
+	});
+
 	var $alert = jq.alert,
 		icons = {QUESTION: "z-msgbox z-msgbox-question",
 			EXCLAMATION: "z-msgbox z-msgbox-exclamation",
