@@ -49,6 +49,31 @@ public class AnnotationHelper {
 	/** A list of AnnotInfo */
 	final List<AnnotInfo> _annots = new LinkedList<AnnotInfo>();
 
+	/** Test if the given value is an annotation.
+	 * In other words, it returns true if the value matches
+	 * one of two kinds of format described in {@link #addByCompoundValue}.
+	 * @param val the value.
+	 * @since 6.0.0
+	 */
+	public static boolean isAnnotation(String val) {
+		int len = val.length();
+		if (len >= 4) {
+			len = (val = val.trim()).length();
+			if (len >= 4 && val.charAt(0) == '@') {
+				if (val.charAt(1) == '{') {
+					if (val.charAt(len - 1) == '}') //format 1
+						return true;
+				} else if (val.charAt(len - 1) == ')' && val.indexOf('(', 1) > 0) {
+					final char cc = val.charAt(Strings.skipWhitespaces(val, 1));
+					return (cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z')
+						|| (cc >= '0' && cc <= '9') || cc == '_' || cc == '$';
+					//we have to be conserative since a non-annotation value might carry @
+				}
+			}
+		}
+		return false;
+	}
+
 	/** Adds an annotation definition.
 	 * The annotation's attributes must be parsed into a map (annotAttrs).
 	 *

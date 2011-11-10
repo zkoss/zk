@@ -861,7 +861,7 @@ public class Parser {
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						if (!bNativeContent
-						&& isAttrAnnot(attvaltrim = attval.trim())) { //annotation
+						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
 							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
@@ -945,22 +945,6 @@ public class Parser {
 			//Note: nativeInfo can not be a child. Rather, it will be a property
 		parseItems(pgdef, nativeInfo, items, annHelper, true);
 		compInfo.addProperty(name, nativeInfo, cond);
-	}
-	/** @param val the value (it was trimmed before called). */
-	private static boolean isAttrAnnot(String val) {
-		final int len = val.length();
-		if (len >= 4 && val.charAt(0) == '@') {
-			if (val.charAt(1) == '{') {
-				if (val.charAt(len - 1) == '}') //format 1
-					return true;
-			} else if (val.charAt(len - 1) == ')' && val.indexOf('(', 1) > 0) {
-				final char cc = val.charAt(Strings.skipWhitespaces(val, 1));
-				return (cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z')
-					|| (cc >= '0' && cc <= '9') || cc == '_' || cc == '$';
-				//we have to be conserative since a non-annotation value might carry @
-			}
-		}
-		return false;
 	}
 	/** @param val the value (it was trimmed before called). */
 	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
@@ -1098,7 +1082,7 @@ public class Parser {
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
 			} else if (parent instanceof ComponentInfo
-			&& isAttrAnnot(attvaltrim = attval.trim())) {
+			&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
