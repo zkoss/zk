@@ -369,33 +369,21 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (w = run.nextwgt) zWatch.fireDown('beforeSize', w);
 		if (w = run.prevwgt) zWatch.fireDown('beforeSize', w);
-
-		// B50-ZK-514: The splitter issue occurs after dragging splitter several times
-		var ns = 0,
-			oriPrev,
-			realDiff;
-		if (w = run.prev) {
-			var $w = jq(w);
-			oriPrev = fd == "height"? $w.height() : $w.width();
-			var s = zk.parseInt(w.style[fd]);
-			s += diff;
-			if (s < 0) s = 0;
-			w.style[fd] = s + "px";
-
-			realDiff = (fd == "height"? $w.height() : $w.width()) - oriPrev;
-			if (realDiff != diff) {
-				s = s - (diff - realDiff);
-				diff = realDiff;
-				w.style[fd] = s + "px";
-			}
-			if (bfcolps) w.style.overflow = 'hidden';
-		}
+		
+		var ns = 0;
 		if (w = run.next) {
 			var s = zk.parseInt(w.style[fd]);
 			s -= diff;
 			if (s < 0) s = 0;
 			w.style[fd] = s + "px";
 			if (!bfcolps) w.style.overflow = 'hidden';
+		}
+		if (w = run.prev) {
+			var s = zk.parseInt(w.style[fd]);
+			s += diff;
+			if (s < 0) s = 0;
+			w.style[fd] = s + "px";
+			if (bfcolps) w.style.overflow = 'hidden';
 		}
 
 		if (w = run.nextwgt)
