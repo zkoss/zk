@@ -273,15 +273,20 @@ zWatch = (function () {
 	//Returns subset of xinfs that are visible and childrens of p
 	function _visiChildSubset(name, xinfs, p, remove) {
 		var found = [], bindLevel = p.bindLevel,
-			cache = _visiEvts[name] && {};
-		if (p.isWatchable_ //in future, w might not be a widget
-		&& (!cache || p._visible)) //quick test visible (real-visible will be check in isWatchable_)
+			cache = _visiEvts[name] && {}, pvisible;
+		if (p.isWatchable_) //in future, w might not be a widget
 			for (var j = xinfs.length; j--;) {
 				var xinf = xinfs[j],
 					o = xinf[0],
 					diff = bindLevel > o.bindLevel;
 				if (diff) //neither ancestor, nor this (nor sibling)
 					break;
+
+				if (!pvisible && cache) { //not cached yet
+					if (!(pvisible = _visible(name, p))) //check p first (since _visibleChild checks only o)
+						break; //p is NOT visible
+					cache[p.uuid] = true; //cache result to speed up _visiChild
+				}
 
 				if (_visibleChild(name, p, o, cache)) {
 					if (remove)
