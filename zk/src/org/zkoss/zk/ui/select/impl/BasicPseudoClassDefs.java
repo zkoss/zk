@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * The default set of pseudo classes in Selector.
+ * @since 6.0.0
  * @author simonpai
  */
 public class BasicPseudoClassDefs {

@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * A wrapper of Component, providing a context for selector matching algorithm.
+ * @since 6.0.0
  * @author simonpai
  */
 public class ComponentMatchCtx {

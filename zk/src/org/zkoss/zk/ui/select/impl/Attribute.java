@@ -6,6 +6,7 @@ package org.zkoss.zk.ui.select.impl;
 /**
  * The model representing an attribute in Selector.
  * @author simonpai
+ * @since 6.0.0
  */
 public class Attribute {
 	

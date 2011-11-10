@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation for specifying components or objects to wire in 
  * @{GenericAnnotatedComposer}.
+ * @since 6.0.0
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)

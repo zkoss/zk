@@ -17,6 +17,7 @@ import java.util.Set;
 
 /**
  * A collection of reflection utilities.
+ * @since 6.0.0
  * @author simonpai
  */
 public class Reflections {

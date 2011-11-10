@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * A context for a State in a StateMachine, holding returning and transition
  * information.
+ * @since 6.0.0
  * @author simonpai
  */
 public class StateCtx<E, C, IN> {

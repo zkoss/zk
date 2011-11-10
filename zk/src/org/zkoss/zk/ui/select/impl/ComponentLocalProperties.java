@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * A collection of utilities that check local properties of Components. 
  * Including type, ID, class, attribute, and pseudo class.
+ * @since 6.0.0
  * @author simonpai
  */
 public class ComponentLocalProperties {

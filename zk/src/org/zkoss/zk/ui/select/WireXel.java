@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation for specifying to wire XEL context when auto-wiring in 
  * @{GenericAnnotatedComposer}.
+ * @since 6.0.0
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)

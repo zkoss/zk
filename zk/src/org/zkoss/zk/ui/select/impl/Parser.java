@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.select.impl.Token.Type;
 
 /**
  * A parser that parses selector string and generates selector objects.
+ * @since 6.0.0
  * @author simonpai
  */
 public class Parser {

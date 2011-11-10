@@ -46,7 +46,7 @@ import org.zkoss.zk.ui.util.GenericComposer;
  *     
  * }
  * </code></pre>
- * 
+ * @since 6.0.0
  * @author simonpai
  */
 public class GenericAnnotatedComposer<T extends Component> extends GenericComposer<T>

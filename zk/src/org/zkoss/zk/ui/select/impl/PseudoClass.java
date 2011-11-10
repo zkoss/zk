@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * The model representing a pseudo class in Selector
+ * @since 6.0.0
  * @author simonpai
  */
 public class PseudoClass {

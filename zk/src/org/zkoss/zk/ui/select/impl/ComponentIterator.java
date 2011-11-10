@@ -17,6 +17,7 @@ import org.zkoss.zk.ui.select.impl.Selector.Combinator;
  * An implementation of Iterator&lt;Component> that realizes the selector matching
  * algorithm. The iteration is lazily evaluated. i.e. The iterator will not
  * perform extra computation until .next() is called.
+ * @since 6.0.0
  * @author simonpai
  */
 public class ComponentIterator implements Iterator<Component> {

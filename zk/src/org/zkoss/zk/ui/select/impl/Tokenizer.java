@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.select.impl.Token.Type;
 
 /**
  * A tokenizer of selector string.
+ * @since 6.0.0
  * @author simonpai
  */
 public class Tokenizer {

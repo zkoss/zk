@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * A collection of selector related utilities. 
+ * @since 6.0.0
  * @author simonpai
  */
 public class Selectors {

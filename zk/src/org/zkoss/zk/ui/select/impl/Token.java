@@ -5,6 +5,7 @@ package org.zkoss.zk.ui.select.impl;
 
 /**
  * The model of Selector token.
+ * @since 6.0.0
  * @author simonpai
  */
 public class Token {

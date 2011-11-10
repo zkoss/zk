@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * The model representing a selector.
+ * @since 6.0.0
  * @author simonpai
  */
 public class Selector extends ArrayList<SimpleSelectorSequence> {

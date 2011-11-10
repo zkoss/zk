@@ -14,6 +14,7 @@ import org.zkoss.zk.ui.select.impl.Selector.Combinator;
 
 /**
  * The model representing a sequence of simple selectors.
+ * @since 6.0.0
  * @author simonpai
  */
 public class SimpleSelectorSequence {

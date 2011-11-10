@@ -7,6 +7,7 @@ import org.zkoss.zk.ui.UiException;
 
 /**
  * Exception thrown for illegal selector string.
+ * @since 6.0.0
  * @author simonpai
  */
 public class ParseException extends UiException {

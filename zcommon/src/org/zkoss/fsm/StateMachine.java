@@ -11,6 +11,7 @@ import java.util.Map;
  * A Finite State Machine implementation. This state machine is callback based,
  * which differs from the standard FSM from textbook. Easier to use and faster 
  * to develop and debug.
+ * @since 6.0.0
  * @author simonpai
  */
 public abstract class StateMachine<E, C, IN> {
