@@ -12,6 +12,7 @@ ZK 5.0.10
   ZK-546: When HTTP session is deserialized, it failed to create session-scoped bean in composer
   ZK-535: Missing border of listheader (classicblue, IE8 only)
   ZK-543: Height issue of listbox when sizedByContent is true
+  ZK-563: Reopen bug in B50-ZK-371.zul
 
 	--------
 ZK 5.0.9
