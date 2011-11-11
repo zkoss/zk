@@ -2926,6 +2926,14 @@ unbind_: function (skipper, after) {
 	afterResetChildSize_: function() {
 		//to be overridden, after my children reset the size of (both width and height)
 	},
+	isExcludedHflex_: function () {
+		return false;
+		//to be overridden, if the widget is excluded for hflex calculation.
+	},
+	isExcludedVflex_: function () {
+		return false;
+		//to be overridden, if the widget is excluded for hflex calculation.
+	},
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
 	getChildMinSize_: function (attr, wgt) { //'w' for width or 'h' for height

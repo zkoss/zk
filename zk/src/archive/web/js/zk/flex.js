@@ -448,10 +448,10 @@ zFlex = { //static methods
 						hflexs.push(cwgt);
 						hflexsz += cwgt._nhflex;
 					}
-				} else {
+				} else if (!cwgt || !cwgt.isExcludedHflex_()) {
 					wdh -= offwdh;
 					wdh -= zkc.sumStyles("lr", jq.margins);
-				}
+    			}
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -466,10 +466,11 @@ zFlex = { //static methods
 						vflexs.push(cwgt);
 						vflexsz += cwgt._nvflex;
 					}
-				} else {			
+				} else if (!cwgt || !cwgt.isExcludedVflex_()) {			
 					hgh -= offhgh;
 					hgh -= zkc.sumStyles("tb", jq.margins);
 				}
+				
 				pretxt = false;
 			}
 		}
@@ -479,10 +480,12 @@ zFlex = { //static methods
 		var lastsz = hgh = Math.max(hgh, 0);
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			var cwgt = vflexs.shift(), 
-				vsz = (cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
+				vsz = cwgt.isExcludedVflex_() ? hgh :
+						(cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({height:vsz});
 			cwgt._vflexsz = vsz;
-			lastsz -= vsz;
+			if (!cwgt.isExcludedVflex_())
+				lastsz -= vsz;
 		}
 		//last one with vflex
 		if (vflexs.length) {
@@ -501,10 +504,11 @@ zFlex = { //static methods
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
-				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
+				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({width:hsz});
 			cwgt._hflexsz = hsz;
-			lastsz -= hsz;
+			if (!cwgt.isExcludedHflex_())
+				lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
