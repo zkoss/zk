@@ -2932,7 +2932,7 @@ unbind_: function (skipper, after) {
 	},
 	isExcludedVflex_: function () {
 		return false;
-		//to be overridden, if the widget is excluded for hflex calculation.
+		//to be overridden, if the widget is excluded for vflex calculation.
 	},
 	// to overridden this method have to fix the IE9 issue (ZK-483)
 	// you can just add 1 px more for the offsetWidth
