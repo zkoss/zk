@@ -133,7 +133,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					// IE6 will count out the height of header in default mold while
 					// calculate revisedHeight if vflex != min
 					var fixh = 0;
-					if (zk.ie6_ && wgt._isDefault()) {
+					if (zk.ie6_ && wgt._isDefault() && (wgt.caption || wgt._title)) {
 						if (wgt.getVflex() != 'min')
 							fixh = jq(wgt.$n()).find('.' + wgt.getZclass() + '-header').height();
 						if (!wgt.caption)
