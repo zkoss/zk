@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for specifying Event handling in @{GenericAnnotatedComposer}.
+ * Annotation for specifying Event handling in @link{GenericAnnotatedComposer}.
  * @since 6.0.0
  * @author simonpai
  */
