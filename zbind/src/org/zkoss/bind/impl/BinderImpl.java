@@ -164,6 +164,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private final Map<String, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
 	private final String _quename;
 	private final String _quescope;
+	private final EventListener<Event> _queueListener;
 	
 	//flag to keep info of current vm has converter method or not
 	private boolean _hasGetConverterMethod = true;
@@ -203,7 +204,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		
 		//subscribe change listener
-		subscribeChangeListener(_quename, _quescope, new EventListener<Event>() {
+		subscribeChangeListener(_quename, _quescope, _queueListener = new EventListener<Event>() {
 			public void onEvent(Event event) throws Exception {
 				//only when a event in queue is our event
 				if(event instanceof PropertyChangeEvent){
@@ -1311,6 +1312,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 	 * @param comp the component
 	 */
 	public void removeBindings(Component comp) {
+		if(_rootComp==comp){
+			//the binder component was detached, unregister queue
+			unsubscribeChangeListener(_quename, _quescope, _queueListener);
+		}
+		
 		final Map<String, List<Binding>> attrMap = _bindings.remove(comp);
 		if (attrMap != null) {
 			final Set<Binding> removed = new HashSet<Binding>();
@@ -1455,9 +1461,16 @@ public class BinderImpl implements Binder,BinderCtrl {
 		_phaseListener = listener;
 	}
 
-	public void subscribeChangeListener(String quename, String quescope, EventListener<Event> listener) {
+	private void subscribeChangeListener(String quename, String quescope, EventListener<Event> listener) {
 		EventQueue<Event> que = EventQueues.lookup(quename, quescope, true);
 		que.subscribe(listener);
+	}
+	
+	private void unsubscribeChangeListener(String quename, String quescope, EventListener<Event> listener) {
+		EventQueue<Event> que = EventQueues.lookup(quename, quescope, false);
+		if(que!=null){
+			que.unsubscribe(listener);
+		}
 	}
 	
 	private class PropertyChangeEvent extends Event {
