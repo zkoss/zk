@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @since Composer
  * @see FullComposer
  */
-public interface ComposerExt {
+public interface ComposerExt<T extends Component> {
 	/** Invokes before composing a component.
 	 * If you want to manipulate the specified component info,
 	 * you can use {@link ComponentInfo#duplicate} to make a copy and then
@@ -52,7 +52,7 @@ public interface ComposerExt {
 	 * before composing any child.
 	 * @param comp the component being composed
 	 */
-	public void doBeforeComposeChildren(Component comp) throws Exception;
+	public void doBeforeComposeChildren(T comp) throws Exception;
 	/** Called when an exception occurs when composing the component.
 	 *
 	 * <p>If you don't want to handle the exception, simply returns false.

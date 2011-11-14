@@ -68,7 +68,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @since 3.0.1
  */
 abstract public class GenericComposer<T extends Component> extends GenericEventListener
-implements Composer<T>, ComposerExt, java.io.Serializable {
+implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	protected String _applied; //uuid of the applied component (for serialization back)
 	
@@ -91,7 +91,7 @@ implements Composer<T>, ComposerExt, java.io.Serializable {
 	}
 
 	//since 3.6.1
-	public void doBeforeComposeChildren(Component comp) throws Exception {
+	public void doBeforeComposeChildren(T comp) throws Exception {
 		//assign this composer as a variable
 		//feature #2778508
 		Components.wireController(comp, this);

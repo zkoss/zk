@@ -129,7 +129,8 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 			}
 		return compInfo;
 	}
-	public void doBeforeComposeChildren(Component comp) throws Exception {
+	@SuppressWarnings("unchecked")
+	public void doBeforeComposeChildren(T comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
 				((ComposerExt)_cs[j]).doBeforeComposeChildren(comp);
@@ -148,7 +149,7 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 	}
 }
 /*package*/ class MultiComposerExt<T extends Component>
-extends MultiComposer<T> implements ComposerExt {
+extends MultiComposer<T> implements ComposerExt<T> {
 	/*package*/ MultiComposerExt(Composer<T>[] cs) throws Exception {
 		super(cs);
 	}
@@ -160,7 +161,7 @@ extends MultiComposer<T> implements FullComposer {
 	}
 }
 /*package*/ class MultiFullComposerExt<T extends Component>
-extends MultiFullComposer<T> implements ComposerExt {
+extends MultiFullComposer<T> implements ComposerExt<T> {
 	/*package*/ MultiFullComposerExt(Composer<T>[] cs) throws Exception {
 		super(cs);
 	}

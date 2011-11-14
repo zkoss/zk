@@ -810,8 +810,7 @@ public class UiEngineImpl implements UiEngine {
 			if (bNative)
 				setProlog(ci, child, (NativeInfo)childInfo);
 
-			if (composerExt != null)
-				composerExt.doBeforeComposeChildren(child);
+			doBeforeComposeChildren(composerExt, child);
 			ci.doBeforeComposeChildren(child, bRoot);
 
 			execCreate(ci, childInfo, child, null); //recursive (and appendChild)
@@ -862,6 +861,14 @@ public class UiEngineImpl implements UiEngine {
 			}
 		}
 	}
+	@SuppressWarnings("unchecked")
+	/*package*/ static
+	void doBeforeComposeChildren(ComposerExt composerExt, Component comp)
+	throws Exception {
+		if (composerExt != null)
+			composerExt.doBeforeComposeChildren(comp);
+	}
+
 	/** Handles <zk switch>. */
 	private static Component[] execSwitch(CreateInfo ci, ZkInfo switchInfo,
 	Component parent, Component insertBefore) {
@@ -2560,14 +2567,12 @@ public class UiEngineImpl implements UiEngine {
 		if (_composerExts != null)
 			for (Composer composer: _composerExts) {
 				final boolean old = beforeInvoke(composer, bRoot);
-
-				((ComposerExt)composer).doBeforeComposeChildren(comp);
-
+				UiEngineImpl.doBeforeComposeChildren((ComposerExt)composer, comp);
 				afterInvoke(composer, bRoot, old);
 			}
 
 		if (bRoot && _syscomposer instanceof ComposerExt)
-			((ComposerExt)_syscomposer).doBeforeComposeChildren(comp);
+			UiEngineImpl.doBeforeComposeChildren((ComposerExt)_syscomposer, comp);
 	}
 	/*package*/ boolean doCatch(Throwable ex, boolean bRoot) {
 		if (_composerExts != null)
