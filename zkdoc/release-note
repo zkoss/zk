@@ -148,6 +148,7 @@ ZK 5.0.10
   ZK-535: Missing border of listheader (classicblue, IE8 only)
   ZK-543: Height issue of listbox when sizedByContent is true
   ZK-576: Panel with vflex=1 cannot fit to the height of Portalchildren (reopen B50-3303725.zul) 
+  ZK-569: Select Item doesn't work as expected if the listitems containing non visible list items
 
 	--------
 ZK 5.0.9

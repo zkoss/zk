@@ -462,7 +462,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 			else
 				doModal();
 		} else if ("highlighted".equals(name)) doHighlighted();
-		else throw new WrongValueException("Uknown mode: "+name);
+		else throw new WrongValueException("Unknown mode: "+name);
 	}
 	/** Sets the mode to overlapped, popup, modal, embedded or highlighted.
 	 *

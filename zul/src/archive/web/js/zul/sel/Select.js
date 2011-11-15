@@ -61,17 +61,22 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 * the given index.
 		 * @param int selectedIndex
 		 */
-		selectedIndex: function (selectedIndex) {
+		selectedIndex: function (selectedIndex, opts) {
 			var i = 0, j = 0, w, n = this.$n();
 			this.clearSelection();
-			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
-				if (w.$instanceof(zul.sel.Option)) {
-    				if (!w.isVisible())
-    					j++;
-				} else i--;			
+			// B50-ZK-569: Select Item doesn't work as expected if
+			// the listitems containing non visible list items
+			// only set selected by API have to fix index
+			if (!(opts && opts.skipFixIndex)) {
+				for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
+					if (w.$instanceof(zul.sel.Option)) {
+	    				if (!w.isVisible())
+	    					j++;
+					} else i--;			
+				}
+					
+				selectedIndex -= j;
 			}
-				
-			selectedIndex -= j;
 			if (n)
 				n.selectedIndex = selectedIndex;
 
@@ -275,7 +280,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			if (this._selectedIndex == v)
 				return;
 
-			this.setSelectedIndex(v);
+			this.setSelectedIndex(v, {skipFixIndex: true});
 			data.push(reference = n.options[v].id);
 		}
 

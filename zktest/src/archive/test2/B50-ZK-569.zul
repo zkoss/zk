@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-569.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 14 15:47:46 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<hbox>
+<div width="20px">1.</div><label value="Select item 'test 7'" />
+</hbox>
+<separator/>
+<hbox>
+<div width="20px">2.</div><label value="Click button 'show selection', you should see a message box contains" />
+</hbox>
+<separator/>
+<hbox>
+<div width="20px"></div><label value="Selected index: 10, label of selected item: test 7" />
+</hbox>
+<separator/>
+<hbox>
+<div width="20px">3.</div><label value="Click 'OK' to close the message box then Click button 'set 333 selected'" />
+</hbox>
+<separator/>
+<hbox>
+<div width="20px">4.</div><label value="Click button 'show selection', you should see a message box contains" />
+</hbox>
+<separator/>
+<hbox>
+<div width="20px"></div><label value="Selected index: 4, label of selected item: test 333" />
+</hbox>
+<separator/>
+	<div>
+		<listbox id="lb" mold="select">
+			<listitem label="test 1" visible="false"/>
+			<listitem label="test 2" visible="false"/>
+			<listitem label="test 3"/>
+			<listitem label="test 33"/>
+			<listitem id="fff" label="test 333"/>
+			<listitem label="test 3333"/>
+			<listitem label="test 4" visible="false"/>
+			<listitem label="test 5"/>
+			<listitem label="test 555"/>
+			<listitem label="test 6" visible="false"/>
+			<listitem label="test 7"/>
+			<listitem label="test 7555"/>
+			<listitem label="test 8" visible="false"/>
+		</listbox>
+		<button label="show selection">
+			<attribute name="onClick">
+				alert("Selected index: " + lb.getSelectedIndex() + ", label of selected item: " + lb.getSelectedItem().getLabel());
+			</attribute>
+		</button>
+		<button label="set 333 selected">
+			<attribute name="onClick">
+				lb.setSelectedItem(fff);
+			</attribute>
+		</button>
+	</div>
+</zk>
