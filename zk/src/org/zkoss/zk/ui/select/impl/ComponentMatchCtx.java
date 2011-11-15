@@ -83,7 +83,6 @@ public class ComponentMatchCtx {
 	
 	/**
 	 * Return the count of total siblings of the component, including itself.
-	 * @return
 	 */
 	public int getComponentSiblingSize(){
 		Component parent = _comp.getParent();
@@ -97,9 +96,8 @@ public class ComponentMatchCtx {
 	/**
 	 * Return true if the component matched the given position of the given 
 	 * selector.
-	 * @param selector
+	 * @param selectorIndex
 	 * @param position
-	 * @return
 	 */
 	public boolean isQualified(int selectorIndex, int position) {
 		return _qualified[selectorIndex][position];
@@ -117,7 +115,6 @@ public class ComponentMatchCtx {
 	/**
 	 * Return true if the component matched the last position of any selectors
 	 * in the list. (i.e. the one we are looking for)
-	 * @return
 	 */
 	public boolean isMatched() {
 		for(int i = 0; i< _qualified.length; i++) 
@@ -130,7 +127,6 @@ public class ComponentMatchCtx {
 	 * Return true if the component matched the last position of the given
 	 * selector.
 	 * @param selectorIndex
-	 * @return
 	 */
 	public boolean isMatched(int selectorIndex) {
 		boolean[] quals = _qualified[selectorIndex];
@@ -145,7 +141,6 @@ public class ComponentMatchCtx {
 	 * SimpleSelectorSequence.
 	 * @param seq 
 	 * @param defs 
-	 * @return
 	 */
 	public boolean match(SimpleSelectorSequence seq, 
 			Map<String, PseudoClassDef> defs){

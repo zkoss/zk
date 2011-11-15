@@ -26,7 +26,6 @@ public class ComponentLocalProperties {
 	 * are not allowed.
 	 * @param component
 	 * @param selector
-	 * @return
 	 */
 	public static boolean match(Component component, String selector) {
 		return match(component, selector, null);
@@ -38,7 +37,6 @@ public class ComponentLocalProperties {
 	 * @param component
 	 * @param selector
 	 * @param defs
-	 * @return
 	 */
 	public static boolean match(Component component, String selector,
 			Map<String, PseudoClassDef> defs) {

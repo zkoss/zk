@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for specifying to wire XEL context when auto-wiring in 
- * @link{GenericAnnotatedComposer}.
+ * {@link GenericAnnotatedComposer}.
  * @since 6.0.0
  * @author simonpai
  */

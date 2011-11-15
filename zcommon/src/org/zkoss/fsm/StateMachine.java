@@ -35,7 +35,7 @@ public abstract class StateMachine<E, C, IN> {
 	
 	// system //
 	/**
-	 * Set debug mode, where {@link onDebug} is called at certain timing to
+	 * Set debug mode, where {@link #onDebug(String)} is called at certain timing to
 	 * assist user develop the state machine
 	 */
 	public StateMachine<E, C, IN> setDebugMode(boolean mode) {

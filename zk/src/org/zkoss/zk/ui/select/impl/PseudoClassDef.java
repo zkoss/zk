@@ -15,7 +15,6 @@ public interface PseudoClassDef {
 	 * Return true if the component qualifies this pseudo class.
 	 * @param ctx 
 	 * @param parameters
-	 * @return
 	 */
 	public boolean accept(ComponentMatchCtx ctx, String ... parameters);
 	

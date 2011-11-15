@@ -17,7 +17,6 @@ package org.zkoss.util;
 import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.Map;
 import java.util.AbstractList;
@@ -513,7 +512,7 @@ public class CollectionsX {
 	 * between hasNext() and next().Modify it after next(), if necessary.</li>
 	 * <li>If the collection have multiple items referencing to the same object,
 	 * and if we remove the item that has been iterated, the other item might
-	 * be ingored. For example, if a collection has A, B, C, B, then the
+	 * be ignored. For example, if a collection has A, B, C, B, then the
 	 * following code only iterates A, B, C</li>
 	 * </ul>
 	 * <pre><code>
@@ -528,13 +527,13 @@ public class CollectionsX {
 	}
 	/** Returns an iterator that allows the caller to modify the collection
 	 * directly (in addition to Iterator.remove()).
-	 * @param filter the filter used to convert the value of each element
+	 * @param converter the filter used to convert the value of each element
 	 * found in the given collection to the return iterator.
 	 * Ignored if null (and then F must be the same as T or extends from T).
 	 * @since 6.0.0
 	 */
-	@SuppressWarnings("unchecked")
-	public static <F, T> Iterator<T> comodifiableIterator(Collection<F> col, Converter<F, T> converter) {
+	public static <F, T> Iterator<T> comodifiableIterator(Collection<F> col, 
+			Converter<F, T> converter) {
 		return new ComodifiableIterator<F, T>(col, converter);
 	}
 }
