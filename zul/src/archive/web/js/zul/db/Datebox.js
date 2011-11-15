@@ -222,11 +222,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		displayedTimeZones: function (dtzones) {
 			this._dtzones = dtzones.split(",");
 		},
-		/**
-		 * Returns the unformater.
+		/** Sets the unformater function. This method is called from Server side.
+		 * @param String unf the unformater function
 		 */
-		/**
-		 * Sets the unformater function. This method is called from Server side.
+		/** Returns the unformater.
+		 * @return String the unformater function
 		 */
 		unformater: function (unf) {
 			eval('Datebox._unformater = ' + unf);

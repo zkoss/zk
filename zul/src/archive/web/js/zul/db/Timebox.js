@@ -238,11 +238,11 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				this.onSize();
 			}
 		},
-		/**
-		 * Returns the unformater.
+		/** Sets the unformater function. This method is called from Server side.
+		 * @param String unf the unformater function
 		 */
-		/**
-		 * Sets the unformater function. This method is called from Server side.
+		/** Returns the unformater.
+		 * @return String the unformater function
 		 */
 		unformater: function (unf) {
 			eval('Timebox._unformater = ' + unf);
