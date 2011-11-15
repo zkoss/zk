@@ -180,6 +180,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return (lastTh.digits == 1) ? ++len: len;
 	}
 	var globallocalizedSymbols = {};
+
+var Timebox = 
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
@@ -192,7 +194,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * by clicking the up or down button (though users cannot type anything
  * in the input box).
  */
-var Timebox = 
 zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',

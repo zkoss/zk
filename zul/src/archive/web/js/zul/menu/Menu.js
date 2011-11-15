@@ -198,7 +198,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this._contentHandler)
 			this._contentHandler.onHide();
 	},
-	focus_: function (timeout, ignoreActive/** used for Menupopup.js*/) {
+	focus_: function (timeout, ignoreActive/* used for Menupopup.js*/) {
 		if (this.isTopmost() && zk(this.$n('b')).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
             // is the last one, in IE it will delay to show the active effect.
@@ -486,7 +486,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
 	},
-	_rmActive: function (wgt, ignoreSeld/** used for mouseout when topmost*/) {
+	_rmActive: function (wgt, ignoreSeld/* used for mouseout when topmost*/) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.$n('a') : wgt.$n(),
 			zcls = wgt.getZclass(),
