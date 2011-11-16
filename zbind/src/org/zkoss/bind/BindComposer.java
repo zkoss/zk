@@ -42,6 +42,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private final Map<String, Validator> _validators;
 	
 	private static final String BIND_ANNO = "bind";
+	private static final String VIEW_MODEL_ATTR = "viewModel";
 	private static final String COMPOSER_NAME_ATTR = "composerName";
 	private static final String QUEUE_NAME_ATTR = "queueName";
 	private static final String QUEUE_SCOPE_ATTR = "queueScope";
@@ -105,7 +106,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		final String qname = getAnnotatedBindString(evalx, comp,QUEUE_NAME_ATTR);
 		final String qscope = getAnnotatedBindString(evalx, comp,QUEUE_SCOPE_ATTR);
 		
-		_viewModel = initViewModel(evalx, comp,"viewModel");
+		_viewModel = initViewModel(evalx, comp, VIEW_MODEL_ATTR);
 
 		_binder = new AnnotateBinderImpl(comp, _viewModel, qname, qscope);
 		//assign binder name
