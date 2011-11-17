@@ -901,7 +901,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (this._hflex == 'min')
 					zk(n).redoCSS();
 			}
-		}
+		} else if (this.parent.$instanceof(zul.box.Hlayout))
+			zk(this.$n()).redoCSS();
+			// B50-ZK-589: Window in Hlayout the title bar is goen in IE7
 	} : zk.$void,
 	_fixHgh: function () {
 		if (this.isRealVisible()) {
