@@ -2142,7 +2142,7 @@ public class UiEngineImpl implements UiEngine {
 			_src = tempInfo.getSrc(comp);
 		}
 		public Component[] create(Component parent, Component insertBefore,
-		VariableResolver resolver) {
+		VariableResolver resolver, Composer composer) {
 			final Execution exec = Executions.getCurrent();
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final Component[] cs;
@@ -2165,7 +2165,7 @@ public class UiEngineImpl implements UiEngine {
 				cs = execCreate0(
 					new CreateInfo(
 						((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
-						exec, page, null), //technically sys composer can be used but we don't (to simplify it)
+						exec, page, composer), //technically sys composer can be used but we don't (to simplify it)
 					_tempInfo, parent, insertBefore);
 
 				//Notice: if parent is not null, cs[j].page == parent.page

@@ -35,10 +35,12 @@ public interface Template {
 	 * If insertBefore.getParent() is not the same as parent, it is ignored.
 	 * @param resolver the addition variable resolver used to render
 	 * the template. Ignored if null.
+	 * @param composer the addition composer used to control the lifecycle.
+	 * Ignored if null.
 	 * @exception NullPointerException if parent is null
 	 */
 	public Component[] create(Component parent, Component insertBefore,
-	VariableResolver resolver);
+	VariableResolver resolver, Composer composer);
 	/** Returns a readonly map of the parameters that are assigned
 	 * to the template.
 	 * <p>Notice that if a parameter's value contains EL expression, it will

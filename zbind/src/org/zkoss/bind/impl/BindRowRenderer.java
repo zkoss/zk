@@ -58,7 +58,7 @@ public class BindRowRenderer implements RowRenderer {
 						}
 						return null;
 					}
-				});
+				}, null);
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one row, not "+items.length);
 

@@ -1564,7 +1564,7 @@ public class Tree extends MeshElement {
 						public Object resolveVariable(String name) {
 							return "each".equals(name) ? node: null;
 						}
-					});
+					}, null);
 				if (items.length != 1)
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 

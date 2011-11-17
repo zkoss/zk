@@ -65,7 +65,7 @@ public class BindTreeitemRenderer implements TreeitemRenderer {
 						}
 						return null;
 					}
-				});
+				}, null);
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
