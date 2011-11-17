@@ -10,7 +10,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under LGPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -3116,7 +3116,37 @@ public class Listbox extends MeshElement {
 			if (_rod && Executions.getCurrent().getAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
-			Set selItems = evt.getSelectedItems();
+			Set<Listitem> selItems = cast(evt.getSelectedItems());
+			if (_rod) { // Bug: ZK-592
+				Map<String, Object> m = cast((Map) request.getData().get("range"));
+				if (m != null) {
+					int start = AuRequests.getInt(m, "start", -1);
+					int end = AuRequests.getInt(m, "end", -1);
+					int ignoreStart = -1; // used for ignore double add selection in model
+					int ignoreEnd = -1; // used for ignore double add selection in model
+					for (Iterator it = _items.iterator(); it.hasNext();) {
+						Listitem item = (Listitem)it.next();
+						int index = item.getIndex();
+						if (index >= start && index <= end) {
+							if (ignoreStart == -1)
+								ignoreStart = index;
+							ignoreEnd = index;
+							
+							// the same logic come from JS file (SelectWidget)
+							// for Bug: 2030986
+							if (!item.isDisabled()) 
+								selItems.add(item);
+						}
+					}
+					if (_model instanceof Selectable) {
+						for (int i = start; i < end; i++) {
+							// only add out of the _items' range
+							if (i < ignoreStart || i > ignoreEnd)
+								addSelToModel(_model.getElementAt(i));
+						}
+					}
+				}
+			}
 			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))

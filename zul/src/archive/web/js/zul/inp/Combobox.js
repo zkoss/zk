@@ -9,7 +9,7 @@
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
-This program is distributed under LGPL Version 3.0 in the hope that
+This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
@@ -193,6 +193,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	open: function (opts) {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
+		// B50-ZK-568: Combobox does not scroll to selected item
+		if (this._lastsel)
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 	},
 	dnPressed_: function (evt) {
 		this._updnSel(evt);
