@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-568.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov  17 14:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div>1. Open combobox then select item50.</div>
+<div>2. Open combobox again, you should see item50 in drop down list without scroll.</div>
+<div>3. Click 'select item15' button.</div>
+<div>4. Open combobox, you should see item15 in drop down list without scroll.</div>
+<div></div>
+	<zscript>
+		<![CDATA[
+			String[] name = new String[50];
+			for(int i=0, len=name.length; i<len; i++) {
+				name[i] = "name" + (i+1);
+			}
+			ListModelList lm = new ListModelList(name);
+		]]>
+	</zscript>
+	<combobox id="box" width="150px" mold="rounded" model="${lm}" />
+
+	<button label="select item15">
+		<attribute name="onClick">
+			box.setSelectedIndex(14);
+		</attribute>
+	</button>
+</zk>
