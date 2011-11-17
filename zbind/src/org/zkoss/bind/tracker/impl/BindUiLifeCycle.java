@@ -21,6 +21,9 @@ import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.UiLifeCycle;
 
 /**
@@ -28,6 +31,8 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * @author henrichen
  */
 public class BindUiLifeCycle implements UiLifeCycle {
+	private static final String ON_BIND_INIT = "onBindInit";
+	
 	public void afterComponentAttached(Component comp, Page page) {
 		if (comp.getDesktop() != null) {
 			//check if this component already binded
@@ -36,9 +41,20 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				//check if parent exists any binder
 				final Binder binder = (Binder) comp.getAttribute(BinderImpl.BINDER, true);
 				if (binder != null) {
-					//try to load and init
-					new AnnotateBinderHelper(binder).initComponentBindings(comp);
-					((BinderImpl)binder).loadComponent(comp);
+					//ZK-603, ZK-604, ZK-605
+					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
+					comp.addEventListener(10000, ON_BIND_INIT, new EventListener<Event>() {
+						@Override
+						public void onEvent(Event event) throws Exception {
+							final Component comp = event.getTarget();
+							comp.removeEventListener(ON_BIND_INIT, this);
+							final BinderImpl binder = (BinderImpl) event.getData();
+							new AnnotateBinderHelper(binder).initComponentBindings(comp);
+							binder.loadComponent(comp);
+						}
+					});
+					//post ON_BIND_INIT event
+					Events.postEvent(new Event(ON_BIND_INIT, comp, binder));
 				}
 			}
 		}
