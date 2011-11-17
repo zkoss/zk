@@ -15,6 +15,7 @@ ZK 5.0.10
   ZK-576: Panel with vflex=1 cannot fit to the height of Portalchildren (reopen B50-3303725.zul) 
   ZK-569: Select Item doesn't work as expected if the listitems containing non visible list items
   ZK-568: Combobox does not scroll to selected item
+  ZK-592: ROD Listbox cannot select multiple items with shift + click
 
 	--------
 ZK 5.0.9

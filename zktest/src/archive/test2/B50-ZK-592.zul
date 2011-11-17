@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-592.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 17 16:33:57 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. click on the 1th item
+<separator/>
+2. go to the 200th item with the vertical scrollbar
+<separator/>
+3. shift+click on the 200th item
+<separator/>
+4. you should see the 1st to the 200th items are selected.
+<separator/>
+5. Reload this page and then test the following steps
+<separator/>
+6. go to the 200th item with the vertical scrollbar and click it
+<separator/>
+7. go back to the 1th item and then shift+click on the 1st item
+<separator/>
+8. you should see the 1st to the 200th items are selected as well
+<zscript><![CDATA[
+	List s = new ArrayList();
+	for(int i=0; i<200; i++) {
+		s.add("item " + (i+1));
+	}
+	ListModelList m = new ListModelList(s);
+]]>
+</zscript>
+<listbox id="listbox" model="${m}" rows="10" multiple="true">
+	<custom-attributes org.zkoss.zul.listbox.initRodSize="20"/>
+	<listhead>
+		<listheader label="items" />
+	</listhead>
+</listbox>
+</zk>
+
+

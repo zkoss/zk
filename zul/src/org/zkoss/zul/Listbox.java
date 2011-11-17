@@ -3315,6 +3315,36 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
+			if (_rod) { // Bug: ZK-592
+				Map m = (Map) request.getData().get("range");
+				if (m != null) {
+					int start = AuRequests.getInt(m, "start", -1);
+					int end = AuRequests.getInt(m, "end", -1);
+					int ignoreStart = -1; // used for ignore double add selection in model
+					int ignoreEnd = -1; // used for ignore double add selection in model
+					for (Iterator it = _items.iterator(); it.hasNext();) {
+						Listitem item = (Listitem)it.next();
+						int index = item.getIndex();
+						if (index >= start && index <= end) {
+							if (ignoreStart == -1)
+								ignoreStart = index;
+							ignoreEnd = index;
+							
+							// the same logic come from JS file (SelectWidget)
+							// for Bug: 2030986
+							if (!item.isDisabled()) 
+								selItems.add(item);
+						}
+					}
+					if (_model instanceof Selectable) {
+						for (int i = start; i < end; i++) {
+							// only add out of the _items' range
+							if (i < ignoreStart || i > ignoreEnd)
+								((Selectable) _model).addSelection(_model.getElementAt(i));
+						}
+					}
+				}
+			}
 			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
