@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-580.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 18 15:30:06 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Listbox" border="normal">
+1. Please click upon the label ("with") of the textbox and then mouse out of the textbox.
+<separator/>
+2. click upon the label ("a") of the textbox.
+<separator/>
+3. You should see the cursor is moved from "with" to "a" (Firefox only)
+       <listbox>
+               <listitem draggable="true"><listcell><textbox value="testing with a textbox in a listbox"/></listcell></listitem>
+       </listbox>
+</window>

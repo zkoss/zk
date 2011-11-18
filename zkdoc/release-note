@@ -19,6 +19,7 @@ ZK 5.0.10
   ZK-589: Window in Hlayout the title bar is goen in IE7
   ZK-591: Datebox constraint combination yyyymmdd and no empty cause javascript error in zksandbox
   ZK-599: Grid has no vertical scrollbar when height is set by percentage
+  ZK-580: Wrong cursor position in draggable listitem (firefox only)
 
 	--------
 ZK 5.0.9
