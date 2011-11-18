@@ -901,9 +901,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (this._hflex == 'min')
 					zk(n).redoCSS();
 			}
-		} else if (this.parent.$instanceof(zul.box.Hlayout))
-			zk(this.$n()).redoCSS();
+		} else if (zk.ie == 7) {
 			// B50-ZK-589: Window in Hlayout the title bar is goen in IE7
+			// call width() to let browser recalculate
+			var $n = jq(this.$n()),
+				$tl = $n.find('>div:first'),
+				$bl = $n.find('>div:last');
+			if ($tl.width() + $bl.width()) {}
+		}
 	} : zk.$void,
 	_fixHgh: function () {
 		if (this.isRealVisible()) {

@@ -137,7 +137,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			// B50-ZK-591: Datebox constraint combination yyyymmdd and
 			// no empty cause javascript error in zksandbox
 			var constraints = constraint.split(',');
-			for (var i = 0;i < constraints.length;i ++) {
+			for (var i = 0; i < constraints.length; i++) {
 				constraint = constraints[i]
 				if (constraint.startsWith("between")) {
 					var j = constraint.indexOf("and", 7);

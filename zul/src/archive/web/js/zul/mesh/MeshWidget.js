@@ -1071,7 +1071,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			n.style.height = hgh;
 			// B50-ZK-599: Grid has no vertical scrollbar when height is set by percentage
 			// have to assign a height to ebody or it will sized by content automatically.
-			if (hgh && hgh != "auto" && hgh.indexOf('%') > 0) {
+			if (hgh && hgh.indexOf('%') > 0) {
 				var h = this._vflexSize(n.offsetHeight + 'px'); 
 				if (h < 0) h = 0;
 				if (!zk.ie || zk.ie8 || this._vflex != "min")
