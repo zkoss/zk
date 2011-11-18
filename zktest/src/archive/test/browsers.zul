@@ -1,19 +1,22 @@
-<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <zk>
-gecko: ${c:isGecko()}
-<separator/>
-gecko2: ${c:browser('gecko2')}
-<separator/>
-gecko3: ${c:isGecko3()}
-<separator/>
-ie: ${c:isExplorer()}
-<separator/>
-ie7: ${c:isExplorer7()}
-<separator/>
-ie8: ${c:browser('ie8')}
-<separator/>
-safari: ${c:isSafari()}
-<separator/>
-opera: ${c:isOpera()}
-<separator/>
+	<html><![CDATA[
+	${zk.browser.name} ${zk.browser.version}
+	<ul>
+	<li>ie: ${zk.ie}</li>
+	<li>gecko: ${zk.gecko}</li>
+	<li>webkit: ${zk.webkit}</li>
+	<li>opera: ${zk.opera}</li>
+	</ul>
+	]]></html>
+	<label id="inf"/>
+	<zscript><![CDATA[
+	import org.zkoss.web.servlet.Servlets;
+	final StringBuffer sb = new StringBuffer();
+	final String[] names = {"ff6", "ff", "ff6-"};
+	for (int j = 0; j < names.length; ++j)
+		sb.append(names[j]).append('=')
+			.append(Servlets.isBrowser(execution.getNativeRequest(), names[j]))
+			.append(", ");
+	inf.value = sb.toString();
+	]]></zscript>
 </zk>

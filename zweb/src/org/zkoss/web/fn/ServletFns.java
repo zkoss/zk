@@ -77,38 +77,45 @@ public class ServletFns {
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isBrowser(String type) {
 		return Servlets.isBrowser(getCurrentRequest(), type);
 	}
 	/** Returns whether the browser of the current request is Explorer.
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isExplorer() {
 		return Servlets.isExplorer(getCurrentRequest());
 	}
 	/** Returns whether the browser of the current request is Explorer 7 or later.
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isExplorer7() {
 		return Servlets.isExplorer7(getCurrentRequest());
 	}
 	/** Returns whether the browser of the current request is Gecko based,
 	 * such as Mozilla, Firefox and Camino.
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isGecko() {
 		return Servlets.isGecko(getCurrentRequest());
 	}
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isGecko3() {
 		return Servlets.isGecko3(getCurrentRequest());
 	}
 	/** Returns whether the browser of the current request is Safari.
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isSafari() {
 		return Servlets.isSafari(getCurrentRequest());
 	}
 	/** Returns whether the browser of the current request is Opera.
+	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
 	public static boolean isOpera() {
 		return Servlets.isOpera(getCurrentRequest());

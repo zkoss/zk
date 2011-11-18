@@ -1482,50 +1482,61 @@ public class Components {
 			return exec().isAsyncUpdate(page);
 		}
 
+		@Override
+		public Double getBrowser(String name) {
+			return exec().getBrowser(name);
+		}
+		@Override
+		public String getBrowser() {
+			return exec().getBrowser();
+		}
+
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isBrowser() {
 			return exec().isBrowser();
 		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isBrowser(String type) {
 			return exec().isBrowser(type);
 		}
-
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isExplorer() {
 			return exec().isExplorer();
 		}
-
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isExplorer7() {
 			return exec().isExplorer7();
 		}
-		
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isOpera() {
 			return exec().isOpera();
+		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+		public boolean isGecko() {
+			return exec().isGecko();
+		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+		public boolean isGecko3() {
+			return exec().isGecko3();
+		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+		public boolean isHilDevice() {
+			return exec().isHilDevice();
+		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+		public boolean isSafari() {
+			return exec().isSafari();
+		}
+		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+		public boolean isRobot() {
+			return exec().isRobot();
 		}
 
 		public boolean isForwarded() {
 			return exec().isForwarded();
 		}
-
-		public boolean isGecko() {
-			return exec().isGecko();
-		}
-		public boolean isGecko3() {
-			return exec().isGecko3();
-		}
-
-		public boolean isHilDevice() {
-			return exec().isHilDevice();
-		}
-
 		public boolean isIncluded() {
 			return exec().isIncluded();
-		}
-
-		public boolean isRobot() {
-			return exec().isRobot();
-		}
-
-		public boolean isSafari() {
-			return exec().isSafari();
 		}
 
 		public boolean isUserInRole(String role) {

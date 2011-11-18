@@ -40,7 +40,7 @@ ul {
 a, a:visited {
 	color:#008bb6;
 }
-ul li	{list-style: url(${c:encodeURL(c:browser('ie6-') ? '/img/z-bullet1.gif' : '/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
+ul li	{list-style: url(${c:encodeURL(zk.ie == 6 ? '/img/z-bullet1.gif' : '/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-header .z-north-body {
@@ -49,7 +49,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-categorybar {
 	position: relative;
 	overflow: hidden;
-	${c:browser('ie6-') ? 'float: left;' : ''}
+	${zk.ie == 6 ? 'float: left;' : ''}
 }
 .demo-categorybar-body {
 	margin: 0px;
@@ -109,7 +109,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 }
 .demo-search-inp {
     padding: 2px 0 1px 18px;
-	background: white url(${c:encodeURL(c:browser('ie6-') ? '/img/search.gif' : '/img/search.png')}) no-repeat scroll 0 0;
+	background: white url(${c:encodeURL(zk.ie == 6 ? '/img/search.gif' : '/img/search.png')}) no-repeat scroll 0 0;
 }
 .demo-category {
 	margin-top: 10px; float:left; height: 80px; width: 90px;
@@ -229,7 +229,7 @@ a.edition-field:hover {
 .silvertail .demo-categorybar-right-scroll:hover {
 	background-position: 0 0;
 }
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .breeze .demo-categorybar-left-scroll,
 .silvertail .demo-categorybar-left-scroll {
 	background-image: none;

@@ -1036,11 +1036,32 @@ public interface Execution extends Scope {
 	 */
 	public void addAuResponse(String key, AuResponse resposne);
 
+
+	/** Returns the version of the given browser name, or null if the client
+	 * is not the given browsers.
+	 *
+	 * <p>Notice that, after this method is called, an attribute named zk
+	 * will be stored to the request, such that you can retrieve
+	 * the browser information by use of EL, such as
+	 * <code>${zk.ie > 7}</code>.
+	 *
+	 * @param request the request.
+	 * @param name the browser's name. It includes "ie", "ff", "gecko",
+	 * "webkit", "safari" and "opera". And, "ff" is the same as "gecko",
+	 * and "webit" is the same as "safari".
+	 * @since 6.0.0
+	 */
+	public Double getBrowser(String name);
+	/** Returns the name of the browser, or null if not identifiable.
+	 * @since 6.0.0
+	 */
+	public String getBrowser();
 	/** Returns whether the client is a browser.
 	 * No matter the client is Ajax, MIL or whatever, it returns true.
 	 * It returns false only if this is a 'fake' execution (aka., request).
 	 */
 	public boolean isBrowser();
+
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
@@ -1051,39 +1072,48 @@ public interface Execution extends Scope {
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isBrowser(String type);
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
 	 * is not recognized.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isRobot();
 	/** Returns whether the client is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isExplorer();
 	/** Returns whether the client is Internet Explorer 7 or later.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isExplorer7();
 	/** Returns whether the client is Gecko based, such as Mozilla, Firefox and Camino.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isGecko();
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isGecko3();
 	/** Returns whether the client is Safari.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isSafari();
 	/** Returns whether the client is Opera.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isOpera();
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 *
 	 * @since 3.0.2
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isHilDevice();
 

@@ -103,6 +103,8 @@ public class ExecutionImpl extends AbstractExecution {
 		_response = response;
 		_xelctx = new ReqContext();
 
+		Servlets.getBrowser(request); //update request info
+
 		_attrs = new AttributesMap() {
 			@SuppressWarnings("unchecked")
 			protected Enumeration<String> getKeys() {
@@ -400,36 +402,55 @@ public class ExecutionImpl extends AbstractExecution {
 			((HttpServletResponse)_response).setContentType(contentType);
 	}
 
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isBrowser() {
 		return true;
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isBrowser(String type) {
 		return Servlets.isBrowser(_request, type);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isRobot() {
 		return Servlets.isRobot(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isExplorer() {
 		return Servlets.isExplorer(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isExplorer7() {
 		return Servlets.isExplorer7(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isGecko() {
 		return Servlets.isGecko(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isGecko3() {
 		return Servlets.isGecko3(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isOpera() {
 		return Servlets.isOpera(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isHilDevice() {
 		return Servlets.isHilDevice(_request);
 	}
+	@Override
+	public Double getBrowser(String name) {
+		return Servlets.getBrowser(_request, name);
+	}
+	@Override
+	public String getBrowser() {
+		return Servlets.getBrowser(_request);
+	}
+	@Override
 	public String getUserAgent() {
 		return Servlets.getUserAgent(_request);
 	}

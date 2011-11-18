@@ -794,7 +794,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			|| "desktop".equals(ctl))) {
 			if (!au && shallIE7Compatible())
 				try {
-					if (exec.isBrowser("ie8")
+					if (exec.getBrowser("ie") >= 8
 					&& !exec.containsResponseHeader("X-UA-Compatible"))
 						exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
 				} catch (Throwable ex) { //ignore (it might not be allowed)

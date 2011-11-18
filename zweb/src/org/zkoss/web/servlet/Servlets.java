@@ -25,12 +25,14 @@ import java.net.URL;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -53,6 +55,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ServletContextLocator;
+import static org.zkoss.lang.Generics.cast;
 
 /**
  * The servlet relevant utilities.
@@ -64,7 +67,12 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 public class Servlets {
 	private static final Log log = Log.lookup(Servlets.class);
 
-	private static BrowserIdentifier _bwid;
+	private static ClientIdentifier _clientId;
+	private static final Pattern
+		_rwebkit = Pattern.compile(".*(webkit)[ /]([\\w.]+).*"),
+		_ropera = Pattern.compile(".*(opera)(?:.*version)?[ /]([\\w.]+).*"),
+		_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
+		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*");
 
 	private static final boolean _svl24, _svl23;
 	static {
@@ -250,36 +258,172 @@ public class Servlets {
 		}
 	}
 
-	/** Sets the browser identifier that is used to assist {@link #isBrowser}
+	/** Sets the client identifier that is used to assist {@link #isBrowser}
 	 * to identify a client.
 	 *
-	 * <p>Notice that the browser identifier must be thread-safe.
+	 * <p>Notice that the client identifier must be thread-safe.
 	 *
-	 * @param bwid the browser identifier. If null, only the default types
+	 * @param clientId the client identifier. If null, only the default types
 	 * are recognized.
-	 * @see BrowserIdentifier
-	 * @since 5.0.0
+	 * @see ClientIdentifier
+	 * @since 6.0.0
 	 */
-	public static void setBrowserIdentifier(BrowserIdentifier bwid) {
-		_bwid = bwid;
+	public static void setClientIdentifier(ClientIdentifier clientId) {
+		_clientId = clientId;
 	}
-	/** Returns the browser identifier, or null if no such plugin.
-	 * @see BrowserIdentifier
-	 * @since 5.0.0
+	/** Returns the client identifier, or null if no such plugin.
+	 * @see ClientIdentifier
+	 * @since 6.0.0
 	 */
-	public static BrowserIdentifier getBrowserIdentifier() {
-		return _bwid;
+	public static ClientIdentifier getClientIdentifier() {
+		return _clientId;
 	}
 
-	/** Returns whether the client is a browser of the specified type.
+	/** Returns the version of the given browser name, or null if the client
+	 * is not the given browsers.
+	 *
+	 * <p>Notice that, after this method is called, an attribute named zk
+	 * will be stored to the request, such that you can retrieve
+	 * the browser information by use of EL, such as
+	 * <code>${zk.ie > 7}</code>.
+	 *
+	 * @param request the request.
+	 * @param name the browser's name. It includes "ie", "ff", "gecko",
+	 * "webkit", "safari", "opera", "ios", "iphone", "ipad" and "ipod".
+	 * And, "ff" is the same as "gecko", and "webit" is the same as "safari".
+	 * @since 6.0.0
+	 */
+	public static Double getBrowser(ServletRequest request, String name) {
+		return (Double)browserInfo(request).get(name);
+	}
+	/** Returns the name of the browser, or null if not identifiable.
+	 * @since 6.0.0
+	 */
+	public static String getBrowser(ServletRequest request) {
+		return (String)((Map)browserInfo(request).get("browser")).get("name");
+	}
+	/** Returns the version of the given browser name, or null if the client
+	 * is not the given browsers.
+	 *
+	 * <p>Notice that, after this method is called, an attribute named zk
+	 * will be stored to the request, such that you can retrieve
+	 * the browser information by use of EL, such as
+	 * <code>${zk.ie > 7}</code>.
+	 *
+	 * @param userAgent the user agent (i.e., the user-agent header in HTTP).
+	 * @param name the browser's name. It includes "ie", "ff", "gecko",
+	 * "webkit", "safari", "opera", "ios", "iphone", "ipad" and "ipod".
+	 * And, "ff" is the same as "gecko", and "webit" is the same as "safari".
+	 * @since 6.0.0
+	 */
+	public static Double getBrowser(String userAgent, String name) {
+		final Map<String, Object> zk = new HashMap<String, Object>();
+		browserInfo(zk, userAgent);
+		return (Double)zk.get(name);
+	}
+	/** Returns the name of the browser, or null if not identifiable.
+	 * @param userAgent the user agent (i.e., the user-agent header in HTTP).
+	 * @since 6.0.0
+	 */
+	public static String getBrowser(String userAgent) {
+		final Map<String, Object> zk = new HashMap<String, Object>();
+		browserInfo(zk, userAgent);
+		return (String)((Map)zk.get("browser")).get("name");
+	}
+	private static Map browserInfo(ServletRequest request) {
+		//No need synchronized since the servlet request is executed synchronously
+		Map<String, Object> zk = cast((Map)request.getAttribute("zk"));
+		if (zk == null)
+			request.setAttribute("zk", zk = new HashMap<String, Object>(4));
+
+		if (!zk.containsKey("browser"))
+			browserInfo(zk, getUserAgent(request));
+		return zk;
+	}
+	private static void browserInfo(Map<String, Object> zk, String ua) {
+		if (ua != null) {
+			ua = ua.toLowerCase();
+			if (_clientId != null) {
+				final ClientIdentifier ci = _clientId.matches(ua);
+				if (ci != null) {
+					browserInfo(zk, ci.getName(), ci.getVersion());
+					return;
+				}
+			}
+			Matcher m = _rwebkit.matcher(ua);
+			if(m.matches()) {
+				double version;
+				browserInfo(zk, "webkit", version = getVersion(m));
+
+				for (int j = _ios.length; --j >= 0;)
+					if (ua.indexOf(_ios[j]) >= 0) {
+						zk.put(_ios[j], version);
+						zk.put("ios", version);
+						return;
+					}
+				return;
+			}
+			m = _ropera.matcher(ua);
+			if (m.matches()) {
+				browserInfo(zk, "opera", getVersion(m));
+				return;
+			}
+			m = _rmsie.matcher(ua);
+			if (m.matches()) {
+				browserInfo(zk, "ie", getVersion(m));
+				return;
+			}
+
+			if (ua.indexOf("compatible") < 0) {
+				m = _rmozilla.matcher(ua);
+				if (m.matches()) {
+					browserInfo(zk, "gecko", getVersion(m));
+					return;
+				}
+			}
+		}
+		zk.put("browser", Collections.emptyMap()); //none matched
+	}
+	private static final String[] _ios = {"ipod", "iphone", "ipad"};
+	private static
+	void browserInfo(Map<String, Object> zk, String name, double version) {
+		final Map<String, Object> bi = new HashMap<String, Object>(4);
+		bi.put("name", name);
+		bi.put("version", version);
+		zk.put("browser", bi);
+
+		zk.put(name, version);
+		if ("gecko".equals(name))
+			zk.put("ff", version);
+		else if ("webkit".equals(name))
+			zk.put("safari", version);
+	}
+	private static double getVersion(Matcher m) {
+		if (m.groupCount() < 2)
+			return 1; //ignore it
+
+		String version = m.group(2);
+		int j = version.indexOf('.');
+		if (j >= 0) {
+			j = version.indexOf('.', j + 1);
+			if (j >= 0)
+				version = version.substring(0, j);
+		}
+		try {
+			return Double.parseDouble(version);
+		} catch (Throwable t) {
+			return 1; //ignore it
+		}
+	}
+
+	/**
+	 * Returns whether the client is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
-	 * "opara", "safari",
-	 * "hil", "ios".<br/>
-	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
-	 * or other.
+	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
+	 * For example, ie9, ios and ie6-.
+	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
+	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(ServletRequest req, String type) {
@@ -288,56 +432,50 @@ public class Servlets {
 	}
 	/** Returns whether the user agent is a browser of the specified type.
 	 *
-	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie9",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko3.5", "gecko2-", "gecko3-",
-	 * "opara", "safari",
-	 * "hil", "ios". Otherwise, it matches whether the type exist or not.<br/>
-	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
-	 * or other.
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
+	 * @param type the type of the browser.
+	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
+	 * For example, ie9, ios and ie6-.
+	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
+	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
-		final BrowserIdentifier bwid = _bwid;
-		if (bwid != null && bwid.isBrowser(userAgent, type))
-			return true;
+		int last = type.length();
+		if (last == 0) return false;
 
-		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer(userAgent);
-		if ("ie6-".equals(type)) return getIEVer(userAgent) == 6;
-		if ("ie7".equals(type)) return isExplorer7(userAgent);
-		if ("ie7-".equals(type)) return getIEVer(userAgent) == 7;
-		if ("ie8".equals(type)) return getIEVer(userAgent) >= 8;
-		if ("ie8-".equals(type)) return getIEVer(userAgent) == 8;
-		if ("ie9".equals(type)) return getIEVer(userAgent) >= 9;
-		if ("ie9-".equals(type)) return getIEVer(userAgent) == 9;
+		char cc = type.charAt(last - 1);
+		final boolean equals = cc == '-' || cc == '_';
+		if (equals || cc == '+')
+			last--;
 
-		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
-		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
-		if ("gecko3".equals(type)) return isGecko3(userAgent);
-		if ("gecko3.5".equals(type)) return getGeckoVer(userAgent, true) >= 35;
-		if ("gecko3-".equals(type)) return getGeckoVer(userAgent) == 3;
-		if ("gecko4".equals(type)) return getGeckoVer(userAgent) >= 4;
-		if ("gecko4-".equals(type)) return getGeckoVer(userAgent) == 4;
+		int j;
+		for (j = last; j > 0; --j)
+			if ((cc = type.charAt(j - 1)) != '.' && (cc < '0' || cc > '9'))
+				break;
 
-		if ("safari".equals(type)) return isSafari(userAgent);
-		if ("opera".equals(type)) return isOpera(userAgent);
+		Double version = null;
+		if (j < last) {
+			try {
+				version = Double.parseDouble(type.substring(j, last));
+			} catch (Throwable t) {
+			}
+			last = j;
+		}
 
-		if ("hil".equals(type)) return isHilDevice(userAgent);
-
-		if ("robot".equals(type)) return isRobot(userAgent);
-
-		final String ua = userAgent != null ? userAgent.toLowerCase(): "";
-		if ("ios".equals(type))
-			return isSafari(userAgent)
-				&& (ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0);
-		return type != null && ua.indexOf(type.toLowerCase()) >= 0;
+		Double v = getBrowser(userAgent, type.substring(0, last));
+		if (v == null)
+			return false; //unknown
+		if (version != null)
+			return equals ? v == version: v >= version;
+		return v != null;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
 	 * is not recognized.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isRobot(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -351,6 +489,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isRobot(String userAgent) {
 		if (userAgent == null)
@@ -365,6 +504,7 @@ public class Servlets {
 	}
 	/** Returns whether the browser is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -376,6 +516,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer(String userAgent) {
 		if (userAgent == null)
@@ -387,6 +528,7 @@ public class Servlets {
 		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
 	}
 	/** Returns whether the browser is Explorer 7 or later.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer7(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -397,10 +539,14 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer7(String userAgent) {
 		return getIEVer(userAgent) >= 7;
 	}
+	/**
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
+	 */
 	private static final int getIEVer(String userAgent) {
 		if (userAgent == null) return -1;
 /*
@@ -425,6 +571,9 @@ public class Servlets {
 
 		return parseVer(userAgent, j + 5)[0];
 	}
+	/**
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
+	 */
 	private static final int[] parseVer(String ua, int j) {
 		int ver = 0;
 		for (int len = ua.length(); j < len;  ++j) {
@@ -439,6 +588,7 @@ public class Servlets {
 
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
 	 * If true, it also implies {@link #isGecko3} is true.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -450,6 +600,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko(String userAgent) {
 		if (userAgent == null)
@@ -460,6 +611,7 @@ public class Servlets {
 	}
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko3(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -470,6 +622,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko3(String userAgent) {
 		return getGeckoVer(userAgent) >= 3;
@@ -510,6 +663,7 @@ public class Servlets {
 	}
 
 	/** Returns whether the browser is Safari.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isSafari(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -520,6 +674,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isSafari(String userAgent) {
 		if (userAgent == null)
@@ -530,6 +685,7 @@ public class Servlets {
 	}
 	
 	/** Returns whether the browser is Opera.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isOpera(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -540,6 +696,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isOpera(String userAgent) {
 		if (userAgent == null)
@@ -554,6 +711,7 @@ public class Servlets {
 	 * For example, ZK Mobile for Android.
 	 *
 	 * @since 3.0.2
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isHilDevice(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
@@ -566,6 +724,7 @@ public class Servlets {
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isHilDevice(String userAgent) {
 		if (userAgent == null)
@@ -1184,18 +1343,25 @@ public class Servlets {
 			.append('\n');
 	}
 
-	/** A plugin used to assist {@link #isBrowser} to identify
-	 * if a client is the given type.
-	 * @since 5.0.0
-	 * @see #setBrowserIdentifier
+	/** A plugin used to provide additional browser information for
+	 * {@link #getBrowser}.
+	 * @since 6.0.0
+	 * @see #setClientIdentifier
 	 */
-	public static interface BrowserIdentifier {
-		/** Tests if a client is the givent type.
+	public static interface ClientIdentifier {
+		/** Returns the information of the client if userAgent matches
+		 * this client, or null if not matched.
 		 * @param userAgent represents a client.
-		 * @param type the type of the browser.
-		 * @return true if it matches, false if unable to identify
 		 */
-		public boolean isBrowser(String userAgent, String type);
+		public ClientIdentifier matches(String userAgent);
+		/** Returns the name of the browser.
+		 * It is called only against the instance returned by {@link #matches}.
+		 */
+		public String getName();
+		/** Returns the version of the browser.
+		 * It is called only against the instance returned by {@link #matches}.
+		 */
+		public double getVersion();
 	}
 	
 	/** Returns the normal path; that is, will elminate the double dots 
