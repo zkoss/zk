@@ -48,7 +48,19 @@ public class BindUiLifeCycle implements UiLifeCycle {
 						public void onEvent(Event event) throws Exception {
 							final Component comp = event.getTarget();
 							comp.removeEventListener(ON_BIND_INIT, this);
+							//ZK-611 have wrong binding on a removed treecell in a template
+							//if it was detached, ignore it
+							if(comp.getParent()==null || comp.getPage()==null){
+								return;
+							}
+							
+							final Binder innerBinder = (Binder) comp.getAttribute(BinderImpl.BINDER);
 							final BinderImpl binder = (BinderImpl) event.getData();
+
+							if(innerBinder!=null && innerBinder!=binder){//it was already handled by innerBinder, ignore it								
+								return;
+							}
+							
 							new AnnotateBinderHelper(binder).initComponentBindings(comp);
 							binder.loadComponent(comp);
 						}
