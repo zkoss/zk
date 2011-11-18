@@ -709,10 +709,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>treecols</component-name>
 		<extends>treecols</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>treeitem</component-name>
 		<extends>treeitem</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>treerow</component-name>
 		<extends>treerow</extends>
