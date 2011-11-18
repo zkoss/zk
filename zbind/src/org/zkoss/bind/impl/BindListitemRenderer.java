@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -38,8 +39,9 @@ public class BindListitemRenderer implements ListitemRenderer {
 		} else {
 			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
 			final String varnm = (String) listbox.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
+			final String itervarnm = (String) listbox.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
 			final Component[] items = tm.create(listbox, item, 
-				new VariableResolverX() {
+				new VariableResolverX() {//this resolver is for EL ${} not for binding 
 					public Object resolveVariable(String name) {
 						//shall never call here
 						return varnm.equals(name) ? data : null;
@@ -47,9 +49,16 @@ public class BindListitemRenderer implements ListitemRenderer {
 
 					public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
 						if (base == null) {
-							return varnm.equals(name) ? data : null;
-						} else if (base.equals(data)) {
-							return "index".equals(name) ? Integer.valueOf(item.getIndex()) : null;
+							if(varnm.equals(name)){
+								return data;
+							}else if(itervarnm.equals(name)){//iteration status
+								return new IterationStatus(){
+									@Override
+									public int getIndex() {
+										return Integer.valueOf(item.getIndex());
+									}
+								};
+							}
 						}
 						return null;
 					}
@@ -59,6 +68,13 @@ public class BindListitemRenderer implements ListitemRenderer {
 
 			final Listitem nli = (Listitem)items[0];
 			nli.setAttribute(varnm, data); //kept the value
+			
+			nli.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(nli.getIndex());
+				}
+			});
 			
 			if (nli.getValue() == null) //template might set it
 				nli.setValue(data);

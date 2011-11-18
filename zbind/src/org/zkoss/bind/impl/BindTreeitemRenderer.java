@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -50,6 +51,7 @@ public class BindTreeitemRenderer implements TreeitemRenderer {
 		} else {
 			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
 			final String varnm = (String) tree.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
+			final String itervarnm = (String) tree.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
 			final Component[] items = tm.create(parent, item, 
 				new VariableResolverX() {
 					public Object resolveVariable(String name) {
@@ -59,9 +61,16 @@ public class BindTreeitemRenderer implements TreeitemRenderer {
 
 					public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
 						if (base == null) {
-							return varnm.equals(name) ? data : null;
-						} else if (base.equals(data)) {
-							return "index".equals(name) ? Integer.valueOf(item.getIndex()) : null;
+							if(varnm.equals(name)){
+								return data;
+							}else if(itervarnm.equals(name)){//iteration status
+								return new IterationStatus(){
+									@Override
+									public int getIndex() {
+										return Integer.valueOf(item.getIndex());
+									}
+								};
+							}
 						}
 						return null;
 					}
@@ -69,12 +78,18 @@ public class BindTreeitemRenderer implements TreeitemRenderer {
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
-			final Treeitem nli = (Treeitem)items[0];
-			nli.setAttribute(varnm, data); //kept the value
+			final Treeitem ti = (Treeitem)items[0];
+			ti.setAttribute(varnm, data); //kept the value
 			
-			if (nli.getValue() == null) //template might set it
-				nli.setValue(data);
-			item.setAttribute("org.zkoss.zul.model.renderAs", nli);
+			ti.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(ti.getIndex());
+				}
+			});
+			if (ti.getValue() == null) //template might set it
+				ti.setValue(data);
+			item.setAttribute("org.zkoss.zul.model.renderAs", ti);
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}

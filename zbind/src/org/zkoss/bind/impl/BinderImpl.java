@@ -104,6 +104,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	public static final String BINDER = "$BINDER$"; //the binder
 	public static final String BINDCTX = "$BINDCTX$"; //bind context
 	public static final String VAR = "$VAR$"; //variable name in a collection
+	public static final String ITERATION_VAR = "$INTERATION_VAR$"; //iteration status variable name in a collection
 	public static final String VM = "$VM$"; //the associated view model
 	public static final String QUE = "$QUE$"; //the associated event queue name
 	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
@@ -469,6 +470,10 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final String varnm = var == null ? "each" : var; //var is not specified, default to "each"
 		comp.setAttribute(BinderImpl.VAR, varnm);
 		
+		final String itervar = (String) tm.getParameters().get("status");
+		final String itervarnm = itervar == null ? "iterationStatus" : itervar; //provide default value if not specified
+		comp.setAttribute(BinderImpl.ITERATION_VAR, itervarnm);
+
 		if (attrs != null) {
 			final String rendererName = (String) attrs.get(BinderImpl.RENDERER); //renderer if any
 			//setup renderer

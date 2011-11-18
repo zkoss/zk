@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -43,8 +44,9 @@ public class BindRowRenderer implements RowRenderer {
 		} else {
 			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
 			final String varnm = (String) grid.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
+			final String itervarnm = (String) grid.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
 			final Component[] items = tm.create(rows, row,
-				new VariableResolverX() {
+				new VariableResolverX() {//this resolver is for EL ${} not for binding 
 					public Object resolveVariable(String name) {
 						//shall never call here
 						return varnm.equals(name) ? data : null;
@@ -52,9 +54,16 @@ public class BindRowRenderer implements RowRenderer {
 
 					public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
 						if (base == null) {
-							return varnm.equals(name) ? data : null;
-						} else if (base.equals(data)) {
-							return "index".equals(name) ? Integer.valueOf(row.getIndex()) : null;
+							if(varnm.equals(name)){
+								return data;
+							}else if(itervarnm.equals(name)){//iteration status
+								return new IterationStatus(){
+									@Override
+									public int getIndex() {
+										return Integer.valueOf(row.getIndex());
+									}
+								};
+							}
 						}
 						return null;
 					}
@@ -64,6 +73,13 @@ public class BindRowRenderer implements RowRenderer {
 
 			final Row nr = (Row)items[0];
 			nr.setAttribute(varnm, data); //kept the value
+			
+			nr.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(nr.getIndex());
+				}
+			});
 			
 			if (nr.getValue() == null) //template might set it
 				nr.setValue(data);
