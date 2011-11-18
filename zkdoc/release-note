@@ -151,6 +151,11 @@ ZK 5.0.10
   ZK-569: Select Item doesn't work as expected if the listitems containing non visible list items
   ZK-568: Combobox does not scroll to selected item
   ZK-592: ROD Listbox cannot select multiple items with shift + click
+  ZK-589: Window in Hlayout the title bar is goen in IE7
+  ZK-591: Datebox constraint combination yyyymmdd and no empty cause javascript error in zksandbox
+  ZK-599: Grid has no vertical scrollbar when height is set by percentage
+  ZK-580: Wrong cursor position in draggable listitem (firefox only)
+  ZK-508: Texts in multi-column trees are not aligned
 
 	--------
 ZK 5.0.9

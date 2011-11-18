@@ -172,7 +172,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	doMouseOut_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
 			var n = this.$n();
-			if (n) n.firstChild.style.MozUserSelect = "none";
+			if (n) n.firstChild.style.MozUserSelect = ""; // Bug ZK-580
 		}
 		this.$supers('doMouseOut_', arguments);
 	},

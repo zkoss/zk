@@ -535,7 +535,9 @@ div.z-vfiletree div.z-vfiletree-header tr.z-auxhead th:last-child {
 	height: 30px;
 	overflow: hidden;
 }
-
+.z-treecell-cnt {
+	line-height: 18px;<%-- Bug ZK-508 --%>
+}
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
 div.z-tree-header, div.z-dottree-header, div.z-filetree-header, div.z-vfiletree-header,

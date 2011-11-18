@@ -134,26 +134,32 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		constraint: function() {
 			var constraint = this._constraint || '';
 			if (typeof this._constraint != 'string') return;
-			if (constraint.startsWith("between")) {
-				var j = constraint.indexOf("and", 7);
-				if (j < 0 && zk.debugJS) 
-					zk.error('Unknown constraint: ' + constraint);
-				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), 'yyyyMMdd');
-				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3), 'yyyyMMdd');
-				if (this._beg.getTime() > this._end.getTime()) {
-					var d = this._beg;
-					this._beg = this._end;
-					this._end = d;
+			// B50-ZK-591: Datebox constraint combination yyyymmdd and
+			// no empty cause javascript error in zksandbox
+			var constraints = constraint.split(',');
+			for (var i = 0; i < constraints.length; i++) {
+				constraint = constraints[i]
+				if (constraint.startsWith("between")) {
+					var j = constraint.indexOf("and", 7);
+					if (j < 0 && zk.debugJS) 
+						zk.error('Unknown constraint: ' + constraint);
+					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), 'yyyyMMdd');
+					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3), 'yyyyMMdd');
+					if (this._beg.getTime() > this._end.getTime()) {
+						var d = this._beg;
+						this._beg = this._end;
+						this._end = d;
+					}
+					
+					this._beg.setHours(0, 0, 0, 0);
+					this._end.setHours(0, 0, 0, 0);
+				} else if (constraint.startsWith("before")) {
+					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6), 'yyyyMMdd');
+					this._end.setHours(0, 0, 0, 0);
+				} else if (constraint.startsWith("after")) {
+					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5), 'yyyyMMdd');
+					this._beg.setHours(0, 0, 0, 0);
 				}
-				
-				this._beg.setHours(0, 0, 0, 0);
-				this._end.setHours(0, 0, 0, 0);
-			} else if (constraint.startsWith("before")) {
-				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6), 'yyyyMMdd');
-				this._end.setHours(0, 0, 0, 0);
-			} else if (constraint.startsWith("after")) {
-				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5), 'yyyyMMdd');
-				this._beg.setHours(0, 0, 0, 0);
 			}
 		},
 		/** Sets the name of this component.
