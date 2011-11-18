@@ -295,7 +295,7 @@
 	zoom: 1;
 }
 <%-- Center Middle --%>
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 .z-window-embedded-cm {
 	zoom: 1; <%-- fixed for B50-3315594.zul --%>
 }
@@ -506,7 +506,7 @@
 	line-height:0;
 	zoom: 1;
 }
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-window-embedded-br {
 	bottom: 0;
 	right: -5px;
@@ -593,7 +593,7 @@
 }
 
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-messagebox-btn {
 	width: 50pt;
 	text-overflow: ellipsis;
@@ -602,19 +602,19 @@
 	width: 100%;
 }
 </c:if>
-<c:if test="${c:isGecko()}">
+<c:if test="${zk.gecko > 0}">
 .z-messagebox-btn {
 	width: 48pt;
 }
 </c:if>
-<c:if test="${c:isOpera()}">
+<c:if test="${zk.opera > 0}">
 .z-messagebox-btn {
 	width: 50pt;
 }
 </c:if>
 
 <%-- IE 6 GIF  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-window-modal-tl,
 .z-window-modal-tr,
 .z-window-modal-bl,

@@ -30,7 +30,7 @@
 }
 
 <%-- IE 6 GIF  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-popup .z-popup-cl {
 	background-image: url(${c:encodeURL('~./zul/img/popup/popup-bg.gif')});
 }

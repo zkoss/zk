@@ -44,10 +44,10 @@
 	border-radius: 2px 0 0 2px;
 	-moz-border-radius: 2px 0 0 2px;
 	-webkit-border-radius: 2px 0 0 2px;
-	<c:if test="${c:isSafari()}">
+	<c:if test="${zk.safari > 0}">
 		margin:0;
 	</c:if>
-	<c:if test="${c:isOpera()}">
+	<c:if test="${zk.opera > 0}">
 		font-style: normal;
 	</c:if>
 	height: 15px;
@@ -61,7 +61,7 @@
 	border:0;	
 	padding: 5px 4px;
 	height: 14px;
-	<c:if test="${c:browser('ios')}">
+	<c:if test="${zk.ios > 0}">
 		margin-right:-1px;
 	</c:if>
 }
@@ -185,7 +185,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	border-radius: 0 2px 2px 0;
 	-moz-border-radius: 0 2px 2px 0;
 	-webkit-border-radius: 0 2px 2px 0;
-	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+	<c:if test="${zk.ie < 8}">
 		margin-top: 1px;
 	</c:if>
 }
@@ -519,7 +519,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	border-color: white white #004A7F;
 	border-style: none solid solid solid ;
 	border-width: 5px;
-	<c:if test="${c:browser('ie') || c:isOpera() || c:browser('gecko2-')}">
+	<c:if test="${zk.ie > 0 or zk.opera > 0}">
 		border-width: 6px;
 	</c:if>
 	overflow: hidden;
@@ -530,7 +530,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	border-style: solid solid none solid;
 	border-width: 5px;
 	margin-top: 3px;
-	<c:if test="${c:isOpera() || c:browser('gecko2-')}">
+	<c:if test="${zk.opera > 0}">
 		margin: 3px 0 0 1px;
 	</c:if>
 	overflow: hidden;
@@ -744,9 +744,9 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	padding: 2px 1px 2px 5px;
 	border: 0;
 	background: none;
-	<c:if test="${c:isExplorer() || c:isOpera()}">
+	<c:if test="${zk.ie > 0 or zk.opera > 0}">
 	padding: 2px;
-		<c:if test="${c:browser('ie8')}">
+		<c:if test="${zk.ie >= 8}">
 			padding: 1px;
 			padding-left: 2px;
 			padding-right: 2px;
@@ -790,7 +790,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 }
 
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-combobox-rounded-pp .z-comboitem-inner,
 .z-combobox-pp .z-comboitem-inner {<%--description--%>
 	padding-left: 5px;
@@ -801,7 +801,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	border-bottom: 1px solid transparent;
 }
 </c:if>
-<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+<c:if test="${zk.ie < 8}">
 .z-combobox-inplace input.z-combobox-right-edge,
 .z-bandbox-inplace input.z-bandbox-right-edge,
 .z-datebox-inplace input.z-datebox-right-edge,
@@ -811,7 +811,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	border: 0 !important;
 }
 </c:if>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-timebox .z-timebox-btn-upper,
 .z-spinner .z-spinner-btn-upper,
 .z-doublespinner .z-doublespinner-btn-upper {
@@ -857,27 +857,11 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 }
 </c:if>
 <%-- Gecko --%>
-<c:if test="${c:isGecko()}">
+<c:if test="${zk.gecko > 0}">
 i.z-combobox-rounded-btn, i.z-datebox-rounded-btn, i.z-bandbox-rounded-btn,
 i.z-timebox-rounded-btn, i.z-spinner-rounded-btn, i.z-doublespinner-rounded-btn,
 i.z-combobox-btn, i.z-datebox-btn, i.z-bandbox-btn, i.z-timebox-btn,
 i.z-spinner-btn, i.z-doublespinner-btn {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
-}
-</c:if>
-<c:if test="${c:browser('gecko2-')}">
-.z-spinner-rounded,
-.z-doublespinner-rounded,
-.z-timebox-rounded,
-.z-datebox-rounded,
-.z-bandbox-rounded,
-.z-combobox-rounded,
-.z-spinner,
-.z-doublespinner,
-.z-timebox,
-.z-datebox,
-.z-bandbox,
-.z-combobox {
-	min-height: 18px;
 }
 </c:if>

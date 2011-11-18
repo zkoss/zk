@@ -11,7 +11,7 @@
 .z-frozen-inner {
 	overflow-x: scroll;
 	float: right;
-	<c:if test="${c:isExplorer()}">
+	<c:if test="${zk.ie > 0}">
 		<%-- Bug 3244126: scroll bar cannot click then move with IE --%>
 		padding-top: 1px;
 		margin-top: -1px;

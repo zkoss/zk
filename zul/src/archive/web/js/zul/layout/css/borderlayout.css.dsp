@@ -2,7 +2,7 @@
 
 @media print {
     .z-borderlayout {
-		<c:if test="${c:browser('safari')}"><%-- Bug 2949287--%>
+		<c:if test="${zk.safari > 0}"><%-- Bug 2949287--%>
 			position: static;
 		</c:if>
 	}
@@ -236,7 +236,7 @@
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.png')});
 }
 
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-borderlayout-icon {
 	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.gif')});
 }

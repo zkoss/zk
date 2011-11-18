@@ -27,7 +27,7 @@
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
-	<c:if test="${c:isSafari()}">
+	<c:if test="${zk.safari > 0}">
 		margin: 0;
 	</c:if>
 }
@@ -77,7 +77,7 @@
 	padding: 3px 1px;
 	background: none;
 }
-<c:if test="${c:isOpera()}">
+<c:if test="${zk.opera > 0}">
 .z-textbox-inplace,
 .z-decimalbox-inplace,
 .z-intbox-inplace,
@@ -86,7 +86,7 @@
 	padding: 3px 2px;
 }
 </c:if>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-textbox-inplace,
 .z-decimalbox-inplace,
 .z-intbox-inplace,
@@ -114,10 +114,10 @@
 	font-size: ${fontSizeM};
 	font-weight: normal;
 	background: transparent repeat-x 0 0;
-	<c:if test="${c:isSafari()}">
+	<c:if test="${zk.safari > 0}">
 		margin: 0;
 	</c:if>
-	<c:if test="${c:isOpera()}">
+	<c:if test="${zk.opera > 0}">
 		font-style: normal;
 	</c:if>
 	height: 14px;
@@ -142,7 +142,7 @@
 	height: 24px;
 	width: 5px;
 	cursor: default;
-	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+	<c:if test="${zk.ie < 8}">
 		margin-top: 1px;
 	</c:if>
 }
@@ -379,13 +379,13 @@ i.z-doublebox-rounded-right-edge-invalid {
 	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 }
 
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
 }
 
 <%-- IE 6 GIF  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-pointer-d {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerD.gif')});
 }

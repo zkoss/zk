@@ -99,7 +99,7 @@
 	margin: 0;
 	background: #F1F9FF;
 	padding-top: 6px;
-	<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+	<c:if test="${zk.ie < 8}">
 	zoom: 1; <%-- fixed for B50-3315594.zul --%>
 	</c:if>
 }
@@ -322,8 +322,8 @@
 }
 
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
-<c:if test="${c:isExplorer7()}">
+<c:if test="${zk.ie > 0}">
+<c:if test="${zk.ie >= 7}">
 .z-panel-tm {
 	overflow: visible;
 }
@@ -336,7 +336,7 @@
 	position: relative;
 }
 
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-panel-tl,
 .z-panel-tr,
 .z-panel-bl,

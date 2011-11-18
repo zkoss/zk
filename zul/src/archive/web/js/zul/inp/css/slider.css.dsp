@@ -102,7 +102,7 @@
 }
 
 <%-- IE 6 GIF  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-slider-sphere-hor,
 .z-slider-scale,
 .z-slider-hor,

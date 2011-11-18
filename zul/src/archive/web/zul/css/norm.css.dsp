@@ -102,10 +102,12 @@ div.z-error .errnum {
 	color: #C60303;
 	font-weight: bold;	
 }
-<c:if test="${!c:browser('ie6-')}">
-.ie7 div.z-error .btn {
+<c:if test="${zk.ie != 6}">
+<c:if test="${zk.ie == 7}">
+div.z-error .btn {
 	display: inline;
 }
+</c:if>
 div.z-error .errnum {
 	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -33px 2px transparent;
 }
@@ -117,7 +119,7 @@ div.z-error .close {
 }
 </c:if>
 <%-- IE6 --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 div.z-error .btn {
 	display: inline;
 	zoom: 1;
@@ -289,7 +291,7 @@ div.z-log button {
 .z-word-nowrap {
 	white-space: nowrap;
 }
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 .z-word-nowrap  .z-row-inner,
 .z-word-nowrap  .z-cell,
 .z-word-nowrap  .z-listcell {
@@ -523,7 +525,7 @@ span.z-upload input {
 }
 
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 <c:choose>
 <c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk img	{
@@ -547,7 +549,7 @@ option {
 </c:choose>
 
 <%-- IE6  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-shadow {
 	background: #888; zoom: 1; display: none;
 	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
@@ -561,28 +563,13 @@ span.z-drop-disallow {
 </c:if><%-- IE6 --%>
 </c:if><%--IE --%>
 
-<%-- Gecko (3.5 supports word-break )--%>
-<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
-.z-word-wrap,
-.z-word-wrap .z-auxheader-cnt {
-	overflow: hidden;
-	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
-}
-span.z-word-wrap {<%-- label use only --%>
-	display: block;
-}
-</c:if>
-
 <%-- Opera --%>
-<c:if test="${c:isOpera()}">
+<c:if test="${zk.opera > 0}">
 option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:if>
-
-
-
 
 <%-- Auxheader --%>
 .z-auxheader-cnt {

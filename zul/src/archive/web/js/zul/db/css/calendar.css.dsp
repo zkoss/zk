@@ -212,7 +212,7 @@ td.z-calendar-wkend {
 
 <%-- Issues --%>
 <%-- 3159648 --%>
-<c:if test="${c:isGecko3()}">
+<c:if test="${zk.gecko > 0}">
 .z-calendar-disd,
 .z-calendar-disd * {
 	opacity: 1;	
@@ -220,7 +220,7 @@ td.z-calendar-wkend {
 }
 </c:if>
 <%-- 1735084 --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-datebox-rounded-calyear td,
 .z-calendar-calyear td, .z-datebox-calyear td {
 	color: #404040; 

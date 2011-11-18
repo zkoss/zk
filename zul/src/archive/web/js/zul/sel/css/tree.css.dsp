@@ -227,7 +227,7 @@ td.z-treecell-disd a:visited, td.z-treecell-disd a:hover {
 }
 tr.z-treerow-seld {
 	background-image: url(${c:encodeURL('~./zul/img/tree/item-sel.png')});
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 		background-image: url(${c:encodeURL('~./zul/img/tree/item-sel.gif')});
 	</c:if>
 	border: 1px solid #6f97d2;
@@ -255,7 +255,7 @@ tr.z-treerow-over-seld {
 	margin-top: -1px;
 }
 
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 .z-tree-header-bg,
 .z-dottree-header-bg,
 .z-filetree-header-bg,
@@ -539,7 +539,7 @@ div.z-vfiletree div.z-vfiletree-header tr.z-auxhead th:last-child {
 	line-height: 18px;<%-- Bug ZK-508 --%>
 }
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 div.z-tree-header, div.z-dottree-header, div.z-filetree-header, div.z-vfiletree-header,
 div.z-tree-footer, div.z-dottree-footer, div.z-filetree-footer, div.z-vfiletree-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
@@ -573,13 +573,13 @@ div.z-tree-body, div.z-dottree-body,
 div.z-filetree-body, div.z-vfiletree-body {
 	position: relative; <%-- Bug 1766244  --%>
 }
-<c:if test="${!c:browser('ie8')}">
+<c:if test="${!(zk.ie >= 8)}">
 tr.z-tree-faker, tr.z-dottree-faker,
 tr.z-filetree-faker, tr.z-vfiletree-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
 </c:if>
-<c:if test="${c:browser('ie8')}">
+<c:if test="${zk.ie >= 8}">
 .z-treecol, .z-auxheader {
 	text-align: left;
 }
@@ -607,7 +607,7 @@ span.z-vfiletree-last, span.z-vfiletree-spacer {
 	height: 18px;
 }
 
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 div.z-tree, div.z-dottree, div.z-filetree, div.z-vfiletree {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
@@ -624,16 +624,7 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 </c:if>
 </c:if>
 
-<%-- Gecko (3.5 supports word-break )--%>
-<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
-.z-word-wrap div.z-treecell-cnt,
-.z-word-wrap div.z-treefooter-cnt, 
-.z-word-wrap div.z-treecol-cnt {
-	overflow: hidden;
-	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
-}
-</c:if>
-<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+<c:if test="${zk.ie < 8}">
 .z-tree td.z-treecell,
 .z-dottree td.z-treecell,
 .z-filetree td.z-treecell,
@@ -688,7 +679,7 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
-<c:if test="${c:browser('opera')}">
+<c:if test="${zk.opera > 0}">
 tr.z-treerow-disd .z-treerow-img-checkbox,
 tr.z-treerow-disd .z-treerow-img-radio {
 	overflow: visible;<%-- Bug ZK-397 --%>

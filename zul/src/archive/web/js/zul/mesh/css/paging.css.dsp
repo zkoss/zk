@@ -299,13 +299,13 @@ div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-m {
 	font-family:Arial;
 	font-size: 11px;
 }
-<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+<c:if test="${zk.ie < 8}">
 .z-paging-os .z-paging-os-cnt {
 	top:-4px;
 }
 </c:if>
 <%-- IE 6 GIF  --%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-paging-btn .z-paging-next,
 .z-paging-btn .z-paging-prev,
 .z-paging-btn .z-paging-last,
@@ -322,12 +322,12 @@ div.z-paging-os-cnt-l-over {
 	background-image:url(${c:encodeURL('~./zul/img/paging/paging-btn.gif')});
 }
 </c:if>
-<c:if test="${c:isSafari()}">
+<c:if test="${zk.safari > 0}">
 .z-paging-os .z-paging-os-cnt {
 	top: 4px;
 }
 </c:if>
-<c:if test="${c:isGecko() or c:browser('ie8')}">
+<c:if test="${zk.gecko > 0 or zk.ie >= 8}">
 .z-paging-os {
 	padding-bottom: 3px;
 }

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 .z-hlayout, .z-vlayout {
 	overflow: hidden;
-<c:if test="${c:isExplorer() and not c:browser('ie8')}">
+<c:if test="${zk.ie < 8}">
 	position: relative;
 </c:if>
 }
@@ -15,12 +15,12 @@
 	vertical-align: top;
 	zoom: 1;
 	white-space: normal; <%-- Bug ZK-477 --%>
-<c:if test="${c:isExplorer() and not c:browser('ie8')}">
+<c:if test="${zk.ie < 8}">
 	display: inline;
 </c:if>
 }
 
-<c:set var="dchild" value=">" unless="${c:browser('ie6-')}"/>
+<c:set var="dchild" value=">" unless="${zk.ie == 6}"/>
 .z-valign-bottom ${dchild} .z-hlayout-inner {
 	vertical-align: bottom;
 }

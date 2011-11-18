@@ -73,7 +73,7 @@ tr.z-vbox-sep {
 .z-splitter-os-hor-ns,
 .z-splitter-os-hor-outer {
 	max-width: 8px; width: 8px;
-	<c:if test="${c:browser('ie8')}">
+	<c:if test="${zk.ie >= 8}">
 		padding:0px;
 	</c:if>
 }
@@ -166,7 +166,7 @@ tr.z-vbox-sep {
 .z-splitter-os-ver-btn-b {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b-os.gif')});
 }
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-splitter-ver-btn-l, 
 .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
@@ -184,7 +184,7 @@ tr.z-vbox-sep {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
 }
 </c:if>
-<c:if test="${c:isGecko()}">
+<c:if test="${zk.gecko > 0}">
 div.z-splitter-hor, div.z-splitter-ver, 
 div.z-splitter-os-hor, div.z-splitter-os-ver {
 	-moz-user-select: none;

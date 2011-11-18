@@ -201,12 +201,12 @@
 	background-position: 0 -500px;
 }
 
-<c:if test="${c:isExplorer() and not c:browser('ie8')}">
+<c:if test="${zk.ie < 8}">
 .z-toolbarbutton {
 	display: inline;
 }
 
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-toolbarbutton,
 .z-toolbarbutton-body,
 .z-toolbarbutton-cnt {
@@ -222,12 +222,12 @@
 	color:gray !important;
 	cursor:default !important;
 }
-.z-toolbarbutton-disd ${c:isExplorer() ? '*': ''} { <%-- bug 3022237 --%>
+.z-toolbarbutton-disd ${zk.ie > 0 ? '*': ''} { <%-- bug 3022237 --%>
 	opacity: .5;
 	-moz-opacity: .5;
 	filter: alpha(opacity=50);
 }
-<c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
+<c:if test="${zk.safari > 0}"><%-- remove browser's focus effect --%>
 .z-toolbar a:focus {
 	outline: none !important;
 }

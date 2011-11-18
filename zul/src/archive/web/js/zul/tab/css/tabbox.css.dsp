@@ -45,7 +45,7 @@
 	margin-top: -1px;
 	border-bottom: 1px solid #E1E1E1;
 	height: 100%;
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 		padding-bottom: 5px;
 	</c:if>
 }
@@ -244,7 +244,7 @@
 }
 .z-tab-seld .z-tab-hr {
 	background-position: right 0;
-	<c:if test="${c:isExplorer()}">
+	<c:if test="${zk.ie > 0}">
 	position: relative;
 	</c:if>
 }
@@ -433,7 +433,7 @@
 	border-left: 0 none;
 	position: relative;
 }
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-tabs-ver-space {
 	margin-right: -4px;
 }
@@ -785,7 +785,7 @@
 	border-bottom: 1px solid #CFCFCF;
 }
 <%-- IE 6 Image and Fix--%>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 .z-tab-hl, .z-tab-hr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
 }

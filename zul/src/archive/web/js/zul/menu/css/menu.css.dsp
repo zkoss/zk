@@ -115,13 +115,13 @@
 	padding-left:12px;
 	padding-right:0;
 }
-<c:if test="${c:browser('gecko')}">
+<c:if test="${zk.gecko > 0}">
 .z-menu-inner-m button.z-menu-btn::-moz-focus-inner,
 .z-menu-item-inner-m button.z-menu-item-btn::-moz-focus-inner {
 	border: 0;
 }
 </c:if>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-menu-inner-m .z-menu-btn{
 	padding-right:4px;
 }
@@ -255,7 +255,7 @@
 	color:#222222;
 	display:block;
 	line-height:17px;
-	<c:if test="${c:browser('ie7-')}">
+	<c:if test="${zk.ie == 7}">
 		max-height:17px;
 	</c:if>
 	outline-color:-moz-use-text-color;
@@ -374,7 +374,7 @@
 	position:relative;
 	left: 25px;
 	margin-right: 23px;
-	<c:if test="${c:browser('safari')}">
+	<c:if test="${zk.safari > 0}">
 	height: 1px;
 	</c:if>
 }
@@ -424,7 +424,7 @@
 .z-menubar-hor-right-scroll-over {
 	background-position: 0 -1px;
 }
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 a.z-menu-item-cnt:visited,
 a.z-menu-item-cnt {
 	color: black;

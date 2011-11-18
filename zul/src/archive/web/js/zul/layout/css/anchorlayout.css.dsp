@@ -9,7 +9,7 @@
     float: left; padding: 0; margin: 0;
 }
 
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 .z-anchorlayout,
 .z-anchorchildren {
     zoom: 1;

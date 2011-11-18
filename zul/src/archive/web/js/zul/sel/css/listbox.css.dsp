@@ -127,7 +127,7 @@ td.z-listcell-disd a:visited, td.z-listcell-disd a:hover {
 }
 tr.z-listitem-seld {
 	background-image: url(${c:encodeURL('~./zul/img/tree/item-sel.png')});
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 		background-image: url(${c:encodeURL('~./zul/img/tree/item-sel.gif')});
 	</c:if>
 }
@@ -166,7 +166,7 @@ td.z-listgroup-inner div.z-listcell-cnt {
 	color:#636363;
 	padding: 2px;
 	width: auto;
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 	width: 100%;
 	</c:if>
 	font-weight: bold;
@@ -294,7 +294,7 @@ div.z-listbox-header th.z-listheader-sort-dsc div.z-listheader-cnt {
 	overflow: hidden;
 }
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 div.z-listbox-header, div.z-listbox-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
 }
@@ -316,39 +316,29 @@ div.z-listcell-cnt {
 div.z-listbox-body {
 	position: relative; <%-- Bug 1766244 --%>
 }
-<c:if test="${!c:browser('ie8')}">
+<c:if test="${!(zk.ie >= 8)}">
 tr.z-listbox-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
 </c:if>
-<c:if test="${c:browser('ie8')}">
+<c:if test="${zk.ie >= 8}">
 .z-listheader, .z-auxheader {
 	text-align: left;
 }
 </c:if>
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 div.z-listbox {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
 </c:if>
 </c:if>
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 .z-listbox-header-bg {
 	display: none;
 }
 </c:if>
-<%-- Gecko (3.5 supports word-break )--%>
-<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
-.z-word-wrap div.z-listcell-cnt,
-.z-word-wrap div.z-listfooter-cnt,
-.z-word-wrap div.z-listheader-cnt {
-	overflow: hidden;
-	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
-}
-</c:if>
 
-
-<c:if test="${c:browser('ie7-') or c:browser('ie6-')}">
+<c:if test="${zk.ie < 8}">
 .z-listbox td.z-listcell{
 	border-color: #FFFFFF #FFFFFF #FFFFFF #FFFFFF;
 }
@@ -426,7 +416,7 @@ div.z-listbox {
 	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
-<c:if test="${c:browser('opera')}">
+<c:if test="${zk.opera > 0}">
 tr.z-listitem-disd .z-listitem-img-checkbox,
 tr.z-listitem-disd .z-listitem-img-radio {
 	overflow: visible;<%-- Bug ZK-397 --%>

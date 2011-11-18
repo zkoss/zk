@@ -187,7 +187,7 @@ td.z-footer {
 <%-- ZK Column's menu --%>
 .z-column .z-column-cnt {
 	position: relative;
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 		 zoom: 1;
 	</c:if>
 }
@@ -287,7 +287,7 @@ tr.z-row .z-cell {
 	background: white;
 	border: 1px solid white;
 	border-right: 1px solid transparent;
-	<c:if test="${c:browser('ie6-')}">
+	<c:if test="${zk.ie == 6}">
 	border-right: 1px solid white;
 	</c:if>
 	padding: 4px 4px 4px 6px;
@@ -322,7 +322,7 @@ tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
 	overflow: hidden;
 }
 <%-- IE --%>
-<c:if test="${c:isExplorer()}">
+<c:if test="${zk.ie > 0}">
 div.z-grid-header, div.z-grid-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
 }
@@ -345,18 +345,18 @@ div.z-groupfoot-cnt {
 div.z-grid-body {
 	position: relative; <%-- Bug 1766244 --%>
 }
-<c:if test="${!c:browser('ie8')}">
+<c:if test="${!(zk.ie >= 8)}">
 tr.z-grid-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
 </c:if>
-<c:if test="${c:browser('ie8')}">
+<c:if test="${zk.ie >= 8}">
 .z-column, .z-auxheader {
 	text-align: left;
 }
 </c:if>
 
-<c:if test="${c:browser('ie6-')}">
+<c:if test="${zk.ie == 6}">
 div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
@@ -380,23 +380,11 @@ tr.z-row td.z-row-inner {
 	background-image: url(${c:encodeURL('~./zul/img/grid/arrows.gif')});
 }
 </c:if>
-<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+<c:if test="${zk.ie < 8}">
 div.z-grid-header-bg {
 	display: none;
 }
 </c:if>
-</c:if>
-
-<%-- Gecko (3.5 supports word-break )--%>
-<c:if test="${c:isGecko() and !c:browser('gecko3.5')}">
-.z-word-wrap div.z-row-cnt, 
-.z-word-wrap div.z-group-cnt,
-.z-word-wrap div.z-groupfoot-cnt,
-.z-word-wrap div.z-footer-cnt,
-.z-word-wrap div.z-column-cnt {
-	overflow: hidden;
-	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
-}
 </c:if>
 
 .z-grid-footer .z-footer {

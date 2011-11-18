@@ -15,7 +15,7 @@ button.z-combobutton {
 	font-size: 0 !important;
 	line-height: 0 !important;
 	width: 4px !important;
-	height: ${c:isGecko()? 0 : 1}px !important;
+	height: ${zk.gecko > 0 ? 0 : 1}px !important;
 }
 .z-combobutton .z-combobutton-cr * {<%-- IE 6 --%>
 	display: block; 
@@ -24,22 +24,13 @@ button.z-combobutton {
 	font-size: 0 !important;
 	line-height: 0 !important;
 }
-<c:if test="${c:browser('gecko2-')}">
-table.z-combobutton {
-	table-layout:fixed;
-}
-button.z-combobutton {<%-- remove browser's focus effect to scroll down, if any--%>
-	position: relative; 
-	top: -5px;
-}
-</c:if>
 span.z-combobutton {
 	display: -moz-inline-box; 
 	vertical-align: bottom; 
 	display: inline-block;
 	margin: 1px 1px 0 0;
 }
-<c:if test="${c:isSafari()}"><%-- remove browser's focus effect --%>
+<c:if test="${zk.safari > 0}"><%-- remove browser's focus effect --%>
 .z-combobutton:focus {
 	outline: none !important;
 }
