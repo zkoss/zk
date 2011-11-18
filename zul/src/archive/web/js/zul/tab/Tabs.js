@@ -206,15 +206,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (toolbar) {
 					var outer, hgh;
 						
-					// fixed FF2's bug
-					if (zk.gecko2_) {
-						outer = toolbar.parentNode.parentNode;
-						outer.style.height = '';
-						hgh = outer.offsetHeight;
-					}
 					this.$n('right').style.right = toolbar.offsetWidth + 'px';
-					if (zk.gecko2_)
-						outer.style.height = jq.px0(zk(outer).revisedHeight(hgh));
 				}
 				
 				if (tbsdiv.offsetWidth < btnsize) return;

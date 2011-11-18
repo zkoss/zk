@@ -13,15 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _domClick = zk.gecko2_ ? function (evt) {
-		var e = evt.originalEvent;
-		if (e) e.z$target = e.currentTarget;
-			//bug 2233787: bug of firefox 2, use currentTarget not target
-			//if pressing arrow keys
-			//It is used by zk.Widget.$
-			//Store it in originalEvent (since jq will construct another)
-	}: null;
-
 	//Two onclick are fired if clicking on label, so ignore it if so
 	function _shallIgnore(evt) {
 		var v = evt.domEvent;
@@ -189,16 +180,12 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (n.checked != n.defaultChecked)
 			n.checked = n.defaultChecked;
 
-		if (zk.gecko2_)
-			jq(n).click(_domClick);
 		this.domListen_(n, "onFocus", "doFocus_")
 			.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var n = this.$n('real');
 		
-		if (zk.gecko2_)
-			jq(n).unbind("click", _domClick);
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 

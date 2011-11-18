@@ -354,21 +354,12 @@ zk.copy(zk, {
 	 * @since 5.0.5
 	 */
 	//ie9: false,
-	/** Returns the version as double (only the first two part of the version, such as 1.9)if it is Gecko-based browsers,
-	 * such as Firefox. Notice that it is 1.9 (Firefox 3.*) and 2.0 (Firefox 4.*).
-	 * Otherwise, it is null.
-	 * <p>For detailed version, such as 1.9.2 (firefox 3.6), yo could check jq.browser.version
-	 * (which is a string, such as "1.9.2").
+	/** Returns the version as double (only the first two part of the version, such as 3.5)
+	 * if it is Gecko-based browsers,
+	 * such as Firefox.
 	 * @type Double
 	 */
 	//gecko: null,
-	/** Whether it is Gecko-based browsers, such as Firefox, and it
-	 * is version 2 (excluding 3 or others).
-	 * <p>Though a bit confusion (backward compatibility), it is the same
-	 * as <code>zk.ff == 2</code>.
-	 * @type Boolean
-	 */
-	//gecko2_: false,
 	/** Returns the version as double (only the first two part of the version, such as 3.6) if it is Firefox,
 	 * such as Firefox. Notice that it is Firefox's version, such as
 	 * 3.5, 3.6 and 4.0.
@@ -379,8 +370,6 @@ zk.copy(zk, {
 	//ff: null,
 	/** Whether it is Gecko-based browsers, such as Firefox, and it
 	 * is version 3 and later.
-	 * <p>Though a bit confusion (backward compatibility), it is the same
-	 * as <code>zk.ff >= 3</code>.
 	 * @type Boolean
 	 */
 	//gecko3: false,
@@ -1220,15 +1209,16 @@ zk.log('value is", value);
 		agent = zk.agent = navigator.userAgent.toLowerCase();
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
-	zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ff = zk.gecko && ((zk.ff = agent.indexOf("firefox/")) > 0) && _ver(agent.substring(zk.ff + 8));
+	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
 	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
-	if (zk.gecko) {
-		zk.css3 = zk.gecko3 = zk.ff >= 3 || zk.gecko >= 1.9; //gecko 1.9.* => ff 3
-		zk.gecko2_ = !zk.gecko3;
+	if (zk.ff) {
+		if (zk.ff < 5) //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
+			zk.ff = zk.gecko = (bodycls = agent.indexOf("firefox/")) > 0
+					&& _ver(agent.substring(bodycls + 8));
+		zk.css3 = zk.gecko3 = zk.ff >= 3;
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
 	} else if (zk.opera) {
 		bodycls = 'opera';
