@@ -1066,17 +1066,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else {
 			//Bug 1556099
 			var ebodyStyle = this.ebody.style,
-				n = this.$n(),
-				nStyle = n.style;
+				n = this.$n();
 			ebodyStyle.height = "";
-			nStyle.height = hgh;
+			n.style.height = hgh;
 			// B50-ZK-599: Grid has no vertical scrollbar when height is set by percentage
 			// have to assign a height to ebody or it will sized by content automatically.
 			if (hgh && hgh != "auto" && hgh.indexOf('%') > 0) {
 				var h = this._vflexSize(n.offsetHeight + 'px'); 
 				if (h < 0) h = 0;
 				if (!zk.ie || zk.ie8 || this._vflex != "min")
-					this.ebody.style.height = h + "px";
+					ebodyStyle.height = h + "px";
 				if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
 			}
 		}
