@@ -1064,11 +1064,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
-			//Bug 1556099: it is strange if we ever check the value of
-			//body.offsetWidth. The grid's body's height is 0 if init called
-			//after grid become visible (due to opening an accordion tab)
-			this.ebody.style.height = "";
-			this.$n().style.height = hgh;
+			//Bug 1556099
+			var ebodyStyle = this.ebody.style,
+				n = this.$n(),
+				nStyle = n.style;
+			ebodyStyle.height = "";
+			nStyle.height = hgh;
+			// B50-ZK-599: Grid has no vertical scrollbar when height is set by percentage
+			// have to assign a height to ebody or it will sized by content automatically.
+			if (hgh.indexOf('%')) {
+				var h = this._vflexSize(n.offsetHeight + 'px'); 
+				if (h < 0) h = 0;
+				if (!zk.ie || zk.ie8 || this._vflex != "min")
+					this.ebody.style.height = h + "px";
+				if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
+			}
 		}
 	},
 	_ignoreHghExt: function () {
