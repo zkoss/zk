@@ -542,48 +542,7 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer7(String userAgent) {
-		return getIEVer(userAgent) >= 7;
-	}
-	/**
-	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
-	 */
-	private static final int getIEVer(String userAgent) {
-		if (userAgent == null) return -1;
-/*
- * IE8 on Windows Vista (Compatibility View)
- * 	Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/4.0)
- * IE8 on Windows Vista
- * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)
- * IE8 on Windows 7
- * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)
- * 64-bit IE on 64-bit Windows:
- * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Win64; x64; Trident/4.0)
- * 32-bit IE on 64-bit Windows:
- * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0)
- * 
- */
-		int j = userAgent.indexOf("MSIE ");
-			//Bug 3107026: in Turkish, "MSIE".toLowerCase() is NOT "msie"
-		userAgent = userAgent.toLowerCase();
-		if (j < 0)
-			j = userAgent.indexOf("msie ");
-		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
-
-		return parseVer(userAgent, j + 5)[0];
-	}
-	/**
-	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
-	 */
-	private static final int[] parseVer(String ua, int j) {
-		int ver = 0;
-		for (int len = ua.length(); j < len;  ++j) {
-			final char cc = ua.charAt(j);
-			if (cc >= '0' && cc <= '9')
-				ver = ver * 10 + cc - '0';
-			else
-				break;
-		}
-		return new int[] {ver, j};
+		return isBrowser(userAgent, "ie7");
 	}
 
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
@@ -625,41 +584,7 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko3(String userAgent) {
-		return getGeckoVer(userAgent) >= 3;
-	}
-	private static final int getGeckoVer(String userAgent) {
-		return getGeckoVer(userAgent, false);
-	}
-	/**
-	 * @param subversion whether to include the subversion.
-	 * If true, it returns 30 instead of 3. It is useful to detect FF 3.5
-	 * (which will return 35 if subversion is true).
-	 */
-	private static final int getGeckoVer(String userAgent, boolean subversion) {
-		if (userAgent == null) return -1;
-		/* 
-		Firefox 3.0.8
-		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.8) Gecko/2009032609 Firefox/3.0.8 (.NET CLR 3.5.30729) FirePHP/0.2.4
-		Firefox 2.0.0.20
-		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
-		Safari 4 beta
-		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16
-		Opera 9.64
-		  Opera/9.64 (Windows NT 5.1; U; en) Presto/2.1.1
-		*/
-		userAgent = userAgent.toLowerCase();
-		if (userAgent.indexOf("gecko/") < 0 || userAgent.indexOf("safari") >= 0
-		|| userAgent.indexOf("opera") >= 0)
-			return -1;
-
-		int j = userAgent.indexOf("firefox/");
-		if (j < 0) return -1;
-
-		int[] vi = parseVer(userAgent, j + 8);
-		int ver = vi[0];
-		if (subversion)
-			ver = ver * 10 + parseVer(userAgent, vi[1] + 1)[0];
-		return ver;
+		return isBrowser(userAgent, "gecko3");
 	}
 
 	/** Returns whether the browser is Safari.

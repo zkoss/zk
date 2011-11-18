@@ -70,12 +70,10 @@ public class ServletFns {
 	 * a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
-	 * "opara", "safari",
-	 * "mil", "hil", "mil-", "ios".<br/>
-	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
-	 * or other.
+	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
+	 * For example, ie9, ios and ie6-.
+	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
+	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).
 	 * @since 3.5.1
 	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
 	 */
