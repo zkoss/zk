@@ -17,6 +17,7 @@ ZK 5.0.10
   ZK-568: Combobox does not scroll to selected item
   ZK-592: ROD Listbox cannot select multiple items with shift + click
   ZK-589: Window in Hlayout the title bar is goen in IE7
+  ZK-591: Datebox constraint combination yyyymmdd and no empty cause javascript error in zksandbox
 
 	--------
 ZK 5.0.9
