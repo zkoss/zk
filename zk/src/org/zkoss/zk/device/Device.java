@@ -153,16 +153,16 @@ public interface Device {
 	 */
 	public void sessionDidActivate(Desktop desktop);
 
-	/** Tests if a client is the givent type.
-	 * @param userAgent represents a client.
-	 * @param type the type of the browser.
-	 * @return true if it matches, false if unable to identify.
-	 * Note: the default identifies ie*, gecko*, safari, opera and hil.
-	 * So, the implementation needs not to identify them (i.e., simply
-	 * return false), though it is harmless to identify.
-	 * @since 5.0.0
+	/** Returns the name and version of th client if the givent user agent
+	 * matches this client, or null if not matched or it is a standard
+	 * browser request.
+	 * @param userAgent represents a client (i.e., HTTP's user-agent).
+	 * @return a pair of objects or null.
+	 * The first element of the pair is the name of the client (String),
+	 * the second element is the version (Double, such as 3.5).
+	 * @since 6.0.0
 	 */
-	public boolean isClient(String userAgent, String type);
+	public Object[] matches(String userAgent);
 
 	/** Reloads the client-side messages in the specified locale.
 	 *

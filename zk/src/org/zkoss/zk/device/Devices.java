@@ -344,20 +344,24 @@ public class Devices {
 		}
 	}
 
-	/** Tests if a client is the givent type.
-	 * It invokes {@link Device#isClient} one-by-one until one
-	 * of them returns true, or all false.
-	 *
-	 * @param userAgent represents a client.
-	 * @param type the type of the browser.
-	 * @return true if it matches, false if unable to identify
-	 * @since 5.0.0
+	/** Returns the name and version of th client if the givent user agent
+	 * matches any of the devices, or null if not matched or it is a standard
+	 * browser request.
+	 * <p>It iterates all devices and invokes {@link Device#matches} one-by-one,
+	 * then returns the first non-null return, if any.
+	 * @param userAgent represents a client (i.e., HTTP's user-agent).
+	 * @return a pair of objects or null.
+	 * The first element of the pair is the name of the client (String),
+	 * the second element is the version (Double, such as 3.5).
+	 * @since 6.0.0
 	 */
-	public static boolean isClient(String userAgent, String type) {
-		for (int j = 0; j < _devs.length; ++j)
-			if (_devs[j].isClient(userAgent, type))
-				return true;
-		return false;
+	public static final Object[] matches(String userAgent) {
+		for (int j = 0; j < _devs.length; ++j) {
+			Object[] inf = _devs[j].matches(userAgent);
+			if (inf != null)
+				return inf;
+		}
+		return null;
 	}
 
 	/** Adds a device based on the XML declaration.

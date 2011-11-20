@@ -121,7 +121,7 @@ public class WebManager {
 		_updateURI = updateURI;
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
-//		Servlets.setClientIdentifier(new ClientIdentifier());
+		Servlets.setClientIdentifier(new ClientIdentifier());
 			//plugin device-dependent browser identifier
 
 		//load config as soon as possible since it might set some system props
@@ -534,7 +534,27 @@ public class WebManager {
 		}
 	}
 
-/*	private static class ClientIdentifier
-	implements Servlets.ClientIdentifier {
-	}*/
+	private static class ClientIdentifier implements Servlets.ClientIdentifier {
+		private final String _name;
+		private final double _version;
+		private ClientIdentifier() {
+			this(null, 0);
+		}
+		private ClientIdentifier(String name, double version) {
+			_name = name;
+			_version = version;
+		}
+		public ClientIdentifier matches(String userAgent) {
+			Object[] inf = org.zkoss.zk.device.Devices.matches(userAgent);
+			if (inf != null)
+				return new ClientIdentifier((String)inf[0], (Double)inf[1]);
+			return null; 
+		}
+		public String getName() {
+			return _name;
+		}
+		public double getVersion() {
+			return _version;
+		}
+	}
 }

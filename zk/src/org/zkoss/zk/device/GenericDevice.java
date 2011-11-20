@@ -82,15 +82,19 @@ abstract public class GenericDevice implements Device {
 		return _embed;
 	}
 
-	/** Tests if a client is the givent type.
-	 * <p>This implementation always return false.
-	 * @param userAgent represents a client.
-	 * @param type the type of the browser.
-	 * @return true if it matches, false if unable to identify
-	 * @since 5.0.0
+	/** Returns the name and version of th client if the givent user agent
+	 * matches this client, or null if not matched or it is a standard
+	 * browser request.
+	 * <p>This implementation always returns null. That is, it assumes
+	 * the client is a standard browser.
+	 * @param userAgent represents a client (i.e., HTTP's user-agent).
+	 * @return a pair of objects or null.
+	 * The first element of the pair is the name of the client (String),
+	 * the second element is the version (Double, such as 3.5).
+	 * @since 6.0.0
 	 */
-	public boolean isClient(String userAgent, String type) {
-		return false;
+	public Object[] matches(String userAgent) {
+		return null;
 	}
 
 	/** Reloads the client-side messages in the specified locale.
