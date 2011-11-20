@@ -84,7 +84,6 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.SimpleIdSpace;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.ui.impl.Utils;
 import org.zkoss.zk.au.AuRequest;
@@ -243,26 +242,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((AbstractComponent)owner).bindToIdSpace(comp);
 		else if (owner instanceof Page)
 			((AbstractPage)owner).addFellow(comp);
-		else if (owner != null)
-			((SimpleIdSpace)owner).addFellow(comp);
 	}
 	private static void removeFellow(Component comp, IdSpace owner) {
 		if (owner instanceof Component)
 			((AbstractComponent)owner).unbindFromIdSpace(comp.getId());
 		else if (owner instanceof Page)
 			((AbstractPage)owner).removeFellow(comp);
-		else if (owner != null)
-			((SimpleIdSpace)owner).removeFellow(comp);
 	}
 	private static IdSpace getSpaceOwnerOfParent(Component comp) {
 		final Component parent = comp.getParent();
-		return parent != null ? parent.getSpaceOwner():
-			fixWithVirtualIdSpace(comp.getPage());
+		return parent != null ? spaceOwnerNoVirtual(parent): //ignore virtual IdSpace
+			comp.getPage();
 	}
-	/** Fixed with a virtual ID space if the give ID space is null. */
-	private static IdSpace fixWithVirtualIdSpace(IdSpace idspace) {
-		return idspace != null ? idspace: ExecutionsCtrl.getVirtualIdSpace();
-	}
+
 	/** Removes from the ID spaces, if any, when ID is changed. */
 	private static void removeFromIdSpaces(final Component comp) {
 		final String compId = comp.getId();
@@ -292,7 +284,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("Not unique in ID space "+is+": "+newId);
 		}
 	}
-	private static boolean isAutoId(String compId) {
+	/*package*/ static boolean isAutoId(String compId) {
 		return compId.length() == 0;
 	}
 
@@ -342,7 +334,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Checks the uniqueness in ID space when changing parent. */
 	private static void checkIdSpacesDown(Component comp, Component newparent) {
-		final IdSpace is = newparent.getSpaceOwner();
+		final IdSpace is = spaceOwnerNoVirtual(newparent); //exclude virtual IdSpace
+			//for checking, it is better NOT to ignore virtual IdSpace
+			//but, for better performance, we don't.
 		if (is != null)
 			checkIdSpacesDown(comp, is);
 	}
@@ -416,7 +410,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final boolean samepg = page == _page;
 		if (!samepg) {
 			if (page != null) {
-				if (_page != null && _page.getDesktop() != page.getDesktop())
+				if (_page == null)
+					clearVirtualIdSpace(); //clear if being attached
+				else if (_page.getDesktop() != page.getDesktop())
 					throw new UiException("The new page must be in the same desktop: "+page);
 					//Not allow developers to access two desktops simutaneously
 				checkIdSpacesDown(this, page);
@@ -600,13 +596,64 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public IdSpace getSpaceOwner() {
-		Component p = this;
+		return spaceOwner(this, false);
+	}
+	private static IdSpace spaceOwnerNoVirtual(Component p) {
+		return spaceOwner(p, true);
+	}
+	private static IdSpace spaceOwner(Component p, boolean ignoreVirtualIS) {
+		Component top;
 		do {
 			if (p instanceof IdSpace)
 				return (IdSpace)p;
+			top = p;
 		} while ((p = p.getParent()) != null);
-		return fixWithVirtualIdSpace(_page);
+
+		final AbstractComponent ac = (AbstractComponent)top;
+		return ac._page != null ? ac._page:
+			ignoreVirtualIS ? null: ac.getVirtualIdSpace();
 	}
+	/** Returns the UI object that will serve as a space owner.
+	 * Unlike {@link #spaceOwner}, it will return the top component if
+	 * it is a virtual IdSpace. Furthermore, clearVirtualIdSpace will be called
+	 * before returned. It is used only by {@link #setParent}.
+	 */
+	private static Object spaceController(Component p) {
+		Component top;
+		do {
+			if (p instanceof IdSpace)
+				return p;
+			top = p;
+		} while ((p = p.getParent()) != null);
+
+		final AbstractComponent ac = (AbstractComponent)top;
+		if (ac._page != null)
+			return ac._page;
+		ac.clearVirtualIdSpace();
+		return ac; //yes, return the top (virtual ID space)
+	}
+
+	/** Called only if this is root and has no page. The caller has to make sure it.
+	 */
+	private IdSpace getVirtualIdSpace() {
+		if (_chdinf != null) {
+			if (_chdinf.vispace == null)
+				_chdinf.vispace = new VirtualIdSpace(this);
+			return _chdinf.vispace;
+		}
+		return new VirtualIdSpace(this);
+			//no need to cache since it is fast and small (since no child)
+	}
+	/** It must be called if a root component without page and doesn't implement
+	 * idspace: 1) is added to a page, 2) is added to a component,
+	 * 3) add or remove a new descendant (not under another IdSpace).
+	 * It is harmless if called redundantly.
+	 */
+	private void clearVirtualIdSpace() {
+		if (_chdinf != null)
+			_chdinf.vispace = null;
+	}
+
 	public boolean hasFellow(String compId) {
 		if (this instanceof IdSpace)
 			return _auxinf.spaceInfo.fellows.containsKey(compId);
@@ -910,10 +957,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.getAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.getAttributeOrFellow(name, true);
-
-			final IdSpace idspace = ExecutionsCtrl.getVirtualIdSpace();
-			if (idspace != null)
-				return idspace.getFellowIfAny(name);
+			if (!(this instanceof IdSpace))
+				return getVirtualIdSpace().getFellowIfAny(name);
 		}
 		return null;
 	}
@@ -927,10 +972,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _parent.hasAttributeOrFellow(name, true);
 			if (_page != null)
 				return _page.hasAttributeOrFellow(name, true);
-
-			final IdSpace idspace = ExecutionsCtrl.getVirtualIdSpace();
-			if (idspace != null)
-				return idspace.hasFellow(name);
+			if (!(this instanceof IdSpace))
+				return getVirtualIdSpace().hasFellow(name);
 		}
 		return false;
 	}
@@ -964,11 +1007,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		beforeParentChanged(parent);
 
 		final boolean idSpaceChanged =
-			parent != null ?
-				parent.getSpaceOwner() !=
-					(_parent != null ? _parent.getSpaceOwner(): _page):
-				_page != null || _parent.getSpaceOwner() != null;
+			(parent != null ? spaceController(parent): null)
+			!= (_parent != null ? spaceController(_parent): _page);
 
+		clearVirtualIdSpace(); //clear since it is being added to another
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 
 		//call removeChild and clear _parent
@@ -1062,8 +1104,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("The parent and child must be in the same desktop: "+parent);
 
 			final Component oldparent = child.getParent();
-			if (parent.getSpaceOwner() !=
-			(oldparent != null ? oldparent.getSpaceOwner(): childpg))
+			if (spaceOwnerNoVirtual(parent) !=
+			(oldparent != null ? spaceOwnerNoVirtual(oldparent): childpg))
 				checkIdSpacesDown(child, parent);
 		} else {
 			final Page childpg = child.getPage();
@@ -3369,12 +3411,18 @@ w:use="foo.MyWindow"&gt;
 		/** The modification count used to avoid co-modification of _next, _prev..
 		 */
 		private transient int modCntChd;
+		/** The virtual ID space used when this component is a root component,
+		 * but not attached to a page, nor implement IdSpace.
+		 */
+		private transient IdSpace vispace;
 
 		private ChildInfo() {
 		}
 		public Object clone() {
 			try {
-				return super.clone();
+				final Object o = super.clone();
+				((ChildInfo)o).vispace = null; //clean up
+				return o;
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
 			}

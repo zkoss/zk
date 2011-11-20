@@ -976,27 +976,21 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException("pagedef");
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		boolean fakeIS = false;
 		if (parent != null) {
+		//assign page only if parent is not null (rather, we create a fakepg later)
 			final Page ppg = parent.getPage();
 			if (ppg != null)
 				page = ppg;
-			else
-				fakeIS = true;
-			if (page == null) {
-				fakeIS = true;
+			else if (page == null)
 				page = execCtrl.getCurrentPage();
-			}
 		}
 
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
 		final boolean fakepg = page == null;
-		if (fakepg) {
-			fakeIS = true;
+		if (fakepg)
 			page = new VolatilePage(pagedef); //fake
-		}
 
 		final Desktop desktop = exec.getDesktop();
 		final WebApp wapp = desktop.getWebApp();
@@ -1017,9 +1011,6 @@ public class UiEngineImpl implements UiEngine {
 
 		final Initiators inits = Initiators.doInit(pagedef, page,
 			wapp.getConfiguration().getInitiators());
-		final IdSpace prevIS = fakeIS ?
-			ExecutionsCtrl.setVirtualIdSpace(
-				fakepg ? (IdSpace)page: new SimpleIdSpace()): null;
 		if (resolver != null)
 			exec.addVariableResolver(resolver);
 		try {
@@ -1047,8 +1038,6 @@ public class UiEngineImpl implements UiEngine {
 			exec.popArg();
 			execCtrl.setCurrentPage(prevpg); //restore it
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
-			if (fakeIS)
-				ExecutionsCtrl.setVirtualIdSpace(prevIS);
 
 			inits.doFinally();
 
@@ -2151,7 +2140,6 @@ public class UiEngineImpl implements UiEngine {
 				exec.addVariableResolver(resolver);
 
 			Page prevPage = null;
-			IdSpace prevIS = null;
 			Page page = parent != null ? parent.getPage(): null;
 			final boolean fakepg = page == null;
 			if (fakepg) {
@@ -2159,7 +2147,6 @@ public class UiEngineImpl implements UiEngine {
 				page = new VolatilePage(prevPage);
 				((PageCtrl)page).preInit();
 				execCtrl.setCurrentPage(page);
-				prevIS = ExecutionsCtrl.setVirtualIdSpace(page);
 			}
 			try {
 				cs = execCreate0(
@@ -2177,7 +2164,6 @@ public class UiEngineImpl implements UiEngine {
 			} finally {
 				if (fakepg) {
 					execCtrl.setCurrentPage(prevPage);
-					ExecutionsCtrl.setVirtualIdSpace(prevIS);
 					try {
 						((DesktopCtrl)exec.getDesktop()).removePage(page);
 					} catch (Throwable ex) {

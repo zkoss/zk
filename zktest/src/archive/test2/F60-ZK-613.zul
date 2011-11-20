@@ -1,0 +1,51 @@
+<zk>
+	<html><![CDATA[
+	Clicks the following buttons one-by-one. They shall all generate "OK" at
+	the end.
+	]]></html>
+	<separator bar="true"/>
+
+	<button label="test 1">
+		<attribute name="onClick"><![CDATA[{
+	Div d = new Div();
+	Label l = new Label("test");
+	l.setId("t1");
+	d.appendChild(l);
+	if (d.getFellowIfAny("t1") == null)
+		alert("t1 not found");
+	else if (l.getSpaceOwner() == null || d.getSpaceOwner() == null)
+		alert("space owner is wrong: "+l.getSpaceOwner()+":"+d.getSpaceOwner());
+	else if (self.getFellowIfAny("t1") != null)
+		alert("t1 shall not in page");
+	else
+		inf.appendChild(new Label("OK"));
+		}]]></attribute>
+	</button>
+
+	<button label="test 2">
+		<attribute name="onClick"><![CDATA[{
+	Div d = new Div();
+	inf.appendChild(d);
+	Label l = new Label("test");
+	l.setId("t2");
+	d.appendChild(l);
+
+	if (d.getFellowIfAny("t2") == null)
+		alert("t2 not found");
+	else if (self.getFellowIfAny("t2") == null)
+		alert("t2 not found");
+	else {
+		d.detach();
+
+		if (d.getFellowIfAny("t2") == null)
+			alert("t2 not found");
+		else if (self.getFellowIfAny("t2") != null)
+			alert("t2 shall not in page");
+		else
+			inf.appendChild(new Label("OK"));
+	}
+		}]]></attribute>
+	</button>
+
+	<vlayout id="inf"/>
+</zk>

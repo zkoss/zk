@@ -1,0 +1,4 @@
+<zk>
+<label id="l" value="Hi!"/>
+<textbox value="${l.value}"/>
+</zk>
