@@ -134,6 +134,7 @@ ZK 6.0.0
     default styling, without the need to include breeze.jar in the library
     directory on in Maven dependencies. Sapphire and Silvertail are packaged and 
     delivered as they were in ZK 5.
+  + org.zkoss.zk.device.Device.isClient() is replaced with matches().
 
 	--------
 ZK 5.0.10
