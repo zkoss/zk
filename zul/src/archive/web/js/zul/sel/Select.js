@@ -70,10 +70,8 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			if ((opts && opts.skipFixIndex)) {
 				// select by click on item directly,
 				// find the clicked child
-				if (n)
-					n.selectedIndex = selectedIndex;
 				for (w = this.firstChild; w && w.uuid != n.options[selectedIndex].id; w = w.nextSibling)
-					{}
+					;
 			} else {
 				// select from server API call, fix the index
 				for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {

@@ -14,15 +14,30 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<div height="25px">Test both datebox below as follows.</div>
-<div height="15px">Click in input field then press Tab key,</div>
-<div height="25px">you should see an error message about 'no empty'.</div>
-<div height="15px">Select the date 2011-11-11 then press Tab key,</div>
-<div height="25px">you should see NO error message.</div>
-<div height="15px">Change the date to 2011-11-10 then press Tab key,</div>
-<div height="25px">you should see an error message about the date is out of range.</div>
-	<div width="100px" height="100px">
-		<datebox constraint="after 20111111,no empty"/>
-		<datebox constraint="no empty,after 20111111"/>
+	<div width="1200px" height="1000px">
+		<div height="25px">Test the two datebox below as follows.</div>
+		<div height="15px">Click in input field then press Tab key,</div>
+		<div height="25px">you should see an error message about 'no empty'.</div>
+		<div height="15px">Select the date 2011-11-11 then press Tab key,</div>
+		<div height="25px">you should see NO error message.</div>
+		<div height="15px">Change the date to 2011-11-10 then press Tab key,</div>
+		<div height="25px">you should see an error message about the date is out of range.</div>
+			<datebox constraint="after 20111111,no empty"/>
+			<datebox constraint="no empty,after 20111111"/>
+		<div height="25px" />
+		<div height="25px">The datebox below...</div>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can not select or input the date before today.</div></hbox>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can not be empty after you click it.</div></hbox>
+			<datebox constraint="no past,no empty"/>
+		<div height="25px" />
+		<div height="25px">The datebox below...</div>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can not select or input the date before today.</div></hbox>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can not select or input the date after today.</div></hbox>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can not be empty after you click it.</div></hbox>
+			<datebox constraint="no empty, no future, no past"/>
+		<div height="25px" />
+		<div height="25px">The datebox below...</div>
+		<hbox><div height="15px" width="25px" /><div height="15px">Can select or input the date between 2007-12-25 and 2007-12-27 only.</div></hbox>
+			<datebox constraint="between 20071225 and 20071227"/>
 	</div>
 </zk>

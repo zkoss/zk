@@ -2004,16 +2004,18 @@ public class Tree extends MeshElement {
 						from = to = 0;
 					}
 
-					int j = 0;
-					for (Iterator it = getItems().iterator(); it.hasNext(); ++j) {
+					// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
+					Set toRemove = new LinkedHashSet(_selItems);
+					for (Iterator it = selItems.iterator(); it.hasNext();) {
 						final Treeitem item = (Treeitem)it.next();
-						if (selItems.remove(item)) {
+						if (!_selItems.contains(item))
 							addItemToSelection(item);
-						} else if (!paging) {
-							removeItemFromSelection(item);
-						} else {
+					}
+					for (Iterator it = toRemove.iterator(); it.hasNext();) {
+						final Treeitem item = (Treeitem)it.next();
+						if (!selItems.contains(item)) {
 							final int index = getVisibleIndexOfItem(item);
-							if (index >= from && index < to)
+							if (!paging || (index >= from && index < to))
 								removeItemFromSelection(item);
 						}
 					}

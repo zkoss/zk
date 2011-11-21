@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-607.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 21 12:30:04 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<borderlayout>
+		<center >Please click the south icon to open it, then you should see "south" label at the south area</center>
+		<south open="false" flex="true" title="south"
+			collapsible="true">
+			<n:div />
+		</south>
+	</borderlayout>
+</zk>

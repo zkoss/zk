@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-587.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 21 16:04:48 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(250000);
+	</zscript>
+	Please scroll down to the end of the listbox, and then you should be able to the label "Option 249999" (IE8/9 only)
+	<separator/>
+	Note: In IE9 the label may be "Option 249994"
+	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
+		<listhead>
+			<listheader label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+</zk>
