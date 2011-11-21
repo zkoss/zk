@@ -57,7 +57,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							final Binder innerBinder = (Binder) comp.getAttribute(BinderImpl.BINDER);
 							final BinderImpl binder = (BinderImpl) event.getData();
 
-							if(innerBinder!=null && innerBinder!=binder){//it was already handled by innerBinder, ignore it								
+							if(innerBinder!=null){//it was already handled by innerBinder, ignore it								
 								return;
 							}
 							
