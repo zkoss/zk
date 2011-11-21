@@ -3169,16 +3169,18 @@ public class Listbox extends MeshElement {
 						from = to = 0;
 					}
 
-					int j = 0;
-					for (Iterator<Listitem> it = _items.iterator(); it.hasNext(); ++j) {
-						final Listitem item = it.next();
-						if (selItems.contains(item)) {
+					// fine tune with B50-ZK-547.
+					Set toRemove = new LinkedHashSet(_selItems);
+					for (Iterator it = selItems.iterator(); it.hasNext();) {
+						final Listitem item = (Listitem)it.next();
+						if (!_selItems.contains(item))
 							addItemToSelection(item);
-						} else if (!paging) {
-							removeItemFromSelection(item);
-						} else {
+					}
+					for (Iterator it = toRemove.iterator(); it.hasNext();) {
+						final Listitem item = (Listitem)it.next();
+						if (!selItems.contains(item)) {
 							final int index = item.getIndex();
-							if (index >= from && index < to)
+							if (!paging || (index >= from && index < to))
 								removeItemFromSelection(item);
 						}
 					}
