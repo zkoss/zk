@@ -159,6 +159,7 @@ ZK 5.0.10
   ZK-599: Grid has no vertical scrollbar when height is set by percentage
   ZK-580: Wrong cursor position in draggable listitem (firefox only)
   ZK-508: Texts in multi-column trees are not aligned
+  ZK-596: Toolbar in tabbox overlays tabs
 
 	--------
 ZK 5.0.9
