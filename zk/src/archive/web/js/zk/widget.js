@@ -4651,12 +4651,17 @@ zk.Native = zk.$extends(zk.Widget, {
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
 	$n: function (subId) {
-		return !subId && (subId = this.id) ? jq('#' + subId): null;
+		return !subId && (subId = this.id) ? jq('#' + subId) : this.$supers('$n', arguments); // Bug ZK-606/607
 	},
-
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) {
+			if (!this.id && this.parent.className != this.className) {
+				if (s.endsWith('>'))
+					s = s.substring(0, s.length - 1) + ' id="' + this.uuid + '">'; 
+				else
+					s = s + ' id="' + this.uuid + '"';
+			}
 			out.push(s);
 			if (this.value && s.startsWith("<textarea"))
 				out.push(this.value);
