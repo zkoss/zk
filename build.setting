@@ -3,5 +3,9 @@ javadoc=~/prj/javadoc
 unzip=true
 debug=true
 optimize=true
+#tomcat=/usr/tomcat
+#start.service=startup.sh
+	#Invoke the shell script directly
 #start.service=Apache Tomcat 6
+	#Used if Tomcat is installed as a Windows service
 version=6.0.0-FL
