@@ -2069,7 +2069,6 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 
 					// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
 					Set toRemove = new LinkedHashSet(_selItems);
-					toRemove.removeAll(selItems);
 					for (Iterator it = selItems.iterator(); it.hasNext();) {
 						final Treeitem item = (Treeitem)it.next();
 						if (!_selItems.contains(item))
@@ -2077,9 +2076,11 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 					}
 					for (Iterator it = toRemove.iterator(); it.hasNext();) {
 						final Treeitem item = (Treeitem)it.next();
-						final int index = getVisibleIndexOfItem(item);
-						if (!paging || (index >= from && index < to))
-							removeItemFromSelection(item);
+						if (!selItems.contains(item)) {
+							final int index = getVisibleIndexOfItem(item);
+							if (!paging || (index >= from && index < to))
+								removeItemFromSelection(item);
+						}
 					}
 				}
 			} finally {
