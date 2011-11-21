@@ -198,7 +198,7 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 		return ((Comparable)_data).compareTo(node.getData());
 	}
 	
-	protected class TreeNodeChildrenList extends AbstractList {
+	protected class TreeNodeChildrenList extends AbstractList implements java.io.Serializable {
 		
 		protected ArrayList _list = new ArrayList();
 		
