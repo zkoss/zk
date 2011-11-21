@@ -36,6 +36,16 @@ E = zk.$extends(D, {
 	}
 });
 new E().f();
+var d = new D();
+zk.log(d.$instanceof(A), d.$instanceof(E), d.$instanceof(D),
+	d.$instanceof(zk.Object), d.$instanceof(zk.Class));
+	//true, false, true,
+	//true, false
+zk.log(D.isAssignableFrom(E), E.isAssignableFrom(D),
+	D.isAssignableFrom(zk.Object), zk.Object.isAssignableFrom(D),
+	zk.Class.isAssignableFrom(D));
+	//true, false
+	//false, true, false
 </script>
 </body>
 </html>
