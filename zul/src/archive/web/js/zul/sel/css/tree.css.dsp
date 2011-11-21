@@ -365,10 +365,13 @@ div.z-treecol-cnt, div.z-dottreecol-cnt, div.z-filetreecol-cnt,
 div.z-vfiletreecol-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt,
-div.z-dottreefooter-cnt, div.z-dottreecell-cnt, div.z-dottreecol-cnt,
-div.z-filetreefooter-cnt, div.z-filetreecell-cnt, div.z-filetreecol-cnt,
-div.z-vfiletreefooter-cnt, div.z-vfiletreecell-cnt, div.z-vfiletreecol-cnt,
+div.z-treefooter-cnt, div.z-treecol-cnt,
+div.z-dottreefooter-cnt, div.z-dottreecol-cnt,
+div.z-filetreefooter-cnt, div.z-filetreecol-cnt,
+div.z-vfiletreefooter-cnt, div.z-vfiletreecol-cnt,
+<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+div.z-treecell-cnt, div.z-dottreecell-cnt, div.z-filetreecell-cnt, div.z-vfiletreecell-cnt,
+</c:if>
 .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }

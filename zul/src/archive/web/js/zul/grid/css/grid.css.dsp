@@ -218,7 +218,7 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt,
+div.z-footer-cnt, <c:if test="${c:browser('ie6-') or c:browser('ie7-')}">div.z-row-cnt, div.z-group-cnt,</c:if>
 div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }

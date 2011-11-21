@@ -26,6 +26,7 @@ ZK 5.0.10
   ZK-606: Put the hbox include a native component into borderlayout, the south area cannot bre open
   ZK-607: Place a native component in the borderlayout will cause javascript error
   ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
+  ZK-587: ROD in Listbox cannot render 250,000 items (IE8, IE9)
 
 	--------
 ZK 5.0.9

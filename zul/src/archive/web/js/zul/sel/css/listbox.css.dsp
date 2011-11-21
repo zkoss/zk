@@ -201,7 +201,7 @@ div.z-listbox-header th.z-auxheader {
 div.z-listheader-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-listfooter-cnt, div.z-listcell-cnt,
+div.z-listfooter-cnt, <c:if test="${c:browser('ie6-') or c:browser('ie7-')}">div.z-listcell-cnt,</c:if>
 div.z-listheader-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
