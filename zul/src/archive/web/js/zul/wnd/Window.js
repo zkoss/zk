@@ -907,7 +907,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var $n = jq(this.$n()),
 				$tl = $n.find('>div:first'),
 				$bl = $n.find('>div:last');
-			if ($tl.width() + $bl.width()) {}
+			if ($tl.width() + $bl.width()) ;
 		}
 	} : zk.$void,
 	_fixHgh: function () {
