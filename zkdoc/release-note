@@ -25,6 +25,7 @@ ZK 5.0.10
   ZK-564: org.zkoss.zul.DefaultTreeNode$TreeNodeChildrenList is not serializable
   ZK-606: Put the hbox include a native component into borderlayout, the south area cannot bre open
   ZK-607: Place a native component in the borderlayout will cause javascript error
+  ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
 
 	--------
 ZK 5.0.9
