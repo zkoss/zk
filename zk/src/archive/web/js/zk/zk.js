@@ -1215,9 +1215,9 @@ zk.log('value is", value);
 	zk.mobile = zk.ios || zk.android;
 	var bodycls;
 	if (zk.ff) {
-		if (zk.ff < 5) //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
-			zk.ff = zk.gecko = (bodycls = agent.indexOf("firefox/")) > 0
-					&& _ver(agent.substring(bodycls + 8));
+		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
+		&& (bodycls = agent.indexOf("firefox/")) > 0)
+			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
 		zk.css3 = zk.gecko3 = zk.ff >= 3;
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
 	} else if (zk.opera) {
