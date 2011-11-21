@@ -4657,8 +4657,9 @@ zk.Native = zk.$extends(zk.Widget, {
 		var s = this.prolog;
 		if (s) {
 			if (!this.id && this.parent.className != this.className) {
-				if (s.endsWith('>'))
-					s = s.substring(0, s.length - 1) + ' id="' + this.uuid + '">'; 
+				var idx = s.indexOf('>'); 
+				if (idx >= 0)
+					s = s.substring(0, idx) + ' id="' + this.uuid + '">' + s.substring(idx+1, s.length); 
 				else
 					s = s + ' id="' + this.uuid + '"';
 			}
