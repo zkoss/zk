@@ -4656,12 +4656,15 @@ zk.Native = zk.$extends(zk.Widget, {
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) {
+			//hflex/vflex and many components need to know child.$n(), so we have to generate id
+			//if the parent is not native (and no id is assigned) (otherwise, zk.Native.$n() failed)
 			if (!this.id && this.parent.className != this.className) {
-				var idx = s.indexOf('>'); 
+				var extra = ' id="' + this.uuid + '"',
+					idx = s.indexOf('>'); 
 				if (idx >= 0)
-					s = s.substring(0, idx) + ' id="' + this.uuid + '">' + s.substring(idx+1, s.length); 
+					s = s.substring(0, idx) + extra + s.substring(idx); 
 				else
-					s = s + ' id="' + this.uuid + '"';
+					s += extra ;
 			}
 			out.push(s);
 			if (this.value && s.startsWith("<textarea"))
