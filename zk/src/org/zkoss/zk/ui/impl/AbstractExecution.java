@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -58,6 +59,8 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  */
 abstract public class AbstractExecution implements Execution, ExecutionCtrl {
+	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
+
 	private Desktop _desktop;
 	private Page _curpage;
 	private PageDefinition _curpgdef;
@@ -446,6 +449,21 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void log(String msg) {
+		if (_desktop != null)
+			_desktop.getWebApp().log(msg);
+		else
+			_zklog.info(msg);
+	}
+	@Override
+	public void log(String msg, Throwable ex) {
+		if (_desktop != null)
+			_desktop.getWebApp().log(msg, ex);
+		else
+			_zklog.error(msg, ex);
 	}
 
 	//Object//

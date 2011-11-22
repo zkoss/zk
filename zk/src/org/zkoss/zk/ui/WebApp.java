@@ -197,4 +197,16 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * javax.servlet.Servletcontext is returned.
 	 */
 	public Object getNativeContext();
+
+	/** Writes the specified message to a servlet log file, usually an event log.
+	 * The name and type of the servlet log file is specific to the servlet container.
+	 * @since 6.0.0
+	 */
+	public void log(String msg);
+	/** Writes an explanatory message and a stack trace for a given Throwable
+	 * exception to the servlet log file. The name and type of the servlet
+	 * log file is specific to the servlet container, usually an event log. 
+	 * @since 6.0.0
+	 */
+	public void log(String msg, Throwable ex);
 }

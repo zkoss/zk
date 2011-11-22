@@ -171,4 +171,13 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Object getNativeContext() {
 		return _ctx;
 	}
+
+	@Override
+	public void log(String msg) {
+		_ctx.log(msg);
+	}
+	@Override
+	public void log(String msg, Throwable ex) {
+		_ctx.log(msg, ex);
+	}
 }

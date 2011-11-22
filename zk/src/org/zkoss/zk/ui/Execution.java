@@ -1056,12 +1056,13 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public String getBrowser();
+
 	/** Returns whether the client is a browser.
 	 * No matter the client is Ajax, MIL or whatever, it returns true.
 	 * It returns false only if this is a 'fake' execution (aka., request).
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isBrowser();
-
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
@@ -1211,4 +1212,16 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public boolean containsResponseHeader(String name);
+
+	/** Writes the specified message to a servlet log file, usually an event log.
+	 * The name and type of the servlet log file is specific to the servlet container.
+	 * @since 6.0.0
+	 */
+	public void log(String msg);
+	/** Writes an explanatory message and a stack trace for a given Throwable
+	 * exception to the servlet log file. The name and type of the servlet
+	 * log file is specific to the servlet container, usually an event log. 
+	 * @since 6.0.0
+	 */
+	public void log(String msg, Throwable ex);
 }

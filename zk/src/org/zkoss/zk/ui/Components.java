@@ -1651,6 +1651,14 @@ public class Components {
 				return Objects.equals(exec(), ((Exec)o).exec());
 			return Objects.equals(exec(), o);
 		}
+		@Override
+		public void log(String msg) {
+			exec().log(msg);
+		}
+		@Override
+		public void log(String msg, Throwable ex) {
+			exec().log(msg, ex);
+		}
 	}
 	
 	//Proxy to read current requestScope
