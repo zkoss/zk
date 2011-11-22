@@ -52,6 +52,7 @@ ZK 6.0.0
   ZK-609: A way to access the browser information with an implicit object in EL (such as ${zk.ie >= 9})
   ZK-613: The root component is considered as an ID space, so getFellow and wire will work
   ZK-618: WebApp and Execution support log(String) and log(String,Throwable)
+  ZK-614: Support Servlet 3's web fragment
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
