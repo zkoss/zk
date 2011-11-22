@@ -3170,13 +3170,13 @@ public class Listbox extends MeshElement {
 					}
 
 					// fine tune with B50-ZK-547.
-					Set toRemove = new LinkedHashSet(_selItems);
+					Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(_selItems);
 					for (Iterator it = selItems.iterator(); it.hasNext();) {
 						final Listitem item = (Listitem)it.next();
 						if (!_selItems.contains(item))
 							addItemToSelection(item);
 					}
-					for (Iterator it = toRemove.iterator(); it.hasNext();) {
+					for (Iterator it = oldSelItems.iterator(); it.hasNext();) {
 						final Listitem item = (Listitem)it.next();
 						if (!selItems.contains(item)) {
 							final int index = item.getIndex();

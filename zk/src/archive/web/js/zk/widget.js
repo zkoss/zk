@@ -4672,13 +4672,15 @@ zk.Native = zk.$extends(zk.Widget, {
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
 	$n: function (subId) {
-		return !subId && (subId = this.id) ? jq('#' + subId) : this.$supers('$n', arguments); // Bug ZK-606/607
+		return !subId && this.id ? jq('#' + this.id):
+			this.$supers('$n', arguments); // Bug ZK-606/607
 	},
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) {
-			//hflex/vflex and many components need to know child.$n(), so we have to generate id
-			//if the parent is not native (and no id is assigned) (otherwise, zk.Native.$n() failed)
+			//Bug ZK-606/607: hflex/vflex and many components need to know
+			//child.$n(), so we have to generate id if the parent is not native
+			//(and no id is assigned) (otherwise, zk.Native.$n() failed)
 			if (!this.id && this.parent.className != this.className) {
 				var extra = ' id="' + this.uuid + '"',
 					idx = s.indexOf('>'); 
