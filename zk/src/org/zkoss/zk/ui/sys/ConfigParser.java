@@ -239,10 +239,6 @@ public class ConfigParser {
 		for (Element el: root.getElements("client-config")) {
 			if (config != null) {
 				parseClientConfig(config, el);
-			} else {
-				Integer v = parseInteger(el, "resend-delay", false);
-				if (v != null)
-					Library.setProperty(Attributes.RESEND_DELAY, v.toString());
 			}
 		}
 	}
@@ -654,9 +650,6 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "tooltip-delay", true);
 		if (v != null) config.setTooltipDelay(v.intValue());
-
-		v = parseInteger(conf, "resend-delay", false);
-		if (v != null) config.setResendDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)

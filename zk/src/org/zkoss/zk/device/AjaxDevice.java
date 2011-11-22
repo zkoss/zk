@@ -38,11 +38,6 @@ import org.zkoss.zk.au.out.AuScript;
  * @since 2.4.0
  */
 public class AjaxDevice extends GenericDevice {
-	/** It supports {@link #RESEND}.
-	 */
-	public boolean isSupported(int func) {
-		return func == RESEND;
-	}
 	/** Return false to indicate it is not cacheable.
 	 */
 	public boolean isCacheable() {

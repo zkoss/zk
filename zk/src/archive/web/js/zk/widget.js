@@ -4872,7 +4872,6 @@ function zkopt(opts) {
 		switch (nm) {
 		case "pd": zk.procDelay = val; break;
 		case "td": zk.tipDelay =  val; break;
-		case "rd": zk.resendDelay = val; break;
 		case "dj": zk.debugJS = val; break;
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;

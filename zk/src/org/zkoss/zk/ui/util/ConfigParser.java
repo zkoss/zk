@@ -24,8 +24,7 @@ import org.zkoss.idom.Element;
  * as follows:
  *
  * <pre><code>&lt;system-config>
-	&lt;au-writer-class>org.zkoss.zkmax.au.http.SmartAuWriter</au-writer-class>
-	&lt;config-parser-class>org.zkoss.zkmax.init.ConfigParser</config-parser-class>
+	&lt;config-parser-class>com.foo.ConfigParser</config-parser-class>
 &lt;/system-config>
  *</code></pre>
  *

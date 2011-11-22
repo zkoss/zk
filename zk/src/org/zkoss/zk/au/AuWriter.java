@@ -40,13 +40,10 @@ public interface AuWriter {
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
 	 * @param response the response (HttpServletResponse if HTTP)
-	 * @param timeout the elapsed time (milliseconds) before sending
-	 * a whitespace to the client to indicate the connection is alive.
-	 * Ignored if non-positive, or the implementation doesn't support
-	 * this feature.
 	 * @return this object
+	 * @since 6.0.0 (the signature is simplified)
 	 */
-	public AuWriter open(Object request, Object response, int timeout)
+	public AuWriter open(Object request, Object response)
 	throws IOException;
 	/** Closes the writer and flush the result to client.
 	 *

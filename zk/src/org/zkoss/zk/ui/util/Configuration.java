@@ -146,7 +146,7 @@ public class Configuration {
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
+		_promptDelay = 900, _tooltipDelay = 800;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -173,7 +173,6 @@ public class Configuration {
 	/** Constructor.
 	 */
 	public Configuration() {
-		_resendDelay = Library.getIntProperty(Attributes.RESEND_DELAY, -1);
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -1574,7 +1573,9 @@ public class Configuration {
 	public int getTooltipDelay() {
 		return _tooltipDelay;
 	}
-	/** Specifies the time, in milliseconds, before ZK Client Engine re-sends
+	/** @deprecated As of release 6.0.0, it is removed without replacement, since
+	 * it is rarely applicable and over complicated.
+	 * Specifies the time, in milliseconds, before ZK Client Engine re-sends
 	 * the request to the server.
 	 *
 	 * <p>Default: -1 (i.e., disabled).
@@ -1592,14 +1593,15 @@ public class Configuration {
 	 * Since 3.0.3, you can specify a nonpositive number to disable the resend.
 	 */
 	public void setResendDelay(int minisecs) {
-		_resendDelay = minisecs;
 	}
-	/** Returns the time, in milliseconds, before ZK Client Engine re-sends
+	/** @deprecated As of release 6.0.0, it is removed without replacement, since
+	 * it is rarely applicable and over complicated.
+	 * Returns the time, in milliseconds, before ZK Client Engine re-sends
 	 * the request to the server.
 	 * @since 3.0.1
 	 */
 	public int getResendDelay() {
-		return _resendDelay;
+		return -1;
 	}
 
 	/** Returns whether this Web application can be crawled by search engies.

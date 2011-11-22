@@ -557,10 +557,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(_compress);
-		out.open(request, response,
-			desktop.getDevice().isSupported(Device.RESEND) ?
-				getProcessTimeout(config.getResendDelay()): 0);
-				//Note: getResendDelay() might return nonpositive
+		out.open(request, response);
 		try {
 			wappc.getUiEngine().execUpdate(exec, aureqs, out);
 		} catch (RequestOutOfSequenceException ex) {
@@ -581,13 +578,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		return ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktopIfAny(dtid);
 	}
 
-	private static int getProcessTimeout(int resendDelay) {
-		if (resendDelay > 0) {
-			resendDelay = (resendDelay * 3) >> 2;
-			if (resendDelay <= 0) resendDelay = 1;
-		}
-		return resendDelay;
-	}
 	/**
 	 * @param wapp the Web application (or null if not available yet)
 	 */
@@ -599,7 +589,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			response.setHeader("ZK-SID", sid);
 
 		final AuWriter out =
-			AuWriters.newInstance().open(request, response, 0);
+			AuWriters.newInstance().open(request, response);
 
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);
@@ -683,7 +673,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	HttpServletResponse response, String errmsg)
 	throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
-		AuWriter out = AuWriters.newInstance().open(request, response, 0);
+		AuWriter out = AuWriters.newInstance().open(request, response);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
 	}

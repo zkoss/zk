@@ -127,16 +127,6 @@ public class Attributes {
 	public static final String GAE_FIX = "org.zkoss.zk.gae.fix";
 
 	//Library//
-	/** A library property to indicate the default resend delay
-	 * (an integer in milliseconds).
-	 * If specified, {@link org.zkoss.zk.ui.util.Configuration#getResendDelay}
-	 * will use it as the default. Otherwise, -1 is assumed.
-	 * <p>Notice that this property is ignored after ZK is booted
-	 * since ZK depends on {@link org.zkoss.zk.ui.util.Configuration#getResendDelay}.
-	 * @since 3.0.3
-	 */
-	public static final String RESEND_DELAY = "org.zkoss.zk.au.resendDelay";
-
 	/** A library property to indicate whether UUID shall not be recycled.
 	 * <p>Default: false (i.e., not disabled).
 	 * @since 5.0.3

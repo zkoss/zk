@@ -92,22 +92,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		fn.apply(zAu, data);
 	}
 
-	// IE6 sometimes remains readyState==1 (reason unknown), so resend.
-	function ajaxReqTimeout() {
-		//Note: we don't resend if readyState >= 3, since the server is already
-		//processing it
-		var req = ajaxReq, reqInf = ajaxReqInf;
-		if (req && req.readyState < 3) {
-			ajaxReq = ajaxReqInf = null;
-			try {
-				if(typeof req.abort == "function") req.abort();
-			} catch (e2) {
-			}
-			if (reqInf.tmout < 60000) reqInf.tmout += 3000;
-				//sever might be busy, so prolong next timeout
-			ajaxReqResend(reqInf);
-		}
-	}
 	function ajaxReqResend(reqInf, timeout) {
 		if (seqId == reqInf.sid) {//skip if the response was recived
 			pendingReqInf = reqInf; //store as a pending request info
@@ -134,8 +118,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		try {
 			if (req && req.readyState == 4) {
 				ajaxReq = ajaxReqInf = null;
-				if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
-
 				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, pfGetIds(req));
 
 				var sid = req.getResponseHeader("ZK-SID"), rstatus;
@@ -277,8 +259,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 			ajaxReq = req;
 			ajaxReqInf = reqInf;
-			if (zk.resendDelay > 0)
-				ajaxReqInf.tfn = setTimeout(ajaxReqTimeout, zk.resendDelay + reqInf.tmout);
 
 			if (uri) req.send(null);
 			else req.send(reqInf.content);

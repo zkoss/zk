@@ -63,10 +63,8 @@ public class HttpAuWriter implements AuWriter{
 	/** Opens the connection.
 	 *
 	 * <p>Default: it creates an object to store the responses.
-	 *
-	 * <p>This implementation doesn't support the timeout argument.
 	 */
-	public AuWriter open(Object request, Object response, int timeout)
+	public AuWriter open(Object request, Object response)
 	throws IOException {
 		((HttpServletResponse)response).setContentType(AuWriters.CONTENT_TYPE);
 			//Bug 1907640: with Glassfish v1, we cannot change content type

@@ -214,11 +214,6 @@ zk.copy(zk, {
 	 * @type int
 	 */
 	tipDelay: 800,
-	/** The delay before resending the AU request, i.e., assuming the last AU request fails (unit: milliseconds). A negative value means not to resend at all.
-	 * Default: -1 (depending on the server's configuration).
-	 * @type int
-	 */
-	resendDelay: -1,
 	/** The last position that the mouse was clicked (including left and right clicks).
 	 * @type Offset
 	 */
