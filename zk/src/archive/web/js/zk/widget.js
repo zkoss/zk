@@ -2891,6 +2891,13 @@ unbind_: function (skipper, after) {
 		
 		n.style.width = jq.px0(w);
 		
+		// Bug ZK-521
+		if (zk.linux && zk.ff > 6 && jq.nodeName(n, "select")) {
+			var offset = width - margins,
+				diff = offset - n.offsetWidth;
+			if (diff > 0)
+				n.style.width = jq.px0(w + diff);
+		}
 		// fixed for B50-3317729.zul on webkit
 		if (zk.safari) {
 			margins -= zkn.sumStyles("lr", jq.margins);

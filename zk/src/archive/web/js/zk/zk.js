@@ -1223,6 +1223,8 @@ zk.log('value is", value);
 	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
+	zk.linux = agent.indexOf("linux") >= 0;
+	
 	var bodycls;
 	if (zk.gecko) {
 		zk.css3 = zk.gecko3 = zk.ff >= 3 || zk.gecko >= 1.9; //gecko 1.9.* => ff 3
