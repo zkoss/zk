@@ -477,7 +477,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>$C$</attribute-name>
-				<attribute-value>org.zkoss.zkplus.databind.RadiogroupSelectedItemConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.SelectedRadioConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
