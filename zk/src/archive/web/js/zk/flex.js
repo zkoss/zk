@@ -366,11 +366,15 @@ zFlex = { //static methods
 		if (wgt.isRealVisible()) {
 			if (wgt._hflex && wgt._hflex != 'min') {
 				wgt.resetSize_('w');
+				// Bug ZK-597
+				delete wgt._flexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('w');
 			}
 			if (wgt._vflex && wgt._vflex != 'min') {
 				wgt.resetSize_('h');
+				// Bug ZK-597
+				delete wgt._flexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('h');
 			}

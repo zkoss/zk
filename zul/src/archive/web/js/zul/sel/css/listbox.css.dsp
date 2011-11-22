@@ -19,7 +19,10 @@ div.z-listbox-header tr.z-listhead, div.z-listbox-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
+	<c:if test="${!(zk.ie >= 8)}">
+	<%-- Bug B50-3178977 for IE6/7, but cannot use it for IE8+ (Bug ZK-398)--%>
 	position: relative;
+	</c:if>
 	overflow: hidden; 
 	border: 1px solid;
 	white-space: nowrap;

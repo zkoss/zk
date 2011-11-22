@@ -71,8 +71,15 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	 */
 	syncSize: function () {
 		this._shallSize = false;
-		if (this.desktop)
-			zUtl.fireSized(this);
+		if (this.desktop) {
+			// only fire when child has h/vflex
+			for (var w = this.firstChild; w; w = w.nextSibling) {
+				if (w._nvflex || w._nhflex) {
+					zUtl.fireSized(this);
+					break;
+				}
+			}
+		}
 	},
 	onResponse: function () {
 		if (this._shallSize)
@@ -185,6 +192,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		return attr == 'h' ? zk(el).offsetHeight() : zjq.minWidth(el); //See also bug ZK-483
 	},
 	beforeChildrenFlex_: function(child) {
+		// optimized for performance
+		this._shallSize = false;
+		
 		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete child._flexFixed;
 			return false;

@@ -166,6 +166,8 @@ ZK 5.0.10
   ZK-607: Place a native component in the borderlayout will cause javascript error
   ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
   ZK-587: ROD in Listbox cannot render 250,000 items (IE8, IE9)
+  ZK-597: Tree not rendering correctly after event
+  ZK-398: IE8 hflex="min" with grid and listbox, the column border is gone (B50-ZK-272.zul) 
 
 	--------
 ZK 5.0.9
