@@ -597,7 +597,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final String bindDualId = getBindDualId(comp, evtnm);
 		CommandEventListener listener = _listenerMap.get(bindDualId);
 		if (listener == null) {
-			listener = new CommandEventListener();
+			listener = new CommandEventListener(comp);
 			comp.addEventListener(evtnm, listener);
 			_listenerMap.put(bindDualId, listener);
 		}
@@ -620,6 +620,12 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private class CommandEventListener implements EventListener<Event> { //event used to trigger command
 		private boolean _prompt = false;
 		private CommandBinding _commandBinding;
+		final private Component _target;
+		
+		CommandEventListener(Component target){
+			_target = target;
+		}
+		
 		private void setCommand(CommandBinding command) {
 			//if 1.add a non-null command then 2.add a null command, the prompt will be true and commandBinding is not null 
 			//ex, <textbox value="@bind(vm.firstname)" onChange="@bind('save')"/>
@@ -633,7 +639,10 @@ public class BinderImpl implements Binder,BinderCtrl {
 		public void onEvent(Event event) throws Exception {
 			//command need to be confirmed shall be execute first!
 			//must sort the command sequence?
-			final Component comp = event.getTarget();
+			
+			//BUG 619, event may come from children of some component, 
+			//ex tabbox.onSelect is form tab, so we cannot depend on event's target
+			final Component comp = _target;
 			final String evtnm = event.getName();
 			final Set<Property> notifys = new LinkedHashSet<Property>();
 			int result = SUCCESS; //command execution result, default to success
