@@ -14,6 +14,8 @@ package org.zkoss.zul;
 
 import java.util.AbstractList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -259,7 +261,12 @@ public class DefaultTreeNode implements TreeNode, Comparable,java.io.Serializabl
 			remove(index);
 			return true;
 		}
-		
+
+		/** Used only internally by DefaultTreeModel.sort0(). it won't fire event INTERVAL_ADDED or INTERVAL_REMOVED */
+		// B50-ZK-566: Set sortDirection to treecol will show an error
+		/*package*/ void sort(Comparator cmpr) {
+			Collections.sort(_list, cmpr);
+		}
 	}
 	
 }

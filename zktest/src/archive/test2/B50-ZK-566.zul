@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-566.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov  22 14:00:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div height="15px" />
+	<div height="25px">If you see the tree with descending order, the bug is fixed.</div>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+
+		
+		TreeModel model = new DefaultTreeModel(
+				new DefaultTreeNode(null, new DefaultTreeNode[] {
+		      		new DefaultTreeNode("item 0"),
+		          	new DefaultTreeNode("item 1"),
+		          	new DefaultTreeNode("item 2")
+				})
+			);
+		
+		
+		TreeitemRenderer renderer = new TreeitemRenderer() {
+		    public void render(Treeitem item, Object data) throws Exception {
+		    	TreeNode node = (TreeNode) data;
+		        item.setLabel(node.getData().toString());
+		    }
+		};
+	]]></zscript>
+	<tree width="300px" itemRenderer="${renderer}" model="${model}">
+		<custom-attributes org.zkoss.zul.tree.autoSort="true"/>
+		<treecols>
+			<treecol  label="col" sort="auto"  sortDirection="descending" />
+		</treecols>
+	</tree>
+</zk>

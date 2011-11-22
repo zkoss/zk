@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
 
 /**
@@ -87,7 +88,10 @@ implements TreeModelExt, java.io.Serializable {
 	
 	private void sort0(TreeNode node, Comparator cmpr) {
 		if (node.getChildren() == null) return;
-		Collections.sort(node.getChildren(), cmpr);
+		if (node instanceof DefaultTreeNode)
+			((TreeNodeChildrenList)node.getChildren()).sort(cmpr);
+		else
+			Collections.sort(node.getChildren(), cmpr);
 		for (Iterator it = node.getChildren().iterator(); it.hasNext();)
 			sort0((TreeNode) it.next(), cmpr);
 	}
