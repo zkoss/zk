@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-601.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 22 15:38:10 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please scroll to the end of the scrollbar (right-most), and then scroll back to the begin of the scrollbar.
+<separator/>
+In IE8, all of the textbox shouldn't cut its right border.
+	<grid height="350px" width="817px">
+		<frozen style="background: #DFDED8" columns="3">
+			<div style="padding: 0 10px;" /> 
+		</frozen>
+		<columns>
+			<column width="80px" label="1" align="right"/> 
+			<column width="80px" label="2" align="right"/>
+			<column width="80px" label="3" align="right"/>
+			<column width="80px" label="4" align="right"/>
+			<column width="80px" label="5" align="right"/>
+			<column width="80px" label="6" align="right"/>
+			<column width="80px" label="7" align="right"/>
+			<column width="80px" label="8" align="right"/>
+			<column width="80px" label="9" align="right"/>
+			<column width="80px" label="10" align="right"/>
+		</columns>
+		<rows>
+			<row>
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+				<intbox value="12345" style="text-align:right;" width="50px" />
+			</row>
+		</rows>
+	</grid>
+</zk>

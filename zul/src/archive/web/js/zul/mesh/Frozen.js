@@ -318,6 +318,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh.efoottbl.style.width = width;
 
 		mesh._restoreFocus();
+		
+		// Bug ZK-601
+		if (zk.ie == 8)
+			zk(mesh).redoCSS();
 	}
 });
 

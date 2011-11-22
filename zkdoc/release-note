@@ -31,6 +31,7 @@ ZK 5.0.10
   ZK-398: IE8 hflex="min" with grid and listbox, the column border is gone (B50-ZK-272.zul)
   ZK-395: Opera hflex="min" fail with listbox and tree in auxhead
   ZK-521: Listbox with hflex=1 too small in FF on Linux
+  ZK-601: Grid content got wrong position after scroll to right then scroll back with frozen
 
 	--------
 ZK 5.0.9
