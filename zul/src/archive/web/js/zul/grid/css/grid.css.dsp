@@ -25,7 +25,10 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	white-space: nowrap;
 	padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
+	<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+	<%-- Bug B50-3178977 for IE6/7, but cannot use it for IE8+ (Bug ZK-398)--%>
 	position: relative;
+	</c:if>
 }
 div.z-grid-header .z-column-sort div.z-column-cnt {
 	cursor: pointer;

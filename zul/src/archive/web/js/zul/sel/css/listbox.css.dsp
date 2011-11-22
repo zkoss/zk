@@ -19,7 +19,10 @@ div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
+	<c:if test="${c:browser('ie6-') or c:browser('ie7-')}">
+	<%-- Bug B50-3178977 for IE6/7, but cannot use it for IE8+ (Bug ZK-398)--%>
 	position: relative;
+	</c:if>
 }
 div.z-listbox-header th.z-listheader-sort div.z-listheader-cnt {
 	cursor: pointer; padding-right: 9px;
