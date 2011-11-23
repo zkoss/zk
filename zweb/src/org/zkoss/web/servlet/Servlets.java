@@ -74,13 +74,22 @@ public class Servlets {
 		_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
 		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*");
 
-	private static final boolean _svl24, _svl23;
+	private static final boolean _svl24, _svl23, _svl3;
 	static {
 		boolean b = false;
 		try {
-			ServletResponse.class.getMethod("getContentType", new Class[0]);
+			HttpSession.class.forName("javax.servlet.annotation.WebServlet");
 			b = true;
 		} catch (Throwable ex) {
+		}
+		_svl3 = true;
+
+		if (!b) {
+			try {
+				ServletResponse.class.getMethod("getContentType", new Class[0]);
+				b = true;
+			} catch (Throwable ex) {
+			}
 		}
 		_svl24 = b;
 
@@ -109,6 +118,13 @@ public class Servlets {
 			|| uri.startsWith("javascript:") || uri.startsWith("about:"));
 	}
 
+	/** Returns whether the current Web server supports Servlet 3.0 or above.
+	 *
+	 * @since 6.0.0
+	 */
+	public static final boolean isServlet3() {
+		return _svl3;
+	}
 	/** Returns whether the current Web server supports Servlet 2.4 or above.
 	 *
 	 * @since 3.0.0
