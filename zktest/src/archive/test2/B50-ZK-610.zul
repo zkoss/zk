@@ -1,0 +1,35 @@
+<!--
+	B50-ZK-610.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Nov 23 11:01:16 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zktest.util.Person;
+		Person[] ps = new Person[] {
+			new Person("A1", "B1"), new Person("A2", "B2"), new Person(null, null)
+		};
+		ListModelList model = new ListModelList(ps);
+		RowRenderer ren = new RowRenderer() {
+			public void render(Row row, Object value) {
+				String fn = ((Person) value).getFirstName();
+				row.appendChild(new Label(fn == null ? "(null)" : fn)); 
+			}
+		};
+	</zscript>
+	<div>
+		Click on the Column to sort several times. If (null) always stay at the first row, it is a bug.
+	</div>
+	<grid model="${model}" rowRenderer="${ren}">
+		<columns>
+			<column sort='auto(firstName)'>Column</column>
+		</columns>
+	</grid>
+</zk>

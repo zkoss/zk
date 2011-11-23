@@ -33,6 +33,7 @@ ZK 5.0.10
   ZK-521: Listbox with hflex=1 too small in FF on Linux
   ZK-601: Grid content got wrong position after scroll to right then scroll back with frozen
   ZK-577: Rendering Issue using Datebox with displayedTimeZones
+  ZK-610: FieldComparator ignores sort direction for null values
 
 	--------
 ZK 5.0.9
