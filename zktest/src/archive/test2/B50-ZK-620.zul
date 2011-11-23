@@ -1,0 +1,29 @@
+<tabbox height="500px" width="500px">
+	<custom-attributes org.zkoss.zul.client.rod="false" />
+	<tabs>
+		<tab label="Definition" />
+		<tab label="Discovery" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+		<html><![CDATA[
+		<ul>
+			<li>Click the Discovery tab, and then you shall see two windows
+			in the second panel.</li>
+		</ul>
+		]]></html>
+		</tabpanel>
+		<tabpanel>
+			<borderlayout>
+				<north>
+					<window title="x" vflex="1" border="normal"></window>
+				</north>
+				
+				<center >
+					<window title="x" vflex="1" border="normal"></window>
+				</center>
+				
+			</borderlayout>
+		</tabpanel>
+	</tabpanels>
+</tabbox>
