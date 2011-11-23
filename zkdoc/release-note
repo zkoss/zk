@@ -32,6 +32,7 @@ ZK 5.0.10
   ZK-395: Opera hflex="min" fail with listbox and tree in auxhead
   ZK-521: Listbox with hflex=1 too small in FF on Linux
   ZK-601: Grid content got wrong position after scroll to right then scroll back with frozen
+  ZK-577: Rendering Issue using Datebox with displayedTimeZones
 
 	--------
 ZK 5.0.9

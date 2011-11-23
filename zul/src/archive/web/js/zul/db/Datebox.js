@@ -514,7 +514,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			out.push('<select id="', this.uuid, '-dtzones" class="', cls, '-timezone-body">');
 			for (var i = 0, len = timezones.length; i < len; i++)
 				out.push('<option value="', timezones[i], '" class="', cls, '-timezone-item">', timezones[i], '</option>');
-			out.push('</select><div>');
+			out.push('</select></div>');
+			// B50-ZK-577: Rendering Issue using Datebox with displayedTimeZones
 		}
 	}
 });
