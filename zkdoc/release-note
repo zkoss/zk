@@ -168,7 +168,13 @@ ZK 5.0.10
   ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
   ZK-587: ROD in Listbox cannot render 250,000 items (IE8, IE9)
   ZK-597: Tree not rendering correctly after event
-  ZK-398: IE8 hflex="min" with grid and listbox, the column border is gone (B50-ZK-272.zul) 
+  ZK-398: IE8 hflex="min" with grid and listbox, the column border is gone (B50-ZK-272.zul)
+  ZK-395: Opera hflex="min" fail with listbox and tree in auxhead
+  ZK-521: Listbox with hflex=1 too small in FF on Linux
+  ZK-601: Grid content got wrong position after scroll to right then scroll back with frozen
+  ZK-577: Rendering Issue using Datebox with displayedTimeZones
+  ZK-610: FieldComparator ignores sort direction for null values
+  ZK-620: The north calculate a wrong size when place borderlayout in the second tab (CE/PE only)
 
 	--------
 ZK 5.0.9

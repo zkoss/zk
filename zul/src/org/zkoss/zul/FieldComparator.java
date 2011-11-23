@@ -148,8 +148,8 @@ public class FieldComparator implements Comparator, Serializable {
 		final Object v1 = handleFunction(f1, func);
 		final Object v2 = handleFunction(f2, func);
 		
-		if (v1 == null) return v2 == null ? 0: _maxnull ? 1 : -1;
-		if (v2 == null) return _maxnull ? -1 : 1;
+		if (v1 == null) return v2 == null ? 0: (asc == _maxnull) ? 1 : -1;
+		if (v2 == null) return (asc == _maxnull) ? -1 : 1;
 		final int v = ((Comparable)v1).compareTo(v2);
 		return asc ? v : -v;
 	}

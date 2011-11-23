@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-577.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov  23 10:25:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div height="15px" />
+	<div height="25px">You should not see two buttons in the popup of the datebox.</div>
+	<custom-attributes org.zkoss.zul.client.rod="false"
+		scope="page"/>
+	<datebox format="short" timeZonesReadonly="true"
+		displayedTimeZones="UTC" /> 
+	<button label="Test #1" />
+	<button label="Test #2" />
+</zk>

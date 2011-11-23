@@ -1,0 +1,47 @@
+<?component name="div" extends="div" widgetClass="zktest.Div"?>
+<?script content="
+zk.$package('zktest');
+zk.load('zul.wgt', function () {
+zktest.Div = zk.$extends(zul.wgt.Div, {
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		zWatch.listen({beforeSize: this, onFitSize: this, onSize: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({beforeSize: this, onFitSize: this, onSize: this});
+		this.$supers('unbind_', arguments);
+	},
+	beforeSize: function () {
+		zk.log('beforeSize', this);
+	},
+	onFitSize: function () {
+		zk.log('onFitSize', this);
+	},
+	onSize: function () {
+		zk.log('onSize', this);
+	}
+})});
+"?>
+<tabbox height="500px" width="500px">
+	<custom-attributes org.zkoss.zul.client.rod="false" />
+	<tabs>
+		<tab label="Definition" />
+		<tab label="Discovery" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+		<html><![CDATA[
+		<ol>
+			<li>There shall be no log message at all (i.e., zk.log() not called)</li>
+			<li>Click the Discovery tab, and then you shall see some log messages
+			about beforeSize, onFitSize and onSize</li>
+		</ol>
+		]]></html>
+		</tabpanel>
+		<tabpanel>
+			<div id="a">
+				<div id="b">2nd panel</div>
+			</div>
+		</tabpanel>
+	</tabpanels>
+</tabbox>

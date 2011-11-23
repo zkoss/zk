@@ -471,18 +471,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_rdque.splice(j, 1);
 	}
 
-	//@param p the invisible widget, if any, to cache
-	function _markCache(cache, visited, p) {
-		if (cache) {
-			if (p)
-				cache[p.uuid] = false; //invisible
-
+	function _markCache(cache, visited, visible) {
+		if (cache)
 			while (p = visited.pop())
-				cache[p.uuid] = true; //visible
-		}
+				cache[p.uuid] = visible;
+		return visible;
 	}
-
-	var _dragoptions = {
+	function _domAvailable(wgt) {
+		//B50-ZK-258: if native, $n() might be null or wrong (if two with same ID)
+		for (var j = _domAvailWgts.length; j--;)
+			if (wgt.$instanceof(_domAvailWgts[j]))
+				return false;
+		return true;
+	}
+	var _domAvailWgts = [zk.Native, zk.Page, zk.Desktop],
+		_dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
 		ghosting: DD_ghosting, endghosting: DD_endghosting,
@@ -1622,42 +1625,34 @@ wgt.$f().main.setTitle("foo");
 			cache = opts && opts.cache, visited = [], ck,
 			wgt = this;
 		while (wgt) {
-			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined) {
-				_markCache(cache, visited);
-				return ck;
-			}
+			if (cache && (ck=wgt.uuid) && (ck=cache[ck]) !== undefined)
+				return _markCache(cache, visited, ck);
+
+			if (cache)
+				visited.push(wgt);
 	
-			if (dom && !wgt.$instanceof(zk.Native)) { //B50-ZK-258: if native, $n() might be null or wrong (if two with same ID)
+			if (dom && _domAvailable(wgt)) {
 			//Except native, we have to assume it is invsibile if $n() is null
 			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
 			//Alertinative is to introduce another isVisibleXxx but not worth
-				if (!zk(wgt.$n()).isVisible(opts.strict)) {
-					_markCache(cache, visited, wgt);
-					return false;
-				}
-			} else if (!wgt._visible) {
-				_markCache(cache, visited, wgt);
-				return false;
-			}
+				if (!zk(wgt.$n()).isVisible(opts.strict))
+					return _markCache(cache, visited, false);
+			} else if (!wgt._visible)
+				return _markCache(cache, visited, false);
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var wp = wgt.parent, p, n;
 			if (wp && wp._visible && (p=wp.$n()) && (n=wgt.$n()))
 				while ((n=zk(n).vparentNode(true)) && p != n)
-					if ((n.style||{}).display == 'none') {
-						_markCache(cache, visited, wgt);
-						return false; //hidden by parent
-					}
+					if ((n.style||{}).display == 'none') //hidden by parent
+						return _markCache(cache, visited, false);
 
-			if (cache)
-				visited.push(wgt);
 			if (opts && opts.until == wgt)
 				break;
 
 			wgt = wp;
 		}
-		_markCache(cache, visited);
-		return true;
+		return _markCache(cache, visited, true);
 	},
 	/** Returns if this widget is visible
 	 * @return boolean
@@ -2898,6 +2893,13 @@ unbind_: function (skipper, after) {
 		
 		n.style.width = jq.px0(w);
 		
+		// Bug ZK-521
+		if (zk.linux && zk.ff > 6 && jq.nodeName(n, "select")) {
+			var offset = width - margins,
+				diff = offset - n.offsetWidth;
+			if (diff > 0)
+				n.style.width = jq.px0(w + diff);
+		}
 		// fixed for B50-3317729.zul on webkit
 		if (zk.safari) {
 			margins -= zkn.sumStyles("lr", jq.margins);
