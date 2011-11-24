@@ -338,10 +338,7 @@ public class AnnotationHelper {
 	public void applyAnnotations(ComponentInfo compInfo, String propName,
 	boolean clear) {
 		for (AnnotInfo info: _annots) {
-			if (propName != null)
-				compInfo.addAnnotation(propName, info.name, info.attrs);
-			else
-				compInfo.addAnnotation(info.name, info.attrs);
+			compInfo.addAnnotation(propName, info.name, info.attrs);
 		}
 		if (clear)
 			_annots.clear();
@@ -358,10 +355,7 @@ public class AnnotationHelper {
 	boolean clear) {
 		for (AnnotInfo info: _annots) {
 			ComponentCtrl ctrl = (ComponentCtrl) comp;
-			if (propName != null)
-				ctrl.addAnnotation(propName, info.name, info.attrs);
-			else
-				ctrl.addAnnotation(info.name, info.attrs);
+			ctrl.addAnnotation(propName, info.name, info.attrs);
 		}
 		if (clear)
 			_annots.clear();

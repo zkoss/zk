@@ -259,6 +259,7 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 
 		/** Used only internally by DefaultTreeModel.sort0(). it won't fire event INTERVAL_ADDED or INTERVAL_REMOVED */
 		// B50-ZK-566: Set sortDirection to treecol will show an error
+		@SuppressWarnings("unchecked")
 		/*package*/ void sort(Comparator cmpr) {
 			Collections.sort(_list, cmpr);
 		}

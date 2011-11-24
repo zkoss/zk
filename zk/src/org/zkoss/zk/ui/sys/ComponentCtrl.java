@@ -221,44 +221,78 @@ public interface ComponentCtrl {
 	 */
 	public Map<String, Integer> getClientEvents();
 
-	/** Returns the annotation associated with the component,
-	 * or null if not available.
-	 *
-	 * @param annotName the annotation name
+	/** @deprecated As of release 6.0.0, replaced with
+	 * {@link #getAnnotation(String, String)}.
 	 */
 	public Annotation getAnnotation(String annotName);
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
 	 *
-	 * <p>Notice that the property is not limited the 'real' property.
+	 * <p>If there are multiple annotation with the given name,
+	 * this method will merge them before return. If you prefer to get all
+	 * of them without mergine, pleae use {@link #getAnnotations(String, String)} instead.
+	 * For example,
+	 * <pre><code>&lt;textbox value="@bind(abc, param1=foo1) @bind(xyz, param2=foo2)"&gt;</code></pre>
+	 *
+	 * <p>This method will return a single annotaion with three attributes:
+	 * value=xyz, param1=foo1 and param2=foo2. On othe other hand,
+	 * {@link #getAnnotations(String, String)} will return a two-element
+	 * collections.
+	 *
+	 * <p>Notice that the property is <t>not</t> limited the 'real' property.
 	 * For example, the following statement is correct though
 	 * <code>button</code> doesn't have <code>setFoo</code> method.
-	 * And, you can retrieve it by use of this method (<code>getAnnotation("foo", "default")</code>)
+	 * And, you can retrieve it by use of this method (<code>getAnnotation("foo", "bind")</code>)
 	 *
-	 * <pre><code>&lt;button foo="@{value=123}"/&gt;</code></pre>
+	 * <pre><code>&lt;button foo="@bind(whatever=123)"/&gt;</code></pre>
 	 *
-	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>
-	  (since ZK 5.0).
+	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>.
 	 * For example, the following is equivalent to the above.
 	 *
 	 * <pre><code>&lt;button>
-	 *  &lt;custom-attribute foo="@{value=123}"&gt;
+	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
 	 *&lt;/button></code></pre>
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
+	 * If null, this method returns the annotation(s) associated with this
+	 * component (rather than a particular property).
+	 * @see #getAnnotations(String, String)
 	 */
 	public Annotation getAnnotation(String propName, String annotName);
-	/** Returns a read-only collection of all annotations ({@link Annotation})
-	 * associated with this component (never null).
+	/** Returns the annotations associated with the definition of the specified
+	 * property. It never returns null.
+	 *
+	 * <p>Notice that the property is <t>not</t> limited the 'real' property.
+	 * For example, the following statement is correct though
+	 * <code>button</code> doesn't have <code>setFoo</code> method.
+	 * And, you can retrieve it by use of this method (<code>getAnnotation("foo", "bind")</code>)
+	 *
+	 * <pre><code>&lt;button foo="@bind(whatever=123)"/&gt;</code></pre>
+	 *
+	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>.
+	 * For example, the following is equivalent to the above.
+	 *
+	 * <pre><code>&lt;button>
+	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
+	 *&lt;/button></code></pre>
+	 *
+	 * @param annotName the annotation name
+	 * If null, this method returns the annotation(s) associated with this
+	 * component (rather than a particular property).
+	 * @see #getAnnotation(String, String)
+	 * @since 6.0.0
+	 */
+	public Collection<Annotation> getAnnotations(String propName, String annotName);
+	/** @deprecated As of release 6.0.0, replaced with {@link #getAnnotations(String)}.
 	 */
 	public Collection<Annotation> getAnnotations();
 	/** Returns a read-only collection of all annotations ({@link Annotation})
-	 * associated with the specified property (never null).
+	 * associated with the specified property. It never returns null.
 	 *
 	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
+	 * If null, this method returns the annotation(s) associated with this
+	 * component (rather than a particular property).
 	 */
 	public Collection<Annotation> getAnnotations(String propName);
 	/** Returns a read-only list of the names of the properties
@@ -278,20 +312,21 @@ public interface ComponentCtrl {
 	 * @param annots a annotation map.
 	 */
 	public void addSharedAnnotationMap(AnnotationMap annots);
-	/** Associates an annotation to this component.
-	 *
-	 * <p>Unlike Java, you can add annotations dynamically, and each component
-	 * has its own annotations.
-	 *
-	 * @param annotName the annotation name (never null, nor empty).
-	 * @param annotAttrs a map of attributes, or null if no attribute.
-	 * The attribute must be in a pair of strings (String name, String value),
-	 * or (String name, String[] value).
+	/** @deprecated As of release 6.0.0, replaced with
+	 * {@link #addAnnotation(String, String, Map<String, Object>)}
 	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs);
 	/** Adds an annotation to the specified proeprty of this component.
 	 *
-	 * @param propName the property name (never nul, nor empty).
+	 * <p>If the given property is null, the annotation is associated
+	 * to this component, rather than a particular property.
+	 *
+	 * <p>Unlike Java, you can add annotations dynamically, and each component
+	 * has its own annotations.
+	 *
+	 * @param propName the property name.
+	 * If null, the annotation is associated with the component (rather than
+	 * a particular property).
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value),

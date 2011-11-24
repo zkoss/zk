@@ -2414,18 +2414,25 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 
+	/** @deprecated As of release 6.0.0, replaced with
+	 * {@link #getAnnotation(String, String)}.
+	 */
 	public Annotation getAnnotation(String annotName) {
-		return _auxinf != null && _auxinf.annots != null ?
-			_auxinf.annots.getAnnotation(annotName): null;
+		return getAnnotation(null, annotName);
 	}
 	public Annotation getAnnotation(String propName, String annotName) {
 		return _auxinf != null && _auxinf.annots != null ?
 			_auxinf.annots.getAnnotation(propName, annotName): null;
 	}
-	public Collection<Annotation> getAnnotations() {
+	public Collection<Annotation> getAnnotations(String propName, String annotName) {
 		if (_auxinf != null && _auxinf.annots != null)
-			return _auxinf.annots.getAnnotations();
+			return _auxinf.annots.getAnnotations(propName, annotName);
 		return Collections.emptyList();
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getAnnotations(String)}.
+	 */
+	public Collection<Annotation> getAnnotations() {
+		return getAnnotations(null);
 	}
 	public Collection<Annotation> getAnnotations(String propName) {
 		if (_auxinf != null && _auxinf.annots != null)
@@ -2453,9 +2460,11 @@ w:use="foo.MyWindow"&gt;
 			}
 		}
 	}
+	/** @deprecated As of release 6.0.0, replaced with
+	 * {@link #addAnnotation(String, String, Map<String, Object>)}
+	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
-		unshareAnnotationMap(true);
-		_auxinf.annots.addAnnotation(annotName, annotAttrs);
+		addAnnotation(null, annotName, annotAttrs);
 	}
 	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		unshareAnnotationMap(true);

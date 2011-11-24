@@ -38,66 +38,96 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	/** The annotations of properties,
 	 * (String propName, Map(String annotName, Annotation)).
 	 */
-	private Map<String, Map<String, Annotation>> _annots;
+	private Map<String, Map<String, List<Annotation>>> _annots;
 
 	/** Returns whether no annotation at all.
 	 */
 	public boolean isEmpty() {
 		return _annots == null || _annots.isEmpty();
 	}
-	/** Returns the annotation associated with the component definition,
-	 * or null if not available.
-	 *
-	 * @param annotName the annotation name
-	 */
-	public Annotation getAnnotation(String annotName) {
-		return getAnnotation0(null, annotName);
-	}
-	/** Returns the annotation associated with the definition of the specified
+
+	/** Returns the annotation associated with the specified
 	 * property, or null if not available.
 	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
+	 * If null, this method returns the annotation(s) associated with the
+	 * component (rather than a particular property).
 	 */
 	public Annotation getAnnotation(String propName, String annotName) {
-		if (propName == null || propName.length() == 0)
-			throw new IllegalArgumentException("The property name is required");
-		return getAnnotation0(propName, annotName);
+		if (_annots != null) {
+			final Map<String, List<Annotation>> anmap = _annots.get(propName);
+			if (anmap != null) {
+				List<Annotation> ans = anmap.get(annotName);
+				if (ans != null) {
+					if (ans.size() == 1)
+						return ans.get(0);
+
+					//merge annotations into a single annotation
+					final AnnotImpl ai = new AnnotImpl(annotName);
+					for (Annotation an: ans)
+						ai.addAttributes(an);
+				}
+			}
+		}
+		return null;
 	}
-	/** Returns a read-only collection of all annotations associated with the
-	 * component definition (never null).
+	/** Returns the annotations associated with the specified
+	 * property. It never returns null.
+	 *
+	 * @param annotName the annotation name
+	 * @param propName the property name, e.g., "value".
+	 * If null, this method returns the annotation(s) associated with the
+	 * component (rather than a particular property).
+	 * @since 6.0.0
 	 */
-	public Collection<Annotation> getAnnotations() {
-		return getAnnotations0(null);
+	public Collection<Annotation> getAnnotations(String propName, String annotName) {
+		if (_annots != null) {
+			final Map<String, List<Annotation>> anmap = _annots.get(propName);
+			if (anmap != null) {
+				List<Annotation> ans = anmap.get(annotName);
+				if (ans != null)
+					return ans;
+			}
+		}
+		return Collections.emptyList();
 	}
 	/** Returns a read-only collection of all annotations associated with the
-	 * definition of the specified property (never null).
+	 * the specified property.
 	 *
 	 * @param propName the property name, e.g., "value".
-	 * @exception IllegalArgumentException if propName is null or empty
+	 * If null, this method returns the annotation(s) associated with the
+	 * component (rather than a particular property).
 	 */
 	public Collection<Annotation> getAnnotations(String propName) {
-		if (propName == null || propName.length() == 0)
-			throw new IllegalArgumentException("The property name is required");
-		return getAnnotations0(propName);
+		if (_annots != null) {
+			final Map<String, List<Annotation>> anmap = _annots.get(propName);
+			if (anmap != null) {
+				final List<Annotation> dst = new LinkedList<Annotation>();
+				for (List<Annotation> ans: anmap.values())
+					dst.addAll(ans);
+				return dst;
+			}
+		}
+		return Collections.emptyList();
 	}
 	/** Returns a read-only list of the names (String) of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
 	public List<String> getAnnotatedPropertiesBy(String annotName) {
-		final List<String> list = new LinkedList<String>();
 		if (_annots != null) {
-			for (Map.Entry<String, Map<String, Annotation>> me: _annots.entrySet()) {
+			final List<String> list = new LinkedList<String>();
+			for (Map.Entry<String, Map<String, List<Annotation>>> me: _annots.entrySet()) {
 				final String propName = me.getKey();
 				if (propName != null) {
-					final Map<String, Annotation> ans = me.getValue(); //ans is syncMap
-					if (ans.containsKey(annotName))
+					final Map<String, List<Annotation>> anmap = me.getValue();
+					if (anmap.containsKey(annotName))
 						list.add(propName);
 				}
 			}
+			return list;
 		}
-		return list;
+		return Collections.emptyList();
 	}
 	/** Returns a read-only list of the name (String) of properties that
 	 * are associated at least one annotation (never null).
@@ -120,81 +150,56 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		if (src != null && !src.isEmpty()) {
 			initAnnots();
 
-			for (Map.Entry<String, Map<String, Annotation>> me:
+			for (Map.Entry<String, Map<String, List<Annotation>>> me:
 			src._annots.entrySet()) {
 				final String propName = me.getKey(); //may be null
-				Map<String, Annotation> ans = _annots.get(propName);
-				if (ans == null)
-					_annots.put(propName, ans = new LinkedHashMap<String, Annotation>(4));
+				Map<String, List<Annotation>> anmap = _annots.get(propName);
+				if (anmap == null)
+					_annots.put(propName, anmap = new LinkedHashMap<String, List<Annotation>>(4));
 
-				addAllAns(ans, me.getValue());
+				addAllAns(anmap, me.getValue());
 			}
 		}			
 	}
-	/** Adds the value of _annots, Map(String annotName, Annotation).
+	/** Adds the annotations from one source to another.
+	 * @param anmap the destination
+	 * @param srcanmap the source
 	 */
-	public static
-	void addAllAns(Map<String, Annotation> ans, Map<String, Annotation> srcans) {
-		for (Map.Entry<String, Annotation> me: srcans.entrySet()) {
+	private static
+	void addAllAns(Map<String, List<Annotation>> anmap, Map<String, List<Annotation>> srcanmap) {
+		for (Map.Entry<String, List<Annotation>> me: srcanmap.entrySet()) {
 			final String annotName = me.getKey();
-
-			AnnotImpl ai = (AnnotImpl)ans.get(annotName);
-			if (ai == null)
-				ans.put(annotName, ai = new AnnotImpl(annotName));
-
-			ai.addAttributes(((AnnotImpl)me.getValue())._attrs);
+			List<Annotation> ans = anmap.get(annotName);
+			if (ans == null)
+				anmap.put(annotName, ans = new LinkedList<Annotation>());
+			ans.addAll(me.getValue());
 		}
 	}
+
 	/** Adds an annotation.
-	 */
-	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
-		addAnnotation0(null, annotName, annotAttrs);
-	}
-	/** Adds an annotation to a proeprty.
 	 *
 	 * @param propName the property name.
+	 * If null, this method returns the annotation(s) associated with the
+	 * component (rather than a particular property).
 	 */
 	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
-		if (propName == null || propName.length() == 0)
-			throw new IllegalArgumentException("The property name is required");
-		addAnnotation0(propName, annotName, annotAttrs);
-	}
-
-	private Annotation getAnnotation0(String propName, String annotName) {
-		if (_annots != null) {
-			final Map<String, Annotation> ans = _annots.get(propName);
-			if (ans != null)
-				return ans.get(annotName); //ans is syncMap
-		}
-		return null;
-	}
-	private Collection<Annotation> getAnnotations0(String propName) {
-		if (_annots != null) {
-			final Map<String, Annotation> ans = _annots.get(propName);
-			if (ans != null)
-				return ans.values(); //ans is syncMap
-		}
-		return Collections.emptyList();
-	}
-
-	private void addAnnotation0(String propName, String annotName, Map<String, Object> annotAttrs) {
 		initAnnots();
 
-		Map<String, Annotation> ans = _annots.get(propName);
+		Map<String, List<Annotation>> anmap = _annots.get(propName);
+		if (anmap == null)
+			_annots.put(propName, anmap = new LinkedHashMap<String, List<Annotation>>(4));
+
+		List<Annotation> ans = anmap.get(annotName);
 		if (ans == null)
-			_annots.put(propName, ans = new LinkedHashMap<String, Annotation>(4));
+			anmap.put(annotName, ans= new LinkedList<Annotation>());
 
-		AnnotImpl ai = (AnnotImpl)ans.get(annotName);
-		if (ai == null)
-			ans.put(annotName, ai = new AnnotImpl(annotName));
-
-		ai.addAttributes(annotAttrs);
+		ans.add(new AnnotImpl(annotName, annotAttrs));
 	}
 	/** Initializes _annots by creating and assigning a new map for it.
 	 */
 	private void initAnnots() {
 		if (_annots == null)
-			_annots = new LinkedHashMap<String, Map<String, Annotation>>(4);
+			_annots = new LinkedHashMap<String, Map<String, List<Annotation>>>(4);
 	}
 
 	//Cloneable//
@@ -209,13 +214,13 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		}
 
 		if (_annots != null) {
-			clone._annots = new LinkedHashMap<String, Map<String, Annotation>>(_annots);
+			clone._annots = new LinkedHashMap<String, Map<String, List<Annotation>>>(_annots);
 
-			for (Map.Entry<String, Map<String, Annotation>> me:
+			for (Map.Entry<String, Map<String, List<Annotation>>> me:
 			clone._annots.entrySet()) {
-				final Map<String, Annotation> ans = new LinkedHashMap<String, Annotation>(4);
-				clone.addAllAns(ans, me.getValue());
-				me.setValue(ans); //replace with the new one
+				final Map<String, List<Annotation>> anmap = new LinkedHashMap<String, List<Annotation>>(4);
+				clone.addAllAns(anmap, me.getValue());
+				me.setValue(anmap); //replace with the new one
 			}
 		}
 		return clone;
@@ -232,6 +237,10 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 
 		private AnnotImpl(String name) {
 			_name = name;
+		}
+		private AnnotImpl(String name, Map<String, Object> attrs) {
+			_name = name;
+			addAttributes(attrs);
 		}
 
 		//Extra//
@@ -256,6 +265,12 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			if (attrs != null)
 				for (Map.Entry<String, Object> me: attrs.entrySet())
 					addAttribute(me.getKey(), me.getValue());
+		}
+		/** Adds the attributes of the given annotation to this annotation.
+		 */
+		private void addAttributes(Annotation an) {
+			if (an != null)
+				addAttributes(((AnnotImpl)an)._attrs);
 		}
 
 		//Annotation//

@@ -683,11 +683,8 @@ public class DefinitionLoaders {
 				annotAttrs.put(me.getKey(),
 					AnnotationHelper.parseAttributeValue(me.getValue().trim()));
 
-			final String prop = el.getElementValue("property-name", true);
-			if (prop == null || prop.length() == 0)
-				compdef.addAnnotation(annotName, annotAttrs);
-			else
-				compdef.addAnnotation(prop, annotName, annotAttrs);
+			compdef.addAnnotation(
+				el.getElementValue("property-name", true), annotName, annotAttrs);
 		}
 	}
 	/** Configures an integer. */

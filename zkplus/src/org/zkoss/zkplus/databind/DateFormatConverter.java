@@ -63,7 +63,7 @@ public class DateFormatConverter implements TypeConverter {
 			date = (Date)val;
 		}
 
-		final Annotation annot = ((ComponentCtrl)comp).getAnnotation("format");
+		final Annotation annot = ((ComponentCtrl)comp).getAnnotation(null, "format");
 		String pattern = null;
 		if (annot != null) {
 			pattern = annot.getAttribute("value");

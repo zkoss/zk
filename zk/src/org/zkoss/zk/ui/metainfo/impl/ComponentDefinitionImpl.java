@@ -169,21 +169,17 @@ implements ComponentDefinition, java.io.Serializable {
 		_custAttrs.put(name, ev);
 	}
 
-	/** Associates an annotation to this component definition.
-	 *
-	 * @param annotName the annotation name (never null, nor empty).
-	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value).
+	/** @deprecated As of release 6.0.0, replaced with {@link #addAnnotation(String, String, Map<String, Object>)}.
 	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
-		if (_annots == null)
-			_annots = new AnnotationMap();
-		_annots.addAnnotation(annotName, annotAttrs);
+		addAnnotation(null, annotName, annotAttrs);
 	}
 	/** Adds an annotation to the specified proeprty of this component
 	 * definition.
 	 *
-	 * @param propName the property name (never nul, nor empty).
+	 * @param propName the property name.
+	 * If null, the annotation is associated with the whole component rather than
+	 * a particular property.
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).

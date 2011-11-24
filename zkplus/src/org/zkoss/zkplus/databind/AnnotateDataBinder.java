@@ -434,7 +434,7 @@ public class AnnotateDataBinder extends DataBinder {
 	
 	private void loadComponentAnnotation(Component comp, String annotName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		Annotation ann = compCtrl.getAnnotation(annotName);
+		Annotation ann = compCtrl.getAnnotation(null, annotName);
 		if (ann != null) {
 			Map attrs = ann.getAttributes();
 			for(final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {

@@ -120,7 +120,7 @@ public class Composition implements Initiator, InitiatorExt {
 			// join "define" components as children of "insert" component
 			do {
 				final Component nextRoot = comp.getNextSibling();
-				final Annotation annt = ((ComponentCtrl)comp).getAnnotation("define");
+				final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "define");
 				if (annt != null) {
 					final String joinId = annt.getAttribute("value");
 					final Component insertComp = insertMap.get(joinId);
@@ -137,7 +137,7 @@ public class Composition implements Initiator, InitiatorExt {
 	
 	private void resolveInsertComponents(Collection<Component> comps, Map<String, Component> map) {
 		for (Component comp: comps) {
-			final Annotation annt = ((ComponentCtrl)comp).getAnnotation("insert");
+			final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "insert");
 			if (annt != null) {
 				final String insertName = annt.getAttribute("value");
 				if (map.containsKey(insertName)) {
