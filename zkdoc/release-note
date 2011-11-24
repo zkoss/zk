@@ -37,6 +37,7 @@ ZK 5.0.10
   ZK-620: The north calculate a wrong size when place borderlayout in the second tab (CE/PE only)
   ZK-623: Vbox/Hbox vflex/hflex wrong calculation 
   ZK-598: Vflex issue with scrollable listbox
+  ZK-548: Zk brezee dont paint all
 
 	--------
 ZK 5.0.9
