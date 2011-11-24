@@ -1048,25 +1048,27 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	/* set the height. */
 	_setHgh: function (hgh) {
+		var ebody = this.ebody,
+			ebodyStyle = ebody.style;
 		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
 			if (zk.safari // Bug ZK-417, ignore to set the same size
-			&& this.ebody.style.height == jq.px(this._vflexSize(hgh)))
+			&& ebodyStyle.height == jq.px(this._vflexSize(hgh)))
 				return;
 
-			this.ebody.style.height = ''; //allow browser adjusting to default size
+			ebodyStyle.height = ''; //allow browser adjusting to default size
 			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
 
 			if (!zk.ie || zk.ie8 || this._vflex != "min")
-				this.ebody.style.height = h + "px";
+				ebodyStyle.height = h + "px";
 			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
-			if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
+			if (zk.ie && ebody.offsetHeight) // bug #1812001.
+				;
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
 			// and IE7 at initializing phase.
 		} else {
 			//Bug 1556099
-			var ebodyStyle = this.ebody.style,
-				n = this.$n();
+			var n = this.$n();
 			ebodyStyle.height = "";
 			n.style.height = hgh;
 			// B50-ZK-599: Grid has no vertical scrollbar when height is set by percentage
@@ -1076,7 +1078,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (h < 0) h = 0;
 				if (!zk.ie || zk.ie8 || this._vflex != "min")
 					ebodyStyle.height = h + "px";
-				if (zk.ie && this.ebody.offsetHeight) {} // bug #1812001.
+				if (zk.ie && ebody.offsetHeight) // bug #1812001
+					;
 			}
 		}
 	},
