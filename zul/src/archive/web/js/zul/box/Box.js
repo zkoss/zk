@@ -94,9 +94,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (zk.safari && !vert && this.$n().style.height) {
 			var td = this.$n('frame');
 			td.style.height = '';
-			
-			var	hgh = td.offsetHeight;
-			td.style.height = hgh+'px';
+			td.style.height = this.$n().style.height; // B50-ZK-559
 		}
 	}
 

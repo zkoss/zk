@@ -38,6 +38,7 @@ ZK 5.0.10
   ZK-623: Vbox/Hbox vflex/hflex wrong calculation 
   ZK-598: Vflex issue with scrollable listbox
   ZK-548: Zk brezee dont paint all
+  ZK-559: Render problem with chrome and ZK release 5.0.9 
 
 	--------
 ZK 5.0.9
