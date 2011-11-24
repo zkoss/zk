@@ -47,7 +47,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Bandbox extends Textbox {
-	private boolean _autodrop, _btnVisible = true;
+	private boolean _autodrop, _btnVisible = true, _open;
 
 	static {
 		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -98,6 +98,14 @@ public class Bandbox extends Textbox {
 		}
 	}
 
+	/** Returns whether this bandbox is open.
+	 *
+	 * <p>Default: false.
+	 * @since 6.0.0
+	 */
+	public boolean isOpen() {
+		return _open;
+	}
 	/** Drops down or closes the child.
 	 *
 	 * @since 3.0.1
@@ -105,8 +113,11 @@ public class Bandbox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (_open != open) {
+			_open = open;
+			if (open) open();
+			else close();
+		}
 	}
 	/** Drops down the child.
 	 * The same as setOpen(true).
@@ -162,7 +173,9 @@ public class Bandbox extends Textbox {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_OPEN)) {
-			Events.postEvent(OpenEvent.getOpenEvent(request));
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}

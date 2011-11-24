@@ -87,7 +87,7 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class Combobox extends Textbox {
 	private static final Log log = Log.lookup(Combobox.class);
-	private boolean _autodrop, _autocomplete = true, _btnVisible = true;
+	private boolean _autodrop, _autocomplete = true, _btnVisible = true, _open;
 	//Note: _selItem is maintained loosely, i.e., its value might not be correct
 	//unless reIndex is called. So call getSelectedItem/getSelectedIndex if you
 	//want the correct value
@@ -446,6 +446,14 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	/** Returns whether this combobox is open.
+	 *
+	 * <p>Default: false.
+	 * @since 6.0.0
+	 */
+	public boolean isOpen() {
+		return _open;
+	}
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
 	 *
 	 * @since 3.0.1
@@ -453,8 +461,11 @@ public class Combobox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (_open != open) {
+			_open = open;
+			if (open) open();
+			else close();
+		}
 	}
 	/** Drops down the list of combo items ({@link Comboitem}.
 	 * It is the same as setOpen(true).
@@ -649,8 +660,10 @@ public class Combobox extends Textbox {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_OPEN)) {
-			Events.postEvent(OpenEvent.getOpenEvent(request));
-		}else if (cmd.equals(Events.ON_SELECT)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?

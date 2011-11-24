@@ -53,6 +53,7 @@ ZK 6.0.0
   ZK-613: The root component is considered as an ID space, so getFellow and wire will work
   ZK-618: WebApp and Execution support log(String) and log(String,Throwable)
   ZK-614: Support Servlet 3's web fragment
+  ZK-621: Combobox and Bandbox should support isOpen() to store the open status
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
