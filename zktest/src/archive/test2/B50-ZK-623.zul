@@ -10,22 +10,10 @@
 	
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
-<zk xmlns:w="client">
-	<script>
-		zk.afterLoad(function () {
-			var watch = 'args[0].className+"@"+(args[0].id || args[0].uuid)';
-			//watch += ', args[0].$n().offsetWidth';
-			watch += ', args[0].$n().offsetHeight';
-			var watch2 = 'self.className+"@"+(self.id || self.uuid)';
-			//watch2 += ', self.$n().offsetWidth';
-			watch2 += ', self.$n().offsetHeight';
-			//watch += ', callee.caller.caller.caller.caller.caller';
-			debug.inspect('zFlex', 'fixMinFlex', watch);
-			debug.inspect('zFlex', 'fixFlex', watch);
-			//debug.inspect('zul.box.Box.prototype', '_resetBoxSize', watch2);
-			debug.report(true);
-		});
-	</script>
+<zk>
+	<div>	
+		You should see the green area have height 400px, no larger.
+	</div>
 	<vbox id="vbox" height="400px" width="200px" style="background-color:green">
 		<div id="div1" vflex="min">
 			<div height="200px" style="background-color:blue">Div 1</div>
