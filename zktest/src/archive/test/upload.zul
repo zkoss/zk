@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window border="normal">
 	Post your striking photos.
+	NOTE: it works only if the event thread is enabled.
 	<separator/>
 
 	Page ID: <label id="${empty param.pageId ? 'some': param.pageId}" value="${self.id}"/>
