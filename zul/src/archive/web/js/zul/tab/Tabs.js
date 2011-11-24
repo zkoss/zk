@@ -57,10 +57,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck("init");
 	},
-	_fixHeaderSize: function () { // called by Tabbox#onResponse
-		this._fixWidth();
-		this._scrollcheck("sel");
-	},
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
 		if (before) 

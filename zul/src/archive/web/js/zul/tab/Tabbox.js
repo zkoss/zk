@@ -197,15 +197,18 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		var tab = this._selTab,
 			toolbar = this.getToolbar();
 		
-		if (this.inAccordionMold() || toolbar)
+		if (this.inAccordionMold())
 			zWatch.listen({onResponse: this});
+		else if (toolbar && this.getTabs()) {
+			zWatch.listen({onResponse: this});
+			this._toolbarWidth = jq(toolbar.$n()).width();
+		}
 		if (tab)
 			after.push(function() {
 				tab.setSelected(true);
 			});
 
-		if (toolbar && this.getTabs())
-			this._toolbarWidth = jq(toolbar.$n()).width();
+		
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -232,7 +235,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			var toolbarWidth = jq(this.getToolbar().$n()).width();
 			if (toolbarWidth != this._toolbarWidth) { // toolbar width changed
 				this._toolbarWidth = toolbarWidth;
-				this.getTabs()._fixHeaderSize();
+				this.getTabs().onSize();
 			}
 		}
 	},
