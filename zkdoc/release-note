@@ -63,6 +63,7 @@ ZK 6.0.0
   ZK-539: Title background not full-filled in groupbox
   ZK-549: Height issue of groupbox 3d mold
   ZK-562: Groupbox vflex=min is wrong (reopen B50-3005284.zul)
+  ZK-622: jq("@radio input").attr("checked") will return "checked" if not checked
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is

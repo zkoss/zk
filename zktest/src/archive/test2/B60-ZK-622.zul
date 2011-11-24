@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-622.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 24 17:05:33 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="w" mode="modal" xmlns:n="http://www.zkoss.org/2005/zk/native" width="500px">
+	<n:p>Please click the "female" radio, and then click the "show" button, and then you should see that only "female" is checked and the label "undefined" is shown</n:p>
+	<radiogroup id="radiochoice">
+		<radio id="male1" label="male" checked="true" />
+		<radio id="female" label="female" />
+	</radiogroup>
+	 <button label="show" xmlns:w="client" w:onClick='this.$f("log").setValue(jq("$male1 input").attr("checked")+"");'/>
+	 <label id="log"/>
+</window>
