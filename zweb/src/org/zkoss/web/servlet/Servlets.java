@@ -82,7 +82,7 @@ public class Servlets {
 			b = true;
 		} catch (Throwable ex) {
 		}
-		_svl3 = true;
+		_svl3 = b;
 
 		if (!b) {
 			try {
