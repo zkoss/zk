@@ -37,7 +37,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return true;
 	}
-
+	
+	function listenOnFitSize(wgt) {
+		if (wgt._rows && !wgt._rowsOnFitSize) {
+			zWatch.listen({onFitSize: wgt});
+			wgt._rowsOnFitSize = true;
+		}
+	}
+	function unlistenOnFitSize(wgt) {
+		if (wgt._rowsOnFitSize) {
+			zWatch.unlisten({onFitSize: wgt});
+			delete wgt._rowsOnFitSize;
+		}
+	}
 	function _updHeaderCM(box) { //update header's checkmark
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-img-seld',
@@ -94,6 +106,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		 * @param int rows
 		 */
 		rows: function (rows) {
+			listenOnFitSize(this);
 			var n = this.$n();
 			if (n) {
 				n._lastsz = null;
@@ -323,6 +336,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			delete this._oldCSS;
 		}
 		this.$supers('_afterCalcSize', arguments);
+	},
+	onFitSize: function () {
+		// B50-ZK-598: when having rows, height needs to be determined when onFitSize
+		if (this._rows)
+			this._calcHgh();
 	},
 	_calcHgh: function () {
 		var rows = this.ebodyrows,
@@ -618,6 +636,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			btn.style.top = "-1px";
 	},
 	unbind_: function () {
+		unlistenOnFitSize(this);
 		var btn = this.$n('a');
 		if (btn)
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')

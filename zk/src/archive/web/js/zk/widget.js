@@ -477,15 +477,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				cache[p.uuid] = visible;
 		return visible;
 	}
-	function _domAvailable(wgt) {
-		//B50-ZK-258: if native, $n() might be null or wrong (if two with same ID)
-		for (var j = _domAvailWgts.length; j--;)
-			if (wgt.$instanceof(_domAvailWgts[j]))
-				return false;
-		return true;
-	}
-	var _domAvailWgts = [zk.Native, zk.Page, zk.Desktop],
-		_dragoptions = {
+	var _dragoptions = {
 		starteffect: zk.$void, //see bug #1886342
 		endeffect: DD_enddrag, change: DD_dragging,
 		ghosting: DD_ghosting, endghosting: DD_endghosting,
@@ -1631,7 +1623,7 @@ wgt.$f().main.setTitle("foo");
 			if (cache)
 				visited.push(wgt);
 	
-			if (dom && _domAvailable(wgt)) {
+			if (dom && !wgt.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
 			//Except native, we have to assume it is invsibile if $n() is null
 			//Example, tabs in the accordion mold (case: zktest/test2 in IE)
 			//Alertinative is to introduce another isVisibleXxx but not worth
@@ -4391,6 +4383,9 @@ zk.RefWidget = zk.$extends(zk.Widget, {
  * @disable(zkgwt)
  */
 zk.Desktop = zk.$extends(zk.Widget, {
+	//a virtual node that might have no DOM node and must be handled specially
+	z_virnd: true,
+
 	bindLevel: 0,
 	/** The class name (<code>zk.Desktop</code>).
 	 * @type String
@@ -4600,6 +4595,9 @@ zk._wgtutl = { //internal utilities
  * @disable(zkgwt)
 */
 zk.Page = zk.$extends(zk.Widget, {
+	//a virtual node that might have no DOM node and must be handled specially
+	z_virnd: true,
+
 	_style: "width:100%;height:100%",
 	/** The class name (<code>zk.Page</code>).
 	 * @type String
@@ -4662,6 +4660,9 @@ zk.Body = zk.$extends(zk.Page, {
  * @disable(zkgwt)
  */
 zk.Native = zk.$extends(zk.Widget, {
+	//a virtual node that might have no DOM node and must be handled specially
+	z_virnd: true,
+
 	/** The class name (<code>zk.Native</code>)
 	 * @type String
 	 */
@@ -4678,12 +4679,12 @@ zk.Native = zk.$extends(zk.Widget, {
 			this.$supers('$n', arguments); // Bug ZK-606/607
 	},
 	redraw: function (out) {
-		var s = this.prolog;
+		var s = this.prolog, p;
 		if (s) {
 			//Bug ZK-606/607: hflex/vflex and many components need to know
 			//child.$n(), so we have to generate id if the parent is not native
 			//(and no id is assigned) (otherwise, zk.Native.$n() failed)
-			if (!this.id && this.parent.className != this.className) {
+			if (!this.id && (p=this.parent) && !p.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
 				var extra = ' id="' + this.uuid + '"',
 					idx = s.indexOf('>'); 
 				if (idx >= 0)

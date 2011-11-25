@@ -194,17 +194,25 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		
 		// used in Tabs.js
 		this._scrolling = false;
-		var tab = this._selTab;
+		var tab = this._selTab,
+			toolbar = this.getToolbar();
 		
 		if (this.inAccordionMold())
 			zWatch.listen({onResponse: this});
+		else if (toolbar && this.getTabs()) {
+			zWatch.listen({onResponse: this});
+			this._toolbarWidth = jq(toolbar.$n()).width();
+		}
 		if (tab)
 			after.push(function() {
 				tab.setSelected(true);
 			});
+
+		
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
+		this._toolbarWidth = null;
 		this.$supers(zul.tab.Tabbox, 'unbind_', arguments);
 	},
 	/** Synchronizes the size immediately.
@@ -220,8 +228,16 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			zUtl.fireSized(this, -1); //no beforeSize
 	},
 	onResponse: function () {
-		if (this._shallSize)
-			this.syncSize();
+		if (this.inAccordionMold()) {
+			if (this._shallSize)
+				this.syncSize();
+		} else if (this._toolbarWidth) { // accordion mold not support toolbar
+			var toolbarWidth = jq(this.getToolbar().$n()).width();
+			if (toolbarWidth != this._toolbarWidth) { // toolbar width changed
+				this._toolbarWidth = toolbarWidth;
+				this.getTabs().onSize();
+			}
+		}
 	},
 	_syncSize: function () {
 		this._shallSize = true;

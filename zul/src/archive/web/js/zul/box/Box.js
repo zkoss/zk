@@ -94,9 +94,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (zk.safari && !vert && this.$n().style.height) {
 			var td = this.$n('frame');
 			td.style.height = '';
-			
-			var	hgh = td.offsetHeight;
-			td.style.height = hgh+'px';
+			td.style.height = this.$n().style.height; // B50-ZK-559
 		}
 	}
 
@@ -507,9 +505,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (cwgt && cwgt._nvflex) {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
-					if (cwgt._vflex == 'min')
+					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-					else {
+						if (vert) hgh -= chgh;
+					} else {
 						vflexs.push(cwgt);
 						if (vert) vflexsz += cwgt._nvflex;
 					}
@@ -519,9 +518,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (cwgt && cwgt._nhflex) {
 					if (cwgt !== child)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
-					if (cwgt._hflex == 'min')
+					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-					else {
+						if (!vert) wdh -= cwdh;
+					} else {
 						hflexs.push(cwgt);
 						if (!vert) hflexsz += cwgt._nhflex;
 					}

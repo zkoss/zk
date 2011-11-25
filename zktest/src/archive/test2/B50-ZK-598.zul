@@ -1,0 +1,32 @@
+<!--
+	B50-ZK-598.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Nov 23 11:49:14 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		Object[] o = new Object[50];
+	</zscript>
+	<div>
+		You should see the red Div occupy the rest of height from the green area.
+	</div>
+	<div width="500px" height="500px" style="background-color:green">
+		<div id="div0" vflex="1" width="400px">
+			<div id="div1">
+				<listbox rows="7">
+					<listitem label="x" forEach="${o}" />
+				</listbox>
+			</div>
+			<div id="div2" vflex="1" hflex="true" style="background-color:red">
+				Div
+			</div>
+		</div>
+	</div>
+</zk>

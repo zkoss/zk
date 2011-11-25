@@ -57,18 +57,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck("init");
 	},
-	onResponse: function () {
-		// B50-ZK-596: Toolbar in tabbox overlays tabs
-		var tabbox = this.getTabbox(),
-			toolbar;
-		if ((toolbar = tabbox.toolbar) && !tabbox.inAccordionMold()) {
-			var hw = parseInt(this.$n("header").style.width);
-			if (hw != (tabbox.$n().offsetWidth + toolbar.$n().offsetWidth)) {
-				this._fixWidth();
-				this._scrollcheck("sel");
-			}
-		}
-	},
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
 		if (before) 
@@ -122,15 +110,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				self._inited = true;
 			}
 		);
-		if (this.getTabbox().toolbar)
-			zWatch.listen({onResponse: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
 				this.domUnlisten_(btn, "onClick");
-		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
 	_isInited: function () {

@@ -39,7 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			upload = n._ctrl,
 			wgt = upload._wgt,
 			dt = wgt.desktop,
-			action = zk.ajaxURI('/upload', {desktop:dt,au:true}) + '?uuid=' + wgt.uuid + '&dtid=' + dt.uuid + '&sid=' + upload.sid
+			action = zk.ajaxURI('/upload', {desktop:dt,au:true}) + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid
 				+ (upload.maxsize !== '' ? '&maxsize=' + upload.maxsize : '')
 				+ (upload.isNative ? '&native=true' : ''),
 			form = n.form;
@@ -336,10 +336,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this._form.submit();
 		this._form.style.display = "none";
 		
-		var uri = zk.ajaxURI('/upload', {desktop: wgt.desktop, au: true}),
-			dtid = wgt.desktop.id,
-			self = this,
-			data = 'cmd=uploadInfo&dtid=' + dtid + '&wid=' + wgt.uuid + '&sid=' + this._sid;
+		var self = this,
+			data = 'cmd=uploadInfo&dtid=' + wgt.desktop.id
+				+ '&wid=' + wgt.uuid + '&sid=' + this._sid;
 		
 		if (zul.Uploader._tmupload)
 			clearInterval(zul.Uploader._tmupload);
@@ -347,7 +346,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		function t() {
 			jq.ajax({
 				type: 'POST',
-				url: uri,
+				url: zk.ajaxURI('/upload', {desktop: wgt.desktop, au: true}),
 				data: data,
 				dataType: 'text',
 				success: function(data) {

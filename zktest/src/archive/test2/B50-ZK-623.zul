@@ -1,0 +1,25 @@
+<!--
+	B50-ZK-623.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Nov 23 11:49:14 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>	
+		You should see the green area have height 400px, no larger.
+	</div>
+	<vbox id="vbox" height="400px" width="200px" style="background-color:green">
+		<div id="div1" vflex="min">
+			<div height="200px" style="background-color:blue">Div 1</div>
+		</div>
+		<div id="div2" vflex="1" width="100px" style="background-color:red">
+			Div 2
+		</div>
+	</vbox>
+</zk>
