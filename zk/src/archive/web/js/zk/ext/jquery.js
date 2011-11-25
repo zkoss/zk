@@ -8154,7 +8154,7 @@ if ( jQuery.support.ajax ) {
 							// Add to list of active xhrs callbacks
 							xhrCallbacks[ handle ] = callback;
 						}
-						if (isUnload)/*fixed IE memory issue for jQuery 1.6.x*/
+						if (!isUnload)/*fixed IE memory issue for jQuery 1.6.x*/
 							xhr.onreadystatechange = callback;
 					}
 				},

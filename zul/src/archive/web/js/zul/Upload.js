@@ -349,6 +349,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 				type: 'POST',
 				url: uri,
 				data: data,
+				dataType: 'text',
 				success: function(data) {
 					var d = data.split(',');
 					if (data.startsWith('error:')) {
