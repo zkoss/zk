@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.http;
 
+import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,8 +34,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+
 import org.zkoss.image.AImage;
 import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
@@ -59,7 +64,8 @@ import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
 
 /**
- * The utility used to process file upload.
+ * The AU extension to upload files.
+ * It is based on Apache Commons File Upload.
  * 
  * @author tomyeh
  * @since 3.0.2
@@ -333,7 +339,7 @@ public class AuUploader implements AuExtension {
 	Desktop desktop, String key)
 	throws FileUploadException {
 		final Map params = new HashMap();
-		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request, key);
+		final ItemFactory fty = new ItemFactory(desktop, request, key);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 		
 		final Configuration conf = desktop.getWebApp().getConfiguration();
@@ -441,6 +447,86 @@ public class AuUploader implements AuExtension {
 			} catch (IOException ex) {
 				throw new UiException("Unable to read "+_fi, ex);
 			}
+		}
+	}
+
+	/**
+	 * The file item factory that monitors the progress of uploading.
+	 */
+	private static class ItemFactory extends DiskFileItemFactory {
+		private final Desktop _desktop;
+		private final String _key;
+		/** The total length (content length). */
+		private long _cbtotal;
+		/** # of bytes being received. */
+		private long _cbrcv;
+
+		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key) {
+	    	setSizeThreshold(1024*128);	// maximum size that will be stored in memory
+
+			_desktop = desktop;
+			_key = key;
+			long cbtotal = 0;
+			String ctlen = request.getHeader("content-length");
+			if (ctlen != null)
+				try {
+					cbtotal = Long.parseLong(ctlen.trim());
+					//if (log.debugable()) log.debug("content-length="+cbtotal);
+				} catch (Throwable ex) {
+					log.warning(ex);
+				}
+			_cbtotal = cbtotal;
+
+			if (_desktop.getAttribute(Attributes.UPLOAD_PERCENT) == null) {
+				_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new HashMap());
+				_desktop.setAttribute(Attributes.UPLOAD_SIZE, new HashMap());
+			}
+			((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(key, new Integer(0));
+			((Map)_desktop.getAttribute(Attributes.UPLOAD_SIZE)).put(key, new Long(_cbtotal));
+		}
+
+		/*package*/ void onProgress(long cbRead) {
+			int percent = 0;
+			if (_cbtotal > 0) {
+				_cbrcv = cbRead;
+				percent = (int)(_cbrcv * 100 / _cbtotal);
+			}
+			((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(_key, new Integer(percent));
+		}
+
+		//-- FileItemFactory --//
+	    public FileItem createItem(String fieldName, String contentType,
+		boolean isFormField, String fileName) {
+			return new ZkFileItem(fieldName, contentType, isFormField, fileName,
+				getSizeThreshold(), getRepository());
+		}
+
+		//-- helper classes --//
+		/** FileItem created by {@link ItemFactory}.
+		 */
+		/*package*/ class ZkFileItem extends DiskFileItem {
+			/*package*/ ZkFileItem(String fieldName, String contentType,
+			boolean isFormField, String fileName, int sizeThreshold,
+			File repository) {
+				super(fieldName, contentType, isFormField,
+					fileName, sizeThreshold, repository);
+			}
+
+			/** Returns the charset by parsing the content type.
+			 * If none is defined, UTF-8 is assumed.
+			 */
+		    public String getCharSet() {
+				final String charset = super.getCharSet();
+				return charset != null ? charset: "UTF-8";
+			}
+		}
+
+		/*package*/ class ProgressCallback implements ProgressListener {
+		    public void update(long pBytesRead, long pContentLength, int pItems) {
+		    	onProgress(pBytesRead);
+		    	if (pContentLength >= 0)
+		    		_cbtotal = pContentLength;
+		    }
 		}
 	}
 }
