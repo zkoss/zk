@@ -7533,7 +7533,7 @@ jQuery.extend({
 
 			try {
 				state = 1;
-				transport.send( requestHeaders, done, isUnload/*fixed IE memory issue for jQuery 1.6.x*/ );
+				transport.send( requestHeaders, done, isUnload/*Potix, fixed IE memory issue for jQuery 1.6.x*/ );
 			} catch (e) {
 				// Propagate exception as error if not done
 				if ( state < 2 ) {
@@ -8009,7 +8009,7 @@ if ( jQuery.support.ajax ) {
 			var callback;
 
 			return {
-				send: function( headers, complete, isUnload/*fixed IE memory issue for jQuery 1.6.x*/ ) {
+				send: function( headers, complete, isUnload/*Potix, fixed IE memory issue for jQuery 1.6.x*/ ) {
 
 					// Get a new xhr
 					var xhr = s.xhr(),
@@ -8154,7 +8154,7 @@ if ( jQuery.support.ajax ) {
 							// Add to list of active xhrs callbacks
 							xhrCallbacks[ handle ] = callback;
 						}
-						if (!isUnload)/*fixed IE memory issue for jQuery 1.6.x*/
+						if (!isUnload)//Potix Jumper Chen: fixed IE memory issue
 							xhr.onreadystatechange = callback;
 					}
 				},
