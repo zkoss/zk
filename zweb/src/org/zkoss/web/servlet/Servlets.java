@@ -489,21 +489,23 @@ public class Servlets {
 			if ((cc = type.charAt(j - 1)) != '.' && (cc < '0' || cc > '9'))
 				break;
 
-		Double version = null;
+		Double vtype = null;
 		if (j < last) {
 			try {
-				version = Double.parseDouble(type.substring(j, last));
+				vtype = Double.parseDouble(type.substring(j, last));
 			} catch (Throwable t) {
 			}
 			last = j;
 		}
 
-		Double v = getBrowser(userAgent, type.substring(0, last));
-		if (v == null)
+		Double vclient = getBrowser(userAgent, type.substring(0, last));
+		if (vclient == null)
 			return false; //unknown
-		if (version != null)
-			return equals ? v == version: v >= version;
-		return v != null;
+		if (vtype != null) {
+			double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
+			return equals ? v1 == v2: v1 >= v2;
+		}
+		return vclient != null;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
