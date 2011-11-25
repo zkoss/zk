@@ -63,11 +63,31 @@ public class AnnotationHelper {
 				if (val.charAt(1) == '{') {
 					if (val.charAt(len - 1) == '}') //format 1
 						return true;
-				} else if (val.charAt(len - 1) == ')' && val.indexOf('(', 1) > 0) {
-					final char cc = val.charAt(Strings.skipWhitespaces(val, 1));
-					return (cc >= 'A' && cc <= 'Z') || (cc >= 'a' && cc <= 'z')
-						|| (cc >= '0' && cc <= '9') || cc == '_' || cc == '$';
+				} else if (val.charAt(len - 1) == ')') {
 					//we have to be conserative since a non-annotation value might carry @
+					int j = Strings.skipWhitespaces(val, 1);
+					char cc = val.charAt(j);
+					//annotation must start with the above characters
+					if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')
+					|| cc == '_' || cc == '$') {
+						for (; j < len; ++j) {
+							switch (cc = val.charAt(j)) {
+							case '(': return true; //valid
+							case '_': case '$': case '.': case '-':
+								continue; //valid
+							default:
+								if (Character.isWhitespace(cc)) {
+									j = Strings.skipWhitespaces(val, j + 1);
+									if (j < len && val.charAt(j) == '(')
+										return true;
+									return false;
+								}
+								if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z') 
+								&& (cc < '0' || cc > '9'))
+									return false;
+							}
+						}
+					}
 				}
 			}
 		}

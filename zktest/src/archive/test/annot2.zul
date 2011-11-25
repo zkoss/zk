@@ -40,5 +40,7 @@
 		value="@bind(first=a b 'c(\'abc\')',another='else', hello 'in()')"/>
 	<button label="test 2" onClick="dump(self)"
 		value="@foo(first={a b 'c', x='y{f(a)}' y.z}, another='else', last={a, b}) @more()"/>
+	<button label="test 3" onClick="dump(self)"
+		onTest="@ $non-annot.a8_A2 ()"/>
 	<textbox rows="30" hflex="1" id="inf"/>
 </div>
