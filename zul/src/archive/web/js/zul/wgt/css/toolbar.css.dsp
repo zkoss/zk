@@ -6,7 +6,7 @@
 	border-width: 0 0 1px; 
 	display: block;
 	padding: 2px;
-	background: repeat-x 0 -1px;
+	background: repeat-x 0 -1px #EEEEEE;
 	background-image: url(${c:encodeURL('~./zul/img/common/toolbar-hm.png')});
 	position: relative; zoom: 1;
 }
