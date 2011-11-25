@@ -21,7 +21,6 @@ div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
-	position: relative;
 	overflow: hidden;
 	border: 1px solid;
 	white-space: nowrap;
