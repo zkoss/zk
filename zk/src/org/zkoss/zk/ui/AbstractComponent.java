@@ -2097,11 +2097,11 @@ w:use="foo.MyWindow"&gt;
 			_auxinf.listeners = new HashMap<String, List<EventListenerInfo>>(8);
 
 		boolean found = false;
-		List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
+		List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
 		final EventListenerInfo listenerInfo = new EventListenerInfo(priority, listener);
-		if (l != null) {
+		if (lis != null) {
 			if (duplicateListenerIgnored()) {
-				for (Iterator<EventListenerInfo> it = l.iterator(); it.hasNext();) {
+				for (Iterator<EventListenerInfo> it = lis.iterator(); it.hasNext();) {
 					final EventListenerInfo li = it.next();
 					if (li.listener.equals(listener)) {
 						if (li.priority == priority)
@@ -2113,7 +2113,7 @@ w:use="foo.MyWindow"&gt;
 				}
 			}
 
-			for (ListIterator<EventListenerInfo> it = l.listIterator(l.size());;) {
+			for (ListIterator<EventListenerInfo> it = lis.listIterator(lis.size());;) {
 				final EventListenerInfo li =
 					it.hasPrevious() ? (EventListenerInfo)it.previous(): null;
 				if (li == null || li.priority >= priority) {
@@ -2123,8 +2123,8 @@ w:use="foo.MyWindow"&gt;
 				}
 			}	
 		} else {
-			_auxinf.listeners.put(evtnm, l = new LinkedList<EventListenerInfo>());
-			l.add(listenerInfo);
+			_auxinf.listeners.put(evtnm, lis = new LinkedList<EventListenerInfo>());
+			lis.add(listenerInfo);
 		}
 
 		final Desktop desktop;
@@ -2135,7 +2135,7 @@ w:use="foo.MyWindow"&gt;
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 			} else if (getClientEvents().containsKey(evtnm)) {
 				final boolean asap = Events.isListened(this, evtnm, true);
-				if (l.size() == 1 || oldasap != asap)
+				if (lis.size() == 1 || oldasap != asap)
 					smartUpdate("$" + evtnm, asap);
 			}
 		}
@@ -2155,13 +2155,13 @@ w:use="foo.MyWindow"&gt;
 
 		if (_auxinf != null && _auxinf.listeners != null) {
 			final boolean oldasap = Events.isListened(this, evtnm, true);
-			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
-			if (l != null) {
-				for (Iterator<EventListenerInfo> it = l.iterator(); it.hasNext();) {
+			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
+			if (lis != null) {
+				for (Iterator<EventListenerInfo> it = lis.iterator(); it.hasNext();) {
 					final EventListenerInfo li = it.next();
 					if (li.listener.equals(listener)) {
 						it.remove();
-						if (l.isEmpty())
+						if (lis.isEmpty())
 							_auxinf.listeners.remove(evtnm);
 
 						final Desktop desktop = getDesktop();
@@ -2169,7 +2169,7 @@ w:use="foo.MyWindow"&gt;
 							onListenerChange(desktop, false);
 
 							if (getClientEvents().containsKey(evtnm)) {
-								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
+								if (lis.isEmpty() && !Events.isListened(this, evtnm, false))
 									smartUpdate("$" + evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
 									smartUpdate("$" + evtnm, !oldasap);
@@ -2217,16 +2217,16 @@ w:use="foo.MyWindow"&gt;
 			_auxinf.forwards = new HashMap<String, ForwardInfo>(4);
 
 		ForwardInfo info = _auxinf.forwards.get(orgEvent);
-		final List<Object[]> fwds;
+		final List<TargetInfo> tis;
 		if (info != null) {
-			fwds = info.targets;
-			for (Object[] fwd: fwds) {
-				if (Objects.equals(fwd[0], target)
-				&& Objects.equals(fwd[1], targetEvent)) { //found
-					if (Objects.equals(fwd[2], eventData)) {
+			tis = info.targets;
+			for (TargetInfo ti: tis) {
+				if (Objects.equals(ti.target, target)
+				&& Objects.equals(ti.event, targetEvent)) { //found
+					if (Objects.equals(ti.data, eventData)) {
 						return false;
 					} else {
-						fwd[2] = eventData;
+						ti.data = eventData;
 						return true;
 					}
 				}
@@ -2234,11 +2234,11 @@ w:use="foo.MyWindow"&gt;
 		} else {
 			final ForwardListener listener = new ForwardListener(orgEvent);
 			addEventListener(orgEvent, listener);
-			info = new ForwardInfo(listener, fwds = new LinkedList<Object[]>());
+			info = new ForwardInfo(listener, tis = new LinkedList<TargetInfo>());
 			_auxinf.forwards.put(orgEvent, info);
 		}
 
-		fwds.add(new Object[] {target, targetEvent, eventData});
+		tis.add(new TargetInfo(target, targetEvent, eventData));
 		return true;
 	}
 	public boolean removeForward(
@@ -2254,14 +2254,14 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.forwards != null) {
 			final ForwardInfo info = _auxinf.forwards.get(orgEvent);
 			if (info != null) {
-				final List<Object[]> fwds = info.targets;
-				for (Iterator<Object[]> it = fwds.iterator(); it.hasNext();) {
-					final Object[] fwd = it.next();
-					if (Objects.equals(fwd[1], targetEvent)
-					&& Objects.equals(fwd[0], target)) { //found
+				final List<TargetInfo> tis = info.targets;
+				for (Iterator<TargetInfo> it = tis.iterator(); it.hasNext();) {
+					final TargetInfo ti = it.next();
+					if (Objects.equals(ti.event, targetEvent)
+					&& Objects.equals(ti.target, target)) { //found
 						it.remove(); //remove it
 
-						if (fwds.isEmpty()) { //no more event
+						if (tis.isEmpty()) { //no more event
 							_auxinf.forwards.remove(orgEvent);
 							removeEventListener(orgEvent, info.listener);
 						}
@@ -2275,12 +2275,12 @@ w:use="foo.MyWindow"&gt;
 
 	public boolean isListenerAvailable(String evtnm, boolean asap) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
-			if (l != null) {
+			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
+			if (lis != null) {
 				if (!asap)
-					return !l.isEmpty();
+					return !lis.isEmpty();
 
-				for (EventListenerInfo li: l) {
+				for (EventListenerInfo li: lis) {
 					if (!(li.listener instanceof Deferrable)
 					|| !(((Deferrable)li.listener).isDeferrable()))
 						return true;
@@ -2293,19 +2293,19 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
-			if (l != null)
-				return CollectionsX.comodifiableIterator(l, _listenerInfoConverter);
+			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
+			if (lis != null)
+				return CollectionsX.comodifiableIterator(lis, _listenerInfoConverter);
 		}
 		return CollectionsX.emptyIterator();
 	}
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
 		if (_auxinf != null && _auxinf.listeners != null) {
-			final List<EventListenerInfo> l = _auxinf.listeners.get(evtnm);
-			if (l != null)
+			final List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
+			if (lis != null)
 				return new Iterable<EventListener<? extends Event>>() {
 					public Iterator<EventListener<? extends Event>> iterator() {
-						return CollectionsX.comodifiableIterator(l, _listenerInfoConverter);
+						return CollectionsX.comodifiableIterator(lis, _listenerInfoConverter);
 					}
 				};
 		}
@@ -2491,7 +2491,8 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
 			it.hasNext();)
-				willPassivate(it.next());
+				for (EventListenerInfo li: it.next())
+					willPassivate(li.listener);
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
@@ -2511,7 +2512,8 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf != null && _auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
 			it.hasNext();)
-				didActivate(it.next());
+				for (EventListenerInfo li: it.next())
+					didActivate(li.listener);
 
 		for (AbstractComponent p = (AbstractComponent)getFirstChild();
 		p != null; p = p._next)
@@ -2643,12 +2645,12 @@ w:use="foo.MyWindow"&gt;
 			_auxinf.listeners.get(evtnm): null;
 		if (listeners != null)
 			for (Iterator it = CollectionsX.comodifiableIterator(listeners); it.hasNext();) {
-				final EventListenerInfo eli = (EventListenerInfo)it.next();
-				if (eli.priority < 1000)
+				final EventListenerInfo li = (EventListenerInfo)it.next();
+				if (li.priority < 1000)
 					break; //no more
 
-				execinf.update(null, eli.listener, null);
-				onEvent(eli.listener, event);
+				execinf.update(null, li.listener, null);
+				onEvent(li.listener, event);
 				if (!event.isPropagatable())
 					return; //done
 			}
@@ -2667,10 +2669,10 @@ w:use="foo.MyWindow"&gt;
 
 		if (listeners != null)
 			for (Iterator it = CollectionsX.comodifiableIterator(listeners); it.hasNext();) {
-				final EventListenerInfo eli = (EventListenerInfo)it.next();
-				if (eli.priority < 1000) {
-					execinf.update(null, eli.listener, null);
-					onEvent(eli.listener, event);
+				final EventListenerInfo li = (EventListenerInfo)it.next();
+				if (li.priority < 1000) {
+					execinf.update(null, li.listener, null);
+					onEvent(li.listener, event);
 					if (!event.isPropagatable())
 						return; //done
 				}
@@ -2974,39 +2976,35 @@ w:use="foo.MyWindow"&gt;
 			Serializables.smartWrite(s, (List<ScopeListener>)null);
 		}
 
-		if (_auxinf.listeners != null)
+		if (_auxinf.listeners != null) {
+			final Log logio = Serializables.logio;
+			final boolean debug = logio.debugable();
 			for (Map.Entry<String, List<EventListenerInfo>> me: _auxinf.listeners.entrySet()) {
 				s.writeObject(me.getKey());
 
 				final List<EventListenerInfo> ls = me.getValue();
-				willSerialize(ls);
-				writeListeners(s, ls);
+				for (EventListenerInfo li: ls) {
+					willSerialize(li.listener);
+
+					if ((li.listener instanceof java.io.Serializable)
+					|| (li.listener instanceof java.io.Externalizable)) {
+						try {
+							s.writeObject(li);
+						} catch (java.io.NotSerializableException ex) {
+							logio.error("Unable to serialize item: "+li.listener);
+							throw ex;
+						}
+					} else if (debug) {
+						logio.debug("Skip not-serializable item: "+li.listener);
+					}
+				}
+				s.writeObject(null); //end of list for a particular event
 			}
-		s.writeObject(null);
+		}
+		s.writeObject(null); //end of events
 
 		willSerialize(_auxinf.ausvc);
 		Serializables.smartWrite(s, _auxinf.ausvc);
-	}
-	private static void writeListeners(java.io.ObjectOutputStream s, Collection<EventListenerInfo> col)
-	throws IOException {
-		if (col != null) {
-			final Log logio = Serializables.logio;
-			final boolean debug = logio.debugable();
-			for (EventListenerInfo li: col) {
-				if ((li.listener instanceof java.io.Serializable)
-				|| (li.listener instanceof java.io.Externalizable)) {
-					try {
-						s.writeObject(li);
-					} catch (java.io.NotSerializableException ex) {
-						logio.error("Unable to serialize item: "+li.listener);
-						throw ex;
-					}
-				} else if (li.listener != null && debug) {
-					logio.debug("Skip not-serializable item: "+li.listener);
-				}
-			}
-		}
-		s.writeObject(null);
 	}
 
 	/** Utility to invoke {@link ComponentSerializationListener#willSerialize}
@@ -3090,7 +3088,8 @@ w:use="foo.MyWindow"&gt;
 			final String evtnm = (String)s.readObject();
 			if (evtnm == null) break; //no more
 
-			if (_auxinf.listeners == null) _auxinf.listeners = new HashMap<String,List<EventListenerInfo>>(4);
+			if (_auxinf.listeners == null)
+				_auxinf.listeners = new HashMap<String,List<EventListenerInfo>>(4);
 			final List<EventListenerInfo> ls = Serializables.smartRead(s, (List<EventListenerInfo>)null);
 				//OK to use Serializables.smartRead to read back
 			_auxinf.listeners.put(evtnm, ls);
@@ -3114,7 +3113,8 @@ w:use="foo.MyWindow"&gt;
 		if (_auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
 			it.hasNext();)
-				didDeserialize(it.next());
+				for (EventListenerInfo li: it.next())
+					didDeserialize(li.listener);
 		didDeserialize(_auxinf.ausvc = (AuService)s.readObject());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
@@ -3153,8 +3153,8 @@ w:use="foo.MyWindow"&gt;
 		public void onEvent(Event event) {
 			final ForwardInfo info = _auxinf.forwards.get(_orgEvent);
 			if (info != null)
-				for (Object[] fwd: new ArrayList<Object[]>(info.targets)) {
-					Component target = resolveForwardTarget(fwd[0]);
+				for (TargetInfo ti: new ArrayList<TargetInfo>(info.targets)) {
+					Component target = resolveForwardTarget(ti.target);
 					if (target == null) {
 						final IdSpace owner = getSpaceOwner();
 						if (owner instanceof Component) {
@@ -3174,7 +3174,7 @@ w:use="foo.MyWindow"&gt;
 					//(since 3.6.2) change from postEvent to sendEvent to
 					//make forward event deterministic
 					Events.sendEvent(
-						new ForwardEvent((String)fwd[1], target, event, fwd[2]));
+						new ForwardEvent(ti.event, target, event, ti.data));
 				}
 		}
 
@@ -3183,9 +3183,9 @@ w:use="foo.MyWindow"&gt;
 			return null; //handle by AbstractComponent.clone
 		}
 	}
-	private Component resolveForwardTarget(Object fwd) {
-		return fwd instanceof String ?
-			Components.pathToComponent((String)fwd, this): (Component)fwd;
+	private Component resolveForwardTarget(Object target) {
+		return target instanceof String ?
+			Components.pathToComponent((String)target, this): (Component)target;
 	}
 
 	/** Returns the default mold for the given class.
@@ -3364,9 +3364,9 @@ w:use="foo.MyWindow"&gt;
 				for (Map.Entry<String, ForwardInfo> me: forwards.entrySet()) {
 					final String orgEvent = me.getKey();
 					final ForwardInfo info = me.getValue();
-					final List<Object[]> fwds = info.targets;
-					for (Object[] fwd: fwds)
-						owner.addForward0(orgEvent, fwd[0], (String)fwd[1], fwd[2]);
+					final List<TargetInfo> tis = info.targets;
+					for (TargetInfo ti: tis)
+						owner.addForward0(orgEvent, ti.target, ti.event, ti.data);
 				}
 			}
 
@@ -3379,12 +3379,14 @@ w:use="foo.MyWindow"&gt;
 				clone.listeners = new HashMap<String, List<EventListenerInfo>>(4);
 				for (Map.Entry<String, List<EventListenerInfo>> me: listeners.entrySet()) {
 					final List<EventListenerInfo> list = new LinkedList<EventListenerInfo>();
-					for (EventListenerInfo val: me.getValue()) {
-						if (val instanceof ComponentCloneListener) {
-							val = (EventListenerInfo)((ComponentCloneListener)val).willClone(owner);
-							if (val == null) continue; //don't use it in clone
+					for (EventListenerInfo li: me.getValue()) {
+						if (li.listener instanceof ComponentCloneListener) {
+							Object val = ((ComponentCloneListener)li.listener).willClone(owner);
+							if (val == null)
+								continue; //don't use it in clone
+							li = new EventListenerInfo(li.priority, (EventListener<? extends Event>)val);
 						}
-						list.add(val);
+						list.add(li);
 					}
 					if (!list.isEmpty())
 						clone.listeners.put(me.getKey(), list);
@@ -3487,13 +3489,24 @@ w:use="foo.MyWindow"&gt;
 					_aring[which] = null;
 		}
 	}
-	private static class ForwardInfo {
+	private static class ForwardInfo implements java.io.Serializable {
 		private final EventListener<? extends Event> listener;
 		//List([target or targetPath, targetEvent, eventData])]
-		private final List<Object[]> targets;
-		private ForwardInfo(EventListener<? extends Event> listener, List<Object[]> targets) {
+		private final List<TargetInfo> targets;
+		private ForwardInfo(EventListener<? extends Event> listener, List<TargetInfo> targets) {
 			this.listener = listener;
 			this.targets = targets;
+		}
+	}
+	private static class TargetInfo implements java.io.Serializable {
+		private final Object target;
+		private final String event;
+		private Object data;
+
+		private TargetInfo(Object target, String event, Object data) {
+			this.target = target;
+			this.event = event;
+			this.data = data;
 		}
 	}
 	private static class EventListenerInfo
