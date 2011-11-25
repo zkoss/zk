@@ -500,12 +500,12 @@ public class Servlets {
 
 		Double vclient = getBrowser(userAgent, type.substring(0, last));
 		if (vclient == null)
-			return false; //unknown
-		if (vtype != null) {
-			double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
-			return equals ? v1 == v2: v1 >= v2;
-		}
-		return vclient != null;
+			return false; //not matched
+		if (vtype == null)
+			return true; //not care about version
+
+		double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
+		return equals ? v1 == v2: v1 >= v2;
 	}	
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
