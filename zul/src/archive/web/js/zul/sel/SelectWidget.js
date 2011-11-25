@@ -637,7 +637,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				.domListen_(btn, 'onBlur', 'doBlur_');
 		this.updateFormData();
 		this._updHeaderCM();
-		listenOnFitSize(this);
 		
 		// Bug ZK-395(B50-ZK-272.zul), if no items, in opera it will appear a scrollbar
 		if (btn && zk.opera && !this.getBodyWidgetIterator().hasNext())
