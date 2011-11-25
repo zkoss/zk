@@ -507,6 +507,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 	<!-- for testing B50-3316543 -->
 	<system-config>
+		<label-location>/WEB-INF/i3-label.properties</label-location>
 		<label-location>/WEB-INF/prop/B50-3316543-mdm.properties</label-location>
     	<label-location>/WEB-INF/prop/B50-3316543-wtb.properties</label-location>
 	</system-config>	
