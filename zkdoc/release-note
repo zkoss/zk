@@ -139,6 +139,10 @@ ZK 6.0.0
     directory on in Maven dependencies. Sapphire and Silvertail are packaged and 
     delivered as they were in ZK 5.
   + org.zkoss.zk.device.Device.isClient() is replaced with matches().
+  + The support of comet is available to ZK PE, and it is
+  	renamed to org.zkoss.zkex.ui.comet.CometServerPush.
+  	Meanwhile, org.zkoss.zkmax.ui.comet.Comet2ServerPush is upgraded to support
+  	Servlet 3 asynchronous processing. It can be used only with Servlet 3 servers.
 
 	--------
 ZK 5.0.10
