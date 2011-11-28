@@ -95,7 +95,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 		zAu.unError(this.proxy(this._onErr));
 	},
 	_onErr: function (req, errCode) {
-		if (errCode == "410" || errCode == "404")
+		if (errCode == 410 || errCode == 404 || errCode == 405)
 			this._stop();
 	},
 	_tmfn: function () {

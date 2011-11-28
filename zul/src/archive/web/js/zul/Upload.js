@@ -363,8 +363,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 				},
 				complete: function(req, status) {
 					var v;
-					if ((v = req.getResponseHeader("ZK-Error")) == "404"/*SC_NOT_FOUND: server restart*/ ||
-							v == "410" || status == 'error' || status == 410/*SC_GONE: session timeout*/) {
+					if ((v = req.getResponseHeader("ZK-Error")) == "404"/*SC_NOT_FOUND: server restart*/
+					|| v == "410" || status == 'error'
+					|| status == 404 || status == 405 || status == 410/*SC_GONE: session timeout*/) {
 						zul.Uploader.clearInterval(self.id);
 						var wgt = self.getWidget();
 						if (wgt) {
