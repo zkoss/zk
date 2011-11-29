@@ -829,6 +829,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	ajaxSettings: zk.$default({
 		global: false,
+		cache: false,
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
 	}, jq.ajaxSettings),
 
