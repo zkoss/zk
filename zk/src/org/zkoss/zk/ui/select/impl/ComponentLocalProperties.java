@@ -67,7 +67,7 @@ public class ComponentLocalProperties {
 	
 	/*package*/ static boolean matchType(Component component, String type){
 		if(type == null) return true;
-		return component.getDefinition().getName().equals(type);
+		return component.getDefinition().getName().toLowerCase().equals(type.toLowerCase());
 	}
 	
 	/*package*/ static boolean matchClasses(Component component, 
