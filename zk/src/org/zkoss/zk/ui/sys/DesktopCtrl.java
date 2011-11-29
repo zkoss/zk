@@ -399,7 +399,7 @@ if (c.isEmpty()) {
 	 * It is called by {@link org.zkoss.zk.ui.Executions#schedule}.
 	 * Don't call it directly.
 	 * <p>Like {@link #activateServerPush} and {@link #deactivateServerPush}, this method could
-	 * be called in any thread, so it has to be safe for concurrent access.
+	 * be called in any thread, so the implementation of this method has to be safe for concurrent access.
 	 * @param task the task to execute
 	 * @param event the event to be passed to the task (i.e., the event listener).
 	 * It could null or any instance as long as the task recognizes it.
