@@ -55,6 +55,7 @@ ZK 6.0.0
   ZK-614: Support Servlet 3's web fragment
   ZK-621: Combobox and Bandbox should support isOpen() to store the open status
   ZK-615: Comet supports Servlet 3's asynchronous processing
+  ZK-448: Colorbox support keystroke to navigate the color code
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
