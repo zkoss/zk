@@ -125,7 +125,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
 	//private control key
-	private static final String ZBIND_COMP_UUID = "$COMPUUID$";
+	private static final String ZKBIND_COMP_UUID = "$COMPUUID$";
 	private static final String FORM_ID = "$FORM_ID$";
 	
 	//Command lifecycle result
@@ -339,16 +339,16 @@ public class BinderImpl implements Binder,BinderCtrl {
 	//because if a component was detached (ex a listitem of listbox) the uuid will also be changed 
 	//then binder is not able to remove its reference by last uuid 
 	private String getBindUuid(Component comp){
-		String uuid = (String)comp.getAttribute(ZBIND_COMP_UUID,Component.COMPONENT_SCOPE);
+		String uuid = (String)comp.getAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
 		if(uuid==null){
 			uuid = comp.getUuid();
-			comp.setAttribute(ZBIND_COMP_UUID, uuid,Component.COMPONENT_SCOPE);
+			comp.setAttribute(ZKBIND_COMP_UUID, uuid,Component.COMPONENT_SCOPE);
 		}
 		return uuid;
 	}
 	
 	private void removeBindUuid(Component comp){
-		comp.removeAttribute(ZBIND_COMP_UUID,Component.COMPONENT_SCOPE);
+		comp.removeAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
 	}
 
 	private void addLoadFormBinding(Component comp, String formid, Form form, String loadExpr, Map<String, Object> args) {
