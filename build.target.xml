@@ -333,7 +333,7 @@ if="deploy.tomcat.required">
 		<param name="check.lang-addon.zk-version" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
-		<param name="package" value="zbind"/>
+		<param name="package" value="zkbind"/>
 		<param name="check.lang-addon.uid" value="true"/>
 		<param name="check.lang-addon.zk-version" value="true"/>
 	</antcall>
