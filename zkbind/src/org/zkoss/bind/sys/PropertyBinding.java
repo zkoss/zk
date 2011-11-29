@@ -46,12 +46,9 @@ public interface PropertyBinding extends Binding {
 	public String getPropertyString();
 	
 	/**
-	 * Returns whether bind this binding after execute associated command(true); 
-	 * 	otherwise it shall bind before execute associated command(false).
-	 * @return whether bind this binding after execute associated command(true); 
-	 * 	otherwise it shall bind before execute associated command(false).
+	 * Returns the condition type of this binding
 	 */
-	public boolean isAfter();
+	public ConditionType getConditionType();
 	
 	/**
 	 * Returns an argument <tags, object> pairs map for converter. 

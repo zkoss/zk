@@ -18,6 +18,7 @@ import java.util.Map;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -34,11 +35,12 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	final protected AccessInfo _accessInfo;
 	final private Map<String, ExpressionX> _fieldExprs;
 
-	protected FormBindingImpl(Binder binder, Component comp, String formId, Form form, String accessScript, Map<String, Object> args) {
-		super(binder, comp, args);
+	protected FormBindingImpl(Binder binder, Component comp, String formId, Form form, 
+			String accessExpr, ConditionType conditionType, String command,Map<String, Object> bindingArgs) {
+		super(binder, comp, bindingArgs);
 		this._formId = formId;
 		this._form = form;
-		this._accessInfo = AccessInfo.create(this, accessScript, Form.class, ignoreTracker());
+		this._accessInfo = AccessInfo.create(this, accessExpr, Form.class, conditionType, command, ignoreTracker());
 		_fieldExprs = new HashMap<String, ExpressionX>();
 	}
 
@@ -63,8 +65,8 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return getPureExpressionString(this._accessInfo.getProperty());
 	}
 	
-	public boolean isAfter() {
-		return this._accessInfo.isAfter();
+	public ConditionType getConditionType() {
+		return this._accessInfo.getConditionType();
 	}
 	
 	public String getCommandName() {
@@ -97,8 +99,9 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	public String toString(){
 		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
 		.append(",component:").append(getComponent())
-//		.append(",id:").append(getFormId())
+		.append(",id:").append(getFormId())
 		.append(",access:").append(getPropertyString())
+		.append(",condition:").append(getConditionType())		
 		.append(",command:").append(getCommandName()).toString();
 	}
 }

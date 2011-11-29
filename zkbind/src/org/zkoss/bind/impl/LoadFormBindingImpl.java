@@ -22,6 +22,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -36,8 +37,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	private int _len;
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
 	
-	public LoadFormBindingImpl(Binder binder, Component comp, String formId, Form form, String loadExpr, Map<String, Object> args) {
-		super(binder, comp, formId, form, loadExpr, args);
+	public LoadFormBindingImpl(Binder binder, Component comp, String formId, Form form, String loadExpr, 
+			ConditionType conditionType,String command, Map<String, Object> bindingArgs) {
+		super(binder, comp, formId, form, loadExpr, conditionType, command, bindingArgs);
 	}
 
 	public void load(BindContext ctx) {

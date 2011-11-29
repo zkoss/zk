@@ -22,6 +22,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -37,11 +38,13 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
 	
-	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveScript, String converter, String validator, 
-			Map<String, Object> args, Map<String, Object> converterArgs, Map<String, Object> validatorArgs) {
-		super(binder, comp, "self."+attr, saveScript, converter, args, converterArgs);
+	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
+			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
+		
+		super(binder, comp, "self."+attr, saveExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		_validator = validator==null?null:parseValidator(eval,validator);
+		_validator = validatorExpr==null?null:parseValidator(eval,validatorExpr);
 		_validatorArgs = validatorArgs;
 	}
 	

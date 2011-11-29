@@ -22,6 +22,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
@@ -36,8 +37,10 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	private Set<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
 	
 	public LoadPropertyBindingImpl(Binder binder, Component comp,
-		String attr, String loadScript, String converter, Map<String, Object> args,Map<String, Object> converterArgs) {
-		super(binder, comp, "self."+attr, loadScript, converter, args, converterArgs);
+		String attr, String loadExpr,ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
+		String converterExpr,Map<String, Object> converterArgs) {
+		
+		super(binder, comp, "self."+attr, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
 	}
 	
 	public void load(BindContext ctx) {

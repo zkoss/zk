@@ -24,6 +24,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -41,10 +42,12 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	
 	private static final String $VALUEREF$ = "$VALUEREF$";
 	
-	public SaveFormBindingImpl(Binder binder, Component comp, String formId, Form form, String access, String validator, Map<String,Object> args, Map<String,Object> validatorArgs) {
-		super(binder, comp, formId, form, access, args);
+	public SaveFormBindingImpl(Binder binder, Component comp, String formId, Form form, String saveExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
+			String validatorExpr, Map<String,Object> validatorArgs) {
+		super(binder, comp, formId, form, saveExpr, conditionType, command, bindingArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		_validator = validator==null?null:parseValidator(eval,validator);
+		_validator = validatorExpr==null?null:parseValidator(eval,validatorExpr);
 		_validatorArgs = validatorArgs;
 	}
 	

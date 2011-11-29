@@ -16,8 +16,8 @@ import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
@@ -32,15 +32,27 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	private final ExpressionX _converter;
 	private final Map<String, Object> _converterArgs;
 
-	protected PropertyBindingImpl(Binder binder, Component comp, String fieldScript, String accessScript, String converter, 
-			Map<String, Object> args, Map<String, Object> converterArgs) {
-		super(binder,comp, args);
+	/**
+	 * @param binder
+	 * @param comp
+	 * @param fieldExpr the EL expression to access component field (ex, style, value)
+	 * @param accessExpr the binding expression , to access the bean
+	 * @param conditionType the condition type
+	 * @param command the command, if the conditionType is not prompt, then command must not null
+	 * @param bindingArgs
+	 * @param converterExpr
+	 * @param converterArgs
+	 */
+	protected PropertyBindingImpl(Binder binder, Component comp, String fieldExpr, String accessExpr, 
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		super(binder,comp, bindingArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Class<Object> returnType = Object.class;
-		this._fieldExpr = eval.parseExpressionX(null, fieldScript, returnType);
-		this._accessInfo = AccessInfo.create(this, accessScript, returnType, ignoreTracker());
+		this._fieldExpr = eval.parseExpressionX(null, fieldExpr, returnType);
+		this._accessInfo = AccessInfo.create(this, accessExpr, returnType, conditionType, command, ignoreTracker());
 		_converterArgs = converterArgs;
-		_converter = converter==null?null:parseConverter(eval,converter);
+		_converter = converterExpr==null?null:parseConverter(eval,converterExpr);
 	}
 	
 	public Map<String, Object> getConverterArgs() {
@@ -89,8 +101,8 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		return getPureExpressionString(this._accessInfo.getProperty());
 	}
 	
-	public boolean isAfter() {
-		return this._accessInfo.isAfter();
+	public ConditionType getConditionType() {
+		return this._accessInfo.getConditionType();
 	}
 	
 	/*package*/ ExpressionX getProperty() {
@@ -102,6 +114,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		.append(",component:").append(getComponent())
 		.append(",field:").append(getFieldName())
 		.append(",access:").append(getProperty().getExpressionString())
+		.append(",condition:").append(getConditionType())
 		.append(",command:").append(getCommandName()).toString();
 	}
 }

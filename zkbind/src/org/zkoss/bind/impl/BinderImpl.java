@@ -41,6 +41,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
+import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.SaveBinding;
@@ -303,26 +304,90 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 		return _eval;
 	}
-
-	public void addFormBindings(Component comp, String idScript, String initExpr,
-		String[] loadExprs, String[] saveExprs, String validator, Map<String, Object> args, Map<String, Object> validatorArgs) {
-		final BindEvaluatorX eval = getEvaluatorX();
-		final ExpressionX idExpr = eval.parseExpressionX(null, idScript, String.class);
-		final String id = (String) eval.getValue(null, comp, idExpr);
-		final Form form = doInitFormBinding(comp,initExpr,args);
+	
+	@Override
+	public void initForm(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
+		if(Strings.isBlank(id)){
+			throw new IllegalArgumentException("form id is blank");
+		}
+		if(initExpr==null){
+			throw new IllegalArgumentException("initExpr is null for component "+comp+", form "+id);
+		}
 		
+		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		Form form = null; 
+		//check if a form exist already
+		if(oldid!=null){
+			throw new IllegalArgumentException("form "+id+" is already existed, is "+form+", cannot init it again.");
+		}
+		
+		form = doInitForm(comp,initExpr,initArgs);
 		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
 		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
-		for(String loadExpr : loadExprs) {
-			addLoadFormBinding(comp, id, form, loadExpr, args);
+	}
+	@Override
+	public void addFormLoadBindings(Component comp, String id,
+			String loadExpr, String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs) {
+		if(Strings.isBlank(id)){
+			throw new IllegalArgumentException("form id is blank");
 		}
-		for(String saveExpr : saveExprs) {
-			addSaveFormBinding(comp, id, form, saveExpr, validator, args, validatorArgs);
+		if(loadExpr==null){
+			throw new IllegalArgumentException("loadExpr is null for component "+comp+", form "+id);
 		}
+		
+		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		Form form = null; 
+		//check if a form exist already
+		if(oldid!=null){
+			if(!oldid.equals(id)){
+				throw new IllegalArgumentException("try to use 2 forms in same component 1st "+oldid+", 2nd "+id);
+			}
+			form = (Form)comp.getAttribute(oldid, Component.COMPONENT_SCOPE);
+		}
+		
+		if(form==null){
+			form = new SimpleForm();
+			comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
+			comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+		}
+		
+		addLoadFormBinding(comp,id,form,loadExpr,beforeCmds,afterCmds,bindingArgs);
+	}
+
+	@Override
+	public void addFormSaveBindings(Component comp, String id, String saveExpr,
+			String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs, String validatorExpr,
+			Map<String, Object> validatorArgs) {
+		if(Strings.isBlank(id)){
+			throw new IllegalArgumentException("form id is blank");
+		}
+		if(saveExpr==null){
+			throw new IllegalArgumentException("saveExpr is null for component "+comp+", form "+id);
+		}
+		
+		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		Form form = null; 
+		
+		if(oldid!=null){
+			if(!oldid.equals(id)){
+				throw new IllegalArgumentException("try to use 2 forms in same component 1st "+oldid+", 2nd "+id);
+			}
+			
+			form = (Form)comp.getAttribute(oldid, Component.COMPONENT_SCOPE);
+		}
+		
+		if(form==null){
+			form = doInitForm(comp,null,bindingArgs);
+			comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
+			comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+		}
+
+		addSaveFormBinding(comp, id, form, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
 	}
 	
-	private Form doInitFormBinding(Component comp, String initExpr, Map<String, Object> args) {
-		if(initExpr==null) return new SimpleForm();
+	private Form doInitForm(Component comp, String initExpr, Map<String, Object> args) {
 		final BindEvaluatorX eval = getEvaluatorX();
 		final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, comp, null);
 		ctx.setAttribute(IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el
@@ -351,77 +416,134 @@ public class BinderImpl implements Binder,BinderCtrl {
 		comp.removeAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
 	}
 
-	private void addLoadFormBinding(Component comp, String formid, Form form, String loadExpr, Map<String, Object> args) {
-		final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formid, form, loadExpr, args); 
-		final String attr = formid;
-		addBinding(comp, attr, binding);
+	private void addLoadFormBinding(Component comp, String formId, Form form, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+		final boolean prompt = isPrompt(beforeCmds,afterCmds);
+		final String attr = formId;
 		
-		final String command = binding.getCommandName();
-		if (command == null) {
+		if(prompt){
+			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.PROMPT,null, bindingArgs);
+			addBinding(comp, attr, binding);
 			final String bindDualId = getBindDualId(comp, attr);
 			_formBindingHelper.addLoadFormPromptBinding(bindDualId, binding);
-		} else {
-			final boolean after = binding.isAfter();
-			if (after) {
-				_formBindingHelper.addLoadFormAfterBinding(command, binding);
-			} else {
-				_formBindingHelper.addLoadFormBeforeBinding(command, binding);
+		}else{
+			if(beforeCmds!=null && beforeCmds.length>0){
+				for(String cmd:beforeCmds){
+					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+					_formBindingHelper.addLoadFormBeforeBinding(cmd, binding);
+				}
+			}
+			if(afterCmds!=null && afterCmds.length>0){
+				for(String cmd:afterCmds){
+					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+					_formBindingHelper.addLoadFormBeforeBinding(cmd, binding);
+				}
 			}
 		}
 	}
 
-	private void addSaveFormBinding(Component comp, String formid, Form form, String saveExpr, String validator, Map<String, Object> args, Map<String, Object> validatorArgs) {
-		//register event Command listener 
-		final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, validator, args, validatorArgs);
-//		final String formid = form.getId();
-		final String command = binding.getCommandName();
-		if (command == null) {
-			throw new UiException("Form "+formid+" must be saved by a Command: "+ binding.getPropertyString());
+	private void addSaveFormBinding(Component comp, String formid, Form form, String saveExpr, 
+			String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String validatorExpr,Map<String, Object> validatorArgs) {
+		final boolean prompt = isPrompt(beforeCmds,afterCmds);
+		if(prompt){
+			throw new IllegalArgumentException("a save-form-binding have to set with a before|after command condition");
 		}
-		addBinding(comp, formid, binding);
 		
-		final boolean after = binding.isAfter();
-		if (after) {
-			_formBindingHelper.addSaveFormAfterBinding(command, binding);
-		} else {
-			_formBindingHelper.addSaveFormBeforeBinding(command, binding);
+		if(beforeCmds!=null && beforeCmds.length>0){
+			for(String cmd:beforeCmds){
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				addBinding(comp, formid, binding);
+				log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,formid,saveExpr);
+				_formBindingHelper.addSaveFormBeforeBinding(cmd, binding);
+			}
+		}
+		if(afterCmds!=null && afterCmds.length>0){
+			for(String cmd:afterCmds){
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				addBinding(comp, formid, binding);
+				log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,formid,saveExpr);
+				_formBindingHelper.addSaveFormAfterBinding(cmd, binding);
+			}
 		}
 	}
-
-	public void addPropertyBinding(Component comp, String attr, String initExpr, 
-			String[] loadExprs, String[] saveExprs, String converter, String validator, 
-			Map<String, Object> args, Map<String, Object> converterArgs, Map<String, Object> validatorArgs) {
-		if (Strings.isBlank(converter)) {
-			converter = getSystemConverter(comp, attr);
-			if (converter != null) {
-				converter = "'"+converter+"'";
-			}
+	
+	@Override
+	public void initProperty(Component comp, String attr,
+			String initExpr,Map<String, Object> initArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		if(initExpr==null){
+			throw new IllegalArgumentException("initExpr is null for "+attr+" of "+comp);
 		}
-		if (Strings.isBlank(validator)) {
-			validator = getSystemValidator(comp, attr);
-			if (validator != null) {
-				validator = "'"+validator+"'";
+		if (Strings.isBlank(converterExpr)) {
+			converterExpr = getSystemConverter(comp, attr);
+			if (converterExpr != null) {
+				converterExpr = "'"+converterExpr+"'";
 			}
 		}
 		
-		doInitPropertyBinding(comp,attr,initExpr,converter,args,converterArgs);
+		doInitProperty(comp,attr,initExpr,initArgs,converterExpr,converterArgs);
 		
-		for(String loadExpr : loadExprs) {
-			addLoadBinding(comp, attr, loadExpr, converter, args, converterArgs);
-		}
-		for(String saveExpr : saveExprs) {
-			addSaveBinding(comp, attr, saveExpr, converter, validator, args,converterArgs, validatorArgs);
-		}
 		initRendererIfAny(comp);
 	}
 
-	private void doInitPropertyBinding(Component comp, String attr,
-			String initExpr, String converter, Map<String, Object> args,Map<String, Object> converterArgs) {
-		if(initExpr==null) return;
+	@Override
+	public void addPropertyLoadBindings(Component comp, String attr,
+			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		if(loadExpr==null){
+			throw new IllegalArgumentException("loadExpr is null for component "+comp+", attr "+attr);
+		}
+		if (Strings.isBlank(converterExpr)) {
+			converterExpr = getSystemConverter(comp, attr);
+			if (converterExpr != null) {
+				converterExpr = "'"+converterExpr+"'";
+			}
+		}
 		
-		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this,comp,attr,initExpr,converter,args,converterArgs);
+		if(loadExpr!=null){
+			addLoadBinding(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
+		}
+		
+		initRendererIfAny(comp);
+	}
+
+	@Override
+	public void addPropertySaveBindings(Component comp, String attr,
+			String saveExpr, String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs, String converterExpr,
+			Map<String, Object> converterArgs, String validatorExpr,
+			Map<String, Object> validatorArgs) {
+		if(saveExpr==null){
+			throw new IllegalArgumentException("saveExpr is null for component "+comp+", attr "+attr);
+		}
+		if (Strings.isBlank(converterExpr)) {
+			converterExpr = getSystemConverter(comp, attr);
+			if (converterExpr != null) {
+				converterExpr = "'"+converterExpr+"'";
+			}
+		}
+		if (Strings.isBlank(validatorExpr)) {
+			validatorExpr = getSystemValidator(comp, attr);
+			if (validatorExpr != null) {
+				validatorExpr = "'"+validatorExpr+"'";
+			}
+		}
+
+		addSaveBinding(comp, attr, saveExpr, beforeCmds, afterCmds, bindingArgs, 
+				converterExpr, converterArgs, validatorExpr, validatorArgs);
+	}
+	
+	
+	private void doInitProperty(Component comp, String attr,
+			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
+		
+		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, initExpr, bindingArgs, converterExpr, converterArgs);
 		final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
-		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el
+		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
 		
 		//needs converter args
 		if(binding instanceof PropertyBinding){
@@ -454,7 +576,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private void initRendererIfAny(Component comp) {
 		//check if exists template
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(null, BinderImpl.SYSBIND);
 		final Map<?, ?> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		final Template tm = comp.getTemplate("model");
 		if (tm == null) { //no template
@@ -500,9 +622,12 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 	}
 	
-	private void addLoadBinding(Component comp, String attr, String loadExpr, String converter, 
-			Map<String, Object> args, Map<String, Object> converterArgs) {
-		//check attribute _accessInfo natural characteristics to register Command event listener 
+	private void addLoadBinding(Component comp, String attr,
+			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		final boolean prompt = isPrompt(beforeCmds,afterCmds);
+		
+		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
 		//check which attribute of component should load to component on which event.
@@ -518,12 +643,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 			evtnm = (String) attrs.get(BinderImpl.LOADEVENT); //check trigger event for loading
 		}
 		
-		LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, converter, args, converterArgs);
-		addBinding(comp, attr, binding);
-		
-		final String command = binding.getCommandName();
-		if (command == null) {
-			log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converter);
+		if(prompt){
+			log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
+			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
+			addBinding(comp, attr, binding);
+			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
 				addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
 				final String bindDualId = getBindDualId(comp, evtnm);
@@ -534,19 +658,29 @@ public class BinderImpl implements Binder,BinderCtrl {
 			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in loadOnPropertyChange, not by prompt-binding 
 			final String bindDualId = getBindDualId(comp, attr);
 			_propertyBindingHelper.addLoadPromptBinding(comp, bindDualId, binding);
-		} else {
-			final boolean after = binding.isAfter();
-			log.debug("add command-load-binding: comp=[%s],attr=[%s],expr=[%s],after=[%s],converter=[%s]", comp,attr,loadExpr,after,converter);
-			if (after) {
-				_propertyBindingHelper.addLoadAfterBinding(command, binding);
-			} else {
-				_propertyBindingHelper.addLoadBeforeBinding(command, binding);
+		}else{
+			if(beforeCmds!=null && beforeCmds.length>0){
+				for(String cmd:beforeCmds){
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
+					_propertyBindingHelper.addLoadBeforeBinding(cmd, binding);
+				}
+			}
+			if(afterCmds!=null && afterCmds.length>0){
+				for(String cmd:afterCmds){
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
+					_propertyBindingHelper.addLoadAfterBinding(cmd, binding);	
+				}
 			}
 		}
 	}
 	
-	private void addSaveBinding(Component comp, String attr, String saveExpr, String converter, String validator, 
-			Map<String, Object> args, Map<String, Object> converterArgs, Map<String, Object> validatorArgs) {
+	private void addSaveBinding(Component comp, String attr, String saveExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
+		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		//check attribute _accessInfo natural characteristics to register Command event listener 
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
@@ -562,28 +696,42 @@ public class BinderImpl implements Binder,BinderCtrl {
 			}
 			evtnm = (String) attrs.get(BinderImpl.SAVEEVENT); //check trigger event for saving
 		}
-		if (evtnm == null) { //no trigger event...
+		if (evtnm == null) { 
+			//no trigger event, since the value never change of component, so both prompt and command are useless
 			return;
 		}
 
-		final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, converter, validator, args, converterArgs, validatorArgs);
-		addBinding(comp, attr, binding);
 		
-		final String command = binding.getCommandName();
-		if (command == null) { //save on event
-			log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converter,validator);
+		if(prompt){
+			final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+			addBinding(comp, attr, binding);
+			
+			log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
 			addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
 			final String bindDualId = getBindDualId(comp, evtnm);
 			_propertyBindingHelper.addSavePromptBinding(comp, bindDualId, binding);
-		} else {
-			final boolean after = binding.isAfter();
-			log.debug("add command-save-binding: comp=[%s],att=r[%s],expr=[%s],after=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,after,converter,validator);
-			if (after) {
-				_propertyBindingHelper.addSaveAfterBinding(command, binding);
-			} else {
-				_propertyBindingHelper.addSaveBeforeBinding(command, binding);
+		}else{
+			if(beforeCmds!=null && beforeCmds.length>0){
+				for(String cmd:beforeCmds){
+					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
+					_propertyBindingHelper.addSaveBeforeBinding(cmd, binding);
+				}
+			}
+			if(afterCmds!=null && afterCmds.length>0){
+				for(String cmd:afterCmds){
+					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					addBinding(comp, attr, binding);
+					log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
+					_propertyBindingHelper.addSaveAfterBinding(cmd, binding);	
+				}
 			}
 		}
+	}
+	
+	private boolean isPrompt(String[] beforeCmds, String[] afterCmds){
+		return (beforeCmds==null || beforeCmds.length==0) && (afterCmds==null || afterCmds.length==0);
 	}
 
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
@@ -1161,6 +1309,5 @@ public class BinderImpl implements Binder,BinderCtrl {
 			return Collections.emptySet();
 		}
 		return new LinkedHashSet<SaveBinding>(bindings);//keep the order
-	}
-	
+	}	
 }

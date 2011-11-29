@@ -46,8 +46,8 @@ public class LogUtil {
 	public void debug(String format,Object... args){
 		if(debug){
 			String d =format(format,args);
-//			log.fine(d);
-			System.out.println(">>"+d);//more easy to read in console
+			log.fine(d);
+//			System.out.println(">>"+d);//more easy to read in console
 		}
 	}
 }

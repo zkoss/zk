@@ -39,35 +39,109 @@ public interface Binder {
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
 	
 	/**
-	 * Add new form Bindings. 
+	 * init a component property by a expression, it only execute once
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param attr the associated attribute of the component; ex label, style, must not null
+	 * @param initExpr init expression, must not null
+	 * @param initArgs args key-value pairs for initial, nullable
+	 * @param converterExpr the converter expression, nullable
+	 * @param converterArgs args key-value pairs for converter, nullable
+	 */
+	public void initProperty(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
+			String converterExpr, Map<String, Object> converterArgs);
+	
+	
+	/**
+	 * Add new property-load-bindings.
+	 * It creates a prompt|conditional property-load-binding depends on beforeCmds and afterCmds.
+	 * If both beforeCmds and afterCmds are null or empty, it create a prompt binding.
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param attr the associated attribute of the component; ex label, style, must not null
+	 * @param loadExpr load expression, must not null
+	 * @param beforeCmds load before these commands, nullable
+	 * @param afterCmds load after these commands, nullable
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @param converterExpr the converter expression, nullable
+	 * @param converterArgs args key-value pairs for converter, nullable
+	 */
+	public void addPropertyLoadBindings(Component comp,String attr,
+			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs);
+	
+	/**
+	 * Add new property-save-bindings. 
+	 * It creates a prompt|conditional property-save-binding depends on beforeCmds and afterCmds.
+	 * If both beforeCmds and afterCmds are null or mepty, it create a prompt binding.
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param attr the associated attribute of the component; ex value, check, must not null
+	 * @param saveExpr save expression, nullable
+	 * @param beforeCmds save before these commands, nullable
+	 * @param afterCmds save after these commands, nullable
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @param converterExpr the converter expression, nullable
+	 * @param converterArgs args key-value pairs for converter, nullable
+	 * @param validatorExpr the converter expression, nullable
+	 * @param validatorArgs args key-value pairs for validator, nullable
+	 */
+	public void addPropertySaveBindings(Component comp, String attr,
+			String saveExpr,String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs,
+			String validatorExpr, Map<String, Object> validatorArgs);
+	
+	/**
+	 * init a component form by expression, it only execute once
+	 * 
 	 * @param comp the associated component, must not null
 	 * @param id the form id, must not null
-	 * @param initExpr init expressions ; null to ignore it ; the return value of initExpr must be a {@link Form} instance
-	 * @param loadExprs load expressions
-	 * @param saveExprs save expressions
-	 * @param validatorExpr the provided validator expression; null to ignore it 
-	 * @param bindingArgs args key-value pairs for binding. 
-	 * @param validatorArgs args key-value pairs for validator
+	 * @param initExpr init expression, nullable
+	 * @param initArgs args key-value pairs for this init, nullable
 	 */
-	public void addFormBindings(Component comp, String id, String initExpr,
-			String[] loadExprs, String[] saveExprs, String validatorExpr, Map<String, Object> bindingArgs, Map<String, Object> validatorArgs);
-
+	public void initForm(Component comp,String id,String initExpr, Map<String, Object> initArgs);
+	
 	/**
-	 * Add new property Bindings.
+	 * Add new form-load-bindings.
+	 * It create a prompt|conditional form-load-binding depends on beforeCmds and afterCmds.
+	 * If both beforeCmds and afterCmds are null or empty, it create a prompt binding.
+	 * 
 	 * @param comp the associated component, must not null
-	 * @param attr the associated attribute of the component; ex label, style
-	 * @param initExpr init expressions ; null to ignore it
-	 * @param loadExprs load expressions
-	 * @param saveExprs save expressions
-	 * @param converterExpr the provided converter expression; null to ignore it.
-	 * @param validatorExpr the provided validator expression; null to ignore it.
-	 * @param bindingArgs args key-value pairs for binding. 
-	 * @param converterArgs args key-value pairs for converter
-	 * @param validatorArgs args key-value pairs for validator
+	 * @param id the form id, must not null
+	 * @param initExpr init expression, nullable
+	 * @param loadExpr load expression, nullable
+	 * @param beforeCmds load before these commands, nullable
+	 * @param afterCmds load after these commands, nullable
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 */	
+	public void addFormLoadBindings(Component comp,String id,
+			String loadExpr,String[] beforeCmds,String[] afterCmds, Map<String, Object> bindingArgs);
+	
+	/**
+	 * Add new form-save-bindings. 
+	 * It create a conditional form-save-binding depends on beforeCmds and afterCmds.
+	 * Since form-save-binding is always triggered by command, if both beforeCmds and afterCmds are null or empty, it throws an exception.
+	 *  
+	 * @param comp the associated component, must not null
+	 * @param id the form id, must not null
+	 * @param saveExpr save expression, nullable
+	 * @param beforeCmds save before these commands, nullable
+	 * @param afterCmds save after these commands, nullable
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @param validatorExpr the converter expression, nullable
+	 * @param validatorArgs args key-value pairs for validator, nullable
+	 * @throws IllegalArgumentException if beforeCmds or afterCmds are both null or empty
 	 */
-	public void addPropertyBinding(Component comp, String attr, String initExpr,
-			String[] loadExprs, String[] saveExprs, String converterExpr, String validatorExpr, Map<String, Object> bindingArgs,Map<String, Object> converterArgs,Map<String, Object> validatorArgs);
+	public void addFormSaveBindings(Component comp,String id,
+			String saveExpr,String[] beforeCmds,String[] afterCmds, Map<String, Object> bindingArgs,
+			String validatorExpr, Map<String, Object> validatorArgs);
 
+	
+	
+//	public void addChildrenBinding(Component comp, String initExpr, String loadExpr, Map<String, Object> bindingArgs);
+//	public void addReferenceBinding(Component comp, String id, String initExpr, String loadExpr, Map<String, Object> bindingArgs);
+	
+	
 	/**
 	 * Remove all managed bindings that associated with the specified component.
 	 * @param comp
