@@ -130,7 +130,7 @@ public class Doublespinner extends NumberInputElement implements
 
 		try {
 			double v = Double.parseDouble(val);
-			double divscale = vals[1] != null ? ((Double) vals[1]).doubleValue() : 0;
+			double divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			while (v != 0 && --divscale >= 0)
 				v /= 10;
 			return new Double(v);
