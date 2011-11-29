@@ -56,3 +56,12 @@ and mobile applications.
 > all the robustness of Java technologies, but also are offered the flexibility
 > to work directly with ZK's jQuery based widgets to further enhance user
 > experience.
+
+###Declarative Programming
+
+> ZK User Interface Markup Language (ZUML) makes the design of rich user interfaces
+> as simple as authoring HTML pages. ZUML is a variant of XUL inheriting all
+> features available to XML, and separates the UI definition from the run-time logic.
+
+> ZUML also allows developers to automate CRUD between UI components and the data
+> source with annotations, data binding and MVVM.
