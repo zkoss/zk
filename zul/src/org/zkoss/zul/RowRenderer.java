@@ -36,7 +36,7 @@ package org.zkoss.zul;
  * @see RowRendererExt
  * @see GroupRendererExt
  */
-public interface RowRenderer {
+public interface RowRenderer<T> {
 	/** Renders the data to the specified row.
 	 *
 	 * @param row the row to render the result.
@@ -47,5 +47,5 @@ public interface RowRenderer {
 	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public void render(Row row, Object data) throws Exception;
+	public void render(Row row, T data) throws Exception;
 }

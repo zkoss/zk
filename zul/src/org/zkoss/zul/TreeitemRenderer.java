@@ -31,7 +31,7 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @see TreeModel
  * @see Tree
  */
-public interface TreeitemRenderer {
+public interface TreeitemRenderer<T> {
 	/** 
 	 * Renders the data to the specified tree item.
 	 * 
@@ -54,5 +54,5 @@ public interface TreeitemRenderer {
 	 * @param data that is used to render the Treeitem
 	 * 
 	 */
-	public void render(Treeitem item, Object data) throws Exception;
+	public void render(Treeitem item, T data) throws Exception;
 }

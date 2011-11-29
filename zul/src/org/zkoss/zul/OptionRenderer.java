@@ -23,11 +23,11 @@ package org.zkoss.zul;
  * @author jumperchen
  * @since 6.0.0
  */
-public interface OptionRenderer {
+public interface OptionRenderer<T> {
 	
 	/** Renders the data to the specific cell.
 	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public String render(Object data) throws Exception;
+	public String render(T data) throws Exception;
 }

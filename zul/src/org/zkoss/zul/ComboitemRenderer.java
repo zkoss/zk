@@ -33,11 +33,11 @@ package org.zkoss.zul;
  * @see ComboitemRendererExt
  *
  */
-public interface ComboitemRenderer {
+public interface ComboitemRenderer<T> {
 	/** Renders the data to the specified comboitem.
 	 *
 	 * @param item the comboitem to render the result.
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public void render(Comboitem item, Object data) throws Exception;
+	public void render(Comboitem item, T data) throws Exception;
 }

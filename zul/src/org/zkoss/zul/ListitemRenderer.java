@@ -36,7 +36,7 @@ package org.zkoss.zul;
  * @see ListitemRendererExt
  * @see ListgroupRendererExt
  */
-public interface ListitemRenderer {
+public interface ListitemRenderer<T> {
 	/** Renders the data to the specified list item.
 	 *
 	 * @param item the listitem to render the result.
@@ -51,5 +51,5 @@ public interface ListitemRenderer {
 	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public void render(Listitem item, Object data) throws Exception;
+	public void render(Listitem item, T data) throws Exception;
 }
