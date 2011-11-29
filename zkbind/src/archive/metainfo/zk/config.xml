@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml
+	Purpose:
+		Configuration of ZK Bind
+	Description:
+		
+	History:
+		Fri Sep 02 14:35:39     2011, Created by henrichen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<config>
+	<config-name>zbind</config-name><!-- used to resolve dependency -->
+	<depends>zk</depends>
+
+	<version>
+		<version-class>org.zkoss.bind.Version</version-class>
+		<version-uid>6.0.0</version-uid>
+	</version>
+
+	<listener>
+		<listener-class>org.zkoss.bind.tracker.impl.BindUiLifeCycle</listener-class>
+	</listener>
+<!-- 
+	<library-property>
+		<name>org.zkoss.zk.ui.event.EventQueueProvider.class</name>
+		<value>org.zkoss.zkmax.ui.event.impl.EventQueueProviderImpl</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.grid.DataLoader.class</name>
+		<value>org.zkoss.zkmax.zul.impl.LiveGridDataLoader</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zul.listbox.DataLoader.class</name>
+		<value>org.zkoss.zkmax.zul.impl.LiveListboxDataLoader</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zk.ui.impl.UiEngineImpl.extension</name>
+		<value>org.zkoss.zkmax.ui.impl.UiEngineExtension</value>
+	</library-property>
+ -->
+</config>
