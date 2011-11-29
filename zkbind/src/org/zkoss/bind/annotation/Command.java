@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind;
+package org.zkoss.bind.annotation;
 
 /**
  * Marker annotation to identify a Command method

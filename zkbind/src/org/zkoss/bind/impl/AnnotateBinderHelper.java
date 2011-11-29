@@ -148,23 +148,15 @@ public class AnnotateBinderHelper {
 		}
 		
 		Collection<Annotation> annos = compCtrl.getAnnotations(propName); //init in the annotation with the sequence
-		//
-		boolean hasBind = false;
-		boolean hasLS = false;
+		
 		for(Annotation anno:annos){
 			if(anno.getName().equals(BIND_ANNO)){
-				hasBind=true;
 				processPropertyPromptBindings(comp,propName,anno,converterInfo,validatorInfo);
 			}else if(anno.getName().equals(LOAD_ANNO)){
-				hasLS=true;
 				processPropertyLoadBindings(comp,propName,anno,converterInfo);
 			}else if(anno.getName().equals(SAVE_ANNO)){
-				hasLS=true;
 				processPropertySaveBindings(comp,propName,anno,converterInfo,validatorInfo);
 			}
-		}
-		if(hasBind && hasLS){
-			throw new IllegalSyntaxException("@bind is for prompt binding, you should not use it with @load and @save, check "+propName+" of "+comp);
 		}
 	}
 	
