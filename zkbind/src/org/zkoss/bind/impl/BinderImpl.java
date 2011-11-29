@@ -69,6 +69,7 @@ import org.zkoss.zk.ui.util.Template;
 /**
  * Implementation of Binder.
  * @author henrichen
+ * @author dennischen
  *
  */
 public class BinderImpl implements Binder,BinderCtrl {
@@ -306,7 +307,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	@Override
-	public void initForm(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
+	public void setFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
 		if(Strings.isBlank(id)){
 			throw new IllegalArgumentException("form id is blank");
 		}
@@ -472,7 +473,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	@Override
-	public void initProperty(Component comp, String attr,
+	public void setPropertyInitBinding(Component comp, String attr,
 			String initExpr,Map<String, Object> initArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		if(initExpr==null){

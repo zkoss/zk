@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * The Binder that do the data binding things.
  * @author henrichen
+ * @author dennischen
  *
  */
 public interface Binder {
@@ -48,7 +49,7 @@ public interface Binder {
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 */
-	public void initProperty(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
+	public void setPropertyInitBinding(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
 			String converterExpr, Map<String, Object> converterArgs);
 	
 	
@@ -99,7 +100,7 @@ public interface Binder {
 	 * @param initExpr init expression, nullable
 	 * @param initArgs args key-value pairs for this init, nullable
 	 */
-	public void initForm(Component comp,String id,String initExpr, Map<String, Object> initArgs);
+	public void setFormInitBinding(Component comp,String id,String initExpr, Map<String, Object> initArgs);
 	
 	/**
 	 * Add new form-load-bindings.

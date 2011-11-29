@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 /**
  * Helper class to parse binding annotations and create bindings. 
  * @author henrichen
+ * @author dennischen
  *
  */
 public class AnnotateBinderHelper {
@@ -185,7 +186,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		args = args==null?null:parsedArgs(args);
-		_binder.initProperty(comp, propName, initExpr, args,converterInfo == null ? null : converterInfo.expr, 
+		_binder.setPropertyInitBinding(comp, propName, initExpr, args,converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 	}
 	
@@ -382,7 +383,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		args = args==null?null:parsedArgs(args);
-		_binder.initForm(comp, formId,initExpr, args);
+		_binder.setFormInitBinding(comp, formId,initExpr, args);
 	}
 	
 	private void processFormLoadBindings(Component comp, String formId,Annotation ann) {
