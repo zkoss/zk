@@ -13,11 +13,11 @@ and mobile applications.
 
 ###Download
 
-* [Download ](http://www.zkoss.org/download/zk/ce)
+* [Download](http://www.zkoss.org/download/zk/ce)
 
 ###License
 
- * [LGPL v2.1](http://www.gnu.org/licenses/lgpl-2.1.html)
+ * [LGPL](http://www.gnu.org/licenses/lgpl-2.1.html)
 
 ##[Product Overview](http://www.zkoss.org/product/zk)
 
