@@ -829,7 +829,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	ajaxSettings: zk.$default({
 		global: false,
-		cache: false,
+		//cache: false, //no need to turn off cache since server sends NO-CACHE
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
 	}, jq.ajaxSettings),
 
