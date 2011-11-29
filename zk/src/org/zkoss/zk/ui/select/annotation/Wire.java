@@ -1,12 +1,14 @@
 /**
  * 
  */
-package org.zkoss.zk.ui.select;
+package org.zkoss.zk.ui.select.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.zkoss.zk.ui.select.GenericAnnotatedComposer;
 
 /**
  * Annotation for specifying components or objects to wire in 
