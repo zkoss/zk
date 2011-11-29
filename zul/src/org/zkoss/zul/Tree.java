@@ -116,7 +116,7 @@ public class Tree extends MeshElement {
 	private String _innerWidth = "100%";
 
 	private transient TreeModel<Object> _model;
-	private transient TreeitemRenderer _renderer;
+	private transient TreeitemRenderer<?> _renderer;
 	private transient TreeDataListener _dataListener;
 
 	private transient Paginal _pgi;
@@ -1446,7 +1446,7 @@ public class Tree extends MeshElement {
 	 * @exception UiException if failed to initialize with the model
 	 * @since 5.0.6
 	 */
-	public void setItemRenderer(TreeitemRenderer renderer){
+	public void setItemRenderer(TreeitemRenderer<?> renderer){
 		if (_renderer != renderer) {
 			_renderer = renderer;
 			if (_model != null)
@@ -1459,8 +1459,9 @@ public class Tree extends MeshElement {
 	 * @return the renderer to render each item, or null if the default
 	 * @since 5.0.6
 	 */
-	public TreeitemRenderer getItemRenderer(){
-		return _renderer;
+	@SuppressWarnings("unchecked")
+	public <T> TreeitemRenderer<T> getItemRenderer(){
+		return (TreeitemRenderer)_renderer;
 	}
 	/** @deprecated As of release 5.0.6, replaced with {@link #setItemRenderer}.
 	 * Sets the renderer which is used to render each item
@@ -1474,7 +1475,7 @@ public class Tree extends MeshElement {
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.0
 	 */
-	public void setTreeitemRenderer(TreeitemRenderer renderer){
+	public void setTreeitemRenderer(TreeitemRenderer<?> renderer){
 		setItemRenderer(renderer);
 	}
 
@@ -1484,7 +1485,7 @@ public class Tree extends MeshElement {
 	 * @return the renderer to render each item, or null if the default
 	 * @since 3.0.0
 	 */
-	public TreeitemRenderer getTreeitemRenderer(){
+	public <T> TreeitemRenderer<T> getTreeitemRenderer(){
 		return getItemRenderer();
 	}
 

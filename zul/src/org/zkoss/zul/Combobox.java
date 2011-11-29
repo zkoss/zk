@@ -97,7 +97,7 @@ public class Combobox extends Textbox {
 	 */
 	private transient String _lastCkVal;
 	private ListModel<?> _model;
-	private ComboitemRenderer _renderer;
+	private ComboitemRenderer<?>_renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener<InputEvent> _eventListener;
 
@@ -199,8 +199,9 @@ public class Combobox extends Textbox {
 	 * renderer is used.
 	 * @since 3.0.2
 	 */
-	public ComboitemRenderer getItemRenderer() {
-		return _renderer;
+	@SuppressWarnings("unchecked")
+	public <T> ComboitemRenderer<T> getItemRenderer() {
+		return (ComboitemRenderer)_renderer;
 	}
 	
 	/** Sets the renderer which is used to render each row
@@ -214,7 +215,7 @@ public class Combobox extends Textbox {
 	 * @exception UiException if failed to initialize with the model
 	 * @since 3.0.2
 	 */
-	public void setItemRenderer(ComboitemRenderer renderer) {
+	public void setItemRenderer(ComboitemRenderer<?> renderer) {
 		_renderer = renderer;
 	}
 	
@@ -232,7 +233,7 @@ public class Combobox extends Textbox {
 	/** Synchronizes the combobox to be consistent with the specified model.
 	 */
 	private ListModel<?> syncModel(Object index) {
-		ComboitemRenderer renderer = null;
+		ComboitemRenderer<?> renderer = null;
 		final ListModel<?> subset = _model instanceof ListSubModel ? 
 			((ListSubModel<?>)_model).getSubModel(index, -1) : _model;
 		final int newsz = subset.getSize();
@@ -248,7 +249,7 @@ public class Combobox extends Textbox {
 	}
 	
 	/** Creates an new and unloaded Comboitem. */
-	private Comboitem newUnloadedItem(ComboitemRenderer renderer) {
+	private Comboitem newUnloadedItem(ComboitemRenderer<?> renderer) {
 		Comboitem item = null;
 		if (renderer instanceof ComboitemRendererExt)
 			item = ((ComboitemRendererExt)renderer).newComboitem(this);
@@ -354,7 +355,8 @@ public class Combobox extends Textbox {
 	};
 	/** Returns the renderer used to render items.
 	 */
-	private ComboitemRenderer getRealRenderer() {
+	@SuppressWarnings("unchecked")
+	private <T> ComboitemRenderer<T> getRealRenderer() {
 		return _renderer != null ? _renderer: _defRend;
 	}
 
@@ -366,6 +368,7 @@ public class Combobox extends Textbox {
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
+		@SuppressWarnings("unchecked")
 		private void render(ListModel<?> subset, Comboitem item) throws Throwable {
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
@@ -733,7 +736,6 @@ public class Combobox extends Textbox {
 
 	//Cloneable//
 	public Object clone() {
-		final int idx = getSelectedIndex();
 		final Combobox clone = (Combobox)super.clone();
 		clone._selItem = null;
 		clone.reIndexRequired();

@@ -269,8 +269,8 @@ public class Listbox extends MeshElement {
 	private transient Listhead _listhead;
 	private transient Listfoot _listfoot;
 	private transient Frozen _frozen;
-	private transient ListModel _model;
-	private transient ListitemRenderer _renderer;
+	private transient ListModel<?> _model;
+	private transient ListitemRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
 	private transient Collection<Component> _heads;
 	private int _hdcnt;
@@ -1646,7 +1646,6 @@ public class Listbox extends MeshElement {
 						newItem.setSelectedDirectly(false);
 					}
 				} else {
-					final int oldjsel = _jsel;
 					if (jfrom < 0) { // no existent child
 						if (!isLoadingModel() && _jsel >= newIndex)
 							++_jsel;
@@ -2134,7 +2133,7 @@ public class Listbox extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
-		return _model;
+		return (ListModel)_model;
 	}
 
 	/**
@@ -2147,7 +2146,7 @@ public class Listbox extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getListModel() {
-		return _model instanceof GroupsListModel ? null : _model;
+		return _model instanceof GroupsListModel ? null : (ListModel)_model;
 	}
 
 	/**
@@ -2268,8 +2267,9 @@ public class Listbox extends MeshElement {
 	 * Returns the renderer to render each item, or null if the default renderer
 	 * is used.
 	 */
-	public ListitemRenderer getItemRenderer() {
-		return _renderer;
+	@SuppressWarnings("unchecked")
+	public <T> ListitemRenderer<T> getItemRenderer() {
+		return (ListitemRenderer)_renderer;
 	}
 
 	/**
@@ -2286,7 +2286,7 @@ public class Listbox extends MeshElement {
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setItemRenderer(ListitemRenderer renderer) {
+	public void setItemRenderer(ListitemRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 
@@ -2477,7 +2477,8 @@ public class Listbox extends MeshElement {
 			_renderer = (ListitemRenderer) getDataLoader().getRealRenderer();
 		}
 
-		/* package */void render(Listitem item) throws Throwable {
+		/* package */@SuppressWarnings("unchecked")
+		void render(Listitem item) throws Throwable {
 			if (item.isLoaded())
 				return; // nothing to do
 

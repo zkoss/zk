@@ -46,9 +46,9 @@ public class Selectbox extends HtmlBasedComponent {
 	private boolean _disabled;
 	private int _jsel = -1;
 	private int _tabindex;
-	private transient ListModel _model;
+	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
-	private transient OptionRenderer _renderer;
+	private transient OptionRenderer<?> _renderer;
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 	
 	static {
@@ -101,8 +101,9 @@ public class Selectbox extends HtmlBasedComponent {
 	 * Returns the renderer to render each item, or null if the default renderer
 	 * is used.
 	 */
-	public OptionRenderer getItemRenderer() {
-		return _renderer;
+	@SuppressWarnings("unchecked")
+	public <T> OptionRenderer<T> getItemRenderer() {
+		return (OptionRenderer)_renderer;
 	}
 
 	/**
@@ -119,7 +120,7 @@ public class Selectbox extends HtmlBasedComponent {
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setItemRenderer(OptionRenderer renderer) {
+	public void setItemRenderer(OptionRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 			invalidate();
@@ -220,7 +221,7 @@ public class Selectbox extends HtmlBasedComponent {
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setModel(ListModel model) {
+	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (_model != model) {
 				if (_model != null) {
@@ -252,21 +253,24 @@ public class Selectbox extends HtmlBasedComponent {
 	 * Returns the model associated with this selectbox, or null if this selectbox
 	 * is not associated with any list data model.
 	 */
-	public ListModel getModel() {
-		return _model;
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getModel() {
+		return (ListModel)_model;
 	}
 
-	public OptionRenderer getRealRenderer() {
+	@SuppressWarnings("unchecked")
+	public <T> OptionRenderer<T> getRealRenderer() {
 		final OptionRenderer renderer = getItemRenderer();
 		return renderer != null ? renderer : _defRend; 
 	}
 	
-	private static final OptionRenderer _defRend = new OptionRenderer() {
+	private static final OptionRenderer<Object> _defRend = new OptionRenderer<Object>() {
 		public String render(Object data) {
 			return Objects.toString(data);
 		}
 	};
 	// -- ComponentCtrl --//
+	@SuppressWarnings("unchecked")
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);

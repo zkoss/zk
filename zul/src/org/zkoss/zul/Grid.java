@@ -220,7 +220,7 @@ public class Grid extends MeshElement {
 	private transient Frozen _frozen;
 	private transient Collection<Component> _heads;
 	private transient ListModel<?> _model;
-	private transient RowRenderer _renderer;
+	private transient RowRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
@@ -702,8 +702,9 @@ public class Grid extends MeshElement {
 	/** Returns the renderer to render each row, or null if the default
 	 * renderer is used.
 	 */
-	public RowRenderer getRowRenderer() {
-		return _renderer;
+	@SuppressWarnings("unchecked")
+	public <T> RowRenderer<T> getRowRenderer() {
+		return (RowRenderer)_renderer;
 	}
 	/** Sets the renderer which is used to render each row
 	 * if {@link #getModel} is not null.
@@ -715,7 +716,7 @@ public class Grid extends MeshElement {
 	 * @param renderer the renderer, or null to use the default.
 	 * @exception UiException if failed to initialize with the model
 	 */
-	public void setRowRenderer(RowRenderer renderer) {
+	public void setRowRenderer(RowRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 
@@ -926,7 +927,8 @@ public class Grid extends MeshElement {
 		/*package*/ Renderer() {
 			_renderer = (RowRenderer) getDataLoader().getRealRenderer();
 		}
-		/*package*/ void render(Row row) throws Throwable {
+		/*package*/ @SuppressWarnings("unchecked")
+		void render(Row row) throws Throwable {
 			if (row.isLoaded())
 				return; //nothing to do
 
