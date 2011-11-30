@@ -91,11 +91,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		}
 		//Safari/chrome will not extend the height of td to as tr (B30-2088496.zul)
 		//but cannot always give pixels if size determined by contents (big gap in B30-1769047.zul)
-		var nh = this.$n().style.height;
-		if (zk.safari && !vert && nh) {
+		var nh;
+		if (zk.safari && !vert && (nh = this.$n().style.height)) {
 			var td = this.$n('frame');
 			td.style.height = '';
-			td.style.height = nh.charAt(nh.length-1) == '%' ? 
+			td.style.height = nh.indexOf('%') > 0 ? 
 				jq.px0(td.offsetHeight) : nh; // B50-ZK-559
 		}
 	}
