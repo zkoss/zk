@@ -12,35 +12,36 @@ messagebox.zul
 
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 -->
-<window title="${arg.title}" sclass="z-messagebox-window" border="normal" width="250pt" closable="true"
-use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="http://www.zkoss.org/2005/zk/client">
+<window title="${arg.title}" sclass="z-messagebox-window"
+ border="normal" width="260pt" closable="true"
+ use="org.zkoss.zul.impl.MessageboxDlg" xmlns:w="client">
 	<hbox>
 		<div sclass="${arg.icon}"/>
 		<separator spacing="13px" />
 		<div sclass="z-messagebox">
 			<label value="${arg.message}" multiline="true" >
-				<attribute w:name="onBind">
-					var node = this.$n(),
-						tr = node.parentNode.parentNode.parentNode,
-						width = node.offsetWidth + tr.cells[0].offsetWidth,
-						win = this.$o(),
-						cave = win.$n('cave'),
-						outer = win.$n();
-					width += zk(cave).padBorderWidth()
-						+ zk((cave = cave.parentNode)).padBorderWidth()
-						+ zk((cave = cave.parentNode)).padBorderWidth()
-						+ zk((cave = cave.parentNode)).padBorderWidth();
-				
-					outer.style.width = jq.px0(Math.min(Math.max(width, 330), jq.innerWidth() - 20));
-					zk(outer).center();
-					var top = zk.parseInt(outer.style.top), y = jq.innerY();
-					if (y) {
-						var y1 = top - y;
-						if (y1 > 100) outer.style.top = jq.px0(top - (y1 - 100));
-					} else if (top > 100)
-						outer.style.top = "100px";
-					win.onSize();
-				</attribute>
+				<attribute w:name="onBind"><![CDATA[
+		var node = this.$n(),
+			tr = node.parentNode.parentNode.parentNode,
+			width = node.offsetWidth + tr.cells[0].offsetWidth,
+			win = this.$o(),
+			cave = win.$n('cave'),
+			outer = win.$n();
+		width += zk(cave).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth();
+
+		outer.style.width = jq.px0(Math.min(Math.max(width, zk.parseInt('${empty arg.width ? 350: arg.width}')), jq.innerWidth() - 20));
+		zk(outer).center();
+		var top = zk.parseInt(outer.style.top), y = jq.innerY();
+		if (y) {
+			var y1 = top - y;
+			if (y1 > 100) outer.style.top = jq.px0(top - (y1 - 100));
+		} else if (top > 100)
+			outer.style.top = "100px";
+		win.onSize();
+				]]></attribute>
 			</label>
 		</div>
 	</hbox>

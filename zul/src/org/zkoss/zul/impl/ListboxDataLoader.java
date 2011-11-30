@@ -383,7 +383,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 
 	/** Retrieves the children available at client.
-	 * <p>It can not be overriden. Rather, override {@link #getAvailableAtClient(booolean)} instead.
+	 * <p>It can not be overriden. Rather, override {@link #getAvailableAtClient(boolean)} instead.
 	 */
 	public final Set<? extends Component> getAvailableAtClient() {
 		return getAvailableAtClient(false);

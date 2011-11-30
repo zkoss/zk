@@ -57,6 +57,7 @@ ZK 6.0.0
   ZK-615: Comet supports Servlet 3's asynchronous processing
   ZK-448: Colorbox support keystroke to navigate the color code
   ZK-635: Fileupload support HTML5's input file with multiple
+  ZK-616: Able to specify Messagebox width
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
