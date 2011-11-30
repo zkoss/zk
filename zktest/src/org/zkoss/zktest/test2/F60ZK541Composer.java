@@ -17,8 +17,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import org.zkoss.zk.ui.select.GenericAnnotatedComposer;
-import org.zkoss.zk.ui.select.Wire;
-import org.zkoss.zk.ui.select.WireZScript;
+import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.select.annotation.WireZScript;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
