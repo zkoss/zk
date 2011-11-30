@@ -42,6 +42,7 @@ ZK 5.0.10
   ZK-612: The text of the upload button is incorrect in Swedish 
   ZK-630: Doublespinner exception with constraint 
   ZK-629: Problem in Decimalbox when using Spanish locale from browser 
+  ZK-637: Cannot set 0 to error-code in the error-reload element
 
 	--------
 ZK 5.0.9
