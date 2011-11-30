@@ -109,7 +109,6 @@ public interface Binder {
 	 * 
 	 * @param comp the associated component, must not null
 	 * @param id the form id, must not null
-	 * @param initExpr init expression, nullable
 	 * @param loadExpr load expression, nullable
 	 * @param beforeCmds load before these commands, nullable
 	 * @param afterCmds load after these commands, nullable
