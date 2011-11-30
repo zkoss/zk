@@ -212,7 +212,7 @@ var lastTap,	// Holds last tapped element (so we can compare for double tap)
 	initSensitivity = 3,
 	pt,
 	cancelMouseUp,		// prevents a click from occuring as we want the context menu
-	cancelClick;
+	cancelClick,
 	contextmenuHandler = {
 		touchstart: function(evt) {
 			var touchEvt = evt.originalEvent;
