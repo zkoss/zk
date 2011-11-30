@@ -162,8 +162,14 @@ public class BinderImpl implements Binder,BinderCtrl {
 	//flag to keep info of current vm has validator method or not
 	private boolean _hasGetValidatorMethod = true;
 	
-	public BinderImpl(Component comp, Object vm, String qname, String qscope) {
-		_rootComp = comp;
+	
+	private boolean _init = false;
+	
+	public BinderImpl() {
+		this(null,null);
+	}
+	
+	public BinderImpl(String qname, String qscope) {
 		_bindings = new HashMap<Component, Map<String, List<Binding>>>();
 		_formBindingHelper = new FormBindingHelper(this); 
 		_propertyBindingHelper = new PropertyBindingHelper(this);
@@ -172,19 +178,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 		
 		_listenerMap = new HashMap<String, CommandEventListener>();
-		
 		//use same queue name if user was not specified, 
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BinderImpl.QUE;
 		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : EventQueues.DESKTOP;
-		
-		//initial associated view model
-		setViewModel(vm);
-		
-		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
-		
-		//subscribe change listener
-		subscribeChangeListener(_quename, _quescope, _queueListener = new EventListener<Event>() {
+		_queueListener = new EventListener<Event>() {
 			public void onEvent(Event event) throws Exception {
 				//only when a event in queue is our event
 				if(event instanceof PropertyChangeEvent){
@@ -192,7 +190,25 @@ public class BinderImpl implements Binder,BinderCtrl {
 					BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getPropertyName());
 				}
 			}
-		});
+		};
+	}
+	
+	private void checkInit(){
+		if(!_init){
+			throw new UiException("binder is not initialized yet");
+		}
+	}
+	
+	public void init(Component comp, Object vm){
+		if(_init) throw new UiException("binder is already initialized");
+		_init = true;
+		
+		_rootComp = comp;
+		//initial associated view model
+		setViewModel(vm);
+		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
+		//subscribe change listener
+		subscribeChangeListener(_quename, _quescope, _queueListener);
 	}
 	
 	//called when onPropertyChange is fired to the subscribed event queue
@@ -212,17 +228,20 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	public void setViewModel(Object vm) {
+		checkInit();
 		_rootComp.setAttribute(BinderImpl.VM, vm);
 		_hasGetConverterMethod = true;//reset to true
 		_hasGetValidatorMethod = true;//reset to true
 	}
 	
 	public Object getViewModel() {
+		checkInit();
 		return _rootComp.getAttribute(BinderImpl.VM);
 	}
 	
 	//Note: assume system converter is state-less
 	public Converter getConverter(String name) {
+		checkInit();
 		Converter converter = null;
 		if(_hasGetConverterMethod){
 			final BindEvaluatorX eval = getEvaluatorX();
@@ -254,6 +273,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	//Note: assume system validator is state-less
 	public Validator getValidator(String name) {
+		checkInit();
 		Validator validator = null;
 		if(_hasGetValidatorMethod){
 			final BindEvaluatorX eval = getEvaluatorX();
@@ -308,6 +328,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	@Override
 	public void setFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
+		checkInit();
 		if(Strings.isBlank(id)){
 			throw new IllegalArgumentException("form id is blank");
 		}
@@ -330,6 +351,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	public void addFormLoadBindings(Component comp, String id,
 			String loadExpr, String[] beforeCmds, String[] afterCmds,
 			Map<String, Object> bindingArgs) {
+		checkInit();
 		if(Strings.isBlank(id)){
 			throw new IllegalArgumentException("form id is blank");
 		}
@@ -361,6 +383,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			String[] beforeCmds, String[] afterCmds,
 			Map<String, Object> bindingArgs, String validatorExpr,
 			Map<String, Object> validatorArgs) {
+		checkInit();
 		if(Strings.isBlank(id)){
 			throw new IllegalArgumentException("form id is blank");
 		}
@@ -476,6 +499,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	public void setPropertyInitBinding(Component comp, String attr,
 			String initExpr,Map<String, Object> initArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
+		checkInit();
 		if(initExpr==null){
 			throw new IllegalArgumentException("initExpr is null for "+attr+" of "+comp);
 		}
@@ -495,6 +519,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	public void addPropertyLoadBindings(Component comp, String attr,
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
+		checkInit();
 		if(loadExpr==null){
 			throw new IllegalArgumentException("loadExpr is null for component "+comp+", attr "+attr);
 		}
@@ -518,6 +543,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			Map<String, Object> bindingArgs, String converterExpr,
 			Map<String, Object> converterArgs, String validatorExpr,
 			Map<String, Object> validatorArgs) {
+		checkInit();
 		if(saveExpr==null){
 			throw new IllegalArgumentException("saveExpr is null for component "+comp+", attr "+attr);
 		}
@@ -736,6 +762,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
+		checkInit();
 		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
 		addEventCommandListenerIfNotExists(comp, evtnm, binding);
@@ -834,6 +861,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	public void sendCommand(String command, Map<String, Object> args) {
+		checkInit();
 		final Set<Property> notifys = new HashSet<Property>();
 		//args come from user, we don't eval it. 
 		doCommand(_rootComp, command, null, args, notifys);
@@ -847,6 +875,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	public void postCommand(String command, Map<String, Object> args) {
+		checkInit();
 		final Event evt = new Event(ON_POST_COMMAND,_dummyTarget,new Object[]{command,args});
 		Events.postEvent(evt);
 	}
@@ -1089,6 +1118,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	 * @param comp the component
 	 */
 	public void removeBindings(Component comp) {
+		checkInit();
 		if(_rootComp==comp){
 			//the binder component was detached, unregister queue
 			unsubscribeChangeListener(_quename, _quescope, _queueListener);
@@ -1124,6 +1154,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	 * @param key can be component attribute, event name, or form id
 	 */
 	public void removeBindings(Component comp, String key) {
+		checkInit();
 		removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
 		
 		final String bindDualId = getBindDualId(comp, key);
@@ -1190,6 +1221,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	}
 	
 	public void notifyChange(Object base, String attr) {
+		checkInit();
 		log.debug("notifyChange base=[%s],attr=[%s]",base,attr);
 		getEventQueue().publish(new PropertyChangeEvent("onPropertyChange", _rootComp, base, attr));
 	}
@@ -1268,6 +1300,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	@Override
 	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding){
+		checkInit();
 		//find the form component by form id and a associated/nested component
 		Component formComp = lookupAossicatedFormComponent(formId,associatedComp);
 		if(formComp==null){
@@ -1305,6 +1338,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 
 	@Override
 	public Set<SaveBinding> getFormAssociatedSaveBindings(Component comp){
+		checkInit();
 		Set<SaveBinding> bindings = _assocFormSaveBindings.get(comp);
 		if(bindings==null){
 			return Collections.emptySet();

@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import org.zkoss.bind.impl.AnnotateBinderImpl;
-import org.zkoss.bind.impl.AnnotateBinderImpl;
 import org.zkoss.bind.impl.BindEvaluatorXImpl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
@@ -151,7 +151,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation idanno = compCtrl.getAnnotation(BINDER_ATTR, ID_ANNO);
 		final Annotation initanno = compCtrl.getAnnotation(BINDER_ATTR, INIT_ANNO);
-		Binder binder = null;
+		Object binder = null;
 		String bname = null;
 		
 		if(idanno!=null){
@@ -164,18 +164,37 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		}
 		
 		if(initanno!=null){
-			binder = eval(evalx,comp,initanno.getAttribute("value"),Binder.class);
+			binder = eval(evalx,comp,initanno.getAttribute("value"),Object.class);
+			try {
+				if(binder instanceof String){
+					binder = comp.getPage().resolveClass((String)binder);
+				}
+				if(binder instanceof Class<?>){
+					binder = ((Class<?>)binder).newInstance();
+				}
+			} catch (Exception e) {
+				throw new UiException(e.getMessage(),e);
+			}
+			if(!(binder instanceof Binder)){
+				throw new UiException("evaluated binder is not a binder is "+binder);
+			}
 		}else{
-			binder = new AnnotateBinderImpl(comp, _viewModel, null, null);
-		}
-		if(binder == null){
-			throw new UiException("binder of '"+bname+"' is null");
+			binder = new AnnotateBinder();
 		}
 		
-		comp.setAttribute(BinderImpl.BINDER, binder);
+		//put to attribute, so binder could be referred
 		comp.setAttribute(bname, binder);
 		
-		return binder;
+		if(binder instanceof BinderCtrl){ 
+			((BinderCtrl)binder).init(comp, _viewModel);
+		}else{
+			((Binder)binder).setViewModel(_viewModel);
+		}
+		
+		//mark this component was handled by binder after init
+		comp.setAttribute(BinderImpl.BINDER, binder);
+		
+		return (Binder)binder;
 	}
 	
 	@SuppressWarnings("unchecked")

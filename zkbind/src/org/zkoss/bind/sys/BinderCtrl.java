@@ -27,6 +27,12 @@ import org.zkoss.zk.ui.Component;
  */
 public interface BinderCtrl {
 
+	/**
+	 * Initializes the binder with a root component and viewModel object
+	 * @param root root component of binder
+	 * @param viewModel viewModel object
+	 */
+	public void init(Component root,Object viewModel);
 	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
