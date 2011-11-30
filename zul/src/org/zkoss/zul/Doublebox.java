@@ -111,7 +111,6 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 		}
 	}
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-				value.toString(): formatNumber(value, null);
+		return formatNumber(value, null);
 	}
 }

@@ -141,8 +141,7 @@ public class Doublespinner extends NumberInputElement implements
 	}
 
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ? value.toString()
-				: formatNumber(value, null);
+		return formatNumber(value, null);
 	}
 	
 	protected Object unmarshall(Object value) {

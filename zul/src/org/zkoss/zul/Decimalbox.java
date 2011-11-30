@@ -160,9 +160,9 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		}
 	}
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value instanceof BigDecimal ? BigDecimals.toPlainString((BigDecimal)value):
-				value.toString()/*just in case*/: formatNumber(value, null);
+		return value instanceof BigDecimal ? 
+				BigDecimals.toLocaleString((BigDecimal)value, null):
+				formatNumber(value, null);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

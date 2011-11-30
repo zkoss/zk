@@ -41,6 +41,7 @@ ZK 5.0.10
   ZK-559: Render problem with chrome and ZK release 5.0.9 
   ZK-612: The text of the upload button is incorrect in Swedish 
   ZK-630: Doublespinner exception with constraint 
+  ZK-629: Problem in Decimalbox when using Spanish locale from browser 
 
 	--------
 ZK 5.0.9
