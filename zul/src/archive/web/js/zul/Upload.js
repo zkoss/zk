@@ -49,7 +49,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var p = form.parentNode;
 		p.parentNode.removeChild(p);
 		upload._formDetached = true;
-		_start(n._ctrl, form, n.value);
+		var fileName = !n.files ? n.value : (function(files){
+			var fns = [];
+			for (var len = files.length; len--;)
+				fns.unshift(files[len].name);
+			return fns.join(",");
+		})(n.files); 
+		_start(n._ctrl, form, fileName);
 	}
 
 	if (zk.opera) { //opera only
@@ -91,6 +97,8 @@ zul.Upload = zk.$extends(zk.Object, {
 			var attr = attrs[i].trim(); 
 			if (attr.startsWith('maxsize='))
 				this.maxsize = attr.match(new RegExp(/maxsize=([^,]*)/))[1];
+			else if (attr.startsWith('multiple='))
+				this.multiple = attr.match(new RegExp(/multiple=([^,]*)/))[1];
 			else if (attr == 'native')
 				this.isNative = true;
 			else if (attr != 'true')
@@ -130,7 +138,10 @@ zul.Upload = zk.$extends(zk.Object, {
 			parent = this._parent,
 			ref = wgt.$n(), dt = wgt.desktop,
 			html = '<span class="z-upload"><form enctype="multipart/form-data" method="POST">'
-				 + '<input name="file" type="file" hidefocus="true" style="height:'
+				 + '<input name="file" type="file"'
+				// multiple="" for Firefox, multiple for Chrome
+				 + (this.multiple == 'true' ? ' multiple="" multiple' : '')
+				 + ' hidefocus="true" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
 		
 		if (parent) 

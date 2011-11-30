@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-635.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 30 16:46:54 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+In the HTML5's browsers (Like Firefox,Chrome,Safari, and Opera), you can choose multiple files to upload at the same times.
+	<vbox id="pics" />
+    
+	<button label="Upload" upload="true,multiple=true">
+		<attribute name="onUpload">{
+			org.zkoss.util.media.Media[] medias = event.getMedias();
+			alert(medias.length);
+			for (media : medias) {
+			if (media instanceof org.zkoss.image.Image) {
+				org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+				image.setContent(media);
+				image.setParent(pics);
+			} else {
+				Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+				break; //not to show too many errors
+			}
+			}
+		}</attribute>
+	</button>
+</zk>
