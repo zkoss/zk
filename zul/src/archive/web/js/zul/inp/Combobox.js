@@ -193,9 +193,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	open: function (opts) {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
-		// B50-ZK-568: Combobox does not scroll to selected item
-		if (this._lastsel)
-			zk(this._lastsel).scrollIntoView(this.$n('pp'));
+		this._fixScroll = true;
 	},
 	dnPressed_: function (evt) {
 		this._updnSel(evt);
@@ -363,7 +361,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	unbind_: function () {
 		this._hilite2();
-		this._sel = this._lastsel = null;
+		this._sel = this._lastsel = this._fixScroll = null;
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
 			this.unlisten({onChanging: zk.$void});
@@ -385,5 +383,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			w.redraw(out);
 
 		out.push('</table></div>');
+	},
+	afterAnima_: function (visible) {
+		// B50-ZK-568: Combobox does not scroll to selected item
+		// shall do after slide down
+		if (this._fixScroll && this._lastsel)
+			zk(this._lastsel).scrollIntoView(this.$n('pp'));
+		this._fixScroll = null;
+		this.$supers('afterAnima_', arguments);
 	}
 });
