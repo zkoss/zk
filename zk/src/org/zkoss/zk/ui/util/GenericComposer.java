@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * this class will registers onXxx events to the supervised component automatically.</p>
  * <P>Alternative: the wiring of {@link GenericComposer} is based on naming convention.
  * If you prefer to use Java annotations for more precise control, please
- * use {@link org.zkoss.zk.ui.select.GenericAnnotatedComposer} instead.
+ * use {@link org.zkoss.zk.ui.select.SelectorComposer} instead.
  * <p>The following is an example. The onOK and onCancel event listener is registered into 
  * the target main window automatically.</p>
  * 

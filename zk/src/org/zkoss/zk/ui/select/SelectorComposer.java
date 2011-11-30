@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.util.GenericComposer;
  * <pre><code>
  * MyComposer.java
  * 
- * public class MyComposer extends GenericAnnotatedComposer {
+ * public class MyComposer extends SelectorComposer {
  *     
  *     &#064;Wire("#win")
  *     private Window myWin;
@@ -49,7 +49,7 @@ import org.zkoss.zk.ui.util.GenericComposer;
  * @since 6.0.0
  * @author simonpai
  */
-public class GenericAnnotatedComposer<T extends Component> extends GenericComposer<T>
+public class SelectorComposer<T extends Component> extends GenericComposer<T>
 	implements ComponentCloneListener, ComponentActivationListener {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
@@ -147,8 +147,8 @@ public class GenericAnnotatedComposer<T extends Component> extends GenericCompos
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = (Component) event.getTarget();
-			final GenericAnnotatedComposer composerClone = 
-				(GenericAnnotatedComposer) event.getData(); 
+			final SelectorComposer composerClone = 
+				(SelectorComposer) event.getData(); 
 			Selectors.wireController(clone, composerClone);
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);

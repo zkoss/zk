@@ -16,7 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
-import org.zkoss.zk.ui.select.GenericAnnotatedComposer;
+import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireZScript;
 import org.zkoss.zul.Label;
@@ -27,7 +27,7 @@ import org.zkoss.zul.Window;
  * @author simonpai
  */
 @WireZScript
-public class F60ZK541Composer extends GenericAnnotatedComposer<Window> {
+public class F60ZK541Composer extends SelectorComposer<Window> {
 	
 	private static final long serialVersionUID = -8244252715921029506L;
 	

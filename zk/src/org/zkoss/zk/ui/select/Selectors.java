@@ -496,7 +496,7 @@ public class Selectors {
 	private static <A extends Annotation> A getAnnotation(Class<?> ctrlClass, 
 			Class<A> annoClass) {
 		Class<?> cls = ctrlClass;
-		while (cls != null && !cls.equals(GenericAnnotatedComposer.class)) {
+		while (cls != null && !cls.equals(SelectorComposer.class)) {
 			A anno = cls.getAnnotation(annoClass);
 			if (anno != null)
 				return anno;

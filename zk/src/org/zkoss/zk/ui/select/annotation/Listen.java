@@ -8,10 +8,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.zkoss.zk.ui.select.GenericAnnotatedComposer;
+import org.zkoss.zk.ui.select.SelectorComposer;
 
 /**
- * Annotation for specifying Event handling in {@link GenericAnnotatedComposer}.
+ * Annotation for specifying Event handling in {@link SelectorComposer}.
  * @since 6.0.0
  * @author simonpai
  */

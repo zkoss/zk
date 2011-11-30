@@ -75,7 +75,7 @@ import org.zkoss.zk.xel.Evaluator;
  * 
  * <P>Alternative: the wiring of {@link GenericComposer} is based on naming convention.
  * If you prefer to use Java annotations for more precise control, please
- * use {@link org.zkoss.zk.ui.select.GenericAnnotatedComposer} instead.
+ * use {@link org.zkoss.zk.ui.select.SelectorComposer} instead.
  *
  * <p>Notice that since this composer kept references to the components, single
  * instance composer object cannot be shared by multiple components.</p>
