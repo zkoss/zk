@@ -33,6 +33,7 @@ import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
@@ -53,6 +54,7 @@ import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
+import org.zkoss.util.CacheMap;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -64,6 +66,7 @@ import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.Template;
 
 /**
@@ -134,6 +137,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private static final int SUCCESS = 0;
 	private static final int FAIL_VALIDATE = 1;
 	
+	
+	//TODO make it configurable
+	private final static Map<Class<?>, List<Method>> _initMethodCache = 
+		new CacheMap<Class<?>, List<Method>>(1000,CacheMap.DEFAULT_LIFETIME);
+	
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
 	private PhaseListener _phaseListener;
@@ -161,7 +169,6 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	//flag to keep info of current vm has validator method or not
 	private boolean _hasGetValidatorMethod = true;
-	
 	
 	private boolean _init = false;
 	
@@ -209,8 +216,67 @@ public class BinderImpl implements Binder,BinderCtrl {
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		//subscribe change listener
 		subscribeChangeListener(_quename, _quescope, _queueListener);
+		
+		if(vm instanceof Composer<?>){
+			//show a warn only
+			log.warn("you are using a composer [%s] as a view model",vm);
+		}
+		//Should we handle here or in setViewModel for every time set a view model into binder?
+		initViewModel(vm);
 	}
 	
+	//handle init of a viewmodel. 
+	private void initViewModel(Object viewModel){
+		final Class<?> clz = viewModel.getClass();
+		List<Method> inits = getInitMethods(clz);
+		if(inits.size()==0) return;//no init method
+		
+		for(Method m : inits){			
+			try {
+				Class<?> [] parms = m.getParameterTypes();
+				if(parms.length==0){				
+					m.invoke(viewModel);
+				}else if(parms.length==1 && parms[0].isAssignableFrom(BindContext.class)){
+					final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
+					m.invoke(viewModel, ctx);
+				}
+			} catch (Exception e) {
+				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
+					_initMethodCache.remove(clz);
+				}
+				throw new UiException(e.getMessage(),e);
+			}
+		}
+	}
+	
+	private List<Method> getInitMethods(Class<?> clz) {
+		List<Method> inits = _initMethodCache.get(clz);
+		if(inits!=null) return inits;
+		
+		synchronized(_initMethodCache){
+			inits = _initMethodCache.get(clz);//check again
+			if(inits!=null) return inits;
+			
+			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
+			for(Method m : clz.getMethods()){
+				final Init init = m.getAnnotation(Init.class);
+				if(init==null) continue;			
+				
+				Class<?> [] parms = m.getParameterTypes();
+				if(parms.length==0){				
+					inits.add(m);
+				}else if(parms.length==1 && parms[0].isAssignableFrom(BindContext.class)){
+					inits.add(m);
+				}else{
+					throw new UiException("unsupported method with @Init:"+m);
+				}
+			}
+			inits = Collections.unmodifiableList(inits);
+			_initMethodCache.put(clz, inits);
+		}
+		return inits;
+	}
+
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void loadOnPropertyChange(Object base, String prop) {
 		log.debug("loadOnPropertyChange:base=[%s],prop=[%s]",base,prop);

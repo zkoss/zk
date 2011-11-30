@@ -45,9 +45,14 @@ public class LogUtil {
 	
 	public void debug(String format,Object... args){
 		if(debug){
-			String d =format(format,args);
-			log.fine(d);
+			String msg =format(format,args);
+			log.fine(msg);
 //			System.out.println(">>"+d);//more easy to read in console
 		}
+	}
+	
+	public void warn(String format,Object... args){
+		String msg = format(format,args);
+		log.warning(msg);
 	}
 }
