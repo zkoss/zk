@@ -117,8 +117,7 @@ public class ResourceCaches {
 			final String flnm = ctx.getRealPath(path);
 			if (flnm != null) {
 				final File file = new File(flnm);
-				if (file.exists())
-					return cache.get(new ResourceInfo(path, file, extra));
+				return cache.get(new ResourceInfo(path, file, extra));
 			}
 		}
 
