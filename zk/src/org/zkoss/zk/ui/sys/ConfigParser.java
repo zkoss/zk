@@ -244,7 +244,7 @@ public class ConfigParser {
 			if (config != null) {
 				parseClientConfig(config, el);
 			} else {
-				Integer v = parseInteger(el, "resend-delay", false);
+				Integer v = parseInteger(el, "resend-delay", ANY_VALUE);
 				if (v != null)
 					Library.setProperty(Attributes.RESEND_DELAY, v.toString());
 			}
@@ -370,16 +370,16 @@ public class ConfigParser {
 			//  timer-keep-alive
 			//	timeout-uri
 			//  automatic-timeout
-				Integer v = parseInteger(el, "session-timeout", false);
+				Integer v = parseInteger(el, "session-timeout", ANY_VALUE);
 				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
 
-				v = parseInteger(el, "max-desktops-per-session", false);
+				v = parseInteger(el, "max-desktops-per-session", ANY_VALUE);
 				if (v != null) config.setSessionMaxDesktops(v.intValue());
 
-				v = parseInteger(el, "max-requests-per-session", false);
+				v = parseInteger(el, "max-requests-per-session", ANY_VALUE);
 				if (v != null) config.setSessionMaxRequests(v.intValue());
 
-				v = parseInteger(el, "max-pushes-per-session", false);
+				v = parseInteger(el, "max-pushes-per-session", ANY_VALUE);
 				if (v != null) config.setSessionMaxPushes(v.intValue());
 
 				String s = el.getElementValue("timer-keep-alive", true);
@@ -547,17 +547,17 @@ public class ConfigParser {
 			config.setThemeProvider((ThemeProvider)cls.newInstance());
 
 		//desktop-timeout
-		Integer v = parseInteger(conf, "desktop-timeout", false);
+		Integer v = parseInteger(conf, "desktop-timeout", ANY_VALUE);
 		if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
 
 		//file-check-period
-		v = parseInteger(conf, "file-check-period", true);
+		v = parseInteger(conf, "file-check-period", POSITIVE_ONLY);
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
 			//library-wide property
 
 		//extendlet-check-period
-		v = parseInteger(conf, "extendlet-check-period", true);
+		v = parseInteger(conf, "extendlet-check-period", POSITIVE_ONLY);
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
 			//library-wide property
@@ -585,22 +585,22 @@ public class ConfigParser {
 		if (s != null)
 			config.enableZScript(!"true".equals(s));
 
-		Integer v = parseInteger(el, "max-spare-threads", false);
+		Integer v = parseInteger(el, "max-spare-threads", ANY_VALUE);
 		if (v != null) config.setMaxSpareThreads(v.intValue());
 		
-		v = parseInteger(el, "max-suspended-threads", false);
+		v = parseInteger(el, "max-suspended-threads", ANY_VALUE);
 		if (v != null) config.setMaxSuspendedThreads(v.intValue());
 
-		v = parseInteger(el, "event-time-warning", false);
+		v = parseInteger(el, "event-time-warning", ANY_VALUE);
 		if (v != null) config.setEventTimeWarning(v.intValue());
 		
-		v = parseInteger(el, "max-upload-size", false);
+		v = parseInteger(el, "max-upload-size", ANY_VALUE);
 		if (v != null) config.setMaxUploadSize(v.intValue());
 
-		v = parseInteger(el, "file-size-threshold", false);
+		v = parseInteger(el, "file-size-threshold", ANY_VALUE);
 		if (v != null) config.setFileSizeThreshold(v.intValue());
 
-		v = parseInteger(el, "max-process-time", true);
+		v = parseInteger(el, "max-process-time", POSITIVE_ONLY);
 		if (v != null) config.setMaxProcessTime(v.intValue());
 
 		s = el.getElementValue("upload-charset", true);
@@ -660,13 +660,13 @@ public class ConfigParser {
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {
-		Integer v = parseInteger(conf, "processing-prompt-delay", true);
+		Integer v = parseInteger(conf, "processing-prompt-delay", POSITIVE_ONLY);
 		if (v != null) config.setProcessingPromptDelay(v.intValue());
 
-		v = parseInteger(conf, "tooltip-delay", true);
+		v = parseInteger(conf, "tooltip-delay", POSITIVE_ONLY);
 		if (v != null) config.setTooltipDelay(v.intValue());
 
-		v = parseInteger(conf, "resend-delay", false);
+		v = parseInteger(conf, "resend-delay", ANY_VALUE);
 		if (v != null) config.setResendDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
@@ -689,7 +689,7 @@ public class ConfigParser {
 
 			String deviceType = el.getElementValue("device-type", true);
 			String connType = el.getElementValue("connection-type", true);
-			v = parseInteger(el, "error-code", true);
+			v = parseInteger(el, "error-code", NON_NEGATIVE);
 			if (v == null)
 				throw new UiException("error-code is required, "+el.getLocator());
 			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
@@ -767,17 +767,22 @@ public class ConfigParser {
 		return null;
 	}
 
-	/** Configures an integer. */
+	/** Configures an integer.
+	 * @param flag one of POSTIVE_ONLY, NON_NEGATIVE and ANY_VALUE.
+	 */
 	private static Integer parseInteger(Element el, String subnm,
-	boolean positiveOnly) throws UiException {
+	int flag) throws UiException {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		String val = el.getElementValue(subnm, true);
 		if (val != null && val.length() > 0) {
 			try { 
 				final int v = Integer.parseInt(val);
-				if (positiveOnly && v <= 0)
-					throw new UiException("The "+subnm+" element must be a positive number, not "+val+", at "+el.getLocator());
+				if ((flag == POSITIVE_ONLY && v <= 0)
+				|| (flag == NON_NEGATIVE && v < 0))
+					throw new UiException("The "+subnm+" element must be a "
+						+(flag == POSITIVE_ONLY ? "positive": "non-negative")
+						+" number, not "+val+", at "+el.getLocator());
 				return new Integer(v);
 			} catch (NumberFormatException ex) { //eat
 				throw new UiException("The "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
@@ -785,4 +790,7 @@ public class ConfigParser {
 		}
 		return null;
 	}
+	private static final int POSITIVE_ONLY = 2;
+	private static final int NON_NEGATIVE = 1;
+	private static final int ANY_VALUE = 0;
 }
