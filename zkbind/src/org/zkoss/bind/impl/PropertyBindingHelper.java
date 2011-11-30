@@ -180,12 +180,14 @@ import org.zkoss.zk.ui.event.Event;
 	boolean doSaveEvent(String bindDualId,Component comp, Event evt, Set<Property> notifys) {
 		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId);
 		if (bindings != null) {
-			//TODO, DENNIS, ISSUE, What is the Spec of validation of prompt save?, check comment of onEvent also
+			boolean valid = true;
 			for (SavePropertyBinding binding : bindings) {
-				final boolean success = doValidateSaveEvent(comp, binding, evt,notifys);
-				if (!success) { //failed validation
-					return false;
-				}
+				valid &= doValidateSaveEvent(comp, binding, evt,notifys);
+			}
+			if(!valid){
+				return false;
+			}
+			for (SavePropertyBinding binding : bindings) {
 				doSavePropertyBinding(comp, binding, null, evt, notifys);
 			}
 		}
