@@ -114,12 +114,13 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 	}
 	protected String coerceToString(Object value) {
 		return value != null && getFormat() == null ?
-			value instanceof Double ? toLocaleString((Double)value):
+			value instanceof Double ?
+				toLocaleString((Double)value, getDefaultLocale()):
 			value.toString()/*just in case*/: formatNumber(value, null);
 	}
-	private String toLocaleString(Double v) {
+	/*package*/ static String toLocaleString(Double v, java.util.Locale locale) {
 		final DecimalFormatSymbols symbols =
-			new DecimalFormatSymbols(getDefaultLocale());
+			new DecimalFormatSymbols(locale);
 		final char DECIMAL = symbols.getDecimalSeparator();
 		final char MINUS = symbols.getMinusSign();
 		// only replace MINUS and DECIMAL as toPlainString() implementation

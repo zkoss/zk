@@ -141,7 +141,10 @@ public class Doublespinner extends NumberInputElement implements
 	}
 
 	protected String coerceToString(Object value) {
-		return formatNumber(value, null);
+		return value != null && getFormat() == null ?
+			value instanceof Double ?
+				Doublebox.toLocaleString((Double)value, getDefaultLocale()):
+			value.toString()/*just in case*/: formatNumber(value, null);
 	}
 	
 	protected Object unmarshall(Object value) {
