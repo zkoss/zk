@@ -49,7 +49,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var p = form.parentNode;
 		p.parentNode.removeChild(p);
 		upload._formDetached = true;
-		var fileName = !n.files ? n.value : (function(files){
+		var fileName = !n.files || n.files.length == 1 ? n.value : (function(files){
 			var fns = [];
 			for (var len = files.length; len--;)
 				fns.unshift(files[len].name);
