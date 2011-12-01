@@ -67,6 +67,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 					final AnnotImpl ai = new AnnotImpl(annotName);
 					for (Annotation an: ans)
 						ai.addAttributes(an);
+					return ai;
 				}
 			}
 		}
