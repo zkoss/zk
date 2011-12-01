@@ -287,7 +287,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 		}, 10);
 		//Use to scroll
-		goscroll = function(header, to, step) {
+		var goscroll = function(header, to, step) {
 			switch (to) {
 			case 'right':
 				header.scrollLeft += step;
