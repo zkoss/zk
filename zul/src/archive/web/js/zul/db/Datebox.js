@@ -486,8 +486,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._pop) this._pop.close();
 	},
 	onChange: function (evt) {
+		var data = evt.data,
+			inpValue = this.getInputNode().value;
 		if (this._pop)
-			this._pop.setValue(evt.data.value);
+			this._pop.setValue(data.value);
+		// B50-ZK-631: Datebox format error message not shown with implements CustomConstraint
+		// pass input value to server for showCustomError
+		if (!data.value && inpValue
+				&& this.getFormat() && this._cst == "[c")
+			data.value = inpValue;
 	},
 	/** Returns the label of the time zone
 	 * @return String

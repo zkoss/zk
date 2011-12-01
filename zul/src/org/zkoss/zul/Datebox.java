@@ -780,8 +780,17 @@ the short time styling.
 	}
 
 	protected String coerceToString(Object value) {
-		final DateFormat df = getDateFormat(getRealFormat());
-		return value != null ? df.format((Date) value) : "";
+		if (value == null)
+			return "";
+		if (value instanceof Date) {
+			final DateFormat df = getDateFormat(getRealFormat());
+			return df.format((Date) value);
+		}
+		// ZK-631, will receive the "wrong" string value
+		// if set both custom constraint and format
+		// for showCustomError
+		throw showCustomError(new WrongValueException(this,
+				MZul.DATE_REQUIRED, new Object[] { value, getRealFormat() }));
 	}
 
 	/**
