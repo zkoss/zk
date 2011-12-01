@@ -192,7 +192,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	//super
 	open: function (opts) {
 		// do nothing if not visible
-		if (this.isVisible()) {
+		if (this.isRealVisible()) {
 			this.$supers('open', arguments);
 			this._hilite(); //after _open is set
 		}
