@@ -1513,7 +1513,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	private class ScheduleListener implements EventListener<Event>, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
-			final long max = System.currentTimeMillis() + 3000; //3 seconds
+			final long max = System.currentTimeMillis() + getMaxSchedTime();
 			while (!_schedInfos.isEmpty()) {
 				final List<ScheduleInfo<? extends Event>> schedInfos;
 				synchronized (_schedInfos) { //must be thread safe
@@ -1540,4 +1540,26 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
+	/** The maximal allowed time to run scheduled listeners.
+	 */
+	private static long getMaxSchedTime() {
+		if (_maxSchedTime == null) {
+			//no need to be synchronized
+			final String PROP = "org.zkoss.zk.ui.max-schedule-time";
+			final String val = Library.getProperty(PROP);
+			if (val != null) {
+				try {
+					int v = Integer.parseInt(val); //unit: seconds
+					if (v > 0)
+						_maxSchedTime = ((long)v) * 1000;
+				} catch (Throwable t) {
+					log.warning("Ignored library property, "+PROP+": not a number, "+val);
+				}
+			}
+			if (_maxSchedTime == null)
+				_maxSchedTime = 5000L; //default: 5 seconds
+		}
+		return _maxSchedTime.longValue();
+	}
+	private static Long _maxSchedTime;
 }
