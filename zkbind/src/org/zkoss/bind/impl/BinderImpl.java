@@ -33,6 +33,9 @@ import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DefaultValue;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
@@ -140,7 +143,10 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	//TODO make it configurable
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
-		new CacheMap<Class<?>, List<Method>>(1000,CacheMap.DEFAULT_LIFETIME);
+		new CacheMap<Class<?>, List<Method>>(1000,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
+	
+	private final static Map<Class<?>, Map<String,Box<Method>>> _commandMethodCache = 
+		new CacheMap<Class<?>, Map<String,Box<Method>>>(1000,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 	
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
@@ -469,7 +475,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 		
 		if(form==null){
-			form = doInitForm(comp,null,bindingArgs);
+			form = new SimpleForm();
 			comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
 			comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
 		}
@@ -1089,47 +1095,155 @@ public class BinderImpl implements Binder,BinderCtrl {
 			log.debug("before doExecute comp=[%s],command=[%s],notifys=[%s]",comp,command,notifys);
 			doPrePhase(Phase.EXECUTE, ctx);
 			
-			final Object base = getViewModel();
+			final Object viewModel = getViewModel();
 			
-			//TODO, DENNIS, FEATURE,
-			//search if there is any method with command annotation. @Command(command), if yes, call this method
-			//command = searchMethodByAnnotation(base,command);
-			
-			
-			Method method = null;
-			Object[] param = null;
-			try { //try one without arguments
-				method = Classes.getMethodInPublic(base.getClass(), command, null);
-				param = new Object[0];
-			} catch (NoSuchMethodException e) { //try one with Map arguments 
-				try {
-					method = Classes.getMethodInPublic(base.getClass(), command, new Class[] {Map.class});
-					//check if method has a Map argument, then will call it with args
-					param = new Object[] {commandArgs == null ? Collections.emptyMap() : commandArgs};
-				} catch (NoSuchMethodException e1) { //try one with BindContext argument
-					try {
-						method = Classes.getMethodInPublic(base.getClass(), command, new Class[] {BindContext.class});
-						param = new Object[] {ctx};
-					} catch (NoSuchMethodException e2) {
-						//TODO, DENNIS , if not method to execute, should we just ignore it?
-						throw UiException.Aide.wrap(e);
-					}
-				}
-			}
+			Method method = getCommandMethod(viewModel.getClass(), command);
 			if (method != null) {
-				try {
-					method.invoke(base, param);
-				} catch (Exception e) {
-					throw UiException.Aide.wrap(e);
-				}
-				notifys.addAll(BindELContext.getNotifys(method, base, (String)null, (Object) null)); //collect notifyChange
+				doBindingArgExecute(viewModel, method, command, commandArgs, ctx, notifys);
+			} else {
+				// without method, guess it by command name and parameter
+				doSimpleExecute(viewModel, command, commandArgs, ctx, notifys);
+//				throw new UiException("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel);
 			}
-			log.debug("after doExecute notifys=[%s]",notifys);
+			log.debug("after doExecute notifys=[%s]", notifys);
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
 	}
 	
+
+	private void doSimpleExecute(Object viewModel,String command,Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
+		Method method = null;
+		Object[] param = null;
+		try { //try one without arguments
+			method = Classes.getMethodInPublic(viewModel.getClass(), command, null);
+			param = new Object[0];
+		} catch (NoSuchMethodException e) { //try one with Map arguments 
+			try {
+				method = Classes.getMethodInPublic(viewModel.getClass(), command, new Class[] {Map.class});
+				//check if method has a Map argument, then will call it with args
+				param = new Object[] {commandArgs == null ? Collections.emptyMap() : commandArgs};
+			} catch (NoSuchMethodException e1) { //try one with BindContext argument
+				try {
+					method = Classes.getMethodInPublic(viewModel.getClass(), command, new Class[] {BindContext.class});
+					param = new Object[] {ctx};
+				} catch (NoSuchMethodException e2) {
+					throw UiException.Aide.wrap(e);
+				}
+			}
+		}
+		
+		try {
+			method.invoke(viewModel, param);
+		} catch (Exception e) {
+			throw UiException.Aide.wrap(e);
+		}
+		notifys.addAll(BindELContext.getNotifys(method, viewModel, (String)null, (Object) null)); //collect notifyChange
+	}	
+
+	
+	private void doBindingArgExecute(Object viewModel, Method method, String command, Map<String, Object> commandArgs, BindContext ctx,
+			Set<Property> notifys) {
+		Implicit[] implicits = new Implicit[] {
+				new Implicit(BindContext.class, ctx),
+				new Implicit(Binder.class, this) };
+		invokeDynamicArgsMethod(viewModel, method, commandArgs, implicits);
+		notifys.addAll(BindELContext.getNotifys(method, viewModel,
+				(String) null, (Object) null)); // collect notifyChange
+	}
+	
+	private void invokeDynamicArgsMethod(Object base, Method method, Map<String, Object> args, Implicit[] implicits) {
+		Class<?>[] paramTypes = method.getParameterTypes();
+		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
+		Object[] params = new Object[paramTypes.length];
+		for (int i = 0; i < paramTypes.length; i++) {
+			Param argAnno = null;
+			DefaultValue defAnno = null;
+			for (java.lang.annotation.Annotation anno : parmAnnos[i]) {
+				if (anno.annotationType().equals(Param.class)) {
+					argAnno = (Param) anno;
+				} else if (anno.annotationType().equals(DefaultValue.class)) {
+					defAnno = (DefaultValue) anno;
+				}
+			}
+
+			Class<?> paramType = paramTypes[i];
+			Object argVal = null;
+			if (argAnno != null) {
+				final String name = argAnno.value();
+				argVal = args==null ? null : args.get(name);
+				if (argVal == null && defAnno != null) {
+					argVal = defAnno.value();
+				}
+				//don't coerce null, we should respect it since there is a default value annotation
+				argVal = argVal==null ? null:Classes.coerce(paramType, argVal);
+			} else if (implicits != null && implicits.length > 0) {
+				for (Implicit implicit : implicits) {
+					if (paramType.isAssignableFrom(implicit.clz)) {
+						argVal = implicit.value;
+						break;
+					}
+				}
+			}
+			params[i] = argVal;
+		}
+
+		try {
+			method.invoke(base, params);
+		} catch (Exception e) {
+			throw UiException.Aide.wrap(e);
+		}
+	}
+
+	
+	private Method getCommandMethod(Class<?> clz, String command) {
+		Map<String,Box<Method>> methods = _commandMethodCache.get(clz);
+		if(methods==null){
+			synchronized(_commandMethodCache){
+				methods = _commandMethodCache.get(clz);//check again
+				if(methods==null){
+					methods = new HashMap<String,Box<Method>>();
+					_commandMethodCache.put(clz, methods);
+				}
+			}
+		}
+		
+		Box<Method> method = methods.get(command);
+		if(method!=null){
+			return method.value;
+		}
+		synchronized(methods){
+			method = methods.get(command);//check again
+			if(method!=null){
+				return method.value;
+			}
+			//scan
+			for(Method m : clz.getMethods()){
+				final Command cmd = m.getAnnotation(Command.class);
+				if(cmd==null) continue;			
+				String[] vals = cmd.value();
+				if(vals.length==0){
+					vals = new String[]{m.getName()};//default method name
+				}
+				for(String val:vals){
+					if(!command.equals(val)) continue;
+					if(method!=null){
+						throw new UiException("there are more than one method listen to command "+command);
+					}
+					method = new Box<Method>(m);
+					//don't break, for testing duplicate command method
+				}
+				//don't break, for testing duplicate command method
+			}
+			if(method==null){//mark not found
+				method = new Box<Method>(null);
+			}
+			//cache it
+			methods.put(command, method);
+		}
+		return method.value;
+	}
+
 	//doCommand -> doSaveBefore
 	private void doSaveBefore(Component comp, String command, Event evt,  BindContext ctx, Set<Property> notifys) {
 		log.debug("doSaveBefore, comp=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,command,evt,notifys);
@@ -1410,5 +1524,23 @@ public class BinderImpl implements Binder,BinderCtrl {
 			return Collections.emptySet();
 		}
 		return new LinkedHashSet<SaveBinding>(bindings);//keep the order
-	}	
+	}
+
+	//utility to simply hold a value which might be null
+	private static class Box<T> {
+		final T value;
+		public Box(T value){
+			this.value = value;
+		}
+	}
+	
+	//utility to hold implicit class and runtime value
+	private static class Implicit{
+		final Class<?> clz;
+		final Object value;
+		public Implicit(Class<?> clz,Object value){
+			this.clz = clz;
+			this.value = value;
+		}
+	}
 }
