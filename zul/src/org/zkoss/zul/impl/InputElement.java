@@ -445,7 +445,7 @@ implements Constrainted, Readonly, Disable {
 		if (!Objects.equals(_auxinf != null ? _auxinf.constr: null, constr)) {
 			initAuxInfo().constr = constr;
 			_valided = false;
-			
+
 			if (_auxinf.constr instanceof CustomConstraint) { //client ignored if custom
 				smartUpdate("constraint", "[c"); //implies validated at server
 				return;

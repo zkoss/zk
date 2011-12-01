@@ -108,7 +108,7 @@ zk.override(jq.fn, _jq$fn, {
 		var e = this[0], ref;
 		if (e) ref = e.previousSibling;
 
-		ret = _jq$fn.before.apply(this, arguments);
+		var ret = _jq$fn.before.apply(this, arguments);
 
 		if (e) fixDom(ref ? ref.nextSibling:
 			e.parentNode ? e.parentNode.firstChild: null, e);
@@ -119,7 +119,7 @@ zk.override(jq.fn, _jq$fn, {
 		var e = this[0], ref;
 		if (e) ref = e.nextSibling;
 
-		ret = _jq$fn.after.apply(this, arguments);
+		var ret = _jq$fn.after.apply(this, arguments);
 
 		if (e) fixDom(e.nextSibling, ref);
 		return ret;
@@ -128,7 +128,7 @@ zk.override(jq.fn, _jq$fn, {
 		var e = this[0], ref;
 		if (e) ref = e.lastChild;
 
-		ret = _jq$fn.append.apply(this, arguments);
+		var ret = _jq$fn.append.apply(this, arguments);
 
 		if (e) fixDom(ref ? ref.nextSibling: e.firstChild);
 		return ret;
@@ -137,7 +137,7 @@ zk.override(jq.fn, _jq$fn, {
 		var e = this[0], ref;
 		if (e) ref = e.firstChild;
 
-		ret = _jq$fn.prepend.apply(this, arguments);
+		var ret = _jq$fn.prepend.apply(this, arguments);
 
 		if (e) fixDom(e.firstChild, ref);
 		return ret;
@@ -150,7 +150,7 @@ zk.override(jq.fn, _jq$fn, {
 			ref2 = e.nextSibling;
 		}
 
-		ret = _jq$fn.replaceWith.apply(this, arguments);
+		var ret = _jq$fn.replaceWith.apply(this, arguments);
 
 		if (e)
 			fixDom(ref ? ref.nextSibling: p ? p.firstChild: null, ref2);
@@ -160,7 +160,7 @@ zk.override(jq.fn, _jq$fn, {
 	html: function (content) {
 		var e = content === undefined ? null: this[0];
 
-		ret = _jq$fn.html.apply(this, arguments);
+		var ret = _jq$fn.html.apply(this, arguments);
 
 		if (e) fixDom(e.firstChild);
 		return ret;

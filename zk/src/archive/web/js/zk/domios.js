@@ -111,14 +111,10 @@ function _removeEventFunction(elem, type, fn) {
 		funcs.$remove(fn);
 		if (!funcs.length) {
 			delete eventFuncs[type];
-			var count0 = true;
 			for (var i in eventFuncs)
-				if (i) {
-					count = false;
-					break;
-				}
-			if (count0)
-				jq.removeData(elem, 'zk_eventFuncs');
+				if (i)
+					return true;
+			jq.removeData(elem, 'zk_eventFuncs');
 			return true; //has no listen
 		}
 	}
@@ -212,7 +208,7 @@ var lastTap,	// Holds last tapped element (so we can compare for double tap)
 	initSensitivity = 3,
 	pt,
 	cancelMouseUp,		// prevents a click from occuring as we want the context menu
-	cancelClick;
+	cancelClick,
 	contextmenuHandler = {
 		touchstart: function(evt) {
 			var touchEvt = evt.originalEvent;

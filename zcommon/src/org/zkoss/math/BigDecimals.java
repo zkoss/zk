@@ -18,10 +18,12 @@ package org.zkoss.math;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.math.BigIntegers;
+import org.zkoss.util.Locales;
 
 /**
  * Utilities and constants of big decimals.
@@ -147,4 +149,22 @@ public class BigDecimals {
 	public static final String toPlainString(BigDecimal bd) {
 		return bd.toPlainString();
 	}
+	
+	/**
+	 * Return a string representation of this BigDecimal without an exponent 
+	 * field, which respects the given locale.
+	 * @param locale if null, the current user locale is used.
+	 * @since 5.0.10
+	 */
+	public static final String toLocaleString(BigDecimal bd, Locale locale) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
+		final char DECIMAL = symbols.getDecimalSeparator();
+		final char MINUS = symbols.getMinusSign();
+		// only replace MINUS and DECIMAL as toPlainString() implementation
+		// only involves these two chars. 
+		return toPlainString(bd).replace('.', DECIMAL).replace('-', MINUS);
+	}
+	
 }

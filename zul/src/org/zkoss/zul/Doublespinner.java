@@ -129,7 +129,7 @@ public class Doublespinner extends NumberInputElement {
 
 		try {
 			double v = Double.parseDouble(val);
-			double divscale = vals[1] != null ? ((Double) vals[1]).doubleValue() : 0;
+			double divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			while (v != 0 && --divscale >= 0)
 				v /= 10;
 			return new Double(v);
@@ -140,8 +140,10 @@ public class Doublespinner extends NumberInputElement {
 	}
 
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ? value.toString()
-				: formatNumber(value, null);
+		return value != null && getFormat() == null ?
+			value instanceof Double ?
+				Doublebox.toLocaleString((Double)value, getDefaultLocale()):
+			value.toString()/*just in case*/: formatNumber(value, null);
 	}
 	
 	protected Object unmarshall(Object value) {

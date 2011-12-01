@@ -473,7 +473,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _markCache(cache, visited, visible) {
 		if (cache)
-			while (p = visited.pop())
+			for (var p; p = visited.pop();)
 				cache[p.uuid] = visible;
 		return visible;
 	}

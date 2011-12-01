@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.math.BigDecimal;
 
+import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -160,7 +161,8 @@ public class Decimalbox extends NumberInputElement {
 	}
 	protected String coerceToString(Object value) {
 		return value != null && getFormat() == null ?
-			value instanceof BigDecimal ? ((BigDecimal)value).toPlainString():
+			value instanceof BigDecimal ?
+				BigDecimals.toLocaleString((BigDecimal)value, getDefaultLocale()):
 				value.toString()/*just in case*/: formatNumber(value, null);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

@@ -157,10 +157,15 @@ abstract public class NumberInputElement extends FormatInputElement {
 		}
 		return null;
 	}
-	
-	private Locale getDefaultLocale() {
+	/** Returns the default locale, either {@link #getLocale} or
+	 * {@link Locales#getCurrent} (never null).
+	 * It is useful when you wan to get a locale for this input.
+	 * @since 5.0.10
+	 */
+	protected Locale getDefaultLocale() {
 		return _locale != null ? _locale : Locales.getCurrent(); 
 	}
+
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
