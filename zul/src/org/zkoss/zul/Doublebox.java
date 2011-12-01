@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.text.DecimalFormatSymbols;
+
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -111,6 +113,17 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value, null);
+		return value != null && getFormat() == null ?
+			value instanceof Double ? toLocaleString((Double)value):
+			value.toString()/*just in case*/: formatNumber(value, null);
+	}
+	private String toLocaleString(Double v) {
+		final DecimalFormatSymbols symbols =
+			new DecimalFormatSymbols(getDefaultLocale());
+		final char DECIMAL = symbols.getDecimalSeparator();
+		final char MINUS = symbols.getMinusSign();
+		// only replace MINUS and DECIMAL as toPlainString() implementation
+		// only involves these two chars. 
+		return v.toString().replace('.', DECIMAL).replace('-', MINUS);
 	}
 }
