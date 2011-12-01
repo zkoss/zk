@@ -1019,7 +1019,7 @@ zk.get(o, 'value');
 	 * @return Object the value of the property
 	 */
 	get: function (o, name) {
-		var nm = name.charAt(0).toUpperCase() + name.substring(1);
+		var nm = name.charAt(0).toUpperCase() + name.substring(1),
 			m = o['get' + nm];
 		if (m) return m.call(o);
 		m = o['is' + nm];

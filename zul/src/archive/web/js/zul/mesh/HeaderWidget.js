@@ -371,7 +371,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		//feature#3177275: Listheader should override hflex when sized by end user
 		var hdfakercells = mesh.ehdfaker.cells,
 			bdfakercells = mesh.ebdfaker.cells,
-			wds = [];
+			wds = [],
 			i = 0;
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
 			var stylew = hdfakercells[i].style.width;
