@@ -104,7 +104,12 @@ public class ResourceCaches {
 //					if (log.debugable()) log.debug("Resolving "+path0+" to "+url);
 					if (url == null)
 						return null;
-					return cache.get(new ResourceInfo(path, url, extra));
+					try {
+						return cache.get(new ResourceInfo(path, url, extra));
+					} catch (Throwable ex) {
+						log.warning("Unable to load "+url+": "+Exceptions.getMessage(ex));
+					}
+					return null;
 				}
 
 				ctx = ctx.getContext(ctxpath);
@@ -116,9 +121,13 @@ public class ResourceCaches {
 
 			final String flnm = ctx.getRealPath(path);
 			if (flnm != null) {
-				final File file = new File(flnm);
-				if (file.exists())
-					return cache.get(new ResourceInfo(path, file, extra));
+				try {
+					return cache.get(new ResourceInfo(path, new File(flnm), extra));
+						//it is loader's job to check the existence
+				} catch (Throwable ex) {
+					log.warning("Unable to load "+flnm+": "+Exceptions.getMessage(ex));
+				}
+				return null;
 			}
 		}
 
@@ -129,7 +138,7 @@ public class ResourceCaches {
 			if (url != null)
 				return cache.get(new ResourceInfo(path, url, extra));
 		} catch (Throwable ex) {
-			log.warning("Unable to load "+path+"\n"+Exceptions.getMessage(ex));
+			log.warning("Unable to load "+path+": "+Exceptions.getMessage(ex));
 		}
 		return null;
 	}
