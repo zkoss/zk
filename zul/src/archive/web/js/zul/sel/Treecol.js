@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	
 	function _sort0(treechildren, col, dir, sorting, isNumber) {
-		var d = []
+		var d = [];
 		for (var i = 0, z = 0, w = treechildren.firstChild; w; w = w.nextSibling, z++) {
 			if (w.treechildren) 
 				_sort0(w.treechildren, col, dir, sorting, isNumber);

@@ -145,7 +145,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
-			childs = jq(this.$n('cave')).children();
+			childs = jq(this.$n('cave')).children(),
 			totalWidth = 0;
 		
 		for (var i = childs.length; i-- ;)
@@ -278,7 +278,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	_scroll: function (direction) {
 		if (!this.checkScrollable() || this._runId) return;
-		var self = this;
+		var self = this,
 			body = this.$n('body'),
 			currScrollLeft = body.scrollLeft,
 			childs = jq(this.$n('cave')).children(),

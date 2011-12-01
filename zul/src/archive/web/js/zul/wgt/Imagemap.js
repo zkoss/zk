@@ -61,8 +61,8 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			this._fixchd(false);
 	},
 	_fixchd: function (bArea) {
-		var mapid = this.uuid + '-map';
-		img = this.getImageNode();
+		var mapid = this.uuid + '-map',
+			img = this.getImageNode();
 		img.useMap = bArea ? '#' + mapid : '';
 		img.isMap = !bArea;
 	},

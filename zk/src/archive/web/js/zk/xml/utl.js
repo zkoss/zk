@@ -54,7 +54,7 @@ zk.xml.Utl = {
 			return (new DOMParser()).parseFromString(text, "text/xml");
 			//FF, Safar, Opera
 	
-		doc = new ActiveXObject("Microsoft.XMLDOM"); //IE
+		var doc = new ActiveXObject("Microsoft.XMLDOM"); //IE
 		doc.async = false;
 		doc.loadXML(text);
 		return doc;

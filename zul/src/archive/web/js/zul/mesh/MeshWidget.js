@@ -119,7 +119,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			max = 0, maxj;
 		if (bdfaker && w) {
 			for (var i = bdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				var wd = bdwd = bdfaker.cells[i].offsetWidth,
+				var wd = bdfaker.cells[i].offsetWidth,
 					$cv = zk(w.$n('cave')),
 					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
 					ftwd = ftfaker && zk(ftfaker.cells[i]).isVisible() ? ftfaker.cells[i].offsetWidth : 0,
@@ -199,7 +199,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var sbc = wgt.isSizedByContent(),
 			meshmin = wgt._hflex == 'min';
 		if (!wgt.head && (meshmin || sbc)) {
-			var bdw = zk(wgt.$n()).padBorderWidth();
+			var bdw = zk(wgt.$n()).padBorderWidth(),
 				wd = _getMinWd(wgt) + bdw, // has to call _getMinWd first so wgt._minWd will be available
 				tr = wgt.ebodytbl,
 				wds = wgt._minWd.wds,

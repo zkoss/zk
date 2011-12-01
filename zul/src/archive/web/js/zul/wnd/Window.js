@@ -1242,12 +1242,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_snapsizing: function (dg, pos) {
-		// snap y only when dragging upper boundary/corners 
-		px = (dg.z_dir >= 6 && dg.z_dir <= 8) ? 
-				Math.max(pos[0], 0) : pos[0];
-		// snap x only when dragging left boundary/corners
-		py = (dg.z_dir == 8 || dg.z_dir <= 2) ? 
-				Math.max(pos[1], 0) : pos[1];
+			// snap y only when dragging upper boundary/corners 
+		var px = (dg.z_dir >= 6 && dg.z_dir <= 8) ? Math.max(pos[0], 0) : pos[0],
+			// snap x only when dragging left boundary/corners
+			py = (dg.z_dir == 8 || dg.z_dir <= 2) ? Math.max(pos[1], 0) : pos[1];
 		return [px, py];
 	},
 	_ghostsizing: function (dg, ofs, evt) {

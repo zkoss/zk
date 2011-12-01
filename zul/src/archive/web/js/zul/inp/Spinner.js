@@ -228,16 +228,15 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	_increase: function (is_add){
 		var inp = this.inp,
-			value = parseInt(inp.value, 10);
-		if (is_add)
-			result = value + this._step;
-		else
-			result = value - this._step;
-
+			value = parseInt(inp.value, 10),
+			result = is_add ? (value + this._step) : (value - this._step);
+		
 		// control overflow
-		if ( result > Math.pow(2,31)-1 )	result = Math.pow(2,31)-1;
-		else if ( result < -Math.pow(2,31) ) result = -Math.pow(2,31);
-
+		if (result > Math.pow(2,31)-1)
+			result = Math.pow(2,31)-1;
+		else if (result < -Math.pow(2,31))
+			result = -Math.pow(2,31);
+		
 		//over bound shall restore value
 		if (this._max!=null && result > this._max) result = value;
 		else if (this._min!=null && result < this._min) result = value;
