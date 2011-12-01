@@ -259,10 +259,11 @@ zul.fchart.Flashchart = zk.$extends(zul.med.Flash, {
 				wmode: "opaque"
 			},
 			_attributes = {id: _swfId, classid: "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"};
-
+		
+		var src = _src;
 		if (zk.ie || zk.opera)		//Add a cache buster at the end of src url for IE and Opera
-			_src = _src + (_src.indexOf('?') === -1 ? '?' : '&') + "_cache=" + new Date().getTime();
-		zul.fchart.swfobject.embedSWF(_src, _swfId, this._width, this._height, "9.0.0", _expressInstall, false, _params, _attributes);
+			src += (src.indexOf('?') === -1 ? '?' : '&') + "_cache=" + new Date().getTime();
+		zul.fchart.swfobject.embedSWF(src, _swfId, this._width, this._height, "9.0.0", _expressInstall, false, _params, _attributes);
 		
 	}
 }, {// static
