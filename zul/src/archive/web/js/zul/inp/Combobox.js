@@ -191,8 +191,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 	//super
 	open: function (opts) {
-		this.$supers('open', arguments);
-		this._hilite(); //after _open is set
+		// do nothing if not visible
+		if (this.isVisible()) {
+			this.$supers('open', arguments);
+			this._hilite(); //after _open is set
+		}
 	},
 	dnPressed_: function (evt) {
 		this._updnSel(evt);
@@ -386,8 +389,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	afterAnima_: function (visible) {
 		// B50-ZK-568: Combobox does not scroll to selected item
 		// shall do after slide down
-		// do only while visible and in open state
-		if (this.isVisible() && this.isOpen())
+		if (visible && this._lastsel)
 			zk(this._lastsel).scrollIntoView(this.$n('pp'));
 		this.$supers('afterAnima_', arguments);
 	}
