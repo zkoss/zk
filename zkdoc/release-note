@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.10
 * Features
+
 * Bugs
   ZK-513: Adding objects to ListModelList causes Firefox to complain slow script
   ZK-531: Multi-select issue after ROD
@@ -46,6 +47,10 @@ ZK 5.0.10
   ZK-631: Datebox format error message not shown with implements CustomConstraint
   ZK-641: Borderlayout label width inconsistent between browsers 
   ZK-640: toolbarbutton with no label will display larger width blur box
+
+* Upgrade Notes
+  + For better performance, org.zkoss.util.logging.LogService no longer monitors
+    i3-log.conf for any check (so it won't reload if i3-log.conf is modified).
 
 	--------
 ZK 5.0.9

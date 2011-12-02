@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.mesg.MCommon;
@@ -37,11 +38,6 @@ import org.zkoss.io.Files;
  * The log service which is used to monitor i3-log.conf.
  * To initialize it, invoke {@link #init}. Note: {@link Log} could work
  * without {@link LogService}.
- *
- * <p>Design consideration: the configure and configureAndWatch
- * methods could be declared as static, but we don't.
- * Reason: easilier to extend (also the performance gained by
- * the static method is neglectable comparing its complexity).
  *
  * <p>Implementation Note:
  * LogService cannot be a component (because ComponentManager depedns
@@ -85,6 +81,8 @@ public class LogService {
 	 *
 	 * <p>Note: it also enables the hierarchy support of loggers by
 	 * calling {@link Log#setHierarchy} with true.
+	 * Notice the heirachy is always disabled if a library property called
+	 * <code>org.zkoss.util.logging.hierarchy.disabled</code> is set to true.
 	 *
 	 * @param rootnm the name of the root logger. The logging service
 	 * registered handlers at the specified logger.
@@ -150,9 +148,12 @@ public class LogService {
 		//monitor i3-log.conf
 		try {
 			_logfn = new File(Files.getConfigDirectory(), "i3-log.conf");
-			if (_logfn.exists()) log.info("Monitor "+_logfn);
-			else log.info("File not found: "+_logfn);
-			_logwdog = configureAndWatch(_logfn, D.ON ? 10000: 360000);//millisec
+			if (_logfn.exists()) {
+				log.info("Loading "+_logfn);
+				configure(_logfn);
+			} else {
+				log.info("File not found: "+_logfn);
+			}
 		} catch (Exception ex) {
 			log.warning(ex);
 		}
@@ -232,32 +233,5 @@ public class LogService {
 	public final void configure(String filename)
 	throws FileNotFoundException, IOException {
 		configure(new File(filename));
-	}
-
-	public class WatchdogCallback implements FileWatchdog.Callback {
-		private WatchdogCallback() {
-		}
-
-		public final void onModified(File file) {
-			try {
-				configure(file);
-			} catch (Exception ex) {
-				log.warning(MCommon.FILE_READ_FAILED, file, ex);
-			}
-		}
-	}
-	/**
-	 * Periodically checks whether a file is modified, and configures 
-	 * based the properties stored in the file, if any modifications.
-	 *
-	 * <p>The key is a logger name and the value is the level.
-	 *
-	 * @param file the file
-	 * @param delay the delay in milliseconds to wait between each check.
-	 */
-	public final FileWatchdog configureAndWatch(File file, long delay) {
-		FileWatchdog wg = new FileWatchdog(file, delay, new WatchdogCallback());
-		wg.start();
-		return wg;
 	}
 }

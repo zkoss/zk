@@ -21,7 +21,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Level;
 import java.util.logging.Handler;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
@@ -54,7 +53,7 @@ import org.zkoss.mesg.Messages;
  *
  * <p>To log debug information, we usually also test with D.<br>
  * <pre><code>log.debug("a simple info");
- *if (D.ON && log.debugable())
+ *if (log.debugable())
  *  log.debug(a + complex + string + operation);</code></pre>
  *
  * <p>There is a special level called FINER whose priority is lower than DEBUG.
@@ -121,6 +120,14 @@ public class Log {
 		_hierarchy = hierarchy;
 	}
 
+	private static final boolean hierarchyDisabled() {
+		if (_hierarchyDisabled == null)
+			_hierarchyDisabled = Boolean.valueOf("true".equals(
+				Library.getProperty("org.zkoss.util.logging.hierarchy.disabled")));
+		return _hierarchyDisabled.booleanValue();
+	}
+	private static Boolean _hierarchyDisabled;
+
 	/**
 	 * Gets the logger based on the class.
 	 * @param cls the class that identifies the logger.
@@ -132,20 +139,11 @@ public class Log {
 	 * Gets the logger based on the giving name.
 	 * <p>Since 5.0.7, this constructor, unlike others, ignores
 	 * {@link #isHierarchy} and always assumes the hierarchy name.
-	 * <p>Since 5.0.9, the hierarchy use can be disabled by specifying the following
-	 * setting in the zk.xml.
-	 *  
-	 * <pre><code>
-	 *	<library-property>
-	 *		<name>org.zkoss.util.logging.hierarchy.disabled</name>
-	 *		<value>true</value>
-	 *	</library-property>
-	 * </code></pre>
-	 * Default: false
+	 * Notice the heirachy is always disabled if a library property called
+	 * <code>org.zkoss.util.logging.hierarchy.disabled</code> is set to true.
 	 */
 	public static final Log lookup(String name) {
-		return Boolean.valueOf(Library.getProperty("org.zkoss.util.logging.hierarchy.disabled", "false"))
-					.booleanValue() ? new Log(name) : new HierLog(name);
+		return new HierLog(name);
 	}
 	/** Gets the logger based on the package.
 	 */
@@ -823,7 +821,7 @@ Objects.BAR1_STRING
 	 * <p>Default: {@link #isHierarchy}.
 	 */
 	/*package*/ boolean useHierarchy() {
-		return _hierarchy;
+		return _hierarchy && !hierarchyDisabled();
 	}
 
 	public int hashCode() {
@@ -835,12 +833,16 @@ Objects.BAR1_STRING
 	public String toString() {
 		return _name;
 	}
-}
-/*package*/ class HierLog extends Log {
-	/*package*/ HierLog(String name) {
-		super(name);
-	}
-	/*package*/ boolean useHierarchy() {
-		return true;
+
+	/**
+	 * Used internally to represent a hierachical log.
+	 */
+	private static class HierLog extends Log {
+		private HierLog(String name) {
+			super(name);
+		}
+		/*package*/ boolean useHierarchy() {
+			return !hierarchyDisabled();
+		}
 	}
 }
