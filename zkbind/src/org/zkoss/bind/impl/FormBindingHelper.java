@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.event.Event;
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final LogUtil log = new LogUtil(FormBindingHelper.class.getName());
+	private static final Log _log = Log.lookup(FormBindingHelper.class);
 	
 	private final Map<String, List<LoadFormBinding>> _loadFormPromptBindings; //comp+formid -> bindings (load form _prompt)
 	private final Map<String, List<LoadFormBinding>> _loadFormAfterBindings; //command -> bindings (load form after command)
@@ -122,7 +122,9 @@ import org.zkoss.zk.ui.event.Event;
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		//TODO converter args when we support converter in form
 		try {
-			log.debug("doSaveFormBinding:binding.save() comp=[%s],binding=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,binding,command,evt,notifys);
+			if(_log.debugable()){
+				_log.debug("doSaveFormBinding:binding.save() comp=[%s],binding=[%s],command=[%s],evt=[%s],notifys=[%s]",comp,binding,command,evt,notifys);
+			}
 			doPrePhase(Phase.SAVE_BINDING, ctx);
 			binding.save(ctx);
 		} finally {
@@ -140,7 +142,9 @@ import org.zkoss.zk.ui.event.Event;
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, command, binding.getComponent(), null);
 		//TODO converter args when we support converter in form
 		try {
-			log.debug("doLoadFormBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
+			if(_log.debugable()){
+				_log.debug("doLoadFormBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
+			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
 		} finally {
@@ -195,7 +199,9 @@ import org.zkoss.zk.ui.event.Event;
 			for (LoadFormBinding binding : formBindings) {
 				final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, comp, null);
 				//TODO converter args when we support converter in form
-				log.debug("loadComponentProperties:form-binding.load(),component=[%s],binding=[%s],context=[%s]",comp,binding,ctx);
+				if(_log.debugable()){
+					_log.debug("loadComponentProperties:form-binding.load(),component=[%s],binding=[%s],context=[%s]",comp,binding,ctx);
+				}
 				binding.load(ctx);
 			}
 		}
