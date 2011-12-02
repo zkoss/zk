@@ -20,6 +20,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
@@ -100,6 +101,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 				eval.setValue(ctx, comp, expr, value);
 			}
 		}
+		//TODO should we clear form dirty and notify formStatus?
 	}
 
 	//--SaveBinding--//

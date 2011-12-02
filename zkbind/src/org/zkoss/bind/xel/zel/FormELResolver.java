@@ -18,12 +18,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.Path;
+import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
+import org.zkoss.zel.impl.lang.EvaluationContext;
 
 /**
  * ELResolver for {@link Form}.
@@ -85,6 +89,13 @@ public class FormELResolver extends ELResolver {
         	final String fieldName = fieldName(path);
         	ctx.setPropertyResolved(true);
             ((Form) base).setField(fieldName, value);
+            
+            //notify form status change
+            Binding binding = ((BindELContext)((EvaluationContext)ctx).getELContext()).getBinding();
+            if(binding!=null && base instanceof FormExt){
+            	//notify form status was changed.
+            	binding.getBinder().notifyChange(((FormExt)base).getStatus(), "*");
+            }
         }
     }
     

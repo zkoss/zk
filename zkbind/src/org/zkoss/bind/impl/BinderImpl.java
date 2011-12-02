@@ -28,6 +28,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
@@ -398,6 +399,23 @@ public class BinderImpl implements Binder,BinderCtrl {
 		return _eval;
 	}
 	
+	private void storeForm(Component comp,String id, Form form){
+		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
+		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+		if(form instanceof FormExt){
+			comp.setAttribute(id+"Status", ((FormExt)form).getStatus());//by convention fxStatus
+		}
+	}
+
+	private void removeForm(Component comp){
+		String id = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		if(id!=null){
+			comp.removeAttribute(FORM_ID);
+			comp.removeAttribute(id);
+			comp.removeAttribute(id+"Status");
+		}
+	}
+	
 	@Override
 	public void setFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
 		checkInit();
@@ -416,8 +434,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 		
 		form = doInitForm(comp,initExpr,initArgs);
-		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
-		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+		storeForm(comp,id,form);
 	}
 	@Override
 	public void addFormLoadBindings(Component comp, String id,
@@ -443,8 +460,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		
 		if(form==null){
 			form = new SimpleForm();
-			comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
-			comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+			storeForm(comp,id,form);
 		}
 		
 		addLoadFormBinding(comp,id,form,loadExpr,beforeCmds,afterCmds,bindingArgs);
@@ -476,8 +492,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		
 		if(form==null){
 			form = new SimpleForm();
-			comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
-			comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+			storeForm(comp,id,form);
 		}
 
 		addSaveFormBinding(comp, id, form, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
@@ -1319,6 +1334,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 		
 		removeFormAssociatedSaveBinding(comp);
+		removeForm(comp);
 		
 		//remove trackings
 		TrackerImpl tracker = (TrackerImpl) getTracker();

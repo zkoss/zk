@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
+import org.zkoss.bind.FormStatus;
 import org.zkoss.lang.Objects;
 
 /**
@@ -27,7 +29,7 @@ import org.zkoss.lang.Objects;
  * @author henrichen
  *
  */
-public class FormImpl implements Form {
+public class FormImpl implements Form,FormExt {
 //	private final String _id; //form id
 	private final Set<String> _saveFieldNames; //field name for saving
 	private final Set<String> _loadFieldNames; //field name for loading
@@ -36,6 +38,8 @@ public class FormImpl implements Form {
 	private final Set<String> _dirtyFieldNames; //field name that is dirty
 	private static final int INIT_CAPACITY = 32;
 	
+	private final FormStatus _status;
+	
 	public FormImpl(/*String id*/) {
 //		_id = id;
 		_fields = new LinkedHashMap<String, Object>(INIT_CAPACITY);
@@ -43,6 +47,12 @@ public class FormImpl implements Form {
 		_saveFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
 		_loadFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
 		_dirtyFieldNames = new HashSet<String>(INIT_CAPACITY);
+		_status = new FormStatus(){
+			@Override
+			public boolean isDirty() {
+				return FormImpl.this.isDirty();
+			}
+		};
 	}
 
 //	public String getId() {
@@ -96,6 +106,11 @@ public class FormImpl implements Form {
 		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
 //		.append(",id:").append(getId())
 		.append(",fields:").append(getFieldNames()).toString();
+	}
+
+	@Override
+	public FormStatus getStatus() {
+		return _status;
 	}
 	
 }

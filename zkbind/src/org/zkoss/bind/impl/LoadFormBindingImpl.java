@@ -21,6 +21,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
@@ -57,6 +58,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		((FormImpl)form).initFields(); //initial loading, mark form as clean
 		
 		binder.notifyChange(form, "*"); //notify change of fx.*
+		if(form instanceof FormExt){
+			binder.notifyChange(((FormExt)form).getStatus(), "*");//notify change of fxStatus.*
+		}
 	}
 	
 	public void setSeriesLength(int len) {
