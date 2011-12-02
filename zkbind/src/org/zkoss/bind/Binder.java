@@ -215,4 +215,11 @@ public interface Binder {
 	 * @return associated dependency tracker of this binder.
 	 */
 	public Tracker getTracker();
+	
+	/**
+	 * Returns associated root component of this binder.
+	 * @return associated root component of this binder.
+	 */
+	public Component getView();
+	
 }

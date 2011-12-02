@@ -36,7 +36,7 @@ import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Param;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.DefaultValue;
+import org.zkoss.bind.annotation.Default;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
@@ -1114,57 +1114,17 @@ public class BinderImpl implements Binder,BinderCtrl {
 			
 			Method method = getCommandMethod(viewModel.getClass(), command);
 			if (method != null) {
-				doBindingArgExecute(viewModel, method, command, commandArgs, ctx, notifys);
-			} else {
-				// without method, guess it by command name and parameter
-				doSimpleExecute(viewModel, command, commandArgs, ctx, notifys);
-//				throw new UiException("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel);
+				Implicit[] implicits = new Implicit[] {
+						new Implicit(BindContext.class, ctx),
+						new Implicit(Binder.class, this) };
+				invokeDynamicArgsMethod(viewModel, method, commandArgs, implicits);
+				notifys.addAll(BindELContext.getNotifys(method, viewModel,
+						(String) null, (Object) null)); // collect notifyChange
 			}
 			log.debug("after doExecute notifys=[%s]", notifys);
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
 		}
-	}
-	
-
-	private void doSimpleExecute(Object viewModel,String command,Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
-		Method method = null;
-		Object[] param = null;
-		try { //try one without arguments
-			method = Classes.getMethodInPublic(viewModel.getClass(), command, null);
-			param = new Object[0];
-		} catch (NoSuchMethodException e) { //try one with Map arguments 
-			try {
-				method = Classes.getMethodInPublic(viewModel.getClass(), command, new Class[] {Map.class});
-				//check if method has a Map argument, then will call it with args
-				param = new Object[] {commandArgs == null ? Collections.emptyMap() : commandArgs};
-			} catch (NoSuchMethodException e1) { //try one with BindContext argument
-				try {
-					method = Classes.getMethodInPublic(viewModel.getClass(), command, new Class[] {BindContext.class});
-					param = new Object[] {ctx};
-				} catch (NoSuchMethodException e2) {
-					throw UiException.Aide.wrap(e);
-				}
-			}
-		}
-		
-		try {
-			method.invoke(viewModel, param);
-		} catch (Exception e) {
-			throw UiException.Aide.wrap(e);
-		}
-		notifys.addAll(BindELContext.getNotifys(method, viewModel, (String)null, (Object) null)); //collect notifyChange
-	}	
-
-	
-	private void doBindingArgExecute(Object viewModel, Method method, String command, Map<String, Object> commandArgs, BindContext ctx,
-			Set<Property> notifys) {
-		Implicit[] implicits = new Implicit[] {
-				new Implicit(BindContext.class, ctx),
-				new Implicit(Binder.class, this) };
-		invokeDynamicArgsMethod(viewModel, method, commandArgs, implicits);
-		notifys.addAll(BindELContext.getNotifys(method, viewModel,
-				(String) null, (Object) null)); // collect notifyChange
 	}
 	
 	private void invokeDynamicArgsMethod(Object base, Method method, Map<String, Object> args, Implicit[] implicits) {
@@ -1173,12 +1133,12 @@ public class BinderImpl implements Binder,BinderCtrl {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			Param argAnno = null;
-			DefaultValue defAnno = null;
+			Default defAnno = null;
 			for (java.lang.annotation.Annotation anno : parmAnnos[i]) {
 				if (anno.annotationType().equals(Param.class)) {
 					argAnno = (Param) anno;
-				} else if (anno.annotationType().equals(DefaultValue.class)) {
-					defAnno = (DefaultValue) anno;
+				} else if (anno.annotationType().equals(Default.class)) {
+					defAnno = (Default) anno;
 				}
 			}
 
@@ -1192,6 +1152,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 				}
 				//don't coerce null, we should respect it since there is a default value annotation
 				argVal = argVal==null ? null:Classes.coerce(paramType, argVal);
+			} else if(defAnno != null){
+				argVal = Classes.coerce(paramType, defAnno.value());
 			} else if (implicits != null && implicits.length > 0) {
 				for (Implicit implicit : implicits) {
 					if (paramType.isAssignableFrom(implicit.clz)) {
@@ -1558,5 +1520,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 			this.clz = clz;
 			this.value = value;
 		}
+	}
+
+	@Override
+	public Component getView() {
+		checkInit();
+		return _rootComp;
 	}
 }

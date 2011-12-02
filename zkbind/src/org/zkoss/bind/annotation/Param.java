@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Marker annotation to identify the name of a parameter of a method.
  * 
  * @see {@link Command}
- * @see {@link DefaultValue}
+ * @see {@link Default}
  * @author dennis
  *
  */
@@ -21,6 +21,4 @@ public @interface Param {
 	 * @return name of the parameter
 	 */
 	String value();
-	
-//	String defaultValue() default "A-SPECIAL-STRING-FOR-NULL";
 }

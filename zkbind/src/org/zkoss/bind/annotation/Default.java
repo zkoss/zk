@@ -15,11 +15,11 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DefaultValue {
+public @interface Default {
 	/**
 	 * Default value of the parameter. 
 	 * It is string when you assign it in annotation, and will coerce to the corresponding type of the parameter if parameter value is not null.
-	 * @return
+	 * @return default value of the parameter
 	 */
 	String value();
 }
