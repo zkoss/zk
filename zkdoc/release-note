@@ -45,6 +45,7 @@ ZK 5.0.10
   ZK-637: Cannot set 0 to error-code in the error-reload element
   ZK-631: Datebox format error message not shown with implements CustomConstraint
   ZK-641: Borderlayout label width inconsistent between browsers 
+  ZK-640: toolbarbutton with no label will display larger width blur box
 
 	--------
 ZK 5.0.9

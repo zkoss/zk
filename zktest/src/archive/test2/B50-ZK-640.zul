@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-640.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec  2 10:50:11 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+There should no extra "&amp;nbsp;" (see the dom element) after the image of toolbarbutton if no label.
+]]>
+</html>
+	<tabbox width="500px">
+		<tabs>
+			<tab label="Tab 1" />
+		</tabs>
+		<toolbar id="tbar">
+			<toolbarbutton label="label" image="/img/defender.gif" />
+			<toolbarbutton label="label" image="/img/defender.gif" />
+			<toolbarbutton image="/img/live.gif" />
+			<toolbarbutton image="/img/live.gif" />
+			<toolbarbutton label="label" image="/img/defender.gif" />
+			<toolbarbutton image="/img/live.gif" />
+			<toolbarbutton label="label" image="/img/defender.gif" />
+		</toolbar>
+		<tabpanels>
+			<tabpanel>This is panel 1</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
