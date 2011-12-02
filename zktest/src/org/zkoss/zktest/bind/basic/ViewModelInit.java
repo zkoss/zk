@@ -13,8 +13,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.bind.basic;
 
 import java.util.Map;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -119,7 +121,7 @@ public class ViewModelInit implements Initiator {
 			throw new RuntimeException("no such converter");
 		}
 		
-		@NotifyChange("value2")
+		@Command @NotifyChange("value2")
 		public void cmd1(){
 			value2 = "do command1 "+name;
 		}

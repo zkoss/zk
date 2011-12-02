@@ -15,6 +15,7 @@ package org.zkoss.zktest.bind.issue;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 
 /**
@@ -74,7 +75,7 @@ public class B0004{
 		this.lastMessage3 = lastMessage3;
 	}
 
-	@NotifyChange("lastMessage3")
+	@Command @NotifyChange("lastMessage3")
 	public void cmd1(){
 		setLastMessage3("execute command 1");
 		

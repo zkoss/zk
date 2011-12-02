@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.bind.issue;
 
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 
 /**
@@ -48,20 +49,20 @@ public class F0013 extends BindComposer {
 	}
 
 	//notify property, but not base object
-	@NotifyChange("*")
+	@Command @NotifyChange("*")
 	public void cmd1(){
 		this.value1 += "-cmd1";
 		this.value2 += "-cmd1";
 	}
 	
 	//notify base object, include all it property
-	@NotifyChange(".")
+	@Command @NotifyChange(".")
 	public void cmd2(){
 		this.value1 += "-cmd2";
 		this.value2 += "-cmd2";
 	}
 	
-
+	@Command 
 	public void cmd3(){
 		this.value1 += "-cmd3";
 		this.value2 += "-cmd3";

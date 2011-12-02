@@ -1,7 +1,9 @@
 package org.zkoss.zktest.bind.viewmodel.collection;
 
 import static java.lang.System.out;
+
 import java.util.List;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;

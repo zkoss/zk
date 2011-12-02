@@ -15,7 +15,9 @@ package org.zkoss.zktest.bind.basic;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
 
@@ -154,33 +156,34 @@ public class LoadComposer extends BindComposer {
 		return getSelected();
 	}
 
-	@NotifyChange({"p1","selected"})
+	@Command @NotifyChange({"p1","selected"})
 	public void changeFirstName1() {
 		_selected.setFirstName("Dennis");
 	}
-	
+	@Command 
 	public void changeLastName1() {
 		_selected.setLastName("Chen");
 		notifyChange(_selected, "lastName");
 	}
 	
-	@NotifyChange({"p1","selected"})
+	@Command @NotifyChange({"p1","selected"})
 	public void changeFirstName2() {
 		_selected.setFirstName("Alex");
 	}
 	
+	@Command 
 	public void changeLastName2() {
 		_selected.setLastName("Wang");
 		notifyChange(_selected, "lastName");
 	}
 	
-	@NotifyChange({"p1"})
+	@Command @NotifyChange({"p1"})
 	public void notifyP1() {
 		_selected.setFirstName("Ian");
 		_selected.setLastName("Tasi");
 	}
 	
-	@NotifyChange({"selected"})
+	@Command @NotifyChange({"selected"})
 	public void notifySelected() {
 		_selected.setFirstName("Jumper");
 		_selected.setLastName("Chen");
@@ -190,7 +193,7 @@ public class LoadComposer extends BindComposer {
 		return _p2;
 	}
 	
-	@NotifyChange({"p1","p2"})
+	@Command @NotifyChange({"p1","p2"})
 	public void saveForm(){
 		_p2 = new Person(_selected.getFirstName(),_selected.getLastName());
 	}

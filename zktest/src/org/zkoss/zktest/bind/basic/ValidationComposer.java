@@ -12,10 +12,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.basic;
 
+import java.util.Set;
+
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 
 /**
@@ -109,11 +113,11 @@ public class ValidationComposer extends BindComposer {
 	public void setLastMessage2(String lastMessage2) {
 		this.lastMessage2 = lastMessage2;
 	}
-
+	@Command 
 	public void cmd1(){
 		
 	}
-	
+	@Command 
 	public void cmd2(){
 		
 	}

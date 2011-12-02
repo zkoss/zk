@@ -1,10 +1,12 @@
 package org.zkoss.zktest.bind.viewmodel.validator;
 
 import static java.lang.System.out;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 
@@ -82,6 +84,7 @@ public class Va06{
 	}
 	
 	// -----------command -----------------
+	@Command 
 	public void checkAdult(){
 		out.println("is Adult: "+isAdult);
 	}	

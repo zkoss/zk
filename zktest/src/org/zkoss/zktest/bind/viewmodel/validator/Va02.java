@@ -4,6 +4,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 
@@ -72,7 +73,7 @@ public class Va02{
 	}
 	
 	// -----------command -----------------
-
+	@Command 
 	public void add10(){
 		age += 10;
 	}

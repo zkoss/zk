@@ -1,10 +1,13 @@
 package org.zkoss.zktest.bind.viewmodel.validator;
 
 import java.util.Map;
+
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.Param;
 
 
 public class Va12{
@@ -88,11 +91,11 @@ public class Va12{
 
 
 	// -----------command -----------------
-	public void compute(Map<String, Object> args){
+	@Command
+	public void compute(@Param("off") Object offObject){
 		total = (subtotalA+subtotalB);
-		Object offObject = args.get("off");
 		if (offObject !=null){
-			Long off = Long.parseLong(args.get("off").toString());
+			Long off = Long.parseLong(offObject.toString());
 			total = total*off.longValue()/100;
 		}
 	}

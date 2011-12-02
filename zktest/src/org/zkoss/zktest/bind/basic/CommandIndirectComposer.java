@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.bind.basic;
 
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 
 /**
@@ -47,14 +48,14 @@ public class CommandIndirectComposer extends BindComposer {
 		this.checked = checked;
 	}
 
-	@NotifyChange("value1")
+	@NotifyChange("value1") @Command
 	public void command1(){
 		//notifychange only work when method call by binder (by el&binder), so, call this in vm doesn't notify change,
 		//you should add notify change of this command method too
 		setValue1("by command1");
 	}
 	
-	@NotifyChange("value1")
+	@NotifyChange("value1") @Command
 	public void command2(){
 		setValue1("by command2");
 	}

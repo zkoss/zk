@@ -4,6 +4,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.zk.ui.Component;
 
@@ -104,6 +105,7 @@ public class Va11{
 	}
 
 	// -----------command -----------------
+	@Command 
 	public void classify(){
 //		if (age < 13){
 //			isLessThanThirteen = true;

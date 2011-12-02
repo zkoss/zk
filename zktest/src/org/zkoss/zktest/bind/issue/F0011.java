@@ -12,13 +12,21 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.issue;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 
 /**
  * @author Dennis Chen
@@ -277,15 +285,15 @@ public class F0011 extends BindComposer {
 	public void setValue4(String value4) {
 		this.value4 = value4;
 	}
-
+	@Command 
 	public void cmd1(){
 		setMessage3("do Command1");
 	}
-	
+	@Command 
 	public void cmd2(){
 		setMessage4("do Command2");
 	}
-	
+	@Command 
 	public void cmd3(){
 		setMessage5("do Command3");
 	}

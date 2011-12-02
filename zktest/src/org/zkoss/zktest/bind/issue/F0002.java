@@ -12,10 +12,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.issue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.BindContext;
+import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.SimpleForm;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Component;
 
 /**
  * @author Dennis Chen
@@ -57,12 +64,12 @@ public class F0002 extends BindComposer {
 		return form1;
 	}
 
-
+	@Command 
 	public void cmd1(){
 		
 	}
 	
-	@NotifyChange({"value2","formValue2"})
+	@Command @NotifyChange({"value2","formValue2"})
 	public void cmd2(){
 		
 	}

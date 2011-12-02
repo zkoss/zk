@@ -1,14 +1,18 @@
 package org.zkoss.zktest.bind.viewmodel.validator;
 
 import static java.lang.System.out;
+
 import java.util.Date;
 import java.util.Map;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.Param;
 import org.zkoss.zk.ui.Component;
 
 
@@ -209,25 +213,27 @@ public class Va10{
 	}
 	
 	// -----------command -----------------
+	@Command 
 	public void submit(){
 		out.println("current age is "+age);
 	}
+	@Command 
 	public void submit5(){
 		submit();
 	}
+	@Command 
 	public void checkAdult(){
 		out.println("is Adult: "+isAdult);
 	}	
-	
-	public void add(Map<String, Object> args){
-		Long increment = (Long)args.get("increment");
+	@Command 
+	public void add(@Param("increment") Long increment){
 		age += increment.intValue();
 	}
-
+	@Command 
 	public void add10(){
 		age += 10;
 	}
-	
+	@Command 
 	public void ok(){
 		
 	}

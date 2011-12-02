@@ -13,12 +13,15 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.bind.basic;
 
 import java.util.Map;
+
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.Param;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -132,13 +135,13 @@ public class ArgsComposer extends BindComposer {
 		};
 	}
 
-	@NotifyChange("*")
-	public void cmd1(Map<String,Object> args){
-		this.value1 += args.get("param1");
-		this.value2 += args.get("param2");
+	@NotifyChange("*") @Command
+	public void cmd1(@Param("param1") String param1, @Param("param2") String param2){
+		this.value1 += param1;
+		this.value2 += param2;
 	}
 	
-	@NotifyChange(".")
+	@NotifyChange(".") @Command
 	public void cmd2(){
 		setMessage4("execute cmd2");
 	}

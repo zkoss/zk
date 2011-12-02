@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.bind.issue;
 
 import org.zkoss.bind.BindComposer;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 
 /**
@@ -45,18 +46,18 @@ public class F0015 extends BindComposer {
 
 
 	//notify property, but not base object
-	@NotifyChange("*")
+	@Command @NotifyChange("*")
 	public void cmd1(){
 		this.value1 = "doCommand1";
 	}
 	
-	@NotifyChange("*")
+	@Command @NotifyChange("*")
 	public void cmd2(){
 		this.value2 = "doCommand2";
 		getBinder().postCommand("cmd3", null);
 	}
 	
-	@NotifyChange("*")
+	@Command @NotifyChange("*")
 	public void cmd3(){
 		this.value3 = "doCommand3";
 	}

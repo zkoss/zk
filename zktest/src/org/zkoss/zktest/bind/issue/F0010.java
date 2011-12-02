@@ -14,9 +14,11 @@ package org.zkoss.zktest.bind.issue;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 
@@ -105,7 +107,7 @@ public class F0010 extends BindComposer {
 	}
 	
 	
-	@NotifyChange("converterPool")
+	@Command @NotifyChange("converterPool")
 	public void cmd1(){
 		converterPool.put("converter1", new Converter() {
 			public Object coerceToUi(Object val, Component component,
@@ -120,7 +122,7 @@ public class F0010 extends BindComposer {
 		});
 	}
 	
-
+	@Command 
 	public void cmd2(){
 		converterPool.put("converter1", new Converter() {
 			public Object coerceToUi(Object val, Component component,
