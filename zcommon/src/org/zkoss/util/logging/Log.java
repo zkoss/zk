@@ -353,7 +353,24 @@ public class Log {
 		}
 	}
 
+	private String format(String format,Object... args){
+		String d;
+		try{
+			d = String.format(format, args);
+		}catch(Exception x){
+			d = x.getMessage()+": "+format;
+		}
+		return d;
+	}
+
 	//-- ERROR --//
+	/** Logs a debug message with a format and arguments.
+	 * The message is formatted by use of String.format.
+	 * @since 6.0.0
+	 */
+	public void error(String format,Object... args){
+		error(format(format,args));
+	}
 	/**
 	 * Logs an error message and a throwable object.
 	 *
@@ -429,6 +446,13 @@ public class Log {
 	}
 
 	//-- WARNING --//
+	/** Logs a warning message with a format and arguments.
+	 * The message is formatted by use of String.format.
+	 * @since 6.0.0
+	 */
+	public void warning(String format,Object... args){
+		warning(format(format,args));
+	}
 	/**
 	 * Logs a warning message and a throwable object.
 	 *
@@ -504,6 +528,13 @@ public class Log {
 	}
 
 	//-- INFO --//
+	/** Logs an info message with a format and arguments.
+	 * The message is formatted by use of String.format.
+	 * @since 6.0.0
+	 */
+	public void info(String format,Object... args){
+		info(format(format,args));
+	}
 	/**
 	 * Logs an info message and a throwable object.
 	 *
@@ -580,6 +611,13 @@ public class Log {
 	}
 
 	//-- DEBUG --//
+	/** Logs a debug message with a format and arguments.
+	 * The message is formatted by use of String.format.
+	 * @since 6.0.0
+	 */
+	public void debug(String format,Object... args){
+		debug(format(format,args));
+	}
 	/**
 	 * Logs a debug message and a throwable object.
 	 *
@@ -655,6 +693,13 @@ public class Log {
 	}
 
 	//-- FINER --//
+	/** Logs a finer message with a format and arguments.
+	 * The message is formatted by use of String.format.
+	 * @since 6.0.0
+	 */
+	public void finer(String format,Object... args){
+		finer(format(format,args));
+	}
 	/**
 	 * Logs a finer message and a throwable object.
 	 */
