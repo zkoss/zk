@@ -147,22 +147,23 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
 				((ComposerExt)_cs[j]).doFinally();
 	}
-}
-/*package*/ class MultiComposerExt<T extends Component>
-extends MultiComposer<T> implements ComposerExt<T> {
-	/*package*/ MultiComposerExt(Composer<T>[] cs) throws Exception {
-		super(cs);
+
+	private static class MultiComposerExt<T extends Component>
+	extends MultiComposer<T> implements ComposerExt<T> {
+		private MultiComposerExt(Composer<T>[] cs) throws Exception {
+			super(cs);
+		}
 	}
-}
-/*package*/ class MultiFullComposer<T extends Component>
-extends MultiComposer<T> implements FullComposer {
-	/*package*/ MultiFullComposer(Composer<T>[] cs) throws Exception {
-		super(cs);
+	private static class MultiFullComposer<T extends Component>
+	extends MultiComposer<T> implements FullComposer {
+		private MultiFullComposer(Composer<T>[] cs) throws Exception {
+			super(cs);
+		}
 	}
-}
-/*package*/ class MultiFullComposerExt<T extends Component>
-extends MultiFullComposer<T> implements ComposerExt<T> {
-	/*package*/ MultiFullComposerExt(Composer<T>[] cs) throws Exception {
-		super(cs);
+	private static class MultiFullComposerExt<T extends Component>
+	extends MultiFullComposer<T> implements ComposerExt<T> {
+		private MultiFullComposerExt(Composer<T>[] cs) throws Exception {
+			super(cs);
+		}
 	}
 }
