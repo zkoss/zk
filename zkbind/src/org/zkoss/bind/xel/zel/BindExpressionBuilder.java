@@ -19,6 +19,7 @@ import java.util.List;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.LogUtil;
@@ -86,11 +87,15 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 				if (fieldName != null) {
 					if (binding instanceof SavePropertyBinding) {
 						log.debug("add save-filed %s to form %s", fieldName,formBean);
-						formBean.addSaveFieldName(fieldName);
+						if(formBean instanceof FormExt){
+							((FormExt)formBean).addSaveFieldName(fieldName);
+						}
 						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop,(SavePropertyBinding)binding);
 					} else if (binding instanceof LoadPropertyBinding) {
 						log.debug("add load-filed %s to form %s", fieldName,formBean);
-						formBean.addLoadFieldName(fieldName);
+						if(formBean instanceof FormExt){
+							((FormExt)formBean).addLoadFieldName(fieldName);
+						}
 					}
 					//initialize Tracker per the series (in special Form way)
 					if(dotracker){

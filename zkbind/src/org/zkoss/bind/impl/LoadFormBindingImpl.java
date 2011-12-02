@@ -48,14 +48,17 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = ctx.getComponent();
 		final Form form = getFormBean();
-		for (String field : form.getLoadFieldNames()) {
-			final ExpressionX expr = getFieldExpression(eval, field);
-			if (expr != null) {
-				final Object value = eval.getValue(ctx, comp, expr);
-				form.setField(field, value);
+		if(form instanceof FormExt){
+			for (String field : ((FormExt)form).getLoadFieldNames()) {
+				final ExpressionX expr = getFieldExpression(eval, field);
+				if (expr != null) {
+					final Object value = eval.getValue(ctx, comp, expr);
+					form.setField(field, value);
+				}
 			}
+			((FormExt)form).resetDirty(); //initial loading, mark form as clean
 		}
-		((FormImpl)form).initFields(); //initial loading, mark form as clean
+		
 		
 		binder.notifyChange(form, "*"); //notify change of fx.*
 		if(form instanceof FormExt){

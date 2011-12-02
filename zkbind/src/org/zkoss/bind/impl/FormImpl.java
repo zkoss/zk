@@ -69,7 +69,8 @@ public class FormImpl implements Form,FormExt {
 		}
 	}
 	
-	/*package*/ void initFields() {
+	@Override
+	public void resetDirty() {
 		_initFields.putAll(_fields);
 		_dirtyFieldNames.clear();
 	}

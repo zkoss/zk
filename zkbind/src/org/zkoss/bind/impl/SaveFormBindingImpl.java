@@ -93,12 +93,13 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Form form = getFormBean();
 
 		//update form field into backing bean
-//		final boolean vali = isValidate();
-		for (String field : form.getSaveFieldNames()) {
-			final ExpressionX expr = getFieldExpression(eval, field);
-			if (expr != null) {
-				final Object value = form.getField(field);
-				eval.setValue(ctx, comp, expr, value);
+		if(form instanceof FormExt){
+			for (String field : ((FormExt)form).getSaveFieldNames()) {
+				final ExpressionX expr = getFieldExpression(eval, field);
+				if (expr != null) {
+					final Object value = form.getField(field);
+					eval.setValue(ctx, comp, expr, value);
+				}
 			}
 		}
 		//TODO should we clear form dirty and notify formStatus?
@@ -132,12 +133,14 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		final Form form = getFormBean();
 	
 		//remember base and form field
-		for (String field : form.getSaveFieldNames()) {
-			final ExpressionX expr = getFieldExpression(eval, field);
-			if (expr != null) {
-				final ValueReference ref = eval.getValueReference(ctx, comp, expr);
-				final Object value = form.getField(field);
-				properties.add(new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value));
+		if(form instanceof FormExt){
+			for (String field : ((FormExt)form).getSaveFieldNames()) {
+				final ExpressionX expr = getFieldExpression(eval, field);
+				if (expr != null) {
+					final ValueReference ref = eval.getValueReference(ctx, comp, expr);
+					final Object value = form.getField(field);
+					properties.add(new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value));
+				}
 			}
 		}
 		return properties;
