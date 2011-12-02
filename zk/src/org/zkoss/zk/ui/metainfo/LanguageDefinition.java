@@ -940,7 +940,7 @@ public class LanguageDefinition {
 			if (_compdef == null) //no sync since racing is OK
 				_compdef = getComponentDefinition(_name);
 
-			final ComponentInfo info = new ComponentInfo(parent, _compdef);
+			final ComponentInfo info = new ComponentInfo(parent, _compdef, null);
 			info.addProperty(_prop, text, null);
 			return info;
 		}

@@ -792,10 +792,10 @@ public class Parser {
 				ComponentDefinition compdef =
 					defaultNS ? pgdef.getComponentDefinitionMap().get(nm): null;
 				if (compdef != null) {
-					compInfo = new ComponentInfo(parent, compdef);
+					compInfo = new ComponentInfo(parent, compdef, nm);
 				} else if (complangdef.hasComponentDefinition(nm)) {
 					compdef = complangdef.getComponentDefinition(nm);
-					compInfo = new ComponentInfo(parent, compdef);
+					compInfo = new ComponentInfo(parent, compdef, nm);
 					langdef = complangdef;
 				} else {
 					compdef = complangdef.getDynamicTagDefinition();

@@ -92,8 +92,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * @param compdef the component definition; never null
 	 * @param tag the tag name; Note: if component implements
 	 * {@link DynamicTag}, this argument must be specified.
-	 * If {@link DynamicTag} is not implemented, this argument must
-	 * be null.
+	 * If {@link DynamicTag} is not implemented, this argument is optional.
 	 */
 	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef,
 	String tag) {
@@ -103,13 +102,6 @@ public class ComponentInfo extends ForEachBranchInfo {
 			throw new IllegalArgumentException();
 		_compdef = compdef;
 		_tag = tag;
-	}
-	/** Constructs the info about how to create a component that is not
-	 * a dynamic tag.
-	 * @param parent the parent; never null.
-	 */
-	public ComponentInfo(NodeInfo parent, ComponentDefinition compdef) {
-		this(parent, compdef, null);
 	}
 	/** Constructs the info without a prent.
 	 * Used only by {@link NativeInfo}.
@@ -618,7 +610,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 		} finally {
 			ComponentsCtrl.setCurrentInfo((ComponentInfo)null);
 		}
-		if (comp instanceof DynamicTag)
+		if (comp instanceof DynamicTag && _tag != null)
 			((DynamicTag)comp).setTag(_tag);
 		return comp;
 	}
