@@ -676,16 +676,18 @@ the short time styling.
 
 	/**
 	 * Drops down or closes the calendar to select a date.
-	 * 
+	 * only works while visible
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open)
-			open();
-		else
-			close();
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
+		}
 	}
 
 	/**

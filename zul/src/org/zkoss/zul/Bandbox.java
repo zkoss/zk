@@ -105,14 +105,16 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	}
 
 	/** Drops down or closes the child.
-	 *
+	 * only works while visible
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (isVisible()) {
+			if (open) open();
+			else close();
+		}
 	}
 	/** Drops down the child.
 	 * The same as setOpen(true).

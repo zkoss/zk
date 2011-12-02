@@ -396,14 +396,16 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
-	 *
+	 * only works while visible
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (isVisible()) {
+			if (open) open();
+			else close();
+		}
 	}
 	/** Drops down the list of combo items ({@link Comboitem}.
 	 * It is the same as setOpen(true).

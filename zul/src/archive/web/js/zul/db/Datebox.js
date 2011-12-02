@@ -321,10 +321,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	/** Drops down or closes the calendar to select a date.
 	 */
 	setOpen: function(open, _focus_) {
-		var pop;
-		if (pop = this._pop)
-			if (open) pop.open(!_focus_);
-			else pop.close(!_focus_);
+		if (this.isRealVisible()) {
+			var pop;
+			if (pop = this._pop)
+				if (open) pop.open(!_focus_);
+				else pop.close(!_focus_);
+		}
 	},
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
