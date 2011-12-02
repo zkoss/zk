@@ -191,11 +191,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 	//super
 	open: function (opts) {
-		// do nothing if not visible
-		if (this.isVisible()) {
-			this.$supers('open', arguments);
-			this._hilite(); //after _open is set
-		}
+		this.$supers('open', arguments);
+		this._hilite(); //after _open is set
 	},
 	dnPressed_: function (evt) {
 		this._updnSel(evt);

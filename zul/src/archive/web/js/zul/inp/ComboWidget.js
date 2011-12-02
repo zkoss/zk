@@ -120,8 +120,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @see #close
 	 */
 	setOpen: function (open, opts) {
-		if (open) this.open(opts);
-		else this.close(opts);
+		if (this.isRealVisible()) {
+			if (open) this.open(opts);
+			else this.close(opts);
+		}
 	},
 	/** Returns whether the list of combo items is open
 	 * @return boolean

@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.mesg.MCommon;
@@ -79,6 +80,8 @@ public class LogService {
 	 *
 	 * <p>Note: it also enables the hierarchy support of loggers by
 	 * calling {@link Log#setHierarchy} with true.
+	 * Notice the heirachy is always disabled if a library property called
+	 * <code>org.zkoss.util.logging.hierarchy.disabled</code> is set to true.
 	 *
 	 * @param rootnm the name of the root logger. The logging service
 	 * registered handlers at the specified logger.

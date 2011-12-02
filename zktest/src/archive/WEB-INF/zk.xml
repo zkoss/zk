@@ -80,9 +80,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
-	<!--
+	<!-- Uncomment if you want to load conf/i3-log.conf for logging ZK core
 	<log>
-		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
 		<log-base>org.zkoss</log-base>
 	</log>
 	-->

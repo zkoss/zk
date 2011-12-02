@@ -458,7 +458,7 @@ public class Combobox extends Textbox {
 		return _open;
 	}
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
-	 *
+	 * only works while visible
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
@@ -466,8 +466,10 @@ public class Combobox extends Textbox {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			if (open) open();
-			else close();
+			if (isVisible()) {
+				if (open) open();
+				else close();
+			}
 		}
 	}
 	/** Drops down the list of combo items ({@link Comboitem}.

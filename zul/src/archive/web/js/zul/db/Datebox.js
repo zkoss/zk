@@ -330,10 +330,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	/** Drops down or closes the calendar to select a date.
 	 */
 	setOpen: function(open, _focus_) {
-		var pop;
-		if (pop = this._pop)
-			if (open) pop.open(!_focus_);
-			else pop.close(!_focus_);
+		if (this.isRealVisible()) {
+			var pop;
+			if (pop = this._pop)
+				if (open) pop.open(!_focus_);
+				else pop.close(!_focus_);
+		}
 	},
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
@@ -503,8 +505,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this._pop) this._pop.close();
 	},
 	onChange: function (evt) {
+		var data = evt.data,
+			inpValue = this.getInputNode().value;
 		if (this._pop)
-			this._pop.setValue(evt.data.value);
+			this._pop.setValue(data.value);
+		// B50-ZK-631: Datebox format error message not shown with implements CustomConstraint
+		// pass input value to server for showCustomError
+		if (!data.value && inpValue
+				&& this.getFormat() && this._cst == "[c")
+			data.value = inpValue;
 	},
 	/** Returns the label of the time zone
 	 * @return String

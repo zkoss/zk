@@ -675,16 +675,18 @@ the short time styling.
 
 	/**
 	 * Drops down or closes the calendar to select a date.
-	 * 
+	 * only works while visible
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open)
-			open();
-		else
-			close();
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
+		}
 	}
 
 	/**
@@ -779,8 +781,17 @@ the short time styling.
 	}
 
 	protected String coerceToString(Object value) {
-		final DateFormat df = getDateFormat(getRealFormat());
-		return value != null ? df.format((Date) value) : "";
+		if (value == null)
+			return "";
+		if (value instanceof Date) {
+			final DateFormat df = getDateFormat(getRealFormat());
+			return df.format((Date) value);
+		}
+		// ZK-631, will receive the "wrong" string value
+		// if set both custom constraint and format
+		// for showCustomError
+		throw showCustomError(new WrongValueException(this,
+				MZul.DATE_REQUIRED, new Object[] { value, getRealFormat() }));
 	}
 
 	/**
