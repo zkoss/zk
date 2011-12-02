@@ -707,7 +707,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		comp.setAttribute(BinderImpl.VAR, varnm);
 		
 		final String itervar = (String) tm.getParameters().get("status");
-		final String itervarnm = itervar == null ? "iterationStatus" : itervar; //provide default value if not specified
+		final String itervarnm = itervar == null ? var+"Status" : itervar; //provide default value if not specified
 		comp.setAttribute(BinderImpl.ITERATION_VAR, itervarnm);
 
 		if (attrs != null) {
