@@ -1,0 +1,52 @@
+<?init class="org.zkoss.zktest.bind.basic.ViewModelInit"?>
+<?import class="org.zkoss.bind.*"?>
+<?import class="org.zkoss.zktest.bind.basic.ViewModelInit$SubViewModel"?>
+<window>
+	<vbox apply="BindComposer" viewModel="@id('vm1') @init(myvm1)" >
+		<label id="vm1_l1" value="@bind(vm1.name)" />
+		<hbox>
+			<textbox id="vm1_t1" value="@bind(vm1.value1) @converter(vm1.converter1)"/>
+			<label id="vm1_l2" value="@bind(vm1.value1) @converter('converter1')"/>
+		</hbox>
+		<hbox>
+			<label id="vm1_l3" value="@bind(vm1.value2)"/>
+			<button id="vm1_btn" label="cmd1" onClick="@command('cmd1')"/>	
+		</hbox>
+	</vbox>
+	<vbox apply="BindComposer" viewModel="@id('vm2') @init(myvm2)" >
+		<label id="vm2_l1" value="@bind(vm2.name)" />
+		<hbox>
+			<textbox id="vm2_t1" value="@bind(vm2.value1) @converter(vm2.converter1)"/>
+			<label id="vm2_l2" value="@bind(vm2.value1) @converter('converter1')"/>
+		</hbox>
+		<hbox>
+			<label id="vm2_l3" value="@bind(vm2.value2)"/>
+			<button id="vm2_btn" label="cmd1" onClick="@command('cmd1')"/>	
+		</hbox>
+		
+		---Nested---
+		<vbox apply="BindComposer" viewModel="@id('vm3') @init(myvm3)" >
+			<label id="vm3_l1" value="@bind(vm3.name)" />
+			<hbox>
+				<textbox id="vm3_t1" value="@bind(vm3.value1) @converter(vm3.converter1)"/>
+				<label id="vm3_l2" value="@bind(vm3.value1) @converter('converter1')"/>
+			</hbox>
+			<hbox>
+				<label id="vm3_l3" value="@bind(vm3.value2)"/>
+				<button id="vm3_btn" label="cmd1" onClick="@command('cmd1')"/>	
+			</hbox>
+		</vbox>			
+		---End Nested---
+	</vbox>
+	<vbox apply="BindComposer" viewModel="@id('vm4') @init('ViewModelInit$SubViewModel')" >
+		<label id="vm4_l1" value="@bind(vm4.name)" />
+		<hbox>
+			<textbox id="vm4_t1" value="@bind(vm4.value1) @converter(vm4.converter1)"/>
+			<label id="vm4_l2" value="@bind(vm4.value1) @converter('converter1')"/>
+		</hbox>
+		<hbox>
+			<label id="vm4_l3" value="@bind(vm4.value2)"/>
+			<button id="vm4_btn" label="cmd1" onClick="@command('cmd1')"/>	
+		</hbox>
+	</vbox>		
+</window>

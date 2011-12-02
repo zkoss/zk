@@ -1,0 +1,59 @@
+<window apply="org.zkoss.zktest.bind.basic.PropertyComposer">
+	<custom-attributes composerName="vm"/>
+	<grid width="500px">
+		<columns>
+			<column label="" width="40px" />
+			<column label="A"  />
+			<column label="B"  />
+			<column label="C"  />
+		</columns>
+		<rows>
+			<row>
+				1
+				<textbox id="t1" value="@bind(vm.value1)" />
+				<!-- load when vm.value1 was changed -->
+				<label id="l1" value="@bind(vm.value1)" />
+				<!-- only load when cmd1 -->
+				<label id="l1x" value="@load(vm.value1, after='cmd1')" />
+			</row>
+			<row>
+				2
+				<!-- always change, but only load when cmd2, cmd2 will plus a post text on value2 -->
+				<textbox id="t2" value="@save(vm.value2) @load(vm.value2, after='cmd2')" />
+				<!-- load when vm.value2 was changed -->
+				<label id="l2" value="@bind(vm.value2)" />
+				<!-- only load when cmd2 -->
+				<label id="l2x" value="@load(vm.value2, after='cmd2')" />
+			</row> 
+			<row>
+				3
+				<!-- save before cmd3, load when value3 was changed, cmd3 will plus a post text on value3 -->
+				<textbox id="t3" value="@load(vm.value3) @save(vm.value3,before='cmd3')" />
+				<label id="l3" value="@load(vm.value3, before='cmd3')" />
+				<label id="l3x" value="@load(vm.value3, after='cmd3')" />
+			</row>
+			<!-- 
+			<row>
+				4
+				<textbox id="t4" value="@load(vm.value4) @save(vm.value4, before='cmd4')" />
+				<label id="l4" value="@load(vm.value4, before='cmd4')" />
+				<label id="l4x" value="@load(vm.value4, after='cmd4')" />
+			</row>
+			 -->
+		</rows>
+
+	</grid>
+	<hbox>
+		<button id="cmd1" label="Cmd1" onClick="@command('cmd1')" />
+		<button id="cmd2" label="Cmd2" onClick="@command('cmd2')" />
+		<button id="cmd3" label="Cmd3" onClick="@command('cmd3')" />
+		<button id="change3" label="Change3" onClick="@command('change3')" />
+		<!-- 
+		<button label="c4" onClick="@command('cmd4')" />
+		 -->
+	</hbox>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>
+
+</window>

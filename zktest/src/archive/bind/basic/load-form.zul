@@ -1,0 +1,37 @@
+<window apply="org.zkoss.zktest.bind.basic.LoadComposer">
+	<custom-attributes composerName="vm"/>
+<grid width="1000px" >
+	<columns>
+		<column label="First Name"></column>
+		<column label="Last Name"></column>
+		<column label="Full Name"></column>
+		<column label="Address.street"></column>
+	</columns>
+	<rows>
+		<row id="row1">
+			<textbox id="l1" value="@bind(vm.p1.firstName)"/>
+			<label id="l2" value="@bind(vm.p1.lastName)"/>
+			<label id="l3" value="@bind(vm.p1.fullName)"/>
+			<label id="l4" value="@bind(vm.p1.address.street)"/>
+		</row>	
+		<row id="row2" form="@id('fx') @load(vm.p1) @save(vm.p1,before='saveForm')">
+			<textbox id="l5" value="@bind(fx.firstName)"/>
+			<label id="l6" value="@bind(fx.lastName)"/>
+			<label id="l7" value="@bind(fx.fullName)"/>
+			<label id="l8" value="@bind(fx.address.street)"/>
+		</row>
+	</rows>
+</grid>
+<hbox>
+	bind to p2, p2 will be create when click save form
+	<textbox id="l9" value="@bind(vm.p2.firstName)"/>
+	<label id="la" value="@bind(vm.p2.lastName)"/>
+	<label id="lb" value="@bind(vm.p2.fullName)"/>
+	<label id="lc" value="@bind(vm.p2.address.street)"/>
+</hbox>
+<hbox>
+<button id="btn1" label="save form" onClick="@command('saveForm')"/>
+</hbox>
+
+<button label="Dump" onClick="binder.getTracker().dump()"/>
+</window>

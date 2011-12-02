@@ -1,0 +1,24 @@
+<window apply="org.zkoss.zktest.bind.basic.ValidationComposer">
+	<custom-attributes composerName="vm"/>
+	<vbox>
+		<hbox>Value1:<label id="l11" value="@bind(vm.value1)"></label></hbox>
+		<hbox>Value2:<label id="l12" value="@bind(vm.value2)"></label></hbox>
+	</vbox>	
+	<hbox>
+		Prompt:
+		Value1:<textbox id="t21" value="@bind(vm.value1) @validator('validator1')" errorMessage="@bind(vm.lastMessage1)" />
+		Value2:<textbox id="t22" value="@bind(vm.value2) @validator('validator2')" errorMessage="@bind(vm.lastMessage2)"/>
+	</hbox>	
+	<hbox>
+		Command:
+		Value1:<textbox id="t31" value="@load(vm.value1) @save(vm.value1 ,before='cmd1') @validator('validator1')" />
+		Value2:<textbox id="t32" value="@load(vm.value2) @save(vm.value2 ,before='cmd1') @validator('validator2')" />
+	</hbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+	</hbox>	
+	<vbox>
+		<label id="msg1" value="@bind(vm.lastMessage1)"></label>
+		<label id="msg2" value="@bind(vm.lastMessage2)"></label>
+	</vbox>
+</window>

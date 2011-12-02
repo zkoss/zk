@@ -1,0 +1,40 @@
+<window apply="org.zkoss.zktest.bind.basic.LoadComposer">
+	<custom-attributes composerName="vm"/>
+<grid width="500px" >
+	<columns>
+		<column label="First Name"></column>
+		<column label="Last Name"></column>
+		<column label="Full Name"></column>
+		<column label="Street"></column>
+	</columns>
+	<rows>
+		<row id="row1" value="@bind(vm.p1)">
+			<textbox id="l1" value="@bind(vm.p1.firstName)"/>
+			<label id="l2" value="@bind(vm.p1.lastName)"/>
+			<label id="l3" value="@bind(vm.p1.fullName)"/>
+			<label id="l4" value="@bind(vm.p1.address.street)"/>
+		</row>
+		<row id="row2" value="@bind(vm.selected)">
+			<label id="l5" value="@bind(vm.selected.firstName)"/>
+			<label id="l6" value="@load(vm.selected.lastName)"/>
+			<label id="l7" value="@load(vm.selected.fullName)"/>
+			<label id="l8" value="@load(vm.selected.address.street)"/>
+		</row>
+	</rows>
+</grid>
+<hbox>
+<button id="btn1" label="change firstName1" onClick="@command('changeFirstName1')"/>
+<button id="btn2" label="change lastName1" onClick="@command('changeLastName1')"/>
+
+<button id="btn3" label="change firstName2" onClick="@command('changeFirstName2')"/>
+<button id="btn4" label="change lastName2" onClick="@command('changeLastName2')"/>
+
+<button id="btn5" label="event change lastName1" onClick="vm.changeLastName1()"/>
+<button id="btn6" label="event change lastName2" onClick="vm.changeLastName2()"/>
+</hbox>
+<hbox>
+<button id="btn7" label="p1 only" onClick="@command('notifyP1')"/>
+<button id="btn8" label="selected only" onClick="@command('notifySelected')"/>
+</hbox>
+<button label="Dump" onClick="binder.getTracker().dump()"/>
+</window>
