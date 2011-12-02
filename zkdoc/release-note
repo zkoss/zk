@@ -44,6 +44,7 @@ ZK 5.0.10
   ZK-629: Problem in Decimalbox when using Spanish locale from browser 
   ZK-637: Cannot set 0 to error-code in the error-reload element
   ZK-631: Datebox format error message not shown with implements CustomConstraint
+  ZK-641: Borderlayout label width inconsistent between browsers 
 
 	--------
 ZK 5.0.9
