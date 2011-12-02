@@ -47,8 +47,8 @@ ZK 6.0.0
   ZK-523: Columnlayout support any child not limited to Panel
   ZK-537: Hlayout supports valign (top, middle and bottom)
   ZK-503: Add a new component, idspace: as light as div but implements IdSpace
-  ZK-541: GenericAnnotatedComposer uses annotation to control whether to write zscript and XEL variables 
-  ZK-553: GenericAnnotatedComposer shall implement ComponentActivationListener and rewire Session/WebApp 
+  ZK-541: SelectorComposer uses annotation to control whether to write zscript and XEL variables 
+  ZK-553: SelectorComposer shall implement ComponentActivationListener and rewire Session/WebApp 
   ZK-609: A way to access the browser information with an implicit object in EL (such as ${zk.ie >= 9})
   ZK-613: The root component is considered as an ID space, so getFellow and wire will work
   ZK-618: WebApp and Execution support log(String) and log(String,Throwable)
