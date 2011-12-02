@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Document;
@@ -85,7 +84,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			//We overwrite because the order is the parent class loader first
 			//so WEB-INF/lib is placed after
 		}
-//		if (D.ON && rcmap.isEmpty() && log.debugable()) log.debug("No resouce is found for "+name);
+//		if (rcmap.isEmpty() && log.debugable()) log.debug("No resouce is found for "+name);
 
 		final List<Resource> rcs = new LinkedList<Resource>(); //a list of Document
 		final Set<String> resolving = new LinkedHashSet<String>();
@@ -95,7 +94,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			final XMLResource xr = it.next();
 			it.remove();
 			resolveDependency(xr, rcs, rcmap, resolving);
-			assert D.OFF || resolving.isEmpty();
+			assert resolving.isEmpty();
 		}
 		return rcs;
 	}
@@ -113,7 +112,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		rcs.add(new Resource(xr.url, xr.document));
 		resolving.remove(xr.name);
 
-		if (D.ON && log.debugable()) log.debug("Adding resolved resource: "+xr.name);
+		if (log.debugable()) log.debug("Adding resolved resource: "+xr.name);
 	}
 	/** Info used with getDependentXMLResource. */
 	private static class XMLResource {
@@ -124,7 +123,7 @@ public class ClassLocator implements XMLResourcesLocator {
 
 		private XMLResource(URL url, String elName, String elDepends)
 		throws IOException{
-			if (D.ON && log.debugable()) log.debug("Loading "+url);
+			if (log.debugable()) log.debug("Loading "+url);
 			try {
 				this.document = new SAXBuilder(false, false, true).build(url);
 			} catch (Exception ex) {
@@ -144,7 +143,7 @@ public class ClassLocator implements XMLResourcesLocator {
 			} else {
 				this.depends = new LinkedList<String>();
 				CollectionsX.parse(this.depends, deps, ',');
-				if (D.ON && log.finerable()) log.finer(this.name+" depends on "+this.depends);
+				if (log.finerable()) log.finer(this.name+" depends on "+this.depends);
 			}
 		}
 		public String toString() {

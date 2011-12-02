@@ -224,13 +224,14 @@ public class AuResponse {
 		s = s.trim();
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
 	}
-}
-/*package*/ class JSONDate implements JSONAware {
-	private Date _d;
-	/*package*/ JSONDate(Date d) {
-		_d = d;
-	}
-	public String toJSONString() {
-		return "jq.j2d('" + JSONs.d2j(_d) + "')";
+
+	private static class JSONDate implements JSONAware {
+		private Date _d;
+		private JSONDate(Date d) {
+			_d = d;
+		}
+		public String toJSONString() {
+			return "jq.j2d('" + JSONs.d2j(_d) + "')";
+		}
 	}
 }

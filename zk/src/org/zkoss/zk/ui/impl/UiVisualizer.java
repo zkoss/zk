@@ -34,7 +34,6 @@ import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 
@@ -155,7 +154,7 @@ import org.zkoss.zk.au.out.*;
 	public final boolean addToFirstAsyncUpdate(List<AuResponse> responses) {
 		if (!_1stau) return false;
 
-//		if (D.ON && log.finerable()) log.finer("Add to 1st au: "+responses);
+//		if (log.finerable()) log.finer("Add to 1st au: "+responses);
 		UiVisualizer root = getRoot();
 		for (AuResponse response: responses)
 			root.addResponse(null, response);
@@ -497,7 +496,7 @@ import org.zkoss.zk.au.out.*;
 		if (_pgRemoved == null) _pgRemoved = new LinkedHashSet<Page>();
 		_pgRemoved.add(page);
 		if (_pgInvalid != null) _pgInvalid.remove(page);
-//		if (D.ON && log.debugable()) log.debug("Page removed: "+page);
+//		if (log.debugable()) log.debug("Page removed: "+page);
 	}
 	/** Clears components if it belongs to invalidated or removed page. */
 	private void clearInInvalidPage(Collection<Component> coll) {
@@ -532,7 +531,7 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public List<AuResponse> getResponses(Collection<Component> renderedComps)
 	throws IOException {
-/*		if (D.ON && log.finerable())
+/*		if (log.finerable())
 			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
 				+"\npgInvalid: "+_pgInvalid	+"\nUuidChanged: "+_idChgd);
@@ -693,7 +692,7 @@ import org.zkoss.zk.au.out.*;
 		_pgInvalid = _pgRemoved = null;
 		_responses = null;
 
-//		if (D.ON && log.debugable()) log.debug("Return responses: "+responses);
+//		if (log.debugable()) log.debug("Return responses: "+responses);
 //		System.out.println("Return responses: "+responses);
 		return responses;
 	}
@@ -777,7 +776,7 @@ import org.zkoss.zk.au.out.*;
 
 		Collection<? extends Component> sibs = parent != null ?
 			getAvailableAtClient(parent, croppingInfos): null;
-//		if (D.ON && log.finerable()) log.finer("All sibs: "+sibs+" newsibs: "+newsibs);
+//		if (log.finerable()) log.finer("All sibs: "+sibs+" newsibs: "+newsibs);
 
 		/* Algorithm: 5.0.7
 	1. Groups newsibs

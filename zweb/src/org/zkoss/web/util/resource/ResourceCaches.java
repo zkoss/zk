@@ -25,7 +25,6 @@ import java.net.URL;
 
 import javax.servlet.ServletContext;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
@@ -70,7 +69,6 @@ public class ResourceCaches {
 	//We don't need to handle the default name if user specifies only a dir
 	//because it is handled by the container directlys
 	//And, web  developer has to specify <welcome-file> in web.xml
-//		if (D.ON && log.finerable()) log.finer("Servlet path: "+path);
 		URL url = null;
 		if (path == null || path.length() == 0) path = "/";
 		else if (path.charAt(0) != '/') {
@@ -114,7 +112,7 @@ public class ResourceCaches {
 
 				ctx = ctx.getContext(ctxpath);
 				if (ctx == null) { //failed
-//					if (D.ON && log.debugable()) log.debug("Context not found: "+ctxpath);
+//					if (log.debugable()) log.debug("Context not found: "+ctxpath);
 					ctx = ctx0; path = path0;//restore
 				}
 			}

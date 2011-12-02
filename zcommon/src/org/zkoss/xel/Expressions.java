@@ -179,28 +179,29 @@ public class Expressions {
 	public static final Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return _expfcls;
 	}
+
+	private static class EmptyMapper
+	implements FunctionMapper, java.io.Serializable {
+		//-- FunctionMapper --//
+		public Function resolveFunction(String prefix, String name) {
+			return null;
+		}
+		public Collection<String> getClassNames() {
+			return Collections.emptyList();
+		}
+		public Class<?> resolveClass(String name) {
+			return null;
+		}
+	}
+	private static class EmptyResolver
+	implements VariableResolver, java.io.Serializable {
+		public Object resolveVariable(String name) {
+			return null;
+		}
+	}
+	private static class DummyExpr implements Expression, java.io.Serializable {
+		public Object evaluate(XelContext ctx) throws XelException {
+			return null;
+		}
+	};
 }
-/*package*/ class EmptyMapper
-implements FunctionMapper, java.io.Serializable {
-	//-- FunctionMapper --//
-	public Function resolveFunction(String prefix, String name) {
-		return null;
-	}
-	public Collection<String> getClassNames() {
-		return Collections.emptyList();
-	}
-	public Class<?> resolveClass(String name) {
-		return null;
-	}
-}
-/*package*/ class EmptyResolver
-implements VariableResolver, java.io.Serializable {
-	public Object resolveVariable(String name) {
-		return null;
-	}
-}
-/*package*/ class DummyExpr implements Expression, java.io.Serializable {
-	public Object evaluate(XelContext ctx) throws XelException {
-		return null;
-	}
-};

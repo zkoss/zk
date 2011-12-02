@@ -38,7 +38,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
@@ -244,7 +243,7 @@ public class ClassWebResource {
 	HttpServletResponse response)
 	throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-//		if (D.ON && log.debugable()) log.debug("Path info: "+pi);
+//		if (log.debugable()) log.debug("Path info: "+pi);
 		if (pi != null)
 			service(request, response, pi.substring(PATH_PREFIX.length()));
 	}
@@ -761,7 +760,7 @@ public class ClassWebResource {
 				_mappingURI + uri, params, mode);
 		}
 		public RequestDispatcher getRequestDispatcher(String uri) {
-//			if (D.ON && log.debugable()) log.debug("getRequestDispatcher: "+uri);
+//			if (log.debugable()) log.debug("getRequestDispatcher: "+uri);
 			return _ctx.getRequestDispatcher(_mappingURI + uri);
 		}
 		public void include(HttpServletRequest request,

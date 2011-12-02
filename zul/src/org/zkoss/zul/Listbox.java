@@ -1199,8 +1199,8 @@ public class Listbox extends MeshElement {
 	 * Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-//		assert D.OFF || inPagingMold() : "paging mold only";
-//		assert D.OFF || (_paging == null && _pgi == null);
+//		assert inPagingMold() : "paging mold only";
+//		assert (_paging == null && _pgi == null);
 
 		final Paging paging = new Paging();
 		paging.setAutohide(true);

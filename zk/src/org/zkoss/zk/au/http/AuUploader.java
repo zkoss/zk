@@ -41,7 +41,6 @@ import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.zkoss.image.AImage;
-import org.zkoss.lang.D;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Strings;
@@ -188,7 +187,7 @@ public class AuUploader implements AuExtension {
 				size.put(key, alert);
 			}
 		}
-		if (D.ON && log.finerable()) log.finer(attrs);
+		if (log.finerable()) log.finer(attrs);
 
 		if (nextURI == null || nextURI.length() == 0)
 			nextURI = "~./zul/html/fileupload-done.html.dsp";

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;

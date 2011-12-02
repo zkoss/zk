@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
@@ -772,7 +771,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//We have to synchronize it due to getPage allows concurrent access
 		synchronized (_pages) {
 			_pages.add(page);
-//			if (D.ON && log.debugable()) log.debug("After added, pages: "+_pages);
+//			if (log.debugable()) log.debug("After added, pages: "+_pages);
 		}
 		afterPageAttached(page, this);
 		_wapp.getConfiguration().afterPageAttached(page, this);
@@ -784,7 +783,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				//Both UiVisualizer.getResponses and Include.setChildPage
 				//might calll removePage
 
-//			if (D.ON && log.debugable()) log.debug("After removed, pages: "+_pages);
+//			if (log.debugable()) log.debug("After removed, pages: "+_pages);
 		}
 		removeComponents(page.getRoots());
 

@@ -31,7 +31,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletPreferences;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
@@ -168,7 +167,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	protected boolean process(Session sess, RenderRequest request,
 	RenderResponse response, String path, boolean bRichlet)
 	throws PortletException, IOException {
-		if (D.ON && log.debugable()) log.debug("Creates from "+path);
+//		if (log.debugable()) log.debug("Creates from "+path);
 		final WebManager webman = getWebManager();
 		final WebApp wapp = webman.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl)wapp;

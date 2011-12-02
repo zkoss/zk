@@ -21,7 +21,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Level;
 import java.util.logging.Handler;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
@@ -54,7 +53,7 @@ import org.zkoss.mesg.Messages;
  *
  * <p>To log debug information, we usually also test with D.<br>
  * <pre><code>log.debug("a simple info");
- *if (D.ON && log.debugable())
+ *if (log.debugable())
  *  log.debug(a + complex + string + operation);</code></pre>
  *
  * <p>There is a special level called FINER whose priority is lower than DEBUG.
@@ -835,12 +834,16 @@ Objects.BAR1_STRING
 	public String toString() {
 		return _name;
 	}
-}
-/*package*/ class HierLog extends Log {
-	/*package*/ HierLog(String name) {
-		super(name);
-	}
-	/*package*/ boolean useHierarchy() {
-		return true;
+
+	/**
+	 * Used internally to represent a hierachical log.
+	 */
+	private static class HierLog extends Log {
+		private HierLog(String name) {
+			super(name);
+		}
+		/*package*/ boolean useHierarchy() {
+			return true;
+		}
 	}
 }

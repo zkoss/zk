@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.resource;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.SystemException;
@@ -197,7 +196,7 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 		 * @param src the source
 		 */
 		public Info(K src) throws Exception {
-			//if (D.ON && log.debugable()) log.debug("Loading from "+src);
+			//if (log.debugable()) log.debug("Loading from "+src);
 			_src = src;
 			load();
 		}
@@ -219,8 +218,7 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 			final boolean valid = lastmod == _lastModified;
 			if (!valid)
 				log.info("Source is changed: "+_src);
-			//else if (D.ON && log.finerable())
-			//	log.finer("Source not changed: "+_src);
+			//else if (log.finerable()) log.finer("Source not changed: "+_src);
 			return valid;
 		}
 		/** Loads the file. */

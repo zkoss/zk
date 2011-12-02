@@ -28,7 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.D;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;

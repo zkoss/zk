@@ -38,7 +38,6 @@ import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.XMLReader;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
@@ -296,8 +295,7 @@ implements LexicalHandler, DeclHandler {
 	//-- org.xml.sax.ext.DeclHandler --//
 	public void externalEntityDecl(String name, String pubId, String sysId)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("externalEntityDecl: " + name + " p:" + pubId + " s:" + sysId);
+//		if (log.finerable()) log.finer("externalEntityDecl: " + name + " p:" + pubId + " s:" + sysId);
 
 		if (!_inInternSubset)
 			return;
@@ -312,7 +310,7 @@ implements LexicalHandler, DeclHandler {
 
 	public void internalEntityDecl(String name, String value)
 	throws SAXException { 
-		if (D.ON && log.finerable()) log.finer("internalEntityDecl: " + name + '=' + value);
+//		if (log.finerable()) log.finer("internalEntityDecl: " + name + '=' + value);
 
 		if (!_inInternSubset)
 			return;
@@ -350,8 +348,7 @@ implements LexicalHandler, DeclHandler {
 	//-- org.xml.sax.ext.LexicalHandler --//
 	public void startDTD(String name, String pubId, String sysId)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("start DTD: " + name + " p:" + pubId + " s:" + sysId);
+//		if (log.finerable()) log.finer("start DTD: " + name + " p:" + pubId + " s:" + sysId);
 
 		addToCurrentGroup(_factory.newDocType(name, pubId, sysId));
 		_inDTD = true;
@@ -361,7 +358,7 @@ implements LexicalHandler, DeclHandler {
 
 	//NOTE: xerces does not invoke endDTD if nothing in there
 	public void endDTD() throws SAXException {
-		if (D.ON && log.finerable()) log.finer("end DTD: \"" + _internSubset + '"');
+//		if (log.finerable()) log.finer("end DTD: \"" + _internSubset + '"');
 
 		_doc.getDocType().setInternalSubset(_internSubset.toString());
 		_inDTD = false;
@@ -370,7 +367,7 @@ implements LexicalHandler, DeclHandler {
 	}
 
 	public void startEntity(String name) throws SAXException {
-		if (D.ON && log.finerable()) log.finer("startEntity: " + name);
+//		if (log.finerable()) log.finer("startEntity: " + name);
 
 		//A "[dtd]" entity indicates the beginning of the external subset
 		if (name.equals("[dtd]")) {
@@ -396,7 +393,7 @@ implements LexicalHandler, DeclHandler {
 	}
 
 	public void endEntity(String name) throws SAXException {
-		if (D.ON && log.finerable()) log.finer("endEntity: " + name);
+//		if (log.finerable()) log.finer("endEntity: " + name);
 
 		if (name.equals("[dtd]")) {
 			_inInternSubset = false;
@@ -456,8 +453,7 @@ implements LexicalHandler, DeclHandler {
 
 	public void startPrefixMapping(String prefix, String uri)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("start prefix: " + prefix + ", " + uri + SimpleLocator.toString(_loc));
+//		if (log.finerable()) log.finer("start prefix: " + prefix + ", " + uri + SimpleLocator.toString(_loc));
 
 		final Namespace ns = Namespace.getSpecial(prefix);
 		if (ns == null || !ns.getURI().equals(uri))
@@ -466,8 +462,7 @@ implements LexicalHandler, DeclHandler {
 	}
 
 	public void endPrefixMapping(String prefix) throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("end prefix: " + prefix + SimpleLocator.toString(_loc));
+//		if (log.finerable()) log.finer("end prefix: " + prefix + SimpleLocator.toString(_loc));
 
 		for (Iterator<Namespace> itr = _declNamespaces.iterator(); itr.hasNext();) {
 			final Namespace ns = itr.next();
@@ -481,9 +476,9 @@ implements LexicalHandler, DeclHandler {
 	public void
 	startElement(String nsURI, String lname, String tname, Attributes attrs)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("start element: nsURI=\"" + nsURI + "\", lname=" + lname + ", tname=" + tname
-				+ " attr#=" + attrs.getLength() + SimpleLocator.toString(_loc));
+//		if (log.finerable())
+//			log.finer("start element: nsURI=\"" + nsURI + "\", lname=" + lname + ", tname=" + tname
+//				+ " attr#=" + attrs.getLength() + SimpleLocator.toString(_loc));
 
 		//create the element
 		if (tname == null || tname.length() == 0) //just in case
@@ -542,13 +537,13 @@ implements LexicalHandler, DeclHandler {
 			if (_declNamespaces.size() > 0) {
 				for (Namespace n: _declNamespaces)
 					if (n.getPrefix().equals(prefix) && n.getURI().equals(nsURI)) {
-						if (D.ON && log.finerable()) log.finer("Namespace found in _declNamespaces: "+n);
+//						if (log.finerable()) log.finer("Namespace found in _declNamespaces: "+n);
 						ns = n;
 						break; //found
 					}
 			}
 			if (ns == null && nsURI.length() > 0) {
-				if (D.ON && log.finerable()) log.finer("Create namespace: "+prefix+" "+nsURI);
+//				if (log.finerable()) log.finer("Create namespace: "+prefix+" "+nsURI);
 				ns = new Namespace(prefix, nsURI);
 			}
 		}
@@ -568,8 +563,7 @@ implements LexicalHandler, DeclHandler {
 	}
 	public void endElement
 	(String nsURI, String lname, String tname) throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("end element: " + nsURI + ", " + lname + ", " + tname);
+//		if (log.finerable()) log.finer("end element: " + nsURI + ", " + lname + ", " + tname);
 
 		popGroup();
 	}
@@ -613,8 +607,7 @@ implements LexicalHandler, DeclHandler {
 	public void unparsedEntityDecl
 	(String name, String pubId, String sysId, String notationName)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("externalEntityDecl: " + name + " p:" + pubId + " s:" + sysId + " n:" + notationName);
+//		if (log.finerable()) log.finer("externalEntityDecl: " + name + " p:" + pubId + " s:" + sysId + " n:" + notationName);
 
 		if (!_inInternSubset)
 			return;
@@ -632,8 +625,7 @@ implements LexicalHandler, DeclHandler {
 	//-- org.xml.sax.EntityResolver --//
 	public InputSource resolveEntity(String publicId, String systemId)
 	throws SAXException {
-		if (D.ON && log.finerable())
-			log.finer("resolveEntity public="+publicId+" system="+systemId);
+//		if (log.finerable()) log.finer("resolveEntity public="+publicId+" system="+systemId);
 
 		EntityResolver er = getEntityResolver();
 		if (er != null) {
@@ -646,8 +638,7 @@ implements LexicalHandler, DeclHandler {
 			}
 		} else {
 			InputSource is = defaultResolveEntity(publicId, systemId);
-			if (D.ON && is == null && log.finerable())
-				log.finer("Unable to resolve public="+publicId+" system="+systemId);
+//			if (is == null && log.finerable()) log.finer("Unable to resolve public="+publicId+" system="+systemId);
 			return is;
 		}
 	}
@@ -674,10 +665,10 @@ implements LexicalHandler, DeclHandler {
 			try {
 				final InputSource is = new InputSource(new URL(systemId).openStream());
 				is.setSystemId(systemId);
-				if (D.ON && log.finerable()) log.finer("Entity found "+systemId);
+//				if (log.finerable()) log.finer("Entity found "+systemId);
 				return is;
 			} catch (Exception ex) {
-				if (D.ON && log.finerable()) log.finer("Unable to open "+systemId);
+//				if (log.finerable()) log.finer("Unable to open "+systemId);
 			}
 		}
 
@@ -696,11 +687,11 @@ implements LexicalHandler, DeclHandler {
 			url = loader.getResource(resId);
 		}
 		if (url != null) {
-			if (D.ON && log.finerable()) log.finer("Entity resovled to "+url);
+//			if (log.finerable()) log.finer("Entity resovled to "+url);
 			try {
-			    final InputSource is = new InputSource(url.openStream());
-			    is.setSystemId(url.toExternalForm());
-			    return is;
+				final InputSource is = new InputSource(url.openStream());
+				is.setSystemId(url.toExternalForm());
+				return is;
 			} catch (IOException ex) {
 				throw new SAXException(ex); //not possible because Locator is used
 			}

@@ -22,7 +22,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.servlet.http.Https;
@@ -64,11 +63,11 @@ public class ForwardServlet extends GenericServlet {
 				Https.locate(getServletContext(), request, _target, null);
 			Https.forward(getServletContext(), request, response, uri, null, 0);
 		} catch(Error ex) {
-			if (D.ON && log.debugable())
+			if (log.debugable())
 				log.realCause(ex);
 			throw ex;
 		} catch(RuntimeException ex) {
-			if (D.ON && log.debugable())
+			if (log.debugable())
 				log.realCause(ex);
 			throw ex;
 		}

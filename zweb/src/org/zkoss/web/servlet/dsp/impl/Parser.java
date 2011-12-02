@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.Expressions;

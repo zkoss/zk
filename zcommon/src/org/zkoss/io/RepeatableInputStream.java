@@ -275,90 +275,91 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		}
 		super.finalize();
 	}
-}
-/*package*/ class ResetableInputStream extends InputStream
-implements Repeatable {
-	private final InputStream _org;
-	ResetableInputStream(InputStream bais) {
-		_org = bais;
-	}
 
-	public int read() throws IOException {
-		return _org.read();
-	}
-	/** Closes the current access, and the next call of {@link #read}
-	 * re-opens the buffered input stream.
-	 */
-	public void close() throws IOException {
-		_org.reset();
-	}
+	private static class ResetableInputStream extends InputStream
+	implements Repeatable {
+		private final InputStream _org;
+		ResetableInputStream(InputStream bais) {
+			_org = bais;
+		}
 
-	//Object//
-	protected void finalize() throws Throwable {
-		_org.close();
-		super.finalize();
-	}
-}
-/*package*/ class RepeatableFileInputStream extends InputStream
-implements Repeatable {
-	private final File _file;
-	private InputStream _in;
+		public int read() throws IOException {
+			return _org.read();
+		}
+		/** Closes the current access, and the next call of {@link #read}
+		 * re-opens the buffered input stream.
+		 */
+		public void close() throws IOException {
+			_org.reset();
+		}
 
-	RepeatableFileInputStream(File file) {
-		_file = file;
-	}
-
-	public int read() throws IOException {
-		if (_in == null)
-			_in = new BufferedInputStream(new FileInputStream(_file));
-		return _in.read();
-	}
-	/** Closes the current access, and the next call of {@link #read}
-	 * re-opens the buffered input stream.
-	 */
-	public void close() throws IOException {
-		if (_in != null) {
-			_in.close();
-			_in = null;
+		//Object//
+		protected void finalize() throws Throwable {
+			_org.close();
+			super.finalize();
 		}
 	}
+	private static class RepeatableFileInputStream extends InputStream
+	implements Repeatable {
+		private final File _file;
+		private InputStream _in;
 
-	//Object//
-	protected void finalize() throws Throwable {
-		close();
-		super.finalize();
-	}
-}
-/*package*/ class RepeatableURLInputStream extends InputStream
-implements Repeatable {
-	private final URL _url;
-	private InputStream _in;
-
-	RepeatableURLInputStream(URL url) {
-		_url = url;
-	}
-
-	public int read() throws IOException {
-		if (_in == null) {
-			_in = _url.openStream();
-			if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
-			_in = new BufferedInputStream(_in);
+		RepeatableFileInputStream(File file) {
+			_file = file;
 		}
-		return _in.read();
-	}
-	/** Closes the current access, and the next call of {@link #read}
-	 * re-opens the buffered input stream.
-	 */
-	public void close() throws IOException {
-		if (_in != null) {
-			_in.close();
-			_in = null;
+
+		public int read() throws IOException {
+			if (_in == null)
+				_in = new BufferedInputStream(new FileInputStream(_file));
+			return _in.read();
+		}
+		/** Closes the current access, and the next call of {@link #read}
+		 * re-opens the buffered input stream.
+		 */
+		public void close() throws IOException {
+			if (_in != null) {
+				_in.close();
+				_in = null;
+			}
+		}
+
+		//Object//
+		protected void finalize() throws Throwable {
+			close();
+			super.finalize();
 		}
 	}
+	private static class RepeatableURLInputStream extends InputStream
+	implements Repeatable {
+		private final URL _url;
+		private InputStream _in;
 
-	//Object//
-	protected void finalize() throws Throwable {
-		close();
-		super.finalize();
+		RepeatableURLInputStream(URL url) {
+			_url = url;
+		}
+
+		public int read() throws IOException {
+			if (_in == null) {
+				_in = _url.openStream();
+				if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
+				_in = new BufferedInputStream(_in);
+			}
+			return _in.read();
+		}
+		/** Closes the current access, and the next call of {@link #read}
+		 * re-opens the buffered input stream.
+		 */
+		public void close() throws IOException {
+			if (_in != null) {
+				_in.close();
+				_in = null;
+			}
+		}
+
+		//Object//
+		protected void finalize() throws Throwable {
+			close();
+			super.finalize();
+		}
 	}
 }

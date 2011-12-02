@@ -766,7 +766,7 @@ public class Servlets {
 	void forward(ServletContext ctx, ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
-//		if (D.ON && log.debugable()) log.debug("Forwarding "+uri);
+//		if (log.debugable()) log.debug("Forwarding "+uri);
 
 		//include or foward depending whether this page is included or not
 		if (isIncluded(request)) {
@@ -838,7 +838,7 @@ public class Servlets {
 	void include(ServletContext ctx, ServletRequest request,
 	ServletResponse response, String uri, Map params, int mode)
 	throws IOException, ServletException {
-//		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
+//		if (log.debugable()) log.debug("Including "+uri+" at "+ctx);
 
 		//Note: we don't optimize the include to call ClassWebResource here
 		//since 1) it is too low level (might have some risk)
@@ -1072,10 +1072,6 @@ public class Servlets {
 			uri = uri.substring(0, j);
 		}
 
-		//if (D.ON && uri.indexOf('%') >= 0)
-		//	log.warning(new IllegalStateException("You might encode URL twice: "+uri));
-		//might too annoying
-
 		try {
 			uri = Encodes.encodeURI(uri);
 			final boolean noQstr = qstr == null;
@@ -1148,7 +1144,7 @@ public class Servlets {
 		for (Element e: root.getElements("module")) {
 			final String ctxroot = (String)e.getContent("web/context-root");
 			if (ctxroot == null) {
-//				if (D.ON && log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
+//				if (log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
 				continue;
 			}
 

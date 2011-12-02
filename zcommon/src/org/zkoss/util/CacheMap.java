@@ -26,7 +26,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.ref.ReferenceQueue;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 
@@ -68,7 +67,7 @@ import org.zkoss.util.logging.Log;
  * @author tomyeh
  */
 public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable, Cloneable {
-    private static final long serialVersionUID = 20070907L;
+	private static final long serialVersionUID = 20070907L;
 	//private static final Log log = Log.lookup(CacheMap.class);
 
 	/** The map to store the mappings. */
@@ -224,7 +223,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 				final Value<V> v = it.next();
 				final int result = canExpunge(v);
 				if ((result & EXPUNGE_YES) != 0) {
-					//if (D.ON && log.debugable())
+					//if (log.debugable())
 					//	log.debug("expunge: value="+v.value+" size="+_map.size()+"("+getMaxSize()+") time="+v.access+"("+getLifetime()+")");
 
 					it.remove();

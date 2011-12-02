@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.http.Https;
 

@@ -851,7 +851,7 @@ public class Classes {
 	Method myGetCloseMethod(final Class<?> cls, final String name,
 	final Class<?>[] argTypes, final boolean bySubclass)
 	throws NoSuchMethodException {
-		assert D.OFF || argTypes != null: "Caller shall handle null";
+//		assert argTypes != null: "Caller shall handle null";
 		for (int j = 0;; ++j) {
 			if (j == argTypes.length) {//all argTypes[j] non-null
 				try {
@@ -932,7 +932,7 @@ public class Classes {
 	private static final Method[]
 	myGetCloseMethods(final Class<?> cls, final String name,
 	final Class<?>[] argTypes, final boolean bySubclass) {
-		assert D.OFF || argTypes != null: "Caller shall handle null";
+//		assert argTypes != null: "Caller shall handle null";
 		final List<Method> mtds = new LinkedList<Method>();
 		final Method [] ms = cls.getMethods();
 		for (int j = 0; j < ms.length; ++j) {

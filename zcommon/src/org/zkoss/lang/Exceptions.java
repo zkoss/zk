@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 
-import org.zkoss.lang.D;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.logging.Log;
@@ -169,8 +168,6 @@ public class Exceptions {
 	}
 	private static final Throwable
 	myToAnother(Throwable ex, Class<? extends Throwable> targetExceptCls) {
-		assert D.OFF || ex != null: "null exception";
-
 		if (ex instanceof InvocationTargetException)
 			ex = ex.getCause(); //might returns UndeclaredThrowableException
 		if (ex instanceof UndeclaredThrowableException)
@@ -316,7 +313,7 @@ public class Exceptions {
 				}*/
 				return ex;
 			}
-			assert D.OFF || ex != null: "null cause";
+			assert ex != null: "null cause";
 		}
 	}
 	/**

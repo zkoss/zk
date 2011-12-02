@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.Locales;
@@ -251,7 +250,6 @@ public class Files {
 	/** Assumes both dst and src is a file. */
 	private static final void copyFile(File dst, File src, int flags)
 	throws IOException {
-		assert D.OFF || src.isFile();
 		if (dst.equals(src))
 			throw new IOException("Copy to the same file, "+src);
 
@@ -281,7 +279,6 @@ public class Files {
 		if ((flags & CP_SKIP_SVN) != 0 && ".svn".equals(src.getName()))
 			return; //skip
 
-		assert D.OFF || src.isDirectory();
 		final File[] srcs = src.listFiles();
 		for (int j = 0; j < srcs.length; ++j) {
 			copy(new File(dst, srcs[j].getName()), srcs[j], flags); //recursive

@@ -192,12 +192,3 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 		}
 	}
 }
-/*package*/ class WcsInfo {
-	/*package*/ final LanguageDefinition langdef;
-	/** A list of URI or static method. */
-	/*package*/ final Object[] items;
-	/*package*/ WcsInfo(String lang, List<Object> items) {
-		this.langdef = LanguageDefinition.lookup(lang);
-		this.items = (Object[])items.toArray(new Object[items.size()]);
-	}
-}

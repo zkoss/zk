@@ -440,7 +440,7 @@ public class Objects {
 				try {
 					return kls.getMethod("clone").invoke(o);
 				} catch (NoSuchMethodException ex) {
-					if (D.ON) log.warning("No clone() for "+kls);
+					if (log.debugable()) log.debug("No clone() for "+kls);
 				}
 			}
 

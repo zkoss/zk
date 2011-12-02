@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
@@ -112,7 +111,7 @@ public class InterpreterServlet extends HttpServlet {
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		final String path = Https.getThisServletPath(request);
-		if (D.ON && log.debugable()) log.debug("Get "+path);
+		if (log.debugable()) log.debug("Get "+path);
 
 		final Object old = Charsets.setup(request, response, _charset);
 		final ServletContext ctx = getServletContext();

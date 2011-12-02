@@ -84,7 +84,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 		return -1; //reload (might be removed)
 	}
 	public V load(String src) throws Exception {
-//		if (D.ON && log.debugable()) log.debug("Parse "+src);
+//		if (log.debugable()) log.debug("Parse "+src);
 		final String path = getRealPath((String)src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {

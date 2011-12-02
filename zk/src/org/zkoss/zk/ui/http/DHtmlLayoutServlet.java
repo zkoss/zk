@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 
@@ -125,7 +124,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final boolean bRichlet = path != null && path.length() > 0;
 		if (!bRichlet)
 			path = Https.getThisServletPath(request);
-//		if (D.ON && log.finerable()) log.finer("Creates from "+path);
+//		if (log.finerable()) log.finer("Creates from "+path);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		if (!SessionsCtrl.requestEnter(sess)) {

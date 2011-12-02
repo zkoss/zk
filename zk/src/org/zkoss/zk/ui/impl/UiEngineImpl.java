@@ -33,7 +33,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletRequest;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
@@ -360,7 +359,7 @@ public class UiEngineImpl implements UiEngine {
 				final Component owner = olduv.getOwner();
 				if (owner != null) {
 					((PageCtrl)page).setOwner(owner);
-//					if (D.ON && log.finerable()) log.finer("Set owner of "+page+" to "+owner);
+//					if (log.finerable()) log.finer("Set owner of "+page+" to "+owner);
 				}
 			}
 
@@ -1130,8 +1129,8 @@ public class UiEngineImpl implements UiEngine {
 	throws IOException {
 		if (requests == null)
 			throw new IllegalArgumentException();
-		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
+//		assert ExecutionsCtrl.getCurrentCtrl() == null:
+//			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
@@ -1729,8 +1728,8 @@ public class UiEngineImpl implements UiEngine {
 		activate(exec, -1);
 	}
 	public boolean activate(Execution exec, int timeout) {
-		assert D.OFF || ExecutionsCtrl.getCurrentCtrl() == null:
-			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
+//		assert ExecutionsCtrl.getCurrentCtrl() == null:
+//			"Impossible to re-activate for update: old="+ExecutionsCtrl.getCurrentCtrl()+", new="+exec;
 		return doActivate(exec, false, false, null, timeout) != null;
 	}
 	public void deactivate(Execution exec) {
@@ -1761,8 +1760,7 @@ public class UiEngineImpl implements UiEngine {
 	boolean recovering, Object[] resultOfRepeat, int timeout) {
 		if (Executions.getCurrent() != null)
 			throw new IllegalStateException("Use doReactivate instead");
-		assert D.OFF || !recovering || !asyncupd; 
-			//Not support both asyncupd and recovering are true yet
+//		assert !recovering || !asyncupd; //Not support both asyncupd and recovering are true yet
 
 		final Desktop desktop = exec.getDesktop();
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
@@ -1923,7 +1921,7 @@ public class UiEngineImpl implements UiEngine {
 		final Session sess = desktop.getSession();
 //		if (log.finerable()) log.finer("Re-activating "+desktop);
 
-		assert D.OFF || olduv.getExecution().getDesktop() == desktop:
+		assert olduv.getExecution().getDesktop() == desktop:
 			"old dt: "+olduv.getExecution().getDesktop()+", new:"+desktop;
 
 		final UiVisualizer uv = new UiVisualizer(olduv, curExec);

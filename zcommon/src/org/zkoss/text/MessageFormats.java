@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.net.InetAddress;
 import java.text.MessageFormat;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Locales;
 

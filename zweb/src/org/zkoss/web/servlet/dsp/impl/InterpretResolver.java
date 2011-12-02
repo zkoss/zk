@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 
-import org.zkoss.lang.D;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
@@ -37,7 +36,7 @@ class InterpretResolver implements VariableResolver {
 	private final Map<String, Object> _attrs = new HashMap<String, Object>();
 
 	InterpretResolver(VariableResolver parent) {
-		assert D.OFF || !(parent instanceof InterpretResolver);
+		assert !(parent instanceof InterpretResolver);
 		_parent = parent;
 	}
 

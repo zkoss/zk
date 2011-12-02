@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;

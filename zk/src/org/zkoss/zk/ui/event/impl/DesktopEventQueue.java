@@ -146,71 +146,72 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			}
 		}
 	}
-}
-/** Info of a listener */
-/*package*/ class ListenerInfo<T extends Event> implements java.io.Serializable {
-	/*package*/ final EventListener<T> listener;
-	/*package*/ final EventListener<T> callback; //used only if async
-	/*package*/ final boolean async;
-	/*package*/ ListenerInfo(EventListener<T> listener,
-	EventListener<T> callback, boolean async) {
-		if (listener == null)
-			throw new IllegalArgumentException();
-		this.listener = listener;
-		this.callback = callback;
-		this.async = async;
-	}
-}
-/** Unlike ServerPushEventQueue, we cannot use Executions.schedule, and
- * we have to use a thread and activate/deactivate, since asynchronous listener
- * might take too long to execute (that is what it is used for).
- */
-/*package*/ class AsyncListenerThread<T extends Event> extends Thread {
-	private static final Log log = DesktopEventQueue.log;
 
-	/*package*/ final Desktop _desktop;
-	private final EventQueue<T> _que;
-	private final ListenerInfo<T> _inf;
-	private final T _event;
-	private List<T> _pendingEvents;
-	/*package*/ AsyncListenerThread(EventQueue<T> que, ListenerInfo<T> inf, T event) {
-		_desktop = Executions.getCurrent().getDesktop();
-		_que = que;
-		_inf = inf;
-		_event = event;
-		Threads.setDaemon(this, true);
+	/** Info of a listener */
+	private static class ListenerInfo<T extends Event> implements java.io.Serializable {
+		/*package*/ final EventListener<T> listener;
+		/*package*/ final EventListener<T> callback; //used only if async
+		/*package*/ final boolean async;
+		private ListenerInfo(EventListener<T> listener,
+		EventListener<T> callback, boolean async) {
+			if (listener == null)
+				throw new IllegalArgumentException();
+			this.listener = listener;
+			this.callback = callback;
+			this.async = async;
+		}
 	}
-	/*package*/ void postEvent(T event) {
-		if (_pendingEvents == null)
-			_pendingEvents = new LinkedList<T>();
-		_pendingEvents.add(event);
-	}
-	public void run() {
-		try {
-			_inf.listener.onEvent(_event);
-
-			if (_inf.callback != null || _pendingEvents != null) {
-				try {
-					Executions.activate(_desktop);
+	/** Unlike ServerPushEventQueue, we cannot use Executions.schedule, and
+	 * we have to use a thread and activate/deactivate, since asynchronous listener
+	 * might take too long to execute (that is what it is used for).
+	 */
+	private static class AsyncListenerThread<T extends Event> extends Thread {
+		private static final Log log = DesktopEventQueue.log;
+	
+		/*package*/ final Desktop _desktop;
+		private final EventQueue<T> _que;
+		private final ListenerInfo<T> _inf;
+		private final T _event;
+		private List<T> _pendingEvents;
+		private AsyncListenerThread(EventQueue<T> que, ListenerInfo<T> inf, T event) {
+			_desktop = Executions.getCurrent().getDesktop();
+			_que = que;
+			_inf = inf;
+			_event = event;
+			Threads.setDaemon(this, true);
+		}
+		/*package*/ void postEvent(T event) {
+			if (_pendingEvents == null)
+				_pendingEvents = new LinkedList<T>();
+			_pendingEvents.add(event);
+		}
+		public void run() {
+			try {
+				_inf.listener.onEvent(_event);
+	
+				if (_inf.callback != null || _pendingEvents != null) {
 					try {
-						if (_pendingEvents != null)
-							for (T evt: _pendingEvents)
-								_que.publish(evt);
+						Executions.activate(_desktop);
+						try {
+							if (_pendingEvents != null)
+								for (T evt: _pendingEvents)
+									_que.publish(evt);
 
-						if (_inf.callback != null)
-							_inf.callback.onEvent(_event);
-					} finally {
-						Executions.deactivate(_desktop);
+							if (_inf.callback != null)
+								_inf.callback.onEvent(_event);
+						} finally {
+							Executions.deactivate(_desktop);
+						}
+					} catch (Throwable ex) {
+						log.realCauseBriefly(ex);
 					}
-				} catch (Throwable ex) {
-					log.realCauseBriefly(ex);
 				}
+			} catch (DesktopUnavailableException ex) {
+				//ignore
+			} catch (Throwable ex) {
+				log.realCauseBriefly(ex);
+				throw UiException.Aide.wrap(ex);
 			}
-		} catch (DesktopUnavailableException ex) {
-			//ignore
-		} catch (Throwable ex) {
-			log.realCauseBriefly(ex);
-			throw UiException.Aide.wrap(ex);
 		}
 	}
 }

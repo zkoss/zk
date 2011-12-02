@@ -22,7 +22,6 @@ import java.util.Locale;
 
 import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 
@@ -131,7 +130,7 @@ public class Locators {
 			jul >= 0 && (jdot < 0 || jul < jdot) ? jul:
 			jdot >= 0 ? jdot: file.length());
 
-		if (D.ON && log.debugable())
+		if (log.debugable())
 			log.debug("svl=" + file + " base=" + base + " ext=" + ext);
 
 		//search the existence based on locale

@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
@@ -131,7 +130,7 @@ class ActionNode extends Node {
 			try {
 				if (_value instanceof Expression) {
 					args[0] = ((Expression)_value).evaluate(ic.xelc);
-					//if (D.ON && log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
+					//if (log.finerable()) log.finer("attr "+_method.getName()+"="+_value+" to "+args[0]);
 				} else {
 					args[0] = _value;
 				}

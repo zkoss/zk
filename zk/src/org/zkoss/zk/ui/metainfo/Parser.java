@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.Reader;
 import java.net.URL;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.ClassResolver;
@@ -280,7 +279,7 @@ public class Parser {
 				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
 			if (uri == null || prefix == null)
 				throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
-			//if (D.ON && log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
+			//if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
 			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
@@ -416,7 +415,7 @@ public class Parser {
 			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
 		if (macroURI != null) {
-			//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
+			//if (log.finerable()) log.finer("macro component definition: "+name);
 
 			final String inline = params.remove("inline");
 			noEL("inline", inline, pi);
@@ -437,7 +436,7 @@ public class Parser {
 		} else {
 			ComponentDefinition ref = null;
 			if (extds != null) { //extends
-				//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
+				//if (log.finerable()) log.finer("Override component definition: "+name);
 
 				noEL("extends", extds, pi);
 				ref = langdef.getComponentDefinition(extds);
@@ -468,7 +467,7 @@ public class Parser {
 						//Resolve later since might defined in zscript
 				}
 			} else {
-				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
+				//if (log.finerable()) log.finer("Add component definition: name="+name);
 
 				noELnorEmpty("class", clsnm, pi);
 
@@ -753,7 +752,7 @@ public class Parser {
 			parseItems(pgdef, parseZk(parent, el, annHelper),
 				el.getChildren(), annHelper, bNativeContent);
 		} else {
-			//if (D.ON && log.debugable()) log.debug("component: "+nm+", ns:"+ns);
+			//if (log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 			if (isZkSwitch(parent))
 				throw new UiException("Only <zk> can be used in <zk switch>, "+el.getLocator());
 

@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
@@ -420,7 +419,7 @@ public class Maps {
 		for (int j = 0, len = src.length();;) {
 			//handle name
 			Token tk = next(src, delimKey, j, true, parenthesis);
-//			if (D.ON && log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
+//			if (log.finerable()) log.finer("name: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			String name = tk.token;
 			switch (tk.cc) {
@@ -455,7 +454,7 @@ public class Maps {
 
 			//handle value
 			tk = next(src, delimValue, j, false, parenthesis);
-//			if (D.ON && log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
+//			if (log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			final String value = tk.token;
 			if (quote != (char)0

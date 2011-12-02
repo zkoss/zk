@@ -22,7 +22,6 @@ import java.util.Locale;
 import java.util.Iterator;
 import java.util.Collection;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 
 /**
@@ -108,9 +107,6 @@ public class Locales {
 	public static final Locale getLocale(String localeString, char separator) {
 		if (localeString == null)
 			return null;
-
-		assert D.OFF || !localeString.equals("null"):
-			"No Locale called 'null'"; //some caller not filter null out
 
 		if (separator == (char)0)
 			separator = localeString.indexOf('_') >= 0 ? '_' : ',';

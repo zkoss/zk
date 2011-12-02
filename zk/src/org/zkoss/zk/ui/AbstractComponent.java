@@ -156,7 +156,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			initAuxInfo().spaceInfo = new SpaceInfo();
 
 		_def.applyAttributes(this);
-//		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
+//		if (log.debugable()) log.debug("Create comp: "+this);
 	}
 	/** Constructs a dummy component that is not associated
 	 * with any component definition.
@@ -481,7 +481,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (page == _page)
 			return; //nothing changed
 
-		//assert D.OFF || _parent == null || _parent.getPage() == page;
+		//assert _parent == null || _parent.getPage() == page;
 		//detach
 		final boolean bRoot = _parent == null;
 		boolean resetUuid = false;
@@ -3541,36 +3541,37 @@ w:use="foo.MyWindow"&gt;
 			return o.listener;
 		}
 	};
-}
-/*package*/ class ExecInfo implements org.zkoss.zk.ui.sys.ExecutionInfo {
-	private final Thread _thread;
-	private final Event _event;
-	private Method _method;
-	private EventListener<? extends Event> _listener;
-	private ZScript _zscript;
 
-	/*package*/ ExecInfo(Event event) {
-		_thread = Thread.currentThread();
-		_event = event;
-	}
-	public Thread getThread() {
-		return _thread;
-	}
-	public Event getEvent() {
-		return _event;
-	}
-	public Method getEventMethod() {
-		return _method;
-	}
-	public EventListener<? extends Event> getEventListener() {
-		return _listener;
-	}
-	public ZScript getEventZScript() {
-		return _zscript;
-	}
-	public void update(Method mtd, EventListener<? extends Event> ln, ZScript zs) {
-		_method = mtd;
-		_listener = ln;
-		_zscript = zs;
+	private static class ExecInfo implements org.zkoss.zk.ui.sys.ExecutionInfo {
+		private final Thread _thread;
+		private final Event _event;
+		private Method _method;
+		private EventListener<? extends Event> _listener;
+		private ZScript _zscript;
+
+		private ExecInfo(Event event) {
+			_thread = Thread.currentThread();
+			_event = event;
+		}
+		public Thread getThread() {
+			return _thread;
+		}
+		public Event getEvent() {
+			return _event;
+		}
+		public Method getEventMethod() {
+			return _method;
+		}
+		public EventListener<? extends Event> getEventListener() {
+			return _listener;
+		}
+		public ZScript getEventZScript() {
+			return _zscript;
+		}
+		public void update(Method mtd, EventListener<? extends Event> ln, ZScript zs) {
+			_method = mtd;
+			_listener = ln;
+			_zscript = zs;
+		}
 	}
 }

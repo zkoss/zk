@@ -336,88 +336,89 @@ public class RepeatableReader extends Reader implements Repeatable {
 		}
 		super.finalize();
 	}
-}
-/*package*/ class ResetableReader extends Reader implements Repeatable {
-	private final Reader _org;
-	ResetableReader(Reader bais) {
-		_org = bais;
-	}
 
-	public int read(char cbuf[], int off, int len) throws IOException {
-		return _org.read(cbuf, off, len);
-	}
-	/** Closes the current access and the next call of {@link #read}
-	 * re-opens the buffered reader.
-	 */
-	public void close() throws IOException {
-		_org.reset();
-	}
+	private static class ResetableReader extends Reader implements Repeatable {
+		private final Reader _org;
+		ResetableReader(Reader bais) {
+			_org = bais;
+		}
 
-	//Object//
-	protected void finalize() throws Throwable {
-		_org.close();
-		super.finalize();
-	}
-}
-/*package*/ class RepeatableFileReader extends Reader implements Repeatable {
-	private final File _file;
-	private Reader _in;
-	private final String _charset;
+		public int read(char cbuf[], int off, int len) throws IOException {
+			return _org.read(cbuf, off, len);
+		}
+		/** Closes the current access and the next call of {@link #read}
+		 * re-opens the buffered reader.
+		 */
+		public void close() throws IOException {
+			_org.reset();
+		}
 
-	RepeatableFileReader(File file, String charset) {
-		_file = file;
-		_charset = charset != null ? charset: "UTF-8";
-	}
-
-	public int read(char cbuf[], int off, int len) throws IOException {
-		if (_in == null)
-			_in = new FileReader(_file, _charset);
-		return _in.read(cbuf, off, len);
-	}
-	/** Closes the current access and the next call of {@link #read}
-	 * re-opens the buffered reader.
-	 */
-	public void close() throws IOException {
-		if (_in != null) {
-			_in.close();
-			_in = null;
+		//Object//
+		protected void finalize() throws Throwable {
+			_org.close();
+			super.finalize();
 		}
 	}
+	private static class RepeatableFileReader extends Reader implements Repeatable {
+		private final File _file;
+		private Reader _in;
+		private final String _charset;
 
-	//Object//
-	protected void finalize() throws Throwable {
-		close();
-		super.finalize();
-	}
-}
-/*package*/ class RepeatableURLReader extends Reader implements Repeatable {
-	private final URL _url;
-	private Reader _in;
-	private final String _charset;
+		RepeatableFileReader(File file, String charset) {
+			_file = file;
+			_charset = charset != null ? charset: "UTF-8";
+		}
 
-	RepeatableURLReader(URL url, String charset) {
-		_url = url;
-		_charset = charset != null ? charset: "UTF-8";
-	}
+		public int read(char cbuf[], int off, int len) throws IOException {
+			if (_in == null)
+				_in = new FileReader(_file, _charset);
+			return _in.read(cbuf, off, len);
+		}
+		/** Closes the current access and the next call of {@link #read}
+		 * re-opens the buffered reader.
+		 */
+		public void close() throws IOException {
+			if (_in != null) {
+				_in.close();
+				_in = null;
+			}
+		}
 
-	public int read(char cbuf[], int off, int len) throws IOException {
-		if (_in == null)
-			_in = new URLReader(_url, _charset);
-		return _in.read(cbuf, off, len);
-	}
-	/** Closes the current access and the next call of {@link #read}
-	 * re-opens the buffered reader.
-	 */
-	public void close() throws IOException {
-		if (_in != null) {
-			_in.close();
-			_in = null;
+		//Object//
+		protected void finalize() throws Throwable {
+			close();
+			super.finalize();
 		}
 	}
+	private static class RepeatableURLReader extends Reader implements Repeatable {
+		private final URL _url;
+		private Reader _in;
+		private final String _charset;
 
-	//Object//
-	protected void finalize() throws Throwable {
-		close();
-		super.finalize();
+		RepeatableURLReader(URL url, String charset) {
+			_url = url;
+			_charset = charset != null ? charset: "UTF-8";
+		}
+
+		public int read(char cbuf[], int off, int len) throws IOException {
+			if (_in == null)
+				_in = new URLReader(_url, _charset);
+			return _in.read(cbuf, off, len);
+		}
+		/** Closes the current access and the next call of {@link #read}
+		 * re-opens the buffered reader.
+		 */
+		public void close() throws IOException {
+			if (_in != null) {
+				_in.close();
+				_in = null;
+			}
+		}
+
+		//Object//
+		protected void finalize() throws Throwable {
+			close();
+			super.finalize();
+		}
 	}
 }

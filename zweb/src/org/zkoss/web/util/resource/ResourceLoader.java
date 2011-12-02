@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-import org.zkoss.lang.D;
 import org.zkoss.util.resource.Loader;
 import org.zkoss.util.logging.Log;
 
@@ -79,10 +78,11 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 			return parse(src.path, src.url, src.extra);
 
 		if (!src.file.exists()) {
-			if (D.ON && log.debugable()) log.debug("Not found: "+src.file);
+			if (log.debugable()) log.debug("Not found: "+src.file);
 			return null; //File not found
 		}
-		if (D.ON && log.debugable()) log.debug("Loading "+src.file);
+
+		if (log.debugable()) log.debug("Loading "+src.file);
 		try {
 			return parse(src.path, src.file, src.extra);
 		} catch (FileNotFoundException ex) {

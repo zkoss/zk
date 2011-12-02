@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletContext;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
@@ -469,7 +468,7 @@ public class Encodes {
 				final ServletContext newctx = ctx.getContext(ctxroot);
 				if (newctx != null) {
 					ctx = newctx;
-				} else if (D.ON && log.debugable()) {
+				} else if (log.debugable()) {
 					log.debug("Context not found: "+ctxroot);
 				}
 				ctxpathSpecified = true;

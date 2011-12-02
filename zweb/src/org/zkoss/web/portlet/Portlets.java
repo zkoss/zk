@@ -30,7 +30,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 

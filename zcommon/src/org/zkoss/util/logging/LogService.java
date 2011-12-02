@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.mesg.MCommon;
@@ -152,7 +151,7 @@ public class LogService {
 			_logfn = new File(Files.getConfigDirectory(), "i3-log.conf");
 			if (_logfn.exists()) log.info("Monitor "+_logfn);
 			else log.info("File not found: "+_logfn);
-			_logwdog = configureAndWatch(_logfn, D.ON ? 10000: 360000);//millisec
+			_logwdog = configureAndWatch(_logfn, 360000);//millisec
 		} catch (Exception ex) {
 			log.warning(ex);
 		}

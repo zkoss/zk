@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.mesg.Messages;
-import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
@@ -74,7 +73,7 @@ public class AuDynaMediar implements AuExtension {
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 	throws ServletException, IOException {
-//		if (D.ON && log.debugable()) log.debug("View "+pi);
+//		if (log.debugable()) log.debug("View "+pi);
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
