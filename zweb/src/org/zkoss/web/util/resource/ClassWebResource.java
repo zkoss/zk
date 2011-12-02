@@ -19,9 +19,7 @@ package org.zkoss.web.util.resource;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Date;
 import java.util.Calendar;
 import java.net.URL;
 import java.io.OutputStream;
@@ -32,13 +30,11 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
@@ -57,7 +53,7 @@ import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
 
 /**
- * Used to access resouces located in class path and under /web.
+ * Used to access resources located in class path and under /web.
  * It doesn't work alone. Rather, it is a helper for servlet, such as
  * ZK's update servlet or {@link ClassWebServlet}.
  *
