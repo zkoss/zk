@@ -59,9 +59,6 @@ public class LogService {
 	 */
 	protected final String _root;
 
-	private FileWatchdog _logwdog;
-	private File _logfn;
-
 	/** Returns whether the logging service is started, i.e., whether
 	 * {@link #init} is invoked.
 	 */
@@ -146,12 +143,12 @@ public class LogService {
 
 		//monitor i3-log.conf
 		try {
-			_logfn = new File(Files.getConfigDirectory(), "i3-log.conf");
-			if (_logfn.exists()) {
-				log.info("Loading "+_logfn);
-				configure(_logfn);
+			File logfn = new File(Files.getConfigDirectory(), "i3-log.conf");
+			if (logfn.exists()) {
+				log.info("Loading "+logfn);
+				configure(logfn);
 			} else {
-				log.info("File not found: "+_logfn);
+				log.info("File not found: "+logfn);
 			}
 		} catch (Exception ex) {
 			log.warning(ex);
@@ -176,8 +173,6 @@ public class LogService {
 				throw new IllegalStateException("LogService has beeing stopped");
 			}
 		}
-
-		if (_logwdog != null) _logwdog.cease();
 	}
 
 	/**
