@@ -105,7 +105,7 @@ public class ResourceCaches {
 					try {
 						return cache.get(new ResourceInfo(path, url, extra));
 					} catch (Throwable ex) {
-						log.warning("Unable to load "+url+": "+Exceptions.getMessage(ex));
+						log.warningBriefly("Unable to load "+url, ex);
 					}
 					return null;
 				}
@@ -123,7 +123,7 @@ public class ResourceCaches {
 					return cache.get(new ResourceInfo(path, new File(flnm), extra));
 						//it is loader's job to check the existence
 				} catch (Throwable ex) {
-					log.warning("Unable to load "+flnm+": "+Exceptions.getMessage(ex));
+					log.warningBriefly("Unable to load "+flnm, ex);
 				}
 				return null;
 			}
@@ -136,7 +136,7 @@ public class ResourceCaches {
 			if (url != null)
 				return cache.get(new ResourceInfo(path, url, extra));
 		} catch (Throwable ex) {
-			log.warning("Unable to load "+path+": "+Exceptions.getMessage(ex));
+			log.warningBriefly("Unable to load "+path, ex);
 		}
 		return null;
 	}
