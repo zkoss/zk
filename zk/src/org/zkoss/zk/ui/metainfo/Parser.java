@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.Initiator;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.sys.UiFactory;
@@ -645,12 +646,11 @@ public class Parser {
 
 				//Ingore blank text if no need to preserved
 				if (trimLabel.length() == 0
-				&& pi != null && !pi.isBlankPreserved()
-				&& !(pi instanceof NativeInfo))
+				&& pi != null && !pi.isBlankPreserved() && !isNativeText(pi))
 					continue;
 
 				//consider as a label
-				if (pi instanceof NativeInfo) {
+				if (isNativeText(pi)) {
 					new TextInfo(parent, label);
 						//Don't trim if native (3.5.0)
 				} else {
@@ -681,6 +681,19 @@ public class Parser {
 			if (trimLabel.length() != 0)
 				pi.addProperty(textAs, trimLabel, null);
 		}
+	}
+	private static boolean isNativeText(ComponentInfo pi) {
+		if (pi instanceof NativeInfo)
+			return true;
+
+		if (pi != null) {
+			final ComponentDefinition cdef = pi.getComponentDefinition();
+			if (cdef != null) {
+				final Object cls = cdef.getImplementationClass();
+				return cls instanceof Class && Native.class.isAssignableFrom((Class)cls);
+			}
+		}
+		return false;
 	}
 	/** Returns whether to trim the leading and trailing whitespaces 
 	 * of labels.
