@@ -58,6 +58,7 @@ ZK 6.0.0
   ZK-448: Colorbox support keystroke to navigate the color code
   ZK-635: Fileupload support HTML5's input file with multiple
   ZK-616: Able to specify Messagebox width
+  ZK-646: Allow WebAppInit listenes to override default extendlet, such as WPD and WCS
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

@@ -264,17 +264,18 @@ public class ClassWebResource {
 	/** Returns the Extendlet (aka., resource processor) of the
 	 * specified extension, or null if not associated.
 	 *
-	 * <p>Note: if the extension is "js.dsp", then it searches
-	 * any extendlet registered for "js.dsp". If not found, it searches
-	 * any extendlet for "dsp". In other words, "dsp" is searched only
-	 * if no extendlet is registered for "js.dsp".
-	 *
 	 * @param ext the extension, e.g, "js" and "css.dsp".
+	 * @param lookup whether to search different combination of the given
+	 * extension. For example, if the extension is "js.dsp" and
+	 * <code>lookup</code> is true, it first searches
+	 * any extendlet registered for "js.dsp". If not found, it searches
+	 * any extendlet for "dsp". However, if <code>lookup</code> is false,
+	 * it searches only "js.dsp".
 	 * @return the Extendlet (aka., resource processor),
 	 * or null if not associated yet.
-	 * @since 2.4.1
+	 * @since 6.0.0
 	 */
-	public Extendlet getExtendlet(String ext) {
+	public Extendlet getExtendlet(String ext, boolean lookup) {
 		if (ext == null)
 			return null;
 
@@ -282,13 +283,27 @@ public class ClassWebResource {
 		for (;;) {
 			synchronized (_extlets) {
 				Extendlet exlet = _extlets.get(ext);
-				if (exlet != null) return exlet;
+				if (!lookup || exlet != null)
+					return exlet;
 			}
 
 			int j = ext.indexOf('.');
 			if (j < 0) 	return null;
 			ext = ext.substring(j + 1);
 		}
+	}
+	/** Returns the Extendlet (aka., resource processor) of the
+	 * specified extension, or null if not associated.
+	 *
+	 * <p>It is a shortcut of <code>getExtendlet(ext, true)</code>.
+	 *
+	 * @param ext the extension, e.g, "js" and "css.dsp".
+	 * @return the Extendlet (aka., resource processor),
+	 * or null if not associated yet.
+	 * @since 2.4.1
+	 */
+	public Extendlet getExtendlet(String ext) {
+		return getExtendlet(ext, true);
 	}
 	/** Adds an {@link Extendlet} (aka., resource processor) to process
 	 * the resource of the specified extension.

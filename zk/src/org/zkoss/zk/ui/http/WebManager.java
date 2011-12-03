@@ -45,6 +45,7 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletRequestResolver;
 import org.zkoss.web.util.resource.ClassWebResource;
+import org.zkoss.web.util.resource.Extendlet;
 
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApps;
@@ -223,8 +224,8 @@ public class WebManager {
 
 		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
 		_cwr.setDebugJS(config.isDebugJS());
-		_cwr.addExtendlet("wpd", new WpdExtendlet()); //add after _cwr.setDebugJS (since it calls back)
-		_cwr.addExtendlet("wcs", new WcsExtendlet());
+		checkAndAddExtendlet("wpd", new WpdExtendlet()); //add after _cwr.setDebugJS (since it calls back)
+		checkAndAddExtendlet("wcs", new WcsExtendlet());
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml
@@ -237,7 +238,7 @@ public class WebManager {
 			if (!exts.isEmpty()) {
 				if (extlet == null)
 					extlet = new ZumlExtendlet();
-				_cwr.addExtendlet(exts.get(0), extlet);
+				checkAndAddExtendlet(exts.get(0), extlet);
 				//Add to the first extension only (the main one)
 			}
 		}
@@ -253,6 +254,10 @@ public class WebManager {
 				}
 			}
 		}
+	}
+	private void checkAndAddExtendlet(String ext, Extendlet extlet) {
+		if (_cwr.getExtendlet(ext, false) == null)
+			_cwr.addExtendlet(ext, extlet);
 	}
 	/** Returns the prefix of URL to represent this build. */
 	private String getCWRURLPrefix() {
