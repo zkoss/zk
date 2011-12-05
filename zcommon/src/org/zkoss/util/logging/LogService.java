@@ -34,7 +34,7 @@ import org.zkoss.io.FileWatchdog;
 import org.zkoss.io.Files;
 
 /**
- * The log service which is used to monitor i3-log.conf.
+ * The log service which is used to monitor zk-log.conf.
  * To initialize it, invoke {@link #init}. Note: {@link Log} could work
  * without {@link LogService}.
  *
@@ -141,9 +141,15 @@ public class LogService {
 			//Note: we don't store Logger because Tomcat has one root
 			//per Web app, so we have to getLogger dynamically
 
-		//monitor i3-log.conf
+		//monitor zk-log.conf
 		try {
-			File logfn = new File(Files.getConfigDirectory(), "i3-log.conf");
+			File logfn = new File(Files.getConfigDirectory(), "zk-log.conf");
+			if (!logfn.exists()) {
+			//backward compatible (deprecated)
+				File logfn2 = new File(Files.getConfigDirectory(), "i3-log.conf");
+				if (logfn2.exists())
+					logfn = logfn2;
+			}
 			if (logfn.exists()) {
 				log.info("Loading "+logfn);
 				configure(logfn);

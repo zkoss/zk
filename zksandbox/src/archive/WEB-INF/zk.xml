@@ -69,7 +69,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
-	<!-- Uncomment if you want to load conf/i3-log.conf for logging ZK core
+	<!-- Uncomment if you want to load conf/zk-log.conf for logging ZK core
 	<log>
 		<log-base>org.zkoss</log-base>
 	</log>

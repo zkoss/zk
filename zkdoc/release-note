@@ -59,6 +59,7 @@ ZK 6.0.0
   ZK-635: Fileupload support HTML5's input file with multiple
   ZK-616: Able to specify Messagebox width
   ZK-646: Allow WebAppInit listenes to override default extendlet, such as WPD and WCS
+  ZK-648: Rename i3-log.conf to zk-log.conf
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
@@ -149,6 +150,7 @@ ZK 6.0.0
   	Meanwhile, org.zkoss.zkmax.ui.comet.CometServerPush is upgraded to support
   	Servlet 3 asynchronous processing. It will detect if Servlet 3 is supported,
   	and switch the implementation if necessary.
+  + The log configuration file is renamed from i3-log.conf to zk-log.conf.
 
 	--------
 ZK 5.0.10

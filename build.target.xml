@@ -86,7 +86,7 @@ if="deploy.tomcat.required">
 		<fileset dir="${dist.lib.ext.dir}" includes="${server.libs}"/>
 	</copy>
 
-	<copy tofile="${tomcat.conf.dir}/i3-log.conf" file="${dist.conf.dir}/i3-log.conf.local"
+	<copy tofile="${tomcat.conf.dir}/zk-log.conf" file="${dist.conf.dir}/zk-log.conf"
 	preservelastmodified="yes" failonerror="false"/>
 </target>
 <target name="deploy.tomcat"

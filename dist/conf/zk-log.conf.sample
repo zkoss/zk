@@ -1,0 +1,11 @@
+# A sample of zk-log.conf
+#
+#Syntax:
+#	package_or_class_name=level
+#
+# Level could be ERROR, WARNING, INFO, DEBUG and NULL.
+#
+#
+
+org.zkoss=WARNING
+org.zkoss.zk.ui.impl=DEBUG
