@@ -45,7 +45,7 @@ public interface ExpressionX extends Expression {
 	/** 
 	 * Returns the result type of this expression.
 	 * 
-	 * @param ctx the evaluation context
+	 * @param xelc the evaluation context
 	 * @return the result type of this expression.
 	 */
 	public Class getType(XelContext xelc);
