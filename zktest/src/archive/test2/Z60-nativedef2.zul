@@ -12,6 +12,7 @@
 		  	public Object resolveVariable(String name) {
 		  		if ("each".equals(name))
 		  			return s[j];
+		  		return null;
 		  	}
 	  	};
 	self.appendChild(
