@@ -274,18 +274,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._doingScroll[to] = move;
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : (5 * (zk.parseInt(move / 60) + 1));
-		var run = setInterval(function() {
-			if (!move) {
-				delete self._doingScroll[to];
-				clearInterval(run);
-				return;
-			} else {
-				//high speed scroll, need break
-				move < step ? goscroll(header, to, move) : goscroll(header, to, step);
-				move -= step;
-				move = move < 0 ? 0 : move;
-			}
-		}, 10);
 		//Use to scroll
 		var goscroll = function(header, to, step) {
 			switch (to) {
@@ -304,6 +292,18 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			header.scrollLeft = (header.scrollLeft <= 0 ? 0 : header.scrollLeft);
 			header.scrollTop = (header.scrollTop <= 0 ? 0 : header.scrollTop);
 		}
+		var run = setInterval(function() {
+			if (!move) {
+				delete self._doingScroll[to];
+				clearInterval(run);
+				return;
+			} else {
+				//high speed scroll, need break
+				move < step ? goscroll(header, to, move) : goscroll(header, to, step);
+				move -= step;
+				move = move < 0 ? 0 : move;
+			}
+		}, 10);
 	},
 	_getArrowSize: function() {
 		var tabbox = this.getTabbox(),
