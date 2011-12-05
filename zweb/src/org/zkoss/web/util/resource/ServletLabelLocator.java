@@ -69,7 +69,7 @@ public class ServletLabelLocator implements LabelLocator {
 		final URL url = path.toLowerCase().startsWith("file://") ?
 			Servlets.getResource(_ctx, path): _ctx.getResource(path);
 			//we don't accept http:// since we cannot detect if it exists
-		if (url == null && _path != null && _path.equals(path))
+		if (url == null && _path != null && locale == null)
 			log.error("File not found: " + path);
 		return url;
 	}
