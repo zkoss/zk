@@ -18,7 +18,7 @@ ZK 6.0.0
   ZK-217: A way to add a temporary variable resolver to an execution
   ZK-233: Execution.createComponents support inserting before particular component and variable resolver
   ZK-264: addEventListener support 'priority'
-  2974464: A way to customize message with i3-label
+  2974464: A way to customize message with zk-label
   3025389: A way to monitor the execution and event processing
   2947727: The instantiation of Composer & Server Push customizable
   ZK-224: Tree shall render the model in the onInitRender event listener

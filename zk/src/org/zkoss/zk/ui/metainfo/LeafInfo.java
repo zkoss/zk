@@ -39,7 +39,8 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		//_evalr will be added later when this node is added as child (see BranchInfo)
 	}
 	/*package*/ LeafInfo(NodeInfo parent) {
-		parent.appendChild(this);
+		if (parent != null)
+			parent.appendChild(this);
 	}
 	/** Used only by {@link ComponentInfo#duplicate} to make a virtual copy.
 	 */

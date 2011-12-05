@@ -1,0 +1,21 @@
+<?component name="li" class="org.zkoss.zktest.test2.Li"?>
+
+<li>
+  <template name="test">
+   ${each}
+  </template>
+  <zscript><![CDATA[
+  import org.zkoss.xel.VariableResolver;
+  String[] s = {"abc", "xyz", "123"};
+  for (int j = 0; j < s.length; ++j) {
+  	final VariableResolver resolver = new VariableResolver() {
+		  	public Object resolveVariable(String name) {
+		  		if ("each".equals(name))
+		  			return s[j];
+		  	}
+	  	};
+	self.appendChild(
+	  self.getTemplate("test").create(null, null, resolver, null)[0]);
+  }
+  ]]></zscript>
+ </li>

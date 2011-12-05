@@ -726,8 +726,16 @@ public class UiEngineImpl implements UiEngine {
 				//parent must be a native component
 				final String s = ((TextInfo)meta).getValue(parent);
 				if (s != null && s.length() > 0)
-					parent.insertBefore(
-						((Native)parent).getHelper().newNative(s), insertBefore);
+					if (parent != null) {
+						parent.insertBefore(
+							((Native)parent).getHelper().newNative(s), insertBefore);
+					} else if (page != null) {
+						created.add(ci.uf.newComponent(page, null,
+							page.getLanguageDefinition().newLabelInfo(null, s),
+							insertBefore));
+					} else {
+						throw new UnsupportedOperationException("parent or page required for native label: "+s);
+					}
 			} else {
 				execNonComponent(ci, parent, meta);
 			}
