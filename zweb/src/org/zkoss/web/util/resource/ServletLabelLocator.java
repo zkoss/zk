@@ -75,7 +75,7 @@ public class ServletLabelLocator implements LabelLocator {
 			if (fallback)
 				url = locate0("/WEB-INF/i3-label.properties", locale);
 			else
-				log.error("File not found: " + path);
+				log.error(_ctx.getServletContextName()+": file not found, " + path);
 		return url;
 	}
 	private URL locate0(String path, Locale locale) throws IOException  {
