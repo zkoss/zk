@@ -11,7 +11,7 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
-	<div>You should see no Java Exception</div>
+	<div>You should see no Java Exception when the page loads</div>
 	<doublespinner id="db" value="1" constraint="no negative" />
 	<zscript>
 		db.getValue();
