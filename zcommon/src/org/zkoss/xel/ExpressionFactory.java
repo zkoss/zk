@@ -28,7 +28,7 @@ public interface ExpressionFactory {
 	 */
 	public static final int FEATURE_FUNCTION = 0x0001;
 	/** Used with {@link #isSupported} to know whether the factory
-	 * supports {@link FunctionMapper#resolveClass}
+	 * supports {@link FunctionMapperExt#resolveClass}
 	 */
 	public static final int FEATURE_CLASS = 0x0002;
 	/** Returns whether an feature is supported.
