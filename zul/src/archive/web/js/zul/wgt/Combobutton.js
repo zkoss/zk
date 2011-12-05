@@ -62,9 +62,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 /**
- * A combo button. A combo button consists of a button ({@link Combobutton}) and
- * a popup window ({@link Popup}).
- * It is similar to {@link Bandbox} except the input box is substituded by a button.
+ * A combo button. A combo button consists of a button ({@link zul.wgt.Combobutton}) and
+ * a popup window ({@link zul.wgt.Popup}).
+ * It is similar to {@link zul.inp.Bandbox} except the input box is substituted by a button.
  * @since 6.0.0
  * <p>Default {@link #getZclass}: z-combobutton.
  */
