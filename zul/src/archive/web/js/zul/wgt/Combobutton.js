@@ -90,7 +90,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	isOpen: function () {
 		return this.firstChild.isOpen();
 	},
-	/** Drops down or closes the child popup ({@link Popup})({@link Menupopup}, and fire onOpen if it is called with an Event.
+	/** Drops down or closes the child popup ({@link zul.wgt.Popup})
+	 * ({@link zul.menu.Menupopup}, and fire onOpen if it is called with an Event.
 	 * @param boolean open
 	 * @param Map opts 
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event.
