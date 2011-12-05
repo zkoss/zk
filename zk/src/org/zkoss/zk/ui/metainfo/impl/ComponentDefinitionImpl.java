@@ -169,7 +169,7 @@ implements ComponentDefinition, java.io.Serializable {
 		_custAttrs.put(name, ev);
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #addAnnotation(String, String, Map<String, Object>)}.
+	/** @deprecated As of release 6.0.0, replaced with {@link #addAnnotation(String, String, Map)}.
 	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		addAnnotation(null, annotName, annotAttrs);
