@@ -2461,7 +2461,7 @@ w:use="foo.MyWindow"&gt;
 		}
 	}
 	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #addAnnotation(String, String, Map<String, Object>)}
+	 * {@link #addAnnotation(String, String, Map)}
 	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
 		addAnnotation(null, annotName, annotAttrs);

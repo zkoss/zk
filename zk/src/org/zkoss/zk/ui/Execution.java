@@ -1045,7 +1045,6 @@ public interface Execution extends Scope {
 	 * the browser information by use of EL, such as
 	 * <code>${zk.ie > 7}</code>.
 	 *
-	 * @param request the request.
 	 * @param name the browser's name. It includes "ie", "ff", "gecko",
 	 * "webkit", "safari" and "opera". And, "ff" is the same as "gecko",
 	 * and "webit" is the same as "safari".
