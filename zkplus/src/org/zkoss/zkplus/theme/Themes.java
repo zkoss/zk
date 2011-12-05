@@ -172,7 +172,7 @@ public class Themes {
 	
 	// helper //
 	private static String getThemeString() {
-		return Library.getProperty(THEME_NAMES_KEY);
+		return Library.getProperty(THEME_NAMES_KEY, "");
 	}
 	
 	private static boolean contains(String themes, String target) {

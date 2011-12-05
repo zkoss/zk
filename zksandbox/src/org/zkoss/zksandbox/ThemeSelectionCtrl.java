@@ -16,6 +16,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zksandbox;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -58,6 +59,8 @@ public class ThemeSelectionCtrl extends GenericForwardComposer<Component> {
 	public void onAfterRender$themeSelectListbox(Event event) {
 		
 		String name = Themes.getCurrentTheme();
+		if (Strings.isEmpty(name))
+			return;
 		
 		for (Listitem item : themeSelectListbox.getItems()) {
 			if (name.equals(item.getValue())) {
