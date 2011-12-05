@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -26,11 +25,10 @@ import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
- * Represents the compmonent infomation about the native components.
+ * Represents the component information about the native components.
  *
  * <p>Note:it is not thread-safe.
  *
@@ -45,7 +43,7 @@ public class NativeInfo extends ComponentInfo {
 
 	/** Constructs a native info with a parent.
 	 *
-	 * @param parent the parnet info (never null).
+	 * @param parent the parent info (never null).
 	 * @param compdef the component definition (never null).
 	 * @param tag the name of the tag
 	 */
@@ -55,7 +53,7 @@ public class NativeInfo extends ComponentInfo {
 			throw new IllegalArgumentException("compdef must be native");
 	}
 	/** Constructs a native info without a parent.
-	 * @param the evaluator (never null).
+	 * @param evlar the evaluator (never null).
 	 * @param compdef the component definition (never null).
 	 * @param tag the name of the tag
 	 * @since 3.5.0
