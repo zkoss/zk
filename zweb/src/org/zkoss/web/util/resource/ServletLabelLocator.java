@@ -74,19 +74,11 @@ public class ServletLabelLocator implements LabelLocator {
 		if (url == null)
 			if (fallback)
 				url = locate0("/WEB-INF/i3-label.properties", locale);
-			else if (locale == null
-			|| (!Locale.US.equals(locale) && !Locale.ENGLISH.equals(locale)))
-				log.warning("File not found in "+_ctx.getServletContextName()
-					+": " +toRealName(path, locale));
+			else if (locale == null)
+				log.error("File not found in "+_ctx.getServletContextName()+": "+path);
+				//error is shown only if locale, since zh_TW will load zh_TW and zh
+				//while users won't prepare zh
 		return url;
-	}
-	private String toRealName(String path, Locale locale) {
-		if (locale == null)
-			return path;
-		final int j = path.lastIndexOf('.');
-		if (j < 0)
-			return path + '_' + locale;
-		return path.substring(0, j) + '_' + locale + path.substring(j);
 	}
 	private URL locate0(String path, Locale locale) throws IOException  {
 		final int j = path.lastIndexOf('.');
