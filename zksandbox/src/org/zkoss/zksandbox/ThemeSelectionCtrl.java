@@ -59,6 +59,8 @@ public class ThemeSelectionCtrl extends GenericForwardComposer {
 	
 	public void onAfterRender$themeSelectListbox(Event event) {
 		String name = Themes.getCurrentTheme();
+		if (Strings.isEmpty(name))
+			return;
 		List chd = themeSelectListbox.getItems();
 		for (int i = 0; i < chd.size(); i++) {
 			Listitem item = (Listitem)chd.get(i);
