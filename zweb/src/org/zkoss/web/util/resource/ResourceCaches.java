@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -105,7 +106,10 @@ public class ResourceCaches {
 					try {
 						return cache.get(new ResourceInfo(path, url, extra));
 					} catch (Throwable ex) {
-						log.warningBriefly("Unable to load "+url, ex);
+						final IOException ioex = getIOException(ex);
+						if (ioex == null)
+							throw SystemException.Aide.wrap(ex);
+						log.warningBriefly("Unable to load "+url, ioex);
 					}
 					return null;
 				}
@@ -123,7 +127,10 @@ public class ResourceCaches {
 					return cache.get(new ResourceInfo(path, new File(flnm), extra));
 						//it is loader's job to check the existence
 				} catch (Throwable ex) {
-					log.warningBriefly("Unable to load "+flnm, ex);
+					final IOException ioex = getIOException(ex);
+					if (ioex == null)
+						throw SystemException.Aide.wrap(ex);
+					log.warningBriefly("Unable to load "+flnm, ioex);
 				}
 				return null;
 			}
@@ -136,8 +143,18 @@ public class ResourceCaches {
 			if (url != null)
 				return cache.get(new ResourceInfo(path, url, extra));
 		} catch (Throwable ex) {
-			log.warningBriefly("Unable to load "+path, ex);
+			final IOException ioex = getIOException(ex);
+			if (ioex == null)
+				throw SystemException.Aide.wrap(ex);
+			log.warningBriefly("Unable to load "+path, ioex);
 		}
+		return null;
+	}
+	//don't eat exceptions other than IOException
+	private static IOException getIOException(Throwable ex) {
+		for (; ex != null; ex = ex.getCause())
+			if (ex instanceof IOException)
+				return (IOException)ex;
 		return null;
 	}
 }
