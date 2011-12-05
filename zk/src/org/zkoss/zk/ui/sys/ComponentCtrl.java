@@ -56,7 +56,7 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setDefinition(ComponentDefinition compdef);
-	/** Sets the component definition by specifing the name.
+	/** Sets the component definition by specifying the name.
 	 *
 	 * @param defname the name of the component definition
 	 * @exception IllegalArgumentException if defname is null
@@ -161,7 +161,7 @@ public interface ComponentCtrl {
 	 * Note: it is OK to add multiple event handlers to the same event.
 	 * They are evaluated one-by-one.
 	 * On the other hand, {@link Component#setWidgetListener} will
-	 * overwrite the pevious listener if the event name is the same.
+	 * overwrite the previous listener if the event name is the same.
 	 * @see Component#setWidgetListener
 	 */
 	public void addEventHandler(String name, EventHandler evthd);
@@ -230,12 +230,12 @@ public interface ComponentCtrl {
 	 *
 	 * <p>If there are multiple annotation with the given name,
 	 * this method will merge them before return. If you prefer to get all
-	 * of them without mergine, pleae use {@link #getAnnotations(String, String)} instead.
+	 * of them without merging, please use {@link #getAnnotations(String, String)} instead.
 	 * For example,
 	 * <pre><code>&lt;textbox value="@bind(abc, param1=foo1) @bind(xyz, param2=foo2)"&gt;</code></pre>
 	 *
-	 * <p>This method will return a single annotaion with three attributes:
-	 * value=xyz, param1=foo1 and param2=foo2. On othe other hand,
+	 * <p>This method will return a single annotation with three attributes:
+	 * value=xyz, param1=foo1 and param2=foo2. On the other hand,
 	 * {@link #getAnnotations(String, String)} will return a two-element
 	 * collections.
 	 *
@@ -313,10 +313,10 @@ public interface ComponentCtrl {
 	 */
 	public void addSharedAnnotationMap(AnnotationMap annots);
 	/** @deprecated As of release 6.0.0, replaced with
-	 * {@link #addAnnotation(String, String, Map<String, Object>)}
+	 * {@link #addAnnotation(String, String, Map)}
 	 */
 	public void addAnnotation(String annotName, Map<String, Object> annotAttrs);
-	/** Adds an annotation to the specified proeprty of this component.
+	/** Adds an annotation to the specified property of this component.
 	 *
 	 * <p>If the given property is null, the annotation is associated
 	 * to this component, rather than a particular property.
@@ -398,9 +398,9 @@ public interface ComponentCtrl {
 	 *
 	 * <p>Notice: don't invoke this method directly. Rather, invoke
 	 * {@link DesktopCtrl#service(AuRequest, boolean)} instead.
-	 * This method is designed to be overriden.
+	 * This method is designed to be overridden.
 	 *
-	 * <p>To send reponses to the client, use
+	 * <p>To send responses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
@@ -410,16 +410,16 @@ public interface ComponentCtrl {
 	 * <p>Application developer can plug the custom service to handle
 	 * the AU request by calling {@link Component#setAuService}.
 	 *
-	 * @param everError whether any error ever occured before
+	 * @param everError whether any error ever occurred before
 	 * processing this request.
 	 * @since 5.0.0
 	 * @see Component#setAuService
 	 */
 	public void service(AuRequest request, boolean everError);
 
-	/** Hanldes an event.
+	/** Handles an event.
 	 * This method will invoke the event handlers registered in a ZUML page,
-	 * the event listeners registerd in Java, and the event handlers
+	 * the event listeners registered in Java, and the event handlers
 	 * declared as part of the component.
 	 *
 	 * @param event the event to handle
@@ -431,11 +431,11 @@ public interface ComponentCtrl {
 
 	/** Sets whether to disable the update of the client widgets of
 	 * this component and its descendants.
-	 * <p>By default, if a component is attached to a page, modications that
+	 * <p>By default, if a component is attached to a page, modifications that
 	 * change the visual representation will be sent to the client to
 	 * ensure the consistency.
 	 * <p>Though rarely needed, you can disable the synchronization of
-	 * the visual representation, if you prefer to update the client batchly
+	 * the visual representation, if you prefer to update the client in a batch
 	 *or the modification is caused by the client.
 	 * <p><b>Notice</b>:
 	 * <ul>
