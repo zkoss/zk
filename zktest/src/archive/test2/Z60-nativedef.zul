@@ -1,0 +1,6 @@
+<?component name="li" class="org.zkoss.zktest.test2.Li"?>
+
+<n:ul xmlns:n="native">
+	<n:li>Real Native</n:li>
+	<li>Native but a component definition</li>
+</n:ul>

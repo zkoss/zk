@@ -682,15 +682,15 @@ public class Parser {
 				pi.addProperty(textAs, trimLabel, null);
 		}
 	}
-	private static boolean isNativeText(ComponentInfo pi) {
+	/*pacakge*/ static boolean isNativeText(ComponentInfo pi) { //also called by ComponentInfo
 		if (pi instanceof NativeInfo)
 			return true;
 
 		if (pi != null) {
-			final ComponentDefinition cdef = pi.getComponentDefinition();
-			if (cdef != null) {
-				final Object cls = cdef.getImplementationClass();
-				return cls instanceof Class && Native.class.isAssignableFrom((Class)cls);
+			try {
+				final Class cls = pi.resolveImplementationClass(null, null);
+				return cls != null && Native.class.isAssignableFrom(cls);
+			} catch (Throwable ex) { //ignore
 			}
 		}
 		return false;

@@ -163,7 +163,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * {@link NativeInfo} and the child is {@link TextInfo}.
 	 */
 	public void appendChild(NodeInfo child) {
-		if ((child instanceof TextInfo) && !(this instanceof NativeInfo))
+		if ((child instanceof TextInfo) && !Parser.isNativeText(this))
 			throw new IllegalStateException("TextInfo cannot be a child of "+this);
 		super.appendChild(child);
 	}
@@ -619,9 +619,9 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 */
 	private Object evalImpl(Page page, Component parent) {
 		return _impl == null ? null:
-			parent != null ?
-				_impl.getValue(getEvaluator(), parent):
-				_impl.getValue(getEvaluator(), page);
+			parent != null ? _impl.getValue(getEvaluator(), parent):
+			page != null ? _impl.getValue(getEvaluator(), page):
+			_impl.isExpression() ? null: _impl.getRawValue();
 	}
 	/** Creates an component based on this info (never null).
 	 * It is the same as newInstance(page, null).
@@ -645,7 +645,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * if necessary.
 	 *
 	 * @param page the page to check whether the class is defined
-	 * in its interpreters. Ignored if null.
+	 * in the page (such as interpreters). Ignored if null.
 	 * This method will search the class loader of the current thread.
 	 * If not found, it will search the interpreters of the specifed
 	 * page ({@link Page#getLoadedInterpreters}).
