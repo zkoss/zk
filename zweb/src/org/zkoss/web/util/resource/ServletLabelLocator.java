@@ -40,7 +40,7 @@ public class ServletLabelLocator implements LabelLocator {
 
 	/** Constructs a locator where the properties file is decided
 	 * by the library property called org.zkoss.util.label.web.location.
-	 * If not defined, /WEB-INF/i3-label.properties is assumed
+	 * If not defined, /WEB-INF/zk-label.properties is assumed
 	 */
 	public ServletLabelLocator(ServletContext ctx) {
 		this(ctx, null);
@@ -59,19 +59,33 @@ public class ServletLabelLocator implements LabelLocator {
 
 	//-- LabelLocator --//
 	public URL locate(Locale locale) throws IOException {
-		String path = _path != null ? _path:
-			Library.getProperty("org.zkoss.util.label.web.location", 
-				"/WEB-INF/i3-label.properties");
+		boolean fallback = false;
+		String path;
+		if (_path != null) {
+			path = _path;
+		} else {
+			path = Library.getProperty("org.zkoss.util.label.web.location");
+			if (path == null) {
+				path = "/WEB-INF/zk-label.properties";
+				fallback = true;
+			}
+		}
+		URL url = locate0(path, locale);
+		if (url == null)
+			if (fallback)
+				url = locate0("/WEB-INF/i3-label.properties", locale);
+			else
+				log.error("File not found: " + path);
+		return url;
+	}
+	private URL locate0(String path, Locale locale) throws IOException  {
 		final int j = path.lastIndexOf('.');
 		final String prefix = j >= 0 ? path.substring(0, j): path;
 		final String suffix = j >= 0 ? path.substring(j): "";
 		path = locale == null ? prefix + suffix: prefix + '_' + locale + suffix;
-		final URL url = path.toLowerCase().startsWith("file://") ?
+		return path.toLowerCase().startsWith("file://") ?
 			Servlets.getResource(_ctx, path): _ctx.getResource(path);
 			//we don't accept http:// since we cannot detect if it exists
-		if (url == null && _path != null && _path.equals(path))
-			log.error("File not found: " + path);
-		return url;
 	}
 
 	//-- Object --//

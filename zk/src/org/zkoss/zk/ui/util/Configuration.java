@@ -961,7 +961,7 @@ public class Configuration {
 	}
 
 	/** Adds the location of a properties file for i18n labels.
-	 * <p>Default: none (/WEB-INF/i3-label.properties are assumed).
+	 * <p>Default: none (/WEB-INF/zk-label.properties is assumed).
 	 * <p>Notice that this method has no effect after the web server has been
 	 * started. Thus, it is suggested to use the label-location element in zk.xml instead.
 	 * @since 5.0.7

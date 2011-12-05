@@ -236,8 +236,8 @@ public class LabelLoader {
 			//1. load from modules
 			final ClassLocator locator = new ClassLocator();
 			for (Enumeration en = locator.getResources(
-				locale == null ? "metainfo/i3-label.properties":
-				"metainfo/i3-label_" + locale + ".properties");
+				locale == null ? "metainfo/zk-label.properties":
+				"metainfo/zk-label_" + locale + ".properties");
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
 				load(labels, url, _jarcharset);

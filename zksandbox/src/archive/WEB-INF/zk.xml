@@ -525,7 +525,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Uncommet to control where the label propeties file is located.
 		If you have multiple properties files, specify them one-by-one. 
-		Default: /WEB-INF/i3-label.properties
+		Default: /WEB-INF/zk-label.properties
 	<system-config>
 		<label-location>/WEB-INF/label/foo.properties</label-location>
 	</system-config>

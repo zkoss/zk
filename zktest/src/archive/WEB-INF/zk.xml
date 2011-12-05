@@ -499,14 +499,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Uncommet to control where the label propeties file is located.
 		If you have multiple properties files, specify them one-by-one. 
-		Default: /WEB-INF/i3-label.properties
+		Default: /WEB-INF/zk-label.properties
 	<system-config>
 		<label-location>/WEB-INF/label/foo.properties</label-location>
 	</system-config>
 	-->
 	<!-- for testing B50-3316543 -->
 	<system-config>
-		<label-location>/WEB-INF/i3-label.properties</label-location>
+		<label-location>/WEB-INF/zk-label.properties</label-location>
 		<label-location>/WEB-INF/prop/B50-3316543-mdm.properties</label-location>
     	<label-location>/WEB-INF/prop/B50-3316543-wtb.properties</label-location>
 	</system-config>	

@@ -27,6 +27,8 @@ import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletRequestResolver;
 
 /**
+ * @deprecated As of release 6.0.0, we don't support the loading of
+ * zk-label.properties without installing ZK.
  * Used to hook a label locator to locate resources from the servlet context.
  *
  * <p>Note: you don't need to specify this in web.xml if you use ZK
@@ -36,8 +38,8 @@ import org.zkoss.web.util.resource.ServletRequestResolver;
  * <p>If you don't use ZK, you could declare
 <pre><code>
 &lt;listener&gt;
-	&lt;description&gt;Load i3-label.properties from this Web app&lt;/description&gt;
-	&lt;display-name&gt;Locating i3-label.properties&lt;/display-name&gt;
+	&lt;description&gt;Load zk-label.properties from this Web app&lt;/description&gt;
+	&lt;display-name&gt;Locating zk-label.properties&lt;/display-name&gt;
 	&lt;listener-class&gt;org.zkoss.web.init.LabelLocatorHook&lt;/listener-class&gt;
 &lt;/listener&gt;
 </code></pre>
