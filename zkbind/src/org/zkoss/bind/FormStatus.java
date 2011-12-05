@@ -21,7 +21,7 @@ public interface FormStatus {
 	/**
 	 * Returns whether the form has been modified 
 	 * @return whether the form has been modified.
-	 * @see {@link Form#isDirty()}
+	 * @see Form#isDirty()
 	 */
 	public boolean isDirty();
 }

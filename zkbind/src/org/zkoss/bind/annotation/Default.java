@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Marker annotation to identify default value of a parameter of a method. 
  * 
- * @see {@link Command}
- * @see {@link Param}
+ * @see Command
+ * @see Param
  * @author dennis
  *
  */

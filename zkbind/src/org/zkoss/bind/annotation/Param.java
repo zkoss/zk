@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Marker annotation to identify the name of a parameter of a method.
  * 
- * @see {@link Command}
- * @see {@link Default}
+ * @see Command
+ * @see Default
  * @author dennis
  *
  */
