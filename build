@@ -393,6 +393,11 @@ function invoke_ant
 	if [ "$deprecation" = "" ] ; then
 		deprecation=on
 	fi
+	unchecked=$(grep '^unchecked=' version)
+	unchecked=${unchecked#unchecked=}
+	if [ "$unchecked" = "" ] ; then
+		unchecked=on
+	fi
 
 	this_dflag=$dflag
 	dflagtmp=$(grep '^debug=' version)
@@ -442,7 +447,7 @@ function invoke_ant
 		-Dear.libs="$ear_libs" \
 		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
-		-Ddeprecation="$deprecation" \
+		-Ddeprecation="$deprecation" -Dunchecked="$unchecked" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \

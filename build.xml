@@ -39,6 +39,7 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<echo message="out.dir = ${out.dir}"/>
 		<echo message="debug = ${debug}"/>
 		<echo message="optimize = ${optimize}"/>
+		<echo message="unchecked = ${unchecked}"/>
 	</target>
 
 	<target name="config" depends="verbose">
@@ -47,6 +48,15 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<available file="${src.mesg.dir}" property="src.mesg.dir.exist"/>
 		<available file="${src.dir}" property="src.dir.exist"/>
 		<available file="${srcpv.dir}" property="srcpv.dir.exist"/>
+
+		<condition property="javac.unchecked" value="-Xlint:unchecked">
+			<not>
+				<equals arg1="${unchecked}" arg2="off"/>
+			</not>
+		</condition>
+		<condition property="javac.unchecked" value="-Xlint:-unchecked">
+			<equals arg1="${unchecked}" arg2="off"/>
+		</condition>
 
 		<condition property="war.dir" value="${src.archive.dir}">
 			<available file="${src.archive.dir}" type="dir"/>

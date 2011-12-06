@@ -21,14 +21,14 @@ package org.zkoss.zktest.test2.grid;
 import java.util.Comparator;
 
 import org.zkoss.zul.AbstractListModel;
-import org.zkoss.zul.ListModelExt;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.event.ListDataEvent;
 /**
  * 
  * @author Jeff
  *
  */
-public class FakeListModel extends AbstractListModel implements ListModelExt, java.io.Serializable {
+public class FakeListModel extends AbstractListModel implements Sortable, java.io.Serializable {
 	
 	private int _size;
 	private boolean _asc = true;
@@ -40,7 +40,7 @@ public class FakeListModel extends AbstractListModel implements ListModelExt, ja
 		_size = size;
 	}
 
-	// ListModelExt
+	// Sortable
 	public void sort(Comparator cmpr, boolean asc) {
 		_asc = asc;
 		invalidate();

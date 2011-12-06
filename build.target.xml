@@ -31,8 +31,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	<mkdir dir="${out.dir}"/>
 	<javac srcdir="${srcpv.dir}" destdir="${out.dir}"
 	 debug="false" optimize="true" encoding="UTF-8"
-	 target="${target.version}" deprecation="${deprecation}" source="${source.version}">
-		<compilerarg value="-Xlint:unchecked"/>
+	 deprecation="${deprecation}"
+	 target="${target.version}" source="${source.version}">
+		<compilerarg value="${javac.unchecked}"/>
 	</javac>
 </target>
 <target name="compile1" depends="codegen.mesg,compile0" if="src.dir.exist">
@@ -41,8 +42,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	<property name="srcdpc.dir" value=""/>
 	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
-	 target="${target.version}" deprecation="${deprecation}" source="${source.version}">
-		<compilerarg value="-Xlint:unchecked"/>
+	 deprecation="${deprecation}"
+	 target="${target.version}" source="${source.version}">
+		<compilerarg value="${javac.unchecked}"/>
 	</javac>
 </target>
 <target name="compile" depends="compile0,compile1" if="compile.required">
