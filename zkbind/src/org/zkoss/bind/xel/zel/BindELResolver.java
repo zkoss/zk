@@ -14,6 +14,7 @@ package org.zkoss.bind.xel.zel;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
@@ -24,6 +25,9 @@ import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.SaveBinding;
+import org.zkoss.bind.sys.tracker.TrackerNode;
+import org.zkoss.bind.tracker.impl.TrackerImpl;
+import org.zkoss.util.IdentityHashSet;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELResolver;
 import org.zkoss.zel.CompositeELResolver;
@@ -55,23 +59,53 @@ public class BindELResolver extends XelELResolver {
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
 		final Object value = super.getValue(ctx, base, property);
-		tieValue((BindELContext)((EvaluationContext)ctx).getELContext(), base, property, value);
+		tieValue(ctx, base, property, value);
 		return value;
 	}
 	
 	public void setValue(ELContext ctx, Object base, Object property, Object value)
 	throws PropertyNotFoundException, PropertyNotWritableException, ELException {
 		super.setValue(ctx, base, property, value);
-		tieValue((BindELContext)((EvaluationContext)ctx).getELContext(), base, property, value);
+		tieValue(ctx, base, property, value);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private static List<String> getPathList(BindELContext ctx){
 		return (List<String>)ctx.getContext(Path.class);//get path, see #PathResolver
 	}
-	
+
+	//save value into equal beans
+	private void saveEqualBeans(ELContext elCtx, Object base, String prop, Object value) {
+		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
+		final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
+
+		if (bctx.getAttribute(BinderImpl.SAVE_BASE) != null) { //recursive back, return
+			return; 
+		}
+		ctx.setAttribute(BinderImpl.SAVE_BASE, Boolean.TRUE);
+		try {
+			final Binder binder = bctx.getBinder();
+			final TrackerImpl tracker = (TrackerImpl) binder.getTracker();
+			final Set<TrackerNode> nodes = tracker.getTrackerNodesByBean(base);
+			if (nodes != null) {
+				final Set<Object> set = new IdentityHashSet<Object>(4);
+				set.add(base);
+				for (TrackerNode node : nodes) {
+					final Object candidate = node.getBean();
+					if (!set.contains(candidate)) { //!= bean though equals
+						super.setValue(elCtx, candidate, prop, value); //might recursive back
+						set.add(candidate);
+					}
+				}
+			}
+		} finally {
+			ctx.setAttribute(BinderImpl.SAVE_BASE, null);
+		}
+	}
+
 	//update dependency and notify changed
-	private void tieValue(BindELContext ctx, Object base, Object propName, Object value) {
+	private void tieValue(ELContext elCtx, Object base, Object propName, Object value) {
+		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
 		//only there is a binding that needs tie tracking to value
@@ -92,23 +126,28 @@ public class BindELResolver extends XelELResolver {
 			final Binder binder = binding.getBinder();
 			binder.getTracker().tieValue(binding.getComponent(), base, script, propName, value);
 			
-			if (base != null && !(base instanceof Form)) { //no @DependsOn and @NotifyChange in Form
-				final Method m = (Method) ctx.getContext(Method.class);
-				//parse @DependsOn and add into dependency tracking
-				final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
-				final boolean prompt = bctx != null && bctx.getCommandName() == null; 
-				if (prompt && binding instanceof LoadBinding && m != null) {
-					//FormBinding shall not check @DependsOn() for dependent nodes
-					if (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size()) {
-						BindELContext.addDependsOnTrackings(m, basePath(path), path, binding, bctx);
-					}
+			if (base != null) {
+				if (nums == 0 && binding instanceof SaveBinding) { //a done save operation, form or not form
+					saveEqualBeans(elCtx, base, (String) propName, value);
 				}
-				
-				//parse @NotifyChange and collect Property to publish PropertyChangeEvent
-				if (nums == 0 && binding instanceof SaveBinding) { //a done save operation
-					//collect Property for @NotifyChange, kept in BindContext
-					//see BinderImpl$CommandEventListener#onEvent()
-					BindELContext.addNotifys(m, base, (String) propName, value, bctx);
+				if (!(base instanceof Form)) { //no @DependsOn and @NotifyChange in Form
+					final Method m = (Method) ctx.getContext(Method.class);
+					//parse @DependsOn and add into dependency tracking
+					final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
+					final boolean prompt = bctx != null && bctx.getCommandName() == null; 
+					if (prompt && binding instanceof LoadBinding && m != null) {
+						//FormBinding shall not check @DependsOn() for dependent nodes
+						if (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size()) {
+							BindELContext.addDependsOnTrackings(m, basePath(path), path, binding, bctx);
+						}
+					}
+					
+					//parse @NotifyChange and collect Property to publish PropertyChangeEvent
+					if (nums == 0 && binding instanceof SaveBinding) { //a done save operation
+						//collect Property for @NotifyChange, kept in BindContext
+						//see BinderImpl$CommandEventListener#onEvent()
+						BindELContext.addNotifys(m, base, (String) propName, value, bctx);
+					}
 				}
 			}
 		}

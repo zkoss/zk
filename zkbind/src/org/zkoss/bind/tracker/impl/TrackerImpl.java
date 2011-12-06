@@ -12,14 +12,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.tracker.impl;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -30,13 +29,11 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
-import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Primitives;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of dependency tracking.
@@ -46,7 +43,7 @@ import org.zkoss.zk.ui.UiException;
 public class TrackerImpl implements Tracker {
 	private Map<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
 	private Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
-	private Map<Object, Object> _equalBeanMap = new WeakHashMap<Object, Object>(); //bean -> bean (use to locate proxy bean)
+	private Map<Object, WeakReference<Object>> _equalBeanMap = new WeakHashMap<Object, WeakReference<Object>>(); //bean -> bean (use to locate proxy bean)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	
 	public void addTracking(Component comp, String[] series, String[] srcpath, Binding binding) {
@@ -103,7 +100,7 @@ public class TrackerImpl implements Tracker {
 				removed.add(node);
 				removed.addAll(node.getDependents());
 			}
-			removeNodes(_beanMap.values(), removed);
+			removeAllFromBeanMap(removed);
 			removeNodes(_nullMap.values(), removed);
 		}
 	}
@@ -138,7 +135,7 @@ public class TrackerImpl implements Tracker {
 	private void collectLoadBindings(Object base, String prop, Set<LoadBinding> bindings, Set<TrackerNode> visited) {
 		final Set<Object> kidbases = new HashSet<Object>(); //collect kid as base bean
 		if (base != null) {
-			if ("*".equals(base)) { //loadAll
+			if ("*".equals(base)) { //loadAll, when base == "*"
 				final Collection<Map<Object, TrackerNode>> nodesMaps = _compMap.values();
 				if (nodesMaps != null) {
 					for(Map<Object, TrackerNode> nodesMap : nodesMaps) {
@@ -216,7 +213,7 @@ public class TrackerImpl implements Tracker {
 				if (nodes == null) {
 					nodes = new HashSet<TrackerNode>();
 					_beanMap.put(value, nodes);
-					_equalBeanMap.put(value, value); //prepare proxy bean map
+					putEqualBeanMapValue(value); //prepare proxy bean map
 				}
 				nodes.add(node);
 				//only when value is not a primitive that we shall store it
@@ -228,6 +225,21 @@ public class TrackerImpl implements Tracker {
 		removeNullMap(node);
 	}
 	
+	private void putEqualBeanMapValue(Object value) {
+		if (value != null) {
+			_equalBeanMap.put(value, new WeakReference<Object>(value)); //prepare proxy bean map
+		}
+	}
+	
+	private Object getEqualBeanMapValue(Object key) {
+		final WeakReference<Object> ref = _equalBeanMap.get(key);
+		Object value = ref == null ? null : ref.get();
+		if (value == null && ref != null) { //Help GC
+			_equalBeanMap.remove(key);
+		}
+		return value;
+	}
+
 	//add head node into the _nullMap
 	private void addNullMap(TrackerNode node) {
 		//add node into _nullMap
@@ -279,6 +291,21 @@ public class TrackerImpl implements Tracker {
 						_beanMap.remove(proxy);
 					} else {
 						_beanMap.remove(value);
+					}
+				} else { 
+					final Object proxy = getEqualBeanMapValue(value);
+					final int proxyHash = System.identityHashCode(proxy);
+					if (System.identityHashCode(value) == proxyHash) { //might need to migrate proxy
+						Object candidate = null;
+						for (TrackerNode left : nodes) { //scan left nodes after removing
+							candidate = left.getBean();
+							if (System.identityHashCode(candidate) == proxyHash) {   
+								//there are proxy in left nodes, no need to migrate proxy
+								return;
+							}
+						}
+						//no proxy in nodes left, have to migrate the proxy
+						putEqualBeanMapValue(candidate);
 					}
 				}
 			}
@@ -364,6 +391,20 @@ public class TrackerImpl implements Tracker {
 		return kidnodes;
 	}
 
+	//remove all specified nodes from the _beanMap 
+	private void removeAllFromBeanMap(Collection<TrackerNode> removed) {
+		final Collection<Entry<Object, Set<TrackerNode>>> nodesets = _beanMap.entrySet(); 
+		for (final Iterator<Entry<Object, Set<TrackerNode>>> it = nodesets.iterator(); it.hasNext();) {
+			final Entry<Object, Set<TrackerNode>> nodeset = it.next();
+			final Object bean = nodeset.getKey();
+			nodeset.getValue().removeAll(removed);
+			if (nodeset.getValue().isEmpty()) {
+				it.remove();
+				_equalBeanMap.remove(bean);
+			}
+		}
+	}
+	
 	private void removeNodes(Collection<Set<TrackerNode>> nodesets, Collection<TrackerNode> removed) {
 		for (final Iterator<Set<TrackerNode>> it = nodesets.iterator(); it.hasNext();) {
 			final Set<TrackerNode> nodeset = it.next();
@@ -374,9 +415,13 @@ public class TrackerImpl implements Tracker {
 		}
 	}
 	
-	private Set<TrackerNode> getTrackerNodesByBean(Object bean) {
-		final Object proxy = _equalBeanMap.get(bean);
-		return proxy != null ? _beanMap.get(proxy) : _beanMap.get(bean);
+	public Set<TrackerNode> getTrackerNodesByBean(Object bean) {
+		return _beanMap.get(getEqualBeanMapProxy(bean));
+	}
+	
+	private Object getEqualBeanMapProxy(Object bean) {
+		final Object proxy = getEqualBeanMapValue(bean);
+		return proxy != null ? proxy : bean;
 	}
 	
 	//------ debug dump ------//
@@ -384,10 +429,12 @@ public class TrackerImpl implements Tracker {
 		dumpCompMap();
 		dumpBeanMap();
 		dumpNullMap();
+		dumpEqualBeanMap();
 	}
 	
 	private void dumpBeanMap() {
 		System.out.println("******* _beanMap: *********");
+		System.out.println("******* size: "+_beanMap.size());
 		for(Object bean : _beanMap.keySet()) {
 			System.out.println("bean:"+bean+"------------");
 			Set<TrackerNode> nodes = _beanMap.get(bean);
@@ -399,6 +446,7 @@ public class TrackerImpl implements Tracker {
 	
 	private void dumpCompMap() {
 		System.out.println("******* _compMap: *********");
+		System.out.println("******* size: "+_compMap.size());
 		for(Component comp: _compMap.keySet()) {
 			System.out.println("comp:"+comp+"------------");
 			Map<Object, TrackerNode> nodes = _compMap.get(comp);
@@ -411,6 +459,7 @@ public class TrackerImpl implements Tracker {
 
 	private void dumpNullMap() {
 		System.out.println("******* _nullMap: *********");
+		System.out.println("******* size: "+_nullMap.size());
 		for(Object field: _nullMap.keySet()) {
 			System.out.println("field:"+field+"------");
 			Set<TrackerNode> nodes = _beanMap.get(field);
@@ -419,7 +468,18 @@ public class TrackerImpl implements Tracker {
 			}
 		}
 	}
-	
+
+	private void dumpEqualBeanMap() {
+		System.out.println("******* _equalBeanMap: *********");
+		System.out.println("******* size: "+_equalBeanMap.size());
+		
+		for(Entry<Object, WeakReference<Object>> entry: _equalBeanMap.entrySet()) {
+			System.out.println("key:"+entry.getKey());
+			System.out.println("val:"+entry.getValue().get());
+			System.out.println("----");
+		}
+	}
+
 	private void dumpNodeTree(TrackerNode node, int indent) {
 		dumpNode(node, indent);
 		for(TrackerNode kid : node.getDirectDependents()) {

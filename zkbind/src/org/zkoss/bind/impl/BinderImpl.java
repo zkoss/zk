@@ -122,7 +122,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
 	
-	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init 
+	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
+	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
 	
 	//System Annotation, see lang-addon.xml
 	private static final String SYSBIND = "$SYSBIND$"; //system binding annotation name
