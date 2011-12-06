@@ -1171,6 +1171,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 				invokeDynamicArgsMethod(viewModel, method, commandArgs, implicits);
 				notifys.addAll(BindELContext.getNotifys(method, viewModel,
 						(String) null, (Object) null)); // collect notifyChange
+			}else{
+				throw new UiException("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel);
 			}
 			if(_log.debugable()){
 				_log.debug("after doExecute notifys=[%s]", notifys);
