@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -1395,7 +1396,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private void addBinding(Component comp, String attr, Binding binding) {
 		Map<String, List<Binding>> attrMap = _bindings.get(comp);
 		if (attrMap == null) {
-			attrMap = new HashMap<String, List<Binding>>(); 
+			//bug 657, we have to keep the attribute assignment order.
+			attrMap = new LinkedHashMap<String, List<Binding>>(); 
 			_bindings.put(comp, attrMap);
 		}
 		List<Binding> bindings = attrMap.get(attr);
