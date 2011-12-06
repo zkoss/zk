@@ -1,4 +1,4 @@
-/* OptionRenderer.java
+/* ItemRenderer.java
 
 	Purpose:
 		
@@ -16,18 +16,20 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.ui.Component;
+
 /**
- * Identifies components that can be used to render the content of the cells in
- * a {@link Selectbox}.
+ * Identifies components that can be used to render the content of the html.
  * 
  * @author jumperchen
  * @since 6.0.0
  */
-public interface OptionRenderer<T> {
+public interface ItemRenderer<T> {
 	
-	/** Renders the data to the specific cell.
+	/** Renders the data to the specific html.
 	 *
+	 * @param owner the comopnent that the renderer belongs to.
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public String render(T data) throws Exception;
+	public String render(Component owner, T data) throws Exception;
 }

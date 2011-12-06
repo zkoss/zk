@@ -24,9 +24,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
         String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
         org.zkoss.zul.ListModelList model = new org.zkoss.zul.ListModelList(userName);
 
-        org.zkoss.zul.OptionRenderer render = new org.zkoss.zul.OptionRenderer() {
+        org.zkoss.zul.ItemRenderer render = new org.zkoss.zul.ItemRenderer() {
 
-                public String render(Object data) throws Exception {
+                public String render(Component owner, Object data) throws Exception {
                         return data.toString();
                 }
         };

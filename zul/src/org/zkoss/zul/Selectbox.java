@@ -32,11 +32,12 @@ import org.zkoss.zul.event.ListDataListener;
 
 /**
  * A light weight dropdown list.
- * <p>Default {@link #getZclass}: z-selectbox.
- * It does not create child widgets for each data, so the memory usage is much
- * lower at the server.
- * However, the implementation is based on HTML SELECT and OPTION tags,
- * so the functionality is not as rich as {@link Listbox}.
+ * <p>
+ * Default {@link #getZclass}: z-selectbox. It does not create child widgets for
+ * each data, so the memory usage is much lower at the server. However, the
+ * implementation is based on HTML SELECT and OPTION tags, so the functionality
+ * is not as rich as {@link Listbox}.
+ * 
  * @author jumperchen
  * @since 6.0.0
  */
@@ -48,11 +49,12 @@ public class Selectbox extends HtmlBasedComponent {
 	private int _tabindex;
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
-	private transient OptionRenderer<?> _renderer;
+	private transient ItemRenderer<?> _renderer;
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
-	
+
 	static {
-		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE
+				| CE_IMPORTANT);
 		addClientEvent(Selectbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Selectbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
@@ -60,13 +62,14 @@ public class Selectbox extends HtmlBasedComponent {
 	public String getZclass() {
 		return _zclass == null ? "z-selectbox" : _zclass;
 	}
+
 	/**
 	 * Returns the index of the selected item (-1 if no one is selected).
 	 */
 	public int getSelectedIndex() {
 		return _jsel;
 	}
-	
+
 	/**
 	 * Selects the item with the given index.
 	 */
@@ -97,30 +100,31 @@ public class Selectbox extends HtmlBasedComponent {
 			smartUpdate("tabindex", tabindex);
 		}
 	}
+
 	/**
 	 * Returns the renderer to render each item, or null if the default renderer
 	 * is used.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> OptionRenderer<T> getItemRenderer() {
-		return (OptionRenderer)_renderer;
+	public <T> ItemRenderer<T> getItemRenderer() {
+		return (ItemRenderer) _renderer;
 	}
 
 	/**
 	 * Sets the renderer which is used to render each item if {@link #getModel}
 	 * is not null.
-	 *
+	 * 
 	 * <p>
 	 * Note: changing a render will not cause the selectbox to re-render. If you
 	 * want it to re-render, you could assign the same model again (i.e.,
 	 * setModel(getModel())), or fire an {@link ListDataEvent} event.
-	 *
+	 * 
 	 * @param renderer
 	 *            the renderer, or null to use the default.
 	 * @exception UiException
 	 *                if failed to initialize with the model
 	 */
-	public void setItemRenderer(OptionRenderer<?> renderer) {
+	public void setItemRenderer(ItemRenderer<?> renderer) {
 		if (_renderer != renderer) {
 			_renderer = renderer;
 			invalidate();
@@ -135,8 +139,7 @@ public class Selectbox extends HtmlBasedComponent {
 			NoSuchMethodException, IllegalAccessException,
 			InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setItemRenderer((OptionRenderer) Classes
-					.newInstanceByThread(clsnm));
+			setItemRenderer((ItemRenderer) Classes.newInstanceByThread(clsnm));
 	}
 
 	/**
@@ -148,10 +151,10 @@ public class Selectbox extends HtmlBasedComponent {
 		return _disabled;
 	}
 
-	
 	protected boolean isChildable() {
 		return false;
 	}
+
 	/**
 	 * Sets whether it is disabled.
 	 */
@@ -209,12 +212,12 @@ public class Selectbox extends HtmlBasedComponent {
 			};
 		_model.addListDataListener(_dataListener);
 	}
-	
+
 	/**
-	 * Sets the list model associated with this selectbox. If a non-null model is
-	 * assigned, no matter whether it is the same as the previous, it will
+	 * Sets the list model associated with this selectbox. If a non-null model
+	 * is assigned, no matter whether it is the same as the previous, it will
 	 * always cause re-render.
-	 *
+	 * 
 	 * @param model
 	 *            the list model to associate, or null to dis-associate any
 	 *            previous model.
@@ -242,33 +245,55 @@ public class Selectbox extends HtmlBasedComponent {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		invalidate();
 	}
+
 	private void postOnInitRender() {
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
 		}
 	}
-	
+
 	/**
-	 * Returns the model associated with this selectbox, or null if this selectbox
-	 * is not associated with any list data model.
+	 * Returns the model associated with this selectbox, or null if this
+	 * selectbox is not associated with any list data model.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
-		return (ListModel)_model;
+		return (ListModel) _model;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> OptionRenderer<T> getRealRenderer() {
-		final OptionRenderer renderer = getItemRenderer();
-		return renderer != null ? renderer : _defRend; 
+	public <T> ItemRenderer<T> getRealRenderer() {
+		final ItemRenderer renderer = getItemRenderer();
+		return renderer != null ? renderer : _defRend;
 	}
-	
-	private static final OptionRenderer<Object> _defRend = new OptionRenderer<Object>() {
-		public String render(Object data) {
-			return Objects.toString(data);
+
+	private static final ItemRenderer<Object> _defRend = new ItemRenderer<Object>() {
+		public String render(Component owner, final Object data) {
+			final Selectbox self = (Selectbox) owner;
+			final Template tm = self.getTemplate("model");
+			if (tm == null)
+				return Objects.toString(data);
+			else {
+				final Component[] items = tm.create(null, null,
+						new VariableResolver() {
+							public Object resolveVariable(String name) {
+								return "each".equals(name) ? data : null;
+							}
+						}, null);
+				if (items.length != 1)
+					throw new UiException(
+							"The model template must have exactly one item, not "
+									+ items.length);
+				if (!(items[0] instanceof Label))
+					throw new UiException(
+							"The model template can only support Label component, not "
+									+ items[0]);
+				return ((Label) items[0]).getValue();
+			}
 		}
 	};
+
 	// -- ComponentCtrl --//
 	@SuppressWarnings("unchecked")
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
@@ -278,38 +303,20 @@ public class Selectbox extends HtmlBasedComponent {
 		render(renderer, "name", _name);
 		render(renderer, "disabled", isDisabled());
 		renderer.render("selectedIndex", _jsel);
-		
+
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
-		
+
 		if (_model != null) {
-	        String[] datas = new String[_model.getSize()];
-	        final Template tm = getTemplate("model");
+			String[] datas = new String[_model.getSize()];
 			try {
-				if (tm == null) {
-			        final OptionRenderer render = getRealRenderer();
-					for (int i = 0; i < _model.getSize(); i++)
-						datas[i] = render.render(_model.getElementAt(i));
-				} else {
-					for (int i = 0; i < _model.getSize(); i++) {
-						final Object data = _model.getElementAt(i);
-						final Component[] items = tm.create(null, null,
-							new VariableResolver() {
-								public Object resolveVariable(String name) {
-									return "each".equals(name) ? data: null;
-								}
-							}, null);
-						if (items.length != 1)
-							throw new UiException("The model template must have exactly one item, not "+items.length);
-						if (!(items[0] instanceof Label))
-							throw new UiException("The model template can only support Label component, not "+items[0]);
-						datas[i] = ((Label)items[0]).getValue();
-					}
-				}
+				final ItemRenderer render = getRealRenderer();
+				for (int i = 0; i < _model.getSize(); i++)
+					datas[i] = render.render(this, _model.getElementAt(i));
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
-			
+
 			render(renderer, "items", datas);
 		}
 	}
@@ -317,10 +324,12 @@ public class Selectbox extends HtmlBasedComponent {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			_jsel = ((Integer)request.getData().get("")).intValue();
-			Events.postEvent(new Event(Events.ON_SELECT, this, request.getData().get("")));
+			_jsel = ((Integer) request.getData().get("")).intValue();
+			Events.postEvent(new Event(Events.ON_SELECT, this, request
+					.getData().get("")));
 		}
 	}
+
 	// Cloneable//
 	public Object clone() {
 		final Selectbox clone = (Selectbox) super.clone();
@@ -331,7 +340,6 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 		return clone;
 	}
-
 
 	// -- Serializable --//
 	// NOTE: they must be declared as private
@@ -354,7 +362,7 @@ public class Selectbox extends HtmlBasedComponent {
 
 		_model = (ListModel) s.readObject();
 		didDeserialize(_model);
-		_renderer = (OptionRenderer) s.readObject();
+		_renderer = (ItemRenderer) s.readObject();
 		didDeserialize(_renderer);
 		if (_model != null) {
 			initDataListener();
