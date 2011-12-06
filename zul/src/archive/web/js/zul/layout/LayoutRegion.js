@@ -762,7 +762,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						Math.floor(pn.offsetHeight * zk.parseInt(h.substring(0, pert)) / 100),
 						0) : this.$n('real').offsetHeight
 			};
-			if (zk.ie == 9 && (region == 'west' || region == 'east') && !this._width)
+			if (zk.ie == 9 && (region == 'west' || region == 'east') && !this._width && !this._hflex)
 				ambit.w++; // B50-ZK-641: text wrap in IE
 		}
 		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0}: this.$n('split') || {offsetHeight:0, offsetWidth:0};
