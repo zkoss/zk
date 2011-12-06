@@ -153,13 +153,16 @@ public class AnnotationHelper {
 
 			j = ++k;
 			final StringBuffer sb = new StringBuffer(len);
+			int nparen = 1;
 			for (char quot = (char)0;; ++j) {
 				if (j >= len)
 					throw wrongAnnotationException(cval, ") expected");
 
 				char cc = cval.charAt(j);
 				if (quot == (char)0) {
-					if (cc == ')') { //found
+					if (cc == '(') {
+						++nparen;
+					} else if (cc == ')' && --nparen == 0) { //found
 						addByRawValueInFormat2(annotName, sb.toString().trim());
 						break; //next @name(value)
 					} else if (cc == '\'' || cc == '"') {
