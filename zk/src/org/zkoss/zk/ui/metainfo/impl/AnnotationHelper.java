@@ -148,7 +148,7 @@ public class AnnotationHelper {
 			//look for annotation's name
 			int k = cval.indexOf('(', ++j);
 			if (k < 0)
-				throw wrongAnnotationException(cval, "( expected");
+				throw wrongAnnotationException(cval, "'(' expected");
 			final String annotName = cval.substring(j, k).trim();
 
 			j = ++k;
@@ -156,7 +156,7 @@ public class AnnotationHelper {
 			int nparen = 1;
 			for (char quot = (char)0;; ++j) {
 				if (j >= len)
-					throw wrongAnnotationException(cval, ") expected");
+					throw wrongAnnotationException(cval, "')' expected");
 
 				char cc = cval.charAt(j);
 				if (quot == (char)0) {
@@ -188,11 +188,14 @@ public class AnnotationHelper {
 		final StringBuffer sb = new StringBuffer(len);
 		String nm = null;
 		char quot = (char)0;
+		int nparen = 0;
 		main: //for each name=value, parse name and value
 		for (int j = 0;; ++j) {
 			if (j >= len) {
 				if (quot != (char)0)
 					throw wrongAnnotationException(rval, quot+" expected (not paired)");
+				if (nparen != 0)
+					throw wrongAnnotationException(rval, "')' expected");
 
 				final String val = sb.toString().trim();
 				if (nm != null || val.length() > 0) //skip empty one (iincluding after last , )
@@ -202,29 +205,34 @@ public class AnnotationHelper {
 
 			char cc = rval.charAt(j);
 			if (quot == (char)0) {
-				if (cc == ',') {
+				if (cc == ',' && nparen == 0) {
 					final String val = sb.toString().trim();
 					if (nm == null && val.length() == 0)
-						throw wrongAnnotationException(rval, "nothing before comma (,)");
+						throw wrongAnnotationException(rval, "nothing before ','");
 
 					attrs.put(nm, val); //found
 					nm = null; //cleanup
 					sb.setLength(0); //cleanup
 					continue; //next name=value
-				} else if (cc == '=') {
+				} else if (cc == '=' && nparen == 0) {
 					if (nm != null)
-						throw wrongAnnotationException(rval, "comman (,) missed between two equal sign (=)");
+						throw wrongAnnotationException(rval, "',' missed between two equal sign (=)");
 					nm = sb.toString().trim(); //name found
 					sb.setLength(0); //cleanup
 					continue; //parse value
+				} else if (cc == '(') {
+					++nparen;
+				} else if (cc == ')') {
+					if (--nparen < 0)
+						throw wrongAnnotationException(rval, "too many ')'");
 				} else if (cc == '\'' || cc == '"') {
 					quot = cc;
-				} else if (cc == '{'
+				} else if (cc == '{' && nparen == 0
 				&& (sb.length() == 0 || sb.toString().trim().length() == 0)) {
 					//look for }
 					for (int k = ++j;; ++j) {
 						if (j >= len)
-							throw wrongAnnotationException(rval, "} expected");
+							throw wrongAnnotationException(rval, "'}' expected");
 
 						cc = rval.charAt(j);
 						if (quot == (char)0) {
@@ -232,7 +240,7 @@ public class AnnotationHelper {
 								attrs.put(nm, parseValueArray(rval.substring(k, j).trim()));
 								j = Strings.skipWhitespaces(rval, j + 1);
 								if (j < len && rval.charAt(j) != ',')
-									throw wrongAnnotationException(rval, rval.charAt(j)+" unexpected");
+									throw wrongAnnotationException(rval, "',' expected, not '" + rval.charAt(j)+'\'');
 								nm = null; //cleanup
 								sb.setLength(0); //cleanup
 								continue main;
@@ -278,10 +286,13 @@ public class AnnotationHelper {
 		final int len = rval.length();
 		char quot = (char)0;
 		final StringBuffer sb = new StringBuffer(len);
+		int nparen = 0;
 		for (int j =0;; ++j) {
 			if (j >= len) {
 				if (quot != (char)0)
-					throw wrongAnnotationException(rval, quot+" expected (not paired)");
+					throw wrongAnnotationException(rval, '\'' + quot+"' expected (not paired)");
+				if (nparen != 0)
+					throw wrongAnnotationException(rval, "')' expected");
 
 				final String val = sb.toString().trim();
 				if (val.length() > 0) //skip if last if it is empty
@@ -291,10 +302,15 @@ public class AnnotationHelper {
 
 			char cc = rval.charAt(j);
 			if (quot == (char)0) {
-				if (cc == ',') { //found
+				if (cc == ',' && nparen == 0) { //found
 					attrs.add(sb.toString().trim()); //including empty (between ,)
 					sb.setLength(0); //cleanup
 					continue;
+				} else if (cc == '(') {
+					++nparen;
+				} else if (cc == ')') {
+					if (--nparen < 0)
+						throw wrongAnnotationException(rval, "too many ')'");
 				} else if (cc == '\'' || cc == '"') {
 					quot = cc;
 				}
