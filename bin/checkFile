@@ -10,15 +10,26 @@
 #
 #Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 #
-if [ $# != 2 ] ; then
+if [ $# != 2 ] && [ $# != 4 ] ; then
 	echo Please specify two files or two folders
-	echo for example
+	echo for example,
 	echo ./bin/checkFile folder1 folder2
+	echo To replace version number in each file/folder, put version number in front of the file/folder names
+	echo for example,
+	echo ./bin/checkFile 6.0.0 folder1 6.0.1 folder2
 	exit 1
 fi
 
-folder1=$1
-folder2=$2
+if [ $# != 4 ] ; then
+	folder1=$1
+	folder2=$2
+else
+	ver1=$1
+	folder1=$2
+	ver2=$3
+	folder2=$4
+fi
+
 if [ ! -d "$folder1" ] && [ ! -f "$folder1"] ; then
 	echo $folder1 is not a file or folder
 	exit 1
@@ -75,6 +86,12 @@ else
 fi
 
 cd $maindir
+
+if [ $# != 2 ] ; then
+	sed -i "s/$ver1/{VER}/g" $tmp1.log
+	sed -i "s/$ver2/{VER}/g" $tmp2.log
+fi
+
 TortoiseMerge.exe $tmp1.log $tmp2.log
 
 rm $tmp1.log
