@@ -230,13 +230,13 @@ public class AnnotationHelper {
 				} else if (cc == '{' && nparen == 0
 				&& (sb.length() == 0 || sb.toString().trim().length() == 0)) {
 					//look for }
-					for (int k = ++j;; ++j) {
+					for (int k = ++j, ncur = 1;; ++j) {
 						if (j >= len)
 							throw wrongAnnotationException(rval, "'}' expected");
 
 						cc = rval.charAt(j);
 						if (quot == (char)0) {
-							if (cc == '}') { //found
+							if (cc == '}' && --ncur == 0) { //found
 								attrs.put(nm, parseValueArray(rval.substring(k, j).trim()));
 								j = Strings.skipWhitespaces(rval, j + 1);
 								if (j < len && rval.charAt(j) != ',')
@@ -244,6 +244,8 @@ public class AnnotationHelper {
 								nm = null; //cleanup
 								sb.setLength(0); //cleanup
 								continue main;
+							} else if (cc == '{') {
+								++ncur;
 							} else if (cc == '\'' || cc == '"') {
 								quot = cc;
 							}
