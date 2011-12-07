@@ -2189,6 +2189,7 @@ redraw: function (out) {
 			out.push("display:none;");
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
+			s = s.replace(/\"/g,'\'');  // B50-ZK-647
 			out.push(s);
 			if (s.charAt(s.length - 1) != ';')
 				out.push(';');
