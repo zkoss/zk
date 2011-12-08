@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.resource.Location;
 
 /**
  * A map of annotations used with {@link ComponentDefinition} and
@@ -64,9 +65,12 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 						return ans.get(0);
 
 					//merge annotations into a single annotation
-					final AnnotImpl ai = new AnnotImpl(annotName);
-					for (Annotation an: ans)
+					final AnnotImpl ai = new AnnotImpl(annotName, null);
+					for (Annotation an: ans) {
+						if (ai._loc == null)
+							ai._loc = an.getLocation();
 						ai.addAttributes(an);
+					}
 					return ai;
 				}
 			}
@@ -182,8 +186,10 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	 * @param propName the property name.
 	 * If null, this method returns the annotation(s) associated with the
 	 * component (rather than a particular property).
+	 * @since 6.0.0
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
+	public void addAnnotation(String propName, String annotName,
+	Map<String, Object> annotAttrs, Location loc) {
 		initAnnots();
 
 		Map<String, List<Annotation>> anmap = _annots.get(propName);
@@ -194,7 +200,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		if (ans == null)
 			anmap.put(annotName, ans= new LinkedList<Annotation>());
 
-		ans.add(new AnnotImpl(annotName, annotAttrs));
+		ans.add(new AnnotImpl(annotName, annotAttrs, loc));
 	}
 	/** Initializes _annots by creating and assigning a new map for it.
 	 */
@@ -235,12 +241,15 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 	private static class AnnotImpl implements Annotation {
 		private final String _name;
 		private Map<String, Object> _attrs;
+		private Location _loc;
 
-		private AnnotImpl(String name) {
+		private AnnotImpl(String name, Location loc) {
 			_name = name;
+			_loc = loc;
 		}
-		private AnnotImpl(String name, Map<String, Object> attrs) {
+		private AnnotImpl(String name, Map<String, Object> attrs, Location loc) {
 			_name = name;
+			_loc = loc;
 			addAttributes(attrs);
 		}
 
@@ -274,16 +283,18 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 				addAttributes(((AnnotImpl)an)._attrs);
 		}
 
-		//Annotation//
+		@Override
 		public String getName() {
 			return _name;
 		}
+		@Override
 		@SuppressWarnings("unchecked")
 		public Map<String, Object> getAttributes() {
 			if (_attrs != null)
 				return _attrs;
 			return Collections.emptyMap();
 		}
+		@Override
 		public String getAttribute(String name) {
 			if (_attrs != null) {
 				Object val = _attrs.get(name);
@@ -295,6 +306,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			}
 			return null;
 		}
+		@Override
 		public String[] getAttributeValues(String name) {
 			if (_attrs != null) {
 				Object val = _attrs.get(name);
@@ -304,6 +316,10 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 					return new String[] {(String)val};
 			}
 			return null;
+		}
+		@Override
+		public Location getLocation() {
+			return _loc;
 		}
 		public String toString() {
 			final StringBuffer sb =

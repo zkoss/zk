@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.CollectionsX;
+import org.zkoss.util.resource.Location;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -755,11 +756,6 @@ public class ComponentInfo extends ForEachBranchInfo {
 		return propmap;
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #addAnnotation(String, String, Map)}.
-	 */
-	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
-		addAnnotation(null, annotName, annotAttrs);
-	}
 	/** Adds an annotation to the specified proeprty of this component
 	 * info.
 	 *
@@ -770,11 +766,15 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value),
 	 * or (String name, String[] value).
+	 * @param loaction the location information of the annotation in
+	 * the document, or null if not available.
+	 * @since 6.0.0
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
+	public void addAnnotation(String propName, String annotName,
+	Map<String, Object> annotAttrs, Location loc) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
-		_annots.addAnnotation(propName, annotName, annotAttrs);
+		_annots.addAnnotation(propName, annotName, annotAttrs, loc);
 	}
 
 	/** Duplicates the specified component info but retaining

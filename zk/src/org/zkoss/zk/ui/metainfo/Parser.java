@@ -850,8 +850,8 @@ public class Parser {
 						attrAnnHelper = new AnnotationHelper();
 					final String attvaltrim = attval.trim();
 					if (attvaltrim.startsWith("@")) {
-						//since 5.1, attnm is the property name (than annot name)
-						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
+						//since 6.0, attnm is the property name (than annot name)
+						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, attr.getLocator());
 					} else {
 						attrAnnHelper.addByRawValue(attnm, attvaltrim);
 					}
@@ -883,12 +883,12 @@ public class Parser {
 						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
-							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true);
+							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, attr.getLocator());
 						} else {
 							addAttribute(compInfo, attrns, attnm, attval, null,
 								attr.getLocator());
 							if (attrAnnHelper != null)
-								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
+								attrAnnHelper.applyAnnotations(compInfo, attnm, true, el.getLocator());
 						}
 					}
 				}
@@ -896,7 +896,7 @@ public class Parser {
 
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
-			annHelper.applyAnnotations(compInfo, null, true);
+			annHelper.applyAnnotations(compInfo, null, true, el.getLocator());
 
 			final Collection<Item> items = el.getChildren();
 			String textAs = null;
@@ -967,10 +967,11 @@ public class Parser {
 	}
 	/** @param val the value (it was trimmed before called). */
 	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
-	ComponentInfo compInfo, String nm, String val, boolean selfAllowed) {
-		attrAnnHelper.addByCompoundValue(val.trim());
+	ComponentInfo compInfo, String nm, String val, boolean selfAllowed,
+	org.zkoss.xml.Locator loc) {
+		attrAnnHelper.addByCompoundValue(val.trim(), loc);
 		attrAnnHelper.applyAnnotations(compInfo,
-			selfAllowed && "self".equals(nm) ? null: nm, true);
+			selfAllowed && "self".equals(nm) ? null: nm, true, loc);
 	}
 	private static void warnWrongZkAttr(Attribute attr) {
 		log.warning(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
@@ -1068,7 +1069,7 @@ public class Parser {
 				el.getLocator());
 		}
 
-		annHelper.applyAnnotations(parent, attnm, true);
+		annHelper.applyAnnotations(parent, attnm, true, el.getLocator());
 	}
 	private static void parseCustomAttributes(LanguageDefinition langdef,
 	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
@@ -1105,7 +1106,7 @@ public class Parser {
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
-					attnm, attvaltrim, false);
+					attnm, attvaltrim, false, attr.getLocator());
 			} else {
 				attrs.put(attnm, attval);
 			}
@@ -1160,7 +1161,8 @@ public class Parser {
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
 			attrs.put(attr.getLocalName(),
-				AnnotationHelper.parseAttributeValue(attr.getValue().trim()));
+				AnnotationHelper.parseAttributeValue(
+					attr.getValue().trim(), attr.getLocator()));
 		}
 		annHelper.add(el.getLocalName(), attrs);
 	}

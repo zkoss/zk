@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.net.URL;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.util.resource.Location;
 import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.ui.Page;
@@ -169,11 +170,6 @@ implements ComponentDefinition, java.io.Serializable {
 		_custAttrs.put(name, ev);
 	}
 
-	/** @deprecated As of release 6.0.0, replaced with {@link #addAnnotation(String, String, Map)}.
-	 */
-	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
-		addAnnotation(null, annotName, annotAttrs);
-	}
 	/** Adds an annotation to the specified proeprty of this component
 	 * definition.
 	 *
@@ -183,11 +179,15 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value).
+	 * @param loaction the location information of the annotation in
+	 * the document, or null if not available.
+	 * @since 6.0.0
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
+	public void addAnnotation(String propName, String annotName,
+	Map<String, Object> annotAttrs, Location loc) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
-		_annots.addAnnotation(propName, annotName, annotAttrs);
+		_annots.addAnnotation(propName, annotName, annotAttrs, loc);
 	}
 
 	/** Returns the current directory which is used to convert

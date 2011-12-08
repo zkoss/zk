@@ -2468,7 +2468,7 @@ w:use="foo.MyWindow"&gt;
 	}
 	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
 		unshareAnnotationMap(true);
-		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs);
+		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs, null);
 	}
 	/** Clones the shared annotations, if shared.
 	 * @param autocreate whether to create an annotation map if not available.

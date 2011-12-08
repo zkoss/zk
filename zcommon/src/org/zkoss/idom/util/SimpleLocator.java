@@ -80,8 +80,9 @@ public class SimpleLocator implements Locator, Serializable {
 			if (sb.length() > 0)
 				sb.append(':');
 			sb.append(_lnno);
-			if (_colno >= 0)
-				sb.append(':').append(_colno);
+//we don't show column # since it always points to the end of the line
+//			if (_colno >= 0)
+//				sb.append(':').append(_colno);
 		}
 		return sb.length() > 0 ?
 			sb.append(": ").append(message).toString(): message;

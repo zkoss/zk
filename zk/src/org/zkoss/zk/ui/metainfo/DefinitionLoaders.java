@@ -690,10 +690,12 @@ public class DefinitionLoaders {
 			final Map<String, Object> annotAttrs = new LinkedHashMap<String, Object>();
 			for (Map.Entry<String, String> me: parseAttrs(el).entrySet())
 				annotAttrs.put(me.getKey(),
-					AnnotationHelper.parseAttributeValue(me.getValue().trim()));
+					AnnotationHelper.parseAttributeValue(me.getValue().trim(),
+					el.getLocator())); //not accurate but acceptable
 
 			compdef.addAnnotation(
-				el.getElementValue("property-name", true), annotName, annotAttrs);
+				el.getElementValue("property-name", true), annotName,
+					annotAttrs, el.getLocator());
 		}
 	}
 	/** Configures an integer. */

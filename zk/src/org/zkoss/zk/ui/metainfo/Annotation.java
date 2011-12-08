@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Map;
+import org.zkoss.util.resource.Location;
 
 /**
  * The common interface extended by all annotation types.
@@ -58,4 +59,16 @@ public interface Annotation extends java.io.Serializable {
 	 * @since 6.0.0
 	 */
 	public String[] getAttributeValues(String name);
+
+	/** Returns the location information of the annotation in the document,
+	 * or null if not available.
+	 * It is useful for displaying the error message:
+	 *
+	 * <pre><code>
+	 *private static String message(String message, Location loc) {
+	 *   return loc != null ? loc.format(message): message;
+	 *}</code></pre>
+	 *@since 6.0.0
+	 */
+	public Location getLocation();
 }

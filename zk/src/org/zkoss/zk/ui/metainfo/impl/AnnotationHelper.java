@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Maps;
+import org.zkoss.util.resource.Location;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -133,8 +134,11 @@ public class AnnotationHelper {
 	 *
 	 * @param cval the compound value to check. This method assumes that
 	 * cval starts with @ and the length is larger than 2
+	 * @param loc the location information of the value for displaying better
+	 * error message. Ignored if null.
+	 * @since 6.0.0
 	 */
-	public void addByCompoundValue(String cval) {
+	public void addByCompoundValue(String cval, Location loc) {
 		final int len = cval.length();
 		if (cval.charAt(1) == '{'
 		&& cval.charAt(len - 1) == '}') { //Format 1
@@ -148,7 +152,7 @@ public class AnnotationHelper {
 			//look for annotation's name
 			int k = cval.indexOf('(', ++j);
 			if (k < 0)
-				throw wrongAnnotationException(cval, "'(' expected");
+				throw wrongAnnotationException(cval, "'(' expected", loc);
 			final String annotName = cval.substring(j, k).trim();
 
 			j = ++k;
@@ -156,14 +160,14 @@ public class AnnotationHelper {
 			int nparen = 1;
 			for (char quot = (char)0;; ++j) {
 				if (j >= len)
-					throw wrongAnnotationException(cval, "')' expected");
+					throw wrongAnnotationException(cval, "')' expected", loc);
 
 				char cc = cval.charAt(j);
 				if (quot == (char)0) {
 					if (cc == '(') {
 						++nparen;
 					} else if (cc == ')' && --nparen == 0) { //found
-						addByRawValueInFormat2(annotName, sb.toString().trim());
+						addByRawValueInFormat2(annotName, sb.toString().trim(), loc);
 						break; //next @name(value)
 					} else if (cc == '\'' || cc == '"') {
 						quot = cc; //begin-of-quot
@@ -182,7 +186,7 @@ public class AnnotationHelper {
 		}
 	}
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
-	private void addByRawValueInFormat2(String annotName, String rval) {
+	private void addByRawValueInFormat2(String annotName, String rval, Location loc) {
 		final Map<String, Object> attrs = new LinkedHashMap<String, Object>(4);
 		final int len = rval.length();
 		final StringBuffer sb = new StringBuffer(len);
@@ -193,9 +197,9 @@ public class AnnotationHelper {
 		for (int j = 0;; ++j) {
 			if (j >= len) {
 				if (quot != (char)0)
-					throw wrongAnnotationException(rval, quot+" expected (not paired)");
+					throw wrongAnnotationException(rval, quot+" expected (not paired)", loc);
 				if (nparen != 0)
-					throw wrongAnnotationException(rval, "')' expected");
+					throw wrongAnnotationException(rval, "')' expected", loc);
 
 				final String val = sb.toString().trim();
 				if (nm != null || val.length() > 0) //skip empty one (iincluding after last , )
@@ -208,7 +212,7 @@ public class AnnotationHelper {
 				if (cc == ',' && nparen == 0) {
 					final String val = sb.toString().trim();
 					if (nm == null && val.length() == 0)
-						throw wrongAnnotationException(rval, "nothing before ','");
+						throw wrongAnnotationException(rval, "nothing before ','", loc);
 
 					attrs.put(nm, val); //found
 					nm = null; //cleanup
@@ -216,7 +220,7 @@ public class AnnotationHelper {
 					continue; //next name=value
 				} else if (cc == '=' && nparen == 0) {
 					if (nm != null)
-						throw wrongAnnotationException(rval, "',' missed between two equal sign (=)");
+						throw wrongAnnotationException(rval, "',' missed between two equal sign (=)", loc);
 					nm = sb.toString().trim(); //name found
 					sb.setLength(0); //cleanup
 					continue; //parse value
@@ -224,7 +228,7 @@ public class AnnotationHelper {
 					++nparen;
 				} else if (cc == ')') {
 					if (--nparen < 0)
-						throw wrongAnnotationException(rval, "too many ')'");
+						throw wrongAnnotationException(rval, "too many ')'", loc);
 				} else if (cc == '\'' || cc == '"') {
 					quot = cc;
 				} else if (cc == '{' && nparen == 0
@@ -232,15 +236,15 @@ public class AnnotationHelper {
 					//look for }
 					for (int k = ++j, ncur = 1;; ++j) {
 						if (j >= len)
-							throw wrongAnnotationException(rval, "'}' expected");
+							throw wrongAnnotationException(rval, "'}' expected", loc);
 
 						cc = rval.charAt(j);
 						if (quot == (char)0) {
 							if (cc == '}' && --ncur == 0) { //found
-								attrs.put(nm, parseValueArray(rval.substring(k, j).trim()));
+								attrs.put(nm, parseValueArray(rval.substring(k, j).trim(), loc));
 								j = Strings.skipWhitespaces(rval, j + 1);
 								if (j < len && rval.charAt(j) != ',')
-									throw wrongAnnotationException(rval, "',' expected, not '" + rval.charAt(j)+'\'');
+									throw wrongAnnotationException(rval, "',' expected, not '" + rval.charAt(j)+'\'', loc);
 								nm = null; //cleanup
 								sb.setLength(0); //cleanup
 								continue main;
@@ -275,15 +279,17 @@ public class AnnotationHelper {
 	 * @param val the value. This method assumes val has been trimmed before the
 	 * call.
 	 * @exception NullPointException if val is null.
+	 * @param loc the location information of the value for displaying better
+	 * error message. Ignored if null.
 	 * @since 6.0.0
 	 */
-	public static Object parseAttributeValue(String val) {
+	public static Object parseAttributeValue(String val, Location loc) {
 		final int len = val.length();
 		if (len >= 2 && val.charAt(0) == '{' && val.charAt(len - 1) =='}')
-			return parseValueArray(val.substring(1, len - 1));
+			return parseValueArray(val.substring(1, len - 1), loc);
 		return val;
 	}
-	private static String[] parseValueArray(String rval) {
+	private static String[] parseValueArray(String rval, Location loc) {
 		final List<String> attrs = new ArrayList<String>();
 		final int len = rval.length();
 		char quot = (char)0;
@@ -292,9 +298,9 @@ public class AnnotationHelper {
 		for (int j =0;; ++j) {
 			if (j >= len) {
 				if (quot != (char)0)
-					throw wrongAnnotationException(rval, '\'' + quot+"' expected (not paired)");
+					throw wrongAnnotationException(rval, '\'' + quot+"' expected (not paired)", loc);
 				if (nparen != 0)
-					throw wrongAnnotationException(rval, "')' expected");
+					throw wrongAnnotationException(rval, "')' expected", loc);
 
 				final String val = sb.toString().trim();
 				if (val.length() > 0) //skip if last if it is empty
@@ -312,7 +318,7 @@ public class AnnotationHelper {
 					++nparen;
 				} else if (cc == ')') {
 					if (--nparen < 0)
-						throw wrongAnnotationException(rval, "too many ')'");
+						throw wrongAnnotationException(rval, "too many ')'", loc);
 				} else if (cc == '\'' || cc == '"') {
 					quot = cc;
 				}
@@ -330,8 +336,10 @@ public class AnnotationHelper {
 
 		return (String[])attrs.toArray(new String[attrs.size()]);
 	}
-	private static UiException wrongAnnotationException(String cval, String reason) {
-		return new UiException("Illegal annotation, "+reason+": "+cval);
+	private static UiException wrongAnnotationException(
+	String cval, String reason, Location loc) {
+		final String msg = "Illegal annotation, "+reason+": "+cval;
+		return new UiException(loc != null ? loc.format(msg): msg);
 	}
 	private void addInFormat1(String cval) {
 		final char[] seps1 = {'(', ' '}, seps2 = {')'};
@@ -374,12 +382,15 @@ public class AnnotationHelper {
 	 * @param compInfo the instance definition to update
 	 * @param propName the property name
 	 * @param clear whether to clear all definitions before returning
+	 * @param loaction the location information of the annotation in
+	 * the document, or null if not available.
 	 * @see #clear
+	 * @since 6.0.0
 	 */
 	public void applyAnnotations(ComponentInfo compInfo, String propName,
-	boolean clear) {
+	boolean clear, Location loc) {
 		for (AnnotInfo info: _annots) {
-			compInfo.addAnnotation(propName, info.name, info.attrs);
+			compInfo.addAnnotation(propName, info.name, info.attrs, loc);
 		}
 		if (clear)
 			_annots.clear();
