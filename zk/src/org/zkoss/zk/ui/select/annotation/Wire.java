@@ -22,14 +22,14 @@ public @interface Wire {
 	
 	/**
 	 * The selector string that specifies the Components to wire. If empty, 
-	 * GenericAnnotatedComposer will attempt to wire from implicit objects,
+	 * {@link SelectorComposer} will attempt to wire from implicit objects,
 	 * XEL/ZScript variables and fellows.
 	 */
 	String value() default "";
 	
 	/**
 	 * If set to true, no Exception is throw when component/object is not found
-	 * for wiring. By default, when GenericAnnotatedComposer fails to wire an 
+	 * for wiring. By default, when {@link SelectorComposer} fails to wire an 
 	 * object to a field, an UiException will be thrown. 
 	 */
 	boolean optional() default false;

@@ -63,8 +63,7 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
 		_self = comp;
-		autowire(comp);
-		// adding event listeners is only done here
+		Selectors.wireVariables(comp, this);
 		Selectors.wireEventListeners(comp, this); 
 		
 		//register event to wire variables just before component onCreate
@@ -75,16 +74,16 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 	 * Redo variable auto-wiring.
 	 */
 	protected final void rewire(){
-		autowire(_self);
+		Selectors.wireVariables(_self, this);
 	}
 	
 	private class BeforeCreateWireListener implements EventListener<Event> {
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
-			autowire(event.getTarget());
+			Selectors.wireVariables(event.getTarget(), SelectorComposer.this);
 			//called only once
-			event.getTarget().removeEventListener("onCreate", this);
+			_self.removeEventListener("onCreate", this);
 		}
 	}
 	
@@ -155,15 +154,6 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 		}
 	}
 	
-	// helper //
-	private void autowire(Component comp){
-		IdSpace spaceOwner = comp.getSpaceOwner();
-		if(spaceOwner instanceof Page)
-			Selectors.wireVariables((Page) spaceOwner, this);
-		else
-			Selectors.wireVariables((Component) spaceOwner, this);
-	}
-	
 	@Override
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		// no super
@@ -174,11 +164,7 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 	public void didActivate(Component comp) {
 		// rewire Session, Webapp and some other variable back, depending on
 		// annotation
-		IdSpace spaceOwner = comp.getSpaceOwner();
-		if(spaceOwner instanceof Page)
-			Selectors.rewireVariables((Page) spaceOwner, this);
-		else
-			Selectors.rewireVariables((Component) spaceOwner, this);
+		Selectors.rewireVariables(comp, this);
 	}
 	
 	@Override

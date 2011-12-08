@@ -118,33 +118,32 @@ public class Selectors {
 	}
 	
 	/**
-	 * Wire variables to controller, including components from the page, 
-	 * implicit variables, ZScript variables and XEL variables.
-	 * @param page the reference page for selector
-	 * @param controller the controller object to be injected with variables
-	 */
-	public static void wireVariables(Page page, Object controller) {
-		new Wirer(controller, false).wireVariables(new PageFunctor(page));
-	}
-	
-	/*package*/ static void rewireVariables(Page page, Object controller) {
-		// called when activated
-		new Wirer(controller, true).wireVariables(new PageFunctor(page));
-	}
-	
-	/**
 	 * Wire variables to controller, including components, implicit variables, 
 	 * ZScript variables and XEL variables.
 	 * @param component the reference component for selector
 	 * @param controller the controller object to be injected with variables
 	 */
 	public static void wireVariables(Component component, Object controller) {
-		new Wirer(controller, false).wireVariables(new ComponentFunctor(component));
+		final IdSpace spaceOwner = component.getSpaceOwner();
+		if(spaceOwner instanceof Page)
+			new Wirer(controller, false)
+				.wireVariables(new PageFunctor((Page) spaceOwner));
+		else
+			new Wirer(controller, false)
+				.wireVariables(new ComponentFunctor(
+					spaceOwner != null ? (Component) spaceOwner: component));
 	}
 	
 	/*package*/ static void rewireVariables(Component component, Object controller) {
-		// called when activated
-		new Wirer(controller, true).wireVariables(new ComponentFunctor(component));
+	// called when activated
+		final IdSpace spaceOwner = component.getSpaceOwner();
+		if(spaceOwner instanceof Page)
+			new Wirer(controller, true)
+				.wireVariables(new PageFunctor((Page) spaceOwner));
+		else
+			new Wirer(controller, true)
+				.wireVariables(new ComponentFunctor(
+					spaceOwner != null ? (Component) spaceOwner: component));
 	}
 	
 	/**
@@ -319,7 +318,7 @@ public class Selectors {
 					// no matched Object or Component
 					String name = field.getName();
 					if (name.contains("$")) throw new UiException(
-							"GenericAnnotatedComposer does not support " + 
+							this.getClass()+" does not support " + 
 							"syntax with '$'. Please use selector as alternative.");
 					throw new UiException("Cannot wire variable to field: " + name);
 				}
