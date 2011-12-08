@@ -26,8 +26,8 @@ public interface Form {
 //	public String getId();
 	
 	/**
-	 * Returns all field names taht this Form bean is care about for both read and load.
-	 * @return all field names taht this Form bean is care about.
+	 * Returns all field names that this Form bean is care about for both read and load.
+	 * @return all field names that this Form bean is care about.
 	 */
 	public Set<String> getFieldNames();
 
