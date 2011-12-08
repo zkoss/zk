@@ -86,17 +86,10 @@ public class BindELResolver extends XelELResolver {
 		try {
 			final Binder binder = bctx.getBinder();
 			final TrackerImpl tracker = (TrackerImpl) binder.getTracker();
-			final Set<TrackerNode> nodes = tracker.getTrackerNodesByBean(base);
-			if (nodes != null) {
-				final Set<Object> set = new IdentityHashSet<Object>(4);
-				set.add(base);
-				for (TrackerNode node : nodes) {
-					final Object candidate = node.getBean();
-					if (!set.contains(candidate)) { //!= bean though equals
-						super.setValue(elCtx, candidate, prop, value); //might recursive back
-						set.add(candidate);
-					}
-				}
+			final Set<Object> beans = tracker.getEqualBeans(base);
+			beans.remove(base);
+			for (Object candidate : beans) {
+				super.setValue(elCtx, candidate, prop, value); //might recursive back
 			}
 		} finally {
 			ctx.setAttribute(BinderImpl.SAVE_BASE, null);

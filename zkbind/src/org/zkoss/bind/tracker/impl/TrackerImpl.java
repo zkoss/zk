@@ -15,10 +15,12 @@ package org.zkoss.bind.tracker.impl;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,6 +35,7 @@ import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Primitives;
+import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -43,7 +46,7 @@ import org.zkoss.zk.ui.Component;
 public class TrackerImpl implements Tracker {
 	private Map<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
 	private Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
-	private Map<Object, WeakReference<Object>> _equalBeanMap = new WeakHashMap<Object, WeakReference<Object>>(); //bean -> bean (use to locate proxy bean)
+	private EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	
 	public void addTracking(Component comp, String[] series, String[] srcpath, Binding binding) {
@@ -146,7 +149,7 @@ public class TrackerImpl implements Tracker {
 					}
 				}
 			} else {
-				final Set<TrackerNode> nodes = getTrackerNodesByBean(base);
+				final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
 				if (nodes != null) {
 					getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
 				}
@@ -181,7 +184,7 @@ public class TrackerImpl implements Tracker {
 				}
 			}
 		} else {
-			final Set<TrackerNode> baseNodes = getTrackerNodesByBean(base);
+			final Set<TrackerNode> baseNodes = getAllTrackerNodesByBean(base);
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 				for (TrackerNode baseNode : baseNodes) {
 					final TrackerNode node = baseNode.getDependent(script);
@@ -209,11 +212,11 @@ public class TrackerImpl implements Tracker {
 			
 			//add into _beanMap
 			if (!isPrimitive(value)) {
-				Set<TrackerNode> nodes = getTrackerNodesByBean(value);
+				Set<TrackerNode> nodes = _beanMap.get(value);
 				if (nodes == null) {
 					nodes = new HashSet<TrackerNode>();
 					_beanMap.put(value, nodes);
-					putEqualBeanMapValue(value); //prepare proxy bean map
+					_equalBeansMap.put(value);
 				}
 				nodes.add(node);
 				//only when value is not a primitive that we shall store it
@@ -225,21 +228,6 @@ public class TrackerImpl implements Tracker {
 		removeNullMap(node);
 	}
 	
-	private void putEqualBeanMapValue(Object value) {
-		if (value != null) {
-			_equalBeanMap.put(value, new WeakReference<Object>(value)); //prepare proxy bean map
-		}
-	}
-	
-	private Object getEqualBeanMapValue(Object key) {
-		final WeakReference<Object> ref = _equalBeanMap.get(key);
-		Object value = ref == null ? null : ref.get();
-		if (value == null && ref != null) { //Help GC
-			_equalBeanMap.remove(key);
-		}
-		return value;
-	}
-
 	//add head node into the _nullMap
 	private void addNullMap(TrackerNode node) {
 		//add node into _nullMap
@@ -282,31 +270,12 @@ public class TrackerImpl implements Tracker {
 		final Object value = node.getBean();
 		if (value != null) {
 			node.setBean(null);
-			final Set<TrackerNode> nodes = getTrackerNodesByBean(value);
+			final Set<TrackerNode> nodes = _beanMap.get(value);
 			if (nodes != null) {
 				nodes.remove(node); //remove this node from the _beanMap
 				if (nodes.isEmpty()) {
-					final Object proxy = _equalBeanMap.remove(value);
-					if (proxy != null) {
-						_beanMap.remove(proxy);
-					} else {
-						_beanMap.remove(value);
-					}
-				} else { 
-					final Object proxy = getEqualBeanMapValue(value);
-					final int proxyHash = System.identityHashCode(proxy);
-					if (System.identityHashCode(value) == proxyHash) { //might need to migrate proxy
-						Object candidate = null;
-						for (TrackerNode left : nodes) { //scan left nodes after removing
-							candidate = left.getBean();
-							if (System.identityHashCode(candidate) == proxyHash) {   
-								//there are proxy in left nodes, no need to migrate proxy
-								return;
-							}
-						}
-						//no proxy in nodes left, have to migrate the proxy
-						putEqualBeanMapValue(candidate);
-					}
+					_equalBeansMap.remove(value); //sync the equalBeanMap 
+					_beanMap.remove(value);
 				}
 			}
 		}
@@ -371,7 +340,7 @@ public class TrackerImpl implements Tracker {
 	//given base and postfix, found the associated TrackerNode. 
 	@SuppressWarnings("unused")
 	private Set<TrackerNode> getNodes(Object base, String postfix) {
-		Set<TrackerNode> nodes = getTrackerNodesByBean(base);
+		Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
 		String[] props = postfix.split("\\.");
 		for (String prop : props) {
 			nodes = getDependents(nodes, prop);
@@ -400,7 +369,7 @@ public class TrackerImpl implements Tracker {
 			nodeset.getValue().removeAll(removed);
 			if (nodeset.getValue().isEmpty()) {
 				it.remove();
-				_equalBeanMap.remove(bean);
+				_equalBeansMap.remove(bean);
 			}
 		}
 	}
@@ -415,13 +384,98 @@ public class TrackerImpl implements Tracker {
 		}
 	}
 	
-	public Set<TrackerNode> getTrackerNodesByBean(Object bean) {
-		return _beanMap.get(getEqualBeanMapProxy(bean));
+	private Set<TrackerNode> getAllTrackerNodesByBean(Object bean) {
+		final Set<Object> beans = _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
+		final Set<TrackerNode> nodes = new LinkedHashSet<TrackerNode>();
+		for (Object obj : beans) {
+			nodes.addAll(_beanMap.get(obj));
+		}
+		return nodes;
 	}
 	
-	private Object getEqualBeanMapProxy(Object bean) {
-		final Object proxy = getEqualBeanMapValue(bean);
-		return proxy != null ? proxy : bean;
+	//Returns equal beans with the given bean in an IdentityHashSet() 
+	public Set<Object> getEqualBeans(Object bean) {
+		return _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
+	}
+	
+	private static class EqualBeansMap {
+		private WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>();
+		
+		public void put(Object bean) {
+			final EqualBeans beans = _innerMap.get(bean);
+			if (beans == null) {
+				_innerMap.put(bean, new EqualBeans(bean));
+			} else {
+				beans.put(bean);
+			}
+		}
+		
+		public void remove(Object bean) {
+			final EqualBeans beans = _innerMap.remove(bean);
+			if (beans != null) {
+				Object proxy = beans.remove(bean);
+				if (!beans.isEmpty()) {
+					_innerMap.put(proxy, beans);
+				}
+			}
+		}
+		
+		public Set<Object> getEqualBeans(Object bean) {
+			final EqualBeans equalBeans =  _innerMap.get(bean);
+			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeans();
+		}
+		
+		public int size() {
+			return _innerMap.size();
+		}
+		
+		private Set<Entry<Object, EqualBeans>> entrySet() {
+			return _innerMap.entrySet();
+		}
+	}
+	
+	private static class EqualBeans {
+		private WeakReference<Object> _proxy; //surrogate object as the key for the _beanSet
+		private WeakIdentityMap<Object, Boolean> _beanSet; //different instance of beans equal to each other
+		
+		public EqualBeans(Object proxy) {
+			_proxy = new WeakReference<Object>(proxy);
+			_beanSet = new WeakIdentityMap<Object, Boolean>(2);
+			_beanSet.put(proxy, Boolean.TRUE);
+		}
+		
+		public void put(Object value) {
+			_beanSet.put(value, Boolean.TRUE);
+		}
+		
+		public Set<Object> getBeans() {
+			return _beanSet != null ? 
+					new IdentityHashSet<Object>(_beanSet.keySet()) : Collections.emptySet();
+		}
+		
+		//return proxy bean(could be migrated or not)
+		public Object remove(Object value) {
+			_beanSet.remove(value);
+			if (_beanSet.isEmpty()) {
+				_beanSet = null;
+			} else if (System.identityHashCode(_proxy.get()) == System.identityHashCode(value)) {
+				//proxy deleted, must migrate proxy
+				for(final Iterator<Object> it = _beanSet.keySet().iterator(); it.hasNext(); ) { 
+					final Object obj = it.next();
+					if (obj != null) {
+						_proxy = new WeakReference<Object>(obj); //migrate
+						break;
+					} else {
+						it.remove();
+					}
+				}
+			}
+			return _proxy.get();
+		}
+		
+		public boolean isEmpty() {
+			return _beanSet == null || _beanSet.isEmpty();
+		}
 	}
 	
 	//------ debug dump ------//
@@ -429,7 +483,7 @@ public class TrackerImpl implements Tracker {
 		dumpCompMap();
 		dumpBeanMap();
 		dumpNullMap();
-		dumpEqualBeanMap();
+		dumpEqualBeansMap();
 	}
 	
 	private void dumpBeanMap() {
@@ -469,13 +523,13 @@ public class TrackerImpl implements Tracker {
 		}
 	}
 
-	private void dumpEqualBeanMap() {
-		System.out.println("******* _equalBeanMap: *********");
-		System.out.println("******* size: "+_equalBeanMap.size());
+	private void dumpEqualBeansMap() {
+		System.out.println("******* _equalBeansMap: *********");
+		System.out.println("******* size: "+_equalBeansMap.size());
 		
-		for(Entry<Object, WeakReference<Object>> entry: _equalBeanMap.entrySet()) {
-			System.out.println("key:"+entry.getKey());
-			System.out.println("val:"+entry.getValue().get());
+		for(Entry<Object, EqualBeans> entry: _equalBeansMap.entrySet()) {
+			System.out.println("proxy:"+entry.getKey());
+			System.out.println("val:"+entry.getValue().getBeans());
 			System.out.println("----");
 		}
 	}
