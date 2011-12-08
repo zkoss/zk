@@ -602,10 +602,7 @@ public class Selectors {
 			return _comp.getAttributeOrFellow(name, true);
 		}
 		private Page getPage() {
-			Page page = _comp.getPage();
-			if (page != null) return page;
-			final Execution exec = Executions.getCurrent();
-			return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+			return Components.getCurrentPage(_comp);
 		}
 		public Component getFellowIfAny(String name) {
 			return _comp.getFellowIfAny(name);
