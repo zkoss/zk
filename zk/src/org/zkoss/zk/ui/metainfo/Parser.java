@@ -746,6 +746,8 @@ public class Parser {
 		final String pref = ns != null ? ns.getPrefix(): "";
 		final String uri = ns != null ? ns.getURI(): "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
+
+		checkAnnotNamespace(uri);
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			checkZScriptEnabled(el);
 			parseZScript(parent, el, annHelper);
@@ -761,9 +763,6 @@ public class Parser {
 		} else if ("variables".equals(nm)
 		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			parseVariables(langdef, parent, el, annHelper);
-		} else if (LanguageDefinition.ANNO_NAMESPACE.equals(uri)
-		|| "annotation".equals(uri)) {
-			parseAnnotation(el, annHelper);
 		} else if ("template".equals(nm)
 		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			parseItems(pgdef, parseTemplate(parent, el, annHelper),
@@ -844,18 +843,9 @@ public class Parser {
 				final String attURI = attrns != null ? attrns.getURI(): "";
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
-				if (LanguageDefinition.ANNO_NAMESPACE.equals(attURI)
-				|| "annotation".equals(attURI)) {
-					if (attrAnnHelper == null)
-						attrAnnHelper = new AnnotationHelper();
-					final String attvaltrim = attval.trim();
-					if (attvaltrim.startsWith("@")) {
-						//since 6.0, attnm is the property name (than annot name)
-						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, attr.getLocator());
-					} else {
-						attrAnnHelper.addByRawValue(attnm, attvaltrim);
-					}
-				} else if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
+
+				checkAnnotNamespace(attURI);
+				if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setForward(attval);
@@ -953,6 +943,13 @@ public class Parser {
 				optimizeNativeInfos((NativeInfo)compInfo);
 		} //end-of-else//
 	}
+
+	private static void checkAnnotNamespace(String uri) {
+		if ("http://www.zkoss.org/2005/zk/annotation".equals(uri)
+		|| "annotation".equals(uri))
+			throw new UiException("Namespace, "+uri+", no longer supported");
+	}
+
 	/** Parses the items as if they are native and they will become a property
 	 * rather than child components.
 	 */
@@ -1385,8 +1382,6 @@ public class Parser {
 			|| (langdef.isNative()
 				&& !LanguageDefinition.ZK_NAMESPACE.equals(uri)
 				&& !"zk".equals(uri)
-				&& !LanguageDefinition.ANNO_NAMESPACE.equals(uri)
-				&& !"annotation".equals(uri)
 				&& !LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
 				&& !"native".equals(uri)
 				&& !langdef.getNamespace().equals(uri)))

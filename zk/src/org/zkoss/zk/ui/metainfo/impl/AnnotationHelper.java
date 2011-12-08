@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  *
  * <p>How to use:
  * <ol>
- * <li>Invoke one of {@link #add}, {@link #addByRawValue},
+ * <li>Invoke {@link #add}
  * or {@link #addByCompoundValue} to add annotations to this helper.</li>
  * <li>After annotations are all added, invoke {@link #applyAnnotations}
  * to update the annotations to the specified component info.</li>
@@ -101,22 +101,12 @@ public class AnnotationHelper {
 	 * @param annotName the annotation name.
 	 * @param annotAttrs a map of attributes of the annotation. If null,
 	 * it means no attribute at all.
-	 * @see #addByRawValue
 	 * @see #addByCompoundValue
 	 */
 	public void add(String annotName, Map<String, Object> annotAttrs) {
 		if (annotName == null || annotName.length() == 0)
 			throw new IllegalArgumentException("empty");
 		_annots.add(new AnnotInfo(annotName, annotAttrs));
-	}
-	/** Adds an annotation by specify the value in the raw format.
-	 * <code>att1-name=att1-value, att2-name = att2-value</code>.
-	 * @param rval the raw value. This method assumes it has been trimmed
-	 * before the call.
-	 */
-	public void addByRawValue(String annotName, String rval) {
-		addByRawValueInFormat1(annotName, rval);
-			//For backward compatible, we assume Format 1
 	}
 	/** Adds annotation by specifying the content in the compound format.
 	 * <p>There are two formats:
@@ -147,7 +137,8 @@ public class AnnotationHelper {
 		}
 
 		//format 2
-		//for each @name(value), parse name and value, and pass value addByRawValue
+		//for each @name(value),
+		//parse name/value, then pass to addByRawValueInFormat2
 		for (int j = 0; j >= 0; j = cval.indexOf('@', j)) {
 			//look for annotation's name
 			int k = cval.indexOf('(', ++j);
@@ -414,7 +405,7 @@ public class AnnotationHelper {
 	}
 	/** Clears the annotations defined in this helper.
 	 *
-	 * <p>The annotations are defined by {@link #add}, {@link #addByRawValue},
+	 * <p>The annotations are defined by {@link #add}
 	 * or {@link #addByCompoundValue}.
 	 *
 	 * @return true if one or more annotation definitions are defined

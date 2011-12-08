@@ -72,9 +72,6 @@ public class LanguageDefinition {
 	 * and attributes, such as zscript and use.
 	 */
 	public static final String ZK_NAMESPACE = "http://www.zkoss.org/2005/zk";
-	/** The namespace for ZK annotations.
-	 */
-	public static final String ANNO_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 	/** The namespace for ZK native components.
 	 * @since 3.0.0
 	 */
