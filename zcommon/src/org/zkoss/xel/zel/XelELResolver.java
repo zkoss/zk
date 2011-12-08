@@ -87,13 +87,16 @@ public class XelELResolver extends ELResolver {
 		}
 		return null;
 	}
-	public Class getType(ELContext ctx, Object base, Object property)
+	public Class<?> getType(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
 		if (ctx == null)
 			throw new IllegalArgumentException();
-		
+		final Class<?> type = getELResolver().getType(ctx, base, property);
+		if (ctx.isPropertyResolved()) {
+			return type;
+		}
 		final Object o = resolve(ctx, base, property); //might change isPropertyResolved
-		return o != null ? o.getClass(): getELResolver().getType(ctx, base, property);
+		return o != null ? o.getClass() : null;
 	}
 
 	public void setValue(ELContext ctx, Object base, Object property,
