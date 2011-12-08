@@ -78,7 +78,7 @@ ZK 6.0.0
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
     z-groupbox-3d. In additions, the default mold is implemented with DIV rather than
     FIELDSET.
-  + The autowiring of HtmlMacroComponent and XmlMacroComponent is default
+  + The default autowiring of HtmlMacroComponent and XmlMacroComponent is
     based on CSS 3 selector, i.e., it is the same as SelectorComposer.
     To be backward-compatible, you could specify a library property called
     org.zkoss.zk.ui.macro.autowire.convention to true.
