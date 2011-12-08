@@ -251,7 +251,7 @@ public class DefinitionLoaders {
 			device = Devices.getDevice(langdef.getDeviceType());
 
 			if (root.getElement("case-insensitive") != null)
-				throw new UiException("case-insensitive not allowed in addon");
+				throw new UiException(message("case-insensitive not allowed in addon", root));
 		} else {
 			final String ns =
 				IDOMs.getRequiredElementValue(root, "namespace");
@@ -266,7 +266,7 @@ public class DefinitionLoaders {
 
 			final List<String> exts = parseExtensions(root);
 			if (exts.isEmpty())
-				throw new UiException("The extension must be specified for "+lang);
+				throw new UiException(message("The extension must be specified for "+lang, root));
 
 			String ignoreCase = root.getElementValue("case-insensitive", true);
 			String bNative = root.getElementValue("native-namespace", true);
@@ -327,7 +327,7 @@ public class DefinitionLoaders {
 				continue; //TODO
 			} else if (src != null && src.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
-					throw new UiException("You cannot specify the content if the src attribute is specified, "+el.getLocator());
+					throw new UiException(message("You cannot specify the content if the src attribute is specified", el));
 				final String charset = el.getAttributeValue("charset");
 				js = new JavaScript(src, charset);
 			} else if (ctn != null && ctn.length() > 0) {
@@ -354,12 +354,12 @@ public class DefinitionLoaders {
 			final StyleSheet ss;
 			if (href != null && href.length() > 0) {
 				if (ctn != null && ctn.length() > 0)
-					throw new UiException("You cannot specify the content if the href attribute is specified, "+el.getLocator());
+					throw new UiException(message("You cannot specify the content if the href attribute is specified", el));
 				ss = new StyleSheet(href, el.getAttributeValue("type"), el.getAttributeValue("media"), false);
 			} else if (ctn != null && ctn.length() > 0) {
 				ss = new StyleSheet(ctn, el.getAttributeValue("type"), el.getAttributeValue("media"), true);
 			} else {
-				throw new UiException("You must specify either the href attribute or the content, "+el.getLocator());
+				throw new UiException(message("You must specify either the href attribute or the content", el));
 			}
 			langdef.addStyleSheet(ss);
 		}
@@ -374,7 +374,7 @@ public class DefinitionLoaders {
 			} else {
 				zslang = attr.getValue();
 				if (zslang == null || zslang.length() == 0)
-					throw new UiException("The language attribute cannot be empty, "+attr.getLocator());
+					throw new UiException(message("The language attribute cannot be empty", attr));
 			}
 			final String s = el.getText(true);
 			final String eachTime = el.getAttributeValue("each-time");
@@ -441,7 +441,7 @@ public class DefinitionLoaders {
 				}
 
 				if (ref.isMacro())
-					throw new UiException("Unable to extend from a macro component, "+el.getLocator());
+					throw new UiException(message("Unable to extend from a macro component", el));
 
 				if (extnm.equals(name)) {
 					compdef = (ComponentDefinitionImpl)ref;
@@ -462,7 +462,7 @@ public class DefinitionLoaders {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 
 				if (cls == null && clsnm == null)
-					throw new UiException("component-class is required, "+el.getLocator());
+					throw new UiException(message("component-class is required", el));
 				compdef = cls != null ?
 					new ComponentDefinitionImpl(langdef, null, name, cls):
 					new ComponentDefinitionImpl(langdef, null, name, clsnm);
@@ -546,6 +546,15 @@ public class DefinitionLoaders {
 			parseAnnots(compdef, el);
 		}
 	}
+
+	private static String message(String message, org.zkoss.idom.Item el) {
+		return message(message, el != null ? el.getLocator(): null);
+	}
+	private static String message(String message,
+	org.zkoss.xml.Locator loc) {
+		return loc != null ? loc.format(message): message;
+	}
+
 	private static WidgetDefinition getWidgetDefinition(
 	LanguageDefinition langdef, ComponentDefinition compdef, String wgtnm) {
 		WidgetDefinition wgtdef = langdef.getWidgetDefinitionIfAny(wgtnm);
@@ -569,7 +578,7 @@ public class DefinitionLoaders {
 	private static void noEL(String nm, String val, Element el)
 	throws UiException {
 		if (withEL(val))
-			throw new UiException(nm+" does not support EL expressions, "+el.getLocator());
+			throw new UiException(message(nm+" does not support EL expressions", el));
 	}
 	private static boolean withEL(String val) {
 		return val != null && val.indexOf("${") >= 0;
@@ -591,7 +600,7 @@ public class DefinitionLoaders {
 				if (!params.isEmpty())
 					log.warning("Ignored unknown attribute: "+params+", "+pi.getLocator());
 				if (uri == null || prefix == null)
-					throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
+					throw new UiException(message("Both uri and prefix attribute are required", pi));
 				if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 				langdef.addTaglib(new Taglib(prefix, uri));
 			} else {
@@ -657,7 +666,7 @@ public class DefinitionLoaders {
 					final char cc = ext.charAt(j);
 					if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z')
 					&& (cc < '0' || cc > '9'))
-						throw new UiException("Invalid extension; only letters and numbers are allowed: "+ext);
+						throw new UiException(message("Invalid extension; only letters and numbers are allowed: "+ext, elm));
 				}
 				exts.add(ext);
 			}

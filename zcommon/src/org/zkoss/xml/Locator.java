@@ -28,5 +28,6 @@ package org.zkoss.xml;
  * @author tomyeh
  */
 public interface Locator
-extends org.xml.sax.Locator, javax.xml.transform.SourceLocator {
+extends org.xml.sax.Locator, javax.xml.transform.SourceLocator,
+org.zkoss.util.resource.Location {
 }

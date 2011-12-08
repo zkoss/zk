@@ -673,12 +673,20 @@ public class ConfigParser {
 			String connType = el.getElementValue("connection-type", true);
 			v = parseInteger(el, "error-code", NON_NEGATIVE);
 			if (v == null)
-				throw new UiException("error-code is required, "+el.getLocator());
+				throw new UiException(message("error-code is required", el));
 			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
 			if ("false".equals(uri)) uri = null;
 
 			config.setClientErrorReload(deviceType, v.intValue(), uri, connType);
 		}
+	}
+
+	private static String message(String message, org.zkoss.idom.Item el) {
+		return message(message, el != null ? el.getLocator(): null);
+	}
+	private static String message(String message,
+	org.zkoss.xml.Locator loc) {
+		return loc != null ? loc.format(message): message;
 	}
 
 	/** Parse language-config */
@@ -727,7 +735,7 @@ public class ConfigParser {
 			try {
 				final Class<?> klass = Classes.forNameByThread(clsnm);
 				if (cls != null && !cls.isAssignableFrom(klass)) {
-					String msg = clsnm+" must implement "+cls.getName()+", "+el.getLocator();
+					String msg = message(clsnm+" must implement "+cls.getName(), el);
 					if (required)
 						throw new UiException(msg);
 					log.error(msg);
@@ -738,14 +746,14 @@ public class ConfigParser {
 			} catch (Throwable ex) {
 				String msg = ex instanceof ClassNotFoundException ?
 					clsnm + " not found": "Unable to load "+clsnm;
-				msg += ", at "+el.getLocator();
+				msg = message(msg, el);
 				if (required)
 					throw new UiException(msg, ex);
 				log.error(msg);
 				return null;
 			}
 		} else if (required)
-			throw new UiException(elnm+" required, at "+el.getLocator());
+			throw new UiException(message(elnm+" required", el));
 		return null;
 	}
 
@@ -762,12 +770,12 @@ public class ConfigParser {
 				final int v = Integer.parseInt(val);
 				if ((flag == POSITIVE_ONLY && v <= 0)
 				|| (flag == NON_NEGATIVE && v < 0))
-					throw new UiException("The "+subnm+" element must be a "
+					throw new UiException(message("The "+subnm+" element must be a "
 						+(flag == POSITIVE_ONLY ? "positive": "non-negative")
-						+" number, not "+val+", at "+el.getLocator());
+						+" number, not "+val, el));
 				return new Integer(v);
 			} catch (NumberFormatException ex) { //eat
-				throw new UiException("The "+subnm+" element must be a number, not "+val+", at "+el.getLocator());
+				throw new UiException(message("The "+subnm+" element must be a number, not "+val, el));
 			}
 		}
 		return null;

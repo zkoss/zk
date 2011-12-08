@@ -188,7 +188,7 @@ public class Parser {
 						noELnorEmpty(nm, nm, pi);
 						impclses.add(nm);
 					} else {
-						log.warning("Ignored unknown attribute for import: "+nm+", "+pi.getLocator());
+						log.warning(message("Ignored unknown attribute for import: "+nm, pi));
 					}
 				}
 			} else {
@@ -264,7 +264,7 @@ public class Parser {
 		|| "function-mapper".equals(target)) {
 			final String clsnm = params.remove("class");
 			if (isEmpty(clsnm))
-				throw new UiException("The class attribute is required, "+pi.getLocator());
+				throw new UiException(message("The class attribute is required", pi));
 
 			final Map<String, String> args = new LinkedHashMap<String, String>(params);
 			if ("variable-resolver".equals(target))
@@ -277,9 +277,9 @@ public class Parser {
 			final String uri = params.remove("uri");
 			final String prefix = params.remove("prefix");
 			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+				log.warning(message("Ignored unknown attributes: "+params.keySet(), pi));
 			if (uri == null || prefix == null)
-				throw new UiException("Both uri and prefix attribute are required, "+pi.getLocator());
+				throw new UiException(message("Both uri and prefix attribute are required", pi));
 			//if (log.debugable()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
@@ -309,14 +309,14 @@ public class Parser {
 			final String ifc = params.remove("if");
 			final String unless = params.remove("unless");
 			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
+				log.warning(message("Ignored unknown attributes: "+params.keySet(), pi));
 			noEmpty("uri", uri, pi);
 			pgdef.addForwardInfo(
 				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
-			throw new UiException("The import directive can be used only at the top level, "+pi.getLocator());
+			throw new UiException(message("The import directive can be used only at the top level", pi));
 		} else {
-			log.warning("Unknown processing instruction: "+target+", "+pi.getLocator());
+			log.warning(message("Unknown processing instruction: "+target, pi));
 		}
 	}
 	/** Process the init directive. */
@@ -328,7 +328,7 @@ public class Parser {
 		final Map<String, String> args = new LinkedHashMap<String, String>(params);
 		if (clsnm == null) {
 			if (zsrc == null)
-				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
+				throw new UiException(message("Either the class or zscript attribute must be specified", pi));
 
 			checkZScriptEnabled(pi.getLocator());
 			ZScript zs =  null;
@@ -347,17 +347,24 @@ public class Parser {
 				new InitiatorInfo(new ZScriptInitiator(zs), args));
 		} else {
 			if (zsrc != null)
-				throw new UiException("You cannot specify both class and zscript, "+pi.getLocator());
+				throw new UiException(message("You cannot specify both class and zscript", pi));
 
 			pgdef.addInitiatorInfo(new InitiatorInfo(clsnm, args));
 		}
+	}
+	private static String message(String message, Item el) {
+		return message(message, el != null ? el.getLocator(): null);
+	}
+	private static String message(String message,
+	org.zkoss.xml.Locator loc) {
+		return loc != null ? loc.format(message): message;
 	}
 	private void checkZScriptEnabled(Element el) {
 		checkZScriptEnabled(el.getLocator());
 	}
 	private void checkZScriptEnabled(org.zkoss.xml.Locator loc) {
 		if (!_wapp.getConfiguration().isZScriptEnabled())
-			throw new UiException("zscript is not allowed since <disable-zscript> is configured, "+loc);
+			throw new UiException(message("zscript is not allowed since <disable-zscript> is configured", loc));
 	}
 	/** Process the page directive. */
 	private static void parsePageDirective(PageDefinition pgdef,
@@ -367,7 +374,7 @@ public class Parser {
 			final String val = me.getValue();
 			if ("language".equals(nm)) {
 				if (!(pi.getParent() instanceof Document))
-					log.warning("Ignored language attribute since the page directive is not at the top level, "+pi.getLocator());
+					log.warning(message("Ignored language attribute since the page directive is not at the top level", pi));
 			} else if ("title".equals(nm)) {
 				pgdef.setTitle(val);
 			} else if ("style".equals(nm)) {
@@ -397,7 +404,7 @@ public class Parser {
 			} else if ("complete".equals(nm)) {
 				pgdef.setComplete("true".equals(val));
 			} else {
-				log.warning("Ignored unknown attribute: "+nm+", "+pi.getLocator());
+				log.warning(message("Ignored unknown attribute: "+nm, pi));
 			}
 		}
 	}
@@ -429,7 +436,7 @@ public class Parser {
 				name, toAbsoluteURI(macroURI, false), bInline, pgdef);
 			if (!isEmpty(clsnm)) {
 				if (bInline)
-					throw new UiException("class not allowed with inline macros, "+pi.getLocator());
+					throw new UiException(message("class not allowed with inline macros", pi));
 				noEL("class", clsnm, pi);
 				compdef.setImplementationClass(clsnm);
 					//Resolve later since might defined in zscript
@@ -459,7 +466,7 @@ public class Parser {
 
 			if (ref != null) {
 				if (ref.isMacro())
-					throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
+					throw new UiException(message("Unable to extend from a macro component", pi));
 
 				compdef = ref.clone(null, name);
 				if (!isEmpty(clsnm)) {
@@ -493,11 +500,11 @@ public class Parser {
 		Object o = params.remove("moldURI");
 		if (o == null) o = params.remove("mold-uri");
 		if (o != null)
-			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead, "+pi.getLocator());
+			throw new UnsupportedOperationException(message("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead", pi));
 
 		o = params.remove("cssURI");
 		if (o != null)
-			throw new UnsupportedOperationException("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead, "+pi.getLocator());
+			throw new UnsupportedOperationException(message("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead", pi));
 
 		compdef.setApply(params.remove("apply"));
 
@@ -560,25 +567,25 @@ public class Parser {
 			final Class cls = clsresolver.resolveClass(clsnm);
 			mtd = Classes.getMethodBySignature(cls, sig, null, clsresolver);
 		} catch (ClassNotFoundException ex) {
-			throw new UiException("Class not found: "+clsnm+", "+pi.getLocator());
+			throw new UiException(message("Class not found: "+clsnm, pi));
 		} catch (Exception ex) {
-			throw new UiException("Method not found: "+sig+" in "+clsnm+", "+pi.getLocator());
+			throw new UiException(message("Method not found: "+sig+" in "+clsnm, pi));
 		}
 		if ((mtd.getModifiers() & Modifier.STATIC) == 0)
-			throw new UiException("Not a static method: "+mtd+", "+pi.getLocator());
+			throw new UiException(message("Not a static method: "+mtd, pi));
 
 		pgdef.addXelMethod(prefix, nm, new MethodFunction(mtd));
 	}
 	private static void noELnorEmpty(String nm, String val, Item item)
 	throws UiException {
 		if (isEmpty(val))
-			throw new UiException(nm + " cannot be empty, "+item.getLocator());
+			throw new UiException(message(nm + " cannot be empty", item));
 		noEL(nm, val, item);
 	}
 	private static void noEL(String nm, String val, Item item)
 	throws UiException {
 		if (val != null && val.indexOf("${") >= 0)
-			throw new UiException(nm+" does not support EL expressions, "+item.getLocator());
+			throw new UiException(message(nm+" does not support EL expressions", item));
 	}
 	/** Checks whether the value is an empty string.
 	 * Note: Like {@link #noEL}, it is OK to be null!!
@@ -586,7 +593,7 @@ public class Parser {
 	private static void noEmpty(String nm, String val, Item item)
 	throws UiException {
 		if (val != null && val.length() == 0)
-			throw new UiException(nm+" cannot be empty, "+item.getLocator());
+			throw new UiException(message(nm+" cannot be empty", item));
 	}
 	private String toAbsoluteURI(String uri, boolean allowEL) {
 		if (uri != null && uri.length() > 0) {
@@ -641,7 +648,7 @@ public class Parser {
 				if (bZkSwitch) {
 					if (trimLabel.length() == 0)
 						continue;
-					throw new UiException("Only <zk> can be used in <zk switch>, "+((Item)o).getLocator());
+					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item)o));
 				}
 
 				//Ingore blank text if no need to preserved
@@ -660,7 +667,7 @@ public class Parser {
 								textAsBuffer.append(label); //concatenate all together
 							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
-									"Not allowed in text-as, "+((Item)o).getParent().getLocator());
+									message("Not allowed in text-as", ((Item)o).getParent()));
 					} else {
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
 							if (trimLabel.length() == 0)
@@ -745,7 +752,7 @@ public class Parser {
 		} else if ("attribute".equals(nm)
 		&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 			if (!(parent instanceof ComponentInfo))
-				throw new UiException("<attribute> cannot be the root element, "+el.getLocator());
+				throw new UiException(message("<attribute> cannot be the root element", el));
 
 			parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
 		} else if ("custom-attributes".equals(nm)
@@ -767,7 +774,7 @@ public class Parser {
 		} else {
 			//if (log.debugable()) log.debug("component: "+nm+", ns:"+ns);
 			if (isZkSwitch(parent))
-				throw new UiException("Only <zk> can be used in <zk switch>, "+el.getLocator());
+				throw new UiException(message("Only <zk> can be used in <zk switch>", el));
 
 			boolean prefRequired =
 				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
@@ -786,7 +793,7 @@ public class Parser {
 			final ComponentInfo compInfo;
 			if (bNative) {
 				if (annHelper.clear())
-					log.warning("Annotations are ignored since native doesn't support them, "+el.getLocator());
+					log.warning(message("Annotations are ignored since native doesn't support them", el));
 
 				final NativeInfo ni;
 				compInfo = ni = new NativeInfo(
@@ -812,7 +819,7 @@ public class Parser {
 				} else {
 					compdef = complangdef.getDynamicTagDefinition();
 					if (compdef == null)
-						throw new DefinitionNotFoundException("Component definition not found: "+nm+" in "+complangdef+", "+el.getLocator());
+						throw new DefinitionNotFoundException(message("Component definition not found: "+nm+" in "+complangdef, el));
 					compInfo = new ComponentInfo(parent, compdef, nm);
 					langdef = complangdef;
 				}
@@ -905,9 +912,9 @@ public class Parser {
 				for (Iterator<Item> it = items.iterator();;) {
 					if (zkElem != null && xmlFound != null)
 						throw new UnsupportedOperationException(
-							"Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead, "
-							+(it.hasNext() ? it.next().getLocator(): el.getLocator()));
-							//might be possible to handle but not worth
+							message("Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead",
+								(it.hasNext() ? it.next(): el)));
+								//might be possible to handle but not worth
 					if (!it.hasNext())
 						break;
 
@@ -966,7 +973,7 @@ public class Parser {
 			selfAllowed && "self".equals(nm) ? null: nm, true);
 	}
 	private static void warnWrongZkAttr(Attribute attr) {
-		log.warning("Attribute "+attr.getName()+" ignored in <zk>, "+attr.getLocator());
+		log.warning(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
 	}
 	private static boolean isZkSwitch(NodeInfo nodeInfo) {
 		return nodeInfo instanceof ZkInfo && ((ZkInfo)nodeInfo).withSwitch();
@@ -974,9 +981,9 @@ public class Parser {
 	private void parseZScript(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) {
 		if (el.getAttributeItem("forEach") != null)
-			throw new UiException("forEach not applicable to <zscript>, "+el.getLocator());
+			throw new UiException(message("forEach not applicable to <zscript>", el));
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <zscript> doesn't support them, "+el.getLocator());
+			log.warning(message("Annotations are ignored since <zscript> doesn't support them", el));
 
 		final String
 			ifc = el.getAttributeValue("if"),
@@ -1028,7 +1035,7 @@ public class Parser {
 	ComponentInfo parent, Element el, AnnotationHelper annHelper)
 	throws Exception {
 		if (el.getAttributeItem("forEach") != null)
-			throw new UiException("forEach not applicable to attribute, "+el.getLocator());
+			throw new UiException(message("forEach not applicable to attribute", el));
 
 		//Test if any element is used
 		String elFound = null;
@@ -1042,7 +1049,7 @@ public class Parser {
 
 		final Attribute attr = el.getAttributeItem(null, "name", 0); //by local name
 		if (attr == null)
-			throw new UiException("The name attribute required, "+el.getLocator());
+			throw new UiException(message("The name attribute required", el));
 
 		final String attnm = attr.getValue();
 		noEmpty("name", attnm, el);
@@ -1050,7 +1057,7 @@ public class Parser {
 				el.getAttributeValue("if"), el.getAttributeValue("unless"));
 		if (elFound != null) {
 			if (Events.isValid(attnm))
-				throw new UiException("<" + elFound + "> not allowed in an event listener, "+el.getLocator());
+				throw new UiException(message("<" + elFound + "> not allowed in an event listener", el));
 
 			parseAsProperty(pgdef, parent, attnm, el.getChildren(), annHelper, cond);
 		} else {
@@ -1066,12 +1073,12 @@ public class Parser {
 	private static void parseCustomAttributes(LanguageDefinition langdef,
 	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
-		//	throw new UiException("Child elements are not allowed for <custom-attributes>, "+el.getLocator());
+		//	throw new UiException(message("Child elements are not allowed for <custom-attributes>", el));
 
 		if (parent instanceof PageDefinition)
-			throw new UiException("<custom-attributes> must be used under a component, "+el.getLocator());
+			throw new UiException(message("<custom-attributes> must be used under a component", el));
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator()); //old style annotation not supported
+			log.warning(message("Annotations are ignored since <custom-attributes> doesn't support them", el)); //old style annotation not supported
 
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map<String, String> attrs = new LinkedHashMap<String, String>();
@@ -1092,7 +1099,7 @@ public class Parser {
 			} else if ("composite".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				composite = attval;
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
-				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
+				throw new UiException(message("forEach not applicable to <custom-attributes>", el));
 			} else if (parent instanceof ComponentInfo
 			&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
 				if (attrAnnHelper == null)
@@ -1111,10 +1118,10 @@ public class Parser {
 	private static void parseVariables(LanguageDefinition langdef,
 	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
-		//	throw new UiException("Child elements are not allowed for <variables> element, "+el.getLocator());
+		//	throw new UiException(message("Child elements are not allowed for <variables> element", el));
 
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <variables> doesn't support them, "+el.getLocator()); //old style annotation not supported here
+			log.warning(message("Annotations are ignored since <variables> doesn't support them", el)); //old style annotation not supported here
 
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
@@ -1134,7 +1141,7 @@ public class Parser {
 			} else if ("composite".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				composite = attval;
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
-				throw new UiException("forEach not applicable to <variables>, "+el.getLocator());
+				throw new UiException(message("forEach not applicable to <variables>", el));
 			} else {
 				vars.put(attnm, attval);
 			}
@@ -1146,7 +1153,7 @@ public class Parser {
 	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
 	throws Exception {
 		if (!el.getElements().isEmpty())
-			throw new UiException("Child elements are not allowed for the annotations, "+el.getLocator());
+			throw new UiException(message("Child elements are not allowed for the annotations", el));
 
 		final Map<String, Object> attrs = new LinkedHashMap<String, Object>();
 		for (Iterator it = el.getAttributeItems().iterator();
@@ -1160,9 +1167,9 @@ public class Parser {
 	private static TemplateInfo parseTemplate(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <template> doesn't support them, "+el.getLocator());
+			log.warning(message("Annotations are ignored since <template> doesn't support them", el));
 		if (el.getAttributeItem("forEach") != null)
-			log.warning("forEach is ignored since <template> doesn't support it, "+el.getLocator());
+			log.warning(message("forEach is ignored since <template> doesn't support it", el));
 
 		String ifc = null, unless = null,
 			name = null, src = null;
@@ -1192,14 +1199,14 @@ public class Parser {
 			}
 		}
 		if (name == null)
-			throw new UiException("The name attribute required, "+el.getLocator());
+			throw new UiException(message("The name attribute required", el));
 		return new TemplateInfo(parent,
 			name, src, params, ConditionImpl.getInstance(ifc, unless));
 	}
 	private static ZkInfo parseZk(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <zk> doesn't support them, "+el.getLocator());
+			log.warning(message("Annotations are ignored since <zk> doesn't support them", el));
 
 		final ZkInfo zi = new ZkInfo(parent, null);
 		String ifc = null, unless = null,
@@ -1223,11 +1230,11 @@ public class Parser {
 				forEachEnd = attval;
 			} else if ("switch".equals(attnm) || "choose".equals(attnm)) {
 				if (isZkSwitch(parent))
-					throw new UiException("<zk "+attnm+"> cannot be used in <zk switch/choose>, "+el.getLocator());
+					throw new UiException(message("<zk "+attnm+"> cannot be used in <zk switch/choose>", el));
 				zi.setSwitch(attval);
 			} else if ("case".equals(attnm)) {
 				if (!isZkSwitch(parent))
-					throw new UiException("<zk case> can be used only in <zk switch>, "+attr.getLocator());
+					throw new UiException(message("<zk case> can be used only in <zk switch>", attr));
 				zi.setCase(attval);
 			} else {
 				final String attPref = attrns != null ? attrns.getPrefix(): null;
@@ -1345,10 +1352,10 @@ public class Parser {
 			if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri)
 			|| "client".equals(uri)) {
 				if (name.length() == 0)
-					throw new UiException("Client attribute name required, "+xl);
+					throw new UiException(message("Client attribute name required", xl));
 				if ("use".equals(name)) {
 					if (cond != null)
-						throw new UnsupportedOperationException("if and unless not allowed for w:use, "+xl);
+						throw new UnsupportedOperationException(message("if and unless not allowed for w:use", xl));
 					compInfo.setWidgetClass(value);
 				} else {
 					compInfo.addWidgetOverride(name, value, cond);
