@@ -2,7 +2,7 @@
 <?page title="Process Monitor"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 
-<window title="Tasks" border="normal" xmlns:a="http://www.zkoss.org/2005/zk/annotation">
+<window title="Tasks" border="normal">
 A data bound grid consisting of a progress bar and a label appears to
 suffer from sizing issues upon refresh. The refresh is taking place via a
 timer every second. This problem does not happen in Firefox 2.
@@ -40,19 +40,16 @@ timer every second. This problem does not happen in Firefox 2.
 
 	<hbox width="100%" widths="20%,80%">
 		<div />
-		<a:bind model="tasks" />
-		<grid id="grid">
+
+		<grid id="grid" self="@{bind(model='tasks')}">
 			<columns>
 				<column width="35%"/>
 				<column width="65%"/>
 			</columns>
 			<rows>
-				<a:bind _var="task" />
-				<row>
-					<a:bind value="task.progress" />
-					<progressmeter />
-					<a:bind value="task.message" />
-					<label />
+				<row self="@{bind(_var='task')}">
+					<progressmeter self="@{bind(value='task.progress')}" />
+					<label self="@{bind(value='task.message')}"/>
 				</row>
 			</rows>
 		</grid>

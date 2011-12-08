@@ -17,19 +17,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<zk xmlns:a="http://www.zkoss.org/2005/zk/annotation"
-xmlns:h="http://www.w3.org/1999/xhtml">
-<a:author name="John Magic" date="3/17/2006"/>
-<a:editor name="Mary White" date="4/11/2006"/>
-<window id="main" title="Annotation" >
-	<a:bind field="value"/>
-	<a:bind source="bigcat:1099"/>
-	<textbox id="t1"/>
-	<textbox id="t2">
-		<a:hello say="hi"/>
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<window self="@{author(name='John Magic')}" id="main" title="Annotation">
+	<textbox id="t1" self="@{bind(field='value',source='bigcat:1099')}"/>
+	<textbox id="t2" value="@{hello(say='hi')}">
 		<attribute name="value">Hello</attribute>
 	</textbox>
-	<textbox id="t3" a:mark="color='blue',shape='round'" value=""/>
+	<textbox id="t3" mark="@{color='blue',shape='round'}" value=""/>
 	<textbox id="t4" value="@{mark(color='blue',shape='round')}"/>
 	<textbox id="t5" value="@{selected.item}"/>
 	<textbox id="t6" value="@{first second(color='blue',round) third forth(ab) (cd='cd')}"/>
