@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx$myid 
@@ -70,7 +70,7 @@ import org.zkoss.zk.ui.Components;
  * 
  * @author henrichen
  * @since 3.0.7
- * @see org.zkoss.zk.ui.Components#addForwards
+ * @see ConventionWires
  */
 abstract public class GenericForwardComposer<T extends Component> extends GenericAutowireComposer<T> {
 	private static final long serialVersionUID = 20091006115726L;
@@ -145,6 +145,6 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 		
 		//add forward condtions to the components as defined in this composer
 		//onXxx$myid
-		Components.addForwards(comp, this, _separator);
+		ConventionWires.addForwards(comp, this, _separator);
 	}
 }

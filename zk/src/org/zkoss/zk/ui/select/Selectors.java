@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.select.impl.ComponentIterator;
 import org.zkoss.zk.ui.select.impl.Reflections;
 import org.zkoss.zk.ui.select.impl.Reflections.FieldRunner;
 import org.zkoss.zk.ui.select.impl.Reflections.MethodRunner;
+import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -156,7 +157,7 @@ public class Selectors {
 	public static void wireController(Component component, Object controller){
 		Wire anno = controller.getClass().getAnnotation(Wire.class);
 		if(anno == null || anno.value().length() == 0) { 
-			Components.wireController(component, controller);
+			ConventionWires.wireController(component, controller);
 			return;
 		}
 		

@@ -17,8 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
@@ -94,7 +94,7 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		//assign this composer as a variable
 		//feature #2778508
-		Components.wireController(comp, this);
+		ConventionWires.wireController(comp, this);
 	}
 
 	//since 3.6.1

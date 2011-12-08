@@ -10,7 +10,7 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 */
-package org.zkoss.zk.ui.impl;
+package org.zkoss.zk.ui.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -39,11 +39,12 @@ import org.zkoss.zk.ui.UiException;
 
 /**
  * The utility to wire by name convention.
- *
+ * You rarely need to access this class directly.
+ * Rather, use {@link ConventionWires} instead.
  * @author tomyeh
  * @since 6.0.0
  */
-public class ConventionWire {
+/*package*/ class ConventionWire {
 	private final Object _controller;
 	private final Set<String> _injected;
 	private final Map<String, Field> _fldMaps;

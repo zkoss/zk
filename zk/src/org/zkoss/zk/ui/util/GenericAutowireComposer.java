@@ -35,7 +35,6 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -49,6 +48,7 @@ import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -119,7 +119,7 @@ import org.zkoss.zk.xel.Evaluator;
  * 
  * @author henrichen
  * @since 3.0.6
- * @see org.zkoss.zk.ui.Components#wireFellows
+ * @see ConventionWires
  */
 abstract public class GenericAutowireComposer<T extends Component> extends GenericComposer<T>
 implements ComponentCloneListener, ComponentActivationListener {
@@ -295,7 +295,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		super.doAfterCompose(comp);
 		
 		//wire variables to reference fields (include implicit objects) ASAP
-		Components.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
+		ConventionWires.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
 	
 		//register event to wire variables just before component onCreate
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
@@ -304,7 +304,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	private class BeforeCreateWireListener implements SerializableEventListener<CreateEvent> {
 		public void onEvent(CreateEvent event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
-			Components.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript, _ignoreXel);
+			ConventionWires.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript, _ignoreXel);
 			//called only once
 			event.getTarget().removeEventListener("onCreate", this);
 		}
@@ -383,7 +383,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		//the composer somewhere other than the original component
 		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
 			if (self == null) { //Bug #2873310. didActivate only once
-				Components.wireImplicit(comp, this); //Bug ZK-546. Shall re-wire transient implicit variables only
+				ConventionWires.wireImplicit(comp, this); //Bug ZK-546. Shall re-wire transient implicit variables only
 			}
 		}
 	}

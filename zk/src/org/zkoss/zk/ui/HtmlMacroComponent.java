@@ -25,6 +25,7 @@ import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
  * The implemetation of a macro component for HTML-based clients.
@@ -155,9 +156,9 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		}
 
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
-			Components.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
+			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
-			Components.addForwards(this, this, '$');
+			ConventionWires.addForwards(this, this, '$');
 	}
 	public String getMacroURI() {
 		return _uri != null ? _uri: getDefinition().getMacroURI();
