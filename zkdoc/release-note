@@ -61,6 +61,7 @@ ZK 6.0.0
   ZK-646: Allow WebAppInit listenes to override default extendlet, such as WPD and WCS
   ZK-648: Rename i3-log.conf to zk-log.conf
   ZK-649: Rename i3-label.properties to zk-label.properties
+  ZK-665: The default autowiring of HtmlMacroComponent and XmlMacroComponent shall be the same as SelectorComposer
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

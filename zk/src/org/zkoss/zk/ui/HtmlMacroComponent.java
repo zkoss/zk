@@ -25,6 +25,7 @@ import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
@@ -38,26 +39,30 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * {@link #compose}. Both {@link #afterCompose} and {@link #recreate}
  * depends on {@link #compose}.
  *
- * <p>By default, {@link #compose}
- * supports auto-forward events and wire accessible variables to this component.
- * You can turn on/off auto wire mechanism by specifying the Library
- * Property "org.zkoss.zk.ui.macro.autowire.disabled" to "true" in WEB-INF/zk.xml.
- * If you did not specify the Library Property, default is false.</p>
+ * <p>By default, {@link #compose} will wire members by use
+ * of {@link Selector}. In other words, it will wire annotated members
+ * the same way as {@link org.zkoss.zk.ui.select.SelectorComposer} does.
+ *
+ * <p>If you prefer to wire the members based on the name convention
+ * as {@link org.zkoss.zk.ui.util.GenericForwardComposer} does (i.e.,
+ * backward compatible with ZK 5), you could specify a library property
+ * called <code>org.zkoss.zk.ui.macro.autowire.convention</code> to true
+ *  in WEB-INF/zk.xml as follows.
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zk.ui.macro.autowire.convention</name>
+ *		<value>true</value>
+ *	</library-property>
+ * </code></pre>
+ *
+ * <p>If you prefer not to wire at all (neither by-selector nor by-convention),
+ * you could specify a library property called
+ * <code>org.zkoss.zk.ui.macro.autowire.disabled</code> to true
+ * in WEB-INF/zk.xml as follows..
  * 
  * <pre><code>
  *	<library-property>
  *		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
- *		<value>true</value>
- *	</library-property>
- * </code></pre>
- * 
- * or turn on/off auto forward events by specifying the Library Property
- * "org.zkoss.zk.ui.macro.autoforward.disabled" to "true" in WEB-INF/zk.xml.
- * If you did not specify the Library Property, default is false.</p>
- * 
- * <pre><code>
- *	<library-property>
- *		<name>org.zkoss.zk.ui.macro.autoforward.disabled</name>
  *		<value>true</value>
  *	</library-property>
  * </code></pre>
@@ -155,11 +160,30 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
 
-		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")))
+		switch (getAutowireFlag()) {
+		case 1: //by selector
+			Selectors.wireVariables(this, this);
+			Selectors.wireEventListeners(this, this); 
+			break;
+		case 2: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
-		if (!"true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autoforward.disabled")))
 			ConventionWires.addForwards(this, this, '$');
+			break;
+		}
 	}
+	private static Integer _autowireflag;
+	private static int getAutowireFlag() {
+		if (_autowireflag == null)
+			_autowireflag = 
+				"true".equals(Library.getProperty(
+				"org.zkoss.zk.ui.macro.autowire.disabled")) ?
+					0/*no wire*/:
+				"true".equals(Library.getProperty(
+				"org.zkoss.zk.ui.macro.autowire.convention")) ?
+					2/*convention*/: 1/*selector*/;
+		return _autowireflag;
+	}
+
 	public String getMacroURI() {
 		return _uri != null ? _uri: getDefinition().getMacroURI();
 	}
