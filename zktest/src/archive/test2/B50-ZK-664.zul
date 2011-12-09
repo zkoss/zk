@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-664.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec  9 15:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<hbox>
+		<vbox>
+			<div>Do the following steps for Test 1, Test 2, Test 3 and Test 4.</div>
+			<div>Note: The result maybe not correct if more then one person test it at the same time.</div>
+			<div>1. Click on textbox then press ENTER key, you will see the number in the right frame increased by 1.</div>
+			<div>2. Click on textbox then press tab to focus the Login button.</div>
+			<div>3. Press ENTER key, you will see the number in the right frame increased by 1.</div>
+			<div>4. Click on textbox then press tab to focus the Login button.</div>
+			<div>5. Press SPACE bar, you will see the number in the right frame increased by 1.</div>
+			<div>6. Click Login button directly, you will see the number in the right frame increased by 1.</div>
+			<div>7. Type something into each textbox, they should be cleared after you click Reset button.</div>
+			<div height="15px" width="10px"></div>
+			<div height="25px">Test 1</div>
+		</vbox>
+		<n:iframe id="iframe" src="B50-ZK-664_1.zul" />
+	</hbox>
+	<n:form method="POST" action="B50-ZK-664.zul">
+		<grid>
+			<auxhead>
+				<auxheader label="trendy" colspan="2" />
+			</auxhead>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					User:
+					<textbox name="name" />
+				</row>
+				<row spans="2">
+					<hbox>
+						<button type="submit" label="Login"
+							mold="trendy" />
+						<button type="reset" label="Reset"
+							mold="trendy" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 2</div>
+	<n:form method="POST" action="B50-ZK-664.zul">
+		User:
+		<textbox name="name" />
+		Password:
+		<textbox type="password" name="j_password" />
+		Password:
+		<textbox type="password" name="j_password" />
+		<button type="submit" label="Login" mold="trendy" />
+		<button type="reset" label="Reset" mold="trendy" />
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 3</div>
+	<n:form method="POST" action="B50-ZK-664.zul">
+		<grid>
+			<auxhead>
+				<auxheader label="os" colspan="2" />
+			</auxhead>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					User:
+					<textbox name="name" />
+				</row>
+				<row spans="2">
+					<hbox>
+						<button type="submit" label="Login"
+							mold="os" />
+						<button type="reset" label="Reset"
+							mold="os" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 4</div>
+	<n:form method="POST" action="B50-ZK-664.zul">
+		User:
+		<textbox name="name" />
+		Password:
+		<textbox type="password" name="j_password" />
+		Password:
+		<textbox type="password" name="j_password" />
+		<button type="submit" label="Login" mold="os" />
+		<button type="reset" label="Reset" mold="os" />
+	</n:form>
+</zk>
