@@ -13,13 +13,14 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.GenericComposer;
+import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
  * <p>A composer analogous to GenericForwardComposer. Instead of wiring 
@@ -49,8 +50,9 @@ import org.zkoss.zk.ui.util.GenericComposer;
  * @since 6.0.0
  * @author simonpai
  */
-public class SelectorComposer<T extends Component> extends GenericComposer<T>
-	implements ComponentCloneListener, ComponentActivationListener {
+public class SelectorComposer<T extends Component>
+implements Composer<T>, ComposerExt<T>,
+ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
@@ -61,7 +63,6 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 	
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
-		super.doAfterCompose(comp);
 		_self = comp;
 		Selectors.wireVariables(comp, this);
 		Selectors.wireEventListeners(comp, this); 
@@ -166,8 +167,20 @@ public class SelectorComposer<T extends Component> extends GenericComposer<T>
 		// annotation
 		Selectors.rewireVariables(comp, this);
 	}
-	
+
 	@Override
-	public void willPassivate(Component comp) {} // do nothing
-	
+	public ComponentInfo doBeforeCompose(Page page, Component parent,
+	ComponentInfo compInfo) { //do nothing
+		return compInfo;
+	}
+	@Override
+	public void willPassivate(Component comp) { // do nothing
+	}
+	@Override
+	public boolean doCatch(Throwable ex) throws Exception { //do nothing
+		return false;
+	}
+	@Override
+	public void doFinally() throws Exception { //do nothing
+	}
 }

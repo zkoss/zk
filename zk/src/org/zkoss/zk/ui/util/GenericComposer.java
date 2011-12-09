@@ -83,28 +83,23 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 		bindComponent(comp);
 	}
 
-	//since 3.6.1
+	@Override
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
-			ComponentInfo compInfo) {
-		//do nothing
+			ComponentInfo compInfo) { //do nothing
 		return compInfo;
 	}
-
-	//since 3.6.1
+	@Override
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		//assign this composer as a variable
 		//feature #2778508
 		ConventionWires.wireController(comp, this);
 	}
 
-	//since 3.6.1
-	public boolean doCatch(Throwable ex) throws Exception {
-		//do nothing
+	@Override
+	public boolean doCatch(Throwable ex) throws Exception { //do nothing
 		return false;
 	}
-
-	//since 3.6.1
-	public void doFinally() throws Exception {
-		//do nothing
+	@Override
+	public void doFinally() throws Exception { //do nothing
 	}
 }

@@ -417,7 +417,7 @@ import org.zkoss.zk.ui.UiException;
 			HtmlMacroComponent.class,
 			HtmlNativeComponent.class,
 			AbstractComponent.class,
-			org.zkoss.zk.ui.util.GenericComposer.class,
+			org.zkoss.zk.ui.util.GenericAutowireComposer.class,
 			Object.class
 		};
 		for (int j = 0; j < clses.length; ++j)
