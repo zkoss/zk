@@ -956,7 +956,7 @@ public class Components {
 				composerNameByClass(id, _controller.getClass()), _controller);
 		}
 		
-		private void wireFellows(IdSpace idspace) {
+		private void wireFellows(final IdSpace idspace) {
 			//inject fellows
 			final Collection fellows = idspace.getFellows();
 			for(final Iterator it = fellows.iterator(); it.hasNext();) {
@@ -964,10 +964,9 @@ public class Components {
 				injectFellow(xcomp);
 			}
 			//inject space owner ancestors
-			IdSpace xidspace = idspace;
-			if (xidspace instanceof Component) {
-				wireController((Component)xidspace, ((Component)idspace).getId());
-				while (true) {
+			if (idspace instanceof Component) {
+				wireController((Component)idspace, ((Component)idspace).getId());
+				for (IdSpace xidspace = idspace;;) {
 					final Component parent = ((Component)xidspace).getParent();
 					if (parent == null) {//hit page
 						final Page page = ((Component)xidspace).getPage();
@@ -978,7 +977,6 @@ public class Components {
 					injectFellow(xidspace);
 				}
 			} else {
-				wireController((Page)xidspace, ((Component)idspace).getId());
 				injectFellow((Page) idspace);
 			}
 		}
