@@ -76,6 +76,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else
 				wgt._fxcfg = null;
 		}
+	}: zk.ie ? function (wgt, evt) {
+		// ZK-664
+		// mark the status as mouse up in the widget but click not fired
+		wgt._fxcfg = 2;
+		setTimeout(function () {
+			wgt._fxcfg = null;
+		}, 50);
 	}: zk.$void,
 
 	_fixMousedownForClick = zk.safari || zk.gecko ?  function (wgt) {
@@ -388,7 +395,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (this._type != "button") {
 				var n;
 				if ((n = this.$n('btn')) && (n = n.form)) {
-					if (this._type != "reset") zk(n).submit();
+					// ZK-664: Use a trendy button to submit a form will submit twice (IE only)
+					// IE will submit directly without bubble up
+					if (this._type != "reset")
+						if (!zk.ie || this._fxcfg == 2)
+							zk(n).submit();
 					else n.reset();
 					return;
 				}

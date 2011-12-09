@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-664.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec  9 15:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<div >IE only.</div>
+	<div>Do the following steps for Test 1, Test 2, Test 3 and Test 4.</div>
+	<div>1. Click on textbox then press enter key, you will see a number in the new page.</div>
+	<div>2. Return to this page.</div>
+	<div>3. Click on textbox then press tab to focus the Login button.</div>
+	<div>4. Press enter key, you will see a number in the new page and only increased by 1 from step 1.</div>
+	<div>5. Return to this page.</div>
+	<div>6. Click on textbox then press tab to focus the Login button.</div>
+	<div>7. Press space bar, you will see a number in the new page and only increased by 1 from step 4.</div>
+	<div>8. Return to this page.</div>
+	<div>9. Click Login button directly, you will see a number in the new page and only increased by 1 from step 7.</div>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 1</div>
+	<n:form method="POST" action="B50-ZK-664_1.zul">
+		<grid>
+			<auxhead>
+				<auxheader label="trendy" colspan="2" />
+			</auxhead>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					User:
+					<textbox name="name" />
+				</row>
+				<row spans="2">
+					<hbox>
+						<button type="submit" label="Login"
+							mold="trendy" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 2</div>
+	<n:form method="POST" action="B50-ZK-664_1.zul">
+		User:
+		<textbox name="name" />
+		Password:
+		<textbox type="password" name="j_password" />
+		Password:
+		<textbox type="password" name="j_password" />
+		<button type="submit" label="Login" mold="trendy" />
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 3</div>
+	<n:form method="POST" action="B50-ZK-664_1.zul">
+		<grid>
+			<auxhead>
+				<auxheader label="os" colspan="2" />
+			</auxhead>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					User:
+					<textbox name="name" />
+				</row>
+				<row spans="2">
+					<hbox>
+						<button type="submit" label="Login"
+							mold="os" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</n:form>
+	<div height="15px" width="10px"></div>
+	<div height="25px">Test 4</div>
+	<n:form method="POST" action="B50-ZK-664_1.zul">
+		User:
+		<textbox name="name" />
+		Password:
+		<textbox type="password" name="j_password" />
+		Password:
+		<textbox type="password" name="j_password" />
+		<button type="submit" label="Login" mold="os" />
+	</n:form>
+</zk>
