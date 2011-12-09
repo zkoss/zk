@@ -434,7 +434,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//render the render defer (usually controlled by server)
-	function _rdrender(wgt) {
+	function _doDeferRender(wgt) {
 		if (wgt._z$rd) { //might be redrawn by forcerender
 			delete wgt._z$rd;
 			wgt._norenderdefer = true;
@@ -2063,7 +2063,7 @@ redraw: function (out) {
 				out = null; //to free memory
 
 				var wgt = this;
-				setTimeout(function () {_rdrender(wgt);}, delay);
+				setTimeout(function () {_doDeferRender(wgt);}, delay);
 				return true;
 			}
 			delete this._norenderdefer;
@@ -2097,7 +2097,7 @@ redraw: function (out) {
 	 * @since 5.0.2
 	 */
 	forcerender: function () {
-		_rdrender(this);
+		_doDeferRender(this);
 	},
 	/** Updates the DOM element's CSS class. It is called when the CSS class is changed (e.g., setZclass is called).
 	 * <p>Default: it changes the class of {@link #$n}. 
@@ -2426,6 +2426,7 @@ function () {
 						_rsFocus(cf);
 					}
 				}
+
 				if (!skipInfo)
 					this.replaceHTML(n, null, null, true);
 
