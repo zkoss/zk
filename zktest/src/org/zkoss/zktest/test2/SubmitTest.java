@@ -1,4 +1,4 @@
-package org.zkoss.zktest.test;
+package org.zkoss.zktest.test2;
 
 public class SubmitTest {
 	private static int count = 0;
