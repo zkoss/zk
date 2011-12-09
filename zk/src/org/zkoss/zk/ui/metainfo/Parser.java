@@ -353,12 +353,15 @@ public class Parser {
 		}
 	}
 	private static String message(String message, Item el) {
-		return message(message, el != null ? el.getLocator(): null);
+		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator(): null);
 	}
-	private static String message(String message,
-	org.zkoss.xml.Locator loc) {
-		return loc != null ? loc.format(message): message;
+	private static String message(String message, org.zkoss.xml.Locator loc) {
+		return org.zkoss.xml.Locators.format(message, loc);
 	}
+	private static org.zkoss.util.resource.Location location(Item el) {
+		return org.zkoss.xml.Locators.toLocation(el != null ? el.getLocator(): null);
+	}
+
 	private void checkZScriptEnabled(Element el) {
 		checkZScriptEnabled(el.getLocator());
 	}
@@ -873,12 +876,12 @@ public class Parser {
 						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
-							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, attr.getLocator());
+							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
 						} else {
 							addAttribute(compInfo, attrns, attnm, attval, null,
 								attr.getLocator());
 							if (attrAnnHelper != null)
-								attrAnnHelper.applyAnnotations(compInfo, attnm, true, el.getLocator());
+								attrAnnHelper.applyAnnotations(compInfo, attnm, true, location(el));
 						}
 					}
 				}
@@ -886,7 +889,7 @@ public class Parser {
 
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
-			annHelper.applyAnnotations(compInfo, null, true, el.getLocator());
+			annHelper.applyAnnotations(compInfo, null, true, location(el));
 
 			final Collection<Item> items = el.getChildren();
 			String textAs = null;
@@ -965,7 +968,7 @@ public class Parser {
 	/** @param val the value (it was trimmed before called). */
 	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
 	ComponentInfo compInfo, String nm, String val, boolean selfAllowed,
-	org.zkoss.xml.Locator loc) {
+	org.zkoss.util.resource.Location loc) {
 		attrAnnHelper.addByCompoundValue(val.trim(), loc);
 		attrAnnHelper.applyAnnotations(compInfo,
 			selfAllowed && "self".equals(nm) ? null: nm, true, loc);
@@ -1066,7 +1069,7 @@ public class Parser {
 				el.getLocator());
 		}
 
-		annHelper.applyAnnotations(parent, attnm, true, el.getLocator());
+		annHelper.applyAnnotations(parent, attnm, true, location(el));
 	}
 	private static void parseCustomAttributes(LanguageDefinition langdef,
 	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
@@ -1103,7 +1106,7 @@ public class Parser {
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
-					attnm, attvaltrim, false, attr.getLocator());
+					attnm, attvaltrim, false, location(attr));
 			} else {
 				attrs.put(attnm, attval);
 			}
@@ -1159,7 +1162,7 @@ public class Parser {
 			final Attribute attr = (Attribute)it.next();
 			attrs.put(attr.getLocalName(),
 				AnnotationHelper.parseAttributeValue(
-					attr.getValue().trim(), attr.getLocator()));
+					attr.getValue().trim(), location(attr)));
 		}
 		annHelper.add(el.getLocalName(), attrs);
 	}

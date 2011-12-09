@@ -18,7 +18,7 @@ package org.zkoss.idom;
 import org.xml.sax.Locator;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.idom.util.SimpleLocator;
+import org.zkoss.xml.Locators;
 
 /**
  * Denotes an operation is not supported.
@@ -81,12 +81,6 @@ public class DOMException extends org.w3c.dom.DOMException {
 		if (extraMsg != null)
 			sb.append(": ").append(extraMsg);
 
-		if (loc != null) {
-			if (sb.length() > 0)
-				sb.append(' ');
-
-			sb.append(SimpleLocator.toString(loc));
-		}
-		return sb.toString();
+		return Locators.format(sb.toString(), loc);
 	}
 }

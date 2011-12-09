@@ -548,11 +548,10 @@ public class DefinitionLoaders {
 	}
 
 	private static String message(String message, org.zkoss.idom.Item el) {
-		return message(message, el != null ? el.getLocator(): null);
+		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator(): null);
 	}
-	private static String message(String message,
-	org.zkoss.xml.Locator loc) {
-		return loc != null ? loc.format(message): message;
+	private static org.zkoss.util.resource.Location location(org.zkoss.idom.Item el) {
+		return org.zkoss.xml.Locators.toLocation(el != null ? el.getLocator(): null);
 	}
 
 	private static WidgetDefinition getWidgetDefinition(
@@ -691,11 +690,11 @@ public class DefinitionLoaders {
 			for (Map.Entry<String, String> me: parseAttrs(el).entrySet())
 				annotAttrs.put(me.getKey(),
 					AnnotationHelper.parseAttributeValue(me.getValue().trim(),
-					el.getLocator())); //not accurate but acceptable
+					location(el))); //not accurate but acceptable
 
 			compdef.addAnnotation(
 				el.getElementValue("property-name", true), annotName,
-					annotAttrs, el.getLocator());
+					annotAttrs, location(el));
 		}
 	}
 	/** Configures an integer. */

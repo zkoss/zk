@@ -682,11 +682,7 @@ public class ConfigParser {
 	}
 
 	private static String message(String message, org.zkoss.idom.Item el) {
-		return message(message, el != null ? el.getLocator(): null);
-	}
-	private static String message(String message,
-	org.zkoss.xml.Locator loc) {
-		return loc != null ? loc.format(message): message;
+		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator(): null);
 	}
 
 	/** Parse language-config */

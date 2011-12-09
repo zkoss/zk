@@ -25,9 +25,6 @@ public interface Location {
 	/** Return the line number in the document, or -1 if not available.
 	 */
 	public int getLineNumber();
-	/** Return the character position, or -1 if not available.
-	 */
-	public int getColumnNumber();
 
 	/** Fomrats the given message by prefixing with the location information.
 	 */

@@ -41,7 +41,6 @@ import org.xml.sax.XMLReader;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
-import org.zkoss.idom.util.SimpleLocator;
 import org.zkoss.idom.*;
 
 /**
@@ -257,7 +256,7 @@ implements LexicalHandler, DeclHandler {
 	 */
 	protected final void attachLocator(Item vtx) {
 		if (_loc != null)
-			vtx.setLocator(new SimpleLocator(_loc));
+			vtx.setLocator(new MyLoc(_loc));
 	}
 
 	/** Returns the top group, or null if not available.
@@ -453,7 +452,7 @@ implements LexicalHandler, DeclHandler {
 
 	public void startPrefixMapping(String prefix, String uri)
 	throws SAXException {
-//		if (log.finerable()) log.finer("start prefix: " + prefix + ", " + uri + SimpleLocator.toString(_loc));
+//		if (log.finerable()) log.finer(message("start prefix: " + prefix + ", " + uri, _loc));
 
 		final Namespace ns = Namespace.getSpecial(prefix);
 		if (ns == null || !ns.getURI().equals(uri))
@@ -462,7 +461,7 @@ implements LexicalHandler, DeclHandler {
 	}
 
 	public void endPrefixMapping(String prefix) throws SAXException {
-//		if (log.finerable()) log.finer("end prefix: " + prefix + SimpleLocator.toString(_loc));
+//		if (log.finerable()) log.finer(message("end prefix: " + prefix, _loc));
 
 		for (Iterator<Namespace> itr = _declNamespaces.iterator(); itr.hasNext();) {
 			final Namespace ns = itr.next();
@@ -472,13 +471,16 @@ implements LexicalHandler, DeclHandler {
 			}
 		}
 	}
+	private static String message(String message, Locator loc) {
+		return org.zkoss.xml.Locators.format(message, loc);
+	}
 
 	public void
 	startElement(String nsURI, String lname, String tname, Attributes attrs)
 	throws SAXException {
 //		if (log.finerable())
-//			log.finer("start element: nsURI=\"" + nsURI + "\", lname=" + lname + ", tname=" + tname
-//				+ " attr#=" + attrs.getLength() + SimpleLocator.toString(_loc));
+//			log.finer(message("start element: nsURI=\"" + nsURI + "\", lname=" + lname + ", tname=" + tname
+//				+ " attr#=" + attrs.getLength(), _loc));
 
 		//create the element
 		if (tname == null || tname.length() == 0) //just in case
@@ -705,7 +707,7 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.warning(ex);
 		} else {
-			log.warning(ex.getMessage() + SimpleLocator.toString(_loc));
+			log.warning(message(ex.getMessage(), _loc));
 		}
 	}
 	public void error(SAXParseException ex) throws SAXException {
@@ -713,7 +715,7 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.error(ex);
 		} else {
-			log.error(ex.getMessage() + SimpleLocator.toString(_loc));
+			log.error(message(ex.getMessage(), _loc));
 			throw ex;
 		}
 	}
@@ -722,8 +724,41 @@ implements LexicalHandler, DeclHandler {
 		if (eh != null) {
 			eh.fatalError(ex);
 		} else {
-			if (log.debugable()) log.debug(ex.getMessage() + SimpleLocator.toString(_loc));
+			if (log.debugable()) log.debug(message(ex.getMessage(), _loc));
 			throw ex;
+		}
+	}
+
+	private class MyLoc implements org.zkoss.xml.Locator, java.io.Serializable {
+		protected final int _colno, _lnno;
+		protected final String _pubId, _sysId;
+
+		private MyLoc(org.xml.sax.Locator loc) {
+			_pubId = loc.getPublicId();
+			_sysId = loc.getSystemId();
+			_lnno  = loc.getLineNumber();
+			_colno = loc.getColumnNumber();
+		}
+
+		@Override
+		public final int getColumnNumber() {
+			return _colno;
+		}
+		@Override
+		public final int getLineNumber() {
+			return _lnno;
+		}
+		@Override
+		public final String getPublicId() {
+			return _pubId;
+		}
+		@Override
+		public final String getSystemId() {
+			return _sysId;
+		}
+		@Override
+		public final String toString() {
+			return '['+_pubId+':'+_sysId+':'+_lnno+':'+_colno+']';
 		}
 	}
 }
