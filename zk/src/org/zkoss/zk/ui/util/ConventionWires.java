@@ -209,38 +209,47 @@ public class ConventionWires {
 		new ConventionWire(controller, separator, ignoreZScript, ignoreXel).wireVariables(page);
 	}
 
-	/** Wire controller as a variable objects of the specified component with a custom separator.
-	 * The separator is used to separate the component ID and the controller.
+	/** Wire controller as an attribute of the specified component.
+	 * Please refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Controller/Composer">ZK Developer's Reference</a>
+	 * for details.
+	 * <p>The separator is used to separate the component ID and the controller.
 	 * By default, it is '$'. However, for Groovy or other environment that
 	 * '$' is not applicable, you can invoke {@link #wireController(Component, Object, char)}
 	 * to use '_' as the separator.
 	 */
 	public static final
 	void wireController(Component comp, Object controller) {
-		new ConventionWire(controller).wireController(comp, comp.getId());
+		wireController(comp, controller, '$');
 	}
 
-	/** Wire controller as a variable objects of the specified component with a custom separator.
-	 * The separator is used to separate the component ID and the controller.
+	/** Wire controller as an attribute of the specified component with a custom separator.
+	 * <p>The separator is used to separate the component ID and the controller.
 	 * By default, it is '$'. However, for Groovy or other environment that
 	 * '$' is not applicable, you can invoke this method to use '_' as
 	 * the separator.
 	 */
 	public static final
 	void wireController(Component comp, Object controller, char separator) {
-		new ConventionWire(controller, separator).wireController(comp, comp.getId());
+		//feature #3326788: support custom name
+		Object onm = comp.getAttribute("composerName");
+		if (onm instanceof String && ((String)onm).length() > 0) {
+			comp.setAttribute((String)onm, controller);
+		} else {
+			//feature #2778513, support {id}$composer name
+			final String id = comp.getId();
+			final String nm = id + separator + "composer";
+			if (!comp.hasAttributeOrFellow(nm, false))
+				comp.setAttribute(nm, controller);
+
+			//support {id}$ClassName
+			comp.setAttribute(
+				composerNameByClass(id, controller.getClass(), separator), controller);
+		}
 	}
-	/** Wire controller as a variable objects of the specified component with full control.
-	 * @param separator the separator used to separate the component ID and event name.
-	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
-	 * a member.
-	 * @param ignoreXel whether to ignore variables defined in varible resolver
-	 * ({@link Page#addVariableResolver}) when wiring a member.
-	 */
-	public static final
-	void wireController(Component comp, Object controller, char separator,
-	boolean ignoreZScript, boolean ignoreXel) {
-		new ConventionWire(controller, separator, ignoreZScript, ignoreXel).wireController(comp, comp.getId());
+	private static String composerNameByClass(String id, Class cls, char separator) {
+		final String clsname = cls.getName();
+		int j = clsname.lastIndexOf('.');
+		return id + separator + (j >= 0 ? clsname.substring(j+1) : clsname);
 	}
 
 	/**Wire implicit variables of the specified component into a controller Java object. 

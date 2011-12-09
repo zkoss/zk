@@ -17,7 +17,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Wire {
 	
 	/**

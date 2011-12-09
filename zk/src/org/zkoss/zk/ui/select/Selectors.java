@@ -147,22 +147,15 @@ public class Selectors {
 	}
 	
 	/**
-	 * Add a reference of controller in the attributes of component. If &#064;Wire
-	 * is present on the controller class with a nonempty value, the value will 
-	 * be the attribute name. Otherwise the old convention is used.
+	 * Add a reference of controller in the attributes of the given component.
+	 * Please refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Controller/Composer">ZK Developer's Reference</a>
+	 * for details.
+	 * 
 	 * @param component the component to inject reference
 	 * @param controller the controller to be referred to
 	 */
 	public static void wireController(Component component, Object controller){
-		Wire anno = controller.getClass().getAnnotation(Wire.class);
-		if(anno == null || anno.value().length() == 0) { 
-			ConventionWires.wireController(component, controller);
-			return;
-		}
-		
-		String compKey = anno.value();
-		if (!component.hasAttributeOrFellow(compKey, false))
-			component.setAttribute(compKey, controller);
+		ConventionWires.wireController(component, controller);
 	}
 	
 	/**

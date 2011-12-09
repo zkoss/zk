@@ -80,54 +80,17 @@ import org.zkoss.zk.ui.UiException;
 		}
 	}
 
-	/**
-	 * Inject controller as variable of the specified component.
-	 */
-	public void wireController(Component comp, String id) {
-		//feature #3326788: support custom name
-		Object onm = comp.getAttribute("composerName");
-		if (onm instanceof String && ((String)onm).length() > 0)
-			comp.setAttribute((String)onm, _controller);
-
-		//feature #2778513, support {id}$composer name
-		final String nm = composerNameById(id);
-		if (!comp.hasAttributeOrFellow(nm, false))
-			comp.setAttribute(nm, _controller);
-
-		//support {id}$ClassName
-		comp.setAttribute(
-			composerNameByClass(id, _controller.getClass()), _controller);
-	}
-	
-	/**
-	 * Inject controller as variable of the specified page.
-	 */
-	public void wireController(Page page, String id) {
-		Object onm = page.getAttribute("composerName");
-		if (onm instanceof String && ((String)onm).length() > 0)
-			page.setAttribute((String)onm, _controller);
-
-		final String nm = composerNameById(id);
-		if (!page.hasAttributeOrFellow(nm, false))
-			page.setAttribute(nm, _controller);
-
-		page.setAttribute(
-			composerNameByClass(id, _controller.getClass()), _controller);
-	}
-	
 	/** Injects the fellows in the context of the given IdSpace.
 	 */
-	public void wireFellows(IdSpace idspace) {
+	public void wireFellows(final IdSpace idspace) {
 		//inject fellows
 		final Collection<Component> fellows = idspace.getFellows();
 		for(Component xcomp: fellows)
 			injectFellow(xcomp);
 
 		//inject space owner ancestors
-		IdSpace xidspace = idspace;
-		if (xidspace instanceof Component) {
-			wireController((Component)xidspace, ((Component)idspace).getId());
-			while (true) {
+		if (idspace instanceof Component) {
+			for (IdSpace xidspace = idspace;;) {
 				final Component parent = ((Component)xidspace).getParent();
 				if (parent == null) {//hit page
 					final Page page = ((Component)xidspace).getPage();
@@ -138,20 +101,17 @@ import org.zkoss.zk.ui.UiException;
 				injectFellow(xidspace);
 			}
 		} else {
-			wireController((Page)xidspace, ((Component)idspace).getId());
 			injectFellow((Page) idspace);
 		}
 	}
 	/** Injects the variables in the context of the given page.
 	 */
 	public void wireVariables(Page page) {
-		wireController(page, page.getId());
 		myWireVariables(page);
 	}
 	/** Injects the variables in the context of the given component.
 	 */
 	public void wireVariables(Component comp) {
-		wireController(comp, comp.getId());
 		myWireVariables(comp);
 	}
 	private void myWireVariables(Object x) {
@@ -394,15 +354,6 @@ import org.zkoss.zk.ui.UiException;
 		return x instanceof Page ?
 				Components.getImplicit((Page)x, fdname) :
 				Components.getImplicit((Component)x, fdname);
-	}
-
-	private String composerNameById(String id) {
-		return id + _separator + "composer";
-	}
-	private String composerNameByClass(String id, Class cls) {
-		final String clsname = cls.getName();
-		int j = clsname.lastIndexOf('.');
-		return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
 	}
 
 	private static boolean ignoreFromWire(Class<?> cls) {

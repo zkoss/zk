@@ -160,6 +160,8 @@ ZK 6.0.0
   + The default I18N  properties file is renamed from i3-label.properties to
     zk-label.properties.
   + The log configuration file is renamed from i3-log.conf to zk-log.conf.
+  + If the attribute called composerName is specified, the default name
+    won't be wired (for better performance).
 
 	--------
 ZK 5.0.10

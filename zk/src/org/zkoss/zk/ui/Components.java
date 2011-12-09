@@ -454,7 +454,7 @@ public class Components {
 	public static final
 	void wireController(Component comp, Object controller, char separator,
 	boolean ignoreZScript, boolean ignoreXel) {
-		ConventionWires.wireController(comp, controller, separator, ignoreZScript, ignoreXel);
+		ConventionWires.wireController(comp, controller, separator);
 	}
 	/** @deprecated As of release 6.0.0, replaced with {@link ConventionWires}.
 	 */
