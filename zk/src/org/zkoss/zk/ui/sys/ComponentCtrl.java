@@ -253,10 +253,10 @@ public interface ComponentCtrl {
 	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
 	 *&lt;/button></code></pre>
 	 *
-	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
 	 * If null, this method returns the annotation(s) associated with this
 	 * component (rather than a particular property).
+	 * @param annotName the annotation name
 	 * @see #getAnnotations(String, String)
 	 */
 	public Annotation getAnnotation(String propName, String annotName);
@@ -277,9 +277,10 @@ public interface ComponentCtrl {
 	 *  &lt;custom-attribute foo="@bind(whatever=123}"&gt;
 	 *&lt;/button></code></pre>
 	 *
-	 * @param annotName the annotation name
+	 * @param propName the property name, e.g., "value".
 	 * If null, this method returns the annotation(s) associated with this
 	 * component (rather than a particular property).
+	 * @param annotName the annotation name
 	 * @see #getAnnotation(String, String)
 	 * @since 6.0.0
 	 */

@@ -62,6 +62,7 @@ ZK 6.0.0
   ZK-648: Rename i3-log.conf to zk-log.conf
   ZK-649: Rename i3-label.properties to zk-label.properties
   ZK-665: The default autowiring of HtmlMacroComponent and XmlMacroComponent shall be the same as SelectorComposer
+  ZK-666: A way to specify both annotation and value for a property
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

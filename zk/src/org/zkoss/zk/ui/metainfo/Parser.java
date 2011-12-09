@@ -750,7 +750,10 @@ public class Parser {
 		final String uri = ns != null ? ns.getURI(): "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
 
-		checkAnnotNamespace(uri);
+		if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri)
+		|| "annotation".equals(uri))
+			throw new UiException(message("Namespace, "+uri+", no longer supported element's annotation", el));
+
 		if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 			checkZScriptEnabled(el);
 			parseZScript(parent, el, annHelper);
@@ -847,7 +850,6 @@ public class Parser {
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
 
-				checkAnnotNamespace(attURI);
 				if ("apply".equals(attnm) && isZkAttr(langdef, attrns)) {
 					compInfo.setApply(attval);
 				} else if ("forward".equals(attnm) && isZkAttr(langdef, attrns)) {
@@ -865,6 +867,12 @@ public class Parser {
 				} else if ("fulfill".equals(attnm)
 				&& isZkAttr(langdef, attrns, bNativeContent)) {
 					compInfo.setFulfill(attval);
+				} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
+				|| "annotation".equals(attURI)) {
+					//ZK 6: annotation namespace mandates annotation
+					if (attrAnnHelper == null)
+						attrAnnHelper = new AnnotationHelper();
+					applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
 				} else if (!"use".equals(attnm)
 				|| !isZkAttr(langdef, attrns, bNativeContent)) {
 					final String attPref = attrns != null ? attrns.getPrefix(): "",
@@ -873,6 +881,7 @@ public class Parser {
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						if (!bNativeContent
+						&& attURI.length() == 0 //ZK 6: non-annotation namespace mandates non-annotation
 						&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
@@ -945,12 +954,6 @@ public class Parser {
 			&& !compInfo.getChildren().isEmpty())
 				optimizeNativeInfos((NativeInfo)compInfo);
 		} //end-of-else//
-	}
-
-	private static void checkAnnotNamespace(String uri) {
-		if ("http://www.zkoss.org/2005/zk/annotation".equals(uri)
-		|| "annotation".equals(uri))
-			throw new UiException("Namespace, "+uri+", no longer supported");
 	}
 
 	/** Parses the items as if they are native and they will become a property

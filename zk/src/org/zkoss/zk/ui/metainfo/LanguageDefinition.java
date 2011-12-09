@@ -96,6 +96,11 @@ public class LanguageDefinition {
 	 * @since 5.0.3
 	 */
 	public static final String CLIENT_ATTRIBUTE_NAMESPACE = "http://www.zkoss.org/2005/zk/client/attribute";
+	/** The namespace for annoation. It is mainly used to resolve the conflict
+	 * between a normal value and an annotation.
+	 * @since 6.0.0
+	 */
+	public static final String ANNOTATION_NAMESPACE = "http://www.zkoss.org/2005/zk/annotation";
 
 	/** The namespace for ZK native namespace prefix.
 	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("native:"),
