@@ -385,16 +385,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
-			if (this._type != "button") {
-				var n;
-				if ((n = this.$n('btn')) && (n = n.form)) {
-					// ZK-664: Use a trendy button to submit a form will submit twice (IE only)
-					// IE will submit directly without bubble up
-					if (evt.domTarget != this.$n('btn'))
-						if (this._type != "reset") zk(n).submit();
-						else n.reset();
-					return;
-				}
+			var btn, fm;
+			if (this._type != "button"
+			&& (btn = this.$n('btn')) && (fm = btn.form)) {
+				// ZK-664: Use a trendy button to submit a form will submit twice (IE only)
+				// IE will submit directly without bubble up
+				if (evt.domTarget != btn)
+					if (this._type != "reset") zk(fm).submit();
+					else fm.reset();
+				return;
 			}
 			
 			this.fireX(evt);
