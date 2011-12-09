@@ -766,7 +766,7 @@ public class ComponentInfo extends ForEachBranchInfo {
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
 	 * The attribute must be in a pair of strings (String name, String value),
 	 * or (String name, String[] value).
-	 * @param loaction the location information of the annotation in
+	 * @param loc the location information of the annotation in
 	 * the document, or null if not available.
 	 * @since 6.0.0
 	 */

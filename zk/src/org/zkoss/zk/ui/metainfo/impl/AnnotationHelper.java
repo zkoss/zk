@@ -373,7 +373,7 @@ public class AnnotationHelper {
 	 * @param compInfo the instance definition to update
 	 * @param propName the property name
 	 * @param clear whether to clear all definitions before returning
-	 * @param loaction the location information of the annotation in
+	 * @param loc the location information of the annotation in
 	 * the document, or null if not available.
 	 * @see #clear
 	 * @since 6.0.0

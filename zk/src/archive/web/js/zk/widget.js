@@ -2392,15 +2392,19 @@ function () {
 	 * the second call will reset the expiration time to the value given
 	 * in the second call.
 	 * @param int timeout the number milliseconds (non-negative) to wait
-	 * before rerender
+	 * before rerender. If negative, it means rerender shall take place
+	 * immediately.
 	 * @return zk.Widget this widget.
 	 * @since 5.0.4
 	 */
 	rerender: function (skipper) {
 		if (this.desktop) {
 			if (typeof skipper == "number") {
-				_rerender(this, skipper);
-				return this;
+				if (skipper >= 0) {
+					_rerender(this, skipper);
+					return this;
+				}
+				skipper = null; //negative -> immediately
 			}
 
 			var n = this.$n();
