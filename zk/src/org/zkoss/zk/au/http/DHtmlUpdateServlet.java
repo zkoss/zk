@@ -128,8 +128,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	public static DHtmlUpdateServlet getUpdateServlet(WebApp wapp) {
 		return (DHtmlUpdateServlet)
-			((ServletContext)wapp.getNativeContext())
-				.getAttribute(ATTR_UPDATE_SERVLET);
+			(wapp.getServletContext()).getAttribute(ATTR_UPDATE_SERVLET);
 	}
 
 	//Servlet//

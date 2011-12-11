@@ -358,7 +358,7 @@ public class WebManager {
 	 * @since 3.0.4
 	 */
 	public static final WebManager getWebManager(WebApp wapp) {
-		return getWebManager((ServletContext)wapp.getNativeContext());
+		return getWebManager(wapp.getServletContext());
 	}
 	/** Returns the Web manager of the give context, or null if not found.
 	 * @since 5.0.5
@@ -371,7 +371,7 @@ public class WebManager {
 	 * @since 5.0.5
 	 */
 	public static final WebManager getWebManagerIfAny(WebApp wapp) {
-		return getWebManagerIfAny((ServletContext)wapp.getNativeContext());
+		return getWebManagerIfAny(wapp.getServletContext());
 	}
 	/** Returns the Web application of the specified context.
 	 * @exception UiException if not found (i.e., not initialized
@@ -498,7 +498,7 @@ public class WebManager {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		TemporaryExecution de = new TemporaryExecution(
-			(ServletContext)ri.getWebApp().getNativeContext(),
+			ri.getWebApp().getServletContext(),
 			(HttpServletRequest)ri.getNativeRequest(),
 			(HttpServletResponse)response, ri.getDesktop());
 		desktopCtrl.setExecution(de);
@@ -525,7 +525,7 @@ public class WebManager {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		TemporaryExecution de = new TemporaryExecution(
-			(ServletContext)ri.getWebApp().getNativeContext(),
+			ri.getWebApp().getServletContext(),
 			(HttpServletRequest)ri.getNativeRequest(),
 			(HttpServletResponse)response, ri.getDesktop());
 		desktopCtrl.setExecution(de);

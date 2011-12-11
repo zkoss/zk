@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.net.URL;
 import java.io.InputStream;
+import javax.servlet.ServletContext;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.zk.ui.util.Configuration;
@@ -190,13 +191,13 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 */
 	public Configuration getConfiguration();
 
-	/** Returns the native application context, or null if not available.
-	 *
-	 * <p>The returned object depends on the Web container.
-	 * If it is based Java servlet container, an instance of
-	 * javax.servlet.Servletcontext is returned.
+	/** @deprecated As of release 6.0.0, replaced with {@link #getServletContext}.
 	 */
 	public Object getNativeContext();
+	/** Returns the servlet context of this application.
+	 * @since 6.0.0
+	 */
+	public ServletContext getServletContext();
 
 	/** Writes the specified message to a servlet log file, usually an event log.
 	 * The name and type of the servlet log file is specific to the servlet container.

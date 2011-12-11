@@ -42,7 +42,7 @@ public interface WebAppInit {
 	/** Called when a ZK application is created and initialized.
 	 *
 	 * <p>You could
-	 * retrieve the servlet context by {@link WebApp#getNativeContext}</p>
+	 * retrieve the servlet context by {@link WebApp#getServletContext}</p>
 	 */
 	public void init(WebApp wapp) throws Exception;
 }

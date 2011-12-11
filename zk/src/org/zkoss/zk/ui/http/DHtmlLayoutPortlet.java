@@ -174,7 +174,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
-		final ServletContext svlctx = (ServletContext)wapp.getNativeContext();
+		final ServletContext svlctx = wapp.getServletContext();
 
 		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
 		Desktop desktop = dtrc != null ?

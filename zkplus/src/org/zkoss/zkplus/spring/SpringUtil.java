@@ -16,8 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.spring;
 
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -42,7 +40,7 @@ public class SpringUtil {
 		}
 		
 		return WebApplicationContextUtils.getRequiredWebApplicationContext(
-				(ServletContext)exec.getDesktop().getWebApp().getNativeContext());
+				exec.getDesktop().getWebApp().getServletContext());
 	}
 	
 	/**

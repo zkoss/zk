@@ -21,7 +21,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.IOException;
 import java.net.URL;
-import javax.servlet.ServletContext;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
@@ -138,11 +137,8 @@ public class PageDefinitions {
 		wapp.getConfiguration().invokeURIInterceptors(path);
 			//give the security a chance to reject
 
-		final Object ctx = wapp.getNativeContext();
-		if (ctx instanceof ServletContext)
-			return ResourceCaches.get(
-				getCache(wapp), (ServletContext)ctx, path, locator);
-		throw new UnsupportedOperationException("Unknown context: "+ctx);
+		return ResourceCaches.get(
+			getCache(wapp), wapp.getServletContext(), path, locator);
 	}
 	/** Returns the locator for the specified context.
 	 *
@@ -161,10 +157,7 @@ public class PageDefinitions {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null) path = exec.getDesktop().getCurrentDirectory();
 		}
-		final Object ctx = wapp.getNativeContext();
-		if (ctx instanceof ServletContext)
-			return new ServletContextLocator((ServletContext)ctx, path);
-		throw new UnsupportedOperationException("Unknown context: "+ctx);
+		return new ServletContextLocator(wapp.getServletContext(), path);
 	}
 
 	@SuppressWarnings("unchecked")

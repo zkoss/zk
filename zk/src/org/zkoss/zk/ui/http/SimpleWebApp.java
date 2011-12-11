@@ -168,7 +168,13 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Set<String> getResourcePaths(String path) {
 		return _ctx.getResourcePaths(path);
 	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #getServletContext}.
+	 */
 	public Object getNativeContext() {
+		return _ctx;
+	}
+	@Override
+	public ServletContext getServletContext() {
 		return _ctx;
 	}
 

@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.http.WebManager;
  */
 /*package*/ class CCExecution extends org.zkoss.zk.ui.http.ExecutionImpl {
 	/*package*/ static CCExecution newInstance(WebApp wapp) {
-		final ServletContext ctx = (ServletContext)wapp.getNativeContext();
+		final ServletContext ctx = wapp.getServletContext();
 		final String updateURI = WebManager.getWebManager(ctx).getUpdateURI();
 		return new CCExecution(ctx,
 			new DesktopImpl(wapp, updateURI, "/", null, null));

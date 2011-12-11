@@ -53,7 +53,7 @@ public class DemoWebAppInit implements WebAppInit {
 	};
 	
 	public void init(WebApp wapp) throws Exception {
-		loadProperites((ServletContext)wapp.getNativeContext());
+		loadProperites(wapp.getServletContext());
 	}
 	
 	static Map getCateMap() {
