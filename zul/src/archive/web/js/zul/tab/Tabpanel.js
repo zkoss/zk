@@ -162,13 +162,17 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (v != 'min') v = false;
 		this.$super(zul.tab.Tabpanel, 'setHflex', v);
 	},
-	bind_: function() {
+	bind_: function(desktop, skipper, after) {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		zWatch.listen({onSize: this});
+		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
-		// ZK-660
-		if ((tab = this.getLinkedTab()) && tab._rerender)
-			tab._rerender();
+		if (this.getTabbox().inAccordionMold()
+				&& (tab=this.getLinkedTab()) && !tab.$n()) {
+			tab.clearCache();
+			tab.unbind_();
+			tab.bind_(desktop, skipper, after);
+		}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
