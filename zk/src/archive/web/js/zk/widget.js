@@ -462,7 +462,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				else if (zUtl.isAncestor(_rdque[j], wgt))
 					continue l_out; //skip wgt
 
-			wgt.rerender();
+			wgt.rerender(-1);
 		}
 	}
 	function _rerenderDone(wgt) {
@@ -2382,7 +2382,7 @@ function () {
 	 * by passing an instance of {@link zk.Skipper} that is used to
 	 * re-render some or all descendant widgets of this widget.
 	 * @param zk.Skipper skipper [optional] skip some portion of this widget
-	 * to speed up the re-rendering.
+	 * to speed up the re-rendering. If not specified, rerender(0) is assumed.
 	 * @return zk.Widget this widget.
 	 */
 	/** Re-renders after the specified time (milliseconds).
@@ -2393,19 +2393,18 @@ function () {
 	 * in the second call.
 	 * @param int timeout the number milliseconds (non-negative) to wait
 	 * before rerender. If negative, it means rerender shall take place
-	 * immediately.
+	 * immediately. If not specified, 0 is assumed.
 	 * @return zk.Widget this widget.
 	 * @since 5.0.4
 	 */
 	rerender: function (skipper) {
 		if (this.desktop) {
-			if (typeof skipper == "number") {
-				if (skipper >= 0) {
-					_rerender(this, skipper);
-					return this;
-				}
-				skipper = null; //negative -> immediately
+			if (!skipper || skipper > 0) { //default: 0
+				_rerender(this, skipper||0);
+				return this;
 			}
+			if (skipper < 0)
+				skipper = null; //negative -> immediately
 
 			var n = this.$n();
 			if (n) {
