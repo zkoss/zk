@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -70,11 +71,22 @@ ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 		//register event to wire variables just before component onCreate
 		comp.addEventListener("onCreate", new BeforeCreateWireListener());
 	}
-	
+
+	/** Returns the current page.
+	 */
+	protected Page getPage() {
+		if (_self != null) {
+			final Page page = _self.getPage();
+			if (page != null)
+				return page;
+		}
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+	}
 	/**
 	 * Redo variable auto-wiring.
 	 */
-	protected final void rewire(){
+	protected void rewire(){
 		Selectors.wireVariables(_self, this);
 	}
 	

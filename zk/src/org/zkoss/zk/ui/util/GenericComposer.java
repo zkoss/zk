@@ -16,9 +16,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConventionWires;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
@@ -72,6 +75,13 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	protected String _applied; //uuid of the applied component (for serialization back)
 	
+	/** Returns the current page.
+	 * @since 5.0.10
+	 */
+	protected Page getPage() {
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+	}
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 

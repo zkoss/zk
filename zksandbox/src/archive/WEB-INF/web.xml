@@ -152,12 +152,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 
 	<!-- /////////// -->
-	<!-- Miscellaneous -->
+	<!-- Optional. Session timeout -->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
 
-	<!-- MIME mapping -->
+	<!-- Optional. MIME mapping -->
 	<mime-mapping>
 		<extension>doc</extension>
 		<mime-type>application/vnd.ms-word</mime-type>
