@@ -271,6 +271,17 @@ implements ComponentCloneListener, ComponentActivationListener {
 	}
 	private static boolean _sIgnoreChecked, _sIgnoreZScript, _sIgnoreXel;
 
+	/** Returns the current page.
+	 * @since 5.0.10
+	 */
+	protected Page getPage() {
+		if (self != null) {
+			final Page page = self.getPage();
+			if (page != null)
+				return page;
+		}
+		return super.getPage();
+	}
 	/**
 	 * Auto wire accessible variables of the specified component into a 
 	 * controller Java object; a subclass that 
