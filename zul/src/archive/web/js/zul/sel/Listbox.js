@@ -74,7 +74,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 	},	
 	$init: function () {
-		this.$supers('$init', arguments);
+		this.$supers(Listbox, '$init', arguments);
 		this._groupsInfo = [];
 	},
 	/**
@@ -157,7 +157,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	// bug ZK-56 for non-ROD to scroll after onSize ready
 	onSize: function () {
-		this.$supers("onSize", arguments);
+		this.$supers(Listbox, "onSize", arguments);
 		this._syncSelInView();
 	},
 	bind_: function (desktop, skipper, after) {
@@ -207,7 +207,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (this._shallFixEmpty) 
 				_fixForEmpty(this);
 		}
-		this.$supers('onResponse', arguments);
+		this.$supers(Listbox, 'onResponse', arguments);
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
@@ -230,7 +230,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this;
 	},
 	rerender: function () {
-		this.$supers('rerender', arguments);
+		this.$supers(Listbox, 'rerender', arguments);
 		this._syncStripe();		
 		return this;
 	},
@@ -373,7 +373,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this._shallFixEmpty = true;
 	},
 	onChildReplaced_: function (oldc, newc) {
-		this.$supers('onChildReplaced_', arguments);
+		this.$supers(Listbox, 'onChildReplaced_', arguments);
 
 		if (oldc) this._fixOnRemove(oldc, true);
 		if (newc) this._fixOnAdd(newc, true, false, true); //ignoreAll: no sync stripe...
@@ -412,7 +412,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (this._headercm && this._multiple 
 			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
-		this.$supers('_updHeaderCM', arguments);
+		this.$supers(Listbox, '_updHeaderCM', arguments);
 	}
 });
 /**

@@ -129,7 +129,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);
-		});
+		}, 50); // timing issue for B50-ZK-343.zul in ztltest
 	},
 
 	_onScroll: function (evt) {
