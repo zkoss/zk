@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-660.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec  12 09:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div height="20px">1. Click 'add tab and tabpanel' to add some tabs.</div>
+	<div height="20px">2. You can close tabs without any problem.</div>
+	<div height="20px">3. Click 'add tab and tabpanel' to add some tabs.</div>
+	<div height="20px">4. Click 'invalidate'.</div>
+	<div height="20px">5. You can close tabs without any problem.</div>
+	<tabbox id="tabbox" mold="accordion" width="400px">
+		<tabs id="tabs"></tabs>
+		<tabpanels id="tabpanels"></tabpanels>
+	</tabbox>
+	<button id="addTabAndPanel" label="add tab and tabpanel">
+		<attribute name="onClick">
+			<![CDATA[
+			Tab tab = new Tab();
+			tab.setClosable(true);
+			tab.setLabel("tab");
+			tab.setParent(tabs);
+			Tabpanel tabpanel = new Tabpanel();
+			Label label = new Label("tabpanel");
+			label.setParent(tabpanel);
+			tabpanel.setParent(tabpanels);
+       		]]>
+		</attribute>
+	</button>
+	<button label="invalidate">
+		<attribute name="onClick">
+			<![CDATA[
+			tabbox.invalidate();
+       		]]>
+		</attribute>
+	</button>
+</zk>

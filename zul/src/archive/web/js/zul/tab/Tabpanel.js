@@ -165,6 +165,10 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	bind_: function() {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		zWatch.listen({onSize: this});
+		var tab;
+		// ZK-660
+		if ((tab = this.getLinkedTab()) && tab._rerender)
+			tab._rerender();
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});

@@ -230,6 +230,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
     				tab._sel(false, true);
 			});
 		});
+		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
+		// will redraw by linked tabpanel 
+		if (this.getTabbox().inAccordionMold() && !this.getLinkedPanel()) {
+			var wgt = this;
+			// called by linked tabpanel#bind_
+			this._rerender = function () {
+				wgt._rerender = null;
+				wgt.clearCache();
+				wgt.rerender();
+			}
+		}
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
@@ -239,6 +250,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				this.domUnlisten_(closebtn, "onMouseOver", '_toggleBtnOver')
 					.domUnlisten_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
+		this._rerender = null;
 		this.$supers(zul.tab.Tab, 'unbind_', arguments);
 	},
 	//event handler//
