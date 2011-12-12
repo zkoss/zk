@@ -169,9 +169,8 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tab;
 		if (this.getTabbox().inAccordionMold()
 				&& (tab=this.getLinkedTab()) && !tab.$n()) {
-			tab.clearCache();
-			tab.unbind_();
-			tab.bind_(desktop, skipper, after);
+			tab.unbind();
+			tab.bind(desktop);
 		}
 	},
 	unbind_: function () {
