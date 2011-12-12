@@ -168,10 +168,8 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
 		if (this.getTabbox().inAccordionMold()
-				&& (tab=this.getLinkedTab()) && !tab.$n()) {
-			tab.unbind();
-			tab.bind(desktop);
-		}
+		&& (tab=this.getLinkedTab()) && !tab.$n())
+			tab.unbind().bind(desktop);
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
