@@ -880,7 +880,7 @@ new zul.wnd.Window{
 					_listenFlex(this);
 
 				var p;
-				if (!(p = this.parent).isBinding()) //ZK-307
+				if ((p = this.parent) && !p.isBinding()) //ZK-307
 					zUtl.fireSized(p, -1); //no beforeSize
 			}
 		},
@@ -916,8 +916,9 @@ new zul.wnd.Window{
 		hflex: function(v) {
 			this.setHflex_(v);
 
-			var p = this.parent;
-			if (this.desktop/*if already bind*/ && !p.isBinding()/*ZK-307*/)
+			var p;
+			if (this.desktop/*if already bind*/
+			&& (p = this.parent) && !p.isBinding()/*ZK-307*/)
 				zUtl.fireSized(p, -1); //no beforeSize
 		},
 		/** Returns the number of milliseconds before rendering this component
@@ -2382,7 +2383,8 @@ function () {
 	 * by passing an instance of {@link zk.Skipper} that is used to
 	 * re-render some or all descendant widgets of this widget.
 	 * @param zk.Skipper skipper [optional] skip some portion of this widget
-	 * to speed up the re-rendering. If not specified, rerender(0) is assumed.
+	 * to speed up the re-rendering.
+	 * If not specified, rerender(0) is assumed (since ZK 6).
 	 * @return zk.Widget this widget.
 	 */
 	/** Re-renders after the specified time (milliseconds).
@@ -2393,7 +2395,7 @@ function () {
 	 * in the second call.
 	 * @param int timeout the number milliseconds (non-negative) to wait
 	 * before rerender. If negative, it means rerender shall take place
-	 * immediately. If not specified, 0 is assumed.
+	 * immediately. If not specified, 0 is assumed (since ZK 6).
 	 * @return zk.Widget this widget.
 	 * @since 5.0.4
 	 */

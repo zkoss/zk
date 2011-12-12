@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _rerenderIfBothPaging(wgt) {
 		if (wgt.isBothPaging()) {
-			wgt.parent.rerender(0);
+			wgt.parent.rerender();
 			return true;
 		}
 	}
@@ -62,7 +62,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		 * @param int pageIncrement
 		 */
 		pageIncrement: _zkf = function () {
-			this.rerender(0);
+			this.rerender();
 		},
 		/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
 		 * @return boolean
@@ -109,7 +109,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		 * @param boolean autohide
 		 */
 		autohide: function () {
-			if (this._pageCount == 1) this.rerender(0);
+			if (this._pageCount == 1) this.rerender();
 		}
 	},
 	setStyle: function () {

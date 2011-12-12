@@ -52,7 +52,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
 			if (wgt)
-				wgt.rerender(0); //defer it since it might be called multiple times
+				wgt.rerender();
 		}
 	},
 	setFlexSize_: function (sz) {

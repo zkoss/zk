@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (tch)
 			for (var w = tch.firstChild, tr; w; w = w.nextSibling) {
 				if ((tr = w.treerow) && jcol < tr.nChildren) 
-					tr.getChildAt(jcol).rerender(0);
+					tr.getChildAt(jcol).rerender();
 
 				_updCells(w.treechildren, jcol); //recursive
 			}
@@ -104,7 +104,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			return !v || v < 0 ? 0 : v; 
 		}, function () {
 			if (this.desktop) {
-				this.rerender(0);
+				this.rerender();
 				this.updateCells_();
 			}
 		}]
@@ -118,7 +118,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			_updCells(tree.treechildren, jcol);
 
 			if (tf && jcol < tf.nChildren)
-				tf.getChildAt(jcol).rerender(0);
+				tf.getChildAt(jcol).rerender();
 		}
 	},
 	getZclass: function () {

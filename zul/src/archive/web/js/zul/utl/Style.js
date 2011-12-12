@@ -37,7 +37,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 */
 		src: function () {
 			this._content = null;
-			this.rerender(0);
+			this.rerender();
 		},
 		/**
 		 * Returns the content of this style tag.
@@ -51,7 +51,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		 */
 		content: function () {
 			this._src = null;
-			this.rerender(0);
+			this.rerender();
 		},
 		/**
 		 * Returns the media dependencies for this style sheet.

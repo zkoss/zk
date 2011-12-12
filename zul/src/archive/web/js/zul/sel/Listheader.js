@@ -50,7 +50,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			return !v || v < 0 ? 0 : v; 
 		}, function () {
 			if (this.desktop) {
-				this.rerender(0);
+				this.rerender();
 				this.updateCells_();
 			}
 		}]
@@ -66,11 +66,11 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		var jcol = this.getChildIndex(), w;
 		for (var it = box.getBodyWidgetIterator(); (w = it.next());)
 			if (jcol < w.nChildren)
-				w.getChildAt(jcol).rerender(0);
+				w.getChildAt(jcol).rerender();
 
 		w = box.listfoot;
 		if (w && jcol < w.nChildren)
-			w.getChildAt(jcol).rerender(0);
+			w.getChildAt(jcol).rerender();
 	},
 	//super//
 	getZclass: function () {
