@@ -123,13 +123,17 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-frozen" : this._zclass;
 	},
+	// timing issue for B50-ZK-343.zul in ztltest
+	beforeSize: function () {
+		this._doScrollNow(0, true); //reset
+	},
 	onSize: function () {
 		if (!this._columns) return;
 		var self = this;
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);
-		}, 50); // timing issue for B50-ZK-343.zul in ztltest
+		});
 	},
 
 	_onScroll: function (evt) {
@@ -153,7 +157,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Frozen, 'bind_', arguments);
-		zWatch.listen({onSize: this});
+		zWatch.listen({onSize: this, beforeSize: this});
 		var scroll = this.$n('scrollX'),
 			p = this.parent,
 			gbody = p.$n('body');
@@ -170,7 +174,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this});
+		zWatch.unlisten({onSize: this, beforeSize: this});
 		
 		var p, body, fakerflex;
 		if (p = this.parent) {

@@ -55,6 +55,7 @@ zul.grid.Renderer = {
 		wgt._shallFixEmpty = false;
 	}
 
+var Grid =
 /**
  * A grid is an element that contains both rows and columns elements.
  * It is used to create a grid of elements.
@@ -111,7 +112,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return this;
 	},
 	rerender: function () {
-		this.$supers('rerender', arguments);
+		this.$supers(Grid, 'rerender', arguments);
 		if (this.rows)
 			this.rows._syncStripe();
 		return this;
@@ -198,7 +199,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
-		this.$supers(zul.grid.Grid, 'bind_', arguments);
+		this.$supers(Grid, 'bind_', arguments);
 		var w = this;
 		after.push(function() {
 			_fixForEmpty(w);
@@ -207,14 +208,14 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	onResponse: function () {
 		if (this._shallFixEmpty) 
 			_fixForEmpty(this);
-		this.$supers('onResponse', arguments);
+		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
 	},
 	onChildAdded_: function(child) {
-		this.$supers('onChildAdded_', arguments);
+		this.$supers(Grid, 'onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true); //_syncSize required
 		//else handled by insertBefore/appendChild
