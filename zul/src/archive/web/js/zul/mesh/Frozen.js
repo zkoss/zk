@@ -125,7 +125,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	// timing issue for B50-ZK-343.zul in ztltest
 	beforeSize: function () {
-		this._doScrollNow(0, true); //reset
+		if (this._start != 0)
+			this._doScrollNow(0, true); //reset
 	},
 	onSize: function () {
 		if (!this._columns) return;
