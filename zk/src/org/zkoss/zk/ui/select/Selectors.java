@@ -121,14 +121,17 @@ public class Selectors {
 	 * @param controller the controller object to be injected with variables
 	 */
 	public static void wireVariables(Component component, Object controller) {
-		final IdSpace spaceOwner = component.getSpaceOwner();
-		if(spaceOwner instanceof Page)
-			new Wirer(controller, false)
-				.wireVariables(new PageFunctor((Page) spaceOwner));
-		else
-			new Wirer(controller, false)
-				.wireVariables(new ComponentFunctor(
-					spaceOwner != null ? (Component) spaceOwner: component));
+		new Wirer(controller, false).wireVariables(new ComponentFunctor(component));
+	}
+	
+	/**
+	 * Wire variables to controller, including components, implicit variables, 
+	 * ZScript variables and XEL variables.
+	 * @param page the page to wire
+	 * @param controller the controller object to be injected with variables
+	 */
+	public static void wireVariables(Page page, Object controller) {
+		new Wirer(controller, false).wireVariables(new PageFunctor(page));
 	}
 	
 	/*package*/ static void rewireVariables(Component component, Object controller) {
