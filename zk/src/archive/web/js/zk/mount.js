@@ -324,12 +324,12 @@ function zkamn(pkg, fn) {
 			if (v = zk.cut(props, "z$al"))
 				zk.afterLoad(function () {
 					for (var p in v)
-						wgt.set(p, v[p]()); //must be func
+						wgt.set(p, v[p](), true); //value must be func; fromServer
 				});
 		}
 
 		for (var nm in props)
-			wgt.set(nm, props[nm]);
+			wgt.set(nm, props[nm], true); //fromServer
 
 		for (var j = 0, childs = wi[3], len = childs.length;
 		j < len; ++j)
