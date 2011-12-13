@@ -2497,12 +2497,9 @@ public class Listbox extends MeshElement {
 			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
 			//check if the item is a selected item and add into selected set
 			final Object value = _model.getElementAt(item.getIndex());
-			if (_model instanceof Selectable) {
-				if (((Selectable) _model).getSelection().contains(value)) {
-					addItemToSelection(item);
-				}
-			}
-
+			//bug #ZK-675: Selection was lost if a render replace the listitem
+			final boolean selected = _model instanceof Selectable && ((Selectable) _model).getSelection().contains(value);
+			
 			try {
 				_renderer.render(item, value);
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
@@ -2520,7 +2517,11 @@ public class Listbox extends MeshElement {
 				if (item.getChildren().isEmpty())
 					cell.setParent(item);
 			}
-
+			
+			//bug #ZK-675: Selection was lost if a render replace the listitem
+			if (selected) {
+				addItemToSelection(item);
+			}
 			item.setLoaded(true);
 			_rendered = true;
 		}
