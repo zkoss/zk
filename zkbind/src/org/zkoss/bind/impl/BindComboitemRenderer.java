@@ -19,6 +19,8 @@ import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
@@ -81,6 +83,10 @@ public class BindComboitemRenderer implements ComboitemRenderer {
 			item.setAttribute("org.zkoss.zul.model.renderAs", nci);
 				//indicate a new item is created to replace the existent one
 			item.detach();
+			
+			//bug #ZK-677: combobox selection is lost after reload model
+			//binding Comboitem immediately, @see BindUiLifeCycle#afterComponentAttached
+			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, nci));
 		}
 	}
 }

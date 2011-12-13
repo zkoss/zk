@@ -125,6 +125,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
+	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
+	
 	
 	//System Annotation, see lang-addon.xml
 	private static final String SYSBIND = "$SYSBIND$"; //system binding annotation name

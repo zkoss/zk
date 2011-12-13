@@ -31,8 +31,6 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * @author henrichen
  */
 public class BindUiLifeCycle implements UiLifeCycle {
-	private static final String ON_BIND_INIT = "onBindInit";
-	
 	public void afterComponentAttached(Component comp, Page page) {
 		if (comp.getDesktop() != null) {
 			//check if this component already binded
@@ -43,11 +41,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				if (binder != null) {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
-					comp.addEventListener(10000, ON_BIND_INIT, new EventListener<Event>() {
+					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event event) throws Exception {
 							final Component comp = event.getTarget();
-							comp.removeEventListener(ON_BIND_INIT, this);
+							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
 							//ZK-611 have wrong binding on a removed treecell in a template
 							//if it was detached, ignore it
 							if(comp.getParent()==null || comp.getPage()==null){
@@ -55,18 +53,16 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							}
 							
 							final Binder innerBinder = (Binder) comp.getAttribute(BinderImpl.BINDER);
-							final BinderImpl binder = (BinderImpl) event.getData();
-
 							if(innerBinder!=null){//it was already handled by innerBinder, ignore it								
 								return;
 							}
 							
 							new AnnotateBinderHelper(binder).initComponentBindings(comp);
-							binder.loadComponent(comp);
+							((BinderImpl)binder).loadComponent(comp);
 						}
 					});
 					//post ON_BIND_INIT event
-					Events.postEvent(new Event(ON_BIND_INIT, comp, binder));
+					Events.postEvent(new Event(BinderImpl.ON_BIND_INIT, comp));
 				}
 			}
 		}
