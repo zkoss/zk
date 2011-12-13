@@ -100,9 +100,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var w,n;
 		w = (w = this.getTabbox()) && (w = w.getTabpanels()) ?
 			w.getChildAt(this.getIndex()): null;
-		// ZK-674 panel already linked with another tab
+		// ZK-674: Tab lost if add tabpanel first in accordion mold
+		// the panel is not linked panel if it has linked with another tab
 		if (w && this.getTabbox().inAccordionMold()
-			&& (n = w.$n()) && n.firstChild != this.$n() // the panel has linked with another tab
+			&& (n = w.$n()) && n.firstChild != this.$n()
 			&& n.firstChild.className.indexOf(this.getZclass()) >= 0)
 				return null;
 		return w;

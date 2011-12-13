@@ -48,8 +48,9 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		
 		var tabs = tabbox.getTabs();
 		tab = tabs ? tabs.getChildAt(this.getIndex()) : null;
+		// the tab is not linked tab if it has linked with another panel
 		if (tab && tabbox.inAccordionMold() && tab.$n()
-			&& tab.$n().parentNode != this.$n()){ // the tab has linked with another panel
+			&& tab.$n().parentNode != this.$n()){
 			return null;
 		}
 		
