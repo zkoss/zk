@@ -19,9 +19,15 @@ function (out) {
 		tbx = this.getTabbox(),
 		uuid = this.uuid;
 	if (tbx.inAccordionMold()) {//Accordion
+		var panel,
+			n;
 		// Bug ZK-419
-		if (!this.getLinkedPanel())
+		if (!(panel = this.getLinkedPanel())) // no linked panel
 			return;
+		n = panel.$n();
+		// push to new array to insert if panel already rendered
+		out = n? [] : out;
+
 		if (tbx.getMold() == 'accordion-lite') {
 			out.push('<div id="', this.uuid, '"', this.domAttrs_(), '>',
 				'<div align="left" class="', zcls, '-header">');
@@ -53,6 +59,8 @@ function (out) {
 			if (isFrameRequired)
 				out.push('</div></div>');
 		}
+		if (n) // panel already rendered, do insert
+			jq(n).prepend(out.join(''));
 	} else {
 		out.push('<li ', this.domAttrs_(), '>');
 		if (this.isClosable())
