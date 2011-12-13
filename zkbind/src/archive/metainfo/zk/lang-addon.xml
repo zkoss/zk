@@ -146,7 +146,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindComboitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
-		
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>$C$</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.ComboboxModelConverter</attribute-value>
+			</attribute>
+		</annotation>			
 		<annotation>
 			<annotation-name>$SYSBIND$</annotation-name>
 			<property-name>selectedItem</property-name>
@@ -268,6 +275,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>rowRenderer=org.zkoss.bind.impl.BindRowRenderer</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>$C$</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.GridModelConverter</attribute-value>
+			</attribute>
+		</annotation>		
 	</component>
 	<!--component>
 		<component-name>groupbox</component-name>
@@ -323,7 +338,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindListitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
-		
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>$C$</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.ListboxModelConverter</attribute-value>
+			</attribute>
+		</annotation>		
 		<annotation>
 			<annotation-name>$SYSBIND$</annotation-name>
 			<property-name>selectedItem</property-name>
