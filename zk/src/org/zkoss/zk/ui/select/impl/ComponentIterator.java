@@ -256,7 +256,7 @@ public class ComponentIterator implements Iterator<Component> {
 		else
 			matchLevel0(ctx);
 		
-		System.out.println(ctx); // TODO: debugger
+		//System.out.println(ctx); // TODO: debugger
 		return ctx;
 	}
 	
@@ -305,7 +305,7 @@ public class ComponentIterator implements Iterator<Component> {
 				}
 			}
 		}
-		System.out.println(ctx); // TODO: debugger
+		//System.out.println(ctx); // TODO: debugger
 		return ctx;
 	}
 	
@@ -352,7 +352,7 @@ public class ComponentIterator implements Iterator<Component> {
 		if (_posOffset == 0)
 			matchLevel0(ctx);
 		
-		System.out.println(ctx); // TODO: debugger
+		//System.out.println(ctx); // TODO: debugger
 		return ctx;
 	}
 	
