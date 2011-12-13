@@ -3,7 +3,7 @@
 	Purpose:
 		Fix the alpha transparency issue found in IE6
 	Description:
- 		IE 5.5/6 (not 7) has a bug that failed to render PNG with
+ 		IE 6 (not 7) has a bug that failed to render PNG with
 		alpha transparency. 
 		See
 		http://code.google.com/p/ie7-js/

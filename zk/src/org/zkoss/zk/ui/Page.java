@@ -447,7 +447,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <h2>Version Difference</h2>
 	 * <p>ZK 5.0 and earlier, the second registration is ignored if an event
 	 * listener has been registered twice.
-	 * However, since 5.1 and later, it won't be ignored. If a listener has
+	 * However, since 6.0.0 and later, it won't be ignored. If a listener has
 	 * been registered multiple times, it will be invoked multiple times.
 	 * <p>If you prefer to ignore the second registration, you could specify
 	 * a library property called "org.zkoss.zk.ui.EventListener.duplicateIgnored"

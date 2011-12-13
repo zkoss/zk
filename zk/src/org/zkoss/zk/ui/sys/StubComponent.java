@@ -36,7 +36,7 @@ import org.zkoss.zk.au.AuRequest;
  * invoke {@link #replace} after {@link #redraw} is called.
  *
  * @author tomyeh
- * @since 5.1,0
+ * @since 6.0.0
  */
 public class StubComponent extends AbstractComponent {
 	public StubComponent() {

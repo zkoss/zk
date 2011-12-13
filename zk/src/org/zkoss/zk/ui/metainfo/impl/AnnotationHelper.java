@@ -110,11 +110,11 @@ public class AnnotationHelper {
 	}
 	/** Adds annotation by specifying the content in the compound format.
 	 * <p>There are two formats:
-	 * <p>Format 1 (deprecated, 5.0 and before): <br/>
-	 * <code>@{annot-name(att1-name=att1-value, att2-name=att2-value) annot2-name (annot3-attrs)}</code>
-	 * <p>Format 2 (recommended, since ZK 5.1):<br/>
+	 * <p>Format 1 (recommended, since 6.0):<br/>
 	 * <code>@annot-name(att1-name=att1-value, att2-name=att2-value) @annot-name() @default(annot3-attrs)</code>
-	 * <p>In the second format, it must be a list of annotations separated by space.
+	 * <p>Format 2 (deprecated, 5.0 and before): <br/>
+	 * <code>@{annot-name(att1-name=att1-value, att2-name=att2-value) annot2-name (annot3-attrs)}</code>
+	 * <p>In the first format, it must be a list of annotations separated by space.
 	 * And, each annotation is in the format of <code>@annot-name(key=value, value, key=value)</code>.
 	 * That is, it starts with the annotation's name and a parenthesis to enclose
 	 * any number of key and value pairs (key is optional).
@@ -132,13 +132,13 @@ public class AnnotationHelper {
 		final int len = cval.length();
 		if (cval.charAt(1) == '{'
 		&& cval.charAt(len - 1) == '}') { //Format 1
-			addInFormat1(cval.substring(2, len - 1));
+			addInV5(cval.substring(2, len - 1));
 			return;
 		}
 
 		//format 2
 		//for each @name(value),
-		//parse name/value, then pass to addByRawValueInFormat2
+		//parse name/value, then pass to addByRawValueInV6
 		for (int j = 0; j >= 0; j = cval.indexOf('@', j)) {
 			//look for annotation's name
 			int k = cval.indexOf('(', ++j);
@@ -158,7 +158,7 @@ public class AnnotationHelper {
 					if (cc == '(') {
 						++nparen;
 					} else if (cc == ')' && --nparen == 0) { //found
-						addByRawValueInFormat2(annotName, sb.toString().trim(), loc);
+						addByRawValueInV6(annotName, sb.toString().trim(), loc);
 						break; //next @name(value)
 					} else if (cc == '\'' || cc == '"') {
 						quot = cc; //begin-of-quot
@@ -177,7 +177,7 @@ public class AnnotationHelper {
 		}
 	}
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
-	private void addByRawValueInFormat2(String annotName, String rval, Location loc) {
+	private void addByRawValueInV6(String annotName, String rval, Location loc) {
 		final Map<String, Object> attrs = new LinkedHashMap<String, Object>(4);
 		final int len = rval.length();
 		final StringBuffer sb = new StringBuffer(len);
@@ -332,7 +332,7 @@ public class AnnotationHelper {
 		final String msg = "Illegal annotation, "+reason+": "+cval;
 		return new UiException(loc != null ? loc.format(msg): msg);
 	}
-	private void addInFormat1(String cval) {
+	private void addInV5(String cval) {
 		final char[] seps1 = {'(', ' '}, seps2 = {')'};
 		for (int j = 0, len = cval.length(); j < len;) {
 			j = Strings.skipWhitespaces(cval, j);
@@ -347,21 +347,21 @@ public class AnnotationHelper {
 				final String rv = 
 					(k < len ? cval.substring(j, k): cval.substring(j)).trim();
 				if (rv.length() > 0)
-					addByRawValueInFormat1(nm, rv);
+					addByRawValueInV5(nm, rv);
 				else
 					add(nm, null);
 			} else {
 				final String rv = 
 					(k < len ? cval.substring(j, k): cval.substring(j)).trim();
 				if (rv.length() > 0)
-					addByRawValueInFormat1("default", rv);
+					addByRawValueInV5("default", rv);
 			}
 			j = k + 1;
 		}
 	}
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
 	@SuppressWarnings("unchecked")
-	private void addByRawValueInFormat1(String annotName, String rval) {
+	private void addByRawValueInV5(String annotName, String rval) {
 		final Map attrs = Maps.parse(null, rval, ',', '\'', true);
 		add(annotName, attrs);
 			//The parsing of the value in format 1 is different from format 2
