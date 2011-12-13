@@ -6,7 +6,7 @@
  <li>Click the button, and then repeat 1 and 2</li>
 </ol>
 	]]></html>
-	<doublebox value="6.33" format="#.0" constraint="no negative"
+	<doublebox value="6.33" format="#.0"
 		onChange='self.parent.appendChild(new Label("onChange, value="+self.value))'/>
 	<button label="set 5.23" onClick="self.previousSibling.setValue(5.23)"/>
 </vlayout>

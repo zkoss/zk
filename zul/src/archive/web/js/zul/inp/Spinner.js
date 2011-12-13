@@ -245,7 +245,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		
 	},
 	_clearValue: function(){
-		this.getInputNode().value = this._defRawValue = "";
+		this.getInputNode().value = this._defRawVal = "";
 		return true;
 	},
 	_startAutoIncProc: function (isup){

@@ -338,7 +338,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	setValue: function (value, fromServer) {
 		var vi;
 		if (fromServer)
-			this.clearErrorMessage();
+			this.clearErrorMessage(this.cst != null);
 		else {
  			vi = this._validate(value);
  			value = vi.value;
@@ -351,10 +351,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
 			this._value = value;
 			var inp = this.getInputNode();
-			if (inp) { //check if bind
-				this._defRawValue = this._lastChg = inp.value = value = this.coerceToString_(value);
-				if (fromServer) this._lastRawValVld = value;
-			}
+			if (inp) //check if bind
+				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value);
 		}
 	},
 	//value object set from server(smartUpdate, renderProperites)
@@ -417,7 +415,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._cst = new zul.inp.SimpleConstraint(cst);
 		else
 			this._cst = cst;
-		if (this._cst) delete this._lastRawValVld; //revalidate required
+		if (this._cst)
+			this._reVald = true; //revalidate required
 	},
 	/** Returns the constraint, or null if no constraint at all.
 	 * @return zul.inp.SimpleConstraint
@@ -532,7 +531,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			
 		}
 		if (revalidate)
-			delete this._lastRawValVld; //cause re-valid
+			this._reVald = true; //revalidate required
 	},
 	/** Coerces the value passed to {@link #setValue}.
 	 *
@@ -624,14 +623,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
-					this._lastRawValVld = value; //raw value
+					this._reVald = false;
 					return {value: val, server: true};
 				}
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
 				}
-				this._lastRawValVld = value;
+				this._reVald = false;
 				if (em)
 					this.fire('onError', {value: val});
 			}
@@ -674,7 +673,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		var inp = this.getInputNode(),
 			value = inp.value;
-		if (value == this._lastRawValVld)
+		if (!this._reVald && value == this._defRawVal /* ZK-658 */)
 			return false; //not changed
 
 		var wasErr = this._errmsg,
@@ -682,15 +681,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!vi.error || vi.server) {
 			var upd;
 			if (!vi.error) {
-				// _lastRawValVld must be updated after validate. Bug#3071613
-				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
+				inp.value = value = this.coerceToString_(vi.value);
+				this._reVald = false;
 
-				//reason to use this._defRawValue rather than this._value is
+				//reason to use this._defRawVal rather than this._value is
 				//to save the trouble of coerceToString issue
 				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
-					this._defRawValue = value;
+					this._defRawVal = value;
 				}
 			}
 			if (upd || vi.server)
@@ -743,7 +742,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var n = this.getInputNode(),
 			zcls = this.getZclass();
 
-		this._lastRawValVld = this._defRawValue = n.value; //ZK-658
+		this._defRawVal = n.value;
 
 		if (this._readonly)
 			jq(n).addClass(zcls + '-readonly');
@@ -812,7 +811,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
 				var inp = this.getInputNode(), val = inp.value;
-				if (val != this._defRawValue && val.length > maxlen)
+				if (val != this._defRawVal && val.length > maxlen)
 					inp.value = val.substring(0, maxlen);
 			}
 		}
