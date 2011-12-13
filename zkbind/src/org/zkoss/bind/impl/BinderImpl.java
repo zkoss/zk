@@ -633,9 +633,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			}
 		}
 		
-		if(loadExpr!=null){
-			addLoadBinding(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
-		}
+		addLoadBinding(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
 		
 		initRendererIfAny(comp);
 	}

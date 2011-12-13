@@ -75,7 +75,7 @@ public abstract class AbstractModelConverter implements Converter{
 		}
 		
 		final ListModel compModel = getComponentModel(comp);
-		if(compModel instanceof Selectable && model instanceof Selectable){
+		if(compModel instanceof Selectable){
 			 Set selection = ((Selectable)compModel).getSelection();
 			 if(selection!=null){
 				 for(Object obj:selection){
