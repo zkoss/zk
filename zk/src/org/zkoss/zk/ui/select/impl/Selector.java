@@ -5,6 +5,8 @@ package org.zkoss.zk.ui.select.impl;
 
 import java.util.ArrayList;
 
+import org.zkoss.lang.Strings;
+
 /**
  * The model representing a selector.
  * @since 6.0.0
@@ -41,6 +43,10 @@ public class Selector extends ArrayList<SimpleSelectorSequence> {
 	 */
 	public Combinator getCombinator(int index){
 		return get(index).getCombinator();
+	}
+	
+	/*package*/ boolean requiresIdSpace(int index) {
+		return !Strings.isEmpty(get(index).getId());
 	}
 	
 	public enum Combinator {

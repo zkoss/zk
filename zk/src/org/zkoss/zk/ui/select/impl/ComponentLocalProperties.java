@@ -50,8 +50,7 @@ public class ComponentLocalProperties {
 	}
 	
 	/*package*/ static boolean match(ComponentMatchCtx context, 
-			SimpleSelectorSequence seq, 
-			Map<String, PseudoClassDef> defs){
+			SimpleSelectorSequence seq, Map<String, PseudoClassDef> defs) {
 		Component comp = context.getComponent();
 		return matchType(comp, seq.getType()) 
 			&& matchID(comp, seq.getId()) 
@@ -60,8 +59,9 @@ public class ComponentLocalProperties {
 			&& matchPseudoClasses(context, seq.getPseudoClasses(), defs);
 	}
 	
-	/*package*/ static boolean matchID(Component component, String id){
-		if(id == null) return true;
+	/*package*/ static boolean matchID(Component component, String id) {
+		if(id == null)
+			return true;
 		return id.equals(component.getId());
 	}
 	
@@ -96,9 +96,16 @@ public class ComponentLocalProperties {
 		return true;
 	}
 	
+	/*package*/ static boolean matchPseudoClasses(Component component, 
+			List<PseudoClass> pseudoClasses, Map<String, PseudoClassDef> defs) {
+		if(pseudoClasses == null || pseudoClasses.isEmpty()) 
+			return true;
+		return matchPseudoClasses(new ComponentMatchCtx(component), pseudoClasses, defs);
+	}
+	
 	/*package*/ static boolean matchPseudoClasses(
 			ComponentMatchCtx context, List<PseudoClass> pseudoClasses, 
-			Map<String, PseudoClassDef> defs){
+			Map<String, PseudoClassDef> defs) {
 		if(pseudoClasses == null || pseudoClasses.isEmpty()) return true;
 		
 		for(PseudoClass pc : pseudoClasses){

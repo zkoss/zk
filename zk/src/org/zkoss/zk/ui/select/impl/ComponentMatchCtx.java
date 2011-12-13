@@ -19,14 +19,20 @@ public class ComponentMatchCtx {
 	private Component _comp;
 	
 	// qualified positions
-	private boolean[][] _qualified;
+	private final boolean[][] _qualified;
 	
 	// pseudo-class support
 	private int _compChildIndex = -1;
 	
 	
 	
-	/*package*/ ComponentMatchCtx(Component component, List<Selector> selectorList){
+	/*package*/ ComponentMatchCtx(Component component) { // used by root jumping
+		_comp = component;
+		_qualified = new boolean[0][0];
+		_compChildIndex = getComponentIndex();
+	}
+	
+	/*package*/ ComponentMatchCtx(Component component, List<Selector> selectorList) { // root
 		_comp = component;
 		_qualified = new boolean[selectorList.size()][];
 		
@@ -36,7 +42,7 @@ public class ComponentMatchCtx {
 		_compChildIndex = getComponentIndex();
 	}
 	
-	/*package*/ ComponentMatchCtx(Component component, ComponentMatchCtx parent){
+	/*package*/ ComponentMatchCtx(Component component, ComponentMatchCtx parent) { // first child
 		_comp = component;
 		int selectorListSize = parent._qualified.length;
 		_qualified = new boolean[selectorListSize][];
@@ -49,7 +55,7 @@ public class ComponentMatchCtx {
 	
 	
 	// operation //
-	/*package*/ void moveToNextSibling(){
+	/*package*/ void moveToNextSibling() {
 		_comp = _comp.getNextSibling();
 		_compChildIndex++;
 	}
@@ -60,14 +66,14 @@ public class ComponentMatchCtx {
 	/**
 	 * Return the parent context
 	 */
-	public ComponentMatchCtx getParent(){
+	public ComponentMatchCtx getParent() {
 		return _parent;
 	}
 	
 	/**
 	 * Return the component.
 	 */
-	public Component getComponent(){
+	public Component getComponent() {
 		return _comp;
 	}
 	
@@ -75,7 +81,7 @@ public class ComponentMatchCtx {
 	 * Return the child index of the component. If the component is one of the 
 	 * page roots, return -1.
 	 */
-	public int getComponentChildIndex(){
+	public int getComponentChildIndex() {
 		if(_compChildIndex > -1) return _compChildIndex;
 		Component parent = _comp.getParent();
 		return parent == null ? -1 : parent.getChildren().indexOf(_comp);
@@ -84,7 +90,7 @@ public class ComponentMatchCtx {
 	/**
 	 * Return the count of total siblings of the component, including itself.
 	 */
-	public int getComponentSiblingSize(){
+	public int getComponentSiblingSize() {
 		Component parent = _comp.getParent();
 		return parent == null ? 
 				_comp.getPage().getRoots().size() : parent.getChildren().size();
@@ -100,7 +106,10 @@ public class ComponentMatchCtx {
 	 * @param position
 	 */
 	public boolean isQualified(int selectorIndex, int position) {
-		return _qualified[selectorIndex][position];
+		if (selectorIndex < 0 || selectorIndex >= _qualified.length)
+			return false;
+		boolean[] posq = _qualified[selectorIndex];
+		return position > -1 && position < posq.length && posq[position];
 	}
 	
 	/*package*/ void setQualified(int selectorIndex, int position) {
@@ -117,8 +126,8 @@ public class ComponentMatchCtx {
 	 * in the list. (i.e. the one we are looking for)
 	 */
 	public boolean isMatched() {
-		for(int i = 0; i< _qualified.length; i++) 
-			if(isMatched(i)) 
+		for (int i = 0; i < _qualified.length; i++) 
+			if (isMatched(i)) 
 				return true;
 		return false;
 	}
@@ -129,8 +138,10 @@ public class ComponentMatchCtx {
 	 * @param selectorIndex
 	 */
 	public boolean isMatched(int selectorIndex) {
+		if (selectorIndex < 0 || selectorIndex >= _qualified.length)
+			return false;
 		boolean[] quals = _qualified[selectorIndex];
-		return quals[quals.length-1];
+		return quals[quals.length - 1];
 	}
 	
 	
@@ -143,14 +154,14 @@ public class ComponentMatchCtx {
 	 * @param defs 
 	 */
 	public boolean match(SimpleSelectorSequence seq, 
-			Map<String, PseudoClassDef> defs){
+			Map<String, PseudoClassDef> defs) {
 		return ComponentLocalProperties.match(this, seq, defs);
 	}
 	
 	
 	
 	// helper //
-	private int getComponentIndex(){
+	private int getComponentIndex() {
 		Component curr = _comp;
 		int index = -1;
 		while(curr != null) {
@@ -159,4 +170,35 @@ public class ComponentMatchCtx {
 		}
 		return index;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		str(sb, _qualified);
+		sb.append(' ');
+		for (ComponentMatchCtx c = this; (c = c.getParent()) != null;)
+			sb.append("  ");
+		sb.append(_comp);
+		return sb.toString();
+	}
+	
+	private static void str(StringBuilder sb, boolean[][] arr) {
+		if (arr.length > 1)
+			sb.append('[');
+		for (int i = 0; i < arr.length; i++) {
+			if (i > 0)
+				sb.append(',');
+			str(sb, arr[i]);
+		}
+		if (arr.length > 1)
+			sb.append(']');
+	}
+	
+	private static void str(StringBuilder sb, boolean[] arr) {
+		sb.append('[');
+		for (boolean b : arr)
+			sb.append(b ? '1' : '0');
+		sb.append(']');
+	}
+	
 }

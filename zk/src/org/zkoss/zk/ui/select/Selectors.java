@@ -18,8 +18,6 @@ import java.util.TreeSet;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
@@ -36,7 +34,6 @@ import org.zkoss.zk.ui.select.impl.Reflections;
 import org.zkoss.zk.ui.select.impl.Reflections.FieldRunner;
 import org.zkoss.zk.ui.select.impl.Reflections.MethodRunner;
 import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * A collection of selector related utilities. 
@@ -414,7 +411,7 @@ public class Selectors {
 			if (!optional)
 				// failed to inject, throw exception
 				throw new UiException("Failed to inject to field " + 
-						injector.getName() + "on controller " + _controller);
+						injector.getName() + " in controller " + _controller);
 			injector.inject(_controller, null); // no match, inject null
 		}
 		
