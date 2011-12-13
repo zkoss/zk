@@ -169,7 +169,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		name: function (name) {
 			var inp = this.getInputNode();
-			if (inp)
+			if (inp) //check if bind
 				inp.name = name;
 		},
 		/** Returns whether it is disabled.
@@ -181,7 +181,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		disabled: function (disabled) {
 			var inp = this.getInputNode();
-			if (inp) {
+			if (inp) { //check if bind
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
 					fnm = disabled ? 'addClass': 'removeClass';
@@ -337,11 +337,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	setValue: function (value, fromServer) {
 		var vi;
-		if (fromServer) this.clearErrorMessage(true);
+		if (fromServer)
+			this.clearErrorMessage();
 		else {
-			if (value == this._lastRawValVld)
-				return; //not changed
-
  			vi = this._validate(value);
  			value = vi.value;
 	 	}
@@ -353,8 +351,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if ((!vi || !vi.error) && (fromServer || !this._equalValue(this._value, value))) {
 			this._value = value;
 			var inp = this.getInputNode();
-			if (inp)
-				this._defValue = this._lastChg = inp.value = value = this.coerceToString_(value);
+			if (inp) { //check if bind
+				this._defRawValue = this._lastChg = inp.value = value = this.coerceToString_(value);
+				if (fromServer) this._lastRawValVld = value;
+			}
 		}
 	},
 	//value object set from server(smartUpdate, renderProperites)
@@ -437,12 +437,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doFocus_', arguments);
 
 		var inp = this.getInputNode();
-		if (inp) this._lastChg = inp.value;
+		this._lastChg = inp.value;
 
 		if (evt.domTarget.tagName) { //Bug 2111900
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
 			if (this._inplace) {
-				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
+				jq(inp).removeClass(this.getInplaceCSS());
 				if (!this._inplaceout)
 					this._inplaceout = true;
 			}
@@ -624,7 +624,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.clearErrorMessage(true);
 				msg = this.validate_(val);
 				if (msg === false) {
-					this._lastRawValVld = value;
+					this._lastRawValVld = value; //raw value
 					return {value: val, server: true};
 				}
 				if (msg) {
@@ -684,12 +684,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (!vi.error) {
 				// _lastRawValVld must be updated after validate. Bug#3071613
 				this._lastRawValVld = inp.value = value = this.coerceToString_(vi.value);
-					//reason to use this._defValue rather than this._value is
-					//to save the trouble of coerceToString issue
+
+				//reason to use this._defRawValue rather than this._value is
+				//to save the trouble of coerceToString issue
 				upd = wasErr || !this._equalValue(vi.value, this._value);
 				if (upd) {
 					this._value = vi.value; //vi - not coerced
-					this._defValue = value;
+					this._defRawValue = value;
 				}
 			}
 			if (upd || vi.server)
@@ -742,7 +743,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var n = this.getInputNode(),
 			zcls = this.getZclass();
 
-		this._defValue = n.value;
+		this._lastRawValVld = this._defRawValue = n.value; //ZK-658
 
 		if (this._readonly)
 			jq(n).addClass(zcls + '-readonly');
@@ -811,7 +812,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
 				var inp = this.getInputNode(), val = inp.value;
-				if (val != this._defValue && val.length > maxlen)
+				if (val != this._defRawValue && val.length > maxlen)
 					inp.value = val.substring(0, maxlen);
 			}
 		}

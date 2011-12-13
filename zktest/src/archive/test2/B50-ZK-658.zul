@@ -1,0 +1,13 @@
+<vlayout>
+	<html><![CDATA[
+<ol>
+ <li>Click the first double box, and then press TAB (don't change anything).</li>
+ <li>Then, you shall see NOTHING changed.</li>
+ <li>Click the button, and then repeat 1 and 2</li>
+</ol>
+	]]></html>
+	<doublebox value="6.33" format="#.0" constraint="no negative"
+		onChange='self.parent.appendChild(new Label("onChange, value="+self.value))'/>
+	<button label="set 5.23" onClick="self.previousSibling.setValue(5.23)"/>
+</vlayout>
+
