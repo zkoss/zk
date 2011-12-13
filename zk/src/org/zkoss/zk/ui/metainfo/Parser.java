@@ -1159,7 +1159,7 @@ public class Parser {
 		if (!el.getElements().isEmpty())
 			throw new UiException(message("Child elements are not allowed for the annotations", el));
 
-		final Map<String, Object> attrs = new LinkedHashMap<String, Object>();
+		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>();
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();

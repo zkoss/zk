@@ -103,7 +103,7 @@ public class AnnotationHelper {
 	 * it means no attribute at all.
 	 * @see #addByCompoundValue
 	 */
-	public void add(String annotName, Map<String, Object> annotAttrs) {
+	public void add(String annotName, Map<String, String[]> annotAttrs) {
 		if (annotName == null || annotName.length() == 0)
 			throw new IllegalArgumentException("empty");
 		_annots.add(new AnnotInfo(annotName, annotAttrs));
@@ -178,7 +178,7 @@ public class AnnotationHelper {
 	}
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
 	private void addByRawValueInV6(String annotName, String rval, Location loc) {
-		final Map<String, Object> attrs = new LinkedHashMap<String, Object>(4);
+		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>(4);
 		final int len = rval.length();
 		final StringBuffer sb = new StringBuffer(len);
 		String nm = null;
@@ -194,7 +194,7 @@ public class AnnotationHelper {
 
 				final String val = sb.toString().trim();
 				if (nm != null || val.length() > 0) //skip empty one (iincluding after last , )
-					attrs.put(nm, val); //found
+					attrs.put(nm, new String[] {val}); //found
 				break; //done
 			}
 
@@ -205,7 +205,7 @@ public class AnnotationHelper {
 					if (nm == null && val.length() == 0)
 						throw wrongAnnotationException(rval, "nothing before ','", loc);
 
-					attrs.put(nm, val); //found
+					attrs.put(nm, new String[] {val}); //found
 					nm = null; //cleanup
 					sb.setLength(0); //cleanup
 					continue; //next name=value
@@ -274,11 +274,11 @@ public class AnnotationHelper {
 	 * error message. Ignored if null.
 	 * @since 6.0.0
 	 */
-	public static Object parseAttributeValue(String val, Location loc) {
+	public static String[] parseAttributeValue(String val, Location loc) {
 		final int len = val.length();
 		if (len >= 2 && val.charAt(0) == '{' && val.charAt(len - 1) =='}')
 			return parseValueArray(val.substring(1, len - 1), loc);
-		return val;
+		return new String[] {val};
 	}
 	private static String[] parseValueArray(String rval, Location loc) {
 		final List<String> attrs = new ArrayList<String>();
@@ -421,9 +421,9 @@ public class AnnotationHelper {
 
 	private static class AnnotInfo {
 		private final String name;
-		private final Map<String, Object> attrs;
+		private final Map<String, String[]> attrs;
 
-		private AnnotInfo(String name, Map<String, Object> attrs) {
+		private AnnotInfo(String name, Map<String, String[]> attrs) {
 			this.name = name;
 			this.attrs = attrs;
 		}

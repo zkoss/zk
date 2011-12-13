@@ -2463,10 +2463,10 @@ w:use="foo.MyWindow"&gt;
 	/** @deprecated As of release 6.0.0, replaced with
 	 * {@link #addAnnotation(String, String, Map)}
 	 */
-	public void addAnnotation(String annotName, Map<String, Object> annotAttrs) {
+	public void addAnnotation(String annotName, Map<String, String[]> annotAttrs) {
 		addAnnotation(null, annotName, annotAttrs);
 	}
-	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs) {
+	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs) {
 		unshareAnnotationMap(true);
 		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs, null);
 	}

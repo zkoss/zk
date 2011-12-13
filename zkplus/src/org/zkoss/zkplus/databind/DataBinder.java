@@ -600,7 +600,7 @@ public class DataBinder implements java.io.Serializable {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
 		if (ann != null) {
-			final Map<String, Object> attrs = ann.getAttributes(); //(tag, tagExpr)
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 			List<String> loadWhenEvents = null;
 			List<String> saveWhenEvents = null;
 			List<String> loadAfterEvents = null;
@@ -609,17 +609,14 @@ public class DataBinder implements java.io.Serializable {
 			String converter = null;
 			String expr = null;
 			Map<Object, Object> args = null;
-			for (Map.Entry<String, Object> entry: attrs.entrySet()) {
+			for (Map.Entry<String, String[]> entry: attrs.entrySet()) {
 				String tag = entry.getKey();
-				Object tagval = entry.getValue();
+				String[] tagval = entry.getValue();
 				String tagExpr;
-				if (tagval instanceof String[]) {
-					if (((String[])tagval).length != 1)
-						throw new UiException("Array of attribute values not allowed, "+Objects.toString(tagval));
-					tagExpr = ((String[])tagval)[0];
-				} else {
-					tagExpr = (String) tagval;
-				}
+				if (tagval.length != 1)
+					throw new UiException("Array of attribute values not allowed, "+Objects.toString(tagval));
+				tagExpr = tagval[0];
+
 				if ("save-when".equals(tag)) {
 					saveWhenEvents = parseExpression(tagExpr, ",");
 				} else if ("load-after".equals(tag)) {

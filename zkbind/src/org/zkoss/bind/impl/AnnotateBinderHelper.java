@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.xel.ExpressionX;
@@ -109,13 +110,13 @@ public class AnnotateBinderHelper {
 		}
 		final Annotation ann = anncol.iterator().next();
 		
-		final Map<String,Object> attrs = ann.getAttributes(); //(tag, tagExpr)
+		final Map<String,String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 		Map<String, Object> args = null;
 		final List<String> cmdExprs = new ArrayList<String>();
-		for (final Iterator<Entry<String,Object>> it = attrs.entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = attrs.entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				cmdExprs.add(testString(comp,propName,tag,tagExpr));
 			} else { //other unknown tag, keep as arguments
@@ -164,10 +165,10 @@ public class AnnotateBinderHelper {
 		String initExpr = null;
 			
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				initExpr = testString(comp, propName, tag, tagExpr);
 			} else { //other unknown tag, keep as arguments
@@ -186,10 +187,10 @@ public class AnnotateBinderHelper {
 	private void processPropertyPromptBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo, ValidatorInfo validatorInfo) {
 		String expr = null;
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				expr = testString(comp,propName,tag, tagExpr);
 			} else if ("before".equals(tag)) {
@@ -219,23 +220,15 @@ public class AnnotateBinderHelper {
 				validatorInfo == null ? null : validatorInfo.args);
 	}
 	
-	private String testString(Object comp,String propName, String tag, Object tagValue){
-		if(tagValue instanceof String){
-			return (String)tagValue;
-		}else{
-			throw new IllegalSyntaxException("Allow only String in "+tag +":"+propName+":"+comp+", but get is "+tagValue);
-		}
+	private String testString(Object comp,String propName, String tag, String[] tagValue){
+		if (tagValue.length != 1)
+			throw new IllegalSyntaxException("Allow only a single string in "+tag +":"+propName+":"+comp+", but not "+Objects.toString(tagValue));
+		return tagValue[0];
 	}
 	
-	private void addCommand(Component comp, List<String> cmds, Object cmdExprs){
-		if(cmdExprs instanceof String[]){
-			for(String cmdExpr:(String[])cmdExprs){
-				addCommand(comp,cmds,cmdExpr);
-			}
-		}else{
-			addCommand(comp,cmds,cmdExprs.toString());
-		}
-		
+	private void addCommand(Component comp, List<String> cmds, String[] cmdExprs){
+		for(String cmdExpr: cmdExprs)
+			addCommand(comp,cmds,cmdExpr);
 	}
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
 		cmds.add(eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
@@ -254,10 +247,10 @@ public class AnnotateBinderHelper {
 		final List<String> afterCmds = new ArrayList<String>();
 		
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				loadExpr = testString(comp,propName,tag, tagExpr);
 			} else if ("before".equals(tag)) {
@@ -286,10 +279,10 @@ public class AnnotateBinderHelper {
 		final List<String> afterCmds = new ArrayList<String>();
 			
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				saveExpr = testString(comp,propName,tag, tagExpr);
 			} else if ("before".equals(tag)) {
@@ -361,10 +354,10 @@ public class AnnotateBinderHelper {
 		String initExpr = null;
 			
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				initExpr = testString(comp, formId, tag, tagExpr);
 			} else { //other unknown tag, keep as arguments
@@ -384,10 +377,10 @@ public class AnnotateBinderHelper {
 		final List<String> afterCmds = new ArrayList<String>();
 			
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				loadExpr = testString(comp,formId,tag, tagExpr);
 			} else if ("before".equals(tag)) {
@@ -414,10 +407,10 @@ public class AnnotateBinderHelper {
 		final List<String> afterCmds = new ArrayList<String>();
 			
 		Map<String, Object> args = null;
-		for (final Iterator<Entry<String,Object>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				saveExpr = testString(comp,formId,tag, tagExpr);
 			} else if ("before".equals(tag)) {
@@ -449,11 +442,10 @@ public class AnnotateBinderHelper {
 		final Annotation anno = annos.iterator().next();
 		
 		ConverterInfo info = new ConverterInfo();
-		for (final Iterator<Entry<String,Object>> it = anno.getAttributes().entrySet().iterator(); it
-				.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				info.expr = testString(compCtrl,propName,tag, tagExpr);
 			} else { // other unknown tag, keep as arguments
@@ -478,10 +470,10 @@ public class AnnotateBinderHelper {
 		}
 		final Annotation anno = annos.iterator().next();
 		ValidatorInfo info = new ValidatorInfo();
-		for (final Iterator<Entry<String,Object>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
-			final Entry<String,Object> entry = it.next();
-			final String tag = (String) entry.getKey();
-			final Object tagExpr = entry.getValue();
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				info.expr = testString(compCtrl,propName,tag, tagExpr);
 			} else { // other unknown tag, keep as arguments

@@ -686,7 +686,7 @@ public class DefinitionLoaders {
 	private static void parseAnnots(ComponentDefinitionImpl compdef, Element top) {
 		for (Element el: top.getElements("annotation")) {
 			final String annotName = IDOMs.getRequiredElementValue(el, "annotation-name");
-			final Map<String, Object> annotAttrs = new LinkedHashMap<String, Object>();
+			final Map<String, String[]> annotAttrs = new LinkedHashMap<String, String[]>();
 			for (Map.Entry<String, String> me: parseAttrs(el).entrySet())
 				annotAttrs.put(me.getKey(),
 					AnnotationHelper.parseAttributeValue(me.getValue().trim(),

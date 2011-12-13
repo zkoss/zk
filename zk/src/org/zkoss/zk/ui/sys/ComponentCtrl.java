@@ -316,7 +316,7 @@ public interface ComponentCtrl {
 	/** @deprecated As of release 6.0.0, replaced with
 	 * {@link #addAnnotation(String, String, Map)}
 	 */
-	public void addAnnotation(String annotName, Map<String, Object> annotAttrs);
+	public void addAnnotation(String annotName, Map<String, String[]> annotAttrs);
 	/** Adds an annotation to the specified property of this component.
 	 *
 	 * <p>If the given property is null, the annotation is associated
@@ -330,10 +330,11 @@ public interface ComponentCtrl {
 	 * a particular property).
 	 * @param annotName the annotation name (never null, nor empty).
 	 * @param annotAttrs a map of attributes, or null if no attribute at all.
-	 * The attribute must be in a pair of strings (String name, String value),
-	 * or (String name, String[] value).
+	 * This method will make a copy of <code>annotAttrs</code>, so the caller
+	 * can use it after the invocation.
 	 */
-	public void addAnnotation(String propName, String annotName, Map<String, Object> annotAttrs);
+	public void addAnnotation(
+		String propName, String annotName, Map<String, String[]> annotAttrs);
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (aka., serialized).

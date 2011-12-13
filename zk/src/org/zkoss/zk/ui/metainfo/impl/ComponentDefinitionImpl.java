@@ -184,7 +184,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @since 6.0.0
 	 */
 	public void addAnnotation(String propName, String annotName,
-	Map<String, Object> annotAttrs, Location loc) {
+	Map<String, String[]> annotAttrs, Location loc) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs, loc);
