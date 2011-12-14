@@ -162,6 +162,7 @@ ZK 6.0.0
   + The log configuration file is renamed from i3-log.conf to zk-log.conf.
   + If the attribute called composerName is specified, the default name
     won't be wired (for better performance).
+  + AbstractComponent.smartUpdate(String, Date) is removed
 
 	--------
 ZK 5.0.10

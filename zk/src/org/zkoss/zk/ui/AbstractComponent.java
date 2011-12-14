@@ -1628,13 +1628,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, double value) {
 		smartUpdate(attr, new Double(value));
 	}
-	/** A special smart update to update a value in Date.
-	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
-	 * @since 5.0.0
-	 */
-	protected void smartUpdate(String attr, Date value) {
-		smartUpdate(attr, (Object)value);
-	}
 
 	/** A special smart update to update an event listener for the
 	 * peer widget.
