@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.xel.ExpressionX;
@@ -111,7 +110,7 @@ public class AnnotateBinderHelper {
 		final Annotation ann = anncol.iterator().next();
 		
 		final Map<String,String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		final List<String> cmdExprs = new ArrayList<String>();
 		for (final Iterator<Entry<String,String[]>> it = attrs.entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
@@ -121,15 +120,15 @@ public class AnnotateBinderHelper {
 				cmdExprs.add(testString(comp,propName,tag,tagExpr));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
 		
-		args = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
 		for(String cmd : cmdExprs) {
-			_binder.addCommandBinding(comp, propName, cmd, args);
+			_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
 		}
 	}
 	
@@ -164,7 +163,7 @@ public class AnnotateBinderHelper {
 	private void processPropertyInit(Component comp, String propName, Annotation anno,ConverterInfo converterInfo) {
 		String initExpr = null;
 			
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -173,20 +172,20 @@ public class AnnotateBinderHelper {
 				initExpr = testString(comp, propName, tag, tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
-		_binder.setPropertyInitBinding(comp, propName, initExpr, args,converterInfo == null ? null : converterInfo.expr, 
+		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		_binder.setPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 	}
 	
 	//process @bind(expr) 
 	private void processPropertyPromptBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo, ValidatorInfo validatorInfo) {
 		String expr = null;
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -199,36 +198,41 @@ public class AnnotateBinderHelper {
 				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support after commands, check property "+propName+" of "+comp);
 			}  else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
 			
-		args = args==null?null:parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 
 		_binder.addPropertyLoadBindings(comp, propName,
-				expr, null, null, args, 
+				expr, null, null, parsedArgs, 
 				converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 		
 		_binder.addPropertySaveBindings(comp, propName, expr,
-				null, null, args, 
+				null, null, parsedArgs, 
 				converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args, 
 				validatorInfo == null ? null : validatorInfo.expr, 
 				validatorInfo == null ? null : validatorInfo.args);
 	}
 	
-	private String testString(Object comp,String propName, String tag, String[] tagValue){
-		if (tagValue.length != 1)
-			throw new IllegalSyntaxException("Allow only a single string in "+tag +":"+propName+":"+comp+", but not "+Objects.toString(tagValue));
-		return tagValue[0];
+	private String testString(Object comp,String propName, String tag, String[] string){
+		if(string==null || string.length==0){
+			return null;
+		}else if(string.length==1){
+			return string[0];
+		}else{
+			throw new IllegalSyntaxException("Allow only one String in "+tag +":"+propName+":"+comp+", but get "+string.length);
+		}
 	}
 	
 	private void addCommand(Component comp, List<String> cmds, String[] cmdExprs){
-		for(String cmdExpr: cmdExprs)
+		for(String cmdExpr:(String[])cmdExprs){
 			addCommand(comp,cmds,cmdExpr);
+		}
 	}
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
 		cmds.add(eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
@@ -246,7 +250,7 @@ public class AnnotateBinderHelper {
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
 		
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -259,16 +263,16 @@ public class AnnotateBinderHelper {
 				addCommand(comp,afterCmds,tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 		_binder.addPropertyLoadBindings(comp, propName,
 			loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), args, 
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
 			converterInfo == null ? null : converterInfo.expr, 
 			converterInfo == null ? null : converterInfo.args);
 	}
@@ -278,7 +282,7 @@ public class AnnotateBinderHelper {
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
 			
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -291,15 +295,15 @@ public class AnnotateBinderHelper {
 				addCommand(comp,afterCmds,tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 		_binder.addPropertySaveBindings(comp, propName,saveExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), args, 
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
 			converterInfo == null ? null : converterInfo.expr, 
 			converterInfo == null ? null : converterInfo.args,
 			validatorInfo == null ? null : validatorInfo.expr, 
@@ -353,7 +357,7 @@ public class AnnotateBinderHelper {
 	private void processFormInit(Component comp, String formId,Annotation ann) {
 		String initExpr = null;
 			
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -362,13 +366,13 @@ public class AnnotateBinderHelper {
 				initExpr = testString(comp, formId, tag, tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
-		_binder.setFormInitBinding(comp, formId,initExpr, args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		_binder.setFormInitBinding(comp, formId,initExpr, parsedArgs);
 	}
 	
 	private void processFormLoadBindings(Component comp, String formId,Annotation ann) {
@@ -376,7 +380,7 @@ public class AnnotateBinderHelper {
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
 			
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -389,16 +393,16 @@ public class AnnotateBinderHelper {
 				addCommand(comp,afterCmds, tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 		_binder.addFormLoadBindings(comp, formId,
 			loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), args);
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
 	}
 	
 	private void processFormSaveBindings(Component comp, String formId, Annotation ann, ValidatorInfo validatorInfo) {
@@ -406,7 +410,7 @@ public class AnnotateBinderHelper {
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
 			
-		Map<String, Object> args = null;
+		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -419,15 +423,15 @@ public class AnnotateBinderHelper {
 				addCommand(comp,afterCmds,tagExpr);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, Object>();
+					args = new HashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
 		}
-		args = args==null?null:parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 		_binder.addFormSaveBindings(comp, formId, saveExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), args, 
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
 			validatorInfo == null ? null : validatorInfo.expr, 
 			validatorInfo == null ? null : validatorInfo.args);
 	}
@@ -442,23 +446,25 @@ public class AnnotateBinderHelper {
 		final Annotation anno = annos.iterator().next();
 		
 		ConverterInfo info = new ConverterInfo();
-		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+		Map<String,String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it
+				.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
 				info.expr = testString(compCtrl,propName,tag, tagExpr);
 			} else { // other unknown tag, keep as arguments
-				if (info.args == null) {
-					info.args = new HashMap<String, Object>();
+				if (args== null) {
+					args = new HashMap<String, String[]>();
 				}
-				info.args.put(tag, tagExpr);
+				args.put(tag, tagExpr);
 			}
 		}
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a converter for "+propName+" of "+compCtrl);
 		}
-		info.args = info.args == null ? null : parsedArgs(info.args);
+		info.args = args == null ? null : parsedArgs(args);
 		return info;
 	}
 
@@ -470,6 +476,7 @@ public class AnnotateBinderHelper {
 		}
 		final Annotation anno = annos.iterator().next();
 		ValidatorInfo info = new ValidatorInfo();
+		Map<String,String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
 			final String tag = entry.getKey();
@@ -477,42 +484,42 @@ public class AnnotateBinderHelper {
 			if ("value".equals(tag)) {
 				info.expr = testString(compCtrl,propName,tag, tagExpr);
 			} else { // other unknown tag, keep as arguments
-				if (info.args == null) {
-					info.args = new HashMap<String, Object>();
+				if (args == null) {
+					args = new HashMap<String, String[]>();
 				}
-				info.args.put(tag, tagExpr);
+				args.put(tag, tagExpr);
 			}
 		}
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a validator for "+propName+" of "+compCtrl);
 		}
-		info.args = info.args == null ? null : parsedArgs(info.args);
+		info.args = args == null ? null : parsedArgs(args);
 		return info;
 	}
 	
 	// parse args , if it is a string, than parse it to ExpressionX
-	private Map<String, Object> parsedArgs(Map<String,Object> args) {
+	private Map<String, Object> parsedArgs(Map<String,String[]> args) {
 		final BindEvaluatorX eval = _binder.getEvaluatorX();
 		final Map<String, Object> result = new LinkedHashMap<String, Object>(args.size()); 
-		for(final Iterator<Entry<String, Object>> it = args.entrySet().iterator(); it.hasNext();) {
-			final Entry<String, Object> entry = it.next(); 
+		for(final Iterator<Entry<String, String[]>> it = args.entrySet().iterator(); it.hasNext();) {
+			final Entry<String, String[]> entry = it.next(); 
 			final String key = entry.getKey();
-			final Object value = entry.getValue();
-			if (value instanceof String){
-				addArg(eval, result, key, (String)value);
-			}/*else if (value instanceof String[]) { 
-				// TODO, consider if it is a string array/collection
-			}*/else{
-				result.put(key, value);
-			}
+			final String[] value = entry.getValue();
+			
+			addArg(eval, result, key, value);
 		}
 		return result;
 	}
 
 	
-	private void addArg(BindEvaluatorX eval, Map<String,Object> result, String key, String valueScript) {
-		final ExpressionX parsedValue = valueScript == null ? null : eval.parseExpressionX(null, valueScript, Object.class);
-		result.put(key, parsedValue);
+	private void addArg(BindEvaluatorX eval, Map<String,Object> result, String key, String[] valueScript) {
+		Object val = null;
+		if(valueScript.length==1){
+			val =  eval.parseExpressionX(null, valueScript[0], Object.class);
+		}else{
+			val = valueScript;
+		}
+		result.put(key, val);
 	}
 	
 	private static class ValidatorInfo{

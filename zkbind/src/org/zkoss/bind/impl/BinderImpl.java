@@ -137,6 +137,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private static final String CONVERTER = "$C$"; //system converter for binding
 	private static final String VALIDATOR = "$V$"; //system validator for binding
 	
+	private static final String LOAD_REPLACEMENT = "$LR$"; //loadreplacement of attribute
+	
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
 	//private control key
@@ -687,8 +689,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
 		if (ann != null) {
-			final Map<?, ?> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return (String) attrs.get(BinderImpl.CONVERTER); //system converter if exists
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+			return testString(attrs.get(BinderImpl.CONVERTER)); //system converter if exists
 		}
 		return null;
 	}
@@ -697,8 +699,8 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
 		if (ann != null) {
-			final Map<?, ?> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return (String) attrs.get(BinderImpl.VALIDATOR); //system validator if exists
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+			return testString(attrs.get(BinderImpl.VALIDATOR)); //system validator if exists
 		}
 		return null;
 	}
@@ -707,7 +709,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		//check if exists template
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation ann = compCtrl.getAnnotation(null, BinderImpl.SYSBIND);
-		final Map<?, ?> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
+		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		final Template tm = comp.getTemplate("model");
 		if (tm == null) { //no template
 			return;
@@ -727,7 +729,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		comp.setAttribute(BinderImpl.ITERATION_VAR, itervarnm);
 
 		if (attrs != null) {
-			final String rendererName = (String) attrs.get(BinderImpl.RENDERER); //renderer if any
+			final String rendererName = testString(attrs.get(BinderImpl.RENDERER)); //renderer if any
 			//setup renderer
 			if (rendererName != null) { //there was system renderer
 				final String[] values = rendererName.split("=", 2);
@@ -752,6 +754,17 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 	}
 	
+	
+	private String testString(String[] string){
+		if(string==null || string.length==0){
+			return null;
+		}else if(string.length==1){
+			return string[0];
+		}else{
+			throw new IndexOutOfBoundsException("size="+string.length);
+		}
+	}
+	
 	private void addLoadBinding(Component comp, String attr,
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
@@ -764,14 +777,18 @@ public class BinderImpl implements Binder,BinderCtrl {
 		//the event is usually a engine lifecycle event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
 		String evtnm = null;
+		String loadrep = null;//loadrep not ready yet
 		if (ann != null) {
-			final Map<?, ?> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) attrs.get(BinderImpl.ACCESS); //_accessInfo right, "both|save|load", default to load
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+			final String rw = (String) testString(attrs.get(BinderImpl.ACCESS)); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
-			evtnm = (String) attrs.get(BinderImpl.LOADEVENT); //check trigger event for loading
+			evtnm = (String) testString(attrs.get(BinderImpl.LOADEVENT)); //check trigger event for loading
+			
+//			loadrep = (String) attrs.get(BinderImpl.LOAD_REPLACEMENT); //check replacement of attr when loading
 		}
+		attr = loadrep == null ? attr : loadrep;
 		
 		if(prompt){
 			if(_log.debugable()){
@@ -825,12 +842,12 @@ public class BinderImpl implements Binder,BinderCtrl {
 		//ex, checkbox's 'checked' should be saved to bean on 'onCheck'
 		String evtnm = null;
 		if (ann != null) {
-			final Map<?, ?> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) attrs.get(BinderImpl.ACCESS); //_accessInfo right, "both|save|load", default to load
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+			final String rw = testString(attrs.get(BinderImpl.ACCESS)); //_accessInfo right, "both|save|load", default to load
 			if (!"both".equals(rw) && !"save".equals(rw)) { //load only, skip
 				return;
 			}
-			evtnm = (String) attrs.get(BinderImpl.SAVEEVENT); //check trigger event for saving
+			evtnm = testString(attrs.get(BinderImpl.SAVEEVENT)); //check trigger event for saving
 		}
 		if (evtnm == null) { 
 			//no trigger event, since the value never change of component, so both prompt and command are useless
