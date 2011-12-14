@@ -1,0 +1,12 @@
+<window title="inner2" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00605')"> 
+	<vbox>
+		<hbox>
+			<textbox id="tb3" value="@bind(vm.value)"/>
+			<label id="lb3" value="@bind(vm.value)"/>
+		</hbox>
+		<hbox>
+			<button label="detach" onClick="spaceOwner.detach()" />
+			<button label="Dump" onClick="binder.getTracker().dump()" />
+		</hbox>
+	</vbox>	
+</window>
