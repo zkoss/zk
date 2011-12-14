@@ -138,6 +138,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private static final String VALIDATOR = "$V$"; //system validator for binding
 	
 	private static final String LOAD_REPLACEMENT = "$LR$"; //loadreplacement of attribute
+	private static final String LOAD_TYPE = "$LT$"; //expected type of attribute
 	
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
@@ -673,7 +674,26 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private void doInitProperty(Component comp, String attr,
 			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
 		
-		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, initExpr, bindingArgs, converterExpr, converterArgs);
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		String loadrep = null;
+		Class<?> attrType = null;//default is any class
+		if (ann != null) {
+			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+			loadrep = testString(attrs.get(BinderImpl.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			
+			final String type = testString(attrs.get(BinderImpl.LOAD_TYPE)); //check type of attr when loading
+			if (type != null) {
+				try {
+					attrType = Classes.forNameByThread(type);
+				} catch (ClassNotFoundException e) {
+					throw new UiException(e.getMessage(),e);
+				}
+			}
+		}
+		attr = loadrep == null ? attr : loadrep;
+		
+		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
 		final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
 		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
 		
@@ -778,15 +798,25 @@ public class BinderImpl implements Binder,BinderCtrl {
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
 		String evtnm = null;
 		String loadrep = null;//loadrep not ready yet
+		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 			final String rw = (String) testString(attrs.get(BinderImpl.ACCESS)); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
-			evtnm = (String) testString(attrs.get(BinderImpl.LOADEVENT)); //check trigger event for loading
+			evtnm = testString(attrs.get(BinderImpl.LOADEVENT)); //check trigger event for loading
 			
-//			loadrep = (String) attrs.get(BinderImpl.LOAD_REPLACEMENT); //check replacement of attr when loading
+			loadrep = testString(attrs.get(BinderImpl.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			
+			final String type = testString(attrs.get(BinderImpl.LOAD_TYPE)); //check type of attr when loading
+			if(type!=null){
+				try {
+					attrType = Classes.forNameByThread(type);
+				} catch (ClassNotFoundException e) {
+					throw new UiException(e.getMessage(),e);
+				}
+			}
 		}
 		attr = loadrep == null ? attr : loadrep;
 		
@@ -794,7 +824,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
 			}
-			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
+			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
 			addBinding(comp, attr, binding);
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
@@ -810,7 +840,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -820,7 +850,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);

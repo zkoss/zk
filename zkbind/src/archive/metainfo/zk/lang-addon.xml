@@ -12,6 +12,8 @@
 	    $C$ is the system converter for special properties. e.g. SelectedItem in listbox. see SelectedListitemConverter.java
 	    $SE$ is the save trigger event; meaningful only when $A$ is "both" or "save".
 	    $LE$ is the load trigger event; meaningful only when $A$ is "both" or "load" or not found(default to "load").
+	    $LR$ is the load replacement ; e.g. value of textbox, it loads to rawValue
+	    $LT$ is the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
 	    $R$ is the special renderer for binding
 	    $SYSBIND$ is the system annotation
 	    (see BinderImpl.java)
@@ -73,6 +75,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.String</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -191,6 +201,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.String</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>$SYSBIND$</annotation-name>
@@ -227,6 +245,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.util.Date</attribute-value>
+			</attribute>
 		</annotation>
 	</component>
 	<component>
@@ -243,6 +269,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.math.BigDecimal</attribute-value>
+			</attribute>			
 		</annotation>
 	</component>
 	<!--component>
@@ -262,6 +296,38 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.Double</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>doublespinner</component-name>
+		<extends>doublespinner</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.Double</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -321,6 +387,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.Integer</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -420,6 +494,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.Long</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -569,6 +651,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.Integer</attribute-value>
+			</attribute>
 		</annotation>
 	</component>
 	<!--component>
@@ -653,6 +743,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.lang.String</attribute-value>
+			</attribute>
 		</annotation>
 	</component>
 	<component>
@@ -668,6 +766,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>$SE$</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LR$</attribute-name>
+				<attribute-value>rawValue</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LT$</attribute-name>
+				<attribute-value>java.util.Date</attribute-value>
 			</attribute>
 		</annotation>
 	</component>

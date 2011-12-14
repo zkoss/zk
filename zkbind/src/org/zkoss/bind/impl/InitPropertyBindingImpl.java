@@ -20,6 +20,7 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -29,11 +30,14 @@ import org.zkoss.zk.ui.Component;
 public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	
+	private final Class<?> _attrType;
+	
 	public InitPropertyBindingImpl(Binder binder, Component comp,
-		String attr, String initExpr,Map<String, Object> bindingArgs,
+		String attr, Class<?> attrType, String initExpr,Map<String, Object> bindingArgs,
 		String converterExpr, Map<String, Object> converterArgs) {
 		
 		super(binder, comp, "self."+attr, initExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs);
+		_attrType = attrType == null ? Object.class : attrType;
 	}
 	
 	@Override
@@ -54,6 +58,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		if (conv != null) {
 			value = conv.coerceToUi(value, comp, ctx);
 		}
+		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
 	}

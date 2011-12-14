@@ -25,6 +25,7 @@ import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -35,12 +36,13 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
 	private Set<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
+	private final Class<?> _attrType;
 	
 	public LoadPropertyBindingImpl(Binder binder, Component comp,
-		String attr, String loadExpr,ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
+		String attr, Class<?> attrType, String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
 		String converterExpr,Map<String, Object> converterArgs) {
-		
 		super(binder, comp, "self."+attr, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
+		_attrType = attrType == null ? Object.class : attrType;
 	}
 	
 	public void load(BindContext ctx) {
@@ -59,7 +61,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			addConverterDependsOnTrackings(conv, ctx);
 			value = conv.coerceToUi(value, comp, ctx);
 		}
-		
+		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);
 	}
