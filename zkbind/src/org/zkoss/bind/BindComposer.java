@@ -102,7 +102,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
 		//load data
-		((BinderImpl)_binder).loadComponent(comp); //load all bindings
+		((BinderCtrl)_binder).loadComponent(comp); //load all bindings
 	}
 	
 	private Object initViewModel(BindEvaluatorX evalx, Component comp) {

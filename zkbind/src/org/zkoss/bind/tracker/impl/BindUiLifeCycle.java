@@ -18,6 +18,7 @@ import java.util.Iterator;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -58,7 +59,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							}
 							
 							new AnnotateBinderHelper(binder).initComponentBindings(comp);
-							((BinderImpl)binder).loadComponent(comp);
+							((BinderCtrl)binder).loadComponent(comp);
 						}
 					});
 					//post ON_BIND_INIT event

@@ -48,4 +48,10 @@ public interface BinderCtrl {
 	 * @return all associated save binding in the form 
 	 */
 	public Set<SaveBinding> getFormAssociatedSaveBindings(Component formComp);
+	
+	/**
+	 * reload the load-binding of the component
+	 * @param comp the component to reload
+	 */
+	public void loadComponent(Component comp);
 }
