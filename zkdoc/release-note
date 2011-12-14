@@ -53,6 +53,7 @@ ZK 5.0.10
   ZK-658: onChange was fired in formatted doublebox without change the value
   ZK-674: Tab lost if add tabpanel first in accordion mold
   ZK-679: Textbox multi-line start with new-line failed in onCreate event
+  ZK-683: constraint messag not showup after lost focus
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors

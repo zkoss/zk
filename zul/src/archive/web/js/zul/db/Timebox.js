@@ -591,10 +591,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 
 		// skip onchange, Bug 2936568
-		if (!this._value && !this._changed) {
+		if (!this._value && !this._changed)
 			this.getInputNode().value = this._defRawVal = '';
-			this._reVald = false;
-		}
 
 		this.$supers('doBlur_', arguments);
 

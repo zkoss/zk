@@ -175,6 +175,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		var f = this._flags,
 			msg = this._errmsg;
 
+		if (val && val.toNumber)
+			val = val.toNumber();
+
 		switch (typeof val) {
 		case 'string':
 			if (f.NO_EMPTY && (!val || !val.trim()))
@@ -210,17 +213,6 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 				if (f.NO_TODAY) return msg || this._msgDateDenied();
 			} else
 				if (f.NO_PAST) return msg || this._msgDateDenied();
-			return;
-		}
-
-		if (val && val.compareTo) {
-			var b = val.compareTo(0);
-			if (b > 0) {
-				if (f.NO_POSITIVE) return msg || this._msgNumDenied();
-			} else if (b == 0) {
-				if (f.NO_ZERO) return msg || this._msgNumDenied();
-			} else
-				if (f.NO_NEGATIVE) return msg || this._msgNumDenied();
 			return;
 		}
 
