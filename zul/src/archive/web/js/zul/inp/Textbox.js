@@ -99,13 +99,8 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	},	
 	bind_: function(){
 		this.$supers(zul.inp.Textbox, 'bind_', arguments);
-		var inp = this.getInputNode(),
-			value = this.getValue();
 		if (this.inRoundedMold())
 			zWatch.listen({onSize: this});
-		// ZK-679: Textbox multi-line start with new-line failed in onCreate event
-		if (inp && value && inp.value != value)
-			this._defRawVal = this._lastChg = inp.value = this.coerceToString_(value);
 	},	
 	unbind_: function(){
 		if (this.inRoundedMold())

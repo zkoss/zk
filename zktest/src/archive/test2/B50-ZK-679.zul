@@ -14,10 +14,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<div>1. You should see 'test' at second line in textbox and 'changed times: 0' beside it.</div>
-	<div>2. Clear the textbox then click on 'changed times: 0', you should see it becomes 'changed times: 1'.</div>
-	<div>3. Refresh page.</div>
-	<div>4. Delete the first line of textbox then click on 'changed times: 0', you should see it becomes 'changed times: 1'.</div>
+	<div>1. You should see 'test' at second line in textbox1 and 'label 1' beside it.</div>
+	<div>2. Clear the textbox1 then click on 'label 1', you should see it becomes 'changed times: 1'.</div>
+	<div>3. Click 'setValue' button, you should see 'test' at second line in textbox2 and 'label 2' beside it.</div>
+	<div>4. Clear the textbox2 then click on 'label 2', you should see it becomes 'changed times: 2'.</div>
+	<div>5. Refresh page.</div>
+	<div>6. Delete the first line of textbox1 then click on 'label 1', you should see it becomes 'changed times: 1'.</div>
+	<div>7. redo step 3.</div>
+	<div>8. Delete the first line of textbox2 then click on 'label 2', you should see it becomes 'changed times: 2'.</div>
 	<zscript>
 		int i = 0;
 	</zscript>
@@ -28,6 +32,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 						lb.setValue("changed times: " + i);
 					</attribute>
 				</textbox>
-		<label id="lb" value="changed times: 0" />
+		<label id="lb" value="label 1" />
+		textbox2: <textbox id="test2" rows="4">
+					<attribute name="onChange">
+						++i;
+						lb2.setValue("changed times: " + i);
+					</attribute>
+				</textbox>
+		<button label="setValue" onClick='test2.value="\ntest";' />
+		<label id="lb2" value="label 2" />
 	</window>
 </zk>
