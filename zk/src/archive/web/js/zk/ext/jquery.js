@@ -6565,8 +6565,26 @@ jQuery.each(["height", "width"], function( i, name ) {
     						val = getWH( elem, name, extra );
     					});
     				}
-				} else {
-					val = '';
+				} else { /* Jumper Chen, Potix, 20111214 for B35-2103813.zul copied from jQuery 1.4.4 */
+					val = curCSS( elem, name, name );
+
+					if ( val === "0px" && currentStyle ) {
+						val = currentStyle( elem, name, name );
+					}
+
+					if ( val != null ) {
+						// Should return "auto" instead of 0, use 0 for
+						// temporary backwards-compat
+						return val === "" || val === "auto" ? "0px" : val;
+					}
+
+					if ( val < 0 || val == null ) {
+						val = elem.style[ name ];
+
+						// Should return "auto" instead of 0, use 0 for
+						// temporary backwards-compat
+						return val === "" || val === "auto" ? "0px" : val;
+					}
 				}
 
 				return val;
