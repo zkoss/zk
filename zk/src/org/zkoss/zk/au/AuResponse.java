@@ -225,7 +225,7 @@ public class AuResponse {
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
 	}
 
-	private class JSONDate implements JSONAware {
+	private static class JSONDate implements JSONAware {
 		private final Date _d;
 		private JSONDate(Date d) {
 			_d = d;
