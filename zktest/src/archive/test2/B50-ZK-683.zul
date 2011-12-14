@@ -1,0 +1,14 @@
+	<window>
+		<zscript>
+			Integer intValue = -1;
+			Long longValue = -1L;
+			java.math.BigDecimal decimalValue = new java.math.BigDecimal("-1.040");
+			java.util.Date dateValue = null;
+		</zscript>
+		<vbox>
+		<intbox width="100px" constraint="no negative" rawValue="${intValue}"/>
+		<longbox width="100px" constraint="no negative" rawValue="${longValue}"/>
+		<decimalbox width="100px" constraint="no negative" rawValue="${decimalValue}"/>
+		<timebox width="100px" constraint="no empty" rawValue="${dateValue}"/>
+		</vbox>
+	</window>
