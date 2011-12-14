@@ -38,6 +38,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.util.logging.Log;
@@ -2468,7 +2469,41 @@ w:use="foo.MyWindow"&gt;
 	}
 	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs) {
 		unshareAnnotationMap(true);
-		_auxinf.annots.addAnnotation(propName, annotName, annotAttrs, null);
+		_auxinf.annots.addAnnotation(propName, annotName,
+			fixAttrValues(annotAttrs), null);
+	}
+	/** Used to resolve the backward compatibility:
+	 * ZK 6 expects String[], but ZK 5 might pass String as the value.
+	 * <p>For better performance, we don't put this method to AnnotationMap.
+	 * After all, ComponentInfo/ComponentDefinition.addAnnotation not for app
+	 */
+	private Map<String, String[]> fixAttrValues(Map<?, ?> attrs) {
+		if (attrs == null)
+			return null;
+
+		for (Map.Entry<?, ?> m0: attrs.entrySet()) {
+			Object key = m0.getKey();
+			Object val = m0.getValue();
+			if ((key != null && !(key instanceof String))
+			|| (val != null && !(val instanceof String[]))) {//need to convert
+				final Map<String, String[]> as = new LinkedHashMap<String, String[]>(4);
+				for (Map.Entry<?, ?> me: attrs.entrySet()) {
+					key = me.getKey();
+					if (key != null  && !(key instanceof String))
+						throw new UiException("Illegal attribute name, "+key);
+
+					val = me.getValue();
+					if (val == null || val instanceof String[])
+						as.put((String)key, (String[])val);
+					else if (val instanceof String)
+						as.put((String)key, new String[] {(String)val});
+					else
+						throw new UiException("Illegagl attribute value, "+val);
+				}
+				return as;
+			}
+		}
+		return cast(attrs);
 	}
 	/** Clones the shared annotations, if shared.
 	 * @param autocreate whether to create an annotation map if not available.

@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.resource.Location;
 import org.zkoss.zk.ui.UiException;
@@ -203,38 +202,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 		if (ans == null)
 			anmap.put(annotName, ans= new LinkedList<Annotation>());
 
-		ans.add(new AnnotImpl(annotName, fixAttrValues(annotAttrs), loc));
-	}
-	/** Used to resolve the backward compatibility:
-	 * ZK 6 expects String[], but ZK 5 might pass String as the value.
-	 */
-	private Map<String, String[]> fixAttrValues(Map<?, ?> attrs) {
-		if (attrs == null || attrs.isEmpty())
-			return null;
-
-		for (Map.Entry<?, ?> m0: attrs.entrySet()) {
-			Object key = m0.getKey();
-			Object val = m0.getValue();
-			if ((key != null && !(key instanceof String))
-			|| !(val instanceof String[])) {//need to convert
-				final Map<String, String[]> as = new LinkedHashMap<String, String[]>(4);
-				for (Map.Entry<?, ?> me: attrs.entrySet()) {
-					key = me.getKey();
-					if (key != null  && !(key instanceof String))
-						throw new UiException("Illegal attribute name, "+key);
-
-					val = me.getValue();
-					if (val == null || val instanceof String[])
-						as.put((String)key, (String[])val);
-					else if (val instanceof String)
-						as.put((String)key, new String[] {(String)val});
-					else
-						throw new UiException("Illegagl attribute value, "+val);
-				}
-				return as;
-			}
-		}
-		return cast(attrs);
+		ans.add(new AnnotImpl(annotName, annotAttrs, loc));
 	}
 	/** Initializes _annots by creating and assigning a new map for it.
 	 */

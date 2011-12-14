@@ -362,9 +362,12 @@ public class AnnotationHelper {
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
 	@SuppressWarnings("unchecked")
 	private void addByRawValueInV5(String annotName, String rval) {
-		final Map attrs = Maps.parse(null, rval, ',', '\'', true);
-		add(annotName, attrs);
-			//The parsing of the value in format 1 is different from format 2
+		//The parsing of the value in format 1 is different from format 2
+		final Map<String, Object> attrs = (Map)Maps.parse(null, rval, ',', '\'', true);
+		for (Map.Entry<String, Object> me: attrs.entrySet())
+			me.setValue(new String[] {(String)me.getValue()});
+			//convert String to String[]
+		add(annotName, (Map)attrs);
 	}
 
 	/** Applies the annotations defined in this helper to the specified
