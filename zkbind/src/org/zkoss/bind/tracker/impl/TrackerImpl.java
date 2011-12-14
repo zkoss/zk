@@ -400,29 +400,82 @@ public class TrackerImpl implements Tracker {
 	
 	private static class EqualBeansMap {
 		private WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>();
+		private WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>();
 		
-		public void put(Object bean) {
-			final EqualBeans beans = _innerMap.get(bean);
-			if (beans == null) {
-				_innerMap.put(bean, new EqualBeans(bean));
-			} else {
-				beans.put(bean);
-			}
-		}
-		
-		public void remove(Object bean) {
-			final EqualBeans beans = _innerMap.remove(bean);
-			if (beans != null) {
-				Object proxy = beans.remove(bean);
-				if (!beans.isEmpty()) {
-					_innerMap.put(proxy, beans);
+		//bug #ZK-678: NotifyChange on Map is not work
+		private void syncInnerMap(EqualBeans equalBeans, Object bean) {
+			//search one by one
+			for(Iterator<Entry<Object, EqualBeans>> it = _innerMap.entrySet().iterator(); it.hasNext();) {
+				final Entry<Object, EqualBeans> entry = it.next();
+				final EqualBeans beans = entry.getValue();
+				if (equalBeans.equals(beans)) { //found
+					it.remove(); //remove from _innerMap;
+					//reput equalBeans (item inside might not equal to each other any more)
+					for (Object b : equalBeans.getBeans()) {
+						_identityMap.remove(b);
+						put(b); //recursive
+					}
+					break;
 				}
 			}
 		}
 		
+		public void put(Object bean) {
+			EqualBeans equalBeans = _innerMap.get(bean);
+			if (equalBeans == null) { //hashcode might changed
+				equalBeans = _identityMap.remove(bean);
+				if (equalBeans != null) { //hashcode is changed
+					syncInnerMap(equalBeans, bean);
+					return;
+				} else { //a new bean
+					equalBeans = new EqualBeans(bean);
+					_innerMap.put(bean, equalBeans);
+				}
+			} else {
+				equalBeans.put(bean);
+			}
+			_identityMap.put(bean, equalBeans);
+		}
+		
+		public void remove(Object bean) {
+			EqualBeans equalBeans = _innerMap.remove(bean);
+			if (equalBeans != null) {
+				_identityMap.remove(bean);
+				removeFromEqualBeansAndReput(equalBeans, bean);
+			} else { //hashcode might changed
+				equalBeans = _identityMap.remove(bean);
+				if (equalBeans != null) { //hashcode is changed
+					//search one by one
+					for(Iterator<Entry<Object, EqualBeans>> it = _innerMap.entrySet().iterator(); it.hasNext();) {
+						final Entry<Object, EqualBeans> entry = it.next();
+						final EqualBeans beans = entry.getValue();
+						if (equalBeans.equals(beans)) { //found
+							it.remove(); //remove from _innerMap;
+							removeFromEqualBeansAndReput(beans, bean); //remove from EqualBeans
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		private void removeFromEqualBeansAndReput(EqualBeans equalBeans, Object bean) {
+			final Object proxy = equalBeans.remove(bean);
+			if (!equalBeans.isEmpty()) {
+				_innerMap.put(proxy, equalBeans); //reput into _innerMap with new Proxy
+			}
+		}
+		
 		public Set<Object> getEqualBeans(Object bean) {
-			final EqualBeans equalBeans =  _innerMap.get(bean);
-			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeans();
+			EqualBeans equalBeans = _innerMap.get(bean);
+			if (equalBeans == null) { //hashcode might changed
+				equalBeans = _identityMap.remove(bean);
+				if (equalBeans != null) { //hashcode is changed
+					syncInnerMap(equalBeans, bean);
+					equalBeans = _identityMap.get(bean);
+				}
+			}
+			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeans(); 
 		}
 		
 		public int size() {
@@ -475,6 +528,10 @@ public class TrackerImpl implements Tracker {
 		
 		public boolean isEmpty() {
 			return _beanSet == null || _beanSet.isEmpty();
+		}
+		
+		public boolean contains(Object bean) {
+			return _beanSet != null && _beanSet.containsKey(bean);
 		}
 	}
 	
