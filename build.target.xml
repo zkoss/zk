@@ -106,7 +106,7 @@ if="deploy.tomcat.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
-	<exec executable="bash" dir="." failonerror="true">
+	<!--<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/zipjs"/>
 		<arg value="${dist.lib.ext.dir}/yuicompressor.jar"/>
 		<arg value="${dist.lib.ext.dir}/bsh.jar"/>
@@ -121,6 +121,28 @@ if="deploy.tomcat.required">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
 	</exec>
+	-->
+	<java classname="ZipJS"
+           	fork="true">
+		<arg value="${src.archive.dir}/${zipjs}"/>
+		<arg value="${codegen.archive.dir}/${zipjs}"/>
+		<classpath>
+		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+		</classpath>
+	</java>
+	   
+	<java classname="ZipJS"
+           	fork="true">
+		<arg value="${src.archive.dir}/${zipcss}"/>
+		<arg value="${codegen.archive.dir}/${zipcss}"/>
+		<classpath>
+		   <pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
+		   <pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
+		   <pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+		</classpath>
+	</java>
 	
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
