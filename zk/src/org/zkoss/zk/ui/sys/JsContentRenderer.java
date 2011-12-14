@@ -26,6 +26,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
+
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -79,6 +81,10 @@ public class JsContentRenderer implements ContentRenderer {
 			.append(JSONs.d2j((Date)value))
 			.append("')");
 	}
+	private void renderValue(Component value) {
+		if (value == null || value.getPage() == null) _buf.append((String)null);
+		else _buf.append("{$u:'").append(value.getUuid()).append("'}");
+	}
 	/** Renders an arbitary object. */
 	public void render(String name, Object value) {
 		renderName(name);
@@ -91,6 +97,10 @@ public class JsContentRenderer implements ContentRenderer {
 		}
 		if (value instanceof Date) {
 			renderValue((Date)value);
+			return;
+		}
+		if (value instanceof Component) {
+			renderValue((Component)value);
 			return;
 		}
 		if (value instanceof Integer) {

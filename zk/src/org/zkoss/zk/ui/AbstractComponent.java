@@ -1438,6 +1438,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * the value is a valid JavaScript snippet), you can use
 	 * {@link JavaScriptValue}. Notice that the JavaScript code will be evaluated
 	 * before assigning it to the widget.
+	 * <p>If the value is a Date object, a special pattern will be generated
+	 * (aka., marshaling)
+	 * to ensure it can be unmarshalled back correctly at the client.
+	 * Notice that it is marshalled to a string based
+	 * on {@link org.zkoss.util.TimeZones#getCurrent}, and then
+	 * unmarshalled back at the client. In other words, if the client
+	 * is in different time-zone, the value returned by getTime() might
+	 * be different. However, the value will remain the same if
+	 * the client marshalled the Date object back.
+	 * In other words, it assumes the browser's time zone from enduser's
+	 * perspective (not really browser's setting) shall be the same
+	 * as {@link org.zkoss.util.TimeZones#getCurrent}.
+	 * <p>If the value is a component, a special pattern will be generated
+	 * to ensure it can be unmarshalled back correctly at the client.
 	 * <p>In addition, the value can be any kind of objects that
 	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)

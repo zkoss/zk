@@ -103,7 +103,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 			if (_group != null)
 				_group.addExternal(this);
 
-			smartUpdate("$u$radiogroup", _group != null ? _group.getUuid(): null);
+			smartUpdate("radiogroup", _group);
 		}
 	}
 	/** Associates the radiogroup to this radio component by giving ID.
@@ -122,7 +122,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 		_group = null;
 		_groupId = radiogroupId;
 		if (resolveGroup(true)) //try to bind as soon as possible since they relate to each other
-			smartUpdate("$u$radiogroup", _group != null ? _group.getUuid(): null);
+			smartUpdate("radiogroup", _group);
 		else
 			invalidate(); //delay the retrieval of _group to redraw
 	}
@@ -220,8 +220,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		resolveGroup(false);
-		if (_group != null)
-			render(renderer, "$u$radiogroup", _group.getUuid());
+		render(renderer, "radiogroup", _group);
 	}
 	
 	//-- ComponentCtrl --//

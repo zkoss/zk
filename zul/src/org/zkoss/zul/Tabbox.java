@@ -257,7 +257,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				smartUpdate("selectedTab", _seltab.getUuid());
+				smartUpdate("selectedTab", _seltab);
 		}
 	}
 

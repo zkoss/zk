@@ -1126,13 +1126,14 @@ wgt.$f().main.setTitle("foo");
 	 * back to the server. In additions, the value is assumed to
 	 * be a boolean indicating if the server registers a listener.
 	 *
-	 * <h3>$u$xxx</h3>
-	 * <p>If the name starts with <code>$u$</code>, it indicates
-	 * the value is UUID of a widget, and it will be resolved to a widget
+	 * <h2>Special Value</h2>
+	 * <h3>{$u: uuid}</h3>
+	 * <p>If the value is in this format, it indicates <code>$u</code>'s
+	 * value is UUID of a widget, and it will be resolved to a widget
 	 * before calling the real method.
 	 * <p>However, since we cannot resolve a widget by its UUID until
 	 * the widget is bound (to DOM). Thus, ZK sets property after mounted.
-	 * For example, <code>wgt.set("$u$radiogroup", uuid)</code> is equivalent
+	 * For example, <code>wgt.set("radiogroup", {$u: uuid})</code> is equivalent
 	 * to the following.
 	 * <pre><code>zk.afterMount(function () {
 	 wgt.set("radiogroup", zk.Widget.$(uuid))
@@ -1153,6 +1154,14 @@ wgt.$f().main.setTitle("foo");
 	 */
 	set: function (name, value, extra) {
 		var cc;
+		if (cc = value && value.$u) { //value.$u is UUID
+			var self = this;
+			zk.afterMount(function () {
+				zk._set(self, name, zk.Widget.$(cc), extra);
+			});
+			return this;
+		}
+
 		if (cc = this['set' + name.charAt(0).toUpperCase() + name.substring(1)]) {
 		//to optimize the performance we check the method first (most common)
 			zk._set2(this, cc, null, value, extra);
@@ -1168,7 +1177,7 @@ wgt.$f().main.setTitle("foo");
 			} else if (name.startsWith('$on')) {
 				this._asaps[name.substring(1)] = value;
 				return this;
-			} else if (name.startsWith('$u$')) { //value is UUID
+			} else if (name.startsWith('$u$')) { //value is UUID (redundant for backward compatible)
 				var self = this;
 				zk.afterMount(function () {
 					zk._set(self, name.substring(3), zk.Widget.$(value), extra);

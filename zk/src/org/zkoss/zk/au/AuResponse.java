@@ -155,7 +155,7 @@ public class AuResponse {
 			if (d instanceof DeferredValue)
 				d = ((DeferredValue)d).getValue();
 			if (d instanceof Component)
-				d = ((Component)d).getUuid();
+				d = new JSONComponent((Component)d);
 			if (d instanceof Date)
 				d = new JSONDate((Date)d);
 			encdata.add(d);
@@ -224,13 +224,24 @@ public class AuResponse {
 		s = s.trim();
 		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
 	}
-}
-/*package*/ class JSONDate implements JSONAware {
-	private Date _d;
-	/*package*/ JSONDate(Date d) {
-		_d = d;
+
+	private class JSONDate implements JSONAware {
+		private final Date _d;
+		private JSONDate(Date d) {
+			_d = d;
+		}
+		public String toJSONString() {
+			return "jq.j2d('" + JSONs.d2j(_d) + "')";
+		}
 	}
-	public String toJSONString() {
-		return "jq.j2d('" + JSONs.d2j(_d) + "')";
+	private static class JSONComponent implements JSONAware {
+		private final Component _comp;
+		private JSONComponent(Component comp) {
+			_comp = comp;
+		}
+		public String toJSONString() {
+			return _comp.getPage() == null ? "null": "{$u:'" + _comp.getUuid() + "'}";
+		}
 	}
 }
+

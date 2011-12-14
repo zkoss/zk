@@ -1344,7 +1344,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 						_pgi.setTotalSize(getDataLoader().getTotalSize());
 						addPagingListener(_pgi);
 						if (_pgi instanceof Component)
-							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
+							smartUpdate("paginal", _pgi);
 					}
 				}
 			}
@@ -3185,7 +3185,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				renderer.render("groupSelect", true);
 		}
 		if (_pgi != null && _pgi instanceof Component)
-			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+			renderer.render("paginal", _pgi);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

@@ -292,7 +292,7 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 						_pgi.setTotalSize(getItemCount());
 						addPagingListener(_pgi);
 						if (_pgi instanceof Component)
-							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
+							smartUpdate("paginal", _pgi);
 					}
 				}
 			}
@@ -1988,7 +1988,7 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 		if (!isRightSelect())
 			renderer.render("rightSelect", false);
 		if (_pgi != null && _pgi instanceof Component)
-			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+			renderer.render("paginal", _pgi);
 		
 		if (_currentTop != 0)
 			renderer.render("_currentTop", _currentTop);
