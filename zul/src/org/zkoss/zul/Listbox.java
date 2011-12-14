@@ -880,7 +880,7 @@ public class Listbox extends MeshElement {
 			if (inSelectMold()) {
 				smartUpdate("selectedIndex", _jsel);
 			} else if (item != null)
-				smartUpdate("selectedItem", item.getUuid());
+				smartUpdate("selectedItem", item);
 			// Bug 1734950: don't count on index (since it may change)
 			// On the other hand, it is OK with select-mold since
 			// it invalidates if items are added or removed
@@ -1188,7 +1188,7 @@ public class Listbox extends MeshElement {
 						_pgi.setTotalSize(getDataLoader().getTotalSize());
 						addPagingListener(_pgi);
 						if (_pgi instanceof Component)
-							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
+							smartUpdate("paginal", _pgi);
 					}
 				}
 			}
@@ -2989,7 +2989,7 @@ public class Listbox extends MeshElement {
 				renderer.render("groupSelect", true);
 		}
 		if (_pgi != null && _pgi instanceof Component)
-			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+			renderer.render("paginal", _pgi);
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */

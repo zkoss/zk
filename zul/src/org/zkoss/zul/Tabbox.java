@@ -210,7 +210,7 @@ public class Tabbox extends XulElement {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				smartUpdate("selectedTab", _seltab.getUuid());
+				smartUpdate("selectedTab", _seltab);
 		}
 	}
 

@@ -108,6 +108,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new HashMap<Class<? extends Component>, Map<String, Integer>>(128);
 	private static final String DEFAULT = "default";
 	private static final String ANONYMOUS_ID = "z__i";
+	/** Used to generate an anonymous ID. */
+	private static int _anonymousId;
 
 	/*package*/ transient Page _page;
 	private String _id = "";
@@ -500,7 +502,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (bRoot) ((AbstractPage)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
-				if (_uuid == null || _uuid == ANONYMOUS_ID
+				if (_uuid == null || _uuid.startsWith(ANONYMOUS_ID)
 				|| desktop.getComponentByUuidIfAny(_uuid) != null)
 					_uuid = nextUuid(desktop);
 
@@ -591,7 +593,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public String getUuid() {
 		if (_uuid == null) {
 			final Execution exec = _page != null ? Executions.getCurrent(): null;
-			_uuid = exec == null ? ANONYMOUS_ID: nextUuid(exec.getDesktop());
+			_uuid = exec == null ? ANONYMOUS_ID + _anonymousId++: nextUuid(exec.getDesktop());
+				//OK to race for _anonymousId (since ok to be the same)
 		}
 		return _uuid;
 	}
@@ -1528,6 +1531,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * the value is a valid JavaScript snippet), you can use
 	 * {@link JavaScriptValue}. Notice that the JavaScript code will be evaluated
 	 * before assigning it to the widget.
+	 * <p>If the value is a Date object, a special pattern will be generated
+	 * (aka., marshaling)
+	 * to ensure it can be unmarshalled back correctly at the client.
+	 * Notice that it is marshalled to a string based
+	 * on {@link org.zkoss.util.TimeZones#getCurrent}, and then
+	 * unmarshalled back at the client. In other words, if the client
+	 * is in different time-zone, the value returned by getTime() might
+	 * be different. However, the value will remain the same if
+	 * the client marshalled the Date object back.
+	 * In other words, it assumes the browser's time zone from enduser's
+	 * perspective (not really browser's setting) shall be the same
+	 * as {@link org.zkoss.util.TimeZones#getCurrent}.
+	 * <p>If the value is a component, a special pattern will be generated
+	 * to ensure it can be unmarshalled back correctly at the client.
 	 * <p>In addition, the value can be any kind of objects that
 	 * the client accepts (marshaled by JSON) (see also {@link org.zkoss.json.JSONAware}).
 	 * @since 5.0.0 (become protected)
@@ -1563,85 +1580,60 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			getAttachedUiEngine().addSmartUpdate(this, attr, value, append);
 	}
 	/** A special smart update to update a value in int.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, int value) {
 		smartUpdate(attr, new Integer(value));
 	}
 	/** A special smart update to update a value in long.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, long value) {
 		smartUpdate(attr, new Long(value));
 	}
 	/** A special smart update to update a value in byte.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, byte value) {
 		smartUpdate(attr, new Byte(value));
 	}
 	/** A special smart update to update a value in character.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, char value) {
 		smartUpdate(attr, new Character(value));
 	}
 	/** A special smart update to update a value in boolean.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, boolean value) {
 		smartUpdate(attr, Boolean.valueOf(value));
 	}
 	/** A special smart update to update a value in float.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, float value) {
 		smartUpdate(attr, new Float(value));
 	}
 	/** A special smart update to update a value in double.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, double value) {
 		smartUpdate(attr, new Double(value));
 	}
 	/** A special smart update to update a value in Date.
-	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
-	 * the attribute eventually.
-	 * <p>Notice that the Date object is marshalled to a string based
-	 * on {@link org.zkoss.util.TimeZones#getCurrent}, and then
-	 * unmarshalled back at the client. In other words, if the client
-	 * is in different time-zone, the value returned by getTime() might
-	 * be different. However, the value will remain the same if
-	 * the client marshalled the Date object back.
-	 * In other words, it assumes the browser's time zone from enduser's
-	 * perspective (not really browser's setting) shall be the same
-	 * as {@link org.zkoss.util.TimeZones#getCurrent}.
+	 * <p>It is the same as {@link #smartUpdate(String, Object)}.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, Date value) {
 		smartUpdate(attr, (Object)value);
-	}
-	/** A special smart update to update a value to the given component.
-	 * <p>It is the same as
-	 * <code>smartUpdate(attr, comp != null ? comp.getUuid(): null)</code>.
-	 * @since 6.0.0
-	 */
-	protected void smartUpdate(String attr, Component comp) {
-		smartUpdate(attr, comp != null ? comp.getUuid(): null);
 	}
 
 	/** A special smart update to update an event listener for the

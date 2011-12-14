@@ -474,7 +474,7 @@ public class Grid extends MeshElement {
 						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
 						addPagingListener(_pgi);
 						if (_pgi instanceof Component)
-							smartUpdate("$u$paginal", ((Component) _pgi).getUuid());
+							smartUpdate("paginal", _pgi);
 					}
 				}
 			}
@@ -1404,7 +1404,7 @@ public class Grid extends MeshElement {
 		}
 		
 		if (_pgi != null && _pgi instanceof Component)
-			renderer.render("$u$paginal", ((Component) _pgi).getUuid());
+			renderer.render("paginal", _pgi);
 
 	}
 	/*package*/ boolean isRod() {

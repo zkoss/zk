@@ -258,7 +258,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	setSelectedItem: function (item) {
 		if (!item)
 			this.clearSelection();
-		else if (item = zk.Widget.$(item)) {
+		else {
 			this._selectOne(item, true);
 			zk(item).scrollIntoView(this.ebody);
 			if (zk.ff >= 4 && this.ebody) { // B50-ZK-293: FF5 misses to fire onScroll

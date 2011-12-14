@@ -1,0 +1,47 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<zscript><![CDATA[ 
+import org.zkoss.zul.*;
+	class Ctrl extends org.zkoss.zk.ui.util.GenericForwardComposer {
+		Div main;
+		Div cave;
+		Tabbox tabbox;
+		Tabs tabs;
+		Button btn;
+		
+		public void doAfterCompose(Component comp) throws Exception {
+			super.doAfterCompose(comp);
+		}
+		
+		public void onClick$btn() {
+			tabs.getChildren().clear();
+			for (int i = 1; i <= 3; i++) {
+				Tab a = new Tab("Tab " + i);
+				a.setParent(tabs);
+			}
+		}
+		
+		public void onSelect$tabbox(Event evt) {
+			inf.appendChild(new Label("selectd " + tabbox.getSelectedTab().getLabel()));
+		}
+	}
+]]></zscript>
+<html><![CDATA[
+    <h4>Test steps</h4>
+    <ul>
+    	<li>Click "Create tab button"</li>
+    	<li>Click "Tab 2" will display a message, "selectd Tab 2", at the end</li>
+    	<li style="color:red;">Click "Tab 1" shall display another message, "selectd Tab 1", at the end (if not, it fails)</li>
+    </ul>
+]]></html>
+<div id="main" apply="Ctrl">
+	<button id="btn" label="Create tab"/>
+	<div id="cave">
+		<tabbox id="tabbox">
+			<tabs id="tabs">
+			</tabs>
+		</tabbox>
+	</div>
+</div>
+<vlayout id="inf"/>
+</zk>

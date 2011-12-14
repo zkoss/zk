@@ -180,8 +180,6 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * @param Tab tab
 	 */
 	setSelectedTab: function(tab) {
-		if (typeof tab == 'string')
-			tab = zk.Widget.$(tab);
 		if (this._selTab != tab) {
 			if (tab)
 				tab.setSelected(true);
