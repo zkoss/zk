@@ -209,8 +209,7 @@ public class Radio extends Checkbox {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		resolveGroup(false);
-		if (_group != null)
-			render(renderer, "radiogroup", _group);
+		render(renderer, "radiogroup", _group);
 	}
 	
 	//-- ComponentCtrl --//

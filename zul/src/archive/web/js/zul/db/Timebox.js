@@ -618,7 +618,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		// skip onchange, Bug 2936568
 		if (!this._value && !this._changed && !Timebox._unformater)
-			this.getInputNode().value = this._lastRawValVld = '';
+			this.getInputNode().value = this._defRawVal = '';
 
 		this.$supers('doBlur_', arguments);
 

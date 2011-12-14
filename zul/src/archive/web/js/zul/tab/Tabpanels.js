@@ -136,6 +136,13 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers("onChildAdded_", arguments);
+		// sync too early will cause wrong result,
+		// handle by tab in accordion mold
+		if (!this.getTabbox().inAccordionMold())
+			_syncSelectedPanels(this);
+	},
+	// called by Tab#bind_ in accordion mold
+	_fixSel: function () {
 		_syncSelectedPanels(this);
 	}
 });

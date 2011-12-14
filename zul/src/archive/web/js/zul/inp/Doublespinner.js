@@ -117,7 +117,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	coerceFromString_: function (value) {//copy from doublebox
 		// B50-3322816
 		if (!value) return null;
-		
+
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
     		raw = info.raw,
     		val = parseFloat(raw),
@@ -180,7 +180,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
 	doKeyDown_: function(evt){
-		var inp = this.inp;
+		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
 	
@@ -212,10 +212,8 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_btnDown: function(evt){
 		var isRounded = this.inRoundedMold();
 		if (isRounded && !this._buttonVisible) return;
-		
-		var inp;
-		if(!(inp = this.inp) || inp.disabled) return;
-		
+		if(this.getInputNode().disabled) return;
+
 		var btn = this.$n("btn"),
 			zcls = this.getZclass();
 			
@@ -254,7 +252,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	 * Sets bound value if the value out of range 
 	 */
 	checkValue: function(){
-		var inp = this.inp,
+		var inp = this.getInputNode(),
 			min = this._min,
 			max = this._max;
 
@@ -271,7 +269,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	_btnUp: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
-		var inp = this.inp;
+		var inp = this.getInputNode();
 		if(inp.disabled) return;
 
 		this._onChanging();
@@ -285,21 +283,21 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	_btnOut: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
-		if (this.inp && !this.inp.disabled && !zk.dragging)
+		var inp = this.getInputNode();
+		if (!inp.disabled && !zk.dragging)
 			jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
 			
-		var inp = this.inp;
 		if(inp.disabled) return;
 
 		this._stopAutoIncProc();
 	},
 	_btnOver: function(evt){
 		if (this.inRoundedMold() && !this._buttonVisible) return;
-		if (this.inp && !this.inp.disabled && !zk.dragging)
+		if (!this.getInputNode().disabled && !zk.dragging)
 			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
 	},
 	_increase: function (asc){
-		var inp = this.inp,
+		var inp = this.getInputNode(),
 			value = this.coerceFromString_(inp.value),
 			shiftLen = Math.max(_digitsAfterDecimal(value), this._fixedDigits),
 			result = _shiftedSum(value, this._step, shiftLen, asc); // B50-3301517
@@ -318,8 +316,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		
 	},
 	_clearValue: function(){
-		var real = this.inp;
-		real.value = this._defValue = "";
+		this.getInputNode().value = this._defRawVal = "";
 		return true;
 	},
 	_startAutoIncProc: function (isup){
@@ -382,12 +379,11 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	bind_: function () {//after compose
 		this.$supers(zul.inp.Doublespinner, 'bind_', arguments); 
 		this.timeId = null;
-		var inp = this.inp = this.$n("real"), btn;
-		
+
 		if (this._inplace)
-			jq(inp).addClass(this.getInplaceCSS());
-		
-		
+			jq(this.getInputNode()).addClass(this.getInplaceCSS());
+
+		var btn;
 		if(btn = this.$n("btn"))
 			this.domListen_(btn, "onZMouseDown", "_btnDown")
 				.domListen_(btn, "onZMouseUp", "_btnUp")

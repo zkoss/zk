@@ -100,9 +100,16 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	 * @return Tabpanel
 	 */
 	getLinkedPanel: function() {
-		var w;
-		return (w = this.getTabbox()) && (w = w.getTabpanels()) ?
+		var w,n;
+		w = (w = this.getTabbox()) && (w = w.getTabpanels()) ?
 			w.getChildAt(this.getIndex()): null;
+		// ZK-674: Tab lost if add tabpanel first in accordion mold
+		// the panel is not linked panel if it has linked with another tab
+		if (w && this.getTabbox().inAccordionMold()
+			&& (n = w.$n()) && n.firstChild != this.$n()
+			&& n.firstChild.className.indexOf(this.getZclass()) >= 0)
+				return null;
+		return w;
 	},
 	_doCloseClick : function(evt) {
 		if (!this._disabled) {
@@ -224,13 +231,29 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 					.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
 
+		
 		after.push(function () {tab.parent._fixHgh();});
 			//Bug 3022274: required so it is is called before, say, panel's slideDown
 			//_sel will invoke _fixWidth but it is too late since it uses afterMount
 		after.push(function () {
 			zk.afterMount(function () {
-    			if (tab.isSelected()) 
-    				tab._sel(false, true);
+    			if (tab.isSelected()) {
+    				var tabbox = tab.getTabbox();
+    				if (tabbox.inAccordionMold()) {
+    					if (tab.getLinkedPanel()) {
+    						var panels = tabbox.getTabpanels(),
+    							oldSel = panels._selPnl,
+    							slidedown = tabbox._selTab != tab;
+
+    						tab._sel(false, true);
+    						// restore old panel to trigger slide down while sync
+    						if (slidedown)
+    							panels._selPnl = oldSel
+    						panels._fixSel();
+    					}
+    				} else
+    					tab._sel(false, true);
+    			}
 			});
 		});
 	},

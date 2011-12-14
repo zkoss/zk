@@ -51,6 +51,12 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
+	toNumber: function () {
+		var v = parseFloat(this._value), p;
+		if (p = this._precision)
+			v /= Math.pow(10, p);
+		return v;
+	},
 	/** Returns a string for this big decimal (per the original form).
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
@@ -85,17 +91,6 @@ zk.BigDecimal = zk.$extends(zk.Object, {
  * @disable(zkgwt)
  */
 zk.Long = zk.$extends(zk.Object, {
-	_precision: 0,
-	$define: {
-		/** Returns the precision.
-		 * <p>Default: 0
-		 * @return int
-		 */
-		/** Sets the precision
-		 * @param int precision the precision
-		 */
-		precision: null
-	},
 	/** Constructor.
 	 * @param Object value a number or a string
 	 */
@@ -119,6 +114,9 @@ zk.Long = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
+	toNumber: function () {
+		return parseFloat(this._value)
+	},
 	/** Returns a string for this long integer
 	 * To have a Locale-dependent string, use {@link #$toLocaleString}
 	 * instead.
@@ -126,7 +124,7 @@ zk.Long = zk.$extends(zk.Object, {
 	 */
 	$toString: zkf = function() { //toString is reserved keyword for IE
 		if (this._value.length == 0) return ''; 
-		var j = this._value.length - this._precision;
+		var j = this._value.length;
 		return j <= 0 ? 0: this._value.substring(0, j);
 	},
 	/** Returns a Locale-dependent string for this long integer.

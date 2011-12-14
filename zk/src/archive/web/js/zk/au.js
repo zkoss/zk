@@ -1206,7 +1206,7 @@ zAu.cmd1 = /*prototype*/ {
 		if (nm == 'z$al') { //afterLoad
 			zk.afterLoad(function () {
 				for (nm in val)
-					wgt.set(nm, val[nm]()); //must be func
+					wgt.set(nm, val[nm](), true); //must be func
 			});
 		} else
 			wgt.set(nm, val, true); //3rd arg: fromServer

@@ -42,11 +42,19 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	 * @return Tab
 	 */
 	getLinkedTab: function() {
-		var tabbox =  this.getTabbox();
+		var tabbox =  this.getTabbox(),
+			tab;
 		if (!tabbox) return null;
 		
 		var tabs = tabbox.getTabs();
-		return tabs ? tabs.getChildAt(this.getIndex()) : null;
+		tab = tabs ? tabs.getChildAt(this.getIndex()) : null;
+		// the tab is not linked tab if it has linked with another panel
+		if (tab && tabbox.inAccordionMold() && tab.$n()
+			&& tab.$n().parentNode != this.$n()){
+			return null;
+		}
+		
+		return tab;
 	},
 	/** Returns the index of this panel, or -1 if it doesn't belong to any
 	 * tabpanels.

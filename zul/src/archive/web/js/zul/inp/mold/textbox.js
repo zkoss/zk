@@ -16,8 +16,10 @@ function (out) {
 	var zcls = this.getZclass(),
 		uuid = this.uuid,
 		isRounded = this.inRoundedMold();
+	// ZK-679: Textbox multi-line start with new-line failed in onCreate event
+	// browser will ignore first newline
 	if(this.isMultiline()) 
-		out.push('<textarea', this.domAttrs_(), '>', this._areaText(), '</textarea>');
+		out.push('<textarea', this.domAttrs_(), '>\n', this._areaText(), '</textarea>');
 	else if(!isRounded)
 		out.push('<input', this.domAttrs_(), '/>');
 	else {

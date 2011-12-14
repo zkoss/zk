@@ -772,6 +772,7 @@ implements Constrainted, Readonly, Disable {
 		super.renderProperties(renderer);
 
 		render(renderer, "_value", marshall(_value));
+			//ZK-658: we have to render the value before constraint
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", getName());

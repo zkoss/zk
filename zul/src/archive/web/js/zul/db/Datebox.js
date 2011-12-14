@@ -181,7 +181,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this._cst = new zul.inp.SimpleDateConstraint(cst, this);
 			else
 				this._cst = cst;
-			if (this._cst) delete this._lastRawValVld; //revalidate required
+			if (this._cst)
+				this._reVald = true; //revalidate required
 			if (this._pop) {
 				this._pop.setConstraint(this._constraint);
 				this._pop.rerender();
