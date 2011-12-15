@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.Component;
 public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	
+	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	
 	public InitPropertyBindingImpl(Binder binder, Component comp,

@@ -36,6 +36,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
 	private Set<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
+	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	
 	public LoadPropertyBindingImpl(Binder binder, Component comp,
