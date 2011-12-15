@@ -214,7 +214,7 @@ import org.zkoss.zk.au.out.*;
 		if (_recovering || _disabled || page == null || page instanceof VolatilePage
 		|| !_exec.isAsyncUpdate(page) || isCUDisabled(comp))
 			return; //nothing to do
-		if (_ending) throw new IllegalStateException("ended");
+		if (_ending) throw new IllegalStateException("UI can't be modified in the rendering phase");
 
 		checkDesktop(comp);
 
@@ -279,7 +279,7 @@ import org.zkoss.zk.au.out.*;
 		|| page instanceof VolatilePage || !_exec.isAsyncUpdate(page)
 		|| _invalidated.contains(comp) || isCUDisabled(comp))
 			return null; //nothing to do
-		if (_ending) throw new IllegalStateException("ended");
+		if (_ending) throw new IllegalStateException("UI can't be modified in the rendering phase");
 
 		checkDesktop(comp);
 
@@ -303,7 +303,7 @@ import org.zkoss.zk.au.out.*;
 		|| (oldpg == null && (newpg instanceof VolatilePage || !_exec.isAsyncUpdate(newpg))) //attach to loading pg
 		|| isCUDisabled(comp) || (oldparent != null && isCUDisabled(oldparent)))
 			return; //to avoid redundant AuRemove
-		if (_ending) throw new IllegalStateException("ended");
+		if (_ending) throw new IllegalStateException("UI can't be modified in the rendering phase");
 
 		snapshotUuid(comp);
 
@@ -531,6 +531,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public List<AuResponse> getResponses(Collection<Component> renderedComps)
 	throws IOException {
+		_ending = true; //no more modifying UI (invalidate/addSmartUpdate...)
+
 /*		if (log.finerable())
 			log.finer("ei: "+this+"\nInvalidated: "+_invalidated+"\nSmart Upd: "+_smartUpdated
 				+"\nAttached: "+_attached+"\nMoved:"+_moved+"\nResponses:"+_responses
@@ -614,8 +616,6 @@ import org.zkoss.zk.au.out.*;
 				renderedComps.add(comp);
 			responses.add(new AuOuter(comp, redraw(comp)));
 		}
-
-		_ending = true; //no more addSmartUpdate...
 
 		//6. add attached components (including setParent)
 		//Due to cyclic references, we have to process all siblings
