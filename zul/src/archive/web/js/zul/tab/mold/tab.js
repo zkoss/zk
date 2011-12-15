@@ -19,12 +19,17 @@ function (out) {
 		tbx = this.getTabbox(),
 		uuid = this.uuid;
 	if (tbx.inAccordionMold()) {//Accordion
-		var panel,
-			n;
+		var panel = this.getLinkedPanel(),
+			n = panel? panel.$n() : null,
+			c = n? n.firstChild : null;
 		// Bug ZK-419
-		if (!(panel = this.getLinkedPanel())) // no linked panel
+		// no linked panel
+		// Bug ZK-674
+		// the first dom child of linked panel
+		// should be its cave node or self dom node
+		if (!panel
+				|| c && c != panel.$n('cave') && c != this.$n()) 
 			return;
-		n = panel.$n();
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
 

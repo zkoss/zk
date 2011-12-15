@@ -136,14 +136,12 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers("onChildAdded_", arguments);
-		// sync too early will cause wrong result,
-		// handle by tab in accordion mold
-		if (!this.getTabbox().inAccordionMold())
+		// sync select status if tabbox not in accordion mold or
+		// the child cave is already visible
+		var cave;
+		if (!this.getTabbox().inAccordionMold()
+				|| (cave = child.$n('cave')) && cave.style.display != 'none')
 			_syncSelectedPanels(this);
-	},
-	// called by Tab#bind_ in accordion mold
-	_fixSel: function () {
-		_syncSelectedPanels(this);
 	}
 });
 })();
