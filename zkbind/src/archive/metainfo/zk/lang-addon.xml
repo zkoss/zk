@@ -605,6 +605,41 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>rows</component-name>
 		<extends>rows</extends>
 	</component-->
+	<component>
+		<component-name>selectbox</component-name>
+		<extends>selectbox</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<attribute>
+				<attribute-name>$R$</attribute-name>
+				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindSelectboxRenderer</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>$C$</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.SelectboxModelConverter</attribute-value>
+			</attribute>
+		</annotation>		
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>selectedIndex</property-name>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$LE$</attribute-name>
+				<attribute-value>onAfterRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
 	<!--component>
 		<component-name>separator</component-name>
 		<extends>separator</extends>
