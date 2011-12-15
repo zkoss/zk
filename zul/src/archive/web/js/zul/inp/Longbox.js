@@ -38,7 +38,8 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
-		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
+		if (info.divscale)
+			val.scale(-info.divscale);
 		if (this._isOutRange(val.$toString()))
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−9223372036854775808 - 9223372036854775807)')};
 		return val;

@@ -114,6 +114,22 @@ zk.Long = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
+	/** Scales the number as value * 10 ^ digits.
+	 * @param int digits the number of digits to scale.
+	 * If zero, nothing changed.
+	 * @since 5.0.10.
+	 */
+	scale: function (digits) {
+		var val = this._value||'',
+			n = val.length;
+		if (n)
+			if (digits > 0) {
+				if (n > 1 || val.charAt(0) != '0')
+					while (digits-- > 0) //in case if digits is not an integer
+						val += '0';
+			} else if (digits < 0)
+				this._value = (n += digits) <= 0 ? '0': val.substring(0, n);
+	},
 	$toNumber: function () {
 		return parseFloat(this._value)
 	},
@@ -123,9 +139,7 @@ zk.Long = zk.$extends(zk.Object, {
 	 * @return String
 	 */
 	$toString: zkf = function() { //toString is reserved keyword for IE
-		if (this._value.length == 0) return ''; 
-		var j = this._value.length;
-		return j <= 0 ? 0: this._value.substring(0, j);
+		return this._value;
 	},
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
