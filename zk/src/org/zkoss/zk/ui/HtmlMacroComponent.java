@@ -86,7 +86,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public HtmlMacroComponent() {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 		init();
-		_resolvers = Selectors.newVariableResolvers(getClass());
+		_resolvers = Selectors.newVariableResolvers(getClass(), HtmlMacroComponent.class);
 		if (getAutowireFlag() == 0)
 			Selectors.wireVariables(this, this, _resolvers);
 	}

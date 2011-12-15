@@ -208,10 +208,16 @@ public class Selectors {
 	/** Creates a list of instances of {@link VariableResolver} based
 	 * on the annotation of the given class.
 	 * If none of annotataion is found, an empty list is returned.
+	 *
+	 * @param cls the class to look for the annotation.
+	 * @param untilClass the class to stop the searching.
+	 * By default, it will look for the annotation of the super class if not found.
+	 * Ignored if null.
 	 */
-	public static List<VariableResolver> newVariableResolvers(Class<?> cls) {
+	public static
+	List<VariableResolver> newVariableResolvers(Class<?> cls, Class<?> untilClass) {
 		final List<VariableResolver> resolvers = new ArrayList<VariableResolver>();
-		while (cls != SelectorComposer.class) {
+		while (cls != null && cls != untilClass) {
 			final org.zkoss.zk.ui.select.annotation.VariableResolver anno = 
 				cls.getAnnotation(org.zkoss.zk.ui.select.annotation.VariableResolver.class);
 			if (anno != null)

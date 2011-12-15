@@ -66,7 +66,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	protected final List<VariableResolver> _resolvers;
 	
 	public SelectorComposer() {
-		_resolvers = Selectors.newVariableResolvers(getClass());
+		_resolvers = Selectors.newVariableResolvers(getClass(), SelectorComposer.class);
 	}
 	
 	@Override
