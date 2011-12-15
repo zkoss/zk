@@ -74,7 +74,6 @@ ZK 6.0.0
   ZK-549: Height issue of groupbox 3d mold
   ZK-562: Groupbox vflex=min is wrong (reopen B50-3005284.zul)
   ZK-622: jq("@radio input").attr("checked") will return "checked" if not checked
-  ZK-686: javascript exception if I created/detach a component in Selectbox renderer
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
