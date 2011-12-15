@@ -42,19 +42,11 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	 * @return Tab
 	 */
 	getLinkedTab: function() {
-		var tabbox =  this.getTabbox(),
-			tab;
+		var tabbox =  this.getTabbox();
 		if (!tabbox) return null;
 		
 		var tabs = tabbox.getTabs();
-		tab = tabs ? tabs.getChildAt(this.getIndex()) : null;
-		// the tab is not linked tab if it has linked with another panel
-		if (tab && tabbox.inAccordionMold() && tab.$n()
-			&& tab.$n().parentNode != this.$n()){
-			return null;
-		}
-		
-		return tab;
+		return tabs ? tabs.getChildAt(this.getIndex()) : null;
 	},
 	/** Returns the index of this panel, or -1 if it doesn't belong to any
 	 * tabpanels.
@@ -176,8 +168,16 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
 		if (this.getTabbox().inAccordionMold()
-		&& (tab=this.getLinkedTab()) && !tab.$n())
-			tab.unbind().bind(desktop);
+		&& (tab=this.getLinkedTab()))
+			if (!tab.$n())
+				tab.unbind().bind(desktop);
+			else if (!jq.isAncestor(this.$n(), tab.$n())) {
+				// not display if got wrong tab,
+				// it will fixed by Tabpanels#onChildAdded_ if tab add first
+				// or by afterMount in tab#bind_ if panel add first
+				var cave = this.$n('cave');
+				if (cave) cave.style.display = 'none';
+			}
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});

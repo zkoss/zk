@@ -175,8 +175,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		var f = this._flags,
 			msg = this._errmsg;
 
-		if (val && val.toNumber)
-			val = val.toNumber();
+		if (val && val.$toNumber)
+			val = val.$toNumber();
 
 		switch (typeof val) {
 		case 'string':

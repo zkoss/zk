@@ -22,7 +22,8 @@ function (out) {
 		var tab = this.getLinkedTab();
 		
 		out.push('<div class="', zcls, '-outer" id="', uuid, '">');
-		if (tab)
+		// only draw tab if it is not rendered
+		if (tab && !tab.$n())
 			tab.redraw(out);
 		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1}), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
