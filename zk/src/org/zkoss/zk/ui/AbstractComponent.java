@@ -734,7 +734,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
 	private int modCntChd() {
-		return _chdinf != null ? _chdinf.modCntChd: 0;
+		return _chdinf != null ? _chdinf.modCntChd: -1;
 	}
 
 	public String setWidgetListener(String evtnm, String script) {
@@ -1354,8 +1354,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				//refer to insertBefore for more info.
 		}
 
-		++_chdinf.modCntChd;
-		--_chdinf.nChild;
+		if (_chdinf.nullifiable()) {
+			_chdinf = null;
+		} else {
+			++_chdinf.modCntChd;
+			--_chdinf.nChild;
+		}
 		onChildRemoved(child);
 		return true;
 	}
@@ -3457,6 +3461,9 @@ w:use="foo.MyWindow"&gt;
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
 			}
+		}
+		private boolean nullifiable() {
+			return first == null && _aring == null && vispace == null;
 		}
 		private ChildInfo clone(AbstractComponent owner) {
 			final ChildInfo clone = (ChildInfo)clone();
