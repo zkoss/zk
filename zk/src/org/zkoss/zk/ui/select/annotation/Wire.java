@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 import org.zkoss.zk.ui.select.SelectorComposer;
 
 /**
- * Annotation for specifying components to wire 
+ * Annotation for specifying components to wire.
  * {@link SelectorComposer}.
  * @since 6.0.0
  * @author simonpai
@@ -34,8 +34,8 @@ public @interface Wire {
 	boolean optional() default false;
 	
 	/**
-	 * If true, the variable will be rewired when the composer is deserialized 
-	 * in cluster environment. Session and Webapp variables are always rewired.
+	 * If true, the component will be rewired when the composer is deserialized 
+	 * in cluster environment.
 	 */
 	boolean rewireOnActivate() default false;
 	

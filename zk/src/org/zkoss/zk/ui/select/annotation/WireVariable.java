@@ -24,7 +24,8 @@ import java.lang.annotation.Target;
 import org.zkoss.zk.ui.select.SelectorComposer;
 
 /**
- * Annotation for specifying variables to wire 
+ * Annotation for specifying variables to wire, from XEL, implicit objects, or
+ * custom variable resolvers.
  * {@link SelectorComposer}.
  * @since 6.0.0
  * @author simonpai
@@ -34,16 +35,15 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 public @interface WireVariable {
 	
 	/**
-	 * The selector string that specifies the Components to wire. If empty, 
-	 * {@link SelectorComposer} will attempt to wire from implicit objects,
-	 * XEL variables.
+	 * The name of variable to wire. If empty, it will use field name or method
+	 * name (without "set" prefix).
 	 */
 	String value() default "";
 	
 	/**
-	 * If set to true, no Exception is throw when component/object is not found
+	 * If set to true, no Exception is throw when the variable is not found
 	 * for wiring. By default, when {@link SelectorComposer} fails to wire an 
-	 * object to a field, an UiException will be thrown. 
+	 * object to a field/method, an UiException will be thrown. 
 	 */
 	boolean optional() default false;
 	
