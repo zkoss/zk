@@ -1340,7 +1340,13 @@ zAu.cmd1 = /*prototype*/ {
 		var args = [];
 		for (var j = arguments.length; --j > 1;) //exclude wgt and func
 			args.unshift(arguments[j]);
-		wgt[func].apply(wgt, args);
+		if (wgt)
+			wgt[func].apply(wgt, args);
+		else {
+			var fn = zk.$import(func);
+			if (!fn) zk.error("not found: "+func);
+			fn.apply(null, args);
+		}
 	},
 	/** Ask the client to echo back an AU request with the specified
 	 * evant name and the target widget.

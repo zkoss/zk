@@ -63,6 +63,7 @@ ZK 6.0.0
   ZK-649: Rename i3-label.properties to zk-label.properties
   ZK-665: The default autowiring of HtmlMacroComponent and XmlMacroComponent shall be the same as SelectorComposer
   ZK-666: A way to specify both annotation and value for a property
+  ZK-688: AuInvoke supports the invocation of a global function at the client
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

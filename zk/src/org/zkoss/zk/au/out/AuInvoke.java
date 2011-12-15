@@ -20,10 +20,14 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
 
 /**
- * A response to ask the client to execute the specified client function.
- * Unlike {@link AuScript}, it invokes the function called zkType.function,
- * where Type is the component's type (at the client) and function
- * is the function name specified in {@link AuInvoke}.
+ * A response to ask the client to invoke a function.
+ * Unlike {@link AuScript}, it invokes the given function (rather than
+ * evaluates a JavaScript snippet).
+ * <p>There are basically two approaches.
+ * First, {@link AuInvoke(Component, String, Object...)} is used to invoke
+ * the method of the peer widget of the given component.
+ * Second, {@link AuInvoke#AuInvoke(String, Object...)} is used to invoke
+ * a global function (at the client).
  *
  * <p>data[0]: the component UUID<br/>
  * data[1]: the client function name (i.e., JavaScript function)<br/>
@@ -146,19 +150,20 @@ public class AuInvoke extends AuResponse {
 			arg1, arg2, arg3});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
-	 * an array of arguments.
+	 * an array of the given arguments.
 	 *
 	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * {@link org.zkoss.zk.ui.util.DeferredValue}, {@link Component},
+	 * {@link org.zkoss.json.JavaScriptValue},
 	 * and any kind of objects that
-	 * the client accepts (marshaled by JSON since 5.0.0).
+	 * the client accepts (notice that they are marshaled by JSON).
 	 * @since 3.6.1
 	 */
-	public AuInvoke(Component comp, String function, Object[] args) {
-		super("invoke", comp, toData(comp, function, args));
+	public AuInvoke(Component comp, String function, Object... args) {
+		super("invoke", comp, toData(comp.getUuid(), function, args));
 	}
 	/** Construct AuInvoke to call a client function with variable number of
 	 * arguments.
@@ -173,13 +178,26 @@ public class AuInvoke extends AuResponse {
 	 * @param function the function name
 	 * @since 3.6.0
 	 */
-	public AuInvoke(Component comp, String function, String[] args) {
-		super("invoke", comp, toData(comp, function, args));
+	public AuInvoke(Component comp, String function, String... args) {
+		super("invoke", comp, toData(comp.getUuid(), function, args));
+	}
+	/** Constuct AuInvoke to call a global function at the client with
+	 * the given arguments.
+	 * @param function the function name
+	 * @param args the additional arguments. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue}, {@link Component},
+	 * {@link org.zkoss.json.JavaScriptValue},
+	 * and any kind of objects that
+	 * the client accepts (notice that they are marshaled by JSON).
+	 * @since 6.0.0
+	 */
+	public AuInvoke(String function, Object... args) {
+		super("invoke", (Component)null, toData(null, function, args));
 	}
 	private static final
-	Object[] toData(Component comp, String function, Object[] args) {
+	Object[] toData(String uuid, String function, Object[] args) {
 		final Object[] data = new Object[2 + (args != null ? args.length: 0)];
-		data[0] = comp.getUuid();
+		data[0] = uuid;
 		data[1] = function;
 		for (int j = 2; j < data.length; ++j)
 			data[j] = args[j - 2];
