@@ -65,6 +65,8 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -246,16 +248,11 @@ public class BinderImpl implements Binder,BinderCtrl {
 		final Class<?> clz = viewModel.getClass();
 		List<Method> inits = getInitMethods(clz);
 		if(inits.size()==0) return;//no init method
-		
-		for(Method m : inits){			
+		for(Method m : inits){
+			final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
 			try {
-				Class<?> [] parms = m.getParameterTypes();
-				if(parms.length==0){				
-					m.invoke(viewModel);
-				}else if(parms.length==1 && parms[0].isAssignableFrom(BindContext.class)){
-					final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
-					m.invoke(viewModel, ctx);
-				}
+				ParamCall parCall = createParamCall(ctx);
+				parCall.call(viewModel, m);
 			} catch (Exception e) {
 				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
 					_initMethodCache.remove(clz);
@@ -277,15 +274,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			for(Method m : clz.getMethods()){
 				final Init init = m.getAnnotation(Init.class);
 				if(init==null) continue;			
-				
-				Class<?> [] parms = m.getParameterTypes();
-				if(parms.length==0){				
-					inits.add(m);
-				}else if(parms.length==1 && parms[0].isAssignableFrom(BindContext.class)){
-					inits.add(m);
-				}else{
-					throw new UiException("unsupported method with @Init:"+m);
-				}
+				inits.add(m);
 			}
 			inits = Collections.unmodifiableList(inits);
 			_initMethodCache.put(clz, inits);
@@ -1202,6 +1191,23 @@ public class BinderImpl implements Binder,BinderCtrl {
 		}
 	}
 	
+	private ParamCall createParamCall(BindContext ctx){
+		final ParamCall call = new ParamCall();
+		call.setBinder(this);
+		call.setBindContext(ctx);
+		final Component comp = ctx.getComponent();
+		if(comp!=null){
+			call.setComponent(comp);
+		}
+		final Execution exec = Executions.getCurrent();
+		if(exec!=null){
+			call.setExecution(exec);
+		}
+		
+		return call;
+	}
+	
+	
 	private void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx, Set<Property> notifys) {
 		try {
 			if(_log.debugable()){
@@ -1213,10 +1219,14 @@ public class BinderImpl implements Binder,BinderCtrl {
 			
 			Method method = getCommandMethod(viewModel.getClass(), command);
 			if (method != null) {
-				Implicit[] implicits = new Implicit[] {
-						new Implicit(BindContext.class, ctx),
-						new Implicit(Binder.class, this) };
-				invokeDynamicArgsMethod(viewModel, method, commandArgs, implicits);
+				
+				ParamCall parCall = createParamCall(ctx);
+				if(commandArgs != null){
+					parCall.setBindingArgs(commandArgs);
+				}
+				
+				parCall.call(viewModel, method);
+				
 				notifys.addAll(BindELContext.getNotifys(method, viewModel,
 						(String) null, (Object) null)); // collect notifyChange
 			}else{
@@ -1227,51 +1237,6 @@ public class BinderImpl implements Binder,BinderCtrl {
 			}
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
-		}
-	}
-	
-	private void invokeDynamicArgsMethod(Object base, Method method, Map<String, Object> args, Implicit[] implicits) {
-		Class<?>[] paramTypes = method.getParameterTypes();
-		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
-		Object[] params = new Object[paramTypes.length];
-		for (int i = 0; i < paramTypes.length; i++) {
-			Param argAnno = null;
-			Default defAnno = null;
-			for (java.lang.annotation.Annotation anno : parmAnnos[i]) {
-				if (anno.annotationType().equals(Param.class)) {
-					argAnno = (Param) anno;
-				} else if (anno.annotationType().equals(Default.class)) {
-					defAnno = (Default) anno;
-				}
-			}
-
-			Class<?> paramType = paramTypes[i];
-			Object argVal = null;
-			if (argAnno != null) {
-				final String name = argAnno.value();
-				argVal = args==null ? null : args.get(name);
-				if (argVal == null && defAnno != null) {
-					argVal = defAnno.value();
-				}
-				//don't coerce null, we should respect it since there is a default value annotation
-				argVal = argVal==null ? null:Classes.coerce(paramType, argVal);
-			} else if(defAnno != null){
-				argVal = Classes.coerce(paramType, defAnno.value());
-			} else if (implicits != null && implicits.length > 0) {
-				for (Implicit implicit : implicits) {
-					if (paramType.isAssignableFrom(implicit.clz)) {
-						argVal = implicit.value;
-						break;
-					}
-				}
-			}
-			params[i] = argVal;
-		}
-
-		try {
-			method.invoke(base, params);
-		} catch (Exception e) {
-			throw UiException.Aide.wrap(e);
 		}
 	}
 
@@ -1622,16 +1587,6 @@ public class BinderImpl implements Binder,BinderCtrl {
 	private static class Box<T> {
 		final T value;
 		public Box(T value){
-			this.value = value;
-		}
-	}
-	
-	//utility to hold implicit class and runtime value
-	private static class Implicit{
-		final Class<?> clz;
-		final Object value;
-		public Implicit(Class<?> clz,Object value){
-			this.clz = clz;
 			this.value = value;
 		}
 	}

@@ -1,3 +1,14 @@
+/* ContextParam.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2011/12/15 Created by Dennis Chen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+*/
 package org.zkoss.bind.annotation;
 
 import java.lang.annotation.ElementType;
@@ -7,7 +18,7 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation to identify the name of a parameter of a method.
- * the value of this parameter is getting from binding argument
+ * the value of this parameter is getting from the special context
  * 
  * @see Command
  * @see Default
@@ -16,10 +27,10 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Param {
+public @interface ContextParam {
 	/**
-	 * name of the parameter
-	 * @return name of the parameter
+	 * the {@link ContextType}
+	 * @return type of the context
 	 */
-	String value();
+	ContextType value();
 }
