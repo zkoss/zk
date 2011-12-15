@@ -204,9 +204,29 @@ public class Selectors {
 			}
 		});
 	}
-	
-	
-	
+
+	/** Creates a list of instances of {@link VariableResolver} based
+	 * on the annotation of the given class.
+	 * If none of annotataion is found, an empty list is returned.
+	 */
+	public static List<VariableResolver> newVariableResolvers(Class<?> cls) {
+		final List<VariableResolver> resolvers = new ArrayList<VariableResolver>();
+		while (cls != SelectorComposer.class) {
+			final org.zkoss.zk.ui.select.annotation.VariableResolver anno = 
+				cls.getAnnotation(org.zkoss.zk.ui.select.annotation.VariableResolver.class);
+			if (anno != null)
+				for (Class<? extends VariableResolver> rc : anno.value()) {
+					try {
+						resolvers.add(rc.getConstructor().newInstance());
+					} catch (Exception e) {
+						throw UiException.Aide.wrap(e);
+					}
+				}
+			cls = cls.getSuperclass();
+		}
+		return resolvers;
+	}
+
 	// helper //
 	private static String[][] splitListenAnnotationValues(String str) {
 		List<String[]> result = new ArrayList<String[]>();

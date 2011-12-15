@@ -258,8 +258,8 @@ public class Selectbox extends HtmlBasedComponent {
 				throw UiException.Aide.wrap(e);
 			} finally {
 				//clear possible children created in renderer
-				getChildren().clear();
 				_childable = old;
+				getChildren().clear();
 			}
 		}
 		invalidate();

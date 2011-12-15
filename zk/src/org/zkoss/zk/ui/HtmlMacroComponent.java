@@ -17,11 +17,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.Map;
+import java.util.List;
 import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
+import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.select.Selectors;
@@ -76,10 +78,15 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	 */
 	private Component[] _inlines;
 	private String _tag = "span";
+	/** A list of resolvers (never null). A variable resolver is added automatically if
+	 * {@link org.zkoss.zk.ui.select.annotation.VariableResolver} was annotated.
+	 */
+	protected final List<VariableResolver> _resolvers;
 
 	public HtmlMacroComponent() {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 		init();
+		_resolvers = Selectors.newVariableResolvers(getClass());
 	}
 	private void init() {
 		_props = new LinkedHashMap<String, Object>();
@@ -161,8 +168,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 		switch (getAutowireFlag()) {
 		case 1: //by selector
+			Selectors.wireVariables(this, this, _resolvers);
 			Selectors.wireComponents(this, this, false);
-			Selectors.wireVariables(this, this, null);
 			Selectors.wireEventListeners(this, this); 
 			break;
 		case 2: //by convention

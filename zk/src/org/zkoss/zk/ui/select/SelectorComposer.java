@@ -5,7 +5,6 @@ package org.zkoss.zk.ui.select;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.lang.Classes;
@@ -58,41 +57,32 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
-	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
-	private static final String 
-		ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
+	private static final String ON_WIRE_CLONE = "onWireCloneSelectorComposer";
 	
 	private Component _self;
-	protected final List<VariableResolver> resolvers = new ArrayList<VariableResolver>();
+	/** A list of resolvers (never null). A variable resolver is added automatically if
+	 * {@link org.zkoss.zk.ui.select.annotation.VariableResolver} was annotated.
+	 */
+	protected final List<VariableResolver> _resolvers;
 	
 	public SelectorComposer() {
-		resolvers.clear();
-		Class<?> cls = this.getClass();
-		while (cls != SelectorComposer.class) {
-			org.zkoss.zk.ui.select.annotation.VariableResolver anno = 
-				cls.getAnnotation(org.zkoss.zk.ui.select.annotation.VariableResolver.class);
-			if (anno != null)
-				for (Class<? extends VariableResolver> rc : anno.value()) {
-					try {
-						resolvers.add(rc.getConstructor().newInstance());
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				}
-			cls = cls.getSuperclass();
-		}
+		_resolvers = Selectors.newVariableResolvers(getClass());
 	}
 	
 	@Override
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
-		Selectors.wireVariables(page, this, resolvers);
+		Selectors.wireVariables(page, this, _resolvers);
 		return compInfo;
 	}
-	
+	@Override
+	public void doBeforeComposeChildren(Component comp) throws Exception {
+		_self = comp;
+		ConventionWires.wireController(comp, this);
+	}
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
-		_self = comp;
+		_self = comp; //just in case
 		Selectors.wireComponents(comp, this, false);
 		Selectors.wireEventListeners(comp, this);
 		
@@ -136,7 +126,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 					Classes.forNameByThread("org.zkoss.zul.Messagebox");
 				_alert = mboxcls.getMethod("show", new Class[] {String.class});
 			}
-			_alert.invoke(null, new Object[] {m});
+			_alert.invoke(null, m);
 		} catch (InvocationTargetException e) {
 			throw UiException.Aide.wrap(e);
 		} catch (Exception e) {
@@ -152,31 +142,22 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 * @since 3.5.2
 	 */
 	public Object willClone(Component comp) {
-		// brought from GenericAutowireComposer
 		try {
-			final Execution exec = Executions.getCurrent();
-			final int idcode = System.identityHashCode(comp);
-			Composer<?> composerClone = 
-				(Composer<?>) exec.getAttribute(COMPOSER_CLONE + idcode);
-			if (composerClone == null) {
-				composerClone = (Composer<?>) Classes.newInstance(getClass(), null);
-				exec.setAttribute(COMPOSER_CLONE + idcode, composerClone);
+			Composer<?> composerClone = getClass().newInstance();
 				
-				//cannot call doAfterCompose directly because the clone 
-				//component might not be attach to Page yet
-				comp.addEventListener(ON_CLONE_DO_AFTER_COMPOSE, 
-						new CloneDoAfterCompose());
-				Events.postEvent(new Event(ON_CLONE_DO_AFTER_COMPOSE, comp, 
-						composerClone));
-			}
+			//cannot wire directly because the clone 
+			//component might not be attach to Page yet
+			comp.addEventListener(ON_WIRE_CLONE, new CloneDoAfterCompose());
+			Events.postEvent(new Event(ON_WIRE_CLONE, comp, composerClone));
 			return composerClone;
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
 	
-	//doAfterCompose, called once after clone
-	private static class CloneDoAfterCompose implements EventListener<Event> {
+	//wire, called once after clone
+	private static class CloneDoAfterCompose
+	implements EventListener<Event>, java.io.Serializable {
 		// brought from GenericAutowireComposer
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
@@ -184,15 +165,11 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			final SelectorComposer<Component> composerClone = 
 				(SelectorComposer<Component>) event.getData(); 
 			ConventionWires.wireController(clone, composerClone);
-			composerClone.doAfterCompose(clone);
-			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
+			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
+			Selectors.wireComponents(clone, this, false);
+			Selectors.wireEventListeners(clone, this);
+			clone.removeEventListener(ON_WIRE_CLONE, this);
 		}
-	}
-	
-	@Override
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-		// no super
-		ConventionWires.wireController(comp, this);
 	}
 	
 	@Override
@@ -200,7 +177,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		// rewire Session, Webapp and some other variable back, depending on
 		// annotation
 		Selectors.rewireComponentsOnActivate(comp, this);
-		Selectors.rewireVariablesOnActivate(comp, this, resolvers);
+		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 	}
 	
 	@Override
