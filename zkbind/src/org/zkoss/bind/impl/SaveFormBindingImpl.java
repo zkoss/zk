@@ -89,7 +89,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	public void save(BindContext ctx) {
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 
 		//update form field into backing bean
@@ -111,7 +111,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		//since other validator may want to know the value of porperty of this binding, so just provide it 
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 			
 		final ExpressionX expr = getBaseExpression(eval);
@@ -129,7 +129,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		//since other validator may want to know the value of porperty of this binding, so just provide it 
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 	
 		//remember base and form field
@@ -182,7 +182,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	private ValueReference getValueReference(BindContext ctx){
 		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
 		if (ref == null) {
-			final Component comp = ctx.getComponent();
+			final Component comp = getComponent();//ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
 			ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
 			setAttribute(ctx, $VALUEREF$, ref);

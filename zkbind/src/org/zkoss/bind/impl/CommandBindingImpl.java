@@ -51,7 +51,7 @@ public class CommandBindingImpl extends BindingImpl implements CommandBinding {
 	//TODO, DENNIS, Nobody call this
 	public void execute(BindContext ctx) {
 		final Object base = getBinder().getViewModel();
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		final String methodName = (String) eval.getValue(ctx, comp, getCommand());
 		try {

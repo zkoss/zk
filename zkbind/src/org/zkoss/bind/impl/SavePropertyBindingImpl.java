@@ -88,7 +88,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private static final String $VALUEREF$ = "$VALUEREF$";
 	private Object getComponentValue(BindContext ctx) {
 		if (!containsAttribute(ctx, $COMPVALUE$)) {
-			final Component comp = ctx.getComponent();
+			final Component comp = getComponent();//ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
 			
 			//get data from component attribute
@@ -113,7 +113,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		Object value = getComponentValue(ctx);
 		
 		//set data into bean property
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		eval.setValue(ctx, comp, _accessInfo.getProperty(), value);
 	}
@@ -122,7 +122,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private ValueReference getValueReference(BindContext ctx){
 		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
 		if (ref == null) {
-			final Component comp = ctx.getComponent();
+			final Component comp = getComponent();//ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
 			ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
 			setAttribute(ctx, $VALUEREF$, ref);

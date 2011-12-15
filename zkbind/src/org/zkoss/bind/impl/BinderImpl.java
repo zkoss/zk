@@ -968,7 +968,7 @@ public class BinderImpl implements Binder,BinderCtrl {
 			
 			//BUG 619, event may come from children of some component, 
 			//ex tabbox.onSelect is form tab, so we cannot depend on event's target
-			final Component comp = _target;
+			final Component comp = _target;//_target is always equals _commandBinding.getComponent();
 			final String evtnm = event.getName();
 			final Set<Property> notifys = new LinkedHashSet<Property>();
 			int result = SUCCESS; //command execution result, default to success

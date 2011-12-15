@@ -46,7 +46,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	public void load(BindContext ctx) {
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 		if(form instanceof FormExt){
 			for (String field : ((FormExt)form).getLoadFieldNames()) {

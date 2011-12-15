@@ -48,7 +48,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 	}
 	
 	public void load(BindContext ctx) {
-		final Component comp = ctx.getComponent();
+		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		
 		//get data from property
