@@ -245,6 +245,7 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		if (_model != null) {
