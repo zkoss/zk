@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -31,15 +32,14 @@ import org.zkoss.zul.Label;
  */
 public class BindSelectboxRenderer implements ItemRenderer<Object> {
 	@Override
-	public String render(final Component owner, final Object data) throws Exception {
+	public String render(final Component owner, final Object data, final int index) throws Exception {
 		final Template tm = owner.getTemplate("model");
 		if (tm == null) {
 			return Objects.toString(data);
 		} else {
 			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
 			final String varnm = (String) owner.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			//TODO how to support this if there is no index directly, does look the model a stupid way?
-//			final String itervarnm = (String) owner.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String itervarnm = (String) owner.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
 			
 			final Component[] items = tm.create(owner, null,
 				new VariableResolverX() {
@@ -51,9 +51,14 @@ public class BindSelectboxRenderer implements ItemRenderer<Object> {
 						if (base == null) {
 							if(varnm.equals(name)){
 								return data;
-							}/*else if(itervarnm.equals(name)){//iteration status
-								throw new UiException(itervarnm +" is not supported in selectbox binding");
-							}*/
+							} else if(itervarnm.equals(name)){//iteration status
+								return new IterationStatus(){
+									@Override
+									public int getIndex() {
+										return Integer.valueOf(index);
+									}
+								};
+							}
 						}
 						return null;
 					}
@@ -66,14 +71,20 @@ public class BindSelectboxRenderer implements ItemRenderer<Object> {
 				throw new UiException(
 						"The model template can only support Label component, not "
 								+ items[0]);
-			final Label l = ((Label) items[0]);
-			l.setAttribute(varnm, data);
+			final Label lbl = ((Label) items[0]);
+			lbl.setAttribute(varnm, data);
+			
+			lbl.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(index);
+				}
+			});
 			
 			//to force init and load
-			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, l));
-			final String val = l.getValue();
-			l.detach();
-			return val;
+			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, lbl));
+			lbl.detach();
+			return lbl.getValue();
 		}
 	}
 }

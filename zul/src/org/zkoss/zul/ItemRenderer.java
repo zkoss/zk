@@ -32,8 +32,9 @@ public interface ItemRenderer<T> {
 	 *
 	 * @param owner the comopnent that this renderer belongs to (never null).
 	 * @param data that is returned from {@link ListModel#getElementAt}
+	 * @param index the data index that is currently being rendered 
 	 * @return the HTML fragment representing the data. It depends
 	 * on the component this renderer belongs to.
 	 */
-	public String render(Component owner, T data) throws Exception;
+	public String render(Component owner, T data, int index) throws Exception;
 }

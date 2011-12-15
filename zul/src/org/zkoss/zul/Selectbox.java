@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -253,7 +254,7 @@ public class Selectbox extends HtmlBasedComponent {
 				_childable = true;
 				final ItemRenderer renderer = getRealRenderer();
 				for (int i = 0; i < _model.getSize(); i++)
-					_tmpdatas[i] = renderer.render(this, _model.getElementAt(i));
+					_tmpdatas[i] = renderer.render(this, _model.getElementAt(i), i);
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			} finally {
@@ -288,7 +289,7 @@ public class Selectbox extends HtmlBasedComponent {
 	}
 
 	private static final ItemRenderer<Object> _defRend = new ItemRenderer<Object>() {
-		public String render(Component owner, final Object data) {
+		public String render(final Component owner, final Object data, final int index) {
 			final Selectbox self = (Selectbox) owner;
 			final Template tm = self.getTemplate("model");
 			if (tm == null)
@@ -297,7 +298,34 @@ public class Selectbox extends HtmlBasedComponent {
 				final Component[] items = tm.create(owner, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
-								return "each".equals(name) ? data : null;
+								if ("each".equals(name)) {
+									return data;
+								} else if ("forEachStatus".equals(name)) {
+									return new ForEachStatus() {
+										@Override
+										public ForEachStatus getPrevious() {
+											return null;
+										}
+										@Override
+										public Object getEach() {
+											return data;
+										}
+										@Override
+										public int getIndex() {
+											return index;
+										}
+										@Override
+										public Integer getBegin() {
+											return 0;
+										}
+										@Override
+										public Integer getEnd() {
+											return ((Selectbox)owner).getModel().getSize();
+										}
+									};
+								} else {
+									return null;
+								}
 							}
 						}, null);
 				if (items.length != 1)
