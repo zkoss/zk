@@ -19,8 +19,9 @@ package org.zkoss.zul;
 import java.io.Writer;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.json.JavaScriptValue;
+
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zul.impl.XulElement;
 
 /**

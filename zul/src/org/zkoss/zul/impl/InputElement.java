@@ -22,6 +22,7 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
+import org.zkoss.json.JavaScriptValue;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
@@ -29,7 +30,6 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.ext.Readonly;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.au.out.AuWrongValue;

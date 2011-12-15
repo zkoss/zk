@@ -164,6 +164,7 @@ ZK 6.0.0
   + If the attribute called composerName is specified, the default name
     won't be wired (for better performance).
   + AbstractComponent.smartUpdate(String, Date) is removed
+  + org.zkoss.zk.ui.sys.JavaScriptValue is moved to org.zkoss.json.JavaScriptValue
 
 	--------
 ZK 5.0.10

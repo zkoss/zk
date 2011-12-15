@@ -35,6 +35,7 @@ import org.zkoss.util.Pair;
 import org.zkoss.util.MultiCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
+import org.zkoss.json.JavaScriptValue;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -52,7 +53,6 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.au.AuRequest;

@@ -30,6 +30,7 @@ import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
+import org.zkoss.json.JavaScriptValue;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
@@ -45,7 +46,6 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.ext.DynamicPropertied;

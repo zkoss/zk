@@ -43,6 +43,7 @@ import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
+import org.zkoss.json.JavaScriptValue;
 
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
@@ -70,7 +71,6 @@ import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.Attributes;

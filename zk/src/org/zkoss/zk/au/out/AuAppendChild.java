@@ -21,9 +21,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 
+import org.zkoss.json.JavaScriptValue;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.JavaScriptValue;
 import org.zkoss.zk.au.AuResponse;
 
 /**
