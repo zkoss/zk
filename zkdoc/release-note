@@ -54,6 +54,7 @@ ZK 5.0.10
   ZK-674: Tab lost if add tabpanel first in accordion mold
   ZK-679: Textbox multi-line start with new-line failed in onCreate event
   ZK-683: constraint messag not showup after lost focus
+  ZK-685: Listbox with checkmark and droppable enabled, scrolls to top when first time checked 
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors
