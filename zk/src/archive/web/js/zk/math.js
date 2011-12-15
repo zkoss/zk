@@ -51,7 +51,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
-	toNumber: function () {
+	$toNumber: function () {
 		var v = parseFloat(this._value), p;
 		if (p = this._precision)
 			v /= Math.pow(10, p);
@@ -114,7 +114,7 @@ zk.Long = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
-	toNumber: function () {
+	$toNumber: function () {
 		return parseFloat(this._value)
 	},
 	/** Returns a string for this long integer
