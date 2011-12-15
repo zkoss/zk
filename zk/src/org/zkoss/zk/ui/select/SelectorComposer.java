@@ -5,12 +5,14 @@ package org.zkoss.zk.ui.select;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -22,6 +24,7 @@ import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
+import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
  * <p>A composer analogous to GenericForwardComposer. Instead of wiring 
@@ -51,9 +54,8 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @since 6.0.0
  * @author simonpai
  */
-public class SelectorComposer<T extends Component>
-implements Composer<T>, ComposerExt<T>,
-ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
+public class SelectorComposer<T extends Component> implements Composer<T>, ComposerExt<T>,
+		ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
@@ -61,15 +63,41 @@ ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 		ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	
 	private Component _self;
+	protected final List<VariableResolver> resolvers = new ArrayList<VariableResolver>();
+	
+	public SelectorComposer() {
+		resolvers.clear();
+		Class<?> cls = this.getClass();
+		while (cls != SelectorComposer.class) {
+			org.zkoss.zk.ui.select.annotation.VariableResolver anno = 
+				cls.getAnnotation(org.zkoss.zk.ui.select.annotation.VariableResolver.class);
+			if (anno != null)
+				for (Class<? extends VariableResolver> rc : anno.value()) {
+					try {
+						resolvers.add(rc.getConstructor().newInstance());
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			cls = cls.getSuperclass();
+		}
+	}
+	
+	@Override
+	public ComponentInfo doBeforeCompose(Page page, Component parent,
+	ComponentInfo compInfo) {
+		Selectors.wireVariables(page, this, resolvers);
+		return compInfo;
+	}
 	
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
 		_self = comp;
-		Selectors.wireVariables(comp, this);
-		Selectors.wireEventListeners(comp, this); 
+		Selectors.wireComponents(comp, this, false);
+		Selectors.wireEventListeners(comp, this);
 		
 		//register event to wire variables just before component onCreate
-		comp.addEventListener("onCreate", new BeforeCreateWireListener());
+		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
 	}
 
 	/** Returns the current page.
@@ -83,18 +111,12 @@ ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 		final Execution exec = Executions.getCurrent();
 		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
 	}
-	/**
-	 * Redo variable auto-wiring.
-	 */
-	protected void rewire(){
-		Selectors.wireVariables(_self, this);
-	}
 	
 	private class BeforeCreateWireListener implements EventListener<Event> {
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
-			//wire variables again so some late created object can be wired in(e.g. DataBinder)
-			Selectors.wireVariables(event.getTarget(), SelectorComposer.this);
+			//wire components again so some late created object can be wired in (e.g. DataBinder)
+			Selectors.wireComponents(event.getTarget(), SelectorComposer.this, true);
 			//called only once
 			_self.removeEventListener("onCreate", this);
 		}
@@ -159,9 +181,9 @@ ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = (Component) event.getTarget();
-			final SelectorComposer composerClone = 
-				(SelectorComposer) event.getData(); 
-			Selectors.wireController(clone, composerClone);
+			final SelectorComposer<Component> composerClone = 
+				(SelectorComposer<Component>) event.getData(); 
+			ConventionWires.wireController(clone, composerClone);
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
 		}
@@ -170,29 +192,28 @@ ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 	@Override
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		// no super
-		Selectors.wireController(comp, this);
+		ConventionWires.wireController(comp, this);
 	}
 	
 	@Override
 	public void didActivate(Component comp) {
 		// rewire Session, Webapp and some other variable back, depending on
 		// annotation
-		Selectors.rewireVariables(comp, this);
+		Selectors.rewireComponentsOnActivate(comp, this);
+		Selectors.rewireVariablesOnActivate(comp, this, resolvers);
 	}
-
-	@Override
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo) { //do nothing
-		return compInfo;
-	}
+	
 	@Override
 	public void willPassivate(Component comp) { // do nothing
 	}
+	
 	@Override
 	public boolean doCatch(Throwable ex) throws Exception { //do nothing
 		return false;
 	}
+	
 	@Override
 	public void doFinally() throws Exception { //do nothing
 	}
+	
 }

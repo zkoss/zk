@@ -1,0 +1,18 @@
+<zk>
+	<zscript>
+		String[] strs = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+		ListModel model = new ListModelList(strs);
+	</zscript>
+	<window>
+		<div apply="org.zkoss.zktest.test2.select.Z60SelectorComposer">
+			<div>Click on the button. You shall see "00" appear on all cells under Column 2.</div>
+			<grid model="${model}">
+				<columns>
+					<column>Column 1</column>
+					<column>Column 2</column>
+				</columns>
+			</grid>
+			<button label="Go" id="btn" />
+		</div>
+	</window>
+</zk>

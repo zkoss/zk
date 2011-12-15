@@ -24,7 +24,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zk.ui.ext.Macro;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
 
@@ -162,7 +161,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 		switch (getAutowireFlag()) {
 		case 1: //by selector
-			Selectors.wireVariables(this, this);
+			Selectors.wireComponents(this, this, false);
+			Selectors.wireVariables(this, this, null);
 			Selectors.wireEventListeners(this, this); 
 			break;
 		case 2: //by convention

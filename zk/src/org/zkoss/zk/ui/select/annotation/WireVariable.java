@@ -1,6 +1,19 @@
-/**
- * 
- */
+/* WireVariable.java
+
+{{IS_NOTE
+ Purpose:
+  
+ Description:
+  
+ History:
+  Dec 13, 2011 4:42:38 PM , Created by simonpai
+}}IS_NOTE
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+*/
 package org.zkoss.zk.ui.select.annotation;
 
 import java.lang.annotation.ElementType;
@@ -11,18 +24,19 @@ import java.lang.annotation.Target;
 import org.zkoss.zk.ui.select.SelectorComposer;
 
 /**
- * Annotation for specifying components to wire 
+ * Annotation for specifying variables to wire 
  * {@link SelectorComposer}.
  * @since 6.0.0
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
-public @interface Wire {
+public @interface WireVariable {
 	
 	/**
 	 * The selector string that specifies the Components to wire. If empty, 
-	 * {@link SelectorComposer} will attempt to wire from fellows by name.
+	 * {@link SelectorComposer} will attempt to wire from implicit objects,
+	 * XEL variables.
 	 */
 	String value() default "";
 	

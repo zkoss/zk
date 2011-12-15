@@ -3,7 +3,6 @@
  */
 package org.zkoss.zk.ui.select;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -16,9 +15,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.zkoss.lang.Strings;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -27,13 +27,11 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zk.ui.select.annotation.WireXel;
-import org.zkoss.zk.ui.select.annotation.WireZScript;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.select.impl.ComponentIterator;
 import org.zkoss.zk.ui.select.impl.Reflections;
 import org.zkoss.zk.ui.select.impl.Reflections.FieldRunner;
 import org.zkoss.zk.ui.select.impl.Reflections.MethodRunner;
-import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
  * A collection of selector related utilities. 
@@ -49,7 +47,8 @@ public class Selectors {
 	 * @param selector the selector string
 	 * @return an Iterable of Component
 	 */
-	public static Iterable<Component> iterable(final Page page, final String selector) {
+	public static Iterable<Component> iterable(final Page page, 
+			final String selector) {
 		return new Iterable<Component>() {
 			public Iterator<Component> iterator() {
 				return new ComponentIterator(page, selector);
@@ -64,7 +63,8 @@ public class Selectors {
 	 * @param selector the selector string
 	 * @return an Iterable of Component
 	 */
-	public static Iterable<Component> iterable(final Component root, final String selector){
+	public static Iterable<Component> iterable(final Component root, 
+			final String selector){
 		return new Iterable<Component>() {
 			public Iterator<Component> iterator() {
 				return new ComponentIterator(root, selector);
@@ -115,47 +115,63 @@ public class Selectors {
 	}
 	
 	/**
-	 * Wire variables to controller, including components, implicit variables, 
-	 * ZScript variables and XEL variables.
+	 * Wire variables to controller, including XEL variables, implicit variables.
+	 * @param component the reference component
+	 * @param controller the controller object to be injected with variables
+	 */
+	public static void wireVariables(Component component, Object controller, 
+			List<VariableResolver> extraResolvers) {
+		new Wirer(controller, false).wireVariables(
+				new ComponentFunctor(component), extraResolvers);
+	}
+	
+	/**
+	 * Wire variables to controller, including XEL variables, implicit variables.
+	 * @param page the reference page
+	 * @param controller the controller object to be injected with variables
+	 */
+	public static void wireVariables(Page page, Object controller, 
+			List<VariableResolver> extraResolvers) {
+		new Wirer(controller, false).wireVariables(
+				new PageFunctor(page), extraResolvers);
+	}
+	
+	/**
+	 * Wire components to controller.
 	 * @param component the reference component for selector
 	 * @param controller the controller object to be injected with variables
+	 * @param ignoreNonNull ignore wiring when the value of the field is a 
+	 * Component (non-null) or a non-empty Collection.
 	 */
-	public static void wireVariables(Component component, Object controller) {
-		new Wirer(controller, false).wireVariables(new ComponentFunctor(component));
+	public static void wireComponents(Component component, Object controller, 
+			boolean ignoreNonNull) {
+		new Wirer(controller, false).wireComponents(
+				new ComponentFunctor(component), ignoreNonNull);
 	}
 	
 	/**
-	 * Wire variables to controller, including components, implicit variables, 
-	 * ZScript variables and XEL variables.
-	 * @param page the page to wire
+	 * Wire components to controller.
+	 * @param page the reference page for selector
 	 * @param controller the controller object to be injected with variables
+	 * @param ignoreNonNull ignore wiring when the value of the field is a 
+	 * Component (non-null) or a non-empty Collection.
 	 */
-	public static void wireVariables(Page page, Object controller) {
-		new Wirer(controller, false).wireVariables(new PageFunctor(page));
+	public static void wireComponents(Page page, Object controller, boolean ignoreNonNull) {
+		new Wirer(controller, false).wireComponents(new PageFunctor(page), ignoreNonNull);
 	}
 	
-	/*package*/ static void rewireVariables(Component component, Object controller) {
-	// called when activated
-		final IdSpace spaceOwner = component.getSpaceOwner();
-		if(spaceOwner instanceof Page)
-			new Wirer(controller, true)
-				.wireVariables(new PageFunctor((Page) spaceOwner));
-		else
-			new Wirer(controller, true)
-				.wireVariables(new ComponentFunctor(
-					spaceOwner != null ? (Component) spaceOwner: component));
+	/*package*/ static void rewireVariablesOnActivate(Component component, 
+			Object controller, List<VariableResolver> extraResolvers) {
+		// called when activated
+		new Wirer(controller, true).wireVariables(
+				new ComponentFunctor(component), extraResolvers);
 	}
 	
-	/**
-	 * Add a reference of controller in the attributes of the given component.
-	 * Please refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Controller/Composer">ZK Developer's Reference</a>
-	 * for details.
-	 * 
-	 * @param component the component to inject reference
-	 * @param controller the controller to be referred to
-	 */
-	public static void wireController(Component component, Object controller){
-		ConventionWires.wireController(component, controller);
+	/*package*/ static void rewireComponentsOnActivate(Component component, 
+			Object controller) {
+		// called when activated
+		new Wirer(controller, true).wireComponents(
+				new ComponentFunctor(component), false);
 	}
 	
 	/**
@@ -164,9 +180,9 @@ public class Selectors {
 	 * @param controller the controller of event listening methods
 	 */
 	public static void wireEventListeners(final Component component, 
-			final Object controller){
+			final Object controller) {
 		Reflections.forMethods(controller.getClass(), Listen.class, 
-				new MethodRunner<Listen>(){
+				new MethodRunner<Listen>() {
 			public void onMethod(Class<?> clazz, Method method, Listen anno) {
 				// check method signature
 				if((method.getModifiers() & Modifier.STATIC) != 0) 
@@ -192,7 +208,7 @@ public class Selectors {
 	
 	
 	// helper //
-	private static String[][] splitListenAnnotationValues(String str){
+	private static String[][] splitListenAnnotationValues(String str) {
 		List<String[]> result = new ArrayList<String[]>();
 		int len = str.length();
 		boolean inSqBracket = false;
@@ -201,7 +217,7 @@ public class Selectors {
 		String evtName = null;
 		int i = 0;
 		
-		for(int j = 0; j < len; j++) {
+		for (int j = 0; j < len; j++) {
 			char c = str.charAt(j);
 			
 			if(!escaped)
@@ -241,15 +257,15 @@ public class Selectors {
 		}
 		
 		// flush last chunk if any
-		if(i < len) {
+		if (i < len) {
 			String last = str.substring(i).trim();
-			if(last.length() > 0)
+			if (last.length() > 0)
 				result.add(new String[]{evtName, last});
 		}
 		return result.toArray(new String[0][0]);
 	}
 	
-	private static <T> List<T> toList(Iterable<T> iterable){
+	private static <T> List<T> toList(Iterable<T> iterable) {
 		List<T> result = new ArrayList<T>();
 		for (T t : iterable)
 			result.add(t);
@@ -260,25 +276,93 @@ public class Selectors {
 	private static class Wirer {
 		
 		private final Object _controller;
-		private final boolean _ignoreXel;
-		private final boolean _ignoreZScript;
 		private final boolean _rewire;
 		
 		private Wirer(Object controller, final boolean rewire) {
 			_controller = controller;
-			Class<?> cls = controller.getClass();
-			WireZScript wz = getAnnotation(cls, WireZScript.class);
-			WireXel wx = getAnnotation(cls, WireXel.class);
-			_ignoreZScript = wz == null || !wz.value();
-			_ignoreXel = wx == null || !wx.value();
 			_rewire = rewire;
 		}
 		
-		private void wireVariables(final PsdoCompFunctor functor) {
+		private void wireComponents(final PsdoCompFunctor functor, 
+				final boolean ignoreNonNull) {
+			final Class<?> ctrlClass = _controller.getClass();
+			// wire to fields
+			Reflections.forFields(ctrlClass, Wire.class, new FieldRunner<Wire>() {
+				public void onField(Class<?> clazz, Field field, Wire anno) {
+					if ((field.getModifiers() & Modifier.STATIC) != 0)
+						throw new UiException("Cannot wire variable to " + 
+								"static field: " + field.getName());
+					
+					if (_rewire && !anno.rewireOnActivate())
+						return; // skipped, not rewired
+					
+					if (ignoreNonNull) {
+						// if not null && not collection, skip
+						Object value = Reflections.getFieldValue(_controller, field);
+						if (value != null && (!(value instanceof Collection<?>) ||
+								!((Collection<?>) value).isEmpty()))
+							return;
+					}
+					
+					String selector = anno.value();
+					boolean optional = anno.optional();
+					if (selector.length() > 0) {
+						injectComponent(field, functor.iterable(selector), optional);
+						return;
+					}
+					
+					// no selector value, wire implicit object by naming convention
+					Component value = 
+						getComponentByName(functor, field.getName(), field.getType());
+					if (value != null) {
+						Reflections.setFieldValue(_controller, field, value);
+						return;
+					}
+					if (optional) return;
+					
+					// no matched Object or Component
+					String name = field.getName();
+					if (name.contains("$")) throw new UiException(
+							ctrlClass + " does not support " + 
+							"syntax with '$'. Please use selector as alternative.");
+					throw new UiException("Cannot wire component to field: " + name);
+				}
+			});
+			// wire by methods
+			Reflections.forMethods(ctrlClass, Wire.class, new MethodRunner<Wire>() {
+				public void onMethod(Class<?> clazz, Method method, Wire anno) {
+					// check method signature
+					String name = method.getName();
+					if ((method.getModifiers() & Modifier.STATIC) != 0) 
+						throw new UiException(
+								"Cannot wire component by static method: " + name);
+					Class<?>[] paramTypes = method.getParameterTypes();
+					if (paramTypes.length != 1) 
+						throw new UiException("Setter method should have only" + 
+								" one parameter: " + name);
+					
+					if (_rewire && !anno.rewireOnActivate())
+						return; // skipped, not rewired
+					
+					String selector = anno.value();
+					// check selector string: nonempty
+					if (selector.length() == 0)
+						throw new UiException("Selector is empty on method: " + 
+								method.getName());
+					
+					injectComponent(method, functor.iterable(selector), 
+							anno.optional());
+				}
+			});
+		}
+		
+		private void wireVariables(final PsdoCompFunctor functor, 
+				final List<VariableResolver> resolvers) {
 			Class<?> ctrlClass = _controller.getClass();
 			// wire to fields
-			Reflections.forFields(ctrlClass, Wire.class, new FieldRunner<Wire>(){
-				public void onField(Class<?> clazz, Field field, Wire anno) {
+			Reflections.forFields(ctrlClass, WireVariable.class, 
+					new FieldRunner<WireVariable>(){
+				public void onField(Class<?> clazz, Field field, WireVariable anno) {
 					if ((field.getModifiers() & Modifier.STATIC) != 0)
 						throw new UiException("Cannot wire variable to " + 
 								"static field: " + field.getName());
@@ -292,42 +376,34 @@ public class Selectors {
 							return; // skipped, not rewired
 					}
 					
-					String selector = anno.value();
-					boolean optional = anno.optional();
-					if (selector.length() > 0) {
-						injectComponent(field, functor.iterable(selector), optional);
-						return;
-					}
+					String vname = anno.value();
+					String name = Strings.isEmpty(vname) ? field.getName() : vname;
 					
 					// no selector value, wire implicit object by naming convention
 					Object value = 
-						getObjectByName(functor, field.getName(), field.getType());
-					if (value != null) {
+						getObjectByName(functor, name, field.getType(), resolvers);
+					if (value != null)
 						Reflections.setFieldValue(_controller, field, value);
-						return;
-					} 
-					if (optional) return;
+					else if (!anno.optional())
+						// no matched Object or Component
+						throw new UiException("Cannot wire variable of name " + 
+								name + " to field: " + field.getName());
 					
-					// no matched Object or Component
-					String name = field.getName();
-					if (name.contains("$")) throw new UiException(
-							this.getClass()+" does not support " + 
-							"syntax with '$'. Please use selector as alternative.");
-					throw new UiException("Cannot wire variable to field: " + name);
 				}
 			});
 			// wire by methods
-			Reflections.forMethods(ctrlClass, Wire.class, new MethodRunner<Wire>(){
-				public void onMethod(Class<?> clazz, Method method, Wire anno) {
+			Reflections.forMethods(ctrlClass, WireVariable.class, 
+					new MethodRunner<WireVariable>(){
+				public void onMethod(Class<?> clazz, Method method, WireVariable anno) {
 					// check method signature
-					String name = method.getName();
+					String mname = method.getName();
 					if ((method.getModifiers() & Modifier.STATIC) != 0) 
 						throw new UiException("Cannot wire variable by static" + 
-								" method: " + name);
+								" method: " + mname);
 					Class<?>[] paramTypes = method.getParameterTypes();
 					if (paramTypes.length != 1) 
 						throw new UiException("Setter method should have only" + 
-								" one parameter: " + name);
+								" one parameter: " + mname);
 					
 					if (_rewire) {
 						Class<?> cls = paramTypes[0];
@@ -337,14 +413,13 @@ public class Selectors {
 							return; // skipped, not rewired
 					}
 					
-					String selector = anno.value();
+					String vname = anno.value();
 					// check selector string: nonempty
-					if (selector.length() == 0)
-						throw new UiException("Selector is empty on method: " + 
+					if (vname.length() == 0)
+						throw new UiException("Variable name is empty on method: " + 
 								method.getName());
 					
-					injectComponent(method, functor.iterable(selector), 
-							anno.optional());
+					injectComponent(method, functor.iterable(vname), anno.optional());
 				}
 			});
 		}
@@ -374,7 +449,7 @@ public class Selectors {
 			if (Collection.class.isAssignableFrom(type)) {
 				
 				Collection collection = null;
-				if(isField) {
+				if (isField) {
 					Field field = ((FieldFunctor) injector).getField();
 					try {
 						collection = (Collection) field.get(_controller);
@@ -387,20 +462,21 @@ public class Selectors {
 				// try to give an instance if null 
 				if(collection == null) {
 					collection = getCollectionInstanceIfPossible(type);
-					if(collection == null)
+					if (collection == null)
 						throw new UiException("Cannot initiate collection for "+
 								(isField? "field" : "method") + ": " + 
 								injector.getName() + " on " + _controller);
-					if(isField) injector.inject(_controller, collection);
+					if (isField)
+						injector.inject(_controller, collection);
 				}
 				
 				// try add to collection
 				collection.clear();
 				for (Component c : comps)
-					if(Reflections.isAppendableToCollection(
+					if (Reflections.isAppendableToCollection(
 							injector.getGenericType(), c))
 						collection.add(c);
-				if(!isField) 
+				if (!isField) 
 					injector.inject(_controller, collection);
 				return;
 			} 
@@ -418,25 +494,27 @@ public class Selectors {
 			injector.inject(_controller, null); // no match, inject null
 		}
 		
-		private Object getObjectByName(PsdoCompFunctor functor, 
+		private Component getComponentByName(PsdoCompFunctor functor, 
 				String name, Class<?> type) {
-			Object result = functor.getImplicit(name);
-			if(isValidValue(result, type)) return result;
+			Component result = functor.getFellowIfAny(name);
+			return isValidValue(result, type) ? result : null;
+		}
+		
+		private Object getObjectByName(PsdoCompFunctor functor, String name, 
+				Class<?> type, List<VariableResolver> resolvers) {
 			
-			if(!_ignoreZScript) {
-				result = functor.getZScriptVariable(name);
-				if(isValidValue(result, type)) return result;
-			}
+			Object result = functor.getXelVariable(name);
+			if (isValidValue(result, type)) 
+				return result;
 			
-			result = functor.getAttributeOrFellow(name);
-			if(isValidValue(result, type)) return result;
+			if (resolvers != null)
+				for (VariableResolver resv : resolvers) {
+					result = resv.resolveVariable(name);
+					if (isValidValue(result, type))
+						return result;
+				}
 			
-			if(!_ignoreXel) {
-				result = functor.getXelVariable(name);
-				if(isValidValue(result, type)) return result;
-			}
-			
-			result = functor.getFellowIfAny(name);
+			result = functor.getImplicit(name);
 			return isValidValue(result, type)? result : null;
 		}
 		
@@ -459,22 +537,22 @@ public class Selectors {
 			public Class<?> getType() {
 				return _field.getType();
 			}
-			public Field getField(){
-				return _field;
-			}
 			public Type getGenericType() {
 				return _field.getGenericType();
+			}
+			public Field getField(){
+				return _field;
 			}
 		}
 		
 		private class MethodFunctor implements InjectionFunctor {
 			private final Method _method;
 			private MethodFunctor(Method method){ _method = method; }
-			public String getName() {
-				return _method.getName();
-			}
 			public void inject(Object obj, Object value) {
 				Reflections.invokeMethod(_method, obj, value);
+			}
+			public String getName() {
+				return _method.getName();
 			}
 			public Class<?> getType() {
 				return _method.getParameterTypes()[0];
@@ -486,24 +564,12 @@ public class Selectors {
 		
 	}
 	
-	private static <A extends Annotation> A getAnnotation(Class<?> ctrlClass, 
-			Class<A> annoClass) {
-		Class<?> cls = ctrlClass;
-		while (cls != null && !cls.equals(SelectorComposer.class)) {
-			A anno = cls.getAnnotation(annoClass);
-			if (anno != null)
-				return anno;
-			cls = cls.getSuperclass();
-		}
-		return null;
-	}
-	
-	private static boolean isValidValue(Object value, Class<?> clazz){
+	private static boolean isValidValue(Object value, Class<?> clazz) {
 		return value != null && clazz.isAssignableFrom(value.getClass());
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static Collection getCollectionInstanceIfPossible(Class<?> clazz){
+	private static Collection getCollectionInstanceIfPossible(Class<?> clazz) {
 		if(clazz.isAssignableFrom(ArrayList.class)) return new ArrayList();
 		if(clazz.isAssignableFrom(HashSet.class)) return new HashSet();
 		if(clazz.isAssignableFrom(TreeSet.class)) return new TreeSet();
@@ -511,7 +577,7 @@ public class Selectors {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T> T[] generateArray(Class<T> clazz, Iterable<Component> comps){
+	private static <T> T[] generateArray(Class<T> clazz, Iterable<Component> comps) {
 		// add to a temporary ArrayList then set to Array
 		ArrayList<T> list = new ArrayList<T>();
 		for (Component c : comps)
@@ -525,13 +591,13 @@ public class Selectors {
 		private final Method _ctrlMethod;
 		private final Object _ctrl;
 		
-		public ComposerEventListener(Method method, Object controller){
+		public ComposerEventListener(Method method, Object controller) {
 			_ctrlMethod = method;
 			_ctrl = controller;
 		}
 		
 		public void onEvent(Event event) throws Exception {
-			if(_ctrlMethod.getParameterTypes().length == 0)
+			if (_ctrlMethod.getParameterTypes().length == 0)
 				_ctrlMethod.invoke(_ctrl);
 			else
 				_ctrlMethod.invoke(_ctrl, event);
@@ -544,8 +610,7 @@ public class Selectors {
 	private interface PsdoCompFunctor {
 		public Iterable<Component> iterable(String selector);
 		public Object getImplicit(String name);
-		public Object getZScriptVariable(String name);
-		public Object getAttributeOrFellow(String name);
+		public Object getAttribute(String name);
 		public Object getXelVariable(String name);
 		public Component getFellowIfAny(String name);
 	}
@@ -559,14 +624,11 @@ public class Selectors {
 		public Object getImplicit(String name) {
 			return Components.getImplicit(_page, name);
 		}
-		public Object getZScriptVariable(String name) {
-			return _page.getZScriptVariable(name);
-		}
 		public Object getXelVariable(String name) {
 			return _page.getXelVariable(null, null, name, true);
 		}
-		public Object getAttributeOrFellow(String name) {
-			return _page.getAttributeOrFellow(name, true);
+		public Object getAttribute(String name) {
+			return _page.getAttribute(name, true);
 		}
 		public Component getFellowIfAny(String name) {
 			return _page.getFellowIfAny(name);
@@ -577,28 +639,22 @@ public class Selectors {
 		private final Component _comp;
 		private ComponentFunctor(Component comp){ _comp = comp; }
 		public Iterable<Component> iterable(String selector) {
-			IdSpace spaceOwner = _comp.getSpaceOwner();
-			return spaceOwner instanceof Component ?
-					Selectors.iterable((Component) spaceOwner, selector) :
-					Selectors.iterable((Page) spaceOwner, selector);
+			return Selectors.iterable(_comp, selector);
 		}
 		public Object getImplicit(String name) {
 			return Components.getImplicit(_comp, name);
 		}
-		public Object getZScriptVariable(String name) {
-			return getPage().getZScriptVariable(name);
-		}
 		public Object getXelVariable(String name) {
 			return getPage().getXelVariable(null, null, name, true);
 		}
-		public Object getAttributeOrFellow(String name) {
-			return _comp.getAttributeOrFellow(name, true);
-		}
-		private Page getPage() {
-			return Components.getCurrentPage(_comp);
+		public Object getAttribute(String name) {
+			return _comp.getAttribute(name, true);
 		}
 		public Component getFellowIfAny(String name) {
 			return _comp.getFellowIfAny(name);
+		}
+		private Page getPage() {
+			return Components.getCurrentPage(_comp);
 		}
 	}
 	

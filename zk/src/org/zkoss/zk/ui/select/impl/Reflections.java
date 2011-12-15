@@ -115,6 +115,19 @@ public class Reflections {
 	}
 	
 	/**
+	 * Get field value.
+	 */
+	public static Object getFieldValue(Object bean, Field field) {
+		try {
+			return field.get(bean);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalStateException("IllegalStateException @ getFieldValue");
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("IllegalStateException @ getFieldValue");
+		}
+	}
+	
+	/**
 	 * Add the item to a collection field of an object.
 	 */
 	@SuppressWarnings("unchecked")
