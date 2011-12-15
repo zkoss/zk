@@ -51,6 +51,9 @@ public class Selectbox extends HtmlBasedComponent {
 	private transient ListDataListener _dataListener;
 	private transient ItemRenderer<?> _renderer;
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
+	
+	private transient boolean _childable;
+	private transient String[] _tmpdatas; 
 
 	static {
 		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE
@@ -152,7 +155,7 @@ public class Selectbox extends HtmlBasedComponent {
 	}
 
 	protected boolean isChildable() {
-		return false;
+		return _childable;
 	}
 
 	/**
@@ -243,6 +246,22 @@ public class Selectbox extends HtmlBasedComponent {
 
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+		if (_model != null) {
+			_tmpdatas = new String[_model.getSize()];
+			final boolean old = _childable;
+			try {
+				_childable = true;
+				final ItemRenderer renderer = getRealRenderer();
+				for (int i = 0; i < _model.getSize(); i++)
+					_tmpdatas[i] = renderer.render(this, _model.getElementAt(i));
+			} catch (Exception e) {
+				throw UiException.Aide.wrap(e);
+			} finally {
+				//clear possible children created in renderer
+				getChildren().clear();
+				_childable = old;
+			}
+		}
 		invalidate();
 	}
 
@@ -275,7 +294,7 @@ public class Selectbox extends HtmlBasedComponent {
 			if (tm == null)
 				return Objects.toString(data);
 			else {
-				final Component[] items = tm.create(null, null,
+				final Component[] items = tm.create(owner, null,
 						new VariableResolver() {
 							public Object resolveVariable(String name) {
 								return "each".equals(name) ? data : null;
@@ -289,13 +308,13 @@ public class Selectbox extends HtmlBasedComponent {
 					throw new UiException(
 							"The model template can only support Label component, not "
 									+ items[0]);
+				items[0].detach(); //remove the label from owner
 				return ((Label) items[0]).getValue();
 			}
 		}
 	};
 
 	// -- ComponentCtrl --//
-	@SuppressWarnings("unchecked")
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -307,17 +326,9 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 
-		if (_model != null) {
-			String[] datas = new String[_model.getSize()];
-			try {
-				final ItemRenderer render = getRealRenderer();
-				for (int i = 0; i < _model.getSize(); i++)
-					datas[i] = render.render(this, _model.getElementAt(i));
-			} catch (Exception e) {
-				throw UiException.Aide.wrap(e);
-			}
-
-			render(renderer, "items", datas);
+		if (_tmpdatas != null) {
+			render(renderer, "items", _tmpdatas);
+			_tmpdatas = null; //purge the data
 		}
 	}
 
