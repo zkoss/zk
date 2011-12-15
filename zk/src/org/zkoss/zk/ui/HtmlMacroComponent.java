@@ -87,6 +87,8 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 		init();
 		_resolvers = Selectors.newVariableResolvers(getClass());
+		if (getAutowireFlag() == 0)
+			Selectors.wireVariables(this, this, _resolvers);
 	}
 	private void init() {
 		_props = new LinkedHashMap<String, Object>();
@@ -167,12 +169,11 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		}
 
 		switch (getAutowireFlag()) {
-		case 1: //by selector
-			Selectors.wireVariables(this, this, _resolvers);
+		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
 			Selectors.wireEventListeners(this, this); 
 			break;
-		case 2: //by convention
+		case 1: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 			ConventionWires.addForwards(this, this, '$');
 			break;
@@ -184,10 +185,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			_autowireflag = 
 				"true".equals(Library.getProperty(
 				"org.zkoss.zk.ui.macro.autowire.disabled")) ?
-					0/*no wire*/:
+					-1/*no wire*/:
 				"true".equals(Library.getProperty(
 				"org.zkoss.zk.ui.macro.autowire.convention")) ?
-					2/*convention*/: 1/*selector*/;
+					1/*convention*/: 0/*selector*/;
 		return _autowireflag;
 	}
 
