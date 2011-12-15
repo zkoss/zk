@@ -22,6 +22,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.NotifyChangeDisabled;
 import org.zkoss.bind.impl.BindContextUtil;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
@@ -39,6 +40,7 @@ import org.zkoss.zel.impl.parser.AstDotSuffix;
 import org.zkoss.zel.impl.parser.AstValue;
 import org.zkoss.zel.impl.parser.Node;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * ELContext for Binding.
@@ -79,8 +81,15 @@ public class BindELContext extends XelELContext {
 	public static Set<Property> getNotifys(Method m, Object base, String prop, Object value) {
 		//TODO, Dennis, do we really need to pass value here?
 		final Set<Property> notifys = new LinkedHashSet<Property>();
-		final NotifyChange annt = m == null ? 
-			null : m.getAnnotation(NotifyChange.class);
+		if(m==null) return notifys;
+		
+		final NotifyChange annt = m.getAnnotation(NotifyChange.class);
+		//ZK-687 @NotifyChange should be doing automatically. 
+		final NotifyChangeDisabled anntdis = m.getAnnotation(NotifyChangeDisabled.class);
+		if (annt != null && anntdis != null) {
+			throw new UiException("don't use "+NotifyChange.class+" with "+NotifyChangeDisabled.class+", choose only one");
+		}
+		
 		if (annt != null) {
 			//if has annotation, use annotated value or prop (if no value in annotation)
 			String[] notifies = annt.value();
@@ -89,10 +98,11 @@ public class BindELContext extends XelELContext {
 					final Property propx = new PropertyImpl(base, notify, value);
 					notifys.add(propx);
 				}
-			} else if (prop != null) {
-				//prpoerty is null in doExecute case
+			} else if (prop != null) { //property is null in doExecute case
 				notifys.add(new PropertyImpl(base, prop, value));
 			}
+		}else if(anntdis == null && prop != null){
+			notifys.add(new PropertyImpl(base, prop, value));
 		}
 		return notifys;
 	}
