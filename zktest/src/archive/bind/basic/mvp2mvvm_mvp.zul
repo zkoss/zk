@@ -1,0 +1,12 @@
+<zk>
+
+	<window title="Test" apply="org.zkoss.zktest.bind.basic.MVP2MVVMComposer" border="normal">
+
+		<button id="outerToggle1" label="toggle outside 1" />
+		<button id="outerToggle2" label="toggle outside 2" />
+
+		<vbox id="mVbox" />
+
+	</window>
+
+</zk>
