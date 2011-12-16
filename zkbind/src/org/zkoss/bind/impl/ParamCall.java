@@ -22,9 +22,12 @@ import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.HeaderParam;
 import org.zkoss.bind.annotation.Param;
 import org.zkoss.bind.annotation.QueryParam;
+import org.zkoss.bind.annotation.Scope;
+import org.zkoss.bind.annotation.ScopeParam;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 /**
@@ -145,15 +148,36 @@ public class ParamCall {
 		public Object resolveParameter(T anno);
 	}
 
+	
 	public void setComponent(final Component comp) {
 		//scope param
-//		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
-//			@Override
-//			public Object resolveParameter(Annotation anno) {
-//				return exec.getParameter(((QueryParam) anno).value());
-//			}
-//		});
-		
+		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				final String name = ((ScopeParam)anno).value();
+				Scope[] scopes = ((ScopeParam)anno).scopes();
+				if(scopes.length==1 && scopes[0].equals(Scope.ALL)){
+					List<Scope> ls = Scope.getScopeSequence();
+					scopes = ls.toArray(new Scope[ls.size()]);
+				}
+				
+				Object val = null;
+				for(Scope scope:scopes){
+					if(scope.equals(Scope.ALL)){
+						continue;
+					}
+					final String scopeName = scope.getName();
+					Object scopeObj = Components.getImplicit(comp, scopeName);
+					if(scopeObj instanceof Map){
+						val = ((Map<?,?>)scopeObj).get(name);
+						if(val!=null) break;
+					}else if(scopeObj !=null){
+						_log.error("the scope of "+scopeName+" is not a Map, is "+scopeObj);
+					}
+				}
+				return val;
+			}
+		});
 	}
 	public void setExecution(final Execution exec) {
 		//http param
