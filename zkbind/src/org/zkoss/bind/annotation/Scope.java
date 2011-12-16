@@ -16,12 +16,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * the implicit scopes of zk for {@link ScopeParam}
+ * The implicit scopes of zk for {@link ScopeParam}.
+ * The {@linkplain #DEFAULT} includes {@linkplain #REQUEST}, {@linkplain #DESKTOP},{@linkplain #SESSION},{@linkplain #APPLICATION} and by the order.
+ * The {@linkplain #ALL} includes {@linkplain #REQUEST}, {@linkplain #COMPONENT}, {@linkplain #SPACE}, {@linkplain #PAGE}, {@linkplain #DESKTOP}, 
+ * {@linkplain #SESSION}, {@linkplain #APPLICATION} and by the order.
+ * Other scope only represents itself.
  * @author dennis
  * @see ScopeParam
  */
 public enum Scope {
-	ALL("*"),
+	DEFAULT("default"),
+	ALL("all"),
 	REQUEST("requestScope"),
 	COMPONENT("componentScope"),
 	SPACE("spaceScope"),
@@ -43,7 +48,7 @@ public enum Scope {
 		return name;
 	}
 	
-	private static final List<Scope> _sequence;
+	private static final List<Scope> _all;
 	static{
 		List<Scope> s = new ArrayList<Scope>();
 		s.add(REQUEST);
@@ -53,10 +58,23 @@ public enum Scope {
 		s.add(DESKTOP);
 		s.add(SESSION);
 		s.add(APPLICATION);
-		_sequence = Collections.unmodifiableList(s);
+		_all = Collections.unmodifiableList(s);
 	}
 	
-	public static List<Scope> getScopeSequence(){
-		return _sequence;
+	private static final List<Scope> _default;
+	static{
+		List<Scope> s = new ArrayList<Scope>();
+		s.add(REQUEST);
+		s.add(DESKTOP);
+		s.add(SESSION);
+		s.add(APPLICATION);
+		_default = Collections.unmodifiableList(s);
+	}
+	
+	public static List<Scope> getAllScopes(){
+		return _all;
+	}
+	public static List<Scope> getDefaultScopes(){
+		return _default;
 	}
 }

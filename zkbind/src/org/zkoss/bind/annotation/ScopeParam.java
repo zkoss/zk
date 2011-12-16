@@ -18,8 +18,8 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation to identify the name of a parameter of a method.
- * By default, the value of this parameter is getting from current scopes in sequence of [requestScope, componentScope, spaceScope, pageScope, desktopScope, sessionScope, applicationScope]
- * You could arrange another sequence by setting the {@linkplain #scopes()} and in this case, the {@link Scope#ALL} is ignored.
+ * By default, the {@linkplain #scopes()} is  {@link Scope#DEFAULT}.
+ * You could arrange another sequence by setting the {@linkplain #scopes()}.
  * 
  * @see Init
  * @see Command
@@ -38,7 +38,7 @@ public @interface ScopeParam {
 	
 	/**
 	 * the scopes to evaluate.
-	 * @return the scopes, default {@linkplain Scope#ALL}
+	 * @return the scopes, default {@linkplain Scope#DEFAULT}
 	 */
-	Scope[] scopes() default {Scope.ALL};
+	Scope[] scopes() default {Scope.DEFAULT};
 }

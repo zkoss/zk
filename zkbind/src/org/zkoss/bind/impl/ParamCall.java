@@ -155,17 +155,22 @@ public class ParamCall {
 			@Override
 			public Object resolveParameter(Annotation anno) {
 				final String name = ((ScopeParam)anno).value();
-				Scope[] scopes = ((ScopeParam)anno).scopes();
-				if(scopes.length==1 && scopes[0].equals(Scope.ALL)){
-					List<Scope> ls = Scope.getScopeSequence();
-					scopes = ls.toArray(new Scope[ls.size()]);
+				Scope[] ss = ((ScopeParam)anno).scopes();
+				List<Scope> scopes = new ArrayList<Scope>();  
+				for(Scope s:ss){
+					switch(s){
+					case DEFAULT:
+						scopes.addAll(Scope.getDefaultScopes());
+						break;
+					case ALL:
+						scopes.addAll(Scope.getAllScopes());
+						break;
+					default:
+						scopes.add(s);
+					}
 				}
-				
 				Object val = null;
 				for(Scope scope:scopes){
-					if(scope.equals(Scope.ALL)){
-						continue;
-					}
 					final String scopeName = scope.getName();
 					Object scopeObj = Components.getImplicit(comp, scopeName);
 					if(scopeObj instanceof Map){
