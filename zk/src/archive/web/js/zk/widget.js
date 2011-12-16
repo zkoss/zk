@@ -1161,7 +1161,7 @@ wgt.$f().main.setTitle("foo");
 			var self = this;
 			zk.afterMount(function () {
 				zk._set(self, name, Widget.$(cc), extra);
-			});
+			}, -1);
 			return this;
 		}
 
@@ -1184,7 +1184,7 @@ wgt.$f().main.setTitle("foo");
 				var self = this;
 				zk.afterMount(function () {
 					zk._set(self, name.substring(3), Widget.$(value), extra);
-				});
+				}, -1);
 				return this;
 			}
 		} else if (cc == 'o' && name.charAt(1) == 'n'

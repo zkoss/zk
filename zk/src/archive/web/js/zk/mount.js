@@ -116,8 +116,8 @@ function zkamn(pkg, fn) {
 	 * the function is executed with <code>setTimeout(fn, 0)</code>.
 	 * @param Function fn the function to execute after mounted
 	 * @param int delay (since 5.0.6) how many milliseconds to wait before execute if
-	 * there is no mounting is taking place. If omiited, 0 is assumed.
-	 * If negative, the function is executed immediately.
+	 * there is no mounting taking place. If omitted, 0 is assumed.
+	 * If negative, the function is executed immediately (if no mounting is taking place).
 	 * @return boolean true if this method has been called before return (delay must
 	 * be negative, and no mounting); otherwise, undefined is returned.
 	 * @see #mounting
