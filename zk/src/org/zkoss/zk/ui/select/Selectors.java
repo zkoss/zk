@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -393,28 +396,26 @@ public class Selectors {
 						throw new UiException("Cannot wire variable to " + 
 								"static field: " + field.getName());
 					
-					Type tp = field.getGenericType();
-					if (_rewire && tp instanceof Class<?>) {
-						Class<?> cls = (Class<?>) tp;
-						if (!anno.rewireOnActivate() && 
-								!Session.class.isAssignableFrom(cls) && 
-								!WebApp.class.isAssignableFrom(cls))
-							return; // skipped, not rewired
-					}
+					String name = anno.value();
+					if (Strings.isEmpty(name))
+						name = guessImplicitObjectName(field.getType());
 					
-					String vname = anno.value();
-					String name = Strings.isEmpty(vname) ? field.getName() : vname;
+					if (name == null)
+						throw new UiException("Name of variable is required " + 
+								"on field: " + field.getName());
 					
-					// no selector value, wire implicit object by naming convention
+					if (_rewire && !anno.rewireOnActivate() && 
+							!isSessionOrWebApp(field.getType()))
+						return; // skipped, not rewired
+					
 					Object value = 
 						getObjectByName(functor, name, field.getType(), resolvers);
 					if (value != null)
 						Reflections.setFieldValue(_controller, field, value);
 					else if (!anno.optional())
-						// no matched Object or Component
+						// no matched variable
 						throw new UiException("Cannot wire variable of name " + 
 								name + " to field: " + field.getName());
-					
 				}
 			});
 			// wire by methods
@@ -428,24 +429,25 @@ public class Selectors {
 								" method: " + mname);
 					Class<?>[] paramTypes = method.getParameterTypes();
 					if (paramTypes.length != 1) 
-						throw new UiException("Setter method should have only" + 
-								" one parameter: " + mname);
+						throw new UiException("Setter method should have" + 
+								" exactly one parameter: " + mname);
 					
-					if (_rewire) {
-						Class<?> cls = paramTypes[0];
-						if (!anno.rewireOnActivate() && 
-								!Session.class.isAssignableFrom(cls) && 
-								!WebApp.class.isAssignableFrom(cls))
-							return; // skipped, not rewired
-					}
+					String name = anno.value();
+					if (Strings.isEmpty(name))
+						name = guessImplicitObjectName(paramTypes[0]);
 					
-					String vname = anno.value();
-					// check selector string: nonempty
-					if (vname.length() == 0)
-						throw new UiException("Variable name is empty on method: " + 
-								method.getName());
+					if (name == null)
+						throw new UiException("Name of variable is required " + 
+								"on method: " + method.getName());
 					
-					injectComponent(method, functor.iterable(vname), anno.optional());
+					if (_rewire && !anno.rewireOnActivate() && 
+							!isSessionOrWebApp(paramTypes[0]))
+						return; // skipped, not rewired
+					
+					Object value = 
+						getObjectByName(functor, name, paramTypes[0], resolvers);
+					
+					Reflections.invokeMethod(method, _controller, value); // TODO: confirm optional
 				}
 			});
 		}
@@ -588,6 +590,26 @@ public class Selectors {
 			}
 		}
 		
+	}
+	
+	private static String guessImplicitObjectName(Class<?> cls) {
+		if (Execution.class.equals(cls))
+			return "execution";
+		if (Page.class.equals(cls))
+			return "page";
+		if (Desktop.class.equals(cls))
+			return "desktop";
+		if (Session.class.equals(cls))
+			return "session";
+		if (WebApp.class.equals(cls))
+			return "application";
+		if (Log.class.equals(cls))
+			return "log";
+		return null;
+	}
+	
+	private static boolean isSessionOrWebApp(Class<?> cls) {
+		return Session.class.equals(cls) || WebApp.class.equals(cls);
 	}
 	
 	private static boolean isValidValue(Object value, Class<?> clazz) {
