@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.CookieParam;
@@ -30,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.select.Selectors;
 /**
  * to help invoke a method with {@link Param} etc.. features
  * @author dennis
@@ -45,6 +47,8 @@ public class ParamCall {
 	private Map<ContextType,Object> _contextObjects = new HashMap<ContextType,Object>();
 	
 	private static final String COOKIE_CACHE = "$PARAM_COOKIES$";
+	
+	private static Component _root = null;
 	
 	public ParamCall(){
 		this(true);
@@ -68,6 +72,7 @@ public class ParamCall {
 	public void setBinder(Binder binder){
 		_types.add(new Type(binder.getClass(),binder));
 		_contextObjects.put(ContextType.BINDER, binder);
+		_root = binder.getView();
 	}
 	
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
@@ -181,6 +186,24 @@ public class ParamCall {
 					}
 				}
 				return val;
+			}
+		});
+		
+		//component
+		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				String selector = ((SelectorParam) anno).value();
+				boolean local =  ((SelectorParam) anno).local();
+				int index =  ((SelectorParam) anno).index();
+				if(!local && _root==null){
+					return null;
+				}
+				if(index<0){
+					return Selectors.find(local?comp:_root, selector);
+				}else{
+					return Selectors.find(local?comp:_root, selector, index);
+				}
 			}
 		});
 	}
