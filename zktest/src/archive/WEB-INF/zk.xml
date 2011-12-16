@@ -465,7 +465,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	ZK will try to locate the file from the class path, and the current directory
 	("user.dir").
 	<library-property>
-		<name>org.zkoss.util.logging.configuration.file</name>
+		<name>org.zkoss.util.logging.config.file</name>
 		<value>conf/zk-log.properties</value>
 	</library-property>
 	-->

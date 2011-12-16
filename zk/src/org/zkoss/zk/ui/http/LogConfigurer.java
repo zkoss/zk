@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.UiException;
 	private static final Log log = Log.lookup(LogConfigurer.class);
 
 	/*package*/ static void configure() {
-		final String LIBPROP = "org.zkoss.util.logging.configuration.file";
+		final String LIBPROP = "org.zkoss.util.logging.config.file";
 		final String path = Library.getProperty(LIBPROP);
 		if (path == null || path.length() == 0)
 			return;
