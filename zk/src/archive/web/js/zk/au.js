@@ -592,9 +592,9 @@ zAu = {
 				if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 			},
 			//2011/04/22 feature 3291332
-			//Use sync request for chrome and safari.
+			//Use sync request for chrome, safari and firefox (4 and later).
 			//Note: when pressing F5, the request's URL still arrives before this even async:false
-			async: !zk.safari
+			async: zk.ie //conservative, though it shall be (!zk.safari || zk.ff >= 4)
 		}, zAu.ajaxSettings), true/*fixed IE memory issue for jQuery 1.4.x*/);
 	},
 
