@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.select.Selectors;
  * In {@linkplain Command}, it is the component who triggers the command) as the base component. &lt;br/&gt;
  * &lt;br/&gt;
  * 
- * {@linkplain #index()} is the index of the selected components, if {@linkplain #index()} is -1,  you have to use List&lt;Component&gt; as the parameter type.
+ * {@linkplain #index()} is the index of the selected components, if {@linkplain #index()} small than 0  you have to use List&lt;Component&gt; as the parameter type.
  * 
  * 
  * @see Init
@@ -47,14 +47,14 @@ public @interface SelectorParam {
 	String value();
 	
 	/**
-	 * to define to select component from local binded component or root of the binder.
+	 * To define to select component from local binded component or root of the binder.
 	 * @return true if select from root of the binder, default false
 	 */
 	boolean local() default false;
 	
 	/**
-	 * the index of selected component, you have to use List&lt;Component&gt; as the parameter type if the index is -1
-	 * @return the index of selected component, default -1.
+	 * The index of selected component. If the index is -1 you have to use List&lt;Component&gt; as the parameter type 
+	 * @return the index of selected component, default 0.
 	 */
-	int index() default -1;
+	int index() default 0;
 }
