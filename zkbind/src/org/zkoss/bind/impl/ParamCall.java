@@ -23,6 +23,7 @@ import org.zkoss.bind.annotation.HeaderParam;
 import org.zkoss.bind.annotation.Param;
 import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.lang.Classes;
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
@@ -33,6 +34,8 @@ import org.zkoss.zk.ui.UiException;
  */
 public class ParamCall {
 
+	private static final Log _log = Log.lookup(ParamCall.class);
+	
 	private Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types;//to map class type directly, regardless the annotation
 	private boolean _mappingType;//to enable the map class type without annotation, it is for compatible to rc2, only support BindeContext and Binder
@@ -78,13 +81,15 @@ public class ParamCall {
 		Class<?>[] paramTypes = method.getParameterTypes();
 		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
 		Object[] params = new Object[paramTypes.length];
-		for (int i = 0; i < paramTypes.length; i++) {
-			params[i] = resolveParameter(parmAnnos[i],paramTypes[i]);
-		}
 
 		try {
+			for (int i = 0; i < paramTypes.length; i++) {
+				params[i] = resolveParameter(parmAnnos[i],paramTypes[i]);
+			}
+			
 			method.invoke(base, params);
 		} catch (Exception e) {
+			_log.error(e);
 			throw UiException.Aide.wrap(e);
 		}
 	}
@@ -171,16 +176,18 @@ public class ParamCall {
 				Map<String,Object> m = (Map<String,Object>)exec.getAttribute(COOKIE_CACHE);
 				if(m==null){
 					final Object req  = exec.getNativeRequest();
+					m = new HashMap<String,Object>();
+					exec.setAttribute(COOKIE_CACHE, m);
+					
 					if(req instanceof HttpServletRequest){
-						m = new HashMap<String,Object>();
-						exec.setAttribute(COOKIE_CACHE, m);
 						final Cookie[] cks = ((HttpServletRequest)req).getCookies();
-						for(Cookie ck:cks){
-							m.put(ck.getName().toLowerCase(), ck.getValue());
+						if(cks != null){
+							for(Cookie ck:cks){
+								m.put(ck.getName().toLowerCase(), ck.getValue());
+							}
 						}
 					}else/* if(req instanceof PortletRequest)*/{
 						//no cookie in protlet 1.0
-						m = new HashMap<String,Object>();
 					}
 				}
 				return m==null?null:m.get(((CookieParam) anno).value().toLowerCase());
