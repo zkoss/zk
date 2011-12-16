@@ -23,7 +23,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
-		_detached = []; //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
+		_detached = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
+		Widget = zk.Widget;
 
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
@@ -74,22 +75,39 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 		cmdsQue.push(cmds);
 	}
+	function dataNotReady(cmd, data) {
+		for (var j = data.length, id, w; j--;)
+			if (id = data[j] && data[j].$u) {
+				if (!(w = Widget.$(id))) { //not ready
+					zk.afterMount(function () {
+						do
+							if (id = data[j] && data[j].$u)
+								data[j] = Widget.$(id);
+						while (j--)
+						doProcess(cmd, data);
+					});
+					return true; //not ready
+				}
+				data[j] = w;
+			}
+	}
 	function doProcess(cmd, data) { //decoded
-		//1. process zAu.cmd1 (cmd1 has higher priority)
-		var fn = zAu.cmd1[cmd], id;
-		if (fn) {
-			if (!data.length)
-				return zAu.showError("ILLEGAL_RESPONSE", "uuid required", cmd);
+		if (!dataNotReady(cmd, data)) {
+			//1. process zAu.cmd1 (cmd1 has higher priority)
+			var fn = zAu.cmd1[cmd];
+			if (fn) {
+				if (!data.length)
+					return zAu.showError("ILLEGAL_RESPONSE", "uuid required", cmd);
 
-			data[0] = zk.Widget.$(id = data[0]); //might be null (such as rm)
-				//assign to id for debugging purpose (go thru stacktrace)
-		} else {
-			//2. process zAu.cmd0
-			fn = zAu.cmd0[cmd];
-			if (!fn)
-				return zAu.showError("ILLEGAL_RESPONSE", "Unknown", cmd);
+				data[0] = Widget.$(data[0]); //might be null (such as rm)
+			} else {
+				//2. process zAu.cmd0
+				fn = zAu.cmd0[cmd];
+				if (!fn)
+					return zAu.showError("ILLEGAL_RESPONSE", "Unknown", cmd);
+			}
+			fn.apply(zAu, data);
 		}
-		fn.apply(zAu, data);
 	}
 
 	function ajaxReqResend(reqInf, timeout) {
@@ -1101,7 +1119,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 
 		zAu.cmd0.clearBusy(uuid);
 
-		var w = uuid ? zk.Widget.$(uuid): null;
+		var w = uuid ? Widget.$(uuid): null;
 		if (!uuid)
 			zUtl.progressbox("zk_showBusy", msg || msgzk.PLEASE_WAIT, true, null, {busy:true});
 		else if (w) {
@@ -1118,7 +1136,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	/** Removes the busy message covering the whole browser.
 	 */
 	clearBusy: function (uuid) {
-		var w = uuid ? zk.Widget.$(uuid): null,
+		var w = uuid ? Widget.$(uuid): null,
 			efs = w ? w.effects_: null;
 		if (efs && efs.showBusy) {
 			efs.showBusy.destroy();
@@ -1137,7 +1155,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	clearWrongValue: function () {
 		for (var i = arguments.length; i--;) {
-			var wgt = zk.Widget.$(arguments[i]);
+			var wgt = Widget.$(arguments[i]);
 			if (wgt)
 				if (wgt.clearErrorMessage)
 					wgt.clearErrorMessage();
@@ -1157,7 +1175,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	wrongValue: function () {
 		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
 			var uuid = arguments[i], msg = arguments[i + 1],
-				wgt = zk.Widget.$(uuid);
+				wgt = Widget.$(uuid);
 			if (wgt) {
 				if (wgt.setErrorMessage) wgt.setErrorMessage(msg);
 				else zAu.wrongValue_(wgt, msg);
@@ -1175,7 +1193,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	submit: function (id) {
 		setTimeout(function (){
-			var n = zk.Widget.$(id);
+			var n = Widget.$(id);
 			if (n && n.submit)
 				n.submit();
 			else
@@ -1186,7 +1204,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String id the UUID of the widget, or the ID of the DOM element.
 	 */
 	scrollIntoView: function (id) {
-		var w = zk.Widget.$(id);
+		var w = Widget.$(id);
 		if (w) w.scrollIntoView();
 		else zk(id).scrollIntoView();
 	}

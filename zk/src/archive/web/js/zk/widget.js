@@ -486,6 +486,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zIndex: 88800
 	};
 
+var Widget =
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -663,7 +664,7 @@ new zul.wnd.Window{
 				if ((zk.spaceless || this.rawId) && this.id)
 					this.uuid = this.id; //setId was called
 				if (!this.uuid)
-					this.uuid = zk.Widget.nextUuid();
+					this.uuid = Widget.nextUuid();
 			});
 	},
 
@@ -1162,10 +1163,11 @@ wgt.$f().main.setTitle("foo");
 	 */
 	set: function (name, value, extra) {
 		var cc;
-		if (cc = value && value.$u) { //value.$u is UUID
+		if ((cc = value && value.$u) //value.$u is UUID
+		&& !(value = Widget.$(cc))) { //not created yet
 			var self = this;
 			zk.afterMount(function () {
-				zk._set(self, name, zk.Widget.$(cc), extra);
+				zk._set(self, name, Widget.$(cc), extra);
 			});
 			return this;
 		}
@@ -2355,7 +2357,7 @@ function () {
 	 * @since 5.0.3
 	 */
 	getOldWidget_: function (n) {
-		return zk.Widget.$(n, {strict:true});
+		return Widget.$(n, {strict:true});
 	},
 	/** Returns the HTML fragment of this widget.
 	 * @param zk.Skipper skipper the skipper. Ignored if null
@@ -3088,7 +3090,7 @@ unbind_: function (skipper, after) {
 	 */
 	onDrop_: function (drag, evt) {
 		var data = zk.copy({dragged: drag.control}, evt.data);
-		this.fire('onDrop', data, null, zk.Widget.auDelay);
+		this.fire('onDrop', data, null, Widget.auDelay);
 	},
 	/** Called to create the visual effect representing what is being dragged.
 	 * In other words, it creates the DOM element that will be moved with the mouse pointer when the user is dragging.
@@ -3276,7 +3278,7 @@ focus_: function (timeout) {
 					if (asap != null //true or false
 					|| evt.opts.sendAhead)
 						this.sendAU_(evt,
-							asap ? timeout >= 0 ? timeout : zk.Widget.auDelay : -1);
+							asap ? timeout >= 0 ? timeout : Widget.auDelay : -1);
 				}
 			}
 			return evt;
@@ -4090,7 +4092,7 @@ _doFooSelect: function (evt) {
 		if (n && n.zk && n.zk.jq == n) //jq()
 			n = n[0];
 
-		if (!n || zk.Widget.isInstance(n))
+		if (!n || Widget.isInstance(n))
 			return n;
 
 		var wgt, id;
@@ -4191,7 +4193,7 @@ _doFooSelect: function (evt) {
 			if (name == '*' || name == _binds[wid].widgetName) {
 				var n = _binds[wid].$n(), w;
 				//Bug B50-3310406 need to check if widget is removed or not.
-				if (n && (w = zk.Widget.$(_binds[wid]))) {
+				if (n && (w = Widget.$(_binds[wid]))) {
 					els.push({
 						n: n,
 						w: w
@@ -4342,7 +4344,7 @@ zk.Widget.getClass('combobox');
 	 */
 	auDelay: 38
 });
-zkreg = zk.Widget.register; //a shortcut for WPD loader
+zkreg = Widget.register; //a shortcut for WPD loader
 
 /** A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
@@ -4363,7 +4365,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 	 */
 	widgetName: "refWidget",
 	bind_: function () {
-		var w = zk.Widget.$(this.uuid);
+		var w = Widget.$(this.uuid);
 		if (!w) {
 			zk.error("RefWidget not found: " + this.uuid);
 			return;
@@ -4464,7 +4466,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			if (w)
 				return w;
 
-			w = zk.Widget.$(dtid);
+			w = Widget.$(dtid);
 			for (; w; w = w.parent) {
 				if (w.desktop)
 					return w.desktop;
@@ -4526,7 +4528,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 zk._wgtutl = { //internal utilities
 	setUuid: function (wgt, uuid) { //called by au.js
 		if (!uuid)
-			uuid = zk.Widget.nextUuid();
+			uuid = Widget.nextUuid();
 		if (uuid != wgt.uuid) {
 			var n = wgt.$n();
 			if (n) {
