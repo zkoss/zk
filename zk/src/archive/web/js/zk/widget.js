@@ -25,7 +25,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 		_syncdt, //timer ID to sync destkops
 		_rdque = [], _rdtid, //async rerender's queue and timeout ID
-		_ignCanActivate; //whether canActivate always returns true
+		_ignCanActivate, //whether canActivate always returns true
+		REGEX_DQUOT = /\"/g; //jsdoc can't handle it correctly, so we have to put here
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -2195,7 +2196,7 @@ redraw: function (out) {
 			out.push("display:none;");
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
-			s = s.replace(/\"/g,'\'');  // B50-ZK-647
+			s = s.replace(REGEX_DQUOT,'\'');  // B50-ZK-647
 			out.push(s);
 			if (s.charAt(s.length - 1) != ';')
 				out.push(';');
