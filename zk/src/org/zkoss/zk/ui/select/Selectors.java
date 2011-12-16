@@ -599,6 +599,9 @@ public class Selectors {
 		if(clazz.isAssignableFrom(ArrayList.class)) return new ArrayList();
 		if(clazz.isAssignableFrom(HashSet.class)) return new HashSet();
 		if(clazz.isAssignableFrom(TreeSet.class)) return new TreeSet();
+		try {
+			return (Collection) clazz.getConstructor().newInstance();
+		} catch (Exception e) {} // ignore
 		return null;
 	}
 	
