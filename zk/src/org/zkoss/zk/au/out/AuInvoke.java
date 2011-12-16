@@ -24,9 +24,9 @@ import org.zkoss.zk.au.AuResponse;
  * Unlike {@link AuScript}, it invokes the given function (rather than
  * evaluates a JavaScript snippet).
  * <p>There are basically two approaches.
- * First, {@link AuInvoke(Component, String, Object...)} is used to invoke
+ * First, {@link #AuInvoke(Component, String, Object...)} is used to invoke
  * the method of the peer widget of the given component.
- * Second, {@link AuInvoke#AuInvoke(String, Object...)} is used to invoke
+ * Second, {@link #AuInvoke(String, Object...)} is used to invoke
  * a global function (at the client).
  *
  * <p>data[0]: the component UUID<br/>
