@@ -7,13 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.CookieParam;
 import org.zkoss.bind.annotation.Default;
+import org.zkoss.bind.annotation.ExecutionArgParam;
+import org.zkoss.bind.annotation.ExecutionParam;
+import org.zkoss.bind.annotation.HeaderParam;
 import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -27,8 +35,10 @@ public class ParamCall {
 
 	private Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types;//to map class type directly, regardless the annotation
-	private boolean _mappingType;//to enable the map class type
+	private boolean _mappingType;//to enable the map class type without annotation, it is for compatible to rc2, only support BindeContext and Binder
 	private Map<ContextType,Object> _contextObjects = new HashMap<ContextType,Object>();
+	
+	private static final String COOKIE_CACHE = "$PARAM_COOKIES$";
 	
 	public ParamCall(){
 		this(true);
@@ -131,10 +141,65 @@ public class ParamCall {
 	}
 
 	public void setComponent(final Component comp) {
-		// TODO implementation
+		//scope param
+//		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
+//			@Override
+//			public Object resolveParameter(Annotation anno) {
+//				return exec.getParameter(((QueryParam) anno).value());
+//			}
+//		});
+		
 	}
 	public void setExecution(final Execution exec) {
-		// TODO implementation
+		//http param
+		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				return exec.getParameter(((QueryParam) anno).value());
+			}
+		});
+		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				return exec.getHeader(((HeaderParam) anno).value());
+			}
+		});
+		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
+			@Override
+			@SuppressWarnings("unchecked")
+			public Object resolveParameter(Annotation anno) {
+				Map<String,Object> m = (Map<String,Object>)exec.getAttribute(COOKIE_CACHE);
+				if(m==null){
+					final Object req  = exec.getNativeRequest();
+					if(req instanceof HttpServletRequest){
+						m = new HashMap<String,Object>();
+						exec.setAttribute(COOKIE_CACHE, m);
+						final Cookie[] cks = ((HttpServletRequest)req).getCookies();
+						for(Cookie ck:cks){
+							m.put(ck.getName().toLowerCase(), ck.getValue());
+						}
+					}else/* if(req instanceof PortletRequest)*/{
+						//no cookie in protlet 1.0
+						m = new HashMap<String,Object>();
+					}
+				}
+				return m==null?null:m.get(((CookieParam) anno).value().toLowerCase());
+			}
+		});
+
+		//execution
+		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				return exec.getAttribute(((ExecutionParam) anno).value());
+			}
+		});
 		
+		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				return exec.getArg().get(((ExecutionArgParam) anno).value());
+			}
+		});
 	}
 }

@@ -18,6 +18,11 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation to identify a init method
+ * A init method could also use with {@link Param} to assign a binding argument as its parameter, 
+ * and {@link Default} to assign a default value if the argument is null.
+ * 
+ * @see Param
+ * @see Default
  * @author dennis
  *
  */

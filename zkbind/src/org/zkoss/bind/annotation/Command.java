@@ -18,8 +18,8 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation to identify a Command method. 
- * A Command method could also use {@link Param} to assign a binding argument as its parameter, 
- * and {@link Default} to assign a default value if the binding argument is null.
+ * A Command method could also use with {@link Param} to assign a binding argument as its parameter, 
+ * and {@link Default} to assign a default value if the argument is null.
  * 
  * @see Param
  * @see Default
