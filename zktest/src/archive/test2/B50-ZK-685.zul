@@ -1,0 +1,9 @@
+<zk xmlns:w="client">
+	<div>
+		Select the last Listitem (by clicking on the checkmark. If the Listbox scrolls to the top, it is a bug.
+	</div>
+	<listbox height="200px" checkmark="true">
+		<listitem label="${each}" forEach="1,2,3,4,5,6,7,8" />
+		<listitem id="i9" draggable="true" label="9" />
+	</listbox>
+</zk>

@@ -603,7 +603,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._focusItem) {
 				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) 
 					if (this._isFocus(w)) {
-						w.focus_(timeout);
+						w._focus(timeout); // B50-ZK-685
 						break;
 					}
 			} else {
@@ -758,12 +758,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			} else
 				this._select(row, evt, skipFocus);
 
-			//since row might was selected, we always enfoce focus here
-			if (!skipFocus)
-				row.focus();
+			//since row might was selected, we always enforce focus here
+			if (!skipFocus && row.canActivate({checkOnly:true})
+					&& zk(row.$n()).isRealVisible()) // B50-ZK-685
+				row._focus();
 			//if (evt) evt.stop();
 			//No much reason to eat the event.
-			//Oppositely, it disabled popup (bug 1578659)
+			//In opposite, it disabled popup (bug 1578659)
 		}
 	},
 	/* Handles keydown sent to the body. */
@@ -1070,7 +1071,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var changed = this._isFocus(row) != bFocus;
 		if (changed) {
 			if (bFocus) {
-				if (!row.focus())
+				if (!row.canActivate({checkOnly:true}) || 
+						!zk(row.$n()).isRealVisible() || !row._focus()) // B50-ZK-685
 					this.focus();
 
 				if (!this.paging && zk.gecko)
