@@ -66,11 +66,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
-	<!-- Uncomment if you want to load conf/zk-log.conf for logging ZK core
-	<log>
-		<log-base>org.zkoss</log-base>
-	</log>
-	-->
 
 	<!-- Turn on the following if you want to use the trendy mold as default
 		for all buttons.
@@ -466,6 +461,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- Uncomment if you want to load a conifugration file for logging ZK core
+	ZK will try to locate the file from the class path, and the current directory
+	("user.dir").
+	<library-property>
+		<name>org.zkoss.util.logging.configuration.file</name>
+		<value>conf/zk-log.properties</value>
+	</library-property>
+	-->
+	<!-- Turn on the following if you want to use ZK with a GAE(Google App Engine)
+	environment. If turned on, the configuration file is useless.
+	<library-property>
+		<name>org.zkoss.util.logging.hierarchy.disabled</name>
+		<value>true</value>
+	</library-property>
+	-->
 	<!-- Uncommet to control the number of lines to log an error message.
 		Default: 6. If nonpostive is specified, the full stack traces are logged.
 		Notice that # of lines don't include packages starting with java, javax or sun.

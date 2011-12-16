@@ -59,11 +59,11 @@ ZK 6.0.0
   ZK-635: Fileupload support HTML5's input file with multiple
   ZK-616: Able to specify Messagebox width
   ZK-646: Allow WebAppInit listenes to override default extendlet, such as WPD and WCS
-  ZK-648: Rename i3-log.conf to zk-log.conf
   ZK-649: Rename i3-label.properties to zk-label.properties
   ZK-665: The default autowiring of HtmlMacroComponent and XmlMacroComponent shall be the same as SelectorComposer
   ZK-666: A way to specify both annotation and value for a property
   ZK-688: AuInvoke supports the invocation of a global function at the client
+  ZK-694: The file to configure logger can be specified in a library property
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
@@ -160,13 +160,16 @@ ZK 6.0.0
   	and switch the implementation if necessary.
   + The default I18N  properties file is renamed from i3-label.properties to
     zk-label.properties.
-  + The log configuration file is renamed from i3-log.conf to zk-log.conf.
+  + The configuration file for logging is now configurable by use of
+    the library property called org.zkoss.util.logging.configuration.file.
   + If the attribute called composerName is specified, the default name
     won't be wired (for better performance).
   + AbstractComponent.smartUpdate(String, Date) is removed
   + org.zkoss.zk.ui.sys.JavaScriptValue is moved to org.zkoss.json.JavaScriptValue
   + The return type of org.zkoss.zk.ui.metainfo.Annotation.getAttributes()
     is changed to Map<String, String[]>
+  + Files.getConfigDirectory is removed
+  + org.zkoss.util.logging.LogService is removed
 
 	--------
 ZK 5.0.10

@@ -163,6 +163,8 @@ public class WebManager {
 			log.realCauseBriefly("Unable to load " + XML, ex);
 		}
 
+		LogConfigurer.configure();
+
 		//load additional configuration file
 		XML = Library.getProperty("org.zkoss.zk.config.path");
 		if (XML != null && XML.length() > 0) {

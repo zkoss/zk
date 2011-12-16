@@ -54,7 +54,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="working.dir" value="../working"/>
 <property name="dist.lib.dir" value="${dist.dir}/lib"/>
 <property name="dist.lib.ext.dir" value="${dist.lib.dir}/ext"/>
-<property name="dist.conf.dir" value="${dist.dir}/conf"/>
 <property name="working.javadoc.dir" value="${working.dir}/javadoc/${project.name}"/>
 <property name="dist.javadoc.dir" value="${share.javadoc.dir}/${project.name}"/>
 <property name="out.metainf.dir" value="${out.dir}/META-INF"/>

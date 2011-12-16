@@ -57,47 +57,6 @@ public class Files {
 		return File.separatorChar != '/' ?
 			flnm.replace('/', File.separatorChar): flnm;
 	}
-	/** Returns the conf directory.
-	 *
-	 * <p>The configure directory is assumed to be specified by
-	 * the system property called "org.zkoss.io.conf.dir".
-	 * If property not found, it assumes the conf or config directory under
-	 * the directory specified by the system property called "user.dir".
-	 * If property not found, it assumes the conf directory under
-	 * the current directory.
-	 */
-	public final static File getConfigDirectory() {
-		final String confdir = Library.getProperty("org.zkoss.io.conf.dir");
-		if (confdir != null) return new File(confdir);
-
-		final String userdir = System.getProperty("user.dir", ".");
-		final File fl0 = new File(userdir, "conf");
-		if (exists(fl0) == null) {
-			File fl = exists(new File(userdir, "config"));
-			if (fl != null) return fl;
-
-			if (!".".equals(userdir)) {
-				fl = exists(new File(userdir, "../conf"));
-				if (fl != null) return fl;
-				fl = exists(new File(userdir, "../config"));
-				if (fl != null) return fl;
-
-				fl = exists(new File("./conf"));
-				if (fl != null) return fl;
-				fl = exists(new File("./config"));
-				if (fl != null) return fl;
-			}
-
-			fl = exists(new File("../conf"));
-			if (fl != null) return fl;
-			fl = exists(new File("../config"));
-			if (fl != null) return fl;
-		}
-		return fl0;
-	}
-	private static final File exists(File fl) {
-		return fl.exists() ? fl: null;
-	}
 
 	/** Returns all bytes in the input stream, never null
 	 * (but its length might zero).

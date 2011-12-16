@@ -429,9 +429,7 @@ public class ConfigParser {
 				parseTimeoutURI(config, el);
 					//deprecated since 3.6.3, but to be backward-compatible
 			} else if ("log".equals(elnm)) {
-				final String base = el.getElementValue("log-base", true);
-				if (base != null)
-					org.zkoss.util.logging.LogService.init(base, null); //start the log service
+				log.warning("Ingored. Use the library property called org.zkoss.util.logging.configuration.file instead");
 			} else if ("error-page".equals(elnm)) {
 			//error-page
 				final Class cls =

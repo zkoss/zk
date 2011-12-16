@@ -15,6 +15,8 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.logging;
 
+import java.util.Map;
+import java.util.Properties;
 import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.logging.LogManager;
@@ -94,6 +96,37 @@ public class Log {
 	 * Note: it is temporay and set to null when {@link #logger} is called.
 	 */
 	private String _name;
+
+	/**
+	 * Configures based the properties.
+	 *
+	 * <p>The key is a logger name and the value is the level.
+	 * A special level, INHERIT or NULL, to denote resetting the level
+	 * to be the same as the logger's parent.
+	 *
+	 * @param props the properties
+	 * @since 6.0.0
+	 */
+	public final static void configure(Properties props) {
+		setHierarchy(true); //turn on the hierarchy
+
+		Log log = null;
+		for (Map.Entry<Object, Object> me: props.entrySet()) {
+			final String key = (String)me.getKey();
+			String val = (String)me.getValue();
+			if (val != null) val = val.trim();
+
+			final Level level = Log.getLevel(val);
+			if (level != null || (val != null && (val.equalsIgnoreCase("NULL")
+			|| val.equalsIgnoreCase("INHERIT")))) {
+				Logger.getLogger(key).setLevel(level);
+			} else {
+				if (log == null)
+					log = lookup(Log.class);
+				log.warning("Illegal log level, "+val+", for "+key);
+			}
+		}
+	}
 
 	/** Returns whether the loggers support hierarchy.
 	 * If hierarchy is supported, a {@link Log} instance is mapped to
