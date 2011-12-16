@@ -52,7 +52,6 @@ public class Z60SelectorComposer extends SelectorComposer<Component> {
 			lb.setValue(var);
 	}
 	
-	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		
@@ -67,7 +66,6 @@ public class Z60SelectorComposer extends SelectorComposer<Component> {
 	
 	public static class Z60VariableResolver implements org.zkoss.xel.VariableResolver {
 		
-		@Override
 		public Object resolveVariable(String name) throws XelException {
 			return name + name;
 		}
