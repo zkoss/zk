@@ -15,6 +15,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.logging;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import java.util.logging.LogManager;
 import java.util.logging.Level;
 import java.util.logging.Handler;
+import java.io.ByteArrayInputStream;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -111,10 +113,50 @@ public class Log {
 		setHierarchy(true); //turn on the hierarchy
 
 		Log log = null;
+		final StringBuffer sb = new StringBuffer();
+		String[] handlers = null;
+		for (Iterator<Map.Entry<Object, Object>> it = props.entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry<Object, Object> me = it.next();
+			final String key = (String)me.getKey();
+			final String val = (String)me.getValue();
+			boolean matched = false;
+			if ("handlers".equals(key)) {
+				matched = true;
+
+				handlers = val.split("[, ]");
+				for (int j = handlers.length; --j >= 0;) {
+					handlers[j] = handlers[j].trim();
+					handlers[j] = handlers[j].length() > 0 ?
+						handlers[j] + '.': null;
+				}
+			} else {
+				for (String h: handlers) {
+					if (h != null && key.startsWith(h)) {
+						matched = true;
+						break;
+					}
+				}
+			}
+
+			if (matched) {
+				sb.append(key).append('=').append(val).append('\n');
+				it.remove();
+			}
+		}
+
+		if (sb.length() > 0) {
+			try {
+				LogManager.getLogManager().readConfiguration(
+					new ByteArrayInputStream(sb.toString().getBytes()));
+			} catch (java.io.IOException ex) {
+				throw org.zkoss.lang.SystemException.Aide.wrap(ex);
+			}
+		}
+
 		for (Map.Entry<Object, Object> me: props.entrySet()) {
 			final String key = (String)me.getKey();
-			String val = (String)me.getValue();
-			if (val != null) val = val.trim();
+			final String val = ((String)me.getValue()).trim();
 
 			final Level level = Log.getLevel(val);
 			if (level != null || (val != null && (val.equalsIgnoreCase("NULL")
@@ -260,8 +302,10 @@ public class Log {
 	public static final Level getLevel(String level) {
 		if (level != null) {
 			level = level.toUpperCase();
-			if (level.equals("DEBUG")) return Log.DEBUG;
-			if (level.equals("ERROR")) return Log.ERROR;
+			if (level.equals("DEBUG") || level.equals("FINE"))
+				return Log.DEBUG;
+			if (level.equals("ERROR") || level.equals("SEVERE"))
+				return Log.ERROR;
 			if (level.equals("FINER")) return Log.FINER; 
 			if (level.equals("INFO")) return Log.INFO;
 			if (level.equals("WARNING")) return Log.WARNING;
