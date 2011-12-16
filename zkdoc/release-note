@@ -165,6 +165,8 @@ ZK 6.0.0
     won't be wired (for better performance).
   + AbstractComponent.smartUpdate(String, Date) is removed
   + org.zkoss.zk.ui.sys.JavaScriptValue is moved to org.zkoss.json.JavaScriptValue
+  + The return type of org.zkoss.zk.ui.metainfo.Annotation.getAttributes()
+    is changed to Map<String, String[]>
 
 	--------
 ZK 5.0.10

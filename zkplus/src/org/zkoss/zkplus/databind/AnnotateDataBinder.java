@@ -436,12 +436,14 @@ public class AnnotateDataBinder extends DataBinder {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(null, annotName);
 		if (ann != null) {
-			Map attrs = ann.getAttributes();
-			for(final Iterator it = attrs.entrySet().iterator(); it.hasNext();) {
-				Entry me = (Entry) it.next();
-				String attr = (String) me.getKey();
+			Map<String, String[]> attrs = ann.getAttributes();
+			for(Entry<String, String[]> me: attrs.entrySet()) {
+				String attr = me.getKey();
+				String[] val = me.getValue();
+				if (val.length != 1)
+					throw new UiException("Not support array value, "+annotName);
 				//[0] bean value, [1 ~ *] tag:expression
-				List expr = parseExpression((String) me.getValue(), ";");
+				List expr = parseExpression(val[0] , ";");
 				if (expr == null || expr.get(0) == null) {
 					throw new UiException("Cannot find any bean value in the annotation <a:bind "+attr+"=\"\"/> for component "+comp+", id="+comp.getId());
 				} else {
