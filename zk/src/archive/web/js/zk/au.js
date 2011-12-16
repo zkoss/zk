@@ -85,7 +85,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 								data[j] = Widget.$(id);
 						while (j--)
 						doProcess(cmd, data);
-					});
+					}, -1);
 					return true; //not ready
 				}
 				data[j] = w;

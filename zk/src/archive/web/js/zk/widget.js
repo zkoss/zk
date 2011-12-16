@@ -1169,7 +1169,7 @@ wgt.$f().main.setTitle("foo");
 			var self = this;
 			zk.afterMount(function () {
 				zk._set(self, name, Widget.$(cc), extra);
-			});
+			}, -1);
 			return this;
 		}
 
