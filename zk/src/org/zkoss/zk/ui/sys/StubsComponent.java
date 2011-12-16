@@ -18,6 +18,10 @@ import java.util.LinkedList;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.StubEvent;
+import org.zkoss.zk.ui.sys.EventListenerMap;
 
 /**
  * Represents a tree of {@link StubComponent} that are merged into
@@ -30,6 +34,8 @@ public class StubsComponent extends StubComponent {
 	private String[] _uuids;
 	/** [0]: uuid, [1]: id */
 	private String[][] _idmap;
+	/** [0]: uuid, [1]: EventListenerMap. */
+	private Object[][] _evtmap;
 
 	/** Called when this component replaced the given component,
 	 * and the children of the given component shall be 'merged' to this component.
@@ -37,33 +43,47 @@ public class StubsComponent extends StubComponent {
 	 * @exception IllegalStateException if this method has been called twice
 	 * (we can modify the algorithm to support but not worth).
 	 */
-	public void onChildrenMerged(Component replaced) {
+	public void onChildrenMerged(Component replaced, boolean bListener) {
 		if (_uuids != null)
 			throw new IllegalStateException("called twice");
 
 		final List<String> uuids = new LinkedList<String>();
 		final List<String[]> idmap = new LinkedList<String[]>();
+		final List<Object[]> evtmap = bListener ? new LinkedList<Object[]>(): null;
 		final Page page = getPage();
+
 		mapChildren(page != null ? (DesktopCtrl)page.getDesktop(): null,
-			uuids, idmap, replaced);
+			uuids, idmap, evtmap, replaced);
+
 		_uuids = (String[])uuids.toArray(new String[uuids.size()]);
-		_idmap = (String[][])idmap.toArray(new String[idmap.size()][]);
+		_idmap = !idmap.isEmpty() ?
+			(String[][])idmap.toArray(new String[idmap.size()][]): null;
+		_evtmap = evtmap != null && !evtmap.isEmpty() ?
+			(Object[][])evtmap.toArray(new Object[evtmap.size()][]): null;
 	}
 	private void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids,
-	List<String[]> idmap, Component comp) {
+	List<String[]> idmap, List<Object[]> evtmap, Component comp) {
 		for (Component p = comp.getFirstChild(); p != null; p = p.getNextSibling()) {
 			if (p instanceof StubsComponent) {
 				final String[] kiduuids = ((StubsComponent)p)._uuids;
 				if (kiduuids != null)
-					for (int j = 0; j < kiduuids.length; ++j) {
-						uuids.add(kiduuids[j]);
+					for (String uuid: kiduuids) {
+						uuids.add(uuid);
 						if (desktopCtrl != null)
-							desktopCtrl.mapComponent(kiduuids[j], this);
+							desktopCtrl.mapComponent(uuid, this);
 					}
+
 				final String[][] kidids = ((StubsComponent)p)._idmap;
 				if (kidids != null)
-					for (int j = 0; j < kidids.length; ++j)
-						idmap.add(kidids[j]);
+					for (String[] idinf: kidids)
+						idmap.add(idinf);
+
+				if (evtmap != null) {
+					final Object[][] kidevts = ((StubsComponent)p)._evtmap;
+					if (kidevts != null)
+						for (Object[] evtinf: kidevts)
+							evtmap.add(evtinf);
+				}
 			}
 
 			final String uuid = p.getUuid();
@@ -74,38 +94,62 @@ public class StubsComponent extends StubComponent {
 			final String id = p.getId();
 			if (id != null && id.length() > 0)
 				idmap.add(new String[] {uuid, id});
+			if (evtmap != null) {
+				EventListenerMap em = ((ComponentCtrl)p).getEventListenerMap();
+				if (em != null)
+					evtmap.add(new Object[] {uuid, em});
+			}
 
-			mapChildren(desktopCtrl, uuids, idmap, p); //recusrive
+			mapChildren(desktopCtrl, uuids, idmap, evtmap, p); //recusrive
 		}
 	}
 
 	//--super--//
-	//@Override
+	@Override
 	public String getId(String uuid) {
 		if (_idmap != null)
-			for (int j = 0; j < _idmap.length; ++j)
-				if (uuid.equals(_idmap[j][0]))
-					return _idmap[j][1];
+			for (String[] idinf: _idmap)
+				if (uuid.equals(idinf[0]))
+					return idinf[1];
 		return super.getId(uuid);
 	}
-	//@Override
+	@Override
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 
 		if (newpage != null) {
 			final DesktopCtrl desktopCtrl = (DesktopCtrl)newpage.getDesktop();
-			for (int j = 0; j < _uuids.length; ++j)
-				desktopCtrl.mapComponent(_uuids[j], this);
+			for (String uuid: _uuids)
+				desktopCtrl.mapComponent(uuid, this);
 		}
 	}
-	//@Override
+	@Override
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)page.getDesktop();
-		for (int j = 0; j < _uuids.length; ++j)
-			desktopCtrl.mapComponent(_uuids[j], null);
+		for (String uuid: _uuids)
+			desktopCtrl.mapComponent(uuid, null);
 	}
+	@Override
+	public void service(Event event, Scope scope) throws Exception {
+		final StubEvent stubevt =
+			event instanceof StubEvent ? (StubEvent)event: null;
+		final String uuid = stubevt != null ? stubevt.getUuid(): null;
+		if (uuid == null || uuid.equals(getUuid())) {
+			super.service(event, scope);
+		} else if (_evtmap != null) {
+			for (Object[] evtinf: _evtmap) {
+				if (uuid.equals(evtinf[0])) {//matched
+					((EventListenerMap)evtinf[1]).service(
+						event, scope, this, stubevt.getCommand());
+					break; //done
+				}
+			}
+			postToNonStubAncestor(stubevt);
+		}
+	}
+
 	/** Returns the widget class, "#stubs".
 	 */
 	public String getWidgetClass() {

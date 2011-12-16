@@ -51,12 +51,12 @@ void show(Event event) {
 		<div>
 			1.1
 			<div>
-			<textbox id="t0" value="1.1.1 (stub)" onChange="">
+			<textbox id="t0" value="1.1.1 (stub)" onChange='alert("Changed")'>
 				<zscript>
 			t0uuid = self.uuid;
 				</zscript>
 			</textbox>
-			<button id="b0" label="click (stub)" onClick=""/></div>
+			<button id="b0" label="click (stub)" onClick='alert("Clicked")'/></div>
 		</div>
 		<div>
 			1.2

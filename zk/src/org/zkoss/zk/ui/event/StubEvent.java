@@ -31,20 +31,17 @@ import org.zkoss.zk.au.AuRequests;
  * @since 6.0.0
  */
 public class StubEvent extends Event {
-	private final String _cmd, _id;
+	private final String _cmd, _uuid, _id;
 	private final Map<String, Object> _data;
 
 	/** Converts an AU request to a stub event.
 	 */
 	public static final StubEvent getStubEvent(AuRequest request) {
-		Component comp = request.getComponent(), target;
-		for (target = comp; target != null && (target instanceof Native
-		|| target instanceof StubComponent); target = target.getParent())
-			;
-
+		final Component target = request.getComponent();
 		final Map<String, Object> data = request.getData();
+		final String uuid = request.getUuid();
 		return new StubEvent("onStub", target, request.getCommand(),
-			getId(comp, request.getUuid()), data);
+			uuid, getId(target, uuid), data);
 	}
 	private static final String getId(Component comp, String uuid) {
 		if (comp instanceof StubComponent)
@@ -61,11 +58,15 @@ public class StubEvent extends Event {
 	 * @param id the ID of the stub component causes this event.
 	 */
 	public StubEvent(String name, Component target,
-	String cmd, String id, Map<String, Object> data) {
+	String cmd, String uuid, String id, Map<String, Object> data) {
 		super(name, target);
 		_cmd = cmd;
+		_uuid = uuid;
 		_id = id;
 		_data = data;
+	}
+	public StubEvent(StubEvent evt, Component target) {
+		this(evt.getName(), target, evt._cmd, evt._uuid, evt._id, evt._data);
 	}
 
 	/** Returns the command of the AU request, such as onChange.
@@ -78,6 +79,11 @@ public class StubEvent extends Event {
 	 */
 	public String getId() {
 		return _id;
+	}
+	/** Returns the UUID of the stub component sending the request.
+	 */
+	public String getUuid() {
+		return _uuid;
 	}
 	/** Returns the data carried in the request.
 	 * The content depends on the request ({@link AuRequest}).

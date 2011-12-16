@@ -460,4 +460,12 @@ public interface ComponentCtrl {
 	 * @since 3.6.2
 	 */
 	public boolean disableClientUpdate(boolean disable);
+
+	/** Returns the map of event handlers and listeners defined in this component.
+	 * This method is rarely used, but it is useful if  you'd like to retrieve
+	 * the behavior of the event handling of this component (and if you don't
+	 * have the reference to the component)
+	 * @since 6.0.0
+	 */
+	public EventListenerMap getEventListenerMap();
 }

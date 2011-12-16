@@ -75,6 +75,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.EventListenerMap;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -1306,7 +1307,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				comp._chdinf = _chdinf;
 				_chdinf = null;
 			} else if (comp instanceof StubsComponent) { //dirty but not worth to generalize it yet
-				((StubsComponent)comp).onChildrenMerged(this);
+				((StubsComponent)comp).onChildrenMerged(this, bListener);
 			} else if (page != null) {
 				childrenMerged((DesktopCtrl)page.getDesktop(), _chdinf);
 			}
@@ -2647,6 +2648,22 @@ w:use="foo.MyWindow"&gt;
 	}
 
 	public void service(Event event, Scope scope) throws Exception {
+		final String evtnm = event.getName();
+		final Method mtd = ComponentsCtrl.getEventMethod(getClass(), evtnm);
+		if (_auxinf != null)
+			service(event, scope,
+				_auxinf.listeners != null ? _auxinf.listeners.get(evtnm): null,
+				_auxinf.evthds != null ? _auxinf.evthds.get(this, evtnm): null,
+				mtd, false);
+		else
+			service(event, scope, null, null, mtd, false);
+	}
+	/**
+	 * @param skipPageListener whether to skip page's event listener.
+	 */
+	/*package*/ void service(Event event, Scope scope,
+	final List<EventListenerInfo> listeners, final EventHandler evthd,
+	final Method mtd, boolean skipPageListener) throws Exception {
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
 		final Page page = _page != null ? _page: desktop.getFirstPage();
@@ -2664,9 +2681,6 @@ w:use="foo.MyWindow"&gt;
 		//EventListener always is called even if comp isn't attached (e.g., EventQueue)
 		final ExecInfo execinf;
 		((ExecutionCtrl)exec).setExecutionInfo(execinf = new ExecInfo(event));
-		final String evtnm = event.getName();
-		final List<EventListenerInfo> listeners = _auxinf != null && _auxinf.listeners != null ?
-			_auxinf.listeners.get(evtnm): null;
 		if (listeners != null)
 			for (Iterator it = CollectionsX.comodifiableIterator(listeners); it.hasNext();) {
 				final EventListenerInfo li = (EventListenerInfo)it.next();
@@ -2681,9 +2695,9 @@ w:use="foo.MyWindow"&gt;
 
 		//ZScript called only if comp attached to an active page
 		if (page != null && getDesktop() != null) { //this.desktop, not exec.desktop
-			final ZScript zscript = getEventHandler(evtnm);
-			execinf.update(null, null, zscript);
+			final ZScript zscript = evthd != null ? evthd.getZScript(): null;
 			if (zscript != null) {
+				execinf.update(null, null, zscript);
 				page.interpret(
 						zscript.getLanguage(), zscript.getContent(page, this), scope);
 				if (!event.isPropagatable())
@@ -2703,9 +2717,7 @@ w:use="foo.MyWindow"&gt;
 			}
 
 		//Like EventListener, method is always called
-		final Method mtd = ComponentsCtrl.getEventMethod(getClass(), evtnm);
 		if (mtd != null) {
-//			if (log.finerable()) log.finer("Method for event="+evtnm+" comp="+this+" method="+mtd);
 			execinf.update(mtd, null, null);
 
 			if (mtd.getParameterTypes().length == 0)
@@ -2716,8 +2728,8 @@ w:use="foo.MyWindow"&gt;
 				return; //done
 		}
 
-		if (page != null)
-			for (EventListener<? extends Event> el: page.getEventListeners(evtnm)) {
+		if (!skipPageListener && page != null)
+			for (EventListener<? extends Event> el: page.getEventListeners(event.getName())) {
 			//Note: CollectionsX.comodifiableIterator is used so OK to iterate
 				execinf.update(null, el, null);
 				onEvent(el, event);
@@ -2728,6 +2740,12 @@ w:use="foo.MyWindow"&gt;
 	@SuppressWarnings("unchecked")
 	private static void onEvent(EventListener listener, Event event) throws Exception {
 		listener.onEvent(event);
+	}
+	@Override
+	public EventListenerMap getEventListenerMap() {
+		return new EventListenerMapImpl(
+			_auxinf != null ? _auxinf.listeners: null,
+			_auxinf != null ? _auxinf.evthds: null);
 	}
 
 	/** Called when the widget running at the client asks the server
@@ -3358,11 +3376,13 @@ w:use="foo.MyWindow"&gt;
 		}
 		/** Clone for the stub component ({@link replaceWith}). */
 		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
+			//No need to clone visible since it is meaningless in StubComponent
 			if (bListener && (evthds != null || listeners != null)) {
+				//No need to make a copy of  evthds and listeners since Stub replaced the old one
 				final AuxInfo clone = new AuxInfo();
-				if (evthds != null)
-					clone.evthds = evthdsShared ? evthds: (EventHandlerMap)evthds.clone();
-				cloneListeners(owner, clone);
+				clone.evthdsShared = evthdsShared;
+				clone.evthds = evthds;
+				clone.listeners = listeners;
 				return clone;
 			}
 			return null;
@@ -3534,33 +3554,6 @@ w:use="foo.MyWindow"&gt;
 			this.target = target;
 			this.event = event;
 			this.data = data;
-		}
-	}
-	private static class EventListenerInfo
-	implements ComponentSerializationListener, ComponentActivationListener,
-	java.io.Serializable {
-		private final int priority;
-		private final EventListener<? extends Event> listener;
-		private EventListenerInfo(int priority, EventListener<? extends Event> listener) {
-			this.priority = priority;
-			this.listener = listener;
-		}
-		//ComponentSerializationListener//
-		public void willSerialize(Component comp) {
-			((AbstractComponent)comp).willSerialize(this.listener);
-		}
-		public void didDeserialize(Component comp) {
-			((AbstractComponent)comp).didDeserialize(this.listener);
-		}
-		//ComponentActivationListener//
-		public void didActivate(Component comp) {
-			((AbstractComponent)comp).didActivate(this.listener);
-		}
-		public void willPassivate(Component comp) {
-			((AbstractComponent)comp).willPassivate(this.listener);
-		}
-		public String toString() {
-			return "[" + this.priority + ": " + this.listener.toString() + "]";
 		}
 	}
 	private static final Converter<EventListenerInfo, EventListener<? extends Event>> _listenerInfoConverter = new Converter<EventListenerInfo, EventListener<? extends Event>>() {

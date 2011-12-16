@@ -16,7 +16,9 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.event.StubEvent;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -103,16 +105,35 @@ public class StubComponent extends AbstractComponent {
 	 * @exception IllegalStateException if this component has a parent,
 	 * sibling or child.
 	 */
+	@Override
 	public void replace(Component comp, boolean bFellow, boolean bListener,
 	boolean bChildren) {
 		super.replace(comp, bFellow, bListener, bChildren);
 	}
 	/** Returns the widget class, "#stub".
 	 */
+	@Override
 	public String getWidgetClass() {
 		return "#stub";
 	}
+	@Override
 	public void service(AuRequest request, boolean everError) {
 		Events.postEvent(StubEvent.getStubEvent(request));
+	}
+	@Override
+	public void service(Event event, Scope scope) throws Exception {
+		if (event instanceof StubEvent) {
+			postToNonStubAncestor((StubEvent)event);
+		} else {
+			super.service(event, scope);
+		}
+	}
+	/** Post event to the non-stub ancestor. */
+	/*package*/ void postToNonStubAncestor(StubEvent event) {
+		Component target = event.getTarget();
+		for (; target != null && (target instanceof Native
+		|| target instanceof StubComponent); target = target.getParent())
+			;
+		Events.postEvent(new StubEvent(event, target));
 	}
 }
