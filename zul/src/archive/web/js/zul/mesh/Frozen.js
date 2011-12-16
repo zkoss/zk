@@ -134,6 +134,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);
+			self._syncFrozenNow();
 		});
 	},
 
@@ -208,13 +209,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		this._start = num;
 	},
 	_syncFrozen: function () { //called by Rows, HeadWidget...
-		this._scrlcnt = (this._scrlcnt||0) + 1;
-		var self = this;
-		return setTimeout(function () {
-				var num;
-				if (!--self._scrlcnt && (num = self._start))
-					self._doScrollNow(num, true);
-			}, 10);
+		this._shallSync = true;
+	},
+	_syncFrozenNow: function () {
+		var num;
+		if (this._shallSync && (num = self._start)) {
+			this._doScrollNow(num, true);
+		}
+		this._shallSync = false;
 	},
 	_doScrollNow: function (num, force) {
 		var width = this.desktop ? this.$n('cave').offsetWidth: null,
