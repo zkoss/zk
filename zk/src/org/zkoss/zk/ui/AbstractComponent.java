@@ -3018,32 +3018,7 @@ w:use="foo.MyWindow"&gt;
 			Serializables.smartWrite(s, (List<ScopeListener>)null);
 		}
 
-		if (_auxinf.listeners != null) {
-			final Log logio = Serializables.logio;
-			final boolean debug = logio.debugable();
-			for (Map.Entry<String, List<EventListenerInfo>> me: _auxinf.listeners.entrySet()) {
-				s.writeObject(me.getKey());
-
-				final List<EventListenerInfo> ls = me.getValue();
-				for (EventListenerInfo li: ls) {
-					willSerialize(li.listener);
-
-					if ((li.listener instanceof java.io.Serializable)
-					|| (li.listener instanceof java.io.Externalizable)) {
-						try {
-							s.writeObject(li);
-						} catch (java.io.NotSerializableException ex) {
-							logio.error("Unable to serialize item: "+li.listener);
-							throw ex;
-						}
-					} else if (debug) {
-						logio.debug("Skip not-serializable item: "+li.listener);
-					}
-				}
-				s.writeObject(null); //end of list for a particular event
-			}
-		}
-		s.writeObject(null); //end of events
+		EventListenerInfo.write(s, this, _auxinf.listeners);
 
 		willSerialize(_auxinf.ausvc);
 		Serializables.smartWrite(s, _auxinf.ausvc);
@@ -3126,16 +3101,7 @@ w:use="foo.MyWindow"&gt;
 		else if (_parent != null)
 			_auxinf.attrs.notifyParentChanged(_parent);
 
-		for (;;) {
-			final String evtnm = (String)s.readObject();
-			if (evtnm == null) break; //no more
-
-			if (_auxinf.listeners == null)
-				_auxinf.listeners = new HashMap<String,List<EventListenerInfo>>(4);
-			final List<EventListenerInfo> ls = Serializables.smartRead(s, (List<EventListenerInfo>)null);
-				//OK to use Serializables.smartRead to read back
-			_auxinf.listeners.put(evtnm, ls);
-		}
+		_auxinf.listeners = EventListenerInfo.read(s, this);
 
 		//restore _auxinf.spaceInfo
 		if (this instanceof IdSpace) {
@@ -3152,11 +3118,6 @@ w:use="foo.MyWindow"&gt;
 		//didDeserialize
 		didDeserialize(attrmap.values());
 		didDeserialize(attrlns);
-		if (_auxinf.listeners != null)
-			for (Iterator<List<EventListenerInfo>> it = CollectionsX.comodifiableIterator(_auxinf.listeners.values());
-			it.hasNext();)
-				for (EventListenerInfo li: it.next())
-					didDeserialize(li.listener);
 		didDeserialize(_auxinf.ausvc = (AuService)s.readObject());
 	}
 	/** Utility to invoke {@link ComponentSerializationListener#didDeserialize}
