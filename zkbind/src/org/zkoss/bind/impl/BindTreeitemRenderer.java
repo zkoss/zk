@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
@@ -31,7 +33,8 @@ import org.zkoss.zul.Treerow;
  * @author henrichen
  *
  */
-public class BindTreeitemRenderer implements TreeitemRenderer {
+public class BindTreeitemRenderer implements TreeitemRenderer<Object>,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	public void render(final Treeitem item, final Object data) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();

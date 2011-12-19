@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.Form;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;

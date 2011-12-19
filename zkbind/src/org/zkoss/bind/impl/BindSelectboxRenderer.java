@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
@@ -30,7 +32,8 @@ import org.zkoss.zul.Label;
  * @author dennischen
  *
  */
-public class BindSelectboxRenderer implements ItemRenderer<Object> {
+public class BindSelectboxRenderer implements ItemRenderer<Object>,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	public String render(final Component owner, final Object data, final int index) throws Exception {
 		final Template tm = owner.getTemplate("model");

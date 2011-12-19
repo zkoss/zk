@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
@@ -31,7 +33,9 @@ import org.zkoss.zul.ComboitemRenderer;
  * @author henrichen
  *
  */
-public class BindComboitemRenderer implements ComboitemRenderer {
+public class BindComboitemRenderer implements ComboitemRenderer<Object>, Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
+	
 	public void render(final Comboitem item, final Object data) throws Exception {
 		final Combobox cb = (Combobox)item.getParent();
 		final Template tm = cb.getTemplate("model");

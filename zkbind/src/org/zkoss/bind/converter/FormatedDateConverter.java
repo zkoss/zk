@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.converter;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +27,10 @@ import org.zkoss.zk.ui.UiException;
  * @author henrichen
  *
  */
-public class FormatedDateConverter implements Converter {
+public class FormatedDateConverter implements Converter,Serializable {
+	
+	private static final long serialVersionUID = 1463169907348730644L;
+	
 	/**
 	 * Convert Date to String.
 	 * @param val date to be converted

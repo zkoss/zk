@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,9 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @author henrichen
  *
  */
-public class BindComposer<T extends Component> implements Composer<T>, ComposerExt {
+public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
+	
 	private Object _viewModel;
 	private Binder _binder;
 	private final Map<String, Converter> _converters;

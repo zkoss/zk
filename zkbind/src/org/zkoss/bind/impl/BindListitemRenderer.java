@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
@@ -29,7 +31,8 @@ import org.zkoss.zul.ListitemRenderer;
  * @author henrichen
  *
  */
-public class BindListitemRenderer implements ListitemRenderer {
+public class BindListitemRenderer implements ListitemRenderer<Object>,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	public void render(final Listitem item, final Object data) throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
 		final Template tm = listbox.getTemplate("model");

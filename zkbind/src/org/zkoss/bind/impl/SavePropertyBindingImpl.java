@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.UiException;
  * @author henrichen
  */
 public class SavePropertyBindingImpl extends PropertyBindingImpl implements SavePropertyBinding {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
 	

@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class FormBindingImpl extends BindingImpl implements FormBinding {
+	private static final long serialVersionUID = 1463169907348730644L;
 	final protected String _formId;
 	final protected Form _form;
 	final protected AccessInfo _accessInfo;

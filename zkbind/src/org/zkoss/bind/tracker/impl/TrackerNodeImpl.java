@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.tracker.impl;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +28,8 @@ import org.zkoss.bind.sys.tracker.TrackerNode;
  * @author henrichen
  *
  */
-public class TrackerNodeImpl implements TrackerNode {
+public class TrackerNodeImpl implements TrackerNode,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
 	private final Set<Binding> _bindings; //associated bindings

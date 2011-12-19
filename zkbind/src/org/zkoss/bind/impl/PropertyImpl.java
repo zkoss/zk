@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.Property;
 
 /**
@@ -19,7 +21,8 @@ import org.zkoss.bind.Property;
  * @author henrichen
  *
  */
-public class PropertyImpl implements Property {
+public class PropertyImpl implements Property,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _base;
 	private final String _property;
 	private final Object _value;

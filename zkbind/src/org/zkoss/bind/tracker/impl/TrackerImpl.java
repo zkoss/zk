@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.tracker.impl;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +44,8 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  *
  */
-public class TrackerImpl implements Tracker {
+public class TrackerImpl implements Tracker,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private Map<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
 	private Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 	private EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)

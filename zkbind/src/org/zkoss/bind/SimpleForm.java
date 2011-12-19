@@ -18,5 +18,5 @@ import org.zkoss.bind.impl.FormImpl;
  *
  */
 public class SimpleForm extends FormImpl {
-
+	private static final long serialVersionUID = 1463169907348730644L;
 }

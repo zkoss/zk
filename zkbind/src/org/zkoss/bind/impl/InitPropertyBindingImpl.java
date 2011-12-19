@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
-	
+	private static final long serialVersionUID = 1463169907348730644L;
 	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	

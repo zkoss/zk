@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -29,7 +30,9 @@ import org.zkoss.lang.Objects;
  * @author henrichen
  *
  */
-public class FormImpl implements Form,FormExt {
+public class FormImpl implements Form,FormExt,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
+	
 //	private final String _id; //form id
 	private final Set<String> _saveFieldNames; //field name for saving
 	private final Set<String> _loadFieldNames; //field name for loading

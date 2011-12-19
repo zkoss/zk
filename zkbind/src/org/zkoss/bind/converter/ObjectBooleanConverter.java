@@ -11,6 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.converter;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.Binding;
@@ -22,7 +24,8 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  *
  */
-public class ObjectBooleanConverter implements Converter {
+public class ObjectBooleanConverter implements Converter,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	/**
 	 * Given an object value and return whether it is a "true" object.
 	 * @param val the object to be checked if a true object

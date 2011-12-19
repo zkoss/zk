@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.converter;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
@@ -25,7 +26,8 @@ import org.zkoss.zk.ui.UiException;
  * @author henrichen
  *
  */
-public class FormatedNumberConverter implements Converter {
+public class FormatedNumberConverter implements Converter,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	/**
 	 * Convert Number to String.
 	 * @param val number to be converted

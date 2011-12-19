@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBinding {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
 	

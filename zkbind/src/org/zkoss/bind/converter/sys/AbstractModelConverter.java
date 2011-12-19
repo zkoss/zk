@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.converter.sys;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import org.zkoss.zul.impl.GroupsListModel;
  * @author dennis
  *
  */
-public abstract class AbstractModelConverter implements Converter{
+public abstract class AbstractModelConverter implements Converter, Serializable{
 
 	private static final long serialVersionUID = 201108171744L;
 	

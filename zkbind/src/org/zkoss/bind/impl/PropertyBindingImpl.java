@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  */
 public abstract class PropertyBindingImpl extends BindingImpl implements PropertyBinding {
+	private static final long serialVersionUID = 1463169907348730644L;
 	protected final ExpressionX _fieldExpr;
 	protected final AccessInfo _accessInfo;
 	private final ExpressionX _converter;

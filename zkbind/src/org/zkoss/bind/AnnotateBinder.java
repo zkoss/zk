@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  *
  */
 public class AnnotateBinder extends BinderImpl {
-	
+	private static final long serialVersionUID = 1463169907348730644L;
 	/**
 	 * new a annotate binder with default event queue name and scope
 	 */

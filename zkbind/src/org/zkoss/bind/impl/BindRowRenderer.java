@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
@@ -31,7 +33,8 @@ import org.zkoss.zul.Rows;
  * @author henrichen
  *
  */
-public class BindRowRenderer implements RowRenderer {
+public class BindRowRenderer implements RowRenderer<Object>,Serializable {
+	private static final long serialVersionUID = 1463169907348730644L;
 	public void render(final Row row, final Object data) {
 		final Rows rows = (Rows)row.getParent();
 		final Grid grid = (Grid)rows.getParent();

@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -28,7 +30,10 @@ import org.zkoss.xel.ExpressionX;
  * @author henrichen
  *
  */
-public class AccessInfo {
+public class AccessInfo implements Serializable{
+	
+	private static final long serialVersionUID = 1463169907348730644L;
+	
 	final String commandName; //command name
 	final ExpressionX property; //property expression
 	final ConditionType type; //the condition type, prompt, before command or after command

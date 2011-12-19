@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,9 +85,10 @@ import org.zkoss.zk.ui.util.Template;
  * @author dennischen
  *
  */
-public class BinderImpl implements Binder,BinderCtrl {
-	
-	
+public class BinderImpl implements Binder,BinderCtrl,Serializable {
+
+	private static final long serialVersionUID = 1463169907348730644L;
+
 	private static final Log _log = Log.lookup(BinderImpl.class);
 	
 	private static final Map<String, Converter> CONVERTERS = new HashMap<String, Converter>();

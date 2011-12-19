@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;

@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.UiException;
  *
  */
 public class CommandBindingImpl extends BindingImpl implements CommandBinding {
+	private static final long serialVersionUID = 1463169907348730644L;
 	private final String _evtnm;
 	private final ExpressionX _command;
 	public CommandBindingImpl(Binder binder, Component comp, String evtnm, String cmdScript, Map<String, Object> args) {

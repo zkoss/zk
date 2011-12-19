@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  *
  */
-public class BindingImpl implements Binding {
+public class BindingImpl implements Binding,Serializable{
+	private static final long serialVersionUID = 1463169907348730644L;
 	private WeakReference<Component> _comp;
 	private final Binder _binder;
 	private final Map<String, Object> _args;

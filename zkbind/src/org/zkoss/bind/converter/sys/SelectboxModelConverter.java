@@ -14,7 +14,6 @@ package org.zkoss.bind.converter.sys;
 import org.zkoss.bind.Converter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Selectbox;
 
 /**
@@ -23,6 +22,7 @@ import org.zkoss.zul.Selectbox;
  *
  */
 public class SelectboxModelConverter extends AbstractModelConverter{
+	private static final long serialVersionUID = 1463169907348730644L;
 	
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {
