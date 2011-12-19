@@ -34,6 +34,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-panel.
  * 
  */
+(function () {
+	// bug fixed for B50-3166478.zul
+	function _getOuter(cap, root) {
+		while (cap && cap.parentNode != root)
+			cap = cap.parentNode;
+		return cap;
+	}
 zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
@@ -715,7 +722,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			top = isFramable || cap ? jq(n).find('> div:first-child')[0].offsetHeight : 0;
 		return cap ? (isFramable ? 
 				jq(n).find('> div:first-child').next()[0].offsetHeight : 
-					cap.offsetHeight + 2) + top : top;
+					_getOuter(cap, n).offsetHeight) + top : top;
 	},
 	onFloatUp: function (ctl) {
 		if (!this._visible || !this.isFloatable())
@@ -1103,3 +1110,4 @@ zul.wnd.PanelRenderer = {
 		return true;
 	}
 };
+})();

@@ -92,7 +92,7 @@ import org.zkoss.zul.impl.XulElement;
  * {@link #setPageSize}.
  *
  * <p>If paging is used, the page controller is either created automatically
- * or assigned explicity by {@link #setPaginal}.
+ * or assigned explicitly by {@link #setPaginal}.
  * The paging controller specified explicitly by {@link #setPaginal} is called
  * the external page controller. It is useful if you want to put the paging
  * controller at different location (other than as a child component), or
@@ -437,7 +437,7 @@ public class Grid extends MeshElement {
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
 	 * <p>If mold is "paging", this method never returns null, because
-	 * a child paging controller is created automcatically (if not specified
+	 * a child paging controller is created automatically (if not specified
 	 * by developers with {@link #setPaginal}).
 	 *
 	 * <p>If a paging controller is specified (either by {@link #setPaginal},
@@ -448,7 +448,7 @@ public class Grid extends MeshElement {
 	public Paginal getPaginal() {
 		return _pgi;
 	}
-	/* Specifies the paging controller.
+	/** Specifies the paging controller.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
 	 * <p>It is OK, though without any effect, to specify a paging controller
@@ -626,7 +626,7 @@ public class Grid extends MeshElement {
 			final Execution exec = Executions.getCurrent();
 			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
 			final boolean rod = evalRod();
-			//Always syncModel because it is easier for user to enfore reload
+			//Always syncModel because it is easier for user to enforce reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
 				getDataLoader().syncModel(-1, -1); //create rows if necessary
 			} else if (inPagingMold()) { 
