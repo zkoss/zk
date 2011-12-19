@@ -30,68 +30,68 @@ import org.zkoss.zk.ui.WebApp;
  */
 public enum ContextType {
 	/**  
-	 * The current bind context, which type is {@link BindContext}
+	 * The current bind context, the type is {@link BindContext}
 	 */
 	BIND_CONTEXT,
 	/**  
-	 * The current binder, which type is {@link Binder}
+	 * The current binder, the type is {@link Binder}
 	 */
 	BINDER,
 	/**  
-	 * The current execution, which type is {@link Execution}
+	 * The current execution, the type is {@link Execution}
 	 */
 	EXECUTION,
 	/**  
-	 * The current component, which type is subclass of the {@link Component} 
+	 * The current component, the type is subclass of the {@link Component} 
 	 */
 	COMPONENT,
 	/**  
-	 * The space owner of the current component, which type is {@link IdSpace} 
+	 * The space owner of the current component, the type is {@link IdSpace} 
 	 */
 	SPACE_OWNER,
 	/**  
-	 * The page of the current component, which type is {@link Page} 
+	 * The page of the current component, the type is {@link Page} 
 	 */
 	PAGE,
 	/**  
-	 * The desktop of the current component, which type is {@link Desktop} 
+	 * The desktop of the current component, the type is {@link Desktop} 
 	 */
-	DEKSTOP,
+	DESKTOP,
 	/**  
-	 * The session, which type is {@link Session} 
+	 * The session, the type is {@link Session} 
 	 */
 	SESSION,
 	/**  
-	 * The web application, which type is {@link WebApp} 
+	 * The web application, the type is {@link WebApp} 
 	 */
 	APPLICATION,
 	
 	/**  
-	 * The implicit requestScope object, which type is {@linkplain Map} 
+	 * The implicit requestScope object, the type is {@linkplain Map} 
 	 */
 	REQUEST_SCOPE,
 	/**  
-	 * The implicit componentScope object of the current component, which type is {@linkplain Map} 
+	 * The implicit componentScope object of the current component, the type is {@linkplain Map} 
 	 */
 	COMPONENT_SCOPE,
 	/**  
-	 * The implicit spaceScope object of the current component, which type is {@linkplain Map} 
+	 * The implicit spaceScope object of the current component, the type is {@linkplain Map} 
 	 */
 	SPACE_SCOPE,
 	/**  
-	 * The implicit pageScope object of the current component, which type is {@linkplain Map} 
+	 * The implicit pageScope object of the current component, the type is {@linkplain Map} 
 	 */
 	PAGE_SCOPE,
 	/**  
-	 * The implicit desktopScope object of the current component, which type is {@linkplain Map} 
+	 * The implicit desktopScope object of the current component, the type is {@linkplain Map} 
 	 */
 	DESKTOP_SCOPE,
 	/**  
-	 * The implicit sessionScope object, which type is {@linkplain Map} 
+	 * The implicit sessionScope object, the type is {@linkplain Map} 
 	 */
 	SESSION_SCOPE,
 	/**  
-	 * The implicit applicationScope object, which type is {@linkplain Map} 
+	 * The implicit applicationScope object, the type is {@linkplain Map} 
 	 */
 	APPLICATION_SCOPE
 }

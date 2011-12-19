@@ -288,7 +288,7 @@ public class ParamCall {
 				return _component==null?null:_component.getSpaceOwner();
 			case PAGE:
 				return _component==null?null:_component.getPage();
-			case DEKSTOP:
+			case DESKTOP:
 				return _component==null?null:_component.getDesktop();
 			case SESSION:
 				return _component==null?null:Components.getImplicit(_component, "session");
