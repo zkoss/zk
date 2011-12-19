@@ -355,10 +355,8 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 
-		if (_tmpdatas != null) {
+		if (_tmpdatas != null)
 			render(renderer, "items", _tmpdatas);
-			_tmpdatas = null; //purge the data
-		}
 	}
 
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
