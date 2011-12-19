@@ -344,6 +344,13 @@ public class Selectbox extends HtmlBasedComponent {
 	};
 
 	// -- ComponentCtrl --//
+	public void invalidate() {
+		// post onInitRender to rerender content if not done it before
+		if (_tmpdatas == null && _model != null && _model.getSize() > 0)
+			postOnInitRender();
+
+		super.invalidate();
+	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -355,8 +362,10 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
 
-		if (_tmpdatas != null)
+		if (_tmpdatas != null) {
 			render(renderer, "items", _tmpdatas);
+			_tmpdatas = null; //purge the data
+		}
 	}
 
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
