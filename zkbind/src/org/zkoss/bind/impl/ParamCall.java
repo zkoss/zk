@@ -48,7 +48,7 @@ public class ParamCall {
 	
 	private static final String COOKIE_CACHE = "$PARAM_COOKIES$";
 	
-	private static Component _root = null;
+	private Component _root = null;
 	
 	public ParamCall(){
 		this(true);
@@ -160,8 +160,8 @@ public class ParamCall {
 			@Override
 			public Object resolveParameter(Annotation anno) {
 				final String name = ((ScopeParam)anno).value();
-				Scope[] ss = ((ScopeParam)anno).scopes();
-				List<Scope> scopes = new ArrayList<Scope>();  
+				final Scope[] ss = ((ScopeParam)anno).scopes();
+				final List<Scope> scopes = new ArrayList<Scope>();  
 				for(Scope s:ss){
 					switch(s){
 					case DEFAULT:
@@ -193,9 +193,9 @@ public class ParamCall {
 		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno) {
-				String selector = ((SelectorParam) anno).value();
-				boolean local =  ((SelectorParam) anno).local();
-				int index =  ((SelectorParam) anno).index();
+				final String selector = ((SelectorParam) anno).value();
+				final boolean local =  ((SelectorParam) anno).local();
+				final int index =  ((SelectorParam) anno).index();
 				if(!local && _root==null){
 					return null;
 				}
