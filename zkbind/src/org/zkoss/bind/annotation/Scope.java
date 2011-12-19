@@ -25,16 +25,48 @@ import java.util.List;
  * @see ScopeParam
  */
 public enum Scope {
+	/**
+	 * special scope, includes {@linkplain #REQUEST}, {@linkplain #DESKTOP},{@linkplain #SESSION},{@linkplain #APPLICATION} and by the order.
+	 */
 	DEFAULT("default"),
+	/**
+	 * special scope, includes  {@linkplain #REQUEST}, {@linkplain #COMPONENT}, {@linkplain #SPACE}, {@linkplain #PAGE}, {@linkplain #DESKTOP}, 
+	 * {@linkplain #SESSION}, {@linkplain #APPLICATION} and by the order
+	 */
 	ALL("all"),
+	/**
+	 * The implicit requestScope
+	 */
 	REQUEST("requestScope"),
+	/**
+	 * The implicit componentScope
+	 */
 	COMPONENT("componentScope"),
+	/**
+	 * The implicit spaceScope
+	 */
 	SPACE("spaceScope"),
+	/**
+	 * The implicit pageScope
+	 */
 	PAGE("pageScope"),
+	/**
+	 * The implicit desktopScope
+	 */
 	DESKTOP("desktopScope"),
+	/**
+	 * The implicit sessionScope
+	 */
 	SESSION("sessionScope"),
+	/**
+	 * The implicit applicationScope
+	 */
 	APPLICATION("applicationScope");
 	
+	
+	/**
+	 * 
+	 */
 	String name;
 	
 	private Scope(String name){

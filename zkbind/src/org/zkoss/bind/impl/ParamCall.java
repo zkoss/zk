@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.select.Selectors;
 /**
- * to help invoke a method with {@link Param} etc.. features
+ * To help invoke a method with {@link Param} etc.. features.
  * @author dennis
  *
  */
@@ -44,17 +44,23 @@ public class ParamCall {
 	private Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types;//to map class type directly, regardless the annotation
 	private boolean _mappingType;//to enable the map class type without annotation, it is for compatible to rc2, only support BindeContext and Binder
-	private Map<ContextType,Object> _contextObjects = new HashMap<ContextType,Object>();
+	private ContextObjects _contextObjects;
 	
 	private static final String COOKIE_CACHE = "$PARAM_COOKIES$";
 	
 	private Component _root = null;
+	private Component _component = null;
+	private Execution _execution = null;
+	private Binder _binder = null;
+	private BindContext _bindContext = null;
+	
 	
 	public ParamCall(){
 		this(true);
 	}
 	public ParamCall(boolean mappingType){
 		_paramResolvers = new HashMap<Class<? extends Annotation>, ParamResolver<Annotation>>();
+		_contextObjects = new ContextObjects();
 		_types = new ArrayList<Type>();
 		_mappingType = mappingType;
 		_paramResolvers.put(ContextParam.class, new ParamResolver<Annotation>() {
@@ -66,12 +72,12 @@ public class ParamCall {
 	}
 	
 	public void setBindContext(BindContext ctx){
-		_types.add(new Type(ctx.getClass(),ctx));
-		_contextObjects.put(ContextType.BIND_CONTEXT, ctx);
+		_bindContext = ctx;
+		_types.add(new Type(ctx.getClass(),_bindContext));
 	}
 	public void setBinder(Binder binder){
-		_types.add(new Type(binder.getClass(),binder));
-		_contextObjects.put(ContextType.BINDER, binder);
+		_binder = binder;
+		_types.add(new Type(binder.getClass(),_binder));
 		_root = binder.getView();
 	}
 	
@@ -154,7 +160,8 @@ public class ParamCall {
 	}
 
 	
-	public void setComponent(final Component comp) {
+	public void setComponent(Component comp) {
+		_component = comp;
 		//scope param
 		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
 			@Override
@@ -177,7 +184,7 @@ public class ParamCall {
 				Object val = null;
 				for(Scope scope:scopes){
 					final String scopeName = scope.getName();
-					Object scopeObj = Components.getImplicit(comp, scopeName);
+					Object scopeObj = Components.getImplicit(_component, scopeName);
 					if(scopeObj instanceof Map){
 						val = ((Map<?,?>)scopeObj).get(name);
 						if(val!=null) break;
@@ -200,36 +207,37 @@ public class ParamCall {
 					return null;
 				}
 				if(index<0){
-					return Selectors.find(local?comp:_root, selector);
+					return Selectors.find(local?_component:_root, selector);
 				}else{
-					return Selectors.find(local?comp:_root, selector, index);
+					return Selectors.find(local?_component:_root, selector, index);
 				}
 			}
 		});
 	}
-	public void setExecution(final Execution exec) {
+	public void setExecution(Execution exec) {
+		_execution = exec;
 		//http param
 		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno) {
-				return exec.getParameter(((QueryParam) anno).value());
+				return _execution.getParameter(((QueryParam) anno).value());
 			}
 		});
 		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno) {
-				return exec.getHeader(((HeaderParam) anno).value());
+				return _execution.getHeader(((HeaderParam) anno).value());
 			}
 		});
 		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
 			@Override
 			@SuppressWarnings("unchecked")
 			public Object resolveParameter(Annotation anno) {
-				Map<String,Object> m = (Map<String,Object>)exec.getAttribute(COOKIE_CACHE);
+				Map<String,Object> m = (Map<String,Object>)_execution.getAttribute(COOKIE_CACHE);
 				if(m==null){
-					final Object req  = exec.getNativeRequest();
+					final Object req  = _execution.getNativeRequest();
 					m = new HashMap<String,Object>();
-					exec.setAttribute(COOKIE_CACHE, m);
+					_execution.setAttribute(COOKIE_CACHE, m);
 					
 					if(req instanceof HttpServletRequest){
 						final Cookie[] cks = ((HttpServletRequest)req).getCookies();
@@ -250,15 +258,60 @@ public class ParamCall {
 		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno) {
-				return exec.getAttribute(((ExecutionParam) anno).value());
+				return _execution.getAttribute(((ExecutionParam) anno).value());
 			}
 		});
 		
 		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno) {
-				return exec.getArg().get(((ExecutionArgParam) anno).value());
+				return _execution.getArg().get(((ExecutionArgParam) anno).value());
 			}
 		});
+	}
+	
+	class ContextObjects {
+		public Object get(ContextType type){
+			switch(type){
+			//bind contexts
+			case BIND_CONTEXT:
+				return _bindContext;
+			case BINDER:
+				return _binder;
+			
+			//zk execution contexts
+			case EXECUTION:
+				return _execution;
+			case COMPONENT:
+				return _component;
+			case SPACE_OWNER:
+				return _component==null?null:_component.getSpaceOwner();
+			case PAGE:
+				return _component==null?null:_component.getPage();
+			case DEKSTOP:
+				return _component==null?null:_component.getDesktop();
+			case SESSION:
+				return _component==null?null:Components.getImplicit(_component, "session");
+			case APPLICATION:
+				return _component==null?null:Components.getImplicit(_component, "application");
+				
+			//zk execution scope contexts
+			case REQUEST_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "requestScope");
+			case COMPONENT_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "componentScope");
+			case SPACE_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "spaceScope");
+			case PAGE_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "pageScope");
+			case DESKTOP_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "desktopScope");
+			case SESSION_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "sessionScope");
+			case APPLICATION_SCOPE:
+				return _component==null?null:Components.getImplicit(_component, "applicationScope");
+			}
+			return null;
+		}
 	}
 }
