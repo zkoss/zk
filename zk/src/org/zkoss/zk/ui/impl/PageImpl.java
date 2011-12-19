@@ -892,7 +892,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
 		Interpreter ip = (Interpreter)_ips.get(zslang);
 		if (ip == null) {
-			if (!_desktop.getWebApp().getConfiguration().isZScriptEnabled())
+			if (_desktop != null //mmight be null, if deserialization
+			&& !_desktop.getWebApp().getConfiguration().isZScriptEnabled())
 				throw new UiException("zscript is not allowed since <disable-zscript> is configured");
 
 			ip = Interpreters.newInterpreter(zslang, this);
