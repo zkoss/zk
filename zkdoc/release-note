@@ -56,6 +56,7 @@ ZK 5.0.10
   ZK-683: constraint messag not showup after lost focus
   ZK-685: Listbox with checkmark and droppable enabled, scrolls to top when first time checked
   ZK-692: The removeDesktop function does not work correctly when closing the browser tab (FF4 or above)
+  ZK-696: Panel with height will reduce 1px height (B50-3166478.zul)
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors
