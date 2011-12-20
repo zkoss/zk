@@ -43,6 +43,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!--  Bug ZK-692 -->
+	<listener>
+		<listener-class>org.zkoss.zktest.test.MyDesktopCleanup</listener-class>
+	</listener>
+   
 	<!-- Uncomment if you want to control the number of hours that
 		the CSS files of class Web resources won't be changed.
 		By default, it is 8760 (the same as other class Web resouces).
