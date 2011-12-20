@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
  * @see Command
  * @author dennis
  *
+ * @deprecated please use {@link BindingParam}
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

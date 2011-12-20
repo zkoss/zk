@@ -52,6 +52,10 @@ public enum ContextType {
 	/**  
 	 * The page of the current component, the type is {@link Page} 
 	 */
+	VIEW,
+	/**  
+	 * The view of binder, the type is {@link Component}  
+	 */
 	PAGE,
 	/**  
 	 * The desktop of the current component, the type is {@link Desktop} 
@@ -65,33 +69,4 @@ public enum ContextType {
 	 * The web application, the type is {@link WebApp} 
 	 */
 	APPLICATION,
-	
-	/**  
-	 * The implicit requestScope object, the type is {@linkplain Map} 
-	 */
-	REQUEST_SCOPE,
-	/**  
-	 * The implicit componentScope object of the current component, the type is {@linkplain Map} 
-	 */
-	COMPONENT_SCOPE,
-	/**  
-	 * The implicit spaceScope object of the current component, the type is {@linkplain Map} 
-	 */
-	SPACE_SCOPE,
-	/**  
-	 * The implicit pageScope object of the current component, the type is {@linkplain Map} 
-	 */
-	PAGE_SCOPE,
-	/**  
-	 * The implicit desktopScope object of the current component, the type is {@linkplain Map} 
-	 */
-	DESKTOP_SCOPE,
-	/**  
-	 * The implicit sessionScope object, the type is {@linkplain Map} 
-	 */
-	SESSION_SCOPE,
-	/**  
-	 * The implicit applicationScope object, the type is {@linkplain Map} 
-	 */
-	APPLICATION_SCOPE
 }

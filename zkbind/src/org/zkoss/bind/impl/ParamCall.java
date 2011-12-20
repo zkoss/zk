@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -86,6 +87,12 @@ public class ParamCall {
 			@Override
 			public Object resolveParameter(Annotation anno) {
 				return bindingArgs.get(((Param) anno).value());
+			}
+		});
+		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno) {
+				return bindingArgs.get(((BindingParam) anno).value());
 			}
 		});
 	}
@@ -168,21 +175,18 @@ public class ParamCall {
 			public Object resolveParameter(Annotation anno) {
 				final String name = ((ScopeParam)anno).value();
 				final Scope[] ss = ((ScopeParam)anno).scopes();
-				final List<Scope> scopes = new ArrayList<Scope>();  
+				
 				for(Scope s:ss){
 					switch(s){
-					case DEFAULT:
-						scopes.addAll(Scope.getDefaultScopes());
-						break;
-					case ALL:
-						scopes.addAll(Scope.getAllScopes());
-						break;
-					default:
-						scopes.add(s);
+					case AUTO:
+						if(ss.length==1){
+							return _component.getAttribute(name,true);
+						}
+						throw new UiException("don't use "+s+" with other scopes "+ss);
 					}
 				}
 				Object val = null;
-				for(Scope scope:scopes){
+				for(Scope scope:ss){
 					final String scopeName = scope.getName();
 					Object scopeObj = Components.getImplicit(_component, scopeName);
 					if(scopeObj instanceof Map){
@@ -286,6 +290,8 @@ public class ParamCall {
 				return _component;
 			case SPACE_OWNER:
 				return _component==null?null:_component.getSpaceOwner();
+			case VIEW:
+				return _binder==null?null:_binder.getView();
 			case PAGE:
 				return _component==null?null:_component.getPage();
 			case DESKTOP:
@@ -294,22 +300,6 @@ public class ParamCall {
 				return _component==null?null:Components.getImplicit(_component, "session");
 			case APPLICATION:
 				return _component==null?null:Components.getImplicit(_component, "application");
-				
-			//zk execution scope contexts
-			case REQUEST_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "requestScope");
-			case COMPONENT_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "componentScope");
-			case SPACE_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "spaceScope");
-			case PAGE_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "pageScope");
-			case DESKTOP_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "desktopScope");
-			case SESSION_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "sessionScope");
-			case APPLICATION_SCOPE:
-				return _component==null?null:Components.getImplicit(_component, "applicationScope");
 			}
 			return null;
 		}
