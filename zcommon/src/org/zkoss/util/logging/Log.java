@@ -17,6 +17,8 @@ package org.zkoss.util.logging;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -93,11 +95,16 @@ public class Log {
 
 	/** Whether the loggers supports the hierarchy. */
 	private static boolean _hierarchy;
+	/** ZK-694: we have to store it to avoid being GCed. */
+	private static Logger[] _configedLoggers;
+	private static Logger _default;
 
 	/** The category that this log belongs.
 	 * Note: it is temporay and set to null when {@link #logger} is called.
 	 */
 	private String _name;
+	/** Used if useHierachy() is true. */
+	private Logger _logger;
 
 	/**
 	 * Configures based the properties.
@@ -130,7 +137,7 @@ public class Log {
 					handlers[j] = handlers[j].length() > 0 ?
 						handlers[j] + '.': null;
 				}
-			} else {
+			} else if (handlers != null) {
 				for (String h: handlers) {
 					if (h != null && key.startsWith(h)) {
 						matched = true;
@@ -154,20 +161,30 @@ public class Log {
 			}
 		}
 
+		final List<Logger> configed = new LinkedList<Logger>();
 		for (Map.Entry<Object, Object> me: props.entrySet()) {
-			final String key = (String)me.getKey();
+			String key = (String)me.getKey();
 			final String val = ((String)me.getValue()).trim();
+
+			if (key.endsWith(".level")) //compatible with LogManager
+				key = key.substring(0, key.length() - 6);
 
 			final Level level = Log.getLevel(val);
 			if (level != null || (val != null && (val.equalsIgnoreCase("NULL")
 			|| val.equalsIgnoreCase("INHERIT")))) {
-				Logger.getLogger(key).setLevel(level);
+				final Logger logger = Logger.getLogger(key);
+				logger.setLevel(level);
+				configed.add(logger);
 			} else {
 				if (log == null)
 					log = lookup(Log.class);
 				log.warning("Illegal log level, "+val+", for "+key);
 			}
 		}
+
+		//ZK-694: we have to store them. Otherwise, they will be GCed
+		if (!configed.isEmpty())
+			_configedLoggers = configed.toArray(new Logger[configed.size()]);
 	}
 
 	/** Returns whether the loggers support hierarchy.
@@ -245,39 +262,22 @@ public class Log {
 	 * <p>If not found, it created a new one.
 	 */
 	private final Logger getLogger() {
-		return Logger.getLogger(useHierarchy() ? _name: DEFAULT_NAME);
-			//NOTE: we don't cache getLogger because Tomcat use one
-			//LogManager per Web app
-	}
-	/** Returns the closest logger that has been created (never null).
-	 */
-	private final Logger getClosestLogger() {
-		if (!useHierarchy())
-			return Logger.getLogger(DEFAULT_NAME);
-
-		final LogManager logman = LogManager.getLogManager();
-		int j = _name.length();
-		do {
-			final Logger logger = logman.getLogger(_name.substring(0, j));
-			if (logger != null)
-				return logger;
-			j = _name.lastIndexOf('.', j - 1);
-		} while (j >= 0);
-		return Logger.getLogger(DEFAULT_NAME);
-	}
-	/** Returns the logger, or null if not created yet.
-	 */
-	private final Logger getLoggerIfAny() {
-		return LogManager.getLogManager()
-			.getLogger(useHierarchy() ? _name: DEFAULT_NAME);
+		if (!useHierarchy()) {
+			if (_default != null)
+				return _default;
+			return _default = Logger.getLogger(DEFAULT_NAME);
+		}
+		if (_logger != null)
+			return _logger;
+		return _logger = Logger.getLogger(_name);
+		//Note: we have to t save Logger.getLogger(). Otherwise, it will be GCed
 	}
 
 	/**
 	 * Retruns the logging level.
 	 */
 	public final Level getLevel() {
-		final Logger logger = getLoggerIfAny();
-		return logger != null ? logger.getLevel(): null;
+		return getLogger().getLevel();
 	}
 	/**
 	 * Sets the logging level.
@@ -318,31 +318,31 @@ public class Log {
 	 * Tests whether the {@link #ERROR} level is loggable.
 	 */
 	public final boolean errorable() {
-		return getClosestLogger().isLoggable(ERROR);
+		return getLogger().isLoggable(ERROR);
 	}
 	/**
 	 * Tests whether the {@link #WARNING} level is loggable.
 	 */
 	public final boolean warningable() {
-		return getClosestLogger().isLoggable(WARNING);
+		return getLogger().isLoggable(WARNING);
 	}
 	/**
 	 * Tests whether the {@link #INFO} level is loggable.
 	 */
 	public final boolean infoable() {
-		return getClosestLogger().isLoggable(INFO);
+		return getLogger().isLoggable(INFO);
 	}
 	/**
 	 * Tests whether the {@link #DEBUG} level is loggable.
 	 */
 	public final boolean debugable() {
-		return getClosestLogger().isLoggable(DEBUG);
+		return getLogger().isLoggable(DEBUG);
 	}
 	/**
 	 * Tests whether the {@link #FINER} level is loggable.
 	 */
 	public final boolean finerable() {
-		return getClosestLogger().isLoggable(FINER);
+		return getLogger().isLoggable(FINER);
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class Log {
 	 * @param t the throwable object; null to ignore
 	 */
 	public final void log(Level level, String msg, Throwable t) {
-		final Logger logger = getClosestLogger();
+		final Logger logger = getLogger();
 		if (logger.isLoggable(level)) {
 			//We have to unveil the stack frame to find the real source
 			//Otherwise, Logger.log will report the wrong source
