@@ -75,6 +75,12 @@ public class InputEvent extends Event {
 		_start = start;
 	}
 
+	/** @deprecated As of release 5.0.4, replaced with {@link #getInputEvent(AuRequest, Object)}.
+	 */
+	public static final InputEvent getInputEvent(AuRequest request) {
+		return getInputEvent(request, null);
+	}
+
 	/** Returns the value that user input.
 	 */
 	public final String getValue() {
