@@ -28,7 +28,7 @@ public class Strings {
 	/** Used with {@link #escape} to escape a string in
 	 * JavaScript. It assumes the string will be enclosed with a single quote.
 	 */
-	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/";
+	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/!";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -308,6 +308,15 @@ public class Strings {
 					if (specials == ESCAPE_JAVASCRIPT //handle it specially
 					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
 						|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
+						j2 = k + 1;
+						continue;
+					}
+					break;
+				case '!':
+					//escape <!-- (ZK-676: it causes problem if used with <script>)
+					if (specials == ESCAPE_JAVASCRIPT //handle it specially
+					&& (k <= 0 || src.charAt(k - 1) != '<' || k + 3 > len
+						|| !"--".equals(src.substring(k+1, k+3)))) {
 						j2 = k + 1;
 						continue;
 					}
