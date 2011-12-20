@@ -33,7 +33,7 @@ import org.zkoss.zul.event.GroupsDataListener;
  * @author tomyeh
  * @since 3.5.0
  */
-abstract public class AbstractGroupsModel implements GroupsModel {
+abstract public class AbstractGroupsModel implements GroupsModel, java.io.Serializable{
 	private transient List _listeners = new LinkedList();
 
 	/** Fires a {@link GroupsDataEvent} for all registered listener
