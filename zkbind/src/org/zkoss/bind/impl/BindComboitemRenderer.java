@@ -19,6 +19,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -27,6 +28,7 @@ import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
+import org.zkoss.zul.impl.LoadStatus;
 
 /**
  * comboitem renderer for binding.
@@ -73,8 +75,9 @@ public class BindComboitemRenderer implements ComboitemRenderer<Object>, Seriali
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Comboitem nci = (Comboitem)items[0];
-			nci.setAttribute(varnm, data); //kept the value
+			((LoadStatus)(((AbstractComponent)nci).getExtraCtrl())).setIndex(item.getIndex());
 			
+			nci.setAttribute(varnm, data); //kept the value
 			nci.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
 				@Override
 				public int getIndex() {

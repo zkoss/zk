@@ -276,7 +276,7 @@ public class Combobox extends Textbox {
 			for (Comboitem item = getItems().size() <= ofs ? null: (Comboitem)getItems().get(ofs), nxt;
 			j < pgsz && item != null; ++j, item = nxt) {
 				nxt = (Comboitem)item.getNextSibling(); //store it first
-				renderer.render(subset, item);
+				renderer.render(subset, item, j + ofs);
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new item is created to replace the existent one
 					item = (Comboitem)v;
@@ -345,6 +345,7 @@ public class Combobox extends Textbox {
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 
 				final Comboitem nci = (Comboitem)items[0];
+				nci.setIndex(item.getIndex());
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
 				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
@@ -369,7 +370,7 @@ public class Combobox extends Textbox {
 			_renderer = getRealRenderer();
 		}
 		@SuppressWarnings("unchecked")
-		private void render(ListModel<?> subset, Comboitem item) throws Throwable {
+		private void render(ListModel<?> subset, Comboitem item, int index) throws Throwable {
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
@@ -377,7 +378,8 @@ public class Combobox extends Textbox {
 			}
 
 			try {
-				_renderer.render(item, subset.getElementAt(getItems().indexOf(item)));
+				item.setIndex(index); //initialize index
+				_renderer.render(item, subset.getElementAt(index));
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));

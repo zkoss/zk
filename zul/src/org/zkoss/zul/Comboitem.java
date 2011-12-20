@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
+import org.zkoss.zul.impl.LoadStatus;
 
 /**
  * An item of a combo box.
@@ -175,6 +176,10 @@ implements org.zkoss.zk.ui.ext.Disable {
 		return j;
 	}
 	
+	/*package*/ void setIndex(int index) {
+		_index = index;
+	}
+	
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-comboitem" : _zclass;
@@ -216,5 +221,38 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/** No child is allowed. */
 	protected boolean isChildable() {
 		return false;
+	}
+
+	//Clone//
+	public Object clone() {
+		final Comboitem clone = (Comboitem)super.clone();
+		clone._index = -1;
+			//note: we have to reset, since Combobox.insertBefore assumes
+			//that a parent-less comboitem's index is -1
+		return clone;
+	}
+	
+	//-- ComponentCtrl --//
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
+	implements LoadStatus {
+		//-- LoadStatus --//
+		public boolean isLoaded() {
+			return true;
+		}
+
+		public void setLoaded(boolean loaded) {
+			//ignore
+		}
+		
+		public void setIndex(int index) {
+			Comboitem.this.setIndex(index);
+		}
 	}
 }
