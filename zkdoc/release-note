@@ -57,6 +57,7 @@ ZK 5.0.10
   ZK-685: Listbox with checkmark and droppable enabled, scrolls to top when first time checked
   ZK-692: The removeDesktop function does not work correctly when closing the browser tab (FF4 or above)
   ZK-696: Panel with height will reduce 1px height (B50-3166478.zul)
+  ZK-676: toolbartext attribute doesn't escape HTML
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors
