@@ -1,6 +1,14 @@
-/**
- * 
- */
+/* DependsOn.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2011/12/15 Created by henrichen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+*/
 package org.zkoss.bind.annotation;
 
 import java.lang.annotation.ElementType;

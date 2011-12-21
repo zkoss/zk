@@ -1,4 +1,4 @@
-/* QueryParam.java
+/* CookieParam.java
 
 	Purpose:
 		

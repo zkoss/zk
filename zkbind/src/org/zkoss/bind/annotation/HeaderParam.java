@@ -1,4 +1,4 @@
-/* QueryParam.java
+/* HeaderParam.java
 
 	Purpose:
 		

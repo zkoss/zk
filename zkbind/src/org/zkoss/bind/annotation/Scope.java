@@ -22,48 +22,45 @@ package org.zkoss.bind.annotation;
  */
 public enum Scope {
 	/**
-	 * will search the value from components to page, desktop one bye one...until find a value 
+	 * Search the value from components to page, desktop one bye one...until find a value 
 	 */
 	AUTO("auto"),
 	/**
-	 * The implicit componentScope
+	 * Search the value from the implicit componentScope
 	 */
 	COMPONENT("componentScope"),
 	/**
-	 * The implicit spaceScope
+	 * Search the value from the implicit spaceScope
 	 */
 	SPACE("spaceScope"),
 	/**
-	 * The implicit pageScope
+	 * Search the value from the implicit pageScope
 	 */
 	PAGE("pageScope"),
 	/**
-	 * The implicit desktopScope
+	 * Search the value from the implicit desktopScope
 	 */
 	DESKTOP("desktopScope"),
 	/**
-	 * The implicit sessionScope
+	 * Search the value from the implicit sessionScope
 	 */
 	SESSION("sessionScope"),
 	/**
-	 * The implicit applicationScope
+	 * Search the value from the implicit applicationScope
 	 */
 	APPLICATION("applicationScope");
 	
 	
-	/**
-	 * 
-	 */
-	String name;
+	private String _name;
 	
 	private Scope(String name){
-		this.name = name;
+		this._name = name;
 	}
 	
 	/**
 	 * the zk implicit scope name
 	 */
 	public String getName(){
-		return name;
+		return _name;
 	}
 }

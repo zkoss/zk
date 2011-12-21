@@ -11,8 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.annotation;
 
-import java.util.Map;
-
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.zk.ui.Component;
@@ -50,11 +48,11 @@ public enum ContextType {
 	 */
 	SPACE_OWNER,
 	/**  
-	 * The page of the current component, the type is {@link Page} 
+	 * The view of binder, the type is {@link Component}  
 	 */
 	VIEW,
 	/**  
-	 * The view of binder, the type is {@link Component}  
+	 * The page of the current component, the type is {@link Page} 
 	 */
 	PAGE,
 	/**  
