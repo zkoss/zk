@@ -25,17 +25,12 @@
 				<listheader id="h1" label="name" sort="auto" />
 				<listheader id="h2" label="gender" sort="auto" />
 			</listhead>
-			<listgroup id="gp1" open="@load(vm.open)" label="Group1"></listgroup>
+			<listgroup id="gp1" open="@bind(vm.open)" label="Group1"></listgroup>
 			<listitem>
 				<listcell id="nameLabel" label="Mary" />
 				<listcell label="FEMALE" />
 			</listitem>
-			<listgroup id="g2" label="Grouping 2" open="@load(vm.open)"/>
-			<listitem>
-				<listcell label="Jane" />
-				<listcell label="FEMALE" />
-			</listitem>
 		</listbox>
-		<button id="open" label="open" onClick="@command('open')"/>
+		<label id="open" value="@load(vm.open)"/>
 	</vlayout>
 </zk>

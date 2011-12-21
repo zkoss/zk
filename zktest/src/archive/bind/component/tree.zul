@@ -3,7 +3,7 @@
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Tree')">
 		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)">
 			<template name="model" var="i">
-				<treeitem open="@load(vm.open)">
+				<treeitem open="@bind(vm.open)">
 					<treerow>
 						<treecell label="@load(i)"></treecell>
 					</treerow>
@@ -11,6 +11,6 @@
 			</template>
 		</tree>
 		<label id="selectedLabel" value="@load(vm.selected)"/>
-		<button id="open" label="open" onClick="@command('open')"/>
+		<label id="open" value="@load(vm.open)"/>
 	</vlayout>
 </zk>

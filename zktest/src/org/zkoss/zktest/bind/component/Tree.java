@@ -50,6 +50,10 @@ public class Tree{
 		return open;
 	}
 
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
 	public AbstractTreeModel<String> getModel(){
 		model = new MyModel();
 		return model;

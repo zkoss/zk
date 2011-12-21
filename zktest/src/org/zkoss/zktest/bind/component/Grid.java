@@ -1,23 +1,24 @@
 package org.zkoss.zktest.bind.component;
 
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
 
 
 
 public class Grid{
-	private boolean open = false;
-
-	public boolean isOpen() {
-		return open;
-	}
+	private boolean open1 = false;
+	private boolean open2 = false;
 	
-
-
-	// -----------command -----------------
-	@Command @NotifyChange("*")
-	public void open(){
-		open = true;
+	public boolean isOpen1() {
+		return open1;
+	}
+	public void setOpen1(boolean open1) {
+		this.open1 = open1;
+	}
+	public boolean isOpen2() {
+		return open2;
+	}
+	public void setOpen2(boolean open2) {
+		this.open2 = open2;
 	}
 
+	
 }

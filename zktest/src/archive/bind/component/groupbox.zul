@@ -1,0 +1,19 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Groupbox')">
+		Click "toogle" button to switch between open and closed.
+		<groupbox id="groupbox" open="@bind(vm.open)" mold="3d"
+			width="200px">
+			<caption label="open test"></caption>
+
+			<vlayout>
+				<label id="gbLabel">testing content</label>
+				<label>testing content</label>
+				<label>testing content</label>
+			</vlayout>
+		</groupbox>
+		<label id="openStatus" value="@load(vm.open)" />
+	</vlayout>
+</zk>

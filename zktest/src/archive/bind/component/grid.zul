@@ -10,7 +10,7 @@
 		</columns>
 		<rows>
 			<row>
-				<detail open="@load(vm.open)">
+				<detail open="@bind(vm.open1)">
 					<hlayout>
 						<image sclass="myimg" width="100px"
 							height="100px" src="" />
@@ -30,6 +30,7 @@
 			</row>
 		</rows>
 	</grid>
+	<label id="detailOpen" value="@load(vm.open1)"/>
 	<grid id="groupGrid" fixedLayout="true">
 		<columns sizable="true">
 			<column label="Brand" sort="auto" />
@@ -40,7 +41,7 @@
 				sort="auto" />
 		</columns>
 		<rows>
-			<group label="Dell" open="@load(vm.open)"/>
+			<group label="Dell" open="@bind(vm.open2)"/>
 			<row>
 				<label id="pcNameLabel" style="padding-left:15px"
 					value="Dell E4500 2.2GHz" />
@@ -51,6 +52,6 @@
 			</row>
 		</rows>
 	</grid>
-	<button id="open" label="Open" onClick="@command('open')"/>
+	<label id="groupOpen" value="@load(vm.open2)"/>
 </vlayout>
 </zk>

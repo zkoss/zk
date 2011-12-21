@@ -36,6 +36,10 @@ public class Listbox{
 		return open;
 	}
 
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
 	// -----------command -----------------
 	@Command @NotifyChange("*")
 	public void open(){
