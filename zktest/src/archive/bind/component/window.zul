@@ -5,7 +5,7 @@
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Window')">
 		<window id="window" title="maximize test" border="normal"
 			maximizable="true" maximized="@bind(vm.maximized)" mode="embedded"
-			width="200px" zindex="1">
+			width="200px">
 			<vlayout>
 				<label>testing content</label>
 				<label>testing content</label>
@@ -20,13 +20,13 @@
 
 
 		click 2 windows to make zindex change.
-		<window title="Window1" border="normal" width="200px" style="position:absolute;"
-			mode="overlapped" zindex="@bind(vm.index1)">
-			Hello, World! 1
-		</window>
-		<window title="Window2" border="normal" width="200px" style="position:absolute;left:100px"
+		<window id="window2" title="Window2" border="normal" width="200px" style="position:absolute;left:100px" maximizable="true"
 			mode="overlapped" zindex="@bind(vm.index2)">
 			Hello, World! 2
+		</window>
+		<window id="window1" title="Window1" border="normal" width="200px" style="position:absolute;"
+			mode="overlapped" zindex="@bind(vm.index1)">
+			Hello, World! 1
 		</window>
 		<space height="100px"/>
 		<hlayout>

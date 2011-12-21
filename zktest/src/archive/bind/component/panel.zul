@@ -25,7 +25,7 @@
 		</hlayout>
 		<space height="10px" />
 
-		<panel id="panel01" title="bottom panel" border="normal" style="position:absolute;left:100px"
+		<panel id="panel01" title="bottom panel" border="normal" style="position:absolute;left:100px" collapsible="true"
 			width="200px" movable="true" floatable="true" zindex="@bind(vm.index1)">
 			<panelchildren>
 				<vlayout>
@@ -35,7 +35,7 @@
 				</vlayout>
 			</panelchildren>
 		</panel>
-		<panel id="panel02" title="top panel" border="normal" style="position:absolute;"
+		<panel id="panel02" title="top panel" border="normal" style="position:absolute;" collapsible="true"
 			width="200px" movable="true" floatable="true" 
 			zindex="@bind(vm.index2)" >
 			<panelchildren>
@@ -49,11 +49,11 @@
 		<space height="200px"/>
 		<hlayout>
 			panel 1 zindex:
-			<label id="window1Zindex" value="@load(vm.index1)" />
+			<label id="panel1Zindex" value="@load(vm.index1)" />
 		</hlayout>
 		<hlayout>
 			panel 2 zindex:
-			<label id="window2Zindex" value="@load(vm.index2)" />
+			<label id="panel2Zindex" value="@load(vm.index2)" />
 		</hlayout>
 	</vlayout>
 </zk>
