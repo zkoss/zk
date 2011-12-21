@@ -3,6 +3,7 @@ package org.zkoss.bind.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +67,9 @@ public class ParamCall {
 		_mappingType = mappingType;
 		_paramResolvers.put(ContextParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return _contextObjects.get(((ContextParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = _contextObjects.get(((ContextParam) anno).value()); 
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 	}
@@ -85,14 +87,16 @@ public class ParamCall {
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
 		_paramResolvers.put(Param.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return bindingArgs.get(((Param) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = bindingArgs.get(((Param) anno).value());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return bindingArgs.get(((BindingParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = bindingArgs.get(((BindingParam) anno).value()); 
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 	}
@@ -129,9 +133,8 @@ public class ParamCall {
 			ParamResolver<Annotation> resolver = _paramResolvers.get(annotype);
 			if(resolver==null) continue;
 			hitResolver = true;
-			val = resolver.resolveParameter(anno);
+			val = resolver.resolveParameter(anno,paramType);
 			if(val!=null) {
-				val = Classes.coerce(paramType, val);
 				break;
 			}
 			//don't break until get a value
@@ -163,7 +166,7 @@ public class ParamCall {
 	}
 	
 	private interface ParamResolver<T> {
-		public Object resolveParameter(T anno);
+		public Object resolveParameter(T anno,Class<?> returnType);
 	}
 
 	
@@ -172,7 +175,7 @@ public class ParamCall {
 		//scope param
 		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				final String name = ((ScopeParam)anno).value();
 				final Scope[] ss = ((ScopeParam)anno).scopes();
 				
@@ -196,25 +199,23 @@ public class ParamCall {
 						_log.error("the scope of "+scopeName+" is not a Map, is "+scopeObj);
 					}
 				}
-				return val;
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		
 		//component
 		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				final String selector = ((SelectorParam) anno).value();
-				final boolean local =  ((SelectorParam) anno).local();
-				final int index =  ((SelectorParam) anno).index();
-				if(!local && _root==null){
-					return null;
-				}
-				if(index<0){
-					return Selectors.find(local?_component:_root, selector);
+				final List<Component> result = Selectors.find(_root, selector);
+				Object val;
+				if(!Collection.class.isAssignableFrom(returnType)){
+					val = result.size()>0?Classes.coerce(returnType, result.get(0)):null;
 				}else{
-					return Selectors.find(local?_component:_root, selector, index);
+					val = Classes.coerce(returnType, result);
 				}
+				return val;
 			}
 		});
 	}
@@ -223,20 +224,22 @@ public class ParamCall {
 		//http param
 		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return _execution.getParameter(((QueryParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = _execution.getParameter(((QueryParam) anno).value());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return _execution.getHeader(((HeaderParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = _execution.getHeader(((HeaderParam) anno).value());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
 			@Override
 			@SuppressWarnings("unchecked")
-			public Object resolveParameter(Annotation anno) {
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
 				Map<String,Object> m = (Map<String,Object>)_execution.getAttribute(COOKIE_CACHE);
 				if(m==null){
 					final Object req  = _execution.getNativeRequest();
@@ -254,22 +257,25 @@ public class ParamCall {
 						//no cookie in protlet 1.0
 					}
 				}
-				return m==null?null:m.get(((CookieParam) anno).value().toLowerCase());
+				Object val = m==null?null:m.get(((CookieParam) anno).value().toLowerCase());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 
 		//execution
 		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return _execution.getAttribute(((ExecutionParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = _execution.getAttribute(((ExecutionParam) anno).value());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 		
 		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno) {
-				return _execution.getArg().get(((ExecutionArgParam) anno).value());
+			public Object resolveParameter(Annotation anno,Class<?> returnType) {
+				Object val = _execution.getArg().get(((ExecutionArgParam) anno).value());
+				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});
 	}
