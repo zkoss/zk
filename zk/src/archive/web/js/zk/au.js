@@ -587,7 +587,8 @@ zAu = {
 			//2011/04/22 feature 3291332
 			//Use sync request for chrome, safari and firefox (4 and later).
 			//Note: when pressing F5, the request's URL still arrives before this even async:false
-			async: zk.ie //conservative, though it shall be (!zk.safari || zk.ff >= 4)
+			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome. 
+				// conservative, though it shall be (!zk.safari || zk.ff >= 4)
 		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
 	},
 

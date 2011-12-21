@@ -1,0 +1,9 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<zscript><![CDATA[
+		String str = "abc\"><script></script><!--";
+	]]></zscript>
+	<div id="div" style="color: #009900" tooltiptext="@{str}">abc</div>
+	<div id="div2" style="color: #009900" tooltiptext="@{str}">def</div>
+	<div id="div3" style="color: #009900" tooltiptext="@{str}">ghi</div>
+</zk>

@@ -8,7 +8,10 @@ function newWindow(url){
 </script>
 <h:form id="newform" target="_blank" method="post"/>
 	<borderlayout id="main" use="org.zkoss.zktest.test2.MainLayout">
-	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<west size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
+		<attribute name="onCreate">
+		 self.title = "ZK " + desktop.webApp.version + " " + WebApps.getEdition() + ", build " + desktop.webApp.build; 
+		</attribute>
 	<!-- ******************** Ctrl Panel ******************** -->
 			<window id="w1" contentStyle="overflow:auto;position:relative;">
 				<vbox>

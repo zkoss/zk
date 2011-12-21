@@ -126,7 +126,7 @@ public class MainLayout extends Borderlayout {
 				new EventListener() {
 
 					public void onEvent(Event arg0) throws Exception {
-						updateModel();
+						updateModel(true);
 					}
 				});
 		getFellow("w1").getFellow("fnf").addEventListener(Events.ON_OK,
@@ -140,7 +140,7 @@ public class MainLayout extends Borderlayout {
 		getFellow("w1").getFellow("reg").addEventListener(Events.ON_CHECK,
 				new EventListener() {
 					public void onEvent(Event arg0) throws Exception {
-						updateModel();
+						updateModel(true);
 					}
 				});
 
@@ -206,6 +206,9 @@ public class MainLayout extends Borderlayout {
 	}
 
 	public void updateModel() {
+		updateModel(false);
+	}
+	public void updateModel(boolean isAll) {
 		fileModel.clear();
 		final String r = getDesktop().getWebApp().getRealPath("/");
 		final File test2 = new File(r, PATH);
@@ -214,7 +217,7 @@ public class MainLayout extends Borderlayout {
 		final boolean reg = ((Checkbox) getFellow("w1").getFellow("reg")).isChecked();
 		final File[] files = test2.listFiles(new MyFilenameFilter(pattern, reg));
 		for (int j = 0; j < files.length; j++)
-			if(prop.containsKey(files[j].getName()) || files[j].getName().equalsIgnoreCase(pattern))
+			if(isAll || prop.containsKey(files[j].getName()) || files[j].getName().equalsIgnoreCase(pattern))
 				fileModel.add(files[j]);
 	}
 	public void exportFileName() throws SuspendNotAllowedException, InterruptedException {

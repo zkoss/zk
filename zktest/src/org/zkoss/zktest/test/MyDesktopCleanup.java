@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.DesktopCleanup;
 
 /**
@@ -32,6 +33,11 @@ public class MyDesktopCleanup implements DesktopCleanup {
 	 * only logged (user won't see it).
 	 */
 	public void cleanup(Desktop desktop) throws Exception {
-		System.out.println("Cleanup "+desktop);
+		if (null != Sessions.getCurrent().getAttribute("MyDesktopCleanup")) {
+			System.out.println("Test Cleanup "+desktop);
+			int val = ((Integer)Sessions.getCurrent().getAttribute("MyDesktopCleanup")).intValue();
+			if (val > 9) val = 1;
+			Sessions.getCurrent().setAttribute("MyDesktopCleanup", new Integer(val + 1));
+		}
 	}
 }

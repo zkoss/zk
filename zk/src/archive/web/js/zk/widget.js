@@ -810,7 +810,8 @@ new zul.wnd.Window{
 		 */
 		tooltiptext: function (v) {
 			var n = this.$n();
-			if (n) n.title = v || '';
+			// ZK-676
+			if (n) n.title = zUtl.encodeXML(v) || '';
 		},
 
 		/** Sets the identifier, or a list of identifiers of a droppable type for this widget.
@@ -2269,7 +2270,7 @@ function () {
 		if ((!no || !no.domClass) && (s = this.domClass_(no)))
 			out.push(' class="', s, '"');
 		if ((!no || !no.tooltiptext) && (s = this.domTooltiptext_()))
-			out.push(' title="', s, '"');
+			out.push(' title="', zUtl.encodeXML(s), '"'); // ZK-676
 		for (var nm in (attrs = this.domExtraAttrs))
 			out.push(' ', nm, '="', attrs[nm]||'', '"'); //generate even if val is empty
 		return out.join('');

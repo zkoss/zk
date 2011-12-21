@@ -28,7 +28,7 @@ public class Strings {
 	/** Used with {@link #escape} to escape a string in
 	 * JavaScript. It assumes the string will be enclosed with a single quote.
 	 */
-	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/";
+	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/!";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -297,21 +297,11 @@ public class Strings {
 					break;
 			}
 
-			if (enc == null)
-				switch (cc) {
-				case '\n': cc = 'n'; break;
-				case '\t': cc = 't'; break;
-				case '\r': cc = 'r'; break;
-				case '\f': cc = 'f'; break;
-				case '/':
-					//escape </script>
-					if (specials == ESCAPE_JAVASCRIPT //handle it specially
-					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
-						|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
-						j2 = k + 1;
-						continue;
-					}
-				}
+			if (enc == null
+			&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
+				j2 = k + 1;
+				continue;
+			}
 
 			if (sb == null)
 				sb = new StringBuffer(len + 4);
@@ -323,6 +313,32 @@ public class Strings {
 		if (sb == null)
 			return src; //nothing changed
 		return sb.append(src.substring(j)).toString();
+	}
+	private static char escapeSpecial(CharSequence src,
+	char cc, int k, String specials) {
+		switch (cc) {
+		case '\n': return 'n'; 
+		case '\t': return 't';
+		case '\r': return 'r';
+		case '\f': return 'f';
+		case '/':
+			//escape </script>
+			if (specials == ESCAPE_JAVASCRIPT //handle it specially
+			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 8 > src.length()
+				|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
+				return (char)0; //don't escape
+			}
+			break;
+		case '!':
+			//escape <!-- (ZK-676: it causes problem if used with <script>)
+			if (specials == ESCAPE_JAVASCRIPT //handle it specially
+			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 3 > src.length()
+				|| !"--".equals(src.subSequence(k+1, k+3)))) {
+				return (char)0; //don't escape
+			}
+			break;
+		}
+		return cc;
 	}
 	/** Escapes (aka. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
@@ -355,21 +371,11 @@ public class Strings {
 					break;
 			}
 
-			if (enc == null)
-				switch (cc) {
-				case '\n': cc = 'n'; break;
-				case '\t': cc = 't'; break;
-				case '\r': cc = 'r'; break;
-				case '\f': cc = 'f'; break;
-				case '/':
-					//escape </script>
-					if (specials == ESCAPE_JAVASCRIPT //handle it specially
-					&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
-						|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
-						j2 = k + 1;
-						continue;
-					}
-				}
+			if (enc == null
+			&& (cc = escapeSpecial(src, cc, k, specials)) == (char)0) {
+				j2 = k + 1;
+				continue;
+			}
 
 			dst.append((Object)src.subSequence(j, k)).append('\\');
 			if (enc != null) dst.append(enc);

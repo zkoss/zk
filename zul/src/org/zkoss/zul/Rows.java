@@ -546,13 +546,28 @@ public class Rows extends XulElement {
 	public Object clone() {
 		final Rows clone = (Rows)super.clone();
 		clone.init();
+		clone._groupsInfo.addAll(_groupsInfo);
 		return clone;
 	}
 	//-- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+		int size = _groupsInfo.size();
+		s.writeInt(size);
+		if (size > 0)
+			s.writeObject(_groupsInfo);
+	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
+		int size = s.readInt();
+		if (size > 0) {
+			List groupsInfo = (List)s.readObject();
+			for (int i = 0; i < size; i++)
+				_groupsInfo.add(groupsInfo.get(i));
+		}
 	}
 	public List<Component> getChildren() {
 		return new Children();
