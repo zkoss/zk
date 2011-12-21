@@ -95,27 +95,31 @@ public class Selectors {
 		return toList(iterable(root, selector));
 	}
 	
-	/**
+	/*
 	 * Returns the ith component that matches the selector
 	 * @param page the reference page for selector
 	 * @param selector the selector string
 	 * @param index 1-based index (1 means the first component found)
 	 * @return Component, null if not found
 	 */
+	/*
 	public static Component find(Page page, String selector, int index) {
 		return getIthItem(new ComponentIterator(page, selector), index);
 	}
+	*/
 	
-	/**
+	/*
 	 * Returns the ith component that matches the selector
 	 * @param root root the reference component for selector
 	 * @param selector selector the selector string
 	 * @param index 1-based index (1 means the first component found)
 	 * @return Component, null if not found
 	 */
+	/*
 	public static Component find(Component root, String selector, int index) {
 		return getIthItem(new ComponentIterator(root, selector), index);
 	}
+	*/
 	
 	/**
 	 * Wire variables to controller, including XEL variables, implicit variables.
@@ -210,15 +214,14 @@ public class Selectors {
 
 	/** Creates a list of instances of {@link VariableResolver} based
 	 * on the annotation of the given class.
-	 * If none of annotataion is found, an empty list is returned.
-	 *
+	 * If no such annotation is found, an empty list is returned.
 	 * @param cls the class to look for the annotation.
 	 * @param untilClass the class to stop the searching.
 	 * By default, it will look for the annotation of the super class if not found.
 	 * Ignored if null.
 	 */
-	public static
-	List<VariableResolver> newVariableResolvers(Class<?> cls, Class<?> untilClass) {
+	public static List<VariableResolver> newVariableResolvers(Class<?> cls, 
+			Class<?> untilClass) {
 		final List<VariableResolver> resolvers = new ArrayList<VariableResolver>();
 		while (cls != null && cls != untilClass) {
 			final org.zkoss.zk.ui.select.annotation.VariableResolver anno = 
@@ -235,7 +238,9 @@ public class Selectors {
 		}
 		return resolvers;
 	}
-
+	
+	
+	
 	// helper //
 	private static String[][] splitListenAnnotationValues(String str) {
 		List<String[]> result = new ArrayList<String[]>();
@@ -334,27 +339,17 @@ public class Selectors {
 					}
 					
 					String selector = anno.value();
-					boolean optional = anno.optional();
-					if (selector.length() > 0) {
-						injectComponent(field, functor.iterable(selector), optional);
-						return;
+					if (!Strings.isEmpty(selector))
+						injectComponent(field, functor.iterable(selector));
+					
+					else {
+						// no selector value, wire implicit object by naming convention
+						Component value = 
+							getComponentByName(functor, field.getName(), field.getType());
+						if (value != null)
+							Reflections.setFieldValue(_controller, field, value);
 					}
 					
-					// no selector value, wire implicit object by naming convention
-					Component value = 
-						getComponentByName(functor, field.getName(), field.getType());
-					if (value != null) {
-						Reflections.setFieldValue(_controller, field, value);
-						return;
-					}
-					if (optional) return;
-					
-					// no matched Object or Component
-					String name = field.getName();
-					if (name.contains("$")) throw new UiException(
-							ctrlClass + " does not support " + 
-							"syntax with '$'. Please use selector as alternative.");
-					throw new UiException("Cannot wire component to field: " + name);
 				}
 			});
 			// wire by methods
@@ -375,12 +370,11 @@ public class Selectors {
 					
 					String selector = anno.value();
 					// check selector string: nonempty
-					if (selector.length() == 0)
+					if (Strings.isEmpty(selector))
 						throw new UiException("Selector is empty on method: " + 
 								method.getName());
 					
-					injectComponent(method, functor.iterable(selector), 
-							anno.optional());
+					injectComponent(method, functor.iterable(selector));
 				}
 			});
 		}
@@ -412,10 +406,6 @@ public class Selectors {
 						getObjectByName(functor, name, field.getType(), resolvers);
 					if (value != null)
 						Reflections.setFieldValue(_controller, field, value);
-					else if (!anno.optional())
-						// no matched variable
-						throw new UiException("Cannot wire variable of name " + 
-								name + " to field: " + field.getName());
 				}
 			});
 			// wire by methods
@@ -447,24 +437,22 @@ public class Selectors {
 					Object value = 
 						getObjectByName(functor, name, paramTypes[0], resolvers);
 					
-					Reflections.invokeMethod(method, _controller, value); // TODO: confirm optional
+					Reflections.invokeMethod(method, _controller, value);
 				}
 			});
 		}
 		
-		private void injectComponent(Method method, Iterable<Component> iter, 
-				boolean optional) {
-			injectComponent(new MethodFunctor(method), iter, optional);
+		private void injectComponent(Method method, Iterable<Component> iter) {
+			injectComponent(new MethodFunctor(method), iter);
 		}
 		
-		private void injectComponent(Field field, Iterable<Component> iter, 
-				boolean optional) {
-			injectComponent(new FieldFunctor(field), iter, optional);
+		private void injectComponent(Field field, Iterable<Component> iter) {
+			injectComponent(new FieldFunctor(field), iter);
 		}
 		
 		@SuppressWarnings("unchecked")
 		private void injectComponent(InjectionFunctor injector, 
-				Iterable<Component> comps, boolean optional) {
+				Iterable<Component> comps) {
 			Class<?> type = injector.getType();
 			boolean isField = injector instanceof FieldFunctor;
 			// Array
@@ -515,10 +503,6 @@ public class Selectors {
 				injector.inject(_controller, c);
 				return;
 			}
-			if (!optional)
-				// failed to inject, throw exception
-				throw new UiException("Failed to inject to field " + 
-						injector.getName() + " in controller " + _controller);
 			injector.inject(_controller, null); // no match, inject null
 		}
 		
@@ -709,6 +693,7 @@ public class Selectors {
 		}
 	}
 	
+	/*
 	private static <T> T getIthItem(Iterator<T> iter, int index){
 		// shift (index - 1) times
 		for(int i = 1; i < index; i++) {
@@ -718,5 +703,6 @@ public class Selectors {
 		}
 		return iter.hasNext() ? iter.next() : null;
 	}
+	*/
 	
 }

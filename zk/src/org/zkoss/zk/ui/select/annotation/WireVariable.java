@@ -41,13 +41,6 @@ public @interface WireVariable {
 	String value() default "";
 	
 	/**
-	 * If set to true, no Exception is throw when the variable is not found
-	 * for wiring. By default, when {@link SelectorComposer} fails to wire an 
-	 * object to a field/method, an UiException will be thrown. 
-	 */
-	boolean optional() default false;
-	
-	/**
 	 * If true, the variable will be rewired when the composer is deserialized 
 	 * in cluster environment. Session and Webapp variables are always rewired.
 	 */

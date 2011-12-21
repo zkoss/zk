@@ -27,13 +27,6 @@ public @interface Wire {
 	String value() default "";
 	
 	/**
-	 * If set to true, no Exception is throw when component/object is not found
-	 * for wiring. By default, when {@link SelectorComposer} fails to wire an 
-	 * object to a field, an UiException will be thrown. 
-	 */
-	boolean optional() default false;
-	
-	/**
 	 * If true, the component will be rewired when the composer is deserialized 
 	 * in cluster environment.
 	 */
