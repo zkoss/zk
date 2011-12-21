@@ -85,6 +85,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>java.lang.String</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>		
 	</component>
 	<!--component>
 		<component-name>bandpopup</component-name>
@@ -118,6 +130,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>caption</component-name>
 		<extends>caption</extends>
 	</component-->
+	<component>
+		<component-name>center</component-name>
+		<extends>center</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
 	<!--component>
 		<component-name>chart</component-name>
 		<extends>chart</extends>
@@ -226,7 +254,35 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>		
 	</component>
+	<component>
+		<component-name>combobutton</component-name>
+		<extends>combobutton</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
 	<!--component>
 		<component-name>comboitem</component-name>
 		<extends>comboitem</extends>
@@ -254,6 +310,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>java.util.Date</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>timeZone</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onTimeZoneChange</attribute-value>
+			</attribute>
+		</annotation>		
 	</component>
 	<component>
 		<component-name>decimalbox</component-name>
@@ -277,6 +345,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>$LT$</attribute-name>
 				<attribute-value>java.math.BigDecimal</attribute-value>
 			</attribute>			
+		</annotation>
+	</component>
+	
+	<component>
+		<component-name>detail</component-name>
+		<extends>detail</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
 		</annotation>
 	</component>
 	<!--component>
@@ -332,6 +417,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		</annotation>
 	</component>
 	<component>
+		<component-name>east</component-name>
+		<extends>east</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>		
+	<component>
 		<component-name>grid</component-name>
 		<extends>grid</extends>
 		<annotation>
@@ -350,10 +451,38 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>		
 	</component>
-	<!--component>
+	<component>
+		<component-name>group</component-name>
+		<extends>group</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
+	<component>
 		<component-name>groupbox</component-name>
 		<extends>groupbox</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>hbox</component-name>
 		<extends>hbox</extends>
@@ -469,6 +598,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>listfoot</component-name>
 		<extends>listfoot</extends>
 	</component-->
+	<component>
+		<component-name>listgroup</component-name>
+		<extends>listgroup</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
 	<!--component>
 		<component-name>listheader</component-name>
 		<extends>listheader</extends>
@@ -513,10 +658,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>menubar</component-name>
 		<extends>menubar</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>menuitem</component-name>
 		<extends>menuitem</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>checked</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onCheck</attribute-value>
+			</attribute>
+		</annotation>
+		
+	</component>
 	<!--component>
 		<component-name>menupopup</component-name>
 		<extends>menupopup</extends>
@@ -525,10 +683,103 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>menuseparator</component-name>
 		<extends>menuseparator</extends>
 	</component-->
-	<!--component>
+	<component>
+		<component-name>north</component-name>
+		<extends>north</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>		
+	<component>
 		<component-name>paging</component-name>
 		<extends>paging</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>activePage</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onPaging</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
+		<component-name>panel</component-name>
+		<extends>panel</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>maximized</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onMaximize</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>minimized</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onMinimize</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>zindex</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onZIndex</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>zIndex</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onZIndex</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
+	
 	<!--component>
 		<component-name>popup</component-name>
 		<extends>popup</extends>
@@ -696,18 +947,58 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
-	<!--component>
+	<component>
 		<component-name>splitter</component-name>
 		<extends>splitter</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>	
+	<component>
+		<component-name>south</component-name>
+		<extends>south</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>		
 	<!--component>
 		<component-name>style</component-name>
 		<extends>style</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>tab</component-name>
 		<extends>tab</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>selected</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+		</annotation>		
+	</component>
 	<component>
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
@@ -896,8 +1187,72 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>vbox</component-name>
 		<extends>vbox</extends>
 	</component-->
-	<!--component>
+	<component>
+		<component-name>west</component-name>
+		<extends>west</extends>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>open</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onOpen</attribute-value>
+			</attribute>
+		</annotation>
+	</component>		
+	<component>
 		<component-name>window</component-name>
 		<extends>window</extends>
-	</component-->
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>maximized</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onMaximize</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>minimized</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onMinimize</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>zindex</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onZIndex</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>$SYSBIND$</annotation-name>
+			<property-name>zIndex</property-name>
+			<attribute>
+				<attribute-name>$A$</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>$SE$</attribute-name>
+				<attribute-value>onZIndex</attribute-value>
+			</attribute>
+		</annotation>		
+	</component>
 </language-addon>
