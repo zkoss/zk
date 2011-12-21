@@ -1,5 +1,12 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
+<zscript>
+	static int i=3;
+	public void lower(){
+		i--;
+		toppanel.setZindex(i);
+	}
+</zscript>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Container')">
 		Click "toogle" button to switch between open and closed.
@@ -43,6 +50,7 @@
 			<button id="min" label="Min" onClick="@command('min')" />
 			<button id="lower" label="Lower"
 				onClick="@command('lower')" />
+		    <button label="Lower 2" onClick="lower()"/>				
 		</hlayout>
 		Top panel zindex:
 		<label value="@load(vm.zindex)" />
