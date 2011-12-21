@@ -18,33 +18,41 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$prev = $zkc.prev(),
 			start = 0,
 			oldVal = [],
-			zs, ps;
+			zs, ps, ignorePrev;
 		if ($prev.length) {
-			zs = $zkc[0].style,
 			ps = $prev[0].style;
-			
-			// store the old value
-			oldVal[0] = zs.marginLeft;
-			oldVal[1] = zs.marginRight;
-			oldVal[2] = ps.marginLeft;
-			oldVal[3] = ps.marginRight;
-			
-			// clean margin
-			zs.marginLeft = zs.marginRight = ps.marginLeft = ps.marginRight = '0px';
+			// ZK-700
+			// ignore prev if not displayed
+			if (ps.display == 'none')
+				ignorePrev = true;
+			else {
+				zs = $zkc[0].style;
 
-			start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
+				// store the old value
+				oldVal[0] = zs.marginLeft;
+				oldVal[1] = zs.marginRight;
+				oldVal[2] = ps.marginLeft;
+				oldVal[3] = ps.marginRight;
+				
+				// clean margin
+				zs.marginLeft = zs.marginRight = ps.marginLeft = ps.marginRight = '0px';
+	
+				start = $prev.zk.cmOffset()[0] + $prev.zk.offsetWidth();
+			}
 		} else {
 			start = zkpOffset[0] + zkp.sumStyles("l", jq.paddings) + zkp.sumStyles("l", jq.borders);
 		}
-		start = zkc.cmOffset()[0] - start;
-		
-		if (oldVal.length) {
-			zs.marginLeft = oldVal[0];
-			zs.marginRight = oldVal[1];
-		}
-		if ($prev.length) {
-			ps.marginLeft = oldVal[2];
-			ps.marginRight = oldVal[3];
+
+		// ZK-700
+		if (!ignorePrev) {
+			start = zkc.cmOffset()[0] - start;
+			
+			if (oldVal.length) {
+				zs.marginLeft = oldVal[0];
+				zs.marginRight = oldVal[1];
+				ps.marginLeft = oldVal[2];
+				ps.marginRight = oldVal[3];
+			}
 		}
 		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
 		
@@ -55,36 +63,44 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			$prev = $zkc.prev(),
 			start = 0,
 			oldVal = [],
-			zs, ps;
+			zs, ps, ignorePrev;
 		if ($prev.length) {
-			zs = $zkc[0].style,
 			ps = $prev[0].style;
-			
-			// store the old value
-			oldVal[0] = zs.marginTop;
-			oldVal[1] = zs.marginBottom;
-			oldVal[2] = ps.marginTop;
-			oldVal[3] = ps.marginBottom;
-			
-			// clean margin
-			zs.marginTop = '0px';
-			zs.marginBottom = '0px';
-			ps.marginTop = '0px';
-			ps.marginBottom = '0px';
-			
-			start = $prev.zk.cmOffset()[1] + $prev.zk.offsetHeight();
+			// ZK-700
+			// ignore prev if not displayed
+			if (ps.display == 'none')
+				ignorePrev = true;
+			else {
+				zs = $zkc[0].style;
+
+				// store the old value
+				oldVal[0] = zs.marginTop;
+				oldVal[1] = zs.marginBottom;
+				oldVal[2] = ps.marginTop;
+				oldVal[3] = ps.marginBottom;
+				
+				// clean margin
+				zs.marginTop = '0px';
+				zs.marginBottom = '0px';
+				ps.marginTop = '0px';
+				ps.marginBottom = '0px';
+				
+				start = $prev.zk.cmOffset()[1] + $prev.zk.offsetHeight();
+			}
 		} else {
 			start = zkpOffset[1] + zkp.sumStyles("t", jq.paddings) + zkp.sumStyles("t", jq.borders);
 		}
-		start = zkc.cmOffset()[1] - start;
-		
-		if (oldVal.length) {
-			zs.marginTop = oldVal[0];
-			zs.marginBottom = oldVal[1];
-		}
-		if ($prev.length) {
-			ps.marginTop = oldVal[2];
-			ps.marginBottom = oldVal[3];
+
+		// ZK-700
+		if (!ignorePrev) {
+			start = zkc.cmOffset()[1] - start;
+			
+			if (oldVal.length) {
+				zs.marginTop = oldVal[0];
+				zs.marginBottom = oldVal[1];
+				ps.marginTop = oldVal[2];
+				ps.marginBottom = oldVal[3];
+			}
 		}
 		return !zk.ie ? Math.max(0, start) : start; // ie may have a wrong gap
 	}
