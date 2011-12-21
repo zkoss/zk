@@ -88,7 +88,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	 * @return boolean
 	 */
 	isOpen: function () {
-		return this.firstChild.isOpen();
+		var pp = this.firstChild;
+		return pp && pp.isOpen();
 	},
 	/** Drops down or closes the child popup ({@link zul.wgt.Popup})
 	 * ({@link zul.menu.Menupopup}, and fire onOpen if it is called with an Event.
@@ -115,8 +116,9 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	},
 	unbind_: function () {
 		var pp = this.firstChild.$n();
-		this.domListen_(pp, "onMouseOver")
-			.domListen_(pp, "onMouseOut");
+		if (pp)
+			this.domUnlisten_(pp, "onMouseOver")
+				.domUnlisten_(pp, "onMouseOut");
 		this.$supers('unbind_', arguments);
 	},
 	doFocus_: function (evt) {
@@ -128,12 +130,13 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	/** Open the dropdown widget of the Combobutton.
 	 */
 	open: function (opts) {
-		if (!this.isOpen()) {
-			if (this.firstChild.$instanceof(zul.wgt.Popup)) {
-				this.firstChild.open(this.uuid, null, 'after_end', opts);
+		var pp = this.firstChild;
+		if (pp && !this.isOpen()) {
+			if (pp.$instanceof(zul.wgt.Popup)) {
+				pp.open(this.uuid, null, 'after_end', opts);
 				_fireOnOpen(this, opts, true);
 			}
-			_attachPopup(this, !this.firstChild.$instanceof(zul.wgt.Menupopup));
+			_attachPopup(this, !pp.$instanceof(zul.wgt.Menupopup));
 		}
 	},
 	/** Close the dropdown widget of the Combobutton.
