@@ -29,6 +29,7 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -44,9 +45,9 @@ import org.zkoss.zk.ui.event.Event;
 
 	private static final Log _log = Log.lookup(PropertyBindingHelper.class);
 	
-	private final Map<String, List<LoadPropertyBinding>> _loadPromptBindings; //comp+_fieldExpr -> bindings (load _prompt | load on property change)
-	private final Map<String, List<LoadPropertyBinding>> _loadEventBindings; //comp+evtnm -> bindings (load on event)
-	private final Map<String, List<SavePropertyBinding>> _saveEventBindings; //comp+evtnm -> bindings (save on event)
+	private final Map<BindingKey, List<LoadPropertyBinding>> _loadPromptBindings; //comp+_fieldExpr -> bindings (load _prompt | load on property change)
+	private final Map<BindingKey, List<LoadPropertyBinding>> _loadEventBindings; //comp+evtnm -> bindings (load on event)
+	private final Map<BindingKey, List<SavePropertyBinding>> _saveEventBindings; //comp+evtnm -> bindings (save on event)
 	private final Map<String, List<LoadPropertyBinding>> _loadAfterBindings; //command -> bindings (load after command)
 	private final Map<String, List<SavePropertyBinding>> _saveAfterBindings; //command -> bindings (save after command)
 	private final Map<String, List<LoadPropertyBinding>> _loadBeforeBindings; //command -> bindings (load before command)
@@ -55,28 +56,28 @@ import org.zkoss.zk.ui.event.Event;
 	
 	PropertyBindingHelper(BinderImpl binder) {
 		super(binder);
-		_loadPromptBindings = new HashMap<String, List<LoadPropertyBinding>>();
-		_loadEventBindings = new HashMap<String, List<LoadPropertyBinding>>();
-		_saveEventBindings = new HashMap<String, List<SavePropertyBinding>>();
+		_loadPromptBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();
+		_loadEventBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();
+		_saveEventBindings = new HashMap<BindingKey, List<SavePropertyBinding>>();
 		_loadAfterBindings = new HashMap<String, List<LoadPropertyBinding>>();
 		_saveAfterBindings = new HashMap<String, List<SavePropertyBinding>>();
 		_loadBeforeBindings = new HashMap<String, List<LoadPropertyBinding>>();
 		_saveBeforeBindings = new HashMap<String, List<SavePropertyBinding>>();
 	}
 	
-	void addLoadEventBinding(Component comp, String bindDualId, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadEventBindings.get(bindDualId); 
+	void addLoadEventBinding(Component comp, BindingKey bkey, LoadPropertyBinding binding) {
+		List<LoadPropertyBinding> bindings = _loadEventBindings.get(bkey); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadEventBindings.put(bindDualId, bindings);
+			_loadEventBindings.put(bkey, bindings);
 		}
 		bindings.add(binding);
 	}
-	void addLoadPromptBinding(Component comp, String bindDualId, LoadPropertyBinding binding) {
-		List<LoadPropertyBinding> bindings = _loadPromptBindings.get(bindDualId); 
+	void addLoadPromptBinding(Component comp, BindingKey bkey, LoadPropertyBinding binding) {
+		List<LoadPropertyBinding> bindings = _loadPromptBindings.get(bkey); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadPropertyBinding>();
-			_loadPromptBindings.put(bindDualId, bindings);
+			_loadPromptBindings.put(bkey, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -99,11 +100,11 @@ import org.zkoss.zk.ui.event.Event;
 		bindings.add(binding);
 	}
 
-	void addSavePromptBinding(Component comp, String bindDualId, SavePropertyBinding binding) {
-		List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId); 
+	void addSavePromptBinding(Component comp, BindingKey bkey, SavePropertyBinding binding) {
+		List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey); 
 		if (bindings == null) {
 			bindings = new ArrayList<SavePropertyBinding>();
-			_saveEventBindings.put(bindDualId, bindings);
+			_saveEventBindings.put(bkey, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -163,8 +164,8 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//for event -> prompt only, no command
-	void doLoadEvent(String bindDualId,Component comp, String evtnm) {
-		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(bindDualId);
+	void doLoadEvent(BindingKey bkey,Component comp, String evtnm) {
+		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(bkey);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
 				doLoadPropertyBinding(comp, binding, null);
@@ -173,8 +174,8 @@ import org.zkoss.zk.ui.event.Event;
 	}
 
 	//for event -> prompt only, no command 
-	void doSaveEventNoValidate(String bindDualId,Component comp, Event evt, Set<Property> notifys) {
-		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId);
+	void doSaveEventNoValidate(BindingKey bkey,Component comp, Event evt, Set<Property> notifys) {
+		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
 				doSavePropertyBinding(comp, binding, null, evt, notifys);
@@ -182,8 +183,8 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 	
-	boolean doSaveEvent(String bindDualId,Component comp, Event evt, Set<Property> notifys) {
-		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bindDualId);
+	boolean doSaveEvent(BindingKey bkey,Component comp, Event evt, Set<Property> notifys) {
+		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey);
 		if (bindings != null) {
 			boolean valid = true;
 			for (SavePropertyBinding binding : bindings) {
@@ -276,7 +277,7 @@ import org.zkoss.zk.ui.event.Event;
 		return _saveBeforeBindings;
 	}
 
-	Map<String, List<SavePropertyBinding>> getSaveEventBindings() {
+	Map<BindingKey, List<SavePropertyBinding>> getSaveEventBindings() {
 		return _saveEventBindings;
 	}
 	
@@ -318,15 +319,15 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 	
-	void removeBindings( String bindDualId, Set<Binding> removed) {
+	void removeBindings(BindingKey bkey, Set<Binding> removed) {
 		List<? extends Binding> bindingx;
-		if((bindingx = _loadPromptBindings.remove(bindDualId)) !=null){
+		if((bindingx = _loadPromptBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+_fieldExpr -> bindings (load _prompt)
 		}
-		if((bindingx = _loadEventBindings.remove(bindDualId)) !=null){
+		if((bindingx = _loadEventBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+evtnm -> bindings (load on event)
 		}
-		if((bindingx = _saveEventBindings.remove(bindDualId)) !=null){
+		if((bindingx = _saveEventBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+evtnm -> bindings (save on event)
 		}
 	}
@@ -338,8 +339,8 @@ import org.zkoss.zk.ui.event.Event;
 		_saveBeforeBindings.values().removeAll(removes); //command -> bindings (save before command)
 	}
 
-	void loadComponentProperties(Component comp, String bindDualId) {
-		final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bindDualId);
+	void loadComponentProperties(Component comp, BindingKey bkey) {
+		final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bkey);
 		if (propBindings != null) {
 			for (LoadPropertyBinding binding : propBindings) {
 				final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, comp, null);

@@ -24,6 +24,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
+import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -39,7 +40,7 @@ import org.zkoss.zk.ui.event.Event;
 
 	private static final Log _log = Log.lookup(FormBindingHelper.class);
 	
-	private final Map<String, List<LoadFormBinding>> _loadFormPromptBindings; //comp+formid -> bindings (load form _prompt)
+	private final Map<BindingKey, List<LoadFormBinding>> _loadFormPromptBindings; //comp+formid -> bindings (load form _prompt)
 	private final Map<String, List<LoadFormBinding>> _loadFormAfterBindings; //command -> bindings (load form after command)
 	private final Map<String, List<SaveFormBinding>> _saveFormAfterBindings; //command -> bindings (save form after command)
 	private final Map<String, List<LoadFormBinding>> _loadFormBeforeBindings; //command -> bindings (load form before command)
@@ -47,18 +48,18 @@ import org.zkoss.zk.ui.event.Event;
 	
 	FormBindingHelper(BinderImpl binder){
 		super(binder);
-		_loadFormPromptBindings = new HashMap<String, List<LoadFormBinding>>();
+		_loadFormPromptBindings = new HashMap<BindingKey, List<LoadFormBinding>>();
 		_loadFormAfterBindings = new HashMap<String, List<LoadFormBinding>>();
 		_saveFormAfterBindings = new HashMap<String, List<SaveFormBinding>>();
 		_loadFormBeforeBindings = new HashMap<String, List<LoadFormBinding>>();
 		_saveFormBeforeBindings = new HashMap<String, List<SaveFormBinding>>();
 	}
 
-	void addLoadFormPromptBinding(String bindDualId, LoadFormBinding binding) {
-		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(bindDualId); 
+	void addLoadFormPromptBinding(BindingKey bkey, LoadFormBinding binding) {
+		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(bkey); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadFormBinding>();
-			_loadFormPromptBindings.put(bindDualId, bindings);
+			_loadFormPromptBindings.put(bkey, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -179,9 +180,9 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 	
-	void removeBindings(String bindDualId,Set<Binding> removed) {
+	void removeBindings(BindingKey bkey,Set<Binding> removed) {
 		final List<? extends Binding> bindingx;
-		if((bindingx = _loadFormPromptBindings.remove(bindDualId)) !=null){
+		if((bindingx = _loadFormPromptBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+formid -> bindings (load form _prompt)
 		}
 	}
@@ -193,8 +194,8 @@ import org.zkoss.zk.ui.event.Event;
 		_saveFormBeforeBindings.values().removeAll(bindings); //command -> bindings (save form before command)
 	}
 
-	void loadComponentProperties(Component comp, String bindDualId) {
-		final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(bindDualId);
+	void loadComponentProperties(Component comp, BindingKey bkey) {
+		final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(bkey);
 		if (formBindings != null) {
 			for (LoadFormBinding binding : formBindings) {
 				final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, comp, null);

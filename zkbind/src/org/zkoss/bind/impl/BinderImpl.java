@@ -37,9 +37,7 @@ import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
-import org.zkoss.bind.annotation.Param;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.Default;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
@@ -62,6 +60,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -179,7 +178,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private Map<Component, Map<SaveBinding,Set<SaveBinding>>> _reversedAssocFormSaveBindings;////associated comp -> binding -> associated save bindings of _formSaveBindingMap
 	
 
-	private final Map<String, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
+	private final Map<BindingKey, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
 	private final String _quename;
 	private final String _quescope;
 	private final EventListener<Event> _queueListener;
@@ -204,7 +203,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 		
-		_listenerMap = new HashMap<String, CommandEventListener>();
+		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
 		//use same queue name if user was not specified, 
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BinderImpl.QUE;
@@ -515,17 +514,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		throw new UiException("the return value of init expression is not a From is :" + obj); 
 	}
 	
-	//find and cache the uuid of component to a attribute, 
-	//because if a component was detached (ex a listitem of listbox) the uuid will also be changed 
-	//then binder is not able to remove its reference by last uuid 
-	private String getBindUuid(Component comp){
-		String uuid = (String)comp.getAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
-		if(uuid==null){
-			uuid = comp.getUuid();
-			comp.setAttribute(ZKBIND_COMP_UUID, uuid,Component.COMPONENT_SCOPE);
-		}
-		return uuid;
-	}
+
 	
 	private void removeBindUuid(Component comp){
 		comp.removeAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
@@ -538,8 +527,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(prompt){
 			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.PROMPT,null, bindingArgs);
 			addBinding(comp, attr, binding);
-			final String bindDualId = getBindDualId(comp, attr);
-			_formBindingHelper.addLoadFormPromptBinding(bindDualId, binding);
+			final BindingKey bkey = getBindingKey(comp, attr);
+			_formBindingHelper.addLoadFormPromptBinding(bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -820,14 +809,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
 				addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
-				final String bindDualId = getBindDualId(comp, evtnm);
-				_propertyBindingHelper.addLoadEventBinding(comp, bindDualId, binding);
+				final BindingKey bkey = getBindingKey(comp, evtnm);
+				_propertyBindingHelper.addLoadEventBinding(comp, bkey, binding);
 			}
 			//if no command , always add to prompt binding, a prompt binding will be load when , 
 			//1.load a component property binding
 			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in loadOnPropertyChange, not by prompt-binding 
-			final String bindDualId = getBindDualId(comp, attr);
-			_propertyBindingHelper.addLoadPromptBinding(comp, bindDualId, binding);
+			final BindingKey bkey = getBindingKey(comp, attr);
+			_propertyBindingHelper.addLoadPromptBinding(comp, bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -883,8 +872,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
 			}
 			addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
-			final String bindDualId = getBindDualId(comp, evtnm);
-			_propertyBindingHelper.addSavePromptBinding(comp, bindDualId, binding);
+			final BindingKey bkey = getBindingKey(comp, evtnm);
+			_propertyBindingHelper.addSavePromptBinding(comp, bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -922,12 +911,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	
 	//associate event to CommandBinding
 	private void addEventCommandListenerIfNotExists(Component comp, String evtnm, CommandBinding command) {
-		final String bindDualId = getBindDualId(comp, evtnm);
-		CommandEventListener listener = _listenerMap.get(bindDualId);
+		final BindingKey bkey = getBindingKey(comp, evtnm);
+		CommandEventListener listener = _listenerMap.get(bkey);
 		if (listener == null) {
 			listener = new CommandEventListener(comp);
 			comp.addEventListener(evtnm, listener);
-			_listenerMap.put(bindDualId, listener);
+			_listenerMap.put(bkey, listener);
 		}
 		//DENNIS, this method will call by
 		//1.addPropertyBinding -> command is null -> means prompt when evtnm is fired.
@@ -938,8 +927,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	private void removeEventCommandListenerIfExists(Component comp, String evtnm) {
-		final String bindDualId = getBindDualId(comp, evtnm);
-		final CommandEventListener listener = _listenerMap.remove(bindDualId);
+		final BindingKey bkey = getBindingKey(comp, evtnm);
+		final CommandEventListener listener = _listenerMap.remove(bkey);
 		if (listener != null) {
 			comp.removeEventListener(evtnm, listener);
 		}
@@ -1108,8 +1097,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(_log.debugable()){
 			_log.debug("doSaveEventNoValidate comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
 		}
-		final String bindDualId = getBindDualId(comp, evtnm);
-		_propertyBindingHelper.doSaveEventNoValidate(bindDualId, comp, evt, notifys);
+		final BindingKey bkey = getBindingKey(comp, evtnm);
+		_propertyBindingHelper.doSaveEventNoValidate(bkey, comp, evt, notifys);
 	}
 	//for event -> prompt only, no command 
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
@@ -1117,8 +1106,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(_log.debugable()){
 			_log.debug("doSaveEvent comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
 		}
-		final String bindDualId = getBindDualId(comp, evtnm);
-		return _propertyBindingHelper.doSaveEvent(bindDualId, comp, evt, notifys);
+		final BindingKey bkey = getBindingKey(comp, evtnm);
+		return _propertyBindingHelper.doSaveEvent(bkey, comp, evt, notifys);
 	}
 	
 	//for event -> prompt only, no command
@@ -1126,8 +1115,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(_log.debugable()){
 			_log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evtnm);
 		}
-		final String bindDualId = getBindDualId(comp, evtnm); 
-		_propertyBindingHelper.doLoadEvent(bindDualId, comp, evtnm);
+		final BindingKey bkey = getBindingKey(comp, evtnm); 
+		_propertyBindingHelper.doLoadEvent(bkey, comp, evtnm);
 	}
 	
 	//doCommand -> doValidate
@@ -1147,7 +1136,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				public Map<String, List<SaveFormBinding>> getSaveFormAfterBindings() {
 					return _formBindingHelper.getSaveFormAfterBindings();
 				}
-				public Map<String, List<SavePropertyBinding>> getSaveEventBindings() {
+				public Map<BindingKey, List<SavePropertyBinding>> getSaveEventBindings() {
 					return _propertyBindingHelper.getSaveEventBindings();
 				}
 				public Map<String, List<SavePropertyBinding>> getSaveBeforeBindings() {
@@ -1156,8 +1145,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				public Map<String, List<SavePropertyBinding>> getSaveAfterBindings() {
 					return _propertyBindingHelper.getSaveAfterBindings();
 				}
-				public String getBindDualId(Component comp, String attr) {
-					return BinderImpl.this.getBindDualId(comp,attr);
+				public BindingKey getBindingKey(Component comp, String attr) {
+					return BinderImpl.this.getBindingKey(comp,attr);
 				}
 			});
 			
@@ -1393,11 +1382,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		checkInit();
 		removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
 		
-		final String bindDualId = getBindDualId(comp, key);
+		final BindingKey bkey = getBindingKey(comp, key);
 		final Set<Binding> removed = new HashSet<Binding>();
 		
-		_formBindingHelper.removeBindings(bindDualId,removed);
-		_propertyBindingHelper.removeBindings(bindDualId, removed);
+		_formBindingHelper.removeBindings(bkey,removed);
+		_propertyBindingHelper.removeBindings(bkey, removed);
 
 		removeBindings(removed);
 	}
@@ -1447,12 +1436,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
 		if (compBindings != null) {
 			for(String key : compBindings.keySet()) {
-				final String bindDualId = getBindDualId(comp, key);
-				_formBindingHelper.loadComponentProperties(comp,bindDualId);
+				final BindingKey bkey = getBindingKey(comp, key);
+				_formBindingHelper.loadComponentProperties(comp,bkey);
 			}
 			for(String key : compBindings.keySet()) {
-				final String bindDualId = getBindDualId(comp, key);
-				_propertyBindingHelper.loadComponentProperties(comp,bindDualId);
+				final BindingKey bkey = getBindingKey(comp, key);
+				_propertyBindingHelper.loadComponentProperties(comp,bkey);
 			}
 		}
 	}
@@ -1510,9 +1499,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 
 	// create a unique id base on component's uuid and attr
-	private String getBindDualId(Component comp, String attr) {
-		final String uuid = getBindUuid(comp);
-		return uuid+"#"+attr;
+	private BindingKey getBindingKey(Component comp, String attr) {
+		return new BindingKey(comp,attr);
 	}
 
 	private class PostCommandListener implements EventListener<Event>{
