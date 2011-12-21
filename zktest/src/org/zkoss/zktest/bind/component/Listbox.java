@@ -40,10 +40,4 @@ public class Listbox{
 		this.open = open;
 	}
 
-	// -----------command -----------------
-	@Command @NotifyChange("*")
-	public void open(){
-		open = true;
-	}
-
 }
