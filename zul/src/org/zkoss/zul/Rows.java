@@ -566,7 +566,7 @@ public class Rows extends XulElement {
 		if (size > 0) {
 			List groupsInfo = (List)s.readObject();
 			for (int i = 0; i < size; i++)
-				_groupsInfo.add(groupsInfo.get(i));
+				_groupsInfo.add((int [])groupsInfo.get(i));
 		}
 	}
 	public List<Component> getChildren() {

@@ -110,7 +110,7 @@ public class Menu extends LabelImageElement {
 	 */
 	public void open() {
 		if (this.getParent() instanceof Menubar)
-			response("menu", new AuInvoke(this, "open", null));
+			response("menu", new AuInvoke(this, "open", (Object)null));
 	}
 
 	//-- Component --//
