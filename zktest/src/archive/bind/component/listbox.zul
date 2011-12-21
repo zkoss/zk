@@ -1,0 +1,41 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Listbox')">
+		<listbox id="listbox" model="@load(vm.items)"
+			selectedItem="@bind(vm.selected)" selectedIndex="@bind(vm.index)">
+			<template name="model" var="i">
+				<listitem>
+					<listcell label="@load(i)"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<hlayout>
+			Selected Item:
+			<label id="itemLabel" value="@load(vm.selected)"></label>
+		</hlayout>
+		<hlayout>
+			Selected Index:
+			<label id="indexLabel" value="@load(vm.index)"></label>
+		</hlayout>
+		<listbox>
+			<listgroup></listgroup>
+		</listbox>
+		<listbox id="groupListbox" width="250px">
+			<listhead sizable="true" id="h">
+				<listheader id="h1" label="name" sort="auto" />
+				<listheader id="h2" label="gender" sort="auto" />
+			</listhead>
+			<listgroup id="gp1" open="@load(vm.open)" label="Group1"></listgroup>
+			<listitem>
+				<listcell id="nameLabel" label="Mary" />
+				<listcell label="FEMALE" />
+			</listitem>
+			<listgroup id="g2" label="Grouping 2" open="@load(vm.open)"/>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="FEMALE" />
+			</listitem>
+		</listbox>
+		<button id="open" label="open" onClick="@command('open')"/>
+	</vlayout>
+</zk>

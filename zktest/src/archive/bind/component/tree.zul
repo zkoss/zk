@@ -1,0 +1,16 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Tree')">
+		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)">
+			<template name="model" var="i">
+				<treeitem open="@load(vm.open)">
+					<treerow>
+						<treecell label="@load(i)"></treecell>
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+		<label id="selectedLabel" value="@load(vm.selected)"/>
+		<button id="open" label="open" onClick="@command('open')"/>
+	</vlayout>
+</zk>

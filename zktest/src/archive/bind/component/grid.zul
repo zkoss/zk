@@ -1,0 +1,56 @@
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Grid')">
+	<grid id="detailGrid" fixedLayout="true">
+		<columns>
+			<column width="40px" />
+			<column sort="auto" />
+			<column width="100px" label="Price" sort="auto" />
+			<column label="Item location" sort="auto" />
+		</columns>
+		<rows>
+			<row>
+				<detail open="@load(vm.open)">
+					<hlayout>
+						<image sclass="myimg" width="100px"
+							height="100px" src="" />
+						<vlayout>
+							<hlayout>
+								<label id="brandLabel" value="Brand:" />
+								<label value="Apple" />
+							</hlayout>
+						</vlayout>
+					</hlayout>
+				</detail>
+				<label
+					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+				<label style="color:green;float:right;"
+					value="US $202.50" />
+				<label value="Tulsa, OK, United States" />
+			</row>
+		</rows>
+	</grid>
+	<grid id="groupGrid" fixedLayout="true">
+		<columns sizable="true">
+			<column label="Brand" sort="auto" />
+			<column label="Processor Type" width="150px" sort="auto" />
+			<column label="Memory (RAM)" width="120px" sort="auto" />
+			<column label="Price" width="100px" sort="auto" />
+			<column label="Hard Drive Capacity" width="150px"
+				sort="auto" />
+		</columns>
+		<rows>
+			<group label="Dell" open="@load(vm.open)"/>
+			<row>
+				<label id="pcNameLabel" style="padding-left:15px"
+					value="Dell E4500 2.2GHz" />
+				<label value="Intel Core 2 Duo" />
+				<label value="2GB RAM" />
+				<label value="$261.00" style="color:green" />
+				<label value="500GB" />
+			</row>
+		</rows>
+	</grid>
+	<button id="open" label="Open" onClick="@command('open')"/>
+</vlayout>
+</zk>
