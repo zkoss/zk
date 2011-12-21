@@ -18,11 +18,14 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.zkoss.json.JSONObject;
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
@@ -88,7 +91,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		if (_chartStyle != null)
 			render(renderer, "chartStyle", _chartStyle);
 		render(renderer, "jsonModel", getJSONResponse(transferToJSONObject(getModel())));
-		if (_type.startsWith("stackbar") || _type.startsWith("stackcolumn"))
+		if (!_type.equals("pie"))
 			render(renderer, "jsonSeries", getJSONResponse(_seriesList));
 	}
 	
@@ -98,12 +101,13 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	 * <p>Allowed Types: pie, line, bar, column, stackbar, stackcolumn
 	 */
 	public void setType(String type) {
-		if (type == null)
-			type = "";		
+		if (!isValid(type))
+			throw new UiException("Type must be one of the following: " + 
+					"pie, line, bar, column, stackbar, stackcolumn");
 		if (!Objects.equals(_type, type)) {
 			_type = type;
 			invalidate(); // Always redraw
-		}		
+		}
 	}
 	
 	/**
@@ -114,7 +118,7 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 	}
 	
 	/**
-	 * Sets the model of chart. The chart will be redrawed if setting an different model.
+	 * Sets the model of chart. The chart will be redrawn if setting an different model.
 	 * <p>Only implement models which matched the allowed types
 	 * @param model
 	 * @see #setType(String)
@@ -123,15 +127,15 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		if (_model != model) {
 			if (_model != null)
 				_model.removeChartDataListener(_dataListener);
-
+			
 			_model = model;
-
+			
 			if (_dataListener == null) {
 				_dataListener = new DefaultChartDataListener();
 				_model.addChartDataListener(_dataListener);
 			}
 			invalidate(); // Always redraw
-		}		
+		}
 	}
 	
 	/**
@@ -203,92 +207,62 @@ public class Flashchart extends Flash implements org.zkoss.zul.api.Flashchart {
 		if (model == null || _type == null)
 			return list;
 		
-		if ("pie".equals(_type)) { // Draw PieChart
+		if ("pie".equals(_type)) {
 			PieModel tempModel = (PieModel) model;
-			for (int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++) {
+			for (int i = 0; i < tempModel.getCategories().size(); i++) {
 				Comparable category = tempModel.getCategory(i);
 				JSONObject json = new JSONObject();
 				json.put("categoryField", category);
 				json.put("dataField", tempModel.getValue(category));
 				list.add(json);
 			}
-		} else if ("bar".equals(_type) || "line".equals(_type)
-				|| "column".equals(_type)) {
-			CategoryModel tempModel = (CategoryModel) model;
-			for (int j = 0, nSeries = tempModel.getSeries().size(); j < nSeries; j++) {
-				Comparable series = tempModel.getSeries(j);
-				for (int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++) {
-					Comparable category = tempModel.getCategory(i);
-					JSONObject json = new JSONObject();
-					if ("line".equals(_type) || "column".equals(_type)) { // Draw LineChart and ColumnChart
-						json.put("horizontalField", category);
-						json.put("verticalField", tempModel.getValue(series, category));
-					} else { // Draw BarChart
-						json.put("horizontalField", tempModel.getValue(series, category));
-						json.put("verticalField", category);
-					}
-					list.add(json);
-				}
-			}
-		} else if (_type.startsWith("stackbar")) { // Draw StackedBarChart
+		
+		} else {
 			_seriesList = new LinkedList();
 			CategoryModel tempModel = (CategoryModel) model;
-			for (int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++) {
+			int seriesLength = tempModel.getSeries().size();
+			String fieldKey = isHorizontal(_type) ? "xField" : "yField";
+			for (int i = 0; i < seriesLength; i++) {
 				Comparable series = tempModel.getSeries(i);
 				JSONObject json = new JSONObject();
-				json.put("xField", series);
+				json.put(fieldKey, escape(series));
 				json.put("displayName", series);
 				_seriesList.add(json);
 			}
-			for (int i = 0, nCategories = tempModel.getCategories().size(); i < nCategories; i++) {
+			for (int i = 0; i < tempModel.getCategories().size(); i++) {
 				Comparable category = tempModel.getCategory(i);
 				JSONObject jData = new JSONObject();
-				jData.put("verticalField", category);
-				for (int j = 0; j < _seriesList.size(); j++) {
+				jData.put("values", category);
+				for (int j = 0; j < seriesLength; j++) {
 					Comparable series = tempModel.getSeries(j);
-					JSONObject temp = (JSONObject) _seriesList.get(j);
-					jData.put(temp.get("xField"), tempModel.getValue(series, category));
+					jData.put(escape(series), tempModel.getValue(series, category));
 				}
 				list.add(jData);
 			}
-		} else if (_type.startsWith("stackcolumn")) { // Draw StackedColumnChart
-			_seriesList = new LinkedList();
-			XYModel tempModel = (XYModel) model;
-			for (int i = 0, nSeries = tempModel.getSeries().size(); i < nSeries; i++) {
-				Comparable series = tempModel.getSeries(i);
-				JSONObject jData = new JSONObject();
-				jData.put("horizontalField", series);
-				jData.put(_xAxis, tempModel.getX(series, 0));
-				jData.put(_yAxis, tempModel.getY(series, 0));
-				list.add(jData);
-			}
-
-			JSONObject[] json = new JSONObject[] { new JSONObject(), new JSONObject() };
-
-			// Bug ID: 3126338
-			String tempType = getType();
-			String tempTypeYAxis = "";
-			String tempTypeXAxis = "";
-
-			if (tempType != null) {
-				tempType = getType().indexOf(":") > -1 ? _type.split(":")[1] : getType();
-				tempTypeYAxis = tempType.indexOf(",") > -1 ? tempType.split(",")[0] : "";
-				tempTypeXAxis = tempType.indexOf(",") > -1 ? tempType.split(",")[1] : "";
-			}
-
-			json[0].put("type", tempTypeYAxis);
-			json[0].put("displayName", _yAxis);
-			json[0].put("yField", _yAxis);
-			_seriesList.add(json[0]);
-			json[1].put("type", tempTypeXAxis);
-			json[1].put("displayName", _xAxis);
-			json[1].put("yField", _xAxis);
-			_seriesList.add(json[1]);
 		}
 		return list;
 	}
 	
-	private String getJSONResponse(List list) {
+	
+	
+	// helper //
+	private static String escape(Object series) {
+		return "'" + series + "'";
+	}
+	
+	private static boolean isHorizontal(String type) {
+		return "bar".equals(type) || "stackbar".equals(type);
+	}
+	
+	private static final List _VALID_TYPES = Arrays.asList(new Object[] {
+			"pie", "line", "bar", "column", "stackbar", "stackcolumn"
+	});
+	
+	private static boolean isValid(String type) {
+		return _VALID_TYPES.contains(type);
+	}
+	
+	private static String getJSONResponse(List list) {
 		// list may be null.
 		if (list == null)
 			return "";

@@ -60,6 +60,7 @@ ZK 5.0.10
   ZK-676: toolbartext attribute doesn't escape HTML
   ZK-699: GroupModel can not running under cluster server
   ZK-700: vflex miscalculated height on IE9
+  ZK-471: Series in SimpleCategoryModel when assigned to flashchart object aren't displayed - only 1 series is possible
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors

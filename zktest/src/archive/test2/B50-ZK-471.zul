@@ -1,0 +1,58 @@
+<!--
+	B50-ZK-579.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Nov 29 09:57:36 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.SimpleCategoryModel;
+		import org.zkoss.zul.SimpleXYModel;
+		SimpleCategoryModel model = new SimpleCategoryModel();
+		model.setValue("Series 1", "Alpha", new Integer(100));
+		model.setValue("Series 1", "Beta", new Integer(150));
+		model.setValue("Series 2", "Alpha", new Integer(200));
+		model.setValue("Series 2", "Beta", new Integer(250));
+	]]></zscript>
+	<div>
+		1. All charts should show 2 series. 
+	</div>
+	<div>
+		2. Click on "Update Model" button, then all charts should be updated.
+	</div>
+	<div>
+		Line:
+		<flashchart model="${model}" type="line" />
+	</div>
+	<hlayout>
+		<div>
+			Bar:
+			<flashchart model="${model}" type="bar" />
+		</div>
+		<div>
+			Column:
+			<flashchart model="${model}" type="column" />
+		</div>
+	</hlayout>
+	<hlayout>
+		<div>
+			Stackbar:
+			<flashchart model="${model}" type="stackbar" />
+		</div>
+		<div>
+			Stackcolumn:  
+			<flashchart model="${model}" type="stackcolumn" />
+		</div>
+	</hlayout>
+	<button label="Update Model">
+		<attribute name="onClick"><![CDATA[
+			model.setValue("Series 1", "Alpha", new Integer(300));
+		]]></attribute>
+	</button>
+</zk>
