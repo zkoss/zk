@@ -117,8 +117,6 @@ public class Log {
 	 * @since 6.0.0
 	 */
 	public final static void configure(Properties props) {
-		setHierarchy(true); //turn on the hierarchy
-
 		Log log = null;
 		final StringBuffer sb = new StringBuffer();
 		String[] handlers = null;
@@ -183,8 +181,10 @@ public class Log {
 		}
 
 		//ZK-694: we have to store them. Otherwise, they will be GCed
-		if (!configed.isEmpty())
+		if (!configed.isEmpty()) {
+			setHierarchy(true); //turn on the hierarchy
 			_configedLoggers = configed.toArray(new Logger[configed.size()]);
+		}
 	}
 
 	/** Returns whether the loggers support hierarchy.
