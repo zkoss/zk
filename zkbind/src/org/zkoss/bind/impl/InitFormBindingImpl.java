@@ -16,37 +16,31 @@ import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.Converter;
+import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
+import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.InitPropertyBinding;
-import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of {@link InitPropertyBinding}.
  * @author Dennis
  */
-public class InitPropertyBindingImpl extends PropertyBindingImpl implements
-	InitPropertyBinding {
+public class InitFormBindingImpl extends FormBindingImpl implements InitFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
-	private final Class<?> _attrType;
-	
-	public InitPropertyBindingImpl(Binder binder, Component comp,
-		String attr, Class<?> attrType, String initExpr,Map<String, Object> bindingArgs,
-		String converterExpr, Map<String, Object> converterArgs) {
-		
-		super(binder, comp, "self."+attr, initExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs);
-		_attrType = attrType == null ? Object.class : attrType;
-	}
-	
 	@Override
 	protected boolean ignoreTracker(){
 		//init only loaded once, so it don't need to add to tracker.
 		return true;
 	}
 	
+	public InitFormBindingImpl(Binder binder, Component comp, String formId, String initExpr, Map<String, Object> bindingArgs) {
+		super(binder, comp, formId, initExpr, ConditionType.PROMPT, null, bindingArgs);
+	}
+
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
@@ -54,13 +48,10 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
-		//use _converter to convert type if any
-		final Converter conv = getConverter();
-		if (conv != null) {
-			value = conv.coerceToUi(value, comp, ctx);
+		if(!(value instanceof Form)){
+			throw new UiException("the return value of init expression is not a From is :" + value);
 		}
-		value = Classes.coerce(_attrType, value);
-		//set data into component attribute
-		eval.setValue(null, comp, _fieldExpr, value);
+		
+		((BinderCtrl)getBinder()).storeForm(getComponent(), getFormId(), (Form)value);
 	}
 }

@@ -17,9 +17,7 @@ import java.util.Map;
 
 //import org.zkoss.bind.impl.AnnotateBinderImpl;
 import org.zkoss.bind.impl.BindEvaluatorXImpl;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
-import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
@@ -105,7 +103,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
 		//load data
-		((BinderCtrl)_binder).loadComponent(comp); //load all bindings
+		_binder.loadComponent(comp,true); //load all bindings
 	}
 	
 	private Object initViewModel(BindEvaluatorX evalx, Component comp) {
@@ -185,17 +183,10 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			binder = new AnnotateBinder();
 		}
 		
-		//put to attribute, so binder could be referred
+		//put to attribute, so binder could be referred by the name
 		comp.setAttribute(bname, binder);
 		
-		if(binder instanceof BinderCtrl){ 
-			((BinderCtrl)binder).init(comp, _viewModel);
-		}else{
-			((Binder)binder).setViewModel(_viewModel);
-		}
-		
-		//mark this component was handled by binder after init
-		comp.setAttribute(BinderImpl.BINDER, binder);
+		((Binder)binder).init(comp, _viewModel);
 		
 		return (Binder)binder;
 	}

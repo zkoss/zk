@@ -14,7 +14,6 @@ package org.zkoss.bind;
 import java.util.Map;
 
 import org.zkoss.bind.sys.BindEvaluatorX;
-import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -24,6 +23,23 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public interface Binder {
+	
+	/**
+	 * Initializes the binder with a root component and viewModel object. 
+	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * @param root root component of binder
+	 * @param viewModel viewModel object
+	 */
+	public void init(Component root,Object viewModel);
+	
+	/**
+	 * Load the load-binding of the component
+	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * @param comp the component to reload
+	 * @loadinit true if should also load the init-binding
+	 */
+	public void loadComponent(Component comp,boolean loadinit);	
+	
 	/**
 	 * Returns the {@link BindEvaluatorX} used by this Binder. 
 	 * @return the EvaluatorX.
@@ -49,7 +65,7 @@ public interface Binder {
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 */
-	public void setPropertyInitBinding(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
+	public void addPropertyInitBinding(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
 			String converterExpr, Map<String, Object> converterArgs);
 	
 	
@@ -61,8 +77,8 @@ public interface Binder {
 	 * @param comp the associated component, must not null
 	 * @param attr the associated attribute of the component; ex label, style, must not null
 	 * @param loadExpr load expression, must not null
-	 * @param beforeCmds load before these commands, nullable
-	 * @param afterCmds load after these commands, nullable
+	 * @param beforeCmds load before these commands, the command here is not a EL expression. nullable
+	 * @param afterCmds load after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
@@ -79,8 +95,8 @@ public interface Binder {
 	 * @param comp the associated component, must not null
 	 * @param attr the associated attribute of the component; ex value, check, must not null
 	 * @param saveExpr save expression, nullable
-	 * @param beforeCmds save before these commands, nullable
-	 * @param afterCmds save after these commands, nullable
+	 * @param beforeCmds save before these commands, the command here is not a EL expression. nullable
+	 * @param afterCmds save after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
@@ -100,7 +116,7 @@ public interface Binder {
 	 * @param initExpr init expression, nullable
 	 * @param initArgs args key-value pairs for this init, nullable
 	 */
-	public void setFormInitBinding(Component comp,String id,String initExpr, Map<String, Object> initArgs);
+	public void addFormInitBinding(Component comp,String id,String initExpr, Map<String, Object> initArgs);
 	
 	/**
 	 * Add new form-load-bindings.
@@ -110,8 +126,8 @@ public interface Binder {
 	 * @param comp the associated component, must not null
 	 * @param id the form id, must not null
 	 * @param loadExpr load expression, nullable
-	 * @param beforeCmds load before these commands, nullable
-	 * @param afterCmds load after these commands, nullable
+	 * @param beforeCmds load before these commands, the command here is not a EL expression. nullable
+	 * @param afterCmds load after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 */	
 	public void addFormLoadBindings(Component comp,String id,
@@ -125,8 +141,8 @@ public interface Binder {
 	 * @param comp the associated component, must not null
 	 * @param id the form id, must not null
 	 * @param saveExpr save expression, nullable
-	 * @param beforeCmds save before these commands, nullable
-	 * @param afterCmds save after these commands, nullable
+	 * @param beforeCmds save before these commands, the command here is not a EL expression. nullable
+	 * @param afterCmds save after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 * @param validatorExpr the converter expression, nullable
 	 * @param validatorArgs args key-value pairs for validator, nullable
@@ -209,12 +225,6 @@ public interface Binder {
 	 * @param listener the associated phase listener.
 	 */
 	public void setPhaseListener(PhaseListener listener);
-	
-	/**
-	 * Returns associated dependency tracker of this binder.
-	 * @return associated dependency tracker of this binder.
-	 */
-	public Tracker getTracker();
 	
 	/**
 	 * Returns associated root component of this binder.

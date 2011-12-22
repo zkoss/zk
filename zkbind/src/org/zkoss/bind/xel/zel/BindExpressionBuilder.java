@@ -73,7 +73,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			final Iterator<String> it = series.iterator();
 			final String prop = (String) it.next();
 			final Binder binder = binding.getBinder();
-			final Tracker tracker = binder.getTracker();
+			final Tracker tracker = ((BinderCtrl)binder).getTracker();
 			
 			final BindContext bctx = (BindContext) _ctx.getAttribute(BinderImpl.BINDCTX);
 			final List<String> srcpath = bctx != null ? getSrcList(bctx) : null;

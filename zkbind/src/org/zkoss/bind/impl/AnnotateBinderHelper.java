@@ -178,7 +178,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
-		_binder.setPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
+		_binder.addPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 	}
 	
@@ -372,7 +372,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
-		_binder.setFormInitBinding(comp, formId,initExpr, parsedArgs);
+		_binder.addFormInitBinding(comp, formId,initExpr, parsedArgs);
 	}
 	
 	private void processFormLoadBindings(Component comp, String formId,Annotation ann) {

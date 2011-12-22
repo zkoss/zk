@@ -22,9 +22,9 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
-import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -34,20 +34,22 @@ import org.zkoss.zk.ui.event.Event;
  * @author dennis
  *
  */
-/*package*/ class FormBindingHelper extends AbstractBindingHelper{
+/*package*/ class FormBindingHandler extends AbstractBindingHandler{
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final Log _log = Log.lookup(FormBindingHelper.class);
+	private static final Log _log = Log.lookup(FormBindingHandler.class);
 	
+	private final Map<BindingKey, List<InitFormBinding>> _initFormBindings; //comp+formid -> bindings (load form _prompt)
 	private final Map<BindingKey, List<LoadFormBinding>> _loadFormPromptBindings; //comp+formid -> bindings (load form _prompt)
 	private final Map<String, List<LoadFormBinding>> _loadFormAfterBindings; //command -> bindings (load form after command)
 	private final Map<String, List<SaveFormBinding>> _saveFormAfterBindings; //command -> bindings (save form after command)
 	private final Map<String, List<LoadFormBinding>> _loadFormBeforeBindings; //command -> bindings (load form before command)
 	private final Map<String, List<SaveFormBinding>> _saveFormBeforeBindings; //command -> bindings (save form before command)
 	
-	FormBindingHelper(BinderImpl binder){
+	FormBindingHandler(BinderImpl binder){
 		super(binder);
+		_initFormBindings = new HashMap<BindingKey, List<InitFormBinding>>();
 		_loadFormPromptBindings = new HashMap<BindingKey, List<LoadFormBinding>>();
 		_loadFormAfterBindings = new HashMap<String, List<LoadFormBinding>>();
 		_saveFormAfterBindings = new HashMap<String, List<SaveFormBinding>>();
@@ -55,7 +57,7 @@ import org.zkoss.zk.ui.event.Event;
 		_saveFormBeforeBindings = new HashMap<String, List<SaveFormBinding>>();
 	}
 
-	void addLoadFormPromptBinding(BindingKey bkey, LoadFormBinding binding) {
+	void addLoadPromptBinding(BindingKey bkey, LoadFormBinding binding) {
 		List<LoadFormBinding> bindings = _loadFormPromptBindings.get(bkey); 
 		if (bindings == null) {
 			bindings = new ArrayList<LoadFormBinding>();
@@ -63,8 +65,17 @@ import org.zkoss.zk.ui.event.Event;
 		}
 		bindings.add(binding);
 	}
+	
+	void addInitBinding(BindingKey bkey, InitFormBinding binding) {
+		List<InitFormBinding> bindings = _initFormBindings.get(bkey); 
+		if (bindings == null) {
+			bindings = new ArrayList<InitFormBinding>();
+			_initFormBindings.put(bkey, bindings);
+		}
+		bindings.add(binding);
+	}
 
-	void addLoadFormBeforeBinding(String command, LoadFormBinding binding) {
+	void addLoadBeforeBinding(String command, LoadFormBinding binding) {
 		List<LoadFormBinding> bindings = _loadFormBeforeBindings.get(command);
 		if (bindings == null) {
 			bindings = new ArrayList<LoadFormBinding>();
@@ -73,7 +84,7 @@ import org.zkoss.zk.ui.event.Event;
 		bindings.add(binding);
 	}
 
-	void addLoadFormAfterBinding(String command, LoadFormBinding binding) {
+	void addLoadAfterBinding(String command, LoadFormBinding binding) {
 		List<LoadFormBinding> bindings = _loadFormAfterBindings.get(command);
 		if (bindings == null) {
 			bindings = new ArrayList<LoadFormBinding>();
@@ -82,7 +93,7 @@ import org.zkoss.zk.ui.event.Event;
 		bindings.add(binding);
 	}
 
-	void addSaveFormBeforeBinding(String command, SaveFormBinding binding) {
+	void addSaveBeforeBinding(String command, SaveFormBinding binding) {
 		List<SaveFormBinding> bindings = _saveFormBeforeBindings.get(command);
 		if (bindings == null) {
 			bindings = new ArrayList<SaveFormBinding>();
@@ -91,7 +102,7 @@ import org.zkoss.zk.ui.event.Event;
 		bindings.add(binding);
 	}
 	
-	void addSaveFormAfterBinding(String command, SaveFormBinding binding) {
+	void addSaveAfterBinding(String command, SaveFormBinding binding) {
 		List<SaveFormBinding> bindings = _saveFormAfterBindings.get(command);
 		if (bindings == null) {
 			bindings = new ArrayList<SaveFormBinding>();
@@ -108,17 +119,25 @@ import org.zkoss.zk.ui.event.Event;
 		return _saveFormAfterBindings;
 	}
 	
-	void doSaveFormBefore(Component comp, String command, Event evt, Set<Property> notifys) {
+	void doSaveBefore(Component comp, String command, Event evt, Set<Property> notifys) {
+		System.out.println("1>>>>>>>>>>>"+command);
+		System.out.println("2>>>>>>>>>>>"+_saveFormBeforeBindings.keySet());
+		System.out.println("3>>>>>>>>>>>"+_saveFormBeforeBindings.keySet().contains(command));
+		
+		for(String s: _saveFormBeforeBindings.keySet()){
+			System.out.println("3>>>>>>>>>>>"+s);
+			System.out.println("4>>>>>>>>>>>"+s.equals(command));
+		}
 		final List<SaveFormBinding> bindings = _saveFormBeforeBindings.get(command);
 		if (bindings != null) {
 			for (SaveFormBinding binding : bindings) {
-				doSaveFormBinding(comp, binding, command, evt, notifys);
+				doSaveBinding(comp, binding, command, evt, notifys);
 			}
 		}
 	}
 	
 	//generic operation to save a property binding
-	private void doSaveFormBinding(Component comp, SaveFormBinding binding, String command, Event evt, Set<Property> notifys) {
+	private void doSaveBinding(Component comp, SaveFormBinding binding, String command, Event evt, Set<Property> notifys) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), evt);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
 		//TODO converter args when we support converter in form
@@ -139,8 +158,11 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//generic operation to load a property binding
-	private void doLoadFormBinding(Component comp, LoadFormBinding binding, String command) {
+	private void doLoadBinding(Component comp, LoadFormBinding binding, String command) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, command, binding.getComponent(), null);
+		if(binding instanceof InitFormBindingImpl){
+			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
+		}
 		//TODO converter args when we support converter in form
 		try {
 			if(_log.debugable()){
@@ -153,35 +175,38 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 
-	void doSaveFormAfter(Component comp, String command, Event evt, Set<Property> notifys) {
+	void doSaveAfter(Component comp, String command, Event evt, Set<Property> notifys) {
 		final List<SaveFormBinding> bindings = _saveFormAfterBindings.get(command);
 		if (bindings != null) {
 			for (SaveFormBinding binding : bindings) {
-				doSaveFormBinding(comp, binding, command, evt, notifys);
+				doSaveBinding(comp, binding, command, evt, notifys);
 			}
 		}
 	}
 
-	void doLoadFormBefore(Component comp, String command) {
+	void doLoadBefore(Component comp, String command) {
 		final List<LoadFormBinding> bindings = _loadFormBeforeBindings.get(command);
 		if (bindings != null) {
 			for (LoadFormBinding binding : bindings) {
-				doLoadFormBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command);
 			}
 		}
 	}
 
-	void doLoadFormAfter(Component comp, String command) {
+	void doLoadAfter(Component comp, String command) {
 		final List<LoadFormBinding> bindings = _loadFormAfterBindings.get(command);
 		if (bindings != null) {
 			for (LoadFormBinding binding : bindings) {
-				doLoadFormBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command);
 			}
 		}
 	}
 	
 	void removeBindings(BindingKey bkey,Set<Binding> removed) {
-		final List<? extends Binding> bindingx;
+		List<? extends Binding> bindingx;
+		if((bindingx = _initFormBindings.remove(bkey)) !=null){
+			removed.addAll(bindingx); //comp+_fieldExpr -> bindings (load _prompt)
+		}
 		if((bindingx = _loadFormPromptBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+formid -> bindings (load form _prompt)
 		}
@@ -198,12 +223,16 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(bkey);
 		if (formBindings != null) {
 			for (LoadFormBinding binding : formBindings) {
-				final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, comp, null);
-				//TODO converter args when we support converter in form
-				if(_log.debugable()){
-					_log.debug("loadComponentProperties:form-binding.load(),component=[%s],binding=[%s],context=[%s]",comp,binding,ctx);
-				}
-				binding.load(ctx);
+				doLoadBinding(comp,binding,null);
+			}
+		}
+	}
+	
+	void initComponentProperties(Component comp,BindingKey bkey) {
+		final List<InitFormBinding> initBindings = _initFormBindings.get(bkey);
+		if (initBindings != null) {
+			for (InitFormBinding binding : initBindings) {
+				doLoadBinding(comp, binding,null);
 			}
 		}
 	}

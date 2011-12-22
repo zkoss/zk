@@ -14,6 +14,8 @@ package org.zkoss.bind.sys;
 import java.util.Set;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Form;
+import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
 
 
@@ -25,14 +27,7 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public interface BinderCtrl {
-
-	/**
-	 * Initializes the binder with a root component and viewModel object
-	 * @param root root component of binder
-	 * @param viewModel viewModel object
-	 */
-	public void init(Component root,Object viewModel);
+public interface BinderCtrl {	
 	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
@@ -50,8 +45,25 @@ public interface BinderCtrl {
 	public Set<SaveBinding> getFormAssociatedSaveBindings(Component formComp);
 	
 	/**
-	 * reload the load-binding of the component
-	 * @param comp the component to reload
+	 * Store the form in the component with id
+	 * @param comp the component to store the form
+	 * @param id the form id
+	 * @param form the form instance
 	 */
-	public void loadComponent(Component comp);
+	public void storeForm(Component comp,String id, Form form);
+	
+	/**
+	 * Get the form of the component
+	 * @param comp the component has the form
+	 * @param id the form id
+	 * @return the form if there is a form inside the component with the id
+	 */
+	public Form getForm(Component comp,String id);
+	
+	/**
+	 * Returns associated dependency tracker of this binder.
+	 * @return associated dependency tracker of this binder.
+	 */
+	public Tracker getTracker();
+	
 }

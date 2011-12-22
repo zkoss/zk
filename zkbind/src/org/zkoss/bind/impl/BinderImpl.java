@@ -60,7 +60,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
-import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -146,7 +145,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	
 	//private control key
-	private static final String ZKBIND_COMP_UUID = "$COMPUUID$";
 	private static final String FORM_ID = "$FORM_ID$";
 	
 	//Command lifecycle result
@@ -170,8 +168,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	/* holds all binding in this binder */
 	private final Map<Component, Map<String, List<Binding>>> _bindings; //comp -> (evtnm | _fieldExpr | formid) -> bindings
 
-	private final FormBindingHelper _formBindingHelper;
-	private final PropertyBindingHelper _propertyBindingHelper;
+	private final FormBindingHandler _formBindingHandler;
+	private final PropertyBindingHandler _propertyBindingHandler;
 	
 	/* the relation of form and inner save-bindings */
 	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings;//form comp -> savebindings	
@@ -197,8 +195,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	
 	public BinderImpl(String qname, String qscope) {
 		_bindings = new HashMap<Component, Map<String, List<Binding>>>();
-		_formBindingHelper = new FormBindingHelper(this); 
-		_propertyBindingHelper = new PropertyBindingHelper(this);
+		_formBindingHandler = new FormBindingHandler(this); 
+		_propertyBindingHandler = new PropertyBindingHandler(this);
 		
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
@@ -402,12 +400,41 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		return _eval;
 	}
 	
-	private void storeForm(Component comp,String id, Form form){
+	public void storeForm(Component comp,String id, Form form){
+		final String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		//check if a form exist already, allow to store a form with same id again for replacing the form 
+		if(oldid!=null && !oldid.equals(id)){
+			throw new IllegalArgumentException("try to store 2 forms in same component id : 1st "+oldid+", 2nd "+id);
+		}
+		final Form oldForm = (Form)comp.getAttribute(id);
+		
+		if(oldForm==form) return;
+		
 		comp.setAttribute(FORM_ID, id);//mark it is a form component with the form id;
 		comp.setAttribute(id, form);//after setAttribute, we can access fx in el.
+		
 		if(form instanceof FormExt){
-			comp.setAttribute(id+"Status", ((FormExt)form).getStatus());//by convention fxStatus
+			final FormExt fex = (FormExt)form;
+			comp.setAttribute(id+"Status", fex.getStatus());//by convention fxStatus
+			
+			if(oldForm instanceof FormExt){//copy the filed information, this is for a form-init that assign a user form
+				for(String fn:((FormExt)oldForm).getLoadFieldNames()){
+					fex.addLoadFieldName(fn);
+				}
+				for(String fn:((FormExt)oldForm).getSaveFieldNames()){
+					fex.addSaveFieldName(fn);
+				}
+			}
 		}
+	}
+	
+	public Form getForm(Component comp,String id){
+		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
+		if(oldid==null || !oldid.equals(id)){
+			//return null if the id is not correct
+			return null;
+		}
+		return (Form)comp.getAttribute(id);
 	}
 
 	private void removeForm(Component comp){
@@ -420,7 +447,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	@Override
-	public void setFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
+	public void addFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
 		checkInit();
 		if(Strings.isBlank(id)){
 			throw new IllegalArgumentException("form id is blank");
@@ -429,16 +456,30 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			throw new IllegalArgumentException("initExpr is null for component "+comp+", form "+id);
 		}
 		
-		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
-		Form form = null; 
-		//check if a form exist already
-		if(oldid!=null){
-			throw new IllegalArgumentException("form "+id+" is already existed, is "+form+", cannot init it again.");
+		
+		Form form = getForm(comp,id);
+		if(form==null){
+			storeForm(comp,id,new SimpleForm());
 		}
 		
-		form = doInitForm(comp,initExpr,initArgs);
-		storeForm(comp,id,form);
+		addFormInitBinding0(comp,id,initExpr,initArgs);
+
 	}
+	
+	private void addFormInitBinding0(Component comp, String formId, String initExpr, Map<String, Object> bindingArgs) {
+		
+		if(_log.debugable()){
+			_log.debug("add init-form-binding: comp=[%s],form=[%s],expr=[%s]", comp,formId,initExpr);
+		}
+		final String attr = formId;
+		
+		InitFormBindingImpl binding = new InitFormBindingImpl(this, comp, attr, initExpr, bindingArgs);
+		
+		addBinding(comp, attr, binding);
+		final BindingKey bkey = getBindingKey(comp, attr);
+		_formBindingHandler.addInitBinding(bkey, binding);
+	}
+	
 	@Override
 	public void addFormLoadBindings(Component comp, String id,
 			String loadExpr, String[] beforeCmds, String[] afterCmds,
@@ -451,22 +492,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			throw new IllegalArgumentException("loadExpr is null for component "+comp+", form "+id);
 		}
 		
-		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
-		Form form = null; 
-		//check if a form exist already
-		if(oldid!=null){
-			if(!oldid.equals(id)){
-				throw new IllegalArgumentException("try to use 2 forms in same component 1st "+oldid+", 2nd "+id);
-			}
-			form = (Form)comp.getAttribute(oldid, Component.COMPONENT_SCOPE);
-		}
-		
+		Form form = getForm(comp,id);
 		if(form==null){
-			form = new SimpleForm();
-			storeForm(comp,id,form);
+			storeForm(comp,id,new SimpleForm());
 		}
 		
-		addLoadFormBinding(comp,id,form,loadExpr,beforeCmds,afterCmds,bindingArgs);
+		addFormLoadBindings0(comp,id,loadExpr,beforeCmds,afterCmds,bindingArgs);
 	}
 
 	@Override
@@ -482,78 +513,48 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			throw new IllegalArgumentException("saveExpr is null for component "+comp+", form "+id);
 		}
 		
-		String oldid = (String)comp.getAttribute(FORM_ID, Component.COMPONENT_SCOPE);
-		Form form = null; 
-		
-		if(oldid!=null){
-			if(!oldid.equals(id)){
-				throw new IllegalArgumentException("try to use 2 forms in same component 1st "+oldid+", 2nd "+id);
-			}
-			
-			form = (Form)comp.getAttribute(oldid, Component.COMPONENT_SCOPE);
-		}
-		
+		Form form = getForm(comp,id);
 		if(form==null){
-			form = new SimpleForm();
-			storeForm(comp,id,form);
+			storeForm(comp,id,new SimpleForm());
 		}
 
-		addSaveFormBinding(comp, id, form, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
-	}
-	
-	private Form doInitForm(Component comp, String initExpr, Map<String, Object> args) {
-		final BindEvaluatorX eval = getEvaluatorX();
-		final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, comp, null);
-		ctx.setAttribute(IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el
-		
-		final ExpressionX expr = eval.parseExpressionX(ctx, initExpr, Object.class);
-		final Object obj = eval.getValue(null, comp, expr);
-		if(obj instanceof Form){
-			return (Form)obj;
-		}
-		throw new UiException("the return value of init expression is not a From is :" + obj); 
-	}
-	
-
-	
-	private void removeBindUuid(Component comp){
-		comp.removeAttribute(ZKBIND_COMP_UUID,Component.COMPONENT_SCOPE);
+		addFormSaveBindings0(comp, id, saveExpr, beforeCmds, afterCmds, bindingArgs, validatorExpr, validatorArgs);
 	}
 
-	private void addLoadFormBinding(Component comp, String formId, Form form, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+	private void addFormLoadBindings0(Component comp, String formId, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		final String attr = formId;
 		
 		if(prompt){
-			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.PROMPT,null, bindingArgs);
+			final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.PROMPT,null, bindingArgs);
 			addBinding(comp, attr, binding);
 			final BindingKey bkey = getBindingKey(comp, attr);
-			_formBindingHelper.addLoadFormPromptBinding(bkey, binding);
+			_formBindingHandler.addLoadPromptBinding(bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
+					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.BEFORE_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
-						_log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+						_log.debug("add before command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
 					}
-					_formBindingHelper.addLoadFormBeforeBinding(cmd, binding);
+					_formBindingHandler.addLoadBeforeBinding(cmd, binding);
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, form, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
+					final LoadFormBindingImpl binding = new LoadFormBindingImpl(this, comp, formId, loadExpr,ConditionType.AFTER_COMMAND,cmd, bindingArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
-						_log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+						_log.debug("add after command-load-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,attr,loadExpr,cmd);
 					}
-					_formBindingHelper.addLoadFormBeforeBinding(cmd, binding);
+					_formBindingHandler.addLoadAfterBinding(cmd, binding);
 				}
 			}
 		}
 	}
 
-	private void addSaveFormBinding(Component comp, String formid, Form form, String saveExpr, 
+	private void addFormSaveBindings0(Component comp, String formid, String saveExpr, 
 			String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String validatorExpr,Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
@@ -563,28 +564,28 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		if(beforeCmds!=null && beforeCmds.length>0){
 			for(String cmd:beforeCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formid, binding);
 				if(_log.debugable()){
-					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,formid,saveExpr);
+					_log.debug("add before command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formid,saveExpr,cmd);
 				}
-				_formBindingHelper.addSaveFormBeforeBinding(cmd, binding);
+				_formBindingHandler.addSaveBeforeBinding(cmd, binding);
 			}
 		}
 		if(afterCmds!=null && afterCmds.length>0){
 			for(String cmd:afterCmds){
-				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, form, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
+				final SaveFormBindingImpl binding = new SaveFormBindingImpl(this, comp, formid, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, validatorExpr, validatorArgs);
 				addBinding(comp, formid, binding);
 				if(_log.debugable()){
-					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s]", comp,formid,saveExpr);
+					_log.debug("add after command-save-form-binding: comp=[%s],attr=[%s],expr=[%s],command=[%s]", comp,formid,saveExpr,cmd);
 				}
-				_formBindingHelper.addSaveFormAfterBinding(cmd, binding);
+				_formBindingHandler.addSaveAfterBinding(cmd, binding);
 			}
 		}
 	}
 	
 	@Override
-	public void setPropertyInitBinding(Component comp, String attr,
+	public void addPropertyInitBinding(Component comp, String attr,
 			String initExpr,Map<String, Object> initArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
@@ -598,7 +599,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 		}
 		
-		doInitProperty(comp,attr,initExpr,initArgs,converterExpr,converterArgs);
+		addPropertyInitBinding0(comp,attr,initExpr,initArgs,converterExpr,converterArgs);
 		
 		initRendererIfAny(comp);
 	}
@@ -618,7 +619,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 		}
 		
-		addLoadBinding(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
+		addPropertyLoadBindings0(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
 		
 		initRendererIfAny(comp);
 	}
@@ -646,12 +647,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 		}
 
-		addSaveBinding(comp, attr, saveExpr, beforeCmds, afterCmds, bindingArgs, 
+		addPropertySaveBindings0(comp, attr, saveExpr, beforeCmds, afterCmds, bindingArgs, 
 				converterExpr, converterArgs, validatorExpr, validatorArgs);
 	}
 	
 	
-	private void doInitProperty(Component comp, String attr,
+	private void addPropertyInitBinding0(Component comp, String attr,
 			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
@@ -673,16 +674,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		attr = loadrep == null ? attr : loadrep;
 		
-		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
-		final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
-		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
-		
-		//needs converter args
-		if(binding instanceof PropertyBinding){
-			BindContextUtil.setConverterArgs(this, binding.getComponent(), ctx, (PropertyBinding)binding);
+		if(_log.debugable()){
+			_log.debug("add init-binding: comp=[%s],attr=[%s],expr=[%s],converter=[%s]", comp,attr,initExpr,converterArgs);
 		}
 		
-		binding.load(ctx);
+		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
+		
+		addBinding(comp, attr, binding); 
+		final BindingKey bkey = getBindingKey(comp, attr);
+		_propertyBindingHandler.addInitBinding(bkey, binding);
 	}
 
 	private String getSystemConverter(Component comp, String attr) {
@@ -765,7 +765,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 	}
 	
-	private void addLoadBinding(Component comp, String attr,
+	private void addPropertyLoadBindings0(Component comp, String attr,
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
@@ -810,13 +810,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
 				addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
 				final BindingKey bkey = getBindingKey(comp, evtnm);
-				_propertyBindingHelper.addLoadEventBinding(comp, bkey, binding);
+				_propertyBindingHandler.addLoadEventBinding(comp, bkey, binding);
 			}
 			//if no command , always add to prompt binding, a prompt binding will be load when , 
 			//1.load a component property binding
 			//2.property change (TODO, DENNIS, ISSUE, I think loading of property change is triggered by tracker in loadOnPropertyChange, not by prompt-binding 
 			final BindingKey bkey = getBindingKey(comp, attr);
-			_propertyBindingHelper.addLoadPromptBinding(comp, bkey, binding);
+			_propertyBindingHandler.addLoadPromptBinding(comp, bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -825,7 +825,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					if(_log.debugable()){
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
 					}
-					_propertyBindingHelper.addLoadBeforeBinding(cmd, binding);
+					_propertyBindingHandler.addLoadBeforeBinding(cmd, binding);
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -835,13 +835,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					if(_log.debugable()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
 					}
-					_propertyBindingHelper.addLoadAfterBinding(cmd, binding);	
+					_propertyBindingHandler.addLoadAfterBinding(cmd, binding);	
 				}
 			}
 		}
 	}
 	
-	private void addSaveBinding(Component comp, String attr, String saveExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+	private void addPropertySaveBindings0(Component comp, String attr, String saveExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		//check attribute _accessInfo natural characteristics to register Command event listener 
@@ -873,7 +873,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
 			final BindingKey bkey = getBindingKey(comp, evtnm);
-			_propertyBindingHelper.addSavePromptBinding(comp, bkey, binding);
+			_propertyBindingHandler.addSavePromptBinding(comp, bkey, binding);
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
@@ -882,7 +882,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					if(_log.debugable()){
 						_log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
-					_propertyBindingHelper.addSaveBeforeBinding(cmd, binding);
+					_propertyBindingHandler.addSaveBeforeBinding(cmd, binding);
 				}
 			}
 			if(afterCmds!=null && afterCmds.length>0){
@@ -892,7 +892,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					if(_log.debugable()){
 						_log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
 					}
-					_propertyBindingHelper.addSaveAfterBinding(cmd, binding);	
+					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);	
 				}
 			}
 		}
@@ -1098,7 +1098,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			_log.debug("doSaveEventNoValidate comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
 		}
 		final BindingKey bkey = getBindingKey(comp, evtnm);
-		_propertyBindingHelper.doSaveEventNoValidate(bkey, comp, evt, notifys);
+		_propertyBindingHandler.doSaveEventNoValidate(bkey, comp, evt, notifys);
 	}
 	//for event -> prompt only, no command 
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
@@ -1107,7 +1107,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			_log.debug("doSaveEvent comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
 		}
 		final BindingKey bkey = getBindingKey(comp, evtnm);
-		return _propertyBindingHelper.doSaveEvent(bkey, comp, evt, notifys);
+		return _propertyBindingHandler.doSaveEvent(bkey, comp, evt, notifys);
 	}
 	
 	//for event -> prompt only, no command
@@ -1116,7 +1116,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			_log.debug("doLoadEvent comp=[%s],evtnm=[%s]",comp,evtnm);
 		}
 		final BindingKey bkey = getBindingKey(comp, evtnm); 
-		_propertyBindingHelper.doLoadEvent(bkey, comp, evtnm);
+		_propertyBindingHandler.doLoadEvent(bkey, comp, evtnm);
 	}
 	
 	//doCommand -> doValidate
@@ -1131,19 +1131,19 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			//we collect properties that need to be validated, than validate one-by-one
 			ValidationHelper vHelper = new ValidationHelper(this,new ValidationHelper.InfoProvider() {
 				public Map<String, List<SaveFormBinding>> getSaveFormBeforeBindings() {
-					return _formBindingHelper.getSaveFormBeforeBindings();
+					return _formBindingHandler.getSaveFormBeforeBindings();
 				}		
 				public Map<String, List<SaveFormBinding>> getSaveFormAfterBindings() {
-					return _formBindingHelper.getSaveFormAfterBindings();
+					return _formBindingHandler.getSaveFormAfterBindings();
 				}
 				public Map<BindingKey, List<SavePropertyBinding>> getSaveEventBindings() {
-					return _propertyBindingHelper.getSaveEventBindings();
+					return _propertyBindingHandler.getSaveEventBindings();
 				}
 				public Map<String, List<SavePropertyBinding>> getSaveBeforeBindings() {
-					return _propertyBindingHelper.getSaveBeforeBindings();
+					return _propertyBindingHandler.getSaveBeforeBindings();
 				}
 				public Map<String, List<SavePropertyBinding>> getSaveAfterBindings() {
-					return _propertyBindingHelper.getSaveAfterBindings();
+					return _propertyBindingHandler.getSaveAfterBindings();
 				}
 				public BindingKey getBindingKey(Component comp, String attr) {
 					return BinderImpl.this.getBindingKey(comp,attr);
@@ -1166,7 +1166,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					_log.debug("doValidate validates=[%s]",validates);
 				}
 				boolean valid = true;
-				Map<String,Property[]> properties = _propertyBindingHelper.toCollectedProperties(validates);
+				Map<String,Property[]> properties = _propertyBindingHandler.toCollectedProperties(validates);
 				valid &= vHelper.validateSaveBefore(comp, command, properties,valid,notifys);
 				valid &= vHelper.validateSaveAfter(comp, command, properties,valid,notifys);
 				if (evt != null) {
@@ -1287,8 +1287,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		try {
 			doPrePhase(Phase.SAVE_BEFORE, ctx);		
-			_propertyBindingHelper.doSavePropertyBefore(comp, command, evt, notifys);
-			_formBindingHelper.doSaveFormBefore(comp, command, evt, notifys);
+			_propertyBindingHandler.doSaveBefore(comp, command, evt, notifys);
+			_formBindingHandler.doSaveBefore(comp, command, evt, notifys);
 		} finally {
 			doPostPhase(Phase.SAVE_BEFORE, ctx);
 		}
@@ -1301,8 +1301,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		try {
 			doPrePhase(Phase.SAVE_AFTER, ctx);
-			_propertyBindingHelper.doSavePropertyAfter(comp, command, evt, notifys);
-			_formBindingHelper.doSaveFormAfter(comp, command, evt, notifys);
+			_propertyBindingHandler.doSaveAfter(comp, command, evt, notifys);
+			_formBindingHandler.doSaveAfter(comp, command, evt, notifys);
 		} finally {
 			doPostPhase(Phase.SAVE_AFTER, ctx);
 		}		
@@ -1316,8 +1316,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		try {
 			doPrePhase(Phase.LOAD_BEFORE, ctx);		
-			_propertyBindingHelper.doLoadPropertyBefore(comp, command);
-			_formBindingHelper.doLoadFormBefore(comp, command);
+			_propertyBindingHandler.doLoadBefore(comp, command);
+			_formBindingHandler.doLoadBefore(comp, command);
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
@@ -1329,8 +1329,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		try {
 			doPrePhase(Phase.LOAD_AFTER, ctx);
-			_propertyBindingHelper.doLoadPropertyAfter(comp, command);
-			_formBindingHelper.doLoadFormAfter(comp, command);
+			_propertyBindingHandler.doLoadAfter(comp, command);
+			_formBindingHandler.doLoadAfter(comp, command);
 		} finally {
 			doPostPhase(Phase.LOAD_AFTER, ctx);
 		}		
@@ -1370,7 +1370,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		tracker.removeTrackings(comp);
 
 		comp.removeAttribute(BINDER);
-		removeBindUuid(comp);
 	}
 
 	/**
@@ -1385,15 +1384,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		final BindingKey bkey = getBindingKey(comp, key);
 		final Set<Binding> removed = new HashSet<Binding>();
 		
-		_formBindingHelper.removeBindings(bkey,removed);
-		_propertyBindingHelper.removeBindings(bkey, removed);
+		_formBindingHandler.removeBindings(bkey,removed);
+		_propertyBindingHandler.removeBindings(bkey, removed);
 
 		removeBindings(removed);
 	}
 
 	private void removeBindings(Collection<Binding> removed) {
-		_formBindingHelper.removeBindings(removed);
-		_propertyBindingHelper.removeBindings(removed);
+		_formBindingHandler.removeBindings(removed);
+		_propertyBindingHandler.removeBindings(removed);
 	}
 	
 	private void addBinding(Component comp, String attr, Binding binding) {
@@ -1422,26 +1421,28 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	/**
-	 * Internal Use only.
+	 * Internal Use only. init and load the component
 	 */
-	public void loadComponent(Component comp) {
-		loadComponentProperties(comp);
+	public void loadComponent(Component comp,boolean loadinit) {
+		loadComponentProperties(comp,loadinit);
 		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
-			loadComponent(kid); //recursive
+			loadComponent(kid,loadinit); //recursive
 		}
 	}
 	
-	private void loadComponentProperties(Component comp) {
+	private void loadComponentProperties(Component comp,boolean loadinit) {
 		
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
 		if (compBindings != null) {
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_formBindingHelper.loadComponentProperties(comp,bkey);
+				_formBindingHandler.initComponentProperties(comp,bkey);
+				_formBindingHandler.loadComponentProperties(comp,bkey);
 			}
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_propertyBindingHelper.loadComponentProperties(comp,bkey);
+				_propertyBindingHandler.initComponentProperties(comp,bkey);
+				_propertyBindingHandler.loadComponentProperties(comp,bkey);
 			}
 		}
 	}

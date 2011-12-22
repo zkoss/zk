@@ -24,12 +24,12 @@ import org.zkoss.bind.Property;
  * @author dennis
  *
  */
-abstract class AbstractBindingHelper implements Serializable {
+abstract class AbstractBindingHandler implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	protected final BinderImpl _binder;
 	
-	AbstractBindingHelper(BinderImpl binder){
+	AbstractBindingHandler(BinderImpl binder){
 		_binder = binder;
 	}
 	

@@ -22,14 +22,13 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
-import org.zkoss.util.Pair;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -40,11 +39,12 @@ import org.zkoss.zk.ui.event.Event;
  * @author dennis
  *
  */
-/*package*/ class PropertyBindingHelper extends AbstractBindingHelper{
+/*package*/ class PropertyBindingHandler extends AbstractBindingHandler{
 	private static final long serialVersionUID = 1L;
 
-	private static final Log _log = Log.lookup(PropertyBindingHelper.class);
+	private static final Log _log = Log.lookup(PropertyBindingHandler.class);
 	
+	private final Map<BindingKey, List<InitPropertyBinding>> _initBindings; //comp+_fieldExpr -> bindings (load when init)
 	private final Map<BindingKey, List<LoadPropertyBinding>> _loadPromptBindings; //comp+_fieldExpr -> bindings (load _prompt | load on property change)
 	private final Map<BindingKey, List<LoadPropertyBinding>> _loadEventBindings; //comp+evtnm -> bindings (load on event)
 	private final Map<BindingKey, List<SavePropertyBinding>> _saveEventBindings; //comp+evtnm -> bindings (save on event)
@@ -54,8 +54,9 @@ import org.zkoss.zk.ui.event.Event;
 	private final Map<String, List<SavePropertyBinding>> _saveBeforeBindings; //command -> bindings (save before command)
 	
 	
-	PropertyBindingHelper(BinderImpl binder) {
+	PropertyBindingHandler(BinderImpl binder) {
 		super(binder);
+		_initBindings = new HashMap<BindingKey, List<InitPropertyBinding>>();
 		_loadPromptBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();
 		_loadEventBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();
 		_saveEventBindings = new HashMap<BindingKey, List<SavePropertyBinding>>();
@@ -78,6 +79,14 @@ import org.zkoss.zk.ui.event.Event;
 		if (bindings == null) {
 			bindings = new ArrayList<LoadPropertyBinding>();
 			_loadPromptBindings.put(bkey, bindings);
+		}
+		bindings.add(binding);
+	}
+	void addInitBinding(BindingKey bkey, InitPropertyBinding binding) {
+		List<InitPropertyBinding> bindings = _initBindings.get(bkey); 
+		if (bindings == null) {
+			bindings = new ArrayList<InitPropertyBinding>();
+			_initBindings.put(bkey, bindings);
 		}
 		bindings.add(binding);
 	}
@@ -128,7 +137,7 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//generic operation to save a property binding
-	private void doSavePropertyBinding(Component comp, SavePropertyBinding binding, String command, Event evt, Set<Property> notifys) {
+	private void doSaveBinding(Component comp, SavePropertyBinding binding, String command, Event evt, Set<Property> notifys) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), evt);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 		BindContextUtil.setValidatorArgs(_binder, binding.getComponent(), ctx, binding);
@@ -149,9 +158,12 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//generic operation to load a property binding
-	private void doLoadPropertyBinding(Component comp, LoadPropertyBinding binding, String command) {
+	private void doLoadBinding(Component comp, LoadPropertyBinding binding, String command) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, command, binding.getComponent(), null);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
+		if(binding instanceof InitPropertyBindingImpl){
+			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);//ignore tracker when doing el , we don't need to track the init
+		}
 		try { 
 			if(_log.debugable()){
 				_log.debug("doLoadPropertyBinding:binding.load(),component=[%s],binding=[%s],context=[%s],command=[%s]",comp,binding,ctx,command);
@@ -168,7 +180,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadPropertyBinding> bindings = _loadEventBindings.get(bkey);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadPropertyBinding(comp, binding, null);
+				doLoadBinding(comp, binding, null);
 			}
 		}
 	}
@@ -178,7 +190,7 @@ import org.zkoss.zk.ui.event.Event;
 		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
-				doSavePropertyBinding(comp, binding, null, evt, notifys);
+				doSaveBinding(comp, binding, null, evt, notifys);
 			}
 		}
 	}
@@ -194,7 +206,7 @@ import org.zkoss.zk.ui.event.Event;
 				return false;
 			}
 			for (SavePropertyBinding binding : bindings) {
-				doSavePropertyBinding(comp, binding, null, evt, notifys);
+				doSaveBinding(comp, binding, null, evt, notifys);
 			}
 		}
 		return true;
@@ -282,45 +294,48 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	//doCommand -> doSaveBefore -> doSavePropertyBefore
-	void doSavePropertyBefore(Component comp, String command, Event evt, Set<Property> notifys) {
+	void doSaveBefore(Component comp, String command, Event evt, Set<Property> notifys) {
 		final List<SavePropertyBinding> bindings = _saveBeforeBindings.get(command);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
-				doSavePropertyBinding(comp, binding, command, evt, notifys);
+				doSaveBinding(comp, binding, command, evt, notifys);
 			}
 		}
 	}
 	
-	void doSavePropertyAfter(Component comp, String command, Event evt, Set<Property> notifys) {
+	void doSaveAfter(Component comp, String command, Event evt, Set<Property> notifys) {
 //		final BindEvaluatorX eval = getEvaluatorX(); 
 		final List<SavePropertyBinding> bindings = _saveAfterBindings.get(command);
 		if (bindings != null) {
 			for (SavePropertyBinding binding : bindings) {
-				doSavePropertyBinding(comp, binding, command, evt, notifys);
+				doSaveBinding(comp, binding, command, evt, notifys);
 			}
 		}
 	}
 	
-	void doLoadPropertyBefore(Component comp, String command) {
+	void doLoadBefore(Component comp, String command) {
 		final List<LoadPropertyBinding> bindings = _loadBeforeBindings.get(command);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadPropertyBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command);
 			}
 		}
 	}
 	
-	void doLoadPropertyAfter(Component comp, String command) {
+	void doLoadAfter(Component comp, String command) {
 		final List<LoadPropertyBinding> bindings = _loadAfterBindings.get(command);
 		if (bindings != null) {
 			for (LoadPropertyBinding binding : bindings) {
-				doLoadPropertyBinding(comp, binding, command);
+				doLoadBinding(comp, binding, command);
 			}
 		}
 	}
 	
 	void removeBindings(BindingKey bkey, Set<Binding> removed) {
 		List<? extends Binding> bindingx;
+		if((bindingx = _initBindings.remove(bkey)) !=null){
+			removed.addAll(bindingx); //comp+_fieldExpr -> bindings (load _prompt)
+		}
 		if((bindingx = _loadPromptBindings.remove(bkey)) !=null){
 			removed.addAll(bindingx); //comp+_fieldExpr -> bindings (load _prompt)
 		}
@@ -343,12 +358,16 @@ import org.zkoss.zk.ui.event.Event;
 		final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bkey);
 		if (propBindings != null) {
 			for (LoadPropertyBinding binding : propBindings) {
-				final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, false, null, comp, null);
-				BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
-				if(_log.debugable()){
-					_log.debug("loadComponentProperties:binding.load(),component=[%s],binding=[%s],context=[%s]",comp,binding,ctx);
-				}
-				binding.load(ctx);
+				doLoadBinding(comp,binding,null);
+			}
+		}
+	}
+	
+	void initComponentProperties(Component comp,BindingKey bkey) {
+		final List<InitPropertyBinding> initBindings = _initBindings.get(bkey);
+		if (initBindings != null) {
+			for (InitPropertyBinding binding : initBindings) {
+				doLoadBinding(comp, binding,null);
 			}
 		}
 	}

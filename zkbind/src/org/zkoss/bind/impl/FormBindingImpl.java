@@ -18,6 +18,7 @@ import java.util.Map;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -32,15 +33,13 @@ import org.zkoss.zk.ui.Component;
 public class FormBindingImpl extends BindingImpl implements FormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	final protected String _formId;
-	final protected Form _form;
 	final protected AccessInfo _accessInfo;
 	final private Map<String, ExpressionX> _fieldExprs;
 
-	protected FormBindingImpl(Binder binder, Component comp, String formId, Form form, 
+	protected FormBindingImpl(Binder binder, Component comp, String formId,
 			String accessExpr, ConditionType conditionType, String command,Map<String, Object> bindingArgs) {
 		super(binder, comp, bindingArgs);
 		this._formId = formId;
-		this._form = form;
 		this._accessInfo = AccessInfo.create(this, accessExpr, Form.class, conditionType, command, ignoreTracker());
 		_fieldExprs = new HashMap<String, ExpressionX>();
 	}
@@ -55,7 +54,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 //	}
 	
 	public Form getFormBean() {
-		return _form;
+		return ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
 	}
 
 	public String getFormId() {

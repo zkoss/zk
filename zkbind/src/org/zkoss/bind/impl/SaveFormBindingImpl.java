@@ -44,10 +44,10 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 	
 	private static final String $VALUEREF$ = "$VALUEREF$";
 	
-	public SaveFormBindingImpl(Binder binder, Component comp, String formId, Form form, String saveExpr,
+	public SaveFormBindingImpl(Binder binder, Component comp, String formId, String saveExpr,
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
 			String validatorExpr, Map<String,Object> validatorArgs) {
-		super(binder, comp, formId, form, saveExpr, conditionType, command, bindingArgs);
+		super(binder, comp, formId, saveExpr, conditionType, command, bindingArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		_validator = validatorExpr==null?null:parseValidator(eval,validatorExpr);
 		_validatorArgs = validatorArgs;
@@ -157,7 +157,6 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 			throw new NullPointerException("cannot find validator for "+this);
 		}
 		validator.validate(vctx);
-		//TODO , form need to do extra action(ex, nested property-validation)for validation state.
 		
 		//collect notify change
 		collectNotifyChange(validator,vctx);

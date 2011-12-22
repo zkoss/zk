@@ -45,5 +45,8 @@ public class AnnotateBinder extends BinderImpl {
 	public void init(Component comp, Object vm){
 		super.init(comp, vm);
 		new AnnotateBinderHelper(this).initComponentBindings(comp);
+		
+		//mark this component was handled by binder after init
+		comp.setAttribute(BINDER, this);
 	}
 }

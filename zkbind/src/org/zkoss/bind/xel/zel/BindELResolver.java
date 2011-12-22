@@ -22,6 +22,7 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.SaveBinding;
@@ -85,7 +86,7 @@ public class BindELResolver extends XelELResolver {
 		ctx.setAttribute(BinderImpl.SAVE_BASE, Boolean.TRUE);
 		try {
 			final Binder binder = bctx.getBinder();
-			final TrackerImpl tracker = (TrackerImpl) binder.getTracker();
+			final TrackerImpl tracker = (TrackerImpl) ((BinderCtrl)binder).getTracker();
 			final Set<Object> beans = tracker.getEqualBeans(base);
 			beans.remove(base);
 			for (Object candidate : beans) {
@@ -117,7 +118,7 @@ public class BindELResolver extends XelELResolver {
 				script = propertyName(path.listIterator(path.size()).previous());
 			}
 			final Binder binder = binding.getBinder();
-			binder.getTracker().tieValue(binding.getComponent(), base, script, propName, value);
+			((BinderCtrl)binder).getTracker().tieValue(binding.getComponent(), base, script, propName, value);
 			
 			if (base != null) {
 				if (nums == 0 && binding instanceof SaveBinding) { //a done save operation, form or not form
