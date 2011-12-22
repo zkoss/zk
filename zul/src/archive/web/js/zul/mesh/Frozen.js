@@ -213,7 +213,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	},
 	_syncFrozenNow: function () {
 		var num;
-		if (this._shallSync && (num = self._start)) {
+		if (this._shallSync && (num = this._start)) {
 			this._doScrollNow(num, true);
 		}
 		this._shallSync = false;
