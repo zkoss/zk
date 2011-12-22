@@ -57,9 +57,6 @@ import org.zkoss.zk.ui.Component;
  * <P>Alternatives: in most cases, you don't implement {@link Composer} directly.
  * Rather, you can extend from one of the following skeletons.
  * <dl>
- * <dt>{@link AbstractComposer}</dt>
- * <dd>The thinest composer. It does nothing but stores a reference of the composer
- * to the component's attribute.</dd>
  * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
  * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
  * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>

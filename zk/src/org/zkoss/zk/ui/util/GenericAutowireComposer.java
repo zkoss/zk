@@ -73,12 +73,9 @@ import org.zkoss.zk.xel.Evaluator;
  * extends this class and calling {@link #GenericAutowireComposer(char separator)}
  * constructor with proper separator character.</p>
  * 
- * <P>Alternatives: in most cases, you don't extend from {@link GenericAutowireComposer} directly. Rather,
- * you can extend from one of the following skeletons.
+ * <P>Alternatives: in most cases, you don't extend from {@link GenericAutowireComposer} directly.
+ * Rather, you can extend from one of the following skeletons.
  * <dl>
- * <dt>{@link AbstractComposer}</dt>
- * <dd>The thinest composer. It does nothing but stores a reference of the composer
- * to the component's attribute.</dd>
  * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
  * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
  * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
