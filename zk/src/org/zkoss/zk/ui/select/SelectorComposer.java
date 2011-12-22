@@ -10,17 +10,15 @@ import java.util.List;
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.AbstractComposer;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -53,13 +51,13 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * @since 6.0.0
  * @author simonpai
  */
-public class SelectorComposer<T extends Component> implements Composer<T>, ComposerExt<T>,
-		ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
+public class SelectorComposer<T extends Component> extends AbstractComposer<T>
+implements ComponentCloneListener, ComponentActivationListener, java.io.Serializable {
 	
 	private static final long serialVersionUID = 5022810317492589463L;
 	private static final String ON_WIRE_CLONE = "onWireCloneSelectorComposer";
 	
-	private Component _self;
+	private T _self;
 	/** A list of resolvers (never null). A variable resolver is added automatically if
 	 * {@link org.zkoss.zk.ui.select.annotation.VariableResolver} was annotated.
 	 */
@@ -73,15 +71,16 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
 		Selectors.wireVariables(page, this, _resolvers);
-		return compInfo;
+		return super.doBeforeCompose(page, parent, compInfo);
 	}
 	@Override
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-		_self = comp;
-		ConventionWires.wireController(comp, this);
+	public void doBeforeComposeChildren(T comp) throws Exception {
+		super.doBeforeComposeChildren(_self = comp);
 	}
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
+		super.doAfterCompose(comp);
+
 		_self = comp; //just in case
 		Selectors.wireComponents(comp, this, false);
 		Selectors.wireEventListeners(comp, this);
@@ -98,8 +97,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			if (page != null)
 				return page;
 		}
-		final Execution exec = Executions.getCurrent();
-		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+		return super.getPage();
 	}
 	
 	private class BeforeCreateWireListener implements EventListener<Event> {
@@ -116,7 +114,6 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	private static Method _alert;
 	
 	/** Shortcut to call Messagebox.show(String).
-	 * @since 3.0.7 
 	 */
 	protected void alert(String m) {
 		// brought from GenericAutowireComposer
@@ -139,7 +136,6 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	 * component is cloned.
 	 * @param comp the clone of the applied component
 	 * @return A clone of this Composer. 
-	 * @since 3.5.2
 	 */
 	public Object willClone(Component comp) {
 		try {
@@ -183,14 +179,4 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	@Override
 	public void willPassivate(Component comp) { // do nothing
 	}
-	
-	@Override
-	public boolean doCatch(Throwable ex) throws Exception { //do nothing
-		return false;
-	}
-	
-	@Override
-	public void doFinally() throws Exception { //do nothing
-	}
-	
 }

@@ -20,17 +20,29 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
- * <p>An abstract composer that you can extend and write intuitive onXxx event handler methods;
+ * <p>A skeletal composer that you can extend and write intuitive onXxx event handler methods;
  * this class will registers onXxx events to the supervised component automatically.</p>
- * <P>Alternative: the wiring of {@link GenericComposer} is based on naming convention.
- * If you prefer to use Java annotations for more precise control, please
- * use {@link org.zkoss.zk.ui.select.SelectorComposer} instead.
+ *
+ * <P>Alternatives: in most case, you don't extend from {@link GenericComposer} directly. Rather,
+ * you can extend from one of the following skeletons.
+ * <dl>
+ * <dt>{@link AbstractComposer}</dt>
+ * <dd>The thinest composer. It does nothing but stores a reference of the composer
+ * to the component's attribute.</dd>
+ * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
+ * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
+ * <dt>{@link GenericForwardComposer}</dt>
+ * <dd>It supports the autowiring based on naming convention.
+ * You don't need to specify annotations explicitly, but it is error-prone if
+ * it is used properly.</dd>
+ * </dl>
+ *
  * <p>The following is an example. The onOK and onCancel event listener is registered into 
  * the target main window automatically.</p>
  * 

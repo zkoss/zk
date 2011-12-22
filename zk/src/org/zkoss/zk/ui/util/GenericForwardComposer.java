@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
- * <p>An abstract composer that you can extend and write intuitive onXxx$myid 
+ * <p>A skeletal composer that you can extend and write intuitive onXxx$myid 
  * event handler methods with auto event forwarding and "auto-wired" accessible 
  * variable objects such as embedded objects, components, and external 
  * resolvable variables in a ZK zuml page; this class will add forward
@@ -32,9 +32,19 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * calling setXxx() method or set xxx field value directly per the variable 
  * name.</p>
  * 
- * <P>Alternative: the wiring of {@link GenericForwardComposer} is based on naming convention.
- * If you prefer to use Java annotations for more precise control, please
- * use {@link org.zkoss.zk.ui.select.SelectorComposer} instead.
+ * <P>Alternatives: you can extend from one of the following skeletons.
+ * <dl>
+ * <dt>{@link AbstractComposer}</dt>
+ * <dd>The thinest composer. It does nothing but stores a reference of the composer
+ * to the component's attribute.</dd>
+ * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
+ * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
+ * <dt>{@link GenericForwardComposer}</dt>
+ * <dd>It supports the autowiring based on naming convention.
+ * You don't need to specify annotations explicitly, but it is error-prone if
+ * it is used properly.</dd>
+ * </dl>
  *
  * <p>Notice that since this composer kept references to the components, single
  * instance object cannot be shared by multiple components.</p>

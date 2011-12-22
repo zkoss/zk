@@ -52,10 +52,10 @@ import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
- * <p>An abstract composer that you can extend and write intuitive onXxx 
+ * <p>A skeletal composer that you can extend and write intuitive onXxx 
  * event handler methods with "auto-wired" accessible variable objects such
  * as implicit objects, components, and external resolvable variables in a ZK 
- * zuml page; this class will registers onXxx events to the supervised 
+ * zuml page. This class will registers onXxx events to the supervised 
  * component and wire all accessible variable objects to this composer by 
  * calling setXxx() method or set xxx field value directly per the variable 
  * name. Since 3.0.7, this composer has wired all implicit objects 
@@ -73,9 +73,20 @@ import org.zkoss.zk.xel.Evaluator;
  * extends this class and calling {@link #GenericAutowireComposer(char separator)}
  * constructor with proper separator character.</p>
  * 
- * <P>Alternative: the wiring of {@link GenericComposer} is based on naming convention.
- * If you prefer to use Java annotations for more precise control, please
- * use {@link org.zkoss.zk.ui.select.SelectorComposer} instead.
+ * <P>Alternatives: in most case, you don't extend from {@link GenericAutowireComposer} directly. Rather,
+ * you can extend from one of the following skeletons.
+ * <dl>
+ * <dt>{@link AbstractComposer}</dt>
+ * <dd>The thinest composer. It does nothing but stores a reference of the composer
+ * to the component's attribute.</dd>
+ * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
+ * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
+ * <dt>{@link GenericForwardComposer}</dt>
+ * <dd>It supports the autowiring based on naming convention.
+ * You don't need to specify annotations explicitly, but it is error-prone if
+ * it is used properly.</dd>
+ * </dl>
  *
  * <p>Notice that since this composer kept references to the components, single
  * instance composer object cannot be shared by multiple components.</p>
