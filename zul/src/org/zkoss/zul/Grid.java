@@ -1321,6 +1321,8 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 		if (cnt > 0) clone.afterUnmarshal(cnt);
 		
 		if (clone._model != null) {
+			clone._dataListener = null;
+			clone.initDataListener();
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
 		

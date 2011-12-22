@@ -3046,6 +3046,9 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			clone.initDataListener();
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
+		
+		clone._groupsInfo.addAll(_groupsInfo);
+		
 		return clone;
 	}
 
@@ -3093,6 +3096,11 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
+		
+		int size = _groupsInfo.size();
+		s.writeInt(size);
+		if (size > 0)
+			s.writeObject(_groupsInfo);
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -3112,6 +3120,13 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 		if (_model != null) {
 			initDataListener();
 			getDataLoader().setLoadAll(_renderAll);
+		}
+		
+		int size = s.readInt();
+		if (size > 0) {
+			List groupsInfo = (List)s.readObject();
+			for (int i = 0; i < size; i++)
+				_groupsInfo.add(groupsInfo.get(i));
 		}
 	}
 
