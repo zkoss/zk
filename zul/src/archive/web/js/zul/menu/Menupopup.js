@@ -117,7 +117,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
 
-		if (menu) {
+		var mb;
+		// adjust only for topmost menu in horizontal.
+		if (menu && menu.isTopmost() && (mb = menu.getMenubar()) && mb.getOrient() == 'horizontal') {
 			var n;
 			if (n = this.$n())
 				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
