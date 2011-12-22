@@ -36,12 +36,13 @@ import org.zkoss.zul.event.GroupsDataEvent;
  *
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
- * 
+ * <p>By default, the model support cloneable when the component is cloned. (since 6.0.0)
  * @author Dennis.Chen
  * @since 5.0.5
  * @see GroupsModel
  * @see SimpleGroupsModel
  * @see GroupComparator
+ * @see ComponentCloneListener
  */
 public class GroupsModelArray<D, H, F> extends AbstractGroupsModel<D, H, F>
 implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
