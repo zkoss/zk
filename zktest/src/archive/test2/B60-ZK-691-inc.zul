@@ -1,0 +1,16 @@
+<window title="Extra" border="normal">
+  <zscript>
+  import org.zkoss.zk.ui.sys.StubComponent;
+  void check(Component comp) {
+  	String msg = comp instanceof StubComponent ? "Correct": "Failed";
+  	inf.appendChild(new Label(msg));
+  }
+  </zscript>
+  <div onStub='inf.appendChild(new Label("Stub:"+event))'>
+  <div stubonly="true">
+  <button stubonly="true" label="test" onClick='check(self)'/>
+  </div>
+  </div>
+
+  <vlayout id="inf"/>
+</window>

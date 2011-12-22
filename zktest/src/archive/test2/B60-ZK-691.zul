@@ -1,0 +1,11 @@
+<zk>
+	<html><![CDATA[
+	<ol>
+	<li>Click the create button</li>
+	<li>Click the test button</li>
+	<li>Then, you shall two message: "Correct" and another message starting with "Stub: [StubEvent onStub".</li>
+	</ol>
+	]]></html>
+	<button label="create"
+	 onClick='Executions.createComponents("B60-ZK-691-inc.zul", null, null)'/>
+</zk>
