@@ -36,7 +36,7 @@ public interface Binder {
 	 * Load the load-binding of the component
 	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
 	 * @param comp the component to reload
-	 * @loadinit true if should also load the init-binding
+	 * @param loadinit true if should also load the init-binding
 	 */
 	public void loadComponent(Component comp,boolean loadinit);	
 	

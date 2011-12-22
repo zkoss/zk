@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.select.Selectors;
  * 
  * @see Init
  * @see Command
- * @see Selectors#find(org.zkoss.zk.ui.Component)
+ * @see Selectors#find(org.zkoss.zk.ui.Component, String)
  * @author dennis
  *
  */

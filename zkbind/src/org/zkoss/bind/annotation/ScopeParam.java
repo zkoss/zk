@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation to identify the name of a parameter of a method.
- * By default, the {@linkplain #scopes()} is  {@link Scope#DEFAULT}.
+ * By default, the {@linkplain #scopes()} is  {@link Scope#AUTO}.
  * You could arrange another sequence by setting the {@linkplain #scopes()}.
  * 
  * @see Init

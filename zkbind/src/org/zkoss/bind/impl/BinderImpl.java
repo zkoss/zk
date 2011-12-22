@@ -270,10 +270,29 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if(inits!=null) return inits;
 			
 			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
-			for(Method m : clz.getMethods()){
-				final Init init = m.getAnnotation(Init.class);
-				if(init==null) continue;			
-				inits.add(m);
+			
+			Class<?> curr = clz;
+			
+			while(curr!=null && !curr.equals(Object.class)){
+				Method currm = null;
+				Init init = null;
+				//only allow one init method in a class.
+				for(Method m : curr.getDeclaredMethods()){
+					final Init i = m.getAnnotation(Init.class);
+					if(i==null) continue;
+					if(currm!=null){
+						throw new UiException("more than one @Init method in calss "+curr+" first:"+currm+", secondary:"+m);
+					}
+					init = i;
+					currm = m;
+				}
+				
+				if(currm!=null){
+					//super first
+					inits.add(0,currm);
+				}
+				//check if we should take care super's init also.
+				curr = (init==null || init.upward())?curr.getSuperclass():null;
 			}
 			inits = Collections.unmodifiableList(inits);
 			_initMethodCache.put(clz, inits);
