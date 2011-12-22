@@ -54,6 +54,21 @@ import org.zkoss.zk.ui.Component;
  * to initialize a component (that might or might not implement
  * {@link org.zkoss.zk.ui.ext.AfterCompose}).
  *
+ * <P>Alternatives: in most cases, you don't implement {@link Composer} directly.
+ * Rather, you can extend from one of the following skeletons.
+ * <dl>
+ * <dt>{@link AbstractComposer}</dt>
+ * <dd>The thinest composer. It does nothing but stores a reference of the composer
+ * to the component's attribute.</dd>
+ * <dt>{@link org.zkoss.zk.ui.select.SelectorComposer}</dt>
+ * <dd>It supports the autowiring based on Java annoataion and a CSS3-based selector.
+ * If you don't know which one to use, use {@link org.zkoss.zk.ui.select.SelectorComposer}.</dd>
+ * <dt>{@link GenericForwardComposer}</dt>
+ * <dd>It supports the autowiring based on naming convention.
+ * You don't need to specify annotations explicitly, but it is error-prone if
+ * it is used properly.</dd>
+ * </dl>
+ *
  * @author tomyeh
  * @since 3.0.0
  * @see org.zkoss.zk.ui.ext.AfterCompose

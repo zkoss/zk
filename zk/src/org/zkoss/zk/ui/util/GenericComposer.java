@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * <p>A skeletal composer that you can extend and write intuitive onXxx event handler methods;
  * this class will registers onXxx events to the supervised component automatically.</p>
  *
- * <P>Alternatives: in most case, you don't extend from {@link GenericComposer} directly. Rather,
+ * <P>Alternatives: in most cases, you don't extend from {@link GenericComposer} directly. Rather,
  * you can extend from one of the following skeletons.
  * <dl>
  * <dt>{@link AbstractComposer}</dt>

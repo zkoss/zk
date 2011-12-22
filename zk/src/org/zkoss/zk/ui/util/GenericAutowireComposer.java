@@ -73,7 +73,7 @@ import org.zkoss.zk.xel.Evaluator;
  * extends this class and calling {@link #GenericAutowireComposer(char separator)}
  * constructor with proper separator character.</p>
  * 
- * <P>Alternatives: in most case, you don't extend from {@link GenericAutowireComposer} directly. Rather,
+ * <P>Alternatives: in most cases, you don't extend from {@link GenericAutowireComposer} directly. Rather,
  * you can extend from one of the following skeletons.
  * <dl>
  * <dt>{@link AbstractComposer}</dt>
