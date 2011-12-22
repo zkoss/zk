@@ -110,8 +110,6 @@ public class Log {
 	 * Configures based the properties.
 	 *
 	 * <p>The key is a logger name and the value is the level.
-	 * A special level, INHERIT or NULL, to denote resetting the level
-	 * to be the same as the logger's parent.
 	 *
 	 * @param props the properties
 	 * @since 6.0.0
@@ -168,8 +166,7 @@ public class Log {
 				key = key.substring(0, key.length() - 6);
 
 			final Level level = Log.getLevel(val);
-			if (level != null || (val != null && (val.equalsIgnoreCase("NULL")
-			|| val.equalsIgnoreCase("INHERIT")))) {
+			if (level != null) {
 				final Logger logger = Logger.getLogger(key);
 				logger.setLevel(level);
 				configed.add(logger);
