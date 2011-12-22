@@ -102,4 +102,17 @@ implements ListModel<E>, Selectable<E>, java.io.Serializable {
 		_listeners = new LinkedList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		final AbstractListModel clone;
+		try {
+			clone = (AbstractListModel) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._listeners = new LinkedList<ListDataListener>();
+		clone._selection = new HashSet<E>(_selection);
+		return clone;
+	}
 }

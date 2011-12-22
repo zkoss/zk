@@ -31,9 +31,9 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.event.Event;
@@ -744,6 +744,11 @@ public class Combobox extends Textbox {
 		clone._selItem = null;
 		clone.reIndexRequired();
 		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
 			clone._dataListener = null;
 			clone._eventListener = null;
 			clone.initDataListener();

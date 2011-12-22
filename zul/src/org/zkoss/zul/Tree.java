@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
@@ -1100,6 +1101,7 @@ public class Tree extends MeshElement {
 	}
 
 	//Cloneable//
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		int cntSel = _selItems.size();
 
@@ -1117,6 +1119,11 @@ public class Tree extends MeshElement {
 		if (_paging != null) ++cnt;
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
 		if(clone._model != null){
+			if (clone._model instanceof ComponentCloneListener) {
+				final TreeModel<Object> model = (TreeModel<Object>) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
 			clone._dataListener = null;
 			clone.initDataListener();
 		}

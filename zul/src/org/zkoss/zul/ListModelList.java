@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zk.ui.UiException;
@@ -391,5 +392,14 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		Collections.sort(_list, cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		ListModelList clone = (ListModelList) super.clone();
+		if (_list != null)
+			clone._list = new ArrayList(_list);
+		return clone;
 	}
 }

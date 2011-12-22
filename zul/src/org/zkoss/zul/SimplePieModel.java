@@ -18,12 +18,9 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -76,6 +73,16 @@ public class SimplePieModel extends AbstractChartModel implements PieModel {
 		_categoryMap.clear();
 		_categoryList.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
+	}
+
+	@Override
+	public Object clone() {
+		SimplePieModel clone = (SimplePieModel) super.clone();
+		if (_categoryList != null)
+			clone._categoryList = new ArrayList<Comparable<?>>(_categoryList);
+		if (_categoryMap != null)
+			clone._categoryMap = new HashMap<Comparable<?>, Number>(_categoryMap);
+		return clone;
 	}
 }
 

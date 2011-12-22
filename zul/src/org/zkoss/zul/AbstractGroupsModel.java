@@ -72,4 +72,16 @@ abstract public class AbstractGroupsModel<D, G, F> implements GroupsModel<D, G, 
 		_listeners = new LinkedList<GroupsDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		final AbstractGroupsModel clone;
+		try {
+			clone = (AbstractGroupsModel) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._listeners = new LinkedList<GroupsDataListener>();
+		return clone;
+	}
 }

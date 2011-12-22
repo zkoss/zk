@@ -367,4 +367,13 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		_set.addAll(copy);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		ListModelSet clone = (ListModelSet) super.clone();
+		if (_set != null)
+			clone._set = new LinkedHashSet(_set);
+		return clone;
+	}
 }

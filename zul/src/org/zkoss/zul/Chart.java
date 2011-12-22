@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.impl.ChartEngine;
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
@@ -994,6 +995,11 @@ public class Chart extends Imagemap {
 		clone.init();
 		clone.doSmartDraw();
 		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ChartModel model = (ChartModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
 			clone._dataListener = null;
 			clone.initDataListener();
 		}

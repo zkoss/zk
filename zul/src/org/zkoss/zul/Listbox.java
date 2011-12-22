@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -2846,11 +2847,19 @@ public class Listbox extends MeshElement {
 		
 		clone.afterUnmarshal();
 		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
 			// we use the same data model but we have to create a new listener
 			clone._dataListener = null;
 			clone.initDataListener();
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
+
+		clone._groupsInfo.addAll(_groupsInfo);
+		
 		return clone;
 	}
 
@@ -2897,6 +2906,11 @@ public class Listbox extends MeshElement {
 		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
+		
+		int size = _groupsInfo.size();
+		s.writeInt(size);
+		if (size > 0)
+			s.writeObject(_groupsInfo);
 	}
 
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -2916,6 +2930,13 @@ public class Listbox extends MeshElement {
 		if (_model != null) {
 			initDataListener();
 			getDataLoader().setLoadAll(_renderAll);
+		}
+		
+		int size = s.readInt();
+		if (size > 0) {
+			List groupsInfo = (List)s.readObject();
+			for (int i = 0; i < size; i++)
+				_groupsInfo.add((int [])groupsInfo.get(i));
 		}
 	}
 

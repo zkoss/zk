@@ -18,16 +18,10 @@ package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Sortable;
-import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
-import static org.zkoss.lang.Generics.cast;
-
 import java.util.Comparator;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,7 +38,7 @@ public class ListModelArray<E> extends AbstractListModel<E>
 implements Sortable<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
-	protected final Object[] _array;
+	protected Object[] _array;
 
 	/**
 	 * Constructor
@@ -157,5 +151,14 @@ implements Sortable<E>, java.io.Serializable {
 	}
 	public String toString() {
 		return Objects.toString(_array);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		ListModelArray clone = (ListModelArray) super.clone();
+		if (_array != null)
+			clone._array = ArraysX.clone(_array);
+		return clone;
 	}
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-701-Tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 21 16:49:18 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vbox id="vb">
+	1. Please select one item on the tree.
+	<separator />
+	2. Press the "Clone" button (it should not show any exception)
+	<separator />
+	3. Please select another item on the top tree and then click the "Path" head to sort it.
+	<separator />
+	4. The sorting and the selection cannot apply to the bottom list. (That is the feature)
+	<button id="btn" label="Clone">
+		<attribute name="onClick">{
+	Object l = tree.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		}</attribute>
+	</button>
+    <zscript><![CDATA[
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+  int cnt = 0;
+public class CloneableModel extends org.zkoss.zul.DefaultTreeModel implements ComponentCloneListener, Cloneable {
+	public CloneableModel(Object d) {
+		super(d);
+	}
+	public Object willClone(Component comp) {
+		return clone();
+	}
+}
+	TreeitemRenderer render = new org.zkoss.zktest.test2.tree.DirectoryTreeitemRenderer();
+	DefaultTreeModel model = new CloneableModel(org.zkoss.zktest.test2.tree.PackageData.getRoot());
+    ]]></zscript>
+    <tree id="tree" width="830px" itemRenderer="${render}" model="${model}">
+		<treecols>
+			<treecol hflex="3" label="Path" sort="auto"/>
+			<treecol hflex="5" label="Description" />
+			<treecol hflex="2" label="Size" />
+		</treecols>
+	</tree>
+	</vbox>
+</zk>

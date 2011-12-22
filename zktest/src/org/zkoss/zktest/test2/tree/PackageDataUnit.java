@@ -20,7 +20,7 @@ package org.zkoss.zktest.test2.tree;
  * 
  * @author simonpai
  */
-public class PackageDataUnit {
+public class PackageDataUnit implements Comparable<PackageDataUnit> {
 	
 	private final String path;
 	private final String description;
@@ -48,5 +48,11 @@ public class PackageDataUnit {
 	
 	public String getSize() {
 		return size;
+	}
+
+	// for F60-ZK-701-Tree.zul
+	@Override
+	public int compareTo(PackageDataUnit o) {
+		return path.compareTo(o.path);
 	}
 }

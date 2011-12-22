@@ -19,6 +19,9 @@ package org.zkoss.zul;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.zkoss.util.ArraysX;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
@@ -35,7 +38,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
  * @see GroupsModelArray
  */
 public class SimpleGroupsModel<D, H, F> extends AbstractGroupsModel<D, Object, F>
-implements GroupsModelExt<D> {
+implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
 	
 	/**
 	 * member field to store group data
@@ -202,5 +205,27 @@ implements GroupsModelExt<D> {
 	Comparator<D> cmpr, boolean ascending, int colIndex){
 		Arrays.sort(groupdata,cmpr);
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		SimpleGroupsModel clone = (SimpleGroupsModel)super.clone();
+		if (_data != null)
+			clone._data = ArraysX.clone(_data);
+		if (_heads != null)
+			clone._heads = ArraysX.clone(_heads);
+		if (_foots != null)
+			clone._foots = ArraysX.clone(_foots);
+		if (_closes != null)
+			clone._closes = (boolean[])ArraysX.clone(_closes);
+		return clone;
+	}
+	/**
+	 * Allows the model to clone
+	 * @since 6.0.0
+	 */
+	@Override
+	public Object willClone(Component comp) {
+		return clone();
+	}
 }

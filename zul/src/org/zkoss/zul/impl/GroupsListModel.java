@@ -21,7 +21,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.GroupsModelExt;
@@ -268,7 +270,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 }
 /*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
-implements GroupsModelExt<D> {
+implements GroupsModelExt<D>, ComponentCloneListener {
 	/*package*/ GroupsListModelExt(GroupsModel<D, G, F> model) {
 		super(model);
 	}
@@ -290,5 +292,13 @@ implements GroupsModelExt<D> {
 		if (!(_model instanceof GroupsModelExt))
 			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
 		((GroupsModelExt)_model).sort(cmpr, ascending, colIndex);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object willClone(Component comp) {
+		if (_model instanceof ComponentCloneListener)
+			return GroupsListModel.toListModel((GroupsModel<D, G, F>)((ComponentCloneListener) _model).willClone(comp));
+		return null; // no need to clone
 	}
 }

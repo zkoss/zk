@@ -70,7 +70,6 @@ public class GanttModel extends AbstractChartModel {
 	/** Return all series of this GanttModel.
 	 * @return all series of this GanttModel.
 	 */
-	@SuppressWarnings("unchecked")
 	public Comparable<?>[] getAllSeries() {
 		final Set<Comparable<?>> allseries = _taskMap.keySet();
 		return allseries.toArray(new Comparable[allseries.size()]);
@@ -190,5 +189,13 @@ public class GanttModel extends AbstractChartModel {
 			if (_owner != null)
 				_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);
 		}
+	}
+
+	@Override
+	public Object clone() {
+		GanttModel clone = (GanttModel) super.clone();
+		if (_taskMap != null)
+			clone._taskMap = new LinkedHashMap<Comparable<?>, List<GanttTask>>(_taskMap);
+		return clone;
 	}
 }

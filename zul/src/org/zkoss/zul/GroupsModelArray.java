@@ -23,6 +23,8 @@ import java.util.List;
 import java.lang.reflect.Array;
 
 import org.zkoss.util.ArraysX;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
@@ -42,7 +44,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
  * @see GroupComparator
  */
 public class GroupsModelArray<D, H, F> extends AbstractGroupsModel<D, H, F>
-implements GroupsModelExt<D> {
+implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 	
 	/**
 	 * member field to store native (original) array data
@@ -349,5 +351,30 @@ implements GroupsModelExt<D> {
 	 */
 	protected boolean createGroupClose(D[] groupdata,int index,int col) {
 		return false;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		GroupsModelArray clone = (GroupsModelArray)super.clone();
+		if (_nativedata != null)
+			clone._nativedata = ArraysX.clone(_nativedata);
+		if (_data != null)
+			clone._data = ArraysX.clone(_data);
+		if (_heads != null)
+			clone._heads = ArraysX.clone(_heads);
+		if (_foots != null)
+			clone._foots = ArraysX.clone(_foots);
+		if (_closes != null)
+			clone._closes = (boolean[])ArraysX.clone(_closes);
+		return clone;
+	}
+	/**
+	 * Allows the model to clone
+	 * @since 6.0.0
+	 */
+	@Override
+	public Object willClone(Component comp) {
+		return clone();
 	}
 }

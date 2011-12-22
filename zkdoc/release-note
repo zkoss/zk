@@ -64,6 +64,7 @@ ZK 6.0.0
   ZK-666: A way to specify both annotation and value for a property
   ZK-688: AuInvoke supports the invocation of a global function at the client
   ZK-694: The file to configure logger can be specified in a library property
+  ZK-701: ListModel, TreeModel, ChartModel, and ListGroupModel supports Cloneable if implemented 
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

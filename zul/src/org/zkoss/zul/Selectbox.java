@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
@@ -381,6 +382,11 @@ public class Selectbox extends HtmlBasedComponent {
 	public Object clone() {
 		final Selectbox clone = (Selectbox) super.clone();
 		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
 			// we use the same data model but we have to create a new listener
 			clone._dataListener = null;
 			clone.initDataListener();

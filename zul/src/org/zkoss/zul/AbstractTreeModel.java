@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -169,5 +168,21 @@ implements TreeModel<E>, Selectable<E>, Openable<E>, java.io.Serializable  {
 	@SuppressWarnings("unchecked")
 	public int[] getPath(Object parent, Object lastNode){
 		return Tree.getPath((TreeModel)this, parent, lastNode);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		final AbstractTreeModel clone;
+		try {
+			clone = (AbstractTreeModel) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._listeners = new LinkedList<TreeDataListener>();
+		clone._selection = new HashSet<E>(_selection);
+		clone._openSet = new HashSet<E>(_openSet);
+		
+		return clone;
 	}
 }

@@ -18,11 +18,8 @@ package org.zkoss.zul;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
 
 import org.zkoss.io.Serializables;
-
-import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.event.ChartDataEvent;
 import org.zkoss.zul.event.ChartDataListener;
@@ -70,5 +67,17 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 
 		_listeners = new LinkedList<ChartDataListener>();
 		Serializables.smartRead(s, _listeners);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		final AbstractChartModel clone;
+		try {
+			clone = (AbstractChartModel) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._listeners = new LinkedList<ChartDataListener>();
+		return clone;
 	}
 }

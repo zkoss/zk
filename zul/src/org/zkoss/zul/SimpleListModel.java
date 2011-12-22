@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class SimpleListModel<E> extends AbstractListModel<E>
 implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
     private static final long serialVersionUID = 20060707L;
 
-	private final Object[] _data;
+	private Object[] _data;
 
 	/** Constructor.
 	 *
@@ -170,5 +171,14 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	protected String objectToString(Object value) {
 		final String s = value != null ? value.toString(): "";
 		return s != null ? s: "";
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		SimpleListModel clone = (SimpleListModel) super.clone();
+		if (_data != null)
+			clone._data = (Object[]) ArraysX.clone(_data);
+		return clone;
 	}
 }

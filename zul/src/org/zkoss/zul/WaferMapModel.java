@@ -19,7 +19,6 @@ package org.zkoss.zul;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.zkoss.zul.event.ChartDataEvent;
@@ -38,7 +37,7 @@ public class WaferMapModel extends AbstractChartModel {
 	private int _ysize = 100;
 	private double _space = 1d;
 	private Map<IntPair, Number> _values; //(IntPair, Number)
-	
+
 	/**
 	 * data model to be used with wafermap chart.
 	 */
@@ -203,5 +202,13 @@ public class WaferMapModel extends AbstractChartModel {
 			final IntPair o = (IntPair) other;
 			return o._x == _x && o._y == _y;
 		}
+	}
+
+	@Override
+	public Object clone() {
+		WaferMapModel clone = (WaferMapModel) super.clone();
+		if (_values != null)
+			clone._values = new HashMap<IntPair, Number>(_values);
+		return clone;
 	}
 }

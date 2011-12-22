@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -677,5 +678,14 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 				return ret;
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		ListModelMap clone = (ListModelMap) super.clone();
+		if (_map != null)
+			clone._map = new LinkedHashMap(_map);
+		return clone;
 	}
 }

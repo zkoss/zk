@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ChartDataEvent;
 
 /**
@@ -330,5 +331,19 @@ public class DialModel extends AbstractChartModel {
 	 */
 	public double getCapRadius() {
 		return _capRadius;
+	}
+	
+	@Override
+	public Object clone() {
+		DialModel clone = (DialModel) super.clone();
+		if (_bgRGB != null)
+			clone._bgRGB = (int[]) ArraysX.clone(_bgRGB);
+		if (_bgRGB1 != null)
+			clone._bgRGB1 = (int[]) ArraysX.clone(_bgRGB1);
+		if (_bgRGB2 != null)
+			clone._bgRGB2 = (int[]) ArraysX.clone(_bgRGB2);
+		if (_fgRGB != null)
+			clone._fgRGB = (int[]) ArraysX.clone(_fgRGB);
+		return clone;
 	}
 }

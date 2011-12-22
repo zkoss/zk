@@ -152,5 +152,13 @@ public class SimpleHiLoModel extends AbstractChartModel implements HiLoModel {
 			return _volume;
 		}
 	}
+
+	@Override
+	public Object clone() {
+		SimpleHiLoModel clone = (SimpleHiLoModel) super.clone();
+		if (_hlTuples != null)
+			clone._hlTuples = new ArrayList<HiLoTuple>(_hlTuples);
+		return clone;
+	}
 }
 

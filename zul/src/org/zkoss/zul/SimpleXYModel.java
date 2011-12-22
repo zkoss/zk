@@ -151,4 +151,14 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 			return _y;
 		}
 	}
+
+	@Override
+	public Object clone() {
+		SimpleXYModel clone = (SimpleXYModel) super.clone();
+		if (_seriesMap != null)
+			clone._seriesMap = new HashMap<Comparable<?>, List<XYPair>>(_seriesMap);
+		if (_seriesList != null)
+			clone._seriesList = new ArrayList<Comparable<?>>(_seriesList);
+		return clone;
+	}
 }

@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -1296,6 +1297,13 @@ public class Grid extends MeshElement {
 		if (cnt > 0) clone.afterUnmarshal(cnt);
 		
 		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
+			clone._dataListener = null;
+			clone.initDataListener();
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
 		

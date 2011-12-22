@@ -143,4 +143,20 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		_valueMap.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
+
+	@Override
+	public Object clone() {
+		SimpleCategoryModel clone = (SimpleCategoryModel) super.clone();
+		if (_seriesMap != null)
+			clone._seriesMap = new HashMap<Comparable<?>, Integer>(_seriesMap);
+		if (_seriesList != null)
+			clone._seriesList = new ArrayList<Comparable<?>>(_seriesList);
+		if (_categoryMap != null)
+			clone._categoryMap = new HashMap<Comparable<?>, Integer>(_categoryMap);
+		if (_categoryList != null)
+			clone._categoryList = new ArrayList<Comparable<?>>(_categoryList);
+		if (_valueMap != null)
+			clone._valueMap = new LinkedHashMap<List<Comparable<?>>, Number>(_valueMap);
+		return clone;
+	}
 }
