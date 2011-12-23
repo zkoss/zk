@@ -152,8 +152,8 @@ public class Log {
 			try {
 				LogManager.getLogManager().readConfiguration(
 					new ByteArrayInputStream(sb.toString().getBytes()));
-			} catch (java.io.IOException ex) {
-				throw org.zkoss.lang.SystemException.Aide.wrap(ex);
+			} catch (Throwable ex) {
+				lookup(Log.class).warningBriefly("Failed to configure LogManager", ex);
 			}
 		}
 
