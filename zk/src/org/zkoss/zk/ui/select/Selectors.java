@@ -370,11 +370,14 @@ public class Selectors {
 					
 					String selector = anno.value();
 					// check selector string: nonempty
-					if (Strings.isEmpty(selector))
-						throw new UiException("Selector is empty on method: " + 
-								method.getName());
+					if (!Strings.isEmpty(selector))
+						injectComponent(method, functor.iterable(selector));
 					
-					injectComponent(method, functor.iterable(selector));
+					else {
+						Component value = getComponentByName(functor, 
+								desetterize(method.getName()), paramTypes[0]);
+						Reflections.invokeMethod(method, this, value);
+					}
 				}
 			});
 		}
@@ -390,17 +393,16 @@ public class Selectors {
 						throw new UiException("Cannot wire variable to " + 
 								"static field: " + field.getName());
 					
+					if (_rewire && !anno.rewireOnActivate() && 
+							!isSessionOrWebApp(field.getType()))
+						return; // skipped, not rewired
+					
 					String name = anno.value();
 					if (Strings.isEmpty(name))
 						name = guessImplicitObjectName(field.getType());
 					
-					if (name == null)
-						throw new UiException("Name of variable is required " + 
-								"on field: " + field.getName());
-					
-					if (_rewire && !anno.rewireOnActivate() && 
-							!isSessionOrWebApp(field.getType()))
-						return; // skipped, not rewired
+					if (Strings.isEmpty(name))
+						name = field.getName();
 					
 					Object value = 
 						getObjectByName(functor, name, field.getType(), resolvers);
@@ -422,21 +424,19 @@ public class Selectors {
 						throw new UiException("Setter method should have" + 
 								" exactly one parameter: " + mname);
 					
-					String name = anno.value();
-					if (Strings.isEmpty(name))
-						name = guessImplicitObjectName(paramTypes[0]);
-					
-					if (name == null)
-						throw new UiException("Name of variable is required " + 
-								"on method: " + method.getName());
-					
 					if (_rewire && !anno.rewireOnActivate() && 
 							!isSessionOrWebApp(paramTypes[0]))
 						return; // skipped, not rewired
 					
+					String name = anno.value();
+					if (Strings.isEmpty(name))
+						name = guessImplicitObjectName(paramTypes[0]);
+					
+					if (Strings.isEmpty(name))
+						name = desetterize(method.getName());
+					
 					Object value = 
 						getObjectByName(functor, name, paramTypes[0], resolvers);
-					
 					Reflections.invokeMethod(method, _controller, value);
 				}
 			});
@@ -598,6 +598,13 @@ public class Selectors {
 	
 	private static boolean isValidValue(Object value, Class<?> clazz) {
 		return value != null && clazz.isAssignableFrom(value.getClass());
+	}
+	
+	private static String desetterize(String name) {
+		if (name.length() < 4 || !name.startsWith("set") || 
+				Character.isLowerCase(name.charAt(3)))
+			throw new UiException("Expecting method name in form setXxx: " + name);
+		return Character.toLowerCase(name.charAt(3)) + name.substring(4);
 	}
 	
 	@SuppressWarnings("unchecked")
