@@ -235,11 +235,12 @@ public class ConventionWires {
 		if (onm instanceof String && ((String)onm).length() > 0) {
 			comp.setAttribute((String)onm, controller);
 		} else {
+			comp.setAttribute(separator + "composer", controller);
+				//no need to check since it is more nature (new overwrites old)
+
 			//feature #2778513, support {id}$composer name
 			final String id = comp.getId();
-			final String nm = id + separator + "composer";
-			if (!comp.hasAttributeOrFellow(nm, false))
-				comp.setAttribute(nm, controller);
+			comp.setAttribute(id + separator + "composer", controller);
 
 			//support {id}$ClassName
 			comp.setAttribute(
