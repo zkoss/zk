@@ -575,6 +575,7 @@
 			<xs:element ref="menupopup" />
 			<xs:element ref="paging" />
 			<xs:element ref="panel" />
+			<xs:element ref="pivottable" />
 			<xs:element ref="popup" />
 			<xs:element ref="portallayout" />
 			<xs:element ref="progressmeter" />
@@ -652,6 +653,7 @@
 				<xs:element ref="menupopup" />
 				<xs:element ref="paging" />
 				<xs:element ref="panel" />
+				<xs:element ref="pivottable" />
 				<xs:element ref="popup" />
 				<xs:element ref="portallayout" />
 				<xs:element ref="progressmeter" />
@@ -1919,6 +1921,23 @@
 		<xs:attribute name="pageIncrement" type="intType" use="optional" />
 		<xs:attribute name="detailed" type="booleanType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />
+	</xs:complexType>
+	<!-- pivottable -->
+	<xs:element name="pivottable" type="pivottableType" />
+	<xs:complexType name="pivottableType">
+		<xs:choice minOccurs="0" maxOccurs="3">
+			<xs:group ref="anyGroup" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="pageSize" type="intType" use="optional" />
+		<xs:attribute name="activePage" type="intType" use="optional" />
+		<xs:attribute name="totalSize" type="intType" use="optional" />
+		<xs:attribute name="grandTotalForRows" type="booleanType" use="optional" />
+		<xs:attribute name="grandTotalForColumns" type="booleanType" use="optional" />
+		<xs:attribute name="dataFieldOrient" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="pivotRenderer" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- popup -->
 	<xs:element name="popup" type="popupType" />
