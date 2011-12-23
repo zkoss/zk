@@ -1,0 +1,12 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Combobutton')">
+		<combobox open="bind(vm.open)" >
+			<comboitem>AAAAA</comboitem>
+			<comboitem>BBBBB</comboitem>
+			<comboitem>CCCCC</comboitem>
+		</combobox>
+		<separator height="50px"></separator>
+		<label id="open" value="@load(vm.open)" />
+	</vlayout>
+</zk>

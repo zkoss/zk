@@ -1,0 +1,15 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Menuitem')"
+		border="normal" width="200px">
+		<menubar>
+			<menu label="Option">
+				<menupopup id="editPopup">
+					<menuitem label="Item"  checkmark="true" autocheck="true" checked="@bind(vm.checked)"/>						
+				</menupopup>
+			</menu>
+		</menubar>
+		<separator height="50px" />
+		<label id="checked" value="@load(vm.checked)" />
+	</window>
+</zk>

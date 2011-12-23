@@ -1,0 +1,30 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Combobutton')">
+		<combobutton label="combobutton" open="@load(vm.open)" >
+			<popup>
+				<vbox>
+					<hbox>
+						Search
+						<textbox />
+					</hbox>
+					<listbox width="200px">
+						<listhead>
+							<listheader label="Name" />
+							<listheader label="Description" />
+						</listhead>
+						<listitem>
+							<listcell label="John" />
+							<listcell label="CEO" />
+						</listitem>
+						<listitem>
+							<listcell label="Joe" />
+							<listcell label="Engineer" />
+						</listitem>
+					</listbox>
+				</vbox>
+			</popup>
+		</combobutton>
+		<label id="open" value="@load(vm.open)" />
+	</vlayout>
+</zk>
