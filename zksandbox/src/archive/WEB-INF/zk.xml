@@ -502,13 +502,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>conf/zk-log.properties</value>
 	</library-property>
 	-->
-	<!-- Turn on the following if you want to use ZK with a GAE(Google App Engine)
-	environment. If turned on, the configuration file is useless.
-	<library-property>
-		<name>org.zkoss.util.logging.hierarchy.disabled</name>
-		<value>true</value>
-	</library-property>
-	-->
 	<!-- Uncommet to control the number of lines to log an error message.
 		Default: 6. If nonpostive is specified, the full stack traces are logged.
 		Notice that # of lines don't include packages starting with java, javax or sun.

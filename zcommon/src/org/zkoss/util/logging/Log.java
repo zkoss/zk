@@ -152,7 +152,7 @@ public class Log {
 			try {
 				LogManager.getLogManager().readConfiguration(
 					new ByteArrayInputStream(sb.toString().getBytes()));
-			} catch (Throwable ex) {
+			} catch (Throwable ex) { //GAE doesn't support LogManager
 				lookup(Log.class).warningBriefly("Failed to configure LogManager", ex);
 			}
 		}
@@ -209,6 +209,10 @@ public class Log {
 		_hierarchy = hierarchy;
 	}
 
+	/** This property is deprecated in ZK 6, since it is longer required for GAE.
+	 * HOwever, we keep it here for backward compatiblity.
+	 * We might remove it in the future.
+	 */
 	private static final boolean hierarchyDisabled() {
 		if (_hierarchyDisabled == null)
 			_hierarchyDisabled = Boolean.valueOf("true".equals(
