@@ -30,7 +30,7 @@ public interface ItemRenderer<T> {
 	/** Renders the data to the corresponding HTML fragment, and returns
 	 * the HTML fragment.
 	 *
-	 * @param owner the comopnent that this renderer belongs to (never null).
+	 * @param owner the component that this renderer belongs to (never null).
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 * @param index the data index that is currently being rendered 
 	 * @return the HTML fragment representing the data. It depends
