@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -42,5 +43,16 @@ public class BindEvaluatorXUtil {
 			result.put(key, evalValue);
 		}
 		return result;
+	}
+	
+	public static BindEvaluatorX createEvaluator(FunctionMapper fnampper){
+		return new BindEvaluatorXImpl(fnampper, org.zkoss.bind.xel.BindXelFactory.class);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType){
+		ExpressionX expr = evalx.parseExpressionX(null, expression, expectedType);
+		Object obj = evalx.getValue(null, comp, expr);
+		return (T)obj;
 	}
 }

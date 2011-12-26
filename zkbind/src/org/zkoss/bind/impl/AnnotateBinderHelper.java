@@ -235,14 +235,7 @@ public class AnnotateBinderHelper {
 		}
 	}
 	private void addCommand(Component comp, List<String> cmds, String cmdExpr){
-		cmds.add(eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType){
-		ExpressionX expr = evalx.parseExpressionX(null, expression, expectedType);
-		Object obj = evalx.getValue(null, comp, expr);
-		return (T)obj;
+		cmds.add(BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
 	}
 	
 	private void processPropertyLoadBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo) {
@@ -329,7 +322,7 @@ public class AnnotateBinderHelper {
 		final String idExpr = idanno.getAttribute("value");
 		
 		if(idExpr!=null){
-			formId = eval(eval, comp, idExpr, String.class);
+			formId = BindEvaluatorXUtil.eval(eval, comp, idExpr, String.class);
 		}
 		if(formId==null){
 			throw new UiException("value of @id is not found for a form binding of "+compCtrl+", exprssion is "+idExpr);

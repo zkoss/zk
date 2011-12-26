@@ -15,11 +15,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-//import org.zkoss.bind.impl.AnnotateBinderImpl;
-import org.zkoss.bind.impl.BindEvaluatorXImpl;
+import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -93,7 +91,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
-		BindEvaluatorX evalx = new BindEvaluatorXImpl(null, org.zkoss.bind.xel.BindXelFactory.class);
+		BindEvaluatorX evalx = BindEvaluatorXUtil.createEvaluator(null);
 		
 		//name of this composer
 		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
@@ -121,8 +119,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			throw new IllegalSyntaxException("you have to use @init to assign the view model for "+comp);
 		}
 		
-		vmname = eval(evalx,comp,idanno.getAttribute("value"),String.class);
-		vm = eval(evalx,comp,initanno.getAttribute("value"),Object.class);
+		vmname = BindEvaluatorXUtil.eval(evalx,comp,idanno.getAttribute("value"),String.class);
+		vm = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute("value"),Object.class);
 		
 		if(vmname==null){
 			throw new UiException("name of view model is null");
@@ -156,7 +154,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		String bname = null;
 		
 		if(idanno!=null){
-			bname = eval(evalx,comp,idanno.getAttribute("value"),String.class);
+			bname = BindEvaluatorXUtil.eval(evalx,comp,idanno.getAttribute("value"),String.class);
 		}else{
 			bname = "binder";
 		}
@@ -165,7 +163,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		}
 		
 		if(initanno!=null){
-			binder = eval(evalx,comp,initanno.getAttribute("value"),Object.class);
+			binder = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute("value"),Object.class);
 			try {
 				if(binder instanceof String){
 					binder = comp.getPage().resolveClass((String)binder);
@@ -190,13 +188,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		
 		return (Binder)binder;
 	}
-	
-	@SuppressWarnings("unchecked")
-	private static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType){
-		ExpressionX expr = evalx.parseExpressionX(null, expression, expectedType);
-		Object obj = evalx.getValue(null, comp, expr);
-		return (T)obj;
-	}
+
 	
 	//--ComposerExt//
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
