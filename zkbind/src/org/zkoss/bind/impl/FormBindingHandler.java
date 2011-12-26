@@ -120,14 +120,6 @@ import org.zkoss.zk.ui.event.Event;
 	}
 	
 	void doSaveBefore(Component comp, String command, Event evt, Set<Property> notifys) {
-		System.out.println("1>>>>>>>>>>>"+command);
-		System.out.println("2>>>>>>>>>>>"+_saveFormBeforeBindings.keySet());
-		System.out.println("3>>>>>>>>>>>"+_saveFormBeforeBindings.keySet().contains(command));
-		
-		for(String s: _saveFormBeforeBindings.keySet()){
-			System.out.println("3>>>>>>>>>>>"+s);
-			System.out.println("4>>>>>>>>>>>"+s.equals(command));
-		}
 		final List<SaveFormBinding> bindings = _saveFormBeforeBindings.get(command);
 		if (bindings != null) {
 			for (SaveFormBinding binding : bindings) {
