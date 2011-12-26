@@ -30,6 +30,7 @@
 	<c:if test="${zk.safari > 0}">
 		margin: 0;
 	</c:if>
+	outline: none;
 }
 .z-textbox-focus, .z-textbox-focus input,
 .z-decimalbox-focus, .z-decimalbox-focus input,

@@ -51,6 +51,7 @@
 		font-style: normal;
 	</c:if>
 	height: 15px;
+	outline: none;
 }
 .z-combobox-rounded-inp,
 .z-bandbox-rounded-inp,
