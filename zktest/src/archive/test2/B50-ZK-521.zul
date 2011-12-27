@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-In Linux's Firefox, the selectbox and button should be the same width. 
+In Linux and Mac's Firefox, the selectbox and button should be the same width. 
 <vbox width="100px">
 <button label="test" hflex="1"/>
 <listbox rows="1" mold="select" hflex="1">

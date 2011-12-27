@@ -1224,6 +1224,7 @@ zk.log('value is", value);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf("linux") >= 0;
+	zk.mac = !zk.ios && agent.indexOf("mac") >= 0;
 	
 	var bodycls;
 	if (zk.gecko) {
