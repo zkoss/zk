@@ -1095,7 +1095,7 @@ w:use="foo.MyWindow"&gt;
 	public Object clone();
 
 	/** Find the first component that matches the given CSS3 selector.
-	 * @param selector the CSS3 selector. For example, comp.select("#id div").
+	 * @param selector the CSS3 selector. For example, comp.query("#id div").
 	 * @return the first matched component, or null if not found
 	 * @since 6.0.0
 	 */
@@ -1106,7 +1106,7 @@ w:use="foo.MyWindow"&gt;
 	 * criteria, it is better to use {@link org.zkoss.zk.select.Selectors#iterable}
 	 * instead.
 	 *
-	 * @param selector the CSS3 selector. For example, comp.select("#id div").
+	 * @param selector the CSS3 selector. For example, comp.queryAll("#id div").
 	 * @return a list of all matched component, or an empty list if none is found.
 	 * @see 6.0.0
 	 */
