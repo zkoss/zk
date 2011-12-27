@@ -25,11 +25,13 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * A representation of a component path.
- *
  * <p>There are three formats:
  * //page-id/comp-id/comp-id<br/>
  * /comp-id/comp-id<br/>
  * comp-id/comp-id
+ *
+ * <p>Alternatively, you could use {@link Component#select}
+ * or {@link Component#selectAll} instead.
  *
  * @author tomyeh
  */

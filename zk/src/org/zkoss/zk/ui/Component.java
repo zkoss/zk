@@ -1093,4 +1093,22 @@ w:use="foo.MyWindow"&gt;
 	 * desktop. It doesn't have a parent, either.
 	 */
 	public Object clone();
+
+	/** Find the first component that matches the given CSS3 selector.
+	 * @param selector the CSS3 selector. For example, comp.select("#id div").
+	 * @return the first matched component, or null if not found
+	 * @since 6.0.0
+	 */
+	public Component query(String selector);
+	/** Returns a list of all components that match the given CSS3 selector.
+	 * <p>Notice: this method will traverse the whole component tree.
+	 * If you'd like to examine each of them  one-by-one based on some
+	 * criteria, it is better to use {@link org.zkoss.zk.select.Selectors#iterable}
+	 * instead.
+	 *
+	 * @param selector the CSS3 selector. For example, comp.select("#id div").
+	 * @return a list of all matched component, or an empty list if none is found.
+	 * @see 6.0.0
+	 */
+	public List<Component> queryAll(String selector);
 }

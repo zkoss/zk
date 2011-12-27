@@ -88,6 +88,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.ui.impl.Utils;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
@@ -3237,12 +3238,12 @@ w:use="foo.MyWindow"&gt;
 		return _auxinf;
 	}
 
-	//@Override
+	@Override
 	public Template getTemplate(String name) {
 		return _auxinf != null && _auxinf.templates != null ?
 			_auxinf.templates.get(name): null;
 	}
-	//@Override
+	@Override
 	public Template setTemplate(String name, Template template) {
 		if (template == null) {
 			return _auxinf != null && _auxinf.templates != null ?
@@ -3254,11 +3255,21 @@ w:use="foo.MyWindow"&gt;
 			return auxinf.templates.put(name, template);
 		}
 	}
-	//@Override
+	@Override
 	public Set<String> getTemplateNames() {
 		if (_auxinf != null && _auxinf.templates != null)
 			return _auxinf.templates.keySet();
 		return Collections.emptySet();
+	}
+	@Override
+	public Component query(String selector) {
+		final Iterator<Component> found =
+			Selectors.iterable(this, selector).iterator();
+		return found.hasNext() ? found.next(): null;
+	}
+	@Override
+	public List<Component> queryAll(String selector) {
+		return Selectors.find(this, selector);
 	}
 
 	/** Merge multiple memembers into an single object (and create on demand)
