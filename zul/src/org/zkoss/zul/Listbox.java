@@ -3333,6 +3333,7 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			if (_rod) { // Bug: ZK-592
 				Map m = (Map) request.getData().get("range");
 				if (m != null) {
+					selItems.addAll(_selItems); // keep other selected items.
 					int start = AuRequests.getInt(m, "start", -1);
 					int end = AuRequests.getInt(m, "end", -1);
 					int ignoreStart = -1; // used for ignore double add selection in model
