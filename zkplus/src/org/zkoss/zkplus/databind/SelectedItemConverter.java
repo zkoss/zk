@@ -83,7 +83,7 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 		    				items.add(item);
 		    				//bug #2140491
 		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+lbx.getUuid(), Boolean.TRUE);
-		    				Events.postEvent(new SelectEvent<Listitem>("onSelect", lbx, items, item));
+		    				Events.postEvent(new SelectEvent<Listitem, Object>("onSelect", lbx, items, item));
 		    			}
 	    			}
 	  				return item;

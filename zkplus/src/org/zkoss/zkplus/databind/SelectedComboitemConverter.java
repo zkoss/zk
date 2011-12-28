@@ -100,7 +100,7 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 		    				items.add(item);
 		    				//bug #2140491
 		    				Executions.getCurrent().setAttribute("zkoss.zkplus.databind.ON_SELECT"+cbbox.getUuid(), Boolean.TRUE);
-		    				Events.postEvent(new SelectEvent<Comboitem>("onSelect", cbbox, items, item));
+		    				Events.postEvent(new SelectEvent<Comboitem, Object>("onSelect", cbbox, items, item));
 		    			}
 	    			}
 	  				return item;
