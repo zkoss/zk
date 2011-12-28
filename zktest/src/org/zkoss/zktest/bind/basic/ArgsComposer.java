@@ -21,7 +21,7 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -136,7 +136,7 @@ public class ArgsComposer extends BindComposer {
 	}
 
 	@NotifyChange("*") @Command
-	public void cmd1(@Param("param1") String param1, @Param("param2") String param2){
+	public void cmd1(@BindingParam("param1") String param1, @BindingParam("param2") String param2){
 		this.value1 += param1;
 		this.value2 += param2;
 	}

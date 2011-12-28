@@ -12,7 +12,7 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.zk.ui.Component;
 
 
@@ -226,7 +226,7 @@ public class Va10{
 		out.println("is Adult: "+isAdult);
 	}	
 	@Command 
-	public void add(@Param("increment") Long increment){
+	public void add(@BindingParam("increment") Long increment){
 		age += increment.intValue();
 	}
 	@Command 

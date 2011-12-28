@@ -7,7 +7,7 @@ import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.BindingParam;
 
 
 public class Va12{
@@ -92,7 +92,7 @@ public class Va12{
 
 	// -----------command -----------------
 	@Command
-	public void compute(@Param("off") Object offObject){
+	public void compute(@BindingParam("off") Object offObject){
 		total = (subtotalA+subtotalB);
 		if (offObject !=null){
 			Long off = Long.parseLong(offObject.toString());

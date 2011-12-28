@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.bind.annotation.Param;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.zul.ListModelList;
 
 public class B0020 {
@@ -29,7 +29,7 @@ public class B0020 {
 	// FIXME can NOT remove last 2 items
 	// -----------command -----------------
 	@Command @NotifyChange("fruitList")
-	public void delete(@Param("index") Integer index) {
+	public void delete(@BindingParam("index") Integer index) {
 		out.println(index);
 		fruitList.remove(index.intValue());
 		out.println("size:" + fruitList.size());
