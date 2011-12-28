@@ -16,6 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
@@ -24,8 +27,8 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -369,12 +372,16 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
 			_jsel = ((Integer) request.getData().get("")).intValue();
-			Events.postEvent(new Event(Events.ON_SELECT, this, request
-					.getData().get("")));
+			final Integer index = ((Integer)request.getData().get(""));
+			final Set<Object> objects = new LinkedHashSet<Object>();
+			objects.add(_model.getElementAt(index));
+			Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
+					objects, null, index, 0));
 		}
 	}
 

@@ -34,8 +34,9 @@ import org.zkoss.zk.au.AuRequests;
  * 
  * @author tomyeh
  */
-public class SelectEvent<T extends Component> extends Event {
+public class SelectEvent<T extends Component, E> extends Event {
 	private final Set<T> _selectedItems;
+	private final Set<E> _selectedObjects;
 	private final T _ref;
 	private final int _keys;
 
@@ -56,12 +57,12 @@ public class SelectEvent<T extends Component> extends Event {
 	 * @since 5.0.0
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T extends Component> SelectEvent<T> getSelectEvent(AuRequest request) {
+	public static final <T extends Component, E> SelectEvent<T,E> getSelectEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
 		final Desktop desktop = request.getDesktop();
 		final List<String> sitems = cast((List)data.get("items"));
 		final Set<T> items = AuRequests.convertToItems(desktop, sitems);
-		return new SelectEvent<T>(request.getCommand(), request.getComponent(),
+		return new SelectEvent<T,E>(request.getCommand(), request.getComponent(),
 			items, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			AuRequests.parseKeys(data));
 	}
@@ -86,19 +87,46 @@ public class SelectEvent<T extends Component> extends Event {
 	 * @since 3.6.0
 	 */
 	public SelectEvent(String name, Component target, Set<T> selectedItems, T ref, int keys) {
-		super(name, target);
+		this(name, target, selectedItems, null, ref, null, keys);
+	}
+	
+	/** Constructs a selection event containing the data objects that model
+	 * provided.
+	 * 
+	 * @param selectedItems a set of items that shall be selected.
+	 * @param selectedObjects a set of data objects that shall be selected.
+	 * @param data an arbitrary data
+	 * @param keys a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
+	 * and {@link #ALT_KEY}.
+	 * @since 6.0.0
+	 */
+	public SelectEvent(String name, Component target, Set<T> selectedItems,
+			Set<E> selectedObjects, T ref, Object data, int keys) {
+		super(name, target, data);
 
 		if (selectedItems != null)
 			_selectedItems = selectedItems;
-		else
-			_selectedItems = Collections.emptySet();
+		else _selectedItems = Collections.emptySet();
+		
+		if (selectedObjects != null)
+			_selectedObjects = selectedObjects;
+		else _selectedObjects = Collections.emptySet();
+		
 		_ref = ref;
 		_keys = keys;
 	}
+	
 	/** Returns the selected items (never null).
 	 */
 	public final Set<T> getSelectedItems() {
 		return _selectedItems;
+	}
+	
+	/** Returns the selected objects (never null).
+	 * @since 6.0.0
+	 */
+	public final Set<T> getSelectedObjects() {
+		return _selectedObjects;
 	}
 
 	/** Returns the reference item that is the component causing the onSelect 
