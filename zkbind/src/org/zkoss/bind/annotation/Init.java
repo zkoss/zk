@@ -17,18 +17,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation to identify a init method. &lt;br/&gt;
- * Binder calls the method that has this annotation by the order (super first) of the class hierarchy. &lt;br/&gt;
- * Only one (could be zero) initial method is allowed in a particular class, and the super class could have another initial method. &lt;br/&gt;
- * You could disable invoking the initial method of super class by setting {@link #upward()} to false. &lt;br/&gt;
- * For example, in class hierarchy A(has init) &lt;- B(upward=false) &lt;- C(no init) &lt;- D (has init).  D is the last one. &lt;br/&gt; 
- * If D is the view model, will call B.init then D.init, ignores A.init and C since it doesn't has init method.  &lt;br/&gt; 
- * If C or B is the view model, will call B.init  &lt;br/&gt; 
+ * Marker annotation to identify a initial method. &lt;br/&gt;
+ * Only one (could be zero) initial method is allowed in a particular class.
+ * if you want binder to call super calss's initial method also, you have to set {@link #upward()} to true, 
+ * and super class's initial method will be called first.
+ * 
+ * For example, in class hierarchy A(has init) &lt;- B(has init) &lt;- C(no init) &lt;- D (has init, upward true).  D is the last one. &lt;br/&gt; 
+ * If D is the view model, will call D.init&lt;br/&gt;
+ * If C is the view model, no method will be called br/&gt; 
+ * If B is the view model, will call A.init then B.init  &lt;br/&gt; 
  * If A is the view model, will call A.init  &lt;br/&gt; 
  * 
- * Note that, if you override a method, which is also the init method of the super class. ex, X.m1() &lt;- Y.m1()  
- * Because of the java limitation, binder has no way to call X.m1(), and Y.m1() will be called twice.
- * To avoid this, you should set {@link #upward()} to false of Y.m1() and call super.m1() inside it.
+ * Note that, if you override a method, which is also the init method of the super class. ex, X.m1() &lt;- Y.m1() &lt;br/&gt;   
+ * Because of the java limitation, you should set upward to true in Y.m1() or Y.m1() will be called twice. &lt;br/&gt; 
  * 
  * A initial method could also use with {@link BindingParam} and others to assign a argument as its parameter,  
  * and {@link Default} to assign a default value if the argument is null. &lt;br/&gt;
@@ -48,5 +49,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Init {
-	boolean upward() default true;
+	boolean upward() default false;
 }
