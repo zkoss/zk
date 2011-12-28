@@ -34,10 +34,10 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 	private final Class<?> _attrType;
 	
 	public InitPropertyBindingImpl(Binder binder, Component comp,
-		String attr, Class<?> attrType, String initExpr,Map<String, Object> bindingArgs,
+		String attr, String loadAttr, Class<?> attrType, String initExpr,Map<String, Object> bindingArgs,
 		String converterExpr, Map<String, Object> converterArgs) {
 		
-		super(binder, comp, "self."+attr, initExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs);
+		super(binder, comp, attr, "self."+loadAttr, initExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs);
 		_attrType = attrType == null ? Object.class : attrType;
 	}
 	

@@ -66,4 +66,24 @@ public interface BinderCtrl {
 	 */
 	public Tracker getTracker();
 	
+	/**
+	 * Get the {@link ValidationMessages}
+	 * @return null if no one set the instance by {@link #setValidationMessages(ValidationMessages)}
+	 */
+	public ValidationMessages getValidationMessages();
+	
+	/**
+	 * Set the {@link ValidationMessages}
+	 * @param messages the {@link ValidationMessages}
+	 */
+	public void setValidationMessages(ValidationMessages messages);
+	
+	/**
+	 * is there a validator on the attribute of component
+	 * @param comp the component to check
+	 * @param attr the attribute to check
+	 * @return true if there is a validator
+	 */
+	public boolean hasValidator(Component comp, String attr);
+	
 }

@@ -32,11 +32,13 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	protected final AccessInfo _accessInfo;
 	private final ExpressionX _converter;
 	private final Map<String, Object> _converterArgs;
+	private String _filedName;
 
 	/**
 	 * @param binder
 	 * @param comp
-	 * @param fieldExpr the EL expression to access component field (ex, style, value)
+	 * @param fieldExpr the name of component field  (ex, style, value)
+	 * @param fieldExpr the EL expression to access component field (ex, self.style, self.value)
 	 * @param accessExpr the binding expression , to access the bean
 	 * @param conditionType the condition type
 	 * @param command the command, if the conditionType is not prompt, then command must not null
@@ -44,7 +46,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	 * @param converterExpr
 	 * @param converterArgs
 	 */
-	protected PropertyBindingImpl(Binder binder, Component comp, String fieldExpr, String accessExpr, 
+	protected PropertyBindingImpl(Binder binder, Component comp, String fieldName,String fieldExpr, String accessExpr, 
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		super(binder,comp, bindingArgs);
@@ -54,6 +56,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		this._accessInfo = AccessInfo.create(this, accessExpr, returnType, conditionType, command, ignoreTracker());
 		_converterArgs = converterArgs;
 		_converter = converterExpr==null?null:parseConverter(eval,converterExpr);
+		_filedName =  fieldName;
 	}
 	
 	public Map<String, Object> getConverterArgs() {
@@ -89,9 +92,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	}
 	
 	public String getFieldName() {
-		final String fieldScript = getPureExpressionString(this._fieldExpr);
-		final int j = fieldScript.lastIndexOf(".");
-		return j < 0 ? fieldScript : fieldScript.substring(j);
+		return _filedName;
 	}
 	
 	public String getCommandName() {

@@ -15,9 +15,13 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.zk.ui.Component;
 
 /**
  * to help implement BinderImpl 
@@ -33,14 +37,14 @@ abstract class AbstractBindingHandler implements Serializable {
 		_binder = binder;
 	}
 	
-	void doPrePhase(Phase phase, BindContext ctx) {
+	protected void doPrePhase(Phase phase, BindContext ctx) {
 		final PhaseListener l = _binder.getPhaseListener(); 
 		if ( l != null) {
 			l.prePhase(phase, ctx);
 		}
 	}
 	
-	void doPostPhase(Phase phase, BindContext ctx) {
+	protected void doPostPhase(Phase phase, BindContext ctx) {
 		final PhaseListener l = _binder.getPhaseListener();
 		if (l != null) {
 			l.postPhase(phase, ctx);
@@ -48,7 +52,14 @@ abstract class AbstractBindingHandler implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Set<Property> getNotifys(BindContext ctx){
+	static protected Set<Property> getNotifys(BindContext ctx){
 		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
+	}
+	
+	protected void clearValidationMessages(Binder binder, Component component,String attr){
+		ValidationMessages vmsgs = ((BinderCtrl)binder).getValidationMessages();
+		if(vmsgs!=null){
+			vmsgs.clearMessages(component,attr);
+		}
 	}
 }

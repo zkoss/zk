@@ -41,9 +41,9 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	private final Class<?> _attrType;
 	
 	public LoadPropertyBindingImpl(Binder binder, Component comp,
-		String attr, Class<?> attrType, String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
+		String attr, String loadAttr,Class<?> attrType, String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs, 
 		String converterExpr,Map<String, Object> converterArgs) {
-		super(binder, comp, "self."+attr, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
+		super(binder, comp, attr, "self."+loadAttr, loadExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
 		_attrType = attrType == null ? Object.class : attrType;
 	}
 	

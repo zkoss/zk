@@ -25,6 +25,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -250,6 +251,12 @@ import org.zkoss.zk.ui.event.Event;
 	//validate a save-binding
 	private boolean validateSavePropertyBinding(Component comp,SavePropertyBinding binding,String command, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
 		if(!binding.hasValidator()) return true;
+		
+		//clear previous message before balidation
+		if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())){
+			clearValidationMessage(binding.getBinder(),binding.getComponent(),binding.getFieldName());
+		}
+		
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), null);
 		BindContextUtil.setValidatorArgs(binding.getBinder(), binding.getComponent(), ctx, binding);
 
@@ -261,6 +268,13 @@ import org.zkoss.zk.ui.event.Event;
 			notifys.addAll(xnotifys);
 		}
 		return vContext.isValid();
+	}
+	
+	private void clearValidationMessage(Binder binder, Component component,String attr){
+		ValidationMessages vmsgs = ((BinderCtrl)binder).getValidationMessages();
+		if(vmsgs!=null){
+			vmsgs.clearMessages(component,attr);
+		}
 	}
 	
 	//validate a save-form-binding
@@ -276,6 +290,11 @@ import org.zkoss.zk.ui.event.Event;
 			}
 		}
 		if(!binding.hasValidator()) return svalid;
+		
+		//clear previous message before validation
+		if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFormId())){
+			clearValidationMessage(binding.getBinder(),binding.getComponent(),binding.getFormId());
+		}
 		
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), null);
 		BindContextUtil.setValidatorArgs(binding.getBinder(), binding.getComponent(), ctx, binding);

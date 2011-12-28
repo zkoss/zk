@@ -48,6 +48,8 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
+import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.SaveBinding;
@@ -181,6 +183,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private final String _quescope;
 	private final EventListener<Event> _queueListener;
 	
+	private ValidationMessages _validationMessages;
+	private Set<BindingKey> _hasValidators;//the key to mark they have validator
+	
 	//flag to keep info of current vm has converter method or not
 	private boolean _hasGetConverterMethod = true;
 	
@@ -200,6 +205,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
+		
+		_hasValidators = new HashSet<BindingKey>();
 		
 		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
 		//use same queue name if user was not specified, 
@@ -317,6 +324,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				_log.debug("loadOnPropertyChange:binding.load(),binding=[%s],context=[%s]",binding,ctx);
 			}
 			binding.load(ctx);
+			
+			if(_validationMessages!=null){
+				String attr = null;
+				if(binding instanceof PropertyBinding){
+					attr = ((PropertyBinding)binding).getFieldName();
+				}else if(binding instanceof FormBinding){
+					attr = ((FormBinding)binding).getFormId();
+				}else{
+					throw new UiException("unknow binding type "+binding); 
+				}
+				if(hasValidator(binding.getComponent(), attr)){
+					_validationMessages.clearMessages(binding.getComponent(),attr);
+				}
+			}
 		}
 	}
 	
@@ -601,6 +622,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				_formBindingHandler.addSaveAfterBinding(cmd, binding);
 			}
 		}
+		if(validatorExpr!=null){
+			BindingKey bkey = new BindingKey(comp, formid);
+			if(!_hasValidators.contains(bkey)){
+				_hasValidators.add(bkey);
+			}
+		}
 	}
 	
 	@Override
@@ -691,13 +718,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				}
 			}
 		}
-		attr = loadrep == null ? attr : loadrep;
+		loadrep = loadrep == null ? attr : loadrep;
 		
 		if(_log.debugable()){
 			_log.debug("add init-binding: comp=[%s],attr=[%s],expr=[%s],converter=[%s]", comp,attr,initExpr,converterArgs);
 		}
 		
-		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
+		InitPropertyBindingImpl binding = new InitPropertyBindingImpl(this, comp, attr, loadrep, attrType, initExpr, bindingArgs, converterExpr, converterArgs);
 		
 		addBinding(comp, attr, binding); 
 		final BindingKey bkey = getBindingKey(comp, attr);
@@ -817,13 +844,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				}
 			}
 		}
-		attr = loadrep == null ? attr : loadrep;
+		loadrep = loadrep == null ? attr : loadrep;
 		
 		if(prompt){
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
 			}
-			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
+			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
 			addBinding(comp, attr, binding);
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
@@ -839,7 +866,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -849,7 +876,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -913,6 +940,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					}
 					_propertyBindingHandler.addSaveAfterBinding(cmd, binding);	
 				}
+			}
+		}
+		
+		if(validatorExpr!=null){
+			BindingKey bkey = new BindingKey(comp, attr);
+			if(!_hasValidators.contains(bkey)){
+				_hasValidators.add(bkey);
 			}
 		}
 	}
@@ -998,6 +1032,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 //					BinderImpl.this.doFailConfirm();
 //					break;
 				case BinderImpl.FAIL_VALIDATE:
+					//validationmessages, the last notified
+					if(_validationMessages!=null){
+						notifys.add(new PropertyImpl(_validationMessages,".",null));
+					}
+					
 					if(_log.debugable()){
 						_log.debug("There are [%s] property need to be notify after fail validate",notifys.size());
 					}
@@ -1012,14 +1051,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				if (command != null) { //command has own VALIDATE phase, don't do validate again
 					BinderImpl.this.doSaveEventNoValidate(comp, event, notifys); //save on event without validation
 				} else {
-					//TODO, DENNIS, ISSUE, What is the Spec of validation of prompt save?
-					//1.if a validation failed, should we break it?
-					//2.if a validation passed, should we save it?
-					//3.if any validation failed, should we do load-binding 
 					BinderImpl.this.doSaveEvent(comp, event, notifys); //save on event
 				}
 				BinderImpl.this.doLoadEvent(comp, evtnm); //load on event
 			}
+
+			if(_validationMessages!=null){
+				//validationmessages the last notified
+				notifys.add(new PropertyImpl(_validationMessages,".",null));
+			}
+			
 			if(_log.debugable()){
 				_log.debug("There are [%s] property need to be notify after command",notifys.size());
 			}
@@ -1366,6 +1407,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			//the binder component was detached, unregister queue
 			unsubscribeChangeListener(_quename, _quescope, _queueListener);
 		}
+		if(_validationMessages!=null){
+			_validationMessages.clearMessages(comp);
+		}
 		
 		final Map<String, List<Binding>> attrMap = _bindings.remove(comp);
 		if (attrMap != null) {
@@ -1405,7 +1449,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		_formBindingHandler.removeBindings(bkey,removed);
 		_propertyBindingHandler.removeBindings(bkey, removed);
-
+		if(_validationMessages!=null){
+			_validationMessages.clearMessages(comp,key);
+		}
+		_hasValidators.remove(bkey);
+		
 		removeBindings(removed);
 	}
 
@@ -1600,10 +1648,27 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			this.value = value;
 		}
 	}
+	
+	public boolean hasValidator(Component comp, String attr){
+		BindingKey bkey = new BindingKey(comp, attr);
+		return _hasValidators.contains(bkey);
+	}
 
 	@Override
 	public Component getView() {
 		checkInit();
 		return _rootComp;
 	}
+
+	@Override
+	public ValidationMessages getValidationMessages() {
+		return _validationMessages;
+	}
+
+	@Override
+	public void setValidationMessages(ValidationMessages messages) {
+		_validationMessages = messages;
+	}
+	
+	
 }

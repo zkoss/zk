@@ -170,6 +170,11 @@ import org.zkoss.zk.ui.event.Event;
 			}
 			doPrePhase(Phase.LOAD_BINDING, ctx);
 			binding.load(ctx);
+			
+			//if there is a valodator, clear the validation message after load
+			if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())){
+				clearValidationMessages(binding.getBinder(),binding.getComponent(),binding.getFieldName());
+			}
 		} finally {
 			doPostPhase(Phase.LOAD_BINDING, ctx);
 		}
@@ -229,6 +234,12 @@ import org.zkoss.zk.ui.event.Event;
 				if(p==null){
 					throw new UiException("no main property for save-binding "+binding);
 				}
+				
+				//clear previous message before validation
+				if(((BinderImpl)binding.getBinder()).hasValidator(binding.getComponent(), binding.getFieldName())){
+					clearValidationMessages(binding.getBinder(),binding.getComponent(),binding.getFieldName());
+				}
+				
 				ValidationContext vctx = new ValidationContextImpl(null, p, toCollectedProperties(p), ctx, true);
 				binding.validate(vctx);
 				boolean valid = vctx.isValid();

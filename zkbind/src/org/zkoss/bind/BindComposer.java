@@ -16,7 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
+import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -35,6 +39,9 @@ import org.zkoss.zk.ui.util.ComposerExt;
 public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
+	private static final String VM_ID = "$VM_ID$";
+	private static final String BINDER_ID = "$BINDER_ID$";
+	
 	private Object _viewModel;
 	private Binder _binder;
 	private final Map<String, Converter> _converters;
@@ -46,6 +53,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private static final String COMPOSER_NAME_ATTR = "composerName";
 	private static final String VIEW_MODEL_ATTR = "viewModel";
 	private static final String BINDER_ATTR = "binder";
+	private static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
 	
 	
 	
@@ -100,6 +108,9 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
+		initValidationMessages(evalx, comp, _binder);
+		
+		
 		//load data
 		_binder.loadComponent(comp,true); //load all bindings
 	}
@@ -122,8 +133,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		vmname = BindEvaluatorXUtil.eval(evalx,comp,idanno.getAttribute("value"),String.class);
 		vm = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute("value"),Object.class);
 		
-		if(vmname==null){
-			throw new UiException("name of view model is null");
+		if(Strings.isEmpty(vmname)){
+			throw new UiException("name of view model is empty");
 		}
 		
 		try {
@@ -142,6 +153,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			throw new UiException("view model '"+vmname+"' is a primitive type, is "+vm);
 		}
 		comp.setAttribute(vmname, vm);
+		comp.setAttribute(VM_ID, vmname);
 		
 		return vm;
 	}
@@ -158,8 +170,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		}else{
 			bname = "binder";
 		}
-		if(bname==null){
-			throw new UiException("name of binder is null");
+		if(Strings.isEmpty(bname)){
+			throw new UiException("name of binder is empty");
 		}
 		
 		if(initanno!=null){
@@ -183,10 +195,54 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		
 		//put to attribute, so binder could be referred by the name
 		comp.setAttribute(bname, binder);
+		comp.setAttribute(BINDER_ID, bname);
 		
 		((Binder)binder).init(comp, _viewModel);
 		
 		return (Binder)binder;
+	}
+	
+	private ValidationMessages initValidationMessages(BindEvaluatorX evalx, Component comp,Binder binder) {
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final Annotation idanno = compCtrl.getAnnotation(VALIDATION_MESSAGES_ATTR, ID_ANNO);
+		final Annotation initanno = compCtrl.getAnnotation(VALIDATION_MESSAGES_ATTR, INIT_ANNO);
+		Object vmessages = null;
+		String vname = null;
+		
+		if(idanno!=null){
+			vname = BindEvaluatorXUtil.eval(evalx,comp,idanno.getAttribute("value"),String.class);
+		}else{
+			return null;//validation messages is default null
+		}
+		if(Strings.isEmpty(vname)){
+			throw new UiException("name of ValidationMessages is empty");
+		}
+		
+		if(initanno!=null){
+			vmessages = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute("value"),Object.class);
+			try {
+				if(vmessages instanceof String){
+					vmessages = comp.getPage().resolveClass((String)vmessages);
+				}
+				if(vmessages instanceof Class<?>){
+					vmessages = ((Class<?>)vmessages).newInstance();
+				}
+			} catch (Exception e) {
+				throw new UiException(e.getMessage(),e);
+			}
+			if(!(vmessages instanceof ValidationMessages)){
+				throw new UiException("evaluated validationMessages is not a ValidationMessages is "+vmessages);
+			}
+		}else{
+			vmessages = new ValidationMessagesImpl();
+		}
+		
+		//put to attribute, so binder could be referred by the name
+		comp.setAttribute(vname, vmessages);
+		
+		((BinderCtrl)binder).setValidationMessages((ValidationMessages)vmessages);
+		
+		return (ValidationMessages)vmessages;
 	}
 
 	
