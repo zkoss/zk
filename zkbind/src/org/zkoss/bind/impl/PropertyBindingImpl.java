@@ -37,7 +37,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	/**
 	 * @param binder
 	 * @param comp
-	 * @param fieldExpr the name of component field  (ex, style, value)
+	 * @param fieldName the name of component field  (ex, style, value)
 	 * @param fieldExpr the EL expression to access component field (ex, self.style, self.value)
 	 * @param accessExpr the binding expression , to access the bean
 	 * @param conditionType the condition type

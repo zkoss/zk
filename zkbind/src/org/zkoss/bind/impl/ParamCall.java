@@ -23,7 +23,6 @@ import org.zkoss.bind.annotation.Default;
 import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.HeaderParam;
-import org.zkoss.bind.annotation.Param;
 import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.bind.annotation.Scope;
 import org.zkoss.bind.annotation.ScopeParam;
@@ -35,7 +34,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.select.Selectors;
 /**
- * To help invoke a method with {@link Param} etc.. features.
+ * To help invoke a method with {@link BindingParam} etc.. features.
  * @author dennis
  *
  */
@@ -84,11 +83,12 @@ public class ParamCall {
 		_root = binder.getView();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
-		_paramResolvers.put(Param.class, new ParamResolver<Annotation>() {
+		_paramResolvers.put(org.zkoss.bind.annotation.Param.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
-				Object val = bindingArgs.get(((Param) anno).value());
+				Object val = bindingArgs.get(((org.zkoss.bind.annotation.Param) anno).value());
 				return val==null?null:Classes.coerce(returnType, val);
 			}
 		});

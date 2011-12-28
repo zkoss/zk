@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * @see CookieParam
  * @see QueryParam
  * @see ScopeParam
- * @see ContextnParam
+ * @see ContextParam
  * @see Default
  * @author henrichen
  * @author dennischen

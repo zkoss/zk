@@ -73,13 +73,11 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		if(msgs != null){
 			msgs.remove(attr);
 		}
-//		System.out.println(">>>>clearMessage>"+comp+","+attr);
 	}
 
 	@Override
 	public String[] getMessages(Component comp,String attr) {
 		List<String> msgs = getAttrMessages(comp, attr, false);
-//		System.out.println(">>>>getMessage>"+comp+","+attr+":"+msgs);
 		return msgs==null||msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
 	}
 	
@@ -89,7 +87,6 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		if(m==null || m.size()==0){
 			return null;
 		}
-//		System.out.println(">>>>getMessage>"+comp);
 		List<String> msgs = new ArrayList<String>();
 		
 		for(Entry<String, List<String>> e:m.entrySet()){
@@ -106,7 +103,6 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		for(String s:messages){
 			msgs.add(s);
 		}
-//		System.out.println(">>>>setMessage>"+comp+","+attr+","+msg);
 	}
 	
 	@Override
@@ -115,7 +111,6 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		for(String s:messages){
 			msgs.add(s);
 		}
-//		System.out.println(">>>>addMessages>"+comp+","+attr+","+msg);
 	}
 
 	@Override
@@ -173,16 +168,19 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 	public void clear() {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Component> keySet() {
 		return Collections.EMPTY_SET;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Object> values() {
 		return Collections.EMPTY_SET;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<java.util.Map.Entry<Component, Object>> entrySet() {
 		return Collections.EMPTY_SET;
@@ -227,21 +225,27 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 			return null;
 		}
 		@Override
-		public void putAll(Map m) {
+		public void putAll(Map<? extends Object, ? extends Object> m) {
 		}
 		@Override
 		public void clear() {
 		}
+		
+		@SuppressWarnings("unchecked")
 		@Override
-		public Set keySet() {
+		public Set<Object> keySet() {
 			return Collections.EMPTY_SET;
 		}
+		
+		@SuppressWarnings("unchecked")
 		@Override
-		public Collection values() {
+		public Collection<Object> values() {
 			return Collections.EMPTY_SET;
 		}
+		
+		@SuppressWarnings("unchecked")
 		@Override
-		public Set entrySet() {
+		public Set<java.util.Map.Entry<Object, Object>> entrySet() {
 			return Collections.EMPTY_SET;
 		}
 		

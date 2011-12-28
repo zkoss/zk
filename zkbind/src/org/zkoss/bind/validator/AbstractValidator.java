@@ -44,7 +44,7 @@ public abstract class AbstractValidator implements Validator {
 	/**
 	 * add multiple messages to validation context, when you call this method, it also set context invalid.
 	 * @param ctx the validation context
-	 * @param message the message of validation
+	 * @param messages messages of validation
 	 */
 	protected void addInvalidMessages(ValidationContext ctx,String[] messages) {
 		ctx.setInvalid();
