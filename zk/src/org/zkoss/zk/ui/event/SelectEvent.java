@@ -125,7 +125,7 @@ public class SelectEvent<T extends Component, E> extends Event {
 	/** Returns the selected objects (never null).
 	 * @since 6.0.0
 	 */
-	public final Set<T> getSelectedObjects() {
+	public final Set<E> getSelectedObjects() {
 		return _selectedObjects;
 	}
 
