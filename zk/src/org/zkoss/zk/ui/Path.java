@@ -30,8 +30,8 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * /comp-id/comp-id<br/>
  * comp-id/comp-id
  *
- * <p>Alternatively, you could use {@link Component#select}
- * or {@link Component#selectAll} instead.
+ * <p>Alternatively, you could use {@link Component#query}
+ * or {@link Component#queryAll} instead.
  *
  * @author tomyeh
  */

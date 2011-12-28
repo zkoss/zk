@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * depends on {@link #compose}.
  *
  * <p>By default, {@link #compose} will wire members by use
- * of {@link Selector}. In other words, it will wire annotated members
+ * of {@link Selectors}. In other words, it will wire annotated members
  * the same way as {@link org.zkoss.zk.ui.select.SelectorComposer} does.
  *
  * <p>If you prefer to wire the members based on the name convention
