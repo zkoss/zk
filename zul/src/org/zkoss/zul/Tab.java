@@ -106,7 +106,7 @@ public class Tab extends LabelImageElement {
 			if (tab != null) {
 				final Set<Tab> selItems = new HashSet<Tab>(2);
 				selItems.add(tab);
-				Events.postEvent(new SelectEvent<Tab>(Events.ON_SELECT, tab, selItems));
+				Events.postEvent(new SelectEvent<Tab, Object>(Events.ON_SELECT, tab, selItems));
 			}
 		}
 		
