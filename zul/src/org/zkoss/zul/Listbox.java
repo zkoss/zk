@@ -3143,6 +3143,7 @@ public class Listbox extends MeshElement {
 			if (_rod) { // Bug: ZK-592
 				Map<String, Object> m = cast((Map) request.getData().get("range"));
 				if (m != null) {
+					selItems.addAll(_selItems); // keep other selected items.
 					int start = AuRequests.getInt(m, "start", -1);
 					int end = AuRequests.getInt(m, "end", -1);
 					int ignoreStart = -1; // used for ignore double add selection in model

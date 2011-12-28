@@ -2900,7 +2900,7 @@ unbind_: function (skipper, after) {
 		n.style.width = jq.px0(w);
 		
 		// Bug ZK-521
-		if (zk.linux && zk.ff > 6 && jq.nodeName(n, "select")) {
+		if ((zk.linux || zk.mac) && zk.ff && jq.nodeName(n, "select")) {
 			var offset = width - margins,
 				diff = offset - n.offsetWidth;
 			if (diff > 0)
