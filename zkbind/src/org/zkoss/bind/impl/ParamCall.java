@@ -83,15 +83,7 @@ public class ParamCall {
 		_root = binder.getView();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void setBindingArgs(final Map<String, Object> bindingArgs){
-		_paramResolvers.put(org.zkoss.bind.annotation.Param.class, new ParamResolver<Annotation>() {
-			@Override
-			public Object resolveParameter(Annotation anno,Class<?> returnType) {
-				Object val = bindingArgs.get(((org.zkoss.bind.annotation.Param) anno).value());
-				return val==null?null:Classes.coerce(returnType, val);
-			}
-		});
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
 			@Override
 			public Object resolveParameter(Annotation anno,Class<?> returnType) {
