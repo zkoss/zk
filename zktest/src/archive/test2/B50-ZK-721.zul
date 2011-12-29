@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-721.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 29 15:15:22 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Tree Model with ROD" border="normal"
+	apply="org.zkoss.zktest.test2.tree.TreeClickComposer">
+	<tree id="tree" onSelect=""></tree>
+	1. Please <button label="click to setModel" id="btn2"></button>
+	<separator/>
+	2. Please click this button to
+	<button label="remove item3" >
+	<attribute name="onClick">
+		TreeModel model = tree.getModel();
+		((DefaultTreeNode)model.getChild(model.getRoot(), 0)).remove(3);
+	</attribute>
+	</button>
+	<separator/>
+	3. You should's not see open/close icon disappeared.
+</window>

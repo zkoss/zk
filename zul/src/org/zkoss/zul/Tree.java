@@ -1253,20 +1253,23 @@ public class Tree extends MeshElement {
 	/*
 	 * Handle Treedata insertion
 	 */
-	private void onTreeDataInsert(Component parent,Object node, int index){
-		/* 	Find the sibling to insertBefore;
-		 * 	if there is no sibling or new item is inserted at end.
-		 */
-		Treeitem newTi = newUnloadedItem();
-		Treechildren tc= treechildrenOf(parent);
-		List siblings = tc.getChildren();
-		//if there is no sibling or new item is inserted at end.
-		tc.insertBefore(newTi, 
-			siblings.isEmpty() || index == siblings.size() ?
-				null: (Treeitem)siblings.get(index));
-				//Note: we don't use index >= size(); reason: it detects bug
-
-		renderChangedItem(newTi,_model.getChild(node,index));
+	private void onTreeDataInsert(Component parent, Object node, int index) {
+		//B50-ZK-721
+		if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
+			/*
+			 * Find the sibling to insertBefore; if there is no sibling or new item
+			 * is inserted at end.
+			 */
+			Treeitem newTi = newUnloadedItem();
+			Treechildren tc = treechildrenOf(parent);
+			List siblings = tc.getChildren();
+			// if there is no sibling or new item is inserted at end.
+			tc.insertBefore(newTi,
+					siblings.isEmpty() || index == siblings.size() ? null
+							: (Treeitem) siblings.get(index));
+			// Note: we don't use index >= size(); reason: it detects bug
+			renderChangedItem(newTi, _model.getChild(node, index));
+		}
 	}
 
 	/*
@@ -1275,9 +1278,10 @@ public class Tree extends MeshElement {
 	private void onTreeDataRemoved(Component parent,Object node, int index){
 		final Treechildren tc = treechildrenOf(parent);
 		final List items = tc.getChildren();
-		if(items.size()>1){
-			((Treeitem)items.get(index)).detach();
-		}else{
+		if (items.size() > index) {
+			((Treeitem) items.get(index)).detach();
+		} else //B50-ZK-721
+			if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
 			tc.detach();
 		}
 	}
