@@ -83,7 +83,7 @@ div.z-error .msgs {
 }
 div.z-error .msgs .msg {
 	padding: 3px 0 2px;
-	border-bottom: 1px solid #FF9696
+	border-bottom: 1px solid #FF9696;
 }
 div.z-error .newmsg {
 	background-color: #FFD6D6;
@@ -143,7 +143,7 @@ div.z-log {
 	position:absolute; z-index: 99000;
 }
 div.z-log textarea {
-	width: 100%
+	width: 100%;
 }
 div.z-log button {
 	font-size: ${fontSizeXS};
@@ -533,7 +533,7 @@ span.z-upload input {
 <c:choose>
 <c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk img	{
-	hspace: 0; vspace: 0
+	hspace: 0; vspace: 0;
 }
 .zk option {
 	font-family: ${fontFamilyC};
@@ -543,7 +543,7 @@ span.z-upload input {
 </c:when>
 <c:otherwise>
 img	{
-	hspace: 0; vspace: 0
+	hspace: 0; vspace: 0;
 }
 option {
 	font-family: ${fontFamilyC};
@@ -556,7 +556,7 @@ option {
 <c:if test="${zk.ie == 6}">
 .z-shadow {
 	background: #888; zoom: 1; display: none;
-	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30);
 }
 span.z-drop-allow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag-allow.gif')});
