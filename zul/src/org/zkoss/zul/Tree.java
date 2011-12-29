@@ -1316,9 +1316,9 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			List siblings = tc.getChildren();
 			// if there is no sibling or new item is inserted at end.
 			tc.insertBefore(newTi,
+					// Note: we don't use index >= size(); reason: it detects bug
 					siblings.isEmpty() || index == siblings.size() ? null
 							: (Treeitem) siblings.get(index));
-			// Note: we don't use index >= size(); reason: it detects bug
 			renderChangedItem(newTi, _model.getChild(node, index));
 		}
 	}
