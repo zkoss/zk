@@ -16,7 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
@@ -36,6 +36,10 @@ import org.zkoss.zul.ext.Sortable;
  * <p>Also notice that {@link SimpleListModel} also implements
  * {@link ListSubModel}. It means when it is used with {@link Combobox},
  * only the data that matches what the user typed will be shown.
+ * 
+ * <p> The class implements the {@link ListSelectionModel} interface, updating
+ * the selection status after sorted. (since 6.0.0)
+ *
  * @author tomyeh
  * @see ListModelArray
  * @see ListModelSet
@@ -102,7 +106,28 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		final boolean shallSync = !isSelectionEmpty();
+		List<E> selected = null;
+		if (shallSync) {
+			int min = getMinSelectionIndex();
+			int max = getMaxSelectionIndex();
+			selected = new ArrayList<E>();
+			for (;min <= max; min++) {
+				if (isSelectedIndex(min)) {
+					selected.add(getElementAt(min));
+				}
+			}
+			clearSelection();
+		}
 		Arrays.sort(_data, (Comparator)cmpr);
+		if (shallSync) {
+			for (int i = 0; i < _data.length; i++) {
+				Object e = _data[i];
+				if (selected.remove(e)) {
+					addSelectionInterval(i, i);
+				}
+			}
+		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 	
@@ -178,7 +203,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	public Object clone() {
 		SimpleListModel clone = (SimpleListModel) super.clone();
 		if (_data != null)
-			clone._data = (Object[]) ArraysX.clone(_data);
+			clone._data = ArraysX.duplicate(_data);
 		return clone;
 	}
 }

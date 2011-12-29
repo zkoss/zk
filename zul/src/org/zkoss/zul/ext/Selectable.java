@@ -1,9 +1,3 @@
-package org.zkoss.zul.ext;
-
-import java.util.Set;
-import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Listbox;
-
 /* Selectable.java
 {{IS_NOTE
 	Purpose:
@@ -21,48 +15,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
+package org.zkoss.zul.ext;
+
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Listbox;
 
 /**
+ * @deprecated As of release 6.0.0, replaced with {@link ListSelectionModel}.
  * Indicate a data model that supports selection.
  * It is typically used with {@link ListModel}
  * and {@link Listbox}.
  * @author henrichen
- * @see ListModel
- * @see Listbox
  */
-public interface Selectable<E> {
-	/**
-	 * Returns current selection.
-	 * @return current selection.
-	 */
-	public Set<E> getSelection();
-	
-	/**
-	 * Add the specified object into selection.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Listbox}).
-	 * If it is called by an application, the component's selection status
-	 * won't be changed.
-	 * @param obj the object to be as selection.
-	 */
-	public void addSelection(E obj);
-	
-	/**
-	 * Remove the specified object from selection.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Listbox}).
-	 * If it is called by an application, the component's selection status
-	 * won't be changed.
-	 * @param obj the object to be remove from selection.
-	 */
-	public void removeSelection(Object obj);
-	
-	/**
-	 * Clear all selection.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Listbox}).
-	 * If it is called by an application, the component's selection status
-	 * won't be changed.
-	 */
-	public void clearSelection();
+public interface Selectable extends ListSelectionModel {
 }

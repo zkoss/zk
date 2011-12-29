@@ -16,7 +16,6 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -242,8 +241,9 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 			DefaultTreeModel<E> model = getModel();
 			if (model != null) {
 				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_REMOVED);
-				model.removeSelection(child);
-				model.setOpen(child, false);
+				int[] path = Tree.getPath(model, model.getRoot(), child);
+				model.removeSelectionPath(path);
+				model.removeOpenPath(path);
 			}
 			
 			return child;

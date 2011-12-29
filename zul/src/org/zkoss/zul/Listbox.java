@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.AbstractSequentialList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -60,7 +61,7 @@ import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
@@ -100,15 +101,15 @@ import org.zkoss.zul.impl.XulElement;
  * {@link ListModel#getElementAt}
  *
  * [Since 5.0.4]
- * <p>To retrieve what are selected in Listbox with a {@link Selectable}
- * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what
+ * <p>To retrieve what are selected in Listbox with a {@link ListSelectionModel}
+ * {@link ListModel}, you shall use {@link ListSelectionModel#getSelection} to get what
  * is currently selected object in {@link ListModel} rather than using
  * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of
  * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox}
- * if you use the {@link Selectable} {@link ListModel}.</p>
+ * if you use the {@link ListSelectionModel} {@link ListModel}.</p>
  *
  * <pre><code>
- * Set selection = ((Selectable)getModel()).getSelection();
+ * Set selection = ((ListSelectionModel)getModel()).getSelection();
  * </code></pre>
  *
  * <p>
@@ -226,7 +227,7 @@ import org.zkoss.zul.impl.XulElement;
  * It will be inherited.</dd>
  * </dl>
  * <dt>org.zkoss.zul.listbox.groupSelect</dt>
- * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
+ * <dd>Specifies whether Listgroups under this Listbox are ListSelectionModel. Notice that 
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
  * 
@@ -871,13 +872,6 @@ public class Listbox extends MeshElement {
 				_selItems.add(item);
 			}
 
-			if (_model instanceof Selectable) {
-				if (!isLoadingModel()) {
-					((Selectable) _model).clearSelection();
-				}
-				addSelToModel(_model.getElementAt(_jsel));
-			}
-
 			if (inSelectMold()) {
 				smartUpdate("selectedIndex", _jsel);
 			} else if (item != null)
@@ -898,10 +892,6 @@ public class Listbox extends MeshElement {
 			if (pg != getActivePage())
 				setActivePage(pg);
 		}
-	}
-	@SuppressWarnings("unchecked")
-	private void addSelToModel(Object o) {
-		((Selectable) _model).addSelection(o);
 	}
 
 	/**
@@ -939,9 +929,6 @@ public class Listbox extends MeshElement {
 					_jsel = item.getIndex();
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				if (_model instanceof Selectable) {
-					addSelToModel(_model.getElementAt(item.getIndex()));
-				}
 				if (inSelectMold()) {
 					item.smartUpdate("selected", true);
 				} else {
@@ -962,12 +949,6 @@ public class Listbox extends MeshElement {
 			if (!_multiple) {
 				clearSelection();
 			} else {
-				if (_model instanceof Selectable && !isLoadingModel()) {
-					((Selectable) _model).removeSelection(_model
-							.getElementAt(item.getIndex()));
-				}
-
-				final int oldSel = _jsel;
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
 				fixSelectedIndex(0);
@@ -1022,9 +1003,6 @@ public class Listbox extends MeshElement {
 				smartUpdate("selectedItem", (Object)null);
 			// Bug 1734950: don't count on index (since it may change)
 		}
-		if (_model instanceof Selectable && !isLoadingModel()) {
-			((Selectable) _model).clearSelection();
-		}
 	}
 
 	/**
@@ -1042,13 +1020,6 @@ public class Listbox extends MeshElement {
 			}
 			_jsel = _items.isEmpty() ? -1 : 0;
 			smartUpdate("selectAll", true);
-		}
-		if (_model instanceof Selectable) {
-			if (_model.getSize() != ((Selectable) _model).getSelection().size()) {
-				for (int j = _model.getSize(); --j >= 0;) {
-					addSelToModel(_model.getElementAt(j));
-				}
-			}
 		}
 	}
 
@@ -1632,17 +1603,11 @@ public class Listbox extends MeshElement {
 					if (_jsel < 0) {
 						_jsel = newIndex;
 						_selItems.add(newItem);
-						if (_model instanceof Selectable) {
-							addSelToModel(_model.getElementAt(_jsel));
-						}
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
 						}
 						_selItems.add(newItem);
-						if (_model instanceof Selectable) {
-							addSelToModel(_model.getElementAt(_jsel));
-						}
 					} else { // deselect
 						newItem.setSelectedDirectly(false);
 					}
@@ -1893,10 +1858,6 @@ public class Listbox extends MeshElement {
 		}
 
 		return true;
-	}
-
-	private boolean isSyncingModel() {
-		return getAttribute(SYNCING_MODEL) != null;
 	}
 
 	/**
@@ -2259,7 +2220,6 @@ public class Listbox extends MeshElement {
 	 * @see #setModel(ListModel)
 	 * @see #getGroupsModel()
 	 */
-	@SuppressWarnings("unchecked")
 	public void setModel(GroupsModel<?, ?, ?> model) {
 		setModel((ListModel) (model != null ? GroupsListModel.toListModel(model) : null));
 	}
@@ -2386,6 +2346,11 @@ public class Listbox extends MeshElement {
 	}
 	
 	private void doInitRenderer() {
+
+		// sync the multiple status from model
+		if (_model instanceof ListSelectionModel) {
+			setMultiple(((ListSelectionModel) _model).isMultiple());
+		}
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
@@ -2463,6 +2428,20 @@ public class Listbox extends MeshElement {
 				type == ListDataEvent.CONTENTS_CHANGED) && 
 				!isIgnoreSortWhenChanged()) {
 			doSort(this);
+		} else if (type == ListDataEvent.SELECTION_CHANGED) {
+			if (_model instanceof ListSelectionModel) {
+				ListSelectionModel smodel = (ListSelectionModel) _model;
+				if (smodel.isSelectionEmpty()) {
+					for (Listitem item : new ArrayList<Listitem>(_selItems))
+						item.setSelected(false);
+				} else {
+					for (int i = smodel.getMinSelectionIndex(); i <= smodel.getMaxSelectionIndex(); i++) {
+						Listitem item = getItemAtIndex(i);
+						if (item != null)
+							item.setSelected(smodel.isSelectedIndex(i));
+					}
+				}
+			}
 		} else {
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
@@ -2499,7 +2478,7 @@ public class Listbox extends MeshElement {
 			//check if the item is a selected item and add into selected set
 			final Object value = _model.getElementAt(item.getIndex());
 			//bug #ZK-675: Selection was lost if a render replace the listitem
-			final boolean selected = _model instanceof Selectable && ((Selectable) _model).getSelection().contains(value);
+			final boolean selected = _model instanceof ListSelectionModel && ((ListSelectionModel) _model).isSelectedIndex(item.getIndex());
 			
 			try {
 				_renderer.render(item, value);
@@ -2742,7 +2721,6 @@ public class Listbox extends MeshElement {
 			_it.set(o);
 		}
 
-		@SuppressWarnings("unchecked")
 		private void prepare() {
 			if (_it == null)
 				_it = cast(getChildren().listIterator(_j + _hdcnt));
@@ -2879,9 +2857,6 @@ public class Listbox extends MeshElement {
 				// index
 				if (li.isSelected()) {
 					_selItems.add(li);
-					if (_model instanceof Selectable) {
-						addSelToModel(_model.getElementAt(index - 1));
-					}
 				}
 			} else if (child instanceof Listhead) {
 				_listhead = (Listhead) child;
@@ -3146,35 +3121,26 @@ public class Listbox extends MeshElement {
 					selItems.addAll(_selItems); // keep other selected items.
 					int start = AuRequests.getInt(m, "start", -1);
 					int end = AuRequests.getInt(m, "end", -1);
-					int ignoreStart = -1; // used for ignore double add selection in model
-					int ignoreEnd = -1; // used for ignore double add selection in model
 					for (Iterator it = _items.iterator(); it.hasNext();) {
 						Listitem item = (Listitem)it.next();
 						int index = item.getIndex();
-						if (index >= start && index <= end) {
-							if (ignoreStart == -1)
-								ignoreStart = index;
-							ignoreEnd = index;
-							
+						if (index >= start && index <= end) {							
 							// the same logic come from JS file (SelectWidget)
 							// for Bug: 2030986
 							if (!item.isDisabled()) 
 								selItems.add(item);
 						}
 					}
-					if (_model instanceof Selectable) {
-						for (int i = start; i < end; i++) {
-							// only add out of the _items' range
-							if (i < ignoreStart || i > ignoreEnd)
-								addSelToModel(_model.getElementAt(i));
-						}
-					}
 				}
 			}
 			disableClientUpdate(true);
 			try {
-				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
+				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
+					if (_model instanceof ListSelectionModel) {
+						((ListSelectionModel)_model).clearSelection();
+					}
+				}
 				final boolean paging = inPagingMold();
 				if (!_multiple
 						|| (!_rod && !paging && (selItems == null || selItems.size() <= 1))) {
@@ -3182,6 +3148,10 @@ public class Listbox extends MeshElement {
 							&& selItems.size() > 0 ? (Listitem) selItems
 							.iterator().next() : null;
 					selectItem(item);
+					if (_model instanceof ListSelectionModel) {
+						int index = item.getIndex();
+						((ListSelectionModel)_model).addSelectionInterval(index, index);
+					}
 				} else {
 					int from, to;
 					if (paging) {
@@ -3194,25 +3164,39 @@ public class Listbox extends MeshElement {
 					}
 
 					// fine tune with B50-ZK-547.
-					Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(_selItems);
+					ListSelectionModel smodel = null;
+					if (_model instanceof ListSelectionModel)
+						smodel = (ListSelectionModel) _model;
+					Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(
+							_selItems);
 					for (Iterator it = selItems.iterator(); it.hasNext();) {
-						final Listitem item = (Listitem)it.next();
-						if (!_selItems.contains(item))
+						final Listitem item = (Listitem) it.next();
+						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
+							if (smodel != null) {
+								int idx = item.getIndex();
+								smodel.addSelectionInterval(idx, idx);
+							}
+						}
 					}
 					for (Iterator it = oldSelItems.iterator(); it.hasNext();) {
-						final Listitem item = (Listitem)it.next();
+						final Listitem item = (Listitem) it.next();
 						if (!selItems.contains(item)) {
 							final int index = item.getIndex();
-							if (!paging || (index >= from && index < to))
+							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
+								if (smodel != null) {
+									int idx = item.getIndex();
+									smodel.removeSelectionInterval(idx, idx);
+								}
+							}
 						}
 					}
 				}
+
 			} finally {
 				disableClientUpdate(false);
 			}
-
 			Events.postEvent(evt);
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);

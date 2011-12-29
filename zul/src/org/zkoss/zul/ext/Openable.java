@@ -22,34 +22,12 @@ import org.zkoss.zul.TreeModel;
 
 
 /**
+ * @deprecated As of release 6.0.0, replaced with {@link TreeOpenableModel}.
  * Indicate a openable collection or component. Generally used with {@link TreeModel}
  * and {@link Tree}.
  * @author jimmyshiau
  * @see TreeModel
  * @see Tree
  */
-public interface Openable<E> {
-	/**
-	 * Sets the specified object into open.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Treeitem}).
-	 * If it is called by an application, the component's open status
-	 * won't be changed.
-	 * @param obj the object to be as open.
-	 * @param open whether be opened
-	 */
-	public void setOpen(E obj, boolean open);
-	/**
-	 * Returns whether the specified object be opened.
-	 * @param obj
-	 */
-	public boolean isOpen(E obj);
-	/**
-	 * Clear all open status.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Tree}).
-	 * If it is called by an application, the component's open status
-	 * won't be changed.
-	 */
-	public void clearOpen();
+public interface Openable<E> extends TreeOpenableModel<E> {
 }

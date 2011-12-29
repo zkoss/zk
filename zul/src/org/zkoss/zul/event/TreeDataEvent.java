@@ -33,6 +33,10 @@ public class TreeDataEvent<E> {
 	public static final int INTERVAL_REMOVED = 2;
 	/** Identifies the structure of the tree has changed. @since 5.0.6  */
 	public static final int STRUCTURE_CHANGED = 3;
+	/** Identifies the selection of the tree has changed. @since 6.0.0  */
+	public static final int SELECTION_CHANGED = 4;
+	/** Identifies the open status of the tree has changed. @since 6.0.0  */
+	public static final int OPEN_CHANGED = 5;
 
 	private final TreeModel<E> _model;
 	private final int _type;

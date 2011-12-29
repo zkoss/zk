@@ -27,7 +27,7 @@ import org.zkoss.zul.ListModelArray;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.ListModelMap;
 import org.zkoss.zul.ListModelSet;
-import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.impl.GroupsListModel;
 
 /**
@@ -76,14 +76,15 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 		}
 		
 		final ListModel compModel = getComponentModel(comp);
-		if(compModel instanceof Selectable){
-			 Set selection = ((Selectable)compModel).getSelection();
-			 if(selection!=null){
-				 for(Object obj:selection){
-					 //TODO , should I check object in model first?
-					 ((Selectable)model).addSelection(obj);
-				 }
-			 }
+		if(compModel instanceof ListSelectionModel){
+			ListSelectionModel smodel = ((ListSelectionModel)compModel);
+			ListSelectionModel toSModel = (ListSelectionModel) model;
+			toSModel.setMultiple(smodel.isMultiple());
+			if (!smodel.isSelectionEmpty()) {
+				for(int index = smodel.getMinSelectionIndex();
+						index <= smodel.getMaxSelectionIndex();	index++)
+					toSModel.addSelectionInterval(index, index);
+			}
 		}
 		return model;
 	}

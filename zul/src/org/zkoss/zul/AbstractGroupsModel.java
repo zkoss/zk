@@ -18,11 +18,7 @@ package org.zkoss.zul;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
-
 import org.zkoss.io.Serializables;
-
-import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;

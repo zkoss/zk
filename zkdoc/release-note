@@ -78,6 +78,7 @@ ZK 6.0.0
   ZK-622: jq("@radio input").attr("checked") will return "checked" if not checked
   ZK-702: combobutton js error occurs on click event
   ZK-691: stubonly not work for Executions.createComponentsDirectly
+  ZK-707: ListModel/TreeModel selection cannot share in two component
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
@@ -173,7 +174,18 @@ ZK 6.0.0
     is changed to Map<String, String[]>
   + Files.getConfigDirectory is removed
   + org.zkoss.util.logging.LogService is removed
-
+  + org.zkoss.zul.ext.Selectable is deprecated, replaced with
+    org.zkoss.zul.ext.ListSelectionModel.
+  + org.zkoss.zul.ext.Openable is deprecated, replaced with
+    org.zkoss.zul.ext.TreeOpenableModel.
+  + AbstractListModel implements org.zkoss.zul.ext.ListSelectionModel instead of
+	org.zkoss.zul.ext.Selectable
+  + AbstractTreeModel implements org.zkoss.zul.ext.TreeSelectionModel and
+	org.zkoss.zul.ext.TreeOpenableModel instead of org.zkoss.zul.ext.Selectable
+	and org.zkoss.zul.ext.Openable
+  + The multiple status and selections status are provided by ListSelectionModel
+  and TreeSelectionModel when using Tree or Listbox with Model.
+  + The open status are provided by TreeOpenableModel when using Tree with Model
 	--------
 ZK 5.0.10
 * Features

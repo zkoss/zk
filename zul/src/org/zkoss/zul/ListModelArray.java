@@ -20,6 +20,8 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +31,9 @@ import java.util.List;
  * Change the contents of this model as an Object array would cause the associated Listbox to 
  * change accordingly.</p> 
  *
+ * <p> The class implements the {@link ListSelectionModel} interface, updating
+ * the selection status after sorted. (since 6.0.0)
+ * 
  * @author Henri Chen
  * @see ListModel
  * @see ListModelList
@@ -138,7 +143,28 @@ implements Sortable<E>, java.io.Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		final boolean shallSync = !isSelectionEmpty();
+		List<E> selected = null;
+		if (shallSync) {
+			int min = getMinSelectionIndex();
+			int max = getMaxSelectionIndex();
+			selected = new ArrayList<E>();
+			for (;min <= max; min++) {
+				if (isSelectedIndex(min)) {
+					selected.add(getElementAt(min));
+				}
+			}
+			clearSelection();
+		}
 		Arrays.sort(_array, (Comparator)cmpr);
+		if (shallSync) {
+			for (int i = 0; i < _array.length; i++) {
+				Object e = _array[i];
+				if (selected.remove(e)) {
+					addSelectionInterval(i, i);
+				}
+			}
+		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 

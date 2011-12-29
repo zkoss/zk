@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.ListSelectionModel;
 
 /**
  * A light weight dropdown list.
@@ -380,6 +381,10 @@ public class Selectbox extends HtmlBasedComponent {
 			final Integer index = ((Integer)request.getData().get(""));
 			final Set<Object> objects = new LinkedHashSet<Object>();
 			objects.add(_model.getElementAt(index));
+			
+			if (_model instanceof ListSelectionModel)
+				((ListSelectionModel)_model).addSelectionInterval(index, index);
+			
 			Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
 					objects, null, index, 0));
 		}

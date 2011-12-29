@@ -26,8 +26,8 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
-import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -230,7 +230,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 	/** Sets whether this container is open.
 	 */
-	@SuppressWarnings("unchecked")
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
@@ -245,9 +244,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 			if(tree != null && tree.getModel() !=null){
 				if(_open)
 					tree.renderItem(this);
-				TreeModel model = tree.getModel();
-				if (model instanceof Openable)
-					((Openable)model).setOpen(_treeNode, open);
 			}
 		}
 	}
@@ -608,6 +604,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			final boolean open = evt.isOpen();
 
 			final Tree tree = getTree();
+			boolean hasOpenableModel = false;
 			if (tree != null && tree.getModel() != null) {
 				if (open && !isLoaded()) {
 					tree.renderItem(Treeitem.this);
@@ -617,11 +614,16 @@ implements org.zkoss.zk.ui.ext.Disable {
 						invalidate();
 				}
 				TreeModel model = tree.getModel();
-				if (model instanceof Openable)
-					((Openable)model).setOpen(_treeNode, open);
+				if (model instanceof TreeOpenableModel) {
+					if (open)
+						((TreeOpenableModel)model).addOpenPath(Tree.toIntArray(tree.getTreeitemPath(tree, this)));
+					else
+						((TreeOpenableModel)model).removeOpenPath(Tree.toIntArray(tree.getTreeitemPath(tree, this)));
+					hasOpenableModel = true;// skip to count again.
+				}
 			}
 			
-			if (_treechildren != null && super.isVisible()) {
+			if (!hasOpenableModel && _treechildren != null && super.isVisible()) {
 				if (open)
 					addVisibleItemCount(_treechildren.getVisibleItemCount());
 				else {

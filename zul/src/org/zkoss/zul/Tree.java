@@ -55,9 +55,9 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.TreeOpenableModel;
+import org.zkoss.zul.ext.TreeSelectionModel;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -759,25 +759,11 @@ public class Tree extends MeshElement {
 				_sel = item;
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				
-				addSelectionToModel(item, true);
-					// B50-ZK-306: DefaultTreeModel does not properly
-					// synchronize deselection state -- 
-					// _model should clear at first too
 
 				smartUpdate("selectedItem", item);
 			}
 			if (inPagingMold())
 				setActivePage(item);
-		}
-	}
-	@SuppressWarnings("unchecked")
-	private void addSelectionToModel(Treeitem item, boolean clearFirst) {
-		if (_model instanceof Selectable) {
-			Selectable model = (Selectable) _model;
-			if (clearFirst)
-				model.clearSelection();
-			model.addSelection(item.getTreeNode());
 		}
 	}
 
@@ -794,9 +780,8 @@ public class Tree extends MeshElement {
 			} else {
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
-				addSelectionToModel(item, false);
 				if(_sel == null)
-					_sel = (Treeitem)_selItems.iterator().next();
+					_sel = _selItems.iterator().next();
 				smartUpdateSelection();
 			}
 		}
@@ -816,10 +801,7 @@ public class Tree extends MeshElement {
 				
 				if(_sel == item) //bug fix:3131173 
 					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
-				
-				if (_model instanceof Selectable) // B50-ZK-306
-					((Selectable) _model).removeSelection(item.getTreeNode());
-				
+								
 				smartUpdateSelection();
 			}
 		}
@@ -856,9 +838,6 @@ public class Tree extends MeshElement {
 			_sel = null;
 			smartUpdate("selectedItem", (Object)null);
 		}
-		if (_model instanceof Selectable) {
-			((Selectable) _model).clearSelection();
-		}
 	}
 	/** Selects all items.
 	 */
@@ -867,14 +846,12 @@ public class Tree extends MeshElement {
 			throw new UiException("Appliable only to the multiple seltype: "+this);
 
 		//we don't invoke getItemCount first because it is slow!
-		boolean changed = false, first = true;
+		boolean first = true;
 		for (Iterator it = getItems().iterator(); it.hasNext();) {
 			final Treeitem item = (Treeitem)it.next();
 			if (!item.isSelected()) {
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
-				changed = true;
-				addSelectionToModel(item, false);
 			}
 			if (first) {
 				_sel = item;
@@ -1009,8 +986,6 @@ public class Tree extends MeshElement {
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
-				addSelectionToModel(item, false);
-
 			}
 		}
 	}
@@ -1080,7 +1055,7 @@ public class Tree extends MeshElement {
 		Treeitem sel = null;
 		switch (_selItems.size()) {
 		case 1:
-			sel = (Treeitem)_selItems.iterator().next();
+			sel = _selItems.iterator().next();
 		case 0:
 			break;
 		default:
@@ -1162,7 +1137,6 @@ public class Tree extends MeshElement {
 				if (ti.isSelected()) {
 					if (_sel == null) _sel = ti;
 					_selItems.add(ti);
-					addSelectionToModel(ti, false);
 					if (--cntSel == 0) break;
 				}
 			}
@@ -1235,6 +1209,20 @@ public class Tree extends MeshElement {
 			case TreeDataEvent.STRUCTURE_CHANGED:
 				renderTree();
 				break;
+			case TreeDataEvent.SELECTION_CHANGED:
+				if (_model instanceof TreeSelectionModel) {
+					TreeSelectionModel sm = (TreeSelectionModel) _model;
+					if (parent instanceof Treeitem)
+						((Treeitem)parent).setSelected(sm.isPathSelected(Tree.getPath(_model, _model.getRoot(), node)));
+				}
+				break;
+			case TreeDataEvent.OPEN_CHANGED:
+				if (_model instanceof TreeOpenableModel) {
+					TreeOpenableModel om = (TreeOpenableModel) _model;
+					if (parent instanceof Treeitem)
+						((Treeitem)parent).setOpen(om.isPathOpened(Tree.getPath(_model, _model.getRoot(), node)));
+				}
+				break;
 			}
 		}
 	}
@@ -1265,9 +1253,9 @@ public class Tree extends MeshElement {
 			List siblings = tc.getChildren();
 			// if there is no sibling or new item is inserted at end.
 			tc.insertBefore(newTi,
+					// Note: we don't use index >= size(); reason: it detects bug
 					siblings.isEmpty() || index == siblings.size() ? null
 							: (Treeitem) siblings.get(index));
-			// Note: we don't use index >= size(); reason: it detects bug
 			renderChangedItem(newTi, _model.getChild(node, index));
 		}
 	}
@@ -1280,8 +1268,7 @@ public class Tree extends MeshElement {
 		final List items = tc.getChildren();
 		if (items.size() > index) {
 			((Treeitem) items.get(index)).detach();
-		} else //B50-ZK-721
-			if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
+		} else if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
 			tc.detach();
 		}
 	}
@@ -1511,7 +1498,9 @@ public class Tree extends MeshElement {
 		} else {
 			_treechildren.getChildren().clear();
 		}
-
+		if (_model instanceof TreeSelectionModel)
+			this.setMultiple(((TreeSelectionModel) _model).isMultiple());
+		
 		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
 		try {
@@ -1608,16 +1597,17 @@ public class Tree extends MeshElement {
 			if (node instanceof TreeNode) {
 				TreeNode treeNode = (TreeNode) node;
 				item.setTreeNode(treeNode);
-				if (_model instanceof Selectable) {
-					final Object value = 
-						_model.getChild(treeNode.getParent(), item.getIndex());
-					if (((Selectable) _model).getSelection().contains(value)) {
-						addItemToSelection(item);
-					}
+			}
+			int[] path = Tree.getPath(_model, _model.getRoot(), node);
+			if (_model instanceof TreeSelectionModel) {
+				if (((TreeSelectionModel) _model).isPathSelected(path)) {
+					addItemToSelection(item);
 				}
 			}
-			if (_model instanceof Openable)
-				item.setOpen(((Openable)_model).isOpen(node));
+			if (_model instanceof TreeOpenableModel) {
+				item.setOpen(((TreeOpenableModel) _model).isPathOpened(path));
+			}
+			
 			try {
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
@@ -1798,12 +1788,12 @@ public class Tree extends MeshElement {
 	/**
 	 * return the path which is from ZK Component root to ZK Component lastNode
 	 */
-	private List<Integer> getTreeitemPath(Component root, Component lastNode){
+	/*package*/ List<Integer> getTreeitemPath(Component root, Component lastNode){
 		List<Integer> al = new ArrayList<Integer>();
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
 			if(curNode instanceof Treeitem){
-				al.add(new Integer(((Treeitem)curNode).getIndex()));
+				al.add(0, new Integer(((Treeitem)curNode).getIndex()));
 			}
 			curNode = curNode.getParent();
 		}
@@ -1817,8 +1807,7 @@ public class Tree extends MeshElement {
 	 */
 	private Object getNodeByPath(List<Integer> path, Object root) {
 		Object node = root;
-		int pathSize = path.size()-1;
-		for(int i=pathSize; i >= 0; i--){
+		for (int i = 0; i < path.size(); i++) {
 			node = _model.getChild(node, path.get(i));
 		}
 		return node;
@@ -1839,15 +1828,19 @@ public class Tree extends MeshElement {
 	public Treeitem renderItemByNode(Object node) {
 		return renderItemByPath(getPath(_model, _model.getRoot(), node));
 	}
-	/*package*/ static <Node> int[] getPath(TreeModel<Node> model, Node parent, Node lastNode){
-		final List<Integer> l = new LinkedList<Integer>();
-		dfSearch(model, l, parent, lastNode);
-
+	
+	/*package*/ static int[] toIntArray(List<Integer> l) {
 		final Integer[] objs = l.toArray(new Integer[l.size()]);
 		final int[] path = new int[objs.length];
 		for (int i = 0; i < objs.length; i++)
 			path[i] = objs[i].intValue();
 		return path;
+	}
+	/*package*/ static <Node> int[] getPath(TreeModel<Node> model, Node parent, Node lastNode){
+		final List<Integer> l = new LinkedList<Integer>();
+		dfSearch(model, l, parent, lastNode);
+
+		return toIntArray(l);
 	}
 	private static <Node>
 	boolean dfSearch(TreeModel<Node> model, List<Integer> path, Node node, Node target){
@@ -1887,8 +1880,6 @@ public class Tree extends MeshElement {
 		for(int i=0; i<path.length; i++){
 			if(path[i] <0 || path[i] > children.size())
 				return null;
-			Treeitem parentTi = ti;
-
 			ti = (Treeitem) children.get(path[i]);
 
 			if(i<path.length-1)
@@ -1995,8 +1986,12 @@ public class Tree extends MeshElement {
 			Set selItems = evt.getSelectedItems();
 			disableClientUpdate(true);
 			try {
-				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
+				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
+					if (_model instanceof TreeSelectionModel) {
+						((TreeSelectionModel)_model).clearSelection();
+					}
+				}
 
 				final boolean paging = inPagingMold();
 				if (!_multiple
@@ -2005,6 +2000,9 @@ public class Tree extends MeshElement {
 						selItems != null && selItems.size() > 0 ?
 							(Treeitem)selItems.iterator().next(): null;
 					selectItem(item);
+					if (_model instanceof TreeSelectionModel) {
+						((TreeSelectionModel)_model).addSelectionPath(toIntArray(getTreeitemPath(this, item)));
+					}
 				} else {
 					int from, to;
 					if (paging) {
@@ -2020,15 +2018,23 @@ public class Tree extends MeshElement {
 					Set<Treeitem> oldSelItems = new LinkedHashSet<Treeitem>(_selItems);
 					for (Iterator it = selItems.iterator(); it.hasNext();) {
 						final Treeitem item = (Treeitem)it.next();
-						if (!_selItems.contains(item))
+						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
+							if (_model instanceof TreeSelectionModel) {
+								((TreeSelectionModel)_model).addSelectionPath(toIntArray(getTreeitemPath(this, item)));
+							}
+						}
 					}
 					for (Iterator it = oldSelItems.iterator(); it.hasNext();) {
 						final Treeitem item = (Treeitem)it.next();
 						if (!selItems.contains(item)) {
 							final int index = getVisibleIndexOfItem(item);
-							if (!paging || (index >= from && index < to))
+							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
+								if (_model instanceof TreeSelectionModel) {
+									((TreeSelectionModel)_model).removeSelectionPath(toIntArray(getTreeitemPath(this, item)));
+								}
+							}
 						}
 					}
 				}

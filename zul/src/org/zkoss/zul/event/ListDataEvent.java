@@ -32,6 +32,8 @@ public class ListDataEvent {
 	public static final int INTERVAL_REMOVED = 2;
 	/** Identifies the structure of the lists has changed. @since 5.0.7*/
 	public static final int STRUCTURE_CHANGED = 3;
+	/** Identifies the selection of the lists has changed. @since 6.0.0*/
+	public static final int SELECTION_CHANGED = 4;
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 

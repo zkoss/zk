@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Selectable;
 
 /**
@@ -634,14 +635,15 @@ public class Combobox extends Textbox {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void syncSelectionToModel() {
-		if (_model instanceof Selectable) {
-			Selectable model = (Selectable) _model;
+		if (_model instanceof ListSelectionModel) {
+			ListSelectionModel model = (ListSelectionModel) _model;
 			model.clearSelection();
 			
-			if (_selItem != null)
-				model.addSelection(_model.getElementAt(getChildren().indexOf(_selItem)));
+			if (_selItem != null) {
+				int index = getChildren().indexOf(_selItem);
+				model.addSelectionInterval(index, index);
+			}
 		}
 	}
 	// super
@@ -690,12 +692,11 @@ public class Combobox extends Textbox {
 		super.beforeChildAdded(newChild, refChild);
 	}
 	private void fixSelectOnRender(Comboitem item) {
-		if (_model instanceof Selectable) {
-			Iterator it = ((Selectable) _model).getSelection().iterator();
-			if (!it.hasNext()) return;
+		if (_model instanceof ListSelectionModel) {
+			ListSelectionModel smodel = (ListSelectionModel) _model;
+			if (smodel.isSelectionEmpty()) return;
 			
-			if (Objects.equals(it.next(),
-					_model.getElementAt(getItems().indexOf(item)))) {
+			if (smodel.isSelectedIndex(getItems().indexOf(item))) {
 				setSelectedItem(item);
 			}
 		}

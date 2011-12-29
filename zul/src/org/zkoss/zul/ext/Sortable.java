@@ -17,7 +17,10 @@ import java.util.Comparator;
 /**
  * Indicate a data model that supports sorting.
  * It is typically used with {@link org.zkoss.zul.ListModel}
- *
+ * <p> If the implementation also implements {@link ListSelectionModel} interface,
+ * it is up to the particular implementation to decide what the selections 
+ * remains in order after sorted.
+ * 
  * @author tomyeh
  * @since 6.0.0
  */
