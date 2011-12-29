@@ -5,3 +5,4 @@
 ../dist/lib/zel.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/portlet-api.jar
+../dist/lib/ext/validation-api.jar

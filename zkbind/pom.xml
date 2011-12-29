@@ -101,7 +101,14 @@
 			<artifactId>portlet-api</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
+		<!-- jsr 303 -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>

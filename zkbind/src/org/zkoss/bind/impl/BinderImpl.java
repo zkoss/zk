@@ -57,6 +57,7 @@ import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
+import org.zkoss.bind.validator.DeferredValidator;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
@@ -113,6 +114,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private static void initValidator() {
 		//TODO initial the system validator
 		
+		VALIDATORS.put("beanValidator", new DeferredValidator("org.zkoss.bind.validator.BeanValidator"));//defer the init of validator.(user might not use this validator)
 	}
 	
 	//control keys
