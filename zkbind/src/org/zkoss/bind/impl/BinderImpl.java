@@ -147,6 +147,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private static final String LOAD_TYPE = "$LT$"; //expected type of attribute
 	
 	private static final String ON_POST_COMMAND = "onPostCommand";
+	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
 	
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
@@ -240,6 +241,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		//initial associated view model
 		setViewModel(vm);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
+		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
 		//subscribe change listener
 		subscribeChangeListener(_quename, _quescope, _queueListener);
 		
@@ -1034,10 +1036,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 //					BinderImpl.this.doFailConfirm();
 //					break;
 				case BinderImpl.FAIL_VALIDATE:
-					//validationmessages, the last notified
-					if(_validationMessages!=null){
-						notifys.add(new PropertyImpl(_validationMessages,".",null));
-					}
+					notifyVMsgsChanged();
 					
 					if(_log.debugable()){
 						_log.debug("There are [%s] property need to be notify after fail validate",notifys.size());
@@ -1058,10 +1057,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				BinderImpl.this.doLoadEvent(comp, evtnm); //load on event
 			}
 
-			if(_validationMessages!=null){
-				//validationmessages the last notified
-				notifys.add(new PropertyImpl(_validationMessages,".",null));
-			}
+			notifyVMsgsChanged();
 			
 			if(_log.debugable()){
 				_log.debug("There are [%s] property need to be notify after command",notifys.size());
@@ -1070,6 +1066,25 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if(_log.debugable()){
 				_log.debug("====End command event [%s]",event);
 			}
+		}
+	}
+	
+	private class VMsgsChangedListener implements EventListener<Event>,Serializable{
+		private static final long serialVersionUID = 1L;
+		public void onEvent(Event event) throws Exception {
+			if(_validationMessages!=null){
+				Set<Property> notify = new HashSet<Property>();
+				notify.add(new PropertyImpl(_validationMessages,".",null));
+				fireNotifyChanges(notify);
+			}
+		}
+	}
+	
+	private void notifyVMsgsChanged(){
+		if(_validationMessages!=null){
+			//ZK-722 Validation message is not clear after form binding loaded
+			//defer the validation notify as possible
+			Events.postEvent(-1, _dummyTarget, new Event(ON_VMSGS_CHANGED));
 		}
 	}
 	
@@ -1573,7 +1588,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		return new BindingKey(comp,attr);
 	}
 
-	private class PostCommandListener implements EventListener<Event>{
+	private class PostCommandListener implements EventListener<Event>,Serializable{
+		private static final long serialVersionUID = 1L;
+
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			Object[] data = (Object[])event.getData();
