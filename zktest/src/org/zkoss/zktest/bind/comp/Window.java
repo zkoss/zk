@@ -1,19 +1,15 @@
-package org.zkoss.zktest.bind.component;
+package org.zkoss.zktest.bind.comp;
+
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 
 
 
-
-public class Panel{
-	private boolean open = false;
+public class Window{
 	private boolean maximized = false;
 	private Integer index1 = 3;
 	private Integer index2 = 3;
 
-	public boolean isOpen() {
-		return open;
-	}
-	
-	
 	public boolean isMaximized() {
 		return maximized;
 	}
@@ -38,14 +34,21 @@ public class Panel{
 	}
 
 
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
-
-
 	public void setMaximized(boolean maximized) {
 		this.maximized = maximized;
 	}
 
+
+	// -----------command -----------------
+	
+	@Command @NotifyChange("*")
+	public void max(){
+		maximized = true;
+	}
+	
+	@Command @NotifyChange("*")
+	public void min(){
+		maximized = false;
+	}
 
 }

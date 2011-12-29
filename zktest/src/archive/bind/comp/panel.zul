@@ -2,7 +2,7 @@
 <zk>
 
 	<vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Panel')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Panel')">
 		Click "toogle" button to switch between open and closed.
 		<panel id="panel" open="@bind(vm.open)" title="open test"
 			collapsible="true" border="normal" maximizable="true"

@@ -1,6 +1,6 @@
 <zk>
 <vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Grid')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Grid')">
 	<grid id="detailGrid" fixedLayout="true">
 		<columns>
 			<column width="40px" />

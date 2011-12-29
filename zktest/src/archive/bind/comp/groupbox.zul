@@ -2,7 +2,7 @@
 <zk>
 	click to open it.
 	<vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Groupbox')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Groupbox')">
 		Click "toogle" button to switch between open and closed.
 		<groupbox id="groupbox" open="@bind(vm.open)" mold="3d"
 			width="200px">

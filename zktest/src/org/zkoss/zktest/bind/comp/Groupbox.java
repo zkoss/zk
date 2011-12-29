@@ -1,4 +1,4 @@
-package org.zkoss.zktest.bind.component;
+package org.zkoss.zktest.bind.comp;
 
 
 

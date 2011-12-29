@@ -1,6 +1,6 @@
 <zk>
 	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Menuitem')"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Menuitem')"
 		border="normal" width="200px">
 		<menubar>
 			<menu label="Option">

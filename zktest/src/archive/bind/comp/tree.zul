@@ -1,6 +1,6 @@
 <zk>
 	<vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Tree')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Tree')">
 		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)">
 			<template name="model" var="i">
 				<treeitem open="@bind(vm.open)">

@@ -1,6 +1,6 @@
 <zk>
 	<vlayout apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.component.Combobutton')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Combobutton')">
 		<combobutton label="combobutton" open="@load(vm.open)" >
 			<popup>
 				<vbox>
