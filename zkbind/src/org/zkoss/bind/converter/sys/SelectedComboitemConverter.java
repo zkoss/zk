@@ -23,7 +23,7 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Comboitem;
 
 /**
- * Convert listbox selected listitem to bean and vice versa.
+ * Convert combobox selected comboitem to bean and vice versa.
  * @author henrichen
  *
  */

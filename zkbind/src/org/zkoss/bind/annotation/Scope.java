@@ -13,9 +13,9 @@ package org.zkoss.bind.annotation;
 
 
 /**
- * The implicit scopes of zk for {@link ScopeParam}.
- * The {@linkplain #AUTO} will search the value from components to page, desktop one bye one...until find a value 
- * {@linkplain #SESSION}, {@linkplain #APPLICATION} and by the order.
+ * The implicit scopes of zk for {@link ScopeParam}. <br/>
+ * The {@linkplain #AUTO} scope means searching the value from components to page, desktop one bye one automatically...until find a value 
+ * {@linkplain #SESSION}, {@linkplain #APPLICATION} and by the order. <br/>
  * Other scope only represents itself.
  * @author dennis
  * @see ScopeParam

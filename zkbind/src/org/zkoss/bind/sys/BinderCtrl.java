@@ -21,9 +21,9 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * An addition interface to {@link Binder}
- * that is used for implementation or tools.
- *
- * <p>Application developers rarely need to access methods in this interface.
+ * that is used for implementation or tools. <br/>
+ *  <br/>
+ * Application developers rarely need to access methods in this interface.
  * @author dennis
  *
  */

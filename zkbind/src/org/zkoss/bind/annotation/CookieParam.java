@@ -17,7 +17,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation to identify the name of a parameter of a method.
+ * Marker annotation to identify the name of a parameter of a method. <br/>
  * The value of this parameter is getting from current http request cookie.
  * 
  * @see Init

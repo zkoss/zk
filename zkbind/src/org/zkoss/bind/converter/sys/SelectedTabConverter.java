@@ -25,7 +25,7 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 
 /**
- * Convert Tabbox selected Tab to Tab label and vice versa.
+ * Convert tabbox selected tab and vice versa.
  *
  * @author Dennis
  */

@@ -17,9 +17,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation to identify the name of a parameter of a method.
- * By default, the {@linkplain #scopes()} is  {@link Scope#AUTO}.
- * You could arrange another sequence by setting the {@linkplain #scopes()}.
+ * Marker annotation to identify the name of a parameter of a method. <br/>
+ * By default, the {@linkplain #scopes()} is  {@link Scope#AUTO}. <br/>
+ * You could arrange another sequence by setting the {@linkplain #scopes()}. <br/>
  * 
  * @see Init
  * @see Command

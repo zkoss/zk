@@ -14,6 +14,7 @@ package org.zkoss.bind;
 import java.util.Map;
 
 /**
+ * The context for validation 
  * @author dennis
  * 
  */

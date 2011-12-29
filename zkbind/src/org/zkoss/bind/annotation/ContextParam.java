@@ -17,8 +17,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation to identify the name of a parameter of a method.
- * the value of this parameter is getting from the special context
+ * Marker annotation to identify the name of a parameter of a method. <br/>
+ * The value of this parameter is getting from the special {@link ContextType}
  * 
  * @see Command
  * @see Default

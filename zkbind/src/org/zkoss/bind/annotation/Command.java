@@ -17,7 +17,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation to identify a Command method. 
+ * Marker annotation to identify a Command method. <br/>
  * A Command method could also use with {@link BindingParam} and others to assign a binding argument as its parameter, 
  * and {@link Default} to assign a default value if the argument is null.
  * 

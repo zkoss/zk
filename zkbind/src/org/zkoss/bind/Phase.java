@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 /**
- * the Phase of PhaseListener when doing binding.
+ * The Phase of PhaseListener when doing binding.
  * There are currently seven phases that executed in that order:
  * <ul>
  * <li>{@link #COMMAND}: do a command</li>

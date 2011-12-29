@@ -20,10 +20,10 @@ import java.util.Collection;
 import org.zkoss.zk.ui.select.Selectors;
 
 /**
- * Marker annotation to identify the component of a parameter of a method &lt;br/&gt;
- * The {@linkplain #value()} is the selector to find components. It uses {@link Selectors#find(org.zkoss.zk.ui.Component)} to select the components. &lt;br/&gt;
+ * Marker annotation to identify the component of a parameter of a method <br/>
+ * The {@linkplain #value()} is the selector to find components. It uses {@link Selectors#find(org.zkoss.zk.ui.Component)} to select the components. <br/>
  * The base component of the selector is the view component of the binder.
- * &lt;br/&gt;
+ * <br/>
  * If the parameter type is a {@link Collection}, it passes the result directly. Otherwise it passes the first result or null if no result.
  * 
  * @see Init

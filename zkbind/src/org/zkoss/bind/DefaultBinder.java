@@ -17,11 +17,11 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventQueues;
 
 /**
- * ZK default Binder, use this class if you want to new a binder and control components though {@link Binder} API.
+ * ZK default Binder, use this class if you want to new a binder and control components though {@link Binder} API. <br/>
  * After new a instance, you have to call {@link #init(Component, Object)} first, then call 
  * {@link #addCommandBinding(Component, String, String, java.util.Map)}, {@link #addPropertyLoadBindings(Component, String, String, String[], String[], java.util.Map, String, java.util.Map)}
- * ...etc to assign the binding.
- * after all the add binding done, you have to call {@link #loadComponent(Component, boolean)} to trigger first loading of the binding. 
+ * ...etc to assign the binding.<br/>
+ * After all the add binding done, you have to call {@link #loadComponent(Component, boolean)} to trigger first loading of the binding. <br/> 
  * @author dennischen
  *
  */

@@ -17,11 +17,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Notify value change. 
- * By default, a property set by binder will notify this property changed. 
- * You could use this annotation on the set method to change or add notification target.
- * You could also add this annotation on a command method to notify properties that will be changed after the command.
- * To avoid the default notification, use {@link NotifyChangeDisabled} on the set method independently.   
+ * Notify value change.  <br/>
+ * By default, a property set by binder will notify this property changed.  <br/>
+ * You could use this annotation on the set method to change or add notification target. <br/>
+ * You could also add this annotation on a command method to notify properties that will be changed after the command. <br/>
+ * To avoid the default notification, use {@link NotifyChangeDisabled} on the set method independently.    <br/>
  *  
  * @author henrichen
  * @see NotifyChangeDisabled

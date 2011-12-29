@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 /**
- * {@link Phase} call back listener that allow user to intervene the execution life cycle. 
+ * A call back listener that allow user to intervene the execution life cycle. 
  * @author henrichen
  *
  */
