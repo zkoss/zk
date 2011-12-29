@@ -35,7 +35,9 @@
 	scope="request" if="${empty fontFamilyC}"/>
 </c:if>
 
-html, body {height:100%}
+html, body {
+	height: 100%;
+}
 
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
@@ -44,7 +46,9 @@ body {
 </c:if>
 
 <%-- paragraphs --%>
-img {border: 0;}
+img {
+	border: 0;
+}
 
 <%-- ZK JavaScript debug box --%>
 div.z-error {
