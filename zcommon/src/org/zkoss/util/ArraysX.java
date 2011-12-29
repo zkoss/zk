@@ -209,7 +209,7 @@ public class ArraysX {
 	/**
 	 * Duplicates the specified array.
 	 *
-	 * <p>The array could be an array of objects or primiitives.
+	 * <p>The array could be an array of objects or primitives.
 	 *
 	 * @param ary the array
 	 * @param jb the beginning index (included)
@@ -359,20 +359,11 @@ public class ArraysX {
 		return (T[])resize((Object)ary, size);
 	}
 
-	/** Clones an array.
+	/** 
+	 * @deprecated As of release 6.0.0, replaced with {@link duplicate(Object)}.
 	 */
 	public static final Object clone(Object ary) {
-		final int size = Array.getLength(ary);
-		final Object dst = Array.newInstance(ary.getClass().getComponentType(), size);
-		System.arraycopy(ary, 0, dst, 0, size);
-		return dst;
-	}
-	/** Clones an array.
-	 * @since 6.0.0
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> T[] clone(T[] ary) {
-		return (T[])clone((Object)ary);
+		return duplicate(ary);
 	}
 
 //meaningless to provide this method since the caller's casting to Class<T> causes
