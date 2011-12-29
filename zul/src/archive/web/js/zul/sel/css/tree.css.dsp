@@ -222,7 +222,7 @@ tr.z-treerow-disd *, td.z-treecell-disd * {
 tr.z-treerow-disd a:visited, tr.z-treerow-disd a:hover,
 td.z-treecell-disd a:visited, td.z-treecell-disd a:hover {
 	text-decoration: none !important;
-	cursor: default !important;;
+	cursor: default !important;
 	border-color: #D0DEF0 !important;
 }
 tr.z-treerow-seld {

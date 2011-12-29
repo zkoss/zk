@@ -125,7 +125,7 @@ tr.z-listitem-disd *, td.z-listcell-disd * {
 tr.z-listitem-disd a:visited, tr.z-listitem-disd a:hover,
 td.z-listcell-disd a:visited, td.z-listcell-disd a:hover {
 	text-decoration: none !important;
-	cursor: default !important;;
+	cursor: default !important;
 	border-color: #D0DEF0 !important;
 }
 tr.z-listitem-seld {
