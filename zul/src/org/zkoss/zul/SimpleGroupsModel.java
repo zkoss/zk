@@ -213,13 +213,13 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
 	public Object clone() {
 		SimpleGroupsModel clone = (SimpleGroupsModel)super.clone();
 		if (_data != null)
-			clone._data = ArraysX.clone(_data);
+			clone._data = ArraysX.duplicate(_data);
 		if (_heads != null)
-			clone._heads = ArraysX.clone(_heads);
+			clone._heads = ArraysX.duplicate(_heads);
 		if (_foots != null)
-			clone._foots = ArraysX.clone(_foots);
+			clone._foots = ArraysX.duplicate(_foots);
 		if (_closes != null)
-			clone._closes = (boolean[])ArraysX.clone(_closes);
+			clone._closes = (boolean[])ArraysX.duplicate(_closes);
 		return clone;
 	}
 	/**

@@ -58,7 +58,7 @@ implements Sortable<E>, java.io.Serializable {
 	 * @since 2.4.0
 	 */
 	public ListModelArray(E[] array, boolean live) {
-		_array = live ? array: ArraysX.clone(array);
+		_array = live ? array: ArraysX.duplicate(array);
 	}
 
 	/**
@@ -67,7 +67,7 @@ implements Sortable<E>, java.io.Serializable {
 	 * @param src the source array used to initialize this ListModelArray.
 	 */
 	public ListModelArray(E[] src) {
-		_array = ArraysX.clone(src);
+		_array = ArraysX.duplicate(src);
 	}
 	
 	/**
@@ -158,7 +158,7 @@ implements Sortable<E>, java.io.Serializable {
 	public Object clone() {
 		ListModelArray clone = (ListModelArray) super.clone();
 		if (_array != null)
-			clone._array = ArraysX.clone(_array);
+			clone._array = ArraysX.duplicate(_array);
 		return clone;
 	}
 }

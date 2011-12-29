@@ -65,7 +65,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 * @since 2.4.1
 	 */
 	public SimpleListModel(E[] data, boolean live) {
-		_data = live ? data: ArraysX.clone(data);
+		_data = live ? data: ArraysX.duplicate(data);
 	}
 	/** Constructor.
 	 * It made a copy of the specified array (<code>data</code>).
