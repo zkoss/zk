@@ -87,14 +87,9 @@ span.z-combobutton {
 }
 .z-combobutton .z-combobutton-tr,
 .z-combobutton .z-combobutton-cr {
+	background-position: 0 0;
 	width: 21px;
 	border-left: 1px solid #CCCCCC;
-}
-.z-combobutton .z-combobutton-tr {
-	background-position: 0 0;
-}
-.z-combobutton .z-combobutton-cr {
-	background-position: 0 0;
 }
 .z-combobutton .z-combobutton-tl,
 .z-combobutton .z-combobutton-tr {
@@ -126,10 +121,8 @@ span.z-combobutton {
 }
 .z-combobutton-clk .z-combobutton-tr,
 .z-combobutton-clk .z-combobutton-cr {
-	border-color: #86A4BE;
-}
-.z-combobutton-clk .z-combobutton-tr {
 	background-position: 0 -24px;
+	border-color: #86A4BE;
 }
 .z-combobutton-clk .z-combobutton-cr {
 	background-position: -63px 0;
