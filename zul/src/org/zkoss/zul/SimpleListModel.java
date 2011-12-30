@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.ListSelectionModel;
@@ -189,6 +190,41 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	protected boolean inSubModel(Object key, Object value) {
 		String idx = objectToString(key);
 		return idx.length() > 0 && objectToString(value).startsWith(idx);
+	}
+
+	//-- backward compatible Selectable --//
+	/**
+	 * Returns the index of the first occurrence of the specified element.
+	 * @since 6.0.0
+	 */
+	protected int indexOf(Object obj) {
+		if (_data != null) {
+			for (int i = 0; i < _data.length; i++) {
+				if (Objects.equals(obj, _data[i])) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
 	}
 	
 	/**

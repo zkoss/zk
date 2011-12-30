@@ -135,6 +135,27 @@ implements Sortable<E>, java.io.Serializable {
 		return (E)_array[j];
 	}
 	
+	//-- backward compatible Selectable --//
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
+	}
+	
 	//-- Sortable --//
 	/** Sorts the data.
 	 *

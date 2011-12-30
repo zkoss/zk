@@ -724,4 +724,24 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			clone._map = new LinkedHashMap(_map);
 		return clone;
 	}
+	//-- backward compatible Selectable --//
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(Object obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(Object obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
+	}
 }

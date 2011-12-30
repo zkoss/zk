@@ -19,8 +19,11 @@ package org.zkoss.zul;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
@@ -150,6 +153,64 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 		_listeners.remove(l);
 	}
 
+	/**
+	 * Returns the selections set.
+	 */
+	public Set<E> getSelection() {
+		HashSet<E> selected = new HashSet<E>();
+		int[][] paths = getSelectionPaths();
+		for (int i = 0; i < paths.length; i++) {
+			selected.add(getChild(paths[i]));
+		}
+		return selected;
+	}
+	
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */	
+	public void addSelection(E obj) {
+		int[] path = Tree.getPath(this, getRoot(), obj);
+		if (path != null && path.length > 0)
+			addSelectionPath(path);
+	}
+	
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.	 * 
+	 */
+	public void removeSelection(E obj) {
+		int[] path = Tree.getPath(this, getRoot(), obj);
+		if (path != null && path.length > 0)
+			addSelectionPath(path);
+	}
+	/**
+	 * Sets the specified object into open.
+	 * @param obj the object to be as open.
+	 * @param open whether be opened
+	 */
+	public void setOpen(E obj, boolean open) {
+		int[] path = Tree.getPath(this, getRoot(), obj);
+		if (path != null && path.length > 0) {
+			if (open)
+				addOpenPath(path);
+			else
+				removeOpenPath(path);
+		}
+	}
+	
+	/**
+	 * Returns whether the specified object be opened.
+	 * @param obj
+	 */
+	public boolean isOpen(E obj) {
+		int[] path = Tree.getPath(this, getRoot(), obj);
+		if (path != null && path.length > 0) {
+			return isPathOpened(path);
+		}
+		return false;
+	}
+	
 	// TreeOpenableModel
 	@Override
 	public void addOpenPath(int[] path) {

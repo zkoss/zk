@@ -225,19 +225,19 @@ implements Sortable<E>, List<E>, java.io.Serializable {
     public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			private Iterator<E> _it = _list.iterator();
-			private E _current = null;
+			private int _index;
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
 			public E next() {
-				_current = _it.next();
-				return _current;
+				_index++;
+				return _it.next();
 			}
 			public void remove() {
-				final int index = indexOf(_current);
-				removeSelectionInterval(index, index);
+				removeSelectionInterval(_index, _index);
 				_it.remove();
-				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
+				_index--;
 			}
 		};
     }
@@ -422,5 +422,26 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 		if (_list != null)
 			clone._list = new ArrayList(_list);
 		return clone;
+	}
+	
+	//-- backward compatible Selectable --//
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
 	}
 }

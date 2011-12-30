@@ -17,10 +17,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.BitSet;
-import java.util.List;
+import java.util.HashSet;
 import java.util.LinkedList;
-import org.zkoss.io.Serializables;
+import java.util.List;
+import java.util.Set;
 
+import org.zkoss.io.Serializables;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.ListSelectionModel;
@@ -161,6 +163,20 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		removeSelectionInterval(_minIndex, _maxIndex);
 	}
 
+	/**
+	 * Returns the selections set.
+	 */
+	public Set<E> getSelection() {
+		HashSet<E> selected = new HashSet<E>();
+		int min = getMinSelectionIndex();
+		int max = getMaxSelectionIndex();
+		for (;min <= max; min++) {
+				if (isSelectedIndex(min)) {
+					selected.add(getElementAt(min));
+				}
+		}
+		return selected;
+	}
 	/**
 	 * Insert length indices beginning before/after index. This is typically
 	 * called to sync the selection model with a corresponding change in the

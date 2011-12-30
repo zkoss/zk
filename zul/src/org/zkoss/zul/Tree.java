@@ -55,7 +55,6 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectionModel;
@@ -1441,7 +1440,7 @@ public class Tree extends MeshElement {
 	}
 	@SuppressWarnings("unchecked")
 	private final void setModelDirectly(TreeModel model) {
-		_model = (TreeModel<Object>)model;
+		_model = model;
 	}
 
 	/** Handles a private event, onInitRender. It is used only for

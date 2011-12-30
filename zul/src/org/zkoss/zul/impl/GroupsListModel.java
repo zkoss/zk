@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -157,6 +158,40 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 
 		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, _gpcloses[gi]);
 	}
+	
+	//-- backward compatible Selectable --//
+	/**
+	 * Returns the index of the first occurrence of the specified element.
+	 * @since 6.0.0
+	 */
+	protected int indexOf(Object obj) {
+		for (int i = 0, j = this.getSize(); i < j; i++) {
+			if (Objects.equals(obj, getElementAt(i)))
+				return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(Object obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(Object obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
+	}
+	
 	//ListModel
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is deemed not in the ListModel

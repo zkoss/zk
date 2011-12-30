@@ -174,9 +174,9 @@ ZK 6.0.0
     is changed to Map<String, String[]>
   + Files.getConfigDirectory is removed
   + org.zkoss.util.logging.LogService is removed
-  + org.zkoss.zul.ext.Selectable is deprecated, replaced with
+  + org.zkoss.zul.ext.Selectable is removed, replaced with
     org.zkoss.zul.ext.ListSelectionModel.
-  + org.zkoss.zul.ext.Openable is deprecated, replaced with
+  + org.zkoss.zul.ext.Openable is removed, replaced with
     org.zkoss.zul.ext.TreeOpenableModel.
   + AbstractListModel implements org.zkoss.zul.ext.ListSelectionModel instead of
 	org.zkoss.zul.ext.Selectable

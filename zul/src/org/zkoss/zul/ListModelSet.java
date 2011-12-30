@@ -227,25 +227,25 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			private Iterator<E> _it = _set.iterator();
-			private E _current = null;
+			private int _index;
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
 			public E next() {
-				_current = _it.next();
-				return _current;
+				_index++;
+				return _it.next();
 			}
 			public void remove() {
 				//bug #1819318 Problem while using SortedSet with Databinding
-				final int index = indexOf(_current);
-				removeSelectionInterval(index, index);
+				removeSelectionInterval(_index, _index);
 				if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 					_it.remove();
-					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
 				} else { //bug #1839634 Problem while using HashSet with Databinding
 					_it.remove();
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 				}
+				_index--;
 			}
 		};
 	}
@@ -407,5 +407,25 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		if (_set != null)
 			clone._set = new LinkedHashSet(_set);
 		return clone;
+	}
+	//-- backward compatible Selectable --//
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */
+	public void addSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			addSelectionInterval(index, index);
+	}
+
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(E obj) {
+		int index = indexOf(obj);
+		if (index >= 0)
+			removeSelectionInterval(index, index);
 	}
 }
