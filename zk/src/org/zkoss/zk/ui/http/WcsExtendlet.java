@@ -111,7 +111,8 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 						log.realCauseBriefly("Unable to load "+wi.items[j], ex);
 					}
 				} else { //static method
-					sw.write(invoke((MethodInfo)o));
+					sw.write(invoke(
+						new RequestContext(this, request, response), (MethodInfo)o));
 				}
 				sw.write('\n');
 			}
@@ -144,7 +145,7 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/*package*/ WcsInfo parse(InputStream is, String path)
+	private WcsInfo parse(InputStream is, String path)
 	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");

@@ -17,6 +17,7 @@ package org.zkoss.zk.ui.http;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -110,50 +111,47 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	throws ServletException, IOException {
 		byte[] data;
 		String pkg = null;
-		setProvider(new Provider(this, request, response));
-		try {
 			
-			/* 2011/4/27 Tony:
-			 * Here we don't use "org.zkoss.web.classWebResource.cache" directly,
-			 * since some of our users might want to clear the cache for their css.dsp ,
-			 * and still cache the wpd js resource.
-			 * 
-			 * So we add on a new config to clear the widget source .
-			 * @see bug 2898413
-			 */
-			String resourceCache = Library.getProperty("org.zkoss.zk.WPD.cache");
-			if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
-				_cache.clear();
-			
-			final Object rawdata = _cache.get(path);
-			if (rawdata == null) {
-				if (Servlets.isIncluded(request)) {
-					log.error("Failed to load the resource: "+path);
-						//It might be eaten, so log the error
-					throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
-						//have the includer to handle it
-				}
-				response.sendError(response.SC_NOT_FOUND, path);
-				return null;
+		/* 2011/4/27 Tony:
+		 * Here we don't use "org.zkoss.web.classWebResource.cache" directly,
+		 * since some of our users might want to clear the cache for their css.dsp ,
+		 * and still cache the wpd js resource.
+		 * 
+		 * So we add on a new config to clear the widget source .
+		 * @see bug 2898413
+		 */
+		String resourceCache = Library.getProperty("org.zkoss.zk.WPD.cache");
+		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
+			_cache.clear();
+		
+		final Content content = (Content)_cache.get(path);
+		if (content == null) {
+			if (Servlets.isIncluded(request)) {
+				log.error("Failed to load the resource: "+path);
+					//It might be eaten, so log the error
+				throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
+					//have the includer to handle it
 			}
-
-			final boolean cacheable;
-			if (rawdata instanceof ByteContent) {
-				final ByteContent bc = (ByteContent)rawdata;
-				data = bc.content;
-				cacheable = bc.cacheable;
-			} else {
-				final WpdContent wc = (WpdContent)rawdata;
-				data = wc.toByteArray(request);
-				pkg = wc.name;
-				cacheable = wc.cacheable;
-			}
-			if (cacheable)
-				org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
-						request, response, "org.zkoss.web.classWebResource.cache", 8760);
-		} finally {
-			setProvider(null);
+			response.sendError(response.SC_NOT_FOUND, path);
+			return null;
 		}
+
+		final boolean cacheable;
+		final RequestContext reqctx = new RequestContext(this, request, response);
+		final Object rawdata = content.parse(reqctx);
+		if (rawdata instanceof ByteContent) {
+			final ByteContent bc = (ByteContent)rawdata;
+			data = bc.content;
+			cacheable = bc.cacheable;
+		} else {
+			final WpdContent wc = (WpdContent)rawdata;
+			data = wc.toByteArray(reqctx);
+			pkg = wc.name;
+			cacheable = wc.cacheable;
+		}
+		if (cacheable)
+			org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(),
+					request, response, "org.zkoss.web.classWebResource.cache", 8760);
 
 		return pkg != null ? mergeJavaScript(request, response, pkg, data): data;
 	}
@@ -196,7 +194,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		return out != null ? out.toByteArray(): data;
 	}
 
-	/*package*/ Object parse(InputStream is, String path)
+	private Object parse(RequestContext reqctx, InputStream is, String path)
 	throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
@@ -214,7 +212,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			zk || aaas || !cacheable || isWpdContentRequired(name, root) ?
 				new WpdContent(name, dir, cacheable): null;
 
-		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*16);
 		String depends = null;
 		if (zk) {
@@ -233,7 +230,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			write(out, "function(){if(zk._p=zkpi('");
 			write(out, name);
 			write(out, '\'');
-			if (provider != null && provider.getResource(dir + "wv/zk.wpd") != null)
+			if (reqctx.getResource(dir + "wv/zk.wpd") != null)
 				write(out, ",true");
 			write(out, "))try{\n");
 		}
@@ -245,7 +242,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (!writeResource(out, jspath, dir, false)) {
+				if (!writeResource(reqctx, out, jspath, dir, false)) {
 					log.error("Widget "+wgtnm+": "+jspath+" not found, "+el.getLocator()+", "+path);
 					continue;
 				}
@@ -286,7 +283,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 							write(out, "'];");
 						} else {
 							moldInfos.put(uri, new String[] {wgtnm, mold});
-							if (!writeResource(out, uri, dir, true)) {
+							if (!writeResource(reqctx, out, uri, dir, true)) {
 								write(out, "zk.$void;zk.error('");
 								write(out, uri);
 								write(out, " not found')");
@@ -313,10 +310,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						move(wc, out);
 						wc.add(jspath, browser);
 					} else {
-						if (browser != null && provider != null
-						&& !Servlets.isBrowser(provider.request, browser))
+						if (browser != null && !Servlets.isBrowser(reqctx.request, browser))
 							continue;
-						if (!writeResource(out, jspath, dir, true))
+						if (!writeResource(reqctx, out, jspath, dir, true))
 							log.error(jspath+" not found, "+el.getLocator()+", "+path);
 					}
 				}
@@ -333,7 +329,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 						move(wc, out);
 						wc.add(mtd);
 					} else {
-						write(out, mtd);
+						write(reqctx, out, mtd);
 					}
 			} else {
 				log.warning("Unknown element "+elnm+", "+el.getLocator()+", "+path);
@@ -342,7 +338,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (zk) {
 			final WebApp wapp = getWebApp();
 			if (wapp != null)
-				writeAppInfo(out, wapp);
+				writeAppInfo(reqctx, out, wapp);
 			 write(out, '}'); //end of if(window.zk)
 
 			writeHost(wc, out, wapp);
@@ -385,15 +381,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 		}
 	}
-	private boolean writeResource(OutputStream out, String path,
+	private boolean writeResource(RequestContext reqctx, OutputStream out, String path,
 	String dir, boolean locate)
 	throws IOException, ServletException {
 		if (path.startsWith("~./")) path = path.substring(2);
 		else if (path.charAt(0) != '/')
 			path = Files.normalize(dir, path);
 
-		final InputStream is =
-			getProvider().getResourceAsStream(path, locate);
+		final InputStream is = reqctx.getResourceAsStream(path, locate);
 		if (is == null) {
 			write(out, "zk.log('");
 			write(out, path);
@@ -426,9 +421,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		final byte[] bs = new byte[] {(byte)cc};
 		out.write(bs, 0, 1);
 	}
-	private void write(OutputStream out, MethodInfo mtd) throws IOException {
+	private void write(RequestContext reqctx, OutputStream out, MethodInfo mtd)
+	throws IOException {
 		try {
-			write(out, invoke(mtd));
+			write(out, invoke(reqctx, mtd));
 		} catch (IOException ex) {
 			throw ex;
 		}
@@ -441,25 +437,22 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 	}
 
-	private void writeAppInfo(OutputStream out, WebApp wapp)
+	private void writeAppInfo(RequestContext reqctx, OutputStream out, WebApp wapp)
 	throws IOException, ServletException {
 		final StringBuffer sb = new StringBuffer(256);
 		sb.append("\nzkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild());
-		final Provider provider = getProvider();
-		if (provider != null) {
-			final ServletContext ctx = getServletContext();
-			String s = Encodes.encodeURL(ctx, provider.request, provider.response, "/");
-			int j = s.lastIndexOf('/'); //might have jsessionid=...
-			if (j >= 0) s = s.substring(0, j) + s.substring(j + 1);
 
-			sb.append("','")
-				.append(s)
-				.append("','")
-				.append(Encodes.encodeURL(ctx, provider.request, provider.response,
-					wapp.getUpdateURI(false)));
-		} else
-			sb.append("','','");
+		final ServletContext ctx = getServletContext();
+		String s = Encodes.encodeURL(ctx, reqctx.request, reqctx.response, "/");
+		int j = s.lastIndexOf('/'); //might have jsessionid=...
+		if (j >= 0) s = s.substring(0, j) + s.substring(j + 1);
+
+		sb.append("','")
+			.append(s)
+			.append("','")
+			.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response,
+				wapp.getUpdateURI(false)));
 
 		sb.append("',{");
 		for (Iterator it = LanguageDefinition.getByDeviceType(getDeviceType()).iterator();
@@ -497,13 +490,13 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		Object[][] infs = config.getClientErrorReloads(deviceType, null);
 		if (infs != null) {
 			sb.append("eu:{");
-			outErrReloads(config, sb, infs);
+			outErrReloads(reqctx, config, sb, infs);
 			sb.append("},");
 		}
 		infs = config.getClientErrorReloads(deviceType, "server-push");
 		if (infs != null) {
 			sb.append("eup:{");
-			outErrReloads(config, sb, infs);
+			outErrReloads(reqctx, config, sb, infs);
 			sb.append("},");
 		}
 
@@ -512,8 +505,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		sb.append("});");
 		write(out, sb.toString());
 	}
-	private void outErrReloads(Configuration config, StringBuffer sb,
-	Object[][] infs) {
+	private void outErrReloads(RequestContext reqctx, Configuration config,
+	StringBuffer sb, Object[][] infs) {
 		for (int j = 0; j < infs.length; ++j) {
 			if (j > 0) sb.append(',');
 			sb.append('\'').append(infs[j][0]).append("':'");
@@ -521,9 +514,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			String uri = ((URIInfo)infs[j][1]).uri;
 			if (uri.length() > 0)
 				try {
-					final Provider provider = getProvider();
 					uri = Encodes.encodeURL(getServletContext(),
-						provider.request, provider.response, uri);
+						reqctx.request, reqctx.response, uri);
 				} catch (javax.servlet.ServletException ex) {
 					throw new UiException("Unable to encode "+uri, ex);
 				}
@@ -574,6 +566,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			.append(clientPackages).append(");").toString();
 	}
 
+	/**  Loader used with ResourceCache. */
 	private class WpdLoader extends ExtendletLoader<Object> {
 		private WpdLoader() {
 		}
@@ -581,7 +574,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		//-- super --//
 		protected Object parse(InputStream is, String path, String orgpath)
 		throws Exception {
-			return WpdExtendlet.this.parse(is, path);
+			return new Content(new SourceInfo(is, path));
 		}
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
@@ -591,9 +584,44 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			return path.substring(0, j).replace('.', '/') + "/zk" + path.substring(j);
 		}
 	}
-	/*package*/ static class ByteContent {
-		/*package*/ final byte[] content;
-		/*package*/ final boolean cacheable;
+	private static class Content {
+		private Object _cnt;
+
+		private Content(SourceInfo si) {
+			_cnt = si;
+		}
+		private Object parse(RequestContext reqctx)
+		throws ServletException, IOException {
+			if (_cnt instanceof SourceInfo)
+				try {
+					_cnt = ((SourceInfo)_cnt).parse(reqctx);
+				} catch (IOException ex) {
+					throw ex;
+				} catch (ServletException ex) {
+					throw ex;
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
+				}
+			return _cnt;
+		}
+	}
+	private class SourceInfo {
+		private final byte[] _raw;
+		private final String _path;
+		private SourceInfo(InputStream input, String path)
+		throws IOException {
+			_raw = Files.readAll(input);
+			_path = path;
+		}
+		private Object parse(RequestContext reqctx)
+		throws Exception {
+			return WpdExtendlet.this.parse(
+				reqctx, new ByteArrayInputStream(_raw), _path);
+		}
+	}
+	private static class ByteContent {
+		private final byte[] content;
+		private final boolean cacheable;
 
 		private ByteContent(byte[] cnt, boolean cacheable) {
 			this.content = cnt;
@@ -601,7 +629,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 	}
 			
-	/*package*/ class WpdContent {
+	private class WpdContent {
 		/** The package name*/
 		private final String name;
 		private final String _dir;
@@ -627,22 +655,23 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			_cnt.add(new Object[] {wapp, clientPackages});
 		}
 		@SuppressWarnings("unchecked")
-		/*package*/ byte[] toByteArray(HttpServletRequest request) throws ServletException, IOException {
+		private byte[] toByteArray(RequestContext reqctx)
+		throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final HttpServletRequest request = reqctx.request;
 			final String main = request != null ? request.getParameter("main"): null;
 			for (Object o: _cnt) {
 				if (o instanceof byte[]) {
 					out.write((byte[])o);
 				} else if (o instanceof MethodInfo) {
-					write(out, (MethodInfo)o);
+					write(reqctx, out, (MethodInfo)o);
 				} else if (o instanceof String[]) {
 					final String[] inf = (String[])o;
 					if (inf[1] != null) {
-						final Provider provider = getProvider();
-						if (provider != null && !Servlets.isBrowser(provider.request, inf[1]))
+						if (request != null && !Servlets.isBrowser(request, inf[1]))
 							continue;
 					}
-					if (!writeResource(out, inf[0], _dir, true))
+					if (!writeResource(reqctx, out, inf[0], _dir, true))
 						log.error(inf[0] + " not found");
 				} else if (o instanceof Object[]) { //host
 					if (main != null) {
