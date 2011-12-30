@@ -53,12 +53,8 @@ public class JSONs {
 		return getDateFormat().parse(s);
 	}
 	private static final SimpleDateFormat getDateFormat() {
-		SimpleDateFormat df = _df.get();
-		if (df == null)
-			_df.set(df = new SimpleDateFormat(
-				"yyyy.M.d.H.m.s.S", Locale.US));
+		SimpleDateFormat df = new SimpleDateFormat("yyyy.M.d.H.m.s.S", Locale.US);
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
-	private static final ThreadLocal<SimpleDateFormat> _df = new ThreadLocal<SimpleDateFormat>();
 }
