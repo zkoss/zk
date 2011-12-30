@@ -22,6 +22,7 @@ import java.text.ParseException;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Dates;
+import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 
 import org.zkoss.zk.ui.Component;
@@ -149,14 +150,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 	}
 	private static SimpleDateFormat getDateFormat() {
-		SimpleDateFormat df = (SimpleDateFormat)_df.get();
-		if (df == null)
-			_df.set(df = new SimpleDateFormat("yyyyMMdd"));
-				//OK not to use Locales.getCurrent() since yyyyMMdd all numbers
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locales.getCurrent());
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
-	private static final ThreadLocal _df = new ThreadLocal();
 
 	public void validate(Component comp, Object value)
 	throws WrongValueException {

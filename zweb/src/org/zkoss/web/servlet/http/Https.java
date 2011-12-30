@@ -372,33 +372,28 @@ public class Https extends Servlets {
 	 * @exception ParseException if the string is not valid
 	 */
 	public static final Date toDate(String sdate) throws ParseException {
-		final SimpleDateFormat[] dfs = getDateFormats();
-		for (int j = 0;;) {
+		ParseException ex = null;
+		for (int j = 0; j < _dfs.length; ++j) {
 			try {
-				return dfs[j].parse(sdate);
-			} catch (ParseException ex) {
-				if (++j == dfs.length)
-					throw ex;
+				return new SimpleDateFormat(_dfs[j], Locale.US).parse(sdate);
+			} catch (ParseException t) {
+				if (ex == null)
+					ex = t;
 			}
 		}
+		throw ex;
 	}
 	/**
 	 * Converts a data to a string complaint to HTTP protocol.
 	 */
 	public static final String toString(Date date) {
-		return getDateFormats()[0].format(date);
+		return new SimpleDateFormat(_dfs[0], Locale.US).format(date);
 	}
-	private static final SimpleDateFormat[] getDateFormats() {
-		SimpleDateFormat[] dfs = (SimpleDateFormat[])_dfs.get();
-		if (dfs == null)
-			_dfs.set(dfs = new SimpleDateFormat[] {
-				new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
-				new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
-				new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US)
-			});
-		return dfs;
-	}
-	private static final ThreadLocal _dfs = new ThreadLocal();
+	private static final String[] _dfs = {
+		"EEE, dd MMM yyyy HH:mm:ss zzz",
+		"EEEEEE, dd-MMM-yy HH:mm:ss zzz",
+		"EEE MMMM d HH:mm:ss yyyy"
+	};
 
 	/** Write the specified media to HTTP response.
 	 *

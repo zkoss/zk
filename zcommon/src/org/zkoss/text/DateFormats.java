@@ -230,12 +230,8 @@ public class DateFormats {
 		}
 	}
 	private static final SimpleDateFormat getHttpDateFormat() {
-		SimpleDateFormat df = (SimpleDateFormat)_df.get();
-		if (df == null)
-			_df.set(df = new SimpleDateFormat(
-				"EEE MMM dd HH:mm:ss zzz yyyy", Locale.US));
+		SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
-	private static final ThreadLocal _df = new ThreadLocal();
 }
