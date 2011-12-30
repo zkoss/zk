@@ -1,0 +1,15 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Selectbox')">
+		<zscript>
+        <![CDATA[
+	String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+	ListModelList model = new ListModelList(userName);
+]]></zscript>
+		<selectbox id="sbox" model="@load(vm.items)" selectedIndex="@bind(vm.selectedIndex)">
+			<template name="model">${each}</template>
+		</selectbox>
+		<separator height="50px"></separator>
+		<label id="selected" value="@load(vm.selectedIndex)" />
+	</vlayout>
+</zk>

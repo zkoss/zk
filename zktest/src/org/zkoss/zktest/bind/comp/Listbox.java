@@ -1,7 +1,5 @@
 package org.zkoss.zktest.bind.comp;
 
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
 
 
 
