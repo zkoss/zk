@@ -736,7 +736,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _chdinf != null ? _chdinf.nChild: 0;
 	}
 	private int modCntChd() {
-		return _chdinf != null ? _chdinf.modCntChd: -1;
+		return _chdinf != null ? _chdinf.modCntChd: 0;
 	}
 
 	public String setWidgetListener(String evtnm, String script) {
@@ -1356,12 +1356,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				//refer to insertBefore for more info.
 		}
 
-		if (_chdinf.nullifiable()) {
-			_chdinf = null;
-		} else {
-			++_chdinf.modCntChd;
-			--_chdinf.nChild;
-		}
+		//ZK-725: we can't remove _chdinf even if no child at all,
+		//since this method might be called by ChildIter.remove()
+		++_chdinf.modCntChd;
+		--_chdinf.nChild;
 		onChildRemoved(child);
 		return true;
 	}
@@ -2908,7 +2906,7 @@ w:use="foo.MyWindow"&gt;
 			_lastRet = null;
 				//spec: cause remove to throw ex if no next/previous
 			++_modCntSnap;
-				//don't assign modCntChd directly since deriving class
+				//don't assign from modCntChd directly since deriving class
 				//might manipulate others in insertBefore
 		}
 		public void remove() {
@@ -3453,9 +3451,6 @@ w:use="foo.MyWindow"&gt;
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
 			}
-		}
-		private boolean nullifiable() {
-			return first == null && _aring == null && vispace == null;
 		}
 		private ChildInfo clone(AbstractComponent owner) {
 			final ChildInfo clone = (ChildInfo)clone();

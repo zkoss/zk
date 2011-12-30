@@ -1,0 +1,22 @@
+<zk>
+<html><![CDATA[
+Click the header (Author) to sort the grid. It is OK if it is sorted correctly.
+]]></html>
+
+<grid>
+	<columns>
+		<column label="Author" sort="auto" />
+	</columns>
+	<rows>
+		<row>
+			<label value="B" />
+		</row>
+		<row>
+			<label value="C" />
+		</row>
+		<row>
+			<label value="A" />
+		</row>
+	</rows>
+</grid>
+</zk>
