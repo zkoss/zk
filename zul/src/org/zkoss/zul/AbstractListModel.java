@@ -17,11 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.BitSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Set;
-
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zul.event.ListDataEvent;
@@ -29,7 +26,7 @@ import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.ListSelectionModel;
 
 /**
- * A skeletal implementation for {@link ListModel}.
+ * A skeletal implementation for {@link ListModel} and {@link ListSelectionModel}
  * 
  * @author tomyeh
  */

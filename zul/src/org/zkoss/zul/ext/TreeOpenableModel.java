@@ -18,6 +18,7 @@ package org.zkoss.zul.ext;
 
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.TreeModel;
+import org.zkoss.zul.event.TreeDataListener;
 
 /**
  * Indicate an openable collection or components. Generally used with {@link TreeModel}

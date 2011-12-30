@@ -47,7 +47,6 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.ListSelectionModel;
-import org.zkoss.zul.ext.Selectable;
 
 /**
  * A combobox.

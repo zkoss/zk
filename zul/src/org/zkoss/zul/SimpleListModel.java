@@ -17,13 +17,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Sortable;
 
 /**

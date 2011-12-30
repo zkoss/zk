@@ -197,7 +197,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 	@Override
 	public boolean isPathOpened(int[] path) {
 		if (path != null && !_opens.isEmpty()) {
-			E e = getNodeByPath(path);
+			E e = getChild(path);
 			if (e != null)
 				return _opens.containsKey(e);
 		}
@@ -264,11 +264,9 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 
 	// -TreeModel-//
 	/**
-	 * @deprecated As of release 5.0.6, it was replaced by
-	 *             {@link #getIndexOfChild}. This method was implemented to
-	 *             provide backward compatibility.
+	 * Returns the path from a node
+	 * @since 6.0.0
 	 */
-	@Deprecated
 	@SuppressWarnings("unchecked")
 	public int[] getPath(Object parent, Object lastNode) {
 		return Tree.getPath((TreeModel) this, parent, lastNode);
@@ -361,7 +359,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 	@Override
 	public boolean isPathSelected(int[] path) {
 		if (path != null && !_selections.isEmpty()) {
-			E e = getNodeByPath(path);
+			E e = getChild(path);
 			if (e != null)
 				return _selections.containsKey(e);
 		}
@@ -416,14 +414,20 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 			return Collections.EMPTY_LIST;
 		List<E> list = new ArrayList<E>();
 		for (int[] path : paths) {
-			E node = getNodeByPath(path);
+			E node = getChild(path);
 			if (node != null)
 				list.add(node);
 		}
 		return list;
 	}
-
-	private E getNodeByPath(int[] path) {
+	
+	/**
+	 * Returns the child of parent at path where the path indicates the node is
+	 * placed in the whole tree.
+	 * @param path the tree path
+	 * @return the child of parent at path
+	 */
+	public E getChild(int[] path) {
 		E parent = getRoot();
 		E node = null;
 		int childCount = getChildCount(parent);

@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.ListSelectionModel;
 
 /**
  * This interface defines the methods that components like {@link Listbox}
@@ -27,7 +27,7 @@ import org.zkoss.zul.ext.Selectable;
  * the developer must also implement {@link org.zkoss.zul.ext.Sortable}.
  *
  * <p>If the model also provides the selection, it could implement
- * {@link Selectable}.
+ * {@link ListSelectionModel}.
  *
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
@@ -37,7 +37,7 @@ import org.zkoss.zul.ext.Selectable;
  * @see Listbox
  * @see ListitemRenderer
  * @see org.zkoss.zul.ext.Sortable
- * @see Selectable
+ * @see ListSelectionModel
  */
 public interface ListModel<E> {
 	/** Returns the value at the specified index.

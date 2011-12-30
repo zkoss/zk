@@ -16,20 +16,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.Sortable;
-import org.zkoss.lang.Objects;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.SortedMap;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Comparator;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+
+import org.zkoss.lang.Objects;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.Map} to be used with {@link Listbox}.

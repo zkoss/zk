@@ -98,20 +98,41 @@ import org.zkoss.zul.impl.XulElement;
  * {@link ListModel#getElementAt}. If not assigned, the default renderer, which
  * assumes a label per list item, is used. In other words, the default renderer
  * adds a label to a Listitem by calling toString against the object returned by
- * {@link ListModel#getElementAt}
+ * {@link ListModel#getElementAt}</p>
  *
- * [Since 5.0.4]
- * <p>To retrieve what are selected in Listbox with a {@link ListSelectionModel}
- * {@link ListModel}, you shall use {@link ListSelectionModel#getSelection} to get what
- * is currently selected object in {@link ListModel} rather than using
+ * <br/>
+ * [Since 6.0.0]
+ * <p>To retrieve what are selected in Listbox with a {@link ListSelectionModel},
+ * you shall use {@link ListSelectionModel#isSelectedIndex(int)} to check whether
+ * the current index is selected in {@link ListSelectionModel} rather than using
  * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of
- * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox}
- * if you use the {@link ListSelectionModel} {@link ListModel}.</p>
+ * the {@link ListSelectionModel} rather than on the {@link Listitem} of
+ * the {@link Listbox} if you use the {@link ListSelectionModel} with
+ * {@link ListModel}.</p>
  *
  * <pre><code>
- * Set selection = ((ListSelectionModel)getModel()).getSelection();
+ * ListSelectionModel selModel = ((ListSelectionModel)getModel());
+ * int min = selModel.getMinSelectionIndex();
+ * int max = selModel.getMaxSelectionIndex();
+ * List<E> selected = new ArrayList<E>();
+ * for (;min <= max; min++) {
+ * 		if (selModel.isSelectedIndex(min)) {
+ * 			selected.add(selModel.getElementAt(min));
+ * 		}
+ * }
  * </code></pre>
- *
+ * 
+ * <br/>
+ * [Since 6.0.0]
+ * <p> If the ListModel in Listbox implements a {@link ListSelectionModel}, the
+ * multiple selections status is applied from the method of {@link ListSelectionModel#isMultiple()}
+ * </p>
+ * <pre><code>
+ * ListModelList selModel = new ListModelList(list);
+ * selModel.setMultiple(true);
+ * listbox.setModel(selModel);
+ * </code></pre>
+ * 
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
  * {@link #getMold} is "default", scrolling is used if {@link #setHeight} is

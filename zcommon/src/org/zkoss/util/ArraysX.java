@@ -360,7 +360,7 @@ public class ArraysX {
 	}
 
 	/** 
-	 * @deprecated As of release 6.0.0, replaced with {@link duplicate(Object)}.
+	 * @deprecated As of release 6.0.0, replaced with {@link #duplicate(Object)}.
 	 */
 	public static final Object clone(Object ary) {
 		return duplicate(ary);

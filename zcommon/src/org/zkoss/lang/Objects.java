@@ -19,12 +19,10 @@ package org.zkoss.lang;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Collection;
 import java.lang.reflect.Method;
 import java.rmi.MarshalledObject;
 
 import org.zkoss.util.ArraysX;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.text.DateFormats;
 
@@ -434,7 +432,7 @@ public class Objects {
 		try {
 			final Class<?> kls = o.getClass();
 			if (kls.isArray())
-				return ArraysX.clone(o);
+				return ArraysX.duplicate(o);
 
 			if (o instanceof Cloneable) {
 				try {

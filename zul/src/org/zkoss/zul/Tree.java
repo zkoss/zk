@@ -55,6 +55,7 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectionModel;
@@ -94,6 +95,57 @@ import org.zkoss.zul.impl.XulElement;
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
+ * 
+ * <br/>
+ * [Since 6.0.0]
+ * <p>To retrieve what are selected in Tree with a {@link TreeSelectionModel},
+ * you shall use {@link TreeSelectionModel#isPathSelected(int[])}
+ * to check whether the current path is selected in {@link TreeSelectionModel}
+ * rather than using {@link Tree#getSelectedItems()}. That is, you shall operate on
+ * the item of the {@link TreeSelectionModel} rather than on the {@link Treeitem}
+ * of the {@link Tree} if you use the {@link TreeSelectionModel} and {@link TreeModel}.</p>
+ *
+ * <pre><code>
+ * TreeSelectionModel selModel = ((TreeSelectionModel)getModel());
+ * int[][] paths = selModel.getSelectionPaths();
+ * List<E> selected = new ArrayList<E>();
+ * AbstractTreeModel model = (AbstractTreeModel) selModel;
+ * for (int i = 0; i < paths.length; i++) {
+ * 		selected.add(model.getChild(paths[i]));
+ * }
+ * </code></pre>
+ * 
+ * <br/>
+ * [Since 6.0.0]
+ * <p> If the TreeModel in Tree implements a {@link TreeSelectionModel}, the
+ * multiple selections status is applied from the method of
+ * {@link TreeSelectionModel#isMultiple()}
+ * </p>
+ * <pre><code>
+ * DefaultTreeModel selModel = new DefaultTreeModel(treeNode);
+ * selModel.setMultiple(true);
+ * tree.setModel(selModel);
+ * </code></pre>
+ * 
+ * <br/>
+ * [Since 6.0.0]
+ * <p>To retrieve what are opened nodes in Tree with a {@link TreeOpenableModel},
+ * you shall use {@link TreeOpenableModel#isPathOpened(int[])}
+ * to check whether the current path is opened in {@link TreeOpenableModel}
+ * rather than using {@link Treeitem#isOpen()}. That is, you shall operate on
+ * the item of the {@link TreeOpenableModel} rather than on the {@link Treeitem}
+ * of the {@link Tree} if you use the {@link TreeOpenableModel} and {@link TreeModel}.</p>
+ *
+ * <pre><code>
+ * TreeOpenableModel openModel = ((TreeOpenableModel)getModel());
+ * int[][] paths = openModel.getOpenPaths();
+ * List<E> opened = new ArrayList<E>();
+ * AbstractTreeModel model = (AbstractTreeModel) openModel;
+ * for (int i = 0; i < paths.length; i++) {
+ * 		opened.add(model.getChild(paths[i]));
+ * }
+ * </code></pre>
+ * 
  * @author tomyeh
  */
 public class Tree extends MeshElement {

@@ -267,10 +267,7 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 		//regroup native
 		for(int i=0;i<_nativedata.length;i++){
 			curr = _nativedata[i];
-			boolean hitn = false;
-			boolean hita = false;
 			if(last==null || cmpr.compare(last,curr)!=0){
-				hitn = true;
 				gdata = new LinkedList<D>();
 				group.add(gdata);
 			}
@@ -367,7 +364,7 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 		if (_foots != null)
 			clone._foots = ArraysX.duplicate(_foots);
 		if (_closes != null)
-			clone._closes = (boolean[])ArraysX.clone(_closes);
+			clone._closes = (boolean[])ArraysX.duplicate(_closes);
 		return clone;
 	}
 	/**

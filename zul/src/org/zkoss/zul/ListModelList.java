@@ -16,17 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.Sortable;
-import org.zkoss.zk.ui.UiException;
-
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
+
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.List} to be used with {@link Listbox}.

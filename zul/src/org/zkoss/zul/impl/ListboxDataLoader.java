@@ -29,7 +29,6 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.Frozen;
-import org.zkoss.zul.Group;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -43,7 +42,6 @@ import org.zkoss.zul.ListitemRendererExt;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
 
 /**
@@ -437,7 +435,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 					final Listgroup g = (Listgroup) item;
 					if (!g.isOpen()) {
 						for (int j = 0, len = g.getItemCount(); j < len; j++)
-							item = (Listitem) item.getNextSibling();
+							item = item.getNextSibling();
 					}
 				}
 				if (item != null)

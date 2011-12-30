@@ -337,13 +337,13 @@ public class DialModel extends AbstractChartModel {
 	public Object clone() {
 		DialModel clone = (DialModel) super.clone();
 		if (_bgRGB != null)
-			clone._bgRGB = (int[]) ArraysX.clone(_bgRGB);
+			clone._bgRGB = (int[]) ArraysX.duplicate(_bgRGB);
 		if (_bgRGB1 != null)
-			clone._bgRGB1 = (int[]) ArraysX.clone(_bgRGB1);
+			clone._bgRGB1 = (int[]) ArraysX.duplicate(_bgRGB1);
 		if (_bgRGB2 != null)
-			clone._bgRGB2 = (int[]) ArraysX.clone(_bgRGB2);
+			clone._bgRGB2 = (int[]) ArraysX.duplicate(_bgRGB2);
 		if (_fgRGB != null)
-			clone._fgRGB = (int[]) ArraysX.clone(_fgRGB);
+			clone._fgRGB = (int[]) ArraysX.duplicate(_fgRGB);
 		return clone;
 	}
 }
