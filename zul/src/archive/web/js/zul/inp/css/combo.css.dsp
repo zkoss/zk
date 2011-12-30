@@ -458,7 +458,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 }
 .z-combobox-rounded-pp .z-comboitem-seld,
 .z-combobox-pp .z-comboitem-seld {
-	background: #b3c8e8; border: 1px solid #6f97d2;
+	background: #b3c8e8;
 }
 .z-combobox-rounded-pp .z-comboitem-over,
 .z-combobox-pp .z-comboitem-over {
@@ -494,55 +494,6 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-datebox-rounded-pp .z-datebox-rounded-calyear,
 .z-datebox-pp .z-datebox-calyear {
 	background: #d8e8f0;
-}
-.z-datebox-rounded-time,
-.z-datebox-time {
-	width: 20px;
-	padding: 0;
-	margin: 0;
-}
-.z-datebox-rounded-time,
-.z-datebox-time {
-	text-align: center;	
-}
-.z-datebox-rounded-time-up,
-.z-datebox-rounded-time-down,
-.z-datebox-time-up,
-.z-datebox-time-down { 	
-	width: 0; 
-	height: 0;
-	margin: 0;
-	padding: 0;
-	cursor: pointer;
-}
-.z-datebox-rounded-time-up,
-.z-datebox-time-up {
-	border-color: white white #004A7F;
-	border-style: none solid solid solid ;
-	border-width: 5px;
-	<c:if test="${zk.ie > 0 or zk.opera > 0}">
-		border-width: 6px;
-	</c:if>
-	overflow: hidden;
-}
-.z-datebox-rounded-time-down,
-.z-datebox-time-down {
-	border-color: #004A7F white white;
-	border-style: solid solid none solid;
-	border-width: 5px;
-	margin-top: 3px;
-	<c:if test="${zk.opera > 0}">
-		margin: 3px 0 0 1px;
-	</c:if>
-	overflow: hidden;
-}
-.z-datebox-rounded-time-up.z-datebox-rounded-time-over,
-.z-datebox-time-up.z-datebox-time-over {
-	border-color: white white #BFBFBF;
-}
-.z-datebox-rounded-time-down.z-datebox-rounded-time-over,
-.z-datebox-time-down.z-datebox-time-over {
-	border-color: #BFBFBF white white;
 }
 <%-- Shadow --%>
 .z-combobox-rounded-shadow, .z-bandbox-rounded-shadow, .z-datebox-rounded-shadow,

@@ -57,7 +57,7 @@
 	position: absolute;
 	height: 6px;
 	width: 6px;
-	background: #C4DCFB left;
+	background: transparent left;
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
 	cursor: col-resize;
 	cursor: e-resize;
@@ -66,7 +66,7 @@
 }
 .z-north-splt,
 .z-south-splt {
-	background: #C4DCFB top;
+	background: transparent top;
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
 	cursor: row-resize;
 	cursor: s-resize;

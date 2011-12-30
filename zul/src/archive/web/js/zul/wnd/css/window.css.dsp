@@ -248,8 +248,6 @@
 }
 .z-window-popup-cnt {
 	margin:0;
-	padding: 2px;
-	border: 1px solid #2c70a9;
 }
 .z-window-modal-cnt,
 .z-window-highlighted-cnt,
@@ -487,7 +485,6 @@
 .z-window-embedded-cm {
 	padding: 0;
 	margin: 0;
-	background: #5EABDB;
 }
 .z-window-embedded-bl {
 	background: transparent no-repeat 0 -5px;

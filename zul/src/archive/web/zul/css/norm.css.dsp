@@ -223,24 +223,35 @@ div.z-log button {
 	background: transparent no-repeat center;
 	background-image: url(${c:encodeURL('~./zk/img/zkpowered.png')});
 }
-.z-loading {
-	background-color: #E3E3E3;
+.z-loading, .z-apply-loading {
 	position: absolute;
 	cursor: wait;
-	padding:3px;
-	white-space: nowrap;
+	background-color: #E3E3E3;
 	border: 1px solid #C7C7C7;
+	white-space: nowrap;
+	padding: 3px;
+}
+.z-loading {
 	z-index: 31000;
 	left: 0; top: 0;
 }
-.z-loading-indicator {
+.z-apply-loading {
+	z-index: 89500;
+	overflow: hidden;
+}
+.z-loading-indicator, .z-apply-loading-indicator {
+	border: 1px solid #D9D9D9;
 	background-color: #FFFFFF;
 	color: #383838;
-	border:1px solid #D9D9D9;
 	white-space: nowrap;
-	padding:6px;
 }
-
+.z-loading-indicator {
+	padding: 6px;
+}
+.z-apply-loading-indicator {
+	padding: 2px;
+	font: normal ${fontSizeM} ${fontFamilyT};
+}
 .z-apply-loading-icon,
 .z-loading-icon,
 .z-renderdefer {
@@ -248,12 +259,10 @@ div.z-log button {
 	background: transparent no-repeat center;
 	background-image: url(${c:encodeURL('~./zul/img/misc/progress_breeze.gif')});
 }
-
 .z-apply-loading-icon,
 .z-loading-icon {
 	display:-moz-inline-box; vertical-align:top; display:inline-block;
 }
-
 .z-apply-mask {
 	width: 100%;
 	height: 100%;
@@ -265,25 +274,6 @@ div.z-log button {
 	filter: alpha(opacity=60);
 	opacity: .6;
 	zoom: 1;
-}
-.z-apply-loading-indicator {
-	border:1px solid #A6C5DC;
-	background-color: #FFF;
-	color: #383838;
-	white-space: nowrap;
-	padding: 2px;
-	font: normal ${fontSizeM} ${fontFamilyT};
-	cursor: wait;
-}
-.z-apply-loading {
-	position: absolute;
-	background-color: #CEDFEC;
-	border: 1px solid #99C6E9;
-	z-index: 89500;
-	padding: 3px;
-	cursor: wait;
-	overflow: hidden;
-	white-space: nowrap;
 }
 .z-inline-block { <%-- used with label/checkbox and others to ensure the dimension --%>
 	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>

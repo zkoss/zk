@@ -45,9 +45,6 @@ div.z-grid-header .z-column-sort-asc div.z-column-cnt {
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-grid-header .z-column-sort-asc, div.z-grid-header .z-column-sort-dsc {
-	background: #DDEEFB repeat-x 0 0;
-}
 div.z-grid-header .z-column-sort-dsc div.z-column-cnt {
 	cursor: pointer;
 	padding-right: 9px;
@@ -71,9 +68,6 @@ div.z-grid-pgi-b {
 }
 div.z-grid-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden; width: 100%;
-}
-div.z-grid-footer {
-	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;
@@ -118,11 +112,6 @@ div.z-column-cnt, div.z-grid-header div.z-auxheader-cnt {
 div.z-row-cnt {
 	color: #363636;
 }
-tr.z-grid-odd td.z-row-inner,
-tr.z-grid-odd .z-cell,
-tr.z-grid-odd {
-	background: #F0FAFF;
-}
 <%-- Group --%>
 tr.z-group {
 	background: #E9F2FB repeat-x 0 0;
@@ -130,10 +119,6 @@ tr.z-group {
 }
 td.z-group-inner {
 	padding: 2px; overflow: hidden;
-	color: #2C559C;
-	font-weight: bold;
-	font-size: ${fontSizeM};
-	font-family: ${fontFamilyT};
 	border-bottom:1px solid #CFCFCF;
 	border-top:1px solid #CFCFCF;
 }

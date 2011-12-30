@@ -55,10 +55,6 @@
 	background-position: right 0;
 	color: #363636;
 }
-.z-paging-os .z-paging-os-cnt-label {
-	background-image: none;
-	color: #0076a3;
-}
 div.z-paging-os-cnt-l .z-paging-os-cnt,
 div.z-paging-os-cnt-seld-l .z-paging-os-cnt {
 	position: relative;

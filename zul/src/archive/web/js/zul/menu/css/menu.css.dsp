@@ -403,7 +403,6 @@
 	top: 0;
 	width: 25px;
 	height: 64px;
-	border-bottom: 1px solid #8DB2E3;
 	cursor: pointer;
 	position: absolute;
 	z-index: 25;

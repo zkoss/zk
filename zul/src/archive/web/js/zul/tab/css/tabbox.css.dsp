@@ -61,9 +61,6 @@
 	padding-top: 2px;
 }
 .z-tabs-scroll {
-	border: 1px solid #7EAAC6;
-	background: #FAFDFE none repeat 0 0;
-	padding-bottom: 2px;
 	zoom: 1;
 }
 .z-tabs-header {
