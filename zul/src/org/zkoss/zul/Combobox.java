@@ -103,7 +103,7 @@ public class Combobox extends Textbox {
 
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
-		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT);
+		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
 	}
 
 	public Combobox() {
@@ -177,6 +177,25 @@ public class Combobox extends Textbox {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
+					// Bug B30-1906748.zul
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
+						int start = event.getIndex0();
+						int end = event.getIndex1();
+						if (end < getItemCount()) {
+							if (_model instanceof ListSelectionModel) {
+								ListSelectionModel smodel = (ListSelectionModel) _model;
+								if (!smodel.isSelectionEmpty()) {
+									for (; start <= end; start++) { // inclusive the end
+										if (smodel.isSelectedIndex(start))
+											setSelectedIndex(start);								
+									}
+								} else
+									setSelectedIndex(-1);
+								
+								return; // no need to rerender.	
+							}
+						}
+					}
 					postOnInitRender(null);
 				}
 			};
@@ -574,7 +593,6 @@ public class Combobox extends Textbox {
 				}
 			}
 			_lastCkVal = getValue();
-			syncSelectionToModel();
 		}
 	}
 	
@@ -637,12 +655,11 @@ public class Combobox extends Textbox {
 	private void syncSelectionToModel() {
 		if (_model instanceof ListSelectionModel) {
 			ListSelectionModel model = (ListSelectionModel) _model;
-			model.clearSelection();
-			
 			if (_selItem != null) {
 				int index = getChildren().indexOf(_selItem);
 				model.addSelectionInterval(index, index);
-			}
+			} else
+				model.clearSelection();
 		}
 	}
 	// super
