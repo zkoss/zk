@@ -177,7 +177,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 	
 	/**
 	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.	 * 
+	 * @param obj the object to be remove from selection.
 	 */
 	public void removeSelection(E obj) {
 		int[] path = Tree.getPath(this, getRoot(), obj);
@@ -283,7 +283,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 				if (path != null)
 					paths.add(path);
 			}
-			return (int[][]) paths.toArray();
+			return (int[][]) paths.toArray(new int[0][]);
 		} else return null;
 	}
 
@@ -445,7 +445,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 				if (path != null)
 					paths.add(path);
 			}
-			return (int[][]) paths.toArray();
+			return (int[][]) paths.toArray(new int[0][]);
 		} else return null;
 	}
 

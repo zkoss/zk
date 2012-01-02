@@ -21,6 +21,7 @@
 	    import org.zkoss.zktest.test2.tree.BinaryTreeModel;
 	    import java.util.*;
 	    BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new org.zkoss.zktest.test2.BigList(1000)));
+	    btm.setMultiple(true);
 	</zscript>
 	<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}"
 		checkmark="true" multiple="true">
