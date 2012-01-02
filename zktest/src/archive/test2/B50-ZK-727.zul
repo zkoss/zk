@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-727.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan  2 11:51:05 TST 2012, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+1. You shouldn't see any JS error when the page is loaded.
+2. Please type a date after 12/31/2011 and focus out the input, it should show an error message "customer error message"
+<datebox id="date1" constraint="before 20111231: customer error message"/>
+</window>
