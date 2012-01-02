@@ -69,16 +69,13 @@
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.png')});
 	cursor: pointer;
 }
-.z-slider-sphere-ver-btn {
- 	height: 14px;
- 	left: 3px;
-}
 .z-slider-sphere-hor-btn {
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-circle.png')});
 }
-
 .z-slider-sphere-ver-btn {
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-circle.png')});
+ 	height: 14px;
+ 	left: 3px;
 }
 <%-- all button style --%>
 .z-slider-hor-btn-over,

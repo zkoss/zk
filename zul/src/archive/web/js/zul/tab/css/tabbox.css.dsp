@@ -60,9 +60,6 @@
 .z-toolbar-tabs-body {
 	padding-top: 2px;
 }
-.z-tabs-scroll {
-	zoom: 1;
-}
 .z-tabs-header {
 	width: 100%;
 	margin: 0;
@@ -192,6 +189,7 @@
 	background:none repeat scroll 0 0 transparent;
 	border: 0;
 	padding-bottom: 0;
+	zoom: 1;
 }
 .z-tabs-scroll .z-tabs-right-scroll,
 .z-tabs-scroll .z-tabs-left-scroll {

@@ -186,6 +186,8 @@ ZK 6.0.0
   + The multiple status and selections status are provided by ListSelectionModel
   and TreeSelectionModel when using Tree or Listbox with Model.
   + The open status are provided by TreeOpenableModel when using Tree with Model
+  + Library property org.zkoss.zul.Separator.spaceWithMargin is removed.
+
 	--------
 ZK 5.0.10
 * Features

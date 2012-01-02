@@ -98,10 +98,6 @@ div.z-tree-footer td.z-treefooter {
 div.z-tree-header th.z-treecol-sort-over {
 	background-image: url(${c:encodeURL('~./zul/img/grid/header-over.png')});
 }
-div.z-treefooter-cnt, div.z-treecol-cnt {
-	overflow: hidden;
-	cursor: default;
-}
 div.z-treecol-cnt {
 	position: relative;
 }
@@ -310,12 +306,6 @@ div.z-dottree-header tr.z-treecols th:last-child,
 div.z-dottree div.z-dottree-header tr.z-auxhead th:last-child {
 	border-right: none;
 }
-div.z-dottree-pgi-b {
-	border-top: 1px solid #AAB; overflow: hidden;
-}
-div.z-dottree-pgi-t {
-	border-bottom: 1px solid #AAB; overflow: hidden;
-}
 div.z-dottree-body td.z-treecell, div.z-dottree-footer td.z-treefooter {
 	cursor: pointer;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
@@ -461,12 +451,6 @@ div.z-vfiletree-header, div.z-vfiletree-footer {
 div.z-vfiletree-header tr.z-treecols, div.z-tree-header tr.z-auxhead  {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
-div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader {
-	overflow: hidden; border: 1px solid;
-	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
-	white-space: nowrap; padding: 2px;
-	font-size: ${fontSizeM}; font-weight: normal;
-}
 div.z-vfiletree-body {
 	background: white; border: 0; overflow: auto; width: 100%;
 }
@@ -517,6 +501,11 @@ div.z-vfiletree-header tr.z-auxhead {
 }
 div.z-vfiletree-header th.z-treecol,
 div.z-vfiletree-header th.z-auxheader {
+	overflow: hidden;
+	border: 1px solid;
+	white-space: nowrap;
+	font-size: ${fontSizeM};
+	font-weight: normal;
 	border-color: #CFCFCF #CFCFCF #CFCFCF white;
 	border-top: none;
 	padding: 4px 10px 3px 10px;

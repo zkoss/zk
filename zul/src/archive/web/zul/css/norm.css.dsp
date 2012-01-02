@@ -399,12 +399,6 @@ span.z-drop-allow, span.z-drop-disallow {
 	min-height: 16px;
 	height: 16px;
 }
-span.z-drop-allow {
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag-allow.png')});
-}
-span.z-drop-disallow {
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag-disallow.png')});
-}
 div.z-drop-ghost {
 	border: 1px solid #CCCCCC;
 }
@@ -521,7 +515,7 @@ span.z-upload input {
 <%-- IE --%>
 <c:if test="${zk.ie > 0}">
 <c:choose>
-<c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
+<c:when test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
 .zk img	{
 	hspace: 0; vspace: 0;
 }
@@ -564,11 +558,3 @@ option {
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
 </c:if>
-
-<%-- Auxheader --%>
-.z-auxheader-cnt {
-	color:#636363;
-	font-family:arial;
-	font-size:12px;
-	font-weight:bold;
-}

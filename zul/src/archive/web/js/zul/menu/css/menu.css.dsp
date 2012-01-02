@@ -207,6 +207,7 @@
 .z-menu-cnt-body {
 	background-color:#FFFFFF;
 }
+<%-- define menupopup property--%>
 .z-menu-popup {
 	background:none;
 	background-color:#FAFAFA;
@@ -215,9 +216,6 @@
 	z-index:88000;
 	left: 0;
 	top: 0;
-}
-<%-- define menupopup property--%>
-.z-menu-popup {
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;

@@ -76,6 +76,7 @@ div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-col
 }
 div.z-row-cnt {
 	padding: 1px 0 1px 0;
+	color: #363636;
 }
 div.z-footer-cnt, div.z-column-cnt{
 	overflow: hidden;
@@ -108,9 +109,6 @@ div.z-column-cnt, div.z-row-cnt {
 }
 div.z-column-cnt, div.z-grid-header div.z-auxheader-cnt {
 	padding: 8px 4px 7px;
-}
-div.z-row-cnt {
-	color: #363636;
 }
 <%-- Group --%>
 tr.z-group {
@@ -320,10 +318,15 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-footer-cnt, <c:if test="${!(zk.ie >= 8)}">div.z-row-cnt, div.z-group-cnt,</c:if>
+div.z-footer-cnt,
 div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
+<c:if test="${!(zk.ie >= 8)}">
+div.z-row-cnt, div.z-group-cnt {
+	position: relative; <%-- Bug #1825896  --%>
+}
+</c:if>
 div.z-footer-cnt,
 div.z-row-cnt,
 div.z-group-cnt,

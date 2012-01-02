@@ -94,8 +94,6 @@
 	overflow: hidden;
 	border: 1px solid #C5C5C5;
 	zoom: 1;
-}
-.z-groupbox-3d-hm {
 	cursor: pointer;
 }
 .z-groupbox-3d-hm-readonly {

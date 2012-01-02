@@ -160,20 +160,15 @@ div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-m {
 }
 
 .z-paging .z-paging-btn {
-	cursor:pointer;
 	font-weight:normal;
 	white-space:nowrap;
 	width:auto;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
-}
-
-.z-paging .z-paging-btn {
 	background:#F9F9F9 none repeat 0 0;
 	cursor:pointer;
 	text-align:center;
 	vertical-align:middle;
-	white-space:nowrap;
 }
 
 .z-paging-btn .z-paging-first,

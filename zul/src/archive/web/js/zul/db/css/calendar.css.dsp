@@ -123,6 +123,7 @@
 .z-calendar-calyear td,
 .z-calendar-calmon td {
 	padding: 12px 3px;
+	font-size: ${fontSizeM};
 }
 .z-calendar-calday {
 	table-layout: fixed;
@@ -137,12 +138,6 @@
 	-moz-user-select: none;
 	color: #5C5C5C;	
 }
-
-.z-calendar-calyear td,
-.z-calendar-calmon td {
-	font-size: ${fontSizeM};
-}
-
 .z-calendar-calday td {
 	padding: 3px 0;
 }

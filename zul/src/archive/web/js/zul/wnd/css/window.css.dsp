@@ -225,11 +225,6 @@
 	color: #FFFFFF;
 }
 <%-- Body Content--%>
-.z-window-embedded-cnt {
-	margin: 0;
-	padding: 3px;
-	border: 1px solid #538BA2;
-}
 .z-window-embedded-cnt,
 .z-window-embedded-body,
 .z-window-overlapped-body,

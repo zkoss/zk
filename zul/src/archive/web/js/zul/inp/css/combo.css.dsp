@@ -80,14 +80,6 @@
 .z-doublespinner-rounded-inp {
 	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.png')});	
 }
-.z-combobox-focus .z-combobox-inp,
-.z-bandbox-focus .z-bandbox-inp,
-.z-datebox-focus .z-datebox-inp,
-.z-timebox-focus .z-timebox-inp,
-.z-spinner-focus .z-spinner-inp,
-.z-doublespinner-focus .z-doublespinner-inp {
-	border: 1px solid #90BCE6;
-}
 .z-combobox-right-edge,
 .z-bandbox-right-edge,
 .z-datebox-right-edge,

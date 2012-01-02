@@ -81,6 +81,7 @@ tr.z-vbox-sep {
 	background: transparent no-repeat top center;
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
 	max-height: 6px; height: 6px;
+	border-width: 1px 0;
 }
 .z-splitter-ver,
 .z-splitter-os-ver {
@@ -194,9 +195,6 @@ div.z-splitter-os-hor, div.z-splitter-os-ver {
 .z-splitter-hor-outer,
 .z-splitter-ver {
 	border: 1px solid #C5C5C5;
-}
-.z-splitter-ver {
-	border-width: 1px 0;
 }
 .z-splitter-hor-outer {
 	border-width: 0 1px;
