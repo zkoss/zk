@@ -2,21 +2,21 @@
 
 <!-- lang-addon.xml
 	Purpose:
-		A extention with default org.zkoss.bind.Binder annotation.
+		A extension with default org.zkoss.bind.Binder annotation.
 	Description:
 		
 	Note:
 	 1. Properties defined here are assigned to all instances of the
 		specified definition, no matter it is created by ZUML or by program.
-	 2. $A$ is the access direction: can be "both", "save", "load"; default to "load" if not found
-	    $C$ is the system converter for special properties. e.g. SelectedItem in listbox. see SelectedListitemConverter.java
-	    $SE$ is the save trigger event; meaningful only when $A$ is "both" or "save".
-	    $LE$ is the load trigger event; meaningful only when $A$ is "both" or "load" or not found(default to "load").
-	    $LR$ is the load replacement ; e.g. value of textbox, it loads to rawValue
-	    $LT$ is the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
-	    $R$ is the special renderer for binding
-	    $SYSBIND$ is the system annotation
-	    (see BinderImpl.java)
+	 2. ZKBIND is the zkbind system annotation 
+	    ACCESS is the access direction: can be "both", "save", "load"; default to "load" if not found
+	    CONVERTER is the system converter for special properties. e.g. SelectedItem in listbox. see SelectedListitemConverter.java
+	    VALIDATOR is the system validator for special properties.
+	    SAVE_EVENT is the save trigger event; meaningful only when ACCESS is "both" or "save".
+	    LOAD_EVENT is the load trigger event; meaningful only when ACCESS is "both" or "load" or not found(default to "load").
+	    LOAD_REPLACEMENT is the load replacement ; e.g. value of textbox, it loads to rawValue
+	    LOAD_TYPE is the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
+	    RENDERER is the special renderer for binding
 	    
 	History:
 		Mon Aug 08 12:48:12     2011, Created by Henri Chen
@@ -66,34 +66,34 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>bandbox</component-name>
 		<extends>bandbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.String</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>		
@@ -114,14 +114,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>calendar</component-name>
 		<extends>calendar</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 		</annotation>
@@ -134,14 +134,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>center</component-name>
 		<extends>center</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -154,14 +154,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>checkbox</component-name>
 		<extends>checkbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>checked</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 		</annotation>
@@ -178,25 +178,25 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>combobox</component-name>
 		<extends>combobox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
-				<attribute-name>$R$</attribute-name>
+				<attribute-name>RENDERER</attribute-name>
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindComboitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>model</property-name>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.ComboboxModelConverter</attribute-value>
 			</attribute>
 		</annotation>			
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<!-- bug #2966241, since 5.0, combobox changes the sequence to fire onChange 
 				then onSelect event when end user select an item from the drop down list(In 3.x,
 				it used to fire onSelect then onChange). This could cause the currently selected 
@@ -206,63 +206,63 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedComboitemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.String</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>		
@@ -271,14 +271,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>combobutton</component-name>
 		<extends>combobutton</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -291,34 +291,34 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>datebox</component-name>
 		<extends>datebox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.util.Date</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>timeZone</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onTimeZoneChange</attribute-value>
 			</attribute>
 		</annotation>		
@@ -327,22 +327,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>decimalbox</component-name>
 		<extends>decimalbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.math.BigDecimal</attribute-value>
 			</attribute>			
 		</annotation>
@@ -353,14 +353,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>detail</component-name>
 		<extends>detail</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -374,22 +374,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>doublebox</component-name>
 		<extends>doublebox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.Double</attribute-value>
 			</attribute>
 		</annotation>
@@ -398,22 +398,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>doublespinner</component-name>
 		<extends>doublespinner</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.Double</attribute-value>
 			</attribute>
 		</annotation>
@@ -422,14 +422,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>east</component-name>
 		<extends>east</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -438,17 +438,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>grid</component-name>
 		<extends>grid</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
-				<attribute-name>$R$</attribute-name>
+				<attribute-name>RENDERER</attribute-name>
 				<attribute-value>rowRenderer=org.zkoss.bind.impl.BindRowRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>model</property-name>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.GridModelConverter</attribute-value>
 			</attribute>
 		</annotation>		
@@ -458,14 +458,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>group</component-name>
 		<extends>group</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -475,14 +475,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>groupbox</component-name>
 		<extends>groupbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -511,22 +511,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>intbox</component-name>
 		<extends>intbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.Integer</attribute-value>
 			</attribute>
 		</annotation>
@@ -539,53 +539,53 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>listbox</component-name>
 		<extends>listbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
-				<attribute-name>$R$</attribute-name>
+				<attribute-name>RENDERER</attribute-name>
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindListitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>model</property-name>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.ListboxModelConverter</attribute-value>
 			</attribute>
 		</annotation>		
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedListitemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
@@ -608,14 +608,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>listgroup</component-name>
 		<extends>listgroup</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -637,22 +637,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>longbox</component-name>
 		<extends>longbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.Long</attribute-value>
 			</attribute>
 		</annotation>
@@ -669,14 +669,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>menuitem</component-name>
 		<extends>menuitem</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>checked</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 		</annotation>
@@ -694,14 +694,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>north</component-name>
 		<extends>north</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -710,14 +710,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>paging</component-name>
 		<extends>paging</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>activePage</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onPaging</attribute-value>
 			</attribute>
 		</annotation>
@@ -726,62 +726,62 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>panel</component-name>
 		<extends>panel</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>maximized</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onMaximize</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>minimized</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onMinimize</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>zindex</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onZIndex</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>zIndex</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onZIndex</attribute-value>
 			</attribute>
 		</annotation>
@@ -799,26 +799,26 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>radio</component-name>
 		<extends>radio</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>checked</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selected</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 		</annotation>
@@ -827,30 +827,30 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>radiogroup</component-name>
 		<extends>radiogroup</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedRadioConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onCheck</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
@@ -867,33 +867,33 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>selectbox</component-name>
 		<extends>selectbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
-				<attribute-name>$R$</attribute-name>
+				<attribute-name>RENDERER</attribute-name>
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindSelectboxRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>model</property-name>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectboxModelConverter</attribute-value>
 			</attribute>
 		</annotation>		
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
@@ -918,14 +918,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>slider</component-name>
 		<extends>slider</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>curpos</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onScroll</attribute-value>
 			</attribute>
 		</annotation>
@@ -934,22 +934,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>spinner</component-name>
 		<extends>spinner</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.Integer</attribute-value>
 			</attribute>
 		</annotation>
@@ -958,14 +958,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>splitter</component-name>
 		<extends>splitter</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -974,14 +974,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>south</component-name>
 		<extends>south</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -994,14 +994,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>tab</component-name>
 		<extends>tab</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selected</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 		</annotation>		
@@ -1010,42 +1010,42 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>tabbox</component-name>
 		<extends>tabbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedTab</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedTabConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedTabpanel</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 		</annotation>
@@ -1066,22 +1066,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>textbox</component-name>
 		<extends>textbox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.lang.String</attribute-value>
 			</attribute>
 		</annotation>
@@ -1090,22 +1090,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>timebox</component-name>
 		<extends>timebox</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>value</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LR$</attribute-name>
+				<attribute-name>LOAD_REPLACEMENT</attribute-name>
 				<attribute-value>rawValue</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LT$</attribute-name>
+				<attribute-name>LOAD_TYPE</attribute-name>
 				<attribute-value>java.util.Date</attribute-value>
 			</attribute>
 		</annotation>
@@ -1126,30 +1126,30 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>tree</component-name>
 		<extends>tree</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
-				<attribute-name>$R$</attribute-name>
+				<attribute-name>RENDERER</attribute-name>
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindTreeitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onSelect</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$LE$</attribute-name>
+				<attribute-name>LOAD_EVENT</attribute-name>
 				<attribute-value>onAfterRender</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$C$</attribute-name>
+				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedTreeitemConverter</attribute-value>
 			</attribute>
 		</annotation>
@@ -1174,14 +1174,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>treeitem</component-name>
 		<extends>treeitem</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -1198,14 +1198,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>west</component-name>
 		<extends>west</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>open</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onOpen</attribute-value>
 			</attribute>
 		</annotation>
@@ -1214,50 +1214,50 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>window</component-name>
 		<extends>window</extends>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>maximized</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onMaximize</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>minimized</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onMinimize</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>zindex</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onZIndex</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
-			<annotation-name>$SYSBIND$</annotation-name>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>zIndex</property-name>
 			<attribute>
-				<attribute-name>$A$</attribute-name>
+				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>both</attribute-value>
 			</attribute>
 			<attribute>
-				<attribute-name>$SE$</attribute-name>
+				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onZIndex</attribute-value>
 			</attribute>
 		</annotation>		

@@ -25,6 +25,45 @@ import org.zkoss.zk.ui.Component;
 public interface Binder {
 	
 	/**
+	 * Component annotation of ZKBind
+	 */
+	public static final String ZKBIND = "ZKBIND"; //system binding annotation name
+	
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the special renderer for binding 
+	 */
+	public static final String RENDERER = "RENDERER"; //system renderer for binding
+	
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the load trigger event; meaningful only when ACCESS is "both" or "load" or not found(default to "load").
+	 */
+	public static final String LOAD_EVENT = "LOAD_EVENT"; //load trigger event
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the save trigger event; meaningful only when ACCESS is "both" or "save".
+	 */
+	public static final String SAVE_EVENT = "SAVE_EVENT"; //save trigger event
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the access direction: can be "both", "save", "load"; default to "load" if not found
+	 */
+	public static final String ACCESS = "ACCESS"; //access type (load|save|both), load is default
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the system converter for special properties. e.g. SelectedItem in listbox. see SelectedListitemConverter.java
+	 */
+	public static final String CONVERTER = "CONVERTER"; //system converter for binding
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the system validator for special properties.
+	 */
+	public static final String VALIDATOR = "VALIDATOR"; //system validator for binding
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the load replacement ; e.g. value of textbox, it loads to rawValue
+	 */
+	public static final String LOAD_REPLACEMENT = "LOAD_REPLACEMENT"; //loadreplacement of attribute
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
+	 */
+	public static final String LOAD_TYPE = "LOAD_TYPE"; //expected type of attribute
+	
+	/**
 	 * Initializes the binder with a root component and viewModel object. 
 	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
 	 * @param root root component of binder

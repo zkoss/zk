@@ -133,19 +133,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
 	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
 	
-	
-	//System Annotation, see lang-addon.xml
-	private static final String SYSBIND = "$SYSBIND$"; //system binding annotation name
-	private static final String RENDERER = "$R$"; //system renderer for binding
-	private static final String LOADEVENT = "$LE$"; //load trigger event
-	private static final String SAVEEVENT = "$SE$"; //save trigger event
-	private static final String ACCESS = "$A$"; //access type (load|save|both), load is default
-	private static final String CONVERTER = "$C$"; //system converter for binding
-	private static final String VALIDATOR = "$V$"; //system validator for binding
-	
-	private static final String LOAD_REPLACEMENT = "$LR$"; //loadreplacement of attribute
-	private static final String LOAD_TYPE = "$LT$"; //expected type of attribute
-	
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
 	
@@ -706,14 +693,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
 		String loadrep = null;
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			loadrep = testString(attrs.get(BinderImpl.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			loadrep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
 			
-			final String type = testString(attrs.get(BinderImpl.LOAD_TYPE)); //check type of attr when loading
+			final String type = testString(attrs.get(Binder.LOAD_TYPE)); //check type of attr when loading
 			if (type != null) {
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -737,20 +724,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 
 	private String getSystemConverter(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return testString(attrs.get(BinderImpl.CONVERTER)); //system converter if exists
+			return testString(attrs.get(Binder.CONVERTER)); //system converter if exists
 		}
 		return null;
 	}
 	
 	private String getSystemValidator(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return testString(attrs.get(BinderImpl.VALIDATOR)); //system validator if exists
+			return testString(attrs.get(Binder.VALIDATOR)); //system validator if exists
 		}
 		return null;
 	}
@@ -758,7 +745,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private void initRendererIfAny(Component comp) {
 		//check if exists template
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(null, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(null, Binder.ZKBIND);
 		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		final Template tm = comp.getTemplate("model");
 		if (tm == null) { //no template
@@ -779,7 +766,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		comp.setAttribute(BinderImpl.ITERATION_VAR, itervarnm);
 
 		if (attrs != null) {
-			final String rendererName = testString(attrs.get(BinderImpl.RENDERER)); //renderer if any
+			final String rendererName = testString(attrs.get(Binder.RENDERER)); //renderer if any
 			//setup renderer
 			if (rendererName != null) { //there was system renderer
 				final String[] values = rendererName.split("=", 2);
@@ -822,7 +809,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
 		//check which attribute of component should load to component on which event.
 		//the event is usually a engine lifecycle event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
@@ -831,15 +818,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) testString(attrs.get(BinderImpl.ACCESS)); //_accessInfo right, "both|save|load", default to load
+			final String rw = (String) testString(attrs.get(Binder.ACCESS)); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
-			evtnm = testString(attrs.get(BinderImpl.LOADEVENT)); //check trigger event for loading
+			evtnm = testString(attrs.get(Binder.LOAD_EVENT)); //check trigger event for loading
 			
-			loadrep = testString(attrs.get(BinderImpl.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			loadrep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
 			
-			final String type = testString(attrs.get(BinderImpl.LOAD_TYPE)); //check type of attr when loading
+			final String type = testString(attrs.get(Binder.LOAD_TYPE)); //check type of attr when loading
 			if(type!=null){
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -896,18 +883,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		//check attribute _accessInfo natural characteristics to register Command event listener 
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, BinderImpl.SYSBIND);
+		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
 		//check which attribute of component should fire save on which event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onSelect'
 		//ex, checkbox's 'checked' should be saved to bean on 'onCheck'
 		String evtnm = null;
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = testString(attrs.get(BinderImpl.ACCESS)); //_accessInfo right, "both|save|load", default to load
+			final String rw = testString(attrs.get(Binder.ACCESS)); //_accessInfo right, "both|save|load", default to load
 			if (!"both".equals(rw) && !"save".equals(rw)) { //load only, skip
 				return;
 			}
-			evtnm = testString(attrs.get(BinderImpl.SAVEEVENT)); //check trigger event for saving
+			evtnm = testString(attrs.get(Binder.SAVE_EVENT)); //check trigger event for saving
 		}
 		if (evtnm == null) { 
 			//no trigger event, since the value never change of component, so both prompt and command are useless
