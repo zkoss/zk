@@ -17,9 +17,6 @@
 			Selected Index:
 			<label id="indexLabel" value="@load(vm.index)"></label>
 		</hlayout>
-		<listbox>
-			<listgroup></listgroup>
-		</listbox>
 		<listbox id="groupListbox" width="250px">
 			<listhead sizable="true" id="h">
 				<listheader id="h1" label="name" sort="auto" />
