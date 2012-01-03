@@ -47,9 +47,9 @@ function checkFile {
 	echo "List file name $(pwd)/$1" >> $maindir//$2.log
 	result=$(echo "$1" | awk '/tar.gz$/{print "yes"}')
 	if [ "$result" != "yes" ] ; then
-		unzip -ql $1 | awk '{print $4}' >> $maindir/$2.log
+		unzip -ql $1 | awk '{print $4}' | sort >> $maindir/$2.log
 	else
-		tar -tf $1 >> $maindir//$2.log
+		tar -tf $1 | sort >> $maindir//$2.log
 	fi
 }
 function listFile {
