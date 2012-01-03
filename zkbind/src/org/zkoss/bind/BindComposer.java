@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
@@ -108,9 +109,15 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
-		initValidationMessages(evalx, comp, _binder);
+		ValidationMessages _vmsgs = initValidationMessages(evalx, comp, _binder);
 		
-		
+		//wire before call init
+		Selectors.wireVariables(comp, _viewModel, Selectors.newVariableResolvers(_viewModel.getClass(), null));
+		if(_vmsgs!=null){
+			((BinderCtrl)_binder).setValidationMessages(_vmsgs);
+		}
+		//init
+		_binder.init(comp, _viewModel);
 		//load data
 		_binder.loadComponent(comp,true); //load all bindings
 	}
@@ -197,8 +204,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		comp.setAttribute(bname, binder);
 		comp.setAttribute(BINDER_ID, bname);
 		
-		((Binder)binder).init(comp, _viewModel);
-		
 		return (Binder)binder;
 	}
 	
@@ -239,8 +244,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		
 		//put to attribute, so binder could be referred by the name
 		comp.setAttribute(vname, vmessages);
-		
-		((BinderCtrl)binder).setValidationMessages((ValidationMessages)vmessages);
 		
 		return (ValidationMessages)vmessages;
 	}
