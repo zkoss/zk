@@ -347,25 +347,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>			
 		</annotation>
 	</component>
-	
-	<!-- move to zkmax
-	<component>
-		<component-name>detail</component-name>
-		<extends>detail</extends>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>open</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>both</attribute-value>
-			</attribute>
-			<attribute>
-				<attribute-name>SAVE_EVENT</attribute-name>
-				<attribute-value>onOpen</attribute-value>
-			</attribute>
-		</annotation>
-	</component> -->
-	
 	<!--component>
 		<component-name>div</component-name>
 		<extends>div</extends>
@@ -453,24 +434,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>		
 	</component>
-	<!-- move to zkmax
-	<component>
-		<component-name>group</component-name>
-		<extends>group</extends>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>open</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>both</attribute-value>
-			</attribute>
-			<attribute>
-				<attribute-name>SAVE_EVENT</attribute-name>
-				<attribute-value>onOpen</attribute-value>
-			</attribute>
-		</annotation>
-	</component> -->
-	
 	<component>
 		<component-name>groupbox</component-name>
 		<extends>groupbox</extends>
@@ -602,25 +565,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>listfoot</component-name>
 		<extends>listfoot</extends>
 	</component-->
-	
-	<!-- move to zkmax
-	<component>
-		<component-name>listgroup</component-name>
-		<extends>listgroup</extends>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>open</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>both</attribute-value>
-			</attribute>
-			<attribute>
-				<attribute-name>SAVE_EVENT</attribute-name>
-				<attribute-value>onOpen</attribute-value>
-			</attribute>
-		</annotation>
-	</component>-->
-	
 	<!--component>
 		<component-name>listheader</component-name>
 		<extends>listheader</extends>
