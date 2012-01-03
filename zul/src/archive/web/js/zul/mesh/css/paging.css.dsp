@@ -70,7 +70,7 @@ div.z-paging-os-cnt-seld-m,
 div.z-paging-os-cnt-l-over {
 	display: inline-block;
 	*display: inline;
-	background-image:url(${c:encodeURL('~./zul/img/paging/paging-btn.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/paging-btn.png', theme)});
 	background-position: 0 0;
 	zoom: 1;
 }
@@ -223,19 +223,19 @@ div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-m {
 }
 .z-paging-btn .z-paging-next {
 	background-position:0 0;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/pg-btn2.png', theme)});
 }
 .z-paging-btn .z-paging-prev {
 	background-position:0 -24px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/pg-btn2.png', theme)});
 }
 .z-paging-btn .z-paging-last {
 	background-position:0 -48px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/pg-btn2.png', theme)});
 }
 .z-paging-btn .z-paging-first {
 	background-position:0 -72px;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/pg-btn2.png', theme)});
 }
 
 
@@ -301,7 +301,7 @@ div.z-paging-os-cnt-l-over  div.z-paging-os-cnt-m {
 .z-paging-btn .z-paging-prev,
 .z-paging-btn .z-paging-last,
 .z-paging-btn .z-paging-first {	
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn2.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/pg-btn2.gif', theme)});
 }
 div.z-paging-os-cnt-l,
 div.z-paging-os-cnt-r,
@@ -310,7 +310,7 @@ div.z-paging-os-cnt-seld-l,
 div.z-paging-os-cnt-seld-r,
 div.z-paging-os-cnt-seld-m,
 div.z-paging-os-cnt-l-over {
-	background-image:url(${c:encodeURL('~./zul/img/paging/paging-btn.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/paging/paging-btn.gif', theme)});
 }
 </c:if>
 <c:if test="${zk.safari > 0}">

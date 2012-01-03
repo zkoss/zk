@@ -55,23 +55,23 @@ span.z-combobutton {
 <%-- image --%>
 .z-combobutton .z-combobutton-tl, 
 .z-combobutton .z-combobutton-bl {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-corner.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-corner.gif', theme)});
 }
 .z-combobutton .z-combobutton-tr, 
 .z-combobutton .z-combobutton-br {
-	background-image:url(${c:encodeURL('~./zul/img/button/combobutton-corner-r.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/combobutton-corner-r.gif', theme)});
 }
 .z-combobutton .z-combobutton-tm, .z-combobutton .z-combobutton-bm  {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-x.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-x.gif', theme)});
 }
 .z-combobutton .z-combobutton-cl {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-y.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-y.gif', theme)});
 }
 .z-combobutton .z-combobutton-cr {
-	background-image:url(${c:encodeURL('~./zul/img/button/combobutton-y-r.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/combobutton-y-r.gif', theme)});
 }
 .z-combobutton .z-combobutton-cm {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-ctr.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-ctr.gif', theme)});
 }
 
 <%-- tl, tr, cl, cr --%>
@@ -217,7 +217,7 @@ span.z-combobutton {
 }
 
 .z-combobutton .z-combobutton-cr .z-combobutton-btn-img {
-	background-image:url(${c:encodeURL('~./zul/img/button/combobutton-right-btn.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/combobutton-right-btn.gif', theme)});
 	background-position: 0 0px;
 	width: 12px !important;
 	height: 22px;

@@ -477,6 +477,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Encoding a string to be used as a query name or value.
 		</description>
 	</function>
+	<function>
+		<name>encodeThemeURL</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+	java.lang.String encodeThemeURL(java.lang.String, java.lang.String)
+		</function-signature>
+		<description>
+	Encoding URL to prefix the context path and to provide session info,
+	if necessary
+	If URL contains "*", it is resolved to the current Locale and
+	the browser code.
+	If URL contains "${theme}", it is resolved to the second parameter.
+		</description>
+	</function>
 
 	<function>
 		<name>escapeXML</name>

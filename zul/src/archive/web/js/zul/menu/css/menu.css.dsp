@@ -20,7 +20,7 @@
 	border-top : 1px solid #D8D8D8;
 	border-bottom : 1px solid #D8D8D8;
 	background: #F5F5F5 repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/menu/menu-bg.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/menu-bg.png', theme)});
 }
 .z-menubar-ver {
 	background-color: #f5f5f5;
@@ -69,7 +69,7 @@
 	padding-right: 3px;
 	padding-left: 0;
 	background: transparent no-repeat right -14px;
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/btn-arrow.gif', theme)});
 }
 .z-menubar-hor .z-menu-body-clk .z-menu-inner-m  div,
 .z-menubar-ver .z-menu-body-clk .z-menu-inner-m  div {
@@ -139,7 +139,7 @@
 .z-menu-item-body-over .z-menu-item-inner-r {
 	background-repeat : no-repeat;
 	background-position : 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/menu-btn.png', theme)});
 }
 .z-menu-body-over .z-menu-inner-r,
 .z-menu-item-body-over .z-menu-item-inner-r {
@@ -149,7 +149,7 @@
 .z-menu-item-body-over .z-menu-item-inner-m {
 	background-repeat : repeat-x;
 	background-position : 0 -80px;
-	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/menu-btn.png', theme)});
 	overflow: hidden;
 }
 .z-menu-body-over .z-menu-inner-m .z-menu-btn,
@@ -158,30 +158,30 @@
 }
 .z-menubar-hor .z-menu-body-over .z-menu-inner-m  div {
 	background: transparent no-repeat right -14px;
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/btn-arrow.gif', theme)});
 }
 .z-menubar-ver .z-menu-body-over .z-menu-inner-m  div {
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/btn-arrow.gif', theme)});
 }
 .z-menubar-hor .z-menu-body-clk-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-hor-over.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/btn-menu-hor-over.gif', theme)});
 }
 .z-menubar-ver .z-menu-body-clk-over .z-menu-inner-m  div {
 	background: transparent no-repeat right 0;
-	background-image:url(${c:encodeURL('~./zul/img/menu/btn-menu-ver-over.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/btn-menu-ver-over.gif', theme)});
 }
 <%-- seld effect --%>
 .z-menu-body-seld .z-menu-inner-l,
 .z-menu-body-seld .z-menu-inner-r {
-	background:  url(${c:encodeURL('~./zul/img/menu/menu-btn.png')}) no-repeat transparent 0 -120px;
+	background:  url(${c:encodeThemeURL('~./${theme}/img/menu/menu-btn.png', theme)}) no-repeat transparent 0 -120px;
 }
 .z-menu-body-seld .z-menu-inner-r {
 	background-position : 0 -160px;
 }
 .z-menu-body-seld .z-menu-inner-m {
 	background-position : 0 -200px;
-	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/menu-btn.png', theme)});
 }
 .z-menu-body-seld .z-menu-inner-m .z-menu-btn {
 	color:#233D6D;
@@ -229,7 +229,7 @@
 }
 .z-menu-popup .z-menu-popup-cnt{
 	background:transparent none repeat 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/pp-bg.png', theme)});
 	border:0 none;
 	padding:0;
 	margin:0 !important;
@@ -282,16 +282,16 @@
 }
 .z-menu-popup-cnt .z-menu .z-menu-cnt-img {
 	background:transparent no-repeat right center;
-	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/arrow.gif', theme)});
 }
 <%--define checked menuitem effect in menupopup --%>
 .z-menu-popup-cnt .z-menu-item-cnt-ck .z-menu-item-img {
 	background:transparent no-repeat center center;
-	background-image:url(${c:encodeURL('~./zul/img/menu/checked.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/checked.gif', theme)});
 }
 .z-menu-popup-cnt .z-menu-item-cnt-unck .z-menu-item-img {
 	background:transparent no-repeat center center;
-	background-image:url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/unchecked.gif', theme)});
 }
 <%--define disabled menuitem effect in menupopup--%>
 .z-menu-popup-cnt .z-menu-item-disd,
@@ -327,7 +327,7 @@
 .z-menu-popup-cnt .z-menu-over .z-menu-cm {
 	background-repeat : no-repeat;
 	background-position : 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/menu/menu-btn.png', theme)});
 }
 
 .z-menu-popup-cnt .z-menu-item-over .z-menu-item-cl {
@@ -408,7 +408,7 @@
 .z-menubar-hor-left-scroll {
 	left: 0;
 	background: transparent no-repeat 0 -1px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-l.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/tab/scroll-l.png', theme)});
 }
 .z-menubar-hor-left-scroll-over {
 	background-position: -25px -1px;
@@ -416,7 +416,7 @@
 .z-menubar-hor-right-scroll {
 	right: 0;
 	background: transparent no-repeat -25px -1px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-r.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/tab/scroll-r.png', theme)});
 }
 .z-menubar-hor-right-scroll-over {
 	background-position: 0 -1px;

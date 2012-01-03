@@ -25,7 +25,7 @@
 .z-panel-bl,
 .z-panel-br {
 	background: transparent no-repeat 0 top;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-corner.png', theme)});
 	margin-right: 7px;
 	height: 7px;
 	font-size: 0;
@@ -35,7 +35,7 @@
 .z-panel-tl-gray,
 .z-panel-tr-gray {
 	/* ADDED for framable, untitled case */
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner-blue.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-corner-blue.png', theme)});
 }
 .z-panel-bl {
 	background-position: 0 -7px;
@@ -64,7 +64,7 @@
 }
 .z-panel-header {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-hm.png', theme)});
 	border: 1px solid #B1CBD5;
 	padding: 5px 3px 4px 5px;
 }
@@ -74,7 +74,7 @@
 <%-- Header Left --%>
 .z-panel-hl {
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hl.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-hl.png', theme)});
 	padding-left: 7px;
 	border-bottom: 1px solid #C5C5C5;
 	zoom: 1;
@@ -82,14 +82,14 @@
 <%-- Header Right --%>
 .z-panel-hr {
 	background: transparent no-repeat right 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hr.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-hr.png', theme)});
 	padding-right: 7px;
 	zoom: 1;
 }
 <%-- Header Middle --%>
 .z-panel-hm {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-hm.png', theme)});
 	overflow: hidden;
 	zoom: 1;
 }
@@ -107,7 +107,7 @@
 .z-panel-cl,
 .z-panel-fl {
 	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-clr.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-clr.png', theme)});
 	padding-left: 4px;
 	zoom: 1;
 }
@@ -115,7 +115,7 @@
 .z-panel-cr,
 .z-panel-fr {
 	background: transparent repeat-y right 0;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-clr.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-clr.png', theme)});
 	padding-right: 4px;
 	zoom: 1;
 }
@@ -276,7 +276,7 @@
 	float: right;
 	margin-left: 2px;
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/wnd/wnd-icon.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/wnd-icon.png', theme)});
 	width: 28px;
 	height: 17px;
 	cursor: pointer;
@@ -341,14 +341,14 @@
 .z-panel-tr,
 .z-panel-bl,
 .z-panel-br {
-	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corner.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-corner.gif', theme)});
 }
 .z-panel-tl-gray,
 .z-panel-tr-gray{
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner-blue.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/panel-corner-blue.gif', theme)});
 }
 .z-panel-icon {
-	background-image : url(${c:encodeURL('~./zul/img/wnd/wnd-icon.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/wnd/wnd-icon.gif', theme)});
 }
 </c:if>
 </c:if>

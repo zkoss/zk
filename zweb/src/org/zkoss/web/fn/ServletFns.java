@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.fn;
 
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -64,6 +65,20 @@ public class ServletFns {
 		return Encodes.encodeURL(
 			getCurrentServletContext(), getCurrentRequest(),
 			getCurrentResponse(), uri);
+	}
+	/**
+	 * Encodes a URL with theme key parameterized. The token "${theme}" in URL
+	 * string will be replaced by the theme value 
+	 * @param s the string to encode
+	 * @param theme the key of theme
+	 * @return the encoded string or null if s is null
+	 * @throws UnsupportedEncodingException 
+	 */
+	public static final String encodeThemeURL(String s, String theme) 
+			throws ServletException {
+		if (s == null)
+			return null;
+		return encodeURL(s.replace("${theme}", theme));
 	}
 
 	/** Returns whether the current request is from

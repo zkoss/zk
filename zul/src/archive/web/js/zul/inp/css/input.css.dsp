@@ -124,7 +124,7 @@
 	height: 14px;
 	border: 0;
 	padding: 5px 4px;
-	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/timebox-rounded.png', theme)});
 	background-position: 0 -24px;
 }
 .z-textbox-rounded-right-edge,
@@ -133,7 +133,7 @@
 .z-longbox-rounded-right-edge,
 .z-doublebox-rounded-right-edge {
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.png')});	
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/timebox-rounded.png', theme)});	
 	background-position: -19px -120px;
 	vertical-align: top; 
 	overflow: hidden;
@@ -181,14 +181,14 @@
 .z-longbox-rounded .z-longbox-rounded-text-invalid,
 .z-doublebox-rounded .z-doublebox-rounded-text-invalid {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)});
 }
 .z-textbox-rounded .z-textbox-rounded-text-invalid + .z-textbox-rounded-right-edge,
 .z-decimalbox-rounded .z-decimalbox-rounded-text-invalid + .z-decimalbox-rounded-right-edge,
 .z-intbox-rounded .z-intbox-rounded-text-invalid + .z-intbox-rounded-right-edge,
 .z-longbox-rounded .z-longbox-rounded-text-invalid + .z-longbox-rounded-right-edge,
 .z-doublebox-rounded .z-doublebox-rounded-text-invalid + .z-doublebox-rounded-right-edge {
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)});
 	background-position: 0 -24px;
 }
 i.z-textbox-rounded-right-edge-invalid,
@@ -197,7 +197,7 @@ i.z-intbox-rounded-right-edge-invalid,
 i.z-longbox-rounded-right-edge-invalid,
 i.z-doublebox-rounded-right-edge-invalid {
 	<%-- extra class provided for IE 6 --%>
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)});
 	background-position: 0 -24px;
 }
 <%-- rounded: focus, read only --%>
@@ -218,7 +218,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-intbox-rounded-real-readonly .z-intbox-rounded-inp,
 .z-longbox-rounded-real-readonly .z-longbox-rounded-inp,
 .z-doublebox-rounded-real-readonly .z-doublebox-rounded-inp {
-	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.png')});	
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/timebox-rounded.png', theme)});	
 	background-position: 0 -72px;
 }
 .z-textbox-rounded-focus i.z-textbox-rounded-right-edge,
@@ -231,7 +231,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-intbox-rounded-real-readonly .z-intbox-rounded-right-edge,
 .z-longbox-rounded-real-readonly .z-longbox-rounded-right-edge,
 .z-doublebox-rounded-real-readonly .z-doublebox-rounded-right-edge {
-	background-image: url(${c:encodeURL('~./zul/img/button/timebox-rounded.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/timebox-rounded.png', theme)});
 	background-position: -19px -192px;
 }
 <%-- rounded: focus + invalid (overrides focus) --%>
@@ -241,14 +241,14 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-longbox-rounded-focus input.z-longbox-rounded-text-invalid,
 .z-doublebox-rounded-focus input.z-doublebox-rounded-text-invalid {
 	background: transparent repeat-x 0 0 !important;
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) !important;
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)}) !important;
 }
 .z-textbox-rounded-focus input.z-textbox-rounded-text-invalid + i.z-textbox-rounded-right-edge,
 .z-decimalbox-rounded-focus input.z-decimalbox-rounded-text-invalid + i.z-decimalbox-rounded-right-edge,
 .z-intbox-rounded-focus input.z-intbox-rounded-text-invalid + i.z-intbox-rounded-right-edge,
 .z-longbox-rounded-focus input.z-longbox-rounded-text-invalid + i.z-longbox-rounded-right-edge,
 .z-doublebox-rounded-focus input.z-doublebox-rounded-text-invalid + i.z-doublebox-rounded-right-edge {
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) !important;
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)}) !important;
 	background-position: 0 -24px !important;
 }
 .z-textbox-rounded-focus .z-textbox-rounded-right-edge-invalid,
@@ -257,7 +257,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-longbox-rounded-focus .z-longbox-rounded-right-edge-invalid,
 .z-doublebox-rounded-focus .z-doublebox-rounded-right-edge-invalid {
 	<%-- extra class provided for IE 6 --%>
-	background-image: url(${c:encodeURL('~./zul/img/button/redcombo-rounded.gif')}) !important;
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/redcombo-rounded.gif', theme)}) !important;
 	background-position: 0 -24px !important;
 }
 <%-- rouneded: inplace --%>
@@ -316,7 +316,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 	padding: 5px 3px;
 }
 .z-errbox-left {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/error-icon.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/error-icon.png', theme)});
 	background-repeat: no-repeat;
 	background-position: 5px 4px;
 	cursor: pointer; 
@@ -337,40 +337,40 @@ i.z-doublebox-rounded-right-edge-invalid {
 	height: 11px;
 }
 .z-pointer-d {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerD.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerD.png', theme)});
 	height: 6px;
 }
 .z-pointer-u {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerU.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerU.png', theme)});
 	height: 6px;
 }
 .z-pointer-l {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerL.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerL.png', theme)});
 	width: 6px;
 }
 .z-pointer-r {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerR.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerR.png', theme)});
 	width: 6px;
 }
 .z-pointer-ld {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerLD.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerLD.png', theme)});
 }
 .z-pointer-lu {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerLU.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerLU.png', theme)});
 }
 .z-pointer-rd {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerRD.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerRD.png', theme)});
 }
 .z-pointer-ru {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerRU.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerRU.png', theme)});
 }
 
 .z-errbox-close, .z-errbox-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/error-close.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/error-close.gif', theme)});
 	zoom: 1; <%--Bug 2916148 --%>
 }
 .z-errbox-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/error-close-over.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/error-close-over.gif', theme)});
 }
 .z-errbox.z-popup .z-popup-cl {
 	background: transparent repeat-x 0 0;
@@ -388,35 +388,35 @@ i.z-doublebox-rounded-right-edge-invalid {
 <%-- IE 6 GIF  --%>
 <c:if test="${zk.ie == 6}">
 .z-pointer-d {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerD.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerD.gif', theme)});
 }
 .z-pointer-l {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerL.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerL.gif', theme)});
 }
 .z-pointer-ld {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerLD.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerLD.gif', theme)});
 }
 .z-pointer-lu {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerLU.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerLU.gif', theme)});
 }
 .z-pointer-rd {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerRD.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerRD.gif', theme)});
 }
 .z-pointer-ru {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerRU.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerRU.gif', theme)});
 }
 .z-pointer-r {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerR.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerR.gif', theme)});
 }
 .z-pointer-u {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pointerU.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/pointerU.gif', theme)});
 }
 .z-errbox-left {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/error-icon.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/errbox/error-icon.gif', theme)});
 }
 .z-popup .z-popup-cl {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/popup2/popup-bg.png')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/popup2/popup-bg.png', theme)});
 	background-position: 0 -2px;
 	border: 1px solid #CFCFCF;
 	padding-left: 0;

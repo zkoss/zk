@@ -57,16 +57,16 @@ span.z-button {
 .z-button .z-button-tr,
 .z-button .z-button-bl,
 .z-button .z-button-br{
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-corner.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-corner.gif', theme)});
 }
 .z-button .z-button-tm, .z-button .z-button-bm  {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-x.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-x.gif', theme)});
 }
 .z-button .z-button-cl, .z-button .z-button-cr {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-y.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-y.gif', theme)});
 }
 .z-button .z-button-cm {
-	background-image:url(${c:encodeURL('~./zul/img/button/btn-ctr.gif')});
+	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/btn-ctr.gif', theme)});
 }
 
 <%-- tl, tr, cl, cr --%>
