@@ -23,7 +23,7 @@
 .z-groupbox .z-groupbox-hl {
 	background: no-repeat;
 	background-position: 0 center;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/groupbox-y.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-y.gif')});
 }
 .z-groupbox-colpsd .z-groupbox-hl {
 	background: none;
@@ -31,12 +31,12 @@
 .z-groupbox-hm {
 	background: no-repeat;
 	background-position: 0 center;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/groupbox-x.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-x.gif')});
 }
 .z-groupbox .z-groupbox-hr {
 	background: no-repeat;
 	background-position: right center;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/groupbox-y.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-y.gif')});
 }
 .z-groupbox-colpsd .z-groupbox-hr {
 	background: none;
@@ -90,7 +90,7 @@
 }
 .z-groupbox-3d-hm {
 	background:transparent repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/groupbox-hm.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-hm.png')});
 	overflow: hidden;
 	border: 1px solid #C5C5C5;
 	zoom: 1;
@@ -125,6 +125,6 @@
 <%-- IE 6 GIF  --%>
 <c:if test="${zk.ie == 6}">
 .z-groupbox-3d-hm {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/groupbox-hm.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-hm.gif')});
 }
 </c:if>

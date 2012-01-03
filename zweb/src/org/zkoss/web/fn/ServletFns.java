@@ -68,20 +68,20 @@ public class ServletFns {
 			getCurrentResponse(), uri);
 	}
 	/**
-	 * Encodes a URL with theme key parameterized. The token "${theme}" in URL
-	 * string will be replaced by the theme value 
+	 * Encodes a URL with theme key injected. 
 	 * @param s the string to encode
-	 * @param theme the key of theme
 	 * @return the encoded string or null if s is null
 	 * @throws UnsupportedEncodingException 
+	 * @since 6.0.0
 	 */
-	public static final String encodeThemeURL(String s, String theme) 
+	public static final String encodeThemeURL(String s) 
 			throws ServletException {
 		if (s == null)
 			return null;
+		String theme = (String) getCurrentRequest().getAttribute("theme");
 		if (Strings.isBlank(theme))
-			return encodeURL(s.replace("${theme}/", "")); // eats a slash
-		return encodeURL(s.replace("${theme}", theme));
+			return encodeURL(s);
+		return encodeURL(s.replace("~./", "~./" + theme + "/"));
 	}
 
 	/** Returns whether the current request is from

@@ -257,7 +257,7 @@ div.z-log button {
 .z-renderdefer {
 	height: 16px; width: 16px;
 	background: transparent no-repeat center;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/progress_breeze.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/progress_breeze.gif')});
 }
 .z-apply-loading-icon,
 .z-loading-icon {
@@ -333,7 +333,7 @@ div.z-log button {
 }
 .z-shadow .z-shadow-cl{
 	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/shadow-cl.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-cl.png')});
 	padding-left: 6px;
 	overflow: hidden;
 	height:100%;
@@ -341,7 +341,7 @@ div.z-log button {
 }
 .z-shadow .z-shadow-cr{
 	background: transparent repeat-y right;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/shadow-cr.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-cr.png')});
 	padding-right: 6px;
 	overflow: hidden;
 	height:100%;
@@ -349,7 +349,7 @@ div.z-log button {
 }
 .z-shadow .z-shadow-cm {
 	background: transparent repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/shadow-m.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-m.png')});
 	overflow: hidden;
 	height:100%;
 	zoom: 1;
@@ -374,12 +374,12 @@ div.z-log button {
 }
 .z-shadow .z-shadow-tl,
 .z-shadow .z-shadow-tr{
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/shadow-tlr.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-tlr.png')});
 }
 
 .z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br{
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/shadow-blr.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/shadow-blr.png')});
 }
 
 <%-- Drag-Drop --%>
@@ -423,14 +423,14 @@ span.z-drop-allow {
 	background: none no-repeat scroll 0 0 #EEFFEE;
 }
 span.z-drop-allow {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/drag-allow.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-allow.png')});
 }
 div.z-drop-disallow div.z-drop-cnt,
 span.z-drop-disallow {
 	background: none no-repeat scroll 0 0 #FFEEEE;
 }
 span.z-drop-disallow {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/drag-disallow.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-disallow.png')});
 }
 
 <%-- customized by users
@@ -473,7 +473,7 @@ span.z-upload input {
 }
 .z-upload-icon {
 	overflow: hidden;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/prgmeter.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/prgmeter.png')});
 }
 
 <%-- fileupload dialog --%>
@@ -484,14 +484,14 @@ span.z-upload input {
 .z-fileupload-add {
 	cursor: pointer;
 	background: transparent no-repeat 0 -23px;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/fileupload.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/fileupload.gif')});
 	width: 16px;
 	height: 17px;
 }
 .z-fileupload-rm {
 	cursor: pointer;
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/fileupload.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/fileupload.gif')});
 	width: 16px;
 	height: 17px;
 }
@@ -543,10 +543,10 @@ option {
 	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30);
 }
 span.z-drop-allow {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/drag-allow.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-allow.gif')});
 }
 span.z-drop-disallow {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/misc/drag-disallow.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/drag-disallow.gif')});
 }
 </c:if><%-- IE6 --%>
 </c:if><%--IE --%>

@@ -3,7 +3,7 @@
 	overflow: hidden;
 }
 .z-frozen {
-	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/common/bar-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./zul/img/common/bar-bg.png')});
 }
 .z-frozen-body {
 	float: left;
