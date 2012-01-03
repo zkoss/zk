@@ -328,7 +328,7 @@ public class Property extends ConditionValue {
 	}
 
 	public String toString() {
-		return "["+_name+(_navval != null ? "": "="+_value)+']';
+		return "["+_name+(_navval != null ? ""+_navval: "="+_value)+']';
 	}
 
 	//static utilities//

@@ -926,10 +926,12 @@ public class Parser {
 							&& o.getText().trim().length() == 0;
 
 					if (o instanceof Element) {
-						final String n = ((Element)o).getName();
-						if ("attribute".equals(n) || "custom-attributes".equals(n)
+						final Element e = (Element)o;
+						final String n = e.getLocalName();
+						if (isZkElement(langdef, e, bNativeContent)
+						&& ("attribute".equals(n) || "custom-attributes".equals(n)
 						|| "variables".equals(n) || "template".equals(n)
-						|| "zscript".equals(n)) { //we have to skip zscript because of B50-3259479
+						|| "zscript".equals(n))) { //we have to skip zscript because of B50-3259479
 							zkElem = n;
 							textAs = null;
 							//unable to handle them because EL/zscript might affect
@@ -1275,6 +1277,13 @@ public class Parser {
 		if (isDefaultNS(langdef, pref, uri))
 			return !bNativeContent && !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri);
+	}
+	private static final boolean isZkElement(LanguageDefinition langdef,
+	Element el, boolean bNativeContent) {
+		final Namespace ns = el.getNamespace();
+		return isZkElement(langdef, el.getLocalName(),
+			ns != null ? ns.getPrefix(): "",
+			ns != null ? ns.getURI(): "", bNativeContent);
 	}
 	private static final boolean
 	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
