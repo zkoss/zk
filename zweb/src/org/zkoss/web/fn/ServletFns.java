@@ -25,6 +25,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.dsp.DspException;
@@ -78,6 +79,8 @@ public class ServletFns {
 			throws ServletException {
 		if (s == null)
 			return null;
+		if (Strings.isBlank(theme))
+			return encodeURL(s.replace("${theme}/", "")); // eats a slash
 		return encodeURL(s.replace("${theme}", theme));
 	}
 

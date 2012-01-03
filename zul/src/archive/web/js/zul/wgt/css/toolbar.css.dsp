@@ -7,7 +7,7 @@
 	display: block;
 	padding: 2px;
 	background: repeat-x 0 -1px #EEEEEE;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/common/toolbar-hm.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/common/toolbar-hm.png', theme)});
 	position: relative; zoom: 1;
 }
 .z-caption .z-toolbar {
@@ -71,18 +71,18 @@
 .z-toolbarbutton .z-toolbarbutton-tr, 
 .z-toolbarbutton .z-toolbarbutton-bl, 
 .z-toolbarbutton .z-toolbarbutton-br{
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/toolbarbtn-corner.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/button/toolbarbtn-corner.gif', theme)});
 }
 .z-toolbarbutton .z-toolbarbutton-tm, 
 .z-toolbarbutton .z-toolbarbutton-bm  {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/toolbarbtn-x.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/button/toolbarbtn-x.gif', theme)});
 }
 .z-toolbarbutton .z-toolbarbutton-cl, 
 .z-toolbarbutton .z-toolbarbutton-cr {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/toolbarbtn-y.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/button/toolbarbtn-y.gif', theme)});
 }
 .z-toolbarbutton .z-toolbarbutton-cm {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/toolbarbtn-ctr.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/button/toolbarbtn-ctr.gif', theme)});
 }
 
 .z-toolbarbutton .z-toolbarbutton-tl,
@@ -197,7 +197,7 @@
 	font-weight: normal;
 }
 .z-toolbarbutton-over .z-toolbarbutton-cnt {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/button/toolbarbtn-ctr.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/button/toolbarbtn-ctr.gif', theme)});
 	background-position: 0 -500px;
 }
 

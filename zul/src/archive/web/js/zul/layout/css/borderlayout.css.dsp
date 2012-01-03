@@ -58,7 +58,7 @@
 	height: 6px;
 	width: 6px;
 	background: transparent left;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/splt-h.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/splt-h.png', theme)});
 	cursor: col-resize;
 	cursor: e-resize;
 	line-height: 0;
@@ -67,7 +67,7 @@
 .z-north-splt,
 .z-south-splt {
 	background: transparent top;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/splt-v.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/splt-v.png', theme)});
 	cursor: row-resize;
 	cursor: s-resize;
 }
@@ -107,7 +107,7 @@
 	height: 15px;
 	float: right;
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/layout/borderlayout-btn.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/borderlayout-btn.png', theme)});
 	margin-left: 2px;
 	cursor: pointer;
 }
@@ -124,7 +124,7 @@
 	padding: 5px 3px 4px 5px;
 	border-bottom: 1px solid #C5C5C5;
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/layout/borderlayout-hm.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/borderlayout-hm.png', theme)});
 	white-space: nowrap;
 	overflow: hidden;
 	line-height: 15px;
@@ -220,36 +220,36 @@
 	width: 6px; min-height: 50px; height: 50px;
 }
 .z-west-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-l.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-l.png', theme)});
 }
 .z-east-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-r.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-r.png', theme)});
 }
 .z-north-splt-btn,
 .z-south-splt-btn {
 	width: 50px; min-height: 5px; height: 6px;
 }
 .z-north-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-t.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-t.png', theme)});
 }
 .z-south-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-b.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-b.png', theme)});
 }
 
 <c:if test="${zk.ie == 6}">
 .z-borderlayout-icon {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/layout/borderlayout-btn.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/layout/borderlayout-btn.gif', theme)});
 }
 .z-west-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-l.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-l.gif', theme)});
 }
 .z-east-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-r.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-r.gif', theme)});
 }
 .z-north-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-t.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-t.gif', theme)});
 }
 .z-south-splt-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/splt/colps-b.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/splt/colps-b.gif', theme)});
 }
 </c:if>

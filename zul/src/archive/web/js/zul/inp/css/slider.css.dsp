@@ -8,7 +8,7 @@
 .z-slider-scale-center,
 .z-slider-hor-center {
 	background: transparent no-repeat 0 top;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-bg.png', theme)});
 	font-size: 0;
 	height: 22px;
 	line-height: 0;
@@ -27,16 +27,16 @@
 .z-slider-hor-btn {
 	width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-square.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-square.png', theme)});
 	cursor: pointer;
 }
 .z-slider-scale-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-scale.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-scale.gif', theme)});
 }
 
 <%-- Scale style --%>
 .z-slider-scale-tick {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/ticks.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/ticks.gif', theme)});
 	padding-top:6px;
 }
 
@@ -46,7 +46,7 @@
 .z-slider-sphere-ver-center,
 .z-slider-ver-center {
 	background: transparent no-repeat left 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-bg-ver.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-bg-ver.png', theme)});
 	font-size: 0;
 	width: 22px;
 	line-height: 0;
@@ -66,14 +66,14 @@
 .z-slider-ver-btn {
 	width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-v-square.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-v-square.png', theme)});
 	cursor: pointer;
 }
 .z-slider-sphere-hor-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-circle.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-circle.png', theme)});
 }
 .z-slider-sphere-ver-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-v-circle.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-v-circle.png', theme)});
  	height: 14px;
  	left: 3px;
 }
@@ -106,31 +106,31 @@
 .z-slider-sphere-hor-center,
 .z-slider-scale-center,
 .z-slider-hor-center {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-bg.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-bg.gif', theme)});
 }
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-square.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-square.gif', theme)});
 }
 .z-slider-scale-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-scale.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-scale.gif', theme)});
 }
 .z-slider-sphere-ver,
 .z-slider-ver,
 .z-slider-sphere-ver-center,
 .z-slider-ver-center {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-bg-ver.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-bg-ver.gif', theme)});
 }
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-v-square.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-v-square.gif', theme)});
 }
 .z-slider-sphere-hor-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-circle.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-circle.gif', theme)});
 }
 .z-slider-sphere-ver-btn {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/slider/slider-v-circle.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/slider/slider-v-circle.gif', theme)});
 }
 </c:if>

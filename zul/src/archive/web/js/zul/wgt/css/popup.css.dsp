@@ -16,7 +16,7 @@
 }
 .z-popup .z-popup-cl {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/popup/popup-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/popup/popup-bg.png', theme)});
 	background-position: 0 -2px;
 	border: 1px solid #CFCFCF;
 	padding-left: 0;
@@ -32,6 +32,6 @@
 <%-- IE 6 GIF  --%>
 <c:if test="${zk.ie == 6}">
 .z-popup .z-popup-cl {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/popup/popup-bg.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/popup/popup-bg.gif', theme)});
 }
 </c:if>

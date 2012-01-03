@@ -4,7 +4,7 @@
 div.z-grid {
 	border: 1px solid #CFCFCF;
 	background: #FFF;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/column-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/column-bg.png', theme)});
 	overflow: hidden;
 	zoom: 1;
 }
@@ -18,7 +18,7 @@ div.z-grid-header, div.z-grid-footer {
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-repeat: repeat-x;
 	background-color: white;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/column-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/column-bg.png', theme)});
 }
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	overflow: hidden;
@@ -113,7 +113,7 @@ div.z-column-cnt, div.z-grid-header div.z-auxheader-cnt {
 <%-- Group --%>
 tr.z-group {
 	background: #E9F2FB repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/group_bg.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/group_bg.gif', theme)});
 }
 td.z-group-inner {
 	padding: 2px; overflow: hidden;
@@ -138,7 +138,7 @@ td.z-group-inner {
 	display:-moz-inline-box;
 	vertical-align: top;
 	display: inline-block;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/tree/arrow-toggle.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/tree/arrow-toggle.gif', theme)});
 	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
 }
@@ -152,7 +152,7 @@ td.z-group-inner {
 .z-groupfoot {
 	height: 25px;
 	background: #E9F2FB repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/groupfoot_bg.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/groupfoot_bg.gif', theme)});
 }
 .z-groupfoot-inner .z-groupfoot-cnt .z-label, .z-groupfoot-inner .z-groupfoot-cnt {
 	color:#636363;
@@ -185,7 +185,7 @@ td.z-footer {
 	top: 0;
 	right: 0;
 	width: 23px;
-	background: url(${c:encodeThemeURL('~./${theme}/img/grid/hd-btn.png', theme)}) no-repeat scroll left 0 transparent;
+	background: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/hd-btn.png', theme)}) no-repeat scroll left 0 transparent;
 	background-position: 0 0;
 }
 .z-column-over .z-column-btn, .z-column-visi .z-column-btn {
@@ -199,17 +199,17 @@ a.z-column-btn:hover {
 	background-image: none;
 }
 .z-columns-menu-grouping .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-group.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-group.png', theme)});
 }
 .z-columns-menu-asc .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-arrowup.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-arrowup.png', theme)});
 }
 .z-columns-menu-dsc .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-arrowdown.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-arrowdown.png', theme)});
 }
 div.z-grid-header th.z-column-over,
 div.z-grid-header th.z-auxheader-over {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/header-over.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/header-over.png', theme)});
 }
 .z-column-sort-img {
 	position: absolute;
@@ -231,7 +231,7 @@ div.z-grid-header .z-column-sort-asc, div.z-grid-header .z-column-sort-dsc {
 .z-column-sort-dsc .z-column-sort-img {
     background-position: 0 0;
     background-repeat: no-repeat;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/arrows.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/arrows.png', theme)});
 }
 .z-column-sort-asc .z-column-sort-img {
 	background-position: 0 0;
@@ -246,7 +246,7 @@ div.z-grid-header .z-column-sort-asc, div.z-grid-header .z-column-sort-dsc {
 	top: 0;
 	height: 1px;
 	font-size: 0;
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/head-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/head-bg.png', theme)});
 	margin-top: -1px;
 }
 <%-- ZK Column's sizing --%>
@@ -262,7 +262,7 @@ div.z-grid-header .z-column.z-column-sizing div.z-column-cnt .z-column-btn {
 	color: #636363;
 }
 div.z-grid-header .z-column-over-sort-asc, div.z-grid-header .z-column-over-sort-dsc {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/column-bg.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/column-bg.png', theme)});
 }
 div.z-grid-header tr.z-columns th:last-child,
 div.z-grid-header tr.z-auxhead th:last-child {
@@ -299,7 +299,7 @@ tr.z-row-over > td.z-row-inner {
 
 
 tr.z-row-over > td.z-row-inner, tr.z-row-over > .z-cell {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/column-over.png', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/column-over.png', theme)});
 }
 
 <%-- Autopaging --%>
@@ -352,13 +352,13 @@ div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
 .z-columns-menu-grouping .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-group.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-group.gif', theme)});
 }
 .z-columns-menu-asc .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-arrowup.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-arrowup.gif', theme)});
 }
 .z-columns-menu-dsc .z-menu-item-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/menu-arrowdown.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/menu-arrowdown.gif', theme)});
 }
 .z-group-inner .z-group-cnt {
 	width: 100%;
@@ -368,7 +368,7 @@ tr.z-row td.z-row-inner {
 }
 .z-column-sort-asc .z-column-sort-img,
 .z-column-sort-dsc .z-column-sort-img {
-	background-image: url(${c:encodeThemeURL('~./${theme}/img/grid/arrows.gif', theme)});
+	background-image: url(${c:encodeThemeURL('~./${theme}/zul/img/grid/arrows.gif', theme)});
 }
 </c:if>
 <c:if test="${zk.ie < 8}">
