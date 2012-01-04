@@ -104,7 +104,7 @@
 	zoom: 1;
 }
 .z-groupbox-3d-hl .z-groupbox-3d-header {
-	color: #373737;
+	color: #363636;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-weight: normal;

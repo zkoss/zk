@@ -64,10 +64,10 @@ tbody.z-grid-empty-body td{
     text-align:center;
 }
 div.z-grid-pgi-b {
-	border-top: 1px solid #AAB; overflow: hidden; width: 100%;
+	border-top: 1px solid #CFCFCF; overflow: hidden; width: 100%;
 }
 div.z-grid-pgi-t {
-	border-bottom: 1px solid #AAB; overflow: hidden; width: 100%;
+	border-bottom: 1px solid #CFCFCF; overflow: hidden; width: 100%;
 }
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;

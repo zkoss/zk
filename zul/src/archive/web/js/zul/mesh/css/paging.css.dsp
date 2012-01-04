@@ -32,9 +32,6 @@
 	background-image:none;
 	background-position: right 0;
 }
-.z-paging-os .z-paging-os-seld:hover {
-	color: #403E39;
-}
 .z-paging-os span {
 	font-family: Arial;
 	font-size: 11px; 

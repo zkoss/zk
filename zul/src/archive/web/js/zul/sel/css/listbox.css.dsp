@@ -60,10 +60,10 @@ tbody.z-listbox-empty-body td{
     text-align:center;
 }
 div.z-listbox-pgi-b {
-	border-top: 1px solid #AAB; overflow: hidden;
+	border-top: 1px solid #CFCFCF; overflow: hidden;
 }
 div.z-listbox-pgi-t {
-	border-bottom: 1px solid #AAB; overflow: hidden;
+	border-bottom: 1px solid #CFCFCF; overflow: hidden;
 }
 div.z-listbox-body .z-listcell, div.z-listbox-footer .z-listfooter {
 	cursor: pointer; padding: 0 2px;

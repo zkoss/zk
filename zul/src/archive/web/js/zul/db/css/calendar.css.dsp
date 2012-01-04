@@ -180,7 +180,7 @@
 }
 .z-datebox-rounded-caldow td,
 .z-datebox-caldow td {
-	font-size: ${fontSizeS}; color: #333; font-weight: bold;
+	font-size: ${fontSizeS}; color: #363636; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
 }
 .z-calendar .z-weekend,

@@ -17,18 +17,6 @@
 .z-toolbar-body, .z-toolbar-body span {
 	font-size: ${fontSizeS};
 }
-.z-toolbar a, .z-toolbar a:visited, .z-toolbar a:hover {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeS}; font-weight: normal; color: black;
-	background: #D0DEF0; border: 1px solid #D0DEF0;
-	text-decoration: none;
-}
-.z-toolbar a:hover {
-	border-color: #f8fbff #aca899 #aca899 #f8fbff;
-}
-.z-caption .z-toolbar a:hover {
-	text-decoration: underline;
-}
 <%-- toolbar horizontal alignment --%>
 .z-toolbar-start,
 .z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt {
@@ -227,8 +215,3 @@
 	-moz-opacity: .5;
 	filter: alpha(opacity=50);
 }
-<c:if test="${zk.safari > 0}"><%-- remove browser's focus effect --%>
-.z-toolbar a:focus {
-	outline: none !important;
-}
-</c:if>

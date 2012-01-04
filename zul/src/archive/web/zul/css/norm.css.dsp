@@ -62,15 +62,15 @@ div.z-error {
 	padding: 3px;
 	border-width: 1px;
 	border-style: solid;
-	border-color: #BC6464 #940000 #940000 #BC6464;
+	border-color: #CC6666 #990000 #990000 #CC6666;
 	-moz-box-shadow: 0px 0px 6px gray; 
 	-webkit-box-shadow: 0px 0px 6px gray;
 	box-shadow: 0px 0px 6px gray; 
-	background-color: #FFEDED;
+	background-color: #FFEEEE;
 }
 div.z-error .msgcnt {
 	padding: 0;
-	border: 1px solid #EE7373;
+	border: 1px solid #EE7777;
 	background-color: white;
 	height: 60px;
 }
@@ -83,16 +83,16 @@ div.z-error .msgs {
 }
 div.z-error .msgs .msg {
 	padding: 3px 0 2px;
-	border-bottom: 1px solid #FF9696;
+	border-bottom: 1px solid #FF9999;
 }
 div.z-error .newmsg {
-	background-color: #FFD6D6;
+	background-color: #FFDDDD;
 	display: none;
 }
 
 div.z-error .btn {
 	cursor: pointer;	
-	color: #333; 
+	color: #363636; 
 	width: 16px;
 	height: 16px;
 	display: inline-block;
@@ -103,7 +103,7 @@ div.z-error #zk_err-p {
 }
 div.z-error .errnum {
 	padding-left: 20px;
-	color: #C60303;
+	color: #CC0000;
 	font-weight: bold;	
 }
 <c:if test="${zk.ie != 6}">
@@ -147,34 +147,6 @@ div.z-log textarea {
 }
 div.z-log button {
 	font-size: ${fontSizeXS};
-}
-.z-debug-domtree {
-	width:80%; right:10px; bottom:5px;
-	position:absolute; z-index: 99000; 
-	overflow: auto; color: #7D9196;
-	height: 300px; background: white;
-	padding: 2px; border: 1px solid gray;
-}
-.z-debug-domtree .z-debug-domtree-header {
-	overflow: hidden; zoom: 1; color: #403E39; font: normal ${fontSizeM} ${fontFamilyT};
-	padding: 5px 3px 4px 5px; border: 1px solid #999884; line-height: 15px; 
-	background:transparent url(${c:encodeURL('~./zk/img/debug/hd-gray.png')}) repeat-x 0 -1px;
-	font-weight:bold;
-}
-.z-debug-domtree .z-debug-domtree-body {
-	border: 1px solid #999884;
-	border-top: 0;
-}
-.z-debug-domtree-close {
-	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background-color : transparent;
-	background-image : url(${c:encodeURL('~./zk/img/debug/tool-btn.gif')});
-	background-position : 0 0;
-	background-repeat : no-repeat;
-	margin-left: 2px;
-}
-.z-debug-domtree-close-over {
-	background-position: -15px 0;
 }
 <%-- General --%>
 .noscript {<%-- the content of noscript --%>
@@ -227,7 +199,7 @@ div.z-log button {
 	position: absolute;
 	cursor: wait;
 	background-color: #E3E3E3;
-	border: 1px solid #C7C7C7;
+	border: 1px solid #C5C5C5;
 	white-space: nowrap;
 	padding: 3px;
 }
@@ -240,9 +212,9 @@ div.z-log button {
 	overflow: hidden;
 }
 .z-loading-indicator, .z-apply-loading-indicator {
-	border: 1px solid #D9D9D9;
+	border: 1px solid #C5C5C5;
 	background-color: #FFFFFF;
-	color: #383838;
+	color: #363636;
 	white-space: nowrap;
 }
 .z-loading-indicator {

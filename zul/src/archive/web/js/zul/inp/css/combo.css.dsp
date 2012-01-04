@@ -114,7 +114,7 @@
 .z-spinner .z-spinner-text-invalid,
 .z-doublespinner .z-doublespinner-text-invalid {
 	background: #FFFFFF;
-	border: 1px solid #DD7870;
+	border: 1px solid #DD7777;
 	border-right-width: 1px !important;
 	margin-right: -1px;
 }
