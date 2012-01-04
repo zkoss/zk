@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK Framework
-Specification-Version: 5.0.10
+Specification-Version: 5.0.11
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zk
 Implementation-URL: http://www.zkoss.org/prj/zk
-Implementation-Version: 5.0.10
+Implementation-Version: 5.0.11
 Implementation-Vendor: Potix Corporation
