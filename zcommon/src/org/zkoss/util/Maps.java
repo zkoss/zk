@@ -116,86 +116,90 @@ public class Maps {
 
 		final BufferedReader in =
 			new BufferedReader(new InputStreamReader(pis, charset));
-
 		final List<Integer> prefixes = new LinkedList<Integer>();
-		String prefix = null;
-		String line;
-		for (int lno = 1; (line = in.readLine()) != null; ++lno) {
-			int len = line.length();
-			if (len == 0)
-				continue;
+		try {
+			String prefix = null;
+			String line;
+			for (int lno = 1; (line = in.readLine()) != null; ++lno) {
+				int len = line.length();
+				if (len == 0)
+					continue;
 
-			final int from = Strings.skipWhitespaces(line, 0);
-			if (from < len && line.charAt(from) == '#')
-				continue; //comment, ignore rest of line
+				final int from = Strings.skipWhitespaces(line, 0);
+				if (from < len && line.charAt(from) == '#')
+					continue; //comment, ignore rest of line
 
-			final Strings.Result res =
-				Strings.nextToken(line, from, new char[] {'=', '{', '}'}, true, false);
-			if (res == null)
-				continue; //nothing found
-			if (res.separator == (char)0) {
-				if (res.token.length() > 0)
-					log.warning(">>Igored: a key, "+res.token+", without value, line "+lno);
-				continue;
-			}
-			if (res.separator == '{') {
-				//res.token.lenth() could be zero
-				if (Strings.skipWhitespaces(line, res.next) < len) //non-space following '{'
-					throw new IllegalSyntaxException("Invalid nest: '{' must be the last character, line "+lno);
-				prefixes.add(new Integer(res.token.length()));
-				prefix = prefix != null ? prefix + res.token: res.token;
-				continue;
-			}
-			if (res.separator == '}' ) {
-				if (Strings.skipWhitespaces(line, res.next) < len) //non-space following '}'
-					throw new IllegalSyntaxException("Invalid nesting: '}' must be the last character, line "+lno);
-				if (prefixes.isEmpty())
-					throw new IllegalSyntaxException("Invalid nesting: '}' does have any preceding '{', line "+lno);
-				final Integer i = prefixes.remove(prefixes.size() - 1); //pop
-				prefix = prefixes.isEmpty() ?
-					null: prefix.substring(0, prefix.length() - i.intValue());
-				continue;
-			}
-			if (res.token.length() == 0) {
-				log.warning(">>Ignored: wihout key, line "+lno);
-				continue;
-			}
-
-//			assert res.separator == '=': "Wrong separator: "+res.separator;
-			final String val;
-			String key = caseInsensitive ? res.token.toLowerCase(): res.token;
-			int j = Strings.skipWhitespaces(line, res.next);
-			int k = Strings.skipWhitespacesBackward(line, len - 1);
-			if (j == k && line.charAt(k) == '{') { //pack multiple lines
-				final StringBuffer sb = new StringBuffer();
-				for (int lnoFrom = lno;;) {
-					line = in.readLine();
-					++lno;
-					if (line == null){
-						log.warning(
-							">>Ignored: invalid multiple-line format: '={' does not have following '}', "+lnoFrom);
-						break;
-					}
-
-					len = line.length();
-					if (len > 0) {
-						j = Strings.skipWhitespacesBackward(line, len - 1);
-						if (j >= 0 && line.charAt(j) == '}') {
-							if (j > 0)
-								j = 1 + Strings.skipWhitespacesBackward(line, j - 1);
-							if (j == 0) //no non-space before }
-								break;
-						}
-					}
-					if (sb.length() > 0)
-						sb.append('\n');
-					sb.append(line);
+				final Strings.Result res =
+					Strings.nextToken(line, from, new char[] {'=', '{', '}'}, true, false);
+				if (res == null)
+					continue; //nothing found
+				if (res.separator == (char)0) {
+					if (res.token.length() > 0)
+						log.warning(">>Igored: a key, "+res.token+", without value, line "+lno);
+					continue;
 				}
-				val = sb.toString();
-			} else {
-				val = j <= k ? line.substring(j, k + 1): "";
+				if (res.separator == '{') {
+					//res.token.lenth() could be zero
+					if (Strings.skipWhitespaces(line, res.next) < len) //non-space following '{'
+						throw new IllegalSyntaxException("Invalid nest: '{' must be the last character, line "+lno);
+					prefixes.add(new Integer(res.token.length()));
+					prefix = prefix != null ? prefix + res.token: res.token;
+					continue;
+				}
+				if (res.separator == '}' ) {
+					if (Strings.skipWhitespaces(line, res.next) < len) //non-space following '}'
+						throw new IllegalSyntaxException("Invalid nesting: '}' must be the last character, line "+lno);
+					if (prefixes.isEmpty())
+						throw new IllegalSyntaxException("Invalid nesting: '}' does have any preceding '{', line "+lno);
+					final Integer i = prefixes.remove(prefixes.size() - 1); //pop
+					prefix = prefixes.isEmpty() ?
+						null: prefix.substring(0, prefix.length() - i.intValue());
+					continue;
+				}
+				if (res.token.length() == 0) {
+					log.warning(">>Ignored: wihout key, line "+lno);
+					continue;
+				}
+
+	//			assert res.separator == '=': "Wrong separator: "+res.separator;
+				final String val;
+				String key = caseInsensitive ? res.token.toLowerCase(): res.token;
+				int j = Strings.skipWhitespaces(line, res.next);
+				int k = Strings.skipWhitespacesBackward(line, len - 1);
+				if (j == k && line.charAt(k) == '{') { //pack multiple lines
+					final StringBuffer sb = new StringBuffer();
+					for (int lnoFrom = lno;;) {
+						line = in.readLine();
+						++lno;
+						if (line == null){
+							log.warning(
+								">>Ignored: invalid multiple-line format: '={' does not have following '}', "+lnoFrom);
+							break;
+						}
+
+						len = line.length();
+						if (len > 0) {
+							j = Strings.skipWhitespacesBackward(line, len - 1);
+							if (j >= 0 && line.charAt(j) == '}') {
+								if (j > 0)
+									j = 1 + Strings.skipWhitespacesBackward(line, j - 1);
+								if (j == 0) //no non-space before }
+									break;
+							}
+						}
+						if (sb.length() > 0)
+							sb.append('\n');
+						sb.append(line);
+					}
+					val = sb.toString();
+				} else {
+					val = j <= k ? line.substring(j, k + 1): "";
+				}
+				map.put(prefix != null ? prefix + key: key, val);
+
 			}
-			map.put(prefix != null ? prefix + key: key, val);
+		} finally {
+			in.close();
 		}
 
 		if (!prefixes.isEmpty())

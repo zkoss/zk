@@ -136,15 +136,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			if (typeof this._constraint != 'string') return;
 			// B50-ZK-591: Datebox constraint combination yyyymmdd and
 			// no empty cause javascript error in zksandbox
-			var constraints = constraint.split(',');
+			var constraints = constraint.split(','),
+				format = 'yyyyMMdd',
+				len = format.length + 1;
 			for (var i = 0; i < constraints.length; i++) {
 				constraint = constraints[i]
 				if (constraint.startsWith("between")) {
 					var j = constraint.indexOf("and", 7);
 					if (j < 0 && zk.debugJS) 
 						zk.error('Unknown constraint: ' + constraint);
-					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), 'yyyyMMdd');
-					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3), 'yyyyMMdd');
+					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format);
+					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format);
 					if (this._beg.getTime() > this._end.getTime()) {
 						var d = this._beg;
 						this._beg = this._end;
@@ -154,10 +156,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this._beg.setHours(0, 0, 0, 0);
 					this._end.setHours(0, 0, 0, 0);
 				} else if (constraint.startsWith("before")) {
-					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6), 'yyyyMMdd');
+					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format);
 					this._end.setHours(0, 0, 0, 0);
 				} else if (constraint.startsWith("after")) {
-					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5), 'yyyyMMdd');
+					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format);
 					this._beg.setHours(0, 0, 0, 0);
 				}
 			}

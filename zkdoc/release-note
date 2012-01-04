@@ -254,6 +254,8 @@ ZK 5.0.10
   ZK-714: listbox data is not loaded when rod is enable
   ZK-721: Removing TreeNode in TreeModel will cause wrong tree display in ROD
   ZK-724: Reset ListModel will cause an exception in ROD
+  ZK-727: Datebox constraint failed when set custom error message for before constraint
+  ZK-731: Unclosed BufferedReader for org.zkoss.util.Maps
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors

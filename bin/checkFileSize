@@ -1,22 +1,22 @@
 #!/bin/bash
-# checkFile
+# checkFileSize
 #
 #	Purpose:
 #		
 #	Description:
 #		
 #	History:
-#		Thu Nov 17 09:43:23 TST 2011, Created by jumperchen
+#		Tue Jan  3 14:41:15 TST 2012, Created by jumperchen
 #
-#Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+#Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 #
 if [ $# != 2 ] && [ $# != 4 ] ; then
 	echo Please specify two files or two folders
 	echo for example,
-	echo ./bin/checkFile folder1 folder2
+	echo ./bin/checkFileSize folder1 folder2
 	echo To replace version number in each file/folder, put version number in front of the file/folder names
 	echo for example,
-	echo ./bin/checkFile 6.0.0 folder1 6.0.1 folder2
+	echo ./bin/checkFileSize 6.0.0 folder1 6.0.1 folder2
 	exit 1
 fi
 
@@ -42,26 +42,12 @@ fi
 maindir="$(pwd)"
 tmp1="checktmp1"
 tmp2="checktmp2"
-function checkFile {
+function checkFileSize {
 	echo $(pwd)/$1
-	#echo "List file name $(pwd)/$1" >> $maindir//$2.log
-	result=$(echo "$1" | awk '/tar.gz$/{print "yes"}')
-	if [ "$result" != "yes" ] ; then
-		unzip -ql $1 | awk '{print $4}' | sort >> $maindir/$2.log
-	else
-		tar -tf $1 | sort >> $maindir//$2.log
+	if [ -d $1 ] ; then
+		cd $1
 	fi
-}
-function listFile {
-	for f in `ls | sort`; do
-		if [ ! -d "$f" ] ; then
-			checkFile "$f" "$1"
-		else
-			cd "$f"
-			listFile "$1"
-			cd ..
-		fi
-	done
+	du -abh >> $maindir/$2.log
 }
 
 if [ -f "$maindir/$tmp1.log" ] ; then
@@ -71,19 +57,8 @@ if [ -f "$maindir/$tmp2.log" ] ; then
 	rm $maindir/$tmp2.log
 fi
 
-if [ ! -d "$folder1" ] ; then
-	checkFile "$folder1" "$tmp1"
-else
-	cd "$folder1"
-	listFile "$tmp1"
-fi
-
-if [ ! -d "$folder2" ] ; then
-	checkFile "$folder2" "$tmp2"
-else
-	cd "$folder2"
-	listFile "$tmp2"
-fi
+checkFileSize "$folder1" "$tmp1"
+checkFileSize "$folder2" "$tmp2"
 
 cd $maindir
 
@@ -91,6 +66,9 @@ if [ $# != 2 ] ; then
 	sed -i "s/$ver1/{VER}/g" $tmp1.log
 	sed -i "s/$ver2/{VER}/g" $tmp2.log
 fi
+
+sort -n $tmp1.log -o $tmp1.log
+sort -n $tmp2.log -o $tmp2.log
 
 diff $tmp1.log $tmp2.log
 if [ $? != 0 ] ; then
