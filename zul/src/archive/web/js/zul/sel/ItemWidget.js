@@ -166,10 +166,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_toggleEffect: function (undo) {
 		_toggleEffect(this, undo);
 	},
-	_focus: function (timeout) {
+	focus_: function (timeout) {
 		var mesh = this.getMeshWidget();
 			mesh._focusItem = this;
 		this._doFocusIn();
+		mesh._syncFocus(this);
 		mesh.focusA_(mesh.$n('a'), timeout);
 		return true;
 	},
