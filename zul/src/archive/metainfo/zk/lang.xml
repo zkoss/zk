@@ -277,6 +277,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/auxhead.js</mold-uri>
+			<css-uri>css/auxhead.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -286,6 +287,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/auxheader.js</mold-uri>
+			<css-uri>css/auxhead.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/><!-- blank text is converted as a label child -->
 	</component>

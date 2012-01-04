@@ -473,16 +473,6 @@ span.z-upload input {
 .z-fileupload-manager {
 	width: 350px;
 }
-<%-- Auxheader --%>
-.z-auxheader-cnt {
-	font-size: 12px; font-weight: bold;
-	font-family: arial;
-	border: 0; margin: 0; padding: 0; overflow: hidden;
-	color: #636363;
-}
-.z-word-wrap .z-auxheader-cnt {
-	word-wrap: break-word;
-}
 
 <%-- IE --%>
 <c:if test="${zk.ie > 0}">

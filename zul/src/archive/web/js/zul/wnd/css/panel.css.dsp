@@ -127,18 +127,6 @@
 	overflow: hidden;
 	padding: 2px;
 }
-.z-panel-cl .z-panel-top .z-toolbar {
-	border-top: 1px solid #B1CBD5;
-	border-bottom: 0;
-}
-.z-panel-cl .z-panel-children {
-	background-color: transparent;
-	border: 1px solid #B1CBD5;
-}
-.z-panel-children-noheader,
-.z-panel-cl .z-panel-children {
-	border-top: 1px solid #B1CBD5;
-}
 .z-panel-noborder .z-panel-children-noborder {
 	border-width: 0;
 }
@@ -151,13 +139,7 @@
 .z-panel-noheader {
 	border-bottom: 0;
 }
-.z-panel-top-noborder .z-toolbar {
-	border: none;
-	overflow: hidden;
-}
-.z-panel-noborder .z-panel-top.z-panel-top-noborder .z-toolbar {
-	border: none;
-}
+.z-panel-noborder .z-panel-top.z-panel-top-noborder .z-toolbar,
 .z-panel-noborder .z-panel-btm.z-panel-btm-noborder .z-toolbar {
 	border: none;
 }
@@ -229,25 +211,11 @@
 	background-color: white;
 	border: 1px solid #C5C5C5;
 }
-.z-panel-children-noheader,
-.z-panel-cl .z-panel-children {
+.z-panel-children-noheader {
 	border-top: 1px solid #C5C5C5;
 }
-.z-panel-noborder .z-panel-children-noborder {
-	border-width: 0;
-}
-.z-panel-fl.z-panel-nobtm2 {
-	display: none;
-}
-.z-panel-cm.z-panel-noheader {
-	padding: 0;
-}
-.z-panel-noheader {
-	border-bottom: 0;
-}
-
-<%-- This is for fixing border of toolbars at different position --%>
 .z-panel-top-noborder .z-toolbar {
+	border: none;
 	border-bottom: 0;
 	border-top: 1px solid #C5C5C5;
 	overflow: hidden;
