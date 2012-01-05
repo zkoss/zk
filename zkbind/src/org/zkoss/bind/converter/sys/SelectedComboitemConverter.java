@@ -35,12 +35,12 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  	if (val != null) {
 	  		final ListModel<?> model = cbx.getModel();
 	  		if (model != null) {
-		  		final String varnm = (String) cbx.getAttribute(BinderImpl.VAR);
-		  		if (varnm != null) { //There is binding on template
+		  		if (cbx.getAttribute(BinderImpl.RENDERER_INSTALLED) != null) { //There is binding on template
 		  			//TODO might be done with dependency tracker, bean -> listitem (implicit binding)
 		  			//iterate to find the selected item
 		  			for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
 		  				final Comboitem li = (Comboitem) it.next();
+		  				final String varnm = (String) li.getAttribute(BinderImpl.VAR);
 		  				final Object bean = li.getAttribute(varnm);
 		  				if (val.equals(bean)) {
 		  					return li;

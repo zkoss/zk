@@ -31,18 +31,21 @@ import org.zkoss.zul.ListitemRenderer;
  * @author henrichen
  *
  */
-public class BindListitemRenderer implements ListitemRenderer<Object>,Serializable {
+public class BindListitemRenderer extends AbstractRenderer implements ListitemRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
+	
 	public void render(final Listitem item, final Object data) throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
-		final Template tm = listbox.getTemplate("model");
+		final Template tm = resoloveTemplate(listbox,item,data,item.getIndex(),"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
 		} else {
-			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
-			final String varnm = (String) listbox.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			final String itervarnm = (String) listbox.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String var = (String) tm.getParameters().get(EACH_ATTR);
+			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
+			
 			final Component[] items = tm.create(listbox, item, 
 				new VariableResolverX() {//this resolver is for EL ${} not for binding 
 					public Object resolveVariable(String name) {
@@ -55,7 +58,8 @@ public class BindListitemRenderer implements ListitemRenderer<Object>,Serializab
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new IterationStatus(){
+								return new AbstractIterationStatus(){
+									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
 										return Integer.valueOf(item.getIndex());
@@ -70,9 +74,11 @@ public class BindListitemRenderer implements ListitemRenderer<Object>,Serializab
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Listitem nli = (Listitem)items[0];
+			nli.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			nli.setAttribute(varnm, data); //kept the value
 			
-			nli.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+			nli.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return Integer.valueOf(nli.getIndex());

@@ -25,7 +25,6 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
@@ -47,6 +46,7 @@ public class AnnotateBinderHelper {
 	final static private String ID_ANNO = "id";
 	final static private String VALIDATOR_ANNO = "validator";
 	final static private String CONVERTER_ANNO = "converter";
+	final static private String TEMPLATE_ANNO = "template";
 	final static private String COMMAND_ANNO = "command";
 	
 	final static private String FORM_ATTR = "form";
@@ -136,9 +136,14 @@ public class AnnotateBinderHelper {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
 		//validator and converter information
-		ValidatorInfo validatorInfo = parseValidator(compCtrl,propName);
-		ConverterInfo converterInfo = parseConverter(compCtrl,propName);
+		ExpressionAnnoInfo validatorInfo = parseValidator(compCtrl,propName);
+		ExpressionAnnoInfo converterInfo = parseConverter(compCtrl,propName);
+		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,propName);
 		
+		if(templateInfo!=null){
+			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
+		}
+
 		//scan init
 		Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
 		if(initannos.size()>1){
@@ -160,7 +165,7 @@ public class AnnotateBinderHelper {
 		}
 	}
 	
-	private void processPropertyInit(Component comp, String propName, Annotation anno,ConverterInfo converterInfo) {
+	private void processPropertyInit(Component comp, String propName, Annotation anno,ExpressionAnnoInfo converterInfo) {
 		String initExpr = null;
 			
 		Map<String, String[]> args = null;
@@ -183,7 +188,7 @@ public class AnnotateBinderHelper {
 	}
 	
 	//process @bind(expr) 
-	private void processPropertyPromptBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo, ValidatorInfo validatorInfo) {
+	private void processPropertyPromptBindings(Component comp, String propName, Annotation ann, ExpressionAnnoInfo converterInfo, ExpressionAnnoInfo validatorInfo) {
 		String expr = null;
 		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
@@ -238,7 +243,7 @@ public class AnnotateBinderHelper {
 		cmds.add(BindEvaluatorXUtil.eval(_binder.getEvaluatorX(),comp,cmdExpr,String.class));
 	}
 	
-	private void processPropertyLoadBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo) {
+	private void processPropertyLoadBindings(Component comp, String propName, Annotation ann, ExpressionAnnoInfo converterInfo) {
 		String loadExpr = null;
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
@@ -270,7 +275,7 @@ public class AnnotateBinderHelper {
 			converterInfo == null ? null : converterInfo.args);
 	}
 
-	private void processPropertySaveBindings(Component comp, String propName, Annotation ann, ConverterInfo converterInfo, ValidatorInfo validatorInfo) {
+	private void processPropertySaveBindings(Component comp, String propName, Annotation ann, ExpressionAnnoInfo converterInfo, ExpressionAnnoInfo validatorInfo) {
 		String saveExpr = null;
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
@@ -307,7 +312,7 @@ public class AnnotateBinderHelper {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final BindEvaluatorX eval = _binder.getEvaluatorX();
 		//validator information
-		ValidatorInfo validatorInfo = parseValidator(compCtrl,FORM_ATTR);
+		ExpressionAnnoInfo validatorInfo = parseValidator(compCtrl,FORM_ATTR);
 		
 		String formId = null;
 		
@@ -398,7 +403,7 @@ public class AnnotateBinderHelper {
 			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
 	}
 	
-	private void processFormSaveBindings(Component comp, String formId, Annotation ann, ValidatorInfo validatorInfo) {
+	private void processFormSaveBindings(Component comp, String formId, Annotation ann, ExpressionAnnoInfo validatorInfo) {
 		String saveExpr = null;
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
@@ -430,7 +435,7 @@ public class AnnotateBinderHelper {
 	}
 	
 
-	private ConverterInfo parseConverter(ComponentCtrl compCtrl, String propName) {
+	private ExpressionAnnoInfo parseConverter(ComponentCtrl compCtrl, String propName) {
 		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, CONVERTER_ANNO);
 		if(annos.size()==0) return null;
 		if(annos.size()>1) {
@@ -438,7 +443,7 @@ public class AnnotateBinderHelper {
 		}
 		final Annotation anno = annos.iterator().next();
 		
-		ConverterInfo info = new ConverterInfo();
+		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
 		Map<String,String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it
 				.hasNext();) {
@@ -461,14 +466,14 @@ public class AnnotateBinderHelper {
 		return info;
 	}
 
-	private ValidatorInfo parseValidator(ComponentCtrl compCtrl, String propName) {
+	private ExpressionAnnoInfo parseValidator(ComponentCtrl compCtrl, String propName) {
 		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, VALIDATOR_ANNO);
 		if(annos.size()==0) return null;
 		if(annos.size()>1) {
 			throw new IllegalSyntaxException("Allow only one validator for "+propName+" of "+compCtrl);
 		}
 		final Annotation anno = annos.iterator().next();
-		ValidatorInfo info = new ValidatorInfo();
+		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
 		Map<String,String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
 			final Entry<String,String[]> entry = it.next();
@@ -485,6 +490,35 @@ public class AnnotateBinderHelper {
 		}
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a validator for "+propName+" of "+compCtrl);
+		}
+		info.args = args == null ? null : parsedArgs(args);
+		return info;
+	}
+	
+	private ExpressionAnnoInfo parseTemplate(ComponentCtrl compCtrl, String propName) {
+		final Collection<Annotation> annos = compCtrl.getAnnotations(propName, TEMPLATE_ANNO);
+		if(annos.size()==0) return null;
+		if(annos.size()>1) {
+			throw new IllegalSyntaxException("Allow only one template for "+propName+" of "+compCtrl);
+		}
+		final Annotation anno = annos.iterator().next();
+		ExpressionAnnoInfo info = new ExpressionAnnoInfo();
+		Map<String,String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				info.expr = testString(compCtrl,propName,tag, tagExpr);
+			} else { // other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		if (Strings.isBlank(info.expr)) {
+			throw new IllegalSyntaxException("Must specify a template for "+propName+" of "+compCtrl);
 		}
 		info.args = args == null ? null : parsedArgs(args);
 		return info;
@@ -515,12 +549,7 @@ public class AnnotateBinderHelper {
 		result.put(key, val);
 	}
 	
-	private static class ValidatorInfo{
-		Map<String, Object> args;
-		String expr;
-	}
-	
-	private static class ConverterInfo{
+	private static class ExpressionAnnoInfo{
 		Map<String, Object> args;
 		String expr;
 	}

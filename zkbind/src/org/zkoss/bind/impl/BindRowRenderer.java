@@ -33,21 +33,23 @@ import org.zkoss.zul.Rows;
  * @author henrichen
  *
  */
-public class BindRowRenderer implements RowRenderer<Object>,Serializable {
+public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
 	public void render(final Row row, final Object data) {
 		final Rows rows = (Rows)row.getParent();
 		final Grid grid = (Grid)rows.getParent();
-		final Template tm = grid.getTemplate("model");
+		final Template tm = resoloveTemplate(grid,row,data,row.getIndex(),"model");
 		if (tm == null) {
 			final Label label = newRenderLabel(Objects.toString(data));
 			label.applyProperties();
 			label.setParent(row);
 			row.setValue(data);
 		} else {
-			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
-			final String varnm = (String) grid.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			final String itervarnm = (String) grid.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String var = (String) tm.getParameters().get(EACH_ATTR);
+			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
+			
 			final Component[] items = tm.create(rows, row,
 				new VariableResolverX() {//this resolver is for EL ${} not for binding 
 					public Object resolveVariable(String name) {
@@ -60,7 +62,8 @@ public class BindRowRenderer implements RowRenderer<Object>,Serializable {
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new IterationStatus(){
+								return new AbstractIterationStatus(){
+									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
 										return Integer.valueOf(row.getIndex());
@@ -75,9 +78,11 @@ public class BindRowRenderer implements RowRenderer<Object>,Serializable {
 				throw new UiException("The model template must have exactly one row, not "+items.length);
 
 			final Row nr = (Row)items[0];
+			nr.setAttribute(BinderImpl.VAR, varnm);
 			nr.setAttribute(varnm, data); //kept the value
 			
-			nr.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+			nr.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return Integer.valueOf(nr.getIndex());

@@ -35,12 +35,12 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  	if (val != null) {
 	  		final ListModel<?> model = lbx.getModel();
 	  		if (model != null) {
-		  		final String varnm = (String) lbx.getAttribute(BinderImpl.VAR);
-		  		if (varnm != null) { //There is binding on template
+		  		if (lbx.getAttribute(BinderImpl.RENDERER_INSTALLED) != null) { //There is binding on template
 		  			//TODO might be done with dependency tracker, bean -> listitem (implicit binding)
 		  			//iterate to find the selected item
 		  			for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
 		  				final Listitem li = (Listitem) it.next();
+		  				final String varnm = (String) li.getAttribute(BinderImpl.VAR);
 		  				final Object bean = li.getAttribute(varnm);
 		  				if (val.equals(bean)) {
 		  					return li;

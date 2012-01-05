@@ -32,17 +32,18 @@ import org.zkoss.zul.Label;
  * @author dennischen
  *
  */
-public class BindSelectboxRenderer implements ItemRenderer<Object>,Serializable {
+public class BindSelectboxRenderer extends AbstractRenderer implements ItemRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	public String render(final Component owner, final Object data, final int index) throws Exception {
-		final Template tm = owner.getTemplate("model");
+		final Template tm = resoloveTemplate(owner,owner,data,index,"model");
 		if (tm == null) {
 			return Objects.toString(data);
 		} else {
-			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
-			final String varnm = (String) owner.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			final String itervarnm = (String) owner.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String var = (String) tm.getParameters().get(EACH_ATTR);
+			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
 			
 			final Component[] items = tm.create(owner, null,
 				new VariableResolverX() {
@@ -55,7 +56,8 @@ public class BindSelectboxRenderer implements ItemRenderer<Object>,Serializable 
 							if(varnm.equals(name)){
 								return data;
 							} else if(itervarnm.equals(name)){//iteration status
-								return new IterationStatus(){
+								return new AbstractIterationStatus(){
+									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
 										return Integer.valueOf(index);
@@ -75,9 +77,11 @@ public class BindSelectboxRenderer implements ItemRenderer<Object>,Serializable 
 						"The model template can only support Label component, not "
 								+ items[0]);
 			final Label lbl = ((Label) items[0]);
+			lbl.setAttribute(BinderImpl.VAR, varnm);
 			lbl.setAttribute(varnm, data);
 			
-			lbl.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+			lbl.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return Integer.valueOf(index);

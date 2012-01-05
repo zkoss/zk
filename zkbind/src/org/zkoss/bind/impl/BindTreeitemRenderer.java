@@ -33,12 +33,12 @@ import org.zkoss.zul.Treerow;
  * @author henrichen
  *
  */
-public class BindTreeitemRenderer implements TreeitemRenderer<Object>,Serializable {
+public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
 	public void render(final Treeitem item, final Object data) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
-		final Template tm = tree.getTemplate("model");
+		final Template tm = resoloveTemplate(tree,parent,data,item.getIndex(),"model");
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;
@@ -52,9 +52,10 @@ public class BindTreeitemRenderer implements TreeitemRenderer<Object>,Serializab
 			}
 			tc.setParent(tr);
 		} else {
-			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
-			final String varnm = (String) tree.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			final String itervarnm = (String) tree.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String var = (String) tm.getParameters().get(EACH_ATTR);
+			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
 			final Component[] items = tm.create(parent, item, 
 				new VariableResolverX() {
 					public Object resolveVariable(String name) {
@@ -67,7 +68,8 @@ public class BindTreeitemRenderer implements TreeitemRenderer<Object>,Serializab
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new IterationStatus(){
+								return new AbstractIterationStatus(){
+									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
 										return Integer.valueOf(item.getIndex());
@@ -82,9 +84,11 @@ public class BindTreeitemRenderer implements TreeitemRenderer<Object>,Serializab
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Treeitem ti = (Treeitem)items[0];
+			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			ti.setAttribute(varnm, data); //kept the value
 			
-			ti.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+			ti.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return Integer.valueOf(ti.getIndex());

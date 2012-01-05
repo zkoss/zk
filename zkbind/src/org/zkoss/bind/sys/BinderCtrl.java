@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys;
 
+import java.util.List;
 import java.util.Set;
 
 import org.zkoss.bind.Binder;
@@ -85,5 +86,16 @@ public interface BinderCtrl {
 	 * @return true if there is a validator
 	 */
 	public boolean hasValidator(Component comp, String attr);
+	
+	/**
+	 * get the template resolver that sets by {@link Binder#setTemplate(Component, String, String, java.util.Map)}
+	 * @param comp the component has resolvers
+	 * @param attr the attribute to get the resolver
+	 * @return the resolver, null if not existed.
+	 */
+	public TemplateResolver getTemplateResolver(Component comp, String attr);
+
+	
+//	public List<Binding> getBindings(Component comp, String attr);
 	
 }

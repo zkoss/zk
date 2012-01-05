@@ -49,6 +49,7 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
@@ -78,7 +79,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.Template;
 
 /**
  * Implementation of Binder.
@@ -122,12 +122,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	public static final String BINDER = "$BINDER$"; //the binder
 	public static final String BINDCTX = "$BINDCTX$"; //bind context
 	public static final String VAR = "$VAR$"; //variable name in a collection
-	public static final String ITERATION_VAR = "$INTERATION_VAR$"; //iteration status variable name in a collection
 	public static final String VM = "$VM$"; //the associated view model
 	public static final String QUE = "$QUE$"; //the associated event queue name
 	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
 	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
+	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
@@ -176,6 +176,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private ValidationMessages _validationMessages;
 	private Set<BindingKey> _hasValidators;//the key to mark they have validator
 	
+	private final Map<Component, Map<String,TemplateResolver>> _templateResolvers;//comp,<attr,resolver>
+	
 	//flag to keep info of current vm has converter method or not
 	private boolean _hasGetConverterMethod = true;
 	
@@ -197,7 +199,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 		
 		_hasValidators = new HashSet<BindingKey>();
-		
+		_templateResolvers = new HashMap<Component,Map<String,TemplateResolver>>();
 		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
 		//use same queue name if user was not specified, 
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
@@ -638,7 +640,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		addPropertyInitBinding0(comp,attr,initExpr,initArgs,converterExpr,converterArgs);
 		
-		initRendererIfAny(comp);
+		initRendererIfAny(comp,attr);
 	}
 
 	@Override
@@ -658,7 +660,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		addPropertyLoadBindings0(comp, attr, loadExpr, beforeCmds, afterCmds, bindingArgs, converterExpr, converterArgs);
 		
-		initRendererIfAny(comp);
+		initRendererIfAny(comp,attr);
 	}
 
 	@Override
@@ -742,29 +744,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		return null;
 	}
 	
-	private void initRendererIfAny(Component comp) {
-		//check if exists template
-		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(null, Binder.ZKBIND);
-		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
-		final Template tm = comp.getTemplate("model");
-		if (tm == null) { //no template
-			return;
-		}
-		
-		final Object installed = comp.getAttribute(BinderImpl.VAR);
+	private void initRendererIfAny(Component comp,String attr) {
+		final Object installed = comp.getAttribute(BinderImpl.RENDERER_INSTALLED);
 		if (installed != null) { //renderer was set already init
 			return;
 		}
 		
-		final String var = (String) tm.getParameters().get("var");
-		final String varnm = var == null ? "each" : var; //var is not specified, default to "each"
-		comp.setAttribute(BinderImpl.VAR, varnm);
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final Annotation ann = compCtrl.getAnnotation(null, Binder.ZKBIND);
+		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		
-		final String itervar = (String) tm.getParameters().get("status");
-		final String itervarnm = itervar == null ? var+"Status" : itervar; //provide default value if not specified
-		comp.setAttribute(BinderImpl.ITERATION_VAR, itervarnm);
-
 		if (attrs != null) {
 			final String rendererName = testString(attrs.get(Binder.RENDERER)); //renderer if any
 			//setup renderer
@@ -785,7 +774,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 						} catch (Exception  e) {
 							throw UiException.Aide.wrap(e);
 						}
+						
+						if(renderer instanceof TemplateRendererCtrl){
+							((TemplateRendererCtrl)renderer).setAttributeName(attr);
+						}
 					}
+					
+					comp.setAttribute(BinderImpl.RENDERER_INSTALLED,"");//mark installed
 				}
 			}
 		}
@@ -1432,6 +1427,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		removeFormAssociatedSaveBinding(comp);
 		removeForm(comp);
 		
+		removeTemplateResolver(comp);
+		
 		//remove trackings
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
@@ -1458,8 +1455,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		_hasValidators.remove(bkey);
 		
+		removeTemplateResolver(comp,key);
+		
 		removeBindings(removed);
 	}
+	
+//	@Override
+//	public List<Binding> getBindings(Component comp, String key) {
+//		checkInit();
+//		Map<String, List<Binding>> map = _bindings.get(comp);
+//		return map==null ? null : map.get(key);
+//	}
 
 	private void removeBindings(Collection<Binding> removed) {
 		_formBindingHandler.removeBindings(removed);
@@ -1483,6 +1489,33 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		//associate component with this binder, which means, one component can only bind by one binder
 		comp.setAttribute(BINDER, this);
 	}
+	
+	@Override
+	public void setTemplate(Component comp,String attr, String templateExpr, Map<String,Object> templateArgs){
+		Map<String,TemplateResolver> resolvers = _templateResolvers.get(comp);
+		if(resolvers==null){
+			resolvers = new HashMap<String,TemplateResolver>();
+			_templateResolvers.put(comp, resolvers);
+		}
+		resolvers.put(attr, new TemplateResolverImpl(this,comp,attr,templateExpr,templateArgs));
+	}
+	
+	@Override
+	public TemplateResolver getTemplateResolver(Component comp, String attr){
+		Map<String,TemplateResolver> resolvers = _templateResolvers.get(comp);
+		return resolvers==null?null:resolvers.get(attr);
+	}
+	
+	private void removeTemplateResolver(Component comp,String attr){
+		Map<String,TemplateResolver> resolvers = _templateResolvers.get(comp);
+		if(resolvers!=null){
+			resolvers.remove(attr);
+		}
+	}
+	private void removeTemplateResolver(Component comp){
+		_templateResolvers.remove(comp);
+	}
+	
 
 	public Tracker getTracker() {
 		if (_tracker == null) {

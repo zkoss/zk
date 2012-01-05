@@ -94,6 +94,17 @@ public interface Binder {
 	 */
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
 	
+	
+	/**
+	 * set template to a component property by an expression
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param attr the associated attribute of the component; ex label, style, must not null
+	 * @param templateExpr template expression, must not null
+	 * @param templateArgs args key-value pairs for template, nullable
+	 */
+	public void setTemplate(Component comp,String attr, String templateExpr, Map<String,Object> templateArgs);
+	
 	/**
 	 * init a component property by a expression, it only execute once
 	 * 

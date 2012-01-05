@@ -12,9 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import java.io.Serializable;
-
-import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -35,19 +32,20 @@ import org.zkoss.zul.impl.LoadStatus;
  * @author henrichen
  *
  */
-public class BindComboitemRenderer implements ComboitemRenderer<Object>, Serializable {
+public class BindComboitemRenderer extends AbstractRenderer implements ComboitemRenderer<Object>{
 	private static final long serialVersionUID = 1463169907348730644L;
 	
 	public void render(final Comboitem item, final Object data) throws Exception {
 		final Combobox cb = (Combobox)item.getParent();
-		final Template tm = cb.getTemplate("model");
+		final Template tm = resoloveTemplate(cb,item,data,item.getIndex(),"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
 		} else {
-			//will call into BindUiLifeCycle#afterComponentAttached, and apply binding management there
-			final String varnm = (String) cb.getAttribute(BinderImpl.VAR); //see BinderImpl#initRendererIfAny
-			final String itervarnm = (String) cb.getAttribute(BinderImpl.ITERATION_VAR); //see BinderImpl#initRendererIfAny
+			final String var = (String) tm.getParameters().get(EACH_ATTR);
+			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
+			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
 			final Component[] items = tm.create(cb, item,
 				new VariableResolverX() {
 					public Object resolveVariable(String name) {
@@ -60,7 +58,9 @@ public class BindComboitemRenderer implements ComboitemRenderer<Object>, Seriali
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new IterationStatus(){
+								return new AbstractIterationStatus(){
+									private static final long serialVersionUID = 1L;
+
 									@Override
 									public int getIndex() {
 										return Integer.valueOf(item.getIndex());
@@ -76,9 +76,11 @@ public class BindComboitemRenderer implements ComboitemRenderer<Object>, Seriali
 
 			final Comboitem nci = (Comboitem)items[0];
 			((LoadStatus)(((AbstractComponent)nci).getExtraCtrl())).setIndex(item.getIndex());
-			
+			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			nci.setAttribute(varnm, data); //kept the value
-			nci.setAttribute(itervarnm, new IterationStatus(){//provide iteration status in this context
+			nci.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public int getIndex() {
 					return Integer.valueOf(nci.getIndex());
