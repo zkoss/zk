@@ -123,7 +123,7 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("[").append(_templateExpr).append("]").append(this);
+		sb.append("[").append(_templateExpr).append("]").append(super.toString());
 		return sb.toString();
 	}
 }
