@@ -47,6 +47,8 @@ window.$eval=function(s){return eval(s);};
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
 
+	<script src="zkie.js" browser="ie"/>
+
 	<script src="ext/jquery.json.js"/>
 	<script src="ext/jquery.mousewheel.js"/>
 </package>

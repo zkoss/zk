@@ -777,15 +777,6 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	vflexHeight: function () {
 		var el = this.jq[0],
 			hgh = el.parentNode.clientHeight;
-		if (zk.ie6_) { //IE6's clientHeight is wrong
-			var ref = el.parentNode,
-				h = ref.style.height;
-			if (h && h.endsWith("px")) {
-				h = zk(ref).revisedHeight(zk.parseInt(h));
-				if (h && h < hgh) hgh = h;
-			}
-		}
-
 		for (var p = el; p = p.previousSibling;)
 			if (p.offsetHeight && zk(p).isVisible())
 				hgh -= p.offsetHeight; //may undefined

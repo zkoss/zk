@@ -250,7 +250,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var mate = this.getMeshWidget();
-		if (!zk.gecko3 || !jq.nodeName(evt.domTarget, "input", "textarea"))
+		if (!zk.gecko || !jq.nodeName(evt.domTarget, "input", "textarea"))
 			zk(mate.$n()).disableSelection();
 		mate._doKeyDown(evt);
 		this.$supers('doKeyDown_', arguments);

@@ -797,7 +797,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 
-		if (!zk.gecko3 || !jq.nodeName(evt.domTarget, "input", "textarea"))
+		if (!zk.gecko || !jq.nodeName(evt.domTarget, "input", "textarea"))
 			zk(this.$n()).disableSelection();
 
 		// Feature #1978624

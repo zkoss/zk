@@ -207,7 +207,7 @@ zk.copy(zjq, {
 	}
 });
 
-zk.override(zjq.prototype, {}, {
+zk.copy(zjq.prototype, {
 	hasVScroll: function () {
 		var n, v;
 		// need to read clientWidth twice to get correct value in IE6
@@ -217,6 +217,26 @@ zk.override(zjq.prototype, {}, {
 		var n, v;
 		// need to read clientHeight twice to get correct value in IE6
 		return (n = this.jq[0]) && n.clientHeight && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v: 0;
+	},
+	vflexHeight: function () {
+		var el = this.jq[0],
+			hgh = el.parentNode.clientHeight;
+
+		//IE6's clientHeight is wrong
+		var ref = el.parentNode,
+			h = ref.style.height;
+		if (h && h.endsWith("px")) {
+			h = zk(ref).revisedHeight(zk.parseInt(h));
+			if (h && h < hgh) hgh = h;
+		}
+
+		for (var p = el; p = p.previousSibling;)
+			if (p.offsetHeight && zk(p).isVisible())
+				hgh -= p.offsetHeight; //may undefined
+		for (var p = el; p = p.nextSibling;)
+			if (p.offsetHeight && zk(p).isVisible())
+				hgh -= p.offsetHeight; //may undefined
+		return hgh;
 	}
 });
 

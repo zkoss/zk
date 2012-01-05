@@ -468,16 +468,26 @@ public class Servlets {
 	 *
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
-	 * @param type the type of the browser.
+	 * @param type the type of the browser, or a list of types separated by comma.<br/>
 	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
 	 * For example, ie9, ios and ie6-.
 	 * And, <code>ie9</code> means Internet Explorer 9 and later, while
-	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).
+	 * <code>ie6-</code> means Internet Explorer 6 (not prior, nor later).<br/>
+	 * If a list of types are specified (such as <code>ie6-,ie7-</code>),
+	 * this method returns true if any of them matches (i.e., OR condition).
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
-		int last = type.length();
-		if (last == 0) return false;
+		String[] types = type.split(",");
+		for (int j = 0; j < types.length; ++j)
+			if (browser(userAgent, types[j]))
+				return true; //OR
+		return false;
+	}
+	private static boolean browser(String userAgent, String type) {
+		int last = (type = type.trim()).length();
+		if (last == 0)
+			return false;
 
 		char cc = type.charAt(last - 1);
 		final boolean equals = cc == '-' || cc == '_';

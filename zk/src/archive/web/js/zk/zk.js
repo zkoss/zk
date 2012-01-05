@@ -363,11 +363,6 @@ zk.copy(zk, {
 	 * @since 5.0.6
 	 */
 	//ff: null,
-	/** Whether it is Gecko-based browsers, such as Firefox, and it
-	 * is version 3 and later.
-	 * @type Boolean
-	 */
-	//gecko3: false,
 	/** Returns the version as double (only the first two part of the version, such as 533.1) if it is Safari-based, or null if not.
 	 * @type Double
 	 */
@@ -1210,17 +1205,16 @@ zk.log('value is", value);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf("linux") >= 0;
 	zk.mac = !zk.ios && agent.indexOf("mac") >= 0;
+	zk.css3 = true;
 	
 	var bodycls;
 	if (zk.ff) {
 		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
 		&& (bodycls = agent.indexOf("firefox/")) > 0)
 			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
-		zk.css3 = zk.gecko3 = zk.ff >= 3;
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
-	} else if (zk.opera) {
+	} else if (zk.opera) { //no longer to worry 10.5 or earlier
 		bodycls = 'opera';
-		zk.css3 = zk.opera >= 10.5;
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 			//zk.iex is the Browser Mode (aka., Compatibility View)
@@ -1238,7 +1232,6 @@ zk.log('value is", value);
 		} else {
 			if (zk.safari)
 				bodycls = 'safari safari' + Math.floor(zk.safari);
-			zk.css3 = true;
 		}
 	}
 	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
