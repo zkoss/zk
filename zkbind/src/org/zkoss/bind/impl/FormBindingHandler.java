@@ -216,7 +216,7 @@ import org.zkoss.zk.ui.event.Event;
 		_saveFormBeforeBindings.values().removeAll(bindings); //command -> bindings (save form before command)
 	}
 
-	void loadComponentProperties(Component comp, BindingKey bkey) {
+	void doLoad(Component comp, BindingKey bkey) {
 		final List<LoadFormBinding> formBindings = _loadFormPromptBindings.get(bkey);
 		if (formBindings != null) {
 			for (LoadFormBinding binding : formBindings) {
@@ -225,7 +225,7 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 	
-	void initComponentProperties(Component comp,BindingKey bkey) {
+	void doInit(Component comp,BindingKey bkey) {
 		final List<InitFormBinding> initBindings = _initFormBindings.get(bkey);
 		if (initBindings != null) {
 			for (InitFormBinding binding : initBindings) {

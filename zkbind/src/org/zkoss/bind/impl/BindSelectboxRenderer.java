@@ -45,6 +45,14 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
 			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
 			
+			final IterationStatus iterStatus = new AbstractIterationStatus(){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(index);
+				}
+			};
+			
 			final Component[] items = tm.create(owner, null,
 				new VariableResolverX() {
 					public Object resolveVariable(String name) {
@@ -56,13 +64,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 							if(varnm.equals(name)){
 								return data;
 							} else if(itervarnm.equals(name)){//iteration status
-								return new AbstractIterationStatus(){
-									private static final long serialVersionUID = 1L;
-									@Override
-									public int getIndex() {
-										return Integer.valueOf(index);
-									}
-								};
+								return iterStatus;
 							}
 						}
 						return null;
@@ -79,14 +81,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			final Label lbl = ((Label) items[0]);
 			lbl.setAttribute(BinderImpl.VAR, varnm);
 			lbl.setAttribute(varnm, data);
-			
-			lbl.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
-				private static final long serialVersionUID = 1L;
-				@Override
-				public int getIndex() {
-					return Integer.valueOf(index);
-				}
-			});
+			lbl.setAttribute(itervarnm, iterStatus);
 			
 			//to force init and load
 			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, lbl));

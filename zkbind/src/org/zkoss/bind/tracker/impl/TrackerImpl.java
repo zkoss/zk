@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
 
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
@@ -636,6 +637,8 @@ public class TrackerImpl implements Tracker,Serializable {
 			System.out.println(dumpSpace(spaces)+((PropertyBinding)binding).getPropertyString()+":"+binding);
 		} else if (binding instanceof FormBinding) {
 			System.out.println(dumpSpace(spaces)+((FormBinding)binding).getPropertyString()+":"+binding);
+		} else if(binding instanceof ChildrenBinding){
+			System.out.println(dumpSpace(spaces)+((ChildrenBinding)binding).getPropertyString()+":"+binding);
 		}
 	}
 	

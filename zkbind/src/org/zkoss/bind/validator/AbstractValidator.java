@@ -57,10 +57,11 @@ public abstract class AbstractValidator implements Validator {
 			}else if(binding instanceof FormBinding){
 				attr = ((FormBinding)binding).getFormId();
 			}else{
-				throw new UiException("unknow binding type "+binding); 
+				//ignore children binding;
 			}
-			
-			vmsgs.setMessages(ctx.getBindContext().getComponent(),attr, messages);
+			if(attr!=null){
+				vmsgs.setMessages(ctx.getBindContext().getComponent(),attr, messages);
+			}
 		}else{
 			_log.warning("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");
 		}

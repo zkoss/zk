@@ -365,7 +365,7 @@ import org.zkoss.zk.ui.event.Event;
 		_saveBeforeBindings.values().removeAll(removes); //command -> bindings (save before command)
 	}
 
-	void loadComponentProperties(Component comp, BindingKey bkey) {
+	void doLoad(Component comp, BindingKey bkey) {
 		final List<LoadPropertyBinding> propBindings = _loadPromptBindings.get(bkey);
 		if (propBindings != null) {
 			for (LoadPropertyBinding binding : propBindings) {
@@ -374,7 +374,7 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 	
-	void initComponentProperties(Component comp,BindingKey bkey) {
+	void doInit(Component comp,BindingKey bkey) {
 		final List<InitPropertyBinding> initBindings = _initBindings.get(bkey);
 		if (initBindings != null) {
 			for (InitPropertyBinding binding : initBindings) {

@@ -34,7 +34,7 @@ public class AbstractRenderer implements TemplateRendererCtrl, Serializable {
 	static final protected String STATUS_ATTR = "status";
 	static final protected String STATUS_POST_VAR = "Status";
 	
-	protected String _attributeName;
+	private String _attributeName;
 	
 	@Override
 	public void setAttributeName(String name) {

@@ -49,9 +49,13 @@ public class AnnotateBinderHelper {
 	final static private String TEMPLATE_ANNO = "template";
 	final static private String COMMAND_ANNO = "command";
 	
-	final static private String FORM_ATTR = "form";
-	final static private String VIEW_MODEL_ATTR = "viewModel";
-	final static private String BINDER_ATTR = "binder";
+	final static public String FORM_ATTR = "form";
+	final static public String VIEW_MODEL_ATTR = "viewModel";
+	final static public String BINDER_ATTR = "binder";
+	final static public String CHILDREN_ATTR = "children";
+	
+	//control key
+	final static public String CHILDREN_KEY = "$CHILDREN$";
 	
 	
 	public AnnotateBinderHelper(Binder binder) {
@@ -86,6 +90,8 @@ public class AnnotateBinderHelper {
 				processCommandBinding(comp,propName);
 			}else if(FORM_ATTR.equals(propName)){
 				processFormBindings(comp);
+			}else if(CHILDREN_ATTR.equals(propName)){
+				processChildrenBindings(comp);
 			}else if(VIEW_MODEL_ATTR.equals(propName)){
 				//ignore
 			}else if(BINDER_ATTR.equals(propName)){
@@ -433,6 +439,113 @@ public class AnnotateBinderHelper {
 			validatorInfo == null ? null : validatorInfo.expr, 
 			validatorInfo == null ? null : validatorInfo.args);
 	}
+	
+	
+	private void processChildrenBindings(Component comp) {
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		
+		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,CHILDREN_ATTR);
+		
+		if(templateInfo!=null){
+			//use special CHILDREN_KEY to avoid conflict 
+			_binder.setTemplate(comp, CHILDREN_KEY, templateInfo.expr, templateInfo.args);
+		}
+		
+		//scan init first
+		Collection<Annotation> initannos = compCtrl.getAnnotations(CHILDREN_ATTR, INIT_ANNO);
+		if(initannos.size()>1){
+			throw new IllegalSyntaxException("Allow only one @init for "+CHILDREN_ATTR+" of "+comp);
+		}else if(initannos.size()==1){
+			processChildrenInit(comp,initannos.iterator().next());
+		}
+		
+		Collection<Annotation> annos = compCtrl.getAnnotations(CHILDREN_ATTR); //get all annotation in the children with the order.
+
+		for(Annotation anno:annos){
+			if(anno.getName().equals(BIND_ANNO)){
+				processChildrenPromptBindings(comp,anno);
+			}else if(anno.getName().equals(LOAD_ANNO)){
+				processChildrenLoadBindings(comp,anno);
+			}
+		}
+	}
+	
+	private void processChildrenInit(Component comp, Annotation anno) {
+		String initExpr = null;
+			
+		Map<String, String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				initExpr = testString(comp, CHILDREN_ATTR, tag, tagExpr);
+			} else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs);
+	}
+	
+	private void processChildrenPromptBindings(Component comp, Annotation ann) {
+		String expr = null;
+		Map<String, String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				expr = testString(comp,CHILDREN_ATTR,tag, tagExpr);
+			} else if ("before".equals(tag)) {
+				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support before commands, check property "+CHILDREN_ATTR+" of "+comp);
+			} else if ("after".equals(tag)) {
+				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support after commands, check property "+CHILDREN_ATTR+" of "+comp);
+			}  else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+			
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+
+		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs);
+	}
+	
+	private void processChildrenLoadBindings(Component comp, Annotation ann){
+		String loadExpr = null;
+		final List<String> beforeCmds = new ArrayList<String>();
+		final List<String> afterCmds = new ArrayList<String>();
+		
+		Map<String, String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				loadExpr = testString(comp,CHILDREN_ATTR,tag, tagExpr);
+			} else if ("before".equals(tag)) {
+				addCommand(comp,beforeCmds,tagExpr);
+			} else if ("after".equals(tag)) {
+				addCommand(comp,afterCmds,tagExpr);
+			} else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		_binder.addChildrenLoadBindings(comp, loadExpr, 
+			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
+	}
+	
 	
 
 	private ExpressionAnnoInfo parseConverter(ComponentCtrl compCtrl, String propName) {

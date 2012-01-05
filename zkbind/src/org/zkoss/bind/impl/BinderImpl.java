@@ -46,6 +46,7 @@ import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
@@ -138,6 +139,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
+	private static final String CHILDREN_ATTR = "$CHILDREN$";
 	
 	//Command lifecycle result
 	private static final int SUCCESS = 0;
@@ -162,6 +164,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 
 	private final FormBindingHandler _formBindingHandler;
 	private final PropertyBindingHandler _propertyBindingHandler;
+	private final ChildrenBindingHandler _childrenBindingHandler;
 	
 	/* the relation of form and inner save-bindings */
 	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings;//form comp -> savebindings	
@@ -194,6 +197,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		_bindings = new HashMap<Component, Map<String, List<Binding>>>();
 		_formBindingHandler = new FormBindingHandler(this); 
 		_propertyBindingHandler = new PropertyBindingHandler(this);
+		_childrenBindingHandler = new ChildrenBindingHandler(this);
 		
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
@@ -325,9 +329,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				}else if(binding instanceof FormBinding){
 					attr = ((FormBinding)binding).getFormId();
 				}else{
-					throw new UiException("unknow binding type "+binding); 
+					//ignore children binding
 				}
-				if(hasValidator(binding.getComponent(), attr)){
+				if(attr!=null && hasValidator(binding.getComponent(), attr)){
 					_validationMessages.clearMessages(binding.getComponent(),attr);
 				}
 			}
@@ -937,6 +941,76 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 	}
 	
+	
+	@Override
+	public void addChildrenInitBinding(Component comp, String initExpr,Map<String, Object> initArgs) {
+		checkInit();
+		if(initExpr==null){
+			throw new IllegalArgumentException("initExpr is null for children of "+comp);
+		}
+		addChildrenInitBinding0(comp,initExpr,initArgs);
+	}
+	
+	@Override
+	public void addChildrenLoadBindings(Component comp,  String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+		checkInit();
+		if(loadExpr==null){
+			throw new IllegalArgumentException("loadExpr is null for children of "+comp);
+		}
+		addChildrenLoadBindings0(comp, loadExpr, beforeCmds, afterCmds, bindingArgs);
+	}
+	
+	private void addChildrenInitBinding0(Component comp, String initExpr, Map<String, Object> bindingArgs) {
+		
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		
+		if(_log.debugable()){
+			_log.debug("add children-init-binding: comp=[%s],expr=[%s]", comp,initExpr);
+		}
+		
+		InitChildrenBindingImpl binding = new InitChildrenBindingImpl(this, comp, initExpr, bindingArgs);
+		
+		addBinding(comp, CHILDREN_ATTR, binding); 
+		final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
+		_childrenBindingHandler.addInitBinding(bkey, binding);
+	}
+	
+	private void addChildrenLoadBindings0(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+		final boolean prompt = isPrompt(beforeCmds,afterCmds);
+
+		if(prompt){
+			if(_log.debugable()){
+				_log.debug("add event(prompt)-children-load-binding: comp=[%s],expr=[%s]", comp,loadExpr);
+			}
+			LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.PROMPT, null,  bindingArgs);
+			addBinding(comp, CHILDREN_ATTR, binding);
+			
+			final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
+			_childrenBindingHandler.addLoadPromptBinding(comp, bkey, binding);
+		}else{
+			if(beforeCmds!=null && beforeCmds.length>0){
+				for(String cmd:beforeCmds){
+					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs);
+					addBinding(comp, CHILDREN_ATTR, binding);
+					if(_log.debugable()){
+						_log.debug("add before command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
+					}
+					_childrenBindingHandler.addLoadBeforeBinding(cmd, binding);
+				}
+			}
+			if(afterCmds!=null && afterCmds.length>0){
+				for(String cmd:afterCmds){
+					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs);
+					addBinding(comp, CHILDREN_ATTR, binding);
+					if(_log.debugable()){
+						_log.debug("add after command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
+					}
+					_childrenBindingHandler.addLoadAfterBinding(cmd, binding);	
+				}
+			}
+		}
+	}
+
 	private boolean isPrompt(String[] beforeCmds, String[] afterCmds){
 		return (beforeCmds==null || beforeCmds.length==0) && (afterCmds==null || afterCmds.length==0);
 	}
@@ -1377,6 +1451,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			doPrePhase(Phase.LOAD_BEFORE, ctx);		
 			_propertyBindingHandler.doLoadBefore(comp, command);
 			_formBindingHandler.doLoadBefore(comp, command);
+			_childrenBindingHandler.doLoadBefore(comp,command);
 		} finally {
 			doPostPhase(Phase.LOAD_BEFORE, ctx);
 		}
@@ -1390,6 +1465,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			doPrePhase(Phase.LOAD_AFTER, ctx);
 			_propertyBindingHandler.doLoadAfter(comp, command);
 			_formBindingHandler.doLoadAfter(comp, command);
+			_childrenBindingHandler.doLoadAfter(comp,command);
 		} finally {
 			doPostPhase(Phase.LOAD_AFTER, ctx);
 		}		
@@ -1450,6 +1526,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		
 		_formBindingHandler.removeBindings(bkey,removed);
 		_propertyBindingHandler.removeBindings(bkey, removed);
+		_childrenBindingHandler.removeBindings(bkey, removed);
 		if(_validationMessages!=null){
 			_validationMessages.clearMessages(comp,key);
 		}
@@ -1470,6 +1547,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private void removeBindings(Collection<Binding> removed) {
 		_formBindingHandler.removeBindings(removed);
 		_propertyBindingHandler.removeBindings(removed);
+		_childrenBindingHandler.removeBindings(removed);
 	}
 	
 	private void addBinding(Component comp, String attr, Binding binding) {
@@ -1540,14 +1618,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if (compBindings != null) {
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_formBindingHandler.initComponentProperties(comp,bkey);
-				_formBindingHandler.loadComponentProperties(comp,bkey);
+				_formBindingHandler.doInit(comp,bkey);
+				_formBindingHandler.doLoad(comp,bkey);
 			}
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_propertyBindingHandler.initComponentProperties(comp,bkey);
-				_propertyBindingHandler.loadComponentProperties(comp,bkey);
+				_propertyBindingHandler.doInit(comp,bkey);
+				_propertyBindingHandler.doLoad(comp,bkey);
 			}
+			for(String key : compBindings.keySet()) {
+				final BindingKey bkey = getBindingKey(comp, key);
+				_childrenBindingHandler.doInit(comp,bkey);
+				_childrenBindingHandler.doLoad(comp,bkey);
+			}
+			
 		}
 	}
 	
