@@ -610,7 +610,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._focusItem) {
 				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) 
 					if (this._isFocus(w)) {
-						w.focus_(timeout); // B50-ZK-685
+						w.focus_(timeout);
 						break;
 					}
 			} else {
