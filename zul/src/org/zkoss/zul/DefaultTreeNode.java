@@ -233,15 +233,20 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		}
 		
 		public TreeNode<E> remove(int index) {
+
+			DefaultTreeModel<E> model = getModel();
 			TreeNode<E> child = _list.remove(index);
+			
+			int[] path = null;
+			if (model != null) {
+				path = model.getPath(child);
+			}
 			
 			if (child instanceof DefaultTreeNode)
 				((DefaultTreeNode<E>)child).setParent(null);
 			
-			DefaultTreeModel<E> model = getModel();
 			if (model != null) {
 				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_REMOVED);
-				int[] path = model.getPath(child);
 				model.removeSelectionPath(path);
 				model.removeOpenPath(path);
 			}

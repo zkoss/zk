@@ -162,13 +162,15 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 		List<Integer> p = new ArrayList<Integer>();
 		while (root != child) {
 			TreeNode<E> parent = child.getParent();
-			for (int i = 0, j = parent.getChildCount(); i < j; i++) {
-				if (parent.getChildAt(i) == child) {
-					p.add(0, i);
-					break;
+			if (parent != null) {
+				for (int i = 0, j = parent.getChildCount(); i < j; i++) {
+					if (parent.getChildAt(i) == child) {
+						p.add(0, i);
+						break;
+					}
 				}
+				child = parent;
 			}
-			child = parent;
 		}
 		final Integer[] objs = p.toArray(new Integer[p.size()]);
 		final int[] path = new int[objs.length];
