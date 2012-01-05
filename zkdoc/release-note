@@ -188,8 +188,9 @@ ZK 6.0.0
   + The open status are provided by TreeOpenableModel when using Tree with Model
   + Library property org.zkoss.zul.Separator.spaceWithMargin is removed (since
     we don't maintain the margin approach found in ZK 2 any more)
-  + org.zkoss.web.util.resource.ClassWebServlet and
-    org.zkoss.web.servlet.ForwardServlet are removed since they are never used
+  + org.zkoss.web.util.resource.ClassWebServlet,
+    org.zkoss.web.servlet.ForwardServlet and
+    org.zkoss.web.servlet.http.HttpServlet are removed, since they are never used.
 
 	--------
 ZK 5.0.10
