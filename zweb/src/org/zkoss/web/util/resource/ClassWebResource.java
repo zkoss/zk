@@ -55,7 +55,7 @@ import org.zkoss.web.servlet.http.Encodes;
 /**
  * Used to access resources located in class path and under /web.
  * It doesn't work alone. Rather, it is a helper for servlet, such as
- * ZK's update servlet or {@link ClassWebServlet}.
+ * ZK's update servlet.
  *
  * <p>Typical use:
  * <ol>
@@ -253,6 +253,8 @@ public class ClassWebResource {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
+		Servlets.getBrowser(request); //update request info
+
 		final Object old = Charsets.setup(request, response, "UTF-8");
 		try {
 			web(request, response, path);

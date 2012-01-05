@@ -93,7 +93,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (data == null)
 			return;
 
-		Servlets.getBrowser(request); //update request info
 		response.setContentType("text/javascript;charset=UTF-8");
 		if (_webctx.shallCompress(request, "wpd") && data.length > 200) {
 			byte[] bs = Https.gzip(request, response, null, data);

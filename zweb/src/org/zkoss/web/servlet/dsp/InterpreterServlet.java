@@ -110,6 +110,8 @@ public class InterpreterServlet extends HttpServlet {
 	protected
 	void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
+		Servlets.getBrowser(request); //update request info
+
 		final String path = Https.getThisServletPath(request);
 		if (log.debugable()) log.debug("Get "+path);
 
