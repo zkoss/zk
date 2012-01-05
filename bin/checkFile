@@ -30,11 +30,11 @@ else
 	folder2=$4
 fi
 
-if [ ! -d "$folder1" ] && [ ! -f "$folder1"] ; then
+if [ ! -d "$folder1" ] && [ ! -f "$folder1" ] ; then
 	echo $folder1 is not a file or folder
 	exit 1
 fi
-if [ ! -d "$folder2" ] && [ ! -f "$folder2"] ; then
+if [ ! -d "$folder2" ] && [ ! -f "$folder2" ] ; then
 	echo $folder2 is not a file or folder
 	exit 1
 fi
