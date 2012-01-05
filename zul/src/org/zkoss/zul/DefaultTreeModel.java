@@ -12,12 +12,18 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.ext.TreeOpenableModel;
+import org.zkoss.zul.ext.TreeSelectionModel;
 
 /**
  * A simple tree data model that uses {@link TreeNode} to represent a tree.
@@ -39,10 +45,88 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements TreeModelExt<TreeNode<E>>, java.io.Serializable {
+implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
+		java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
+	private HashMap<TreeNode<E>, Boolean> _opens = new HashMap<TreeNode<E>, Boolean>();
 
+	private HashMap<TreeNode<E>, Boolean> _selections = new HashMap<TreeNode<E>, Boolean>();
+
+	private boolean _multiple;
+
+
+	// Selectable//Selectable
+	@Override
+	public void setMultiple(boolean multiple) {
+		_multiple = multiple;
+	}
+
+	@Override
+	public boolean isMultiple() {
+		return _multiple;
+	}
+
+
+	/**
+	 * Returns the selections set.
+	 */
+	public Set<TreeNode<E>> getSelection() {
+		HashSet<TreeNode<E>> selected = new HashSet<TreeNode<E>>();
+		int[][] paths = getSelectionPaths();
+		for (int i = 0; i < paths.length; i++) {
+			selected.add(getChild(paths[i]));
+		}
+		return selected;
+	}
+	
+	/**
+	 * Add the specified object into selection.
+	 * @param obj the object to be as selection.
+	 */	
+	public void addSelection(TreeNode<E> child) {
+		int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			addSelectionPath(path);
+	}
+	
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 */
+	public void removeSelection(TreeNode<E> child) {
+		int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			addSelectionPath(path);
+	}
+	/**
+	 * Sets the specified object into open.
+	 * @param obj the object to be as open.
+	 * @param open whether be opened
+	 */
+	public void setOpen(TreeNode<E> child, boolean open) {
+		int[] path = getPath(child);
+		if (path != null && path.length > 0) {
+			if (open)
+				addOpenPath(path);
+			else
+				removeOpenPath(path);
+		}
+	}
+	
+	
+	/**
+	 * Returns whether the specified object be opened.
+	 * @param obj
+	 */
+	public boolean isOpen(TreeNode<E> child) {
+		int[] path = getPath(child);
+		if (path != null && path.length > 0) {
+			return isPathOpened(path);
+		}
+		return false;
+	}
+	
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
 	 */
@@ -71,7 +155,253 @@ implements TreeModelExt<TreeNode<E>>, java.io.Serializable {
 	public int getIndexOfChild(TreeNode<E> parent, TreeNode<E> child) {
 		return parent.getIndex(child);
 	}
+		
+	@Override
+	public int[] getPath(TreeNode<E> child) {
+		final TreeNode<E> root = getRoot();
+		List<Integer> p = new ArrayList<Integer>();
+		while (root != child) {
+			TreeNode<E> parent = child.getParent();
+			for (int i = 0, j = parent.getChildCount(); i < j; i++) {
+				if (parent.getChildAt(i) == child) {
+					p.add(0, i);
+					break;
+				}
+			}
+			child = parent;
+		}
+		final Integer[] objs = p.toArray(new Integer[p.size()]);
+		final int[] path = new int[objs.length];
+		for (int i = 0; i < objs.length; i++)
+			path[i] = objs[i].intValue();
+		return path;
+	}
 	
+	// TreeOpenableModel
+	@Override
+	public void addOpenPath(int[] path) {
+		if (path != null && path.length > 0) {
+			int[][] paths = new int[1][path.length];
+			paths[0] = path;
+			addOpenPaths(paths);
+		}
+	}
+	
+	@Override
+	public void addOpenPaths(int[][] paths) {
+		int newPathLength = paths != null ? paths.length : 0;
+		if (newPathLength > 0) {
+			for (TreeNode<E> e : getNodesByPath(paths)) {
+				if (!_opens.containsKey(e)) {
+					_opens.put(e, Boolean.TRUE);
+					fireOpenChanged(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void removeOpenPath(int[] path) {
+		if (path != null && path.length > 0) {
+			int[][] paths = new int[1][path.length];
+			paths[0] = path;
+			removeOpenPaths(paths);
+		}
+	}
+
+	@Override
+	public void removeOpenPaths(int[][] paths) {
+		int newPathLength = paths != null ? paths.length : 0;
+		if (newPathLength > 0 && !_opens.isEmpty()) {
+			for (TreeNode<E> e : getNodesByPath(paths)) {
+				if (_opens.remove(e)) {
+					fireOpenChanged(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean isPathOpened(int[] path) {
+		if (path != null && !_opens.isEmpty()) {
+			TreeNode<E> e = getChild(path);
+			if (e != null)
+				return _opens.containsKey(e);
+		}
+		return false;
+	}
+
+	@Override
+	public int[] getOpenPath() {
+		if (!_opens.isEmpty()) {
+			return getPath(_opens.keySet().iterator()
+					.next());
+		} else return null;
+	}
+
+	@Override
+	public int[][] getOpenPaths() {
+		if (!_opens.isEmpty()) {
+			List<int[]> paths = new ArrayList<int[]>();
+			for (TreeNode<E> e : _opens.keySet()) {
+				int[] path = getPath(e);
+				if (path != null)
+					paths.add(path);
+			}
+			return paths.toArray(new int[0][]);
+		} else return null;
+	}
+
+	@Override
+	public int getOpenCount() {
+		return _opens.size();
+	}
+
+	@Override
+	public boolean isOpenEmpty() {
+		return _opens.isEmpty();
+	}
+
+	@Override
+	public void clearOpen() {
+		if (!_opens.isEmpty()) {
+			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_opens.keySet())) {
+				_opens.remove(e);
+				fireOpenChanged(e);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<TreeNode<E>> getNodesByPath(int[][] paths) {
+		if (paths == null)
+			return Collections.EMPTY_LIST;
+		List<TreeNode<E>> list = new ArrayList<TreeNode<E>>();
+		for (int[] path : paths) {
+			TreeNode<E> node = getChild(path);
+			if (node != null)
+				list.add(node);
+		}
+		return list;
+	}
+	
+	// TreeSelectionModel
+	@Override
+	public void addSelectionPath(int[] path) {
+		if (path != null && path.length > 0) {
+			int[][] paths = new int[1][path.length];
+			paths[0] = path;
+			addSelectionPaths(paths);
+		}
+	}
+
+	@Override
+	public void addSelectionPaths(int[][] paths) {
+		int newPathLength = paths != null ? paths.length : 0;
+		if (newPathLength > 0) {
+			if (!isMultiple()) {
+				List<TreeNode<E>> newSelection = getNodesByPath(paths);
+				if (!newSelection.isEmpty()) {
+					TreeNode<E> e = newSelection.get(0);
+					if (!_selections.containsKey(e)) {
+						_selections.clear();
+						_selections.put(e, Boolean.TRUE);
+						fireSelectionChanged(e);
+					}
+				}
+			} else {
+				for (TreeNode<E> e : getNodesByPath(paths)) {
+					if (!_selections.containsKey(e)) {
+						_selections.put(e, Boolean.TRUE);
+						fireSelectionChanged(e);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void removeSelectionPath(int[] path) {
+		if (path != null && path.length > 0) {
+			int[][] paths = new int[1][path.length];
+			paths[0] = path;
+			removeSelectionPaths(paths);
+		}
+	}
+
+	@Override
+	public void removeSelectionPaths(int[][] paths) {
+		int newPathLength = paths != null ? paths.length : 0;
+		if (newPathLength > 0 && !_selections.isEmpty()) {
+			for (TreeNode<E> e : getNodesByPath(paths)) {
+				if (_selections.remove(e)) {
+					fireSelectionChanged(e);
+				}
+				if (!isMultiple())
+					break;
+			}
+		}
+	}
+
+	@Override
+	public boolean isPathSelected(int[] path) {
+		if (path != null && !_selections.isEmpty()) {
+			TreeNode<E> e = getChild(path);
+			if (e != null)
+				return _selections.containsKey(e);
+		}
+		return false;
+	}
+
+	@Override
+	public int[] getSelectionPath() {
+		if (!_selections.isEmpty()) {
+			return getPath(_selections.keySet()
+					.iterator().next());
+		} else return null;
+	}
+
+	@Override
+	public int[][] getSelectionPaths() {
+		if (!_selections.isEmpty()) {
+			List<int[]> paths = new ArrayList<int[]>();
+			for (TreeNode<E> e : _selections.keySet()) {
+				int[] path = getPath(e);
+				if (path != null)
+					paths.add(path);
+			}
+			return paths.toArray(new int[0][]);
+		} else return null;
+	}
+
+	@Override
+	public int getSelectionCount() {
+		return _selections.size();
+	}
+
+	@Override
+	public boolean isSelectionEmpty() {
+		return _selections.isEmpty();
+	}
+
+	@Override
+	public void clearSelection() {
+		if (!_selections.isEmpty()) {
+			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_selections.keySet())) {
+				_selections.remove(e);
+				fireSelectionChanged(e);
+			}
+		}
+	}
+	
+	// Clone
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		DefaultTreeModel<E> clone = (DefaultTreeModel<E>)super.clone();
+		clone._selections = new HashMap<TreeNode<E>, Boolean>(_selections);
+		clone._opens = new HashMap<TreeNode<E>, Boolean>(_opens);
+		return clone;
+	}
 	//-- TreeModelExt --//
 	/** Sorts the data.
 	 *

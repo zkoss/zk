@@ -18,7 +18,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <separator/>
 2. You should see there displays a paging detail like "[1 - 10 / 15]".
 <separator/>
-3. Please press F5 to reload this page. Root4.0.0 should be opened and the pager should be displayed correctly.
+3. Please press the button "refresh" to reload this page. Root4.0.0 should be opened and the pager should be displayed correctly.
 <vlayout id="inf"/>
 <zscript><![CDATA[
 public class JeaseTree extends Tree {

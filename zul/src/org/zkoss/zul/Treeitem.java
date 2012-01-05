@@ -595,7 +595,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */
-	@SuppressWarnings("unchecked")
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_OPEN)) {
@@ -616,9 +615,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 				TreeModel model = tree.getModel();
 				if (model instanceof TreeOpenableModel) {
 					if (open)
-						((TreeOpenableModel)model).addOpenPath(Tree.toIntArray(tree.getTreeitemPath(tree, this)));
+						((TreeOpenableModel)model).addOpenPath(tree.getTreeitemPath(tree, this));
 					else
-						((TreeOpenableModel)model).removeOpenPath(Tree.toIntArray(tree.getTreeitemPath(tree, this)));
+						((TreeOpenableModel)model).removeOpenPath(tree.getTreeitemPath(tree, this));
 					hasOpenableModel = true;// skip to count again.
 				}
 			}

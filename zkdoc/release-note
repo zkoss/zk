@@ -180,7 +180,9 @@ ZK 6.0.0
     org.zkoss.zul.ext.TreeOpenableModel.
   + AbstractListModel implements org.zkoss.zul.ext.ListSelectionModel instead of
 	org.zkoss.zul.ext.Selectable
-  + AbstractTreeModel implements org.zkoss.zul.ext.TreeSelectionModel and
+  + Remove AbstractTreeModel to implement org.zkoss.zul.ext.Selectable and
+    org.zkoss.zul.ext.Openable
+  + DefaultTreeModel implements org.zkoss.zul.ext.TreeSelectionModel and
 	org.zkoss.zul.ext.TreeOpenableModel instead of org.zkoss.zul.ext.Selectable
 	and org.zkoss.zul.ext.Openable
   + The multiple status and selections status are provided by ListSelectionModel

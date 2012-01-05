@@ -75,6 +75,24 @@ public interface TreeModel<E> {
 	public E getRoot();
 	
 	/**
+	 * Returns the child of parent at path where the path indicates the child is
+	 * placed in the whole tree.
+	 * @param path the tree path
+	 * @return the child of parent at path
+	 * @since 6.0.0
+	 */
+	public E getChild(int[] path);
+	
+
+	/**
+	 * Returns the path from the child, where the path indicates the child is
+	 * placed in the whole tree.
+	 * @param child the node we are interested in
+	 * @since 6.0.0
+	 */
+	public int[] getPath(E child);
+	
+	/**
 	 * Add a listener to the tree that's notified each time a change to the data model occurs
 	 * @param l the listener to add
 	 */

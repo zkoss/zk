@@ -1264,14 +1264,14 @@ public class Tree extends MeshElement {
 				if (_model instanceof TreeSelectionModel) {
 					TreeSelectionModel sm = (TreeSelectionModel) _model;
 					if (parent instanceof Treeitem)
-						((Treeitem)parent).setSelected(sm.isPathSelected(Tree.getPath(_model, _model.getRoot(), node)));
+						((Treeitem)parent).setSelected(sm.isPathSelected(_model.getPath(node)));
 				}
 				break;
 			case TreeDataEvent.OPEN_CHANGED:
 				if (_model instanceof TreeOpenableModel) {
 					TreeOpenableModel om = (TreeOpenableModel) _model;
 					if (parent instanceof Treeitem)
-						((Treeitem)parent).setOpen(om.isPathOpened(Tree.getPath(_model, _model.getRoot(), node)));
+						((Treeitem)parent).setOpen(om.isPathOpened(_model.getPath(node)));
 				}
 				break;
 			}
@@ -1650,14 +1650,24 @@ public class Tree extends MeshElement {
 				TreeNode treeNode = (TreeNode) node;
 				item.setTreeNode(treeNode);
 			}
-			int[] path = Tree.getPath(_model, _model.getRoot(), node);
+			int[] path = null;
 			if (_model instanceof TreeSelectionModel) {
-				if (((TreeSelectionModel) _model).isPathSelected(path)) {
-					addItemToSelection(item);
+				TreeSelectionModel model = (TreeSelectionModel) _model;
+				if (!model.isSelectionEmpty()) {
+					if (model.isPathSelected((path = _model.getPath(node)))) {
+						addItemToSelection(item);
+					}
 				}
 			}
+			
 			if (_model instanceof TreeOpenableModel) {
-				item.setOpen(((TreeOpenableModel) _model).isPathOpened(path));
+				TreeOpenableModel model = (TreeOpenableModel) _model;
+				if (!model.isOpenEmpty()) {
+					if (path == null) {
+						path = _model.getPath(node);
+					}
+					item.setOpen(model.isPathOpened(path));
+				}
 			}
 			
 			try {
@@ -1834,35 +1844,26 @@ public class Tree extends MeshElement {
 	 * @since 3.0.0
 	 */
 	protected Object getAssociatedNode(Treeitem ti, Tree t){
-		return getNodeByPath(getTreeitemPath(t,ti),_model.getRoot());
+		return _model.getChild(getTreeitemPath(t,ti));
 	}
 
 	/**
 	 * return the path which is from ZK Component root to ZK Component lastNode
 	 */
-	/*package*/ List<Integer> getTreeitemPath(Component root, Component lastNode){
-		List<Integer> al = new ArrayList<Integer>();
+	/*package*/ int[] getTreeitemPath(Component root, Component lastNode){
+		List<Integer> l = new ArrayList<Integer>();
 		Component curNode = lastNode;
 		while(!root.equals(curNode)){
 			if(curNode instanceof Treeitem){
-				al.add(0, new Integer(((Treeitem)curNode).getIndex()));
+				l.add(0, new Integer(((Treeitem)curNode).getIndex()));
 			}
 			curNode = curNode.getParent();
 		}
-		return al;
-	}
-
-	/**
-	 * Get the node from tree by given path
-	 * @return the node from tree by given path
-	 * @since 3.0.0
-	 */
-	private Object getNodeByPath(List<Integer> path, Object root) {
-		Object node = root;
-		for (int i = 0; i < path.size(); i++) {
-			node = _model.getChild(node, path.get(i));
-		}
-		return node;
+		final Integer[] objs = l.toArray(new Integer[l.size()]);
+		final int[] path = new int[objs.length];
+		for (int i = 0; i < objs.length; i++)
+			path[i] = objs[i].intValue();
+		return path;
 	}
 
 	/** Load the treeitems by the given node.
@@ -1878,22 +1879,23 @@ public class Tree extends MeshElement {
 	 * @since #getChildByNode
 	 */
 	public Treeitem renderItemByNode(Object node) {
-		return renderItemByPath(getPath(_model, _model.getRoot(), node));
+		return renderItemByPath(_model.getPath(node));
 	}
 	
-	/*package*/ static int[] toIntArray(List<Integer> l) {
-		final Integer[] objs = l.toArray(new Integer[l.size()]);
-		final int[] path = new int[objs.length];
-		for (int i = 0; i < objs.length; i++)
-			path[i] = objs[i].intValue();
-		return path;
-	}
+	
+	
 	/*package*/ static <Node> int[] getPath(TreeModel<Node> model, Node parent, Node lastNode){
 		final List<Integer> l = new LinkedList<Integer>();
 		dfSearch(model, l, parent, lastNode);
 
-		return toIntArray(l);
+		final Integer[] objs = l.toArray(new Integer[l.size()]);
+		final int[] path = new int[objs.length];
+		for (int i = 0; i < objs.length; i++)
+			path[i] = objs[i].intValue();
+		
+		return path;
 	}
+	
 	private static <Node>
 	boolean dfSearch(TreeModel<Node> model, List<Integer> path, Node node, Node target){
 		if (node.equals(target))
@@ -1909,7 +1911,6 @@ public class Tree extends MeshElement {
 			}
 		return false;
 	}
-
 	/**
 	 * Load the treeitems by giveing a path of the treeitems top open.
 	 * <br>Note: By using this method, all treeitems in path will be rendered
@@ -1920,27 +1921,27 @@ public class Tree extends MeshElement {
 	 * @return the treeitem from tree by given path
 	 * @since 3.0.0
 	 */
-	public Treeitem renderItemByPath(int[] path){
-		if(path == null || path.length == 0)
+	public Treeitem renderItemByPath(int[] path) {
+		if (path == null || path.length == 0)
 			return null;
-		//Start from root-Tree
+		// Start from root-Tree
 		Treeitem ti = null;
 		List children = this.getTreechildren().getChildren();
 		/*
 		 * Go through each stop in path and render corresponding treeitem
 		 */
-		for(int i=0; i<path.length; i++){
-			if(path[i] <0 || path[i] > children.size())
+		for (int i = 0; i < path.length; i++) {
+			if (path[i] < 0 || path[i] > children.size())
 				return null;
 			ti = (Treeitem) children.get(path[i]);
 
-			if(i<path.length-1)
+			if (i < path.length - 1)
 				ti.setOpen(true);
 
-			if(ti.getTreechildren()!=null){
+			if (ti.getTreechildren() != null) {
 				children = ti.getTreechildren().getChildren();
-			}else{
-				if(i!=path.length-1){
+			} else {
+				if (i != path.length - 1) {
 					return null;
 				}
 			}
@@ -2053,7 +2054,7 @@ public class Tree extends MeshElement {
 							(Treeitem)selItems.iterator().next(): null;
 					selectItem(item);
 					if (_model instanceof TreeSelectionModel) {
-						((TreeSelectionModel)_model).addSelectionPath(toIntArray(getTreeitemPath(this, item)));
+						((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
 					}
 				} else {
 					int from, to;
@@ -2073,7 +2074,7 @@ public class Tree extends MeshElement {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
 							if (_model instanceof TreeSelectionModel) {
-								((TreeSelectionModel)_model).addSelectionPath(toIntArray(getTreeitemPath(this, item)));
+								((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
 							}
 						}
 					}
@@ -2084,7 +2085,7 @@ public class Tree extends MeshElement {
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
 								if (_model instanceof TreeSelectionModel) {
-									((TreeSelectionModel)_model).removeSelectionPath(toIntArray(getTreeitemPath(this, item)));
+									((TreeSelectionModel)_model).removeSelectionPath(getTreeitemPath(this, item));
 								}
 							}
 						}
