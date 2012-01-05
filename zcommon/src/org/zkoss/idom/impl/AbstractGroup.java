@@ -33,7 +33,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import org.zkoss.util.NotableLinkedList;
-import org.zkoss.xml.FacadeNodeList;
 import org.zkoss.idom.*;
 
 /**

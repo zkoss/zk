@@ -35,7 +35,6 @@ import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Primitives;
 import org.zkoss.lang.reflect.Fields;
-import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.ui.Component;
@@ -1106,8 +1105,6 @@ public class DataBinder implements java.io.Serializable {
 						return; //same value, no need to do anything
 					Fields.set(bean, beanid, val, autoConvert);
 				} catch (NoSuchMethodException ex) {
-					throw UiException.Aide.wrap(ex);
-				} catch (ModificationException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
 			}

@@ -36,9 +36,6 @@ public class SystemException extends RuntimeException implements Messageable {
 		 */
 		public static SystemException wrap(Throwable t) {
 			t = Exceptions.unwrap(t);
-			if (t instanceof Warning)
-				return (WarningException)
-					Exceptions.wrap(t, WarningException.class);
 			if (t instanceof Expectable)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class);
@@ -51,9 +48,6 @@ public class SystemException extends RuntimeException implements Messageable {
 		 */
 		public static SystemException wrap(Throwable t, String msg) {
 			t = Exceptions.unwrap(t);
-			if (t instanceof Warning)
-				return (WarningException)
-					Exceptions.wrap(t, WarningException.class, msg);
 			if (t instanceof Expectable)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, msg);
@@ -66,9 +60,6 @@ public class SystemException extends RuntimeException implements Messageable {
 		 */
 		public static SystemException wrap(Throwable t, int code, Object[] fmtArgs) {
 			t = Exceptions.unwrap(t);
-			if (t instanceof Warning)
-				return (WarningException)
-					Exceptions.wrap(t, WarningException.class, code, fmtArgs);
 			if (t instanceof Expectable)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code, fmtArgs);
@@ -81,9 +72,6 @@ public class SystemException extends RuntimeException implements Messageable {
 		 */
 		public static SystemException wrap(Throwable t, int code, Object fmtArg) {
 			t = Exceptions.unwrap(t);
-			if (t instanceof Warning)
-				return (WarningException)
-					Exceptions.wrap(t, WarningException.class, code, fmtArg);
 			if (t instanceof Expectable)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code, fmtArg);
@@ -96,9 +84,6 @@ public class SystemException extends RuntimeException implements Messageable {
 		 */
 		public static SystemException wrap(Throwable t, int code) {
 			t = Exceptions.unwrap(t);
-			if (t instanceof Warning)
-				return (WarningException)
-					Exceptions.wrap(t, WarningException.class, code);
 			if (t instanceof Expectable)
 				return (OperationException)
 					Exceptions.wrap(t, OperationException.class, code);

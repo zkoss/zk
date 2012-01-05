@@ -33,7 +33,6 @@ import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
-import org.zkoss.util.ModificationException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -422,8 +421,6 @@ public class Binding implements java.io.Serializable {
 			} else { //Feature# 2855116. Save into component custom-attribute(also a variable in ZK5).
 				comp.setAttribute(_attr, bean);
 			}
-		} catch (ModificationException ex) {
-			throw UiException.Aide.wrap(ex);
 
 		//Bug #1876198 Error msg appears when load page (databind+CustomConstraint)
 		//catching WrongValueException no longer works, so mark it out

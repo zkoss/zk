@@ -40,7 +40,7 @@ import static org.zkoss.lang.Generics.cast;
 import org.zkoss.mesg.Messages;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.NotableLinkedList;
-import org.zkoss.xml.FacadeNodeList;
+import org.zkoss.idom.impl.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
 /**

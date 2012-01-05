@@ -23,7 +23,6 @@ import java.lang.reflect.AccessibleObject;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
-import org.zkoss.util.ModificationException;
 
 /**
  * Utilities to access fields.
@@ -73,7 +72,7 @@ public class Fields {
 	 */
 	public static final
 	void setByCompound(Object obj, String name, Object val,
-	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
+	boolean autoCoerce) throws NoSuchMethodException {
 		for (;;) {
 			final int j = name.indexOf('.');
 			if (j < 0) {
@@ -97,7 +96,7 @@ public class Fields {
 	 */
 	public static final
 	void setByCompound(Object obj, String name, Object val)
-	throws NoSuchMethodException, ModificationException {
+	throws NoSuchMethodException {
 		setByCompound(obj, name, val, false);
 	}
 
@@ -128,7 +127,7 @@ public class Fields {
 	 * or method (prefixed with set).
 	 */
 	public static final void set(Object obj, String name, Object val,
-	boolean autoCoerce) throws NoSuchMethodException, ModificationException {
+	boolean autoCoerce) throws NoSuchMethodException {
 		try {
 			AccessibleObject acs;
 			try {
@@ -157,7 +156,7 @@ public class Fields {
 		} catch (NoSuchMethodException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw ModificationException.Aide.wrap(ex, "Not found: " + name);
+			throw SystemException.Aide.wrap(ex, "Not found: " + name);
 		}
 	}
 }

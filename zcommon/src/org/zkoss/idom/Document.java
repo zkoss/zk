@@ -26,7 +26,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMConfiguration;
 
 import org.zkoss.util.NotableLinkedList;
-import org.zkoss.xml.FacadeNodeList;
+import org.zkoss.idom.impl.FacadeNodeList;
 import org.zkoss.idom.impl.*;
 
 /**

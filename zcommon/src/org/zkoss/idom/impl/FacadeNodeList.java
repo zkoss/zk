@@ -13,7 +13,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.xml;
+package org.zkoss.idom.impl;
 
 import java.util.List;
 import org.w3c.dom.Node;
@@ -23,7 +23,6 @@ import org.w3c.dom.NodeList;
  * The NodeList which is a facade of another java List.
  *
  * @author tomyeh
- * @see FacadeList
  */
 public class FacadeNodeList implements NodeList {
 	/** The java List to facade. */

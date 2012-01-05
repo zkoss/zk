@@ -29,8 +29,14 @@ import org.zkoss.idom.Item;
  */
 public class Nodes {
 	/** The empty node list. */
-	public static final NodeList EMPTY_NODELIST
-		= new FacadeNodeList(Collections.EMPTY_LIST);
+	public static final NodeList EMPTY_NODELIST = new NodeList() {
+			public int getLength() {
+				return 0;
+			}
+			public Node item(int index) {
+				return null;
+			}
+		};
 
 	/**
 	 * Get the text value of a node.
