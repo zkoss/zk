@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-750.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  5 18:00:08 TST 2012, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    1. Please scroll down to the end of the listbox.
+    <separator/>
+    2. Please scroll up to the top of the listbox.
+    <separator/>
+    3. Please scroll down to the end of the listbox.
+    <separator/>
+    4. If you see the content of the listbox is blank, that is a bug.
+	<zscript>
+		<![CDATA[
+		List Items = new ArrayList();
+		for (int i = 0; i < 1000; i++) {
+			Items.add("data "+i);
+		}
+		ListModelList model = new ListModelList(Items);
+	]]></zscript>
+	<listbox height="150px" model="${model}" />
+</zk>

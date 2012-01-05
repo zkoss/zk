@@ -79,6 +79,7 @@ ZK 6.0.0
   ZK-702: combobutton js error occurs on click event
   ZK-691: stubonly not work for Executions.createComponentsDirectly
   ZK-707: ListModel/TreeModel selection cannot share in two component
+  ZK-750: Listbox ROD failed with ListModelList
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
