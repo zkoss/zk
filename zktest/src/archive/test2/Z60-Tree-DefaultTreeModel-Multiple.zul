@@ -1,0 +1,84 @@
+<!--
+	Z60-Tree-DefaultTreeModel-ROD.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zul.*;
+		import org.zkoss.zktest.test2.tree.*;
+		import org.zkoss.zktest.util.*;
+		import org.zkoss.zk.ui.select.*;
+		DefaultTreeModel model = TreeModels.createDefaultTreeModel();
+		DefaultTreeModel model2 = TreeModels.createDefaultTreeModel();
+		model.multiple = true;
+		model2.multiple = true;
+		int cnt = 0;
+		int cmpCnt = 0;
+	</zscript>
+	<div>
+		<div>1. Select "A" in the first tree and then deselect "A". You should see corresponding items in the tree below selected/deselected.</div>
+	</div>
+	<separator />
+	<button label="Add">
+		<attribute name="onClick"><![CDATA[
+			Iterator iter = model.getSelection().iterator();
+			if (!iter.hasNext()) {
+				alert("No Treeitem is selected.");
+				return;
+			}
+			TreeNode n = iter.next();
+			n.add(new TreeModels.TestDefaultTreeNode("Node " + cnt++, new TreeNode[0]));
+		]]></attribute>
+	</button>
+	<button label="Remove">
+		<attribute name="onClick"><![CDATA[
+			for (TreeNode n : model.getSelection())
+				n.getParent().remove(n);
+		]]></attribute>
+	</button>
+	<button label="Clone">
+		<attribute name="onClick"><![CDATA[
+			Tree tree = tree3.clone();
+			tree.id = "treeC" + cmpCnt;
+			tree.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[
+			Tree tree = (Tree) Serializations.clone(tree3);
+			tree.id = "treeCBS" + cmpCnt;
+			tree.parent = clones;
+		]]></attribute>
+	</button>
+	<separator />
+	<hlayout>
+		<vlayout hflex="1">
+			<tree model="${model}" checkmark="true" hflex="1" height="200px" onSelect="">
+				<treecols>
+					<treecol label="Col" />
+				</treecols>
+			</tree>
+			<tree model="${model}" checkmark="true" hflex="1" height="200px" onSelect="">
+				<treecols>
+					<treecol label="Col" />
+				</treecols>
+			</tree>
+		</vlayout>
+		<vlayout hflex="1">
+			<tree id="tree3" model="${model2}" checkmark="true" hflex="1" height="200px" onSelect="">
+				<treecols>
+					<treecol label="Col" />
+				</treecols>
+			</tree>
+		</vlayout>
+		<vlayout id="clones" hflex="1" />
+	</hlayout>
+</zk>
