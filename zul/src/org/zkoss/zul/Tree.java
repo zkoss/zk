@@ -1651,6 +1651,7 @@ public class Tree extends MeshElement {
 				treeNode = (TreeNode) node;
 				item.setTreeNode(treeNode);
 			}
+
 			int[] path = null;
 			if (_model instanceof TreeSelectionModel) {
 				TreeSelectionModel model = (TreeSelectionModel) _model;
@@ -1886,35 +1887,6 @@ public class Tree extends MeshElement {
 		return renderItemByPath(_model.getPath(node));
 	}
 	
-	
-	
-	/*package*/ static <Node> int[] getPath(TreeModel<Node> model, Node parent, Node lastNode){
-		final List<Integer> l = new LinkedList<Integer>();
-		dfSearch(model, l, parent, lastNode);
-
-		final Integer[] objs = l.toArray(new Integer[l.size()]);
-		final int[] path = new int[objs.length];
-		for (int i = 0; i < objs.length; i++)
-			path[i] = objs[i].intValue();
-		
-		return path;
-	}
-	
-	private static <Node>
-	boolean dfSearch(TreeModel<Node> model, List<Integer> path, Node node, Node target){
-		if (node.equals(target))
-			return true;
-		if (model.isLeaf(node))
-			return false;
-
-		int size = model.getChildCount(node);
-		for (int i = 0; i< size; i++)
-			if (dfSearch(model, path, model.getChild(node, i), target)){
-				path.add(0, new Integer(i));
-				return true;
-			}
-		return false;
-	}
 	/**
 	 * Load the treeitems by giveing a path of the treeitems top open.
 	 * <br>Note: By using this method, all treeitems in path will be rendered

@@ -139,23 +139,29 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 		root.setModel(this);
 	}
 
-	//@Override
+	@Override
 	public boolean isLeaf(TreeNode<E> node) {
 		return node.isLeaf();
 	}
-	//@Override
+	@Override
 	public TreeNode<E> getChild(TreeNode<E> parent, int index) {
 		return parent.getChildAt(index);
 	}
-	//@Override
+	@Override
 	public int getChildCount(TreeNode<E> parent) {
 		return parent.getChildCount();
 	}
-	//@Override
+	@Override
 	public int getIndexOfChild(TreeNode<E> parent, TreeNode<E> child) {
 		return parent.getIndex(child);
 	}
-		
+
+	/**
+	 * Returns the path from the child, where the path indicates the child is
+	 * placed in the whole tree.
+	 * @param child the node we are interested in
+	 * @since 6.0.0
+	 */
 	@Override
 	public int[] getPath(TreeNode<E> child) {
 		final TreeNode<E> root = getRoot();

@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -156,15 +157,36 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 
 
 	/**
-	 * Returns the path from the specified child, this implementation is not
-	 * smart to get the path, it will go through the whole tree to get the path.
-	 * <p> If the subclass must override this method for better performance.
+	 * Returns the path from the specified child.
+	 * This implementation looks for the child by traversing every possible
+	 * child (deep-first).
+	 * It is suggested to override this method for better performance,
+	 * if there is a better algorithm.
 	 * @since 6.0.0 
 	 */
 	public int[] getPath(E child) {
-		return Tree.getPath(this, getRoot(), child);
+		final List<Integer> path = new ArrayList<Integer>();
+		dfSearch(path, getRoot(), child);
+
+		final int[] ipath = new int[path.size()];
+		for (int j = 0; j < ipath.length; j++)
+			ipath[j] = path.get(j);
+		return ipath;
 	}
-	
+	private boolean dfSearch(List<Integer> path, E node, E target){
+		if (node.equals(target))
+			return true;
+		if (isLeaf(node))
+			return false;
+
+		for (int i = 0, size = getChildCount(node); i< size; i++)
+			if (dfSearch(path, getChild(node, i), target)){
+				path.add(0, new Integer(i));
+				return true;
+			}
+		return false;
+	}
+
 	// -- TreeModel --//
 	public void addTreeDataListener(TreeDataListener l) {
 		_listeners.add(l);
