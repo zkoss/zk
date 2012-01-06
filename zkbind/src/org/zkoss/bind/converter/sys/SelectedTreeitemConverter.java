@@ -67,7 +67,7 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		  	final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
 	  		if (model != null) {
-		  		final String varnm = (String) tree.getAttribute("$VAR$");
+		  		final String varnm = (String) ((Treeitem) val).getAttribute(BinderImpl.VAR);
 		  		if (varnm != null) { //There is binding on template
 		  			return ((Treeitem) val).getAttribute(varnm);
 		  		} else { //no template, assume Treeitem.value to be used with selectedItem

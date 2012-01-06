@@ -67,7 +67,7 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 		  	final Combobox lbx = (Combobox) comp;
 	  		final ListModel<?> model = lbx.getModel();
 	  		if (model != null) {
-		  		final String varnm = (String) lbx.getAttribute("$VAR$");
+		  		final String varnm = (String) ((Comboitem)val).getAttribute(BinderImpl.VAR);
 		  		if (varnm != null) { //There is binding on template
 		  			return ((Comboitem)val).getAttribute(varnm);
 		  		} else { //no binding

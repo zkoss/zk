@@ -67,7 +67,7 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 		  	final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
 	  		if (model != null) {
-		  		final String varnm = (String) lbx.getAttribute(BinderImpl.VAR);
+		  		final String varnm = (String) ((Listitem)val).getAttribute(BinderImpl.VAR);
 		  		if (varnm != null) { //There is binding on template
 		  			return ((Listitem)val).getAttribute(varnm);
 		  		} else { //no binding
