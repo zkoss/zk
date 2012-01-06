@@ -231,7 +231,13 @@ public class GridDataLoader implements DataLoader, Cropper {
 		public void render(final Row row, final Object data) {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
-			final Template tm = grid.getTemplate("model");
+			Template tm = grid.getTemplate("model");
+			if (row instanceof Group) {
+				final Template tm2 = grid.getTemplate("model:grouping");
+				if (tm2 != null)
+					tm = tm2;
+			}
+				
 			if (tm == null) {
 				final Label label = newRenderLabel(Objects.toString(data));
 				label.applyProperties();

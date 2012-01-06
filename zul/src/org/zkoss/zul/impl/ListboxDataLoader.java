@@ -212,7 +212,12 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	private static final ListitemRenderer _defRend = new ListitemRenderer() {
 		public void render(final Listitem item, final Object data) {
 			final Listbox listbox = (Listbox)item.getParent();
-			final Template tm = listbox.getTemplate("model");
+			Template tm = listbox.getTemplate("model");
+			if (item instanceof Listgroup) {
+				final Template tm2 = listbox.getTemplate("model:grouping");
+				if (tm2 != null)
+					tm = tm2;
+			}
 			if (tm == null) {
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
