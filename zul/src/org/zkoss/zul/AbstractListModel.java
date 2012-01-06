@@ -376,6 +376,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 			throw new InternalError();
 		}
 		clone._listeners = new LinkedList<ListDataListener>();
+		clone._value = (BitSet) _value.clone(); 
 		return clone;
 	}
 }

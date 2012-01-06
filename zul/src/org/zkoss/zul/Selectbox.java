@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.ArraysX;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -216,7 +217,14 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					postOnInitRender();
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
+						if (_model instanceof ListSelectionModel) {
+							ListSelectionModel smodel = (ListSelectionModel)_model;
+							setSelectedIndex(smodel.getMinSelectionIndex());
+						}
+					} else {
+						postOnInitRender();
+					}
 				}
 			};
 		_model.addListDataListener(_dataListener);
@@ -380,7 +388,9 @@ public class Selectbox extends HtmlBasedComponent {
 			_jsel = ((Integer) request.getData().get("")).intValue();
 			final Integer index = ((Integer)request.getData().get(""));
 			final Set<Object> objects = new LinkedHashSet<Object>();
-			objects.add(_model.getElementAt(index));
+			
+			if (index >= 0)
+				objects.add(_model.getElementAt(index));
 			
 			if (_model instanceof ListSelectionModel)
 				((ListSelectionModel)_model).addSelectionInterval(index, index);
@@ -399,6 +409,7 @@ public class Selectbox extends HtmlBasedComponent {
 				if (model != null)
 					clone._model = model;
 			}
+			clone.postOnInitRender();
 			// we use the same data model but we have to create a new listener
 			clone._dataListener = null;
 			clone.initDataListener();
@@ -431,6 +442,7 @@ public class Selectbox extends HtmlBasedComponent {
 		didDeserialize(_renderer);
 		if (_model != null) {
 			initDataListener();
+			postOnInitRender();
 		}
 	}
 
