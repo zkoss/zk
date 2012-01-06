@@ -21,7 +21,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			Items.add("data "+i);
 		}
 		ListModelList model = new ListModelList(Items);
-		ListModelList model2 = new ListModelList(Items);
+		ListModelList model2 = org.zkoss.zktest.util.Serializations.toCloneableListModelList(Items);
 		model.setMultiple(true);
 		model2.setMultiple(true);
 		int cnt = 0;
