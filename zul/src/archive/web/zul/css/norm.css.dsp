@@ -229,7 +229,7 @@ div.z-log button {
 .z-renderdefer {
 	height: 16px; width: 16px;
 	background: transparent no-repeat center;
-	background-image: url(${c:encodeThemeURL('~./zul/img/misc/progress_breeze.gif')});
+	background-image: url(${c:encodeThemeURL('~./zul/img/misc/progress.gif')});
 }
 .z-apply-loading-icon,
 .z-loading-icon {
