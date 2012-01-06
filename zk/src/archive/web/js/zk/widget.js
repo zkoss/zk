@@ -4698,14 +4698,26 @@ zk.Native = zk.$extends(zk.Widget, {
 			//Bug ZK-606/607: hflex/vflex and many components need to know
 			//child.$n(), so we have to generate id if the parent is not native
 			//(and no id is assigned) (otherwise, zk.Native.$n() failed)
-			if (!this.id && (p=this.parent) && !p.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
-				var extra = ' id="' + this.uuid + '"',
-					idx = s.indexOf('>'); 
-				if (idx >= 0)
-					s = s.substring(0, idx) + extra + s.substring(idx); 
-				else
-					s += extra ;
+			if (this.$instanceof(zk.Native) //ZK-745
+			&& !this.id && (p=this.parent) && !p.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+				var j = 0, len = s.length, cond, cc;
+				for (cond = {whitespace:1}; j < len; ++j) {
+					if ((cc = s.charAt(j)) == '<')
+						break; //found
+					if (!zUtl.isChar(cc, cond)) {
+						j = len; //not recognized => don't handle
+						break;
+					}
+				}
+				if (j < len) {
+					cond = {upper:1,lower:1,digit:1,'-':1};
+					while (++j < len)
+						if (!zUtl.isChar(s.charAt(j), cond))
+							break;
+					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j); 
+				}
 			}
+
 			out.push(s);
 			if (this.value && s.startsWith("<textarea"))
 				out.push(this.value);
