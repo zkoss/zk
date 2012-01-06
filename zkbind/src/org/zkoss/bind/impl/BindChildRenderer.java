@@ -50,10 +50,10 @@ import org.zkoss.zul.Label;
 		};
 		
 		final String var = (String) tm.getParameters().get("var");
-		final String varnm = var == null ? "each" : var; //var is not specified, default to "each"
+		final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 		
-		final String itervar = (String) tm.getParameters().get("status");
-		final String itervarnm = itervar == null ? var+"Status" : itervar; //provide default value if not specified
+		final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
+		final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
 
 		final Component[] items = tm.create(owner, null, 
 			new VariableResolverX() {//this resolver is for EL ${} not for binding 
@@ -74,9 +74,15 @@ import org.zkoss.zul.Label;
 				}
 			}, null);
 
+		//add template dependency
+		if (items != null && items.length > 0)
+			addTemplateDependency(owner, items[0], data, index);
+
 		for(Component comp:items){
+			comp.setAttribute(BinderImpl.VAR, varnm);
 			comp.setAttribute(varnm, data); //kept the value
 			comp.setAttribute(itervarnm, iterStatus);
+			
 			//to force init and load
 			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, comp));
 		}

@@ -24,12 +24,20 @@ import org.zkoss.zk.ui.Component;
 public interface Tracker {
 	/**
 	 * Add a tracking that associate a binding to a dot series under the specified {@link Component}
-	 * @param comp the associated component
+	 * @param comp the component with the associated binding
 	 * @param series the dot series as an array of property name
-	 * @param dependentpath the dot series as an array of property name of the dependent property 
-	 * @param binding the binding
+	 * @param binding the associated binding
 	 */
-	public void addTracking(Component comp, String[] series, String[] dependentpath, Binding binding);
+	public void addTracking(Component comp, String[] series, Binding binding);
+	
+	/**
+	 * Add a depends-on tracking between the source property name series and depends-on property name series.
+	 * @param srcComp the source component with the associated binding
+	 * @param srcSeries the dot series as an array of source property name.
+	 * @param srcBinding the associated binding
+	 * @param dependsOnSeries the dot series as an array of dependsOn property name.
+	 */
+	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp, String[] dependsOnSeries);
 	
 	/**
 	 * Remove all tracking associated with the specified {@link Component}. 

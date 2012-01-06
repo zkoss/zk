@@ -37,7 +37,8 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 	
 	public void render(final Comboitem item, final Object data) throws Exception {
 		final Combobox cb = (Combobox)item.getParent();
-		final Template tm = resoloveTemplate(cb,item,data,item.getIndex(),"model");
+		final int index = item.getIndex();
+		final Template tm = resoloveTemplate(cb,item,data,index,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
@@ -63,7 +64,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 									@Override
 									public int getIndex() {
-										return Integer.valueOf(item.getIndex());
+										return Integer.valueOf(index);
 									}
 								};
 							}
@@ -83,9 +84,12 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 				@Override
 				public int getIndex() {
-					return Integer.valueOf(nci.getIndex());
+					return Integer.valueOf(index);
 				}
 			});
+			
+			//add template dependency
+			addTemplateDependency(cb, nci, data, index);
 			
 			if (nci.getValue() == null) //template might set it
 				nci.setValue(data);

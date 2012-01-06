@@ -38,6 +38,7 @@ import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.impl.lang.EvaluationContext;
+import org.zkoss.zk.ui.Component;
 
 /**
  * ELResolver for Binding; handle Form bean.
@@ -118,7 +119,9 @@ public class BindELResolver extends XelELResolver {
 				script = propertyName(path.listIterator(path.size()).previous());
 			}
 			final Binder binder = binding.getBinder();
-			((BinderCtrl)binder).getTracker().tieValue(binding.getComponent(), base, script, propName, value);
+			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
+			final Component ctxcomp = bctx != null ? bctx.getComponent() : binding.getComponent();
+			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
 			
 			if (base != null) {
 				if (nums == 0 && binding instanceof SaveBinding) { //a done save operation, form or not form
@@ -127,7 +130,6 @@ public class BindELResolver extends XelELResolver {
 				if (!(base instanceof Form)) { //no @DependsOn and @NotifyChange in Form
 					final Method m = (Method) ctx.getContext(Method.class);
 					//parse @DependsOn and add into dependency tracking
-					final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 					final boolean prompt = bctx != null && bctx.getCommandName() == null; 
 					if (prompt && binding instanceof LoadBinding && m != null) {
 						//FormBinding shall not check @DependsOn() for dependent nodes

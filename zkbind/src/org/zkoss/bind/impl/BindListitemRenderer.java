@@ -36,7 +36,8 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 	
 	public void render(final Listitem item, final Object data) throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
-		final Template tm = resoloveTemplate(listbox,item,data,item.getIndex(),"model");
+		final int index = item.getIndex();
+		final Template tm = resoloveTemplate(listbox,item,data,index,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
@@ -62,7 +63,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
-										return Integer.valueOf(item.getIndex());
+										return Integer.valueOf(index);
 									}
 								};
 							}
@@ -81,9 +82,12 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
-					return Integer.valueOf(nli.getIndex());
+					return Integer.valueOf(index);
 				}
 			});
+			
+			//add template dependency
+			addTemplateDependency(listbox, nli, data, index);
 			
 			if (nli.getValue() == null) //template might set it
 				nli.setValue(data);

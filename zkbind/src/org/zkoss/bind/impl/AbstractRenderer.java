@@ -25,15 +25,15 @@ import org.zkoss.zk.ui.util.Template;
  * @author dennis
  * 
  */
-public class AbstractRenderer implements TemplateRendererCtrl, Serializable {
-
+public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializable {
 	private static final long serialVersionUID = 3738037033671761825L;
 
-	static final protected String EACH_ATTR = "var";
-	static final protected String EACH_VAR = "each";
-	static final protected String STATUS_ATTR = "status";
-	static final protected String STATUS_POST_VAR = "Status";
-	
+	protected static final String EACH_ATTR = TemplateResolver.EACH_ATTR;
+	protected static final String EACH_VAR = TemplateResolver.EACH_VAR;
+	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
+	protected static final String STATUS_POST_VAR = TemplateResolver.STATUS_POST_VAR;
+	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
+
 	private String _attributeName;
 	
 	@Override
@@ -59,7 +59,27 @@ public class AbstractRenderer implements TemplateRendererCtrl, Serializable {
 		}else{
 			template = lookupTemplate(comp, defaultName);
 		}
-		
 		return template;
+	}
+    //ZK-739: Allow dynamic template for collection binding.
+	protected void addTemplateDependency(Component templateComp, final Component eachComp, Object data, final int index) {
+		Object old = null;
+		Object oldStatus = null;
+		try {
+			old = eachComp.setAttribute(EACH_VAR, data); //kept the value for template resolving
+			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return Integer.valueOf(index);
+				}
+			});
+			final Binder binder = (Binder)eachComp.getAttribute(BinderImpl.BINDER,true);
+			final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
+			resolver.addTemplateDependency(eachComp);
+		} finally {
+			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
+			eachComp.setAttribute(TemplateResolver.EACH_VAR, old);
+		}
 	}
 }

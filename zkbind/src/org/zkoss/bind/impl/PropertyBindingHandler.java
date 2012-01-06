@@ -291,6 +291,9 @@ import org.zkoss.zk.ui.event.Event;
 		return collected;
 	}
 	
+	List<LoadPropertyBinding> getLoadPromptBindings(BindingKey bkey) {
+		return _loadPromptBindings.get(bkey);
+	}
 
 	Map<String, List<SavePropertyBinding>> getSaveAfterBindings() {
 		return _saveAfterBindings;

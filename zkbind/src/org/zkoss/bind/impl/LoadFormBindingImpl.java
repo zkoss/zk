@@ -78,7 +78,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	/**
 	 * Internal Use Only.
 	 */
-	public void addDependsOnTrackings(Method m, String basepath, List<String> srcpath, String[] props) {
+	public void addDependsOnTrackings(List<String> srcpath, String basepath, String[] props) {
 		if (srcpath != null) {
 			final String src = BindELContext.pathToString(srcpath);
 			if (_doneDependsOn.contains(src)) { //this method has already done @DependsOn in this binding
@@ -87,7 +87,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			_doneDependsOn.add(src); //mark method as done @DependsOn
 		}
 		for(String prop : props) {
-			BindELContext.addDependsOnTracking(m, basepath, srcpath, prop, this);
+			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);
 		}
 	}
 }

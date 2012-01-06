@@ -82,7 +82,10 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			lbl.setAttribute(BinderImpl.VAR, varnm);
 			lbl.setAttribute(varnm, data);
 			lbl.setAttribute(itervarnm, iterStatus);
-			
+
+			//add template dependency
+			addTemplateDependency(owner, lbl, data, index);
+
 			//to force init and load
 			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, lbl));
 			lbl.detach();

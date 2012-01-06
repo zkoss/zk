@@ -62,7 +62,7 @@ public class AccessInfo implements Serializable{
 
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final BindContext ctx = (type != ConditionType.PROMPT) ? null : 
-			BindContextUtil.newBindContext(binder, binding, false, null, null, null); 
+			BindContextUtil.newBindContext(binder, binding, false, null, binding.getComponent(), null); 
 		if(ctx!=null && ignoreTracker){
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);
 		}

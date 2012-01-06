@@ -63,6 +63,9 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 	private static List<String> getSrcList(BindContext ctx){
 		return (List<String>)ctx.getAttribute(BinderImpl.SRCPATH);
 	}
+	private static Component getDependsOnComponent(BindContext ctx) {
+		return (Component)ctx.getAttribute(BinderImpl.DEPENDS_ON_COMP);
+	}
 	
 	//to tracing load property dependency or form field(both save and load)
 	//path example, [vm,.p1,.firstName] or [fx.firstName]
@@ -77,9 +80,10 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			
 			final BindContext bctx = (BindContext) _ctx.getAttribute(BinderImpl.BINDCTX);
 			final List<String> srcpath = bctx != null ? getSrcList(bctx) : null;
+			final Component dependsOnComp =  bctx != null ? getDependsOnComponent(bctx) : null;
 			final String[] srcprops = srcpath != null ? properties(srcpath) : null;
 			//check if a PropertyBinding inside a Form
-			final Component comp = binding.getComponent();
+			final Component comp = bctx != null ? bctx.getComponent() : binding.getComponent();
 			final Object base = comp.getAttribute(prop, true);
 			if (base instanceof Form) {
 				final Form formBean = (Form) base;
@@ -103,19 +107,30 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 					}
 					//initialize Tracker per the series (in special Form way)
 					if(dotracker){
-						tracker.addTracking(comp, new String[] {prop, fieldName}, srcprops, binding);
+						if (srcprops == null) {
+							tracker.addTracking(comp, new String[] {prop, fieldName}, binding);
+						} else {
+							tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, new String[] {prop, fieldName});
+						}
 					}
 				} else {
 					if(dotracker){
-						tracker.addTracking(comp, new String[] {prop}, srcprops, binding);
+						if (srcprops == null) {
+							tracker.addTracking(comp, new String[] {prop}, binding);
+						} else {
+							tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, new String[] {prop});
+						}
 					}
 				}
-			
 			} else {
 				//initialize Tracker per the series
 				String[] props = properties(series);
 				if(dotracker){
-					tracker.addTracking(binding.getComponent(), props, srcprops, binding);
+					if (srcprops == null) {
+						tracker.addTracking(comp, props, binding);
+					} else {
+						tracker.addDependsOn(comp, srcprops, binding, dependsOnComp, props);
+					}
 				}
 				
 				if (binding instanceof LoadFormBindingImpl) {

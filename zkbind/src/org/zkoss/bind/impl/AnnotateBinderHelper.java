@@ -144,11 +144,6 @@ public class AnnotateBinderHelper {
 		//validator and converter information
 		ExpressionAnnoInfo validatorInfo = parseValidator(compCtrl,propName);
 		ExpressionAnnoInfo converterInfo = parseConverter(compCtrl,propName);
-		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,propName);
-		
-		if(templateInfo!=null){
-			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
-		}
 
 		//scan init
 		Collection<Annotation> initannos = compCtrl.getAnnotations(propName, INIT_ANNO);
@@ -168,6 +163,12 @@ public class AnnotateBinderHelper {
 			}else if(anno.getName().equals(SAVE_ANNO)){
 				processPropertySaveBindings(comp,propName,anno,converterInfo,validatorInfo);
 			}
+		}
+
+		//template information (must be after LoadBinding is processed)
+		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,propName);
+		if(templateInfo!=null){
+			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
 		}
 	}
 	

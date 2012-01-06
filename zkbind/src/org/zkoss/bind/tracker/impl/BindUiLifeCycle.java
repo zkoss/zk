@@ -60,6 +60,9 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							
 							new AnnotateBinderHelper(binder).initComponentBindings(comp);
 							binder.loadComponent(comp,true);
+							
+							if (comp.getAttribute(BinderImpl.VAR) != null)
+								comp.setAttribute(BinderImpl.BINDER, binder);
 						}
 					});
 					//post ON_BIND_INIT event

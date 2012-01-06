@@ -38,7 +38,8 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 	public void render(final Treeitem item, final Object data) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
-		final Template tm = resoloveTemplate(tree,parent,data,item.getIndex(),"model");
+		final int index = item.getIndex();
+		final Template tm = resoloveTemplate(tree,parent,data,index,"model");
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;
@@ -72,7 +73,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 									private static final long serialVersionUID = 1L;
 									@Override
 									public int getIndex() {
-										return Integer.valueOf(item.getIndex());
+										return Integer.valueOf(index);
 									}
 								};
 							}
@@ -91,9 +92,12 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
-					return Integer.valueOf(ti.getIndex());
+					return Integer.valueOf(index);
 				}
 			});
+			//add template dependency
+			addTemplateDependency(tree, ti, data, index);
+			
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);
 			item.setAttribute("org.zkoss.zul.model.renderAs", ti);

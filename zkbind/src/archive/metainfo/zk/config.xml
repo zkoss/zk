@@ -13,7 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 <config>
 	<config-name>zkbind</config-name><!-- used to resolve dependency -->
-	<depends>zk</depends>
+	<depends>zul</depends>
 
 	<version>
 		<version-class>org.zkoss.bind.Version</version-class>

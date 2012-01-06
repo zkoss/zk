@@ -181,9 +181,9 @@ public class BindELContext extends XelELContext {
 			String[] props = annt.value();
 			if (props.length > 0) {
 				if (binding instanceof LoadPropertyBindingImpl) {
-					((LoadPropertyBindingImpl)binding).addDependsOnTrackings(m, basepath, srcpath, props);
+					((LoadPropertyBindingImpl)binding).addDependsOnTrackings(srcpath, basepath, props);
 				} else if (binding instanceof LoadFormBindingImpl) {
-					((LoadFormBindingImpl)binding).addDependsOnTrackings(m, basepath, srcpath, props);
+					((LoadFormBindingImpl)binding).addDependsOnTrackings(srcpath, basepath, props);
 				}
 			}
 		}
@@ -197,20 +197,39 @@ public class BindELContext extends XelELContext {
 		return sb.toString();
 	}
 	
-	//prepare the dependsOn nodes
-	public static void addDependsOnTracking(Method m, String basepath, List<String> srcpath, String prop, Binding binding) {
-		final Component comp = binding.getComponent();
-		final Binder binder = binding.getBinder();
+	/**
+	 * Prepare the dependsOn nodes
+	 * @param srcBinding associated binding of the source dependent field; e.g. <label id="full" value="@bind(vm.fullname)"/>
+	 * @param srcPath the source dependent field name series in list. e.g. "vm", "fullname" for "vm.fullname". 
+	 * @param dependsOnBasepath the base path for the depends-on field; e.g. the "vm" of the "vm.firstname"
+	 * @param dependsOnProp the property name of the depends-on field; e.g. the "firstname" of the "vm.firstname"
+	 */
+	public static void addDependsOnTracking(Binding srcBinding, List<String> srcPath, String dependsOnBasepath, String dependsOnProp) {
+		final String dependsOnPath = BindELContext.appendFields(dependsOnBasepath, dependsOnProp);
+		final Component srcComp = srcBinding.getComponent();
+		addDependsOnTracking(srcBinding, srcPath, srcComp, dependsOnPath, srcComp); //source component shared as DependsOnComp 
+	}
+	
+	/**
+	 * Prepare the dependsOn nodes
+	 * @param srcBinding the binding with the source dependent field; e.g. <label id="full" value="@load(vm.fullname)"/>
+	 * @param srcPath the source dependent field name series in list; e.g. ["vm", "fullname"] for "vm.fullname".
+	 * @param srcComp the source component associated with the binding; e.g. <label>
+	 * @param dependsOnPath the depends-on property name series; e.g. "vm.firstname" 
+	 * @param despendsOnComp the depends-on component associated with the depends-on property name series binding; e.g. "vm.firstname"
+	 */
+	public static void addDependsOnTracking(Binding srcBinding, List<String> srcPath, Component srcComp, String dependsOnPath, Component dependsOnComp) {
+		final Binder binder = srcBinding.getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final String path = BindELContext.appendFields(basepath, prop);
 		
 		//parse depends on series
-		BindContext ctxparse = BindContextUtil.newBindContext(binder, binding, false, null, comp, null);
-		ctxparse.setAttribute(BinderImpl.SRCPATH, srcpath);
-		ExpressionX expr = eval.parseExpressionX(ctxparse, path, Object.class); //prepare the tracking and association
+		BindContext ctxparse = BindContextUtil.newBindContext(binder, srcBinding, false, null, srcComp, null);
+		ctxparse.setAttribute(BinderImpl.SRCPATH, srcPath);
+		ctxparse.setAttribute(BinderImpl.DEPENDS_ON_COMP, dependsOnComp);
+		ExpressionX expr = eval.parseExpressionX(ctxparse, dependsOnPath, Object.class); //prepare the tracking and association
 		
 		//bean association
-		BindContext ctx = BindContextUtil.newBindContext(binder, binding, false, null, comp, null);
-		eval.getValue(ctx, comp, expr); //will call tieValue() and recursive back via BindELResolver
+		BindContext ctx = BindContextUtil.newBindContext(binder, srcBinding, false, null, srcComp, null);
+		eval.getValue(ctx, srcComp, expr); //will call tieValue() and recursive back via BindELResolver
 	}
 }

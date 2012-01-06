@@ -50,6 +50,7 @@ import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.LoadBinding;
@@ -128,6 +129,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
 	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
+	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
@@ -1569,13 +1571,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	@Override
-	public void setTemplate(Component comp,String attr, String templateExpr, Map<String,Object> templateArgs){
+	public void setTemplate(Component comp, String attr, String templateExpr, Map<String,Object> templateArgs){
 		Map<String,TemplateResolver> resolvers = _templateResolvers.get(comp);
 		if(resolvers==null){
 			resolvers = new HashMap<String,TemplateResolver>();
 			_templateResolvers.put(comp, resolvers);
 		}
-		resolvers.put(attr, new TemplateResolverImpl(this,comp,attr,templateExpr,templateArgs));
+		final BindingKey bkey = getBindingKey(comp, attr);
+		final List<LoadPropertyBinding> loadBindings = _propertyBindingHandler.getLoadPromptBindings(bkey);
+		final Binding binding = loadBindings != null && !loadBindings.isEmpty() ? 
+				loadBindings.get(loadBindings.size() - 1) : null;
+		resolvers.put(attr, new TemplateResolverImpl(this, binding, comp,attr,templateExpr,templateArgs));
 	}
 	
 	@Override

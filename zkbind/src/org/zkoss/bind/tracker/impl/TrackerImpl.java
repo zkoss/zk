@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.zkoss.bind.Immutable;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
@@ -52,23 +53,31 @@ public class TrackerImpl implements Tracker,Serializable {
 	private EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	
-	public void addTracking(Component comp, String[] series, String[] srcpath, Binding binding) {
+	public void addTracking(Component comp, String[] series, Binding binding) {
 		//Track only LoadBinding
 		if (!(binding instanceof LoadBinding)) {
 			return;
 		}
 		
 		final TrackerNodeImpl node = (TrackerNodeImpl) getOrCreateTrackerNode(comp, series);
-		if (srcpath == null || srcpath.length == 0) {
-			//node is leaf of this series, add the binding to it
-			node.addBinding(binding);
-		} else {
-			//bug# 1: depends-on is not working in nested C->B->A when A changed
-			final TrackerNode srcnode =  getOrCreateTrackerNode(comp, srcpath);
-			node.addAssociate(srcnode); 
-		}
+		//node is leaf of this series, add the binding to it
+		node.addBinding(binding);
 	}
-
+	
+	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp, String[] dependsOnSeries) {
+		//Track only LoadBinding
+		if (!(srcBinding instanceof LoadBinding)) {
+			return;
+		}
+		if (dependsOnComp == null) {
+			dependsOnComp = srcComp; //share same component context for @DependsOn case
+		}
+		final TrackerNodeImpl dependsOnNode = (TrackerNodeImpl) getOrCreateTrackerNode(dependsOnComp, dependsOnSeries);
+		//bug# 1: depends-on is not working in nested C->B->A when A changed
+		final TrackerNode srcnode =  getOrCreateTrackerNode(srcComp, srcSeries);
+		dependsOnNode.addAssociate(srcnode); 
+	}
+	
 	private TrackerNode getOrCreateTrackerNode(Component comp, String[] series) {
 		Map<Object, TrackerNode> nodes = _compMap.get(comp);
 		if (nodes == null) {
@@ -214,7 +223,7 @@ public class TrackerImpl implements Tracker,Serializable {
 			removeBeanMap(node);
 			
 			//add into _beanMap
-			if (!isPrimitive(value)) {
+			if (!isImmutable(value)) {
 				Set<TrackerNode> nodes = _beanMap.get(value);
 				if (nodes == null) {
 					nodes = new HashSet<TrackerNode>();
@@ -284,7 +293,7 @@ public class TrackerImpl implements Tracker,Serializable {
 		}
 	}
 	
-	private boolean isPrimitive(Object value) {
+	private boolean isImmutable(Object value) {
 		//null is deemed as primitive
 		if (value == null) {
 			return true;
@@ -292,7 +301,8 @@ public class TrackerImpl implements Tracker,Serializable {
 		final Class<? extends Object> cls = value.getClass();
 		return cls.isPrimitive() //value is primitive 
 			|| Primitives.toPrimitive(cls) != null //or a wrapper
-			|| value instanceof String; //or a String
+			|| value instanceof String //or a String
+			|| value instanceof Immutable; //or an Immutable
 	}
 
 	private void getNodesLoadBindings(Set<TrackerNode> basenodes, Set<LoadBinding> bindings, Set<Object> kidbases, Set<TrackerNode> visited) {
@@ -576,7 +586,7 @@ public class TrackerImpl implements Tracker,Serializable {
 		System.out.println("******* size: "+_nullMap.size());
 		for(Object field: _nullMap.keySet()) {
 			System.out.println("field:"+field+"------");
-			Set<TrackerNode> nodes = _beanMap.get(field);
+			Set<TrackerNode> nodes = _nullMap.get(field);
 			for(TrackerNode node : nodes) {
 				dumpNodeTree(node, 4);
 			}

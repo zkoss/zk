@@ -35,12 +35,6 @@ import org.zkoss.zk.ui.util.Template;
  *
  */
 public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Serializable{//implement binding for tieValue
-	
-	
-	private static final String EACH_VAR = "each";
-	private static final String EACH_STATUS_VAR = "eachStatus";
-	
-	
 	private static final long serialVersionUID = 1L;
 	private final String _templateExpr;
 	private final Map<String, Object> _templateArgs;
@@ -48,9 +42,11 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	private final String _attr;
 	private final Component _comp;
 	private final ExpressionX _expression;
+	private final Binding _binding;
 	
-	public TemplateResolverImpl(Binder binder,Component comp,String attr,String templateExpr, Map<String, Object> templateArgs) {
+	public TemplateResolverImpl(Binder binder, Binding binding, Component comp, String attr, String templateExpr, Map<String, Object> templateArgs) {
 		_binder = binder;
+		_binding = binding;
 		_comp = comp;
 		_templateExpr = templateExpr;
 		_templateArgs = templateArgs;
@@ -70,55 +66,53 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 		return template==null?lookupTemplate(comp.getParent(),name):template;
 	}
 
-	
 	@Override
 	public Template resolveTemplate(Component eachComp, Object eachData, final int index) {
-		
-		final BindEvaluatorX eval = _binder.getEvaluatorX();
-		//pass this as the binding to context, we need to enable tieValue
-		final BindContext ctx = BindContextUtil.newBindContext(_binder, null, false, null, eachComp, null);
-		
-		Object oldEach = eachComp.getAttribute("each");
-		Object oldStatus = eachComp.getAttribute("eachStatus");
-		
-		//prepare each
-		eachComp.setAttribute(EACH_VAR, eachData);
-		eachComp.setAttribute(EACH_STATUS_VAR, new AbstractIterationStatus(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public int getIndex() {
-				return index;
-			}
-		});
-
-		Object value = eval.getValue(ctx, eachComp, _expression);
-		
-		if(oldEach==null){
-			eachComp.removeAttribute(EACH_VAR);
-		}else{
-			eachComp.setAttribute(EACH_VAR,oldEach);
-		}
-		if(oldStatus==null){
-			eachComp.removeAttribute(EACH_STATUS_VAR);
-		}else{
-			eachComp.setAttribute(EACH_STATUS_VAR,oldStatus);
-		}
-		
-		if(value instanceof Template){
-			return (Template) value;
-		}else if(value instanceof String){
-			Template template = lookupTemplate(_comp,(String)value);
-			if (template == null && ((String)value).indexOf('.') > 0) { //might be a class path
-				try {
-					template = (Template) _comp.getPage().resolveClass(((String)value)).newInstance();
-				} catch (Exception e) {
-					//ignore;
+		Object oldEach = null;
+		Object oldStatus = null;
+		try {
+			//prepare each and eachStatus
+			oldEach = eachComp.setAttribute(EACH_VAR, eachData);
+			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractIterationStatus(){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return index;
 				}
+			});
+	
+			final BindEvaluatorX eval = _binder.getEvaluatorX();
+			final BindContext ctx = BindContextUtil.newBindContext(_binder, null, false, null, eachComp, null);
+			final Object value = eval.getValue(ctx, eachComp, _expression);
+			if(value instanceof Template){
+				return (Template) value;
+			}else if(value instanceof String){
+				Template template = lookupTemplate(_comp,(String)value);
+				if (template == null && ((String)value).indexOf('.') > 0) { //might be a class path
+					try {
+						template = (Template) _comp.getPage().resolveClass(((String)value)).newInstance();
+					} catch (Exception e) {
+						//ignore;
+					}
+				}
+				return template;
+			}else{
+				throw new UiException("unknow template type "+value);
 			}
-			return template;
-		}else{
-			throw new UiException("unknow template type "+value);
+		} finally {
+			eachComp.setAttribute(EACH_VAR, oldEach);
+			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
 		}
+	}
+	
+    //ZK-739: Allow dynamic template for collection binding.	
+	//Tracking template expression to trigger load binding of the template component
+	@Override
+	public void addTemplateDependency(Component eachComp) {
+		final BindContext ctx = BindContextUtil.newBindContext(_binder, _binding, false, null, eachComp, null);
+		final ExpressionX exprX = _binder.getEvaluatorX().parseExpressionX(ctx, _templateExpr, Object.class); 
+		final BindEvaluatorX eval = _binder.getEvaluatorX();
+		eval.getValue(ctx, eachComp, exprX);
 	}
 	
 	public String toString(){
