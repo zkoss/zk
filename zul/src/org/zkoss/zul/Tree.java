@@ -1646,14 +1646,15 @@ public class Tree extends MeshElement {
 				_ctrled = true;
 			}
 
+			TreeNode treeNode = null;
 			if (node instanceof TreeNode) {
-				TreeNode treeNode = (TreeNode) node;
+				treeNode = (TreeNode) node;
 				item.setTreeNode(treeNode);
 			}
 			int[] path = null;
 			if (_model instanceof TreeSelectionModel) {
 				TreeSelectionModel model = (TreeSelectionModel) _model;
-				if (!model.isSelectionEmpty()) {
+				if (!model.isSelectionEmpty() && getSelectedCount() != model.getSelectionCount()) {
 					if (model.isPathSelected((path = _model.getPath(node)))) {
 						addItemToSelection(item);
 					}
@@ -1663,10 +1664,13 @@ public class Tree extends MeshElement {
 			if (_model instanceof TreeOpenableModel) {
 				TreeOpenableModel model = (TreeOpenableModel) _model;
 				if (!model.isOpenEmpty()) {
-					if (path == null) {
-						path = _model.getPath(node);
+					boolean isLeaf = treeNode != null ? treeNode.isLeaf() : false;
+					if (!isLeaf) {
+						if (path == null) {
+							path = _model.getPath(node);
+						}
+						item.setOpen(model.isPathOpened(path));
 					}
-					item.setOpen(model.isPathOpened(path));
 				}
 			}
 			
