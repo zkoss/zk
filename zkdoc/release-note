@@ -201,6 +201,8 @@ ZK 6.0.0
     org.zkoss.util.InvalidValueException, org.zkoss.util.ModificationException,
     org.zkoss.util.ScalableTimer, org.zkoss.util.ScalableTimerTask,
     org.zkoss.util.ScalableTimerTask, org.zkoss.util.ThreadLocalCache
+  + bullet1.gif, bullet2.gif and bullet3.gif are removed from zweb
+    since they are never used
 
 	--------
 ZK 5.0.11
