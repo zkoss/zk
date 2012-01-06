@@ -16,12 +16,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 <zk>
 	<zscript>
 		<![CDATA[
-		List Items = new ArrayList();
-		for (int i = 0; i < 1000; i++) {
-			Items.add("data "+i);
-		}
-		ListModelList model = new ListModelList(Items);
-		ListModelList model2 = org.zkoss.zktest.util.Serializations.toCloneableListModelList(Items);
+		import org.zkoss.zktest.test2.select.models.*;
+		
+		ListModelList model = ListModelLists.getModel(ListModelLists.DEFAULT);
+		ListModelList model2 = ListModelLists.getModel(ListModelLists.CLONEABLE);
+
 		int cnt = 0;
 		int elemcnt = 0;
 	]]></zscript>
@@ -62,6 +61,12 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<attribute name="onClick">
 			model.add(0, "inserted "+elemcnt++);
 			model2.add(0, "inserted "+elemcnt++);
+		</attribute>
+	</button>
+	<button label="remove item">
+		<attribute name="onClick">
+			model.remove(0);
+			model2.remove(0);
 		</attribute>
 	</button>
 	<div id="cloneThreeArea" />

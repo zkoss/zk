@@ -16,14 +16,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 <zk>
 	<zscript>
 		<![CDATA[
-		List Items = new ArrayList();
-		for (int i = 0; i < 1000; i++) {
-			Items.add("data "+i);
-		}
-		ListModelList model = new ListModelList(Items);
-		ListModelList model2 = org.zkoss.zktest.util.Serializations.toCloneableListModelList(Items);
-		model.setMultiple(true);
-		model2.setMultiple(true);
+		import org.zkoss.zktest.test2.select.models.*;
+		
+		ListModelList model = ListModelLists.getModel(ListModelLists.MULTIPLE);
+		ListModelList model2 = ListModelLists.getModel(ListModelLists.MULTIPLE_AND_CLONEABLE);
+
 		int cnt = 0;
 		int elemcnt = 0;
 	]]></zscript>
