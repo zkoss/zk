@@ -222,8 +222,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 		int newPathLength = paths != null ? paths.length : 0;
 		if (newPathLength > 0 && !_opens.isEmpty()) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_opens.containsKey(e)) {
-					_opens.remove(e);
+				if (_opens.remove(e) != null) {
 					fireOpenChanged(e);
 				}
 			}
@@ -343,8 +342,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 		int newPathLength = paths != null ? paths.length : 0;
 		if (newPathLength > 0 && !_selections.isEmpty()) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_selections.containsKey(e)) {
-					_selections.remove(e);
+				if (_selections.remove(e) != null) {
 					fireSelectionChanged(e);
 				}
 				if (!isMultiple())
