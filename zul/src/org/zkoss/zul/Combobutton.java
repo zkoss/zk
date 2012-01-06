@@ -45,7 +45,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * @author benbai
  */
 public class Combobutton extends Button {
-	private boolean _autodrop;
+	private boolean _autodrop, _open;
 
 	static {
 		addClientEvent(Combobutton.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -83,15 +83,28 @@ public class Combobutton extends Button {
 		}
 	}
 
-	/** Drops down or closes the child.
+	/** Drops down or closes the child, 
+	 * only works while visible.
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (open != _open) {
+			_open = open;
+			if (isVisible()) {
+				if (open) open();
+				else close();
+			}
+		}
 	}
-	
+	/** Returns whether this combobutton is open.
+	 *
+	 * <p>Default: false.
+	 * @since 6.0.0
+	 */
+	public boolean isOpen() {
+		return _open;
+	}
 	/** Drops down the child.
 	 * The same as setOpen(true).
 	 */
@@ -119,7 +132,9 @@ public class Combobutton extends Button {
 		if (cmd.equals(Events.ON_CLICK)) {
 			Events.postEvent(MouseEvent.getMouseEvent(request));
 		} else if (cmd.equals(Events.ON_OPEN)) {
-			Events.postEvent(OpenEvent.getOpenEvent(request));
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
