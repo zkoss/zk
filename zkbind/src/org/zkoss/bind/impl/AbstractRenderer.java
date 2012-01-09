@@ -63,6 +63,9 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	}
     //ZK-739: Allow dynamic template for collection binding.
 	protected void addTemplateDependency(Component templateComp, final Component eachComp, Object data, final int index) {
+		final Binder binder = (Binder)eachComp.getAttribute(BinderImpl.BINDER,true);
+		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
+		if(resolver == null) return;//no resolver
 		Object old = null;
 		Object oldStatus = null;
 		try {
@@ -74,8 +77,6 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 					return Integer.valueOf(index);
 				}
 			});
-			final Binder binder = (Binder)eachComp.getAttribute(BinderImpl.BINDER,true);
-			final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
 			resolver.addTemplateDependency(eachComp);
 		} finally {
 			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
