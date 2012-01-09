@@ -65,6 +65,7 @@ ZK 6.0.0
   ZK-688: AuInvoke supports the invocation of a global function at the client
   ZK-694: The file to configure logger can be specified in a library property
   ZK-701: ListModel, TreeModel, ChartModel, and ListGroupModel supports Cloneable if implemented 
+  ZK-719: Combobutton supports the toolbar mold such that it has the same size as other toolbar components
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

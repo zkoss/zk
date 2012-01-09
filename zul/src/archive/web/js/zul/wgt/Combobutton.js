@@ -82,7 +82,12 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		autodrop: null
 	},
 	getZclass: function () {
-		return 'z-combobutton';
+		var zcls = this._zclass;
+		// F60-ZK-719
+		return zcls ? zcls: this._isDefault() ? 'z-combobutton' : 'z-combobutton-tbbtn';
+	},
+	_isDefault: function () {
+		return this._mold == 'default';
 	},
 	/** Returns whether the list of combo items is open
 	 * @return boolean

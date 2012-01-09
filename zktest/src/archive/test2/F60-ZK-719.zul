@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-719.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 09 12:41:05 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<div>1. You can see a combobutton in each toolbar, their size should similar to toolbarbutton.</div>
+		<div>2. Click left button of combobutton one, the label 'message: ' should change to 'combobutton clicked.'.</div>
+		<div>3. Click right button of combobutton one twice, the label should change to 'combobutton popup opened.' then 'combobutton popup closed.'.</div>
+		<div>4. Test step 2 and step 3 with combobutton two.</div>
+		<div>5. Also test F55-ZK-318.zul and make sure nothing strange.</div>
+	</div>
+	<window title="Toolbar window" border="normal" width="400px">
+		<label id="lb" value="message: " />
+		<toolbar>
+			<toolbarbutton label="Left" image="/img/network.gif" />
+			<space />
+			<toolbarbutton label="Right" image="/img/network.gif"
+				dir="reverse" />
+			<combobutton id="bd" label="combobutton one" image="/img/network.gif" mold="tbbtn"
+				onClick='lb.setValue("message: combobutton clicked.");'
+				onOpen='lb.setValue("message: combobutton popup "+ (self.open? "opened." : "closed."));'>
+				<popup id="ppOne">
+					<vbox>
+						<hbox>
+							Search
+							<textbox />
+						</hbox>
+						<listbox width="200px">
+							<listhead>
+								<listheader label="Name" />
+								<listheader label="Description" />
+							</listhead>
+							<listitem>
+								<listcell label="John" />
+								<listcell label="CEO" />
+							</listitem>
+							<listitem>
+								<listcell label="Joe" />
+								<listcell label="Engineer" />
+							</listitem>
+							<listitem>
+								<listcell label="Mary" />
+								<listcell label="Supervisor" />
+							</listitem>
+						</listbox>
+					</vbox>
+				</popup>
+			</combobutton>
+		</toolbar>
+		<toolbar orient="vertical">
+			<button label="Left" image="/img/network.gif" width="125px" />
+			<toolbarbutton label="Right" image="/img/network.gif"
+				dir="reverse" />
+			<combobutton id="bdTwo" label="combobutton two"
+				onClick='lb.setValue("message: combobutton two clicked.");'
+				onOpen='lb.setValue("message: combobutton two popup "+ (self.open? "opened." : "closed."));'
+				dir="reverse" image="/img/network.gif" mold="tbbtn">
+				<popup id="ppTwo">
+					<vbox>
+						<hbox>
+							Search
+							<textbox />
+						</hbox>
+						<listbox width="200px">
+							<listhead>
+								<listheader label="Name" />
+								<listheader label="Description" />
+							</listhead>
+							<listitem>
+								<listcell label="John" />
+								<listcell label="CEO" />
+							</listitem>
+							<listitem>
+								<listcell label="Joe" />
+								<listcell label="Engineer" />
+							</listitem>
+							<listitem>
+								<listcell label="Mary" />
+								<listcell label="Supervisor" />
+							</listitem>
+						</listbox>
+					</vbox>
+				</popup>
+			</combobutton>
+		</toolbar>
+	</window>
+</zk>
