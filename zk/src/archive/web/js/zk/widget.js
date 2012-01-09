@@ -1494,8 +1494,10 @@ wgt.$f().main.setTitle("foo");
 		_addIdSpaceDown(newwgt);
 
 		var cf = zk.currentFocus;
-		if (cf && zUtl.isAncestor(this, cf))
+		if (cf && zUtl.isAncestor(this, cf)) {
+			var cfid = cf.uuid;
 			zk.currentFocus = null;
+		}
 
 		var node = this.$n(),
 			p = this.parent, shallReplace,
@@ -1523,6 +1525,14 @@ wgt.$f().main.setTitle("foo");
 			p.onChildReplaced_(this, newwgt);
 
 		this.parent = this.nextSibling = this.previousSibling = null;
+		
+		if (cfid) {
+			cf = zk.Widget.$(cfid);
+			if (!cf)
+				_rsFocus(newwgt); // restore to outer root
+			else if (zUtl.isAncestor(newwgt, cf))
+				_rsFocus(cf);
+		}
 	},
 	/** Replaced the child widgets with the specified widgets.
 	 * It is usefull if you want to replace a part of children whose
