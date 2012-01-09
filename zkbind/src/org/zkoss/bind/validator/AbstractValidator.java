@@ -19,14 +19,13 @@ import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.util.logging.Log;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * A abstract validator the handling validation message
  * 
  * @author dennis
  * @see ValidationMessages
- *
+ * @since 6.0.0
  */
 public abstract class AbstractValidator implements Validator {
 

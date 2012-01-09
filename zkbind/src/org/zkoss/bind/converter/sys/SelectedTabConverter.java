@@ -28,6 +28,7 @@ import org.zkoss.zul.Tabbox;
  * Convert tabbox selected tab and vice versa.
  *
  * @author Dennis
+ * @since 6.0.0
  */
 public class SelectedTabConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;

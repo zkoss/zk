@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Implementation of {@link InitPropertyBinding}.
  * @author Dennis
+ * @since 6.0.0
  */
 public class InitFormBindingImpl extends FormBindingImpl implements InitFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

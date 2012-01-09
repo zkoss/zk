@@ -16,6 +16,7 @@ package org.zkoss.bind.sys;
  * A binding tells how to deal with Load children of a source object
  * (usually an UI component) and a property of a target object(usually a backing bean).
  * @author dennis
+ * @since 6.0.0
  */
 public interface ChildrenBinding extends Binding {
 		

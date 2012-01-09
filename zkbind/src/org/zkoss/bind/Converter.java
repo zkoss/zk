@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Generic binding conversion interface.
  * @author henrichen
+ * @since 6.0.0
  */
 public interface Converter {
 	public Object coerceToUi(Object val, Component component, BindContext ctx);

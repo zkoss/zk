@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * Helper class to parse binding annotations and create bindings. 
  * @author henrichen
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public class AnnotateBinderHelper {
 	final private Binder _binder;

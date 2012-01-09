@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Implementation of {@link SaveFormBinding}.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

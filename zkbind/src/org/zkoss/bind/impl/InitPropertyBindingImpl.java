@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Implementation of {@link InitPropertyBinding}.
  * @author Dennis
+ * @since 6.0.0
  */
 public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 	InitPropertyBinding {

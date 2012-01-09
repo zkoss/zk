@@ -16,7 +16,7 @@ package org.zkoss.bind.sys;
 /**
  * Binding for init a form.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface InitFormBinding extends LoadFormBinding {
 }

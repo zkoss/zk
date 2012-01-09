@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * ELResolver for Binding; handle Form bean.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindELResolver extends XelELResolver {
 	private final CompositeELResolver _resolver;

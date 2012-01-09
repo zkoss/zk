@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.LoadStatus;
 /**
  * comboitem renderer for binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindComboitemRenderer extends AbstractRenderer implements ComboitemRenderer<Object>{
 	private static final long serialVersionUID = 1463169907348730644L;

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  *  <br/>
  * Application developers rarely need to access methods in this interface.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface BinderCtrl {	
 	
@@ -100,7 +100,7 @@ public interface BinderCtrl {
 	 * get all load prompt binding of the component and attribute
 	 * @param comp the component is relative to the bindings
 	 * @param attr the attribute is relative to the bindings
-	 * @return
+	 * @return the prompt-load-bindings
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
 	

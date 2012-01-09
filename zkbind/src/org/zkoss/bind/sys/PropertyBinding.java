@@ -19,6 +19,7 @@ import org.zkoss.bind.Converter;
  * A binding tells how to deal with Load or Save a field of a source object
  * (usually an UI component) and a property of a target object(usually a backing bean).
  * @author henrichen
+ * @since 6.0.0
  */
 public interface PropertyBinding extends Binding {
 	/**

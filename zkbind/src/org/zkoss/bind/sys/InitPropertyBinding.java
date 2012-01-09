@@ -16,7 +16,7 @@ package org.zkoss.bind.sys;
 /**
  * PropertyBinding for init-loading into component attribute from backing bean property.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface InitPropertyBinding extends LoadPropertyBinding {
 }

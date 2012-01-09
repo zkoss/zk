@@ -19,7 +19,7 @@ import org.zkoss.zul.Listbox;
 /**
  * The {@link Converter} implementation of the listbox for converting collection to ListModel and vice versa.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class ListboxModelConverter extends AbstractModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;

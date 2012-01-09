@@ -28,7 +28,7 @@ import org.zkoss.zul.Rows;
 /**
  * Row renderer for binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;

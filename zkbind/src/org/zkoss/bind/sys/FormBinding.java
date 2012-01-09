@@ -16,7 +16,7 @@ import org.zkoss.bind.Form;
 /**
  * A binding tells how to deal with Load and Save between a form and a bean.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface FormBinding extends Binding {
 	/**

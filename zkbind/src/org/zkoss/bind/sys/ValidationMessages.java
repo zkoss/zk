@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * To provide the message binding between validator and binder. 
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface ValidationMessages{
 

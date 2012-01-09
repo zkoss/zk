@@ -15,7 +15,7 @@ package org.zkoss.bind.impl;
 /**
  * Class that holding a dot series path(dummy class)
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class Path {
 }

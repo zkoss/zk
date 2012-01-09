@@ -14,7 +14,7 @@ package org.zkoss.bind.impl;
 /**
  * provide extra control for a renderer that evaluates dynamic template
  * @author dennis
- *
+ * @since 6.0.0
  */
 /*package*/ interface TemplateRendererCtrl {
 

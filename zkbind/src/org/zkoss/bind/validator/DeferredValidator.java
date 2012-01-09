@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.UiException;
  * A deferred validator that defers the initialization of the real validator,
  * a validator needs 3-party jar files could still be installed if user doesn't provide it (ex, BeanValidator of JSR 303).   
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class DeferredValidator implements Validator,Serializable{
 	private static final long serialVersionUID = 6545009126528775045L;

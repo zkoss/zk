@@ -19,7 +19,7 @@ import org.zkoss.bind.Property;
 /**
  * Implementation of a property.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class PropertyImpl implements Property,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;

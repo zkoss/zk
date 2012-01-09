@@ -22,6 +22,7 @@ import java.util.WeakHashMap;
 /**
  * A {@link Set} that each entry is weakly referenced.
  * @author henrichen
+ * @since 6.0.0
  */
 public class WeakHashSet<E> implements Set<E>, Serializable{
 	private static final long serialVersionUID = 1463169907348730644L;

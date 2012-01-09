@@ -20,6 +20,7 @@ import org.zkoss.bind.IterationStatus;
  * The Class AbstractIterationStatus.
  *
  * @author dennis
+ * @since 6.0.0
  */
 /*package*/ abstract class AbstractIterationStatus implements IterationStatus, Immutable, Serializable{
 	private static final long serialVersionUID = 1L;

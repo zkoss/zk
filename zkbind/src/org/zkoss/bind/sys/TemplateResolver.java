@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.util.Template;
 /**
  * Resolver for Template
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface TemplateResolver {
 	public static final String EACH_ATTR = "var";
@@ -27,8 +27,18 @@ public interface TemplateResolver {
 	public static final String STATUS_POST_VAR = "Status";
 	public static final String EACH_STATUS_VAR = EACH_VAR + STATUS_POST_VAR;
 	
-	
+	/**
+	 * resolve the template for the component 
+	 * @param eachComp the template to be resolved of the component
+	 * @param eachData the data for resolver
+	 * @param index the index for resolver
+	 * @return the template if exist.
+	 */
 	Template resolveTemplate(Component eachComp, Object eachData, int index);
 	
+	/**
+	 * add template dependency to component
+	 * @param eachComp the component to add template dependency
+	 */
 	void addTemplateDependency(Component eachComp);
 }

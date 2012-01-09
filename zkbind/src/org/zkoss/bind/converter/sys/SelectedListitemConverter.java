@@ -25,7 +25,7 @@ import org.zkoss.zul.Listitem;
 /**
  * Convert listbox selected listitem to bean and vice versa.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class SelectedListitemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;

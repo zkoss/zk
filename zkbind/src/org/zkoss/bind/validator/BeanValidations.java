@@ -21,7 +21,7 @@ import javax.validation.ValidatorFactory;
 /**
  * A util class to help jsr 303 validation.
  * @author dennis
- * 
+ * @since 6.0.0
  */
 class BeanValidations {
 	// from javadoc, it is thread safe.

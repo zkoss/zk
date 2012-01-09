@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Implementation of CommandBinding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class CommandBindingImpl extends BindingImpl implements CommandBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

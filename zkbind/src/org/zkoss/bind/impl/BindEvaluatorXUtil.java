@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * a internal utility to help doing evaluation.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class BindEvaluatorXUtil {
 

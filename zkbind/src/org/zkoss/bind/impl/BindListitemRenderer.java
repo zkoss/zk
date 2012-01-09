@@ -14,7 +14,6 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
-import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -29,7 +28,7 @@ import org.zkoss.zul.ListitemRenderer;
 /**
  * Listitem renderer for binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindListitemRenderer extends AbstractRenderer implements ListitemRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;

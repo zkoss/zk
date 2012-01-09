@@ -30,7 +30,7 @@ import org.zkoss.zul.Label;
 /**
  * selectbox renderer.
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public class BindSelectboxRenderer extends AbstractRenderer implements ItemRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;

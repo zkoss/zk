@@ -20,6 +20,7 @@ import org.zkoss.zk.ui.Component;
  * A Binding represent a relation between a source object
  * (usually an UI component) and a target object(usually a backing bean).
  * @author henrichen
+ * @since 6.0.0
  */
 public interface Binding {
 	/**

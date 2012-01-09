@@ -46,7 +46,6 @@ import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
@@ -87,7 +86,7 @@ import org.zkoss.zk.ui.util.Composer;
  * Implementation of Binder.
  * @author henrichen
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public class BinderImpl implements Binder,BinderCtrl,Serializable {
 

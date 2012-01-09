@@ -45,7 +45,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * ELContext for Binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindELContext extends XelELContext {
 	public BindELContext(XelContext xelc) {

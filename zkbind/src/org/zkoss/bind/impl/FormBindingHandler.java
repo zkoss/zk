@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * to help form-binding implementation of BinderImpl 
  * @author dennis
- *
+ * @since 6.0.0
  */
 /*package*/ class FormBindingHandler extends AbstractBindingHandler{
 	

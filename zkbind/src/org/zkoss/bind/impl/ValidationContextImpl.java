@@ -20,7 +20,7 @@ import org.zkoss.bind.ValidationContext;
 /**
  * the default implementation of validation context
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class ValidationContextImpl implements ValidationContext{
 

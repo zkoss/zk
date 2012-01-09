@@ -14,7 +14,7 @@ package org.zkoss.bind;
 /**
  * Represent a property of a base object in the binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface Property {
 	/**

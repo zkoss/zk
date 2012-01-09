@@ -19,6 +19,7 @@ package org.zkoss.bind.annotation;
  * Other scope only represents itself.
  * @author dennis
  * @see ScopeParam
+ * @since 6.0.0
  */
 public enum Scope {
 	/**

@@ -21,7 +21,7 @@ import org.zkoss.bind.Validator;
 /**
  * A composite validator that contains mulitple validator and forward the validation to them.   
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class CompositeValidator implements Validator,Serializable{
 	private static final long serialVersionUID = 6545009126528775045L;

@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * A base implementation of {@link ChildrenBinding}.
  * @author dennis
+ * @since 6.0.0
  */
 public abstract class ChildrenBindingImpl extends BindingImpl implements ChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

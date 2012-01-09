@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
 /**
  * Base composer to apply ZK Bind.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;

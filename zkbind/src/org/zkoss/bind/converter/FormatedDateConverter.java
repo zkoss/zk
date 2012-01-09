@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Converter to convert String to Date.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class FormatedDateConverter implements Converter,Serializable {
 	

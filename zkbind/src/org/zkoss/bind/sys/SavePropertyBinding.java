@@ -16,7 +16,7 @@ package org.zkoss.bind.sys;
 /**
  * PropertyBinding for save from component attribute into backing bean property.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface SavePropertyBinding extends PropertyBinding, SaveBinding {
 }

@@ -26,7 +26,7 @@ package org.zkoss.bind;
  * <li>{@link #LOAD_BINDING}: do a load binding</li>
  * </ul>
  * @author dennis
- *
+ * @since 6.0.0
  */
 public enum Phase {
 	/**

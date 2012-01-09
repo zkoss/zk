@@ -17,7 +17,7 @@ import org.zkoss.bind.BindContext;
 /**
  * A binding tells which command to call(usually used with UI event).
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface CommandBinding extends Binding {
 	/**

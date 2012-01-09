@@ -14,7 +14,7 @@ package org.zkoss.bind;
 /**
  *  Represents the runtime information of each iteration caused by binding to a collection 
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface IterationStatus {
 //TODO

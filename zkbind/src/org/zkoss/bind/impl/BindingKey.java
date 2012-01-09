@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * 
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class BindingKey implements java.io.Serializable {
 

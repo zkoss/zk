@@ -26,14 +26,13 @@ import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
-import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 /**
  * a internal stateless helper to helps BindImpl to the validation.
  * 
  * @author dennis
- *
+ * @since 6.0.0
  */
 /*public*/ class ValidationHelper {
 	

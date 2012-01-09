@@ -15,7 +15,7 @@ package org.zkoss.bind;
 /**
  * Generic binding validation interface.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface Validator {
 

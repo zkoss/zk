@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-abstract class AbstractBindingHandler implements Serializable {
+/*package */ abstract class AbstractBindingHandler implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	protected final BinderImpl _binder;

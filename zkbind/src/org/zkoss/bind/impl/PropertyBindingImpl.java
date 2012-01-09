@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * A base implementation of {@link PropertyBinding}.
  * @author henrichen
+ * @since 6.0.0
  */
 public abstract class PropertyBindingImpl extends BindingImpl implements PropertyBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

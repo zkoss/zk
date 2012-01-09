@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
  * The Binder that do the data binding things.
  * @author henrichen
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public interface Binder {
 	

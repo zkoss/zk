@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Implementation of {@link LoadChildrenBinding}.
  * @author dennis
+ * @since 6.0.0
  */
 public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		LoadChildrenBinding {

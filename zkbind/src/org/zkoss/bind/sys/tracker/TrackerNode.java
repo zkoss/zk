@@ -18,7 +18,7 @@ import org.zkoss.bind.sys.Binding;
 /**
  * Tracker Node in a binding dependency graph.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface TrackerNode {
 	/**

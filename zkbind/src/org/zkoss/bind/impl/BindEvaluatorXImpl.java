@@ -28,7 +28,7 @@ import org.zkoss.zk.xel.impl.SimpleEvaluator;
  * A simple implementation of {@link BindEvaluatorX}.
  * 
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluatorX {
 	private static final long serialVersionUID = 1L;

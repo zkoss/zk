@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.select.Selectors;
  * @see Command
  * @see Selectors#find(org.zkoss.zk.ui.Component, String)
  * @author dennis
- *
+ * @since 6.0.0
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

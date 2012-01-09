@@ -25,7 +25,7 @@ import org.zkoss.zul.Comboitem;
 /**
  * Convert combobox selected comboitem to bean and vice versa.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class SelectedComboitemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;

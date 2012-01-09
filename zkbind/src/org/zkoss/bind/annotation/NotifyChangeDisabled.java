@@ -21,6 +21,7 @@ import java.lang.annotation.Target;
  * @author henrichen
  *
  * @see NotifyChange
+ * @since 6.0.0
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

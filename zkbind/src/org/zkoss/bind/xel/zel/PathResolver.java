@@ -31,7 +31,7 @@ import org.zkoss.zel.impl.parser.Node;
 /**
  * Handle dot series path when evaluating expression.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class PathResolver extends ELResolver {
 	private Stack<Integer> _numOfKids = new Stack<Integer>();

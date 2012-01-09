@@ -21,6 +21,7 @@ import org.zkoss.zel.impl.lang.ExpressionBuilder;
  * @author henrichen
  * @see BindExpressionBuilder
  * @see BindXelFactory
+ * @since 6.0.0
  */
 public class BindExpressionFactoryImpl extends ExpressionFactoryImpl {
     //20110815, Henri Chen: allow override node visiting (see BindExpressionBuilder#visit)

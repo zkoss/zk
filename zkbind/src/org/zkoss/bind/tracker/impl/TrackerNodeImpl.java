@@ -26,7 +26,7 @@ import org.zkoss.bind.sys.tracker.TrackerNode;
 
 /**
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;

@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Implementation of {@link LoadPropertyBinding}.
  * @author henrichen
+ * @since 6.0.0
  */
 public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {

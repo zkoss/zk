@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.event.Event;
 /**
  * Implementation of {@link BindContext}.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindContextImpl implements BindContext {
 	private final Binder _binder;

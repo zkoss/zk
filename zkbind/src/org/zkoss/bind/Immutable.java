@@ -15,7 +15,7 @@ package org.zkoss.bind;
 /**
  * Marker interface to indicate an immutable class (no setters).
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface Immutable {
 }

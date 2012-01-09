@@ -17,7 +17,7 @@ import org.zkoss.bind.BindContext;
 /**
  * Binding for loading.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface LoadBinding extends Binding {
 	/**

@@ -23,9 +23,9 @@ import java.util.Set;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.zk.ui.Component;
 /**
- * 
+ * Map base implementation of {@link ValidationMessages}
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class ValidationMessagesImpl implements ValidationMessages,Map<Component, Object>, Serializable {
 

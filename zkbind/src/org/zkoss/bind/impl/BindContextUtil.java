@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.event.Event;
  * to help handling BindContext, internal use only,
  * 
  * @author dennis
- * 
+ * @since 6.0.0
  */
 public class BindContextUtil {
 	

@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 /**
  * Specify variable dependency.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

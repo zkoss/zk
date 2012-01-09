@@ -12,9 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 /**
- *  Represents the runtime information of the {@link Form} 
+ * Represents the runtime information of the {@link Form} 
  * @author dennis
- *
+ * @since 6.0.0
  */
 public interface FormStatus {
 

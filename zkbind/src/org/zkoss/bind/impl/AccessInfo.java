@@ -28,7 +28,7 @@ import org.zkoss.xel.ExpressionX;
  * "save = property (before|after) command"
  * </p>
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class AccessInfo implements Serializable{
 	

@@ -13,7 +13,7 @@ package org.zkoss.bind.sys;
 /**
  * this enum represent the load/save condition type
  * @author dennis
- *
+ * @since 6.0.0
  */
 public enum ConditionType {
 

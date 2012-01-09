@@ -19,7 +19,7 @@ import org.zkoss.zul.ListModel;
 /**
  * The {@link Converter} implementation of the grid for converting collection to ListModel and vice versa.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class GridModelConverter extends AbstractModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;

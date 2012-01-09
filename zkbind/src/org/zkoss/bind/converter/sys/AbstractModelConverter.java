@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 /**
  * The abstract {@link Converter} implementation for converting collection to ListModel and vice versa.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public abstract class AbstractModelConverter implements Converter, Serializable{
 

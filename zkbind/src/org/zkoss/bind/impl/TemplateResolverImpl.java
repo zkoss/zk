@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.util.Template;
 /**
  * rename it to template binding?
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Serializable{//implement binding for tieValue
 	private static final long serialVersionUID = 1L;

@@ -25,7 +25,7 @@ import org.zkoss.zul.Treeitem;
 /**
  * Convert tree selected treeitem to bean and vice versa.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class SelectedTreeitemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201109261823L;

@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.WebApp;
  * To define the context object type for {@link ContextParam}
  * @author dennis
  * @see ContextParam
+ * @since 6.0.0
  */
 public enum ContextType {
 	/**  

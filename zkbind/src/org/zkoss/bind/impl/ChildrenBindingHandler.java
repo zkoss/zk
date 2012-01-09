@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * to help children-binding implementation of  BinderImpl 
  * @author dennis
- *
+ * @since 6.0.0
  */
 /*package*/ class ChildrenBindingHandler extends AbstractBindingHandler{
 	private static final long serialVersionUID = 1L;

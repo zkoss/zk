@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
  * @see Init
  * @see Command
  * @author dennis
- *
+ * @since 6.0.0
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

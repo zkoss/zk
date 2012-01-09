@@ -21,7 +21,7 @@ import org.zkoss.bind.Property;
 /**
  * Binding for saving a form.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface SaveFormBinding extends FormBinding, SaveBinding {
 	/**

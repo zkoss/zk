@@ -15,7 +15,7 @@ import org.zkoss.bind.impl.FormImpl;
 /**
  * A simple implementation of {@link Form}
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class SimpleForm extends FormImpl {
 	private static final long serialVersionUID = 1463169907348730644L;

@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.util.Template;
 /**
  * to handle the common task of resolver a template fo a renderer
  * @author dennis
- * 
+ * @since 6.0.0
  */
 public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializable {
 	private static final long serialVersionUID = 3738037033671761825L;

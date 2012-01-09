@@ -31,7 +31,7 @@ import org.zkoss.zul.Treerow;
 /**
  * Treeitem renderer for binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;

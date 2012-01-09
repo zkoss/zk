@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.select.Selectors;
 /**
  * To help invoke a method with {@link BindingParam} etc.. features.
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class ParamCall {
 

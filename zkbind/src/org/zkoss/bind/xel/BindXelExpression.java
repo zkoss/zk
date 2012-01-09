@@ -20,7 +20,7 @@ import org.zkoss.zel.ValueExpression;
 
 /**
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindXelExpression extends ELXelExpression {
 

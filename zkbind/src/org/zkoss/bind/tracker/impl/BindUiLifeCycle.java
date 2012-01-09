@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
 /**
  * Track Binding CRUD and dependent tracking management. 
  * @author henrichen
+ * @since 6.0.0
  */
 public class BindUiLifeCycle implements UiLifeCycle {
 	public void afterComponentAttached(Component comp, Page page) {

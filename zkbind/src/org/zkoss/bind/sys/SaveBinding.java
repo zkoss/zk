@@ -22,7 +22,7 @@ import org.zkoss.bind.Validator;
 /**
  * Binding for saving.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface SaveBinding extends Binding {
 	/**

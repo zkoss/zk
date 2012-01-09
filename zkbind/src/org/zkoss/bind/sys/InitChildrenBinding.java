@@ -16,7 +16,7 @@ package org.zkoss.bind.sys;
 /**
  * ChildrenBinding for init-loading into children component from backing bean property.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public interface InitChildrenBinding extends LoadChildrenBinding {
 }

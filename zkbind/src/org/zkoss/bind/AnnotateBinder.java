@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  * ZK Annotated Binder, it parse the component annotation and handles the binding of components and view model.
  * @author henrichen
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public class AnnotateBinder extends BinderImpl {
 	private static final long serialVersionUID = 1463169907348730644L;

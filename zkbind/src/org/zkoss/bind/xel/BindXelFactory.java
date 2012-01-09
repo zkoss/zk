@@ -22,6 +22,7 @@ import org.zkoss.zel.ELContext;
 /**
  * Xel Factory for Binding.
  * @author henrichen
+ * @since 6.0.0
  */
 public class BindXelFactory extends ELFactory {
 	@SuppressWarnings("unchecked")

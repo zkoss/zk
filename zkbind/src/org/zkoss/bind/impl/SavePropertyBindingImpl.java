@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * Implementation of {@link SavePropertyBinding}.
  * @author henrichen
+ * @since 6.0.0
  */
 public class SavePropertyBindingImpl extends PropertyBindingImpl implements SavePropertyBinding {
 	private static final long serialVersionUID = 1463169907348730644L;

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Base implementation for implementing a {@link Binding}
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindingImpl implements Binding,Serializable{
 	private static final long serialVersionUID = 1463169907348730644L;

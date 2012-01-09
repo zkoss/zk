@@ -24,9 +24,9 @@ import org.zkoss.zul.Label;
 /**
  * to renderer children of component
  * @author dennis
- *
+ * @since 6.0.0
  */
-/*package*/ class BindChildRenderer extends AbstractRenderer{
+public class BindChildRenderer extends AbstractRenderer{
 	private static final long serialVersionUID = 1L;
 
 	public BindChildRenderer(){

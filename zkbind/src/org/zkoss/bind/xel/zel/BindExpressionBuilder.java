@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Handle value dot series script for Binding.
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class BindExpressionBuilder extends ExpressionBuilder {
 	

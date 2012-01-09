@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  * ...etc to assign the binding.<br/>
  * After all the add binding done, you have to call {@link #loadComponent(Component, boolean)} to trigger first loading of the binding. <br/> 
  * @author dennischen
- *
+ * @since 6.0.0
  */
 public class DefaultBinder extends BinderImpl {
 	private static final long serialVersionUID = 1463169907348730644L;

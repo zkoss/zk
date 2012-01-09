@@ -30,7 +30,7 @@ import org.zkoss.bind.ValidationContext;
  * talks about how to set up JSR 303 in ZK with Hibernate implementation.
  * 
  * @author dennis
- *
+ * @since 6.0.0
  */
 public class BeanValidator extends AbstractValidator {
 

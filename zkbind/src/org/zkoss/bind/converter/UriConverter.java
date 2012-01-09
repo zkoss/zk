@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Convert String into Uri
  * @author henrichen
- *
+ * @since 6.0.0
  */
 public class UriConverter implements Converter,Serializable{
 	private static final long serialVersionUID = 1463169907348730644L;
