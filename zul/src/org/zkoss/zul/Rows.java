@@ -132,6 +132,24 @@ public class Rows extends XulElement {
 			}
 		}
 	}
+	/**
+	 * Fix Childitem._index since j-th item.
+	 *
+	 * @param j
+	 *            the start index (inclusion)
+	 * @param to
+	 *            the end index (inclusion). If -1, up to the end.
+	 */
+	private void fixItemIndices(int j, int to) {
+		int realj = getRealIndex(j);
+		if (realj < 0)
+			realj = 0;
+		if (realj < getChildren().size()) {
+			for (Iterator<Component> it = getChildren().listIterator(realj); it.hasNext()
+					&& (to < 0 || j <= to); ++j)
+				((Row)it.next()).setIndexDirectly(j);
+		}
+	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
@@ -139,10 +157,16 @@ public class Rows extends XulElement {
 			realj = 0;
 		} 
 		if (realj < getChildren().size()) {
+			final int beginning = j;
 			for (Iterator<Component> it = getChildren().listIterator(realj);
 			it.hasNext() && (to < 0 || j <= to); ++j) {
 				Component o = it.next();
-				if (o instanceof Group) {
+				((Row) o).setIndexDirectly(j);
+				
+				// if beginning is a group, we don't need to change its groupInfo,
+				// because
+				// it is not reliable when infront is true.
+				if ((!infront || beginning != j) && o instanceof Group) {
 					int[] g = getLastGroupsInfoAt(j + (infront ? -1 : 1));
 					if (g != null) {
 						g[0] = j;
@@ -248,18 +272,6 @@ public class Rows extends XulElement {
 		if (isReorder) {
 			checkInvalidateForMoved(child, true);
 		}
-		if (grid != null && grid.isRod() && hasGroupsModel()) {
-			if (_groupsInfo.isEmpty())
-				_groupsInfo = ((GroupsListModel<?,?,?>)grid.getModel()).getGroupsInfos();
-			if (super.insertBefore(child, refChild)) {
-				//bug #3049167: Bug in drag & drop demo
-				if (!isReorder) {
-					afterInsert(child);
-				}
-				return true;
-			}
-			return false;
-		}
 		
 		Row newItem = (Row) child;
 		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
@@ -297,11 +309,14 @@ public class Rows extends XulElement {
 			}							
 		}
 		if (super.insertBefore(child, refChild)) {
-			if(hasGroup()) {
-				final int
-					jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
-					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
-				if (fixFrom >= 0) fixGroupIndex(fixFrom,
+			final int jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
+					  fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
+			
+			if (fixFrom < 0) {
+				newItem.setIndexDirectly(getChildren().size() - 1
+					+ (grid != null ? grid.getDataLoader().getOffset() : 0));
+			} else {
+				fixGroupIndex(fixFrom,
 					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);
 			}
 			if (newItem instanceof Group) {
@@ -364,6 +379,7 @@ public class Rows extends XulElement {
 		final boolean hasModelButNotROD = hasModelButNotROD();
 		int index = hasGroup || hasModelButNotROD ? ((Row)child).getIndex() : -1;
 		if(super.removeChild(child)) {
+			((Row)child).setIndexDirectly(-1);
 			if (child instanceof Group) {
 				int[] prev = null, remove = null;
 				for(Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
@@ -547,7 +563,16 @@ public class Rows extends XulElement {
 		final Rows clone = (Rows)super.clone();
 		clone.init();
 		clone._groupsInfo.addAll(_groupsInfo);
+		clone.afterUnmarshal();
 		return clone;
+	}
+	private void afterUnmarshal() {
+		Grid grid = getGrid();
+		final int offset = grid != null ? grid.getDataLoader().getOffset() : 0;
+		int index = offset;
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			((Row) it.next()).setIndexDirectly(index++);
+		}
 	}
 	//-- Serializable --//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
@@ -568,6 +593,7 @@ public class Rows extends XulElement {
 			for (int i = 0; i < size; i++)
 				_groupsInfo.add((int [])groupsInfo.get(i));
 		}
+		afterUnmarshal();
 	}
 	public List<Component> getChildren() {
 		return new Children();

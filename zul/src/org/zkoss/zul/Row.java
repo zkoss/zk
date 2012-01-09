@@ -184,22 +184,17 @@ public class Row extends XulElement {
 	 * @since 6.0.0
 	 */
 	public int getIndex() {
-		int j = 0;
-		if (_index < 0) {
-			for (Iterator it = getParent().getChildren().iterator();
-			it.hasNext(); ++j) {
-				if (it.next() == this)
-					break;
-			}
-			final Grid grid = getGrid();
-			final int offset = grid != null && grid.getModel() != null ? grid.getDataLoader().getOffset() : 0; 
-			j += (offset < 0 ? 0 : offset);
-		} else {
-			j = _index;
-		}
-		return j;
+		return _index;
 	}
-
+	
+	protected void setIndex(int index) {
+		_index = index;	
+	}
+	
+	/*package*/ void setIndexDirectly(int index) {
+		setIndex(index);
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-row" : _zclass;
 	}
@@ -331,7 +326,7 @@ public class Row extends XulElement {
 		}
 		
 		public void setIndex(int index) {
-			_index = index;
+			Row.this.setIndex(index);
 		}
 	}
 

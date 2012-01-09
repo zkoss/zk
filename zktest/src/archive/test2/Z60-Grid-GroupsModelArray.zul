@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Listbox-GroupsModelArray.zul
+Z60-Grid-GroupsModelArray.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Jan  9 15:59:41 TST 2012, Created by jumperchen
+		Fri Jan  6 14:35:54 TST 2012, Created by jumperchen
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -30,69 +30,70 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
 		<div>1. There are 3 Grid with Grouping below.</div>
 		<div>2. For first two Grid, their open/close/sorting status will sync automatically after you open/close/sorting it.</div>
 		<div>3. Close the Seafood of third Grid.</div>
-		<div>4. Click clone and 'clone by serialization', then two Grids should be created and also closed the Seafood.</div>
+		<div>4. Click "clone" and "clone by serialization", then two Grids should be created and also closed the Seafood.</div>
 		<div>5. Open the Seafood of the third Grid, the Seafood of the fourth and the fifth should not sync.</div>
 		<div>6. Close the Seafood and theVegetables of the third Grid and click the "clone" and "clone by serialization".</div>
 		<div>7. Open the Vegetables of the last two Grid, its content will open well (if it opens the Seafood's content, that is a bug).</div>
 	</div>
 	<hlayout>
-    <listbox id="grid" hflex="1" model="${model}">
-        <listhead>
-            <listheader label="Category" sort="auto(0)"/>
-            <listheader label="Name" sort="auto(1)"/>
-            <listheader label="Calories" sort="auto(2)"/>
-        </listhead>
+    <grid id="grid" hflex="1" model="${model}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)"/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Calories" sort="auto(2)"/>
+        </columns>
 		<template name="model:grouping">
-			<listgroup open="${groupingInfo.open}" label="${each}"/>
+			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">
-			<listitem>
-				<listcell label="${each[0]}"/>
-				<listcell label="${each[1]}"/>
-				<listcell label="${each[2]}"/>
-			</listitem>
+			<row>
+				<label value="${each[0]}"/>
+				<label value="${each[1]}"/>
+				<label value="${each[2]}"/>
+			</row>
 		</template>
-    </listbox>
- <listbox id="grid2" hflex="1" model="${model}">
-        <listhead>
-            <listheader label="Category" sort="auto(0)"/>
-            <listheader label="Name" sort="auto(1)"/>
-            <listheader label="Calories" sort="auto(2)"/>
-        </listhead>
+    </grid>
+	
+	<grid id="grid2" hflex="1" model="${model}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)"/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Calories" sort="auto(2)"/>
+        </columns>
 		<template name="model:grouping">
-			<listgroup open="${groupingInfo.open}" label="${each}"/>
+			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">
-			<listitem>
-				<listcell label="${each[0]}"/>
-				<listcell label="${each[1]}"/>
-				<listcell label="${each[2]}"/>
-			</listitem>
+			<row>
+				<label value="${each[0]}"/>
+				<label value="${each[1]}"/>
+				<label value="${each[2]}"/>
+			</row>
 		</template>
-    </listbox>
+    </grid>
     </hlayout>
 	<div height="10px"></div>
 	
-  <listbox id="grid3" hflex="1" model="${model2}">
-        <listhead>
-            <listheader label="Category" sort="auto(0)"/>
-            <listheader label="Name" sort="auto(1)"/>
-            <listheader label="Calories" sort="auto(2)"/>
-        </listhead>
+    <grid id="grid3" model="${model2}">
+         <columns menupopup="auto">
+            <column label="Category" sort="auto(0)"/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Calories" sort="auto(2)"/>
+        </columns>
 		<template name="model:grouping">
-			<listgroup open="${groupingInfo.open}" label="${each}"/>
+			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">
-			<listitem>
-				<listcell label="${each[0]}"/>
-				<listcell label="${each[1]}"/>
-				<listcell label="${each[2]}"/>
-			</listitem>
+			<row>
+				<label value="${each[0]}"/>
+				<label value="${each[1]}"/>
+				<label value="${each[2]}"/>
+			</row>
 		</template>
-    </listbox>
+    </grid>
 	<button label="clone">
 		<attribute name="onClick">
-			Listbox sbx = grid3.clone();
+			Grid sbx = grid3.clone();
 			sbx.setId("sbxThree_clone" + cnt++);
 			sbx.setParent(cloneThreeArea);
 		</attribute>
