@@ -425,6 +425,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
 		if (node.getChildren() == null) return;
 		if (node instanceof DefaultTreeNode)

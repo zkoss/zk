@@ -2011,28 +2011,30 @@ public class Tree extends MeshElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_SELECT)) {
-			SelectEvent evt = SelectEvent.getSelectEvent(request);
-			Set selItems = evt.getSelectedItems();
+			SelectEvent<Treeitem, ?> evt = SelectEvent.getSelectEvent(request);
+			Set<Treeitem> selItems = evt.getSelectedItems();
 			disableClientUpdate(true);
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
-					if (_model instanceof TreeSelectionModel) {
+					if (_model instanceof TreeSelectionModel)
 						((TreeSelectionModel)_model).clearSelection();
-					}
 				}
-
-				final boolean paging = inPagingMold();
-				if (!_multiple
-						|| (!paging && (selItems == null || selItems.size() <= 1))) {
+				
+				if (!_multiple) {
 					final Treeitem item =
 						selItems != null && selItems.size() > 0 ?
-							(Treeitem)selItems.iterator().next(): null;
+							selItems.iterator().next(): null;
 					selectItem(item);
 					if (_model instanceof TreeSelectionModel) {
-						((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
+						if (item != null)
+							((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
+						else
+							((TreeSelectionModel)_model).clearSelection();
 					}
+					
 				} else {
+					final boolean paging = inPagingMold();
 					int from, to;
 					if (paging) {
 						final Paginal pgi = getPaginal();
@@ -2045,27 +2047,21 @@ public class Tree extends MeshElement {
 
 					// B50-ZK-547: SelectEvent.getSelectItems() does not return multiple selected TreeItems.
 					Set<Treeitem> oldSelItems = new LinkedHashSet<Treeitem>(_selItems);
-					for (Iterator it = selItems.iterator(); it.hasNext();) {
-						final Treeitem item = (Treeitem)it.next();
+					for (Treeitem item : selItems)
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
-							if (_model instanceof TreeSelectionModel) {
+							if (_model instanceof TreeSelectionModel)
 								((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
-							}
 						}
-					}
-					for (Iterator it = oldSelItems.iterator(); it.hasNext();) {
-						final Treeitem item = (Treeitem)it.next();
+					for (Treeitem item : oldSelItems)
 						if (!selItems.contains(item)) {
 							final int index = getVisibleIndexOfItem(item);
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
-								if (_model instanceof TreeSelectionModel) {
+								if (_model instanceof TreeSelectionModel)
 									((TreeSelectionModel)_model).removeSelectionPath(getTreeitemPath(this, item));
-								}
 							}
 						}
-					}
 				}
 			} finally {
 				disableClientUpdate(false);
