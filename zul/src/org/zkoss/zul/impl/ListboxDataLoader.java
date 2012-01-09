@@ -41,6 +41,7 @@ import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.ListitemRendererExt;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
 
@@ -130,7 +131,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			break;
 
 		default: //CONTENTS_CHANGED
-			syncModel(min, max);
+			syncModel(min, max < 0 ? -1 : (max - min + 1)); // inclusive
 		}
 	}
 	
@@ -140,11 +141,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		Listitem item = null;
 		if (model instanceof GroupsListModel) {
 			final GroupsListModel gmodel = (GroupsListModel) model;
-			final GroupDataInfo info = gmodel.getDataInfo(index);
-			switch(info.type){
+			final GroupingInfo info = gmodel.getDataInfo(index);
+			switch(info.getType()){
 			case GroupDataInfo.GROUP:
 				item = newListgroup(renderer);
-				((Listgroup)item).setOpen(!info.close);
+				((Listgroup)item).setOpen(info.isOpen());
 				break;
 			case GroupDataInfo.GROUPFOOT:
 				item = newListgroupfoot(renderer);
@@ -213,8 +214,17 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		public void render(final Listitem item, final Object data) {
 			final Listbox listbox = (Listbox)item.getParent();
 			Template tm = listbox.getTemplate("model");
+			GroupingInfo info = null;
 			if (item instanceof Listgroup) {
 				final Template tm2 = listbox.getTemplate("model:grouping");
+				if (tm2 != null)
+					tm = tm2;
+				if (listbox.getModel() instanceof GroupsListModel) {
+					final GroupsListModel gmodel = (GroupsListModel) listbox.getModel();
+					info = gmodel.getDataInfo(item.getIndex());
+				}
+			} else if (item instanceof Listgroupfoot) {
+				final Template tm2 = listbox.getTemplate("model:groupfoot");
 				if (tm2 != null)
 					tm = tm2;
 			}
@@ -222,6 +232,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
 			} else {
+				final GroupingInfo groupingInfo = info;
 				final Component[] items = tm.create(listbox, item,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
@@ -250,6 +261,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 										return listbox.getModel().getSize();
 									}
 								};
+							} else if ("groupingInfo".equals(name)) {
+								return groupingInfo;
 							} else {
 								return null;
 							}

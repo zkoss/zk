@@ -1509,19 +1509,6 @@ public class Listbox extends MeshElement {
 			if (isReorder) {
 				checkInvalidateForMoved((Listitem)newChild, true);
 			}
-			if (_rod && hasGroupsModel()) {
-				if (_groupsInfo.isEmpty())
-					_groupsInfo = ((GroupsListModel<?,?,?>)getModel()).getGroupsInfos();
-				refChild = fixRefChildBeforeFoot(refChild);
-				if (super.insertBefore(newChild, refChild)) {
-					//bug #3049167: Bug in drag & drop demo
-					if (!isReorder) {
-						afterInsert(newChild);
-					}
-					return true;
-				}
-				return false;
-			}
 			if (newChild instanceof Listgroupfoot) {
 				if (refChild == null) {
 					if (isReorder) {
@@ -1697,6 +1684,7 @@ public class Listbox extends MeshElement {
 				if (!isReorder) { //if reorder, not an insert
 					afterInsert(newChild);
 				}
+
 				return true;
 			} // insert
 		} else if (newChild instanceof Listhead) {

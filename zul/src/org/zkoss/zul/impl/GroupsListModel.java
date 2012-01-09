@@ -30,6 +30,7 @@ import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.GroupsModelExt;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
+import org.zkoss.zul.ext.GroupingInfo;
 
 /**
  * Encapulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
@@ -142,21 +143,21 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	/**
 	 * Returns the group info of given index
 	 */
-	public GroupDataInfo getDataInfo(int index) {
+	public GroupingInfo getDataInfo(int index) {
 		if (index < 0 || index >= _size)
 			throw new IndexOutOfBoundsException("Not in 0.."+_size+": "+index);
 
 		int gi = Arrays.binarySearch(_gpofs, index);
 		if (gi >= 0)
-			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, _gpcloses[gi]);
+			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, !_gpcloses[gi]);
 
 		gi = - gi - 2; //0 ~ _gpofs.length - 2
 		int ofs = index - _gpofs[gi] - 1;
 		if (_gpfts[gi]
 		&& ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
-			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, _gpcloses[gi]);
+			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, !_gpcloses[gi]);
 
-		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, _gpcloses[gi]);
+		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, !_gpcloses[gi]);
 	}
 	
 	//-- backward compatible Selectable --//
@@ -196,12 +197,12 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is deemed not in the ListModel
 	public Object getElementAt(int index) {
-		final GroupDataInfo info = getDataInfo(index);
-		if (info.type == GroupDataInfo.GROUP)
-			return _model.getGroup(info.groupIndex);
-		if (info.type == GroupDataInfo.GROUPFOOT)
-			return _model.getGroupfoot(info.groupIndex);
-		return _model.getChild(info.groupIndex, info.offset);
+		final GroupingInfo info = getDataInfo(index);
+		if (info.getType() == GroupDataInfo.GROUP)
+			return _model.getGroup(info.getGroupIndex());
+		if (info.getType() == GroupDataInfo.GROUPFOOT)
+			return _model.getGroupfoot(info.getGroupIndex());
+		return _model.getChild(info.getGroupIndex(), info.getOffset());
 	}
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is not count into size
@@ -273,7 +274,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 	/** The group infomation returned by {@link GroupsListModel#getDataInfo}.
 	 */
-	public static class GroupDataInfo {
+	public static class GroupDataInfo implements GroupingInfo {
 		/** Indicates the data is a group (aka., the head of the group). */
 		public static final byte GROUP = 0;
 		/** Indicates the data is a group foot. */
@@ -282,25 +283,45 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		public static final byte ELEMENT = 2;
 
 		/** The index of the group. */
-		private int groupIndex;
+		private int _groupIndex;
 		/** The offset of an element in a group.
 		 * It is meaningful only if {@link #type} is {@link #ELEMENT}.
 		 */
-		private int offset;
+		private int _offset;
 		/** The type of the data.
 		 * It is one of {@link #GROUP}, {@link #GROUPFOOT} and {@link #ELEMENT}.
 		 */
-		public byte type;
+		private byte _type;
 		/** Whether the group is closed.
 		 * It is meaningful only if {@link #type} is {@link #GROUP}.
 		 */
-		public boolean close;
+		private boolean _open;
 
-		private GroupDataInfo(byte type, int groupIndex, int offset, boolean close) {
-			this.type = type;
-			this.groupIndex = groupIndex;
-			this.offset = offset;
-			this.close = close;
+		private GroupDataInfo(byte type, int groupIndex, int offset, boolean open) {
+			_type = type;
+			_groupIndex = groupIndex;
+			_offset = offset;
+			_open = open;
+		}
+
+		@Override
+		public int getType() {
+			return _type;
+		}
+
+		@Override
+		public int getGroupIndex() {
+			return _groupIndex;
+		}
+
+		@Override
+		public int getOffset() {
+			return _offset;
+		}
+
+		@Override
+		public boolean isOpen() {
+			return _open;
 		}
 	}
 }

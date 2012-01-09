@@ -214,7 +214,7 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 		}
 		if (_closes[groupIndex] != close) {
 			_closes[groupIndex] = close;
-			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex,-1,-1);
+			fireEvent(GroupsDataEvent.GROUPS_CHANGED, groupIndex, groupIndex, groupIndex);
 		}
 	}
 	

@@ -39,6 +39,7 @@ import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.RowRendererExt;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
 
@@ -150,11 +151,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 		Row row = null;
 		if (model instanceof GroupsListModel) {
 			final GroupsListModel gmodel = (GroupsListModel) model;
-			final GroupDataInfo info = gmodel.getDataInfo(index);
-			switch(info.type){
+			final GroupingInfo info = gmodel.getDataInfo(index);
+			switch(info.getType()){
 			case GroupDataInfo.GROUP:
 				row = newGroup(renderer0);
-				((Group)row).setOpen(!info.close);
+				((Group)row).setOpen(info.isOpen());
 				break;
 			case GroupDataInfo.GROUPFOOT:
 				row = newGroupfoot(renderer0);
@@ -232,18 +233,27 @@ public class GridDataLoader implements DataLoader, Cropper {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
 			Template tm = grid.getTemplate("model");
+			GroupingInfo info = null;
 			if (row instanceof Group) {
 				final Template tm2 = grid.getTemplate("model:grouping");
 				if (tm2 != null)
 					tm = tm2;
+				if (grid.getModel() instanceof GroupsListModel) {
+					final GroupsListModel gmodel = (GroupsListModel) grid.getModel();
+					info = gmodel.getDataInfo(row.getIndex());
+				}
+			} else if (row instanceof Groupfoot) {
+				final Template tm2 = grid.getTemplate("model:groupfoot");
+				if (tm2 != null)
+					tm = tm2;
 			}
-				
 			if (tm == null) {
 				final Label label = newRenderLabel(Objects.toString(data));
 				label.applyProperties();
 				label.setParent(row);
 				row.setValue(data);
 			} else {
+				final GroupingInfo groupingInfo = info;
 				final Component[] items = tm.create(rows, row,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
@@ -272,6 +282,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 										return grid.getModel().getSize();
 									}
 								};
+							} else if ("groupingInfo".equals(name)) {
+								return groupingInfo;
 							} else {
 								return null;
 							}
