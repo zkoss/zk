@@ -1493,9 +1493,9 @@ wgt.$f().main.setTitle("foo");
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
-		var cf = zk.currentFocus;
+		var cf = zk.currentFocus, cfid;
 		if (cf && zUtl.isAncestor(this, cf)) {
-			var cfid = cf.uuid;
+			cfid = cf.uuid;
 			zk.currentFocus = null;
 		}
 
