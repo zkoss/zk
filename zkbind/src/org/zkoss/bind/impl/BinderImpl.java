@@ -1354,7 +1354,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				parCall.call(viewModel, method);
 				
 				notifys.addAll(BindELContext.getNotifys(method, viewModel,
-						(String) null, (Object) null)); // collect notifyChange
+						(String) null, (Object) null, ctx)); // collect notifyChange
 			}else{
 				throw new UiException("cannot find any method that is annotated for the command "+command+" with @Command in "+viewModel);
 			}

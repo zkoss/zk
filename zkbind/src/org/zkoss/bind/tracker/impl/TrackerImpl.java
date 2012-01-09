@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.zkoss.bind.Immutable;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
@@ -37,7 +36,6 @@ import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
-import org.zkoss.lang.Primitives;
 import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
 
@@ -223,7 +221,7 @@ public class TrackerImpl implements Tracker,Serializable {
 			removeBeanMap(node);
 			
 			//add into _beanMap
-			if (!isImmutable(value)) {
+			if (!BindELContext.isImmutable(value)) {
 				Set<TrackerNode> nodes = _beanMap.get(value);
 				if (nodes == null) {
 					nodes = new HashSet<TrackerNode>();
@@ -293,18 +291,6 @@ public class TrackerImpl implements Tracker,Serializable {
 		}
 	}
 	
-	private boolean isImmutable(Object value) {
-		//null is deemed as primitive
-		if (value == null) {
-			return true;
-		}
-		final Class<? extends Object> cls = value.getClass();
-		return cls.isPrimitive() //value is primitive 
-			|| Primitives.toPrimitive(cls) != null //or a wrapper
-			|| value instanceof String //or a String
-			|| value instanceof Immutable; //or an Immutable
-	}
-
 	private void getNodesLoadBindings(Set<TrackerNode> basenodes, Set<LoadBinding> bindings, Set<Object> kidbases, Set<TrackerNode> visited) {
 		if (basenodes != null) {
 			for (TrackerNode node : basenodes) {

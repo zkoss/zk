@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Immutable;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -30,7 +31,9 @@ import org.zkoss.bind.impl.LoadPropertyBindingImpl;
 import org.zkoss.bind.impl.PropertyImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.lang.Primitives;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELContext;
 import org.zkoss.zel.ELResolver;
@@ -77,8 +80,42 @@ public class BindELContext extends XelELContext {
 		return getXelContext().setAttribute(name, value);
 	}
 	
+	private static final String TEMPBASE = "$TEMPBASE$";
+	public static Property prepareProperty(Object base, String prop, Object value, BindContext ctx) {
+		if (ctx != null && prop.indexOf('[') >= 0) { //handle properties that containing [] indirect reference
+			final Binder binder = ctx.getBinder();
+			final Component comp = ctx.getComponent();
+			Object old = null;
+			try {
+				old = comp.setAttribute(TEMPBASE, base);
+				final BindEvaluatorX eval = binder.getEvaluatorX();
+				final BindContext bctx = BindContextUtil.newBindContext(binder, null, false, null, comp, null);
+				final String expression = TEMPBASE + (prop.startsWith("[") ? prop : ("."+prop));
+				final ExpressionX exprX = eval.parseExpressionX(bctx, expression, Object.class);
+				if (prop.endsWith("]")) {
+					final Object result = eval.getValue(bctx, comp, exprX);
+					if (!isImmutable(result)) {
+						base = result;
+						prop = ".";
+					} else { //immutable
+						final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
+						base = valref.getBase();
+						prop = "*";
+					}
+				} else {
+					final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
+					base = valref.getBase();
+					prop = ""+valref.getProperty();
+				}
+			} finally {
+				comp.setAttribute(TEMPBASE, old);
+			}
+		}
+		return new PropertyImpl(base, prop, value);
+	}
+	
 	//check method annotation and collect NotifyChange annotation
-	public static Set<Property> getNotifys(Method m, Object base, String prop, Object value) {
+	public static Set<Property> getNotifys(Method m, Object base, String prop, Object value, BindContext ctx) {
 		//TODO, Dennis, do we really need to pass value here?
 		final Set<Property> notifys = new LinkedHashSet<Property>();
 		if(m==null) return notifys;
@@ -95,7 +132,7 @@ public class BindELContext extends XelELContext {
 			String[] notifies = annt.value();
 			if (notifies.length > 0) {
 				for(String notify : notifies) {
-					final Property propx = new PropertyImpl(base, notify, value);
+					final Property propx = prepareProperty(base, notify, value, ctx);
 					notifys.add(propx);
 				}
 			} else if (prop != null) { //property is null in doExecute case
@@ -108,7 +145,7 @@ public class BindELContext extends XelELContext {
 	}
 	
 	public static void addNotifys(Method m, Object base, String prop, Object value, BindContext ctx) {
-		final Set<Property> props = getNotifys(m, base, prop, value);
+		final Set<Property> props = getNotifys(m, base, prop, value, ctx);
 		addNotifys(props, ctx);
 	}
 	
@@ -231,5 +268,18 @@ public class BindELContext extends XelELContext {
 		//bean association
 		BindContext ctx = BindContextUtil.newBindContext(binder, srcBinding, false, null, srcComp, null);
 		eval.getValue(ctx, srcComp, expr); //will call tieValue() and recursive back via BindELResolver
+	}
+
+	/** Returns whether the specified Object is an immutable object */
+	public static boolean isImmutable(Object value) {
+		//null is deemed as primitive
+		if (value == null) {
+			return true;
+		}
+		final Class<? extends Object> cls = value.getClass();
+		return cls.isPrimitive() //value is primitive 
+			|| Primitives.toPrimitive(cls) != null //or a wrapper
+			|| value instanceof String //or a String
+			|| value instanceof Immutable; //or an Immutable
 	}
 }
