@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class AuAppendChild extends AuResponse {
 	 * @since 5.0.7
 	 */
 	public AuAppendChild(Component comp, Collection<String> contents) {
-		super("addChd", comp, toArray(comp, contents));
+		super("addChd", comp, toArray(comp.getUuid(), contents));
 	}
 	/**
 	 * @param contents a collection of contents (in String objects).
@@ -51,12 +52,12 @@ public class AuAppendChild extends AuResponse {
 	 * @since 5.0.7
 	 */
 	public AuAppendChild(Page page, Collection<String> contents) {
-		super("addChd", page, toArray(page.getId(), contents));
+		super("addChd", page, toArray(page.getUuid(), contents));
 	}
 	/** Converts the contents (a collection of strings) to an arry of JavaScriptValue. */
-	/*package*/ static Object[] toArray(Object target, Collection<String> contents) {
+	/*package*/ static Object[] toArray(String uuid, Collection<String> contents) {
 		final List<Object> list = new LinkedList<Object>();
-		list.add(target);
+		list.add(uuid);
 		stringToJS(contents, list);
 		return list.toArray(new Object[list.size()]);
 	}

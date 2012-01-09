@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import java.util.List;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
@@ -37,21 +38,33 @@ public class AuClearWrongValue extends AuResponse {
 	 * @param comps a list of components
 	 */
 	public AuClearWrongValue(List<? extends Component> comps) {
-		super("clearWrongValue", comps.toArray(new Object[0])); //component-independent
+		super("clearWrongValue", toData(comps)); //component-independent
 	}
 	/**
 	 * @param comps a list of components
 	 */
 	public AuClearWrongValue(Component[] comps) {
-		super("clearWrongValue", comps); //component-independent
+		super("clearWrongValue", toData(comps)); //component-independent
 	}
-
+	private static String[] toData(List<? extends Component> comps) {
+		final String[] uuids = new String[comps.size()];
+		int j = 0;
+		for (Component comp: comps)
+			uuids[j++] = comp.getUuid();
+		return uuids;
+	}
+	private static String[] toData(Component[] comps) {
+		final String[] uuids = new String[comps.length];
+		for (int j = 0; j < comps.length; j++)
+			uuids[j] = comps[j].getUuid();
+		return uuids;
+	}	
 	/** Unlike other constructors, the object instantiated by this method
 	 * depends on the specified comp.
 	 * @param comp the component whose error box, if any, shall be closed.
 	 */
 	public AuClearWrongValue(Component comp) {
-		super("clearWrongValue", comp, comp); //dependent
+		super("clearWrongValue", comp, comp.getUuid()); //dependent
 	}
 
 	/** Default: "zk.wrongValue" if {@link #getDepends} is not null,

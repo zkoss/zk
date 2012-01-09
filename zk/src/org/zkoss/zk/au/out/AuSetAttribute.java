@@ -39,6 +39,6 @@ public class AuSetAttribute extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuSetAttribute(Component comp, String attr, Object val) {
-		super("setAttr", comp, new Object[] {comp, attr, val});
+		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
 	}
 }

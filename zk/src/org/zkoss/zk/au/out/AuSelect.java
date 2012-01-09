@@ -28,11 +28,11 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuSelect extends AuResponse {
 	public AuSelect(Component comp) {
-		super("select", comp, comp);
+		super("select", comp, comp.getUuid());
 	}
 	public AuSelect(Component comp, int beg, int end) {
 		super("select", comp,
-			new Object[] {comp, new Integer(beg), new Integer(end)});
+			new Object[] {comp.getUuid(), new Integer(beg), new Integer(end)});
 	}
 
 	/** Default: zk.select (i.e., only one response of this class

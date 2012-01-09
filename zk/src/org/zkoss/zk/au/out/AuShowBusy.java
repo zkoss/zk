@@ -43,7 +43,7 @@ public class AuShowBusy extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuShowBusy(Component comp, String mesg) {
-		super("showBusy", comp, new Object[] {comp, mesg != null ? mesg: ""});
+		super("showBusy", comp, new String[] {comp.getUuid(), mesg != null ? mesg: ""});
 	}
 
 	/** Default: zk.busy (i.e., only one response of this class and {@link AuClearBusy} will

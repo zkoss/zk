@@ -26,7 +26,7 @@ public class AuResizeWidget extends AuResponse {
 	 * @param comp the component to resize
 	 */
 	public AuResizeWidget(Component comp) {
-		super("resizeWgt", comp, comp);
+		super("resizeWgt", comp, comp.getUuid());
 	}
 
 	/** Default: zk.resizeWgt (i.e., only one response of this class will

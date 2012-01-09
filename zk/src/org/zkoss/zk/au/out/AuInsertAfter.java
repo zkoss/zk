@@ -18,6 +18,7 @@ package org.zkoss.zk.au.out;
 
 import java.util.Collection;
 
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.StubsComponent;
@@ -48,6 +49,6 @@ public class AuInsertAfter extends AuResponse {
 		if (anchor instanceof Native || anchor instanceof StubsComponent)
 			throw new UiException("Adding a component after native or stubs not allowed: "+anchor);
 
-		return AuAppendChild.toArray(anchor, contents);
+		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}
 }

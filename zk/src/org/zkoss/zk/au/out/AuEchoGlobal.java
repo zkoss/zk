@@ -12,6 +12,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;

@@ -28,7 +28,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuFocus extends AuResponse {
 	public AuFocus(Component comp) {
-		super("focus", comp, comp);
+		super("focus", comp, comp.getUuid());
 	}
 
 	/** Default: zk.focus (i.e., only one response of this class
