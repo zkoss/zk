@@ -26,6 +26,6 @@ public class AuUuid extends AuResponse {
 	 * @param oldid the old UUID.
 	 */
 	public AuUuid(Component comp, String oldid) {
-		super("uuid", comp, new String[] {oldid, comp.getUuid()});
+		super("uuid", comp, new Object[] {oldid, comp});
 	}
 }

@@ -46,6 +46,6 @@ public class AuInsertBefore extends AuResponse {
 		if (anchor instanceof Native || anchor instanceof StubsComponent)
 			throw new UiException("Adding a component before native or stubs not allowed: "+anchor);
 
-		return AuAppendChild.toArray(anchor.getUuid(), contents);
+		return AuAppendChild.toArray(anchor, contents);
 	}
 }

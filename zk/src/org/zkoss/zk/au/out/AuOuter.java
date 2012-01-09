@@ -34,7 +34,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuOuter extends AuResponse {
 	public AuOuter(Component comp, String content) {
-		super("outer", comp, new Object[] {comp.getUuid(), new JavaScriptValue(content)});
+		super("outer", comp, new Object[] {comp, new JavaScriptValue(content)});
 	}
 	public AuOuter(Page page, String content) {
 		super("outer", page, new Object[] {page.getUuid(), new JavaScriptValue(content)});

@@ -29,7 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuWrongValue extends AuResponse {
 	public AuWrongValue(Component comp, String message) {
-		super("wrongValue", comp, new String[] {comp.getUuid(), message});
+		super("wrongValue", comp, new Object[] {comp, message});
 	}
 	/**
 	 * Constructor for multiple wrong values.
