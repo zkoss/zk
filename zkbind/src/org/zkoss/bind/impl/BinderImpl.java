@@ -1551,7 +1551,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		if(bindings.size()==0){//optimize, they are exclusive
 			List<LoadChildrenBinding> childrenLoadBindings = _childrenBindingHandler.getLoadPromptBindings(bkey);
-			if(childrenLoadBindings!=null && loadBindings.size()>0){
+			if(childrenLoadBindings!=null && childrenLoadBindings.size()>0){
 				bindings.addAll(childrenLoadBindings);
 			}
 		}

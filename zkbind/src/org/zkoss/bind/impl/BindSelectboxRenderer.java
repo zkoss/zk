@@ -43,7 +43,7 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-			final String itervarnm = itervar == null ? var+STATUS_POST_VAR : itervar; //provide default value if not specified
+			final String itervarnm = itervar == null ? varnm+STATUS_POST_VAR : itervar; //provide default value if not specified
 			
 			final IterationStatus iterStatus = new AbstractIterationStatus(){
 				private static final long serialVersionUID = 1L;
