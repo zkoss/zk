@@ -423,7 +423,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 					final String s = ((HtmlNativeComponent)n).getFullContent();
 			 		_postfix = _postfix != null ? _postfix + s: s;
 					if (desktopCtrl != null)
-						desktopCtrl.removeComponent(n, false); //ok but no need to recycle
+						desktopCtrl.removeComponent(n, false); //don't recycle since client might hold it
 					return this;
 			 	}
 			 	if (getFirstChild() == null) {
@@ -437,7 +437,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 			 			prefix = ((HtmlNativeComponent)n)._prefix;
 			 		((HtmlNativeComponent)n)._prefix = prefix != null ? s + prefix: s;
 					if (desktopCtrl != null)
-						desktopCtrl.removeComponent(this, false); //ok but no need to recycle
+						desktopCtrl.removeComponent(this, false); //don't recycle since client might hold it
 					return n;
 			 	}
 			}
@@ -477,7 +477,7 @@ implements DynamicTag, Native { //cannot be RawId since two native might have th
 					bEpilog = true;
 				}
 				if (desktopCtrl != null)
-					desktopCtrl.removeComponent(nc, false); //ok but no need to recycle
+					desktopCtrl.removeComponent(nc, false); //don't recycle since client might hold it
 			}
 
 			_prolog = prolog.toString();

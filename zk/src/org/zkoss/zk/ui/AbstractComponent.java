@@ -1317,7 +1317,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	void childrenMerged(DesktopCtrl desktopCtrl, ChildInfo chdinf) {
 		if (chdinf != null)
 			for (AbstractComponent p = chdinf.first; p != null; p = p._next) {
-				desktopCtrl.removeComponent(p, true); //OK to recycle
+				desktopCtrl.removeComponent(p, false);
+					//don't recycle it (since the client might hold them)
 				childrenMerged(desktopCtrl, p._chdinf);
 			}
 	}
