@@ -74,9 +74,9 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
 	public Set<TreeNode<E>> getSelection() {
 		HashSet<TreeNode<E>> selected = new HashSet<TreeNode<E>>();
 		int[][] paths = getSelectionPaths();
-		for (int i = 0; i < paths.length; i++) {
-			selected.add(getChild(paths[i]));
-		}
+		if (paths != null)
+			for (int i = 0; i < paths.length; i++)
+				selected.add(getChild(paths[i]));
 		return selected;
 	}
 	
