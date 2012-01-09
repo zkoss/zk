@@ -3170,8 +3170,12 @@ public class Listbox extends MeshElement {
 							.iterator().next() : null;
 					selectItem(item);
 					if (_model instanceof ListSelectionModel) {
-						int index = item.getIndex();
-						((ListSelectionModel)_model).addSelectionInterval(index, index);
+						ListSelectionModel lsm = (ListSelectionModel) _model;
+						lsm.clearSelection();
+						if (item != null) {
+							int index = item.getIndex();
+							lsm.addSelectionInterval(index, index);
+						}
 					}
 				} else {
 					int from, to;

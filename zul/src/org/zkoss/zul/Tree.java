@@ -2021,20 +2021,20 @@ public class Tree extends MeshElement {
 						((TreeSelectionModel)_model).clearSelection();
 				}
 				
-				if (!_multiple) {
+				final boolean paging = inPagingMold();
+				if (!_multiple || (!paging && (selItems == null || selItems.size() <= 1))) {
 					final Treeitem item =
 						selItems != null && selItems.size() > 0 ?
 							selItems.iterator().next(): null;
 					selectItem(item);
 					if (_model instanceof TreeSelectionModel) {
+						TreeSelectionModel tsm = (TreeSelectionModel) _model;
+						tsm.clearSelection();
 						if (item != null)
-							((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
-						else
-							((TreeSelectionModel)_model).clearSelection();
+							tsm.addSelectionPath(getTreeitemPath(this, item));
 					}
 					
 				} else {
-					final boolean paging = inPagingMold();
 					int from, to;
 					if (paging) {
 						final Paginal pgi = getPaginal();
