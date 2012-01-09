@@ -78,8 +78,8 @@ public class AuEcho extends AuResponse {
 	public AuEcho(Component comp, String evtnm, Object data) {
 		super("echo2", comp,
 			data != null ?
-				new Object[] {comp.getUuid(), evtnm, getKeyOfData(comp, data)}:
-				(Object[])(new String[] {comp.getUuid(), evtnm}));
+				new Object[] {comp, evtnm, getKeyOfData(comp, data)}:
+				new Object[] {comp, evtnm});
 	}
 	/** Note: data must be non-null. */
 	@SuppressWarnings("unchecked")
