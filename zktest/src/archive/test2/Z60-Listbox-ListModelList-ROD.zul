@@ -34,11 +34,12 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>7. Click 'insert item', each select of Listbox should not be changed.</div>
 		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
 	</div>
-	<listbox id="lbxOne" height="150px" model="${model}" onSelect="" checkmark="true" />
+	<hbox>
+		<listbox id="lbxOne" height="150px" width="140px" model="${model}" onSelect="" checkmark="true" />
+		<listbox id="lbxTwo" height="150px" width="140px" model="${model}" onSelect="" checkmark="true" />
+		<listbox id="lbxThree" height="150px" width="140px" model="${model2}" onSelect="" checkmark="true" />
+	</hbox>
 	<div height="10px"></div>
-	<listbox id="lbxTwo" height="150px" model="${model}" onSelect="" checkmark="true" />
-	<div height="10px"></div>
-	<listbox id="lbxThree" height="150px" model="${model2}" onSelect="" checkmark="true" />
 	<button label="clone">
 		<attribute name="onClick">
 			Listbox lbx = lbxThree.clone();
@@ -69,5 +70,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			model2.remove(0);
 		</attribute>
 	</button>
-	<div id="cloneThreeArea" />
+	<hbox id="cloneThreeArea" />
 </zk>

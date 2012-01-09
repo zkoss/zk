@@ -1,27 +1,27 @@
 package org.zkoss.zktest.test2.select.models;
 
-import java.util.*;
+import org.zkoss.zul.ListModelArray;
 
-import org.zkoss.zul.*;
-public class ListModelLists {
+public class ListModelArrays {
 	public static final int DEFAULT = 0;
 	public static final int MULTIPLE = 1;
 	public static final int CLONEABLE = 2;
 	public static final int MULTIPLE_AND_CLONEABLE = 3;
-	public static ListModelList getModel(int config) {
-		ListModelList model = null;
+
+	public static ListModelArray getModel(int config) {
+		ListModelArray model = null;
 		if (config == CLONEABLE || config == MULTIPLE_AND_CLONEABLE)
-			model = (ListModelList)org.zkoss.zktest.util.Serializations.toCloneableListModelList(getItems());
+			model = (ListModelArray)org.zkoss.zktest.util.Serializations.toCloneableListModelAraay(getItems());
 		else
-			model = new ListModelList(getItems());
+			model = new ListModelArray(getItems());
 		if(config == MULTIPLE || config == MULTIPLE_AND_CLONEABLE)
 			model.setMultiple(true);
 		return model;
 	}
-	private static List getItems() {
-		List Items = new ArrayList();
+	private static String[] getItems() {
+		String[] Items = new String[1000];
 		for (int i = 0; i < 1000; i++) {
-			Items.add(new String("data "+i));
+			Items[i] = new String("data "+i);
 		}
 		return Items;
 	}
