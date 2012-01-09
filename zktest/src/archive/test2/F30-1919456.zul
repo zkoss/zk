@@ -27,9 +27,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	]]></zscript>
 	<listbox mold="paging" pageSize="22" id="lbx" model="${mymodel}">
 	</listbox>
-	<button label="select item 21 (last of 1st page)" onClick="mymodel.addSelectionInterval(21,21);lbx.setSelectedIndex(21)"/>
-	<button label="select item 22 (first of 2nd page)" onClick="mymodel.addSelectionInterval(22,22);lbx.setSelectedIndex(22)"/>
-	<button label="select item 29 (last)" onClick="mymodel.addSelectionInterval(29,29);lbx.setSelectedIndex(29)"/>
+	<button label="select item 21 (last of 1st page)" onClick="mymodel.addSelectionInterval(21,21);"/>
+	<button label="select item 22 (first of 2nd page)" onClick="mymodel.addSelectionInterval(22,22);"/>
+	<button label="select item 29 (last)" onClick="mymodel.addSelectionInterval(29,29);"/>
 
 	<tree id="tree" mold="paging" pageSize="4">
 		<treechildren>

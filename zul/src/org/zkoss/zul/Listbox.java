@@ -2446,8 +2446,11 @@ public class Listbox extends MeshElement {
 				} else {
 					for (int i = smodel.getMinSelectionIndex(); i <= smodel.getMaxSelectionIndex(); i++) {
 						Listitem item = getItemAtIndex(i);
-						if (item != null)
+						if (item != null) {
 							item.setSelected(smodel.isSelectedIndex(i));
+						} else if (smodel.isSelectedIndex(i)) {
+							setSelectedIndex(i); // auto scrollIntoView, if item is not rendered
+						}
 					}
 				}
 			}
