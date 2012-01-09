@@ -50,6 +50,7 @@ import org.zkoss.bind.sys.ChildrenBinding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
@@ -1539,12 +1540,23 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		removeBindings(removed);
 	}
 	
-//	@Override
-//	public List<Binding> getBindings(Component comp, String key) {
-//		checkInit();
-//		Map<String, List<Binding>> map = _bindings.get(comp);
-//		return map==null ? null : map.get(key);
-//	}
+	@Override
+	public List<Binding> getLoadPromptBindings(Component comp, String attr) {
+		checkInit();
+		final List<Binding> bindings = new ArrayList<Binding>();
+		final BindingKey bkey = getBindingKey(comp, attr);
+		final List<LoadPropertyBinding> loadBindings = _propertyBindingHandler.getLoadPromptBindings(bkey);
+		if(loadBindings!=null && loadBindings.size()>0){
+			bindings.addAll(loadBindings);
+		}
+		if(bindings.size()==0){//optimize, they are exclusive
+			List<LoadChildrenBinding> childrenLoadBindings = _childrenBindingHandler.getLoadPromptBindings(bkey);
+			if(childrenLoadBindings!=null && loadBindings.size()>0){
+				bindings.addAll(childrenLoadBindings);
+			}
+		}
+		return bindings;
+	}
 
 	private void removeBindings(Collection<Binding> removed) {
 		_formBindingHandler.removeBindings(removed);
@@ -1576,12 +1588,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(resolvers==null){
 			resolvers = new HashMap<String,TemplateResolver>();
 			_templateResolvers.put(comp, resolvers);
-		}
-		final BindingKey bkey = getBindingKey(comp, attr);
-		final List<LoadPropertyBinding> loadBindings = _propertyBindingHandler.getLoadPromptBindings(bkey);
-		final Binding binding = loadBindings != null && !loadBindings.isEmpty() ? 
-				loadBindings.get(loadBindings.size() - 1) : null;
-		resolvers.put(attr, new TemplateResolverImpl(this, binding, comp,attr,templateExpr,templateArgs));
+		}	
+		resolvers.put(attr, new TemplateResolverImpl(this, comp,attr,templateExpr,templateArgs));
 	}
 	
 	@Override

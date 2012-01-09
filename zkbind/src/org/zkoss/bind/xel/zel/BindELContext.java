@@ -216,7 +216,7 @@ public class BindELContext extends XelELContext {
 	 * @param srcPath the source dependent field name series in list; e.g. ["vm", "fullname"] for "vm.fullname".
 	 * @param srcComp the source component associated with the binding; e.g. <label>
 	 * @param dependsOnPath the depends-on property name series; e.g. "vm.firstname" 
-	 * @param despendsOnComp the depends-on component associated with the depends-on property name series binding; e.g. "vm.firstname"
+	 * @param dependsOnComp the depends-on component associated with the depends-on property name series binding; e.g. "vm.firstname"
 	 */
 	public static void addDependsOnTracking(Binding srcBinding, List<String> srcPath, Component srcComp, String dependsOnPath, Component dependsOnComp) {
 		final Binder binder = srcBinding.getBinder();

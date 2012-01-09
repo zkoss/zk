@@ -95,6 +95,10 @@ import org.zkoss.zk.ui.Component;
 		}
 		bindings.add(binding);
 	}
+	
+	List<LoadChildrenBinding> getLoadPromptBindings(BindingKey bkey) {
+		return _loadPromptBindings.get(bkey);
+	}
 
 	
 	//generic operation to load a property binding

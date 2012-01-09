@@ -17,13 +17,10 @@ import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.IterationStatus;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -42,11 +39,11 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	private final String _attr;
 	private final Component _comp;
 	private final ExpressionX _expression;
-	private final Binding _binding;
+	private Binding _binding;
+	private boolean _bindingResolved;
 	
-	public TemplateResolverImpl(Binder binder, Binding binding, Component comp, String attr, String templateExpr, Map<String, Object> templateArgs) {
+	public TemplateResolverImpl(Binder binder, Component comp, String attr, String templateExpr, Map<String, Object> templateArgs) {
 		_binder = binder;
-		_binding = binding;
 		_comp = comp;
 		_templateExpr = templateExpr;
 		_templateArgs = templateArgs;
@@ -109,10 +106,17 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	//Tracking template expression to trigger load binding of the template component
 	@Override
 	public void addTemplateDependency(Component eachComp) {
-		final BindContext ctx = BindContextUtil.newBindContext(_binder, _binding, false, null, eachComp, null);
-		final ExpressionX exprX = _binder.getEvaluatorX().parseExpressionX(ctx, _templateExpr, Object.class); 
-		final BindEvaluatorX eval = _binder.getEvaluatorX();
-		eval.getValue(ctx, eachComp, exprX);
+		if(!_bindingResolved || _binding==null){//defer the linking between last prompt binding and template
+			List<Binding> bindings = ((BinderCtrl)_binder).getLoadPromptBindings(_comp,_attr);
+			_binding = bindings.size()>0?bindings.get(bindings.size()-1):null;
+			_bindingResolved = true;
+		}
+		if(_binding!=null){
+			final BindContext ctx = BindContextUtil.newBindContext(_binder, _binding, false, null, eachComp, null);
+			final ExpressionX exprX = _binder.getEvaluatorX().parseExpressionX(ctx, _templateExpr, Object.class); 
+			final BindEvaluatorX eval = _binder.getEvaluatorX();
+			eval.getValue(ctx, eachComp, exprX);
+		}
 	}
 	
 	public String toString(){

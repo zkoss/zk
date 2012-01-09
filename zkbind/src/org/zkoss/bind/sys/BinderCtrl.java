@@ -95,7 +95,13 @@ public interface BinderCtrl {
 	 */
 	public TemplateResolver getTemplateResolver(Component comp, String attr);
 
-	
-//	public List<Binding> getBindings(Component comp, String attr);
+
+	/**
+	 * get all load prompt binding of the component and attribute
+	 * @param comp the component is relative to the bindings
+	 * @param attr the attribute is relative to the bindings
+	 * @return
+	 */
+	public List<Binding> getLoadPromptBindings(Component comp, String attr);
 	
 }

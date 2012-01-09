@@ -165,7 +165,6 @@ public class AnnotateBinderHelper {
 			}
 		}
 
-		//template information (must be after LoadBinding is processed)
 		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,propName);
 		if(templateInfo!=null){
 			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
@@ -444,14 +443,7 @@ public class AnnotateBinderHelper {
 	
 	private void processChildrenBindings(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		
-		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,CHILDREN_ATTR);
-		
-		if(templateInfo!=null){
-			//use special CHILDREN_KEY to avoid conflict 
-			_binder.setTemplate(comp, CHILDREN_KEY, templateInfo.expr, templateInfo.args);
-		}
-		
+
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(CHILDREN_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
@@ -468,6 +460,12 @@ public class AnnotateBinderHelper {
 			}else if(anno.getName().equals(LOAD_ANNO)){
 				processChildrenLoadBindings(comp,anno);
 			}
+		}
+
+		ExpressionAnnoInfo templateInfo = parseTemplate(compCtrl,CHILDREN_ATTR);
+		if(templateInfo!=null){
+			//use special CHILDREN_KEY to avoid conflict 
+			_binder.setTemplate(comp, CHILDREN_KEY, templateInfo.expr, templateInfo.args);
 		}
 	}
 	
