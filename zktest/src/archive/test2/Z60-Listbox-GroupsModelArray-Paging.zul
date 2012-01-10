@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Listbox-GroupsModelArray-ROD.zul
+Z60-Listbox-GroupsModelArray-Paging.zul
 
 	Purpose:
 		
@@ -34,7 +34,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>7. Open the Itemset 1 of the last two Grid, its content will open well (if it opens the Last Group's content, that is a bug).</div>
 	</div>
 	<hbox>
-		<listbox id="lbxOne" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+		<listbox id="lbxOne" height="200px" width="310px" mold="paging" pageSize="5" model="${model}" onSelect="" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>
@@ -51,7 +51,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</template>
 		</listbox>
-		<listbox id="lbxTwo" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+		<listbox id="lbxTwo" height="200px" width="310px" mold="paging" pageSize="5" model="${model}" onSelect="" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>
@@ -68,7 +68,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</template>
 		</listbox>
-		<listbox id="lbxThree" height="150px" width="240px" model="${model2}" onSelect="" checkmark="true">
+		<listbox id="lbxThree" height="200px" width="310px" mold="paging" pageSize="5" model="${model2}" onSelect="" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>

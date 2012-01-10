@@ -18,6 +18,25 @@ public class ListModelLists {
 			model.setMultiple(true);
 		return model;
 	}
+	public static Comparator getRowComparator(boolean asc) {
+		return new MyRowComparator(asc);
+	}
+	private static class MyRowComparator implements Comparator, java.io.Serializable {
+		boolean _asc;
+		public MyRowComparator(boolean asc) {
+			_asc = asc;
+		}
+		public int compare(Object o1, Object o2) {
+			int i1 = ListModelLists.getNumberFromData((String)o1);
+			int i2 = ListModelLists.getNumberFromData((String)o2);
+			if (_asc && i1 > i2 || !_asc && i1 < i2)
+				return 1;
+			return -1;
+		}
+	}
+	public static int getNumberFromData(String data) {
+		return Integer.parseInt(data.replace("data", "").trim());
+	}
 	private static List getItems() {
 		List Items = new ArrayList();
 		for (int i = 0; i < 1000; i++) {
