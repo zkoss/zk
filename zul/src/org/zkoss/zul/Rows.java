@@ -132,24 +132,6 @@ public class Rows extends XulElement {
 			}
 		}
 	}
-	/**
-	 * Fix Childitem._index since j-th item.
-	 *
-	 * @param j
-	 *            the start index (inclusion)
-	 * @param to
-	 *            the end index (inclusion). If -1, up to the end.
-	 */
-	private void fixItemIndices(int j, int to) {
-		int realj = getRealIndex(j);
-		if (realj < 0)
-			realj = 0;
-		if (realj < getChildren().size()) {
-			for (Iterator<Component> it = getChildren().listIterator(realj); it.hasNext()
-					&& (to < 0 || j <= to); ++j)
-				((Row)it.next()).setIndexDirectly(j);
-		}
-	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
@@ -355,9 +337,6 @@ public class Rows extends XulElement {
 					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2] = g[0] + g[1] - 1;
 				}
 				
-			} else if (hasModelButNotROD()) {
-				int index = newItem.getIndex();
-				fixRowIndices(index, -1);
 			}
 			
 			//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
@@ -417,7 +396,7 @@ public class Rows extends XulElement {
 						g1[2] = -1;
 					}
 				}
-			} else if (hasModelButNotROD) {
+			} else {
 				fixRowIndices(index, -1);
 			}
 			
