@@ -237,11 +237,6 @@ public class Rows extends XulElement {
 		}
 		super.beforeChildAdded(child, refChild);
 	}
-
-	private boolean hasModelButNotROD() {
-		final Grid grid = getGrid();
-		return grid != null && (!WebApps.getFeature("ee") || !grid.evalRod()) && grid.getModel() != null;
-	}
 	
 	private boolean hasGroupsModel() {
 		final Grid grid = getGrid();
@@ -355,8 +350,7 @@ public class Rows extends XulElement {
 			beforeRemove(child);
 		
 		final boolean hasGroup = hasGroup();
-		final boolean hasModelButNotROD = hasModelButNotROD();
-		int index = hasGroup || hasModelButNotROD ? ((Row)child).getIndex() : -1;
+		int index = ((Row)child).getIndex();
 		if(super.removeChild(child)) {
 			((Row)child).setIndexDirectly(-1);
 			if (child instanceof Group) {
