@@ -1,0 +1,66 @@
+<!--
+	F60-ZK-715.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Jan 10 12:04:36 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		String[] strs = new String[500];
+		for (int i = 0; i < 500; i++)
+			strs[i] = "Item " + i;
+		ListModel model1 = new ListModelList(strs);
+		ListModel model2 = new ListModelList(strs);
+		model1.multiple = true;
+	]]></zscript>
+	<div>
+		1. In paging mold, when reaching page boundary upon pressing UP/DOWN key, 
+		it shall go across to the next/previous page. 
+	</div>
+	<div>
+		2. In paging mold, when pressing PageUp/PageDown, it will go to the 
+		next/previous page.
+	</div>
+	<separator />
+	<hlayout>
+		<vlayout hflex="1">
+			Model 1
+			<listbox id="listbox1" hflex="1" model="${model1}" checkmark="true" 
+				mold="paging" pageSize="12" onSelect="" />
+		</vlayout>
+		<vlayout hflex="1">
+			Model 1
+			<listbox id="listbox2" hflex="1" model="${model1}" checkmark="true" 
+				rows="12" onSelect="" />
+		</vlayout>
+		<vlayout hflex="1">
+			Model 2
+			<listbox id="listbox3" hflex="1" model="${model2}" mold="paging" 
+				pageSize="12" onSelect="" />
+		</vlayout>
+		<vlayout hflex="1">
+			Model 2
+			<listbox id="listbox4" hflex="1" model="${model2}" rows="12" onSelect="" />
+		</vlayout>
+		<vlayout hflex="1">
+			No Model
+			<listbox id="listbox5" hflex="1" mold="paging" pageSize="12" 
+				multiple="true" checkmark="true" onSelect="">
+				<listitem label="${each}" forEach="${strs}" />
+			</listbox>
+		</vlayout>
+		<vlayout hflex="1">
+			No Model
+			<listbox id="listbox6" hflex="1" mold="paging" pageSize="12" onSelect="">
+				<listitem label="${each}" forEach="${strs}" />
+			</listbox>
+		</vlayout>
+	</hlayout>
+</zk>

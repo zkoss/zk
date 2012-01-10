@@ -827,8 +827,20 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		switch (data.keyCode) {
 		case 33: //PgUp
 		case 34: //PgDn
+			var pgnl = this.paging || this._paginal;
+			if (row && pgnl) { // F60-ZK-715
+				var npg = this.getActivePage() + (data.keyCode == 33 ? -1 : 1);
+				if (npg > -1 && npg < this.getPageCount())
+					this.fire('onAcrossPage', {
+						page: npg, 
+						offset: this.indexOfItem(row),
+						shift: !shift || !this._multiple ? 0 : 
+							data.keyCode == 33 ? this.getPageSize() : -this.getPageSize()
+					});
+				return;
+			}
 			step = this._visibleRows();
-			if (step == 0) step = 20;
+			if (step == 0) step = 20; // TODO: fix this
 			if (data.keyCode == 33)
 				step = -step;
 			break;
@@ -852,11 +864,27 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._doRight(row);
 			break;
 		}
-
+		
 		if (step) {
 			if (shift) this._toggleSelect(row, true, evt);
 			var nrow = row.$n();
-			for (;nrow && (nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling);) {
+			for (;nrow;) {
+				nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling;
+				if (!nrow) { // F60-ZK-715: across to next/previous page if any
+					if (endless)
+						break; // ignore Home/End key
+					var pg = this.paging || this._paginal, pnum;
+					if (pg) {
+						pnum = pg.getActivePage();
+						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0)
+							this.fire('onAcrossPage', {
+								page: pnum + (step > 0 ? 1 : 0), 
+								offset: step > 0 ? 0 : -1,
+								shift: !this._multiple || !shift ? 0 : step > 0 ? -1 : 1
+							});
+					}
+					break;
+				}
 				var r = zk.Widget.$(nrow);
 				if (r.$instanceof(zul.sel.Treerow))
 					r = r.parent;

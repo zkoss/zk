@@ -22,6 +22,7 @@ import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -53,6 +54,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
@@ -344,6 +346,10 @@ public class Listbox extends MeshElement {
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
 		addClientEvent(Listbox.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		
+		// since 6.0.0, F60-ZK-715
+		addClientEvent(Listbox.class, "onAcrossPage", 
+				CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
 	}
 
 	public Listbox() {
@@ -3262,6 +3268,37 @@ public class Listbox extends MeshElement {
 			}
 
 			Listbox.this.renderItems(items);
+			
+		} else if (cmd.equals("onAcrossPage")) { // F60-ZK-715
+			final Map<String, Object> data = request.getData();
+			int page = AuRequests.getInt(data, "page", 0);
+			int offset = AuRequests.getInt(data, "offset", 0);
+			int shift = AuRequests.getInt(data, "shift", 0);
+			int pageSize = getPageSize();
+			int index = page * pageSize + offset;
+			int from = shift < 0 ? index + shift : index;
+			int to = shift > 0 ? index + shift : index;
+			
+			if (_model != null && _model instanceof ListSelectionModel) {
+				ListSelectionModel smodel = (ListSelectionModel) _model;
+				to = Math.min(to, _model.getSize() - 1); // capped by size
+				if (!smodel.isMultiple() || shift == 0)
+					smodel.clearSelection();
+				smodel.addSelectionInterval(from, to);
+				
+			} else {
+				to = Math.min(to, getItemCount() - 1); // capped by size
+				if (!isMultiple() || shift == 0)
+					setSelectedIndex(index);
+				else {
+					Set<Listitem> items = new HashSet<Listitem>();
+					for (int i = from; i <= to; i++)
+						items.add(getItemAtIndex(i));
+					setSelectedItems(items);
+					this.setActivePage(index / pageSize);
+				}
+			}
+			
 		} else
 			super.service(request, everError);
 	}

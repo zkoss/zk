@@ -66,6 +66,7 @@ ZK 6.0.0
   ZK-694: The file to configure logger can be specified in a library property
   ZK-701: ListModel, TreeModel, ChartModel, and ListGroupModel supports Cloneable if implemented 
   ZK-719: Combobutton supports the toolbar mold such that it has the same size as other toolbar components
+  ZK-715: Listbox paging mold support PageUp/PageDown to navigate the paging 
 
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
