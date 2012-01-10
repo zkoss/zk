@@ -2444,8 +2444,8 @@ public class Listbox extends MeshElement {
 					for (Listitem item : new ArrayList<Listitem>(_selItems))
 						item.setSelected(false);
 				} else {
-					final int min = Math.max(event.getIndex0(), smodel.getMinSelectionIndex());
-					final int max = Math.min(event.getIndex1(), smodel.getMaxSelectionIndex());
+					final int min = event.getIndex0();
+					final int max = event.getIndex1();
 					for (int i = min; i <= max; i++) {
 						Listitem item = getItemAtIndex(i);
 						if (item != null) {
