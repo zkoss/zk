@@ -74,10 +74,9 @@ function (out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-bpad');
 	
-	out.push('<', tag, ' id="', uuid, '-a"');
-	//out.push(' tabindex="-1"'); // TODO
-	out.push(' onclick="return false;" href="javascript:;" class="z-focus-a"></',
-		tag, '>', "</div>");
+	out.push('<', tag, ' id="', uuid, 
+			'-a" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+			tag, '>', "</div>");
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',

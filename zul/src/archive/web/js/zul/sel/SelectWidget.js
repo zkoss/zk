@@ -18,8 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 (function() {
 	function _beforeChildKey(wgt, evt) {
-		return zAu.processing() || wgt._shallIgnore(evt)
-			|| (!wgt._focusItem && !wgt.getSelectedItem());
+		return zAu.processing() || wgt._shallIgnore(evt);
 	}
 	function _afterChildKey(evt) {
 		switch (evt.data.keyCode) {
@@ -840,7 +839,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				return;
 			}
 			step = this._visibleRows();
-			if (step == 0) step = 20; // TODO: fix this
+			if (step == 0) step = this.getPageSize() || 20;
 			if (data.keyCode == 33)
 				step = -step;
 			break;
@@ -849,8 +848,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			step = data.keyCode == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
-			if (this._multiple) this._toggleSelect(row, !row.isSelected(), evt);
-			else this._select(row, evt);
+			if (row) {
+				if (this._multiple)
+					this._toggleSelect(row, !row.isSelected(), evt);
+				else
+					this._select(row, evt);
+			}
 			break;
 		case 36: //Home
 		case 35: //End
@@ -858,18 +861,29 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			endless = true;
 			break;
 		case 37: //LEFT
-			this._doLeft(row);
+			if (row)
+				this._doLeft(row);
 			break;
 		case 39: //RIGHT
-			this._doRight(row);
+			if (row)
+				this._doRight(row);
 			break;
 		}
 		
-		if (step) {
-			if (shift) this._toggleSelect(row, true, evt);
-			var nrow = row.$n();
-			for (;nrow;) {
-				nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling;
+		if (step > 0 || (step < 0 && row)) {
+			if (row && shift)
+				this._toggleSelect(row, true, evt);
+			var nrow = row ? row.$n() : null;
+			for (;;) {
+				if (!nrow) { // no focused/selected item yet
+					var w = this.getBodyWidgetIterator().next();
+					if (w)
+						nrow = w.$n(); // F60-ZK-423: first row
+					else
+						return; // empty
+				} else
+					nrow = step > 0 ? nrow.nextSibling : nrow.previousSibling;
+				
 				if (!nrow) { // F60-ZK-715: across to next/previous page if any
 					if (endless)
 						break; // ignore Home/End key

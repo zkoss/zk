@@ -54,10 +54,9 @@ function (out) {
 	if (this.treechildren)
 		this.treechildren.redraw(out);
 	
-	out.push('</table><', tag, ' id="', uuid, '-a"');
-	//out.push(' tabindex="-1"'); // TODO
-	out.push(' onclick="return false;" href="javascript:;" class="z-focus-a"></',
-		tag, '>');
+	out.push('</table><', tag, ' id="', uuid, 
+			'-a" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+			tag, '>');
 	out.push("</div>");
 	
 	if (this.treefoot) {
