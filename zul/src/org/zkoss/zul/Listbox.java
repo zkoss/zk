@@ -2444,7 +2444,9 @@ public class Listbox extends MeshElement {
 					for (Listitem item : new ArrayList<Listitem>(_selItems))
 						item.setSelected(false);
 				} else {
-					for (int i = smodel.getMinSelectionIndex(); i <= smodel.getMaxSelectionIndex(); i++) {
+					final int min = Math.max(event.getIndex0(), smodel.getMinSelectionIndex());
+					final int max = Math.min(event.getIndex1(), smodel.getMaxSelectionIndex());
+					for (int i = min; i <= max; i++) {
 						Listitem item = getItemAtIndex(i);
 						if (item != null) {
 							item.setSelected(smodel.isSelectedIndex(i));
@@ -2856,9 +2858,6 @@ public class Listbox extends MeshElement {
 	private void afterUnmarshal() {
 		//recreate the DataLoader
 		final int offset = getDataLoader().getOffset();
-		final int limit = getDataLoader().getLimit();
-		resetDataLoader();
-		getDataLoader().init(this, offset, limit);
 
 		int index = offset;
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
@@ -2881,6 +2880,11 @@ public class Listbox extends MeshElement {
 				addPagingListener(_pgi);
 			}
 		}
+
+		// after _pgi ready, and then getLimit() will work
+		final int limit = getDataLoader().getLimit();
+		resetDataLoader();
+		getDataLoader().init(this, offset, limit);
 	}
 
 	// -- Serializable --//
