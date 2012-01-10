@@ -282,18 +282,26 @@ public class Grid extends MeshElement {
 			Events.postEvent(20000, new Event("onInitModel", this));
 		}
 	}
+	
 	private void resetDataLoader() {
+		resetDataLoader(true);
+	}
+	private void resetDataLoader(boolean shallReset) {
 		if (_dataLoader != null) {
-			_dataLoader.reset();
+			if (shallReset) {
+				_dataLoader.reset();
+				smartUpdate("_lastoffset", 0); //reset for bug 3357641
+			}
 			_dataLoader = null;
-			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
 		
-		// Bug ZK-373
-		smartUpdate("resetDataLoader", true);
-		_currentTop = 0;
-		_currentLeft = 0;
-		_topPad = 0;
+		if (shallReset) {
+			// Bug ZK-373
+			smartUpdate("resetDataLoader", true);
+			_currentTop = 0;
+			_currentLeft = 0;
+			_topPad = 0;
+		}
 	}
 	
 	private class ModelInitListener implements SerializableEventListener<Event> {
@@ -1284,9 +1292,6 @@ public class Grid extends MeshElement {
 		
 		//recreate the DataLoader 
 		final int offset = clone.getDataLoader().getOffset(); 
-		final int limit = clone.getDataLoader().getLimit();
-		clone.resetDataLoader();
-		clone.getDataLoader().init(clone, offset, limit);
 		
 		int cnt = 0;
 		if (clone._rows != null) ++cnt;
@@ -1295,6 +1300,11 @@ public class Grid extends MeshElement {
 		if (clone._frozen != null) ++cnt;
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
+
+		// after _pgi ready, and then getLimit() will work
+		final int limit = clone.getDataLoader().getLimit();
+		clone.resetDataLoader(false);
+		clone.getDataLoader().init(clone, offset, limit);
 		
 		if (clone._model != null) {
 			if (clone._model instanceof ComponentCloneListener) {
@@ -1358,6 +1368,15 @@ public class Grid extends MeshElement {
 		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
+		
+		// keep the scrolling status after serialized
+		if (_dataLoader != null) {
+			s.writeInt(_dataLoader.getOffset());
+			s.writeInt(_dataLoader.getLimit());
+		} else {
+			s.writeInt(0);
+			s.writeInt(100);
+		}		
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -1370,6 +1389,12 @@ public class Grid extends MeshElement {
 
 		init();
 		afterUnmarshal(-1);
+		
+		int offset = s.readInt();
+		int limit = s.readInt();
+		resetDataLoader(false); // no need to reset, it will reset the old reference.
+		getDataLoader().init(this, offset, limit);
+		
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 

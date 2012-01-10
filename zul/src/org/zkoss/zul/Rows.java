@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
@@ -536,13 +537,12 @@ public class Rows extends XulElement {
 		final Rows clone = (Rows)super.clone();
 		clone.init();
 		clone._groupsInfo.addAll(_groupsInfo);
-		clone.afterUnmarshal();
-		return clone;
-	}
-	private void afterUnmarshal() {
 		Grid grid = getGrid();
 		final int offset = grid != null ? grid.getDataLoader().getOffset() : 0;
-		int index = offset;
+		clone.afterUnmarshal(offset);
+		return clone;
+	}
+	private void afterUnmarshal(int index) {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			((Row) it.next()).setIndexDirectly(index++);
 		}
@@ -555,6 +555,12 @@ public class Rows extends XulElement {
 		s.writeInt(size);
 		if (size > 0)
 			s.writeObject(_groupsInfo);
+		Grid grid = getGrid();
+		DataLoader loader = grid != null ? grid.getDataLoader() : null;
+		if (loader != null) {
+			s.writeInt(loader.getOffset());
+		} else
+			s.writeInt(0);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -566,7 +572,8 @@ public class Rows extends XulElement {
 			for (int i = 0; i < size; i++)
 				_groupsInfo.add((int [])groupsInfo.get(i));
 		}
-		afterUnmarshal();
+		int offset = s.readInt();
+		afterUnmarshal(offset);
 	}
 	public List<Component> getChildren() {
 		return new Children();

@@ -2778,18 +2778,26 @@ public class Listbox extends MeshElement {
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
 	}
+
 	private void resetDataLoader() {
+		resetDataLoader(true);
+	}
+	private void resetDataLoader(boolean shallReset) {
 		if (_dataLoader != null) {
-			_dataLoader.reset();
+			if (shallReset) {
+				_dataLoader.reset();
+				smartUpdate("_lastoffset", 0); //reset for bug 3357641
+			}
 			_dataLoader = null;
-			smartUpdate("_lastoffset", 0); //reset for bug 3357641
 		}
 
-		// Bug ZK-373
-		smartUpdate("resetDataLoader", true);
-		_currentTop = 0;
-		_currentLeft = 0;
-		_topPad = 0;
+		if (shallReset) {
+			// Bug ZK-373
+			smartUpdate("resetDataLoader", true);
+			_currentTop = 0;
+			_currentLeft = 0;
+			_topPad = 0;
+		}
 	}
 
 	private class ModelInitListener implements SerializableEventListener<Event> {
@@ -2842,8 +2850,17 @@ public class Listbox extends MeshElement {
 		// remove cached listeners
 		clone._pgListener = null;
 		clone._pgImpListener = null;
+
+		//recreate the DataLoader
+		final int offset = clone.getDataLoader().getOffset();
 		
-		clone.afterUnmarshal();
+		clone.afterUnmarshal(offset);
+
+		// after _pgi ready, and then getLimit() will work
+		final int limit = clone.getDataLoader().getLimit();
+		clone.resetDataLoader(false); // no need to reset, it will reset the old reference.
+		clone.getDataLoader().init(clone, offset, limit);
+		
 		if (clone._model != null) {
 			if (clone._model instanceof ComponentCloneListener) {
 				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
@@ -2861,11 +2878,7 @@ public class Listbox extends MeshElement {
 		return clone;
 	}
 
-	private void afterUnmarshal() {
-		//recreate the DataLoader
-		final int offset = getDataLoader().getOffset();
-
-		int index = offset;
+	private void afterUnmarshal(int index) {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Listitem) {
@@ -2886,11 +2899,6 @@ public class Listbox extends MeshElement {
 				addPagingListener(_pgi);
 			}
 		}
-
-		// after _pgi ready, and then getLimit() will work
-		final int limit = getDataLoader().getLimit();
-		resetDataLoader();
-		getDataLoader().init(this, offset, limit);
 	}
 
 	// -- Serializable --//
@@ -2904,6 +2912,15 @@ public class Listbox extends MeshElement {
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
 		
+		// keep the scrolling status after serialized
+		if (_dataLoader != null) {
+			s.writeInt(_dataLoader.getOffset());
+			s.writeInt(_dataLoader.getLimit());
+		} else {
+			s.writeInt(0);
+			s.writeInt(100);
+		}
+			
 		int size = _groupsInfo.size();
 		s.writeInt(size);
 		if (size > 0)
@@ -2920,7 +2937,14 @@ public class Listbox extends MeshElement {
 		didDeserialize(_renderer);
 
 		init();
-		afterUnmarshal();
+		
+		int offset = s.readInt();
+		afterUnmarshal(offset);
+
+		int limit = s.readInt();
+		resetDataLoader(false); // no need to reset, it will reset the old reference.
+		getDataLoader().init(this, offset, limit);
+		
 		// TODO: how to marshal _pgi if _pgi != _paging
 		// TODO: re-register event listener for onPaging
 
