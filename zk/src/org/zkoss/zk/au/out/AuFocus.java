@@ -21,14 +21,14 @@ import org.zkoss.zk.au.AuResponse;
 
 /**
  * A response to set focus to the specified component at the client.
- * <p>data[0]: the uuid of the component to set focus
+ * <p>data[0]: the component to set focus
  * 
  * @author tomyeh
  * @since 3.0.0
  */
 public class AuFocus extends AuResponse {
 	public AuFocus(Component comp) {
-		super("focus", comp, comp.getUuid());
+		super("focus", comp, comp);
 	}
 
 	/** Default: zk.focus (i.e., only one response of this class

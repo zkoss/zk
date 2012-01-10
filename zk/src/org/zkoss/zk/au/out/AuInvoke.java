@@ -29,7 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  * Second, {@link #AuInvoke(String, Object...)} is used to invoke
  * a global function (at the client).
  *
- * <p>data[0]: the component UUID<br/>
+ * <p>data[0]: the component<br/>
  * data[1]: the client function name (i.e., JavaScript function)<br/>
  * data[2]: the second argument<br/>
  * data[3]: the third argument...
@@ -48,7 +48,7 @@ public class AuInvoke extends AuResponse {
 	 * @param function the function name
 	 */
 	public AuInvoke(Component comp, String function) {
-		super("invoke", comp, new String[] {comp.getUuid(), function});
+		super("invoke", comp, new Object[] {comp, function});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one argument.
@@ -71,7 +71,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, Object arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, arg});
+			new Object[] {comp, function, arg});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one boolean argument.
@@ -85,7 +85,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, boolean arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, Boolean.valueOf(arg)});
+			new Object[] {comp, function, Boolean.valueOf(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one int argument.
@@ -98,7 +98,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, int arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, new Integer(arg)});
+			new Object[] {comp, function, new Integer(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one double argument.
@@ -111,7 +111,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, double arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, new Double(arg)});
+			new Object[] {comp, function, new Double(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * two arguments.
@@ -127,7 +127,7 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, Object arg1, Object arg2) {
-		super("invoke", comp, new Object[] {comp.getUuid(), function,
+		super("invoke", comp, new Object[] {comp, function,
 			arg1, arg2});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
@@ -146,7 +146,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, Object arg1, Object arg2,
 	Object arg3) {
-		super("invoke", comp, new Object[] {comp.getUuid(), function,
+		super("invoke", comp, new Object[] {comp, function,
 			arg1, arg2, arg3});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
@@ -163,7 +163,7 @@ public class AuInvoke extends AuResponse {
 	 * @since 3.6.1
 	 */
 	public AuInvoke(Component comp, String function, Object... args) {
-		super("invoke", comp, toData(comp.getUuid(), function, args));
+		super("invoke", comp, toData(comp, function, args));
 	}
 	/** Construct AuInvoke to call a client function with variable number of
 	 * arguments.
@@ -179,7 +179,7 @@ public class AuInvoke extends AuResponse {
 	 * @since 3.6.0
 	 */
 	public AuInvoke(Component comp, String function, String... args) {
-		super("invoke", comp, toData(comp.getUuid(), function, args));
+		super("invoke", comp, toData(comp, function, args));
 	}
 	/** Constuct AuInvoke to call a global function at the client with
 	 * the given arguments.
@@ -195,9 +195,9 @@ public class AuInvoke extends AuResponse {
 		super("invoke", (Component)null, toData(null, function, args));
 	}
 	private static final
-	Object[] toData(String uuid, String function, Object[] args) {
+	Object[] toData(Component comp, String function, Object[] args) {
 		final Object[] data = new Object[2 + (args != null ? args.length: 0)];
-		data[0] = uuid;
+		data[0] = comp;
 		data[1] = function;
 		for (int j = 2; j < data.length; ++j)
 			data[j] = args[j - 2];

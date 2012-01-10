@@ -32,7 +32,7 @@ public class AuClearBusy extends AuResponse {
 	 * @param comp the component that the busy message is associated.
 	 */
 	public AuClearBusy(Component comp) {
-		super("clearBusy", comp, comp.getUuid());
+		super("clearBusy", comp, comp);
 	}
 
 	/** Default: zk.busy (i.e., only one response of this class and {@link AuShowBusy} will

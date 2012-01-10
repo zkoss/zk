@@ -26,7 +26,7 @@ import org.zkoss.zk.au.AuResponse;
  * A response to ask client to 'outer' the widgets and all its
  * descendants of the associatethe specified component or page.
  *
- * <p>data[0]: the uuid of the component or page to outer
+ * <p>data[0]: the component or UUID of page to outer
  * data[1]: the new content
  *
  * @author tomyeh
@@ -34,7 +34,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuOuter extends AuResponse {
 	public AuOuter(Component comp, String content) {
-		super("outer", comp, new Object[] {comp.getUuid(), new JavaScriptValue(content)});
+		super("outer", comp, new Object[] {comp, new JavaScriptValue(content)});
 	}
 	public AuOuter(Page page, String content) {
 		super("outer", page, new Object[] {page.getUuid(), new JavaScriptValue(content)});

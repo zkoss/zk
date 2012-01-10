@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Scrolls the ancestors to make the component visible.
  *
- * <p>data[0]: the component's UUID.
+ * <p>data[0]: the component.
  *
  * @author tomyeh
  * @since 3.6.1
@@ -28,8 +28,8 @@ public class AuScrollIntoView extends org.zkoss.zk.au.AuResponse {
 	/** Constructor.
 	 * @param cmp the component
 	 */
-	public AuScrollIntoView(Component cmp) {
-		super("scrollIntoView", cmp.getUuid());
+	public AuScrollIntoView(Component comp) {
+		super("scrollIntoView", comp);
 			//component-independent (so we can scroll multiple elements at once)
 	}
 }

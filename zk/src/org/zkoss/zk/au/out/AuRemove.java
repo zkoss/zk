@@ -28,6 +28,8 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuRemove extends AuResponse {
+	/** @deprecated As of release 6.0.0, replaced with {@link #AuRemove(String)}.
+	 */
 	public AuRemove(Component comp) {
 		this(comp.getUuid());
 	}

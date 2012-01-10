@@ -21,7 +21,7 @@ import org.zkoss.zk.au.AuResponse;
 /**
  * A response to tell the client a component's value is wrong.
  *
- * <p>data[0]: component's UUID
+ * <p>data[0]: component
  * data[1]: the error message
  * 
  * @author tomyeh
@@ -29,7 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuWrongValue extends AuResponse {
 	public AuWrongValue(Component comp, String message) {
-		super("wrongValue", comp, new String[] {comp.getUuid(), message});
+		super("wrongValue", comp, new Object[] {comp, message});
 	}
 	/**
 	 * Constructor for multiple wrong values.

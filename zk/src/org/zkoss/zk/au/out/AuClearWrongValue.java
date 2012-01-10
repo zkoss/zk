@@ -26,8 +26,8 @@ import org.zkoss.zk.au.AuResponse;
  * A response to ask the client to close the error messages belonging
  * the specified component, if any.
  *
- * <p>data[0]: the component's UUID.<br/>
- * data[1]: the UUID of the 2nd component, if any<br/>
+ * <p>data[0]: the component.<br/>
+ * data[1]: the 2nd component, if any<br/>
  * ...
  * 
  * @author tomyeh
@@ -38,33 +38,20 @@ public class AuClearWrongValue extends AuResponse {
 	 * @param comps a list of components
 	 */
 	public AuClearWrongValue(List<? extends Component> comps) {
-		super("clearWrongValue", toData(comps)); //component-independent
+		super("clearWrongValue", comps.toArray()); //component-independent
 	}
 	/**
 	 * @param comps a list of components
 	 */
 	public AuClearWrongValue(Component[] comps) {
-		super("clearWrongValue", toData(comps)); //component-independent
+		super("clearWrongValue", comps); //component-independent
 	}
-	private static String[] toData(List<? extends Component> comps) {
-		final String[] uuids = new String[comps.size()];
-		int j = 0;
-		for (Component comp: comps)
-			uuids[j++] = comp.getUuid();
-		return uuids;
-	}
-	private static String[] toData(Component[] comps) {
-		final String[] uuids = new String[comps.length];
-		for (int j = 0; j < comps.length; j++)
-			uuids[j] = comps[j].getUuid();
-		return uuids;
-	}	
 	/** Unlike other constructors, the object instantiated by this method
 	 * depends on the specified comp.
 	 * @param comp the component whose error box, if any, shall be closed.
 	 */
 	public AuClearWrongValue(Component comp) {
-		super("clearWrongValue", comp, comp.getUuid()); //dependent
+		super("clearWrongValue", comp, comp); //dependent
 	}
 
 	/** Default: "zk.wrongValue" if {@link #getDepends} is not null,
