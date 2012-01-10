@@ -17,14 +17,17 @@ import java.util.Iterator;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.ext.ListSelectionModel;
 
 /**
  * Convert listbox selected listitem to bean and vice versa.
  * @author henrichen
+ * @author dennis
  * @since 6.0.0
  */
 public class SelectedListitemConverter implements Converter, java.io.Serializable {
@@ -32,32 +35,38 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Listbox lbx = (Listbox) comp;
+		final ListModel<?> model = lbx.getModel();
+		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
+  		final ListSelectionModel smodel = (model instanceof ListSelectionModel)?(ListSelectionModel)model:null;
 	  	if (val != null) {
-	  		final ListModel<?> model = lbx.getModel();
-	  		if (model != null) {
-		  		if (lbx.getAttribute(BinderImpl.RENDERER_INSTALLED) != null) { //There is binding on template
-		  			//TODO might be done with dependency tracker, bean -> listitem (implicit binding)
-		  			//iterate to find the selected item
-		  			for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-		  				final Listitem li = (Listitem) it.next();
-		  				final String varnm = (String) li.getAttribute(BinderImpl.VAR);
-		  				final Object bean = li.getAttribute(varnm);
-		  				if (val.equals(bean)) {
-		  					return li;
-		  				}
-		  			}
-		  			//not in the item list
-		  			return null;
+		  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
+		  		final Listitem li = (Listitem) it.next();
+		  		final String varnm = (String) li.getAttribute(BinderImpl.VAR);
+		  		Object bean = null;
+		  		if (varnm != null) { //There is binding on template
+		  			bean = li.getAttribute(varnm);
+		  		} else if(model!=null){ //no binding
+		  			bean = model.getElementAt(li.getIndex());
+		  		} else{
+		  			bean = li.getValue();
 		  		}
-	  		}
-	  		//no model or no binding, assume Listitem.value to be used with selectedItem
-  			//iterate to find the selected item
-  			for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-  				final Listitem li = (Listitem) it.next();
-  				if (val.equals(li.getValue())) {
-  					return li;
-  				}
-  			}
+
+		  		if (val.equals(bean)) {
+		  			if(smodel!=null){
+		  				final int i = li.getIndex();
+		  				smodel.addSelectionInterval(i,i);
+		  				return LoadPropertyBinding.LOAD_IGNORED;
+		  			}
+		  			return li;
+		  		}
+		  	}
+		  	//not in the item list
+	  	}
+	  	
+	  	if(smodel!=null){
+	  		if(smodel.getMaxSelectionIndex()!=-1)
+	  			smodel.clearSelection();
+	  		return LoadPropertyBinding.LOAD_IGNORED;
 	  	}
 	  	return null;
 	}
@@ -66,14 +75,12 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  	if (val != null) {
 		  	final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		if (model != null) {
-		  		final String varnm = (String) ((Listitem)val).getAttribute(BinderImpl.VAR);
-		  		if (varnm != null) { //There is binding on template
-		  			return ((Listitem)val).getAttribute(varnm);
-		  		} else { //no binding
-		  			return model.getElementAt(((Listitem) val).getIndex());
-		  		}
-	  		} else { //no model case, assume Listitem.value to be used with selectedItem
+	  		final String varnm = (String) ((Listitem)val).getAttribute(BinderImpl.VAR);
+	  		if (varnm != null) { //There is binding on template
+	  			return ((Listitem)val).getAttribute(varnm);
+	  		} else if(model!=null){ //no binding
+	  			return model.getElementAt(((Listitem) val).getIndex());
+	  		} else{
 	  			return ((Listitem) val).getValue();
 	  		}
 	  	}

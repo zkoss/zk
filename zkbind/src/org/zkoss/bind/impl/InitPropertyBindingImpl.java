@@ -59,6 +59,7 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		final Converter conv = getConverter();
 		if (conv != null) {
 			value = conv.coerceToUi(value, comp, ctx);
+			if(value == LOAD_IGNORED) return;
 		}
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute

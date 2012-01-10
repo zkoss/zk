@@ -63,6 +63,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 				//this sepc is different with DependsOn of a property
 			addConverterDependsOnTrackings(conv, ctx);
 			value = conv.coerceToUi(value, comp, ctx);
+			if(value == LOAD_IGNORED) return;
 		}
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute

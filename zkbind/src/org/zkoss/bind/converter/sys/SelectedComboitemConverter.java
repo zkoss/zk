@@ -17,14 +17,17 @@ import java.util.Iterator;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.ext.ListSelectionModel;
 
 /**
  * Convert combobox selected comboitem to bean and vice versa.
  * @author henrichen
+ * @author dennis
  * @since 6.0.0
  */
 public class SelectedComboitemConverter implements Converter, java.io.Serializable {
@@ -32,32 +35,40 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Combobox cbx = (Combobox) comp;
+		final ListModel<?> model = cbx.getModel();
+		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
+  		final ListSelectionModel smodel = (model instanceof ListSelectionModel)?(ListSelectionModel)model:null;
 	  	if (val != null) {
-	  		final ListModel<?> model = cbx.getModel();
-	  		if (model != null) {
-		  		if (cbx.getAttribute(BinderImpl.RENDERER_INSTALLED) != null) { //There is binding on template
-		  			//TODO might be done with dependency tracker, bean -> listitem (implicit binding)
-		  			//iterate to find the selected item
-		  			for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
-		  				final Comboitem li = (Comboitem) it.next();
-		  				final String varnm = (String) li.getAttribute(BinderImpl.VAR);
-		  				final Object bean = li.getAttribute(varnm);
-		  				if (val.equals(bean)) {
-		  					return li;
-		  				}
-		  			}
-		  			//not in the item list
-		  			return null;
+	  		int i = 0;
+		  	for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
+		  		final Comboitem ci = (Comboitem) it.next();
+		  		final String varnm = (String) ci.getAttribute(BinderImpl.VAR);
+		  		
+		  		Object bean = null;
+		  		if (varnm != null) { //There is binding on template
+		  			bean = ci.getAttribute(varnm);
+		  		} else if(model!=null){ //no binding
+		  			bean = model.getElementAt(i);
+		  		} else{
+		  			bean = ci.getValue();
 		  		}
-	  		}
-	  		//no model or no binding, assume Comboitem.value to be used with selectedItem
-  			//iterate to find the selected item
-  			for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
-  				final Comboitem li = (Comboitem) it.next();
-  				if (val.equals(li.getValue())) {
-  					return li;
-  				}
-  			}
+
+		  		if (val.equals(bean)) {
+		  			if(smodel!=null){
+		  				smodel.addSelectionInterval(i,i);
+		  				return LoadPropertyBinding.LOAD_IGNORED;
+		  			}
+		  			return ci;
+		  		}
+		  		i++;
+		  	}
+		  	//not in the item list
+	  	}
+	  	
+	  	if(smodel!=null){
+	  		if(smodel.getMaxSelectionIndex()!=-1)
+	  			smodel.clearSelection();
+	  		return LoadPropertyBinding.LOAD_IGNORED;
 	  	}
 	  	return null;
 	}
@@ -66,14 +77,13 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  	if (val != null) {
 		  	final Combobox lbx = (Combobox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		if (model != null) {
-		  		final String varnm = (String) ((Comboitem)val).getAttribute(BinderImpl.VAR);
-		  		if (varnm != null) { //There is binding on template
-		  			return ((Comboitem)val).getAttribute(varnm);
-		  		} else { //no binding
-		  			return model.getElementAt(((Comboitem) val).getIndex());
-		  		}
-	  		} else { //no model case, assume Comboitem.value to be used with selectedItem
+	  		
+	  		final String varnm = (String) ((Comboitem)val).getAttribute(BinderImpl.VAR);
+	  		if (varnm != null) { //There is binding on template
+	  			return ((Comboitem)val).getAttribute(varnm);
+	  		} else if(model!=null){ //no binding
+	  			return model.getElementAt(((Comboitem) val).getIndex());
+	  		} else{
 	  			return ((Comboitem) val).getValue();
 	  		}
 	  	}
