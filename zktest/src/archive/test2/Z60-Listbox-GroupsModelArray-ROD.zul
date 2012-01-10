@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z60-Listbox-GroupsModelArray-ROD.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 10 12:11:05 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		<![CDATA[
+		import org.zkoss.zktest.test2.select.models.*;
+		
+		GroupsModel model = GroupsModelArrays.getModel();
+		GroupsModel model2 = GroupsModelArrays.getModel();
+
+		int cnt = 0;
+		int elemcnt = 0;
+	]]></zscript>
+	<div>
+		<div>1. There are 3 Grid with Grouping below.</div>
+		<div>2. For first two Grid, their open/close/sorting status will sync automatically after you open/close/sorting it.</div>
+		<div>3. Close the Seafood of third Grid.</div>
+		<div>4. Click clone and 'clone by serialization', then two Grids should be created and also closed the Seafood.</div>
+		<div>5. Open the Seafood of the third Grid, the Seafood of the fourth and the fifth should not sync.</div>
+		<div>6. Close the Seafood and theVegetables of the third Grid and click the "clone" and "clone by serialization".</div>
+		<div>7. Open the Vegetables of the last two Grid, its content will open well (if it opens the Seafood's content, that is a bug).</div>
+	</div>
+	<hbox>
+		<listbox id="lbxOne" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+			<listhead>
+            	<listheader label="Category" sort="auto(0)"/>
+            	<listheader label="Name" sort="auto(1)"/>
+            	<listheader label="Calories" sort="auto(2)"/>
+        	</listhead>
+        	<template name="model:grouping">
+				<listgroup open="${groupingInfo.open}" label="${each}"/>
+			</template>
+			<template name="model">
+				<listitem>
+					<listcell label="${each[0]}"/>
+					<listcell label="${each[1]}"/>
+					<listcell label="${each[2]}"/>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox id="lbxTwo" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+			<listhead>
+            	<listheader label="Category" sort="auto(0)"/>
+            	<listheader label="Name" sort="auto(1)"/>
+            	<listheader label="Calories" sort="auto(2)"/>
+        	</listhead>
+        	<template name="model:grouping">
+				<listgroup open="${groupingInfo.open}" label="${each}"/>
+			</template>
+			<template name="model">
+				<listitem>
+					<listcell label="${each[0]}"/>
+					<listcell label="${each[1]}"/>
+					<listcell label="${each[2]}"/>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox id="lbxThree" height="150px" width="240px" model="${model2}" onSelect="" checkmark="true">
+			<listhead>
+            	<listheader label="Category" sort="auto(0)"/>
+            	<listheader label="Name" sort="auto(1)"/>
+            	<listheader label="Calories" sort="auto(2)"/>
+        	</listhead>
+        	<template name="model:grouping">
+				<listgroup open="${groupingInfo.open}" label="${each}"/>
+			</template>
+			<template name="model">
+				<listitem>
+					<listcell label="${each[0]}"/>
+					<listcell label="${each[1]}"/>
+					<listcell label="${each[2]}"/>
+				</listitem>
+			</template>
+		</listbox>
+	</hbox>
+	<div height="10px"></div>
+	<button label="clone">
+		<attribute name="onClick">
+			Listbox lbx = lbxThree.clone();
+			lbx.setId("lbxThree_clone" + cnt++);
+			lbx.setParent(cloneThreeArea);
+		</attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[{
+			import java.io.*;
+			ByteArrayOutputStream boa = new ByteArrayOutputStream();
+			new ObjectOutputStream(boa).writeObject(lbxThree);
+			byte[] bs = boa.toByteArray();
+			Object n = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+			n.setId("lbxThree_serialize" + cnt++);
+			((Component)n).setParent(cloneThreeArea);
+		}]]></attribute>
+	</button>
+	<hbox id="cloneThreeArea" />
+</zk>

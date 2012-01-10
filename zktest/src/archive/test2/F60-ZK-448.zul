@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<div>You should choose color from colorbox without any problems.</div>
+	<div>You should choose color from colorbox by arrow keys without any problem.</div>
 	<colorbox width="50px" />
 	<menubar id="menubar" width="100%">
 		<menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
