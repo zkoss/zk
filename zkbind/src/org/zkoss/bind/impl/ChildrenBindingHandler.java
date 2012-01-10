@@ -182,5 +182,10 @@ import org.zkoss.zk.ui.Component;
 			}
 		}
 	}
+
+	public boolean hasLoadBinding(BindingKey bkey) {
+		return _initBindings.size() > 0 || _loadPromptBindings.size() > 0
+				|| _loadAfterBindings.size() > 0 || _loadBeforeBindings.size() > 0;
+	}
 	
 }

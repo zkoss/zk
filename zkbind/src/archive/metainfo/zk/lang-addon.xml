@@ -538,6 +538,26 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
+			<property-name>selectedItems</property-name>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_EVENT</attribute-name>
+				<attribute-value>onAfterRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.SelectedListitemsConverter</attribute-value>
+			</attribute>
+		</annotation>		
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>

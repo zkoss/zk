@@ -46,6 +46,17 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 	 */
 	abstract protected ListModel<?> getComponentModel(Component comp);
 	
+	/**
+	 * post processing the wrapped model. default return original one
+	 * @param ctx the context
+	 * @param comp the component of the converter
+	 * @param model the wrapped model
+	 * @return the list model
+	 */
+	protected ListModel<?> handleWrappedModel(BindContext ctx, Component comp, ListModel<?> model){
+		return model;
+	}
+	
 	/** Convert a Set, Map, List, Object[], Enum, or other kind of ListModel to associated {@link ListModel}.
 	 * @param val must be instanceof Set, Map, List, Object[], Enum Class, or other kind of ListModel implementation.
 	 * @param comp associated component
@@ -86,6 +97,8 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 					toSModel.addSelectionInterval(index, index);
 			}
 		}
+		model = handleWrappedModel(ctx,comp,model);
+		
 		return model;
 	}
 

@@ -103,5 +103,12 @@ public interface BinderCtrl {
 	 * @return the prompt-load-bindings
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
+
+	/**
+	 * check if there is any property load binding in component and attribute
+	 * @param comp the component is relative to the bindings
+	 * @param attr the attribute is relative to the bindings
+	 */
+	public boolean hasPropertyLoadBinding(Component comp, String attr);
 	
 }

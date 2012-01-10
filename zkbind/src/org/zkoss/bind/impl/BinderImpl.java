@@ -1556,6 +1556,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		return bindings;
 	}
+	
+	@Override
+	public boolean hasPropertyLoadBinding(Component comp, String attr) {
+		checkInit();
+		final BindingKey bkey = getBindingKey(comp, attr);
+		return _propertyBindingHandler.hasLoadBinding(bkey); 
+	}
 
 	private void removeBindings(Collection<Binding> removed) {
 		_formBindingHandler.removeBindings(removed);
