@@ -2498,7 +2498,9 @@ public class Listbox extends MeshElement {
 			//check if the item is a selected item and add into selected set
 			final Object value = _model.getElementAt(item.getIndex());
 			//bug #ZK-675: Selection was lost if a render replace the listitem
-			final boolean selected = _model instanceof ListSelectionModel && ((ListSelectionModel) _model).isSelectedIndex(item.getIndex());
+			final boolean selected = _model instanceof ListSelectionModel &&
+								!((ListSelectionModel) _model).isSelectionEmpty() &&
+								((ListSelectionModel) _model).isSelectedIndex(item.getIndex());
 			
 			try {
 				_renderer.render(item, value);

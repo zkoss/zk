@@ -52,6 +52,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 
 	private int lastChangedIndex = MIN;
 
+	private boolean noFireEvent = false;
 	/**
 	 * Fires a {@link ListDataEvent} for all registered listener (thru
 	 * {@link #addListDataListener}.
@@ -208,6 +209,22 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 	}
 
 	/**
+	 * Reorganize the selection index from the specified array.
+	 * <p> the original selection will be removed and add the new index.
+	 * @param selection the array by which the list will be selected
+	 */
+	protected void reorganizeIndex(int... selection) {
+		try {
+			noFireEvent = true;
+			for (int i = _minIndex; i <= _maxIndex; i++)
+				clear(i);
+			for (int i = 0; i < selection.length; i++)
+				set(selection[i]);
+		} finally {
+			noFireEvent = false;
+		}
+	}
+	/**
 	 * Remove the indices in the interval index0,index1 (inclusive) from the
 	 * selection model. This is typically called to sync the selection model
 	 * width a corresponding change in the data model.
@@ -260,7 +277,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 	}
 
 	private void fireSelectionChanged() {
-		if (lastChangedIndex == MIN) {
+		if (lastChangedIndex == MIN || noFireEvent) {
 			return;
 		}
 		/*

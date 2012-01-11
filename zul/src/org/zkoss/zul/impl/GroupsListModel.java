@@ -16,12 +16,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -41,7 +46,7 @@ import org.zkoss.zul.ext.GroupingInfo;
  * @since 3.5.0
  */
 public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
-	protected final GroupsModel<D, G, F> _model;
+	protected GroupsModel<D, G, F> _model;
 	private transient int _size;
 	/** An array of the group offset.
 	 * The group offset is the offset from 0 that a group shall appear
@@ -57,7 +62,10 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	private transient GroupsDataListener _listener;
 	/** groupInfo list used in {@link Rows} */
 	private transient List<int[]> _gpinfo;
-
+	
+	// indexing cache
+	private transient HashMap<Object, Integer> _indexCache = new LinkedHashMap<Object, Integer>();
+	
 	/** Returns the list model ({@link org.zkoss.zul.ListModel}) representing the given
 	 * groups model.
 	 * @since 6.0.0
@@ -72,7 +80,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		_model = model;
 		init();
 	}
-	private void init() {
+	protected void init() {
 		final int groupCount = _model.getGroupCount();
 		_gpofs = new int[groupCount];
 		_gpfts = new boolean[groupCount];
@@ -163,16 +171,31 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	//-- backward compatible Selectable --//
 	/**
 	 * Returns the index of the first occurrence of the specified element.
+	 * <p> The performance of this implementation is bad, it will go through the
+	 * whole GroupsModel to check the element's index.
 	 * @since 6.0.0
 	 */
 	protected int indexOf(Object obj) {
-		for (int i = 0, j = this.getSize(); i < j; i++) {
-			if (Objects.equals(obj, getElementAt(i)))
-				return i;
+		if (_indexCache.isEmpty()) {
+			reindex();
 		}
-		return -1;
+		Integer val = _indexCache.get(obj);
+		return val == null ? -1 : val.intValue();
 	}
 	
+	private void reindex() {
+		if (_indexCache.isEmpty()) {
+			int index = 0;
+			for (int i = 0, j = _model.getGroupCount(); i < j; i++) {
+				_indexCache.put(_model.getGroup(i), index);
+				index++;
+				for (int k = 0, z = _model.getChildCount(i); k < z; k++) {
+					_indexCache.put(_model.getChild(i, k), index);
+					index++;
+				}
+			}
+		}
+	}
 	/**
 	 * Add the specified object into selection.
 	 * @param obj the object to be as selection.
@@ -180,7 +203,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	public void addSelection(Object obj) {
 		int index = indexOf(obj);
 		if (index >= 0)
-			addSelectionInterval(index, index);
+			super.addSelectionInterval(index, index);
 	}
 
 	/**
@@ -190,8 +213,59 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	public void removeSelection(Object obj) {
 		int index = indexOf(obj);
 		if (index >= 0)
-			removeSelectionInterval(index, index);
+			super.removeSelectionInterval(index, index);
 	}
+	
+	//ListSelectionModel
+	@Override
+	public boolean isSelectedIndex(int index) {
+		if (index >= 0 && index < this.getSize()) {
+			index = indexOf(getElementAt(index));
+			return super.isSelectedIndex(index);
+		}
+		return false;
+	}
+
+	@Override
+	public void addSelectionInterval(int index0, int index1) {
+		if (index0 == index1) {
+			Object o = getElementAt(index0);
+			if (o != null) {
+				int index = indexOf(o);
+				super.addSelectionInterval(index, index);
+			}
+		} else {
+			Object o = getElementAt(index0);
+			Object o1 = getElementAt(index1);
+			index0 = indexOf(o);
+			index1 = indexOf(o1);
+			super.addSelectionInterval(index0, index1);
+		}
+	}
+	@Override
+	public void clearSelection() {
+		// avoid checking index recursively
+		super.removeSelectionInterval(getMinSelectionIndex(), getMaxSelectionIndex());
+	}
+	@Override
+	public void removeSelectionInterval(int index0, int index1) {
+		if (isSelectionEmpty()) return;
+		
+		if (index0 == index1) {
+			Object o = getElementAt(index0);
+			if (o != null) {
+				int index = indexOf(o);
+				super.removeSelectionInterval(index, index);
+			}
+		} else {
+			Object o = getElementAt(index0);
+			Object o1 = getElementAt(index1);
+			index0 = indexOf(o);
+			index1 = indexOf(o1);
+			super.removeSelectionInterval(index0, index1);
+		}
+	}
+	
 	
 	//ListModel
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
@@ -228,12 +302,48 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		init();
 	}
 
+	public Object clone() {
+		GroupsListModel clone = (GroupsListModel) super.clone();
+		clone._listener = null;
+		return clone;
+	}
+	
 	private class DataListener implements GroupsDataListener {
 		public void onChange(GroupsDataEvent event) {
 			int type = event.getType(),
 				j0 = event.getIndex0(),
 				j1 = event.getIndex1();
 
+			// reset index
+			if (type != GroupsDataEvent.GROUPS_CHANGED) {
+				GroupsListModel self = GroupsListModel.this;
+				List<Object> selected = null;
+				// reset selection index
+				if (!self.isSelectionEmpty()) {
+					 selected = new ArrayList<Object>();
+					int min = self.getMinSelectionIndex();
+					int max = self.getMinSelectionIndex();
+					for (Map.Entry<Object, Integer> me : _indexCache.entrySet()) {
+						if (min >= me.getValue() && max <= me.getValue()) {
+							if (GroupsListModel.super.isSelectedIndex(me.getValue())) {
+								selected.add(me.getKey());
+							}
+						}
+						if (max < me.getValue())
+							break;
+					}
+				}
+				_indexCache.clear();
+				if (selected != null) {
+					int[] sel = new int[selected.size()];
+					int i = 0;
+					for (Object o : selected) {
+						sel[i++] = indexOf(o);
+					}
+					self.reorganizeIndex(sel);
+				}
+			}
+			
 			switch (type) {
 			case GroupsDataEvent.CONTENTS_CHANGED:
 			case GroupsDataEvent.INTERVAL_ADDED:
@@ -326,7 +436,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 }
 /*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
-implements GroupsModelExt<D>, ComponentCloneListener {
+implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
 	/*package*/ GroupsListModelExt(GroupsModel<D, G, F> model) {
 		super(model);
 	}
@@ -353,8 +463,14 @@ implements GroupsModelExt<D>, ComponentCloneListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object willClone(Component comp) {
-		if (_model instanceof ComponentCloneListener)
-			return GroupsListModel.toListModel((GroupsModel<D, G, F>)((ComponentCloneListener) _model).willClone(comp));
+		if (_model instanceof ComponentCloneListener) {
+			GroupsListModelExt clone = (GroupsListModelExt) clone();
+			GroupsModel m = (GroupsModel)((ComponentCloneListener) _model).willClone(comp);
+			if (m != null)
+				clone._model = m;
+			clone.init(); // reset grouping info
+			return clone;
+		}
 		return null; // no need to clone
 	}
 }
