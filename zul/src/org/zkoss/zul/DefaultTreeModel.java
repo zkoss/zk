@@ -45,7 +45,7 @@ import org.zkoss.zul.ext.TreeSelectionModel;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel<E>,
+implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;

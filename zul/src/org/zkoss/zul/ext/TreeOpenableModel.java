@@ -26,7 +26,7 @@ import org.zkoss.zul.event.TreeDataListener;
  * @author jumperchen
  * @since 6.0.0
  */
-public interface TreeOpenableModel<E> {
+public interface TreeOpenableModel {
 
 	/**
 	 * Adds path to the current open. If path is not currently in the
