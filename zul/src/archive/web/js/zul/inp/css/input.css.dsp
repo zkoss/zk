@@ -12,7 +12,7 @@
 
 .z-textbox-disd,   .z-decimalbox-disd,   .z-intbox-disd,   .z-longbox-disd,   .z-doublebox-disd,
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
-	color: #AAA !important;
+	color: #AAAAAA !important;
 }
 .z-textbox, .z-decimalbox, .z-intbox, .z-longbox, .z-doublebox {
 	background: #FFFFFF repeat-x 0 0;
@@ -300,7 +300,9 @@ i.z-doublebox-rounded-right-edge-invalid {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; 
 	font-weight: normal;
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 	-moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+	-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 	overflow: visible !important;
 }
 .z-errbox .z-popup-cnt {
@@ -374,8 +376,12 @@ i.z-doublebox-rounded-right-edge-invalid {
 	background: transparent repeat-x 0 0;
 	background-color: #FFEEEE;
 	border: 1px solid #990000;
-	-moz-border-radius: 1px 1px 1px 1px;
+	border-radius: 1px;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 <c:if test="${zk.ie > 0}">
@@ -412,19 +418,10 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-errbox-left {
 	background-image: url(${c:encodeThemeURL('~./zul/img/errbox/error-icon.gif')});
 }
-.z-popup .z-popup-cl {
-	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeThemeURL('~./zul/img/popup2/popup-bg.png')});
-	background-position: 0 -2px;
-	border: 1px solid #CFCFCF;
-	padding-left: 0;
-}
 .z-errbox .z-popup-cl {
 	background: none !important;
 	background-color: #FFEEEE !important;
 	border: 1px solid #990000 !important;
-	-moz-border-radius: 1px 1px 1px 1px !important;
-	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35) !important;
 }
 </c:if>
 </c:if>

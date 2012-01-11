@@ -201,6 +201,7 @@
 }
 <%-- define menupopup effect --%>
 .z-menu-popup-shadow, .z-menu-palette-pp, .z-menu-picker-pp, .z-menu-cnt-pp {
+	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 	-webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }

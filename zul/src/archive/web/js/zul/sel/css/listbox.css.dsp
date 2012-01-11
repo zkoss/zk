@@ -117,7 +117,7 @@ tr.z-listbox-odd {
 	background: #F7F7F7;
 }
 tr.z-listitem-disd *, td.z-listcell-disd * {
-	color: #C5CACB !important; cursor: default!important;
+	color: #AAAAAA !important; cursor: default!important;
 }
 tr.z-listitem-disd a:visited, tr.z-listitem-disd a:hover,
 td.z-listcell-disd a:visited, td.z-listcell-disd a:hover {

@@ -11,8 +11,12 @@
 	margin:0;
 	overflow:hidden;
 	padding:0;
+	border-radius: 1px;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
-	-moz-border-radius: 1px 1px 1px 1px;
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 }
 .z-popup .z-popup-cl {
 	background: transparent repeat-x 0 0;

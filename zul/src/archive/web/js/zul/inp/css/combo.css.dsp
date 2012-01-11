@@ -87,7 +87,9 @@
 .z-spinner-right-edge,
 .z-doublespinner-right-edge {
 	border-right: 1px solid #CCCCCC;
+	border-radius: 2px 2px 2px 2px;
 	-moz-border-radius: 2px 2px 2px 2px;
+	-webkit-border-radius: 2px 2px 2px 2px;
 }
 .z-combobox-focus .z-combobox-inp,
 .z-bandbox-focus .z-bandbox-inp,
@@ -105,7 +107,9 @@
 .z-spinner-focus .z-spinner-right-edge,
 .z-doublespinner-focus .z-doublespinner-right-edge {
 	border-right: 1px solid #90BCE6;
+	border-radius: 2px 2px 2px 2px;
 	-moz-border-radius: 2px 2px 2px 2px;
+	-webkit-border-radius: 2px 2px 2px 2px;
 }
 .z-combobox .z-combobox-text-invalid,
 .z-bandbox .z-bandbox-text-invalid,
@@ -360,13 +364,17 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-doublespinner .z-doublespinner-btn-upper {
 	background-image: url(${c:encodeThemeURL('~./zul/img/input/timebtn-up.gif')});
 	border-bottom: 1px solid rgba(0,0,0,0);
-	-moz-border-radius:0 2px 0 0;
+	border-radius: 0 2px 0 0;
+	-moz-border-radius: 0 2px 0 0;
+	-webkit-border-radius: 0 2px 0 0;
 }
 .z-timebox .z-timebox-btn-lower,
 .z-spinner .z-spinner-btn-lower,
 .z-doublespinner .z-doublespinner-btn-lower {
 	background-image: url(${c:encodeThemeURL('~./zul/img/input/timebtn-down.gif')});
-	-moz-border-radius:0 0 2px 0;
+	border-radius: 0 0 2px 0;
+	-moz-border-radius: 0 0 2px 0;
+	-webkit-border-radius: 0 0 2px 0;
 }
 .z-timebox .z-timebox-btn-over .z-timebox-btn-upper,
 .z-spinner .z-spinner-btn-over .z-spinner-btn-upper,
@@ -458,7 +466,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 }
 .z-combobox-rounded-pp .z-comboitem-over-seld,
 .z-combobox-pp .z-comboitem-over-seld {
-	background: #82D5F8;
+	background: #81D0F7;
 }
 .z-comboitem .z-comboitem-text {
 	font-size: 12px;
@@ -469,10 +477,6 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	background-image: url(${c:encodeThemeURL('~./zul/img/input/bandbtn.gif')});
 }
 <%-- Datebox --%>
-.z-datebox-rounded-over,
-.z-datebox-over{
-	background: #dae7f6;
-}
 .z-datebox .z-datebox-btn {
 	background-image: url(${c:encodeThemeURL('~./zul/img/input/datebtn.gif')});
 }
@@ -491,11 +495,11 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-combobox-rounded-shadow, .z-bandbox-rounded-shadow, .z-datebox-rounded-shadow,
 .z-combobox-shadow, .z-bandbox-shadow, .z-datebox-shadow {
 	border-radius: 3px;
-	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 	-moz-border-radius: 3px;
-	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 	-webkit-border-radius: 3px;
-	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 }
 <%-- disable --%>
 .z-spinner-rounded-disd,
@@ -532,7 +536,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-comboitem-disd, .z-comboitem-disd *,
 .z-combobox-disd, .z-combobox-disd * {
 	cursor: default !important;
-	color: #CCCCCC !important;
+	color: #AAAAAA !important;
 	background: #F0F0F0;
 }
 .z-timebox-rounded-disd,
@@ -575,7 +579,9 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-spinner-real-readonly .z-spinner-right-edge,
 .z-doublespinner-real-readonly .z-doublespinner-right-edge {
 	border-right-width: 1px !important;
+	border-radius: 2px 2px 2px 2px;
 	-moz-border-radius: 2px 2px 2px 2px;
+	-webkit-border-radius: 2px 2px 2px 2px;
 }
 .z-combobox-rounded-readonly,
 .z-bandbox-rounded-readonly,

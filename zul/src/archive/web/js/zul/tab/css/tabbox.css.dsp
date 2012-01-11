@@ -740,7 +740,7 @@
 	display: block;
 }
 .z-tab-accordion-lite-tm:hover {
-	background-color: #E6F5FD;
+	background-color: #E6F5FC;
 }
 .z-tab-accordion-lite-tl {
 	zoom: 1;

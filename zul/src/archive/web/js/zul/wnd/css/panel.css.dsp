@@ -65,7 +65,7 @@
 .z-panel-header {
 	background: transparent repeat-x 0 0;
 	background-image: url(${c:encodeThemeURL('~./zul/img/wnd/panel-hm.png')});
-	border: 1px solid #B1CBD5;
+	border: 1px solid #B2CAD6;
 	padding: 5px 3px 4px 5px;
 }
 .z-panel-header-move {
@@ -122,7 +122,7 @@
 <%-- Footer Middle --%>
 .z-panel-body .z-panel-top .z-toolbar,
 .z-panel-body .z-panel-btm .z-toolbar {
-	border: 1px solid #B1CBD5;
+	border: 1px solid #B2CAD6;
 	border-top: 0;
 	overflow: hidden;
 	padding: 2px;
@@ -157,10 +157,10 @@
 	cursor: move !important;
 }
 .z-panel-move-block {
-	border: 2px dashed #B1CBD5;
+	border: 2px dashed #B2CAD6;
 }
 .z-panel-move-ghost dl {
-	border: 1px solid #B1CBD5;
+	border: 1px solid #B2CAD6;
 	margin: 0;
 	overflow: hidden;
 	padding: 0;

@@ -3,6 +3,7 @@
 .z-button tr td {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
+	font-weight: normal;
 	color: black;
 	cursor: pointer;
 	white-space: nowrap;

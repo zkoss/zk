@@ -59,18 +59,18 @@ div.z-error {
 	left: 40%;
 	height: 90px;
 	width: 450px;
-	padding: 3px;
+	padding: 3px 5px 3px 3px;
 	border-width: 1px;
 	border-style: solid;
-	border-color: #CC6666 #990000 #990000 #CC6666;
-	-moz-box-shadow: 0px 0px 6px gray; 
-	-webkit-box-shadow: 0px 0px 6px gray;
-	box-shadow: 0px 0px 6px gray; 
+	border-color: #990000;
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 	background-color: #FFEEEE;
 }
 div.z-error .msgcnt {
 	padding: 0;
-	border: 1px solid #EE7777;
+	border: 1px solid #990000;
 	background-color: white;
 	height: 60px;
 }
@@ -83,10 +83,10 @@ div.z-error .msgs {
 }
 div.z-error .msgs .msg {
 	padding: 3px 0 2px;
-	border-bottom: 1px solid #FF9999;
+	border-bottom: 1px solid #990000;
 }
 div.z-error .newmsg {
-	background-color: #FFDDDD;
+	background-color: #FFEEEE;
 	display: none;
 }
 
@@ -103,7 +103,7 @@ div.z-error #zk_err-p {
 }
 div.z-error .errnum {
 	padding-left: 20px;
-	color: #CC0000;
+	color: #990000;
 	font-weight: bold;	
 }
 <c:if test="${zk.ie != 6}">
@@ -113,13 +113,13 @@ div.z-error .btn {
 }
 </c:if>
 div.z-error .errnum {
-	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -33px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -31px 4px transparent;
 }
 div.z-error .redraw {
-	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll 0px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll 0 0 transparent;
 }
 div.z-error .close {
-	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.png')}) no-repeat scroll -17px 0 transparent;
 }
 </c:if>
 <%-- IE6 --%>
@@ -129,13 +129,13 @@ div.z-error .btn {
 	zoom: 1;
 }
 div.z-error .errnum {
-	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -33px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -31px 4px transparent;
 }
 div.z-error .redraw {
-	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll 0px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll 0 0 transparent;
 }
 div.z-error .close {
-	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 2px transparent;
+	background: url(${c:encodeURL('~./zk/img/error.gif')}) no-repeat scroll -17px 0 transparent;
 }
 </c:if>
 div.z-log {

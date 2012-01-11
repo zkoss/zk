@@ -8,7 +8,7 @@
 .z-window-embedded-shadow,
 .z-window-highlighted-shadow {
 	border-radius: 5px;
-	box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 	-moz-border-radius: 5px;
 	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 5px;
@@ -16,6 +16,7 @@
 }
 .z-window-modal-shadow,
 .z-window-highlighted-shadow {
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
 	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
 }
@@ -53,7 +54,7 @@
 .z-window-popup-move-ghost dl,
 .z-window-highlighted-move-ghost dl,
 .z-window-move-ghost dl {
-	border: 1px solid #538BA2;
+	border: 1px solid #9F9F9F;
 	margin: 0; padding: 0;
 	overflow: hidden;
 	display: block;
@@ -171,12 +172,6 @@
 	font-size: ${fontSizeM}; font-weight: normal;
 	cursor: default;
 }
-.z-window-modal-header, 
-.z-window-popup-header, 
-.z-window-highlighted-header,
-.z-window-overlapped-header {
-	color: #FFFFFF;
-}
 .z-window-embedded-header a, 
 .z-window-embedded-header a:visited, 
 .z-window-embedded-header a:hover {
@@ -188,33 +183,6 @@
 .z-window-popup-header-move {
 	cursor: move;
 } 
-<%-- Caption and Toolbarbutton --%>
-.z-window-modal-header a,
-.z-window-modal-header a:visited,
-.z-window-modal-header a:hover,
-.z-window-modal-header .z-caption a,
-.z-window-modal-header .z-caption a:visited,
-.z-window-modal-header .z-caption a:hover,
-.z-window-popup-header a,
-.z-window-popup-header a:visited,
-.z-window-popup-header a:hover,
-.z-window-popup-header .z-caption a,
-.z-window-popup-header .z-caption a:visited,
-.z-window-popup-header .z-caption a:hover,
-.z-window-highlighted-header a,
-.z-window-highlighted-header a:visited,
-.z-window-highlighted-header a:hover,
-.z-window-highlighted-header .z-caption a,
-.z-window-highlighted-header .z-caption a:visited,
-.z-window-highlighted-header .z-caption a:hover,
-.z-window-overlapped-header a,
-.z-window-overlapped-header a:visited,
-.z-window-overlapped-header a:hover,
-.z-window-overlapped-header .z-caption a,
-.z-window-overlapped-header .z-caption a:visited,
-.z-window-overlapped-header .z-caption a:hover {
-	color: #FFFFFF;
-}
 <%-- Body Content--%>
 .z-window-embedded-cnt,
 .z-window-embedded-body,

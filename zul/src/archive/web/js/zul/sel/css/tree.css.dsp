@@ -210,7 +210,7 @@ tr.z-treerow a:hover {
 	text-decoration: underline;
 }
 tr.z-treerow-disd *, td.z-treecell-disd * {
-	color: #C5CACB !important; cursor: default!important;
+	color: #AAAAAA !important; cursor: default!important;
 }
 tr.z-treerow-disd a:visited, tr.z-treerow-disd a:hover,
 td.z-treecell-disd a:visited, td.z-treecell-disd a:hover {

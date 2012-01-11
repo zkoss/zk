@@ -10,7 +10,7 @@
 	background: none;
 	border: 0;
 	font-size: ${fontSizeS};
-	color: #0076a3; 
+	color: #006DA3; 
 	font-weight: normal;
 	text-decoration: none;
 	font-family: arial;
@@ -20,7 +20,7 @@
 	top: -7px;
 }
 .z-paging-os .z-paging-os-cnt:hover {
-	color: #0076A3;
+	color: #006DA3;
 	background-position: -24px 0;
 	text-decoration: underline;
 }
@@ -31,6 +31,9 @@
 	font-weight: bold;
 	background-image:none;
 	background-position: right 0;
+}
+.z-paging-os .z-paging-os-seld:hover {
+	color: #363636; 
 }
 .z-paging-os span {
 	font-family: Arial;
