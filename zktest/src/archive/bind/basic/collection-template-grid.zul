@@ -1,0 +1,77 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CollectionTemplateGridVM')">
+	<custom-attributes composerName="vm"/>
+	<label id="msg" value="@bind(vm.message1)"/>
+	<!-- bind tracker has bug on tie value on each.name eq 'A' or eachStatus.index eq 2 -->
+	<grid id="outergrid" width="700px" model="@bind(vm.items) @template(each.name eq 'A' or eachStatus.index eq 2?'model1':'model2')">
+		<columns>
+			<column label="index"/>
+			<column label="name"/>
+			<column label="options" width="200px"/>
+			<column label="action" width="300px"/>
+			<column label="template"/>
+		</columns>
+		
+		<template name="model1" var="item" status="s">
+			<row>
+				<label value="@bind(s.index)"/>
+				<label value="@bind(item.name)"/>
+				<grid hflex="1" model="@bind(item.options) @template('model1')">
+					<columns>
+						<column label="index"/>
+						<column label="previous-index"/>
+						<column label="name"/>
+					</columns>
+					<template name="model1" var="option">
+						<row>
+							<label value="@bind(optionStatus.index)"/>
+							<label value="@bind(s.index)"/>
+							<label value="@bind(option)"/>
+						</row>
+					</template>
+				</grid>						
+				<hbox>
+					<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+					<button label="Delete" onClick="@command('delete', item=item)"/>
+					<button label="Add After" onClick="@command('addAfter', item=item)"/>
+					<button label="Add Before" onClick="@command('addBefore', item=item)"/>
+				</hbox>
+				<label value="Model1"/>
+			</row>
+		</template>
+		<template name="model2" var="item" status="s">
+			<row>
+				<label value="@bind(s.index)"/>
+				<label value="@bind(item.name)"/>
+				<grid hflex="1" model="@bind(item.options) @template('model1')">
+					<columns>
+						<column label="index"/>
+						<column label="previous-index"/>
+						<column label="name"/>
+					</columns>
+					<template name="model1" var="option">
+						<row>
+							<label value="@bind(optionStatus.index)"/>
+							<label value="@bind(s.index)"/>
+							<label value="@bind(option)"/>
+						</row>
+					</template>
+				</grid>						
+				<hbox>
+					<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+					<button label="Delete" onClick="@command('delete', item=item)"/>
+					<button label="Add After" onClick="@command('addAfter', item=item)"/>
+					<button label="Add Before" onClick="@command('addBefore', item=item)"/>
+				</hbox>
+				<label value="Model2"/>				
+			</row>
+		</template>
+	</grid>
+
+	<hbox>
+		<button label="reload" onClick="@command('reload')" />
+		<button label="change1" onClick="@command('change1')" />
+		<button label="change2" onClick="@command('change2')" />
+		<button label="detach" onClick="grid.detach()" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>
