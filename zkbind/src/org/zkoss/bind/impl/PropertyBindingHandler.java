@@ -387,8 +387,28 @@ import org.zkoss.zk.ui.event.Event;
 	}
 
 	public boolean hasLoadBinding(BindingKey bkey) {
-		return _initBindings.size() > 0 || _loadPromptBindings.size() > 0 || _loadEventBindings.size() > 0
-				|| _loadAfterBindings.size() > 0 || _loadBeforeBindings.size() > 0;
+		boolean r = false;
+		List<?> bindings = _initBindings.get(bkey);
+		if(bindings!=null && bindings.size()>0){
+			return true;
+		}
+		bindings = _loadPromptBindings.get(bkey);
+		if(bindings!=null && bindings.size()>0){
+			return true;
+		}
+		bindings = _loadEventBindings.get(bkey);
+		if(bindings!=null && bindings.size()>0){
+			return true;
+		}
+		bindings = _loadAfterBindings.get(bkey);
+		if(bindings!=null && bindings.size()>0){
+			return true;
+		}
+		bindings = _loadBeforeBindings.get(bkey);
+		if(bindings!=null && bindings.size()>0){
+			return true;
+		}
+		return false;
 	}
 	
 }
