@@ -56,9 +56,9 @@ public class ComponentIterator implements Iterator<Component> {
 	}
 	
 	private ComponentIterator(Page page, Component root, String selector){
-		if(page == null && root == null) 
+		if (page == null && root == null) 
 			throw new IllegalArgumentException("Page or root component cannot be null.");
-		if(selector == null || selector.isEmpty()) 
+		if (Strings.isEmpty(selector)) 
 			throw new IllegalArgumentException("Selector string cannot be empty.");
 		
 		_selectorList = new Parser().parse(selector);

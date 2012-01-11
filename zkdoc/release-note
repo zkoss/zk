@@ -85,6 +85,7 @@ ZK 6.0.0
   ZK-750: Listbox ROD failed with ListModelList
   ZK-732: combobutton doesn't have isOpen() so zkbind can't read open property
   ZK-756: Include's setProgressing() fails on ZK 6
+  ZK-764: Use a jdk 1.6 only API
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
