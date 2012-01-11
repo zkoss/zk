@@ -16,6 +16,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2.tree;
 
+import java.util.Set;
+
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
@@ -26,21 +28,43 @@ import org.zkoss.zul.TreeNode;
  */
 public class TreeModels {
 	
-	public static DefaultTreeModel<String> createDefaultTreeModel() {
-		return new DefaultTreeModel<String>(createNode(RAW_NODES));
+	public static DefaultTreeModel<String> createDefaultTreeModel(boolean closeEnd) {
+		return new DefaultTreeModel<String>(createNode(RAW_NODES, closeEnd));
+	}
+	
+	/**
+	 * Open all nodes.
+	 */
+	public static <T> void openAll(DefaultTreeModel<T> model, boolean open) {
+		openAllChildren(model, model.getRoot(), open);
+	}
+	
+	private static <T> void openAllChildren(DefaultTreeModel<T> model, 
+			TreeNode<T> node, boolean open) {
+		model.setOpen(node, open);
+		for (TreeNode<T> c : node.getChildren())
+			openAllChildren(model, c, open);
+	}
+	
+	
+	
+	/**
+	 * Return TreeModel selection.
+	 */
+	public static String printSelection(DefaultTreeModel<String> model) {
+		Set<?> objs = model.getSelection();
+		return objs == null ? "(null)" : objs.isEmpty() ? "(empty)" : "[" + join(objs) + "]";
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static TreeNode<String> createNode(Object[] objs) {
+	private static TreeNode<String> createNode(Object[] objs, boolean closeEnd) {
 		String name = (String) objs[0];
 		int len = objs.length - 1;
-		/*
-		if (len == 0)
+		if (closeEnd && len == 0)
 			return new TestDefaultTreeNode(name);
-		*/
 		TreeNode<String>[] children = new TreeNode[len];
 		for (int i = 0; i < len; i++)
-			children[i] = createNode((Object[]) objs[i + 1]);
+			children[i] = createNode((Object[]) objs[i + 1], closeEnd);
 		return new TestDefaultTreeNode(name, children);
 	}
 	
@@ -111,5 +135,18 @@ public class TreeModels {
 				new Object[] { "Z" }
 		}
 	};
+	
+	public static String join(Iterable<?> objs) {
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for (Object obj : objs) {
+			if (!first)
+				sb.append(", ");
+			else
+				first = false;
+			sb.append(obj);
+		}
+		return sb.toString();
+	}
 	
 }

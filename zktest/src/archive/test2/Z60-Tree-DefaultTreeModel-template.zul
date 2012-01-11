@@ -1,0 +1,106 @@
+<!--
+	Z60-Tree-DefaultTreeModel-template.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zul.*;
+		import org.zkoss.zktest.test2.tree.*;
+		import org.zkoss.zktest.util.*;
+		import org.zkoss.zk.ui.select.*;
+		DefaultTreeModel model = TreeModels.createDefaultTreeModel(false);
+		DefaultTreeModel model2 = TreeModels.createDefaultTreeModel(false);
+		model.multiple = "true".equals(arg.get("multiple"));
+		model2.multiple = "true".equals(arg.get("multiple"));
+		int cnt = 0;
+		int cmpCnt = 0;
+	</zscript>
+	<div>
+		<div>Spec: The two trees on the left sharing model 1 should always have the same selection and open states.</div>
+		<div>Spec: When you click on "Clone" (by POJO) or "Clone by Serialization", a cloned instance will appear in the right most column. 
+			When cloned, the model state (selection, open) will be brought to the new instance. After cloning, if cloned by POJO, 
+			the state on Trees will sync among each other. However, if cloned by serialization, the state will not sync afterward.</div>
+		<div>1. Select, deselect, add, remove, open, close Treeitems from the Trees of model 1. 
+			Make sure the operation does not break the spec above. Click on "Inspect Selection" on each step to verify model content.</div>
+		<div>2. Clone the Tree of model 2 by POJO and serialization. Select, deselect, add, remove, open, close Treeitems from the Tree and
+			cloned Tree, and make sure the spec above does not break.</div>
+	</div>
+	<separator />
+	<button label="Add">
+		<attribute name="onClick"><![CDATA[
+			Iterator iter = model.getSelection().iterator();
+			if (!iter.hasNext()) {
+				alert("No Treeitem is selected.");
+				return;
+			}
+			TreeNode n = iter.next();
+			n.add(new TreeModels.TestDefaultTreeNode("Node " + cnt++, new TreeNode[0]));
+		]]></attribute>
+	</button>
+	<button label="Remove">
+		<attribute name="onClick"><![CDATA[
+			for (TreeNode n : model.getSelection())
+				n.getParent().remove(n);
+		]]></attribute>
+	</button>
+	<button label="Clone">
+		<attribute name="onClick"><![CDATA[
+			Tree tree = tree3.clone();
+			tree.id = "treeC" + cmpCnt++;
+			tree.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[
+			Tree tree = (Tree) Serializations.clone(tree3);
+			tree.id = "treeCBS" + cmpCnt++;
+			tree.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Inspect Selection">
+		<attribute name="onClick"><![CDATA[
+			modelSelectionLb.value = TreeModels.printSelection(model);
+			model2SelectionLb.value = TreeModels.printSelection(model2);
+		]]></attribute>
+	</button>
+	<separator />
+	<hlayout>
+		<vlayout hflex="1">
+			Model 1
+			<tree model="${model}" checkmark="true" hflex="1" onSelect="" 
+				height="200px">
+				<treecols>
+					<treecol label="Col" sort="auto" />
+				</treecols>
+			</tree>
+			<tree model="${model}" checkmark="true" hflex="1" onSelect="" 
+				mold="paging" pageSize="6">
+				<treecols>
+					<treecol label="Col" sort="auto" />
+				</treecols>
+			</tree>
+			<label id="modelSelectionLb" />
+		</vlayout>
+		<vlayout hflex="1">
+			Model 2
+			<tree id="tree3" model="${model2}" checkmark="true" hflex="1" onSelect=""
+			 	height="200px">
+				<treecols>
+					<treecol label="Col" sort="auto" />
+				</treecols>
+			</tree>
+			<label id="model2SelectionLb" />
+		</vlayout>
+		<vlayout id="clones" hflex="1">
+			Clone from Tree of Model 2
+		</vlayout>
+	</hlayout>
+</zk>

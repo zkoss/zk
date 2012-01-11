@@ -1,5 +1,5 @@
 <!--
-	Z60-Tree-DefaultTreeModel-Multiple.zul
+	Z60-Tree-DefaultTreeModel-Single.zul
 	
 	Purpose:
 	
@@ -11,5 +11,5 @@
 	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
 <zk>
-	<include id="inc" src="Z60-Tree-DefaultTreeModel-template.zul" multiple="true" />
+	<include id="inc" src="Z60-Tree-DefaultTreeModel-template.zul" multiple="false" />
 </zk>
