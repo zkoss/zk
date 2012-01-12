@@ -37,15 +37,34 @@ public abstract class AbstractValidator implements Validator {
 	 * @param message the message of validation
 	 */
 	protected void addInvalidMessage(ValidationContext ctx,String message) {
-		addInvalidMessages(ctx, new String[]{message});
+		addInvalidMessages(ctx, null, new String[]{message});
 	}
 	
 	/**
-	 * add multiple messages to validation context, when you call this method, it also set context invalid.
+	 * add a message to validation context, when you call this method, it also sets context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param message the message of validation
+	 */
+	protected void addInvalidMessage(ValidationContext ctx, String key, String message) {
+		addInvalidMessages(ctx, key, new String[]{message});
+	}
+
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
 	 * @param ctx the validation context
 	 * @param messages messages of validation
 	 */
-	protected void addInvalidMessages(ValidationContext ctx,String[] messages) {
+	protected void addInvalidMessages(ValidationContext ctx, String[] messages) {
+		addInvalidMessages(ctx,null,messages);
+	}
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param messages messages of validation
+	 */
+	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages) {
 		ctx.setInvalid();
 		ValidationMessages vmsgs = ((BinderCtrl)ctx.getBindContext().getBinder()).getValidationMessages();
 		if(vmsgs!=null){
@@ -59,10 +78,12 @@ public abstract class AbstractValidator implements Validator {
 				//ignore children binding;
 			}
 			if(attr!=null){
-				vmsgs.setMessages(ctx.getBindContext().getComponent(),attr, messages);
+				vmsgs.addMessages(ctx.getBindContext().getComponent(),attr, key, messages);
 			}
 		}else{
 			_log.warning("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");
 		}
 	}
+	
+	
 }

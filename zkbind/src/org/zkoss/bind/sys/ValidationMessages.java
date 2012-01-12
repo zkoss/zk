@@ -31,24 +31,44 @@ public interface ValidationMessages{
 	void clearMessages(Component comp);
 	
 	/**
-	 * get validation message of component
-	 * @return null if no message in component
+	 * get validation messages of a component and special attribute
+	 * @return null if no message in component and attribute
 	 */
 	String[] getMessages(Component comp,String attr);
 	
 	/**
-	 * get validation message of component
-	 * @return null if no message in component
+	 * get validation messages of a component
+	 * @return null if no message of component
 	 */
 	String[] getMessages(Component comp);
 	
 	/**
-	 * set validation message to component, it will replace previous messages
+	 * get validation message of component and a special key
+	 * @return null if no message of key
 	 */
-	void setMessages(Component comp, String attr, String[] messages);
+	String[] getKeyMessages(Component comp,String key);
 	
 	/**
-	 * add validation message to component
+	 * get validation message of a special key
+	 * @return null if no message of key
 	 */
-	void addMessages(Component comp, String attr, String[] messages);
+	String[] getKeyMessages(String key);
+	
+	/**
+	 * set validation messages to component, it will replace previous messages
+	 * @param comp the component refers to the messages
+	 * @param attr the attr refers to the messages
+	 * @param key the custom key refers to this messages
+	 * @param messages the messages
+	 */
+	void setMessages(Component comp, String attr, String key, String[] messages);
+	
+	/**
+	 * add validation messages to component
+	 * @param comp the component refers to the messages
+	 * @param attr the attr refers to the messages
+	 * @param key the custom key refers to this messages
+	 * @param messages the messages
+	 */
+	void addMessages(Component comp, String attr, String key, String[] messages);
 }
