@@ -105,7 +105,7 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
     //ZK-739: Allow dynamic template for collection binding.	
 	//Tracking template expression to trigger load binding of the template component
 	@Override
-	public void addTemplateDependency(Component eachComp) {
+	public void addTemplateTracking(Component eachComp) {
 		if(!_bindingResolved || _binding==null){//defer the linking between last prompt binding and template
 			List<Binding> bindings = ((BinderCtrl)_binder).getLoadPromptBindings(_comp,_attr);
 			_binding = bindings.size()>0?bindings.get(bindings.size()-1):null;
@@ -113,8 +113,8 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 		}
 		if(_binding!=null){
 			final BindContext ctx = BindContextUtil.newBindContext(_binder, _binding, false, null, eachComp, null);
-			final ExpressionX exprX = _binder.getEvaluatorX().parseExpressionX(ctx, _templateExpr, Object.class); 
 			final BindEvaluatorX eval = _binder.getEvaluatorX();
+			final ExpressionX exprX = eval.parseExpressionX(ctx, _templateExpr, Object.class); 
 			eval.getValue(ctx, eachComp, exprX);
 		}
 	}

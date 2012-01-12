@@ -78,7 +78,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			final Comboitem nci = (Comboitem)items[0];
 			((LoadStatus)(((AbstractComponent)nci).getExtraCtrl())).setIndex(item.getIndex());
 			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			nci.setAttribute(varnm, data); //kept the value
+			addItemReference(nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			nci.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
 
@@ -89,7 +89,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			});
 			
 			//add template dependency
-			addTemplateDependency(cb, nci, data, index);
+			addTemplateTracking(cb, nci, data, index);
 			
 			if (nci.getValue() == null) //template might set it
 				nci.setValue(data);

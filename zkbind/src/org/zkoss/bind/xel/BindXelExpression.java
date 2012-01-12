@@ -25,7 +25,7 @@ import org.zkoss.zel.ValueExpression;
 public class BindXelExpression extends ELXelExpression {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	BindXelExpression(ValueExpression expr) {
 		super(expr);
 	}

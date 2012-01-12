@@ -78,4 +78,15 @@ public interface BindEvaluatorX extends Evaluator {
 	 */
 	public ValueReference getValueReference(BindContext ctx, Component comp, ExpressionX expression)
 	throws XelException;
+	
+	/**
+	 * Returns whether the specified expression a read only expression. 
+	 * @param ctx BindContext
+	 * @param comp evaluation context
+	 * @param expression the expression that will resolve a property
+	 * @return whether the specified expression a read only expression.
+	 * @throws XelException
+	 */
+	public boolean isReadOnly(BindContext ctx, Component comp, ExpressionX expression)
+	throws XelException;
 }

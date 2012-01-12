@@ -75,7 +75,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 
 			final Listitem nli = (Listitem)items[0];
 			nli.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			nli.setAttribute(varnm, data); //kept the value
+			addItemReference(nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nli.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -86,7 +86,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			});
 			
 			//add template dependency
-			addTemplateDependency(listbox, nli, data, index);
+			addTemplateTracking(listbox, nli, data, index);
 			
 			if (nli.getValue() == null) //template might set it
 				nli.setValue(data);

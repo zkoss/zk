@@ -66,8 +66,9 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		return template;
 	}
     //ZK-739: Allow dynamic template for collection binding.
-	protected void addTemplateDependency(Component templateComp, final Component eachComp, Object data, final int index) {
+	protected void addTemplateTracking(Component templateComp, final Component eachComp, Object data, final int index) {
 		final Binder binder = (Binder)eachComp.getAttribute(BinderImpl.BINDER,true);
+		if(binder == null) return; //no binder
 		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
 		if(resolver == null) return;//no resolver
 		Object old = null;
@@ -81,10 +82,17 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 					return Integer.valueOf(index);
 				}
 			});
-			resolver.addTemplateDependency(eachComp);
+			resolver.addTemplateTracking(eachComp);
 		} finally {
 			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
 			eachComp.setAttribute(TemplateResolver.EACH_VAR, old);
 		}
+	}
+	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List
+	protected void addItemReference(final Component comp, int index, String varnm) {
+		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
+		if (binder == null) return; //no binder
+		final String expression = BinderImpl.MODEL+"["+index+"]";
+		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
 	}
 }

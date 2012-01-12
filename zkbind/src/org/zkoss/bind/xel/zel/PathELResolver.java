@@ -33,7 +33,7 @@ import org.zkoss.zel.impl.parser.Node;
  * @author henrichen
  * @since 6.0.0
  */
-public class PathResolver extends ELResolver {
+public class PathELResolver extends ELResolver {
 	private Stack<Integer> _numOfKids = new Stack<Integer>();
 	private Stack<List<String>> _paths = new Stack<List<String>>();
 	
@@ -113,7 +113,7 @@ public class PathResolver extends ELResolver {
 	@Override
 	public boolean isReadOnly(ELContext context, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
-		return false;
+		return true;
 	}
 
 	@Override

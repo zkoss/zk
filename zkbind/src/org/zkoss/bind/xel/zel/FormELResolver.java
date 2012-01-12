@@ -21,7 +21,6 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;

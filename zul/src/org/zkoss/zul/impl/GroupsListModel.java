@@ -33,6 +33,8 @@ import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.GroupsModelExt;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelSet;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.ext.GroupingInfo;
@@ -167,7 +169,16 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 
 		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, !_gpcloses[gi]);
 	}
-	
+	//Object//
+	public boolean equals(Object o) {
+		return _model.equals(o instanceof GroupsListModel ? ((GroupsListModel)o)._model: o);
+	}
+	public int hashCode() {
+		return _model.hashCode();
+	}
+	public String toString() {
+		return Objects.toString(_model);
+	}
 	//-- backward compatible Selectable --//
 	/**
 	 * Returns the index of the first occurrence of the specified element.

@@ -28,7 +28,7 @@ public interface TemplateResolver {
 	public static final String EACH_STATUS_VAR = EACH_VAR + STATUS_POST_VAR;
 	
 	/**
-	 * resolve the template for the component 
+	 * Resolve the template for the component 
 	 * @param eachComp the template to be resolved of the component
 	 * @param eachData the data for resolver
 	 * @param index the index for resolver
@@ -37,8 +37,8 @@ public interface TemplateResolver {
 	Template resolveTemplate(Component eachComp, Object eachData, int index);
 	
 	/**
-	 * add template dependency to component
-	 * @param eachComp the component to add template dependency
+	 * Add template tracking to component
+	 * @param eachComp the component to add template tracking
 	 */
-	void addTemplateDependency(Component eachComp);
+	void addTemplateTracking(Component eachComp);
 }

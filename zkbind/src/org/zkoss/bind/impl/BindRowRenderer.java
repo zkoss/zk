@@ -77,7 +77,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 
 			final Row nr = (Row)items[0];
 			nr.setAttribute(BinderImpl.VAR, varnm);
-			nr.setAttribute(varnm, data); //kept the value
+			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			});
 			
 			//add template dependency
-			addTemplateDependency(grid, nr, data, index);
+			addTemplateTracking(grid, nr, data, index);
 			
 			if (nr.getValue() == null) //template might set it
 				nr.setValue(data);

@@ -37,7 +37,6 @@ import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELContext;
 import org.zkoss.zel.ELResolver;
-import org.zkoss.zel.VariableMapper;
 import org.zkoss.zel.impl.parser.AstBracketSuffix;
 import org.zkoss.zel.impl.parser.AstDotSuffix;
 import org.zkoss.zel.impl.parser.AstValue;
@@ -59,11 +58,6 @@ public class BindELContext extends XelELContext {
 		return new BindELResolver(xelc);
 	}
 
-	//can be used to pass info to ELResolver
-	public VariableMapper getVariableMapper() {
-		return super.getVariableMapper();
-	}
-
 	public Binding getBinding() {
 		return (Binding) getXelContext().getAttribute(BinderImpl.BINDING); //see BindEvaluatorXImpl#newXelContext()
 	}
@@ -80,35 +74,26 @@ public class BindELContext extends XelELContext {
 		return getXelContext().setAttribute(name, value);
 	}
 	
-	private static final String TEMPBASE = "$TEMPBASE$";
+	private static final String TMPBASE = "$TMPBASE$";
 	public static Property prepareProperty(Object base, String prop, Object value, BindContext ctx) {
 		if (ctx != null && prop.indexOf('[') >= 0) { //handle properties that containing [] indirect reference
 			final Binder binder = ctx.getBinder();
 			final Component comp = ctx.getComponent();
 			Object old = null;
 			try {
-				old = comp.setAttribute(TEMPBASE, base);
+				old = comp.setAttribute(TMPBASE, base);
 				final BindEvaluatorX eval = binder.getEvaluatorX();
 				final BindContext bctx = BindContextUtil.newBindContext(binder, null, false, null, comp, null);
-				final String expression = TEMPBASE + (prop.startsWith("[") ? prop : ("."+prop));
+				final String expression = TMPBASE + (prop.startsWith("[") ? prop : ("."+prop));
 				final ExpressionX exprX = eval.parseExpressionX(bctx, expression, Object.class);
-				if (prop.endsWith("]")) {
-					final Object result = eval.getValue(bctx, comp, exprX);
-					if (!isImmutable(result)) {
-						base = result;
-						prop = ".";
-					} else { //immutable
-						final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
-						base = valref.getBase();
-						prop = "*";
-					}
-				} else {
-					final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
-					base = valref.getBase();
-					prop = ""+valref.getProperty();
-				}
+				final String propTrim = prop.trim();
+				final ValueReference valref = eval.getValueReference(bctx, comp, exprX);
+				base = valref.getBase();
+				prop = propTrim.endsWith("]") ? 
+						"[" + valref.getProperty() + "]" :
+						""+valref.getProperty();
 			} finally {
-				comp.setAttribute(TEMPBASE, old);
+				comp.setAttribute(TMPBASE, old);
 			}
 		}
 		return new PropertyImpl(base, prop, value);

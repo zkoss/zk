@@ -30,6 +30,7 @@ import java.util.WeakHashMap;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
+import org.zkoss.bind.sys.DummyBinding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
@@ -58,8 +59,11 @@ public class TrackerImpl implements Tracker,Serializable {
 		}
 		
 		final TrackerNodeImpl node = (TrackerNodeImpl) getOrCreateTrackerNode(comp, series);
+		
 		//node is leaf of this series, add the binding to it
-		node.addBinding(binding);
+		if (!(binding instanceof DummyBinding)) {
+			node.addBinding(binding);
+		}
 	}
 	
 	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp, String[] dependsOnSeries) {

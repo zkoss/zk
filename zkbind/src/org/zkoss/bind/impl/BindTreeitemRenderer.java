@@ -86,7 +86,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 
 			final Treeitem ti = (Treeitem)items[0];
 			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			ti.setAttribute(varnm, data); //kept the value
+			addItemReference(ti, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ti.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -96,7 +96,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 				}
 			});
 			//add template dependency
-			addTemplateDependency(tree, ti, data, index);
+			addTemplateTracking(tree, ti, data, index);
 			
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);

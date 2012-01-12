@@ -74,14 +74,17 @@ public class BindChildRenderer extends AbstractRenderer{
 				}
 			}, null);
 
-		//add template dependency
-		if (items != null && items.length > 0)
-			addTemplateDependency(owner, items[0], data, index);
-
-		for(Component comp:items){
+		boolean templateTracked = false;
+		for(Component comp: items){
 			comp.setAttribute(BinderImpl.VAR, varnm);
-			comp.setAttribute(varnm, data); //kept the value
+			addItemReference(comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			comp.setAttribute(itervarnm, iterStatus);
+			
+			//add template dependency
+			if (!templateTracked) {
+				addTemplateTracking(owner, comp, data, index);
+				templateTracked = true;
+			}
 			
 			//to force init and load
 			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, comp));

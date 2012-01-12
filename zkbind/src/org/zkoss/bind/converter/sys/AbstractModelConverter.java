@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.GroupsModel;
@@ -69,6 +70,7 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 		}
 		ListModel model = null;
 		if (val instanceof ListModel) {
+			comp.setAttribute(BinderImpl.MODEL, val); //ZK-758. @see AbstractRenderer#addItemReference
 			return val;
 		} else if (val instanceof Set) {
 			model =  new ListModelSet((Set)val, true);
@@ -98,6 +100,7 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 			}
 		}
 		model = handleWrappedModel(ctx,comp,model);
+		comp.setAttribute(BinderImpl.MODEL, model); //ZK-758. @see AbstractRenderer#addItemReference
 		
 		return model;
 	}

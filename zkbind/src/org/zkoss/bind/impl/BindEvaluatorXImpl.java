@@ -14,6 +14,8 @@ package org.zkoss.bind.impl;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.Binding;
+import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
@@ -54,8 +56,18 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 
 	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
 	throws XelException {
+		Component comp = null;
+		if (ctx != null) {
+			comp = ctx.getComponent();
+			if (comp == null) {
+				final Binding binding = ctx.getBinding(); 
+				if (binding != null) {
+					comp = binding.getComponent();
+				}
+			}
+		}
 		return (ExpressionX) getExpressionFactory()
-			.parseExpression(newXelContext(ctx, null), "${"+expression+"}", expectedType);
+			.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
 	}
 	
 	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression)
@@ -68,7 +80,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		return expression.getValueReference(newXelContext(ctx, comp));
 	}
 
-	//utility to create an XelContext associated to the refrence (could be Component or Page)
+	//utility to create an XelContext associated to the reference
 	protected XelContext newXelContext(BindContext ctx, Component comp) {
 		final XelContext xelc = super.newXelContext(comp);
 		xelc.setAttribute(BinderImpl.BINDCTX, ctx);
@@ -79,5 +91,11 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			xelc.setAttribute(BinderImpl.IGNORE_TRACKER, ctx.getAttribute(BinderImpl.IGNORE_TRACKER));
 		}
 		return xelc;
+	}
+
+	@Override
+	public boolean isReadOnly(BindContext ctx, Component comp,
+			ExpressionX expression) throws XelException {
+		return expression.isReadOnly(newXelContext(ctx, comp));
 	}
 }

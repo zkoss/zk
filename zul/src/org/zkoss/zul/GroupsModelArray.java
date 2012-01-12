@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.lang.reflect.Array;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -374,5 +375,16 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 	@Override
 	public Object willClone(Component comp) {
 		return clone();
+	}
+	
+	//Object//
+	public boolean equals(Object o) {
+		return _nativedata.equals(o instanceof GroupsModelArray ? ((GroupsModelArray)o)._nativedata: o);
+	}
+	public int hashCode() {
+		return _nativedata.hashCode();
+	}
+	public String toString() {
+		return Objects.toString(_nativedata);
 	}
 }

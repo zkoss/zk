@@ -80,11 +80,11 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 								+ items[0]);
 			final Label lbl = ((Label) items[0]);
 			lbl.setAttribute(BinderImpl.VAR, varnm);
-			lbl.setAttribute(varnm, data);
+			addItemReference(lbl, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			lbl.setAttribute(itervarnm, iterStatus);
 
 			//add template dependency
-			addTemplateDependency(owner, lbl, data, index);
+			addTemplateTracking(owner, lbl, data, index);
 
 			//to force init and load
 			Events.sendEvent(new Event(BinderImpl.ON_BIND_INIT, lbl));

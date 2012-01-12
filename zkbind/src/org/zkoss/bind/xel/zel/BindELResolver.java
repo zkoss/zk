@@ -25,10 +25,9 @@ import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
+import org.zkoss.bind.sys.Reference;
 import org.zkoss.bind.sys.SaveBinding;
-import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
-import org.zkoss.util.IdentityHashSet;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.zel.XelELResolver;
 import org.zkoss.zel.CompositeELResolver;
@@ -50,8 +49,9 @@ public class BindELResolver extends XelELResolver {
 	public BindELResolver(XelContext ctx) {
 		super(ctx);
 		_resolver = new CompositeELResolver();
-		_resolver.add(new PathResolver()); //must be the first
+		_resolver.add(new PathELResolver()); //must be the first
 		_resolver.add(new FormELResolver());
+		_resolver.add(new ListModelELResolver());
 		_resolver.add(super.getELResolver());
 	}
 	protected ELResolver getELResolver() {
@@ -60,13 +60,19 @@ public class BindELResolver extends XelELResolver {
 	//ELResolver//
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
-		final Object value = super.getValue(ctx, base, property);
+		Object value = super.getValue(ctx, base, property);
+		if (value instanceof Reference) {
+			value = ((Reference)value).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
+		}
 		tieValue(ctx, base, property, value);
 		return value;
 	}
 	
 	public void setValue(ELContext ctx, Object base, Object property, Object value)
 	throws PropertyNotFoundException, PropertyNotWritableException, ELException {
+		if (base instanceof Reference) {
+			base = ((Reference)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
+		}
 		super.setValue(ctx, base, property, value);
 		tieValue(ctx, base, property, value);
 	}
