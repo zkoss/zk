@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-770.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 11 18:55:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<div>1. Test without zkmax, (use PollingServerPush in stead of CometServerPush)</div>
+		<div>2. Change the spinner's value, then click the button directly without blur the spinner.</div>
+		<div>3. If there is no delay, its correct.</div>
+	</div>
+	<window title="Chat" border="normal">
+	    <zscript><![CDATA[
+	    import org.zkoss.zk.ui.event.*;
+	    EventQueue que = EventQueues.lookup("chat", EventQueues.SESSION, true);
+	    que.subscribe(new EventListener() {
+	        public void onEvent(Event evt) {
+	            new Label(evt.getData()).setParent(inf);
+	        }
+	    }); 
+	    void post(Button tb, int cnt) {
+	        String text = tb.getLabel();
+	        que.publish(new Event("onChat", null, text+" " + cnt));
+	    }
+	    ]]></zscript>
+		<spinner id="pdo" value="5" /> 
+	    Say <button label="send message" onClick="post(self, pdo.getValue())" />
+	    <separator bar="true"/>
+	    <vbox id="inf"/>
+	</window>
+</zk>

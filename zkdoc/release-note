@@ -284,6 +284,7 @@ Jan 03, 2012
   ZK-724: Reset ListModel will cause an exception in ROD
   ZK-727: Datebox constraint failed when set custom error message for before constraint
   ZK-731: Unclosed BufferedReader for org.zkoss.util.Maps
+  ZK-770: EventQueue has extra delay if scope is SESSION
 
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors

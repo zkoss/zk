@@ -139,7 +139,7 @@ w:use="foo.MyWindow"&gt;
 	 *
 	 * @param id the identifier.
 	 * You could specify null or an empty string to remove ID.
-	 * @see Path
+	 * @see org.zkoss.zk.ui.select.Selectors
 	 */
 	public void setId(String id);
 

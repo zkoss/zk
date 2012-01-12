@@ -78,8 +78,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	/** The information of the event being served, or null if not under event processing. */
 	private ExecutionInfo _execinf;
 	private List<VariableResolver> _resolvers;
-	/** Whether onPiggyback is checked for this execution. */
-	private boolean _piggybacked;
 
 	/** Constructs an execution.
 	 * @param creating which page is being creating for this execution, or
@@ -194,13 +192,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (!_evtInfos.isEmpty())
 			return _evtInfos.remove(0).event;
 
-		if (!_piggybacked) { //handle piggyback only once
-			((DesktopCtrl)_desktop).onPiggyback();
-			_piggybacked = true;
+		// ZK-770: EventQueue has extra delay if scope is SESSION
+		((DesktopCtrl)_desktop).onPiggyback();
 
-			if (!_evtInfos.isEmpty())
-				return _evtInfos.remove(0).event;
-		}
+		if (!_evtInfos.isEmpty())
+			return _evtInfos.remove(0).event;
 		return null;
 	}
 
