@@ -1096,7 +1096,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindTreeitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
-		
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
@@ -1117,6 +1116,26 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-value>org.zkoss.bind.converter.sys.SelectedTreeitemConverter</attribute-value>
 			</attribute>
 		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>selectedItems</property-name>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_EVENT</attribute-name>
+				<attribute-value>onAfterRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.SelectedTreeitemsConverter</attribute-value>
+			</attribute>
+		</annotation>		
 	</component>
 	<!--component>
 		<component-name>treecell</component-name>
