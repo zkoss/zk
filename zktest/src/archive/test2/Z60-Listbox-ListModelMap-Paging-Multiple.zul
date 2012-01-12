@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z60-Listbox-ListModelMap-Paging-Multiple.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 11 10:41:05 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		<![CDATA[
+		import org.zkoss.zktest.test2.select.models.*;
+		
+		ListModelMap model = ListModelMaps.getModel(ListModelMaps.MULTIPLE);
+		ListModelMap model2 = ListModelMaps.getModel(ListModelMaps.MULTIPLE_AND_CLONEABLE);
+
+		int cnt = 0;
+		int elemcnt = 1001;
+		int rmcnts = 0;
+		int rmcntm = 1001;
+	]]></zscript>
+	<div>
+		<div>1. There are 3 Listbox below.</div>
+		<div>2. For first two Listbox, their select status will sync automatically after you select item.</div>
+		<div>3. Select data 10 and data 11 of third Listbox.</div>
+		<div>4. Click clone and 'clone by serialization', then two Listboxes should be created and also select data 10 and data 11.</div>
+		<div>5. Hold Ctrl then Select data 312 of third Listbox, data 313 of fourth and data 314 of fifth, the select status of last three listbox should not sync.</div>
+		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 10, 11 and 312.</div>
+		<div>7. Click 'insert item', each select of Listbox should not be changed.</div>
+		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
+	</div>
+	<hbox>
+		<listbox id="lbxOne" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" multiple="true" checkmark="true" />
+	</hbox>
+	<div height="10px"></div>
+	<button label="clone">
+		<attribute name="onClick">
+			Listbox lbx = lbxThree.clone();
+			lbx.setId("lbxThree_clone" + cnt++);
+			lbx.setParent(cloneThreeArea);
+		</attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[{
+			import java.io.*;
+			ByteArrayOutputStream boa = new ByteArrayOutputStream();
+			new ObjectOutputStream(boa).writeObject(lbxThree);
+			byte[] bs = boa.toByteArray();
+			Object n = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+			n.setId("lbxThree_serialize" + cnt++);
+			((Component)n).setParent(cloneThreeArea);
+		}]]></attribute>
+	</button>
+	<button label="insert item">
+		<attribute name="onClick">
+			model.put("item "+elemcnt, "data "+elemcnt);
+			model2.put("item "+elemcnt, "data "+elemcnt);
+			elemcnt++;
+		</attribute>
+	</button>
+	<button label="remove item">
+		<attribute name="onClick"><![CDATA[
+			String key = "item ";
+			if (rmcntm < elemcnt) {
+				key += rmcntm;
+				rmcntm++;
+			} else {
+				key += rmcnts;
+				rmcnts++;
+			}
+			model.remove(key);
+			model2.remove(key);
+		]]></attribute>
+	</button>
+	<hbox id="cloneThreeArea" />
+</zk>
