@@ -1430,14 +1430,19 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (listen) _piggybackListened = true;
 	}
 	public void onPiggyback() {
-		if (_piggybackListened) {
+		//Note: we don't post ON_PIGGYBACK twice in an execution
+		//(performance concern and back-compatibility).
+		if (_piggybackListened
+		&& Executions.getCurrent().getAttribute(ATTR_PIGGYBACK_POSTED) == null) {
 			for (Iterator it = _pages.iterator(); it.hasNext();) {
 				final Page page = (Page)it.next();
 				if (Executions.getCurrent().isAsyncUpdate(page)) { //ignore new created pages
 					for (Component root = page.getFirstRoot();
 					root != null; root = root.getNextSibling()) {
-						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) //asap+deferrable
+						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) { //asap+deferrable
 							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
+							Executions.getCurrent().setAttribute(ATTR_PIGGYBACK_POSTED, Boolean.TRUE);
+						}
 					}
 				}
 			}
@@ -1452,6 +1457,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (_spush != null)
 			_spush.onPiggyback();
 	}
+	private static final String ATTR_PIGGYBACK_POSTED =
+		"org.zkoss.zk.ui.impl.piggyback.posted";
 
 	//AU Response//
 	public void responseSent(String reqId, Object response) {
