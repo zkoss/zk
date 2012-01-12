@@ -68,7 +68,8 @@ ZK 6.0.0
   ZK-719: Combobutton supports the toolbar mold such that it has the same size as other toolbar components
   ZK-715: Listbox paging mold support PageUp/PageDown to navigate the paging 
   ZK-423: Focusable listboxes 
-
+  ZK-669: Add method setModel(ListModel model) to Radiogroup class
+  
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)

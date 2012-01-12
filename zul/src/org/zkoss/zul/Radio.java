@@ -169,6 +169,7 @@ public class Radio extends Checkbox {
 				}
 			}
 			group.fixSelectedIndex();
+			group.syncSelectionToModel();
 		}
 	}
 

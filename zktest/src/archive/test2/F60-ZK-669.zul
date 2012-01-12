@@ -1,0 +1,61 @@
+<!--
+	F60-ZK-669.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Jan 11 20:04:36 TST 2012, Created by tonyq
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import java.util.*;
+		
+	    ListModelList list = new ListModelList();
+	    list.addAll( Arrays.asList(new String[]{"test","test2","test3","test4","test5"}));
+	    
+	    ListModelList list2 = new ListModelList();
+	    list2.addAll( Arrays.asList(new String[]{"newtest","newtest2","newtest3","newtest4","newtest5"}));
+	    
+	]]></zscript>
+	
+	<h:pre xmlns:h="html">
+	Test cases:
+ 		1.There should be two radio group , each with 5 radios. (Same model, but different label)
+		
+ 		2.Click invalidate button for both radiogroups and see if it also render the same view.
+		
+		3.Click set anoter model for both radiogroups , it should show different label with differnt model after you click the button.
+		
+		4.Click add one for both radiogroups, it should add one more radio for both radiogroups. (because they use same model)
+				 
+		4.Click remove last item for both radiogroups, it should remove one radio for both radiogroups. (because they use same model)
+	</h:pre>
+	<vlayout>
+		<label value="radiogroup1" />
+		<hlayout>
+			<radiogroup model="${list}" id="rg1" />
+			<button label="invalidate" onClick="rg1.invalidate()" />
+			<button label="set another model" onClick="rg1.setModel(list2)" />
+			<button label="add one" onClick='rg1.getModel().add("new1")' />
+			<button label="remove last one item in model" onClick='rg1.getModel().remove(rg1.getModel().size()-1)' />
+		</hlayout>
+		
+		<label value="radiogroup2" />
+		<hlayout>
+			<radiogroup model="${list}" id="rg2" >
+				<template name="model">
+					<radio value="${each}" label="Hi ${each}"></radio>
+				</template>
+			</radiogroup>
+			<button label="invalidate" onClick="rg2.invalidate()" />
+			<button label="set another model" onClick="rg2.setModel(list2)" />
+			<button label="add one" onClick='rg2.getModel().add("new1")' />
+			<button label="remove last item" onClick='rg2.getModel().remove(rg2.getModel().size()-1)' />
+		</hlayout>
+	</vlayout>
+</zk>

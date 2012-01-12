@@ -16,21 +16,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Objects;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.MutableInteger;
-
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.Deferrable;
-
+import org.zkoss.zk.ui.util.ForEachStatus;
+import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.event.ZulEvents;
+import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -43,12 +49,18 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Radiogroup extends XulElement {
+	private static final Log log = Log.lookup(Radiogroup.class);
+	
+	private static final String ZUL_RADIOGROUP_ON_INITRENDER = "zul.Radiogroup.ON_INITRENDER";
 	private String _orient = "horizontal";
 	/** The name of all child radio buttons. */
 	private String _name;
 	/** A list of external radio ({@link Radio}) components. */
 	private List<Radio> _externs;
 	private int _jsel = -1;
+	private ListModel<?> _model;
+	private RadioRenderer<?> _renderer;
+	private transient ListDataListener _dataListener;
 	
 	static {
 		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
@@ -93,6 +105,7 @@ public class Radiogroup extends XulElement {
 			}
 		return items;
 	}
+	
 	private static void getItems0(Component comp, List<Radio> items) {
 		for (Component child: comp.getChildren()) {
 			if (child instanceof Radio)
@@ -331,6 +344,253 @@ public class Radiogroup extends XulElement {
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
 	}
+	
+	
+	//-- ListModel dependent codes --//
+	/** Returns the list model associated with this radiogroup, or null
+	 * if this radiogroup is not associated with any list data model.
+	 * @since 6.0.0
+	 */
+	public ListModel<?> getModel() {
+		return _model;
+	}
+	/** Sets the list model associated with this radiogroup.
+	 * If a non-null model is assigned, no matter whether it is the same as
+	 * the previous, it will always cause re-render.
+	 *
+	 * @param model the list model to associate, or null to dis-associate
+	 * any previous model.
+	 * @exception UiException if failed to initialize with the model
+	 * @since 6.0.0
+	 */
+	public void setModel(ListModel<?> model) {
+		if (model != null) {
+			if (_model != model) {
+				if (_model != null) {
+					_model.removeListDataListener(_dataListener);
+					//2012/1/11 TonyQ:Here we only clear children but not external radioss.
+				} else if (!getChildren().isEmpty()) getChildren().clear();
+				_model = model;
+				initDataListener();
+			}
+
+			postOnInitRender(null);
+			//Since user might setModel and setRender separately or repeatedly,
+			//we don't handle it right now until the event processing phase
+			//such that we won't render the same set of data twice
+			//--
+			//For better performance, we shall load the first few row now
+			//(to save a roundtrip)
+		} else if (_model != null) {
+			_model.removeListDataListener(_dataListener);
+			_model = null;
+			if (!getChildren().isEmpty()) getChildren().clear();
+		}
+	}
+	
+	private void initDataListener() {
+		if (_dataListener == null){
+			_dataListener = new ListDataListener() {
+				public void onChange(ListDataEvent event) {
+					// Bug B30-1906748.zul
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
+						int start = event.getIndex0();
+						int end = event.getIndex1();
+						if (end < getChildren().size()) {
+							if (_model instanceof ListSelectionModel) {
+								ListSelectionModel smodel = (ListSelectionModel) _model;
+								if (!smodel.isSelectionEmpty()) {
+									for (; start <= end; start++) { // inclusive the end
+										if (smodel.isSelectedIndex(start))
+											setSelectedIndex(start);								
+									}
+								} else
+									setSelectedIndex(-1);
+								
+								return; // no need to rerender.	
+							}
+						}
+					}
+					postOnInitRender(null);
+				}
+			};
+		}
+
+		_model.addListDataListener(_dataListener);
+	}
+	
+	private void postOnInitRender(String idx) {
+		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
+		if (getAttribute(ZUL_RADIOGROUP_ON_INITRENDER) == null) {
+	  		//Bug #2010389
+			setAttribute(ZUL_RADIOGROUP_ON_INITRENDER, Boolean.TRUE); //flag syncModel
+			Events.postEvent("onInitRender", this, idx);
+		}
+	}
+	
+	/**
+	 * For model renderering
+	 * @param data
+	 */
+	@SuppressWarnings("rawtypes")
+	public void onInitRender(Event data) {
+  		//Bug #2010389
+		removeAttribute(ZUL_RADIOGROUP_ON_INITRENDER); //clear syncModel flag
+		final Renderer renderer = new Renderer();
+		final ListModel subset = _model;
+		try {
+			if (!getChildren().isEmpty()) getChildren().clear();
+			int pgsz = subset.getSize(), ofs = 0;
+			for (int j = 0 ;j < pgsz ; ++j) {
+				Radio item = new Radio();
+				item.applyProperties();
+				item.setParent(this);
+				renderer.render(subset, item, j + ofs);
+				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				if (v != null) //a new item is created to replace the existent one
+					item = (Radio)v;
+				fixSelectOnRender(item);// radio can be selected after set a label
+			}
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
+		}
+		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
+	}
+
+	/**
+	 * We need to sync model selection to keep select status .
+	 * @see Radio#service(org.zkoss.zk.au.AuRequest, boolean)
+	 */
+	/*package*/ void syncSelectionToModel() {
+		if (_model instanceof ListSelectionModel) {
+			ListSelectionModel model = (ListSelectionModel) _model;
+			if (_jsel != -1) {
+				model.addSelectionInterval(_jsel, _jsel);
+			} else
+				model.clearSelection();
+		}
+	}
+	private void fixSelectOnRender(Radio item) {
+		if (_model instanceof ListSelectionModel) {
+			ListSelectionModel smodel = (ListSelectionModel) _model;
+			if (smodel.isSelectionEmpty()) return;
+			
+			if (smodel.isSelectedIndex(getItems().indexOf(item))) {
+				setSelectedItem(item);
+				setSelectedItem(item);
+			}
+		}
+	}
+	
+	/** Returns the renderer used to render items.
+	 */
+	@SuppressWarnings("unchecked")
+	private <T> RadioRenderer<T> getRealRenderer() {
+		return _renderer != null ? _renderer: _defRend;
+	}
+	
+	/**
+	 * The default Renderer for model rendering. 
+	 */
+	@SuppressWarnings("rawtypes")
+	private static final RadioRenderer _defRend = new RadioRenderer() {
+		public void render(final Radio item,final Object data,final int index) throws Exception {
+			final Radiogroup cb = (Radiogroup)item.getParent();
+			final Template tm = cb.getTemplate("model");
+			if (tm == null) {
+				item.setLabel(Objects.toString(data));
+				item.setValue(Objects.toString(data));
+			} else {
+				final Component[] items = tm.create(item.getParent(), item,
+					new VariableResolver() {
+						public Object resolveVariable(String name) {
+							if ("each".equals(name)) {
+								return data;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									public Object getEach() {
+										return data;
+									}
+									public int getIndex() {
+										return index;
+									}
+									public Integer getBegin() {
+										return 0;
+									}
+									public Integer getEnd() {
+										return cb.getModel().getSize();
+									}
+								};
+							} else {
+								return null;
+							}
+						}
+					}, null);
+				if (items.length != 1)
+					throw new UiException("The model template must have exactly one item, not "+items.length);
+
+				final Radio nci = (Radio)items[0];
+				if (nci.getValue() == null) //template might set it
+					item.setValue(Objects.toString(data));
+				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
+					//indicate a new item is created to replace the existent one
+				item.detach();
+			}
+			
+		}
+	};	
+	/** Used to render Radio if _model is specified. */
+	private class Renderer implements java.io.Serializable {
+		@SuppressWarnings("rawtypes")
+		private final RadioRenderer _renderer;
+		private boolean _rendered, _ctrled;
+
+		private Renderer() {
+			_renderer = getRealRenderer();
+		}
+		@SuppressWarnings("unchecked")
+		private void render(ListModel<?> subset, Radio item, int index) throws Throwable {
+
+			if (!_rendered && (_renderer instanceof RendererCtrl)) {
+				((RendererCtrl)_renderer).doTry();
+				_ctrled = true;
+			}
+
+			try {
+				_renderer.render(item, subset.getElementAt(index),index);
+			} catch (Throwable ex) {
+				try {
+					item.setLabel(Exceptions.getMessage(ex));
+				} catch (Throwable t) {
+					log.error(t);
+				}			
+				throw ex;
+			}
+			_rendered = true;
+		}
+		private void doCatch(Throwable ex) {
+			if (_ctrled) {
+				try {
+					((RendererCtrl)_renderer).doCatch(ex);
+				} catch (Throwable t) {
+					throw UiException.Aide.wrap(t);
+				}
+			} else {
+				throw UiException.Aide.wrap(ex);
+			}
+		}
+		private void doFinally() {
+			if (_ctrled)
+				((RendererCtrl)_renderer).doFinally();
+		}
+	}
+	
 	
 	//Cloneable//
 	public Object clone() {
