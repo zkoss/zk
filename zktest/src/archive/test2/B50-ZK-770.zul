@@ -19,7 +19,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>2. Change the spinner's value, then click the button directly without blur the spinner.</div>
 		<div>3. If there is no delay, its correct.</div>
 	</div>
-	<window title="Chat" border="normal">
+	<window title="Chat" border="normal" onPiggyback='new Label("piggy back !").setParent(piggyInf);'>
 	    <zscript><![CDATA[
 	    import org.zkoss.zk.ui.event.*;
 	    EventQueue que = EventQueues.lookup("chat", EventQueues.SESSION, true);
@@ -36,6 +36,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<spinner id="pdo" value="5" /> 
 	    Say <button label="send message" onClick="post(self, pdo.getValue())" />
 	    <separator bar="true"/>
-	    <vbox id="inf"/>
+	    <hbox width="500px">
+	    	<vbox id="inf" hflex="1"/>
+	    	<vbox id="piggyInf" hflex="1"/>
+	    </hbox>
 	</window>
 </zk>
