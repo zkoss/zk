@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Listbox-ListModelList-Paging.zul
+Z60-Listbox-ListModelSet-Paging.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Jan 06 15:55:05 TST 2012, Created by benbai
+		Thu Jan 12 13:03:05 TST 2012, Created by benbai
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -18,11 +18,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
 		
-		ListModelList model = ListModelLists.getModel(ListModelLists.DEFAULT);
-		ListModelList model2 = ListModelLists.getModel(ListModelLists.CLONEABLE);
+		ListModelSet model = ListModelSets.getModel(ListModelSets.DEFAULT);
+		ListModelSet model2 = ListModelSets.getModel(ListModelSets.CLONEABLE);
 
 		int cnt = 0;
-		int elemcnt = 0;
+		int elemcnt = 1001;
+		int rmcnts = 0;
+		int rmcntm = 1001;
 	]]></zscript>
 	<div>
 		<div>1. There are 3 Listbox below.</div>
@@ -35,9 +37,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
 	</div>
 	<hbox>
-		<listbox id="lbxOne" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" checkmark="true" />
-		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" checkmark="true" />
-		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" checkmark="true" />
+		<listbox id="lbxOne" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" multiple="true" checkmark="true" />
 	</hbox>
 	<div height="10px"></div>
 	<button label="clone">
@@ -60,15 +62,24 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	</button>
 	<button label="insert item">
 		<attribute name="onClick">
-			model.add(0, "inserted "+elemcnt++);
-			model2.add(0, "inserted "+elemcnt++);
+			model.add("data "+elemcnt);
+			model2.add("data "+elemcnt);
+			elemcnt++;
 		</attribute>
 	</button>
 	<button label="remove item">
-		<attribute name="onClick">
-			model.remove(0);
-			model2.remove(0);
-		</attribute>
+		<attribute name="onClick"><![CDATA[
+			String obj = "data ";
+			if (rmcntm < elemcnt) {
+				obj += rmcntm;
+				rmcntm++;
+			} else {
+				obj += rmcnts;
+				rmcnts++;
+			}
+			model.remove(obj);
+			model2.remove(obj);
+		]]></attribute>
 	</button>
 	<hbox id="cloneThreeArea" />
 </zk>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Selectbox-ListModelList.zul
+Z60-Selectbox-ListModelMap.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Jan 05 10:43:05 TST 2012, Created by benbai
+		Thu Jan 12 12:00:25 TST 2012, Created by benbai
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -18,11 +18,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
 		
-		ListModelList model = ListModelLists.getModel(ListModelLists.DEFAULT);
-		ListModelList model2 = ListModelLists.getModel(ListModelLists.CLONEABLE);
+		ListModelMap model = ListModelMaps.getModel(ListModelMaps.DEFAULT);
+		ListModelMap model2 = ListModelMaps.getModel(ListModelMaps.CLONEABLE);
 
 		int cnt = 0;
-		int elemcnt = 0;
+		int elemcnt = 1001;
+		int rmcnts = 0;
+		int rmcntm = 1001;
 	]]></zscript>
 	<div>
 		<div>1. There are 3 selectbox below.</div>
@@ -34,40 +36,49 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>7. Click 'insert item', each select of selectbox should not be changed.</div>
 		<div>8. Click 'remove item', each select of Selectbox should not be changed.</div>
 	</div>
-	<selectbox id="sbxOne" model="${model}" onSelect="" />
+	<selectbox id="cbxOne" model="${model}" onSelect="" onOpen="" />
 	<div height="10px"></div>
-	<selectbox id="sbxTwo" model="${model}" onSelect="" />
+	<selectbox id="cbxTwo" model="${model}" onSelect="" onOpen="" />
 	<div height="10px"></div>
-	<selectbox id="sbxThree" model="${model2}" onSelect="" />
+	<selectbox id="cbxThree" model="${model2}" onSelect="" onOpen="" />
 	<button label="clone">
 		<attribute name="onClick">
-			Selectbox sbx = sbxThree.clone();
-			sbx.setId("sbxThree_clone" + cnt++);
-			sbx.setParent(cloneThreeArea);
+			Selectbox cbx = cbxThree.clone();
+			cbx.setId("cbxThree_clone" + cnt++);
+			cbx.setParent(cloneThreeArea);
 		</attribute>
 	</button>
 	<button label="Clone by Serialization">
 		<attribute name="onClick"><![CDATA[{
 			import java.io.*;
 			ByteArrayOutputStream boa = new ByteArrayOutputStream();
-			new ObjectOutputStream(boa).writeObject(sbxThree);
+			new ObjectOutputStream(boa).writeObject(cbxThree);
 			byte[] bs = boa.toByteArray();
 			Object n = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
-			n.setId("sbxThree_serialize" + cnt++);
+			n.setId("cbxThree_serialize" + cnt++);
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
 	<button label="insert item">
 		<attribute name="onClick">
-			model.add(0, "inserted "+elemcnt++);
-			model2.add(0, "inserted "+elemcnt++);
+			model.put("item "+elemcnt, "data "+elemcnt);
+			model2.put("item "+elemcnt, "data "+elemcnt);
+			elemcnt++;
 		</attribute>
 	</button>
 	<button label="remove item">
-		<attribute name="onClick">
-			model.remove(0);
-			model2.remove(0);
-		</attribute>
+		<attribute name="onClick"><![CDATA[
+			String key = "item ";
+			if (rmcntm < elemcnt) {
+				key += rmcntm;
+				rmcntm++;
+			} else {
+				key += rmcnts;
+				rmcnts++;
+			}
+			model.remove(key);
+			model2.remove(key);
+		]]></attribute>
 	</button>
 	<div id="cloneThreeArea" />
 </zk>

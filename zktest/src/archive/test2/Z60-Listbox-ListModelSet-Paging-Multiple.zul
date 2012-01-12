@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Listbox-ListModelMap-ROD.zul
+Z60-Listbox-ListModelSet-Paging-Multiple.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Wed Jan 11 11:21:05 TST 2012, Created by benbai
+		Thu Jan 12 14:11:05 TST 2012, Created by benbai
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -18,8 +18,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
 		
-		ListModelMap model = ListModelMaps.getModel(ListModelMaps.DEFAULT);
-		ListModelMap model2 = ListModelMaps.getModel(ListModelMaps.CLONEABLE);
+		ListModelSet model = ListModelSets.getModel(ListModelSets.MULTIPLE);
+		ListModelSet model2 = ListModelSets.getModel(ListModelSets.MULTIPLE_AND_CLONEABLE);
 
 		int cnt = 0;
 		int elemcnt = 1001;
@@ -29,17 +29,17 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	<div>
 		<div>1. There are 3 Listbox below.</div>
 		<div>2. For first two Listbox, their select status will sync automatically after you select item.</div>
-		<div>3. Select data 10 of third Listbox.</div>
-		<div>4. Click clone and 'clone by serialization', then two Listboxes should be created and also select data 10.</div>
-		<div>5. Select data 312 of third Listbox, data 313 of fourth and data 314 of fifth, the select status of last three listbox should not sync.</div>
-		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 312.</div>
+		<div>3. Select data 10 and data 11 of third Listbox.</div>
+		<div>4. Click clone and 'clone by serialization', then two Listboxes should be created and also select data 10 and data 11.</div>
+		<div>5. Go to page 32, hold Ctrl then Select data 312 of third Listbox, data 313 of fourth and data 314 of fifth, the select status of last three listbox should not sync.</div>
+		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 10, 11 and 312.</div>
 		<div>7. Click 'insert item', each select of Listbox should not be changed.</div>
 		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
 	</div>
 	<hbox>
-		<listbox id="lbxOne" height="150px" width="140px" model="${model}" onSelect="" multiple="true" checkmark="true" />
-		<listbox id="lbxTwo" height="150px" width="140px" model="${model}" onSelect="" multiple="true" checkmark="true" />
-		<listbox id="lbxThree" height="150px" width="140px" model="${model2}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxOne" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" multiple="true" checkmark="true" />
 	</hbox>
 	<div height="10px"></div>
 	<button label="clone">
@@ -62,23 +62,23 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	</button>
 	<button label="insert item">
 		<attribute name="onClick">
-			model.put("item "+elemcnt, "data "+elemcnt);
-			model2.put("item "+elemcnt, "data "+elemcnt);
+			model.add("data "+elemcnt);
+			model2.add("data "+elemcnt);
 			elemcnt++;
 		</attribute>
 	</button>
 	<button label="remove item">
 		<attribute name="onClick"><![CDATA[
-			String key = "item ";
+			String obj = "data ";
 			if (rmcntm < elemcnt) {
-				key += rmcntm;
+				obj += rmcntm;
 				rmcntm++;
 			} else {
-				key += rmcnts;
+				obj += rmcnts;
 				rmcnts++;
 			}
-			model.remove(key);
-			model2.remove(key);
+			model.remove(obj);
+			model2.remove(obj);
 		]]></attribute>
 	</button>
 	<hbox id="cloneThreeArea" />

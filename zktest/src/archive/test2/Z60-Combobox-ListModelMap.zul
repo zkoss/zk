@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Combobox-ListModelList.zul
+Z60-Combobox-ListModelMap.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Jan 05 09:45:05 TST 2012, Created by benbai
+		Thu Jan 12 12:00:05 TST 2012, Created by benbai
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -18,11 +18,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
 		
-		ListModelList model = ListModelLists.getModel(ListModelLists.DEFAULT);
-		ListModelList model2 = ListModelLists.getModel(ListModelLists.CLONEABLE);
+		ListModelMap model = ListModelMaps.getModel(ListModelMaps.DEFAULT);
+		ListModelMap model2 = ListModelMaps.getModel(ListModelMaps.CLONEABLE);
 
 		int cnt = 0;
-		int elemcnt = 0;
+		int elemcnt = 1001;
+		int rmcnts = 0;
+		int rmcntm = 1001;
 	]]></zscript>
 	<div>
 		<div>1. There are 3 combobox below.</div>
@@ -59,15 +61,24 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	</button>
 	<button label="insert item">
 		<attribute name="onClick">
-			model.add(0, "inserted "+elemcnt++);
-			model2.add(0, "inserted "+elemcnt++);
+			model.put("item "+elemcnt, "data "+elemcnt);
+			model2.put("item "+elemcnt, "data "+elemcnt);
+			elemcnt++;
 		</attribute>
 	</button>
 	<button label="remove item">
-		<attribute name="onClick">
-			model.remove(0);
-			model2.remove(0);
-		</attribute>
+		<attribute name="onClick"><![CDATA[
+			String key = "item ";
+			if (rmcntm < elemcnt) {
+				key += rmcntm;
+				rmcntm++;
+			} else {
+				key += rmcnts;
+				rmcnts++;
+			}
+			model.remove(key);
+			model2.remove(key);
+		]]></attribute>
 	</button>
 	<div id="cloneThreeArea" />
 </zk>

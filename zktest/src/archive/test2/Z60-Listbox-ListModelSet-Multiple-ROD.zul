@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z60-Listbox-ListModelArray-Paging-Multiple.zul
+Z60-Listbox-ListModelSet-Multiple-ROD.zul
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Jan 09 11:50:05 TST 2012, Created by benbai
+		Thu Jan 12 14:23:05 TST 2012, Created by benbai
 
 Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
@@ -18,11 +18,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
 		
-		ListModelArray model = ListModelArrays.getModel(ListModelArrays.MULTIPLE);
-		ListModelArray model2 = ListModelArrays.getModel(ListModelArrays.MULTIPLE_AND_CLONEABLE);
+		ListModelSet model = ListModelSets.getModel(ListModelSets.MULTIPLE);
+		ListModelSet model2 = ListModelSets.getModel(ListModelSets.MULTIPLE_AND_CLONEABLE);
 
 		int cnt = 0;
-		int elemcnt = 0;
+		int elemcnt = 1001;
+		int rmcnts = 0;
+		int rmcntm = 1001;
 	]]></zscript>
 	<div>
 		<div>1. There are 3 Listbox below.</div>
@@ -31,11 +33,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>4. Click clone and 'clone by serialization', then two Listboxes should be created and also select data 10 and data 11.</div>
 		<div>5. Hold Ctrl then Select data 312 of third Listbox, data 313 of fourth and data 314 of fifth, the select status of last three listbox should not sync.</div>
 		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 10, 11 and 312.</div>
+		<div>7. Click 'insert item', each select of Listbox should not be changed.</div>
+		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
 	</div>
 	<hbox>
-		<listbox id="lbxOne" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" checkmark="true" />
-		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" checkmark="true" />
-		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" checkmark="true" />
+		<listbox id="lbxOne" height="150px" width="140px" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxTwo" height="150px" width="140px" model="${model}" onSelect="" multiple="true" checkmark="true" />
+		<listbox id="lbxThree" height="150px" width="140px" model="${model2}" onSelect="" multiple="true" checkmark="true" />
 	</hbox>
 	<div height="10px"></div>
 	<button label="clone">
@@ -55,6 +59,27 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			n.setId("lbxThree_serialize" + cnt++);
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
+	</button>
+	<button label="insert item">
+		<attribute name="onClick">
+			model.add("data "+elemcnt);
+			model2.add("data "+elemcnt);
+			elemcnt++;
+		</attribute>
+	</button>
+	<button label="remove item">
+		<attribute name="onClick"><![CDATA[
+			String obj = "data ";
+			if (rmcntm < elemcnt) {
+				obj += rmcntm;
+				rmcntm++;
+			} else {
+				obj += rmcnts;
+				rmcnts++;
+			}
+			model.remove(obj);
+			model2.remove(obj);
+		]]></attribute>
 	</button>
 	<hbox id="cloneThreeArea" />
 </zk>
