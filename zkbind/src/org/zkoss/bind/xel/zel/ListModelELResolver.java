@@ -37,12 +37,12 @@ public class ListModelELResolver extends ELResolver {
         }
 
         if (base instanceof ListModel<?>) {
-            context.setPropertyResolved(true);
             ListModel<?> listmodel = (ListModel<?>) base;
-            int idx = coerce(property);
-            if (idx < 0 || idx >= listmodel.getSize()) {
+            Integer idx = coerce(property);
+            if (idx==null || idx < 0 || idx >= listmodel.getSize()) {
                 return null;
             }
+            context.setPropertyResolved(true);
             return listmodel.getElementAt(idx);
         }
 
@@ -57,13 +57,14 @@ public class ListModelELResolver extends ELResolver {
         }
 
         if (base instanceof ListModel<?>) {
-            context.setPropertyResolved(true);
             ListModel<?> listmodel = (ListModel<?>) base;
-            int idx = coerce(property);
+            Integer idx = coerce(property);
+            if (idx == null) return null;
             if (idx < 0 || idx >= listmodel.getSize()) {
                 throw new PropertyNotFoundException(
                         new ArrayIndexOutOfBoundsException(idx).getMessage());
             }
+            context.setPropertyResolved(true);
             return Object.class;
         }
 
@@ -113,20 +114,18 @@ public class ListModelELResolver extends ELResolver {
         return null;
     }
 
-    private static final int coerce(Object property) {
+    private static final Integer coerce(Object property) {
+    	//should only handle a property that is possible a number
         if (property instanceof Number) {
-            return ((Number) property).intValue();
+            return ((Number)property).intValue();
         }
         if (property instanceof Character) {
-            return ((Character) property).charValue();
+            return (int)((Character) property).charValue();
         }
         if (property instanceof Boolean) {
             return (((Boolean) property).booleanValue() ? 1 : 0);
         }
-        if (property instanceof String) {
-            return Integer.parseInt((String) property);
-        }
-        throw new IllegalArgumentException(property != null ?
-                property.toString() : "null");
+        //just ignore other types (especially a string)
+        return null;
     }
 }

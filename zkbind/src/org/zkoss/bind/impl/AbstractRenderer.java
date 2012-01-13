@@ -103,7 +103,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
 		if (binder == null) return; //no binder
 		comp.setAttribute(TREE_PATH, path);
-		final String expression = BinderImpl.MODEL+".getChild("+TREE_PATH+")";
+		final String expression = BinderImpl.MODEL+"["+TREE_PATH+"]";
 		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
 	}
 	

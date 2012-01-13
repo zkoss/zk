@@ -52,6 +52,7 @@ public class BindELResolver extends XelELResolver {
 		_resolver.add(new PathELResolver()); //must be the first
 		_resolver.add(new FormELResolver());
 		_resolver.add(new ListModelELResolver());
+		_resolver.add(new TreeModelELResolver());
 		_resolver.add(super.getELResolver());
 	}
 	protected ELResolver getELResolver() {
