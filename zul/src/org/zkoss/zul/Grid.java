@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -304,7 +305,8 @@ public class Grid extends MeshElement {
 		}
 	}
 	
-	private class ModelInitListener implements SerializableEventListener<Event> {
+	private class ModelInitListener implements SerializableEventListener<Event>,
+			CloneableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Grid.this.removeEventListener("onInitModel", _modelInitListener);
@@ -341,6 +343,11 @@ public class Grid extends MeshElement {
 		private void initModel() {
 			Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
 			setModel(_model);
+		}
+
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
 		}
 	}
 
@@ -504,42 +511,55 @@ public class Grid extends MeshElement {
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
+	private class PGListener implements SerializableEventListener<PagingEvent>,
+			CloneableEventListener<PagingEvent> {
+		public void onEvent(PagingEvent event) {
+			Events.postEvent(
+				new PagingEvent(event.getName(), Grid.this,
+					event.getPageable(), event.getActivePage()));
+		}
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
+		}
+	}
+	private class PGImpListener implements SerializableEventListener<Event>,
+			CloneableEventListener<Event> {
+		public void onEvent(Event event) {
+			if (_rows != null && _model != null && inPagingMold()) {
+			//theoretically, _rows shall not be null if _model is not null when
+			//this method is called. But, just in case -- if sent manually
+				final Paginal pgi = getPaginal();
+				int pgsz = pgi.getPageSize();
+				final int ofs = pgi.getActivePage() * pgsz;
+				if (_rod) {
+					getDataLoader().syncModel(ofs, pgsz);
+				}
+				postOnPagingInitRender();
+			}
+			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
+			else if (_rows != null) {
+				_rows.invalidate();
+				
+				// Bug 3218078
+				if (_frozen != null)
+					_frozen.invalidate();
+			}
+		}
+
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
+		}
+	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new SerializableEventListener<PagingEvent>() {
-				public void onEvent(PagingEvent event) {
-					Events.postEvent(
-						new PagingEvent(event.getName(), Grid.this,
-							event.getPageable(), event.getActivePage()));
-				}
-			};
+			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new SerializableEventListener<Event>() {
-	public void onEvent(Event event) {
-		if (_rows != null && _model != null && inPagingMold()) {
-		//theoretically, _rows shall not be null if _model is not null when
-		//this method is called. But, just in case -- if sent manually
-			final Paginal pgi = getPaginal();
-			int pgsz = pgi.getPageSize();
-			final int ofs = pgi.getActivePage() * pgsz;
-			if (_rod) {
-				getDataLoader().syncModel(ofs, pgsz);
-			}
-			postOnPagingInitRender();
-		}
-		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
-		else if (_rows != null) {
-			_rows.invalidate();
-			
-			// Bug 3218078
-			if (_frozen != null)
-				_frozen.invalidate();
-		}
-	}
-			};
+			_pgImpListener = new PGImpListener();
 		pgi.addEventListener("onPagingImpl", _pgImpListener);
 	}
 	/** Removes the event listener for the onPaging event. */

@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -222,7 +223,8 @@ public class Tree extends MeshElement {
 		}
 	}
 	
-	private class ModelInitListener implements SerializableEventListener<Event> {
+	private class ModelInitListener implements SerializableEventListener<Event>,
+			CloneableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Tree.this
@@ -243,6 +245,11 @@ public class Tree extends MeshElement {
 		private void initModel() {
 			Executions.getCurrent().removeAttribute("zkoss.Tree.deferInitModel_"+getUuid());
 			setModel(_model);
+		}
+		
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
 		}
 	}
 	void addVisibleItemCount(int count) {
@@ -403,26 +410,40 @@ public class Tree extends MeshElement {
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
+	private class PGListener implements SerializableEventListener<PagingEvent>,
+			CloneableEventListener<PagingEvent> {
+		public void onEvent(PagingEvent event) {
+			Events.postEvent(
+				new PagingEvent(event.getName(),
+					Tree.this, event.getPageable(), event.getActivePage()));
+		}
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
+		}
+	}
+	private class PGImpListener implements SerializableEventListener<Event>,
+			CloneableEventListener<Event> {
+		public void onEvent(Event event) {
+			if (inPagingMold()) {
+				invalidate();
+			}
+		}
+
+		@Override
+		public Object willClone(Component comp) {
+			return null; // skip to clone
+		}
+	}
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
-			_pgListener = new SerializableEventListener<PagingEvent>() {
-				public void onEvent(PagingEvent event) {
-					Events.postEvent(
-						new PagingEvent(event.getName(),
-							Tree.this, event.getPageable(), event.getActivePage()));
-				}
-			};
+			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
 
 		if (_pgImpListener == null)
-			_pgImpListener = new SerializableEventListener<Event>() {
-	public void onEvent(Event event) {
-		if (inPagingMold()) {
-			invalidate();
-		}
-	}
-			};
+			_pgImpListener = new PGImpListener();
+		
 		pgi.addEventListener("onPagingImpl", _pgImpListener);
 	}
 	/** Removes the event listener for the onPaging event. */
