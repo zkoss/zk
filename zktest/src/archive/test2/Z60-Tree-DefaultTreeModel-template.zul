@@ -37,17 +37,22 @@
 	<button label="Add">
 		<attribute name="onClick"><![CDATA[
 			Iterator iter = model.getSelection().iterator();
-			if (!iter.hasNext()) {
-				alert("No Treeitem is selected.");
-				return;
+			if (iter.hasNext()) {
+				TreeNode n = iter.next();
+				n.add(new TreeModels.TestDefaultTreeNode("Node " + cnt++, new TreeNode[0]));
 			}
-			TreeNode n = iter.next();
-			n.add(new TreeModels.TestDefaultTreeNode("Node " + cnt++, new TreeNode[0]));
+			iter = model2.getSelection().iterator();
+			if (iter.hasNext()) {
+				TreeNode n = iter.next();
+				n.add(new TreeModels.TestDefaultTreeNode("Node " + cnt++, new TreeNode[0]));
+			}
 		]]></attribute>
 	</button>
 	<button label="Remove">
 		<attribute name="onClick"><![CDATA[
 			for (TreeNode n : model.getSelection())
+				n.getParent().remove(n);
+			for (TreeNode n : model2.getSelection())
 				n.getParent().remove(n);
 		]]></attribute>
 	</button>
@@ -56,11 +61,17 @@
 			Tree tree = tree3.clone();
 			tree.id = "treeC" + cmpCnt++;
 			tree.parent = clones;
+			Tree tree = tree4.clone();
+			tree.id = "treeC" + cmpCnt++;
+			tree.parent = clones;
 		]]></attribute>
 	</button>
 	<button label="Clone by Serialization">
 		<attribute name="onClick"><![CDATA[
 			Tree tree = (Tree) Serializations.clone(tree3);
+			tree.id = "treeCBS" + cmpCnt++;
+			tree.parent = clones;
+			Tree tree = (Tree) Serializations.clone(tree4);
 			tree.id = "treeCBS" + cmpCnt++;
 			tree.parent = clones;
 		]]></attribute>
@@ -93,6 +104,12 @@
 			Model 2
 			<tree id="tree3" model="${model2}" checkmark="true" hflex="1" onSelect=""
 			 	height="200px">
+				<treecols>
+					<treecol label="Col" sort="auto" />
+				</treecols>
+			</tree>
+			<tree id="tree4" model="${model2}" checkmark="true" hflex="1" onSelect=""
+			 	mold="paging" pageSize="6">
 				<treecols>
 					<treecol label="Col" sort="auto" />
 				</treecols>
