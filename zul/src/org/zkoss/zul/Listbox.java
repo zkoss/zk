@@ -2953,6 +2953,12 @@ public class Listbox extends MeshElement {
 		if (_model != null) {
 			initDataListener();
 			getDataLoader().setLoadAll(_renderAll);
+			
+			// Map#Entry cannot be serialized, we have to restore them
+			if (_model instanceof ListModelMap) {
+				for (Listitem item : getItems())
+					item.setValue(_model.getElementAt(item.getIndex()));
+			}
 		}
 		
 		int size = s.readInt();

@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
@@ -40,7 +41,7 @@ import org.zkoss.zul.impl.LoadStatus;
 public class Comboitem extends LabelImageElement
 implements org.zkoss.zk.ui.ext.Disable {
 	private String _desc = "";
-	private Object _value;
+	private transient Object _value;
 	private String _content = "";
 	private boolean _disabled;
 	private transient int _index = -1;
@@ -222,7 +223,27 @@ implements org.zkoss.zk.ui.ext.Disable {
 	protected boolean isChildable() {
 		return false;
 	}
+	
+	// -- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws java.io.IOException {
+		s.defaultWriteObject();
 
+		if (_value instanceof Serializable) {
+			s.writeBoolean(true);
+			s.writeObject(_value);
+		} else {
+			s.writeBoolean(false);
+		}
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream s)
+			throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		if (s.readBoolean())
+			_value = s.readObject();
+	}
+	
 	//Clone//
 	public Object clone() {
 		final Comboitem clone = (Comboitem)super.clone();

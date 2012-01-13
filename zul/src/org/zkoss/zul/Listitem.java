@@ -16,6 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 
@@ -36,7 +39,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Listitem extends XulElement {
 	private static final Log log = Log.lookup(Listitem.class);
 
-	private Object _value;
+	private transient Object _value;
 	/** The index in the parent (only for implementation purpose). */
 	private int _index = -1; //no parent at begining
 	private boolean _selected, _disabled, _checkable = true;
@@ -44,7 +47,7 @@ public class Listitem extends XulElement {
 	 * the listbox owning this item is using a list model.
 	 */
 	private boolean _loaded;
-
+	
 	public Listitem() {
 	}
 	public Listitem(String label) {
@@ -352,6 +355,26 @@ public class Listitem extends XulElement {
 		if (!(child instanceof Listcell))
 			throw new UiException("Unsupported child for listitem: "+child);
 		super.beforeChildAdded(child, refChild);
+	}
+	
+	// -- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws java.io.IOException {
+		s.defaultWriteObject();
+
+		if (_value instanceof Serializable) {
+			s.writeBoolean(true);
+			s.writeObject(_value);
+		} else {
+			s.writeBoolean(false);
+		}
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream s)
+			throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		if (s.readBoolean())
+			_value = s.readObject();
 	}
 
 	//Clone//

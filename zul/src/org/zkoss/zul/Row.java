@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
@@ -38,7 +39,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Row extends XulElement {
 	private static final long serialVersionUID = 20091111L;
 
-	private Object _value;
+	private transient Object _value;
 	private String _align, _valign;
 	private String _spans;
 	private boolean _nowrap;
@@ -299,11 +300,26 @@ public class Row extends XulElement {
 			}
 		}
 	}
+	// -- Serializable --//
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+			throws java.io.IOException {
+		s.defaultWriteObject();
 
-	//Serializable//
+		if (_value instanceof Serializable) {
+			s.writeBoolean(true);
+			s.writeObject(_value);
+		} else {
+			s.writeBoolean(false);
+		}
+	}
+
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
+		
+		if (s.readBoolean())
+			_value = s.readObject();
+		
 		afterUnmarshal();
 	}
 	

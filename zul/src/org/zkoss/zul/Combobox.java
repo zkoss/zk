@@ -779,6 +779,15 @@ public class Combobox extends Textbox {
 		s.defaultReadObject();
 
 		reIndexRequired();
-		if (_model != null) initDataListener();
+		if (_model != null) {
+			initDataListener();
+			
+			// Map#Entry cannot be serialized, we have to restore them
+			if (_model instanceof ListModelMap) {
+				for (Comboitem item : getItems()) {
+					item.setValue(_model.getElementAt(item.getIndex()));
+				}
+			}
+		}
 	}
 }

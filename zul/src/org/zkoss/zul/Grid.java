@@ -1401,6 +1401,14 @@ public class Grid extends MeshElement {
 		if (_model != null) {
 			initDataListener();
 			getDataLoader().setLoadAll(_renderAll);
+			
+			// Map#Entry cannot be serialized, we have to restore them
+			if (_model instanceof ListModelMap && _rows != null) {
+				for (Component o : _rows.getChildren()) {
+					Row item = (Row) o;
+					item.setValue(_model.getElementAt(item.getIndex()));
+				}
+			}
 		}
 	}
 
