@@ -8,8 +8,8 @@
 .z-menu-cnt, .z-menu-item-cnt {
 	font-weight:normal;
 	white-space: nowrap;
-	font-family:  Arial;
-	font-size: 12px;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
 	color: #636363;
 }
 <%-- define common horizontal and vertical property --%>

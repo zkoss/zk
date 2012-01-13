@@ -173,8 +173,7 @@ div.z-log button {
 	opacity: 1;
 }
 
-.z-label, .z-radio-cnt, .z-checkbox-cnt, input.button, input.file,
-.z-loading {
+.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-loading {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
@@ -476,18 +475,6 @@ span.z-upload input {
 
 <%-- IE --%>
 <c:if test="${zk.ie > 0}">
-<c:choose>
-<c:when test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
-.zk img	{
-	hspace: 0; vspace: 0;
-}
-.zk option {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeXS}; font-weight: normal;
-	overflow: hidden;
-}
-</c:when>
-<c:otherwise>
 img	{
 	hspace: 0; vspace: 0;
 }
@@ -495,10 +482,8 @@ option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
-</c:otherwise>
-</c:choose>
 
-<%-- IE6  --%>
+<%-- IE6 --%>
 <c:if test="${zk.ie == 6}">
 .z-shadow {
 	background: #888; zoom: 1; display: none;

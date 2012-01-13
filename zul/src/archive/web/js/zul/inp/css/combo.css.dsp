@@ -469,7 +469,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 	background: #81D0F7;
 }
 .z-comboitem .z-comboitem-text {
-	font-size: 12px;
+	font-size: ${fontSizeM};
 }
 
 <%-- Bandbox trendy mold --%>

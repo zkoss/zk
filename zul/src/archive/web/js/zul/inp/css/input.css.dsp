@@ -307,7 +307,7 @@ i.z-doublebox-rounded-right-edge-invalid {
 }
 .z-errbox .z-popup-cnt {
 	font-family: ${fontFamilyC};
-	font-size: 11;
+	font-size: ${fontSizeS};
 	font-weight: bold;
 	padding: 2px 2px;
 }

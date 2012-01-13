@@ -171,8 +171,8 @@ td.z-listgroup-inner div.z-listcell-cnt {
 	width: 100%;
 	</c:if>
 	font-weight: bold;
-	font-size:12px;
-	font-family:arial;
+	font-size: ${fontSizeM};
+	font-family: ${fontFamilyC};
 }
 .z-listgroup-img {
 	width: 18px;

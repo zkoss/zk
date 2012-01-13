@@ -2,7 +2,7 @@
 
 <%-- Tree --%>
 div.z-tree {
-	background: #FFF;
+	background: #FFFFFF;
 	overflow: hidden; 
 	zoom: 1;
 	border: 1px solid #CFCFCF;
@@ -15,7 +15,7 @@ div.z-tree-header, div.z-tree-footer {
 	overflow: hidden;
 }
 div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
-	background: #FFF;
+	background: #FFFFFF;
 	background-image: url(${c:encodeThemeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-tree-header th.z-treecol, div.z-tree-header th.z-auxheader {
@@ -115,9 +115,9 @@ div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt {
 div.z-treefooter-cnt, div.z-treecol-cnt {
 	overflow: hidden;
 	cursor: default;
-	font-family: arial;
-	font-size: 12px;
-	font-weight:bold;
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: bold;
 	color: #636363;
 }
 div.z-treecol-cnt, div.z-tree-header div.z-auxheader-cnt {
