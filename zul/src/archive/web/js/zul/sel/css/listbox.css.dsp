@@ -217,6 +217,7 @@ div.z-listbox-header tr.z-listhead th:last-child {
 }
 
 div.z-listheader-cnt, div.z-listbox-header div.z-auxheader-cnt {
+	font-weight: bold;
 	padding: 8px 5px 7px;
 }
 
