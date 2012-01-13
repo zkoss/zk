@@ -32,5 +32,5 @@ public interface RadioRenderer<T> {
 	 * @param item the comboitem to render the result.
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 */
-	public void render(Radio item, T data,int index) throws Exception;
+	public void render(Radio item, T data) throws Exception;
 }
