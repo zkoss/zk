@@ -42,9 +42,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
+	_checked: false,
 	//_tabindex: 0,
 
 	$define: {
+		/** Returns whether it is checked. (Note:It's only available in toggle mold.)
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is checked. (Note:It's only available in toggle mold.)
+		 * @param boolean disabled
+		 */
+		checked:function(val){
+			if(this.desktop && this._mold == "toggle"){
+				var s = this.getZclass(), $n = jq(this.$n());
+				if(val)
+					$n.addClass( s + '-ck' );
+				else
+					$n.removeClass( s + '-ck' );
+			}
+		},
 		/** Returns whether it is disabled.
 		 * <p>Default: false.
 		 * @return boolean
@@ -228,13 +245,19 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	},
 	domClass_: function(no){
-		var scls = this.$supers('domClass_', arguments);
-		if (this._disabled && (!no || !no.zclass)) {
-			var s = this.getZclass();
-			if (s)
-				scls += (scls ? ' ' : '') + s + '-disd';
+		var scls = [this.$supers('domClass_', arguments)], 
+			zcls = this.getZclass(),
+			nozcls = (!no || !no.zclass);
+		
+		if (this._disabled && nozcls && zcls) {
+				scls.push(' ' , zcls , '-disd');
 		}
-		return scls;
+		
+		if(this._mold == "toggle" && this._checked && nozcls && zcls ) {
+			scls.push(' ',zcls,'-ck');
+		}
+		
+		return scls.join("");
 	},
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),
@@ -252,12 +275,17 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
 			this.fireX(evt);
-
+			
 			if (!evt.stopped) {
 				var href = this._href;
 				if (href)
 					zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 				this.$super('doClick_', evt, true);
+				
+				if (this._mold == "toggle") {
+					this.setChecked(!this.isChecked());
+					this.fire('onCheck', this.isChecked());
+				}
 			}
 		}
 	},

@@ -69,6 +69,7 @@ ZK 6.0.0
   ZK-715: Listbox paging mold support PageUp/PageDown to navigate the paging 
   ZK-423: Focusable listboxes 
   ZK-669: Add method setModel(ListModel model) to Radiogroup class
+  ZK-720: Toggable toolbar buttons
   
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
