@@ -50,11 +50,8 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 	  	if (vals != null && vals.size()>0) {
 		  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
 		  		final Listitem li = (Listitem) it.next();
-		  		final String varnm = (String) li.getAttribute(BinderImpl.VAR);
 		  		Object bean = null;
-		  		if (varnm != null) { //There is binding on template
-		  			bean = li.getAttribute(varnm);
-		  		} else if(model!=null){ //no binding
+		  		if(model!=null){ //no binding
 		  			bean = model.getElementAt(li.getIndex());
 		  		} else{
 		  			bean = li.getValue();
@@ -80,10 +77,7 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 	  		final ListModel<?> model = lbx.getModel();
 	  		final Set<Listitem> items = (Set<Listitem>)Classes.coerce(LinkedHashSet.class, val);
 	  		for(Listitem item : items){
-		  		final String varnm = (String) item.getAttribute(BinderImpl.VAR);
-		  		if (varnm != null) { //There is binding on template
-		  			vals.add(item.getAttribute(varnm));
-		  		} else if(model != null){ //from model value
+		  		if(model != null){ //from model value
 		  			vals.add(model.getElementAt(item.getIndex()));
 		  		} else { //no binding
 		  			vals.add(item.getValue());

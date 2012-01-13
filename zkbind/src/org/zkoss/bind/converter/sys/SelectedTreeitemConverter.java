@@ -45,12 +45,13 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 	  		//and if user want better performance, he should get the selection from model directly
 		  	for (final Iterator<?> it = tree.getItems().iterator(); it.hasNext();) {
 		  		final Treeitem ti = (Treeitem) it.next();
-		  		final String varnm = (String) ti.getAttribute(BinderImpl.VAR);
+		  		//TODO get value form BinderImpl.VAR (Reference) for better performance
+		  		//final String varnm = (String) ti.getAttribute(BinderImpl.VAR);
 		  		Object bean = null;
 		  		int path[] = null;
-		  		if (varnm != null) { //There is binding on template
+		  		/*if (varnm != null) { //There is binding on template
 		  			bean = ti.getAttribute(varnm);
-		  		} else if(model!=null){ //no binding
+		  		} else */if(model!=null){ //no binding
 		  			bean = model.getChild(path = toPath(ti));
 		  		} else{
 		  			bean = ti.getValue();
@@ -82,10 +83,7 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		if (val != null) {
 		  	final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
-	  		final String varnm = (String) ((Treeitem)val).getAttribute(BinderImpl.VAR);
-	  		if (varnm != null) { //There is binding on template
-	  			return ((Treeitem)val).getAttribute(varnm);
-	  		} else if(model!=null){ //no binding
+	  		if(model!=null){ //no binding
 	  			return model.getChild(toPath((Treeitem) val));
 	  		} else{
 	  			return ((Treeitem) val).getValue();

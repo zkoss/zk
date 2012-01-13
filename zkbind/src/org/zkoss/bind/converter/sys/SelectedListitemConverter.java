@@ -41,11 +41,8 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  	if (val != null) {
 		  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
 		  		final Listitem li = (Listitem) it.next();
-		  		final String varnm = (String) li.getAttribute(BinderImpl.VAR);
 		  		Object bean = null;
-		  		if (varnm != null) { //There is binding on template
-		  			bean = li.getAttribute(varnm);
-		  		} else if(model!=null){ //no binding
+		  		if(model!=null){ //no binding
 		  			bean = model.getElementAt(li.getIndex());
 		  		} else{
 		  			bean = li.getValue();
@@ -75,10 +72,7 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  	if (val != null) {
 		  	final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		final String varnm = (String) ((Listitem)val).getAttribute(BinderImpl.VAR);
-	  		if (varnm != null) { //There is binding on template
-	  			return ((Listitem)val).getAttribute(varnm);
-	  		} else if(model!=null){ //no binding
+	  		if(model!=null){ //no binding
 	  			return model.getElementAt(((Listitem) val).getIndex());
 	  		} else{
 	  			return ((Listitem) val).getValue();

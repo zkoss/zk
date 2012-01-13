@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
@@ -86,7 +87,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 
 			final Treeitem ti = (Treeitem)items[0];
 			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(ti, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(ti, toPath(ti), varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			ti.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -104,5 +105,18 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 				//indicate a new item is created to replace the existent one
 			item.detach();
 		}
+	}
+	
+	private int[] toPath(Treeitem item) {
+		ArrayList<Integer> path = new ArrayList<Integer>();
+		while(item!=null){
+			path.add(0,item.getIndex());
+			item = item.getParentItem();
+		}
+		int[] p = new int[path.size()];
+		for(int i=0;i<p.length;i++){
+			p[i] = path.get(i).intValue();
+		}
+		return p;
 	}
 }

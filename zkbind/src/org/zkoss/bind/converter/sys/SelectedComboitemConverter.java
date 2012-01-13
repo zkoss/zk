@@ -42,12 +42,9 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  		int i = 0;
 		  	for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
 		  		final Comboitem ci = (Comboitem) it.next();
-		  		final String varnm = (String) ci.getAttribute(BinderImpl.VAR);
 		  		
 		  		Object bean = null;
-		  		if (varnm != null) { //There is binding on template
-		  			bean = ci.getAttribute(varnm);
-		  		} else if(model!=null){ //no binding
+		  		if(model!=null){ //no binding
 		  			bean = model.getElementAt(i);
 		  		} else{
 		  			bean = ci.getValue();
@@ -77,11 +74,7 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  	if (val != null) {
 		  	final Combobox lbx = (Combobox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		
-	  		final String varnm = (String) ((Comboitem)val).getAttribute(BinderImpl.VAR);
-	  		if (varnm != null) { //There is binding on template
-	  			return ((Comboitem)val).getAttribute(varnm);
-	  		} else if(model!=null){ //no binding
+	  		if(model!=null){ //no binding
 	  			return model.getElementAt(((Comboitem) val).getIndex());
 	  		} else{
 	  			return ((Comboitem) val).getValue();
