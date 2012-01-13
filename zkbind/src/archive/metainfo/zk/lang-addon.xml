@@ -1098,6 +1098,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.TreeModelConverter</attribute-value>
+			</attribute>
+		</annotation>		
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
 			<property-name>selectedItem</property-name>
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>

@@ -34,6 +34,8 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String STATUS_POST_VAR = TemplateResolver.STATUS_POST_VAR;
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
 
+	static private String TREE_PATH = "$TREEPATH$";//for tree model only
+	
 	private String _attributeName;
 	
 	@Override
@@ -95,4 +97,15 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		final String expression = BinderImpl.MODEL+"["+index+"]";
 		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
 	}
+	
+	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List, for tree model only
+	protected void addItemReference(final Component comp, int[] path, String varnm) {
+		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
+		if (binder == null) return; //no binder
+		comp.setAttribute(TREE_PATH, path);
+		final String expression = BinderImpl.MODEL+".getChild("+TREE_PATH+")";
+		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
+	}
+	
+	
 }
