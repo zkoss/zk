@@ -311,6 +311,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		s.defaultReadObject();
 
 		init();
+		_indexCache = new LinkedHashMap<Object, Integer>();
 	}
 
 	public Object clone() {
