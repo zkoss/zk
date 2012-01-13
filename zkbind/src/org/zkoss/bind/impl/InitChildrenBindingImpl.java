@@ -52,6 +52,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 
 		comp.getChildren().clear();
+		comp.removeAttribute(BinderImpl.MODEL);
 		if(value!=null){
 			BindChildRenderer renderer = new BindChildRenderer();
 			List<Object> data = (List<Object>)Classes.coerce(List.class, value);
