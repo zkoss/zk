@@ -17,7 +17,7 @@
 		import org.zkoss.zktest.util.*;
 		import org.zkoss.zk.ui.select.*;
 		DefaultTreeModel model = TreeModels.createDefaultTreeModel(false);
-		DefaultTreeModel model2 = TreeModels.createDefaultTreeModel(false);
+		DefaultTreeModel model2 = TreeModels.createCloneableDefaultTreeModel(false);
 		model.multiple = "true".equals(arg.get("multiple"));
 		model2.multiple = "true".equals(arg.get("multiple"));
 		int cnt = 0;

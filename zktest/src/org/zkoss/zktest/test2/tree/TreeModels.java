@@ -18,6 +18,8 @@ package org.zkoss.zktest.test2.tree;
 
 import java.util.Set;
 
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
@@ -32,6 +34,20 @@ public class TreeModels {
 		return new DefaultTreeModel<String>(createNode(RAW_NODES, closeEnd));
 	}
 	
+	public static DefaultTreeModel<String> createCloneableDefaultTreeModel(boolean closeEnd) {
+		return new CloneableTreeModel<String>(createNode(RAW_NODES, closeEnd));
+	}
+	
+	private static class CloneableTreeModel<String> extends DefaultTreeModel<String> implements ComponentCloneListener, Cloneable {
+		public CloneableTreeModel(TreeNode<String> root) {
+			super(root);
+		}
+
+		@Override
+		public Object willClone(Component comp) {
+			return clone();
+		}
+	}
 	/**
 	 * Open all nodes.
 	 */
