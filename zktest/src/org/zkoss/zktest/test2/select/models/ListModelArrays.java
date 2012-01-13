@@ -37,8 +37,8 @@ public class ListModelArrays {
 		}
 	}
 	private static String[] getItems() {
-		String[] Items = new String[1000];
-		for (int i = 0; i < 1000; i++) {
+		String[] Items = new String[300];
+		for (int i = 0; i < 300; i++) {
 			Items[i] = new String("data "+i);
 		}
 		return Items;
