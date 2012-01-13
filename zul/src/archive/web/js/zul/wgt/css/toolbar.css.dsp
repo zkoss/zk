@@ -21,7 +21,7 @@
 .z-toolbar-start,
 .z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt {
 	float: left; clear: none;
-}
+} 
 .z-toolbar-center,
 .z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt {
 	text-align: center;
