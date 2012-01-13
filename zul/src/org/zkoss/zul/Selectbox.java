@@ -217,12 +217,12 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
-						if (_model instanceof ListSelectionModel) {
-							ListSelectionModel smodel = (ListSelectionModel)_model;
-							setSelectedIndex(smodel.getMinSelectionIndex());
-						}
-					} else {
+					if (_model instanceof ListSelectionModel) {
+						ListSelectionModel smodel = (ListSelectionModel)_model;
+						setSelectedIndex(smodel.getMinSelectionIndex());
+					}
+					
+					if (event.getType() != ListDataEvent.SELECTION_CHANGED) {
 						postOnInitRender();
 					}
 				}
