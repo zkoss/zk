@@ -64,6 +64,9 @@
 			Tree tree = tree4.clone();
 			tree.id = "treeC" + cmpCnt++;
 			tree.parent = clones;
+			Tree tree = tree5.clone();
+			tree.id = "treeC" + cmpCnt++;
+			tree.parent = clones;
 		]]></attribute>
 	</button>
 	<button label="Clone by Serialization">
@@ -74,6 +77,15 @@
 			Tree tree = (Tree) Serializations.clone(tree4);
 			tree.id = "treeCBS" + cmpCnt++;
 			tree.parent = clones;
+			Tree tree = (Tree) Serializations.clone(tree5);
+			tree.id = "treeCBS" + cmpCnt++;
+			tree.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Clear Clones">
+		<attribute name="onClick"><![CDATA[
+			clones.children.clear();
+			clones.appendChild(new Label("Clone from Tree of Model 2"));
 		]]></attribute>
 	</button>
 	<button label="Inspect Selection">
@@ -102,13 +114,19 @@
 		</vlayout>
 		<vlayout hflex="1">
 			Model 2
-			<tree id="tree3" model="${model2}" checkmark="true" hflex="1" onSelect=""
+			<tree id="tree3" model="${model2}" checkmark="true" width="250px" onSelect=""
 			 	height="200px">
 				<treecols>
 					<treecol label="Col" sort="auto" />
 				</treecols>
 			</tree>
-			<tree id="tree4" model="${model2}" checkmark="true" hflex="1" onSelect=""
+			<tree id="tree4" model="${model2}" checkmark="true" width="250px" onSelect=""
+			 	mold="paging" pageSize="10" height="200px">
+				<treecols>
+					<treecol label="Col" sort="auto" />
+				</treecols>
+			</tree>
+			<tree id="tree5" model="${model2}" checkmark="true" width="250px" onSelect=""
 			 	mold="paging" pageSize="6">
 				<treecols>
 					<treecol label="Col" sort="auto" />
