@@ -21,7 +21,7 @@
 .z-toolbar-start,
 .z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt {
 	float: left; clear: none;
-} 
+}
 .z-toolbar-center,
 .z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt {
 	text-align: center;
@@ -121,7 +121,6 @@
 .z-toolbarbutton .z-toolbarbutton-br {
 	background-position: -4px -4px;
 }
-
 <%-- mouseover --%>
 .z-toolbarbutton-over .z-toolbarbutton-tl,
 .z-toolbarbutton-over .z-toolbarbutton-cl {
@@ -160,16 +159,6 @@
 	padding: 1px 0;
 	zoom: 1;
 }
-
-.z-toolbarbutton-ck {
-	border-top: 1px solid #d6d6d6;
-	border-bottom: 1px solid #d6d6d6;
-	padding: 0;
-	background-color: #e2e2e2;
-	-webkit-box-shadow: inset 3px 3px 0px -2px #b7b7b7;
-	-moz-box-shadow: inset 3px 3px 0px -2px #b7b7b7;
-	box-shadow: inset 3px 3px 0px -2px #b7b7b7;
-}
 .z-toolbarbutton-over {
 	border-top: 1px solid #7EAAC6;
 	border-bottom: 1px solid #7EAAC6;
@@ -181,11 +170,6 @@
 	padding: 0 1px;
 	vertical-align: middle;
 	zoom: 1;
-}
-.z-toolbarbutton-ck  .z-toolbarbutton-body {
-	border-left: 1px solid #d6d6d6;
-	border-right: 1px solid #d6d6d6;
-	padding: 0;
 }
 .z-toolbarbutton-over .z-toolbarbutton-body {
 	border-left: 1px solid #7EAAC6;
