@@ -407,18 +407,25 @@ public class TrackerImpl implements Tracker,Serializable {
 		
 		//bug #ZK-678: NotifyChange on Map is not work
 		private void syncInnerMap(EqualBeans equalBeans, Object bean) {
-			//search one by one
+			//hashCode of bean has changed, must reset
+			boolean found = false;
+			final WeakHashMap<Object, EqualBeans> newMap = new WeakHashMap<Object, EqualBeans>(_innerMap.size());
+			//ZK-781. Copy one by one to reset _innerMap
 			for(Iterator<Entry<Object, EqualBeans>> it = _innerMap.entrySet().iterator(); it.hasNext();) {
 				final Entry<Object, EqualBeans> entry = it.next();
 				final EqualBeans beans = entry.getValue();
 				if (equalBeans.equals(beans)) { //found
-					it.remove(); //remove from _innerMap;
-					//reput equalBeans (item inside might not equal to each other any more)
-					for (Object b : equalBeans.getBeans()) {
-						_identityMap.remove(b);
-						put(b); //recursive
-					}
-					break;
+					found = true;
+					continue;
+				}
+				newMap.put(entry.getKey(), entry.getValue());
+			}
+			if (found) {
+				_innerMap = newMap;
+				//reput equalBeans (item inside might not equal to each other any more)
+				for (Object b : equalBeans.getBeans()) {
+					_identityMap.remove(b);
+					put(b); //recursive
 				}
 			}
 		}
@@ -448,15 +455,22 @@ public class TrackerImpl implements Tracker,Serializable {
 			} else { //hashcode might changed
 				equalBeans = _identityMap.remove(bean);
 				if (equalBeans != null) { //hashcode is changed
-					//search one by one
+					//hashCode of bean has changed, must reset
+					boolean found = false;
+					final WeakHashMap<Object, EqualBeans> newMap = new WeakHashMap<Object, EqualBeans>(_innerMap.size());   
+					//ZK-781. Copy one by one to reset _innerMap
 					for(Iterator<Entry<Object, EqualBeans>> it = _innerMap.entrySet().iterator(); it.hasNext();) {
 						final Entry<Object, EqualBeans> entry = it.next();
 						final EqualBeans beans = entry.getValue();
 						if (equalBeans.equals(beans)) { //found
-							it.remove(); //remove from _innerMap;
-							removeFromEqualBeansAndReput(beans, bean); //remove from EqualBeans
-							break;
+							found = true;
+							continue;
 						}
+						newMap.put(entry.getKey(), entry.getValue());
+					}
+					if (found) {
+						_innerMap = newMap;
+						removeFromEqualBeansAndReput(equalBeans, bean); //remove from EqualBeans
 					}
 				}
 			}
