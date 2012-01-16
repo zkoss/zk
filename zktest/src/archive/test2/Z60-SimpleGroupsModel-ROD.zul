@@ -1,0 +1,15 @@
+<!--
+	Z60-SimpleGroupsModel-ROD.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<include src="Z60-SimpleGroupsModel-template.zul" csize="100" />
+</zk>

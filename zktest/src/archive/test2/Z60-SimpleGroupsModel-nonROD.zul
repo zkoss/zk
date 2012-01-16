@@ -1,0 +1,18 @@
+<!--
+	Z60-SimpleGroupsModel-nonROD.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window>
+		<custom-attributes org.zkoss.zul.listbox.rod="false" org.zkoss.zul.grid.rod="false" />
+		<include src="Z60-SimpleGroupsModel-template.zul" csize="20" />
+	</window>
+</zk>
