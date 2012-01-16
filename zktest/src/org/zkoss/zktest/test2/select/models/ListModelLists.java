@@ -39,7 +39,7 @@ public class ListModelLists {
 	}
 	private static List getItems() {
 		List Items = new ArrayList();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 300; i++) {
 			Items.add(new String("data "+i));
 		}
 		return Items;
