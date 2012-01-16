@@ -8,7 +8,7 @@
 </ol>
 ]]></html>
 
-<zscript>
+<zscript><![CDATA[
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
@@ -53,6 +53,23 @@ public class MyTreeModel implements TreeModel {
 		return "tttt".equals(arg0) ? 5 : 0;
 	}
 
+	public Object getChild(int[] path) {
+		Object parent = getRoot();
+		Object node = null;
+		int childCount = getChildCount(parent);
+		for (int i = 0; i < path.length; i++) {
+			if (path[i] < 0 || path[i] > childCount)
+				return null;
+			node = getChild(parent, path[i]);
+
+			if (node != null && (childCount = getChildCount(node)) > 0) {
+				parent = node;
+			} else if (i != path.length - 1) {
+				return null;
+			}
+		}
+		return node;
+	}
 	public Object getRoot() {
 		// TODO Auto-generated method stub
 		return new String[] { "tttt" };
@@ -69,7 +86,7 @@ public class MyTreeModel implements TreeModel {
 		// TODO Auto-generated method stub
 	}
 }
-</zscript>
+]]></zscript>
 <window use="Test14105Window" title="new page title"	
 border="normal">
 <tree id="tree" height="300px" checkmark="true" multiple="true" />
