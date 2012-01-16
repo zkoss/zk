@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-719.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 09 12:41:05 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="xhtml">
+	<h:pre>
+		1.Click all the (left/Right) toolbarbutton and see if the toggle effect working.
+		  press toolbarbutton and release , 
+		  then a tootlebarbutton is persistent checked.
+		  
+		  (Also need to check if there's any issue with images.')
+		  
+		2. Click the "test event" , there should show up "Checked:true"
+		
+		3. Click the "test event" again, there should show up "Checked:false"
+		 
+	</h:pre>
+	<window title="Toolbar window" border="normal" width="400px">
+		<label id="lb" value="message: " />
+		<toolbar>
+			<toolbarbutton label="Left" mold="toggle" image="/img/network.gif" />
+			<space />
+			<toolbarbutton label="Right"  mold="toggle" image="/img/network.gif" dir="reverse" />
+			<separator />
+			<toolbarbutton label="checked Left" mold="toggle" checked="true" image="/img/network.gif" />
+			<space />
+			<toolbarbutton label="checked Right" mold="toggle" checked="true" image="/img/network.gif" dir="reverse" />
+			
+			<separator />
+			<toolbarbutton label="Left" mold="toggle" />
+			<space />
+			<toolbarbutton label="Right"  mold="toggle" />
+			<separator />
+			<toolbarbutton label="checked Left" mold="toggle" checked="true" />
+			<space />
+			<toolbarbutton label="checked Right" mold="toggle" checked="true" dir="reverse" />
+		</toolbar>
+		<toolbar>
+			<toolbarbutton label="Test event" mold="toggle" onCheck='lbl.setValue("Checked:"+event.isChecked())' />
+			<label id="lbl" /> 
+			<space />
+		</toolbar>
+	</window>
+</zk>
