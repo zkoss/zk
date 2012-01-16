@@ -26,8 +26,7 @@
 	<div>
 		<div>Spec: The two trees on the left sharing model 1 should always have the same selection and open states.</div>
 		<div>Spec: When you click on "Clone" (by POJO) or "Clone by Serialization", a cloned instance will appear in the right most column. 
-			When cloned, the model state (selection, open) will be brought to the new instance. After cloning, if cloned by POJO, 
-			the state on Trees will sync among each other. However, if cloned by serialization, the state will not sync afterward.</div>
+			When cloned, the model state (selection, open) will be brought to the new instance. After cloning, the state will not sync afterward.</div>
 		<div>1. Select, deselect, add, remove, open, close Treeitems from the Trees of model 1. 
 			Make sure the operation does not break the spec above. Click on "Inspect Selection" on each step to verify model content.</div>
 		<div>2. Clone the Tree of model 2 by POJO and serialization. Select, deselect, add, remove, open, close Treeitems from the Tree and
