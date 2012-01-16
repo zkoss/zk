@@ -22,18 +22,19 @@
 	    list2.addAll( Arrays.asList(new String[]{"newtest","newtest2","newtest3","newtest4","newtest5"}));
 	    
 	]]></zscript>
-	
 	<h:pre xmlns:h="html">
 	Test cases:
- 		1.There should be two radio group , each with 5 radios. (Same model, but different label)
+ 		1.There should be three radio group , each with 5 radios. (Same model, but different label)
 		
- 		2.Click invalidate button for both radiogroups and see if it also render the same view.
+		2.The latest one should show up "renderer_(string)_(index)" to test if renderer woring correctly
+ 		
+ 		3.Click invalidate button for all radiogroups and see if it also render the same view.
 		
-		3.Click set anoter model for both radiogroups , it should show different label with differnt model after you click the button.
+		4.Click set anoter model for all radiogroups , it should show different label with differnt model after you click the button.
 		
-		4.Click add one for both radiogroups, it should add one more radio for both radiogroups. (because they use same model)
+		5.Click add one for all radiogroups, it should add one more radio for all radiogroups. (because they use same model)
 				 
-		4.Click remove last item for both radiogroups, it should remove one radio for both radiogroups. (because they use same model)
+		6.Click remove last item for all radiogroups, it should remove one radio for all radiogroups. (because they use same model)
 	</h:pre>
 	<vlayout>
 		<label value="radiogroup1" />
@@ -57,5 +58,13 @@
 			<button label="add one" onClick='rg2.getModel().add("new1")' />
 			<button label="remove last item" onClick='rg2.getModel().remove(rg2.getModel().size()-1)' />
 		</hlayout>
+		<label value="Test Renderer" />
+		<hlayout>
+			<radiogroup model="${list}" id="rg3" radioRenderer="org.zkoss.zktest.test2.F60_ZK_669_RadioRenderer" />
+			<button label="invalidate" onClick="rg3.invalidate()" />
+			<button label="set another model" onClick="rg3.setModel(list2)" />
+			<button label="add one" onClick='rg3.getModel().add("new1")' />
+			<button label="remove last item" onClick='rg3.getModel().remove(rg3.getModel().size()-1)' />
+		</hlayout>			
 	</vlayout>
 </zk>

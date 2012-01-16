@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.MutableInteger;
 import org.zkoss.lang.Objects;
@@ -491,6 +492,41 @@ public class Radiogroup extends XulElement {
 	@SuppressWarnings("unchecked")
 	private <T> RadioRenderer<T> getRealRenderer() {
 		return _renderer != null ? _renderer: _defRend;
+	}
+	
+	/** Returns the renderer to render each radio, or null if the default
+	 * renderer is used.
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> RadioRenderer<T> getRadioRenderer() {
+		return (RadioRenderer<T>)_renderer;
+	}
+	
+	/** Sets the renderer which is used to render each row
+	 * if {@link #getModel} is not null.
+	 *
+	 * <p>Note: changing a render will not cause the radiogroup to re-render.
+	 * If you want it to re-render, you could assign the same model again 
+	 * (i.e., setModel(getModel())), or fire an {@link ListDataEvent} event.
+	 *
+	 * @param renderer the renderer, or null to use the default.
+	 * @exception UiException if failed to initialize with the model
+	 * @since 6.0.0
+	 */
+	public void setRadioRenderer(RadioRenderer<?> renderer) {
+		_renderer = renderer;
+	}
+	
+	/** Sets the renderer by use of a class name.
+	 * It creates an instance automatically.
+	 *@since 6.0.0
+	 */
+	public void setRadioRenderer(String clsnm)
+	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null)
+			setRadioRenderer((RadioRenderer)Classes.newInstanceByThread(clsnm));
 	}
 	
 	/**

@@ -2000,6 +2000,8 @@
 		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
 		<xs:attribute name="selectedIndex" type="intType" use="optional" />
 		<xs:attribute name="onCheck" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="radioRenderer" type="xs:string" use="optional" />		
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- row -->
@@ -2292,6 +2294,8 @@
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="mode" type="xs:string" use="optional" />
+		<xs:attribute name="checked" type="booleanType" use="optional" />		
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- tree -->
