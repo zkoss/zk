@@ -73,11 +73,13 @@ public class Toolbarbutton extends Button {
 	}
 	/** Returns whether it is checked.
 	 * <p>Default: false.
+	 * @since 6.0.0
 	 */
 	public boolean isChecked() {
 		return _checked;
 	}
 	/** Sets whether it is checked.
+	 * @since 6.0.0
 	 */
 	public void setChecked(boolean checked) {
 		if (_checked  != checked) {
@@ -86,10 +88,19 @@ public class Toolbarbutton extends Button {
 		}
 	}
 
+	/**
+	 * @since 6.0.0
+	 * @return String mode 
+	 */
 	public String getMode() {
 		return _mode;
 	}
 	
+	/**
+	 * Set the mode of toolbarbutton.(default,toggle)
+	 * @since 6.0.0
+	 * @param mode the mode 
+	 */
 	public void setMode(String mode) {
 		if (_mode != mode) {
 			_mode = mode;
