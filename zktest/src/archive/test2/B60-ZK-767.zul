@@ -1,0 +1,79 @@
+<!--
+	B60-ZK-767.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon Jan 16 11:21:16 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[//@DECLARATION
+       	class MyTreeNode extends org.zkoss.zul.DefaultTreeNode {
+       		public MyTreeNode(String data, MyTreeNode[] children) {
+      			super(data, children);
+      		}
+      		public MyTreeNode(String data) {
+      			super(data);
+      		}
+      	}
+	]]></zscript>
+	<zscript><![CDATA[
+		MyTreeNode root = new MyTreeNode("Root", new MyTreeNode[] {});
+		String[] labs = new String[] { "A", "B", "C" };
+		for (int i = 0; i < 3; i++) {
+			MyTreeNode ni = new MyTreeNode(labs[i] + i, new MyTreeNode[] {});
+			for (int j = 0; j < 3; j++) {
+				MyTreeNode nj = new MyTreeNode(ni.getData() + "-" + j, new MyTreeNode[] {});
+				for (int k = 0; k < 2; k++)
+					nj.add(new MyTreeNode(nj.getData() + "-" + k));
+				ni.add(nj);
+			}
+			root.add(ni);
+		}
+		org.zkoss.zul.DefaultTreeModel model = new org.zkoss.zul.DefaultTreeModel(root);
+		org.zkoss.zul.DefaultTreeModel model2 = new org.zkoss.zul.DefaultTreeModel(root);
+		model.addSelectionPath(new int[] { 1, 1 });
+		model.addOpenPath(new int[] { 0, 1 });
+	]]></zscript>
+	<div>
+		<div>1. Open A0 in Tree 1. You should see A0-1 already opened.</div>
+		<div>2. Open B1 in Tree 1. You should see B1-1 already selected.</div>
+		<div>3. Click "Open 0,1", and open A0 in Tree 2. You should see A0-1 already opened.</div>
+		<div>4. Click "Select 0,1", and open B1 in Tree 2. You should see B1-1 already selected.</div>
+	</div>
+	<separator />
+	Tree 1
+	<tree model="${model}" width="500px">
+		<treecols>
+			<treecol label="name"/>
+		</treecols>
+		<template name="model" >
+			<treeitem value="${each}">
+				<treerow>
+					<treecell label="${each.data}"/>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+	Tree 2
+	<tree model="${model2}" width="500px">
+		<treecols>
+			<treecol label="name"/>
+		</treecols>
+		<template name="model" >
+			<treeitem value="${each}">
+				<treerow>
+					<treecell label="${each.data}"/>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+	<hlayout>
+		<button label="Open 0,1" onClick="model2.addOpenPath(new int[]{0,1})" />
+		<button label="Select 1,1" onClick="model2.addSelectionPath(new int[]{1,1})" />
+	</hlayout>
+</zk>

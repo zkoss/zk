@@ -1599,7 +1599,7 @@ public class Tree extends MeshElement {
 	}
 
 	/*
-	 * Renders the direct children for the specifed parent
+	 * Renders the direct children for the specified parent
 	 */
 	private void renderChildren(Renderer renderer, Treechildren parent,
 	Object node) throws Throwable {
@@ -1610,8 +1610,33 @@ public class Tree extends MeshElement {
 			renderer.render(ti, childNode);
 			Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
 			if (v != null) //a new item is created to replace the existent one
-				(ti = (Treeitem)v).setOpen(false);
-			if(!_model.isLeaf(childNode) && ti.getTreechildren() == null){
+				(ti = (Treeitem) v).setOpen(false);
+			// B60-ZK-767: handle selected/open state here, as it might be replaced
+			TreeNode treeNode = null;
+			if (childNode instanceof TreeNode) {
+				treeNode = (TreeNode) childNode;
+				ti.setTreeNode(treeNode);
+			}
+			int[] path = null;
+			if (_model instanceof TreeSelectionModel) {
+				TreeSelectionModel model = (TreeSelectionModel) _model;
+				if (!model.isSelectionEmpty() && 
+						getSelectedCount() != model.getSelectionCount() &&
+						model.isPathSelected((path = _model.getPath(childNode))))
+					addItemToSelection(ti);
+			}
+			if (_model instanceof TreeOpenableModel) {
+				TreeOpenableModel model = (TreeOpenableModel) _model;
+				if (!model.isOpenEmpty()) {
+					boolean isLeaf = treeNode != null ? treeNode.isLeaf() : false;
+					if (!isLeaf) {
+						if (path == null)
+							path = _model.getPath(childNode);
+						ti.setOpen(model.isPathOpened(path));
+					}
+				}
+			}
+			if (!_model.isLeaf(childNode) && ti.getTreechildren() == null) {
 				Treechildren tc = new Treechildren();
 				tc.setParent(ti);
 			}
@@ -1678,36 +1703,6 @@ public class Tree extends MeshElement {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
-
-			TreeNode treeNode = null;
-			if (node instanceof TreeNode) {
-				treeNode = (TreeNode) node;
-				item.setTreeNode(treeNode);
-			}
-
-			int[] path = null;
-			if (_model instanceof TreeSelectionModel) {
-				TreeSelectionModel model = (TreeSelectionModel) _model;
-				if (!model.isSelectionEmpty() && getSelectedCount() != model.getSelectionCount()) {
-					if (model.isPathSelected((path = _model.getPath(node)))) {
-						addItemToSelection(item);
-					}
-				}
-			}
-			
-			if (_model instanceof TreeOpenableModel) {
-				TreeOpenableModel model = (TreeOpenableModel) _model;
-				if (!model.isOpenEmpty()) {
-					boolean isLeaf = treeNode != null ? treeNode.isLeaf() : false;
-					if (!isLeaf) {
-						if (path == null) {
-							path = _model.getPath(node);
-						}
-						item.setOpen(model.isPathOpened(path));
-					}
-				}
-			}
-			
 			try {
 				_renderer.render(item, node);
 			} catch (Throwable ex) {
@@ -1805,7 +1800,7 @@ public class Tree extends MeshElement {
 				tc.detach(); //just in case
 
 			//no children to render
-			//Note item already renderred, so no need:
+			//Note item already rendered, so no need:
 			//renderer.render(item, node);
 		}else{
 			if (tc != null) tc.getChildren().clear(); //just in case
@@ -1921,7 +1916,7 @@ public class Tree extends MeshElement {
 	}
 	
 	/**
-	 * Load the treeitems by giveing a path of the treeitems top open.
+	 * Load the treeitems by giving a path of the treeitems top open.
 	 * <br>Note: By using this method, all treeitems in path will be rendered
 	 * and opened ({@link Treeitem#setOpen}). If you want to visit the rendered
 	 * item in paging mold, please invoke {@link #setActivePage(Treeitem)}.
