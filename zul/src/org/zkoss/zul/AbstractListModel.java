@@ -146,6 +146,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		}
 		if (!isMultiple()) {
 			index0 = index1;
+			_selection.clear();
 		}
 		boolean changed = false;
 		for (int i = index0; i <= index1; i++) {
