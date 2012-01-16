@@ -446,12 +446,13 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 	}
 
+	@Override
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
 		willPassivate(_model);
 		willPassivate(_renderer);
 	}
-
+	@Override
 	public void sessionDidActivate(Page page) {
 		super.sessionDidActivate(page);
 		didActivate(_model);

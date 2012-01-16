@@ -29,6 +29,7 @@ import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
@@ -789,5 +790,18 @@ public class Combobox extends Textbox {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void sessionWillPassivate(Page page) {
+		super.sessionWillPassivate(page);
+		willPassivate(_model);
+		willPassivate(_renderer);
+	}
+	@Override
+	public void sessionDidActivate(Page page) {
+		super.sessionDidActivate(page);
+		didActivate(_model);
+		didActivate(_renderer);
 	}
 }

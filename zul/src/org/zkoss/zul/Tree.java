@@ -1240,6 +1240,18 @@ public class Tree extends MeshElement {
 
 		if (_model != null) initDataListener();
 	}
+	@Override
+	public void sessionWillPassivate(Page page) {
+		super.sessionWillPassivate(page);
+		willPassivate(_model);
+		willPassivate(_renderer);
+	}
+	@Override
+	public void sessionDidActivate(Page page) {
+		super.sessionDidActivate(page);
+		didActivate(_model);
+		didActivate(_renderer);
+	}
 
 	//-- ComponentCtrl --//
 	/**
