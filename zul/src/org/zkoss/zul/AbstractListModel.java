@@ -202,9 +202,8 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		/*
 		 * Initialize the newly inserted indices.
 		 */
-		boolean setInsertedValues = _value.get(index);
 		for (int i = insMinIndex; i <= insMaxIndex; i++) {
-			setState(i, setInsertedValues);
+			setState(i, false);
 		}
 	}
 
