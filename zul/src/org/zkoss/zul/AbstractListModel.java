@@ -16,7 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.BitSet;
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,23 +37,10 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		ListSelectionModel, java.io.Serializable {
 	private transient List<ListDataListener> _listeners = new LinkedList<ListDataListener>();
 
-	private static final int MIN = -1;
-
-	private static final int MAX = Integer.MAX_VALUE;
-
-	private int _minIndex = MAX;
-
-	private int _maxIndex = MIN;
-
-	private BitSet _value = new BitSet(32);
+	private LinkedList<Index> _selection = new LinkedList<Index>();
 
 	private boolean _multiple;
-
-	private int firstChangedIndex = MAX;
-
-	private int lastChangedIndex = MIN;
-
-	private boolean noFireEvent = false;
+	
 	/**
 	 * Fires a {@link ListDataEvent} for all registered listener (thru
 	 * {@link #addListDataListener}.
@@ -90,30 +78,63 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		_listeners.remove(l);
 	}
 
+	private static class Index implements Comparable<Index>, Serializable {
+		private int _val;
+		private Index(int val) {
+			_val = val;
+		}
+		private int get() {
+			return _val;
+		}
+		private void set(int val) {
+			_val = val;
+		}
+		
+		@Override
+		public int hashCode() {
+			return _val;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this)
+				return true;
+			if (obj instanceof Index) {
+				return _val == ((Index) obj)._val;
+			}
+			return false;
+		}
+		@Override
+		public int compareTo(Index o) {
+			int val0 = _val;
+			int val1 = o._val;
+			return (val0 < val1 ? -1 : (val0 == val1 ? 0 : 1));
+		}
+	}
+	
 	// ListSelectionModel
 	/** {@inheritDoc} */
 	@Override
 	public int getMinSelectionIndex() {
-		return isSelectionEmpty() ? -1 : _minIndex;
+		return isSelectionEmpty() ? -1 : _selection.getFirst().get();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public int getMaxSelectionIndex() {
-		return _maxIndex;
+		return isSelectionEmpty() ? -1 : _selection.getLast().get();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean isSelectedIndex(int index) {
-		return ((index < _minIndex) || (index > _maxIndex)) ? false : _value
-				.get(index);
+		return _selection.contains(new Index(index));
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean isSelectionEmpty() {
-		return (_minIndex > _maxIndex);
+		return _selection.isEmpty();
 
 	}
 
@@ -123,17 +144,21 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		if (index0 == -1 || index1 == -1) {
 			return;
 		}
-		int clearMin = MAX;
-		int clearMax = MIN;
 		if (!isMultiple()) {
 			index0 = index1;
-			clearMin = _minIndex;
-			clearMax = _maxIndex;
 		}
-
-		int setMin = Math.min(index0, index1);
-		int setMax = Math.max(index0, index1);
-		changeSelection(clearMin, clearMax, setMin, setMax);
+		boolean changed = false;
+		for (int i = index0; i <= index1; i++) {
+			if (!_selection.contains(i)) {
+				_selection.add(new Index(i));
+				changed = true;
+			}
+		}
+		if (changed) {
+			Collections.sort(_selection);
+			fireEvent(ListDataEvent.SELECTION_CHANGED, index0,
+					index1);
+		}	
 	}
 
 	@Override
@@ -142,11 +167,16 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 			return;
 		}
 
-		int clearMin = Math.min(index0, index1);
-		int clearMax = Math.max(index0, index1);
-		int setMin = MAX;
-		int setMax = MIN;
-		changeSelection(clearMin, clearMax, setMin, setMax);
+		boolean changed = false;
+		for (int i = index0; i <= index1; i++) {
+			if (_selection.remove(new Index(i))) {
+				changed = true;
+			}
+		}
+		if (changed) {
+			fireEvent(ListDataEvent.SELECTION_CHANGED, index0,
+					index1);
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -161,7 +191,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 
 	/** {@inheritDoc} */
 	public void clearSelection() {
-		removeSelectionInterval(_minIndex, _maxIndex);
+		removeSelectionInterval(getMinSelectionIndex(), getMaxSelectionIndex());
 	}
 
 	/**
@@ -172,9 +202,9 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		int min = getMinSelectionIndex();
 		int max = getMaxSelectionIndex();
 		for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
+			if (isSelectedIndex(min)) {
+				selected.add(getElementAt(min));
+			}
 		}
 		return selected;
 	}
@@ -184,26 +214,10 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 	 * data model.
 	 */
 	protected void insertIndexInterval(int index, int length, boolean before) {
-		/*
-		 * The first new index will appear at insMinIndex and the last one will
-		 * appear at insMaxIndex
-		 */
-		int insMinIndex = (before) ? index : index + 1;
-		int insMaxIndex = (insMinIndex + length) - 1;
-
-		/*
-		 * Right shift the entire bitset by length, beginning with index-1 if
-		 * before is true, index+1 if it's false (i.e. with insMinIndex).
-		 */
-		for (int i = _maxIndex; i >= insMinIndex; i--) {
-			setState(i + length, _value.get(i));
-		}
-
-		/*
-		 * Initialize the newly inserted indices.
-		 */
-		for (int i = insMinIndex; i <= insMaxIndex; i++) {
-			setState(i, false);
+		int insertionIndex = before ? index : index + 1;
+		for (Index i : _selection) {
+			if (i.get() >= insertionIndex)
+				i.set(i.get() + length);
 		}
 	}
 
@@ -213,15 +227,10 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 	 * @param selection the array by which the list will be selected
 	 */
 	protected void reorganizeIndex(int... selection) {
-		try {
-			noFireEvent = true;
-			for (int i = _minIndex; i <= _maxIndex; i++)
-				clear(i);
-			for (int i = 0; i < selection.length; i++)
-				set(selection[i]);
-		} finally {
-			noFireEvent = false;
-		}
+		_selection.clear();
+		for (int i = 0; i < selection.length; i++)
+			_selection.add(new Index(selection[i]));
+		Collections.sort(_selection);
 	}
 	/**
 	 * Remove the indices in the interval index0,index1 (inclusive) from the
@@ -229,141 +238,11 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 	 * width a corresponding change in the data model.
 	 */
 	protected void removeIndexInterval(int index0, int index1) {
-		int rmMinIndex = Math.min(index0, index1);
-		int rmMaxIndex = Math.max(index0, index1);
-		int gapLength = (rmMaxIndex - rmMinIndex) + 1;
+		int length = (index0 - index1) + 1;
 
-		/*
-		 * Shift the entire bitset to the left to close the index0, index1 gap.
-		 */
-		for (int i = rmMinIndex; i <= _maxIndex; i++) {
-			setState(i, _value.get(i + gapLength));
-		}
-	}
-	
-	private void setState(int index, boolean state) {
-		if (state) {
-			set(index);
-		} else {
-			clear(index);
-		}
-	}
-
-	private boolean contains(int a, int b, int i) {
-		return (i >= a) && (i <= b);
-	}
-
-	private void changeSelection(int clearMin, int clearMax, int setMin,
-			int setMax) {
-		for (int i = Math.min(setMin, clearMin); i <= Math
-				.max(setMax, clearMax); i++) {
-
-			boolean shouldClear = contains(clearMin, clearMax, i);
-			boolean shouldSet = contains(setMin, setMax, i);
-
-			if (shouldSet && shouldClear) {
-				shouldClear = false;
-			}
-
-			if (shouldSet) {
-				set(i);
-			}
-			if (shouldClear) {
-				clear(i);
-			}
-		}
-		fireSelectionChanged();
-	}
-
-	private void fireSelectionChanged() {
-		if (lastChangedIndex == MIN || noFireEvent) {
-			return;
-		}
-		/*
-		 * Change the values before sending the event to the listeners in case
-		 * the event causes a listener to make another change to the selection.
-		 */
-		int oldFirstChangedIndex = firstChangedIndex;
-		int oldLastChangedIndex = lastChangedIndex;
-		firstChangedIndex = MAX;
-		lastChangedIndex = MIN;
-		fireEvent(ListDataEvent.SELECTION_CHANGED, oldFirstChangedIndex,
-				oldLastChangedIndex);
-	}
-
-	// Update first and last change indices
-	private void markAsDirty(int r) {
-		firstChangedIndex = Math.min(firstChangedIndex, r);
-		lastChangedIndex = Math.max(lastChangedIndex, r);
-	}
-
-	// Set the state at this index and update all relevant state.
-	private void set(int r) {
-		if (_value.get(r)) {
-			return;
-		}
-		_value.set(r);
-		markAsDirty(r);
-
-		// Update minimum and maximum indices
-		_minIndex = Math.min(_minIndex, r);
-		_maxIndex = Math.max(_maxIndex, r);
-	}
-
-	// Clear the state at this index and update all relevant state.
-	private void clear(int r) {
-		if (!_value.get(r)) {
-			return;
-		}
-		_value.clear(r);
-		markAsDirty(r);
-
-		// Update minimum and maximum indices
-		/*
-		 * If (r > minIndex) the minimum has not changed. The case (r <
-		 * minIndex) is not possible because r'th value was set. We only need to
-		 * check for the case when lowest entry has been cleared, and in this
-		 * case we need to search for the first value set above it.
-		 */
-		if (r == _minIndex) {
-			for (_minIndex = _minIndex + 1; _minIndex <= _maxIndex; _minIndex++) {
-				if (_value.get(_minIndex)) {
-					break;
-				}
-			}
-		}
-		/*
-		 * If (r < maxIndex) the maximum has not changed. The case (r >
-		 * maxIndex) is not possible because r'th value was set. We only need to
-		 * check for the case when highest entry has been cleared, and in this
-		 * case we need to search for the first value set below it.
-		 */
-		if (r == _maxIndex) {
-			for (_maxIndex = _maxIndex - 1; _minIndex <= _maxIndex; _maxIndex--) {
-				if (_value.get(_maxIndex)) {
-					break;
-				}
-			}
-		}
-		/*
-		 * Performance note: This method is called from inside a loop in
-		 * changeSelection() but we will only iterate in the loops above on the
-		 * basis of one iteration per deselected cell - in total. i.e. the next
-		 * time this method is called the work of the previous deselection will
-		 * not be repeated.
-		 * 
-		 * We also don't need to worry about the case when the min and max
-		 * values are in their unassigned states. This cannot happen because
-		 * this method's initial check ensures that the selection was not empty
-		 * and therefore that the minIndex and maxIndex had 'real' values.
-		 * 
-		 * If we have cleared the whole selection, set the minIndex and maxIndex
-		 * to their cannonical values so that the next set command always works
-		 * just by using Math.min and Math.max.
-		 */
-		if (isSelectionEmpty()) {
-			_minIndex = MAX;
-			_maxIndex = MIN;
+		for (Index i : _selection) {
+			if (i.get() >= index0)
+				i.set(i.get() - length);
 		}
 	}
 
@@ -392,7 +271,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 			throw new InternalError();
 		}
 		clone._listeners = new LinkedList<ListDataListener>();
-		clone._value = (BitSet) _value.clone(); 
+		clone._selection = (LinkedList<Index>) _selection.clone(); 
 		return clone;
 	}
 }
