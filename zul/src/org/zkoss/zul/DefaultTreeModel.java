@@ -49,9 +49,8 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
-	private HashMap<TreeNode<E>, Boolean> _opens = new HashMap<TreeNode<E>, Boolean>();
-
-	private HashMap<TreeNode<E>, Boolean> _selections = new HashMap<TreeNode<E>, Boolean>();
+	private HashSet<TreeNode<E>> _opens = new HashSet<TreeNode<E>>();
+	private HashSet<TreeNode<E>> _selections = new HashSet<TreeNode<E>>();
 
 	private boolean _multiple;
 
@@ -200,8 +199,8 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		int newPathLength = paths != null ? paths.length : 0;
 		if (newPathLength > 0) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (!_opens.containsKey(e)) {
-					_opens.put(e, Boolean.TRUE);
+				if (!_opens.contains(e)) {
+					_opens.add(e);
 					fireOpenChanged(e);
 				}
 			}
@@ -220,13 +219,10 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public void removeOpenPaths(int[][] paths) {
 		int newPathLength = paths != null ? paths.length : 0;
-		if (newPathLength > 0 && !_opens.isEmpty()) {
-			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_opens.remove(e) != null) {
+		if (newPathLength > 0 && !_opens.isEmpty())
+			for (TreeNode<E> e : getNodesByPath(paths))
+				if (_opens.remove(e))
 					fireOpenChanged(e);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -234,7 +230,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		if (path != null && !_opens.isEmpty()) {
 			TreeNode<E> e = getChild(path);
 			if (e != null)
-				return _opens.containsKey(e);
+				return _opens.contains(e);
 		}
 		return false;
 	}
@@ -242,8 +238,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public int[] getOpenPath() {
 		if (!_opens.isEmpty()) {
-			return getPath(_opens.keySet().iterator()
-					.next());
+			return getPath(_opens.iterator().next());
 		} else return null;
 	}
 
@@ -251,7 +246,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	public int[][] getOpenPaths() {
 		if (!_opens.isEmpty()) {
 			List<int[]> paths = new ArrayList<int[]>();
-			for (TreeNode<E> e : _opens.keySet()) {
+			for (TreeNode<E> e : _opens) {
 				int[] path = getPath(e);
 				if (path != null)
 					paths.add(path);
@@ -273,7 +268,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public void clearOpen() {
 		if (!_opens.isEmpty()) {
-			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_opens.keySet())) {
+			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_opens)) {
 				_opens.remove(e);
 				fireOpenChanged(e);
 			}
@@ -311,16 +306,16 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 				List<TreeNode<E>> newSelection = getNodesByPath(paths);
 				if (!newSelection.isEmpty()) {
 					TreeNode<E> e = newSelection.get(0);
-					if (!_selections.containsKey(e)) {
+					if (!_selections.contains(e)) {
 						_selections.clear();
-						_selections.put(e, Boolean.TRUE);
+						_selections.add(e);
 						fireSelectionChanged(e);
 					}
 				}
 			} else {
 				for (TreeNode<E> e : getNodesByPath(paths)) {
-					if (!_selections.containsKey(e)) {
-						_selections.put(e, Boolean.TRUE);
+					if (!_selections.contains(e)) {
+						_selections.add(e);
 						fireSelectionChanged(e);
 					}
 				}
@@ -342,9 +337,8 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		int newPathLength = paths != null ? paths.length : 0;
 		if (newPathLength > 0 && !_selections.isEmpty()) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_selections.remove(e) != null) {
+				if (_selections.remove(e))
 					fireSelectionChanged(e);
-				}
 				if (!isMultiple())
 					break;
 			}
@@ -356,7 +350,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		if (path != null && !_selections.isEmpty()) {
 			TreeNode<E> e = getChild(path);
 			if (e != null)
-				return _selections.containsKey(e);
+				return _selections.contains(e);
 		}
 		return false;
 	}
@@ -364,8 +358,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public int[] getSelectionPath() {
 		if (!_selections.isEmpty()) {
-			return getPath(_selections.keySet()
-					.iterator().next());
+			return getPath(_selections.iterator().next());
 		} else return null;
 	}
 
@@ -373,7 +366,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	public int[][] getSelectionPaths() {
 		if (!_selections.isEmpty()) {
 			List<int[]> paths = new ArrayList<int[]>();
-			for (TreeNode<E> e : _selections.keySet()) {
+			for (TreeNode<E> e : _selections) {
 				int[] path = getPath(e);
 				if (path != null)
 					paths.add(path);
@@ -395,7 +388,7 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public void clearSelection() {
 		if (!_selections.isEmpty()) {
-			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_selections.keySet())) {
+			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_selections)) {
 				_selections.remove(e);
 				fireSelectionChanged(e);
 			}
@@ -406,8 +399,8 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		DefaultTreeModel<E> clone = (DefaultTreeModel<E>)super.clone();
-		clone._selections = new HashMap<TreeNode<E>, Boolean>(_selections);
-		clone._opens = new HashMap<TreeNode<E>, Boolean>(_opens);
+		clone._selections = new HashSet<TreeNode<E>>(_selections);
+		clone._opens = new HashSet<TreeNode<E>>(_opens);
 		return clone;
 	}
 	//-- TreeModelExt --//
@@ -438,6 +431,6 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	
 	private void fireStructureChangedEvent(TreeNode<E> node) {
 		if (node.getChildCount() == 0) return;
-		fireEvent(node,  0, 0,TreeDataEvent.STRUCTURE_CHANGED);
+		fireEvent(node, 0, 0,TreeDataEvent.STRUCTURE_CHANGED);
 	}
 }
