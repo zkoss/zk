@@ -40,6 +40,8 @@ public class Toolbarbutton extends Button {
 		addClientEvent(Toolbarbutton.class, Events.ON_CHECK, CE_IMPORTANT);
 	}
 	
+	private String _mode ="default";
+	
 	private boolean _checked ;
 	
 	public Toolbarbutton() {
@@ -54,6 +56,7 @@ public class Toolbarbutton extends Button {
 	protected void renderProperties(ContentRenderer renderer)
 			throws IOException {
 		super.renderProperties(renderer);
+		render(renderer, "mode", getMode());
 		render(renderer, "checked", isChecked());
 	}
 	
@@ -80,6 +83,17 @@ public class Toolbarbutton extends Button {
 		if (_checked  != checked) {
 			_checked = checked;
 			smartUpdate("checked", isChecked());
+		}
+	}
+
+	public String getMode() {
+		return _mode;
+	}
+	
+	public void setMode(String mode) {
+		if (_mode != mode) {
+			_mode = mode;
+			smartUpdate("mode", _mode);
 		}
 	}
 	

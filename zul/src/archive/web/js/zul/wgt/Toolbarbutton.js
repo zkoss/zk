@@ -42,19 +42,31 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
+	_mode:"default",
 	_checked: false,
 	//_tabindex: 0,
 
 	$define: {
-		/** Returns whether it is checked. (Note:It's only available in toggle mold.)
+		/**
+		 * Returns the mode.
+		 * @return string
+		 */
+		/**
+		 * Sets the mode. (default/toggle)
+		 * @param string mode
+		 */
+		mode:function(mode){
+			this.rerender();
+		},
+		/** Returns whether it is checked. (Note:It's only available in toggle mode.)
 		 * <p>Default: false.
 		 * @return boolean
 		 */
-		/** Sets whether it is checked. (Note:It's only available in toggle mold.)
-		 * @param boolean disabled
+		/** Sets whether it is checked. (Note:It's only available in toggle mode.)
+		 * @param boolean val
 		 */
 		checked:function(val){
-			if(this.desktop && this._mold == "toggle"){
+			if(this.desktop && this._mode == "toggle"){
 				var s = this.getZclass(), $n = jq(this.$n());
 				if(val)
 					$n.addClass( s + '-ck' );
@@ -253,7 +265,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 				scls.push(' ' , zcls , '-disd');
 		}
 		
-		if(this._mold == "toggle" && this._checked && nozcls && zcls ) {
+		if(this._mode == "toggle" && this._checked && nozcls && zcls ) {
 			scls.push(' ',zcls,'-ck');
 		}
 		
@@ -282,7 +294,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 					zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 				this.$super('doClick_', evt, true);
 				
-				if (this._mold == "toggle") {
+				if (this._mode == "toggle") {
 					this.setChecked(!this.isChecked());
 					this.fire('onCheck', this.isChecked());
 				}
