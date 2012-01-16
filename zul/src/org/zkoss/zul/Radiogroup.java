@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
@@ -497,7 +498,7 @@ public class Radiogroup extends XulElement {
 	 */
 	@SuppressWarnings("rawtypes")
 	private static final RadioRenderer _defRend = new RadioRenderer() {
-		public void render(final Radio item,final Object data) throws Exception {
+		public void render(final Radio item,final Object data,final int index) throws Exception {
 			final Radiogroup cb = (Radiogroup)item.getParent();
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
@@ -509,6 +510,24 @@ public class Radiogroup extends XulElement {
 						public Object resolveVariable(String name) {
 							if ("each".equals(name)) {
 								return data;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									public Object getEach() {
+										return data;
+									}
+									public int getIndex() {
+										return index;
+									}
+									public Integer getBegin() {
+										return 0;
+									}
+									public Integer getEnd() {
+										return cb.getModel().getSize();
+									}
+								};
 							} else {
 								return null;
 							}
@@ -545,7 +564,7 @@ public class Radiogroup extends XulElement {
 			}
 
 			try {
-				_renderer.render(item, subset.getElementAt(index));
+				_renderer.render(item, subset.getElementAt(index),index);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -578,9 +597,29 @@ public class Radiogroup extends XulElement {
 	public Object clone() {
 		final Radiogroup clone = (Radiogroup)super.clone();
 		fixClone(clone);
+		if (clone._model != null) {
+			if (clone._model instanceof ComponentCloneListener) {
+				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
+				if (model != null)
+					clone._model = model;
+			}
+			clone._dataListener = null;
+			clone.initDataListener();
+		}		
 		return clone;
 	}
 	private static void fixClone(Radiogroup clone) {
 		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
 	}
+	
+	//	Serializable//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (_model != null) {
+			initDataListener();
+		}
+	}
+	
 }
