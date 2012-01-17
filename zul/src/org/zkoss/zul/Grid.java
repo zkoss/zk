@@ -696,6 +696,9 @@ public class Grid extends MeshElement {
 	 * @see #getGroupsModel()
 	 */
 	public void setModel(GroupsModel<?, ?, ?> model) {
+		if (evalRod()) {
+			throw new UnsupportedOperationException("Not support GroupsModel in ROD yet!");
+		}
 		setModel((ListModel)(model != null ? GroupsListModel.toListModel(model): null));
 	}
 	private void initDataListener() {
