@@ -178,7 +178,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (cwgt._vflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._vflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._vflexsz;
-									}/** Fixed for B50-3356022.zul
+									}/* Fixed for B50-3356022.zul
 									 else
 										sz += cwgt._vflexsz === undefined ? 0 : cwgt._vflexsz;
 									*/
@@ -286,7 +286,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (cwgt._hflex == 'min') {
 									if (zkc.isVisible()) {
 										sz += cwgt._hflexsz === undefined ? zFlex.fixMinFlex(cwgt, c, o) : cwgt._hflexsz;
-									}/** Fixed for B50-3356022.zul
+									}/* Fixed for B50-3356022.zul
 									 else {
 										sz += cwgt._hflexsz === undefined ? 0 : cwgt._hflexsz;
 									}*/
