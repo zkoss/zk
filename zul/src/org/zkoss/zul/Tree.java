@@ -1599,23 +1599,18 @@ public class Tree extends MeshElement {
 			if (v != null) //a new item is created to replace the existent one
 				(ti = (Treeitem) v).setOpen(false);
 			// B60-ZK-767: handle selected/open state here, as it might be replaced
-			TreeNode treeNode = null;
-			if (childNode instanceof TreeNode) {
-				treeNode = (TreeNode) childNode;
-				ti.setTreeNode(treeNode);
-			}
 			int[] path = null;
+			boolean isLeaf = childNode != null && _model.isLeaf(childNode);
 			if (_model instanceof TreeSelectionModel) {
 				TreeSelectionModel model = (TreeSelectionModel) _model;
 				if (!model.isSelectionEmpty() && 
 						getSelectedCount() != model.getSelectionCount() &&
-						model.isPathSelected((path = _model.getPath(childNode))))
+						model.isPathSelected(path = _model.getPath(childNode)))
 					addItemToSelection(ti);
 			}
 			if (_model instanceof TreeOpenableModel) {
 				TreeOpenableModel model = (TreeOpenableModel) _model;
 				if (!model.isOpenEmpty()) {
-					boolean isLeaf = treeNode != null ? treeNode.isLeaf() : false;
 					if (!isLeaf) {
 						if (path == null)
 							path = _model.getPath(childNode);
@@ -1623,7 +1618,7 @@ public class Tree extends MeshElement {
 					}
 				}
 			}
-			if (!_model.isLeaf(childNode) && ti.getTreechildren() == null) {
+			if (!isLeaf && ti.getTreechildren() == null) {
 				Treechildren tc = new Treechildren();
 				tc.setParent(ti);
 			}

@@ -51,7 +51,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private boolean _selected;
 	private boolean _disabled;
 	private boolean _checkable = true;
-	private TreeNode _treeNode;
 	
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
@@ -207,21 +206,6 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public <T> void setValue(T value) {
 		_value = value;
 	}
-	/**
-	 * Returns the {@link TreeNode} in corresponding position of {@link TreeModel}.
-	 * @since 5.0.7
-	 */
-	/*package*/ TreeNode getTreeNode() {
-		return _treeNode;
-	}
-	/** 
-	 * Sets the {@link TreeNode} in corresponding position of {@link TreeModel}.
-	 * @since 5.0.7
-	 */
-	/*package*/ void setTreeNode(TreeNode treeNode) {
-		_treeNode = treeNode;
-	}
-
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 */
