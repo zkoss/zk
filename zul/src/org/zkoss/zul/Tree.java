@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -350,7 +349,7 @@ public class Tree extends MeshElement {
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
 	 * <p>If mold is "paging", this method never returns null, because
-	 * a child paging controller is created automcatically (if not specified
+	 * a child paging controller is created automatically (if not specified
 	 * by developers with {@link #setPaginal}).
 	 *
 	 * <p>If a paging controller is specified (either by {@link #setPaginal},
@@ -709,8 +708,8 @@ public class Tree extends MeshElement {
 			_multiple = multiple;
 			if (!_multiple && _selItems.size() > 1) {
 				final Treeitem item = getSelectedItem();
-				for (Iterator it = _selItems.iterator(); it.hasNext();) {
-					final Treeitem ti = (Treeitem)it.next();
+				for (Iterator<Treeitem> it = _selItems.iterator(); it.hasNext();) {
+					final Treeitem ti = it.next();
 					if (ti != item) {
 						ti.setSelectedDirectly(false);
 						it.remove();
@@ -822,10 +821,8 @@ public class Tree extends MeshElement {
 
 			if (_sel != item
 			|| (_multiple && _selItems.size() > 1)) {
-				for (Iterator it = _selItems.iterator(); it.hasNext();) {
-					final Treeitem ti = (Treeitem)it.next();
+				for (Treeitem ti : _selItems)
 					ti.setSelectedDirectly(false);
-				}
 				_selItems.clear();
 
 				_sel = item;
@@ -883,8 +880,7 @@ public class Tree extends MeshElement {
 	 */
 	private void smartUpdateSelection() {
 		final StringBuffer sb = new StringBuffer(80);
-		for (Iterator it = _selItems.iterator(); it.hasNext();) {
-			final Treeitem item = (Treeitem)it.next();
+		for (Treeitem item : _selItems) {
 			if (sb.length() > 0) sb.append(',');
 			sb.append(item.getUuid());
 		}
@@ -902,10 +898,8 @@ public class Tree extends MeshElement {
 	 */
 	public void clearSelection() {
 		if (!_selItems.isEmpty()) {
-			for (Iterator it = _selItems.iterator(); it.hasNext();) {
-				final Treeitem item = (Treeitem)it.next();
+			for (Treeitem item : _selItems)
 				item.setSelectedDirectly(false);
-			}
 			_selItems.clear();
 			_sel = null;
 			smartUpdate("selectedItem", (Object)null);
@@ -919,8 +913,7 @@ public class Tree extends MeshElement {
 
 		//we don't invoke getItemCount first because it is slow!
 		boolean first = true;
-		for (Iterator it = getItems().iterator(); it.hasNext();) {
-			final Treeitem item = (Treeitem)it.next();
+		for (Treeitem item : getItems()) {
 			if (!item.isSelected()) {
 				_selItems.add(item);
 				item.setSelectedDirectly(true);
@@ -949,7 +942,7 @@ public class Tree extends MeshElement {
 
 	/** Returns all selected items.
 	 */
-	public Set getSelectedItems() {
+	public Set<Treeitem> getSelectedItems() {
 		return Collections.unmodifiableSet(_selItems);
 	}
 	/** Returns the number of items being selected.
@@ -1045,8 +1038,8 @@ public class Tree extends MeshElement {
 			return; //already being processed by insertBefore
 
 		//main the selected status
-		for (Iterator it = tchs.getItems().iterator(); it.hasNext();)
-			fixNewChild((Treeitem)it.next());
+		for (Treeitem item : tchs.getItems())
+			fixNewChild(item);
 	}
 	/** Fixes the status of new added child. */
 	private void fixNewChild(Treeitem item) {
@@ -1068,8 +1061,7 @@ public class Tree extends MeshElement {
 
 		//main the selected status
 		boolean fixSel = false;
-		for (Iterator it = tchs.getItems().iterator(); it.hasNext();) {
-			final Treeitem item = (Treeitem)it.next();
+		for (Treeitem item : tchs.getItems()) {
 			if (item.isSelected()) {
 				_selItems.remove(item);
 				if (_sel == item) {
@@ -1109,8 +1101,7 @@ public class Tree extends MeshElement {
 	/** Fixes all info about the selected status. */
 	private void fixSelectedSet() {
 		_sel = null; _selItems.clear();
-		for (Iterator it = getItems().iterator(); it.hasNext();) {
-			final Treeitem item = (Treeitem)it.next();
+		for (Treeitem item : getItems()) {
 			if (item.isSelected()) {
 				if (_sel == null) {
 					_sel = item;
@@ -1131,8 +1122,7 @@ public class Tree extends MeshElement {
 		case 0:
 			break;
 		default:
-			for (Iterator it = getItems().iterator(); it.hasNext();) {
-				final Treeitem item = (Treeitem)it.next();
+			for (Treeitem item : getItems()) {
 				if (item.isSelected()) {
 					sel = item;
 					break;
@@ -1167,7 +1157,8 @@ public class Tree extends MeshElement {
 		if (cnt > 0 || cntSel > 0) clone.afterUnmarshal(cnt, cntSel);
 		if(clone._model != null){
 			if (clone._model instanceof ComponentCloneListener) {
-				final TreeModel<Object> model = (TreeModel<Object>) ((ComponentCloneListener) clone._model).willClone(clone);
+				final TreeModel<Object> model = (TreeModel<Object>) 
+					((ComponentCloneListener) clone._model).willClone(clone);
 				if (model != null)
 					clone._model = model;
 			}
@@ -1182,8 +1173,7 @@ public class Tree extends MeshElement {
 	 */
 	private void afterUnmarshal(int cnt, int cntSel) {
 		if (cnt != 0) {
-			for (Iterator it = getChildren().iterator(); it.hasNext();) {
-				final Object child = it.next();
+			for (Component child : getChildren()) {
 				if (child instanceof Treecols) {
 					_treecols = (Treecols)child;
 					if (--cnt == 0) break;
@@ -1204,8 +1194,7 @@ public class Tree extends MeshElement {
 		_sel = null;
 		_selItems.clear();
 		if (cntSel != 0) {
-			for (Iterator it = getItems().iterator(); it.hasNext();) {
-				final Treeitem ti = (Treeitem)it.next();
+			for (Treeitem ti : getItems()) {
 				if (ti.isSelected()) {
 					if (_sel == null) _sel = ti;
 					_selItems.add(ti);
@@ -1335,7 +1324,7 @@ public class Tree extends MeshElement {
 
 		//B50-ZK-721
 		if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
-			List siblings = tc.getChildren();
+			List<Component> siblings = tc.getChildren();
 			// if there is no sibling or new item is inserted at end.
 			tc.insertBefore(newTi,
 					// Note: we don't use index >= size(); reason: it detects bug
@@ -1350,7 +1339,7 @@ public class Tree extends MeshElement {
 	 */
 	private void onTreeDataRemoved(Component parent,Object node, int index){
 		final Treechildren tc = treechildrenOf(parent);
-		final List items = tc.getChildren();
+		final List<Component> items = tc.getChildren();
 		if (items.size() > index) {
 			((Treeitem) items.get(index)).detach();
 		} else if (!(parent instanceof Treeitem) || ((Treeitem) parent).isLoaded()) {
@@ -1362,7 +1351,7 @@ public class Tree extends MeshElement {
 	 * Handle event that child's content is changed
 	 */
 	private void onTreeDataContentChange(Component parent,Object node, int index){
-		List items = treechildrenOf(parent).getChildren();
+		List<Component> items = treechildrenOf(parent).getChildren();
 
 		/*
 		 * 2008/02/01 --- issue: [ 1884112 ] When Updating TreeModel, throws a IndexOutOfBoundsException
@@ -1505,9 +1494,8 @@ public class Tree extends MeshElement {
 	private static boolean doSort(Tree tree) {
 		Treecols cols = tree.getTreecols();
 		if (!tree.isAutosort() || cols == null) return false;
-		for (Iterator it = cols.getChildren().iterator();
-		it.hasNext();) {
-			final Treecol hd = (Treecol)it.next();
+		for (Component c : cols.getChildren()) {
+			final Treecol hd = (Treecol) c;
 			String dir = hd.getSortDirection();
 			if (!"natural".equals(dir)) {
 				hd.doSort("ascending".equals(dir));
@@ -1929,7 +1917,7 @@ public class Tree extends MeshElement {
 			return null;
 		// Start from root-Tree
 		Treeitem ti = null;
-		List children = this.getTreechildren().getChildren();
+		List<Component> children = this.getTreechildren().getChildren();
 		/*
 		 * Go through each stop in path and render corresponding treeitem
 		 */
