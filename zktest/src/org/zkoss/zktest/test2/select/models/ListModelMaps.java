@@ -8,7 +8,7 @@ public class ListModelMaps {
 	public static final int MULTIPLE = 1;
 	public static final int CLONEABLE = 2;
 	public static final int MULTIPLE_AND_CLONEABLE = 3;
-	private static final int defaultAmount = 1000;
+	private static final int defaultAmount = 300;
 	
 	public static ListModelMap getModel(int config) {
 		return getModel(config,defaultAmount);

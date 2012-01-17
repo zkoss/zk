@@ -25,14 +25,48 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		int elemcnt = 1001;
 		int rmcnts = 0;
 		int rmcntm = 1001;
+
+		public void checkEqualSelection (String idOne, String idTwo, Label msg) {
+			Listbox lbOne = msg.getPage().getFellow(idOne);
+			Listbox lbTwo = msg.getPage().getFellow(idTwo);
+			Set s1 = lbOne.getModel().getSelection();
+			Set s2 = lbTwo.getModel().getSelection();
+			boolean matched = false;
+			for (Object o : s1) {
+				for (Object o2 : s2) {
+					System.out.println(o);
+					System.out.println(o2);
+					if (o.equals(o2)) {
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {
+					msg.setValue("false");
+					return;
+				}
+				matched = false;
+			}
+			msg.setValue("true");
+		}
+		public void showSelection (String idOne, Label msg) {
+			Listbox lbOne = msg.getPage().getFellow(idOne);
+			Set s1 = lbOne.getModel().getSelection();
+			StringBuilder sb = new StringBuilder("");
+			boolean matched = false;
+			for (Object o : s1) {
+				sb.append(o);
+			}
+			msg.setValue(sb.toString());
+		}
 	]]></zscript>
 	<div>
 		<div>1. There are 3 Listbox below.</div>
 		<div>2. For first two Listbox, their select status will sync automatically after you select item.</div>
 		<div>3. Select data 10 of third Listbox.</div>
 		<div>4. Click clone and 'clone by serialization', then two Listboxes should be created and also select data 10.</div>
-		<div>5. Select data 312 of third Listbox, data 313 of fourth and data 314 of fifth, the select status of last three listbox should not sync.</div>
-		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 312.</div>
+		<div>5. Select data 212 of third Listbox, data 213 of fourth and data 214 of fifth, the select status of last three listbox should not sync.</div>
+		<div>6. Click clone and 'clone by serialization', you should see two Listboxes created and each Listbox after fifth Listbox select data 212.</div>
 		<div>7. Click 'insert item', each select of Listbox should not be changed.</div>
 		<div>8. Click 'remove item', each select of Listbox should not be changed.</div>
 	</div>
@@ -42,15 +76,22 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<listbox id="lbxTwo" height="150px" width="140px" model="${model}" onSelect="" multiple="true" checkmark="true" />
 		<listbox id="lbxThree" height="150px" width="140px" model="${model2}" onSelect="" multiple="true" checkmark="true" />
 	</hbox>
+	<hbox>
+		<textbox id="tbOne" value="box one" />
+		<textbox id="tbTwo" value="box two" />
+		<button id="btnOne" label="check equal selection" onClick='checkEqualSelection(tbOne.getValue(), tbTwo.getValue(), msg);' />
+		<button id="btnFour" label="show selection" onClick='showSelection(tbOne.getValue(), msg);' />
+		<label id="msg" />
+	</hbox>
 	<div height="10px"></div>
-	<button label="clone">
+	<button id="btnTwo" label="clone">
 		<attribute name="onClick">
 			Listbox lbx = lbxThree.clone();
 			lbx.setId("lbxThree_clone" + cnt++);
 			lbx.setParent(cloneThreeArea);
 		</attribute>
 	</button>
-	<button label="Clone by Serialization">
+	<button id="btnThree" label="Clone by Serialization">
 		<attribute name="onClick"><![CDATA[{
 			import java.io.*;
 			ByteArrayOutputStream boa = new ByteArrayOutputStream();
@@ -61,14 +102,14 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
-	<button label="insert item">
+	<button id="btnSix" label="insert item">
 		<attribute name="onClick">
 			model.put("item "+elemcnt, "data "+elemcnt);
 			model2.put("item "+elemcnt, "data "+elemcnt);
 			elemcnt++;
 		</attribute>
 	</button>
-	<button label="remove item">
+	<button id="btnSeven" label="remove item">
 		<attribute name="onClick"><![CDATA[
 			String key = "item ";
 			if (rmcntm < elemcnt) {

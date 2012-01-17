@@ -23,6 +23,45 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 		int cnt = 0;
 		int elemcnt = 0;
+
+		public void checkEqualSelection (String idOne, String idTwo, Label msg) {
+			Listbox lbOne = msg.getPage().getFellow(idOne);
+			Listbox lbTwo = msg.getPage().getFellow(idTwo);
+			Set s1 = lbOne.getModel().getSelection();
+			Set s2 = lbTwo.getModel().getSelection();
+			boolean matched = false;
+			for (Object o : s1) {
+				for (Object o2 : s2) {
+					System.out.println(o);
+					System.out.println(o2);
+					if (o.equals(o2)) {
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {
+					msg.setValue("false");
+					return;
+				}
+				matched = false;
+			}
+			msg.setValue("true");
+		}
+		public void showSelection (String idOne, Label msg) {
+			Listbox lbOne = msg.getPage().getFellow(idOne);
+			Set s1 = lbOne.getModel().getSelection();
+			StringBuilder sb = new StringBuilder("");
+			boolean matched = false;
+			for (Object o : s1) {
+				sb.append(o);
+			}
+			msg.setValue(sb.toString());
+		}
+		public void changePage(String id, String itemNumber, Page page) {
+			Listbox lbx = page.getFellow(id);
+			int inm = Integer.parseInt(itemNumber);
+			lbx.setActivePage(inm/lbx.getPageSize());
+		}
 	]]></zscript>
 	<div>
 		<div>1. There are 3 Listbox below.</div>
@@ -39,15 +78,23 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<listbox id="lbxTwo" height="150px" width="310px" mold="paging" pageSize="10" model="${model}" onSelect="" checkmark="true" />
 		<listbox id="lbxThree" height="150px" width="310px" mold="paging" pageSize="10" model="${model2}" onSelect="" checkmark="true" />
 	</hbox>
+	<hbox>
+		<textbox id="tbOne" value="box one" />
+		<textbox id="tbTwo" value="box two" />
+		<button id="btnOne" label="check equal selection" onClick='checkEqualSelection(tbOne.getValue(), tbTwo.getValue(), msg);' />
+		<button id="btnFour" label="show selection" onClick='showSelection(tbOne.getValue(), msg);' />
+		<button id="pagingBtn" label="go to page" onClick='changePage(tbOne.getValue(), tbTwo.getValue(), self.getPage());' />
+		<label id="msg" />
+	</hbox>
 	<div height="10px"></div>
-	<button label="clone">
+	<button id="btnTwo" label="clone">
 		<attribute name="onClick">
 			Listbox lbx = lbxThree.clone();
 			lbx.setId("lbxThree_clone" + cnt++);
 			lbx.setParent(cloneThreeArea);
 		</attribute>
 	</button>
-	<button label="Clone by Serialization">
+	<button id="btnThree" label="Clone by Serialization">
 		<attribute name="onClick"><![CDATA[{
 			import java.io.*;
 			ByteArrayOutputStream boa = new ByteArrayOutputStream();
@@ -58,13 +105,13 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
-	<button label="insert item">
+	<button id="btnSix" label="insert item">
 		<attribute name="onClick">
 			model.add(0, "inserted "+elemcnt++);
 			model2.add(0, "inserted "+elemcnt++);
 		</attribute>
 	</button>
-	<button label="remove item">
+	<button id="btnSeven" label="remove item">
 		<attribute name="onClick">
 			model.remove(0);
 			model2.remove(0);
