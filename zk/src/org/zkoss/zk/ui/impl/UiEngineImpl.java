@@ -572,21 +572,8 @@ public class UiEngineImpl implements UiEngine {
 				.getUiEngine()).getExtension();
 		ext.afterCreate(comps);
 
-		//Bug ZK-504: we have to fire onCreate after all composer since
-		//a composer might register an onCreate listener for its child
-		if (comps != null)
-			for (int j = 0; j < comps.length; ++j)
-				postOnCreate(exec, comps[j]);
 	}
-	private static void postOnCreate(Execution exec, Component comp) {
-		//child first
-		for (Component child = comp.getFirstChild();
-		child != null; child = child.getNextSibling())
-			postOnCreate(exec, child);
 
-		if (Events.isListened(comp, Events.ON_CREATE, false))
-			Events.postEvent(new CreateEvent(Events.ON_CREATE, comp, exec.getArg()));
-	}
 	/** Called after a new page has been redrawn ({@link PageCtrl#redraw}
 	 * has been called).
 	 */
@@ -838,6 +825,10 @@ public class UiEngineImpl implements UiEngine {
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
 
+			if (Events.isListened(child, Events.ON_CREATE, false))
+				Events.postEvent(
+					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
+			
 			return child;
 		} catch (Throwable ex) {
 			boolean ignore = false;
