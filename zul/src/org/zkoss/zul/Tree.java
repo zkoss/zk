@@ -1390,36 +1390,35 @@ public class Tree extends MeshElement {
 	protected Component getChildByNode(Object node) {
 		if (_model == null)
 			throw new IllegalStateException("model required");
-
+		
 		final Object root = _model.getRoot();
 		if (Objects.equals(root, node))
 			return this;
-
-		return getChildByNode0(_model, _treechildren, root, node);
+		
+		return getChildByPath(_model.getPath(node));
 	}
-	private static Treeitem
-	getChildByNode0(TreeModel<Object> model, Treechildren tc, Object parent, Object node) {
+	/**
+	 * Return the Tree or Treeitem component by a path, or null if corresponding
+	 * Treeitem is not instantiated (i.e., rendered) yet. It returns this tree 
+	 * if the given node is the root node. (i.e., {@link TreeModel#getRoot}).
+	 * @since 6.0.0
+	 */
+	protected Component getChildByPath(int[] path) {
+		if (path.length == 0)
+			return this; // return Tree
+		
+		Treeitem item = getChildTreeitem(getTreechildren(), path[0]);
+		for (int j = 1; j < path.length && item != null; j++)
+			item = getChildTreeitem(item.getTreechildren(), path[j]);
+		
+		return item;
+	}
+	private static Treeitem getChildTreeitem(Treechildren tc, int i) {
 		if (tc == null)
-			return null; //if not rendered, return null
-
-		int j = model.getIndexOfChild(parent, node);
-		if (j >= 0) {
-			final List cs = tc.getChildren();
-			return j < cs.size() ? (Treeitem)cs.get(j): null; //null if not rendered
-		}
-
-		Treeitem ti = (Treeitem)tc.getFirstChild();
-		j = 0;
-		for (int len = model.getChildCount(parent); j < len && ti != null; ++j) {
-			Treeitem c = getChildByNode0(
-				model, ti.getTreechildren(), model.getChild(parent, j), node);
-			if (c != null)
-				return c;
-			ti = (Treeitem)ti.getNextSibling();
-		}
-		return null;
+			return null;
+		List<Component> cs = tc.getChildren();
+		return i < 0 || i >= cs.size() ? null : (Treeitem) cs.get(i);
 	}
-
 	/*
 	 * Initial Tree data listener
 	 */
