@@ -9,16 +9,22 @@ public class ListModelArrays {
 	public static final int MULTIPLE = 1;
 	public static final int CLONEABLE = 2;
 	public static final int MULTIPLE_AND_CLONEABLE = 3;
+	
+	private static final int defaultAmount = 300;
 
-	public static ListModelArray getModel(int config) {
+	public static ListModelArray getModel(int config,int items) {
 		ListModelArray model = null;
 		if (config == CLONEABLE || config == MULTIPLE_AND_CLONEABLE)
-			model = (ListModelArray)org.zkoss.zktest.util.Serializations.toCloneableListModelAraay(getItems());
+			model = (ListModelArray)org.zkoss.zktest.util.Serializations.toCloneableListModelAraay(getItems(items));
 		else
-			model = new ListModelArray(getItems());
+			model = new ListModelArray(getItems(items));
 		if(config == MULTIPLE || config == MULTIPLE_AND_CLONEABLE)
 			model.setMultiple(true);
 		return model;
+	}
+	
+	public static ListModelArray getModel(int config) {
+		return getModel(config,defaultAmount);
 	}
 	public static Comparator getRowComparator(boolean asc) {
 		return new MyRowComparator(asc);
@@ -36,11 +42,13 @@ public class ListModelArrays {
 			return -1;
 		}
 	}
-	private static String[] getItems() {
-		String[] Items = new String[300];
-		for (int i = 0; i < 300; i++) {
+	
+	private static String[] getItems(int num) {
+		String[] Items = new String[num];
+		for (int i = 0; i < num; i++) {
 			Items[i] = new String("data "+i);
 		}
 		return Items;
 	}
+	
 }
