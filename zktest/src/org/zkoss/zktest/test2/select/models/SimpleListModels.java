@@ -9,12 +9,19 @@ public class SimpleListModels {
 	public static final int MULTIPLE = 1;
 	public static final int CLONEABLE = 2;
 	public static final int MULTIPLE_AND_CLONEABLE = 3;
+	
+	private static final int defaultAmount = 300 ;
+	
 	public static SimpleListModel getModel(int config) {
+		return getModel(config, defaultAmount);
+	}
+	
+	public static SimpleListModel getModel(int config,int items) {
 		SimpleListModel model = null;
 		if (config == CLONEABLE || config == MULTIPLE_AND_CLONEABLE)
-			model = (SimpleListModel)org.zkoss.zktest.util.Serializations.toCloneableSimpleListModel(getItems().toArray(new String[0]));
+			model = (SimpleListModel)org.zkoss.zktest.util.Serializations.toCloneableSimpleListModel(getItems(items).toArray(new String[0]));
 		else
-			model = new SimpleListModel(getItems());
+			model = new SimpleListModel(getItems(items));
 		if(config == MULTIPLE || config == MULTIPLE_AND_CLONEABLE)
 			model.setMultiple(true);
 		return model;
@@ -38,9 +45,9 @@ public class SimpleListModels {
 	public static int getNumberFromData(String data) {
 		return Integer.parseInt(data.replace("data", "").trim());
 	}
-	private static List getItems() {
+	private static List getItems(int items) {
 		List Items = new ArrayList();
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < items; i++) {
 			Items.add(new String("data "+i));
 		}
 		return Items;

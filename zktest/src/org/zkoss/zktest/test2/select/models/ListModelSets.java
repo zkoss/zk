@@ -8,12 +8,18 @@ public class ListModelSets {
 	public static final int MULTIPLE = 1;
 	public static final int CLONEABLE = 2;
 	public static final int MULTIPLE_AND_CLONEABLE = 3;
+	private static final int defaultAmounts = 1000;
+	
 	public static ListModelSet getModel(int config) {
+		return getModel(config,defaultAmounts);
+	}
+	
+	public static ListModelSet getModel(int config,int items) {
 		ListModelSet model = null;
 		if (config == CLONEABLE || config == MULTIPLE_AND_CLONEABLE)
-			model = (ListModelSet)org.zkoss.zktest.util.Serializations.toCloneableListModelSet(getItems());
+			model = (ListModelSet)org.zkoss.zktest.util.Serializations.toCloneableListModelSet(getItems(items));
 		else
-			model = new ListModelSet(getItems());
+			model = new ListModelSet(getItems(items));
 		if(config == MULTIPLE || config == MULTIPLE_AND_CLONEABLE)
 			model.setMultiple(true);
 		return model;
@@ -37,9 +43,9 @@ public class ListModelSets {
 	public static int getNumberFromData(String data) {
 		return Integer.parseInt(data.substring(data.lastIndexOf("data")+4, data.length()).trim());
 	}
-	private static Set getItems() {
+	private static Set getItems(int items) {
 		Set Items = new LinkedHashSet();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < items; i++) {
 			Items.add(new String("data "+i));
 		}
 		return Items;
