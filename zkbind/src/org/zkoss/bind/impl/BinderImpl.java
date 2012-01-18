@@ -269,10 +269,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	private List<Method> getInitMethods(Class<?> clz) {
-		List<Method> inits = _initMethodCache.get(clz);
-		if(inits!=null) return inits;
-		
+		List<Method> inits = null;
 		synchronized(_initMethodCache){
+			//have to synchronized cache, because it calls expunge when get.
 			inits = _initMethodCache.get(clz);//check again
 			if(inits!=null) return inits;
 			
