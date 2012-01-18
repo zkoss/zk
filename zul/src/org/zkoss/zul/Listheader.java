@@ -17,15 +17,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Comparator;
-import java.util.HashMap;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -34,7 +29,6 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scopes;
 
-import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.ext.Sortable;
 
@@ -581,7 +575,7 @@ public class Listheader extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

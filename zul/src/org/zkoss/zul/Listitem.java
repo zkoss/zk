@@ -17,11 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.Serializable;
-import java.util.Map;
-
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -37,8 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Listitem extends XulElement {
-	private static final Log log = Log.lookup(Listitem.class);
-
+	
 	private transient Object _value;
 	/** The index in the parent (only for implementation purpose). */
 	private int _index = -1; //no parent at begining
@@ -63,12 +58,6 @@ public class Listitem extends XulElement {
 	 */
 	public Listbox getListbox() {
 		return (Listbox)getParent();
-	}
-	/** Returns whether the HTML's select tag is used.
-	 */
-	private boolean inSelectMold() {
-		final Listbox listbox = getListbox();
-		return listbox != null && listbox.inSelectMold();
 	}
 	
 	/**
@@ -370,7 +359,7 @@ public class Listitem extends XulElement {
 		}
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		if (s.readBoolean())

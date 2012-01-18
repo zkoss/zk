@@ -94,7 +94,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				//throw new UiException("Adding causes a smaller list?");
 			}
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD)
-			&& !inPagingMold() && rows != null)
+			&& !inPagingMold())
 				_grid.invalidate();
 					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
 					//Also better performance (outer better than remove a lot)
@@ -121,7 +121,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				//throw new UiException("Removal causes a larger list?");
 			}
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD)
-			&& !inPagingMold() && rows != null)
+			&& !inPagingMold())
 				_grid.invalidate();
 					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
 					//Also better performance (outer better than remove a lot)
@@ -329,45 +329,47 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 
 			int cnt = max - min + 1; //# of affected
-			if (model instanceof GroupsListModel) {
-			//detach all from end to front since groupfoot
-			//must be detached before group
-				newcnt += cnt; //add affected later
-				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD)
-				&& !inPaging && rows != null)
-					_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-						//Also better performance (if a lot of elements to change)
-
-				Component comp = (Component)rows.getChildren().get(max);
-				next = comp.getNextSibling();
-				while (--cnt >= 0) {
-					Component p = comp.getPreviousSibling();
-					comp.detach();
-					comp = p;
-				}
-			} else { //ListModel
-				int addcnt = 0;
-				Component row = (Component)rows.getChildren().get(min);
-				while (--cnt >= 0) {
-					next = row.getNextSibling();
-
-					if (cnt < -newcnt) { //if shrink, -newcnt > 0
-						row.detach(); //remove extra
-					} else if (((LoadStatus)((Row)row).getExtraCtrl()).isLoaded()) {
-						if (renderer == null)
-							renderer = (RowRenderer)getRealRenderer();
-						row.detach(); //always detach
-						rows.insertBefore((Row) newUnloadedItem(renderer, min), next);
-						++addcnt;
+			if (rows != null) {
+				if (model instanceof GroupsListModel) {
+				//detach all from end to front since groupfoot
+				//must be detached before group
+					newcnt += cnt; //add affected later
+					if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD)
+					&& !inPaging)
+						_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+							//Also better performance (if a lot of elements to change)
+	
+					Component comp = (Component)rows.getChildren().get(max);
+					next = comp.getNextSibling();
+					while (--cnt >= 0) {
+						Component p = comp.getPreviousSibling();
+						comp.detach();
+						comp = p;
 					}
-					++min;
-					row = next;
+				} else { //ListModel
+					int addcnt = 0;
+					Component row = (Component)rows.getChildren().get(min);
+					while (--cnt >= 0) {
+						next = row.getNextSibling();
+	
+						if (cnt < -newcnt) { //if shrink, -newcnt > 0
+							row.detach(); //remove extra
+						} else if (((LoadStatus)((Row)row).getExtraCtrl()).isLoaded()) {
+							if (renderer == null)
+								renderer = (RowRenderer)getRealRenderer();
+							row.detach(); //always detach
+							rows.insertBefore((Row) newUnloadedItem(renderer, min), next);
+							++addcnt;
+						}
+						++min;
+						row = next;
+					}
+	
+					if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
+					&& !inPaging)
+						_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
+							//Also better performance (if a lot of elements to change)
 				}
-
-				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
-				&& !inPaging && rows != null)
-					_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-						//Also better performance (if a lot of elements to change)
 			}
 		} else {
 			min = 0;

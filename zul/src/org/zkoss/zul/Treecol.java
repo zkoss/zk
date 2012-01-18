@@ -352,7 +352,6 @@ public class Treecol extends HeaderElement {
 	 * null but {@link TreeModelExt} is not implemented.
 	 * @since 5.0.6
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
 		if (ascending) {
@@ -536,7 +535,7 @@ public class Treecol extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

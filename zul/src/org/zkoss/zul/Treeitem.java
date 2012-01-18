@@ -349,8 +349,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if(!isVisible())
 			return false;
 		Component comp = getParent();
-		return comp == null || (comp instanceof Treechildren) ? 
-				((Treechildren)comp).isRealVisible() : comp.isVisible();
+		return comp == null || ((comp instanceof Treechildren) ? 
+				((Treechildren)comp).isRealVisible() : comp.isVisible());
 	}
 	
 	//-- super --//
@@ -552,7 +552,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 
 	//-- Serializable --//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

@@ -20,10 +20,7 @@ import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
@@ -921,7 +918,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	}
 
 	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();

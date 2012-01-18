@@ -19,8 +19,6 @@ package org.zkoss.zul;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -413,7 +411,7 @@ public class Tabbox extends XulElement {
 	}
 
 	// -- Serializable --//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

@@ -37,9 +37,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zk.ui.ext.Scopes;
 
-import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.HeaderElement;
-import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Sortable;
 
@@ -702,7 +700,7 @@ public class Column extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

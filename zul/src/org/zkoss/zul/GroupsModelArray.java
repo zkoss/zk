@@ -379,10 +379,15 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
 	
 	//Object//
 	public boolean equals(Object o) {
-		return _nativedata.equals(o instanceof GroupsModelArray ? ((GroupsModelArray)o)._nativedata: o);
+		if (this == o)
+			return true;
+		if (o instanceof GroupsModelArray) {
+			return Arrays.equals(_nativedata, ((GroupsModelArray)o)._nativedata);
+		}
+		return false;
 	}
 	public int hashCode() {
-		return _nativedata.hashCode();
+		return Arrays.hashCode(_nativedata);
 	}
 	public String toString() {
 		return Objects.toString(_nativedata);

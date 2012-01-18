@@ -775,7 +775,7 @@ public class Combobox extends Textbox {
 	}
 	
 	//	Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

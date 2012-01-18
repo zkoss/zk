@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.util.ArraysX;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -432,7 +431,7 @@ public class Selectbox extends HtmlBasedComponent {
 				: null);
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

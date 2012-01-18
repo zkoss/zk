@@ -61,7 +61,7 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 
 		Serializables.smartWrite(s, _listeners);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
@@ -69,7 +69,6 @@ abstract public class AbstractChartModel implements ChartModel, java.io.Serializ
 		Serializables.smartRead(s, _listeners);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final AbstractChartModel clone;
 		try {

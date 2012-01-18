@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
@@ -102,7 +103,7 @@ public class Toolbarbutton extends Button {
 	 * @param mode the mode 
 	 */
 	public void setMode(String mode) {
-		if (_mode != mode) {
+		if (!Objects.equals(_mode, mode)) {
 			_mode = mode;
 			smartUpdate("mode", _mode);
 		}

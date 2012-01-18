@@ -16,19 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
-import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.io.Serializables;
 
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
-import org.zkoss.zul.ext.TreeOpenableModel;
-import org.zkoss.zul.ext.TreeSelectionModel;
 
 /**
  * A skeletal implementation for {@link TreeModel}.
@@ -205,7 +200,7 @@ abstract public class AbstractTreeModel<E> implements TreeModel<E>,
 		Serializables.smartWrite(s, _listeners);
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

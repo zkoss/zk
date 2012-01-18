@@ -55,7 +55,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
 import org.zkoss.zul.event.ListDataEvent;
@@ -2955,7 +2954,7 @@ public class Listbox extends MeshElement {
 			s.writeObject(_groupsInfo);
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

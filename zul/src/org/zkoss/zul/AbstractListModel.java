@@ -150,7 +150,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		}
 		boolean changed = false;
 		for (int i = index0; i <= index1; i++) {
-			if (!_selection.contains(i)) {
+			if (!_selection.contains(new Index(i))) {
 				_selection.add(new Index(i));
 				changed = true;
 			}
@@ -255,7 +255,7 @@ abstract public class AbstractListModel<E> implements ListModel<E>,
 		Serializables.smartWrite(s, _listeners);
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

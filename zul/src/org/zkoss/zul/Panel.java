@@ -629,7 +629,7 @@ public class Panel extends XulElement implements Framable {
 	}
 
 	//-- Serializable --//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		//afterUnmarshal(); // B50-ZK-261: no afterUnmarshal() as now the fields are non-transient

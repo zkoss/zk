@@ -26,7 +26,6 @@ import java.util.Set;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.DataLoader;
@@ -264,7 +263,7 @@ public class Rows extends XulElement {
 						ginfo[2] = -1;
 					}
 				}
-				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
+				final int[] g = _groupsInfo.get(getGroupCount()-1);
 				g[2] = getChildren().size() - (isReorder ? 2 : 1);
 			} else {
 				final int idx = ((Row)refChild).getIndex();				
@@ -374,7 +373,7 @@ public class Rows extends XulElement {
 					if (idx != -1) {
 						final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
 						if (realIndex >= 0 && realIndex < getChildren().size())
-							removeChild((Component) getChildren().get(realIndex));
+							removeChild(getChildren().get(realIndex));
 					}
 				}
 			} else if (hasGroup) {
@@ -562,7 +561,7 @@ public class Rows extends XulElement {
 		} else
 			s.writeInt(0);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
@@ -631,7 +630,7 @@ public class Rows extends XulElement {
 		}
 		public Group next() {
 			++_j;
-			final int realIndex = getRealIndex(((int[])_it.next())[0]);
+			final int realIndex = getRealIndex((_it.next())[0]);
 			return (realIndex >=0 && realIndex < getChildren().size()) ?
 				(Group)getChildren().get(realIndex) : null;
 		}

@@ -26,15 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.GroupsModelExt;
-import org.zkoss.zul.ListModelArray;
-import org.zkoss.zul.ListModelSet;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.ext.GroupingInfo;
@@ -306,7 +303,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			_model.addGroupsDataListener(_listener);
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
@@ -314,6 +311,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		_indexCache = new LinkedHashMap<Object, Integer>();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		GroupsListModel clone = (GroupsListModel) super.clone();
 		clone._listener = null;

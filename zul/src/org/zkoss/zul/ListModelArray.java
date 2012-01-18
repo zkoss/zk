@@ -192,10 +192,15 @@ implements Sortable<E>, java.io.Serializable {
 
 	//Object//
 	public boolean equals(Object o) {
-		return _array.equals(o instanceof ListModelArray ? ((ListModelArray)o)._array: o);
+		if (this == o)
+			return true;
+		if (o instanceof ListModelArray) {
+			return Arrays.equals(_array, ((ListModelArray)o)._array);
+		}
+		return false;
 	}
 	public int hashCode() {
-		return _array.hashCode();
+		return Arrays.hashCode(_array);
 	}
 	public String toString() {
 		return Objects.toString(_array);

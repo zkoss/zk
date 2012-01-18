@@ -23,8 +23,6 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.impl.LoadStatus;
 
@@ -237,7 +235,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		}
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 			throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		if (s.readBoolean())

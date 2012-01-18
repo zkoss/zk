@@ -20,8 +20,6 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
@@ -277,7 +275,7 @@ public class Group extends Row {
 		return clone;
 	}
 	//-- Serializable --//
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
