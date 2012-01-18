@@ -75,7 +75,6 @@ div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-col
 }
 div.z-row-cnt {
 	padding: 1px 0 1px 0;
-	color: #363636;
 }
 div.z-footer-cnt, div.z-column-cnt{
 	overflow: hidden;
@@ -308,11 +307,11 @@ div.z-grid-header, div.z-grid-footer {
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
-div.z-column-cnt, .z-auxheader-cnt {
+div.z-column-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
 div.z-footer-cnt,
-div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
+div.z-groupfoot-cnt, div.z-column-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
 <c:if test="${!(zk.ie >= 8)}">
@@ -335,7 +334,7 @@ tr.z-grid-faker {
 }
 </c:if>
 <c:if test="${zk.ie >= 8}">
-.z-column, .z-auxheader {
+.z-column {
 	text-align: left;
 }
 </c:if>
