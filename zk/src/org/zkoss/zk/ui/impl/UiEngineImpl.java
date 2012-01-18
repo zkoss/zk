@@ -825,10 +825,11 @@ public class UiEngineImpl implements UiEngine {
 				//2) we did it after afterCompose, so what specified
 				//here has higher priority than class defined by app dev
 
-			if (Events.isListened(child, Events.ON_CREATE, false))
-				Events.postEvent(
-					new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
-			
+			//Bug ZK-504: even might be listened later (in parent's composer)
+			//See also ZK-759
+			Events.postEvent(
+				new CreateEvent(Events.ON_CREATE, child, ci.exec.getArg()));
+
 			return child;
 		} catch (Throwable ex) {
 			boolean ignore = false;
