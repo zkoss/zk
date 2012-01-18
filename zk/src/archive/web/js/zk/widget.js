@@ -810,8 +810,8 @@ new zul.wnd.Window{
 		 */
 		tooltiptext: function (v) {
 			var n = this.$n();
-			// ZK-676
-			if (n) n.title = zUtl.encodeXML(v) || '';
+			// ZK-676 , ZK-752
+			if (this.desktop) this.$n().title = v || '';
 		},
 
 		/** Sets the identifier, or a list of identifiers of a droppable type for this widget.

@@ -1,0 +1,29 @@
+<!--
+	B50-ZK-752.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon Jan 18 15:35:36 TST 2012, Created by tonyq
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<h:pre xmlns:h="html"><![CDATA[
+		1.Mouse over the abc , it should show up [abc"><script></script><!--] .
+		2.Click the test button 
+		3.mouse over the abc , it should show up 
+			[abc"><script></script><!--abc"><script></script><!--abc"><script></script><!--]
+	]]></h:pre>
+	<zscript><![CDATA[
+		String str = "abc\"><script></script><!--";
+	]]></zscript>
+	<div id="div" style="color: #009900" tooltiptext="@{str}">abc</div>
+	
+	<button label="Test" onClick="div.setTooltiptext(str+str+str);" /> 
+	<div id="div2" style="color: #009900" tooltiptext="@{str}">def</div>
+	<div id="div3" style="color: #009900" tooltiptext="@{str}">ghi</div>
+</zk>
