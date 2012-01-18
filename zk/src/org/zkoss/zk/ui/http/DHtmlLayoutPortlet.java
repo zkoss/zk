@@ -273,7 +273,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			return _prpatch = patch;
 		}
 	}
-	private static PageRenderPatch _prpatch;
+	private static volatile PageRenderPatch _prpatch;
 
 	private static void fixContentType(RenderResponse response) {
 		//Bug 1548478: content-type is required for some implementation (JBoss Portal)

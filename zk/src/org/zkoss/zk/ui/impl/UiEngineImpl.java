@@ -103,7 +103,7 @@ public class UiEngineImpl implements UiEngine {
 	private int _suspCnt;
 	/** the extension.
 	 */
-	private Extension _ext;
+	private volatile Extension _ext;
 
 	public UiEngineImpl() {
 	}
@@ -1842,7 +1842,7 @@ public class UiEngineImpl implements UiEngine {
 		return uv;
 	}
 
-	private static Integer _retryTimeout, _destroyTimeout;
+	private static volatile Integer _retryTimeout, _destroyTimeout;
 	private static final int getRetryTimeout() {
 		if (_retryTimeout == null) {
 			int v = 0;

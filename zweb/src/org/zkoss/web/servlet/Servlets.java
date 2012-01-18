@@ -1120,7 +1120,7 @@ public class Servlets {
 	}
 
 	/** A list of context root paths (e.g., "/abc"). */
-	private static List<String> _ctxroots;
+	private static volatile List<String> _ctxroots;
 	/** Returns a list of context paths (e.g., "/abc") that this application
 	 * has. This implementation parse application.xml. For war that doesn't
 	 * contain application.xml might have to override this method and

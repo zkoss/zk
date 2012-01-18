@@ -93,7 +93,7 @@ public class StringFns {
 				sb.append(separator);
 			sb.append(ss[j]);
 		}
-		return ss.toString();
+		return sb.toString();
 	}
 	/** Tests if this string starts with the specified prefix.
 	 * @since 5.0.7

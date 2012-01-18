@@ -295,7 +295,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		Serializables.smartWrite(s, _props);
 		_props.put("includer", this);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();

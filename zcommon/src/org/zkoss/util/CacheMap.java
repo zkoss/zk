@@ -592,7 +592,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	throws java.io.IOException {
 		s.defaultWriteObject();
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

@@ -103,7 +103,7 @@ import org.zkoss.zk.ui.ext.Scope;
 			});
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

@@ -66,7 +66,7 @@ implements java.io.Serializable {
 		s.writeObject(_pagedef != null ? _pagedef.getExpressionFactoryClass(): _expfcls);
 		s.writeObject(_pagedef != null ? _pagedef.getTaglibMapper(): _mapper);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		_expfcls = cast((Class)s.readObject());

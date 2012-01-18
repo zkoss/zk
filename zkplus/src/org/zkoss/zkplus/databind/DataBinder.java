@@ -1385,7 +1385,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 
-		return getCollectionItem(comp, bean, /* isCollectionItem */ true);		
+		return comp == null ? null : getCollectionItem(comp, bean, /* isCollectionItem */ true);		
 	}
 	
 	private class LoadOnSaveEventListener implements EventListener, java.io.Serializable {
@@ -1606,8 +1606,13 @@ public class DataBinder implements java.io.Serializable {
 				return (_comp == null ? 0 : _comp.hashCode()) ^ (_binding == null ? 0 : _binding.hashCode());
 			}
 			public boolean equals(Object other) {
-				final Dual o = (Dual) other;
-				return o._comp == _comp && o._binding == _binding;
+				if (this == other)
+					return true;
+				if (other instanceof Dual) {
+					final Dual o = (Dual) other;
+					return o._comp == _comp && o._binding == _binding;
+				}
+				return false;
 			}
 		}
 	}

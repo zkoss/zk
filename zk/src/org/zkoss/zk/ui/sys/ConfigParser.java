@@ -67,8 +67,8 @@ public class ConfigParser {
 	/** The number of segments in a version.
 	 */
 	private static final int MAX_VERSION_SEGMENT = 4;
-	private static int[] _zkver;
-	private static List<org.zkoss.zk.ui.util.ConfigParser> _parsers;
+	private static volatile int[] _zkver;
+	private static volatile List<org.zkoss.zk.ui.util.ConfigParser> _parsers;
 	// Map<int, boolean>: whether an instance of Configuration
 	private static final Map<Integer, Boolean> _syscfgLoadedConfigs = new HashMap<Integer, Boolean>(4);
 	private static boolean _syscfgLoaded;

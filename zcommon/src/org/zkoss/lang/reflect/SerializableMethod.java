@@ -61,7 +61,7 @@ public class SerializableMethod implements Serializable, Cloneable {
 				s.writeObject(argTypes[j]);
 		}
 	}
-	private synchronized void readObject(ObjectInputStream s)
+	private void readObject(ObjectInputStream s)
 	throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

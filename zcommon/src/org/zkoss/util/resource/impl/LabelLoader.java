@@ -407,7 +407,7 @@ public class LabelLoader {
 			return _expr != null ? (String)_expr.evaluate(_xelc): _val;
 		}
 	}
-	private class Resolver implements VariableResolver, java.io.Serializable {
+	private class Resolver implements VariableResolver {
 		private VariableResolver custom;
 		public Object resolveVariable(String name) {
 			if (custom != null) {

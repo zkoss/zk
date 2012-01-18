@@ -63,11 +63,11 @@ public class DefinitionLoaders {
 	private static final Log log = Log.lookup(DefinitionLoaders.class);
 
 	/** List<Object[Locator, URL]> */
-	private static List<Object[]> _addons;
-	private static List<Object[]> _langs;
+	private static volatile List<Object[]> _addons;
+	private static volatile List<Object[]> _langs;
 	/** A map of (String ext, String lang). */
-	private static Map<String, String> _exts;
-	private static boolean _loaded, _loading;
+	private static volatile Map<String, String> _exts;
+	private static volatile boolean _loaded, _loading;
 
 	//CONSIDER:
 	//Sotre language definitions per WebApp, since diff app may add its

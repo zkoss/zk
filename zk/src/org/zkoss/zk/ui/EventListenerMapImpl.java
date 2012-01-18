@@ -56,7 +56,7 @@ implements EventListenerMap, java.io.Serializable {
 
 		EventListenerInfo.write(s, null, _listeners); //no AbstractComponent
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

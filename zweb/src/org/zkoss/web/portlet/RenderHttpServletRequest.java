@@ -205,7 +205,7 @@ public class RenderHttpServletRequest implements HttpServletRequest {
 		//Ensure the specified encoding is valid
 		byte buffer[] = new byte[1];
 		buffer[0] = (byte) 'a';
-		String dummy = new String(buffer, enc);
+		new String(buffer, enc); // dummy to check encoding
 
 		_enc = enc;
 	}

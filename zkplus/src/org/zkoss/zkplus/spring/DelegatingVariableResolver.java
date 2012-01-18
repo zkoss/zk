@@ -127,7 +127,7 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 		}
 	}
 	
-	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException,
+	private void readObject(java.io.ObjectInputStream s) throws IOException,
 			ClassNotFoundException {
 		s.defaultReadObject();
 		_variableResolvers = new ArrayList<VariableResolver>();

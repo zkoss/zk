@@ -311,7 +311,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

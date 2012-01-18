@@ -115,7 +115,7 @@ implements Set<T>, Cloneable, java.io.Serializable {
 			s.writeObject(key);
 	}
 	@SuppressWarnings("unchecked")
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		// Read in any hidden serialization magic
 		s.defaultReadObject();

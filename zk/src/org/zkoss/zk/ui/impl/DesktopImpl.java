@@ -1034,7 +1034,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (o instanceof DesktopSerializationListener)
 			((DesktopSerializationListener)o).willSerialize(this);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

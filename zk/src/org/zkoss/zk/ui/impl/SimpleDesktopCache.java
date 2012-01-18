@@ -219,7 +219,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			if (log.debugable()) log.debug("Expunge desktop: "+v.getValue());
 		}
 
-		private synchronized void readObject(java.io.ObjectInputStream s)
+		private void readObject(java.io.ObjectInputStream s)
 		throws java.io.IOException, ClassNotFoundException {
 			final boolean old = disableExpunge(true);
 			try {

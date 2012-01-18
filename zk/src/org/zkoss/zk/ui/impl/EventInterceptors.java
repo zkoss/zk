@@ -181,7 +181,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 		Serializables.smartWrite(s, _eis);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

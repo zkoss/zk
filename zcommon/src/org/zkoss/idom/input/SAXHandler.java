@@ -729,7 +729,7 @@ implements LexicalHandler, DeclHandler {
 		}
 	}
 
-	private class MyLoc implements org.zkoss.xml.Locator, java.io.Serializable {
+	private static class MyLoc implements org.zkoss.xml.Locator, java.io.Serializable {
 		protected final int _colno, _lnno;
 		protected final String _pubId, _sysId;
 

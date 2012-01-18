@@ -254,5 +254,5 @@ public class EventQueues {
 			}
 		return _provider;
 	}
-	private static EventQueueProvider _provider;
+	private static volatile EventQueueProvider _provider;
 }

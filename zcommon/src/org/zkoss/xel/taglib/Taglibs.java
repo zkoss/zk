@@ -295,7 +295,7 @@ public class Taglibs {
 //----------------------------------//
 	//Mapping of URI to TLD files//
 	/** The default TLD files: Map(String uri, URL location). */
-	private static Map<String, URL> _defURLs;
+	private static volatile Map<String, URL> _defURLs;
 
 	/** Returns the URL associated with the specified taglib URI,
 	 * or null if not found.

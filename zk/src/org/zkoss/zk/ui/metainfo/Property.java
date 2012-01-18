@@ -58,7 +58,7 @@ public class Property extends ConditionValue {
 	 */
 	private final NativeInfo _navval;
 	/** Used to optimize {@link #resolve}. */
-	private transient Class _lastcls;
+	private transient volatile Class _lastcls;
 	/** The method, or null if more than two methods are found
 	 * (and use {@link #_mtds} in this case).
 	 */

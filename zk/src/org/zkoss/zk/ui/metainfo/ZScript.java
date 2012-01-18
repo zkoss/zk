@@ -243,7 +243,7 @@ public class ZScript implements java.io.Serializable {
 		return sb.append(']').toString();
 	}
 
-	private static ResourceCache<Object, String> _cache;
+	private static volatile ResourceCache<Object, String> _cache;
 	private static final ResourceCache<Object, String> getCache() {
 		if (_cache == null) {
 			synchronized (ZScript.class) {

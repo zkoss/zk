@@ -3044,7 +3044,7 @@ w:use="foo.MyWindow"&gt;
 		if (o instanceof ComponentSerializationListener)
 			((ComponentSerializationListener)o).willSerialize(this);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

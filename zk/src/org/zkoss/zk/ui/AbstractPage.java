@@ -232,7 +232,7 @@ implements Page, PageCtrl, java.io.Serializable {
 			s.writeObject(p);
 		s.writeObject(null);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
