@@ -17,12 +17,49 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	<zscript>
 		<![CDATA[
 		import org.zkoss.zktest.test2.select.models.*;
-		
+		import org.zkoss.zul.impl.*;
+
 		GroupsModel model = GroupsModelArrays.getModel();
 		GroupsModel model2 = GroupsModelArrays.getModel();
 
 		int cnt = 0;
 		int elemcnt = 0;
+
+		public void showItems(String id, String gnum, Label msg) {
+			Page page = msg.getPage();
+			Grid lbx = page.getFellow(id);
+			GroupsModel gm = ((GroupsListModel)lbx.getModel()).getGroupsModel();
+			int gi = Integer.parseInt(gnum);
+			String s = "";
+			for (int i = 0; i < gm.getChildCount(gi); i++) {
+				Object[] o = (Object[])gm.getChild(gi, i);
+				s += o[1];
+			}
+			msg.setValue(s);
+		}
+		public void changePage(String id, String gnum, Page page) {
+			Grid lbx = page.getFellow(id);
+			lbx.setActivePage(getPageOfGroup(id, gnum, page));
+		}
+		public void checkClose(String id, String gnum, Label msg) {
+			Page page = msg.getPage();
+			Grid lbx = page.getFellow(id);
+			GroupsModel gm = ((GroupsListModel)lbx.getModel()).getGroupsModel();
+			int gi = Integer.parseInt(gnum);
+			msg.setValue(gm.isClose(gi)+"");
+		}
+		public int getPageOfGroup(String id, String gnum, Page page) {
+			Grid lbx = page.getFellow(id);
+			GroupsModel gm = ((GroupsListModel)lbx.getModel()).getGroupsModel();
+			int gi = Integer.parseInt(gnum);
+			int idx = 0;
+			for (int i = 0; i < gi; i++) {
+				idx += 1;
+				if (!gm.isClose(i))
+					idx += gm.getChildCount(i);
+			}
+			return idx/lbx.getPageSize();
+		}
 	]]></zscript>
 	<div>
 		<div>** should remove this case after GroupsModelArray support ROD</div>
@@ -31,8 +68,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>3. Close the Last Group of third Grid, if it can not be closed, it is a bug.</div>
 		<div>4. Click clone and 'clone by serialization', then two Grids should be created and also closed the Last Group.</div>
 		<div>5. Open the Last Group of the third Grid, the Last Group of the fourth and the fifth should not sync.</div>
-		<div>6. Close the Last Group and the Itemset 1 of the third Grid and click the "clone" and "clone by serialization".</div>
-		<div>7. Open the Itemset 1 of the last two Grid, its content will open well (if it opens the Last Group's content, that is a bug).</div>
+		<div>6. Close the Itemset 0 and the Itemset 1 of the third Grid and click the "clone" and "clone by serialization".</div>
+		<div>7. Open the Itemset 1 of the last two Grid, its content will open well (if it opens the Itemset 0's content, that is a bug).</div>
 	</div>
 	<custom-attributes org.zkoss.zul.grid.rod="false" />
 	<hlayout>
@@ -91,14 +128,22 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			</row>
 		</template>
     </grid>
-	<button label="clone">
+    <hbox>
+		<textbox id="tbOne" />
+		<textbox id="tbTwo" />
+		<button id="btnOne" label="change page" onClick="changePage(tbOne.getValue(), tbTwo.getValue(), self.getPage());" />
+		<button id="btnTwo" label="show items" onClick="showItems(tbOne.getValue(), tbTwo.getValue(), msg);" />
+		<button id="checkClose" label="check close" onClick="checkClose(tbOne.getValue(), tbTwo.getValue(), msg);" />
+		<label id="msg" />
+	</hbox>
+	<button id="btnThree" label="clone">
 		<attribute name="onClick">
 			Grid sbx = grid3.clone();
 			sbx.setId("sbxThree_clone" + cnt++);
 			sbx.setParent(cloneThreeArea);
 		</attribute>
 	</button>
-	<button label="Clone by Serialization">
+	<button id="btnFour" label="Clone by Serialization">
 		<attribute name="onClick"><![CDATA[{
 			import java.io.*;
 			ByteArrayOutputStream boa = new ByteArrayOutputStream();

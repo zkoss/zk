@@ -72,17 +72,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
-	<button label="insert item">
-		<attribute name="onClick">
-			model.add(0, "data "+elemcnt++);
-			model2.add(0, "data "+elemcnt++);
-		</attribute>
-	</button>
-	<button label="remove item">
-		<attribute name="onClick">
-			model.remove(0);
-			model2.remove(0);
-		</attribute>
-	</button>
 	<hbox id="cloneThreeArea" />
 </zk>
