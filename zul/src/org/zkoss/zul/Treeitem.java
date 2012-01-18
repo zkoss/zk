@@ -395,8 +395,8 @@ implements org.zkoss.zul.api.Treeitem, org.zkoss.zk.ui.ext.Disable {
 		if(!isVisible())
 			return false;
 		Component comp = getParent();
-		return comp == null || (comp instanceof Treechildren) ? 
-				((Treechildren)comp).isRealVisible() : comp.isVisible();
+		return comp == null || ((comp instanceof Treechildren) ? 
+				((Treechildren)comp).isRealVisible() : comp.isVisible());
 	}
 	
 	//-- super --//
