@@ -77,7 +77,8 @@ Jan 03, 2012
   ZK-727: Datebox constraint failed when set custom error message for before constraint
   ZK-731: Unclosed BufferedReader for org.zkoss.util.Maps
   ZK-770: EventQueue has extra delay if scope is SESSION
-
+  ZK-752：  Tooltiptext gets rendered differently in different situations
+  
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors
     i3-log.conf for any check (so it won't reload if i3-log.conf is modified).
