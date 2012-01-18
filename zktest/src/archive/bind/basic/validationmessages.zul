@@ -1,0 +1,54 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ValidationMessagesVM')" validationMessages = "@id('vmsgs')">
+	<vbox>
+		<hbox>Value1:<label id="l11" value="@bind(vm.value1)"></label></hbox>
+		<hbox>Value2:<label id="l12" value="@bind(vm.value2)"></label></hbox>
+	</vbox>	
+	<vbox>
+		Prompt:
+		<hlayout>Value1:<textbox id="t21" value="@bind(vm.value1) @validator(vm.validator1)" errorMessage="@bind(vmsgs[self])" /></hlayout>
+		<hlayout>Value2:<intbox id="t22" value="@bind(vm.value2) @validator(vm.validator2)" errorMessage="@bind(vmsgs[self])"/></hlayout>
+	</vbox>	
+	<vbox>
+		Command:
+		<hlayout>Value1:
+			<textbox id="t31" value="@load(vm.value1) @save(vm.value1 ,before='cmd1') @validator(vm.validator1)" />
+			<label id="m31" value="@bind(vmsgs[t31])"/>
+		</hlayout>
+		<hlayout>Value2:
+			<intbox id="t32" value="@load(vm.value2) @save(vm.value2 ,before='cmd1') @validator(vm.validator2)" />
+			<label id="m32" value="@bind(vmsgs[self.previousSibling])"/>	
+		</hlayout>
+	</vbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+	</hbox>
+	<vbox form="@id('fx') @load(vm) @save(vm ,before='cmd2') @validator(vm.validator3)">
+		Form:
+		<hlayout>Value1:
+			<textbox id="t41" value="@bind(fx.value1) @validator(vm.validator1)" />
+			<label id="m41" value="@bind(vmsgs[t41])"/>
+		</hlayout>
+		<hlayout>Value2:
+			<intbox id="t42" value="@bind(fx.value2) @validator(vm.validator2)" />
+			<label id="m42" value="@bind(vmsgs[self.previousSibling])"/>	
+		</hlayout>
+		<label id="m43" value="@bind(vmsgs[self.parent])"/>
+		<label id="m44" value="@bind(vmsgs.getMessages(self.parent,'fx')[0])"/>
+		<label id="m45" value="@bind(vmsgs.getMultiple()[self.parent][0])"/>
+		<label id="m46" value="@bind(vmsgs.getMultiple()[self.parent][1])"/>
+		<grid id="msggrid" model="@bind(vmsgs.getMultiple()[self.parent])" visible="@bind(not empty vmsgs.getMultiple()[self.parent])">
+			<template name="model" var="msg">
+				<row>
+					<label value="@bind(msg)" />
+				</row>
+			</template>
+		</grid>
+
+	</vbox>
+	<hbox>
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')"/>
+		
+		<button id="btn3" label="cmd3" onClick="@command('cmd3')"/>
+	</hbox>
+	
+</window>
