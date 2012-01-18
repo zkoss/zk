@@ -80,6 +80,7 @@
 			label="set Paging" />
 		<button onClick="lb1.invalidate();" label="invalidate" />
 	</hbox>
+	<custom-attributes org.zkoss.zul.listbox.rod="false" />
 	<listbox id="lb1" width="500px" height="500px" model="${model2}"
 		itemRenderer="${renderer}">
 		<listhead>

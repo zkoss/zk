@@ -29,6 +29,7 @@
 				}
 			]]>
 		</zscript>
+		<custom-attributes org.zkoss.zul.listbox.rod="false" />
 		<listbox id="rs" width="300px" mold="paging" pageSize="10" model="${model}" />
 					
 				

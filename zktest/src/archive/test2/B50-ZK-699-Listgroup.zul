@@ -54,6 +54,7 @@ Object[][] foods = new Object[][] {
 ListitemRenderer renderer = new org.zkoss.zktest.test2.group.FoodGroupRenderer2();
 GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
     ]]></zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="false" />
     <listbox id="grid" model="${model}" itemRenderer="${renderer}">
         <listhead>
             <listheader label="Category" sort="auto(0)"/>
