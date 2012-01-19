@@ -210,6 +210,16 @@ ZK 6.0.0
     org.zkoss.util.ScalableTimerTask, org.zkoss.util.ThreadLocalCache
   + bullet1.gif, bullet2.gif and bullet3.gif are removed from zweb
     since they are never used
+  + Some z-class names are changed:
+    z-menu-item -> z-menuitem
+    z-menu-popup -> z-menupopup
+    z-menu-separator -> z-menuseparator
+    z-panel-children -> z-panelchildren
+  + Some CSS class names are changed. To update theme customization, replace CSS
+    class occurrences by the following:
+    .z-weekend -> .z-calendar-caldow .z-calendar-wkend
+    .z-weekday -> .z-calendar-caldow .z-calendar-wkday
+    .z-outside -> .z-calendar-outside
 
 	--------
 ZK 5.0.11
