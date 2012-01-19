@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * Note that the size of Panelchildren is automatically calculated by Panel so both
  * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
  * 
- * <p>Default {@link #getZclass}: z-panel-children.
+ * <p>Default {@link #getZclass}: z-panelchildren.
  * 
  * @author jumperchen
  * @since 3.5.0
@@ -88,6 +88,6 @@ public class Panelchildren extends XulElement {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-panel-children" : _zclass;
+		return _zclass == null ?  "z-panelchildren" : _zclass;
 	}
 }

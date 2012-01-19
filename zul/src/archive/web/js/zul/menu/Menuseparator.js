@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * Used to create a separator between menu items.
  *
- *<p>Default {@link #getZclass}: z-menu-separator.
+ *<p>Default {@link #getZclass}: z-menuseparator.
  */
 zul.menu.Menuseparator = zk.$extends(zul.Widget, {
 	/** Returns whether parent is a {@link Menupopup}
@@ -34,7 +34,7 @@ zul.menu.Menuseparator = zk.$extends(zul.Widget, {
 		return null;
 	},
 	getZclass: function () {
-		return this._zclass == null ? "z-menu-separator" : this._zclass;
+		return this._zclass == null ? "z-menuseparator" : this._zclass;
 	},
 	doMouseOver_: function () {
 		if (zul.menu._nOpen)

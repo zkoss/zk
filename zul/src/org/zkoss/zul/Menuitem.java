@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
- * <p>Default {@link #getZclass}: z-menu-item. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-menuitem. (since 3.5.0)
  * @author tomyeh
  */
 public class Menuitem extends LabelImageElement
@@ -70,7 +70,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-menu-item" : _zclass;
+		return _zclass == null ? "z-menuitem" : _zclass;
 	}
 	
 	/**

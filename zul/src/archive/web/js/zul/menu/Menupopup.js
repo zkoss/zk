@@ -108,13 +108,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A container used to display menus. It should be placed inside a
  * {@link Menu}.
  *
- * <p>Default {@link #getZclass}: z-menu-popup.
+ * <p>Default {@link #getZclass}: z-menupopup.
  */
 zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_curIndex: -1,
 
 	getZclass: function () {
-		return this._zclass == null ? "z-menu-popup" : this._zclass;
+		return this._zclass == null ? "z-menupopup" : this._zclass;
 	},
 	zsync: function () {
 		this.$supers('zsync', arguments);

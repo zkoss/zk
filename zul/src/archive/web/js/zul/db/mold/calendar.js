@@ -75,17 +75,14 @@ function (out) {
 		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, '-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
 				'<tr class="', zcls, '-caldow">');
 			var sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7;
-			for (var j = 0 ; j < 7; ++j) {
-				out.push('<td');
-				if (j == sun || j == sat) out.push(' class="z-weekend"');
-				else out.push(' class="z-weekday"');
-				out.push( '>' + localizedSymbols.S2DOW[j] + '</td>');
-			}
+			for (var j = 0 ; j < 7; ++j)
+				out.push('<td class="', zcls, (j == sun || j == sat) ? '-wkend' : '-wkday', 
+						'">' + localizedSymbols.S2DOW[j] + '</td>');
 			out.push('</tr>');
 			for (var j = 0; j < 6; ++j) { //at most 7 rows
 				out.push('<tr class="', zcls, '-caldayrow" id="', uuid, '-w', j, '" >');
 				for (var k = 0; k < 7; ++k)
-					out.push ('<td class="', (k == sun || k == sat) ? zcls + '-wkend ' : zcls + '-wkday ', '"></td>');
+					out.push ('<td class="', zcls, (k == sun || k == sat) ? '-wkend' : '-wkday', '"></td>');
 				out.push('</tr>');
 			}
 		break;

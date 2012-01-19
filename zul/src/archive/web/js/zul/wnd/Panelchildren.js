@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * Note that the size of Panelchildren is automatically calculated by Panel so both
  * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
  * 
- * <p>Default {@link #getZclass}: z-panel-children.
+ * <p>Default {@link #getZclass}: z-panelchildren.
  */
 zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	/**
@@ -34,7 +34,7 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 
 	// super
 	getZclass: function () {
-		return this._zclass == null ?  "z-panel-children" : this._zclass;
+		return this._zclass == null ?  "z-panelchildren" : this._zclass;
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);

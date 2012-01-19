@@ -540,7 +540,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								$cell.removeClass(zcls+"-seld");
 								
 							//not same month
-							$cell[monofs ? 'addClass': 'removeClass']("z-outside")
+							$cell[monofs ? 'addClass': 'removeClass'](zcls+"-outside")
 								[zul.db.Renderer.disabled(this, y, m + monofs, v, today) ? 
 								'addClass': 'removeClass'](zcls+"-disd").
 								html(zul.db.Renderer.cellHTML(this, y, m + monofs, v, monofs)).

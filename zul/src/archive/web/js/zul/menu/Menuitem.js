@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
  * 
- * <p>Default {@link #getZclass}: z-menu-item.
+ * <p>Default {@link #getZclass}: z-menuitem.
  */
 zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
@@ -200,7 +200,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	getZclass: function () {
-		return this._zclass == null ? "z-menu-item" : this._zclass;
+		return this._zclass == null ? "z-menuitem" : this._zclass;
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
