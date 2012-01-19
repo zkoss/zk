@@ -197,8 +197,9 @@ public class Log {
 	 *
 	 * <p>Default: false.
 	 *
-	 * <p>Note: Once {@link LogService} is initialized, {@link #setHierarchy}
-	 * is called automatically to turn on the hierarchy support.
+	 * <p>Note: {@link #configure} will invoke {@link #setHierarchy} with
+	 * true automatically to turn on the hierarchy support, if any level
+	 * is defined.
 	 */
 	public static final boolean isHierarchy() {
 		return _hierarchy;
