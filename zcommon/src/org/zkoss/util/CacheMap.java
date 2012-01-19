@@ -133,7 +133,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 *
 	 * <p>Default: does nothing
 	 */
-	protected void onExpunge(Value v) {
+	protected void onExpunge(Value<V> v) {
 	}
 
 	/** Returns by {@link #canExpunge} to denote it shall not be expunged. */
@@ -190,7 +190,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * @return a combination of EXPUNGE_xxx
 	 * @see #shallExpunge
 	 */
-	protected int canExpunge(Value v) {
+	protected int canExpunge(Value<V> v) {
 		return _map.size() > getMaxSize()
 			|| (System.currentTimeMillis() - v.access) > getLifetime() ?
 			(EXPUNGE_YES|EXPUNGE_CONTINUE): (EXPUNGE_NO|EXPUNGE_STOP);
@@ -219,14 +219,13 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		_inExpunge = true;
 		try {
 			//dennis, bug 1815633, remove some control code here 
-			for (final Iterator<Value<V>> it = _map.values().iterator();it.hasNext();) {
-				final Value<V> v = it.next();
+			for (final Iterator<Map.Entry<K, Value<V>>> it = _map.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry<K, Value<V>> entry = it.next();
+				final Value<V> v = entry.getValue();
 				final int result = canExpunge(v);
 				if ((result & EXPUNGE_YES) != 0) {
-					//if (log.debugable())
-					//	log.debug("expunge: value="+v.value+" size="+_map.size()+"("+getMaxSize()+") time="+v.access+"("+getLifetime()+")");
-
-					it.remove();
+					removeInExpunge(it, entry.getKey()); //remove it
 					onExpunge(v);
 				}
 
@@ -237,6 +236,10 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		} finally {
 			_inExpunge = false;
 		}
+	}
+	//for FastReadCache to override (not sure worth to be protected)
+	/*package*/ void removeInExpunge(Iterator<Map.Entry<K, Value<V>>> it, K k) {
+		it.remove();
 	}
 	/** Re-create the reference so we can detect if GC was activated.
 	 */
@@ -554,18 +557,6 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		}
 		return sb.append('}').toString();
 	}
-
-	//-- Debug --//
-	/** To make sure that it is in the acess order. */
-	/*private final void assertion(Object key) {
-		long last = Long.MIN_VALUE;
-		int j = 0;
-		for (final Iterator it = _map.values().iterator(); it.hasNext(); ++j) {
-			final Value v = (Value)it.next();
-			assert v.access >= last: "Order is wrong: j="+j+" key="+key+" acs="+v.access+" map="+_map;
-			last = v.access;
-		}
-	}*/
 
 	//Cloneable//
 	@SuppressWarnings("unchecked")

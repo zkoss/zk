@@ -32,7 +32,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
 import org.zkoss.util.Pair;
-import org.zkoss.util.MultiCache;
+import org.zkoss.util.FastReadCache;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 import org.zkoss.json.JavaScriptValue;
@@ -352,7 +352,7 @@ public class ComponentsCtrl {
 
 	/** Sets the cache that stores the information about event handler methods.
 	 *
-	 * <p>Default: {@link MultiCache}. In additions, the number of caches is default
+	 * <p>Default: {@link FastReadCache}. In additions, the number of caches is default
 	 * to 97 and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.number
 	 * property. The maximal allowed size of each cache, if GC, is default to 30
 	 * and can be changed by use of the org.zkoss.zk.ui.eventMethods.cache.maxSize
@@ -370,9 +370,8 @@ public class ComponentsCtrl {
 	}
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static Cache<Pair<Class<?>, String>, Object> _evtmtds =
-		new MultiCache<Pair<Class<?>, String>, Object> (
-			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
-			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 60),
+		new FastReadCache<Pair<Class<?>, String>, Object> (
+			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 350),
 			4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript objects

@@ -35,7 +35,7 @@ import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Cache;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.MultiCache;
+import org.zkoss.util.FastReadCache;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -843,9 +843,8 @@ public class Classes {
 		_closms.put(aoi, m);
 		return (Method) m;
 	}
-	private static Cache<AOInfo, Object> _closms = new MultiCache<AOInfo, Object>(
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 60),
+	private static Cache<AOInfo, Object> _closms = new FastReadCache<AOInfo, Object>(
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 500),
 		4*60*60*1000);
 	private static final
 	Method myGetCloseMethod(final Class<?> cls, final String name,
@@ -1035,9 +1034,8 @@ public class Classes {
 		_acsos.put(aoi, ao);
 		return ao;
 	}
-	private static Cache<AOInfo, AccessibleObject> _acsos = new MultiCache<AOInfo, AccessibleObject>(
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 60),
+	private static Cache<AOInfo, AccessibleObject> _acsos = new FastReadCache<AOInfo, AccessibleObject>(
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 500),
 		4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class<?> cls, String name, Class<?>[] argTypes, int flags)
