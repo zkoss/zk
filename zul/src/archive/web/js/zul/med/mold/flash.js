@@ -25,7 +25,7 @@ function (out) {
 
 	var bgc;
 	if (bgc = this._bgcolor)
-		out.push('<param name="bgcolor" value="', bgc, '"');
+		out.push('<param name="bgcolor" value="', bgc, '"></param>'); // ZK-740
 
 	out.push('<embed id="', this.uuid, '-emb" src="', this._src,
 		'" type="application/x-shockwave-flash" wmode="', this._wmode,

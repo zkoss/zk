@@ -4,6 +4,7 @@ ZK 5.0.11
 
 * Bugs
   ZK-773: Listbox sizedByContent breaks scrolling in 5.0.10 
+  ZK-740: missing close tag in flash.js
   
 * Upgrade Notes
   
