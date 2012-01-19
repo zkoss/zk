@@ -6,6 +6,7 @@ ZK 5.0.11
   ZK-773: Listbox sizedByContent breaks scrolling in 5.0.10 
   ZK-740: missing close tag in flash.js
   ZK-751: Tooltiptext not working for upload button
+  ZK-786: Caption control wrong image with toolbarbutton
   
 * Upgrade Notes
   
