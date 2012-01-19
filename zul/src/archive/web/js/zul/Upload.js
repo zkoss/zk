@@ -101,6 +101,8 @@ zul.Upload = zk.$extends(zk.Object, {
 		
 		this._wgt = wgt;
 		this._parent = parent;
+		if (wgt._tooltiptext) // ZK-751
+			this._tooltiptext = wgt._tooltiptext;
 		
 		this.initContent();
 	},
@@ -129,7 +131,9 @@ zul.Upload = zk.$extends(zk.Object, {
 		var wgt = this._wgt,
 			parent = this._parent,
 			ref = wgt.$n(), dt = wgt.desktop,
-			html = '<span class="z-upload"><form enctype="multipart/form-data" method="POST">'
+			html = '<span class="z-upload"'
+				 + (this._tooltiptext? ' title="'+ this._tooltiptext+'"' : '') // ZK-751
+				 +'><form enctype="multipart/form-data" method="POST">'
 				 + '<input name="file" type="file" hidefocus="true" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
 		
