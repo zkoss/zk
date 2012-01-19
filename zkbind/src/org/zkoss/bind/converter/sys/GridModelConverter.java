@@ -21,7 +21,7 @@ import org.zkoss.zul.ListModel;
  * @author dennis
  * @since 6.0.0
  */
-public class GridModelConverter extends AbstractModelConverter{
+public class GridModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {

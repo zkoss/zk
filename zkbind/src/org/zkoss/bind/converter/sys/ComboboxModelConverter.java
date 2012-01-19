@@ -21,7 +21,7 @@ import org.zkoss.zul.ListModel;
  * @author dennis
  * @since 6.0.0
  */
-public class ComboboxModelConverter extends AbstractModelConverter{
+public class ComboboxModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {

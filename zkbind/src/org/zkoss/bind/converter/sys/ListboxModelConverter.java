@@ -25,7 +25,7 @@ import org.zkoss.zul.ext.ListSelectionModel;
  * @author dennis
  * @since 6.0.0
  */
-public class ListboxModelConverter extends AbstractModelConverter{
+public class ListboxModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {

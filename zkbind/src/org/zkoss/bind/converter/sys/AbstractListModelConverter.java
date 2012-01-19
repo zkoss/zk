@@ -1,4 +1,4 @@
-/* AbstractModelConverter.java
+/* AbstractListModelConverter.java
 
 	Purpose:
 		
@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.GroupsListModel;
  * @author dennis
  * @since 6.0.0
  */
-public abstract class AbstractModelConverter implements Converter, Serializable{
+/*package*/ abstract class AbstractListModelConverter implements Converter, Serializable{
 
 	private static final long serialVersionUID = 201108171744L;
 	
@@ -87,6 +87,7 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, or ListModel only. "+val.getClass());
 		}
+		final Indexer indexer = new Indexer(model);
 		
 		final ListModel compModel = getComponentModel(comp);
 		if(compModel instanceof ListSelectionModel){
@@ -94,9 +95,17 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 			ListSelectionModel toSModel = (ListSelectionModel) model;
 			toSModel.setMultiple(smodel.isMultiple());
 			if (!smodel.isSelectionEmpty()) {
-				for(int index = smodel.getMinSelectionIndex();
-						index <= smodel.getMaxSelectionIndex();	index++)
-					toSModel.addSelectionInterval(index, index);
+				int maxsel = smodel.getMaxSelectionIndex();
+				int sel;
+				for(int index = smodel.getMinSelectionIndex();index <= maxsel;index++){
+					//get the object from old model
+					Object selval = compModel.getElementAt(index);
+					if(selval!=null){
+						//find the index of the object in new wrapped model
+						sel = indexer.indexOf(selval);
+						toSModel.addSelectionInterval(sel, sel);
+					}
+				}
 			}
 		}
 		model = handleWrappedModel(ctx,comp,model);
@@ -129,6 +138,28 @@ public abstract class AbstractModelConverter implements Converter, Serializable{
 			return val;
 		} else {
 			throw new UiException("Expects ListModelSet, ListModelList, ListModelMap, GroupsListModel or ListModel only."+val.getClass());
+		}
+	}
+	
+	//indexer to handle wrapped model
+	private static class Indexer {
+		private Object model;
+		
+		public Indexer(Object model){
+			this.model = model;
+		}
+		@SuppressWarnings("rawtypes")
+		public int indexOf(Object obj){
+			if (model instanceof ListModelSet) {
+				return ((ListModelSet)model).indexOf(obj);
+			} else if (model instanceof ListModelList) {
+				return ((ListModelList)model).indexOf(obj);
+			} else if (model instanceof ListModelMap) {
+				return ((ListModelMap)model).indexOf(obj);
+			} else if (model instanceof ListModelArray) {
+				return ((ListModelArray)model).indexOf(obj);
+			} 
+			return -1;
 		}
 	}
 
