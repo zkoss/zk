@@ -65,7 +65,7 @@ tomcat_home="$CATALINA_HOME"
 if [ ! -d "$tomcat_home" ]; then
   tomcat_home=/usr/tomcat
 fi
-if [ "$TERM" = "cygwin" ] ; then
+if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 	tomcat_home=$(cygpath -w $tomcat_home)
 	tomcat_home=${tomcat_home%\\}
 fi
@@ -303,7 +303,7 @@ function invoke_ant
 		#javadoc.class.path shall not contain '.', because xdoclet will
 		#ignore files that are found in classpath
 		DCP=$(echo $CP | sed -e 's/:\.:/:/g' -e 's/^\.://' -e 's/:\.$//')
-		if [ "$TERM" = "cygwin" ] ; then
+		if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 			DCP=$(safe_cygpath "-mp" "$DCP")
 				#Don't convert CP because it is used by bash directly
 		fi

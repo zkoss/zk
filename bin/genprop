@@ -150,7 +150,7 @@ for fn in $cnfpath/*$flext ; do
 			echo "Generating $dstfn..."
 
 			if [ "$awkfn" = "" ] ; then
-				if [ "$TERM" = "cygwin" ] ; then
+				if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 					awkpath=$(cygpath -u $awkpath)
 				fi
 				awkfn=${awkpath%/*}/genprop.awk
