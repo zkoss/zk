@@ -50,13 +50,17 @@ public class FormImpl implements Form,FormExt,Serializable {
 		_saveFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
 		_loadFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
 		_dirtyFieldNames = new HashSet<String>(INIT_CAPACITY);
-		_status = new FormStatus(){
-			@Override
-			public boolean isDirty() {
-				return FormImpl.this.isDirty();
-			}
-		};
+		_status = new FormStatusImpl();
 	}
+	
+	private class FormStatusImpl implements FormStatus,Serializable{
+		private static final long serialVersionUID = 1L;
+		@Override
+		public boolean isDirty() {
+			return FormImpl.this.isDirty();
+		}
+	}
+	
 
 //	public String getId() {
 //		return _id;

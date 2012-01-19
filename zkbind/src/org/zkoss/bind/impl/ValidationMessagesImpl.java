@@ -124,7 +124,7 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 				if(gmsgs!=null && gmsgs.size()>0){
 					gmsgs.removeAll(entry.getValue());
 				}
-				if(gmsgs.size()==0){
+				if(gmsgs!=null && gmsgs.size()==0){
 					_globalKeyMessageMap.remove(entry.getKey());
 				}
 			}

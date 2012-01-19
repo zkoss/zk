@@ -90,6 +90,7 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
         while (hasNext) {
             Object obj = it.next();
             buf.append(obj == c ? "(this Collection)" : obj);
+            hasNext = it.hasNext();
             if (hasNext) {
                 buf.append(", ");
             }
@@ -133,7 +134,10 @@ public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V
     private int threshold;
     private final float loadFactor;
     private final ReferenceQueue<K> queue;
-    private transient volatile int modCount;
+    
+    //this field volatile to detect concurrent modification, 
+    //check line if (WeakIdentityMap.this.modCount != this.expectedModCount) {
+    private transient volatile int modCount; 
 
     // Views
 

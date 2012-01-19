@@ -161,8 +161,12 @@ import org.zkoss.zk.ui.Component;
 	}
 
 	void removeBindings(Collection<Binding> removes) {
-		_loadAfterBindings.values().removeAll(removes); //command -> bindings (load after command)
-		_loadBeforeBindings.values().removeAll(removes); //command -> bindings (load before command)
+		for(List<LoadChildrenBinding> bindings:_loadAfterBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load after command)
+		}
+		for(List<LoadChildrenBinding> bindings:_loadBeforeBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load before command)
+		}
 	}
 
 	void doLoad(Component comp, BindingKey bkey) {

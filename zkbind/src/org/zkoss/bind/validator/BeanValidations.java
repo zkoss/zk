@@ -25,7 +25,7 @@ import javax.validation.ValidatorFactory;
  */
 class BeanValidations {
 	// from javadoc, it is thread safe.
-	private static Validator _validator;
+	private volatile static Validator _validator;
 
 	private static ValidatorFactory buildFactory() {
 		// TODO from configuration

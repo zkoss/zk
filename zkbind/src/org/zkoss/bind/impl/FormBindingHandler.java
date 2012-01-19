@@ -209,11 +209,19 @@ import org.zkoss.zk.ui.event.Event;
 		}
 	}
 
-	void removeBindings(Collection<Binding> bindings) {
-		_loadFormAfterBindings.values().removeAll(bindings); //command -> bindings (load form after command)
-		_saveFormAfterBindings.values().removeAll(bindings); //command -> bindings (save form after command)
-		_loadFormBeforeBindings.values().removeAll(bindings); //command -> bindings (load form before command)
-		_saveFormBeforeBindings.values().removeAll(bindings); //command -> bindings (save form before command)
+	void removeBindings(Collection<Binding> removes) {
+		for(List<LoadFormBinding> bindings:_loadFormAfterBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load form after command)
+		}
+		for(List<SaveFormBinding> bindings:_saveFormAfterBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (save form after command)
+		}
+		for(List<LoadFormBinding> bindings:_loadFormBeforeBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load form before command)
+		}
+		for(List<SaveFormBinding> bindings:_saveFormBeforeBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (save form before command)
+		}
 	}
 
 	void doLoad(Component comp, BindingKey bkey) {

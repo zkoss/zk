@@ -362,10 +362,18 @@ import org.zkoss.zk.ui.event.Event;
 	}
 
 	void removeBindings(Collection<Binding> removes) {
-		_loadAfterBindings.values().removeAll(removes); //command -> bindings (load after command)
-		_saveAfterBindings.values().removeAll(removes); //command -> bindings (save after command)
-		_loadBeforeBindings.values().removeAll(removes); //command -> bindings (load before command)
-		_saveBeforeBindings.values().removeAll(removes); //command -> bindings (save before command)
+		for(List<LoadPropertyBinding> bindings:_loadAfterBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load after command)
+		}
+		for(List<SavePropertyBinding> bindings:_saveAfterBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (save after command)
+		}
+		for(List<LoadPropertyBinding> bindings:_loadBeforeBindings.values()){
+			bindings.removeAll(removes); //command -> bindings (load before command)
+		}
+		for(List<SavePropertyBinding> bindings:_saveBeforeBindings.values()){
+			bindings.removeAll(removes); //command -> bindings save before command)
+		}
 	}
 
 	void doLoad(Component comp, BindingKey bkey) {
@@ -385,30 +393,4 @@ import org.zkoss.zk.ui.event.Event;
 			}
 		}
 	}
-
-	public boolean hasLoadBinding(BindingKey bkey) {
-		boolean r = false;
-		List<?> bindings = _initBindings.get(bkey);
-		if(bindings!=null && bindings.size()>0){
-			return true;
-		}
-		bindings = _loadPromptBindings.get(bkey);
-		if(bindings!=null && bindings.size()>0){
-			return true;
-		}
-		bindings = _loadEventBindings.get(bkey);
-		if(bindings!=null && bindings.size()>0){
-			return true;
-		}
-		bindings = _loadAfterBindings.get(bkey);
-		if(bindings!=null && bindings.size()>0){
-			return true;
-		}
-		bindings = _loadBeforeBindings.get(bkey);
-		if(bindings!=null && bindings.size()>0){
-			return true;
-		}
-		return false;
-	}
-	
 }

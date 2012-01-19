@@ -305,7 +305,7 @@ import org.zkoss.zk.ui.event.Event;
 		if (xnotifys != null) {
 			notifys.addAll(xnotifys);
 		}
-		return svalid & vContext.isValid();
+		return svalid && vContext.isValid();
 		
 	}
 	

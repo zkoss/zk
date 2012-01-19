@@ -177,7 +177,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private final Map<BindingKey, CommandEventListener> _listenerMap; //comp+evtnm -> eventlistener
 	private final String _quename;
 	private final String _quescope;
-	private final EventListener<Event> _queueListener;
+	private final QueueListener _queueListener;
 	
 	private ValidationMessages _validationMessages;
 	private Set<BindingKey> _hasValidators;//the key to mark they have validator
@@ -212,15 +212,19 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
 		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BinderImpl.QUE;
 		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : EventQueues.DESKTOP;
-		_queueListener = new EventListener<Event>() {
-			public void onEvent(Event event) throws Exception {
-				//only when a event in queue is our event
-				if(event instanceof PropertyChangeEvent){
-					final PropertyChangeEvent evt = (PropertyChangeEvent) event;
-					BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getPropertyName());
-				}
+		_queueListener = new QueueListener();
+	}
+	
+	private class QueueListener implements EventListener<Event>,Serializable{
+		private static final long serialVersionUID = 1L;
+
+		public void onEvent(Event event) throws Exception {
+			//only when a event in queue is our event
+			if(event instanceof PropertyChangeEvent){
+				final PropertyChangeEvent evt = (PropertyChangeEvent) event;
+				BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getPropertyName());
 			}
-		};
+		}
 	}
 	
 	private void checkInit(){
@@ -1049,7 +1053,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 	}
 
-	private class CommandEventListener implements EventListener<Event> { //event used to trigger command
+	private class CommandEventListener implements EventListener<Event>, Serializable{
+		private static final long serialVersionUID = 1L;
+	//event used to trigger command
 		private boolean _prompt = false;
 		private CommandBinding _commandBinding;
 		final private Component _target;
@@ -1560,8 +1566,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	@Override
 	public boolean hasPropertyLoadBinding(Component comp, String attr) {
 		checkInit();
-		final BindingKey bkey = getBindingKey(comp, attr);
-		return _propertyBindingHandler.hasLoadBinding(bkey); 
+		Map<String, List<Binding>> map = _bindings.get(comp);
+		if(map==null) return false;
+		List<Binding> list = map.get(attr);
+		if(list==null) return false;
+		for(Binding binding:list){
+			if(binding instanceof LoadPropertyBinding)
+				return true;
+		}
+		return false; 
 	}
 
 	private void removeBindings(Collection<Binding> removed) {

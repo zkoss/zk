@@ -3,6 +3,7 @@ package org.zkoss.bind.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -177,7 +178,7 @@ public class ParamCall {
 						if(ss.length==1){
 							return _component.getAttribute(name,true);
 						}
-						throw new UiException("don't use "+s+" with other scopes "+ss);
+						throw new UiException("don't use "+s+" with other scopes "+Arrays.toString(ss));
 					}
 				}
 				Object val = null;

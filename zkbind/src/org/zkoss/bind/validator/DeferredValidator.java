@@ -29,7 +29,7 @@ public class DeferredValidator implements Validator,Serializable{
 	private static final long serialVersionUID = 6545009126528775045L;
 	private String _clzName;
 	private Class<Validator> _clz;
-	private Validator _target;
+	private volatile Validator _target;
 	
 	public DeferredValidator(String clzName){
 		_clzName = clzName;
