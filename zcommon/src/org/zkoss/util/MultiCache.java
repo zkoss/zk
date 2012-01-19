@@ -19,7 +19,8 @@ package org.zkoss.util;
 import org.zkoss.lang.Objects;
 
 /**
- * A {@link CacheMap}-based cache.
+ * A {@link CacheMap} that uses multiple instanceof {@link CacheMap} to speed up
+ * the performance.
  * It creates multiple instances of {@link CacheMap}, called
  * the internal caches, and then distributes the access across them.
  * Thus, the performance is porportional to the number of internal caches.
@@ -98,8 +99,21 @@ public class MultiCache<K, V> implements Cache<K, V>, java.io.Serializable, Clon
 		}
 	}
 
+	/** Returns an integer used to identify the instance of inner caches to use.
+	 * By default, this method returns the hash code of the given key
+	 * and the current thread.
+	 * It means the value of the same key might be stored in different
+	 * cache (in favor of performance).
+	 * If different threads of your application usually access
+	 * different keys, you can override this method to return
+	 * the hash code of the given key only.
+	 * @since 6.0.0
+	 */
+	protected int getInnerCacheHashCode(Object key) {
+		return Objects.hashCode(key) ^ Objects.hashCode(Thread.currentThread());
+	}
 	private CacheMap<K, V> getCache(Object key) {
-		int j = Objects.hashCode(key);
+		int j = getInnerCacheHashCode(key);
 		j = (j >= 0 ? j: -j) % _caches.length;
 
 		CacheMap<K, V> cache = _caches[j];
