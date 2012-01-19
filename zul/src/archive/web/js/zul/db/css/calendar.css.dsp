@@ -159,19 +159,19 @@
 .z-calendar-caldow td {
 	text-align: center;
 }
-.z-calendar .z-weekend,
-.z-calendar .z-weekday {
+.z-calendar-caldow .z-calendar-wkend,
+.z-calendar-caldow .z-calendar-wkday {
 	font-family: ${fontFamilyT};
 	font-weight: bold;
 	font-size: ${fontSizeS};
 }
-.z-calendar .z-weekend {
+.z-calendar-caldow .z-calendar-wkend {
 	color: #f7941d;
 }
-.z-calendar .z-weekday {
+.z-calendar-caldow .z-calendar-wkday {
 	color: #636363;
 }
-.z-calendar .z-outside {
+.z-calendar .z-calendar-outside {
 	color: #AAAAAA;
 	text-shadow: none;
 }
