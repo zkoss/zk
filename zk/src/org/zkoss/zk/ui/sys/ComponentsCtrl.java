@@ -372,7 +372,7 @@ public class ComponentsCtrl {
 	private static Cache<Pair<Class<?>, String>, Object> _evtmtds =
 		new MultiCache<Pair<Class<?>, String>, Object> (
 			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.number", 97),
-			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 30),
+			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 60),
 			4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript objects

@@ -845,7 +845,7 @@ public class Classes {
 	}
 	private static Cache<AOInfo, Object> _closms = new MultiCache<AOInfo, Object>(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 60),
 		4*60*60*1000);
 	private static final
 	Method myGetCloseMethod(final Class<?> cls, final String name,
@@ -1037,7 +1037,7 @@ public class Classes {
 	}
 	private static Cache<AOInfo, AccessibleObject> _acsos = new MultiCache<AOInfo, AccessibleObject>(
 		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.number", 97),
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 30),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 60),
 		4*60*60*1000);
 	private static final AccessibleObject
 	myGetAcsObj(Class<?> cls, String name, Class<?>[] argTypes, int flags)
