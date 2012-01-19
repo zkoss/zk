@@ -17,7 +17,6 @@ import java.util.Iterator;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.TreeModel;
@@ -36,38 +35,33 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 	
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Tree tree = (Tree) comp;
-		final TreeModel<?> model = tree.getModel();
+		final TreeModel<Object> model = tree.getModel();
 
   		final TreeSelectionModel smodel = (model instanceof TreeSelectionModel)?(TreeSelectionModel)model:null;
+		if(smodel!=null && !smodel.isSelectionEmpty()){//clear the selection first
+	  		smodel.clearSelection();
+		}
+		
 	  	if (val != null) {
-	  		//there is a BUG on tree.getItems (http://tracker.zkoss.org/browse/ZK-766),
-	  		//it doesn't return all descending children if it is not open yet
-	  		//and if user want better performance, he should get the selection from model directly
-		  	for (final Iterator<?> it = tree.getItems().iterator(); it.hasNext();) {
-		  		final Treeitem ti = (Treeitem) it.next();
-		  		//TODO get value form BinderImpl.VAR (Reference) for better performance
-		  		//final String varnm = (String) ti.getAttribute(BinderImpl.VAR);
-		  		Object bean = null;
-		  		int path[] = null;
-		  		/*if (varnm != null) { //There is binding on template
-		  			bean = ti.getAttribute(varnm);
-		  		} else */if(model!=null){ //no binding
-		  			bean = model.getChild(path = toPath(ti));
-		  		} else{
-		  			bean = ti.getValue();
-		  		}
-
-		  		if (val.equals(bean)) {
-		  			if(smodel!=null){
-		  				if(path==null){
-		  					path = toPath(ti);
-		  				}
-		  				smodel.addSelectionPath(path);
-		  				return LoadPropertyBinding.LOAD_IGNORED;
-		  			}
-		  			return ti;
-		  		}
-		  	}
+	  		if(model!=null){
+	  			int[] path = model.getPath(val);
+	  			if(path!=null && smodel!=null){
+	  				smodel.addSelectionPath(path);
+	  				return LoadPropertyBinding.LOAD_IGNORED;
+	  			}
+	  			//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766
+	  		}	  		
+		  	//there is a issue on tree.getItems (http://tracker.zkoss.org/browse/ZK-766),
+		  	//it doesn't return all descending children if it is not open yet
+		  	//and if user want better performance, he should get the selection from model directly
+			for (final Iterator<?> it = tree.getItems().iterator(); it.hasNext();) {
+				final Treeitem ti = (Treeitem) it.next();
+				Object bean = ti.getValue();
+				if (val.equals(bean)) {
+					return ti;
+				}
+			}
+	  		
 		  	//not in the item list
 	  	}
 	  	
