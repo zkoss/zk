@@ -30,6 +30,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>4. Click clone and 'clone by serialization', then two radiogroups should be created and also select data 10.</div>
 		<div>5. Select data 11 of third radiogroups, data 12 of fourth and data 13 of fifth, the select status of last three radiogroups should not sync.</div>
 		<div>6. Click clone and 'clone by serialization', you should see two radiogroups created and each radiogroups after fifth radiogroups select data 11.</div>
+		<div>7. You can only select one of third/serialized radiogroup at the same time.</div>
 	</div>
 	<radiogroup id="cbxOne" model="${model}" onCheck="" />
 	<div height="10px"></div>
