@@ -61,7 +61,7 @@ if [ -f "$appxml" ] && [ "$appxml" -nt "$srcfl" ] ; then
 fi
 
 #convert srcfl to absolute
-if [ "$TERM" = "cygwin" ] ; then
+if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 	srcfl=$(cygpath -wa $srcfl)
 else
 	if [ "$srcfl" = "${srcfl#/}" ] ; then #relative

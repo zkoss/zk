@@ -45,7 +45,7 @@ if [ ! -f "$jarfl" ] ; then
 fi
 
 #convert jarfl to window format
-if [ "$TERM" = "cygwin" ] ; then
+if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 	jarfl=$(cygpath -wa $jarfl)
 fi
 
@@ -73,7 +73,7 @@ function zips
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
-						if [ "$TERM" = "cygwin" ] ; then
+						if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 							dstfl=$(cygpath -wa $dstfl)
 						fi
 						java -jar $jarfl --charset UTF-8 --type css "$f" -o "$dstfl" 2>&1
