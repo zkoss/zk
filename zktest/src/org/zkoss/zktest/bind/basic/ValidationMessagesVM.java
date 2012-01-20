@@ -40,7 +40,7 @@ public class ValidationMessagesVM {
 		return new AbstractValidator() {
 			public void validate(ValidationContext ctx) {
 				Integer val = (Integer)ctx.getProperty().getValue();
-				if(val<10 || val>100){
+				if(val==null || val<10 || val>100){
 					addInvalidMessage(ctx, "value must not < 10 or > 100, but is "+val);
 				}
 			}
