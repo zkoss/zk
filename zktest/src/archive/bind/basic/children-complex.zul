@@ -1,0 +1,24 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenComplexVM')" validationMessages = "@id('vmsgs')">
+
+	Nested.
+	<vlayout id="vlayout" children="@load(vm.nodes) @template('children1')">
+		<template name="children1" var="node">
+			<vlayout style="padding-left:10px; border:2px solid green;" sclass="children1">
+				<label value="@bind(node.name)" />
+				<vlayout children="@load(node.children) @template('children2')"/>
+			</vlayout>
+		</template>
+		<template name="children2" var="node">
+			<vlayout style="padding-left:10px; border:2px solid blue;" sclass="children2">
+				<label value="@bind(node.name)" />
+				<vlayout children="@load(node.children) @template('children1')"/>
+			</vlayout>
+		</template>
+	</vlayout>
+	
+	
+	<button label="cmd1" id="cmd1" onClick="@command('cmd1')"/>
+	
+	<button label="clear " id="clear" onClick="@command('clear')"/> 
+	
+</window>
