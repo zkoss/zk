@@ -699,7 +699,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var h = n.offsetHeight - this._titleHeight(n);
 		if (this._rounded()) {
 			var body = this.panelchildren.$n(),
-				bl = jq(this.$n('body')).find(':last')[0],
+				bl = jq(this.$n('body')).find('> div:last-child')[0],
 				title = this.$n('cap');
 			h -= bl.offsetHeight;
 			if (body)
