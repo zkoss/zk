@@ -16,9 +16,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import java.math.BigDecimal;
-import java.util.Locale;
-
 /**
  * Integer utilities.
  *

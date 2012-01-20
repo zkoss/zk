@@ -38,8 +38,6 @@ import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.FormatInputElement;
-import org.zkoss.zul.impl.InputElement;
-import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -364,7 +362,7 @@ will be used to retrieve the real format.
 			renderer.render("timezone", timezone);
 		}
 
-		if(_btnVisible != true)
+		if(!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 		
 		String unformater = getUnformater();

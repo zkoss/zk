@@ -49,6 +49,7 @@ public class Taglib {
 		return _prefix.hashCode() + _uri.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof Taglib
 			&& ((Taglib)o)._prefix.equals(_prefix)
 			&& ((Taglib)o)._uri.equals(_uri);

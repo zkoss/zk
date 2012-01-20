@@ -18,10 +18,6 @@ package org.zkoss.xel.el;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.XelException;
-
 import org.zkforge.apache.commons.el.ELExpression;
 
 /** 
@@ -47,6 +43,7 @@ import org.zkforge.apache.commons.el.ELExpression;
 
 	//Object//
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof ELXelExpression &&
 			((ELXelExpression)o)._expr.equals(_expr);
 	}

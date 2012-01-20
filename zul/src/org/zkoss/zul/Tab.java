@@ -168,7 +168,7 @@ public class Tab extends LabelImageElement {
 	 */
 	public void setSelected(boolean selected) {
 		if (_selected != selected) {
-			final Tabbox tabbox = (Tabbox) getTabbox();
+			final Tabbox tabbox = getTabbox();
 			if (tabbox != null) {
 				// Note: we don't update it here but let its parent does the job
 				tabbox.setSelectedTab(this);

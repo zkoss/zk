@@ -200,6 +200,8 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	}
 	
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return _list.equals(o instanceof ListModelList ? ((ListModelList)o)._list: o);
 	}
 	

@@ -17,7 +17,6 @@ package org.zkoss.idom.impl;
 
 import org.w3c.dom.*;
 
-import org.zkoss.idom.*;
 import org.zkoss.idom.DOMException;
 
 /**

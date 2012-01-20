@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 

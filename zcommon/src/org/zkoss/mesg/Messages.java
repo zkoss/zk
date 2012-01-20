@@ -16,7 +16,6 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.mesg;
 
-import java.util.Date;
 import java.util.Locale;
 
 import org.zkoss.lang.Objects;

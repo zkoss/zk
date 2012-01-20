@@ -25,8 +25,6 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.lang.Objects;
 
 import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
-import org.acegisecurity.context.SecurityContextHolder;
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,13 +69,13 @@ public class ZkAuthenticationProcessingFilter extends AuthenticationProcessingFi
     	if (url == null) {
     		return; //skip
     	}
-		final Event evt = (Event) ((HttpServletRequest)request).getSession().getAttribute(ZkEventExceptionFilter.EVENT);
+		final Event evt = (Event) (request).getSession().getAttribute(ZkEventExceptionFilter.EVENT);
 		final Component comp = evt.getTarget();
 		final String updateURI = comp.getDesktop().getUpdateURI(null);
     	if (url.indexOf(updateURI) >= 0) { //saved request
     		Events.postEvent(new Event(ON_LOGIN_OK, comp, null)); //post onLoginOK event
     		if (_resendZkEvent) {
-				((HttpServletRequest)request).getSession().removeAttribute(ZkEventExceptionFilter.EVENT);
+				(request).getSession().removeAttribute(ZkEventExceptionFilter.EVENT);
 	    		Events.postEvent(evt);
 	    	}
     		return;

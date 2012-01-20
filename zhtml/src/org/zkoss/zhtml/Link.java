@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
-import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The LINK tag.

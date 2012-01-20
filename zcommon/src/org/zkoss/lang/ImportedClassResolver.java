@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
 
 /**
  * The class resolve that allows to import classes and packages, like Java's

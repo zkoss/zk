@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.util.resource;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 /**

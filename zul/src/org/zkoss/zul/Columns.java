@@ -119,12 +119,6 @@ public class Columns extends HeadersElement {
 			smartUpdate("menupopup", mpop);
 		}
 	}
-
-	/** @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
-	 */
-	public void setPopup(Menupopup mpop) {
-		super.setPopup(mpop);
-	}
 	
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

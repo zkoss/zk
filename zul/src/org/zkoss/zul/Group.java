@@ -109,6 +109,12 @@ public class Group extends Row {
 		}
 		return 0;
 	}
+	
+	@Override
+	public Group getGroup() {
+		return this;
+	}
+	
 	/**
 	 * Returns the number of visible descendant {@link Row}.
 	 * @since 3.5.1

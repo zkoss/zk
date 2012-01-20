@@ -17,20 +17,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.util.resource;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
 
-import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
-import org.zkoss.io.Files;
-
 import org.zkoss.web.servlet.Servlets;
 
 /**

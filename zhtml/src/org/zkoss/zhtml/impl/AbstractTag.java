@@ -20,9 +20,6 @@ import java.lang.Object;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.Set;
-import java.util.HashSet;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 import org.zkoss.html.HTMLs;
@@ -37,13 +34,9 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
-
-import org.zkoss.zhtml.Text;
-import org.zkoss.zhtml.Zkhead;
 
 /**
  * The raw component used to generate raw HTML elements.

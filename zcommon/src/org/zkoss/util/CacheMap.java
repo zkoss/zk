@@ -22,12 +22,10 @@ import java.util.AbstractSet;
 import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
-import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.ref.ReferenceQueue;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.util.logging.Log;
 
 /**
  * The cache map. The key-to-value mappings hold in this map is
@@ -422,6 +420,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 			return _me.hashCode();
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			return (o instanceof Entry) && _me.equals(((Entry)o)._me);
 		}
 	}
@@ -547,7 +546,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		tryExpunge();
 		return o == this
 			|| ((o instanceof CacheMap) && _map.equals(((CacheMap)o)._map))
-			|| ((o instanceof Map) && _map.equals((Map)o));
+			|| ((o instanceof Map) && _map.equals(o));
 	}
 	public String toString() {
 		tryExpunge();

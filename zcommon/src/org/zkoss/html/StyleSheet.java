@@ -108,6 +108,7 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 		return _href.hashCode() + _type.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		if (!(o instanceof StyleSheet))
 			return false;
 		final StyleSheet ss = (StyleSheet)o;

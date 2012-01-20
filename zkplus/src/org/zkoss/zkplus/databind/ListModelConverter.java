@@ -54,7 +54,7 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 		} else if (val instanceof Object[]) {
 			return new BindingListModelArray((Object[]) val, true, distinct);
 		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
-			return new BindingListModelArray((Object[]) ((Class)val).getEnumConstants(), true);
+			return new BindingListModelArray(((Class)val).getEnumConstants(), true);
 		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
 			return new BindingGroupsListModel((GroupsModel) val);
 		} else if (val instanceof ListModel) { //Bug 3354086: Model attribute will not accept a ListModel

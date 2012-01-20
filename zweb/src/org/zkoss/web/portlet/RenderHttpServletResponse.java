@@ -143,6 +143,8 @@ public class RenderHttpServletResponse implements HttpServletResponse {
 		return _res.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		RenderResponse val =
 			o instanceof RenderResponse ? (RenderResponse)o:
 			o instanceof RenderHttpServletResponse ? ((RenderHttpServletResponse)o)._res: null;

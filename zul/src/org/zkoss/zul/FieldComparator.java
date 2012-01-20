@@ -106,7 +106,7 @@ public class FieldComparator implements Comparator, Serializable {
 				appendField(sb, it.next());
 			}
 			while(it.hasNext()) {
-				sb.append(",");
+				sb.append(',');
 				appendField(sb, it.next());
 			}
 			_orderBy = sb.toString();

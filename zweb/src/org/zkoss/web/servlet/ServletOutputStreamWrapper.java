@@ -18,7 +18,6 @@ package org.zkoss.web.servlet;
 
 import java.io.Writer;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;

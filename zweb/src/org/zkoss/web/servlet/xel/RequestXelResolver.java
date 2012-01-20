@@ -18,16 +18,11 @@ package org.zkoss.web.servlet.xel;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Set;
-import java.util.AbstractSet;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Enumeration;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;

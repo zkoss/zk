@@ -47,6 +47,7 @@ import org.zkforge.apache.commons.el.ELExpression;
 
 	//Object//
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof ELXelExpression102 &&
 			((ELXelExpression102)o)._expr.equals(_expr);
 	}

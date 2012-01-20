@@ -18,12 +18,10 @@ package org.zkoss.web.util.resource;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Writer;
 import java.io.StringWriter;
 import java.io.OutputStream;
 import java.io.IOException;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,7 +78,7 @@ public class DspExtendlet implements Extendlet {
 				throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
 					//have the includer to handle it
 			}
-			response.sendError(response.SC_NOT_FOUND, path);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 			return;
 		}
 

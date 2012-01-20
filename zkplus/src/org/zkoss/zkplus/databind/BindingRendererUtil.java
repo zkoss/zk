@@ -74,7 +74,7 @@ public class BindingRendererUtil {
 			if(g != null && g.getModel() != null)
 				return true;
 		} else if(comp instanceof Listitem) {
-			Listbox b = (Listbox)((Listitem) comp).getListbox();
+			Listbox b = ((Listitem) comp).getListbox();
 			if(b != null && b.getModel() != null)
 				return true;
 		}

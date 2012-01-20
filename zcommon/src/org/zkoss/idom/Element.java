@@ -18,18 +18,11 @@ package org.zkoss.idom;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Collection;
-import java.util.AbstractCollection;
 import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import javax.xml.transform.TransformerException;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,8 +30,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.TypeInfo;
 
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.mesg.Messages;
-import org.zkoss.mesg.MCommon;
 import org.zkoss.util.NotableLinkedList;
 import org.zkoss.idom.impl.FacadeNodeList;
 import org.zkoss.idom.impl.*;
@@ -291,7 +282,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		}
 		if (obj != null)
 			_children.add(0,
-				bStr ? (Item)new Text((String)obj): (Item)new Binary(obj));
+				bStr ? new Text((String)obj): new Binary(obj));
 		return ret;
 	}
 
@@ -597,11 +588,11 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 
 	public final Attribute getAttributeItem(String namespace, String name, int mode) {
 		int j= getAttributeIndex(0, namespace, name, mode);
-		return j >= 0 ? (Attribute)_attrs.get(j): null;
+		return j >= 0 ? _attrs.get(j): null;
 	}
 	public final Attribute getAttributeItem(String tname) {
 		int j= getAttributeIndex(0, tname);
-		return j >= 0 ? (Attribute)_attrs.get(j): null;
+		return j >= 0 ? _attrs.get(j): null;
 	}
 	public final List<Attribute> getAttributes(String namespace, String name, int mode) {
 		if (_attrs == null)
@@ -619,9 +610,9 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 	public final Attribute setAttribute(Attribute attr) {
 		int j = getAttributeIndex(0, attr.getTagName());
 		if (j >= 0) {
-			return (Attribute)getAttributeItems().set(j, (Attribute)attr);
+			return getAttributeItems().set(j, attr);
 		} else {
-			getAttributeItems().add((Attribute)attr);
+			getAttributeItems().add(attr);
 			return null;
 		}
 	}
@@ -737,7 +728,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		int j = getAttributeIndex(
 			0, attr.getNamespace().getURI(), attr.getLocalName(), 0);
 		if (j >= 0) {
-			return (Attr)getAttributeItems().set(j, (Attribute)newAttr);
+			return getAttributeItems().set(j, (Attribute)newAttr);
 		} else {
 			getAttributeItems().add((Attribute)newAttr);
 			return null;
@@ -758,7 +749,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 		Attribute attr = (Attribute)oldAttr;
 		int j = getAttributeIndex(0, attr.getTagName());
 		if (j >= 0) {
-			return (Attr)_attrs.remove(j);
+			return _attrs.remove(j);
 		} else {
 			throw new DOMException(DOMException.NOT_FOUND_ERR, getLocator());
 		}
@@ -834,7 +825,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 				newItem.setOwner(Element.this);
 			}catch(RuntimeException ex) {
 				if (replace) {
-					Attribute attrRep = (Attribute)other;
+					Attribute attrRep = other;
 					if (attrRep.getOwner() == null)
 						attrRep.setOwner(Element.this); //restore it
 				}

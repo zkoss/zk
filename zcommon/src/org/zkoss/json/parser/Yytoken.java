@@ -29,7 +29,7 @@ class Yytoken {
 		StringBuffer sb = new StringBuffer();
 		switch(type){
 		case TYPE_VALUE:
-			sb.append("VALUE(").append(value).append(")");
+			sb.append("VALUE(").append(value).append(')');
 			break;
 		case TYPE_LEFT_BRACE:
 			sb.append("LEFT BRACE({)");

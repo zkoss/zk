@@ -21,11 +21,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zk.ui.util.WebAppCleanup;
-
-import org.hibernate.SessionFactory;
 
 /**
  * <p>Listener to init and cleanup the hibernate session factory automatically. 

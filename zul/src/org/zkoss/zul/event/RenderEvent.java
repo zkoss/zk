@@ -20,9 +20,7 @@ import java.util.List;
 
 import static org.zkoss.lang.Generics.cast;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.event.Event;

@@ -150,6 +150,8 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	}
     
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return _map.equals(o instanceof ListModelMap ? ((ListModelMap)o)._map: o);
 	}
 	public String toString() {

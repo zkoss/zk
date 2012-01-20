@@ -869,7 +869,7 @@ public class Tree extends MeshElement {
 				_selItems.remove(item);
 				
 				if(_sel == item) //bug fix:3131173 
-					_sel = _selItems.size() > 0 ? (Treeitem)_selItems.iterator().next() : null;
+					_sel = _selItems.size() > 0 ? _selItems.iterator().next() : null;
 								
 				smartUpdateSelection();
 			}
@@ -902,7 +902,7 @@ public class Tree extends MeshElement {
 				item.setSelectedDirectly(false);
 			_selItems.clear();
 			_sel = null;
-			smartUpdate("selectedItem", (Object)null);
+			smartUpdate("selectedItem", null);
 		}
 	}
 	/** Selects all items.

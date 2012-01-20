@@ -147,7 +147,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		boolean b = _defaultConfig != null ? Boolean.valueOf(_defaultConfig).booleanValue() : true;
-		if (_comp instanceof Component) { //a specified component instance
+		if (_comp != null) { //a specified component instance
 			_binder = new AnnotateDataBinder(_comp, b);
 			saveBinder(_comp);//_comp.setAttribute(_name, _binder);
 		} else if (_compPath == null || "page".equals(_compPath)) { //page
@@ -157,7 +157,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			} else {
 				page.setAttribute(_name, _binder);
 			}
-		} else if (_compPath.startsWith("/")) { //absolute path
+		} else if (_compPath.charAt(0) == '/') { //absolute path
 			final Component comp = Path.getComponent(_compPath);
 			if (comp == null) {
 				throw new UiException("Cannot find the specified component. Absolute Path:"+_compPath);

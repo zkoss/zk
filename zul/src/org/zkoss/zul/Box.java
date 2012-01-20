@@ -14,16 +14,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
-import java.io.IOException;
-
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
 

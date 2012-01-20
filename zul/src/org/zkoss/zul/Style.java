@@ -20,7 +20,6 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * The style component used to specify CSS styles for the owner desktop.

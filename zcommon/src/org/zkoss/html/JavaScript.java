@@ -76,6 +76,7 @@ public class JavaScript {
 		return Objects.hashCode(_src) + Objects.hashCode(_content);
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		if (!(o instanceof JavaScript))
 			return false;
 		final JavaScript js = (JavaScript)o;

@@ -61,7 +61,7 @@ public class ContentTypes {
 
 		format = format.trim().toLowerCase();
 		synchronized (_fmt2ct) {
-			return (String)_fmt2ct.get(format);
+			return _fmt2ct.get(format);
 		}
 	}
 	/** Returns the format of the specified content type, or null if not found.
@@ -74,7 +74,7 @@ public class ContentTypes {
 		ctype = ctype.trim().toLowerCase();
 		String format;
 		synchronized (_ct2fmt) {
-			format = (String)_ct2fmt.get(ctype);
+			format = _ct2fmt.get(ctype);
 		}
 		if (format == null) {
 			//sometime, content type is "text/html;charset=UTF-8"
@@ -82,7 +82,7 @@ public class ContentTypes {
 			if (j >= 0) {
 				ctype = ctype.substring(0, j);
 				synchronized (_ct2fmt) {
-					format = (String)_ct2fmt.get(ctype);
+					format = _ct2fmt.get(ctype);
 				}
 			}
 			if (format == null) {

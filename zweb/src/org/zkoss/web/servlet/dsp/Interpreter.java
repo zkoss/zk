@@ -20,14 +20,11 @@ import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 

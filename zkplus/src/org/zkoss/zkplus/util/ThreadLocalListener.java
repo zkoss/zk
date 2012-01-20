@@ -18,8 +18,6 @@ package org.zkoss.zkplus.util;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
@@ -36,8 +34,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Iterator;
 import java.util.HashMap;
-import java.lang.reflect.Field;
-
 import java.util.List;
 import java.util.Collection;
 
@@ -201,7 +197,7 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
 				final Object[] threadLocals = me.getValue();
-				final String[] fields = (String[]) _fieldsMap.get(clsName);
+				final String[] fields = _fieldsMap.get(clsName);
 			
 				for(int j = 0; j < threadLocals.length; ++j) {
 					getThreadLocal(cls, fields[j]).set(threadLocals[j]);

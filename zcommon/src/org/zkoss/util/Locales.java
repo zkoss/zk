@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Iterator;
 import java.util.Collection;
 
 import org.zkoss.lang.Objects;

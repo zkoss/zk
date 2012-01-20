@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Date;
-import java.util.Collection;
 
 /**
  * A HiLo chart data model (date, open, close, high, low, volumn) usually used in

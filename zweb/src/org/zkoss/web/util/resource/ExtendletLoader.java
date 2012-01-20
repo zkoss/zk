@@ -20,7 +20,6 @@ import java.net.URL;
 import java.io.InputStream;
 
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Loader;
@@ -85,7 +84,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 	}
 	public V load(String src) throws Exception {
 //		if (log.debugable()) log.debug("Parse "+src);
-		final String path = getRealPath((String)src);
+		final String path = getRealPath(src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
 			//Due to Web server might cache the result, we use URL if possible
@@ -105,7 +104,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 		}
 
 		try {
-			return parse(is, path, (String)src);
+			return parse(is, path, src);
 		} catch (Throwable ex) {
 			log.realCauseBriefly("Failed to parse "+src, ex);
 			return null; //as non-existent

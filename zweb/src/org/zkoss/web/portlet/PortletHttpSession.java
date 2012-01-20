@@ -118,6 +118,8 @@ public class PortletHttpSession implements HttpSession {
 		return _sess.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		PortletSession val =
 			o instanceof PortletSession ? (PortletSession)o:
 			o instanceof PortletHttpSession ? ((PortletHttpSession)o)._sess: null;

@@ -20,7 +20,6 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import org.zkoss.mesg.Messages;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;

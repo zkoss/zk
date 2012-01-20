@@ -19,11 +19,7 @@ package org.zkoss.image.encoder;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
-import java.awt.image.RenderedImage;
-
 import org.zkoss.lang.SystemException;
-import org.zkoss.image.Image;
-import org.zkoss.image.AImage;
 
 /**
  * The factory of the image encodes.

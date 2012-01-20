@@ -16,7 +16,6 @@ package org.zkoss.web.servlet.http;
 
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.IOException;
@@ -29,12 +28,10 @@ import java.text.ParseException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
 import org.zkoss.lang.Strings;
@@ -531,7 +528,7 @@ public class Https extends Servlets {
 		} else {
 			final ServletOutputStream out = response.getOutputStream();
 			if (from >= 0) { //partial
-				response.setStatus(response.SC_PARTIAL_CONTENT);
+				response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 
 				int f = from <= data.length ? from: data.length;
 				int t = to >= 0 && to < data.length ? to: data.length;
@@ -611,7 +608,7 @@ public class Https extends Servlets {
 	throws IOException {
 		//Note: after all content are written, _ofs is the total number
 		//while _cnt the number of bytes being written.
-		response.setStatus(response.SC_PARTIAL_CONTENT);
+		response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 		response.setContentLength(_cnt);
 
 		int from = _from <= _ofs ? _from: _ofs;
@@ -620,14 +617,14 @@ public class Https extends Servlets {
 
 		writeTo(response.getOutputStream());
 	}
-	public void write(int b) {
+	public synchronized void write(int b) {
 		int ofs = _ofs++;
 		if (ofs >= _from && (_to < 0 || ofs <= _to)) {
 			++_cnt;
 			super.write(b);
 		}
 	}
-	public void write(byte[] b, int ofs, int len) {
+	public synchronized void write(byte[] b, int ofs, int len) {
 		while (--len >= 0)
 			write(b[ofs++]);
 	}

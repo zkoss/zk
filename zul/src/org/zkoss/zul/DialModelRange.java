@@ -135,7 +135,7 @@ public class DialModelRange implements Serializable {
 	 * @param lower the specified lower bound in the scale.
 	 */
 	public void setLowerBound(double lower) {
-		if (_lower != lower) {
+		if (Double.compare(_lower, lower) != 0) {
 			_lower = lower;
 			_scale.fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -155,7 +155,7 @@ public class DialModelRange implements Serializable {
 	 * @param upper the upper bound
 	 */
 	public void setUpperBound(double upper) {
-		if (_upper != upper) {
+		if (Double.compare(_upper, upper) != 0) {
 			_upper = upper;
 			_scale.fireEvent(ChartDataEvent.CHANGED);
 		}

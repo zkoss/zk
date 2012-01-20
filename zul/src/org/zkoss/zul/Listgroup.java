@@ -94,6 +94,12 @@ public class Listgroup extends Listitem {
 		}
 		return 0;
 	}
+	
+	@Override
+	public Listgroup getListgroup() {
+		return this;
+	}
+	
 	/**
 	 * Returns the number of visible descendant {@link Listitem}.
 	 * @since 3.5.1

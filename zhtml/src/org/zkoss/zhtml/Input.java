@@ -18,8 +18,6 @@ package org.zkoss.zhtml;
 
 import java.lang.Object; //since we have org.zkoss.zhtml.Object
 
-import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zhtml.impl.AbstractTag;

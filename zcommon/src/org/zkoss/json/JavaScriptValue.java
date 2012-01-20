@@ -42,6 +42,7 @@ public class JavaScriptValue implements org.zkoss.json.JSONAware {
 		return _js.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof JavaScriptValue && _js.equals(((JavaScriptValue)o)._js);
 	}
 }

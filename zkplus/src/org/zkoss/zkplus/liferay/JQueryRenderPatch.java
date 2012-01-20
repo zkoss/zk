@@ -17,8 +17,6 @@ import java.io.StringWriter;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.ServletRequest;
-
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;

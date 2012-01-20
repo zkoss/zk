@@ -16,8 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.Component;
-
 /**
  * Addition interface implemented with {@link Constraint} to handle
  * the validation at the client.

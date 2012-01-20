@@ -24,8 +24,6 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.MouseEvent;
 

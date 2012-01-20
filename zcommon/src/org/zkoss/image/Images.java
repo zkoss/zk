@@ -19,9 +19,6 @@ package org.zkoss.image;
 import java.io.IOException;
 import java.awt.image.RenderedImage;
 
-import org.zkoss.image.Image;
-import org.zkoss.image.AImage;
-
 import org.zkoss.image.encoder.ImageEncoders;
 import org.zkoss.image.encoder.ImageEncoder;
 

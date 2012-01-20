@@ -14,8 +14,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.zel;
 
-import java.lang.reflect.Method;
-
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.VariableMapper;

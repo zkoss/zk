@@ -142,7 +142,7 @@ public class Spinner extends NumberInputElement {
 		super.renderProperties(renderer);
 		if(_step != 1)
 			renderer.render("step", _step);
-		if(_btnVisible != true)
+		if(!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 	}
 }

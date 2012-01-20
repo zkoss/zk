@@ -197,7 +197,7 @@ public class Chart extends Imagemap {
 		if (WAFERMAP.equals(getType())) {
 			return new WaferMapModel(100,100);
 		}
-		final String klass = (String) DEFAULT_MODEL.get(getType());
+		final String klass = DEFAULT_MODEL.get(getType());
 		if (klass != null) {
 			try {
 				return (ChartModel) Classes.newInstanceByThread(klass);
@@ -947,7 +947,7 @@ public class Chart extends Imagemap {
 		if (color == null) {
 			return;
 		}
-		if (color.length() != 7 || !color.startsWith("#")) {
+		if (color.length() != 7 || color.charAt(0) != '#') {
 			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
 		}
 		rgb[0] = Integer.parseInt(color.substring(1, 3), 16);

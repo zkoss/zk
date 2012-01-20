@@ -52,7 +52,12 @@ public abstract class StringKeysMap<V> extends AbstractMap<String, V> {
 			_key = key;
 		}
 		public boolean equals(Object o) {
+			if (this == o)
+				return true;
 			return o instanceof Key && _key.equals(((Key)o)._key);
+		}
+		public int hashCode() {
+			return _key.hashCode();
 		}
 	}
 	private class Entry extends Key implements Map.Entry<String, V> {
@@ -61,6 +66,11 @@ public abstract class StringKeysMap<V> extends AbstractMap<String, V> {
 		}
 		public int hashCode() {
 			return _key.hashCode();
+		}
+		public boolean equals(Object o) {
+			if (this == o)
+				return true;
+			return o instanceof StringKeysMap.Entry && _key.equals(((StringKeysMap.Entry)o)._key);
 		}
 		public String getKey() {
 			return _key;

@@ -18,16 +18,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zk.au.out.AuInvoke;
 
 /**
@@ -218,8 +214,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 		final int len = arguments != null ? arguments.length: 0;
 		final String[] args = new String[len + 1];
 		args[0] = function;
-		for (int j = 0; j < len; ++j)
-			args[j + 1] = arguments[j];
+		System.arraycopy(arguments, 0, args, 1, len);
 		response(new AuInvoke(this, "invoke", args));
 	}
 

@@ -41,7 +41,6 @@ import org.zkoss.util.WaitLock;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.util.SimpleXelContext;

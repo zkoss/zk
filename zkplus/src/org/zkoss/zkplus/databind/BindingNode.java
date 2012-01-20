@@ -123,7 +123,7 @@ import org.zkoss.zk.ui.UiException;
 			if (nodeid == null) {
 				throw new UiException("Incorrect bean expression: "+path);
 			}
-			BindingNode kidNode = (BindingNode) currentNode.getKidNode(nodeid);
+			BindingNode kidNode = currentNode.getKidNode(nodeid);
 			if (kidNode == null) { //if not found, then add one
 				if ("/".equals(currentNode._path)) {
 					kidNode = new BindingNode(nodeid, var, nodeid, true);
@@ -167,7 +167,7 @@ import org.zkoss.zk.ui.UiException;
 			if (nodeid == null) {
 				throw new UiException("Incorrect format of bean expression: "+path);
 			}
-			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			currentNode = currentNode.getKidNode(nodeid);
 			if (currentNode == null) {
 				return null; 
 			}

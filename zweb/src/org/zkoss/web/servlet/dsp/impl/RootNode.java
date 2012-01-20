@@ -19,8 +19,6 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.util.Iterator;
 import java.io.IOException;
 
-import org.zkoss.util.logging.Log;
-
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.web.servlet.xel.RequestContexts;
 import org.zkoss.web.servlet.dsp.*;

@@ -19,21 +19,15 @@ package org.zkoss.zkplus.spring;
 import org.zkoss.zkplus.util.ThreadLocals;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.lang.reflect.Field;
 
 import java.util.List;
 

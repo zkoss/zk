@@ -622,7 +622,7 @@ public class Grid extends MeshElement {
 	@SuppressWarnings("unchecked")
 	public <D, G, F> GroupsModel<D, G, F> getGroupsModel() {
 		return _model instanceof GroupsListModel ?
-			(GroupsModel)((GroupsListModel)_model).getGroupsModel(): null;
+			((GroupsListModel)_model).getGroupsModel(): null;
 	}
 	/** Sets the list model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
@@ -699,7 +699,7 @@ public class Grid extends MeshElement {
 		if (evalRod()) {
 			throw new UnsupportedOperationException("Not support GroupsModel in ROD yet!");
 		}
-		setModel((ListModel)(model != null ? GroupsListModel.toListModel(model): null));
+		setModel((model != null ? GroupsListModel.toListModel(model): null));
 	}
 	private void initDataListener() {
 		if (_dataListener == null)
@@ -1291,7 +1291,7 @@ public class Grid extends MeshElement {
 	/*package*/ DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
-			final String loadercls = (String) Library.getProperty("org.zkoss.zul.grid.DataLoader.class");
+			final String loadercls = Library.getProperty("org.zkoss.zul.grid.DataLoader.class");
 			try {
 				_dataLoader = _rod && loadercls != null ? 
 						(DataLoader) Classes.forNameByThread(loadercls).newInstance() :

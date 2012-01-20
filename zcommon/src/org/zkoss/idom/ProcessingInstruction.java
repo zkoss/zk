@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Collections;
-import java.io.IOException;
-
 import org.zkoss.mesg.MCommon;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;

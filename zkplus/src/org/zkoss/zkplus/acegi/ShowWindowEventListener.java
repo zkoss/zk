@@ -20,14 +20,10 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import org.zkoss.util.CollectionsX;
@@ -37,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * <p>The default listener to show a modal window for login and other things.</p>

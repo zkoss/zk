@@ -50,6 +50,8 @@ import java.net.URL;
 
 	//-- Object --//
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return (o instanceof ResourceInfo) && path.equals(((ResourceInfo)o).path);
 	}
 	public int hashCode() {

@@ -16,15 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zul.impl.Utils;
 
 /**
  * A band box. A bank box consists of an input box ({@link Textbox} and

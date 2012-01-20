@@ -293,7 +293,7 @@ public class Combobox extends Textbox {
 				data.getData() : getRawText());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
-			for (Comboitem item = getItems().size() <= ofs ? null: (Comboitem)getItems().get(ofs), nxt;
+			for (Comboitem item = getItems().size() <= ofs ? null: getItems().get(ofs), nxt;
 			j < pgsz && item != null; ++j, item = nxt) {
 				nxt = (Comboitem)item.getNextSibling(); //store it first
 				renderer.render(subset, item, j + ofs);

@@ -20,9 +20,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.XelException;
-
 import org.zkforge.apache.commons.el.ExpressionApi;
 
 /** 
@@ -59,6 +56,7 @@ import org.zkforge.apache.commons.el.ExpressionApi;
 
 	//Object//
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof ELXelExpression100 &&
 			((ELXelExpression100)o)._expr.equals(_expr);
 	}

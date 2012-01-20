@@ -212,7 +212,7 @@ public class CommonFns {
 				double v = ((Number)element).doubleValue();
 				final double[] ary = (double[])o;
 				for (int j = 0; j < ary.length; j++)
-					if (ary[j] == v)
+					if (Double.compare(ary[j], v) == 0)
 						return j;
 			}
 		} else if (o instanceof float[]) {
@@ -220,7 +220,7 @@ public class CommonFns {
 				float v = ((Number)element).floatValue();
 				final float[] ary = (float[])o;
 				for (int j = 0; j < ary.length; j++)
-					if (ary[j] == v)
+					if (Float.compare(ary[j], v) == 0)
 						return j;
 			}
 		} else if (o instanceof char[]) {
@@ -296,7 +296,7 @@ public class CommonFns {
 				double v = ((Number)element).doubleValue();
 				final double[] ary = (double[])o;
 				for (int j = ary.length; --j >= 0;)
-					if (ary[j] == v)
+					if (Double.compare(ary[j], v) == 0)
 						return j;
 			}
 		} else if (o instanceof float[]) {
@@ -304,7 +304,7 @@ public class CommonFns {
 				float v = ((Number)element).floatValue();
 				final float[] ary = (float[])o;
 				for (int j = ary.length; --j >= 0;)
-					if (ary[j] == v)
+					if (Float.compare(ary[j], v) == 0)
 						return j;
 			}
 		} else if (o instanceof char[]) {

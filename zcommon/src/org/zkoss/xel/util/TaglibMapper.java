@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.util;
 
-import java.util.Iterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -175,6 +174,7 @@ implements FunctionMapper, FunctionMapperExt, Cloneable, java.io.Serializable {
 		return Objects.hashCode(_mtds) ^ Objects.hashCode(_clses);
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof TaglibMapper
 			&& Objects.equals(_mtds, ((TaglibMapper)o)._mtds)
 			&& Objects.equals(_clses, ((TaglibMapper)o)._clses);

@@ -24,8 +24,6 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
-import org.zkoss.lang.SystemException;
-
 /**
  * The encoder for encoding an image into the JPEG format
  *
@@ -40,7 +38,7 @@ public class JPEGEncoder implements ImageEncoder {
 
 	public byte[] encode(RenderedImage image) throws java.io.IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		ImageWriter iw = (ImageWriter)ImageIO.getImageWritersByFormatName("jpeg").next();
+		ImageWriter iw = ImageIO.getImageWritersByFormatName("jpeg").next();
 		ImageWriteParam iwp = iw.getDefaultWriteParam();
 		iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		iwp.setCompressionQuality(_quality);

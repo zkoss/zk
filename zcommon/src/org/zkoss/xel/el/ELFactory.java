@@ -78,7 +78,7 @@ public class ELFactory implements ExpressionFactory {
 			v103 = true;
 		} catch (Throwable e) {
 		}
-		if ((_v103 = v103) == true) {
+		if ((_v103 = v103)) {
 			_v102 = true;
 		} else {
 			boolean v102 = false;

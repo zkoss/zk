@@ -17,7 +17,6 @@ package org.zkoss.idom;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Collection;
 
 /**
  * Represents an item might have children. Group is also a item.

@@ -17,10 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.servlet.dsp.action;
 
 import java.io.StringWriter;
-import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.dsp.DspException;
 
 /**

@@ -16,7 +16,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.databind;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.event.ListDataListener;
 

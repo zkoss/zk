@@ -24,7 +24,6 @@ import org.zkoss.util.media.Media;
 import org.zkoss.util.media.RepeatableMedia;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.impl.Utils;
 

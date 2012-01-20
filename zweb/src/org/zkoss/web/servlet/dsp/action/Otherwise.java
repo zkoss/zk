@@ -18,7 +18,6 @@ package org.zkoss.web.servlet.dsp.action;
 
 import java.io.IOException;
 
-import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.dsp.DspException;
 
 /**

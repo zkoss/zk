@@ -16,8 +16,6 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import java.io.Writer;
-
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.util.SimpleXelContext;

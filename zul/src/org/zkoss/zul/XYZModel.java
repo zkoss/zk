@@ -16,8 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collection;
-
 /**
  * A XYZ chart data model.
  *

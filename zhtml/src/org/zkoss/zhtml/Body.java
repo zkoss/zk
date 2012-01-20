@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import java.util.Collection;
 import java.io.StringWriter;
 
 import org.zkoss.zk.ui.Executions;
@@ -25,7 +24,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
 import org.zkoss.zhtml.impl.AbstractTag;
-import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The BODY tag.

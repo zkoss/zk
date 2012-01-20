@@ -210,6 +210,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	}
 	
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return _set.equals(o instanceof ListModelSet ? ((ListModelSet)o)._set: o);
 	}
 	

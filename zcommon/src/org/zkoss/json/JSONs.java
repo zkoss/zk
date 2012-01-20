@@ -14,7 +14,6 @@ package org.zkoss.json;
 
 import java.util.Locale;
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 

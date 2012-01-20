@@ -168,6 +168,8 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 	//Object//
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return _model.equals(o instanceof GroupsListModel ? ((GroupsListModel)o)._model: o);
 	}
 	public int hashCode() {

@@ -323,7 +323,7 @@ public class Strings {
 		case '\f': return 'f';
 		case '/':
 			//escape </script>
-			if (specials == ESCAPE_JAVASCRIPT //handle it specially
+			if (ESCAPE_JAVASCRIPT.equals(specials) //handle it specially
 			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 8 > src.length()
 				|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
 				return (char)0; //don't escape
@@ -331,7 +331,7 @@ public class Strings {
 			break;
 		case '!':
 			//escape <!-- (ZK-676: it causes problem if used with <script>)
-			if (specials == ESCAPE_JAVASCRIPT //handle it specially
+			if (ESCAPE_JAVASCRIPT.equals(specials) //handle it specially
 			&& (k <= 0 || src.charAt(k - 1) != '<' || k + 3 > src.length()
 				|| !"--".equals(src.subSequence(k+1, k+3)))) {
 				return (char)0; //don't escape
@@ -384,7 +384,7 @@ public class Strings {
 		}
 	}
 	private static final boolean shallEncodeUnicode(char cc, String specials) {
-		return specials == ESCAPE_JAVASCRIPT && cc > (char)255
+		return ESCAPE_JAVASCRIPT.equals(specials) && cc > (char)255
 			&& !Character.isLetterOrDigit(cc);
 			//don't check isSpaceChar since \u2028 will return true and it
 			//is not recoginized by firefox

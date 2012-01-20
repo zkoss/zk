@@ -27,23 +27,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.net.URL;
-import java.io.File;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.zkoss.mesg.MCommon;
-import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.SystemException;
-import org.zkoss.util.Locales;
 import org.zkoss.util.IllegalSyntaxException;
-import org.zkoss.util.resource.Locator;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.idom.*;
-import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.transform.Transformer;
 
 /**

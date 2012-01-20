@@ -952,6 +952,7 @@ Objects.BAR1_STRING
 		return _name.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof Log && ((Log)o)._name.equals(_name);
 	}
 	public String toString() {

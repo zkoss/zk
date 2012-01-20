@@ -798,7 +798,7 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, 0);
-		Object m = (Object)_closms.get(aoi);
+		Object m = _closms.get(aoi);
 		if( m == NOT_FOUND)
 			throw newNoSuchMethodException(cls, name, argTypes);
 		
@@ -827,7 +827,7 @@ public class Classes {
 			return getMethodInPublic(cls, name, null);
 
 		final AOInfo aoi = new AOInfo(cls, name, argTypes, B_BY_SUBCLASS);
-		Object m = (Object)_closms.get(aoi);
+		Object m = _closms.get(aoi);
 		if( m == NOT_FOUND)
 			throw newNoSuchMethodException(cls, name, argTypes);
 		
@@ -1123,6 +1123,7 @@ public class Classes {
 			return cls.hashCode() + name.hashCode() + flags;
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			if (!(o instanceof AOInfo))
 				return false;
 

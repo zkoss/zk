@@ -28,7 +28,6 @@ import org.zkoss.util.Maps;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
-import org.zkoss.zkplus.cdi.DelegatingVariableResolver;
 
 /**
  * JndiVariableResolver, a jndi variableResolver 

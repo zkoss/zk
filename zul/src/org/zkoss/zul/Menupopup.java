@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
 
 /**
  * A container used to display menus. It should be placed inside a

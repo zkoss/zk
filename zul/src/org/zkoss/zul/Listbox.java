@@ -1027,7 +1027,7 @@ public class Listbox extends MeshElement {
 			if (inSelectMold())
 				smartUpdate("selectedIndex", -1);
 			else
-				smartUpdate("selectedItem", (Object)null);
+				smartUpdate("selectedItem", null);
 			// Bug 1734950: don't count on index (since it may change)
 		}
 	}
@@ -1543,7 +1543,7 @@ public class Listbox extends MeshElement {
 					}
 					final int[] g = _groupsInfo.get(getGroupCount() - 1);
 
-					g[2] = ((Listitem) getItems().get(getItems().size() - 1))
+					g[2] = getItems().get(getItems().size() - 1)
 							.getIndex();
 				} else if (refChild instanceof Listitem) {
 					final int idx = ((Listitem) refChild).getIndex();
@@ -1601,7 +1601,7 @@ public class Listbox extends MeshElement {
 				refChild = null; // Bug 1649625: it becomes the last child
 			if (refChild != null
 					&& (refChild == _listhead || refChild instanceof Auxhead))
-				refChild = getChildren().size() > _hdcnt ? (Component) getChildren()
+				refChild = getChildren().size() > _hdcnt ? getChildren()
 						.get(_hdcnt)
 						: null;
 
@@ -1762,7 +1762,7 @@ public class Listbox extends MeshElement {
 		// try the first listitem
 		if (refChild == null
 				|| (refChild != _listhead && !(refChild instanceof Auxhead)))
-			refChild = getChildren().size() > _hdcnt ? (Component) getChildren()
+			refChild = getChildren().size() > _hdcnt ? getChildren()
 					.get(_hdcnt)
 					: null;
 
@@ -1847,8 +1847,7 @@ public class Listbox extends MeshElement {
 					if (idx != -1) {
 						final int realIndex = getRealIndex(idx) - 1;
 						if (realIndex >= 0 && realIndex < getItemCount())
-							removeChild((Component) getChildren()
-									.get(realIndex));
+							removeChild(getChildren().get(realIndex));
 					}
 				}
 			} else if (!_groupsInfo.isEmpty()) {
@@ -2410,7 +2409,7 @@ public class Listbox extends MeshElement {
 			if (realOfs < 0)
 				realOfs = 0;
 			boolean open = true;
-			for (Listitem item = getItems().size() <= realOfs ? null: (Listitem)getItems().get(realOfs), nxt;
+			for (Listitem item = getItems().size() <= realOfs ? null: getItems().get(realOfs), nxt;
 			j < pgsz && item != null; item = nxt) {
 				nxt = nextListitem(item); //retrieve first since it might be changed
 
@@ -2607,7 +2606,7 @@ public class Listbox extends MeshElement {
 
 		final Renderer renderer = new Renderer();
 		try {
-			for (Listitem item = getItems().size() <= 0 ? null: (Listitem)getItems().get(0), nxt; item != null; item = nxt) {
+			for (Listitem item = getItems().size() <= 0 ? null: getItems().get(0), nxt; item != null; item = nxt) {
 				nxt = nextListitem(item); //retrieve first since it might be changed
 				renderer.render(item);
 			}
@@ -2775,7 +2774,7 @@ public class Listbox extends MeshElement {
 	/* package */DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
-			final String loadercls = (String) Library.getProperty("org.zkoss.zul.listbox.DataLoader.class");
+			final String loadercls = Library.getProperty("org.zkoss.zul.listbox.DataLoader.class");
 			try {
 				_dataLoader = _rod && loadercls != null ? (DataLoader) Classes
 						.forNameByThread(loadercls).newInstance()
@@ -3221,7 +3220,7 @@ public class Listbox extends MeshElement {
 				if (!_multiple
 						|| (!_rod && !paging && (selItems == null || selItems.size() <= 1))) {
 					final Listitem item = selItems != null
-							&& selItems.size() > 0 ? (Listitem) selItems
+							&& selItems.size() > 0 ? selItems
 							.iterator().next() : null;
 					selectItem(item);
 					if (_model instanceof ListSelectionModel) {
@@ -3297,7 +3296,7 @@ public class Listbox extends MeshElement {
 				final List<Listitem> toload = new LinkedList<Listitem>();
 				Iterator<Listitem> it = _items.iterator();
 				while (it.hasNext()) {
-					final Listitem li = (Listitem) it.next();
+					final Listitem li = it.next();
 					if (items.contains(li)) // found
 						break;
 					if (!li.isLoaded())
@@ -3428,7 +3427,7 @@ public class Listbox extends MeshElement {
 		}
 
 		public Listgroup next() {
-			final Listgroup o = (Listgroup)getItemAtIndex(((int[]) _it.next())[0]);
+			final Listgroup o = (Listgroup)getItemAtIndex(_it.next()[0]);
 			++_j;
 			return o;
 		}

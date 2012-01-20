@@ -85,7 +85,7 @@ public class Doublespinner extends NumberInputElement {
 	 * Set the step of double spinner
 	 */
 	public void setStep(double step) {
-		if (_step != step) {
+		if (Double.compare(_step, step) != 0) {
 			_step = step;
 			smartUpdate("step", _step);
 		}
@@ -156,9 +156,9 @@ public class Doublespinner extends NumberInputElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);
-		if(_step != 1.0)
+		if(Double.compare(_step, 1.0) != 0)
 			renderer.render("step", _step);
-		if(_btnVisible != true)
+		if(!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 	}
 

@@ -16,7 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.taglib;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
@@ -348,7 +347,7 @@ public class Taglibs {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String s = IDOMs.getRequiredElementValue(el, "taglib-location");
-			final URL url = loc.getResource(s.startsWith("/") ? s.substring(1): s);
+			final URL url = loc.getResource(s.charAt(0) == '/' ? s.substring(1): s);
 			if (url != null) {
 				urls.put(
 					IDOMs.getRequiredElementValue(el, "taglib-uri"), url);

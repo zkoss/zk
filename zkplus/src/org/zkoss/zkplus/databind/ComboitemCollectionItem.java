@@ -19,7 +19,6 @@ package org.zkoss.zkplus.databind;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;

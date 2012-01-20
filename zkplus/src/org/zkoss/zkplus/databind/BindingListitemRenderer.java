@@ -25,7 +25,6 @@ import java.util.Map;
 import static org.zkoss.lang.Generics.cast;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;

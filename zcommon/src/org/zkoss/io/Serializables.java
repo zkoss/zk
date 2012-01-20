@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
 import java.io.Serializable;
 import java.io.Externalizable;
 import java.io.ObjectOutputStream;

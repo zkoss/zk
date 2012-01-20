@@ -83,7 +83,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 				_categoryMap.put(category, new Integer(1));
 				_categoryList.add(category);
 			} else {
-				Integer count = (Integer) _categoryMap.get(category);
+				Integer count = _categoryMap.get(category);
 				_categoryMap.put(category, new Integer(count.intValue()+1));
 			}
 			
@@ -115,7 +115,7 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		if (_valueMap.remove(key) == null)
 			return;
 		
-		int ccount = ((Integer) _categoryMap.get(category)).intValue();
+		int ccount = _categoryMap.get(category).intValue();
 		if (ccount > 1) {
 			_categoryMap.put(category, new Integer(ccount-1));
 		} else {

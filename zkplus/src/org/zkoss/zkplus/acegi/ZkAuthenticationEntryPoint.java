@@ -16,42 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.acegi;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
-
 import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
 import org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.springframework.beans.factory.InitializingBean;
-
-import org.springframework.util.Assert;
-
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
-
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>This implementation would forward to onAcegiLogin event and popup a login page.</p>

@@ -22,8 +22,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Locale;
 
-import org.zkoss.lang.SystemException;
-
 /**
  * Utilities for java.util.Date
  *

@@ -19,7 +19,6 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
-import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.web.servlet.dsp.DspException;

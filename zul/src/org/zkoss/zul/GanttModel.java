@@ -142,7 +142,7 @@ public class GanttModel extends AbstractChartModel {
 		}
 
 		public void setPercent(double percent) {
-			if (percent != _percent) {
+			if (Double.compare(percent, _percent) != 0) {
 				this._percent = percent;
 				if (_owner != null)
 					_owner.fireEvent(ChartDataEvent.CHANGED, _series, this);

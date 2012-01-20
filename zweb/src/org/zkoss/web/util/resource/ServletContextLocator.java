@@ -164,6 +164,8 @@ public class ServletContextLocator implements Locator {
 		return _ctx.hashCode();
 	}
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return o instanceof ServletContextLocator
 			&& ((ServletContextLocator)o)._ctx.equals(_ctx);
 	}

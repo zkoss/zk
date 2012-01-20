@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
-import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.impl.XulElement;
 
 /**

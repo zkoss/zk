@@ -263,6 +263,8 @@ public class TreeitemComparator implements Comparator {
 	}
 
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		if (!(o instanceof TreeitemComparator))
 			return false;
 		final TreeitemComparator c = (TreeitemComparator)o;

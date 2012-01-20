@@ -194,6 +194,8 @@ public class RowComparator implements Comparator<Object> {
 	}
 
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		if (!(o instanceof RowComparator))
 			return false;
 		final RowComparator c = (RowComparator)o;

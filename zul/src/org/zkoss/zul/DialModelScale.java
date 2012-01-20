@@ -85,7 +85,7 @@ public class DialModelScale implements Serializable {
 	}
 	
 	public void setValue(double val) {
-		if (_value != val) {
+		if (Double.compare(_value, val) != 0) {
 			_value = val;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -140,7 +140,7 @@ public class DialModelScale implements Serializable {
 	 * @param radius radius percentage(0 ~ 1) to place the text annotation.
 	 */
 	public void setTextRadius(double radius) {
-		if (_textRadius != radius) {
+		if (Double.compare(_textRadius, radius) != 0) {
 			_textRadius = radius;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -178,7 +178,7 @@ public class DialModelScale implements Serializable {
 	 * @param radius radius percentage(0 ~ 1) to place the value.
 	 */
 	public void setValueRadius(double radius) {
-		if (_valueRadius != radius) {
+		if (Double.compare(_valueRadius, radius) != 0) {
 			_valueRadius = radius;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -197,7 +197,7 @@ public class DialModelScale implements Serializable {
 	 * @param angle angle in degree to place the value (counter clockwise is positive).
 	 */
 	public void setValueAngle(double angle) {
-		if (_valueAngle != angle) {
+		if (Double.compare(_valueAngle, angle) != 0) {
 			_valueAngle = angle;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -214,12 +214,12 @@ public class DialModelScale implements Serializable {
 	 */
 	public void setScale(double lowerBound, double upperBound, 
 		double startAngle, double extent, double majorTickInterval, int minorTickCount) {
-		if (lowerBound != _lowerBound
-			|| upperBound != _upperBound
-			|| startAngle != _startAngle
-			|| extent != _extent
-			|| majorTickInterval != _majorTickInterval
-			|| minorTickCount != _minorTickCount) {
+		if (Double.compare(lowerBound, _lowerBound) != 0
+			|| Double.compare(upperBound, _upperBound) != 0
+			|| Double.compare(startAngle, _startAngle) != 0
+			|| Double.compare(extent, _extent) != 0
+			|| Double.compare(majorTickInterval, _majorTickInterval) != 0
+			|| Double.compare(minorTickCount, _minorTickCount) != 0) {
 			_lowerBound = lowerBound;
 			_upperBound = upperBound;
 			_startAngle = startAngle;
@@ -310,7 +310,7 @@ public class DialModelScale implements Serializable {
 	 * @param radius radius percentage(0 ~ 1) to place the tick label.
 	 */
 	public void setTickRadius(double radius) {
-		if (_tickRadius != radius) {
+		if (Double.compare(_tickRadius, radius) != 0) {
 			_tickRadius = radius;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -329,7 +329,7 @@ public class DialModelScale implements Serializable {
 	 * @param tickLabelOffset the radius offset in percentage(0 ~ 1) between the tick and tick label.
 	 */
 	public void setTickLabelOffset(double tickLabelOffset) {
-		if (_tickLabelOffset != tickLabelOffset) {
+		if (Double.compare(_tickLabelOffset, tickLabelOffset) != 0) {
 			_tickLabelOffset = tickLabelOffset;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -469,7 +469,7 @@ public class DialModelScale implements Serializable {
 	 * @param radius the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
 	 */
 	public void setNeedleRadius(double radius) {
-		if (_needleRadius != radius) {
+		if (Double.compare(_needleRadius, radius) != 0) {
 			_needleRadius = radius;
 			fireEvent(ChartDataEvent.CHANGED);
 		}

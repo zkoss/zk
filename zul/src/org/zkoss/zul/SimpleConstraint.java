@@ -431,7 +431,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				}
 			}
 		}
-		return sb.append(")").toString();
+		return sb.append(')').toString();
 	}
 	/** Default: null (since it depends on zul.inp which is loaded for
 	* all input widgets).

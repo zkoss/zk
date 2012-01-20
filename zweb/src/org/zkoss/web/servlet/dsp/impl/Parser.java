@@ -75,7 +75,7 @@ public class Parser {
 			final Map<String, String> attrs = new HashMap<String, String>(2);
 
 			if (ctype == null) ctype = "text/html";
-			else if (ctype.startsWith(";")) ctype = "text/html" + ctype;
+			else if (ctype.charAt(0) == ';') ctype = "text/html" + ctype;
 
 			attrs.put("optionalContentType", ctype);
 			applyAttrs("page", action, attrs, ctx);
@@ -201,8 +201,8 @@ public class Parser {
 				new Object[] {new Character('%'), new Integer(ctx.nLines)});
 
 		if (action == null) { //taglib
-			final String uri = (String)attrs.get("uri"),
-				prefix = (String)attrs.get("prefix");
+			final String uri = attrs.get("uri"),
+				prefix = attrs.get("prefix");
 			if (prefix == null || uri == null)
 				throw new DspException(MWeb.DSP_TAGLIB_ATTRIBUTE_REQUIRED, new Integer(ctx.nLines));
 			ctx.loadTaglib(prefix, uri);

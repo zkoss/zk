@@ -50,7 +50,7 @@ public class MultiCache<K, V> implements Cache<K, V>, java.io.Serializable, Clon
 	public MultiCache(int nCache, int maxSize, int lifetime) {
 		if (nCache <= 0)
 			throw new IllegalArgumentException();
-		_caches = (CacheMap<K, V>[])new CacheMap[nCache];
+		_caches = new CacheMap[nCache];
 		_maxsize = maxSize;
 		_lifetime = lifetime;
 	}

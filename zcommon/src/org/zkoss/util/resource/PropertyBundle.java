@@ -19,9 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.InputStream;
-import java.lang.reflect.Method;
-
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
@@ -90,6 +87,7 @@ public class PropertyBundle {
 				^ (locale != null ? locale.hashCode(): 0) ^ locator.hashCode();
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			if (!(o instanceof Key))
 				return false;
 			Key k = (Key)o;

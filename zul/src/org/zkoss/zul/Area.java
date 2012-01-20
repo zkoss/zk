@@ -17,8 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;

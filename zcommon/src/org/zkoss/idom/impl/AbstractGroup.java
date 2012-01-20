@@ -25,8 +25,6 @@ import java.util.ListIterator;
 import java.util.regex.Pattern;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.Collection;
-import java.util.AbstractCollection;
 import java.util.Collections;
 
 import org.w3c.dom.Node;
@@ -361,7 +359,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 		 */
 		public final Element get(String name) {
 			final List<Element> vals = _map.get(name);
-			return vals != null && !vals.isEmpty() ? (Element)vals.get(0): null;
+			return vals != null && !vals.isEmpty() ? vals.get(0): null;
 		}
 		/**
 		 * Get a readonly list of all elements with name.
@@ -445,7 +443,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Invalid type", getLocator());
 
 			//to be safe, no auto-detach
-			final Item newItem = (Item)newVal;
+			final Item newItem = newVal;
 			if (newItem.getParent() != null) {
 				throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,
 					"Item, "+newItem.toString()+", owned by "+newItem.getParent()+" "+newItem.getLocator()+"; detach or clone it", getLocator());
@@ -485,7 +483,7 @@ public abstract class AbstractGroup extends AbstractItem implements Group {
 			newItem.setParent(AbstractGroup.this);
 		}
 		protected void onRemove(Item item) {
-			final Item removeItem = (Item)item;
+			final Item removeItem = item;
 			removeItem.setParent(null);
 
 			if (removeItem instanceof Element) //Element remove from map

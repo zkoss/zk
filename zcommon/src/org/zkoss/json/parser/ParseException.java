@@ -73,16 +73,16 @@ public class ParseException extends RuntimeException {
 		
 		switch(errorType){
 		case ERROR_UNEXPECTED_CHAR:
-			sb.append("Unexpected character (").append(unexpectedObject).append(") at position ").append(position).append(".");
+			sb.append("Unexpected character (").append(unexpectedObject).append(") at position ").append(position).append('.');
 			break;
 		case ERROR_UNEXPECTED_TOKEN:
-			sb.append("Unexpected token ").append(unexpectedObject).append(" at position ").append(position).append(".");
+			sb.append("Unexpected token ").append(unexpectedObject).append(" at position ").append(position).append('.');
 			break;
 		case ERROR_UNEXPECTED_EXCEPTION:
 			sb.append("Unexpected exception at position ").append(position).append(": ").append(unexpectedObject);
 			break;
 		default:
-			sb.append("Unkown error at position ").append(position).append(".");
+			sb.append("Unkown error at position ").append(position).append('.');
 			break;
 		}
 		return sb.toString();

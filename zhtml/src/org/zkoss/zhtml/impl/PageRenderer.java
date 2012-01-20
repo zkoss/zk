@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zhtml.impl;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.io.StringWriter;
 import java.io.Writer;

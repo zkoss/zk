@@ -169,7 +169,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		return is != null ? is: ClassLocator.class.getResourceAsStream(name);
 	}
 	private static String resolveName(String name) {
-		return name != null && name.startsWith("/") ?
+		return name != null && name.charAt(0) == '/' ?
 			name.substring(1): name;
 	}
 
@@ -178,6 +178,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		return 1123;
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof ClassLocator;
 	}
 }

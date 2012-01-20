@@ -16,8 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
-import org.zkoss.zk.ui.UiException;
-
 /**
  * Defines the methods used in listener when the content of
  * {@link org.zkoss.zul.ChartModel} is changed.

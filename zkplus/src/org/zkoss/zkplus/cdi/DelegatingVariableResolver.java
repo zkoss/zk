@@ -33,7 +33,7 @@ import org.zkoss.xel.XelException;
  *
  */
 public class DelegatingVariableResolver implements VariableResolverX {
-	private transient boolean _resolving; //prevent recursive
+	private boolean _resolving; //prevent recursive
 	private ELResolver _cdiResolver;
 	public DelegatingVariableResolver() {
 		_cdiResolver = CDIUtil.getBeanManager().getELResolver();

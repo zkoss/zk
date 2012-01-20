@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.AccessibleObject;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
 
 /**

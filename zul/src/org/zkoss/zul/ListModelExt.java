@@ -16,7 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Comparator;
 import org.zkoss.zul.ext.Sortable;
 
 /**

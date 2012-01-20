@@ -16,7 +16,6 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.idom.impl;
 
 import java.util.List;
-import java.util.Collections;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.io.Serializable;

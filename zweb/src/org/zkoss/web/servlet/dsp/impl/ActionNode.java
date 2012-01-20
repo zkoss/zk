@@ -20,11 +20,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;

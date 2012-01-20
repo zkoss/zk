@@ -71,6 +71,7 @@ public class MutableInteger implements Comparable {
 		return this.value;
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return (o instanceof MutableInteger)
 			&& ((MutableInteger)o).value == this.value;
 	}

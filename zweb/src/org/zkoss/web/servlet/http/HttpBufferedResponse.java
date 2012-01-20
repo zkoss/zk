@@ -160,10 +160,4 @@ public class HttpBufferedResponse extends HttpServletResponseWrapper {
 	public String encodeUrl(String url) {
 		return super.encodeUrl(url);
 	}
-	/**
-	 * @deprecated
-	 */
-	public void setStatus(int sc, String sm) {
-		super.setStatus(sc, sm);
-	}
 }

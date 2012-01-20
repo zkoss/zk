@@ -18,8 +18,6 @@ import java.util.AbstractMap;
 import java.util.Set;
 import java.util.AbstractSet;
 
-import org.zkoss.lang.Objects;
-
 /**
  * A map that allows the value to be evaluated before returning (so called
  * filtering).
@@ -143,6 +141,7 @@ public class FilterMap<K, V> extends AbstractMap<K, V> {
 			return _me.hashCode();
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			if (!(o instanceof Map.Entry))
 				return false;
 			Map.Entry e = (Map.Entry)o;
@@ -180,6 +179,7 @@ public class FilterMap<K, V> extends AbstractMap<K, V> {
 	}
 	//@Override
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		final FilterMap fm;
 		return o instanceof FilterMap && _map.equals(fm = ((FilterMap)o))
 			&& _filter.equals(fm._filter);

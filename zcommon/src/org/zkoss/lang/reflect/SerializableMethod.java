@@ -94,6 +94,7 @@ public class SerializableMethod implements Serializable, Cloneable {
 		return Objects.hashCode(_m);
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return (o instanceof SerializableMethod)
 			&& Objects.equals(_m, ((SerializableMethod)o)._m);
 	}

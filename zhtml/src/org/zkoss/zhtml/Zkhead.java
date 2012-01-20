@@ -23,10 +23,7 @@ import java.io.IOException;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-
-import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The component used to generate CSS and JavaScrpt declarations.

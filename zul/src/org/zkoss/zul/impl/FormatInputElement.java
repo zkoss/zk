@@ -19,7 +19,6 @@ package org.zkoss.zul.impl;
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
 
 /**
  * A skeletal implementation for an input box with format.

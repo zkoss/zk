@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.Library;
 import org.zkoss.web.servlet.http.Https;
 
 import org.zkoss.zk.ui.WebApp;
@@ -43,7 +42,6 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.I18Ns;
-import org.zkoss.zk.ui.http.Utils;
 
 /**
  * Utilities to embed ZK component(s) as a native JSF component, a JSP tag, Zimlet or others.

@@ -15,7 +15,6 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.idom.impl.*;
 
 /**

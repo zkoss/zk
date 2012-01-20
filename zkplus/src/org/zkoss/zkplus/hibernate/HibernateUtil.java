@@ -25,9 +25,7 @@ import org.zkoss.util.logging.Log;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.ConnectionReleaseMode;
 import org.hibernate.HibernateException;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.AnnotationConfiguration;
 /**
  * <p>Utitlity to access Hibernate Session. This implemenation works with the Hibernate's 

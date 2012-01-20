@@ -199,7 +199,7 @@ public class ClassWebResource {
 	}
 	/** Constructor. */
 	private ClassWebResource(ServletContext ctx, String mappingURI) {
-		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
+		if (mappingURI.charAt(0) != '/' || mappingURI.endsWith("/"))
 			throw new IllegalArgumentException("mappingURI must start with /, but not ends with /");
 		if (ctx == null)
 			throw new IllegalArgumentException("null ctx");
@@ -382,7 +382,7 @@ public class ClassWebResource {
 		for (;;) {
 			FastReadArray ary;
 			synchronized (filters) {
-				ary = (FastReadArray)filters.get(ext);
+				ary = filters.get(ext);
 			}
 			if (ary != null)
 				return (Filter[])ary.toArray();

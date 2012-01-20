@@ -16,12 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
 import java.io.Writer;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;

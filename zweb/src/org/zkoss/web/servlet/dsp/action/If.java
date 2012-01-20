@@ -19,7 +19,6 @@ package org.zkoss.web.servlet.dsp.action;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.zkoss.web.mesg.MWeb;
 import org.zkoss.web.servlet.dsp.DspException;
 
 /**

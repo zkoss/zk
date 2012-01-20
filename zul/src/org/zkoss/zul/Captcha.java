@@ -16,8 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -32,9 +30,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Library;
 
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Color;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -338,7 +333,7 @@ public class Captcha extends org.zkoss.zul.Image {
 		final StringBuffer sb = new StringBuffer(len);
 		while (len > 0) {
 			final char c = (char) ('0' + _random.nextInt(CHAR_COUNT)); // ASCII '0' to 'z'
-			if (Character.isLetterOrDigit(c) && exclude.indexOf((int)c) < 0) {
+			if (Character.isLetterOrDigit(c) && exclude.indexOf(c) < 0) {
 				sb.append(c); 
 				--len;
 			}
@@ -452,7 +447,7 @@ public class Captcha extends org.zkoss.zul.Image {
 		if (color == null) {
 			return 0;
 		}
-		if (color.length() != 7 || !color.startsWith("#")) {
+		if (color.length() != 7 || color.charAt(0) != '#') {
 			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
 		}
 		return Integer.parseInt(color.substring(1), 16);

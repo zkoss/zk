@@ -16,16 +16,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-
-import java.util.Map;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * A XYZ data model implementation of {@link XYZModel}.

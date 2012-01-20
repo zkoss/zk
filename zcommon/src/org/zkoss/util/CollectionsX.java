@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.Map;
 import java.util.AbstractList;
-import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.ListIterator;

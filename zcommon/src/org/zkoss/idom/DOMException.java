@@ -17,7 +17,6 @@ package org.zkoss.idom;
 
 import org.xml.sax.Locator;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.xml.Locators;
 
 /**

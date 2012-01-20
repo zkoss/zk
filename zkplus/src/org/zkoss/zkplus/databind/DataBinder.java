@@ -48,7 +48,6 @@ import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.Combobox;
@@ -380,7 +379,7 @@ public class DataBinder implements java.io.Serializable {
 		}
 			
 		if (attrMap.containsKey(attr)) { //override
-			final Binding binding = (Binding) attrMap.get(attr);
+			final Binding binding = attrMap.get(attr);
 			binding.setExpression(expr);
 			binding.setLoadWhenEvents(loadEvents);
 			binding.setLoadAfterEvents(lafterEvents);
@@ -665,7 +664,7 @@ public class DataBinder implements java.io.Serializable {
 					//bug#1888911 databind and Grid in Grid not work when no _var in inner Grid
 					owner.setAttribute(IAMOWNER, Boolean.TRUE);
 					setupTemplateComponent(comp, owner); //setup as template components
-					String varname = ((Binding)attrMap.get("_var")).getExpression();
+					String varname = (attrMap.get("_var")).getExpression();
 					varnameSet.add(varname);
 					comp.setAttribute(VARNAME, varname);
 					setupBindingRenderer(comp); //setup binding renderer
@@ -846,7 +845,7 @@ public class DataBinder implements java.io.Serializable {
 		for(Binding binding: bindings) {
 			String[] paths = binding.getPaths();
 			for(int j = 0; j < paths.length; ++j) {
-				final String path = (String) paths[j];
+				final String path = paths[j];
 				_pathTree.addBinding(path, binding, varnameSet);
 			}
 		}
@@ -984,7 +983,7 @@ public class DataBinder implements java.io.Serializable {
 		final Iterator it = nodeids.iterator();
 		if (it != null && it.hasNext()) {
 			String nodeid = (String) it.next();
-			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			currentNode = currentNode.getKidNode(nodeid);
 			if (currentNode == null) {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
@@ -998,7 +997,7 @@ public class DataBinder implements java.io.Serializable {
 		
 		while(bean != null && it.hasNext()) {
 			String nodeid = (String) it.next();
-			currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+			currentNode = currentNode.getKidNode(nodeid);
 			if (currentNode == null) {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
@@ -1047,7 +1046,7 @@ public class DataBinder implements java.io.Serializable {
 		final Iterator it = nodeids.iterator();
 		if (it != null && it.hasNext()) {
 			beanid = (String) it.next();
-			currentNode = (BindingNode) currentNode.getKidNode(beanid);
+			currentNode = currentNode.getKidNode(beanid);
 			if (currentNode == null) {
 				throw new UiException("Cannot find the specified databind bean expression:" + path);
 			}
@@ -1075,7 +1074,7 @@ public class DataBinder implements java.io.Serializable {
 			int sz = nodeids.size() - 2; //minus first and last beanid in path
 			for(;bean != null && it.hasNext() && sz > 0; --sz) {
 				beanid = (String) it.next();
-				currentNode = (BindingNode) currentNode.getKidNode(beanid);
+				currentNode = currentNode.getKidNode(beanid);
 				if (currentNode == null) {
 					throw new UiException("Cannot find the specified databind bean expression:" + path);
 				}
@@ -1110,7 +1109,7 @@ public class DataBinder implements java.io.Serializable {
 			}
 			
 			if (!isPrimitive(val) && !isPrimitive(orgVal)) { //val is a bean (null is not primitive)
-				currentNode = (BindingNode) currentNode.getKidNode(beanid);
+				currentNode = currentNode.getKidNode(beanid);
 				if (currentNode == null) {
 					throw new UiException("Cannot find the specified databind bean expression:" + path);
 				}
@@ -1242,9 +1241,9 @@ public class DataBinder implements java.io.Serializable {
 		}
 		if (existsBean(beanid)) {
 			bean = getBean(beanid);
-		} else if (beanid.startsWith("/")) { //a absolute component Path: // or /
+		} else if (beanid.charAt(0) == '/') { //a absolute component Path: // or /
 			bean = Path.getComponent(beanid);
-		} else if (beanid.startsWith(".")) { //a relative component Path: ./ or ../
+		} else if (beanid.charAt(0) == '.') { //a relative component Path: ./ or ../
 			bean = Path.getComponent(comp.getSpaceOwner(), beanid);
 		} else {
 			//VariableResolver would need such "self" information when doing
@@ -1346,7 +1345,7 @@ public class DataBinder implements java.io.Serializable {
 			currentNode = (BindingNode) obj;
 			for(final Iterator itx = subids.iterator(); itx.hasNext();) {
 				final String nodeid = (String) itx.next();
-				currentNode = (BindingNode) currentNode.getKidNode(nodeid);
+				currentNode = currentNode.getKidNode(nodeid);
 				if (currentNode == null) {
 					break;
 				}

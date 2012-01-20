@@ -22,7 +22,6 @@ import java.util.Map;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 
 /**

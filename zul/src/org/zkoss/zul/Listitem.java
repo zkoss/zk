@@ -65,7 +65,6 @@ public class Listitem extends XulElement {
 	 * @since 3.5.0
 	 */
 	public Listgroup getListgroup() {
-		if (this instanceof Listgroup) return (Listgroup)this;
 		final Listbox lb = getListbox();
 		if (lb != null)
 			return lb.getListgroupAt(getIndex());

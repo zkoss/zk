@@ -19,7 +19,6 @@
 package org.zkoss.zkplus.databind;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.zkoss.zk.ui.Component;
@@ -82,7 +81,7 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	  			final BindingListModel model = (BindingListModel) xmodel;
 	  			int index = model.indexOf(val);
 	  			if (index >= 0 && cbbox.getItemCount() > index) {
-	    			final Comboitem item = (Comboitem) cbbox.getItemAtIndex(index);
+	    			final Comboitem item = cbbox.getItemAtIndex(index);
 	    			//Bug #2728704: Listbox with databinding generates onSelect w/o user action
 	    			//Shall not fire event by spec. For backward compatibility(still want to
 	    			//fire onSelect event as usual), user can specifies in zk.xml

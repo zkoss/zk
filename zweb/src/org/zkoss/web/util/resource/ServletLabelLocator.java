@@ -95,6 +95,8 @@ public class ServletLabelLocator implements LabelLocator {
 		return _ctx.hashCode() + Objects.hashCode(_path);
 	}
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		return o instanceof ServletLabelLocator
 			&& ((ServletLabelLocator)o)._ctx.equals(_ctx)
 			&& Objects.equals(((ServletLabelLocator)o)._path, _path);

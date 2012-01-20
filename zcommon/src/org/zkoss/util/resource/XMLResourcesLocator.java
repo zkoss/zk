@@ -70,6 +70,7 @@ public interface XMLResourcesLocator extends Locator {
 			return url.hashCode() ^ document.hashCode();
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			return o instanceof Resource && ((Resource)o).url.equals(url)
 				&& ((Resource)o).document.equals(document);
 		}

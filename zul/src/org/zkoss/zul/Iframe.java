@@ -19,8 +19,6 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.RepeatableMedia;
 import org.zkoss.util.media.Media;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;

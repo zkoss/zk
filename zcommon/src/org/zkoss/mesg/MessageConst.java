@@ -19,8 +19,6 @@ package org.zkoss.mesg;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.lang.Objects;
-
 /**
  * Defines the constants of message codes.
  *

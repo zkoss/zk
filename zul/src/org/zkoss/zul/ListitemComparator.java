@@ -266,6 +266,8 @@ public class ListitemComparator implements Comparator {
 	}
 
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		if (!(o instanceof ListitemComparator))
 			return false;
 		final ListitemComparator c = (ListitemComparator)o;

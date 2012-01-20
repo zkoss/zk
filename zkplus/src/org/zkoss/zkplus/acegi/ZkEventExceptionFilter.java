@@ -16,38 +16,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.acegi;
 
-import java.io.StringWriter;
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.FilterChain;
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.zkoss.util.logging.Log;
-import org.zkoss.web.servlet.BufferedResponse;
-
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.impl.RequestInfoImpl;
-
 import org.acegisecurity.AcegiSecurityException;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 /**
  * Used to fire exception in the ZK's event processing queue (Used with MethodSecurityInterceptor).

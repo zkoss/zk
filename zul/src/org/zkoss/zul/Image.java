@@ -21,10 +21,7 @@ import java.awt.image.RenderedImage;
 import org.zkoss.lang.Objects;
 import org.zkoss.image.Images;
 import org.zkoss.util.media.Media;
-import org.zkoss.html.HTMLs;
-
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 

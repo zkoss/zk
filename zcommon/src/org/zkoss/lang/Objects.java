@@ -297,7 +297,7 @@ public class Objects {
 			if (as.length != bs.length)
 				return false;
 			for (int j = as.length; --j >=0;)
-				if (as[j] != bs[j])
+				if (Double.compare(as[j], bs[j]) != 0)
 					return false;
 			return true;
 		}
@@ -307,7 +307,7 @@ public class Objects {
 			if (as.length != bs.length)
 				return false;
 			for (int j = as.length; --j >=0;)
-				if (as[j] != bs[j])
+				if (Float.compare(as[j], bs[j]) != 0)
 					return false;
 			return true;
 		}

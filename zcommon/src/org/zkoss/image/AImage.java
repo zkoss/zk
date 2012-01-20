@@ -31,8 +31,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.util.media.ContentTypes;

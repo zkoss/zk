@@ -18,11 +18,7 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 
-import org.zkoss.html.HTMLs;
-import org.zkoss.xml.XMLs;
-
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
 /**

@@ -25,8 +25,6 @@ import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import org.zkoss.util.logging.Log;
-
 /**
  * The filter to correct character encoding and to prepare Locale for
  * the current request.

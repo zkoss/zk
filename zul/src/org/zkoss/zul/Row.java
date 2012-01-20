@@ -205,7 +205,6 @@ public class Row extends XulElement {
 	 * @since 3.5.0
 	 */
 	public Group getGroup() {
-		if (this instanceof Group) return (Group)this;
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
@@ -266,7 +265,7 @@ public class Row extends XulElement {
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Detail) {
 			//move to the first child
-			refChild = getChildren().isEmpty() ? null : (Component) getChildren().get(0);
+			refChild = getChildren().isEmpty() ? null : getChildren().get(0);
 			if (super.insertBefore(newChild, refChild)) {
 				_detail = (Detail) newChild;
 				return true;
@@ -274,7 +273,7 @@ public class Row extends XulElement {
 			return false;			
 		} else if (refChild != null && refChild == _detail) {
 			if (getChildren().size() <= 1) refChild = null;
-			else refChild = (Component) getChildren().get(1);
+			else refChild = getChildren().get(1);
 		}
 		return super.insertBefore(newChild, refChild);
 	}

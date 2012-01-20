@@ -51,6 +51,7 @@ public class Pair<X, Y> implements java.io.Serializable {
 
 	//-- Object --//
 	public final boolean equals(Object o) {
+		if (this == o) return true;
 		if (!(o instanceof Pair))
 			return false;
 		final Pair pair = (Pair)o;

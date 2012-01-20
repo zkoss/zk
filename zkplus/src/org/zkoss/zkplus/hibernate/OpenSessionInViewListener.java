@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkplus.hibernate;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ExecutionInit;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.util.logging.Log;

@@ -16,14 +16,11 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.util.resource;
 
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
 import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Exceptions;
 
 /**
  * Utilities to load and locate resources.
@@ -153,8 +150,8 @@ public class Locators {
 			args[0] = sb.toString();
 			final Object found =
 				asStream ?
-					(Object)((Locator)locator).getResourceAsStream(args[0]):
-					(Object)((Locator)locator).getResource(args[0]);
+					(locator).getResourceAsStream(args[0]):
+					(locator).getResource(args[0]);
 			if (found != null) {
 				//decide the locale
 				final Locale l;
@@ -174,7 +171,7 @@ public class Locators {
 					return new StreamLocation((InputStream)found, l);
 				} else {
 					return new URLLocation((URL)found,
-						args[0].equals(file) ? file: (String)args[0], l);
+						args[0].equals(file) ? file: args[0], l);
 				}
 			}
 		}

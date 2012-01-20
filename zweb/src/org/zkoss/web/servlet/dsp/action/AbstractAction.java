@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.action;
 
-import java.util.Map;
 import java.io.StringWriter;
 import java.io.IOException;
 

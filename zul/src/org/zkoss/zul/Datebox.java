@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Locale;
@@ -41,7 +40,6 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.text.DateFormats;
 
 import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Blockable;
@@ -430,7 +428,7 @@ the short time styling.
 			StringBuffer sb = new StringBuffer();
 			int i = 0;
 			for (Iterator<TimeZone> it = dtzones.iterator(); it.hasNext(); i++) {
-				if(i != 0) sb.append(",");
+				if(i != 0) sb.append(',');
 				sb.append(it.next().getID());
 			}
 			smartUpdate("displayedTimeZones", sb.toString());
@@ -834,8 +832,8 @@ the short time styling.
 		if (_dtzones != null) {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < _dtzones.size(); i++) {
-				if(i != 0) sb.append(",");
-				TimeZone tz = (TimeZone)_dtzones.get(i);
+				if(i != 0) sb.append(',');
+				TimeZone tz = _dtzones.get(i);
 				sb.append(tz.getID());
 			}
 			renderer.render("displayedTimeZones", sb.toString());

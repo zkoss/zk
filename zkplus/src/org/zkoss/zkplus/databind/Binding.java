@@ -24,17 +24,14 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 import static org.zkoss.lang.Generics.cast;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -329,7 +326,7 @@ public class Binding implements java.io.Serializable {
 	 */
 	public void loadAttribute(Component comp) {
 		if (!isLoadable() 
-				|| _attr.startsWith("_") 
+				|| _attr.charAt(0) == '_' 
 				|| DataBinder.isTemplate(comp)
 				|| comp == null //bug #1941947 Cannot find associated CollectionItem
 				|| comp.getPage() == null) { 
@@ -361,7 +358,7 @@ public class Binding implements java.io.Serializable {
 	 * @param bean the bean value.
 	 */
 	public void loadAttribute(Component comp, Object bean) {
-		if (!isLoadable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isLoadable() || _attr.charAt(0) == '_' || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		myLoadAttribute(comp, bean);
@@ -460,7 +457,7 @@ public class Binding implements java.io.Serializable {
 	/** Get converted value and original value of this Binding.
 	 */
 	private Object[] getAttributeValues(Component comp) {
-		if (!isSavable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isSavable() || _attr.charAt(0) == '_' || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return null; //cannot save, a control attribute, or a detached component, skip!
 		}
 		Object rawval = null;

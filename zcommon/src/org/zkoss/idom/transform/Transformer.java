@@ -18,9 +18,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.idom.transform;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Writer;
 import java.util.Properties;
 
 import javax.xml.transform.TransformerFactory;

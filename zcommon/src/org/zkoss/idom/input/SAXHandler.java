@@ -18,13 +18,9 @@ package org.zkoss.idom.input;
 import java.util.Stack;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.io.IOException;
 import java.net.URL;
-
-import javax.xml.parsers.SAXParser;
 
 import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
@@ -36,9 +32,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.XMLReader;
-
-import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.idom.*;

@@ -49,7 +49,7 @@ import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
  * @since 5.0.0
  */
 public class GridDataLoader implements DataLoader, Cropper {
-	private transient Grid _grid;
+	private Grid _grid;
 
 	//--DataLoader--//
 	public void init(Component owner, int offset, int limit) {
@@ -105,11 +105,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 			RowRenderer renderer = null;
 			final Component next =
-				min < oldsz ? (Component)rows.getChildren().get(min): null;
+				min < oldsz ? rows.getChildren().get(min): null;
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = (RowRenderer) getRealRenderer();
-				rows.insertBefore((Row)newUnloadedItem(renderer, min++), next);
+				rows.insertBefore(newUnloadedItem(renderer, min++), next);
 			}
 			break;
 
@@ -131,7 +131,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			if (max > oldsz - 1) max = oldsz - 1;
 
 			//detach from end (due to groopfoot issue)
-			Component comp = (Component)rows.getChildren().get(max);
+			Component comp = rows.getChildren().get(max);
 			while (--cnt >= 0) {
 				Component p = comp.getPreviousSibling();
 				comp.detach();
@@ -339,7 +339,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 						_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
 							//Also better performance (if a lot of elements to change)
 	
-					Component comp = (Component)rows.getChildren().get(max);
+					Component comp = rows.getChildren().get(max);
 					next = comp.getNextSibling();
 					while (--cnt >= 0) {
 						Component p = comp.getPreviousSibling();
@@ -348,7 +348,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 					}
 				} else { //ListModel
 					int addcnt = 0;
-					Component row = (Component)rows.getChildren().get(min);
+					Component row = rows.getChildren().get(min);
 					while (--cnt >= 0) {
 						next = row.getNextSibling();
 	
@@ -358,7 +358,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 							if (renderer == null)
 								renderer = (RowRenderer)getRealRenderer();
 							row.detach(); //always detach
-							rows.insertBefore((Row) newUnloadedItem(renderer, min), next);
+							rows.insertBefore(newUnloadedItem(renderer, min), next);
 							++addcnt;
 						}
 						++min;
@@ -384,7 +384,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
 				renderer = (RowRenderer) getRealRenderer();
-			rows.insertBefore((Row)newUnloadedItem(renderer, min), next);
+			rows.insertBefore(newUnloadedItem(renderer, min), next);
 		}
 		
 		if (pgi != null) {
