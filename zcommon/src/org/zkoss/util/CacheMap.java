@@ -187,11 +187,13 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * It returns (EXPUNGE_YES|EXPUNGE_CONTINUE) if OK, and
 	 * (EXPUNGE_NO|EXPUNGE_STOP) if not.
 	 *
+	 * @param size the current size. It is used instead of size(), since
+	 * the entry might not be removed yet (such as {@link FastReadCache}).
 	 * @return a combination of EXPUNGE_xxx
 	 * @see #shallExpunge
 	 */
-	protected int canExpunge(Value<V> v) {
-		return _map.size() > getMaxSize()
+	protected int canExpunge(int size, Value<V> v) {
+		return size > getMaxSize()
 			|| (System.currentTimeMillis() - v.access) > getLifetime() ?
 			(EXPUNGE_YES|EXPUNGE_CONTINUE): (EXPUNGE_NO|EXPUNGE_STOP);
 	}
@@ -218,13 +220,15 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 
 		_inExpunge = true;
 		try {
-			//dennis, bug 1815633, remove some control code here 
+			//dennis, bug 1815633, remove some control code here
+			int size = _map.size();
 			for (final Iterator<Map.Entry<K, Value<V>>> it = _map.entrySet().iterator();
 			it.hasNext();) {
 				final Map.Entry<K, Value<V>> entry = it.next();
 				final Value<V> v = entry.getValue();
-				final int result = canExpunge(v);
+				final int result = canExpunge(size, v);
 				if ((result & EXPUNGE_YES) != 0) {
+					--size;
 					removeInExpunge(it, entry.getKey()); //remove it
 					onExpunge(v);
 				}
@@ -232,7 +236,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 				if ((result & EXPUNGE_STOP) != 0)
 					break; //stop
 			}
-			return _map.size();
+			return size;
 		} finally {
 			_inExpunge = false;
 		}
@@ -305,6 +309,8 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	 * Gets the maximal allowed size. Defalut: {@link #DEFAULT_MAX_SIZE}.
 	 * An mapping won't be removed by GC unless the minimal lifetime
 	 * or the maximal allowed size exceeds.
+	 * <p>Notice: getMaxSize() is only a soft limit. It takes effect only if
+	 * GC takes place.
 	 * @see #getLifetime
 	 */
 	public int getMaxSize() {
@@ -344,13 +350,14 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	}
 
 	public V remove(Object key) {
-		tryExpunge();
 		final Value<V> v = _map.remove(key);
+		tryExpunge();
 		return v != null ? v.value: null;
 	}
 	public V get(Object key) {
-		tryExpunge();
-		return getWithoutExpunge(key);
+		final V v = getWithoutExpunge(key);
+		tryExpunge(); //expung later to increase the hit rate
+		return v;
 	}
 	/** Returns the value without trying to expunge first.
 	 * It is useful if you want to preserve all entries.

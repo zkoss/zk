@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+import org.zkoss.lang.Objects;
+
 /**
  * A {@link CacheMap} that the possiblity to have cache hit is much more than
  * not. It maintains a reaonly cache (so no need to synchronize), and then
@@ -46,30 +48,33 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	}
 	@Override
 	public V put(K key, V value) {
-		V result;
+		V result = value;
 		synchronized (this) {
-			InnerCache cache = (InnerCache)_cache.clone();
-			result = cache.put(key, value);
-			_cache = cache;
+			if (!Objects.equals(value, _cache.get(key))) {
+				InnerCache cache = (InnerCache)_cache.clone();
+				result = cache.put(key, value);
+				_cache = cache;
+			}
 		}
 		return result;
 	}
 	@Override
 	public V remove(Object key) {
-		V result;
+		V result = null;
 		synchronized (this) {
-			InnerCache cache = (InnerCache)_cache.clone();
-			result = cache.remove(key);
-			_cache = cache;
+			if (_cache.containsKey(key)) {
+				InnerCache cache = (InnerCache)_cache.clone();
+				result = cache.remove(key);
+				_cache = cache;
+			}
 		}
 		return result;
 	}
 	@Override
 	public void clear() {
 		synchronized (this) {
-			InnerCache cache = (InnerCache)_cache.clone();
-			cache.clear();
-			_cache = cache;
+			if (!_cache.isEmpty())
+				_cache = new InnerCache(getMaxSize(), getLifetime());
 		}
 	}
 

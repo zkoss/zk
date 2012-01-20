@@ -371,7 +371,7 @@ public class ComponentsCtrl {
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static Cache<Pair<Class<?>, String>, Object> _evtmtds =
 		new FastReadCache<Pair<Class<?>, String>, Object> (
-			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 350),
+			Library.getIntProperty("org.zkoss.zk.ui.event.methods.cache.maxSize", 500),
 			4*60*60*1000);
 
 	/** An utilities to create an array of JavaScript objects

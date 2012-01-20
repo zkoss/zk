@@ -207,10 +207,10 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				//1) disable expunge if serialization/activation
 				//2) to minimize memory use, expunge even if no GC
 		}
-		protected int canExpunge(Value<Desktop> v) {
+		protected int canExpunge(int size, Value<Desktop> v) {
 			if (v.getValue().getExecution() != null)
 				return EXPUNGE_NO|EXPUNGE_CONTINUE;
-			return super.canExpunge(v);
+			return super.canExpunge(size, v);
 		}
 		protected void onExpunge(Value<Desktop> v) {
 			super.onExpunge(v);
