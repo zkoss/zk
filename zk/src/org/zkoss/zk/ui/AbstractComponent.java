@@ -2824,16 +2824,7 @@ w:use="foo.MyWindow"&gt;
 		final int j = clsnm.lastIndexOf('.');
 		return "<"+clsnm.substring(j+1)+' '+_uuid+(Strings.isEmpty(_id) ? "": "#"+_id)+'>';
 	}
-	public int hashCode() {
-		int hash = 1;
-		if (_uuid != null) {
-			hash = 31 * hash + _uuid.hashCode();
-		}
-		if (_id != null) {
-			hash = 31 * hash + _id.hashCode();
-		}
-		return hash;
-	}
+	// no need to override hashCode in object
 	public boolean equals(Object o) { //no more override
 		return this == o;
 	}
