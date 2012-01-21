@@ -95,7 +95,7 @@ function zips
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
-						if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ]  ; then
+						if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 							dstfl=$(cygpath -wa $dstfl)
 						fi
 						java -jar $jarfl --charset UTF-8 $type "$f" -o "$dstfl" 2>&1
@@ -103,7 +103,7 @@ function zips
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
 						elif [ "$type" = "" ] ; then #JS
-							if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ]  ; then
+							if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
 								srcfile=$(cygpath -wa $dst/${f%.js}.src.js)
   							else
 								srcfile=$dst/${f%.js}.src.js

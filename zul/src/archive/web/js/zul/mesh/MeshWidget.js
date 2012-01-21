@@ -1161,14 +1161,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_fixBodyMinWd(this, true);
 		
 		//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
-		if (this._hflexsz === undefined && this._hflex == 'min' && this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
+		if (this._hflexsz === undefined && this._hflex == 'min' && 
+				this._width === undefined && n.offsetWidth > this.ebodytbl.offsetWidth) {
 			n.style.width = this.ebodytbl.offsetWidth + 'px';
 			this._hflexsz = n.offsetWidth;
 		}
-		// B50-ZK-543: Height issue of listbox when sizedByContent is true,
+		// B50-ZK-543, B50-ZK-773
 		// should re-calculate height because
-		// the string height maybe changed after width changed. 
-		if (sizedByContent && this.ebody.style.height) // check only if height exists for F50-3000339.zul
+		// the string height maybe changed after width changed.
+		if (this.getRows && this.getRows() && this.ebody.style.height) // check only if height exists for F50-3000339.zul
 			this.ebody.style.height = jq.px0(this.ebodytbl.offsetHeight);
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 		

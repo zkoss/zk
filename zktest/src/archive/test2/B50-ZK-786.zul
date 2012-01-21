@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-786.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 19 15:25:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Below is a window has a 'caption', and there is a 'toolbarbutton' in caption has a coffee image in it.</div>
+	<div>2. Click the Show/Hide caption image button, you should see a image before the 'Testing' title displayed, disappeared.</div>
+	<div>3. If the coffee image changed, it is a bug.</div>
+	<window id="testWindow" title="Testing" border="normal">
+		<caption id="cap" image="">
+			<toolbarbutton image="img/coffee.gif" />
+		</caption>
+		<button id="showCapImg" label="Show caption image" onClick='cap.setImage("img/defender.gif");' />
+		<button id="hideCapImg" label="Hide caption image" onClick='cap.setImage("");' />
+	</window>
+</zk>

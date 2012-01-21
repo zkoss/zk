@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-740.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 19 14:20:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>You should see the flash below displayed without any problem.</div>
+	<flash src="multimedia/flash/learn.swf" height="300" width="800" bgcolor="#00FF00" />
+</zk>

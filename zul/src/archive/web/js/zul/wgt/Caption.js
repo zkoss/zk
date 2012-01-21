@@ -89,5 +89,14 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
 		if (o == 'w')
 			this.$n().width = '';
+	},
+	// override
+	// ZK-786
+	getImageNode: function () {
+		if (!this._eimg && this._image) {
+			var n = this.$n('cnt');
+			if (n) this._eimg = jq(n).find('img:first')[0];
+		}
+		return this._eimg;
 	}
 });

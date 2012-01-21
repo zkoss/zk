@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-751.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 19 15:10:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>Mouseover the button below, a tooltiptext should appear.</div>
+	<button label="TEST LABEL" tooltiptext="popup" upload="true"></button>
+</zk>

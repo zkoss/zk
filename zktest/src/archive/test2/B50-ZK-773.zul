@@ -1,0 +1,29 @@
+<!--
+	B50-ZK-773.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon Jan 16 15:35:36 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		You should see vertical scroll bar in the Grid.
+	</div>
+	<grid height="200px" sizedByContent="true">
+		<columns>
+			<column label="Name" />
+			<column label="Title" />
+		</columns>
+		<rows>
+			<row forEach="1,2,3,4,5,6,7,8,9,10,11,12">
+				<label value="John ${each}" />
+				<label value="CEO ${each}" />
+			</row>
+		</rows>
+	</grid>
+</zk>
