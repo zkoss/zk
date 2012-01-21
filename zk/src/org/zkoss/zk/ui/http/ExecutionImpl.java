@@ -16,9 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Date;
@@ -36,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
-import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Expression;
@@ -59,7 +56,6 @@ import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractExecution;
@@ -398,8 +394,8 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public void setContentType(String contentType) {
-		if (_response instanceof HttpServletResponse)
-			((HttpServletResponse)_response).setContentType(contentType);
+		if (_response != null)
+			(_response).setContentType(contentType);
 	}
 
 	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */

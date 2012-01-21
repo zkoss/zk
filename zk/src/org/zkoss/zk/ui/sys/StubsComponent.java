@@ -17,7 +17,6 @@ import java.util.LinkedList;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.StubEvent;
@@ -55,11 +54,11 @@ public class StubsComponent extends StubComponent {
 		mapChildren(page != null ? (DesktopCtrl)page.getDesktop(): null,
 			uuids, idmap, evtmap, replaced);
 
-		_uuids = (String[])uuids.toArray(new String[uuids.size()]);
+		_uuids = uuids.toArray(new String[uuids.size()]);
 		_idmap = !idmap.isEmpty() ?
-			(String[][])idmap.toArray(new String[idmap.size()][]): null;
+			idmap.toArray(new String[idmap.size()][]): null;
 		_evtmap = evtmap != null && !evtmap.isEmpty() ?
-			(Object[][])evtmap.toArray(new Object[evtmap.size()][]): null;
+			evtmap.toArray(new Object[evtmap.size()][]): null;
 	}
 	private void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids,
 	List<String[]> idmap, List<Object[]> evtmap, Component comp) {

@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
@@ -38,14 +37,11 @@ import org.zkoss.util.Maps;
 import org.zkoss.json.JavaScriptValue;
 
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -53,10 +49,6 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.IdGenerator;
-import org.zkoss.zk.ui.ext.RawId;
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.xel.ExValue;
 
 /**
@@ -91,7 +83,7 @@ public class ComponentsCtrl {
 				sb.append((char)('0' + v));
 //			} else if (v < 36) {
 			} else {
-				sb.append((char)(v + ((int)'a' - 10)));
+				sb.append((char)(v + ('a' - 10)));
 //			} else {
 //				sb.append((char)(v + ((int)'A' - 36)));
 			}
@@ -222,7 +214,7 @@ public class ComponentsCtrl {
 					final Object v =
 						Executions.evaluate(comp, path, Object.class);
 					if (v instanceof Component) {
-						target = (Component)v;
+						target = v;
 					} else if (v == null) {
 						throw new ComponentNotFoundException("EL evaluated to null: "+path);
 					} else {
@@ -234,7 +226,7 @@ public class ComponentsCtrl {
 					path = path.trim();
 					if ("self".equals(path)) path = ".";
 
-					target = deferred ? (Object)path:
+					target = deferred ? path:
 						".".equals(path) ? comp:
 							Path.getComponent(comp.getSpaceOwner(), path);
 					if (target == null && comp instanceof IdSpace && comp.getParent() != null) {

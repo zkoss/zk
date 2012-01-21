@@ -20,13 +20,9 @@ import java.util.HashMap;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import groovy.lang.Script;
 import groovy.lang.Closure;
-import org.codehaus.groovy.runtime.InvokerHelper;
-
 import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**

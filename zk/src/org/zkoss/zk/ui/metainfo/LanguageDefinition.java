@@ -25,8 +25,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.Iterator;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.CollectionsX;
@@ -38,7 +36,6 @@ import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
@@ -204,9 +201,9 @@ public class LanguageDefinition {
 					if (j >= 0)
 						if (langnm.indexOf('/', j + 1) < 0) { //1st format
 							if (langnm.substring(0, j).equals(name))
-								return (LanguageDefinition)me.getValue();
+								return me.getValue();
 						} else if (langnm.endsWith(slashnm)) { //2nd format
-							return (LanguageDefinition)me.getValue();
+							return me.getValue();
 						}
 				}
 
@@ -459,7 +456,7 @@ public class LanguageDefinition {
 	 */
 	public ComponentDefinition getComponentDefinition(String name) {
 		final ComponentDefinition compdef =
-			(ComponentDefinition)_compdefs.get(name);
+			_compdefs.get(name);
 		if (compdef == null)
 			throw new DefinitionNotFoundException("Component definition not found: "+name);
 		return compdef;
@@ -473,7 +470,7 @@ public class LanguageDefinition {
 	 * @since 3.0.2
 	 */
 	public ComponentDefinition getComponentDefinitionIfAny(String name) {
-		return (ComponentDefinition)_compdefs.get(name);
+		return _compdefs.get(name);
 	}
 	/** Returns {@link ComponentDefinition} of the specified class.
 	 *
@@ -486,7 +483,7 @@ public class LanguageDefinition {
 	 */
 	public ComponentDefinition getComponentDefinition(Class klass) {
 		final ComponentDefinition compdef =
-			(ComponentDefinition)_compdefs.get(klass);
+			_compdefs.get(klass);
 		if (compdef == null)
 			throw new DefinitionNotFoundException("Component definition not found: "+klass);
 		return compdef;
@@ -785,7 +782,7 @@ public class LanguageDefinition {
 		|| !Native.class.isAssignableFrom(klass))
 			throw new IllegalArgumentException("Illegal native class: "+klass);
 		_nativedef =
-			ComponentDefinitionImpl.newNativeDefinition(this, "native", klass);;
+			ComponentDefinitionImpl.newNativeDefinition(this, "native", klass);
 	}
 	/** Returns the component definition for the native components.
 	 *

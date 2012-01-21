@@ -16,10 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.lang.reflect.Method;
-
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Session;
@@ -28,7 +24,6 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.util.ExecutionMonitor;
@@ -37,9 +32,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
  * A utility class that simplify the implementation of

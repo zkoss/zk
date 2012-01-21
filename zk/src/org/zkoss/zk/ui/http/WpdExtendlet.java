@@ -540,7 +540,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			if (!"main".equals(nm)) {
 				final String[] vals = me.getValue();
 				ms.put(nm, vals.length == 0 ? null:
-					vals.length == 1 ? (Object)vals[0]: (Object)vals);
+					vals.length == 1 ? vals[0]: vals);
 			}
 		}
 

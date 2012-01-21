@@ -16,20 +16,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.HashSet;
-
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.ext.DragControl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
  * A skeletal implementation for HTML based components.

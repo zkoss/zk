@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Date;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
@@ -78,7 +77,7 @@ public class JsContentRenderer implements ContentRenderer {
 	private void renderValue(Date value) {
 		if (value == null) _buf.append((String)null);
 		else _buf.append("jq.j2d('")
-			.append(JSONs.d2j((Date)value))
+			.append(JSONs.d2j(value))
 			.append("')");
 	}
 	private void renderValue(Component value) {

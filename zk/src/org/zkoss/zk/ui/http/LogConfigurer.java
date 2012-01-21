@@ -21,8 +21,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.ui.UiException;
-
 /**
  * Utilties for configure the logg.
  * @author tomyeh

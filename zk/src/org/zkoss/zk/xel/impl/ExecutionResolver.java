@@ -25,12 +25,10 @@ import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -117,7 +115,7 @@ public class ExecutionResolver implements VariableResolverX {
 			if (_self instanceof Component)
 				return Components.getCurrentPage((Component)_self);
 			if (_self instanceof Page)
-				return (Page)_self;
+				return _self;
 			return ((ExecutionCtrl)_exec).getCurrentPage();
 		}
 		if ("requestScope".equals(name))
@@ -132,7 +130,7 @@ public class ExecutionResolver implements VariableResolverX {
 			if (_self instanceof Component)
 				return ((Component)_self).getSpaceOwner();
 			if (_self instanceof Page)
-				return (Page)_self;
+				return _self;
 			return null;
 		}
 		if ("spaceScope".equals(name)) {

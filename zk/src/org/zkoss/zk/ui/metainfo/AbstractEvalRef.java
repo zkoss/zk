@@ -21,7 +21,6 @@ import org.zkoss.xel.XelException;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**

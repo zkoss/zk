@@ -16,7 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.ext;
 
-import java.util.Iterator;
 import java.util.Collection;
 import java.util.Map;
 import java.util.List;

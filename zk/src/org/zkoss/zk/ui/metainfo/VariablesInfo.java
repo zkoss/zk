@@ -16,17 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.impl.Utils;
 
 /**

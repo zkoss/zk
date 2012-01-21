@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -61,7 +60,6 @@ import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -94,7 +92,6 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuEcho;
-import org.zkoss.zk.scripting.*;
 
 /**
  * A skeletal implementation of {@link Component}.
@@ -670,7 +667,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public Component getFellow(String compId)
 	throws ComponentNotFoundException {
 		if (this instanceof IdSpace) {
-			final Component comp = (Component)_auxinf.spaceInfo.fellows.get(compId);
+			final Component comp = _auxinf.spaceInfo.fellows.get(compId);
 			if (comp == null)
 				throw new ComponentNotFoundException("Fellow component not found: "+compId);
 			return comp;
@@ -683,7 +680,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public Component getFellowIfAny(String compId) {
 		if (this instanceof IdSpace)
-			return (Component)_auxinf.spaceInfo.fellows.get(compId);
+			return _auxinf.spaceInfo.fellows.get(compId);
 
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? null: idspace.getFellowIfAny(compId);
@@ -749,14 +746,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			old = _auxinf.wgtlsns.put(evtnm, script);
 		} else
 			old = _auxinf != null && _auxinf.wgtlsns != null ?
-				(String)_auxinf.wgtlsns.remove(evtnm): null;
+				_auxinf.wgtlsns.remove(evtnm): null;
 		if (!Objects.equals(script, old))
 			smartUpdateWidgetListener(evtnm, script);
 		return old;
 	}
 	public String getWidgetListener(String evtnm) {
 		return _auxinf != null && _auxinf.wgtlsns != null ?
-			(String)_auxinf.wgtlsns.get(evtnm): null;
+			_auxinf.wgtlsns.get(evtnm): null;
 	}
 	public Set<String> getWidgetListenerNames() {
 		if (_auxinf != null && _auxinf.wgtlsns != null)
@@ -2106,7 +2103,7 @@ w:use="foo.MyWindow"&gt;
 
 			for (ListIterator<EventListenerInfo> it = lis.listIterator(lis.size());;) {
 				final EventListenerInfo li =
-					it.hasPrevious() ? (EventListenerInfo)it.previous(): null;
+					it.hasPrevious() ? it.previous(): null;
 				if (li == null || li.priority >= priority) {
 					if (li != null) it.next();
 					it.add(listenerInfo);
@@ -2827,6 +2824,16 @@ w:use="foo.MyWindow"&gt;
 		final int j = clsnm.lastIndexOf('.');
 		return "<"+clsnm.substring(j+1)+' '+_uuid+(Strings.isEmpty(_id) ? "": "#"+_id)+'>';
 	}
+	public int hashCode() {
+		int hash = 1;
+		if (_uuid != null) {
+			hash = 31 * hash + _uuid.hashCode();
+		}
+		if (_id != null) {
+			hash = 31 * hash + _id.hashCode();
+		}
+		return hash;
+	}
 	public boolean equals(Object o) { //no more override
 		return this == o;
 	}
@@ -3423,24 +3430,24 @@ w:use="foo.MyWindow"&gt;
 	}
 	private static class ChildInfo implements Cloneable/* not java.io.Serializable*/ {
 		/** The first child. */
-		private transient AbstractComponent first;
+		private AbstractComponent first;
 		/** The last child. */
-		private transient AbstractComponent last;
+		private AbstractComponent last;
 		/** # of children. */
-		private transient int nChild;
+		private int nChild;
 		/** Set of components that are being added or removed.
 		 * _aring[0]: add, _aring[1]: remove
 		 * It is used to prevent dead-loop between {@link #removeChild}
 		 * and {@link #setParent}.
 		 */
-		private transient Set<Component>[] _aring; //use an array to save memory
+		private Set<Component>[] _aring; //use an array to save memory
 		/** The modification count used to avoid co-modification of _next, _prev..
 		 */
-		private transient int modCntChd;
+		private int modCntChd;
 		/** The virtual ID space used when this component is a root component,
 		 * but not attached to a page, nor implement IdSpace.
 		 */
-		private transient IdSpace vispace;
+		private IdSpace vispace;
 
 		private ChildInfo() {
 		}

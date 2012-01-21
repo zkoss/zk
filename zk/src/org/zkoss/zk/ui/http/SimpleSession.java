@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.io.Serializable;
 import java.io.Externalizable;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.portlet.PortletSession;
@@ -35,12 +34,10 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.xel.AttributesMap;
 
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.util.Monitor;

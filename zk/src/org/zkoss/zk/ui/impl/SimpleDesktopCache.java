@@ -16,7 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Iterator;
 import java.util.ArrayList;
 
 import org.zkoss.util.CacheMap;
@@ -88,7 +87,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			old = _desktops.put(desktop.getId(), desktop);
 		}
 		if (old != null) {
-			_desktops.put(((Desktop)old).getId(), old); //recover
+			_desktops.put((old).getId(), old); //recover
 			log.warning(
 				desktop == old ? "Register a desktop twice: "+desktop:
 					"Replicated ID: "+desktop+"; already used by "+old);

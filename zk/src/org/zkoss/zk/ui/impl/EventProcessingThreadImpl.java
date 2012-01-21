@@ -87,7 +87,7 @@ implements EventProcessingThread {
 	/** Whether not to show message when stopping. */
 	private boolean _silent;
 	/** Whether it is suspended. */
-	private transient boolean _suspended;
+	private boolean _suspended;
 
 	public EventProcessingThreadImpl() {
 //		if (log.debugable()) log.debug("Starting an event processing thread");
@@ -522,7 +522,7 @@ implements EventProcessingThread {
 		if (ex != null) errs.add(ex);
 		_evtThdCleanups =
 			config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);
-		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
+		_ex = errs.isEmpty() ? null: errs.get(0);
 			//propogate back the first exception
 	}
 

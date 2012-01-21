@@ -347,7 +347,7 @@ public class Taglibs {
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String s = IDOMs.getRequiredElementValue(el, "taglib-location");
-			final URL url = loc.getResource(s.charAt(0) == '/' ? s.substring(1): s);
+			final URL url = loc.getResource(s.startsWith("/") ? s.substring(1): s);
 			if (url != null) {
 				urls.put(
 					IDOMs.getRequiredElementValue(el, "taglib-uri"), url);

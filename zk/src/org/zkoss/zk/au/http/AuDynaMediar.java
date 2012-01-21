@@ -40,7 +40,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -76,7 +75,7 @@ public class AuDynaMediar implements AuExtension {
 //		if (log.debugable()) log.debug("View "+pi);
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
-			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
+			response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
 			return;
 		}
 
@@ -121,7 +120,7 @@ public class AuDynaMediar implements AuExtension {
 					if (m < 0) m = l;
 					media = ((DynamicMedia)cc).getMedia(m >= 0 ? pi.substring(m): "");
 					if (media == null) {
-						response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
+						response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
 						return;
 					}
 				}
@@ -142,7 +141,7 @@ public class AuDynaMediar implements AuExtension {
 					}
 				}
 
-				response.sendError(response.SC_GONE,
+				response.sendError(HttpServletResponse.SC_GONE,
 					Messages.get(MZk.PAGE_FAILED, new Object[] {pi, errmsg, ""}));
 				return;
 			} finally {
@@ -154,7 +153,7 @@ public class AuDynaMediar implements AuExtension {
 			}
 		} catch (ComponentNotFoundException ex) {
 			//possible because view might be as late as origin comp is gone
-			response.sendError(response.SC_GONE, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid));
+			response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid));
 			return;
 		}
 

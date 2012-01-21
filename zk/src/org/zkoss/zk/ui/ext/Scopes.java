@@ -254,6 +254,7 @@ try {
 			return _scope.getAttributes().hashCode();
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			return _scope.getAttributes().equals(o instanceof DeferredAttributes ? 
 					((DeferredAttributes) o)._scope.getAttributes() : o);
 		}

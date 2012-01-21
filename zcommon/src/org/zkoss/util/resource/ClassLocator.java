@@ -169,7 +169,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		return is != null ? is: ClassLocator.class.getResourceAsStream(name);
 	}
 	private static String resolveName(String name) {
-		return name != null && name.charAt(0) == '/' ?
+		return name != null && name.startsWith("/") ?
 			name.substring(1): name;
 	}
 

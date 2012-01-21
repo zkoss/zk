@@ -670,7 +670,7 @@ import org.zkoss.zk.au.out.*;
 			}
 		}
 		if (!tvals.isEmpty()) {
-			final TimedValue[] tvs = (TimedValue[])tvals.toArray(new TimedValue[tvals.size()]);
+			final TimedValue[] tvs = tvals.toArray(new TimedValue[tvals.size()]);
 			Arrays.sort(tvs);
 			for (int j = 0; j < tvs.length; ++j)
 				responses.add(tvs[j].getResponse());
@@ -769,7 +769,7 @@ import org.zkoss.zk.au.out.*;
 		final Component parent;
 		final Page page;
 		{
-			final Component comp = (Component)newsibs.iterator().next();
+			final Component comp = newsibs.iterator().next();
 			parent = comp.getParent();
 			page = comp.getPage();
 		}
@@ -785,7 +785,7 @@ import org.zkoss.zk.au.out.*;
 		*/
 		for (List<Component> group; (group = nextGroupedSiblings(newsibs)) != null;) {
 			final Collection<String> contents = redrawComponents(group);
-			final Component last = (Component)group.get(group.size() - 1);
+			final Component last = group.get(group.size() - 1);
 			Component nxt, prv;
 			if ((nxt = last.getNextSibling()) == null
 			|| (sibs != null && !sibs.contains(nxt))) { //nextsib not available at client
@@ -793,7 +793,7 @@ import org.zkoss.zk.au.out.*;
 				&& !(parent instanceof Native) && !(parent instanceof StubsComponent)) { //parent valid
 					responses.add(new AuAppendChild(parent, contents));
 				} else {
-					final Component first = (Component)group.get(0);
+					final Component first = group.get(0);
 					if ((prv = first.getPreviousSibling()) != null
 					&& (sibs == null || sibs.contains(prv)) //prv is available
 					&& !(prv instanceof Native) && !(prv instanceof StubsComponent)) { //prv valid
@@ -805,7 +805,7 @@ import org.zkoss.zk.au.out.*;
 					}
 				}
 			} else if (nxt instanceof Native || nxt instanceof StubsComponent) { //native
-				final Component first = (Component)group.get(0);
+				final Component first = group.get(0);
 				if ((prv = first.getPreviousSibling()) == null
 				|| (sibs != null && !sibs.contains(prv))) //prv is not available
 					throw new UiException("Inserting a component before a native one not allowed: "+nxt);

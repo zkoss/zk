@@ -22,12 +22,9 @@ import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.xel.ExValue;

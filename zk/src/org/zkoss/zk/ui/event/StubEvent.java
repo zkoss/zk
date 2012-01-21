@@ -15,11 +15,8 @@ package org.zkoss.zk.ui.event;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.StubComponent;
-import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuRequests;
 
 /**
  * The event sent from a stub component ({@link org.zkoss.zk.ui.sys.StubComponent}.

@@ -117,7 +117,7 @@ public class Portlets {
 		private String _uri;
 
 		private ParsedURI(final PortletContext ctx, final String uri) {
-			if (uri != null && uri.charAt(0) == '~') { //refer to foreign context
+			if (uri != null && uri.length() > 0 && uri.charAt(0) == '~') { //refer to foreign context
 				final int j = uri.indexOf('/', 1);
 				final String ctxroot;
 				if (j >= 0) {

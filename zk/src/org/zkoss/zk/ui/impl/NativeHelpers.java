@@ -17,16 +17,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Namespace;
-
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 
 /**
  * Utilities for implementing {@link org.zkoss.zk.ui.ext.Native.Helper}.

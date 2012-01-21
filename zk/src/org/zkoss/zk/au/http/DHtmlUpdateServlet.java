@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import java.util.Iterator;
-import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -67,7 +66,6 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.SessionResolverImpl;
 import org.zkoss.zk.ui.http.I18Ns;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -79,7 +77,6 @@ import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
 import org.zkoss.zk.device.Devices;
-import org.zkoss.zk.device.Device;
 
 /**
  * Used to receive command from the server and send result back to client.
@@ -326,7 +323,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 5.0.0
 	 */
 	public AuExtension getAuExtension(String prefix) {
-		return (AuExtension)_aues.get(prefix);
+		return _aues.get(prefix);
 	}
 	/** Returns the first AU extension matches the specified path,
 	 * or null if not found.
@@ -408,7 +405,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		if (withpi) {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
-				response.sendError(response.SC_NOT_FOUND);
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 				log.debug("Unknown path info: "+pi);
 				return;
 			}
@@ -437,7 +434,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//AU
 		if (sess == null) {
-			response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); //denote timeout
 
 			//Bug 1849088: rmDesktop might be sent after invalidate
 			//Bug 1859776: need send response to client for redirect or others
@@ -505,7 +502,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recoverDesktop(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				response.setIntHeader("ZK-Error", response.SC_GONE); //denote timeout
+				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); //denote timeout
 				sessionTimeout(request, response, wapp, dtid);
 				return;
 			}
@@ -592,7 +589,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);
-			URIInfo ui = wapp != null ? (URIInfo)wapp.getConfiguration()
+			URIInfo ui = wapp != null ? wapp.getConfiguration()
 				.getTimeoutURI(deviceType): null;
 			String uri = ui != null ? ui.uri: null;
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382

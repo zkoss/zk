@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;

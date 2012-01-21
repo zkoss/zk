@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Collections;
@@ -74,7 +73,7 @@ public class TemplateInfo extends BranchInfo {
 		final Map<String, Object> params = new LinkedHashMap<String, Object>(); //eval order is important
 		for (Map.Entry<String, ExValue> me: _params.entrySet())
 			params.put(me.getKey(),
-				((ExValue)me.getValue()).getValue(_evalr, comp));
+				(me.getValue()).getValue(_evalr, comp));
 		return params;
 	}
 

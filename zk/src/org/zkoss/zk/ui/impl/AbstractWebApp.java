@@ -18,7 +18,6 @@ package org.zkoss.zk.ui.impl;
 
 import java.io.InputStream;
 
-import org.zkoss.lang.Library;
 import org.zkoss.util.Utils;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
@@ -28,7 +27,6 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.http.SimpleUiFactory;
 import org.zkoss.zk.ui.http.SimpleSessionCache;
 import org.zkoss.zk.ui.sys.WebAppCtrl;

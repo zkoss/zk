@@ -26,6 +26,6 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 	/*package*/ final Object[] items;
 	/*package*/ WcsInfo(String lang, List<Object> items) {
 		this.langdef = LanguageDefinition.lookup(lang);
-		this.items = (Object[])items.toArray(new Object[items.size()]);
+		this.items = items.toArray(new Object[items.size()]);
 	}
 }

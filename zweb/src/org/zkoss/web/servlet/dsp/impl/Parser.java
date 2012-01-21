@@ -75,7 +75,7 @@ public class Parser {
 			final Map<String, String> attrs = new HashMap<String, String>(2);
 
 			if (ctype == null) ctype = "text/html";
-			else if (ctype.charAt(0) == ';') ctype = "text/html" + ctype;
+			else if (ctype.length() > 0 && ctype.charAt(0) == ';') ctype = "text/html" + ctype;
 
 			attrs.put("optionalContentType", ctype);
 			applyAttrs("page", action, attrs, ctx);

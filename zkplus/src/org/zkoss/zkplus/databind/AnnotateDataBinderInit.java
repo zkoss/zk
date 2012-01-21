@@ -157,7 +157,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			} else {
 				page.setAttribute(_name, _binder);
 			}
-		} else if (_compPath.charAt(0) == '/') { //absolute path
+		} else if (_compPath.length() > 0 && _compPath.charAt(0) == '/') { //absolute path
 			final Component comp = Path.getComponent(_compPath);
 			if (comp == null) {
 				throw new UiException("Cannot find the specified component. Absolute Path:"+_compPath);

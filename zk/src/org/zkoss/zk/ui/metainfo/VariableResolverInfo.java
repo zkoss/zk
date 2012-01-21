@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.metainfo;
 import java.util.Map;
 
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.ui.Page;

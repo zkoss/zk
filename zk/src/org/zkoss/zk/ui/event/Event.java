@@ -18,8 +18,6 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Iterator;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.au.AuRequest;

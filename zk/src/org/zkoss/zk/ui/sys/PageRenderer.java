@@ -16,7 +16,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.Collection;
 import java.io.Writer;
 import java.io.IOException;
 

@@ -624,7 +624,7 @@ public class UiEngineImpl implements UiEngine {
 			if (fulfill != null) { //defer the creation of children
 				fulfill = fulfill.trim();
 				if (fulfill.length() > 0) {
-					if (fulfill.startsWith("=")) {
+					if (fulfill.charAt(0) == '=') {
 						fulfillURI = fulfill.substring(1).trim();
 					} else {
 						new FulfillListener(fulfill, pi, parent);
@@ -650,7 +650,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component[] merge(Component[] cs, Component c) {
 		if (c != null) {
-			cs = (Component[])ArraysX.resize(cs, cs.length + 1);
+			cs = ArraysX.resize(cs, cs.length + 1);
 			cs[cs.length - 1] = c;
 		}
 		return cs;
@@ -753,7 +753,7 @@ public class UiEngineImpl implements UiEngine {
 			String rt = null;
 			if (replaceableText != null) {
 				rt = replaceableText.text;
-				replaceableText.text = childInfo.getReplaceableText();;
+				replaceableText.text = childInfo.getReplaceableText();
 				if (replaceableText.text != null)
 					return new Component[0];
 				//Note: replaceableText is one-shot only
@@ -890,7 +890,7 @@ public class UiEngineImpl implements UiEngine {
 							execCreateChild(ci, parent, caseInfo, null, insertBefore);
 						for (int j = 0; j < children.length; ++j)
 							created.add(children[j]);
-						return (Component[])created.toArray(new Component[created.size()]);
+						return created.toArray(new Component[created.size()]);
 							//only once (AND condition)
 					}
 				}
@@ -1989,7 +1989,7 @@ public class UiEngineImpl implements UiEngine {
 
 		if (sb != null && sb.length() > 0)
 			nc.setPrologContent(
-				sb.insert(0, (String)nc.getPrologContent()).toString());
+				sb.insert(0, nc.getPrologContent()).toString());
 	}
 	/** Sets the epilog of the specified native component.
 	 * @param comp the native component

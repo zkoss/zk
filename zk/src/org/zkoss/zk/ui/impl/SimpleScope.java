@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;

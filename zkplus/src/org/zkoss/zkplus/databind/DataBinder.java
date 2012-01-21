@@ -1241,9 +1241,9 @@ public class DataBinder implements java.io.Serializable {
 		}
 		if (existsBean(beanid)) {
 			bean = getBean(beanid);
-		} else if (beanid.charAt(0) == '/') { //a absolute component Path: // or /
+		} else if (beanid.startsWith("/")) { //a absolute component Path: // or /
 			bean = Path.getComponent(beanid);
-		} else if (beanid.charAt(0) == '.') { //a relative component Path: ./ or ../
+		} else if (beanid.startsWith(".")) { //a relative component Path: ./ or ../
 			bean = Path.getComponent(comp.getSpaceOwner(), beanid);
 		} else {
 			//VariableResolver would need such "self" information when doing

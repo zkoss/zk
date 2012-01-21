@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.util;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Implemented by an initiator that will be invoked if it is specified

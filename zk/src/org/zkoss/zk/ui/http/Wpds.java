@@ -24,8 +24,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Locales;
-import org.zkoss.web.Attributes;
-
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 

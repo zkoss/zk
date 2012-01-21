@@ -14,7 +14,6 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Date;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.util.ConditionImpl;

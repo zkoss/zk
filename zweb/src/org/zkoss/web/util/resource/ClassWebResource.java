@@ -199,7 +199,7 @@ public class ClassWebResource {
 	}
 	/** Constructor. */
 	private ClassWebResource(ServletContext ctx, String mappingURI) {
-		if (mappingURI.charAt(0) != '/' || mappingURI.endsWith("/"))
+		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
 			throw new IllegalArgumentException("mappingURI must start with /, but not ends with /");
 		if (ctx == null)
 			throw new IllegalArgumentException("null ctx");

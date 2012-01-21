@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.zkoss.json.*;
 import org.zkoss.web.servlet.http.Https;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;

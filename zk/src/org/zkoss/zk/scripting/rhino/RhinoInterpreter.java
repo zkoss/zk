@@ -25,7 +25,6 @@ import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.ImporterTopLevel;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**

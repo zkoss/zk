@@ -14,12 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.Iterator;
 import java.util.Collections;
 
 import org.zkoss.zk.ui.Page;

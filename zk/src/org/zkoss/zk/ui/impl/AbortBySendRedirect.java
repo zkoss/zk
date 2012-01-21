@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuSendRedirect;
 import org.zkoss.zk.ui.sys.AbortingReason;
 

@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 
 /**
  * Additional interface of {@link org.zkoss.zk.ui.Session} for implementation.

@@ -25,9 +25,7 @@ import java.util.HashMap;
 
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 
 /**
  * A skeletal implementation of {@link Page}.

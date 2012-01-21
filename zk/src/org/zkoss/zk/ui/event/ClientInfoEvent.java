@@ -22,10 +22,7 @@ import java.util.Map;
 
 import org.zkoss.util.TimeZones;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuRequests;
 
 /**
  * The onClientInfo event is used to notify the client's information, such

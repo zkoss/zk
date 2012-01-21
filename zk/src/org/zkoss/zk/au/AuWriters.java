@@ -16,12 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import java.io.Writer;
-import java.io.IOException;
-
 import org.zkoss.json.*;
-import org.zkoss.idom.Verifier;
-
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.http.HttpAuWriter;
 

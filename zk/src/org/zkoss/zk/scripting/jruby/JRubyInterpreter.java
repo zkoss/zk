@@ -24,13 +24,10 @@ import org.jruby.javasupport.JavaObject;
 import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.IAccessor;
 import org.jruby.runtime.GlobalVariable;
-import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.internal.runtime.GlobalVariables;
 
-import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 
 /**

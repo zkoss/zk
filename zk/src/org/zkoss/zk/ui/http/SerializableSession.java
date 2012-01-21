@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionEvent;
 
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
  * Serializable {@link org.zkoss.zk.ui.Session}.

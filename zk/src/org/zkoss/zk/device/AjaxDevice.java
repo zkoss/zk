@@ -22,8 +22,6 @@ import java.io.IOException;
 
 import org.zkoss.util.Locales;
 import org.zkoss.io.Files;
-import org.zkoss.web.servlet.Servlets;
-
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;

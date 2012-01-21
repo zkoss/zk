@@ -325,7 +325,7 @@ public class AnnotationHelper {
 				//that the data binder can use them
 		}
 
-		return (String[])attrs.toArray(new String[attrs.size()]);
+		return attrs.toArray(new String[attrs.size()]);
 	}
 	private static UiException wrongAnnotationException(
 	String cval, String reason, Location loc) {

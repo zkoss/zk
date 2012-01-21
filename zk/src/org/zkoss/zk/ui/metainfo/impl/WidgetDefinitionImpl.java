@@ -21,9 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.metainfo.*;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * An implementation of WidgetDefinition.

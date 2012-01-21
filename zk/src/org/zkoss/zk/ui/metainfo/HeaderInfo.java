@@ -111,7 +111,7 @@ public class HeaderInfo { //directive
 			for (AttrInfo attr: _attrs) {
 				final String nm = attr.name;
 				if ("content".equals(nm)) {
-					content = (String)((ExValue)attr.value).getValue(eval, page);
+					content = (String)attr.value.getValue(eval, page);
 				} else {
 					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
 				}
@@ -139,7 +139,7 @@ public class HeaderInfo { //directive
 			relFound = bStyle && (relFound || "rel".equals(nm));
 			typeFound = (bScript || bStyle) && (typeFound || "type".equals(nm));
 
-			String val = (String)((ExValue)attr.value).getValue(eval, page);
+			String val = (String)attr.value.getValue(eval, page);
 			if (val == null || val.length() == 0)
 				val = "";
 			else if ("href".equals(nm) || ((bScript || bStyle) && "src".equals(nm)))

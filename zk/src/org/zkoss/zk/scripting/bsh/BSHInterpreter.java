@@ -19,9 +19,6 @@ package org.zkoss.zk.scripting.bsh;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Collection;
 import java.io.Serializable;
 import java.io.Externalizable;
@@ -541,8 +538,8 @@ implements SerializableAware, HierachicalAware {
 			if (newIdSpace instanceof Scope) { //i.e., != null (but safer)
 				final BSHInterpreter ip = getInterpreter(_bshns._scope);
 				_bshns.setParent(
-					ip != null ? ip.prepareNS((Scope)newIdSpace):
-						prepareDetachedNS((Scope)newIdSpace));
+					ip != null ? ip.prepareNS(newIdSpace):
+						prepareDetachedNS(newIdSpace));
 				return;
 			}
 

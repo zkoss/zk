@@ -33,7 +33,6 @@ import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Charsets;
 
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 
 /**

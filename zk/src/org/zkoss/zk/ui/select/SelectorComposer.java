@@ -160,7 +160,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		// brought from GenericAutowireComposer
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
-			final Component clone = (Component) event.getTarget();
+			final Component clone = event.getTarget();
 			final SelectorComposer<Component> composerClone = 
 				(SelectorComposer<Component>) event.getData(); 
 			ConventionWires.wireController(clone, composerClone);

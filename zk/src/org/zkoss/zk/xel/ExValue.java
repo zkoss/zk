@@ -136,6 +136,7 @@ public class ExValue implements java.io.Serializable {
 		return Objects.hashCode(_value);
 	}
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		if (o instanceof ExValue) {
 			final ExValue val = (ExValue)o;
 			return Objects.equals(val._value, _value)

@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import java.util.Iterator;
 import java.util.Collections;
 import java.util.Map;
 import java.text.ParseException;
@@ -151,7 +150,7 @@ public class AuRequest {
 	public int getOptions() {
 		if (_opts == null) {
 			if (_comp != null)
-				_opts = (Integer)((ComponentCtrl)_comp).getClientEvents().get(_cmd);
+				_opts = ((ComponentCtrl)_comp).getClientEvents().get(_cmd);
 			if (_opts == null)
 				_opts = new Integer(0);
 		}
@@ -202,6 +201,19 @@ public class AuRequest {
 	}
 
 	//-- Object --//
+	public int hashCode() {
+		int hash = 1;
+		if (_uuid != null) {
+			hash = 31 * hash + _uuid.hashCode();
+		}
+		if (_comp != null) {
+			hash = 31 * hash + _comp.hashCode();
+		}
+		if (_cmd != null) {
+			hash = 31 * hash + _cmd.hashCode();
+		}
+		return hash;
+	}
 	public final boolean equals(Object o) { //prevent override
 		return this == o;
 	}

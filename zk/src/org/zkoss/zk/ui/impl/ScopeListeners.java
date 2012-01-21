@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 

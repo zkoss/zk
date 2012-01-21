@@ -16,8 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import java.lang.reflect.Method;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -298,7 +296,7 @@ public class Events {
 		if (event == null)
 			return; //done
 
-		final Thread thd = (Thread)Thread.currentThread();
+		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThread)) {
 			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
 				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;

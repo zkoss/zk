@@ -17,14 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
-
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Used to clean up desktops that a session owns.

@@ -326,7 +326,7 @@ public class Binding implements java.io.Serializable {
 	 */
 	public void loadAttribute(Component comp) {
 		if (!isLoadable() 
-				|| _attr.charAt(0) == '_' 
+				|| _attr.startsWith("_") 
 				|| DataBinder.isTemplate(comp)
 				|| comp == null //bug #1941947 Cannot find associated CollectionItem
 				|| comp.getPage() == null) { 
@@ -358,7 +358,7 @@ public class Binding implements java.io.Serializable {
 	 * @param bean the bean value.
 	 */
 	public void loadAttribute(Component comp, Object bean) {
-		if (!isLoadable() || _attr.charAt(0) == '_' || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isLoadable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return; //cannot load, a control attribute, or a detached component, skip!
 		}
 		myLoadAttribute(comp, bean);
@@ -457,7 +457,7 @@ public class Binding implements java.io.Serializable {
 	/** Get converted value and original value of this Binding.
 	 */
 	private Object[] getAttributeValues(Component comp) {
-		if (!isSavable() || _attr.charAt(0) == '_' || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
+		if (!isSavable() || _attr.startsWith("_") || DataBinder.isTemplate(comp) || comp.getPage() == null) { 
 			return null; //cannot save, a control attribute, or a detached component, skip!
 		}
 		Object rawval = null;

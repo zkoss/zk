@@ -15,25 +15,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.Principal;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-
-import org.zkoss.idom.Document;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
-import org.zkoss.xel.VariableResolver;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -47,9 +35,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zk.xel.Evaluator;
 
 /**
  * <p>A skeletal composer that you can extend and write intuitive onXxx 
@@ -386,7 +372,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	private static class CloneDoAfterCompose implements SerializableEventListener<Event> {
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
-			final Component clone = (Component) event.getTarget();
+			final Component clone = event.getTarget();
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);

@@ -16,9 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
@@ -200,6 +199,16 @@ public class AuResponse {
 	}
 
 	//-- Object --//
+	public int hashCode() {
+		int hash = 1;
+		if (_data != null) {
+			hash = 31 * hash + Arrays.hashCode(_data);
+		}
+		if (_cmd != null) {
+			hash = 31 * hash + _cmd.hashCode();
+		}
+		return hash;
+	}
 	public final boolean equals(Object o) { //prevent override
 		return this == o;
 	}

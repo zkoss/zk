@@ -22,14 +22,11 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.io.StringWriter;
 import java.io.Writer;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.html.HTMLs;
-import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
@@ -40,7 +37,6 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.render.DirectContent;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.ext.render.Merger;

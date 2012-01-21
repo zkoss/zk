@@ -166,7 +166,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		try {
 			clone = (EventInterceptors)super.clone();
 			if (clone._eis != null)
-				clone._eis = (EventInterceptor[])clone._eis.clone();
+				clone._eis = clone._eis.clone();
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}

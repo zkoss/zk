@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.sys.EventListenerMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;

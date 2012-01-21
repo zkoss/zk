@@ -127,11 +127,11 @@ public class SimpleSelectorSequence {
 		StringBuffer sb = new StringBuffer(_type == null ? "" : _type.toString());
 		
 		if(_id != null) 
-			sb.append("#").append(_id);
+			sb.append('#').append(_id);
 		
 		if(!_classes.isEmpty()) 
 			for(String c : _classes) 
-				sb.append(".").append(c);
+				sb.append('.').append(c);
 		
 		if(!_pseudoClasses.isEmpty()) 
 			for(PseudoClass p : _pseudoClasses)

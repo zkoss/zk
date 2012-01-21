@@ -48,6 +48,7 @@ import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
 
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -63,11 +64,9 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppsCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.WebAppFactory;
-import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
@@ -433,7 +432,7 @@ public class WebManager {
 		final WebManager webman = getWebManagerIfAny(hsess.getServletContext());
 		if (webman != null) {
 			final WebApp wapp = webman.getWebApp();
-			final Session sess = (Session)SessionsCtrl.getSession(wapp, hsess);
+			final Session sess = SessionsCtrl.getSession(wapp, hsess);
 			if (sess != null)
 				((WebAppCtrl)wapp).sessionDestroyed(sess);
 		}

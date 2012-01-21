@@ -19,8 +19,6 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;

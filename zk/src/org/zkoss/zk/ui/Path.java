@@ -16,11 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Collection;
-
 import org.zkoss.io.Files;
 
-import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -147,7 +144,7 @@ public class Path {
 
 				final Component c = (Component)is;
 				final Component p = c.getParent();
-				is = p != null ? p.getSpaceOwner(): (IdSpace)c.getPage();
+				is = p != null ? p.getSpaceOwner(): c.getPage();
 				if (k < 0) {
 					return (is instanceof Component) ? (Component)is: null;
 				}
@@ -167,6 +164,7 @@ public class Path {
 
 	//--Object--//
 	public boolean equals(Object o) {
+		if (this == o) return true;
 		return o instanceof Path && ((Path)o)._path.equals(_path);
 	}
 	public int hashCode() {

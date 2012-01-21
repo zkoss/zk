@@ -81,7 +81,7 @@ implements SerializableEventListener<T> {
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(controller);
 			else if (evt instanceof ForwardEvent) { //ForwardEvent
-				final Class paramcls = (Class) mtd.getParameterTypes()[0];
+				final Class paramcls = mtd.getParameterTypes()[0];
 				//paramcls is ForwardEvent || Event
 				if (ForwardEvent.class.isAssignableFrom(paramcls)
 				|| Event.class.equals(paramcls)) { 

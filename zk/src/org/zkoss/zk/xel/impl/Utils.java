@@ -21,8 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Iterator;
-
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.Maps;
 import org.zkoss.util.CollectionsX;

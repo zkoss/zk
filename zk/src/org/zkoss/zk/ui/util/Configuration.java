@@ -26,11 +26,9 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.util.WaitLock;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
@@ -64,11 +62,9 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
 import org.zkoss.zk.ui.sys.SEORenderer;
 import org.zkoss.zk.ui.sys.SessionCache;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.MultiComposer;
-import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuDecoder;
 
 /**
@@ -516,7 +512,7 @@ public class Configuration {
 
 		final List<EventThreadCleanup> cleanups = new LinkedList<EventThreadCleanup>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				final EventThreadCleanup cleanup =
 					(EventThreadCleanup)klass.newInstance();
@@ -583,7 +579,7 @@ public class Configuration {
 
 		final List<EventThreadSuspend> suspends = new LinkedList<EventThreadSuspend>();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				final EventThreadSuspend suspend =
 					(EventThreadSuspend)klass.newInstance();
@@ -700,9 +696,9 @@ public class Configuration {
 	 * @param evt the event to process
 	 */
 	public void invokeEventThreadResumeAborts(Component comp, Event evt) {
-		final Class[] ary = (Class[])_evtResus.toArray();
+		final Class[] ary = _evtResus.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				((EventThreadResume)klass.newInstance())
 					.abortResume(comp, evt);
@@ -724,9 +720,9 @@ public class Configuration {
 	 * Rather, it only logs them.
 	 */
 	public void invokeWebAppInits() throws UiException {
-		final Class[] ary = (Class[])_appInits.toArray();
+		final Class[] ary = _appInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				((WebAppInit)klass.newInstance()).init(_wapp);
 			} catch (Throwable ex) {
@@ -745,9 +741,9 @@ public class Configuration {
 	 * <p>It never throws an exception.
 	 */
 	public void invokeWebAppCleanups() {
-		final Class[] ary = (Class[])_appCleans.toArray();
+		final Class[] ary = _appCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
@@ -773,9 +769,9 @@ public class Configuration {
 	 */
 	public void invokeSessionInits(Session sess, Object request)
 	throws UiException {
-		final Class[] ary = (Class[])_sessInits.toArray();
+		final Class[] ary = _sessInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				final SessionInit fn = (SessionInit)klass.newInstance();
 				fn.init(sess, request);
@@ -798,9 +794,9 @@ public class Configuration {
 	 * @param sess the session that is being destroyed
 	 */
 	public void invokeSessionCleanups(Session sess) {
-		final Class[] ary = (Class[])_sessCleans.toArray();
+		final Class[] ary = _sessCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				((SessionCleanup)klass.newInstance()).cleanup(sess);
 			} catch (Throwable ex) {
@@ -825,9 +821,9 @@ public class Configuration {
 	 */
 	public void invokeDesktopInits(Desktop desktop, Object request)
 	throws UiException {
-		final Class[] ary = (Class[])_dtInits.toArray();
+		final Class[] ary = _dtInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
-			final Class klass = (Class)ary[j];
+			final Class klass = ary[j];
 			try {
 				final DesktopInit fn = (DesktopInit)klass.newInstance();
 				fn.init(desktop, request);
@@ -850,7 +846,7 @@ public class Configuration {
 	 * @param desktop the desktop that is being destroyed
 	 */
 	public void invokeDesktopCleanups(Desktop desktop) {
-		final Class[] ary = (Class[])_dtCleans.toArray();
+		final Class[] ary = _dtCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				((DesktopCleanup)ary[j].newInstance()).cleanup(desktop);
@@ -874,7 +870,7 @@ public class Configuration {
 	 */
 	public void invokeExecutionInits(Execution exec, Execution parent)
 	throws UiException {
-		final Class[] ary = (Class[])_execInits.toArray();
+		final Class[] ary = _execInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				((ExecutionInit)ary[j].newInstance()).init(exec, parent);
@@ -928,7 +924,7 @@ public class Configuration {
 	 * Use {@link UiException#getCause} to retrieve the cause.
 	 */
 	public void invokeURIInterceptors(String uri) {
-		URIInterceptor[] ary = (URIInterceptor[])_uriIntcps.toArray();
+		URIInterceptor[] ary = _uriIntcps.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].request(uri);
@@ -950,7 +946,7 @@ public class Configuration {
 	 */
 	public void invokeRequestInterceptors(Session sess, Object request,
 	Object response) {
-		RequestInterceptor[] ary = (RequestInterceptor[])_reqIntcps.toArray();
+		RequestInterceptor[] ary = _reqIntcps.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].request(sess, request, response);
@@ -976,7 +972,7 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public String[] getLabelLocations() {
-		return (String[])_labellocs.toArray();
+		return _labellocs.toArray();
 	}
 
 	/** Returns the system-level composer or null if none is registered.
@@ -986,7 +982,7 @@ public class Configuration {
 	 * @since 5.0.1
 	 */
 	public Composer getComposer(Page page) throws Exception {
-		return MultiComposer.getComposer(page, (Class[])_composers.toArray());
+		return MultiComposer.getComposer(page, _composers.toArray());
 	}
 
 	/** Returns a readonly list of the system-level initiators.
@@ -995,7 +991,7 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public Initiator[] getInitiators() {
-		final Class[] initclses = (Class[])_initiators.toArray();
+		final Class[] initclses = _initiators.toArray();
 		if (initclses.length == 0)
 			return new Initiator[0];
 
@@ -1018,7 +1014,7 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public SEORenderer[] getSEORenderers() {
-		final Class[] sdclses = (Class[])_seoRends.toArray();
+		final Class[] sdclses = _seoRends.toArray();
 		if (sdclses.length == 0)
 			return new SEORenderer[0];
 
@@ -1040,7 +1036,7 @@ public class Configuration {
 	 * @since 5.0.4
 	 */
 	public void init(Page page) {
-		final Class[] classes = (Class[])_resolvers.toArray();
+		final Class[] classes = _resolvers.toArray();
 		for (int j = 0; j < classes.length; ++j) {
 			try {
 				page.addVariableResolver((VariableResolver)classes[j].newInstance());
@@ -1058,14 +1054,14 @@ public class Configuration {
 	 * @since 5.0.7
 	 */
 	public PropertiesRenderer[] getPropertiesRenderers() {
-		return (PropertiesRenderer[])_propRends.toArray();
+		return _propRends.toArray();
 	}
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
 	 * when a component is attached to a page.
 	 * @since 3.0.6
 	 */
 	public void afterComponentAttached(Component comp, Page page) {
-		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		final UiLifeCycle[] ary = _uiCycles.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterComponentAttached(comp, page);
@@ -1079,7 +1075,7 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterComponentDetached(Component comp, Page prevpage) {
-		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		final UiLifeCycle[] ary = _uiCycles.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterComponentDetached(comp, prevpage);
@@ -1093,7 +1089,7 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
-		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		final UiLifeCycle[] ary = _uiCycles.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterComponentMoved(parent, child, prevparent);
@@ -1107,7 +1103,7 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterPageAttached(Page page, Desktop desktop) {
-		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		final UiLifeCycle[] ary = _uiCycles.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterPageAttached(page, desktop);
@@ -1121,7 +1117,7 @@ public class Configuration {
 	 * @since 3.0.6
 	 */
 	public void afterPageDetached(Page page, Desktop prevdesktop) {
-		final UiLifeCycle[] ary = (UiLifeCycle[])_uiCycles.toArray();
+		final UiLifeCycle[] ary = _uiCycles.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
 				ary[j].afterPageDetached(page, prevdesktop);
@@ -1670,7 +1666,7 @@ public class Configuration {
 	public String getTimeoutMessage(String deviceType) {
 		if (deviceType == null) deviceType = "ajax";
 
-		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		return inf != null ? inf.message: null;
 	}
 	/** Sets the timeout message for this device, or null if the default
@@ -1686,7 +1682,7 @@ public class Configuration {
 	public String setTimeoutMessage(String deviceType, String message) {
 		if (deviceType == null) deviceType = "ajax";
 
-		TimeoutURIInfo inf = (TimeoutURIInfo)_timeoutURIs.get(deviceType);
+		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		if (inf != null) {
 			String old = inf.message;
 			inf.message = message;
@@ -2240,7 +2236,7 @@ public class Configuration {
 		//Note: "/" is the same as ""
 		if (path == null || path.length() == 0 || "/".equals(path))
 			path = "";
-		else if (!path.startsWith("/"))
+		else if (path.charAt(0) != '/')
 			throw new IllegalArgumentException("path must start with '/', not "+path);
 
 		final boolean wildcard = path.endsWith("/*");
@@ -2695,6 +2691,7 @@ public class Configuration {
 			return Objects.toString(_klass);
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			return Objects.equals(_klass, o instanceof SameClass ? ((SameClass)o)._klass: o);
 		}
 		public int hashCode() {

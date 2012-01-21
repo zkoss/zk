@@ -16,8 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.io.Writer;
 import java.io.OutputStream;
@@ -30,8 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpSession;
-
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
@@ -46,7 +42,6 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.util.Configuration;
@@ -128,7 +123,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		if (!SessionsCtrl.requestEnter(sess)) {
-			response.sendError(response.SC_SERVICE_UNAVAILABLE,
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
 				Messages.get(MZk.TOO_MANY_REQUESTS));
 			return;
 		}
@@ -181,7 +176,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				if (page != null) {
 					final Execution exec = new ExecutionImpl(
 						ctx, request, response, desktop, page);
-					_webman.setDesktop(request, desktop);
+					WebManager.setDesktop(request, desktop);
 					wappc.getUiEngine().recycleDesktop(exec, page, out);
 				} else
 					desktop = null; //something wrong (not possible; just in case)

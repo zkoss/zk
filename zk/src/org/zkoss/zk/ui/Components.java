@@ -262,7 +262,7 @@ public class Components {
 					}
 					private Component getNextVisible(boolean blind) {
 						while (blind || _it.hasNext()) {
-							final Component c = (Component)_it.next();
+							final Component c = _it.next();
 							if (c.isVisible())
 								return c;
 						}
@@ -529,9 +529,9 @@ public class Components {
 		if ("log".equals(name))
 			return _zklog;
 		if ("self".equals(name))
-			return comp != null ? comp: (Object)page;
+			return comp != null ? comp: page;
 		if ("spaceOwner".equals(name))
-			return comp != null ? comp.getSpaceOwner(): (Object)page;
+			return comp != null ? comp.getSpaceOwner(): page;
 		if ("page".equals(name))
 			return page;
 		if ("desktop".equals(name))
@@ -543,7 +543,7 @@ public class Components {
 		if ("componentScope".equals(name))
 			return comp != null ? comp.getAttributes(): Collections.EMPTY_MAP;
 		if ("spaceScope".equals(name)) {
-			final Scope scope = comp != null ? (Scope)comp.getSpaceOwner(): (Scope)page;
+			final Scope scope = comp != null ? comp.getSpaceOwner(): page;
 			return scope != null ? scope.getAttributes(): Collections.EMPTY_MAP;
 		}
 		if ("pageScope".equals(name))
@@ -1045,6 +1045,7 @@ public class Components {
 			return Objects.hashCode(exec());
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			if (o instanceof Exec)
 				return Objects.equals(exec(), ((Exec)o).exec());
 			return Objects.equals(exec(), o);
@@ -1108,6 +1109,7 @@ public class Components {
 			return Objects.hashCode(req());
 		}
 		public boolean equals(Object o) {
+			if (this == o) return true;
 			if (o instanceof RequestScope)
 				return Objects.equals(req(), ((RequestScope)o).req());
 			return Objects.equals(req(), o);

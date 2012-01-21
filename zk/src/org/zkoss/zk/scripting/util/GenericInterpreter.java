@@ -16,8 +16,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.util;
 
-import java.util.Set;
-import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -31,7 +29,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
-import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
 
 /**

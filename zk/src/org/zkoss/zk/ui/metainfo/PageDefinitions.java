@@ -93,7 +93,7 @@ public class PageDefinitions {
 		try {
 			return new Parser(wapp, locator).parse(reader, extension);
 		} catch (IOException ex) {
-			throw (IOException)ex;
+			throw ex;
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}

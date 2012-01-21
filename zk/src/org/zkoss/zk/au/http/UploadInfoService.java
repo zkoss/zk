@@ -22,7 +22,6 @@ import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.media.Media;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.impl.Attributes;

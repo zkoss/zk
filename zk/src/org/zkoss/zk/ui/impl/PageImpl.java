@@ -23,24 +23,18 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.AbstractMap;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.ImportedClassResolver;
 import org.zkoss.lang.SimpleClassResolver;
-import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.Expectable;
 import org.zkoss.util.DualCollection;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -55,18 +49,14 @@ import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.AbstractPage;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
@@ -91,10 +81,8 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.PageRenderer;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.out.AuSetTitle;
 import org.zkoss.zk.scripting.*;
 
@@ -499,7 +487,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			Function mtd =
 				ip instanceof HierachicalAware ?
 				((HierachicalAware)ip).getFunction(comp, name, argTypes):
-				((Interpreter)ip).getFunction(name, argTypes);
+				(ip).getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
@@ -518,7 +506,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		for (Interpreter ip: getLoadedInterpreters()) {
 			final Object val = ip instanceof HierachicalAware ?
 				((HierachicalAware)ip).getVariable(comp, name):
-				((Interpreter)ip).getVariable(name);
+				(ip).getVariable(name);
 			if (val != null)
 				return val;
 		}

@@ -199,8 +199,8 @@ public class AuInvoke extends AuResponse {
 		final Object[] data = new Object[2 + (args != null ? args.length: 0)];
 		data[0] = comp;
 		data[1] = function;
-		for (int j = 2; j < data.length; ++j)
-			data[j] = args[j - 2];
+		if (args != null)
+			System.arraycopy(args, 0, data, 2, args.length);
 		return data;
 	}
 }

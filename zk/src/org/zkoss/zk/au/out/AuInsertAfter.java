@@ -18,7 +18,6 @@ package org.zkoss.zk.au.out;
 
 import java.util.Collection;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.StubsComponent;

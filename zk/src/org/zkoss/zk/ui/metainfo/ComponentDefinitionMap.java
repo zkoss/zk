@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 
 /**
  * A map of component definitions.
@@ -116,7 +115,7 @@ implements Cloneable, java.io.Serializable {
 	 */
 	public ComponentDefinition get(String name) {
 		return _compdefs != null ?
-			(ComponentDefinition)_compdefs.get(
+			_compdefs.get(
 				isCaseInsensitive() ? name.toLowerCase(): name):
 			null;
 	}
@@ -131,7 +130,7 @@ implements Cloneable, java.io.Serializable {
 		if (_compdefsByClass != null) {
 			for (; cls != null; cls = cls.getSuperclass()) {
 				final ComponentDefinition compdef =
-					(ComponentDefinition)_compdefsByClass.get(cls.getName());
+					_compdefsByClass.get(cls.getName());
 				if (compdef != null)
 					return compdef;
 			}

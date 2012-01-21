@@ -1002,7 +1002,7 @@ public class Servlets {
 		private String _uri;
 
 		private ParsedURI(final ServletContext ctx, final String uri) {
-			if (uri != null && uri.charAt(0) == '~') { //refer to foreign context
+			if (uri != null && uri.length() > 0 && uri.charAt(0) == '~') { //refer to foreign context
 				final int j = uri.indexOf('/', 1);
 				final String ctxroot;
 				if (j >= 0) {
@@ -1074,7 +1074,7 @@ public class Servlets {
 	 * @see Encodes#encodeURL(ServletContext, ServletRequest, ServletResponse, String)
 	 */
 	public static final String generateURI(String uri, Map params, int mode) {
-		if (uri.charAt(0) == '~')
+		if (uri.startsWith("~"))
 			throw new IllegalArgumentException("~ctx not supported here: "+uri);
 
 		final int j = uri.indexOf('?');
@@ -1160,7 +1160,7 @@ public class Servlets {
 				continue;
 			}
 
-			ctxroots.add(ctxroot.charAt(0) == '/' ? ctxroot: "/" + ctxroot);
+			ctxroots.add(ctxroot.startsWith("/") ? ctxroot: "/" + ctxroot);
 		}
 
 //		log.info("Context found: "+ctxroots);

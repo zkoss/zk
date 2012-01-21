@@ -21,14 +21,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Collection;
 import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.io.File;
 import java.io.Reader;
 import java.net.URL;
@@ -36,7 +33,6 @@ import java.net.URL;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.ClassResolver;
-import org.zkoss.lang.Strings;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -49,11 +45,7 @@ import org.zkoss.idom.CData;
 import org.zkoss.idom.Item;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
-import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
@@ -65,7 +57,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
@@ -93,7 +84,7 @@ public class Parser {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
-		_locator = locator != null ? locator: (Locator)wapp;
+		_locator = locator != null ? locator: wapp;
 	}
 
 	/** Parses the specified file.
@@ -644,7 +635,7 @@ public class Parser {
 				parse(pgdef, (ProcessingInstruction)o);
 			} else if ((o instanceof Text) || (o instanceof CData)) {
 				String label = ((Item)o).getText(),
-					trimLabel = label.trim();;
+					trimLabel = label.trim();
 				if (label.length() == 0)
 					continue;
 

@@ -31,7 +31,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Library;
 import org.zkoss.util.CacheMap;
-import org.zkoss.util.Cache;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
@@ -323,9 +322,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (v < 10) {
 			return (char)('0' + v);
 		} else if (v < 36) {
-			return (char)(v + ((int)'A' - 10));
+			return (char)(v + ('A' - 10));
 		} else {
-			return (char)(v + ((int)'a' - 36));
+			return (char)(v + ('a' - 36));
 		}
 	}
 	public String getId() {
@@ -401,7 +400,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Strings.encode(sb, System.identityHashCode(comp) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			if (!pathInfo.startsWith("/")) sb.append('/');
+			if (pathInfo.charAt(0) != '/') sb.append('/');
 			sb.append(pathInfo);
 		}
 		return getUpdateURI(sb.toString());
@@ -429,7 +428,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Strings.encode(sb, System.identityHashCode(media) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			if (!pathInfo.startsWith("/")) sb.append('/');
+			if (pathInfo.charAt(0) != '/') sb.append('/');
 			sb.append(pathInfo);
 		}
 		return getUpdateURI(sb.toString());
@@ -500,13 +499,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		return _comps.values();
 	}
 	public Component getComponentByUuid(String uuid) {
-		final Component comp = (Component)_comps.get(uuid);
+		final Component comp = _comps.get(uuid);
 		if (comp == null)
 			throw new ComponentNotFoundException("Component not found: "+uuid);
 		return comp;
 	}
 	public Component getComponentByUuidIfAny(String uuid) {
-		return (Component)_comps.get(uuid);
+		return _comps.get(uuid);
 	}
 	public void addComponent(Component comp) {
 		//to avoid misuse, check whether new comp belongs to the same device type
@@ -565,7 +564,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (uuid == null)
 			throw new IllegalArgumentException("null");
 		return comp != null ?
-			(Component)_comps.put(uuid, comp): (Component)_comps.remove(uuid);
+			_comps.put(uuid, comp): _comps.remove(uuid);
 			//no recycle, no check
 	}
 	private static int getExecId() {
@@ -745,7 +744,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
 			final int execId = getExecId();
 			for (Iterator<RecycleInfo> it = _uuidRecycle.iterator(); it.hasNext();) {
-				final RecycleInfo ri = (RecycleInfo)it.next();
+				final RecycleInfo ri = it.next();
 				if (ri.execId != execId) { //reuse if diff
 					final String uuid = ri.uuids.remove(0);
 					if (ri.uuids.isEmpty())
@@ -1051,11 +1050,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final List<ScopeListener> lns = _attrs.getListeners();
 		Serializables.smartRead(s, lns);
 
-		_dtCleans = (List<DesktopCleanup>)Serializables.smartRead(s, _dtCleans);
-		_execInits = (List<ExecutionInit>)Serializables.smartRead(s, _execInits);
-		_execCleans = (List<ExecutionCleanup>)Serializables.smartRead(s, _execCleans);
-		_uiCycles = (List<UiLifeCycle>)Serializables.smartRead(s, _uiCycles);
-		_ausvcs = (List<AuService>)Serializables.smartRead(s, _ausvcs);
+		_dtCleans = Serializables.smartRead(s, _dtCleans);
+		_execInits = Serializables.smartRead(s, _execInits);
+		_execCleans = Serializables.smartRead(s, _execCleans);
+		_uiCycles = Serializables.smartRead(s, _uiCycles);
+		_ausvcs = Serializables.smartRead(s, _ausvcs);
 
 		didDeserialize(attrs.values());
 		didDeserialize(lns);
@@ -1338,7 +1337,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					if (cls == null)
 						throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
-					_spush = (ServerPush)((WebAppCtrl)_wapp).getUiFactory().newServerPush(this, cls);
+					_spush = ((WebAppCtrl)_wapp).getUiFactory().newServerPush(this, cls);
 				}
 				_spush.start(this);
 				++cnt;

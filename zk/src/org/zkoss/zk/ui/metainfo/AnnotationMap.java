@@ -22,12 +22,9 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.util.resource.Location;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * A map of annotations used with {@link ComponentDefinition} and
@@ -228,7 +225,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			for (Map.Entry<String, Map<String, List<Annotation>>> me:
 			clone._annots.entrySet()) {
 				final Map<String, List<Annotation>> anmap = new LinkedHashMap<String, List<Annotation>>(4);
-				clone.addAllAns(anmap, me.getValue());
+				AnnotationMap.addAllAns(anmap, me.getValue());
 				me.setValue(anmap); //replace with the new one
 			}
 		}
@@ -272,7 +269,7 @@ public class AnnotationMap implements Cloneable, java.io.Serializable {
 			} else {
 				final String[] oldval = _attrs.get(name);
 				if (oldval != null)
-					value = (String[])ArraysX.concat(oldval, value);
+					value = ArraysX.concat(oldval, value);
 			}
 
 			_attrs.put(name, value);

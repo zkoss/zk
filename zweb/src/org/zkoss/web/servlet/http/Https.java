@@ -339,7 +339,7 @@ public class Https extends Servlets {
 			uri = request.getContextPath() + getOriginFullServlet(request);
 		} else {
 			final int len = uri.length();
-			if (len ==0 || uri.charAt(0) == '/') {
+			if (len == 0 || uri.charAt(0) == '/') {
 				uri = request.getContextPath() + uri;
 			} else if (uri.charAt(0) == '~') {
 				final int j = uri.indexOf('/', 1);

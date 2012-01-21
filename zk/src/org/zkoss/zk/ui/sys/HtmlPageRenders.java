@@ -197,7 +197,7 @@ public class HtmlPageRenders {
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
-			sb.append("'").append(response.getCommand())
+			sb.append('\'').append(response.getCommand())
 				.append("',");
 			final List<?> encdata = response.getEncodedData();
 			if (encdata != null)
@@ -307,9 +307,9 @@ public class HtmlPageRenders {
 			if (!groupingAllowed)
 				sb.append("gd:1,");
 			if (tmout > 0)
-				sb.append("to:").append(tmout).append(",");
+				sb.append("to:").append(tmout).append(',');
 			if (progressboxPos.length() > 0)
-				sb.append("ppos:'").append(progressboxPos).append("'");
+				sb.append("ppos:'").append(progressboxPos).append('\'');
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);

@@ -16,18 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
-
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
-
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.xel.ExValue;

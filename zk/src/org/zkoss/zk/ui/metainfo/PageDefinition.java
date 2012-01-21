@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.ImportedClassResolver;
 import org.zkoss.util.resource.Locator;
