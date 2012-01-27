@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.util.logging.Log;
@@ -61,8 +60,15 @@ public class ContentTypes {
 			return null;
 
 		format = format.trim().toLowerCase();
-		synchronized (_fmt2ct) {
-			return (String)_fmt2ct.get(format);
+		for (;;) {
+			synchronized (_fmt2ct) {
+				String fmt2ct = (String)_fmt2ct.get(format);
+				if (fmt2ct != null) return fmt2ct;
+			}
+
+			int j = format.indexOf('.');
+			if (j < 0) 	return null;
+			format = format.substring(j + 1);
 		}
 	}
 	/** Returns the format of the specified content type, or null if not found.
