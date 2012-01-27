@@ -60,8 +60,15 @@ public class ContentTypes {
 			return null;
 
 		format = format.trim().toLowerCase();
-		synchronized (_fmt2ct) {
-			return _fmt2ct.get(format);
+		for (;;) {
+			synchronized (_fmt2ct) {
+				String fmt2ct = _fmt2ct.get(format);
+				if (fmt2ct != null) return fmt2ct;
+			}
+
+			int j = format.indexOf('.');
+			if (j < 0) 	return null;
+			format = format.substring(j + 1);
 		}
 	}
 	/** Returns the format of the specified content type, or null if not found.

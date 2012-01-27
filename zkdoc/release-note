@@ -230,6 +230,7 @@ ZK 5.0.11
   ZK-740: missing close tag in flash.js
   ZK-751: Tooltiptext not working for upload button
   ZK-786: Caption control wrong image with toolbarbutton
+  ZK-789: Static files defined in lang-addon.xml are served with invalid content-type
   
 * Upgrade Notes
   
