@@ -157,7 +157,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 					items[j]._selected = false;
 					continue;
 				}
-				this._selItems.push(item);
+				this._selItems.push(items[j]);
 			}
 		}
 	},
