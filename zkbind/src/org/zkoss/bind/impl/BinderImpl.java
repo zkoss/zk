@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
@@ -38,6 +39,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
@@ -125,7 +127,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	public static final String BINDCTX = "$BINDCTX$"; //bind context
 	public static final String VAR = "$VAR$"; //variable name in a collection
 	public static final String VM = "$VM$"; //the associated view model
-	public static final String QUE = "$QUE$"; //the associated event queue name
 	public static final String NOTIFYS = "$NOTIFYS$"; //changed properties to be notified
 	public static final String VALIDATES = "$VALIDATES$"; //properties to be validated
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
@@ -153,8 +154,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
 		new CacheMap<Class<?>, List<Method>>(1000,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
 	
-	private final static Map<Class<?>, Map<String,Box<Method>>> _commandMethodCache = 
-		new CacheMap<Class<?>, Map<String,Box<Method>>>(1000,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
+	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _commandMethodCache = 
+		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
+	
+	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _globalCommandMethodCache = 
+		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 	
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
@@ -210,8 +214,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
 		//use same queue name if user was not specified, 
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
-		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BinderImpl.QUE;
-		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : EventQueues.DESKTOP;
+		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BindUtils.DEFAULT_QUEUE_NAME;
+		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : BindUtils.DEFAULT_QUEUE_SCOPE;
 		_queueListener = new QueueListener();
 	}
 	
@@ -223,6 +227,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if(event instanceof PropertyChangeEvent){
 				final PropertyChangeEvent evt = (PropertyChangeEvent) event;
 				BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getPropertyName());
+			}else if(event instanceof GlobalCommandEvent){
+				final GlobalCommandEvent evt = (GlobalCommandEvent) event;
+				final Set<Property> notifys = new LinkedHashSet<Property>();
+				BinderImpl.this.doGlobalCommand(_rootComp, evt.getCommand(), evt.getArgs(), notifys);
+				fireNotifyChanges(notifys);
+				notifyVMsgsChanged();
 			}
 		}
 	}
@@ -850,7 +860,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			addBinding(comp, attr, binding);
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
-				addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
+				registerCommandEventListener(comp, evtnm); //prompt
 				final BindingKey bkey = getBindingKey(comp, evtnm);
 				_propertyBindingHandler.addLoadEventBinding(comp, bkey, binding);
 			}
@@ -913,7 +923,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
 			}
-			addEventCommandListenerIfNotExists(comp, evtnm, null); //local command
+			registerCommandEventListener(comp, evtnm); //prompt
 			final BindingKey bkey = getBindingKey(comp, evtnm);
 			_propertyBindingHandler.addSavePromptBinding(comp, bkey, binding);
 		}else{
@@ -1025,11 +1035,33 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		checkInit();
 		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
 		addBinding(comp, evtnm, binding);
-		addEventCommandListenerIfNotExists(comp, evtnm, binding);
+		registerCommandEventListener(comp, evtnm, binding, false);
+	}
+	
+	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> args) {
+		checkInit();
+		final CommandBindingImpl binding = new CommandBindingImpl(this, comp, evtnm, commandExpr, args);
+		addBinding(comp, evtnm, binding);
+		registerCommandEventListener(comp, evtnm, binding, true);
 	}
 	
 	//associate event to CommandBinding
-	private void addEventCommandListenerIfNotExists(Component comp, String evtnm, CommandBinding command) {
+	private void registerCommandEventListener(Component comp, String evtnm, CommandBinding command,boolean global) {
+		final CommandEventListener listener = getCommandEventListener(comp,evtnm);
+		if(global){
+			listener.setGlobalCommand(command);
+		}else{
+			listener.setCommand(command);
+		}
+	}
+	
+	//associate event to prompt
+	private void registerCommandEventListener(Component comp, String evtnm) {
+		final CommandEventListener listener = getCommandEventListener(comp,evtnm);
+		listener.setPrompt(true);
+	}
+	
+	private CommandEventListener getCommandEventListener(Component comp, String evtnm){
 		final BindingKey bkey = getBindingKey(comp, evtnm);
 		CommandEventListener listener = _listenerMap.get(bkey);
 		if (listener == null) {
@@ -1037,12 +1069,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			comp.addEventListener(evtnm, listener);
 			_listenerMap.put(bkey, listener);
 		}
-		//DENNIS, this method will call by
-		//1.addPropertyBinding -> command is null -> means prompt when evtnm is fired.
-		//2.addCommandBinding -> command is not null -> means trigger command when evtnm is fired.
-		//ex, <textbox value="@bind(vm.firstname)" onChange="@bind('save')"/>
-		//and in current spec, we only allow one command to be executed in one event. 
-		listener.setCommand(command);
+		return listener;
 	}
 	
 	private void removeEventCommandListenerIfExists(Component comp, String evtnm) {
@@ -1058,6 +1085,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	//event used to trigger command
 		private boolean _prompt = false;
 		private CommandBinding _commandBinding;
+		private CommandBinding _globalCommandBinding;
 		final private Component _target;
 		
 		CommandEventListener(Component target){
@@ -1065,13 +1093,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		
 		private void setCommand(CommandBinding command) {
-			//if 1.add a non-null command then 2.add a null command, the prompt will be true and commandBinding is not null 
-			//ex, <textbox value="@bind(vm.firstname)" onChange="@bind('save')"/>
-			if (!_prompt && command == null) {
-				_prompt = true;
-			} else {
-				_commandBinding = command;
-			}
+			_commandBinding = command;
+		}
+		
+		private void setGlobalCommand(CommandBinding command) {
+			_globalCommandBinding = command;
+		}
+		
+		private void setPrompt(boolean prompt) {
+			_prompt = prompt;
 		}
 		
 		public void onEvent(Event event) throws Exception {
@@ -1096,9 +1126,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			//check confirm
 			switch(result) {
-//				case BinderImpl.FAIL_CONFIRM:
-//					BinderImpl.this.doFailConfirm();
-//					break;
 				case BinderImpl.FAIL_VALIDATE:
 					notifyVMsgsChanged();
 					
@@ -1129,6 +1156,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			fireNotifyChanges(notifys);
 			if(_log.debugable()){
 				_log.debug("====End command event [%s]",event);
+			}
+			
+			if (_globalCommandBinding != null) {
+				final BindEvaluatorX eval = getEvaluatorX();
+				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_globalCommandBinding).getCommand());
+				final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
+				//post global command
+				postGlobalCommand(command,args);
 			}
 		}
 	}
@@ -1172,15 +1207,16 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		Events.postEvent(evt);
 	}
 	
-	//comp the component that trigger the command
-	//major life cycle of binding (on event trigger)
-	//command is the command name after evaluation
-	//evt event that fire this command
-	//args the passed in argument for executing command
-	//notifies container for properties that is to be notifyChange
-	//skipConfirm whether skip checking confirm 
-	//return properties to be notified change
-	private int doCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys/*, boolean skipConfirm*/) {
+	
+	/**
+	 * @param comp the component that trigger the command, major life cycle of binding (on event trigger)
+	 * @param command command is the command name after evaluation
+	 * @param evt event that fire this command
+	 * @param commandArgs the passed in argument for executing command
+	 * @param notifys container for properties that is to be notifyChange
+	 * @return the result of the doCommand, SUCCESS or FAIL_VALIDATE 
+	 */
+	private int doCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
 		if(_log.debugable()){
 			_log.debug("Start doCommand comp=[%s],command=[%s],evtnm=[%s]",comp,command,evtnm);
@@ -1219,6 +1255,99 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			doPostPhase(Phase.COMMAND, ctx); //end of Command
 		}
 		
+	}
+	
+	private void doGlobalCommand(Component comp, String command, Map<String, Object> commandArgs, Set<Property> notifys) {
+		if(_log.debugable()){
+			_log.debug("Start doGlobalCommand comp=[%s],command=[%s]",comp,command);
+		}
+		
+		BindContext ctx = BindContextUtil.newBindContext(this, null, false, command, comp, null);
+		BindContextUtil.setCommandArgs(this, comp, ctx, commandArgs);
+		try {
+			doPrePhase(Phase.GLOBAL_COMMAND, ctx); //begin of Command
+			//execute command
+			doGlobalCommandExecute(comp, command, commandArgs, ctx, notifys);
+		} finally {
+			doPostPhase(Phase.GLOBAL_COMMAND, ctx); //end of Command
+		}
+	}
+	
+	private void doGlobalCommandExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx,Set<Property> notifys) {
+		try {
+			if(_log.debugable()){
+				_log.debug("before doGlobalCommandExecute comp=[%s],command=[%s]",comp,command);
+			}
+			doPrePhase(Phase.EXECUTE, ctx);
+			
+			final Object viewModel = getViewModel();
+			
+			Method method = getGlobalCommandMethod(viewModel.getClass(), command);
+			if (method != null) {
+				
+				ParamCall parCall = createParamCall(ctx);
+				if(commandArgs != null){
+					parCall.setBindingArgs(commandArgs);
+				}
+				
+				parCall.call(viewModel, method);
+				
+				notifys.addAll(BindELContext.getNotifys(method, viewModel,
+						(String) null, (Object) null, ctx)); // collect notifyChange
+			}else{
+				//do nothing
+				if(_log.debugable()){
+					_log.debug("no global command method in [%s]", viewModel);
+				}
+			}
+			if(_log.debugable()){
+				_log.debug("after doGlobalCommandExecute notifys=[%s]", notifys);
+			}
+		} finally {
+			doPostPhase(Phase.EXECUTE, ctx);
+		}
+	}
+	
+	private Method getGlobalCommandMethod(Class<?> clz, String command) {
+		Map<String,CachedItem<Method>> methods = null;
+		synchronized(_globalCommandMethodCache){
+			methods = _globalCommandMethodCache.get(clz);//check again
+			if(methods==null){
+				methods = new HashMap<String,CachedItem<Method>>();
+				_globalCommandMethodCache.put(clz, methods);
+			}
+		}
+		CachedItem<Method> method;
+		synchronized(methods){
+			method = methods.get(command);
+			if(method!=null){
+				return method.value;
+			}
+			//scan
+			for(Method m : clz.getMethods()){
+				final GlobalCommand cmd = m.getAnnotation(GlobalCommand.class);
+				if(cmd==null) continue;			
+				String[] vals = cmd.value();
+				if(vals.length==0){
+					vals = new String[]{m.getName()};//default method name
+				}
+				for(String val:vals){
+					if(!command.equals(val)) continue;
+					if(method!=null){
+						throw new UiException("there are more than one method listen to global-command "+command+" in "+clz);
+					}
+					method = new CachedItem<Method>(m);
+					//don't break, for testing duplicate command method
+				}
+				//don't break, for testing duplicate command method
+			}
+			if(method==null){//mark not found
+				method = new CachedItem<Method>(null);
+			}
+			//cache it
+			methods.put(command, method);
+		}
+		return method.value;
 	}
 	
 	/*package*/ void doPrePhase(Phase phase, BindContext ctx) {
@@ -1374,23 +1503,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 
 	
 	private Method getCommandMethod(Class<?> clz, String command) {
-		Map<String,Box<Method>> methods = _commandMethodCache.get(clz);
-		if(methods==null){
-			synchronized(_commandMethodCache){
-				methods = _commandMethodCache.get(clz);//check again
-				if(methods==null){
-					methods = new HashMap<String,Box<Method>>();
-					_commandMethodCache.put(clz, methods);
-				}
+		Map<String,CachedItem<Method>> methods = _commandMethodCache.get(clz);
+		synchronized(_commandMethodCache){
+			methods = _commandMethodCache.get(clz);//check again
+			if(methods==null){
+				methods = new HashMap<String,CachedItem<Method>>();
+				_commandMethodCache.put(clz, methods);
 			}
 		}
-		
-		Box<Method> method = methods.get(command);
-		if(method!=null){
-			return method.value;
-		}
+
+		CachedItem<Method> method;
 		synchronized(methods){
-			method = methods.get(command);//check again
+			method = methods.get(command);
 			if(method!=null){
 				return method.value;
 			}
@@ -1405,15 +1529,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				for(String val:vals){
 					if(!command.equals(val)) continue;
 					if(method!=null){
-						throw new UiException("there are more than one method listen to command "+command);
+						throw new UiException("there are more than one method listen to command "+command +" in "+clz);
 					}
-					method = new Box<Method>(m);
+					method = new CachedItem<Method>(m);
 					//don't break, for testing duplicate command method
 				}
 				//don't break, for testing duplicate command method
 			}
 			if(method==null){//mark not found
-				method = new Box<Method>(null);
+				method = new CachedItem<Method>(null);
 			}
 			//cache it
 			methods.put(command, method);
@@ -1673,7 +1797,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		if(_log.debugable()){
 			_log.debug("notifyChange base=[%s],attr=[%s]",base,attr);
 		}
-		getEventQueue().publish(new PropertyChangeEvent("onPropertyChange", _rootComp, base, attr));
+		getEventQueue().publish(new PropertyChangeEvent(_rootComp, base, attr));
+	}
+	
+	private void postGlobalCommand(String command, Map<String, Object> args) {
+		checkInit();
+		if(_log.debugable()){
+			_log.debug("postGlobalCommand command=[%s], args=[%s]",command,args);
+		}
+		getEventQueue().publish(new GlobalCommandEvent(_rootComp, command, args));
 	}
 	
 	public void setPhaseListener(PhaseListener listener) {
@@ -1693,26 +1825,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		EventQueue<Event> que = EventQueues.lookup(quename, quescope, false);
 		if(que!=null){
 			que.unsubscribe(listener);
-		}
-	}
-	
-	private class PropertyChangeEvent extends Event {
-		private static final long serialVersionUID = 201109091736L;
-		private final Object _base;
-		private final String _propName;
-
-		public PropertyChangeEvent(String name, Component comp, Object base, String propName) {
-			super(name, comp);
-			this._base = base;
-			this._propName = propName;
-		}
-
-		public Object getBase() {
-			return _base;
-		}
-
-		public String getPropertyName() {
-			return _propName;
 		}
 	}
 	
@@ -1798,9 +1910,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 
 	//utility to simply hold a value which might be null
-	private static class Box<T> {
+	private static class CachedItem<T> {
 		final T value;
-		public Box(T value){
+		public CachedItem(T value){
 			this.value = value;
 		}
 	}

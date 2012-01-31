@@ -48,6 +48,7 @@ public class AnnotateBinderHelper {
 	final static private String CONVERTER_ANNO = "converter";
 	final static private String TEMPLATE_ANNO = "template";
 	final static private String COMMAND_ANNO = "command";
+	final static private String GLOBAL_COMMAND_ANNO = "global-command";
 	
 	final static public String FORM_ATTR = "form";
 	final static public String VIEW_MODEL_ATTR = "viewModel";
@@ -88,6 +89,7 @@ public class AnnotateBinderHelper {
 			final String propName = (String) it.next();
 			if (isEventProperty(propName)) {
 				processCommandBinding(comp,propName);
+				processGlobalCommandBinding(comp,propName);
 			}else if(FORM_ATTR.equals(propName)){
 				processFormBindings(comp);
 			}else if(CHILDREN_ATTR.equals(propName)){
@@ -135,6 +137,38 @@ public class AnnotateBinderHelper {
 		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
 		for(String cmd : cmdExprs) {
 			_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
+		}
+	}
+	
+	private void processGlobalCommandBinding(Component comp, String propName) {
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final Collection<Annotation> anncol = compCtrl.getAnnotations(propName, GLOBAL_COMMAND_ANNO);
+		if(anncol.size()==0) return;
+		if(anncol.size()>1) {
+			throw new IllegalSyntaxException("Allow only one global-command binding for event "+propName+" of "+compCtrl);
+		}
+		final Annotation ann = anncol.iterator().next();
+		
+		final Map<String,String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+		Map<String, String[]> args = null;
+		final List<String> cmdExprs = new ArrayList<String>();
+		for (final Iterator<Entry<String,String[]>> it = attrs.entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				cmdExprs.add(testString(comp,propName,tag,tagExpr));
+			} else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		
+		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		for(String cmd : cmdExprs) {
+			_binder.addGlobalCommandBinding(comp, propName, cmd, parsedArgs);
 		}
 	}
 	

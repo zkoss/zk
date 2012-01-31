@@ -22,6 +22,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.IllegalSyntaxException;
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -40,6 +41,8 @@ import org.zkoss.zk.ui.util.ComposerExt;
 public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
+	private static final Log _log = Log.lookup(BindComposer.class);
+	
 	private static final String VM_ID = "$VM_ID$";
 	private static final String BINDER_ID = "$BINDER_ID$";
 	
@@ -55,6 +58,9 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private static final String VIEW_MODEL_ATTR = "viewModel";
 	private static final String BINDER_ATTR = "binder";
 	private static final String VALIDATION_MESSAGES_ATTR = "validationMessages";
+	
+	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
+	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 	
 	
 	
@@ -182,19 +188,50 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		}
 		
 		if(initanno!=null){
-			binder = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute("value"),Object.class);
-			try {
-				if(binder instanceof String){
-					binder = comp.getPage().resolveClass((String)binder);
+			binder = initanno.getAttribute("value");
+			if(binder!=null){
+				//no binder, create default binder with custom queue name and scope
+				Object name = initanno.getAttribute(QUEUE_NAME_ANNO_ATTR);
+				Object scope = initanno.getAttribute(QUEUE_SCOPE_ANNO_ATTR);
+				if(name!=null){
+					_log.warning(QUEUE_NAME_ANNO_ATTR +" is not available if you use custom binder");
 				}
-				if(binder instanceof Class<?>){
-					binder = ((Class<?>)binder).newInstance();
+				if(scope!=null){
+					_log.warning(QUEUE_SCOPE_ANNO_ATTR +" is not available if you use custom binder");
 				}
-			} catch (Exception e) {
-				throw new UiException(e.getMessage(),e);
-			}
-			if(!(binder instanceof Binder)){
-				throw new UiException("evaluated binder is not a binder is "+binder);
+				
+				binder = BindEvaluatorXUtil.eval(evalx,comp,(String)binder,Object.class);
+				try {
+					if(binder instanceof String){
+						binder = comp.getPage().resolveClass((String)binder);
+					}
+					if(binder instanceof Class<?>){
+						binder = ((Class<?>)binder).newInstance();
+					}
+				} catch (Exception e) {
+					throw new UiException(e.getMessage(),e);
+				}
+				if(!(binder instanceof Binder)){
+					throw new UiException("evaluated binder is not a binder is "+binder);
+				}
+				
+			}else {
+				//no binder, create default binder with custom queue name and scope
+				Object name = initanno.getAttribute(QUEUE_NAME_ANNO_ATTR);
+				Object scope = initanno.getAttribute(QUEUE_SCOPE_ANNO_ATTR);
+				if(name!=null){
+					name = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute(QUEUE_NAME_ANNO_ATTR),String.class);
+					if(name==null){
+						_log.warning("evaluated queue name is null, use default name. expression is "+initanno.getAttribute(QUEUE_NAME_ANNO_ATTR));
+					}
+				}
+				if(scope!=null){
+					scope = BindEvaluatorXUtil.eval(evalx,comp,initanno.getAttribute(QUEUE_SCOPE_ANNO_ATTR),String.class);
+					if(scope==null){
+						_log.warning("evaluated queue scope is null, use default scope. expression is "+initanno.getAttribute(QUEUE_SCOPE_ANNO_ATTR));
+					}
+				}
+				binder = new AnnotateBinder((String)name,(String)scope);
 			}
 		}else{
 			binder = new AnnotateBinder();

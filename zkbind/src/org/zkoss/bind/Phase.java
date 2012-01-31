@@ -13,7 +13,8 @@ package org.zkoss.bind;
 
 /**
  * The Phase of PhaseListener when doing binding.
- * There are currently seven phases that executed in that order:
+ * There are currently seven phases that executed in that order: <br/>
+ * Command :  <br/>
  * <ul>
  * <li>{@link #COMMAND}: do a command</li>
  * <li>{@link #VALIDATE}: do validate before a command or zk event</li>
@@ -25,6 +26,13 @@ package org.zkoss.bind;
  * <li>{@link #SAVE_BINDING}: do a save binding</li>
  * <li>{@link #LOAD_BINDING}: do a load binding</li>
  * </ul>
+ *  <br/>
+ * Global Command :  <br/>
+ * <ul>
+ * <li>{@link #GLOBAL_COMMAND}: do a global command</li>
+ * <li>{@link #EXECUTE}: execute a command</li>
+ * </ul>
+ * 
  * @author dennis
  * @since 6.0.0
  */
@@ -33,6 +41,10 @@ public enum Phase {
 	 * command phase.
 	 */
 	COMMAND, 
+	/**
+	 * global command phase.
+	 */
+	GLOBAL_COMMAND,
 	/**
 	 * validate phase.
 	 */

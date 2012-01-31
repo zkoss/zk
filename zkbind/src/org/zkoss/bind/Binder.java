@@ -86,13 +86,22 @@ public interface Binder {
 	public BindEvaluatorX getEvaluatorX();
 
 	/**
-	 * Add a new command bindins.
+	 * Add a new command binding.
 	 * @param comp the associated component
 	 * @param evtnm the associated component event name
 	 * @param commandExpr the command expression
 	 * @param commandArgs other key-value pairs pairs for command
 	 */
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
+	
+	/**
+	 * Add a new global-command binding.
+	 * @param comp the associated component
+	 * @param evtnm the associated component event name
+	 * @param commandExpr the command expression
+	 * @param commandArgs other key-value pairs pairs for command
+	 */
+	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
 	
 	
 	/**
