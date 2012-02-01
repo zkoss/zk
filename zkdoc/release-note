@@ -8,6 +8,9 @@ ZK 5.0.11
   ZK-751: Tooltiptext not working for upload button
   ZK-786: Caption control wrong image with toolbarbutton
   ZK-789: Static files defined in lang-addon.xml are served with invalid content-type
+  ZK-770: EventQueue has extra delay if scope is SESSION
+  ZK-752: Tooltiptext gets rendered differently in different situations
+  ZK-804: Exception: "Failed to mount: Cannot call method 'inAccordionMold' of undefined"
   
 * Upgrade Notes
   
@@ -80,8 +83,6 @@ Jan 03, 2012
   ZK-724: Reset ListModel will cause an exception in ROD
   ZK-727: Datebox constraint failed when set custom error message for before constraint
   ZK-731: Unclosed BufferedReader for org.zkoss.util.Maps
-  ZK-770: EventQueue has extra delay if scope is SESSION
-  ZK-752：  Tooltiptext gets rendered differently in different situations
   
 * Upgrade Notes
   + For better performance, org.zkoss.util.logging.LogService no longer monitors
