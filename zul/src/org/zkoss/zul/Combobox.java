@@ -212,7 +212,7 @@ public class Combobox extends Textbox {
 			return true;
 		}
 
-		final int jsel = getSelectedIndex();
+		final int jsel = selectedIndex(false);
 		if (jsel >= 0 && smodel.isSelected(_model.getElementAt(jsel)))
 			return false; //nothing changed
 
@@ -636,7 +636,11 @@ public class Combobox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public int getSelectedIndex() {
-		reIndex();
+		return selectedIndex(true);
+	}
+	private int selectedIndex(boolean reIndex) {
+		if (reIndex)
+			reIndex();
 		return _selItem != null ? getItems().indexOf(_selItem) : -1;
 	}
 
@@ -676,10 +680,11 @@ public class Combobox extends Textbox {
 		if (_model != null) {
 			List<Object> selObjs = new ArrayList<Object>();
 			if (_selItem != null)
-				selObjs.add(_model.getElementAt(getSelectedIndex()));
+				selObjs.add(_model.getElementAt(selectedIndex(false)));
 			getSelectableModel().setSelection(selObjs);
 		}
 	}
+
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
