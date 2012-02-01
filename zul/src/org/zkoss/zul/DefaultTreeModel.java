@@ -23,6 +23,7 @@ import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectionModel;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * A simple tree data model that uses {@link TreeNode} to represent a tree.
@@ -44,7 +45,7 @@ import org.zkoss.zul.ext.TreeSelectionModel;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
+implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
@@ -402,13 +403,14 @@ implements TreeModelExt<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		clone._opens = new HashSet<TreeNode<E>>(_opens);
 		return clone;
 	}
-	//-- TreeModelExt --//
+	//-- Sortable --//
 	/** Sorts the data.
 	 *
 	 * @param cmpr the comparator.
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
+	@Override
 	public void sort(Comparator<TreeNode<E>> cmpr, final boolean ascending) {
 		TreeNode<E> root = getRoot();
 		if (root != null) {

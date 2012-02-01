@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * A treecol.
@@ -339,17 +340,17 @@ public class Treecol extends HeaderElement {
 	 * <p>It sorts the rows by use of {@link Components#sort}, if not live
 	 * data (i.e., {@link Tree#getModel} is null).
 	 *
-	 * <p>On the other hand, it invokes {@link TreeModelExt#sort} to sort
+	 * <p>On the other hand, it invokes {@link Sortable#sort} to sort
 	 * the treechildren, if live data (i.e., {@link Tree#getModel} is not null).
 	 * In other words, if you use the live data, you have to implement
-	 * {@link TreeModelExt} to sort the live data explicitly.
+	 * {@link Sortable} to sort the live data explicitly.
 	 *
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * @return whether the rows are sorted.
 	 * @exception UiException if {@link Tree#getModel} is not
-	 * null but {@link TreeModelExt} is not implemented.
+	 * null but {@link Sortable} is not implemented.
 	 * @since 5.0.6
 	 */
 	public boolean sort(boolean ascending) {
@@ -377,9 +378,9 @@ public class Treecol extends HeaderElement {
 			boolean isPagingMold = tree.inPagingMold();
 			int activePg = isPagingMold ? tree.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
-				if (!(model instanceof TreeModelExt))
-					throw new UiException("TreeModelExt must be implemented in "+model.getClass().getName());
-				((TreeModelExt)model).sort(cmpr, ascending);
+				if (!(model instanceof Sortable))
+					throw new UiException(Sortable.class + " must be implemented in "+model.getClass().getName());
+				((Sortable)model).sort(cmpr, ascending);
 			} else { //not live data
 				sort0(tree.getTreechildren(), cmpr);
 			}
