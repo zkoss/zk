@@ -189,16 +189,6 @@ import org.zkoss.zk.ui.event.Event;
 			}
 		}
 	}
-
-	//for event -> prompt only, no command 
-	void doSaveEventNoValidate(BindingKey bkey,Component comp, Event evt, Set<Property> notifys) {
-		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey);
-		if (bindings != null) {
-			for (SavePropertyBinding binding : bindings) {
-				doSaveBinding(comp, binding, null, evt, notifys);
-			}
-		}
-	}
 	
 	boolean doSaveEvent(BindingKey bkey,Component comp, Event evt, Set<Property> notifys) {
 		final List<SavePropertyBinding> bindings = _saveEventBindings.get(bkey);

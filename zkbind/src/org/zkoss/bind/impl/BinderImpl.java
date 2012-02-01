@@ -146,8 +146,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	private static final String CHILDREN_ATTR = "$CHILDREN$";
 	
 	//Command lifecycle result
-	private static final int SUCCESS = 0;
-	private static final int FAIL_VALIDATE = 1;
+	private static final int COMMAND_SUCCESS = 0;
+	private static final int COMMAND_FAIL_VALIDATE = 1;
 	
 	
 	//TODO make it configurable
@@ -1113,57 +1113,53 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			final Component comp = _target;//_target is always equals _commandBinding.getComponent();
 			final String evtnm = event.getName();
 			final Set<Property> notifys = new LinkedHashSet<Property>();
-			int result = SUCCESS; //command execution result, default to success
+			int cmdResult = COMMAND_SUCCESS; //command execution result, default to success
+			boolean promptResult = true;
 			String command = null;
 			if(_log.debugable()){
 				_log.debug("====Start command event [%s]",event);
 			}
+			//BUG ZK-757, The timing of saving textbox's value attribute to ViewModel is later than command execution on onChange event
+			//We should save the prompt with validation first. 
+			//For a prompt binding that also binds with a command, that should not be mixed with command
+			//If user concern the timing of prompt save and validation with command, they should use condition not prompt  
+			if(_prompt){
+				promptResult = BinderImpl.this.doSaveEvent(comp, event, notifys); //save on event
+			}
+			
 			if (_commandBinding != null) {
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_commandBinding).getCommand());
 				final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs());
-				result = BinderImpl.this.doCommand(comp, command, event, args, notifys/*, false*/);
+				cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
 			}
-			//check confirm
-			switch(result) {
-				case BinderImpl.FAIL_VALIDATE:
-					notifyVMsgsChanged();
-					
-					if(_log.debugable()){
-						_log.debug("There are [%s] property need to be notify after fail validate",notifys.size());
-					}
-					fireNotifyChanges(notifys); //still has to go through notifyChange to show error message
-					return;
-			}
-			//confirm might cancel the operation, on event binding must be the last one to be done 
-			if (_prompt) {
+
+			//load prompt only when prompt result is success
+			if (_prompt && promptResult) {
 				if(_log.debugable()){
 					_log.debug("This is a prompt command");
-				}
-				if (command != null) { //command has own VALIDATE phase, don't do validate again
-					BinderImpl.this.doSaveEventNoValidate(comp, event, notifys); //save on event without validation
-				} else {
-					BinderImpl.this.doSaveEvent(comp, event, notifys); //save on event
 				}
 				BinderImpl.this.doLoadEvent(comp, evtnm); //load on event
 			}
 
-			notifyVMsgsChanged();
+			notifyVMsgsChanged();//always, no better way to know which properties of validation are changed
 			
 			if(_log.debugable()){
-				_log.debug("There are [%s] property need to be notify after command",notifys.size());
+				_log.debug("There are [%s] property need to be notify after event = [%s], command = [%s]",notifys.size(),evtnm, command);
 			}
 			fireNotifyChanges(notifys);
-			if(_log.debugable()){
-				_log.debug("====End command event [%s]",event);
-			}
 			
-			if (_globalCommandBinding != null) {
+			//post global command only when command success
+			if (cmdResult==COMMAND_SUCCESS && _globalCommandBinding != null) {
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_globalCommandBinding).getCommand());
 				final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
 				//post global command
 				postGlobalCommand(command,args);
+			}
+			
+			if(_log.debugable()){
+				_log.debug("====End command event [%s]",event);
 			}
 		}
 	}
@@ -1214,7 +1210,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	 * @param evt event that fire this command
 	 * @param commandArgs the passed in argument for executing command
 	 * @param notifys container for properties that is to be notifyChange
-	 * @return the result of the doCommand, SUCCESS or FAIL_VALIDATE 
+	 * @return the result of the doCommand, COMMAND_SUCCESS or COMMAND_FAIL_VALIDATE 
 	 */
 	private int doCommand(Component comp, String command, Event evt, Map<String, Object> commandArgs, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
@@ -1230,7 +1226,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			//validate
 			success = doValidate(comp, command, evt, ctx, notifys);
 			if (!success) {
-				return FAIL_VALIDATE;
+				return COMMAND_FAIL_VALIDATE;
 			}
 			
 			//save before command bindings
@@ -1250,7 +1246,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if(_log.debugable()){
 				_log.debug("End doCommand");
 			}
-			return SUCCESS;
+			return COMMAND_SUCCESS;
 		} finally {
 			doPostPhase(Phase.COMMAND, ctx); //end of Command
 		}
@@ -1361,15 +1357,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			_phaseListener.postPhase(phase, ctx);
 		}
 	}
-	//for event -> prompt only, no command 
-	private void doSaveEventNoValidate(Component comp, Event evt, Set<Property> notifys) {
-		final String evtnm = evt == null ? null : evt.getName();
-		if(_log.debugable()){
-			_log.debug("doSaveEventNoValidate comp=[%s],evtnm=[%s],notifys=[%s]",comp,evtnm,notifys);
-		}
-		final BindingKey bkey = getBindingKey(comp, evtnm);
-		_propertyBindingHandler.doSaveEventNoValidate(bkey, comp, evt, notifys);
-	}
+
 	//for event -> prompt only, no command 
 	private boolean doSaveEvent(Component comp, Event evt, Set<Property> notifys) {
 		final String evtnm = evt == null ? null : evt.getName();
@@ -1406,9 +1394,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				public Map<String, List<SaveFormBinding>> getSaveFormAfterBindings() {
 					return _formBindingHandler.getSaveFormAfterBindings();
 				}
-				public Map<BindingKey, List<SavePropertyBinding>> getSaveEventBindings() {
-					return _propertyBindingHandler.getSaveEventBindings();
-				}
 				public Map<String, List<SavePropertyBinding>> getSaveBeforeBindings() {
 					return _propertyBindingHandler.getSaveBeforeBindings();
 				}
@@ -1423,10 +1408,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			//collect Property of special command for validation in validates
 			vHelper.collectSaveBefore(comp, command, evt, validates);
 			vHelper.collectSaveAfter(comp, command, evt, validates);
-			if (evt != null) {
-				//also collect the validate on the prompt save-bind that is related to evt 
-				vHelper.collectSaveEvent(comp, command, evt, validates);
-			}
 			
 			//do validation (defined by application)
 			if (validates.isEmpty()) {
@@ -1439,10 +1420,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				Map<String,Property[]> properties = _propertyBindingHandler.toCollectedProperties(validates);
 				valid &= vHelper.validateSaveBefore(comp, command, properties,valid,notifys);
 				valid &= vHelper.validateSaveAfter(comp, command, properties,valid,notifys);
-				if (evt != null) {
-					//also collect the validate on the prompt save-bind that is related to evt 
-					valid &= vHelper.validateSaveEvent(comp, command, evt, properties,valid,notifys);
-				}
 				return valid;
 			}
 		} catch (Exception e) {
@@ -1801,7 +1778,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	private void postGlobalCommand(String command, Map<String, Object> args) {
-		checkInit();
 		if(_log.debugable()){
 			_log.debug("postGlobalCommand command=[%s], args=[%s]",command,args);
 		}

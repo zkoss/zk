@@ -55,9 +55,7 @@ import org.zkoss.zk.ui.event.Event;
 		Map<String, List<SavePropertyBinding>> getSaveAfterBindings();
 		Map<String, List<SaveFormBinding>> getSaveFormBeforeBindings();
 		Map<String, List<SaveFormBinding>> getSaveFormAfterBindings();
-		Map<BindingKey, List<SavePropertyBinding>> getSaveEventBindings();
 		BindingKey getBindingKey(Component comp, String attr);
-		
 	}
 	
 	//doCommand -> doValidate ->
@@ -113,20 +111,6 @@ import org.zkoss.zk.ui.event.Event;
 			}
 		}
 	}	
-	
-	
-	
-	//doValidate -> 
-	public void collectSaveEvent(Component comp, String command, Event evt, Set<Property> validates) {
-		final String evtnm = evt == null ? null : evt.getName(); 
-		final BindingKey bkey = _infoProvider.getBindingKey(comp, evtnm);;//bkey(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(bkey);//_saveEventBindings.get(evtId);
-		if (bindings != null) {
-			for (SavePropertyBinding binding : bindings) {
-				collectSavePropertyBinding(comp, binding, command, evt, validates);
-			}
-		}
-	}
 
 	//validations
 
@@ -191,26 +175,6 @@ import org.zkoss.zk.ui.event.Event;
 		}
 		return r;
 	}	
-	
-	
-	
-	
-	public boolean validateSaveEvent(Component comp, String command, Event evt, Map<String,Property[]> validates, boolean valid, Set<Property> notifys) {
-		final String evtnm = evt == null ? null : evt.getName(); 
-		final BindingKey bkey = _infoProvider.getBindingKey(comp, evtnm);;//bkey(comp.getUuid(), evtnm);
-		final List<SavePropertyBinding> bindings = _infoProvider.getSaveEventBindings().get(bkey);//_saveEventBindings.get(evtId);
-		boolean r = valid;
-		if (bindings != null) {
-			for (SavePropertyBinding binding : bindings) {
-				r &= validateSavePropertyBinding(comp, binding, command, validates, r, notifys);
-			}
-		}
-		return r;
-	}
-	
-	
-	
-	
 	
 	//collect properties from a save-binding
 	private void collectSavePropertyBinding(Component comp, SavePropertyBinding binding, String command, Event evt, Set<Property> validates) {
