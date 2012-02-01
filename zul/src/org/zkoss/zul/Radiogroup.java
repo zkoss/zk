@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
@@ -38,7 +39,7 @@ import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -98,7 +99,7 @@ public class Radiogroup extends XulElement {
 	public List<Radio> getItems() {
 		//FUTURE: the algorithm is stupid and it shall be similar to Listbox
 		//however, it is OK since there won't be many radio buttons in a group
-		final List<Radio> items = new LinkedList<Radio>();
+		final List<Radio> items = new ArrayList<Radio>();
 		getItems0(this, items);
 		if (_externs != null)
 			for (Radio radio: _externs) {
@@ -367,6 +368,9 @@ public class Radiogroup extends XulElement {
 	 */
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
+			if (!(model instanceof Selectable))
+				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
@@ -395,24 +399,9 @@ public class Radiogroup extends XulElement {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					// Bug B30-1906748.zul
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
-						int start = event.getIndex0();
-						int end = event.getIndex1();
-						if (end < getChildren().size()) {
-							if (_model instanceof ListSelectionModel) {
-								ListSelectionModel smodel = (ListSelectionModel) _model;
-								if (!smodel.isSelectionEmpty()) {
-									for (; start <= end; start++) { // inclusive the end
-										if (smodel.isSelectedIndex(start))
-											setSelectedIndex(start);								
-									}
-								} else
-									setSelectedIndex(-1);
-								
-								return; // no need to rerender.	
-							}
-						}
-					}
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED
+					&& !doSelectionChanged())
+						return; //nothing changed so need to rerender
 					postOnInitRender(null);
 				}
 			};
@@ -420,7 +409,33 @@ public class Radiogroup extends XulElement {
 
 		_model.addListDataListener(_dataListener);
 	}
-	
+	private boolean doSelectionChanged() {
+		final Selectable<Object> smodel = getSelectableModel();
+		if (smodel.getSelection().isEmpty()) {
+			if (_jsel < 0)
+				return false; //nothing changed
+			setSelectedItem(null);
+			return true;
+		}
+
+		if (_jsel >= 0 && smodel.isSelected(_model.getElementAt(_jsel)))
+			return false; //nothing changed
+
+		int j = 0;
+		for (final Radio item: getItems()) {
+			if (smodel.isSelected(_model.getElementAt(j++))) {
+				setSelectedItem(item);
+				return true;
+			}
+		}
+		setSelectedItem(null); //somthing wrong but be self-protected
+		return true;
+	}
+	@SuppressWarnings("unchecked")
+	private Selectable<Object> getSelectableModel() {
+		return (Selectable<Object>)_model;
+	}
+
 	private void postOnInitRender(String idx) {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ZUL_RADIOGROUP_ON_INITRENDER) == null) {
@@ -447,11 +462,14 @@ public class Radiogroup extends XulElement {
 				Radio item = new Radio();
 				item.applyProperties();
 				item.setParent(this);
-				renderer.render(subset, item, j + ofs);
+				final int index = j + ofs;
+				final Object value = subset.getElementAt(index);
+				renderer.render(item, value, index);
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new item is created to replace the existent one
 					item = (Radio)v;
-				fixSelectOnRender(item);// radio can be selected after set a label
+				if (getSelectableModel().isSelected(value))
+					setSelectedItem(item);
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -467,23 +485,11 @@ public class Radiogroup extends XulElement {
 	 * @see Radio#service(org.zkoss.zk.au.AuRequest, boolean)
 	 */
 	/*package*/ void syncSelectionToModel() {
-		if (_model instanceof ListSelectionModel) {
-			ListSelectionModel model = (ListSelectionModel) _model;
-			if (_jsel != -1) {
-				model.addSelectionInterval(_jsel, _jsel);
-			} else
-				model.clearSelection();
-		}
-	}
-	private void fixSelectOnRender(Radio item) {
-		if (_model instanceof ListSelectionModel) {
-			ListSelectionModel smodel = (ListSelectionModel) _model;
-			if (smodel.isSelectionEmpty()) return;
-			
-			if (smodel.isSelectedIndex(getItems().indexOf(item))) {
-				setSelectedItem(item);
-				setSelectedItem(item);
-			}
+		if (_model != null) {
+			List<Object> selObjs = new ArrayList<Object>();
+			if (_jsel >= 0)
+				selObjs.add(_model.getElementAt(_jsel));
+			getSelectableModel().setSelection(selObjs);
 		}
 	}
 	
@@ -592,15 +598,14 @@ public class Radiogroup extends XulElement {
 			_renderer = getRealRenderer();
 		}
 		@SuppressWarnings("unchecked")
-		private void render(ListModel<?> subset, Radio item, int index) throws Throwable {
-
+		private void render(Radio item, Object value, int index) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
 
 			try {
-				_renderer.render(item, subset.getElementAt(index),index);
+				_renderer.render(item, value, index);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));

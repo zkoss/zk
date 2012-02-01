@@ -24,7 +24,7 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.Sortable;
 
 /**
@@ -32,7 +32,7 @@ import org.zkoss.zul.ext.Sortable;
  * Change the contents of this model as an Object array would cause the associated Listbox to 
  * change accordingly.</p> 
  *
- * <p> The class implements the {@link ListSelectionModel} interface, updating
+ * <p> The class implements the {@link Selectable} interface, updating
  * the selection status after sorted. (since 6.0.0)
  * 
  * @author Henri Chen
@@ -41,7 +41,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelArray<E> extends AbstractListModel<E>
-implements Sortable<E>, java.io.Serializable {
+implements Sortable<E>, java.io.Serializable, Cloneable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected Object[] _array;
@@ -135,27 +135,6 @@ implements Sortable<E>, java.io.Serializable {
 		return (E)_array[j];
 	}
 	
-	//-- backward compatible Selectable --//
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
-	 */
-	public void addSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			addSelectionInterval(index, index);
-	}
-
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
-	 */
-	public void removeSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			removeSelectionInterval(index, index);
-	}
-	
 	//-- Sortable --//
 	/** Sorts the data.
 	 *
@@ -165,28 +144,7 @@ implements Sortable<E>, java.io.Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
-		final boolean shallSync = !isSelectionEmpty();
-		List<E> selected = null;
-		if (shallSync) {
-			int min = getMinSelectionIndex();
-			int max = getMaxSelectionIndex();
-			selected = new ArrayList<E>();
-			for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
-			}
-			clearSelection();
-		}
 		Arrays.sort(_array, (Comparator)cmpr);
-		if (shallSync) {
-			for (int i = 0; i < _array.length; i++) {
-				Object e = _array[i];
-				if (selected.remove(e)) {
-					addSelectionInterval(i, i);
-				}
-			}
-		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
@@ -213,5 +171,17 @@ implements Sortable<E>, java.io.Serializable {
 		if (_array != null)
 			clone._array = ArraysX.duplicate(_array);
 		return clone;
+	}
+
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
+	 */
+	public void addSelection(E obj) {
+		addToSelection(obj);
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
+	 */
+	public void removeSelection(Object obj) {
+		removeFromSelection(obj);
 	}
 }

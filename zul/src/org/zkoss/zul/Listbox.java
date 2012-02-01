@@ -63,7 +63,7 @@ import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
@@ -102,38 +102,22 @@ import org.zkoss.zul.impl.XulElement;
  * adds a label to a Listitem by calling toString against the object returned by
  * {@link ListModel#getElementAt}</p>
  *
- * <br/>
- * [Since 6.0.0]
- * <p>To retrieve what are selected in Listbox with a {@link ListSelectionModel},
- * you shall use {@link ListSelectionModel#isSelectedIndex(int)} to check whether
- * the current index is selected in {@link ListSelectionModel} rather than using
+ * <p>To retrieve what are selected in Listbox with a {@link Selectable}
+ * {@link ListModel}, you shall use {@link Selectable#getSelection} to get what
+ * is currently selected object in {@link ListModel} rather than using
  * {@link Listbox#getSelectedItems}. That is, you shall operate on the item of
- * the {@link ListSelectionModel} rather than on the {@link Listitem} of
- * the {@link Listbox} if you use the {@link ListSelectionModel} with
- * {@link ListModel}.</p>
+ * the {@link ListModel} rather than on the {@link Listitem} of the {@link Listbox}
+ * if you use the {@link Selectable} {@link ListModel}.</p>
  *
  * <pre><code>
- * ListSelectionModel selModel = ((ListSelectionModel)getModel());
- * int min = selModel.getMinSelectionIndex();
- * int max = selModel.getMaxSelectionIndex();
- * List<E> selected = new ArrayList<E>();
- * for (;min <= max; min++) {
- * 		if (selModel.isSelectedIndex(min)) {
- * 			selected.add(selModel.getElementAt(min));
- * 		}
- * }
+ * Set selection = ((Selectable)getModel()).getSelection();
  * </code></pre>
  * 
- * <br/>
- * [Since 6.0.0]
- * <p> If the ListModel in Listbox implements a {@link ListSelectionModel}, the
- * multiple selections status is applied from the method of {@link ListSelectionModel#isMultiple()}
- * </p>
- * <pre><code>
- * ListModelList selModel = new ListModelList(list);
- * selModel.setMultiple(true);
- * listbox.setModel(selModel);
- * </code></pre>
+ * <p>[Since 6.0.0] If a model is set, whether the listbox allows
+ * the multiple selection depends on {@link Selectable#setMultiple}.
+ * In other words, the application shall not access listbox directly if
+ * a model is assigned. Rather, the application shall access the model
+ * directly.
  * 
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
@@ -250,7 +234,7 @@ import org.zkoss.zul.impl.XulElement;
  * It will be inherited.</dd>
  * </dl>
  * <dt>org.zkoss.zul.listbox.groupSelect</dt>
- * <dd>Specifies whether Listgroups under this Listbox are ListSelectionModel. Notice that 
+ * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
  * you could specify this attribute in any of its ancestor's attributes. It will 
  * be inherited. Default value is false.</dd>
  * 
@@ -330,6 +314,8 @@ public class Listbox extends MeshElement {
 	private boolean _renderAll; //since 5.0.0
 
 	private transient boolean _rod;
+	/** whether to ignore ListDataEvent.SELECTION_CHANGED */
+	private transient boolean _ignoreDataSelectionEvent;
 	private String _emptyMessage;
 	
 	static {
@@ -943,6 +929,10 @@ public class Listbox extends MeshElement {
 	/**
 	 * Selects the given item, without deselecting any other items that are
 	 * already selected..
+	 *
+	 * <p>Notice that if you assign a model to a listbox ({@link #setModel}),
+	 * you shall not invoke this method directly. Rather, use {@link Selectable}
+	 * instead.
 	 */
 	public void addItemToSelection(Listitem item) {
 		if (item.getParent() != this)
@@ -967,6 +957,10 @@ public class Listbox extends MeshElement {
 
 	/**
 	 * Deselects the given item without deselecting other items.
+	 *
+	 * <p>Notice that if you assign a model to a listbox ({@link #setModel}),
+	 * you shall not invoke this method directly. Rather, use {@link Selectable}
+	 * instead.
 	 */
 	public void removeItemFromSelection(Listitem item) {
 		if (item.getParent() != this)
@@ -1382,7 +1376,7 @@ public class Listbox extends MeshElement {
 		return !_groupsInfo.isEmpty();
 	}
 
-	/* package */void fixGroupIndex(int j, int to, boolean infront) {
+	/* package */void fixItemIndices(int j, int to, boolean infront) {
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
@@ -1623,7 +1617,7 @@ public class Listbox extends MeshElement {
 					newItem.setIndexDirectly(_items.size() - 1
 							+ getDataLoader().getOffset());
 				else
-					fixGroupIndex(fixFrom,
+					fixItemIndices(fixFrom,
 							jfrom >= 0 && jto >= 0 ? jfrom > jto ? jfrom : jto
 									: -1, !isReorder);
 
@@ -1840,7 +1834,7 @@ public class Listbox extends MeshElement {
 				if (prev != null && remove != null) {
 					prev[1] += remove[1] - 1;
 				}
-				fixGroupIndex(index, -1, false);
+				fixItemIndices(index, -1, false);
 				if (remove != null) {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
@@ -1856,9 +1850,9 @@ public class Listbox extends MeshElement {
 					g[1]--;
 					if (g[2] != -1)
 						g[2]--;
-					fixGroupIndex(index, -1, false);
+					fixItemIndices(index, -1, false);
 				} else
-					fixGroupIndex(index, -1, false);
+					fixItemIndices(index, -1, false);
 
 				if (child instanceof Listgroupfoot) {
 					final int[] g1 = getGroupsInfoAt(index);
@@ -2160,16 +2154,17 @@ public class Listbox extends MeshElement {
 	 * assigned, no matter whether it is the same as the previous, it will
 	 * always cause re-render.
 	 *
-	 * @param model
-	 *            the list model to associate, or null to dis-associate any
-	 *            previous model.
-	 * @exception UiException
-	 *                if failed to initialize with the model
+	 * @param model the list model to associate, or null to dis-associate any
+	 * previous model. If not null, it must implement {@link Selectable}.
+	 * @exception UiException if failed to initialize with the model
 	 * @see #getListModel
 	 * @see #setModel(GroupsModel)
 	 */
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
+			if (!(model instanceof Selectable))
+				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
@@ -2379,11 +2374,10 @@ public class Listbox extends MeshElement {
 	}
 	
 	private void doInitRenderer() {
-
 		// sync the multiple status from model
-		if (_model instanceof ListSelectionModel) {
-			setMultiple(((ListSelectionModel) _model).isMultiple());
-		}
+		if (_model != null)
+			setMultiple(((Selectable) _model).isMultiple());
+
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
@@ -2462,28 +2456,48 @@ public class Listbox extends MeshElement {
 				!isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
-			if (_model instanceof ListSelectionModel) {
-				ListSelectionModel smodel = (ListSelectionModel) _model;
-				if (smodel.isSelectionEmpty()) {
-					for (Listitem item : new ArrayList<Listitem>(_selItems))
-						item.setSelected(false);
-				} else {
-					final int min = event.getIndex0();
-					final int max = event.getIndex1();
-					for (int i = min; i <= max; i++) {
-						Listitem item = getItemAtIndex(i);
-						if (item != null) {
-							item.setSelected(smodel.isSelectedIndex(i));
-						} else if (smodel.isSelectedIndex(i)) {
-							setSelectedIndex(i); // auto scrollIntoView, if item is not rendered
-						}
-					}
-				}
-			}
+			if (!_ignoreDataSelectionEvent)
+				doSelectionChanged();
 		} else {
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 		}
+	}
+	/** Called when SELECTION_CHANGED is received. */
+	private void doSelectionChanged() {
+		final Selectable<Object> smodel = getSelectableModel();
+		final Set<Object> selObjs = smodel.getSelection();
+		final int expSelCnt = selObjs.size();
+		if (expSelCnt == 0) {
+			clearSelection();
+			return;
+		}
+
+		//Optimize the single-selection case
+		if (!_multiple && _jsel >= 0) {
+			if (smodel.isSelected(_model.getElementAt(_jsel)))
+				return; //nothing changed
+			getSelectedItem().setSelected(false);
+		}
+
+		//Unfortunately, we have to scan all list items either ROD or not,
+		//because the selection is meaningful only if a listitem is loaded
+		//The performance is not good but it rarely happens (since it is called
+		//if the selection is modified by app directly)
+		int selCnt = 0;
+		for (final Listitem item: _items) {
+			if (item.isLoaded()) { //selected is meaningful only if loaded
+				boolean sel = selObjs.contains(_model.getElementAt(item.getIndex()));
+				if (sel) ++selCnt;
+				item.setSelected(sel);
+			}
+			if (selCnt == expSelCnt && selCnt >= _selItems.size())
+				break; //done (all selected items are sync)
+		}
+	}
+	@SuppressWarnings("unchecked")
+	private Selectable<Object> getSelectableModel() {
+		return (Selectable)_model;
 	}
 
 	/** Used to render listitem if _model is specified. */
@@ -2516,9 +2530,7 @@ public class Listbox extends MeshElement {
 			//check if the item is a selected item and add into selected set
 			final Object value = _model.getElementAt(item.getIndex());
 			//bug #ZK-675: Selection was lost if a render replace the listitem
-			final boolean selected = _model instanceof ListSelectionModel &&
-								!((ListSelectionModel) _model).isSelectionEmpty() &&
-								((ListSelectionModel) _model).isSelectedIndex(item.getIndex());
+			final boolean selected = ((Selectable) _model).isSelected(value);
 			
 			try {
 				_renderer.render(item, value);
@@ -2539,9 +2551,9 @@ public class Listbox extends MeshElement {
 			}
 			
 			//bug #ZK-675: Selection was lost if a render replace the listitem
-			if (selected) {
+			//Also we have to add it to selection when rendered
+			if (selected)
 				addItemToSelection(item);
-			}
 			item.setLoaded(true);
 			_rendered = true;
 		}
@@ -3208,14 +3220,17 @@ public class Listbox extends MeshElement {
 					}
 				}
 			}
+
 			disableClientUpdate(true);
+			final boolean oldIDSE = _ignoreDataSelectionEvent;
+			_ignoreDataSelectionEvent = true;
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
-					if (_model instanceof ListSelectionModel) {
-						((ListSelectionModel)_model).clearSelection();
-					}
+					if (_model != null)
+						((Selectable)_model).clearSelection();
 				}
+
 				final boolean paging = inPagingMold();
 				if (!_multiple
 						|| (!_rod && !paging && (selItems == null || selItems.size() <= 1))) {
@@ -3223,13 +3238,10 @@ public class Listbox extends MeshElement {
 							&& selItems.size() > 0 ? selItems
 							.iterator().next() : null;
 					selectItem(item);
-					if (_model instanceof ListSelectionModel) {
-						ListSelectionModel lsm = (ListSelectionModel) _model;
-						lsm.clearSelection();
-						if (item != null) {
-							int index = item.getIndex();
-							lsm.addSelectionInterval(index, index);
-						}
+					if (_model != null) {
+						final List<Object> selObjs = new ArrayList<Object>();
+						selObjs.add(_model.getElementAt(item.getIndex()));
+						getSelectableModel().setSelection(selObjs);
 					}
 				} else {
 					int from, to;
@@ -3243,37 +3255,29 @@ public class Listbox extends MeshElement {
 					}
 
 					// fine tune with B50-ZK-547.
-					ListSelectionModel smodel = null;
-					if (_model instanceof ListSelectionModel)
-						smodel = (ListSelectionModel) _model;
-					Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(
-							_selItems);
-					for (Iterator it = selItems.iterator(); it.hasNext();) {
-						final Listitem item = (Listitem) it.next();
+					final Set<Listitem> oldSelItems = new LinkedHashSet<Listitem>(_selItems);
+					final Selectable<Object> smodel =
+						_model != null ? getSelectableModel(): null;
+					for (final Listitem item: selItems) {
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
-							if (smodel != null) {
-								int idx = item.getIndex();
-								smodel.addSelectionInterval(idx, idx);
-							}
+							if (smodel != null)
+								smodel.addToSelection(_model.getElementAt(item.getIndex()));
 						}
 					}
-					for (Iterator it = oldSelItems.iterator(); it.hasNext();) {
-						final Listitem item = (Listitem) it.next();
+					for (final Listitem item: oldSelItems) {
 						if (!selItems.contains(item)) {
 							final int index = item.getIndex();
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
-								if (smodel != null) {
-									int idx = item.getIndex();
-									smodel.removeSelectionInterval(idx, idx);
-								}
+								if (smodel != null)
+									smodel.removeFromSelection(_model.getElementAt(index));
 							}
 						}
 					}
 				}
-
 			} finally {
+				_ignoreDataSelectionEvent = oldIDSE;
 				disableClientUpdate(false);
 			}
 			Events.postEvent(evt);
@@ -3331,27 +3335,37 @@ public class Listbox extends MeshElement {
 			int index = page * pageSize + offset;
 			int from = shift < 0 ? index + shift : index;
 			int to = shift > 0 ? index + shift : index;
-			
-			if (_model != null && _model instanceof ListSelectionModel) {
-				ListSelectionModel smodel = (ListSelectionModel) _model;
-				to = Math.min(to, _model.getSize() - 1); // capped by size
-				if (!smodel.isMultiple() || shift == 0)
-					smodel.clearSelection();
-				smodel.addSelectionInterval(from, to);
-				
-			} else {
-				to = Math.min(to, getItemCount() - 1); // capped by size
-				if (!isMultiple() || shift == 0)
-					setSelectedIndex(index);
-				else {
-					Set<Listitem> items = new HashSet<Listitem>();
-					for (int i = from; i <= to; i++)
-						items.add(getItemAtIndex(i));
-					setSelectedItems(items);
-					this.setActivePage(index / pageSize);
+
+			//Update UI
+			final int toUI = Math.min(to, getItemCount() - 1); // capped by size
+			if (!isMultiple() || shift == 0)
+				setSelectedIndex(index);
+			else {
+				Set<Listitem> items = new HashSet<Listitem>();
+				for (int i = from; i <= toUI; i++)
+					items.add(getItemAtIndex(i));
+				setSelectedItems(items);
+				this.setActivePage(index / pageSize);
+			}
+
+			//Update Model
+			if (_model != null) {
+				final boolean oldIDSE = _ignoreDataSelectionEvent;
+				_ignoreDataSelectionEvent = true;
+				try {
+					to = Math.min(to, _model.getSize() - 1); // capped by size
+					final Selectable<Object> smodel = getSelectableModel();
+					if (!smodel.isMultiple() || shift == 0) {
+						if (!smodel.isMultiple())
+							from = to;
+						smodel.clearSelection();
+					}
+					while (from <= to)
+						smodel.addToSelection(_model.getElementAt(from++));
+				} finally {
+					_ignoreDataSelectionEvent = oldIDSE;
 				}
 			}
-			
 		} else
 			super.service(request, everError);
 	}

@@ -2550,7 +2550,8 @@ function () {
 			if (n) return n;
 		}
 	},
-	/** Removes the corresponding DOM content of the specified child. It is called by #removeChild to remove the DOM content.
+	/** Removes the corresponding DOM content of the specified child.
+	 * It is called by {@link #removeChild} to remove the DOM content.
 	 * <p>The default implementation of this method will invoke {@link #removeHTML_}
 	 * if the ignoreDom argument is false or not specified.
 	 * <p>Overrides this method or {@link #removeHTML_} if you have to

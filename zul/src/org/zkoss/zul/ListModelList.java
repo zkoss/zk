@@ -26,7 +26,7 @@ import java.util.ListIterator;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.Sortable;
 
 /**
@@ -36,16 +36,13 @@ import org.zkoss.zul.ext.Sortable;
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
  *
- * <p> The class implements the {@link ListSelectionModel} interface, updating
- * the selection status after sorted. (since 6.0.0)
- *
  * @author Henri Chen
  * @see ListModel
  * @see ListModelList
  * @see ListModelMap
  */
 public class ListModelList<E> extends AbstractListModel<E>
-implements Sortable<E>, List<E>, java.io.Serializable {
+implements Sortable<E>, List<E>, java.io.Serializable, Cloneable {
 	protected List<E> _list;
 
 	/**
@@ -120,9 +117,9 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 			return;
 		}
 		int index = fromIndex;
-
-		removeSelectionInterval(index, toIndex-1);
 		for (final Iterator<E> it = _list.listIterator(fromIndex); it.hasNext() && index < toIndex; ++index){
+			final E obj = it.next();
+			removeFromSelection(obj);
 			it.remove();
 		}
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, fromIndex, index - 1);
@@ -223,30 +220,33 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	public boolean isEmpty() {
 		return _list.isEmpty();
 	}
-    
-    public Iterator<E> iterator() {
+
+	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			private Iterator<E> _it = _list.iterator();
-			private int _index;
+			private E _current = null;
+			private int _nextIndex;
+
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
 			public E next() {
-				_index++;
-				return _it.next();
+				_current = _it.next();
+				++_nextIndex;
+				return _current;
 			}
 			public void remove() {
-				removeSelectionInterval(_index, _index);
 				_it.remove();
-				fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
-				_index--;
+				removeFromSelection(_current);
+				--_nextIndex;
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, _nextIndex, _nextIndex);
 			}
 		};
-    }
-    
-    public int lastIndexOf(Object elem) {
-    	return _list.lastIndexOf(elem);
-    }
+	}
+
+	public int lastIndexOf(Object elem) {
+		return _list.lastIndexOf(elem);
+	}
 	
 	public ListIterator<E> listIterator() {
 		return listIterator(0);
@@ -264,12 +264,10 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 				return _current;
 			}
 			public void remove() {
-				final int index = _list.indexOf(_current);
-				if (index >= 0) {
-					removeSelectionInterval(index, index);
-					_it.remove();
-					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
-				}
+				_it.remove();
+				removeFromSelection(_current);
+				final int index = _it.nextIndex();
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			}
 			public void add(E arg0) {
 				final int index = _it.nextIndex();
@@ -290,18 +288,16 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 				return _it.previousIndex();
 			}
 			public void set(E arg0) {
-				final int index = _list.indexOf(_current);
-				if (index >= 0) {
-					_it.set(arg0);
-					fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
-				}
+				_it.set(arg0);
+				final int index = _it.nextIndex() - 1;
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 			}
 		};
 	}
 	
 	public E remove(int index) {
-		removeSelectionInterval(index, index);
 		E ret = _list.remove(index);
+		removeFromSelection(ret);
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 		return ret;
 	}
@@ -342,7 +338,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 					begin = index;
 				}
 				removed = true;
-				removeSelectionInterval(index, index);
+				removeFromSelection(item);
 				it.remove();
 			} else {
 				if (begin >= 0) {
@@ -391,29 +387,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
-		final boolean shallSync = !isSelectionEmpty();
-		List<E> selected = null;
-		if (shallSync) {
-			int min = getMinSelectionIndex();
-			int max = getMaxSelectionIndex();
-			selected = new ArrayList<E>();
-			for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
-			}
-			clearSelection();
-		}
 		Collections.sort(_list, cmpr);
-		if (shallSync) {
-			int i = 0;
-			for (E e : _list) {
-				if (selected.remove(e)) {
-					addSelectionInterval(i, i);
-				}
-				i++;
-			}
-		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
@@ -425,25 +399,16 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 			clone._list = new ArrayList(_list);
 		return clone;
 	}
-	
-	//-- backward compatible Selectable --//
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
+
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			addSelectionInterval(index, index);
+		addToSelection(obj);
 	}
-
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
-	public void removeSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			removeSelectionInterval(index, index);
+	public void removeSelection(Object obj) {
+		removeFromSelection(obj);
 	}
 }

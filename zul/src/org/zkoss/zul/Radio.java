@@ -219,7 +219,7 @@ public class Radio extends Checkbox {
 		if (cmd.equals(Events.ON_CHECK)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			_checked = evt.isChecked();
-			fixSiblings(_checked, true);
+			fixSiblings(_checked, true); //invoke syncSelectionToModel
 			Events.postEvent(evt);
 			// Bug: B50-3284663: Radio always sends onCheck event
 			final Radiogroup rg = getRadiogroup();

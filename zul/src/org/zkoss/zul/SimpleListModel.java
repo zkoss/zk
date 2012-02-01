@@ -25,7 +25,6 @@ import java.util.List;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Sortable;
 
 /**
@@ -39,9 +38,6 @@ import org.zkoss.zul.ext.Sortable;
  * {@link ListSubModel}. It means when it is used with {@link Combobox},
  * only the data that matches what the user typed will be shown.
  * 
- * <p> The class implements the {@link ListSelectionModel} interface, updating
- * the selection status after sorted. (since 6.0.0)
- *
  * @author tomyeh
  * @see ListModelArray
  * @see ListModelSet
@@ -50,7 +46,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListSubModel (since 3.0.2)
  */
 public class SimpleListModel<E> extends AbstractListModel<E>
-implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
+implements Sortable<E>, ListSubModel<E>, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20060707L;
 
 	private Object[] _data;
@@ -108,28 +104,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
-		final boolean shallSync = !isSelectionEmpty();
-		List<E> selected = null;
-		if (shallSync) {
-			int min = getMinSelectionIndex();
-			int max = getMaxSelectionIndex();
-			selected = new ArrayList<E>();
-			for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
-			}
-			clearSelection();
-		}
 		Arrays.sort(_data, (Comparator)cmpr);
-		if (shallSync) {
-			for (int i = 0; i < _data.length; i++) {
-				Object e = _data[i];
-				if (selected.remove(e)) {
-					addSelectionInterval(i, i);
-				}
-			}
-		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 	
@@ -192,41 +167,6 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 		return idx.length() > 0 && objectToString(value).startsWith(idx);
 	}
 
-	//-- backward compatible Selectable --//
-	/**
-	 * Returns the index of the first occurrence of the specified element.
-	 * @since 6.0.0
-	 */
-	protected int indexOf(Object obj) {
-		if (_data != null) {
-			for (int i = 0; i < _data.length; i++) {
-				if (Objects.equals(obj, _data[i])) {
-					return i;
-				}
-			}
-		}
-		return -1;
-	}
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
-	 */
-	public void addSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			addSelectionInterval(index, index);
-	}
-
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
-	 */
-	public void removeSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			removeSelectionInterval(index, index);
-	}
-	
 	/**
 	 * @deprecated As of release 5.0.4, replaced with {@link #inSubModel}.
 	 */
@@ -242,5 +182,17 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 		if (_data != null)
 			clone._data = ArraysX.duplicate(_data);
 		return clone;
+	}
+
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
+	 */
+	public void addSelection(E obj) {
+		addToSelection(obj);
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
+	 */
+	public void removeSelection(Object obj) {
+		removeFromSelection(obj);
 	}
 }

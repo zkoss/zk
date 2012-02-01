@@ -61,10 +61,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	private transient GroupsDataListener _listener;
 	/** groupInfo list used in {@link Rows} */
 	private transient List<int[]> _gpinfo;
-	
-	// indexing cache
-	private transient HashMap<Object, Integer> _indexCache = new LinkedHashMap<Object, Integer>();
-	
+
 	/** Returns the list model ({@link org.zkoss.zul.ListModel}) representing the given
 	 * groups model.
 	 * @since 6.0.0
@@ -79,7 +76,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		_model = model;
 		init();
 	}
-	protected void init() {
+	/*package*/ void init() {
 		final int groupCount = _model.getGroupCount();
 		_gpofs = new int[groupCount];
 		_gpfts = new boolean[groupCount];
@@ -178,104 +175,18 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	public String toString() {
 		return Objects.toString(_model);
 	}
-	//-- backward compatible Selectable --//
-	/**
-	 * Returns the index of the first occurrence of the specified element.
-	 * <p> The performance of this implementation is bad, it will go through the
-	 * whole GroupsModel to check the element's index.
-	 * @since 6.0.0
-	 */
-	protected int indexOf(Object obj) {
-		if (_indexCache.isEmpty()) {
-			reindex();
-		}
-		Integer val = _indexCache.get(obj);
-		return val == null ? -1 : val.intValue();
-	}
 	
-	private void reindex() {
-		if (_indexCache.isEmpty()) {
-			int index = 0;
-			for (int i = 0, j = _model.getGroupCount(); i < j; i++) {
-				_indexCache.put(_model.getGroup(i), index);
-				index++;
-				for (int k = 0, z = _model.getChildCount(i); k < z; k++) {
-					_indexCache.put(_model.getChild(i, k), index);
-					index++;
-				}
-			}
-		}
-	}
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(Object obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			super.addSelectionInterval(index, index);
+		addToSelection(obj);
 	}
-
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			super.removeSelectionInterval(index, index);
+		removeFromSelection(obj);
 	}
-	
-	//ListSelectionModel
-	@Override
-	public boolean isSelectedIndex(int index) {
-		if (index >= 0 && index < this.getSize()) {
-			index = indexOf(getElementAt(index));
-			return super.isSelectedIndex(index);
-		}
-		return false;
-	}
-
-	@Override
-	public void addSelectionInterval(int index0, int index1) {
-		if (index0 == index1) {
-			Object o = getElementAt(index0);
-			if (o != null) {
-				int index = indexOf(o);
-				super.addSelectionInterval(index, index);
-			}
-		} else {
-			Object o = getElementAt(index0);
-			Object o1 = getElementAt(index1);
-			index0 = indexOf(o);
-			index1 = indexOf(o1);
-			super.addSelectionInterval(index0, index1);
-		}
-	}
-	@Override
-	public void clearSelection() {
-		// avoid checking index recursively
-		super.removeSelectionInterval(getMinSelectionIndex(), getMaxSelectionIndex());
-	}
-	@Override
-	public void removeSelectionInterval(int index0, int index1) {
-		if (isSelectionEmpty()) return;
-		
-		if (index0 == index1) {
-			Object o = getElementAt(index0);
-			if (o != null) {
-				int index = indexOf(o);
-				super.removeSelectionInterval(index, index);
-			}
-		} else {
-			Object o = getElementAt(index0);
-			Object o1 = getElementAt(index1);
-			index0 = indexOf(o);
-			index1 = indexOf(o1);
-			super.removeSelectionInterval(index0, index1);
-		}
-	}
-	
 	
 	//ListModel
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
@@ -310,7 +221,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		s.defaultReadObject();
 
 		init();
-		_indexCache = new LinkedHashMap<Object, Integer>();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -326,36 +236,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 				j0 = event.getIndex0(),
 				j1 = event.getIndex1();
 
-			// reset index
-			if (type != GroupsDataEvent.GROUPS_CHANGED) {
-				GroupsListModel self = GroupsListModel.this;
-				List<Object> selected = null;
-				// reset selection index
-				if (!self.isSelectionEmpty()) {
-					 selected = new ArrayList<Object>();
-					int min = self.getMinSelectionIndex();
-					int max = self.getMinSelectionIndex();
-					for (Map.Entry<Object, Integer> me : _indexCache.entrySet()) {
-						if (min >= me.getValue() && max <= me.getValue()) {
-							if (GroupsListModel.super.isSelectedIndex(me.getValue())) {
-								selected.add(me.getKey());
-							}
-						}
-						if (max < me.getValue())
-							break;
-					}
-				}
-				_indexCache.clear();
-				if (selected != null) {
-					int[] sel = new int[selected.size()];
-					int i = 0;
-					for (Object o : selected) {
-						sel[i++] = indexOf(o);
-					}
-					self.reorganizeIndex(sel);
-				}
-			}
-			
 			switch (type) {
 			case GroupsDataEvent.CONTENTS_CHANGED:
 			case GroupsDataEvent.INTERVAL_ADDED:

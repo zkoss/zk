@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
 import static org.zkoss.lang.Generics.cast;
@@ -47,7 +48,7 @@ import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A combobox.
@@ -150,6 +151,9 @@ public class Combobox extends Textbox {
 	 */
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
+			if (!(model instanceof Selectable))
+				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
@@ -179,24 +183,9 @@ public class Combobox extends Textbox {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					// Bug B30-1906748.zul
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED) {
-						int start = event.getIndex0();
-						int end = event.getIndex1();
-						if (end < getItemCount()) {
-							if (_model instanceof ListSelectionModel) {
-								ListSelectionModel smodel = (ListSelectionModel) _model;
-								if (!smodel.isSelectionEmpty()) {
-									for (; start <= end; start++) { // inclusive the end
-										if (smodel.isSelectedIndex(start))
-											setSelectedIndex(start);								
-									}
-								} else
-									setSelectedIndex(-1);
-								
-								return; // no need to rerender.	
-							}
-						}
-					}
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED
+					&& !doSelectionChanged())
+						return; //nothing changed so need to rerender
 					postOnInitRender(null);
 				}
 			};
@@ -213,6 +202,33 @@ public class Combobox extends Textbox {
 		_model.addListDataListener(_dataListener);
 		if (_model instanceof ListSubModel)
 			addEventListener(Events.ON_CHANGING, _eventListener);
+	}
+	private boolean doSelectionChanged() {
+		final Selectable<Object> smodel = getSelectableModel();
+		if (smodel.getSelection().isEmpty()) {
+			if (_selItem == null)
+				return false; //nothing changed
+			setSelectedItem(null);
+			return true;
+		}
+
+		final int jsel = getSelectedIndex();
+		if (jsel >= 0 && smodel.isSelected(_model.getElementAt(jsel)))
+			return false; //nothing changed
+
+		int j = 0;
+		for (final Comboitem item: getItems()) {
+			if (smodel.isSelected(_model.getElementAt(j++))) {
+				setSelectedItem(item);
+				return true;
+			}
+		}
+		setSelectedItem(null); //somthing wrong but be self-protected
+		return true;
+	}
+	@SuppressWarnings("unchecked")
+	private Selectable<Object> getSelectableModel() {
+		return (Selectable<Object>)_model;
 	}
 
 	/** Returns the renderer to render each row, or null if the default
@@ -296,11 +312,14 @@ public class Combobox extends Textbox {
 			for (Comboitem item = getItems().size() <= ofs ? null: getItems().get(ofs), nxt;
 			j < pgsz && item != null; ++j, item = nxt) {
 				nxt = (Comboitem)item.getNextSibling(); //store it first
-				renderer.render(subset, item, j + ofs);
+				final int index = j + ofs;
+				final Object value = subset.getElementAt(index);
+				renderer.render(item, value, index);
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new item is created to replace the existent one
 					item = (Comboitem)v;
-				fixSelectOnRender(item);// comboitem can be selected after set a label
+				if (getSelectableModel().isSelected(value))
+					setSelectedItem(item);
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -390,8 +409,8 @@ public class Combobox extends Textbox {
 			_renderer = getRealRenderer();
 		}
 		@SuppressWarnings("unchecked")
-		private void render(ListModel<?> subset, Comboitem item, int index) throws Throwable {
-
+		private void render(Comboitem item, Object value, int index)
+		throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
@@ -399,7 +418,7 @@ public class Combobox extends Textbox {
 
 			try {
 				item.setIndex(index); //initialize index
-				_renderer.render(item, subset.getElementAt(index));
+				_renderer.render(item, value);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -654,13 +673,11 @@ public class Combobox extends Textbox {
 	}
 	
 	private void syncSelectionToModel() {
-		if (_model instanceof ListSelectionModel) {
-			ListSelectionModel model = (ListSelectionModel) _model;
-			if (_selItem != null) {
-				int index = getChildren().indexOf(_selItem);
-				model.addSelectionInterval(index, index);
-			} else
-				model.clearSelection();
+		if (_model != null) {
+			List<Object> selObjs = new ArrayList<Object>();
+			if (_selItem != null)
+				selObjs.add(_model.getElementAt(getSelectedIndex()));
+			getSelectableModel().setSelection(selObjs);
 		}
 	}
 	// super
@@ -695,7 +712,7 @@ public class Combobox extends Textbox {
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
 			_lastCkVal = getValue(); //onChange is sent before onSelect
-			
+
 			syncSelectionToModel();
 			Events.postEvent(evt);
 		} else
@@ -707,16 +724,6 @@ public class Combobox extends Textbox {
 		if (!(newChild instanceof Comboitem))
 			throw new UiException("Unsupported child for Combobox: "+newChild);
 		super.beforeChildAdded(newChild, refChild);
-	}
-	private void fixSelectOnRender(Comboitem item) {
-		if (_model instanceof ListSelectionModel) {
-			ListSelectionModel smodel = (ListSelectionModel) _model;
-			if (smodel.isSelectionEmpty()) return;
-			
-			if (smodel.isSelectedIndex(getItems().indexOf(item))) {
-				setSelectedItem(item);
-			}
-		}
 	}
 	
 	/** Childable. */

@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * This interface defines the methods that components like {@link Listbox}
@@ -26,8 +26,8 @@ import org.zkoss.zul.ext.ListSelectionModel;
  * <p>If the list model is used with sortable listbox or grid,
  * the developer must also implement {@link org.zkoss.zul.ext.Sortable}.
  *
- * <p>If the model also provides the selection, it could implement
- * {@link ListSelectionModel}.
+ * <p>To use with {@link Listbox} and other components that
+ * supports the selection, {@link Selectable} must be implemented too.
  *
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/List_Model">ZK Developer's Reference: List Model</a>
@@ -37,7 +37,7 @@ import org.zkoss.zul.ext.ListSelectionModel;
  * @see Listbox
  * @see ListitemRenderer
  * @see org.zkoss.zul.ext.Sortable
- * @see ListSelectionModel
+ * @see Selectable
  */
 public interface ListModel<E> {
 	/** Returns the value at the specified index.
@@ -51,8 +51,8 @@ public interface ListModel<E> {
 	 * to the data model occurs. 
 	 */
 	public void addListDataListener(ListDataListener l);
-    /** Removes a listener from the list that's notified each time
-     * a change to the data model occurs. 
-     */
+	/** Removes a listener from the list that's notified each time
+	 * a change to the data model occurs. 
+	 */
 	public void removeListDataListener(ListDataListener l) ;
 }

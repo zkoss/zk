@@ -28,15 +28,11 @@ import java.util.SortedSet;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Sortable;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.Set} to be used with {@link Listbox}.
  * Add or remove the contents of this model as a Set would cause the associated Listbox to change accordingly.</p> 
- *
- * <p> The class implements the {@link ListSelectionModel} interface, updating
- * the selection status after sorted. (since 6.0.0)
  *
  * @author Henri Chen
  * @see ListModel
@@ -44,7 +40,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelSet<E> extends AbstractListModel<E>
-implements Sortable<E>, Set<E>, java.io.Serializable {
+implements Sortable<E>, Set<E>, java.io.Serializable, Cloneable {
 	protected Set<E> _set;
 
 	/**
@@ -229,25 +225,28 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			private Iterator<E> _it = _set.iterator();
-			private int _index;
+			private E _current = null;
+			private int _nextIndex;
+
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
 			public E next() {
-				_index++;
-				return _it.next();
+				_current = _it.next();
+				++_nextIndex;
+				return _current;
 			}
 			public void remove() {
+				_it.remove();
+				removeFromSelection(_current);
+				--_nextIndex;
 				//bug #1819318 Problem while using SortedSet with Databinding
-				removeSelectionInterval(_index, _index);
 				if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
-					_it.remove();
-					fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
+					fireEvent(ListDataEvent.INTERVAL_REMOVED, _nextIndex, _nextIndex);
 				} else { //bug #1839634 Problem while using HashSet with Databinding
 					_it.remove();
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 				}
-				_index--;
 			}
 		};
 	}
@@ -256,9 +255,9 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		boolean ret = false;
 		if (_set.contains(o)) {
 			//bug #1819318 Problem while using SortedSet with Databinding
-			final int index = indexOf(o);
-			removeSelectionInterval(index, index);
+			removeFromSelection(o);
 			if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
+				final int index = indexOf(o);
 				ret = _set.remove(o);
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
@@ -288,10 +287,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 			return removePartial(c, true);
 		} else { //bug #1839634 Problem while using HashSet with Databinding
-			for (Object o : c) {
-				int index = indexOf(o);
-				removeSelectionInterval(index, index);
-			}
+			removeAllSelection(c);
 			final boolean ret = _set.removeAll(c);
 			if (ret) {
 				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -308,11 +304,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		if (_set instanceof LinkedHashSet || _set instanceof SortedSet) {
 			return removePartial(c, false);
 		} else { //bug #1839634 Problem while using HashSet with Databinding
-			clearSelection();
-			for (Object o : c) {
-				int index = indexOf(o);
-				addSelectionInterval(index, index);
-			}
+			retainAllSelection(c);
 			final boolean ret = _set.retainAll(c);
 			if (ret) {
 				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -335,7 +327,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 					begin = index;
 				}
 				++removed;
-				removeSelectionInterval(index, index);
+				removeFromSelection(item);
 				it.remove();
 			} else {
 				++retained;
@@ -375,30 +367,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		final List<E> copy = new ArrayList<E>(_set);
 		Collections.sort(copy, cmpr);
-		final boolean shallSync = !isSelectionEmpty();
-		List<E> selected = null;
-		if (shallSync) {
-			int min = getMinSelectionIndex();
-			int max = getMaxSelectionIndex();
-			selected = new ArrayList<E>();
-			for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
-			}
-			clearSelection();
-		}
 		_set.clear();
 		_set.addAll(copy);
-		if (shallSync) {
-			int i = 0;
-			for (E e : _set) {
-				if (selected.remove(e)) {
-					addSelectionInterval(i, i);
-				}
-				i++;
-			}
-		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
@@ -410,24 +380,16 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			clone._set = new LinkedHashSet(_set);
 		return clone;
 	}
-	//-- backward compatible Selectable --//
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
+
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			addSelectionInterval(index, index);
+		addToSelection(obj);
 	}
-
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
-	public void removeSelection(E obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			removeSelectionInterval(index, index);
+	public void removeSelection(Object obj) {
+		removeFromSelection(obj);
 	}
 }

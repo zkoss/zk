@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A light weight dropdown list.
@@ -216,17 +216,30 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (_model instanceof ListSelectionModel) {
-						ListSelectionModel smodel = (ListSelectionModel)_model;
-						setSelectedIndex(smodel.getMinSelectionIndex());
-					}
-					
-					if (event.getType() != ListDataEvent.SELECTION_CHANGED) {
-						postOnInitRender();
-					}
+					if (event.getType() == ListDataEvent.SELECTION_CHANGED
+					&& !doSelectionChanged())
+						return; //nothing changed so need to rerender
+					postOnInitRender();
 				}
 			};
 		_model.addListDataListener(_dataListener);
+	}
+	private boolean doSelectionChanged() {
+		final Selectable<Object> smodel = getSelectableModel();
+		if (smodel.getSelection().isEmpty()) {
+			if (_jsel < 0)
+				return false; //nothing changed
+			setSelectedIndex(-1);
+			return true;
+		}
+
+		if (_jsel >= 0 && smodel.isSelected(_model.getElementAt(_jsel)))
+			return false; //nothing changed
+		return true; //cause onInitRender and then maintain _jsel
+	}
+	@SuppressWarnings("unchecked")
+	private Selectable<Object> getSelectableModel() {
+		return (Selectable<Object>)_model;
 	}
 
 	/**
@@ -242,6 +255,9 @@ public class Selectbox extends HtmlBasedComponent {
 	 */
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
+			if (!(model instanceof Selectable))
+				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
@@ -266,8 +282,12 @@ public class Selectbox extends HtmlBasedComponent {
 			try {
 				_childable = true;
 				final ItemRenderer renderer = getRealRenderer();
-				for (int i = 0; i < _model.getSize(); i++)
-					_tmpdatas[i] = renderer.render(this, _model.getElementAt(i), i);
+				for (int i = 0; i < _model.getSize(); i++) {
+					final Object value = _model.getElementAt(i);
+					if (getSelectableModel().isSelected(value))
+						_jsel = i;
+					_tmpdatas[i] = renderer.render(this, value, i);
+				}
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			} finally {
@@ -386,16 +406,16 @@ public class Selectbox extends HtmlBasedComponent {
 		if (cmd.equals(Events.ON_SELECT)) {
 			_jsel = ((Integer) request.getData().get("")).intValue();
 			final Integer index = ((Integer)request.getData().get(""));
-			final Set<Object> objects = new LinkedHashSet<Object>();
+			final Set<Object> selObjs = new LinkedHashSet<Object>();
 			
 			if (index >= 0)
-				objects.add(_model.getElementAt(index));
+				selObjs.add(_model.getElementAt(index));
 			
-			if (_model instanceof ListSelectionModel)
-				((ListSelectionModel)_model).addSelectionInterval(index, index);
+			if (_model != null)
+				getSelectableModel().setSelection(selObjs);;
 			
 			Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-					objects, null, index, 0));
+					selObjs, null, index, 0));
 		}
 	}
 

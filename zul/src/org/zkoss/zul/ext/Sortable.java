@@ -17,7 +17,7 @@ import java.util.Comparator;
 /**
  * Indicate a data model that supports sorting.
  * It is typically used with {@link org.zkoss.zul.ListModel}
- * <p> If the implementation also implements {@link ListSelectionModel} interface,
+ * <p> If the implementation also implements {@link Selectable} interface,
  * it is up to the particular implementation to decide what the selections 
  * remains in order after sorted.
  * 
@@ -54,4 +54,12 @@ public interface Sortable<T> {
 	 * count on the cmpr parameter only.
 	 */
 	public void sort(Comparator<T> cmpr, boolean ascending);
+
+	/** Returns the sort direction of this model for the given comparator.
+	 * It must be one of "ascending", "descending" and "natural".
+	 * <p>Default: "natural".
+	 * @since 6.0.0
+	 */
+//	public String getSortDirection(Comparator<T> cmpr);
+//TODO
 }

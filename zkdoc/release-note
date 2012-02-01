@@ -220,6 +220,9 @@ ZK 6.0.0
     .z-weekend -> .z-calendar-caldow .z-calendar-wkend
     .z-weekday -> .z-calendar-caldow .z-calendar-wkday
     .z-outside -> .z-calendar-outside
+  + Selectable must be implemented  if a list model is assigned to a listbox.
+  + Selectable introduced isMultiple and setMultiple methods.
+  + ListModelExt is removed and replaced with org.zkoss.zul.ext.Sortable
 
 	--------
 ZK 5.0.11

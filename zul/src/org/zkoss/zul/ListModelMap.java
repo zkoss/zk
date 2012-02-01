@@ -29,15 +29,11 @@ import java.util.SortedMap;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.ListSelectionModel;
 import org.zkoss.zul.ext.Sortable;
 
 /**
  * <p>This is the {@link ListModel} as a {@link java.util.Map} to be used with {@link Listbox}.
  * Add or remove the contents of this model as a List would cause the associated Listbox to change accordingly.</p>
- *
- * <p> The class implements the {@link ListSelectionModel} interface, updating
- * the selection status after sorted. (since 6.0.0) 
  *
  * @author Henri Chen
  * @see ListModel
@@ -45,7 +41,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
-implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
+implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable, Cloneable {
 	protected Map<K, V> _map;
 	
 	/**
@@ -284,19 +280,18 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	}
 
 	private void removeSelectionByKey(Object key) {
-		if (!isSelectionEmpty()) {
-			int index = indexOfKey(key);
-			removeSelectionInterval(index, index);
+		for (Map.Entry<K, V> entry: getSelection()) {
+			if (Objects.equals(key, entry.getKey())) {
+				removeSelection(entry);
+				return;
+			}
 		}
 	}
 	private void removeSelectionByValue(Object value) {
-		if (!isSelectionEmpty()) {
-			int j = 0;
-			for (Iterator it = _map.values().iterator(); it.hasNext(); ++j) {
-				if (Objects.equals(value, it.next())) {
-					removeSelectionInterval(j, j);
-					return;
-				}
+		for (Map.Entry<K, V> entry: getSelection()) {
+			if (Objects.equals(value, entry.getValue())) {
+				removeSelection(entry);
+				return;
 			}
 		}
 	}
@@ -319,29 +314,8 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	public void sort(Comparator<Map.Entry<K, V>> cmpr, final boolean ascending) {
 		final List<Map.Entry<K, V>> copy = new ArrayList<Map.Entry<K, V>>(_map.entrySet());
 		Collections.sort(copy, cmpr);
-		final boolean shallSync = !isSelectionEmpty();
-		List<Map.Entry<K, V>> selected = null;
-		if (shallSync) {
-			int min = getMinSelectionIndex();
-			int max = getMaxSelectionIndex();
-			selected = new ArrayList<Map.Entry<K, V>>();
-			for (;min <= max; min++) {
-				if (isSelectedIndex(min)) {
-					selected.add(getElementAt(min));
-				}
-			}
-			clearSelection();
-		}
 		_map.clear();
-		
-		int index = 0;
-		for(Map.Entry<K, V> me: copy) {
-			if (shallSync) {
-				if (selected.remove(me)) {
-					addSelectionInterval(index, index);
-				}
-				index++;
-			}
+		for (Map.Entry<K, V> me: copy) {
 			_map.put(me.getKey(), me.getValue());
 		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
@@ -363,7 +337,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 				++removed;
 				if (byKey) removeSelectionByKey(item);
 				else if (byValue) removeSelectionByValue(item);
-				else removeSelectionInterval(index, index);
+				else removeFromSelection(item);
 				it.remove();
 			} else {
 				++retained;
@@ -377,18 +351,16 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		if (begin >= 0) {
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, begin, index - 1);
 		}
-			
 		return removed > 0;
 	}
 	
 	private class MyIterator<E> implements Iterator<E> {
 		private Iterator<E> _it;
 		private E _current;
-		private int _index = -1;
+		private int _nextIndex;
 		
 		public MyIterator(Iterator<E> inner) {
 			_it = inner;
-			_index = -1;
 		}
 		
 		public boolean hasNext() {
@@ -396,22 +368,21 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		}
 		
 		public E next() {
-			++_index;
 			_current = _it.next(); 
+			++_nextIndex;
 			return _current;
 		}
 		
 		public void remove() {
-			if (_index >= 0) {
-				//bug #1819318 Problem while using SortedSet with Databinding
-				removeSelectionInterval(_index, _index);
-				_it.remove();
-				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
-					fireEvent(ListDataEvent.INTERVAL_REMOVED, _index, _index);
-				} else {
-					//bug #1839634 Problem while using HashSet with Databinding
-					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
-				}
+			_it.remove();
+			//bug #1819318 Problem while using SortedSet with Databinding
+			removeFromSelection(_current);
+			--_nextIndex;
+			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+				fireEvent(ListDataEvent.INTERVAL_REMOVED, _nextIndex, _nextIndex);
+			} else {
+				//bug #1839634 Problem while using HashSet with Databinding
+				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 			}
 		}
 	}
@@ -438,9 +409,9 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			boolean ret = false;
 			if (_set.contains(o)) {
 				//bug #1819318 Problem while using SortedSet with Databinding
-				final int index = indexOf(o);
-				removeSelectionInterval(index, index);
+				removeFromSelection(o);
 				if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
+					final int index = indexOf(o);
 					ret = _set.remove(o);
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				} else { //bug #1839634 Problem while using HashSet with Databinding
@@ -462,10 +433,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				return removePartial(_set, c, true, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
-				for (Object o : c) {
-					int index = indexOf(o);
-					removeSelectionInterval(index, index);
-				}
+				removeAllSelection(c);
 				final boolean ret = _set.removeAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -482,11 +450,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				return removePartial(_set, c, false, _keyset, false);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
-				clearSelection();
-				for (Object o : c) {
-					int index = indexOf(o);
-					addSelectionInterval(index, index);
-				}
+				retainAllSelection(c);
 				final boolean ret = _set.retainAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -646,7 +610,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			for(Iterator it = _col.iterator(); it.hasNext();++j) {
 				final Object val = it.next();
 				if (Objects.equals(val, o)) {
-					removeSelectionInterval(j, j);
+					removeFromSelection(o);
 					it.remove();
 					return j;
 				}
@@ -664,8 +628,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 				fireEvent(ListDataEvent.INTERVAL_REMOVED, index, index);
 				return true;
 			} else {
-				int index = indexOf(o);
-				removeSelectionInterval(index, index);
+				removeFromSelection(o);
 				final boolean ret = _col.remove(o);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -684,10 +647,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				return removePartial(_col, c, true, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
-				for (Object o : c) {
-					final int index = indexOf(o);
-					removeSelectionInterval(index, index);					
-				}
+				removeAllSelection(c);
 				final boolean ret = _col.removeAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -704,11 +664,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			if (_map instanceof LinkedHashMap || _map instanceof SortedMap) {
 				return removePartial(_col, c, false, false, true);
 			} else { //bug #1839634 Problem while using HashSet with Databinding
-				clearSelection();
-				for (Object o : c) {
-					int index = indexOf(o);
-					addSelectionInterval(index, index);
-				}
+				retainAllSelection(c);
 				final boolean ret = _col.retainAll(c);
 				if (ret) {
 					fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
@@ -726,24 +682,16 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			clone._map = new LinkedHashMap(_map);
 		return clone;
 	}
-	//-- backward compatible Selectable --//
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
-	 */
-	public void addSelection(Object obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			addSelectionInterval(index, index);
-	}
 
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
+	 */
+	public void addSelection(Entry<K,V> obj) {
+		addToSelection(obj);
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {
-		int index = indexOf(obj);
-		if (index >= 0)
-			removeSelectionInterval(index, index);
+		removeFromSelection(obj);
 	}
 }
