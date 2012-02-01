@@ -80,6 +80,8 @@ Selectable<E>, java.io.Serializable {
 	@Override
 	public void setSelection(Collection<? extends E> selection) {
 		if (!_selection.equals(selection)) {
+			if (!_multiple && _selection.size() > 1)
+				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
 			_selection.clear();
 			_selection.addAll(selection);
 			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
@@ -94,8 +96,13 @@ Selectable<E>, java.io.Serializable {
 	/** {@inheritDoc} */
 	@Override
 	public void addToSelection(E obj) {
-		if (_selection.add(obj))
+		if (_selection.add(obj)) {
+			if (!_multiple) {
+				_selection.clear();
+				_selection.add(obj);
+			}
 			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+		}
 	}
 	/** {@inheritDoc} */
 	@Override
