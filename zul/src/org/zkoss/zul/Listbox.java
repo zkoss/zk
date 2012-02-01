@@ -3202,6 +3202,8 @@ public class Listbox extends MeshElement {
 				return; //skip all onSelect event after the onDataLoading
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set<Listitem> selItems = cast(evt.getSelectedItems());
+			if (selItems == null)
+				selItems = new HashSet<Listitem>(); //just in case
 			if (_rod) { // Bug: ZK-592
 				Map<String, Object> m = cast((Map) request.getData().get("range"));
 				if (m != null) {
@@ -3233,9 +3235,9 @@ public class Listbox extends MeshElement {
 
 				final boolean paging = inPagingMold();
 				if (!_multiple
-						|| (!_rod && !paging && (selItems == null || selItems.size() <= 1))) {
-					final Listitem item = selItems != null
-							&& selItems.size() > 0 ? selItems
+				|| (_model == null && !_rod && !paging && selItems.size() <= 1)) {
+				//If _model, selItems is only a subset (so we can't optimize it)
+					final Listitem item = selItems.size() > 0 ? selItems
 							.iterator().next() : null;
 					selectItem(item);
 					if (_model != null) {
