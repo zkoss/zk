@@ -3240,7 +3240,8 @@ public class Listbox extends MeshElement {
 					selectItem(item);
 					if (_model != null) {
 						final List<Object> selObjs = new ArrayList<Object>();
-						selObjs.add(_model.getElementAt(item.getIndex()));
+						if (item != null)
+							selObjs.add(_model.getElementAt(item.getIndex()));
 						getSelectableModel().setSelection(selObjs);
 					}
 				} else {

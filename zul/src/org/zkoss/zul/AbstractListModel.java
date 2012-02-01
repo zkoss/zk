@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -37,7 +37,7 @@ import org.zkoss.zul.ext.Selectable;
  */
 abstract public class AbstractListModel<E> implements ListModel<E>,
 Selectable<E>, java.io.Serializable {
-	private transient List<ListDataListener> _listeners = new LinkedList<ListDataListener>();
+	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
 
 	/** The current selection. */
 	protected Set<E> _selection;
@@ -168,7 +168,7 @@ Selectable<E>, java.io.Serializable {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_listeners = new LinkedList<ListDataListener>();
+		_listeners = new ArrayList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
 
@@ -180,7 +180,7 @@ Selectable<E>, java.io.Serializable {
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();
 		}
-		clone._listeners = new LinkedList<ListDataListener>();
+		clone._listeners = new ArrayList<ListDataListener>();
 		clone._selection = clone.newEmptySelection();
 		clone._selection.addAll(_selection);
 		return clone;
