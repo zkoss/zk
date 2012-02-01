@@ -19,9 +19,9 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.Immutable;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.DependsOn;
+import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyChangeDisabled;
 import org.zkoss.bind.impl.BindContextUtil;
@@ -265,6 +265,10 @@ public class BindELContext extends XelELContext {
 		return cls.isPrimitive() //value is primitive 
 			|| Primitives.toPrimitive(cls) != null //or a wrapper
 			|| value instanceof String //or a String
-			|| value instanceof Immutable; //or an Immutable
+			|| isAnnotatedImmutable(cls); //or an Immutable
+	}
+	
+	private static boolean isAnnotatedImmutable(Class<? extends Object> cls){
+		return cls.getAnnotation(Immutable.class)!=null; 
 	}
 }

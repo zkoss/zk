@@ -13,8 +13,8 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
-import org.zkoss.bind.Immutable;
 import org.zkoss.bind.IterationStatus;
+import org.zkoss.bind.annotation.Immutable;
 
 /**
  * The Class AbstractIterationStatus.
@@ -22,6 +22,7 @@ import org.zkoss.bind.IterationStatus;
  * @author dennis
  * @since 6.0.0
  */
-/*package*/ abstract class AbstractIterationStatus implements IterationStatus, Immutable, Serializable{
+@Immutable
+/*package*/ abstract class AbstractIterationStatus implements IterationStatus, Serializable{
 	private static final long serialVersionUID = 1L;
 }
