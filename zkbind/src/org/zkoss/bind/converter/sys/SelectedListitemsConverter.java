@@ -45,6 +45,11 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
   			throw new UiException("model doesn't implement Selectable");
   		}
 		
+		//clean first.
+		if(model!=null){
+			((Selectable<?>)model).clearSelection();
+		}
+		
   		final Set<Listitem> items = new LinkedHashSet<Listitem>();
 		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(LinkedHashSet.class, val);
 		
