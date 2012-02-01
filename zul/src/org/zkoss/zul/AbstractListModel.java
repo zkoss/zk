@@ -40,9 +40,13 @@ Selectable<E>, java.io.Serializable {
 	private transient List<ListDataListener> _listeners = new LinkedList<ListDataListener>();
 
 	/** The current selection. */
-	protected final Set<E> _selection = new LinkedHashSet<E>();
+	protected Set<E> _selection;
 	private boolean _multiple;
-	
+
+	protected AbstractListModel() {
+		_selection = newEmptySelection();
+	}	
+
 	/**
 	 * Fires a {@link ListDataEvent} for all registered listener (thru
 	 * {@link #addListDataListener}.
@@ -144,6 +148,14 @@ Selectable<E>, java.io.Serializable {
 		_multiple = multiple;
 	}
 
+	/** Instantiation an empty set of the section.
+	 * It is used to initialize {@link #_selection}.
+	 * <p>By default, it instantiates an instance of LinkedHashMap.
+	 * The deriving class might override to instantiate a different class.
+	 */
+	protected Set<E> newEmptySelection() {
+		return new LinkedHashSet<E>();
+	}
 
 	// Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
@@ -169,8 +181,8 @@ Selectable<E>, java.io.Serializable {
 			throw new InternalError();
 		}
 		clone._listeners = new LinkedList<ListDataListener>();
-		clone._selection.clear();
-		clone._selection.addAll(_selection); 
+		clone._selection = clone.newEmptySelection();
+		clone._selection.addAll(_selection);
 		return clone;
 	}
 }
