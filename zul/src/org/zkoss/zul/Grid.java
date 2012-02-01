@@ -696,9 +696,6 @@ public class Grid extends MeshElement {
 	 * @see #getGroupsModel()
 	 */
 	public void setModel(GroupsModel<?, ?, ?> model) {
-		if (evalRod()) {
-			throw new UnsupportedOperationException("Not support GroupsModel in ROD yet!");
-		}
 		setModel((model != null ? GroupsListModel.toListModel(model): null));
 	}
 	private void initDataListener() {
@@ -1227,7 +1224,9 @@ public class Grid extends MeshElement {
 	}
 	
 	/*package*/ boolean evalRod() {
-		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true)
+		&& !(_model instanceof GroupsListModel);
+		//TODO: performance enhancement: support GroupsModel in ROD
 	}
 	
 	/** Returns whether to sort all of item when model or sort direction be changed.
