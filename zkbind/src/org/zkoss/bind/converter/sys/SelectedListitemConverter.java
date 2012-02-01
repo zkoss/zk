@@ -13,16 +13,17 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.converter.sys;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Convert listbox selected listitem to bean and vice versa.
@@ -33,36 +34,38 @@ import org.zkoss.zul.ext.ListSelectionModel;
 public class SelectedListitemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Listbox lbx = (Listbox) comp;
 		final ListModel<?> model = lbx.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-  		final ListSelectionModel smodel = (model instanceof ListSelectionModel)?(ListSelectionModel)model:null;
+		if(model !=null && !(model instanceof Selectable)){
+			//model has to imple Selectable if binding to selectedItem
+  			throw new UiException("model doesn't implement Selectable");
+  		}
+		
 	  	if (val != null) {
-		  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-		  		final Listitem li = (Listitem) it.next();
-		  		Object bean = null;
-		  		if(model!=null){ //no binding
-		  			bean = model.getElementAt(li.getIndex());
-		  		} else{
-		  			bean = li.getValue();
-		  		}
-
-		  		if (val.equals(bean)) {
-		  			if(smodel!=null){
-		  				final int i = li.getIndex();
-		  				smodel.addSelectionInterval(i,i);
-		  				return LoadPropertyBinding.LOAD_IGNORED;
-		  			}
-		  			return li;
-		  		}
-		  	}
+	  		if(model!=null){
+	  			((Selectable<Object>)model).addToSelection(val);
+	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  		}else{
+	  			//no model case
+			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
+			  		final Listitem li = (Listitem) it.next();
+			  		Object bean = li.getValue();
+			  		if (val.equals(bean)) {
+			  			return li;
+			  		}
+			  	}
+	  		}
 		  	//not in the item list
 	  	}
 	  	
-	  	if(smodel!=null){
-	  		if(smodel.getMaxSelectionIndex()!=-1)
-	  			smodel.clearSelection();
+	  //nothing matched, clean the old selection
+	  	if(model!=null){
+	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
+	  		if(sels!=null && sels.size()>0)
+	  			((Selectable<Object>)model).clearSelection();
 	  		return LoadPropertyBinding.LOAD_IGNORED;
 	  	}
 	  	return null;

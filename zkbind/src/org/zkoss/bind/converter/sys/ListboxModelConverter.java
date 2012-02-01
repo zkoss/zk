@@ -18,7 +18,7 @@ import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * The {@link Converter} implementation of the listbox for converting collection to ListModel and vice versa.
@@ -41,8 +41,8 @@ public class ListboxModelConverter extends AbstractListModelConverter{
 			throw new IllegalArgumentException("not a listbox, is "+comp);
 		}
 		final Binder binder = ctx.getBinder();
-		if(model instanceof ListSelectionModel && ((BinderCtrl)binder).hasPropertyLoadBinding(comp, "selectedItems")){
-			((ListSelectionModel)model).setMultiple(true);
+		if(model instanceof Selectable && ((BinderCtrl)binder).hasPropertyLoadBinding(comp, "selectedItems")){
+			((Selectable<?>)model).setMultiple(true);
 		}
 		return model;
 	}

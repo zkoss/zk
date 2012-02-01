@@ -13,6 +13,7 @@ package org.zkoss.bind.converter.sys;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +29,7 @@ import org.zkoss.zul.ListModelArray;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.ListModelMap;
 import org.zkoss.zul.ListModelSet;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.GroupsListModel;
 
 /**
@@ -87,26 +88,25 @@ import org.zkoss.zul.impl.GroupsListModel;
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, or ListModel only. "+val.getClass());
 		}
-		final Indexer indexer = new Indexer(model);
+//		final Container container = new Container(model);
 		
 		final ListModel compModel = getComponentModel(comp);
-		if(compModel instanceof ListSelectionModel){
-			ListSelectionModel smodel = ((ListSelectionModel)compModel);
-			ListSelectionModel toSModel = (ListSelectionModel) model;
-			toSModel.setMultiple(smodel.isMultiple());
-			if (!smodel.isSelectionEmpty()) {
-				int maxsel = smodel.getMaxSelectionIndex();
-				int sel;
-				for(int index = smodel.getMinSelectionIndex();index <= maxsel;index++){
-					//get the object from old model
-					Object selval = compModel.getElementAt(index);
-					if(selval!=null){
-						//find the index of the object in new wrapped model
-						sel = indexer.indexOf(selval);
-						toSModel.addSelectionInterval(sel, sel);
-					}
-				}
+		if(compModel instanceof Selectable){
+			Selectable selectable = ((Selectable)compModel);
+			((Selectable) model).setMultiple(selectable.isMultiple());
+			
+			//Should we check the contains? it has O(m) issue and O(mn) in array case
+			//if not, there is a issue if the new data doesn't contains the selected obj
+//			for(Object selected:container.contains(selectable.getSelection())){
+//				((Selectable) model).addToSelection(selected);
+//			}
+			
+			//no need to check contains, user should remove the selection if it is not in current list anymore
+			//that could be done by binding to selectedItem or selectedItems
+			for(Object selected:selectable.getSelection()){
+				((Selectable) model).addToSelection(selected);
 			}
+			
 		}
 		model = handleWrappedModel(ctx,comp,model);
 		comp.setAttribute(BinderImpl.MODEL, model); //ZK-758. @see AbstractRenderer#addItemReference
@@ -141,26 +141,40 @@ import org.zkoss.zul.impl.GroupsListModel;
 		}
 	}
 	
-	//indexer to handle wrapped model
-	private static class Indexer {
-		private Object model;
-		
-		public Indexer(Object model){
-			this.model = model;
-		}
-		@SuppressWarnings("rawtypes")
-		public int indexOf(Object obj){
-			if (model instanceof ListModelSet) {
-				return ((ListModelSet)model).indexOf(obj);
-			} else if (model instanceof ListModelList) {
-				return ((ListModelList)model).indexOf(obj);
-			} else if (model instanceof ListModelMap) {
-				return ((ListModelMap)model).indexOf(obj);
-			} else if (model instanceof ListModelArray) {
-				return ((ListModelArray)model).indexOf(obj);
-			} 
-			return -1;
-		}
-	}
+//	//contains to handle wrapped model
+//	private static class Container {
+//		private Object model;
+//		
+//		public Container(Object model){
+//			this.model = model;
+//		}
+//		@SuppressWarnings("rawtypes")
+//		public Set<Object> contains(Set<Object> objs){
+//			Set<Object> set = new HashSet<Object>();
+//			if (model instanceof ListModelSet) {
+//				for(Object obj:objs){
+//					if(((ListModelSet)model).contains(obj))
+//						set.add(obj);
+//				}
+//			} else if (model instanceof ListModelList) {
+//				for(Object obj:objs){
+//					if(((ListModelList)model).contains(obj))
+//						set.add(obj);
+//				}
+//			} else if (model instanceof ListModelMap) {
+//				for(Object obj:objs){
+//					if(((ListModelMap)model).containsValue(obj))
+//						set.add(obj);
+//				}
+//			} else if (model instanceof ListModelArray) {
+//				for(Object obj:((ListModelArray)model).getInnerArray()){
+//					if(objs.contains(obj)){
+//						set.add(obj);
+//					}
+//				}
+//			} 
+//			return set;
+//		}
+//	}
 
 }

@@ -22,10 +22,11 @@ import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ext.ListSelectionModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Convert listbox selected listitems to bean and vice versa.
@@ -39,34 +40,32 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Listbox lbx = (Listbox) comp;
 		final ListModel<?> model = lbx.getModel();
-  		final ListSelectionModel smodel = (model instanceof ListSelectionModel)?(ListSelectionModel)model:null;
+		if(model !=null && !(model instanceof Selectable)){
+			//model has to imple Selectable if binding to selectedItems
+  			throw new UiException("model doesn't implement Selectable");
+  		}
+		
   		final Set<Listitem> items = new LinkedHashSet<Listitem>();
 		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(LinkedHashSet.class, val);
 		
-		if(smodel!=null && smodel.getMaxSelectionIndex()!=-1){//clear the selection first
-	  		smodel.clearSelection();
-		}
-		
 	  	if (vals != null && vals.size()>0) {
-		  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-		  		final Listitem li = (Listitem) it.next();
-		  		Object bean = null;
-		  		if(model!=null){ //no binding
-		  			bean = model.getElementAt(li.getIndex());
-		  		} else{
-		  			bean = li.getValue();
-		  		}
+	  		if(model!=null){
+	  			for(Object obj:vals){
+	  				((Selectable<Object>)model).addToSelection(obj);
+	  			}
+	  		}else{
+	  			//no model case
+			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
+			  		final Listitem li = (Listitem) it.next();
+			  		Object bean = li.getValue();
 
-		  		if (vals.contains(bean)) {
-		  			if(smodel!=null){
-		  				final int i = li.getIndex();
-		  				smodel.addSelectionInterval(i,i);
-		  			}
-		  			items.add(li);
-		  		}
-		  	}			
+			  		if (vals.contains(bean)) {
+			  			items.add(li);
+			  		}
+			  	}
+	  		}
 	  	}
-	  	return smodel == null ? items : LoadPropertyBinding.LOAD_IGNORED;
+	  	return model == null ? items : LoadPropertyBinding.LOAD_IGNORED;
 	}
 
 	@SuppressWarnings("unchecked")
