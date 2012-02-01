@@ -27,6 +27,7 @@ import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.GroupsDataEvent;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * An array implementation of {@link GroupsModel}.
@@ -46,7 +47,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
  * @see ComponentCloneListener
  */
 public class GroupsModelArray<D, H, F> extends AbstractGroupsModel<D, H, F>
-implements GroupsModelExt<D>, ComponentCloneListener, Cloneable{
+implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	
 	/**
 	 * member field to store native (original) array data

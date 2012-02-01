@@ -1,4 +1,4 @@
-/* GroupsModelExt.java
+/* GroupsSortableModel.java
 
 	Purpose:
 		
@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zul;
+package org.zkoss.zul.ext;
 
 import java.util.Comparator;
 
@@ -24,9 +24,9 @@ import java.util.Comparator;
  *
  * <p>D: the type of the data.
  * @author tomyeh
- * @since 3.5.0
+ * @since 6.0.0
  */
-public interface GroupsModelExt<D> {
+public interface GroupsSortableModel<D> {
 	/** It called when {@link Listbox} or {@link Grid} has to sort
 	 * the content.
 	 *

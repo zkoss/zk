@@ -22,7 +22,9 @@ import java.util.Comparator;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
+
 import org.zkoss.zul.event.GroupsDataEvent;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * A simple implementation of {@link GroupsModel}.
@@ -40,7 +42,7 @@ import org.zkoss.zul.event.GroupsDataEvent;
  * @see ComponentCloneListener
  */
 public class SimpleGroupsModel<D, H, F> extends AbstractGroupsModel<D, Object, F>
-implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
+implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	
 	/**
 	 * member field to store group data

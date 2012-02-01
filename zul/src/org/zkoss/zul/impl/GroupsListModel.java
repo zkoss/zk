@@ -31,10 +31,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
-import org.zkoss.zul.GroupsModelExt;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.ext.GroupingInfo;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * Encapulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
@@ -68,7 +68,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	 */
 	public static <D, G, F> GroupsListModel<D, G, F>
 	toListModel(GroupsModel<D, G, F> model) {
-		if (model instanceof GroupsModelExt)
+		if (model instanceof GroupsSortableModel)
 			return new GroupsListModelExt<D, G, F>(model);
 		return new GroupsListModel<D, G, F>(model);
 	}
@@ -328,7 +328,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	}
 }
 /*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
-implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
+implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	/*package*/ GroupsListModelExt(GroupsModel<D, G, F> model) {
 		super(model);
 	}
@@ -339,17 +339,17 @@ implements GroupsModelExt<D>, ComponentCloneListener, Cloneable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void group(Comparator<D> cmpr, boolean ascending, int colIndex) {
-		if (!(_model instanceof GroupsModelExt))
-			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
-		((GroupsModelExt)_model).group(cmpr, ascending, colIndex);
+		if (!(_model instanceof GroupsSortableModel))
+			throw new UiException(GroupsSortableModel.class + " must be implemented in "+_model.getClass());
+		((GroupsSortableModel)_model).group(cmpr, ascending, colIndex);
 	}
 	/** Sorts the data by the specified column and comparator.
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
-		if (!(_model instanceof GroupsModelExt))
-			throw new UiException("GroupsModelExt must be implemented in "+_model.getClass());
-		((GroupsModelExt)_model).sort(cmpr, ascending, colIndex);
+		if (!(_model instanceof GroupsSortableModel))
+			throw new UiException(GroupsSortableModel.class + " must be implemented in "+_model.getClass());
+		((GroupsSortableModel)_model).sort(cmpr, ascending, colIndex);
 	}
 	
 	@SuppressWarnings("unchecked")

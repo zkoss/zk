@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zul.event.GroupsDataListener;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * The interface defines a suitable data model for grouping {@link Listbox}
@@ -27,14 +28,14 @@ import org.zkoss.zul.event.GroupsDataListener;
  * and D: the class representing each item of data (in a group).
  *
  * <p>If the data model is used with sortable listbox or grid,
- * the developer must also implement {@link GroupsModelExt}.
+ * the developer must also implement {@link GroupsSortableModel}.
  *
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  *
  * @author tomyeh
  * @since 3.5.0
- * @see GroupsModelExt
+ * @see GroupsSortableModel
  * @see ListModel
  */
 public interface GroupsModel<D, G, F> {

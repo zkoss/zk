@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.ext.Sortable;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * The list header which defines the attributes and header of a column
@@ -406,11 +407,12 @@ public class Listheader extends HeaderElement {
 			boolean isPagingMold = box.inPagingMold();
 			int activePg = isPagingMold ? box.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
-				if (model instanceof GroupsModelExt) {
-					sortGroupsModel(box, (GroupsModelExt)model, cmpr, ascending);
+				if (model instanceof GroupsSortableModel) {
+					sortGroupsModel(box, (GroupsSortableModel)model, cmpr, ascending);
 				} else {
 					if (!(model instanceof Sortable))
-						throw new UiException("Sortable must be implemented in "+model.getClass().getName());
+						throw new UiException(GroupsSortableModel.class
+						+ " or " + Sortable.class + " must be implemented in "+model.getClass().getName());
 					sortListModel((Sortable)model, cmpr, ascending);
 				}
 			} else { //not live data
@@ -440,7 +442,7 @@ public class Listheader extends HeaderElement {
 		return true;
 	}
 	@SuppressWarnings("unchecked")
-	private void sortGroupsModel(Listbox box, GroupsModelExt model,
+	private void sortGroupsModel(Listbox box, GroupsSortableModel model,
 	Comparator cmpr, boolean ascending) {
 		model.sort(cmpr, ascending, box.getListhead().getChildren().indexOf(this));
 	}

@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Sortable;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * A single column in a {@link Columns} element.
@@ -368,8 +369,8 @@ public class Column extends HeaderElement {
 			boolean isPagingMold = grid.inPagingMold();
 			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
-				if (model instanceof GroupsModelExt) {
-					sortGroupsModel(grid, (GroupsModelExt)model, cmpr, ascending);
+				if (model instanceof GroupsSortableModel) {
+					sortGroupsModel(grid, (GroupsSortableModel)model, cmpr, ascending);
 				} else {
 					if (!(model instanceof Sortable))
 						throw new UiException("Sortable must be implemented in "+model.getClass());
@@ -392,7 +393,7 @@ public class Column extends HeaderElement {
 		return true;
 	}
 	@SuppressWarnings("unchecked")
-	private void sortGroupsModel(Grid grid, GroupsModelExt model,
+	private void sortGroupsModel(Grid grid, GroupsSortableModel model,
 	Comparator cmpr, boolean ascending) {
 		model.sort(cmpr, ascending, grid.getColumns().getChildren().indexOf(this));
 	}
@@ -470,9 +471,9 @@ public class Column extends HeaderElement {
 			final ListModel model = grid.getModel();
 			int index = grid.getColumns().getChildren().indexOf(this);
 			if (model != null) { //live data
-				if (!(model instanceof GroupsModelExt))
-					throw new UiException("GroupsModel must be implemented in "+model.getClass().getName());
-				groupGroupsModel((GroupsModelExt)model, cmpr, ascending, index);
+				if (!(model instanceof GroupsSortableModel))
+					throw new UiException(GroupsSortableModel.class + " must be implemented in "+model.getClass().getName());
+				groupGroupsModel((GroupsSortableModel)model, cmpr, ascending, index);
 			} else { // not live data
 				final Rows rows = grid.getRows();
 				if (rows == null) return false;//Avoid grid with null group		
@@ -536,7 +537,7 @@ public class Column extends HeaderElement {
 		return true;
 	}
 	@SuppressWarnings("unchecked")
-	private void groupGroupsModel(GroupsModelExt model, Comparator cmpr,
+	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr,
 	boolean ascending, int index) {
 		model.group(cmpr, ascending, index);
 	}

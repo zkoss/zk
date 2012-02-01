@@ -222,8 +222,10 @@ ZK 6.0.0
     .z-outside -> .z-calendar-outside
   + Selectable must be implemented  if a list model is assigned to a listbox.
   + Selectable introduced isMultiple and setMultiple methods.
-  + ListModelExt and TreeModelExt are removed and replaced with
+  + ListModelExt and TreeModelExt are deprecated and replaced with
     org.zkoss.zul.ext.Sortable
+  + GroupsModelExt is depreccated and replaced with
+    org.zkoss.zul.ext.GroupsSortableModel
 
 	--------
 ZK 5.0.11

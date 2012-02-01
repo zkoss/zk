@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * @deprecated As of release 6.0.0, replaced with {@link Sortable}
+ * @deprecated As of release 6.0.0, replaced with {@link org.zkoss.zul.ext.Sortable}
  */
 public interface ListModelExt<E> extends org.zkoss.zul.ext.Sortable<E> {
 }
