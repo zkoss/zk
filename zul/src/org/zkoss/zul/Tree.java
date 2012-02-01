@@ -702,6 +702,8 @@ public class Tree extends MeshElement {
 		return _multiple;
 	}
 	/** Sets whether multiple selections are allowed.
+	 * <p>Notice that, if a model is assigned, it will change the model's
+	 * state (by {@link TreeSelectionModel#setMultiple}).
 	 */
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -717,6 +719,8 @@ public class Tree extends MeshElement {
 				}
 				//No need to update selId because z.multiple will do the job
 			}
+			if (_model != null)
+				((TreeSelectionModel)_model).setMultiple(multiple);
 			smartUpdate("multiple", _multiple);
 		}
 	}
@@ -1296,6 +1300,9 @@ public class Tree extends MeshElement {
 						((Treeitem)parent).setOpen(om.isPathOpened(_model.getPath(node)));
 				}
 				break;
+			case TreeDataEvent.MULTIPLE_CHANGED:
+				setMultiple(((TreeSelectionModel)_model).isMultiple());
+				break;
 			}
 		}
 	}
@@ -1435,6 +1442,9 @@ public class Tree extends MeshElement {
 	 */
 	public void setModel(TreeModel<?> model) {
 		if (model != null) {
+			if (!(model instanceof TreeSelectionModel))
+				throw new UiException(model.getClass() + " must implement "+TreeSelectionModel.class);
+
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);

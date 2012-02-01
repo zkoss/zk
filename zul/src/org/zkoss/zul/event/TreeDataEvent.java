@@ -37,6 +37,10 @@ public class TreeDataEvent<E> {
 	public static final int SELECTION_CHANGED = 4;
 	/** Identifies the open status of the tree has changed. @since 6.0.0  */
 	public static final int OPEN_CHANGED = 5;
+	/** Identified the state of {@link ListModel#isMultiple} is changed.
+	 * @since 6.0.0
+	 */
+	public static final int MULTIPLE_CHANGED = 6;
 
 	private final TreeModel<E> _model;
 	private final int _type;

@@ -50,15 +50,28 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 
 	private static final long serialVersionUID = 20110131094811L;
 	private HashSet<TreeNode<E>> _opens = new HashSet<TreeNode<E>>();
-	private HashSet<TreeNode<E>> _selections = new HashSet<TreeNode<E>>();
+	private HashSet<TreeNode<E>> _selection = new HashSet<TreeNode<E>>();
 
 	private boolean _multiple;
-
 
 	// Selectable//Selectable
 	@Override
 	public void setMultiple(boolean multiple) {
-		_multiple = multiple;
+		if (_multiple != multiple) {
+			_multiple = multiple;
+			fireEvent(getRoot(), -1, -1, TreeDataEvent.MULTIPLE_CHANGED);
+
+			if (!multiple && _selection.size() > 1) {
+				final List<TreeNode<E>> sel = new ArrayList<TreeNode<E>>();
+				sel.addAll(_selection);
+				TreeNode<E> v = sel.remove(0);
+				_selection.clear();
+				_selection.add(v);
+
+				for (final TreeNode<E> node: sel)
+					fireSelectionChanged(node);
+			}
+		}
 	}
 
 	@Override
@@ -78,7 +91,7 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 				selected.add(getChild(paths[i]));
 		return selected;
 	}
-	
+
 	/**
 	 * Add the specified object into selection.
 	 * @param obj the object to be as selection.
@@ -306,16 +319,16 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 				List<TreeNode<E>> newSelection = getNodesByPath(paths);
 				if (!newSelection.isEmpty()) {
 					TreeNode<E> e = newSelection.get(0);
-					if (!_selections.contains(e)) {
-						_selections.clear();
-						_selections.add(e);
+					if (!_selection.contains(e)) {
+						_selection.clear();
+						_selection.add(e);
 						fireSelectionChanged(e);
 					}
 				}
 			} else {
 				for (TreeNode<E> e : getNodesByPath(paths)) {
-					if (!_selections.contains(e)) {
-						_selections.add(e);
+					if (!_selection.contains(e)) {
+						_selection.add(e);
 						fireSelectionChanged(e);
 					}
 				}
@@ -335,9 +348,9 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@Override
 	public void removeSelectionPaths(int[][] paths) {
 		int newPathLength = paths != null ? paths.length : 0;
-		if (newPathLength > 0 && !_selections.isEmpty()) {
+		if (newPathLength > 0 && !_selection.isEmpty()) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_selections.remove(e))
+				if (_selection.remove(e))
 					fireSelectionChanged(e);
 				if (!isMultiple())
 					break;
@@ -347,26 +360,26 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 
 	@Override
 	public boolean isPathSelected(int[] path) {
-		if (path != null && !_selections.isEmpty()) {
+		if (path != null && !_selection.isEmpty()) {
 			TreeNode<E> e = getChild(path);
 			if (e != null)
-				return _selections.contains(e);
+				return _selection.contains(e);
 		}
 		return false;
 	}
 
 	@Override
 	public int[] getSelectionPath() {
-		if (!_selections.isEmpty()) {
-			return getPath(_selections.iterator().next());
+		if (!_selection.isEmpty()) {
+			return getPath(_selection.iterator().next());
 		} else return null;
 	}
 
 	@Override
 	public int[][] getSelectionPaths() {
-		if (!_selections.isEmpty()) {
+		if (!_selection.isEmpty()) {
 			List<int[]> paths = new ArrayList<int[]>();
-			for (TreeNode<E> e : _selections) {
+			for (TreeNode<E> e : _selection) {
 				int[] path = getPath(e);
 				if (path != null)
 					paths.add(path);
@@ -377,19 +390,19 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 
 	@Override
 	public int getSelectionCount() {
-		return _selections.size();
+		return _selection.size();
 	}
 
 	@Override
 	public boolean isSelectionEmpty() {
-		return _selections.isEmpty();
+		return _selection.isEmpty();
 	}
 
 	@Override
 	public void clearSelection() {
-		if (!_selections.isEmpty()) {
-			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_selections)) {
-				_selections.remove(e);
+		if (!_selection.isEmpty()) {
+			for (TreeNode<E> e : new ArrayList<TreeNode<E>>(_selection)) {
+				_selection.remove(e);
 				fireSelectionChanged(e);
 			}
 		}
@@ -399,7 +412,7 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		DefaultTreeModel<E> clone = (DefaultTreeModel<E>)super.clone();
-		clone._selections = new HashSet<TreeNode<E>>(_selections);
+		clone._selection = new HashSet<TreeNode<E>>(_selection);
 		clone._opens = new HashSet<TreeNode<E>>(_opens);
 		return clone;
 	}

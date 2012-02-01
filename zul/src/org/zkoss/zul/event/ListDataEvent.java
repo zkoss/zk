@@ -39,6 +39,11 @@ public class ListDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int SELECTION_CHANGED = 4;
+	/** Identified the state of {@link ListModel#isMultiple} is changed.
+	 * @since 6.0.0
+	 */
+	public static final int MULTIPLE_CHANGED = 6;
+
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 

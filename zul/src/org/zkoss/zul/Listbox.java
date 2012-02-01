@@ -696,6 +696,8 @@ public class Listbox extends MeshElement {
 
 	/**
 	 * Sets whether multiple selections are allowed.
+	 * <p>Notice that, if a model is assigned, it will change the model's
+	 * state (by {@link Selectable#setMultiple}).
 	 */
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -712,7 +714,8 @@ public class Listbox extends MeshElement {
 				// No need to update selId because multiple will do the job at
 				// client
 			}
-
+			if (_model != null)
+				((Selectable)_model).setMultiple(multiple);
 			smartUpdate("multiple", _multiple);
 		}
 	}
@@ -2458,6 +2461,8 @@ public class Listbox extends MeshElement {
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
 			if (!_ignoreDataSelectionEvent)
 				doSelectionChanged();
+		} else if (type == ListDataEvent.MULTIPLE_CHANGED) {
+			setMultiple(((Selectable)_model).isMultiple());
 		} else {
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance

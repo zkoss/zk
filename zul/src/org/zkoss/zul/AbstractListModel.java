@@ -145,7 +145,17 @@ Selectable<E>, java.io.Serializable {
 	/** {@inheritDoc} */
 	@Override
 	public void setMultiple(boolean multiple) {
-		_multiple = multiple;
+		if (_multiple != multiple) {
+			_multiple = multiple;
+			fireEvent(ListDataEvent.MULTIPLE_CHANGED, -1, -1);
+
+			if (!multiple && _selection.size() > 1) {
+				E v = _selection.iterator().next();
+				_selection.clear();
+				_selection.add(v);
+				fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+			}
+		}
 	}
 
 	/** Instantiation an empty set of the section.
