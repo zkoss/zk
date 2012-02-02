@@ -207,7 +207,7 @@ public class Combobox extends Textbox {
 	}
 	private boolean doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
-		if (smodel.getSelection().isEmpty()) {
+		if (smodel.isSelectionEmpty()) {
 			if (_selItem == null)
 				return false; //nothing changed
 			setSelectedItem(null);

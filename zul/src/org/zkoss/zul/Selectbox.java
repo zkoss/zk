@@ -226,7 +226,7 @@ public class Selectbox extends HtmlBasedComponent {
 	}
 	private boolean doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
-		if (smodel.getSelection().isEmpty()) {
+		if (smodel.isSelectionEmpty()) {
 			if (_jsel < 0)
 				return false; //nothing changed
 			setSelectedIndex(-1);

@@ -50,6 +50,11 @@ public interface Selectable<E> {
 	public boolean isSelected(E obj);
 	
 	/**
+	 * Returns true if the selection is currently empty.
+	 * @since 6.0.0
+	 */
+	public boolean isSelectionEmpty();
+	/**
 	 * Add the specified object into selection.
 	 * <p>Notice that this method is designed to be called by a component
 	 * (such as {@link org.zkoss.zul.Listbox}).

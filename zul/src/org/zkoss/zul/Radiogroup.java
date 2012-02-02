@@ -411,7 +411,7 @@ public class Radiogroup extends XulElement {
 	}
 	private boolean doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
-		if (smodel.getSelection().isEmpty()) {
+		if (smodel.isSelectionEmpty()) {
 			if (_jsel < 0)
 				return false; //nothing changed
 			setSelectedItem(null);

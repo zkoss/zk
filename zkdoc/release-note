@@ -183,19 +183,13 @@ ZK 6.0.0
     is changed to Map<String, String[]>
   + Files.getConfigDirectory is removed
   + org.zkoss.util.logging.LogService is removed
-  + org.zkoss.zul.ext.Selectable is removed, replaced with
-    org.zkoss.zul.ext.ListSelectionModel.
-  + org.zkoss.zul.ext.Openable is removed, replaced with
-    org.zkoss.zul.ext.TreeOpenableModel.
-  + AbstractListModel implements org.zkoss.zul.ext.ListSelectionModel instead of
-	org.zkoss.zul.ext.Selectable
-  + Remove AbstractTreeModel to implement org.zkoss.zul.ext.Selectable and
-    org.zkoss.zul.ext.Openable
+  + org.zkoss.zul.ext.TreeSelectionModel and TreeOpenableModel are introduced
+    to replace Selectable and Openable for TreeModel
+  + AbstractTreeModel implements only TreeModel
   + DefaultTreeModel implements org.zkoss.zul.ext.TreeSelectionModel and
-	org.zkoss.zul.ext.TreeOpenableModel instead of org.zkoss.zul.ext.Selectable
-	and org.zkoss.zul.ext.Openable
-  + The multiple status and selections status are provided by ListSelectionModel
-  and TreeSelectionModel when using Tree or Listbox with Model.
+	org.zkoss.zul.ext.TreeOpenableModel
+  + The multiple status and the selection are provided by Selectable
+    and TreeSelectionModel when using Listbox and Tree with Model.
   + The open status are provided by TreeOpenableModel when using Tree with Model
   + Library property org.zkoss.zul.Separator.spaceWithMargin is removed (since
     we don't maintain the margin approach found in ZK 2 any more)

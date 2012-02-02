@@ -96,6 +96,11 @@ Selectable<E>, java.io.Serializable {
 	public boolean isSelected(E obj) {
 		return _selection.contains(obj);
 	}
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSelectionEmpty() {
+		return _selection.isEmpty();
+	}
 
 	/** {@inheritDoc} */
 	@Override
