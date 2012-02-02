@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -24,6 +25,8 @@ import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectionModel;
 import org.zkoss.zul.ext.Sortable;
+import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.Openable;
 
 /**
  * A simple tree data model that uses {@link TreeNode} to represent a tree.
@@ -46,7 +49,7 @@ import org.zkoss.zul.ext.Sortable;
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
 implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
-		java.io.Serializable {
+Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
 	private HashSet<TreeNode<E>> _opens = new HashSet<TreeNode<E>>();
@@ -92,53 +95,7 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		return selected;
 	}
 
-	/**
-	 * Add the specified object into selection.
-	 * @param obj the object to be as selection.
-	 */	
-	public void addToSelection(TreeNode<E> child) {
-		int[] path = getPath(child);
-		if (path != null && path.length > 0)
-			addSelectionPath(path);
-	}
-	/**
-	 * Remove the specified object from selection.
-	 * @param obj the object to be remove from selection.
-	 */
-	public void removeFromSelection(TreeNode<E> child) {
-		int[] path = getPath(child);
-		if (path != null && path.length > 0)
-			removeSelectionPath(path);
-	}
 
-	/**
-	 * Sets the specified object into open.
-	 * @param obj the object to be as open.
-	 * @param open whether be opened
-	 */
-	public void setOpen(TreeNode<E> child, boolean open) {
-		int[] path = getPath(child);
-		if (path != null && path.length > 0) {
-			if (open)
-				addOpenPath(path);
-			else
-				removeOpenPath(path);
-		}
-	}
-	
-	
-	/**
-	 * Returns whether the specified object be opened.
-	 * @param obj
-	 */
-	public boolean isOpen(TreeNode<E> child) {
-		int[] path = getPath(child);
-		if (path != null && path.length > 0) {
-			return isPathOpened(path);
-		}
-		return false;
-	}
-	
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
 	 */
@@ -337,25 +294,30 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	}
 
 	@Override
-	public void removeSelectionPath(int[] path) {
+	public boolean removeSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			int[][] paths = new int[1][path.length];
 			paths[0] = path;
-			removeSelectionPaths(paths);
+			return removeSelectionPaths(paths);
 		}
+		return false;
 	}
 
 	@Override
-	public void removeSelectionPaths(int[][] paths) {
+	public boolean removeSelectionPaths(int[][] paths) {
+		boolean found = false;
 		int newPathLength = paths != null ? paths.length : 0;
 		if (newPathLength > 0 && !_selection.isEmpty()) {
 			for (TreeNode<E> e : getNodesByPath(paths)) {
-				if (_selection.remove(e))
+				if (_selection.remove(e)) {
+					found = true;
 					fireSelectionChanged(e);
+				}
 				if (!isMultiple())
 					break;
 			}
 		}
+		return found;
 	}
 
 	@Override
@@ -448,15 +410,70 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 		fireEvent(node, 0, 0,TreeDataEvent.STRUCTURE_CHANGED);
 	}
 
+	//Selectable//
+	@Override
+	public void setSelection(Collection<? extends TreeNode<E>> selection) {
+		clearSelection();
+		for (final TreeNode<E> node: selection)
+			addToSelection(node);
+	}
+	@Override
+	public boolean isSelected(TreeNode<E> child) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			return isPathSelected(path);
+		return false;
+	}
+	@Override
+	public void addToSelection(TreeNode<E> child) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			addSelectionPath(path);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean removeFromSelection(Object child) {
+		if (child instanceof TreeNode) {
+			final int[] path = getPath((TreeNode)child);
+			if (path != null && path.length > 0)
+				return removeSelectionPath(path);
+		}
+		return false;
+	}
+
+	//Openable//
+	@Override
+	public void setOpen(TreeNode<E> child, boolean open) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0) {
+			if (open)
+				addOpenPath(path);
+			else
+				removeOpenPath(path);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isOpen(Object child) {
+		if (child instanceof TreeNode) {
+			final int[] path = getPath((TreeNode)child);
+			if (path != null && path.length > 0)
+				return isPathOpened(path);
+		}
+		return false;
+	}
+
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
-	public void addSelection(TreeNode<E> obj) {
-		addToSelection(obj);
+	@SuppressWarnings("unchecked")
+	public void addSelection(Object obj) {
+		if (obj instanceof TreeNode)
+			addToSelection((TreeNode)obj);
 	}
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
-	public void removeSelection(TreeNode<E> obj) {
+	public void removeSelection(Object obj) {
 		removeFromSelection(obj);
 	}
 }

@@ -67,8 +67,9 @@ public interface TreeSelectionModel {
 	 * 
 	 * @param path
 	 *            the path to remove from the selection
+	 * @return true if it was selected and unselected successfully
 	 */
-	public void removeSelectionPath(int[] path);
+	public boolean removeSelectionPath(int[] path);
 
 	/**
 	 * Removes paths from the selection. If any of the paths in
@@ -77,8 +78,9 @@ public interface TreeSelectionModel {
 	 * 
 	 * @param paths
 	 *            the path to remove from the selection
+	 * @return true if at least one of the path was selected and unselected successfully
 	 */
-	public void removeSelectionPaths(int[][] paths);
+	public boolean removeSelectionPaths(int[][] paths);
 
 	/**
 	 * Returns true if the path, <code>path</code>, is in the current selection.
