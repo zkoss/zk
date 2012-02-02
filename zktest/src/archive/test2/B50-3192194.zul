@@ -25,7 +25,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			list2.add("Thomas");
 			list2.add("Steven");
 			ListModelList lm2 = new ListModelList(list2);
-			lm2.addSelection(lm2.get(0));
+			lm2.addToSelection(lm2.get(0));
 			combobox.setModel(lm2);
 		]]></attribute>
 	</combobox>

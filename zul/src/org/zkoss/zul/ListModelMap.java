@@ -282,7 +282,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable, Cloneable
 	private void removeSelectionByKey(Object key) {
 		for (Map.Entry<K, V> entry: getSelection()) {
 			if (Objects.equals(key, entry.getKey())) {
-				removeSelection(entry);
+				removeFromSelection(entry);
 				return;
 			}
 		}
@@ -290,7 +290,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable, Cloneable
 	private void removeSelectionByValue(Object value) {
 		for (Map.Entry<K, V> entry: getSelection()) {
 			if (Objects.equals(value, entry.getValue())) {
-				removeSelection(entry);
+				removeFromSelection(entry);
 				return;
 			}
 		}

@@ -96,21 +96,21 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	 * Add the specified object into selection.
 	 * @param obj the object to be as selection.
 	 */	
-	public void addSelection(TreeNode<E> child) {
+	public void addToSelection(TreeNode<E> child) {
 		int[] path = getPath(child);
 		if (path != null && path.length > 0)
 			addSelectionPath(path);
 	}
-	
 	/**
 	 * Remove the specified object from selection.
 	 * @param obj the object to be remove from selection.
 	 */
-	public void removeSelection(TreeNode<E> child) {
+	public void removeFromSelection(TreeNode<E> child) {
 		int[] path = getPath(child);
 		if (path != null && path.length > 0)
-			addSelectionPath(path);
+			removeSelectionPath(path);
 	}
+
 	/**
 	 * Sets the specified object into open.
 	 * @param obj the object to be as open.
@@ -446,5 +446,17 @@ implements Sortable<TreeNode<E>>, TreeSelectionModel, TreeOpenableModel,
 	private void fireStructureChangedEvent(TreeNode<E> node) {
 		if (node.getChildCount() == 0) return;
 		fireEvent(node, 0, 0,TreeDataEvent.STRUCTURE_CHANGED);
+	}
+
+	//For Backward Compatibility//
+	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
+	 */
+	public void addSelection(TreeNode<E> obj) {
+		addToSelection(obj);
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
+	 */
+	public void removeSelection(TreeNode<E> obj) {
+		removeFromSelection(obj);
 	}
 }
