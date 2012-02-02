@@ -34,7 +34,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			ListModel model = new ListModelList(Arrays.asList(data));
 			ListitemRenderer renderer = new ListitemRenderer()
 			{
-				public void render(Listitem item, Object data) throws Exception
+				public void render(Listitem item, Object data, int index) throws Exception
 				{
 					String[] s = (String[])data;
 					new Listcell(s[0]).setParent(item);

@@ -272,7 +272,7 @@ public class ModelProvider {
 	public static class GridRendererFactory {
 		public static RowRenderer getBeanRowRenderer() {
 			return new RowRenderer() {
-				public void render(Row row, Object data) throws Exception {
+				public void render(Row row, Object data, int index) throws Exception {
 					SampleBean b = (SampleBean) data;
 					row.appendChild(new Label(b.getName()));
 					row.appendChild(new Label(b.getNumber()+""));
@@ -282,7 +282,7 @@ public class ModelProvider {
 		}
 		public static RowRenderer getArrayRowRenderer() {
 			return new RowRenderer() {
-				public void render(Row row, Object data) throws Exception {
+				public void render(Row row, Object data, int index) throws Exception {
 					String[] ary = (String[]) data;
 					row.appendChild(new Label(ary[0]));
 					row.appendChild(new Label(ary[1]));
@@ -292,7 +292,7 @@ public class ModelProvider {
 		}
 		public static RowRenderer getGroupBeanRowRenderer() {
 			return new RowRenderer() {
-				public void render(Row row, Object data) {
+				public void render(Row row, Object data, int index) {
 					if (row instanceof Group) {
 						Object[] obj = (Object[]) data; // prepared by
 						// createGroupHead()
@@ -321,7 +321,7 @@ public class ModelProvider {
 		}
 		public static RowRenderer getGroupArrayRowRenderer() {
 			return new RowRenderer () {
-				public void render(Row row, java.lang.Object obj) {
+				public void render(Row row, Object obj, int index) {
 					if (row instanceof Group) {
 						row.appendChild(new Label(obj.toString()));
 					} else {
@@ -339,7 +339,7 @@ public class ModelProvider {
 	public static class ListboxRendererFactory {
 		public static ListitemRenderer getBeanItemRenderer() {
 			return new ListitemRenderer() {
-				public void render(Listitem item, Object data) throws Exception {
+				public void render(Listitem item, Object data, int index) throws Exception {
 					SampleBean b = (SampleBean) data;
 					item.appendChild(new Listcell(b.getName()));
 					item.appendChild(new Listcell(b.getNumber()+""));
@@ -349,7 +349,7 @@ public class ModelProvider {
 		}
 		public static ListitemRenderer getArrayItemRenderer() {
 			return new ListitemRenderer() {
-				public void render(Listitem item, Object data) throws Exception {
+				public void render(Listitem item, Object data, int index) throws Exception {
 					String[] ary = (String[]) data;
 					item.appendChild(new Listcell(ary[0]));
 					item.appendChild(new Listcell(ary[1]));
@@ -359,7 +359,7 @@ public class ModelProvider {
 		}
 		public static ListitemRenderer getGroupBeanItemRenderer() {
 			return new ListitemRenderer() {
-				public void render(Listitem item, Object data) throws Exception {
+				public void render(Listitem item, Object data, int index) throws Exception {
 					if (item instanceof Listgroup) {
 						Object[] obj = (Object[]) data; // prepared by
 						// createGroupHead()
@@ -387,7 +387,7 @@ public class ModelProvider {
 		}
 		public static ListitemRenderer getGroupArrayItemRenderer() {
 			return new ListitemRenderer() {
-				public void render(Listitem item, Object obj) throws Exception {
+				public void render(Listitem item, Object obj, int index) throws Exception {
 					if (item instanceof Listgroup) {
 						item.appendChild(new Listcell(obj.toString()));
 					} else {

@@ -11,7 +11,7 @@ import org.zkoss.zul.RowRenderer;
  *
  */
 public class FoodGroupRenderer implements RowRenderer, java.io.Serializable {
-    public void render(Row row, java.lang.Object obj) {
+    public void render(Row row, Object obj, int index) {
         if (row instanceof Group) {
             row.appendChild(new Label(obj.toString()));
         } else {

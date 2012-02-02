@@ -30,7 +30,7 @@ import org.zkoss.zul.RowRenderer;
  */
 public class LiveGroupRenderer implements RowRenderer {
 
-	public void render(Row row, java.lang.Object data) {
+	public void render(Row row, Object data, int index) {
 		if(data instanceof String[]) {
 			String[] ary = (String[]) data;
       Div div = new Div();

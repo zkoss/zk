@@ -40,8 +40,8 @@
 	<!-- used for debugging
 	<zscript><![CDATA[
 	public class MyRender implements ListitemRenderer {
-		public void render(Listitem item, Object data) {
-			item.appendChild(new Listcell("#" + item.getIndex()));
+		public void render(Listitem item, Object data, int index) {
+			item.appendChild(new Listcell("#" + index));
 			item.appendChild(new Listcell(":" + data));
 		}
 	}

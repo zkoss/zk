@@ -31,7 +31,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
     }
     ListModel strset2 = ListModels.toListSubModel(new ListModelMap(map));
     ComboitemRenderer renderer = new ComboitemRenderer() {
-    	public void render(Comboitem item, Object data) throws Exception {
+    	public void render(Comboitem item, Object data, int index) throws Exception {
     		item.setLabel(((Map.Entry)data).getValue().toString());
     	}
     }

@@ -4,7 +4,7 @@
 
 		ListitemRenderer lir = new ListitemRenderer() {
 
-                    public void render( Listitem item, java.lang.Object data ) {
+                    public void render( Listitem item, Object data, int index) {
                         new Listcell( ( ( String ) data ).toUpperCase()).setParent( item );
                         item.setValue( data );
                     }

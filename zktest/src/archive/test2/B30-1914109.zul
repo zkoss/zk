@@ -29,7 +29,7 @@ is shorter and has a scroll bar</n:li>
 List items = new org.zkoss.zktest.test2.BigList(100);
 ListModel strset = new ListModelList(items);
 ListitemRenderer render = new ListitemRenderer() {
-public void render(Listitem item, Object data) {
+public void render(Listitem item, Object data, int index) {
 new Listcell("col - " + item.getIndex()).setParent(item);
 new Listcell("col - " + item.getIndex()).setParent(item);
 new Listcell("col - " + item.getIndex()).setParent(item);

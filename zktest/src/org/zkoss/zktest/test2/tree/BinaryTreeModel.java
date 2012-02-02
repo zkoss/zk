@@ -92,15 +92,15 @@ public class BinaryTreeModel extends AbstractTreeModel implements TreeSelectionM
 	}
 
 	@Override
-	public void removeSelectionPath(int[] path) {
+	public boolean removeSelectionPath(int[] path) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void removeSelectionPaths(int[][] paths) {
+	public boolean removeSelectionPaths(int[][] paths) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override

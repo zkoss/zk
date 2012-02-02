@@ -9,7 +9,7 @@
 	}
 	ListModel listModel = new SimpleListModel(list);
 	ListitemRenderer render = new ListitemRenderer () {
-			public void render(Listitem item, Object data) throws Exception {
+			public void render(Listitem item, Object data, int index) throws Exception {
 				item.setLabel(data.toString());
 			}
 	 };

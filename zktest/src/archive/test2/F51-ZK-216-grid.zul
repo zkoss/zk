@@ -40,8 +40,8 @@
 	<!-- used for debugging
 	<zscript><![CDATA[
 	public class MyRender implements RowRenderer {
-		public void render(Row item, Object data) {
-			item.appendChild(new Label("#" + item.getIndex())); //performance is not good (for testing only)
+		public void render(Row item, Object data, int index) {
+			item.appendChild(new Label("#" + index)); //performance is not good (for testing only)
 			item.appendChild(new Label(":" + data));
 		}
 	}

@@ -20,23 +20,23 @@
 		ListModel strset = new SimpleListModel(data);
 
 		ListitemRenderer renderl1 = new ListitemRenderer() {
-			public void render(Listitem item, Object data) {
+			public void render(Listitem item, Object data, int index) {
 				item.setLabel("option " + data);
 			}
 		};
 		ListitemRenderer renderl2 = new ListitemRenderer() {
-			public void render(Listitem item, Object data) {
+			public void render(Listitem item, Object data, int index) {
 				item.setLabel("plan " + data);
 			}
 		};
 
 		RowRenderer renderr1 = new RowRenderer() {
-			public void render(Row row, Object data) {
+			public void render(Row row, Object data, int index) {
 				row.appendChild(new Label("option " + data));
 			}
 		};
 		RowRenderer renderr2 = new RowRenderer() {
-			public void render(Row row, Object data) {
+			public void render(Row row, Object data, int index) {
 				row.appendChild(new Label("plan " + data));
 			}
 		};

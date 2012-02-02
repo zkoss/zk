@@ -13,7 +13,7 @@
 <zscript>
 
 		combo.setItemRenderer(new ComboitemRenderer() {
-			public void render(Comboitem item, Object data) throws Exception {
+			public void render(Comboitem item, Object data, int index) throws Exception {
 				// TODO Auto-generated method stub
 				item.setLabel(""+data);
 			}

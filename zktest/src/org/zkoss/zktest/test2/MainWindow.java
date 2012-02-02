@@ -190,7 +190,7 @@ public class MainWindow extends Window{
 	static class FileitemRenderer implements ListitemRenderer {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd mm:ss");
 		
-		public void render(Listitem item, Object data) throws Exception {
+		public void render(Listitem item, Object data, int index) throws Exception {
 			File file = (File)data;
 			new Listcell(file.getName()).setParent(item);
 			new Listcell(format.format(new Date(file.lastModified()))).setParent(item);

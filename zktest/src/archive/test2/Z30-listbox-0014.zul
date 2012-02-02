@@ -27,7 +27,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			List items = new org.zkoss.zktest.test2.BigList(100);
 			ListModel strset = new ListModelList(items);
 			ListitemRenderer render = new ListitemRenderer() { 
-				public void render(Listitem item, Object data) { 
+				public void render(Listitem item, Object data, int index) { 
 					new Listcell("column1 - " + item.getIndex()).setParent(item);
 					new Listcell("column2 - " +	item.getIndex()).setParent(item);
 					new Listcell("column3 - " + item.getIndex()).setParent(item);

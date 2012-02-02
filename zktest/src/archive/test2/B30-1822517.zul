@@ -35,7 +35,7 @@ The difference between 2 Listbox is the renderer.
 	
 	//listitem - listcell
 	public class Rend1 implements ListitemRenderer {
-		public void render(Listitem item, Object obj)
+		public void render(Listitem item, Object obj, int index)
 		{
 			String entry = (String)obj;
 			Listcell cell = new Listcell(entry);
@@ -45,7 +45,7 @@ The difference between 2 Listbox is the renderer.
 	
 	//listitem - listcell - label
 	public class Rend2 implements ListitemRenderer {
-		public void render(Listitem item, Object obj)
+		public void render(Listitem item, Object obj, int index)
 		{
 			String entry = (String)obj;
 			Listcell cell = new Listcell();

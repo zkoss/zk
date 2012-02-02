@@ -24,7 +24,7 @@ You can see the layout of grid shows properly.
 			List items = new org.zkoss.zktest.test2.BigList(500);
 			ListModel strset = new ListModelList(items);
 			RowRenderer render = new RowRenderer() { 
-				public void render(Row item, Object data) {
+				public void render(Row item, Object data, int index) {
 					new Label("col - " + 1).setParent(item);
 					new Label("col - " +	2).setParent(item);
 					new Label("col - " +3).setParent(item);

@@ -11,7 +11,7 @@ import org.zkoss.zul.ListitemRenderer;
  *
  */
 public class FoodGroupRenderer2 implements ListitemRenderer, java.io.Serializable {
-    public void render(Listitem row, java.lang.Object obj) {
+    public void render(Listitem row, Object obj, int index) {
         if (row instanceof Listgroup) {
             row.setLabel(obj.toString());
         } else {

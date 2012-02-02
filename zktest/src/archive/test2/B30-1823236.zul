@@ -26,7 +26,7 @@ NOTE: The mentioned bug occurs only if you add item via ListModel and ListDataEv
 	}
 	
 	public class Rend implements ListitemRenderer {
-		public void render(Listitem item, java.lang.Object data)  {
+		public void render(Listitem item, Object data, int index)  {
 			new Listcell(data.getFn()).setParent(item);
 			new Listcell(data.getLn()).setParent(item);
 		}

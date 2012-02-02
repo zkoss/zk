@@ -11,12 +11,12 @@
 			data[j] = "" + j;
 		ListModel strset = new SimpleListModel(data);
 		ListitemRenderer renderl1 = new ListitemRenderer() {
-			public void render(Listitem item, Object data) {
+			public void render(Listitem item, Object data, int index) {
 				item.setLabel("option " + data);
 			}
 		};
 		ListitemRenderer renderl2 = new ListitemRenderer() {
-			public void render(Listitem item, Object data) {
+			public void render(Listitem item, Object data, int index) {
 				item.setLabel("plan " + data);
 			}
 		};

@@ -56,7 +56,7 @@ public class Z60SelectorComposer extends SelectorComposer<Component> {
 		super.doAfterCompose(comp);
 		
 		grid.setRowRenderer(new RowRenderer<String>() {
-			public void render(Row row, String data) throws Exception {
+			public void render(Row row, String data, int index) throws Exception {
 				row.appendChild(new Label(data));
 				row.appendChild(new Label());
 			}

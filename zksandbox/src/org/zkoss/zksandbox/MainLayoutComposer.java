@@ -260,7 +260,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	private static final ListitemRenderer _defRend = new ItemRender();
 		
 	private static class ItemRender implements ListitemRenderer, java.io.Serializable {
-		public void render(Listitem item, Object data) {
+		public void render(Listitem item, Object data, int index) {
 			DemoItem di = (DemoItem) data;
 			Listcell lc = new Listcell();
 			item.setValue(di);

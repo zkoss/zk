@@ -22,7 +22,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		List items = new org.zkoss.zktest.test2.BigList(1000);
 		ListModel strset = new ListModelList(items);
 		RowRenderer render = new RowRenderer() {
-		public void render(Row item, Object data) {
+		public void render(Row item, Object data, int index) {
 			new Label("column1 - ").setParent(item);
 			new Label("column2 - ").setParent(item);
 			new Label("column3 - ").setParent(item);

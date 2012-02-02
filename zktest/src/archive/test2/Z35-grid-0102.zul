@@ -62,7 +62,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	
 	class MyRowRenderer implements RowRenderer{
-		public void render(Row row, java.lang.Object data){
+		public void render(Row row, Object data, int index){
 			if(data instanceof String[]){
 				String str = ((String[])data)[0].toString();
 				new Label(str).setParent(row);

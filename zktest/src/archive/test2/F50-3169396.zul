@@ -179,7 +179,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		}
 	};
 	ListitemRenderer itemRender = new ListitemRenderer() {
-		public void render(Listitem item, Object data) throws Exception {
+		public void render(Listitem item, Object data, int index) throws Exception {
 			FileInfo fi = (FileInfo) data;
 			item.appendChild(new Listcell(fi.path));
 			item.appendChild(new Listcell(fi.description));
@@ -204,7 +204,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	};
 	
 	ListitemRenderer itemRender2 = new ListitemRenderer() {
-		public void render(Listitem item, Object data) throws Exception {
+		public void render(Listitem item, Object data, int index) throws Exception {
 			String[] fi = (String[]) data;
 			item.appendChild(new Listcell(fi[0]));
 			item.appendChild(new Listcell(fi[1]));

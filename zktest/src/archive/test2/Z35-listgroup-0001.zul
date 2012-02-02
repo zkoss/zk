@@ -26,7 +26,7 @@
 		}
 		
 		class MyRenderer implements ListitemRenderer{
-			public void render(Listitem listitem, java.lang.Object data){
+			public void render(Listitem listitem, Object data, int index){
 				Listcell cell = new Listcell();
 				cell.setParent(listitem);
 				if(data instanceof String[]){

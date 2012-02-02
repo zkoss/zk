@@ -31,7 +31,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</listbox>
 	<zscript>
 	ListitemRenderer renderer = new ListitemRenderer() {
-	public void render(Listitem item, Object obj) throws Exception {
+	public void render(Listitem item, Object obj, int index) throws Exception {
 	item.appendChild(new Listcell("One"));
 	item.appendChild(new Listcell("Two"));
 	item.appendChild(new Listcell("Three"));
@@ -60,7 +60,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</grid>
 	<zscript>
 	RowRenderer renderer1 = new RowRenderer() {
-	public void render(Row item, Object obj) throws Exception {
+	public void render(Row item, Object obj, int index) throws Exception {
 	item.appendChild(new Label("One"));
 	item.appendChild(new Label("Two"));
 	item.appendChild(new Label("Three"));
