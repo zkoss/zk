@@ -216,26 +216,36 @@ public class Selectbox extends HtmlBasedComponent {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED
-					&& !doSelectionChanged())
+					switch (event.getType()) {
+					case ListDataEvent.SELECTION_CHANGED:
+						doSelectionChanged();
 						return; //nothing changed so need to rerender
+					case ListDataEvent.MULTIPLE_CHANGED:
+						return; //nothing to do
+					}
 					postOnInitRender();
 				}
 			};
 		_model.addListDataListener(_dataListener);
 	}
-	private boolean doSelectionChanged() {
+	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
-			if (_jsel < 0)
-				return false; //nothing changed
-			setSelectedIndex(-1);
-			return true;
+			if (_jsel >= 0)
+				setSelectedIndex(-1);
+			return;
 		}
 
 		if (_jsel >= 0 && smodel.isSelected(_model.getElementAt(_jsel)))
-			return false; //nothing changed
-		return true; //cause onInitRender and then maintain _jsel
+			return; //nothing changed
+
+		for (int i = 0, sz = _model.getSize(); i < sz; i++) {
+			if (smodel.isSelected(_model.getElementAt(i))) {
+				setSelectedIndex(i);
+				return; //done
+			}
+		}
+		setSelectedIndex(-1); //just in case
 	}
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
@@ -282,9 +292,11 @@ public class Selectbox extends HtmlBasedComponent {
 			try {
 				_childable = true;
 				final ItemRenderer renderer = getRealRenderer();
-				for (int i = 0; i < _model.getSize(); i++) {
+				final Selectable<Object> smodel = getSelectableModel();
+				_jsel = -1;
+				for (int i = 0, sz = _model.getSize(); i < sz; i++) {
 					final Object value = _model.getElementAt(i);
-					if (getSelectableModel().isSelected(value))
+					if (_jsel < 0 && smodel.isSelected(value))
 						_jsel = i;
 					_tmpdatas[i] = renderer.render(this, value, i);
 				}

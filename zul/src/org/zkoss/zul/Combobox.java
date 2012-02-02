@@ -186,9 +186,13 @@ public class Combobox extends Textbox {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					// Bug B30-1906748.zul
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED
-					&& !doSelectionChanged())
+					switch (event.getType()) {
+					case ListDataEvent.SELECTION_CHANGED:
+						doSelectionChanged();
 						return; //nothing changed so need to rerender
+					case ListDataEvent.MULTIPLE_CHANGED:
+						return; //nothing to do
+					}
 					postOnInitRender(null);
 				}
 			};
@@ -206,28 +210,26 @@ public class Combobox extends Textbox {
 		if (_model instanceof ListSubModel)
 			addEventListener(Events.ON_CHANGING, _eventListener);
 	}
-	private boolean doSelectionChanged() {
+	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
-			if (_selItem == null)
-				return false; //nothing changed
-			setSelectedItem(null);
-			return true;
+			if (_selItem != null)
+				setSelectedItem(null);
+			return;
 		}
 
 		if (_selItem != null
 		&& smodel.isSelected(_model.getElementAt(_selItem.getIndex())))
-			return false; //nothing changed
+			return; //nothing changed
 
 		int j = 0;
 		for (final Comboitem item: getItems()) {
 			if (smodel.isSelected(_model.getElementAt(j++))) {
 				setSelectedItem(item);
-				return true;
+				return;
 			}
 		}
 		setSelectedItem(null); //somthing wrong but be self-protected
-		return true;
 	}
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {

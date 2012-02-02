@@ -399,9 +399,13 @@ public class Radiogroup extends XulElement {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					// Bug B30-1906748.zul
-					if (event.getType() == ListDataEvent.SELECTION_CHANGED
-					&& !doSelectionChanged())
+					switch (event.getType()) {
+					case ListDataEvent.SELECTION_CHANGED:
+						doSelectionChanged();
 						return; //nothing changed so need to rerender
+					case ListDataEvent.MULTIPLE_CHANGED:
+						return; //nothing to do
+					}
 					postOnInitRender(null);
 				}
 			};
@@ -409,27 +413,25 @@ public class Radiogroup extends XulElement {
 
 		_model.addListDataListener(_dataListener);
 	}
-	private boolean doSelectionChanged() {
+	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
-			if (_jsel < 0)
-				return false; //nothing changed
-			setSelectedItem(null);
-			return true;
+			if (_jsel >= 0)
+				setSelectedItem(null);
+			return;
 		}
 
 		if (_jsel >= 0 && smodel.isSelected(_model.getElementAt(_jsel)))
-			return false; //nothing changed
+			return; //nothing changed
 
 		int j = 0;
 		for (final Radio item: getItems()) {
 			if (smodel.isSelected(_model.getElementAt(j++))) {
 				setSelectedItem(item);
-				return true;
+				return;
 			}
 		}
 		setSelectedItem(null); //somthing wrong but be self-protected
-		return true;
 	}
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
