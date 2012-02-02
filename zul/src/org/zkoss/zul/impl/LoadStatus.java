@@ -19,6 +19,8 @@ package org.zkoss.zul.impl;
 
 /**
  * Denote the status whether a on-demand-loading item is loaded. 
+ * It is used because ListboxDataLoader/GridDataLoader is located in
+ * a different package.
  * @author henrichen
  * @since 5.0
  */

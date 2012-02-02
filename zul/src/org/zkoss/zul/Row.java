@@ -188,12 +188,8 @@ public class Row extends XulElement {
 		return _index;
 	}
 	
-	protected void setIndex(int index) {
-		_index = index;	
-	}
-	
 	/*package*/ void setIndexDirectly(int index) {
-		setIndex(index);
+		_index = index;	
 	}
 	
 	public String getZclass() {
@@ -341,7 +337,7 @@ public class Row extends XulElement {
 		}
 		
 		public void setIndex(int index) {
-			Row.this.setIndex(index);
+			Row.this.setIndexDirectly(index);
 		}
 	}
 

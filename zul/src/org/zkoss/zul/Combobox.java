@@ -91,17 +91,19 @@ public class Combobox extends Textbox {
 	private static final Log log = Log.lookup(Combobox.class);
 	private boolean _autodrop, _autocomplete = true, _btnVisible = true, _open;
 	//Note: _selItem is maintained loosely, i.e., its value might not be correct
-	//unless reIndex is called. So call getSelectedItem/getSelectedIndex if you
-	//want the correct value
+	//unless syncValueToSelection is called. So call getSelectedItem/getSelectedIndex
+	//if you want the correct value
 	private transient Comboitem _selItem;
 	/** The last checked value for selected item.
-	 * If null, it means reIndex is required.
+	 * If null, it means syncValueToSelection is required.
 	 */
 	private transient String _lastCkVal;
 	private ListModel<?> _model;
 	private ComboitemRenderer<?>_renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener<InputEvent> _eventListener;
+	/**Used to detect whether to syn Comboitem's index. */
+	private int _idxModCnt;
 
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -212,8 +214,8 @@ public class Combobox extends Textbox {
 			return true;
 		}
 
-		final int jsel = selectedIndex(false);
-		if (jsel >= 0 && smodel.isSelected(_model.getElementAt(jsel)))
+		if (_selItem != null
+		&& smodel.isSelected(_model.getElementAt(_selItem.getIndex())))
 			return false; //nothing changed
 
 		int j = 0;
@@ -384,7 +386,6 @@ public class Combobox extends Textbox {
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 
 				final Comboitem nci = (Comboitem)items[0];
-				nci.setIndex(item.getIndex());
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
 				item.setAttribute("org.zkoss.zul.model.renderAs", nci);
@@ -417,7 +418,6 @@ public class Combobox extends Textbox {
 			}
 
 			try {
-				item.setIndex(index); //initialize index
 				_renderer.render(item, value);
 			} catch (Throwable ex) {
 				try {
@@ -586,7 +586,7 @@ public class Combobox extends Textbox {
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
-		reIndex();
+		syncValueToSelection();
 		return _selItem;
 	}
 
@@ -636,12 +636,8 @@ public class Combobox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public int getSelectedIndex() {
-		return selectedIndex(true);
-	}
-	private int selectedIndex(boolean reIndex) {
-		if (reIndex)
-			reIndex();
-		return _selItem != null ? getItems().indexOf(_selItem) : -1;
+		syncValueToSelection();
+		return _selItem != null ? _selItem.getIndex() : -1;
 	}
 
 	//-- super --//
@@ -680,7 +676,7 @@ public class Combobox extends Textbox {
 		if (_model != null) {
 			List<Object> selObjs = new ArrayList<Object>();
 			if (_selItem != null)
-				selObjs.add(_model.getElementAt(selectedIndex(false)));
+				selObjs.add(_model.getElementAt(_selItem.getIndex()));
 			getSelectableModel().setSelection(selObjs);
 		}
 	}
@@ -737,22 +733,31 @@ public class Combobox extends Textbox {
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
+		++_idxModCnt;
 		smartUpdate("repos", true);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
+		++_idxModCnt;
 		if (child == _selItem)
-			reIndexRequired();
+			schedSyncValueToSelection();
 		smartUpdate("repos", true);
 	}
-	
-	private void reIndex() {
+	/*package*/ void syncItemIndices() { //called by Comboitem
+		if (_idxModCnt != 0) {
+			_idxModCnt = 0;
+			int j = 0;
+			for (final Comboitem item: getItems())
+				item.setIndexDirectly(j++);
+		}
+	}
+
+	private void syncValueToSelection() {
 		final String value = getValue();
 		if (!Objects.equals(_lastCkVal, value)) {
 			_lastCkVal = value;
 			_selItem = null;
-			for (Iterator it = getItems().iterator(); it.hasNext();) {
-				final Comboitem item = (Comboitem)it.next();
+			for (final Comboitem item: getItems()) {
 				if (Objects.equals(value, item.getLabel())) {
 					_selItem = item;
 					break;
@@ -761,7 +766,7 @@ public class Combobox extends Textbox {
 			syncSelectionToModel();
 		}
 	}
-	/*package*/ void reIndexRequired() {
+	/*package*/ void schedSyncValueToSelection() {
 		_lastCkVal = null;
 	}
 	/*package*/ Comboitem getSelectedItemDirectly() {
@@ -772,7 +777,7 @@ public class Combobox extends Textbox {
 	public Object clone() {
 		final Combobox clone = (Combobox)super.clone();
 		clone._selItem = null;
-		clone.reIndexRequired();
+		clone.schedSyncValueToSelection();
 		if (clone._model != null) {
 			if (clone._model instanceof ComponentCloneListener) {
 				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
@@ -791,13 +796,13 @@ public class Combobox extends Textbox {
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		reIndexRequired();
+		schedSyncValueToSelection();
 		if (_model != null) {
 			initDataListener();
 			
 			// Map#Entry cannot be serialized, we have to restore them
 			if (_model instanceof ListModelMap) {
-				for (Comboitem item : getItems()) {
+				for (final Comboitem item : getItems()) {
 					item.setValue(_model.getElementAt(item.getIndex()));
 				}
 			}

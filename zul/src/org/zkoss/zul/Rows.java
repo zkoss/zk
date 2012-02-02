@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
-import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -417,8 +416,8 @@ public class Rows extends XulElement {
 		List items = getChildren();
 		if (realj < items.size()) {
 			for (Iterator it = items.listIterator(realj); it.hasNext()
-					&& (to < 0 || j <= to); ++j)
-				((LoadStatus)(((AbstractComponent)it.next()).getExtraCtrl())).setIndex(j);
+			&& (to < 0 || j <= to); ++j)
+				((Row)it.next()).setIndexDirectly(j);
 		}
 	}
 	

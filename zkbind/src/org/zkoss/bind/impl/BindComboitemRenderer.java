@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
-import org.zkoss.zul.impl.LoadStatus;
 
 /**
  * comboitem renderer for binding.
@@ -76,7 +75,6 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
 			final Comboitem nci = (Comboitem)items[0];
-			((LoadStatus)(((AbstractComponent)nci).getExtraCtrl())).setIndex(item.getIndex());
 			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			addItemReference(nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			nci.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context

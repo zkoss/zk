@@ -24,7 +24,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
-import org.zkoss.zul.impl.LoadStatus;
 
 /**
  * An item of a combo box.
@@ -42,7 +41,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private transient Object _value;
 	private String _content = "";
 	private boolean _disabled;
-	private transient int _index = -1;
+	private transient int _index;
 
 	public Comboitem() {
 	}
@@ -157,25 +156,16 @@ implements org.zkoss.zk.ui.ext.Disable {
 	}
 
 	/** Returns the index of this Comboitem.
-	 * <p>Notice that the performance is not good if there are a lot of items.
-	 * Therefore, this method shall not be used with a huge Combobox.
 	 * @since 6.0.0
 	 */
 	public int getIndex() {
-		int j = 0;
-		if (_index < 0) {
-			final Combobox cb = (Combobox) getParent();
-			for (Iterator it = cb.getChildren().iterator();	it.hasNext(); ++j) {
-				if (it.next() == this)
-					break;
-			}
-		} else {
-			j = _index;
-		}
-		return j;
+		final Combobox cb = (Combobox) getParent();
+		if (cb != null)
+			cb.syncItemIndices();
+		return _index;
 	}
 	
-	/*package*/ void setIndex(int index) {
+	/*package*/ void setIndexDirectly(int index) { //called by Combobox
 		_index = index;
 	}
 	
@@ -187,17 +177,18 @@ implements org.zkoss.zk.ui.ext.Disable {
 		final String old = getLabel();
 		if (!Objects.equals(old, label)) {
 			final Combobox cb = (Combobox)getParent();
-			final boolean reIndex = cb != null && cb.getSelectedItemDirectly() == this;
+			final boolean syncValueToSelection =
+				cb != null && cb.getSelectedItemDirectly() == this;
 
 			super.setLabel(label);
 			
-			if (reIndex) {
+			if (syncValueToSelection) {
 				final Constraint constr = cb.getConstraint();
 				if (constr != null && constr instanceof SimpleConstraint 
 						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
 					cb.setValue(label);
 				} else {
-					cb.reIndexRequired();
+					cb.schedSyncValueToSelection();
 				}
 			}
 		}
@@ -245,33 +236,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	//Clone//
 	public Object clone() {
 		final Comboitem clone = (Comboitem)super.clone();
-		clone._index = -1;
-			//note: we have to reset, since Combobox.insertBefore assumes
-			//that a parent-less comboitem's index is -1
+		clone._index = 0;
 		return clone;
-	}
-	
-	//-- ComponentCtrl --//
-	public Object getExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
-	implements LoadStatus {
-		//-- LoadStatus --//
-		public boolean isLoaded() {
-			return true;
-		}
-
-		public void setLoaded(boolean loaded) {
-			//ignore
-		}
-		
-		public void setIndex(int index) {
-			Comboitem.this.setIndex(index);
-		}
 	}
 }
