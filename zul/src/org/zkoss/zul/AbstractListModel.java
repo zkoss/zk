@@ -40,7 +40,7 @@ Selectable<E>, java.io.Serializable {
 	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
 
 	/** The current selection. */
-	protected Set<E> _selection;
+	protected transient Set<E> _selection;
 	private boolean _multiple;
 
 	protected AbstractListModel() {
@@ -177,11 +177,21 @@ Selectable<E>, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
+		s.writeInt(_selection.size());
+		for (final E selObj: _selection)
+			s.writeObject(selObj);
+
 		Serializables.smartWrite(s, _listeners);
 	}
-	private void readObject(java.io.ObjectInputStream s)
+	@SuppressWarnings("unchecked")
+	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
+
+		_selection = newEmptySelection();
+		int size = s.readInt();
+		while (--size >= 0)
+			((Set)_selection).add(s.readObject());
 
 		_listeners = new ArrayList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
