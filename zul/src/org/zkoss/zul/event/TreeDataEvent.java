@@ -57,25 +57,12 @@ public class TreeDataEvent<E> {
 	 * @param indexTo the upper index of the change range
 	 */
 	public TreeDataEvent(TreeModel<E> model, int type, E parent, int indexFrom, int indexTo) {
-		if (model == null)
-			throw new NullPointerException();
-		checkInterval(indexFrom,indexTo,model.getChildCount(parent));
 		_model = model;
 		_type = type;
 		_parent = parent;
 		_indexFrom = indexFrom;
 		_indexTo = indexTo;
 	}
-	
-	/*
-	 * Check the interval
-	 */
-	private static void checkInterval(int from, int to, int len) {
-        if(from > to)
-            throw new IllegalArgumentException("'from' should be less than or equal to 'to'. from: "+from+", to: "+to);
-        if(from < 0)
-            throw new ArrayIndexOutOfBoundsException("Out of bound. from : "+from);
-    }
 	
 	/** Returns the tree model that fires this event.
 	 */
