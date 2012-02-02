@@ -1,7 +1,8 @@
 	--------
 ZK 5.0.11
 * Features
-
+  ZK-780: Support a non-default context path when integrating ZK with Liferay bundle with JBoss
+  
 * Bugs
   ZK-773: Listbox sizedByContent breaks scrolling in 5.0.10 
   ZK-740: missing close tag in flash.js
