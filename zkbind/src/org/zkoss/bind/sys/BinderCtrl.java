@@ -18,6 +18,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.EventQueues;
 
 
 /**
@@ -29,6 +30,15 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public interface BinderCtrl {	
+	/**
+	 * Default queue name of a binder to share the bean notification and global commands
+	 */
+	public static final String DEFAULT_QUEUE_NAME = "$ZKBIND_DEFQUE$"; //the associated event queue name
+	
+	/**
+	Default queue scope of a binder to share the bean notification and global commands
+	 */
+	public static final String DEFAULT_QUEUE_SCOPE = EventQueues.DESKTOP; //the associated event queue name
 	
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components

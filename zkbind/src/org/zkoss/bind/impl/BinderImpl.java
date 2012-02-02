@@ -28,7 +28,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
@@ -214,8 +213,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		_listenerMap = new HashMap<BindingKey, CommandEventListener>();
 		//use same queue name if user was not specified, 
 		//this means, binder in same scope, same queue, they will share the notification by "base"."property" 
-		_quename = qname != null && !Strings.isEmpty(qname) ? qname : BindUtils.DEFAULT_QUEUE_NAME;
-		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : BindUtils.DEFAULT_QUEUE_SCOPE;
+		_quename = qname != null && !Strings.isEmpty(qname) ? qname : DEFAULT_QUEUE_NAME;
+		_quescope = qscope != null && !Strings.isBlank(qscope) ? qscope : DEFAULT_QUEUE_SCOPE;
 		_queueListener = new QueueListener();
 	}
 	
