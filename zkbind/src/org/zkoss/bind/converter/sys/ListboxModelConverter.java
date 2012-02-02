@@ -12,9 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.BindContext;
-import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
@@ -40,9 +38,13 @@ public class ListboxModelConverter extends AbstractListModelConverter{
 		if(!(comp instanceof Listbox)){
 			throw new IllegalArgumentException("not a listbox, is "+comp);
 		}
-		final Binder binder = ctx.getBinder();
-		if(model instanceof Selectable && ((BinderCtrl)binder).hasPropertyLoadBinding(comp, "selectedItems")){
-			((Selectable<?>)model).setMultiple(true);
+		final Listbox listbox = (Listbox)comp;
+		if(model instanceof Selectable){
+			if(((Selectable<?>)model).isMultiple() != listbox.isMultiple());
+			//since the model was wrapped. I should respect the setting on the component
+			//user might set the multiple on the listbox by <listbox multiple="true" 
+			//or <listbox multiple="@bind(true)" or <listbox multiple="@bind(vm.multiple)"
+			((Selectable<?>)model).setMultiple(listbox.isMultiple());
 		}
 		return model;
 	}

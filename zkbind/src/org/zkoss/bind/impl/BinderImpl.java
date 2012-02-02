@@ -1663,20 +1663,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		return bindings;
 	}
-	
-	@Override
-	public boolean hasPropertyLoadBinding(Component comp, String attr) {
-		checkInit();
-		Map<String, List<Binding>> map = _bindings.get(comp);
-		if(map==null) return false;
-		List<Binding> list = map.get(attr);
-		if(list==null) return false;
-		for(Binding binding:list){
-			if(binding instanceof LoadPropertyBinding)
-				return true;
-		}
-		return false; 
-	}
+
 
 	private void removeBindings(Collection<Binding> removed) {
 		_formBindingHandler.removeBindings(removed);
