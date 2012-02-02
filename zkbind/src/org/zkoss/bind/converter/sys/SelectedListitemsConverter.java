@@ -12,13 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.converter.sys;
 
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
@@ -50,8 +49,8 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 			((Selectable<?>)model).clearSelection();
 		}
 		
-  		final Set<Listitem> items = new LinkedHashSet<Listitem>();
-		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(LinkedHashSet.class, val);
+  		final Set<Listitem> items = new HashSet<Listitem>();
+		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(HashSet.class, val);
 		
 	  	if (vals != null && vals.size()>0) {
 	  		if(model!=null){
@@ -75,11 +74,11 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 
 	@SuppressWarnings("unchecked")
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
-		Set<Object> vals = new LinkedHashSet<Object>();//the order
+		Set<Object> vals = new HashSet<Object>();
 		if (val != null) {
 			final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		final Set<Listitem> items = (Set<Listitem>)Classes.coerce(LinkedHashSet.class, val);
+	  		final Set<Listitem> items = (Set<Listitem>)Classes.coerce(HashSet.class, val);
 	  		for(Listitem item : items){
 		  		if(model != null){ //from model value
 		  			vals.add(model.getElementAt(item.getIndex()));

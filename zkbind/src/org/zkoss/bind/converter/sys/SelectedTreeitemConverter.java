@@ -19,6 +19,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
@@ -37,7 +38,11 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		Tree tree = (Tree) comp;
 		final TreeModel<Object> model = tree.getModel();
 
-  		final TreeSelectionModel smodel = (model instanceof TreeSelectionModel)?(TreeSelectionModel)model:null;
+  		if(model !=null && !(model instanceof TreeSelectionModel)){
+			//model has to imple TreeSelectionModel if binding to selectedItem
+  			throw new UiException("model doesn't implement TreeSelectionModel");
+  		}
+  		final TreeSelectionModel smodel = (TreeSelectionModel)model;
 		if(smodel!=null && !smodel.isSelectionEmpty()){//clear the selection first
 	  		smodel.clearSelection();
 		}
@@ -51,9 +56,8 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 	  			}
 	  			//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766
 	  		}	  		
-		  	//there is a issue on tree.getItems (http://tracker.zkoss.org/browse/ZK-766),
-		  	//it doesn't return all descending children if it is not open yet
-		  	//and if user want better performance, he should get the selection from model directly
+	  		//no model case
+		  	//if user want better performance, he should get the selection from model directly
 			for (final Iterator<?> it = tree.getItems().iterator(); it.hasNext();) {
 				final Treeitem ti = (Treeitem) it.next();
 				Object bean = ti.getValue();
