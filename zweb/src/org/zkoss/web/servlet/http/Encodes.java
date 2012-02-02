@@ -18,9 +18,6 @@ package org.zkoss.web.servlet.http;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Locale;
 import java.util.Iterator;
 import java.io.UnsupportedEncodingException;
 
@@ -38,7 +35,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.logging.Log;
 
-import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.util.resource.ExtendletContext;
@@ -54,7 +50,7 @@ public class Encodes {
 
 	protected Encodes() {} //prevent from instantiation
 
-	/** Encodes a string to HTTP URI compliant by use of
+	/** Encodes a string to HTTP URI compliance by use of
 	 * {@link Charsets#getURICharset}.
 	 *
 	 * <p>Besides two-byte characters, it also encodes any character found
@@ -93,7 +89,7 @@ public class Encodes {
 		}
 		return j == k ? s: new String(out, 0, k, charset);
 	}
-	/** unsafe character when that are used in url's localtion. */
+	/** unsafe character when that are used in url's location. */
 	private static final char[] URI_UNSAFE;
 	/** unsafe character when that are used in url's query. */
 	private static final char[] URI_COMP_UNSAFE;
@@ -121,7 +117,7 @@ public class Encodes {
 	}
 	/** Does the HTTP encoding for an URI query parameter.
 	 * For example, '/' is translated to '%2F'.
-	 * Both name and value must be encoded seperately. Example,
+	 * Both name and value must be encoded separately. Example,
 	 * <code>encodeURIComponent(name) + '=' + encodeURIComponent(value)</code>.
 	 *
 	 * <p>Since {@link #encodeURL(ServletContext, ServletRequest, ServletResponse, String)}
@@ -173,8 +169,8 @@ public class Encodes {
 	 * If the query string doesn't contain '?', it is assumed to be a string
 	 * without query's name/value pairs.
 	 *
-	 * @param value the value. If it is null, only name is appened.
-	 * If it is an array of objects, multipe pairs of name=value[j] will
+	 * @param value the value. If it is null, only name is appended.
+	 * If it is an array of objects, multiple pairs of name=value[j] will
 	 * be appended.
 	 */
 	public static final StringBuffer
@@ -375,7 +371,7 @@ public class Encodes {
 	 *
 	 * <p>This method invokes {@link #encodeURI} for any characters
 	 * before '?'. However, it does NOT encode any character after '?'. Thus,
-	 * you might hvae to invoke
+	 * you might have to invoke
 	 * {@link #encodeURIComponent} or {@link #addToQueryString(StringBuffer,Map)}
 	 * to encode the query parameters.
 	 *
@@ -543,7 +539,7 @@ public class Encodes {
 		 *
 		 * <p>Notice that url might contain "~" and other special
 		 * characters that the Web server won't support.
-		 * The implemetation might invoke back the defult encoding
+		 * The implementation might invoke back the default encoding
 		 * by use of the defaultEcoder parameter.
 		 *
 		 * @param url the URL to encode. It shall not include
