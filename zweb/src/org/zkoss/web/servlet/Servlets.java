@@ -90,7 +90,7 @@ public class Servlets {
 	protected Servlets() {}
 
 	/** Returns whether a URL starts with xxx://, mailto:, about:,
-	 * javascript:
+	 * javascript:, data:
 	 */
 	public static final boolean isUniversalURL(String uri) {
 		if (uri == null || uri.length() == 0) return false;
@@ -98,7 +98,7 @@ public class Servlets {
 		final char cc = uri.charAt(0);
 		return cc >= 'a' && cc <= 'z'
 			&& (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
-			|| uri.startsWith("javascript:") || uri.startsWith("about:"));
+			|| uri.startsWith("javascript:") || uri.startsWith("about:") || uri.startsWith("data:"));
 	}
 
 	/** Returns whether the current Web server supports Servlet 2.4 or above.
@@ -1222,7 +1222,6 @@ public class Servlets {
 	 * @since 3.6.2
 	 */
 	public static String getNormalPath(String path) {
-		final int sz = path.length();
 		final StringBuffer sb = new StringBuffer(path);
 		final IntStack slashes = new IntStack(32); //most 32 slash in a path
 		slashes.push(-1);
