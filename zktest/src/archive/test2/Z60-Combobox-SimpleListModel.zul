@@ -25,6 +25,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		int elemcnt = 0;
 	]]></zscript>
 	<div>
+		<div>Note: it is a test of subList, so you have to type 'd' to bring up a list
+		of options.</div>
 		<div>1. There are 3 combobox below.</div>
 		<div>2. For first two combobox, their select status will sync automatically after you select item.</div>
 		<div>3. Select data 10 of third combobox.</div>
