@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -596,14 +595,23 @@ public class Rows extends XulElement {
 	public List<Component> getChildren() {
 		return new Children();
 	}
-	protected class Children extends AbstractComponent.Children {
-	    protected void removeRange(int fromIndex, int toIndex) {
-	        ListIterator<Component> it = listIterator(toIndex);
-	        for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
-	            it.previous();
-	            it.remove();
-	        }
-	    }
+	protected class Children extends XulElement.Children {
+		protected void removeRange(int fromIndex, int toIndex) {
+			ListIterator<Component> it = listIterator(toIndex);
+			for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
+				it.previous();
+				it.remove();
+			}
+		}
+		@Override
+		public void clear() {
+			final boolean oldFlag = setSkipFixRowIndices(true);
+			try {
+				super.clear();
+			} finally {
+				setSkipFixRowIndices(oldFlag);
+			}
+		}
 	};
 	
 	// super
@@ -615,7 +623,7 @@ public class Rows extends XulElement {
 		renderer.render("_offset", grid == null ? 0 : grid.getDataLoader().getOffset()); //go with each cropping
 		renderer.render("visibleItemCount", _visibleItemCount); //go with each cropping
 	}
-	
+
 	//-- ComponentCtrl --//
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
