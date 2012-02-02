@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -41,6 +42,14 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);
 		} else {
+			final IterationStatus iterStatus = new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return index;
+				}
+			};
+			
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
@@ -58,13 +67,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new AbstractIterationStatus(){
-									private static final long serialVersionUID = 1L;
-									@Override
-									public int getIndex() {
-										return Integer.valueOf(index);
-									}
-								};
+								return iterStatus;
 							}
 						}
 						return null;
@@ -77,13 +80,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			nli.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			addItemReference(nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
-			nli.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
-				private static final long serialVersionUID = 1L;
-				@Override
-				public int getIndex() {
-					return Integer.valueOf(index);
-				}
-			});
+			nli.setAttribute(itervarnm, iterStatus);
 			
 			//add template dependency
 			addTemplateTracking(listbox, nli, data, index);

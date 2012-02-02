@@ -54,6 +54,14 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			}
 			tc.setParent(tr);
 		} else {
+			final IterationStatus iterStatus = new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return index;
+				}
+			};
+			
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
@@ -70,13 +78,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new AbstractIterationStatus(){
-									private static final long serialVersionUID = 1L;
-									@Override
-									public int getIndex() {
-										return Integer.valueOf(index);
-									}
-								};
+								return iterStatus;
 							}
 						}
 						return null;
@@ -89,13 +91,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			addItemReference(ti, toPath(ti), varnm); //kept the reference to the data, before ON_BIND_INIT
 			
-			ti.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
-				private static final long serialVersionUID = 1L;
-				@Override
-				public int getIndex() {
-					return Integer.valueOf(index);
-				}
-			});
+			ti.setAttribute(itervarnm, iterStatus);
 			//add template dependency
 			addTemplateTracking(tree, ti, data, index);
 			

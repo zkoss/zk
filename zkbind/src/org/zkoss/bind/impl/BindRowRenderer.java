@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
@@ -43,6 +44,14 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			label.setParent(row);
 			row.setValue(data);
 		} else {
+			final IterationStatus iterStatus = new AbstractIterationStatus(){//provide iteration status in this context
+				private static final long serialVersionUID = 1L;
+				@Override
+				public int getIndex() {
+					return index;
+				}
+			};
+			
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
@@ -60,13 +69,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 							if(varnm.equals(name)){
 								return data;
 							}else if(itervarnm.equals(name)){//iteration status
-								return new AbstractIterationStatus(){
-									private static final long serialVersionUID = 1L;
-									@Override
-									public int getIndex() {
-										return Integer.valueOf(index);
-									}
-								};
+								return iterStatus;
 							}
 						}
 						return null;
@@ -79,13 +82,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			nr.setAttribute(BinderImpl.VAR, varnm);
 			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
-			nr.setAttribute(itervarnm, new AbstractIterationStatus(){//provide iteration status in this context
-				private static final long serialVersionUID = 1L;
-				@Override
-				public int getIndex() {
-					return Integer.valueOf(index);
-				}
-			});
+			nr.setAttribute(itervarnm, iterStatus);
 			
 			//add template dependency
 			addTemplateTracking(grid, nr, data, index);

@@ -81,7 +81,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
-					return Integer.valueOf(index);
+					return index;
 				}
 			});
 			resolver.addTemplateTracking(eachComp);

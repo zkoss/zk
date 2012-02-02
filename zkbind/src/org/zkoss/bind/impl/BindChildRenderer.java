@@ -45,7 +45,7 @@ public class BindChildRenderer extends AbstractRenderer{
 			private static final long serialVersionUID = 1L;
 			@Override
 			public int getIndex() {
-				return Integer.valueOf(index);
+				return index;
 			}
 		};
 		
