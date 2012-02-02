@@ -229,7 +229,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return renderer != null ? renderer : _defRend; 
 	}
 	private static final RowRenderer _defRend = new RowRenderer() {
-		public void render(final Row row, final Object data) {
+		public void render(final Row row, final Object data, final int index) {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
 			Template tm = grid.getTemplate("model");
@@ -240,7 +240,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 					tm = tm2;
 				if (grid.getModel() instanceof GroupsListModel) {
 					final GroupsListModel gmodel = (GroupsListModel) grid.getModel();
-					info = gmodel.getDataInfo(row.getIndex());
+					info = gmodel.getDataInfo(index);
 				}
 			} else if (row instanceof Groupfoot) {
 				final Template tm2 = grid.getTemplate("model:groupfoot");
@@ -271,7 +271,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 									}
 									@Override
 									public int getIndex() {
-										return row.getIndex();
+										return index;
 									}
 									@Override
 									public Integer getBegin() {

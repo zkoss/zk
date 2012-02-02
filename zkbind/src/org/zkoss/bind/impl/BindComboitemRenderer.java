@@ -35,9 +35,9 @@ import org.zkoss.zul.ComboitemRenderer;
 public class BindComboitemRenderer extends AbstractRenderer implements ComboitemRenderer<Object>{
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	public void render(final Comboitem item, final Object data) throws Exception {
+	public void render(final Comboitem item, final Object data, final int index)
+	throws Exception {
 		final Combobox cb = (Combobox)item.getParent();
-		final int index = item.getIndex();
 		final Template tm = resoloveTemplate(cb,item,data,index,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));

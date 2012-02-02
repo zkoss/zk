@@ -78,7 +78,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 	}
 		
 	//-- RowRenderer --//
-	public void render(Row row, java.lang.Object bean) {
+	public void render(Row row, java.lang.Object bean, int index) {
 		final List<Component> kids = cast((List) row.getAttribute(KIDS));
 		row.getChildren().addAll(kids);
 //			row.removeAttribute(KIDS);
@@ -89,7 +89,7 @@ implements org.zkoss.zul.RowRenderer, org.zkoss.zul.RowRendererExt, Serializable
 		//setup clone id
 		BindingRendererUtil.setupCloneIds(row);
 
-		//bind bean to the associated listitem and its decendant
+		//bind bean to the associated row and its decendant
 		final String varname = (String) _template.getAttribute(DataBinder.VARNAME);
 		final Map<Object, Object> templatemap = cast((Map) row.getAttribute(DataBinder.TEMPLATEMAP));
 		templatemap.put(varname, bean);

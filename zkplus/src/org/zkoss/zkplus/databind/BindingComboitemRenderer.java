@@ -44,7 +44,7 @@ import org.zkoss.zul.Comboitem;
 		_binder = binder;
 	}
 
-	public void render(Comboitem item, Object bean) throws Exception {
+	public void render(Comboitem item, Object bean, int index) throws Exception {
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
 		item.getChildren().addAll(kids);
 		//item.removeAttribute(KIDS);

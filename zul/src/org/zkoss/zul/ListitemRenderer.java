@@ -50,6 +50,7 @@ public interface ListitemRenderer<T> {
 	 * {@link Listcell} explicitly.
 	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
+	 * @param index the index of the data that is currently being rendered 
 	 */
-	public void render(Listitem item, T data) throws Exception;
+	public void render(Listitem item, T data, int index) throws Exception;
 }

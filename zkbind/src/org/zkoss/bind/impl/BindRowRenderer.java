@@ -33,10 +33,9 @@ import org.zkoss.zul.Rows;
  */
 public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
-	public void render(final Row row, final Object data) {
+	public void render(final Row row, final Object data, final int index) {
 		final Rows rows = (Rows)row.getParent();
 		final Grid grid = (Grid)rows.getParent();
-		final int index = row.getIndex();
 		final Template tm = resoloveTemplate(grid,row,data,index,"model");
 		if (tm == null) {
 			final Label label = newRenderLabel(Objects.toString(data));

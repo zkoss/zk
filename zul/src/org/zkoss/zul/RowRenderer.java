@@ -46,6 +46,7 @@ public interface RowRenderer<T> {
 	 * {@link RowRendererExt#getControls} is called.
 	 *
 	 * @param data that is returned from {@link ListModel#getElementAt}
+	 * @param index the index of the data that is currently being rendered 
 	 */
-	public void render(Row row, T data) throws Exception;
+	public void render(Row row, T data, int index) throws Exception;
 }

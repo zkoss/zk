@@ -211,7 +211,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 	
 	private static final ListitemRenderer _defRend = new ListitemRenderer() {
-		public void render(final Listitem item, final Object data) {
+		public void render(final Listitem item, final Object data, final int index) {
 			final Listbox listbox = (Listbox)item.getParent();
 			Template tm = listbox.getTemplate("model");
 			GroupingInfo info = null;
@@ -221,7 +221,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 					tm = tm2;
 				if (listbox.getModel() instanceof GroupsListModel) {
 					final GroupsListModel gmodel = (GroupsListModel) listbox.getModel();
-					info = gmodel.getDataInfo(item.getIndex());
+					info = gmodel.getDataInfo(index);
 				}
 			} else if (item instanceof Listgroupfoot) {
 				final Template tm2 = listbox.getTemplate("model:groupfoot");
@@ -250,7 +250,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 									}
 									@Override
 									public int getIndex() {
-										return item.getIndex();
+										return index;
 									}
 									@Override
 									public Integer getBegin() {

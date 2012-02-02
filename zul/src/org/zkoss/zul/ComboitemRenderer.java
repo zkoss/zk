@@ -38,6 +38,7 @@ public interface ComboitemRenderer<T> {
 	 *
 	 * @param item the comboitem to render the result.
 	 * @param data that is returned from {@link ListModel#getElementAt}
+	 * @param index the index of the data that is currently being rendered 
 	 */
-	public void render(Comboitem item, T data) throws Exception;
+	public void render(Comboitem item, T data, int index) throws Exception;
 }

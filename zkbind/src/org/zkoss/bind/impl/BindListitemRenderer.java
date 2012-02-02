@@ -34,9 +34,9 @@ import org.zkoss.zul.ListitemRenderer;
 public class BindListitemRenderer extends AbstractRenderer implements ListitemRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	public void render(final Listitem item, final Object data) throws Exception {
+	public void render(final Listitem item, final Object data, final int index)
+	throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
-		final int index = item.getIndex();
 		final Template tm = resoloveTemplate(listbox,item,data,index,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));

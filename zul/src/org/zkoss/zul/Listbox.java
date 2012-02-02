@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul;
 
+import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.AbstractSequentialList;
@@ -2409,7 +2410,7 @@ public class Listbox extends MeshElement {
 
 				if (item.isVisible()
 				&& (open || item instanceof Listgroupfoot || item instanceof Listgroup)) {
-					renderer.render(item);
+					renderer.render(item, j + ofs);
 					++j;
 				}
 				if (item instanceof Listgroup)
@@ -2512,7 +2513,7 @@ public class Listbox extends MeshElement {
 		}
 
 		/* package */@SuppressWarnings("unchecked")
-		void render(Listitem item) throws Throwable {
+		void render(Listitem item, int index) throws Throwable {
 			if (item.isLoaded())
 				return; // nothing to do
 
@@ -2530,12 +2531,19 @@ public class Listbox extends MeshElement {
 
 			//bug #3039843: Paging Listbox without rod, ListModel shall not fully loaded
 			//check if the item is a selected item and add into selected set
-			final Object value = _model.getElementAt(item.getIndex());
+			final Object value = _model.getElementAt(index);
 			//bug #ZK-675: Selection was lost if a render replace the listitem
 			final boolean selected = ((Selectable) _model).isSelected(value);
 			
 			try {
-				_renderer.render(item, value);
+				try {
+					_renderer.render(item, value, index);
+				} catch (AbstractMethodError ex) {
+					final Method m = _renderer.getClass()
+						.getMethod("render", new Class<?>[] {Listitem.class, Object.class});
+					m.setAccessible(true);
+					m.invoke(_renderer, new Object[] {item, value});
+				}
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new listitem is created to replace the existent one
 					item = (Listitem)v;
@@ -2594,7 +2602,7 @@ public class Listbox extends MeshElement {
 		if (_model != null && li != null && !li.isLoaded()) {
 			final Renderer renderer = new Renderer();
 			try {
-				renderer.render(li);
+				renderer.render(li, li.getIndex());
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {
@@ -2619,21 +2627,24 @@ public class Listbox extends MeshElement {
 		getDataLoader().setLoadAll(_renderAll);
 
 		final Renderer renderer = new Renderer();
-		try {
-			for (Listitem item = getItems().size() <= 0 ? null: getItems().get(0), nxt; item != null; item = nxt) {
-				nxt = nextListitem(item); //retrieve first since it might be changed
-				renderer.render(item);
+		if (!getItems().isEmpty())
+			try {
+				Listitem item = getItems().get(0);
+				int index = item.getIndex();
+				for (Listitem nxt; item != null; item = nxt) {
+					nxt = nextListitem(item); //retrieve first since it might be changed
+					renderer.render(item, index++);
+				}
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
 			}
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
-		}
 	}
 
 	/** Renders the given set of list items.
 	 */
-	public void renderItems(Set items) {
+	public void renderItems(Set<? extends Listitem> items) {
 		if (_model == null)
 			return;
 
@@ -2642,8 +2653,8 @@ public class Listbox extends MeshElement {
 
 		final Renderer renderer = new Renderer();
 		try {
-			for (Iterator it = items.iterator(); it.hasNext();)
-				renderer.render((Listitem) it.next());
+			for (final Listitem item: items)
+				renderer.render(item, item.getIndex());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {

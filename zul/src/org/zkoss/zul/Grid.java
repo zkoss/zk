@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
@@ -893,7 +894,7 @@ public class Grid extends MeshElement {
 
 				if (row.isVisible()
 				&& (open || row instanceof Groupfoot || row instanceof Group)) {
-					renderer.render(row); 
+					renderer.render(row, j + ofs); 
 					++j;
 				}
 				if (row instanceof Group)
@@ -957,7 +958,7 @@ public class Grid extends MeshElement {
 			_renderer = (RowRenderer) getDataLoader().getRealRenderer();
 		}
 		/*package*/ @SuppressWarnings("unchecked")
-		void render(Row row) throws Throwable {
+		void render(Row row, int index) throws Throwable {
 			if (row.isLoaded())
 				return; //nothing to do
 
@@ -974,7 +975,15 @@ public class Grid extends MeshElement {
 			}
 
 			try {
-				_renderer.render(row, _model.getElementAt(row.getIndex()));
+				final Object value = _model.getElementAt(index);
+				try {
+					_renderer.render(row, value, index);
+				} catch (AbstractMethodError ex) {
+					final Method m = _renderer.getClass()
+						.getMethod("render", new Class<?>[] {Row.class, Object.class});
+					m.setAccessible(true);
+					m.invoke(_renderer, new Object[] {row, value});
+				}
 				Object v = row.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new row is created to replace the existent one
 					row = (Row)v;
@@ -1024,7 +1033,7 @@ public class Grid extends MeshElement {
 
 		final Renderer renderer = new Renderer();
 		try {
-			renderer.render(row);
+			renderer.render(row, row.getIndex());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
@@ -1041,25 +1050,28 @@ public class Grid extends MeshElement {
 		getDataLoader().setLoadAll(_renderAll);
 
 		final Renderer renderer = new Renderer();
-		try {
-			for (Row row = _rows.getChildren().size() <= 0 ? null: (Row)_rows.getChildren().get(0), nxt; row != null; row = nxt) {
-				nxt = (Row)row.getNextSibling(); //retrieve first since it might be changed
-				renderer.render(row);
+		if (!_rows.getChildren().isEmpty())
+			try {
+				Row row = (Row)_rows.getChildren().get(0);
+				int index = row.getIndex();
+				for (Row nxt; row != null; row = nxt) {
+					nxt = (Row)row.getNextSibling(); //retrieve first since it might be changed
+					renderer.render(row, index++);
+				}
+			} catch (Throwable ex) {
+				renderer.doCatch(ex);
+			} finally {
+				renderer.doFinally();
 			}
-		} catch (Throwable ex) {
-			renderer.doCatch(ex);
-		} finally {
-			renderer.doFinally();
-		}
 	}
 	/** Renders a set of specified rows.
 	 * It is the same as {@link #renderItems}.
 	 */
-	public void renderRows(Set rows) {
+	public void renderRows(Set<? extends Row> rows) {
 		renderItems(rows);
 	}
 
-	public void renderItems(Set rows) {
+	public void renderItems(Set<? extends Row> rows) {
 		if (_model == null) { //just in case that app dev might change it
 			if (log.debugable()) log.debug("No model no render");
 			return;
@@ -1070,8 +1082,8 @@ public class Grid extends MeshElement {
 		
 		final Renderer renderer = new Renderer();
 		try {
-			for (Iterator it = rows.iterator(); it.hasNext();)
-				renderer.render((Row)it.next());
+			for (final Row row: rows)
+				renderer.render(row, row.getIndex());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {

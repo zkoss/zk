@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -342,7 +343,7 @@ public class Combobox extends Textbox {
 	}
 
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
-		public void render(final Comboitem item, final Object data) {
+		public void render(final Comboitem item, final Object data, final int index) {
 			final Combobox cb = (Combobox)item.getParent();
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
@@ -366,7 +367,7 @@ public class Combobox extends Textbox {
 									}
 									@Override
 									public int getIndex() {
-										return item.getIndex();
+										return index;
 									}
 									@Override
 									public Integer getBegin() {
@@ -418,7 +419,14 @@ public class Combobox extends Textbox {
 			}
 
 			try {
-				_renderer.render(item, value);
+				try {
+					_renderer.render(item, value, index);
+				} catch (AbstractMethodError ex) {
+					final Method m = _renderer.getClass()
+						.getMethod("render", new Class<?>[] {Comboitem.class, Object.class});
+					m.setAccessible(true);
+					m.invoke(_renderer, new Object[] {item, value});
+				}
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
