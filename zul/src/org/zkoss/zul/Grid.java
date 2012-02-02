@@ -974,6 +974,7 @@ public class Grid extends MeshElement {
 				cell.detach();
 			}
 
+			final boolean oldFlag = _rows.setSkipFixRowIndices(true);
 			try {
 				final Object value = _model.getElementAt(index);
 				try {
@@ -987,6 +988,7 @@ public class Grid extends MeshElement {
 				Object v = row.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new row is created to replace the existent one
 					row = (Row)v;
+				row.setIndexDirectly(index);
 			} catch (Throwable ex) {
 				try {
 					final Label label = newRenderLabel(Exceptions.getMessage(ex));
@@ -998,6 +1000,7 @@ public class Grid extends MeshElement {
 				row.setLoaded(true);
 				throw ex;
 			} finally {
+				_rows.setSkipFixRowIndices(oldFlag);
 				if (row.getChildren().isEmpty())
 					cell.setParent(row);
 			}

@@ -107,6 +107,7 @@ public class Combobox extends Textbox {
 	private transient EventListener<InputEvent> _eventListener;
 	/**Used to detect whether to syn Comboitem's index. */
 	private int _idxModCnt;
+	private transient boolean _skipSyncItemIndices;
 
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -347,11 +348,6 @@ public class Combobox extends Textbox {
 				if (subModel != null)
 					subModel.add(value);
 				renderer.render(item, value, index);
-				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
-				if (v != null) //a new item is created to replace the existent one
-					item = (Comboitem)v;
-				if (getSelectableModel().isSelected(value))
-					setSelectedItem(item);
 			}
 			if (subModel != null)
 				_subModel = subModel.toArray(new Object[subModel.size()]);
@@ -449,6 +445,7 @@ public class Combobox extends Textbox {
 				_ctrled = true;
 			}
 
+			final boolean oldFlag = setSkipSyncItemIndices(true); //skip syncItemIndices when rendering
 			try {
 				try {
 					_renderer.render(item, value, index);
@@ -458,6 +455,9 @@ public class Combobox extends Textbox {
 					m.setAccessible(true);
 					m.invoke(_renderer, new Object[] {item, value});
 				}
+				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
+				if (v != null) //a new item is created to replace the existent one
+					item = (Comboitem)v;
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -465,7 +465,11 @@ public class Combobox extends Textbox {
 					log.error(t);
 				}			
 				throw ex;
+			} finally {
+				setSkipSyncItemIndices(oldFlag);
 			}
+			if (getSelectableModel().isSelected(value))
+				setSelectedItem(item);
 			_rendered = true;
 		}
 		private void doCatch(Throwable ex) {
@@ -782,7 +786,23 @@ public class Combobox extends Textbox {
 			schedSyncValueToSelection();
 		smartUpdate("repos", true);
 	}
+	
+	/**
+	 * Set true to skip calling {@link #syncItemIndices} and avoid unnecessary 
+	 * comboitem re-indexing when render template.
+	 * @param b true to skip
+	 * @return original true/false status
+	 * @see Renderer#render
+	 */
+	/*package*/ boolean setSkipSyncItemIndices(boolean b) {
+		final boolean old = _skipSyncItemIndices; 
+		_skipSyncItemIndices = b;
+		return old;
+	}
+	
 	/*package*/ void syncItemIndices() { //called by Comboitem
+		if (_skipSyncItemIndices) //@see Renderer#render
+			return;
 		if (_idxModCnt != 0) {
 			_idxModCnt = 0;
 			int j = 0;

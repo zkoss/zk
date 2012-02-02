@@ -16,13 +16,17 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataListener;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * A utility for handling {@link ListModel}.
@@ -98,8 +102,8 @@ public class ListModels {
 					: STRING_COMPARATOR, 15);
 	}
 	
-	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>,
-			java.io.Serializable {
+	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>, 
+	Selectable<E>, java.io.Serializable {
 		private final ListModel<E> _model;
 
 		private final Comparator<E> _comparator;
@@ -129,16 +133,22 @@ public class ListModels {
 		@SuppressWarnings("unchecked")
 		public ListModel<E> getSubModel(Object value, int nRows) {
 			final List<E> data = new LinkedList<E>();
+			final Set<E> selection = new LinkedHashSet<E>();
 			nRows = nRows < 0 ? _nRows : nRows;
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
 				E o = _model.getElementAt(i);
 				if (((Comparator)_comparator).compare(value, o) == 0) {
 					data.add(o);
+					if (_model instanceof Selectable && ((Selectable)_model).isSelected(o)) {
+						selection.add(o);
+					}
 					if (--nRows <= 0)
 						break; // done
 				}
 			}
-			return new ListModelList<E>(data);
+			final Selectable<E> subm =  new ListModelList<E>(data);
+			subm.setSelection(selection);
+			return (ListModel<E>) subm;
 		}
 
 		public E getElementAt(int index) {
@@ -156,6 +166,57 @@ public class ListModels {
 		public void removeListDataListener(ListDataListener l) {
 			_model.removeListDataListener(l);
 		}
+
+		@SuppressWarnings("unchecked")
+		private Selectable<E> getSelectModel() {
+			return (Selectable<E>) _model;
+		}
+		@Override
+		public Set<E> getSelection() {
+			return getSelectModel().getSelection();
+		}
+
+		@Override
+		public void setSelection(Collection<? extends E> selection) {
+			getSelectModel().setSelection(selection);
+		}
+
+		@Override
+		public boolean isSelected(E obj) {
+			return getSelectModel().isSelected(obj);
+		}
+
+		@Override
+		public boolean isSelectionEmpty() {
+			return getSelectModel().isSelectionEmpty();
+		}
+
+		@Override
+		public void addToSelection(E obj) {
+			getSelectModel().addToSelection(obj);
+			
+		}
+
+		@Override
+		public boolean removeFromSelection(Object obj) {
+			return getSelectModel().removeFromSelection(obj);
+		}
+
+		@Override
+		public void clearSelection() {
+			getSelectModel().clearSelection();
+			
+		}
+
+		@Override
+		public void setMultiple(boolean multiple) {
+			getSelectModel().setMultiple(multiple);
+			
+		}
+
+		@Override
+		public boolean isMultiple() {
+			return getSelectModel().isMultiple();
+		}
 	}
-	
 }

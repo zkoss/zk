@@ -289,6 +289,7 @@ public class Listbox extends MeshElement {
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
+	private transient boolean _skipFixItemIndices;
 
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
@@ -377,6 +378,18 @@ public class Listbox extends MeshElement {
 				for (int n = toIndex - fromIndex; --n >= 0 && it.hasPrevious();) {
 					it.previous();
 					it.remove();
+				}
+			}
+			
+			/**
+			 * Override to remove unnecessary Listitem re-indexing (when ROD is on, clear() is called frequently). 
+			 */
+			public void clear() {
+				final boolean oldFlag = setSkipFixItemIndices(true);
+				try {
+					super.clear();
+				} finally {
+					setSkipFixItemIndices(oldFlag);
 				}
 			}
 		};
@@ -1380,7 +1393,22 @@ public class Listbox extends MeshElement {
 		return !_groupsInfo.isEmpty();
 	}
 
+	/** Sets true to skip calling {@link fixItemIndices} and avoid unnecessary 
+	 * Listitem re-indexing when render template.
+	 * @param b true to skip
+	 * @return original true/false status
+	 * @see Renderer#render
+	 */
+	/* package */boolean setSkipFixItemIndices(boolean b) {
+		final boolean old = _skipFixItemIndices;
+		_skipFixItemIndices = b;
+		return old;
+	}
+	
 	/* package */void fixItemIndices(int j, int to, boolean infront) {
+		if (_skipFixItemIndices) //@see Renderer#render
+			return;
+		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
@@ -2099,6 +2127,9 @@ public class Listbox extends MeshElement {
 	 *            the end index (inclusion). If -1, up to the end.
 	 */
 	private void fixItemIndices(int j, int to) {
+		if (_skipFixItemIndices) //@see Renderer#render
+			return;
+		
 		int realj = getRealIndex(j);
 		if (realj < 0)
 			realj = 0;
@@ -2534,7 +2565,7 @@ public class Listbox extends MeshElement {
 			final Object value = _model.getElementAt(index);
 			//bug #ZK-675: Selection was lost if a render replace the listitem
 			final boolean selected = ((Selectable) _model).isSelected(value);
-			
+			final boolean oldFlag = setSkipFixItemIndices(true); //skipFixItemIndices when rendering
 			try {
 				try {
 					_renderer.render(item, value, index);
@@ -2547,6 +2578,7 @@ public class Listbox extends MeshElement {
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new listitem is created to replace the existent one
 					item = (Listitem)v;
+				item.setIndexDirectly(index);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -2556,6 +2588,7 @@ public class Listbox extends MeshElement {
 				item.setLoaded(true);
 				throw ex;
 			} finally {
+				setSkipFixItemIndices(oldFlag);
 				if (item.getChildren().isEmpty())
 					cell.setParent(item);
 			}

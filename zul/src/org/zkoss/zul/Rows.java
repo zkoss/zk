@@ -44,6 +44,7 @@ public class Rows extends XulElement {
 	
 	private transient List<int[]> _groupsInfo;
 	private transient List<Group> _groups;
+	private transient boolean _skipFixRowIndices;
 
 	public Rows() {
 		init();
@@ -132,7 +133,23 @@ public class Rows extends XulElement {
 		}
 	}
 	
+	/**
+	 * Set true to skip calling {@link #fixGroupIndex} and {@link #fixRowIndices} 
+	 * and avoid unnecessary row re-indexing when render template.
+	 * @param b true to skip
+	 * @return original true/false status
+	 * @see Grid.Renderer#render
+	 */
+	/*package*/ boolean setSkipFixRowIndices(boolean b) {
+		final boolean old = _skipFixRowIndices;
+		_skipFixRowIndices = b;
+		return old;
+	}
+	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
+		if (_skipFixRowIndices) //@see Grid.Renderer#render
+			return;
+		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
@@ -410,6 +427,9 @@ public class Rows extends XulElement {
 	 *            the end index (inclusion). If -1, up to the end.
 	 */
 	private void fixRowIndices(int j, int to) {
+		if (_skipFixRowIndices) //@see Grid.Renderer#render 
+			return;
+		
 		int realj = getRealIndex(j);
 		if (realj < 0)
 			realj = 0;
