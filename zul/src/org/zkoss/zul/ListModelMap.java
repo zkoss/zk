@@ -694,4 +694,26 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable, Cloneable
 	public void removeSelection(Object obj) {
 		removeFromSelection(obj);
 	}
+
+	@Override
+	protected void writeSelection(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.writeInt(_selection.size());
+		for (final Map.Entry<K, V> sel: _selection)
+			s.writeObject(sel.getKey());
+	}
+	@Override
+	protected void readSelection(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		_selection = newEmptySelection();
+		int size = s.readInt();
+		while (--size >= 0) {
+		//the performance is bad, but no better algorithm
+			final Object key = s.readObject();
+			if (_map.containsKey(key))
+				for (Map.Entry<K, V> entry: _map.entrySet())
+					if (Objects.equals(key, entry.getKey()))
+						_selection.add(entry);
+		}
+	}
 }

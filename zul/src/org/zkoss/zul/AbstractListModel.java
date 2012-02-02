@@ -171,28 +171,35 @@ Selectable<E>, java.io.Serializable {
 	protected Set<E> newEmptySelection() {
 		return new LinkedHashSet<E>();
 	}
+	/** Writes {@link #_selection}.
+	 * <p>Default: write it directly. Override it if E is not serializable.
+	 */
+	protected void writeSelection(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.writeObject(_selection);
+	}
+	/** Reads back {@link #_selection}.
+	 * <p>Default: write it directly. Override it if E is not serializable.
+	 */
+	@SuppressWarnings("unchecked")
+	protected void readSelection(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		_selection = (Set<E>)s.readObject();
+	}
 
 	// Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		s.writeInt(_selection.size());
-		for (final E selObj: _selection)
-			s.writeObject(selObj);
-
+		writeSelection(s);
 		Serializables.smartWrite(s, _listeners);
 	}
-	@SuppressWarnings("unchecked")
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_selection = newEmptySelection();
-		int size = s.readInt();
-		while (--size >= 0)
-			((Set)_selection).add(s.readObject());
-
+		readSelection(s);
 		_listeners = new ArrayList<ListDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
