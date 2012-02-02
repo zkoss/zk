@@ -218,7 +218,7 @@ public class Combobox extends Textbox {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
 			if (_selItem != null)
-				selectItem(null, true);
+				setSelectedItem(null);
 			return;
 		}
 
@@ -229,7 +229,7 @@ public class Combobox extends Textbox {
 		int j = 0;
 		for (final Comboitem item: getItems()) {
 			if (smodel.isSelected(getElementAt(j++))) {
-				selectItem(item, true);
+				setSelectedItem(item);
 				return;
 			}
 		}
@@ -243,7 +243,7 @@ public class Combobox extends Textbox {
 			//(though it could be wrong too -- at least less obvious to users)
 			final Object selObj = smodel.getSelection().iterator().next();
 			if (selObj instanceof String || selObj == null) {
-				setValueWithOnChange((String)selObj);
+				setValue((String)selObj);
 				postOnInitRender(null); //cause Comboitem to be generated
 			}
 			return;
@@ -639,16 +639,9 @@ public class Combobox extends Textbox {
 	public void setSelectedItem(Comboitem item) {
 		if (item != null && item.getParent() != this)
 			throw new UiException("Not a child: "+item);
-		selectItem(item, false);
-	}
-	private void selectItem(Comboitem item, boolean fireOnChange) {
+
 		if (item != _selItem) {
 			_selItem = item;
-			if (fireOnChange) {
-				setValueWithOnChange(item != null ? item.getLabel(): "");
-				return;
-			}
-
 			if (item != null) {
 				setValue(item.getLabel());
 			} else {
@@ -659,14 +652,6 @@ public class Combobox extends Textbox {
 				}
 			}
 			_lastCkVal = getValue();
-		}
-	}
-	/** Note: this method will fire ON_CHANGE. */
-	private void setValueWithOnChange(String value) {
-		final String oldValue = getValue();
-		if (!Objects.equals(oldValue, value)) {
-			setValue(value); //don't update _value directly, since we will fire ON_CHANGE
-			Events.postEvent(new InputEvent(Events.ON_CHANGE, this, value, oldValue));
 		}
 	}
 	
