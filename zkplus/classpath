@@ -13,3 +13,4 @@
 ../dist/lib/ext/s2-framework.jar
 ../dist/lib/ext/el-api.jar
 ../dist/lib/ext/cdi-api.jar
+../dist/lib/ext/portlet-api.jar
