@@ -58,7 +58,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 
 	private Comparator<TreeNode<E>> _sorting;
 
-	private Boolean _sortDir;
+	private boolean _sortDir;
 	
 	private boolean _multiple;
 

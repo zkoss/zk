@@ -46,7 +46,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	
 	private Comparator<E> _sorting;
 
-	private Boolean _sortDir;
+	private boolean _sortDir;
 
 	/**
 	 * Constructor

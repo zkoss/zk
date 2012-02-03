@@ -51,7 +51,7 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 
 	private Comparator<E> _sorting;
 
-	private Boolean _sortDir;
+	private boolean _sortDir;
 	
 	/** Constructor.
 	 *

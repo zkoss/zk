@@ -46,7 +46,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 
 	private Comparator<Map.Entry<K, V>> _sorting;
 
-	private Boolean _sortDir;
+	private boolean _sortDir;
 	/**
 	 * Constructor.
 	 *
