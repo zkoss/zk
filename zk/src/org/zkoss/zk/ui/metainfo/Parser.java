@@ -899,42 +899,9 @@ public class Parser {
 				//if so, we parse them as property
 				//if not, we handle it normally and text, if any, will be
 				//trimmed and assigned as a property (in parseItems)
-				String xmlFound = null; //whether a XML fragment
-				String zkElem = null; //a ZK element
-				boolean empty = true; //whether there is anything other than whitespace
-				for (Iterator<Item> it = items.iterator();;) {
-					if (zkElem != null && xmlFound != null)
-						throw new UnsupportedOperationException(
-							message("Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead",
-								(it.hasNext() ? it.next(): el)));
-								//might be possible to handle but not worth
-					if (!it.hasNext())
-						break;
-
-					final Item o = it.next();
-					if (empty)
-						empty = (o instanceof Text || o instanceof CData)
-							&& o.getText().trim().length() == 0;
-
-					if (o instanceof Element) {
-						final Element e = (Element)o;
-						final String n = e.getLocalName();
-						if (isZkElement(langdef, e, bNativeContent)
-						&& ("attribute".equals(n) || "custom-attributes".equals(n)
-						|| "variables".equals(n) || "template".equals(n)
-						|| "zscript".equals(n))) { //we have to skip zscript because of B50-3259479
-							zkElem = n;
-							textAs = null;
-							//unable to handle them because EL/zscript might affect
-							//the result
-						} else {
-							xmlFound = n;
-								//including "zk" (risk if allowed to mix zk with attribute...)
-						}
-					}
-				}
-				if (empty)
-					textAs = null; //only whitespace, so don't handle textAs
+				if (compInfo.isChildAllowedInTextAs() //don't consider it as text if childable and element found
+				|| !textAsAllowed(langdef, items, bNativeContent))
+					textAs = null; 
 			}
 
 			if (textAs != null)
@@ -947,6 +914,46 @@ public class Parser {
 			&& !compInfo.getChildren().isEmpty())
 				optimizeNativeInfos((NativeInfo)compInfo);
 		} //end-of-else//
+	}
+	private boolean textAsAllowed(LanguageDefinition langdef,
+	Collection<Item> items, boolean bNativeContent) {
+		boolean textAsAllowed = true;
+		String xmlFound = null; //whether a XML fragment
+		String zkElem = null; //a ZK element
+		boolean empty = true; //whether there is anything other than whitespace
+		for (Iterator<Item> it = items.iterator();;) {
+			if (zkElem != null && xmlFound != null)
+				throw new UnsupportedOperationException(
+					message("Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead",
+						(it.hasNext() ? it.next(): items.iterator().next().getParent())));
+						//might be possible to handle but not worth
+			if (!it.hasNext())
+				break;
+
+			final Item o = it.next();
+			if (empty)
+				empty = (o instanceof Text || o instanceof CData)
+					&& o.getText().trim().length() == 0;
+
+			if (o instanceof Element) {
+				final Element e = (Element)o;
+				final String n = e.getLocalName();
+				if (isZkElement(langdef, e, bNativeContent)
+				&& ("attribute".equals(n) || "custom-attributes".equals(n)
+				|| "variables".equals(n) || "template".equals(n)
+				|| "zscript".equals(n))) { //we have to skip zscript because of B50-3259479
+					zkElem = n;
+					textAsAllowed = false;
+					//unable to handle them because EL/zscript might affect
+					//the result
+				} else {
+					xmlFound = n;
+						//including "zk" (risk if allowed to mix zk with attribute...)
+				}
+			}
+		}
+		return textAsAllowed && !empty;
+			//if empty (i.e., only whitespace), so don't handle textAs (i.e., ignore it)
 	}
 
 	/** Parses the items as if they are native and they will become a property

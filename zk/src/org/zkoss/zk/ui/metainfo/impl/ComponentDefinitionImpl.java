@@ -72,6 +72,8 @@ implements ComponentDefinition, java.io.Serializable {
 	private ExValue[] _apply;
 	/** Whether to preserve the blank text. */
 	private boolean _blankpresv;
+	/** Whether the child element is allowed within the element. */
+	private boolean _childAllowedInTextAs;
 
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
@@ -228,6 +230,13 @@ implements ComponentDefinition, java.io.Serializable {
 	public void setBlankPreserved(boolean preserve) {
 		_blankpresv = preserve;
 	}
+	/** Sets whether the child component is allowed within the element.
+	 * For more information, please refer to {@link ComponentDefinition#getTextAs}.
+	 * @since 6.0.0
+	 */
+	public void setChildAllowedInTextAs(boolean allowed) {
+		_childAllowedInTextAs = allowed;
+	}
 
 	/** Sets the URI where this definition is declared.
 	 *
@@ -248,6 +257,10 @@ implements ComponentDefinition, java.io.Serializable {
 
 	public String getTextAs() {
 		return _textAs;
+	}
+	@Override
+	public boolean isChildAllowedInTextAs() {
+		return _childAllowedInTextAs;
 	}
 	public boolean isBlankPreserved() {
 		return _blankpresv;

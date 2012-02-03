@@ -91,9 +91,37 @@ public interface ComponentDefinition extends Cloneable {
 	 *  &lt;text-as&gt;content&lt;/text-as&gt;
 	 *...</code></pre>
 	 *
+	 * <p>Notice that it is valid to have XML fragment, including XML elements,
+	 * within the element. For example,
+<pre><code>&lt;html>
+  &lt;ul>
+    &lt;li forEach="apple, orange">${each}&lt;/li>
+  &lt;/ul>
+&lt;/html></code></pre>
+	 *
+	 * <p>If the component allows child components, it is better not to try
+	 * XML fragment as the plain text. And then, it shall return true
+	 * in {@link #isChildAllowedInTextAs}. Example, {@link org.zkoss.zul.A}.
+	 *
+	 * @see #isChildAllowedInTextAs
 	 * @since 3.0.0
 	 */
 	public String getTextAs();
+	/** Returns if a child is allowed in the text-as area.
+	 * It is meaningful only if {@link #getTextAs} is not null.
+	 * If true, the text enclosed within the element is considered as
+	 * text only if there is no other XML element.
+	 * <p>For example, &lt;div&gt; in the following example won't
+	 * be considered as text. Rather, a div component will be created.
+	 * <pre><code>&lt;a&gt;
+	 *  &lt;div&gt;...&lt;/div&gt;
+	 *&lt;/a&gt;</code></pre>
+	 *
+	 * <p>Default: false.
+	 * @see #getTextAs
+	 * @since 6.0.0
+	 */
+	public boolean isChildAllowedInTextAs();
 	/** Returns whether to preserve the blank text.
 	 * If false, the blank text (a non-empty string consisting of whitespaces)
 	 * are ignored.

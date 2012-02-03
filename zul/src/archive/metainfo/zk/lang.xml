@@ -198,7 +198,8 @@ def alert(m):
 		<component-name>a</component-name>
 		<component-class>org.zkoss.zul.A</component-class>
 		<widget-class>zul.wgt.A</widget-class>
-		<text-as>label</text-as><!-- treat text within the element as the label property -->
+		<text-as childable="true">label</text-as>
+			<!-- treat text within the element as the label property if no element inside -->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/a.js</mold-uri>

@@ -33,6 +33,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.idom.Document;
+import org.zkoss.idom.Item;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
@@ -469,13 +470,9 @@ public class DefinitionLoaders {
 				langdef.addComponentDefinition(compdef);
 			}
 
-			String s = el.getElementValue("text-as", true);
-			if (s != null) { //empty means cleanup (for overriding)
-				noEL("text-as", s, el);
-				compdef.setTextAs(s);
-			}
+			parseTextAs(compdef, el.getElement("text-as"));
 
-			s = el.getElementValue("preserve-blank", true);
+			String s = el.getElementValue("preserve-blank", true);
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
@@ -545,6 +542,16 @@ public class DefinitionLoaders {
 			parseAnnots(compdef, el);
 		}
 	}
+	private static void parseTextAs(ComponentDefinitionImpl compdef, Element el) {
+		if (el != null) {
+			final String s = el.getText(true);
+			noEmpty("text-as", s, el);
+			noEL("text-as", s, el);
+			compdef.setTextAs(s);
+			if ("true".equals(el.getAttributeValue("childable")))
+				compdef.setChildAllowedInTextAs(true);
+		}
+	}
 
 	private static String message(String message, org.zkoss.idom.Item el) {
 		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator(): null);
@@ -573,10 +580,15 @@ public class DefinitionLoaders {
 					throw new UiException(c + " must implement "+cls);
 		return (Class<? extends T>)c;
 	}
-	private static void noEL(String nm, String val, Element el)
+	private static void noEmpty(String nm, String val, Item item)
+	throws UiException {
+		if (val != null && val.length() == 0)
+			throw new UiException(message(nm+" cannot be empty", item));
+	}
+	private static void noEL(String nm, String val, Item item)
 	throws UiException {
 		if (withEL(val))
-			throw new UiException(message(nm+" does not support EL expressions", el));
+			throw new UiException(message(nm+" does not support EL expressions", item));
 	}
 	private static boolean withEL(String val) {
 		return val != null && val.indexOf("${") >= 0;
