@@ -55,7 +55,7 @@ public class B50_ZK_564_Composer extends GenericForwardComposer {
 		};
 		model.addTreeDataListener(listener);
 		TreeitemRenderer renderer = new TreeitemRenderer() {
-			public void render(Treeitem item, Object data) {
+			public void render(Treeitem item, Object data, int index) {
 				item.setValue(data);
 				item.setLabel("" + ((DefaultTreeNode) data).getData());
 			}

@@ -220,8 +220,8 @@ ZK 6.0.0
     org.zkoss.zul.ext.Sortable
   + GroupsModelExt is depreccated and replaced with
     org.zkoss.zul.ext.GroupsSortableModel
-  + The render method of ListitemRender, RowRenderer and ComboitemRender
-    has changed: an additional argument called index was introduced.
+  + The render method of ListitemRender, RowRenderer, ComboitemRender and TreeitemRenderer
+    has been changed: an additional argument called index was introduced.
 
 	--------
 ZK 5.0.11

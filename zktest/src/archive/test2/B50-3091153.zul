@@ -30,7 +30,7 @@ public class Test14105Window extends Window implements AfterCompose {
 	}
 }
 public class MyTreeitemRenderer implements TreeitemRenderer {
-	public void render(Treeitem treeitem, Object arg1) throws Exception {
+	public void render(Treeitem treeitem, Object arg1, int index) throws Exception {
 		treeitem.setLabel(arg1.toString());
 		treeitem.setSelected(true);
 	}

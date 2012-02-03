@@ -17,7 +17,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	Check all of treeitem will be selected when open all of treenode
 	<zscript><![CDATA[
 	public class AllSelectedTreeItemRenderer implements TreeitemRenderer {
-		public void render(Treeitem ti, Object obj) throws Exception {
+		public void render(Treeitem ti, Object obj, int index) throws Exception {
 			ti.setSelected(true);
 
 			SimpleTreeNode t = (SimpleTreeNode) obj;

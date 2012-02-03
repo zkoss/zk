@@ -27,7 +27,7 @@ import org.zkoss.zul.Treerow;
  */
 public class DirectoryTreeitemRenderer implements TreeitemRenderer {
 	
-	public void render(Treeitem treeItem, Object node) throws Exception {
+	public void render(Treeitem treeItem, Object node, int index) throws Exception {
         final DirectoryTreeNode dtn = (DirectoryTreeNode) node;
         final PackageDataUnit pkgData = (PackageDataUnit) dtn.getData();
         treeItem.setOpen(dtn.isOpen());// Whether open the node

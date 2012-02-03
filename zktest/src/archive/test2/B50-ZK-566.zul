@@ -30,7 +30,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		
 		
 		TreeitemRenderer renderer = new TreeitemRenderer() {
-		    public void render(Treeitem item, Object data) throws Exception {
+		    public void render(Treeitem item, Object data, int index) throws Exception {
 		    	TreeNode node = (TreeNode) data;
 		        item.setLabel(node.getData().toString());
 		    }

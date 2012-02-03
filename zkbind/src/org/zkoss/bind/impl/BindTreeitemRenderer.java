@@ -36,10 +36,9 @@ import org.zkoss.zul.Treerow;
  */
 public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
-	public void render(final Treeitem item, final Object data) throws Exception {
+	public void render(final Treeitem item, final Object data, final int index) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
-		final int index = item.getIndex();
 		final Template tm = resoloveTemplate(tree,parent,data,index,-1,"model");
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));

@@ -163,7 +163,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		}
 	
 	TreeitemRenderer render = new TreeitemRenderer() {
-		public void render(Treeitem item, Object data) throws Exception {
+		public void render(Treeitem item, Object data, int index) throws Exception {
 			FileInfo fi = (FileInfo) ((DefaultTreeNode) data).getData();
 			Treerow tr;
 			if (item.getTreerow() == null) {
@@ -187,7 +187,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	};
 	
 	TreeitemRenderer render2 = new TreeitemRenderer() {
-		public void render(Treeitem item, Object data) throws Exception {
+		public void render(Treeitem item, Object data, int index) throws Exception {
 			String[] fi = (String[]) ((DefaultTreeNode) data).getData();
 			Treerow tr;
 			if (item.getTreerow() == null) {

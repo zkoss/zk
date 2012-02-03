@@ -46,7 +46,7 @@
 		
 		
 		TreeitemRenderer treeitemRender = new TreeitemRenderer() {
-			public void render(Treeitem item, Object data) throws Exception {
+			public void render(Treeitem item, Object data, int index) throws Exception {
 				String[] ary = (String[]) ((DefaultTreeNode) data).getData();
 				Treerow tr;
 				if (item.getTreerow() == null) {

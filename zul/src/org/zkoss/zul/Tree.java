@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.lang.reflect.Method;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.AbstractCollection;
@@ -51,6 +52,7 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
@@ -1624,7 +1626,7 @@ public class Tree extends MeshElement {
 			Treeitem ti = newUnloadedItem();
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);
-			renderer.render(ti, childNode);
+			renderer.render(ti, childNode, i);
 			Object v = ti.getAttribute("org.zkoss.zul.model.renderAs");
 			if (v != null) //a new item is created to replace the existent one
 				(ti = (Treeitem) v).setOpen(false);
@@ -1666,7 +1668,7 @@ public class Tree extends MeshElement {
 		return _renderer != null ? _renderer: _defRend;
 	}
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, final Object node){
+		public void render(Treeitem ti, final Object node, final int index){
 			Tree tree = ti.getTree();
 			final Template tm = tree.getTemplate("model");
 			if (tm == null) {
@@ -1685,7 +1687,34 @@ public class Tree extends MeshElement {
 				final Component[] items = tm.create(ti.getParent(), ti,
 					new VariableResolver() {
 						public Object resolveVariable(String name) {
-							return "each".equals(name) ? node: null;
+							if ("each".equals(name)) {
+								return node;
+							} else if ("forEachStatus".equals(name)) {
+								return new ForEachStatus() {
+									@Override
+									public ForEachStatus getPrevious() {
+										return null;
+									}
+									@Override
+									public Object getEach() {
+										return node;
+									}
+									@Override
+									public int getIndex() {
+										return index;
+									}
+									@Override
+									public Integer getBegin() {
+										return 0;
+									}
+									@Override
+									public Integer getEnd() {
+										throw new UnsupportedOperationException("end not available");
+									}
+								};
+							} else {
+								return null;
+							}
 						}
 					}, null);
 				if (items.length != 1)
@@ -1710,13 +1739,20 @@ public class Tree extends MeshElement {
 		}
 
 		@SuppressWarnings("unchecked")
-		private void render(Treeitem item, Object node) throws Throwable {
+		private void render(Treeitem item, Object node, int index) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
 				((RendererCtrl)_renderer).doTry();
 				_ctrled = true;
 			}
 			try {
-				_renderer.render(item, node);
+				try {
+					_renderer.render(item, node, index);
+				} catch (AbstractMethodError ex) {
+					final Method m = _renderer.getClass()
+						.getMethod("render", new Class<?>[] {Treeitem.class, Object.class});
+					m.setAccessible(true);
+					m.invoke(_renderer, new Object[] {item, node});
+				}
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
@@ -1849,7 +1885,7 @@ public class Tree extends MeshElement {
 
 			final Renderer renderer = new Renderer();
 			try {
-				renderer.render(item, node); //re-render
+				renderer.render(item, node, item.getIndex()); //re-render
 			} catch (Throwable ex) {
 				renderer.doCatch(ex);
 			} finally {
@@ -1866,7 +1902,7 @@ public class Tree extends MeshElement {
 	 * @see #renderItem
 	 * @since 3.0.0
 	 */
-	public void renderItems(Set items) {
+	public void renderItems(Set<? extends Treeitem> items) {
 		if (_model == null) return;
 
 		if (items.isEmpty())
@@ -1874,8 +1910,8 @@ public class Tree extends MeshElement {
 
 		final Renderer renderer = new Renderer();
 		try {
-			for (Iterator it = items.iterator(); it.hasNext();){
-				renderItem0(renderer, (Treeitem)it.next());
+			for (final Treeitem item: items){
+				renderItem0(renderer, item);
 			}
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);

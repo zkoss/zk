@@ -31,7 +31,7 @@ import org.zkoss.zul.Treerow;
 public class HostTreeRenderer implements TreeitemRenderer {
 
 
-	public void render(Treeitem treeitem, Object data) throws Exception {
+	public void render(Treeitem treeitem, Object data, int index) throws Exception {
 		Treerow row;
 		if(treeitem.getTreerow()==null){// tree row not create yet.
 			row = new Treerow();

@@ -405,7 +405,7 @@ public class ModelProvider {
 	public static class TreeRendererFactory {
 		public static TreeitemRenderer getBeanTreeitemRenderer() {
 			return new TreeitemRenderer() {
-				public void render(Treeitem item, Object data) throws Exception {
+				public void render(Treeitem item, Object data, int index) throws Exception {
 					SampleBean b = (SampleBean) ((DefaultTreeNode) data).getData();
 					Treerow tr;
 					if (item.getTreerow() == null) {
@@ -425,7 +425,7 @@ public class ModelProvider {
 		}
 		public static TreeitemRenderer getArrayTreeitemRenderer() {
 			return new TreeitemRenderer() {
-				public void render(Treeitem item, Object data) throws Exception {
+				public void render(Treeitem item, Object data, int index) throws Exception {
 					String[] ary = (String[]) ((DefaultTreeNode) data).getData();
 					Treerow tr;
 					if (item.getTreerow() == null) {
@@ -445,7 +445,7 @@ public class ModelProvider {
 		}
 		public static TreeitemRenderer getSingleColTreeitemRenderer() {
 			return new TreeitemRenderer() {
-				public void render(Treeitem item, Object data) throws Exception {
+				public void render(Treeitem item, Object data, int index) throws Exception {
 					Treerow tr;
 					if (item.getTreerow() == null) {
 						tr = new Treerow();

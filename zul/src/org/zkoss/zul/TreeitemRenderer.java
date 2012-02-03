@@ -27,7 +27,7 @@ import org.zkoss.zul.event.TreeDataEvent;
  * (i.e., setModel(getModel())), or fire an {@link TreeDataEvent} event.
  *
  * @author Jeff Liu
- * @since ZK 3.0.0
+ * @since 3.0.0
  * @see TreeModel
  * @see Tree
  */
@@ -52,7 +52,9 @@ public interface TreeitemRenderer<T> {
 	 * <li>When a treerow is not appended to <b>item</b>,  generally label of <b>item</b> is displayed.</li> 
 	 * </ol>
 	 * @param data that is used to render the Treeitem
-	 * 
+	 * @param index the index of the data that is currently being rendered.
+	 * Notice the index is the order of the siblings (i.e., data that belongs
+	 * to the same parent).
 	 */
-	public void render(Treeitem item, T data) throws Exception;
+	public void render(Treeitem item, T data, int index) throws Exception;
 }
