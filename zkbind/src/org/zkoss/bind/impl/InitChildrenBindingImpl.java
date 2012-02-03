@@ -59,7 +59,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			comp.setAttribute(BinderImpl.MODEL, data); //ZK-758. @see AbstractRenderer#addItemReference
 			int size = data.size();
 			for(int i=0;i<size;i++){
-				renderer.render(comp, data.get(i),i);
+				renderer.render(comp, data.get(i),i,size);
 			}
 		}
 	}

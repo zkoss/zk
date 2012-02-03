@@ -15,13 +15,13 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.zkoss.bind.IterationStatus;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
@@ -40,7 +40,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
 		final int index = item.getIndex();
-		final Template tm = resoloveTemplate(tree,parent,data,index,"model");
+		final Template tm = resoloveTemplate(tree,parent,data,index,-1,"model");
 		if (tm == null) {
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;
@@ -54,18 +54,27 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			}
 			tc.setParent(tr);
 		} else {
-			final IterationStatus iterStatus = new AbstractIterationStatus(){//provide iteration status in this context
+
+			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return index;
+				}
+				@Override
+				public Object getEach(){
+					return data;
+				}
+				@Override
+				public Integer getEnd(){
+					throw new UiException("end attribute is not supported");
 				}
 			};
 			
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-			final String itervarnm = itervar == null ? varnm+STATUS_POST_VAR : itervar; //provide default value if not specified
+			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
 			final Component[] items = tm.create(parent, item, 
 				new VariableResolverX() {
 					public Object resolveVariable(String name) {
@@ -93,7 +102,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			
 			ti.setAttribute(itervarnm, iterStatus);
 			//add template dependency
-			addTemplateTracking(tree, ti, data, index);
+			addTemplateTracking(tree, ti, data, index, -1);
 			
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);

@@ -64,17 +64,28 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 	}
 
 	@Override
-	public Template resolveTemplate(Component eachComp, Object eachData, final int index) {
+	public Template resolveTemplate(Component eachComp, final Object eachData, final int index, final int size) {
 		Object oldEach = null;
 		Object oldStatus = null;
 		try {
 			//prepare each and eachStatus
 			oldEach = eachComp.setAttribute(EACH_VAR, eachData);
-			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractIterationStatus(){
+			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return index;
+				}
+				@Override
+				public Object getEach(){
+					return eachData;
+				}
+				@Override
+				public Integer getEnd(){
+					if(size<0){
+						throw new UiException("end attribute is not supported");// the tree case
+					}
+					return size;
 				}
 			});
 	

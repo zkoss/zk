@@ -31,7 +31,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String EACH_ATTR = TemplateResolver.EACH_ATTR;
 	protected static final String EACH_VAR = TemplateResolver.EACH_VAR;
 	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
-	protected static final String STATUS_POST_VAR = TemplateResolver.STATUS_POST_VAR;
+	protected static final String STATUS_POST_VAR = "Status";
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
 
 	static private String TREE_PATH = "$TREEPATH$";//for tree model only
@@ -49,7 +49,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		return template==null?lookupTemplate(comp.getParent(),name):template;
 	}
 	
-	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, String defaultName) {
+	protected Template resoloveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName) {
 		//a detached component(ex,grid.onInitRender) will still calling the render, see test case collection-template-grid.zul
 		//TODO need to check is this a zk bug and repor it
 		if(comp.getPage()==null || comp.getParent()==null) return null;//no template
@@ -58,7 +58,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
 		Template template = null;
 		if(resolver!=null){
-			template = resolver.resolveTemplate(comp,data,index);
+			template = resolver.resolveTemplate(comp,data,index,size);
 			if(template==null){
 				throw new UiException("template not found for component "+comp+" by resolver "+resolver);
 			}
@@ -68,7 +68,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		return template;
 	}
     //ZK-739: Allow dynamic template for collection binding.
-	protected void addTemplateTracking(Component templateComp, final Component eachComp, Object data, final int index) {
+	protected void addTemplateTracking(Component templateComp, final Component eachComp,final Object data, final int index, final int size) {
 		final Binder binder = (Binder)eachComp.getAttribute(BinderImpl.BINDER,true);
 		if(binder == null) return; //no binder
 		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
@@ -77,11 +77,22 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		Object oldStatus = null;
 		try {
 			old = eachComp.setAttribute(EACH_VAR, data); //kept the value for template resolving
-			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractIterationStatus(){//provide iteration status in this context
+			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
 				@Override
 				public int getIndex() {
 					return index;
+				}
+				@Override
+				public Object getEach(){
+					return data;
+				}
+				@Override
+				public Integer getEnd(){
+					if(size<0){
+						throw new UiException("end attribute is not supported");// the tree case
+					}
+					return size;
 				}
 			});
 			resolver.addTemplateTracking(eachComp);

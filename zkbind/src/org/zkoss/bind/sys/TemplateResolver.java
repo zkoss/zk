@@ -24,17 +24,17 @@ public interface TemplateResolver {
 	public static final String EACH_ATTR = "var";
 	public static final String EACH_VAR = "each";
 	public static final String STATUS_ATTR = "status";
-	public static final String STATUS_POST_VAR = "Status";
-	public static final String EACH_STATUS_VAR = EACH_VAR + STATUS_POST_VAR;
+	public static final String EACH_STATUS_VAR = "forEachStatus";
 	
 	/**
 	 * Resolve the template for the component 
 	 * @param eachComp the template to be resolved of the component
 	 * @param eachData the data for resolver
-	 * @param index the index for resolver
+	 * @param index the index of each
+	 * @param size the size of data set
 	 * @return the template if exist.
 	 */
-	Template resolveTemplate(Component eachComp, Object eachData, int index);
+	Template resolveTemplate(Component eachComp, Object eachData, int index, int size);
 	
 	/**
 	 * Add template tracking to component

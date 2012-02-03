@@ -1,4 +1,4 @@
-/* AbstractIterationStatus.java
+/* AbstractForEachStatus.java
 
 	Purpose:
 		
@@ -13,16 +13,27 @@ package org.zkoss.bind.impl;
 
 import java.io.Serializable;
 
-import org.zkoss.bind.IterationStatus;
 import org.zkoss.bind.annotation.Immutable;
+import org.zkoss.zk.ui.util.ForEachStatus;
 
 /**
- * The Class AbstractIterationStatus.
+ * The Class AbstractForEachStatus.
  *
  * @author dennis
  * @since 6.0.0
  */
+//it is immutable
 @Immutable
-/*package*/ abstract class AbstractIterationStatus implements IterationStatus, Serializable{
+/*package*/ abstract class AbstractForEachStatus implements ForEachStatus, Serializable{
 	private static final long serialVersionUID = 1L;
+	
+	//not supported
+	public ForEachStatus getPrevious(){
+		return null;
+	}
+	
+	//default 0
+	public Integer getBegin(){
+		return 0;
+	}
 }
