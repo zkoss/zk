@@ -30,7 +30,7 @@
 		<button id="clean" label="clean" onClick="@command('clean')" />
 		<button id="select" label="select 1" onClick="@command('select')" />
 		<button id="reload" label="reload" onClick="@command('reload')" />
-		<button id="select0" label="select model 0" onClick="outerbox.getModel().addSelectionInterval(0,0)" />
+		<button id="select0" label="select model 0" onClick="outerbox.getModel().addToSelection(outerbox.getModel().getElementAt(0))" />
 		<button id="showselect" label="show selection" onClick="show()" />
 		
 		<button label="Dump" onClick="binder.getTracker().dump()" />

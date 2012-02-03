@@ -198,7 +198,19 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 			clone._data = ArraysX.duplicate(_data);
 		return clone;
 	}
-
+	
+	@Override
+	protected void fireSelectionEvent(E e) {
+		int index = -1;
+		for(int j = 0; j < _data.length; ++j) {
+			index++;
+			if (Objects.equals(e, _data[j])) {
+				break;
+			}
+		}
+		fireEvent(ListDataEvent.SELECTION_CHANGED, index, -1);
+	}
+	
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */

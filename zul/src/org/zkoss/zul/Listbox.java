@@ -2490,8 +2490,13 @@ public class Listbox extends MeshElement {
 				!isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
-			if (!_ignoreDataSelectionEvent)
+			if (!_ignoreDataSelectionEvent) {
+				if (event.getIndex0() > -1) {
+					setSelectedIndex(event.getIndex0());
+					// auto scrollIntoView, if item is not rendered
+				}
 				doSelectionChanged();
+			}
 		} else if (type == ListDataEvent.MULTIPLE_CHANGED) {
 			setMultiple(((Selectable)_model).isMultiple());
 		} else {

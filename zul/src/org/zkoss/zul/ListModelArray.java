@@ -187,6 +187,11 @@ implements Sortable<E>, java.io.Serializable {
 		return clone;
 	}
 
+	@Override
+	protected void fireSelectionEvent(E e) {
+		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
+	}
+	
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */

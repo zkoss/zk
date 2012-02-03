@@ -698,7 +698,12 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			clone._map = new LinkedHashMap(_map);
 		return clone;
 	}
-
+	
+	@Override
+	protected void fireSelectionEvent(Entry<K,V> e) {
+		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
+	}
+	
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */

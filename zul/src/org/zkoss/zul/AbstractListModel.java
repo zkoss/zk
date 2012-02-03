@@ -88,7 +88,7 @@ Selectable<E>, java.io.Serializable {
 				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
 			_selection.clear();
 			_selection.addAll(selection);
-			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+			fireSelectionEvent(selection.iterator().next());
 		}
 	}
 	/** {@inheritDoc} */
@@ -110,7 +110,7 @@ Selectable<E>, java.io.Serializable {
 				_selection.clear();
 				_selection.add(obj);
 			}
-			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+			fireSelectionEvent(obj);
 		}
 	}
 	/** {@inheritDoc} */
@@ -131,6 +131,20 @@ Selectable<E>, java.io.Serializable {
 		}
 	}
 
+	/**
+	 * Selectable's implementor use only.
+	 * <p> Fires a selection event for component to scroll into view. The override
+	 * subclass must put the index0 of {@link #fireEvent(int, int, int)} as 
+	 * the view index to scroll. By default, the value -1 is assumed which means
+	 * no scroll into view.
+	 * <p> The method is invoked when both methods are invoked. {@link #addToSelection(Object)}
+	 * and {@link #setSelection(Collection)}.
+	 * @param e selected object.
+	 */
+	protected void fireSelectionEvent(E e) {
+		fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+	}
+	
 	/**Removes the selection of the given collection.
 	 */
 	protected void removeAllSelection(Collection<?> c) {
