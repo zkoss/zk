@@ -1,0 +1,17 @@
+<zk>
+	<zscript>
+	EventQueue que = EventQueues.lookup("iframe", "group", true);
+	void publish() {
+		String text = tbx.getValue();
+		que.publish(new Event("onGroupTest", null, text));
+	}
+	</zscript>
+	<vlayout>
+		<div>
+			Please type some words into the textbox and press ENTER.
+			Then, if there is no exception, it is correct.
+			<textbox id="tbx" onChange="publish()" onOK="publish()"/>
+		</div>
+		<iframe width="400px" height="600px" src="B50-ZK-822-iframe.zul" />
+	</vlayout>
+</zk>
