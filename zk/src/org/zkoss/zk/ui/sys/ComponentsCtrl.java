@@ -391,98 +391,134 @@ public class ComponentsCtrl {
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
 	new ComponentDefinition() {
+		@Override
 		public LanguageDefinition getLanguageDefinition() {
 			return null;
 		}
+		@Override
 		public String getName() {
 			return "[anonymous]";
 		}
+		@Override
 		public String getTextAs() {
 			return null;
 		}
+		@Override
+		public boolean isChildAllowedInTextAs() {
+			return false;
+		}
+		@Override
 		public boolean isMacro() {
 			return false;
 		}
+		@Override
 		public String getMacroURI() {
 			return null;
 		}
+		@Override
 		public boolean isInlineMacro() {
 			return false;
 		}
+		@Override
 		public boolean isNative() {
 			return false;
 		}
+		@Override
 		public boolean isBlankPreserved() {
 			return false;
 		}
+		@Override
 		public Object getImplementationClass() {
 			return Component.class;
 		}
+		@Override
 		public void setImplementationClass(Class cls) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public void setImplementationClass(String clsnm) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public Class resolveImplementationClass(Page page, String clsnm)
 		throws ClassNotFoundException {
 			return Component.class;
 		}
+		@Override
 		public boolean isInstance(org.zkoss.zk.ui.Component comp) {
 			return comp != null;
 		}
+		@Override
 		public Component newInstance(Page page, String clsnm) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public Component newInstance(Class cls) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public void addMold(String name, String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public String getWidgetClass(Component comp, String moldName) {
 			return null;
 		}
+		@Override
 		public String getDefaultWidgetClass(Component comp) {
 			return null;
 		}
+		@Override
 		public void setDefaultWidgetClass(String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public boolean hasMold(String name) {
 			return false;
 		}
+		@Override
 		public Collection<String> getMoldNames() {
 			return Collections.emptyList();
 		}
+		@Override
 		public void addProperty(String name, String value) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public void applyProperties(Component comp) {
 		}
+		@Override
 		public void applyAttributes(Component comp) {
 		}
+		@Override
 		public Map<String, Object> evalProperties(Map<String, Object> propmap, Page owner, Component parent) {
 			return propmap != null ? propmap: new HashMap<String, Object>(2);
 		}
+		@Override
 		public AnnotationMap getAnnotationMap() {
 			return null;
 		}
+		@Override
 		public String getApply() {
 			return null;
 		}
+		@Override
 		public ExValue[] getParsedApply() {
 			return null;
 		}
+		@Override
 		public void setApply(String apply) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public URL getDeclarationURL() {
 			return null;
 		}
+		@Override
 		public ComponentDefinition clone(LanguageDefinition langdef, String name) {
 			throw new UnsupportedOperationException();
 		}
+		@Override
 		public Object clone() {
 			throw new UnsupportedOperationException();
 		}
