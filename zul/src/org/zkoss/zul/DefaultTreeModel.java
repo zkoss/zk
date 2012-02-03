@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.ext.TreeOpenableModel;
@@ -55,6 +56,10 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 	private HashSet<TreeNode<E>> _opens = new HashSet<TreeNode<E>>();
 	private HashSet<TreeNode<E>> _selection = new HashSet<TreeNode<E>>();
 
+	private Comparator<TreeNode<E>> _sorting;
+
+	private Boolean _sortDir;
+	
 	private boolean _multiple;
 
 	// Selectable//Selectable
@@ -387,6 +392,8 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 	 */
 	@Override
 	public void sort(Comparator<TreeNode<E>> cmpr, final boolean ascending) {
+		_sorting = cmpr;
+		_sortDir = ascending;
 		TreeNode<E> root = getRoot();
 		if (root != null) {
 			sort0(root, cmpr);
@@ -475,5 +482,12 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 	 */
 	public void removeSelection(Object obj) {
 		removeFromSelection(obj);
+	}
+
+	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ?
+					"ascending" : "descending";
+		return "natural";	
 	}
 }

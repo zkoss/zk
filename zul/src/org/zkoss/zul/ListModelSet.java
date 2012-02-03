@@ -43,6 +43,10 @@ public class ListModelSet<E> extends AbstractListModel<E>
 implements Sortable<E>, Set<E>, java.io.Serializable {
 	protected Set<E> _set;
 
+	private Comparator<E> _sorting;
+
+	private Boolean _sortDir;
+	
 	/**
 	 * Constructor
 	 *
@@ -370,12 +374,21 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 */
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		final List<E> copy = new ArrayList<E>(_set);
+		_sorting = cmpr;
+		_sortDir = ascending;
 		Collections.sort(copy, cmpr);
 		_set.clear();
 		_set.addAll(copy);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
+	public String getSortDirection(Comparator<E> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ?
+					"ascending" : "descending";
+		return "natural";	
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {

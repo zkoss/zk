@@ -16,12 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
@@ -51,6 +49,10 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 
 	private Object[] _data;
 
+	private Comparator<E> _sorting;
+
+	private Boolean _sortDir;
+	
 	/** Constructor.
 	 *
 	 * @param data the array to represent
@@ -108,8 +110,17 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		_sorting = cmpr;
+		_sortDir = ascending;
 		Arrays.sort(_data, (Comparator)cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+	}
+
+	public String getSortDirection(Comparator<E> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ?
+					"ascending" : "descending";
+		return "natural";	
 	}
 	
 	/**

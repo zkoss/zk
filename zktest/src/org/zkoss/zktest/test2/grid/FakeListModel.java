@@ -65,5 +65,10 @@ public class FakeListModel extends AbstractListModel implements Sortable, java.i
 	public void setSize(int size){
 		_size = size;
 	}
+	@Override
+	public String getSortDirection(Comparator cmpr) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

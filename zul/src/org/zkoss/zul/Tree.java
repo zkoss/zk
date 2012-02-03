@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Generics;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -50,12 +51,14 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.PageSizeEvent;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectionModel;
 import org.zkoss.zul.impl.MeshElement;
@@ -1285,6 +1288,22 @@ public class Tree extends MeshElement {
 				break;
 			case TreeDataEvent.STRUCTURE_CHANGED:
 				renderTree();
+				// TODO: We have to skip the synchronization of the target component
+				// when the event is fired from it, i.e. No need to sync the sorting
+				// status here.
+				if (_model instanceof Sortable) {
+					Sortable smodel = (Sortable) _model;
+					List<Treecol> cols = Generics.cast(_treecols.getChildren());
+					for (Treecol col : cols) {
+						if (!"natural".equals(smodel.getSortDirection(col.getSortAscending()))) {
+							col.setSortDirection(smodel.getSortDirection(col.getSortAscending()));
+							break;
+						} else if (!"natural".equals(smodel.getSortDirection(col.getSortDescending()))) {
+							col.setSortDirection(smodel.getSortDirection(col.getSortDescending()));
+							break;
+						}
+					}
+				}
 				break;
 			case TreeDataEvent.SELECTION_CHANGED:
 				if (_model instanceof TreeSelectionModel) {

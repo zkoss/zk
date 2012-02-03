@@ -36,6 +36,7 @@ import java.util.Set;
 import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Generics;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -65,6 +66,7 @@ import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.ListboxDataLoader;
@@ -2479,6 +2481,7 @@ public class Listbox extends MeshElement {
 	/**
 	 * Handles when the list model's content changed.
 	 */
+	@SuppressWarnings("unchecked")
 	private void onListDataChange(ListDataEvent event) {
 		//sort when add
 		int type = event.getType();
@@ -2494,6 +2497,24 @@ public class Listbox extends MeshElement {
 		} else {
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
+			
+			// TODO: We have to skip the synchronization of the target component
+			// when the event is fired from it, i.e. No need to sync the sorting
+			// status here.
+			if (event.getType() == ListDataEvent.STRUCTURE_CHANGED
+					&& _model instanceof Sortable) {
+				Sortable smodel = (Sortable) _model;
+				List<Listheader> headers = Generics.cast(_listhead.getChildren());
+				for (Listheader col : headers) {
+					if (!"natural".equals(smodel.getSortDirection(col.getSortAscending()))) {
+						col.setSortDirection(smodel.getSortDirection(col.getSortAscending()));
+						break;
+					} else if (!"natural".equals(smodel.getSortDirection(col.getSortDescending()))) {
+						col.setSortDirection(smodel.getSortDirection(col.getSortDescending()));
+						break;
+					}
+				}
+			}
 		}
 	}
 	/** Called when SELECTION_CHANGED is received. */

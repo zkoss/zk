@@ -43,7 +43,10 @@ import org.zkoss.zul.ext.Sortable;
 public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
 implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	protected Map<K, V> _map;
-	
+
+	private Comparator<Map.Entry<K, V>> _sorting;
+
+	private Boolean _sortDir;
 	/**
 	 * Constructor.
 	 *
@@ -317,12 +320,21 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	 */
 	public void sort(Comparator<Map.Entry<K, V>> cmpr, final boolean ascending) {
 		final List<Map.Entry<K, V>> copy = new ArrayList<Map.Entry<K, V>>(_map.entrySet());
+		_sorting = cmpr;
+		_sortDir = ascending;
 		Collections.sort(copy, cmpr);
 		_map.clear();
 		for (Map.Entry<K, V> me: copy) {
 			_map.put(me.getKey(), me.getValue());
 		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+	}
+
+	public String getSortDirection(Comparator<Map.Entry<K, V>> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ?
+					"ascending" : "descending";
+		return "natural";	
 	}
 
 	private boolean removePartial(Collection<?> master, Collection<?> c, boolean isRemove, boolean byKey, boolean byValue) {

@@ -60,6 +60,5 @@ public interface Sortable<T> {
 	 * <p>Default: "natural".
 	 * @since 6.0.0
 	 */
-//	public String getSortDirection(Comparator<T> cmpr);
-//TODO
+	public String getSortDirection(Comparator<T> cmpr);
 }

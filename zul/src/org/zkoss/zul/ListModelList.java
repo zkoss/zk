@@ -23,10 +23,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.ListDataEvent;
-import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.Sortable;
 
 /**
@@ -44,6 +43,10 @@ import org.zkoss.zul.ext.Sortable;
 public class ListModelList<E> extends AbstractListModel<E>
 implements Sortable<E>, List<E>, java.io.Serializable {
 	protected List<E> _list;
+	
+	private Comparator<E> _sorting;
+
+	private Boolean _sortDir;
 
 	/**
 	 * Constructor
@@ -391,10 +394,19 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
+		_sorting = cmpr;
+		_sortDir = ascending;
 		Collections.sort(_list, cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
+	public String getSortDirection(Comparator<E> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ?
+					"ascending" : "descending";
+		return "natural";	
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
