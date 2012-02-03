@@ -238,6 +238,7 @@ ZK 5.0.11
   ZK-752: Tooltiptext gets rendered differently in different situations
   ZK-804: Exception: "Failed to mount: Cannot call method 'inAccordionMold' of undefined"
   ZK-787: Servlets.isUniversalURL should recognise data URIs
+  ZK=804: Grid in grid's detail with Sapphire theme text color is white
   
 * Upgrade Notes
   
