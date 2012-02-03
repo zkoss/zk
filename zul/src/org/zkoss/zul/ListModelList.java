@@ -42,7 +42,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelList<E> extends AbstractListModel<E>
-implements Sortable<E>, List<E>, java.io.Serializable, Cloneable {
+implements Sortable<E>, List<E>, java.io.Serializable {
 	protected List<E> _list;
 
 	/**

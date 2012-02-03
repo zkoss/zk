@@ -41,7 +41,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelArray<E> extends AbstractListModel<E>
-implements Sortable<E>, java.io.Serializable, Cloneable {
+implements Sortable<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected Object[] _array;

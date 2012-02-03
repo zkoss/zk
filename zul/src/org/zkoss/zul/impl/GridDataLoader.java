@@ -233,6 +233,12 @@ public class GridDataLoader implements DataLoader, Cropper {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
 			Template tm = grid.getTemplate("model");
+			
+			// model's template may declare in Rows
+			if (tm == null) {
+				tm = rows.getTemplate("model");
+			}
+			
 			GroupingInfo info = null;
 			if (row instanceof Group) {
 				final Template tm2 = grid.getTemplate("model:group");

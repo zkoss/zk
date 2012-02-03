@@ -46,7 +46,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListSubModel (since 3.0.2)
  */
 public class SimpleListModel<E> extends AbstractListModel<E>
-implements Sortable<E>, ListSubModel<E>, java.io.Serializable, Cloneable {
+implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
     private static final long serialVersionUID = 20060707L;
 
 	private Object[] _data;

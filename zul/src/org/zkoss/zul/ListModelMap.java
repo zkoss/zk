@@ -41,7 +41,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelMap
  */
 public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
-implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable, Cloneable {
+implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	protected Map<K, V> _map;
 	
 	/**
