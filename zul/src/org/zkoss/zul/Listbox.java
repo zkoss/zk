@@ -3415,7 +3415,7 @@ public class Listbox extends MeshElement {
 				for (int i = from; i <= toUI; i++)
 					items.add(getItemAtIndex(i));
 				setSelectedItems(items);
-				this.setActivePage(index / pageSize);
+				setActivePage(index / pageSize);
 			}
 
 			//Update Model
@@ -3436,6 +3436,13 @@ public class Listbox extends MeshElement {
 					_ignoreDataSelectionEvent = oldIDSE;
 				}
 			}
+			
+			// B60-ZK-815: simulate onSelect event when going across page
+			SelectEvent<Component, Object> evt = new SelectEvent<Component, Object>(
+					"onSelect", this, getSelectedItems(), 
+					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
+			Events.postEvent(evt);
+			
 		} else
 			super.service(request, everError);
 	}

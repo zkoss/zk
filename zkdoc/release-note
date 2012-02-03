@@ -88,6 +88,7 @@ ZK 6.0.0
   ZK-732: combobutton doesn't have isOpen() so zkbind can't read open property
   ZK-767: cannot select a non-open tree node when using model 
   ZK-779: Chechmark issue in paging listbox
+  ZK-815: Listbox Select event is not fired when PgDown/PgUp is pressed
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is

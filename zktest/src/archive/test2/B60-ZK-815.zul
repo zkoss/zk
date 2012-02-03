@@ -1,0 +1,55 @@
+<!--
+	B60-ZK-815.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Feb 3 16:57:36 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		String[] strs = new String[500];
+		for (int i = 0; i < 500; i++)
+			strs[i] = "Item " + i;
+		ListModel model1 = new ListModelList(strs);
+		ListModel model2 = new ListModelList(strs);
+		model1.multiple = true;
+		public void log(Listbox box, String name) {
+			ListModel m = box.model;
+			String msg = "onSelect: " + name + ": " + 
+				(m == null ? box.selectedItems : box.model.selection);
+			box.parent.appendChild(new Label(msg));
+		}
+	]]></zscript>
+	<div>
+		1. For each of the Listbox, select one Listitem and press PageUp/PageDown. You should see onSelect event fired.
+	</div>
+	<div>
+		2. For each of the Listbox, when you press Up/Down which goes across to another page, an onSelect event should be fired.
+	</div>
+	<separator />
+	<hlayout>
+		<vlayout id="v1" hflex="1">
+			Listbox 1: Model 1 (Selectable, Multiple)
+			<listbox id="listbox1" hflex="1" model="${model1}" checkmark="true" 
+				mold="paging" pageSize="12" onSelect='log(self, "Listbox 1")' />
+		</vlayout>
+		<vlayout id="v2" hflex="1">
+			Listbox 2: Model 2 (Selectable, Single)
+			<listbox id="listbox2" hflex="1" model="${model2}" mold="paging" 
+				pageSize="12" onSelect='log(self, "Listbox 2")' />
+		</vlayout>
+		<vlayout id="v3" hflex="1">
+			Listbox 3: No Model
+			<listbox id="listbox3" hflex="1" mold="paging" pageSize="12" 
+				multiple="true" checkmark="true" onSelect='log(self, "Listbox 3")'>
+				<listitem label="${each}" forEach="${strs}" />
+			</listbox>
+		</vlayout>
+	</hlayout>
+</zk>
