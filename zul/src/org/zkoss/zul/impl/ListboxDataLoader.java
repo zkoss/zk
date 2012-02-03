@@ -216,7 +216,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			Template tm = listbox.getTemplate("model");
 			GroupingInfo info = null;
 			if (item instanceof Listgroup) {
-				final Template tm2 = listbox.getTemplate("model:grouping");
+				final Template tm2 = listbox.getTemplate("model:group");
 				if (tm2 != null)
 					tm = tm2;
 				if (listbox.getModel() instanceof GroupsListModel) {

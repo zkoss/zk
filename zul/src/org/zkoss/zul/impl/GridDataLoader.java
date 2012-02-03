@@ -235,7 +235,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			Template tm = grid.getTemplate("model");
 			GroupingInfo info = null;
 			if (row instanceof Group) {
-				final Template tm2 = grid.getTemplate("model:grouping");
+				final Template tm2 = grid.getTemplate("model:group");
 				if (tm2 != null)
 					tm = tm2;
 				if (grid.getModel() instanceof GroupsListModel) {

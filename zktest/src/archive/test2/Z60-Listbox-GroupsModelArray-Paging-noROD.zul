@@ -79,7 +79,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             	<listheader label="Name" sort="auto(1)"/>
             	<listheader label="Calories" sort="auto(2)"/>
         	</listhead>
-        	<template name="model:grouping">
+        	<template name="model:group">
 				<listgroup open="${groupingInfo.open}" label="${each}"/>
 			</template>
 			<template name="model">
@@ -96,7 +96,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             	<listheader label="Name" sort="auto(1)"/>
             	<listheader label="Calories" sort="auto(2)"/>
         	</listhead>
-        	<template name="model:grouping">
+        	<template name="model:group">
 				<listgroup open="${groupingInfo.open}" label="${each}"/>
 			</template>
 			<template name="model">
@@ -113,7 +113,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             	<listheader label="Name" sort="auto(1)"/>
             	<listheader label="Calories" sort="auto(2)"/>
         	</listhead>
-        	<template name="model:grouping">
+        	<template name="model:group">
 				<listgroup open="${groupingInfo.open}" label="${each}"/>
 			</template>
 			<template name="model">

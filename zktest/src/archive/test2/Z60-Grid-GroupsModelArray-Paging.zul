@@ -40,7 +40,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             <column label="Name" sort="auto(1)"/>
             <column label="Calories" sort="auto(2)"/>
         </columns>
-		<template name="model:grouping">
+		<template name="model:group">
 			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">
@@ -58,7 +58,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             <column label="Name" sort="auto(1)"/>
             <column label="Calories" sort="auto(2)"/>
         </columns>
-		<template name="model:grouping">
+		<template name="model:group">
 			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">
@@ -78,7 +78,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
             <column label="Name" sort="auto(1)"/>
             <column label="Calories" sort="auto(2)"/>
         </columns>
-		<template name="model:grouping">
+		<template name="model:group">
 			<group open="${groupingInfo.open}">${each}</group>
 		</template>
 		<template name="model">

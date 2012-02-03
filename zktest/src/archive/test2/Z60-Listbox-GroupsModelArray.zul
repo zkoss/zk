@@ -42,7 +42,7 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
             <listheader label="Name" sort="auto(1)"/>
             <listheader label="Calories" sort="auto(2)"/>
         </listhead>
-		<template name="model:grouping">
+		<template name="model:group">
 			<listgroup open="${groupingInfo.open}" label="${each}"/>
 		</template>
 		<template name="model">
@@ -59,7 +59,7 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
             <listheader label="Name" sort="auto(1)"/>
             <listheader label="Calories" sort="auto(2)"/>
         </listhead>
-		<template name="model:grouping">
+		<template name="model:group">
 			<listgroup open="${groupingInfo.open}" label="${each}"/>
 		</template>
 		<template name="model">
@@ -79,7 +79,7 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
             <listheader label="Name" sort="auto(1)"/>
             <listheader label="Calories" sort="auto(2)"/>
         </listhead>
-		<template name="model:grouping">
+		<template name="model:group">
 			<listgroup open="${groupingInfo.open}" label="${each}"/>
 		</template>
 		<template name="model">
