@@ -1107,7 +1107,7 @@ public class Listbox extends MeshElement {
 	 * item might NOT be loaded yet. To ensure it is loaded, you have to invoke
 	 * {@link #renderItem}.
 	 */
-	public Set getSelectedItems() {
+	public Set<Listitem> getSelectedItems() {
 		return _roSelItems;
 	}
 
@@ -3443,7 +3443,7 @@ public class Listbox extends MeshElement {
 			}
 			
 			// B60-ZK-815: simulate onSelect event when going across page
-			SelectEvent<Component, Object> evt = new SelectEvent<Component, Object>(
+			SelectEvent<Listitem, Object> evt = new SelectEvent<Listitem, Object>(
 					"onSelect", this, getSelectedItems(), 
 					getItemAtIndex(index), shift != 0 ? SelectEvent.SHIFT_KEY : 0);
 			Events.postEvent(evt);
