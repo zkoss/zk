@@ -74,6 +74,10 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified collection (i.e., not live).
+	 *
+	 * <p>Notice that if the data is static or not shared, it is better to
+	 * use <code>ListModelSet(set, true)</code> instead, since
+	 * making a copy is slower.
 	 */
 	public ListModelSet(Collection<? extends E> c) {
 		_set = new LinkedHashSet<E>(c);

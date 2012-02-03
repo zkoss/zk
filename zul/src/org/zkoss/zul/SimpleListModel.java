@@ -71,6 +71,10 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	}
 	/** Constructor.
 	 * It made a copy of the specified array (<code>data</code>).
+	 *
+	 * <p>Notice that if the data is static or not shared, it is better to
+	 * use <code>SimpleListModelMap(data, true)</code> instead, since
+	 * making a copy is slower.
 	 */
 	public SimpleListModel(E[] data) {
 		this(data, false);

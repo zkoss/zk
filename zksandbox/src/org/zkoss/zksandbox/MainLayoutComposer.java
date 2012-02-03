@@ -175,7 +175,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 						list.add(items[i]);
 				}
 				if (!list.isEmpty()) {
-					itemList.setModel(new ListModelList(list));
+					itemList.setModel(new ListModelList(list, true));
 					itemList.renderAll();
 					item = (Listitem) self.getFellow(id);
 					setSelectedCategory(item);
@@ -234,8 +234,9 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 						.indexOf(key.toLowerCase()) != -1)
 					item.add(items[i]);
 			}
-			itemList.setModel(new ListModelList(item));
-		} else itemList.setModel(new ListModelList(items));
+			itemList.setModel(new ListModelList(item, true));
+		} else
+			itemList.setModel(new ListModelList(items));
 		_selected = null;
 	}
 
@@ -279,7 +280,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	public ListModel getSelectedModel() {
 		Category cate = _selected == null ? getCategories()[0] :
 				getCategory(_selected.getId());
-		return new ListModelList(cate.getItems());
+		return new ListModelList(cate.getItems(), true);
 	}
 
 	// Composer Implementation

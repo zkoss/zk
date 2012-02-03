@@ -75,6 +75,10 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified map (i.e., not live).
+	 *
+	 * <p>Notice that if the data is static or not shared, it is better to
+	 * use <code>ListModelMap(map, true)</code> instead, since
+	 * making a copy is slower.
 	 */
 	public ListModelMap(Map<? extends K, ? extends V> map) {
 		_map = new LinkedHashMap<K, V>(map);

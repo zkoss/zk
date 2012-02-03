@@ -146,7 +146,7 @@ public class ListModels {
 						break; // done
 				}
 			}
-			final Selectable<E> subm =  new ListModelList<E>(data);
+			final Selectable<E> subm =  new ListModelList<E>(data, true);
 			subm.setSelection(selection);
 			return (ListModel<E>) subm;
 		}

@@ -70,10 +70,13 @@ implements Sortable<E>, java.io.Serializable {
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified array (i.e., not live).
-	 * @param src the source array used to initialize this ListModelArray.
+	 *
+	 * <p>Notice that if the data is static or not shared, it is better to
+	 * use <code>ListModelArray(array, true)</code> instead, since
+	 * making a copy is slower.
 	 */
-	public ListModelArray(E[] src) {
-		_array = ArraysX.duplicate(src);
+	public ListModelArray(E[] array) {
+		_array = ArraysX.duplicate(array);
 	}
 	
 	/**

@@ -103,7 +103,7 @@ public class ModelProvider {
 						rand.nextInt(count), cal.getTime()));
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 			}
-			return new ListModelList(list);
+			return new ListModelList(list, true);
 		}
 		public static ListModelList getArrayListModelList(int count) {
 			return getArrayListModelList(count, "item");
@@ -119,7 +119,7 @@ public class ModelProvider {
 						rand.nextInt(count)+"", df.format(cal.getTime())});
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 			}
-			return new ListModelList(list);
+			return new ListModelList(list, true);
 		}
 		public static void addListModelListBean(ListModelList model,String label) {
 			model.add(new SampleBean(label, getRandom().nextInt(10), new Date()));

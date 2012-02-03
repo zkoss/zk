@@ -60,6 +60,6 @@ public class SimpleAutoComplete extends Combobox {
 		Arrays.sort(_dict);
 	}
 	public SimpleAutoComplete() {
-		setModel(new SimpleListModel(_dict));
+		setModel(new SimpleListModel(_dict, true));
 	}
 }
