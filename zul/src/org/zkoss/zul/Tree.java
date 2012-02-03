@@ -1253,6 +1253,7 @@ public class Tree extends MeshElement {
 	/**
 	 * Handles when the tree model's content changed
 	 */
+	@SuppressWarnings("unchecked")
 	private void onTreeDataChange(TreeDataEvent event){
 		//if the treeparent is empty, render tree's treechildren
 		Object node = event.getParent();
