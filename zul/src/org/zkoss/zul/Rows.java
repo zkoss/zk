@@ -147,7 +147,7 @@ public class Rows extends XulElement {
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		if (_skipFixRowIndices) //@see Grid.Renderer#render
-			return;
+			to = j;
 		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
@@ -427,7 +427,7 @@ public class Rows extends XulElement {
 	 */
 	private void fixRowIndices(int j, int to) {
 		if (_skipFixRowIndices) //@see Grid.Renderer#render 
-			return;
+			return; //called by #removeChild, no need to re-indexing
 		
 		int realj = getRealIndex(j);
 		if (realj < 0)

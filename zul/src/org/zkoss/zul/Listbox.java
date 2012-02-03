@@ -1393,8 +1393,7 @@ public class Listbox extends MeshElement {
 		return !_groupsInfo.isEmpty();
 	}
 
-	/** Sets true to skip calling {@link fixItemIndices} and avoid unnecessary 
-	 * Listitem re-indexing when render template.
+	/** Sets true to avoid unnecessary Listitem re-indexing when render template.
 	 * @param b true to skip
 	 * @return original true/false status
 	 * @see Renderer#render
@@ -1407,7 +1406,7 @@ public class Listbox extends MeshElement {
 	
 	/* package */void fixItemIndices(int j, int to, boolean infront) {
 		if (_skipFixItemIndices) //@see Renderer#render
-			return;
+			to = j;
 		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
@@ -2128,7 +2127,7 @@ public class Listbox extends MeshElement {
 	 */
 	private void fixItemIndices(int j, int to) {
 		if (_skipFixItemIndices) //@see Renderer#render
-			return;
+			return; //called by #removeChild, no need to re-indexing
 		
 		int realj = getRealIndex(j);
 		if (realj < 0)
@@ -2578,7 +2577,6 @@ public class Listbox extends MeshElement {
 				Object v = item.getAttribute("org.zkoss.zul.model.renderAs");
 				if (v != null) //a new listitem is created to replace the existent one
 					item = (Listitem)v;
-				item.setIndexDirectly(index);
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));

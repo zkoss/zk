@@ -105,9 +105,8 @@ public class Combobox extends Textbox {
 	private ComboitemRenderer<?>_renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener<InputEvent> _eventListener;
-	/**Used to detect whether to syn Comboitem's index. */
-	private int _idxModCnt;
-	private transient boolean _skipSyncItemIndices;
+	/**Used to detect whether to syn Comboitem's index later. */
+	private boolean _syncItemIndicesLater;
 
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -445,7 +444,6 @@ public class Combobox extends Textbox {
 				_ctrled = true;
 			}
 
-			final boolean oldFlag = setSkipSyncItemIndices(true); //skip syncItemIndices when rendering
 			try {
 				try {
 					_renderer.render(item, value, index);
@@ -465,8 +463,6 @@ public class Combobox extends Textbox {
 					log.error(t);
 				}			
 				throw ex;
-			} finally {
-				setSkipSyncItemIndices(oldFlag);
 			}
 			if (getSelectableModel().isSelected(value))
 				setSelectedItem(item);
@@ -776,35 +772,20 @@ public class Combobox extends Textbox {
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		++_idxModCnt;
+		_syncItemIndicesLater = true;
 		smartUpdate("repos", true);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		++_idxModCnt;
+		_syncItemIndicesLater = true;
 		if (child == _selItem)
 			schedSyncValueToSelection();
 		smartUpdate("repos", true);
 	}
 	
-	/**
-	 * Set true to skip calling {@link #syncItemIndices} and avoid unnecessary 
-	 * comboitem re-indexing when render template.
-	 * @param b true to skip
-	 * @return original true/false status
-	 * @see Renderer#render
-	 */
-	/*package*/ boolean setSkipSyncItemIndices(boolean b) {
-		final boolean old = _skipSyncItemIndices; 
-		_skipSyncItemIndices = b;
-		return old;
-	}
-	
 	/*package*/ void syncItemIndices() { //called by Comboitem
-		if (_skipSyncItemIndices) //@see Renderer#render
-			return;
-		if (_idxModCnt != 0) {
-			_idxModCnt = 0;
+		if (_syncItemIndicesLater) {
+			_syncItemIndicesLater = false;
 			int j = 0;
 			for (final Comboitem item: getItems())
 				item.setIndexDirectly(j++);
