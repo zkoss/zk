@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.zkoss.lang.Strings;
@@ -205,13 +206,31 @@ public class Selectors {
 					if(name == null) name = "onClick";
 					Iterable<Component> iter = iterable(component, strs[1]);
 					// no forwarding, just add to event listener
-					for (Component c : iter)
+					for (Component c : iter) {
+						Set<String> set = getEvtLisSet(c, EVT_LIS);
+						String mhash = method.toString();
+						if (set.contains(mhash))
+							continue;
 						c.addEventListener(name, new ComposerEventListener(method, controller));
+						set.add(mhash);
+					}
 				}
 			}
 		});
 	}
-
+	
+	private static final String EVT_LIS = "_SELECTOR_COMPOSER_EVENT_LISTENERS";
+	
+	@SuppressWarnings("unchecked")
+	private static Set<String> getEvtLisSet(Component comp, String name) {
+		Object obj = comp.getAttribute(name);
+		if (obj != null)
+			return (Set<String>) obj;
+		Set<String> set = new HashSet<String>();
+		comp.setAttribute(name, set);
+		return set;
+	}
+	
 	/** Creates a list of instances of {@link VariableResolver} based
 	 * on the annotation of the given class.
 	 * If no such annotation is found, an empty list is returned.

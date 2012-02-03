@@ -82,12 +82,13 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	}
 	@Override
 	public void doAfterCompose(T comp) throws Exception {
-		_self = comp; //just in case
+		_self = comp; // just in case
 		Selectors.wireComponents(comp, this, false);
-		Selectors.wireEventListeners(comp, this);
+		Selectors.wireEventListeners(comp, this); // first event listener wiring
 		
-		//register event to wire variables just before component onCreate
+		// register event to wire variables just before component onCreate
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
+		comp.addEventListener("onCreate", new AfterCreateWireListener());
 	}
 
 	/** Returns the current page.
@@ -99,16 +100,23 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 				return page;
 		}
 		final Execution exec = Executions.getCurrent();
-		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage() : null;
 	}
 	
 	private class BeforeCreateWireListener implements EventListener<Event> {
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
-			//wire components again so some late created object can be wired in (e.g. DataBinder)
+			// wire components again so some late created object can be wired in (e.g. DataBinder)
 			Selectors.wireComponents(event.getTarget(), SelectorComposer.this, true);
-			//called only once
-			_self.removeEventListener("onCreate", this);
+			_self.removeEventListener("onCreate", this); // called only once
+		}
+	}
+	
+	private class AfterCreateWireListener implements EventListener<Event> {
+		public void onEvent(Event event) throws Exception {
+			// second event listener wiring, for components created since doAfterCompose()
+			Selectors.wireEventListeners(_self, SelectorComposer.this);
+			_self.removeEventListener("onCreate", this); // called only once
 		}
 	}
 	
