@@ -30,10 +30,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Comparator;
 
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.Generics;
+import static org.zkoss.lang.Generics.*;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
@@ -1255,7 +1256,6 @@ public class Tree extends MeshElement {
 	/**
 	 * Handles when the tree model's content changed
 	 */
-	@SuppressWarnings("unchecked")
 	private void onTreeDataChange(TreeDataEvent event){
 		//if the treeparent is empty, render tree's treechildren
 		Object node = event.getParent();
@@ -1295,15 +1295,22 @@ public class Tree extends MeshElement {
 				// when the event is fired from it, i.e. No need to sync the sorting
 				// status here.
 				if (_model instanceof Sortable) {
-					Sortable smodel = (Sortable) _model;
-					List<Treecol> cols = Generics.cast(_treecols.getChildren());
+					Sortable<Object> smodel = cast(_model);
+					List<Treecol> cols = cast(_treecols.getChildren());
+					boolean found = false;
 					for (Treecol col : cols) {
-						if (!"natural".equals(smodel.getSortDirection(col.getSortAscending()))) {
-							col.setSortDirection(smodel.getSortDirection(col.getSortAscending()));
-							break;
-						} else if (!"natural".equals(smodel.getSortDirection(col.getSortDescending()))) {
-							col.setSortDirection(smodel.getSortDirection(col.getSortDescending()));
-							break;
+						if (found) {
+							col.setSortDirection("natural");
+						} else {
+							Comparator<Object> cmpr = cast(col.getSortAscending());
+							String dir = smodel.getSortDirection(cmpr);
+							found = !"natural".equals(dir);
+							if (!found) {
+								cmpr = cast(col.getSortDescending());
+								dir = smodel.getSortDirection(cmpr);
+								found = !"natural".equals(dir);
+							}
+							col.setSortDirection(dir);
 						}
 					}
 				}

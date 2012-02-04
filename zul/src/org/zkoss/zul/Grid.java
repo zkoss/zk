@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Comparator;
 
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.Generics;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -929,7 +930,6 @@ public class Grid extends MeshElement {
 
 	/** Handles when the list model's content changed.
 	 */
-	@SuppressWarnings("unchecked")
 	private void onListDataChange(ListDataEvent event) {
 		//sort when add
 		int type = event.getType();
@@ -946,15 +946,22 @@ public class Grid extends MeshElement {
 			// status here.
 			if (event.getType() == ListDataEvent.STRUCTURE_CHANGED
 					&& _model instanceof Sortable) {
-				Sortable smodel = (Sortable) _model;
-				List<Column> cols = Generics.cast(_cols.getChildren());
+				Sortable<Object> smodel = cast(_model);
+				List<Column> cols = cast(_cols.getChildren());
+				boolean found = false;
 				for (Column col : cols) {
-					if (!"natural".equals(smodel.getSortDirection(col.getSortAscending()))) {
-						col.setSortDirection(smodel.getSortDirection(col.getSortAscending()));
-						break;
-					} else if (!"natural".equals(smodel.getSortDirection(col.getSortDescending()))) {
-						col.setSortDirection(smodel.getSortDirection(col.getSortDescending()));
-						break;
+					if (found) {
+						col.setSortDirection("natural");
+					} else {
+						Comparator<Object> cmpr = cast(col.getSortAscending());
+						String dir = smodel.getSortDirection(cmpr);
+						found = !"natural".equals(dir);
+						if (!found) {
+							cmpr = cast(col.getSortDescending());
+							dir = smodel.getSortDirection(cmpr);
+							found = !"natural".equals(dir);
+						}
+						col.setSortDirection(dir);
 					}
 				}
 			}
