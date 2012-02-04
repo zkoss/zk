@@ -80,17 +80,20 @@ public interface GroupsModel<D, G, F> {
      * a change to the data model occurs. 
      */
 	public void removeGroupsDataListener(GroupsDataListener l) ;
-	/** Whether the group is close at the specified index.
+
+	/** Whether the group is open at the specified index.
+	 * It is used to render {@link Group} and {@link Listgroup}.
+	 * <p> Default: true
+	 * @param groupIndex the index of the group.
+	 * @since 6.0.0
+	 */
+	public boolean isOpen(int groupIndex);
+	
+	/** Sets whether the group is open at the specified index.
 	 * It is used to render {@link Group} and {@link Listgroup}.
 	 * @param groupIndex the index of the group.
-	 * @since 5.0.0
+	 * @param open true to open the Group.
+	 * @since 6.0.0
 	 */
-	public boolean isClose(int groupIndex);
-	/** Sets whether the group is close at the specified index.
-	 * It is used to render {@link Group} and {@link Listgroup}.
-	 * @param groupIndex the index of the group.
-	 * @param close true to close the Group.
-	 * @since 5.0.0
-	 */
-	public void setClose(int groupIndex, boolean close);
+	public void setOpen(int groupIndex, boolean open);
 }

@@ -223,6 +223,9 @@ ZK 6.0.0
     org.zkoss.zul.ext.GroupsSortableModel
   + The render method of ListitemRender, RowRenderer, ComboitemRender and TreeitemRenderer
     has been changed: an additional argument called index was introduced.
+  + Deprecated two methods isClose(int) and setClose(int, boolean) of org.zkoss.zul.GroupsModel.
+	Replace with isOpen(int) and setOpen(int, boolean)
+	
 
 	--------
 ZK 5.0.11

@@ -62,7 +62,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	/**
 	 * memeber field to store group close status
 	 */
-	protected boolean[] _closes;
+	protected boolean[] _opens;
 	
 	/**
 	 * Constructs a groups data model with a two-dimensional array of data.
@@ -120,7 +120,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * {@link #getGroup(int)} will return the corresponding Object depends on heads.  
 	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
 	 * are depends on foots. 
-	 *   
+	 * 
 	 * @param data a 2 dimension array to represent groups data
 	 * @param heads an array to represent head data of group
 	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
@@ -134,7 +134,11 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		_data = data;
 		_heads = heads;
 		_foots = foots;
-		_closes = closes;
+		_opens = closes;
+		if (_opens != null) {
+			for (int i = 0; i < _opens.length; i++)
+				_opens[i] = !_opens[i];
+		}
 	}
 	
 	public D getChild(int groupIndex, int index) {
@@ -167,17 +171,33 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		return _foots == null ? false:_foots[groupIndex]!=null;
 	}
 
+	/**
+	 * @deprecated As of release 6.0.0, replace with {@link #isOpen(int)}
+	 */
 	public boolean isClose(int groupIndex) {
-		return _closes == null ? false : _closes[groupIndex];
+		return !isOpen(groupIndex);
 	}
 
+	/**
+	 * @deprecated As of release 6.0.0, replace with {@link #setOpen(int, boolean)}
+	 */
 	public void setClose(int groupIndex, boolean close) {
-		if (_closes == null) {
-			_closes = new boolean[getGroupCount()];
+		setOpen(groupIndex, !close);
+	}
+
+	@Override
+	public boolean isOpen(int groupIndex) {
+		return _opens == null ? true : _opens[groupIndex];
+	}
+
+	@Override
+	public void setOpen(int groupIndex, boolean open) {
+		if (_opens == null) {
+			_opens = new boolean[getGroupCount()];
 		}
-		if (_closes[groupIndex] != close) {
-			_closes[groupIndex] = close;
-			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex,-1,-1);
+		if (_opens[groupIndex] != open) {
+			_opens[groupIndex] = open;
+			fireEvent(GroupsDataEvent.GROUPS_CHANGED,groupIndex, -1, -1);
 		}
 	}
 	
@@ -220,8 +240,8 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 			clone._heads = ArraysX.duplicate(_heads);
 		if (_foots != null)
 			clone._foots = ArraysX.duplicate(_foots);
-		if (_closes != null)
-			clone._closes = (boolean[])ArraysX.duplicate(_closes);
+		if (_opens != null)
+			clone._opens = (boolean[])ArraysX.duplicate(_opens);
 		return clone;
 	}
 	/**

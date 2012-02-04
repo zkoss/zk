@@ -77,7 +77,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	/**
 	 * member field to store group close status
 	 */
-	protected boolean[] _closes;
+	protected boolean[] _opens;
 	
 	/**
 	 * Constructor with an array of data.
@@ -205,19 +205,35 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 
 		fireEvent(GroupsDataEvent.GROUPS_RESET,-1,-1,-1);
 	}
-	
+
+	/**
+	 * @deprecated As of release 6.0.0, replace with {@link #isOpen(int)}
+	 */
 	public boolean isClose(int groupIndex) {
-		return _closes == null ? false : _closes[groupIndex];
+		return !isOpen(groupIndex);
 	}
 
+	/**
+	 * @deprecated As of release 6.0.0, replace with {@link #setOpen(int, boolean)}
+	 */
 	public void setClose(int groupIndex, boolean close) {
-		if (_closes == null) {
-			_closes = new boolean[getGroupCount()];
+		setOpen(groupIndex, !close);
+	}
+
+	@Override
+	public void setOpen(int groupIndex, boolean open) {
+		if (_opens == null) {
+			_opens = new boolean[getGroupCount()];
 		}
-		if (_closes[groupIndex] != close) {
-			_closes[groupIndex] = close;
+		if (_opens[groupIndex] != open) {
+			_opens[groupIndex] = open;
 			fireEvent(GroupsDataEvent.GROUPS_CHANGED, groupIndex, groupIndex, groupIndex);
 		}
+	}
+	
+	@Override
+	public boolean isOpen(int groupIndex) {
+		return _opens == null ? true : _opens[groupIndex];
 	}
 	
 	/**
@@ -285,7 +301,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		_data = (D[][])Array.newInstance(classD, gd.length, 0); //new D[gd.length][];
 		_foots = new Object[gd.length];
 		_heads = new Object[gd.length];
-		_closes = new boolean[_data.length];
+		_opens = new boolean[_data.length];
 		
 		for(int i=0;i<gd.length;i++){
 			gdata = gd[i];
@@ -293,7 +309,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 			gdata.toArray(_data[i]);
 			_heads[i] = createGroupHead(_data[i],i,col);
 			_foots[i] = createGroupFoot(_data[i],i,col);
-			_closes[i] = createGroupClose(_data[i],i,col);
+			_opens[i] = createGroupOpen(_data[i],i,col);
 		}
 	}
 
@@ -342,15 +358,15 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	}
 
 	/**
-	 * create group close status, default implementation return false, which means open the group.
-	 * you can override this method to return your group close status.
+	 * create group open status, default implementation return true, which means open the group.
+	 * you can override this method to return your group open status.
 	 * @param groupdata data the already in a group.
 	 * @param index group index
 	 * @param col column to group
-	 * @since 5.0.0
+	 * @since 6.0.0
 	 */
-	protected boolean createGroupClose(D[] groupdata,int index,int col) {
-		return false;
+	protected boolean createGroupOpen(D[] groupdata,int index,int col) {
+		return true;
 	}
 	
 	@Override
@@ -365,8 +381,8 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 			clone._heads = ArraysX.duplicate(_heads);
 		if (_foots != null)
 			clone._foots = ArraysX.duplicate(_foots);
-		if (_closes != null)
-			clone._closes = (boolean[])ArraysX.duplicate(_closes);
+		if (_opens != null)
+			clone._opens = (boolean[])ArraysX.duplicate(_opens);
 		return clone;
 	}
 	/**
