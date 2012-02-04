@@ -120,6 +120,8 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * {@link #getGroup(int)} will return the corresponding Object depends on heads.  
 	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
 	 * are depends on foots. 
+	 *
+	 * <p>Notice that, for backward compatiblity, the last argument is <code>closes</code>.
 	 * 
 	 * @param data a 2 dimension array to represent groups data
 	 * @param heads an array to represent head data of group
