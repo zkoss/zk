@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listgroup;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 
@@ -90,6 +91,11 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			addItemReference(nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nli.setAttribute(itervarnm, iterStatus);
+			
+			//sync open state
+			if (nli instanceof Listgroup && item instanceof Listgroup) {
+				((Listgroup)nli).setOpen(((Listgroup)item).isOpen());
+			}
 			
 			//add template dependency
 			addTemplateTracking(listbox, nli, data, index, size);

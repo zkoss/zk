@@ -43,7 +43,7 @@ public class Rows extends XulElement {
 	
 	private transient List<int[]> _groupsInfo;
 	private transient List<Group> _groups;
-	private transient boolean _skipFixRowIndices;
+	private transient boolean _isReplacingRow;
 
 	public Rows() {
 		init();
@@ -133,22 +133,18 @@ public class Rows extends XulElement {
 	}
 	
 	/**
-	 * Set true to skip calling {@link #fixGroupIndex} and {@link #fixRowIndices} 
-	 * and avoid unnecessary row re-indexing when render template.
+	 * Set true to avoid unnecessary row re-indexing when render template.
 	 * @param b true to skip
 	 * @return original true/false status
 	 * @see Grid.Renderer#render
 	 */
-	/*package*/ boolean setSkipFixRowIndices(boolean b) {
-		final boolean old = _skipFixRowIndices;
-		_skipFixRowIndices = b;
+	/*package*/ boolean setReplacingRow(boolean b) {
+		final boolean old = _isReplacingRow;
+		_isReplacingRow = b;
 		return old;
 	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
-		if (_skipFixRowIndices) //@see Grid.Renderer#render
-			to = j;
-		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
@@ -159,6 +155,9 @@ public class Rows extends XulElement {
 			it.hasNext() && (to < 0 || j <= to); ++j) {
 				Component o = it.next();
 				((Row) o).setIndexDirectly(j);
+				
+				if (_isReplacingRow) //@see Grid.Renderer#render
+					break; //set only the first Row, skip handling GroupInfo
 				
 				// if beginning is a group, we don't need to change its groupInfo,
 				// because
@@ -266,8 +265,95 @@ public class Rows extends XulElement {
 		}
 		
 		Row newItem = (Row) child;
-		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
+		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;
+		
+		fixGroupsInfoBeforeInsert(newItem, (Row) refChild, isReorder);
+		
+		if (super.insertBefore(child, refChild)) {
+			final int jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
+					  fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
+			
+			if (fixFrom < 0) {
+				newItem.setIndexDirectly(getChildren().size() - 1
+					+ (grid != null ? grid.getDataLoader().getOffset() : 0));
+			} else {
+				fixGroupIndex(fixFrom,
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);
+			}		
+			fixGroupsInfoAfterInsert(newItem);
+			//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+			if (!isReorder) {
+				afterInsert(child);
+			}
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * If the child is a group, its groupfoot will be removed at the same time.
+	 */
+	public boolean removeChild(Component child) {
+		if (child.getParent() == this)
+			beforeRemove(child);
+		
+		final boolean hasGroup = hasGroup();
+		int index = ((Row)child).getIndex();
+		if(super.removeChild(child)) {
+			((Row)child).setIndexDirectly(-1);
+			fixGroupsInfoAfterRemove((Row)child, index);	
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Fix Childitem._index since j-th item.
+	 *
+	 * @param j
+	 *            the start index (inclusion)
+	 * @param to
+	 *            the end index (inclusion). If -1, up to the end.
+	 */
+	private void fixRowIndices(int j, int to) {
+		int realj = getRealIndex(j);
+		if (realj < 0)
+			realj = 0;
+		List items = getChildren();
+		if (realj < items.size()) {
+			for (Iterator it = items.listIterator(realj); it.hasNext()
+			&& (to < 0 || j <= to); ++j)
+				((Row)it.next()).setIndexDirectly(j);
+		}
+	}
+	
+	/** Callback if a child has been inserted.
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void afterInsert(Component comp) {
+		if (_isReplacingRow) //@see Grid.Renderer#render
+			return; //called by #insertBefore(), skip handling item count, etc.
+		
+		updateVisibleCount((Row) comp, false);
+		checkInvalidateForMoved(comp, false);
+	}
+	/** Callback if a child will be removed (not removed yet).
+	 * <p>Default: invalidate if it is the paging mold and it affects
+	 * the view of the active page.
+	 * @since 3.0.5
+	 */
+	protected void beforeRemove(Component comp) {
+		if (_isReplacingRow) //@see Grid.Renderer#render
+			return; //called by #removeChild(), skip handling item count, etc.
+		
+		updateVisibleCount((Row) comp, true);
+		checkInvalidateForMoved(comp, true);
+	}
 
+	private void fixGroupsInfoBeforeInsert(Row newItem, Row refChild, boolean isReorder) {
+		if (_isReplacingRow) //@see Grid.Renderer#render
+			return; //called by #insertBefore(), skip handling GroupInfo
+		
 		if (newItem instanceof Groupfoot){
 			if (refChild == null) {
 				if (isReorder) {
@@ -300,164 +386,101 @@ public class Rows extends XulElement {
 				}
 			}							
 		}
-		if (super.insertBefore(child, refChild)) {
-			final int jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
-					  fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
-			
-			if (fixFrom < 0) {
-				newItem.setIndexDirectly(getChildren().size() - 1
-					+ (grid != null ? grid.getDataLoader().getOffset() : 0));
-			} else {
-				fixGroupIndex(fixFrom,
-					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);
-			}
-			if (newItem instanceof Group) {
-				Group group = (Group) newItem;
-				int index = group.getIndex();
-				if (_groupsInfo.isEmpty())
-					_groupsInfo.add(new int[]{group.getIndex(), getChildren().size() - index, -1});
-				else {
-					int idx = 0;
-					int[] prev = null, next = null;
-					for (Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
-						int[] g = it.next();
-						if(g[0] <= index) {
-							prev = g;
-							idx++;
-						} else {
-							next = g;
-							break;
-						}
-					}
-					if (prev != null) {
-						int leng = index - prev[0], 
-							size = prev[1] - leng + 1;
-						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, size > 1 && prev[2] > index ? prev[2] : -1});
-						if (size > 1 && prev[2] > index) prev[2] = -1; // reset groupfoot
-					} else if (next != null) {
-						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
-					}
-				}
-			} else if (hasGroup()) {
-				int index = newItem.getIndex();
-				final int[] g = getGroupsInfoAt(index);
-				if (g != null) {
-					g[1]++;
-					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2] = g[0] + g[1] - 1;
-				}
-				
-			}
-			
-			//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
-			if (!isReorder) {
-				afterInsert(child);
-			}
-			return true;
-		}
-		return false;
 	}
-	/**
-	 * If the child is a group, its groupfoot will be removed at the same time.
-	 */
-	public boolean removeChild(Component child) {
-		if (child.getParent() == this)
-			beforeRemove(child);
+	
+	private void fixGroupsInfoAfterInsert(Row newItem) {
+		if (_isReplacingRow) //@see Grid.Renderer#render
+			return; //called by #insertBefore(), skip handling GroupInfo
 		
-		final boolean hasGroup = hasGroup();
-		int index = ((Row)child).getIndex();
-		if(super.removeChild(child)) {
-			((Row)child).setIndexDirectly(-1);
-			if (child instanceof Group) {
-				int[] prev = null, remove = null;
-				for(Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
+		if (newItem instanceof Group) {
+			Group group = (Group) newItem;
+			int index = group.getIndex();
+			if (_groupsInfo.isEmpty())
+				_groupsInfo.add(new int[]{group.getIndex(), getChildren().size() - index, -1});
+			else {
+				int idx = 0;
+				int[] prev = null, next = null;
+				for (Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
 					int[] g = it.next();
-					if (g[0] == index) {
-						remove = g;
+					if(g[0] <= index) {
+						prev = g;
+						idx++;
+					} else {
+						next = g;
 						break;
 					}
-					prev = g;
 				}
-				if (prev != null && remove !=null) {
-					prev[1] += remove[1] - 1;
+				if (prev != null) {
+					int leng = index - prev[0], 
+						size = prev[1] - leng + 1;
+					prev[1] = leng;
+					_groupsInfo.add(idx, new int[]{index, size, size > 1 && prev[2] >= index ? prev[2] + 1 : -1});
+					if (size > 1 && prev[2] >= index) prev[2] = -1; // reset groupfoot
+				} else if (next != null) {
+					_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 				}
-				fixGroupIndex(index, -1, false);
-				if (remove != null) {
-					_groupsInfo.remove(remove);
-					final int idx = remove[2];
-					if (idx != -1) {
-						final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
-						if (realIndex >= 0 && realIndex < getChildren().size())
-							removeChild(getChildren().get(realIndex));
-					}
-				}
-			} else if (hasGroup) {
-				final int[] g = getGroupsInfoAt(index);
-				if (g != null) {
-					g[1]--;
-					if (g[2] != -1) g[2]--;
-					fixGroupIndex(index, -1, false);
-				}
-				else fixGroupIndex(index, -1, false);
-				if (child instanceof Groupfoot){
-					final int[] g1 = getGroupsInfoAt(index);	
-					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
-						g1[2] = -1;
-					}
-				}
-			} else {
-				fixRowIndices(index, -1);
+			}
+		} else if (hasGroup()) {
+			int index = newItem.getIndex();
+			final int[] g = getGroupsInfoAt(index);
+			if (g != null) {
+				g[1]++;
+				if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2] = g[0] + g[1] - 1;
 			}
 			
-			if (hasGroupsModel() && getChildren().size() <= 0) { //remove to empty, reset _groupsInfo
-				_groupsInfo = new LinkedList<int[]>();
-			}
-			
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Fix Childitem._index since j-th item.
-	 *
-	 * @param j
-	 *            the start index (inclusion)
-	 * @param to
-	 *            the end index (inclusion). If -1, up to the end.
-	 */
-	private void fixRowIndices(int j, int to) {
-		if (_skipFixRowIndices) //@see Grid.Renderer#render 
-			return; //called by #removeChild, no need to re-indexing
-		
-		int realj = getRealIndex(j);
-		if (realj < 0)
-			realj = 0;
-		List items = getChildren();
-		if (realj < items.size()) {
-			for (Iterator it = items.listIterator(realj); it.hasNext()
-			&& (to < 0 || j <= to); ++j)
-				((Row)it.next()).setIndexDirectly(j);
 		}
 	}
 	
-	/** Callback if a child has been inserted.
-	 * <p>Default: invalidate if it is the paging mold and it affects
-	 * the view of the active page.
-	 * @since 3.0.5
-	 */
-	protected void afterInsert(Component comp) {
-		updateVisibleCount((Row) comp, false);
-		checkInvalidateForMoved(comp, false);
+	private void fixGroupsInfoAfterRemove(Row child, int index) {
+		if (_isReplacingRow) //@see Grid.Renderer#render 
+			return; //called by #removeChild, no need to re-indexing
+		
+		if (child instanceof Group) {
+			int[] prev = null, remove = null;
+			for(Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
+				int[] g = it.next();
+				if (g[0] == index) {
+					remove = g;
+					break;
+				}
+				prev = g;
+			}
+			if (prev != null && remove !=null) {
+				prev[1] += remove[1] - 1;
+			}
+			fixGroupIndex(index, -1, false);
+			if (remove != null) {
+				_groupsInfo.remove(remove);
+				final int idx = remove[2];
+				if (idx != -1) {
+					final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
+					if (realIndex >= 0 && realIndex < getChildren().size())
+						removeChild(getChildren().get(realIndex));
+				}
+			}
+		} else if (hasGroup()) {
+			final int[] g = getGroupsInfoAt(index);
+			if (g != null) {
+				g[1]--;
+				if (g[2] != -1) g[2]--;
+				fixGroupIndex(index, -1, false);
+			}
+			else fixGroupIndex(index, -1, false);
+			if (child instanceof Groupfoot){
+				final int[] g1 = getGroupsInfoAt(index);	
+				if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
+					g1[2] = -1;
+				}
+			}
+		} else {
+			fixRowIndices(index, -1);
+		}
+		
+		if (hasGroupsModel() && getChildren().size() <= 0) { //remove to empty, reset _groupsInfo
+			_groupsInfo = new LinkedList<int[]>();
+		}
 	}
-	/** Callback if a child will be removed (not removed yet).
-	 * <p>Default: invalidate if it is the paging mold and it affects
-	 * the view of the active page.
-	 * @since 3.0.5
-	 */
-	protected void beforeRemove(Component comp) {
-		updateVisibleCount((Row) comp, true);
-		checkInvalidateForMoved(comp, true);
-	}
+	
 	/**
 	 * Update the number of the visible item before it is removed or after it is added.
 	 */
@@ -605,11 +628,11 @@ public class Rows extends XulElement {
 		}
 		@Override
 		public void clear() {
-			final boolean oldFlag = setSkipFixRowIndices(true);
+			final boolean oldFlag = setReplacingRow(true);
 			try {
 				super.clear();
 			} finally {
-				setSkipFixRowIndices(oldFlag);
+				setReplacingRow(oldFlag);
 			}
 		}
 	};

@@ -272,6 +272,12 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 					throw new UiException("The model template must have exactly one item, not "+items.length);
 
 				final Listitem nli = (Listitem)items[0];
+				
+				//sync open state
+				if (nli instanceof Listgroup && item instanceof Listgroup) {
+					((Listgroup)nli).setOpen(((Listgroup)item).isOpen());
+				}
+				
 				if (nli.getValue() == null) //template might set it
 					nli.setValue(data);
 				item.setAttribute("org.zkoss.zul.model.renderAs", nli);

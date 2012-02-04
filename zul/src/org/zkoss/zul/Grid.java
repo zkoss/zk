@@ -1002,7 +1002,7 @@ public class Grid extends MeshElement {
 				cell.detach();
 			}
 
-			final boolean oldFlag = _rows.setSkipFixRowIndices(true);
+			final boolean oldFlag = _rows.setReplacingRow(true);
 			try {
 				final Object value = _model.getElementAt(index);
 				try {
@@ -1027,7 +1027,7 @@ public class Grid extends MeshElement {
 				row.setLoaded(true);
 				throw ex;
 			} finally {
-				_rows.setSkipFixRowIndices(oldFlag);
+				_rows.setReplacingRow(oldFlag);
 				if (row.getChildren().isEmpty())
 					cell.setParent(row);
 			}

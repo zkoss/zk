@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Grid;
+import org.zkoss.zul.Group;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
@@ -91,6 +92,11 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);
+
+			//sync open state
+			if (nr instanceof Group && row instanceof Group) {
+				((Group)nr).setOpen(((Group)row).isOpen());
+			}
 			
 			//add template dependency
 			addTemplateTracking(grid, nr, data, index, size);

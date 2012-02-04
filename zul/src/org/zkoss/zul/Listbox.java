@@ -291,7 +291,7 @@ public class Listbox extends MeshElement {
 	private String _name;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
-	private transient boolean _skipFixItemIndices;
+	private transient boolean _isReplacingItem;
 
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
@@ -387,11 +387,11 @@ public class Listbox extends MeshElement {
 			 * Override to remove unnecessary Listitem re-indexing (when ROD is on, clear() is called frequently). 
 			 */
 			public void clear() {
-				final boolean oldFlag = setSkipFixItemIndices(true);
+				final boolean oldFlag = setReplacingItem(true);
 				try {
 					super.clear();
 				} finally {
-					setSkipFixItemIndices(oldFlag);
+					setReplacingItem(oldFlag);
 				}
 			}
 		};
@@ -1400,16 +1400,13 @@ public class Listbox extends MeshElement {
 	 * @return original true/false status
 	 * @see Renderer#render
 	 */
-	/* package */boolean setSkipFixItemIndices(boolean b) {
-		final boolean old = _skipFixItemIndices;
-		_skipFixItemIndices = b;
+	/* package */boolean setReplacingItem(boolean b) {
+		final boolean old = _isReplacingItem;
+		_isReplacingItem = b;
 		return old;
 	}
 	
 	/* package */void fixItemIndices(int j, int to, boolean infront) {
-		if (_skipFixItemIndices) //@see Renderer#render
-			to = j;
-		
 		int realj = getRealIndex(j);
 		if (realj < 0) {
 			realj = 0;
@@ -1421,6 +1418,9 @@ public class Listbox extends MeshElement {
 				Listitem o = it.next();
 				o.setIndexDirectly(j);
 
+				if (_isReplacingItem) //@see Renderer#render
+					break; //set only the first Listitem, skip handling GroupInfo
+				
 				// if beginning is a group, we don't need to change its groupInfo,
 				// because
 				// it is not reliable when infront is true.
@@ -1558,70 +1558,7 @@ public class Listbox extends MeshElement {
 			if (isReorder) {
 				checkInvalidateForMoved((Listitem)newChild, true);
 			}
-			if (newChild instanceof Listgroupfoot) {
-				if (refChild == null) {
-					if (isReorder) {
-						final int idx = ((Listgroupfoot) newChild).getIndex();
-						final int[] ginfo = getGroupsInfoAt(idx);
-						if (ginfo != null) {
-							ginfo[1]--;
-							ginfo[2] = -1;
-						}
-					}
-					final int[] g = _groupsInfo.get(getGroupCount() - 1);
-
-					g[2] = getItems().get(getItems().size() - 1)
-							.getIndex();
-				} else if (refChild instanceof Listitem) {
-					final int idx = ((Listitem) refChild).getIndex();
-					final int[] g = getGroupsInfoAt(idx);
-					if (g == null)
-						throw new UiException(
-								"Listgroupfoot cannot exist alone, you have to add a Listgroup first");
-					if (g[2] != -1)
-						throw new UiException(
-								"Only one Listgroupfoot is allowed per Listgroup");
-					if (idx != (g[0] + g[1]))
-						throw new UiException(
-								"Listgroupfoot must be placed after the last Row of the Listgroup");
-					g[2] = idx - 1;
-					if (isReorder) {
-						final int nindex = ((Listgroupfoot) newChild)
-								.getIndex();
-						final int[] ginfo = getGroupsInfoAt(nindex);
-						if (ginfo != null) {
-							ginfo[1]--;
-							ginfo[2] = -1;
-						}
-					}
-				} else {
-					final Component preRefChild = refChild.getPreviousSibling();
-					if (preRefChild instanceof Listitem) {
-						final int idx = ((Listitem) preRefChild).getIndex();
-						//bug 2936019: Execption when Listbox insertBefore() group + groupfoot
-						final int[] g = getGroupsInfoAt(idx, preRefChild instanceof Listgroup);
-						if (g == null)
-							throw new UiException(
-									"Listgroupfoot cannot exist alone, you have to add a Listgroup first");
-						if (g[2] != -1)
-							throw new UiException(
-									"Only one Listgroupfoot is allowed per Listgroup");
-						if (idx + 1 != (g[0] + g[1]))
-							throw new UiException(
-									"Listgroupfoot must be placed after the last Row of the Listgroup");
-						g[2] = idx;
-						if (isReorder) {
-							final int nindex = ((Listgroupfoot) newChild)
-									.getIndex();
-							final int[] ginfo = getGroupsInfoAt(nindex);
-							if (ginfo != null) {
-								ginfo[1]--;
-								ginfo[2] = -1;
-							}
-						}
-					}
-				}
-			}
+			fixGroupsInfoBeforeInsert(newChild, refChild, isReorder);
 			// first: listhead or auxhead
 			// last two: listfoot and paging
 			if (refChild != null && refChild.getParent() != this)
@@ -1683,52 +1620,8 @@ public class Listbox extends MeshElement {
 					}
 				}
 
-				if (newChild instanceof Listgroup) {
-					Listgroup lg = (Listgroup) newChild;
-					if (_groupsInfo.isEmpty())
-						_groupsInfo.add(new int[] { lg.getIndex(),
-								getItemCount() - lg.getIndex(), -1 });
-					else {
-						int idx = 0;
-						int[] prev = null, next = null;
-						for (int[] g: _groupsInfo) {
-							if (g[0] <= lg.getIndex()) {
-								prev = g;
-								idx++;
-							} else {
-								next = g;
-								break;
-							}
-						}
-						if (prev != null) {
-							int index = lg.getIndex(), leng = index - prev[0], size = prev[1]
-									- leng + 1;
-							prev[1] = leng;
-							_groupsInfo
-									.add(
-											idx,
-											new int[] {
-													index,
-													size,
-													size > 1 && prev[2] > index ? prev[2]
-															: -1 });
-							if (size > 1 && prev[2] > index)
-								prev[2] = -1; // reset listgroupfoot
-						} else if (next != null) {
-							_groupsInfo.add(idx, new int[] { lg.getIndex(),
-									next[0] - lg.getIndex(), -1 });
-						}
-					}
-				} else if (!_groupsInfo.isEmpty()) {
-					int index = newItem.getIndex();
-					final int[] g = getGroupsInfoAt(index);
-					if (g != null) {
-						g[1]++;
-						if (g[2] != -1
-								&& (g[2] >= index || newItem instanceof Listgroupfoot))
-							g[2] = g[0] + g[1] - 1;
-					}
-				}
+				fixGroupsInfoAfterInsert(newItem);
+				
 				//bug #3049167: Totalsize increase when drag & drop in paging Listbox/Grid
 				if (!isReorder) { //if reorder, not an insert
 					afterInsert(newChild);
@@ -1855,53 +1748,7 @@ public class Listbox extends MeshElement {
 					--_jsel;
 				}
 			}
-			if (child instanceof Listgroup) {
-				int[] prev = null, remove = null;
-				for (int[] g: _groupsInfo) {
-					if (g[0] == index) {
-						remove = g;
-						break;
-					}
-					prev = g;
-				}
-				if (prev != null && remove != null) {
-					prev[1] += remove[1] - 1;
-				}
-				fixItemIndices(index, -1, false);
-				if (remove != null) {
-					_groupsInfo.remove(remove);
-					final int idx = remove[2];
-					if (idx != -1) {
-						final int realIndex = getRealIndex(idx) - 1;
-						if (realIndex >= 0 && realIndex < getItemCount())
-							removeChild(getChildren().get(realIndex));
-					}
-				}
-			} else if (!_groupsInfo.isEmpty()) {
-				final int[] g = getGroupsInfoAt(index);
-				if (g != null) {
-					g[1]--;
-					if (g[2] != -1)
-						g[2]--;
-					fixItemIndices(index, -1, false);
-				} else
-					fixItemIndices(index, -1, false);
-
-				if (child instanceof Listgroupfoot) {
-					final int[] g1 = getGroupsInfoAt(index);
-					if (g1 != null)
-						g1[2] = -1;
-				}
-			} else
-				fixItemIndices(index, -1);
-
-			if (hasGroupsModel() && getItemCount() <= 0) { // remove to empty,
-				// reset _groupsInfo
-				_groupsInfo = new LinkedList<int[]>();
-			}
-			//bug 3057288
-			//getDataLoader().updateModelInfo(); //itemsInvalidate after really removed
-			//return true;
+			fixGroupsInfoAfterRemove(child, index);
 		} else if (_paging == child) {
 			_paging = null;
 			if (_pgi == child)
@@ -1930,6 +1777,9 @@ public class Listbox extends MeshElement {
 	 * @since 3.0.5
 	 */
 	protected void afterInsert(Component comp) {
+		if (_isReplacingItem) //@see Renderer#render
+			return; //called by #insertBefore(), skip handling GroupInfo
+		
 		updateVisibleCount((Listitem) comp, false);
 		checkInvalidateForMoved((Listitem) comp, false);
 	}
@@ -1944,6 +1794,9 @@ public class Listbox extends MeshElement {
 	 * @since 3.0.5
 	 */
 	protected void beforeRemove(Component comp) {
+		if (_isReplacingItem) //@see Renderer#render
+			return; //called by #removeChild(), skip handling GroupInfo
+		
 		updateVisibleCount((Listitem) comp, true);
 		checkInvalidateForMoved((Listitem) comp, true);
 	}
@@ -2119,6 +1972,181 @@ public class Listbox extends MeshElement {
 		_jsel = -1;
 	}
 
+	private void fixGroupsInfoBeforeInsert(Component newChild, Component refChild, boolean isReorder) {
+		if (_isReplacingItem) //@see Renderer#render
+			return; //called by #insertBefore(), skip handling GroupInfo
+		
+		if (newChild instanceof Listgroupfoot) {
+			if (refChild == null) {
+				if (isReorder) {
+					final int idx = ((Listgroupfoot) newChild).getIndex();
+					final int[] ginfo = getGroupsInfoAt(idx);
+					if (ginfo != null) {
+						ginfo[1]--;
+						ginfo[2] = -1;
+					}
+				}
+				final int[] g = _groupsInfo.get(getGroupCount() - 1);
+
+				g[2] = getItems().get(getItems().size() - 1)
+						.getIndex();
+			} else if (refChild instanceof Listitem) {
+				final int idx = ((Listitem) refChild).getIndex();
+				final int[] g = getGroupsInfoAt(idx);
+				if (g == null)
+					throw new UiException(
+							"Listgroupfoot cannot exist alone, you have to add a Listgroup first");
+				if (g[2] != -1)
+					throw new UiException(
+							"Only one Listgroupfoot is allowed per Listgroup");
+				if (idx != (g[0] + g[1]))
+					throw new UiException(
+							"Listgroupfoot must be placed after the last Row of the Listgroup");
+				g[2] = idx - 1;
+				if (isReorder) {
+					final int nindex = ((Listgroupfoot) newChild)
+							.getIndex();
+					final int[] ginfo = getGroupsInfoAt(nindex);
+					if (ginfo != null) {
+						ginfo[1]--;
+						ginfo[2] = -1;
+					}
+				}
+			} else {
+				final Component preRefChild = refChild.getPreviousSibling();
+				if (preRefChild instanceof Listitem) {
+					final int idx = ((Listitem) preRefChild).getIndex();
+					//bug 2936019: Execption when Listbox insertBefore() group + groupfoot
+					final int[] g = getGroupsInfoAt(idx, preRefChild instanceof Listgroup);
+					if (g == null)
+						throw new UiException(
+								"Listgroupfoot cannot exist alone, you have to add a Listgroup first");
+					if (g[2] != -1)
+						throw new UiException(
+								"Only one Listgroupfoot is allowed per Listgroup");
+					if (idx + 1 != (g[0] + g[1]))
+						throw new UiException(
+								"Listgroupfoot must be placed after the last Row of the Listgroup");
+					g[2] = idx;
+					if (isReorder) {
+						final int nindex = ((Listgroupfoot) newChild)
+								.getIndex();
+						final int[] ginfo = getGroupsInfoAt(nindex);
+						if (ginfo != null) {
+							ginfo[1]--;
+							ginfo[2] = -1;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void fixGroupsInfoAfterInsert(Listitem newItem) {
+		if (_isReplacingItem) //@see Renderer#render
+			return; //called by #insertBefore(), skip handling GroupInfo
+		
+		if (newItem instanceof Listgroup) {
+			Listgroup lg = (Listgroup) newItem;
+			if (_groupsInfo.isEmpty())
+				_groupsInfo.add(new int[] { lg.getIndex(),
+						getItemCount() - lg.getIndex(), -1 });
+			else {
+				int idx = 0;
+				int[] prev = null, next = null;
+				for (int[] g: _groupsInfo) {
+					if (g[0] <= lg.getIndex()) {
+						prev = g;
+						idx++;
+					} else {
+						next = g;
+						break;
+					}
+				}
+				if (prev != null) {
+					int index = lg.getIndex(), leng = index - prev[0], size = prev[1]
+							- leng + 1;
+					prev[1] = leng;
+					_groupsInfo
+							.add(
+									idx,
+									new int[] {
+											index,
+											size,
+											size > 1 && prev[2] >= index ? prev[2] + 1
+													: -1 });
+					if (size > 1 && prev[2] > index)
+						prev[2] = -1; // reset listgroupfoot
+				} else if (next != null) {
+					_groupsInfo.add(idx, new int[] { lg.getIndex(),
+							next[0] - lg.getIndex(), -1 });
+				}
+			}
+		} else if (!_groupsInfo.isEmpty()) {
+			int index = newItem.getIndex();
+			final int[] g = getGroupsInfoAt(index);
+			if (g != null) {
+				g[1]++;
+				if (g[2] != -1
+						&& (g[2] >= index || newItem instanceof Listgroupfoot))
+					g[2] = g[0] + g[1] - 1;
+			}
+		}
+	}
+
+	private void fixGroupsInfoAfterRemove(Component child, int index) {
+		if (_isReplacingItem) //@see Renderer#render
+			return; //called by #removeChild(), skip handling GroupInfo
+		
+		if (child instanceof Listgroup) {
+			int[] prev = null, remove = null;
+			for (int[] g: _groupsInfo) {
+				if (g[0] == index) {
+					remove = g;
+					break;
+				}
+				prev = g;
+			}
+			if (prev != null && remove != null) {
+				prev[1] += remove[1] - 1;
+			}
+			fixItemIndices(index, -1, false);
+			if (remove != null) {
+				_groupsInfo.remove(remove);
+				final int idx = remove[2];
+				if (idx != -1) {
+					final int realIndex = getRealIndex(idx) - 1;
+					if (realIndex >= 0 && realIndex < getItemCount())
+						removeChild(getChildren().get(realIndex));
+				}
+			}
+		} else if (!_groupsInfo.isEmpty()) {
+			final int[] g = getGroupsInfoAt(index);
+			if (g != null) {
+				g[1]--;
+				if (g[2] != -1)
+					g[2]--;
+				fixItemIndices(index, -1, false);
+			} else
+				fixItemIndices(index, -1, false);
+
+			if (child instanceof Listgroupfoot) {
+				final int[] g1 = getGroupsInfoAt(index);
+				if (g1 != null)
+					g1[2] = -1;
+			}
+		} else
+			fixItemIndices(index, -1);
+
+		if (hasGroupsModel() && getItemCount() <= 0) { // remove to empty,
+			// reset _groupsInfo
+			_groupsInfo = new LinkedList<int[]>();
+		}
+		//bug 3057288
+		//getDataLoader().updateModelInfo(); //itemsInvalidate after really removed
+		//return true;
+	}
+	
 	/**
 	 * Fix Childitem._index since j-th item.
 	 *
@@ -2128,9 +2156,6 @@ public class Listbox extends MeshElement {
 	 *            the end index (inclusion). If -1, up to the end.
 	 */
 	private void fixItemIndices(int j, int to) {
-		if (_skipFixItemIndices) //@see Renderer#render
-			return; //called by #removeChild, no need to re-indexing
-		
 		int realj = getRealIndex(j);
 		if (realj < 0)
 			realj = 0;
@@ -2596,7 +2621,7 @@ public class Listbox extends MeshElement {
 			final Object value = _model.getElementAt(index);
 			//bug #ZK-675: Selection was lost if a render replace the listitem
 			final boolean selected = ((Selectable) _model).isSelected(value);
-			final boolean oldFlag = setSkipFixItemIndices(true); //skipFixItemIndices when rendering
+			final boolean oldFlag = setReplacingItem(true); //skipFixItemIndices when rendering
 			try {
 				try {
 					_renderer.render(item, value, index);
@@ -2618,7 +2643,7 @@ public class Listbox extends MeshElement {
 				item.setLoaded(true);
 				throw ex;
 			} finally {
-				setSkipFixItemIndices(oldFlag);
+				setReplacingItem(oldFlag);
 				if (item.getChildren().isEmpty())
 					cell.setParent(item);
 			}
