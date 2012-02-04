@@ -1,0 +1,30 @@
+<!--
+	B50-ZK-819.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Sat Feb 4 16:36:49 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		IE 8 only.
+	</div>
+	<div>
+		The two Tabs should be both displayed as disabled. (opacity 0.4) 
+	</div>
+    <tabbox>
+        <tabs>
+            <tab label="Tab 1" disabled="true" />
+            <tab label="Tab 2" disabled="true" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>Tabpanel Content 1</tabpanel>
+            <tabpanel>Tabpanel Content 2</tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>

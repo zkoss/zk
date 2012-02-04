@@ -239,7 +239,7 @@
 }
 .z-tab-seld .z-tab-hr {
 	background-position: right 0;
-	<c:if test="${zk.ie > 0}">
+	<c:if test="${zk.ie == 6}">
 	position: relative;
 	</c:if>
 }
