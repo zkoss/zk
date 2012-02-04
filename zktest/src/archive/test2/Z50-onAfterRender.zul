@@ -2,11 +2,11 @@
 <zk>
 	<zscript><![CDATA[
 		ListModelList lm = new ListModelList(Arrays.asList(new String[]{"David", "Thomas","Steven"}));
-		SimpleTreeModel stm = new SimpleTreeModel(new SimpleTreeNode("ROOT",
-				Arrays.asList(new SimpleTreeNode[]{
-						new SimpleTreeNode("David",new ArrayList()), 
-						new SimpleTreeNode("Thomas",new ArrayList()),
-						new SimpleTreeNode("Steven",new ArrayList())})));
+		DefaultTreeModel stm = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+				Arrays.asList(new DefaultTreeNode[]{
+						new DefaultTreeNode("David",new ArrayList()), 
+						new DefaultTreeNode("Thomas",new ArrayList()),
+						new DefaultTreeNode("Steven",new ArrayList())})));
 		
 		
 		ArrayList list = new ArrayList();
@@ -14,13 +14,13 @@
 		int len = 50;
 		for(int i = 0; i < len; i++) {
 			list.add("item " + i);
-			list2.add(new SimpleTreeNode("item " + i,new ArrayList()));
+			list2.add(new DefaultTreeNode("item " + i,new ArrayList()));
 		}
 		ListModelList lm2 = new ListModelList(list);
 		
-		SimpleTreeModel stm2 = new SimpleTreeModel(
-				new SimpleTreeNode("ROOT", 
-						Arrays.asList(new SimpleTreeNode[]{new SimpleTreeNode("root",list2)})));
+		DefaultTreeModel stm2 = new DefaultTreeModel(
+				new DefaultTreeNode("ROOT", 
+						Arrays.asList(new DefaultTreeNode[]{new DefaultTreeNode("root",list2)})));
 		
 	]]></zscript>
 	<hbox>

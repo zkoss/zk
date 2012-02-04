@@ -8,7 +8,7 @@
 	]]></html>
 	<window title="Dynamically Change by Model">
 		<zscript><![CDATA[
-			class MySimpleTreeNode extends SimpleTreeNode {
+			class MySimpleTreeNode extends DefaultTreeNode {
 				private String myData = null;
 				public MySimpleTreeNode(String data, List children) {
 					super(data, children);
@@ -58,7 +58,7 @@
 			List rootList = new ArrayList();
 			rootList.add(r);
 			MySimpleTreeNode root = new MySimpleTreeNode("Root", rootList);
-			SimpleTreeModel stm = new SimpleTreeModel(root);
+			DefaultTreeModel stm = new DefaultTreeModel(root);
 			public void setOpen() {
 				Treeitem it = (Treeitem) tree.getItems().iterator().next();
 				it.setOpen(true);

@@ -21,8 +21,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
     <zscript>
         children = []
-        5.times{children.add(new SimpleTreeNode(it, []))}
-        model = new SimpleTreeModel(new SimpleTreeNode('ROOT',children))
+        5.times{children.add(new DefaultTreeNode(it, []))}
+        model = new DefaultTreeModel(new DefaultTreeNode('ROOT',children))
 
         removeItem = {
             root = testTree.model.root

@@ -13,7 +13,8 @@
 	<window>
 		<zscript>
 		<![CDATA[
-	class TestTreeModel extends org.zkoss.zul.AbstractTreeModel {
+	class TestTreeModel extends org.zkoss.zul.AbstractTreeModel implements
+		 org.zkoss.zul.ext.TreeSelectionModel {
 		public TestTreeModel(Object root) {
 			super(root);
 		}
@@ -52,6 +53,66 @@
 			fireEvent(parent, indexFrom, indexTo, org.zkoss.zul.event.TreeDataEvent.INTERVAL_ADDED);
 
 		}
+		
+	public void setMultiple(boolean multiple) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isMultiple() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void addSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean removeSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean removeSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isPathSelected(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isSelectionEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void clearSelection() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int[] getSelectionPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int[][] getSelectionPaths() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getSelectionCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	}
 	import java.util.ArrayList;
 	ArrayList mother = new ArrayList();

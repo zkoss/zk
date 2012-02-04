@@ -9,13 +9,13 @@
 		<attribute name="onClick">
 			import org.zkoss.zul.*;
 			
-		    SimpleTreeNode a = new SimpleTreeNode("a", new ArrayList());
-		    SimpleTreeNode b = new SimpleTreeNode("b", new ArrayList());
+		    DefaultTreeNode a = new DefaultTreeNode("a", new ArrayList());
+		    DefaultTreeNode b = new DefaultTreeNode("b", new ArrayList());
 		    ArrayList rootNodes = new ArrayList();
 		    rootNodes.add(a);
 		    rootNodes.add(b);
-		    SimpleTreeNode root = new SimpleTreeNode(null, rootNodes);
-		    SimpleTreeModel m = new SimpleTreeModel(root);
+		    DefaultTreeNode root = new DefaultTreeNode(null, rootNodes);
+		    DefaultTreeModel m = new DefaultTreeModel(root);
 		    tree.setModel(m);
 		</attribute>
 	</button>

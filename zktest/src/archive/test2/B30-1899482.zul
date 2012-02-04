@@ -4,7 +4,7 @@
     
     <window title="Dynamically Change by Model">
         <zscript><![CDATA[
-        class MySimpleTreeNode extends SimpleTreeNode {
+        class MySimpleTreeNode extends DefaultTreeNode {
                 private String myData = null;
                 public MySimpleTreeNode(String data, List children) {
                       super(data, children);
@@ -67,11 +67,11 @@
        rootList.add(r);
        MySimpleTreeNode root = new MySimpleTreeNode("Root", rootList);
        
-       SimpleTreeModel stm = new SimpleTreeModel(root);
+       DefaultTreeModel stm = new DefaultTreeModel(root);
        
        
        public void renderByPath(Object obj){
-       		int[] result = stm.getPath(root,obj);
+       		int[] result = stm.getPath(obj);
        		tree.renderItemByPath(result); 
        }
        

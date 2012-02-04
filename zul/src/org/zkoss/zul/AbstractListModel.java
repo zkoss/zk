@@ -88,7 +88,10 @@ Selectable<E>, java.io.Serializable {
 				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
 			_selection.clear();
 			_selection.addAll(selection);
-			fireSelectionEvent(selection.iterator().next());
+			if (selection.isEmpty()) {
+				fireSelectionEvent(null);
+			} else
+				fireSelectionEvent(selection.iterator().next());
 		}
 	}
 	/** {@inheritDoc} */

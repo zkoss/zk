@@ -22,11 +22,12 @@ import java.util.ArrayList;
 
 import org.zkoss.zul.AbstractTreeModel;
 import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.ext.TreeSelectionModel;
 /**
  * @author Dennis.Chen
  *
  */
-public class HostTreeModel extends AbstractTreeModel{
+public class HostTreeModel extends AbstractTreeModel implements TreeSelectionModel {
 	
 	
 	private FakeRoot fakeRoot;
@@ -245,5 +246,77 @@ public class HostTreeModel extends AbstractTreeModel{
 		public boolean isLeaf() {
 			return true;
 		}
+	}
+
+	@Override
+	public void setMultiple(boolean multiple) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isMultiple() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void addSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean removeSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isPathSelected(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSelectionEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void clearSelection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int[] getSelectionPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[][] getSelectionPaths() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getSelectionCount() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -20,7 +20,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		public void render(Treeitem ti, Object obj, int index) throws Exception {
 			ti.setSelected(true);
 
-			SimpleTreeNode t = (SimpleTreeNode) obj;
+			DefaultTreeNode t = (DefaultTreeNode) obj;
 			Treecell tc = new Treecell(t.getData().toString());
 			Treerow tr =  new Treerow();
 			tr.setParent(ti);
@@ -32,41 +32,41 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	List aChildren = new ArrayList();
 	List empty = new ArrayList();
 	List a2Children = new ArrayList();
-	SimpleTreeNode a20 = new SimpleTreeNode("A2-0", empty);
-	SimpleTreeNode a21 = new SimpleTreeNode("A2-1", empty);
-	SimpleTreeNode a22 = new SimpleTreeNode("A2-2", empty);
+	DefaultTreeNode a20 = new DefaultTreeNode("A2-0", empty);
+	DefaultTreeNode a21 = new DefaultTreeNode("A2-1", empty);
+	DefaultTreeNode a22 = new DefaultTreeNode("A2-2", empty);
 	a2Children.add(a20);
 	a2Children.add(a21);
 	a2Children.add(a22);
-	SimpleTreeNode a0 = new SimpleTreeNode("A0", empty);
-	SimpleTreeNode a1 = new SimpleTreeNode("A1", empty);
-	SimpleTreeNode a2 = new SimpleTreeNode("A2", a2Children);
+	DefaultTreeNode a0 = new DefaultTreeNode("A0", empty);
+	DefaultTreeNode a1 = new DefaultTreeNode("A1", empty);
+	DefaultTreeNode a2 = new DefaultTreeNode("A2", a2Children);
 	aChildren.add(a0);
 	aChildren.add(a1);
 	aChildren.add(a2);
 	List children = new ArrayList();
-	SimpleTreeNode a = new SimpleTreeNode("A", aChildren);
+	DefaultTreeNode a = new DefaultTreeNode("A", aChildren);
 	children.add(a);
 	List bbChildren = new ArrayList();
-	SimpleTreeNode b00 = new SimpleTreeNode("B0-0", empty);
+	DefaultTreeNode b00 = new DefaultTreeNode("B0-0", empty);
 	bbChildren.add(b00);
 	List bChildren = new ArrayList();
-	SimpleTreeNode b0 = new SimpleTreeNode("B0", bbChildren);
-	SimpleTreeNode b1 = new SimpleTreeNode("B1", empty);
-	SimpleTreeNode b2 = new SimpleTreeNode("B2", empty);
+	DefaultTreeNode b0 = new DefaultTreeNode("B0", bbChildren);
+	DefaultTreeNode b1 = new DefaultTreeNode("B1", empty);
+	DefaultTreeNode b2 = new DefaultTreeNode("B2", empty);
 	bChildren.add(b0);
 	bChildren.add(b1);
 	bChildren.add(b2);
-	SimpleTreeNode b = new SimpleTreeNode("B", bChildren);
+	DefaultTreeNode b = new DefaultTreeNode("B", bChildren);
 	children.add(b);
 	List rList = new ArrayList();
 	rList.add(a);
 	rList.add(b);
-	SimpleTreeNode r = new SimpleTreeNode("Root", rList);
+	DefaultTreeNode r = new DefaultTreeNode("Root", rList);
 	List rootList = new ArrayList();
 	rootList.add(r);
-	SimpleTreeNode root = new SimpleTreeNode("Root", rootList);
-	SimpleTreeModel stm = new SimpleTreeModel(root);
+	DefaultTreeNode root = new DefaultTreeNode("Root", rootList);
+	DefaultTreeModel stm = new DefaultTreeModel(root);
 	AllSelectedTreeItemRenderer tir = new AllSelectedTreeItemRenderer();
 ]]></zscript>
 	<window title="Dynamically Change by Model">

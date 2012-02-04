@@ -22,7 +22,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  <zscript>
   <![CDATA[
     import java.util.Vector;
-    public class treeModel extends AbstractTreeModel {
+	import org.zkoss.zul.ext.TreeSelectionModel;
+    public class treeModel extends AbstractTreeModel implements TreeSelectionModel {
 
       public treeModel (Vector treeData) {
 	super(treeData);
@@ -47,6 +48,65 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	else
 	  return vec.size()-1;
       }
+
+	
+	public void setMultiple(boolean multiple) {
+		
+	}
+
+	
+	public boolean isMultiple() {
+		return false;
+	}
+
+	
+	public void addSelectionPath(int[] path) {
+		
+	}
+
+	
+	public void addSelectionPaths(int[][] paths) {
+		
+	}
+
+	
+	public boolean removeSelectionPath(int[] path) {
+		return false;
+	}
+
+	
+	public boolean removeSelectionPaths(int[][] paths) {
+		return false;
+	}
+
+	
+	public boolean isPathSelected(int[] path) {
+		return false;
+	}
+
+	
+	public boolean isSelectionEmpty() {
+		return false;
+	}
+
+	
+	public void clearSelection() {
+	}
+
+	
+	public int[] getSelectionPath() {
+		return null;
+	}
+
+	
+	public int[][] getSelectionPaths() {
+		return null;
+	}
+
+	
+	public int getSelectionCount() {
+		return 0;
+	}
 
     }
 
