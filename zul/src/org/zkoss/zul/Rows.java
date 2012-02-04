@@ -432,48 +432,48 @@ public class Rows extends XulElement {
 	}
 	
 	private void fixGroupsInfoAfterRemove(Row child, int index) {
-		if (_isReplacingRow) //@see Grid.Renderer#render 
-			return; //called by #removeChild, no need to re-indexing
-		
-		if (child instanceof Group) {
-			int[] prev = null, remove = null;
-			for(Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
-				int[] g = it.next();
-				if (g[0] == index) {
-					remove = g;
-					break;
+		if (!_isReplacingRow) { //@see Grid.Renderer#render 
+			//called by #removeChild, handling GroupInfo if !isReplcingRow
+			if (child instanceof Group) {
+				int[] prev = null, remove = null;
+				for(Iterator<int[]> it = _groupsInfo.iterator(); it.hasNext();) {
+					int[] g = it.next();
+					if (g[0] == index) {
+						remove = g;
+						break;
+					}
+					prev = g;
 				}
-				prev = g;
-			}
-			if (prev != null && remove !=null) {
-				prev[1] += remove[1] - 1;
-			}
-			fixGroupIndex(index, -1, false);
-			if (remove != null) {
-				_groupsInfo.remove(remove);
-				final int idx = remove[2];
-				if (idx != -1) {
-					final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
-					if (realIndex >= 0 && realIndex < getChildren().size())
-						removeChild(getChildren().get(realIndex));
+				if (prev != null && remove !=null) {
+					prev[1] += remove[1] - 1;
 				}
-			}
-		} else if (hasGroup()) {
-			final int[] g = getGroupsInfoAt(index);
-			if (g != null) {
-				g[1]--;
-				if (g[2] != -1) g[2]--;
 				fixGroupIndex(index, -1, false);
-			}
-			else fixGroupIndex(index, -1, false);
-			if (child instanceof Groupfoot){
-				final int[] g1 = getGroupsInfoAt(index);	
-				if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
-					g1[2] = -1;
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						final int realIndex = getRealIndex(idx) - 1;  //bug #2936064
+						if (realIndex >= 0 && realIndex < getChildren().size())
+							removeChild(getChildren().get(realIndex));
+					}
 				}
+			} else if (hasGroup()) {
+				final int[] g = getGroupsInfoAt(index);
+				if (g != null) {
+					g[1]--;
+					if (g[2] != -1) g[2]--;
+					fixGroupIndex(index, -1, false);
+				}
+				else fixGroupIndex(index, -1, false);
+				if (child instanceof Groupfoot){
+					final int[] g1 = getGroupsInfoAt(index);	
+					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
+						g1[2] = -1;
+					}
+				}
+			} else {
+				fixRowIndices(index, -1);
 			}
-		} else {
-			fixRowIndices(index, -1);
 		}
 		
 		if (hasGroupsModel() && getChildren().size() <= 0) { //remove to empty, reset _groupsInfo

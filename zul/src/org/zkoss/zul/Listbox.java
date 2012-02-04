@@ -2096,48 +2096,48 @@ public class Listbox extends MeshElement {
 	}
 
 	private void fixGroupsInfoAfterRemove(Component child, int index) {
-		if (_isReplacingItem) //@see Renderer#render
-			return; //called by #removeChild(), skip handling GroupInfo
-		
-		if (child instanceof Listgroup) {
-			int[] prev = null, remove = null;
-			for (int[] g: _groupsInfo) {
-				if (g[0] == index) {
-					remove = g;
-					break;
+		if (!_isReplacingItem) {//@see Renderer#render
+			//called by #removeChild(), handling GroupInfo if !isReplcingItem
+			if (child instanceof Listgroup) {
+				int[] prev = null, remove = null;
+				for (int[] g: _groupsInfo) {
+					if (g[0] == index) {
+						remove = g;
+						break;
+					}
+					prev = g;
 				}
-				prev = g;
-			}
-			if (prev != null && remove != null) {
-				prev[1] += remove[1] - 1;
-			}
-			fixItemIndices(index, -1, false);
-			if (remove != null) {
-				_groupsInfo.remove(remove);
-				final int idx = remove[2];
-				if (idx != -1) {
-					final int realIndex = getRealIndex(idx) - 1;
-					if (realIndex >= 0 && realIndex < getItemCount())
-						removeChild(getChildren().get(realIndex));
+				if (prev != null && remove != null) {
+					prev[1] += remove[1] - 1;
 				}
-			}
-		} else if (!_groupsInfo.isEmpty()) {
-			final int[] g = getGroupsInfoAt(index);
-			if (g != null) {
-				g[1]--;
-				if (g[2] != -1)
-					g[2]--;
 				fixItemIndices(index, -1, false);
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						final int realIndex = getRealIndex(idx) - 1;
+						if (realIndex >= 0 && realIndex < getItemCount())
+							removeChild(getChildren().get(realIndex));
+					}
+				}
+			} else if (!_groupsInfo.isEmpty()) {
+				final int[] g = getGroupsInfoAt(index);
+				if (g != null) {
+					g[1]--;
+					if (g[2] != -1)
+						g[2]--;
+					fixItemIndices(index, -1, false);
+				} else
+					fixItemIndices(index, -1, false);
+	
+				if (child instanceof Listgroupfoot) {
+					final int[] g1 = getGroupsInfoAt(index);
+					if (g1 != null)
+						g1[2] = -1;
+				}
 			} else
-				fixItemIndices(index, -1, false);
-
-			if (child instanceof Listgroupfoot) {
-				final int[] g1 = getGroupsInfoAt(index);
-				if (g1 != null)
-					g1[2] = -1;
-			}
-		} else
-			fixItemIndices(index, -1);
+				fixItemIndices(index, -1);
+		}
 
 		if (hasGroupsModel() && getItemCount() <= 0) { // remove to empty,
 			// reset _groupsInfo
