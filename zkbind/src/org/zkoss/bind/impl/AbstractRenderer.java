@@ -106,7 +106,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
 		if (binder == null) return; //no binder
 		final String expression = BinderImpl.MODEL+"["+index+"]";
-		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
+		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, expression, comp)); //reference
 	}
 	
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List, for tree model only
@@ -115,7 +115,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		if (binder == null) return; //no binder
 		comp.setAttribute(TREE_PATH, path);
 		final String expression = BinderImpl.MODEL+"["+TREE_PATH+"]";
-		comp.setAttribute(varnm, new ReferenceImpl(binder, expression, comp)); //reference
+		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, expression, comp)); //reference
 	}
 	
 	

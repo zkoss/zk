@@ -30,10 +30,10 @@ import java.util.WeakHashMap;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
-import org.zkoss.bind.sys.DummyBinding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -61,9 +61,7 @@ public class TrackerImpl implements Tracker,Serializable {
 		final TrackerNodeImpl node = (TrackerNodeImpl) getOrCreateTrackerNode(comp, series);
 		
 		//node is leaf of this series, add the binding to it
-		if (!(binding instanceof DummyBinding)) {
-			node.addBinding(binding);
-		}
+		node.addBinding(binding);
 	}
 	
 	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp, String[] dependsOnSeries) {
@@ -314,6 +312,9 @@ public class TrackerImpl implements Tracker,Serializable {
 		final Set<Binding> nodebindings = node.getBindings();
 		for(Binding binding : nodebindings) {
 			if (binding instanceof LoadBinding) {
+				if (binding instanceof ReferenceBinding) {
+					((ReferenceBinding)binding).invalidateCache();
+				}
 				bindings.add((LoadBinding)binding);
 			}
 		}
@@ -546,10 +547,6 @@ public class TrackerImpl implements Tracker,Serializable {
 		public boolean isEmpty() {
 			return _beanSet == null || _beanSet.isEmpty();
 		}
-		
-		public boolean contains(Object bean) {
-			return _beanSet != null && _beanSet.containsKey(bean);
-		}
 	}
 	
 	//------ debug dump ------//
@@ -653,6 +650,8 @@ public class TrackerImpl implements Tracker,Serializable {
 			System.out.println(dumpSpace(spaces)+((FormBinding)binding).getPropertyString()+":"+binding);
 		} else if(binding instanceof ChildrenBinding){
 			System.out.println(dumpSpace(spaces)+((ChildrenBinding)binding).getPropertyString()+":"+binding);
+		} else if(binding instanceof ReferenceBinding) {
+			System.out.println(dumpSpace(spaces)+((ReferenceBinding)binding).getPropertyString()+":"+binding);
 		}
 	}
 	

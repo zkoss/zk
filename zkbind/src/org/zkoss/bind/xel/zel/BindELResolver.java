@@ -25,7 +25,7 @@ import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
-import org.zkoss.bind.sys.Reference;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.xel.XelContext;
@@ -62,8 +62,8 @@ public class BindELResolver extends XelELResolver {
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
 		Object value = super.getValue(ctx, base, property);
-		if (value instanceof Reference) {
-			value = ((Reference)value).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
+		if (value instanceof ReferenceBinding) {
+			value = ((ReferenceBinding)value).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		tieValue(ctx, base, property, value);
 		return value;
@@ -71,8 +71,8 @@ public class BindELResolver extends XelELResolver {
 	
 	public void setValue(ELContext ctx, Object base, Object property, Object value)
 	throws PropertyNotFoundException, PropertyNotWritableException, ELException {
-		if (base instanceof Reference) {
-			base = ((Reference)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
+		if (base instanceof ReferenceBinding) {
+			base = ((ReferenceBinding)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		super.setValue(ctx, base, property, value);
 		tieValue(ctx, base, property, value);
