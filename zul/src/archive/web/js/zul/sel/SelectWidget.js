@@ -229,6 +229,19 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 			this._changeSelect(w, sels[w.uuid] == true);
 	},
+	setFocusIndex: function (index) { // called from server
+		// F60-ZK-715
+		if (index < 0)
+			return;
+		var self = this;
+		setTimeout(function () { // items not ready yet
+			var w;
+			for (var it = self.getBodyWidgetIterator(); (w = it.next()) && index--;)
+				if (!it.hasNext())
+					break;
+			self._focusItem = w;
+		});
+	},
 	updateFormData: function () {
 		if (this._name) {
 			if (!this.efield)
@@ -829,6 +842,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			var pgnl = this.paging || this._paginal;
 			if (row && pgnl) { // F60-ZK-715
 				var npg = this.getActivePage() + (data.keyCode == 33 ? -1 : 1);
+				// TODO: concern ctrl
 				if (npg > -1 && npg < this.getPageCount())
 					this.fire('onAcrossPage', {
 						page: npg, 
@@ -890,6 +904,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					var pg = this.paging || this._paginal, pnum;
 					if (pg) {
 						pnum = pg.getActivePage();
+						// TODO: concern ctrl
 						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0)
 							this.fire('onAcrossPage', {
 								page: pnum + (step > 0 ? 1 : 0), 

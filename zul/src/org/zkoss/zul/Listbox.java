@@ -292,6 +292,7 @@ public class Listbox extends MeshElement {
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
 	private transient boolean _isReplacingItem;
+	private transient int _focusIndex = -1;
 
 	/**
 	 * The paging controller, used only if mold = "paging" and user doesn't
@@ -2885,7 +2886,15 @@ public class Listbox extends MeshElement {
 		&& !(_model instanceof GroupsListModel);
 		//TODO: performance enhancement: support GroupsModel in ROD
 	}
-
+	
+	private void setFocusIndex(int index) {
+		// F60-ZK-715: notify Listbox widget to set _focusItem
+		if (index != _focusIndex) {
+			_focusIndex = index;
+			smartUpdate("focusIndex", index);
+		}
+	}
+	
 	/* package */DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
@@ -3176,6 +3185,8 @@ public class Listbox extends MeshElement {
 		}
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
+		if (_focusIndex > -1)
+			renderer.render("focusIndex", _focusIndex); // F60-ZK-715
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
@@ -3444,14 +3455,16 @@ public class Listbox extends MeshElement {
 
 			//Update UI
 			final int toUI = Math.min(to, getItemCount() - 1); // capped by size
-			if (!isMultiple() || shift == 0)
+			if (!isMultiple() || shift == 0) {
 				setSelectedIndex(index);
-			else {
+				setFocusIndex(offset < 0 ? pageSize - 1 : offset);
+			} else {
 				Set<Listitem> items = new HashSet<Listitem>();
 				for (int i = from; i <= toUI; i++)
-					items.add(getItemAtIndex(i));
+					items.add(_items.get(i));
 				setSelectedItems(items);
 				setActivePage(index / pageSize);
+				setFocusIndex(offset);
 			}
 
 			//Update Model
