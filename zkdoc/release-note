@@ -246,6 +246,7 @@ ZK 5.0.11
   ZK-787: Servlets.isUniversalURL should recognise data URIs
   ZK-804: Grid in grid's detail with Sapphire theme text color is white
   ZK-822: EventQueue with Group scope throws NPE if publish without subscribe
+  ZK-791: Listbox getSelectedItems + shift does not work in version 5.0.10 without ROD
   ZK-819: Disabled tabs in IE looks weird 
   
 * Upgrade Notes
