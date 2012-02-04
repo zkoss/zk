@@ -327,9 +327,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		final Tracker tracker = getTracker();
 		final Set<LoadBinding> bindings = tracker.getLoadBindings(base, prop);
 		for(LoadBinding binding : bindings) {
-			final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, binding.getComponent(), null);
+			//BUG 828, the sub-sequence binding might be removed after the previous loading.
+			final Component comp = binding.getComponent();
+			if(comp==null || comp.getParent()==null || comp.getPage()==null) continue;
+			
+			final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
 			if(binding instanceof PropertyBinding){
-				BindContextUtil.setConverterArgs(this, binding.getComponent(), ctx, (PropertyBinding)binding);
+				BindContextUtil.setConverterArgs(this, comp, ctx, (PropertyBinding)binding);
 			}
 			
 			if(_log.debugable()){
@@ -346,8 +350,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				}else{
 					//ignore children binding
 				}
-				if(attr!=null && hasValidator(binding.getComponent(), attr)){
-					_validationMessages.clearMessages(binding.getComponent(),attr);
+				if(attr!=null && hasValidator(comp, attr)){
+					_validationMessages.clearMessages(comp,attr);
 				}
 			}
 		}
