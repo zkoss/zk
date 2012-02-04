@@ -61,16 +61,18 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	getDragMessage_: function () {
 		var p = this.parent,
 			p_sel = p._selItems,
+			length = p_sel.length,
+			inst = zul.sel.Listitem,
 			msg,
 			cnt = 2;
 		// if no other listitem selected or self is not selected,
 		// return self label
 		// else iterate through all listitems 
 		// ZK-803
-		if (!this.isSelected() || !p_sel.length || (p_sel.length == 1 && p_sel[0] == this))
+		if (!this.isSelected() || !length || (length == 1 && p_sel[0] == this))
 			return this.getLabel();
 		for (var w = p.firstChild; w; w = w.nextSibling)
-			if (w.$instanceof(zul.sel.Listitem) && w.isSelected()) {
+			if (w.$instanceof(inst) && w.isSelected()) {
 				var label = w.getLabel();
 				if (label.length > 9)
 					label = label.substring(0, 9) + "...";
