@@ -232,16 +232,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 		public void render(final Row row, final Object data, final int index) {
 			final Rows rows = (Rows)row.getParent();
 			final Grid grid = (Grid)rows.getParent();
-			Template tm = grid.getTemplate("model");
-			
-			// model's template may declare in Rows
-			if (tm == null) {
-				tm = rows.getTemplate("model");
-			}
-			
+			Template tm = getTemplate(grid, rows, "model");
 			GroupingInfo info = null;
 			if (row instanceof Group) {
-				final Template tm2 = grid.getTemplate("model:group");
+				final Template tm2 = getTemplate(grid, rows, "model:group");
 				if (tm2 != null)
 					tm = tm2;
 				if (grid.getModel() instanceof GroupsListModel) {
@@ -249,7 +243,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 					info = gmodel.getDataInfo(index);
 				}
 			} else if (row instanceof Groupfoot) {
-				final Template tm2 = grid.getTemplate("model:groupfoot");
+				final Template tm2 = getTemplate(grid, rows, "model:groupfoot");
 				if (tm2 != null)
 					tm = tm2;
 			}
@@ -313,6 +307,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 		}
 	};
+	private static Template getTemplate(Grid grid, Rows rows, String name) {
+		final Template tm = grid.getTemplate(name);
+		return tm != null ? tm: rows != null ? rows.getTemplate(name): null;
+			// Also allow model's template to be declared in Rows
+	}
 	
 	public void syncModel(int offset, int limit) {
 		int min = offset;
