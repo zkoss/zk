@@ -26,9 +26,6 @@ public class SelectboxModelConverter extends AbstractListModelConverter{
 	
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {
-		if(!(comp instanceof Selectbox)){
-			throw new IllegalArgumentException("not a selectbox, is "+comp);
-		}
 		return ((Selectbox)comp).getModel();
 	}
 }

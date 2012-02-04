@@ -1,4 +1,4 @@
-/* GridModelConverter.java
+/* RadiogroupModelConverter.java
 
 	Purpose:
 		
@@ -13,18 +13,18 @@ package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.Converter;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Radiogroup;
 
 /**
- * The {@link Converter} implementation of the combobox for converting collection to ListModel and vice versa.
+ * The {@link Converter} implementation of the radiogroup for converting collection to ListModel and vice versa.
  * @author dennis
  * @since 6.0.0
  */
-public class ComboboxModelConverter extends AbstractListModelConverter{
+public class RadiogroupModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {
-		return ((Combobox)comp).getModel();
+		return ((Radiogroup)comp).getModel();
 	}
 }

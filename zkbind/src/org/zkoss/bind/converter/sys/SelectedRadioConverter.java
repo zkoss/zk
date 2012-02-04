@@ -17,12 +17,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.converter.sys;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
+import org.zkoss.bind.impl.BindRadioRenderer;
+import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Convert Radiogroup selected item to radio value and vice versa.
@@ -32,28 +38,53 @@ import org.zkoss.zul.Radiogroup;
  */
 public class SelectedRadioConverter implements Converter, java.io.Serializable {
   	private static final long serialVersionUID = 200808191534L;
-  	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
-		if (val != null) {
-			//iterate to find the selected radio via the value
-			for (Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
-				final Component child = it.next();
-				if (child instanceof Radio) {
-					if (val.equals(((Radio)child).getValue())) {
-						return child;
-					}
-				} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
-					//bug 2464484
-					final Object value = coerceToUi(val, child, ctx); //recursive
-					if (value != null) {
-						return value;
-					}
-				}
-			}
-		}
-		return null;
+  	
+  	@SuppressWarnings("unchecked")
+	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
+		Radiogroup radiogroup = (Radiogroup) comp;
+		final ListModel<?> model = radiogroup.getModel();
+		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
+		if(model !=null && !(model instanceof Selectable)){
+			//model has to imple Selectable if binding to selectedItem
+  			throw new UiException("model doesn't implement Selectable");
+  		}
+		
+	  	if (val != null) {
+	  		if(model!=null){
+	  			((Selectable<Object>)model).addToSelection(val);
+	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  		}else{
+	  			//no model case
+			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
+			  		final Radio radio = (Radio) it.next();			  		
+			  		String value = radio.getValue();
+			  		if (val.equals(value)) {
+			  			return radio;
+			  		}
+			  	}
+	  		}
+		  	//not in the item list
+	  	}
+	  	
+	  //nothing matched, clean the old selection
+	  	if(model!=null){
+	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
+	  		if(sels!=null && sels.size()>0)
+	  			((Selectable<Object>)model).clearSelection();
+	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  	}
+	  	return null;
 	}
-  
-  	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
- 		return val != null ? ((Radio)val).getValue() : null;
+
+	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
+	  	if (val != null) {
+	  		//no getIndex in radio. cannot get data form model, 
+	  		//so, if there is a data we stored in component, return it directly 
+	  		if(((Radio) val).hasAttribute(BindRadioRenderer.RADIO_DATA)){
+	  			return ((Radio) val).getAttribute(BindRadioRenderer.RADIO_DATA);
+	  		}
+	  		return ((Radio) val).getValue();
+	  	}
+	 	return null;
 	}
 }

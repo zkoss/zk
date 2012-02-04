@@ -25,9 +25,6 @@ public class GridModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {
-		if(!(comp instanceof Grid)){
-			throw new IllegalArgumentException("not a grid, is "+comp);
-		}
 		return ((Grid)comp).getListModel();
 	}
 }

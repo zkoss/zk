@@ -27,17 +27,11 @@ public class ListboxModelConverter extends AbstractListModelConverter{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
 	protected ListModel<?> getComponentModel(Component comp) {
-		if(!(comp instanceof Listbox)){
-			throw new IllegalArgumentException("not a listbox, is "+comp);
-		}
 		return ((Listbox)comp).getListModel();
 	}
 	
 	@Override
 	protected ListModel<?> handleWrappedModel(BindContext ctx, Component comp, ListModel<?> model){
-		if(!(comp instanceof Listbox)){
-			throw new IllegalArgumentException("not a listbox, is "+comp);
-		}
 		final Listbox listbox = (Listbox)comp;
 		if(model instanceof Selectable){
 			if(((Selectable<?>)model).isMultiple() != listbox.isMultiple());
