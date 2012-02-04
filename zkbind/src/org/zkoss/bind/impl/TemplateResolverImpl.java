@@ -95,7 +95,8 @@ public class TemplateResolverImpl implements TemplateResolver, /*Binding,*/ Seri
 			if(value instanceof Template){
 				return (Template) value;
 			}else if(value instanceof String){
-				Template template = lookupTemplate(_comp,(String)value);
+				//lookup from each, to allow put template in rows
+				Template template = lookupTemplate(eachComp,(String)value);
 				if (template == null && ((String)value).indexOf('.') > 0) { //might be a class path
 					try {
 						template = (Template) _comp.getPage().resolveClass(((String)value)).newInstance();
