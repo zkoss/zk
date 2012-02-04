@@ -57,7 +57,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	/** Whether a group has a foot. */
 	private transient boolean[] _gpfts;
 	/** Whether a group is closed. */
-	private transient boolean[] _gpcloses;
+	private transient boolean[] _gpopens;
 	private transient GroupsDataListener _listener;
 	/** groupInfo list used in {@link Rows} */
 	private transient List<int[]> _gpinfo;
@@ -80,12 +80,12 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		final int groupCount = _model.getGroupCount();
 		_gpofs = new int[groupCount];
 		_gpfts = new boolean[groupCount];
-		_gpcloses = new boolean[groupCount];
+		_gpopens = new boolean[groupCount];
 		_size = 0;
 		for (int j = 0; j < groupCount; ++j) {
 			_gpofs[j] = _size;
-			_gpcloses[j] = _model.isClose(j);
-			_size += 1 + (_gpcloses[j] ? 0 : _model.getChildCount(j)); //closed group deemed as zero child in ListModel
+			_gpopens[j] = _model.isOpen(j);
+			_size += 1 + (_gpopens[j] ? _model.getChildCount(j) : 0); //closed group deemed as zero child in ListModel
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;
 		}
@@ -153,15 +153,15 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 
 		int gi = Arrays.binarySearch(_gpofs, index);
 		if (gi >= 0)
-			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, !_gpcloses[gi]);
+			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, _gpopens[gi]);
 
 		gi = - gi - 2; //0 ~ _gpofs.length - 2
 		int ofs = index - _gpofs[gi] - 1;
 		if (_gpfts[gi]
 		&& ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
-			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, !_gpcloses[gi]);
+			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, _gpopens[gi]);
 
-		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, !_gpcloses[gi]);
+		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, _gpopens[gi]);
 	}
 	//Object//
 	public boolean equals(Object o) {
