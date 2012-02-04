@@ -38,9 +38,7 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 
 	@Override
 	public Object getValue(BindELContext ctx) {
-		if (_cacheValue == null) {
-			load(null);
-		}
+		load(null);
 		return _cacheValue == NULL_VALUE ? null : _cacheValue;
 	}
 	
@@ -50,9 +48,11 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 
 	@Override
 	public void load(BindContext ctx) {
-		final BindContext bctx = newBindContext();
-		final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), _exprX);
-		_cacheValue = val == null ? NULL_VALUE : val;
+		if (_cacheValue == null) {
+			final BindContext bctx = newBindContext();
+			final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), _exprX);
+			_cacheValue = val == null ? NULL_VALUE : val;
+		}
 	}
 
 	@Override
