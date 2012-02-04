@@ -63,19 +63,23 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 			p_sel = p._selItems,
 			msg,
 			cnt = 2;
-		// if no other listitem selected, return self label
+		// if no other listitem selected or self is not selected,
+		// return self label
 		// else iterate through all listitems 
-		if (!p_sel.length || (p_sel.length == 1 && p_sel[0] == this))
+		// ZK-803
+		if (!this.isSelected() || !p_sel.length || (p_sel.length == 1 && p_sel[0] == this))
 			return this.getLabel();
 		for (var w = p.firstChild; w; w = w.nextSibling)
-			if (w.isSelected() || w == this) {
+			if (w.$instanceof(zul.sel.Listitem) && w.isSelected()) {
 				var label = w.getLabel();
 				if (label.length > 9)
 					label = label.substring(0, 9) + "...";
 				if (!msg)
 					msg = label;
 				else
-					msg += '</div><div class="z-drop-cnt"><span id="zk_ddghost-img'+(cnt++)+'" class="z-drop-disallow"></span>&nbsp;'+label;
+					msg += '</div><div class="z-drop-cnt"><span id="zk_ddghost-img'
+						+ (cnt++) + '" class="z-drop-disallow"></span>&nbsp;'
+						+ label;
 			}
 		return msg;
 	},
