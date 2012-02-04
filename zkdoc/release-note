@@ -90,6 +90,7 @@ ZK 6.0.0
   ZK-767: cannot select a non-open tree node when using model 
   ZK-779: Chechmark issue in paging listbox
   ZK-815: Listbox Select event is not fired when PgDown/PgUp is pressed
+  ZK-827: Selection of listbox is worng after change multiple
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is

@@ -1112,7 +1112,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * and return true if the status is really changed.
 	 */
 	_changeSelect: function (row, toSel) {
-		var changed = row.isSelected() != toSel;
+		var changed = !!row.isSelected() != toSel;
 		if (changed) {
 			row.setSelected(toSel);
 			row._toggleEffect(true);
