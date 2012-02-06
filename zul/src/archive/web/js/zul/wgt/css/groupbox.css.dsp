@@ -9,37 +9,25 @@
 .z-groupbox-notitle {
 	border-top: 1px solid #C5C5C5;
 }
-.z-groupbox-colpsd {
-	padding-bottom: 0 !important; 
-	border-width: 2px 0 0 0 !important;
-}
 .z-groupbox .z-caption {
 	cursor: pointer;
 }
 .z-groupbox .z-caption-readonly {
 	cursor: default;
 }
-
-.z-groupbox .z-groupbox-hl {
-	background: no-repeat;
-	background-position: 0 center;
-	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-y.gif')});
-}
-.z-groupbox-colpsd .z-groupbox-hl {
-	background: none;
-}
-.z-groupbox-hm {
-	background: no-repeat;
-	background-position: 0 center;
-	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-x.gif')});
-}
-.z-groupbox .z-groupbox-hr {
-	background: no-repeat;
-	background-position: right center;
-	background-image: url(${c:encodeThemeURL('~./zul/img/layout/groupbox-y.gif')});
+.z-groupbox-hr {
+	position: relative;
+	top: 8px;
+	border: 1px solid #C5C5C5;
+	border-bottom: none;
 }
 .z-groupbox-colpsd .z-groupbox-hr {
-	background: none;
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+}
+.z-groupbox-hm {
+	position: relative;
+	top: -8px;
 }
 .z-groupbox-header {
 	padding-left: 10px;
@@ -47,7 +35,7 @@
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-weight: normal;
-	border: 0 none;
+	border: none;
 }
 .z-groupbox-header span {
 	background-color: #FFFFFF;
