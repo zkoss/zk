@@ -18,57 +18,113 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zksandbox.tree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.zul.AbstractTreeModel;
-import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.ext.TreeSelectionModel;
 
 /** 
  * A simple implementation of binary tree model by an arraylist
  *
  * @author Jeff Liu
  */
-public class BinaryTreeModel extends AbstractTreeModel{
+public class BinaryTreeModel<T> extends AbstractTreeModel<T> implements TreeSelectionModel {
 	
-	private ArrayList _tree =null;
+	private static final long serialVersionUID = 1572780864070967258L;
+	private List<T> _tree = null;
 	
 	/**
 	 * Constructor
 	 * @param tree the list is contained all data of nodes.
 	 */
-	public BinaryTreeModel(List tree){
+	public BinaryTreeModel(List<T> tree) {
 		super(tree.get(0));
-		_tree = (ArrayList)tree;
+		_tree = tree;
 	}
 	
-	//-- TreeModel --//
-	public Object getChild(Object parent, int index) {
-		int i = _tree.indexOf(parent) *2 +1 + index;
-		if( i>= _tree.size())
+	// TreeModel //
+	public T getChild(T parent, int index) {
+		int i = _tree.indexOf(parent) * 2 + 1 + index;
+		if (i >= _tree.size())
 			return null;
 		else
 			return _tree.get(i);
 	}
 	
-	//-- TreeModel --//
-	public int getChildCount(Object parent) {
+	public int getChildCount(T parent) {
 		int count = 0;
-		if(getChild(parent,0) != null)
+		if(getChild(parent, 0) != null)
 			count++;
-		if(getChild(parent,1) != null)
+		if(getChild(parent, 1) != null)
 			count++;
 		return count;
 	}
 	
-	//-- TreeModel --//
-	public boolean isLeaf(Object node) {
+	public boolean isLeaf(T node) {
 		return (getChildCount(node) == 0);
 	}
-
-	public int getIndexOfChild(Object parent, Object child) {
+	
+	public int getIndexOfChild(T parent, T child) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	// TreeSelectionModel //
+	@Override
+	public void addSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void addSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void clearSelection() {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public int getSelectionCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public int[] getSelectionPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int[][] getSelectionPaths() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean isMultiple() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isPathSelected(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isSelectionEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean removeSelectionPath(int[] path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean removeSelectionPaths(int[][] paths) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void setMultiple(boolean multiple) {
+		// TODO Auto-generated method stub
+	}
+	
 }
