@@ -275,7 +275,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.domListen_(wgt.$n(), 'onMouseOut');
 			var Window = wgt.$class;
 			wgt._sizer = new zk.Draggable(wgt, null, {
-				stackup: true, 
+				stackup: true,
+				overlay: true, // ZK-817
 				draw: Window._drawsizing,
 				snap: Window._snapsizing,
 				initSensitivity: 0,
