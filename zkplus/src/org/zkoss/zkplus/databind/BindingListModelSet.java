@@ -33,15 +33,14 @@ import java.util.Set;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelSet
  */
-public class BindingListModelSet extends ListModelSet
-implements BindingListModelExt, java.io.Serializable {
+public class BindingListModelSet<E> extends ListModelSet<E>
+implements BindingListModelExt<E>, java.io.Serializable {
 	private static final long serialVersionUID = 200808191422L;
 
 	/**
 	 * @since 3.0.5.
 	 */
-	@SuppressWarnings("unchecked")
-	public BindingListModelSet(Set set, boolean live) {
+	public BindingListModelSet(Set<E> set, boolean live) {
 		super(set, live);
 	}
 

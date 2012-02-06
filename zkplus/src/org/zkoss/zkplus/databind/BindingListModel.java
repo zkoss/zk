@@ -27,7 +27,7 @@ import org.zkoss.zul.ListModel;
  * @see BindingListModelMap
  * @see org.zkoss.zul.ListModel
  */
-public interface BindingListModel extends ListModel {
+public interface BindingListModel<E> extends ListModel<E> {
 	/** Returns index of the given object inside a ListModel.
 	 */
 	public int indexOf(Object obj);

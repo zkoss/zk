@@ -35,16 +35,15 @@ import org.zkoss.zul.ListModelArray;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelArray
  */
-public class BindingListModelArray extends ListModelArray
-implements BindingListModelExt, java.io.Serializable {
+public class BindingListModelArray<E> extends ListModelArray<E>
+implements BindingListModelExt<E>, java.io.Serializable {
 	private static final long serialVersionUID = 200808191515L;
 	private boolean _distinct = true; //since 3.5; default to true
 	
 	/**
 	 * @since 3.5.0
 	 */
-	@SuppressWarnings("unchecked")
-	public BindingListModelArray(Object[] c, boolean live, boolean distinct) {
+	public BindingListModelArray(E[] c, boolean live, boolean distinct) {
 		super(c, live);
 		_distinct = distinct;
 	}
@@ -52,8 +51,7 @@ implements BindingListModelExt, java.io.Serializable {
 	/**
 	 * @since 3.0.5
 	 */
-	@SuppressWarnings("unchecked")
-	public BindingListModelArray(Object[] c, boolean live) {
+	public BindingListModelArray(E[] c, boolean live) {
 		super(c, live);
 	}
 	

@@ -34,15 +34,14 @@ import java.util.Map;
  * @see org.zkoss.zul.ListModel
  * @see org.zkoss.zul.ListModelMap
  */
-public class BindingListModelMap extends ListModelMap
-implements BindingListModelExt, java.io.Serializable {
+public class BindingListModelMap<K, V> extends ListModelMap<K, V>
+implements BindingListModelExt<Map.Entry<K, V>>, java.io.Serializable {
 	private static final long serialVersionUID = 200808191420L;
 
 	/**
 	 * @since 3.0.5
 	 */
-	@SuppressWarnings("unchecked")
-	public BindingListModelMap(Map map, boolean live) {
+	public BindingListModelMap(Map<K, V> map, boolean live) {
 		super(map, live);
 	}
 	

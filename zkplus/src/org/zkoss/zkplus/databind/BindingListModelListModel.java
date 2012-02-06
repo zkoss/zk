@@ -32,11 +32,11 @@ import org.zkoss.zul.ext.Selectable;
  * @author peterkuo
  * @since 5.0.8
  */
-public class BindingListModelListModel implements BindingListModel, Selectable, java.io.Serializable {
+public class BindingListModelListModel<E> implements BindingListModel<E>, Selectable<E>, java.io.Serializable {
 	
-	protected ListModel _model;
+	protected ListModel<E> _model;
 	
-	public BindingListModelListModel(ListModel model) {
+	public BindingListModelListModel(ListModel<E> model) {
 		_model = model;
 	}
 
@@ -50,7 +50,7 @@ public class BindingListModelListModel implements BindingListModel, Selectable, 
 		return -1;
 	}
 
-	public Object getElementAt(int index) {
+	public E getElementAt(int index) {
 		return _model.getElementAt(index);
 	}
 
@@ -66,17 +66,17 @@ public class BindingListModelListModel implements BindingListModel, Selectable, 
 		_model.removeListDataListener(l);
 	}
 	
-	public ListModel getInnerModel(){
+	public ListModel<E> getInnerModel(){
 		return _model;
 	}
-	private static class EmptySelectable implements Selectable, java.io.Serializable {
+	private static class EmptySelectable<E> implements Selectable<E>, java.io.Serializable {
 
 		@Override
-		public Set getSelection() {
+		public Set<E> getSelection() {
 			return null;
 		}
 		@Override
-		public void setSelection(Collection selection) {
+		public void setSelection(Collection<? extends E> selection) {
 		}
 
 		@Override
@@ -90,7 +90,7 @@ public class BindingListModelListModel implements BindingListModel, Selectable, 
 		}
 
 		@Override
-		public void addToSelection(Object obj) {
+		public void addToSelection(E obj) {
 		}
 
 		@Override
@@ -112,19 +112,19 @@ public class BindingListModelListModel implements BindingListModel, Selectable, 
 		}
 	}
 	@SuppressWarnings("unchecked")
-	private <E> Selectable<E> getSelectModel() {
-		if (_model instanceof Selectable)
-			return (Selectable) _model;
-		return new EmptySelectable();
+	private Selectable<E> getSelectModel() {
+		if (_model instanceof Selectable<?>)
+			return (Selectable<E>) _model;
+		return new EmptySelectable<E>();
 	}
 	@Override
-	public Set getSelection() {
+	public Set<E> getSelection() {
 		return getSelectModel().getSelection();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setSelection(Collection selection) {
+	public void setSelection(Collection<? extends E> selection) {
 		getSelectModel().setSelection(selection);
 	}
 
@@ -139,7 +139,7 @@ public class BindingListModelListModel implements BindingListModel, Selectable, 
 	}
 
 	@Override
-	public void addToSelection(Object obj) {
+	public void addToSelection(E obj) {
 		getSelectModel().addToSelection(obj);
 	}
 

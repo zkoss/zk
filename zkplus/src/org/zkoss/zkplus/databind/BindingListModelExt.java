@@ -37,7 +37,7 @@ package org.zkoss.zkplus.databind;
  * @author henrichen
  * @since 3.5.0
  */
-public interface BindingListModelExt extends BindingListModel {
+public interface BindingListModelExt<E> extends BindingListModel<E> {
 	/** Returns indexes of the given object inside a ListModel.
 	 * @param obj the specified object
 	 * @return indexes that contains the given object; return empty array if none found.
