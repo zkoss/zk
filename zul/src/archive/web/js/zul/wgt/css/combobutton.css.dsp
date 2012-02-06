@@ -22,8 +22,7 @@ button.z-combobutton-tbbtn {
 }
 .z-combobutton .z-combobutton-cr *,
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr * {<%-- IE 6 --%>
-	display: block; 
-	width: 21px !important; 
+	display: block;
 	overflow: hidden;
 	font-size: 0 !important;
 	line-height: 0 !important;
@@ -124,6 +123,10 @@ span.z-combobutton-tbbtn {
 .z-combobutton-over .z-combobutton-cl {
 	background-position: -8px 0;
 }
+.z-combobutton-over .z-combobutton-cr,
+.z-combobutton-over .z-combobutton-tr {
+	border-left: 1px solid #8FB9D0;
+}
 .z-combobutton-over .z-combobutton-tr {
 	background-position: 0 -8px;
 }
@@ -173,6 +176,7 @@ span.z-combobutton-tbbtn {
 }
 .z-combobutton-over .z-combobutton-br {
 	background-position: 0 -12px;
+	border-left: 1px solid #8FB9D0;
 }
 .z-combobutton-clk .z-combobutton-bl {
 	background-position: -24px -4px;
@@ -234,12 +238,11 @@ span.z-combobutton-tbbtn {
 	background-position: 0 -1500px;
 	padding: 0 6px 0 8px;
 }
-
 .z-combobutton .z-combobutton-cr .z-combobutton-btn-img,
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr .z-combobutton-tbbtn-btn-img {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/combobutton-right-btn.gif')});
-	background-position: 0 0px;
-	width: 12px !important;
+	background-position: 2px 0;
+	width: 14px !important;
 	height: 22px;
 	background-repeat: no-repeat;
 }
@@ -257,18 +260,16 @@ span.z-combobutton-tbbtn {
 	display: none;
 	zoom: 1;
 }
-.z-combobutton-tbbtn .z-combobutton-tbbtn-cr * {
-	width: 14px !important;
-}
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr .z-combobutton-tbbtn-btn-img {
+	width: 10px !important;
 	height: 18px;
-	background-position: 0 -4px;
+	background-position: -2px -3px;
 }
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-ctr.gif')});
 	background-repeat: repeat-x;
 	background-position: 0 0;
-	width: 14px;
+	width: 12px;
 	border: 0 none;
 }
 .z-combobutton-tbbtn-over .z-combobutton-tbbtn-cr {
