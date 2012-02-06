@@ -401,7 +401,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
 		if (node.getChildren() == null) return;
 		if (node instanceof DefaultTreeNode)
@@ -424,11 +424,14 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 		for (final TreeNode<E> node: selection)
 			addToSelection(node);
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean isSelected(TreeNode<E> child) {
-		final int[] path = getPath(child);
-		if (path != null && path.length > 0)
-			return isPathSelected(path);
+	public boolean isSelected(Object child) {
+		if (child instanceof TreeNode) {
+			final int[] path = getPath((TreeNode)child);
+			if (path != null && path.length > 0)
+				return isPathSelected(path);
+		}
 		return false;
 	}
 	@Override
@@ -437,7 +440,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 		if (path != null && path.length > 0)
 			addSelectionPath(path);
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean removeFromSelection(Object child) {
 		if (child instanceof TreeNode) {
@@ -459,7 +462,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 				removeOpenPath(path);
 		}
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean isOpen(Object child) {
 		if (child instanceof TreeNode) {
@@ -473,7 +476,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addSelection(Object obj) {
 		if (obj instanceof TreeNode)
 			addToSelection((TreeNode)obj);

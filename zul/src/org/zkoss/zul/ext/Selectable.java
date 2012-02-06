@@ -47,7 +47,7 @@ public interface Selectable<E> {
 	/** Returns whether an object is selected.
 	 * @since 6.0.0
 	 */
-	public boolean isSelected(E obj);
+	public boolean isSelected(Object obj);
 	
 	/**
 	 * Returns true if the selection is currently empty.

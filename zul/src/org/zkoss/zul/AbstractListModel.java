@@ -96,7 +96,7 @@ Selectable<E>, java.io.Serializable {
 	}
 	/** {@inheritDoc} */
 	@Override
-	public boolean isSelected(E obj) {
+	public boolean isSelected(Object obj) {
 		return _selection.contains(obj);
 	}
 	/** {@inheritDoc} */

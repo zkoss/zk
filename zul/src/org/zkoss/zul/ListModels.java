@@ -139,7 +139,7 @@ public class ListModels {
 				E o = _model.getElementAt(i);
 				if (((Comparator)_comparator).compare(value, o) == 0) {
 					data.add(o);
-					if (_model instanceof Selectable && ((Selectable)_model).isSelected(o)) {
+					if (_model instanceof Selectable && ((Selectable<?>)_model).isSelected(o)) {
 						selection.add(o);
 					}
 					if (--nRows <= 0)
@@ -182,7 +182,7 @@ public class ListModels {
 		}
 
 		@Override
-		public boolean isSelected(E obj) {
+		public boolean isSelected(Object obj) {
 			return getSelectModel().isSelected(obj);
 		}
 

@@ -147,7 +147,7 @@ implements Sortable<E>, java.io.Serializable {
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		_sorting = cmpr;
 		_sortDir = ascending;
@@ -167,7 +167,7 @@ implements Sortable<E>, java.io.Serializable {
 		if (this == o)
 			return true;
 		if (o instanceof ListModelArray) {
-			return Arrays.equals(_array, ((ListModelArray)o)._array);
+			return Arrays.equals(_array, ((ListModelArray<?>)o)._array);
 		}
 		return false;
 	}
@@ -181,7 +181,7 @@ implements Sortable<E>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
-		ListModelArray clone = (ListModelArray) super.clone();
+		ListModelArray<E> clone = (ListModelArray<E>) super.clone();
 		if (_array != null)
 			clone._array = ArraysX.duplicate(_array);
 		return clone;

@@ -41,6 +41,8 @@ import org.zkoss.zul.ext.Sortable;
  */
 public class ListModelSet<E> extends AbstractListModel<E>
 implements Sortable<E>, Set<E>, java.io.Serializable {
+	private static final long serialVersionUID = 20120206122849L;
+
 	protected Set<E> _set;
 
 	private Comparator<E> _sorting;
@@ -209,14 +211,14 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		return _set.contains(elem);
 	}
 	
-	public boolean containsAll(Collection c) {
+	public boolean containsAll(Collection<?> c) {
 		return _set.containsAll(c);
 	}
 	
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _set.equals(o instanceof ListModelSet ? ((ListModelSet)o)._set: o);
+		return _set.equals(o instanceof ListModelSet ? ((ListModelSet<?>)o)._set: o);
 	}
 	
 	public int hashCode() {
@@ -279,7 +281,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 */
 	public int indexOf(Object o) {
 		int j = 0;
-		for (Iterator it = _set.iterator(); it.hasNext(); ++j) {
+		for (Iterator<E> it = _set.iterator(); it.hasNext(); ++j) {
 			if (Objects.equals(o, it.next()))
 				return j;
 		}
@@ -327,7 +329,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		int retained = 0;
 		int index = 0;
 		int begin = -1;
-		for(final Iterator it = _set.iterator(); 
+		for(final Iterator<E> it = _set.iterator(); 
 			it.hasNext() && (!isRemove || removed < sz) && (isRemove || retained < sz); ++index) {
 			Object item = it.next();
 			if (c.contains(item) == isRemove) {
@@ -392,9 +394,9 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
-		ListModelSet clone = (ListModelSet) super.clone();
+		ListModelSet<E> clone = (ListModelSet<E>) super.clone();
 		if (_set != null)
-			clone._set = new LinkedHashSet(_set);
+			clone._set = new LinkedHashSet<E>(_set);
 		return clone;
 	}
 	

@@ -42,6 +42,8 @@ import org.zkoss.zul.ext.Sortable;
  */
 public class ListModelList<E> extends AbstractListModel<E>
 implements Sortable<E>, List<E>, java.io.Serializable {
+	private static final long serialVersionUID = 20120206122641L;
+
 	protected List<E> _list;
 	
 	private Comparator<E> _sorting;
@@ -206,7 +208,7 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _list.equals(o instanceof ListModelList ? ((ListModelList)o)._list: o);
+		return _list.equals(o instanceof ListModelList<?> ? ((ListModelList<?>)o)._list: o);
 	}
 	
 	public E get(int index){
@@ -410,9 +412,9 @@ implements Sortable<E>, List<E>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
-		ListModelList clone = (ListModelList) super.clone();
+		ListModelList<E> clone = (ListModelList<E>) super.clone();
 		if (_list != null)
-			clone._list = new ArrayList(_list);
+			clone._list = new ArrayList<E>(_list);
 		return clone;
 	}
 	

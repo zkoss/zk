@@ -42,6 +42,8 @@ import org.zkoss.zul.ext.Sortable;
  */
 public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
 implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
+	private static final long serialVersionUID = 20120206122736L;
+
 	protected Map<K, V> _map;
 
 	private Comparator<Map.Entry<K, V>> _sorting;
@@ -155,7 +157,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _map.equals(o instanceof ListModelMap ? ((ListModelMap)o)._map: o);
+		return _map.equals(o instanceof ListModelMap ? ((ListModelMap<?, ?>)o)._map: o);
 	}
 	public String toString() {
 		return _map.toString();
@@ -213,7 +215,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	 */
 	public int indexOfKey(Object o) {
 		int j = 0;
-		for (Iterator it = _map.keySet().iterator(); it.hasNext(); ++j) {
+		for (Iterator<K> it = _map.keySet().iterator(); it.hasNext(); ++j) {
 			if (Objects.equals(o, it.next()))
 				return j;
 		}
@@ -226,7 +228,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	 */
 	public int indexOf(Object o) {
 		int j = 0;
-		for (Iterator it = _map.entrySet().iterator(); it.hasNext(); ++j) {
+		for (Iterator<?> it = _map.entrySet().iterator(); it.hasNext(); ++j) {
 			if (Objects.equals(o, it.next()))
 				return j;
 		}
@@ -496,11 +498,12 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		}
 		
 
+		@SuppressWarnings("unchecked")
 		public boolean equals(Object o) {
 			if (this == o)
 				return true;
 			if (o instanceof MySet) {
-				return Objects.equals(((MySet)o)._set, _set);
+				return Objects.equals(((MySet<?>)o)._set, _set);
 			} else {
 				return Objects.equals(_set, o);
 			}
@@ -577,12 +580,13 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			return _col == null ? 0 : _col.hashCode();
 		}
 		
+		@SuppressWarnings("unchecked")
 		public boolean equals(Object o) {
 			if (this == o) {
 				return true;
 			}
 			if (o instanceof MyCol) {
-				return Objects.equals(((MyCol)o)._col, _col);
+				return Objects.equals(((MyCol<?>)o)._col, _col);
 			} else {
 				return Objects.equals(_col, o);
 			}
@@ -623,7 +627,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		
 		private int indexOfAndRemove(Object o) {
 			int j = 0;
-			for(Iterator it = _col.iterator(); it.hasNext();++j) {
+			for(Iterator<?> it = _col.iterator(); it.hasNext();++j) {
 				final Object val = it.next();
 				if (Objects.equals(val, o)) {
 					removeFromSelection(o);
@@ -693,9 +697,9 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
-		ListModelMap clone = (ListModelMap) super.clone();
+		ListModelMap<K, V> clone = (ListModelMap<K, V>) super.clone();
 		if (_map != null)
-			clone._map = new LinkedHashMap(_map);
+			clone._map = new LinkedHashMap<K, V>(_map);
 		return clone;
 	}
 	
