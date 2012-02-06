@@ -294,6 +294,11 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
 	private int _currentLeft = 0;
+	
+	
+	private int _anchorTop = 0 ; //since ZK 5.0.10 , 6.0.0 anchor position
+	private int _anchorLeft = 0 ;
+		
 	private int _topPad; // since 5.0.0 top padding
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
 	
@@ -318,6 +323,9 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 		addClientEvent(Listbox.class, "onDataLoading", CE_DUPLICATE_IGNORE
 				| CE_IMPORTANT | CE_NON_DEFERRABLE); // since 5.0.0
 		addClientEvent(Listbox.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		
+		// since 6.0.0/5.0.11, B50-ZK-798
+		addClientEvent(Listbox.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
@@ -2847,6 +2855,9 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 				_topPad = 0;
 				_currentTop = 0;
 				_currentLeft = 0;
+				
+				_anchorTop = 0;
+				_anchorLeft = 0 ;
 				// enforce a page loading
 				// B50-ZK-345: speed up onPagingImpl to surpass onInitRender
 				Events.postEvent(10001, new PagingEvent("onPagingImpl",
@@ -3177,6 +3188,12 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			if (_currentLeft != 0)
 				renderer.render("_currentLeft", _currentLeft);
 
+			//ZK-798
+			if (_anchorTop != 0)
+				renderer.render("_anchorTop", _anchorTop);
+			if (_anchorLeft != 0)
+				renderer.render("_anchorLeft", _anchorLeft);
+			
 			renderer.render("_topPad", _topPad);
 			renderer.render("_totalSize", getDataLoader().getTotalSize());
 			renderer.render("_offset", getDataLoader().getOffset());
@@ -3323,6 +3340,10 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 			final Map data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
+		} else if(cmd.equals("onAnchorPos")){
+			final Map data = request.getData();
+			_anchorTop = AuRequests.getInt(data, "top", 0);
+			_anchorLeft = AuRequests.getInt(data, "left", 0);			
 		} else if (cmd.equals("onTopPad")) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {

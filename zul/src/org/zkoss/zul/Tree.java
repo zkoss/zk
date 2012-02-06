@@ -126,6 +126,9 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 	private int _currentTop = 0; // since 5.0.8 scroll position
 	private int _currentLeft = 0;
 	
+	private int _anchorTop = 0 ; //since ZK 5.0.11 , 6.0.0 anchor position
+	private int _anchorLeft = 0 ; 
+	
 	static {
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -133,6 +136,7 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
+		addClientEvent(Tree.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
 	}
 
 	public Tree() {
@@ -242,6 +246,8 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 				setFixedLayout(true);
 				_currentTop = 0;
 				_currentLeft = 0;
+				_anchorTop = 0;
+				_anchorLeft = 0 ;				
 				invalidate(); //non-paging mold -> paging mold
 			}
 		}
@@ -1999,6 +2005,11 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			renderer.render("_currentTop", _currentTop);
 		if (_currentLeft != 0)
 			renderer.render("_currentLeft", _currentLeft);
+		
+		if (_anchorTop != 0)
+			renderer.render("_anchorTop", _anchorTop);
+		if (_anchorLeft != 0)
+			renderer.render("_anchorLeft", _anchorLeft);		
 	}
 	/** Returns whether to toggle a list item selection on right click
 	 */
@@ -2119,6 +2130,10 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 			final Map data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
+		} else if(cmd.equals("onAnchorPos")){
+			final Map data = request.getData();
+			_anchorTop = AuRequests.getInt(data, "top", 0);
+			_anchorLeft = AuRequests.getInt(data, "left", 0);
 		} else
 			super.service(request, everError);
 	}

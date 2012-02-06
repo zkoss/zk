@@ -69,7 +69,7 @@ function (out) {
 	this.redrawEmpty_(out);
 
 	out.push('</table><', tag, ' id="', uuid,
-		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+		'-a"  style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'"  tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tag, '>', "</div>");
 
 	if (this.listfoot) {
