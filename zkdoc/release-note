@@ -250,6 +250,7 @@ ZK 5.0.11
   ZK-819: Disabled tabs in IE looks weird 
   ZK-831: Spinner won't show constraint message when input value large than java Integer limits
   ZK-817: Cannot resize window on iframe
+  ZK-798: The scroll position shall not goto top when call focus after invalidate()
   
 * Upgrade Notes
   

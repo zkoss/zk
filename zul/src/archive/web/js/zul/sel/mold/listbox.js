@@ -75,7 +75,7 @@ function (out) {
 		this.domPad_(out, '-bpad');
 	
 	out.push('<', tag, ' id="', uuid, 
-			'-a" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+			'-a" style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tag, '>', "</div>");
 
 	if (this.listfoot) {

@@ -86,6 +86,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * @type boolean
 	 */
 	rightSelect: true,
+	_anchorTop:0,
+	_anchorLeft:0,	
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -954,8 +956,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		} else
 			offs = [0, 0];
-		focusEl.style.top = offs[1] + "px";
-		focusEl.style.left = offs[0] + "px";
+		this._anchorTop = offs[1];
+		this._anchorLeft = offs[0];
+		this.fire("onAnchorPos",{top:this._anchorTop,left:this._anchorLeft});
+		focusEl.style.top = this._anchorTop + "px";
+		focusEl.style.left = this._anchorLeft + "px";
 	},
 	_toStyleOffset: function (el, x, y) {
 		var ofs1 = zk(el).revisedOffset(),

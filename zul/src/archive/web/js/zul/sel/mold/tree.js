@@ -54,8 +54,8 @@ function (out) {
 	if (this.treechildren)
 		this.treechildren.redraw(out);
 	
-	out.push('</table><', tag, ' id="', uuid, 
-			'-a" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+	out.push('</table><', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid, 
+			'-a"  onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tag, '>');
 	out.push("</div>");
 	

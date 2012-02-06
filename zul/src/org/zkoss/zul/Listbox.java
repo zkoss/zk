@@ -314,6 +314,9 @@ public class Listbox extends MeshElement {
 	private int _topPad; // since 5.0.0 top padding
 	private String _nonselTags; //since 5.0.5 for non-selectable tags
 	
+	private int _anchorTop = 0 ; //since ZK 5.0.11 , 6.0.0 anchor position
+	private int _anchorLeft = 0 ; 
+	
 	private boolean _multiple;
 	private boolean _disabled, _checkmark;
 	private boolean _renderAll; //since 5.0.0
@@ -341,6 +344,9 @@ public class Listbox extends MeshElement {
 		// since 6.0.0, F60-ZK-715
 		addClientEvent(Listbox.class, "onAcrossPage", 
 				CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
+		
+		// since 6.0.0/5.0.11, B50-ZK-798
+		addClientEvent(Listbox.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
@@ -2940,6 +2946,8 @@ public class Listbox extends MeshElement {
 			smartUpdate("resetDataLoader", true);
 			_currentTop = 0;
 			_currentLeft = 0;
+			_anchorTop = 0;
+			_anchorLeft = 0 ;
 			_topPad = 0;
 		}
 	}
@@ -3160,6 +3168,13 @@ public class Listbox extends MeshElement {
 				renderer.render("_currentTop", _currentTop);
 			if (_currentLeft != 0)
 				renderer.render("_currentLeft", _currentLeft);
+			
+			//ZK-798
+			if (_anchorTop != 0)
+				renderer.render("_anchorTop", _anchorTop);
+			if (_anchorLeft != 0)
+				renderer.render("_anchorLeft", _anchorLeft);
+			
 
 			renderer.render("_topPad", _topPad);
 			renderer.render("_totalSize", getDataLoader().getTotalSize());
@@ -3309,6 +3324,10 @@ public class Listbox extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_currentTop = AuRequests.getInt(data, "top", 0);
 			_currentLeft = AuRequests.getInt(data, "left", 0);
+		} else if(cmd.equals("onAnchorPos")){
+			final Map<String, Object> data = request.getData();
+			_anchorTop = AuRequests.getInt(data, "top", 0);
+			_anchorLeft = AuRequests.getInt(data, "left", 0);
 		} else if (cmd.equals("onTopPad")) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {
