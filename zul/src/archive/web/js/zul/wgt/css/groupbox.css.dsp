@@ -24,6 +24,10 @@
 .z-groupbox-colpsd .z-groupbox-hr {
 	border-left: 1px solid transparent;
 	border-right: 1px solid transparent;
+	<c:if test="${zk.ie == 6}">
+		border-left: 1px solid #FFFFFF;
+		border-right: 1px solid #FFFFFF;
+	</c:if>
 }
 .z-groupbox-hm {
 	position: relative;
