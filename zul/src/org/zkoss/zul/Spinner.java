@@ -60,6 +60,14 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 		final Object val = getTargetValue();
 		return val != null ? ((Integer)val).intValue(): 0;
 	}
+	protected Object getTargetValue() throws WrongValueException {
+		Object val = super.getTargetValue();
+		if (val instanceof Integer) {
+			return val;
+		}
+		throw showCustomError(new WrongValueException(this,
+				MZul.INTEGER_REQUIRED, val));
+	}
 	/** Sets the value (in Integer).
 	 * @exception WrongValueException if value is wrong
 	 */

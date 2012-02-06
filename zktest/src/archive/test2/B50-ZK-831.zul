@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-831.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb  6 12:01:16 TST 2012, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="Spinner" border="normal">
+	1. Please type the number to the input element - "12345678910" and click the button "show"
+	<separator/>
+	2. You should see an error message
+		<spinner id="spinner" />
+		<button label="show" onClick='alert("" + spinner.getValue())' />
+	</window>
+</zk>
