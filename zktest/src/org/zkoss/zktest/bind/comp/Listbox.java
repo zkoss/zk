@@ -7,7 +7,7 @@ public class Listbox{
 
 	private String[] items = {"item01","item02","item03","item04"};
 	private String selected;
-	private String index;
+	private Integer index;
 	private boolean open =false;
 	
 	public String[] getItems() {
@@ -18,11 +18,11 @@ public class Listbox{
 		return selected;
 	}
 
-	public String getIndex() {
+	public Integer getIndex() {
 		return index;
 	}
 
-	public void setIndex(String index) {
+	public void setIndex(Integer index) {
 		this.index = index;
 	}
 
