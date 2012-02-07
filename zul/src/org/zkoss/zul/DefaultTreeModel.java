@@ -150,7 +150,7 @@ Selectable<TreeNode<E>>, Openable<TreeNode<E>>, java.io.Serializable {
 					}
 				}
 				child = parent;
-			}
+			} else break; // ZK-838
 		}
 		final Integer[] objs = p.toArray(new Integer[p.size()]);
 		final int[] path = new int[objs.length];
