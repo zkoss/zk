@@ -1,0 +1,15 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ImmutableVM')">
+	<vbox>
+		<hbox>Item:<label id="l1" value="@bind(vm.item) @converter(vm.converter1)"></label></hbox>
+		<hbox>Option1:<label id="l2" value="@bind(vm.item.option) @converter(vm.converter2)"></label></hbox>
+		<hbox>Option1 Name:<label id="l3" value="@bind(vm.item.option.name)"></label></hbox>
+		<hbox>Option2:<label id="l4" value="@bind(vm.option) @converter(vm.converter2)"></label></hbox>
+		<hbox>Option2 Name:<label id="l5" value="@bind(vm.option.name)"></label></hbox>
+	</vbox>	
+	
+	<hbox>
+		<button label="notify item" id="cmd1" onClick="@command('cmd1')"/>
+		<button label="notify option" id="cmd2" onClick="@command('cmd2')"/>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>
+</window>
