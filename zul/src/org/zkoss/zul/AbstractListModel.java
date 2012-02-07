@@ -212,7 +212,7 @@ Selectable<E>, java.io.Serializable {
 		writeSelection(s);
 		Serializables.smartWrite(s, _listeners);
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 

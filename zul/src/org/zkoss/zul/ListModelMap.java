@@ -737,7 +737,7 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 			((Set)_selection).add(s.readObject());
 		}
 	}
-	private synchronized void readObject(java.io.ObjectInputStream s)
+	private void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
