@@ -1,16 +1,16 @@
 <zk>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Tree')">
-		<tree id="tree" model="@load(vm.model)" selectedItem="@bind(vm.selected)" onSelect='debug.setValue(self.getSelectedItem()+", "+self.getSelectedItem().getLabel())'>
+		<tree id="tree" model="@load(vm.model)"  selectedItem="@save(vm.selected)">
 			<template name="model" var="i">
 				<treeitem open="@bind(vm.open)">
 					<treerow>
-						<treecell label="@load(i)"></treecell>
+						<treecell label="@load(i.data)"></treecell>
 					</treerow>
 				</treeitem>
 			</template>
 		</tree>
-		<label id="selectedLabel" value="@load(vm.selected)"/>
+		<label id="selectedLabel" value="@load(vm.selected.data)"/>
 		<label id="open" value="@load(vm.open)"/>
 		<label id="debug" value=""/>
 	</vlayout>
