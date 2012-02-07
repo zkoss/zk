@@ -5,7 +5,7 @@
 			ex.setAttribute("param1","foo");
 			java.util.Map args = new java.util.HashMap();
 			args.put("arg1","bar");
-			ex.createComponents("executionparam-inner.zul",w1,args);
+			ex.createComponents("/bind/basic/executionparam-inner.zul",w1,args);
 		}
 	</zscript>
 	<button label="create compoents" id="btn1" onClick="doClick1()"/>
@@ -16,7 +16,7 @@
 			void doClick2(){
 				org.zkoss.zk.ui.Execution ex = org.zkoss.zk.ui.Executions.getCurrent();
 				ex.setAttribute("param1","abc");			
-				inc.src = "executionparam-inner.zul";
+				inc.src = "/bind/basic/executionparam-inner.zul";
 			}
 		</zscript>
 		<button label="do include" id="btn2" onClick="doClick2()"/>
