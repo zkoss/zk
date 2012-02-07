@@ -61,7 +61,7 @@ public class B00807GroupModelListboxMultiple {
 		}
 	}
 	
-	@Command @NotifyChange("selected")
+	@Command @NotifyChange({"selected","sortedName"})
 	public void select(){
 		selected = new HashSet<Food>();
 		selected.add((Food)groupsModel.getChild(0,0));
