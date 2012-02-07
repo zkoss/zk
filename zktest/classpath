@@ -7,3 +7,5 @@
 ../dist/lib/ext/hibernate3.jar
 ../dist/lib/ext/servlet-api.jar
 ../dist/lib/ext/jasperreports.jar
+../dist/lib/ext/validation-api.jar
+../dist/lib/ext/hibernate-validator.jar

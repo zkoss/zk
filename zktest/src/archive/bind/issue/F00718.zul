@@ -1,0 +1,42 @@
+<zk>
+    <window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00718')" 
+    validationMessages = "@id('vmsgs')">
+        <grid width="600px">
+            <columns>
+                <column width="100px" />
+                <column width="500px" />
+            </columns>
+            <rows>
+                <row>
+                    First Name
+                    <hlayout>
+                    <textbox id="tb1" value="@bind(vm.user.firstName) @validator('beanValidator')" errorMessage="@load(vmsgs[tb1])" />
+                    </hlayout>
+                </row>
+                <row>
+                    Last Name
+                    <hlayout>
+                    <textbox id="tb2" value="@bind(vm.user.lastName) @validator('beanValidator')" />
+                    <label id="msg2" value="@load(vmsgs[tb2])"/>
+                    </hlayout>
+                </row>
+                <row>
+                    EMail
+                    <hlayout>
+                    <textbox id="tb3" value="@bind(vm.user.email) @validator('org.zkoss.bind.validator.BeanValidator')" />
+                    <label id="msg3" value="@load(vmsgs[tb3])"/>
+                    </hlayout>
+                </row>                
+                <row>
+                    Birth Date
+                    <hlayout>
+                    <datebox id="db4" value="@bind(vm.user.birthDate) @validator('org.zkoss.bind.validator.BeanValidator')" format="yyyy/MM/dd" />
+                    <label id="msg4" value="@load(vmsgs[self.previousSibling])"/>
+                    </hlayout>
+                </row>
+            </rows>
+        </grid>
+        <button id="reload" label="Reload" onClick="@command('reload')" />
+        
+    </window>
+</zk>

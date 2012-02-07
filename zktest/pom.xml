@@ -246,6 +246,25 @@
 			<artifactId>gmapsz</artifactId>
 			<version>${gmapsz.version}</version>
 		</dependency>
+		
+		<!--  for zkbind jsr 303 
+		-->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>4.0.2.GA</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
