@@ -1,0 +1,22 @@
+<window apply="org.zkoss.zktest.bind.issue.F0010" xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<custom-attributes composerName="vm"/>
+	<div>
+	1.row1 values should all have '-toUi-cX' postfix <n:br/>
+	2.change value of row2, will cause row1,row2 update, and value have -toBean-CX-toUI-Cx' postfix<n:br/>
+	</div>
+	<hbox>Row 1
+		<label id="l0" value="@bind(vm.value0) @converter('converter0')" />
+		<label id="l1" value="@bind(vm.value1) @converter(vm.converterPool.converter1)" />
+		<label id="l2" value="@bind(vm.value2) @converter(vm.converter2)" />
+	</hbox>
+	<hbox>Row 2
+		<textbox id="t0" value="@bind(vm.value0) @converter('converter0')" />
+		<textbox id="t1" value="@bind(vm.value1) @converter(vm.converterPool.converter1)" />
+		<textbox id="t2" value="@bind(vm.value2) @converter(vm.converter2)" />
+	</hbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')" />
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

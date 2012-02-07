@@ -1,0 +1,32 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00714')">
+	<listbox id="outerbox" width="700px" model="@bind(vm.items)" rows="5" selectedItem="@bind(vm.selected)">
+		<listhead>
+			<listheader label="name"/>
+			<listheader label="action" width="300px"/>
+		</listhead>
+		
+		<template name="model" var="item" >
+			<listitem>
+				<listcell label="@bind(item.name)"/>
+				<listcell >
+					<listbox hflex="1" model="@bind(item.options)">
+						<listhead>
+							<listheader label="name"/>
+						</listhead>
+						<template name="model" var="option">
+							<listitem>
+								<listcell label="@bind(option)"/>
+							</listitem>
+						</template>
+					</listbox>			
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<label value="@load(vm.selected.name)"/>
+	<hbox>
+		<button label="reload" onClick="@command('reload')" />
+		<button label="invalidate" onClick="outerbox.invalidate()" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

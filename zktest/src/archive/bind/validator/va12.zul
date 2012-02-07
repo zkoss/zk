@@ -1,0 +1,59 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window border="normal" width="400px"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.validator.Va12')">
+		va12
+		<label multiline="true">
+			argument Validator + argument Command, dependsOn
+
+			1. initail input, compute, 30
+			2. input 10 for quantity A, subtotal 100 
+			3. input 11 for quantity B, subtotal unchanged
+			4. input 10 for quantity B, subtoal 200, compute, total 300
+			5. input 90% off, compute, 270
+		</label>
+		<grid>
+			<columns>
+				<column label="Name"/>
+				<column label="Price"/>
+				<column label="Quantity (less than 10)" width="150px"/>
+				<column label="Subtotal"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="Item A"/>
+					<label value="10"/>
+					<intbox id="quantityABox" value="@bind(vm.quantityA) @validator(vm.upperBoundValidator, max=10)"/>
+					<label id="subtotalA" value="@bind(vm.subtotalA)"/>
+				</row>
+				<row>
+					<label value="Item B"/>
+					<label value="20"/>
+					<intbox id="quantityBBox" value="@bind(vm.quantityB) @validator(vm.upperBoundValidator, max=10)"/>
+					<label id="subtotalB" value="@bind(vm.subtotalB)"/>
+				</row>
+				<row>
+					<label value=""/>
+					<label value="Off %"/>
+					<combobox id="offBox" width="80px">
+						<comboitem label="90" value="90"/>
+						<comboitem label="80" value="80"/>
+						<comboitem label="70" value="70"/>
+						<comboitem label="60" value="60"/>
+						<comboitem label="50" value="50"/>
+					</combobox>
+					<button id="computeButton" label="Compute" onClick="@command('compute', off=offBox.selectedItem.value)"/>
+				</row>				
+				<row>
+					<label value="Total"/>
+					<label value=""/>
+					<label value=""/>
+					<label id="total" value="@load(vm.total, after='compute')"/>
+				</row>
+			</rows>
+			
+		</grid>	
+
+	</window>
+</zk>

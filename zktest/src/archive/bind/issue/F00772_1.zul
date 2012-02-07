@@ -1,0 +1,7 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00772_1')">
+	<vbox>
+		<textbox id="t11" value="@bind(vm.value1)"/>
+		<button id="globalx" label="global cmdX" onClick="@command('cmd1') @global-command('cmdX',data=vm.value1)" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+</window>

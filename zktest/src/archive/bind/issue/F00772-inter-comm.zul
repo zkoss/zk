@@ -1,0 +1,22 @@
+<window >
+	<hbox apply="org.zkoss.zktest.bind.issue.F00772InterComm">
+		<button label="postx" id="postx"/>
+		<button label="posty" id="posty"/>
+		<button label="postz" id="postz"/>
+		<button label="postmy" id="postmy"/>
+	</hbox>
+	<hbox >
+		<div>
+			<include src="F00772_1.zul"/>
+		</div>
+		<div>
+			<include src="F00772_2.zul"/>
+		</div>
+		<div>
+			<include src="F00772_3.zul"/>
+		</div>
+		<div>
+			<include src="F00772_4.zul"/>
+		</div>
+	</hbox>
+</window>

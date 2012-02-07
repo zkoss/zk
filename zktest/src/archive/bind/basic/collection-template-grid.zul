@@ -2,7 +2,7 @@
 	<custom-attributes composerName="vm"/>
 	<label id="msg" value="@bind(vm.message1)"/>
 	<!-- bind tracker has bug on tie value on each.name eq 'A' or eachStatus.index eq 2 -->
-	<grid id="outergrid" width="700px" model="@bind(vm.items) @template(each.name eq 'A' or eachStatus.index eq 2?'model1':'model2')">
+	<grid id="outergrid" width="700px" model="@bind(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')">
 		<columns>
 			<column label="index"/>
 			<column label="name"/>

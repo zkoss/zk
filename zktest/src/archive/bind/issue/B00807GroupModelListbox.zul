@@ -1,0 +1,36 @@
+<zk>
+	<custom-attributes org.zkoss.zul.listbox.rod="false"
+		org.zkoss.zul.grid.rod="false" />
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00807GroupModelListbox')" >
+		<label id="l1" value="@bind(vm.selected.name)"/>
+		<listbox id="listbox" height="600px" width="800px"
+			model="@load(vm.groupsModel) @template(vm.getTemplate(each))" selectedItem="@bind(vm.selected)" checkmark="true">
+			<listhead sizable="true">
+				<listheader label="Category" />
+				<listheader label="Name" />
+			</listhead>
+			<template name="row">
+				<listitem>
+					<listcell>
+						<label value="@load(each.category)"/>
+					</listcell>
+					<listcell>
+						<label value="@load(each.name)"/>
+					</listcell>
+				</listitem>
+			</template>
+			<template name="head">
+				<listgroup label="@load(each[0].category)"/>
+			</template>
+			<template name="foot">
+				<listgroupfoot sclass="foodFooter" >
+					<listcell span="2" label="@load(each)"/>
+				</listgroupfoot>
+			</template>
+		</listbox>
+		<button id="sel1" label="select1" onClick="@command('select1')"/>
+		<button id="sel2" label="select2" onClick="@command('select2')"/>
+	</vlayout>
+	
+</zk>

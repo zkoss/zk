@@ -1,0 +1,33 @@
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B0004')">
+		<div>
+			1.value 1 have to large than 10, <n:br/>
+			2.value 2 have to large than 20, <n:br/> 
+			3.value 2 have to large than value 1 <n:br/>
+		</div>
+		<hbox>
+			<hbox>Value1:<label id="l11" value="@bind(vm.value1)"></label></hbox>
+			<hbox>Value2:<label id="l12" value="@bind(vm.value2)"></label></hbox>
+		</hbox>	
+		<hbox id="h1" form="@id('fx') @load(vm) @save(vm, before='cmd1') @validator(vm.validator3)">
+			Form
+			Value1:<textbox id="t21" value="@bind(fx.value1) @validator(vm.validator1)" />
+			Value2:<textbox id="t22" value="@bind(fx.value2) @validator(vm.validator2)" />
+		</hbox>
+		<vbox>
+			<label id="msg1" value="@bind(vm.lastMessage1)"></label>
+			<label id="msg2" value="@bind(vm.lastMessage2)"></label>
+			<label id="msg3" value="@bind(vm.lastMessage3)"></label>
+		</vbox>
+	
+		<hbox>
+			<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+		</hbox>
+		
+		extra test :
+		<hbox>
+			<button label="detach t22" onClick="t22.detach()"/>
+			<button label="detach h1" onClick="h1.detach()"/>
+		</hbox>
+	</window>
+</zk>

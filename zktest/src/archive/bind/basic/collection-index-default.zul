@@ -1,0 +1,34 @@
+<window apply="org.zkoss.zktest.bind.basic.CollectionIndexDefaultComposer">
+	<custom-attributes composerName="vm"/>
+	<grid id="grid" width="700px" model="@bind(vm.items)">
+		<columns>
+			<column label="index"/>
+			<column label="name"/>
+		</columns>
+		
+		<template name="model">
+			<row>
+				<label value="@bind(forEachStatus.index)"/>
+				<label value="@bind(each.name)"/>
+			</row>
+		</template>
+	</grid>
+	<listbox id="listbox" width="700px" model="@bind(vm.items)">
+		<listhead>
+			<listheader label="index"/>
+			<listheader label="name"/>
+		</listhead>
+		
+		<template name="model">
+			<listitem>
+				<listcell label="@bind(forEachStatus.index)"/>
+				<listcell label="@bind(each.name)"/>
+			</listitem>
+		</template>
+	</listbox>
+	<combobox id="combobox"  model="@bind(vm.items)">
+		<template name="model" >
+			<comboitem description="@bind(forEachStatus.index)" label="@bind(each.name)"/>	
+		</template>
+	</combobox>
+</window>

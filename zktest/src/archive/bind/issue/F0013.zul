@@ -1,0 +1,22 @@
+<window apply="org.zkoss.zktest.bind.issue.F0013" xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<custom-attributes composerName="vm"/>
+	<div>
+	1.when click on cmd1, value in row 1 will all be appended -cmd1<n:br/>
+	2.when click on cmd2, value in row 1/2 will all be appended -cmd2<n:br/>
+	</div>
+	<hbox>Row 1
+		<label id="l1" value="@bind(vm.value1)" />
+		<label id="l2" value="@bind(vm.value2)" />
+	</hbox>
+	<hbox form="@id('fx') @load(vm)  @save(vm,before={'cmd1','cmd2','cmd3'})">
+		Row 2
+		<textbox id="t1" value="@bind(fx.value1)" />
+		<textbox id="t2" value="@bind(fx.value2)" />
+	</hbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')"/>
+		<button id="btn3" label="cmd3" onClick="@command('cmd3')"/>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

@@ -1,0 +1,44 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00810ListboxMultiple')">
+	<hbox>
+	<listbox id="listbox1" selectedItems="@bind(vm.selected)" model="@load(vm.model)" multiple="true" checkmark="true">
+		<listhead>
+			<listheader label="static"/>
+		</listhead>
+		<template name="model" var="entry">
+			<listitem>
+				<listcell label="@load(entry)" />
+			</listitem>
+		</template>
+	</listbox>
+	<listbox id="listbox2" selectedItems="@bind(vm.selected)" model="@load(vm.model)" multiple="@load(true)" checkmark="true">
+		<listhead>
+			<listheader label="load" />
+		</listhead>
+		<template name="model" var="entry">
+			<listitem>
+				<listcell label="@load(entry)" />
+			</listitem>
+		</template>
+	</listbox>
+	<listbox id="listbox3" selectedItems="@bind(vm.selected)" model="@load(vm.model)" multiple="@load(vm.multiple)" checkmark="true">
+		<listhead>
+			<listheader label="dynamic"/>
+		</listhead>
+		<template name="model" var="entry">
+			<listitem>
+				<listcell label="@load(entry)" />
+			</listitem>
+		</template>
+	</listbox>
+	</hbox>
+	<vbox>
+	<label id="l1" value="@load(vm.sortedSelected)"/>
+	<hbox>
+	<button id="toggle" label="toggle multiple" onClick="@command('toggle')"/>
+	<button id="update" label="update selection" onClick="@command('update')"/>
+	</hbox>
+	</vbox>
+</window>

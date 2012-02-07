@@ -1,0 +1,19 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.ComboboxSelectedVM')" border="none"> 
+		<vbox>
+			<listbox mold="select" selectedItem="@bind(vm.selected)">
+				<listitem label="Item A" value="itemA"/>
+				<listitem label="Item B" value="itemB"/>
+				<listitem label="Item C" value="itemC"/>
+			</listbox>		
+			==================================
+			<combobox selectedItem="@bind(vm.selected)">
+				<comboitem label="Item A" value="itemA"/>
+				<comboitem label="Item B" value="itemB"/>
+				<comboitem label="Item C" value="itemC"/>
+			</combobox>
+		</vbox>
+		<button label="Dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

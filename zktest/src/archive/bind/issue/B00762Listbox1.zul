@@ -19,18 +19,18 @@
 	<zscript>
 		void show(){
 			org.zkoss.zul.ListModelList model = outerbox.getModel();
-			min.setValue(""+model.getMinSelectionIndex());
-			max.setValue(""+model.getMaxSelectionIndex());
+			java.util.Set sels = model.getSelection();
+			int index = (sels==null||sels.size()==0)?-1:model.indexOf(sels.iterator().next());
+			min.setValue(""+index);
 		}
 	</zscript>
 	<hbox>
-		<label id="min"/>:<label id="max"/>
+		<label id="min"/>
 	</hbox>
 	<hbox>
 		<button id="clean" label="clean" onClick="@command('clean')" />
 		<button id="select" label="select 1" onClick="@command('select')" />
 		<button id="reload" label="reload" onClick="@command('reload')" />
-		<button id="select0" label="select model 0" onClick="outerbox.getModel().addToSelection(outerbox.getModel().getElementAt(0))" />
 		<button id="showselect" label="show selection" onClick="show()" />
 		
 		<button label="Dump" onClick="binder.getTracker().dump()" />

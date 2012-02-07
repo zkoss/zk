@@ -1,0 +1,21 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00757OnChange')">
+	
+	<hbox>
+	<textbox id="t1" value="@bind(vm.value11)" onChange="@command('cmd1')"/>
+	<label id="l1" value="@load(vm.value12)"/>
+	</hbox>
+	<hbox>
+	<textbox id="t2" value="@bind(vm.value21) @validator(vm.validator1)" onChange="@command('cmd2')"/>
+	<label id="l2" value="@load(vm.value22)"/>
+	</hbox>
+	<hbox>
+	<textbox id="t3" value="@bind(vm.value31) " onChange="@command('cmd3')"/>
+	<textbox id="t4" value="@save(vm.value41,before='cmd3') @validator(vm.validator2)"/>
+	<label id="l31" value="@load(vm.value31)"/>
+	<label id="l32" value="@load(vm.value32)"/>
+	<label id="l4" value="@load(vm.value42)"/>
+	</hbox>
+</window>

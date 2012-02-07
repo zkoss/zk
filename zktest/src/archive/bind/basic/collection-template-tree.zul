@@ -1,0 +1,48 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CollectionTemplateTreeVM')">
+	<label id="msg" value="@bind(vm.message1)"/>
+	<tree id="tree" model="@bind(vm.model) @template(each.startA or forEachStatus.index eq 1?'model1':'model2')" width="600px">
+		<treecols>
+			<treecol label="index"/>
+			<treecol label="name"/>
+			<treecol label="action" width="300px"/>
+			<treecol label="tempate" />
+		</treecols>
+		<template name="model1" var="node" status="s">
+			<treeitem open="@bind(node.open)">
+				<treerow>
+					<treecell label="@bind(s.index)"/>
+					<treecell label="@bind(node.data)"/>
+					<treecell>
+						<hbox>
+							<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+							<button label="Delete" onClick="@command('delete', node=node)"/>
+							<button label="Add After" onClick="@command('addAfter', node=node)"/>
+							<button label="Add Before" onClick="@command('addBefore', node=node)"/>
+						</hbox>
+					</treecell>
+					<treecell label="Model1"/>
+				</treerow>
+			</treeitem>
+		</template>
+		<template name="model2" var="node" status="s">
+			<treeitem open="@bind(node.open)">
+				<treerow>
+					<treecell label="@bind(s.index)"/>
+					<treecell label="@bind(node.data)"/>
+					<treecell>
+						<hbox>
+							<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+							<button label="Delete" onClick="@command('delete', node=node)"/>
+							<button label="Add After" onClick="@command('addAfter', node=node)"/>
+							<button label="Add Before" onClick="@command('addBefore', node=node)"/>
+						</hbox>
+					</treecell>
+					<treecell label="Model2"/>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>		
+</window>

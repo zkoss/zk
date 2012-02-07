@@ -1,0 +1,29 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00619')" border="none">
+		1.select listbox, the label and tab selection should change
+		2.select tab, the the label and listbox selection should change
+		<vbox>
+			<label id="msg" value="@bind(vm.selectedTab)"/>
+			<listbox id="listbox" selectedItem="@bind(vm.selectedTab)">
+				<listitem id="itema" label="Tab A" value="tabA"/>
+				<listitem id="itemb" label="Tab B" value="tabB"/>
+				<listitem id="itemc" label="Tab C" value="tabC"/>
+			</listbox>		
+			==================================
+			<tabbox id="tabbox" selectedTab="@bind(vm.selectedTab)">
+				<tabs>
+					<tab id="taba" label="tabA"/>
+					<tab id="tabb" label="tabB"/>
+					<tab id="tabc" label="tabC"/>
+				</tabs>
+				<tabpanels>
+					<tabpanel>Panel A</tabpanel>
+					<tabpanel>Panel B</tabpanel>
+					<tabpanel>Panel C</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</vbox>
+		<button label="Dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

@@ -1,0 +1,30 @@
+<window apply="org.zkoss.zktest.bind.basic.CollectionIndexTreeComposer">
+	<custom-attributes composerName="vm"/>
+	<label id="msg" value="@bind(vm.message1)"/>
+	<tree id="tree" model="@bind(vm.model)" width="500px">
+		<treecols>
+			<treecol label="index"/>
+			<treecol label="name"/>
+			<treecol label="action" width="300px"/>
+		</treecols>
+		<template name="model" var="node" status="s">
+			<treeitem open="@bind(node.open)">
+				<treerow>
+					<treecell label="@bind(s.index)"/>
+					<treecell label="@bind(node.data)"/>
+					<treecell>
+						<hbox>
+							<button label="Index" onClick="@command('showIndex', index=s.index)"/>
+							<button label="Delete" onClick="@command('delete', node=node)"/>
+							<button label="Add After" onClick="@command('addAfter', node=node)"/>
+							<button label="Add Before" onClick="@command('addBefore', node=node)"/>
+						</hbox>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>		
+</window>

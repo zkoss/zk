@@ -1,0 +1,13 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00678')">
+		Click cmd1, the value should become B, click cmd2, the value should become C
+		<hbox>
+		
+		<label id="l1" value="@bind(vm.map.value)"/>
+		<label id="l2" value="@bind(vm.msg)"/>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')" />
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')" />
+		</hbox>
+	</window>
+</zk>

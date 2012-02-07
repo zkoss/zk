@@ -1,0 +1,22 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00828GlobalCommand')">
+		1.click the post, you should not see any error , and the msg label should change. try it more than 10 time
+		<grid id="outergrid" width="700px" model="@bind(vm.items)">
+			<columns>
+				<column label="Item Name"/>
+			</columns>
+			<rows>
+			<template name="model" var="item" status="s">
+				<row>
+					<label value="@bind(item.name) @converter(vm.converter1)"/>
+				</row>
+			</template>
+			</rows>
+		</grid>
+		<label id="msg"/>
+		<hbox>
+			<button id="post" label="post" onClick="@command('post')"/>
+			<button label="Dump" onClick="binder.getTracker().dump()" />
+		</hbox>	
+	</window>
+</zk>

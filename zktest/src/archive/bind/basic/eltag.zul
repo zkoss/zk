@@ -1,0 +1,11 @@
+<?xel-method prefix="c" name="cat" class="org.zkoss.zktest.bind.basic.ELTagVM"
+   signature="String cat(java.lang.String,java.lang.String)"?>
+<?taglib uri="/WEB-INF/tld/eltag.tld" prefix="c2"?>   
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ELTagVM')">
+	<textbox id="t1" value="@bind(vm.value)"/>
+	<label id="l1" value="@bind(c:cat(vm.value,'A'))"/>
+	<label id="l2" value="@bind(c2:cat2(vm.value,'B'))"/>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>
+</window>

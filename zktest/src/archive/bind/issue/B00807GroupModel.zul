@@ -1,0 +1,26 @@
+<zk>
+	<custom-attributes org.zkoss.zul.listbox.rod="false"
+		org.zkoss.zul.grid.rod="false" />
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00807GroupModel')">
+		<grid id="grid" height="600px" width="800px"
+			model="@load(vm.groupsModel) @template(vm.getTemplate(each))">
+			<columns sizable="true">
+				<column label="Category" />
+				<column label="Name" />
+			</columns>
+			<template name="row">
+				<row>
+					<label value="@load(each.category)"/>
+					<label value="@load(each.name)"/>
+				</row>
+			</template>
+			<template name="head">
+				<group label="@load(each[0].category)"/>
+			</template>
+			<template name="foot">
+				<groupfoot spans="2" sclass="foodFooter" label="@load(each)"/>
+			</template>
+		</grid>
+	</vlayout>
+</zk>

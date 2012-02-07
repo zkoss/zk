@@ -1,0 +1,17 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+		<groupbox apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.validator.Va10')">
+		<caption label="va10. multiple field validation"/>
+		<label multiline="true">
+		va10.
+		end day should be later than start date
+		1. input start date 2011/11/02, end date 2011/11/03, click ok, display date
+		2. change end date to 2011/11/01, click ok, display unchaged.
+		</label>
+		start: <datebox id="start"  format="yyyy/MM/dd" value="@save(vm.startDate, before='ok')"/>
+		end: <datebox id="end" format="yyyy/MM/dd" value="@save(vm.endDate, before='ok') @validator(vm.durationValidator, start='startDate', end='endDate'))"/>
+		<button id="okButton" label="OK" onClick="@command('ok')"/><separator/>
+		start:<label id="startLabel" value="@bind(vm.startDate)"/><separator/>
+		end:<label id="endLabel" value="@bind(vm.endDate)"/>
+		</groupbox>
+</zk>

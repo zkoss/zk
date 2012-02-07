@@ -1,0 +1,22 @@
+<window apply="org.zkoss.zktest.bind.issue.F0015" xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<custom-attributes composerName="vm"/>
+	<div>
+	1.click cmd1, only first value change to 'doCommand1' in both row1,2<n:br/>
+	2.click cmd1, values change to 'doCommand1' 'doCommand2' 'doCommand3' in both row1,2<n:br/>
+	</div>
+	<hbox>Row 1
+		<label id="l11" value="@bind(vm.value1)" />
+		<label id="l12" value="@bind(vm.value2)" />
+		<label id="l13" value="@bind(vm.value3)" />
+	</hbox>
+	<hbox>Row 2
+		<label id="l21" value="@load(vm.value1, after='cmd1')" />
+		<label id="l22" value="@load(vm.value2, after='cmd2')" />
+		<label id="l23" value="@load(vm.value3, after='cmd3')" />
+	</hbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')"/>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

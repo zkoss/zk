@@ -14,7 +14,7 @@
 			<row>
 				<label value="@bind(s.index)"/>
 				<label value="@bind(item.name)"/>
-				<combobox hflex="1" model="@bind(item.options ) @template(eachStatus.index eq 0 or eachStatus.index eq 2?'model1':'model2')">
+				<combobox hflex="1" model="@bind(item.options ) @template(forEachStatus.index eq 0 or forEachStatus.index eq 2?'model1':'model2')">
 					<template name="model1" var="option" >
 						<comboitem label="@bind(optionStatus) @converter(vm.statusConverter1,name=option,si=s.index,ssi=optionStatus.index)" description="@bind(option)"/>	
 					</template>

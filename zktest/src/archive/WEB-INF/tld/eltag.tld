@@ -1,0 +1,10 @@
+<taglib>
+    <function>
+        <name>cat2</name>
+        <function-class>org.zkoss.zktest.bind.basic.ELTagVM</function-class>
+        <function-signature>
+    String cat2(java.lang.String,java.lang.String)
+        </function-signature>
+    </function>
+    <!-- any number of functions are allowed -->
+</taglib>

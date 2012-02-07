@@ -1,0 +1,40 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00771')"
+	validationMessages="@id('vmsgs')">
+	<vbox>
+	<hbox>
+		<label id="val1" value="@bind(vm.value1)"/>|
+		<label id="val2" value="@bind(vm.value2)"/>|
+		<label id="val3" value="@bind(vm.value3)"/>|
+	</hbox>
+	<hbox>
+		<textbox id="t11" value="@bind(vm.value1) @validator(vm.validator1)"/>|
+		<label id="l11" value="@bind(vmsgs[t11])"/>|
+		<label id="l12" value="@bind(vmsgs['key1'])"/>|
+	</hbox>
+	<hbox>
+		<textbox id="t21" value="@bind(vm.value2) @validator(vm.validator2)"/>|
+		<label id="l21" value="@bind(vmsgs[t21])"/>|
+		<label id="l22" value="@bind(vmsgs['key1'])"/>|
+	</hbox>
+	<hbox>
+		<textbox id="t31" value="@bind(vm.value3) @validator(vm.validator3)"/>|
+		<label id="l31" value="@bind(vmsgs[t31])"/>|
+		<label id="l32" value="@bind(vmsgs.getKeyMessages(t31,'key1')[0])"/>|
+	</hbox>
+	<vbox>
+		<button id="reload1" label="reload1" onClick="@command('reload1')" />
+		<button id="reload2" label="reload2" onClick="@command('reload2')" />
+	</vbox>	
+	
+	<vbox form="@id('fx') @load(vm) @save(vm,before='submit') @validator(vm.formValidator)">
+		<hbox><textbox id="t41" value="@bind(fx.value1)"/><label id="l41" value="@bind(vmsgs['fkey1'])"/></hbox>
+		<hbox><textbox id="t42" value="@bind(fx.value2)"/><label id="l42" value="@bind(vmsgs['fkey2'])"/></hbox>
+		<hbox><textbox id="t43" value="@bind(fx.value3)"/><label id="l43" value="@bind(vmsgs['fkey3'])"/></hbox>
+		<button id="submit" label="submit" onClick="@command('submit')" />
+	</vbox>
+	
+	<vbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+	</vbox>
+</window>

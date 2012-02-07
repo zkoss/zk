@@ -41,7 +41,7 @@
 
 	<hbox>
 		<button label="reload" onClick="@command('reload')" />
-		<button label="detach" onClick="listbox.detach()" />
+		<button label="invalidate" onClick="outerbox.invalidate()" />
 		<button label="Dump" onClick="binder.getTracker().dump()" />
 	</hbox>	
 </window>

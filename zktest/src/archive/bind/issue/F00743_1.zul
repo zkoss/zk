@@ -1,0 +1,54 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00743_1')">
+	<vlayout>
+	<label id="msg" value="@bind(vm.message1)"/>
+	<label id="selected" value="@bind(vm.selected) @converter(vm.selectedConverter)"/>
+	</vlayout>
+	<listbox id="outerbox" width="700px" model="@bind(vm.items)" checkmark="true" rows="5" selectedItems="@bind(vm.selected)" multiple="true">
+		<listhead>
+			<listheader label="index"/>
+			<listheader label="name"/>
+		</listhead>
+		
+		<template name="model" var="item" status="s">
+			<listitem>
+				<listcell label="@bind(s.index)"/>
+				<listcell label="@bind(item.name)"/>
+			</listitem>
+		</template>
+	</listbox>
+	<zscript><![CDATA[
+		void show(){
+			org.zkoss.zul.ListModelList model = outerbox.getModel();
+			java.util.List selection = new java.util.ArrayList();
+			selection.addAll(model.getSelection());
+			java.util.Collections.sort(selection,new java.util.Comparator(){
+				 public int compare(Object o1, Object o2){
+					 return o1.getName().compareTo(o2.getName());
+				 }
+			});
+			range.setValue(selection.toString());
+		}
+		
+		void addSelection(){
+			org.zkoss.zul.ListModelList model = outerbox.getModel();
+			model.clearSelection();
+			model.addToSelection(model.getElementAt(0));
+			model.addToSelection(model.getElementAt(1));
+		}
+	
+	]]></zscript>
+	<hbox>
+		<label id="range"/>
+	</hbox>	
+	<hbox>
+		<button id="clean1" label="clean1" onClick="@command('clean1')" />
+		<button id="clean2" label="clean2" onClick="@command('clean2')" />
+		<button id="select" label="select 1,3" onClick="@command('select')" />
+		<button id="reload" label="reload" onClick="@command('reload')" />
+		
+		<button id="select0" label="select model 0-1" onClick="addSelection()" />
+		<button id="showselect" label="show selection" onClick="show()" />
+		
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>
+</window>

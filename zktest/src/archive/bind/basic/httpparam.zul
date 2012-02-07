@@ -1,0 +1,14 @@
+<vbox>
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.HttpParamVM')">
+		
+		<hbox><label id="l11" value="@load(vm.queryParam)"/> = your url parameter['param1']</hbox>
+		<hbox><label id="l12" value="@load(vm.headerParam)" /> = your browser user-agent</hbox>
+		<hbox><label id="l13" value="@load(vm.cookieParam)"/> = the jsession id value after you click the cmd1</hbox>
+
+		<button id="cmd1" label="cmd1" onClick="@command('cmd1')" />
+
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+
+</vbox>

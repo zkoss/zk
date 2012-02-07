@@ -1,0 +1,32 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.TreeSelectionVM')">
+	<hbox>
+	<vbox>
+		<label id="msg" value="@bind(vm.message1)"/>
+		<label id="selected" value="@bind(vm.selected.data)"/>
+		<tree id="tree" model="@bind(vm.model)" width="500px" selectedItem="@bind(vm.selected)">
+			<treecols>
+				<treecol label="index"/>
+				<treecol label="name"/>
+			</treecols>
+			<template name="model" var="node" status="s">
+				<treeitem open="@bind(node.open)" id="@bind(node.data)">
+					<treerow>
+						<treecell label="@bind(s.index)"/>
+						<treecell label="@bind(node.data)"/>
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+	</vbox>
+	<vbox>
+		<button id="clean" label="clean" onClick="@command('clean')" />
+		<button id="select" label="select 1" onClick="@command('select')" />
+		<button id="reload" label="reload" onClick="@command('reload')" />
+		<button id="select0" label="select model 0" onClick="tree.getModel().addSelectionPath(new int[]{0,1})" />
+		<button id="select1" label="select model 1" onClick="tree.getModel().addSelectionPath(new int[]{0,1,1})" />
+		<button id="showselect" label="show selection" onClick="@command('showselection')" />
+		
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+	</hbox>
+</window>

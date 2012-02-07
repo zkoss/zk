@@ -45,7 +45,7 @@ public class ConverterComposer extends BindComposer {
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				Date d = (Date)val;
 				if(d==null){
-					return null;
+					return "";
 				}
 				return sdf.format(d);
 			}

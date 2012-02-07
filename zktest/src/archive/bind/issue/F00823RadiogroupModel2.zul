@@ -1,0 +1,26 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00823RadiogroupModel2')">
+	<vbox>
+		<label id="l1" value="@bind(vm.index)"/>
+		<label id="l2" value="@bind(vm.selected)"/>
+		
+		<radiogroup id="box1" width="100px" selectedIndex="@bind(vm.index)">
+			<radio label="A"/>
+			<radio label="B"/>
+			<radio label="C"/>
+			<radio label="D"/>
+		</radiogroup>
+		
+		<radiogroup id="box2" width="100px" selectedItem="@bind(vm.selected)">
+			<radio label="A" value="A"/>
+			<radio label="B" value="B"/>
+			<radio label="C" value="C"/>
+			<radio label="D" value="D"/>
+		</radiogroup>
+	</vbox>
+	
+	<hbox>
+		<button id="select" label="select 0" onClick="@command('select')" />
+		<button id="clean" label="clean" onClick="@command('clean')" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>
