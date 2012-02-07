@@ -29,6 +29,8 @@ import org.zkoss.zul.Popup;
 abstract public class XulElement extends HtmlBasedComponent {
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
+	/** The tool tip instance that will store the tooltip before attached. */
+	private Popup tooltipInst;
 
 	/** Returns what keystrokes to intercept.
 	 * <p>Default: null.
@@ -277,8 +279,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setTooltip(String tooltip) {
+		// ZK-816
 		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, tooltip)) {
 			initAuxInfo().tooltip = tooltip;
+			tooltipInst = null;
 			smartUpdate("tooltip", getTooltip());
 		}
 	}
@@ -291,7 +295,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setTooltip(String)
 	 */
 	public void setTooltip(Popup popup) {
-		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
+		// ZK-816, component keep wrong tooltip reference if set tooltip before tooltip attached
+		setTooltip(popup != null && popup.getPage() != null ? "uuid(" + popup.getUuid() + ")": null);
+		if (popup != null && popup.getPage() == null)
+				tooltipInst = popup;
 	}
 
 	//super//
@@ -301,6 +308,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 
 		render(renderer, "popup", getPopup());
 		render(renderer, "context", getContext());
+		// ZK-816
+		if (getTooltip() == null && tooltipInst != null)
+			setTooltip(tooltipInst);
 		render(renderer, "tooltip", getTooltip());
 		render(renderer, "ctrlKeys", getCtrlKeys());
 	}
