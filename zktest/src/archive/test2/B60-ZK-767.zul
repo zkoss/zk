@@ -43,7 +43,7 @@
 		<div>1. Open A0 in Tree 1. You should see A0-1 already opened.</div>
 		<div>2. Open B1 in Tree 1. You should see B1-1 already selected.</div>
 		<div>3. Click "Open 0,1", and open A0 in Tree 2. You should see A0-1 already opened.</div>
-		<div>4. Click "Select 0,1", and open B1 in Tree 2. You should see B1-1 already selected.</div>
+		<div>4. Click "Select 1,1", and open B1 in Tree 2. You should see B1-1 already selected.</div>
 	</div>
 	<separator />
 	Tree 1

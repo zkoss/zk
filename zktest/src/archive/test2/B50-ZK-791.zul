@@ -44,7 +44,9 @@ public class TestComposer extends GenericForwardComposer{
 		for (int i = 0; i < 300; i++) {
 			ary[i] = "options " + i;
 		}
-		list.setModel(new ListModelList(ary));
+		ListModel lm = new ListModelList(ary);
+		lm.setMultiple(true);
+		list.setModel(lm);
 
 	}
 	public void onSelect$list(ForwardEvent event) throws InterruptedException  {
@@ -57,7 +59,7 @@ public class TestComposer extends GenericForwardComposer{
 ]]></zscript>
   <window border="normal" title="hello" apply="TestComposer">
   	<custom-attributes org.zkoss.zul.listbox.rod="false" />
-  	<listbox id="list" multiple="true"/>
+  	<listbox id="list" />
   </window>
 </zk>
 

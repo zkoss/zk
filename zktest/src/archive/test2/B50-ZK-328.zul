@@ -11,15 +11,16 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<!-- since ZK6: hflex of panelchildren is readonly -->
 	<div>Both Panels and Panelchildrens shall resize correctly when maximized.</div>
 	<div height="300px" style="border: 2px solid green">
 		<panel title="Panel 1" border="normal" maximizable="true" hflex="min" vflex="min">
-			<panelchildren hflex="min">Panel Content</panelchildren>
+			<panelchildren>Panel Content</panelchildren>
 		</panel>
 	</div>
 	<div height="300px" style="border: 2px solid green">
 		<panel title="Panel 2" border="normal" maximizable="true" maximized="true" hflex="min" vflex="min">
-			<panelchildren hflex="min">Panel Content</panelchildren>
+			<panelchildren>Panel Content</panelchildren>
 		</panel>
 	</div>
 </zk>
