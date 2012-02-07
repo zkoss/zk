@@ -15,9 +15,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<window title="Spinner" border="normal">
-	1. Please type the number to the input element - "12345678910" and click the button "show"
+	1. Please type the number to the input element - "12345678910"
 	<separator/>
-	2. You should see an error message
+	2. You should see an error message like "Out of range..."
 		<spinner id="spinner" />
 		<button label="show" onClick='alert("" + spinner.getValue())' />
 	</window>
