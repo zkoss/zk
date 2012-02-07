@@ -480,7 +480,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * Sets the external Paging widget.
 		 * @param Paging paging
 		 */
-		paginal: _zkf,
+		paginal: null,
 		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
