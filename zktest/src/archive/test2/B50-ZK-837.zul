@@ -1,0 +1,15 @@
+<zk>
+  <window>
+  	<zscript>
+  	
+  	
+          org.zkoss.zktest.test2.ZK837BasicConstraint constraint = new org.zkoss.zktest.test2.ZK837BasicConstraint("no empty");
+        </zscript>
+  	<div>Enter an invalid date, e.g. 92.02.2012</div>
+  	<hlayout>
+          <datebox id="test" constraint="${constraint}" timeZone="org.zkoss.util.TimeZones.getCurrent()"/>
+          
+           <datebox  timeZone="org.zkoss.util.TimeZones.getCurrent()"/>
+     </hlayout>
+  </window>
+</zk>

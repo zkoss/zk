@@ -252,6 +252,7 @@ ZK 5.0.11
   ZK-835: Paging Tree/Grid/Listbox trigger bind/unbind_ more than once in mounting
   ZK-763: CDI issue: Cannot locate the BeanManager for JavaEE 6
   ZK-805: MenuPopup without columns label image doesn't appear OK
+  ZK-837: ClassCastException while parsing Date when TimeZone + Custom Constraint are active
   
 * Upgrade Notes
   
