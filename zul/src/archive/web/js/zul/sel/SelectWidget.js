@@ -637,6 +637,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
+		zk.log("bind");
 		var btn = this.$n('a');
 		if (btn)
 			this.domListen_(btn, 'onFocus', 'doFocus_')
@@ -650,6 +651,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			btn.style.top = "-1px";
 	},
 	unbind_: function () {
+		zk.log("unbind");
 		unlistenOnFitSize(this);
 		var btn = this.$n('a');
 		if (btn)
@@ -959,9 +961,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		} else	// ZK-798, use old value if exists
 			offs = [oldLeft? oldLeft : 0, oldTop? oldTop : 0];
-		this._anchorTop = offs[1];
-		this._anchorLeft = offs[0];
-		this.fire("onAnchorPos",{top:this._anchorTop,left:this._anchorLeft});
+
+		if( this._anchorTop != offs[1] || this._anchorLeft != offs[0]){
+			//ZK-798, to prevent firing onAnchorPos too many times when moust over a rod listbox,
+			//if _anchorTop/_anchorLeft is the same , just ignore the event.
+			this._anchorTop = offs[1];
+			this._anchorLeft = offs[0];
+			this.fire("onAnchorPos",{top:this._anchorTop,left:this._anchorLeft});			
+		}
+		
 		focusElStyle.top = this._anchorTop + "px";
 		focusElStyle.left = this._anchorLeft + "px";
 	},
