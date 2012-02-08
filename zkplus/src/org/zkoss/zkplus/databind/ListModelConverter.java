@@ -36,6 +36,7 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 	/** Convert a Set, Map, List, Object[], Enum, or other kind of BindingListModel to associated {@link BindingListModel}.
 	 * @param val must be instanceof Set, Map, List, Object[], Enum Class, or other kind of BindingListModel implementation.
 	 */
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp) {
 		if (val == null) {
 			val = new ArrayList();
