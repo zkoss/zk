@@ -637,7 +637,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	bind_: function () {
 		this.$supers(SelectWidget, 'bind_', arguments);
-		zk.log("bind");
 		var btn = this.$n('a');
 		if (btn)
 			this.domListen_(btn, 'onFocus', 'doFocus_')
@@ -651,7 +650,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			btn.style.top = "-1px";
 	},
 	unbind_: function () {
-		zk.log("unbind");
 		unlistenOnFitSize(this);
 		var btn = this.$n('a');
 		if (btn)
