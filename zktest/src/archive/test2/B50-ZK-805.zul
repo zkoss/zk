@@ -1,0 +1,13 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@bind(vm='fiddle.HelloViewModel2')">
+	<button label="Show" onClick="@bind('showHello')"/>
+	<window title="Hello" closable="true" width="300px" height="200px" mode="modal"
+		visible="@bind(not empty vm.message)" onClose="@bind('hideHello')">
+		<hbox align="center" pack="center" hflex="true" vflex="true">
+			<label value="@bind(vm.message)"/>
+			<label value="@bind(not empty vm.message)"/>                  
+		</hbox>
+	</window>
+
+    <label value="@bind(vm.message)" />
+    <label value="@bind(not empty vm.message)" />  
+</window>
