@@ -145,6 +145,8 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 	@Override
 	public E getChild(int[] path) {
 		E parent = getRoot();
+		if (path.length == 0) return parent;
+		
 		E node = null;
 		int childCount = getChildCount(parent);
 		for (int i = 0; i < path.length; i++) {
