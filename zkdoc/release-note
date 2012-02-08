@@ -189,9 +189,6 @@ ZK 6.0.0
   + org.zkoss.util.logging.LogService is removed
   + org.zkoss.zul.ext.TreeSelectionModel and TreeOpenableModel are introduced
     to replace Selectable and Openable for TreeModel
-  + AbstractTreeModel implements only TreeModel
-  + DefaultTreeModel implements org.zkoss.zul.ext.TreeSelectionModel and
-	org.zkoss.zul.ext.TreeOpenableModel
   + The multiple status and the selection are provided by Selectable
     and TreeSelectionModel when using Listbox and Tree with Model.
   + The open status are provided by TreeOpenableModel when using Tree with Model

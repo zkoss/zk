@@ -22,12 +22,12 @@ import java.util.ArrayList;
 
 import org.zkoss.zul.AbstractTreeModel;
 import org.zkoss.zul.event.TreeDataEvent;
-import org.zkoss.zul.ext.TreeSelectionModel;
+
 /**
  * @author Dennis.Chen
  *
  */
-public class HostTreeModel extends AbstractTreeModel implements TreeSelectionModel {
+public class HostTreeModel extends AbstractTreeModel {
 	
 	
 	private FakeRoot fakeRoot;
@@ -61,7 +61,7 @@ public class HostTreeModel extends AbstractTreeModel implements TreeSelectionMod
 		FakeProcess process = (FakeProcess)host.getChild(processindex);
 		process.type = type;
 		process.name ="AAAAA";		
-		this.fireEvent(host,processindex, processindex, TreeDataEvent.CONTENTS_CHANGED);
+		fireEvent(TreeDataEvent.CONTENTS_CHANGED, getPath(host), processindex, processindex);
 	}
 
 	private static int _cnt;
@@ -71,7 +71,7 @@ public class HostTreeModel extends AbstractTreeModel implements TreeSelectionMod
 		String id = "p1000_10000_" + ++_cnt;
 		FakeProcess process = new FakeProcess(id, id, type);
 		host.addProcess(processindex, process);
-		this.fireEvent(host,processindex, processindex, TreeDataEvent.INTERVAL_ADDED);
+		fireEvent(TreeDataEvent.INTERVAL_ADDED, getPath(host), processindex, processindex);
 	}
 	
 	public void removeProcessType(int groupindex,int hostindex,int processindex,String type){
@@ -79,7 +79,7 @@ public class HostTreeModel extends AbstractTreeModel implements TreeSelectionMod
 		FakeHost host = (FakeHost)group.getChild(hostindex);
 		FakeProcess process = (FakeProcess)host.removeChild(processindex);
 		process.type = type;	
-		this.fireEvent(host,processindex, processindex, TreeDataEvent.INTERVAL_REMOVED);
+		fireEvent(TreeDataEvent.INTERVAL_REMOVED, getPath(host), processindex, processindex);
 
 	}
 	
@@ -246,77 +246,5 @@ public class HostTreeModel extends AbstractTreeModel implements TreeSelectionMod
 		public boolean isLeaf() {
 			return true;
 		}
-	}
-
-	@Override
-	public void setMultiple(boolean multiple) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isMultiple() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void addSelectionPath(int[] path) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addSelectionPaths(int[][] paths) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean removeSelectionPath(int[] path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeSelectionPaths(int[][] paths) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isPathSelected(int[] path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSelectionEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clearSelection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int[] getSelectionPath() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int[][] getSelectionPaths() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getSelectionCount() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

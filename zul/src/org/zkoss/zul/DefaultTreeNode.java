@@ -117,7 +117,8 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		TreeNode<E> parent = getParent();
 		if (model != null && parent != null) {
 			int index = parent.getIndex(this);
-			model.fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+			model.fireEvent(TreeDataEvent.CONTENTS_CHANGED,
+				model.getPath(parent), index, index);
 		}
 	}
 	
@@ -228,7 +229,8 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 			
 			DefaultTreeModel<E> model = getModel();
 			if (model != null)
-				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_ADDED);
+				model.fireEvent(TreeDataEvent.INTERVAL_ADDED,
+					model.getPath(DefaultTreeNode.this), index, index);
 			
 		}
 		
@@ -249,10 +251,9 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 			if (child instanceof DefaultTreeNode)
 				((DefaultTreeNode<E>)child).setParent(null);
 			
-			if (model != null) {
-				model.fireEvent(DefaultTreeNode.this, index, index, TreeDataEvent.INTERVAL_REMOVED);
-			}
-			
+			if (model != null)
+				model.fireEvent(TreeDataEvent.INTERVAL_REMOVED,
+					model.getPath(DefaultTreeNode.this), index, index);
 			return child;
 		}
 		

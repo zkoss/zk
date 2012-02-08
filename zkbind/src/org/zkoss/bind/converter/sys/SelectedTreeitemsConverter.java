@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.ext.TreeSelectionModel;
+import org.zkoss.zul.ext.TreeSelectableModel;
 
 /**
  * Convert tree selected treeitem to bean and vice versa.
@@ -40,11 +40,11 @@ public class SelectedTreeitemsConverter implements Converter, java.io.Serializab
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Tree tree = (Tree) comp;
 		final TreeModel<Object> model = tree.getModel();
-		if(model !=null && !(model instanceof TreeSelectionModel)){
-			//model has to imple TreeSelectionModel if binding to selectedItem
-  			throw new UiException("model doesn't implement TreeSelectionModel");
+		if(model !=null && !(model instanceof TreeSelectableModel)){
+			//model has to imple TreeSelectableModel if binding to selectedItem
+  			throw new UiException("model doesn't implement "+TreeSelectableModel.class);
   		}
-  		final TreeSelectionModel smodel = (TreeSelectionModel)model;
+  		final TreeSelectableModel smodel = (TreeSelectableModel)model;
   		
   		final Set<Treeitem> items = new HashSet<Treeitem>();
 		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(HashSet.class, val);
@@ -87,12 +87,12 @@ public class SelectedTreeitemsConverter implements Converter, java.io.Serializab
 		if (val != null) {
 			final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
-	  		if(model !=null && !(model instanceof TreeSelectionModel)){
-	  			throw new UiException("model doesn't implement TreeSelectionModel");
+	  		if(model !=null && !(model instanceof TreeSelectableModel)){
+	  			throw new UiException("model doesn't implement TreeSelectableModel");
 	  		}
 	  		
 	  		if(model!=null){
-	  			int[][] paths = ((TreeSelectionModel)model).getSelectionPaths();
+	  			int[][] paths = ((TreeSelectableModel)model).getSelectionPaths();
 	  			if(paths!=null && paths.length>0){
 	  				for(int[] path:paths){
 	  					vals.add(model.getChild(path));

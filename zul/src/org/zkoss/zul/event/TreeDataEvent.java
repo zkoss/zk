@@ -24,7 +24,7 @@ import org.zkoss.zul.TreeModel;
  * @author Jeff Liu
  * @since 3.0.0
  */
-public class TreeDataEvent<E> {
+public class TreeDataEvent {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
 	/** Identifies the addition of children to a node. */    
@@ -42,24 +42,30 @@ public class TreeDataEvent<E> {
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
 
-	private final TreeModel<E> _model;
+	private final TreeModel _model;
 	private final int _type;
 	private final int _indexFrom;
 	private final int _indexTo;
-	private final E _parent;
+	private final int[] _nodePath;
 
 	/** Contructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
-	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
-	 * @param parent - the parent node that its children being modified .
+	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}, {@link #SELECTION_CHANGED},
+	 * {@link #OPEN_CHANGED}, {@link #STRUCTURE_CHANGED} or {@link MULTIPLE_CHANGED}.
+	 * @param nodePath the path of the affected node.
+	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
+	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
+	 * it is the node being selected or opened.
+	 * If {@link #STRUCTURE_CHANGED} or {@link MULTIPLE_CHANGED}, it is null.
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 */
-	public TreeDataEvent(TreeModel<E> model, int type, E parent, int indexFrom, int indexTo) {
+	public TreeDataEvent(TreeModel model, int type,
+	int[] nodePath, int indexFrom, int indexTo) {
 		_model = model;
 		_type = type;
-		_parent = parent;
+		_nodePath = nodePath;
 		_indexFrom = indexFrom;
 		_indexTo = indexTo;
 	}
@@ -76,13 +82,17 @@ public class TreeDataEvent<E> {
 	public int getType() {
 		return _type;
 	}
-	
+
 	/**
-	 * Returns the parent node that one of its children being modified 
+	 * Returns the path of the affected node.
+	 * If {@link #CONTENTS_CHANGED}, {@link #INTERVAL_ADDED} or {@link #INTERVAL_REMOVED},
+	 * it is the parent node. If {@link #SELECTION_CHANGED} or {@link #OPEN_CHANGED},
+	 * it is the node being selected or opened.
+	 * If {@link #STRUCTURE_CHANGED} or {@link MULTIPLE_CHANGED}, it is null.
 	 * @return the parent node that one of its children being modified 
 	 */
-	public E getParent(){
-		return _parent;
+	public int[] getPath(){
+		return _nodePath;
 	}
 	
 	/**

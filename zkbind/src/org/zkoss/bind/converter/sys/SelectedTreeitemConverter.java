@@ -23,7 +23,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.ext.TreeSelectionModel;
+import org.zkoss.zul.ext.TreeSelectableModel;
 
 /**
  * Convert tree selected treeitem to bean and vice versa.
@@ -38,11 +38,11 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		Tree tree = (Tree) comp;
 		final TreeModel<Object> model = tree.getModel();
 
-  		if(model !=null && !(model instanceof TreeSelectionModel)){
-			//model has to imple TreeSelectionModel if binding to selectedItem
-  			throw new UiException("model doesn't implement TreeSelectionModel");
+  		if(model !=null && !(model instanceof TreeSelectableModel)){
+			//model has to imple TreeSelectableModel if binding to selectedItem
+  			throw new UiException("model doesn't implement TreeSelectableModel");
   		}
-  		final TreeSelectionModel smodel = (TreeSelectionModel)model;
+  		final TreeSelectableModel smodel = (TreeSelectableModel)model;
 		if(smodel!=null && !smodel.isSelectionEmpty()){//clear the selection first
 	  		smodel.clearSelection();
 		}
@@ -81,11 +81,11 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		if (val != null) {
 		  	final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
-	  		if(model !=null && !(model instanceof TreeSelectionModel)){
-	  			throw new UiException("model doesn't implement TreeSelectionModel");
+	  		if(model !=null && !(model instanceof TreeSelectableModel)){
+	  			throw new UiException("model doesn't implement TreeSelectableModel");
 	  		}
 	  		if(model!=null){
-	  			int[] path = ((TreeSelectionModel)model).getSelectionPath();
+	  			int[] path = ((TreeSelectableModel)model).getSelectionPath();
 	  			if(path==null) return null;
 	  			return model.getChild(path);
 	  		} else{

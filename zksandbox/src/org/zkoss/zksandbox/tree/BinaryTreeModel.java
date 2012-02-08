@@ -21,18 +21,17 @@ package org.zkoss.zksandbox.tree;
 import java.util.List;
 
 import org.zkoss.zul.AbstractTreeModel;
-import org.zkoss.zul.ext.TreeSelectionModel;
 
 /** 
  * A simple implementation of binary tree model by an arraylist
  *
  * @author Jeff Liu
  */
-public class BinaryTreeModel<T> extends AbstractTreeModel<T> implements TreeSelectionModel {
+public class BinaryTreeModel<T> extends AbstractTreeModel<T> {
 	
 	private static final long serialVersionUID = 1572780864070967258L;
 	private List<T> _tree = null;
-	
+
 	/**
 	 * Constructor
 	 * @param tree the list is contained all data of nodes.
@@ -68,63 +67,4 @@ public class BinaryTreeModel<T> extends AbstractTreeModel<T> implements TreeSele
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	// TreeSelectionModel //
-	@Override
-	public void addSelectionPath(int[] path) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void addSelectionPaths(int[][] paths) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void clearSelection() {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public int getSelectionCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	@Override
-	public int[] getSelectionPath() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public int[][] getSelectionPaths() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public boolean isMultiple() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean isPathSelected(int[] path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean isSelectionEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean removeSelectionPath(int[] path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean removeSelectionPaths(int[][] paths) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public void setMultiple(boolean multiple) {
-		// TODO Auto-generated method stub
-	}
-	
 }

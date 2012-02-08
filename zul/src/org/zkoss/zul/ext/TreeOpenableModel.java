@@ -54,8 +54,9 @@ public interface TreeOpenableModel {
 	 * 
 	 * @param path
 	 *            the path to remove from the open
+	 * @return true if it was closed successfully
 	 */
-	public void removeOpenPath(int[] path);
+	public boolean removeOpenPath(int[] path);
 
 	/**
 	 * Removes paths from the open. If any of the paths in <code>paths</code>
@@ -64,8 +65,9 @@ public interface TreeOpenableModel {
 	 * 
 	 * @param paths
 	 *            the path to remove from the open
+	 * @return true if one of the paths was closed successfully
 	 */
-	public void removeOpenPaths(int[][] paths);
+	public boolean removeOpenPaths(int[][] paths);
 
 	/**
 	 * Returns true if the path, <code>path</code>, is in the current open.

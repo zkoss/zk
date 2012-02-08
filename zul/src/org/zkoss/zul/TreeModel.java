@@ -31,8 +31,8 @@ import org.zkoss.zul.event.TreeDataEvent;
  * <a href="http://books.zkoss.org/wiki/ZK_Developer's_Reference/MVC/Model/Tree_Model">ZK Developer's Reference: Tree Model</a>.
  *
  * @author Jeff Liu
+ * @author tomyeh
  * @since 3.0.0
- *
  */
 public interface TreeModel<E> {
 	/**
@@ -45,21 +45,21 @@ public interface TreeModel<E> {
 	public boolean isLeaf(E node);
 
 	/**
-	 * Returns the child of parent at index where the index indicates in the parent's child array.
+	 * Returns the child of the given parent at the given index where the index indicates in the parent's child array.
 	 * @param parent a node in the tree, obtained from this data source
 	 * @return the child of parent at index
 	 */
 	public E getChild(E parent, int index);
 	
 	/**
-	 * Returns the number of children of parent.
+	 * Returns the number of children of the given parent.
 	 * @param parent a node in the tree, obtained from this data source
 	 * @return the number of children of the node parent
 	 */
 	public int getChildCount(E parent);
 
 	/**
-	 * Returns the index of child in parent.
+	 * Returns the index of the given child in the given parent.
 	 * If either parent or child is null, returns -1. If either parent or child don't belong to this tree model, returns -1. 
 	 * @param parent a node in the tree, obtained from this data source
      * @param child the node we are interested in 
@@ -75,17 +75,17 @@ public interface TreeModel<E> {
 	public E getRoot();
 	
 	/**
-	 * Returns the child of parent at path where the path indicates the child is
+	 * Returns the child at the given path where the path indicates the child is
 	 * placed in the whole tree.
 	 * @param path the tree path
-	 * @return the child of parent at path
+	 * @return the child at path
 	 * @since 6.0.0
 	 */
 	public E getChild(int[] path);
 	
 
 	/**
-	 * Returns the path from the child, where the path indicates the child is
+	 * Returns the path from the given child, where the path indicates the child is
 	 * placed in the whole tree.
 	 * @param child the node we are interested in
 	 * @since 6.0.0

@@ -1,4 +1,4 @@
-/* TreeSelectionModel.java
+/* TreeSelectableModel.java
 
 {{IS_NOTE
 	Purpose:
@@ -26,7 +26,7 @@ import org.zkoss.zul.TreeModel;
  * @author jumperchen
  * @since 6.0.0
  */
-public interface TreeSelectionModel {
+public interface TreeSelectableModel {
 
 	/**
 	 * Sets the selection mode to be multiple.
@@ -67,7 +67,7 @@ public interface TreeSelectionModel {
 	 * 
 	 * @param path
 	 *            the path to remove from the selection
-	 * @return true if it was selected and unselected successfully
+	 * @return true if it was unselected successfully
 	 */
 	public boolean removeSelectionPath(int[] path);
 
@@ -78,7 +78,7 @@ public interface TreeSelectionModel {
 	 * 
 	 * @param paths
 	 *            the path to remove from the selection
-	 * @return true if at least one of the path was selected and unselected successfully
+	 * @return true if one of the paths was unselected successfully
 	 */
 	public boolean removeSelectionPaths(int[][] paths);
 

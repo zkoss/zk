@@ -63,7 +63,7 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
-import org.zkoss.zul.ext.TreeSelectionModel;
+import org.zkoss.zul.ext.TreeSelectableModel;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -103,15 +103,15 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * <br/>
  * [Since 6.0.0]
- * <p>To retrieve what are selected in Tree with a {@link TreeSelectionModel},
- * you shall use {@link TreeSelectionModel#isPathSelected(int[])}
- * to check whether the current path is selected in {@link TreeSelectionModel}
+ * <p>To retrieve what are selected in Tree with a {@link TreeSelectableModel},
+ * you shall use {@link TreeSelectableModel#isPathSelected(int[])}
+ * to check whether the current path is selected in {@link TreeSelectableModel}
  * rather than using {@link Tree#getSelectedItems()}. That is, you shall operate on
- * the item of the {@link TreeSelectionModel} rather than on the {@link Treeitem}
- * of the {@link Tree} if you use the {@link TreeSelectionModel} and {@link TreeModel}.</p>
+ * the item of the {@link TreeSelectableModel} rather than on the {@link Treeitem}
+ * of the {@link Tree} if you use the {@link TreeSelectableModel} and {@link TreeModel}.</p>
  *
  * <pre><code>
- * TreeSelectionModel selModel = ((TreeSelectionModel)getModel());
+ * TreeSelectableModel selModel = ((TreeSelectableModel)getModel());
  * int[][] paths = selModel.getSelectionPaths();
  * List<E> selected = new ArrayList<E>();
  * AbstractTreeModel model = (AbstractTreeModel) selModel;
@@ -122,9 +122,9 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * <br/>
  * [Since 6.0.0]
- * <p> If the TreeModel in Tree implements a {@link TreeSelectionModel}, the
+ * <p> If the TreeModel in Tree implements a {@link TreeSelectableModel}, the
  * multiple selections status is applied from the method of
- * {@link TreeSelectionModel#isMultiple()}
+ * {@link TreeSelectableModel#isMultiple()}
  * </p>
  * <pre><code>
  * DefaultTreeModel selModel = new DefaultTreeModel(treeNode);
@@ -716,7 +716,7 @@ public class Tree extends MeshElement {
 	}
 	/** Sets whether multiple selections are allowed.
 	 * <p>Notice that, if a model is assigned, it will change the model's
-	 * state (by {@link TreeSelectionModel#setMultiple}).
+	 * state (by {@link TreeSelectableModel#setMultiple}).
 	 */
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -733,7 +733,7 @@ public class Tree extends MeshElement {
 				//No need to update selId because z.multiple will do the job
 			}
 			if (_model != null)
-				((TreeSelectionModel)_model).setMultiple(multiple);
+				((TreeSelectableModel)_model).setMultiple(multiple);
 			smartUpdate("multiple", _multiple);
 		}
 	}
@@ -1264,9 +1264,51 @@ public class Tree extends MeshElement {
 	 * Handles when the tree model's content changed
 	 */
 	private void onTreeDataChange(TreeDataEvent event){
-		//if the treeparent is empty, render tree's treechildren
-		Object node = event.getParent();
-		Component parent = getChildByNode(node);
+		final int type = event.getType();
+		final int[] path = event.getPath();
+		final Component target = path != null ? getChildByPath(path): null;
+		switch (type) {
+		case TreeDataEvent.STRUCTURE_CHANGED:
+			renderTree();
+
+			if (_model instanceof Sortable) {
+				final Sortable<Object> smodel = cast(_model);
+				final List<Treecol> cols = cast(_treecols.getChildren());
+				boolean found = false;
+				for (final Treecol col : cols) {
+					if (found) {
+						col.setSortDirection("natural");
+					} else {
+						Comparator<Object> cmpr = cast(col.getSortAscending());
+						String dir = smodel.getSortDirection(cmpr);
+						found = !"natural".equals(dir);
+						if (!found) {
+							cmpr = cast(col.getSortDescending());
+							dir = smodel.getSortDirection(cmpr);
+							found = !"natural".equals(dir);
+						}
+						col.setSortDirection(dir);
+					}
+				}
+			}
+			return;
+		case TreeDataEvent.SELECTION_CHANGED:
+			if (target instanceof Treeitem)
+				((Treeitem)target).setSelected(
+					((TreeSelectableModel)_model).isPathSelected(path));
+			return;
+		case TreeDataEvent.OPEN_CHANGED:
+			if (_model instanceof TreeOpenableModel) {
+				if (target instanceof Treeitem)
+					((Treeitem)target).setOpen(
+						((TreeOpenableModel)_model).isPathOpened(path));
+			}
+			return;
+		case TreeDataEvent.MULTIPLE_CHANGED:
+			setMultiple(((TreeSelectableModel)_model).isMultiple());
+			return;
+		}
+
 		/*
 		 * Loop through indexes array
 		 * if INTERVAL_REMOVED, from end to beginning
@@ -1274,10 +1316,10 @@ public class Tree extends MeshElement {
 		 * 2008/02/12 --- issue: [ 1884112 ]
 		 * When getChildByNode returns null, do nothing
 		 */
-		if(parent != null){
+		if(target != null){
+			Object node = _model.getChild(path);
 			int indexFrom = event.getIndexFrom();
 			int indexTo = event.getIndexTo();
-			int type = event.getType();
 			if ((type == TreeDataEvent.INTERVAL_ADDED || 
 					type == TreeDataEvent.CONTENTS_CHANGED) && 
 					!isIgnoreSortWhenChanged()) {
@@ -1286,58 +1328,15 @@ public class Tree extends MeshElement {
 			switch (type) {
 			case TreeDataEvent.INTERVAL_ADDED:
 				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataInsert(parent,node,i);
+					onTreeDataInsert(target,node,i);
 				break;
 			case TreeDataEvent.INTERVAL_REMOVED:
 				for(int i=indexTo;i>=indexFrom;i--)
-					onTreeDataRemoved(parent,node,i);
+					onTreeDataRemoved(target,node,i);
 				break;
 			case TreeDataEvent.CONTENTS_CHANGED:
 				for(int i=indexFrom;i<=indexTo;i++)
-					onTreeDataContentChange(parent,node,i);
-				break;
-			case TreeDataEvent.STRUCTURE_CHANGED:
-				renderTree();
-				// TODO: We have to skip the synchronization of the target component
-				// when the event is fired from it, i.e. No need to sync the sorting
-				// status here.
-				if (_model instanceof Sortable) {
-					Sortable<Object> smodel = cast(_model);
-					List<Treecol> cols = cast(_treecols.getChildren());
-					boolean found = false;
-					for (Treecol col : cols) {
-						if (found) {
-							col.setSortDirection("natural");
-						} else {
-							Comparator<Object> cmpr = cast(col.getSortAscending());
-							String dir = smodel.getSortDirection(cmpr);
-							found = !"natural".equals(dir);
-							if (!found) {
-								cmpr = cast(col.getSortDescending());
-								dir = smodel.getSortDirection(cmpr);
-								found = !"natural".equals(dir);
-							}
-							col.setSortDirection(dir);
-						}
-					}
-				}
-				break;
-			case TreeDataEvent.SELECTION_CHANGED:
-				if (_model instanceof TreeSelectionModel) {
-					TreeSelectionModel sm = (TreeSelectionModel) _model;
-					if (parent instanceof Treeitem)
-						((Treeitem)parent).setSelected(sm.isPathSelected(_model.getPath(node)));
-				}
-				break;
-			case TreeDataEvent.OPEN_CHANGED:
-				if (_model instanceof TreeOpenableModel) {
-					TreeOpenableModel om = (TreeOpenableModel) _model;
-					if (parent instanceof Treeitem)
-						((Treeitem)parent).setOpen(om.isPathOpened(_model.getPath(node)));
-				}
-				break;
-			case TreeDataEvent.MULTIPLE_CHANGED:
-				setMultiple(((TreeSelectionModel)_model).isMultiple());
+					onTreeDataContentChange(target,node,i);
 				break;
 			}
 		}
@@ -1478,8 +1477,8 @@ public class Tree extends MeshElement {
 	 */
 	public void setModel(TreeModel<?> model) {
 		if (model != null) {
-			if (!(model instanceof TreeSelectionModel))
-				throw new UiException(model.getClass() + " must implement "+TreeSelectionModel.class);
+			if (!(model instanceof TreeSelectableModel))
+				throw new UiException(model.getClass() + " must implement "+TreeSelectableModel.class);
 
 			if (_model != model) {
 				if (_model != null) {
@@ -1616,8 +1615,8 @@ public class Tree extends MeshElement {
 		} else {
 			_treechildren.getChildren().clear();
 		}
-		if (_model instanceof TreeSelectionModel)
-			this.setMultiple(((TreeSelectionModel) _model).isMultiple());
+		if (_model instanceof TreeSelectableModel)
+			this.setMultiple(((TreeSelectableModel) _model).isMultiple());
 		
 		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
@@ -1647,8 +1646,8 @@ public class Tree extends MeshElement {
 			// B60-ZK-767: handle selected/open state here, as it might be replaced
 			int[] path = null;
 			boolean isLeaf = childNode != null && _model.isLeaf(childNode);
-			if (_model instanceof TreeSelectionModel) {
-				TreeSelectionModel model = (TreeSelectionModel) _model;
+			if (_model instanceof TreeSelectableModel) {
+				TreeSelectableModel model = (TreeSelectableModel) _model;
 				if (!model.isSelectionEmpty() && 
 						getSelectedCount() != model.getSelectionCount() &&
 						model.isPathSelected(path = _model.getPath(childNode)))
@@ -2114,8 +2113,8 @@ public class Tree extends MeshElement {
 			try {
 				if (AuRequests.getBoolean(request.getData(), "clearFirst")) {
 					clearSelection();
-					if (_model instanceof TreeSelectionModel)
-						((TreeSelectionModel)_model).clearSelection();
+					if (_model instanceof TreeSelectableModel)
+						((TreeSelectableModel)_model).clearSelection();
 				}
 				
 				final boolean paging = inPagingMold();
@@ -2124,8 +2123,8 @@ public class Tree extends MeshElement {
 						selItems != null && selItems.size() > 0 ?
 							selItems.iterator().next(): null;
 					selectItem(item);
-					if (_model instanceof TreeSelectionModel) {
-						TreeSelectionModel tsm = (TreeSelectionModel) _model;
+					if (_model instanceof TreeSelectableModel) {
+						TreeSelectableModel tsm = (TreeSelectableModel) _model;
 						tsm.clearSelection();
 						if (item != null)
 							tsm.addSelectionPath(getTreeitemPath(this, item));
@@ -2147,16 +2146,16 @@ public class Tree extends MeshElement {
 					for (Treeitem item : selItems)
 						if (!_selItems.contains(item)) {
 							addItemToSelection(item);
-							if (_model instanceof TreeSelectionModel)
-								((TreeSelectionModel)_model).addSelectionPath(getTreeitemPath(this, item));
+							if (_model instanceof TreeSelectableModel)
+								((TreeSelectableModel)_model).addSelectionPath(getTreeitemPath(this, item));
 						}
 					for (Treeitem item : oldSelItems)
 						if (!selItems.contains(item)) {
 							final int index = getVisibleIndexOfItem(item);
 							if (!paging || (index >= from && index < to)) {
 								removeItemFromSelection(item);
-								if (_model instanceof TreeSelectionModel)
-									((TreeSelectionModel)_model).removeSelectionPath(getTreeitemPath(this, item));
+								if (_model instanceof TreeSelectableModel)
+									((TreeSelectableModel)_model).removeSelectionPath(getTreeitemPath(this, item));
 							}
 						}
 				}

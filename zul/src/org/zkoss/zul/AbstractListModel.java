@@ -182,7 +182,7 @@ Selectable<E>, java.io.Serializable {
 
 	/** Instantiation an empty set of the section.
 	 * It is used to initialize {@link #_selection}.
-	 * <p>By default, it instantiates an instance of LinkedHashMap.
+	 * <p>By default, it instantiates an instance of LinkedHashSet.
 	 * The deriving class might override to instantiate a different class.
 	 */
 	protected Set<E> newEmptySelection() {
