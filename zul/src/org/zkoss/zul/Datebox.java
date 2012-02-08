@@ -761,6 +761,11 @@ the short time styling.
 	}
 	protected Object unmarshall(Object value) {
 		if (value == null || _tzone == null) return value;
+		
+		if(!(value instanceof Date)){
+			throw new WrongValueException(this,MZul.NUMBER_REQUIRED,value);
+		}
+		
 		Date date = (Date) value;
 		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date) - Dates.getTimezoneOffset(_tzone, date));
 	}
