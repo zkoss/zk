@@ -16,82 +16,84 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import static org.zkoss.lang.Generics.cast;
+
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
 import java.util.AbstractSequentialList;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.io.Writer;
-import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Objects;
-import static org.zkoss.lang.Generics.cast;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.Converter;
-import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 import org.zkoss.json.JavaScriptValue;
-
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Deferrable;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.ForwardEvent;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Macro;
-import org.zkoss.zk.ui.ext.RawId;
-import org.zkoss.zk.ui.ext.NonFellow;
-import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.ext.ScopeListener;
-import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.util.ComponentSerializationListener;
-import org.zkoss.zk.ui.util.ComponentActivationListener;
-import org.zkoss.zk.ui.util.ComponentCloneListener;
-import org.zkoss.zk.ui.util.Template;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.Names;
-import org.zkoss.zk.ui.sys.ComponentRedraws;
-import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zk.ui.sys.JsContentRenderer;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.StubsComponent;
-import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zk.ui.sys.PropertiesRenderer;
-import org.zkoss.zk.ui.sys.EventListenerMap;
-import org.zkoss.zk.ui.metainfo.AnnotationMap;
-import org.zkoss.zk.ui.metainfo.Annotation;
-import org.zkoss.zk.ui.metainfo.EventHandlerMap;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.metainfo.EventHandler;
-import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.impl.SimpleScope;
-import org.zkoss.zk.ui.impl.Utils;
-import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.util.Cache;
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.Converter;
+import org.zkoss.util.FastReadCache;
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.au.out.AuEcho;
+import org.zkoss.zk.ui.event.Deferrable;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.ext.Macro;
+import org.zkoss.zk.ui.ext.NonFellow;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.impl.SimpleScope;
+import org.zkoss.zk.ui.impl.Utils;
+import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.EventHandler;
+import org.zkoss.zk.ui.metainfo.EventHandlerMap;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentRedraws;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ContentRenderer;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.EventListenerMap;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.JsContentRenderer;
+import org.zkoss.zk.ui.sys.Names;
+import org.zkoss.zk.ui.sys.PropertiesRenderer;
+import org.zkoss.zk.ui.sys.StubsComponent;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zk.ui.util.ComponentSerializationListener;
+import org.zkoss.zk.ui.util.Template;
 
 /**
  * A skeletal implementation of {@link Component}.
@@ -3206,28 +3208,15 @@ w:use="foo.MyWindow"&gt;
 	private static Object getDefaultInfo(Class<? extends Component> klass) { //use Object for future extension
 		Object inf = _infs.get(klass);
 		if (inf == null) {
-			synchronized (_sinfs) {
-				inf = _sinfs.get(klass);
-				if (inf == null) {
-					String mold = Library.getProperty(klass.getName() + ".mold");
-					inf = mold != null && mold.length() > 0 ? mold: DEFAULT;
-					_sinfs.put(klass, inf);
-				}
-				if (++_infcnt > 100 || _sinfs.size() > 20) {
-					_infcnt = 0;
-					Map<Class<? extends Component>, Object> infs =
-						new HashMap<Class<? extends Component>, Object>(_infs);
-					infs.putAll(_sinfs);
-					_infs = infs;
-					_sinfs.clear();
-				}
-			}
+			String mold = Library.getProperty(klass.getName() + ".mold");
+			inf = mold != null && mold.length() > 0 ? mold : DEFAULT;
+			_infs.put(klass, inf);
 		}
 		return inf;
 	}
-	private static transient Map<Class<? extends Component>, Object> _infs = new HashMap<Class<? extends Component>, Object>(), //readonly
-		_sinfs = new HashMap<Class<? extends Component>, Object>(); //synchronized
-	private static int _infcnt;
+
+	private static transient Cache<Class<? extends Component>, Object> _infs = new FastReadCache<Class<? extends Component>, Object>(
+			100, 4 * 60 * 60 * 1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
