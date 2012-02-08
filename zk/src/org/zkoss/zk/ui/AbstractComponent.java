@@ -39,7 +39,9 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.reflect.Fields;
+import org.zkoss.util.Cache;
 import org.zkoss.util.CollectionsX;
+import org.zkoss.util.MultiCache;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Serializables;
 
@@ -3113,27 +3115,13 @@ w:use="foo.MyWindow"&gt;
 	private static Object getDefaultInfo(Class klass) { //use Object for future extension
 		Object inf = _infs.get(klass);
 		if (inf == null) {
-			synchronized (_sinfs) {
-				inf = _sinfs.get(klass);
-				if (inf == null) {
-					String mold = Library.getProperty(klass.getName() + ".mold");
-					inf = mold != null && mold.length() > 0 ? mold: DEFAULT;
-					_sinfs.put(klass, inf);
-				}
-				if (++_infcnt > 100 || _sinfs.size() > 20) {
-					_infcnt = 0;
-					Map infs = new HashMap(_infs);
-					infs.putAll(_sinfs);
-					_infs = infs;
-					_sinfs.clear();
-				}
-			}
+			String mold = Library.getProperty(klass.getName() + ".mold");
+			inf = mold != null && mold.length() > 0 ? mold : DEFAULT;
+			_infs.put(klass, inf);
 		}
 		return inf;
 	}
-	private static transient Map _infs = new HashMap(), //readonly
-		_sinfs = new HashMap(); //synchronized
-	private static int _infcnt;
+	private static Cache _infs = new MultiCache(100, 30, 4*60*60*1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
