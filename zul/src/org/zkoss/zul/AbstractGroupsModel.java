@@ -33,16 +33,24 @@ import org.zkoss.zul.ext.Selectable;
  * A skeletal implementation for {@link GroupsModel}.
  * <p> Implements {@link Selectable} interface to handle the selection status.
  * (Since 6.0.0)
+ * <p>Generics:
+ * <dl>
+ * <dt>D</dt><dd>The class of each data</dd>
+ * <dt>H</dt><dd>The class of each group header</dd>
+ * <dt>F</dt><dd>The class of each group footer</dd>
+ * <dt>E</dt><dd>The class of each selection. It is the common base class
+ * of D, H, F. In other words, D, H and F must extend from E.</dd>
+ * </dl>
  * @author tomyeh
  * @since 3.5.0
  * @see Selectable
  */
-abstract public class AbstractGroupsModel<D, G, F> implements GroupsModel<D, G, F>,
-Selectable, java.io.Serializable {
+abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, H, F>,
+Selectable<E>, java.io.Serializable {
 	private transient List<GroupsDataListener> _listeners = new LinkedList<GroupsDataListener>();
 	
 	/** The current selection. */
-	protected transient Set _selection;
+	protected transient Set<E> _selection;
 	private boolean _multiple;
 	
 	protected AbstractGroupsModel() {
@@ -71,15 +79,13 @@ Selectable, java.io.Serializable {
 	}
 	//Selectable//
 	/** {@inheritDoc} */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set getSelection() {
+	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
 	/** {@inheritDoc} */
-	@SuppressWarnings("unchecked")
 	@Override
-	public void setSelection(Collection selection) {
+	public void setSelection(Collection<? extends E> selection) {
 		if (!_selection.equals(selection)) {
 			if (!_multiple && _selection.size() > 1)
 				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
@@ -103,9 +109,8 @@ Selectable, java.io.Serializable {
 	}
 
 	/** {@inheritDoc} */
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addToSelection(Object obj) {
+	public void addToSelection(E obj) {
 		if (_selection.add(obj)) {
 			if (!_multiple) {
 				_selection.clear();
@@ -142,20 +147,18 @@ Selectable, java.io.Serializable {
 	 * and {@link #setSelection(Collection)}.
 	 * @param e selected object.
 	 */
-	protected void fireSelectionEvent(Object e) {
+	protected void fireSelectionEvent(E e) {
 		fireEvent(GroupsDataEvent.SELECTION_CHANGED, -1, -1, -1);
 	}
 	
 	/**Removes the selection of the given collection.
 	 */
-	@SuppressWarnings("unchecked")
-	protected void removeAllSelection(Collection c) {
+	protected void removeAllSelection(Collection<?> c) {
 		_selection.removeAll(c);
 	}
 	/**Removes the selection that doesn't belong to the given collection.
 	 */
-	@SuppressWarnings("unchecked")
-	protected void retainAllSelection(Collection c) {
+	protected void retainAllSelection(Collection<?> c) {
 		_selection.retainAll(c);
 	}
 
@@ -165,7 +168,6 @@ Selectable, java.io.Serializable {
 		return _multiple;
 	}
 	/** {@inheritDoc} */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -173,7 +175,7 @@ Selectable, java.io.Serializable {
 			fireEvent(GroupsDataEvent.MULTIPLE_CHANGED, -1, -1, -1);
 
 			if (!multiple && _selection.size() > 1) {
-				Object v = _selection.iterator().next();
+				E v = _selection.iterator().next();
 				_selection.clear();
 				_selection.add(v);
 				fireEvent(GroupsDataEvent.SELECTION_CHANGED, -1, -1, -1);
@@ -186,8 +188,8 @@ Selectable, java.io.Serializable {
 	 * <p>By default, it instantiates an instance of LinkedHashMap.
 	 * The deriving class might override to instantiate a different class.
 	 */
-	protected Set newEmptySelection() {
-		return new LinkedHashSet();
+	protected Set<E> newEmptySelection() {
+		return new LinkedHashSet<E>();
 	}
 	/** Writes {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
@@ -199,9 +201,10 @@ Selectable, java.io.Serializable {
 	/** Reads back {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
 	 */
+	@SuppressWarnings("unchecked")
 	protected void readSelection(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
-		_selection = (Set)s.readObject();
+		_selection = (Set<E>)s.readObject();
 	}
 	
 	//Serializable//

@@ -32,6 +32,14 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * is immutable.
  * If you allow the user to re-group the content, use {@link GroupsModelArray}
  * instead.
+ * <p>Generics:
+ * <dl>
+ * <dt>D</dt><dd>The class of each data</dd>
+ * <dt>H</dt><dd>The class of each group header</dd>
+ * <dt>F</dt><dd>The class of each group footer</dd>
+ * <dt>E</dt><dd>The class of each selection. It is the common base class
+ * of D, H, F. In other words, D, H and F must extend from E.</dd>
+ * </dl>
  * <p>For more information, please refer to
  * <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVC/Model/Groups_Model">ZK Developer's Reference: Groups Model</a>
  * <p>By default, the model support cloneable when the component is cloned. (since 6.0.0)
@@ -41,7 +49,7 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @see GroupsModelArray
  * @see ComponentCloneListener
  */
-public class SimpleGroupsModel<D, H, F> extends AbstractGroupsModel<D, Object, F>
+public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object, F, E>
 implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	
 	/**

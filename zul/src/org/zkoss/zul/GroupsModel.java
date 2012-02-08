@@ -23,8 +23,8 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * The interface defines a suitable data model for grouping {@link Listbox}
  * and {@link Grid}.
  *
- * <p>G: the class representing a group,
- * F: the class representing a group foot,
+ * <p>H: the class representing a group header,
+ * F: the class representing a group footer,
  * and D: the class representing each item of data (in a group).
  *
  * <p>If the data model is used with sortable listbox or grid,
@@ -38,12 +38,12 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @see GroupsSortableModel
  * @see ListModel
  */
-public interface GroupsModel<D, G, F> {
+public interface GroupsModel<D, H, F> {
 	/** Returns the group value at the specified index.
 	 * It is used to render {@link Group} and {@link Listgroup}.
 	 * @param groupIndex the index of the group.
 	 */
-	public G getGroup(int groupIndex);
+	public H getGroup(int groupIndex);
 	/** Returns the number of groups.
 	 */
 	public int getGroupCount();
