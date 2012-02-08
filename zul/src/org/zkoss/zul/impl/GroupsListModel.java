@@ -33,8 +33,10 @@ import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
+import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.GroupsSortableModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Encapulates {@link org.zkoss.zul.GroupsModel} as an instance of {@link org.zkoss.zul.ListModel}
@@ -72,9 +74,16 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			return new GroupsListModelExt<D, G, F>(model);
 		return new GroupsListModel<D, G, F>(model);
 	}
+	@SuppressWarnings("unchecked")
 	protected GroupsListModel(GroupsModel<D, G, F> model) {
 		_model = model;
 		init();
+
+		if (_model instanceof Selectable) {
+			Selectable s = (Selectable) model;
+			setMultiple(s.isMultiple());
+			setSelection(s.getSelection());
+		}
 	}
 	/*package*/ void init() {
 		final int groupCount = _model.getGroupCount();
@@ -269,6 +278,13 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j1);
 					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
+				break;
+			case GroupsDataEvent.SELECTION_CHANGED:
+				type = ListDataEvent.SELECTION_CHANGED;
+				break;
+			case GroupsDataEvent.MULTIPLE_CHANGED:
+				type = ListDataEvent.MULTIPLE_CHANGED;
+				break;
 			}
 			init();//re-initialize the model information
 			fireEvent(type, j0, j1);

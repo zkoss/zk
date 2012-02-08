@@ -73,6 +73,18 @@ public class GroupsDataEvent {
 	 */
 	public static final int GROUPS_RESET = 7;
 	
+	/** Identifies the selection of the lists has changed.
+	 * Notice that the objects being selected can be found by calling
+	 * {@link org.zkoss.zul.ext.Selectable.getSelection}.
+	 * Moreover, {@link #getIndex0} and {@link #getIndex1} are both meaningless.
+	 * @since 6.0.0
+	 */
+	public static final int SELECTION_CHANGED = 8;
+	/** Identified the state of {@link GroupsModel#isMultiple} is changed.
+	 * @since 6.0.0
+	 */
+	public static final int MULTIPLE_CHANGED = 9;
+	
 	private final GroupsModel _model;
 	private final int _type, _groupIndex, _index0, _index1;
 
