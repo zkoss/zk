@@ -3331,9 +3331,20 @@ public class Listbox extends MeshElement {
 		} else if (cmd.equals("onTopPad")) {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals(Events.ON_SELECT)) {
-			if (_rod && Executions.getCurrent().getAttribute("zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
+			if (_rod && Executions.getCurrent().getAttribute(
+					"zkoss.zul.listbox.onDataLoading."+this.getUuid()) != null) //indicate doing dataloading
 				return; //skip all onSelect event after the onDataLoading
-			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			SelectEvent evt = SelectEvent.getSelectEvent(request, 
+					new SelectEvent.SelectedObjectHandler<Listitem>() {
+				public Set<Object> getObjects(Set<Listitem> items) {
+					if (items == null || items.isEmpty() || _model == null)
+						return null;
+					Set<Object> objs = new LinkedHashSet<Object>();
+					for (Listitem i : items)
+						objs.add(_model.getElementAt(i.getIndex()));
+					return objs;
+				}
+			});
 			Set<Listitem> selItems = cast(evt.getSelectedItems());
 			if (selItems == null)
 				selItems = new HashSet<Listitem>(); //just in case

@@ -56,15 +56,36 @@ public class SelectEvent<T extends Component, E> extends Event {
 	/** Converts an AU request to a select event.
 	 * @since 5.0.0
 	 */
+	public static final <T extends Component, E> SelectEvent<T,E> 
+			getSelectEvent(AuRequest request) {
+		return getSelectEvent(request, null);
+	}
+	
+	/** Converts an AU request to a select event.
+	 * @since 6.0.0
+	 */
 	@SuppressWarnings("unchecked")
-	public static final <T extends Component, E> SelectEvent<T,E> getSelectEvent(AuRequest request) {
+	public static final <T extends Component, E> SelectEvent<T,E> 
+			getSelectEvent(AuRequest request, SelectedObjectHandler<T> handler) {
 		final Map<String, Object> data = request.getData();
 		final Desktop desktop = request.getDesktop();
 		final List<String> sitems = cast((List)data.get("items"));
 		final Set<T> items = AuRequests.convertToItems(desktop, sitems);
+		final Set<E> objs = (Set<E>) (handler == null ? null : handler.getObjects(items));
 		return new SelectEvent<T,E>(request.getCommand(), request.getComponent(),
-			items, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
-			AuRequests.parseKeys(data));
+			items, objs, (T) desktop.getComponentByUuidIfAny((String)data.get("reference")),
+			null, AuRequests.parseKeys(data));
+	}
+	
+	/**
+	 * A handle to retrieve selected objects from selected items (components)
+	 * if possible.
+	 */
+	public interface SelectedObjectHandler<T extends Component> {
+		/**
+		 * Return selected objects from selected items if possible.
+		 */
+		public Set<Object> getObjects(Set<T> items);
 	}
 	
 	/** Constructs a selection event.
@@ -122,7 +143,8 @@ public class SelectEvent<T extends Component, E> extends Event {
 		return _selectedItems;
 	}
 	
-	/** Returns the selected objects (never null).
+	/** Returns the selected objects (never null). The information is available
+	 * only when the target component has a model. 
 	 * @since 6.0.0
 	 */
 	public final Set<E> getSelectedObjects() {

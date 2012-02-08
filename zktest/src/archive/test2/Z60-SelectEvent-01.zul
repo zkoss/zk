@@ -1,0 +1,48 @@
+<!--
+	Z60-SelectEvent-01.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Feb 8 16:14:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		String[] strs = new String[]{ "0A", "0B", "0C", "0D", "0E", "0F", "0G", "0H", "0I", "0J" };
+		ListModel model1 = new SimpleListModel(strs);
+		ListModel model2 = new SimpleListModel(strs);
+		TreeModel model3 = new DefaultTreeModel(new DefaultTreeNode("root", new TreeNode[] {
+			new DefaultTreeNode("0A", new TreeNode[] {
+				new DefaultTreeNode("0B", new TreeNode[] {
+					new DefaultTreeNode("0C"), new DefaultTreeNode("0D")
+				}),
+				new DefaultTreeNode("0E")
+			}),
+			new DefaultTreeNode("0F", new TreeNode[] {
+				new DefaultTreeNode("0G"),
+				new DefaultTreeNode("0H"),
+				new DefaultTreeNode("0I")
+			}),
+			new DefaultTreeNode("0J")
+		}));
+		model1.multiple = true;
+		model3.multiple = true;
+	]]></zscript>
+	<div>
+		Select some items in the following components. You should see a 
+		messagebox of correct information of selected objects upon onSelect.
+	</div>
+	<vlayout>
+		Combobox
+		<combobox model="${model2}" text="0" onSelect='alert(event.selectedObjects)'/>
+		Listbox
+		<listbox model="${model1}" checkmark="true" onSelect='alert(event.selectedObjects)' />
+		Tree
+		<tree model="${model3}" checkmark="true" onSelect='alert(event.selectedObjects)' />
+	</vlayout>
+</zk>

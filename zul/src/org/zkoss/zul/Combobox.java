@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -747,7 +748,17 @@ public class Combobox extends Textbox {
 			_open = evt.isOpen();
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
-			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			SelectEvent evt = SelectEvent.getSelectEvent(request, 
+					new SelectEvent.SelectedObjectHandler<Comboitem>() {
+				public Set<Object> getObjects(Set<Comboitem> items) {
+					if (items == null || items.isEmpty() || _model == null)
+						return null;
+					Set<Object> objs = new LinkedHashSet<Object>();
+					for (Comboitem i : items)
+						objs.add(_model.getElementAt(i.getIndex()));
+					return objs;
+				}
+			});
 			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
