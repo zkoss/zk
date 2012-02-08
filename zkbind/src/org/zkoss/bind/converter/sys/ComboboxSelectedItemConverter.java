@@ -1,19 +1,15 @@
-/* SelectedRadioConverter
+/* ComboboxSelectedItemConverter.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Mar 12 11:05:43     2007, Created by Henri
-}}IS_NOTE
+		Aug 17, 2011 6:10:20 PM, Created by henrichen
 
-Copyright (C) 2007 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
+
 package org.zkoss.bind.converter.sys;
 
 import java.util.Iterator;
@@ -21,53 +17,59 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BindRadioRenderer;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Radio;
-import org.zkoss.zul.Radiogroup;
+import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ext.Selectable;
 
+
 /**
- * Convert Radiogroup selected item to radio value and vice versa.
- *
- * @author Dennis
+ * Convert combobox selected comboitem to bean and vice versa.
+ * @author henrichen
+ * @author dennis
  * @since 6.0.0
  */
-public class SelectedRadioConverter implements Converter, java.io.Serializable {
-  	private static final long serialVersionUID = 200808191534L;
-  	
-  	@SuppressWarnings("unchecked")
+public class ComboboxSelectedItemConverter implements Converter, java.io.Serializable {
+	private static final long serialVersionUID = 201108171811L;
+	
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
-		Radiogroup radiogroup = (Radiogroup) comp;
-		final ListModel<?> model = radiogroup.getModel();
+		Combobox cbx = (Combobox) comp;
+		final ListModel<?> model = cbx.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-		if(model !=null && !(model instanceof Selectable)){
-			//model has to imple Selectable if binding to selectedItem
+  		if(model !=null && !(model instanceof Selectable)){
+  			//model has to imple Selectable if binding to selectedItem
   			throw new UiException("model doesn't implement Selectable");
   		}
-		
+  		
+  		//Notice, clear selection will cause combobox fire onAfterRender, and then reload selectedItem , 
+  		//it cause infinity loop
+  		
 	  	if (val != null) {
 	  		if(model!=null){
 	  			((Selectable<Object>)model).addToSelection(val);
 	  			return LoadPropertyBinding.LOAD_IGNORED;
 	  		}else{
 	  			//no model case
-			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
-			  		final Radio radio = (Radio) it.next();			  		
-			  		String value = radio.getValue();
-			  		if (val.equals(value)) {
-			  			return radio;
+		  		int i = 0;
+			  	for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
+			  		final Comboitem ci = (Comboitem) it.next();
+			  		
+			  		Object bean = ci.getValue();
+	
+			  		if (val.equals(bean)) {
+			  			return ci;
 			  		}
+			  		i++;
 			  	}
 	  		}
 		  	//not in the item list
 	  	}
 	  	
-	  //nothing matched, clean the old selection
+	  	//nothing matched, clean the old selection
 	  	if(model!=null){
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
@@ -79,8 +81,8 @@ public class SelectedRadioConverter implements Converter, java.io.Serializable {
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 	  	if (val != null) {
-	  		final ListModel<?> model = ((Radio)val).getRadiogroup().getModel();
-	  		
+		  	final Combobox lbx = (Combobox) comp;
+	  		final ListModel<?> model = lbx.getModel();
 	  		if(model !=null && !(model instanceof Selectable)){
 	  			throw new UiException("model doesn't implement Selectable");
 	  		}
@@ -89,9 +91,10 @@ public class SelectedRadioConverter implements Converter, java.io.Serializable {
 	  			if(selection==null || selection.size()==0) return null;
 	  			return selection.iterator().next();
 	  		} else{//no model
-	  			return ((Radio) val).getValue();
+	  			return ((Comboitem) val).getValue();
 	  		}
 	  	}
 	 	return null;
 	}
+
 }

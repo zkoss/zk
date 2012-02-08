@@ -1,0 +1,27 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00843SelectboxSelectedItem')">
+	<vbox>
+		<label id="l1" value="@bind(vm.selected.name)"/>
+		
+		<selectbox id="selectbox" model="@bind(vm.items)" width="100px" selectedItem="@bind(vm.selected)">
+			<template name="model" var="item" >
+				<label value="@bind(item.name)"/>	
+			</template>
+		</selectbox>
+		<listbox id="listbox" model="@load(vm.items)" selectedItem="@bind(vm.selected)">
+			<template name="model" var="item" >
+				<listitem>
+					<listcell label="@bind(item.name)"/>	
+				</listitem>
+			</template>
+		</listbox>
+		<combobox id="combobox" model="@load(vm.items)" selectedItem="@bind(vm.selected)">
+			<template name="model" var="item" >
+				<comboitem label="@bind(item.name)"/>	
+			</template>
+		</combobox>
+	
+	</vbox>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

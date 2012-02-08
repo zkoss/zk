@@ -1,4 +1,4 @@
-/* SelectedListitemConverter.java
+/* ListboxSelectedItemsConverter.java
 
 	Purpose:
 		
@@ -32,7 +32,7 @@ import org.zkoss.zul.ext.Selectable;
  * @author dennis
  * @since 6.0.0
  */
-public class SelectedListitemsConverter implements Converter, java.io.Serializable {
+public class ListboxSelectedItemsConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
 	@SuppressWarnings("unchecked")

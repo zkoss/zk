@@ -10,12 +10,13 @@
 		specified definition, no matter it is created by ZUML or by program.
 	 2. ZKBIND is the zkbind system annotation 
 	    ACCESS is the access direction: can be "both", "save", "load"; default to "load" if not found
-	    CONVERTER is the system converter for special properties. e.g. SelectedItem in listbox. see SelectedListitemConverter.java
+	    CONVERTER is the system converter for special properties. e.g. SelectedItem in listbox. see ListboxSelectedItemConverter.java
 	    VALIDATOR is the system validator for special properties.
 	    SAVE_EVENT is the save trigger event; meaningful only when ACCESS is "both" or "save".
 	    LOAD_EVENT is the load trigger event; meaningful only when ACCESS is "both" or "load" or not found(default to "load").
 	    LOAD_REPLACEMENT is the load replacement ; e.g. value of textbox, it loads to rawValue
 	    LOAD_TYPE is the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
+	    SAVE_REPLACEMENT is the save replacement; e.g. selectedItem of selectbox, it save the value selecteIndex via converter to the bean. (selectedItem is not existed in selectbox)
 	    RENDERER is the special renderer for binding
 	    
 	History:
@@ -215,7 +216,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedComboitemConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.ComboboxSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -537,7 +538,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedListitemConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.ListboxSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -557,7 +558,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedListitemsConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.ListboxSelectedItemsConverter</attribute-value>
 			</attribute>
 		</annotation>		
 		<annotation>
@@ -830,7 +831,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedRadioConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.RadiogroupSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -898,6 +899,30 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
 				<attribute-value>org.zkoss.bind.converter.sys.SelectboxSelectedIndexConverter</attribute-value>
+			</attribute>
+		</annotation>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>selectedItem</property-name>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_EVENT</attribute-name>
+				<attribute-value>onAfterRender</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>SAVE_REPLACEMENT</attribute-name>
+				<attribute-value>selectedIndex</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.SelectboxSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>	
@@ -1025,7 +1050,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedTabConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.TabboxSelectedTabConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -1160,7 +1185,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedTreeitemConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.TreeSelectedItemConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -1180,7 +1205,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.SelectedTreeitemsConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.sys.TreeSelectedItemsConverter</attribute-value>
 			</attribute>
 		</annotation>		
 	</component>

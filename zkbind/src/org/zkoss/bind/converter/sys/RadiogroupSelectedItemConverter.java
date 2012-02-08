@@ -1,15 +1,19 @@
-/* SelectedListitemConverter.java
+/* RadiogroupSelectedItemConverter
 
+{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Aug 17, 2011 6:10:20 PM, Created by henrichen
+		Mon Mar 12 11:05:43     2007, Created by Henri
+}}IS_NOTE
 
-Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
 */
-
 package org.zkoss.bind.converter.sys;
 
 import java.util.Iterator;
@@ -21,23 +25,23 @@ import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.ext.Selectable;
 
 /**
- * Convert listbox selected listitem to bean and vice versa.
- * @author henrichen
- * @author dennis
+ * Convert Radiogroup selected item to radio value and vice versa.
+ *
+ * @author Dennis
  * @since 6.0.0
  */
-public class SelectedListitemConverter implements Converter, java.io.Serializable {
-	private static final long serialVersionUID = 201108171811L;
-	
-	@SuppressWarnings("unchecked")
+public class RadiogroupSelectedItemConverter implements Converter, java.io.Serializable {
+  	private static final long serialVersionUID = 200808191534L;
+  	
+  	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
-		Listbox lbx = (Listbox) comp;
-		final ListModel<?> model = lbx.getModel();
+		Radiogroup radiogroup = (Radiogroup) comp;
+		final ListModel<?> model = radiogroup.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
 		if(model !=null && !(model instanceof Selectable)){
 			//model has to imple Selectable if binding to selectedItem
@@ -50,11 +54,11 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  			return LoadPropertyBinding.LOAD_IGNORED;
 	  		}else{
 	  			//no model case
-			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-			  		final Listitem li = (Listitem) it.next();
-			  		Object bean = li.getValue();
-			  		if (val.equals(bean)) {
-			  			return li;
+			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
+			  		final Radio radio = (Radio) it.next();			  		
+			  		String value = radio.getValue();
+			  		if (val.equals(value)) {
+			  			return radio;
 			  		}
 			  	}
 	  		}
@@ -73,8 +77,8 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 	  	if (val != null) {
-		  	final Listbox lbx = (Listbox) comp;
-	  		final ListModel<?> model = lbx.getModel();
+	  		final ListModel<?> model = ((Radio)val).getRadiogroup().getModel();
+	  		
 	  		if(model !=null && !(model instanceof Selectable)){
 	  			throw new UiException("model doesn't implement Selectable");
 	  		}
@@ -83,10 +87,9 @@ public class SelectedListitemConverter implements Converter, java.io.Serializabl
 	  			if(selection==null || selection.size()==0) return null;
 	  			return selection.iterator().next();
 	  		} else{//no model
-	  			return ((Listitem) val).getValue();
+	  			return ((Radio) val).getValue();
 	  		}
 	  	}
 	 	return null;
 	}
-
 }

@@ -1,4 +1,4 @@
-/* SelectedComboitemConverter.java
+/* ListboxSelectedItemConverter.java
 
 	Purpose:
 		
@@ -20,56 +20,48 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zul.Combobox;
 import org.zkoss.zul.ListModel;
-import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ext.Selectable;
 
-
 /**
- * Convert combobox selected comboitem to bean and vice versa.
+ * Convert listbox selected listitem to bean and vice versa.
  * @author henrichen
  * @author dennis
  * @since 6.0.0
  */
-public class SelectedComboitemConverter implements Converter, java.io.Serializable {
+public class ListboxSelectedItemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
-		Combobox cbx = (Combobox) comp;
-		final ListModel<?> model = cbx.getModel();
+		Listbox lbx = (Listbox) comp;
+		final ListModel<?> model = lbx.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-  		if(model !=null && !(model instanceof Selectable)){
-  			//model has to imple Selectable if binding to selectedItem
+		if(model !=null && !(model instanceof Selectable)){
+			//model has to imple Selectable if binding to selectedItem
   			throw new UiException("model doesn't implement Selectable");
   		}
-  		
-  		//Notice, clear selection will cause combobox fire onAfterRender, and then reload selectedItem , 
-  		//it cause infinity loop
-  		
+		
 	  	if (val != null) {
 	  		if(model!=null){
 	  			((Selectable<Object>)model).addToSelection(val);
 	  			return LoadPropertyBinding.LOAD_IGNORED;
 	  		}else{
 	  			//no model case
-		  		int i = 0;
-			  	for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
-			  		final Comboitem ci = (Comboitem) it.next();
-			  		
-			  		Object bean = ci.getValue();
-	
+			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
+			  		final Listitem li = (Listitem) it.next();
+			  		Object bean = li.getValue();
 			  		if (val.equals(bean)) {
-			  			return ci;
+			  			return li;
 			  		}
-			  		i++;
 			  	}
 	  		}
 		  	//not in the item list
 	  	}
 	  	
-	  	//nothing matched, clean the old selection
+	  //nothing matched, clean the old selection
 	  	if(model!=null){
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
@@ -81,7 +73,7 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 	  	if (val != null) {
-		  	final Combobox lbx = (Combobox) comp;
+		  	final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
 	  		if(model !=null && !(model instanceof Selectable)){
 	  			throw new UiException("model doesn't implement Selectable");
@@ -91,7 +83,7 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  			if(selection==null || selection.size()==0) return null;
 	  			return selection.iterator().next();
 	  		} else{//no model
-	  			return ((Comboitem) val).getValue();
+	  			return ((Listitem) val).getValue();
 	  		}
 	  	}
 	 	return null;

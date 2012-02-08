@@ -30,7 +30,7 @@ import org.zkoss.zul.Tabbox;
  * @author Dennis
  * @since 6.0.0
  */
-public class SelectedTabConverter implements Converter, java.io.Serializable {
+public class TabboxSelectedTabConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;
 
 	@Override

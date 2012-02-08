@@ -40,11 +40,11 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
 	
-	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveExpr,
+	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveAttr, String saveExpr,
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
 			String converterExpr, Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs) {
 		
-		super(binder, comp, attr,"self."+attr, saveExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
+		super(binder, comp, attr,"self."+saveAttr, saveExpr, conditionType, command, bindingArgs, converterExpr, converterArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		_validator = validatorExpr==null?null:parseValidator(eval,validatorExpr);
 		_validatorArgs = validatorArgs;

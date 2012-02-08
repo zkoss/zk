@@ -1,4 +1,4 @@
-/* SelectedTreeitemsConverter.java
+/* TreeSelectedItemsConverter.java
 
 	Purpose:
 		
@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.converter.sys;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -33,7 +32,7 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  * @author dennis
  * @since 6.0.0
  */
-public class SelectedTreeitemsConverter implements Converter, java.io.Serializable {
+public class TreeSelectedItemsConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
 	@SuppressWarnings("unchecked")

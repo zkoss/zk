@@ -62,6 +62,11 @@ public interface Binder {
 	 * Attribute of {@link Binder#ZKBIND} annotation, the type of attribute for loading; e.g. rawValue of textbox is java.lang.String
 	 */
 	public static final String LOAD_TYPE = "LOAD_TYPE"; //expected type of attribute
+	/**
+	 * Attribute of {@link Binder#ZKBIND} annotation, the save replacement ; e.g. selecteItem of selectbox, it save the value selectedIndex (via converter) to bean
+	 */
+	public static final String SAVE_REPLACEMENT = "SAVE_REPLACEMENT"; //loadreplacement of attribute
+	
 	
 	/**
 	 * Initializes the binder with a root component and viewModel object. 

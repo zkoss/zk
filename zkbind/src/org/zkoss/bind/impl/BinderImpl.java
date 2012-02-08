@@ -832,7 +832,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		//the event is usually a engine lifecycle event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
 		String evtnm = null;
-		String loadrep = null;//loadrep not ready yet
+		String loadRep = null;
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
@@ -842,7 +842,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			evtnm = testString(attrs.get(Binder.LOAD_EVENT)); //check trigger event for loading
 			
-			loadrep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			loadRep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
 			
 			final String type = testString(attrs.get(Binder.LOAD_TYPE)); //check type of attr when loading
 			if(type!=null){
@@ -853,13 +853,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				}
 			}
 		}
-		loadrep = loadrep == null ? attr : loadrep;
+		loadRep = loadRep == null ? attr : loadRep;
 		
 		if(prompt){
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-load-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s]", comp,attr,loadExpr,evtnm,converterArgs);
 			}
-			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
+			LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr, ConditionType.PROMPT, null,  bindingArgs, converterExpr,converterArgs);
 			addBinding(comp, attr, binding);
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
@@ -875,7 +875,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add before command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -885,7 +885,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadrep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
+					LoadPropertyBindingImpl binding = new LoadPropertyBindingImpl(this, comp, attr, loadRep, attrType, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr,converterArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add after command-load-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s]", comp,attr,loadExpr,converterExpr);
@@ -906,6 +906,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onSelect'
 		//ex, checkbox's 'checked' should be saved to bean on 'onCheck'
 		String evtnm = null;
+		String saveRep = null;
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 			final String rw = testString(attrs.get(Binder.ACCESS)); //_accessInfo right, "both|save|load", default to load
@@ -913,15 +914,17 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				return;
 			}
 			evtnm = testString(attrs.get(Binder.SAVE_EVENT)); //check trigger event for saving
+			
+			saveRep = testString(attrs.get(Binder.SAVE_REPLACEMENT)); //check replacement of attr when saving
 		}
 		if (evtnm == null) { 
 			//no trigger event, since the value never change of component, so both prompt and command are useless
 			return;
 		}
-
+		saveRep = saveRep == null ? attr : saveRep;
 		
 		if(prompt){
-			final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+			final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 			addBinding(comp, attr, binding);
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
@@ -932,7 +935,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add before command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
@@ -942,7 +945,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
+					final SavePropertyBindingImpl binding = new SavePropertyBindingImpl(this, comp, attr, saveRep, saveExpr, ConditionType.AFTER_COMMAND, cmd, bindingArgs, converterExpr, converterArgs, validatorExpr, validatorArgs);
 					addBinding(comp, attr, binding);
 					if(_log.debugable()){
 						_log.debug("add after command-save-binding: comp=[%s],att=r[%s],expr=[%s],converter=[%s],validator=[%s]", comp,attr,saveExpr,converterExpr,validatorExpr);
