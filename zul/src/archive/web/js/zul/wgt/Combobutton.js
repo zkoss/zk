@@ -164,6 +164,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
+			if (this._mold == 'tbbtn')
+				jq(this.$n('box')).addClass(this.getZclass() + "-over");
 		}
 	},
 	doMouseDown_: function (evt) {

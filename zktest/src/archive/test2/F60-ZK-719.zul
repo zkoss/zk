@@ -21,6 +21,24 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>4. Test step 2 and step 3 with combobutton two.</div>
 		<div>5. Also test F55-ZK-318.zul and make sure nothing strange.</div>
 	</div>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zkplus.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
 	<window title="Toolbar window" border="normal" width="400px">
 		<label id="lb" value="message: " />
 		<toolbar>
