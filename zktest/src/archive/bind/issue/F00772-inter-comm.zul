@@ -7,16 +7,16 @@
 	</hbox>
 	<hbox >
 		<div>
-			<include src="F00772_1.zul"/>
+			<include src="/bind/issue/F00772_1.zul"/>
 		</div>
 		<div>
-			<include src="F00772_2.zul"/>
+			<include src="/bind/issue/F00772_2.zul"/>
 		</div>
 		<div>
-			<include src="F00772_3.zul"/>
+			<include src="/bind/issue/F00772_3.zul"/>
 		</div>
 		<div>
-			<include src="F00772_4.zul"/>
+			<include src="/bind/issue/F00772_4.zul"/>
 		</div>
 	</hbox>
 </window>
