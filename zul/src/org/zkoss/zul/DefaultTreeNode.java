@@ -273,4 +273,9 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return _data == null ? "(null)" : _data.toString();
+	}
+	
 }
