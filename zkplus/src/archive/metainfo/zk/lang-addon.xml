@@ -251,6 +251,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</annotation>
 	</component>
 	<component>
+		<component-name>doublespinner</component-name>
+		<extends>doublespinner</extends>
+		<annotation>
+			<annotation-name>default-bind</annotation-name>
+			<property-name>value</property-name>
+			<attribute>
+				<attribute-name>access</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>save-when</attribute-name>
+				<attribute-value>self.onChange</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
 		<component-name>grid</component-name>
 		<extends>grid</extends>
 		<annotation>
