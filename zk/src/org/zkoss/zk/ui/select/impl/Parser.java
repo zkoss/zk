@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.zkoss.fsm.*;
 import org.zkoss.fsm.StateCtx.TransitionListener;
+import org.zkoss.fsm.StateMachine.StateMachineException;
 import org.zkoss.zk.ui.select.impl.Attribute.Operator;
 import org.zkoss.zk.ui.select.impl.InSeqMachine.SubState;
 import org.zkoss.zk.ui.select.impl.Selector.Combinator;
@@ -117,8 +118,12 @@ public class Parser {
 		
 	};
 	
-	public List<Selector> parse(String source){
-		return parse(new Tokenizer().tokenize(source), source);
+	public List<Selector> parse(String source) {
+		try {
+			return parse(new Tokenizer().tokenize(source), source);
+		} catch (StateMachineException e) {
+			throw new ParseException("Illegal selector string: " + source);
+		}
 	}
 	
 	public List<Selector> parse(List<Token> tokens, String source){
