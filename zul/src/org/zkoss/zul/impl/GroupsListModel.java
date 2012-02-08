@@ -16,14 +16,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
@@ -74,16 +72,10 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			return new GroupsListModelExt<D, G, F>(model);
 		return new GroupsListModel<D, G, F>(model);
 	}
-	@SuppressWarnings("unchecked")
+	
 	protected GroupsListModel(GroupsModel<D, G, F> model) {
 		_model = model;
 		init();
-
-		if (_model instanceof Selectable) {
-			Selectable s = (Selectable) model;
-			setMultiple(s.isMultiple());
-			setSelection(s.getSelection());
-		}
 	}
 	/*package*/ void init() {
 		final int groupCount = _model.getGroupCount();
@@ -214,6 +206,80 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		return _size;
 	}
 
+	//Selectable
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<Object> getSelection() {
+		if (_model instanceof Selectable) 
+			return ((Selectable) _model).getSelection();
+		return super.getSelection();
+	}
+	/** {@inheritDoc} */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setSelection(Collection<?> selection) {
+		if (_model instanceof Selectable) 
+			((Selectable) _model).setSelection(selection);
+		else
+			super.setSelection(selection);
+	}
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSelected(Object obj) {
+		if (_model instanceof Selectable) 
+			return ((Selectable) _model).isSelected(obj);
+		return super.isSelected(obj);
+	}
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSelectionEmpty() {
+		if (_model instanceof Selectable) 
+			return ((Selectable) _model).isSelectionEmpty();
+		return super.isSelectionEmpty();
+	}
+
+	/** {@inheritDoc} */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addToSelection(Object obj) {
+		if (_model instanceof Selectable) 
+			((Selectable) _model).addToSelection(obj);
+		else
+			super.addToSelection(obj);
+	}
+	/** {@inheritDoc} */
+	@Override
+	public boolean removeFromSelection(Object obj) {
+		if (_model instanceof Selectable) 
+			return ((Selectable) _model).removeFromSelection(obj);
+		return super.removeFromSelection(obj);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void clearSelection() {
+		if (_model instanceof Selectable) 
+			((Selectable) _model).clearSelection();
+		else
+			super.clearSelection();
+	}
+	/** {@inheritDoc} */
+	@Override
+	public boolean isMultiple() {
+		if (_model instanceof Selectable) 
+			return ((Selectable) _model).isMultiple();
+		return super.isMultiple();
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setMultiple(boolean multiple) {
+		if (_model instanceof Selectable) 
+			((Selectable) _model).setMultiple(multiple);
+		else
+			super.setMultiple(multiple);
+	}
+	
 	//Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 	throws java.io.IOException {
@@ -262,8 +328,8 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 					j1 = getNextOffset(gi) - 1;
 					if (_gpfts[gi]) --j1; //exclude groupfoot
 				}
+				init();//re-initialize the model information
 				break;
-
 			case GroupsDataEvent.GROUPS_CHANGED:
 			case GroupsDataEvent.GROUPS_ADDED:
 			case GroupsDataEvent.GROUPS_REMOVED:
@@ -278,6 +344,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j1);
 					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
+				init();//re-initialize the model information
 				break;
 			case GroupsDataEvent.SELECTION_CHANGED:
 				type = ListDataEvent.SELECTION_CHANGED;
@@ -286,7 +353,6 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 				type = ListDataEvent.MULTIPLE_CHANGED;
 				break;
 			}
-			init();//re-initialize the model information
 			fireEvent(type, j0, j1);
 		}
 	}

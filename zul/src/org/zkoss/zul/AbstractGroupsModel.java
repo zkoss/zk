@@ -233,6 +233,8 @@ Selectable<E>, java.io.Serializable {
 			throw new InternalError();
 		}
 		clone._listeners = new LinkedList<GroupsDataListener>();
+		clone._selection = clone.newEmptySelection();
+		clone._selection.addAll(_selection);
 		return clone;
 	}
 }
