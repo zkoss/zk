@@ -253,6 +253,7 @@ ZK 5.0.11
   ZK-817: Cannot resize window on iframe
   ZK-798: The scroll position shall not goto top when call focus after invalidate()
   ZK-835: Paging Tree/Grid/Listbox trigger bind/unbind_ more than once in mounting
+  ZK-763: CDI issue: Cannot locate the BeanManager for JavaEE 6
   
 * Upgrade Notes
   

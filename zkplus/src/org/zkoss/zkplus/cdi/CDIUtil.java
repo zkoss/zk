@@ -21,10 +21,20 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.xel.XelException;
 /**
  * Some generic utility for use with CDI.
  * <p>Applicable to CDI version 1.0 or later</p>
+ * <p> To specify a different JNDI name for the bean manager, please specify them
+ * in zk.xml as follows. (By default is <tt>java:comp/env/BeanManager</tt>) since
+ * 5.0.11.
+ * <pre><code>
+ *	<library-property>
+ *		<name>org.zkoss.zkplus.cdi.beanManager.jndiName</name>
+ *		<value>java:comp/env/BeanManager</value>
+ *	</library-property>
+ * </code></pre>
  * @author henrichen
  *
  */
@@ -38,10 +48,13 @@ public class CDIUtil {
 			return _manager;
 			
 		try {
-			final InitialContext initialContext = new InitialContext(); 
-		   _manager = (BeanManager) initialContext.lookup("java:comp/env/BeanManager");
+			final InitialContext initialContext = new InitialContext();
+			_manager = (BeanManager) initialContext.lookup(Library.getProperty(
+					"org.zkoss.zkplus.cdi.beanManager.jndiName",
+					"java:comp/env/BeanManager"));
 		} catch (NamingException e) { // Error getting the home interface
-		   throw XelException.Aide.wrap(e, "Cannot locate the BeanManager for JavaEE 6.");
+			throw XelException.Aide.wrap(e,
+					"Cannot locate the BeanManager for JavaEE 6.");
 		}
 		return _manager;
 	}
