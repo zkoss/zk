@@ -3215,8 +3215,9 @@ w:use="foo.MyWindow"&gt;
 		return inf;
 	}
 
-	private static transient Cache<Class<? extends Component>, Object> _infs = new FastReadCache<Class<? extends Component>, Object>(
-			100, 4 * 60 * 60 * 1000);
+	private static transient Cache<Class<? extends Component>, Object> _infs =
+		new FastReadCache<Class<? extends Component>, Object>(
+			30, 4 * 60 * 60 * 1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)

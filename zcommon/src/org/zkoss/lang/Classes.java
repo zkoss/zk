@@ -844,7 +844,7 @@ public class Classes {
 		return (Method) m;
 	}
 	private static Cache<AOInfo, Object> _closms = new FastReadCache<AOInfo, Object>(
-		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 500),
+		Library.getIntProperty("org.zkoss.lang.Classes.methods.cache.maxSize", 100),
 		4*60*60*1000);
 	private static final
 	Method myGetCloseMethod(final Class<?> cls, final String name,
