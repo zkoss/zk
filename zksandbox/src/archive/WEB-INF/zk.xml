@@ -538,6 +538,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
+	<!-- Specify a JNDI name for bean manager in CDI
+		Default: java:comp/env/BeanManager
+	<library-property>
+		<name>org.zkoss.zkplus.cdi.beanManager.jndiName</name>
+		<value>java:comp/env/BeanManager</value>
+	</library-property>
+	-->
+	
 	<!-- Uncommet to specify a directory, where ZK will load the so-called
 		Class-Web Resources (CWR), including JavaScript files, CSS files,
 		 and other resources (~./xxx), in addition to the class path.
