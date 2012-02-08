@@ -78,15 +78,23 @@ public class SelectedListitemsConverter implements Converter, java.io.Serializab
 		if (val != null) {
 			final Listbox lbx = (Listbox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		final Set<Listitem> items = (Set<Listitem>)Classes.coerce(HashSet.class, val);
-	  		for(Listitem item : items){
-		  		if(model != null){ //from model value
-		  			vals.add(model.getElementAt(item.getIndex()));
-		  		} else { //no binding
-		  			vals.add(item.getValue());
+	  		if(model !=null && !(model instanceof Selectable)){
+	  			throw new UiException("model doesn't implement Selectable");
+	  		}
+	  		
+	  		if(model!=null){
+	  			Set<?> selection = ((Selectable<?>)model).getSelection();
+	  			if(selection!=null && selection.size()>0){
+	  				for(Object o:selection){
+	  					vals.add(o);
+	  				}
+	  			}
+	  		} else{//no model
+	  			final Set<Listitem> items = (Set<Listitem>)Classes.coerce(HashSet.class, val);
+		  		for(Listitem item : items){
+			  		vals.add(item.getValue());
 		  		}
 	  		}
-	  		return vals;
 	  	}
 	 	return vals;
 	}

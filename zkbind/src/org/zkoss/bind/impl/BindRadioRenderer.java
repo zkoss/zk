@@ -34,9 +34,6 @@ import org.zkoss.zul.Radiogroup;
 public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer<Object>,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	/** key for the radio data, internal use only */
-	public static final String RADIO_DATA = "$ZKBIND_RADIO_DATA$"; 
-	
 	public void render(final Radio item, final Object data, final int index)
 	throws Exception {
 		final Radiogroup radiogroup = item.getRadiogroup();
@@ -47,7 +44,6 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			if(data instanceof String){//the value of radio will pass to client, (meaningful in html submit case)
 				item.setValue((String)data);
 			}
-			item.setAttribute(RADIO_DATA, data);
 		} else {
 			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
 				private static final long serialVersionUID = 1L;
@@ -96,7 +92,6 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);
-			nr.setAttribute(RADIO_DATA, data);
 			
 			//add template dependency
 			addTemplateTracking(radiogroup, nr, data, index, size);

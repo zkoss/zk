@@ -26,6 +26,7 @@ import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.ext.Selectable;
@@ -78,12 +79,18 @@ public class SelectedRadioConverter implements Converter, java.io.Serializable {
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 	  	if (val != null) {
-	  		//no getIndex in radio. cannot get data form model, 
-	  		//so, if there is a data we stored in component, return it directly 
-	  		if(((Radio) val).hasAttribute(BindRadioRenderer.RADIO_DATA)){
-	  			return ((Radio) val).getAttribute(BindRadioRenderer.RADIO_DATA);
+	  		final ListModel<?> model = ((Radio)val).getRadiogroup().getModel();
+	  		
+	  		if(model !=null && !(model instanceof Selectable)){
+	  			throw new UiException("model doesn't implement Selectable");
 	  		}
-	  		return ((Radio) val).getValue();
+	  		if(model!=null){
+	  			Set<?> selection = ((Selectable<?>)model).getSelection();
+	  			if(selection==null || selection.size()==0) return null;
+	  			return selection.iterator().next();
+	  		} else{//no model
+	  			return ((Radio) val).getValue();
+	  		}
 	  	}
 	 	return null;
 	}

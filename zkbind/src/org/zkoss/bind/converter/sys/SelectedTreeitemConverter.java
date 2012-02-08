@@ -81,26 +81,17 @@ public class SelectedTreeitemConverter implements Converter, java.io.Serializabl
 		if (val != null) {
 		  	final Tree tree = (Tree) comp;
 	  		final TreeModel<?> model = tree.getModel();
-	  		if(model!=null){ //no binding
-	  			return model.getChild(toPath((Treeitem) val));
+	  		if(model !=null && !(model instanceof TreeSelectionModel)){
+	  			throw new UiException("model doesn't implement TreeSelectionModel");
+	  		}
+	  		if(model!=null){
+	  			int[] path = ((TreeSelectionModel)model).getSelectionPath();
+	  			if(path==null) return null;
+	  			return model.getChild(path);
 	  		} else{
 	  			return ((Treeitem) val).getValue();
 	  		}
 	  	}
 	 	return null;
 	}
-
-	private int[] toPath(Treeitem item) {
-		ArrayList<Integer> path = new ArrayList<Integer>();
-		while(item!=null){
-			path.add(0,item.getIndex());
-			item = item.getParentItem();
-		}
-		int[] p = new int[path.size()];
-		for(int i=0;i<p.length;i++){
-			p[i] = path.get(i).intValue();
-		}
-		return p;
-	}
-
 }

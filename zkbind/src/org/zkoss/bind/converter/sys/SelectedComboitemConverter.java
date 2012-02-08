@@ -83,9 +83,14 @@ public class SelectedComboitemConverter implements Converter, java.io.Serializab
 	  	if (val != null) {
 		  	final Combobox lbx = (Combobox) comp;
 	  		final ListModel<?> model = lbx.getModel();
-	  		if(model!=null){ //no binding
-	  			return model.getElementAt(((Comboitem) val).getIndex());
-	  		} else{
+	  		if(model !=null && !(model instanceof Selectable)){
+	  			throw new UiException("model doesn't implement Selectable");
+	  		}
+	  		if(model!=null){
+	  			Set<?> selection = ((Selectable<?>)model).getSelection();
+	  			if(selection==null || selection.size()==0) return null;
+	  			return selection.iterator().next();
+	  		} else{//no model
 	  			return ((Comboitem) val).getValue();
 	  		}
 	  	}
