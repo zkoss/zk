@@ -950,17 +950,20 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	/* maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
 		var focusEl = this.$n('a'),
+			focusElStyle = focusEl.style,
+			oldTop = this._anchorTop,
+			oldLeft = this._anchorLeft,
 			offs, n;
 		if (row && (n = row.$n())) {
 			offs = zk(n).revisedOffset();
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
-		} else
-			offs = [0, 0];
+		} else	// ZK-798, use old value if exists
+			offs = [oldLeft? oldLeft : 0, oldTop? oldTop : 0];
 		this._anchorTop = offs[1];
 		this._anchorLeft = offs[0];
 		this.fire("onAnchorPos",{top:this._anchorTop,left:this._anchorLeft});
-		focusEl.style.top = this._anchorTop + "px";
-		focusEl.style.left = this._anchorLeft + "px";
+		focusElStyle.top = this._anchorTop + "px";
+		focusElStyle.left = this._anchorLeft + "px";
 	},
 	_toStyleOffset: function (el, x, y) {
 		var ofs1 = zk(el).revisedOffset(),
