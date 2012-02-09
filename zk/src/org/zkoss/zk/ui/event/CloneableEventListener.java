@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.util.ComponentCloneListener;
  * if it is registered to {@link org.zkoss.zk.ui.Component#addEventListener}.
  *
  * <p>It is the same as {@link EventListener} except it also extends
- * {@line ComponentCloneListener}. It is useful for instantiating a cloneable instance of
+ * {@link ComponentCloneListener}. It is useful for instantiating a cloneable instance of
  * an anonymous class (so it could work in a cloned environment). For example,
  * <pre><code>
  *comp.addEventListener("onSomething",

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class AuScrollIntoView extends org.zkoss.zk.au.AuResponse {
 	/** Constructor.
-	 * @param cmp the component
+	 * @param comp the component
 	 */
 	public AuScrollIntoView(Component comp) {
 		super("scrollIntoView", comp);
