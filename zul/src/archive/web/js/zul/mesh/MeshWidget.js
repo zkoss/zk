@@ -90,11 +90,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.efoottbl.style.width = '';
 			efoottblfix = wgt.efoottbl.style.tableLayout;
 			wgt.efoottbl.style.tableLayout = '';
-			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
-				var ftcell = ftfaker.cells[i];
-				ftfakerws[i] = ftcell.style.width;
-				ftcell.style.width = '';
-			}
+			if (ftfaker)
+				for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
+					var ftcell = ftfaker.cells[i];
+					ftfakerws[i] = ftcell.style.width;
+					ftcell.style.width = '';
+				}
 		}
 		if (wgt.ebodytbl) {//clear and backup body faker widths
 			wgt.ebody.style.width = '';
@@ -175,8 +176,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.efoottbl) {//restore footers widths
 			wgt.efoottbl.width = efoottblw||'';
 			wgt.efoottbl.style.tableLayout = efoottblfix||'';
-			for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;)
-				ftfaker.cells[i].style.width = ftfakerws[i];
+			if (ftfaker)
+				for (var i = ftfaker.cells.length - (fakerflex ? 1 : 0); i--;)
+					ftfaker.cells[i].style.width = ftfakerws[i];
 		}
 		if (wgt.ebodytbl) {//restore body fakers widths
 			wgt.ebodytbl.width = ebodytblw||'';
