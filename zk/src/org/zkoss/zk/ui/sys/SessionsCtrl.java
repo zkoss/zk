@@ -16,9 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.http.SimpleSession;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.Monitor;
 
 /**
  * An additional utilities for implementation related to {@link Session}.
@@ -26,6 +30,8 @@ import org.zkoss.zk.ui.Sessions;
  * @author tomyeh
  */
 public class SessionsCtrl extends Sessions {
+	private static final Log log = Log.lookup(SessionsCtrl.class);
+	
 	protected SessionsCtrl() {} //prevent from instantiation
 
 	/** Sets the session for the current thread.
@@ -151,6 +157,18 @@ public class SessionsCtrl extends Sessions {
 			wappc.getUiFactory().newSession(wapp, navsess, request);
 		wappc.getSessionCache().put(sess);
 
+		final Configuration config = wapp.getConfiguration();
+		config.invokeSessionInits(sess, request); //it might throw exception
+
+		final Monitor monitor = config.getMonitor();
+		if (monitor != null) {
+			try {
+				monitor.sessionCreated(sess);
+			} catch (Throwable ex) {
+				log.error(ex);
+			}
+		}
+		
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
 		final int v = wapp.getConfiguration().getSessionMaxInactiveInterval();

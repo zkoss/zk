@@ -256,7 +256,8 @@ ZK 5.0.11
   ZK-837: ClassCastException while parsing Date when TimeZone + Custom Constraint are active
   ZK-842: Error message does not show up
   ZK-824: Texbox dragging issue within the draggble container
-   
+  ZK-840: Error on expand of the tree item in the list
+  
 * Upgrade Notes
   
 	--------
