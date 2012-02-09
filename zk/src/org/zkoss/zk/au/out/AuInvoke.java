@@ -64,7 +64,7 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * {@link org.zkoss.zk.au.DeferredValue},
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
 	 * @since 5.0.0
@@ -120,7 +120,7 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg1 the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * {@link org.zkoss.zk.au.DeferredValue},
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
 	 * @param arg2 the 2nd additional argument.
@@ -137,7 +137,7 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg1 the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * {@link org.zkoss.zk.au.DeferredValue},
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
 	 * @param arg2 the 2nd additional argument.
@@ -156,7 +156,7 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, {@link Component},
+	 * {@link org.zkoss.zk.au.DeferredValue}, {@link Component},
 	 * {@link org.zkoss.json.JavaScriptValue},
 	 * and any kind of objects that
 	 * the client accepts (notice that they are marshaled by JSON).
@@ -185,7 +185,7 @@ public class AuInvoke extends AuResponse {
 	 * the given arguments.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, {@link Component},
+	 * {@link org.zkoss.zk.au.DeferredValue}, {@link Component},
 	 * {@link org.zkoss.json.JavaScriptValue},
 	 * and any kind of objects that
 	 * the client accepts (notice that they are marshaled by JSON).

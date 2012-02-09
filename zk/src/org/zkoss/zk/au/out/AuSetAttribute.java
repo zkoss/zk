@@ -32,7 +32,7 @@ public class AuSetAttribute extends AuResponse {
 	/** Construct an instance for miscellanous values, such as Boolean,
 	 * Integer and so on.
 	 * @param val the value. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * {@link org.zkoss.zk.au.DeferredValue},
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
 

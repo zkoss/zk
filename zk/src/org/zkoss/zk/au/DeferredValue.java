@@ -14,21 +14,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zk.ui.util;
+package org.zkoss.zk.au;
 
 /**
  * Used with {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate}
- * to represent a value that shall be evaluated only in the rendering phase
+ * to represent the value of a smart update
+ * that shall be evaluated only in the rendering phase
  * (rather than in the event processing phase).
  *
  * @author tomyeh
- * @since 3.0.1
+ * @since 6.0.0
+ * @see UpdatePriority
  */
 public interface DeferredValue {
 	/** Returns the value.
 	 * It is called to retrieve the real value
 	 * by the ZK engine in the rendering phase.
-	 * @since 5.0.0 (return type becomes Object)
 	 */
 	public Object getValue();
 }

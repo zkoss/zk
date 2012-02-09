@@ -272,7 +272,7 @@ public class Script extends AbstractComponent {
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
 		return dt != null ? dt.getExecution().encodeURL(_src): null;
 	}
-	private class EncodedSrcURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedSrcURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedSrcURL();
 		}

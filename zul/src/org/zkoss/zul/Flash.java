@@ -242,7 +242,7 @@ public class Flash extends HtmlBasedComponent {
 		return Utils.getDynamicMediaURI(
 			this, _medver, _media.getName(), _media.getFormat());
 	}
-	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedSrc implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedSrc();
 		}

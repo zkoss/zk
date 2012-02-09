@@ -336,7 +336,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		return false;
 	}
 
-	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHref implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHref();
 		}

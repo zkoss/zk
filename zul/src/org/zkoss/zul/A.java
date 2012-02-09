@@ -173,7 +173,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		return _zclass != null ? _zclass: "z-a";
 	}
 
-	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHref implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHref();
 		}

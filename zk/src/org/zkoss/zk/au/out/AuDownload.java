@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.ui.util.DeferredValue;
+import org.zkoss.zk.au.DeferredValue;
 
 /**
  * A response to ask the client to download the specified URI.

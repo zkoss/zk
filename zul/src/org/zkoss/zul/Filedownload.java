@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.au.out.AuDownload;
-import org.zkoss.zk.ui.util.DeferredValue;
+import org.zkoss.zk.au.DeferredValue;
 
 /**
  * File download utilities.

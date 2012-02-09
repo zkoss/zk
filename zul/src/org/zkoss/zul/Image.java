@@ -347,12 +347,12 @@ public class Image extends XulElement {
 		}
 	}
 
-	private class EncodedURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedURL();
 		}
 	}
-	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHoverURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHoverURL();
 		}

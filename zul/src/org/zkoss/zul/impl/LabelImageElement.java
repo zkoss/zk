@@ -287,12 +287,12 @@ abstract public class LabelImageElement extends LabelElement {
 			return getImageContent();
 		}
 	}
-	private class EncodedImageURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedImageURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedImageURL();
 		}
 	}
-	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHoverURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHoverURL();
 		}
