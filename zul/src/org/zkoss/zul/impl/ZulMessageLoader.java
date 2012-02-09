@@ -18,18 +18,19 @@ package org.zkoss.zul.impl;
 
 import java.io.IOException;
 
-import org.zkoss.zk.device.AjaxDevice;
+import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.metainfo.MessageLoader;
 
 /**
  * ZUL implementation of MessageLoader
  * @author simonpai
+ * @since 5.0.11
  */
 public class ZulMessageLoader implements MessageLoader {
 	
 	public void load(StringBuffer out, Execution exec) throws IOException {
-		out.append(AjaxDevice.loadJS(exec, "~./js/zul/lang/msgzul*.js"));
+		out.append(Devices.loadJavaScript(exec, "~./js/zul/lang/msgzul*.js"));
 		out.append(Utils.outLocaleJavaScript());
 	}
 	
