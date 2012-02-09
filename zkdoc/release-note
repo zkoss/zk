@@ -92,6 +92,7 @@ ZK 6.0.0
   ZK-815: Listbox Select event is not fired when PgDown/PgUp is pressed
   ZK-827: Selection of listbox is worng after change multiple
   ZK-816: Tooltip assigned to component when it is in detached state won't show up
+  ZK-774: Toolbar's mold "panel" does not work accurately 
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is

@@ -56,7 +56,7 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	// bug for B50-3312936.zul
 	getParentSize_: function (p) {
 		return {
-			height: this.parent._offsetHeight(this.parent.$n()),
+			height: this.parent._offsetHeight(this.parent.$n(), true),
 			width: zk(p).revisedWidth(p.offsetWidth)
 		};
 	}

@@ -1,0 +1,27 @@
+<!--
+	B50-ZK-774.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Feb 9 15:28:16 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		There should be no gap between the bottom red border the bottom green border.
+	</div>
+	<window title="Panel toolbar" border="normal" width="400px" height="400px">
+		<panel hflex="1" vflex="1" style="border: 1px solid #009900">
+			<panelchildren>
+				Panelchildren Content
+			</panelchildren>
+			<toolbar mold="panel" align="end" style="border: 1px solid #990000">
+				<button label="OK" />
+			</toolbar>
+		</panel>
+	</window>
+</zk>

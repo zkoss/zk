@@ -658,7 +658,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_syncBodyWidth: zk.ie6_ ? function () {
 		this.$n('body').style.width = this.$n().offsetWidth; // B50-ZK-304
 	} : zk.$void,
-	_fixHgh: function () {
+	_fixHgh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc;
 		if (!(pc=this.panelchildren) || pc.z_rod || !this.isRealVisible()) return;
 		var n = this.$n(),
@@ -671,7 +671,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
 	},
-	_fixWdh: function () {
+	_fixWdh: function () { // TODO: should be handled by Panelchildren onSize already
 		var pc = this.panelchildren;
 		if (!pc || pc.z_rod || !this.isRealVisible()) 
 			return;
@@ -695,7 +695,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var v;
 		return (v = this._border) != "none" && v != "rounded";
 	},
-	_offsetHeight: function (n) {
+	_offsetHeight: function (n, ignoreToolbar) {
 		var h = n.offsetHeight - this._titleHeight(n);
 		if (this._rounded()) {
 			var body = this.panelchildren.$n(),
@@ -708,6 +708,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				h -= zk(title.parentNode).padBorderHeight();
 		}
 		h -= zk(n).padBorderHeight();
+		if (ignoreToolbar)
+			return h; // B60-ZK-774
 		var tb = this.$n('tb'),
 			bb = this.$n('bb'),
 			fb = this.$n('fb');
