@@ -34,7 +34,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<param-name>update-uri</param-name>
 			<param-value>/zkau</param-value>
 		</init-param>
-		<!-- Optional. Specifies whether to compress the output
+		<!-- [Optional] Specifies whether to compress the output
 		of the ZK loader. It speeds up the transmission over slow Internet.
 		However, if you configure a filter to post-processing the
 		output, you might have to disable it.
@@ -45,7 +45,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<param-value>true</param-value>
 		</init-param>
 		-->
-		<!-- Optional. Specifies the default log level: OFF, ERROR, WARNING,
+		<!-- [Optional] Specifies the default log level: OFF, ERROR, WARNING,
 			INFO, DEBUG and FINER. If not specified, the system default is used.
 		<init-param>
 			<param-name>log-level</param-name>
@@ -99,18 +99,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
 
-	<!-- Optional. Uncomment it if you want to use richlets.
-	-->
+	<!-- [Optional] Uncomment it if you want to use richlets.
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>/zk/*</url-pattern>
 	</servlet-mapping>
+	-->
 	<servlet-mapping>
 		<servlet-name>auEngine</servlet-name>
 		<url-pattern>/zkau/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- Optional.
+	<!-- [Optional]
 	However, it is turned on since zksandbox uses DSP to generate CSS.
 	-->
 	<servlet-mapping>
@@ -139,12 +139,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- /////////// -->
-	<!-- Optional. Session timeout -->
+	<!-- [Optional] Session timeout -->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
 
-	<!-- Optional. MIME mapping -->
+	<!-- [Optional] MIME mapping -->
 	<mime-mapping>
 		<extension>doc</extension>
 		<mime-type>application/vnd.ms-word</mime-type>

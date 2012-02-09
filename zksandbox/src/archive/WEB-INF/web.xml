@@ -64,7 +64,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.zhtml</url-pattern>
 	</servlet-mapping>
-	<!-- For testing some sample code in zksandbox
+	<!-- You can also map to other extensions.
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>*.svg</url-pattern>
@@ -75,12 +75,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 	-->
 
-	<!-- Optional. Uncomment it if you want to use richlets.
-	-->
+	<!-- [Optional] Uncomment it if you want to use richlets.
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>/zk/*</url-pattern>
 	</servlet-mapping>
+	-->
 
 	<servlet>
 		<description>The asynchronous update engine for ZK</description>
@@ -125,17 +125,13 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</filter>
 	<filter-mapping>
 		<filter-name>zkFilter</filter-name>
-		<url-pattern>/test/filter.dsp</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>zkFilter</filter-name>
-		<url-pattern>/test/filter2.dsp</url-pattern>
+		<url-pattern>your URI pattern</url-pattern>
 	</filter-mapping>
 	-->
 
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
-	<!-- Uncomment it if you want to use DSP
+	<!-- [Optional] Uncomment it if you want to use DSP
 	However, it is turned on since zksandbox uses DSP to generate CSS.
 	-->
 	<servlet>
@@ -152,12 +148,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</servlet-mapping>
 
 	<!-- /////////// -->
-	<!-- Optional. Session timeout -->
+	<!-- [Optional] Session timeout -->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
 
-	<!-- Optional. MIME mapping -->
+	<!-- [Optional] MIME mapping -->
 	<mime-mapping>
 		<extension>doc</extension>
 		<mime-type>application/vnd.ms-word</mime-type>
