@@ -8,6 +8,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.util;
 
 import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ import org.zkoss.lang.Objects;
  */
 public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, Cloneable {
 	private InnerCache _cache;
+	private Map<K, V> _writeCache;
+	private transient short _missCnt;
+	/** whether _writeCache is different from _cache. */
+	private boolean _moreInWriteCache;
 
 	/** Constructor.
 	 */
@@ -40,20 +45,34 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 
 	@Override
 	public boolean containsKey(Object key) {
-		return _cache.containsKey(key);
+		boolean found = _cache.containsKey(key);
+		if (!found && _moreInWriteCache)
+			synchronized (this) {
+				if (_writeCache != null && (found = _writeCache.containsKey(key)))
+					missed();
+			}
+		return found;
 	}
 	@Override
 	public V get(Object key) {
-		return _cache.get(key);
+		V val = _cache.get(key);
+		if (val == null && _moreInWriteCache)
+			synchronized (this) {
+				if (_writeCache != null && (val = _writeCache.get(key)) != null)
+					missed();
+			}
+		return val;
 	}
 	@Override
 	public V put(K key, V value) {
 		V result = value;
 		synchronized (this) {
 			if (!Objects.equals(value, _cache.get(key))) {
-				InnerCache cache = (InnerCache)_cache.clone();
-				result = cache.put(key, value);
-				_cache = cache;
+				result = syncToWriteCache().put(key, value);
+				_moreInWriteCache = true;
+
+				if (_cache.containsKey(key)) //ensure _writeCache >= _cache
+					syncToReadCache();
 			}
 		}
 		return result;
@@ -62,20 +81,62 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	public V remove(Object key) {
 		V result = null;
 		synchronized (this) {
-			if (_cache.containsKey(key)) {
-				InnerCache cache = (InnerCache)_cache.clone();
-				result = cache.remove(key);
-				_cache = cache;
-			}
+			result = syncToWriteCache().remove(key);
+
+			if (_cache.containsKey(key)) //ensure _writeCache >= _cache
+				syncToReadCache();
 		}
 		return result;
 	}
 	@Override
 	public void clear() {
 		synchronized (this) {
-			if (!_cache.isEmpty())
-				_cache = new InnerCache(getMaxSize(), getLifetime());
+			setReadAndClearWrite(new InnerCache(getMaxSize(), getLifetime()));
 		}
+	}
+
+	//synchronized(this) before calling this
+	private void missed() {
+		//If missed too many times, we copy _writeCache back to _cache
+		//
+		//Note: we don't count it a miss if both _writeCache and _cache don't have
+		//because it implies the same thread (i.e., only  a few thread,
+		//so synchronized(this) overhead is small)
+		if (++_missCnt == 100)
+			syncToReadCache();
+	}
+	/** Synchronizes _writeCache to _cache.
+	 ** <p>synchronized(this) before calling this
+	 */
+	private void syncToReadCache() {
+		//don't check _moreInWriteCache here because it might be called
+		//in remove() (when _writeCache is less but still need to sync)
+
+		_missCnt = 0;
+		_moreInWriteCache = false;
+
+		final InnerCache cache = new InnerCache(getMaxSize(), getLifetime());
+		cache.putAll(_writeCache);
+		_cache = cache;
+		//_writeCache = null; //no free so write fasterr (GC will trigger it in expunge)
+	}
+	/** Synchronized from _cache to _writeCache.
+	 ** <p>synchronized(this) before calling this
+	 */
+	private Map<K,V> syncToWriteCache() {
+		if (_writeCache == null) {
+			_writeCache = new LinkedHashMap<K, V>();
+				//order is important because cache's expunge depends on it
+			_writeCache.putAll(_cache);
+		}
+		return _writeCache;
+	}
+	//synchronized(this) before calling this
+	private void setReadAndClearWrite(InnerCache cache) {
+		_writeCache = null;
+		_missCnt = 0;
+		_moreInWriteCache = false;
+		_cache = cache;
 	}
 
 	@Override
@@ -115,10 +176,10 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 
 			if (!_removed.isEmpty()) {
 				synchronized (FastReadCache.this) {
-					InnerCache cache = (InnerCache)_cache.clone();
+					final InnerCache cache = (InnerCache)_cache.clone();
 					for (final K key: _removed)
 						cache.remove(key);
-					_cache = cache;
+					setReadAndClearWrite(cache);
 				}
 			}
 			_removed = null;
