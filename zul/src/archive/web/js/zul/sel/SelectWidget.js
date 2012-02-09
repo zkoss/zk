@@ -960,6 +960,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		} else	// ZK-798, use old value if exists
 			offs = [oldLeft? oldLeft : 0, oldTop? oldTop : 0];
 
+		this.fixAnchor_(offs, focusEl);
 		if( this._anchorTop != offs[1] || this._anchorLeft != offs[0]){
 			//ZK-798, to prevent firing onAnchorPos too many times when moust over a rod listbox,
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
@@ -975,6 +976,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var ofs1 = zk(el).revisedOffset(),
 			x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);;
 		return [x - ofs1[0] + x2, y  - ofs1[1] + y2];
+	},
+	/**
+	 * May need fix anchor.
+	 * @param offs The anchor offset [left, top]
+	 * @since 6.0.0
+	 */
+	fixAnchor_: function (offs, focusEl) {
+		var body = this.ebody,
+			sw = body.scrollWidth,
+			sh = body.scrollHeight;
+		if (offs[0] >= sw) offs[0] = sw - jq(focusEl).width();
+		if (offs[1] >= sh) offs[1] = sh - jq(focusEl).height();
 	},
 	/* Selects an item, notify server and change focus if necessary. */
 	_select: function (row, evt, skipFocus) {
