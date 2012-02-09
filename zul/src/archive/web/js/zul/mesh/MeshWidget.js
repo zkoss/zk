@@ -482,7 +482,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * Sets the external Paging widget.
 		 * @param Paging paging
 		 */
-		paginal: null,
+		paginal: zk.ie8 ? function(){  
+			//Workaround for B50-ZK-835 side effect , which paging will disappear in B35-2096807.zul , only IE8.
+			this._shallSize = true;
+		} : null,
 		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
