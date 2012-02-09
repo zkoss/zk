@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
  *     private Window myWin;
  *     
  *     // implicit variables
- *     &#064;Wire
+ *     &#064;WireVariable
  *     private Desktop desktop;
  *     
  *     &#064;Listen("onClick = button#btn")
@@ -50,6 +50,21 @@ import org.zkoss.zk.ui.util.ConventionWires;
  *     
  * }
  * </code></pre>
+ * 
+ * The selector syntax is analogous to CSS selector syntax. For example,
+ * <pre><code>
+ * &#064;Wire("textbox") // matches all textboxes
+ * &#064;Wire("#win") // matches components of id "#win" within the same IdSpace
+ * &#064;Wire(".myclass") // matches components of sclass "myclass"
+ * &#064;Wire("label[value = 'My Label']") // matches all labels with value "My Label"
+ * &#064;Wire(":first-child") // matches all components which are first child
+ * &#064;Wire("window textbox") // matches textbox who is a descendant of a window
+ * &#064;Wire("window > textbox") // matches textbox who is a child of a window
+ * &#064;Wire("window + textbox") // matches textbox who is the next sibling of a window
+ * &#064;Wire("window ~ textbox") // matches textbox who is a younger sibling of a window
+ * &#064;Wire("window > textbox.myclass:first-child") // conditions can be mixed
+ * </code></pre>
+ * 
  * @since 6.0.0
  * @author simonpai
  */
