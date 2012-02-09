@@ -1,0 +1,21 @@
+<!--
+	B50-ZK-842.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Feb 9 14:28:16 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		Clients.reloadMessages(null);
+	</zscript>
+	<div>
+		Enter '00' in the Intbox below and click on somewhere else. You should see an error message. Otherwise it is a bug.
+	</div>
+	<intbox />
+</zk>

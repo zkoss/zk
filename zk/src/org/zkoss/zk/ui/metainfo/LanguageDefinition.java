@@ -38,7 +38,6 @@ import org.zkoss.web.servlet.JavaScript;
 import org.zkoss.web.servlet.StyleSheet;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.Native;
@@ -162,6 +161,8 @@ public class LanguageDefinition {
 	private EvaluatorRef _evalr;
 	/** The page renderer. */
 	private PageRenderer _pgrend;
+	/** The message loaders. */
+	private final FastReadArray _msgloads = new FastReadArray(MessageLoader.class);
 	/** A set of CSS URI. */
 	private final Set _cssURIs = new LinkedHashSet();
 	/** Whether it is a native language. */
@@ -703,7 +704,20 @@ public class LanguageDefinition {
 	public PageRenderer getPageRenderer() {
 		return _pgrend;
 	}
-
+	
+	/** Adds a MessageLoader
+	 * @since 5.0.11
+	 */
+	public void addMessageLoader(MessageLoader loader) {
+		_msgloads.add(loader);
+	}
+	/** Returns the message loader for this language.
+	 * @since 5.0.11
+	 */
+	public Collection getMessageLoaders() {
+		return new CollectionsX.ArrayCollection(_msgloads.toArray());
+	}
+	
 	/** Sets the macro template.
 	 *
 	 * @since 5.0.0

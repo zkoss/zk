@@ -16,19 +16,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import java.util.Iterator;
 import java.util.Locale;
 import java.io.InputStream;
 import java.io.IOException;
 
 import org.zkoss.util.Locales;
 import org.zkoss.io.Files;
-import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.http.Wpds;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.MessageLoader;
 import org.zkoss.zk.au.out.AuScript;
 
 /**
@@ -99,13 +101,20 @@ public class AjaxDevice extends GenericDevice {
 			final Execution exec = Executions.getCurrent();
 			sb.append(loadJS(exec, "~./js/zk/lang/msgzk*.js"));
 			sb.append(Wpds.outLocaleJavaScript());
-			sb.append(loadJS(exec, "~./js/zul/lang/msgzul*.js"));
+			for (Iterator it = LanguageDefinition.getByDeviceType(getType()).iterator(); it.hasNext();) {
+				final LanguageDefinition langdef = (LanguageDefinition) it.next();
+				for (Iterator mit = langdef.getMessageLoaders().iterator(); mit.hasNext();)
+					((MessageLoader) mit.next()).load(sb, exec);
+			}
 		} finally {
 			Locales.setThreadLocal(oldl);
 		}
 		Clients.response("zk.reload", new AuScript(null, sb.toString()));
 	}
-	private static String loadJS(Execution exec, String path)
+	/**
+	 * Loads the content of a javascript file as a String.
+	 */
+	public static String loadJS(Execution exec, String path)
 	throws IOException {
 		path = exec.locate(path);
 		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);

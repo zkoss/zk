@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
@@ -29,6 +28,7 @@ import java.net.URL;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
@@ -64,7 +64,7 @@ public class DefinitionLoaders {
 	private static boolean _loaded, _loading;
 
 	//CONSIDER:
-	//Sotre language definitions per WebApp, since diff app may add its
+	//Store language definitions per WebApp, since diff app may add its
 	//own definitions thru WEB-INF's lang-addon, or a JAR in WEB-INF/lib.
 	//
 	//CONSEQUENCE:
@@ -257,9 +257,8 @@ public class DefinitionLoaders {
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
 			PageRenderer pageRenderer = (PageRenderer)
-				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"))
-				.newInstance();
-
+				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class")).newInstance();
+			
 			final List exts = parseExtensions(root);
 			if (exts.isEmpty())
 				throw new UiException("The extension must be specified for "+lang);
@@ -278,7 +277,17 @@ public class DefinitionLoaders {
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
-
+		
+		for (Iterator it = root.getElements("message-loader-class").iterator();
+		it.hasNext();) {
+			final Element el = (Element) it.next();
+			final String clsname = el.getText().trim();
+			if (Strings.isEmpty(clsname))
+				throw new UiException("Empty class name of message loader for " + lang);
+			MessageLoader msgLoader = (MessageLoader) locateClass(clsname).newInstance();
+			langdef.addMessageLoader(msgLoader);
+		}
+		
 		for (Iterator it = root.getElements("library-property").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
