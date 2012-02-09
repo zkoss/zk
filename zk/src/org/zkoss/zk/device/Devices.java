@@ -16,6 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
@@ -26,9 +28,10 @@ import java.util.LinkedHashMap;
 import org.zkoss.lang.Classes;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.io.Files;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -399,7 +402,21 @@ public class Devices {
 			addEmbedded(deviceType, ((Element)it.next()).getText(true));
 		}
 	}
-
+	
+	/** Loads the content of a javascript file as a String.
+	 * @since 5.0.11
+	 */
+	public static String loadJavaScript(Execution exec, String path)
+	throws IOException {
+		path = exec.locate(path);
+		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
+		if (is == null)
+			throw new UiException("Unable to load "+path);
+		final byte[] bs = Files.readAll(is);
+		Files.close(is);
+		return new String(bs, "UTF-8"); //UTF-8 is assumed
+	}
+	
 	/** Device info.
 	 */
 	private static class DeviceInfo implements DeviceConfig {

@@ -23,12 +23,13 @@ import org.zkoss.zk.ui.Execution;
 /**
  * The interface for loading messages as String output.
  * @author simonpai
+ * @since 5.0.11
  */
 public interface MessageLoader {
 	
 	/**
 	 * Load the message to output StringBuffer
-	 * @param buffer StringBuffer to output
+	 * @param out StringBuffer to output
 	 * @param exec current Execution
 	 */
 	public void load(StringBuffer out, Execution exec) throws IOException;

@@ -17,14 +17,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import java.util.Locale;
-import java.io.InputStream;
 import java.io.IOException;
 
 import org.zkoss.util.Locales;
-import org.zkoss.io.Files;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.http.Wpds;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
@@ -92,7 +89,7 @@ public class AjaxDevice extends GenericDevice {
 		final Locale oldl = Locales.setThreadLocal(locale);
 		try {
 			final Execution exec = Executions.getCurrent();
-			sb.append(loadJS(exec, "~./js/zk/lang/msgzk*.js"));
+			sb.append(Devices.loadJavaScript(exec, "~./js/zk/lang/msgzk*.js"));
 			sb.append(Wpds.outLocaleJavaScript());
 			for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(getType()))
 				for (MessageLoader loader : langdef.getMessageLoaders())
@@ -101,18 +98,5 @@ public class AjaxDevice extends GenericDevice {
 			Locales.setThreadLocal(oldl);
 		}
 		Clients.response("zk.reload", new AuScript(null, sb.toString()));
-	}
-	/**
-	 * Loads the content of a javascript file as a String.
-	 */
-	public static String loadJS(Execution exec, String path)
-	throws IOException {
-		path = exec.locate(path);
-		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
-		if (is == null)
-			throw new UiException("Unable to load "+path);
-		final byte[] bs = Files.readAll(is);
-		Files.close(is);
-		return new String(bs, "UTF-8"); //UTF-8 is assumed
 	}
 }
