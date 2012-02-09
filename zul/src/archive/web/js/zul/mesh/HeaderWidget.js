@@ -455,7 +455,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			label = this.domContent_();
 		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
 				zcls, '-cnt"', this.domTextStyleAttr_(), '><div class="', zcls, '-sort-img"></div>', 
-					(label == "" ? "&nbsp;" : label));
+				( (! this.firstChild && label == "" ) ? "&nbsp;" : label));// ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
 			out.push('<a id="', uuid, '-btn"  href="javascript:;" class="', zcls, '-btn"></a>');
