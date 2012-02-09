@@ -233,11 +233,28 @@ import org.zkoss.zk.au.out.*;
 	 * @param value the value.
 	 * @since 5.0.2
 	 */
-	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
+	public final
+	void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
+		addSmartUpdate0(comp, attr, value, append, 0);
+	}
+	/**
+	 * Adds a smart update that will be executed at the given priority.
+	 * The higher priority, the earlier the update is executed.
+	 * If {@link #addSmartUpdate(Component, String, Object, boolean)}
+	 * is invoked, the priority is assumed to 0.
+	 * @since 6.0.0
+	 */
+	public void addSmartUpdate(Component comp, String attr, Object value, int priority) {
+		addSmartUpdate0(comp, attr, value, false, priority);
+	}
+	private void addSmartUpdate0(Component comp, String attr, Object value,
+	boolean append, int priority) {
+		if (comp == null)
+			throw new IllegalArgumentException();
 		final Map<String, TimedValue> respmap = getAttrRespMap(comp);
 		if (respmap != null)
 			respmap.put(append ? attr + ":" + _cntMultSU++: attr,
-				new TimedValue(_timed++, comp, attr, value));
+				new TimedValue(_timed++, comp, attr, value, priority));
 	}
 	/** Sets whether to disable the update of the client widget.
 	 * By default, if a component is attached to a page, modications that
@@ -378,7 +395,7 @@ import org.zkoss.zk.au.out.*;
 		if (ri == null)
 			_responses.put(depends, ri = new ResponseInfo());
 
-		final TimedValue tval = new TimedValue(_timed++, response);
+		final TimedValue tval = new TimedValue(_timed++, response, 0);
 		if (key != null) {
 			ri.values.put(key, tval); //overwrite
 		} else {
@@ -958,22 +975,28 @@ import org.zkoss.zk.au.out.*;
 	/** Used to hold smart update and response with a time stamp.
 	 */
 	private static class TimedValue implements Comparable {
+		private final int _priority;
 		private final int _timed;
 		private final AuResponse _response;
-		private TimedValue(int timed, AuResponse response) {
+		private TimedValue(int timed, AuResponse response, int priority) {
 			_timed = timed;
 			_response = response;
+			_priority = priority;
 		}
-		private TimedValue(int timed, Component comp, String name, Object value) {
+		private TimedValue(int timed, Component comp, String name, Object value,
+		int priority) {
 			_timed = timed;
 			_response = new AuSetAttribute(comp, name, value);
+			_priority = priority;
 		}
 		public String toString() {
 			return '(' + _timed + ":" + _response + ')';
 		}
 		public int compareTo(Object o) {
-			final int t = ((TimedValue)o)._timed;
-			return _timed > t  ? 1: _timed == t ? 0: -1;
+			final TimedValue tv = (TimedValue)o;
+			return _priority == tv._priority ?
+					_timed > tv._timed  ? 1: _timed == tv._timed ? 0: -1:
+				_priority > tv._priority ? -1: 1; //higher priority, earlier (smaller)
 		}
 		/** Returns the response representing this object. */
 		private AuResponse getResponse() {

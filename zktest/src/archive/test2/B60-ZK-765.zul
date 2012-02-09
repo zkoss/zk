@@ -1,0 +1,62 @@
+<window xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<label multiline="true">
+	1.click show index, the message shows "selected index is undefined, no selection" (currently if selected index is -1 is better, however 'undefined/null' is acceptable.
+	2.select item 1 then click show index, the message should show "selected index is 1, widget selected is true"
+	3.click reset
+	4.click show index, the message shows "selected index is 1, widget selected is true" (currently wrong at here)
+	</label>
+	
+	<label multiline="true">
+	1.click show selected, the message shows "selected no selection"
+	2.select item 1 then click show selected, the message should show "selected index is 1"
+	3.click reset
+	4.click show selected, the message should show "selected index is 1"
+	</label>
+
+	<zscript><![CDATA[
+	org.zkoss.zul.ListModelList model = new org.zkoss.zul.ListModelList();
+	
+	for(int i=0;i<100;i++){
+		model.add("Item "+i);
+	}
+	]]></zscript>
+    <vbox>
+	<listbox id="listbox" width="300px" model="${model}" rows="5" />
+	
+	<label id="msg" />
+	<button label="reset" onClick="listbox.setModel(model)"/>
+	</vbox>
+	<button label="show index" w:onClick="showindex()"/>
+	<button label="show selected" w:onClick="showselected()"/>
+	<script type="text/javascript"><![CDATA[
+	showindex = function(){
+		var msg = zk.Widget.$('$msg');
+		var listbox = zk.Widget.$('$listbox');
+		var index = listbox.getSelectedIndex();
+		var selected = index>=0?listbox.firstChild:null;
+		for(var i=1;i<=index;i++){
+			selected = selected.nextSibling;
+		}
+		if(selected){
+			msg.setValue("selected index is "+index +", widget selected is "+selected.isSelected());
+		}else{
+			msg.setValue("selected index is "+index +", no selection");
+		}
+	}
+	showselected = function(){
+		var msg = zk.Widget.$('$msg');
+		var listbox = zk.Widget.$('$listbox');
+		var index = 0;
+		var selected = listbox.firstChild;
+		while(selected && !selected.isSelected()){
+			selected = selected.nextSibling;
+			index++;
+		}
+		if(selected){
+			msg.setValue("selected index is "+index);
+		}else{
+			msg.setValue("selected no selection");
+		}
+	}
+	]]></script>
+</window>

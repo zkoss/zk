@@ -115,6 +115,21 @@ public interface UiEngine {
 	 * @since 5.0.2
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append);
+	/**
+	 * Adds a smart update that will be executed at the given priority.
+	 * The higher priority, the earlier the update is executed.
+	 * If {@link #addSmartUpdate(Component, String, Object, boolean)}
+	 * is invoked, the priority is assumed to 0.
+	 *
+	 * <p>If the priority is the same, the update is executed in the order
+	 * of first-in-first out. You rarely need to control the sequence, unless
+	 * the update is used to instantiate client-sidte widgets that other
+	 * updates might depend on. In this case, it is suggested to
+	 * specify the priority as 10000 (and not to use priority higher than
+	 * 10000 for other situation).
+	 * @since 6.0.0
+	 */
+	public void addSmartUpdate(Component comp, String attr, Object value, int priority);
 	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
 	 * as the override key.
 	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>

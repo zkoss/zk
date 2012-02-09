@@ -275,10 +275,13 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
+	@Override
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
-		if (comp == null)
-			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value, append);
+	}
+	@Override
+	public void addSmartUpdate(Component comp, String attr, Object value, int priority) {
+		getCurrentVisualizer().addSmartUpdate(comp, attr, value, priority);
 	}
 	public void addResponse(AuResponse response) {
 		getCurrentVisualizer().addResponse(response);

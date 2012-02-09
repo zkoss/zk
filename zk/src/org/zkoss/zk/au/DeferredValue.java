@@ -22,9 +22,13 @@ package org.zkoss.zk.au;
  * that shall be evaluated only in the rendering phase
  * (rather than in the event processing phase).
  *
+ * <p>Notice that, if you are sending a smart update that will
+ * instantiate the client'side widget, it is better to use
+ * {@link org.zkoss.zk.ui.sys.UiEngine#addSmartUpdate(org.zkoss.zk.ui.Component, String, Object, int)}
+ * with priority 10000, such that it will execute before others.
+ *
  * @author tomyeh
  * @since 6.0.0
- * @see UpdatePriority
  */
 public interface DeferredValue {
 	/** Returns the value.
