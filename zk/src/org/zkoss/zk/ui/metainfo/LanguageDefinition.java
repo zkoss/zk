@@ -160,6 +160,9 @@ public class LanguageDefinition {
 	private EvaluatorRef _evalr;
 	/** The page renderer. */
 	private PageRenderer _pgrend;
+	/** The message loaders. */
+	private final FastReadArray<MessageLoader> _msgloads = 
+		new FastReadArray<MessageLoader>(MessageLoader.class);
 	/** A set of CSS URI. */
 	private final Set<String> _cssURIs = new LinkedHashSet<String>();
 	/** Whether it is a native language. */
@@ -741,7 +744,20 @@ public class LanguageDefinition {
 	public PageRenderer getPageRenderer() {
 		return _pgrend;
 	}
-
+	
+	/** Adds a MessageLoader
+	 * @since 5.0.11
+	 */
+	public void addMessageLoader(MessageLoader loader) {
+		_msgloads.add(loader);
+	}
+	/** Returns the message loader for this language.
+	 * @since 5.0.11
+	 */
+	public Collection<MessageLoader> getMessageLoaders() {
+		return new CollectionsX.ArrayCollection<MessageLoader>(_msgloads.toArray());
+	}
+	
 	/** Sets the macro template.
 	 *
 	 * @since 5.0.0

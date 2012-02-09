@@ -29,6 +29,7 @@ import java.net.URL;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
@@ -282,7 +283,15 @@ public class DefinitionLoaders {
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
-
+		
+		for (Element el : root.getElements("message-loader-class")) {
+			final String clsname = el.getText().trim();
+			if (Strings.isEmpty(clsname))
+				throw new UiException("Empty class name of message loader for " + lang);
+			MessageLoader msgLoader = (MessageLoader) locateClass(clsname).newInstance();
+			langdef.addMessageLoader(msgLoader);
+		}
+		
 		for (Element el: root.getElements("library-property")) {
 			final String nm = IDOMs.getRequiredElementValue(el, "name");
 			final String val = IDOMs.getRequiredElementValue(el, "value");

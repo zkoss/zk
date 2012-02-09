@@ -27,6 +27,8 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.http.Wpds;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.MessageLoader;
 import org.zkoss.zk.au.out.AuScript;
 
 /**
@@ -92,13 +94,18 @@ public class AjaxDevice extends GenericDevice {
 			final Execution exec = Executions.getCurrent();
 			sb.append(loadJS(exec, "~./js/zk/lang/msgzk*.js"));
 			sb.append(Wpds.outLocaleJavaScript());
-			sb.append(loadJS(exec, "~./js/zul/lang/msgzul*.js"));
+			for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(getType()))
+				for (MessageLoader loader : langdef.getMessageLoaders())
+					loader.load(sb, exec);
 		} finally {
 			Locales.setThreadLocal(oldl);
 		}
 		Clients.response("zk.reload", new AuScript(null, sb.toString()));
 	}
-	private static String loadJS(Execution exec, String path)
+	/**
+	 * Loads the content of a javascript file as a String.
+	 */
+	public static String loadJS(Execution exec, String path)
 	throws IOException {
 		path = exec.locate(path);
 		InputStream is = exec.getDesktop().getWebApp().getResourceAsStream(path);
