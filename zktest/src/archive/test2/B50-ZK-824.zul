@@ -1,0 +1,64 @@
+<zk xmlns:w="client" xmlns:h="xhtml">
+
+<h:pre>
+	1.In the first line: (test general case)
+	      i.try to select the word of textbox , it should be ok and no dragghost.
+	     ii.try to drag the content except textbox , it should be ok to drag
+
+	2.In the second line:(test event)
+	      i.try to click the textbox , it should be ok to fire the onClick event.
+	     ii.try to drag the content except textbox , it should be ok to drag	 
+	
+	3.In the third line:(test nested draggable)
+		i.try to drag the textbox , it should be ok to drag
+		ii.tryo to drag the content except textbox , it should be ok to drag
+		
+	4.In the fourth line:(test input dom in draggable widget )
+	    i.try to select the word of textbox , it should be ok and no dragghost.
+	    ii.try to drag the content except textbox , it should be ok to drag	
+	
+	5.In the fifth line:(test input dom in draggable widget and need to be draggable )
+</h:pre>
+
+<listbox height="250px" width="200px" droppable="true" multiple="true" >
+  <listitem draggable="true" droppable="true" >
+    <listcell label="Line 1" >
+    <!--   onClick='alert("hi");'  -->
+      <textbox value="some text for test 1" droppable="true"/>
+    </listcell>
+  </listitem>
+
+
+  <listitem draggable="true" droppable="true" >
+    <listcell label="Line 2 " >
+      <textbox value="some text for test 2" onClick='alert("onClick Event fired")' />
+    </listcell>
+  </listitem>
+  
+  <listitem draggable="true" droppable="true" >
+    <listcell label="Line 3" >
+      <textbox  draggable="true" value="some text for test 3" />
+    </listcell>
+  </listitem>
+
+  <listitem draggable="true" droppable="true" >
+    <listcell label="Line 4" >
+    	<attribute w:name="domContent_" ><![CDATA[
+    		function(){
+				var s1 = this.$supers('domContent_', arguments),
+					s2 = this._colHtmlPre(),
+					uuid = this.uuid;
+				return ( s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2 ) + 
+					'<input id="'+uuid+'"-test" value="some text for test 4" />';
+    		}
+    	]]></attribute>
+    </listcell>
+  </listitem>   
+  <listitem draggable="true"  droppable="true" >
+    <listcell label="Line 5" >
+    	<combobox draggable="true"  />
+    </listcell>
+  </listitem>
+</listbox>
+  
+</zk>

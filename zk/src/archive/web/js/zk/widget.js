@@ -386,7 +386,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return DD_pointer(evt, jq(drag.node).height());
 	}
 	function DD_ignoredrag(drag, pt, evt) {
-		return drag.control.ignoreDrag_(pt);
+		//ZK 824:Textbox dragging issue with Listitem
+		//since 5.0.11,6.0.0 introduce evt,drag to the wgt.ignoreDrag_() to provide more information. 
+		return drag.control.ignoreDrag_(pt,evt,drag); 
 	}
 
 	function _topnode(n) {
