@@ -3203,10 +3203,10 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.3
 	 */
 	protected String getDefaultMold(Class<? extends Component> klass) {
-		return (String)getDefaultInfo(klass);
+		return getDefaultInfo(klass);
 	}
-	private static Object getDefaultInfo(Class<? extends Component> klass) { //use Object for future extension
-		Object inf = _infs.get(klass);
+	private static String getDefaultInfo(Class<? extends Component> klass) { //use Object for future extension
+		String inf = _infs.get(klass);
 		if (inf == null) {
 			String mold = Library.getProperty(klass.getName() + ".mold");
 			inf = mold != null && mold.length() > 0 ? mold : DEFAULT;
@@ -3215,9 +3215,9 @@ w:use="foo.MyWindow"&gt;
 		return inf;
 	}
 
-	private static transient Cache<Class<? extends Component>, Object> _infs =
-		new FastReadCache<Class<? extends Component>, Object>(
-			30, 4 * 60 * 60 * 1000);
+	private static transient Cache<Class<? extends Component>, String> _infs =
+		new FastReadCache<Class<? extends Component>, String>(
+			100, 4 * 60 * 60 * 1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
