@@ -27,7 +27,8 @@ ZK 5.0.11
   ZK-842: Error message does not show up
   ZK-840: Error on expand of the tree item in the list
   ZK-824: Texbox dragging issue within the draggble container
-   
+  ZK-841: SessionInit cause a stack overflow
+  
 * Upgrade Notes
   
 	--------

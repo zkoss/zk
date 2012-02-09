@@ -149,18 +149,6 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 
 		init();
-
-		final Configuration config = getWebApp().getConfiguration();
-		config.invokeSessionInits(this, request); //it might throw exception
-
-		final Monitor monitor = config.getMonitor();
-		if (monitor != null) {
-			try {
-				monitor.sessionCreated(this);
-			} catch (Throwable ex) {
-				log.error(ex);
-			}
-		}
 	}
 	/** Called to initialize some members after this object is deserialized.
 	 * <p>In other words, it is called by the deriving class if it implements
