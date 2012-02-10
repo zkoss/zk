@@ -420,6 +420,38 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 		}
 	}
 
+	/** A utility that the deriving class can call to save the states
+	 * before sorting the model.
+	 * <p>Default: saves the selection and open states.
+	 * <p>For example, {@link DefaultTreeModel#sort} invokes it to preserve
+	 * the selection to the same objects (rather than the same paths).
+	 * @since 6.0.0
+	 */
+	protected Object beforeSort() {
+		final States<E> states = new States<E>();
+		for (final Path path: _selection)
+			states.selection.add(getChild(path.path));
+		for (final Path path: _opens)
+			states.opens.add(getChild(path.path));
+		return states;
+	}
+	/** A utility that the deriving class can call to restore the states
+	 * saved by {@link #beforeSort}
+	 * @since 6.0.0
+	 */
+	protected void afterSort(Object ctx) {
+		if (ctx instanceof States) {
+			@SuppressWarnings("unchecked")
+			final States<E> states = (States)ctx;
+			_selection.clear();
+			for (final E node: states.selection)
+				_selection.add(new Path(getPath(node)));
+			_opens.clear();
+			for (final E node: states.opens)
+				_opens.add(new Path(getPath(node)));
+		}
+	}
+
 	// Serializable//
 	private synchronized void writeObject(java.io.ObjectOutputStream s)
 			throws java.io.IOException {
@@ -468,5 +500,9 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 		public boolean equals(Object o) {
 			return o instanceof Path && Objects.equals(path, ((Path)o).path);
 		}
+	}
+	private static class States<E> {
+		private final Set<E> selection = new LinkedHashSet<E>();
+		private final Set<E> opens = new LinkedHashSet<E>();
 	}
 }

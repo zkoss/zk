@@ -118,6 +118,13 @@ java.io.Serializable {
 	//-- Sortable --//
 	/** Sorts the data.
 	 *
+	 * <p>Notice: it invokes {@link #beforeSort} and {@link #afterSort}
+	 * to save and restore the selection and open states.
+	 * If you prefer not to preserve objects and prefer to save the paths,
+	 * you can override {@link #beforeSort} to do nothing but returning null.
+	 * If you prefer to clear the selection, you can override {@link #beforeSort}
+	 * to clear {@link #_selection} and return null.
+	 *
 	 * @param cmpr the comparator.
 	 * @param ascending whether to sort in the ascending order.
 	 * It is ignored since this implementation uses cmprt to compare.
@@ -128,7 +135,9 @@ java.io.Serializable {
 		_sortDir = ascending;
 		TreeNode<E> root = getRoot();
 		if (root != null) {
+			final Object ctx = beforeSort();
 			sort0(root, cmpr);
+			afterSort(ctx); //before firing event
 			fireEvent(TreeDataEvent.STRUCTURE_CHANGED, null, 0, 0);
 		}
 	}
