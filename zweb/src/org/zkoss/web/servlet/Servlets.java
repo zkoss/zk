@@ -376,10 +376,8 @@ public class Servlets {
 				browserInfo(zk, "webkit", version = getVersion(m));
 
 				m = _rchrome.matcher(ua);
-				if (m.matches()) {
+				if (m.matches())
 					zk.put("chrome", getVersion(m));
-					return; //done
-				}
 
 				m = _rsafari.matcher(ua);
 				if (m.matches())
