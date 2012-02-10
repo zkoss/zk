@@ -14,13 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.au.http;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.impl.Attributes;
@@ -29,13 +29,13 @@ import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.AuRequest;
 
 /**
- * Extends desktop to handle the request of the upload infomation
+ * Extends desktop to handle the request of the upload information
  * and post events if the upload is completed.
  *
  * @author jumperchen
  * @since 5.0.0
  */
-public class UploadInfoService implements AuService {
+public class UploadInfoService implements AuService, Serializable {
 	private UploadInfoService() {
 	}
 	
