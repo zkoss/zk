@@ -311,7 +311,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 					inits.add(0,currm);
 				}
 				//check if we should take care super's init also.
-				curr = (init!=null && init.upward())?curr.getSuperclass():null;
+				curr = (init!=null && init.superclass())?curr.getSuperclass():null;
 			}
 			inits = Collections.unmodifiableList(inits);
 			_initMethodCache.put(clz, inits);

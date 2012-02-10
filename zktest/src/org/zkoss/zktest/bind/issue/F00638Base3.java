@@ -5,7 +5,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 
 public class F00638Base3 extends F00638Base2{
 
-	@Init(upward=true)
+	@Init(superclass=true)
 	public void init3(){
 		this.value1 = "A";
 	}
