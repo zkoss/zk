@@ -178,7 +178,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 
 			if (!_removed.isEmpty()) {
 				synchronized (FastReadCache.this) {
-					final InnerCache cache = (InnerCache)_cache.clone();
+					final InnerCache cache = (InnerCache)this.clone();
 					for (final K key: _removed)
 						cache.remove(key);
 					setReadAndClearWrite(cache);
