@@ -72,7 +72,9 @@ public class Servlets {
 		_rwebkit = Pattern.compile(".*(webkit)[ /]([\\w.]+).*"),
 		_ropera = Pattern.compile(".*(opera)(?:.*version)?[ /]([\\w.]+).*"),
 		_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
-		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*");
+		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
+		_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
+		_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*");
 
 	private static final boolean _svl24, _svl23, _svl3;
 	static {
@@ -373,6 +375,16 @@ public class Servlets {
 				double version;
 				browserInfo(zk, "webkit", version = getVersion(m));
 
+				m = _rchrome.matcher(ua);
+				if (m.matches()) {
+					zk.put("chrome", getVersion(m));
+					return; //done
+				}
+
+				m = _rsafari.matcher(ua);
+				if (m.matches())
+					zk.put("safari", getVersion(m));
+
 				for (int j = _ios.length; --j >= 0;)
 					if (ua.indexOf(_ios[j]) >= 0) {
 						zk.put(_ios[j], version);
@@ -413,7 +425,10 @@ public class Servlets {
 							}
 						}
 					}
+					//the version after gecko/* is confusing, so we
+					//use firefox's version instead
 					browserInfo(zk, "gecko", version);
+					zk.put("ff", version);
 					return;
 				}
 			}
@@ -427,18 +442,12 @@ public class Servlets {
 		bi.put("name", name);
 		bi.put("version", version);
 		zk.put("browser", bi);
-
 		zk.put(name, version);
-		if ("gecko".equals(name))
-			zk.put("ff", version);
-		else if ("webkit".equals(name))
-			zk.put("safari", version);
 	}
 	private static double getVersion(Matcher m) {
-		if (m.groupCount() < 2)
-			return 1; //ignore it
-
-		String version = m.group(2);
+		return m.groupCount() < 2 ? 1/*ignore it*/: getVersion(m.group(2));
+	}
+	private static double getVersion(String version) {
 		int j = version.indexOf('.');
 		if (j >= 0) {
 			j = version.indexOf('.', j + 1);
