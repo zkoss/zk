@@ -179,7 +179,7 @@ import org.zkoss.zk.ui.event.Event;
 	//collect properties from a save-binding
 	private void collectSavePropertyBinding(Component comp, SavePropertyBinding binding, String command, Event evt, Set<Property> validates) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(), evt);
-		
+		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
 		Set<Property> cp = new HashSet<Property>();
 		Property p = binding.getValidate(ctx);
 		_mainPropertyCache.put(binding, p);

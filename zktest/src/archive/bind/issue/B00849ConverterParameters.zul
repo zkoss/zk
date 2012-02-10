@@ -1,0 +1,39 @@
+
+<zk>
+<label multiline="true">
+1.type 'A'' in tb1, click Compute1, l11 and l12 is still empty, but tb1 become 'A:value1'
+2.type 'B'' in tb2, click Compute2, l21 and l22 is still empty, but tb1 become 'B:value2'
+3.type 'C'' in tb3, click Compute3, l31 and l32 is still empty, but tb1 become 'C:value3'
+</label>
+	
+	
+	
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00849ConverterParameters')"
+		width="400px">
+		<hbox><label id="l11"/>/<label id="l12"/></hbox>
+		
+		<hbox form="@id('fx') @init(vm.order) @load(vm.order, after='compute') @save(vm.order, before='compute')">
+			<textbox id="tb1" value="@bind(fx.name) @converter(vm.myConverter1, key1=self.value, key2='value1')" />
+			<button id="btn1" label="Compute1" onClick="@command('compute')" />
+		</hbox>
+	</vbox>
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00849ConverterParameters')"
+		width="400px">
+		<hbox><label id="l21"/>/<label id="l22"/></hbox>
+		<hbox>
+			<textbox id="tb2" value="@load(vm.order.name) @save(vm.order.name, before='compute') @converter(vm.myConverter2, key1=self.value, key2='value2')" />
+			<button id="btn2" label="Compute2" onClick="@command('compute')" />
+		</hbox>
+	</vbox>
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00849ConverterParameters')"
+		width="400px">
+		<hbox><label id="l31"/>/<label id="l32"/></hbox>
+		<hbox>
+			<textbox id="tb3" value="@load(vm.order.name) @save(vm.order.name, after='compute') @converter(vm.myConverter3, key1=self.value, key2='value3')" />
+			<button id="btn3" label="Compute3" onClick="@command('compute')" />
+		</hbox>
+	</vbox>
+</zk>
