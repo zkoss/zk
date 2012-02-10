@@ -29,7 +29,8 @@ function (out, skipper) {
 		if (cap)
 			cap.redraw(out);
 		else
-			out.push('<div id="', uuid,'-title" class="', zcls,'-title"><span>', title, '</span></div>');
+			out.push('<div id="', uuid,'-title" class="', zcls, 
+					'-title"><span class="', zcls, '-title-cnt">', title, '</span></div>');
 		out.push('</div></div></div></div>');
 	}
 	

@@ -15,17 +15,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var parent = this.parent,
 		uuid = this.uuid,
+		zcls = this.getZclass(),
 		cnt = this.domContent_();
 	if (parent._isDefault && parent._isDefault()) {
-		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt">', cnt);
+		out.push('<div', this.domAttrs_(), '><span id="', uuid, '-cnt" class="', 
+				zcls, '-cnt">', cnt);
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</span></div>');
 		return;
 	}
 
-	var zcls = this.getZclass(),
-		puuid = parent.uuid,
+	var puuid = parent.uuid,
 		pzcls = parent.getZclass();
 	out.push('<table', this.domAttrs_(), zUtl.cellps0,
 			' width="100%"><tr valign="middle"><td id="', uuid, '-cnt" align="left" class="',
