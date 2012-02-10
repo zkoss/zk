@@ -197,14 +197,16 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	}
 	/** Expunges if {@link #shallExpunge} is true. */
 	private void tryExpunge() {
-		if (shallExpunge()) {
-			if (_inExpunge)
-				throw new IllegalStateException("expung in expung?");
-			try {
-				expunge();
-			} finally {
-				newRef();
-			}
+		if (shallExpunge())
+			doExpunge();
+	}
+	/*package*/ void doExpunge() { //FastReadCache overrides it
+		if (_inExpunge)
+			throw new IllegalStateException("expunge in expunge?");
+		try {
+			expunge();
+		} finally {
+			newRef();
 		}
 	}
 	/** Enforces to expunge items that exceeds the maximal allowed number
@@ -262,25 +264,35 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap() {
-		_map = new LinkedHashMap<K, Value<V>>(16, 0.75f, true);
+		_map = new LinkedHashMap<K, Value<V>>(16, 0.75f, isAccessOrder());
 		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap) {
-		_map = new LinkedHashMap<K, Value<V>>(cap, 0.75f, true);
+		_map = new LinkedHashMap<K, Value<V>>(cap, 0.75f, isAccessOrder());
 		init();
 	}
 	/** Constructs a cachemap by using LinkedHashMap internally.
 	 */
 	public CacheMap(int cap, float load) {
-		_map = new LinkedHashMap<K, Value<V>>(cap, load, true);
+		_map = new LinkedHashMap<K, Value<V>>(cap, load, isAccessOrder());
 		init();
 	}
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
 		_que = new ReferenceQueue<X>();
 		newRef();
+	}
+
+	/** Returns whether the ording mode is for access-order.
+	 * Returns false for insertion-order.
+	 * <p>Default: true.
+	 * <p>Note: this method is called only in the constructor.
+	 * @since 6.0.0
+	 */
+	protected boolean isAccessOrder() {
+		return true;
 	}
 
 	//-- extra api --//
@@ -357,7 +369,8 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		tryExpunge(); //expung later to increase the hit rate
 		return v;
 	}
-	/** Returns the value without trying to expunge first.
+	/** Returns the value without trying to expunge for more
+	 * memory.
 	 * It is useful if you want to preserve all entries.
 	 */
 	public V getWithoutExpunge(Object key) {
@@ -371,6 +384,12 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	}
 	public boolean containsKey(Object key) {
 		tryExpunge();
+		return containsKeyWithoutExpunge(key);
+	}
+	/** Tests if the given key exists without trying to expunge for more
+	 * memory.
+	 */
+	public boolean containsKeyWithoutExpunge(Object key) {
 		return _map.containsKey(key);
 	}
 	public boolean containsValue(Object value) {
@@ -574,7 +593,8 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 			throw new InternalError();
 		}
 
-		clone._map = new LinkedHashMap<K, Value<V>>(clone._map);
+		clone._inExpunge = false;
+		clone._map = new LinkedHashMap<K, Value<V>>(this._map);
 		for (Map.Entry<K, Value<V>> me: clone._map.entrySet()) {
 			me.setValue((Value<V>)me.getValue().clone());
 		}

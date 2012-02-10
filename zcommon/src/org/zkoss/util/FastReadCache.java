@@ -67,11 +67,11 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	public V put(K key, V value) {
 		V result = value;
 		synchronized (this) {
-			if (!Objects.equals(value, _cache.get(key))) {
+			if (!Objects.equals(value, _cache.getWithoutExpunge(key))) {
 				result = syncToWriteCache().put(key, value);
 				_moreInWriteCache = true;
 
-				if (_cache.containsKey(key)) //ensure _writeCache >= _cache
+				if (_cache.containsKeyWithoutExpunge(key)) //ensure _writeCache >= _cache
 					syncToReadCache();
 			}
 		}
@@ -81,11 +81,11 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	public V remove(Object key) {
 		V result = null;
 		synchronized (this) {
-			if (!_cache.containsKey(key) && !_moreInWriteCache)
+			if (!_cache.containsKeyWithoutExpunge(key) && !_moreInWriteCache)
 				return null; //not found at all
 
 			result = syncToWriteCache().remove(key);
-			if (_cache.containsKey(key)) //ensure _writeCache >= _cache
+			if (_cache.containsKeyWithoutExpunge(key)) //ensure _writeCache >= _cache
 				syncToReadCache();
 		}
 		return result;
@@ -166,26 +166,38 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		private InnerCache(int maxSize, int lifetime) {
 			super(maxSize, lifetime);
 		}
+		@Override
+		protected boolean isAccessOrder() {
+			return false; //since _cache will be read concurrently, so insertion-mode only
+		}
 		@Override /*package*/
 		void removeInExpunge(Iterator<Map.Entry<K, Value<V>>> it, K key) {
 			_removed.add(key);
-				//don't remove it here since _cache is readonly
+				//don't remove it here since _cache (this) is readonly
 		}
-		@Override
-		public int expunge() {
-			_removed = new ArrayList<K>();
-			final int result = super.expunge();
+		@Override /*package*/
+		void doExpunge() {
+			synchronized (FastReadCache.this) {
+				_removed = new ArrayList<K>();
+				try {
+					super.doExpunge();
 
-			if (!_removed.isEmpty()) {
-				synchronized (FastReadCache.this) {
-					final InnerCache cache = (InnerCache)this.clone();
-					for (final K key: _removed)
-						cache.remove(key);
-					setReadAndClearWrite(cache);
+					if (!_removed.isEmpty()) {
+						final InnerCache cache = (InnerCache)this.clone();
+						for (final K key: _removed)
+							cache.remove(key);
+						setReadAndClearWrite(cache);
+					}
+				} finally {
+					_removed = null;
 				}
 			}
-			_removed = null;
-			return result;
+		}
+		@Override
+		public Object clone() {
+			final InnerCache clone = (InnerCache)super.clone();
+			clone._removed = null;
+			return clone;
 		}
 	}
 }
