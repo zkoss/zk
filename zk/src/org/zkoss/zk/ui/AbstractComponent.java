@@ -3203,21 +3203,21 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.3
 	 */
 	protected String getDefaultMold(Class<? extends Component> klass) {
-		return getDefaultInfo(klass);
+		return defaultMold(klass);
 	}
-	private static String getDefaultInfo(Class<? extends Component> klass) { //use Object for future extension
-		String inf = _infs.get(klass);
-		if (inf == null) {
-			String mold = Library.getProperty(klass.getName() + ".mold");
-			inf = mold != null && mold.length() > 0 ? mold : DEFAULT;
-			_infs.put(klass, inf);
+	private static String defaultMold(Class<? extends Component> klass) {
+	//To speed up the performance, we store info in FastReadCache (no sync for read)
+	//Also, better to use class name as a key since class might be defined in zscript
+		final String clsnm = klass.getName();
+		String mold = _defMolds.get(clsnm);
+		if (mold == null) {
+			mold = Library.getProperty(clsnm + ".mold", DEFAULT);
+			_defMolds.put(clsnm, mold);
 		}
-		return inf;
+		return mold;
 	}
-
-	private static transient Cache<Class<? extends Component>, String> _infs =
-		new FastReadCache<Class<? extends Component>, String>(
-			100, 4 * 60 * 60 * 1000);
+	private static transient Cache<String, String> _defMolds =
+		new FastReadCache<String, String>(100, 4 * 60 * 60 * 1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)

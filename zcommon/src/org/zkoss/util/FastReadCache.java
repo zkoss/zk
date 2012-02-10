@@ -81,8 +81,10 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 	public V remove(Object key) {
 		V result = null;
 		synchronized (this) {
-			result = syncToWriteCache().remove(key);
+			if (!_cache.containsKey(key) && !_moreInWriteCache)
+				return null; //not found at all
 
+			result = syncToWriteCache().remove(key);
 			if (_cache.containsKey(key)) //ensure _writeCache >= _cache
 				syncToReadCache();
 		}
@@ -118,7 +120,7 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		final InnerCache cache = new InnerCache(getMaxSize(), getLifetime());
 		cache.putAll(_writeCache);
 		_cache = cache;
-		//_writeCache = null; //no free so write fasterr (GC will trigger it in expunge)
+		//no need free to free _writeCache, since write faster (GC will clear it in expunge)
 	}
 	/** Synchronized from _cache to _writeCache.
 	 ** <p>synchronized(this) before calling this
