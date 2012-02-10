@@ -14,7 +14,9 @@
 	position: relative;
 	vertical-align: middle; <%-- so it aligned better with single-line label --%>
 	zoom: 1;
+<c:if test="${not c:browser('ie6-')}">
 	white-space: normal; <%-- Bug ZK-477 --%>
+</c:if>
 <c:if test="${c:isExplorer() and not c:browser('ie8')}">
 	display: inline;
 </c:if>
