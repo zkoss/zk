@@ -865,7 +865,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_timeoutId: null,
 	_fireOnScrollPos: function (time) { //overriden in zkmax
 		clearTimeout(this._timeoutId);
-		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time : zk.gecko ? 200 : 60);
+		//IE6 caused issue if the item too short, test case  http://www.zkoss.org/zksandbox/#g8
+		this._timeoutId = setTimeout(this.proxy(this._onScrollPos), time >= 0 ? time :  (zk.gecko || zk.ie6_) ? 200 : 60);
 	},
 	_onScrollPos: function () {
 		// Bug ZK-414
