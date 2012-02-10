@@ -1550,7 +1550,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static long getMaxSchedTime() {
 		if (_maxSchedTime == null) {
 			//no need to be synchronized
-			final String PROP = "org.zkoss.zk.ui.max-schedule-time";
+			final String PROP = "org.zkoss.zk.ui.maxScheduleTime";
 			final String val = Library.getProperty(PROP);
 			if (val != null) {
 				try {
