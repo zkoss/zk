@@ -151,7 +151,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	
 	//TODO make it configurable
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
-		new CacheMap<Class<?>, List<Method>>(1000,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
+		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
 	
 	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _commandMethodCache = 
 		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>

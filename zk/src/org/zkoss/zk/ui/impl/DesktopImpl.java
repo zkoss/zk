@@ -411,7 +411,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		if (_meds == null) {
 			_meds = new CacheMap<String, Media>();
-			_meds.setMaxSize(1024);
+			_meds.setMaxSize(500);
 			_meds.setLifetime(15 * 60 * 1000);
 				//15 minutes (CONSIDER: configurable)
 		} else {

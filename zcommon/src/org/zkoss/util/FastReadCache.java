@@ -162,13 +162,12 @@ public class FastReadCache<K, V> implements Cache<K, V>, java.io.Serializable, C
 		private List<K> _removed;
 
 		private InnerCache() {
+			super(false);
+			//insertion-order since _cache be read concurrently
 		}
 		private InnerCache(int maxSize, int lifetime) {
-			super(maxSize, lifetime);
-		}
-		@Override
-		protected boolean isAccessOrder() {
-			return false; //since _cache will be read concurrently, so insertion-mode only
+			super(maxSize, lifetime, false);
+			//insertion-order since _cache be read concurrently
 		}
 		@Override /*package*/
 		void removeInExpunge(Iterator<Map.Entry<K, Value<V>>> it, K key) {

@@ -80,6 +80,7 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	private transient WeakReference<X> _ref;
 	/** A flag used for debug purpose. */
 	private transient boolean _inExpunge;
+	private final boolean _accessOrder;
 
 	/** The class to be hold in the reference (to know GC is demanding). */
 	private static class X {
@@ -254,45 +255,66 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 
 	//-- constructors --//
 	/** Constructs a cache map with the specified max size and lifetime.
+	 * Unlike LinkedHashMap, the default order is the access order,
+	 * i.e., the order is changed once accessed, including get().
 	 * @since 3.0.0
 	 */
 	public CacheMap(int maxSize, int lifetime) {
-		this();
+		this(maxSize, lifetime, true);
+	}
+	/** Constructs a cache map.
+	 * Unlike LinkedHashMap, the default order is the access order,
+	 * i.e., the order is changed once accessed, including get().
+	 */
+	public CacheMap() {
+		this(16, 0.75f, true);
+	}
+	/** Constructs a cache map.
+	 * Unlike LinkedHashMap, the default order is the access order,
+	 * i.e., the order is changed once accessed, including get().
+	 */
+	public CacheMap(int cap) {
+		this(cap, 0.75f, true);
+	}
+	/** Constructs a cache map.
+	 * Unlike LinkedHashMap, the default order is the access order,
+	 * i.e., the order is changed once accessed, including get().
+	 */
+	public CacheMap(int cap, float load) {
+		this(cap, load, true);
+	}
+	/** Constructs a cache map.
+	 * @param accessOrder whether to use the access order.
+	 * Specify false for the insertion order.
+	 * @since 6.0.0
+	 */
+	public CacheMap(boolean accessOrder) {
+		this(16, 0.75f, accessOrder);
+	}
+	/** Constructs a cache map with the specified max size and lifetime.
+	 * @param accessOrder whether to use the access order.
+	 * Specify false for the insertion order.
+	 * @since 6.0.0
+	 */
+	public CacheMap(int maxSize, int lifetime, boolean accessOrder) {
+		this(accessOrder);
 		setMaxSize(maxSize);
 		setLifetime(lifetime);
 	}
-	/** Constructs a cachemap by using LinkedHashMap internally.
+	/** Constructs a cache map.
+	 * @param accessOrder whether to use the access order.
+	 * Specify false for the insertion order.
+	 * @since 6.0.0
 	 */
-	public CacheMap() {
-		_map = new LinkedHashMap<K, Value<V>>(16, 0.75f, isAccessOrder());
-		init();
-	}
-	/** Constructs a cachemap by using LinkedHashMap internally.
-	 */
-	public CacheMap(int cap) {
-		_map = new LinkedHashMap<K, Value<V>>(cap, 0.75f, isAccessOrder());
-		init();
-	}
-	/** Constructs a cachemap by using LinkedHashMap internally.
-	 */
-	public CacheMap(int cap, float load) {
-		_map = new LinkedHashMap<K, Value<V>>(cap, load, isAccessOrder());
+	public CacheMap(int cap, float load, boolean accessOrder) {
+		_accessOrder = accessOrder;
+		_map = new LinkedHashMap<K, Value<V>>(cap, load, accessOrder);
 		init();
 	}
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
 		_que = new ReferenceQueue<X>();
 		newRef();
-	}
-
-	/** Returns whether the ording mode is for access-order.
-	 * Returns false for insertion-order.
-	 * <p>Default: true.
-	 * <p>Note: this method is called only in the constructor.
-	 * @since 6.0.0
-	 */
-	protected boolean isAccessOrder() {
-		return true;
 	}
 
 	//-- extra api --//
@@ -376,8 +398,8 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 	public V getWithoutExpunge(Object key) {
 		final Value<V> v = _map.get(key); //re-order
 		if (v != null) {
-			v.updateAccessTime();
-			//assertion(key);
+			if (_accessOrder)
+				v.updateAccessTime();
 			return v.value;
 		}
 		return null;
@@ -594,9 +616,9 @@ public class CacheMap<K,V> implements Map<K,V>, Cache<K,V>, java.io.Serializable
 		}
 
 		clone._inExpunge = false;
-		clone._map = new LinkedHashMap<K, Value<V>>(this._map);
-		for (Map.Entry<K, Value<V>> me: clone._map.entrySet()) {
-			me.setValue((Value<V>)me.getValue().clone());
+		clone._map = new LinkedHashMap<K, Value<V>>(16, 0.75f, _accessOrder);
+		for (Map.Entry<K, Value<V>> me: _map.entrySet()) {
+			clone._map.put(me.getKey(), (Value<V>)me.getValue().clone());
 		}
 
 		clone.init();
