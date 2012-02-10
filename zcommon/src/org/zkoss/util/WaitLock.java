@@ -58,8 +58,6 @@ try {
 }
 </code></pre>
  *
- * Refer to i3sys's SketchPostImpl, zweb's JspLoaderServlet for examples.
- *
  * @author tomyeh
  */
 public class WaitLock {

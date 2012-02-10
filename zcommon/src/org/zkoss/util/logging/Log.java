@@ -927,13 +927,13 @@ public class Log {
 			warningBriefly(message, ex);
 		} else {
 			warning(
-Objects.BAR1_STRING
-+(message != null ? "\n"+message: "")
+BAR+(message != null ? "\n"+message: "")
 +"\n"+"The exception:\n"+Exceptions.getMessage(ex)+"\n"
-+"If you want to see the stack trace, turn the DEBUG level on for "+_name+"\n"
-+Objects.BAR1_STRING);
++"If you want to see the stack trace, turn the DEBUG level on for "+_name+"\n"+BAR);
 		}
 	}
+	private final String BAR = "------------";
+
 	/** Logs an exception as an warning message about being eaten
 	 * (rather than thrown).
 	 */

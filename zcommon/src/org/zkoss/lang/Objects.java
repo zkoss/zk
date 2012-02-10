@@ -73,30 +73,21 @@ public class Objects {
 	 */
 	public static final Character NULL_CHARACTER = new Character('\u0000');
 
-	/** A separator char that is from the Unicode reserved area.
-	 */
-	public static final char SEPARATOR_CHAR = 0xf77a; //DON'T CHANGE IT (Or, db broke)
-	/** The second separator char that is from the Unicode reserved area.
-	 */
-	public static final char SEPARATOR_CHAR2 = (char)(SEPARATOR_CHAR - 1); //DON'T CHANGE IT (Or, db broke)
-	/** A separator char that is from the Unicode reserved area.
-	 */
-	public static final String SEPARATOR_STRING = "" + SEPARATOR_CHAR;
-
-	/** The path seperator character that is used to construct a path.
-	 * See org.zkoss.i3.ds.Path.
+	/** @deprecated As of release 6.0.0, never used and confusing.
 	 */
 	public static final char PATH_SEPARATOR_CHAR = '/';
-	/** The path seperator string that is used to construct a path.
-	 * See org.zkoss.i3.ds.Path.
+	/** @deprecated As of release 6.0.0, never used and confusing.
 	 */
 	public static final String PATH_SEPARATOR_STRING = "" + PATH_SEPARATOR_CHAR;
 
-	/** The horizontal bar 0 (i.e., .........). */
+	/** @deprecated As of release 6.0.0, not worth to have this API.
+	 */
 	public static final String BAR0_STRING = "..\t\t..............................";
-	/** The horizontal bar 1 (i.e., ---------). */
+	/** @deprecated As of release 6.0.0, not worth to have this API.
+	 */
 	public static final String BAR1_STRING = "--\t\t------------------------------";
-	/** The horizontal bar 2 (i.e., =========). */
+	/** @deprecated As of release 6.0.0, not worth to have this API.
+	 */
 	public static final String BAR2_STRING = "==\t\t==============================";
 
 	/**

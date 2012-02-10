@@ -49,7 +49,7 @@ public class Files {
 		System.getProperty("os.name").indexOf("Windows")<0 ? (char)0: ':';
 
 	/** Corrects the separator from '/' to the system dependent one.
-	 * Note: i3 always uses '/' while Windows uses '\\'.
+	 * Note: always uses '/' even though Windows uses '\\'.
 	 */
 	public final static String correctSeparator(String flnm) {
 		return File.separatorChar != '/' ?
