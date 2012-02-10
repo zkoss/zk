@@ -17,11 +17,13 @@ import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.InitPropertyBinding;
+import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -45,14 +47,27 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 	public void load(BindContext ctx) {
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
-		
+		final Binder binder = getBinder();
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
-		
 		if(!(value instanceof Form)){
-			throw new UiException("the return value of init expression is not a From is :" + value);
+			final Form form = getFormBean();
+			if(form instanceof FormExt){
+				for (String field : ((FormExt)form).getLoadFieldNames()) {
+					final ExpressionX expr = getFieldExpression(eval, field);
+					if (expr != null) {
+						final Object fieldval = eval.getValue(ctx, comp, expr);
+						form.setField(field, fieldval);
+					}
+				}
+				((FormExt)form).resetDirty(); //initial loading, mark form as clean
+			}
+			binder.notifyChange(form, "*"); //notify change of fx.*
+			if(form instanceof FormExt){
+				binder.notifyChange(((FormExt)form).getStatus(), "*");//notify change of fxStatus.*
+			}
+		}else{
+			((BinderCtrl)binder).storeForm(getComponent(), getFormId(), (Form)value);
 		}
-		
-		((BinderCtrl)getBinder()).storeForm(getComponent(), getFormId(), (Form)value);
 	}
 }

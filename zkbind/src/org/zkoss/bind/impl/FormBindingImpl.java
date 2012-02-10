@@ -40,7 +40,7 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 			String accessExpr, ConditionType conditionType, String command,Map<String, Object> bindingArgs) {
 		super(binder, comp, bindingArgs);
 		this._formId = formId;
-		this._accessInfo = AccessInfo.create(this, accessExpr, Form.class, conditionType, command, ignoreTracker());
+		this._accessInfo = AccessInfo.create(this, accessExpr, Object.class, conditionType, command, ignoreTracker());
 		_fieldExprs = new HashMap<String, ExpressionX>();
 	}
 
