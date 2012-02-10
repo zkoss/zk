@@ -14,7 +14,9 @@
 	position: relative;
 	vertical-align: top;
 	zoom: 1;
+<c:if test="${not (zk.ie == 6)}">
 	white-space: normal; <%-- Bug ZK-477 --%>
+</c:if>
 <c:if test="${zk.ie < 8}">
 	display: inline;
 </c:if>
