@@ -85,7 +85,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 		_size = 0;
 		for (int j = 0; j < groupCount; ++j) {
 			_gpofs[j] = _size;
-			_gpopens[j] = _model.isOpen(j);
+			_gpopens[j] = _model.isGroupOpened(j);
 			_size += 1 + (_gpopens[j] ? _model.getChildCount(j) : 0); //closed group deemed as zero child in ListModel
 			_gpfts[j] = _model.hasGroupfoot(j);
 			if (_gpfts[j]) ++_size;

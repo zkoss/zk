@@ -57,7 +57,10 @@ public class TreeModels {
 	
 	private static <T> void openAllChildren(DefaultTreeModel<T> model, 
 			TreeNode<T> node, boolean open) {
-		model.setOpen(node, open);
+		if (open)
+			model.addOpenObject(node);
+		else
+			model.removeOpenObject(node);
 		for (TreeNode<T> c : node.getChildren())
 			openAllChildren(model, c, open);
 	}

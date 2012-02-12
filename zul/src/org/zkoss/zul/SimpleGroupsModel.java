@@ -182,26 +182,26 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 
 	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #isOpen(int)}
+	 * @deprecated As of release 6.0.0, replace with {@link #isGroupOpened(int)}
 	 */
 	public boolean isClose(int groupIndex) {
-		return !isOpen(groupIndex);
+		return !isGroupOpened(groupIndex);
 	}
 
 	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #setOpen(int, boolean)}
+	 * @deprecated As of release 6.0.0, replace with {@link #setOpenGroup(int, boolean)}
 	 */
 	public void setClose(int groupIndex, boolean close) {
-		setOpen(groupIndex, !close);
+		setOpenGroup(groupIndex, !close);
 	}
 
 	@Override
-	public boolean isOpen(int groupIndex) {
+	public boolean isGroupOpened(int groupIndex) {
 		return _opens == null ? true : _opens[groupIndex];
 	}
 
 	@Override
-	public void setOpen(int groupIndex, boolean open) {
+	public void setOpenGroup(int groupIndex, boolean open) {
 		if (_opens == null) {
 			_opens = new boolean[getGroupCount()];
 		}
