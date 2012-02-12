@@ -41,6 +41,8 @@ public interface Selectable<E> {
 	public Set<E> getSelection();
 	/**
 	 * Replace the current selection with the given set.
+	 * <p>If this represents a change to the
+	 * current selection then notify each ListDataListener, including UI.
 	 * @since 6.0.0
 	 */
 	public void setSelection(Collection<? extends E> selection);
@@ -56,28 +58,27 @@ public interface Selectable<E> {
 	public boolean isSelectionEmpty();
 	/**
 	 * Add the specified object into selection.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Listbox}).
-	 * If it is called by an application, the component's selection status
-	 * won't be changed.
+	 * <p>If this represents a change to the
+	 * current selection then notify each ListDataListener, including UI.
 	 * @param obj the object to be as selection.
+	 * @return true if it is added successfully; fasle if <code>obj</code>
+	 * is not part of the data, or was already selected.
 	 * @since 6.0.0
 	 */
-	public void addToSelection(E obj);
+	public boolean addToSelection(E obj);
 	/**
 	 * Remove the specified object from selection.
-	 * <p>Notice that this method is designed to be called by a component
-	 * (such as {@link org.zkoss.zul.Listbox}).
-	 * If it is called by an application, the component's selection status
-	 * won't be changed.
+	 * <p>If this represents a change to the
+	 * current selection then notify each ListDataListener, including UI.
 	 * @param obj the object to be remove from selection.
 	 * @return whether it is removed successfully
 	 * @since 6.0.0
 	 */
 	public boolean removeFromSelection(Object obj);
 	/**
-	 * Change the selection to the empty set. If this represents a change to the
-	 * current selection then notify each ListDataListener.
+	 * Change the selection to the empty set.
+	 * <p>If this represents a change to the
+	 * current selection then notify each ListDataListener, including UI.
 	 */
 	public void clearSelection();
 

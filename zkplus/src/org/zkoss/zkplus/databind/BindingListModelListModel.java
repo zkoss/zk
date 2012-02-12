@@ -90,7 +90,8 @@ public class BindingListModelListModel<E> implements BindingListModel<E>, Select
 		}
 
 		@Override
-		public void addToSelection(E obj) {
+		public boolean addToSelection(E obj) {
+			return false;
 		}
 
 		@Override
@@ -139,8 +140,8 @@ public class BindingListModelListModel<E> implements BindingListModel<E>, Select
 	}
 
 	@Override
-	public void addToSelection(E obj) {
-		getSelectModel().addToSelection(obj);
+	public boolean addToSelection(E obj) {
+		return getSelectModel().addToSelection(obj);
 	}
 
 	@Override

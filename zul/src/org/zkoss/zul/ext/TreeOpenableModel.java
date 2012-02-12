@@ -33,20 +33,20 @@ public interface TreeOpenableModel {
 	 * open the TreeDataListeners are notified. This has no effect if
 	 * <code>path</code> is null.
 	 * 
-	 * @param path
-	 *            the new path to add to the current open
+	 * @param path the new path to add to the current open
+	 * @return whether it is added successfully
 	 */
-	public void addOpenPath(int[] path);
+	public boolean addOpenPath(int[] path);
 
 	/**
 	 * Adds paths to the current Open. If any of the paths in paths are not
 	 * currently in the Open the TreeDataListeners are notified. This has no
 	 * effect if <code>paths</code> is null.
 	 * 
-	 * @param paths
-	 *            the new paths to add to the current Open
+	 * @param paths the new paths to add to the current Open
+	 * @return whether an of the paths is added successfully
 	 */
-	public void addOpenPaths(int[][] paths);
+	public boolean addOpenPaths(int[][] paths);
 
 	/**
 	 * Removes path from the open. If path is in the open The TreeDataListeners

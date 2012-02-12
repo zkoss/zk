@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import org.zkoss.lang.Objects;
@@ -26,14 +27,25 @@ import org.zkoss.io.Serializables;
 
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
+import org.zkoss.zul.ext.Selectable;
+import org.zkoss.zul.ext.Openable;
 import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  * A skeletal implementation for {@link TreeModel}.
  * 
- * <p>
- * For introduction, please refer to <a href=
+ * <p>{@link AbstractTreeModel} implements both {@link TreeSelectableModel}
+ * and {@link TreeOpenableModel}. In other words, it stores the selection
+ * and open states, such that {@link Tree} and other UI can interact with.
+ *
+ * <p>In additions, {@link AbstractTreeModel} also implements
+ * {@link Selectable} and {@link Openable} to simplify the acess
+ * (and provides backward compatibility to ZK 5 and ealier).
+ * However, these two interfaces are optional and designed for application.
+ * {@link Tree} and all ZK core don't access it at all.
+ *
+ * <p>For introduction, please refer to <a href=
  * "http://books.zkoss.org/wiki/ZK_Developer's_Reference/MVC/Model/Tree_Model"
  * >ZK Developer's Reference: Tree Model</a>.
  * 
@@ -42,7 +54,8 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @since 3.0.0
  */
 abstract public class AbstractTreeModel<E> implements TreeModel<E>,
-TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
+TreeSelectableModel, TreeOpenableModel, Selectable<E>, Openable<E>,
+java.io.Serializable {
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
@@ -231,26 +244,31 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 
 	// TreeSelectableModel
 	@Override
-	public void addSelectionPath(int[] path) {
+	public boolean addSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
 			paths[0] = path;
-			addSelectionPaths(paths);
+			return addSelectionPaths(paths);
 		}
+		return false;
 	}
 
 	@Override
-	public void addSelectionPaths(int[][] paths) {
+	public boolean addSelectionPaths(int[][] paths) {
+		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
 		final boolean multiple = isMultiple();
 		for (int j = 0; j < len; ++j)
 			if (paths[j] != null) {
 				final Path path = new Path(paths[j]);
 				if (multiple) {
-					if (_selection.add(path))
+					if (_selection.add(path)) {
+						added = true;
 						fireSelectionChanged(path.path);
+					}
 				} else {
 					if (!_selection.contains(path)) {
+						added = true;
 						_selection.clear();
 						_selection.add(path);
 						fireSelectionChanged(path.path);
@@ -258,6 +276,7 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 					break; //done
 				}
 			}
+		return added;
 	}
 
 	@Override
@@ -332,24 +351,29 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 
 	// TreeOpenableModel //
 	@Override
-	public void addOpenPath(int[] path) {
+	public boolean addOpenPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
 			paths[0] = path;
-			addOpenPaths(paths);
+			return addOpenPaths(paths);
 		}
+		return false;
 	}
 	
 	@Override
-	public void addOpenPaths(int[][] paths) {
+	public boolean addOpenPaths(int[][] paths) {
+		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
 		for (int j = 0; j < len; ++j) {
 			if (paths[j] != null) {
 				final Path path = new Path(paths[j]);
-				if (_opens.add(path))
+				if (_opens.add(path)) {
+					added = true;
 					fireOpenChanged(path.path);
+				}
 			}
 		}
+		return added;
 	}
 
 	@Override
@@ -450,6 +474,86 @@ TreeSelectableModel, TreeOpenableModel, java.io.Serializable {
 			for (final E node: states.opens)
 				_opens.add(new Path(getPath(node)));
 		}
+	}
+
+	//Selectable//
+	@Override
+	public Set<E> getSelection() {
+		final Set<E> selected = new LinkedHashSet<E>();
+		int[][] paths = getSelectionPaths();
+		if (paths != null)
+			for (int i = 0; i < paths.length; i++)
+				selected.add(getChild(paths[i]));
+		return selected;
+	}
+	@Override
+	public void setSelection(Collection<? extends E> selection) {
+		clearSelection();
+		for (final E node: selection)
+			addToSelection(node);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isSelected(Object child) {
+		final int[] path = getPath((E)child);
+		if (path != null && path.length > 0)
+			return isPathSelected(path);
+		return false;
+	}
+	@Override
+	public boolean addToSelection(E child) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			return addSelectionPath(path);
+		return false;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean removeFromSelection(Object child) {
+		final int[] path = getPath((E)child);
+		if (path != null && path.length > 0)
+			return removeSelectionPath(path);
+		return false;
+	}
+
+	//Openable//
+	@Override
+	public Set<E> getOpenObjects() {
+		final Set<E> opened = new LinkedHashSet<E>();
+		int[][] paths = getOpenPaths();
+		if (paths != null)
+			for (int i = 0; i < paths.length; i++)
+				opened.add(getChild(paths[i]));
+		return opened;
+	}
+	@Override
+	public void setOpenObjects(Collection<? extends E> opened) {
+		clearOpen();
+		for (final E node: opened)
+			addOpenObject(node);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isObjectOpened(Object child) {
+		final int[] path = getPath((E)child);
+		if (path != null && path.length > 0)
+			return isPathOpened(path);
+		return false;
+	}
+	@Override
+	public boolean addOpenObject(E child) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0)
+			return addOpenPath(path);
+		return false;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean removeOpenObject(Object child) {
+		final int[] path = getPath((E)child);
+		if (path != null && path.length > 0)
+			return removeOpenPath(path);
+		return false;
 	}
 
 	// Serializable//

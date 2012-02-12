@@ -45,20 +45,20 @@ public interface TreeSelectableModel {
 	 * selection the TreeDataListeners are notified. This has no effect if
 	 * <code>path</code> is null.
 	 * 
-	 * @param path
-	 *            the new path to add to the current selection
+	 * @param path the new path to add to the current selection
+	 * @return whether it is added successfully
 	 */
-	public void addSelectionPath(int[] path);
+	public boolean addSelectionPath(int[] path);
 
 	/**
 	 * Adds paths to the current selection. If any of the paths in paths are not
 	 * currently in the selection the TreeDataListeners are notified. This has
 	 * no effect if <code>paths</code> is null.
 	 * 
-	 * @param paths
-	 *            the new paths to add to the current selection
+	 * @param paths the new paths to add to the current selection
+	 * @return whether it is added successfully
 	 */
-	public void addSelectionPaths(int[][] paths);
+	public boolean addSelectionPaths(int[][] paths);
 
 	/**
 	 * Removes path from the selection. If path is in the selection The

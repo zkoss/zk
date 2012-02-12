@@ -192,9 +192,8 @@ public class ListModels {
 		}
 
 		@Override
-		public void addToSelection(E obj) {
-			getSelectModel().addToSelection(obj);
-			
+		public boolean addToSelection(E obj) {
+			return getSelectModel().addToSelection(obj);
 		}
 
 		@Override

@@ -107,14 +107,16 @@ Selectable<E>, java.io.Serializable {
 
 	/** {@inheritDoc} */
 	@Override
-	public void addToSelection(E obj) {
+	public boolean addToSelection(E obj) {
 		if (_selection.add(obj)) {
 			if (!_multiple) {
 				_selection.clear();
 				_selection.add(obj);
 			}
 			fireSelectionEvent(obj);
+			return true;
 		}
+		return false;
 	}
 	/** {@inheritDoc} */
 	@Override

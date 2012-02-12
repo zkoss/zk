@@ -241,11 +241,11 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void addToSelection(Object obj) {
+	public boolean addToSelection(Object obj) {
 		if (_model instanceof Selectable) 
-			((Selectable) _model).addToSelection(obj);
+			return ((Selectable) _model).addToSelection(obj);
 		else
-			super.addToSelection(obj);
+			return super.addToSelection(obj);
 	}
 	/** {@inheritDoc} */
 	@Override

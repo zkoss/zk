@@ -17,6 +17,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.ext;
 
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Indicate an openable collection.
@@ -32,16 +34,41 @@ package org.zkoss.zul.ext;
  */
 public interface Openable<E> {
 	/**
-	 * Sets the specified object into open.
-	 * @param obj the object to be as open.
-	 * @param open whether be opened
+	 * Returns the objects that are opened.
+	 * It is readonly. Don't modify it directly
+	 * @since 6.0.0
 	 */
-	public void setOpen(E obj, boolean open);
+	public Set<E> getOpenObjects();
+	/**
+	 * Replace the current set of opened objects with the given set.
+	 * @since 6.0.0
+	 */
+	public void setOpenObjects(Collection<? extends E> opens);
 	/**
 	 * Returns whether the specified object be opened.
 	 * @param obj
 	 */
-	public boolean isOpen(Object obj);
+	public boolean isObjectOpened(Object obj);
+	/**
+	 * Returns true if the open is currently empty.
+	 * @since 6.0.0
+	 */
+	public boolean isOpenEmpty();
+	/**
+	 * Add the specified object into the collection of opened objects.
+	 * @param obj the object to be as selection.
+	 * @return true if it is added successfully; fasle if <code>obj</code>
+	 * is not part of the data, or was already opened.
+	 * @since 6.0.0
+	 */
+	public boolean addOpenObject(E obj);
+	/**
+	 * Remove the specified object from selection.
+	 * @param obj the object to be remove from selection.
+	 * @return whether it is removed successfully
+	 * @since 6.0.0
+	 */
+	public boolean removeOpenObject(Object obj);
 	/**
 	 * Clear all open status.
 	 * <p>Notice that this method is designed to be called by a component

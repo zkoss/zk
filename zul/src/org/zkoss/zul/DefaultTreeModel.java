@@ -13,7 +13,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -24,8 +23,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.ext.Sortable;
-import org.zkoss.zul.ext.Selectable;
-import org.zkoss.zul.ext.Openable;
 
 /**
  * A simple tree data model that uses {@link TreeNode} to represent a tree.
@@ -48,8 +45,7 @@ import org.zkoss.zul.ext.Openable;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements Sortable<TreeNode<E>>, Selectable<TreeNode<E>>, Openable<TreeNode<E>>,
-java.io.Serializable {
+implements Sortable<TreeNode<E>>, java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
 
@@ -115,6 +111,26 @@ java.io.Serializable {
 		return path;
 	}
 
+	//Selectable//
+	@Override
+	public boolean isSelected(Object child) {
+		return child instanceof TreeNode && super.isSelected(child);
+	}
+	@Override
+	public boolean removeFromSelection(Object child) {
+		return child instanceof TreeNode && super.removeFromSelection(child);
+	}
+
+	//Openable//
+	@Override
+	public boolean isObjectOpened(Object child) {
+		return child instanceof TreeNode && super.isObjectOpened(child);
+	}
+	@Override
+	public boolean removeOpenObject(Object child) {
+		return child instanceof TreeNode && super.removeOpenObject(child);
+	}
+
 	//-- Sortable --//
 	/** Sorts the data.
 	 *
@@ -152,73 +168,6 @@ java.io.Serializable {
 		for (TreeNode<E> child: node.getChildren())
 			sort0(child, cmpr);
 	}
-	
-	//Selectable//
-	/**
-	 * Returns the collection of the selected {@link TreeNode}.
-	 */
-	public Set<TreeNode<E>> getSelection() {
-		final Set<TreeNode<E>> selected = new LinkedHashSet<TreeNode<E>>();
-		int[][] paths = getSelectionPaths();
-		if (paths != null)
-			for (int i = 0; i < paths.length; i++)
-				selected.add(getChild(paths[i]));
-		return selected;
-	}
-	@Override
-	public void setSelection(Collection<? extends TreeNode<E>> selection) {
-		clearSelection();
-		for (final TreeNode<E> node: selection)
-			addToSelection(node);
-	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public boolean isSelected(Object child) {
-		if (child instanceof TreeNode) {
-			final int[] path = getPath((TreeNode)child);
-			if (path != null && path.length > 0)
-				return isPathSelected(path);
-		}
-		return false;
-	}
-	@Override
-	public void addToSelection(TreeNode<E> child) {
-		final int[] path = getPath(child);
-		if (path != null && path.length > 0)
-			addSelectionPath(path);
-	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public boolean removeFromSelection(Object child) {
-		if (child instanceof TreeNode) {
-			final int[] path = getPath((TreeNode)child);
-			if (path != null && path.length > 0)
-				return removeSelectionPath(path);
-		}
-		return false;
-	}
-
-	//Openable//
-	@Override
-	public void setOpen(TreeNode<E> child, boolean open) {
-		final int[] path = getPath(child);
-		if (path != null && path.length > 0) {
-			if (open)
-				addOpenPath(path);
-			else
-				removeOpenPath(path);
-		}
-	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public boolean isOpen(Object child) {
-		if (child instanceof TreeNode) {
-			final int[] path = getPath((TreeNode)child);
-			if (path != null && path.length > 0)
-				return isPathOpened(path);
-		}
-		return false;
-	}
 
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
@@ -232,6 +181,24 @@ java.io.Serializable {
 	 */
 	public void removeSelection(Object obj) {
 		removeFromSelection(obj);
+	}
+
+	/** @deprecated As of release 6.0.0, replaced with {@link #addOpenObject}
+	 * and {@link #removeOpenObject}.
+	 */
+	public void setOpen(TreeNode<E> child, boolean open) {
+		final int[] path = getPath(child);
+		if (path != null && path.length > 0) {
+			if (open)
+				addOpenPath(path);
+			else
+				removeOpenPath(path);
+		}
+	}
+	/** @deprecated As of release 6.0.0, replaced with {@link #isObjectOpened}.
+	 */
+	public boolean isOpen(Object child) {
+		return isObjectOpened(child);
 	}
 
 	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
