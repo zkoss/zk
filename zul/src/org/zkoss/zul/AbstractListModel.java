@@ -84,7 +84,7 @@ Selectable<E>, java.io.Serializable {
 	@Override
 	public void setSelection(Collection<? extends E> selection) {
 		if (isSelectionChanged(selection)) {
-			if (!_multiple && _selection.size() > 1)
+			if (!_multiple && selection.size() > 1)
 				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
 			_selection.clear();
 			_selection.addAll(selection);
