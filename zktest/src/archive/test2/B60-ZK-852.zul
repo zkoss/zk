@@ -1,0 +1,35 @@
+<zk xmlns:h="xhtml" >
+	<h:pre>
+		1.This issue is safari mobile only.
+		2.click the button of datebox ,the calendar should show up.
+		3.click the red block ,the zk log should show up. ("test click")
+		4.click the combobox button, the dropdown list should show up.
+	</h:pre>
+  <div style="padding-top:50px;padding-left:50px;">
+	  <datebox />
+	  <h:br />
+	  <h:br />
+	  <h:br />
+	  <h:br />
+	  <h:i id="test" style="display:block;width:30px;height:30px;background:red;cursor: pointer;" />
+	  <h:br />
+	  <h:br />
+	  <h:br />
+	  <h:br />
+	  <combobox>
+		<comboitem label="Simple and Rich" />
+		<comboitem label="Cool!" />
+		<comboitem label="Thumbs Up!" />
+	</combobox>
+	  <script>
+	  	zk.afterMount(function(){
+	  		jq("#test").bind("click",function(){
+		  		zk.log("test click");
+	  		});
+	  	});
+	  </script>
+
+  </div>
+	
+		
+</zk>		

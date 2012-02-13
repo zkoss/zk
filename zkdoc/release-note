@@ -71,7 +71,7 @@ ZK 6.0.0
   ZK-669: Add method setModel(ListModel model) to Radiogroup class
   ZK-720: Toggable toolbar buttons
   ZK-855: DefaultTreeNode shall support Cloneable
-  
+    
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state
   ZK-392: Set hflex='min' to treeitem will cause javascript error (illegal use actually)
@@ -93,6 +93,7 @@ ZK 6.0.0
   ZK-827: Selection of listbox is worng after change multiple
   ZK-816: Tooltip assigned to component when it is in detached state won't show up
   ZK-774: Toolbar's mold "panel" does not work accurately 
+  ZK-852: Datebox not functional in ZK6 on Mobile Safari
 
 * Upgrade Notes
   + The default zclass of groupbox is renamed to z-groupbox, and the 3d zclass is
