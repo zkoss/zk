@@ -34,12 +34,12 @@ public class ListDataEvent {
 	public static final int STRUCTURE_CHANGED = 3;
 	/** Identifies the selection of the lists has changed.
 	 * Notice that the objects being selected can be found by calling
-	 * {@link org.zkoss.zul.ext.Selectable.getSelection}.
+	 * {@link org.zkoss.zul.ext.Selectable#getSelection}.
 	 * Moreover, {@link #getIndex0} and {@link #getIndex1} are both meaningless.
 	 * @since 6.0.0
 	 */
 	public static final int SELECTION_CHANGED = 4;
-	/** Identified the state of {@link ListModel#isMultiple} is changed.
+	/** Identified the state of {@link org.zkoss.zul.ext.Selectable#isMultiple} is changed.
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;

@@ -23,9 +23,9 @@ import java.util.Set;
 /**
  * Indicate an openable collection.
  *
- * <p>Since 6.0.0, {@link TreeOpenModel} was introduced to handle
+ * <p>Since 6.0.0, {@link TreeOpenableModel} was introduced to handle
  * the open state of {@link org.zkoss.zul.TreeModel} for better performance.
- * Thus, for handling tree's open states, please use {@link TreeOpenModel}
+ * Thus, for handling tree's open states, please use {@link TreeOpenableModel}
  * instead.
  *
  * @author jimmyshiau
