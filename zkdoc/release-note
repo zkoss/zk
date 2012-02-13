@@ -29,6 +29,7 @@ ZK 5.0.11
   ZK-824: Texbox dragging issue within the draggble container
   ZK-841: SessionInit cause a stack overflow
   ZK-845: Fileupload fail in cluster server (JBoss)
+  ZK-851: no value update on textbox in popup
   
 * Upgrade Notes
   
