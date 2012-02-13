@@ -11,6 +11,11 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<style>
+	.ie6 .z-hlayout-inner {
+	white-space: normal;
+	}
+	</style>
 	<zscript><![CDATA[
 		Integer[] items = new Integer[30];
 		for (int i = 0; i < 30; i++)
