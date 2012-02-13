@@ -49,13 +49,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	$define: {
 		/**
 		 * Returns the mode.
-		 * @return string
+		 * @return String
 		 */
 		/**
 		 * Sets the mode. (default/toggle)
-		 * @param string mode
+		 * @param String mode
 		 */
-		mode:function(mode){
+		mode: function(mode) {
 			this.rerender();
 		},
 		/** Returns whether it is checked. (Note:It's only available in toggle mode.)
@@ -65,14 +65,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is checked. (Note:It's only available in toggle mode.)
 		 * @param boolean val
 		 */
-		checked:function(val){
-			if(this.desktop && this._mode == "toggle"){
-				var s = this.getZclass(), $n = jq(this.$n());
-				if(val)
-					$n.addClass( s + '-ck' );
-				else
-					$n.removeClass( s + '-ck' );
-			}
+		checked: function(val) {
+			if (this.desktop && this._mode == "toggle")
+				jq(this.$n())[val ? 'addClass' : 'removeClass'](this.getZclass() + '-ck');
 		},
 		/** Returns whether it is disabled.
 		 * <p>Default: false.

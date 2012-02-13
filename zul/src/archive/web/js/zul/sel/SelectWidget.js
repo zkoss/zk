@@ -979,7 +979,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/**
 	 * May need fix anchor.
-	 * @param offs The anchor offset [left, top]
+	 * @param int[] offs The anchor offset [left, top]
 	 * @since 6.0.0
 	 */
 	fixAnchor_: function (offs, focusEl) {

@@ -4423,7 +4423,11 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @since 5.0.2
 	 */
 	widgetName: "desktop",
-
+	/** The request path.
+	 * @type String
+	 */
+	//requestPath: null,
+	
 	/** Constructor
 	 * @param String dtid the ID of the desktop
 	 * @param String contextURI the context URI, such as <code>/zkdemo</code>
