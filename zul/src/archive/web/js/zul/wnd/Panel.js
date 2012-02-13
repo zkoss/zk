@@ -12,6 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	// bug fixed for B50-3166478.zul
+	function _getOuter(cap, root) {
+		while (cap && cap.parentNode != root)
+			cap = cap.parentNode;
+		return cap;
+	}
 /**
  * Panel is a container that has specific functionality and structural components
  * that make it the perfect building block for application-oriented user interfaces.
@@ -34,13 +41,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-panel.
  * 
  */
-(function () {
-	// bug fixed for B50-3166478.zul
-	function _getOuter(cap, root) {
-		while (cap && cap.parentNode != root)
-			cap = cap.parentNode;
-		return cap;
-	}
 zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
