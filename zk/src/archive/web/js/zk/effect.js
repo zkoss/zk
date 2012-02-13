@@ -32,6 +32,8 @@ zk.eff = {
 	}
 };
 
+/** The shadow effect.
+ */
 zk.eff.Shadow = zk.$extends(zk.Object, {
 	$init: function (element, opts) {
 		this.wgt = zk.Widget.$(element.id);
