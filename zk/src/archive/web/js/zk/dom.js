@@ -1344,7 +1344,8 @@ jq(el).zk.center(); //same as 'center'
 					p.appendChild(el);
 				
 				var cf, p;
-				if ((zk.ff == 3.6 || zk.ff == 4) && (cf = zk._prevFocus) && 
+				// ZK-851
+				if (zk.ff && (cf = zk._prevFocus) && 
 					(p = zk.Widget.$(el)) && zUtl.isAncestor(p, cf) && 
 					cf.getInputNode)
 					jq(cf.getInputNode()).trigger('blur');
