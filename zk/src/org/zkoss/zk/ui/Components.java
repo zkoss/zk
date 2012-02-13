@@ -966,15 +966,16 @@ public class Components {
 			//inject space owner ancestors
 			if (idspace instanceof Component) {
 				wireController((Component)idspace, ((Component)idspace).getId());
-				for (IdSpace xidspace = idspace;;) {
-					final Component parent = ((Component)xidspace).getParent();
+				for (IdSpace is = idspace;;) {
+					final Component parent =
+						is instanceof Component ? ((Component)is).getParent(): null;
 					if (parent == null) {//hit page
-						final Page page = ((Component)xidspace).getPage();
+						final Page page = ((Component)idspace).getPage();
 						if (page != null) injectFellow(page);
 						break;
 					}
-					xidspace = parent.getSpaceOwner();
-					injectFellow(xidspace);
+					is = parent.getSpaceOwner();
+					injectFellow(is);
 				}
 			} else {
 				injectFellow((Page) idspace);
