@@ -587,10 +587,9 @@ String scroll; //DOM Element's ID</code></pre>
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
-		if(_actTmout || _dragging[node] || evt.which != 1
-		|| (zk.safari && jq.nodeName(target, 'select'))
-		|| (zk(target).isInput() && this.control != zk.Widget.$(target) )
-		)
+		if (_actTmout || _dragging[node] || evt.which != 1
+			|| (zk.safari && jq.nodeName(target, 'select'))
+			|| (zk(target).isInput() && this.control != zk.Widget.$(target)))
 			return;
 			// Bug B50-3147909: Safari has issue with select and draggable
 			// Now select element is not draggable in Chrome and Safari
