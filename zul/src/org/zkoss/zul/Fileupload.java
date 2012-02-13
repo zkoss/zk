@@ -285,7 +285,18 @@ public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload {
 	public static
 	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
 	throws InterruptedException {
-		final Map params = new HashMap(8);
+		return get(new HashMap(8), message, title, max, maxsize, alwaysNative);
+	}
+	/** The implemenation of all public get methods.
+	 * In other words, all public <code>get</code> methods will prepare
+	 * an empty map and invoke this method to retrieve the media.
+	 * It is designed to allow applications to customize the creation of 
+	 * the dialog, such as adding more parameters.
+	 * @since 5.0.11
+	 */
+	protected static Media[] get(Map params,
+	String message, String title, int max, int maxsize, boolean alwaysNative)
+	throws InterruptedException {
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);

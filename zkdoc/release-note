@@ -2,6 +2,7 @@
 ZK 5.0.11
 * Features
   ZK-780: Support a non-default context path when integrating ZK with Liferay bundle with JBoss
+  ZK-854: Allow passing additional params to custom file upload template
   
 * Bugs
   ZK-773: Listbox sizedByContent breaks scrolling in 5.0.10 
