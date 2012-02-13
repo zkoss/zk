@@ -281,7 +281,18 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 */
 	public static
 	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative) {
-		final Map<String, Object> params = new HashMap<String, Object>(8);
+		return get(new HashMap<String, Object>(8),
+			message, title, max, maxsize, alwaysNative);
+	}
+	/** The implemenation of all public get methods.
+	 * In other words, all public <code>get</code> methods will prepare
+	 * an empty map and invoke this method to retrieve the media.
+	 * It is designed to allow applications to customize the creation of 
+	 * the dialog, such as adding more parameters.
+	 * @since 5.0.11
+	 */
+	protected static Media[] get(Map<String, Object> params,
+	String message, String title, int max, int maxsize, boolean alwaysNative) {
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
 			Messages.get(MZul.UPLOAD_MESSAGE): message);
