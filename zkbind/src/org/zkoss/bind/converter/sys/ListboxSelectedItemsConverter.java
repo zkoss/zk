@@ -44,31 +44,27 @@ public class ListboxSelectedItemsConverter implements Converter, java.io.Seriali
   			throw new UiException("model doesn't implement Selectable");
   		}
 		
-		//clean first.
-		if(model!=null){
-			((Selectable<?>)model).clearSelection();
-		}
-		
   		final Set<Listitem> items = new HashSet<Listitem>();
 		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(HashSet.class, val);
 		
 	  	if (vals != null && vals.size()>0) {
 	  		if(model!=null){
-	  			for(Object obj:vals){
-	  				((Selectable<Object>)model).addToSelection(obj);
-	  			}
+	  			((Selectable<Object>)model).setSelection(vals);
 	  		}else{
 	  			//no model case
 			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
 			  		final Listitem li = (Listitem) it.next();
 			  		Object bean = li.getValue();
-
+			  		
 			  		if (vals.contains(bean)) {
 			  			items.add(li);
 			  		}
 			  	}
 	  		}
+	  	}else if(model!=null && !((Selectable<Object>)model).isSelectionEmpty()){//model !=null and no selection
+	  		((Selectable<Object>)model).clearSelection();
 	  	}
+	  	
 	  	return model == null ? items : LoadPropertyBinding.LOAD_IGNORED;
 	}
 
