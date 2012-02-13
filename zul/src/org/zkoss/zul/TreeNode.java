@@ -107,4 +107,14 @@ public interface TreeNode<E> {
      * @exception IllegalArgumentException if <code>child</code> is not a child of this node
 	 */
 	public void remove(TreeNode<E> child);
+
+	/** Clones the tree node.
+	 * <p>Notes:
+	 * <ul>
+	 *<li>It is a deep clone, i.e., all descendant are cloned.</li>
+	 *<li>If the implementation supports this method, it shall implement the Cloneable interface too.</li>
+	 *<li>If not supported, the implementation shall throw CloneNotSupportedException.</li>
+	 *</ul>
+	 */
+	public Object clone();
 }

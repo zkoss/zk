@@ -78,12 +78,15 @@ java.io.Serializable {
 	}
 
 	/**
-	 * Return the root of tree
-	 * 
-	 * @return the root of tree
+	 * Return the root of the tree model.
 	 */
 	public E getRoot() {
 		return _root;
+	}
+	/** Sets the root of the tree model.
+	 */
+	/*package*/ void setRootDirectly(E root) {
+		_root = root;
 	}
 
 	/** @deprecated As of release 6.0.0, replaced with {@link fireEvent(int, int[], int, int)}.

@@ -70,6 +70,7 @@ ZK 6.0.0
   ZK-423: Focusable listboxes 
   ZK-669: Add method setModel(ListModel model) to Radiogroup class
   ZK-720: Toggable toolbar buttons
+  ZK-855: DefaultTreeNode shall support Cloneable
   
 * Bugs
   ZK-328: Panelchildren shall ignore flex in maximized state

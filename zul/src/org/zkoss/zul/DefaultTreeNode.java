@@ -31,11 +31,12 @@ import org.zkoss.zul.event.TreeDataEvent;
  * @author tomyeh
  * @since 5.0.6
  */
-public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNode<E>>, java.io.Serializable  {
+public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNode<E>>,
+Cloneable, java.io.Serializable  {
 	private DefaultTreeModel<E> _model;
 	private DefaultTreeNode<E> _parent;
 	/** List<DefaultTreeNode> */
-	private final List<TreeNode<E>> _children;
+	private List<TreeNode<E>> _children;
 	private E _data;
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
@@ -95,22 +96,22 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 			_parent.remove(this);
 	}
 
-	//@Override
+	@Override
 	public DefaultTreeModel<E> getModel() {
 		return _parent != null ? _parent.getModel(): _model;
 	}
-	//@Override
+	@Override
 	public void setModel(DefaultTreeModel<E> model) {
 		if (model != null && _parent != null)
 			throw new IllegalStateException("Only root allowed, "+this);
 		_model = model;
 	}
 
-	//@Override
+	@Override
 	public E getData() {
 		return _data;
 	}
-	//@Override
+	@Override
 	public void setData(E data) {
 		_data = data;
 		DefaultTreeModel<E> model = getModel();
@@ -122,21 +123,20 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		}
 	}
 	
-	//@Override
+	@Override
 	public List<? extends TreeNode<E>> getChildren(){
 		return isLeaf() ? null : _children;
 	}
-
-	//@Override
+	@Override
 	public TreeNode<E> getChildAt(int childIndex) {
 		return childIndex >= 0 && childIndex < getChildCount() ?
 			_children.get(childIndex): null;
 	}
-	//@Override
+	@Override
 	public int getChildCount() {
 		return isLeaf() ? 0 : _children.size();
 	}
-	//@Override
+	@Override
 	public TreeNode<E> getParent() {
 		return _parent;
 	}
@@ -149,23 +149,23 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		_parent = parent;
 	}
 
-	//@Override
+	@Override
 	public int getIndex(TreeNode<E> node) {
 		return isLeaf() ? -1 : _children.indexOf(node);
 	}
 
-	//@Override
+	@Override
 	public boolean isLeaf() {
 		return _children == null;
 	}
 
-	//@Override
+	@Override
 	public void insert(TreeNode<E> child, int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.add(index, child);
 	}
-	//@Override
+	@Override
 	public void add(TreeNode<E> child) {
 		insert(child, getChildCount());
 	}
@@ -178,13 +178,13 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		return false;
 	}
 
-	//@Override
+	@Override
 	public void remove(int index) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
 		_children.remove(index);
 	}
-	//@Override
+	@Override
 	public void remove(TreeNode<E> child) {
 		if (isLeaf())
 			throw new UnsupportedOperationException("Child is not allowed in leaf node");
@@ -199,9 +199,32 @@ public class DefaultTreeNode<E> implements TreeNode<E>, Comparable<DefaultTreeNo
 		if (node == null) return _maxnull ? -1: 1;
 		return ((Comparable)_data).compareTo(node.getData());
 	}
-	
-	protected class TreeNodeChildrenList extends AbstractList<TreeNode<E>> implements java.io.Serializable {
-		
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		final DefaultTreeNode clone;
+		try {
+			clone = (DefaultTreeNode)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._parent = null;
+
+		if (_children != null) {
+			final TreeNodeChildrenList newkids = clone.new TreeNodeChildrenList();
+			clone._children = newkids;
+			for (final TreeNode node: _children) {
+				final DefaultTreeNode child = (DefaultTreeNode)node.clone(); //recursively
+				child._parent = clone;
+				newkids._list.add(child); //added directly without firing events...
+			}
+		}
+		return clone;
+	}
+
+	protected class TreeNodeChildrenList extends AbstractList<TreeNode<E>>
+	implements java.io.Serializable {
 		protected final ArrayList<TreeNode<E>> _list = new ArrayList<TreeNode<E>>();
 		
 		// required implementation by spec: get, size, add, remove, set

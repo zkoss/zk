@@ -172,7 +172,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	public void addSelection(Object obj) {
 		if (obj instanceof TreeNode)
 			addToSelection((TreeNode)obj);
@@ -201,10 +201,20 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 		return isObjectOpened(child);
 	}
 
+	@Override
 	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
-			return _sortDir ?
-					"ascending" : "descending";
+			return _sortDir ? "ascending" : "descending";
 		return "natural";	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object clone() {
+		final DefaultTreeModel clone = (DefaultTreeModel)super.clone();
+		final TreeNode cloneRoot = (TreeNode)getRoot().clone();
+		cloneRoot.setModel(this);
+		clone.setRootDirectly(cloneRoot);
+		return clone;
 	}
 }
