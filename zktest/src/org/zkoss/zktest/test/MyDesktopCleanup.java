@@ -33,7 +33,7 @@ public class MyDesktopCleanup implements DesktopCleanup {
 	 * only logged (user won't see it).
 	 */
 	public void cleanup(Desktop desktop) throws Exception {
-		if (null != Sessions.getCurrent() && Sessions.getCurrent().getAttribute("MyDesktopCleanup")) {
+		if (null != Sessions.getCurrent() && null != Sessions.getCurrent().getAttribute("MyDesktopCleanup")) {
 			System.out.println("Test Cleanup "+desktop);
 			int val = ((Integer)Sessions.getCurrent().getAttribute("MyDesktopCleanup")).intValue();
 			if (val > 9) val = 1;
