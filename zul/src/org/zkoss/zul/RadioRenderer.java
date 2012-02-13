@@ -18,13 +18,12 @@ package org.zkoss.zul;
 
 /**
  * Identifies components that can be used as "rubber stamps" to paint
- * the cells in a {@link RadioGroup}.
+ * the cells in a {@link Radiogroup}.
  *
  * @author tonyq
  * @see ListModel
  * @see Radio
- * @See RadioGroup
- *
+ * @see Radiogroup
  */
 public interface RadioRenderer<T> {
 	/** Renders the data to the specified radio.
@@ -33,5 +32,5 @@ public interface RadioRenderer<T> {
 	 * @param data that is returned from {@link ListModel#getElementAt}
 	 * @param index in the model when rendering
 	 */
-	public void render(Radio item, T data,int index) throws Exception;
+	public void render(Radio item, T data, int index) throws Exception;
 }

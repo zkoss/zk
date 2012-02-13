@@ -42,12 +42,12 @@ public interface GroupingInfo {
 	public int getGroupIndex();
 	
 	/** The offset of an element in a group.
-	 * It is meaningful only if {@link #type} is {@link #ELEMENT}.
+	 * It is meaningful only if {@link #getType} is {@link #ELEMENT}.
 	 */
 	public int getOffset();
 	
 	/** Whether the group is opened.
-	 * It is meaningful only if {@link #type} is {@link #GROUP}.
+	 * It is meaningful only if {@link #getType} is {@link #GROUP}.
 	 */
 	public boolean isOpen();
 

@@ -29,8 +29,8 @@ import java.util.Set;
  * instead.
  *
  * @author jimmyshiau
- * @see TreeModel
- * @see Tree
+ * @see org.zkoss.zul.TreeModel
+ * @see org.zkoss.zul.Tree
  */
 public interface Openable<E> {
 	/**
@@ -57,7 +57,7 @@ public interface Openable<E> {
 	/**
 	 * Add the specified object into the collection of opened objects.
 	 * @param obj the object to be as selection.
-	 * @return true if it is added successfully; fasle if <code>obj</code>
+	 * @return true if it is added successfully; false if <code>obj</code>
 	 * is not part of the data, or was already opened.
 	 * @since 6.0.0
 	 */

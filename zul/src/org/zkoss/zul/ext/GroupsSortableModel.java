@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.ext;
 
 import java.util.Comparator;
+import org.zkoss.zul.*;
 
 /**
  * An extra interface that can be implemented with {@link GroupsModel}
@@ -31,8 +32,8 @@ public interface GroupsSortableModel<D> {
 	 * the content.
 	 *
 	 * <p>After sorting, this model shall notify the instances of
-	 * {@link org.zkoss.zul.event.ListDataListener} (registered thru {@link ListModel#addListDataListener})
-	 * to update the content.
+	 * {@link org.zkoss.zul.event.ListDataListener} (registered thru 
+	 * {@link ListModel#addListDataListener}) to update the content.
 	 * Typically you have to notify with
 	 * <pre><code>new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, -1, -1)</code></pre>
 	 * to denote all data are changed (and reloading is required).

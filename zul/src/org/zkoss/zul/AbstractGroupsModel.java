@@ -142,7 +142,7 @@ Selectable<E>, java.io.Serializable {
 	/**
 	 * Selectable's implementor use only.
 	 * <p> Fires a selection event for component to scroll into view. The override
-	 * subclass must put the index0 of {@link #fireEvent(int, int, int)} as 
+	 * subclass must put the index0 of {@link #fireEvent(int, int, int, int)} as 
 	 * the view index to scroll. By default, the value -1 is assumed which means
 	 * no scroll into view.
 	 * <p> The method is invoked when both methods are invoked. {@link #addToSelection(Object)}
