@@ -276,7 +276,7 @@ zk.override(jq.fn, _jq, {
 				}
 			}
 		} else
-			this.zbind(type, data, fn);
+			this.zbind.apply(this,arguments);
 			
 		return this;
 	},
@@ -300,7 +300,7 @@ zk.override(jq.fn, _jq, {
 				}
 			}
 		} else
-			this.zunbind(type, fn);
+			this.zunbind.apply(this,arguments);
 		return this;
 	}
 });
