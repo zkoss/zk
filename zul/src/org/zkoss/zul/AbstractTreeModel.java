@@ -491,10 +491,22 @@ java.io.Serializable {
 	}
 	@Override
 	public void setSelection(Collection<? extends E> selection) {
-		clearSelection();
-		for (final E node: selection)
-			addToSelection(node);
+		if (isSelectionChanged(selection)) {
+			clearSelection();
+			for (final E node: selection)
+				addToSelection(node);
+		}
 	}
+	private boolean isSelectionChanged(Collection<? extends E> selection) {
+		if (_selection.size() != selection.size())
+			return true;
+
+		for (final E e: selection)
+			if (!_selection.contains(e))
+				return true;
+		return false;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isSelected(Object child) {
