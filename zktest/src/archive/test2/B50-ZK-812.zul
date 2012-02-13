@@ -1,0 +1,11 @@
+<zk>
+	<div>
+		You should not see java error.
+		<window id="win" title="Window">
+			<label id="lb" value="Label" />
+		</window>
+	</div>
+	<zscript>
+		Components.wireFellows(win, new Object());
+	</zscript>
+</zk>
