@@ -25,7 +25,7 @@ import java.util.Comparator;
  *
  * @author tomyeh
  */
-public class ListitemComparator implements Comparator {
+public class ListitemComparator implements Comparator, java.io.Serializable {
 	/** The listheader (optinal). */
 	private final Listheader _header;
 	/** Column index. */
