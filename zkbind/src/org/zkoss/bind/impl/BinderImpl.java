@@ -1136,8 +1136,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if (_commandBinding != null) {
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_commandBinding).getCommand());
-				final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs());
-				cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
+				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
+					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs());
+					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
+				}
 			}
 
 			//load prompt only when prompt result is success
@@ -1159,9 +1161,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			if (cmdResult==COMMAND_SUCCESS && _globalCommandBinding != null) {
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_globalCommandBinding).getCommand());
-				final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
-				//post global command
-				postGlobalCommand(command,args);
+				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
+					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _globalCommandBinding.getArgs());
+					//post global command
+					postGlobalCommand(command,args);
+				}
 			}
 			
 			if(_log.debugable()){
