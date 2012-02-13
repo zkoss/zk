@@ -247,8 +247,12 @@ public class Group extends Row {
 				if (grid != null) {
 					final ListModel model = grid.getModel(); 
 					if (model instanceof GroupsListModel) {
-						((GroupsListModel)model).getGroupsModel()
-						.setOpenGroup(rows.getGroupIndex(getIndex()), _open);
+						int gindex = rows.getGroupIndex(getIndex());
+						GroupsModel gmodel = ((GroupsListModel)model).getGroupsModel();
+						if (_open)
+							gmodel.addOpenGroup(gindex);
+						else
+							gmodel.removeOpenGroup(gindex);
 					}
 				}
 			}

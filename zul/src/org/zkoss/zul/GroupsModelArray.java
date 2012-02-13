@@ -222,21 +222,31 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	}
 
 	/**
-	 * @deprecated As of release 6.0.0, replace with {@link #setOpenGroup(int, boolean)}
+	 * @deprecated As of release 6.0.0, replace with {@link #addOpenGroup(int)}
+	 * and {@link #removeOpenGroup(int)}.
 	 */
 	public void setClose(int groupIndex, boolean close) {
-		setOpenGroup(groupIndex, !close);
+		setOpenGroup0(groupIndex, !close);
 	}
 
 	@Override
-	public void setOpenGroup(int groupIndex, boolean open) {
+	public boolean addOpenGroup(int groupIndex) {
+		return setOpenGroup0(groupIndex, true);
+	}
+	@Override
+	public boolean removeOpenGroup(int groupIndex) {
+		return setOpenGroup0(groupIndex, false);
+	}
+	private boolean setOpenGroup0(int groupIndex, boolean open) {
 		if (_opens == null) {
 			_opens = new boolean[getGroupCount()];
 		}
 		if (_opens[groupIndex] != open) {
 			_opens[groupIndex] = open;
 			fireEvent(GroupsDataEvent.GROUPS_CHANGED, groupIndex, groupIndex, groupIndex);
+			return true;
 		}
+		return false;
 	}
 	
 	@Override

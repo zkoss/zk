@@ -196,8 +196,10 @@ public class Listgroup extends Listitem {
 				listbox.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 				final ListModel model = listbox.getModel();
 				if (model instanceof GroupsListModel) {
-					((GroupsListModel)model)
-					.getGroupsModel().setOpenGroup(listbox.getGroupIndex(getIndex()), _open);
+					int gindex = listbox.getGroupIndex(getIndex());
+					GroupsModel gmodel = ((GroupsListModel)model).getGroupsModel();
+					if (_open) gmodel.addOpenGroup(gindex);
+					else gmodel.removeOpenGroup(gindex);
 				}
 			}
 			Events.postEvent(evt);

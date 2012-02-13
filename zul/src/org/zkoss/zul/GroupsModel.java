@@ -88,12 +88,16 @@ public interface GroupsModel<D, H, F> {
 	 * @since 6.0.0
 	 */
 	public boolean isGroupOpened(int groupIndex);
-	/** Sets whether the group is open at the specified index.
-	 * It is used to render {@link Group} and {@link Listgroup}.
+	/** Opens the group at the specified index.
 	 * @param groupIndex the index of the group.
-	 * @param open true to open the Group.
+	 * @return if it has been added successfully; false if it was opened.
 	 * @since 6.0.0
 	 */
-	public void setOpenGroup(int groupIndex, boolean open);
-
+	public boolean addOpenGroup(int groupIndex);
+	/** Closes the group at the specified index.
+	 * @param groupIndex the index of the group.
+	 * @return if it has been removed successfully; false if it was closed.
+	 * @since 6.0.0
+	 */
+	public boolean removeOpenGroup(int groupIndex);
 }
