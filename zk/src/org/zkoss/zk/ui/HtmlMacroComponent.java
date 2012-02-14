@@ -50,10 +50,10 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * called <code>org.zkoss.zk.ui.macro.autowire.convention</code> to true
  *  in WEB-INF/zk.xml as follows.
  * <pre><code>
- *	<library-property>
- *		<name>org.zkoss.zk.ui.macro.autowire.convention</name>
- *		<value>true</value>
- *	</library-property>
+ *	&lt;library-property>
+ *		&lt;name>org.zkoss.zk.ui.macro.autowire.convention&lt;/name>
+ *		&lt;value>true&lt;/value>
+ *	&lt;/library-property>
  * </code></pre>
  *
  * <p>If you prefer not to wire at all (neither by-selector nor by-convention),
@@ -62,10 +62,10 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * in WEB-INF/zk.xml as follows..
  * 
  * <pre><code>
- *	<library-property>
- *		<name>org.zkoss.zk.ui.macro.autowire.disabled</name>
- *		<value>true</value>
- *	</library-property>
+ *	&lt;library-property>
+ *		&lt;name>org.zkoss.zk.ui.macro.autowire.disabled&lt;/name>
+ *		&lt;value>true&lt;/value>
+ *	&lt;/library-property>
  * </code></pre>
  * 
  * @author tomyeh
