@@ -180,7 +180,7 @@ ZK 6.0.0
   + The default I18N  properties file is renamed from i3-label.properties to
     zk-label.properties.
   + The configuration file for logging is now configurable by use of
-    the library property called org.zkoss.util.logging.configuration.file.
+    the library property called org.zkoss.util.logging.config.file.
   + If the attribute called composerName is specified, the default name
     won't be wired (for better performance).
   + AbstractComponent.smartUpdate(String, Date) is removed
