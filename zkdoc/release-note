@@ -3,6 +3,7 @@ ZK 6.0.1
 * Features
   
 * Bugs
+  ZK-866: Select status of listbox not sync when change multiple to single
   
 * Upgrade Notes
   
