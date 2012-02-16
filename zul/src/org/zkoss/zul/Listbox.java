@@ -895,9 +895,6 @@ public class Listbox extends MeshElement {
 				item.setSelectedDirectly(false);
 			}
 			_selItems.clear();
-			// ZK-866
-			// sync the logic of addItemToSelection
-			final boolean utc = jsel < _jsel || _jsel < 0;
 			_jsel = jsel;
 			Listitem item = getItemAtIndex(_jsel);
 
@@ -914,13 +911,10 @@ public class Listbox extends MeshElement {
 				_selItems.add(item);
 			}
 
-			// ZK-866
-			if (utc) {
-				if (inSelectMold()) {
-					smartUpdate("selectedIndex", _jsel);
-				} else if (item != null)
-					smartUpdate("selectedItem", item);
-			}
+			if (inSelectMold()) {
+				smartUpdate("selectedIndex", _jsel);
+			} else if (item != null)
+				smartUpdate("selectedItem", item);
 			// Bug 1734950: don't count on index (since it may change)
 			// On the other hand, it is OK with select-mold since
 			// it invalidates if items are added or removed
