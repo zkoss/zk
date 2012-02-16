@@ -482,8 +482,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * Sets the external Paging widget.
 		 * @param Paging paging
 		 */
-		paginal: zk.ie8_ ? _zkf : null,
-			//Workaround for B50-ZK-343, B50-ZK-835 side effect, which paging will disappear in B35-2096807.zul , only IE8.
+		paginal: null,
 		/**
 		 * Returns whether the widget is in model mode or not.
 		 * @return boolean
@@ -1204,7 +1203,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var ebodyhghbak = this.ebody.style.height,
 				wgt = this;
 			this.ebody.style.height = this.ebodytbl.offsetHeight + 'px';
-			setTimeout(function () { wgt.ebody.style.height = ebodyhghbak }, 0);
+			setTimeout(function () {
+				// 20120216 TonyQ: Bug fux for paging will disappear in B35-2096807.zul.
+				// It's happening when setVflex in borderlayout , onSize is trigger earlier before setvflex.
+				// We set the body height in async way and it's invoked too late,
+				// so we just ignore the restoring actiion when vflex is set.
+				// Here we assume if dom set a vflex after _removeHorScrollbar but before the restoring action, 
+				// it's already be handled the height in vflex.
+				if(!wgt._vflex) 
+					wgt.ebody.style.height = ebodyhghbak; 
+			}, 0);
+				
 		}
 	} : zk.$void,
 	_removeScrollbar: zk.ie ? function() { //see HeadWidget#afterChildrenFlex_
