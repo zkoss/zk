@@ -1,4 +1,13 @@
 	--------
+ZK 6.0.1
+* Features
+  
+* Bugs
+  ZK-866: Select status of listbox not sync when change multiple to single
+
+* Upgrade Notes
+  
+	--------
 ZK 6.0.0
 * Features
   3061730: Make ZK complaint to Java 5, such generics
