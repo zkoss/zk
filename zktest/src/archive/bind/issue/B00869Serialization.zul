@@ -1,0 +1,34 @@
+<div>
+<label multiline="true">
+1.select any item
+2.edit the item's name and click save.
+3.click serialize, you should not see the message become error
+</label>
+	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00869Serialization')">
+		<vlayout>
+		<hlayout>message:<label id="msg" value="@bind(vm.message1)"/></hlayout>
+		<label id="selected" value="@bind(vm.selected.name)"/>
+		</vlayout>
+		<listbox id="listbox" width="700px" model="@bind(vm.items)" rows="5" selectedItem="@bind(vm.selected)">
+			<listhead>
+				<listheader label="index"/>
+				<listheader label="name"/>
+			</listhead>
+			
+			<template name="model" var="item" status="s">
+				<listitem>
+					<listcell label="@bind(s.index)"/>
+					<listcell label="@bind(item.name)"/>
+				</listitem>
+			</template>
+		</listbox>
+		<vbox form="@id('fx') @load(vm.selected) @save(vm.selected,after='save') @validator(vm.dummyValidator)">
+			Name : <textbox id="tb1" value="@bind(fx.name) @converter(vm.dummyConverter)"/>
+		</vbox>
+		<button id="save" label="save" onClick="@command('save') @global-command('nothihg')"/>
+	</window>
+	<hbox>
+		<button id="serialize" label="serialize" onClick='win.getAttribute("vm").doSerialize(win,win.getFellow("msg"))' />
+		<button label="Dump" onClick='win.getAttribute("binder").getTracker().dump()' />
+	</hbox>
+</div>
