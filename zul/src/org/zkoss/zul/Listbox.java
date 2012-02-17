@@ -915,7 +915,7 @@ public class Listbox extends MeshElement {
 			}
 
 			// ZK-866
-			if (utc) {
+			if (utc || _selItems.size() == 1) {
 				if (inSelectMold()) {
 					smartUpdate("selectedIndex", _jsel);
 				} else if (item != null)
