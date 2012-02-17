@@ -895,11 +895,6 @@ public class Listbox extends MeshElement {
 				item.setSelectedDirectly(false);
 			}
 			_selItems.clear();
-			// ZK-866
-			// sync the logic of addItemToSelection
-			// always update to client if not multiple
-			// multiple will handle the non-multi select by it self
-			final boolean utc = jsel < _jsel || _jsel < 0 || !_multiple;
 			_jsel = jsel;
 			Listitem item = getItemAtIndex(_jsel);
 
@@ -916,13 +911,10 @@ public class Listbox extends MeshElement {
 				_selItems.add(item);
 			}
 
-			// ZK-866
-			if (utc) {
-				if (inSelectMold()) {
-					smartUpdate("selectedIndex", _jsel);
-				} else if (item != null)
-					smartUpdate("selectedItem", item);
-			}
+			if (inSelectMold()) {
+				smartUpdate("selectedIndex", _jsel);
+			} else if (item != null)
+				smartUpdate("selectedItem", item);
 			// Bug 1734950: don't count on index (since it may change)
 			// On the other hand, it is OK with select-mold since
 			// it invalidates if items are added or removed
@@ -976,8 +968,15 @@ public class Listbox extends MeshElement {
 			if (!_multiple) {
 				selectItem(item);
 			} else {
-				if (item.getIndex() < _jsel || _jsel < 0)
+				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
+					// ZK-866
+					// update the change of selected index
+					if (inSelectMold()) {
+						smartUpdate("selectedIndex", _jsel);
+					} else if (item != null)
+						smartUpdate("selectedItem", item);
+				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 				if (inSelectMold()) {
