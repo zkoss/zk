@@ -897,7 +897,9 @@ public class Listbox extends MeshElement {
 			_selItems.clear();
 			// ZK-866
 			// sync the logic of addItemToSelection
-			final boolean utc = jsel < _jsel || _jsel < 0;
+			// always update to client if not multiple
+			// multiple will handle the non-multi select by it self
+			final boolean utc = jsel < _jsel || _jsel < 0 || !_multiple;
 			_jsel = jsel;
 			Listitem item = getItemAtIndex(_jsel);
 
@@ -915,7 +917,7 @@ public class Listbox extends MeshElement {
 			}
 
 			// ZK-866
-			if (utc || _selItems.size() == 1) {
+			if (utc) {
 				if (inSelectMold()) {
 					smartUpdate("selectedIndex", _jsel);
 				} else if (item != null)
