@@ -13,7 +13,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,22 +29,20 @@ import org.zkoss.zk.ui.Component;
  */
 public class BindingImpl implements Binding,Serializable{
 	private static final long serialVersionUID = 1463169907348730644L;
-	private WeakReference<Component> _comp;
+	//http://tracker.zkoss.org/browse/ZK-869, It is OK to not use WeakReference here, 
+	//A binding is always associated with a component, and was removed after a component is detached from the view
+	private final Component _comp;
 	private final Binder _binder;
 	private final Map<String, Object> _args;
 	
 	protected BindingImpl(Binder binder, Component comp, Map<String, Object> args) {
-		_comp = new WeakReference<Component>(comp);
+		_comp = comp;
 		_binder = binder;
 		_args = args;
 	}
 	
 	public Component getComponent() {
-		Object comp = _comp == null ? null : _comp.get();
-		if (comp == null && _comp != null) { //Help GC
-			_comp = null;
-		}
-		return (Component) comp;
+		return _comp;
 	}
 	
 	public Binder getBinder() {

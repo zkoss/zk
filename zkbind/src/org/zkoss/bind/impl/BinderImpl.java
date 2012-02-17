@@ -81,6 +81,7 @@ import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 
 /**
@@ -89,7 +90,7 @@ import org.zkoss.zk.ui.util.Composer;
  * @author dennischen
  * @since 6.0.0
  */
-public class BinderImpl implements Binder,BinderCtrl,Serializable {
+public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActivationListener {
 
 	private static final long serialVersionUID = 1463169907348730644L;
 
@@ -137,8 +138,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
 	public static final String MODEL = "$MODEL$"; //collection model for index tracking
 	
+	//events for dummy target
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
+	private static final String ON_POST_ACTIVATED = "onPostActivated";
 	
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
@@ -251,6 +254,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		setViewModel(vm);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
+		_dummyTarget.addEventListener(ON_POST_ACTIVATED, new PostActivatedListener());
 		//subscribe change listener
 		subscribeChangeListener(_quename, _quescope, _queueListener);
 		
@@ -639,7 +643,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 		}
 		if(validatorExpr!=null){
-			BindingKey bkey = new BindingKey(comp, formid);
+			BindingKey bkey = getBindingKey(comp, formid);
 			if(!_hasValidators.contains(bkey)){
 				_hasValidators.add(bkey);
 			}
@@ -864,6 +868,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			
 			if (evtnm != null) { //special case, load on an event, ex, onAfterRender of listbox on selectedItem
 				registerCommandEventListener(comp, evtnm); //prompt
+				addBinding(comp, evtnm, binding);//to mark evtnm has a this binding, so we can remove it
 				final BindingKey bkey = getBindingKey(comp, evtnm);
 				_propertyBindingHandler.addLoadEventBinding(comp, bkey, binding);
 			}
@@ -930,6 +935,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 				_log.debug("add event(prompt)-save-binding: comp=[%s],attr=[%s],expr=[%s],evtnm=[%s],converter=[%s],validate=[%s]", comp,attr,saveExpr,evtnm,converterExpr,validatorExpr);
 			}
 			registerCommandEventListener(comp, evtnm); //prompt
+			addBinding(comp, evtnm, binding);//to mark evtnm has a this binding, so we can remove it in removeComponent
 			final BindingKey bkey = getBindingKey(comp, evtnm);
 			_propertyBindingHandler.addSavePromptBinding(comp, bkey, binding);
 		}else{
@@ -956,7 +962,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 		}
 		
 		if(validatorExpr!=null){
-			BindingKey bkey = new BindingKey(comp, attr);
+			BindingKey bkey = getBindingKey(comp, attr);
 			if(!_hasValidators.contains(bkey)){
 				_hasValidators.add(bkey);
 			}
@@ -1184,6 +1190,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			}
 		}
 	}
+	
+	private class PostActivatedListener implements EventListener<Event>,Serializable{
+		private static final long serialVersionUID = 1L;
+		public void onEvent(Event event) throws Exception {
+			//re tie value to tracker.
+			loadComponent(_rootComp, false);
+		}
+	}
+	
 	
 	private void notifyVMsgsChanged(){
 		if(_validationMessages!=null){
@@ -1610,7 +1625,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 			final Set<Binding> removed = new HashSet<Binding>();
 			for(Entry<String, List<Binding>> entry : attrMap.entrySet()) {
 				final String key = entry.getKey(); 
-//				removeEventCommandListenerIfExists(comp, key); //_listenerMap; //comp+evtnm -> eventlistener
 				removeBindings(comp, key);
 				removed.addAll(entry.getValue());
 			}
@@ -1891,7 +1905,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	}
 	
 	public boolean hasValidator(Component comp, String attr){
-		BindingKey bkey = new BindingKey(comp, attr);
+		BindingKey bkey = getBindingKey(comp, attr);
 		return _hasValidators.contains(bkey);
 	}
 
@@ -1909,6 +1923,18 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable {
 	@Override
 	public void setValidationMessages(ValidationMessages messages) {
 		_validationMessages = messages;
+	}
+
+	@Override
+	public void didActivate(Component comp) {
+		if(_rootComp.equals(comp)){
+			final Event evt = new Event(ON_POST_ACTIVATED,_dummyTarget);
+			Events.postEvent(evt);
+		}
+	}
+
+	@Override
+	public void willPassivate(Component comp) {//do nothing
 	}
 	
 	
