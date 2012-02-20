@@ -1,0 +1,27 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00878WrongValueException')"
+	validationMessages="@id('vmsgs')">
+	<label multiline="true">
+	1.type A in textbox click save, you will see wrong message 'the name have to equals to Lin, but is A'
+	2.type B in textbox click save, you will see wrong message 'the name have to equals to Lin, but is B'
+	3.type Lin in textbox click save, you will see msg 'Lin'
+	</label>
+	<vlayout>
+		<hlayout>
+			msg:<label value="@bind(vm.name)" />
+		</hlayout>
+		<!-- 
+		<hlayout>
+			Name :
+			<textbox id="tb1" value="@load(vm.name) @save(vm.name, after='save1') @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+		</hlayout>
+		<button label="save1" onClick="@command('save1')"/>
+		-->
+		<hlayout form="@id('fx') @load(vm) @save(vm, after='save2') @validator(vm.validator1)" >
+			Name :
+			<textbox id="tb2" value="@bind(fx.name)" errorMessage="@load(vmsgs[self.parent])" />
+		</hlayout>
+		 
+		<button label="save2" onClick="@command('save2')"/>
+	</vlayout>
+</window>
