@@ -1,0 +1,17 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00877NPEInSaveOnlyBinding')"
+	validationMessages="@id('vmsgs')">
+	<label multiline="true">
+	1.type abc in textbox, it shows a error message .the name have to equals to Lin, but is abc
+	2.type Lin in text, the msg become Lin
+	</label>
+	<vlayout>
+		<hlayout>
+			msg : <label value="@bind(vm.name)" />
+		</hlayout>
+		<hlayout>
+			Name :
+			<textbox value="@save(vm.name) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+		</hlayout>
+	</vlayout>
+</window>
