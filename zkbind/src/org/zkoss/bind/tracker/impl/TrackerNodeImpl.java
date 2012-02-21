@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.zkoss.bind.impl.WeakHashSet;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 
@@ -33,16 +32,16 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
 	private final Map<Object, Object> _brackets; //property -> bracket script
-	private transient WeakHashSet<Binding> _bindings; //associated bindings
+	private final Set<Binding> _bindings; //associated bindings
+	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	private transient WeakReference<Object> _bean; //associated bean value
-	private transient WeakHashSet<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	
 	public TrackerNodeImpl(Object property) {
 		_script = property;
 		_dependents = new HashMap<Object, TrackerNode>(4);
-		_bindings = new WeakHashSet<Binding>(4);
+		_bindings = new HashSet<Binding>(4);
 		_brackets = new HashMap<Object, Object>(4);
-		_associates = new WeakHashSet<TrackerNode>(4);
+		_associates = new HashSet<TrackerNode>(4);
 	}
 	
 	/*package*/ void addAssociate(TrackerNode node) {

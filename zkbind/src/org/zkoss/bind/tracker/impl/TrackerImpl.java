@@ -37,6 +37,7 @@ import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.io.Serializables;
 import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
 
@@ -45,12 +46,12 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @since 6.0.0
  */
-public class TrackerImpl implements Tracker,Serializable {
+public class TrackerImpl implements Tracker, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private Map<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
-	private EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
+	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	private transient EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	
 	public void addTracking(Component comp, String[] series, Binding binding) {
 		//Track only LoadBinding
@@ -402,10 +403,17 @@ public class TrackerImpl implements Tracker,Serializable {
 		return _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
 	}
 	
-	private static class EqualBeansMap implements Serializable {
-		private static final long serialVersionUID = 20120220113826L;
-		private transient WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>();
-		private transient WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>();
+	private void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		
+		_beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+		_equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
+	}
+	
+	private static class EqualBeansMap {
+		private transient WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>(); //bean -> EqualBeans
+		private transient WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>(); //bean -> EqualBeans
 		
 		//bug #ZK-678: NotifyChange on Map is not work
 		private void syncInnerMap(EqualBeans equalBeans, Object bean) {
