@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.Component;
 public class TrackerImpl implements Tracker,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private Map<Component, Map<Object, TrackerNode>> _compMap = new LinkedHashMap<Component, Map<Object, TrackerNode>>(); //comp -> path -> head TrackerNode
-	private Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	private transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
 	private EqualBeansMap _equalBeansMap = new EqualBeansMap(); //bean -> beans (use to manage equal beans)
 	private Map<Object, Set<TrackerNode>> _nullMap = new HashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	
@@ -402,9 +402,10 @@ public class TrackerImpl implements Tracker,Serializable {
 		return _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
 	}
 	
-	private static class EqualBeansMap {
-		private WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>();
-		private WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>();
+	private static class EqualBeansMap implements Serializable {
+		private static final long serialVersionUID = 20120220113826L;
+		private transient WeakHashMap<Object, EqualBeans> _innerMap = new WeakHashMap<Object, EqualBeans>();
+		private transient WeakIdentityMap<Object, EqualBeans> _identityMap = new WeakIdentityMap<Object, EqualBeans>();
 		
 		//bug #ZK-678: NotifyChange on Map is not work
 		private void syncInnerMap(EqualBeans equalBeans, Object bean) {
@@ -506,8 +507,8 @@ public class TrackerImpl implements Tracker,Serializable {
 	}
 	
 	private static class EqualBeans {
-		private WeakReference<Object> _proxy; //surrogate object as the key for the _beanSet
-		private WeakIdentityMap<Object, Boolean> _beanSet; //different instance of beans equal to each other
+		private transient WeakReference<Object> _proxy; //surrogate object as the key for the _beanSet
+		private transient WeakIdentityMap<Object, Boolean> _beanSet; //different instance of beans equal to each other
 		
 		public EqualBeans(Object proxy) {
 			_proxy = new WeakReference<Object>(proxy);

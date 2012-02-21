@@ -29,7 +29,6 @@ package org.zkoss.bind.impl;
  */
 
 //revised from cojen
-import java.io.Serializable;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -67,8 +66,7 @@ import java.util.Set;
  * @since 6.0.0
  */
 @SuppressWarnings("unchecked")
-public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V>, Cloneable, Serializable {
-	private static final long serialVersionUID = 1463169907348730644L;
+public class WeakIdentityMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
     // Types of Iterators
     static final int KEYS = 0;
     static final int VALUES = 1;

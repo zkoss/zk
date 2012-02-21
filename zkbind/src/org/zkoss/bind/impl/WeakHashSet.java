@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,8 +23,7 @@ import java.util.WeakHashMap;
  * @author henrichen
  * @since 6.0.0
  */
-public class WeakHashSet<E> implements Set<E>, Serializable{
-	private static final long serialVersionUID = 1463169907348730644L;
+public class WeakHashSet<E> implements Set<E> {
 	private final Map<E, Object> _map; 
 	private final Set<E> _inner;
 

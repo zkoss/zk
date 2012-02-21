@@ -39,11 +39,14 @@ public class ListModelELResolver extends ELResolver {
         if (base instanceof ListModel<?>) {
             ListModel<?> listmodel = (ListModel<?>) base;
             Integer idx = coerce(property);
-            if (idx==null || idx < 0 || idx >= listmodel.getSize()) {
-                return null;
+            if (idx==null) { // property is not a legal number format
+                return null; // unresolved null
             }
             context.setPropertyResolved(true);
-            return listmodel.getElementAt(idx);
+            if (idx >= 0 && idx < listmodel.getSize()) {
+            	return listmodel.getElementAt(idx);
+            }
+            //out of range, a resolved null
         }
 
         return null;
@@ -124,6 +127,14 @@ public class ListModelELResolver extends ELResolver {
         }
         if (property instanceof Boolean) {
             return (((Boolean) property).booleanValue() ? 1 : 0);
+        }
+        if (property instanceof String) {
+        	//follow EL spec.: String in number format for Array is number
+        	try {
+        		return Integer.parseInt((String) property);
+        	} catch(NumberFormatException ex) {
+        		//ignore
+        	}
         }
         //just ignore other types (especially a string)
         return null;

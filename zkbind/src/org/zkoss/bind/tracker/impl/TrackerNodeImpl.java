@@ -32,10 +32,10 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
-	private final Set<Binding> _bindings; //associated bindings
-	private WeakReference<Object> _bean; //associated bean value
 	private final Map<Object, Object> _brackets; //property -> bracket script
-	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
+	private transient WeakHashSet<Binding> _bindings; //associated bindings
+	private transient WeakReference<Object> _bean; //associated bean value
+	private transient WeakHashSet<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	
 	public TrackerNodeImpl(Object property) {
 		_script = property;

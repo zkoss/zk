@@ -37,7 +37,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		LoadPropertyBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private Set<String> _doneDependsOn = new HashSet<String>(4);
-	private Set<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
+	private transient WeakHashSet<Class<? extends Converter>> _doneConverterDependsOn = new WeakHashSet<Class<? extends Converter>>(4);
 	//ZK-682 Inputfields with constraints and ZK Bind throw wrong value exception
 	private final Class<?> _attrType;
 	
