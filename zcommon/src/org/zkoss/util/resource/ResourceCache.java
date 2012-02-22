@@ -18,6 +18,7 @@ package org.zkoss.util.resource;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.CacheMap;
@@ -139,7 +140,15 @@ public class ResourceCache extends CacheMap {
 				cache = lr.cacheable;
 			} else
 				cache = resource != null;
-
+			
+			//Second level cache of WCS
+			if(cache && src != null && Objects.toString(src).endsWith(".wcs")){
+				String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
+				if (resourceCache != null && "false".equalsIgnoreCase(resourceCache)){
+					cache = false;
+				}
+			}
+		
 			synchronized (this) {
 				if (cache) {
 					super.put(src, ri);
