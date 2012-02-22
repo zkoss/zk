@@ -189,11 +189,15 @@ public class TrackerImpl implements Tracker, Serializable {
 			final Map<Object, TrackerNode> bindingNodes = _compMap.get(comp);
 			if (bindingNodes != null) {
 				final TrackerNode node = bindingNodes.get(script);
-				if (value != null) {
-					addBeanMap(node, value);
-				} else {
-					removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap 
-					addNullMap(node); //head TrackerNode evaluate to null
+				//ZK-877: NPE in a save only binding
+				//No corresponding LoadBinding with the head script in the specified component. 
+				if (node != null) {
+					if (value != null) {
+						addBeanMap(node, value);
+					} else {
+						removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap 
+						addNullMap(node); //head TrackerNode evaluate to null
+					}
 				}
 			}
 		} else {
