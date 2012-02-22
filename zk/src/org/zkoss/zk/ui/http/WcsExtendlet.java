@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.lang.Library;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -60,6 +61,11 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 	HttpServletResponse response, String path)
 	throws ServletException, java.io.IOException {
 		final WcsInfo wi = _cache.get(path);
+		
+		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
+		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
+			_cache.clear();		
+		
 		if (wi == null) {
 			if (Servlets.isIncluded(request)) {
 				log.error("Failed to load the resource: "+path);
