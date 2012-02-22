@@ -33,6 +33,7 @@ ZK 5.0.11
   ZK-851: no value update on textbox in popup
   ZK-812: Components.wireFellows() error when root component is not IdSpace
   ZK-872: Calling fireEvent method cause exeception with GroupsModel(Rod enabled)
+  ZK-867: Can't customize master detail's style of odd row
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
