@@ -141,14 +141,6 @@ public class ResourceCache extends CacheMap {
 			} else
 				cache = resource != null;
 			
-			//Second level cache of WCS
-			if(cache && src != null && Objects.toString(src).endsWith(".wcs")){
-				String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
-				if (resourceCache != null && "false".equalsIgnoreCase(resourceCache)){
-					cache = false;
-				}
-			}
-		
 			synchronized (this) {
 				if (cache) {
 					super.put(src, ri);

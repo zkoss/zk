@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
@@ -73,6 +74,11 @@ public class DspExtendlet implements Extendlet {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
+		
+		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
+		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
+			_cache.clear();		
+		
 		final Interpretation cnt = (Interpretation)_cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) {

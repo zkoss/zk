@@ -63,12 +63,13 @@ public class WcsExtendlet extends AbstractExtendlet {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, java.io.IOException {
-		final WcsInfo wi = (WcsInfo)_cache.get(path);
 		
+		//Note: see also DspExtendlet
 		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
 		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
 			_cache.clear();		
 		
+		final WcsInfo wi = (WcsInfo)_cache.get(path);
 		if (wi == null) {
 			if (Servlets.isIncluded(request)) {
 				log.error("Failed to load the resource: "+path);
