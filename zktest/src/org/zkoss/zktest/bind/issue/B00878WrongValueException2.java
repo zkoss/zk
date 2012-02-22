@@ -92,9 +92,12 @@ public class B00878WrongValueException2 {
 		@Override
 		public void validate(Component comp, Object value) throws WrongValueException {
 			Date date = (Date)value;
-			Calendar c = Calendar.getInstance();
-			c.setTime(date);
-			int h = c.get(Calendar.HOUR_OF_DAY);
+			int h = -1;
+			if(date!=null){
+				Calendar c = Calendar.getInstance();
+				c.setTime(date);
+				h = c.get(Calendar.HOUR_OF_DAY);
+			}
 			if(h < 12){
 				throw new WrongValueException(comp,"Hours must large than 12, but is "+h);
 			}
