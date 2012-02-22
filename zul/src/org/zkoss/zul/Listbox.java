@@ -2956,7 +2956,9 @@ public class Listbox extends MeshElement implements org.zkoss.zul.api.Listbox {
 	}
 
 	private boolean evalRod() {
-		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rod", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.listbox.rod", false, true)
+		&& !(_model instanceof GroupsListModel);
+		//TODO: performance enhancement: support GroupsModel in ROD
 	}
 
 	/* package */DataLoader getDataLoader() {

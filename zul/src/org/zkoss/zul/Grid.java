@@ -1221,7 +1221,9 @@ public class Grid extends MeshElement implements org.zkoss.zul.api.Grid {
 	}
 	
 	/*package*/ boolean evalRod() {
-		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true)
+		&& !(_model instanceof GroupsListModel);
+		//TODO: performance enhancement: support GroupsModel in ROD
 	}
 	
 	/** Returns whether to sort all of item when model or sort direction be changed.

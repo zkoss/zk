@@ -32,6 +32,7 @@ ZK 5.0.11
   ZK-845: Fileupload fail in cluster server (JBoss)
   ZK-851: no value update on textbox in popup
   ZK-812: Components.wireFellows() error when root component is not IdSpace
+  ZK-872: Calling fireEvent method cause exeception with GroupsModel(Rod enabled)
   
 * Upgrade Notes
   
