@@ -50,15 +50,15 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.CommandBinding;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.bind.sys.LoadPropertyBinding;
-import org.zkoss.bind.sys.TemplateResolver;
-import org.zkoss.bind.sys.ValidationMessages;
-import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.validator.DeferredValidator;
@@ -74,6 +74,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
@@ -81,6 +82,7 @@ import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 
@@ -1117,6 +1119,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		}
 		
 		public void onEvent(Event event) throws Exception {
+			try{
+				onEvent0(event);
+			}catch(Exception x){
+				_log.error(x.getMessage(),x);
+				throw x;
+			}
+		}
+		
+		private void onEvent0(Event event) throws Exception {
 			//command need to be confirmed shall be execute first!
 			//must sort the command sequence?
 			
@@ -1445,6 +1456,26 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 				Map<String,Property[]> properties = _propertyBindingHandler.toCollectedProperties(validates);
 				valid &= vHelper.validateSaveBefore(comp, command, properties,valid,notifys);
 				valid &= vHelper.validateSaveAfter(comp, command, properties,valid,notifys);
+				
+				 //ZK-878 Exception if binding a form with errorMessage
+				 //To handle wrong value exception when getting a component value.
+				for(Property p :validates){
+					if(p instanceof WrongValuePropertyImpl){
+						for(WrongValueException wve:((WrongValuePropertyImpl)p).getWrongValueExceptions()){
+							//refer to UiEngineImpl#handleError()
+							Component wvc = wve.getComponent();
+							if(wvc!=null){
+								wve = ((ComponentCtrl)wvc).onWrongValue(wve);
+								if (wve != null) {
+									Component c = wve.getComponent();
+									if (c == null) c = wvc;
+									Clients.wrongValue(c, wve.getMessage());
+								}
+							}
+						}
+						valid = false;
+					}
+				}
 				return valid;
 			}
 		} catch (Exception e) {

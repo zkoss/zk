@@ -2,26 +2,32 @@
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00878WrongValueException')"
 	validationMessages="@id('vmsgs')">
 	<label multiline="true">
-	1.type A in textbox click save, you will see wrong message 'the name have to equals to Lin, but is A'
-	2.type B in textbox click save, you will see wrong message 'the name have to equals to Lin, but is B'
-	3.type Lin in textbox click save, you will see msg 'Lin'
+	1.type Chen in Name, 3 in Age, -1 in Scope, click save, you will see wrong value message on Name, Age, Scope. however the msg-name is empty, msg-age,msg-score is 0 
+	2.type Lin in Name, 5 in Age, -2 in Scope, click save, you will see wrong value message on Age, Scope. however the msg-name is empty, msg-age,msg-score is 0
+	3.type 20 in Age, -3 in Scope, click save, you will see wrong value message on Scope. however the msg-name is empty, msg-age,msg-score is 0
+	4.38 in Scope, click save, you will see no wrong value. and the msg-name is Lin, msg-age is 20 ,msg-score is 38
 	</label>
 	<vlayout>
 		<hlayout>
-			msg:<label value="@bind(vm.name)" />
+			msg-name:<label id="msgName" value="@bind(vm.name)" />
+			msg-age:<label id="msgAge" value="@bind(vm.age)" />
+			msg-score:<label id="msgScore" value="@bind(vm.score)" />
 		</hlayout>
-		<!-- 
-		<hlayout>
-			Name :
-			<textbox id="tb1" value="@load(vm.name) @save(vm.name, after='save1') @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
-		</hlayout>
-		<button label="save1" onClick="@command('save1')"/>
-		-->
-		<hlayout form="@id('fx') @load(vm) @save(vm, after='save2') @validator(vm.validator1)" >
-			Name :
-			<textbox id="tb2" value="@bind(fx.name)" errorMessage="@load(vmsgs[self.parent])" />
-		</hlayout>
+		<vlayout id="f" form="@id('fx') @load(vm) @save(vm, after='save') @validator(vm.validator1)" >
+			<hlayout>	
+			Name(is Lin):
+			<textbox id="inpName" value="@bind(fx.name)" errorMessage="@load(vmsgs['name'])" />
+			</hlayout>
+			<hlayout>
+			Age(large than 18): 
+			<intbox id="inpAge" value="@bind(fx.age)" errorMessage="@load(vmsgs['age'])"/>
+			</hlayout>
+			<hlayout>
+			Score :(no negative) 
+			<intbox id="inpScore" value="@bind(fx.score)" constraint="no negative"/>
+			</hlayout>
+		</vlayout>
 		 
-		<button label="save2" onClick="@command('save2')"/>
+		<button id="save" label="save" onClick="@command('save')"/>
 	</vlayout>
 </window>

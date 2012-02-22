@@ -26,6 +26,8 @@ import org.zkoss.bind.validator.AbstractValidator;
 public class B00878WrongValueException {
 
 	String name;
+	int age;
+	int score;
 
 	public B00878WrongValueException() {
 	}
@@ -37,15 +39,32 @@ public class B00878WrongValueException {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
 
 	@Command
-	public void save1(){
+	public void save(){
 		
 	}
-	@Command
-	public void save2(){
-		
-	}
+
 
 	public Validator getValidator1(){
 		return new AbstractValidator() {
@@ -53,8 +72,12 @@ public class B00878WrongValueException {
 			@Override
 			public void validate(ValidationContext ctx) {
 				String name = (String)ctx.getProperties("name")[0].getValue();
+				Integer age = (Integer)ctx.getProperties("age")[0].getValue();
 				if(!"Lin".equals(name)){
-					addInvalidMessage(ctx, "the name have to equals to Lin, but is "+name);
+					addInvalidMessage(ctx, "name","the name have to equal to Lin, but is "+name);
+				}
+				if(age==null || age<18){
+					addInvalidMessage(ctx, "age", "the age have to large than 18, but is "+age);
 				}
 			}
 		};

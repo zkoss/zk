@@ -29,6 +29,9 @@ import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.WrongValuesException;
+import org.zkoss.zk.ui.util.Clients;
 
 /**
  * Implementation of {@link SavePropertyBinding}.
@@ -136,11 +139,21 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	public Property getValidate(BindContext ctx) {
 		//we should not check this binding need to validate or not, 
 		//maybe other validator want to know the value of this binding, so just provide it
-		final Object value = getComponentValue(ctx);
+		final ValueReference ref = getValueReference(ctx);
 		try {
-			ValueReference ref = getValueReference(ctx);
+			final Object value = getComponentValue(ctx);
 			return new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value);
 		} catch (Exception e) {
+			// ZK-878 Exception if binding a form with errorMessage
+			// a wrong value exception might be thrown when a component has constraint
+			Throwable t = e;
+			while(t!=null){
+				if(t instanceof WrongValueException || t instanceof WrongValuesException){
+					return new WrongValuePropertyImpl(ref.getBase(), (String) ref.getProperty(), t);
+				}else{
+					t = t.getCause();
+				}
+			}
 			throw UiException.Aide.wrap(e);
 		}
 	}
