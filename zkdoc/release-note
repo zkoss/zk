@@ -35,6 +35,7 @@ ZK 5.0.11
   ZK-872: Calling fireEvent method cause exeception with GroupsModel(Rod enabled)
   
 * Upgrade Notes
+  + Disable ROD function when using GroupsModel
   
 	--------
 ZK 5.0.10
