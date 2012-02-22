@@ -7,11 +7,11 @@
 	</label>
 	<vlayout>
 		<hlayout>
-			msg : <label value="@bind(vm.name)" />
+			msg : <label id="msg" value="@bind(vm.name)" />
 		</hlayout>
 		<hlayout>
 			Name :
-			<textbox value="@save(vm.name) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+			<textbox id="tb" value="@save(vm.name) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
 		</hlayout>
 	</vlayout>
 </window>
