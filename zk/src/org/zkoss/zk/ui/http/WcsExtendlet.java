@@ -60,11 +60,12 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, java.io.IOException {
-		final WcsInfo wi = _cache.get(path);
 		
 		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
 		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
 			_cache.clear();		
+		
+		final WcsInfo wi = _cache.get(path);
 		
 		if (wi == null) {
 			if (Servlets.isIncluded(request)) {

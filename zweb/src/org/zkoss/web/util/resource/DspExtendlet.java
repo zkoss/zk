@@ -16,26 +16,26 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.io.OutputStream;
-import java.io.IOException;
+import java.io.StringWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.io.Files;
+import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.ResourceCache;
-
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.http.Https;
-import org.zkoss.web.servlet.dsp.Interpreter;
-import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.ExtendletDspContext;
+import org.zkoss.web.servlet.dsp.Interpretation;
+import org.zkoss.web.servlet.dsp.Interpreter;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * The DSP resource processor ({@link Extendlet}) used to parse
@@ -70,6 +70,9 @@ public class DspExtendlet implements Extendlet {
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path)
 	throws ServletException, IOException {
+		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
+		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
+			_cache.clear();		
 		final Interpretation cnt = _cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) {
