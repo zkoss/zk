@@ -39,8 +39,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @author henrichen
  * @since 6.0.0
  */
-public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, 
-	ComponentActivationListener, Serializable {
+public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
 	
 	private static final long serialVersionUID = 1463169907348730644L;
 	
@@ -309,19 +308,5 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	//--notifyChange--//
 	public void notifyChange(Object bean, String property) {
 		getBinder().notifyChange(bean, property);
-	}
-
-	@Override
-	public void didActivate(Component comp) {
-		if(_binder instanceof ComponentActivationListener){
-			((ComponentActivationListener)_binder).didActivate(comp);
-		}
-	}
-
-	@Override
-	public void willPassivate(Component comp) {
-		if(_binder instanceof ComponentActivationListener){
-			((ComponentActivationListener)_binder).willPassivate(comp);
-		}
 	}
 }

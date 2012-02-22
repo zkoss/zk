@@ -198,6 +198,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 	//flag to keep info of current vm has validator method or not
 	private boolean _hasGetValidatorMethod = true;
 	
+	//flag to keep info that ON_POST_ACTIVATED event is ever fired
+	private transient boolean _everPostActivated = false;   
+
 	private boolean _init = false;
 	
 	public BinderImpl() {
@@ -1205,7 +1208,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 	private class PostActivatedListener implements EventListener<Event>,Serializable{
 		private static final long serialVersionUID = 1L;
 		public void onEvent(Event event) throws Exception {
-			//re tie value to tracker.
+			_everPostActivated = false; //clear the flag
+
+			//subscribe change listener after deserialize
+			if (_queueListener != null) {
+				subscribeChangeListener(_quename, _quescope, _queueListener);
+			}
+			
+			//re-tie value to tracker.
 			loadComponent(_rootComp, false);
 		}
 	}
@@ -1958,7 +1968,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 
 	@Override
 	public void didActivate(Component comp) {
-		if(_rootComp.equals(comp)){
+		//might be called multiple times, post only once
+		if(!_everPostActivated && _rootComp.equals(comp)) {
+			_everPostActivated = true;
 			final Event evt = new Event(ON_POST_ACTIVATED,_dummyTarget);
 			Events.postEvent(evt);
 		}
@@ -1966,6 +1978,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 
 	@Override
 	public void willPassivate(Component comp) {//do nothing
+		if(_rootComp.equals(comp)) {
+			//unregister queue first when doing serialization
+			unsubscribeChangeListener(_quename, _quescope, _queueListener);
+		}
 	}
 	
 	

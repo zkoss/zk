@@ -12,7 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.issue;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +27,9 @@ import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 /**
@@ -95,22 +99,49 @@ public class B00869Serialization implements Serializable{
 	}
 	
 	
-	
-	
+	byte[] _bytes;
 	public void doSerialize(Window win,Label msg){
+		doSerialize0(win, msg);
+		doDeserialize0(win, msg);
+	}
+	public void doSerialize0(Window win,Label msg){
 		try{
+			Page pg = win.getPage();
+			win.sessionWillPassivate(pg);
 			ByteArrayOutputStream oaos = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(oaos);
 			oos.writeObject(win);
 			oos.close();
 			oaos.close();
-			msg.setValue("size : "+oaos.toByteArray().length);	
+			_bytes = oaos.toByteArray();
+//			msg.setValue("size : "+oaos.toByteArray().length);	
 		}catch(Exception x){
 			x.printStackTrace();
 			msg.setValue("error :"+x.getClass()+","+x.getMessage());
 		}
 	}
 	
+	public void doDeserialize0(Window win, Label msg) {
+		try{
+			ByteArrayInputStream oaos = new ByteArrayInputStream(_bytes);
+			ObjectInputStream oos = new ObjectInputStream(oaos);
+			
+			Window newwin = (Window) oos.readObject();
+			Page pg = win.getPage();
+			Component parent = win.getParent();
+			Component ref = win.getNextSibling();
+			win.detach();
+			oos.close();
+			oaos.close();
+			parent.insertBefore(newwin, ref);
+			newwin.sessionDidActivate(pg);
+			Messagebox.show("done Serialize/Deserialize");
+//			msg.setValue("done deserialize: "+_bytes.length);	
+		}catch(Exception x){
+			x.printStackTrace();
+			msg.setValue("error deserialize:"+x.getClass()+","+x.getMessage());
+		}
+	}
 	public Validator getDummyValidator(){
 		return new Validator(){
 			@Override

@@ -1,8 +1,14 @@
 <div>
 <label multiline="true">
-1.select any item
-2.edit the item's name and click save.
-3.click serialize, you should not see the message become error
+1.select A ~ D, the message shall show A ~ D accordingly
+2.select B, and edit the item's name with E and click save.
+3.you shall see the message change to E.
+4.click serialize/deserialize, you should not see the message become error.
+5.You shall not see the screen show any change except pop an alert window showing "done Serialize/Deserialize". 
+5.select A ~ D, the message shall show A ~ D accordingly
+6.select E, and edit the item's name with B and click save.
+7.you shall see the message change to B.
+8.done.
 </label>
 	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00869Serialization')">
 		<vlayout>
@@ -27,8 +33,8 @@
 		</vbox>
 		<button id="save" label="save" onClick="@command('save') @global-command('nothihg')"/>
 	</window>
-	<hbox>
-		<button id="serialize" label="serialize" onClick='win.getAttribute("vm").doSerialize(win,win.getFellow("msg"))' />
+	<hbox id="hbox">
+		<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win,win.getFellow("msg"))' />
 		<button label="Dump" onClick='win.getAttribute("binder").getTracker().dump()' />
 	</hbox>
 </div>
