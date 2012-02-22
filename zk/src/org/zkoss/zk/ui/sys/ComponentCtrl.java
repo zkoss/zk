@@ -304,15 +304,6 @@ public interface ComponentCtrl {
 	 * are associated at least one annotation (never null).
 	 */
 	public List<String> getAnnotatedProperties();
-	/** Add a map of annotations which is shared by other components.
-	 * In other words, this component shall have all annotations
-	 * defined in the specified map, annots. Meanwhile, this component
-	 * shall not modify annots, since it is shared.
-	 * The caller shall not change annots after the invocation, too
-	 *
-	 * @param annots a annotation map.
-	 */
-	public void addSharedAnnotationMap(AnnotationMap annots);
 	/** @deprecated As of release 6.0.0, replaced with
 	 * {@link #addAnnotation(String, String, Map)}
 	 */

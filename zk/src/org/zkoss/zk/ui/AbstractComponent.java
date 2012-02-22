@@ -41,10 +41,8 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.util.Cache;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.Converter;
-import org.zkoss.util.FastReadCache;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -107,7 +105,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map<Class<? extends Component>, Map<String, Integer>> _clientEvents = new HashMap<Class<? extends Component>, Map<String, Integer>>(128);
-	private static final String DEFAULT = "default";
+	private static final String DEFAULT = Impls.DEFAULT;
 	private static final String ANONYMOUS_ID = "z__i";
 	/** Used to generate an anonymous ID. */
 	private static int _anonymousId;
@@ -135,6 +133,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (mold != null && mold.length() > 0 && !DEFAULT.equals(mold))
 			initAuxInfo().mold = mold;
 
+		addSharedAnnotationMap(Impls.getClassAnnotationMap(this.getClass()));
+
 		final Execution exec = Executions.getCurrent();
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		if (curInfo != null) {
@@ -149,7 +149,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				addSharedAnnotationMap(_def.getAnnotationMap());
 			}
 		} else {
-			_def = getDefinition(exec, getClass());
+			_def = Impls.getDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
 			else
@@ -170,48 +170,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected AbstractComponent(boolean useless) {
 		_def = ComponentsCtrl.DUMMY;
-	}
-	/** Returns the component definition of the specified class, or null
-	 * if not found.
-	 */
-	private static ComponentDefinition getDefinition(Execution exec, Class<? extends Component> cls) {
-		if (exec != null) {
-			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
-			final Page page = execCtrl.getCurrentPage();
-
-			final ComponentDefinition compdef =
-				pgdef != null ? pgdef.getComponentDefinition(cls, true):
-				page != null ? 	page.getComponentDefinition(cls, true): null;
-			if (compdef != null && compdef.getLanguageDefinition() != null)
-				return compdef; //already from langdef (not from pgdef)
-
-			final ComponentDefinition compdef2 =
-				Components.getDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
-			return compdef != null && (compdef2 == null ||
-			!Objects.equals(compdef.getImplementationClass(), compdef2.getImplementationClass())) ?
-				compdef: compdef2; //Feature 2816083: use compdef2 if same class
-		}
-
-		for (String deviceType: LanguageDefinition.getDeviceTypes()) {
-			final ComponentDefinition compdef =
-				Components.getDefinitionByDeviceType(deviceType, cls);
-			if (compdef != null)
-				return compdef;
-		}
-		return null;
-	}
-	private ComponentDefinition
-	getDefinitionByDeviceType(String deviceType, String name) {
-		for (LanguageDefinition ld: LanguageDefinition.getByDeviceType(deviceType)) {
-			try {
-				final ComponentDefinition def = ld.getComponentDefinition(name);
-				if (def.isInstance(this))
-					return def;
-			} catch (DefinitionNotFoundException ex) { //ignore
-			}
-		}
-		return null;
 	}
 
 	/** The default implementation for {@link #getChildren}.
@@ -2090,7 +2048,7 @@ w:use="foo.MyWindow"&gt;
 		List<EventListenerInfo> lis = _auxinf.listeners.get(evtnm);
 		final EventListenerInfo listenerInfo = new EventListenerInfo(priority, listener);
 		if (lis != null) {
-			if (duplicateListenerIgnored()) {
+			if (Impls.duplicateListenerIgnored()) {
 				for (Iterator<EventListenerInfo> it = lis.iterator(); it.hasNext();) {
 					final EventListenerInfo li = it.next();
 					if (li.listener.equals(listener)) {
@@ -2131,13 +2089,6 @@ w:use="foo.MyWindow"&gt;
 		}
 		return !found;
 	}
-	private static boolean duplicateListenerIgnored() {
-		if (dupListenerIgnored == null)
-			dupListenerIgnored = Boolean.valueOf(
-				"true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
-		return dupListenerIgnored.booleanValue();
-	}
-	private static Boolean dupListenerIgnored;
 
 	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
@@ -2329,7 +2280,8 @@ w:use="foo.MyWindow"&gt;
 				pgdef != null ? pgdef.getComponentDefinition(name, true):
 				page != null ? 	page.getComponentDefinition(name, true): null;
 			if (compdef == null)
-				compdef = getDefinitionByDeviceType(exec.getDesktop().getDeviceType(), name);
+				compdef = Impls.getDefinitionByDeviceType(
+					this, exec.getDesktop().getDeviceType(), name);
 			if (compdef != null) {
 				setDefinition(compdef);
 				return;
@@ -2337,7 +2289,7 @@ w:use="foo.MyWindow"&gt;
 		} else {
 			for (String deviceType: LanguageDefinition.getDeviceTypes()) {
 				final ComponentDefinition compdef =
-					getDefinitionByDeviceType(deviceType, name);
+					Impls.getDefinitionByDeviceType(this, deviceType, name);
 				if (compdef != null) {
 					setDefinition(compdef);
 					return;
@@ -2439,7 +2391,13 @@ w:use="foo.MyWindow"&gt;
 			return _auxinf.annots.getAnnotatedProperties();
 		return Collections.emptyList();
 	}
-	public void addSharedAnnotationMap(AnnotationMap annots) {
+	/** Add a map of annotations which is shared by other components.
+	 * In other words, this component shall have all annotations
+	 * defined in the specified map, annots. Meanwhile, this component
+	 * shall not modify annots, since it is shared.
+	 * The caller shall not change annots after the invocation, too
+	 */
+	private void addSharedAnnotationMap(AnnotationMap annots) {
 		if (annots != null && !annots.isEmpty()) {
 			unshareAnnotationMap(false);
 			if (initAuxInfo().annots == null) {
@@ -3203,21 +3161,8 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.3
 	 */
 	protected String getDefaultMold(Class<? extends Component> klass) {
-		return defaultMold(klass);
+		return Impls.defaultMold(klass);
 	}
-	private static String defaultMold(Class<? extends Component> klass) {
-	//To speed up the performance, we store info in FastReadCache (no sync for read)
-	//Also, better to use class name as a key since class might be defined in zscript
-		final String clsnm = klass.getName();
-		String mold = _defMolds.get(clsnm);
-		if (mold == null) {
-			mold = Library.getProperty(clsnm + ".mold", DEFAULT);
-			_defMolds.put(clsnm, mold);
-		}
-		return mold;
-	}
-	private static transient Cache<String, String> _defMolds =
-		new FastReadCache<String, String>(100, 4 * 60 * 60 * 1000);
 
 	private final AuxInfo initAuxInfo() {
 		if (_auxinf == null)
