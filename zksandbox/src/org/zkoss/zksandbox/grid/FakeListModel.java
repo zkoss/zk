@@ -69,4 +69,13 @@ public class FakeListModel extends AbstractListModel implements Sortable {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void fireSelectionEvent(Object e) {
+		if (e instanceof String) {
+			String s = ((String) e).replace( "Option ", "");
+			fireEvent(ListDataEvent.SELECTION_CHANGED, Integer.parseInt(s), -1);
+		} else
+			super.fireSelectionEvent(e);
+	}
 }
