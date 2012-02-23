@@ -64,6 +64,7 @@ public class ValidationContextImpl implements ValidationContext{
 	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String,Property> getProperties(Object base){
+		if(base==null) throw new IllegalArgumentException("base object is null");
 		Map<Object,Map<String,Property>> m =  (Map<Object,Map<String,Property>>)_ctx.getAttribute(BASED_VALIDATION_PROPERTIES);
 		if(m==null){
 			_ctx.setAttribute(BASED_VALIDATION_PROPERTIES,m = new HashMap<Object,Map<String,Property>>());
