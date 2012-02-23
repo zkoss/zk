@@ -881,7 +881,7 @@ public class Parser {
 							addAttribute(compInfo, attrns, attnm, attval, null,
 								attr.getLocator());
 							if (attrAnnHelper != null)
-								attrAnnHelper.applyAnnotations(compInfo, attnm, true, location(el));
+								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 						}
 					}
 				}
@@ -889,7 +889,7 @@ public class Parser {
 
 			compInfo.setCondition(ConditionImpl.getInstance(ifc, unless));
 			compInfo.setForEach(forEach, forEachBegin, forEachEnd);
-			annHelper.applyAnnotations(compInfo, null, true, location(el));
+			annHelper.applyAnnotations(compInfo, null, true);
 
 			final Collection<Item> items = el.getChildren();
 			String textAs = null;
@@ -974,7 +974,7 @@ public class Parser {
 	org.zkoss.util.resource.Location loc) {
 		attrAnnHelper.addByCompoundValue(val.trim(), loc);
 		attrAnnHelper.applyAnnotations(compInfo,
-			selfAllowed && "self".equals(nm) ? null: nm, true, loc);
+			selfAllowed && "self".equals(nm) ? null: nm, true);
 	}
 	private static void warnWrongZkAttr(Attribute attr) {
 		log.warning(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
@@ -1072,7 +1072,7 @@ public class Parser {
 				el.getLocator());
 		}
 
-		annHelper.applyAnnotations(parent, attnm, true, location(el));
+		annHelper.applyAnnotations(parent, attnm, true);
 	}
 	private static void parseCustomAttributes(LanguageDefinition langdef,
 	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
@@ -1167,7 +1167,7 @@ public class Parser {
 				AnnotationHelper.parseAttributeValue(
 					attr.getValue().trim(), location(attr)));
 		}
-		annHelper.add(el.getLocalName(), attrs);
+		annHelper.add(el.getLocalName(), attrs, location(el));
 	}
 	private static TemplateInfo parseTemplate(NodeInfo parent, Element el,
 	AnnotationHelper annHelper) throws Exception {

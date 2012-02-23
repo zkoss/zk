@@ -8,8 +8,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -24,6 +27,7 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
 import org.zkoss.zk.ui.annotation.ComponentAnnotation;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
@@ -127,80 +131,67 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 			return; //nothing to do
 
 		//1. load class's
-		loadClassAnnots(annots, klass.getDeclaredAnnotations(), null,
-			new Loc(klass.getName()));
+		ComponentAnnotation jannot = klass.getAnnotation(ComponentAnnotation.class);
+		if (jannot != null)
+			loadClassAnnots(annots, jannot, null, new Loc(klass.getName()));
 
 		//3. load method's
 		final Method[] mtds = klass.getDeclaredMethods();
-		for (int j = 0; j < mtds.length; ++j)
-			loadClassAnnots(annots, mtds[j].getDeclaredAnnotations(), mtds[j],
-				new Loc(mtds[j].toString()));
+		for (int j = 0; j < mtds.length; ++j) {
+			jannot = mtds[j].getAnnotation(ComponentAnnotation.class);
+			if (jannot != null) {
+				final Loc loc = new Loc(mtds[j].toString());
+				final String prop = getMethodProp(mtds[j]);
+				if (prop == null)
+					throw new UiException(loc.format("Component annotations allowed only for public getter or setter"));
+				loadClassAnnots(annots, jannot, prop, loc);
+			}
+		}
 	}
 	private static void loadClassAnnots(AnnotationMap annots,
-	java.lang.annotation.Annotation[] jannots, Method mtd, Location loc) {
-		String prop = null;
-		for (int j = 0; j < jannots.length; ++j) {
-			final java.lang.annotation.Annotation jannot = jannots[j];
-			final ComponentAnnotation compAnnot =
-				jannot.annotationType().getAnnotation(ComponentAnnotation.class);
-			if (compAnnot != null) {
-				if (mtd != null) {
-					if (prop == null) {
-						final String s = mtd.getName();
-						prop = s.length() > 3 && (s.startsWith("get") || s.startsWith("get")) ?
-							(""+s.charAt(3)).toLowerCase() + s.substring(4): s;
-					}
-				} else {
-					prop = getClassAnnotProp(jannot);
-				}
+	ComponentAnnotation jannot, final String prop, Location loc) {
+		final AnnotationHelper annHelper = new AnnotationHelper();
+		final String[] values = jannot.value();
+		for (int j = 0; j < values.length; ++j) {
+			String name = prop;
+			String value = values[j];
+			Matcher m = _rprop.matcher(value);
+			if (m.matches()) {
+				name = m.group(1);
+				value = m.group(2);
+			}
+			if (name == null || name.length() == 0)
+				throw new UiException(loc.format("Property's name required"));
+			if (!AnnotationHelper.isAnnotation(value))
+				throw new UiException(loc.format("Invalid annotation: "+value));
+			annHelper.addByCompoundValue(value, loc);
+			annHelper.applyAnnotations(annots, name, true);
+		}
+	}
+	private static final Pattern _rprop =
+		Pattern.compile(" *([a-zA-Z0-9_$]*) *: *(.*) *");
 
-				annots.addAnnotation(prop,
-					getClassAnnotName(jannot), getClassAnnotAttrs(jannot), loc);
+	/** Returns the property name represents by this method, or null
+	 * if not a setter/getter.
+	 */
+	private static String getMethodProp(Method mtd) {
+		if (Modifier.isPublic(mtd.getModifiers())) {
+			final String nm = mtd.getName();
+			final int len = nm.length();
+			switch (mtd.getParameterTypes().length) {
+			case 0:
+				if (len >= 4 && nm.startsWith("get"))
+					return Character.toLowerCase(nm.charAt(3)) + nm.substring(4);
+				if (len >= 3 && nm.startsWith("is"))
+					return Character.toLowerCase(nm.charAt(2)) + nm.substring(3);
+				break;
+			case 1:
+				if (len >= 4 && nm.startsWith("set"))
+					return Character.toLowerCase(nm.charAt(3)) + nm.substring(4);
+				break;
 			}
 		}
-	}
-	private static String getClassAnnotProp(java.lang.annotation.Annotation jannot) {
-		final String prop;
-		try {
-			Method m = jannot.getClass().getMethod("property");
-			prop = (String)m.invoke(jannot);
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex, "Failed to invoke property() against "+jannot);
-		}
-		if (prop == null || prop.length() == 0)
-			throw new UiException("property() must return a non-empty string, "+jannot);
-		return prop;
-	}
-	private static String getClassAnnotName(java.lang.annotation.Annotation jannot) {
-		final String s = jannot.annotationType().getName();
-		final int j = s.lastIndexOf('.');
-		return j >= 0 ? s.substring(j + 1): s;
-	}
-	private static Map<String, String[]>
-	getClassAnnotAttrs(java.lang.annotation.Annotation jannot) {
-		final Map<String, String[]> attrs = new HashMap<String, String[]>(4);
-		final Method[] mtds = jannot.annotationType().getMethods();
-		for (int j = 0; j < mtds.length; ++j) {
-			final Method mtd = mtds[j];
-			final String name = mtd.getName();
-			if (!name.equals("property") && !name.equals("annotationType") //keyword
-			&& !name.equals("toString") && !name.equals("hashCode") //just in case
-			&& mtd.getParameterTypes().length == 0) {
-				final String value;
-				try {
-					value = convertClassAnnotValue(mtd.invoke(jannot));
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex, "Failed to invoke "+mtd+" against "+jannot);
-				}
-				if (value != null && value.length() > 0)
-					attrs.put(name, new String[] {value});
-			}
-		}
-		return attrs;
-	}
-	private static String convertClassAnnotValue(Object value) {
-		return value instanceof Class ? ((Class)value).getName():
-			Objects.toString(value);
+		return null;
 	}
 	private static transient Cache<String, Object> _defAnnots =
 		new FastReadCache<String, Object>(100, 4 * 60 * 60 * 1000);

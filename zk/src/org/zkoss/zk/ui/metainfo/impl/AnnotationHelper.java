@@ -29,6 +29,7 @@ import org.zkoss.util.resource.Location;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
@@ -103,10 +104,15 @@ public class AnnotationHelper {
 	 * it means no attribute at all.
 	 * @see #addByCompoundValue
 	 */
-	public void add(String annotName, Map<String, String[]> annotAttrs) {
+	public void add(String annotName, Map<String, String[]> annotAttrs, Location loc) {
 		if (annotName == null || annotName.length() == 0)
 			throw new IllegalArgumentException("empty");
-		_annots.add(new AnnotInfo(annotName, annotAttrs));
+		_annots.add(new AnnotInfo(annotName, annotAttrs, loc));
+	}
+	/** @deprecated As of release 6.0.1, replaced with {@link #add(String, Map<String, String[]>, Location)}.
+	 */
+	public void add(String annotName, Map<String, String[]> annotAttrs) {
+		add(annotName, annotAttrs, null);
 	}
 	/** Adds annotation by specifying the content in the compound format.
 	 * <p>There are two formats:
@@ -379,15 +385,22 @@ public class AnnotationHelper {
 	 * @param loc the location information of the annotation in
 	 * the document, or null if not available.
 	 * @see #clear
-	 * @since 6.0.0
+	 * @since 6.0.1
 	 */
 	public void applyAnnotations(ComponentInfo compInfo, String propName,
-	boolean clear, Location loc) {
+	boolean clear) {
 		for (AnnotInfo info: _annots) {
-			compInfo.addAnnotation(propName, info.name, info.attrs, loc);
+			compInfo.addAnnotation(propName, info.name, info.attrs, info.loc);
 		}
 		if (clear)
 			_annots.clear();
+	}
+	/** @deprecated As of release 6.0.1, replaced
+	 * with {@link #applyAnnotations(ComponentInfo,String,boolean)}.
+	 */
+	public void applyAnnotations(ComponentInfo compInfo, String propName,
+	boolean clear, Location loc) {
+		applyAnnotations(compInfo, propName, clear);
 	}
 	/** Applies the annotations defined in this helper to the specified
 	 * component.
@@ -403,6 +416,22 @@ public class AnnotationHelper {
 			ComponentCtrl ctrl = (ComponentCtrl) comp;
 			ctrl.addAnnotation(propName, info.name, info.attrs);
 		}
+		if (clear)
+			_annots.clear();
+	}
+	/** Applies the annotations defined in this helper to the specified
+	 * annotation map.
+	 *
+	 * @param annots the annotation map where the annotaions are added.
+	 * @param propName the property name
+	 * @param clear whether to clear all definitions before returning
+	 * @see #clear
+	 * @since 6.0.1
+	 */
+	public void applyAnnotations(AnnotationMap annots, String propName,
+	boolean clear) {
+		for (AnnotInfo info: _annots)
+			annots.addAnnotation(propName, info.name, info.attrs, info.loc);
 		if (clear)
 			_annots.clear();
 	}
@@ -425,10 +454,12 @@ public class AnnotationHelper {
 	private static class AnnotInfo {
 		private final String name;
 		private final Map<String, String[]> attrs;
+		private final Location loc;
 
-		private AnnotInfo(String name, Map<String, String[]> attrs) {
+		private AnnotInfo(String name, Map<String, String[]> attrs, Location loc) {
 			this.name = name;
 			this.attrs = attrs;
+			this.loc = loc;
 		}
 	}
 }
