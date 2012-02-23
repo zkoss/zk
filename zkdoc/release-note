@@ -2,11 +2,12 @@
 ZK 6.0.1
 * Features
   ZK-883: A way to specify component's annotation in component's Java class
+  ZK-864: Make ValidationContext easier
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
   ZK-877: NPE in a save only binding.
-  ZK-878: Exception if binding a form with errorMessage
+  ZK-878: Exception if binding a form with errorMessage   
 
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public

@@ -1,0 +1,27 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00864ValidationContextEasier')"
+	validationMessages="@id('vmsgs')">
+	<vlayout>
+		<hlayout>
+			Name :
+			<label id="msg1" value="@bind(vm.person.name)" />
+		</hlayout>
+		<hlayout>
+			Age :
+			<label id="msg2" value="@bind(vm.person.age)" />
+		</hlayout>
+	</vlayout>
+	<vlayout id="f"
+		form="@id('fx1') @load(vm.person) @save(vm.person,before='save1') @validator(vm.validator1)">
+		<label id="err" value="@load(vmsgs[f])"/>
+		<hlayout>
+			Name :
+			<textbox id="inp1" value="@bind(fx1.name)" /> 
+		</hlayout>
+		<hlayout>
+			Age :
+			<intbox id="inp2" value="@bind(fx1.age)" />
+		</hlayout>
+		<button id="save1" label="save1" onClick="@command('save1')"/>
+	</vlayout>
+</window>

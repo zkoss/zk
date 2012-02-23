@@ -38,7 +38,7 @@ public interface ValidationContext {
 	String getCommand();
 
 	/**
-	 * get collected properties that need to be validated.
+	 * get dependent properties that need to be validated.
 	 * you usually use this method to get value of other properties to do complex validation or
 	 * a form validation
 	 * @return the properties map.
@@ -46,13 +46,38 @@ public interface ValidationContext {
 	Map<String,Property[]> getProperties();
 	
 	/**
-	 * get collected properties that need to be validated by a property name.
+	 * get dependent properties by the property name.
 	 * you usually use this method to get a value of other properties to do complex validation or
 	 * a form validation
 	 * @param name the property name
 	 * @return the properties array
 	 */
 	Property[] getProperties(String name);
+	
+	
+	/**
+	 * get dependent properties by a base object.
+	 * this method returns a Map (key is the property name) of properties that have same base object. 
+	 * It is useful in the form validation case to get all dependent property that related to a form.
+	 * For example in a validator of a form, <pre><code>
+	 * Map<String,Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());
+	 * Map<String,Property> formProps = ctx.getProperties(ctx.getProperty().getValue());
+	 * </code></pre>
+	 * @param base the base object of properties
+	 * @return a Map of properties that has same base object.
+	 * @since 6.0.1
+	 */
+	Map<String,Property> getProperties(Object base);
+	
+	
+	/**
+	 * Returns validator arg value of the given key
+	 * This is a shortcut of <code>getBindContext().getValidatorArg()</code> 
+	 * @param key the key to the value.
+	 * @return value of validator arg of the given key
+	 * @since 6.0.1
+	 */
+	public Object getValidatorArg(String key);
 
 	/**
 	 * get the main property that need to be validated. 
@@ -66,11 +91,4 @@ public interface ValidationContext {
 	 */
 	BindContext getBindContext();
 
-	//TODO
-//	/**
-//	 * the error message to property
-//	 * @param property the property that message will attached to
-//	 * @param message the message
-//	 */
-//	void setMessage(Property property, String message);
 }
