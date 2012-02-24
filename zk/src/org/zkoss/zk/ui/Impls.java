@@ -159,8 +159,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 				name = m.group(1);
 				value = m.group(2);
 			}
-			if (name == null || name.length() == 0)
-				throw new UiException(loc.format("Property's name required"));
+			
 			if (!AnnotationHelper.isAnnotation(value))
 				throw new UiException(loc.format("Invalid annotation: "+value));
 			annHelper.addByCompoundValue(value, loc);
