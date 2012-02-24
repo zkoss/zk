@@ -23,10 +23,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.bind.tracker.impl.BindUiLifeCycle</listener-class>
 	</listener>
-	<listener>
-		<listener-class>org.zkoss.bind.impl.BindActivationListener</listener-class>
-	</listener>
-	
 <!-- 
 	<library-property>
 		<name>org.zkoss.zk.ui.event.EventQueueProvider.class</name>

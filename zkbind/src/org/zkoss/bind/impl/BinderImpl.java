@@ -86,6 +86,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.ExecutionInit;
 
 /**
  * Implementation of Binder.
@@ -135,7 +136,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
 	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
-	public static final String ACTIVATORS = "$ZKBIND_ACTIVATORS$";//the activators that is stored in desktop, see BindActivationListener
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
@@ -205,6 +205,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	
 	//flag to keep info that binder is in activating state
 	private boolean _activating = false;
+	//to help deferred activation when first execution
+	private DeferredActivator _deferredActivator;
 	
 	public BinderImpl() {
 		this(null,null);
@@ -1976,39 +1978,48 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_activating = false;
 		}
 	}
-
+ 
 	/**
-	 * object that store in root compoent to help activating.
+	 * object that store in root component to help activating.
 	 */
 	private class Activator implements ComponentActivationListener,Serializable{
 		private static final long serialVersionUID = 1L;
-
-		@SuppressWarnings("unchecked")
 		@Override
 		public void didActivate(Component comp) {
 			if(_rootComp.equals(comp)){
-				final Desktop desktop = comp.getDesktop();
-				List<BinderCtrl> binders = (List<BinderCtrl>)desktop.getAttribute(ACTIVATORS);
-				if(binders==null){
-					desktop.setAttribute(ACTIVATORS,binders = new ArrayList<BinderCtrl>());
+				if(_deferredActivator==null){
+					subscribeQueue(_quename, _quescope, _queueListener);
+					comp.getDesktop().addListener(_deferredActivator = new DeferredActivator());
 				}
-				if(!binders.contains(BinderImpl.this)){
-					_log.debug("add to didActivate : [%s]",BinderImpl.this);
-					binders.add(BinderImpl.this);
-					if (_queueListener != null) {
-						subscribeQueue(_quename, _quescope, _queueListener);
-					}
-				}
-								
 			}
 		}
 		@Override
 		public void willPassivate(Component comp) {
 			if(_rootComp.equals(comp)){
 				_log.debug("willPassivate : [%s]",comp);
-				unsubscribeQueue(_quename, _quescope, _queueListener);
+				//for the case there is no execution come into.
+				if(_deferredActivator!=null){
+					unsubscribeQueue(_quename, _quescope, _queueListener);
+					comp.getDesktop().removeListener(_deferredActivator);
+					_deferredActivator = null;
+				}
 			}
 		}
+	}
+	
+	/**
+	 * object that store in desktop listener to help activating.
+	 * it do the activation when first execution come into
+	 */
+	private class DeferredActivator implements ExecutionInit, Serializable{
+		private static final long serialVersionUID = 1L;
+		@Override
+		public void init(Execution exec, Execution parent) throws Exception {
+			Desktop desktop = exec.getDesktop();
+			desktop.removeListener(this);
+			_deferredActivator = null;
+			BinderImpl.this.didActivate();
+		}	
 	}
 
 }
