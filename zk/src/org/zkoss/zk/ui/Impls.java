@@ -116,9 +116,8 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		final String clsnm = klass.getName();
 		Object val = _defAnnots.get(clsnm);
 		if (val == null) { //not loaded yet (OK to race)
-			AnnotationMap annots = getClassAnnotationMap(klass.getSuperclass());
-			if (annots == null)
-				annots = new AnnotationMap();
+			final AnnotationMap  annots = new AnnotationMap();
+			annots.addAll(getClassAnnotationMap(klass.getSuperclass()));
 			loadClassAnnots(annots, klass);
 			_defAnnots.put(clsnm, val = annots.isEmpty() ? Objects.UNKNOWN: annots);
 		}
