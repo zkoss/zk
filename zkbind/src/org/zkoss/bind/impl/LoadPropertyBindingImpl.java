@@ -22,6 +22,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -56,6 +57,8 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
+		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
+		
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
 		if (conv != null) {
@@ -64,9 +67,14 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 				//ex @bind(vm.person.firstName) , it's base path is 'vm.person.firstName', not 'vm.person'
 				//this sepc is different with DependsOn of a property
 			addConverterDependsOnTrackings(conv, ctx);
+			
+			if(activating) return;//don't load to component if activating
+			
 			value = conv.coerceToUi(value, comp, ctx);
 			if(value == LOAD_IGNORED) return;
 		}
+		if(activating) return;//don't load to component if activating
+		
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
 		eval.setValue(null, comp, _fieldExpr, value);

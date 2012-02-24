@@ -23,6 +23,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
@@ -49,17 +50,22 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
+		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		if(form instanceof FormExt){
 			for (String field : ((FormExt)form).getLoadFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final Object value = eval.getValue(ctx, comp, expr);
-					form.setField(field, value);
+					if(!activating){//don't load to form if activating
+						form.setField(field, value);
+					}
 				}
 			}
+			if(activating) return;
+			
 			((FormExt)form).resetDirty(); //initial loading, mark form as clean
 		}
-		
+		if(activating) return;//don't notify change if activating
 		
 		binder.notifyChange(form, "*"); //notify change of fx.*
 		if(form instanceof FormExt){

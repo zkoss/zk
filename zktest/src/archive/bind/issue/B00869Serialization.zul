@@ -12,9 +12,13 @@
 </label>
 	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00869Serialization')">
 		<vlayout>
-		<hlayout>message:<label id="msg" value="@bind(vm.message1)"/></hlayout>
 		<label id="selected" value="@bind(vm.selected.name)"/>
 		</vlayout>
+		<hbox id="children" children="@load(vm.items)">
+			<template name="children">
+				<label value="@load(each.name)"/>
+			</template>
+		</hbox>
 		<listbox id="listbox" width="700px" model="@bind(vm.items)" rows="5" selectedItem="@bind(vm.selected)">
 			<listhead>
 				<listheader label="index"/>
@@ -33,8 +37,9 @@
 		</vbox>
 		<button id="save" label="save" onClick="@command('save') @global-command('nothihg')"/>
 	</window>
+	<hlayout>message:<label id="msg"/></hlayout>
 	<hbox id="hbox">
-		<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win,win.getFellow("msg"))' />
+		<button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win,msg)' />
 		<button label="Dump" onClick='win.getAttribute("binder").getTracker().dump()' />
 	</hbox>
 </div>

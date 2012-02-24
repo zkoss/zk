@@ -114,4 +114,19 @@ public interface BinderCtrl {
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
 	
+	
+	/**
+	 * check if binder is in activating state
+	 * @return true if binder is currently in activating state
+	 * @since 6.0.1
+	 */
+	public boolean isActivating();
+	
+	
+	/**
+	 * did activate when the session is activating
+	 * @since
+	 */
+	public void didActivate();
+	
 }

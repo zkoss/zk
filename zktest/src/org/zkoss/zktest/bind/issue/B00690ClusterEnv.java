@@ -12,9 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.issue;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,36 +22,33 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 /**
  * @author Dennis Chen
  * 
  */
-public class B00869Serialization implements Serializable{
+public class B00690ClusterEnv implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private String message1;
-
+	String message;
+	
 	List<Item> items;
 	Item selected;
 
-	public B00869Serialization() {
+	public B00690ClusterEnv() {
 		items = new ArrayList<Item>();
 		items.add(selected = new Item("A"));
 		items.add(new Item("B"));
 		items.add(new Item("C"));
 		items.add(new Item("D"));
-		
 	}
 
 	public List<Item> getItems() {
@@ -68,9 +63,17 @@ public class B00869Serialization implements Serializable{
 		this.selected = selected;
 	}
 
-	public String getMessage1() {
-		return message1;
+	
+
+	public String getMessage() {
+		return message;
 	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
 
 	static public class Item implements Serializable{
 		private static final long serialVersionUID = 1L;
@@ -98,65 +101,29 @@ public class B00869Serialization implements Serializable{
 		}
 	}
 
-	@Command
-	public void save() {
+	@Command @GlobalCommand @NotifyChange("message")
+	public void save(@BindingParam("msg") String msg) {
+		message = msg;
 	}
 	
-	
-	byte[] _bytes;
-	public void doSerialize(Window win,Label msg){
-		try{
-			doSerialize0(win, msg);
-			doDeserialize0(win, msg);
-		}catch(Exception x){
-			x.printStackTrace();
-			msg.setValue("error :"+x.getClass()+","+x.getMessage());
-		}
-	}
-	public void doSerialize0(Window win,Label msg) throws Exception{
-		Page pg = win.getPage();
-		((ComponentCtrl)win).sessionWillPassivate(pg);//simulate
-		ByteArrayOutputStream oaos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(oaos);
-		oos.writeObject(win);
-		oos.close();
-		oaos.close();
-		_bytes = oaos.toByteArray();
-	}
-	
-	public void doDeserialize0(Window win, Label msg) throws Exception{
-		ByteArrayInputStream oaos = new ByteArrayInputStream(_bytes);
-		ObjectInputStream oos = new ObjectInputStream(oaos);
-		
-		Window newwin = (Window) oos.readObject();
-		Page pg = win.getPage();
-		Component parent = win.getParent();
-		Component ref = win.getNextSibling();
-		win.detach();
-		oos.close();
-		oaos.close();
-		parent.insertBefore(newwin, ref);
-		//for load component back.
-		((ComponentCtrl)newwin).sessionDidActivate(newwin.getPage());//simulate
-		msg.setValue("done deserialize: "+_bytes.length);	
-	}
 	public Validator getDummyValidator(){
-		return new Validator(){
-			@Override
-			public void validate(ValidationContext ctx) {				
+		return new AbstractValidator() {
+			public void validate(ValidationContext ctx) {	
+				String val = (String)ctx.getProperties(ctx.getProperty().getBase()).get("name").getValue();
+				if(val!=null && val.length()>=3){
+					addInvalidMessage(ctx, "that value length must samll than 2 , but is "+val.length());
+				}
 			}
 		};
 	}
 	
 	public Converter getDummyConverter(){
 		return new Converter() {
-			
-			@Override
+
 			public Object coerceToUi(Object val, Component component, BindContext ctx) {
 				return val;
 			}
-			
-			@Override
+
 			public Object coerceToBean(Object val, Component component, BindContext ctx) {
 				return val;
 			}

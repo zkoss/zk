@@ -71,6 +71,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -92,7 +93,7 @@ import org.zkoss.zk.ui.util.Composer;
  * @author dennischen
  * @since 6.0.0
  */
-public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActivationListener {
+public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	private static final long serialVersionUID = 1463169907348730644L;
 
@@ -134,6 +135,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 	public static final String SRCPATH = "$SRCPATH$"; //source path that trigger @DependsOn tracking
 	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
+	public static final String ACTIVATORS = "$ZKBIND_ACTIVATORS$";//the activators that is stored in desktop, see BindActivationListener
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
@@ -143,11 +145,11 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 	//events for dummy target
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
-	private static final String ON_POST_ACTIVATED = "onPostActivated";
 	
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
 	private static final String CHILDREN_ATTR = "$CHILDREN$";
+	private static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
 	//Command lifecycle result
 	private static final int COMMAND_SUCCESS = 0;
@@ -197,11 +199,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 	
 	//flag to keep info of current vm has validator method or not
 	private boolean _hasGetValidatorMethod = true;
-	
-	//flag to keep info that ON_POST_ACTIVATED event is ever fired
-	private transient boolean _everPostActivated = false;   
 
+	//flag to keep info of the binding is initialized or not.
 	private boolean _init = false;
+	
+	//flag to keep info that binder is in activating state
+	private boolean _activating = false;
 	
 	public BinderImpl() {
 		this(null,null);
@@ -259,9 +262,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		setViewModel(vm);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
-		_dummyTarget.addEventListener(ON_POST_ACTIVATED, new PostActivatedListener());
-		//subscribe change listener
-		subscribeChangeListener(_quename, _quescope, _queueListener);
+		//subscribe queue 
+		subscribeQueue(_quename, _quescope, _queueListener);
 		
 		if(vm instanceof Composer<?> && !(vm instanceof BindComposer<?>)){//do we need to warn this?
 			//show a warn only
@@ -269,6 +271,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		}
 		//Should we handle here or in setViewModel for every time set a view model into binder?
 		initViewModel(vm);
+		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 	}
 	
 	//handle init of a viewmodel. 
@@ -1205,21 +1208,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		}
 	}
 	
-	private class PostActivatedListener implements EventListener<Event>,Serializable{
-		private static final long serialVersionUID = 1L;
-		public void onEvent(Event event) throws Exception {
-			_everPostActivated = false; //clear the flag
-
-			//subscribe change listener after deserialize
-			if (_queueListener != null) {
-				subscribeChangeListener(_quename, _quescope, _queueListener);
-			}
-			
-			//re-tie value to tracker.
-			loadComponent(_rootComp, false);
-		}
+	/**
+	 * @since 6.0.1
+	 */
+	@Override
+	public boolean isActivating(){
+		return _activating;
 	}
-	
 	
 	private void notifyVMsgsChanged(){
 		if(_validationMessages!=null){
@@ -1655,7 +1650,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		checkInit();
 		if(_rootComp==comp){
 			//the binder component was detached, unregister queue
-			unsubscribeChangeListener(_quename, _quescope, _queueListener);
+			unsubscribeQueue(_quename, _quescope, _queueListener);
+			_rootComp.removeAttribute(ACTIVATOR);
 		}
 		if(_validationMessages!=null){
 			_validationMessages.clearMessages(comp);
@@ -1844,12 +1840,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		return _phaseListener;
 	}
 
-	private void subscribeChangeListener(String quename, String quescope, EventListener<Event> listener) {
+	private void subscribeQueue(String quename, String quescope, EventListener<Event> listener) {
 		EventQueue<Event> que = EventQueues.lookup(quename, quescope, true);
 		que.subscribe(listener);
 	}
 	
-	private void unsubscribeChangeListener(String quename, String quescope, EventListener<Event> listener) {
+	private void unsubscribeQueue(String quename, String quescope, EventListener<Event> listener) {
 		EventQueue<Event> que = EventQueues.lookup(quename, quescope, false);
 		if(que!=null){
 			que.unsubscribe(listener);
@@ -1966,23 +1962,53 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable, ComponentActi
 		_validationMessages = messages;
 	}
 
+	/**
+	 * @since 6.0.1
+	 */
 	@Override
-	public void didActivate(Component comp) {
-		//might be called multiple times, post only once
-		if(!_everPostActivated && _rootComp.equals(comp)) {
-			_everPostActivated = true;
-			final Event evt = new Event(ON_POST_ACTIVATED,_dummyTarget);
-			Events.postEvent(evt);
+	public void didActivate() {
+		_activating = true;
+		try{
+			_log.debug("didActivate : [%s]",BinderImpl.this);
+			//re-tie value to tracker.
+			loadComponent(_rootComp, false);
+		}finally{
+			_activating = false;
 		}
 	}
 
-	@Override
-	public void willPassivate(Component comp) {//do nothing
-		if(_rootComp.equals(comp)) {
-			//unregister queue first when doing serialization
-			unsubscribeChangeListener(_quename, _quescope, _queueListener);
+	/**
+	 * object that store in root compoent to help activating.
+	 */
+	private class Activator implements ComponentActivationListener,Serializable{
+		private static final long serialVersionUID = 1L;
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void didActivate(Component comp) {
+			if(_rootComp.equals(comp)){
+				final Desktop desktop = comp.getDesktop();
+				List<BinderCtrl> binders = (List<BinderCtrl>)desktop.getAttribute(ACTIVATORS);
+				if(binders==null){
+					desktop.setAttribute(ACTIVATORS,binders = new ArrayList<BinderCtrl>());
+				}
+				if(!binders.contains(BinderImpl.this)){
+					_log.debug("add to didActivate : [%s]",BinderImpl.this);
+					binders.add(BinderImpl.this);
+					if (_queueListener != null) {
+						subscribeQueue(_quename, _quescope, _queueListener);
+					}
+				}
+								
+			}
+		}
+		@Override
+		public void willPassivate(Component comp) {
+			if(_rootComp.equals(comp)){
+				_log.debug("willPassivate : [%s]",comp);
+				unsubscribeQueue(_quename, _quescope, _queueListener);
+			}
 		}
 	}
-	
-	
+
 }

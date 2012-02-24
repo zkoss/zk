@@ -18,6 +18,7 @@ import java.util.Map;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadChildrenBinding;
 import org.zkoss.lang.Classes;
@@ -42,6 +43,8 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
+		
+		if(((BinderCtrl)getBinder()).isActivating()) return;//don't load to component when activating
 		
 		comp.getChildren().clear();
 		comp.removeAttribute(BinderImpl.MODEL);
