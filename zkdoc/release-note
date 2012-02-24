@@ -8,6 +8,8 @@ ZK 6.0.1
   ZK-866: Select status of listbox not sync when change multiple to single
   ZK-877: NPE in a save only binding.
   ZK-878: Exception if binding a form with errorMessage   
+  ZK-869: Binder should be serializable.  
+  ZK-690: Binder is not work in cluster environment
 
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
