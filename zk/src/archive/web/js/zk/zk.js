@@ -1203,8 +1203,10 @@ zk.log('value is", value);
 	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
-	zk.linux = agent.indexOf("linux") >= 0;
-	zk.mac = !zk.ios && agent.indexOf("mac") >= 0;
+	zk.linux = agent.indexOf('linux') >= 0;
+	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
+	zk.chrome = zk.safari && agent.indexOf('chrome') >= 0;
+	zk.safari_ = zk.safari && !zk.chrome; // safari only
 	zk.css3 = true;
 	
 	var bodycls;
