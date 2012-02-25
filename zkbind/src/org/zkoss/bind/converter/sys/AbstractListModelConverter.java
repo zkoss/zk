@@ -21,6 +21,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.GroupsModel;
@@ -71,7 +72,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 		}
 		ListModel model = null;
 		if (val instanceof ListModel) {
-			comp.setAttribute(BinderImpl.MODEL, val); //ZK-758. @see AbstractRenderer#addItemReference
+			BindELContext.addModel(comp, val); //ZK-758. @see AbstractRenderer#addItemReference
 			return val;
 		} else if (val instanceof Set) {
 			model =  new ListModelSet((Set)val, true);
@@ -109,7 +110,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 			
 		}
 		model = handleWrappedModel(ctx,comp,model);
-		comp.setAttribute(BinderImpl.MODEL, model); //ZK-758. @see AbstractRenderer#addItemReference
+		BindELContext.addModel(comp, model); //ZK-758. @see AbstractRenderer#addItemReference
 		
 		return model;
 	}

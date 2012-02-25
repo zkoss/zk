@@ -20,6 +20,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitChildrenBinding;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 
@@ -52,11 +53,11 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 
 		comp.getChildren().clear();
-		comp.removeAttribute(BinderImpl.MODEL);
+		BindELContext.removeModel(comp);
 		if(value!=null){
 			BindChildRenderer renderer = new BindChildRenderer();
 			List<Object> data = (List<Object>)Classes.coerce(List.class, value);
-			comp.setAttribute(BinderImpl.MODEL, data); //ZK-758. @see AbstractRenderer#addItemReference
+			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
 			int size = data.size();
 			for(int i=0;i<size;i++){
 				renderer.render(comp, data.get(i),i,size);

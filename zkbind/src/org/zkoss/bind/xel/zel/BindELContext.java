@@ -268,6 +268,19 @@ public class BindELContext extends XelELContext {
 			|| isAnnotatedImmutable(cls); //or an Immutable
 	}
 	
+	public static String getModelName(Component comp) {
+		return BinderImpl.MODEL + comp.getUuid();
+	}
+	
+	public static void addModel(Component comp, Object model) {
+		final String name = getModelName(comp);
+		comp.setAttribute(name, model);
+	}
+	
+	public static Object removeModel(Component comp) {
+		final String name = getModelName(comp);
+		return comp.removeAttribute(name);
+	}
 	private static boolean isAnnotatedImmutable(Class<? extends Object> cls){
 		return cls.getAnnotation(Immutable.class)!=null; 
 	}

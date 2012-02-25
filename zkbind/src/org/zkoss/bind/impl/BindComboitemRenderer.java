@@ -86,7 +86,7 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 			final Comboitem nci = (Comboitem)items[0];
 			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			nci.setAttribute(itervarnm, iterStatus);
 			
 			//add template dependency

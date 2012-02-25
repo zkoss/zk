@@ -85,7 +85,7 @@ public class BindChildRenderer extends AbstractRenderer{
 		boolean templateTracked = false;
 		for(Component comp: items){
 			comp.setAttribute(BinderImpl.VAR, varnm);
-			addItemReference(comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(owner, comp, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			comp.setAttribute(itervarnm, iterStatus);
 			
 			//add template dependency

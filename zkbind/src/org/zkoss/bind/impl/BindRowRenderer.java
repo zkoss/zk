@@ -89,7 +89,7 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 
 			final Row nr = (Row)items[0];
 			nr.setAttribute(BinderImpl.VAR, varnm);
-			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(grid, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);
 

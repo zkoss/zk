@@ -16,6 +16,7 @@ import java.io.Serializable;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.TemplateResolver;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Template;
@@ -102,19 +103,20 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 	}
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List
-	protected void addItemReference(final Component comp, int index, String varnm) {
+	protected void addItemReference(Component modelOwner, final Component comp, int index, String varnm) {
 		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
 		if (binder == null) return; //no binder
-		final String expression = BinderImpl.MODEL+"["+index+"]";
+		final String expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
 		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, expression, comp)); //reference
 	}
 	
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List, for tree model only
-	protected void addItemReference(final Component comp, int[] path, String varnm) {
+	protected void addItemReference(Component modelOwner, final Component comp, int[] path, String varnm) {
 		final Binder binder = (Binder)comp.getAttribute(BinderImpl.BINDER, true);
 		if (binder == null) return; //no binder
 		comp.setAttribute(TREE_PATH, path);
-		final String expression = BinderImpl.MODEL+"["+TREE_PATH+"]";
+		final String expression = BindELContext.getModelName(modelOwner)
+		+"["+TREE_PATH+"]";
 		comp.setAttribute(varnm, new ReferenceBindingImpl(binder, expression, comp)); //reference
 	}
 	

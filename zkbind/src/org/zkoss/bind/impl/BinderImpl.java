@@ -1999,10 +1999,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				_log.debug("willPassivate : [%s]",comp);
 				//for the case there is no execution come into.
 				if(_deferredActivator!=null){
-					unsubscribeQueue(_quename, _quescope, _queueListener);
 					comp.getDesktop().removeListener(_deferredActivator);
 					_deferredActivator = null;
 				}
+				unsubscribeQueue(_quename, _quescope, _queueListener);
 			}
 		}
 	}

@@ -10,7 +10,8 @@ ZK 6.0.1
   ZK-878: Exception if binding a form with errorMessage   
   ZK-869: Binder should be serializable.  
   ZK-690: Binder is not work in cluster environment
-
+  ZK-892: ChildrenBinding in Listbox pollute the collection model
+  
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
   

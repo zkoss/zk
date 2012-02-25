@@ -16,6 +16,7 @@ import java.io.Serializable;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.TreeModel;
 
@@ -29,7 +30,7 @@ public class TreeModelConverter implements Converter,Serializable{
 	@Override
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
 		if(val instanceof TreeModel){
-			component.setAttribute(BinderImpl.MODEL, val); //ZK-758. @see AbstractRenderer#addItemReference
+			BindELContext.addModel(component, val); //ZK-758. @see AbstractRenderer#addItemReference
 		}
 		return val;
 	}

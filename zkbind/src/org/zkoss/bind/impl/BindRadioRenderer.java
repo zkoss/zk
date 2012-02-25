@@ -89,7 +89,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 
 			final Radio nr = (Radio)items[0];
 			nr.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(radiogroup, nr, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nr.setAttribute(itervarnm, iterStatus);
 			

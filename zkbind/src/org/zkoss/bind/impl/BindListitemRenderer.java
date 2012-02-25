@@ -88,7 +88,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 
 			final Listitem nli = (Listitem)items[0];
 			nli.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			addItemReference(listbox, nli, index, varnm); //kept the reference to the data, before ON_BIND_INIT
 			
 			nli.setAttribute(itervarnm, iterStatus);
 			
