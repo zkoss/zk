@@ -1965,10 +1965,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 
 	/**
-	 * @since 6.0.1
+	 * did activate when the session is activating
 	 */
-	@Override
-	public void didActivate() {
+	private void didActivate() {
 		_activating = true;
 		try{
 			_log.debug("didActivate : [%s]",BinderImpl.this);

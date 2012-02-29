@@ -122,11 +122,4 @@ public interface BinderCtrl {
 	 */
 	public boolean isActivating();
 	
-	
-	/**
-	 * did activate when the session is activating
-	 * @since
-	 */
-	public void didActivate();
-	
 }
