@@ -259,6 +259,20 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tbx = this.getTabbox(),
 			tag = tbx.inAccordionMold() ? 'div' : 'li';
 		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
+	},
+	rerender: function (skipper) {
+		// ZK-886, this._rerendering used in tab.js
+		// this.$n() will be cleared during rerender
+		// but LinkedPanel.firstChild will not,
+		// the condition LinkedPanel.firstChild != this.$n()
+		// will get the wrong result
+		// delete it later for the invalidate() case
+		var wgt = this;
+		if (!this._rerendering)
+			wgt._rerendering = setTimeout(function () {
+				delete wgt._rerendering;
+			}, 0);
+		this.$supers(zul.tab.Tab, 'rerender', arguments);
 	}
 });
 /** @class zul.tab.TabRenderer

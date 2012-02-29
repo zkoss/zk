@@ -36,6 +36,7 @@ ZK 5.0.11
   ZK-867: Can't customize master detail's style of odd row
   ZK-873: Inconsistent display of select all checkbox in listheader if ROD is true
   ZK-859: bandbox popup not aligned correctly on FF10/IE9
+  ZK-886: Accordion tabbox disabled issue
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

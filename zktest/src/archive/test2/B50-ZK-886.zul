@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-886.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  29 10:50:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Click 'set disabled', then you can open/close Tab2, it should not disappear.</div>
+	<div>2. Click 'set closable', then you can open/close/delete Tab2, it should not disappear before you close it.</div>
+	<div>3. Refresh page.</div>
+	<div>4. Click 'set image', the image of Tab2 should changed, it should not disappear.</div>
+	<div>5. Click 'invalidate', Tab2 should not disappear.</div>
+	<tabbox id="tabbox" mold="accordion" width="500px">
+		<tabs>
+			<tab id="tab1" label="Tab1" disabled="false" />
+			<tab id="tab2" label="Tab2" image="/img/battery.gif"
+				disabled="true" closable="false"  />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<button label="set disabled" >
+					<attribute name="onClick"><![CDATA[
+						tab2.setDisabled(false);
+					]]></attribute>
+				</button>
+				<button label="set closable" >
+					<attribute name="onClick"><![CDATA[
+						tab2.setClosable(true);
+					]]></attribute>
+				</button>
+				<button label="set image" >
+					<attribute name="onClick"><![CDATA[
+						tab2.setImage("/img/defender.gif");
+					]]></attribute>
+				</button>
+				<button label="invalidate" >
+					<attribute name="onClick"><![CDATA[
+						tab2.invalidate();
+					]]></attribute>
+				</button>
+			</tabpanel>
+			<tabpanel>
+				tab panel 2
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
