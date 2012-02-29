@@ -1,0 +1,70 @@
+<!--
+	B50-ZK-859.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Feb 29 11:07:47 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Open each of the following Bandbox. The popup position should be correct is each case.
+	</div>
+	<div>
+		<span style="font-style: italic">
+			Some Text For Pushing Bandbox to the Right
+		</span>
+		<bandbox>
+			<bandpopup hflex="min">
+				<listbox hflex="min">
+					<listhead>
+						<listheader label="Header 0" />
+						<listheader label="Header 1" />
+					</listhead>
+					<listitem>
+						<listcell label="Cell 0" />
+						<listcell label="Cell 1" />
+					</listitem>
+				</listbox>
+			</bandpopup>
+		</bandbox>
+		<bandbox>
+			<bandpopup>
+				<listbox width="200px">
+					<listhead>
+						<listheader label="Header 0" />
+						<listheader label="Header 1" />
+					</listhead>
+					<listitem>
+						<listcell label="Cell 0" />
+						<listcell label="Cell 1" />
+					</listitem>
+				</listbox>
+			</bandpopup>
+		</bandbox>
+		<bandbox>
+			<bandpopup hflex="min">
+				<vbox hflex="min">
+					<hbox hflex="min">
+						<label>Search</label>
+						<textbox />
+					</hbox>
+					<listbox hflex="min">
+						<listhead>
+							<listheader label="Header 0" />
+							<listheader label="Header 1" />
+						</listhead>
+						<listitem>
+							<listcell label="Cell 0" />
+							<listcell label="Cell 1" />
+						</listitem>
+					</listbox>
+				</vbox>
+			</bandpopup>
+		</bandbox>
+	</div>
+</zk>

@@ -58,6 +58,13 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		}
 		this.$supers('open', arguments);
 	},
+	presize_: function () {
+		var bp = this.firstChild;
+		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
+			zWatch.fireDown('onFitSize', bp, {reverse: true});
+			return true;
+		}
+	},
 	enterPressed_: function (evt) {
 		//bug 3280506: do not close when children press enter.
 		if(evt.domTarget == this.getInputNode())
