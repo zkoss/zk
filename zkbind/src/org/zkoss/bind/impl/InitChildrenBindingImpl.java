@@ -17,12 +17,14 @@ import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Converter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.InitChildrenBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of {@link InitChildrenBinding}.
@@ -33,9 +35,9 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 	InitChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	public InitChildrenBindingImpl(Binder binder, Component comp, String initExpr,Map<String, Object> bindingArgs) {
-		
-		super(binder, comp, initExpr, ConditionType.PROMPT, null, bindingArgs);
+	public InitChildrenBindingImpl(Binder binder, Component comp, String initExpr,Map<String, Object> bindingArgs,
+			String converterExpr,Map<String, Object> converterArgs) {
+		super(binder, comp, initExpr, ConditionType.PROMPT, null, bindingArgs,converterExpr,converterArgs);
 	}
 	
 	@Override
@@ -51,12 +53,24 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
-
+		
+		//use _converter to convert type if any
+		final Converter conv = getConverter();
+		if (conv != null) {			
+			value = conv.coerceToUi(value, comp, ctx);
+			if(value == LOAD_IGNORED) return;
+		}
+		
 		comp.getChildren().clear();
 		BindELContext.removeModel(comp);
 		if(value!=null){
+			List<Object> data = null;
+			if(value instanceof List){
+				data = (List<Object>)value;
+			}else{
+				throw new UiException("it is not a list, is "+value.getClass()+":"+value);
+			}
 			BindChildRenderer renderer = new BindChildRenderer();
-			List<Object> data = (List<Object>)Classes.coerce(List.class, value);
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
 			int size = data.size();
 			for(int i=0;i<size;i++){

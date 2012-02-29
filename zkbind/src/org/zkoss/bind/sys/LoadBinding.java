@@ -20,6 +20,12 @@ import org.zkoss.bind.BindContext;
  * @since 6.0.0
  */
 public interface LoadBinding extends Binding {
+	
+	/**
+	 * a object to indicate to ignore the load() in load-property-binding, it is usually return by a converter
+	 */
+	public Object LOAD_IGNORED = new Object();
+	
 	/**
 	 * Load data into the source attribute from the target property.
 	 * @param ctx the binding runtime context 

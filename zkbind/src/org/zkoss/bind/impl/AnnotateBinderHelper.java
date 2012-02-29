@@ -477,22 +477,22 @@ public class AnnotateBinderHelper {
 	
 	private void processChildrenBindings(Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-
+		ExpressionAnnoInfo converterInfo = parseConverter(compCtrl,CHILDREN_ATTR);
 		//scan init first
 		Collection<Annotation> initannos = compCtrl.getAnnotations(CHILDREN_ATTR, INIT_ANNO);
 		if(initannos.size()>1){
 			throw new IllegalSyntaxException("Allow only one @init for "+CHILDREN_ATTR+" of "+comp);
 		}else if(initannos.size()==1){
-			processChildrenInit(comp,initannos.iterator().next());
+			processChildrenInit(comp,initannos.iterator().next(),converterInfo);
 		}
 		
 		Collection<Annotation> annos = compCtrl.getAnnotations(CHILDREN_ATTR); //get all annotation in the children with the order.
 
 		for(Annotation anno:annos){
 			if(anno.getName().equals(BIND_ANNO)){
-				processChildrenPromptBindings(comp,anno);
+				processChildrenPromptBindings(comp,anno,converterInfo);
 			}else if(anno.getName().equals(LOAD_ANNO)){
-				processChildrenLoadBindings(comp,anno);
+				processChildrenLoadBindings(comp,anno,converterInfo);
 			}
 		}
 
@@ -503,7 +503,7 @@ public class AnnotateBinderHelper {
 		}
 	}
 	
-	private void processChildrenInit(Component comp, Annotation anno) {
+	private void processChildrenInit(Component comp, Annotation anno,ExpressionAnnoInfo converterInfo) {
 		String initExpr = null;
 			
 		Map<String, String[]> args = null;
@@ -521,10 +521,12 @@ public class AnnotateBinderHelper {
 			}
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
-		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs);
+		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs,
+				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+				converterInfo == null ? null : converterInfo.args);
 	}
 	
-	private void processChildrenPromptBindings(Component comp, Annotation ann) {
+	private void processChildrenPromptBindings(Component comp, Annotation ann,ExpressionAnnoInfo converterInfo) {
 		String expr = null;
 		Map<String, String[]> args = null;
 		for (final Iterator<Entry<String,String[]>> it = ann.getAttributes().entrySet().iterator(); it.hasNext();) {
@@ -547,10 +549,12 @@ public class AnnotateBinderHelper {
 			
 		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 
-		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs);
+		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs,
+				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+				converterInfo == null ? null : converterInfo.args);
 	}
 	
-	private void processChildrenLoadBindings(Component comp, Annotation ann){
+	private void processChildrenLoadBindings(Component comp, Annotation ann, ExpressionAnnoInfo converterInfo){
 		String loadExpr = null;
 		final List<String> beforeCmds = new ArrayList<String>();
 		final List<String> afterCmds = new ArrayList<String>();
@@ -576,7 +580,9 @@ public class AnnotateBinderHelper {
 		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
 		_binder.addChildrenLoadBindings(comp, loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
-			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs);
+			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs,
+			converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+			converterInfo == null ? null : converterInfo.args);
 	}
 	
 	

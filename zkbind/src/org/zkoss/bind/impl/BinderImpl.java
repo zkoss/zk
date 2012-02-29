@@ -44,6 +44,7 @@ import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
+import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -116,6 +117,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		CONVERTERS.put("formatedNumber", new FormatedNumberConverter());
 		
 		CONVERTERS.put("uri", new UriConverter());
+		
+		CONVERTERS.put("childrenBinding", new ChildrenBindingConverter());//to converter object to List for children-binding
 	}
 	
 	//TODO can be defined in property-library
@@ -979,26 +982,38 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	
 	@Override
+	@Deprecated
 	public void addChildrenInitBinding(Component comp, String initExpr,Map<String, Object> initArgs) {
+		this.addChildrenInitBinding(comp, initExpr, initArgs,null,null);
+	}
+	@Override
+	public void addChildrenInitBinding(Component comp, String initExpr,Map<String, Object> initArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(initExpr==null){
 			throw new IllegalArgumentException("initExpr is null for children of "+comp);
 		}
-		addChildrenInitBinding0(comp,initExpr,initArgs);
+		addChildrenInitBinding0(comp,initExpr,initArgs,converterExpr,converterArgs);
 	}
 	
 	@Override
+	@Deprecated
 	public void addChildrenLoadBindings(Component comp,  String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+		addChildrenLoadBindings(comp, loadExpr, beforeCmds, afterCmds, bindingArgs,null, null);
+	}
+	@Override
+	public void addChildrenLoadBindings(Component comp,  String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
 		checkInit();
 		if(loadExpr==null){
 			throw new IllegalArgumentException("loadExpr is null for children of "+comp);
 		}
-		addChildrenLoadBindings0(comp, loadExpr, beforeCmds, afterCmds, bindingArgs);
+		addChildrenLoadBindings0(comp, loadExpr, beforeCmds, afterCmds, bindingArgs,converterExpr,converterArgs);
 	}
 	
-	private void addChildrenInitBinding0(Component comp, String initExpr, Map<String, Object> bindingArgs) {
+	private void addChildrenInitBinding0(Component comp, String initExpr, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		
@@ -1006,21 +1021,22 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_log.debug("add children-init-binding: comp=[%s],expr=[%s]", comp,initExpr);
 		}
 		
-		InitChildrenBindingImpl binding = new InitChildrenBindingImpl(this, comp, initExpr, bindingArgs);
+		InitChildrenBindingImpl binding = new InitChildrenBindingImpl(this, comp, initExpr, bindingArgs,converterExpr,converterArgs);
 		
 		addBinding(comp, CHILDREN_ATTR, binding); 
 		final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
 		_childrenBindingHandler.addInitBinding(bkey, binding);
 	}
 	
-	private void addChildrenLoadBindings0(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs) {
+	private void addChildrenLoadBindings0(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 
 		if(prompt){
 			if(_log.debugable()){
 				_log.debug("add event(prompt)-children-load-binding: comp=[%s],expr=[%s]", comp,loadExpr);
 			}
-			LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.PROMPT, null,  bindingArgs);
+			LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.PROMPT, null,  bindingArgs,converterExpr,converterArgs);
 			addBinding(comp, CHILDREN_ATTR, binding);
 			
 			final BindingKey bkey = getBindingKey(comp, CHILDREN_ATTR);
@@ -1028,7 +1044,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}else{
 			if(beforeCmds!=null && beforeCmds.length>0){
 				for(String cmd:beforeCmds){
-					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs);
+					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr, ConditionType.BEFORE_COMMAND, cmd, bindingArgs,converterExpr,converterArgs);
 					addBinding(comp, CHILDREN_ATTR, binding);
 					if(_log.debugable()){
 						_log.debug("add before command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);
@@ -1038,7 +1054,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 			if(afterCmds!=null && afterCmds.length>0){
 				for(String cmd:afterCmds){
-					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs);
+					LoadChildrenBindingImpl binding = new LoadChildrenBindingImpl(this, comp, loadExpr,  ConditionType.AFTER_COMMAND, cmd, bindingArgs,converterExpr,converterArgs);
 					addBinding(comp, CHILDREN_ATTR, binding);
 					if(_log.debugable()){
 						_log.debug("add after command children-load-binding: comp=[%s],expr=[%s],cmd=[%s]", comp,loadExpr, cmd);

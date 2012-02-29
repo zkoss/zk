@@ -19,8 +19,5 @@ package org.zkoss.bind.sys;
  * @since 6.0.0
  */
 public interface LoadPropertyBinding extends PropertyBinding, LoadBinding {
-	/**
-	 * a object to indicate to ignore the load() in load-property-binding, it is usually return by a converter
-	 */
-	public Object LOAD_IGNORED = new Object();
+
 }

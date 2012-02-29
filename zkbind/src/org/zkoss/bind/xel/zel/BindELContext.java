@@ -26,6 +26,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyChangeDisabled;
 import org.zkoss.bind.impl.BindContextUtil;
 import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.impl.LoadChildrenBindingImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.LoadPropertyBindingImpl;
 import org.zkoss.bind.impl.PropertyImpl;
@@ -206,6 +207,8 @@ public class BindELContext extends XelELContext {
 					((LoadPropertyBindingImpl)binding).addDependsOnTrackings(srcpath, basepath, props);
 				} else if (binding instanceof LoadFormBindingImpl) {
 					((LoadFormBindingImpl)binding).addDependsOnTrackings(srcpath, basepath, props);
+				} else if (binding instanceof LoadChildrenBindingImpl) {
+					((LoadChildrenBindingImpl)binding).addDependsOnTrackings(srcpath, basepath, props);
 				}
 			}
 		}

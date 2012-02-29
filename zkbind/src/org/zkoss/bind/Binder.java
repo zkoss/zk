@@ -224,9 +224,21 @@ public interface Binder {
 	 * @param comp the associated component, must not null
 	 * @param initExpr init expression, must not null
 	 * @param initArgs args key-value pairs for initial, nullable
+	 * @deprecated use {@link Binder#addChildrenInitBinding(Component, String, Map, String, Map)} instead. 
 	 */
 	public void addChildrenInitBinding(Component comp, String initExpr, Map<String,Object> initArgs);
 	
+	/**
+	 * init children of a component by an expression, it only execute once
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param initExpr init expression, must not null
+	 * @param initArgs args key-value pairs for initial, nullable
+	 * @param converterExpr the converter expression, nullable
+	 * @param converterArgs args key-value pairs for converter, nullable
+	 * @since 6.0.1
+	 */
+	public void addChildrenInitBinding(Component comp, String initExpr, Map<String,Object> initArgs,String converterExpr, Map<String, Object> converterArgs);
 	
 	/**
 	 * Add new children-load-bindings.
@@ -238,9 +250,27 @@ public interface Binder {
 	 * @param beforeCmds load before these commands, the command here is not a EL expression. nullable
 	 * @param afterCmds load after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @deprecated use {@link #addChildrenLoadBindings(Component, String, String[], String[], Map, String, Map)} instead.
 	 */
 	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, 
 			Map<String, Object> bindingArgs);
+	
+	/**
+	 * Add new children-load-bindings.
+	 * It creates a prompt|conditional children-load-binding depends on beforeCmds and afterCmds.
+	 * If both beforeCmds and afterCmds are null or empty, it create a prompt binding.
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param loadExpr load expression, must not null
+	 * @param beforeCmds load before these commands, the command here is not a EL expression. nullable
+	 * @param afterCmds load after these commands, the command here is not a EL expression. nullable
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @param converterExpr the converter expression, nullable
+	 * @param converterArgs args key-value pairs for converter, nullable
+	 * @since 6.0.1
+	 */
+	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, 
+			Map<String, Object> bindingArgs,String converterExpr, Map<String, Object> converterArgs);
 	
 	
 	/**
