@@ -11,6 +11,7 @@ ZK 6.0.1
   ZK-869: Binder should be serializable.  
   ZK-690: Binder is not work in cluster environment
   ZK-892: ChildrenBinding in Listbox pollute the collection model
+  ZK-891: Cannot turn on the multiple selection of the listbox when use databinding 1
   
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public

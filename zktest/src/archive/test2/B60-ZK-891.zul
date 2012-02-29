@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-891.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Feb 29 11:37:11 2012, Created by peterkuo
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+		ListModelList model = new ListModelList(list);
+		model.addToSelection(model.get(2));
+		model.setMultiple(true);
+		
+		BindingListModelList blist= new BindingListModelList(model,true);
+	]]></zscript>
+	<listbox width="150px"  model="${blist}" checkmark="true">
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+
+	</window>
+</zk>
