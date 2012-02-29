@@ -37,6 +37,7 @@ ZK 5.0.11
   ZK-873: Inconsistent display of select all checkbox in listheader if ROD is true
   ZK-859: bandbox popup not aligned correctly on FF10/IE9
   ZK-886: Accordion tabbox disabled issue
+  ZK-868: The image of the file upload button broke in the liferay
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

@@ -75,6 +75,8 @@ span.z-button {
 }
 .z-button .z-button-tl {
 	background-position: 0 0;
+	<%-- ZK-868, font size will affect of inner button's td height --%>
+	font-size: 0px;
 }
 .z-button .z-button-cl {
 	background-position: 0 0; text-align: right;
