@@ -17,8 +17,9 @@ ZK 6.0.1
   
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
-  + Added 2 argurments 'converterExpr' and converterArgs' to the end of org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings(),
-    you could pass null if you don't have a converter. (Original methods are deprecated) 
+  + Added 2 arguments 'converterExpr' and converterArgs' to the end of
+    org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings().
+    You could pass null if you don't have a converter. Original methods are deprecated.
   
 	--------
 ZK 6.0.0
