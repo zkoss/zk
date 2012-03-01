@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-893.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  01 16:50:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div>Drag the scroll bar to right side.</div>
+<div>The alignement beetween columns header and column cell should be fine</div>
+<listbox id="listbox" width="800px">
+
+<frozen columns="2" ></frozen>
+
+<listhead sizable="true">
+	<listheader label="A" width="100px"/>
+	<listheader label="B" width="100px"/>
+	<listheader label="C" width="100px"/>
+	<listheader label="D" visible="false"  width="100px"/>
+	<listheader label="E" width="100px"/>
+	<listheader label="A" width="100px"/>
+	<listheader label="B" visible="false"  width="100px"/>
+	<listheader label="C" width="100px"/>
+	<listheader label="D" width="100px"/>
+	<listheader label="E" width="100px"/>
+	<listheader label="A" visible="false"  width="100px"/>
+	<listheader label="B" width="100px"/>
+	<listheader label="C" width="100px"/>
+	<listheader label="D" width="100px"/>
+	<listheader label="E" width="100px"/>
+	<listheader label="A" width="100px"/>
+	<listheader label="B" visible="false"  width="100px"/>
+	<listheader label="C" width="100px"/>
+	<listheader label="D" width="100px"/>
+	<listheader label="E" visible="false"  width="100px"/>
+	<listheader label="A" width="100px"/>
+	<listheader label="B" width="100px"/>
+	<listheader label="C" width="100px"/>
+	<listheader label="D" width="100px"/>
+	<listheader label="E" width="100px"/>
+</listhead>
+
+<listitem>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddddddddddddd</listcell>
+	<listcell>Eeeee</listcell>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddddddddddddd</listcell>
+	<listcell>Eeeee</listcell>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddddddddddddd</listcell>
+	<listcell>Eeeee</listcell>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddddddddddddd</listcell>
+	<listcell>Eeeee</listcell>
+	<listcell>Aaaaaaaaaaaaa</listcell>
+	<listcell>Bbbbbbbbb</listcell>
+	<listcell>Ccccccccccccc</listcell>
+	<listcell>Ddddddddddddddddddddddd</listcell>
+	<listcell>Eeeee</listcell>
+</listitem>
+</listbox>
+</zk>
