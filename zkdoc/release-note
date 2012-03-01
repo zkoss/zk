@@ -20,7 +20,7 @@ ZK 6.0.1
   + Added 2 arguments 'converterExpr' and converterArgs' to the end of
     org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings().
     You could pass null if you don't have a converter. Original methods are deprecated.
-  
+  + Syntax of zk bind2 RENDERER annotation is changed from 'render-attr=render-class' to 'render-attr:render-class'
 	--------
 ZK 6.0.0
 Feb 14, 2012

@@ -1,0 +1,3 @@
+<div use="org.zkoss.zktest.bind.basic.Composite2">
+	<label id="lb" /><textbox id="tb" visible="false"/>
+</div>

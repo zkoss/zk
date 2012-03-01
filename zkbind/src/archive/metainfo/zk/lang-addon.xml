@@ -194,7 +194,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindComboitemRenderer</attribute-value>
+				<attribute-value>itemRenderer:org.zkoss.bind.impl.BindComboitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -499,7 +499,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>rowRenderer=org.zkoss.bind.impl.BindRowRenderer</attribute-value>
+				<attribute-value>rowRenderer:org.zkoss.bind.impl.BindRowRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -594,7 +594,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindListitemRenderer</attribute-value>
+				<attribute-value>itemRenderer:org.zkoss.bind.impl.BindListitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -899,7 +899,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>radioRenderer=org.zkoss.bind.impl.BindRadioRenderer</attribute-value>
+				<attribute-value>radioRenderer:org.zkoss.bind.impl.BindRadioRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -966,7 +966,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindSelectboxRenderer</attribute-value>
+				<attribute-value>itemRenderer:org.zkoss.bind.impl.BindSelectboxRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -1289,7 +1289,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<annotation-name>ZKBIND</annotation-name>
 			<attribute>
 				<attribute-name>RENDERER</attribute-name>
-				<attribute-value>itemRenderer=org.zkoss.bind.impl.BindTreeitemRenderer</attribute-value>
+				<attribute-value>itemRenderer:org.zkoss.bind.impl.BindTreeitemRenderer</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>

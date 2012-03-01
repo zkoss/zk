@@ -15,10 +15,12 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -735,14 +737,14 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			String initExpr, Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs) {
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
 		String loadrep = null;
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			loadrep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			loadrep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),comp,attr,Binder.LOAD_REPLACEMENT); //check replacement of attr when loading
 			
-			final String type = testString(attrs.get(Binder.LOAD_TYPE)); //check type of attr when loading
+			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),comp,attr,Binder.LOAD_TYPE); //check type of attr when loading
 			if (type != null) {
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -766,20 +768,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	private String getSystemConverter(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl,attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return testString(attrs.get(Binder.CONVERTER)); //system converter if exists
+			return AnnotationUtil.testString(attrs.get(Binder.CONVERTER),comp,attr,Binder.CONVERTER); //system converter if exists
 		}
 		return null;
 	}
 	
 	private String getSystemValidator(Component comp, String attr) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			return testString(attrs.get(Binder.VALIDATOR)); //system validator if exists
+			return AnnotationUtil.testString(attrs.get(Binder.VALIDATOR),comp,attr,Binder.VALIDATOR); //system validator if exists
 		}
 		return null;
 	}
@@ -791,14 +793,20 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 		
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(null, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, null, Binder.ZKBIND);
 		final Map<String, String[]> attrs = ann != null ? ann.getAttributes() : null; //(tag, tagExpr)
 		
 		if (attrs != null) {
-			final String rendererName = testString(attrs.get(Binder.RENDERER)); //renderer if any
+			final String rendererName = AnnotationUtil.testString(attrs.get(Binder.RENDERER),comp,attr,Binder.RENDERER); //renderer if any
 			//setup renderer
 			if (rendererName != null) { //there was system renderer
-				final String[] values = rendererName.split("=", 2);
+				String[] values = null;
+				if(rendererName.indexOf("=")!=-1){
+					values = rendererName.split("=", 2);//zk 6.0.0
+				}else{
+					values = rendererName.split(":", 2);//after zk 6.0.1
+				}
+				
 				if (values != null) {
 					final Object renderer = getRenderer(values[1]);
 					//check if user has set a renderer
@@ -826,17 +834,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	
-	private String testString(String[] string){
-		if(string==null || string.length==0){
-			return null;
-		}else if(string.length==1){
-			return string[0];
-		}else{
-			throw new IndexOutOfBoundsException("size="+string.length);
-		}
-	}
-	
 	private void addPropertyLoadBindings0(Component comp, String attr,
 			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
@@ -844,7 +841,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		//check attribute _accessInfo natural characteristics to register Command event listener
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
 		//check which attribute of component should load to component on which event.
 		//the event is usually a engine lifecycle event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onAfterRender'
@@ -853,15 +850,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		Class<?> attrType = null;//default is any class
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = (String) testString(attrs.get(Binder.ACCESS)); //_accessInfo right, "both|save|load", default to load
+			final String rw = (String) AnnotationUtil.testString(attrs.get(Binder.ACCESS),comp,attr,Binder.ACCESS); //_accessInfo right, "both|save|load", default to load
 			if (rw != null && !"both".equals(rw) && !"load".equals(rw)) { //save only, skip
 				return;
 			}
-			evtnm = testString(attrs.get(Binder.LOAD_EVENT)); //check trigger event for loading
+			evtnm = AnnotationUtil.testString(attrs.get(Binder.LOAD_EVENT),comp,attr,Binder.LOAD_EVENT); //check trigger event for loading
 			
-			loadRep = testString(attrs.get(Binder.LOAD_REPLACEMENT)); //check replacement of attr when loading
+			loadRep = AnnotationUtil.testString(attrs.get(Binder.LOAD_REPLACEMENT),comp,attr,Binder.LOAD_REPLACEMENT); //check replacement of attr when loading
 			
-			final String type = testString(attrs.get(Binder.LOAD_TYPE)); //check type of attr when loading
+			final String type = AnnotationUtil.testString(attrs.get(Binder.LOAD_TYPE),comp,attr,Binder.LOAD_TYPE); //check type of attr when loading
 			if(type!=null){
 				try {
 					attrType = Classes.forNameByThread(type);
@@ -919,7 +916,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		final boolean prompt = isPrompt(beforeCmds,afterCmds);
 		//check attribute _accessInfo natural characteristics to register Command event listener 
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		final Annotation ann = compCtrl.getAnnotation(attr, Binder.ZKBIND);
+		final Annotation ann = AnnotationUtil.getOverrideAnnotation(compCtrl, attr, Binder.ZKBIND);
 		//check which attribute of component should fire save on which event.
 		//ex, listbox's 'selectedIndex' should be loaded to component on 'onSelect'
 		//ex, checkbox's 'checked' should be saved to bean on 'onCheck'
@@ -927,13 +924,13 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		String saveRep = null;
 		if (ann != null) {
 			final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
-			final String rw = testString(attrs.get(Binder.ACCESS)); //_accessInfo right, "both|save|load", default to load
+			final String rw = AnnotationUtil.testString(attrs.get(Binder.ACCESS),comp,attr,Binder.ACCESS); //_accessInfo right, "both|save|load", default to load
 			if (!"both".equals(rw) && !"save".equals(rw)) { //load only, skip
 				return;
 			}
-			evtnm = testString(attrs.get(Binder.SAVE_EVENT)); //check trigger event for saving
+			evtnm = AnnotationUtil.testString(attrs.get(Binder.SAVE_EVENT),comp,attr,Binder.SAVE_EVENT); //check trigger event for saving
 			
-			saveRep = testString(attrs.get(Binder.SAVE_REPLACEMENT)); //check replacement of attr when saving
+			saveRep = AnnotationUtil.testString(attrs.get(Binder.SAVE_REPLACEMENT),comp,attr,Binder.SAVE_REPLACEMENT); //check replacement of attr when saving
 		}
 		if (evtnm == null) { 
 			//no trigger event, since the value never change of component, so both prompt and command are useless

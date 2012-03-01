@@ -125,7 +125,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				cmdExprs.add(testString(comp,propName,tag,tagExpr));
+				cmdExprs.add(AnnotationUtil.testString(tagExpr,comp,propName,tag));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -157,7 +157,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				cmdExprs.add(testString(comp,propName,tag,tagExpr));
+				cmdExprs.add(AnnotationUtil.testString(tagExpr,comp,propName,tag));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -214,7 +214,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = testString(comp, propName, tag, tagExpr);
+				initExpr = AnnotationUtil.testString(tagExpr, comp, propName, tag);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -236,7 +236,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				expr = testString(comp,propName,tag, tagExpr);
+				expr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
 			} else if ("before".equals(tag)) {
 				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support before commands, check property "+propName+" of "+comp);
 			} else if ("after".equals(tag)) {
@@ -264,16 +264,6 @@ public class AnnotateBinderHelper {
 				validatorInfo == null ? null : validatorInfo.args);
 	}
 	
-	private String testString(Object comp,String propName, String tag, String[] string){
-		if(string==null || string.length==0){
-			return null;
-		}else if(string.length==1){
-			return string[0];
-		}else{
-			throw new IllegalSyntaxException("Allow only one String in "+tag +":"+propName+":"+comp+", but get "+string.length);
-		}
-	}
-	
 	private void addCommand(Component comp, List<String> cmds, String[] cmdExprs){
 		for(String cmdExpr:(String[])cmdExprs){
 			addCommand(comp,cmds,cmdExpr);
@@ -294,7 +284,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = testString(comp,propName,tag, tagExpr);
+				loadExpr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -326,7 +316,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				saveExpr = testString(comp,propName,tag, tagExpr);
+				saveExpr = AnnotationUtil.testString(tagExpr,comp,propName,tag);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -401,7 +391,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = testString(comp, formId, tag, tagExpr);
+				initExpr = AnnotationUtil.testString(tagExpr,comp, formId, tag);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -424,7 +414,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = testString(comp,formId,tag, tagExpr);
+				loadExpr = AnnotationUtil.testString(tagExpr,comp,formId,tag);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds, tagExpr);
 			} else if ("after".equals(tag)) {
@@ -454,7 +444,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				saveExpr = testString(comp,formId,tag, tagExpr);
+				saveExpr = AnnotationUtil.testString(tagExpr,comp,formId,tag);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -512,7 +502,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				initExpr = testString(comp, CHILDREN_ATTR, tag, tagExpr);
+				initExpr = AnnotationUtil.testString(tagExpr,comp, CHILDREN_ATTR, tag);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -534,7 +524,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				expr = testString(comp,CHILDREN_ATTR,tag, tagExpr);
+				expr = AnnotationUtil.testString(tagExpr,comp,CHILDREN_ATTR,tag);
 			} else if ("before".equals(tag)) {
 				throw new IllegalSyntaxException("@bind is for prompt binding only, doesn't support before commands, check property "+CHILDREN_ATTR+" of "+comp);
 			} else if ("after".equals(tag)) {
@@ -565,7 +555,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				loadExpr = testString(comp,CHILDREN_ATTR,tag, tagExpr);
+				loadExpr = AnnotationUtil.testString(tagExpr,comp,CHILDREN_ATTR,tag);
 			} else if ("before".equals(tag)) {
 				addCommand(comp,beforeCmds,tagExpr);
 			} else if ("after".equals(tag)) {
@@ -603,7 +593,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = testString(compCtrl,propName,tag, tagExpr);
+				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
 			} else { // other unknown tag, keep as arguments
 				if (args== null) {
 					args = new HashMap<String, String[]>();
@@ -632,7 +622,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = testString(compCtrl,propName,tag, tagExpr);
+				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
 			} else { // other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
@@ -661,7 +651,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				info.expr = testString(compCtrl,propName,tag, tagExpr);
+				info.expr = AnnotationUtil.testString(tagExpr,(Component)compCtrl,propName,tag);
 			} else { // other unknown tag, keep as arguments
 				if (args == null) {
 					args = new HashMap<String, String[]>();
