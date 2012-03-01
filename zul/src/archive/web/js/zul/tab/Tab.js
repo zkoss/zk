@@ -241,6 +241,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var closebtn = this.$n('close');
+		// ZK-886
+		this.logId(this);
 		if (closebtn) {
 			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
 			if (zk.ie6_)
@@ -261,18 +263,24 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		out.push('<', tag, this.domAttrs_({domClass:1}), ' class="z-renderdefer"></', tag,'>');
 	},
 	rerender: function (skipper) {
-		// ZK-886, this._rerendering used in tab.js
-		// this.$n() will be cleared during rerender
-		// but LinkedPanel.firstChild will not,
-		// the condition LinkedPanel.firstChild != this.$n()
-		// will get the wrong result
-		// delete it later for the invalidate() case
-		var wgt = this;
-		if (!this._rerendering)
-			wgt._rerendering = setTimeout(function () {
-				delete wgt._rerendering;
-			}, 0);
+		// ZK-886
+		this.logId(this);
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
+	},
+	// ZK-886, called by unbind_ and rerender
+	// this._oldId used in tab.js
+	// this.$n() will be cleared during rerender
+	// but LinkedPanel.firstChild will not,
+	// the condition LinkedPanel.firstChild != this.$n()
+	// will get the wrong result
+	// delete it later for the invalidate() case
+	logId: function (wgt) {
+		if (!wgt._oldId) {
+			wgt._oldId = wgt.uuid;
+			setTimeout(function () {
+				delete wgt._oldId;
+			}, 0);
+		}
 	}
 });
 /** @class zul.tab.TabRenderer
