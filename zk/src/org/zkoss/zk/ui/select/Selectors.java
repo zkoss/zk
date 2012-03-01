@@ -208,7 +208,7 @@ public class Selectors {
 					// no forwarding, just add to event listener
 					for (Component c : iter) {
 						Set<String> set = getEvtLisSet(c, EVT_LIS);
-						String mhash = method.toString();
+						String mhash = name + "#" + method.toString();
 						if (set.contains(mhash))
 							continue;
 						c.addEventListener(name, new ComposerEventListener(method, controller));
