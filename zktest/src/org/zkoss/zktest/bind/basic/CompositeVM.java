@@ -7,6 +7,7 @@ public class CompositeVM {
 
 	String name = "Dennis";
 	String value = "100";
+	String title = "RD";
 
 	public String getName() {
 		return name;
@@ -23,12 +24,23 @@ public class CompositeVM {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	@Command
-	@NotifyChange({ "name", "value" })
+	@NotifyChange({ "name", "value","title" })
 	public void reset() {
 		name = "Lin";
 		value = "34";
+		value = "MVP";
 	}
 
 }

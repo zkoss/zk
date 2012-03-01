@@ -1,0 +1,3 @@
+<div>
+	<label id="lb" /><textbox id="tb" visible="false"/>
+</div>

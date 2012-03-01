@@ -1,13 +1,16 @@
 <?component name="editor1" extends="div" class="org.zkoss.zktest.bind.basic.Composite1"?>
 <?component name="editor2" macroURI="/bind/basic/composite2.zul"?>
+<?component name="editor3" macroURI="/bind/basic/composite3.zul" class="org.zkoss.zktest.bind.basic.Composite3"?>
 <window  apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CompositeVM')" >
 	<vbox>
 		<hbox>Name:<editor1 value="@bind(vm.name)"/></hbox>
 		<hbox>Value:<editor2 value="@bind(vm.value)"/>Not work currently</hbox>
+		<hbox>Title:<editor3 value="@bind(vm.title)"/></hbox>
 	</vbox>
 	<vbox>
 		<hbox>Name:<label value="@bind(vm.name)"/></hbox>
 		<hbox>Value:<label value="@bind(vm.value)"/></hbox>
+		<hbox>Title::<label value="@bind(vm.title)"/></hbox>
 	</vbox>		
 	<button label="reset" onClick="@command('reset')"/>
 	<button label="dump" onClick="binder.tracker.dump()"/>
