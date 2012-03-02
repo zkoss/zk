@@ -274,6 +274,17 @@ public interface Binder {
 	
 	
 	/**
+	 * Add a new reference-binding.
+	 * It creates an attribute as the reference of the expression in the component. 
+	 * 
+	 * @param comp the associated component, must not null
+	 * @param attr the name of reference that stored in the component; ex myval, must not null
+	 * @param loadExpr load expression, must not null
+	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 */
+	public void addReferenceBinding(Component comp,String attr, String loadExpr,Map<String, Object> bindingArgs);
+	
+	/**
 	 * Remove all managed bindings that associated with the specified component.
 	 * @param comp
 	 */

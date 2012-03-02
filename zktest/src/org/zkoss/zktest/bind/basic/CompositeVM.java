@@ -40,7 +40,7 @@ public class CompositeVM {
 	public void reset() {
 		name = "Lin";
 		value = "34";
-		value = "MVP";
+		title = "MVP";
 	}
 
 }

@@ -43,6 +43,7 @@ public class AnnotateBinderHelper {
 	final static private String BIND_ANNO = "bind";
 	final static private String LOAD_ANNO = "load";
 	final static private String SAVE_ANNO = "save";
+	final static private String REFERENCE_ANNO = "ref";
 	final static private String ID_ANNO = "id";
 	final static private String VALIDATOR_ANNO = "validator";
 	final static private String CONVERTER_ANNO = "converter";
@@ -196,6 +197,8 @@ public class AnnotateBinderHelper {
 				processPropertyLoadBindings(comp,propName,anno,converterInfo);
 			}else if(anno.getName().equals(SAVE_ANNO)){
 				processPropertySaveBindings(comp,propName,anno,converterInfo,validatorInfo);
+			}else if(anno.getName().equals(REFERENCE_ANNO)){
+				processReferenceBinding(comp,propName,anno);
 			}
 		}
 
@@ -203,6 +206,27 @@ public class AnnotateBinderHelper {
 		if(templateInfo!=null){
 			_binder.setTemplate(comp, propName, templateInfo.expr, templateInfo.args);
 		}
+	}
+	
+	private void processReferenceBinding(Component comp, String propName, Annotation anno) {
+		String loadExpr = null;
+			
+		Map<String, String[]> args = null;
+		for (final Iterator<Entry<String,String[]>> it = anno.getAttributes().entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				loadExpr = AnnotationUtil.testString(tagExpr, comp, propName, tag);
+			} else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		_binder.addReferenceBinding(comp, propName, loadExpr, parsedArgs);
 	}
 	
 	private void processPropertyInit(Component comp, String propName, Annotation anno,ExpressionAnnoInfo converterInfo) {

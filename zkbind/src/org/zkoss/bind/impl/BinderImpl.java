@@ -15,12 +15,10 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -154,6 +152,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
 	private static final String CHILDREN_ATTR = "$CHILDREN$";
+	private static final String REFERENCE_SET = "$REF_SET$";
 	private static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
 	//Command lifecycle result
@@ -1012,8 +1011,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void addChildrenInitBinding0(Component comp, String initExpr, Map<String, Object> bindingArgs,
 			String converterExpr, Map<String, Object> converterArgs) {
 		
-		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
-		
 		if(_log.debugable()){
 			_log.debug("add children-init-binding: comp=[%s],expr=[%s]", comp,initExpr);
 		}
@@ -1060,6 +1057,31 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void addReferenceBinding(Component comp, String attr,  String loadExpr, Map<String, Object> bindingArgs) {
+		checkInit();
+		if(loadExpr==null){
+			throw new IllegalArgumentException("loadExpr is null for reference of "+comp);
+		}
+		addReferenceBinding0(comp, attr, loadExpr, bindingArgs);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addReferenceBinding0(Component comp, String attr, String loadExpr, Map<String, Object> bindingArgs) {
+		if(_log.debugable()){
+			_log.debug("add reference-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
+		}
+		ReferenceBindingImpl binding = new ReferenceBindingImpl(this, loadExpr, comp);
+		comp.setAttribute(attr,binding);
+		addBinding(comp, attr, binding);
+		
+		Set<String> refs = (Set<String>)comp.getAttribute(REFERENCE_SET,Component.COMPONENT_SCOPE);
+		if(refs==null){
+			comp.setAttribute(REFERENCE_SET,refs=new HashSet<String>());
+		}
+		refs.add(attr);
 	}
 
 	private boolean isPrompt(String[] beforeCmds, String[] afterCmds){
@@ -1690,11 +1712,39 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		removeTemplateResolver(comp);
 		
+		removeReferenceBinding(comp);
+		
 		//remove trackings
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
 
 		comp.removeAttribute(BINDER);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void removeReferenceBinding(Component comp) {
+		//remove all reference that store in component
+		Set<String> refs = (Set<String>)comp.removeAttribute(REFERENCE_SET);
+		if(refs!=null){
+			for(String attr:refs){
+				comp.removeAttribute(attr);
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void removeReferenceBinding(Component comp,String attr) {
+		//remove the reference that store in component
+		Set<String> refs = (Set<String>)comp.getAttribute(REFERENCE_SET,Component.COMPONENT_SCOPE);
+		if(refs!=null){
+			if(refs.remove(attr)){
+				comp.removeAttribute(attr);
+			}
+			if(refs.size()==0){
+				comp.removeAttribute(REFERENCE_SET);
+			}
+		}
+		
 	}
 
 	/**
@@ -1718,6 +1768,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_hasValidators.remove(bkey);
 		
 		removeTemplateResolver(comp,key);
+		
+		removeReferenceBinding(comp,key);
 		
 		removeBindings(removed);
 	}
