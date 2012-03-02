@@ -281,6 +281,7 @@ public interface Binder {
 	 * @param attr the name of reference that stored in the component; ex myval, must not null
 	 * @param loadExpr load expression, must not null
 	 * @param bindingArgs args key-value pairs for this binding, nullable
+	 * @since 6.0.1
 	 */
 	public void addReferenceBinding(Component comp,String attr, String loadExpr,Map<String, Object> bindingArgs);
 	
