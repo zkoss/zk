@@ -4,6 +4,7 @@ ZK 6.0.1
   ZK-883: A way to specify component's annotation in component's Java class
   ZK-864: Make ValidationContext easier
   ZK-889: Children binding should support converter
+  ZK-901: Provide reference-binding
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
