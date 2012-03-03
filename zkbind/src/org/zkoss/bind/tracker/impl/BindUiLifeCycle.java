@@ -19,6 +19,7 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -106,6 +107,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 	
 	private void removeBindings0(Component comp) {
+		//A component with renderer; might need to remove $MODEL$
+		final Object installed = comp.removeAttribute(BinderImpl.RENDERER_INSTALLED); 
+		if (installed != null) { 
+			BindELContext.removeModel(comp);
+		}
 		final Binder binder = (Binder) comp.getAttribute(BinderImpl.BINDER);
 		if (binder != null) {
 			binder.removeBindings(comp);
