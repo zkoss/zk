@@ -1,0 +1,17 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00905FormNotifyChange')">
+	<label multiline="true">
+		1.edit the textbox, the 3 label should change too
+	</label>
+	<label value="@bind(vm.person.name)"/>
+	<hbox form="@id('fx') @load(vm.person) @save(vm.person, before='save')">
+		Name:
+		<textbox id="tb" value="@bind(fx.name)" instant="true" />
+		<label id="l1" value="@load(fx.name)"/>
+		<label id="l2" value="@load(fx['name'])"/>
+		<label id="l3" value="@load(fx[vm.prop])"/>
+		<button id="btn" label="Save" disabled="@load(empty fx.name)" onClick="@command('save')" />
+	</hbox>
+	<button label="dump" onClick="binder.tracker.dump()"/>
+</window>

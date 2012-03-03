@@ -1,0 +1,15 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00911FormNotifyChange')">
+	<label multiline="true">
+		1.click notify1, all the label should change to Alex
+	</label>
+	<hbox form="@id('fx') @load(vm.person)">
+		
+		<label id="l1" value="@load(fx.name)"/>
+		<label id="l2" value="@load(fx['name'])"/>
+		<label id="l3" value="@load(fx[vm.prop])"/>
+		<button id="btn" label="Notify1" onClick="@command('notify1',fx=fx)" />
+	</hbox>
+	<button label="dump" onClick="binder.tracker.dump()"/>
+</window>
