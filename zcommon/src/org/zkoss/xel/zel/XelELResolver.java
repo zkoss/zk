@@ -29,6 +29,7 @@ import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.ResourceBundleELResolver;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
@@ -107,7 +108,7 @@ public class XelELResolver extends ELResolver {
 		}
 
 		if (base == null) {
-			throw new PropertyNotWritableException();
+			throw new PropertyNotWritableException(Objects.toString(property));
 		}
 
 		getELResolver().setValue(ctx, base, property, value);
