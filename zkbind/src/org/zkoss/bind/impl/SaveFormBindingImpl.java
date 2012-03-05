@@ -98,7 +98,9 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 			for (String field : ((FormExt)form).getSaveFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
-					final Object value = form.getField(field);
+					//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
+					final ExpressionX formExpr = getFormExpression(eval, field);
+					final Object value = eval.getValue(null, comp, formExpr);//form.getField(field);
 					eval.setValue(ctx, comp, expr, value);
 				}
 			}
@@ -139,7 +141,9 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final ValueReference ref = eval.getValueReference(ctx, comp, expr);
-					final Object value = form.getField(field);
+					//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
+					final ExpressionX formExpr = getFormExpression(eval, field);
+					final Object value = eval.getValue(null, comp, formExpr);//form.getField(field);
 					properties.add(new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value));
 				}
 			}

@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.xel.zel;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -128,6 +129,12 @@ public class BindELContext extends XelELContext {
 			notifys.add(new PropertyImpl(base, prop, value));
 		}
 		return notifys;
+	}
+	
+	public static void addNotifys(Object base, String prop, Object value, BindContext ctx) {
+		final Set<Property> properties = new HashSet<Property>(3);
+		properties.add(new PropertyImpl(base, prop, value));
+		addNotifys(properties, ctx);
 	}
 	
 	public static void addNotifys(Method m, Object base, String prop, Object value, BindContext ctx) {

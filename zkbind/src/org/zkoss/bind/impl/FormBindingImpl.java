@@ -84,6 +84,16 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		return expr;
 	}
 	
+	protected ExpressionX getFormExpression(BindEvaluatorX eval, String field) {
+		final String script = BindELContext.appendFields(getFormId(), field);
+		ExpressionX expr  = _fieldExprs.get(script);
+		if (expr  == null) {
+			expr = eval.parseExpressionX(null, script, Object.class);
+			_fieldExprs.put(script, expr);
+		}
+		return expr;
+	}
+	
 	protected ExpressionX getBaseExpression(BindEvaluatorX eval) {
 		//TODO, Dennis potential bug if a field name same as form id
 		final String property = getPropertyString();

@@ -13,12 +13,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.xel.zel;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
@@ -78,9 +78,8 @@ public class BindELResolver extends XelELResolver {
 		tieValue(ctx, base, property, value, true);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private static List<String> getPathList(BindELContext ctx){
-		return (List<String>)ctx.getContext(Path.class);//get path, see #PathResolver
+	private static Path getPathList(BindELContext ctx){
+		return (Path)ctx.getContext(Path.class);//get path, see #PathResolver
 	}
 
 	//save value into equal beans
@@ -113,17 +112,17 @@ public class BindELResolver extends XelELResolver {
 		//only there is a binding that needs tie tracking to value
 		if (binding != null) {
         	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
-        	final List<String> path = getPathList(ctx);
+        	final Path path = getPathList(ctx);
         	
         	String script = null;
 			if (base instanceof Form) {
 				if (nums > 0) { //still in resolving the form field
 					return;
 				} else { //done resolving the form field
-					script = FormELResolver.fieldName(path);
+					script = path.getTrackFieldName();
 				}
 			} else {
-				script = propertyName(path.listIterator(path.size()).previous());
+				script = path.getTrackProperty();
 			}
 			final Binder binder = binding.getBinder();
 			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
@@ -131,46 +130,43 @@ public class BindELResolver extends XelELResolver {
 			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
 			
 			if (base != null) {
-				if (nums == 0 && binding instanceof SaveBinding) { //a done save operation, form or not form
-					saveEqualBeans(elCtx, base, (String) propName, value);
-				}
-				if (!(base instanceof Form)) { //no @DependsOn and @NotifyChange in Form
-					final Method m = (Method) ctx.getContext(Method.class);
-					//parse @DependsOn and add into dependency tracking
-					final boolean prompt = bctx != null && bctx.getCommandName() == null; 
-					if (prompt && binding instanceof LoadBinding && m != null) {
-						//FormBinding shall not check @DependsOn() for dependent nodes
-						if (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size()) {
-							BindELContext.addDependsOnTrackings(m, basePath(path), path, binding, bctx);
+				if (binding instanceof SaveBinding) {
+					if (nums == 0) { //a done save operation, form or not form
+						//handle equal beans
+						saveEqualBeans(elCtx, base, (String) propName, value);
+						
+						//ZK-913 Value is reload after validation fail, 
+						//only when notify is allowed.
+						//parse @NotifyChange and collect Property to publish PropertyChangeEvent
+						if (allownotify) { 
+							//ZK-905 Save into a Form should fire NotifyChange
+							if (base instanceof Form) {
+								//collect notify property, kept in BindContext
+								BindELContext.addNotifys(base, (String) propName, value, bctx);
+								if (base instanceof FormExt)
+									BindELContext.addNotifys(((FormExt)base).getStatus(), "*", null, bctx);
+							} else {
+								final Method m = (Method) ctx.getContext(Method.class);
+								//collect Property for @NotifyChange, kept in BindContext
+								//see BinderImpl$CommandEventListener#onEvent()
+								BindELContext.addNotifys(m, base, (String) propName, value, bctx);
+							}
 						}
 					}
-					
-					//ZK-913 Value is reload after validation fail, 
-					//only when notify is allowed.
-					//parse @NotifyChange and collect Property to publish PropertyChangeEvent
-					if (allownotify && nums == 0 && binding instanceof SaveBinding) { //a done save operation
-						//collect Property for @NotifyChange, kept in BindContext
-						//see BinderImpl$CommandEventListener#onEvent()
-						BindELContext.addNotifys(m, base, (String) propName, value, bctx);
+				} else if (!(base instanceof Form) && binding instanceof LoadBinding) { //no @DependsOn in Form bean
+					//parse @DependsOn and add into dependency tracking
+					final Method m = (Method) ctx.getContext(Method.class);
+					if (m != null) {
+						final boolean prompt = bctx != null && bctx.getCommandName() == null; 
+						if (prompt) {
+							//FormBinding shall not check @DependsOn() for dependent nodes
+							if (!(binding instanceof LoadFormBindingImpl) || ((LoadFormBindingImpl)binding).getSeriesLength() <= path.size()) {
+								BindELContext.addDependsOnTrackings(m, path.getTrackBasePath(), path.getTrackFieldsList(), binding, bctx);
+							}
+						}
 					}
 				}
 			}
 		}
 	}
-
-	//get the path before the last dot, to be a basepath 
-	//ex, base path of 'vm.person.address.fullstr' will become 'vm.person.address'
-	//so, a depends-on(city) on fullstr in address will add a depends to 'vm.person.address'.'city'
-	private String basePath(List<String> path) {
-    	final StringBuffer sb = new StringBuffer();
-		for(String prop : path.subList(0, path.size()-1)) { //remove the last one
-			sb.append(prop);
-		}
-    	return sb.charAt(0) == '.' ? sb.substring(1) : sb.toString();
-	}
-	
-	private String propertyName(String script) {
-    	return script.charAt(0) == '.' ? script.substring(1) : script;
-	}
-	
 }

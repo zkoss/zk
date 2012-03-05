@@ -57,7 +57,9 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 					final ExpressionX expr = getFieldExpression(eval, field);
 					if (expr != null) {
 						final Object fieldval = eval.getValue(ctx, comp, expr);
-						form.setField(field, fieldval);
+						//ZK-911. Save into Form bean via expression(so will use form's AccessFieldName)
+						final ExpressionX formExpr = getFormExpression(eval, field);
+						eval.setValue(null, comp, formExpr, fieldval);
 					}
 				}
 				((FormExt)form).resetDirty(); //initial loading, mark form as clean

@@ -18,15 +18,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.bind.Form;
-import org.zkoss.bind.FormExt;
 import org.zkoss.bind.impl.Path;
-import org.zkoss.bind.sys.Binding;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
-import org.zkoss.zel.impl.lang.EvaluationContext;
 
 /**
  * ELResolver for {@link Form}.
@@ -43,11 +40,11 @@ public class FormELResolver extends ELResolver {
         if (base instanceof Form) {
         	//don't care the property, at there, get the path (the key of field in form), the path was built by PathResolver) 
         	final int nums = ((Integer) ctx.getContext(Integer.class)).intValue(); //get numOfKids, see #PathResolver
-        	final List<String> path = getPathList(ctx); //get path, see #PathResolver
+        	final Path path = getPathList(ctx); //get path, see #PathResolver
         	
             ctx.setPropertyResolved(true);
             if (nums == 0) { //last property
-            	final String fieldName = fieldName(path);
+            	final String fieldName = path.getAccessFieldName();
             	return ((Form) base).getField(fieldName);
             } else {
             	return base; //allow FORM resolving to continue!
@@ -65,8 +62,8 @@ public class FormELResolver extends ELResolver {
 
         if (base instanceof Form) {
             ctx.setPropertyResolved(true);
-        	final List<String> path = getPathList(ctx); //get path, see #PathResolver
-        	final String fieldName = fieldName(path);
+        	final Path path = getPathList(ctx); //get path, see #PathResolver
+        	final String fieldName = path.getAccessFieldName();
             final Object result = ((Form) base).getField(fieldName);
             if (result != null) {
             	return result.getClass();
@@ -84,34 +81,16 @@ public class FormELResolver extends ELResolver {
         }
 
         if (base instanceof Form) {
-        	final List<String> path = getPathList(ctx);//get path, see #PathResolver
-        	final String fieldName = fieldName(path);
+        	final Path path = getPathList(ctx);//get path, see #PathResolver
+        	final String fieldName = path.getAccessFieldName();
         	ctx.setPropertyResolved(true);
             ((Form) base).setField(fieldName, value);
-            
-            //notify form status change
-            Binding binding = ((BindELContext)((EvaluationContext)ctx).getELContext()).getBinding();
-            if(binding!=null && base instanceof FormExt){
-            	//notify form status was changed.
-            	binding.getBinder().notifyChange(((FormExt)base).getStatus(), "*");
-            }
         }
     }
     
-	@SuppressWarnings("unchecked")
-	private static List<String> getPathList(ELContext ctx){
-		return (List<String>)ctx.getContext(Path.class);//get path, see #PathResolver
+	private static Path getPathList(ELContext ctx){
+		return (Path)ctx.getContext(Path.class);//get path, see #PathResolver
 	}
-    
-    /*package*/ static String fieldName(List<String> path) {
-    	final StringBuffer sb = new StringBuffer();
-    	final Iterator<String> it = path.iterator();
-    	it.next(); //skip the 1st form property
-    	while(it.hasNext()) {
-    		sb.append(it.next());
-    	}
-    	return sb.charAt(0) == '.' ? sb.substring(1) : sb.toString();
-    }
     
     @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)

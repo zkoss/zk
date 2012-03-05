@@ -31,7 +31,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.WrongValuesException;
-import org.zkoss.zk.ui.util.Clients;
 
 /**
  * Implementation of {@link SavePropertyBinding}.

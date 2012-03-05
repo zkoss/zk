@@ -57,7 +57,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 				if (expr != null) {
 					final Object value = eval.getValue(ctx, comp, expr);
 					if(!activating){//don't load to form if activating
-						form.setField(field, value);
+						//ZK-911. Save into Form bean via expression(so will use form's AccessFieldName)
+						final ExpressionX formExpr = getFormExpression(eval, field);
+						eval.setValue(null, comp, formExpr, value); //formExprform.setField(field, value);
 					}
 				}
 			}

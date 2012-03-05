@@ -16,6 +16,8 @@ ZK 6.0.1
   ZK-891: Cannot turn on the multiple selection of the listbox when use databinding 1
   ZK-888: ZK bind ChildrenBinding fail to convert one object to a list
   ZK-913: Value is reload after validation fail
+  ZK-905: Save into a Form bean should fire NotifyChange
+  ZK-911: NotifyChange of a property of a Form is not reloaded.
   
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public

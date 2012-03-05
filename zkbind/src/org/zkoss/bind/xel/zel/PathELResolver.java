@@ -13,12 +13,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.xel.zel;
 
 import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Stack;
 
 import org.zkoss.bind.impl.Path;
+import org.zkoss.lang.Objects;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
@@ -35,7 +34,7 @@ import org.zkoss.zel.impl.parser.Node;
  */
 public class PathELResolver extends ELResolver {
 	private Stack<Integer> _numOfKids = new Stack<Integer>();
-	private Stack<List<String>> _paths = new Stack<List<String>>();
+	private Stack<Path> _paths = new Stack<Path>();
 	
 	private String toNodeString(ELContext ctx) {
 		final Node node0 = (Node) ctx.getContext(Node.class);
@@ -54,10 +53,10 @@ public class PathELResolver extends ELResolver {
         		numOfKids = (Integer) ctx.getContext(AstIdentifier.class);
         	}
 			_numOfKids.push(numOfKids);
-			_paths.push(new ArrayList<String>());
+			_paths.push(new Path());
         }
         Integer numOfKids = _numOfKids.pop();
-        List<String> path = _paths.pop();
+        Path path = _paths.pop();
         
     	//maintain the number of kids
     	int nums = numOfKids.intValue() - 1;
@@ -65,7 +64,7 @@ public class PathELResolver extends ELResolver {
     	ctx.putContext(Integer.class, numOfKids);
 
     	//maintain the form path field
-    	path.add(toNodeString(ctx));
+    	path.add(toNodeString(ctx), Objects.toString(property));
     	ctx.putContext(Path.class, path);
 
         if (nums > 0) { //still more property
@@ -83,7 +82,7 @@ public class PathELResolver extends ELResolver {
         }
 
         Integer numOfKids = _numOfKids.pop();
-        List<String> path = _paths.pop();
+        Path path = _paths.pop();
         
     	//maintain the number of kids
     	int nums = numOfKids.intValue() - 1;
@@ -91,7 +90,7 @@ public class PathELResolver extends ELResolver {
     	ctx.putContext(Integer.class, numOfKids);
 
     	//maintain the form path field
-    	path.add(toNodeString(ctx));
+    	path.add(toNodeString(ctx), Objects.toString(property));
     	ctx.putContext(Path.class, path);
     	
     	return null;
