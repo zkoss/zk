@@ -65,7 +65,7 @@ public class BindELResolver extends XelELResolver {
 		if (value instanceof ReferenceBinding) {
 			value = ((ReferenceBinding)value).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
-		tieValue(ctx, base, property, value);
+		tieValue(ctx, base, property, value, false);
 		return value;
 	}
 	
@@ -75,7 +75,7 @@ public class BindELResolver extends XelELResolver {
 			base = ((ReferenceBinding)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		super.setValue(ctx, base, property, value);
-		tieValue(ctx, base, property, value);
+		tieValue(ctx, base, property, value, true);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -106,7 +106,7 @@ public class BindELResolver extends XelELResolver {
 	}
 
 	//update dependency and notify changed
-	private void tieValue(ELContext elCtx, Object base, Object propName, Object value) {
+	private void tieValue(ELContext elCtx, Object base, Object propName, Object value,boolean allownotify) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
@@ -145,8 +145,10 @@ public class BindELResolver extends XelELResolver {
 						}
 					}
 					
+					//ZK-913 Value is reload after validation fail, 
+					//only when notify is allowed.
 					//parse @NotifyChange and collect Property to publish PropertyChangeEvent
-					if (nums == 0 && binding instanceof SaveBinding) { //a done save operation
+					if (allownotify && nums == 0 && binding instanceof SaveBinding) { //a done save operation
 						//collect Property for @NotifyChange, kept in BindContext
 						//see BinderImpl$CommandEventListener#onEvent()
 						BindELContext.addNotifys(m, base, (String) propName, value, bctx);

@@ -1,0 +1,21 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00912ValueReload')" validationMessages = "@id('vmsgs')">
+	<label multiline="true">
+		1.change textbox to abc, you will see a error message, textbox's value should keep abc
+		2.change textbox to def, the error message was gone, and label value become def
+	</label>
+	<vbox>
+		<hbox>
+			label.
+			<label id="l1" value="@load(vm.value)" />
+		</hbox>
+		<hbox>
+			textbox.
+			<textbox id="tb1"
+				value="@bind(vm[vm.prop]) @validator(vm.validator)" />
+			<label id="msg1" value="@load(vmsgs[tb1])"/>
+		</hbox>
+	</vbox>
+	<button label="dump" onClick="binder.tracker.dump()"/>
+</window>
