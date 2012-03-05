@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <zk>
+	<div>step 1: click on save button without entering any data (you should see errorbox message)</div>
+	<div>step 2: close errorbox1 and then errorbox2 (if you reverse the closing sequence then it will not cause this issue)</div>
+	<div>step 3: enter some text into first textbox</div>
+	<div>step 4: click on save again, the value of first textbox should not be cleared.</div>
 	<vlayout>
 		<hlayout>
 			<label value="First textbox"></label>
