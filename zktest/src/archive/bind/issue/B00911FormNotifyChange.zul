@@ -2,13 +2,17 @@
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00911FormNotifyChange')">
 	<label multiline="true">
-		1.click notify1, all the label should change to Alex
+		1.click notify1, label 1,2,3 should change to Alex, but 4,5,6 doesn't change
 	</label>
 	<hbox form="@id('fx') @load(vm.person)">
 		
-		<label id="l1" value="@load(fx.name)"/>
-		<label id="l2" value="@load(fx['name'])"/>
-		<label id="l3" value="@load(fx[vm.prop])"/>
+		1.<label id="l1" value="@load(fx.name)"/>
+		2.<label id="l2" value="@load(fx['name'])"/>
+		3.<label id="l3" value="@load(fx[vm.prop1])"/>
+		
+		4.<label id="l4" value="@load(fx.type)"/>
+		5.<label id="l5" value="@load(fx['type'])"/>
+		6.<label id="l6" value="@load(fx[vm.prop2])"/>
 		<button id="btn" label="Notify1" onClick="@command('notify1',fx=fx)" />
 	</hbox>
 	<button label="dump" onClick="binder.tracker.dump()"/>
