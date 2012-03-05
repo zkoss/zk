@@ -7,7 +7,7 @@
 	Description:
 	
 	History:
-	Wed Feb 29 11:37:11 2012, Created by peterkuo
+	Wed Feb 29 11:37:11 2012, Created by tonyq
 	
 	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
@@ -23,17 +23,33 @@
 		}
 		
 		ListModelList model = new ListModelList(list);
-		model.addToSelection(model.get(2));
 		model.setMultiple(true);
+		model.addSelection(model.getElementAt(2));
 		
-		BindingListModelList blist= new BindingListModelList(model,true);
+		
+		
+		Set set = new HashSet();
+		
+		for (int i = 0; i < 10; i++) {
+			set.add("item " + i);
+		}
+		
+		ListModelSet model2 = new ListModelSet(set);
+		model2.setMultiple(true);
+		model2.addSelection(model2.getElementAt(2));
 	]]></zscript>
-	<listbox width="150px"  model="${blist}" checkmark="true">
+	<listbox width="150px"  model="@{model}" checkmark="true">
 		<listhead>
 			<listheader label="col"/>
 		</listhead>
 		<listitem self="@{each=item}" label="@{item}"/>
 	</listbox>
 
+	<listbox width="150px"  model="@{model2}" checkmark="true">
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
 	</window>
 </zk>

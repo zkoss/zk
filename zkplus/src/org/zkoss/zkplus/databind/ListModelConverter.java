@@ -46,6 +46,8 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 		//model can specify distinct=false in annotation to allow handle same-object-in-multiple-items
 		if (val instanceof BindingListModel) {
 			return val;
+		} else if (val instanceof ListModel) { //Bug 3354086: Model attribute will not accept a ListModel
+			return new BindingListModelListModel((ListModel) val,distinct);			
 		} else if (val instanceof Set) {
 			return new BindingListModelSet((Set)val, true);
 		} else if (val instanceof List) {
@@ -58,8 +60,6 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 			return new BindingListModelArray(((Class)val).getEnumConstants(), true);
 		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
 			return new BindingGroupsListModel((GroupsModel) val);
-		} else if (val instanceof ListModel) { //Bug 3354086: Model attribute will not accept a ListModel
-			return new BindingListModelListModel((ListModel) val);
 		} else {
 			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, ListModel,or BindingListModel only. "+val.getClass());
 		}
