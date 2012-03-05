@@ -359,6 +359,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	set_value: function (value, fromServer) {
 		this.setValue(this.unmarshall_(value), fromServer);
 	},
+	// ZK-908
+	// called by server InputElement#setValueByClient if error appeared.
+	set_valueOnError: function (value, fromServer) {
+		// ZK-908: Make sure at error status before change value
+		// the error may cleared by another event if
+		// not listen to onChange and the events are defered
+		if (this.getErrorMesssage())
+			this.setValue(this.unmarshall_(value), fromServer);
+	},
 	/** Returns the input node of this widget
 	 * @return DOMElement
 	 */

@@ -39,6 +39,7 @@ ZK 5.0.11
   ZK-886: Accordion tabbox disabled issue
   ZK-868: The image of the file upload button broke in the liferay
   ZK-893: Frozen causes columns disorder
+  ZK-908: setErrorMessage causes reset of input element value
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

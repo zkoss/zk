@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-908.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar  05 12:50:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Click 'save' button, you should see two error box.</div>
+	<div>2. Close the first error box then close the second error box.</div>
+	<div>3. Input some value into First textbox then click 'save' button again.</div>
+	<div>4. The value of First textbox should not be cleared.</div>
+	<window title="new page title" border="normal">
+		<grid>
+			<columns>
+				<column width="150px" />
+			</columns>
+			<rows>
+				<row>
+					<label value="First textbox"></label>
+					<textbox id="periodValue"></textbox>
+				</row>
+				<row>
+					<label value="Second textbox"></label>
+					<textbox id="periodValue1"></textbox>
+				</row>
+				<row>
+					<button id="b" label="save">
+						<attribute name="onClick"><![CDATA[
+							if ("".equals(periodValue.getValue())) {
+								periodValue.setErrorMessage("Empty not allowed in 1");
+							}
+							if ("".equals(periodValue1.getValue())) {
+								periodValue1.setErrorMessage("Empty not allowed in 2");
+							}
+						]]></attribute>
+					</button>
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>
