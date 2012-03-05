@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+	<vlayout>
+		<hlayout>
+			<label value="First textbox"></label>
+			<textbox id="periodValue"></textbox>
+		</hlayout>
+		<hlayout>
+			<label value="Second textbox"></label>
+			<textbox id="periodValue1"></textbox>
+		</hlayout>
+		<button id="b" label="save">
+			<attribute name="onClick"><![CDATA[
+				import java.util.ArrayList;
+				
+				import org.zkoss.lang.Strings;
+				import org.zkoss.zk.ui.WrongValueException;
+				import org.zkoss.zk.ui.WrongValuesException;
+				
+				ArrayList wve = new ArrayList();
+				if(Strings.isEmpty(periodValue.getValue())) {
+					wve.add(new WrongValueException(periodValue, "Empty not allowed 1"));
+				}
+				if(Strings.isEmpty(periodValue1.getValue())) {
+					wve.add(new WrongValueException(periodValue1, "Empty not allowed 2"));
+				}
+				if (wve.size() > 0) {
+					WrongValueException[] wvea = new WrongValueException[wve.size()];
+					for (int i = 0; i < wve.size(); i++) {
+						wvea[i] = (WrongValueException) wve.get(i);
+					}
+					throw new WrongValuesException(wvea);
+				}			
+			  ]]></attribute>
+		</button>
+	</vlayout>
+</zk>
