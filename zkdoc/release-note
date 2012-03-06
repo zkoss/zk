@@ -26,6 +26,8 @@ ZK 6.0.1
     org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings().
     You could pass null if you don't have a converter. Original methods are deprecated.
   + Syntax of zk bind2 RENDERER annotation is changed from 'render-attr=render-class' to 'render-attr:render-class'
+  + Added 2 methods (setAttribute() and getAttribute()) on org.zkoss.bind.FormExt to provide more features of Form.
+    You have to implement these 2 methods if you have any custom implementation.
 	--------
 ZK 6.0.0
 Feb 14, 2012

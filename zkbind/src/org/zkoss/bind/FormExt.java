@@ -58,17 +58,18 @@ public interface FormExt {
 	public void resetDirty();
 	
 	/**
-	 * Sets the bean class of this form.
-	 * The class could be use by other feature. for example the bean validator of property-binding will use the bean class to valid the form property.
-	 * @param clazz the bean class of this form
+	 * Sets a custom attribute
+	 * @param name the attribute name
+	 * @param value the attribute value
 	 * @since 6.0.1
 	 */
-	public void setBeanClass(Class clazz);
+	public void setAttribute(String name,Object value);
 	
 	/**
-	 * Gets the bean class of this form
-	 * @return the bean class of this form
+	 * Gets a custom attribute
+	 * @param name the attribute name
+	 * @return the attribute value
 	 * @since 6.0.1
 	 */
-	public Class getBeanClass();
+	public Object getAttribute(String name);
 }

@@ -23,6 +23,7 @@ import javax.validation.Validator;
 import org.zkoss.bind.FormExt;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
+import org.zkoss.bind.sys.LoadFormBinding;
 
 /**
  * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator. <br/>
@@ -87,7 +88,7 @@ public class BeanValidator extends AbstractValidator {
 		Class<?> clz = null;
 		if(base instanceof FormExt){
 			FormExt fex = (FormExt)base;
-			clz = fex.getBeanClass();
+			clz = (Class)fex.getAttribute(LoadFormBinding.LOADED_BEAN_CLASS); 
 			if(clz==null){
 				throw new NullPointerException("Bean class not found on a Form "+fex+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
 			}

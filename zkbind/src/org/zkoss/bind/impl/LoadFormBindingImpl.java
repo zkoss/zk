@@ -55,7 +55,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		if(form instanceof FormExt){
 			FormExt fex = (FormExt)form;
 			//sets the last loaded bean class
-			fex.setBeanClass(bean==null?null:bean.getClass());
+			fex.setAttribute(LOADED_BEAN_CLASS, bean==null?null:bean.getClass());
 			
 			for (String field : fex.getLoadFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);

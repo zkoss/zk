@@ -55,7 +55,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 			if(form instanceof FormExt){
 				FormExt fex = (FormExt)form;
 				//sets the last loaded bean class
-				fex.setBeanClass(value==null?null:value.getClass());
+				fex.setAttribute(LOADED_BEAN_CLASS, value==null?null:value.getClass());
 				
 				for (String field : fex.getLoadFieldNames()) {
 					final ExpressionX expr = getFieldExpression(eval, field);
