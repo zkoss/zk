@@ -284,7 +284,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
 				g[2] = getChildren().size() - (isReorder ? 2 : 1);
 			} else {
-				final int idx = ((Row)refChild).getIndex();				
+				final int idx = ((Row)refChild).getIndex(true);				
 				final int[] g = getGroupsInfoAt(idx);
 				if (g == null)
 					throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");				
@@ -306,7 +306,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		if (super.insertBefore(child, refChild)) {
 			if(hasGroup()) {
 				final int
-					jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
+					jto = refChild instanceof Row ? ((Row)refChild).getIndex(true): -1,
 					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
 				if (fixFrom >= 0) fixGroupIndex(fixFrom,
 					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);

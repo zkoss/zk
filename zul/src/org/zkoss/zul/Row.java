@@ -194,9 +194,9 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	/** Returns the index of the specified row.
 	 * The current implementation is stupid, so not public it yet.
 	 */
-	/*package*/ int getIndex() {
+	/*package*/ int getIndex(boolean forceSync) {
 		int j = 0;
-		if (_index < 0) {
+		if (_index < 0 || forceSync) {
 			for (Iterator it = getParent().getChildren().iterator();
 			it.hasNext(); ++j) {
 				if (it.next() == this)
@@ -209,6 +209,9 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 			j = _index;
 		}
 		return j;
+	}
+	/*package*/ int getIndex() {
+		return getIndex(false);
 	}
 
 	public String getZclass() {

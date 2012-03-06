@@ -41,6 +41,7 @@ ZK 5.0.11
   ZK-893: Frozen causes columns disorder
   ZK-908: setErrorMessage causes reset of input element value
   ZK-909: throwing WrongValuesException causes input field value to reset
+  ZK-897: Calling fireEvent method cause UIexeception with GroupsModel(Rod disabled)
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-897.zul
+
+{{IS_NOTE
+	Purpose:
+	Description:
+	History:
+		Mon Mar  5 18:13:44     2012, Created by tonyq
+}}IS_NOTE
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<div width="100%" apply="org.zkoss.zktest.test2.B50_ZK_897">
+	    <custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<grid id="grid"/>
+		<custom-attributes org.zkoss.zul.lsitbox.rod="false"/>
+		<listbox id="listbox"/>
+		<button id="button" label="Run"/>
+	</div>
+
+</zk>

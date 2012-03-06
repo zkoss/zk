@@ -128,7 +128,9 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			break;
 
 		default: //CONTENTS_CHANGED
-			syncModel(min, max);
+			syncModel(min, max < 0 ? -1 : (max - min + 1)); 
+			//TonyQ: B50-ZK-897 , listfoot disappear after clicking run button , 
+			// 		   		sync logic with GridDataLoader 
 		}
 	}
 	
