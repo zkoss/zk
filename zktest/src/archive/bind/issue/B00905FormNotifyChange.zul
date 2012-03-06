@@ -4,7 +4,7 @@
 	<label multiline="true">
 		1.edit the textbox, the 3 label should change too
 	</label>
-	<label value="@bind(vm.person.name)"/>
+	<label id="msg" value="@bind(vm.person.name)"/>
 	<hbox form="@id('fx') @load(vm.person) @save(vm.person, before='save')">
 		Name:
 		<textbox id="tb" value="@bind(fx.name)" instant="true" />

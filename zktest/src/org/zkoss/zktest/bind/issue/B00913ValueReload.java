@@ -4,7 +4,7 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.validator.AbstractValidator;
 
-public class B00912ValueReload {
+public class B00913ValueReload {
 
 	String value = "KGB";
 
