@@ -1,0 +1,42 @@
+<zk>
+    <window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00862BeanValidator4Form')" 
+    validationMessages = "@id('vmsgs')">
+        <grid width="600px" form="@id('fx') @load(vm.user) @save(vm.user,after='save')">
+            <columns>
+                <column width="100px" />
+                <column width="500px" />
+            </columns>
+            <rows>
+                <row>
+                    First Name
+                    <hlayout>
+                    <textbox id="tb1" value="@bind(fx.firstName) @validator('beanValidator')"/>
+                    <label id="msg1" value="@load(vmsgs[tb1])"/>
+                    </hlayout>
+                </row>
+                <row>
+                    Last Name
+                    <hlayout>
+                    <textbox id="tb2" value="@bind(fx['lastName']) @validator('beanValidator')" />
+                    <label id="msg2" value="@load(vmsgs[tb2])"/>
+                    </hlayout>
+                </row>
+                <row>
+                    EMail
+                    <hlayout>
+                    <textbox id="tb3" value="@bind(fx[vm.prop]) @validator('beanValidator')"/>
+                    <label id="msg3" value="@load(vmsgs[tb3])"/>
+                    </hlayout>
+                </row>                
+            </rows>
+        </grid>
+        <hlayout>
+        	<label id="l1" value="@bind(vm.user.firstName)"/>
+        	<label id="l2" value="@bind(vm.user.lastName)"/>
+        	<label id="l3" value="@bind(vm.user.email)"/>
+        </hlayout>
+        <button id="save" label="Save" onClick="@command('save')" />
+        <button id="reload" label="Reload" onClick="@command('reload')" />
+        
+    </window>
+</zk>

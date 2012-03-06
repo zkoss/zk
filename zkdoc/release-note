@@ -5,6 +5,7 @@ ZK 6.0.1
   ZK-864: Make ValidationContext easier
   ZK-889: Children binding should support converter
   ZK-901: Provide reference-binding
+  ZK-862: Enhance the BeanValidator to validate a property of a form
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

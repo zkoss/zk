@@ -20,11 +20,15 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import org.zkoss.bind.FormExt;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 
 /**
  * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator. <br/>
+ * In 6.0.0, it supports to validate a property of a bean.  <br/>
+ * And since 6.0.1, it can also validate a property of a form which properties are load from a bean.
+ * 
  * Before use this validator, you have to configure your environment (depends on the implementation you chosen)<br/>
  * Here is a article <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/Integrate_ZK_with_JSR_303:_Bean_Validation#How_to_use_Bean_Validation_in_your_ZK_application">Integrate ZK with JSR 303: Bean Validation</a> 
  * talks about how to set up JSR 303 in ZK with Hibernate implementation.
@@ -40,8 +44,16 @@ public class BeanValidator extends AbstractValidator {
 		return BeanValidations.getValidator();
 	}
 	
+	/**
+	 * Validate the value 
+	 * @param clz the class of bean
+	 * @param property the property of bean
+	 * @param value the value to be validated.
+	 * @return the ConstraintViolation set.
+	 *  @since 6.0.1
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Set<ConstraintViolation<?>> validate(Class clz, String property, Object value){
+	protected Set<ConstraintViolation<?>> validate(Class clz, String property, Object value){
 		return getValidator().validateValue(clz, property, value);
 	}
 	
@@ -62,21 +74,41 @@ public class BeanValidator extends AbstractValidator {
 		});
 	}
 	
-	@Override
-	public void validate(ValidationContext ctx) {
-		final Property p = ctx.getProperty();
-		final Object base = p.getBase();
-		final Class<?> clz = base.getClass();
-		final String name = p.getProperty();
-		final Object value = p.getValue();
+	/**
+	 * Get the bean class of the base object. <br/>
+	 * By default, if the base object is a form(implements FormExt), it returns the last loaded bean class of this form.<br/>
+	 * If the object is not a form, it returns the class of base object directly.
+	 * @param base the base object
+	 * @return the bean class of base object, never null
+	 * @since 6.0.1
+	 */
+	@SuppressWarnings("rawtypes")
+	protected Class getBeanClass(Object base){
+		Class<?> clz = null;
+		if(base instanceof FormExt){
+			FormExt fex = (FormExt)base;
+			clz = fex.getBeanClass();
+			if(clz==null){
+				throw new NullPointerException("Bean class not found on a Form "+fex+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
+			}
+		}else{
+			clz = base.getClass();
+		}
 		
-		//TODO have to handle the Form case. or(use another validator?)  
-		 
-		Set<ConstraintViolation<?>> violations = validate(clz, name, value);
+		return clz;
+	}
+	
+	/**
+	 * Handle hibernate ConstraintViolation. by default, it add to invalid messages.
+	 * @param ctx
+	 * @param violations
+	 * @since 6.0.1
+	 */
+	protected void handleConstraintViolation(ValidationContext ctx, Set<ConstraintViolation<?>> violations){
 		final int s = violations.size();
 		
 		if (s == 1) {
-			addInvalidMessages(ctx, new String[] { violations.iterator().next().getMessage() });
+			addInvalidMessage(ctx, violations.iterator().next().getMessage());
 		} else if (s > 0) {
 			String[] msgs = new String[violations.size()];
 			// it is a Set, I tested in hibernate 4 , it doesn't guarantee the
@@ -89,6 +121,19 @@ public class BeanValidator extends AbstractValidator {
 			}
 			addInvalidMessages(ctx, msgs);
 		}
-
+	}
+	
+	@Override
+	public void validate(ValidationContext ctx) {
+		final Property p = ctx.getProperty();
+		final Object base = p.getBase();
+		final String name = p.getProperty();
+		final Object value = p.getValue();
+		
+		Class<?> clz = getBeanClass(base);
+		 
+		Set<ConstraintViolation<?>> violations = validate(clz, name, value);
+		
+		handleConstraintViolation(ctx, violations);
 	}
 }

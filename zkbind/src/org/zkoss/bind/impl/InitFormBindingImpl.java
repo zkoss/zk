@@ -53,7 +53,11 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 		if(!(value instanceof Form)){
 			final Form form = getFormBean();
 			if(form instanceof FormExt){
-				for (String field : ((FormExt)form).getLoadFieldNames()) {
+				FormExt fex = (FormExt)form;
+				//sets the last loaded bean class
+				fex.setBeanClass(value==null?null:value.getClass());
+				
+				for (String field : fex.getLoadFieldNames()) {
 					final ExpressionX expr = getFieldExpression(eval, field);
 					if (expr != null) {
 						final Object fieldval = eval.getValue(ctx, comp, expr);
@@ -62,10 +66,10 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 						eval.setValue(null, comp, formExpr, fieldval);
 					}
 				}
-				((FormExt)form).resetDirty(); //initial loading, mark form as clean
+				fex.resetDirty(); //initial loading, mark form as clean
 			}
 			binder.notifyChange(form, "*"); //notify change of fx.*
-			if(form instanceof FormExt){
+			if(form instanceof FormExt){//after notify form
 				binder.notifyChange(((FormExt)form).getStatus(), "*");//notify change of fxStatus.*
 			}
 		}else{

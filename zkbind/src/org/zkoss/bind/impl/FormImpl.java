@@ -28,12 +28,13 @@ import org.zkoss.lang.Objects;
 /**
  * Implementation of the {@link Form}.
  * @author henrichen
+ * @author dennis
  * @since 6.0.0
  */
 public class FormImpl implements Form,FormExt,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-//	private final String _id; //form id
+	private Class _beanClass;
 	private final Set<String> _saveFieldNames; //field name for saving
 	private final Set<String> _loadFieldNames; //field name for loading
 	private final Map<String, Object> _fields; //field series -> value
@@ -43,8 +44,7 @@ public class FormImpl implements Form,FormExt,Serializable {
 	
 	private final FormStatus _status;
 	
-	public FormImpl(/*String id*/) {
-//		_id = id;
+	public FormImpl() {
 		_fields = new LinkedHashMap<String, Object>(INIT_CAPACITY);
 		_initFields = new HashMap<String, Object>(INIT_CAPACITY);
 		_saveFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
@@ -61,10 +61,17 @@ public class FormImpl implements Form,FormExt,Serializable {
 		}
 	}
 	
+	@Override
+	public Class getBeanClass() {
+		return _beanClass;
+	}
 
-//	public String getId() {
-//		return _id;
-//	}
+	@Override
+	public void setBeanClass(Class beanClass){
+		if(!Objects.equals(_beanClass, beanClass)){
+			_beanClass = beanClass;
+		}
+	}
 
 	public void setField(String field, Object value) {
 		_fields.put(field, value);

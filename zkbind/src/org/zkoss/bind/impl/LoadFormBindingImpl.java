@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +47,17 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	public void load(BindContext ctx) {
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
+		final Object bean = eval.getValue(ctx, getComponent(), _accessInfo.getProperty());
+				
 		final Component comp = getComponent();//ctx.getComponent();
 		final Form form = getFormBean();
 		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		if(form instanceof FormExt){
-			for (String field : ((FormExt)form).getLoadFieldNames()) {
+			FormExt fex = (FormExt)form;
+			//sets the last loaded bean class
+			fex.setBeanClass(bean==null?null:bean.getClass());
+			
+			for (String field : fex.getLoadFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final Object value = eval.getValue(ctx, comp, expr);
@@ -65,7 +70,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			}
 			if(activating) return;
 			
-			((FormExt)form).resetDirty(); //initial loading, mark form as clean
+			fex.resetDirty(); //initial loading, mark form as clean
 		}
 		if(activating) return;//don't notify change if activating
 		
