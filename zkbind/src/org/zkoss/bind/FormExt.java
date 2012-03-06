@@ -61,9 +61,10 @@ public interface FormExt {
 	 * Sets a custom attribute
 	 * @param name the attribute name
 	 * @param value the attribute value
+	 * @return the previous value
 	 * @since 6.0.1
 	 */
-	public void setAttribute(String name,Object value);
+	public Object setAttribute(String name,Object value);
 	
 	/**
 	 * Gets a custom attribute

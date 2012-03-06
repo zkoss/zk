@@ -68,12 +68,8 @@ public class FormImpl implements Form,FormExt,Serializable {
 	}
 
 	@Override
-	public void setAttribute(String name,Object value){
-		if(value==null){
-			_attrs.remove(name);
-		}else{
-			_attrs.put(name, value);
-		}
+	public Object setAttribute(String name,Object value){
+		return value==null?_attrs.remove(name):_attrs.put(name, value);
 	}
 
 	public void setField(String field, Object value) {
