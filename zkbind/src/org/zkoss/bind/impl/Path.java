@@ -79,7 +79,7 @@ public class Path {
 	 * 'vm.person.address.fullstreet' depends on 'vm.person.address'.'city'
 	 * 
 	 * @return the path before the last dot
-	 * @see getTrackProperty();
+	 * @see #getTrackProperty
 	 */
 	public String getTrackBasePath() {
     	final StringBuffer sb = new StringBuffer();
