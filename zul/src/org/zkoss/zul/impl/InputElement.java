@@ -693,9 +693,8 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 		if (!same) {
 			_value = value;
 		} else if (errFound) {
-			smartUpdate("_valueOnError", marshall(_value)); //send back original value
+			smartUpdate("_value", marshall(_value)); //send back original value
 				//Bug 1876292: make sure client see the updated value
-				//Bug ZK-908: separate the setter of wrong value at client side
 		}
 	}
 	/** Processes an AU request.

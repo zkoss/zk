@@ -18,8 +18,8 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -38,8 +38,9 @@ public class ErrorEvent extends InputEvent {
 	ErrorEvent getErrorEvent(AuRequest request, Object oldValue) {
 		final Map data = request.getData();
 		return new ErrorEvent(request.getCommand(), request.getComponent(),
-			String.valueOf(data.get("value")), oldValue,
-			String.valueOf(data.get("message")));
+			Objects.toString(data.get("value")), oldValue,
+			//Bug ZK-908: replace String.valueOf by Objects.toString
+			Objects.toString(data.get("message")));
 	}
 	/** Constructs an error-relevant event.
 	 * @param val the new value that caused the error
