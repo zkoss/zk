@@ -2081,14 +2081,8 @@ public class Listbox extends MeshElement {
 					int index = lg.getIndex(), leng = index - prev[0], size = prev[1]
 							- leng + 1;
 					prev[1] = leng;
-					_groupsInfo
-							.add(
-									idx,
-									new int[] {
-											index,
-											size,
-											size > 1 && prev[2] >= index ? prev[2] + 1
-													: -1 });
+					_groupsInfo.add(idx, new int[] { index, size,
+						size > 1 && prev[2] >= index ? prev[2] + 1 : -1 });
 					if (size > 1 && prev[2] > index)
 						prev[2] = -1; // reset listgroupfoot
 				} else if (next != null) {
