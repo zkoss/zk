@@ -1,0 +1,35 @@
+<!--
+	B60-ZK-898.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Mar 7 17:11:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		1. Press Clear button. You should see paging disappeared with Listbox content.
+	</div>
+	<zscript><![CDATA[
+		String[] strs = new String[50];
+		for (int i = 0; i < 50; i++)
+			strs[i] = "Item " + i;
+	]]></zscript>
+	<button label="Clear" onClick="lb.items.clear(); rs.children.clear()" />
+	<hlayout>
+		<listbox id="lb" mold="paging" width="300px">
+			<listitem label="${each}" forEach="${strs}" />
+		</listbox>
+		<grid mold="paging" width="300px">
+			<rows id="rs">
+				<row forEach="${strs}">
+					<label>${each}</label>
+				</row>
+			</rows>
+		</grid>
+	</hlayout>
+</zk>

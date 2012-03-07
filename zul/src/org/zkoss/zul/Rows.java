@@ -140,7 +140,9 @@ public class Rows extends XulElement {
 	 */
 	/*package*/ boolean setReplacingRow(boolean b) {
 		final boolean old = _isReplacingRow;
-		_isReplacingRow = b;
+		Grid grid = getGrid();
+		if (grid != null && grid.getModel() != null) // B60-ZK-898: only apply when model is used.
+			_isReplacingRow = b;
 		return old;
 	}
 	

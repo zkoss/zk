@@ -1416,7 +1416,8 @@ public class Listbox extends MeshElement {
 	 */
 	/* package */boolean setReplacingItem(boolean b) {
 		final boolean old = _isReplacingItem;
-		_isReplacingItem = b;
+		if (_model != null) // B60-ZK-898: only apply when model is used.
+			_isReplacingItem = b;
 		return old;
 	}
 	
