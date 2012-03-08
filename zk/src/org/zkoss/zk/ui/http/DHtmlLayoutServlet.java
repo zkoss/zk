@@ -97,7 +97,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
 		if (_webman == null) {
-			log.warning("Webmanager not initialized. Please check the HttpSessionListener in your web config.");
+			log.warning("WebManager not initialized. Please check if HttpSessionListener is configured properly.");
 			_webman = new WebManager(ctx, updateURI);
 			_webmanCreated = true;
 		} else {
