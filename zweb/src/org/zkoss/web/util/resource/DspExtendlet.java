@@ -73,6 +73,7 @@ public class DspExtendlet implements Extendlet {
 		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
 		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
 			_cache.clear();		
+
 		final Interpretation cnt = _cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) {

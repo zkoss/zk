@@ -66,7 +66,6 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 			_cache.clear();		
 		
 		final WcsInfo wi = _cache.get(path);
-		
 		if (wi == null) {
 			if (Servlets.isIncluded(request)) {
 				log.error("Failed to load the resource: "+path);

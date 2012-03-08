@@ -46,7 +46,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., mine type),
+	 * @param contentType the content type (aka., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -58,7 +58,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., mine type),
+	 * @param contentType the content type (aka., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -70,7 +70,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., mine type),
+	 * @param contentType the content type (aka., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
@@ -82,7 +82,7 @@ public class Filedownload {
 	 * with the suggested file name.
 	 *
 	 * @param content the content
-	 * @param contentType the content type (aka., mine type),
+	 * @param contentType the content type (aka., MIME type),
 	 * e.g., application/pdf
 	 * @param flnm the suggested file name, e.g., myfile.pdf.
 	 * If null, no suggested name is provided.
