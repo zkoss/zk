@@ -31,6 +31,8 @@ ZK 6.0.1
   + Syntax of zk bind2 RENDERER annotation is changed from 'render-attr=render-class' to 'render-attr:render-class'
   + Added 2 methods (setAttribute() and getAttribute()) on org.zkoss.bind.FormExt to provide more features of Form.
     You have to implement these 2 methods if you have any custom implementation.
+  + Initial WebAppInit by org.zkoss.zk.ui.http.HttpSessionListener in stead of
+	org.zkoss.zk.ui.http.DHtmlLayoutServlet if servlet version is 3.
 
 	--------
 ZK 6.0.0
