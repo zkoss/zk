@@ -26,13 +26,37 @@ import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.sys.LoadFormBinding;
 
 /**
- * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator. <br/>
- * In 6.0.0, it supports to validate a property of a bean.  <br/>
- * And since 6.0.1, it can also validate a property of a form which properties are load from a bean.
- * 
- * Before use this validator, you have to configure your environment (depends on the implementation you chosen)<br/>
+ * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator for a property-binding.<p/>  
+ * Notice : Before use this validator, you have to configure your environment (depends on the implementation you chosen). 
  * Here is a article <a href="http://books.zkoss.org/wiki/Small_Talks/2011/May/Integrate_ZK_with_JSR_303:_Bean_Validation#How_to_use_Bean_Validation_in_your_ZK_application">Integrate ZK with JSR 303: Bean Validation</a> 
  * talks about how to set up JSR 303 in ZK with Hibernate implementation.
+ * <p/> 
+ * It validates a single propertie of a bean and sets the invalid message by 
+ * {@link AbstractValidator#addInvalidMessage(ValidationContext, String)}. <p/>
+ * 
+ * To use this class, you have to add <code>@validator('beanValidator')</code> or <code>@validator('org.zkoss.bind.validator.BeanValidator')</code> to the property-binding
+ * <p/> 
+ * <b>Example</b><p/>
+ * <pre>{@code
+ * <grid width="600px">
+ *   <textbox id="tb" value="@bind(vm.person.firstName) @validator('beanValidator')"/>
+ *   <label value="@load(vmsgs[tb])"/> 
+ *</grid>
+ * }</pre>
+ * 
+ * [Since zk 6.0.1] <br/>
+ * It also supports to validate a property of a form which properties are load from a bean,
+ * It uses the class of last loaded bean of the form to perform the validation, which means it doesn't support to validate a form that didn't loaded a bean yet.
+ * <p/>
+ * <b>Example</b><p/>
+ * <pre>{@code
+ * <grid width="600px" form="@id('fx') @load(vm.user) @save(vm.user,after='save')">
+ *   <textbox id="tb" value="@bind(fx.firstName) @validator('beanValidator')"/>
+ *   <label value="@load(vmsgs[tb])"/> 
+ *</grid>
+ * }</pre>
+ *  
+ * <p/>
  * 
  * @author dennis
  * @since 6.0.0
@@ -79,18 +103,19 @@ public class BeanValidator extends AbstractValidator {
 	 * Get the bean class of the base object. <br/>
 	 * By default, if the base object is a form(implements FormExt), it returns the last loaded bean class of this form.<br/>
 	 * If the object is not a form, it returns the class of base object directly.
+	 * @param ctx the validation context
 	 * @param base the base object
 	 * @return the bean class of base object, never null
 	 * @since 6.0.1
 	 */
 	@SuppressWarnings("rawtypes")
-	protected Class getBeanClass(Object base){
+	protected Class getBeanClass(ValidationContext ctx, Object base){
 		Class<?> clz = null;
 		if(base instanceof FormExt){
 			FormExt fex = (FormExt)base;
 			clz = (Class)fex.getAttribute(LoadFormBinding.LOADED_BEAN_CLASS); 
 			if(clz==null){
-				throw new NullPointerException("Bean class not found on a Form "+fex+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
+				throw new NullPointerException("Bean class not found on the Form "+fex+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
 			}
 		}else{
 			clz = base.getClass();
@@ -131,7 +156,7 @@ public class BeanValidator extends AbstractValidator {
 		final String name = p.getProperty();
 		final Object value = p.getValue();
 		
-		Class<?> clz = getBeanClass(base);
+		Class<?> clz = getBeanClass(ctx, base);
 		 
 		Set<ConstraintViolation<?>> violations = validate(clz, name, value);
 		

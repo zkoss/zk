@@ -126,6 +126,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		//TODO initial the system validator
 		
 		VALIDATORS.put("beanValidator", new DeferredValidator("org.zkoss.bind.validator.BeanValidator"));//defer the init of validator.(user might not use this validator)
+		VALIDATORS.put("formBeanValidator", new DeferredValidator("org.zkoss.bind.validator.FormBeanValidator"));//defer the init of validator.(user might not use this validator)
 	}
 	
 	//control keys
