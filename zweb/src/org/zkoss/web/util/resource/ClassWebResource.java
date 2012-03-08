@@ -76,7 +76,7 @@ public class ClassWebResource {
 
 	private final ServletContext _ctx;
 	/** maping URI including PATH_PREFIX. */
-	private final String _mappingURI;
+	private String _mappingURI;
 	private final CWC _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
 	private Set<String> _compressExts;
@@ -199,7 +199,7 @@ public class ClassWebResource {
 	}
 	/** Constructor. */
 	private ClassWebResource(ServletContext ctx, String mappingURI) {
-		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
+		if (mappingURI != null && (!mappingURI.startsWith("/") || mappingURI.endsWith("/")))
 			throw new IllegalArgumentException("mappingURI must start with /, but not ends with /");
 		if (ctx == null)
 			throw new IllegalArgumentException("null ctx");
@@ -530,6 +530,17 @@ public class ClassWebResource {
 		_debugJS = debug;
 	}
 
+	/** Called by WebManager#setUpdateUri when WebManager is created
+	 * by HttpSessionListener#contextInitialized
+	 * 
+	 * @param mappingURI maping URI excluding PATH_PREFIX.
+	 */
+	public void setMappingURI (String mappingURI) {
+		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
+			throw new IllegalArgumentException("mappingURI must start with /, but not ends with /");
+
+		_mappingURI = mappingURI + PATH_PREFIX;
+	}
 	//-- Work with CWC --//
 	/** Works with {@link CWC} to
 	 * load resources from class path (thru this servlet).

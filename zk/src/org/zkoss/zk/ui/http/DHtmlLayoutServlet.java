@@ -94,14 +94,17 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		final ServletContext ctx = getServletContext();
 		_webman = WebManager.getWebManagerIfAny(ctx);
-		if (_webman != null) {
-			log.info("Web Manager was created before ZK loader");
-		} else {
-			String updateURI = Utils.checkUpdateURI(
+		String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
+		if (updateURI == null)
+			throw new IllegalArgumentException("null");
+		if (_webman == null) {
+			log.warning("Webmanager not initialized. Please check the HttpSessionListener in your web config.");
 			_webman = new WebManager(ctx, updateURI);
-			_webmanCreated = true;
+		} else {
+			_webman.setUpdateUri(updateURI);
 		}
+		_webmanCreated = true;
 	}
 	public void destroy() {
 		if (_webman != null) {

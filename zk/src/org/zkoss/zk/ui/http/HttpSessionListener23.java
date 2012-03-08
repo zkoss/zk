@@ -32,7 +32,8 @@ import org.zkoss.zk.ui.sys.Attributes;
  */
 public class HttpSessionListener23 implements
 javax.servlet.http.HttpSessionListener, 
-HttpSessionAttributeListener, ServletContextAttributeListener {
+HttpSessionAttributeListener, ServletContextAttributeListener,
+ServletContextListener {
 	//HttpSessionListener//
 	public void sessionCreated(HttpSessionEvent evt) {
 	}
@@ -108,6 +109,31 @@ HttpSessionAttributeListener, ServletContextAttributeListener {
 
 	/*package*/ static boolean shallIgnore(String name) {
 		return name.startsWith("javax.zkoss") || name.startsWith("org.zkoss");
+	}
+	//ServletContextListener//
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		/*
+		 * From latest servlet specification:
+		 * All ServletContextListeners are notified of context initialization
+		 * before any filters or servlets in the web application are initialized.
+		 * 
+		 * The servlet specification of Version 2.3 only provide the description
+		 * "Notification that the web application is ready to process requests.",
+		 * the order of initialization of listeners and servlets
+		 * may not guaranteed in older servlet version.
+		 * 
+		 * @since 6.0.1
+		 */
+		final ServletContext ctx = event.getServletContext();
+		if (WebManager.getWebManagerIfAny(ctx) == null) {
+			new WebManager(ctx, null);
+		}
 	}
 }
 

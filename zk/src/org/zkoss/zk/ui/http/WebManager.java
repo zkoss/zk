@@ -48,7 +48,6 @@ import org.zkoss.web.util.resource.ClassWebResource;
 import org.zkoss.web.util.resource.Extendlet;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
@@ -97,7 +96,7 @@ public class WebManager {
 
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
-	private final String _updateURI;
+	private String _updateURI;
 	private final ClassWebResource _cwr;
 
 	/** Creates the Web manager. It is singleton in a Web application
@@ -108,7 +107,8 @@ public class WebManager {
 	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
 
-		if (ctx == null || updateURI == null)
+		// allow null updateURI, it will be updated by DHtmlLayoutServlet#init
+		if (ctx == null)
 			throw new IllegalArgumentException("null");
 		if (getWebManagerIfAny(ctx) != null)
 			throw new UiException("Only one Web manager is allowed in one context: "+ctx);
@@ -318,6 +318,15 @@ public class WebManager {
 		return _wapp;
 	}
 
+	/** Called by DHtmlLayoutServlet#init when WebManager is created
+	 * by HttpSessionListener#contextInitialized
+	 * 
+	 * @param updateURI the URI for asynchronous update.
+	 */
+	/*package*/ void setUpdateUri (String updateURI) {
+		_updateURI = updateURI;
+		_cwr.setMappingURI(updateURI);
+	}
 	//-- static --//
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
