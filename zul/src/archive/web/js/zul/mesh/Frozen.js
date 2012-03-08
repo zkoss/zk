@@ -293,7 +293,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			if (width)
 				for (var n = mesh.head.getChildAt(this._columns + num).$n('hdfaker');
 						n; n = n.nextSibling)
-					width += zk.parseInt(n.style.width);
+					if (n.style.display != 'none') // ZK-893, should ignore invisible element
+						width += zk.parseInt(n.style.width);
 
 		} else if (!rows || !rows.length) {
 			return;

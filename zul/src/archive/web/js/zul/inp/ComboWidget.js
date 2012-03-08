@@ -172,7 +172,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var $pp = zk(pp);
 		$pp.makeVParent();
 		zWatch.fireDown('onVParent', this);
-
+		
+		// B50-ZK-859: need to carry out min size here
+		if (this.presize_()) 
+			ppofs = this.getPopupSize_(pp);
+		
 		// throw in
 		pp.style.left = "";
 		this._fixsz(ppofs);//fix size
@@ -206,6 +210,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value}, {rtags: {onOpen: 1}});
 	},
+	/**
+	 * Extra handling for min size of popup widget. Return true if size is affected.
+	 */
+	presize_: zk.$void,
 	/** Slides down the drop-down list.
 	 * <p>Default: <code>zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});</code>
 	 * @param DOMElement pp the DOM element of the drop-down list.

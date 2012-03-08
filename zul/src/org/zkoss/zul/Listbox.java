@@ -3190,6 +3190,7 @@ public class Listbox extends MeshElement {
 					renderer.render("initRodSize", initRodSize());
 				if (!inPagingMold() && _jsel >= 0)
 					renderer.render("_selInView", _jsel); // B50-ZK-56
+				renderer.render("_listbox$noSelectAll", true); // B50-ZK-873, separate the select all condition and isCropper
 			}
 			if (_nonselTags != null)
 				renderer.render("nonselectableTags", _nonselTags);
