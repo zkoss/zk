@@ -34,6 +34,8 @@ public class HttpSessionListener23 implements
 javax.servlet.http.HttpSessionListener, 
 HttpSessionAttributeListener, ServletContextAttributeListener,
 ServletContextListener {
+	private WebManager _webman;
+	private boolean _webmanCreated;
 	//HttpSessionListener//
 	public void sessionCreated(HttpSessionEvent evt) {
 	}
@@ -113,8 +115,11 @@ ServletContextListener {
 	//ServletContextListener//
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		if (_webman != null) {
+			if (_webmanCreated)
+				_webman.destroy();
+			_webman = null;
+		}
 	}
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
@@ -132,7 +137,8 @@ ServletContextListener {
 		 */
 		final ServletContext ctx = event.getServletContext();
 		if (WebManager.getWebManagerIfAny(ctx) == null) {
-			new WebManager(ctx, null);
+			_webman = new WebManager(ctx, "/zkau");
+			_webmanCreated = true;
 		}
 	}
 }

@@ -107,8 +107,7 @@ public class WebManager {
 	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
 
-		// allow null updateURI, it will be updated by DHtmlLayoutServlet#init
-		if (ctx == null)
+		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
 		if (getWebManagerIfAny(ctx) != null)
 			throw new UiException("Only one Web manager is allowed in one context: "+ctx);

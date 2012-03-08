@@ -96,15 +96,13 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		_webman = WebManager.getWebManagerIfAny(ctx);
 		String updateURI = Utils.checkUpdateURI(
 				config.getInitParameter("update-uri"), "The update-uri parameter");
-		if (updateURI == null)
-			throw new IllegalArgumentException("null");
 		if (_webman == null) {
 			log.warning("Webmanager not initialized. Please check the HttpSessionListener in your web config.");
 			_webman = new WebManager(ctx, updateURI);
+			_webmanCreated = true;
 		} else {
 			_webman.setUpdateUri(updateURI);
 		}
-		_webmanCreated = true;
 	}
 	public void destroy() {
 		if (_webman != null) {
