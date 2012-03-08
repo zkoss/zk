@@ -1,0 +1,22 @@
+<!--
+	B60-ZK-917.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Mar 8 09:52:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Blue color should fill the entire region bound by red border.
+	</div>
+	<div width="500px" height="500px" style="border: 1px solid #FF0000">
+		<div style="background: #333399" hflex="1" vflex="1" />
+		<div style="position: absolute; top: 100px; left: 100px; border: 1px solid #00FF00;" 
+			width="100px" height="100px" />
+	</div>
+</zk>

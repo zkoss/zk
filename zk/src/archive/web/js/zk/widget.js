@@ -2955,11 +2955,13 @@ unbind_: function (skipper, after) {
 		//to be overridden, after my children reset the size of (both width and height)
 	},
 	isExcludedHflex_: function () {
-		return false;
+		var n = this.$n();
+		return n && n.style.position == 'absolute'; // B60-ZK-917
 		//to be overridden, if the widget is excluded for hflex calculation.
 	},
 	isExcludedVflex_: function () {
-		return false;
+		var n = this.$n();
+		return n && n.style.position == 'absolute'; // B60-ZK-917
 		//to be overridden, if the widget is excluded for vflex calculation.
 	},
 	// to overridden this method have to fix the IE9 issue (ZK-483)

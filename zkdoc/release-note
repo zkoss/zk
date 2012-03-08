@@ -20,6 +20,7 @@ ZK 6.0.1
   ZK-905: Save into a Form bean should fire NotifyChange
   ZK-911: NotifyChange of a property of a Form is not reloaded.
   ZK-898: Listbox paging bug 
+  ZK-917: V/Hflex shall not calculate its sibling size when its position is absolute or relative 
   
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
