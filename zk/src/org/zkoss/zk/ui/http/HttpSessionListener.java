@@ -17,6 +17,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import javax.servlet.*;
+
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 
@@ -29,7 +31,8 @@ import org.zkoss.zk.ui.Execution;
  * @author tomyeh
  */
 public class HttpSessionListener extends HttpSessionListener23
-implements ServletRequestAttributeListener {
+implements ServletRequestAttributeListener, ServletContextListener {
+	private static WebManager _webman;
 	// ServletRequestAttributeListener//
 	public void attributeAdded(ServletRequestAttributeEvent evt) {
 		final String name = evt.getName();
@@ -60,5 +63,29 @@ implements ServletRequestAttributeListener {
 				((ExecutionImpl)exec).getScopeListeners()
 					.notifyReplaced(name, evt.getValue());
 		}
+	}
+	@Override
+	public void contextDestroyed(ServletContextEvent event) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		if (Servlets.isServlet3() && _webman == null) {
+			try {
+				final ServletContext ctx = event.getServletContext();
+				if (ctx.getInitParameter("DHtmlLayoutServlet.update-uri") != null) {
+					String updateURI = Utils.checkUpdateURI(
+							ctx.getInitParameter("DHtmlLayoutServlet.update-uri"), "The update-uri parameter");
+	
+					_webman = new WebManager(ctx, updateURI);
+				} else
+					throw new ServletException("update-uri required!");
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public static WebManager getWebManager () {
+		return _webman;
 	}
 }
