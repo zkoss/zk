@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-927.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed May 8 11:37:11 2012, Created by Dennis
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	<label multiline="true">
+	1.listbox1 is multiple selection, it select 3rd item after loaded.
+	2.listbox2 is signle selection, it select 3rd item after loaded.
+	3.do multiple selection on listbox1, you will see  selectedItem1 change to your selection
+	4.do single selection on listbox2, you will see  selectedItem2 change to your selection
+	5.click clear, the selection of listbox was clear
+	5.click reload, selectedItem1 and selectedItem2 was clear. 
+	</label>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+		ListModelList model = new ListModelList(list);
+		model.addSelection(model.getElementAt(2));
+		model.setMultiple(true);
+		
+		
+		Set set = new HashSet();
+		
+		for (int i = 0; i < 10; i++) {
+			set.add("item " + i);
+		}
+		
+		ListModelSet model2 = new ListModelSet(set);
+		model2.setMultiple(false);
+		model2.addSelection(model2.getElementAt(2));
+	]]></zscript>
+	<hbox>
+	<listbox id="listbox1" width="150px" model="@{model, load-when='reload.onClick'}" checkmark="true">
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+	<listbox id="listbox2" width="150px" model="@{model2, load-when='reload.onClick'}" checkmark="true">
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+	</hbox>
+	<vbox>
+		<hbox>
+			selectedItem1 : <label value="@{listbox1.model.selection, load-when='listbox1.onSelect,reload.onClick'}" />
+		</hbox>
+		<hbox>
+			selectedItem2 : <label value="@{listbox2.model.selection, load-when='listbox2.onSelect,reload.onClick'}" />
+		</hbox>
+	</vbox>
+	<button id="clear" label="clear" onClick="model.clearSelection();model2.clearSelection();" />	
+	<button id="reload" label="reload" />
+	</window>
+</zk>

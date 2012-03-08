@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-927.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed May 8 11:37:11 2012, Created by Dennis
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	<label multiline="true">
+	1.select combobox1,
+	2.select combobox2, the selectedItem should change to the selection
+	3.click set,then reload, the selection of comboxbox1 should not change, the selection of combobox2 should back to 1st item
+	</label>
+		
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+		java.util.Map selections = new java.util.HashMap();
+		
+		
+	]]></zscript>
+	<hbox>
+	<combobox id="combo1" width="150px" model="@{list, load-when='reload.onClick'}" >
+		<comboitem self="@{each=item}" label="@{item}"/>
+	</combobox>
+	
+	<combobox id="combo2" width="150px" model="@{list, load-when='reload.onClick'}" selectedItem="@{selections.selectedItem, load-when='reload.onClick'}">
+		<comboitem self="@{each=item}" label="@{item}"/>
+	</combobox>
+	</hbox>
+	<vbox>
+		<hbox>
+			selectedItem : <label value="@{selections.selectedItem, load-when='combo2.onChange,reload.onClick'}" />
+		</hbox>
+	</vbox>
+	<button id="set" label="set" onClick='selections.put("selectedItem",list.get(0));' />
+	<button id="reload" label="reload" />
+	</window>
+</zk>

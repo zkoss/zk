@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Convert the selected item of combobox to bean.
@@ -67,18 +68,25 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 	/**
 	 * @since 3.0.2
 	 */
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp) {
 		final Combobox cbbox = (Combobox) comp;
 	  	if (val != null) {
 	  		final ListModel xmodel = cbbox.getModel();
 			
 	  		if (xmodel instanceof BindingListModel) {
+	  			final BindingListModel model = (BindingListModel) xmodel;
+	  			
 		  		//Bug #2010389
 	  			//if combobox is going to do onInitRender (syncModel), no need to setSelectedItem
 	  			if (cbbox.getAttribute("zul.Combobox.ON_INITRENDER") != null) {
+	  				//ZK-927 zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
+	  				if(model instanceof Selectable){
+	    				((Selectable)model).addToSelection(val);
+	  				}
 	  				return TypeConverter.IGNORE;
 	  			}
-	  			final BindingListModel model = (BindingListModel) xmodel;
+	  			
 	  			int index = model.indexOf(val);
 	  			if (index >= 0 && cbbox.getItemCount() > index) {
 	    			final Comboitem item = cbbox.getItemAtIndex(index);
@@ -102,6 +110,12 @@ public class SelectedComboitemConverter implements TypeConverter, java.io.Serial
 		    				Events.postEvent(new SelectEvent<Comboitem, Object>("onSelect", cbbox, items, item));
 		    			}
 	    			}
+	    			//ZK-927 zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
+	    			if(model instanceof Selectable){
+	    				((Selectable)model).addToSelection(val);
+	    				return TypeConverter.IGNORE;
+	    			}
+	    			
 	  				return item;
 	  			}
 	  		} else if (xmodel == null) { //no model case, assume Comboitem.value to be used with selectedItem

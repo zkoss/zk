@@ -136,7 +136,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<property-name>model</property-name>
 			<attribute>
 				<attribute-name>converter</attribute-name>
-				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+				<attribute-value>org.zkoss.zkplus.databind.CombboxListModelConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -330,7 +330,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<property-name>model</property-name>
 			<attribute>
 				<attribute-name>converter</attribute-name>
-				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+				<attribute-value>org.zkoss.zkplus.databind.ListboxListModelConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>

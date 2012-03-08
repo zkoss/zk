@@ -1029,7 +1029,7 @@ def alert(m):
 			<property-name>model</property-name>
 			<attribute>
 				<attribute-name>converter</attribute-name>
-				<attribute-value>org.zkoss.zkplus.databind.ListModelConverter</attribute-value>
+				<attribute-value>org.zkoss.zkplus.databind.SelectboxListModelConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>

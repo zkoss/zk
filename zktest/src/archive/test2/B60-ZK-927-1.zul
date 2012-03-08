@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-927.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed May 8 11:37:11 2012, Created by Dennis
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	<label multiline="true">
+	1.listbox1 is single selection and listbox2 is multiple selection
+	2. do single selection on listbox1, multiple selection on listbox2.
+	3. click reload. both listbox1 and listbox2 should keep the selection.
+	</label>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+	]]></zscript>
+	<hbox>
+	<listbox id="listbox1" width="150px" model="@{list, load-when='reload.onClick'}" multiple="false" checkmark="true" >
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+	
+	<listbox id="listbox2" width="150px" model="@{list, load-when='reload.onClick'}" checkmark="true" multiple="true" >
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+	 
+	</hbox>
+	<button id="reload" label="reload" />
+	</window>
+</zk>

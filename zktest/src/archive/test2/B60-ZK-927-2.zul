@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-927.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed May 8 11:37:11 2012, Created by Dennis
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	<label multiline="true">
+	1.listbox1 is single selection, it select 1st item after loaded.
+	2.do single selection on listbox1, you will see  selectedItem change to your selection
+	3.click set,then reload, selection should back to 1st item
+	</label>
+		
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+		java.util.Map selections = new java.util.HashMap();
+		
+		selections.put("selectedItem",list.get(0));
+	]]></zscript>
+	<hbox>
+	<listbox id="listbox1" width="150px" model="@{list, load-when='reload.onClick'}" multiple="false" selectedItem="@{selections.selectedItem, load-when='reload.onClick'}" checkmark="true" >
+		<listhead>
+			<listheader label="col"/>
+		</listhead>
+		<listitem self="@{each=item}" label="@{item}"/>
+	</listbox>
+	</hbox>
+	<vbox>
+		<hbox>
+			selectedItem : <label value="@{selections.selectedItem, load-when='listbox1.onSelect,reload.onClick'}" />
+		</hbox>
+	</vbox>
+	<button id="set" label="set" onClick='selections.put("selectedItem",list.get(0));' />
+	<button id="reload" label="reload" />
+	</window>
+</zk>

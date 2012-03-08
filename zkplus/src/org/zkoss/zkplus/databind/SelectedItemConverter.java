@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.ext.Selectable;
 
 /**
  * Convert selected item to bean and vice versa.
@@ -55,6 +56,7 @@ import org.zkoss.zul.Listitem;
 public class SelectedItemConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191439L;
 	
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp) { //load
 		Listbox lbx = (Listbox) comp;
 	  	if (val != null) {
@@ -85,6 +87,13 @@ public class SelectedItemConverter implements TypeConverter, java.io.Serializabl
 		    				Events.postEvent(new SelectEvent<Listitem, Object>("onSelect", lbx, items, item));
 		    			}
 	    			}
+	    			
+	    			//ZK-927 zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
+	    			if(model instanceof Selectable){
+	    				((Selectable)model).addToSelection(val);
+	    				return TypeConverter.IGNORE;
+	    			}
+	    			
 	  				return item;
 	  			}
 	  		} else if (xmodel == null) { //no model case, assume Listitem.value to be used with selectedItem

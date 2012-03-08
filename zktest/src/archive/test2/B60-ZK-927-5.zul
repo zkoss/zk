@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B60-ZK-927.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed May 8 11:37:11 2012, Created by Dennis
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window >
+	<label multiline="true">
+	1.select select1,
+	2.select select1, the selectedIndex should change to the selection
+	3.click set,then reload, the selection of select1 should not change, the  selectedIndex should change to 0.
+	4.however the select2 , selection will not change to 0 because of it doesn't imple a selectedIndex converter yet.
+	</label>
+		
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		
+		for (int i = 0; i < 10; i++) {
+			list.add("item " + i);
+		}
+		
+		java.util.Map selections = new java.util.HashMap();
+		
+		
+	]]></zscript>
+	<hbox>
+	<selectbox id="sel1" width="150px" model="@{list, load-when='reload.onClick'}" >
+		<template name="model">${each}</template>
+	</selectbox>
+
+	<selectbox id="sel2" width="150px" model="@{list, load-when='reload.onClick'}" selectedIndex="@{selections.selectedIndex, load-when='reload.onClick'}">
+		<template name="model">${each}</template>
+	</selectbox>
+	
+	</hbox>
+	<vbox>
+		<hbox>
+			selectedIndex : <label value="@{selections.selectedIndex, load-when='sel2.onChange,reload.onClick'}" />
+		</hbox>
+	</vbox>
+	<button id="set" label="set" onClick='selections.put("selectedIndex",0);' />
+	<button id="reload" label="reload" />
+	</window>
+</zk>

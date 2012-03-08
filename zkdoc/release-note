@@ -22,6 +22,7 @@ ZK 6.0.1
   ZK-911: NotifyChange of a property of a Form is not reloaded.
   ZK-898: Listbox paging bug 
   ZK-917: V/Hflex shall not calculate its sibling size when its position is absolute or relative 
+  ZK-927: zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
   
 * Upgrade Notes
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public

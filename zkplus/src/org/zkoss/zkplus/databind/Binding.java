@@ -538,7 +538,9 @@ public class Binding implements java.io.Serializable {
 					//objs[0] component, objs[1] event name
 					final Component target = (Component) objs[0];
 					final String evtname = (String) objs[1];
-					
+					if(target==null){
+						throw new NullPointerException("component not found , expr is "+expr);
+					}
 					LoadEventListener listener = (LoadEventListener)
 						target.getAttribute("zk.LoadEventListener."+evtname);
 					if (listener == null) {
