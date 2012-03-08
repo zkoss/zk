@@ -296,8 +296,19 @@ ZK 5.0.11
   ZK-845: Fileupload fail in cluster server (JBoss)
   ZK-851: no value update on textbox in popup
   ZK-812: Components.wireFellows() error when root component is not IdSpace
+  ZK-872: Calling fireEvent method cause exeception with GroupsModel(Rod enabled)
+  ZK-867: Can't customize master detail's style of odd row
+  ZK-873: Inconsistent display of select all checkbox in listheader if ROD is true
+  ZK-859: bandbox popup not aligned correctly on FF10/IE9
+  ZK-886: Accordion tabbox disabled issue
+  ZK-868: The image of the file upload button broke in the liferay
+  ZK-893: Frozen causes columns disorder
+  ZK-908: setErrorMessage causes reset of input element value
+  ZK-909: throwing WrongValuesException causes input field value to reset
+  ZK-897: Calling fireEvent method cause UIexeception with GroupsModel(Rod disabled)
   
 * Upgrade Notes
+  + Disable ROD function when using GroupsModel
   
 	--------
 ZK 5.0.10
