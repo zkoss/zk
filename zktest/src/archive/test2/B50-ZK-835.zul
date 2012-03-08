@@ -1,5 +1,6 @@
 <zk xmlns:w="client">
 	<h:pre xmlns:h="xhtml">
+		(All browsers EXCEPT IE8)
 		See the zk log , there should be only one "bind" log for listbox/grid/tree , 
 		not "bind, unbind,bind " log. (Except IE8)
 	</h:pre>
