@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.fn;
 
+import java.util.regex.Pattern;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
@@ -130,8 +132,11 @@ public class StringFns {
 	}
 	private static void replace0(StringBuffer sb, String from, String to) {
 		final int len = from.length();
+
 		for (int j = 0; (j = sb.indexOf(from, j)) >= 0;) {
 			sb.replace(j, j += len, to);
+			j+= to.length() -1 ; //ZK-929 : update index to prevent infinite loop
+			
 		}
 	}
 
