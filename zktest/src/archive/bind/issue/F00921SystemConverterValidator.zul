@@ -1,8 +1,8 @@
 <zk>
     <window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00921SystemConverterValidator')">
     	<vbox>
-        <hbox><label id="l1" value="@load(vm.converterName1)"/>=XConverter</hbox>
-        <hbox><label id="l2" value="@load(vm.converterName2)"/>=YConverter</hbox>
+        <hbox><label id="l1" value="@load(vm.converterName1) @converter('xConverter')"/>=XConverterX</hbox>
+        <hbox><label id="l2" value="@load(vm.converterName2) @converter('yConverter')"/>=YConverterX</hbox>
         <hbox><label id="l3" value="@load(vm.validatorName1)"/>=XValidator</hbox>
         <hbox><label id="l4" value="@load(vm.validatorName2)"/>=YValidator</hbox>
         </vbox>

@@ -13,6 +13,27 @@ import org.zkoss.zk.ui.Component;
 public class F00921SystemConverterValidator {
 
 	Binder binder;
+	
+	String value1 = "A";
+	String value2 = "B";
+	
+	
+
+	public String getValue1() {
+		return value1;
+	}
+
+	public void setValue1(String value1) {
+		this.value1 = value1;
+	}
+
+	public String getValue2() {
+		return value2;
+	}
+
+	public void setValue2(String value2) {
+		this.value2 = value2;
+	}
 
 	@Init
 	public void init(@ContextParam(ContextType.BINDER) Binder binder) {
@@ -40,7 +61,7 @@ public class F00921SystemConverterValidator {
 		@Override
 		public Object coerceToUi(Object val, Component component, BindContext ctx) {
 			// TODO Auto-generated method stub
-			return null;
+			return val+"X";
 		}
 
 		@Override
@@ -56,7 +77,7 @@ public class F00921SystemConverterValidator {
 		@Override
 		public Object coerceToUi(Object val, Component component, BindContext ctx) {
 			// TODO Auto-generated method stub
-			return null;
+			return val+"Y";
 		}
 
 		@Override
