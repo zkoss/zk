@@ -43,6 +43,7 @@ ZK 5.0.11
   ZK-909: throwing WrongValuesException causes input field value to reset
   ZK-897: Calling fireEvent method cause UIexeception with GroupsModel(Rod disabled)
   ZK-890: hflex behave different on ie 
+  ZK-918: Combobox elements not customizable with css class
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
