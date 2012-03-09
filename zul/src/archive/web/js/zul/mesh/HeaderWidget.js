@@ -262,7 +262,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var w = zkp.revisedWidth(p.offsetWidth);
 			// Bug #3255116
 			if (mw.ebody) {
-				var scroll = mw.ebody.offsetWidth - mw.ebody.clientWidth; // zkq#hasVScroll() cause issue in IE9
+				// zkq#hasVScroll() cause issue in IE9 (2011/10/17)
+				// B50-ZK-890: somehow IE 9 works with it now. (2012/3/9)
+				var scroll = zk(mw.ebody).hasVScroll();
 				if (scroll > 11) {
 					w -= scroll;
 					

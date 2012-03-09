@@ -1,0 +1,24 @@
+<!--
+	B50-ZK-890.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Mar 9 10:17:13 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		IE only. You should see the 3 Columns.
+	</div>
+	<grid>
+		<columns>
+			<column label="Column 1" hflex="1" />
+			<column label="Column 2" hflex="1" />
+			<column label="Column 3" hflex="1" />
+		</columns>
+	</grid>
+</zk>
