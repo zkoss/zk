@@ -1,0 +1,7 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<label value='${c:replace("ZK-123-ZK-456-ZK", "ZK", "Hello ZK!")}'/>
+	
+	<separator />
+	(It should be [<label value='Hello ZK!-123-Hello ZK!-456-Hello ZK!'/>] )
+</zk>
