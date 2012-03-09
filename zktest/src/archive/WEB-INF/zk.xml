@@ -505,6 +505,18 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     	<label-location>/WEB-INF/prop/B50-3316543-wtb.properties</label-location>
 	</system-config>	
 	
+	<!-- for ZKBIND ZK-921	A way to register system level converter and validator  -->
+	<library-property>
+		<name>org.zkoss.bind.appConverters</name>
+		<value>xConverter=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$XConverter,
+		yConverter=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$YConverter</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.bind.appValidators</name>
+		<value>xValidator=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$XValidator,
+		yValidator=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$YValidator</value>
+	</library-property>
+	
 	<!-- Uncommet to control the encoding of the labe properties files
 		Default: UTF-8
 	<library-property>

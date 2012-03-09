@@ -7,6 +7,7 @@ ZK 6.0.1
   ZK-901: Provide reference-binding
   ZK-862: Enhance the BeanValidator to validate a property of a form
   ZK-916: A FormBeanValidator
+  ZK-921: A way to register system level converter and validator
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

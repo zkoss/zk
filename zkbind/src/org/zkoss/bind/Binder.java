@@ -24,6 +24,35 @@ import org.zkoss.zk.ui.Component;
  */
 public interface Binder {
 	
+	
+	/**
+	 * Key of application converters, you set it by library-property in application zk.xml.
+	 * The format is <i>name=className</i>, different converters are split by comma. <p/> 
+	 * Example <p/>
+	 * <pre>{@code
+	 * <library-property>
+	 *   <name>org.zkoss.bind.appConverters</name>
+	 *   <value>foo=my.FooConverter,bar=my.BarConverter</value>
+	 *</library-property>
+	 * }</pre> 
+	 * @since 6.0.1
+	 */
+	public static final String APP_CONVERTERS = "org.zkoss.bind.appConverters";
+	
+	/**
+	 * Key of application validators, you set it by library-property in application zk.xml <br/>
+	 * The format is <i>name=className</i>, different validators are split by comma. <p/> 
+	 * Example <p/>
+	 * <pre>{@code
+	 * <library-property>
+	 *   <name>org.zkoss.bind.appValidators</name>
+	 *   <value>foo=my.FooValidator,bar=my.BarValidator</value>
+	 *</library-property>
+	 *}</pre> 
+	 * @since 6.0.1
+	 */
+	public static final String APP_VALIDATORS = "org.zkoss.bind.appValidators";
+	
 	/**
 	 * Component annotation of ZKBind
 	 */
