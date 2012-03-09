@@ -410,7 +410,8 @@ public class Https extends Servlets {
 	void write(HttpServletRequest request, HttpServletResponse response,
 	Media media, boolean download, boolean repeatable)
 	throws IOException {
-		response.setHeader("Accept-Ranges", "bytes");
+		//2012/03/09 TonyQ: ZK-885 Iframe with PDF stop works in IE 8 when we have Accept-Ranges = bytes.
+//		response.setHeader("Accept-Ranges", "bytes");
 
 		final boolean headOnly = "HEAD".equalsIgnoreCase(request.getMethod());
 		final byte[] data;

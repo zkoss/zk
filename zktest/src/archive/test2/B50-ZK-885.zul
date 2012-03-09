@@ -1,0 +1,15 @@
+<zk>
+  <window border="normal" title="hello">
+  
+  	<iframe id="ifr" src="http://www.zkoss.org" />
+  	<zscript>
+  		import org.zkoss.util.media.AMedia;
+  		import java.io.*;
+  		
+  		AMedia media = new AMedia(new File("src/archive/test2/ZK 6 Essentials.pdf"),null,null);
+  		
+  		ifr.setContent(media);
+  	</zscript>  	
+  </window>
+  
+</zk>
