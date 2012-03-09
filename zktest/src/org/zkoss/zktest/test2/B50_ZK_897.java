@@ -30,7 +30,7 @@ public class B50_ZK_897 extends GenericForwardComposer {
 
 	private class MyModel extends GroupsModelArray {
 
-		public MyModel(String[] data, Comparator<String> comp) {
+		public MyModel(String[] data, Comparator comp) {
 			super(data, comp);
 		}
 
@@ -38,19 +38,16 @@ public class B50_ZK_897 extends GenericForwardComposer {
 			fireEvent(GroupsDataEvent.GROUPS_CHANGED, 0, group, group);
 		}
 
-		@Override
 		protected Object createGroupHead(Object[] groupdata, int index, int col) {
 			return "HEAD";
 		}
 
-		@Override
 		protected Object createGroupFoot(Object[] groupdata, int index, int col) {
 			return "FOOT";
 		}
 	}
 
 
-	@Override
 	public void doAfterCompose(final Component component) throws Exception {
 		super.doAfterCompose(component);
 
@@ -60,10 +57,9 @@ public class B50_ZK_897 extends GenericForwardComposer {
 		data[2] = "test1";
 		data[3] = "test1";
 		
-		model = new MyModel(data, new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.compareTo(o2);
+		model = new MyModel(data, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((String)o1).compareTo((String)o2);
 			}
 		});
 		
@@ -75,7 +71,6 @@ public class B50_ZK_897 extends GenericForwardComposer {
 		
 
 		button.addEventListener(Events.ON_CLICK, new EventListener() {
-			@Override
 			public void onEvent(Event arg0) throws Exception {
 				model.update(0);
 			}
