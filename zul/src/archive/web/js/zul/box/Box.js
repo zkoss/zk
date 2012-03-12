@@ -763,7 +763,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 		var nd = vert ? real.rows: real.rows[0].cells,
 			total = vert ? zk(real).revisedHeight(real.offsetHeight):
-							zk(real).revisedWidth(real.offsetWidth);
+							zk(real).revisedWidth(real.offsetWidth),
+			sizes = this._sizes;
 
 		for (var i = nd.length; i--;) {
 			var d = nd[i];
@@ -783,7 +784,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					total -= diff;
 				} else {
 					var diff = d.offsetWidth;
-					if(d.id && !d.id.endsWith("-chdex2")) //TD
+					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
+					//if user set the widths , we freeze the with directly 
+					if(!sizes && d.id && !d.id.endsWith("-chdex2")) //TD
 						d.style.width = zk(d).revisedWidth(i ? diff: total) + "px";
 					total -= diff;
 				}
