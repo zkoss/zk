@@ -206,9 +206,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (val) {
 			val = val.toLowerCase();
 			var beg = this._sel,
-				last = this._next(null, !bUp);
-			if (!beg || beg.parent != this)
-				beg = this._next(null, bUp);
+				last = this._next(null, bUp);
+			if (!beg || beg.parent != this){
+				beg = this._next(null, !bUp);
+			}
 			if (!beg) {
 				evt.stop();
 				return; //ignore it
@@ -226,7 +227,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 						break;
 					}
 				}
-				if ((item = this._next(item, bUp)) == beg)
+				var nextitem = this._next(item, bUp);
+				if( item == nextitem ) break;  //prevent infinite loop
+				if ((item = nextitem) == beg)
 					break;
 			}
 
@@ -235,12 +238,15 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 			if (sel) { //exact match
 				var ofs = zk(inp).getSelectionRange();
-				if (ofs[0] == 0 && ofs[1] == val.length) //full selected
+				if (ofs[0] == 0 && ofs[1] == val.length){ //full selected
 					sel = this._next(sel, bUp); //next
-			} else
-				sel = this._next(null, bUp);
-		} else
+				}
+			} else{
+				sel = this._next(null, !bUp);
+			}
+		} else{
 			sel = this._next(null, true);
+		}
 
 		if (sel)
 			zk(sel).scrollIntoView(this.$n('pp'));

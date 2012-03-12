@@ -314,7 +314,8 @@ ZK 5.0.11
   ZK-918: Combobox elements not customizable with css class
   ZK-929: StringFns's replace function will cause an infinite loo
   ZK-885: Iframe with PDF stop works in IE 8  
-    
+  ZK-928: Navigate the comboitems by press key will select a wrong item
+  
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
   

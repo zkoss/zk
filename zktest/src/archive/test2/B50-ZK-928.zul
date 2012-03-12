@@ -1,0 +1,22 @@
+<!-- 
+	20120312 11:12 , TonyQ 
+ -->
+<zk>
+	<combobox id="cb1" value="Apple">
+		<comboitem forEach="Apple, Orange, Grape, Banana"
+			label="${each }" />
+	</combobox>
+	<combobox id="cb2"  >
+		<comboitem forEach="Apple, Orange, Grape, Banana"
+			label="${each }" />
+	</combobox>	
+	<script>
+	/*
+	zk.afterMount(function (){
+		zk.Widget.$("$cb1")._updnSel({stop:function(){}},false);
+		zk.Widget.$("$cb2")._updnSel({stop:function(){}},false);		
+	});
+	*/
+	</script>
+	
+</zk>
