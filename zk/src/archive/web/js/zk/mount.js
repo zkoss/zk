@@ -405,6 +405,9 @@ function zkamn(pkg, fn) {
 		} catch (e) {
 			zk.mounting = false;
 			zk.error("Failed to mount: "+(e.message||e));
+			setTimeout(function(){
+				throw e;
+			},0);				
 		}
 	},
 	//widget creation called by au.js
