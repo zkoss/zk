@@ -24,8 +24,10 @@ ZK 6.0.1
   ZK-898: Listbox paging bug 
   ZK-917: V/Hflex shall not calculate its sibling size when its position is absolute or relative 
   ZK-927: zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
+  ZK-939: TreeNode's getChildren() shall not return List<? extends TreeNode<E>>
   
 * Upgrade Notes
+  + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
   + Added 2 arguments 'converterExpr' and converterArgs' to the end of
     org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings().

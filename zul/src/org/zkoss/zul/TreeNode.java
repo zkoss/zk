@@ -50,7 +50,7 @@ public interface TreeNode<E> {
 	 * Return children of the receiver
 	 * @return children of the receiver. If the node is a leaf, null is returned.
 	 */
-	public List<? extends TreeNode<E>> getChildren();
+	public List<TreeNode<E>> getChildren();
 	
 	/**
 	 * Returns the child <code>TreeNode</code> at index 

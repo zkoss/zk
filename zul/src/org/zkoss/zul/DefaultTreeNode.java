@@ -124,7 +124,7 @@ Cloneable, java.io.Serializable  {
 	}
 	
 	@Override
-	public List<? extends TreeNode<E>> getChildren(){
+	public List<TreeNode<E>> getChildren(){
 		return isLeaf() ? null : _children;
 	}
 	@Override
