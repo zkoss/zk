@@ -1,6 +1,6 @@
 <zk xmlns:w="client">
 	<window border="normal" title="hello">
-		<custom-attributes org.zkoss.zul.listbox.rod="false" />
+		<custom-attributes org.zkoss.zul.listbox.rod="true" />
 
 		<button
 			onClick="label.value=String.valueOf(listbox.getSelectedCount())"
