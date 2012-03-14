@@ -894,8 +894,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		if (zk.ie < 8)
 			this._syncBodyHeight(); // B50-ZK-171
-		if (zk.ie7_)
-			zk(this.ebody).redoCSS(); // B50-ZK-335: Grid, Tree may have extra horizonal scroll bar
+		
+		
+		//ZK-926 IE7 scrollbar not working after zoom or classname is changed in redoCSS.
+		//       Since ZK-335 is not reproducible in ZK 5.0.11 and it's causing bigger side effect,so we comment this first. 
+//		if (zk.ie7_)
+//			zk(this.ebody).redoCSS(); // B50-ZK-335: Grid, Tree may have extra horizonal scroll bar
 		
 		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
