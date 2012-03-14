@@ -1,0 +1,31 @@
+<!--
+	B60-ZK-919.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Mar 14 15:48:21 TST 2012, Created by henri
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<window width="400px" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B60_ZK_919_ViewModel')">
+<label pre="true">
+1. You shall see 4 type of dates whose time part are the same. 
+2. Change the date of each datebox.
+3. If no exception, then it is OK. 
+</label>
+	<grid>
+		<columns>
+			<column hflex="min"></column>
+			<column></column>
+		</columns>
+		<rows>
+			<row>java.util.Date: <datebox value="@bind(vm.utildate)"  format="medium+medium" hflex="true"/></row>
+			<row>java.sql.Date: <datebox value="@bind(vm.sqldate)"  format="medium+medium" hflex="true"/></row>
+			<row>java.sql.Time:<datebox value="@bind(vm.sqltime)"  format="medium+medium" hflex="true"/></row>
+			<row>java.sql.Timestamp<datebox value="@bind(vm.sqltimestamp)"  format="medium+medium" hflex="true"/></row>
+		</rows>
+	</grid>
+</window>
