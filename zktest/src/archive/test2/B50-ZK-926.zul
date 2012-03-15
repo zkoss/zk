@@ -1,0 +1,19 @@
+<zk>
+		<listbox height="500px">
+		<custom-attributes org.zkoss.zul.listbox.rod="false" />
+		<zscript>
+		Object[] o = new Object[100];
+		</zscript>
+			<zk forEach="${o}">
+				<listitem label="test" />
+			</zk>
+		</listbox>
+		
+		<script>
+		zk.afterMount(function(){
+			 jq(zk.Widget.$(jq("@listbox")).ebody).scroll(function(){
+			 	zk.log("scroll",this.scrollTop);
+			 });
+		 });
+		</script>
+</zk>
