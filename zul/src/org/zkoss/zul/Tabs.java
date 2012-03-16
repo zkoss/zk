@@ -137,8 +137,13 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		super.onChildRemoved(child);
 
 		final Tabbox tabbox = getTabbox();
-		if (tabbox != null)
-			((Tab)child).removeEventListener(Events.ON_SELECT, tabbox._listener);
+		if (tabbox != null){
+			Tab tab = (Tab) child;
+			tab.removeEventListener(Events.ON_SELECT, tabbox._listener);
+			if(tabbox.getSelectedTab() == tab){
+				tabbox.clearSelectedTab();
+			}
+		}
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
