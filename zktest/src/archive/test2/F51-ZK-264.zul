@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <vlayout>
-Click the following button, then check if four lines will be shown as the following sequence:
+Click the following button, then check if six lines will be shown as the following sequence:
 "Highest Priority", "ZUML Priority", "High Priority", "Normal Priority", "Normal Priority", "Low Priority"
 <button id="b" label="test"
  onClick='self.parent.appendChild(new Label("ZUML Priority"))'/>

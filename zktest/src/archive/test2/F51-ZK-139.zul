@@ -44,7 +44,7 @@
 	</zscript>		
 
 	<button label="create after from template"
-		onClick='self.parent.getTemplate("t1").create(self.parent, null, resolver)'/>
+		onClick='self.parent.getTemplate("t1").create(self.parent, null, resolver, null)'/>
 	<button label="create before from template"
-		onClick='self.parent.getTemplate("t1").create(self.parent, self, resolver)'/>
+		onClick='self.parent.getTemplate("t1").create(self.parent, self, resolver, null)'/>
 </vlayout>
