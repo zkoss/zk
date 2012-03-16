@@ -635,7 +635,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** The constructor.
 	 * For example,
 <pre><code>
-new zul.wnd.Window{
+new zul.wnd.Window({
   border: 'normal',
   title: 'Hello World',
   closable: true
