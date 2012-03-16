@@ -58,9 +58,13 @@ public class SimpleScope implements Scope {
 		_listeners = new ScopeListeners(_owner);
 	}
 
+	/*package*/ Map newInitMap() {
+		return new Attrs();
+	}
+
 	//Scope//
 	public Map getAttributes() {
-		if (_attrs == null) _attrs = new Attrs();
+		if (_attrs == null) _attrs = newInitMap();
 		return _attrs;
 	}
 	public Object getAttribute(String name) {
@@ -70,7 +74,7 @@ public class SimpleScope implements Scope {
 		return _attrs != null && _attrs.containsKey(name);
 	}
 	public Object setAttribute(String name, Object value) {
-		if (_attrs == null) _attrs = new Attrs();
+		if (_attrs == null) _attrs = newInitMap();
 		return _attrs.put(name, value);
 	}
 	public Object removeAttribute(String name) {

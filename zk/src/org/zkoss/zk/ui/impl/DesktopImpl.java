@@ -292,7 +292,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_uvLock = new Object();
 		_rque = newRequestQueue();
 		_comps = new HashMap(64);
-		_attrs = new SimpleScope(this);
+		_attrs = new SynchronizedScope(this);
+			//Use thread-safe scope, Since some class might access asynchronous,
+			//i.e., without locking. Example, AuUploader
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
