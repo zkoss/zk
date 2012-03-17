@@ -412,9 +412,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 	
 	protected void clearSelectedTab(){
-		if(_seltab != null){
-			_seltab = null;
-		}
+		_seltab = null;
 	}
 
 	// Cloneable//
