@@ -361,6 +361,12 @@ public class Tabbox extends XulElement {
 			}
 		}
 	}
+	
+	protected void clearSelectedTab(){
+		if(_seltab != null){
+			_seltab = null;
+		}
+	}
 
 	// Cloneable//
 	public Object clone() {

@@ -521,8 +521,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var p = this.parent;
 		if (p && child == p._selTab) {
 			p._selTab = null;
-			if (p = p.tabpanels)
-				p._selPnl = null; //stored in tabpanels
+			
+			//ZK-937
+//			if (p = p.tabpanels){
+//				p._selPnl = null; //stored in tabpanels
+//			}
 		}
 		this._scrollcheck("init");
 		this.$supers("onChildRemoved_", arguments);

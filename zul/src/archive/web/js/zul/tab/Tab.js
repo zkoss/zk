@@ -19,6 +19,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <p>
  * Default {@link #getZclass}: z-tab.
  */
+
+(function () {
+
+	// ZK-886, called by unbind_ and rerender
+	// this._oldId used in tab.js
+	// this.$n() will be cleared during rerender
+	// but LinkedPanel.firstChild will not,
+	// the condition LinkedPanel.firstChild != this.$n()
+	// will get the wrong result
+	// delete it later for the invalidate() case
+	function _logId (wgt) {
+		if (!wgt._oldId) {
+			wgt._oldId = wgt.uuid;
+			setTimeout(function () {
+				delete wgt._oldId;
+			}, 0);
+		}
+	}
 zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -140,8 +158,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (toSel) {
 			tabbox._selTab = tab; //avoid loopback
 			var ps;
-			if (ps = tabbox.tabpanels)
+			if (ps = tabbox.tabpanels){
+				if(ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false,false);
 				ps._selPnl = panel; //stored in tabpanels
+			}
 		}
 		tab._selected = toSel;
 		
@@ -245,7 +265,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	unbind_: function () {
 		var closebtn = this.$n('close');
 		// ZK-886
-		this.logId(this);
+		_logId(this);
 		if (closebtn) {
 			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
 			if (zk.ie6_)
@@ -267,23 +287,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	rerender: function (skipper) {
 		// ZK-886
-		this.logId(this);
+		_logId(this);
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
-	},
-	// ZK-886, called by unbind_ and rerender
-	// this._oldId used in tab.js
-	// this.$n() will be cleared during rerender
-	// but LinkedPanel.firstChild will not,
-	// the condition LinkedPanel.firstChild != this.$n()
-	// will get the wrong result
-	// delete it later for the invalidate() case
-	logId: function (wgt) {
-		if (!wgt._oldId) {
-			wgt._oldId = wgt.uuid;
-			setTimeout(function () {
-				delete wgt._oldId;
-			}, 0);
-		}
 	}
 });
 /** @class zul.tab.TabRenderer
@@ -300,3 +305,4 @@ zul.tab.TabRenderer = {
 		return false;
 	}
 };
+})();

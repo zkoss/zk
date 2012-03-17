@@ -409,6 +409,9 @@ span.z-drop-disallow {
 	border: 1px dotted #999;
 }
 --%>
+.z-drag-ghost {
+	list-style:none;
+}
 
 <%-- Focus Anchor --%>
 .z-focus-a {

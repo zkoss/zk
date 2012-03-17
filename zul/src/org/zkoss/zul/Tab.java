@@ -117,7 +117,7 @@ public class Tab extends LabelImageElement {
 		if (panel != null)
 			panel.detach();		
 	}
-
+	
 	private Tab selectNextTab() {
 		for (Tab tab = (Tab) getNextSibling(); tab != null; tab = (Tab) tab.getNextSibling())
 			if (!tab.isDisabled()) {
@@ -167,15 +167,21 @@ public class Tab extends LabelImageElement {
 	 * Sets whether this tab is selected.
 	 */
 	public void setSelected(boolean selected) {
-		if (_selected != selected) {
-			final Tabbox tabbox = getTabbox();
-			if (tabbox != null) {
-				// Note: we don't update it here but let its parent does the job
+		final Tabbox tabbox = (Tabbox) getTabbox();
+		if (tabbox != null) {
+			// Note: we don't update it here but let its parent does the job
+			if(selected){  //Note that if already selecetd , tabbox will ignore it.
 				tabbox.setSelectedTab(this);
-			} else {
-				_selected = selected;				
-				smartUpdate("selected", _selected);
+			}else if(tabbox.getSelectedTab() == this){ //selected false and selected
+				
+				//clean selected tab , not set any others selected , if user call setSelected(false) manually , 
+				//they should set another tab to be selected or no any tab will be selected.
+				tabbox.clearSelectedTab();   
+				_selected = false;
 			}
+		} else if(_selected != selected){
+			_selected = selected;				
+			smartUpdate("selected", _selected);
 		}
 	}
 
