@@ -35,14 +35,18 @@ import org.zkoss.io.NullInputStream;
 /**
  * Represents an audio.
  * Unlike javax.sound.AudioClip, this class is used only to hold the raw
- * data as opaque rather than manilupate the sound.
+ * data as opaque rather than manipulate the sound.
  *
  * <p>In other words, it is used to retrieve and store the opaque data
  * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
+ * <p>AAudio is serializable, but, if you are using InputStream,
+ * you have to extend this class, and provide the implementation to
+ * serialize and deserialize {@link #_isdata}. (Since 5.0.11)
+ * 
  * @author tomyeh
  */
-public class AAudio implements Audio {
+public class AAudio implements Audio, java.io.Serializable {
 	/** Used if you want to implement a meida whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AAudio(String,,InputStream)
@@ -56,7 +60,7 @@ public class AAudio implements Audio {
 	/** The raw data in stream (or {@link #DYNAMIC_STREAM}).
 	 * Exactly one of {@link #_data} and {@link #_isdata} is not null.
 	 */
-	private final InputStream _isdata;
+	protected final transient InputStream _isdata;
 	/** The URL of the data.
 	 */
 	private final URL _url;
