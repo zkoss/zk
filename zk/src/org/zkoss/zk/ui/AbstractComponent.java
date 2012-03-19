@@ -952,7 +952,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _auxinf != null ? _auxinf.autag: null;
 	}
 	public void setAutag(String tag) {
-		if (tag != null && tag.isEmpty()) tag = null;
+		if (tag != null && Strings.isEmpty(tag)) tag = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.autag: null, tag)) {
 			initAuxInfo().autag = tag;
 			smartUpdate("autag", getAutag());
