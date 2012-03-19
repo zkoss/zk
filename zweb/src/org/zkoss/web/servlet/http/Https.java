@@ -409,7 +409,7 @@ public class Https extends Servlets {
 	throws IOException {
 		//2012/03/09 TonyQ: ZK-885 Iframe with PDF stop works in IE 8 when we have Accept-Ranges = bytes.
 		
-		if(Servlets.isBrowser(request, "ie")){
+		if(!Servlets.isBrowser(request, "ie")){
 			response.setHeader("Accept-Ranges", "bytes");
 		}
 
