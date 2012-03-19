@@ -1,0 +1,32 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00950ReferenceChange')">
+	<label multiline="true">
+		1.Select a person, both Direct and Reference should change to selected one
+		2.Select another person and edit it, both Direct and Reference should change also.
+	</label>
+	<listbox width="500px" model="@load(vm.personList)"
+		selectedItem="@bind(vm.selectedPerson)" checkmark="true">
+		<template name="model" var="r">
+			<listitem>
+				<listcell>
+					<textbox value="@bind(r.firstName)" />
+				</listcell>
+				<listcell label="@load(r.lastName)" />
+			</listitem>
+		</template>
+	</listbox>
+	<vbox>
+	==Direct==
+	<label value="@load(vm.selectedPerson.firstName)" />
+	<label value="@load(vm.selectedPerson.lastName)" />
+	<label value="@load(vm.selectedPerson.fullName)" />
+	==Reference==
+	<div p="@ref(vm.selectedPerson)">
+		<label value="@load(p.firstName)" />
+		<label value="@load(p.lastName)" />
+		<label value="@load(p.fullName)" />
+	</div>
+	</vbox>
+	<button label="dump" onClick="binder.tracker.dump()" />
+</window>
