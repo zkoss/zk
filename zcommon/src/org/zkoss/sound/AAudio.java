@@ -35,14 +35,18 @@ import org.zkoss.io.NullInputStream;
 /**
  * Represents an audio.
  * Unlike javax.sound.AudioClip, this class is used only to hold the raw
- * data as opaque rather than manilupate the sound.
+ * data as opaque rather than manipulate the sound.
  *
  * <p>In other words, it is used to retrieve and store the opaque data
  * as polymorphic thru the {@link org.zkoss.util.media.Media} interface.
  *
+ * <p>AAudio is serializable, but, if you are using InputStream,
+ * you have to extend this class, and provide the implementation to
+ * serialize and deserialize {@link #_isdata}. (Since 5.0.11)
+ * 
  * @author tomyeh
  */
-public class AAudio implements Audio {
+public class AAudio implements Audio, java.io.Serializable {
 	/** Used if you want to implement a meida whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AAudio(String,,InputStream)
@@ -56,7 +60,7 @@ public class AAudio implements Audio {
 	/** The raw data in stream (or {@link #DYNAMIC_STREAM}).
 	 * Exactly one of {@link #_data} and {@link #_isdata} is not null.
 	 */
-	private final InputStream _isdata;
+	protected final transient InputStream _isdata;
 	/** The URL of the data.
 	 */
 	private final URL _url;
@@ -65,9 +69,9 @@ public class AAudio implements Audio {
 	private final File _file;
 
 	/** The format name, e.g., "jpeg", "gif" and "png". */
-	private final String _format;
+	private String _format;
 	/** The content type. */
-	private final String _ctype;
+	private String _ctype;
 	/** The name (usually filename). */
 	private final String _name;
 
@@ -79,19 +83,6 @@ public class AAudio implements Audio {
 		_isdata = null;
 		_url = null;
 		_file = null;
-
-		String format = null;
-		try {
-			format =
-				AudioSystem.getAudioFileFormat(new ByteArrayInputStream(data))
-				.getType().getExtension();
-		} catch (UnsupportedAudioFileException ex) {
-			format = getFormatByName(_name);
-			if (format == null)
-				throw (IOException)new IOException().initCause(ex);
-		}
-		_format = format;
-		_ctype = getContentType(_format);
 	}
 	/**
 	 * Creates an instance of an audio with an input stream.
@@ -110,23 +101,10 @@ public class AAudio implements Audio {
 		_data = null;
 		_url = null;
 		_file = null;
-
-		String format = null;
-		try {
-			format = AudioSystem.getAudioFileFormat(
-					isdata == DYNAMIC_STREAM ? getStreamData(): isdata)
-				.getType().getExtension();
-		} catch (UnsupportedAudioFileException ex) {
-			format = getFormatByName(_name);
-			if (format == null)
-				throw (IOException)new IOException().initCause(ex);
-		}
-		_format = format;
-		_ctype = getContentType(_format);
 	}
 	/** Constructs an audio with an URL.
 	 */
-	public AAudio(URL url) throws IOException {
+	public AAudio(URL url) {
 		if (url == null)
 			throw new IllegalArgumentException("null url");
 		_name = getName(url);
@@ -134,22 +112,10 @@ public class AAudio implements Audio {
 		_isdata = DYNAMIC_STREAM;
 		_data = null;
 		_file = null;
-
-		String format = null;
-		try {
-			format = AudioSystem.getAudioFileFormat(url)
-				.getType().getExtension();
-		} catch (UnsupportedAudioFileException ex) {
-			format = getFormatByName(_name);
-			if (format == null)
-				throw (IOException)new IOException().initCause(ex);
-		}
-		_format = format;
-		_ctype = getContentType(_format);
 	}
 	/** Constructs an audio with a file.
 	 */
-	public AAudio(File file) throws IOException {
+	public AAudio(File file) {
 		if (file == null)
 			throw new IllegalArgumentException("null url");
 		_name = file.getName();
@@ -157,18 +123,6 @@ public class AAudio implements Audio {
 		_isdata = DYNAMIC_STREAM;
 		_data = null;
 		_url = null;
-
-		String format = null;
-		try {
-			format = AudioSystem.getAudioFileFormat(file)
-				.getType().getExtension();
-		} catch (UnsupportedAudioFileException ex) {
-			format = getFormatByName(_name);
-			if (format == null)
-				throw (IOException)new IOException().initCause(ex);
-		}
-		_format = format;
-		_ctype = getContentType(_format);
 	}
 	/** Constructs an audio with a file name.
 	 */
@@ -268,9 +222,63 @@ public class AAudio implements Audio {
 		return _name;
 	}
 	public final String getFormat() {
+		if (_format == null) {
+			try {
+				_format = getFormat0();
+			} catch (IOException ex) {
+				throw new SystemException("Unable to read", ex);
+			}
+		}
 		return _format;
 	}
+	
+	private String getFormat0() throws IOException {
+		String format = null;
+		if (_data != null) {
+			try {
+				format =
+					AudioSystem.getAudioFileFormat(new ByteArrayInputStream(_data))
+					.getType().getExtension();
+			} catch (UnsupportedAudioFileException ex) {
+				format = getFormatByName(_name);
+				if (format == null)
+					throw (IOException)new IOException().initCause(ex);
+			}
+		} else if (_file != null) {
+			try {
+				format = AudioSystem.getAudioFileFormat(_file)
+					.getType().getExtension();
+			} catch (UnsupportedAudioFileException ex) {
+				format = getFormatByName(_name);
+				if (format == null)
+					throw (IOException)new IOException().initCause(ex);
+			}
+		} else if (_url != null) {
+			try {
+				format = AudioSystem.getAudioFileFormat(_url)
+					.getType().getExtension();
+			} catch (UnsupportedAudioFileException ex) {
+				format = getFormatByName(_name);
+				if (format == null)
+					throw (IOException)new IOException().initCause(ex);
+			}
+		} else {
+			try {
+				format = AudioSystem.getAudioFileFormat(
+						_isdata == DYNAMIC_STREAM ? getStreamData(): _isdata)
+					.getType().getExtension();
+			} catch (UnsupportedAudioFileException ex) {
+				format = getFormatByName(_name);
+				if (format == null)
+					throw (IOException)new IOException().initCause(ex);
+			}
+		}
+		return format;
+	}
 	public final String getContentType() {
+		if (_ctype == null) {
+			_ctype = getContentType(getFormat());
+		}
 		return _ctype;
 	}
 }

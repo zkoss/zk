@@ -19,6 +19,7 @@ package org.zkoss.zk.au.http;
 import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -416,6 +417,12 @@ public class AuUploader implements AuExtension {
 				throw new UiException("Unable to read "+_fi, ex);
 			}
 		}
+		public boolean isBinary() {
+			return true;
+		}
+		public boolean inMemory() {
+			return false;
+		}
 	}
 	private static class ReaderMedia extends AMedia {
 		private final FileItem _fi;
@@ -433,6 +440,12 @@ public class AuUploader implements AuExtension {
 			} catch (IOException ex) {
 				throw new UiException("Unable to read "+_fi, ex);
 			}
+		}
+		public boolean isBinary() {
+			return false;
+		}
+		public boolean inMemory() {
+			return true;
 		}
 	}
 	private static class StreamAudio extends AAudio {
@@ -453,7 +466,7 @@ public class AuUploader implements AuExtension {
 	/**
 	 * The file item factory that monitors the progress of uploading.
 	 */
-	private static class ItemFactory extends DiskFileItemFactory {
+	private static class ItemFactory extends DiskFileItemFactory implements Serializable {
 		private final Desktop _desktop;
 		private final String _key;
 		/** The total length (content length). */

@@ -437,7 +437,11 @@ public class SimpleSession implements Session, SessionCtrl {
 		//we ony invoke the notification
 		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = (String)en.nextElement();
-			willSerialize(getAttribute(nm));
+			
+			// Skip to write ZK Session for weblogic to avoid an infinite loop
+			if (!Attributes.ZK_SESSION.equals(nm)) {
+				willSerialize(getAttribute(nm));
+			}
 		}
 	}
 	private void willSerialize(Object o) {
