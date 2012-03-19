@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.zkoss.lang.Strings;
+
 /**
  * The default set of pseudo classes in Selector.
  * @since 6.0.0
@@ -19,6 +21,7 @@ public class BasicPseudoClassDefs {
 	
 	static {
 		
+		// TODO: rethink about :root
 		// :root
 		_defs.put("root", new PseudoClassDef(){
 			public boolean accept(ComponentMatchCtx ctx, String ... parameters) {
@@ -124,10 +127,11 @@ public class BasicPseudoClassDefs {
 		}
 		
 		private int value(String str, int defValue){
-			if(str.isEmpty()) return defValue;
+			if (Strings.isEmpty(str))
+				return defValue;
 			char p = str.charAt(0);
 			String s = (p=='+' || p=='-') ? str.substring(1) : str;
-			return (p=='-'?-1:1) * (s.isEmpty()? defValue : Integer.valueOf(s));
+			return (p=='-'?-1:1) * (Strings.isEmpty(s)? defValue : Integer.valueOf(s));
 		}
 		
 	}
