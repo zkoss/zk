@@ -326,6 +326,7 @@ ZK 5.0.11
   ZK-928: Navigate the comboitems by press key will select a wrong item
   ZK-887: hbox's widths properties specified in Chrome is not precise
   ZK-925: Select mutiple Item using shift key will return wrong count in listbox (ROD enabled)
+  ZK-937: Bug and improvement to tabs dragging behaviour
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
