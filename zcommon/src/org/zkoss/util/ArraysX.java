@@ -17,6 +17,9 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.util;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Utilities for handling arrays.
@@ -337,6 +340,41 @@ public class ArraysX {
 		return (T[])shrink((Object)ary, jb, je);
 	}
 
+	/**
+	 * Returns a mutable list.
+	 * <p> Never be null.
+	 * @param ary the data array
+	 * @return a list view of the specified array
+	 * @since 6.0.1
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> List<T> asList(T[] ary) {
+		if (ary == null)
+			return Collections.EMPTY_LIST;
+		List<T> list = new ArrayList<T>(ary.length);
+		for (T t : ary)
+			list.add(t);
+		return list;
+	}
+	
+	/**
+	 * Returns a two dimensional mutable list.
+	 * <p> Never be null.
+	 * @param ary the two dimensional data array
+	 * @return a two dimensional list view of the specified array
+	 * @since 6.0.1
+	 * @see #asList(Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> List<List<T>> asList(T[][] ary) {
+		if (ary == null)
+			return Collections.EMPTY_LIST;
+		
+		List<List<T>> list = new ArrayList<List<T>>(ary.length);
+		for (T[] t : ary)
+			list.add(asList(t));
+		return list;
+	}
 	/**
 	 * Resizes the specified array. Similar to {@link #shrink}, but
 	 * it can enlarge and it keeps elements from the first.

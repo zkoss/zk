@@ -16,13 +16,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
-
 import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.ext.GroupsSortableModel;
 
@@ -55,17 +57,17 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	/**
 	 * member field to store group data
 	 */
-	protected D[][] _data;
+	protected List<List<D>> _data;
 	
 	/**
 	 * member field to store group head data
 	 */
-	protected H[] _heads;
+	protected List<H> _heads;
 	
 	/**
 	 * member field to store group foot data
 	 */
-	protected F[] _foots;
+	protected List<F> _foots;
 	
 	/**
 	 * memeber field to store group close status
@@ -114,7 +116,78 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
 	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
 	 */
-	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots){
+	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots) {
+		this(data != null ? ArraysX.asList(data) : (List<List<D>>) null,
+				heads != null ? ArraysX.asList(heads) : (List<H>) null,
+				foots != null ? ArraysX.asList(foots) : (List<F>) null);
+	}
+	
+	/**
+	 * Constructor
+	 * When using this constructor , 
+	 * {@link #getGroup(int)} will return the corresponding Object depends on heads.  
+	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
+	 * are depends on foots. 
+	 *
+	 * <p>Notice that, for backward compatibility, the last argument is <code>closes</code>.
+	 * 
+	 * @param data a 2 dimension array to represent groups data
+	 * @param heads an array to represent head data of group
+	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
+	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
+	 * @param closes an array of boolean to represent close status of group. If not specified, then
+	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
+	 */
+	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes){
+		this(data != null ? ArraysX.asList(data) : (List<List<D>>) null,
+				heads != null ? ArraysX.asList(heads) : (List<H>) null,
+				foots != null ? ArraysX.asList(foots) : (List<F>) null, closes);
+	}
+
+	/**
+	 * Constructs a groups data model with a two-dimensional list of data.
+	 * For example, if you have three groups and each of them have 5 elements,
+	 * then the data argument must be a 3 x 5 list.
+	 * Furthermore, <code>list.get(0)</code> is the elements of the first group,
+	 * <code>list.get(1)</code> is the elements of the second group, and so on.
+	 * Of course, each group might have different number of elements.
+	 *
+	 * <p>This constructor assumes there is no group foot at all.
+	 *
+	 * @param data a two-dimensional list to represent groups data.
+	 * @since 6.0.1
+	 */
+	public SimpleGroupsModel(List<List<D>> data) {
+		this(data, null, null);
+	}
+
+	/**
+	 * Constructor
+	 * When using this constructor , 
+	 * {@link #getGroup(int)} will return the corresponding Object depends on heads. 
+	 * {@link #hasGroupfoot(int)} will always return false
+	 * @param data a two dimensional list to represent groups data
+	 * @param heads a list to represent head data of group
+	 * @since 6.0.1
+	 */
+	public SimpleGroupsModel(List<List<D>> data, List<H> heads) {
+		this(data, heads, null);
+	}
+	
+	/**
+	 * Constructor
+	 * When using this constructor , 
+	 * {@link #getGroup(int)} will return the corresponding Object depends on heads.  
+	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
+	 * are depends on foots. 
+	 *   
+	 * @param data a two dimensional list to represent groups data
+	 * @param heads a list to represent head data of group
+	 * @param foots a list to represent foot data of group, if an element in this list is null, then 
+	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
+	 * @since 6.0.1
+	 */
+	public SimpleGroupsModel(List<List<D>> data, List<H> heads, List<F> foots) {
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
@@ -129,16 +202,17 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * The return value of {@link #hasGroupfoot(int)} and {@link #getGroupfoot(int)} 
 	 * are depends on foots. 
 	 *
-	 * <p>Notice that, for backward compatiblity, the last argument is <code>closes</code>.
+	 * <p>Notice that, for backward compatibility, the last argument is <code>closes</code>.
 	 * 
-	 * @param data a 2 dimension array to represent groups data
-	 * @param heads an array to represent head data of group
-	 * @param foots an array to represent foot data of group, if an element in this array is null, then 
+	 * @param data a two dimensional list to represent groups data
+	 * @param heads a list to represent head data of group
+	 * @param foots a list to represent foot data of group, if an element in this list is null, then 
 	 * {@link #hasGroupfoot(int)} will return false in corresponding index.
 	 * @param closes an array of boolean to represent close status of group. If not specified, then
-	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
+	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)
+	 * @since 6.0.1  
 	 */
-	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes){
+	public SimpleGroupsModel(List<List<D>> data, List<H> heads, List<F> foots, boolean[] closes){
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
@@ -152,12 +226,12 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 	
 	public D getChild(int groupIndex, int index) {
-		return _data[groupIndex][index];
+		return _data.get(groupIndex).get(index);
 	}
 
 
 	public int getChildCount(int groupIndex) {
-		return _data[groupIndex].length;
+		return _data.get(groupIndex).size();
 	}
 
 	/** Returns the data representing the group.
@@ -165,20 +239,20 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * not specified.
 	 */
 	public Object getGroup(int groupIndex) {
-		return  _heads==null?_data[groupIndex]:_heads[groupIndex];
+		return  _heads==null?_data.get(groupIndex):_heads.get(groupIndex);
 	}
 
 
 	public int getGroupCount() {
-		return _data.length;
+		return _data.size();
 	}
 
 	public F getGroupfoot(int groupIndex) {
-		return _foots == null ? null:_foots[groupIndex];
+		return _foots == null ? null:_foots.get(groupIndex);
 	}
 
 	public boolean hasGroupfoot(int groupIndex) {
-		return _foots == null ? false:_foots[groupIndex]!=null;
+		return _foots == null ? false:_foots.contains(groupIndex);
 	}
 
 	/**
@@ -230,24 +304,35 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 
 	/**
 	 * Sort each data in each group by Comparator, developer could override
-	 * {@link #sortGroupData(Object, Object[], Comparator, boolean, int)}
+	 * {@link #sortGroupData(Object, List, Comparator, boolean, int)} (Since 6.0.1)
 	 * to customize.
 	 */
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
-		for(int i=0;i<_data.length;i++){
-			sortGroupData(_heads==null?_data[i]:_heads[i],_data[i],cmpr,ascending,colIndex);
+		for (int i = 0, j = _data.size(); i < j; i++) {
+			List<D> d = _data.get(i);
+			sortGroupData(_heads == null ? d : _heads.get(i), d, cmpr,
+					ascending, colIndex);
 		}
 		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
 	}
 
-	/** Sorts a group of data.
-	 * <p>Default: <code>Arrays.sort(groupdata, cmpr)</code>
-	 * @param group the group (the same as {@link #getGroup})
-	 * @param groupdata the group of data to sort
+	/** @deprecated As of release 6.0.1, replaced with {@link #sortGroupData(Object, List, Comparator, boolean, int)}.
 	 */
 	protected void sortGroupData(Object group, D[] groupdata,
 	Comparator<D> cmpr, boolean ascending, int colIndex){
-		Arrays.sort(groupdata,cmpr);
+		sortGroupData(group, ArraysX.asList(groupdata), cmpr, ascending, colIndex);
+	}
+
+	/**
+	 * Sorts a group of data.
+	 * <p>Default: <code>Collections.sort(groupdata, cmpr)</code>
+	 * @param group the group (the same as {@link #getGroup})
+	 * @param groupdata the group of data to sort
+	 * @since 6.0.1
+	 */
+	protected void sortGroupData(Object group, List<D> groupdata,
+			Comparator<D> cmpr, boolean ascending, int colIndex) {
+		Collections.sort(groupdata, cmpr);
 	}
 	
 	@Override
@@ -255,11 +340,11 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	public Object clone() {
 		SimpleGroupsModel clone = (SimpleGroupsModel)super.clone();
 		if (_data != null)
-			clone._data = ArraysX.duplicate(_data);
+			clone._data = new ArrayList(_data);
 		if (_heads != null)
-			clone._heads = ArraysX.duplicate(_heads);
+			clone._heads = new ArrayList(_heads);
 		if (_foots != null)
-			clone._foots = ArraysX.duplicate(_foots);
+			clone._foots = new ArrayList(_foots);
 		if (_opens != null)
 			clone._opens = (boolean[])ArraysX.duplicate(_opens);
 		return clone;
