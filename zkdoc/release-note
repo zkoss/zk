@@ -52,6 +52,7 @@ ZK 5.0.11
   ZK-926: Scrollbar stops working in listbox (IE7 only)
   ZK-937: Bug and improvement to tabs dragging behaviour
   ZK-930: Fileupload.get fail in cluster server
+  ZK-938: Fileupload of binaries fails with 0 content/NullInputStream
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

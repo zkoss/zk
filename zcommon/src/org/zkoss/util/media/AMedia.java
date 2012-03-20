@@ -285,12 +285,37 @@ public class AMedia implements Media, java.io.Serializable {
 	public boolean inMemory() {
 		return _bindata != null || _strdata != null;
 	}
+
+	/**
+	 * Take care for those DYNAMIC_STREAM case .
+	 * @return
+	 */ 
+	private InputStream getInputStream(){ //ZK-938
+		if( _isdata != null && _isdata == DYNAMIC_STREAM){
+			return getStreamData();
+		}
+		return null;
+	}
+	
+	/**
+	 * Take care for those DYNCMIC_READER case 
+	 * @return
+	 */
+	private Reader getReader(){
+		if( _rddata != null && _rddata == DYNAMIC_READER){ //ZK-938
+			return getReaderData();
+		}
+		return null;
+	}
+	
 	public byte[] getByteData() {
 		if (_bindata != null) return _bindata;
-		if (_isdata != null) {
+		
+		InputStream is = getInputStream();
+		if (is != null) {
 			try {
-				byte[] bs = Files.readAll(_isdata);
-				_isdata.close();
+				byte[] bs = Files.readAll(is);
+				is.close();
 				return bs;
 			} catch (java.io.IOException ex) {
 				throw SystemException.Aide.wrap(ex);
@@ -300,10 +325,12 @@ public class AMedia implements Media, java.io.Serializable {
 	}
 	public String getStringData() {
 		if (_strdata != null) return _strdata;
-		if (_rddata != null) {
+		
+		Reader reader =  getReader();
+		if (reader != null) {
 			try {
-				String ct = Files.readAll(_rddata).toString();
-				_rddata.close();
+				String ct = Files.readAll(reader).toString();
+				reader.close();
 				return ct;
 			} catch (java.io.IOException ex) {
 				throw SystemException.Aide.wrap(ex);
