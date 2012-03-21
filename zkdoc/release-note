@@ -9,6 +9,7 @@ ZK 6.0.1
   ZK-916: A FormBeanValidator
   ZK-921: A way to register system level converter and validator
   ZK-943: We need a groups model which supports List<?>, all the Groups models use arrays
+  ZK-955: Update jars in dist/lib/ext to newer version
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
@@ -38,6 +39,8 @@ ZK 6.0.1
   + Added 2 methods (setAttribute() and getAttribute()) on org.zkoss.bind.FormExt to provide more features of Form.
     You have to implement these 2 methods if you have any custom implementation.
   + Initial WebAppInit by org.zkoss.zk.ui.http.HttpSessionListener if Listener initiate first.
+  + Some jars under /dist/lib/ext are updated, please refer to the Installation Ghide
+    http://books.zkoss.org/wiki/ZK_Installation_Guide/ZK_Background/The_Content_of_ZK_Binary_Distribution
 
 	--------
 ZK 6.0.0
