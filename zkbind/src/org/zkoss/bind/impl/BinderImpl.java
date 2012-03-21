@@ -189,6 +189,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
+	public static final String REF_BINDING = "$REF_BINDING$"; //associated ReferenceBinding
+
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
 	public static final String ON_BIND_INIT = "onBindInit"; //do component binding initialization
 	public static final String MODEL = "$MODEL$"; //collection model for index tracking

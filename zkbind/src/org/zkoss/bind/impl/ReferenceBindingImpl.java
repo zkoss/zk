@@ -64,4 +64,9 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	public void invalidateCache() {
 		_cacheValue = null;
 	}
+
+	public String toString(){
+		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
+				.append(",component:").append(getComponent()).toString();
+	}
 }

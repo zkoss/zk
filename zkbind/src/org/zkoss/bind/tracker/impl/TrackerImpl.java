@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.WeakIdentityMap;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.ChildrenBinding;
@@ -37,7 +38,6 @@ import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 import org.zkoss.bind.xel.zel.BindELContext;
-import org.zkoss.io.Serializables;
 import org.zkoss.util.IdentityHashSet;
 import org.zkoss.zk.ui.Component;
 
@@ -163,7 +163,7 @@ public class TrackerImpl implements Tracker, Serializable {
 				}
 			} else {
 				final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
-				if (nodes != null) {
+				if (nodes != null && !nodes.isEmpty()) {
 					getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
 				}
 			}
@@ -192,6 +192,10 @@ public class TrackerImpl implements Tracker, Serializable {
 				//ZK-877: NPE in a save only binding
 				//No corresponding LoadBinding with the head script in the specified component. 
 				if (node != null) {
+					//ZK-950: The expression reference doesn't update while change the instant of the reference
+					//Update if the node refer to a ReferenceBinding
+					((TrackerNodeImpl)node)
+						.setReferenceBinding((ReferenceBinding)((Component)comp).getAttribute(BinderImpl.REF_BINDING));
 					if (value != null) {
 						addBeanMap(node, value);
 					} else {
@@ -203,23 +207,76 @@ public class TrackerImpl implements Tracker, Serializable {
 		} else {
 			final Set<TrackerNode> baseNodes = getAllTrackerNodesByBean(base);
 			if (baseNodes != null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
+				final Set<TrackerNode> propNodes = new LinkedHashSet<TrackerNode>(); //normal nodes; i.e. a base + property node. e.g. vm.selectedPerson
+				Object bean = null;
 				for (TrackerNode baseNode : baseNodes) {
 					final TrackerNode node = baseNode.getDependent(script);
 					if (node == null) { //FormBinding will keep base nodes only (so no associated dependent nodes)
 						continue;
 					}
+					if (bean == null) {
+						bean = node.getBean();
+					}
+					propNodes.add(node);
 					if (BindELContext.isBracket((String)script)) {
 						((TrackerNodeImpl)baseNode).tieProperty(propName, script);
 					}
-					if (value != null) {
+				}
+				
+				//ZK-950: The expression reference doesn't update while change the instant of the reference
+				//Collect those nodes that refers to the same bean minus normal nodes
+				@SuppressWarnings("unchecked")
+				final Set<TrackerNode> beanNodes = (Set<TrackerNode>) (bean == null ? Collections.emptySet() : getAllTrackerNodesByBean(bean));
+				if (bean != null) {
+					beanNodes.removeAll(propNodes);
+				}
+				
+				//Collect target ReferenceBinding in normal nodes. These are ReferenceBinding modified.
+				final Set<ReferenceBinding> targetRefBindings = collectReferenceBindings(propNodes);
+				
+				if (value != null) {
+					for (TrackerNode node : propNodes) { //normal nodes
 						addBeanMap(node, value);
-					} else {
+					}
+					for (TrackerNode node : beanNodes) { //other nodes
+						final ReferenceBinding rbinding = ((TrackerNodeImpl)node).getReferenceBinding();
+						//a node refers no ReferenceBinding or refer to the target ReferenceBinding
+						if (rbinding == null || targetRefBindings.contains(rbinding)) {  
+							addBeanMap(node, value);
+						}
+					}
+				} else { //value == null
+					for (TrackerNode node : propNodes) { //normal nodes
 						removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap
+					}
+					for (TrackerNode node : beanNodes) { //other nodes
+						final ReferenceBinding rbinding = ((TrackerNodeImpl)node).getReferenceBinding();
+						//refers no ReferenceBinding, normal cases
+						if (rbinding == null) {
+							removeAllBeanMap(node); //dependent nodes shall be null, too. Remove them from _beanMap
+						} else if (targetRefBindings.contains(rbinding)) { //refers to target ReferenceBinding
+							addBeanMap(node, rbinding);
+						}
 					}
 				}
 			}
 		}
 	}
+	
+	//Collect ReferenceBinding within the node tree
+	private Set<ReferenceBinding> collectReferenceBindings(Collection<TrackerNode> nodes) {
+		final Set<LoadBinding> bindings = new LinkedHashSet<LoadBinding>();
+		final Set<TrackerNode> visited = new HashSet<TrackerNode>();
+		getLoadBindingsPerProperty(nodes, ".", bindings, null, visited);
+		final Set<ReferenceBinding> refBindings = new LinkedHashSet<ReferenceBinding>(); 
+		for (LoadBinding binding : bindings) {
+			if (binding instanceof ReferenceBinding) {
+				refBindings.add((ReferenceBinding)binding);
+			}
+		}
+		return refBindings; 
+	}
+	
 	//add node into the _beanMap
 	private void addBeanMap(TrackerNode node, Object value) {
 		//add node into _beanMap
@@ -319,6 +376,9 @@ public class TrackerImpl implements Tracker, Serializable {
 			if (binding instanceof LoadBinding) {
 				if (binding instanceof ReferenceBinding) {
 					((ReferenceBinding)binding).invalidateCache();
+					//ZK-950: The expression reference doesn't update while change the instant of the reference
+					//Try reload bindings that might refer this ReferenceBinding
+					collectLoadBindings(binding, ".", bindings, visited); //recursive
 				}
 				bindings.add((LoadBinding)binding);
 			}
@@ -330,7 +390,7 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 		
 		final Object kidbase = node.getBean();
-		if (kidbase != null) {
+		if (kidbases != null && kidbase != null) {
 			kidbases.add(kidbase);
 		} else {
 			//check all dependents

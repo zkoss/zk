@@ -62,10 +62,14 @@ public class BindELResolver extends XelELResolver {
 	public Object getValue(ELContext ctx, Object base, Object property)
 	throws PropertyNotFoundException, ELException {
 		Object value = super.getValue(ctx, base, property);
-		if (value instanceof ReferenceBinding) {
-			value = ((ReferenceBinding)value).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
-		}
-		tieValue(ctx, base, property, value, false);
+		//ZK-950: The expression reference doesn't update while change the instant of the reference
+		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
+		if (rbinding != null) {
+			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
+		} 
+		//If a ReferenceBinding evaluated to null, tie the ReferenceBinding itself as the 
+		//evaluated bean, @see TrackerImpl#getLoadBindings0()
+		tieValue(ctx, base, property, value != null ? value : rbinding, false, rbinding);
 		return value;
 	}
 	
@@ -75,7 +79,7 @@ public class BindELResolver extends XelELResolver {
 			base = ((ReferenceBinding)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		super.setValue(ctx, base, property, value);
-		tieValue(ctx, base, property, value, true);
+		tieValue(ctx, base, property, value, true, null);
 	}
 	
 	private static Path getPathList(BindELContext ctx){
@@ -105,7 +109,7 @@ public class BindELResolver extends XelELResolver {
 	}
 
 	//update dependency and notify changed
-	private void tieValue(ELContext elCtx, Object base, Object propName, Object value,boolean allownotify) {
+	private void tieValue(ELContext elCtx, Object base, Object propName, Object value, boolean allownotify, ReferenceBinding refBinding) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
@@ -127,7 +131,12 @@ public class BindELResolver extends XelELResolver {
 			final Binder binder = binding.getBinder();
 			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 			final Component ctxcomp = bctx != null ? bctx.getComponent() : binding.getComponent();
-			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
+			final Object old = ctxcomp.setAttribute(BinderImpl.REF_BINDING, refBinding);
+			try {
+				((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
+			} finally {
+				ctxcomp.setAttribute(BinderImpl.REF_BINDING, old);
+			}
 			
 			if (base != null) {
 				if (binding instanceof SaveBinding) {

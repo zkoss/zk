@@ -3,17 +3,23 @@ package org.zkoss.zktest.bind.issue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DependsOn;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.ext.Selectable;
 
 public class B00950ReferenceChange {
-	private List<Person> personList;
+	private ListModelList<Person> personList;
 
 	private Person selectedPerson;
 
 	public B00950ReferenceChange() {
-		personList = new ArrayList<Person>();
+		personList = new ListModelList<Person>();
 		personList.add(new Person("Dennis","Chen"));
 		personList.add(new Person("Alice","Lin"));
+		personList.add(null);
 	}
 
 	public List<Person> getPersonList() {
@@ -26,6 +32,11 @@ public class B00950ReferenceChange {
 
 	public void setSelectedPerson(Person selectedPerson) {
 		this.selectedPerson = selectedPerson;
+	}
+	
+	@Command @NotifyChange("selectedPerson")
+	public void clearSelection() {
+		selectedPerson = null;
 	}
 
 	public class Person {

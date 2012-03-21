@@ -25,7 +25,6 @@ import org.zkoss.bind.sys.InitFormBinding;
 import org.zkoss.bind.sys.InitPropertyBinding;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of {@link InitPropertyBinding}.

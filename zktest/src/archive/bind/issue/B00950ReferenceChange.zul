@@ -4,6 +4,9 @@
 	<label multiline="true">
 		1.Select a person, both Direct and Reference should change to selected one
 		2.Select another person and edit it, both Direct and Reference should change also.
+		3.Select the third empty one, both Direct and Reference should clear
+		4.Select 1st person, both Direct and Reference should change to the selected one
+		5.Click "Clear Selection" button, both Direct and Reference should clear
 	</label>
 	<listbox width="500px" model="@load(vm.personList)"
 		selectedItem="@bind(vm.selectedPerson)" checkmark="true">
@@ -22,11 +25,12 @@
 	<label value="@load(vm.selectedPerson.lastName)" />
 	<label value="@load(vm.selectedPerson.fullName)" />
 	==Reference==
-	<div p="@ref(vm.selectedPerson)">
+	<vbox p="@ref(vm.selectedPerson)">
 		<label value="@load(p.firstName)" />
 		<label value="@load(p.lastName)" />
 		<label value="@load(p.fullName)" />
-	</div>
 	</vbox>
+	</vbox>
+	<button label="Clear Selection" onClick="@command('clearSelection')"/> 
 	<button label="dump" onClick="binder.tracker.dump()" />
 </window>
