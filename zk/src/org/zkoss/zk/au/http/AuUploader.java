@@ -445,7 +445,7 @@ public class AuUploader implements AuExtension {
 			return false;
 		}
 		public boolean inMemory() {
-			return true;
+			return false;
 		}
 	}
 	private static class StreamAudio extends AAudio {
