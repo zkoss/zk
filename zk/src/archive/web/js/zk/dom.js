@@ -898,24 +898,37 @@ jq(el).zk.center(); //same as 'center'
 	},
 	/** Position the first matched element to the specified location.
 	 *
-	 * @param Dimension dim the dimension of the achor location
+	 * @param Dimension dim the dimension of the anchor location
 	 * @param String where where to position. Default: <code>overlap</code><br/>
 	 * Allowed values:</br>
-<ol><li> <b>before_start</b><br /> the el appears above the anchor, aligned on the left.
-</li><li> <b>before_end</b><br /> the el appears above the anchor, aligned on the right.
-</li><li> <b>after_start</b><br /> the el appears below the anchor, aligned on the left.
-</li><li> <b>after_end</b><br /> the el appears below the anchor, aligned on the right.
-</li><li> <b>start_before</b><br /> the el appears to the left of the anchor, aligned on the top.
-
-</li><li> <b>start_after</b><br /> the el appears to the left of the anchor, aligned on the bottom.
-</li><li> <b>end_before</b><br /> the el appears to the right of the anchor, aligned on the top.
-</li><li> <b>end_after</b><br /> the el appears to the right of the anchor, aligned on the bottom.
-</li><li> <b>overlap</b><br /> the el overlaps the anchor, with the topleft corners of both the anchor and the el aligned.
-</li><li> <b>after_pointer</b><br /> the el appears with the top aligned with	the bottom of the anchor, with the topleft corner of the el at the horizontal position of the mouse pointer.
-
-</li></ol>
+	 * <ul>
+	 * 	<li><b>before_start</b><br/> the element appears above the anchor, aligned to the left.</li>
+	 * 	<li><b>before_center</b><br/> the element appears above the anchor, aligned to the center.</li>
+	 *  <li><b>before_end</b><br/> the element appears above the anchor, aligned to the right.</li>
+	 *  <li><b>after_start</b><br/> the element appears below the anchor, aligned to the left.</li>
+	 *  <li><b>after_center</b><br/> the element appears below the anchor, aligned to the center.</li>
+	 *  <li><b>after_end</b><br/> the element appears below the anchor, aligned to the right.</li>
+	 *  <li><b>start_before</b><br/> the element appears to the left of the anchor, aligned to the top.</li>
+	 *  <li><b>start_center</b><br/> the element appears to the left of the anchor, aligned to the middle.</li>
+	 *  <li><b>start_after</b><br/> the element appears to the left of the anchor, aligned to the bottom.</li>
+	 *  <li><b>end_before</b><br/> the element appears to the right of the anchor, aligned to the top.</li>
+	 *  <li><b>end_center</b><br/> the element appears to the right of the anchor, aligned to the middle.</li>
+	 *  <li><b>end_after</b><br/> the element appears to the right of the anchor, aligned to the bottom.</li>
+	 *  <li><b>overlap/top_left</b><br/> the element overlaps the anchor, with anchor and element aligned at top-left.</li>
+	 *  <li><b>top_center</b><br/> the element overlaps the anchor, with anchor and element aligned at top-center.</li>
+	 *  <li><b>overlap_end/top_right</b><br/> the element overlaps the anchor, with anchor and element aligned at top-right.</li>
+	 *  <li><b>middle_left</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-left.</li>
+	 *  <li><b>middle_center</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-center.</li>
+	 *  <li><b>middle_right</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-right.</li>
+	 *  <li><b>overlap_before/bottom_left</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-left.</li>
+	 *  <li><b>bottom_center</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-center.</li>
+	 *  <li><b>overlap_after/bottom_right</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-right.</li>
+	 *  <li><b>at_pointer</b><br/> the element appears with the upper-left aligned with the mouse cursor.</li>
+	 *  <li><b>after_pointer</b><br/> the element appears with the top aligned with
+	 *  	the bottom of the mouse cursor, with the left side of the element at the horizontal position of the mouse cursor.</li>
+	 * </ul>
 	 * @param Map opts a map of addition options. Allowed values include
-<ol><li> <b>overflow</b><br /> whether to allow the popup being scrolled out of the visible area (Default: false, i.e., not allowed). If not specified (or false), the popup always remains visible even if the user scrolls the anchor widget out of the visible area</li></ol>
+<ol><li> <b>overflow</b><br /> whether to allow the element being scrolled out of the visible area (Default: false, i.e., not allowed). If not specified (or false), the popup always remains visible even if the user scrolls the anchor widget out of the visible area</li></ol>
 	 * @return jqzk this object
      * @see #center
      */
@@ -932,6 +945,15 @@ jq(el).zk.center(); //same as 'center'
      */
 	position: function (dim, where, opts) {
 		where = where || "overlap";
+		
+		if (!dim) {
+			var bd = jq('body')[0];
+			dim = {
+				left:0, top: 0,
+				width: bd.offsetWidth, height: bd.offsetHeight
+			};
+		}
+		
 		if (dim.nodeType) //DOM element
 			dim = zk(dim).dimension(true);
 		var x = dim.left, y = dim.top,
@@ -948,12 +970,20 @@ jq(el).zk.center(); //same as 'center'
 		case "before_start":
 			y -= hgh;
 			break;
+		case "before_center":
+			y -= hgh;
+			x += (dim.width - wd) / 2 | 0;
+			break;
 		case "before_end":
 			y -= hgh;
 			x += dim.width - wd;
 			break;
 		case "after_start":
 			y += dim.height;
+			break;
+		case "after_center":
+			y += dim.height;
+			x += (dim.width - wd) / 2 | 0;
 			break;
 		case "after_end":
 			y += dim.height;
@@ -962,12 +992,20 @@ jq(el).zk.center(); //same as 'center'
 		case "start_before":
 			x -= wd;
 			break;
+		case "start_center":
+			x -= wd;
+			y += (dim.height - hgh) / 2 | 0;
+			break;
 		case "start_after":
 			x -= wd;
 			y += dim.height - hgh;
 			break;
 		case "end_before":
 			x += dim.width;
+			break;
+		case "end_center":
+			x += dim.width;
+			y += (dim.height - hgh) / 2 | 0;
 			break;
 		case "end_after":
 			x += dim.width;
@@ -983,17 +1021,38 @@ jq(el).zk.center(); //same as 'center'
 			x = offset[0];
 			y = offset[1] + 20;
 			break;
+		case "top_right":
 		case "overlap_end":
 			x += dim.width - wd;
-			break; 
+			break;
+		case "top_center":
+			x += (dim.width - wd) / 2 | 0;
+			break;
+		case "middle_left":
+			y += (dim.height - hgh) / 2 | 0;
+			break;
+		case "middle_center":
+			x += (dim.width - wd) / 2 | 0;
+			y += (dim.height - hgh) / 2 | 0;
+			break;
+		case "middle_right":
+			x += dim.width - wd;
+			y += (dim.height - hgh) / 2 | 0;
+			break;
+		case "bottom_left":
 		case "overlap_before":
 			y += dim.height - hgh;
-			break; 
+			break;
+		case "bottom_center":
+			x += (dim.width - wd) / 2 | 0;
+			y += dim.height - hgh;
+			break;
+		case "bottom_right":
 		case "overlap_after":
 			x += dim.width - wd;
 			y += dim.height - hgh;
 			break;
-		default: // overlap is assumed
+		default: // overlap/top_left is assumed
 			// nothing to do.
 		}
 		
