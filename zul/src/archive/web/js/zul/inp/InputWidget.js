@@ -17,9 +17,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.inp');
 
 (function () {
-	function _onChangeData(wgt, val, selbk) {
-		var inf = {value: val,
-			start: zk(wgt.getInputNode()).getSelectionRange()[0]}
+	function _onChangeData(wgt, inf, selbk) {
+		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
 		if (selbk) inf.bySelectBack =  true;
 		return inf;
 	}
@@ -50,7 +49,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
+			this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
 				{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 		}
 	}
@@ -609,8 +608,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				val = this.coerceFromString_(val);
 				if (val && (msg = val.error)) {
 					this.clearErrorMessage(true);
-					if (this._cst == "[c") //CustomConstraint
-						return {error: msg, server: true};
+					if (this._cst == "[c") { //CustomConstraint
+						this._reVald = false;
+						return {rawValue: value||'', server: true}; //let server to validate it
+					}
 					this._markError(msg, val);
 					return val;
 				}
@@ -624,7 +625,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				msg = this.validate_(val);
 				if (msg === false) {
 					this._reVald = false;
-					return {value: val, server: true};
+					return {value: val, server: true}; //let server to validate it
 				}
 				if (msg) {
 					this._markError(msg, val);
@@ -679,8 +680,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var wasErr = this._errmsg,
 			vi = this._validate(value);
 		if (!vi.error || vi.server) {
-			var upd;
-			if (!vi.error) {
+			var upd, data;
+			if (vi.rawValue != null) { //coerce failed
+				data = {rawValue: vi.rawValue};
+			} else if (!vi.error) {
 				inp.value = value = this.coerceToString_(vi.value);
 				this._reVald = false;
 
@@ -693,7 +696,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				}
 			}
 			if (upd || vi.server)
-				this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
+				this.fire('onChange',
+					_onChangeData(this,
+						data != null ? data: {value: this.marshall_(vi.value)}),
 					vi.server ? {toServer:true}: null, 90);
 		}
 		return true;
@@ -705,7 +710,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.5
 	 */
 	fireOnChange: function (opts) {
-		this.fire('onChange', _onChangeData(this, this.marshall_(this.getValue())), opts);
+		this.fire('onChange',
+			_onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
 	},
 
 	_resetForm: function () {
