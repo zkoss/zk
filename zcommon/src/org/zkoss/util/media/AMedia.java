@@ -286,32 +286,10 @@ public class AMedia implements Media, java.io.Serializable {
 		return _bindata != null || _strdata != null;
 	}
 
-	/**
-	 * Take care for those DYNAMIC_STREAM case .
-	 * @return
-	 */ 
-	private InputStream getInputStream(){ //ZK-938
-		if( _isdata != null && _isdata == DYNAMIC_STREAM){
-			return getStreamData();
-		}
-		return null;
-	}
-	
-	/**
-	 * Take care for those DYNCMIC_READER case 
-	 * @return
-	 */
-	private Reader getReader(){
-		if( _rddata != null && _rddata == DYNAMIC_READER){ //ZK-938
-			return getReaderData();
-		}
-		return null;
-	}
-	
 	public byte[] getByteData() {
 		if (_bindata != null) return _bindata;
 		
-		InputStream is = getInputStream();
+		InputStream is = _isdata == DYNAMIC_STREAM ? getStreamData() : _isdata ; //ZK-938
 		if (is != null) {
 			try {
 				byte[] bs = Files.readAll(is);
@@ -326,7 +304,7 @@ public class AMedia implements Media, java.io.Serializable {
 	public String getStringData() {
 		if (_strdata != null) return _strdata;
 		
-		Reader reader =  getReader();
+		Reader reader =  _rddata == DYNAMIC_READER ? getReaderData() : _rddata; //ZK-938
 		if (reader != null) {
 			try {
 				String ct = Files.readAll(reader).toString();
