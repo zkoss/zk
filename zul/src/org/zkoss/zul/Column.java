@@ -267,7 +267,7 @@ public class Column extends HeaderElement {
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
 	 *
-	 * @param sorter the comparator used to sort the ascending order.
+	 * @param sorter the comparator used to sort the descending order.
 	 * If you are using the group feature, you can pass an instance of
 	 * {@link GroupComparator} to have a better control.
 	 * If an instance of {@link GroupComparator} is passed,

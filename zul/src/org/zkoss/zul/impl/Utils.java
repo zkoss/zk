@@ -224,6 +224,11 @@ public class Utils {
 		addLocaleJS(sb, "GRID_DESC", MZul.GRID_DESC);
 		addLocaleJS(sb, "GRID_COLUMNS", MZul.GRID_COLUMNS);
 
+		addLocaleJS(sb, "WS_HOME", MZul.WS_HOME);
+		addLocaleJS(sb, "WS_PREV", MZul.WS_PREV);
+		addLocaleJS(sb, "WS_NEXT", MZul.WS_NEXT);
+		addLocaleJS(sb, "WS_END", MZul.WS_END);
+
 		addLocaleJS(sb, "OK", MZul.OK);
 		addLocaleJS(sb, "CANCEL", MZul.CANCEL);
 		addLocaleJS(sb, "YES", MZul.YES);
