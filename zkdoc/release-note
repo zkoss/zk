@@ -54,6 +54,7 @@ ZK 5.0.11
   ZK-930: Fileupload.get fail in cluster server
   ZK-938: Fileupload of binaries fails with 0 content/NullInputStream
   ZK-941: The decimalbox with the roundingMode="UNNECESSARY" will not throw ArithmeticException when type a invalid value
+  ZK-964: No error shown if coerceFromString_ failed and CustomConstraint was specified
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
