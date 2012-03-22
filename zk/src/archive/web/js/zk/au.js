@@ -1105,6 +1105,22 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	cfmClose: function (msg) {
 		zk.confirmClose = msg;
 	},
+	/** Shows a notifaction popup.
+	 * @param String msg message to show
+	 * @param String pid uuid of the page to which it belongs
+	 * @param String ref uuid of a reference component
+	 * @param String pos the position of notification
+	 * @param int dur the duration of notification
+	 */
+	showNotification: function (msg, type, pid, ref, pos, off, dur) {
+		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
+		if (notif)
+			notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type});
+		else {
+			// TODO: provide a hook to customize
+			jq.alert(msg); // fall back to alert when zul is not available
+		}
+	},
 	/** Shows the busy message covering the specified widget.
 	 * @param String uuid the component's UUID
 	 * @param String msg the message.

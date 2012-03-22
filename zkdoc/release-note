@@ -11,6 +11,8 @@ ZK 6.0.1
   ZK-943: We need a groups model which supports List<?>, all the Groups models use arrays
   ZK-955: Update jars in dist/lib/ext to newer version
   ZK-951: Add a new Biglistbox component to handle huge data
+  ZK-540: Notification Components 
+  ZK-698: A flexible Notification(Box) component to give user visual feedback.
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

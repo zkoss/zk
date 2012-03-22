@@ -16,14 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.*;
 
@@ -205,8 +205,104 @@ public class Clients {
 	public static final void evalJavaScript(String javaScript) {
 		response(new AuScript(null, javaScript));
 	}
-
-	/** Shows the busy message at the brower such that
+	
+	/**
+	 * Notification type: information
+	 */
+	public static final String NOTIFICATION_TYPE_INFO = "info";
+	
+	/**
+	 * Notification type: warning
+	 */
+	public static final String NOTIFICATION_TYPE_WARNING = "warning";
+	
+	/**
+	 * Notification type: error
+	 */
+	public static final String NOTIFICATION_TYPE_ERROR = "error";
+	
+	/**
+	 * Shows a message at the center of the browser window.
+	 * @param msg the message to show
+	 * @since 6.0.1
+	 */
+	public static final void showNotification(String msg) {
+		showNotification(msg, null, null, null, -1);
+	}
+	
+	/**
+	 * Displays a message.
+	 * @param msg the message to show
+	 * @param type available types are "info", "warning", "error"
+	 * @param ref the referenced component, null to be based on browser window
+	 * @param position predefined positions.
+	 * <p> Available options are:
+	 * <ul>
+	 * 	<li><b>before_start</b><br/> the message appears above the anchor, aligned to the left.</li>
+	 * 	<li><b>before_center</b><br/> the message appears above the anchor, aligned to the center.</li>
+	 *  <li><b>before_end</b><br/> the message appears above the anchor, aligned to the right.</li>
+	 *  <li><b>after_start</b><br/> the message appears below the anchor, aligned to the left.</li>
+	 *  <li><b>after_center</b><br/> the message appears below the anchor, aligned to the center.</li>
+	 *  <li><b>after_end</b><br/> the message appears below the anchor, aligned to the right.</li>
+	 *  <li><b>start_before</b><br/> the message appears to the left of the anchor, aligned to the top.</li>
+	 *  <li><b>start_center</b><br/> the message appears to the left of the anchor, aligned to the middle.</li>
+	 *  <li><b>start_after</b><br/> the message appears to the left of the anchor, aligned to the bottom.</li>
+	 *  <li><b>end_before</b><br/> the message appears to the right of the anchor, aligned to the top.</li>
+	 *  <li><b>end_center</b><br/> the message appears to the right of the anchor, aligned to the middle.</li>
+	 *  <li><b>end_after</b><br/> the message appears to the right of the anchor, aligned to the bottom.</li>
+	 *  <li><b>overlap/top_left</b><br/> the message overlaps the anchor, with anchor and message aligned at top-left.</li>
+	 *  <li><b>top_center</b><br/> the message overlaps the anchor, with anchor and message aligned at top-center.</li>
+	 *  <li><b>overlap_end/top_right</b><br/> the message overlaps the anchor, with anchor and message aligned at top-right.</li>
+	 *  <li><b>middle_left</b><br/> the message overlaps the anchor, with anchor and message aligned at middle-left.</li>
+	 *  <li><b>middle_center</b><br/> the message overlaps the anchor, with anchor and message aligned at middle-center.</li>
+	 *  <li><b>middle_right</b><br/> the message overlaps the anchor, with anchor and message aligned at middle-right.</li>
+	 *  <li><b>overlap_before/bottom_left</b><br/> the message overlaps the anchor, with anchor and message aligned at bottom-left.</li>
+	 *  <li><b>bottom_center</b><br/> the message overlaps the anchor, with anchor and message aligned at bottom-center.</li>
+	 *  <li><b>overlap_after/bottom_right</b><br/> the message overlaps the anchor, with anchor and message aligned at bottom-right.</li>
+	 *  <li><b>at_pointer</b><br/> the message appears with the upper-left aligned with the mouse cursor.</li>
+	 *  <li><b>after_pointer</b><br/> the message appears with the top aligned with
+	 *  	the bottom of the mouse cursor, with the left side of the message at the horizontal position of the mouse cursor.</li>
+	 * </ul></p>
+	 * @param duration the duration of notification in millisecond. If zero or 
+	 * negative the notification does not dismiss until user left-clicks outside 
+	 * of the notification box.
+	 * @since 6.0.1
+	 */
+	public static final void showNotification(String msg, String type, 
+			Component ref, String position, int duration) { // TODO: dismiss strategy
+		Execution exec = Executions.getCurrent();
+		Page page = ref != null ? ref.getPage() : null;
+		if (page == null && exec instanceof ExecutionCtrl)
+			page = ((ExecutionCtrl) exec).getCurrentPage();
+		if (type == null)
+			type = NOTIFICATION_TYPE_INFO;
+		response(new AuNotification(msg, type, page, ref, position, duration));
+	}
+	
+	/**
+	 * Displays a message.
+	 * @param msg the message to show
+	 * @param type available types are "info", "warning", "error"
+	 * @param ref the referenced component, null to be based on browser window
+	 * @param x the horizontal position of the notification, aligned at top-left (in pixel)
+	 * @param y the vertical position of the notification, aligned at top-left (in pixel)
+	 * @param duration the duration of notification in millisecond. If zero or 
+	 * negative the notification does not dismiss until user left-clicks outside 
+	 * of the notification box.
+	 * @since 6.0.1
+	 */
+	public static final void showNotification(String msg, String type, 
+			Component ref, int x, int y, int duration) { // TODO: dismiss strategy
+		Execution exec = Executions.getCurrent();
+		Page page = ref != null ? ref.getPage() : null;
+		if (page == null && exec instanceof ExecutionCtrl)
+			page = ((ExecutionCtrl) exec).getCurrentPage();
+		if (type == null)
+			type = NOTIFICATION_TYPE_INFO;
+		response(new AuNotification(msg, type, page, ref, x, y, duration));
+	}
+	
+	/** Shows the busy message at the browser such that
 	 * the user knows the system is busy.
 	 *
 	 * <p>It is usually used with {@link org.zkoss.zk.ui.event.Events#echoEvent}
@@ -304,4 +400,5 @@ public class Clients {
 	public static final void log(String msg) {
 		response(new AuLog(msg));
 	}
+	
 }

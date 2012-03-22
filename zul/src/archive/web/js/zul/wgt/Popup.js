@@ -39,24 +39,30 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @param String position
 	 * <p> Possible values for the position attribute are:
 	 * <ul>
-	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned on the left.</li>
-	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned on the right.</li>
-	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned on the left.</li>
-	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned on the right.</li>
-	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned on the top.</li>
-	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned on the bottom.</li>
-	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned on the top.</li>
-	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned on the bottom.</li>
-	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the top-left 
-	 *  	corners of both the anchor and popup aligned.</li>
-	 *  <li><b>overlap_end</b><br/> the popup overlaps the anchor, with the top-right 
-	 *  	corners of both the anchor and popup aligned.</li>
-	 *  <li><b>overlap_before</b><br/> the popup overlaps the anchor, with the bottom-left 
-	 *  	corners of both the anchor and popup aligned.</li>
-	 *  <li><b>overlap_after</b><br/> the popup overlaps the anchor, with the bottom-right 
-	 *  	corners of both the anchor and popup aligned.</li>
+	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned to the left.</li>
+	 * 	<li><b>before_center</b><br/> the popup appears above the anchor, aligned to the center.</li>
+	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned to the right.</li>
+	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned to the left.</li>
+	 *  <li><b>after_center</b><br/> the popup appears below the anchor, aligned to the center.</li>
+	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned to the right.</li>
+	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned to the top.</li>
+	 *  <li><b>start_center</b><br/> the popup appears to the left of the anchor, aligned to the middle.</li>
+	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned to the bottom.</li>
+	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned to the top.</li>
+	 *  <li><b>end_center</b><br/> the popup appears to the right of the anchor, aligned to the middle.</li>
+	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned to the bottom.</li>
+	 *  <li><b>overlap/top_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-left.</li>
+	 *  <li><b>top_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-center.</li>
+	 *  <li><b>overlap_end/top_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-right.</li>
+	 *  <li><b>middle_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-left.</li>
+	 *  <li><b>middle_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-center.</li>
+	 *  <li><b>middle_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-right.</li>
+	 *  <li><b>overlap_before/bottom_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-left.</li>
+	 *  <li><b>bottom_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-center.</li>
+	 *  <li><b>overlap_after/bottom_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-right.</li>
+	 *  <li><b>at_pointer</b><br/> the popup appears with the upper-left aligned with the mouse cursor.</li>
 	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
-	 *  	the bottom of the anchor, with the topleft corner of the popup at the horizontal position of the mouse pointer.</li>
+	 *  	the bottom of the mouse cursor, with the left side of the popup at the horizontal position of the mouse cursor.</li>
 	 * </ul></p>
 	 * @param Map opts 
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
@@ -98,9 +104,22 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
 		
 		this.setFloating_(true); // B50-ZK-280: setFloating_ first
-		this.setVisible(true);
 		this.setTopmost();
-		
+		this.openAnima_(ref, offset, position, opts);
+	},
+	/** The effect for opening the popup. Override this function to provide
+	 * opening effect. afterOpenAnima_ needs to be called after the effect.
+	 * @since 6.0.1
+	 */
+	openAnima_: function (ref, offset, position, opts) {
+		this.afterOpenAnima_(ref, offset, position, opts);
+	},
+	/** The handling after the opening effect of popup.
+	 * @since 6.0.1
+	 */
+	afterOpenAnima_: function (ref, offset, position, opts) {
+		var node = this.$n();
+		this.setVisible(true);
 		if ((!opts || !opts.disableMask) && this.isListen("onOpen", {asapOnly:true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
 			if (this.mask) this.mask.destroy(); 
@@ -159,15 +178,18 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_posInfo: function (ref, offset, position, opts) {
 		var pos, dim;
 		
-		if (ref && position) {
-			if (typeof ref == 'string')
-				ref = zk.Widget.$(ref);
-				
+		if (position) {
 			if (ref) {
-				var refn = zul.Widget.isInstance(ref) ? ref.$n() : ref;
-				pos = position;
-				dim = zk(refn).dimension(true);
-			}
+				if (typeof ref == 'string')
+					ref = zk.Widget.$(ref);
+					
+				if (ref) {
+					var refn = zul.Widget.isInstance(ref) ? ref.$n() : ref;
+					pos = position;
+					dim = zk(refn).dimension(true);
+				}
+			} else
+				return {pos: position};
 		} else if (jq.isArray(offset)) {
 			dim = {
 				left: zk.parseInt(offset[0]), top: zk.parseInt(offset[1]),
@@ -197,7 +219,19 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	close: function (opts) {
 		if (this._stackup)
 			this._stackup.style.display = "none";
-		
+		this.closeAnima_();
+	},
+	/** The effect for closing the popup. Override this function to provide
+	 * closing effect. afterCloseAnima_ needs to be called after the effect.
+	 * @since 6.0.1
+	 */
+	closeAnima_: function (opts) {
+		this.afterCloseAnima_(opts);
+	},
+	/** The handling after the closing effect of popup.
+	 * @since 6.0.1
+	 */
+	afterCloseAnima_: function (opts) {
 		this.setVisible(false);
 		zk(this.$n()).undoVParent();
 		zWatch.fireDown("onVParent", this);

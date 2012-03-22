@@ -103,24 +103,30 @@ public class Popup extends XulElement {
 	 * method directly.
 	 * <p> Possible values for the position attribute are:
 	 * <ul>
-	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned on the left.</li>
-	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned on the right.</li>
-	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned on the left.</li>
-	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned on the right.</li>
-	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned on the top.</li>
-	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned on the bottom.</li>
-	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned on the top.</li>
-	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned on the bottom.</li>
-	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the top-left 
-	 *  	corners of both the anchor and popup aligned.</li>
-	 *  <li><b>overlap_end</b><br/> the popup overlaps the anchor, with the top-right 
-	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
-	 *  <li><b>overlap_before</b><br/> the popup overlaps the anchor, with the bottom-left 
-	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
-	 *  <li><b>overlap_after</b><br/> the popup overlaps the anchor, with the bottom-right 
-	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
+	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned to the left.</li>
+	 * 	<li><b>before_center</b><br/> the popup appears above the anchor, aligned to the center.</li>
+	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned to the right.</li>
+	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned to the left.</li>
+	 *  <li><b>after_center</b><br/> the popup appears below the anchor, aligned to the center.</li>
+	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned to the right.</li>
+	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned to the top.</li>
+	 *  <li><b>start_center</b><br/> the popup appears to the left of the anchor, aligned to the middle.</li>
+	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned to the bottom.</li>
+	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned to the top.</li>
+	 *  <li><b>end_center</b><br/> the popup appears to the right of the anchor, aligned to the middle.</li>
+	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned to the bottom.</li>
+	 *  <li><b>overlap/top_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-left.</li>
+	 *  <li><b>top_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-center.</li>
+	 *  <li><b>overlap_end/top_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at top-right.</li>
+	 *  <li><b>middle_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-left.</li>
+	 *  <li><b>middle_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-center.</li>
+	 *  <li><b>middle_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at middle-right.</li>
+	 *  <li><b>overlap_before/bottom_left</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-left.</li>
+	 *  <li><b>bottom_center</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-center.</li>
+	 *  <li><b>overlap_after/bottom_right</b><br/> the popup overlaps the anchor, with anchor and popup aligned at bottom-right.</li>
+	 *  <li><b>at_pointer</b><br/> the popup appears with the upper-left aligned with the mouse cursor.</li>
 	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
-	 *  	the bottom of the anchor, with the topleft corner of the popup at the horizontal position of the mouse pointer.</li>
+	 *  	the bottom of the mouse cursor, with the left side of the popup at the horizontal position of the mouse cursor.</li>
 	 * </ul></p>
 	 * 
 	 * @param ref the reference component to position the popup.

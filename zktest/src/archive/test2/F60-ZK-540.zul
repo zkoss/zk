@@ -1,0 +1,103 @@
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.*;
+		import org.zkoss.zul.*;
+		ListModel posm1 = new SimpleListModel(new String[] {
+			"(default)", "before_start", "before_center", "before_end", 
+			"after_start", "after_center", "after_end", "start_before", 
+			"start_center", "start_after", "end_before", "end_center", 
+			"end_after", "top_left", "top_center", "top_right", "middle_center",
+			"middle_left", "middle_right", "bottom_left", "bottom_center", 
+			"bottom_right"
+		});
+		ListModel posm2 = new SimpleListModel(new String[] {
+			"(default)", "top_left", "top_center", "top_right", "middle_center",
+			"middle_left", "middle_right", "bottom_left", "bottom_center", 
+			"bottom_right", "at_pointer", "after_pointer", "200, 200"
+		});
+		ListModel types = new SimpleListModel(new String[] {
+			Clients.NOTIFICATION_TYPE_INFO,
+			Clients.NOTIFICATION_TYPE_WARNING,
+			Clients.NOTIFICATION_TYPE_ERROR
+		});
+		String[] msgs = new String[] {
+			"En taro adun.",
+			"Use the force, Harry.",
+			"I don't always drink beer, but when I do, I code a lot."
+		};
+	]]></zscript>
+	<div style="padding: 5px; border: 1px solid #339999">
+		<n:table>
+			<n:tr>
+				<n:td rowspan="2">
+					<button label="Show">
+						<attribute name="onClick"><![CDATA[
+							int dur = adcb.checked ? adms.value : -1;
+							Component ref = refcb.checked ? win : null;
+							ListModel model = refcb.checked ? posm1 : posm2;
+							int i = Math.max(0, posbox.selectedIndex);
+							String plb = (String) model.getElementAt(i);
+							String pval = plb.charAt(0) == '(' ? null : plb;
+							i = Math.max(0, typebox.selectedIndex);
+							String type = (String) types.getElementAt(i);
+							String msg = msgbox.selectedItem.value;
+							if (msg == null)
+								msg = msgs[(int) (Math.random() * msgs.length)];
+							if (pval != null && pval.contains(",")) {
+								String[] ss = pval.split(",", 2);
+								int x = Integer.parseInt(ss[0].trim());
+								int y = Integer.parseInt(ss[1].trim());
+								Clients.showNotification(msg, type, ref, x, y, dur);
+							} else
+								Clients.showNotification(msg, type, ref, pval, dur);
+						]]></attribute>
+					</button>
+				</n:td>
+				<n:td>
+					<label>Reference</label>
+				</n:td>
+				<n:td>
+					<label>Position</label>
+				</n:td>
+				<n:td>
+					<label>Type</label>
+				</n:td>
+				<n:td>
+					<label>Duration (ms)</label>
+				</n:td>
+				<n:td colspan="2">
+					<label>Message</label>
+				</n:td>
+			</n:tr>
+			<n:tr>
+				<n:td>
+					<checkbox id="refcb" label="Window" checked="true" 
+						onCheck='posbox.model = self.checked ? posm1 : posm2' />
+				</n:td>
+				<n:td>
+					<selectbox id="posbox" model="${posm1}" />
+				</n:td>
+				<n:td>
+					<selectbox id="typebox" model="${types}" />
+				</n:td>
+				<n:td>
+					<checkbox id="adcb" />
+					<intbox id="adms" value="2000" />
+				</n:td>
+				<n:td>
+					<listbox id="msgbox" mold="select">
+						<listitem label="(random)" selected="true" />
+						<listitem label="Protoss" value="${msgs[0]}" />
+						<listitem label="Force" value="${msgs[1]}" />
+						<listitem label="Beer" value="${msgs[2]}" />
+					</listbox>
+				</n:td>
+			</n:tr>
+		</n:table>
+	</div>
+	<div style="padding: 150px 250px">
+		<window id="win" border="normal" title="Window" height="300px" width="300px">
+			Window Content
+		</window>
+	</div>
+</zk>
