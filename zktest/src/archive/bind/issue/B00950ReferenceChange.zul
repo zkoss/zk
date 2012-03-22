@@ -8,7 +8,7 @@
 		4.Select 1st person, both Direct and Reference should change to the selected one
 		5.Click "Clear Selection" button, both Direct and Reference should clear
 	</label>
-	<listbox width="500px" model="@load(vm.personList)"
+	<listbox id="listbox" width="500px" model="@load(vm.personList)"
 		selectedItem="@bind(vm.selectedPerson)" checkmark="true">
 		<template name="model" var="r">
 			<listitem>
@@ -21,16 +21,16 @@
 	</listbox>
 	<vbox>
 	==Direct==
-	<label value="@load(vm.selectedPerson.firstName)" />
-	<label value="@load(vm.selectedPerson.lastName)" />
-	<label value="@load(vm.selectedPerson.fullName)" />
+	<label id="l11" value="@load(vm.selectedPerson.firstName)" />
+	<label id="l12" value="@load(vm.selectedPerson.lastName)" />
+	<label id="l13" value="@load(vm.selectedPerson.fullName)" />
 	==Reference==
 	<vbox p="@ref(vm.selectedPerson)">
-		<label value="@load(p.firstName)" />
-		<label value="@load(p.lastName)" />
-		<label value="@load(p.fullName)" />
+		<label id="l21" value="@load(p.firstName)" />
+		<label id="l22" value="@load(p.lastName)" />
+		<label id="l23" value="@load(p.fullName)" />
 	</vbox>
 	</vbox>
-	<button label="Clear Selection" onClick="@command('clearSelection')"/> 
+	<button id="clear" label="Clear Selection" onClick="@command('clearSelection')"/> 
 	<button label="dump" onClick="binder.tracker.dump()" />
 </window>
