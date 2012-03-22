@@ -19,10 +19,10 @@ package org.zkoss.zul;
 import java.math.BigDecimal;
 
 import org.zkoss.math.BigDecimals;
+import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.WrongValueException;
-
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.NumberInputElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding BigDecimal.
@@ -87,6 +87,20 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		this.setValue(new BigDecimal(str));
 	}
 
+	protected WrongValueException handleClientWrongValueExpcetion(String error,
+			String val) {
+		if("RoundingNeed".equals(error)){
+			try{
+				formatNumber(unmarshall(val),null);
+			}catch(ArithmeticException ex) {
+				return new ArithmeticWrongValueException(this,ex,val);
+			}
+		}
+		
+		return super.handleClientWrongValueExpcetion(error, val);
+		
+	}
+	
 	/** Returns the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).

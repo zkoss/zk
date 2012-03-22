@@ -610,7 +610,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (val && (msg = val.error)) {
 					this.clearErrorMessage(true);
 					if (this._cst == "[c") //CustomConstraint
-						return {error: msg, server: true};
+						return {error: msg,value:val.value, server: true};
+					if (val.toServer){
+						return {error: msg,value:val.value, server: true};
+					}
 					this._markError(msg, val);
 					return val;
 				}
@@ -691,10 +694,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					this._value = vi.value; //vi - not coerced
 					this._defRawVal = value;
 				}
+				if (upd || vi.server)
+					this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
+						vi.server ? {toServer:true}: null, 90);				
+			}else{//sending error back
+				if (vi.server)
+					this.fire('onChange', {error:vi.error, value:vi.value } , {toServer:true}, 90 );				
 			}
-			if (upd || vi.server)
-				this.fire('onChange', _onChangeData(this, this.marshall_(vi.value)),
-					vi.server ? {toServer:true}: null, 90);
 		}
 		return true;
 	},

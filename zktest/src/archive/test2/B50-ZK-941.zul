@@ -1,0 +1,16 @@
+<!-- 
+	20120319 1159 TonyQ
+ -->
+
+<zk xmlns:h="xhtml">
+	<h:pre>
+	1. Enter 1.239 and blur, it should show up error message.
+	2. Enter 1.0  and blur, it should clear the error message
+	
+	</h:pre>
+	<div apply="org.zkoss.zktest.test2.B50_ZK_941_Composer">
+	
+		<decimalbox id="dec"  format="#.##" width="150px"  roundingMode="UNNECESSARY"/>
+		<label id="label" style="color:red;" />
+	</div>
+</zk>

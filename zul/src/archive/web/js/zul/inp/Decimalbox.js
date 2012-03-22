@@ -46,6 +46,11 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 			sval = val.$toString();
 		if (info.raw != sval && info.raw != '-'+sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
+			
+		if(this._rounding == 7 && zk.fmt.Number.isNeedRound(value, this.getFormat(), this._localizedSymbols)){
+			return {error: "RoundingNeed", toServer:true , value:value} ;
+		}
+			
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
 		if (this._scale > 0) //bug #3089502: setScale in decimalbox not working
 			val = zk.fmt.Number.setScale(val, this._scale, this._rounding);

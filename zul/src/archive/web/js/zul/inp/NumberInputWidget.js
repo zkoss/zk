@@ -35,6 +35,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		 * <li>4: ROUND_HALF_UP</li>
 		 * <li>5: ROUND_HALF_DOWN</li>
 		 * <li>6: ROUND_HALF_EVEN</li>
+		 * <li>7: ROUND_UNNECESSARY</li>
 		 * </ul>
 		 * @return int
 		 */
@@ -47,6 +48,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		 * <li>4: ROUND_HALF_UP</li>
 		 * <li>5: ROUND_HALF_DOWN</li>
 		 * <li>6: ROUND_HALF_EVEN</li>
+		 * <li>7: ROUND_UNNECESSARY</li>
 		 * </ul>
 		 * @param int rounding mode
 		 */
