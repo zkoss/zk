@@ -711,6 +711,13 @@ implements Constrainted, Readonly, Disable {
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
+	
+	
+	//2012/3/22 Currently only Decimalbox used/overwrite this.
+	protected WrongValueException handleClientWrongValueExpcetion(String error,String val){
+		return new WrongValueException(this,error);
+	}
+	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -721,7 +728,18 @@ implements Constrainted, Readonly, Disable {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
 			final Map<String, Object> data = request.getData();
+			
 			final Object clientv = data.get("value");
+			final Object error = data.get("error");
+			
+			if(error != null){ //handle error message from client.
+				WrongValueException ex = handleClientWrongValueExpcetion((String)error,(String)clientv);
+				if(ex != null){
+					initAuxInfo().errmsg = ex.getMessage();
+					throw ex;					
+				}
+			}
+			
 			final Object oldval = _value;
 			Object value = null;
 			try {

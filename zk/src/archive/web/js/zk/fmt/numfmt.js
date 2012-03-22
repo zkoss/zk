@@ -79,6 +79,58 @@ zk.fmt.Number = {
 			return new zk.BigDecimal(valStr);
 		}
 	},
+	isNeedRound: function(val, fmt, localizedSymbols){
+		if(!fmt || val == null || val =="") {
+			return false;
+		}
+		
+		var useMinsuFmt;
+		if (fmt.indexOf(';') != -1) {
+			fmt = fmt.split(';');
+			useMinsuFmt = val < 0;
+			fmt = fmt[useMinsuFmt ? 1 : 0];
+		}
+		
+		// localized symbols
+		localizedSymbols = localizedSymbols || _defaultSymbols;
+		//calculate number of fixed decimals
+		var efmt = this._escapeQuote(fmt, localizedSymbols);
+		fmt = efmt.fmt;
+		var pureFmtStr = efmt.pureFmtStr,
+			ind = efmt.purejdot,
+			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
+			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring(val < 0 ? 1 : 0),
+			ei = valStr.lastIndexOf('e'),
+			indVal = valStr.indexOf('.'),
+			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
+			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei+1), 10));
+			
+		if(ei > 0) valStr = valStr.substring(0, ei);
+		if (shift > 0) {
+			if (indVal >= 0) { //with dot
+				if (valFixed > shift) {
+					valFixed -= shift;
+				} else {
+					valFixed = 0;
+				}
+			} 
+		} else if (shift < 0) {
+			var nind = (indVal < 0 ? varStr.length : indVal) + shift;
+			if(nind > 0) {
+				valFixed -= shift;
+			} else {
+				//TODO finetune logic to prevent string operation.
+				if(indVal >= 0)
+					valStr = valStr.substring(0, indVal) + valStr.substring(indVal+1);
+				for(; nind++ < 0;)
+					valStr = '0' + valStr;
+				valStr = '0.' + valStr;
+				valFixed = valStr.length - 2;
+			}
+		}
+		
+		return valFixed > fixed;
+	},
 	rounding: function (valStr, ri, rounding, minus) {
 		switch(rounding) {
 			case 0: //UP
