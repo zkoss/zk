@@ -164,11 +164,13 @@ public interface Execution extends Scope {
 	/** Adds a name resolver that will be used to resolve a variable
 	 * (by {@link #getVariableResolver}).
 	 *
-	 * <p>The new added variable resolver has the higher priority.
+	 * <p>The new added variable resolver is called first, so it has the higher
+	 * priority than the previous added variable resolver.
 	 * In additions, the priority of the variable resolver added with this method
-	 * is higher than the attributes defined in the execution, and
-	 * any variable resolver added to a page
+	 * is higher than the variable resolvers added to a page
 	 * ({@link Page#addVariableResolver}).
+	 * However, its priority is lower than attributes defined in the execution and
+	 * components.
 	 *
 	 * <p>Notice that {@link #getVariableResolver} returns a variable resolver
 	 * used to evaluate EL expressions. It
