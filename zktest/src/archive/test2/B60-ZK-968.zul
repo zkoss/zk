@@ -1,0 +1,55 @@
+<zk>
+    <zscript><![CDATA[
+        public class Prod{
+        	private String name;
+        	private List detail;
+        	public Prod(String name, List detail) {
+        		this.name = name;
+        		this.detail = detail;
+        	}
+        	
+        	public String getName() {
+        		return name;
+        	}
+        	
+        	public List getDetail() {
+        		return detail;
+        	}
+        	
+        }
+        
+        public Prod createProd(String name, int size) {
+        	List list = new ArrayList();
+        	for (int i = 0; i < size; i++)
+        		list.add(name + " " + i);
+        	return new Prod(name, list);
+        }
+        
+        List list = new ArrayList();
+        
+        list.add(createProd("A",3));
+        list.add(createProd("B",2));
+        list.add(createProd("C",4));
+        
+		ListModelList model = new ListModelList(list);
+    ]]></zscript>
+    
+	<listbox model="${model}">
+	   <listhead>
+	       <listheader label="Name" />
+	       <listheader label="Detail" />
+	   </listhead>
+	   <template name="model">
+	       <listitem>
+	           <listcell label="${each.name}"/>
+	           <listcell>
+	           		<vlayout>
+	           			<label forEach="${each.detail}" value="${each}"/>
+	           		</vlayout>
+	           </listcell>
+	       </listitem>
+	   </template>
+</listbox>
+	
+</zk>
+

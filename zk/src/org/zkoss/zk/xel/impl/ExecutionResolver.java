@@ -156,15 +156,15 @@ public class ExecutionResolver implements VariableResolverX {
 					return o;
 			}
 
-			Object o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
-			if (o != null)
-				return o;
-
-			o = _exec.getAttribute(name);
+			Object o = _exec.getAttribute(name);
 			if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 				return o;
 
 			o = comp.getAttributeOrFellow(name, true);
+			if (o != null)
+				return o;
+
+			o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
 			if (o != null)
 				return o;
 
@@ -186,15 +186,15 @@ public class ExecutionResolver implements VariableResolverX {
 				if (o != null)
 					return o;
 
-				o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
-				if (o != null)
-					return o;
-
 				o = _exec.getAttribute(name);
 				if (o != null/* || _exec.hasAttribute(name)*/) //ServletRequest not support hasAttribute
 					return o;
 
 				o = page.getAttributeOrFellow(name, true);
+				if (o != null)
+					return o;
+
+				o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
 				if (o != null)
 					return o;
 
