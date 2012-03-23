@@ -381,34 +381,34 @@ div.z-listbox {
 .z-listgroup-img-radio {
 	background-position: 0 -13px;
 }
-.z-listitem-over .z-listitem-img-radio,
-.z-listgroup-over .z-listgroup-img-radio {
+.z-listitem-over ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-radio,
+.z-listgroup-over ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-radio {
 	background-position: -13px -13px;
 }
-.z-listitem-seld .z-listitem-img-radio,
-.z-listgroup-seld .z-listgroup-img-radio {
+.z-listitem-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-radio,
+.z-listgroup-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-radio {
 	background-position: -26px -13px;
 }
-.z-listitem-over-seld .z-listitem-img-radio,
-.z-listgroup-over-seld .z-listgroup-img-radio {
+.z-listitem-over-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-radio,
+.z-listgroup-over-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-radio {
 	background-position: -39px -13px;
 }
 .z-listheader-img-over,
-.z-listitem-over .z-listitem-img-checkbox, 
-.z-listgroup-over .z-listgroup-img-checkbox, 
-.z-listgroupfoot-over .z-listgroupfoot-img-checkbox {
+.z-listitem-over ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-checkbox, 
+.z-listgroup-over ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-checkbox, 
+.z-listgroupfoot-over ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroupfoot-img-checkbox {
 	background-position: -13px 0;
 }
 .z-listheader-img-seld,
-.z-listitem-seld .z-listitem-img-checkbox, 
-.z-listgroup-seld .z-listgroup-img-checkbox, 
-.z-listgroupfoot-seld .z-listgroupfoot-img-checkbox {
+.z-listitem-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-checkbox, 
+.z-listgroup-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-checkbox, 
+.z-listgroupfoot-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroupfoot-img-checkbox {
 	background-position: -26px 0;
 }
 .z-listheader-img-over-seld,
-.z-listitem-over-seld .z-listitem-img-checkbox, 
-.z-listgroup-over-seld .z-listgroup-img-checkbox, 
-.z-listgroupfoot-over-seld .z-listgroupfoot-img-checkbox {
+.z-listitem-over-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listitem-img-checkbox, 
+.z-listgroup-over-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroup-img-checkbox, 
+.z-listgroupfoot-over-seld ${zk.ie == 6 ? "" : "> td > .z-listcell-cnt >"} .z-listgroupfoot-img-checkbox {
 	background-position: -39px 0;
 }
 .z-listitem-img-disd {
@@ -417,8 +417,8 @@ div.z-listbox {
 	filter: alpha(opacity=60);
 }
 <c:if test="${zk.opera > 0}">
-tr.z-listitem-disd .z-listitem-img-checkbox,
-tr.z-listitem-disd .z-listitem-img-radio {
+tr.z-listitem-disd > td > .z-listcell-cnt > .z-listitem-img-checkbox,
+tr.z-listitem-disd > td > .z-listcell-cnt > .z-listitem-img-radio {
 	overflow: visible;<%-- Bug ZK-397 --%>
 }
 </c:if>

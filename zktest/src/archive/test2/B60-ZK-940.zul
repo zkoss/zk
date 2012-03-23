@@ -1,0 +1,61 @@
+<!--
+	B60-ZK-949.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Mar 23 11:31:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Select Listitem/Treeitem 1. You should NOT see any of other Listitems/Treeitems selected. Otherwise this is a bug.
+	</div>
+	<div>
+		When you hover Listitem/Treeitem 1, the checkmark of other Listitems/Treeitems should NOT reflect hover state (blue color).
+	</div>
+	<div>
+		Note that due to CSS limitation, we are skipping the fix for IE 6. (We can fix it by adding CSS class, but probably not worth it.)
+	</div>
+	<listbox multiple="true" checkmark="true">
+		<listitem>
+			<listcell>
+				Listitem 1
+				<listbox multiple="true" checkmark="true">
+					<listitem label="Listitem 2" />
+					<listitem label="Listitem 3" />
+				</listbox>
+				<listbox checkmark="true">
+					<listitem label="Listitem 4" />
+					<listitem label="Listitem 5" />
+				</listbox>
+			</listcell>
+		</listitem>
+	</listbox>
+	<tree multiple="true" checkmark="true">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>
+						Treeitem 1
+						<tree multiple="true" checkmark="true">
+							<treechildren>
+								<treeitem label="Treeitem 2" />
+								<treeitem label="Treeitem 3" />
+							</treechildren>
+						</tree>
+						<tree checkmark="true">
+							<treechildren>
+								<treeitem label="Treeitem 4" />
+								<treeitem label="Treeitem 5" />
+							</treechildren>
+						</tree>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

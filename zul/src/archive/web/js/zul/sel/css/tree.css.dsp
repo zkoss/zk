@@ -633,22 +633,22 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 .z-treerow-img-radio {
 	background-position: 0 -13px;
 }
-.z-treerow-over .z-treerow-img-radio {
+.z-treerow-over ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-radio {
 	background-position: -13px -13px;
 }
-.z-treerow-seld .z-treerow-img-radio {
+.z-treerow-seld ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-radio {
 	background-position: -26px -13px;
 }
-.z-treerow-over-seld .z-treerow-img-radio {
+.z-treerow-over-seld ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-radio {
 	background-position: -39px -13px;
 }
-.z-treerow-over .z-treerow-img-checkbox {
+.z-treerow-over ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-checkbox {
 	background-position: -13px 0;
 }
-.z-treerow-seld .z-treerow-img-checkbox {
+.z-treerow-seld ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-checkbox {
 	background-position: -26px 0;
 }
-.z-treerow-over-seld .z-treerow-img-checkbox {
+.z-treerow-over-seld ${zk.ie == 6 ? "" : "> td > .z-treecell-cnt >"} .z-treerow-img-checkbox {
 	background-position: -39px 0;
 }
 .z-treerow-img-disd {
@@ -657,8 +657,8 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 	filter: alpha(opacity=60);
 }
 <c:if test="${zk.opera > 0}">
-tr.z-treerow-disd .z-treerow-img-checkbox,
-tr.z-treerow-disd .z-treerow-img-radio {
+tr.z-treerow-disd > td > .z-treecell-cnt > .z-treerow-img-checkbox,
+tr.z-treerow-disd > td > .z-treecell-cnt > .z-treerow-img-radio {
 	overflow: visible;<%-- Bug ZK-397 --%>
 }
 </c:if>
