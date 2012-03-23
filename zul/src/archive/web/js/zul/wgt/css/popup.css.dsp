@@ -62,7 +62,7 @@
 }
 .z-notification .z-notification-cl {
 	padding: 15px;
-	padding-left: 60px;
+	padding-left: 55px;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
@@ -75,7 +75,7 @@
 	padding-left: 55px;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
-	background-position: 13px 14px;
+	background-position: 17px 18px;
 }
 .z-notification .z-notification-cnt {
 	overflow: hidden;
@@ -103,7 +103,7 @@
 <%-- notification: base style --%>
 .z-notification .z-notification-cl {
 	background-color: ${zk.ie < 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"};
-	color: #BBBBBB;
+	color: #FFFFFF;
 }
 .z-notification .z-notification-pointer-l,
 .z-notification .z-notification-pointer-r,
@@ -124,64 +124,75 @@
 	border-top-color: ${zk.ie < 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"};
 }
 
+<c:set var="infoColor" value="${zk.ie < 8 ? '#3CA7B1' : 'rgba(33, 155, 166, 0.88)'}" />
+<c:set var="warningColor" value="${zk.ie < 8 ? '#ED5A33' : 'rgba(234, 67, 23, 0.88)'}" />
+<c:set var="errorColor" value="${zk.ie < 8 ? '#C61F23' : 'rgba(190, 0, 5, 0.88)'}" />
+
 <%-- notification: info --%>
 .z-notification-info .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/info-btn.png')});
-}
-.z-notification-ref.z-notification-info .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/info-btn.png')});
+	background-color: ${infoColor};
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-info.png')});
 }
 <c:if test="${zk.ie == 6}">
 .z-notification-info .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/info-btn.gif')});
-}
-.z-notification-ref-info .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/info-btn.gif')});
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-info.gif')});
 }
 </c:if>
+.z-notification-info .z-notification-pointer-l {
+	border-right-color: ${infoColor};
+}
+.z-notification-info .z-notification-pointer-r {
+	border-left-color: ${infoColor};
+}
+.z-notification-info .z-notification-pointer-u {
+	border-bottom-color: ${infoColor};
+}
+.z-notification-info .z-notification-pointer-d {
+	border-top-color: ${infoColor};
+}
 
 <%-- notification: warning --%>
 .z-notification-warning .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/warning-btn.png')});
-}
-.z-notification-ref.z-notification-warning .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/warning-btn.png')});
+	background-color: ${warningColor};
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-warning.png')});
 }
 <c:if test="${zk.ie == 6}">
 .z-notification-warning .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/warning-btn.gif')});
-}
-.z-notification-ref-warning .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/warning-btn.gif')});
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-warning.gif')});
 }
 </c:if>
+.z-notification-warning .z-notification-pointer-l {
+	border-right-color: ${warningColor};
+}
+.z-notification-warning .z-notification-pointer-r {
+	border-left-color: ${warningColor};
+}
+.z-notification-warning .z-notification-pointer-u {
+	border-bottom-color: ${warningColor};
+}
+.z-notification-warning .z-notification-pointer-d {
+	border-top-color: ${warningColor};
+}
 
 <%-- notification: error --%>
 .z-notification-error .z-notification-cl {
-	background-color: ${zk.ie < 8 ? "#990000" : "rgba(153, 0, 0, 0.8)"};
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/stop-btn.png')});
-	color: #FFDDDD;
-}
-.z-notification-ref.z-notification-error .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/stop-btn.png')});
+	background-color: ${errorColor};
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-error.png')});
 }
 <c:if test="${zk.ie == 6}">
 .z-notification-error .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/stop-btn.gif')});
-}
-.z-notification-ref-error .z-notification-cl {
-	background-image: url(${c:encodeThemeURL('~./zul/img/msgbox/stop-btn.gif')});
+	background-image: url(${c:encodeThemeURL('~./zul/img/popup/notif-error.gif')});
 }
 </c:if>
 .z-notification-error .z-notification-pointer-l {
-	border-right-color: ${zk.ie < 8 ? "#990000" : "rgba(153, 0, 0, 0.8)"};
+	border-right-color: ${errorColor};
 }
 .z-notification-error .z-notification-pointer-r {
-	border-left-color: ${zk.ie < 8 ? "#990000" : "rgba(153, 0, 0, 0.8)"};
+	border-left-color: ${errorColor};
 }
 .z-notification-error .z-notification-pointer-u {
-	border-bottom-color: ${zk.ie < 8 ? "#990000" : "rgba(153, 0, 0, 0.8)"};
+	border-bottom-color: ${errorColor};
 }
 .z-notification-error .z-notification-pointer-d {
-	border-top-color: ${zk.ie < 8 ? "#990000" : "rgba(153, 0, 0, 0.8)"};
+	border-top-color: ${errorColor};
 }
