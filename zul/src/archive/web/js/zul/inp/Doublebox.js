@@ -31,14 +31,14 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	coerceFromString_: function (value) {
 		if (!value) return null;
-
+					
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			raw = info.raw,
 			val = parseFloat(raw),
 			valstr = ''+val,
 			valind = valstr.indexOf('.'),
 			rawind = raw.indexOf('.');
-
+					
 		if (isNaN(val) || valstr.indexOf('e') < 0) {
 			if (rawind == 0) {
 				raw = '0' + raw;
@@ -71,6 +71,10 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 				return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 		}
 
+		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/ ||
+				zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
+					return {server:true};		
+		
 		if (info.divscale) val = val / Math.pow(10, info.divscale);
 		return val;
 	},

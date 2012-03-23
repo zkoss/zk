@@ -79,10 +79,10 @@ zk.fmt.Number = {
 			return new zk.BigDecimal(valStr);
 		}
 	},
-	isNeedRound: function(val, fmt, localizedSymbols){
-		if(!fmt || val == null || val =="") {
+	//Test if rounding is required (used if Rounding is UNNECESSARY
+	isRoundingRequired: function(val, fmt, localizedSymbols){
+		if(!fmt || val == null || val =="")
 			return false;
-		}
 		
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {

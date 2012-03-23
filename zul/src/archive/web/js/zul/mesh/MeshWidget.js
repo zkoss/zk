@@ -877,6 +877,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_onRender: function () { //overriden in zkmax
+		if (!this.$n())
+			return; // the target may not exist. B50-ZK-963 
+		
 		this._pendOnRender = false;
 		if (this._syncingbodyrows || zAu.processing()) { //wait if busy (it might run outer)
 			this.fireOnRender(zk.gecko ? 200 : 60); //is syncing rows, try it later

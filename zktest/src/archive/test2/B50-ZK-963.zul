@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-963.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Mar 23, 2012  9:40:21 AM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you cannot see a Javascript error from the browser window for IE8, that the bug is fixed.
+	<zscript><![CDATA[
+ListitemRenderer renderer = new ListitemRenderer(){
+
+	public void render(Listitem item, Object data) throws Exception {
+		item.appendChild(new Listcell("item"));
+		item.appendChild(new Listcell("item"));
+		item.appendChild(new Listcell("item"));
+		
+	}
+	
+};
+	]]></zscript>
+	<listbox height="500px" width="300px" id="lb" itemRenderer="${renderer}">
+		<custom-attributes org.zkoss.zul.listbox.rod="false" />
+		<listhead>
+			<listheader label="col" forEach="1,1,1" />
+		</listhead>
+	</listbox>
+	<timer repeats="true" running="true" delay="1500">
+		<attribute name="onTimer"><![CDATA[
+			List list = new ArrayList();
+			
+			for (int i = 0; i < 1000; i++)
+				list.add("item");
+			lb.setModel(new ListModelList(list));
+		]]></attribute>
+	</timer>
+</zk>
+
+

@@ -7,15 +7,18 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Constraint;
 import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.Decimalbox;
+import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Label;
 
 public class B50_ZK_941_Composer extends GenericForwardComposer {
 	private Decimalbox dec ;
+	private Doublebox dbl ;
 	private Label label;
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		
 		dec.setConstraint(new MyConstraint());
+		dbl.setConstraint(new MyConstraint());
 	}
 	
 	private class MyConstraint implements CustomConstraint,Constraint{
@@ -26,7 +29,7 @@ public class B50_ZK_941_Composer extends GenericForwardComposer {
 				label.setValue("The value your input( "+ aex.getValue() +") is not avaiable for the input, " +
 						" please enter numbers with format #.## .");
 			}else{
-				label.setValue("");
+				label.setValue(ex != null ? ex.getMessage(): "");
 			}
 			
 		}
