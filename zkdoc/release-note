@@ -55,6 +55,7 @@ ZK 5.0.11
   ZK-938: Fileupload of binaries fails with 0 content/NullInputStream
   ZK-941: The decimalbox with the roundingMode="UNNECESSARY" will not throw ArithmeticException when type a invalid value
   ZK-964: No error shown if coerceFromString_ failed and CustomConstraint was specified
+  ZK-963: Update the data of the listbox with a timer and IE8 will cause javascript error
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
