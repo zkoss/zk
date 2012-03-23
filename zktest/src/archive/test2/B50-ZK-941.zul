@@ -4,13 +4,28 @@
 
 <zk xmlns:h="xhtml">
 	<h:pre>
-	1. Enter 1.239 and blur, it should show up error message.
+	1. Enter 1.239 and blur, the error message will be shown at its right side
 	2. Enter 1.0  and blur, it should clear the error message
+	3. Repeat 1 and 2 for the second decimalbox, and the message will be a popup (error box).
 	
 	</h:pre>
-	<div apply="org.zkoss.zktest.test2.B50_ZK_941_Composer">
 	
-		<decimalbox id="dec"  format="#.##" width="150px"  roundingMode="UNNECESSARY"/>
-		<label id="label" style="color:red;" />
+	<div apply="org.zkoss.zktest.test2.B50_ZK_941_Composer">
+		<groupbox >
+			<caption label="custom constraint"/>
+			<vlayout>
+				<div> Message: <label id="label" style="color:red;" /> </div>
+			
+				<div> decimal <decimalbox id="dec"  format="#.##" width="150px"  roundingMode="UNNECESSARY"/> </div>
+				<div> double <doublebox id="dbl"  format="#.##" width="150px"  roundingMode="UNNECESSARY" /> </div>
+			</vlayout>
+		</groupbox>
 	</div>
+		<groupbox >
+			<caption label="no custom constraint"/>
+			<vlayout>
+				<div> decimal <decimalbox format="#.##" width="150px"  roundingMode="UNNECESSARY"/> </div>
+				<div> doublebox <doublebox  format="#.##" width="150px"  roundingMode="UNNECESSARY" />			</div>
+			</vlayout>
+		</groupbox>
 </zk>

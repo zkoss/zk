@@ -1,0 +1,22 @@
+<vlayout>
+	<html>First, enter "...." to the following box, and then press TAB.
+An error message shall be shown.
+Second, copy-and-paste "1e2" to the following box, and then press TAB.
+The error message shall disappear and you shall see 100.</html>
+
+	<zscript><![CDATA[
+	public class MyConstraint extends SimpleConstraint implements CustomConstraint {
+		public MyConstraint(int flags) {
+			super(flags);
+		}
+		public void showCustomError(Component comp, WrongValueException ex) {
+			comp.getFellow("err").setValue(ex != null ? ex.getMessage(): "");
+		}
+	}
+	MyConstraint cs1 = new MyConstraint(0);
+	MyConstraint nes = new MyConstraint(MyConstraint.NO_NEGATIVE);
+	]]></zscript>
+
+	<decimalbox format="#.##" width="150px" constraint="${cs1}"/>
+	<label id="err"/>
+</vlayout>

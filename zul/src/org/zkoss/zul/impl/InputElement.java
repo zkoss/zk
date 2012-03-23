@@ -711,13 +711,6 @@ implements Constrainted, Readonly, Disable {
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
-	
-	
-	//2012/3/22 Currently only Decimalbox used/overwrite this.
-	protected WrongValueException handleClientWrongValueExpcetion(String error,String val){
-		return new WrongValueException(this,error);
-	}
-	
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -727,27 +720,27 @@ implements Constrainted, Readonly, Disable {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			final Map<String, Object> data = request.getData();
-			
-			final Object clientv = data.get("value");
-			final Object error = data.get("error");
-			
-			if(error != null){ //handle error message from client.
-				WrongValueException ex = handleClientWrongValueExpcetion((String)error,(String)clientv);
-				if(ex != null){
-					initAuxInfo().errmsg = ex.getMessage();
-					throw ex;					
-				}
-			}
-			
 			final Object oldval = _value;
 			Object value = null;
-			try {
-				value = unmarshall(clientv);
-			} catch (NumberFormatException ex) {
-				initAuxInfo().errmsg = ex.getMessage();
-				throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
+			final Map data = request.getData();
+			final String rawValue = (String)data.get("rawValue");
+			if (rawValue != null) {
+				try {
+					value = coerceFromString(rawValue);
+				} catch (WrongValueException ex) {
+					initAuxInfo().errmsg = ex.getMessage();
+					throw ex;
+				}
+			} else {
+				final Object clientv = data.get("value");
+				try {
+					value = unmarshall(clientv);
+				} catch (NumberFormatException ex) {
+					initAuxInfo().errmsg = ex.getMessage();
+					throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
+				}
 			}
+
 			final String valstr = coerceToString(value);
 			try {
 				setValueByClient(value, valstr); //always since it might have func even not change
@@ -759,6 +752,10 @@ implements Constrainted, Readonly, Disable {
 					//will throw an exception with proper value.
 				throw ex;
 			}
+
+			if (rawValue != null && !rawValue.equals(valstr))
+				smartUpdate("_value", marshall(_value));
+	
 			final InputEvent evt = new InputEvent(cmd, this,
 				valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
 				AuRequests.getBoolean(data, "bySelectBack"),
