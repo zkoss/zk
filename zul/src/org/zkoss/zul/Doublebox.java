@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.text.DecimalFormatSymbols;
 
+import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.mesg.MZul;
@@ -113,10 +114,14 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 		}
 	}
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value instanceof Double ?
-				toLocaleString((Double)value, getDefaultLocale()):
-			value.toString()/*just in case*/: formatNumber(value, null);
+		try{
+			return value != null && getFormat() == null ?
+				value instanceof Double ?
+					toLocaleString((Double)value, getDefaultLocale()):
+				value.toString()/*just in case*/: formatNumber(value, null);
+		} catch (ArithmeticException ex) {
+			throw new ArithmeticWrongValueException(this, ex.getMessage(), ex, value);
+		}
 	}
 	/*package*/ static String toLocaleString(Double v, java.util.Locale locale) {
 		final DecimalFormatSymbols symbols =
