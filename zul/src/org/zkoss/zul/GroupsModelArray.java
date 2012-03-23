@@ -135,28 +135,15 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		_comparator = cmpr;
 		group(_comparator,true,col);
 	}
-	/** Constructor with a list of data.
-	 * @param data a list of data to be grouping.
-	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
-	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
-	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
-	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
-	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
-	 * @param col column index associate with cmpr.
-	 * @since 5.0.6
+	/** @deprecated As of release 6.0.1, there is no way to instantiate
+	 * the array with the correct type.
 	 */
 	@SuppressWarnings("unchecked")
 	public GroupsModelArray(List<D> data, Comparator cmpr, int col) {
 		this((D[])data.toArray(), cmpr, col, false); //no need to clone
 	}
-	/** Constructor with a list of data.
-	 * @param data a list of data to be grouping.
-	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
-	 * At 1st phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to sort the data.<br/>
-	 * At 2nd phase, it calls {@link Comparator#compare(Object, Object)} or {@link GroupComparator#compareGroup(Object, Object)} to decide which data belong to which group. 
-	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
-	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
-	 * @since 5.0.6
+	/** @deprecated As of release 6.0.1, there is no way to instantiate
+	 * the array with the correct type.
 	 */
 	public GroupsModelArray(List<D> data, Comparator cmpr) {
 		this(data, cmpr, 0);
