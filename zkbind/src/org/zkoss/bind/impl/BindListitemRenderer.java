@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listgroup;
+import org.zkoss.zul.Listgroupfoot;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 
@@ -39,7 +40,8 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 	throws Exception {
 		final Listbox listbox = (Listbox)item.getParent();
 		final int size = listbox.getModel().getSize();
-		final Template tm = resoloveTemplate(listbox,item,data,index,size,"model");
+		final String tmn = item instanceof Listgroup?"model:group":item instanceof Listgroupfoot?"model:groupfoot":"model";
+		final Template tm = resoloveTemplate(listbox,item,data,index,size,tmn);
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
 			item.setValue(data);

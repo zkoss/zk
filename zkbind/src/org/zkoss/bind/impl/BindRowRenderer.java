@@ -22,6 +22,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
+import org.zkoss.zul.Groupfoot;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
@@ -38,7 +39,8 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 		final Rows rows = (Rows)row.getParent();
 		final Grid grid = (Grid)rows.getParent();
 		final int size = grid.getModel().getSize();
-		final Template tm = resoloveTemplate(grid,row,data,index,size,"model");
+		final String tmn = row instanceof Group?"model:group":row instanceof Groupfoot?"model:groupfoot":"model";
+		final Template tm = resoloveTemplate(grid,row,data,index,size,tmn);
 		if (tm == null) {
 			final Label label = newRenderLabel(Objects.toString(data));
 			label.applyProperties();
