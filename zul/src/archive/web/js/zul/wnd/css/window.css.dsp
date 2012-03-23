@@ -167,7 +167,7 @@
 .z-window-highlighted-header,
 .z-window-overlapped-header, 
 .z-window-embedded-header {
-	overflow: hidden; zoom: 1; color: #222222; padding-bottom: 4px;
+	overflow: hidden; zoom: 1; padding-bottom: 4px;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM}; font-weight: normal;
 	cursor: default;
@@ -184,12 +184,7 @@
 	cursor: move;
 } 
 <%-- Body Content--%>
-.z-window-embedded-cnt,
-.z-window-embedded-body,
-.z-window-overlapped-body,
-.z-window-popup-body,
-.z-window-highlighted-body,
-.z-window-modal-body {
+.z-window-embedded-cnt {
 	overflow: hidden;
 	zoom: 1;
 }

@@ -65,8 +65,6 @@
 .z-panel-header {
 	background: transparent repeat-x 0 0;
 	background-image: url(${c:encodeThemeURL('~./zul/img/wnd/panel-hm.png')});
-	border: 1px solid #B2CAD6;
-	padding: 5px 3px 4px 5px;
 }
 .z-panel-header-move {
 	cursor: move;
@@ -173,12 +171,6 @@
 .z-panel-header {
 	overflow: hidden;
 }
-.z-panel-hl .z-panel-header {
-	background-color: transparent;
-	border: 0;
-	color: #363636;
-	padding: 3px 0 7px 0;
-}
 .z-panel-body {
 	overflow: hidden;
 	zoom: 1;
@@ -190,9 +182,6 @@
 	border-top: 0;
 	position: relative;
 	zoom: 1;
-	/*
-	padding: 5px;
-	*/
 }
 
 <%-- This is for fixing border of toolbars at different position --%>
