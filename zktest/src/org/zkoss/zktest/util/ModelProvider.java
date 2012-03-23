@@ -152,7 +152,7 @@ public class ModelProvider {
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			
-			return new GroupsModelArray(list, new FieldComparator("name", true)) {
+			return new GroupsModelArray(list.toArray(), new FieldComparator("name", true)) {
 				protected Object createGroupHead(
 						Object[] groupdata, int index, int col) {
 					return new Object[] { groupdata[0], new Integer(col) };
@@ -173,7 +173,7 @@ public class ModelProvider {
 						rand.nextInt(count)+"", df.format(cal.getTime())});
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 			}
-			return new GroupsModelArray(list, new ArrayComparator(0, true));
+			return new GroupsModelArray(list.toArray(), new ArrayComparator(0, true));
 		}
 	}
 	
