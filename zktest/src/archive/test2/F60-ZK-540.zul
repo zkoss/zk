@@ -23,7 +23,8 @@
 		String[] msgs = new String[] {
 			"En taro adun.",
 			"Use the force, Harry.",
-			"I don't always drink beer, but when I do, I code a lot."
+			"I don't always drink beer, but when I do, I code a lot.",
+			"Also possible to do <span style=\"font-weight: bold\">HTML</span>."
 		};
 	]]></zscript>
 	<div style="padding: 5px; border: 1px solid #339999">
@@ -90,6 +91,7 @@
 						<listitem label="Protoss" value="${msgs[0]}" />
 						<listitem label="Force" value="${msgs[1]}" />
 						<listitem label="Beer" value="${msgs[2]}" />
+						<listitem label="HTML" value="${msgs[3]}" />
 					</listbox>
 				</n:td>
 			</n:tr>

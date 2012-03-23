@@ -32,8 +32,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		out.push('<div', this.domAttrs_(), '><div id=', uuid, '-p class="', 
 				zcls, '-pointer"></div><div id="', uuid, '-body" class="', 
 				zcls, '-cl"><div id="', uuid, '-cave" class="', zcls, 
-				'-cnt">', zUtl.encodeXML(this._msg, {multiline:true}), 
-				'</div></div></div>');
+				'-cnt">', this._msg, '</div></div></div>'); // not encoded to support HTML
 	},
 	domClass_: function (no) {
 		var zcls = this.getZclass(),
