@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 
 /**
@@ -36,7 +35,6 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private final Set<Binding> _bindings; //associated bindings
 	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	private transient WeakReference<Object> _bean; //associated bean value
-	private transient WeakReference<ReferenceBinding> _referBinding; //if this node refer to a ReferenceBinding, the ReferenceBinding; or null.
 	
 	public TrackerNodeImpl(Object property) {
 		_script = property;
@@ -44,17 +42,6 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		_bindings = new HashSet<Binding>(4);
 		_brackets = new HashMap<Object, Object>(4);
 		_associates = new HashSet<TrackerNode>(4);
-	}
-	/*package*/ ReferenceBinding getReferenceBinding() {
-		ReferenceBinding rbinding = _referBinding == null ? null : _referBinding.get();
-		if (rbinding == null && _referBinding != null) { //Help GC
-			setReferenceBinding(null);
-		}
-		return rbinding;
-	}
-
-	/*package*/ void setReferenceBinding(ReferenceBinding rbinding) {
-		_referBinding = rbinding == null ? null : new WeakReference<ReferenceBinding>(rbinding);
 	}
 	/*package*/ void addAssociate(TrackerNode node) {
 		_associates.add(node);

@@ -67,9 +67,9 @@ public class BindELResolver extends XelELResolver {
 		if (rbinding != null) {
 			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
 		} 
-		//If a ReferenceBinding evaluated to null, tie the ReferenceBinding itself as the 
-		//evaluated bean, @see TrackerImpl#getLoadBindings0()
-		tieValue(ctx, base, property, value != null ? value : rbinding, false, rbinding);
+		//If value evaluated to a ReferenceBinding, always tie the ReferenceBinding itself as the 
+		//evaluated bean, @see TrackerImpl#getLoadBindings0() and TrackerImpl#getAllTrackerNodesByBeanNodes()
+		tieValue(ctx, base, property, rbinding != null ? rbinding : value, false);
 		return value;
 	}
 	
@@ -79,7 +79,7 @@ public class BindELResolver extends XelELResolver {
 			base = ((ReferenceBinding)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		super.setValue(ctx, base, property, value);
-		tieValue(ctx, base, property, value, true, null);
+		tieValue(ctx, base, property, value, true);
 	}
 	
 	private static Path getPathList(BindELContext ctx){
@@ -109,7 +109,7 @@ public class BindELResolver extends XelELResolver {
 	}
 
 	//update dependency and notify changed
-	private void tieValue(ELContext elCtx, Object base, Object propName, Object value, boolean allownotify, ReferenceBinding refBinding) {
+	private void tieValue(ELContext elCtx, Object base, Object propName, Object value, boolean allownotify) {
 		final BindELContext ctx = (BindELContext)((EvaluationContext)elCtx).getELContext();
 		if(ctx.ignoreTracker()) return; 
 		final Binding binding = ctx.getBinding();
@@ -131,12 +131,7 @@ public class BindELResolver extends XelELResolver {
 			final Binder binder = binding.getBinder();
 			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 			final Component ctxcomp = bctx != null ? bctx.getComponent() : binding.getComponent();
-			final Object old = ctxcomp.setAttribute(BinderImpl.REF_BINDING, refBinding);
-			try {
-				((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
-			} finally {
-				ctxcomp.setAttribute(BinderImpl.REF_BINDING, old);
-			}
+			((BinderCtrl)binder).getTracker().tieValue(ctxcomp, base, script, propName, value);
 			
 			if (base != null) {
 				if (binding instanceof SaveBinding) {
