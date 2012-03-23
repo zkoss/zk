@@ -343,6 +343,8 @@ ZK 5.0.11
   ZK-938: Fileupload of binaries fails with 0 content/NullInputStream
   ZK-941: The decimalbox with the roundingMode="UNNECESSARY" will not throw ArithmeticException when type a invalid value
   ZK-964: No error shown if coerceFromString_ failed and CustomConstraint was specified
+  ZK-952: Portallayout get wrong position when using Executions.createComponents to create panels
+  
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
