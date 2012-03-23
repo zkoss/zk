@@ -1037,6 +1037,9 @@ public class Components {
 		public boolean hasVariableResolver(VariableResolver resolver) {
 			return exec().hasVariableResolver(resolver);
 		}
+		public boolean hasVariableResolver(Class<? extends VariableResolver> cls) {
+			return exec().hasVariableResolver(cls);
+		}
 
 		public String toString() {
 			return Objects.toString(exec());

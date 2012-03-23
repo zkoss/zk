@@ -194,6 +194,10 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public boolean hasVariableResolver(VariableResolver resolver);
+	/** Returns if any instance of the give class has been registered.
+	 * @since 6.0.1
+	 */
+	public boolean hasVariableResolver(Class<? extends VariableResolver> cls);
 
 	/** Queues an event to this execution.
 	 * In other words, the event is placed to the event queue.

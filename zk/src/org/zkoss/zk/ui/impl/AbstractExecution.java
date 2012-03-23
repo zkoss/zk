@@ -421,11 +421,19 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public boolean hasVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
-	//@Override ExecutionCtrl
+	@Override
+	public boolean hasVariableResolver(Class<? extends VariableResolver> cls) {
+		if (_resolvers != null)
+			for (final VariableResolver resolver: _resolvers)
+				if (cls.isInstance(resolver))
+					return true;
+		return false;
+	}
+	@Override
 	public Object getExtraXelVariable(String name) {
 		return getExtraXelVariable(null, null, name);
 	}
-	//@Override ExecutionCtrl
+	@Override
 	public Object getExtraXelVariable(XelContext ctx, Object base, Object name) {
 		//Note this method searches only _resolvers
 		if (_resolvers != null) {
