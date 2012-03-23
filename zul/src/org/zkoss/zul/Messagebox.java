@@ -414,9 +414,9 @@ public class Messagebox {
 	 */
 	public static int show(String message, String title, int buttons, String icon,
 	int focus, EventListener<Event> listener) {
-		return show(message, title, toButtonTypes(buttons), null, icon,
-			focus != 0 ? toButtonType(focus): null,
-			toButtonListener(listener), null).id;
+		Button res = show(message, title, toButtonTypes(buttons), null, icon,
+				focus != 0 ? toButtonType(focus): null, toButtonListener(listener), null);
+		return res != null ? res.id : 0; // B60-ZK-946: NPE
 	}
 	private static Button toButtonType(int btn) {
 		switch (btn) {

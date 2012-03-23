@@ -1,0 +1,25 @@
+<!--
+	B60-ZK-946.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Mar 23 11:31:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		ONLY when event thread is enabled.
+	</div>
+	<div>
+		Click on "Show" Button and close the Messagebox by the close icon at upper-right (NOT OK button).
+	</div>
+	<div>
+		You shall see "Result: 0" and no NullPointerException occurs. Otherwise it is a bug.
+	</div>
+	<button label="Show" onClick='lb.value = "" + Messagebox.show("Test")' />
+	Result: <label id="lb" />
+</zk>
