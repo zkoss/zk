@@ -606,9 +606,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var val = value, msg;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val);
-				if (val && (msg = val.error)) {
+				if (val && ((msg = val.error) || val.server)) {
 					this.clearErrorMessage(true);
-					if (this._cst == "[c") { //CustomConstraint
+					if (val.server || this._cst == "[c") { //CustomConstraint
 						this._reVald = false;
 						return {rawValue: value||'', server: true}; //let server to validate it
 					}

@@ -26,7 +26,7 @@ public class B50_ZK_941_Composer extends GenericForwardComposer {
 				label.setValue("The value your input( "+ aex.getValue() +") is not avaiable for the input, " +
 						" please enter numbers with format #.## .");
 			}else{
-				label.setValue("");
+				label.setValue(ex != null ? ex.getMessage(): "");
 			}
 			
 		}

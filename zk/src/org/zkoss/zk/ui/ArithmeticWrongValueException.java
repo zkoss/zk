@@ -20,39 +20,44 @@ package org.zkoss.zk.ui;
  * For ArithmeticException wrong value wrapper.
  * 
  * @author tony
- * 
+ * @since 5.0.11
  */
 public class ArithmeticWrongValueException extends WrongValueException {
 
 	private static final long serialVersionUID = 2388564567451692996L;
-	private String value;
+	private Object _value;
 
-	public ArithmeticWrongValueException(Component comp, Throwable cause,
-			String value) {
-		super(comp, value);
-		initCause(cause);
-		this.value = value;
+	public ArithmeticWrongValueException(Component comp, String msg,
+	Throwable cause, Object value) {
+		super(comp, msg, cause);
+		_value = value;
+	}
+	public ArithmeticWrongValueException(Component comp, String msg, Object value) {
+		super(comp, msg);
+		_value = value;
+	}
+	public ArithmeticWrongValueException(Object value) {
+		_value = value;
+	}
+	public ArithmeticWrongValueException() {
 	}
 
-	public ArithmeticWrongValueException() {
-		super();
+	public ArithmeticWrongValueException(Component comp, int code,
+	Object[] fmtArgs, Object value) {
+		this(comp, code, fmtArgs);
+		_value = value;
+	}
+	public ArithmeticWrongValueException(Component comp, int code,
+	Object[] fmtArgs) {
+		super(comp, code, fmtArgs);
 	}
 
 	public ArithmeticWrongValueException(Component comp, int code, Object fmtArg) {
 		super(comp, code, fmtArg);
 	}
 
-	public ArithmeticWrongValueException(Component comp, int code,
-			Object[] fmtArgs) {
-		super(comp, code, fmtArgs);
-	}
-
 	public ArithmeticWrongValueException(Component comp, int code) {
 		super(comp, code);
-	}
-
-	public ArithmeticWrongValueException(Component comp, String msg) {
-		super(comp, msg);
 	}
 
 	public ArithmeticWrongValueException(int code, Object fmtArg,
@@ -94,14 +99,9 @@ public class ArithmeticWrongValueException extends WrongValueException {
 	}
 
 	/**
-	 * @return the value that user entered
+	 * @return the value that causes the exception.
 	 */
-	public String getValue() {
-		return value;
+	public Object getValue() {
+		return _value;
 	}
-	
-	public String getMessage() {
-		return getCause() != null ? getCause().toString() : super.getMessage();
-	}
-
 }

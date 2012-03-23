@@ -706,47 +706,39 @@ implements Constrainted, Readonly, Disable, org.zkoss.zul.impl.api.InputElement 
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
-			final Object oldval = _value;
-			Object value = null;
-			final Map data = request.getData();
-			final String rawValue = (String)data.get("rawValue");
-			if (rawValue != null) {
-				try {
-					value = coerceFromString(rawValue);
-				} catch (WrongValueException ex) {
-					initAuxInfo().errmsg = ex.getMessage();
-					throw ex;
-				}
-			} else {
-				final Object clientv = data.get("value");
-				try {
-					value = unmarshall(clientv);
-				} catch (NumberFormatException ex) {
-					initAuxInfo().errmsg = ex.getMessage();
-					throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
-				}
-			}
-
-			final String valstr = coerceToString(value);
 			try {
+				final Object oldval = _value;
+				Object value = null;
+				final Map data = request.getData();
+				final String rawValue = (String)data.get("rawValue");
+				if (rawValue != null) {
+					value = coerceFromString(rawValue);
+				} else {
+					final Object clientv = data.get("value");
+					try {
+						value = unmarshall(clientv);
+					} catch (NumberFormatException ex) {
+						throw new WrongValueException(this, MZul.NUMBER_REQUIRED, clientv);
+					}
+				}
+
+				final String valstr = coerceToString(value);
 				setValueByClient(value, valstr); //always since it might have func even not change
+				if (rawValue != null && !rawValue.equals(valstr))
+					smartUpdate("_value", marshall(_value));
+
 				if (Objects.equals(oldval, _value))
 					return; //Bug 1881557: don't post event if not modified
+
+				final InputEvent evt = new InputEvent(cmd, this,
+					valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
+					AuRequests.getBoolean(data, "bySelectBack"),
+					AuRequests.getInt(data, "start", 0));
+				Events.postEvent(evt);
 			} catch (WrongValueException ex) {
 				initAuxInfo().errmsg = ex.getMessage();
-					//we have to 'remember' the error, so next call to getValue
-					//will throw an exception with proper value.
-				throw ex;
+				throw ex; //No need to go through onWrongValue since UiEngine will do it
 			}
-
-			if (rawValue != null && !rawValue.equals(valstr))
-				smartUpdate("_value", marshall(_value));
-	
-			final InputEvent evt = new InputEvent(cmd, this,
-				valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
-				AuRequests.getBoolean(data, "bySelectBack"),
-				AuRequests.getInt(data, "start", 0));
-			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_CHANGING)) {
 			final Map data = request.getData();
 			final Object clientv = data.get("value");

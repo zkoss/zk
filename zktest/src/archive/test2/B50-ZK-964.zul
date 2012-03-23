@@ -2,7 +2,7 @@
 	<html>First, enter "...." to the following box, and then press TAB.
 An error message shall be shown.
 Second, copy-and-paste "1e2" to the following box, and then press TAB.
-The error message shall disappear.</html>
+The error message shall disappear and you shall see 100.</html>
 
 	<zscript><![CDATA[
 	public class MyConstraint extends SimpleConstraint implements CustomConstraint {

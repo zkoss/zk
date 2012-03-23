@@ -87,20 +87,6 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		this.setValue(new BigDecimal(str));
 	}
 
-	protected WrongValueException handleClientWrongValueExpcetion(String error,
-			String val) {
-		if("RoundingNeed".equals(error)){
-			try{
-				formatNumber(unmarshall(val),null);
-			}catch(ArithmeticException ex) {
-				return new ArithmeticWrongValueException(this,ex,val);
-			}
-		}
-		
-		return super.handleClientWrongValueExpcetion(error, val);
-		
-	}
-	
 	/** Returns the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).
@@ -174,10 +160,14 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		}
 	}
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value instanceof BigDecimal ?
-				BigDecimals.toLocaleString((BigDecimal)value, getDefaultLocale()):
-				value.toString()/*just in case*/: formatNumber(value, null);
+		try {
+			return value != null && getFormat() == null ?
+				value instanceof BigDecimal ?
+					BigDecimals.toLocaleString((BigDecimal)value, getDefaultLocale()):
+					value.toString()/*just in case*/: formatNumber(value, null);
+		} catch (ArithmeticException ex) {
+			throw new ArithmeticWrongValueException(this, ex.getMessage(), ex, value);
+		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

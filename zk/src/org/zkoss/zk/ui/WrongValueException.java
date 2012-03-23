@@ -54,6 +54,14 @@ public class WrongValueException extends OperationException {
 		_comp = comp;
 	}
 
+	/** Constructs a wrong value exception.
+	 * @since 5.0.11
+	 */
+	public WrongValueException(Component comp, String msg, Throwable cause) {
+		super(msg, cause);
+		_comp = comp;
+	}
+
 	public WrongValueException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
