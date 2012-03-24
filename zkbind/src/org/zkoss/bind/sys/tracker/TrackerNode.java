@@ -14,6 +14,8 @@ package org.zkoss.bind.sys.tracker;
 import java.util.Set;
 
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.LoadBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 
 /**
  * Tracker Node in a binding dependency graph.
@@ -65,11 +67,23 @@ public interface TrackerNode {
 	 */
 	public void addBinding(Binding binding);
 
-	/** Returns associated Binding.
+	/** Returns all associated Bindings.
 	 * 
-	 * @return associated Binding.
+	 * @return associated Bindings.
 	 */
 	public Set<Binding> getBindings();
+	
+	/** Returns associated LoadBindings except ReferenceBindings.
+	 * @return associated LoadBindings except ReferenceBindings.
+	 * @since 6.0.1 
+	 */
+	public Set<LoadBinding> getLoadBindings();
+	
+	/** Returns associated ReferenceBindings.
+	 * @return associated ReferenceBindings.
+	 * @since 6.0.1
+	 */
+	public Set<ReferenceBinding> getReferenceBindings();
 	
 	/**
 	 * Returns associated bean of this TrackerNode.

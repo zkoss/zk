@@ -321,17 +321,14 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 		visited.add(node);
 		
-		final Set<Binding> nodebindings = node.getBindings();
-		for(Binding binding : nodebindings) {
-			if (binding instanceof LoadBinding) {
-				if (binding instanceof ReferenceBinding) {
-					((ReferenceBinding)binding).invalidateCache();
-					//ZK-950: The expression reference doesn't update while change the instant of the reference
-					//Have to load bindings that refer this ReferenceBinding as well
-					collectLoadBindings(binding, ".", bindings, visited); //recursive
-				}
-				bindings.add((LoadBinding)binding);
-			}
+		bindings.addAll(node.getLoadBindings());
+		final Set<ReferenceBinding> refBindings = node.getReferenceBindings();
+		bindings.addAll(refBindings);
+		for (ReferenceBinding refBinding : refBindings) {
+			refBinding.invalidateCache();
+			//ZK-950: The expression reference doesn't update while change the instant of the reference
+			//Have to load bindings that refer this ReferenceBinding as well
+			collectLoadBindings(refBinding, ".", bindings, visited); //recursive
 		}
 		
 		//bug #1: depends-on is not working in nested C->B->A when A changed
@@ -343,15 +340,10 @@ public class TrackerImpl implements Tracker, Serializable {
 		if (kidbases != null && kidbase != null) {
 			kidbases.add(kidbase);
 		} else {
-			//check all dependents
-			Set<TrackerNode> nodes = node.getDependents(); //include all offspring and dependent nodes 
+			//check dependents
+			final Set<TrackerNode> nodes = node.getDirectDependents(); 
 			for (TrackerNode kid : nodes) {
-				final Set<Binding> kidbindings = kid.getBindings();
-				for (Binding binding : kidbindings) {
-					if (binding instanceof LoadBinding) {
-						bindings.add((LoadBinding)binding);
-					}
-				}
+				getLoadBindings0(kid, bindings, null, visited); //recursive
 			}
 		}
 	}
@@ -423,17 +415,11 @@ public class TrackerImpl implements Tracker, Serializable {
 	//Check if the passed in bean nodes contains ReferenceBindings; have to collect those
 	//nodes that refers those ReferenceBindings as well
 	private void getAllTrackerNodesByBeanNodes(Set<TrackerNode> nodes, Set<TrackerNode> results) {
-		final Set<ReferenceBinding> refBindings = new HashSet<ReferenceBinding>(4);
 		for (TrackerNode node : nodes) {
-			Set<Binding> bindings = node.getBindings();
-			for (Binding binding : bindings) {
-				if (binding instanceof ReferenceBinding) {
-					refBindings.add((ReferenceBinding)binding);
-				}
+			final Set<ReferenceBinding> refBindings = node.getReferenceBindings();
+			for (ReferenceBinding refBinding : refBindings) {
+				getAllTrackerNodesByBean0(refBinding, results); //recursive
 			}
-		}
-		for (ReferenceBinding refBinding : refBindings) {
-			getAllTrackerNodesByBean0(refBinding, results); //recursive
 		}
 	}
 	
@@ -683,7 +669,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	private void dumpBindings(TrackerNode node, int spaces) {
-		if(node.getBindings().size()==0) return;//don't dump if empty
+		if(node.getBindings().isEmpty()) return;//don't dump if empty
 		System.out.println(dumpSpace(spaces)+"[bindings:");
 		for(Binding binding : node.getBindings()) {
 			dumpBinding(binding, spaces+4);

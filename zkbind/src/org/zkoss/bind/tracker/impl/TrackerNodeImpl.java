@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.LoadBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.tracker.TrackerNode;
 
 /**
@@ -32,14 +34,16 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
 	private final Map<Object, Object> _brackets; //property -> bracket script
-	private final Set<Binding> _bindings; //associated bindings
+	private final Set<LoadBinding> _bindings; //associated bindings
+	private final Set<ReferenceBinding> _refBindings; //associated ReferenceBindings
 	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	private transient WeakReference<Object> _bean; //associated bean value
 	
 	public TrackerNodeImpl(Object property) {
 		_script = property;
 		_dependents = new HashMap<Object, TrackerNode>(4);
-		_bindings = new HashSet<Binding>(4);
+		_bindings = new HashSet<LoadBinding>(4);
+		_refBindings = new HashSet<ReferenceBinding>(2);
 		_brackets = new HashMap<Object, Object>(4);
 		_associates = new HashSet<TrackerNode>(4);
 	}
@@ -95,10 +99,26 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	}
 
 	public void addBinding(Binding binding) {
-		_bindings.add(binding);
+		if (binding instanceof ReferenceBinding) {
+			_refBindings.add((ReferenceBinding)binding);
+		} else {
+			_bindings.add((LoadBinding)binding);
+		}
 	}
 	
 	public Set<Binding> getBindings() {
+		final Set<Binding> bindings = new HashSet<Binding>();
+		bindings.addAll(getLoadBindings());
+		bindings.addAll(getReferenceBindings());
+		
+		return bindings;
+	}
+	
+	public Set<ReferenceBinding> getReferenceBindings() {
+		return _refBindings;
+	}
+	
+	public Set<LoadBinding> getLoadBindings() {
 		return _bindings;
 	}
 
