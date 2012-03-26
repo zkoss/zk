@@ -1,0 +1,26 @@
+<!--
+	B60-ZK-975.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon Mar 26 12:09:24 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		The three textboxes should have almost the same width.
+	</div>
+	<div width="300px">
+		<textbox hflex="1" multiline="true" value="Textbox 1" />
+	</div>
+	<div width="300px">
+		<textbox mold="rounded" hflex="1" multiline="true" value="Textbox 2" />
+	</div>
+	<div width="300px">
+		<textbox mold="rounded" width="100%" multiline="true" value="Textbox 2" />
+	</div>
+</zk>
