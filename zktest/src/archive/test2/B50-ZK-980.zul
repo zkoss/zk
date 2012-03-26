@@ -1,0 +1,8 @@
+<zk>
+    <window mode="modal" title="Modal Window" border="normal" position="center">
+    	<textbox width="200px" height="14px" />
+		<textbox width="95px" height="14px" />
+		<textbox width="89px" height="14px" />
+		<button label="height" xmlns:w="client" w:onClick="alert(jq.innerHeight());"  />
+    </window>
+</zk>
