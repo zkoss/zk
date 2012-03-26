@@ -134,9 +134,8 @@ public class StringFns {
 		final int len = from.length();
 
 		for (int j = 0; (j = sb.indexOf(from, j)) >= 0;) {
-			sb.replace(j, j += len, to);
-			j+= to.length() -1 ; //ZK-929 : update index to prevent infinite loop
-			
+			sb.replace(j, j + len, to);
+			j += to.length()  ; //ZK-929 : update index to prevent infinite loop
 		}
 	}
 
