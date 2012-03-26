@@ -25,11 +25,12 @@ function (out) {
 		// Bug ZK-419
 		// no linked panel
 		// Bug ZK-674
-		// the first dom child of linked panel
-		// should be its cave node or self dom node
-		// Bug ZK-886, this._oldId from Tab.js#logId
-		if (!panel || c && c != panel.$n('cave')
-			&& (this._oldId? c.id != this._oldId : c != this.$n())) 
+		// Bug ZK-886
+		// return if no LinkedPanel
+		// or the LinkedPanel already Linked to another tab
+		// this._oldId is from Tab.js#_logId
+		if (!panel || (c && c != panel.$n('cave')
+			&& (this._oldId? c.id != this._oldId : c != this.$n()))) 
 			return;
 		// push to new array to insert if panel already rendered
 		out = n? [] : out;
