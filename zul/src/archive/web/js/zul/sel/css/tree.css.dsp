@@ -468,6 +468,25 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-treerow-img-radio {
 	background-position: 0 -13px;
 }
+.z-treerow-over > td > .z-treecell-cnt > .z-treerow-img-radio {
+	background-position: -13px -13px;
+}
+.z-treerow-seld > td > .z-treecell-cnt > .z-treerow-img-radio {
+	background-position: -26px -13px;
+}
+.z-treerow-over-seld > td > .z-treecell-cnt > .z-treerow-img-radio {
+	background-position: -39px -13px;
+}
+.z-treerow-over > td > .z-treecell-cnt > .z-treerow-img-checkbox {
+	background-position: -13px 0;
+}
+.z-treerow-seld > td > .z-treecell-cnt > .z-treerow-img-checkbox {
+	background-position: -26px 0;
+}
+.z-treerow-over-seld > td > .z-treecell-cnt > .z-treerow-img-checkbox {
+	background-position: -39px 0;
+}
+<c:if test="${c:browser('ie6-')}">
 .z-treerow-over .z-treerow-img-radio {
 	background-position: -13px -13px;
 }
@@ -486,6 +505,7 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-treerow-over-seld .z-treerow-img-checkbox {
 	background-position: -39px 0;
 }
+</c:if>
 .z-treerow-img-disd {
 	opacity: .6;
 	filter: alpha(opacity=60);
