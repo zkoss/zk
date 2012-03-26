@@ -265,20 +265,22 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				// zkq#hasVScroll() cause issue in IE9 (2011/10/17)
 				// B50-ZK-890: somehow IE 9 works with it now. (2012/3/9)
 				var scroll = zk(mw.ebody).hasVScroll();
+				
 				if (scroll > 11) {
 					w -= scroll;
-					
-					// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
-					if (zk.ie) {
+				}
+				if (zk.ie){
+					if (scroll > 11 || mw.ebody.clientWidth == 0) {
+						// For bug #3255116, we have to avoid IE to appear the hor. scrollbar.
 						var hdflex = jq(mw.ehead).find('table>tbody>tr>th:last-child')[0];
 						hdflex.style.width = '';
 						if (mw.ebodytbl)
 							mw.ebodytbl.width = "";
+					} else if (mw.ebodytbl) {
+						// reset the width for IE
+						if (mw.ebodytbl && !mw.ebodytbl.width)
+							mw.ebodytbl.width = "100%";
 					}
-				} else if (zk.ie && mw.ebodytbl) {
-					// reset the width for IE
-					if (mw.ebodytbl && !mw.ebodytbl.width)
-						mw.ebodytbl.width = "100%";
 				}
 			}
 			return {
