@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,33 +32,37 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 
 	private static final long serialVersionUID = 1L;
 	
+	//
 	private final Map<Component, Map<String, List<Message>>> _attrMessageMap; //<component, <attr,messages>>
-	private final Map<Component, Map<String, List<Message>>> _keyMessageMap; //<component, <attr,messages>>
-	private final Map<String, List<Message>> _globalKeyMessageMap; //<component, <attr,messages>>
+	private final Map<Component, Map<String, List<Message>>> _keyMessageMap; //<component, <key,messages>>
+	private final Map<String, List<Message>> _globalKeyMessageMap; //<component, <key,messages>>
 	
-	private final MultipleMessages _multiple;
+	private final MultipleMessages _multiple;//a internal map for getting the messages array
+	
+	private final List<Message> _messages;//contains all the messages
 	
 	public ValidationMessagesImpl(){
+		_messages = new LinkedList<Message>();
 		_attrMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
 		_keyMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
 		_globalKeyMessageMap = new LinkedHashMap<String,List<Message>>();
 		_multiple = new MultipleMessages();
 	}
 	
-	
+	//a message that related to a attr and key
 	static class Message implements Serializable{
 		private static final long serialVersionUID = 1L;
 		final String attr;
 		final String key;
 		final String msg;
 		public Message(String attr, String key, String msg) {
-			super();
 			this.attr = attr;
 			this.key = key;
 			this.msg = msg;
 		}
 	}
 	
+	//get messages of a attr of a special component
 	private List<Message> getAttrMessages(Component comp,String attr,boolean create){
 		Map<String,List<Message>> attrMap = getAttrMap(comp,create);
 		if(attrMap==null){
@@ -71,6 +76,7 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		return msgs;
 	}
 	
+	//get attr messages of a special component
 	private Map<String,List<Message>> getAttrMap(Component comp,boolean create){
 		Map<String,List<Message>> msgs = _attrMessageMap.get(comp);
 		if(msgs==null && create){
@@ -80,7 +86,7 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		return msgs;
 	}
 	
-	
+	//get messages of a key of a special component.
 	private List<Message> getKeyMessages(Component comp,String key,boolean create){
 		Map<String,List<Message>> keyMap = getKeyMap(comp,create);
 		if(keyMap==null){
@@ -94,6 +100,7 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		return msgs;
 	}
 	
+	//get key messages of a special component.
 	private Map<String,List<Message>> getKeyMap(Component comp,boolean create){
 		Map<String,List<Message>> msgs = _keyMessageMap.get(comp);
 		if(msgs==null && create){
@@ -114,8 +121,14 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 	
 	@Override
 	public void clearMessages(Component comp) {
-		_attrMessageMap.remove(comp);
-		
+		Map<String,List<Message>> attrMap = getAttrMap(comp,false);
+		if(attrMap != null){
+			for(List<Message> remove:attrMap.values()){
+				_messages.removeAll(remove);
+			}
+			_attrMessageMap.remove(comp);
+		}
+
 		//comp, <key,messages>
 		Map<String,List<Message>> keyMap = getKeyMap(comp,false);
 		if(keyMap!=null){
@@ -138,8 +151,12 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		List<Message> remove = null;
 		if(attrMap != null){
 			remove = attrMap.remove(attr);
+			if(attrMap.size()==0){
+				_attrMessageMap.remove(comp);
+			}
 		}
 		if(remove!=null && remove.size()>0){
+			_messages.removeAll(remove);
 			for(Message m:remove){
 				if(m.key==null) continue;
 				List<Message> msgs = getKeyMessages(comp, m.key, false);
@@ -229,11 +246,12 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		List<Message> globalMsgs = null;
 		for(String s:messages){
 			Message msg = new Message(attr,key,s);
+			_messages.add(msg);
 			attrMsgs.add(msg);
 			if(key!=null){
 				if(keyMsgs==null){
-					keyMsgs = getKeyMessages(comp, key, true);
-					globalMsgs = getGlobalKeyMessages(key,true);
+					keyMsgs = getKeyMessages(comp, key, true);//key messages on a special component 
+					globalMsgs = getGlobalKeyMessages(key,true);//
 				}
 				keyMsgs.add(msg);
 				globalMsgs.add(msg);
@@ -241,16 +259,14 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		}
 	}
 
-	
-
 	@Override
 	public int size() {
-		return 0;
+		return _messages.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return false;
+		return _messages.isEmpty();
 	}
 
 	@Override
@@ -260,7 +276,7 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 
 	@Override
 	public boolean containsValue(Object value) {
-		return false;
+		return _messages.contains(value);
 	}
 
 	@Override
@@ -281,53 +297,55 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 
 	@Override
 	public String put(Component key, Object value) {
-		return null;
+		throw new UnsupportedOperationException("doesn't support this api");
 	}
 
 	@Override
 	public String remove(Object key) {
-		return null;
+		throw new UnsupportedOperationException("doesn't support this api");
 	}
 
 	@Override
 	public void putAll(Map<? extends Component, ? extends Object> m) {
+		throw new UnsupportedOperationException("you have to call api of validation messages");
 	}
 
 	@Override
 	public void clear() {
+		throw new UnsupportedOperationException("doesn't support this api");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Component> keySet() {
-		return Collections.EMPTY_SET;
+		throw new UnsupportedOperationException("doesn't support this api");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Collection<Object> values() {
-		return Collections.EMPTY_SET;
+		return (Collection)Collections.unmodifiableList(_messages);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Set<java.util.Map.Entry<Component, Object>> entrySet() {
-		return Collections.EMPTY_SET;
+		throw new UnsupportedOperationException("doesn't support this api");
 	}
 	
 	public Map<Object,Object> getMultiple(){
 		return _multiple;
 	}
 	
+	//the map for EL that return multiple messages.
 	public class MultipleMessages implements Map<Object,Object>,Serializable{
 		private static final long serialVersionUID = 7853710733151556817L;
 		@Override
 		public int size() {
-			return 0;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
+
 		@Override
 		public boolean isEmpty() {
-			return false;
+			return _messages.isEmpty();
 		}
 		@Override
 		public boolean containsKey(Object key) {
@@ -350,35 +368,34 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		}
 		@Override
 		public Object put(Object key, Object value) {
-			return null;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		@Override
 		public String[] remove(Object key) {
-			return null;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		@Override
 		public void putAll(Map<? extends Object, ? extends Object> m) {
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		@Override
 		public void clear() {
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		
-		@SuppressWarnings("unchecked")
 		@Override
 		public Set<Object> keySet() {
-			return Collections.EMPTY_SET;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		
-		@SuppressWarnings("unchecked")
 		@Override
 		public Collection<Object> values() {
-			return Collections.EMPTY_SET;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		
-		@SuppressWarnings("unchecked")
 		@Override
 		public Set<java.util.Map.Entry<Object, Object>> entrySet() {
-			return Collections.EMPTY_SET;
+			throw new UnsupportedOperationException("doesn't support this api");
 		}
 		
 	}

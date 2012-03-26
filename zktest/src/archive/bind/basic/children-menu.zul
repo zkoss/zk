@@ -1,4 +1,4 @@
-<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenMenuVM')" validationMessages = "@id('vmsgs')">
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenMenuVM')">
 	<menubar id="mbar" children="@bind(vm.nodes) @template(empty each.children?'menuitem':'menu')">
 		<template name="menu" var="node">
 			<menu label="@bind(node.name)">

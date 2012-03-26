@@ -1,4 +1,4 @@
-<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenComplexVM')" validationMessages = "@id('vmsgs')">
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenComplexVM')">
 
 	Nested.
 	<vlayout id="vlayout" children="@load(vm.nodes) @template('children1')">

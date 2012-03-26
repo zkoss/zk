@@ -58,7 +58,7 @@ public interface ValidationMessages{
 	 * set validation messages to component, it will replace previous messages
 	 * @param comp the component refers to the messages
 	 * @param attr the attr refers to the messages
-	 * @param key the custom key refers to this messages
+	 * @param key the custom key refers to this messages, nullable
 	 * @param messages the messages
 	 */
 	void setMessages(Component comp, String attr, String key, String[] messages);
@@ -67,7 +67,7 @@ public interface ValidationMessages{
 	 * add validation messages to component
 	 * @param comp the component refers to the messages
 	 * @param attr the attr refers to the messages
-	 * @param key the custom key refers to this messages
+	 * @param key the custom key refers to this messages, nullable
 	 * @param messages the messages
 	 */
 	void addMessages(Component comp, String attr, String key, String[] messages);

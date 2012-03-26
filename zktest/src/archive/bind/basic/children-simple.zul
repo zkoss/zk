@@ -1,4 +1,4 @@
-<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenSimpleVM')" validationMessages = "@id('vmsgs')">
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ChildrenSimpleVM')">
 
 	Simple - Init
 	<vlayout id="init" children="@init(vm.nodes)">
