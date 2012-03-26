@@ -347,6 +347,7 @@ ZK 5.0.11
   ZK-952: Portallayout get wrong position when using Executions.createComponents to create panels
   ZK-962: Portalchildren visible false problem
   ZK-975: Textbox with rows and mold rounded does not recognize width nor hflex
+  ZK-980: Modal Window position="center" problem in iPad
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel

@@ -693,18 +693,16 @@ jq(function() {
 
 	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
 
-	jq(window).resize(function () {
-		if (zk.mounting || zk.skipResize)
-			return;
-
-	//Tom Yeh: 20051230:
-	//1. In certain case, IE will keep sending onresize (because
-	//grid/listbox may adjust size, which causes IE to send onresize again)
-	//To avoid this endless loop, we ignore onresize a while if this method
-	//was called
-	//
-	//2. IE keeps sending onresize when dragging the browser's border,
-	//so we have to filter (most of) them out
+	
+	var _sizeHandler = function(){
+		//Tom Yeh: 20051230:
+		//1. In certain case, IE will keep sending onresize (because
+		//grid/listbox may adjust size, which causes IE to send onresize again)
+		//To avoid this endless loop, we ignore onresize a while if this method
+		//was called
+		//
+		//2. IE keeps sending onresize when dragging the browser's border,
+		//so we have to filter (most of) them out
 
 		var now = jq.now();
 		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
@@ -713,6 +711,19 @@ jq(function() {
 		var delay = zk.ie ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
+	}
+	
+	if(zk.mobile){
+		jq(window).bind("orientationchange",function(){
+			if (zk.mounting || zk.skipResize)
+				return;
+			_sizeHandler();
+		});
+	}
+	jq(window).resize(function () {
+		if (zk.mounting || zk.skipResize || zk.mobile)
+			return;
+		_sizeHandler();
 	})
 	.scroll(function () {
 		zWatch.fire('onScroll'); //notify all
