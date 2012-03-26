@@ -99,11 +99,11 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	},	
 	bind_: function(){
 		this.$supers(zul.inp.Textbox, 'bind_', arguments);
-		if (this.inRoundedMold())
+		if (this.inRoundedMold() && !this.isMultiline()) // B50-ZK-975
 			zWatch.listen({onSize: this});
 	},	
 	unbind_: function(){
-		if (this.inRoundedMold())
+		if (this.inRoundedMold() && !this.isMultiline()) // B50-ZK-975
 			zWatch.unlisten({onSize: this});
 		this.$supers(zul.inp.Textbox, 'unbind_', arguments);
 	}
