@@ -1,0 +1,103 @@
+<!--
+	2012/3/23 18:25 
+ -->
+ <zk>
+ 	<h:pre xmlns:h="xhtml" >
+ 	I.For hidden columns Issue
+ 		It should start with the layout
+ 		 
+ 		-1-4-
+ 		-2-
+ 		-3-
+ 		-5-
+ 		
+	 	1. Click "single column" button
+	 	
+		-1-(-4-)
+ 		-2-
+ 		-3-
+ 		-5-	 	
+ 		
+		2. Drag "panel 1" and drop below "panel 2" , "panel 1" should not disappear.
+ 		-2-(-4-)
+ 		-1-
+ 		-3-
+ 		-5-
+ 		
+		3. Click "two columns" button, see "panel 3" , "panel 2" and "panel 1" in same column.
+		-2--4-
+ 		-1-
+ 		-3-
+ 		-5-
+ 	</h:pre>
+	<zscript><![CDATA[
+		Panel panel1, panel2, panel3, panel4;
+		void init() {
+			panel1 = createPanel("panel1", "Panel 1");
+			panel2 = createPanel("panel2", "Panel 2");
+			panel3 = createPanel("panel3", "Panel 3");
+			panel4 = createPanel("panel4", "Panel 4");
+			panel5 = createPanel("panel5", "Panel 5");
+			bussinessPortal.setPanel(panel1, 0, 0);
+			bussinessPortal.setPanel(panel2, 0, 1);
+			bussinessPortal.setPanel(panel3, 0, 2);
+			bussinessPortal.setPanel(panel5, 0, 3);
+			bussinessPortal.setPanel(panel4, 1, 0);
+		}
+		Panel createPanel( String id, String title ) {
+			String content = "<panel height=\"300px\" border=\"normal\"><panelchildren></panelchildren></panel>";
+			Panel panel = (Panel) Executions.createComponentsDirectly(content, null, null, null);
+			panel.setId(id);
+			panel.setTitle(title);
+			return panel;
+		}
+	]]></zscript>
+    <radiogroup id="columnSelect">
+        <hlayout>
+            <groupbox width="300px" closable="false">
+                <caption label="Columns" />
+                <button id="singleColumnBtn" label="single column">
+                	<attribute name="onClick"><![CDATA[
+						ptc1.setWidth("100%");
+						ptc2.setVisible(false);
+						singleColumnBtn.setDisabled(true);
+						twoColumnBtn.setDisabled(false);
+                	]]></attribute>
+                </button>
+                <button id="twoColumnBtn" label="two columns" disabled="true">
+                	<attribute name="onClick"><![CDATA[
+						ptc1.setWidth("50%");
+						ptc2.setWidth("50%");
+						ptc2.setVisible(true);
+						singleColumnBtn.setDisabled(false);
+						twoColumnBtn.setDisabled(true);
+                	]]></attribute>
+                </button>
+            </groupbox>
+            <groupbox width="300px" closable="false">
+                <caption label="Rows " />
+                <button id="hiddenrow" label="hidden panel3">
+                	<attribute name="onClick"><![CDATA[
+						panel3.setVisible(false);
+						hiddenrow.setDisabled(true);
+						showrow.setDisabled(false);						
+                	]]></attribute>
+                </button>
+                <button id="showrow" label="show row" disabled="true">
+                	<attribute name="onClick"><![CDATA[
+   						panel3.setVisible(true);
+						hiddenrow.setDisabled(false);
+						showrow.setDisabled(true);			
+                	]]></attribute>
+                </button>
+            </groupbox>            
+        </hlayout>
+    </radiogroup>
+    <portallayout id="bussinessPortal" maximizedMode="whole">
+    	<attribute name="onCreate"><![CDATA[
+			init();
+		]]></attribute>
+        <portalchildren id="ptc1" width="50%" style="padding:5px;" />
+        <portalchildren id="ptc2" width="50%" style="padding:5px;" />
+    </portallayout>
+</zk>
