@@ -4,4 +4,4 @@ unzip=true
 debug=true
 optimize=true
 #start.service=Apache Tomcat 6
-version=5.0.11-FL
+version=5.0.11

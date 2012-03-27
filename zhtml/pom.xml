@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zhtml</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0.11-SNAPSHOT</version>
+	<version>5.0.11</version>
 	<name>ZK XHTML Components</name>
 	<url>http://www.zkoss.org/zhtml</url>
 	<description>ZK XHTML components</description>
