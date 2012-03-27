@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.ext.Scope;
  *
  * <p>Thread safe.
  * @author tomyeh
- * @5.0.11
+ * @since 5.0.11
  */
 public class SynchronizedScope extends SimpleScope {
 	public SynchronizedScope(Scope owner) {

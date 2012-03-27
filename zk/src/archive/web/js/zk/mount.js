@@ -695,6 +695,9 @@ jq(function() {
 
 	
 	var _sizeHandler = function(){
+		if (zk.mounting || zk.skipResize)
+			return;
+
 		//Tom Yeh: 20051230:
 		//1. In certain case, IE will keep sending onresize (because
 		//grid/listbox may adjust size, which causes IE to send onresize again)
@@ -711,21 +714,14 @@ jq(function() {
 		var delay = zk.ie ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
-	}
+	};
 	
-	if(zk.mobile){
-		jq(window).bind("orientationchange",function(){
-			if (zk.mounting || zk.skipResize)
-				return;
-			_sizeHandler();
-		});
-	}
-	jq(window).resize(function () {
-		if (zk.mounting || zk.skipResize || zk.mobile)
-			return;
-		_sizeHandler();
-	})
-	.scroll(function () {
+	if(zk.mobile)
+		jq(window).bind("orientationchange", _sizeHandler);
+	else
+		jq(window).resize(_sizeHandler);
+
+	jq(window).scroll(function () {
 		zWatch.fire('onScroll'); //notify all
 	})
 	.unload(function () {
