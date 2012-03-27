@@ -92,18 +92,22 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_contentAttrs: function () {
 		var html = ' class="', s = this._contentSclass,
 			cap = this.caption,
+			title = this.getTitle(),
 			zcls = this.getZclass();
-		if (s) html += s + ' ';
+		if (s)
+			html += s + ' ';
 		html += zcls + '-cnt';
-		if (!this.getTitle() && !cap) {
+		if (!title && !cap)
 			html += ' '+ zcls + '-notitle';
-		}
 		html += '"';
 
 		s = this._contentStyle;
-		if (cap) s = 'border-top:0;' + (s||'');
-		if (!this._open) s = 'display:none;' + (s||'');
-		if (s) html += ' style="' + s + '"';
+		if (cap || title) // B60-ZK-987
+			s = 'border-top:0;' + (s||'');
+		if (!this._open)
+			s = 'display:none;' + (s||'');
+		if (s)
+			html += ' style="' + s + '"';
 		return html;
 	},
 	_redrawCave: function (out, skipper) { //reserve for customizing

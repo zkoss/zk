@@ -37,6 +37,7 @@ ZK 6.0.1
   ZK-968: The template doesn't render the nest collection data correct
   ZK-940: Nested listbox selection issue
   ZK-848: How to figure out a validationMessages is empty
+  ZK:987: 3d Groupbox cave has extra top border when having title
   
 * Upgrade Notes
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.
