@@ -712,7 +712,7 @@ jq(function() {
 		var delay = zk.ie ? 250: 50;
 		_reszInf.time = now + delay - 1; //handle it later
 		setTimeout(_docResize, delay);
-	}
+	};
 	
 	if(zk.mobile)
 		jq(window).bind("orientationchange", _sizeHandler);
