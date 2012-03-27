@@ -14,12 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-/**
- * A tab.
- * <p>
- * Default {@link #getZclass}: z-tab.
- */
-
 (function () {
 
 	// ZK-886, called by unbind_ and rerender
@@ -37,6 +31,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}, 0);
 		}
 	}
+/**
+ * A tab.
+ * <p>
+ * Default {@link #getZclass}: z-tab.
+ */
 zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	$init: function () {
 		this.$supers('$init', arguments);
