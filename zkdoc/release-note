@@ -285,6 +285,7 @@ Feb 14, 2012
 
 	--------
 ZK 5.0.11
+Mar 27, 2012
 * Features
   ZK-780: Support a non-default context path when integrating ZK with Liferay bundle with JBoss
   ZK-854: Allow passing additional params to custom file upload template

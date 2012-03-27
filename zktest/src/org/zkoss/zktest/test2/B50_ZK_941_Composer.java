@@ -6,9 +6,9 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Constraint;
 import org.zkoss.zul.CustomConstraint;
-import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.api.Decimalbox;
 
 public class B50_ZK_941_Composer extends GenericForwardComposer {
 	private Decimalbox dec ;
