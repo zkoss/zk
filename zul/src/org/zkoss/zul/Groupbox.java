@@ -137,8 +137,8 @@ public class Groupbox extends XulElement {
 	}
 	/** Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
-	 * a more sophiscated caption (aka., title).
-	 * <p> It will be displaied before caption.
+	 * a more sophisticated caption (aka., title).
+	 * <p> It will be displayed before caption.
 	 * <p>Default: empty.
 	 * @since 6.0.0
 	 */
@@ -228,13 +228,11 @@ public class Groupbox extends XulElement {
 	 * -1 means process all of them
 	 */
 	private void afterUnmarshal() {
-		for (Iterator it = getChildren().iterator(); it.hasNext();) {
-			final Object child = it.next();
+		for (Component child : getChildren())
 			if (child instanceof Caption) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				break; //done
 			}
-		}
 	}
 
 	//Serializable//
