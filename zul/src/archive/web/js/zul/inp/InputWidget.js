@@ -51,7 +51,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
 			if (this.isListen("onChanging"))
-				this.fire('onChanging', _onChangeData(this, val, valsel == val), //pass inp.value directly
+				this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
 					{ignorable:1, rtags: {onChanging: 1}}, timeout||5);
 			if (this._instant)
 				this.updateChange_();
