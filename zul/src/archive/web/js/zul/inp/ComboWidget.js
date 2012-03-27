@@ -315,7 +315,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (ppofs[0] == "auto") {
 			var cb = this.$n();
 			if (pp.offsetWidth < cb.offsetWidth) {
-				pp.style.width = cb.offsetWidth + "px";
+				pp.style.width = zk(pp).revisedWidth(cb.offsetWidth) + "px";
 				if (pp2) pp2.style.width = "100%";
 					//Note: we have to set width to auto and then 100%
 					//Otherwise, the width is too wide in IE
