@@ -348,6 +348,7 @@ ZK 5.0.11
   ZK-962: Portalchildren visible false problem
   ZK-975: Textbox with rows and mold rounded does not recognize width nor hflex
   ZK-980: Modal Window position="center" problem in iPad
+  ZK-963: Update the data of the listbox with a timer and IE8 will cause javascript error
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
