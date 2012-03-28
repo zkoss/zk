@@ -61,6 +61,7 @@ Mar 27, 2012
   ZK-962: Portalchildren visible false problem
   ZK-975: Textbox with rows and mold rounded does not recognize width nor hflex
   ZK-980: Modal Window position="center" problem in iPad
+  ZK-989: Retrieve a wrong selectedItem when hiding the item in the listbox 
   
 * Upgrade Notes
   + Disable ROD function when using GroupsModel
