@@ -1,0 +1,57 @@
+<zk>
+	<window>
+	<label multiline="true">
+	1.type 9 in combobox. you should see a drop down which contains value the start with 9
+	2.select 99, you should see the label become 99
+	</label>
+		<zscript><![CDATA[
+	//@DECLARATION
+	class MyVM {
+		org.zkoss.zul.SimpleListModel model;
+		P selected;
+		public MyVM() {
+			java.util.List data = new java.util.ArrayList();
+			for (int i = 0; i < 1000; i++) {
+				data.add(new P("" + i));
+			}
+			model = new org.zkoss.zul.SimpleListModel(data);
+		}
+
+		public org.zkoss.zul.SimpleListModel getModel() {
+			return model;
+		}
+		
+		public P getSelected(){
+			return selected;
+		}
+		public void setSelected(P p){
+			selected = p;
+		}
+	}
+	class P {
+		String name;
+		public P(String name){
+			this.name = name;
+		}
+		public String getName(){
+			return name;
+		}
+		public String toString(){
+			return name;
+		}		
+	}
+]]></zscript>
+		<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('MyVM')" title="a title">
+			<hbox>
+			<combobox id="combobox" model="@load(vm.model)" autodrop="true" selectedItem="@bind(vm.selected)" >
+				<template name="model">
+					<comboitem label="@load(each.name)"/>
+				</template>
+			</combobox>
+			<label id="lab" value="@load(vm.selected.name)"/>
+			</hbox>
+			<button label="dump" onClick="binder.tracker.dump()"/>
+		</window>
+	</window>
+</zk>
