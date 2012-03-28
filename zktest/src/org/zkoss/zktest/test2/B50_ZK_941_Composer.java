@@ -8,7 +8,7 @@ import org.zkoss.zul.Constraint;
 import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.api.Decimalbox;
+import org.zkoss.zul.Decimalbox;
 
 public class B50_ZK_941_Composer extends GenericForwardComposer {
 	private Decimalbox dec ;
