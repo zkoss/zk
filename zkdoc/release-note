@@ -39,6 +39,7 @@ ZK 6.0.1
   ZK-848: How to figure out a validationMessages is empty
   ZK-987: 3d Groupbox cave has extra top border when having title
   ZK-945: The gap between the image and description/text is large in a comboitem
+  ZK-948: rerendering of selectbox looses its data
   
 * Upgrade Notes
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.

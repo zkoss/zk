@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-948.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  28 10:30:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Click on the button.</div>
+	<div>2. Check selectbox has data. Select some value. Close the window.</div>
+	<div>3. Click on the button again. Window should be displayed. Check selectbox data.</div>
+	<zscript><![CDATA[
+		//@IMPORT
+		import org.zkoss.zk.ui.event.EventListener;
+		//@DECLARATION
+		Window win = null;
+
+		public class MyListener implements EventListener{
+			public void onEvent(Event evt) throws Exception{
+				if (win == null) {
+					String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+					ListModelList model = new ListModelList(userName);
+					Selectbox selBox = new Selectbox();
+					selBox.setModel(model);
+					win = new Window();
+					win.setTitle("Hello!");
+					win.setClosable(true);
+					win.appendChild(selBox);
+				} 
+	       
+				win.setParent(mainWindow);
+				win.doModal();
+			}
+		}
+	]]></zscript>
+	<window id="mainWindow">
+		<button>Click me!
+			<attribute name="onCreate">
+				self.addEventListener("onClick", new MyListener(){});
+			</attribute>
+		</button>
+	</window>
+</zk>

@@ -395,6 +395,15 @@ public class Selectbox extends HtmlBasedComponent {
 
 		super.invalidate();
 	}
+	// ZK-948
+	public void setParent (Component parent) {
+		super.setParent(parent);
+		if (parent != null && _tmpdatas == null
+			&& _model != null && _model.getSize() > 0) {
+			// post onInitRender to rerender content
+			postOnInitRender();
+		}
+	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
