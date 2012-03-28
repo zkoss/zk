@@ -120,8 +120,10 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		return true;
 	},
 	unbind_: function () {
-		var pp = this.firstChild.$n();
-		if (pp)
+		var pp;
+		// ZK-983
+		if ((pp = this.firstChild)
+			&& (pp = pp.$n()))
 			this.domUnlisten_(pp, "onMouseOver")
 				.domUnlisten_(pp, "onMouseOut");
 		this.$supers('unbind_', arguments);
