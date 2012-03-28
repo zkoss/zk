@@ -1,0 +1,13 @@
+<zk>
+	<window>
+	<label multiline="true">
+	1.click the reload button more than 3 time, the time stamp should change after each click
+	
+	</label>
+		<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00993IncludeReload')" title="a title">
+			<include src="@load(vm.url) @converter(vm.converter)"/>
+			<button label="reload" onClick="@command('reload')"/>
+		</window>
+	</window>
+</zk>

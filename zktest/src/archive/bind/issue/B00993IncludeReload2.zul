@@ -1,0 +1,8 @@
+<zk>
+	<window>
+		<zscript>
+		java.util.Date date = new java.util.Date();
+		</zscript>
+		Time : <label value="${date}"/>
+	</window>
+</zk>
