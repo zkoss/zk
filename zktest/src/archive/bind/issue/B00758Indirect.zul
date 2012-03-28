@@ -1,0 +1,31 @@
+<zk>
+<window>
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00758Indirect')">
+	<label multiline="true">
+	NotifyChange via indirect [] on a List. 
+	1.Press "change first name of the first person", the first name of the first person shall change to "Tom". 
+	2.Press "change first person", the first person shall change to "Henri Chen".
+	</label>
+	<grid id="grid" width="500px" model="@bind(vm.persons)">
+		<columns>
+			<column label="First Name"></column>
+			<column label="Last Name"></column>
+			<column label="Full Name"></column>
+		</columns>
+		<template name="model" var="p">
+			<row>
+				<textbox value="@bind(p.firstName)" />
+				<textbox value="@bind(p.lastName)" />
+				<label value="@bind(p.fullName)" />
+			</row>
+		</template>
+	</grid>
+	<button id="btn1" label="change first name of the first person"
+		onClick="@command('change1stPersonFirstName')" />
+	<button id="btn2" label="change first person"
+		onClick="@command('chang1stPerson')" />
+	<button label="Dump" onClick="binder.getTracker().dump()" />
+</window>
+</window>
+</zk>
