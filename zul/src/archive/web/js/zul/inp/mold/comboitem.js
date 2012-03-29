@@ -14,6 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var zcls = this.getZclass();
+	// ZK-945
+	// fine tune the style of image's td,
+	// add spacer so can customize easier
 	out.push('<tr', this.domAttrs_({text:true}), '><td class="',
 		zcls, '-img">', this.domImage_(), '</td><td class="',
 		zcls, '-text"><span class="',
