@@ -252,16 +252,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(wgt, cf)) {
 			zk.currentFocus = null;
-			return cf;
+			return {focus: cf, range: _bkRange(cf)};
 		}
 	}
+	function _bkRange(wgt) {
+		return wgt.getInputNode && (wgt = wgt.getInputNode())
+			&& zk(wgt).getSelectionRange();
+	}
 	//restore focus
-	function _rsFocus(cf) {
-		if (cf && cf.desktop && !zk.currentFocus) {
+	function _rsFocus(cfi) {
+		var cf;
+		if (cfi && (cf = cfi.focus) && cf.desktop && !zk.currentFocus) {
 			_ignCanActivate = true;
 				//s.t., Window's rerender could gain focus back and receive onblur correctly
 			try {
 				cf.focus();
+				if (cfi.range && cf.getInputNode && (cf = cf.getInputNode()))
+					zk(cf).setSelectionRange(cfi.range[0], cfi.range[1]);
 			} finally {
 				_ignCanActivate = false;
 			}
@@ -1495,9 +1502,10 @@ wgt.$f().main.setTitle("foo");
 		_rmIdSpaceDown(this);
 		_addIdSpaceDown(newwgt);
 
-		var cf = zk.currentFocus, cfid;
+		var cf = zk.currentFocus, cfid, cfrg;
 		if (cf && zUtl.isAncestor(this, cf)) {
 			cfid = cf.uuid;
+			cfrg = _bkRange(cf);
 			zk.currentFocus = null;
 		}
 
@@ -1531,9 +1539,9 @@ wgt.$f().main.setTitle("foo");
 		if (cfid) {
 			cf = zk.Widget.$(cfid);
 			if (!cf)
-				_rsFocus(newwgt); // restore to outer root
+				_rsFocus({focus: newwgt, range: cfrg}); // restore to outer root
 			else if (zUtl.isAncestor(newwgt, cf))
-				_rsFocus(cf);
+				_rsFocus({focus: cf, range: cfrg});
 		}
 	},
 	/** Replaced the child widgets with the specified widgets.
@@ -2339,7 +2347,7 @@ function () {
 			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
-		var cf = skipper ? null: _bkFocus(this);
+		var cfi = skipper ? null: _bkFocus(this);
 
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper, _trim_);
@@ -2354,7 +2362,7 @@ function () {
 		if (!skipper)
 			zUtl.fireSized(this);
 
-		_rsFocus(cf);
+		_rsFocus(cfi);
 		return this;
 	},
 	/**
@@ -2437,7 +2445,7 @@ function () {
 				if (skipper) {
 					skipInfo = skipper.skip(this);
 					if (skipInfo) {
-						var cf = _bkFocus(this);
+						var cfi = _bkFocus(this);
 
 						this.replaceHTML(n, null, skipper, true);
 
@@ -2447,7 +2455,7 @@ function () {
 							//to notify it is restored from rerender with skipper
 						zUtl.fireSized(this);
 
-						_rsFocus(cf);
+						_rsFocus(cfi);
 					}
 				}
 
