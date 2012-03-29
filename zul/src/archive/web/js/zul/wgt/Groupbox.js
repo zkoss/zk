@@ -138,10 +138,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					// calculate revisedHeight if vflex != min
 					var fixh = 0;
 					if (zk.ie6_ && wgt._isDefault() && (wgt.caption || wgt._title)) {
-						if (wgt.getVflex() != 'min')
-							fixh = jq(wgt.$n()).find('.' + wgt.getZclass() + '-header').height();
-						if (!wgt.caption)
-							fixh += 1;
+						fixh += 1;
 					}
 
 					// B50-ZK-487: height isuue in the groupbox (with specified caption)
