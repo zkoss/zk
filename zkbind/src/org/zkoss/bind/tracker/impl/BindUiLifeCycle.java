@@ -87,12 +87,10 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	}
 
 	public void afterPageDetached(Page page, Desktop prevdesktop) {
-		if (prevdesktop != null) {
-			final Collection<Component> comps = page.getRoots();
-			for(final Iterator<Component> it = comps.iterator(); it.hasNext();) {
-				final Component comp = it.next();
-				removeBindings(comp); 
-			}
+		final Collection<Component> comps = page.getRoots();
+		for(final Iterator<Component> it = comps.iterator(); it.hasNext();) {
+			final Component comp = it.next();
+			removeBindings(comp); 
 		}
 	}
 	private void removeBindings(Component comp) {
