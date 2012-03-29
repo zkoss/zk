@@ -25,6 +25,8 @@ import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Comboitem;
 import org.zkoss.zul.ComboitemRenderer;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListSubModel;
 
 /**
  * comboitem renderer for binding.
@@ -37,7 +39,8 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 	public void render(final Comboitem item, final Object data, final int index)
 	throws Exception {
 		final Combobox cb = (Combobox)item.getParent();
-		final int size = cb.getModel().getSize();
+		final ListModel<?> model = cb.getModel();
+		final int size = model.getSize();
 		final Template tm = resoloveTemplate(cb,item,data,index,size,"model");
 		if (tm == null) {
 			item.setLabel(Objects.toString(data));
@@ -86,7 +89,17 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 
 			final Comboitem nci = (Comboitem)items[0];
 			nci.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
-			addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			
+			if(model instanceof ListSubModel){
+				//ZK-992 wrong item when binding to combbox with submodel implementation
+				//combobox has a internal model as the submodel, 
+				//I don't have way to access the submodel, and user doesn't has info to notify model[index] changed.
+				//so I set the value directly.
+				nci.setAttribute(varnm, data);
+			}else{
+				addItemReference(cb, nci, index, varnm); //kept the reference to the data, before ON_BIND_INIT
+			}
+			
 			nci.setAttribute(itervarnm, iterStatus);
 			
 			//add template dependency
