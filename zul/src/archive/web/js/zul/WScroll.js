@@ -143,7 +143,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 					dg._lastSteps = dg._steps;
 					var func = orient == 'top' ? ctrl.opts.onScrollY : ctrl.opts.onScrollX;
 					if (typeof func == 'function') {
-						func.call(dg.control.widget, dg._steps);
+						func.call(dg.control.widget, dg._steps + ctrl.opts.offset);
 					}
 				}
 				clearTimeout(dg._timer);
@@ -253,6 +253,11 @@ zul.WScroll = zk.$extends(zk.Object, {
 	 * scrolled only in the vertical or horizontal direction.
 	 * <p>Default: 'horizontal'
 	 * 
+	 * <h4>anchor</h4>
+	 * DOMElement anchor
+	 * <p>Specifies the anchor that indicates the scrollbar will be its child node.
+	 * <p>Default: the parent node of the control.
+	 * 
 	 * <h4>syncSize</h4>
 	 * boolean syncSize
 	 * <p>Specifies whether to sync the scrolling area size at initial phase.
@@ -268,6 +273,14 @@ zul.WScroll = zk.$extends(zk.Object, {
 	 * <p>Specifies the callback function for the horizental scrolling, when user
 	 * changes the horizental scrolling step.
 	 * 
+	 * <h4>offset</h4>
+	 * int offset
+	 * <p>Specifies the offset for the scrolling step to shift when the callback
+	 * functions (onScrollX and onScrollY) are invoked.
+	 * For example, if the offset is 2, then the steps in the onScrollX/Y event
+	 * will start at 2.
+	 * <p>Default: 0
+	 * 
 	 * @type Map
 	 */
 	//opts: null,
@@ -277,15 +290,17 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this.opts = zk.$default(opts, {
 			orient : 'horizontal',
 			startPosition : 0,
-			startStep: 0
+			startStep: 0,
+			offset: 0
 		});
+		this.anchor = this.opts.anchor || control.parentNode;
 		this.widget = zk.Widget.$(control);
 		this.uid = this.widget.uuid;
 		this.zcls = this.widget.getZclass();
 		this._isVer = opts.orient == 'vertical';
 		if (!opts.viewportSize)
 			throw "Handle required for a viewport size: {viewportSize: size}";
-		this.redraw(control.parentNode);
+		this.redraw(this.anchor);
 		this._initDragdrop();
 		this._listenMouseEvent();
 		if (this.opts.syncSize !== false)
@@ -309,6 +324,10 @@ zul.WScroll = zk.$extends(zk.Object, {
 				vsize = opts.viewportSize,
 				rest = end - view,
 				edragHeight = this.edrag.offsetHeight - this._gap;
+			if (rest <= 0) {
+				this.eend.style.display = this.edrag.style.display = 'none';
+				return;
+			}
 			vsize -= edragHeight;
 			if (vsize > rest) {
 				this.epos.style.height = edragHeight + 'px';
@@ -339,6 +358,10 @@ zul.WScroll = zk.$extends(zk.Object, {
 				vsize = opts.viewportSize,
 				rest = end - view,
 				edragWidth = this.edrag.offsetWidth - this._gap;
+			if (rest <= 0) {
+				this.eend.style.display = this.edrag.style.display = 'none';
+				return;
+			}
 			vsize -= edragWidth;
 			if (vsize > rest) {
 				this.epos.style.width = edragWidth + 'px';
@@ -448,13 +471,13 @@ zul.WScroll = zk.$extends(zk.Object, {
 					this.epos.style.top = moving;
 					$drag.animate({top: moving}, 500);
 					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep);
+						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					var moving = opts.startPosition + 'px';
 					this.epos.style.left = moving;
 					$drag.animate({left: moving}, 500);
 					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep);
+						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
 				$drag.removeClass(cls + '-over');
 			}
@@ -479,7 +502,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 						this.edrag.style.top = move + 'px';
 					}	
 					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep);
+						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					var end;
 					if (zk(this.eend).isVisible()) {
@@ -497,7 +520,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 					}
 					
 					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep);
+						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
 				
 				if (opts.startStep == 0)
@@ -524,7 +547,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 						this.edrag.style.top = move + 'px';
 					}
 					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep);
+						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					var end;
 					if (zk(this.eend).isVisible()) {
@@ -542,7 +565,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 					}
 					
 					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep);
+						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
 				if (opts.startStep == opts.endStep - opts.viewport)
 					$drag.removeClass(cls + '-over');
@@ -561,7 +584,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 					this.epos.style.top = moving;
 					$drag.animate({top: moving}, 500);
 					if (typeof this.opts.onScrollY == 'function')
-						this.opts.onScrollY.call(this.widget, opts.startStep);
+						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
 					var moving;
 					if (zk(this.eend).isVisible()) {
@@ -572,7 +595,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 					this.epos.style.left = moving;
 					$drag.animate({left: moving}, 500);
 					if (typeof this.opts.onScrollX == 'function')
-						this.opts.onScrollX.call(this.widget, opts.startStep);
+						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
 				$drag.removeClass(cls + '-over');
 			}
@@ -610,7 +633,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 				
 			this.edrag.style.top = moving + 'px';
 			if (typeof this.opts.onScrollY == 'function')
-			this.opts.onScrollY.call(this.widget, opts.startStep);
+			this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 		}
 	},
 	_mousewheelX: function (evt, delta, deltaX, deltaY) {
@@ -644,7 +667,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 				
 			this.edrag.style.left = moving + 'px';
 			if (typeof this.opts.onScrollX == 'function')
-				this.opts.onScrollX.call(this.widget, opts.startStep);	
+				this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);	
 		}
 	},
 	_initDragdrop: function () {

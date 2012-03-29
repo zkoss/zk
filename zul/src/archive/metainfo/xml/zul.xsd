@@ -533,6 +533,7 @@
 			<xs:element ref="anchorlayout"/>
 			<xs:element ref="audio" />
 			<xs:element ref="bandbox" />
+			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
 			<xs:element ref="box" />
 			<xs:element ref="button" />
@@ -611,6 +612,7 @@
 				<xs:element ref="anchorlayout"/>
 				<xs:element ref="audio" />
 				<xs:element ref="bandbox" />
+				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
 				<xs:element ref="box" />
 				<xs:element ref="button" />
@@ -820,6 +822,29 @@
 	<xs:complexType name="bandpopupType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+    <!-- biglistbox -->
+	<xs:element name="biglistbox" type="biglistboxType" />
+	<xs:complexType name="biglistboxType" mixed="true">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="rows" type="intType" use="optional" />
+		<xs:attribute name="cols" type="intType" use="optional" />
+		<xs:attribute name="frozenCols" type="intType" use="optional" />
+		<xs:attribute name="rowHeight" type="xs:string" use="optional" />
+		<xs:attribute name="colWidth" type="xs:string" use="optional" />
+		<xs:attribute name="maxtrixRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
+		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
+		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
+		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onScroll" type="xs:string" use="optional" />
+		<xs:attribute name="onScrollX" type="xs:string" use="optional" />
+		<xs:attribute name="onScrollY" type="xs:string" use="optional" />
+		<xs:attribute name="onCellClick" type="xs:string" use="optional" />
+		<xs:attribute name="onAfterRender" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- borderlayout -->
 	<xs:element name="borderlayout" type="borderlayoutType" />
