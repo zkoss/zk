@@ -12,8 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
@@ -126,12 +130,39 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		if(_vmsgs!=null){
 			((BinderCtrl)_binder).setValidationMessages(_vmsgs);
 		}
+		
+		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
 		//init
-		_binder.init(comp, _viewModel);
+		_binder.init(comp, _viewModel, initArgs);
 		//load data
 		_binder.loadComponent(comp,true); //load all bindings
 	}
 	
+	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
+		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
+		final Collection<Annotation> anncol = compCtrl.getAnnotations(VIEW_MODEL_ATTR, INIT_ANNO);
+		if(anncol.size()==0) return null;
+		final Annotation ann = anncol.iterator().next();
+		
+		final Map<String,String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
+		Map<String, String[]> args = null;
+
+		for (final Iterator<Entry<String,String[]>> it = attrs.entrySet().iterator(); it.hasNext();) {
+			final Entry<String,String[]> entry = it.next();
+			final String tag = entry.getKey();
+			final String[] tagExpr = entry.getValue();
+			if ("value".equals(tag)) {
+				//ignore
+			} else { //other unknown tag, keep as arguments
+				if (args == null) {
+					args = new HashMap<String, String[]>();
+				}
+				args.put(tag, tagExpr);
+			}
+		}
+		return args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
+	}
+
 	private Object initViewModel(BindEvaluatorX evalx, Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation idanno = compCtrl.getAnnotation(VIEW_MODEL_ATTR, ID_ANNO);

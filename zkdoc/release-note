@@ -41,6 +41,7 @@ ZK 6.0.1
   ZK-945: The gap between the image and description/text is large in a comboitem
   ZK-948: rerendering of selectbox looses its data
   ZK-983: Combobutton js error upon unbind
+  ZK-994: BindingParam doesn't not work with @Init
   
 * Upgrade Notes
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.
@@ -54,7 +55,8 @@ ZK 6.0.1
   + Initial WebAppInit by org.zkoss.zk.ui.http.HttpSessionListener if Listener initiate first.
   + Some jars under /dist/lib/ext are updated, please refer to the Installation Ghide
     http://books.zkoss.org/wiki/ZK_Installation_Guide/ZK_Background/The_Content_of_ZK_Binary_Distribution
-
+  + Binder.init(Component root,Object viewModel) is deprecated, 
+    please use Binder.init(Component root,Object viewModel,Map<String, Object> initArgs) instead.
 	--------
 ZK 6.0.0
 Feb 14, 2012

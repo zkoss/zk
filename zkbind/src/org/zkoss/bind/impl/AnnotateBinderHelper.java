@@ -135,7 +135,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		
-		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		for(String cmd : cmdExprs) {
 			_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
 		}
@@ -167,7 +167,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 		
-		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		for(String cmd : cmdExprs) {
 			_binder.addGlobalCommandBinding(comp, propName, cmd, parsedArgs);
 		}
@@ -225,7 +225,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addReferenceBinding(comp, propName, loadExpr, parsedArgs);
 	}
 	
@@ -246,7 +246,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addPropertyInitBinding(comp, propName, initExpr, parsedArgs, converterInfo == null ? null : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 	}
@@ -273,7 +273,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 			
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 
 		_binder.addPropertyLoadBindings(comp, propName,
 				expr, null, null, parsedArgs, 
@@ -320,7 +320,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addPropertyLoadBindings(comp, propName,
 			loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
@@ -352,7 +352,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addPropertySaveBindings(comp, propName,saveExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
 			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
@@ -423,7 +423,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addFormInitBinding(comp, formId,initExpr, parsedArgs);
 	}
 	
@@ -450,7 +450,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addFormLoadBindings(comp, formId,
 			loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
@@ -480,7 +480,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addFormSaveBindings(comp, formId, saveExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
 			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs, 
@@ -534,7 +534,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String,Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs,
 				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
@@ -561,7 +561,7 @@ public class AnnotateBinderHelper {
 			}
 		}
 			
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 
 		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs,
 				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
@@ -591,7 +591,7 @@ public class AnnotateBinderHelper {
 				args.put(tag, tagExpr);
 			}
 		}
-		final Map<String, Object> parsedArgs = args == null ? null : parsedArgs(args);
+		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addChildrenLoadBindings(comp, loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
 			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs,
@@ -628,7 +628,7 @@ public class AnnotateBinderHelper {
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a converter for "+propName+" of "+compCtrl);
 		}
-		info.args = args == null ? null : parsedArgs(args);
+		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;
 	}
 
@@ -657,7 +657,7 @@ public class AnnotateBinderHelper {
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a validator for "+propName+" of "+compCtrl);
 		}
-		info.args = args == null ? null : parsedArgs(args);
+		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;
 	}
 	
@@ -686,33 +686,8 @@ public class AnnotateBinderHelper {
 		if (Strings.isBlank(info.expr)) {
 			throw new IllegalSyntaxException("Must specify a template for "+propName+" of "+compCtrl);
 		}
-		info.args = args == null ? null : parsedArgs(args);
+		info.args = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		return info;
-	}
-	
-	// parse args , if it is a string, than parse it to ExpressionX
-	private Map<String, Object> parsedArgs(Map<String,String[]> args) {
-		final BindEvaluatorX eval = _binder.getEvaluatorX();
-		final Map<String, Object> result = new LinkedHashMap<String, Object>(args.size()); 
-		for(final Iterator<Entry<String, String[]>> it = args.entrySet().iterator(); it.hasNext();) {
-			final Entry<String, String[]> entry = it.next(); 
-			final String key = entry.getKey();
-			final String[] value = entry.getValue();
-			
-			addArg(eval, result, key, value);
-		}
-		return result;
-	}
-
-	
-	private void addArg(BindEvaluatorX eval, Map<String,Object> result, String key, String[] valueScript) {
-		Object val = null;
-		if(valueScript.length==1){
-			val =  eval.parseExpressionX(null, valueScript[0], Object.class);
-		}else{
-			val = valueScript;
-		}
-		result.put(key, val);
 	}
 	
 	private static class ExpressionAnnoInfo{

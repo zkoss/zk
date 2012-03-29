@@ -1,0 +1,15 @@
+<zk>
+	<div>
+	<label multiline="true">
+	you should see label 'foo' in first window, and 'bar' in secondary window
+	</label>
+    <window id="win1" title="a title1" width="300px" height="100px" 
+    	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00994InitParam', val='foo')">
+    	<label id="l1" value="@load(vm.value)"/>
+    </window>
+    <window id="win2" title="a title2" width="300px" height="100px" 
+    	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00994InitParam', val='bar')">
+    	<label id="l2" value="@load(vm.value)"/>
+    </window>
+    </div>
+</zk>

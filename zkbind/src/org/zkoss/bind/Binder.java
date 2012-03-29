@@ -102,8 +102,20 @@ public interface Binder {
 	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
 	 * @param root root component of binder
 	 * @param viewModel viewModel object
+	 * @deprecated use {@link #init(Component, Object, Map)} instead
 	 */
 	public void init(Component root,Object viewModel);
+	
+	/**
+	 * Initializes the binder with a root component and viewModel object. 
+	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * @param root root component of binder
+	 * @param viewModel viewModel object
+	 * @param initArgs args key-value pairs for initial, nullable
+	 * @since 6.0.1
+	 */
+	public void init(Component root,Object viewModel,Map<String, Object> initArgs);
+	
 	
 	/**
 	 * Load the load-binding of the component

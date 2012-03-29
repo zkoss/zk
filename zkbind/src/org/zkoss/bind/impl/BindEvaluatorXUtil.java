@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class BindEvaluatorXUtil {
 
+	//eval args, it it is an ExpressionX, than evaluate the value to instance
 	public static Map<String, Object> evalArgs(BindEvaluatorX eval,Component comp, Map<String, Object> args) {
 		if (args == null) {
 			return null;
@@ -37,12 +38,37 @@ public class BindEvaluatorXUtil {
 			final Entry<String, Object> entry = it.next(); 
 			final String key = entry.getKey();
 			final Object value = entry.getValue();
-			//evaluate the arg if it was a ExpressionX
+			//evaluate the arg if it is an ExpressionX
 			final Object evalValue = value == null ? null : 
 				(value instanceof ExpressionX) ? eval.getValue(null, comp, (ExpressionX)value) : value;
 			result.put(key, evalValue);
 		}
 		return result;
+	}
+	
+	// parse args , if it is a string, than parse it to an ExpressionX
+	public static Map<String, Object> parseArgs(BindEvaluatorX eval, Map<String,String[]> args) {
+		final Map<String, Object> result = new LinkedHashMap<String, Object>(args.size()); 
+		for(final Iterator<Entry<String, String[]>> it = args.entrySet().iterator(); it.hasNext();) {
+			final Entry<String, String[]> entry = it.next(); 
+			final String key = entry.getKey();
+			final String[] value = entry.getValue();
+			
+			addArg(eval, result, key, value);
+		}
+		return result;
+	}
+
+	
+	private static void addArg(BindEvaluatorX eval, Map<String,Object> result, String key, String[] valueScript) {
+		Object val = null;
+		if(valueScript.length==1){
+			val =  eval.parseExpressionX(null, valueScript[0], Object.class);
+		}else{
+			//TODO support multiple value of a arg
+			val = valueScript;
+		}
+		result.put(key, val);
 	}
 	
 	public static BindEvaluatorX createEvaluator(FunctionMapper fnampper){

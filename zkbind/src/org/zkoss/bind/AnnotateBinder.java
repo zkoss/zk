@@ -12,6 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind;
 
+import java.util.Map;
+
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zk.ui.Component;
@@ -42,8 +44,8 @@ public class AnnotateBinder extends BinderImpl {
 	}
 	
 	@Override
-	public void init(Component comp, Object vm){
-		super.init(comp, vm);
+	public void init(Component comp, Object vm, Map<String, Object> initArgs){
+		super.init(comp, vm, initArgs);
 		new AnnotateBinderHelper(this).initComponentBindings(comp);
 		
 		//mark this component was handled by binder after init

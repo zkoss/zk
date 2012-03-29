@@ -307,37 +307,55 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			throw new UiException("binder is not initialized yet");
 		}
 	}
+
+	/**
+	 * @deprecated use {@link #init(Component, Object, Map)} instead
+	 */
+	public void init(Component comp, Object viewModel){
+		init(comp,viewModel,null);
+	}
 	
-	public void init(Component comp, Object vm){
+	/**
+	 * @since 6.0.1
+	 */
+	public void init(Component comp, Object viewModel, Map<String, Object> initArgs){
 		if(_init) throw new UiException("binder is already initialized");
 		_init = true;
 		
 		_rootComp = comp;
 		//initial associated view model
-		setViewModel(vm);
+		setViewModel(viewModel);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
 		//subscribe queue 
 		subscribeQueue(_quename, _quescope, _queueListener);
 		
-		if(vm instanceof Composer<?> && !(vm instanceof BindComposer<?>)){//do we need to warn this?
+		if(viewModel instanceof Composer<?> && !(viewModel instanceof BindComposer<?>)){//do we need to warn this?
 			//show a warn only
-			_log.warning("you are using a composer [%s] as a view model",vm);
+			_log.warning("you are using a composer [%s] as a view model",viewModel);
 		}
 		//Should we handle here or in setViewModel for every time set a view model into binder?
-		initViewModel(vm);
+		initViewModel(viewModel, initArgs);
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 	}
 	
 	//handle init of a viewmodel. 
-	private void initViewModel(Object viewModel){
+	private void initViewModel(Object viewModel, Map<String, Object> initArgs){
 		final Class<?> clz = viewModel.getClass();
 		List<Method> inits = getInitMethods(clz);
 		if(inits.size()==0) return;//no init method
+		
+		if(initArgs!=null){
+			initArgs = BindEvaluatorXUtil.evalArgs(getEvaluatorX(), _rootComp, initArgs);
+		}
+		
 		for(Method m : inits){
 			final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
 			try {
 				ParamCall parCall = createParamCall(ctx);
+				if(initArgs!=null){
+					parCall.setBindingArgs(initArgs);
+				}
 				parCall.call(viewModel, m);
 			} catch (Exception e) {
 				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
