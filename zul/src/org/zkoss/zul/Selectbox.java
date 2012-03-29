@@ -390,16 +390,24 @@ public class Selectbox extends HtmlBasedComponent {
 	// -- ComponentCtrl --//
 	public void invalidate() {
 		// post onInitRender to rerender content if not done it before
-		if (_tmpdatas == null && _model != null && _model.getSize() > 0)
-			postOnInitRender();
+		prepareDatas();
 
 		super.invalidate();
 	}
-	// ZK-948
+	// ZK-948 need render data when change parent or attach to page
 	public void setParent (Component parent) {
 		super.setParent(parent);
-		if (parent != null && _tmpdatas == null
-			&& _model != null && _model.getSize() > 0) {
+		if (parent != null) {
+			prepareDatas();
+		}
+	}
+	// ZK-948 
+	public void onPageAttached(Page newpage, Page oldpage) {
+		super.onPageAttached(newpage, oldpage);
+		prepareDatas();
+	}
+	private void prepareDatas () {
+		if (_tmpdatas == null && _model != null && _model.getSize() > 0) {
 			// post onInitRender to rerender content
 			postOnInitRender();
 		}

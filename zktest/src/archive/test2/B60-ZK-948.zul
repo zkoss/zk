@@ -14,21 +14,28 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<div>1. Click on the button.</div>
+	<div>1. Click on the 'Do modal' button.</div>
 	<div>2. Check selectbox has data. Select some value. Close the window.</div>
-	<div>3. Click on the button again. Window should be displayed. Check selectbox data.</div>
+	<div>3. Click on the 'Do modal' button again. Window should be displayed. Check selectbox has data and the selected value.</div>
+	<div>4. Close the window.</div>
+	<div>5. Click on the 'move to first window' button, the selectbox should appear after the 'Do modal' button.</div>
+	<div>6. Check selectbox has data and the selected value.</div>
+	<div>7. Click on the 'move to second window' button, the selectbox should appear below the 'Do modal' button.</div>
+	<div>8. Check selectbox has data and the selected value.</div>
+	<div>9. Click on the 'attach to page directly' button, the selectbox should appear after the 'attach to page directly' button.</div>
+	<div>10. Check selectbox has data and the selected value.</div>
 	<zscript><![CDATA[
 		//@IMPORT
 		import org.zkoss.zk.ui.event.EventListener;
 		//@DECLARATION
 		Window win = null;
-
+		Selectbox selBox = null;
 		public class MyListener implements EventListener{
 			public void onEvent(Event evt) throws Exception{
 				if (win == null) {
 					String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
 					ListModelList model = new ListModelList(userName);
-					Selectbox selBox = new Selectbox();
+					selBox = new Selectbox();
 					selBox.setModel(model);
 					win = new Window();
 					win.setTitle("Hello!");
@@ -42,10 +49,37 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		}
 	]]></zscript>
 	<window id="mainWindow">
-		<button>Click me!
+		<button>Do modal
 			<attribute name="onCreate">
 				self.addEventListener("onClick", new MyListener(){});
 			</attribute>
 		</button>
 	</window>
+	<window id="secondWindow">
+
+	</window>
+	<button>move to modal window
+		<attribute name="onClick">
+			if (selBox != null)
+				selBox.setParent(win);
+		</attribute>
+	</button>
+	<button>move to first window
+		<attribute name="onClick">
+			if (selBox != null)
+				selBox.setParent(mainWindow);
+		</attribute>
+	</button>
+	<button>move to second window
+		<attribute name="onClick">
+			if (selBox != null)
+				selBox.setParent(secondWindow);
+		</attribute>
+	</button>
+	<button>attach to page directly
+		<attribute name="onClick">
+			selBox.setParent(null);
+			selBox.setPage(mainWindow.getPage());
+		</attribute>
+	</button>
 </zk>
