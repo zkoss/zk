@@ -231,6 +231,16 @@ public class Clients {
 	}
 	
 	/**
+	 * Shows a message at the right side of the given component.
+	 * @param msg the message to show
+	 * @param ref the referenced component, null to be based on browser window
+	 * @since 6.0.1
+	 */
+	public static final void showNotification(String msg, Component ref) {
+		showNotification(msg, null, ref, null, -1);
+	}
+	
+	/**
 	 * Displays a message.
 	 * @param msg the message to show
 	 * @param type available types are "info", "warning", "error"
