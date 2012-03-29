@@ -471,18 +471,8 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-comboitem .z-comboitem-text {
 	font-size: ${fontSizeM};
 }
-.z-comboitem .z-comboitem-text,
-.z-comboitem .z-comboitem-img,
-.z-comboitem .z-comboitem-img-bottom {
-	display: inline-block;
-	<c:if test="${zk.ie < 8}">
-		display: inline;
-		zoom: 1;
-	</c:if>
-}
-.z-comboitem .z-comboitem-img-bottom {
-	font-size: 1px;
-	line-height: 6px;
+.z-comboitem .z-comboitem-img {
+	width: 1px;
 }
 
 <%-- Bandbox trendy mold --%>
