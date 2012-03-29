@@ -1,8 +1,12 @@
 <zk>
-	<window>
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00993IncludeReload2')">
 		<zscript>
 		java.util.Date date = new java.util.Date();
 		</zscript>
-		Time : <label value="${date}"/>
+		<vlayout>
+		<hlayout>Time in zscript : <label id="l1" value="${date}"/></hlayout>
+		<hlayout>Time in vm : <label id="l2" value="@load(vm.now)"/></hlayout>
+		</vlayout>
 	</window>
 </zk>

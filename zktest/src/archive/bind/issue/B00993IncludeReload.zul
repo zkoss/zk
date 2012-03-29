@@ -7,7 +7,7 @@
 		<window apply="org.zkoss.bind.BindComposer"
 			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00993IncludeReload')" title="a title">
 			<include src="@load(vm.url) @converter(vm.converter)"/>
-			<button label="reload" onClick="@command('reload')"/>
+			<button id="reload" label="reload" onClick="@command('reload')"/>
 		</window>
 	</window>
 </zk>

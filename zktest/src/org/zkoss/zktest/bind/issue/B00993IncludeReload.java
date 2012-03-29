@@ -1,5 +1,7 @@
 package org.zkoss.zktest.bind.issue;
 
+import java.util.Date;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,6 +17,10 @@ public class B00993IncludeReload {
 	@NotifyChange("url")
 	public void reload(){
 		
+	}
+	
+	public Date getNow(){
+		return new Date();
 	}
 	
 	public Converter getConverter(){

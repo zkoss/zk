@@ -18,7 +18,6 @@ import java.util.Iterator;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
-import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -89,10 +88,10 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 	public void afterPageDetached(Page page, Desktop prevdesktop) {
 		if (prevdesktop != null) {
-			final Collection<Component> comps = prevdesktop.getComponents();
+			final Collection<Component> comps = page.getRoots();
 			for(final Iterator<Component> it = comps.iterator(); it.hasNext();) {
 				final Component comp = it.next();
-				removeBindings0(comp); 
+				removeBindings(comp); 
 			}
 		}
 	}
