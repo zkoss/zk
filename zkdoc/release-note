@@ -42,6 +42,7 @@ ZK 6.0.1
   ZK-948: rerendering of selectbox looses its data
   ZK-983: Combobutton js error upon unbind
   ZK-994: BindingParam doesn't not work with @Init
+  ZK-985: The entire Grid is invalidated when adjusting models and a couple of components
   
 * Upgrade Notes
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.

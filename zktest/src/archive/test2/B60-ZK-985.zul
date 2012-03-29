@@ -1,0 +1,22 @@
+<zk>
+<html>
+<ul>
+	<li>Enter something in the textbox below and wait. You shall see nothing happen.
+	(The bug is that the content you entered is cleared wrongly.)</li>
+</ul>
+</html>
+<zscript>
+import org.zkoss.zktest.test2.select.models.*;
+ListModel model = ListModelArrays.getModel(ListModelArrays.DEFAULT);
+</zscript>
+<grid id="grid" model="${model}">
+    <columns>
+        <column label="Category"/>
+    </columns>
+    <auxhead>
+    	<auxheader>
+    		<textbox onChanging="grid.setModel(ListModelArrays.getModel(ListModelArrays.DEFAULT))"/>
+    	</auxheader>
+    </auxhead>
+</grid>
+</zk>

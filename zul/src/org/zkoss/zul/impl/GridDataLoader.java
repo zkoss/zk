@@ -95,9 +95,13 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD)
 			&& !inPagingMold())
-				_grid.invalidate();
-					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-					//Also better performance (outer better than remove a lot)
+				rows.invalidate();
+					//Invalidate rows to improve the performance since it is faster
+					//to remove a lot of individual rows. It is safer than invalidating
+					//the whole grid since header might have an input affecting the model
+					//(e.g., ZK-985: demo's data filter)
+					//The memory leak of IE is better with outer (Bug 3147518),
+					//and even better with _grid.invalidate() but better to solve ZK-985
 			if (min < 0)
 				if (max < 0) min = 0;
 				else min = max - cnt + 1;
@@ -122,9 +126,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD)
 			&& !inPagingMold())
-				_grid.invalidate();
-					//Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-					//Also better performance (outer better than remove a lot)
+				rows.invalidate();
+					//Invalidate rows to improve the performance see above
 
 			if (min >= 0) max = min + cnt - 1;
 			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
@@ -347,8 +350,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 					newcnt += cnt; //add affected later
 					if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD)
 					&& !inPaging)
-						_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-							//Also better performance (if a lot of elements to change)
+						rows.invalidate();
+					//Invalidate rows to improve the performance see above
 	
 					Component comp = rows.getChildren().get(max);
 					next = comp.getNextSibling();
@@ -378,8 +381,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 	
 					if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
 					&& !inPaging)
-						_grid.invalidate(); //Bug 3147518: avoid memory leak (rows.invalidate() leaks more)
-							//Also better performance (if a lot of elements to change)
+						rows.invalidate();
+						//Invalidate rows to improve the performance see above
 				}
 			}
 		} else {
