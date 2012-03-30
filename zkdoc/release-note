@@ -1,4 +1,11 @@
 	--------
+ZK 5.0.12
+* Features
+  ZK-1002: Remove script carrying ZK initialization code after mounted
+
+* Bugs
+
+	--------
 ZK 5.0.11
 Mar 27, 2012
 * Features

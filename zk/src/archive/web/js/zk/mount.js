@@ -761,4 +761,8 @@ jq(function() {
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 		//Return nothing
 	};
+
+	zk.afterMount(function(){jq('script.z-runonce').remove();});
+		//clean up the runonce script. otherwise, it might be run again if
+		//the script element is moved
 }); //jq()
