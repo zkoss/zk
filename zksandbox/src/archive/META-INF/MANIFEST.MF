@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK DEMO
-Specification-Version: 5.0.11
+Specification-Version: 5.0.12
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zksandbox
 Implementation-URL: http://www.zkoss.org/prj/zksandbox
-Implementation-Version: 5.0.11
+Implementation-Version: 5.0.12
 Implementation-Vendor: Potix Corporation
