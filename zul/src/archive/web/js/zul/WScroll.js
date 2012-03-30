@@ -174,36 +174,10 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			
 		}
 		ctrl.opts.startStep = dg._steps;
-		jq(dg._epos).delay(300).fadeOut(500);
+		var $jq = jq(dg._epos),
+			old = $jq.css('opacity'); // fix old IE version
+		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
 	};
-	// fix ZK 6.0.0 jquery.mousewheel issue
-	function _getWheelDelta(evt) {
-		var orgEvent = evt.originalEvent, delta = 0, deltaX = 0, deltaY = 0;
-		
-		// Old school scrollwheel delta
-	    if ( orgEvent.wheelDelta ) { delta = orgEvent.wheelDelta/120; }
-	    if ( orgEvent.detail     ) { delta = -orgEvent.detail/3; }
-		deltaY = delta;
-		    
-	    // Gecko
-	    if ( orgEvent.axis !== undefined && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
-	        deltaY = 0;
-	        deltaX = -1*delta;
-	    }
-		    
-	    // Webkit
-	    if ( orgEvent.wheelDeltaY !== undefined ) { deltaY = orgEvent.wheelDeltaY/120; }
-		
-		// fix safari issue: Jumper Chen, Potix 2012/02/24
-	    if ( orgEvent.wheelDeltaX !== undefined ) { deltaX = (zk.safari_ ? 1 : -1) *orgEvent.wheelDeltaX/120; }
-	    return [deltaX, deltaY];
-	}
-	function _getDeltaX(evt) {
-		return _getWheelDelta(evt)[0];
-	}
-	function _getDeltaY(evt) {
-		return _getWheelDelta(evt)[1];		
-	}
 
 /**
  * A wave Scrollbar used to scroll the specific content and provides four controls
@@ -603,7 +577,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		}
 	},
 	_mousewheelY: function (evt, delta, deltaX, deltaY) {
-		deltaY = deltaY || _getDeltaY(evt);
+		deltaY = deltaY;
 		if (deltaY) {
 			evt.stop();
 			var opts = this.opts,
@@ -637,7 +611,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		}
 	},
 	_mousewheelX: function (evt, delta, deltaX, deltaY) {
-		deltaX = deltaX || _getDeltaX(evt);
+		deltaX = deltaX;
 		if (deltaX) {
 			evt.stop();
 			var opts = this.opts,
