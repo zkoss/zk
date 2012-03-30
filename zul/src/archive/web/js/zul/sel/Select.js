@@ -61,31 +61,21 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 * the given index.
 		 * @param int selectedIndex
 		 */
-		selectedIndex: function (selectedIndex, opts) {
+		selectedIndex: function (selectedIndex) {
 			var i = 0, j = 0, w, n = this.$n();
 			this.clearSelection();
-			// B50-ZK-569: Select Item doesn't work as expected if
-			// the listitems containing non visible list items
-			// only set selected by API have to fix index
-			if ((opts && opts.skipFixIndex)) {
-				// select by click on item directly,
-				// find the clicked child
-				for (w = this.firstChild; w && w.uuid != n.options[selectedIndex].id; w = w.nextSibling)
-					;
-			} else {
-				// select from server API call, fix the index
-				for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
-					if (w.$instanceof(zul.sel.Option)) {
-	    				if (!w.isVisible())
-	    					j++;
-					} else i--;			
-				}
-					
-				selectedIndex -= j;
-				if (n)
-					n.selectedIndex = selectedIndex;
+			// B50-ZK-989: original skipFixIndex way gives wrong value for this._selectedIndex
+			// select from server API call, fix the index
+			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
+				if (w.$instanceof(zul.sel.Option)) {
+    				if (!w.isVisible())
+    					j++;
+				} else i--;			
 			}
 			
+			selectedIndex -= j;
+			if (n)
+				n.selectedIndex = selectedIndex;
 
 			if (selectedIndex > -1 && w && w.$instanceof(zul.sel.Option)) {
 				w.setSelected(true);
@@ -284,10 +274,19 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		} else {
 			var v = n.selectedIndex;
 			if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
-			if (this._selectedIndex == v)
+			// B50-ZK-989: this._selectedIndex does not concern Option visibility
+			var rv = v < 0 ? v : -1;
+			for (var w = this.firstChild, j = v; w && j > -1; w = w.nextSibling) {
+				if (!w.$instanceof(zul.sel.Option)) // ignore non-option widget
+					continue;
+				if (w.isVisible())
+					j--;
+				rv++;
+			}
+			if (this._selectedIndex == rv)
 				return;
 
-			this.setSelectedIndex(v, {skipFixIndex: true});
+			this.setSelectedIndex(rv);
 			data.push(reference = n.options[v].id);
 		}
 

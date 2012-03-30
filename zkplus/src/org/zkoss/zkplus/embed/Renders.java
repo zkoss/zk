@@ -198,7 +198,7 @@ public class Renders {
 			}
 
 			final Desktop desktop = _exec.getDesktop();
-			out.write("<script type=\"text/javascript\">zkpb('");
+			out.write("<script class=\"z-runonce\" type=\"text/javascript\">zkpb('");
 			out.write(page.getUuid());
 			out.write("','");
 			out.write(desktop.getId());

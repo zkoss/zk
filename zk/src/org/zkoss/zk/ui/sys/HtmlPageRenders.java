@@ -193,7 +193,7 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script type=\"text/javascript\">\nzkac(");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -300,7 +300,7 @@ public class HtmlPageRenders {
 			groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script type=\"text/javascript\">zkopt({");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">zkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -466,7 +466,7 @@ public class HtmlPageRenders {
 				sb.append(" charset=\"").append(charset).append('"');
 			sb.append('>');
 		} else {
-			sb.append(">\n").append(js.getContent());
+			sb.append(" class=\"z-runonce\">\n").append(js.getContent());
 		}
 		sb.append("\n</script>");
 	}
@@ -561,7 +561,7 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script type=\"text/javascript\">");
+			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">");
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -817,7 +817,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script type=\"text/javascript\">\nzkmx(");
+			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\nzkmx(");
 
 			if (comp != null)
 				((ComponentCtrl)comp).redraw(out);
@@ -928,7 +928,7 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script type=\"text/javascript\">zkdt('")
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">zkdt('")
 				.append(desktop.getId()).append("','")
 				.append(getContextURI(exec))
 				.append("','").append(desktop.getUpdateURI(null))
