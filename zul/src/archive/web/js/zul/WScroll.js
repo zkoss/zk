@@ -300,6 +300,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 				edragHeight = this.edrag.offsetHeight - this._gap;
 			if (rest <= 0) {
 				this.eend.style.display = this.edrag.style.display = 'none';
+				if (typeof this.opts.onScrollY == 'function')
+					this.opts.onScrollY.call(this.widget, opts.offset); //reset scrolling
 				return;
 			}
 			vsize -= edragHeight;
@@ -334,6 +336,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 				edragWidth = this.edrag.offsetWidth - this._gap;
 			if (rest <= 0) {
 				this.eend.style.display = this.edrag.style.display = 'none';
+				if (typeof this.opts.onScrollX == 'function')
+					this.opts.onScrollX.call(this.widget, opts.offset); //reset scrolling
 				return;
 			}
 			vsize -= edragWidth;

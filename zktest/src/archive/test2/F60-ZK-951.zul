@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-951.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Mar 30, 2012 12:09:08 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div><label style="font-weight:bold">This feature only support on IE8+, Firefox, Chrome, Safari, and Opera</label></div>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		import org.zkoss.util.*;
+		
+		FakerMatrixModel NonHeader = new FakerMatrixModel(10, 10, 0);
+		FakerMatrixModel MultipleHeader = new FakerMatrixModel(10, 10, 3);
+		FakerMatrixModel SingleColumn = new FakerMatrixModel(1, 10);
+		FakerMatrixModel MultipleColumn = new FakerMatrixModel(10000, 10);
+		FakerMatrixModel SingleRow = new FakerMatrixModel(10, 10);
+		FakerMatrixModel MultipleRow = new FakerMatrixModel(10, 10000);
+		FakerMatrixModel BigData = new FakerMatrixModel(1000000, 1000000);
+		
+		Pair[] models = new Pair[] {
+			new Pair("NonHeader", NonHeader), 
+			new Pair("MultipleHeader", MultipleHeader),
+			new Pair("SingleColumn", SingleColumn),
+			new Pair("MultipleColumn", MultipleColumn),
+			new Pair("SingleRow", SingleRow),
+			new Pair("MultipleRow", MultipleRow),
+			new Pair("BigData", BigData)
+		};
+		ListModelList modelList = new ListModelList(Arrays.asList(models));
+		modelList.addToSelection(modelList.get(0));
+		ListModelList tenSize = new ListModelList(Arrays.asList(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
+		tenSize.addToSelection(tenSize.get(0));
+		ListModelList colsSize = new ListModelList(Arrays.asList(new Integer[]{5, 10, 15, 20}));
+		ListModelList rowsSize = new ListModelList(Arrays.asList(new Integer[]{5, 10, 15, 20}));
+	]]></zscript>
+	<vlayout>
+		<hlayout valign="bottom">
+		Change Models:
+		<selectbox model="${modelList}">
+			<attribute name="onSelect">
+			biglist.frozenCols = 0;
+			tenSize.addToSelection(tenSize.get(0));
+			biglist.setModel(event.selectedObjects.iterator().next().y);
+			</attribute>
+			<template name="model">
+			${each.x}
+			</template>
+		</selectbox>
+		Change V/Hflex:
+		<radiogroup onCheck="biglist.vflex = biglist.hflex= self.selectedItem.label; biglist.invalidate();">
+		<radio label="1" checked="true"/>
+		<radio label="min"/>
+		</radiogroup>
+		</hlayout>
+		<hlayout>
+		Change fixForzenCols:
+			<radiogroup onCheck='biglist.fixFrozenCols = self.selectedItem.label.equals("Enable") '>
+			<radio label="Disable" checked="true"/>
+			<radio label="Enable"/>
+			</radiogroup>
+		Change frozenCols:
+			<selectbox model="${tenSize}">
+				<attribute name="onSelect">
+				if (self.selectedIndex > biglist.cols -1) {
+					self.selectedIndex = self.selectedIndex - 1;
+					alert("FrozenCols cannot be greater than Cols");
+				} else
+					biglist.frozenCols = self.selectedIndex
+				</attribute>
+			</selectbox>
+		
+		Change cols: 
+			<selectbox model="${colsSize}">
+				<attribute name="onSelect">
+				int i = event.selectedObjects.iterator().next().intValue();
+				if (biglist.frozenCols > i-1) {
+					self.selectedIndex = self.selectedIndex - 1;
+					alert("FrozenCols cannot be greater than Cols");
+				} else {
+					biglist.autoCols = false;
+					biglist.cols = i;
+				}
+				</attribute>
+			</selectbox>
+		Change rows: 
+			<selectbox model="${rowsSize}" onSelect="biglist.autoRows = false;biglist.rows = event.selectedObjects.iterator().next()"/>
+		</hlayout>
+		<hlayout>
+		Invalidate should look the same as before: <button label="invalidate" onClick="biglist.invalidate()"/>
+		</hlayout>
+	</vlayout>
+	<biglistbox id="biglist" hflex="1" vflex="1" colWidth="130px" model="${NonHeader}">
+		<!-- Template example -->
+		<template name="heads">
+			<html><![CDATA[
+				<div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>
+			]]></html>
+		</template>
+		<template name="rows">
+			<html><![CDATA[
+				<div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>
+			]]></html>
+		</template>
+	</biglistbox>
+</zk>
