@@ -287,7 +287,7 @@ public class AuUploader implements AuExtension {
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()):
-						new StreamAudio(name, fi);
+						new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
 					if (log.debugable()) log.debug("Unknown file format: "+ctype);
 				}
@@ -450,9 +450,12 @@ public class AuUploader implements AuExtension {
 	}
 	private static class StreamAudio extends AAudio {
 		private final FileItem _fi;
-		public StreamAudio(String name, FileItem fi) throws IOException {
+		private String _format;
+		private String _ctype;
+		public StreamAudio(String name, FileItem fi, String ctype) throws IOException {
 			super(name, DYNAMIC_STREAM);
 			_fi = fi;
+			_ctype = ctype;
 		}
 		public java.io.InputStream getStreamData() {
 			try {
@@ -460,6 +463,15 @@ public class AuUploader implements AuExtension {
 			} catch (IOException ex) {
 				throw new UiException("Unable to read "+_fi, ex);
 			}
+		}
+		public String getFormat(){
+			if (_format == null) {
+				_format = ContentTypes.getFormat(getContentType());
+			}
+			return _format;
+		}
+		public String getContentType() {
+			return _ctype != null ? _ctype : _fi.getContentType();
 		}
 	}
 

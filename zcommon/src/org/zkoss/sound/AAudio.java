@@ -221,7 +221,7 @@ public class AAudio implements Audio, java.io.Serializable {
 	public final String getName() {
 		return _name;
 	}
-	public final String getFormat() {
+	public String getFormat() {
 		if (_format == null) {
 			try {
 				_format = getFormat0();
@@ -275,7 +275,7 @@ public class AAudio implements Audio, java.io.Serializable {
 		}
 		return format;
 	}
-	public final String getContentType() {
+	public String getContentType() {
 		if (_ctype == null) {
 			_ctype = getContentType(getFormat());
 		}
