@@ -24,7 +24,6 @@ import org.zkoss.zel.ELResolver;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zel.impl.parser.AstIdentifier;
-import org.zkoss.zel.impl.parser.AstValue;
 import org.zkoss.zel.impl.parser.Node;
 
 /**
@@ -48,10 +47,7 @@ public class PathELResolver extends ELResolver {
             throw new NullPointerException();
         }
         if (base == null) { //init
-        	Integer numOfKids = (Integer) ctx.getContext(AstValue.class);
-        	if (numOfKids == null) {
-        		numOfKids = (Integer) ctx.getContext(AstIdentifier.class);
-        	}
+        	final Integer numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
 			_numOfKids.push(numOfKids);
 			_paths.push(new Path());
         }
