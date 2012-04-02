@@ -13,6 +13,7 @@ ZK 6.0.1
   ZK-951: Add a new Biglistbox component to handle huge data
   ZK-540: Notification Components 
   ZK-698: A flexible Notification(Box) component to give user visual feedback.
+  ZK-995: A way to access multiple validation messages
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
