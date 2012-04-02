@@ -35,6 +35,7 @@ public class DeferInitVM implements Composer<Window>{
 		w2.setParent(comp);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void init(Window window,String value1,String value2,String value3) {
 		final Binder binder = new DefaultBinder(); 
 		binder.init(window, new MyViewModel(value1,value2,value3));  
