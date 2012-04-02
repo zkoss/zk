@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.Composer;
@@ -118,7 +119,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage() : null;
 	}
 	
-	private class BeforeCreateWireListener implements EventListener<Event> {
+	private class BeforeCreateWireListener implements SerializableEventListener<Event> {
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
 			// wire components again so some late created object can be wired in (e.g. DataBinder)
@@ -127,7 +128,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		}
 	}
 	
-	private class AfterCreateWireListener implements EventListener<Event> {
+	private class AfterCreateWireListener implements SerializableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			// second event listener wiring, for components created since doAfterCompose()
 			Selectors.wireEventListeners(_self, SelectorComposer.this);
@@ -179,7 +180,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	
 	//wire, called once after clone
 	private static class CloneDoAfterCompose
-	implements EventListener<Event>, java.io.Serializable {
+	implements SerializableEventListener<Event>, java.io.Serializable {
 		// brought from GenericAutowireComposer
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
@@ -200,6 +201,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		// annotation
 		Selectors.rewireComponentsOnActivate(comp, this);
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
+		Selectors.rewireEventListeners(comp, this);
 	}
 	
 	@Override

@@ -189,6 +189,10 @@ public class Selectors {
 	 */
 	public static void wireEventListeners(final Component component, 
 			final Object controller) {
+		wireEventListeners0(component, controller, false);
+	}
+	private static void wireEventListeners0(final Component component, 
+				final Object controller, final boolean rewire) {
 		Reflections.forMethods(controller.getClass(), Listen.class, 
 				new MethodRunner<Listen>() {
 			public void onMethod(Class<?> clazz, Method method, Listen anno) {
@@ -200,13 +204,23 @@ public class Selectors {
 				if(method.getParameterTypes().length > 1) 
 					throw new UiException("Event handler method should have " + 
 							"at most one parameter: " + method.getName());
-				
 				for(String[] strs : splitListenAnnotationValues(anno.value())){
 					String name = strs[0];
 					if(name == null) name = "onClick";
 					Iterable<Component> iter = iterable(component, strs[1]);
 					// no forwarding, just add to event listener
+					Set<Component> rewired = rewire ? new HashSet<Component>() : null;
 					for (Component c : iter) {
+						if (rewired != null && !rewired.contains(c)) {
+							rewired.add(c);
+							c.removeAttribute(EVT_LIS);
+							Iterable<EventListener<? extends Event>> listeners = c.getEventListeners(name);
+							if (listeners != null) {
+								for (EventListener<? extends Event> listener : listeners)
+									if (listener instanceof ComposerEventListener)
+										c.removeEventListener(name, listener);
+							}
+						}
 						Set<String> set = getEvtLisSet(c, EVT_LIS);
 						String mhash = name + "#" + method.toString();
 						if (set.contains(mhash))
@@ -219,6 +233,10 @@ public class Selectors {
 		});
 	}
 	
+	/*package*/ static void rewireEventListeners(final Component component, 
+			final Object controller) {
+		wireEventListeners0(component, controller, true);
+	}
 	private static final String EVT_LIS = "_SELECTOR_COMPOSER_EVENT_LISTENERS";
 	
 	@SuppressWarnings("unchecked")
@@ -647,6 +665,7 @@ public class Selectors {
 		return list.toArray((T[]) Array.newInstance(clazz, 0));
 	}
 	
+	// Cannot be serialized
 	private static class ComposerEventListener implements EventListener<Event> {
 		
 		private final Method _ctrlMethod;
