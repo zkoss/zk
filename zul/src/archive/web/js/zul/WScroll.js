@@ -682,7 +682,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 	redraw: function (p) {
 		var orient = this._isVer ? 'v' : 'h',
 			uuid = this.uid + '-' + orient + 'bar',
-			zcls = this.zcls + '-gs';
+			zcls = this.zcls + '-ws';
 		jq(p).append(['<div id="', uuid, '" class="', zcls, '-', orient ,'">',
 				'<div class="', zcls, '-drag">',
 					'<div class="', zcls, '-home" title="', msgzul.WS_HOME, '"></div>',
