@@ -14,12 +14,12 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.zk.ui.Component;
@@ -28,16 +28,14 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  * @since 6.0.0
  */
-public class ValidationMessagesImpl implements ValidationMessages,Map<Component, Object>, Serializable {
-
+public class ValidationMessagesImpl implements ValidationMessages,Collection<Object>, Serializable {
+	//this class implement collection to support empty expression in EL
 	private static final long serialVersionUID = 1L;
 	
 	//
 	private final Map<Component, Map<String, List<Message>>> _attrMessageMap; //<component, <attr,messages>>
 	private final Map<Component, Map<String, List<Message>>> _keyMessageMap; //<component, <key,messages>>
 	private final Map<String, List<Message>> _globalKeyMessageMap; //<component, <key,messages>>
-	
-	private final MultipleMessages _multiple;//a internal map for getting the messages array
 	
 	private final List<Message> _messages;//contains all the messages
 	
@@ -46,7 +44,6 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		_attrMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
 		_keyMessageMap = new LinkedHashMap<Component,Map<String,List<Message>>>();
 		_globalKeyMessageMap = new LinkedHashMap<String,List<Message>>();
-		_multiple = new MultipleMessages();
 	}
 	
 	//a message that related to a attr and key
@@ -208,6 +205,17 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 		return msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
 	}
 	
+	@Override
+	public String[] getMessages() {
+		if(_messages.size()==0){
+			return null;
+		}
+		List<String> msgs = new ArrayList<String>(_messages.size());
+		for(Message mm:_messages){
+			msgs.add(mm.msg);
+		}
+		return msgs.size()==0?null:msgs.toArray(new String[msgs.size()]);
+	}
 
 	@Override
 	public String[] getKeyMessages(Component comp, String key) {
@@ -258,6 +266,8 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 			}
 		}
 	}
+	
+	//interface for collection
 
 	@Override
 	public int size() {
@@ -270,134 +280,59 @@ public class ValidationMessagesImpl implements ValidationMessages,Map<Component,
 	}
 
 	@Override
-	public boolean containsKey(Object key) {
-		return false;
+	public boolean contains(Object o) {
+		return _messages.contains(o);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Iterator<Object> iterator() {
+		return new ArrayList(_messages).iterator();
 	}
 
 	@Override
-	public boolean containsValue(Object value) {
-		return _messages.contains(value);
+	public Object[] toArray() {
+		return _messages.toArray();
 	}
 
 	@Override
-	public Object get(Object key) {
-		if(key instanceof Component){
-			String[] msgs = getMessages((Component)key);
-			if(msgs!=null && msgs.length>0){
-				return msgs[0];
-			}
-		}else if(key instanceof String){
-			String[] msgs = getKeyMessages((String)key);
-			if(msgs!=null && msgs.length>0){
-				return msgs[0];
-			}
-		}
-		return null;
+	public <T> T[] toArray(T[] a) {
+		return _messages.toArray(a);
 	}
 
 	@Override
-	public String put(Component key, Object value) {
-		throw new UnsupportedOperationException("doesn't support this api");
+	public boolean add(Object e) {
+		throw new UnsupportedOperationException("read only");
 	}
 
 	@Override
-	public String remove(Object key) {
-		throw new UnsupportedOperationException("doesn't support this api");
+	public boolean remove(Object o) {
+		throw new UnsupportedOperationException("read only");
 	}
 
 	@Override
-	public void putAll(Map<? extends Component, ? extends Object> m) {
-		throw new UnsupportedOperationException("you have to call api of validation messages");
+	public boolean containsAll(Collection<?> c) {
+		return _messages.contains(c);
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends Object> c) {
+		throw new UnsupportedOperationException("read only");
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		throw new UnsupportedOperationException("read only");
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		throw new UnsupportedOperationException("read only");
 	}
 
 	@Override
 	public void clear() {
-		throw new UnsupportedOperationException("doesn't support this api");
-	}
-
-	@Override
-	public Set<Component> keySet() {
-		throw new UnsupportedOperationException("doesn't support this api");
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Collection<Object> values() {
-		return (Collection)Collections.unmodifiableList(_messages);
-	}
-
-	@Override
-	public Set<java.util.Map.Entry<Component, Object>> entrySet() {
-		throw new UnsupportedOperationException("doesn't support this api");
-	}
-	
-	public Map<Object,Object> getMultiple(){
-		return _multiple;
-	}
-	
-	//the map for EL that return multiple messages.
-	public class MultipleMessages implements Map<Object,Object>,Serializable{
-		private static final long serialVersionUID = 7853710733151556817L;
-		@Override
-		public int size() {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-
-		@Override
-		public boolean isEmpty() {
-			return _messages.isEmpty();
-		}
-		@Override
-		public boolean containsKey(Object key) {
-			return false;
-		}
-		@Override
-		public boolean containsValue(Object value) {
-			return false;
-		}
-		@Override
-		public Object get(Object key) {
-			if(key instanceof Component){
-				String[] msgs = getMessages((Component)key);
-				return msgs;
-			}else if(key instanceof String){
-				String[] msgs = getKeyMessages((String)key);
-				return msgs;
-			}
-			return null;
-		}
-		@Override
-		public Object put(Object key, Object value) {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		@Override
-		public String[] remove(Object key) {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		@Override
-		public void putAll(Map<? extends Object, ? extends Object> m) {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		@Override
-		public void clear() {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		
-		@Override
-		public Set<Object> keySet() {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		
-		@Override
-		public Collection<Object> values() {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		
-		@Override
-		public Set<java.util.Map.Entry<Object, Object>> entrySet() {
-			throw new UnsupportedOperationException("doesn't support this api");
-		}
-		
+		throw new UnsupportedOperationException("read only");
 	}
 
 }

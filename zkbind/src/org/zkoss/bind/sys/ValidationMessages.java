@@ -43,6 +43,13 @@ public interface ValidationMessages{
 	String[] getMessages(Component comp);
 	
 	/**
+	 * get all validation messages
+	 * @return null if no messages
+	 * @since 6.0.1
+	 */
+	String[] getMessages();
+	
+	/**
 	 * get validation message of component and a special key
 	 * @return null if no message of key
 	 */
