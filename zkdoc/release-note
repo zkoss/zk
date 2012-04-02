@@ -49,8 +49,11 @@ ZK 6.0.1
   ZK-992: Wrong item when binding to combbox with submodel implementation
   ZK-1008: The numberOfChildren in PathELResolver is not correct
   ZK-1009: Bind event by selectorcomposer in cluster environment doesn't work
+  ZK-1013: Component.queryAll() shall return Iterable<Component> instead of List<Component> for better performance
   
 * Upgrade Notes
+  + Component.queryAll() returns Iterable<Component> instead of List<Component>
+    for better performance.
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.
   + ComponentCtrl.addSharedAnnotationMap() was removed since it shall not be public
   + Added 2 arguments 'converterExpr' and converterArgs' to the end of

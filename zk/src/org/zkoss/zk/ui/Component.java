@@ -1101,16 +1101,16 @@ w:use="foo.MyWindow"&gt;
 	 * @see #queryAll
 	 */
 	public Component query(String selector);
-	/** Returns a list of all components that match the given CSS3 selector.
-	 * <p>Notice: this method will traverse the whole component tree.
-	 * If you'd like to examine each of them  one-by-one based on some
-	 * criteria, it is better to use {@link org.zkoss.zk.ui.select.Selectors#iterable}
-	 * instead.
+	/** Returns an iterable object for components that match the given CSS3 selector.
+	 * <p>Notice: this method traverses the whole component tree, only if
+	 * you iterate through the whole iterable object.
+	 * In other words, the performance is good, and you can iterate it
+	 * find the object that matches your criteria.
 	 *
 	 * @param selector the CSS3 selector. For example, comp.queryAll("#id div").
 	 * @return a list of all matched component, or an empty list if none is found.
 	 * @since 6.0.0
 	 * @see #query
 	 */
-	public List<Component> queryAll(String selector);
+	public Iterable<Component> queryAll(String selector);
 }

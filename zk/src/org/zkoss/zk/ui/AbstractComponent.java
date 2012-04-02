@@ -3200,8 +3200,8 @@ w:use="foo.MyWindow"&gt;
 		return found.hasNext() ? found.next(): null;
 	}
 	@Override
-	public List<Component> queryAll(String selector) {
-		return Selectors.find(this, selector);
+	public Iterable<Component> queryAll(String selector) {
+		return Selectors.iterable(this, selector);
 	}
 
 	/** Merge multiple memembers into an single object (and create on demand)
