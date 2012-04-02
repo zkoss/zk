@@ -46,6 +46,7 @@ ZK 6.0.1
   ZK-996: Widget.replaceWidget (i.e., invalidate() at the server) shall preserve the cursor the position
   ZK-993: Exception if reloaded a included page
   ZK-992: Wrong item when binding to combbox with submodel implementation
+  ZK-1008: The numberOfChildren in PathELResolver is not correct
   
 * Upgrade Notes
   + TreeNode's getChildren() returns List<TreeNode<E>> instead of List<? extends TreeNode<E>>.
