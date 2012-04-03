@@ -1,0 +1,22 @@
+<zk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd"
+	xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<label multiline="true">
+		1.you should see value1 is A 
+		2.edit on value1, set to Aa, you will see a length validation warn
+		3.edit on value2, set to Aaaa, the message will be gone.
+		4.click update, the Info value should change to Aaaa
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01017NestedFormPath')" 
+	validationMessages="@id('vmsgs')">
+		<hlayout>
+			Info : <label id="l12" value="@bind(vm.bean.value1)" />
+		</hlayout>
+		<div form="@id('fx') @load(vm) @save(vm, before='doSubmit')">
+			<hlayout>
+				<label value="Value1" />
+				<textbox id="t2" value="@bind(fx.bean.value1) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+			</hlayout>
+		</div>
+		<button id="update" label="update" onClick="@command('update')" />
+	</window>
+</zk>

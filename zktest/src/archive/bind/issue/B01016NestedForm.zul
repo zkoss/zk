@@ -1,0 +1,25 @@
+<zk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd"
+	xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<label multiline="true">
+		1.you should see value1 is A value2 is B
+		2.edit on value1 and value2, set to Aa and Ba, you will see a length validation warn
+		3.edit on value2 and value2, set to Aaaa and Baaa, the message will be gone.
+		4.click update, the Info change to Aaaa/Baaa 
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01016NestedForm')" validationMessages="@id('vmsgs')">
+		<hlayout>
+			Info : <label id="l11" value="@bind(vm.value1)" />/<label id="l12" value="@bind(vm.bean.value2)" />
+		</hlayout>
+		<div form="@id('fx') @load(vm) @save(vm, before='doSubmit')">
+			<hlayout>
+				<label value="Value1" />
+				<textbox id="t1" value="@bind(fx.value1) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+			</hlayout>
+			<hlayout form="@id('fx2') @load(fx.bean) @save(fx.bean, before='doSubmit')">
+				<label value="Value2" />
+				<textbox id="t2" value="@bind(fx2.value2) @validator(vm.validator1)" errorMessage="@load(vmsgs[self])" />
+			</hlayout>
+		</div>
+		<button id="update" label="update" onClick="@command('update')" />
+	</window>
+</zk>
