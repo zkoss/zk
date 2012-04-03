@@ -52,14 +52,6 @@ span.z-combobutton-tbbtn {
 .z-combobutton-tbbtn-disd tr td {
 	cursor: default;
 }
-<%-- os mold --%>
-.z-combobutton-os,
-.z-combobutton-tbbtn-os {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; 
-	font-weight: normal;
-}
-
 <%-- image --%>
 .z-combobutton .z-combobutton-tl, 
 .z-combobutton .z-combobutton-bl {
@@ -85,29 +77,36 @@ span.z-combobutton-tbbtn {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-ctr.gif')});
 }
 
-<%-- tl, tr, cl, cr --%>
 .z-combobutton .z-combobutton-tl,
 .z-combobutton .z-combobutton-cl,
-.z-combobutton .z-combobutton-tr,
-.z-combobutton .z-combobutton-cr,
-.z-combobutton-tbbtn .z-combobutton-tbbtn-cr {
-	background-repeat: no-repeat;
-	background-position: 0 0;
+.z-combobutton .z-combobutton-bl {
 	width: 4px;
 	padding: 0;
 	margin: 0;
+	background-repeat: no-repeat;
+	background-position: 0 0;
 }
 .z-combobutton .z-combobutton-tr,
 .z-combobutton .z-combobutton-cr,
-.z-combobutton-tbbtn .z-combobutton-tbbtn-cr {
-	background-position: 0 0;
+.z-combobutton .z-combobutton-br {
 	width: 21px;
+	padding: 0;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-position: 0 0;
 	border-left: 1px solid #CCCCCC;
 }
-.z-combobutton .z-combobutton-tl,
-.z-combobutton .z-combobutton-tr {
+.z-combobutton .z-combobutton-tl, 
+.z-combobutton .z-combobutton-tm, 
+.z-combobutton .z-combobutton-tr,
+.z-combobutton .z-combobutton-bl,
+.z-combobutton .z-combobutton-bm,
+.z-combobutton .z-combobutton-br {
 	height: 4px;
+	padding: 0;
+	margin: 0;
 }
+<%-- tl, tr, cl, cr --%>
 .z-combobutton-focus .z-combobutton-tl,
 .z-combobutton-focus .z-combobutton-cl {
 	background-position: -16px 0;
@@ -153,17 +152,7 @@ span.z-combobutton-tbbtn {
 <%-- bl, br --%>
 .z-combobutton .z-combobutton-bl,
 .z-combobutton .z-combobutton-br {
-	width: 4px;
-	height: 4px;
-	padding: 0;
-	margin: 0;
-	background-repeat: no-repeat;
 	background-position: 0 -4px;
-}
-.z-combobutton .z-combobutton-br {
-	background-position: 0 -4px;
-	width: 21px;
-	border-left: 1px solid #CCCCCC;
 }
 .z-combobutton-focus .z-combobutton-bl {
 	background-position: -16px -4px;
