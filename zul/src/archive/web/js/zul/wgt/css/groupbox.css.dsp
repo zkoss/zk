@@ -41,7 +41,8 @@
 	font-weight: normal;
 	border: none;
 }
-.z-groupbox-header span.z-caption-cnt {
+.z-groupbox-header span.z-caption-cnt,
+.z-groupbox-title-cnt {
 	display: -moz-inline-box;
 	display: inline-block;
 	<c:if test="${zk.ie < 8}">
