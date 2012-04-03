@@ -181,7 +181,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zml</artifactId>
+			<artifactId>zk</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
