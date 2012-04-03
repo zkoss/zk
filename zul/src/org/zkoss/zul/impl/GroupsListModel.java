@@ -352,6 +352,9 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> {
 			case GroupsDataEvent.MULTIPLE_CHANGED:
 				type = ListDataEvent.MULTIPLE_CHANGED;
 				break;
+			default:
+				init();//re-initialize the model information
+				break;
 			}
 			fireEvent(type, j0, j1);
 		}
