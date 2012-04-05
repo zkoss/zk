@@ -310,7 +310,8 @@ ZK 5.0.12
 
 * Bugs
   ZK-998: Uploading mp3 fails in 5.0.11
-
+  ZK-1011: drag and drop in mobile safari throwing exceptions
+  
 	--------
 ZK 5.0.11
 Mar 27, 2012
