@@ -7,18 +7,28 @@
 	</label>
 	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01017NestedFormPath')" 
 	validationMessages="@id('vmsgs')">
-		<hlayout>
-			Value : <label id="l11" value="@bind(vm.bean.value1)" />
-			/Msg : <label id="l13" value="@bind(vm.msg)"/>
-			/Info : <label id="l12"/>
-			
-		</hlayout>
-		<div form="@id('fx') @load(vm) @save(vm, before='update')">
+		<vlayout>
 			<hlayout>
-				<label value="Value1" />
-				<textbox id="t2" value="@bind(fx.bean.value1) @validator(vm.validator1,info=l12)" errorMessage="@load(vmsgs[self])" />
+				Value1 : <label id="l11" value="@bind(vm.bean.value1)" />
+				
+				/Info : <label id="l12"/>
 			</hlayout>
-		</div>
+			<hlayout>
+				Value2 : <label id="l21" value="@bind(vm.bean['value2'])" />
+				/Info : <label id="l22"/>
+			</hlayout>
+			/Msg : <label id="l13" value="@bind(vm.msg)"/>
+			<div form="@id('fx') @load(vm) @save(vm, before='update')">
+				<hlayout>
+					<label value="Value1" />
+					<textbox id="t1" value="@bind(fx.bean.value1) @validator(vm.validator1,info=l12)" errorMessage="@load(vmsgs[self])" />
+				</hlayout>
+				<hlayout>
+					<label value="Value2" />
+					<textbox id="t2" value="@bind(fx.bean[vm.key2]) @validator(vm.validator2,info=l22)" errorMessage="@load(vmsgs[self])" />
+				</hlayout>
+			</div>
+		</vlayout>
 		<button id="update" label="update" onClick="@command('update')" />
 	</window>
 </zk>
