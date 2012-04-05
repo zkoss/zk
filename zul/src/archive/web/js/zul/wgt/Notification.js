@@ -167,6 +167,9 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			self.afterCloseAnima_(opts);
 		});
 	},
+	afterCloseAnima_: function (opts) {
+		this.detach();
+	},
 	getZclass: function () {
 		return this._zclass || "z-notification";
 	}
