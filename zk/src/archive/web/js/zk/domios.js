@@ -26,7 +26,8 @@ function _createMouseEvent (type, button, changedTouch, ofs) {
 }
 function _createJQEvent (target, type, button, changedTouch, ofs) {
 	//do not allow text
-	if (target.nodeType === 3 || target.nodeType === 8)
+	//ZK-1011
+	if (target && (target.nodeType === 3 || target.nodeType === 8))
 		target = target.parentNode;
 	
 	var originalEvent = _createMouseEvent(type, button, changedTouch, ofs),
@@ -52,12 +53,8 @@ function _toMouseEvent(event, changedTouch) {
 				'mouseup', 0, changedTouch);
 		break;
 	case 'touchmove':
-		return _createJQEvent(
-			document.elementFromPoint(
-				changedTouch.clientX, 
-				changedTouch.clientY),
-			'mousemove', 0, changedTouch);
-		break;
+		var ele = document.elementFromPoint(changedTouch.clientX,changedTouch.clientY);
+		return (ele && _createJQEvent(ele, 'mousemove', 0, changedTouch)) || null;
 	}
 	return event;
 }
@@ -75,7 +72,10 @@ function delegateEventFunc (event) {
 	var touchEvt = event.originalEvent;
 	if (touchEvt.touches.length > 1) return;
 	
-	_doEvt(event.type, event, _toMouseEvent(event, touchEvt.changedTouches[0]));
+	var evt;
+	
+	if(evt = _toMouseEvent(event, touchEvt.changedTouches[0]))
+		_doEvt(event.type, event, evt);
 }
 zk.copy(zjq, {
 	eventTypes: {
