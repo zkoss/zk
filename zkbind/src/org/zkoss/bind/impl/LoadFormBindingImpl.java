@@ -27,7 +27,9 @@ import org.zkoss.bind.sys.ConditionType;
 import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Implementation of {@link LoadFormBinding}
@@ -47,9 +49,17 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	public void load(BindContext ctx) {
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final Object bean = eval.getValue(ctx, getComponent(), _accessInfo.getProperty());
-				
-		final Component comp = getComponent();//ctx.getComponent();
+		final Component comp = getComponent();
+		final Object bean = eval.getValue(ctx, comp, _accessInfo.getProperty());
+		//ZK-1016 Nested form binding doesn't work.
+		final ValueReference beanvr = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
+		//value-reference is null if it is a simple node, ex ${vm}
+		if( (beanvr!=null && beanvr.getBase() instanceof Form) || bean instanceof Form){
+			throw new UiException("doesn't supprot to load a nested form , formId "+getFormId());
+		}
+		
+		
+		
 		final Form form = getFormBean();
 		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		if(form instanceof FormExt){
