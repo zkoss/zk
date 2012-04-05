@@ -16,7 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.io.Serializable;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Popup;
@@ -29,8 +32,6 @@ import org.zkoss.zul.Popup;
 abstract public class XulElement extends HtmlBasedComponent {
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
-	/** The tool tip instance that will store the tooltip before attached. */
-	private Popup tooltipInst;
 
 	/** Returns what keystrokes to intercept.
 	 * <p>Default: null.
@@ -238,7 +239,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * <p>Default: null (no tooltip).
 	 */
 	public String getTooltip() {
-		return _auxinf != null ? _auxinf.tooltip: null;
+		return _auxinf != null ? _auxinf.tooltip != null ? (String)  _auxinf.tooltip.getValue() : null: null;
 	}
 	/** Sets the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -281,9 +282,8 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setTooltip(String tooltip) {
 		// ZK-816
 		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, tooltip)) {
-			initAuxInfo().tooltip = tooltip;
-			tooltipInst = null;
-			smartUpdate("tooltip", getTooltip());
+			initAuxInfo().tooltip = new DeferedTooltip(tooltip);
+			smartUpdate("tooltip", _auxinf.tooltip);
 		}
 	}
 	/** Sets the UUID of the popup that should be used
@@ -296,9 +296,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	public void setTooltip(Popup popup) {
 		// ZK-816, component keep wrong tooltip reference if set tooltip before tooltip attached
-		setTooltip(popup != null && popup.getPage() != null ? "uuid(" + popup.getUuid() + ")": null);
-		if (popup != null && popup.getPage() == null)
-				tooltipInst = popup;
+		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, popup)) {
+			initAuxInfo().tooltip = new DeferedTooltip(popup);
+			smartUpdate("tooltip", _auxinf.tooltip);
+		}
 	}
 
 	//super//
@@ -309,8 +310,6 @@ abstract public class XulElement extends HtmlBasedComponent {
 		render(renderer, "popup", getPopup());
 		render(renderer, "context", getContext());
 		// ZK-816
-		if (getTooltip() == null && tooltipInst != null)
-			setTooltip(tooltipInst);
 		render(renderer, "tooltip", getTooltip());
 		render(renderer, "ctrlKeys", getCtrlKeys());
 	}
@@ -338,7 +337,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 		/** The context ID that will be shown when right-click. */
 		private String ctx;
 		/** The tooltip ID that will be shown when mouse-over. */
-		private String tooltip;
+		private DeferredValue tooltip;
 		/** What control and function keys to intercepts. */
 		private String ctrlKeys;
 
@@ -347,6 +346,45 @@ abstract public class XulElement extends HtmlBasedComponent {
 				return super.clone();
 			} catch (CloneNotSupportedException e) {
 				throw new InternalError();
+			}
+		}
+	}
+	
+	private static class DeferedTooltip implements DeferredValue,Serializable{
+		private static final long serialVersionUID = -122378869909137783L;
+		
+		private Popup popup;
+		private String popupString;
+		public DeferedTooltip(String tooltip) {
+			super();
+			this.popupString = tooltip;
+		}
+		
+		public DeferedTooltip(Popup tooltip) {
+			super();
+			this.popup = tooltip;
+		}
+		
+		public Object getValue() {
+			if( popupString != null){
+				return popupString;
+			}else if(popup != null){
+				return "uuid(" + popup.getUuid() + ")";
+			}else{
+				return null;
+			}
+		}
+		
+		public boolean equals(Object obj) {
+			
+			if(obj instanceof String){
+				return Objects.equals(popupString, obj);
+			}else if(obj instanceof Popup){
+				return Objects.equals(popup, obj);
+			}else if(obj == null){
+				return popup == null && popupString == null;
+			}else{
+				return false;
 			}
 		}
 	}
