@@ -905,9 +905,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	doClick_: function (evt) {
 		var maxBtn = this.$n('max'),
 			minBtn = this.$n('min'),
-			zcls = this.getZclass();
-		
-		switch (evt.domTarget) {
+			zcls = this.getZclass(),
+			n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		switch (n) {
 		case this.$n('close'):
 			this.fire('onClose');
 			break;

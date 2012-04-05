@@ -1164,7 +1164,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$n().style.cursor = this._backupCursor || '';
 	},
 	doClick_: function (evt) {
-		switch (evt.domTarget) {
+		var n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		switch (n) {
 		case this.$n('close'):
 			this.fire('onClose');
 			break;
