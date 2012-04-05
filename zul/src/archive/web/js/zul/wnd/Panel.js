@@ -935,43 +935,51 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	doMouseOver_: function (evt) {
-		var zcls = this.getZclass();
-		
-		switch (evt.domTarget) {
+		var zcls = this.getZclass(),
+			n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		switch (n) {
 		case this.$n('close'):
-			jq(this.$n('close')).addClass(zcls + '-close-over');
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
 			break;
 		case this.$n('max'):
 			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).addClass(zcls + '-min-over');
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
 			break;
 		case this.$n('exp'):
-			jq(this.$n('exp')).addClass(zcls + '-exp-over');
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		var zcls = this.getZclass();
-		
-		switch (evt.domTarget) {
+		var zcls = this.getZclass(),
+			n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		var jqn = jq(n);
+		switch (n) {
 		case this.$n('close'):
-			jq(this.$n('close')).removeClass(zcls + '-close-over');
+			jqn.removeClass(zcls + '-close-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		case this.$n('max'):
-			var $n = jq(this.$n('max'));
 			if (this._maximized)
-				$n.removeClass(zcls + '-maxd-over');
-			$n.removeClass(zcls + '-max-over');
+				jqn.removeClass(zcls + '-maxd-over');
+			jqn.removeClass(zcls + '-max-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).removeClass(zcls + '-min-over');
+			jqn.removeClass(zcls + '-min-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		case this.$n('exp'):
-			jq(this.$n('exp')).removeClass(zcls + '-exp-over');
+			jqn.removeClass(zcls + '-exp-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);

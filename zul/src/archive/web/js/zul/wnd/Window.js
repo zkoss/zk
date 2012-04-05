@@ -1181,35 +1181,44 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	doMouseOver_: function (evt) {
-		switch (evt.domTarget) {
+		var zcls = this.getZclass(),
+			n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		switch (n) {
 		case this.$n('close'):
-			jq(this.$n('close')).addClass(this.getZclass() + '-close-over');
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-close-over');
 			break;
 		case this.$n('max'):
-			var zcls = this.getZclass(),
-				added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
-			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
+			var added = this._maximized ? ' ' + zcls + '-maxd-over' : '';
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-max-over' + added);
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).addClass(this.getZclass() + '-min-over');
+			jq(n).addClass(zcls + '-icon-over ' + zcls + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		switch (evt.domTarget) {
+		var zcls = this.getZclass(),
+			n = evt.domTarget;
+		if (!n.id)
+			n = n.parentNode;
+		var jqn = jq(n);
+		switch (n) {
 		case this.$n('close'):
-			jq(this.$n('close')).removeClass(this.getZclass() + '-close-over');
+			jqn.removeClass(zcls + '-close-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		case this.$n('max'):
-			var zcls = this.getZclass(),
-				$max = jq(this.$n('max'));
 			if (this._maximized)
-				$max.removeClass(zcls + '-maxd-over');
-			$max.removeClass(zcls + '-max-over');
+				jqn.removeClass(zcls + '-maxd-over');
+			jqn.removeClass(zcls + '-max-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		case this.$n('min'):
-			jq(this.$n('min')).removeClass(this.getZclass() + '-min-over');
+			jqn.removeClass(zcls + '-min-over');
+			jqn.removeClass(zcls + '-icon-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
