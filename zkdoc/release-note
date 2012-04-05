@@ -14,6 +14,7 @@ ZK 6.0.1
   ZK-540: Notification Components 
   ZK-698: A flexible Notification(Box) component to give user visual feedback.
   ZK-995: A way to access multiple validation messages
+  ZK-1019: Provide an extra layer of DIV on Window/Panel buttons 
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

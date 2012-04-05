@@ -19,7 +19,7 @@ function (out, skipper) {
 		caption = this.caption,
 		isFrameRequired = zul.wnd.PanelRenderer.isFrameRequired(this),
 		rounded = this._rounded(),
-		noborder = !this._bordered(), //Ulike window, panel does not support other kind of borders
+		noborder = !this._bordered(), //Unlike window, panel does not support other kind of borders
 		noheader = !caption && !title;
 		
 	out.push('<div', this.domAttrs_(), '>');
@@ -34,21 +34,22 @@ function (out, skipper) {
 			}
 		out.push('">');
 		if (!caption) {
+			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
 			if (this._closable)
 				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ',
-						zcls, '-close"></div>');
+						zcls, '-close">', iconInner, '</div>');
 			if (this._maximizable) {
 				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
 				if (this._maximized)
 					out.push(' ', zcls, '-maxd');
-				out.push('"></div>');
+				out.push('">', iconInner, '</div>');
 			}
 			if (this._minimizable)
 				out.push('<div id="', uuid, '-min" class="', zcls, '-icon ',
-						zcls, '-min"></div>');
+						zcls, '-min">', iconInner, '</div>');
 			if (this._collapsible)
 				out.push('<div id="', uuid, '-exp" class="', zcls, '-icon ',
-						zcls, '-exp"></div>');
+						zcls, '-exp">', iconInner, '</div>');
 			out.push(zUtl.encodeXML(title));
 		} else caption.redraw(out);
 		

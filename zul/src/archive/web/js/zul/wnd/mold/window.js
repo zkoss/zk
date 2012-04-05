@@ -36,16 +36,17 @@ function (out, skipper) {
 
 		if (caption) caption.redraw(out);
 		else {
+			var iconInner = '<div class="' + zcls + '-icon-img"></div>';
 			if (this._closable)
-				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close"></div>');
+				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close">', iconInner, '</div>');
 			if (this._maximizable) {
 				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
 				if (this._maximized)
 					out.push(' ', zcls, '-maxd');
-				out.push('"></div>');
+				out.push('">', iconInner, '</div>');
 			}
 			if (this._minimizable)
-				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min"></div>');
+				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min">', iconInner, '</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div></div></div>');
