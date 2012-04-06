@@ -17,7 +17,13 @@
 				Value2 : <label id="l21" value="@bind(vm.bean['value2'])" />
 				/Info : <label id="l22"/>
 			</hlayout>
-			/Msg : <label id="l13" value="@bind(vm.msg)"/>
+			<hlayout>
+				Value3 : <label id="l31" value="@bind(vm.bean[vm.key3])" />
+				/Info : <label id="l32"/>
+			</hlayout>
+			<hlayout>
+			Msg : <label id="msg" value="@bind(vm.msg)"/>
+			</hlayout>
 			<div form="@id('fx') @load(vm) @save(vm, before='update')">
 				<hlayout>
 					<label value="Value1" />
@@ -25,7 +31,11 @@
 				</hlayout>
 				<hlayout>
 					<label value="Value2" />
-					<textbox id="t2" value="@bind(fx.bean[vm.key2]) @validator(vm.validator2,info=l22)" errorMessage="@load(vmsgs[self])" />
+					<textbox id="t2" value="@bind(fx.bean['value2']) @validator(vm.validator2,info=l22)" errorMessage="@load(vmsgs[self])" />
+				</hlayout>
+				<hlayout>
+					<label value="Value3" />
+					<textbox id="t3" value="@bind(fx.bean[vm.key3]) @validator(vm.validator3,info=l32)" errorMessage="@load(vmsgs[self])" />
 				</hlayout>
 			</div>
 		</vlayout>
