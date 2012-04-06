@@ -6,6 +6,8 @@ ZK 5.0.12
 * Bugs
   ZK-998: Uploading mp3 fails in 5.0.11
   ZK-1011: drag and drop in mobile safari throwing exceptions
+  ZK-922: Misaligned Grid columns with Firefox 10
+  ZK-1024: The row of the listbox are not aligned with the head (Firefox 11 only)
   
 	--------
 ZK 5.0.11

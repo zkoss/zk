@@ -1,0 +1,67 @@
+<!--
+	B60-ZK-922.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Apr 6 10:26:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Firefox 10-12 only. All the Grid content should align correctly.
+	</div>
+	<vlayout height="500px">
+		<grid width="200px">
+			<columns>
+				<column hflex="1" label="A" />
+				<column hflex="1" label="B" />
+				<column hflex="2" label="C" />
+				<column hflex="2" label="D" />
+			</columns>
+			<rows>
+				<row>
+					<label value="A" />
+					<label value="B" />
+					<label value="C" />
+					<label value="D" />
+				</row>
+			</rows>
+		</grid>
+		<grid height="100px" width="200px">
+			<columns>
+				<column hflex="1" label="A" />
+				<column hflex="1" label="B" />
+				<column hflex="2" label="C" />
+				<column hflex="2" label="D" />
+			</columns>
+			<rows>
+				<row>
+					<label value="A" />
+					<label value="B" />
+					<label value="C" />
+					<label value="D" />
+				</row>
+			</rows>
+		</grid>
+		<grid vflex="true" width="200px">
+			<columns>
+				<column hflex="1" label="A" />
+				<column hflex="1" label="B" />
+				<column hflex="2" label="C" />
+				<column hflex="2" label="D" />
+			</columns>
+			<rows>
+				<row>
+					<label value="A" />
+					<label value="B" />
+					<label value="C" />
+					<label value="D" />
+				</row>
+			</rows>
+		</grid>
+	</vlayout>
+</zk>
