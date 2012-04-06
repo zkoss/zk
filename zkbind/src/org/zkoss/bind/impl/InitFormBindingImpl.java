@@ -44,7 +44,7 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 	}
 
 	public void load(BindContext ctx) {
-		final Component comp = getComponent();//ctx.getComponent();
+		final Component comp = getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		final Binder binder = getBinder();
 		//get data from property
@@ -53,8 +53,9 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 			final Form form = getFormBean();
 			if(form instanceof FormExt){
 				FormExt fex = (FormExt)form;
-				//sets the last loaded bean class
-				fex.setAttribute(LOADED_BEAN_CLASS, value==null?null:value.getClass());
+				//ZK-1005 ZK 6.0.1 validation fails on nested bean
+				//sets the last loaded bean express of the form
+				comp.setAttribute(BinderImpl.LOAD_FORM_EXPRESSION, getPropertyString());
 				
 				for (String field : fex.getLoadFieldNames()) {
 					final ExpressionX expr = getFieldExpression(eval, field);

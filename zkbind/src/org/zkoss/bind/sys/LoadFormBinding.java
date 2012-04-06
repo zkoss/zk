@@ -19,9 +19,4 @@ package org.zkoss.bind.sys;
  * @since 6.0.0
  */
 public interface LoadFormBinding extends FormBinding, LoadBinding {
-	/**
-	 * The attribute name of a loaded bean class, internal use only
-	 * @since 6.0.1
-	 */
-	public static final String LOADED_BEAN_CLASS = "$LOADED_BEAN_CLASS$";
 }

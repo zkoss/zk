@@ -34,7 +34,6 @@ import org.zkoss.lang.Objects;
 public class FormImpl implements Form,FormExt,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	
-	private final Map<String, Object> _attrs; //custom attributes
 	private final Set<String> _saveFieldNames; //field name for saving
 	private final Set<String> _loadFieldNames; //field name for loading
 	private final Map<String, Object> _fields; //field series -> value
@@ -51,7 +50,6 @@ public class FormImpl implements Form,FormExt,Serializable {
 		_loadFieldNames = new LinkedHashSet<String>(INIT_CAPACITY);
 		_dirtyFieldNames = new HashSet<String>(INIT_CAPACITY);
 		_status = new FormStatusImpl();
-		_attrs = new HashMap<String, Object>();
 	}
 	
 	private class FormStatusImpl implements FormStatus,Serializable{
@@ -60,16 +58,6 @@ public class FormImpl implements Form,FormExt,Serializable {
 		public boolean isDirty() {
 			return FormImpl.this.isDirty();
 		}
-	}
-	
-	@Override
-	public Object getAttribute(String name) {
-		return _attrs.get(name);
-	}
-
-	@Override
-	public Object setAttribute(String name,Object value){
-		return value==null?_attrs.remove(name):_attrs.put(name, value);
 	}
 
 	public void setField(String field, Object value) {

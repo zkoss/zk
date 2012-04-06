@@ -54,6 +54,7 @@ ZK 6.0.1
   ZK-910: Cannot use the menupopup option of the grid to change the grouping
   ZK-956: setTooltip in a event cause IllegalStateException in ZK 6
   ZK-1017: Property of a form is not correct when validation
+  ZK-1005: Validation fails on nested bean
   
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
@@ -64,8 +65,6 @@ ZK 6.0.1
     org.zkoss.bind.Binder.addChildrenInitBinding() and addChildrenLoadBindings().
     You could pass null if you don't have a converter. Original methods are deprecated.
   + Syntax of zk bind2 RENDERER annotation is changed from 'render-attr=render-class' to 'render-attr:render-class'
-  + Added 2 methods (setAttribute() and getAttribute()) on org.zkoss.bind.FormExt to provide more features of Form.
-    You have to implement these 2 methods if you have any custom implementation.
   + Initial WebAppInit by org.zkoss.zk.ui.http.HttpSessionListener if Listener initiate first.
   + Some jars under /dist/lib/ext are updated, please refer to the Installation Ghide
     http://books.zkoss.org/wiki/ZK_Installation_Guide/ZK_Background/The_Content_of_ZK_Binary_Distribution

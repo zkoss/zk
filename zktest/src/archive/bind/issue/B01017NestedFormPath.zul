@@ -1,9 +1,11 @@
 <zk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zkoss.org/2005/zul/zul.xsd"
 	xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<label multiline="true">
-		1.you should see value1 is A 
-		2.edit on value1, set to Aa, you will not see Info changed 
-		4.click update, the Value should change to Aaaa and Msg changes to 'update Aa'
+		1.you should see value1 is A, value2 is B, value3 is C
+		2.edit on value1, set to Aa, info will change to value is Aa
+		3.edit on value2, set to Bb, info will change to value is Bb
+		4.edit on value3, set to Cc, info will change to value is Cc 
+		5.Click update, the Value should change to Aaaa and Msg changes to 'update value1:Aa,value2:Bb,value3:Cc'
 	</label>
 	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01017NestedFormPath')" 
 	validationMessages="@id('vmsgs')">

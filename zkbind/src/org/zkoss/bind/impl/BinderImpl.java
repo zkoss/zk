@@ -188,6 +188,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	
+	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$";//The attribute name of a loaded bean class, internal use only
+	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$";//The attribute name of a loaded bean class, internal use only
+	
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 
 	public static final String SAVE_BASE = "$SAVE_BASE$"; //bean base of a save operation
@@ -2043,7 +2046,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		reverseMap.put(saveBinding,bindings);
 		
 		//ZK-1017 Property of a form is not correct when validation
-		((SavePropertyBindingImpl)saveBinding).setFormInfo(formId, fieldName);
+		//ZK-1005 ZK 6.0.1 validation fails on nested bean
+		((SavePropertyBindingImpl)saveBinding).setFormFieldInfo(formComp, formId, fieldName);
 	}
 	
 	private Component lookupAossicatedFormComponent(String formId,Component associatedComp) {

@@ -20,10 +20,15 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.zkoss.bind.FormExt;
+import org.zkoss.bind.Binder;
+import org.zkoss.bind.Form;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
-import org.zkoss.bind.sys.LoadFormBinding;
+import org.zkoss.bind.impl.BinderImpl;
+import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.xel.ExpressionX;
+import org.zkoss.xel.ValueReference;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator for a property-binding.<p/>  
@@ -100,28 +105,47 @@ public class BeanValidator extends AbstractValidator {
 	}
 	
 	/**
-	 * Get the bean class of the base object. <br/>
+	 * Get the bean class of the base object and property to validate. <br/>
 	 * By default, if the base object is a form(implements FormExt), it returns the last loaded bean class of this form.<br/>
 	 * If the object is not a form, it returns the class of base object directly.
 	 * @param ctx the validation context
 	 * @param base the base object
-	 * @return the bean class of base object, never null
+	 * @param property the property to validate
+	 * @return a object array, the first item is the bean class of base object, 2nd item is the tuned property regards to the bean class
 	 * @since 6.0.1
 	 */
-	@SuppressWarnings("rawtypes")
-	protected Class getBeanClass(ValidationContext ctx, Object base){
+	
+	protected Object[] getValidationInfo(ValidationContext ctx, Object base, String property){
 		Class<?> clz = null;
-		if(base instanceof FormExt){
-			FormExt fex = (FormExt)base;
-			clz = (Class)fex.getAttribute(LoadFormBinding.LOADED_BEAN_CLASS); 
-			if(clz==null){
-				throw new NullPointerException("Bean class not found on the Form "+fex+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
+		if(base instanceof Form){
+			//ZK-1005 ZK 6.0.1 validation fails on nested bean
+			Component formComp = (Component)ctx.getBindContext().getAttribute(BinderImpl.LOAD_FORM_COMPONENT);//see SavePropertyBinding
+			if(formComp==null){
+				throw new NullPointerException("form component not found");
 			}
+			String loadexpr = (String) formComp.getAttribute(BinderImpl.LOAD_FORM_EXPRESSION);//see InitForm and LoadForm
+			if(loadexpr==null){
+				throw new NullPointerException("load expression not found on the Form "+base+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
+			}
+			
+			final String beanexpr = BindELContext.appendFields(loadexpr, property);
+			Binder binder = ctx.getBindContext().getBinder();
+			ExpressionX expr = binder.getEvaluatorX().parseExpressionX(null, beanexpr, Object.class);
+			
+			ValueReference vr = binder.getEvaluatorX().getValueReference(ctx.getBindContext(), formComp, expr);
+			
+			if(vr==null){
+				throw new NullPointerException("loaded instance not found on the Form "+base+", a bean validator doesn't support to validate a form that doesn't loads a bean yet");
+			}
+			
+			clz = vr.getBase().getClass();
+			property = vr.getProperty().toString();
+
 		}else{
 			clz = base.getClass();
 		}
 		
-		return clz;
+		return new Object[]{clz,property};
 	}
 	
 	/**
@@ -153,12 +177,14 @@ public class BeanValidator extends AbstractValidator {
 	public void validate(ValidationContext ctx) {
 		final Property p = ctx.getProperty();
 		final Object base = p.getBase();
-		final String name = p.getProperty();
+		String property = p.getProperty();
 		final Object value = p.getValue();
 		
-		Class<?> clz = getBeanClass(ctx, base);
+		Object[] info = getValidationInfo(ctx, base, property);
+		Class<?> clz = (Class<?>)info[0];
+		property = (String)info[1];
 		 
-		Set<ConstraintViolation<?>> violations = validate(clz, name, value);
+		Set<ConstraintViolation<?>> violations = validate(clz, property, value);
 		
 		handleConstraintViolation(ctx, violations);
 	}

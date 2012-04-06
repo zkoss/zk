@@ -64,8 +64,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		if(form instanceof FormExt){
 			FormExt fex = (FormExt)form;
-			//sets the last loaded bean class
-			fex.setAttribute(LOADED_BEAN_CLASS, bean==null?null:bean.getClass());
+			//ZK-1005 ZK 6.0.1 validation fails on nested bean
+			//sets the last loaded bean express of the form
+			comp.setAttribute(BinderImpl.LOAD_FORM_EXPRESSION, getPropertyString());
 			
 			for (String field : fex.getLoadFieldNames()) {
 				final ExpressionX expr = getFieldExpression(eval, field);

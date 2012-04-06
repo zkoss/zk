@@ -16,7 +16,7 @@ import java.util.Set;
 
 
 /**
- * An addition interface implemented with {@link Form} to provide
+ * An addition interface of {@link Form} to provide
  * more control.
  * @author dennis
  * @since 6.0.0
@@ -57,20 +57,4 @@ public interface FormExt {
 	 */
 	public void resetDirty();
 	
-	/**
-	 * Sets a custom attribute
-	 * @param name the attribute name
-	 * @param value the attribute value
-	 * @return the previous value
-	 * @since 6.0.1
-	 */
-	public Object setAttribute(String name,Object value);
-	
-	/**
-	 * Gets a custom attribute
-	 * @param name the attribute name
-	 * @return the attribute value
-	 * @since 6.0.1
-	 */
-	public Object getAttribute(String name);
 }

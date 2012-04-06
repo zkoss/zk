@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
-	private String[] _formInfo;
+	private FormFieldInfo _formFieldInfo;
 	
 	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveAttr, String saveExpr,
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
@@ -127,9 +128,9 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private ValueReference getValueReference(BindContext ctx){
 		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
 		if (ref == null) {
-			if (_formInfo != null) { //ZK-1017: Property of a form is not correct when validation
-				final Object form = getComponent().getAttribute(_formInfo[0], true);
-				final String fieldName = _formInfo[1];
+			if (_formFieldInfo != null) { //ZK-1017: Property of a form is not correct when validation
+				final Object form = getComponent().getAttribute(_formFieldInfo._id, true);
+				final String fieldName = _formFieldInfo._fieldName;
 				ref = new org.zkoss.xel.zel.ELXelExpression.ValueReferenceImpl(form, fieldName);
 			} else {
 				final Component comp = getComponent();//ctx.getComponent();
@@ -143,8 +144,13 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 
 	//ZK-1017: Property of a form is not correct when validation
 	//@see BinderImpl#addFormAssociatedSaveBinding
-	/*package*/ void setFormInfo(String formId, String fieldName) {
-		_formInfo = new String[] {formId, fieldName};
+	/*package*/ void setFormFieldInfo(Component formComp, String formId, String fieldName) {
+		if(_formFieldInfo==null){
+			_formFieldInfo = new FormFieldInfo();
+		}
+		_formFieldInfo._component = formComp;
+		_formFieldInfo._id = formId;
+		_formFieldInfo._fieldName = fieldName;
 	}
 
 	//--SaveBinding--//
@@ -179,6 +185,11 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		if(validator == null){
 			throw new NullPointerException("cannot find validator for "+this);
 		}
+		//ZK-1005 ZK 6.0.1 validation fails on nested bean
+		if(_formFieldInfo!=null){
+			vctx.getBindContext().setAttribute(BinderImpl.LOAD_FORM_COMPONENT, _formFieldInfo._component);
+		}
+		
 		validator.validate(vctx);
 		//collect notify change
 		collectNotifyChange(validator,vctx);
@@ -205,5 +216,14 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			//ignore
 		}
 		return null; //shall never come here
+	}
+	
+	//ZK-1005 ZK 6.0.1 validation fails on nested bean
+	private static class FormFieldInfo implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		private Component _component;
+		private String _fieldName;
+		private String _id;
 	}
 }
