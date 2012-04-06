@@ -38,21 +38,21 @@ public class SimpleSessionCache implements SessionCache {
 
 	public void put(Session sess) {
 		final Object navsess = sess.getNativeSession();
-		if (navsess instanceof HttpSession)
-			((HttpSession)navsess).setAttribute(Attributes.ZK_SESSION, sess);
-		else
+		if (navsess instanceof PortletSession)
 			((PortletSession)navsess).setAttribute(Attributes.ZK_SESSION, sess, PortletSession.APPLICATION_SCOPE);
+		else
+			((HttpSession)navsess).setAttribute(Attributes.ZK_SESSION, sess);
 	}
 	public Session get(Object navsess) {
-		return (Session)(navsess instanceof HttpSession ?
-			((HttpSession)navsess).getAttribute(Attributes.ZK_SESSION):
-			((PortletSession)navsess).getAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE));
+		return (Session)(navsess instanceof PortletSession ?
+				((PortletSession)navsess).getAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE):
+			((HttpSession)navsess).getAttribute(Attributes.ZK_SESSION));
 	}
 	public void remove(Session sess) {
 		final Object navsess = sess.getNativeSession();
-		if (navsess instanceof HttpSession)
-			((HttpSession)navsess).removeAttribute(Attributes.ZK_SESSION);
-		else
+		if (navsess instanceof PortletSession)
 			((PortletSession)navsess).removeAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE);
+		else
+			((HttpSession)navsess).removeAttribute(Attributes.ZK_SESSION);
 	}
 }
