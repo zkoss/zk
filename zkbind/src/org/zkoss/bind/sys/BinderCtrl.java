@@ -45,8 +45,10 @@ public interface BinderCtrl {
 	 * @param associatedComp associated component inside a form binding
 	 * @param formId the form id
 	 * @param saveBinding the nested save binding in side a form binding
+	 * @param fieldName the associated form fieldName for the associated save binding
+	 * @since 6.0.1
 	 */
-	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding);
+	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding, String fieldName);
 	
 	/**
 	 * Get associated save bindings of a form in a component

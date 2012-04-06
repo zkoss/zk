@@ -41,6 +41,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
+	private String[] _formInfo;
 	
 	public SavePropertyBindingImpl(Binder binder, Component comp, String attr, String saveAttr, String saveExpr,
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs, 
@@ -126,12 +127,24 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private ValueReference getValueReference(BindContext ctx){
 		ValueReference ref = (ValueReference) getAttribute(ctx, $VALUEREF$);
 		if (ref == null) {
-			final Component comp = getComponent();//ctx.getComponent();
-			final BindEvaluatorX eval = getBinder().getEvaluatorX();
-			ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
+			if (_formInfo != null) { //ZK-1017: Property of a form is not correct when validation
+				final Object form = getComponent().getAttribute(_formInfo[0], true);
+				final String fieldName = _formInfo[1];
+				ref = new org.zkoss.xel.zel.ELXelExpression.ValueReferenceImpl(form, fieldName);
+			} else {
+				final Component comp = getComponent();//ctx.getComponent();
+				final BindEvaluatorX eval = getBinder().getEvaluatorX();
+				ref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
+			}
 			setAttribute(ctx, $VALUEREF$, ref);
 		}
 		return ref;
+	}
+
+	//ZK-1017: Property of a form is not correct when validation
+	//@see BinderImpl#addFormAssociatedSaveBinding
+	/*package*/ void setFormInfo(String formId, String fieldName) {
+		_formInfo = new String[] {formId, fieldName};
 	}
 
 	//--SaveBinding--//

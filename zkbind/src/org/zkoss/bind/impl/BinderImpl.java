@@ -2020,7 +2020,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	@Override
-	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding){
+	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding, String fieldName){
 		checkInit();
 		//find the form component by form id and a associated/nested component
 		Component formComp = lookupAossicatedFormComponent(formId,associatedComp);
@@ -2041,6 +2041,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
 		}
 		reverseMap.put(saveBinding,bindings);
+		
+		//ZK-1017 Property of a form is not correct when validation
+		((SavePropertyBindingImpl)saveBinding).setFormInfo(formId, fieldName);
 	}
 	
 	private Component lookupAossicatedFormComponent(String formId,Component associatedComp) {

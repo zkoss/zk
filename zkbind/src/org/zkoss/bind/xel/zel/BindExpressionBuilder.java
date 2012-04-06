@@ -96,7 +96,7 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 						if(formBean instanceof FormExt){
 							((FormExt)formBean).addSaveFieldName(fieldName);
 						}
-						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop,(SavePropertyBinding)binding);
+						((BinderCtrl)binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding)binding, fieldName);
 					} else if (binding instanceof LoadPropertyBinding) {
 						if(_log.debugable()){
 							_log.debug("add load-filed %s to form %s", fieldName,formBean);

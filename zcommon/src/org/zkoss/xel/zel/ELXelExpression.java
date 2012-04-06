@@ -29,7 +29,7 @@ import org.zkoss.zel.ValueExpression;
  */
 public class ELXelExpression implements ExpressionX, java.io.Serializable {
 	private static final long serialVersionUID = 5843639871525015820L;
-	private final ValueExpression _expr;
+	protected final ValueExpression _expr;
 
 	public ELXelExpression(ValueExpression expr) {
 		_expr = expr;
@@ -67,7 +67,7 @@ public class ELXelExpression implements ExpressionX, java.io.Serializable {
 		return new XelELContext(xelc);
 	}
 	
-	private static class ValueReferenceImpl implements ValueReference, java.io.Serializable {
+	public static class ValueReferenceImpl implements ValueReference, java.io.Serializable {
 	    private static final long serialVersionUID = 201109141039L;
 	    
 	    private final Object _base;

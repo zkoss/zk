@@ -53,6 +53,7 @@ ZK 6.0.1
   ZK-1013: Component.queryAll() shall return Iterable<Component> instead of List<Component> for better performance
   ZK-910: Cannot use the menupopup option of the grid to change the grouping
   ZK-956: setTooltip in a event cause IllegalStateException in ZK 6
+  ZK-1017: Property of a form is not correct when validation
   
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
