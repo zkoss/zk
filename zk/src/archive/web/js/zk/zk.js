@@ -170,7 +170,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (tobak)
 					subpt['$'+nm] = oldfn; // B50-ZK-493
 				subpt[nm] = newfn;
-				_overrideSub(subpt, nm, oldfn, newfn); //recursive
+				_overrideSub(subpt, nm, oldfn, newfn, tobak); //recursive
 			}
 		}
 	}
