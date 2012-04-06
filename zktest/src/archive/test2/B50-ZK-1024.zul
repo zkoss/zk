@@ -1,0 +1,30 @@
+<!--
+	B60-ZK-1024.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Apr 6 10:26:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Firefox 10-12 only.
+	</div>
+	<div>
+		The columns and row cells should align.
+	</div>
+	<listbox vflex="true">
+		<listhead>
+			<listheader label="col" width="30px" />
+			<listheader label="col" hflex="1" />
+			<listheader label="col" hflex="1" />
+		</listhead>
+		<listitem forEach="1,2,3,4,5">
+			<listcell forEach="1,2,3" label="item ${each}" />
+		</listitem>
+	</listbox>
+</zk>

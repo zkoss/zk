@@ -724,19 +724,36 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_adjFlexWd: function () { //used by HeadWidget
-		var head = this.head;
-		if (!head) return;
-		var hdfaker = this.ehdfaker,
-			bdfaker = this.ebdfaker,
-			ftfaker = this.eftfaker,
-			headn = head.$n(),
-			i = 0;
-		for (var w = head.firstChild, wd; w; w = w.nextSibling) {
-			if ((wd = w._hflexWidth) !== undefined)
-				_setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
-			++i;
+		// start of ZK-922/ZK-1024: can remove after FF 13
+		var ff = zk.gecko,
+			ff_10_12 = ff > 9 && ff < 13,
+			ebody = this.ebody, 
+			h;
+		if (ff_10_12) {
+			if (ebody)
+				h = ebody.style.height;
+			if (h)
+				ebody.style.height = '';
 		}
-		_adjMinWd(this);
+		// end of ZK-922/ZK-1024
+		var head = this.head;
+		if (head) {
+			var hdfaker = this.ehdfaker,
+				bdfaker = this.ebdfaker,
+				ftfaker = this.eftfaker,
+				headn = head.$n(),
+				i = 0;
+			for (var w = head.firstChild, wd; w; w = w.nextSibling) {
+				if ((wd = w._hflexWidth) !== undefined)
+					_setFakerWd(i, wd, hdfaker, bdfaker, ftfaker, headn);
+				++i;
+			}
+			_adjMinWd(this);
+		}
+		// start of ZK-922/ZK-1024: can remove after FF 13
+		if (ff_10_12 && h)
+			ebody.style.height = h;
+		// end of ZK-922/ZK-1024
 	},
 	_bindDomNode: function () { //called by Treecell
 		for (var n = this.$n().firstChild; n; n = n.nextSibling)
