@@ -349,6 +349,22 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			rwd = $n.revisedWidth(wd),
 			cidx = $n.cellIndex();
 			
+		
+		// start of ZK-922/ZK-1024: can remove after FF 13
+		var ff = zk.gecko,
+			ff_10_12 = ff > 9 && ff < 13,
+			wgt = wgt.getMeshWidget(),
+			ebody = wgt && wgt.ebody , 
+			h;
+		if (ff_10_12 && ebody) {
+			if (ebody)
+				h = ebody.style.height;
+			if (h )
+				ebody.style.height = '';
+		}
+		// end of ZK-922/ZK-1024
+		
+		
 		// For Opera, the code of adjusting width must be in front of the adjusting table.
 		// Otherwise, the whole layout in Opera always shows wrong.
 		if (mesh.efoottbl) {
@@ -430,6 +446,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var redrawFix = meshn.offsetHeight;
 			meshn.style.display=olddisp;
 		}
+		
+	    // start of ZK-922/ZK-1024: can remove after FF 13
+  	   if (ff_10_12 && h && ebody)
+	      ebody.style.height = h;
+  	   // end of ZK-922/ZK-1024		
 		
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
