@@ -1,4 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1003.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr  09 15:50:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
 <zk>
+	<div>You should see two Toolbar below the 'Panel Content'</div>
 	<div height="400px" style="border: 1px solid red">
 		<panel vflex="1" border="normal" title="Panel" framable="true"
 			closable="true" maximizable="true" minimizable="true" collapsible="true">

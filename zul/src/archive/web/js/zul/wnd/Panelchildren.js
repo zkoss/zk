@@ -55,9 +55,11 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	},
 	// bug for B50-3312936.zul
 	getParentSize_: function (p) {
+		// ZK-1003
+		var zkp = zk(p);
 		return {
-			height: this.parent._offsetHeight(this.parent.$n(), true),
-			width: zk(p).revisedWidth(p.offsetWidth)
+			height: zkp.revisedHeight(p.offsetHeight),
+			width: zkp.revisedWidth(p.offsetWidth)
 		};
 	}
 });
