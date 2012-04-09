@@ -375,6 +375,16 @@ abstract public class XulElement extends HtmlBasedComponent {
 			}
 		}
 		
+		public int hashCode() {
+			if(popupString != null) {
+				return popupString.hashCode();
+			}else if(popup != null){
+				return popup.hashCode();
+			}else{
+				return super.hashCode();
+			}
+		}
+		
 		public boolean equals(Object obj) {
 			
 			if(obj instanceof String){
