@@ -315,6 +315,7 @@ ZK 5.0.12
   ZK-1024: The row of the listbox are not aligned with the head (Firefox 11 only)
   ZK-979: Listbox sizable fail when set height attribute (Firefox 11.0 only)
   ZK-1029: Send a ajax request with webshpere portal server will cause session timeout
+
 	--------
 ZK 5.0.11
 Mar 27, 2012
