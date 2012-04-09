@@ -16,12 +16,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.http.HttpSession;
-import javax.portlet.PortletSession;
-
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.SessionCache;
 
 /**
@@ -37,22 +33,12 @@ public class SimpleSessionCache implements SessionCache {
 	}
 
 	public void put(Session sess) {
-		final Object navsess = sess.getNativeSession();
-		if (navsess instanceof PortletSession)
-			((PortletSession)navsess).setAttribute(Attributes.ZK_SESSION, sess, PortletSession.APPLICATION_SCOPE);
-		else
-			((HttpSession)navsess).setAttribute(Attributes.ZK_SESSION, sess);
+		SessionAgent.agent.put(sess);
 	}
 	public Session get(Object navsess) {
-		return (Session)(navsess instanceof PortletSession ?
-				((PortletSession)navsess).getAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE):
-			((HttpSession)navsess).getAttribute(Attributes.ZK_SESSION));
+		return SessionAgent.agent.get(navsess);
 	}
 	public void remove(Session sess) {
-		final Object navsess = sess.getNativeSession();
-		if (navsess instanceof PortletSession)
-			((PortletSession)navsess).removeAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE);
-		else
-			((HttpSession)navsess).removeAttribute(Attributes.ZK_SESSION);
+		SessionAgent.agent.remove(sess);
 	}
 }
