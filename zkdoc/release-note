@@ -57,6 +57,7 @@ ZK 6.0.1
   ZK-956: setTooltip in a event cause IllegalStateException in ZK 6
   ZK-1017: Property of a form is not correct when validation
   ZK-1005: Validation fails on nested bean
+  ZK-1007: A tree is rendered twice while onInitModel and onInitRender events
   
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

@@ -1,0 +1,18 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<zk>
+<h:pre xmlns:h="html">
+	Check Render items:
+		if items is 2 that's right  , if items is 4 , that's wrong.
+		
+</h:pre>
+<div id="treeDiv" apply="org.zkoss.zktest.test2.B60_ZK_1007_TreeComposer">
+  <label id="lbl" />
+    <tree id="treeGrid" width="550px" treeitemRenderer="@{treeDiv$composer.treeRenderer}" model="@{treeDiv$composer.treeModel}" >
+        <treecols>
+            <treecol width="200px" label="Path" />
+            <treecol width="350px" label="Description" />
+        </treecols>
+    </tree>
+    <label id="result" />
+</div>
+</zk>

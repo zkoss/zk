@@ -226,7 +226,6 @@ public class Tree extends MeshElement {
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) {
-			Executions.getCurrent().setAttribute("zkoss.Tree.deferInitModel_"+getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Tree(must be as early as possible)
 			addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this));
@@ -242,19 +241,15 @@ public class Tree extends MeshElement {
 				_modelInitListener = null;
 			}
 			if (_model != null) { //rows not created yet
-				if (_treechildren == null) {
-					renderTree();
-				} else
-					initModel();
-			} else {
-				//bug# 3039282: NullPointerException when assign a model to Grid at onCreate
-				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
-				Executions.getCurrent().removeAttribute("zkoss.Tree.deferInitModel_"+getUuid());
+				//ZK-1007 Left the job to onInitRenderer if exist
+				if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) { 
+					if (_treechildren == null) {
+						renderTree();
+					} else{
+						setModel(_model);
+					}
+				}
 			}
-		}
-		private void initModel() {
-			Executions.getCurrent().removeAttribute("zkoss.Tree.deferInitModel_"+getUuid());
-			setModel(_model);
 		}
 		
 		@Override
