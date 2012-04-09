@@ -428,7 +428,7 @@ public class Events {
 	public static final void postEvent(int priority,
 	String name, Component target, Object data) {
 		if (name == null || name.length() == 0 || target == null)
-			throw new IllegalArgumentException("null");
+			throw new IllegalArgumentException("Name is empty or target is null.");
 		postEvent(priority, new Event(name, target, data));
 	}
 
@@ -494,7 +494,7 @@ public class Events {
 	 */
 	public static final void echoEvent(String name, Component target, Object data) {
 		if (name == null || name.length() == 0 || target == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Name is empty or target is null.");
 
 		Clients.response(new AuEcho(target, name, data));
 	}
