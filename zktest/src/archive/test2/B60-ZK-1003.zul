@@ -1,0 +1,13 @@
+<zk>
+	<div height="400px" style="border: 1px solid red">
+		<panel vflex="1" border="normal" title="Panel" framable="true"
+			closable="true" maximizable="true" minimizable="true" collapsible="true">
+			<toolbar mold="panel">Toolbar</toolbar>
+			<panelchildren>
+				Panel Content
+			</panelchildren>
+			<toolbar>Toolbar</toolbar>
+			<toolbar mold="panel">Toolbar</toolbar>
+		</panel>
+	</div>
+</zk>
