@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1034.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 09 12:25:05 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>Click the 'end' button of horizontal scroll bar.</div>
+	<div>You should see Header x = 1999 and horizontal scroll bar should not disappeared.</div>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		import org.zkoss.util.*;
+		
+		FakerMatrixModel BigData = new FakerMatrixModel(2000, 2);
+	]]></zscript>
+	<div hflex="1" vflex="1">
+		<biglistbox id="biglist" frozenCols="2" hflex="1" vflex="1" colWidth="130px" model="${BigData}">
+		</biglistbox>
+	</div>
+</zk>
