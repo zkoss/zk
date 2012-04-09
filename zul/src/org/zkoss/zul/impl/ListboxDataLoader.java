@@ -69,7 +69,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 	
 	public int getLimit() {
-		return _listbox.getRows() > 0 ? _listbox.getRows() + 5 : 20;
+		return _listbox.getRows() > 0 ? _listbox.getRows() + 5 : 50;
 	}
 
 	public int getTotalSize() {

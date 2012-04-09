@@ -69,7 +69,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 	
 	public int getLimit() {
-		return 20;
+		return 50;
 	}
 
 	public int getTotalSize() {

@@ -71,6 +71,7 @@ ZK 6.0.1
     http://books.zkoss.org/wiki/ZK_Installation_Guide/ZK_Background/The_Content_of_ZK_Binary_Distribution
   + Binder.init(Component root,Object viewModel) is deprecated, 
     please use Binder.init(Component root,Object viewModel,Map<String, Object> initArgs) instead.
+  + The preloadSize and initRodSize of Listbox and Grid change to 50 items by default.
 
 	--------
 ZK 6.0.0

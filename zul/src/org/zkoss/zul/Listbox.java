@@ -266,7 +266,7 @@ public class Listbox extends MeshElement {
 	private static final Log log = Log.lookup(Listbox.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = "org.zkoss.zul.onPagingInitPosted";
-	private static final int INIT_LIMIT = 100;
+	private static final int INIT_LIMIT = 50;
 
 	private transient DataLoader _dataLoader;
 	private transient List<Listitem> _items;
@@ -306,7 +306,7 @@ public class Listbox extends MeshElement {
 	private String _scOddRow = null;
 	private int _tabindex;
 	/** the # of rows to preload. */
-	private int _preloadsz = 7;
+	private int _preloadsz = 50;
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	private int _currentTop = 0; // since 5.0.0 scroll position
@@ -2387,7 +2387,7 @@ public class Listbox extends MeshElement {
 	 * request from the client.
 	 *
 	 * <p>
-	 * Default: 7.
+	 * Default: 50. (Since 6.0.1)
 	 *
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
@@ -3230,7 +3230,7 @@ public class Listbox extends MeshElement {
 	 * Returns the number of items to preload when receiving the rendering
 	 * request from the client.
 	 * <p>
-	 * Default: 7.
+	 * Default: 50. (Since 6.0.1)
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.
@@ -3248,7 +3248,7 @@ public class Listbox extends MeshElement {
 	/** 
 	 * Returns the number of items rendered when the Listbox first render.
 	 *  <p>
-	 * Default: 100.
+	 * Default: 50. (Since 6.0.1)
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.

@@ -217,7 +217,7 @@ public class Grid extends MeshElement {
 	private static final String ATTR_ON_PAGING_INIT_RENDER_POSTED = 
 		"org.zkoss.zul.Grid.onPagingInitLaterPosted";
 
-	private static final int INIT_LIMIT = 100;
+	private static final int INIT_LIMIT = 50;
 
 	private transient DataLoader _dataLoader;
 	private transient Rows _rows;
@@ -240,7 +240,7 @@ public class Grid extends MeshElement {
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
 	/** the # of rows to preload. */
-	private int _preloadsz = 7;
+	private int _preloadsz = 50;
 	private String _innerWidth = "100%";
 	private int _currentTop = 0; //since 5.0.0 scroll position
 	private int _currentLeft = 0;
@@ -786,7 +786,7 @@ public class Grid extends MeshElement {
 	 * Returns the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 *
-	 * <p>Default: 7.
+	 * <p>Default: 50. (since 6.0.1)
 	 *
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
 	 * not paging ({@link #getPagingChild}.
@@ -1287,7 +1287,7 @@ public class Grid extends MeshElement {
 	 * Returns the number of rows to preload when receiving the rendering
 	 * request from the client.
 	 * <p>
-	 * Default: 7.
+	 * Default: 50. (since 6.0.1)
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.
@@ -1305,7 +1305,7 @@ public class Grid extends MeshElement {
 	/** 
 	 * Returns the number of rows rendered when the Grid first render.
 	 *  <p>
-	 * Default: 100.
+	 * Default: 50. (since 6.0.1)
 	 * <p>
 	 * It is used only if live data ({@link #setModel(ListModel)} and not paging
 	 * ({@link #getPagingChild}.
