@@ -17,6 +17,7 @@ ZK 6.0.1
   ZK-1019: Provide an extra layer of DIV on Window/Panel buttons 
   ZK-1028: Add Chosenbox to handle multiple selection
   ZK-1003: Panel vflex wrong with toolbar
+  ZK-882: Add the ComponentInfo to the id generator
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

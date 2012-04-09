@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
  * @author tomyeh
  */
 abstract public class AbstractUiFactory implements UiFactory {
+	
 	//-- UiFactory --//
 	public void start(WebApp wapp) {
 	}
@@ -90,7 +91,9 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo, Component insertBefore) {
 		final Component comp = compInfo.newInstance(page, parent);
-
+		
+		//F60-ZK-822 Attribute be used in DesktopImppl.
+		comp.setAttribute( "org.zkoss.compinfo", compInfo);
 		if (parent != null)
 			parent.insertBefore(comp, insertBefore);
 		else
@@ -99,6 +102,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (comp instanceof BeforeCompose)
 			((BeforeCompose)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
+		comp.removeAttribute( "org.zkoss.compinfo");
 		return comp;
 	}
 	public Component newComponent(Page page, Component parent,

@@ -1,0 +1,20 @@
+<!-- 
+	20120409 TonyQ
+ -->
+ 
+ <zk>
+ 	<h:pre xmlns:h="html" >
+ 		For developer test only , this one can't be ZTL testing. 
+ 		
+ 		1.You have to enable the uuid generator in zk.xml.
+ 		(Find org.zkoss.zktest.test2.F60_882_IDGenerator ,uncomment it and restart the server.)
+ 	
+ 		2.the uuid below should show up "test_Hi" instead of default UUID ,attr should be null.  
+ 	</h:pre>
+	 <div id="test">
+	 	<label id="hello"></label>
+	 </div>
+	 <zscript>
+	 	hello.setValue("uuid is:"+test.getUuid()+"  Attr:"+test.getAttribute("org.zkoss.compinfo"));
+	 </zscript>
+ </zk>

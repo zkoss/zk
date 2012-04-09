@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DesktopCleanup;
@@ -757,7 +758,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 
 		final IdGenerator idgen = ((WebAppCtrl)_wapp).getIdGenerator();
-		String uuid = idgen != null ? idgen.nextComponentUuid(this, comp): null;
+		
+		String uuid = idgen != null ? idgen.nextComponentUuid(this, comp, (ComponentInfo) comp.getAttribute("org.zkoss.compinfo")): null;
 		if (uuid == null)
 			return nextUuid();
 

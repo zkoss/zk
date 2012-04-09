@@ -16,9 +16,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
  * Used to generate UUID of components and pages and ID of desktops.
@@ -55,7 +56,7 @@ public interface IdGenerator {
 	 * default UUID.<br/>
 	 * Note: don't return an UUID containing ':'.
 	 */
-	public String nextComponentUuid(Desktop desktop, Component comp);
+	public String nextComponentUuid(Desktop desktop, Component comp, ComponentInfo compInfo );
 	/** Returns the next page UUID for the specified page,
 	 * or null to generate the default UUID.
 	 *
