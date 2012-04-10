@@ -9,6 +9,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.sys.IdGenerator;
 
 public class SequenceIdGenerator implements IdGenerator{
@@ -16,7 +17,7 @@ public class SequenceIdGenerator implements IdGenerator{
 	
 	
 	
-	public String nextComponentUuid(Desktop desktop, Component comp) {
+	public String nextComponentUuid(Desktop desktop, Component comp, ComponentInfo info) {
 		
 		Map<String,Integer> idcmap = (Map<String,Integer>)desktop.getAttribute("__sidg_idhash");
 		if(idcmap==null){
