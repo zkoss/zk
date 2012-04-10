@@ -105,7 +105,7 @@
 	color: #363636;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
-	font-weight: normal;
+	font-weight: bold;
 	padding: 4px 5px;
 	border: 0 none;
 	background: transparent;
