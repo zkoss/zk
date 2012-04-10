@@ -16,81 +16,85 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Collections;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
-import java.util.HashSet;
 
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Objects;
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
-import org.zkoss.io.Serializables;
-
-import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ComponentNotFoundException;
-import org.zkoss.zk.ui.DesktopUnavailableException;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.DesktopCleanup;
-import org.zkoss.zk.ui.util.ExecutionCleanup;
-import org.zkoss.zk.ui.util.ExecutionInit;
-import org.zkoss.zk.ui.util.UiLifeCycle;
-import org.zkoss.zk.ui.util.Monitor;
-import org.zkoss.zk.ui.util.DesktopSerializationListener;
-import org.zkoss.zk.ui.util.DesktopActivationListener;
-import org.zkoss.zk.ui.util.EventInterceptor;
-import org.zkoss.zk.ui.util.ExecutionMonitor;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.ScopeListener;
-import org.zkoss.zk.ui.ext.RawId;
-import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.RequestQueue;
-import org.zkoss.zk.ui.sys.DesktopCache;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.sys.IdGenerator;
-import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.ui.sys.Scheduler;
-import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.sys.Visualizer;
-import org.zkoss.zk.ui.sys.Attributes;
-import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.device.Device;
-import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.DeviceNotFoundException;
+import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.BookmarkEvent;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.RawId;
+import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.Attributes;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.RequestQueue;
+import org.zkoss.zk.ui.sys.Scheduler;
+import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.Visualizer;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.DesktopActivationListener;
+import org.zkoss.zk.ui.util.DesktopCleanup;
+import org.zkoss.zk.ui.util.DesktopSerializationListener;
+import org.zkoss.zk.ui.util.EventInterceptor;
+import org.zkoss.zk.ui.util.ExecutionCleanup;
+import org.zkoss.zk.ui.util.ExecutionInit;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
+import org.zkoss.zk.ui.util.Monitor;
+import org.zkoss.zk.ui.util.UiLifeCycle;
 
 /**
  * The implementation of {@link Desktop}.
@@ -758,14 +762,45 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 
 		final IdGenerator idgen = ((WebAppCtrl)_wapp).getIdGenerator();
-		
-		String uuid = idgen != null ? idgen.nextComponentUuid(this, comp, (ComponentInfo) comp.getAttribute("org.zkoss.compinfo")): null;
+		String uuid = null;
+		if(idgen != null){
+			try{
+				ComponentInfo info = getComponentInfoFromExecution(comp);
+				uuid = idgen.nextComponentUuid(this, comp, info);		
+			}catch(AbstractMethodError ex){
+				try {
+					Method method = idgen.getClass().getMethod("nextComponentUuid", Desktop.class,Component.class);
+					uuid = (String) method.invoke(idgen,this,comp);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
 		if (uuid == null)
 			return nextUuid();
 
 		ComponentsCtrl.checkUuid(uuid);
 		return uuid;
 	}
+	/**
+	 * 
+	 * @param comp
+	 * @return
+	 */
+	private ComponentInfo getComponentInfoFromExecution(Component comp){
+		ComponentInfo result = null;
+		final Execution exec = Executions.getCurrent();
+		if(exec == null){
+			return null;
+		}
+		Map<Component,ComponentInfo> info = (Map<Component,ComponentInfo>  ) 
+			exec.getAttribute(org.zkoss.zk.ui.impl.Attributes.COMPONENT_INFO);
+		if(info == null){
+			return null;
+		}
+		return (ComponentInfo) info.get(comp);
+	}
+	
 	private String nextUuid() {
 		return ComponentsCtrl.toAutoId(_uuidPrefix, _nextUuid++);
 	}

@@ -52,7 +52,9 @@ public interface IdGenerator {
 	 *
 	 * @param desktop the current desktop (never null)
 	 * @param comp the component (never null)
+	 * @param compInfo Providing Properties from tag attributes ,null if you initialize a component manually. 
 	 * @return the next component UUID, or null to generate the
+	 * @since 6.0.1
 	 * default UUID.<br/>
 	 * Note: don't return an UUID containing ':'.
 	 */

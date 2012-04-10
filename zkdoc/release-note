@@ -76,7 +76,8 @@ ZK 6.0.1
   + Binder.init(Component root,Object viewModel) is deprecated, 
     please use Binder.init(Component root,Object viewModel,Map<String, Object> initArgs) instead.
   + The preloadSize and initRodSize of Listbox and Grid change to 50 items by default.
-
+  + IdGenerator provides ComponentInfo when rendering component UUID now,please update your IdGenerator if exist.
+  
 	--------
 ZK 6.0.0
 Feb 14, 2012

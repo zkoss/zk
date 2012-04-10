@@ -16,29 +16,32 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.io.Reader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.idom.Document;
-
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.BeforeCompose;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.util.Composer;
 
 /**
  * The sketetal implementation of {@link UiFactory}.
@@ -88,12 +91,25 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
 		return new PageImpl(richlet, path);
 	}
+	private Map<Component,ComponentInfo> getInfoMap(){
+		Execution exec = Executions.getCurrent();
+		if(exec == null ){
+			return null;
+		}
+		Map<Component,ComponentInfo> result = (Map<Component,ComponentInfo>) exec.getAttribute("org.zkoss.compinfo");
+		if(result == null){
+			result = new HashMap<Component,ComponentInfo>();
+			exec.setAttribute( Attributes.COMPONENT_INFO, result);
+		}
+		return result;
+	}
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo, Component insertBefore) {
 		final Component comp = compInfo.newInstance(page, parent);
+		Map<Component,ComponentInfo> map = getInfoMap();
+		if(map != null)
+			map.put(comp, compInfo);
 		
-		//F60-ZK-822 Attribute be used in DesktopImppl.
-		comp.setAttribute( "org.zkoss.compinfo", compInfo);
 		if (parent != null)
 			parent.insertBefore(comp, insertBefore);
 		else
@@ -102,7 +118,9 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if (comp instanceof BeforeCompose)
 			((BeforeCompose)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
-		comp.removeAttribute( "org.zkoss.compinfo");
+		
+		if(map != null)
+			map.remove(comp);
 		return comp;
 	}
 	public Component newComponent(Page page, Component parent,
