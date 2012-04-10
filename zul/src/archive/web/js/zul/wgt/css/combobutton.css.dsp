@@ -89,11 +89,11 @@ span.z-combobutton-tbbtn {
 .z-combobutton .z-combobutton-tr,
 .z-combobutton .z-combobutton-cr,
 .z-combobutton .z-combobutton-br {
-	width: 21px;
+	width: 17px;
 	padding: 0;
 	margin: 0;
 	background-repeat: no-repeat;
-	background-position: 0 0;
+	background-position: -4px 0;
 	border-left: 1px solid #CCCCCC;
 }
 .z-combobutton .z-combobutton-tl, 
@@ -112,11 +112,11 @@ span.z-combobutton-tbbtn {
 	background-position: -16px 0;
 }
 .z-combobutton-focus .z-combobutton-tr {
-	background-position: 0 -16px;
+	background-position: -4px -16px;
 }
 .z-combobutton-focus .z-combobutton-cr,
 .z-combobutton-tbbtn-focus .z-combobutton-tbbtn-cr {
-	background-position: -42px 0;
+	background-position: -46px 0;
 }
 .z-combobutton-over .z-combobutton-tl,
 .z-combobutton-over .z-combobutton-cl {
@@ -127,11 +127,11 @@ span.z-combobutton-tbbtn {
 	border-left: 1px solid #8FB9D0;
 }
 .z-combobutton-over .z-combobutton-tr {
-	background-position: 0 -8px;
+	background-position: -4px -8px;
 }
 .z-combobutton-over .z-combobutton-cr,
 .z-combobutton-tbbtn-over .z-combobutton-tbbtn-cr {
-	background-position: -21px 0;
+	background-position: -25px 0;
 }
 .z-combobutton-clk .z-combobutton-tl,
 .z-combobutton-clk .z-combobutton-cl {
@@ -139,40 +139,42 @@ span.z-combobutton-tbbtn {
 }
 .z-combobutton-clk .z-combobutton-tr,
 .z-combobutton-clk .z-combobutton-cr {
-	background-position: 0 -24px;
-	border-color: #86A4BE;
+	background-position: -4px -24px;
+	border-color: #499EB3;
 }
 .z-combobutton-clk .z-combobutton-cr {
-	background-position: -63px 0;
+	background-position: -67px 0;
 }
 .z-combobutton .z-combobutton-cl {
 	text-align: right;
 }
 
 <%-- bl, br --%>
-.z-combobutton .z-combobutton-bl,
-.z-combobutton .z-combobutton-br {
+.z-combobutton .z-combobutton-bl {
 	background-position: 0 -4px;
+}
+.z-combobutton .z-combobutton-br {
+	background-position: -4px -4px;
 }
 .z-combobutton-focus .z-combobutton-bl {
 	background-position: -16px -4px;
 }
 .z-combobutton-focus .z-combobutton-br {
-	background-position: 0 -20px;
+	background-position: -4px -20px;
 }
 .z-combobutton-over .z-combobutton-bl {
 	background-position: -8px -4px;
 }
 .z-combobutton-over .z-combobutton-br {
-	background-position: 0 -12px;
+	background-position: -4px -12px;
 	border-left: 1px solid #8FB9D0;
 }
 .z-combobutton-clk .z-combobutton-bl {
 	background-position: -24px -4px;
 }
 .z-combobutton-clk .z-combobutton-br {
-	background-position: 0 -28px;
-	border-color: #86A4BE;
+	background-position: -4px -28px;
+	border-color: #499EB3;
 }
 
 <%-- tm, bm --%>
@@ -227,12 +229,11 @@ span.z-combobutton-tbbtn {
 	background-position: 0 -1500px;
 	padding: 0 6px 0 8px;
 }
-.z-combobutton .z-combobutton-cr .z-combobutton-btn-img,
-.z-combobutton-tbbtn .z-combobutton-tbbtn-cr .z-combobutton-tbbtn-btn-img {
+.z-combobutton .z-combobutton-cr .z-combobutton-btn-img {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/combobutton-right-btn.gif')});
-	background-position: 2px 0;
+	background-position: 0 -4px;
 	width: 14px !important;
-	height: 22px;
+	height: 15px;
 	background-repeat: no-repeat;
 }
 
@@ -250,6 +251,8 @@ span.z-combobutton-tbbtn {
 	zoom: 1;
 }
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr .z-combobutton-tbbtn-btn-img {
+	background-repeat: no-repeat;
+	background-image: url(${c:encodeThemeURL('~./zul/img/button/combobutton-right-btn.gif')});
 	width: 10px !important;
 	height: 18px;
 	background-position: -2px -3px;
