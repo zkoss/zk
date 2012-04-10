@@ -255,6 +255,10 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-doublespinner-focus .z-doublespinner-btn-clk, .z-doublespinner .z-doublespinner-btn-clk {
 	background-position: -38px -1px;
 	border: 1px solid #94B9DA;
+}
+.z-combobox-focus .z-combobox-btn-clk, .z-combobox .z-combobox-btn-clk,
+.z-bandbox-focus .z-bandbox-btn-clk, .z-bandbox .z-bandbox-btn-clk,
+.z-datebox-focus .z-datebox-btn-clk, .z-datebox .z-datebox-btn-clk {
 	margin-left: -1px;
 }
 .z-combobox-focus .z-combobox-btn,
