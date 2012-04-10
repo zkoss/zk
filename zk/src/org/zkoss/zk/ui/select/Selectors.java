@@ -281,6 +281,7 @@ public class Selectors {
 	
 	/**
 	 * Subscribe member methods with {@link Subscribe} annotation in the controller object.
+	 * @since 6.0.1
 	 */
 	public static void subscribeEventQueues(final Object controller) {
 		subscribeEventQueues(controller, false);
