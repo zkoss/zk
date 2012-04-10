@@ -418,7 +418,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_dodropbtnup: function (evt) {
 		var zcls = this.getZclass();
 		
-		jq(this._currentbtn).removeClass(zcls + "-btn-clk");
+		jq(this.$n("btn")).removeClass(zcls + "-btn-clk");
 		if (!this.inRoundedMold()) {
 			jq(this._currentbtn).removeClass(zcls + "-btn-up-clk");
 			jq(this._currentbtn).removeClass(zcls + "-btn-down-clk");

@@ -113,9 +113,12 @@ zul.inp.RoundUtl = {
 		if (zk.ie6_ && node.style.width)
 			inp.style.width = '0px';
 	
-		var	width = this.getOuterWidth(wgt, wgt.inRoundedMold());
-		
-		inp.style.width = jq.px0(zk(inp).revisedWidth(width - (rightElem ? rightElem.offsetWidth : 0)));
+		var width = this.getOuterWidth(wgt, wgt.inRoundedMold()),
+			// ignore left border, as it is countered by margin-left
+			rightElemWidth = rightElem ? rightElem.offsetWidth - 
+					zk(rightElem).sumStyles('l', jq.borders) : 0, 
+			rev = zk(inp).revisedWidth(width - rightElemWidth);
+		inp.style.width = jq.px0(rev);
 	},
 	getOuterWidth: function(wgt, rmInplace) {
 		var node = wgt.$n(),
