@@ -29,7 +29,10 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.select.annotation.Subscribe;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.select.impl.ComponentIterator;
@@ -274,6 +277,36 @@ public class Selectors {
 			cls = cls.getSuperclass();
 		}
 		return resolvers;
+	}
+	
+	/**
+	 * Subscribe member methods with {@link Subscribe} annotation in the controller object.
+	 */
+	public static void subscribeEventQueues(final Object controller) {
+		subscribeEventQueues(controller, false);
+	}
+	
+	/*package*/ static void resubscribeEventQueues(final Object controller) {
+		subscribeEventQueues(controller, true);
+	}
+	
+	private static void subscribeEventQueues(final Object controller, boolean rewire) {
+		Reflections.forMethods(controller.getClass(), Subscribe.class, 
+				new MethodRunner<Subscribe>() {
+			public void onMethod(Class<?> clazz, Method method, Subscribe anno) {
+				// check method signature
+				if ((method.getModifiers() & Modifier.STATIC) != 0) 
+					throw new UiException("Cannot add forward to static method: " + 
+							method.getName());
+				// method should have 0 or 1 parameter
+				int paramLen = method.getParameterTypes().length;
+				if (paramLen > 1) 
+					throw new UiException("Event handler method should have " + 
+							"at most one parameter: " + method.getName());
+				EventQueue<Event> eq = EventQueues.lookup(anno.value(), anno.scope(), true);
+				eq.subscribe(new ComposerEventListener(method, controller));
+			}
+		});
 	}
 	
 	

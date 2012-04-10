@@ -17,7 +17,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
@@ -89,6 +88,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
 		Selectors.wireVariables(page, this, _resolvers);
+		Selectors.subscribeEventQueues(this);
 		return compInfo;
 	}
 	@Override
@@ -106,7 +106,14 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
 		comp.addEventListener("onCreate", new AfterCreateWireListener());
 	}
-
+	
+	/** Returns the component which applies to this composer.
+	 * @since 6.0.1
+	 */
+	protected T getSelf() {
+		return _self;
+	}
+	
 	/** Returns the current page.
 	 */
 	protected Page getPage() {
@@ -120,6 +127,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	}
 	
 	private class BeforeCreateWireListener implements SerializableEventListener<Event> {
+		private static final long serialVersionUID = 1L;
 		// brought from GenericAutowireComposer
 		public void onEvent(Event event) throws Exception {
 			// wire components again so some late created object can be wired in (e.g. DataBinder)
@@ -129,6 +137,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	}
 	
 	private class AfterCreateWireListener implements SerializableEventListener<Event> {
+		private static final long serialVersionUID = 1L;
 		public void onEvent(Event event) throws Exception {
 			// second event listener wiring, for components created since doAfterCompose()
 			Selectors.wireEventListeners(_self, SelectorComposer.this);
@@ -181,6 +190,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	//wire, called once after clone
 	private static class CloneDoAfterCompose
 	implements SerializableEventListener<Event>, java.io.Serializable {
+		private static final long serialVersionUID = 1L;
 		// brought from GenericAutowireComposer
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
@@ -191,6 +201,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
 			Selectors.wireComponents(clone, this, false);
 			Selectors.wireEventListeners(clone, this);
+			Selectors.subscribeEventQueues(this);
 			clone.removeEventListener(ON_WIRE_CLONE, this);
 		}
 	}
@@ -202,6 +213,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.rewireComponentsOnActivate(comp, this);
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 		Selectors.rewireEventListeners(comp, this);
+		Selectors.resubscribeEventQueues(this);
 	}
 	
 	@Override

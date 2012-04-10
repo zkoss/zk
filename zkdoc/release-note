@@ -18,6 +18,7 @@ ZK 6.0.1
   ZK-1028: Add Chosenbox to handle multiple selection
   ZK-1003: Panel vflex wrong with toolbar
   ZK-882: Add the ComponentInfo to the id generator
+  ZK-997: SelectorComposer supports the listening of an event queue 
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

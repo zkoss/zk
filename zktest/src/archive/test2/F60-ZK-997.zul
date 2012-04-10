@@ -1,0 +1,36 @@
+<!--
+	F60-ZK-997.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Mar 27 18:11:17 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		1. Click on each of the 'Publish' button. You should see two messages regarding to event receiving for each click.
+	</div>
+	<window	apply="org.zkoss.zktest.test2.F60_ZK_997_Composer">
+		<div>
+			Desktop: 
+			<button id="dBtn" label="Publish" />
+		</div>
+		<div>
+			Group: 
+			<button id="gBtn" label="Publish" />
+		</div>
+		<div>
+			Session: 
+			<button id="sBtn" label="Publish" />
+		</div>
+		<div>
+			Application: 
+			<button id="aBtn" label="Publish" />
+		</div>
+		<div id="screen" />
+	</window>
+</zk>
