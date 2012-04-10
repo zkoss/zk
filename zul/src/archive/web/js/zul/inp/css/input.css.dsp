@@ -39,7 +39,6 @@
 	background: #FFFFFF repeat-x 0 0;
 	border: 1px solid #D5EAFD;
 	border-top: 1px solid #94B9DA;
-	border-top: 1px solid #94B9DA;
 }
 .z-textbox-text-invalid,
 .z-decimalbox-text-invalid,
