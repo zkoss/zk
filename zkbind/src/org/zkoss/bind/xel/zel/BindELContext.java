@@ -64,6 +64,10 @@ public class BindELContext extends XelELContext {
 		return (Binding) getXelContext().getAttribute(BinderImpl.BINDING); //see BindEvaluatorXImpl#newXelContext()
 	}
 	
+	public BindContext getBindContext() {
+		return (BindContext) getXelContext().getAttribute(BinderImpl.BINDCTX); //see BindEvaluatorXImpl#newXelContext()
+	}
+	
 	public boolean ignoreTracker(){
 		return getBinding()==null ||  Boolean.TRUE.equals(getXelContext().getAttribute(BinderImpl.IGNORE_TRACKER)); //see BindEvaluatorXImpl#newXelContext()
 	}

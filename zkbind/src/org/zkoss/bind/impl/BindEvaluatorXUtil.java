@@ -16,7 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.zk.ui.Component;
@@ -30,9 +32,20 @@ public class BindEvaluatorXUtil {
 
 	//eval args, it it is an ExpressionX, than evaluate the value to instance
 	public static Map<String, Object> evalArgs(BindEvaluatorX eval,Component comp, Map<String, Object> args) {
+		return evalArgs(eval, comp, args, null);
+	}
+	public static Map<String, Object> evalArgs(BindEvaluatorX eval,Component comp, Map<String, Object> args, Map<String, Object> implicit) {
 		if (args == null) {
 			return null;
 		}
+		//ZK-1032 Able to wire Event to command method
+		//for implicit objects, see ImplicitObjectELResolver
+		BindContext ctx = null;
+		if(implicit!=null){
+			ctx = new BindContextImpl(null,null,false,null,null,null);
+			ctx.setAttribute(ImplicitObjectELResolver.IMPLICIT_OBJECTS, implicit);
+		}
+		
 		final Map<String, Object> result = new LinkedHashMap<String, Object>(args.size()); 
 		for(final Iterator<Entry<String, Object>> it = args.entrySet().iterator(); it.hasNext();) {
 			final Entry<String, Object> entry = it.next(); 
@@ -40,7 +53,7 @@ public class BindEvaluatorXUtil {
 			final Object value = entry.getValue();
 			//evaluate the arg if it is an ExpressionX
 			final Object evalValue = value == null ? null : 
-				(value instanceof ExpressionX) ? eval.getValue(null, comp, (ExpressionX)value) : value;
+				(value instanceof ExpressionX) ? eval.getValue(ctx, comp, (ExpressionX)value) : value;
 			result.put(key, evalValue);
 		}
 		return result;
@@ -75,10 +88,19 @@ public class BindEvaluatorXUtil {
 		return new BindEvaluatorXImpl(fnampper, org.zkoss.bind.xel.BindXelFactory.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType){
+		return eval(evalx,comp,expression,expectedType,null);
+	}
+	@SuppressWarnings("unchecked")
+	public static <T> T eval(BindEvaluatorX evalx, Component comp, String expression, Class<T> expectedType,Map<String, Object> implicit){
+		BindContext ctx = null;
+		if(implicit!=null){
+			ctx = new BindContextImpl(null,null,false,null,null,null);
+			ctx.setAttribute(ImplicitObjectELResolver.IMPLICIT_OBJECTS, implicit);
+		}
+		
 		ExpressionX expr = evalx.parseExpressionX(null, expression, expectedType);
-		Object obj = evalx.getValue(null, comp, expr);
+		Object obj = evalx.getValue(ctx, comp, expr);
 		return (T)obj;
 	}
 }

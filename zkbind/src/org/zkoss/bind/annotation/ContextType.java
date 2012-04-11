@@ -68,4 +68,14 @@ public enum ContextType {
 	 * The web application, the type is {@link WebApp} 
 	 */
 	APPLICATION,
+	/**
+	 * The trigger event of a command
+	 * @since 6.0.1
+	 */
+	TRIGGER_EVENT,
+	/**
+	 * The command name
+	 * @since 6.0.1
+	 */
+	COMMAND_NAME
 }

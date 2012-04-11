@@ -1,0 +1,12 @@
+<zk>
+	<window>
+		<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01032BindContextEvent')" title="a title">
+			<vbox>
+			<label value="@load(vm.message)" />
+			<textbox onChange="@command('cmd',e=event)"/>
+			<button label="click me" onClick="@command('cmd',e=event)"/>
+			</vbox>
+		</window>
+	</window>
+</zk>

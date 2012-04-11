@@ -281,7 +281,10 @@ public class ParamCall {
 				return _bindContext;
 			case BINDER:
 				return _binder;
-			
+			case COMMAND_NAME:
+				return _bindContext==null?null:_bindContext.getCommandName();
+			case TRIGGER_EVENT:
+				return _bindContext==null?null:_bindContext.getTriggerEvent();	
 			//zk execution contexts
 			case EXECUTION:
 				return _execution;

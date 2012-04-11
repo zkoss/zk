@@ -1267,7 +1267,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				final BindEvaluatorX eval = getEvaluatorX();
 				command = (String) eval.getValue(null, comp, ((CommandBindingImpl)_commandBinding).getCommand());
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
-					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs());
+					
+					//ZK-1032 Able to wire Event to command method
+					final Map<String,Object> implicit = new HashMap<String,Object>();
+					implicit.put("event", event);
+					
+					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
 					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
 				}
 			}

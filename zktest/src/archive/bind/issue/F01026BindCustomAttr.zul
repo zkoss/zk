@@ -1,0 +1,20 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01026BindCustomAttr')">
+	<label multiline="true">
+		1.Value 1 is A, 2 is B , 3 is C
+		2.click test1, Value1 still A, 2 become to y, 3 become to z. and message 1 become value1:A,value2:B,value3:C
+		3.click test2, message 2 become value1:A,value2:y,value3:z
+	</label>
+	<vbox>
+		<hlayout>Value1:<label id="l1" value="@init(vm.value1)"/></hlayout>
+		<hlayout>Value2:<label id="t2" value="@load(vm.value2)"/></hlayout>
+		<hlayout>Value3:<label id="t3" value="@bind(vm.value3)"/></hlayout>
+	</vbox>	
+	<vbox>
+	<label id="msg1" value="@bind(vm.message)" />
+	<label id="msg2" />
+	</vbox>
+	<hbox id="box" attributes.value1="@init(vm.value1)" attributes.value2="@load(vm.value2)" attributes.value3="@bind(vm.value3)">
+		<button id="test1" label="test1" onClick="@command('test1',comp=box)"/>
+		<button id="test2" label="test2" onClick='msg2.setValue("value1:"+value1+",value2:"+value2+",value3:"+value3)'/>
+	</hbox>
+</window>
