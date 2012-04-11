@@ -592,6 +592,7 @@
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="tablelayout" />
+			<xs:element ref="template" />
 			<xs:element ref="textbox" />
 			<xs:element ref="timer" />
 			<xs:element ref="timebox" />
@@ -671,6 +672,7 @@
 				<xs:element ref="spinner" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
+				<xs:element ref="template" />
 				<xs:element ref="textbox" />
 				<xs:element ref="timer" />
 				<xs:element ref="timebox" />
@@ -2278,6 +2280,15 @@
 		</xs:choice>
 		<xs:attribute name="columns" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- template -->
+	<xs:element name="template" type="templateType" />
+	<xs:complexType name="templateType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="if" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- textbox -->
 	<xs:element name="textbox" type="textboxType" />
