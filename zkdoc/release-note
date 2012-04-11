@@ -19,7 +19,6 @@ ZK 6.0.1
   ZK-1003: Panel vflex wrong with toolbar
   ZK-882: Add the ComponentInfo to the id generator
   ZK-997: SelectorComposer supports the listening of an event queue
-  ZK-1004: Missing template element in XML Schema
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
@@ -61,6 +60,8 @@ ZK 6.0.1
   ZK-1017: Property of a form is not correct when validation
   ZK-1005: Validation fails on nested bean
   ZK-1007: A tree is rendered twice while onInitModel and onInitRender events
+  ZK-1004: Missing template element in XML Schema
+  ZK-1031: NPE with ListModelList (with null item) and Selectbox
   
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.LinkedHashSet;
 
 import org.zkoss.io.Serializables;
+import org.zkoss.lang.Objects;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.ext.Selectable;
@@ -108,8 +109,9 @@ Selectable<E>, java.io.Serializable {
 	@Override
 	public boolean isSelected(Object obj) {
 		return !isSelectionEmpty()
-				&& (_selection.size() == 1 ? _selection.iterator().next()
-						.equals(obj) : _selection.contains(obj));
+				&& (_selection.size() == 1 ? Objects
+						.equals(_selection.iterator().next(), obj)
+						 : _selection.contains(obj));
 	}
 	/** {@inheritDoc} */
 	@Override
