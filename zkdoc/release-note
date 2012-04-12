@@ -20,6 +20,7 @@ ZK 6.0.1
   ZK-882: Add the ComponentInfo to the id generator
   ZK-997: SelectorComposer supports the listening of an event queue
   ZK-1032: Able to wire Event to command method
+  ZK-1033: @Init should supports to annotate on Type
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

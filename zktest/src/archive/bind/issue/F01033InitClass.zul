@@ -1,0 +1,18 @@
+<window>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
+	@init('org.zkoss.zktest.bind.issue.F01033InitClass$Case1$D',val1='Dennis',val2='Chen')">
+		
+		<vbox> 
+			<hbox>l11[<label id="l11" value="@load(vm.value1)"/>]=</hbox>
+			<hbox>l12[<label id="l12" value="@load(vm.value2)"/>]=Chen</hbox>
+		</vbox>
+	</window>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
+	@init('org.zkoss.zktest.bind.issue.F01033InitClass$Case2$D',val1='Ian',val2='Tasi')">
+		
+		<vbox> 
+			<hbox>l21[<label id="l21" value="@load(vm.value1)"/>]=Ian</hbox>
+			<hbox>l22[<label id="l22" value="@load(vm.value2)"/>]=Tasi</hbox>
+		</vbox>
+	</window>
+</window>

@@ -19,18 +19,20 @@ import java.lang.annotation.Target;
 /**
  * Marker annotation to identify a initial method. <br/>
  * Only one (could be zero) initial method is allowed in a particular class.
- * if you want binder to call super calss's initial method also, you have to set {@link #superclass()} to true, 
- * and super class's initial method will be called first.
+ * If you want binder to call super calss's initial method also, you have to set {@link #superclass()} to true, 
+ * and super class's initial method will be called first. 
+ * You could annotate it on the type if the class doesn't has a init method but super-class has. 
+ * <p/>
  * 
- * For example, in class hierarchy A(has init) &lt;- B(has init) &lt;- C(no init) &lt;- D (has init, superclass true).  D is the last one. <br/> 
- * If D is the view model, will call D.init<br/>
- * If C is the view model, no method will be called br/&gt; 
+ * For example, in class hierarchy A(has @Init) &lt;- B(has @Init, superclass true) &lt;- C(no @Init) &lt;- D (has @Init, superclass false).  D is the last one. <br/> 
+ * If D is the view model, will call D.init only<br/>
+ * If C is the view model, no method will be called <br/> 
  * If B is the view model, will call A.init then B.init  <br/> 
  * If A is the view model, will call A.init  <br/> 
- * 
- * Note that, if you override a method, which is also the init method of the super class. ex, X.m1() &lt;- Y.m1() <br/>   
- * Because of the java limitation, you should set superclass to true in Y.m1() or Y.m1() will be called twice. <br/> 
- * 
+ * <p/>
+ * Note that, if you override a method, which is both the init method of the the class and its super class. ex, X.m1() &lt;- Y.m1() <br/>   
+ * Binder will throw a exception (or the Y.m1() will be called twice because of the java method overriding spec)<br/> 
+ * <p/>
  * A initial method could also use with {@link BindingParam} and others to assign a argument as its parameter,  
  * and {@link Default} to assign a default value if the argument is null. <br/>
  * 
@@ -46,7 +48,7 @@ import java.lang.annotation.Target;
  * @author dennis
  * @since 6.0.0
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Init {
 	boolean superclass() default false;

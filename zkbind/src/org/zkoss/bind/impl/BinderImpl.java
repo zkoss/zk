@@ -380,21 +380,34 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			
 			Class<?> curr = clz;
 			
+			String sign = null;
+			Set<String> signs = new HashSet<String>();
+			
 			while(curr!=null && !curr.equals(Object.class)){
 				Method currm = null;
-				Init init = null;
+				//ZK-1033 @Init should supports to annotate on Type
+				Init init = curr.getAnnotation(Init.class);
 				//only allow one init method in a class.
 				for(Method m : curr.getDeclaredMethods()){
 					final Init i = m.getAnnotation(Init.class);
 					if(i==null) continue;
-					if(currm!=null){
-						throw new UiException("more than one @Init method in calss "+curr+" first:"+currm+", secondary:"+m);
+					if(init!=null){
+						throw new UiException("more than one @Init in the class "+curr);
 					}
 					init = i;
 					currm = m;
+					//don't break, we need to check all init methods, we allow only one per class.
 				}
 				
 				if(currm!=null){
+					//check if overrode the same init method
+					sign = MiscUtil.toInitMethodSignature(currm);
+					if(signs.contains(sign)){
+						_log.warning("more than one init method that has same signature '%s' in the hierarchy of '%s', the method in extended class will be call more than once ",sign,clz);
+					}else{
+						signs.add(sign);
+					}
+					
 					//super first
 					inits.add(0,currm);
 				}
