@@ -1,6 +1,7 @@
 package org.zkoss.zktest.bind.issue;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -8,7 +9,6 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 
-import com.sun.istack.internal.NotNull;
 
 public class B01005BeanValidatorPath {
 
