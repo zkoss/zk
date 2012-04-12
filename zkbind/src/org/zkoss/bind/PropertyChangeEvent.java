@@ -9,32 +9,38 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.impl;
+package org.zkoss.bind;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * queue event for notify change, internal use only
+ * The property-change event
  * @author dennis
- * @since 6.0.0
+ * @since 6.0.1
  */
 public class PropertyChangeEvent extends Event {
 	private static final long serialVersionUID = 201109091736L;
 	private final Object _base;
-	private final String _propName;
+	private final String _prop;
 
-	public PropertyChangeEvent(Component comp, Object base, String propName) {
+	public PropertyChangeEvent(Component comp, Object base, String prop) {
 		super("onPropertyChange", comp);
 		this._base = base;
-		this._propName = propName;
+		this._prop = prop;
 	}
 
+	/**
+	 * Gets the base object
+	 */
 	public Object getBase() {
 		return _base;
 	}
 
-	public String getPropertyName() {
-		return _propName;
+	/**
+	 * Gets the property
+	 */
+	public String getProperty() {
+		return _prop;
 	}
 }

@@ -14,8 +14,6 @@ package org.zkoss.bind;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.impl.GlobalCommandEvent;
-import org.zkoss.bind.impl.PropertyChangeEvent;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.event.Event;

@@ -32,9 +32,11 @@ import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
+import org.zkoss.bind.GlobalCommandEvent;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
+import org.zkoss.bind.PropertyChangeEvent;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
@@ -294,7 +296,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//only when a event in queue is our event
 			if(event instanceof PropertyChangeEvent){
 				final PropertyChangeEvent evt = (PropertyChangeEvent) event;
-				BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getPropertyName());
+				BinderImpl.this.loadOnPropertyChange(evt.getBase(), evt.getProperty());
 			}else if(event instanceof GlobalCommandEvent){
 				final GlobalCommandEvent evt = (GlobalCommandEvent) event;
 				final Set<Property> notifys = new LinkedHashSet<Property>();

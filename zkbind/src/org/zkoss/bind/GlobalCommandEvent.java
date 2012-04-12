@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.impl;
+package org.zkoss.bind;
 
 import java.util.Map;
 
@@ -17,9 +17,9 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
- * queue event for global command, internal use only
+ * The global-command event
  * @author dennis
- * @since 6.0.0
+ * @since 6.0.1
  */
 public class GlobalCommandEvent  extends Event {
 	private static final long serialVersionUID = 201109091736L;
@@ -32,10 +32,16 @@ public class GlobalCommandEvent  extends Event {
 		this._args = args;
 	}
 
+	/**
+	 * Gets the global command name
+	 */
 	public String getCommand() {
 		return _command;
 	}
 	
+	/**
+	 * Gets the global-command args.
+	 */
 	public Map<String, Object> getArgs() {
 		return _args;
 	}

@@ -1,0 +1,14 @@
+<zk>
+	<window>
+		<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01046PublicEvent$VM')"
+			binder="@init(queueName='myqueue')" title="vm">
+			<button id="btn1" label="say hi" onClick="@global-command('sayHi',param='i am a vm')"/>
+			<label id="msg1" value="@bind(vm.message)"/>
+		</window>
+		<window apply="org.zkoss.zktest.bind.issue.F01046PublicEvent$Composesr" title="composer">
+			<button id="btn2" label="say hello"/>
+			<label id="msg2"/>
+		</window>
+	</window>
+</zk>
