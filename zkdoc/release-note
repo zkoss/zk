@@ -64,7 +64,8 @@ ZK 6.0.1
   ZK-1007: A tree is rendered twice while onInitModel and onInitRender events
   ZK-1004: Missing template element in XML Schema
   ZK-1031: NPE with ListModelList (with null item) and Selectbox
-  
+  ZK-1045: Cannot bind on colorbox.color
+
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
     for better performance.
