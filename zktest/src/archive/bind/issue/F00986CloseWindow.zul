@@ -1,0 +1,25 @@
+<zk>
+    <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00986CloseWindow')">
+    	<label multiline="true">
+    	1. you will see window 1,2,3 after loaded
+    	2.click on detach, you will only see window2 than
+    	</label>
+    	<window title="window1" 
+    		whatever="@load(true,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		
+    	</window>
+    	<window title="window2" 
+    		whatever="@load(false,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		
+    	</window>
+    	<window title="window3" 
+    		whatever="@load(vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		
+    	</window>
+    	<window title="window4" 
+    		whatever="@load(not vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    	</window>
+    	<button label="detach" onClick="@command('detach')"/>
+    	<button label="Dump" onClick="binder.tracker.dump()"/>
+    </window>
+</zk>
