@@ -390,8 +390,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			wds = [],
 			i = 0;
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling) {
-			var stylew = hdfakercells[i].style.width;
-			w._width = wds[i] = stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
+			var stylew = hdfakercells[i].style.width,
+				origWd = w._origWd; // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
+			w._width = wds[i] = origWd ? origWd :
+								stylew ? stylew : jq.px0(hdfakercells[i].offsetWidth); //bug#3180189. setWidth() has side effect
 			if (!stylew) //bug#3183228.
 				bdfakercells[i].style.width = hdfakercells[i].style.width = w._width;
 			++i;
