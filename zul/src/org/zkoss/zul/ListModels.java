@@ -147,6 +147,8 @@ public class ListModels {
 				}
 			}
 			final Selectable<E> subm =  new ListModelList<E>(data, true);
+			// may multiple selected item in subModel, sync the multiple state
+			subm.setMultiple(((Selectable)_model).isMultiple());
 			subm.setSelection(selection);
 			return (ListModel<E>) subm;
 		}

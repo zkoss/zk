@@ -19,7 +19,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
         String[] userName = { "data 1", null, "data 2"};
         ListModelList model = new ListModelList(userName);
     ]]></zscript>
-    <div>Select second item of the selectbox.</div>
+    <div>Select second item of the selectbox, you should NOT see any Exception.</div>
     <div>Click 'show selected index' button, all indexes are '1'</div>
     The selectbox: <selectbox id="sbx" model="${model}" onSelect="">
         <template name="model">
