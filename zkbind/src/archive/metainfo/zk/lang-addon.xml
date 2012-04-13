@@ -95,7 +95,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -292,7 +292,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>		
 	</component>
@@ -348,7 +348,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -396,7 +396,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -436,7 +436,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -472,7 +472,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -579,7 +579,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -722,7 +722,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -1086,7 +1086,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -1230,7 +1230,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -1266,7 +1266,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 			<attribute>
 				<attribute-name>CONVERTER</attribute-name>
-				<attribute-value>org.zkoss.bind.converter.sys.ErrorMessageConverter</attribute-value>
+				<attribute-value>org.zkoss.bind.converter.ErrorMessageConverter</attribute-value>
 			</attribute>
 		</annotation>
 	</component>

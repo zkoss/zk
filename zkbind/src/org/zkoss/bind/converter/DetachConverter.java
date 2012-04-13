@@ -28,12 +28,12 @@ import org.zkoss.zk.ui.event.Events;
  * <pre>
  * {@code
  * <window title="window1" 
- *    whatever="@load(true,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">
+ *    detach="@load(true,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">
  *    <button label="detach" onClick="@command('detach')"/>
  * </window>
  * }
  * </pre>
- * At here, <i>whatever</i> is a non-existed attribute of the component
+ * At here, <i>detach</i> is a non-existed attribute of the component, you can use another non-existed name
  * 
  * @author dennis
  * @since 6.0.1

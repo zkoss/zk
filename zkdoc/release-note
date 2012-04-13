@@ -23,6 +23,7 @@ ZK 6.0.1
   ZK-1033: @Init should supports to annotate on Type
   ZK-1050: Able to ignore the load or save of a binding
   ZK-986: A way to close a window after a command
+  ZK-1042: Able to show error message on selectbox
 
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
