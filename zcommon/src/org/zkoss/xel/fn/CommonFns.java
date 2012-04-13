@@ -425,8 +425,6 @@ public class CommonFns {
 		String result;
 		if (value == null) {
 			result =  "";
-		} else if (format == null) {
-			result = value.toString();
 		} else {
 			if (locale == null) locale = Locales.getCurrent();
 			final DecimalFormat df = (DecimalFormat)
