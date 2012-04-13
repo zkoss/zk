@@ -39,8 +39,10 @@ function (out) {
 	
 	out.push('">');
 	if (!isRounded)
-		out.push('<div id="', uuid, '-btn-up" class="', zcls, '-btn-upper"></div>',
-				'<div id="', uuid, '-btn-down" class="', zcls, '-btn-lower"></div>');
+		out.push('<div id="', uuid, '-btn-up" class="', zcls, 
+				'-btn-upper"><div class="', zcls, '-btn-up-icon"></div></div>',
+				'<div id="', uuid, '-btn-down" class="', zcls, 
+				'-btn-lower"><div class="', zcls, '-btn-down-icon"></div></div>');
 	out.push('</i></i>');
 	
 }

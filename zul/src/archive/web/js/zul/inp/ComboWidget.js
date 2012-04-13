@@ -388,7 +388,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		} else if (!isButtonVisible)
 			out.push('" style="display:none');
 
-		out.push('"></i>');
+		out.push('"><div class="', zcls, '-btn-icon"></div></i>');
 
 		this.redrawpp_(out);
 
