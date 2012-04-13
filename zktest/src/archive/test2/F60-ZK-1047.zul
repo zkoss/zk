@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+
+<!--
+F60-ZK-1047.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr  13 15:50:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>The content of block one (green) and block two (brown) should the same.</div>
+	<zscript><![CDATA[
+		import java.math.BigDecimal;
+		int num1 = 12345;
+		BigDecimal num2 = new BigDecimal("12345678901234.345678");
+		double num3 = 12345.2345678;
+
+		String f1 = "##,###.##";
+		String f2 = "##,###.###";
+		String f3 = "##,###.#####";
+		String f4 = "##,###.######";
+
+		String percentage = f3 + " \u2030"; // %
+		String currency = "\u00A4 " + f4; // ¤
+
+		Locale l1 = Locale.ITALIAN;
+		Locale l2 = Locale.JAPAN;
+		Locale l3 = Locale.GERMAN;
+		Locale l4 = Locale.FRANCE;
+		
+		]]></zscript>
+	<hbox>
+		<div style="border: 1px solid green; padding: 5px;">
+			<hbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.ITALIAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="12.345" />
+							<label value="12.345.678.901.234,35" />
+							<label value="12.345,23" />
+							<label value="12.345,235" />
+							<label value="12.345.234,5678 ‰" />
+							<label value="¤ 12.345,234568" />
+						</vbox>
+					</hbox>
+				</vbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.JAPAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="12,345" />
+							<label value="12,345,678,901,234.35" />
+							<label value="12,345.23" />
+							<label value="12,345.235" />
+							<label value="12,345,234.5678 ‰" />
+							<label value="￥ 12,345.234568" />
+						</vbox>
+					</hbox>
+				</vbox>
+			</hbox>
+			<hbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.GERMAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="12.345" />
+							<label value="12.345.678.901.234,35" />
+							<label value="12.345,23" />
+							<label value="12.345,235" />
+							<label value="12.345.234,5678 ‰" />
+							<label value="¤ 12.345,234568" />
+						</vbox>
+					</hbox>
+				</vbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.FRANCE:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="12 345" />
+							<label value="12 345 678 901 234,35" />
+							<label value="12 345,23" />
+							<label value="12 345,235" />
+							<label value="12 345 234,5678 ‰" />
+							<label value="€ 12 345,234568" />
+						</vbox>
+					</hbox>
+				</vbox>
+			</hbox>
+		</div>
+		<div style="border: 1px solid brown; padding: 5px;">
+			<hbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.ITALIAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="${c:formatNumber(num1, f1, l1)}" />
+							<label value="${c:formatNumber(num2, f1, l1)}" />
+							<label value="${c:formatNumber(num3, f1, l1)}" />
+							<label value="${c:formatNumber(num3, f2, l1)}" />
+							<label value="${c:formatNumber(num3, percentage, l1)}" />
+							<label value="${c:formatNumber(num3, currency, l1)}" />
+						</vbox>
+					</hbox>
+				</vbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.JAPAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="${c:formatNumber(num1, f1, l2)}" />
+							<label value="${c:formatNumber(num2, f1, l2)}" />
+							<label value="${c:formatNumber(num3, f1, l2)}" />
+							<label value="${c:formatNumber(num3, f2, l2)}" />
+							<label value="${c:formatNumber(num3, percentage, l2)}" />
+							<label value="${c:formatNumber(num3, currency, l2)}" />
+						</vbox>
+					</hbox>
+				</vbox>
+			</hbox>
+			<hbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.GERMAN:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="${c:formatNumber(num1, f1, l3)}" />
+							<label value="${c:formatNumber(num2, f1, l3)}" />
+							<label value="${c:formatNumber(num3, f1, l3)}" />
+							<label value="${c:formatNumber(num3, f2, l3)}" />
+							<label value="${c:formatNumber(num3, percentage, l3)}" />
+							<label value="${c:formatNumber(num3, currency, l3)}" />
+						</vbox>
+					</hbox>
+				</vbox>
+				<vbox style="border: 1px solid #8643AE; padding: 5px;">
+					<div style="margin-bottom: 5px;">
+						<label value="Locale.FRANCE:" style="font-size: 18px !important; font-weight: bold !important;" />
+					</div>
+					<hbox>
+						<vbox>
+							<div> int .2f </div>
+							<div> BigDecimal .2f </div>
+							<div> double .2f </div>
+							<div> double .3f </div>
+							<div> double .5f Currency </div>
+							<div> double .6f Percentage </div>
+						</vbox>
+						<vbox>
+							<label value="${c:formatNumber(num1, f1, l4)}" />
+							<label value="${c:formatNumber(num2, f1, l4)}" />
+							<label value="${c:formatNumber(num3, f1, l4)}" />
+							<label value="${c:formatNumber(num3, f2, l4)}" />
+							<label value="${c:formatNumber(num3, percentage, l4)}" />
+							<label value="${c:formatNumber(num3, currency, l4)}" />
+						</vbox>
+					</hbox>
+				</vbox>
+			</hbox>
+		</div>
+	</hbox>
+</zk>

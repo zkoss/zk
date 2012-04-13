@@ -16,12 +16,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.fn;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.List;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.lang.reflect.Field;
 import java.lang.reflect.Array;
@@ -30,6 +33,7 @@ import java.math.BigDecimal;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
+import org.zkoss.util.Locales;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
 import org.zkoss.text.MessageFormats;
@@ -404,5 +408,33 @@ public class CommonFns {
 	 */
 	public static final Date parseDate(String source, String pattern) throws Exception {
 		return new SimpleDateFormat(pattern).parse(source);
+	}
+	/**
+	 * Formats a number (Integer, BigDecimal...) into a string.
+	 * If null, an empty string is returned.
+	 *
+	 * <p>A utility to assist the handling of numeric data.
+	 * @param value The number to format.
+	 * @param format The format to apply, if it is null,
+	 * the system's default format is used.
+	 * @param locale The Locale to apply, if it is null,
+	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
+	 * @return String The formatted number string.
+	 */
+	public static final String formatNumber(Object value, String format, Locale locale) {
+		String result;
+		if (value == null) {
+			result =  "";
+		} else if (format == null) {
+			result = value.toString();
+		} else {
+			if (locale == null) locale = Locales.getCurrent();
+			final DecimalFormat df = (DecimalFormat)
+				NumberFormat.getInstance(locale);
+			if (format != null)
+				df.applyPattern(format);
+			result = df.format(value);
+		}
+		return result;
 	}
 }

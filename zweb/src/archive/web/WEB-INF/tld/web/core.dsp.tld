@@ -434,7 +434,18 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Returns A Date parsed from the string.
 		</description>
 	</function>
-	
+
+	<!--                    -->
+	<!-- Number Utilities   -->
+	<!--                    -->
+	<function>
+		<name>formatNumber</name>
+		<function-class>org.zkoss.xel.fn.CommonFns</function-class>
+		<function-signature>java.lang.String formatNumber(java.lang.Object, java.lang.String, java.util.Locale)</function-signature>
+		<description>
+		Returns the formatted number string.
+		</description>
+	</function>
 	
 	<!--                    -->
 	<!-- XML/HTML Utilities -->
