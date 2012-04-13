@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.util.Clients;
  * For example <br/>
  * <pre>
  * {@code
- * <div msg="@bind(vmsgs[self]) @converter('org.zkoss.bind.converter.ErrorMessageConverter')">
+ * <div msg="@bind(vmsgs[tb]) @converter('org.zkoss.bind.converter.ErrorMessageConverter')">
  *     <textbox id="tb" value="@bind(vm.value1) @validator(vm.validator1)"  />
  * </div>
  * }
