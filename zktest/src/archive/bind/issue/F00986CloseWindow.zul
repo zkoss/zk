@@ -4,22 +4,22 @@
     	1. you will see window 1,2,3 after loaded
     	2.click on detach, you will only see window2 than
     	</label>
-    	<window title="window1" 
+    	<window id="win1" title="window1" 
     		whatever="@load(true,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
     		
     	</window>
-    	<window title="window2" 
+    	<window id="win2" title="window2" 
     		whatever="@load(false,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
     		
     	</window>
-    	<window title="window3" 
+    	<window id="win3" title="window3" 
     		whatever="@load(vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
     		
     	</window>
-    	<window title="window4" 
+    	<window id="win4" title="window4" 
     		whatever="@load(not vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
     	</window>
-    	<button label="detach" onClick="@command('detach')"/>
+    	<button id="detach" label="detach" onClick="@command('detach')"/>
     	<button label="Dump" onClick="binder.tracker.dump()"/>
     </window>
 </zk>
