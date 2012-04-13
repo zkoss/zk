@@ -58,7 +58,7 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 		final Converter conv = getConverter();
 		if (conv != null) {			
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == LOAD_IGNORED) return;
+			if(value == Converter.IGNORED_VALUE) return;
 		}
 		
 		comp.getChildren().clear();

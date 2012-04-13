@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Combobox;
@@ -51,10 +50,9 @@ public class ComboboxSelectedItemConverter implements Converter, java.io.Seriali
 	  	if (val != null) {
 	  		if(model!=null){
 	  			((Selectable<Object>)model).addToSelection(val);
-	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  			return IGNORED_VALUE;
 	  		}else{
 	  			//no model case
-		  		int i = 0;
 			  	for (final Iterator<?> it = cbx.getItems().iterator(); it.hasNext();) {
 			  		final Comboitem ci = (Comboitem) it.next();
 			  		
@@ -63,7 +61,6 @@ public class ComboboxSelectedItemConverter implements Converter, java.io.Seriali
 			  		if (val.equals(bean)) {
 			  			return ci;
 			  		}
-			  		i++;
 			  	}
 	  		}
 		  	//not in the item list
@@ -74,7 +71,7 @@ public class ComboboxSelectedItemConverter implements Converter, java.io.Seriali
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
 	  			((Selectable<Object>)model).clearSelection();
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	return null;
 	}

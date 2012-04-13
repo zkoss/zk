@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
@@ -50,7 +49,7 @@ import org.zkoss.zul.ext.Selectable;
 	  			}else{
 	  				((Selectable<Object>)model).addToSelection(model.getElementAt(index));
 	  			}
-	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  			return IGNORED_VALUE;
 	  		}else{
 	  			return val;
 	  		}
@@ -62,7 +61,7 @@ import org.zkoss.zul.ext.Selectable;
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
 	  			((Selectable<Object>)model).clearSelection();
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	return val;
 	}

@@ -16,9 +16,33 @@ import org.zkoss.zk.ui.Component;
 /**
  * Generic binding conversion interface.
  * @author henrichen
+ * @author dennis
  * @since 6.0.0
  */
 public interface Converter {
+	
+	/**
+	 * Indicates the returned value should be ignored to load to a component or save to a bean, 
+	 * It is useful for writing a converter to manipulate component directly when loading or saving
+	 * @since 6.0.1
+	 */
+	public Object IGNORED_VALUE = new Object();
+	
+	/**
+	 * Coerces a value to another value to load to a component
+	 * @param val the bean value
+	 * @param component the component to be loaded the value
+	 * @param ctx the bind context
+	 * @return the value to load to a component
+	 */
 	public Object coerceToUi(Object val, Component component, BindContext ctx);
+	
+	/**
+	 * Coerces a value to bean value to save to a bean
+	 * @param val the value
+	 * @param component the component provides the value
+	 * @param ctx the bind context
+	 * @return the value to save to a bean
+	 */
 	public Object coerceToBean(Object val, Component component, BindContext ctx);
 }

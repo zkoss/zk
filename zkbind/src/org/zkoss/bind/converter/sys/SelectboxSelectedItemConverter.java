@@ -45,13 +45,13 @@ public class SelectboxSelectedItemConverter implements Converter, java.io.Serial
 		
 	  	if (val != null) {
 	  		((Selectable<Object>)model).addToSelection(val);
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	
 	  	Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  	if(sels!=null && sels.size()>0)
 	  		((Selectable<Object>)model).clearSelection();
-	  	return LoadPropertyBinding.LOAD_IGNORED;
+	  	return IGNORED_VALUE;
 	}
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {

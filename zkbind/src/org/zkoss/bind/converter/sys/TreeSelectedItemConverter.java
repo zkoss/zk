@@ -51,7 +51,7 @@ public class TreeSelectedItemConverter implements Converter, java.io.Serializabl
 	  			int[] path = model.getPath(val);
 	  			if(path!=null && smodel!=null){
 	  				smodel.addSelectionPath(path);
-	  				return LoadPropertyBinding.LOAD_IGNORED;
+	  				return IGNORED_VALUE;
 	  			}
 	  			//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766
 	  		}	  		
@@ -71,7 +71,7 @@ public class TreeSelectedItemConverter implements Converter, java.io.Serializabl
 	  	if(smodel!=null){
 	  		if(smodel.getSelectionCount()>0)
 	  			smodel.clearSelection();
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	return null;
 	}

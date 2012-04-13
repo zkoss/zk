@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -65,7 +64,7 @@ public class ListboxSelectedItemsConverter implements Converter, java.io.Seriali
 	  		((Selectable<Object>)model).clearSelection();
 	  	}
 	  	
-	  	return model == null ? items : LoadPropertyBinding.LOAD_IGNORED;
+	  	return model == null ? items : IGNORED_VALUE;
 	}
 
 	@SuppressWarnings("unchecked")

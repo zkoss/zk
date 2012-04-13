@@ -71,7 +71,7 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 			if(activating) return;//don't load to component if activating
 			
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == LOAD_IGNORED) return;
+			if(value == Converter.IGNORED_VALUE) return;
 		}
 		if(activating) return;//don't load to component if activating
 		

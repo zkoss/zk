@@ -61,7 +61,7 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
 		  			}
 		  			//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766 event we 
 	  			}
-	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  			return IGNORED_VALUE;
 	  		}
 	  		//no model case
 		  	//and if user want better performance, he should get the selection from model directly
@@ -77,7 +77,7 @@ public class TreeSelectedItemsConverter implements Converter, java.io.Serializab
 			 	}
 			 }
 	  	}
-	  	return smodel == null ? items : LoadPropertyBinding.LOAD_IGNORED;
+	  	return smodel == null ? items : IGNORED_VALUE;
 	}
 
 	@SuppressWarnings("unchecked")

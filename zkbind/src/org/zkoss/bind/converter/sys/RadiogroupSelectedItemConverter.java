@@ -51,7 +51,7 @@ public class RadiogroupSelectedItemConverter implements Converter, java.io.Seria
 	  	if (val != null) {
 	  		if(model!=null){
 	  			((Selectable<Object>)model).addToSelection(val);
-	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  			return IGNORED_VALUE;
 	  		}else{
 	  			//no model case
 			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
@@ -70,7 +70,7 @@ public class RadiogroupSelectedItemConverter implements Converter, java.io.Seria
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
 	  			((Selectable<Object>)model).clearSelection();
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	return null;
 	}

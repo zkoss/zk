@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.ListModel;
@@ -47,7 +46,7 @@ public class ListboxSelectedItemConverter implements Converter, java.io.Serializ
 	  	if (val != null) {
 	  		if(model!=null){
 	  			((Selectable<Object>)model).addToSelection(val);
-	  			return LoadPropertyBinding.LOAD_IGNORED;
+	  			return IGNORED_VALUE;
 	  		}else{
 	  			//no model case
 			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
@@ -66,7 +65,7 @@ public class ListboxSelectedItemConverter implements Converter, java.io.Serializ
 	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
 	  		if(sels!=null && sels.size()>0)
 	  			((Selectable<Object>)model).clearSelection();
-	  		return LoadPropertyBinding.LOAD_IGNORED;
+	  		return IGNORED_VALUE;
 	  	}
 	  	return null;
 	}

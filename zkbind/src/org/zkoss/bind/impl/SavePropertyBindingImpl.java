@@ -117,6 +117,9 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	public void save(BindContext ctx) {
 		//get data from component attribute
 		Object value = getComponentValue(ctx);
+		if(value == Converter.IGNORED_VALUE){
+			return;
+		}
 		
 		//set data into bean property
 		final Component comp = getComponent();//ctx.getComponent();
@@ -160,7 +163,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final ValueReference ref = getValueReference(ctx);
 		try {
 			final Object value = getComponentValue(ctx);
-			return new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value);
+			return new PropertyImpl(ref.getBase(), (String) ref.getProperty(), value==Converter.IGNORED_VALUE?null:value);
 		} catch (Exception e) {
 			// ZK-878 Exception if binding a form with errorMessage
 			// a wrong value exception might be thrown when a component has constraint

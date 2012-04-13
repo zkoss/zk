@@ -13,7 +13,6 @@ package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.sys.LoadPropertyBinding;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
@@ -36,7 +35,7 @@ public class ErrorMessageConverter implements Converter, java.io.Serializable {
 		}else{
 			Clients.wrongValue(input, msg);
 		}
-		return LoadPropertyBinding.LOAD_IGNORED;
+		return IGNORED_VALUE;
 	}
 
 	@Override
