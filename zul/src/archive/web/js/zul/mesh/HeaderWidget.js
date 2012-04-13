@@ -353,8 +353,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		// start of ZK-922/ZK-1024: can remove after FF 13
 		var ff = zk.gecko,
 			ff_10_12 = ff > 9 && ff < 13,
-			wgt = wgt.getMeshWidget(),
-			ebody = wgt && wgt.ebody , 
+			meshWgt = wgt.getMeshWidget(),
+			ebody = meshWgt && meshWgt.ebody , 
 			h;
 		if (ff_10_12 && ebody) {
 			if (ebody)
