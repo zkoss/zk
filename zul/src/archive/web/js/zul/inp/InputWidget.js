@@ -72,24 +72,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}, 0);
 		}: zk.$void;
 
-/** @class zul.inp.Renderer
- * The renderer used to render a inputWidget.
- * It is designed to be overridden.
- */
-zul.inp.Renderer = {
-	/** render the spinner's(timebox) button
-	* @param Array out an array of HTML fragments.
-	* @param zul.inp.ComboWidget wgt the combowidget
-	*/
-	renderSpinnerButton: function (out, wgt) {
-		if (wgt.inRoundedMold()) 
-			return;
-		var zcls = wgt.getZclass(),
-			uuid = wgt.uuid;
-		out.push('<div id="', uuid, '-btn-up" class="', zcls, '-btn-upper"></div>',
-				'<div id="', uuid, '-btn-down" class="', zcls, '-btn-lower"></div>');
-	}
-};
 /** @class zul.inp.RoundUtl
  * The RoundUtl used to adjust the display of the rounded input.
  * @since 5.0.7
