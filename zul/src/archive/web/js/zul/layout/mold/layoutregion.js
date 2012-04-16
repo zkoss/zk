@@ -27,7 +27,7 @@ function (out) {
 					'-icon ', zcls, '-colps"');
 			if (!this._collapsible)
 				out.push(' style="display:none;"');
-			out.push('></div>');
+			out.push('><div class="', pzcls, '-icon-img"></div></div>');
 		}
 		out.push(zUtl.encodeXML(this._title), '</div>');
 	}
@@ -49,7 +49,7 @@ function (out) {
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
 				
-		out.push('></div></div>');
+		out.push('><div class="', pzcls, '-icon-img"></div></div></div>');
 	}
 	out.push('</div>');
 }

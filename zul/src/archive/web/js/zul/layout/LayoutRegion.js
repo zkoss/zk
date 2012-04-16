@@ -544,7 +544,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},
 	doMouseOver_: function (evt) {
-		switch (evt.domTarget) {
+		var target = evt.domTarget;
+		if (!target.id)
+			target = target.parentNode;
+		switch (target) {
 		case this.$n('btn'):
 			jq(this.$n('btn')).addClass(this.getZclass() + '-colps-over');
 			break;
@@ -561,7 +564,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		switch (evt.domTarget) {
+		var target = evt.domTarget;
+		if (!target.id)
+			target = target.parentNode;
+		switch (target) {
 		case this.$n('btn'):
 			jq(this.$n('btn')).removeClass(this.getZclass() + '-colps-over');
 			break;
@@ -579,6 +585,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	doClick_: function (evt) {
 		var target = evt.domTarget;
+		if (!target.id)
+			target = target.parentNode;
 		switch (target) {
 		case this.$n('btn'):
 		case this.$n('btned'):
