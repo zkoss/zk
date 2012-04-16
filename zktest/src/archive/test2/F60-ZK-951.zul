@@ -22,9 +22,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		FakerMatrixModel NonHeader = new FakerMatrixModel(10, 10, 0);
 		FakerMatrixModel MultipleHeader = new FakerMatrixModel(10, 10, 3);
 		FakerMatrixModel SingleColumn = new FakerMatrixModel(1, 10);
-		FakerMatrixModel MultipleColumn = new FakerMatrixModel(10000, 10);
+		FakerMatrixModel MultipleColumn = new FakerMatrixModel(100, 10);
+		FakerMatrixModel HugeColumn = new FakerMatrixModel(10000, 10);
 		FakerMatrixModel SingleRow = new FakerMatrixModel(10, 10);
-		FakerMatrixModel MultipleRow = new FakerMatrixModel(10, 10000);
+		FakerMatrixModel MultipleRow = new FakerMatrixModel(10, 100);
+		FakerMatrixModel HugeRow = new FakerMatrixModel(10, 10000);
 		FakerMatrixModel BigData = new FakerMatrixModel(1000000, 1000000);
 		
 		Pair[] models = new Pair[] {
@@ -32,8 +34,10 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			new Pair("MultipleHeader", MultipleHeader),
 			new Pair("SingleColumn", SingleColumn),
 			new Pair("MultipleColumn", MultipleColumn),
+			new Pair("HugeColumn", HugeColumn),
 			new Pair("SingleRow", SingleRow),
 			new Pair("MultipleRow", MultipleRow),
+			new Pair("HugeRow", HugeRow),
 			new Pair("BigData", BigData)
 		};
 		ListModelList modelList = new ListModelList(Arrays.asList(models));

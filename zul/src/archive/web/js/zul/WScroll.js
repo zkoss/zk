@@ -178,6 +178,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			old = $jq.css('opacity'); // fix old IE version
 		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
 	};
+	function ignoredrag(dg, p, evt) {
+		return dg.node != evt.domTarget;
+	}
 
 /**
  * A wave Scrollbar used to scroll the specific content and provides four controls
@@ -669,6 +672,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			snap: snap,
 			starteffect: starteffect,
 			zIndex: 12000,
+			ignoredrag: ignoredrag,
 			endeffect: endeffect
 		});
 		jq(this.epos).hide();
