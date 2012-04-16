@@ -70,7 +70,8 @@ ZK 6.0.1
   ZK-1031: NPE with ListModelList (with null item) and Selectbox
   ZK-1045: Cannot bind on colorbox.color
   ZK-1046: Public event class of zkbind
-  ZK-1053: Selectbox doesn't handle onFocus / onBlur event
+  ZK-1053: Selectbox doesn't handle onFocus / onBlur event 
+  ZK-1058: ZK cannot support drag-and-drop for Android mobile
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
