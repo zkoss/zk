@@ -11,6 +11,7 @@ ZK 5.0.12
   ZK-979: Listbox sizable fail when set height attribute (Firefox 11.0 only)
   ZK-1029: Send a ajax request with webshpere portal server will cause session timeout
   ZK-1022: grid column disappear after sizable and setModel with frozen column
+  ZK-1043: Still Firefox 11 (probably also 10) problems with listbox and span 
 
 	--------
 ZK 5.0.11
