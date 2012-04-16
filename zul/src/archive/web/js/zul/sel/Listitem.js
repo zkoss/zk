@@ -171,6 +171,17 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 			if (b1 != b2)
 				box._updHeaderCM();
 		}
+	},
+	//super//
+	setVisible: function (visible) {
+		this.$supers('setVisible', arguments);
+		// ZK-1037 start
+		var box = this.getListbox();
+		if (visible)
+			box._fixHorScrollbar();
+		else
+			box._removeHorScrollbar();
+		// ZK-1037 end
 	}
 });
 })();

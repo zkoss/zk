@@ -71,6 +71,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	$define:{
 		emptyMessage:function(msg){
 			if(this.desktop) jq("td",this.$n("empty")).html(msg);
+			// ZK-1037 start
+			if (msg)
+				this._fixHorScrollbar();
+			else
+				this._removeHorScrollbar();
+			// ZK-1037 end
 		}
 	},	
 	$init: function () {
@@ -413,7 +419,30 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
 		this.$supers(Listbox, '_updHeaderCM', arguments);
-	}
+	},
+	// ZK-1037 start
+	// called by self#emptyMessage and Listitem#setVisible
+	_fixHorScrollbar: (zk.ie == 9) ? function () {
+		jq(this.$n('body')).css('overflowX', 'scroll');
+	} : zk.$void,
+	// super
+	// also called by self#emptyMessage and Listitem#setVisible
+	_removeHorScrollbar: (zk.ie) ? function () {
+		if (zk.ie == 8) {
+			this.$supers('_removeHorScrollbar', arguments);
+		} else if (zk.ie == 9) { // ZK-1037
+			var body = this.$n('body');
+			if (!this._emptyMessage	// no empty message and visible listitem
+				&& !this.getBodyWidgetIterator({skipHidden: true}).next()) {
+				setTimeout(function () {
+					body.scrollLeft = 0;
+					jq(body).css('overflowX', 'hidden');
+					
+				}, 0);
+			}
+		}
+	} : zk.$void
+	// ZK-1037 end
 });
 /**
  * The listitem iterator.
