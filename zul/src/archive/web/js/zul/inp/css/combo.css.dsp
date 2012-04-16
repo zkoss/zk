@@ -311,7 +311,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded-focus .z-timebox-rounded-btn-over,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-over,
 .z-doublespinner-rounded-focus .z-doublespinner-rounded-btn-over {
-	background-position: 0 -216px;
+	background-position: 0 -240px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-inp-clk, .z-combobox-rounded .z-combobox-inp-clk,
 .z-bandbox-rounded-focus .z-bandbox-rounded-inp-clk, .z-bandbox-rounded .z-bandbox-inp-clk,
@@ -604,7 +604,8 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded-readonly,
 .z-spinner-rounded-readonly,
 .z-doublespinner-rounded-readonly {
-	background-position: 0 -72px;
+	background-position: 0 -96px;
+	cursor: default;
 }
 .z-combobox-rounded-readonly {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/combobox-rounded.png')});
@@ -632,7 +633,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-doublespinner-rounded .z-doublespinner-rounded-btn-right-edge.z-doublespinner-rounded-btn-readonly,
 .z-spinner-rounded i.z-spinner-rounded-btn-right-edge-readonly,
 .z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-readonly {
-	background-position: -19px -192px;
+	background-position: -19px -216px;
 }
 .z-combobox-rounded .z-combobox-rounded-btn-readonly,
 .z-bandbox-rounded .z-bandbox-rounded-btn-readonly,
@@ -640,7 +641,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded .z-timebox-rounded-btn-readonly,
 .z-spinner-rounded .z-spinner-rounded-btn-readonly,
 .z-doublespinner-rounded .z-doublespinner-rounded-btn-readonly {
-	background-position: 0 -192px;
+	background-position: 0 -216px;
 }
 
 .z-spinner-real-readonly,
@@ -672,7 +673,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-doublespinner-rounded-focus .z-doublespinner-rounded-btn-right-edge.z-doublespinner-rounded-btn-readonly,
 .z-spinner-rounded-focus i.z-spinner-rounded-btn-right-edge-readonly,
 .z-doublespinner-rounded-focus i.z-doublespinner-rounded-btn-right-edge-readonly {
-	background-position: -19px -192px;
+	background-position: -19px -216px;
 }
 .z-combobox-rounded-focus .z-combobox-rounded-btn-readonly,
 .z-bandbox-rounded-focus .z-bandbox-rounded-btn-readonly,
@@ -680,7 +681,7 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-timebox-rounded-focus .z-timebox-rounded-btn-readonly,
 .z-spinner-rounded-focus .z-spinner-rounded-btn-readonly,
 .z-doublespinner-rounded-focus .z-doublespinner-rounded-btn-readonly {
-	background-position: 0 -192px;
+	background-position: 0 -216px;
 }
 <%-- Inplace editing --%>
 .z-combobox-inplace,

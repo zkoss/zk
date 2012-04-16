@@ -209,27 +209,34 @@ i.z-doublebox-rounded-right-edge-invalid {
 .z-decimalbox-rounded-focus input.z-decimalbox-rounded-inp,
 .z-intbox-rounded-focus input.z-intbox-rounded-inp,
 .z-longbox-rounded-focus input.z-longbox-rounded-inp,
-.z-doublebox-rounded-focus input.z-doublebox-rounded-inp,
+.z-doublebox-rounded-focus input.z-doublebox-rounded-inp {
+	background-image: url(${c:encodeThemeURL('~./zul/img/button/timebox-rounded.png')});	
+	background-position: 0 -72px;
+}
 .z-textbox-rounded-real-readonly .z-textbox-rounded-inp,
 .z-decimalbox-rounded-real-readonly .z-decimalbox-rounded-inp,
 .z-intbox-rounded-real-readonly .z-intbox-rounded-inp,
 .z-longbox-rounded-real-readonly .z-longbox-rounded-inp,
 .z-doublebox-rounded-real-readonly .z-doublebox-rounded-inp {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/timebox-rounded.png')});	
-	background-position: 0 -72px;
+	background-position: 0 -96px !important;
+	cursor: default;
 }
 .z-textbox-rounded-focus i.z-textbox-rounded-right-edge,
 .z-decimalbox-rounded-focus i.z-decimalbox-rounded-right-edge,
 .z-intbox-rounded-focus i.z-intbox-rounded-right-edge,
 .z-longbox-rounded-focus i.z-longbox-rounded-right-edge,
-.z-doublebox-rounded-focus i.z-doublebox-rounded-right-edge,
+.z-doublebox-rounded-focus i.z-doublebox-rounded-right-edge {
+	background-image: url(${c:encodeThemeURL('~./zul/img/button/timebox-rounded.png')});
+	background-position: -19px -192px;
+}
 .z-textbox-rounded-real-readonly .z-textbox-rounded-right-edge,
 .z-decimalbox-rounded-real-readonly .z-decimalbox-rounded-right-edge,
 .z-intbox-rounded-real-readonly .z-intbox-rounded-right-edge,
 .z-longbox-rounded-real-readonly .z-longbox-rounded-right-edge,
 .z-doublebox-rounded-real-readonly .z-doublebox-rounded-right-edge {
 	background-image: url(${c:encodeThemeURL('~./zul/img/button/timebox-rounded.png')});
-	background-position: -19px -192px;
+	background-position: -19px -216px !important;
 }
 <%-- rounded: focus + invalid (overrides focus) --%>
 .z-textbox-rounded-focus input.z-textbox-rounded-text-invalid,
