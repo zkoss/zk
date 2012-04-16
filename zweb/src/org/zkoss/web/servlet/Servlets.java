@@ -294,11 +294,21 @@ public class Servlets {
 	 * "hil", "ios". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
+	 * <p> If a list of types are specified (such as <code>ie6-,ie7-</code>),
+	 * this method returns true if any of them matches (i.e., OR condition).
+	 * (since 5.0.12)
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
+		String[] types = type.split(",");
+		for (int j = 0; j < types.length; ++j)
+			if (browser(userAgent, types[j]))
+				return true; //OR
+		return false;
+	}
+	private static boolean browser(String userAgent, String type) {
 		final BrowserIdentifier bwid = _bwid;
 		if (bwid != null && bwid.isBrowser(userAgent, type))
 			return true;
