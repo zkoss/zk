@@ -14,7 +14,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<div><label style="font-weight:bold">This feature only support on IE8+, Firefox, Chrome, Safari, and Opera</label></div>
+	<vlayout>
+	<label style="font-weight:bold">This feature only support on IE8+, Firefox, Chrome, Safari, and Opera</label>
 	<zscript><![CDATA[
 		import org.zkoss.zktest.test2.big.*;
 		import org.zkoss.util.*;
@@ -116,4 +117,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			]]></html>
 		</template>
 	</biglistbox>
+	</vlayout>
 </zk>
