@@ -60,7 +60,7 @@ function (out) {
 						'<div class="', zcls, '-hr" >',
 						(isFrameRequired ? hm: ''));
 			if (this.isClosable())
-				out.push('<a id="', this.uuid, '-close"  class="', zcls, '-close"></a>');
+				out.push('<a id="', this.uuid, '-close"  class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
 
 			out.push((!isFrameRequired ? hm: ''), '<span class="', zcls, '-text">', this.domContent_(), '</span></div></div></div>');
 			if (isFrameRequired)
