@@ -1461,6 +1461,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 			}
 		} else { //feature#3184415: span to a specific column
+			// start of ZK-1043: can remove after FF 13
+			var ff = zk.gecko,
+				ff_10_12 = ff > 9 && ff < 13,
+				ebody = this.ebody, 
+				h;
+			if (ff_10_12) {
+				if (ebody)
+					h = ebody.style.height;
+				if (h)
+					ebody.style.height = '';
+			}
+			// end of ZK-1043
 			visj = this._nspan - 1;
 			for (var i = hdfaker.cells.length - (fakerflex ? 1 : 0); i--;) {
 				if (!zk(hdfaker.cells[i]).isVisible()) continue;
@@ -1477,6 +1489,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				var cell = head.cells[i].firstChild;
 				cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 			}
+			// start of ZK-1043: can remove after FF 13
+			if (ff_10_12 && h)
+				ebody.style.height = h;
+			// end of ZK-1043
 		}
 		//bug 3188738: Opera only. Grid/Listbox/Tree span="x" not working
 		if (zk.opera) 
