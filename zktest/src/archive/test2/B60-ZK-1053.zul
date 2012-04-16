@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1053.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr  16 10:10:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>Click on the selectbox component, you should see the msg become 'msg: Selectbox onFocus'</div>
+	<div>Click on the blank outside, you should see the msg become 'msg: Selectbox onBlur'</div>
+	<div>Click on the chosenbox component, you should see the msg become 'msg: Chosenbox onFocus'</div>
+	<div>Click on the blank outside, you should see the msg become 'msg: Chosenbox onBlur'</div>
+	
+	<label id="msg" value="msg:" />
+	<div></div>
+	Selectbox:
+	<selectbox>
+		<attribute name="onFocus">
+			msg.setValue("msg: Selectbox onFocus");
+		</attribute>
+		<attribute name="onBlur">
+			msg.setValue("msg: Selectbox onBlur");
+		</attribute>
+	</selectbox>
+	<div></div>
+	Chosenbox
+	<chosenbox>
+		<attribute name="onFocus">
+			msg.setValue("msg: Chosenbox onFocus");
+		</attribute>
+		<attribute name="onBlur">
+			msg.setValue("msg: Chosenbox onBlur");
+		</attribute>
+	</chosenbox>
+</zk>

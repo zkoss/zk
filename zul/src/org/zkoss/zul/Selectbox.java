@@ -445,7 +445,8 @@ public class Selectbox extends HtmlBasedComponent {
 			
 			Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
 					selObjs, null, index, 0));
-		}
+		} else // ZK-1053
+			super.service(request, everError);
 	}
 
 	// Cloneable//
