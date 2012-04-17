@@ -39,16 +39,16 @@ public class ObjectBooleanConverter implements Converter,Serializable {
 	}
 	
 	/**
-	 * Given a Boolean value and return associated "true" object if true; or "false" object if false.
+	 * Given a Boolean value and return associated "true" object if true; or "false" object if null or false
 	 * @param val the boolean value to be checked.
 	 * @param comp associate Component
 	 * @param ctx bind context for associate {@link Binding} and extra parameter (e.g. true and false)
-	 * @return the converted "true" object if true; or "false" object if false.
+	 * @return the converted "true" object if true; or "false" object if null or false.
 	 */
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		final Object trueObj = ctx.getConverterArg("true");
 		final Object falseObj = ctx.getConverterArg("false");
 		final Boolean b = (Boolean) val;
-		return b.booleanValue() ? trueObj : falseObj;
+		return b!=null && b.booleanValue() ? trueObj : falseObj;
 	}
 }
