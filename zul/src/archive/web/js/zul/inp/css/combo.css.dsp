@@ -643,6 +643,14 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-doublespinner-rounded .z-doublespinner-rounded-btn-readonly {
 	background-position: 0 -216px;
 }
+.z-spinner-rounded-real-readonly .z-spinner-rounded-btn-over,
+.z-doublespinner-rounded-real-readonly .z-doublespinner-rounded-btn-over,
+.z-timebox-rounded-real-readonly .z-timebox-rounded-btn-over,
+.z-datebox-rounded-real-readonly .z-datebox-rounded-btn-over,
+.z-bandbox-rounded-real-readonly .z-bandbox-rounded-btn-over,
+.z-combobox-rounded-real-readonly .z-combobox-rounded-btn-over {
+	background-position: 0 -144px;
+}
 
 .z-spinner-real-readonly,
 .z-doublespinner-real-readonly,
