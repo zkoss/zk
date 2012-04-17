@@ -1144,7 +1144,14 @@ jq(el).zk.center(); //same as 'center'
 		el.style.display = "none";
 		return ofs;
 	},
-
+	/**
+	 * A short cut for looking up ZK Widget from jQuery object.
+	 * Now the code 
+	 * <pre><code> zk.Widget.$(jq("@listbox"))</code></pre> could be replaced with <code><pre> zk("@listbox").$() </code></pre>
+	 */
+	$:function(){
+		return zk.Widget.$(this.jq[0]);
+	},
 	/** Makes the position of the first selected element as absolute.
 	 * In addition to changing the style's position to absolute, it
 	 * will store the location such that it can be restored later when
