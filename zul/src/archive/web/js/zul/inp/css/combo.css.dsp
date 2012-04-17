@@ -39,9 +39,7 @@
 	border: 1px solid #E6E6E6;
 	border-top-color: #B2B2B2;
 	border-right: 0;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 4px;
+	padding: 2px;
 	border-radius: 2px 0 0 2px;
 	-moz-border-radius: 2px 0 0 2px;
 	-webkit-border-radius: 2px 0 0 2px;
@@ -583,6 +581,8 @@ i.z-doublespinner-rounded i.z-doublespinner-rounded-btn-right-edge-invalid {
 .z-combobox-focus .z-combobox-readonly {
 	background: transparent repeat-x 0 0;
 	background-color: #FAFAFA;
+	border: 1px solid #E6E6E6;
+	border-top-color: #B2B2B2;
 	border-right-width: 0;
 	padding-right: 1px;
 	cursor: default;

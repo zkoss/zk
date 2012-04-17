@@ -21,8 +21,7 @@
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	padding: 2px;
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
@@ -63,6 +62,7 @@
 .z-doublebox-readonly,
 .z-decimalbox-readonly {
 	background: #FAFAFA;
+	cursor: default;
 }
 
 <%-- Inplace editing--%>
