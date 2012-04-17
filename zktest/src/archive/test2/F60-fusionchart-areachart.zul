@@ -1,0 +1,81 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window id="win"  height="100%">
+		<zscript>
+			import org.zkoss.zkmax.zul.fusionchart.config.*;
+			import org.zkoss.zktest.test2.*;
+			
+			String type ="area" ;
+			//XYModel or Category model for area chart
+			//org.zkoss.zul.ChartModel model = F60_Fusionchart_Factory.createCategoryModel();
+			org.zkoss.zul.ChartModel model = F60_Fusionchart_Factory.createXYModel();
+			ChartConfig config = F60_Fusionchart_Factory.createXYChartConfig();
+		</zscript>
+		<borderlayout height="100%">
+			<center autoscroll="true">
+				<vlayout>
+					<div>
+						3d
+					</div>
+					<hlayout>
+					(Not supported / chart - horizontal -3d)
+							<!-- unsupported 
+						<fusionchart title="${type} chart - vertical" width="500" height="250" type="${type}"
+							model="${model}" orient="vertical" threeD="true"
+							chartConfig="${config}"
+							forward="onChartClick" /> 
+							-->
+							(Not supported / chart - horizontal -3d)
+							<!--  
+						<fusionchart  title="${type} chart - horizontal" width="500" height="250" type="${type}"
+							model="${model}" orient="horizontal" threeD="true"
+							chartConfig="${config}"
+							forward="onChartClick" />
+							-->
+					</hlayout>
+					<div>
+						non 3d
+					</div>
+					<hlayout>
+						<fusionchart  title="${type} chart - vertical" width="500" height="250" type="${type}"
+							model="${model}" orient="vertical" threeD="false"
+							chartConfig="${config}"
+							forward="onChartClick" />
+						<fusionchart  title="${type} chart - horizontal" width="500" height="250" type="${type}"
+							model="${model}" orient="horizontal" threeD="false"
+							chartConfig="${config}"
+							forward="onChartClick" />							
+					</hlayout>		
+					<div>
+						no-config 3d
+					</div>
+					<hlayout>
+					(Not supported / chart - horizontal -3d)
+							<!-- unsupported 
+						<fusionchart  title="${type} chart - vertical" width="500" height="250" type="${type}"
+							model="${model}" orient="vertical" threeD="true"
+							forward="onChartClick" />
+							-->
+							(Not supported / chart - horizontal -3d)
+							<!-- unsupported
+						<fusionchart  title="${type} chart - horizontal" width="500" height="250" type="${type}"
+							model="${model}" orient="horizontal" threeD="true"
+							forward="onChartClick" />
+							-->							
+					</hlayout>
+					<div>
+						no-config	no-3d
+					</div>	
+					<hlayout>
+						<fusionchart  title="${type} chart - vertical" width="500" height="250" type="${type}"
+							model="${model}" orient="vertical" threeD="false"
+							forward="onChartClick" />
+						<fusionchart  title="${type} chart - horizontal" width="500" height="250" type="${type}"
+							model="${model}" orient="horizontal" threeD="false"
+							forward="onChartClick" />							
+					</hlayout>						
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>	

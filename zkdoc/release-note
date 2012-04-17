@@ -25,7 +25,8 @@ ZK 6.0.1
   ZK-986: A way to close a window after a command
   ZK-1042: Able to show error message on selectbox
   ZK-1047: Label should support format
-
+  ZK-1018: Add fusionchart component
+  
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
   ZK-877: NPE in a save only binding.
@@ -90,7 +91,7 @@ ZK 6.0.1
     please use Binder.init(Component root,Object viewModel,Map<String, Object> initArgs) instead.
   + The preloadSize and initRodSize of Listbox and Grid change to 50 items by default.
   + IdGenerator provides ComponentInfo when rendering component UUID now,please update your IdGenerator if exist.
-  
+
 	--------
 ZK 6.0.0
 Feb 14, 2012

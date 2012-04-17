@@ -88,6 +88,7 @@ public class Chart extends Imagemap {
 	public static final String LINE = "line";
 	public static final String AREA = "area";
 	public static final String STACKED_BAR = "stacked_bar";
+	public static final String COMBINATION = "combination";
 	public static final String STACKED_AREA = "stacked_area";
 	public static final String WATERFALL = "waterfall";
 	public static final String POLAR = "polar";

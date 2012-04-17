@@ -1,0 +1,46 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk>
+	<window id="win" apply="org.zkoss.zktest.test2.F60_ZK_1018_Fusionchart_Composer" height="100%">
+		<borderlayout height="100%">
+			<north vflex="min">
+				<panel border="normal" framable="true" height="100%">
+					<panelchildren>
+						<checkbox label="threeD"
+							checked="@{attr.threeD}" />
+						<checkbox label="use ChartConfig"
+							checked="@{attr.useChartConfig}" />
+						<radiogroup
+							selectedIndex="@{attr.orient, converter='org.zkoss.zktest.test2.F60_ZK_1018_Fusionchart_OrientConverter'}">
+							<radio label="vertical"/>
+							<radio label="horizontal"/>
+						</radiogroup>
+						<checkbox label="Show Gantt Chart Table"  forward="onCheck=onShowTable"/>
+					</panelchildren>
+				</panel>
+			</north>
+			<west size="150px">
+				<listbox id="typeList" selectedIndex="@{attr.type, converter='org.zkoss.zktest.test2.F60_ZK_1018_Fusionchart_ChartConverter'}">
+					<listitem label="Pie Chart" value="pie"/>
+					<listitem label="Bar Chart" value="bar"/>
+					<listitem label="Stacked Bar Chart" value="stacked_bar"/>
+					<listitem label="Line Chart" value="line"/>
+					<listitem label="Area Chart" value="area"/>
+					<listitem label="Stacked Area Chart" value="stacked_area"/>
+					<listitem label="Gantt Chart" value="gantt"/>
+					<listitem label="Combination Chart" value="combination"/>
+				</listbox>
+			</west>
+			<center autoscroll="true">
+				<vlayout>
+					<chart id="chart" title="@{attr.type}" width="500" height="250" type="@{attr.type}"
+						model="@{attr.model}" orient="@{attr.orient}" threeD="@{attr.threeD}"
+						forward="onChartClick" />
+					<fusionchart id="fchart" title="@{attr.type}" width="500" height="250" type="@{attr.type}"
+						model="@{attr.model}" orient="@{attr.orient}" threeD="@{attr.threeD}"
+						chartConfig="@{attr.chartConfig}"
+						forward="onChartClick" />
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>	
