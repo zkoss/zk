@@ -1422,10 +1422,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			++i;
 		}
 		//ie6/ie7 leave a vertical scrollbar space, use offsetWidth if not setting height
-		var hgh = zk.ie < 8 ? (this.getHeight() || this.$n().style.height) : true; 
+		// B50-ZK-1038: in IE, when body has 0 height, it has 0 client width
+		var useOffset = zk.ie && (bdtable.parentNode.offsetHeight == 0 || 
+			(zk.ie < 8 && !this.getHeight() && !this.$n().style.height));
 		//**Tricky. ie6/ie7 strange behavior, will generate horizontal scrollbar, minus one to avoid it!
-		var	total = (hgh ? bdtable.parentNode.clientWidth : bdtable.parentNode.offsetWidth) - (zk.ie < 8 ? 1 : 0), 
-			extSum = total - width; 
+		var	total = bdtable.parentNode[useOffset ? 'offsetWidth' : 'clientWidth'] - (zk.ie < 8 ? 1 : 0), 
+			extSum = total - width;
 		
 		var count = total,
 			visj = -1;

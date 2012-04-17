@@ -1,0 +1,52 @@
+<!--
+	B50-ZK-1038.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Apr 17 12:26:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		In the following 3 listboxes, the second column should occupy the rest of the width (around 200px), while the first and third should be 50px wide.
+	</div>
+	<div width="300px">
+		<listbox span="1">
+			<listhead>
+				<listheader label="col 1" width="50px" />
+				<listheader label="col 2" width="50px" />
+				<listheader label="col 3" width="50px" />
+			</listhead>
+		</listbox>
+		<separator />
+		<listbox span="1">
+			<listhead>
+				<listheader label="col 1" width="50px" />
+				<listheader label="col 2" width="50px" />
+				<listheader label="col 3" width="50px" />
+			</listhead>
+			<listitem>
+				<listcell label="item" />
+				<listcell label="item" />
+				<listcell label="item" />
+			</listitem>
+		</listbox>
+		<separator />
+		<listbox span="1">
+			<listhead>
+				<listheader width="50px" />
+				<listheader width="50px" />
+				<listheader width="50px" />
+			</listhead>
+			<listitem>
+				<listcell label="item" />
+				<listcell label="item" />
+				<listcell label="item" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

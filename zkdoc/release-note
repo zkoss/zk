@@ -13,6 +13,7 @@ ZK 5.0.12
   ZK-1022: grid column disappear after sizable and setModel with frozen column
   ZK-1043: Still Firefox 11 (probably also 10) problems with listbox and span 
   ZK-1058: ZK cannot support drag-and-drop for Android mobile
+  ZK-1038: A empty listbox with long header set span doesn't work (IE only) 
 
 	--------
 ZK 5.0.11
