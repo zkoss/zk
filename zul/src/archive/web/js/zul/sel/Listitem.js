@@ -176,11 +176,14 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	setVisible: function (visible) {
 		this.$supers('setVisible', arguments);
 		// ZK-1037 start
-		var box = this.getListbox();
-		if (visible)
-			box._fixHorScrollbar();
-		else
-			box._removeHorScrollbar();
+		var box;
+		if (zk.ie == 9 && (box = this.getListbox())
+			&& box.$n()) {
+			if (visible)
+				box._fixHorScrollbar();
+			else
+				box._removeHorScrollbar();
+		}
 		// ZK-1037 end
 	}
 });

@@ -72,10 +72,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		emptyMessage:function(msg){
 			if(this.desktop) jq("td",this.$n("empty")).html(msg);
 			// ZK-1037 start
-			if (msg)
-				this._fixHorScrollbar();
-			else
-				this._removeHorScrollbar();
+			if (zk.ie == 9) {
+				if (msg)
+					this._fixHorScrollbar();
+				else
+					this._removeHorScrollbar();
+			}
 			// ZK-1037 end
 		}
 	},	
