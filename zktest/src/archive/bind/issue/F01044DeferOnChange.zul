@@ -1,0 +1,32 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01044DeferOnChange')"
+	validationMessages="@id('vmsgs')">
+	<label multiline="true">
+	1.edit value2 and value 4 should not fire onChange to server side immediately.
+	2.click save 1, the label of value2 should change the value you edited.
+	3.click save 2, the label of value4 should change the value you edited.
+	</label>
+	<hlayout>
+	Value 1 <textbox id="tb1" value="@bind(vm.value1)"/>/<label id="lb1" value="@bind(vm.value1)"/>
+	</hlayout>
+	<hlayout>
+	Value 2 <textbox id="tb2" value="@load(vm.value2) @save(vm.value2,before='save1')"/>/<label id="lb2" value="@bind(vm.value2)"/>
+	</hlayout>
+	<button label="Save1" onClick="@command('save1')" />
+	<vlayout form="@id('fx') @load(vm) @save(vm,before='save2')">
+		<hlayout>
+		Value 3 <textbox id="tb3" value="@bind(fx.value3)"/>/<label id="lb3" value="@bind(fx.value3)"/>
+		</hlayout>
+		<hlayout>
+		Value 4 <textbox id="tb4" value="@load(fx.value4) @save(fx.value4,before='save2')"/>/<label id="lb4" value="@bind(fx.value4)"/>
+		</hlayout>
+	</vlayout>
+	<hlayout>
+		Value3:<label id="lb5" value="@bind(vm.value3)"/>/Value4:<label id="lb6" value="@bind(vm.value4)"/>
+	</hlayout>
+	<button label="Save2" onClick="@command('save2')" />
+	
+	
+</window>

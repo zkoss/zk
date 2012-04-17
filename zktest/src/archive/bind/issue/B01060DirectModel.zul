@@ -1,0 +1,34 @@
+<zk>
+
+	<window apply="org.zkoss.bind.BindComposer" title="title"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01059DifferentType')">
+		<label multiline="true">
+			1.3 listbox should shows A,B,C as well
+		</label>
+		<zscript>
+		org.zkoss.zul.ListModelList model = new org.zkoss.zul.ListModelList();
+		model.add("A");
+		model.add("B");
+		model.add("C");
+		</zscript>
+		Listbox1, mode,item by EL
+		<listbox model="${model}">
+			<template name="model">
+				<listitem label="${each}" />	
+			</template>
+		</listbox>
+		Listbox2, model by EL, item by Binder
+		<listbox model="${model}" visible="@load(true)"> <!-- visible to enable binder renderer -->
+			<template name="model">
+				<listitem label="@load(each)" />	
+			</template>
+		</listbox>
+		Listbox3, mode &amp; item by Binder
+		<listbox model="@load(model)" > 
+			<template name="model">
+				<listitem label="@load(each)" />	
+			</template>
+		</listbox>
+	</window>
+
+</zk>

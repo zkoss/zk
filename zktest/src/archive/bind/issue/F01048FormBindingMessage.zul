@@ -1,0 +1,15 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F01048FormBindingMessage')"
+	validationMessages="@id('vmsgs')">
+	<hbox form="@id('fx') @load(vm.person) @save(vm.person, before='save') @validator(vm.validator)">
+		<label value="First name: " />
+		<textbox maxlength="30" value="@bind(fx.firstName)" errorMessage="@load(vmsgs['firstName'])"/>
+		<label value="Last name: " />
+		<textbox maxlength="30" value="@bind(fx.lastName)" errorMessage="@load(vmsgs['lastName'])"/>
+		<label value="Age: " />
+		<intbox maxlength="2" value="@bind(fx.age)" errorMessage="@load(vmsgs['age'])"/>
+	</hbox>
+	<button label="Save" onClick="@command('save')" />
+</window>

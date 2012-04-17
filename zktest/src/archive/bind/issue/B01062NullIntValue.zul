@@ -1,0 +1,16 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01062NullIntValue')"
+	validationMessages="@id('vmsgs')">
+	
+	<intbox value="@bind(vm.value)"/>/<label value="@bind(vm.value)"/>
+	
+	<div form="@id('fx') @load(vm) @save(vm,before='save') @validator(vm.validator)" >
+		<intbox value="@bind(fx.value)"/>/<label value="@bind(fx.value)"/>	
+	</div>
+	
+	<button label="Save" onClick="@command('save')" />
+	
+	<label value="@bind(vm.message)"/>
+</window>

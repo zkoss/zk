@@ -1,0 +1,17 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01066IncorrectFormValue')"
+	validationMessages="@id('vmsgs')">
+	<label multiline="true">
+	1.edit value, the label value should not change.
+	2.click save, two label value should change to corresponding value.
+	</label>
+	<vlayout form="@id('fx') @load(vm) @save(vm,before='save')">
+		<hlayout>
+		Value <textbox id="tb1" value="@load(fx.value1) @save(fx.value1,before='save')"/>/<label id="lb1" value="@bind(fx.value1)"/>
+		</hlayout>
+	</vlayout>
+	<label id="lb6" value="@bind(vm.value1)"/>
+	<button label="Save" onClick="@command('save')" />
+</window>
