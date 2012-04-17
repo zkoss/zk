@@ -1,0 +1,18 @@
+<zk>
+	<window>
+		<window apply="org.zkoss.bind.BindComposer" title="aa"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01063BindException')">
+			<vbox>
+			normal property
+			<label value="@bind(vm.value)"/>
+			<textbox value="@bind(vm.value)"/>
+			--normal map property
+			<label value="@bind(vm.map.xyz)"/>
+			<textbox value="@save(vm.map.xyz)"/>
+			--get exception if change the textbox value
+			<textbox value="@save(vm.valuex)"/>
+			</vbox>
+			
+		</window>
+	</window>
+</zk>

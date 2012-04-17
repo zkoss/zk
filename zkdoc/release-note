@@ -74,6 +74,7 @@ ZK 6.0.1
   ZK-1053: Selectbox doesn't handle onFocus / onBlur event 
   ZK-1058: ZK cannot support drag-and-drop for Android mobile
   ZK-1037: An empty listbox with long header will appear scroll bar (IE only)
+  ZK-1063: No exception if binding to a non-existed property
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

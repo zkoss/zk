@@ -15,14 +15,12 @@ package org.zkoss.bind.impl;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
-import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
-import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -46,12 +44,10 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 
 	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value)
 	throws XelException {
-		try {
-			expression.setValue(newXelContext(ctx, comp), value);
-		} catch (PropertyNotFoundException ex) {
-			//TODO, Henri, shall log here
-			//ignore if fail to locate base
-		}
+		//ZK-1063 No exception if binding to a non-existed property
+		//Dennis, Removed the try-catch PropertyNotFoundException, we don't have history to check why we did try-catch before
+		//However, it should throw the property-not-found to let user be aware it. 
+		expression.setValue(newXelContext(ctx, comp), value);
 	}
 
 	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
