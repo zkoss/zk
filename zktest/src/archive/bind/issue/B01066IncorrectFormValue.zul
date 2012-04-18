@@ -12,6 +12,6 @@
 		Value <textbox id="tb1" value="@load(fx.value1) @save(fx.value1,before='save')"/>/<label id="lb1" value="@bind(fx.value1)"/>
 		</hlayout>
 	</vlayout>
-	<label id="lb6" value="@bind(vm.value1)"/>
-	<button label="Save" onClick="@command('save')" />
+	<label id="lb2" value="@bind(vm.value1)"/>
+	<button id="save" label="Save" onClick="@command('save')" />
 </window>

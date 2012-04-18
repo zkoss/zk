@@ -56,14 +56,15 @@ public class AccessInfo implements Serializable{
 
 	public static AccessInfo create(Binding binding, String accessExpr, Class<?> expectedType, ConditionType type, String command,boolean ignoreTracker) {
 		final Binder binder = binding.getBinder();
-		if(type != ConditionType.PROMPT && command==null){
+		if(ConditionType.PROMPT != type && command==null){
 			throw new IllegalArgumentException("condition type is "+type+", but command is null");
 		}
 
 		final BindEvaluatorX eval = binder.getEvaluatorX();
-		final BindContext ctx = (type != ConditionType.PROMPT) ? null : 
-			BindContextUtil.newBindContext(binder, binding, false, null, binding.getComponent(), null); 
-		if(ctx!=null && ignoreTracker){
+		//ZK-1066 Incorrect form value if inner binding waiting a command
+		//ignore when non-prompt and binding marked ignored
+		final BindContext ctx = BindContextUtil.newBindContext(binder, binding, false, null, binding.getComponent(), null);
+		if(ConditionType.PROMPT != type || ignoreTracker){ 
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);
 		}
 		final ExpressionX prop = eval.parseExpressionX(ctx, accessExpr, expectedType);
