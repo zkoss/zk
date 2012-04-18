@@ -425,7 +425,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	// ZK-1037 start
 	// called by self#emptyMessage and Listitem#setVisible
 	_fixHorScrollbar: (zk.ie == 9) ? function () {
-		jq(this.$n('body')).css('overflowX', 'scroll');
+		var ebody, ebodytbl;
+		if (((ebody = this.ebody) && (ebodytbl = this.ebodytbl))
+			&& (ebody.offsetWidth < ebodytbl.offsetWidth))
+			jq(this.$n('body')).css('overflowX', 'scroll');
 	} : zk.$void,
 	// super
 	// also called by self#emptyMessage and Listitem#setVisible
