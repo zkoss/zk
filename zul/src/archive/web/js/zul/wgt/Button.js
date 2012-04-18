@@ -64,7 +64,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * 4.mouse up not in the widget (null)
 		 */
 		if ( wgt._fxcfg == 1 ) {
-			if (jq.contains(wgt.$n(), evt.domTarget)) {
+			var n = wgt.$n(); // the wgt may be detached while clicking quickly to invalidate itself.
+			if (n && jq.contains(n, evt.domTarget)) {
 				wgt._fxcfg = 2;
 				if(wgt._fxctm) clearTimeout(wgt._fxctm);
 				wgt._fxctm = setTimeout(function() {
