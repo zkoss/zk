@@ -74,6 +74,7 @@ ZK 6.0.1
   ZK-1037: An empty listbox with long header will appear scroll bar (IE only)
   ZK-1063: No exception if binding to a non-existed property
   ZK-1054: ObjectBooleanConverter does not accept Null value
+  ZK-1067: Selectbox de-serialization fails while restoring session
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

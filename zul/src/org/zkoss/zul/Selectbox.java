@@ -491,7 +491,6 @@ public class Selectbox extends HtmlBasedComponent {
 		didDeserialize(_renderer);
 		if (_model != null) {
 			initDataListener();
-			postOnInitRender();
 		}
 	}
 
@@ -506,5 +505,7 @@ public class Selectbox extends HtmlBasedComponent {
 		super.sessionDidActivate(page);
 		didActivate(_model);
 		didActivate(_renderer);
+		if (_model != null)
+			postOnInitRender();
 	}
 }
