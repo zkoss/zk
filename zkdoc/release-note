@@ -22,8 +22,6 @@ ZK 6.0.1
   ZK-1032: Able to wire Event to command method
   ZK-1033: @Init should supports to annotate on Type
   ZK-1050: Able to ignore the load or save of a binding
-  ZK-986: A way to close a window after a command
-  ZK-1042: Able to show error message on selectbox
   ZK-1047: Label should support format
   ZK-1018: Add fusionchart component
   

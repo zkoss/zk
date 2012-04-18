@@ -9,7 +9,7 @@
 
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.bind.converter;
+package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
@@ -18,16 +18,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
- * A special converter that help you show a error message on any component.<br/>
- * For example <br/>
- * <pre>
- * {@code
- * <div msg="@bind(vmsgs[tb]) @converter('org.zkoss.bind.converter.ErrorMessageConverter')">
- *     <textbox id="tb" value="@bind(vm.value1) @validator(vm.validator1)"  />
- * </div>
- * }
- * </pre>
- * At here, <i>msg</i> is a non-existed attribute of the component, you can use another non-existed name
+ * A internal converter that shows a error message on any component.<br/>
  * @author dennis
  * @since 6.0.1
  */

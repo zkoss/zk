@@ -5,19 +5,19 @@
     	2.click on detach, you will only see window2 than
     	</label>
     	<window id="win1" title="window1" 
-    		whatever="@load(true,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		whatever="@load(true,after='detach') @converter('org.zkoss.zktest.bind.issue.F00986CloseWindow$DetachConverter')">    	
     		
     	</window>
     	<window id="win2" title="window2" 
-    		whatever="@load(false,after='detach') @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		whatever="@load(false,after='detach') @converter('org.zkoss.zktest.bind.issue.F00986CloseWindow$DetachConverter')">    	
     		
     	</window>
     	<window id="win3" title="window3" 
-    		whatever="@load(vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		whatever="@load(vm.detached) @converter('org.zkoss.zktest.bind.issue.F00986CloseWindow$DetachConverter')">    	
     		
     	</window>
     	<window id="win4" title="window4" 
-    		whatever="@load(not vm.detached) @converter('org.zkoss.bind.converter.DetachConverter')">    	
+    		whatever="@load(not vm.detached) @converter('org.zkoss.zktest.bind.issue.F00986CloseWindow$DetachConverter')">    	
     	</window>
     	<button id="detach" label="detach" onClick="@command('detach')"/>
     	<button label="Dump" onClick="binder.tracker.dump()"/>
