@@ -35,7 +35,7 @@ public class B01062NullIntValue {
 
 	@Command @NotifyChange("message")
 	public void save() {
-		message = "save value is "+value;
+		message = "value is "+value;
 	}
 
 	/**

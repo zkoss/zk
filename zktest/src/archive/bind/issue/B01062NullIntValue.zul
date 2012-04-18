@@ -3,14 +3,17 @@
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01062NullIntValue')"
 	validationMessages="@id('vmsgs')">
-	
-	<intbox value="@bind(vm.value)"/>/<label value="@bind(vm.value)"/>
+	<label multiline="true">
+	1.after loaded , the textbox and label is all empty
+	2.after click the after, they should keep empty, and message is 'value is null'
+	</label>
+	<intbox id="ib1" value="@bind(vm.value)"/>/<label id="lb1" value="@bind(vm.value)"/>
 	
 	<div form="@id('fx') @load(vm) @save(vm,before='save') @validator(vm.validator)" >
-		<intbox value="@bind(fx.value)"/>/<label value="@bind(fx.value)"/>	
+		<intbox id="ib2" value="@bind(fx.value)"/>/<label id="lb2" value="@bind(fx.value)"/>	
 	</div>
 	
-	<button label="Save" onClick="@command('save')" />
+	<button id="save" label="Save" onClick="@command('save')" />
 	
-	<label value="@bind(vm.message)"/>
+	<label id="msg" value="@bind(vm.message)"/>
 </window>
