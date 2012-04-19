@@ -78,6 +78,7 @@ ZK 6.0.1
   ZK-1054: ObjectBooleanConverter does not accept Null value
   ZK-1067: Selectbox de-serialization fails while restoring session
   ZK-1066: Incorrect form value if inner binding waiting a command
+  ZK-1010: datebox with locale th_TH (Thai buddist calendar) can't select 29/02/2555 (year 2555 is 2012 in US calendar)
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

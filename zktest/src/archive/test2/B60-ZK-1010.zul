@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1010.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 19, 2012  5:54:39 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please choose a date like "2012/02/29" (Leap-day), in thai's datebox will be "2555" years, after selected the value will be "Wed Feb 29 00:00:00 CST 2012"
+<separator/>
+2. Please reopen the selected datebox, the date in the calendar should be the same as your chosen.
+
+<hlayout>
+<datebox locale="th_TH" onChange="v1.value = self.value.toString()"/>THai's value=<label id="v1"/>
+</hlayout>
+
+<hlayout>
+<datebox locale="jp_JP" onChange="v2.value = self.value.toString()"/>Japan's value=<label id="v2"/>
+</hlayout>
+
+<hlayout>
+<datebox onChange="v3.value = self.value.toString()"/>Default's value=<label id="v3"/>
+</hlayout>
+</zk>

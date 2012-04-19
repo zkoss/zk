@@ -111,9 +111,69 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function dayOfWeekInMonth(d) {
 		return _digitFixed(1 + Math.floor(_dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
 	}
-	
-	
 
+// a proxy of Date object for leap day on Thai locale - B60-ZK-1010
+var LeapDay = zk.$extends(zk.Object, {
+	$init: function (y, m, d, hr, min, sec, msec) {
+		this.$supers('$init', arguments);
+		if (arguments.length > 1) {
+			this._date = new Date(y, m, d, hr, min, sec, msec);
+		} else
+			this._date = y;
+	},
+	setOffset: function (v) {
+		this._offset = v;
+	},
+	setFullYear: function (val) {
+		// no need to subtract the._offset, the caller will handle
+		this._date.setFullYear(val);
+	},
+	getFullYear: function () {
+		return this._date.getFullYear() + (this._offset || 0);
+	},
+	getDate: function () {
+		return this._date.getDate();
+	},
+	setDate: function (d) {
+		this._date.setDate(d);
+	},
+	getDay: function () {
+		return this._date.getDay();
+	},
+	setDay: function (d) {
+		this._date.setDay(d);
+	},
+	getMonth: function () {
+		return this._date.getMonth();
+	},
+	setMonth: function (month) {
+		this._date.setMonth(month);
+	},
+	getHours: function () {
+		return this._date.getHours();
+	},
+	setHours: function (h) {
+		this._date.setHours(h);
+	},
+	getSeconds: function () {
+		return this._date.getSeconds();
+	},
+	setSeconds: function (s) {
+		this._date.setSeconds(s);
+	},
+	getMilliseconds: function () {
+		return this._date.getMilliseconds();
+	},
+	setMilliseconds: function (m) {
+		this._date.setMilliseconds(m);
+	},
+	getTimezoneOffset: function () {
+		return this._date.getTimezoneOffset();
+	},
+	getRealDate: function () {
+		return this._date;
+	}
+});
 zk.fmt.Date = {
 	parseDate : function (txt, fmt, strict, refval, localizedSymbols) {
 		if (!fmt) fmt = "yyyy/MM/dd";
@@ -277,7 +337,13 @@ zk.fmt.Date = {
 
 		if (hasHour1 && isAM === false)
 			hr += 12;
-		var dt = new Date(y, m, d, hr, min, sec, msec);
+		var dt;
+		if (m == 1 && d == 29 && localizedSymbols.YDELTA) {
+			dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec);
+			dt.setOffset(localizedSymbols.YDELTA);
+		} else {
+			dt = new Date(y, m, d, hr, min, sec, msec);
+		}
 		if (!dFound && dt.getMonth() != m)
 			dt = new Date(y, m + 1, 0, hr, min, sec, msec); //last date of m
 		if (strict) {
@@ -437,12 +503,19 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 			this._offset = localizedSymbols.YDELTA;
 			
 		if (this._offset) {
-			d = new Date(val);
-			d.setFullYear(d.getFullYear() + this._offset);
+			if (val.getMonth() == 1 && val.getDate() == 29) {
+				d = new LeapDay(val); // a proxy of Date
+				d.setOffset(this._offset);
+			} else {
+				d = new Date(val);
+				d.setFullYear(d.getFullYear() + this._offset);
+			}
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt, localizedSymbols);
 	},
     toUTCDate: function () {
+    	if (LeapDay.isInstance(this._date))
+    		return this._date.getRealDate();
         var d;
         if ((d = this._date) && this._offset)
             (d = new Date(d))
@@ -455,24 +528,29 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 			this._offset = localizedSymbols.YDELTA;
 			
 		if (this._offset && fmt) {
-			var cnt = 0;
-			for (var i = fmt.length; i--;)
-				if (fmt.charAt(i) == 'y')
-					cnt++;
-			if (cnt > 3)
-				d.setFullYear(d.getFullYear() - this._offset);
-			else if (cnt) {
-				var year = d.getFullYear();
-				if (year < 2000)
-					d.setFullYear(year + (Math.ceil(this._offset / 100) * 100 - this._offset));
-				else
-					d.setFullYear(year - (this._offset % 100));
+			if (!LeapDay.isInstance(d)) {
+				var cnt = 0;
+				for (var i = fmt.length; i--;)
+					if (fmt.charAt(i) == 'y')
+						cnt++;
+				if (cnt > 3)
+					d.setFullYear(d.getFullYear() - this._offset);
+				else if (cnt) {
+					var year = d.getFullYear();
+					if (year < 2000)
+						d.setFullYear(year + (Math.ceil(this._offset / 100) * 100 - this._offset));
+					else
+						d.setFullYear(year - (this._offset % 100));
+				}
+			} else {
+				return d.getRealDate();
 			}
 		}
 		return d;
 	},
 	getYear: function () {
-		return this._date.getFullYear() + this._offset;
+		return LeapDay.isInstance(this._date) ? this._date.getFullYear() : 
+			this._date.getFullYear() + this._offset;
 	}
 });
 })();
