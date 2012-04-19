@@ -1163,7 +1163,14 @@ wgt.$f().main.setTitle("foo");
 		&& !(value = Widget.$(cc))) { //not created yet
 			var self = this;
 			zk.afterMount(function () {
-				zk._set(self, name, Widget.$(cc), extra);
+				var v = Widget.$(cc);
+				// ZK-1069: may not be ready even in afterMount
+				if (v)
+					zk._set(self, name, v, extra);
+				else
+					setTimeout(function () {
+						zk._set(self, name, Widget.$(cc), extra);
+					});
 			}, -1);
 			return this;
 		}
