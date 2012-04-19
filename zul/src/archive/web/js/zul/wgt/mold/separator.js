@@ -14,5 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var tag = this.isVertical() ? 'span': 'div';
-	out.push('<', tag, this.domAttrs_(), '>&nbsp;</', tag, '>');
+	out.push('<', tag, this.domAttrs_(), '><div class="', this.getZclass(), 
+			'-inner">&nbsp;</div></', tag, '>');
 }
