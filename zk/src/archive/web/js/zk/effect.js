@@ -305,7 +305,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 				rleaf = offp[0];
 			}
 		// grab the maximum along the chain of nodes
-		for (n = rleaf[0]; n && n.style; n = n.parentNode)
+		for (var n = rleaf[0]; n && n.style; n = n.parentNode)
 			if ((zic = jq(n).css('z-index')) && zic != 'auto') {
 				zicv = zk.parseInt(zic);
 				if (zi == 'auto' || zicv > zi)
