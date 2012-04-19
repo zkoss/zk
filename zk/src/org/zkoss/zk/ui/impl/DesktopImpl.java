@@ -787,13 +787,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * @param comp
 	 * @return
 	 */
-	private ComponentInfo getComponentInfoFromExecution(Component comp){
+	private ComponentInfo getComponentInfoFromExecution(Component comp) {
 		ComponentInfo result = null;
 		final Execution exec = Executions.getCurrent();
 		if(exec == null){
 			return null;
 		}
-		Map<Component,ComponentInfo> info = (Map<Component,ComponentInfo>  ) 
+		Map<Component,ComponentInfo> info = (Map<Component,ComponentInfo>) 
 			exec.getAttribute(org.zkoss.zk.ui.impl.Attributes.COMPONENT_INFO);
 		if(info == null){
 			return null;

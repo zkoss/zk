@@ -96,10 +96,10 @@ abstract public class AbstractUiFactory implements UiFactory {
 		if(exec == null ){
 			return null;
 		}
-		Map<Component,ComponentInfo> result = (Map<Component,ComponentInfo>) exec.getAttribute("org.zkoss.compinfo");
+		Map<Component,ComponentInfo> result = (Map<Component,ComponentInfo>) exec.getAttribute(Attributes.COMPONENT_INFO);
 		if(result == null){
 			result = new HashMap<Component,ComponentInfo>();
-			exec.setAttribute( Attributes.COMPONENT_INFO, result);
+			exec.setAttribute(Attributes.COMPONENT_INFO, result);
 		}
 		return result;
 	}
