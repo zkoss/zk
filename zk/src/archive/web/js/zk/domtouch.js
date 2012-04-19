@@ -42,7 +42,6 @@ function _createJQEvent (target, type, button, changedTouch, ofs) {
 	return event;
 }
 function _toMouseEvent(event, changedTouch) {
-	zk.log(event.type);
 	switch (event.type) {
 	case 'touchstart':
 		return _createJQEvent(changedTouch.target, 'mousedown', 0, changedTouch);
