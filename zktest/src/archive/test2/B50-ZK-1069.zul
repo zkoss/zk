@@ -1,0 +1,22 @@
+<zk>
+	<div>
+		Click the button and select Radio 1, then select Radio 2. If both radio are checked, it is a bug.
+	</div>
+	<button label="Go" >
+		<attribute name="onClick"><![CDATA[
+			Radiogroup g = new Radiogroup();
+			Radio r1 = new Radio();
+			Radio r2 = new Radio();
+			
+			r1.label = "Radio 1";
+			r2.label = "Radio 2";
+			r1.radiogroup = g;
+			r2.radiogroup = g;
+			
+			div.appendChild(r1);
+			div.appendChild(r2);
+			div.appendChild(g);
+		]]></attribute>
+	</button>
+	<div id="div" />
+</zk>
