@@ -11,31 +11,53 @@ import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.lang.Strings;
 
 public class B01062NullIntValue {
-	Integer value;
+	Integer value1;
+	int value2;
 	
-	String message;
+	String message1;
+	String message2;
 	
-	public Integer getValue() {
-		return value;
-	}
-
-	public void setValue(Integer value) {
-		this.value = value;
-	}
+	
 	
 	
 
-	public String getMessage() {
-		return message;
+	public Integer getValue1() {
+		return value1;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setValue1(Integer value1) {
+		this.value1 = value1;
 	}
 
-	@Command @NotifyChange("message")
+	public int getValue2() {
+		return value2;
+	}
+
+	public void setValue2(int value2) {
+		this.value2 = value2;
+	}
+
+	
+
+	public String getMessage1() {
+		return message1;
+	}
+
+	public void setMessage1(String message1) {
+		this.message1 = message1;
+	}
+
+	public String getMessage2() {
+		return message2;
+	}
+
+	public void setMessage2(String message2) {
+		this.message2 = message2;
+	}
+
+	@Command @NotifyChange("message1")
 	public void save() {
-		message = "value is "+value;
+		message1 = "value1 is "+value1+", value2 is "+value2;
 	}
 
 	/**
@@ -46,8 +68,12 @@ public class B01062NullIntValue {
 			@Override
 			public void validate(ValidationContext ctx) {
 				Map<String, Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());
-				Integer value = (Integer)beanProps.get("value").getValue();
-				System.out.println(">>>>"+value);
+				Integer value1 = (Integer)beanProps.get("value1").getValue();
+				Integer value2 = (Integer)beanProps.get("value2").getValue();
+				
+				message2 = "value1 is "+value1+", value2 is "+value2;
+				
+				ctx.getBindContext().getBinder().notifyChange(B01062NullIntValue.this, "message2");
 			}
 		};
 	}

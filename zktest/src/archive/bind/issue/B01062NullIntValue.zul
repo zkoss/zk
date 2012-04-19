@@ -3,17 +3,33 @@
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01062NullIntValue')"
 	validationMessages="@id('vmsgs')">
+	<vbox>
 	<label multiline="true">
-	1.after loaded , the textbox and label is all empty
-	2.after click the after, they should keep empty, and message is 'value is null'
+	1.after loaded , the value1 is empty , and value2 is 0
+	2.click save directly, value1 is still empty, and value2 is 0
+	3.Msg1 and Msg2 are both 'value1 is null, value2 is 0' 
 	</label>
-	<intbox id="ib1" value="@bind(vm.value)"/>/<label id="lb1" value="@bind(vm.value)"/>
-	
-	<div form="@id('fx') @load(vm) @save(vm,before='save') @validator(vm.validator)" >
-		<intbox id="ib2" value="@bind(fx.value)"/>/<label id="lb2" value="@bind(fx.value)"/>	
-	</div>
+	<hbox>
+	Value1 <label id="lb11" value="@bind(vm.value1)"/>
+	</hbox>
+	<hbox>
+	Value2 <label id="lb12" value="@bind(vm.value2)"/>
+	</hbox>
+	<vbox form="@id('fx') @load(vm) @save(vm,before='save') @validator(vm.validator)" >
+		<hbox>Value1
+		<intbox id="ib1" value="@bind(fx.value1)"/>/<label id="lb21" value="@bind(fx.value1)"/>
+		</hbox>
+		<hbox>Value2
+		<intbox id="ib2" value="@bind(fx.value2)"/>/<label id="lb22" value="@bind(fx.value2)"/>
+		</hbox>	
+	</vbox>
 	
 	<button id="save" label="Save" onClick="@command('save')" />
-	
-	<label id="msg" value="@bind(vm.message)"/>
+	<hbox>Msg1
+	<label id="msg1" value="@bind(vm.message1)"/>
+	</hbox>
+	<hbox>Msg2
+	<label id="msg2" value="@bind(vm.message2)"/>
+	</hbox>
+	</vbox>
 </window>
