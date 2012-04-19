@@ -33,6 +33,7 @@ import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
@@ -66,7 +67,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -765,14 +765,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		String uuid = null;
 		if(idgen != null){
 			try{
-				ComponentInfo info = getComponentInfoFromExecution(comp);
-				uuid = idgen.nextComponentUuid(this, comp, info);		
+				uuid = idgen.nextComponentUuid(
+					this, comp, Utils.getComponentInfo(comp));
 			}catch(AbstractMethodError ex){
 				try {
 					Method method = idgen.getClass().getMethod("nextComponentUuid", Desktop.class,Component.class);
-					uuid = (String) method.invoke(idgen,this,comp);
+					Fields.setAccessible(method, true);
+					uuid = (String) method.invoke(idgen, this, comp);
 				} catch (Exception e) {
-					throw new RuntimeException(e);
+					throw UiException.Aide.wrap(e);
 				}
 			}
 		}
@@ -781,24 +782,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		ComponentsCtrl.checkUuid(uuid);
 		return uuid;
-	}
-	/**
-	 * 
-	 * @param comp
-	 * @return
-	 */
-	private ComponentInfo getComponentInfoFromExecution(Component comp) {
-		ComponentInfo result = null;
-		final Execution exec = Executions.getCurrent();
-		if(exec == null){
-			return null;
-		}
-		Map<Component,ComponentInfo> info = (Map<Component,ComponentInfo>) 
-			exec.getAttribute(org.zkoss.zk.ui.impl.Attributes.COMPONENT_INFO);
-		if(info == null){
-			return null;
-		}
-		return (ComponentInfo) info.get(comp);
 	}
 	
 	private String nextUuid() {

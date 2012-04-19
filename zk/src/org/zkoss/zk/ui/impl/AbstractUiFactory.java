@@ -91,24 +91,10 @@ abstract public class AbstractUiFactory implements UiFactory {
 	public Page newPage(RequestInfo ri, Richlet richlet, String path) {
 		return new PageImpl(richlet, path);
 	}
-	private Map<Component,ComponentInfo> getInfoMap(){
-		Execution exec = Executions.getCurrent();
-		if(exec == null ){
-			return null;
-		}
-		Map<Component,ComponentInfo> result = (Map<Component,ComponentInfo>) exec.getAttribute(Attributes.COMPONENT_INFO);
-		if(result == null){
-			result = new HashMap<Component,ComponentInfo>();
-			exec.setAttribute(Attributes.COMPONENT_INFO, result);
-		}
-		return result;
-	}
 	public Component newComponent(Page page, Component parent,
 	ComponentInfo compInfo, Component insertBefore) {
 		final Component comp = compInfo.newInstance(page, parent);
-		Map<Component,ComponentInfo> map = getInfoMap();
-		if(map != null)
-			map.put(comp, compInfo);
+		Utils.setComponentInfo(comp, compInfo);
 		
 		if (parent != null)
 			parent.insertBefore(comp, insertBefore);
@@ -119,8 +105,7 @@ abstract public class AbstractUiFactory implements UiFactory {
 			((BeforeCompose)comp).beforeCompose();
 		compInfo.applyProperties(comp); //include comp's definition
 		
-		if(map != null)
-			map.remove(comp);
+		Utils.setComponentInfo(comp, null);
 		return comp;
 	}
 	public Component newComponent(Page page, Component parent,

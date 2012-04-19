@@ -12,14 +12,22 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.resource.XMLResourcesLocator;
 import org.zkoss.util.resource.ClassLocator;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 
@@ -91,4 +99,37 @@ public class Utils {
 
 		return (Composer)cls.newInstance();
 	}
+
+	/** Returns the component info associated with the given component, or null
+	 * if not available.
+	 * <p>It is used only internally.
+	 */
+	public static ComponentInfo getComponentInfo(Component comp) {
+		final Map<Component,ComponentInfo> map = getComponentInfos(false);
+		return map != null ? map.get(comp): null;
+	}
+	/** Sets the component info for the given component.
+	 * <p>It is used only internally.
+	 */
+	public static void setComponentInfo(Component comp, ComponentInfo info) {
+		final Map<Component,ComponentInfo> map = getComponentInfos(info != null);
+		if (map != null)
+			if (info != null)
+				map.put(comp, info);
+			else
+				map.remove(comp);
+	}
+	private static Map<Component,ComponentInfo> getComponentInfos(boolean autoCreate){
+		Execution exec = Executions.getCurrent();
+		if (exec == null )
+			return null;
+
+		Map<Component,ComponentInfo> result = cast((Map) exec.getAttribute(COMPONENT_INFO));
+		if (result == null && autoCreate){
+			result = new HashMap<Component,ComponentInfo>();
+			exec.setAttribute(COMPONENT_INFO, result);
+		}
+		return result;
+	}
+	private static final String COMPONENT_INFO = "org.zkoss.zk.ui.metainfo.compinfo";
 }

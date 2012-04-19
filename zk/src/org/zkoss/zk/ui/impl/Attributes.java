@@ -43,9 +43,4 @@ public class Attributes extends org.zkoss.zk.ui.sys.Attributes {
 	//Session//
 	
 	//Execution//
-	/**
-	 * A execution attribute used to store a map of ComponentInfo when creating component.
-	 * @since 6.0.1
-	 */
-	public static final String COMPONENT_INFO = "org.zkoss.compinfo";
 }
