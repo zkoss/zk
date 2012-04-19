@@ -240,6 +240,10 @@ span.z-combobutton-tbbtn {
 <%-- tbbtn mold --%>
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cm {
 	font-size: ${fontSizeS};
+	background-image: none;
+}
+.z-combobutton-tbbtn-over  .z-combobutton-tbbtn-cm {
+	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-ctr.gif')});
 }
 .z-combobutton-tbbtn .z-combobutton-tbbtn-tl, 
 .z-combobutton-tbbtn .z-combobutton-tbbtn-bl,
@@ -273,6 +277,10 @@ span.z-combobutton-tbbtn {
 }
 .z-combobutton-tbbtn .z-combobutton-tbbtn-cr {
 	padding-right: 1px;
+	background-image: none;
+}
+.z-combobutton-tbbtn-over .z-combobutton-tbbtn-cr {
+	background-image: url(${c:encodeThemeURL('~./zul/img/button/btn-ctr.gif')});
 }
 .z-combobutton-tbbtn-over .z-combobutton-tbbtn-cm {
 	padding: 1px 2px 1px 2px;
