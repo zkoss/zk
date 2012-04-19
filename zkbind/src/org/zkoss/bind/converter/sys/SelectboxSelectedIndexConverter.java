@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.converter.sys;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Selectbox;
 
@@ -21,10 +20,10 @@ import org.zkoss.zul.Selectbox;
  * @author dennis
  * @since 6.0.0
  */
-public class SelectboxSelectedIndexConverter extends AbstractSelectedIndexConverter {
+public class SelectboxSelectedIndexConverter extends AbstractSelectedIndexConverter<Selectbox> {
 	private static final long serialVersionUID = 201108171811L;
-
-	protected ListModel<?> getComponentModel(Component comp) {
-		return ((Selectbox)comp).getModel();
+	@Override
+	protected ListModel<?> getComponentModel(Selectbox comp) {
+		return comp.getModel();
 	}
 }

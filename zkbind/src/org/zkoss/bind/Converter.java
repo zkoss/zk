@@ -15,11 +15,13 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * Generic binding conversion interface.
+ * <b>U</b> is the object type for the Component, <b>B</b> is the object type for the Bean
+ * and <b>C</b> is the component type of the converter. 
  * @author henrichen
  * @author dennis
  * @since 6.0.0
  */
-public interface Converter {
+public interface Converter<U,B,C extends Component> {
 	
 	/**
 	 * Indicates the returned value should be ignored to load to a component or save to a bean, 
@@ -35,7 +37,7 @@ public interface Converter {
 	 * @param ctx the bind context
 	 * @return the value to load to a component
 	 */
-	public Object coerceToUi(Object val, Component component, BindContext ctx);
+	public U coerceToUi(B val, C component, BindContext ctx);
 	
 	/**
 	 * Coerces a value to bean value to save to a bean
@@ -44,5 +46,5 @@ public interface Converter {
 	 * @param ctx the bind context
 	 * @return the value to save to a bean
 	 */
-	public Object coerceToBean(Object val, Component component, BindContext ctx);
+	public B coerceToBean(U val, C component, BindContext ctx);
 }

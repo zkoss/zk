@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.Converter;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModel;
 
@@ -21,10 +20,10 @@ import org.zkoss.zul.ListModel;
  * @author dennis
  * @since 6.0.0
  */
-public class GridModelConverter extends AbstractListModelConverter{
+public class GridModelConverter extends AbstractListModelConverter<Grid>{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
-	protected ListModel<?> getComponentModel(Component comp) {
-		return ((Grid)comp).getListModel();
+	protected ListModel<?> getComponentModel(Grid comp) {
+		return comp.getListModel();
 	}
 }

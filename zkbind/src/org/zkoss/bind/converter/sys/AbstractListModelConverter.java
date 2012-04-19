@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -38,7 +37,7 @@ import org.zkoss.zul.impl.GroupsListModel;
  * @author dennis
  * @since 6.0.0
  */
-/*package*/ abstract class AbstractListModelConverter implements Converter, Serializable{
+/*package*/ abstract class AbstractListModelConverter<C extends Component> implements Converter<Object,Object,C>, Serializable{
 
 	private static final long serialVersionUID = 201108171744L;
 	
@@ -47,7 +46,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 	 * @param comp the component that has listmodel
 	 * @return null if no list model for the component
 	 */
-	abstract protected ListModel<?> getComponentModel(Component comp);
+	abstract protected ListModel<?> getComponentModel(C comp);
 	
 	/**
 	 * post processing the wrapped model. default return original one
@@ -56,7 +55,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 	 * @param model the wrapped model
 	 * @return the list model
 	 */
-	protected ListModel<?> handleWrappedModel(BindContext ctx, Component comp, ListModel<?> model){
+	protected ListModel<?> handleWrappedModel(BindContext ctx, C comp, ListModel<?> model){
 		return model;
 	}
 	
@@ -66,7 +65,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 	 * @param ctx bind context
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
+	public Object coerceToUi(Object val, C comp, BindContext ctx) {
 		if (val == null) {
 			val = new ArrayList();
 		}
@@ -121,7 +120,7 @@ import org.zkoss.zul.impl.GroupsListModel;
 	 * @param ctx bind context
 	 */
 	@SuppressWarnings("rawtypes")
-	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
+	public Object coerceToBean(Object val, C comp, BindContext ctx) {
 		if (val == null) {
 			throw new NullPointerException("val");
 		}
@@ -141,41 +140,5 @@ import org.zkoss.zul.impl.GroupsListModel;
 			throw new UiException("Expects ListModelSet, ListModelList, ListModelMap, GroupsListModel or ListModel only."+val.getClass());
 		}
 	}
-	
-//	//contains to handle wrapped model
-//	private static class Container {
-//		private Object model;
-//		
-//		public Container(Object model){
-//			this.model = model;
-//		}
-//		@SuppressWarnings("rawtypes")
-//		public Set<Object> contains(Set<Object> objs){
-//			Set<Object> set = new HashSet<Object>();
-//			if (model instanceof ListModelSet) {
-//				for(Object obj:objs){
-//					if(((ListModelSet)model).contains(obj))
-//						set.add(obj);
-//				}
-//			} else if (model instanceof ListModelList) {
-//				for(Object obj:objs){
-//					if(((ListModelList)model).contains(obj))
-//						set.add(obj);
-//				}
-//			} else if (model instanceof ListModelMap) {
-//				for(Object obj:objs){
-//					if(((ListModelMap)model).containsValue(obj))
-//						set.add(obj);
-//				}
-//			} else if (model instanceof ListModelArray) {
-//				for(Object obj:((ListModelArray)model).getInnerArray()){
-//					if(objs.contains(obj)){
-//						set.add(obj);
-//					}
-//				}
-//			} 
-//			return set;
-//		}
-//	}
 
 }

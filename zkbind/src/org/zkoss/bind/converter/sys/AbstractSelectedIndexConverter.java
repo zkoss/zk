@@ -26,11 +26,11 @@ import org.zkoss.zul.ext.Selectable;
  * @author dennis
  * @since 6.0.0
  */
-/*package*/ abstract class AbstractSelectedIndexConverter implements Converter, java.io.Serializable {
+/*package*/ abstract class AbstractSelectedIndexConverter<C extends Component> implements Converter<Object,Object,C>, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
 	@SuppressWarnings("unchecked")
-	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
+	public Object coerceToUi(Object val, C comp, BindContext ctx) {
 
 		final ListModel<?> model = getComponentModel(comp);
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
@@ -66,9 +66,9 @@ import org.zkoss.zul.ext.Selectable;
 	  	return val;
 	}
 
-	abstract protected ListModel<?> getComponentModel(Component comp);
+	abstract protected ListModel<?> getComponentModel(C comp);
 
-	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
+	public Object coerceToBean(Object val, C comp, BindContext ctx) {
 	 	return val;
 	}
 

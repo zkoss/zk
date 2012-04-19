@@ -50,7 +50,7 @@ public class B00775ListmodelSelection {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object coerceToUi(Object val, Component comp, BindContext ctx) {
+		public Object coerceToUi(Object val, Listbox comp, BindContext ctx) {
 			Object bean = super.coerceToUi(val, comp, ctx);
 
 			if (bean instanceof ListModelList && comp instanceof Listbox) {

@@ -24,6 +24,7 @@ ZK 6.0.1
   ZK-1050: Able to ignore the load or save of a binding
   ZK-1047: Label should support format
   ZK-1018: Add fusionchart component
+  ZK-1072: Converter supports generic type
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single

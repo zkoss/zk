@@ -56,7 +56,8 @@ public class InitPropertyBindingImpl extends PropertyBindingImpl implements
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
 		//use _converter to convert type if any
-		final Converter conv = getConverter();
+		@SuppressWarnings("unchecked")
+		final Converter<Object, Object, Component> conv = getConverter();
 		if (conv != null) {
 			value = conv.coerceToUi(value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) return;

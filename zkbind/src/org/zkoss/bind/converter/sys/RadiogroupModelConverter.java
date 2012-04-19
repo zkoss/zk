@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.converter.sys;
 
 import org.zkoss.bind.Converter;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Radiogroup;
 
@@ -21,10 +20,10 @@ import org.zkoss.zul.Radiogroup;
  * @author dennis
  * @since 6.0.0
  */
-public class RadiogroupModelConverter extends AbstractListModelConverter{
+public class RadiogroupModelConverter extends AbstractListModelConverter<Radiogroup>{
 	private static final long serialVersionUID = 1463169907348730644L;
 	@Override
-	protected ListModel<?> getComponentModel(Component comp) {
-		return ((Radiogroup)comp).getModel();
+	protected ListModel<?> getComponentModel(Radiogroup comp) {
+		return comp.getModel();
 	}
 }

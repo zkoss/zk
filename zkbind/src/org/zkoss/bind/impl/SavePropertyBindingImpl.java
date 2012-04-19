@@ -101,7 +101,8 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			Object value = eval.getValue(null, comp, _fieldExpr);
 			
 			//use converter to convert type if any
-			final Converter conv = getConverter();
+			@SuppressWarnings("unchecked")
+			final Converter<Object, Object, Component> conv = getConverter();
 			if (conv != null) {
 				value = conv.coerceToBean(value, comp, ctx);
 				ValueReference ref = getValueReference(ctx);
