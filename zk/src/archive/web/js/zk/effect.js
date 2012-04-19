@@ -291,8 +291,27 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		st.width = jq.px(w);
 		st.height = jq.px(h);
 		
-		var zi = $anchor.jq.css('position') == 'absolute' ?
-				$anchor.jq.css('z-index') : $anchor.jq.offsetParent().css('z-index');
+		// ZK-726: The z-index required to cover anchor is the maximum z-index
+		// along the anchor's ancestor chain, from document body to the highest
+		// non-static node with non-auto z-index.
+		var body = document.body,
+			rleaf = $anchor.jq,
+			zi = 'auto', 
+			zic, zicv;
+		// find the highest non-static node with non-auto z-index
+		for (var offp = rleaf.offsetParent(); offp[0] != body; offp = offp.offsetParent())
+			if ((zic = offp.css('z-index')) && zic != 'auto') {
+				zi = zk.parseInt(zic);
+				rleaf = offp[0];
+			}
+		// grab the maximum along the chain of nodes
+		for (n = rleaf[0]; n && n.style; n = n.parentNode)
+			if ((zic = jq(n).css('z-index')) && zic != 'auto') {
+				zicv = zk.parseInt(zic);
+				if (zi == 'auto' || zicv > zi)
+					zi = zicv;
+			}
+		
 		// IE bug
 		if (zk.ie && !zk.ie8)
 			zi = zi == 0 ? 1 : zi;

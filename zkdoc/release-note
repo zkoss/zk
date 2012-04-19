@@ -25,6 +25,7 @@ ZK 6.0.1
   ZK-1047: Label should support format
   ZK-1018: Add fusionchart component
   ZK-1072: Converter supports generic type
+  ZK-726: Masking fail when component is under autocsroll layout region 
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
