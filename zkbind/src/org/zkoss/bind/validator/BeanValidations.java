@@ -23,7 +23,7 @@ import javax.validation.ValidatorFactory;
  * @author dennis
  * @since 6.0.0
  */
-class BeanValidations {
+public class BeanValidations {
 	// from javadoc, it is thread safe.
 	private volatile static Validator _validator;
 
@@ -32,7 +32,7 @@ class BeanValidations {
 		return Validation.buildDefaultValidatorFactory();
 	}
 
-	static Validator getValidator() {
+	static public Validator getValidator() {
 		if (_validator == null) {
 			synchronized (BeanValidations.class) {
 				if (_validator == null) {// check again
@@ -43,7 +43,7 @@ class BeanValidations {
 		return _validator;
 	}
 
-	static <T> Set<ConstraintViolation<T>> validate(Class<T> clazz, String propName, Object value) {
+	static public <T> Set<ConstraintViolation<T>> validate(Class<T> clazz, String propName, Object value) {
 		Set<ConstraintViolation<T>> set = getValidator().validateValue(clazz, propName, value);
 		return set;
 	}

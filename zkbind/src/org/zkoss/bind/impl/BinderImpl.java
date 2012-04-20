@@ -42,11 +42,6 @@ import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
-import org.zkoss.bind.converter.FormatedDateConverter;
-import org.zkoss.bind.converter.FormatedNumberConverter;
-import org.zkoss.bind.converter.ObjectBooleanConverter;
-import org.zkoss.bind.converter.UriConverter;
-import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -64,14 +59,11 @@ import org.zkoss.bind.sys.TemplateResolver;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
-import org.zkoss.bind.validator.DeferredValidator;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
-import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -105,78 +97,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 
 	private static final Log _log = Log.lookup(BinderImpl.class);
 	
-	private static final Map<String, Converter> CONVERTERS = new HashMap<String, Converter>();
-	private static final Map<String, Validator> VALIDATORS = new HashMap<String, Validator>();
 	private static final Map<String, Object> RENDERERS = new HashMap<String, Object>();
-	static {
-		initBuiltinConverters();
-		initBulitinValidators();
-		initAppConverters();
-		initAppValidators();
-	}
-
-	private static void initBuiltinConverters() {
-		//built in
-		CONVERTERS.put("objectBoolean", new ObjectBooleanConverter());
-		CONVERTERS.put("formatedDate", new FormatedDateConverter());
-		CONVERTERS.put("formatedNumber", new FormatedNumberConverter());		
-		CONVERTERS.put("uri", new UriConverter());
-		CONVERTERS.put("childrenBinding", new ChildrenBindingConverter());//to converter object to List for children-binding
-	}
-	
-	private static void initBulitinValidators() {
-		//built in
-		VALIDATORS.put("beanValidator", new DeferredValidator("org.zkoss.bind.validator.BeanValidator"));//defer the init of validator.(user might not use this validator)
-		VALIDATORS.put("formBeanValidator", new DeferredValidator("org.zkoss.bind.validator.FormBeanValidator"));//defer the init of validator.(user might not use this validator)
-	}
-	
-	private static void initAppConverters() {
-		final String converters = Library.getProperty(APP_CONVERTERS);
-		if(!Strings.isBlank(converters)){
-			String[][] pairs = parsePairs(converters);
-			for(String[] pair:pairs){
-				try {
-					CONVERTERS.put(pair[0], (Converter)Classes.newInstanceByThread(pair[1]));
-					if(_log.debugable()){
-						_log.debug("register app converter [%s]=[%s]",pair[0],pair[1]);
-					}
-				} catch (Exception x) {
-					throw new RuntimeException(x.getMessage(),x);
-				}
-			}
-		}
-	}
-	
-	private static void initAppValidators() {
-		final String validators = Library.getProperty(APP_VALIDATORS);
-		if(!Strings.isBlank(validators)){
-			String[][] pairs = parsePairs(validators);
-			for(String[] pair:pairs){
-				try {
-					VALIDATORS.put(pair[0], (Validator)Classes.newInstanceByThread(pair[1]));
-					if(_log.debugable()){
-						_log.debug("register app validator [%s]=[%s]",pair[0],pair[1]);
-					}
-				} catch (Exception x) {
-					throw new RuntimeException(x.getMessage(),x);
-				}
-			}
-		}
-	}
-	
-	//parse a=b,c=d
-	private static String[][] parsePairs(String pairs){
-		String[] items = pairs.split(",");
-		String[][] result = new String[items.length][];
-		for(int i=0;i<items.length;i++){
-			String[] val = items[i].split("=",2);
-			if(val.length!=2) throw new IllegalSyntaxException("pairs syntax error "+pairs);
-			result[i] =new String[2];
-			result[i][0] = val[0].trim();
-			result[i][1] = val[1].trim();
-		}
-		return result;
-	}
 	
 	//control keys
 	public static final String BINDING = "$BINDING$"; //a binding
@@ -504,18 +425,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 		}
 		if(converter == null){
-			converter = CONVERTERS.get(name);
-		}
-		if (converter == null && name.indexOf('.') > 0) { //might be a class path
-			try {
-				converter = (Converter) Classes.newInstanceByThread(name);
-				CONVERTERS.put(name, converter); //assume converter is state-less
-			} catch (Exception e) {
-				throw UiException.Aide.wrap(e);
-			}
+			converter = SystemConverters.get(name);
 		}
 		if (converter == null) {
-			throw new UiException("Cannot find the named converter:" + name);
+			throw new UiException("Cannot find converter:" + name);
 		}
 		return converter;
 	}
@@ -536,18 +449,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			}
 		}
 		if(validator == null){
-			validator = VALIDATORS.get(name);
-		}
-		if (validator == null && name.indexOf('.') > 0) { //might be a class path
-			try {
-				validator = (Validator) Classes.newInstanceByThread(name);
-				VALIDATORS.put(name, validator); //assume converter is state-less
-			} catch (Exception e) {
-				throw UiException.Aide.wrap(e);
-			}
+			validator = SystemValidators.get(name);
 		}
 		if (validator == null) {
-			throw new UiException("Cannot find the named validator:" + name);
+			throw new UiException("Cannot find validator:" + name);
 		}
 		return validator;
 	}

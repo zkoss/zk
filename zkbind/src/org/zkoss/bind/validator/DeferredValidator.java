@@ -63,6 +63,9 @@ public class DeferredValidator implements Validator,Serializable{
 		}
 	}
 
-	
+	public String toString(){
+		return new StringBuilder().append(super.toString()).append("[")
+				.append(_clzName != null ? _clzName : (_target != null ? _target : _clz)).append("]").toString();
+	}
 
 }
