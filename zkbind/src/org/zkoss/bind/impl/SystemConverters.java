@@ -19,7 +19,6 @@ import org.zkoss.bind.converter.FormatedDateConverter;
 import org.zkoss.bind.converter.FormatedNumberConverter;
 import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
-import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.UiException;
@@ -40,7 +39,6 @@ public class SystemConverters {
 			set0("formatedDate", new FormatedDateConverter());
 			set0("formatedNumber", new FormatedNumberConverter());		
 			set0("uri", new UriConverter());
-			set0("childrenBinding", new ChildrenBindingConverter());//to converter object to List for children-binding
 			_init = true;
 		}
 	}

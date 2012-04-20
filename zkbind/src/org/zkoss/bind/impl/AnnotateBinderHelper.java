@@ -536,8 +536,15 @@ public class AnnotateBinderHelper {
 		}
 		final Map<String,Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 		_binder.addChildrenInitBinding(comp, initExpr, parsedArgs,
-				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+				converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
+	}
+	
+	private String getDefaultChildBindingConverter(){
+		if(SystemConverters.get("childrenBinding")!=null){
+			return "'childrenBinding'";
+		}
+		return null;
 	}
 	
 	private void processChildrenPromptBindings(Component comp, Annotation ann,ExpressionAnnoInfo converterInfo) {
@@ -564,7 +571,7 @@ public class AnnotateBinderHelper {
 		final Map<String, Object> parsedArgs = args == null ? null : BindEvaluatorXUtil.parseArgs(_binder.getEvaluatorX(),args);
 
 		_binder.addChildrenLoadBindings(comp, expr, null, null, parsedArgs,
-				converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+				converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
 				converterInfo == null ? null : converterInfo.args);
 	}
 	
@@ -595,7 +602,7 @@ public class AnnotateBinderHelper {
 		_binder.addChildrenLoadBindings(comp, loadExpr, 
 			beforeCmds.size()==0?null:beforeCmds.toArray(new String[beforeCmds.size()]),
 			afterCmds.size()==0?null:afterCmds.toArray(new String[afterCmds.size()]), parsedArgs,
-			converterInfo == null ? "'childrenBinding'" : converterInfo.expr, 
+			converterInfo == null ? getDefaultChildBindingConverter() : converterInfo.expr, 
 			converterInfo == null ? null : converterInfo.args);
 	}
 	
