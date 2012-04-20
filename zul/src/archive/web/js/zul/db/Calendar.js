@@ -510,7 +510,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 		if (this._view == 'day') {
 			var d = seldate.getDate(),
-				v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
+				DOW_1ST = (this._localizedSymbols && this._localizedSymbols.DOW_1ST )|| zk.DOW_1ST, //ZK-1061
+				v = new Date(y, m, 1).getDay()- DOW_1ST,
 				last = new Date(y, m + 1, 0).getDate(), //last date of this month
 				prev = new Date(y, m, 0).getDate(), //last date of previous month
 				today = zUtl.today(); //no time part
