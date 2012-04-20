@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.GroupsListModel;
  * @author dennis
  * @since 6.0.0
  */
-/*package*/ abstract class AbstractListModelConverter<C extends Component> implements Converter<Object,Object,C>, Serializable{
+public abstract class AbstractListModelConverter<C extends Component> implements Converter<Object,Object,C>, Serializable{
 
 	private static final long serialVersionUID = 201108171744L;
 	

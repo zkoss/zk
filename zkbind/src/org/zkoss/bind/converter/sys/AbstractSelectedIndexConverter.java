@@ -26,7 +26,7 @@ import org.zkoss.zul.ext.Selectable;
  * @author dennis
  * @since 6.0.0
  */
-/*package*/ abstract class AbstractSelectedIndexConverter<C extends Component> implements Converter<Object,Object,C>, java.io.Serializable {
+public abstract class AbstractSelectedIndexConverter<C extends Component> implements Converter<Object,Object,C>, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
 	
 	@SuppressWarnings("unchecked")

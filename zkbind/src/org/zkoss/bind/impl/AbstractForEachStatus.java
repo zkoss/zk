@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.util.ForEachStatus;
  */
 //it is immutable
 @Immutable
-/*package*/ abstract class AbstractForEachStatus implements ForEachStatus, Serializable{
+public abstract class AbstractForEachStatus implements ForEachStatus, Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	//not supported
