@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -88,7 +89,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 	ComponentInfo compInfo) {
 		Selectors.wireVariables(page, this, _resolvers);
-		Selectors.subscribeEventQueues(this);
+		getUtilityHandler().subscribeEventQueues(this);
 		return compInfo;
 	}
 	@Override
@@ -201,7 +202,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
 			Selectors.wireComponents(clone, this, false);
 			Selectors.wireEventListeners(clone, this);
-			Selectors.subscribeEventQueues(this);
+			composerClone.getUtilityHandler().subscribeEventQueues(this);
 			clone.removeEventListener(ON_WIRE_CLONE, this);
 		}
 	}
@@ -213,7 +214,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 		Selectors.rewireComponentsOnActivate(comp, this);
 		Selectors.rewireVariablesOnActivate(comp, this, _resolvers);
 		Selectors.rewireEventListeners(comp, this);
-		Selectors.resubscribeEventQueues(this);
+		getUtilityHandler().resubscribeEventQueues(this);
 	}
 	
 	@Override
@@ -227,6 +228,63 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 	
 	@Override
 	public void doFinally() throws Exception { //do nothing
+	}
+	
+	// utility handler //
+	/** An interface for SelectorComposer's functionality plug-in.
+	 * @author simonpai
+	 * @since 6.0.1
+	 */
+	public interface UtilityHandler {
+		
+		/** Subscribes annotated methods to the EventQueues.
+		 */
+		public void subscribeEventQueues(Object controller);
+		
+		/** Re-subscribes annotated methods to the EventQueues, used in clustering
+		 * environment.
+		 */
+		public void resubscribeEventQueues(Object controller);
+	}
+	
+	/** Default skeletal implementation of {@link UtilityHandler}.
+	 * @author simonpai
+	 * @since 6.0.1
+	 */
+	public static class UtilityHandlerImpl implements UtilityHandler {
+		private static final long serialVersionUID = 1L;
+		public void subscribeEventQueues(Object controller) {}
+		public void resubscribeEventQueues(Object controller) {}
+	}
+	
+	private static final String UTILITY_HANDLER_KEY = 
+		"org.zkoss.zk.ui.select.SelectorComposer.UtilityHandler.class";
+	private static UtilityHandler _handler;
+	
+	protected UtilityHandler getUtilityHandler() {
+		loadUtilityHandler();
+		return _handler;
+	}
+	
+	private final void loadUtilityHandler() {
+		if (_handler != null)
+			return;
+		String clsName = Library.getProperty(UTILITY_HANDLER_KEY);
+		if (clsName != null) {
+			try {
+				final Object o = Classes.newInstanceByThread(clsName);
+				if (!(o instanceof UtilityHandler)) {
+					_handler = new UtilityHandlerImpl();
+					throw new UiException(o.getClass().getName() + 
+							" must implement " + UtilityHandler.class.getName());
+				}
+				_handler = (UtilityHandler) o;
+			} catch (Exception ex) {
+				_handler = new UtilityHandlerImpl();
+				throw UiException.Aide.wrap(ex, "Unable to construct " + clsName);
+			}
+		} else
+			_handler = new UtilityHandlerImpl();
 	}
 	
 }
