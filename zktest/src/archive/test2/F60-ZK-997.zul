@@ -12,6 +12,9 @@
 -->
 <zk>
 	<div>
+		ZK EE only
+	</div>
+	<div>
 		1. Click on each of the 'Publish' button. You should see two messages regarding to event receiving for each click.
 	</div>
 	<window	apply="org.zkoss.zktest.test2.F60_ZK_997_Composer">
