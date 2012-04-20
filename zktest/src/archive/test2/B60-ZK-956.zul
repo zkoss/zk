@@ -1,7 +1,7 @@
 <zk>
-	<html:pre xmlns:h="html">
+	<h:pre xmlns:h="html">
 		Click the button and it shouldn't show up Exception message.
-	</pre>
+	</h:pre>
 	<zscript>
 		public void addLabelAndTooltip (Component comp) {
 			Div container = new Div(); // dettached, imagine we DON'T have parent component at this point, e.g. macro component is being constructed
