@@ -206,12 +206,12 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_propertyBindingHandler.setBinder(this);
 		_childrenBindingHandler.setBinder(this);
 		
-		_refBindingHandler = MiscUtil.newInstanceFromProperty(REF_HANDLER_CLASS_PROP, ReferenceBindingHandler.class);
+		_refBindingHandler = MiscUtil.newInstanceFromProperty(REF_HANDLER_CLASS_PROP, null, ReferenceBindingHandler.class);
 		if(_refBindingHandler!=null){
 			_refBindingHandler.setBinder(this);
 		}
 		
-		_implicitContributor = MiscUtil.newInstanceFromProperty(IMPLICIT_CONTRIBUTOR_CLASS_PROP, ImplicitObjectContributor.class);
+		_implicitContributor = MiscUtil.newInstanceFromProperty(IMPLICIT_CONTRIBUTOR_CLASS_PROP, null, ImplicitObjectContributor.class);
 
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();

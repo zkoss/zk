@@ -65,8 +65,8 @@ public class MiscUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstanceFromProperty(String key,Class<T> type){
-		String clz = Library.getProperty(key);
+	public static <T> T newInstanceFromProperty(String key,String def,Class<T> type){
+		String clz = Library.getProperty(key,def);
 		if(clz!=null){
 			final Object v;
 			try {
