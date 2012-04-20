@@ -43,8 +43,7 @@ import org.zkoss.zk.ui.Component;
 	private final Map<String, List<LoadChildrenBinding>> _loadBeforeBindings; //command -> bindings (load before command)
 	
 	
-	ChildrenBindingHandler(BinderImpl binder) {
-		super(binder);
+	ChildrenBindingHandler() {
 		_initBindings = new HashMap<BindingKey, List<InitChildrenBinding>>();
 		_loadPromptBindings = new HashMap<BindingKey, List<LoadChildrenBinding>>();
 //		_loadEventBindings = new HashMap<BindingKey, List<LoadChildrenBinding>>();

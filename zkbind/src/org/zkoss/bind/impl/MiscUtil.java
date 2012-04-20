@@ -15,6 +15,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.zk.ui.UiException;
+
 /**
  * internal use only misc util
  * 
@@ -60,4 +64,21 @@ public class MiscUtil {
 		return type.getName();
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstanceFromProperty(String key,Class<T> type){
+		String clz = Library.getProperty(key);
+		if(clz!=null){
+			final Object v;
+			try {
+				v = Classes.newInstanceByThread(clz);
+			} catch (Exception ex) {
+				throw UiException.Aide.wrap(ex);
+			}
+			
+			if (!type.isAssignableFrom(v.getClass()))
+				throw new UiException(type + " must be implemented by "+v);
+			return (T)v;
+		}
+		return null;
+	}
 }

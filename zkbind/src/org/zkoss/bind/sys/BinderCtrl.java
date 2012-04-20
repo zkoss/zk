@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -116,6 +117,9 @@ public interface BinderCtrl {
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
 	
+	
+	//TODO should public this API or change to listeners feature in future
+	public PhaseListener getPhaseListener();
 	
 	/**
 	 * check if binder is in activating state

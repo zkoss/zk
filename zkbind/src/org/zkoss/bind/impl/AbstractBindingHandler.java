@@ -28,24 +28,24 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-/*package */ abstract class AbstractBindingHandler implements Serializable {
+public abstract class AbstractBindingHandler implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	protected final BinderImpl _binder;
+	protected Binder _binder;
 	
-	AbstractBindingHandler(BinderImpl binder){
+	public void setBinder(Binder binder){
 		_binder = binder;
 	}
 	
 	protected void doPrePhase(Phase phase, BindContext ctx) {
-		final PhaseListener l = _binder.getPhaseListener(); 
+		final PhaseListener l = ((BinderCtrl)_binder).getPhaseListener(); 
 		if ( l != null) {
 			l.prePhase(phase, ctx);
 		}
 	}
 	
 	protected void doPostPhase(Phase phase, BindContext ctx) {
-		final PhaseListener l = _binder.getPhaseListener();
+		final PhaseListener l = ((BinderCtrl)_binder).getPhaseListener();
 		if (l != null) {
 			l.postPhase(phase, ctx);
 		}

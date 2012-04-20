@@ -47,8 +47,7 @@ import org.zkoss.zk.ui.event.Event;
 	private final Map<String, List<LoadFormBinding>> _loadFormBeforeBindings; //command -> bindings (load form before command)
 	private final Map<String, List<SaveFormBinding>> _saveFormBeforeBindings; //command -> bindings (save form before command)
 	
-	FormBindingHandler(BinderImpl binder){
-		super(binder);
+	FormBindingHandler(){
 		_initFormBindings = new HashMap<BindingKey, List<InitFormBinding>>();
 		_loadFormPromptBindings = new HashMap<BindingKey, List<LoadFormBinding>>();
 		_loadFormAfterBindings = new HashMap<String, List<LoadFormBinding>>();

@@ -54,8 +54,7 @@ import org.zkoss.zk.ui.event.Event;
 	private final Map<String, List<SavePropertyBinding>> _saveBeforeBindings; //command -> bindings (save before command)
 	
 	
-	PropertyBindingHandler(BinderImpl binder) {
-		super(binder);
+	PropertyBindingHandler() {
 		_initBindings = new HashMap<BindingKey, List<InitPropertyBinding>>();
 		_loadPromptBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();
 		_loadEventBindings = new HashMap<BindingKey, List<LoadPropertyBinding>>();

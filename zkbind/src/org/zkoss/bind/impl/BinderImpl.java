@@ -206,7 +206,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//private control key
 	private static final String FORM_ID = "$FORM_ID$";
 	private static final String CHILDREN_ATTR = "$CHILDREN$";
-	private static final String REFERENCE_SET = "$REF_SET$";
 	private static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
 	
 	//Command lifecycle result
@@ -236,6 +235,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private final FormBindingHandler _formBindingHandler;
 	private final PropertyBindingHandler _propertyBindingHandler;
 	private final ChildrenBindingHandler _childrenBindingHandler;
+	private final ReferenceBindingHandler _refBindingHandler;
 	
 	/* the relation of form and inner save-bindings */
 	private Map<Component, Set<SaveBinding>> _assocFormSaveBindings;//form comp -> savebindings	
@@ -266,16 +266,28 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//to help deferred activation when first execution
 	private DeferredActivator _deferredActivator;
 	
+	
+	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.refhandler.class";
+	
 	public BinderImpl() {
 		this(null,null);
 	}
 	
 	public BinderImpl(String qname, String qscope) {
 		_bindings = new HashMap<Component, Map<String, List<Binding>>>();
-		_formBindingHandler = new FormBindingHandler(this); 
-		_propertyBindingHandler = new PropertyBindingHandler(this);
-		_childrenBindingHandler = new ChildrenBindingHandler(this);
+		_formBindingHandler = new FormBindingHandler(); 
+		_propertyBindingHandler = new PropertyBindingHandler();
+		_childrenBindingHandler = new ChildrenBindingHandler();
 		
+		_formBindingHandler.setBinder(this);
+		_propertyBindingHandler.setBinder(this);
+		_childrenBindingHandler.setBinder(this);
+		
+		_refBindingHandler = MiscUtil.newInstanceFromProperty(REF_HANDLER_CLASS_PROP, ReferenceBindingHandler.class);
+		if(_refBindingHandler!=null){
+			_refBindingHandler.setBinder(this);
+		}
+
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
 		
@@ -1153,20 +1165,19 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		addReferenceBinding0(comp, attr, loadExpr, bindingArgs);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void addReferenceBinding0(Component comp, String attr, String loadExpr, Map<String, Object> bindingArgs) {
 		if(_log.debugable()){
 			_log.debug("add reference-binding: comp=[%s],attr=[%s],expr=[%s]", comp,attr,loadExpr);
 		}
 		ReferenceBindingImpl binding = new ReferenceBindingImpl(this, loadExpr, comp);
-		comp.setAttribute(attr,binding);
-		addBinding(comp, attr, binding);
 		
-		Set<String> refs = (Set<String>)comp.getAttribute(REFERENCE_SET,Component.COMPONENT_SCOPE);
-		if(refs==null){
-			comp.setAttribute(REFERENCE_SET,refs=new HashSet<String>());
+		if(_refBindingHandler!=null){
+			_refBindingHandler.addReferenceBinding(comp, attr, binding);
+		}else{
+			throw new UiException("ref binding handler is not supported in current runtime.");
 		}
-		refs.add(attr);
+		
+		addBinding(comp, attr, binding);
 	}
 
 	private boolean isPrompt(String[] beforeCmds, String[] afterCmds){
@@ -1801,40 +1812,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		removeForm(comp);
 		
 		removeTemplateResolver(comp);
-		
-		removeReferenceBinding(comp);
+		if(_refBindingHandler!=null){
+			_refBindingHandler.removeReferenceBinding(comp);
+		}
 		
 		//remove trackings
 		TrackerImpl tracker = (TrackerImpl) getTracker();
 		tracker.removeTrackings(comp);
 
 		comp.removeAttribute(BINDER);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void removeReferenceBinding(Component comp) {
-		//remove all reference that store in component
-		Set<String> refs = (Set<String>)comp.removeAttribute(REFERENCE_SET);
-		if(refs!=null){
-			for(String attr:refs){
-				comp.removeAttribute(attr);
-			}
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void removeReferenceBinding(Component comp,String attr) {
-		//remove the reference that store in component
-		Set<String> refs = (Set<String>)comp.getAttribute(REFERENCE_SET,Component.COMPONENT_SCOPE);
-		if(refs!=null){
-			if(refs.remove(attr)){
-				comp.removeAttribute(attr);
-			}
-			if(refs.size()==0){
-				comp.removeAttribute(REFERENCE_SET);
-			}
-		}
-		
 	}
 
 	/**
@@ -1859,7 +1845,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		
 		removeTemplateResolver(comp,key);
 		
-		removeReferenceBinding(comp,key);
+		if(_refBindingHandler!=null){
+			_refBindingHandler.removeReferenceBinding(comp,key);
+		}
 		
 		removeBindings(removed);
 	}
@@ -1993,7 +1981,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_phaseListener = listener;
 	}
 	
-	PhaseListener getPhaseListener(){
+	public PhaseListener getPhaseListener(){
 		return _phaseListener;
 	}
 
