@@ -477,9 +477,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				allTab = jq(cave).children();
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
 				var tabsHgh = allTab.length * 35, // default height
-					seldPanel = tabbox.getSelectedPanel(),
-					panelsHgh = seldPanel ? seldPanel.$n().offsetHeight : 0, // B50-ZK-298: concern panel height
-					realHgh = Math.max(tabsHgh, panelsHgh);
+				seldPanel = tabbox.getSelectedPanel(),
+				seldPanelNode = seldPanel.$n(),
+				tabpanelsNode =  seldPanelNode.parentNode ,
+				panelContentHeight = tabpanelsNode && 
+					(tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight()),
+				panelsHgh = seldPanel ? Math.max( seldPanelNode.offsetHeight,panelContentHeight ) : 0, // B50-ZK-298: concern panel height
+				realHgh = Math.max(tabsHgh, panelsHgh);
 				this._forceStyle(tbx, "h", jq.px0(realHgh));
 			}
 			this._forceStyle(tabs, "h", jq.px0(jq(tabs).zk.revisedHeight(tbx.offsetHeight, true)));
