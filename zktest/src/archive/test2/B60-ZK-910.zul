@@ -14,6 +14,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+Please click the column's menu to group the data, if it cannot work that's a bug.
     <zscript><![CDATA[
 		import java.util.Calendar;
 		import java.text.DateFormat;
