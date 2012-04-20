@@ -629,7 +629,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_docClick: function (evt) {
 		var target = evt.target;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
-			if (this.$n('btned') == target) {
+			var btned = this.$n('btned');
+			if (btned == target || btned == target.parentNode) {
 				this.$class.afterSlideUp.apply(this, [target]);
 				this.setOpen(true, false, true);
 			} else 
