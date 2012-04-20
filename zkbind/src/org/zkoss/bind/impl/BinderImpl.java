@@ -266,8 +266,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//to help deferred activation when first execution
 	private DeferredActivator _deferredActivator;
 	
+	private final ImplicitObjectContributor _implicitContributor;
 	
-	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.refhandler.class";
+	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.ReferenceBindingHandler.class";
+	private static final String IMPLICIT_CONTRIBUTOR_CLASS_PROP = "org.zkoss.bind.ImplicitObjectContributor.class";
 	
 	public BinderImpl() {
 		this(null,null);
@@ -287,6 +289,8 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if(_refBindingHandler!=null){
 			_refBindingHandler.setBinder(this);
 		}
+		
+		_implicitContributor = MiscUtil.newInstanceFromProperty(IMPLICIT_CONTRIBUTOR_CLASS_PROP, ImplicitObjectContributor.class);
 
 		_assocFormSaveBindings = new HashMap<Component, Set<SaveBinding>>();
 		_reversedAssocFormSaveBindings = new HashMap<Component, Map<SaveBinding,Set<SaveBinding>>>();
@@ -1295,8 +1299,10 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 				if(!Strings.isEmpty(command)){//avoid the execution of a empty command.
 					
 					//ZK-1032 Able to wire Event to command method
-					final Map<String,Object> implicit = new HashMap<String,Object>();
-					implicit.put("event", event);
+					Map<String,Object> implicit = null;
+					if(_implicitContributor!=null){
+						implicit = _implicitContributor.contirbuteCommandObject(BinderImpl.this,_commandBinding,event);
+					}
 					
 					final Map<String, Object> args = BindEvaluatorXUtil.evalArgs(eval, comp, _commandBinding.getArgs(),implicit);
 					cmdResult = BinderImpl.this.doCommand(comp, command, event, args, notifys);
