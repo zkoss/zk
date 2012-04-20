@@ -175,15 +175,19 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	selectItem: function (item) {
 		if (!item)
 			this.setSelectedIndex(-1);
-		else if (this._multiple || !item.isSelected())
-			this.setSelectedIndex(item.getChildIndex());
+		else if (this._multiple || !item.isSelected()){
+			if(item.getOptionIndex_)
+				this.setSelectedIndex(item.getOptionIndex_());
+			else
+				this.setSelectedIndex(item.getChildIndex());
+		}
 	},
 	_addItemToSelection: function (item) {
 		if (!item.isSelected()) {
 			if (!this._multiple) {
 				this.selectItem(item);
 			} else {
-				var index = item.getChildIndex();
+				var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
 				if (index < this._selectedIndex || this._selectedIndex < 0) {
 					this._selectedIndex = index;
 				}

@@ -102,6 +102,21 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	getMaxlength: function () {
 		return this.parent ? this.parent.getMaxlength() : 0;
 	},
+	/**
+	 * The index for option widget only , not including the listhead.etc
+	 */
+	getOptionIndex_: function () {
+		var parent = this.parent , ret = -1 ;
+		if(parent){
+			for (w = parent.firstChild; w  ; w = w.nextSibling ) {
+				if (w.$instanceof(zul.sel.Option)) {
+					ret ++ ;
+				}			
+				if(w == this) break;
+			}
+		}
+		return ret;
+	},
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},
