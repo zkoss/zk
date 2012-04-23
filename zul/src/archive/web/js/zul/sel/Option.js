@@ -104,15 +104,16 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	},
 	/**
 	 * The index for option widget only , not including the listhead.etc
+	 * @since 6.0.1
 	 */
 	getOptionIndex_: function () {
-		var parent = this.parent , ret = -1 ;
-		if(parent){
-			for (w = parent.firstChild; w  ; w = w.nextSibling ) {
+		var parent = this.parent, ret = -1;
+		if (parent) {
+			for (w = parent.firstChild; w; w = w.nextSibling) {
 				if (w.$instanceof(zul.sel.Option)) {
-					ret ++ ;
-				}			
-				if(w == this) break;
+					ret++;
+					if(w == this) break;
+				}		
 			}
 		}
 		return ret;
