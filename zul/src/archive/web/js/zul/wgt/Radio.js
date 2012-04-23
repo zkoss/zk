@@ -28,6 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
+	_attachExternal: null,
 	/** Returns {@link Radiogroup} that this radio button belongs to.
 	 * It is the nearest ancestor {@link Radiogroup}.
 	 * In other words, it searches up the parent, parent's parent
@@ -53,13 +54,29 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	setRadiogroup: function (group) {
 		var old;
 		if ((old = this._group) != group) {
-			if (old) old._rmExtern(this);
+			if (old && this._attachExternal) old._rmExtern(this);
 			this._group = group;
-			if (group) group._addExtern(this);
+			if (group && this.desktop) {
+				group._addExtern(this);
+				this._attachExternal = true;
+			}
 			this._fixName();
 		}
 	},
-
+	bind_: function(){
+		this.$supers(zul.wgt.Radio, 'bind_', arguments);
+		if(this._group && this.desktop && !this._attachExternal){
+			this._group._addExtern(this);
+			this._attachExternal = true;
+		}
+	},
+	unbind_: function(){
+		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
+		if(this._group && this._attachExternal){
+			this._group._rmExtern(this);
+			this._attachExternal = false;
+		}
+	},	
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
@@ -79,7 +96,8 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 					if (checked) {
 						for (var items = group.getItems(), i = items.length; i--;) {
 							if (items[i] != this) {
-								items[i].$n('real').checked = false;
+								if(items[i].$n('real'))
+									items[i].$n('real').checked = false;
 								items[i]._checked = false;
 							}
 						}
@@ -124,13 +142,24 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		return zcls != null ? zcls: "z-radio";
 	},
 	beforeParentChanged_: function (newParent) {
-		var oldParent = this.getRadiogroup(),
-			newParent = newParent ? this.getRadiogroup(newParent) : null;
-		if (oldParent != newParent) {
-			if (oldParent && oldParent.$instanceof(zul.wgt.Radiogroup))
-				oldParent._fixOnRemove(this); 
-			if (newParent && newParent.$instanceof(zul.wgt.Radiogroup))
-				newParent._fixOnAdd(this); 
+		var oldParent = this.parentNode,
+			oldGroup = this.getRadiogroup(),
+			newGroup = newParent ? this.getRadiogroup(newParent) : null;
+		if (oldGroup != newGroup || !newParent) {
+			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)){
+				oldGroup._fixOnRemove(this);
+				if(this._attachExternal){
+					oldGroup._rmExtern(this);
+					this._attachExternal = false;
+				}
+			}
+			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)){
+				if(newGroup == this._group){
+					newGroup._addExtern(this);
+					this._attachExternal = true;
+				}
+				newGroup._fixOnAdd(this); 
+			}
 		}
 		this.$supers("beforeParentChanged_", arguments);
 	},

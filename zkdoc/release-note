@@ -16,6 +16,7 @@ ZK 5.0.12
   ZK-1038: A empty listbox with long header set span doesn't work (IE only)
   ZK-1069: Squence issue when attaching radio and radiogroup 
   ZK-1061: Wrong Weekday when set a specified locale on a datebox
+  ZK-1073: Oncheck event doesn't fire when the new radio attached
   
 	--------
 ZK 5.0.11
