@@ -1,0 +1,16 @@
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.ChosenboxVM')">
+		<label id="l1" value="@bind(vm.selected)"/>
+		<chosenbox id="cbox1" model="@bind(vm.items)" selectedObjects="@bind(vm.selected)" width="400px" >
+			<template name="model">
+				<label value="@load(each)"/>
+			</template>
+		</chosenbox>
+		
+		<label id="l2" value="@bind(vm.selectedIndex)"/>
+		<chosenbox id="cbox2" model="@bind(vm.items)" selectedIndex="@bind(vm.selectedIndex)" width="400px" >
+			<template name="model">${each}</template>
+		</chosenbox>
+	</vlayout>
+</zk>
