@@ -26,6 +26,7 @@ ZK 6.0.1
   ZK-1018: Add fusionchart component
   ZK-1072: Converter supports generic type
   ZK-726: Masking fail when component is under autocsroll layout region 
+  ZK-1082: Supports bind on chosenbox model and selection
   
 * Bugs
   ZK-866: Select status of listbox not sync when change multiple to single
