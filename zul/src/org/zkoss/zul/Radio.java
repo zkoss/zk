@@ -43,6 +43,7 @@ public class Radio extends Checkbox {
 	private Radiogroup _group;
 	/** At most one of _group and _groupId will be non-null. */
 	private String _groupId;
+	private boolean _attachExternal = false;
 
 	public Radio() {
 	}
@@ -82,11 +83,17 @@ public class Radio extends Checkbox {
 		boolean inGroup = _groupId != null;
 		_groupId = null;
 		if (inGroup || radiogroup != _group) {
-			if (_group != null)
+			if (_group != null){
 				_group.removeExternal(this);
+				_attachExternal = false;
+			}
 			_group = radiogroup;
-			if (_group != null)
+			
+			//ZK-1073 it's better not to add the external when component is not attached.
+			if (_group != null && getDesktop() != null) {
 				_group.addExternal(this);
+				_attachExternal = true;
+			}
 
 			smartUpdate("radiogroup", _group);
 		}
@@ -122,6 +129,7 @@ public class Radio extends Checkbox {
 			}
 			_groupId = null;
 			_group.addExternal(this);
+			_attachExternal = true;
 		}
 		return true;
 	}
@@ -192,14 +200,38 @@ public class Radio extends Checkbox {
 	
 	//-- Component --//
 	public void setParent(Component parent) {
-		final Radiogroup oldgp = getRadiogroup();
+		Radiogroup oldgp = null;
+		
+		if(getParent() != null ) oldgp = getRadiogroup();
+		else oldgp = null;
+		
 		super.setParent(parent);
 
-		final Radiogroup newgp = getRadiogroup();
-		if (oldgp != newgp) {
-			if (oldgp != null) oldgp.fixOnRemove(this);
-			if (newgp != null) newgp.fixOnAdd(this);
+		Radiogroup newgp = null ;
+		
+		if( parent != null ){ 
+			newgp = getRadiogroup();
+		}else {
+			newgp = null;
 		}
+
+		if (oldgp != newgp) {
+			if(oldgp != null  ){  //removed from the component tree  
+				if(oldgp == _group){
+					_group.removeExternal(this);
+					_attachExternal = false;
+				}
+				oldgp.fixOnRemove(this);
+			}
+			if (newgp != null) {
+				if(!_attachExternal && newgp == _group){
+					_group.addExternal(this);
+					_attachExternal = true;
+				}
+				newgp.fixOnAdd(this);
+			}
+		}
+	
 	}
 	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
