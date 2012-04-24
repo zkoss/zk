@@ -217,10 +217,14 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		_data = data;
 		_heads = heads;
 		_foots = foots;
-		_opens = closes;
-		if (_opens != null) {
-			for (int i = 0; i < _opens.length; i++)
-				_opens[i] = !_opens[i];
+		if (closes != null) {
+			int length = _data.size();
+			int paramLen = Math.min(closes.length, length);
+			_opens = new boolean[length];
+			for (int i = 0; i < paramLen; i++)
+				_opens[i] = closes[i];
+			for (int i = paramLen; i < length; i++)
+				_opens[i] = true;
 		}
 	}
 	
@@ -272,7 +276,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 
 	@Override
 	public boolean isGroupOpened(int groupIndex) {
-		return _opens == null ? true : _opens[groupIndex];
+		return _opens == null || _opens[groupIndex];
 	}
 
 	@Override
@@ -285,7 +289,12 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 	public boolean setOpenGroup0(int groupIndex, boolean open) {
 		if (_opens == null) {
-			_opens = new boolean[getGroupCount()];
+			if (open)
+				return true; // _opens == null means all open
+			int length = getGroupCount();
+			_opens = new boolean[length];
+			for (int i = 0; i < length; i++)
+				_opens[i] = true;
 		}
 		if (_opens[groupIndex] != open) {
 			_opens[groupIndex] = open;
