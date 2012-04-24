@@ -1,0 +1,14 @@
+<zk xmlns:h="xhtml">
+	<h:pre>
+		1.click the "test" button 
+		2.click the "test upload" button.
+		3.the upload dialog should not be masked.
+	</h:pre>
+	
+	<button label="test" onClick="pp.open(20,20)"></button>
+
+	<popup id="pp" >
+		<button id="btn" label="test upload" onClick='Fileupload.get();'/>
+	</popup>
+	
+</zk>
