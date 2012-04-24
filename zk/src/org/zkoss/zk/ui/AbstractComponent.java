@@ -1446,9 +1446,46 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0 (become protected)
 	 */
 	protected void response(String key, AuResponse response) {
+		response(key, response, 0);
+	}
+	
+	/** Causes a response to be sent to the client by overriding the key
+	 * returned by {@link AuResponse#getOverrideKey}).
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the existence of the component returned by
+	 * {@link AuResponse#getDepends}.
+	 * In other words, the response is removed if the component is removed.
+	 * If it is null, the response is component-independent and it is
+	 * always sent to the client.
+	 *
+	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
+	 * {@link Component#invalidate()} was called.
+	 * Typical examples include setting the focus, selecting the text and so on.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * @param key could be anything.
+	 * The second invocation of this method
+	 * in the same execution with the same key and the same depends
+	 * ({@link AuResponse#getDepends}) will override the previous one.
+	 * However, if key is null, it won't override any other. All responses
+	 * with key == null will be sent.<br/>
+	 * Notice that if {@link AuResponse#getDepends} is null, then be careful
+	 * of the key you used since it is shared in the same execution
+	 * (rather than a particular component).
+	 * @param priority The higher priority, the earlier the update is executed.
+	 * The priority of {@link #response(AuResponse)}
+	 *  and {@link #response(String, AuResponse)} is assumed to be 0.
+	 * <p>If the priority is the same, the update is executed in the order
+	 * of first-in-first out.
+	 * @since 6.0.1
+	 */
+	protected void response(String key, AuResponse response, int priority) {
 		//if response not depend on this component, it must be generated
 		if (_page != null) {
-			getAttachedUiEngine().addResponse(key, response);
+			getAttachedUiEngine().addResponse(key, response, priority);
 		} else if (response.getDepends() != this) {
 			final UiEngine uieng = getCurrentUiEngine();
 			if (uieng != null) uieng.addResponse(key, response);

@@ -131,7 +131,7 @@ public class Bandbox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("open", new AuInvoke(this, "setOpen", false)); //don't use smartUpdate
+		response("open", new AuInvoke(this, "setOpen", false), -1000); //don't use smartUpdate
 	}
 
 	/**
