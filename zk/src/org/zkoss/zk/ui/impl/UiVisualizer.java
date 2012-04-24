@@ -381,6 +381,15 @@ import org.zkoss.zk.au.out.*;
 	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response) {
+		addResponse(key, response, 0);
+	}
+	/** Adds a response directly with the given priority.
+	 * The higher priority, the earlier the update is executed.
+	 * The priority of {@link #addResponse(String, AuResponse)}
+	 *  and {@link #addResponse(AuResponse)} is assumed to be 0.
+	 * @since 6.0.1
+	 */
+	public void addResponse(String key, AuResponse response, int priority) {
 		if (response == null)
 			throw new IllegalArgumentException();
 
@@ -395,7 +404,7 @@ import org.zkoss.zk.au.out.*;
 		if (ri == null)
 			_responses.put(depends, ri = new ResponseInfo());
 
-		final TimedValue tval = new TimedValue(_timed++, response, 0);
+		final TimedValue tval = new TimedValue(_timed++, response, priority);
 		if (key != null) {
 			ri.values.put(key, tval); //overwrite
 		} else {

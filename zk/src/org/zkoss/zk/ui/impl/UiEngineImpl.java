@@ -289,6 +289,9 @@ public class UiEngineImpl implements UiEngine {
 	public void addResponse(String key, AuResponse response) {
 		getCurrentVisualizer().addResponse(key, response);
 	}
+	public void addResponse(String key, AuResponse response, int priority) {
+		getCurrentVisualizer().addResponse(key, response, priority);
+	}
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		if (comp == null)
 			throw new IllegalArgumentException();

@@ -160,6 +160,15 @@ public interface UiEngine {
 	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response);
+	/** Adds a response with the given priority.
+	 * The higher priority, the earlier the update is executed.
+	 * The priority of {@link #addResponse(String, AuResponse)}
+	 *  and {@link #addResponse(AuResponse)} is assumed to be 0.
+	 * <p>If the priority is the same, the update is executed in the order
+	 * of first-in-first out.
+	 * @since 6.0.1
+	 */
+	public void addResponse(String key, AuResponse response, int priority);
 	/** Called to update (redraw) a component, when a component is moved.
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
