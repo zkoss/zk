@@ -247,11 +247,12 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 
 	public F getGroupfoot(int groupIndex) {
-		return _foots == null ? null:_foots.get(groupIndex);
+		return _foots == null ? null : _foots.get(groupIndex);
 	}
 
 	public boolean hasGroupfoot(int groupIndex) {
-		return _foots == null ? false:_foots.contains(groupIndex);
+		return _foots != null && groupIndex > -1 && 
+			groupIndex < _foots.size() && _foots.get(groupIndex) != null;
 	}
 
 	/**
