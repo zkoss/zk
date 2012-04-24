@@ -154,7 +154,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				}
 			}
 			if (newGroup && newGroup.$instanceof(zul.wgt.Radiogroup)){
-				if(newGroup == this._group){
+				if(!this._attachExternal && newGroup == this._group ){
 					newGroup._addExtern(this);
 					this._attachExternal = true;
 				}
