@@ -202,36 +202,32 @@ public class Radio extends Checkbox {
 	public void setParent(Component parent) {
 		Radiogroup oldgp = null;
 		
-		if(getParent() != null ) oldgp = getRadiogroup();
-		else oldgp = null;
+		if (getParent() != null)
+			oldgp = getRadiogroup();
 		
 		super.setParent(parent);
 
-		Radiogroup newgp = null ;
+		Radiogroup newgp = null;
 		
-		if( parent != null ){ 
+		if (parent != null)
 			newgp = getRadiogroup();
-		}else {
-			newgp = null;
-		}
 
 		if (oldgp != newgp) {
-			if(oldgp != null  ){  //removed from the component tree  
-				if(oldgp == _group){
+			if (oldgp != null) {//removed from the component tree  
+				if (oldgp == _group) {
 					_group.removeExternal(this);
 					_attachExternal = false;
 				}
 				oldgp.fixOnRemove(this);
 			}
 			if (newgp != null) {
-				if(!_attachExternal && newgp == _group){
+				if (!_attachExternal && newgp == _group) {
 					_group.addExternal(this);
 					_attachExternal = true;
 				}
 				newgp.fixOnAdd(this);
 			}
 		}
-	
 	}
 	
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
