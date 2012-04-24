@@ -760,6 +760,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				else
 					this._shadowWgt.sync();
 			}
+			if (this._mask){ //B50-ZK-1079
+				this._mask.setZIndex(this._zIndex);
+			}
 			if (this._mask && this._shadowWgt) {
 				var n = this._shadowWgt.getBottomElement()||this.$n(); //null if ff3.5 (no shadow/stackup)
 				if (n) this._mask.sync(n);

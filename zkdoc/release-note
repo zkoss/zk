@@ -17,6 +17,7 @@ ZK 5.0.12
   ZK-1069: Squence issue when attaching radio and radiogroup 
   ZK-1061: Wrong Weekday when set a specified locale on a datebox
   ZK-1073: Oncheck event doesn't fire when the new radio attached
+  ZK-1079: Fileupload dialog will be masked while open it by a button in a popup  
   
 	--------
 ZK 5.0.11
