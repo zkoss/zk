@@ -17,6 +17,8 @@ import org.zkoss.zk.ui.Component;
  * Generic binding conversion interface.
  * <b>U</b> is the object type for the Component, <b>B</b> is the object type for the Bean
  * and <b>C</b> is the component type of the converter. 
+ * <p/> 
+ * 
  * @author henrichen
  * @author dennis
  * @since 6.0.0
@@ -26,6 +28,8 @@ public interface Converter<U,B,C extends Component> {
 	/**
 	 * Indicates the returned value should be ignored to load to a component or save to a bean, 
 	 * It is useful for writing a converter to manipulate component directly when loading or saving
+	 * Note : <br/>
+	 * If you want to return {@link #IGNORED_VALUE} in the converter method, then you need to set <b>U</b> or <b>B</b> to Object.
 	 * @since 6.0.1
 	 */
 	public Object IGNORED_VALUE = new Object();
