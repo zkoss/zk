@@ -1,0 +1,84 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window>
+
+	<zscript>
+	Object selected = "A";
+	//for test
+</zscript>
+	<window id="win" title="new page title" border="normal"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01085NPEReferenceBinding')"
+		vmsel="@ref(vm.selected)" simple="@ref(selected)">
+		<label multiline="true">
+			1.selection of listbox1,2,3 are synchronized 2.select on
+			listbox4,5 will get exception
+		</label>
+		<hbox width="600px">
+			<vbox hflex="1">
+				Listbox1
+				<listbox id="lb1" selectedItem="@bind(vmsel)"
+					model="@load(vm.model)">
+					<template name="model" var="entry">
+						<listitem>
+							<listcell label="@load(entry)" />
+						</listitem>
+					</template>
+				</listbox>
+				Listbox2
+				<div vmsel2="@ref(vmsel)">
+					<listbox id="lb2" selectedItem="@bind(vmsel2)"
+						model="@load(vm.model)">
+						<template name="model" var="entry">
+							<listitem>
+								<listcell label="@load(entry)" />
+							</listitem>
+						</template>
+					</listbox>
+					<div vmsel3="@ref(vmsel2)">
+						Listbox3
+						<listbox id="lb3" selectedItem="@bind(vmsel3)"
+							model="@load(vm.model)">
+							<template name="model" var="entry">
+								<listitem>
+									<listcell label="@load(entry)" />
+								</listitem>
+							</template>
+						</listbox>
+					</div>
+				</div>
+			</vbox>
+			<vbox hflex="1">
+				Listbox4
+				<listbox id="lb4" selectedItem="@bind(selected)"
+					model="@load(vm.model)">
+					<template name="model" var="entry">
+						<listitem>
+							<listcell label="@load(entry)" />
+						</listitem>
+					</template>
+				</listbox>
+				Listbox5
+				<listbox id="lb5" selectedItem="@bind(simple)"
+					model="@load(vm.model)">
+					<template name="model" var="entry">
+						<listitem>
+							<listcell label="@load(entry)" />
+						</listitem>
+					</template>
+				</listbox>
+				<div simple2="@ref(simple)">
+					Listbox6
+					<listbox id="lb6" selectedItem="@bind(simple2)"
+						model="@load(vm.model)">
+						<template name="model" var="entry">
+							<listitem>
+								<listcell label="@load(entry)" />
+							</listitem>
+						</template>
+					</listbox>
+				</div>
+			</vbox>
+		</hbox>
+		<label value="@load(vmsel)" />
+	</window>
+</window>

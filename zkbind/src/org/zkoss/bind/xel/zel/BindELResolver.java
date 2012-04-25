@@ -19,6 +19,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
+import org.zkoss.bind.impl.BindEvaluatorXImpl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.MiscUtil;
@@ -75,6 +76,12 @@ public class BindELResolver extends XelELResolver {
 		Object value = super.getValue(ctx, base, property);
 		//ZK-950: The expression reference doesn't update while change the instant of the reference
 		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
+		
+		//ZK-1085 NPE when using reference binding, return the rbinding directly if context set the flag
+		if(rbinding != null && isReturnRef(ctx)){
+			return rbinding;
+		}
+		
 		if (rbinding != null) {
 			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
 		} 
@@ -82,6 +89,16 @@ public class BindELResolver extends XelELResolver {
 		//evaluated bean, @see TrackerImpl#getLoadBindings0() and TrackerImpl#getAllTrackerNodesByBeanNodes()
 		tieValue(ctx, base, property, rbinding != null ? rbinding : value, false);
 		return value;
+	}
+	
+	private boolean isReturnRef(ELContext ctx){
+		if(ctx instanceof EvaluationContext){
+			final ELContext elc = ((EvaluationContext)ctx).getELContext();
+			if(elc instanceof BindELContext){
+				return Boolean.TRUE.equals(((BindELContext)elc).getAttribute(BindEvaluatorXImpl.RETURN_REFERENCE_BINDING));
+			}
+		}
+		return false;
 	}
 	
 	public void setValue(ELContext ctx, Object base, Object property, Object value)

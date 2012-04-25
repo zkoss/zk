@@ -85,7 +85,8 @@ ZK 6.0.1
   ZK-1070: onSelect is not fired in listbox mold select
   ZK-1071: Bandbox, Form Binding and Constraints with Chromium and (less reprodible) Firefox
   ZK-1090: Load a ZUL page with an Ajax request failed in ZK 6
-  
+  ZK-1085: PropertyNotWritableException when using reference binding
+
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
     for better performance.

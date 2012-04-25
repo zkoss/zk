@@ -59,6 +59,10 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	public String getPropertyString() {
 		return getPureExpressionString(_exprX);
 	}
+	
+	/*package*/ ExpressionX getProperty(){
+		return _exprX;
+	}
 
 	@Override
 	public void invalidateCache() {
