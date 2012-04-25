@@ -155,10 +155,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		jq(window).resize(f = this.proxy(_syncMaskPos))
 			.scroll(f);
 	},
-	setZIndex: function(zIndex){
-		if(this.mask && zIndex != null)
-			this.mask.style.zIndex = zIndex;
-	},
 	/** Removes the full mask. You can not access this object any more.
 	 */
 	destroy: function () {
