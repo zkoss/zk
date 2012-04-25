@@ -123,7 +123,7 @@ public class Bandbox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void open() {
-		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
+		response("open", new AuInvoke(this, "setOpen", true), -1000); //don't use smartUpdate
 	}
 	/** Closes the child if it was dropped down.
 	 * The same as setOpen(false).
