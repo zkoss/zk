@@ -162,25 +162,25 @@ public class SaveFormBindingImpl extends FormBindingImpl implements	SaveFormBind
 		}
 		validator.validate(vctx);
 		
-		//collect notify change
-		collectNotifyChange(validator,vctx);
+//		//collect notify change
+//		collectNotifyChange(validator,vctx);
 	}
 	
-	private void collectNotifyChange(Validator validator, ValidationContext vctx) {
-		//collect notify change
-		ValueReference ref = getValueReference(vctx.getBindContext());
-		//for special case that a form bind to vm directly, ex @form(save=vm after 'cmd1'), ref will be null
-		if(ref!=null){
-			BindELContext.addNotifys(getValidatorMethod(validator.getClass()), ref.getBase(), null, null, vctx.getBindContext());
-		}else{
-			final BindEvaluatorX eval = getBinder().getEvaluatorX();
-			final ExpressionX expr = getBaseExpression(eval);
-			if (expr != null) {
-				final Object base = eval.getValue(vctx.getBindContext(), getComponent(), expr);
-				BindELContext.addNotifys(getValidatorMethod(validator.getClass()), base, null, null, vctx.getBindContext());
-			}			
-		}
-	}
+//	private void collectNotifyChange(Validator validator, ValidationContext vctx) {
+//		//collect notify change
+//		ValueReference ref = getValueReference(vctx.getBindContext());
+//		//for special case that a form bind to vm directly, ex @form(save=vm after 'cmd1'), ref will be null
+//		if(ref!=null){
+//			BindELContext.addNotifys(getValidatorMethod(validator.getClass()), ref.getBase(), null, null, vctx.getBindContext());
+//		}else{
+//			final BindEvaluatorX eval = getBinder().getEvaluatorX();
+//			final ExpressionX expr = getBaseExpression(eval);
+//			if (expr != null) {
+//				final Object base = eval.getValue(vctx.getBindContext(), getComponent(), expr);
+//				BindELContext.addNotifys(getValidatorMethod(validator.getClass()), base, null, null, vctx.getBindContext());
+//			}			
+//		}
+//	}
 	
 	//get and cache value reference of this binding
 	private ValueReference getValueReference(BindContext ctx){

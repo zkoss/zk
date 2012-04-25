@@ -55,7 +55,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final ValueReference beanvr = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
 		//value-reference is null if it is a simple node, ex ${vm}
 		if( (beanvr!=null && beanvr.getBase() instanceof Form) || bean instanceof Form){
-			throw new UiException("doesn't supprot to load a nested form , formId "+getFormId());
+			throw new UiException("doesn't support to load a nested form , formId "+getFormId());
 		}
 		
 		

@@ -105,10 +105,10 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 			final Converter<Object, Object, Component> conv = getConverter();
 			if (conv != null) {
 				value = conv.coerceToBean(value, comp, ctx);
-				ValueReference ref = getValueReference(ctx);
-					//collect Property for @NotifyChange, kept in BindContext
-					//see BinderImpl$CommandEventListener#onEvent()
-				BindELContext.addNotifys(getConverterMethod(conv.getClass()), ref.getBase(), null, value, ctx);
+//				ValueReference ref = getValueReference(ctx);
+//					//collect Property for @NotifyChange, kept in BindContext
+//					//see BinderImpl$CommandEventListener#onEvent()
+//				BindELContext.addNotifys(getConverterMethod(conv.getClass()), ref.getBase(), null, value, ctx);
 			}
 			setAttribute(ctx, $COMPVALUE$, value);
 		}
@@ -195,14 +195,14 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		}
 		
 		validator.validate(vctx);
-		//collect notify change
-		collectNotifyChange(validator,vctx);
+//		//collect notify change
+//		collectNotifyChange(validator,vctx);
 	}
 	
-	private void collectNotifyChange(Validator validator, ValidationContext vctx) {
-		ValueReference ref = getValueReference(vctx.getBindContext());
-		BindELContext.addNotifys(getValidatorMethod(validator.getClass()), ref.getBase(), null, null, vctx.getBindContext());
-	}
+//	private void collectNotifyChange(Validator validator, ValidationContext vctx) {
+//		ValueReference ref = getValueReference(vctx.getBindContext());
+//		BindELContext.addNotifys(getValidatorMethod(validator.getClass()), ref.getBase(), null, null, vctx.getBindContext());
+//	}
 
 	private Method getConverterMethod(Class<? extends Converter> cls) {
 		try {

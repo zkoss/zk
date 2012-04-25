@@ -41,14 +41,14 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		LoadChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Set<String> _doneDependsOn;
-	private final Set<Class<? extends Converter>> _doneConverterDependsOn;
+//	private final Set<Class<? extends Converter>> _doneConverterDependsOn;
 	
 	public LoadChildrenBindingImpl(Binder binder, Component comp,
 		String loadExpr, ConditionType conditionType,String command,  Map<String, Object> bindingArgs,
 		String converterExpr,Map<String, Object> converterArgs) {
 		super(binder, comp, loadExpr, conditionType, command, bindingArgs,converterExpr,converterArgs);
 		_doneDependsOn = new HashSet<String>(4);
-		_doneConverterDependsOn = new HashSet<Class<? extends Converter>>(4);
+//		_doneConverterDependsOn = new HashSet<Class<? extends Converter>>(4);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -63,11 +63,11 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
 		if (conv != null) {
-			//if a converter depends on some property, we should also add tracker
-			//TODO, Dennis, ISSUES, currently, a base path of a converter, is its binding path.
-			//ex @bind(vm.person.firstName) , it's base path is 'vm.person.firstName', not 'vm.person'
-			//this sepc is different with DependsOn of a property
-			addConverterDependsOnTrackings(conv, ctx);
+//			//if a converter depends on some property, we should also add tracker
+//			//TODO, Dennis, ISSUES, currently, a base path of a converter, is its binding path.
+//			//ex @bind(vm.person.firstName) , it's base path is 'vm.person.firstName', not 'vm.person'
+//			//this sepc is different with DependsOn of a property
+//			addConverterDependsOnTrackings(conv, ctx);
 			
 			if(activating) return;//don't load to component if activating
 			
@@ -94,16 +94,16 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		}
 	}
 	
-	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {
-		final Class<? extends Converter> convClz = conv.getClass();
-		if (_doneConverterDependsOn.contains(convClz)) { //avoid to eval converter @DependsOn again if not exists
-			return;
-		}
-		_doneConverterDependsOn.add(convClz);
-		final Method m = getConverterMethod(convClz);
-		final String srcpath = getPropertyString();
-		BindELContext.addDependsOnTrackings(m, srcpath, null, this, ctx);
-	}
+//	private void addConverterDependsOnTrackings(Converter conv, BindContext ctx) {
+//		final Class<? extends Converter> convClz = conv.getClass();
+//		if (_doneConverterDependsOn.contains(convClz)) { //avoid to eval converter @DependsOn again if not exists
+//			return;
+//		}
+//		_doneConverterDependsOn.add(convClz);
+//		final Method m = getConverterMethod(convClz);
+//		final String srcpath = getPropertyString();
+//		BindELContext.addDependsOnTrackings(m, srcpath, null, this, ctx);
+//	}
 	
 	private Method getConverterMethod(Class<? extends Converter> cls) {
 		try {

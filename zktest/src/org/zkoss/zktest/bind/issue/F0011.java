@@ -20,6 +20,7 @@ import java.util.Date;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
@@ -49,8 +50,8 @@ public class F0011 extends BindComposer {
 	public F0011() {
 		bday1 = new Date();
 		addValidator("validator1", new Validator() {
-			@NotifyChange("message1")
 			public void validate(ValidationContext ctx) {
+				BindUtils.postNotifyChange(null, null, F0011.this, "message1");
 				Property p = ctx.getProperty();
 				Date d = (Date)p.getValue();
 				if(d==null){
@@ -68,8 +69,8 @@ public class F0011 extends BindComposer {
 			}
 		});
 		validator2 = new Validator() {
-			@NotifyChange("message2")
 			public void validate(ValidationContext ctx) {
+				BindUtils.postNotifyChange(null, null, F0011.this, "message2");
 				Property p = ctx.getProperty();
 				Date d = (Date)p.getValue();
 				if(d==null){
@@ -86,8 +87,8 @@ public class F0011 extends BindComposer {
 			}
 		};
 		addValidator("validator31", new Validator() {
-			@NotifyChange("message3")
 			public void validate(ValidationContext ctx) {
+				BindUtils.postNotifyChange(null, null, F0011.this, "message3");
 				if(!ctx.isValid()){
 					return;
 				}
@@ -102,8 +103,8 @@ public class F0011 extends BindComposer {
 			}
 		});
 		addValidator("validator32", new Validator() {
-			@NotifyChange("message3")
 			public void validate(ValidationContext ctx) {
+				BindUtils.postNotifyChange(null, null, F0011.this, "message3");
 				if(!ctx.isValid()){
 					return;
 				}
@@ -164,8 +165,8 @@ public class F0011 extends BindComposer {
 			}
 		});
 		addValidator("validator5", new Validator() {
-			@NotifyChange("message5")
 			public void validate(ValidationContext ctx) {
+				BindUtils.postNotifyChange(null, null, F0011.this, "message5");
 				if(!ctx.isValid()){
 					return;
 				}
