@@ -28,7 +28,8 @@ var jQuery = function( selector, context ) {
 	},
 
 	// Map over jQuery in case of overwrite
-	_jQuery = window.jQuery,
+//Potix: no need to restore since we don't override old copy
+//	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
 //Potix: no need since we don't override the old copy (see below)
