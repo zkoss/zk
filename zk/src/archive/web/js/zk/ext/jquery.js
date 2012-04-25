@@ -403,9 +403,7 @@ jQuery.extend({
 	},
 
 	// Is the DOM ready to be used? Set to true once it occurs.
-//Tom Yeh, Potix, 20100110: inherit older copy since it might be loaded later (Liferay)
-//	isReady: false,
-	isReady: (_jQuery&&_jQuery.isReady),
+	isReady: false,
 
 	// A counter to track how many items to wait for before
 	// the ready event fires. See #6781

@@ -1,0 +1,6 @@
+<zk>
+	<window title="hello" border="normal">
+		<custom-attributes scope="request" org.zkoss.zk.ui.page.redrawCtrl="true"/>
+		<button id="btn" label="hello" onClick='alert("Hello")' />
+	</window>
+</zk>
