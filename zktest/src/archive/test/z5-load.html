@@ -2,25 +2,16 @@
 <html>
 <head>
 <title>Load ZK dynamically</title>
-<script type="text/javascript" src="/zktest/zkau/web/js/zk/ext/jquery.src.js">
-</script>
-<script>
-function loadDiv() {
-	jQuery.ajax({
-		url: "z5-load-1.zul?zk.redrawCtrl=page",
-		success: function (html) {
-			jQuery("#myDiv").append(html);
-		}
-	});
-}
-jQuery(document).ready(function(){
-	loadDiv();
-});
-</script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
 <body>
 	This example loads a ZUL file from a plain HTML file (with jQuery)
 	<div id="myDiv">
 	</div>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#myDiv").load("z5-load-1.zul?zk.redrawCtrl=page");
+});
+</script>
 </body>
 </html>
