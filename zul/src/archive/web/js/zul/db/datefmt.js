@@ -407,7 +407,7 @@ zk.fmt.Date = {
 					break;
 				case 'E':
 					if (len <= 3) txt += localizedSymbols.SDOW[(val.getDay() - localizedSymbols.DOW_1ST + 7) % 7];
-					else txt += localizedSymbols.FDOW[(val.getDay() - localizedSymbols.DOW_1ST) % 7];
+					else txt += localizedSymbols.FDOW[(val.getDay() - localizedSymbols.DOW_1ST + 7) % 7];
 					break;
 				case 'D':
 					txt += dayInYear(val);
