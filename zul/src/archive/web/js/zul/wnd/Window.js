@@ -761,7 +761,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					this._shadowWgt.sync();
 			}
 			if (this._mask ) { //ZK-1079
-				var n = this._shadowWgt ? this._shadowWgt.getBottomElement() || this.$n() : this.$n(); //null if ff3.5 (no shadow/stackup)
+				var n = (this._shadowWgt && this._shadowWgt.getBottomElement()) || this.$n() ; //null if ff3.5 (no shadow/stackup)
 				if (n) this._mask.sync(n);
 			}
 		}
