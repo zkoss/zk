@@ -12,8 +12,11 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.util.Set;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Property;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.xel.ExpressionX;
@@ -42,6 +45,18 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 		return _cacheValue == NULL_VALUE ? null : _cacheValue;
 	}
 	
+	@Override
+	public void setValue(BindELContext ctx, Object val) {
+		invalidateCache();
+		final BindContext bctx = newBindContext();
+		getBinder().getEvaluatorX().setValue(bctx, getComponent(), _exprX, val);
+		//copy notifies back
+		final Set<Property> notifies = BindELContext.getNotifys(bctx);
+		if(notifies!=null){
+			BindELContext.addNotifys(notifies, ctx.getBindContext());
+		}
+	}
+	
 	private BindContext newBindContext() {
 		return BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
 	}
@@ -58,10 +73,6 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 	@Override
 	public String getPropertyString() {
 		return getPureExpressionString(_exprX);
-	}
-	
-	/*package*/ ExpressionX getProperty(){
-		return _exprX;
 	}
 
 	@Override

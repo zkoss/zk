@@ -19,7 +19,6 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormExt;
-import org.zkoss.bind.impl.BindEvaluatorXImpl;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.MiscUtil;
@@ -76,12 +75,6 @@ public class BindELResolver extends XelELResolver {
 		Object value = super.getValue(ctx, base, property);
 		//ZK-950: The expression reference doesn't update while change the instant of the reference
 		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding)value : null;
-		
-		//ZK-1085 NPE when using reference binding, return the rbinding directly if context set the flag
-		if(rbinding != null && isReturnRef(ctx)){
-			return rbinding;
-		}
-		
 		if (rbinding != null) {
 			value = rbinding.getValue((BindELContext) ((EvaluationContext)ctx).getELContext());
 		} 
@@ -91,19 +84,19 @@ public class BindELResolver extends XelELResolver {
 		return value;
 	}
 	
-	private boolean isReturnRef(ELContext ctx){
-		if(ctx instanceof EvaluationContext){
-			final ELContext elc = ((EvaluationContext)ctx).getELContext();
-			if(elc instanceof BindELContext){
-				return Boolean.TRUE.equals(((BindELContext)elc).getAttribute(BindEvaluatorXImpl.RETURN_REFERENCE_BINDING));
-			}
-		}
-		return false;
-	}
-	
 	public void setValue(ELContext ctx, Object base, Object property, Object value)
 	throws PropertyNotFoundException, PropertyNotWritableException, ELException {
-		if (base instanceof ReferenceBinding) {
+		
+		if(base ==null){
+			//ZK-1085 PropertyNotWritableException when using reference binding
+			//for setting value to a reference-binding and simple-node (base = null), we let reference-binding handle it 
+			Object val = super.getValue(ctx, base, property);//property resolved sets true when getValue
+			if(val instanceof ReferenceBinding){
+				((ReferenceBinding)val).setValue((BindELContext)((EvaluationContext)ctx).getELContext(),value);
+				return;
+			}
+			
+		}else if (base instanceof ReferenceBinding) {
 			base = ((ReferenceBinding)base).getValue((BindELContext)((EvaluationContext)ctx).getELContext());
 		}
 		super.setValue(ctx, base, property, value);
@@ -197,6 +190,13 @@ public class BindELResolver extends XelELResolver {
 							}
 						}
 					}
+				} 
+				
+				if(binding instanceof ReferenceBinding && nums == 0 && allownotify){
+					final Method m = (Method) ctx.getContext(Method.class);
+					//collect Property for @NotifyChange, kept in BindContext
+					//see BinderImpl$CommandEventListener#onEvent()
+					BindELContext.addNotifys(m, base, (String) propName, value, bctx);
 				}
 			}
 		}

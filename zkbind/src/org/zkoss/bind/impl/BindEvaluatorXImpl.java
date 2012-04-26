@@ -21,7 +21,6 @@ import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
-import org.zkoss.zel.PropertyNotWritableException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -33,8 +32,6 @@ import org.zkoss.zk.xel.impl.SimpleEvaluator;
  */
 public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluatorX {
 	private static final long serialVersionUID = 1L;
-	
-	static public final String RETURN_REFERENCE_BINDING = "$RETURN_REF$"; 
 
 	public BindEvaluatorXImpl(FunctionMapper mapper, Class<? extends ExpressionFactory> expfcls) {
 		super(mapper, expfcls);
@@ -50,31 +47,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		//ZK-1063 No exception if binding to a non-existed property
 		//Dennis, Removed the try-catch PropertyNotFoundException, we don't have history to check why we did try-catch before
 		//However, it should throw the property-not-found to let user be aware it. 
-		try{
-			expression.setValue(newXelContext(ctx, comp), value);
-		}catch(PropertyNotWritableException x){
-			//ZK-1085 NPE when using reference binding, continue set to a reference binding
-			handleWriteReferenceBinding(ctx,comp,expression,value,x);
-		}
-	}
-	
-	//ZK-1085 NPE when using reference binding, continue set to a reference binding
-	private void handleWriteReferenceBinding(BindContext ctx, Component comp, ExpressionX expression, Object value,PropertyNotWritableException x){
-		//try to evaluate it if it is a reference binding
-		XelContext xelc = newXelContext(ctx, comp);
-		xelc.setAttribute(RETURN_REFERENCE_BINDING, Boolean.TRUE); //see BindELResolver getValue
-		Object val = expression.evaluate(xelc);
-		if(val instanceof ReferenceBindingImpl){
-			ExpressionX expr = ((ReferenceBindingImpl)val).getProperty();
-			try{
-				expr.setValue(newXelContext(ctx, comp), value);
-			}catch(PropertyNotWritableException e){
-				//nested , reference in reference
-				handleWriteReferenceBinding(ctx,((ReferenceBindingImpl)val).getComponent(),expr,value,e);
-			}
-		}else{
-			throw x;
-		}
+		expression.setValue(newXelContext(ctx, comp), value);
 	}
 
 	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)

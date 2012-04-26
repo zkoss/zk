@@ -147,7 +147,7 @@ public class BindELContext extends XelELContext {
 	}
 	
 	//utility method to add notifys to BindContext
-	private static void addNotifys(Set<Property> props, BindContext ctx) {
+	public static void addNotifys(Set<Property> props, BindContext ctx) {
 		if (ctx == null) {
 			return;
 		}
@@ -160,7 +160,7 @@ public class BindELContext extends XelELContext {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static Set<Property> getNotifys(BindContext ctx){
+	public static Set<Property> getNotifys(BindContext ctx){
 		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
 	}
 	
