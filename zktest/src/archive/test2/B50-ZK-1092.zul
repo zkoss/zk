@@ -1,0 +1,51 @@
+<zk>
+   <window border="normal" title="hello" mode="modal" >
+   	  <h:pre xmlns:h="xhtml">
+   	  	1.select the last item
+   	  	2.expend the first group
+			There should not have horizontal scrollbar and spaces in the bottom.    	  	
+   	  </h:pre>
+      <tree checkmark="true" multiple="true" fixedLayout="true"
+         height="310px" width="510px">
+         <treechildren>
+            <treeitem label="test" open="false">
+               <treechildren>
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+               </treechildren>
+            </treeitem>
+            <treeitem label="test">
+               <treechildren>
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+
+                  <treeitem label="test" />
+                  <treeitem label="test" />
+               </treechildren>
+            </treeitem>
+         </treechildren>
+      </tree>
+   </window>
+</zk>

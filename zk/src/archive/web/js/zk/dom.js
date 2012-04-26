@@ -675,7 +675,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
 				var elst, oldvisi;
-				if (zk.ie && !zk.ie8 && el.style.display == "none") {
+				if (zk.ie && el.style.display == "none") {
 				//When popup a window in an iframe, getBoundingClientRect not correct (test case: B36-2851102.zul within iframe)
 					oldvisi = (elst = el.style).visibility;
 					elst.visibility = "hidden";
