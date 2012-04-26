@@ -68,9 +68,9 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 				}
 				fex.resetDirty(); //initial loading, mark form as clean
 			}
-			binder.notifyChange(form, "*"); //notify change of fx.*
+			binder.notifyChange(form, "."); //notify change of fx and fx.*
 			if(form instanceof FormExt){//after notify form
-				binder.notifyChange(((FormExt)form).getStatus(), "*");//notify change of fxStatus.*
+				binder.notifyChange(((FormExt)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
 			}
 		}else{
 			((BinderCtrl)binder).storeForm(getComponent(), getFormId(), (Form)value);

@@ -1,0 +1,27 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01088FormUpdate')"
+	validationMessages="@id('vmsgs')">
+	<label multiline="true">
+	1.edit value, Dirty should update to true
+	2.click reload, fullname should relod back to Dennis Chen and dirty is false
+	3.edit value and save the form, fullName should change to the edited value, dirty should update to false
+	</label>
+	<hlayout>
+		<label id="lb11" value="@bind(vm.person.firstName)"/>/<label id="lb12" value="@bind(vm.person.lastName)"/>
+	</hlayout>
+	<vlayout form="@id('fx') @load(vm.person) @save(vm.person,before='save')">
+		<hlayout>
+		Name1 :<textbox id="tb11" value="@bind(fx.firstName)"/>/<textbox id="tb12" value="@bind(fx.lastName)"/>
+		</hlayout>
+		<hlayout>
+		FullName :<label id="lb21" value="@bind(fx) @converter(vm.converter1)"/>
+		</hlayout>
+		<hlayout>
+		Dirty :<label id="lb22" value="@bind(fxStatus) @converter(vm.converter2)"/>
+		</hlayout>
+	</vlayout>
+	<button id="reload" label="Reload" onClick="@command('reload')" />
+	<button id="save" label="Save" onClick="@command('save')" />
+</window>

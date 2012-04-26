@@ -86,6 +86,7 @@ ZK 6.0.1
   ZK-1071: Bandbox, Form Binding and Constraints with Chromium and (less reprodible) Firefox
   ZK-1090: Load a ZUL page with an Ajax request failed in ZK 6
   ZK-1085: PropertyNotWritableException when using reference binding
+  ZK-1088: Value of form with converter is not updated.
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

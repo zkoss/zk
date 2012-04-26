@@ -169,7 +169,7 @@ public class BindELResolver extends XelELResolver {
 								//collect notify property, kept in BindContext
 								BindELContext.addNotifys(base, (String) propName, value, bctx);
 								if (base instanceof FormExt)
-									BindELContext.addNotifys(((FormExt)base).getStatus(), "*", null, bctx);
+									BindELContext.addNotifys(((FormExt)base).getStatus(), ".", null, bctx);
 							} else {
 								final Method m = (Method) ctx.getContext(Method.class);
 								//collect Property for @NotifyChange, kept in BindContext

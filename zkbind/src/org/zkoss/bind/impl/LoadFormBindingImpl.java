@@ -85,9 +85,9 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		}
 		if(activating) return;//don't notify change if activating
 		
-		binder.notifyChange(form, "*"); //notify change of fx.*
+		binder.notifyChange(form, "."); //notify change of fx and fx.*
 		if(form instanceof FormExt){
-			binder.notifyChange(((FormExt)form).getStatus(), "*");//notify change of fxStatus.*
+			binder.notifyChange(((FormExt)form).getStatus(), ".");//notify change of fxStatus and fxStatus.*
 		}
 	}
 	
