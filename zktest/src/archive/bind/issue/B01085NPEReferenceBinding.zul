@@ -2,7 +2,7 @@
 <window>
 
 	<zscript>
-	Object selected = "A";
+	Object selected = "1";
 	//for test
 </zscript>
 	<window id="win" title="new page title" border="normal"
@@ -16,7 +16,7 @@
 		<hbox width="600px">
 			<vbox hflex="1">
 				Listbox1
-				<listbox id="lb1" selectedItem="@bind(vmsel)"
+				<listbox id="listbox1" selectedItem="@bind(vmsel)"
 					model="@load(vm.model)">
 					<template name="model" var="entry">
 						<listitem>
@@ -26,7 +26,7 @@
 				</listbox>
 				Listbox2
 				<div vmsel2="@ref(vmsel)">
-					<listbox id="lb2" selectedItem="@bind(vmsel2)"
+					<listbox id="listbox2" selectedItem="@bind(vmsel2)"
 						model="@load(vm.model)">
 						<template name="model" var="entry">
 							<listitem>
@@ -36,7 +36,7 @@
 					</listbox>
 					<div vmsel3="@ref(vmsel2)">
 						Listbox3
-						<listbox id="lb3" selectedItem="@bind(vmsel3)"
+						<listbox id="listbox3" selectedItem="@bind(vmsel3)"
 							model="@load(vm.model)">
 							<template name="model" var="entry">
 								<listitem>
@@ -49,7 +49,7 @@
 			</vbox>
 			<vbox hflex="1">
 				Listbox4
-				<listbox id="lb4" selectedItem="@bind(selected)"
+				<listbox id="listbox4" selectedItem="@bind(selected)"
 					model="@load(vm.model)">
 					<template name="model" var="entry">
 						<listitem>
@@ -58,7 +58,7 @@
 					</template>
 				</listbox>
 				Listbox5
-				<listbox id="lb5" selectedItem="@bind(simple)"
+				<listbox id="listbox5" selectedItem="@bind(simple)"
 					model="@load(vm.model)">
 					<template name="model" var="entry">
 						<listitem>
@@ -68,7 +68,7 @@
 				</listbox>
 				<div simple2="@ref(simple)">
 					Listbox6
-					<listbox id="lb6" selectedItem="@bind(simple2)"
+					<listbox id="listbox6" selectedItem="@bind(simple2)"
 						model="@load(vm.model)">
 						<template name="model" var="entry">
 							<listitem>
@@ -79,6 +79,7 @@
 				</div>
 			</vbox>
 		</hbox>
-		<label value="@load(vmsel)" />
+		<label id="lb1" value="@load(vmsel)" />
+		<label id="lb2" value="@load(selected)" />
 	</window>
 </window>
