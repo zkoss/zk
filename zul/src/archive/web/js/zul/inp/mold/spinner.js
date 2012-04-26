@@ -43,6 +43,8 @@ function (out) {
 				'-btn-upper"><div class="', zcls, '-btn-up-icon"></div></div>',
 				'<div id="', uuid, '-btn-down" class="', zcls, 
 				'-btn-lower"><div class="', zcls, '-btn-down-icon"></div></div>');
+	else
+		out.push('<div class="', zcls, '-btn-icon"></div>');
 	out.push('</i></i>');
 	
 }
