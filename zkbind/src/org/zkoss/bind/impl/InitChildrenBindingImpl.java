@@ -70,8 +70,8 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 			if(value instanceof Collection){
 				data = (Collection<Object>)value;
 			}else{
-				data = new ArrayList<Object>();
-				data.add(value);
+				//handle other type in converter
+				throw new UiException("it is not a list, is "+value.getClass()+":"+value);
 			}
 			BindChildRenderer renderer = new BindChildRenderer();
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
