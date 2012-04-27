@@ -13,10 +13,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,17 +77,19 @@ public class LoadChildrenBindingImpl extends ChildrenBindingImpl implements
 		comp.getChildren().clear();
 		BindELContext.removeModel(comp);
 		if(value!=null){
-			List<Object> data = null;
-			if(value instanceof List){
-				data = (List<Object>)value;
+			Collection<Object> data = null;
+			if(value instanceof Collection){
+				data = (Collection<Object>)value;
 			}else{
+				//handle other type in converter
 				throw new UiException("it is not a list, is "+value.getClass()+":"+value);
 			}
 			BindChildRenderer renderer = new BindChildRenderer();
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
 			int size = data.size();
-			for(int i=0;i<size;i++){
-				renderer.render(comp, data.get(i),i,size);
+			int i = 0;
+			for(Object obj:data){
+				renderer.render(comp, obj , i++, size);
 			}
 		}
 	}
