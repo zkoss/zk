@@ -90,8 +90,8 @@ public interface Binder {
 	
 	
 	/**
-	 * Load the load-binding of the component
-	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * Load the load-binding of the component. <br/>
+	 * By calling this method, all load-bindings in the component (including load-bindings in its descendant) will reload the value to components.  
 	 * @param comp the component to reload
 	 * @param loadinit true if should also load the init-binding
 	 */
