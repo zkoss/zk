@@ -16,7 +16,6 @@ ZK 6.0.1
   ZK-995: A way to access multiple validation messages
   ZK-1019: Provide an extra layer of DIV on Window/Panel buttons 
   ZK-1028: Add Chosenbox to handle multiple selection
-  ZK-1003: Panel vflex wrong with toolbar
   ZK-882: Add the ComponentInfo to the id generator
   ZK-997: SelectorComposer supports the listening of an event queue
   ZK-1032: Able to wire Event to command method
@@ -25,7 +24,6 @@ ZK 6.0.1
   ZK-1047: Label should support format
   ZK-1018: Add fusionchart component
   ZK-1072: Converter supports generic type
-  ZK-726: Masking fail when component is under autocsroll layout region 
   ZK-1082: Supports bind on chosenbox model and selection
   ZK-1084: Supports binding on biglistbox selection
   
@@ -84,6 +82,8 @@ ZK 6.0.1
   ZK-965: Tabpanel does not adapt height to its content if a vertical tabs is used unless a vflex="min" is specified  
   ZK-1070: onSelect is not fired in listbox mold select
   ZK-1071: Bandbox, Form Binding and Constraints with Chromium and (less reprodible) Firefox
+  ZK-1003: Panel vflex wrong with toolbar
+  ZK-726: Masking fail when component is under autocsroll layout region 
   ZK-1090: Load a ZUL page with an Ajax request failed in ZK 6
   ZK-1085: PropertyNotWritableException when using reference binding
   ZK-1088: Value of form with converter is not updated.
