@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.fn;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.lang.reflect.Field;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -34,8 +36,10 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.logging.Log;
+import org.zkoss.text.DateFormats;
 import org.zkoss.text.MessageFormats;
 
 /**
@@ -385,54 +389,129 @@ public class CommonFns {
 			throw new IllegalArgumentException("Unknow object for new: "+o);
 		}
 	}
-	
+
+
+	public static final String formatDate(Date date, String pattern) {
+		return formatDate(date, pattern, null, null, null, null);
+	}
+	public static final Date parseDate(String source, String pattern) throws Exception {
+		return parseDate(source, pattern, null, null, null, null);
+	}
+
+	public static final String formatNumber(Object value, String format) {
+		return formatNumber(value, format, null);
+	}
+	public static final Number parseNumber (String source, String pattern) throws Exception {
+		return parseNumber(source, pattern, null);
+	}
+
 	/**
 	 * Formats a Date into a date/time string.
      * @param date the time value to be formatted into a time string.
 	 * @param pattern the pattern describing the date and time format
+	 * @param locale The Locale to apply, if it is null,
+	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
+	 * @param timezone the time zone to apply, if it is null,
+	 * The current timezone given by {@link org.zkoss.util.TimeZones#getCurrent} is used.
+	 * @param dateStyle styling index of date.
+	 * @param timeStyle styling index of time.
      * @return the formatted time string.
      * @since 6.0.0
 	 */
-	public static final String formatDate(Date date, String pattern) {
-		return new SimpleDateFormat(pattern).format(date);
+	public static final String formatDate(Date date, String pattern, Locale locale, TimeZone timezone, String dateStyle, String timeStyle) {
+		return getDateFormat(pattern, locale, timezone, dateStyle, timeStyle).format(date);
 	}
-
 	/**
 	 * Parses text from the beginning of the given string to produce a date.
      * The method may not use the entire text of the given string.
      * @param source A <code>String</code> whose beginning should be parsed.
 	 * @param pattern the pattern describing the date and time format
+	 * @param locale The Locale to apply, if it is null,
+	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
+	 * @param timezone the time zone to apply, if it is null,
+	 * The current timezone given by {@link org.zkoss.util.TimeZones#getCurrent} is used.
+	 * @param dateStyle styling index of date.
+	 * @param timeStyle styling index of time.
+	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
      * @return A <code>Date</code> parsed from the string.
 	 * @throws Exception
 	 * @since 6.0.0
 	 */
-	public static final Date parseDate(String source, String pattern) throws Exception {
-		return new SimpleDateFormat(pattern).parse(source);
+	public static final Date parseDate(String source, String pattern, Locale locale, TimeZone timezone, String dateStyle, String timeStyle) throws Exception {
+		return getDateFormat(pattern, locale, timezone, dateStyle, timeStyle).parse(source);
 	}
 	/**
 	 * Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
 	 *
 	 * <p>A utility to assist the handling of numeric data.
-	 * @param value The number to format.
-	 * @param format The format to apply, if it is null,
+	 * @param number The number to format.
+	 * @param pattern The pattern to apply, if it is null,
 	 * the system's default format is used.
 	 * @param locale The Locale to apply, if it is null,
 	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
 	 * @return String The formatted number string.
+	 * @since 6.0.1
 	 */
-	public static final String formatNumber(Object value, String format, Locale locale) {
-		String result;
-		if (value == null) {
-			result =  "";
-		} else {
-			if (locale == null) locale = Locales.getCurrent();
-			final DecimalFormat df = (DecimalFormat)
-				NumberFormat.getInstance(locale);
-			if (format != null)
-				df.applyPattern(format);
-			result = df.format(value);
+	public static final String formatNumber (Object number, String pattern, Locale locale) {
+		return getDecimalFormat(pattern, locale).format(number);
+	}
+	/**
+	 * Parses text from the beginning of the given string to produce a number.
+     * The method may not use the entire text of the given string.
+     * @param source A <code>String</code> whose beginning should be parsed.
+	 * @param pattern the pattern describing the date and time format
+	 * @param locale The Locale to apply, if it is null,
+	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
+     * @return A <code>Number</code> parsed from the string.
+	 * @throws Exception
+	 * @since 6.0.1
+	 */
+	public static final Number parseNumber (String source, String pattern, Locale locale) throws Exception {
+		return getDecimalFormat(pattern, locale).parse(source);
+	}
+	private static final DecimalFormat getDecimalFormat (String pattern, Locale locale) {
+		final DecimalFormat df = (DecimalFormat)
+			NumberFormat.getInstance(locale != null ? locale : Locales.getCurrent());
+		if (pattern != null)
+			df.applyPattern(pattern);
+		return df;
+	}
+	private static final DateFormat getDateFormat (String pattern, Locale locale, TimeZone timezone, String dateStyle, String timeStyle) {
+		if (locale == null)
+			locale = Locales.getCurrent();
+		if (timezone == null)
+			timezone = TimeZones.getCurrent();
+		pattern = getRealFormat(pattern, locale, dateStyle, timeStyle);
+		final DateFormat df = new SimpleDateFormat(pattern,
+				locale);
+		df.setTimeZone(timezone);
+		return df;
+	}
+	private static final String getRealFormat (String pattern, Locale locale, String dateStyle, String timeStyle) {
+		int ts, ds;
+		if (locale == null)
+			locale = Locales.getCurrent();
+
+		ds = toStyle(dateStyle);
+		if (ds != -111) {
+			ts = toStyle(timeStyle);
+			if (ts != -111) {
+				return DateFormats.getDateTimeFormat(ds, ts, locale, pattern);
+			}
+			return DateFormats.getDateFormat(ds, locale, pattern);
 		}
-		return result;
+		return pattern != null ? pattern : "M/d/yy";
+	}
+	private static final int toStyle (String style) {
+		if (style != null) {
+			style = style.trim().toLowerCase();
+			return "short".equals(style) ? DateFormat.SHORT
+					: "medium".equals(style) ? DateFormat.MEDIUM
+					: "long".equals(style) ? DateFormat.LONG
+					: "full".equals(style) ? DateFormat.FULL
+					: -111; //not found
+		}
+		return -111;
 	}
 }
