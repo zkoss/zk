@@ -87,6 +87,7 @@ ZK 6.0.1
   ZK-1090: Load a ZUL page with an Ajax request failed in ZK 6
   ZK-1085: PropertyNotWritableException when using reference binding
   ZK-1088: Value of form with converter is not updated.
+  ZK-1096: Listbox multiselect bug with draggable on 
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

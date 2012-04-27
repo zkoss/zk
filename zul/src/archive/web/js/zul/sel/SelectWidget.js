@@ -1007,7 +1007,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		var focusfound = false, rowfound = false,
-			lastSelected = this._lastSelectedItem || this._focusItem;
+			// ZK-1096: this._lastSelectedItem is only updated when doBlur
+			lastSelected = this._focusItem || this._lastSelectedItem; 
 		for (var it = this.getBodyWidgetIterator(), si = this.getSelectedItem(), w; (w = it.next());) {
 			if (w.isDisabled()) continue; // Bug: 2030986
 			if (focusfound) {

@@ -1,0 +1,35 @@
+<!--
+	B60-ZK-1096.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Apr 27 15:27:17 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Select Item 5.</div>
+	<div>2. Click outside the Listbox.</div>
+	<div>3. Select Item 15.</div>
+	<div>4. Shift-select Item 10.</div>
+	<div>You should see Item 10-15 selected. Otherwise it is a bug.</div>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 100; i++)
+			model.add("Item " + i);
+		ListitemRenderer rend = new ListitemRenderer() {
+			public void render(Listitem item, Object object) {
+				item.setLabel((String)object);
+				item.setDraggable("dgroup");
+			}
+			public void render(Listitem item, Object object, int index) {
+				render(item, object);
+			}
+		};
+	]]></zscript>
+	<listbox model="${model}" itemRenderer="${rend}" multiple="true" height="500px" />
+</zk>
