@@ -1303,10 +1303,11 @@ if (obj.$instanceof(zul.wgt.Label, zul.wgt.Image)) {
 	 * @return boolean true if this object is an instance of the class
 	 */
 	$instanceof: function () {
-		for (var extds = this.$class._$extds, args = arguments,
-		j = args.length, cls; j--;)
-			if ((cls = args[j]) && extds[cls.$oid])
-				return true; //found
+		if (this.$class)
+			for (var extds = this.$class._$extds, args = arguments,
+					j = args.length, cls; j--;)
+				if ((cls = args[j]) && extds[cls.$oid])
+					return true; //found
 		return false;
 	},
 	/** Invokes a method defined in the superclass with any number of arguments. It is like Function's call() that takes any number of arguments.
