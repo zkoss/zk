@@ -522,11 +522,8 @@ public class CommonFns {
 	}
 	private static final String getRealFormat (String pattern, Locale locale, String dateStyle, String timeStyle) {
 		int ts, ds;
-		if (locale == null)
-			locale = Locales.getCurrent();
-		if (pattern == null || pattern.isEmpty())
-			pattern = "M/d/yy";
-
+		if (pattern.isEmpty())
+			pattern = null;
 		ds = toStyle(dateStyle);
 		if (ds != -111) {
 			ts = toStyle(timeStyle);
@@ -535,7 +532,7 @@ public class CommonFns {
 			}
 			return DateFormats.getDateFormat(ds, locale, pattern);
 		}
-		return pattern;
+		return pattern != null ? pattern : "M/d/yy";
 	}
 	private static final int toStyle (String style) {
 		if (style != null) {
