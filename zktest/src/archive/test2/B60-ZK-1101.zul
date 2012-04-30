@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1101.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Apr 30, 2012 10:20:46 AM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the addChild 2~3 times, you should see 2,1,0 in order, not 0, 1, 2.
+	<zscript>
+		Panel newPanel() {
+			Panel p = new Panel();
+			Panelchildren pc = new Panelchildren();
+			p.appendChild(pc);
+			pc.appendChild(new Label(ptc.getChildren().size() + ""));
+return p;
+
+		}
+	</zscript>
+	<portallayout id="p">
+		<portalchildren id="ptc">
+		</portalchildren>
+	</portallayout>
+	<button label="addChild" onClick='p.setPanel(newPanel(), 0, 0)'/>
+</zk>
