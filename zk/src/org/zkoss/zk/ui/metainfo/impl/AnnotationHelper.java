@@ -102,6 +102,8 @@ public class AnnotationHelper {
 	 * @param annotName the annotation name.
 	 * @param annotAttrs a map of attributes of the annotation. If null,
 	 * it means no attribute at all.
+	 * @param loc the location information of the annotation in
+	 * the document, or null if not available.
 	 * @see #addByCompoundValue
 	 */
 	public void add(String annotName, Map<String, String[]> annotAttrs, Location loc) {
@@ -109,7 +111,7 @@ public class AnnotationHelper {
 			throw new IllegalArgumentException("empty");
 		_annots.add(new AnnotInfo(annotName, annotAttrs, loc));
 	}
-	/** @deprecated As of release 6.0.1, replaced with {@link #add(String, Map<String, String[]>, Location)}.
+	/** @deprecated As of release 6.0.1, replaced with {@link #add(String, Map, Location)}.
 	 */
 	public void add(String annotName, Map<String, String[]> annotAttrs) {
 		add(annotName, annotAttrs, null);
@@ -382,8 +384,6 @@ public class AnnotationHelper {
 	 * @param compInfo the instance definition to update
 	 * @param propName the property name
 	 * @param clear whether to clear all definitions before returning
-	 * @param loc the location information of the annotation in
-	 * the document, or null if not available.
 	 * @see #clear
 	 * @since 6.0.1
 	 */
