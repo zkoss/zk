@@ -89,7 +89,8 @@ May 2, 2012
   ZK-1085: PropertyNotWritableException when using reference binding
   ZK-1088: Value of form with converter is not updated.
   ZK-1096: Listbox multiselect bug with draggable on
-  ZK-1101: Portallayout.setPanel() doesn't behave as expected 
+  ZK-1101: Portallayout.setPanel() doesn't behave as expected
+  ZK-1100: Menuitem.setImage() doesn't work in menubar
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
