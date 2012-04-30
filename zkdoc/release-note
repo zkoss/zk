@@ -1,5 +1,6 @@
 	--------
 ZK 6.0.1
+May 2, 2012
 * Features
   ZK-883: A way to specify component's annotation in component's Java class
   ZK-864: Make ValidationContext easier
