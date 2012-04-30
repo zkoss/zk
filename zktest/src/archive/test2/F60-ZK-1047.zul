@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?xel-method prefix="n" name="formatNumber"
+	class="org.zkoss.xel.fn.CommonFns"
+	signature="java.lang.String formatNumber(java.lang.Object, java.lang.String, java.util.Locale)"?>
+<?xel-method prefix="n" name="formatDate"
+	class="org.zkoss.xel.fn.CommonFns"
+	signature="java.lang.String formatDate(java.util.Date date, java.lang.String pattern, java.util.Locale locale, java.util.TimeZone timezone, java.lang.String dateStyle, java.lang.String timeStyle)"?>
 
 <!--
 F60-ZK-1047.zul
@@ -31,7 +37,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 		String df1 = "yyyy-MM-dd";
 		String df2 = "yyyy // MM -- dd";
-		Date d1 = new Date();
+		Date d1 = new Date(1000L*43*365*24*60*60);
 		String ds1 = "2010 // 02 -- 03";
 
 		String ns1 = "12,345";
@@ -45,29 +51,47 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		Locale l2 = Locale.JAPAN;
 		Locale l3 = Locale.GERMAN;
 		Locale l4 = Locale.FRANCE;
-		
+
+		TimeZone tz1 = TimeZone.getTimeZone("GMT+2");
+		TimeZone tz2 = TimeZone.getTimeZone("GMT-2");
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+		Locale.setDefault(Locale.ENGLISH);
 		]]></zscript>
 	<hbox>
-		<vbox>
-			<div> int .2f </div>
-			<div> BigDecimal .2f </div>
-			<div> double .2f </div>
-			<div> double .3f </div>
-			<div> double .5f Currency </div>
-			<div> double .6f Percentage </div>
+		<vbox style="border: 1px solid green;">
+			<label value="12,345" />
+			<label value="12,345,678,901,234.35" />
+			<label value="12,345.23" />
+			<label value="12,345.235" />
+			<label value="12,345,234.5678 ‰" />
+			<label value="$ 12,345.234568" />
+			<label value="￥ 12,345.234568" />
+			<intbox value="12345" />
+			<intbox value="12345" />
+			<doublebox value="12345.876543" />
+
+			<label value="2012-12-21" />
+			<label value="12/21/12 2:00 AM" />
+			<label value="20 décembre 2012 22:00:00 GMT-02:00" />
+			<label value="venerdì 21 dicembre 2012 8.00.00 GMT+08:00" />
+			<textbox value="Feb 3, 2010" />
 		</vbox>
-		<vbox>
+		<vbox style="border: 1px solid brown;">
 			<label value="${c:formatNumber(num1, f1)}" />
 			<label value="${c:formatNumber(num2, f1)}" />
 			<label value="${c:formatNumber(num3, f1)}" />
 			<label value="${c:formatNumber(num3, f2)}" />
 			<label value="${c:formatNumber(num3, percentage)}" />
 			<label value="${c:formatNumber(num3, currency)}" />
+			<label value="${n:formatNumber(num3, currency, l2)}" />
 			<intbox value="${c:parseNumber(ns1, f1)}" />
 			<intbox value="${c:parseNumber(ns2, f6)}" />
 			<doublebox value="${c:parseNumber(ns3, f5)}" />
 
 			<label value="${c:formatDate(d1, df1)}" />
+			<label value="${n:formatDate(d1, null, null, tz1, 'short', 'short')}" />
+			<label value="${n:formatDate(d1, null, l4, tz2, 'long', 'long')}" />
+			<label value="${n:formatDate(d1, null, l1, null, 'full', 'full')}" />
 			<datebox value="${c:parseDate(ds1, df2)}" />
 		</vbox>
 	</hbox>

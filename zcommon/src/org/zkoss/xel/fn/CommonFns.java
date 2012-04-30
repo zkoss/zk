@@ -492,6 +492,8 @@ public class CommonFns {
 		int ts, ds;
 		if (locale == null)
 			locale = Locales.getCurrent();
+		if (pattern == null || pattern.isEmpty())
+			pattern = "M/d/yy";
 
 		ds = toStyle(dateStyle);
 		if (ds != -111) {
@@ -501,7 +503,7 @@ public class CommonFns {
 			}
 			return DateFormats.getDateFormat(ds, locale, pattern);
 		}
-		return pattern != null ? pattern : "M/d/yy";
+		return pattern;
 	}
 	private static final int toStyle (String style) {
 		if (style != null) {
