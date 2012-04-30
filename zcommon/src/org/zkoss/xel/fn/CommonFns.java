@@ -392,26 +392,20 @@ public class CommonFns {
 
 	/**
 	 * Formats a Date into a date/time string.
-     * @param date the time value to be formatted into a time string.
+	 * @param date the time value to be formatted into a time string.
 	 * @param pattern the pattern describing the date and time format
-     * @return the formatted time string.
-     * @since 6.0.0
+	 * @return the formatted time string.
+	 * @since 6.0.0
 	 */
 	public static final String formatDate(Date date, String pattern) {
 		return formatDate(date, pattern, null, null, null, null);
 	}
 	/**
 	 * Parses text from the beginning of the given string to produce a date.
-     * The method may not use the entire text of the given string.
-     * @param source A <code>String</code> whose beginning should be parsed.
+	 * The method may not use the entire text of the given string.
+	 * @param source A <code>String</code> whose beginning should be parsed.
 	 * @param pattern the pattern describing the date and time format
-	 * @param locale The Locale to apply, if it is null,
-	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
-	 * @param timezone the time zone to apply, if it is null,
-	 * The current timezone given by {@link org.zkoss.util.TimeZones#getCurrent} is used.
-	 * @param dateStyle styling index of date.
-	 * @param timeStyle styling index of time.
-     * @return A <code>Date</code> parsed from the string.
+	 * @return A <code>Date</code> parsed from the string.
 	 * @throws Exception
 	 * @since 6.0.0
 	 */
@@ -434,10 +428,10 @@ public class CommonFns {
 	}
 	/**
 	 * Parses text from the beginning of the given string to produce a number.
-     * The method may not use the entire text of the given string.
-     * @param source A <code>String</code> whose beginning should be parsed.
+	 * The method may not use the entire text of the given string.
+	 * @param source A <code>String</code> whose beginning should be parsed.
 	 * @param pattern the pattern describing the date and time format
-     * @return A <code>Number</code> parsed from the string.
+	 * @return A <code>Number</code> parsed from the string.
 	 * @throws Exception
 	 * @since 6.0.1
 	 */
@@ -447,7 +441,7 @@ public class CommonFns {
 
 	/**
 	 * Formats a Date into a date/time string.
-     * @param date the time value to be formatted into a time string.
+	 * @param date the time value to be formatted into a time string.
 	 * @param pattern the pattern describing the date and time format
 	 * @param locale The Locale to apply, if it is null,
 	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
@@ -455,16 +449,16 @@ public class CommonFns {
 	 * The current timezone given by {@link org.zkoss.util.TimeZones#getCurrent} is used.
 	 * @param dateStyle styling index of date.
 	 * @param timeStyle styling index of time.
-     * @return the formatted time string.
-     * @since 6.0.0
+	 * @return the formatted time string.
+	 * @since 6.0.0
 	 */
 	public static final String formatDate(Date date, String pattern, Locale locale, TimeZone timezone, String dateStyle, String timeStyle) {
 		return getDateFormat(pattern, locale, timezone, dateStyle, timeStyle).format(date);
 	}
 	/**
 	 * Parses text from the beginning of the given string to produce a date.
-     * The method may not use the entire text of the given string.
-     * @param source A <code>String</code> whose beginning should be parsed.
+	 * The method may not use the entire text of the given string.
+	 * @param source A <code>String</code> whose beginning should be parsed.
 	 * @param pattern the pattern describing the date and time format
 	 * @param locale The Locale to apply, if it is null,
 	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
@@ -472,7 +466,7 @@ public class CommonFns {
 	 * The current timezone given by {@link org.zkoss.util.TimeZones#getCurrent} is used.
 	 * @param dateStyle styling index of date.
 	 * @param timeStyle styling index of time.
-     * @return A <code>Date</code> parsed from the string.
+	 * @return A <code>Date</code> parsed from the string.
 	 * @throws Exception
 	 * @since 6.0.0
 	 */
@@ -496,12 +490,12 @@ public class CommonFns {
 	}
 	/**
 	 * Parses text from the beginning of the given string to produce a number.
-     * The method may not use the entire text of the given string.
-     * @param source A <code>String</code> whose beginning should be parsed.
+	 * The method may not use the entire text of the given string.
+	 * @param source A <code>String</code> whose beginning should be parsed.
 	 * @param pattern the pattern describing the date and time format
 	 * @param locale The Locale to apply, if it is null,
 	 * The current locale given by {@link org.zkoss.util.Locales#getCurrent} is used.
-     * @return A <code>Number</code> parsed from the string.
+	 * @return A <code>Number</code> parsed from the string.
 	 * @throws Exception
 	 * @since 6.0.1
 	 */
