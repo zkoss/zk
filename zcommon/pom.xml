@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zel</artifactId>
-			<version>2.2.2.FL.20120403</version>
+			<version>2.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.beanshell</groupId>
