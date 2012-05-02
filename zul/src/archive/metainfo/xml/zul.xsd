@@ -896,6 +896,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="autodisable" type="xs:string" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
+		<xs:attribute name="upload" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- calendar -->
@@ -1068,6 +1069,9 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="sizable" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="menupopup" type="xs:string" use="optional" />
+		<xs:attribute name="columnshide" type="booleanType" use="optional" />
+		<xs:attribute name="columnsgroup" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- combobox -->
 	<xs:element name="combobox" type="comboboxType" />
@@ -1168,6 +1172,7 @@
 	<xs:element name="div" type="divType" />
 	<xs:complexType name="divType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="mouseExtAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1539,6 +1544,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="valign" type="valignAttrType" use="optional" />
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- html -->
@@ -2838,6 +2844,8 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="toolbar" type="xs:string" use="optional" />
 		<xs:attribute name="onSave" type="xs:string" use="optional" />
+		<xs:attribute name="hflex" type="xs:string" use="optional" />
+		<xs:attribute name="vflex" type="xs:string" use="optional" />
 		<xs:attribute name="customConfigurationsPath" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- fckeditor -->
