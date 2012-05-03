@@ -117,13 +117,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<resend-delay>9000</resend-delay>
 	</client-config>
 	-->
-	<!-- Turn on if you want to ignore the consecutive click events,
-	if it happens too close to the previous one, or the server is still
-	serving the previous click.
-	<client-config>
-		<click-filter-delay>390</click-filter-delay>
-	</client-config>
-	-->
 
 	<!--
 		Turn off if you want to disable the auto wire for macro component.

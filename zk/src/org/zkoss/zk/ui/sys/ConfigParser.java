@@ -343,7 +343,6 @@ public class ConfigParser {
 
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
-			//	click-filter-delay
 			//  keep-across-visits
 			//  processing-prompt-delay
 			//	error-reload
