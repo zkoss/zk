@@ -1,7 +1,9 @@
 	--------
 ZK 3.6.5
 * Features
-
+  2990932: Allow disable load-on-save mechanism in databinder
+  2866506: Data Binding shall support GroupsModel with Listbox/Grid
+  
 * Bugs
   2973036: ScalableTimer shall stop when hot redeployed (memory issue)
   2975362: Unable to close Messagebox using ceaseSuspendedThread()
@@ -16,7 +18,27 @@ ZK 3.6.5
   2997111: BlackBerry mouse click error
   2999154: Request a non-existent resource thru /zkau causes download
   2997548: Whitespace and native components
-
+  3002536: Datebox can't select month with ZK3 and 5 on FF in French
+  2997527: IE6: datebox / combobox button disappears
+  3019383: Failed to change the position of a root component to the end
+  3020609: Dragging modal window might fail if dragging too fast
+  3023619: inline macro cause nRoot to become a negative number
+  3014817: DateFormat set timezone from TimeZones
+  3039363: Listbox will hide the popup after the popup add height(IE6)
+  3042165: Misplaced drop-down list of auto-complete combobox on iPad
+  3034638: Listcell cannot remove style (3.6)
+  3000305: DataBinder cannot set a value when constraint error
+  2975020: Image component behaves wrongly (3.6)
+  3042935: ZK 3.6 send extra onSort for listheader
+  3046360: NoClassDefFoundError: org/zkoss/util/Cleanups
+  3049167: Totalsize increase when drag & drop in paging Listbox/Grid
+  3051305: Active Page not update when drag & drop item to the end
+  3091160: WrongValueException not handled if thrown in onCreate listener
+  3147518: Memory leak with IE 7 and dynamic Grid Updates
+  3165075: msgzul.js didn't loal the correct language (3.6.4)
+  3162596: mesg.TRY_AGAIN not translated in zk.jar
+  1968615: Data binding problem in listfooter inside a nested listbox
+  
 * Upgrade Notes:
 
 	--------

@@ -304,6 +304,11 @@ zkPop = {
 		var x = dim.left, y = dim.top,
 			wd = zk.getDimension(el), hgh = wd[1]; //only width and height
 		wd = wd[0];
+
+		if (zk.ios) { // Bug 3042165(iphone/ipad)
+			x -= zk.innerX();
+			y -= zk.innerY();
+		}
 		switch(where) {
 		case "before_start":
 			y -= hgh;
@@ -450,6 +455,11 @@ zkPop = {
 			zk.onVisiAt(cmp);
 			zkPop._fixWdh(cmp);
 			zkPop._fixHgh(cmp);
+			var ifram;
+			if (ifram = $e(cmp.id + "!ifrstk")) {
+				ifram.style.height = cmp.style.height;
+				ifram.style.width = cmp.style.width;
+			}
 			return true;
 		}
 		return false;

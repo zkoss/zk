@@ -1,37 +1,38 @@
-README
+ZK is a highly productive Java framework for building amazing enterprise web
+and mobile applications.
 
-Naming Convention for abbreviation names
-1) Industry standard names, e.g., XML, HTML and URI:
-	We use all uppercase letters as other projects do.
-	For example, XMLs for the XML utilities
+Simply Java
 
-2) ZK's names, e.g., ZK and ZUL:
-	We use uppercase for the first letter.
-	For example, ZkFns for the ZK EL functions, UiFactory for the UI factory
+    ZK is renowned for its "Ajax without JavaScript" approach since 2005,
+    enabling developers to build rich internet applications transparently
+    without any knowledge of Ajax and JavaScript.
 
----
-zul
-	The ZK XUL component set, http://www.zkoss.org/2005/zul
-	It includes ZK components implementing XUL tags
-	XUL: XML user interface markup language
+    The client engine and update engine in ZK play the roles of pitcher and
+    catcher, rendering Ajax communication transparent to developers. Events
+    triggered by users are encapsulated and marshalled to event listeners
+    running at the server.
 
----
-zkex
-	The extension of the ZK, such as the extenstion to XUL component set,
-	and server-push features.
-	It includes the jFreechart-based engine.
+    User interface rendered on browsers are surrogated on the server as
+    POJO components, alternation made on the POJO components are reflected
+    to the client transparently.
 
----
-zhtml
-	The XHTML component set, http://www.w3c.org/1999/xhtml
-	It includes ZK components implementing XHTML tags
+    With programs executed at the server, developers can leverage all the Java
+    technologies, such as Java EE and Spring, while back-end data and services
+    are readily available.
 
----
-zml
-	The XML component set, http://www.zkoss.org/2007/xml
-	It includes ZK components for generating XML ouput
 
----
-zkmax
-	The Ruby, Groovy, Rhino, MVEL and other plugins.
-	Also, the performance enhancement version of zul.
+Server+client Fusion
+
+    ZK’s Server+client Fusion gives developers the freedom to leverage the best
+    of both sides.
+
+    The server-centric solution to Ajax brings a productivity boost, robustness,
+    and security to Web application development; while client side solutions
+    endows Web applications with greater controllability and the ability to
+    leverage client side resources.
+
+    ZK marries the benefits of both to bring forth a developer-centric approach
+    where developers continue to build large scale enterprise applications with
+    all the robustness of Java technologies, but also are offered the flexibility
+    to work directly with ZK’s jQuery based widgets to further enhance user
+    experience.

@@ -1,0 +1,77 @@
+<zk><html>
+<![CDATA[
+	<p>1. Drag Listitem inside the listbox to reorder the sequence.</p>
+	<p>2. Check the total size of the listitems shown on the paging bar (original is 8).</p>
+	<p>3. If you saw the total size change(increase) after you drag and reorder the listitem, it is a bug.</p>
+]]>
+	</html>
+	<hbox>
+		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="true"
+			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
+			</listitem>
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
+			</listitem>
+			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
+			</listitem>
+			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
+			</listitem>
+		</listbox>
+		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="true" 
+			oddRowSclass="non-odd" fixedLayout="true" mold="paging" pageSize="5">
+			<rows>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK Forge" />
+			</row>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)"> 
+				<label value="ZK Mobile" />
+			</row>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK GWT" />
+			</row>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK JSF" />
+			</row>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK JSP" />
+			</row>
+			<row draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK Spring" />
+			</row>
+			<row draggable="true"  droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK" />
+			</row >
+			<row draggable="true"  droppable="true" onDrop="move(event.dragged)">
+				<label value="ZK Studio" />
+			</row>
+			</rows>
+		</grid>
+	</hbox>
+	<zscript>
+	void move(Component dragged) {
+		if (self instanceof Listitem || self instanceof Row) {
+			self.parent.insertBefore(dragged, self.getNextSibling());
+		} else if (self instanceof Grid) {
+			self.getRows().appendChild(dragged);
+		} else {
+			self.appendChild(dragged);
+		}
+	}
+	</zscript>
+</zk>

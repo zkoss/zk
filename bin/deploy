@@ -73,7 +73,7 @@ for f in $*; do
 done
 
 if [ "$jar_found" = "true" ] ; then
-	net stop "Apache Tomcat"
+	net stop "Apache Tomcat 6"
 
 	for f in $*; do
 		f=${f%/}
@@ -84,5 +84,5 @@ if [ "$jar_found" = "true" ] ; then
 		fi
 	done
 
-	net start "Apache Tomcat"
+	net start "Apache Tomcat 6"
 fi

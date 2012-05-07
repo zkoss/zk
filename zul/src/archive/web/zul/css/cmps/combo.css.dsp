@@ -3,7 +3,7 @@
 
 <%-- Combobox --%>
 .z-combobox {
-	border: 0; padding: 0; margin: 0; white-space: nowrap;
+	border: 0; padding: 0; margin: 0; white-space: nowrap; display:inline-block;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 
@@ -11,6 +11,11 @@
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
 }
 .z-combobox-focus .z-combobox-inp {
 	border: 1px solid #90BCE6;
@@ -27,6 +32,10 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:inline-block;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
 .z-combobox-btn-over .z-combobox-img {
 	background-position: -17px 0;
@@ -74,13 +83,19 @@
 
 <%-- Bandbox trendy mold --%>
 .z-bandbox {
-	border: 0; padding: 0; margin: 0; white-space: nowrap;
-	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	border: 0; padding: 0; margin: 0; white-space: nowrap; display:inline-block;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM};
 }
 
 .z-bandbox-inp {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
 }
 .z-bandbox-focus .z-bandbox-inp {
 	border: 1px solid #90BCE6;
@@ -97,6 +112,10 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:inline-block;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
 .z-bandbox-btn-over .z-bandbox-img {
 	background-position: -17px 0;
@@ -119,7 +138,7 @@
 
 <%-- Datebox --%>
 .z-datebox {
-	border: 0; padding: 0; margin: 0; white-space: nowrap;
+	border: 0; padding: 0; margin: 0; white-space: nowrap; display:inline-block;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-datebox-over{
@@ -127,8 +146,14 @@
 }
 
 .z-datebox-inp {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
 }
 .z-datebox-focus .z-datebox-inp {
 	border: 1px solid #90BCE6;
@@ -145,6 +170,10 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:inline-block;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
 .z-datebox-btn-over .z-datebox-img {
 	background-position: -17px 0;
@@ -242,10 +271,19 @@
 	background-position: -34px 0;
 }
 <%-- Timebox --%>
+.z-timebox {
+	border: 0; padding: 0; margin: 0; white-space: nowrap; display:inline-block;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+}
 .z-timebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
 }
 .z-timebox-focus .z-timebox-inp {
 	border: 1px solid #90BCE6;
@@ -262,6 +300,10 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:inline-block;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
 .z-timebox-btn-over .z-timebox-img {
 	background-position: -17px 0;
@@ -277,11 +319,20 @@
 	background-position: -34px 0;
 }
 <%-- Spinner --%>
+.z-spinner {
+	border: 0; padding: 0; margin: 0; white-space: nowrap; display:inline-block;
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+}
 .z-spinner-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
+	<c:if test="${c:isSafari()}">
+		margin:0;
+	</c:if>
 }
 .z-spinner-focus .z-spinner-inp {
 	border: 1px solid #90BCE6;
@@ -297,6 +348,10 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:inline-block;
+	<c:if test="${c:browser('ie7-') || c:browser('ie6-')}">
+		margin-top: 1px;
+	</c:if>
 }
 .z-spinner-btn-over .z-spinner-img {
 	background-position: -17px 0;

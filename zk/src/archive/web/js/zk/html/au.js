@@ -888,6 +888,7 @@ zkau.setAttr = function (cmp, name, value) {
 		for (var j = 0, ol = cmp.options.length; j < ol; ++j)
 			cmp.options[j].selected = value;
 	} else if ("style" == name) {
+		zk.clearStyle(cmp);
 		zk.setStyle(cmp, value);
 	} else if (name.startsWith("z.")) { //ZK attributes
 		setZKAttr(cmp, name.substring(2), value);
@@ -1322,7 +1323,7 @@ zkau._onDocLClick = function (evt) {
 				}
 			}
 
-			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt) && !zkau._lastClkUuid)
+			if (getZKAttr(cmp, "lfclk") && zkau.insamepos(evt) && !zkau._lastClkUuid && zk.isAncestor(cmp, Event.element(evt)))
 				zkau.send({uuid: $uuid(cmp),
 					cmd: "onClick", data: zkau._getMouseData(evt, cmp), ctl: true});
 

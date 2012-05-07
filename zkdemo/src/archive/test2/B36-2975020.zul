@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2975020.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 13 14:32:32 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+Please click the row where is outside the image, you shouldn't see any dialog. 
+	<grid>
+		<columns>
+			<column width="15%" />
+			<column width="35%" align="left" />
+			<column width="15%" align="right" />
+			<column width="35%" align="left" />
+		</columns>
+		<rows>
+			<row spans="4" align="center">
+				<image src="/img/m1.gif" onClick='alert("Hello");' />
+			</row>
+		</rows>
+	</grid>
+</window>
+

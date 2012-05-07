@@ -1354,7 +1354,7 @@ zkLic.setAttr = function (cmp, nm, val) {
 	if ("style" == nm) {
 		var cell = cmp.firstChild;
 		var v = zk.getTextStyle(val);
-		if (v) zkau.setAttr(cell, nm, v);
+		zkau.setAttr(cell, nm, v);
 		zkau.setAttr(cmp, nm, val);
 		return true;
 	}

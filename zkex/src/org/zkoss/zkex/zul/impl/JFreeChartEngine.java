@@ -185,8 +185,7 @@ import org.zkoss.zul.impl.ChartEngine;
 public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	//as long as the series name is not set
 	private static final String DEFAULT_HI_LO_SERIES = "High Low Data";
-	private static final SimpleDateFormat _dateFormat = new SimpleDateFormat();
-	
+
 	//caching chartImpl if type and 3d are the same 
 	private transient boolean _threeD; 
 	private transient String _type; 
@@ -201,6 +200,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			return _chartImpl;
 		}
 
+		final SimpleDateFormat df = getDateFormat();
 		if (Chart.PIE.equals(chart.getType())) 
 			_chartImpl = chart.isThreeD() ? new Pie3d() : new Pie();
 
@@ -235,10 +235,10 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			_chartImpl = new TimeSeries();
 			final TimeZone tz = chart.getTimeZone();
 			if (tz != null) {
-				_dateFormat.setTimeZone(tz);
+				df.setTimeZone(tz);
 			}
 			if (chart.getDateFormat() != null) {
-				_dateFormat.applyPattern(chart.getDateFormat());
+				df.applyPattern(chart.getDateFormat());
 			}
 
 		} else if (Chart.STEP_AREA.equals(chart.getType()))
@@ -254,20 +254,20 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			_chartImpl = new Candlestick();
 			final TimeZone tz = chart.getTimeZone();
 			if (tz != null) {
-				_dateFormat.setTimeZone(tz);
+				df.setTimeZone(tz);
 			}
 			if (chart.getDateFormat() != null) {
-				_dateFormat.applyPattern(chart.getDateFormat());
+				df.applyPattern(chart.getDateFormat());
 			}
 
 		} else if (Chart.HIGHLOW.equals(chart.getType())) {			
 			_chartImpl = new Highlow();
 			final TimeZone tz = chart.getTimeZone();
 			if (tz != null) {
-				_dateFormat.setTimeZone(tz);
+				df.setTimeZone(tz);
 			}
 			if (chart.getDateFormat() != null) {
-				_dateFormat.applyPattern(chart.getDateFormat());
+				df.applyPattern(chart.getDateFormat());
 			}
 
 		} else if (Chart.BUBBLE.equals(chart.getType()))
@@ -280,22 +280,22 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			_chartImpl = new Gantt();
 			final TimeZone tz = chart.getTimeZone();
 			if (tz != null) {
-				_dateFormat.setTimeZone(tz);
+				df.setTimeZone(tz);
 			}
 			if (chart.getDateFormat() == null) {
-				_dateFormat.applyPattern("MMM d ''yy");
+				df.applyPattern("MMM d ''yy");
 			} else {
-				_dateFormat.applyPattern(chart.getDateFormat());
+				df.applyPattern(chart.getDateFormat());
 			}
 
 		} else if (Chart.WIND.equals(chart.getType())) {
 			_chartImpl = new Wind();
 			final TimeZone tz = chart.getTimeZone();
 			if (tz != null) {
-				_dateFormat.setTimeZone(tz);
+				df.setTimeZone(tz);
 			}
 			if (chart.getDateFormat() != null) {
-				_dateFormat.applyPattern(chart.getDateFormat());
+				df.applyPattern(chart.getDateFormat());
 			}
 		} else if (Chart.DIAL.equals(chart.getType())) {
 			_chartImpl = new Dial();
@@ -307,6 +307,15 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		_type = chart.getType();
 		return _chartImpl;
 	}
+
+	private static SimpleDateFormat getDateFormat() {
+		SimpleDateFormat df = (SimpleDateFormat)_df.get();
+		if (df == null)
+			_df.set(df = new SimpleDateFormat());
+		df.setTimeZone(TimeZones.getCurrent());
+		return df;
+	}
+	private static final ThreadLocal _df = new ThreadLocal();
 	
 	/**
 	* Developers with special needs can override this method to apply own rendering properties on the created JFreeChart. The
@@ -1459,7 +1468,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			axisX.setTimeZone(zone);
 		}
 		if (chart.getDateFormat() != null) {
-			axisX.setDateFormatOverride(_dateFormat);
+			axisX.setDateFormatOverride(getDateFormat());
 		}
 	}
 
@@ -1798,7 +1807,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 */
 	protected String getGanttTaskTooltip(Date start, Date end, Number percent) {
 		return new MessageFormat("{2,number,0.0%}, {0} ~ {1}")
-			.format(new Object[] {_dateFormat.format(start), _dateFormat.format(end), percent});
+			.format(new Object[] {getDateFormat().format(start), getDateFormat().format(end), percent});
 	}
 
 	/** wind 

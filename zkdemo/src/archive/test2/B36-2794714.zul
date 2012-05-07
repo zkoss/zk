@@ -1,41 +1,27 @@
 <zk>
-	Strange case: in Section "Paging with tree" (see HIDE ALL button),
-	all works fine. Only a note: If i re-press button an "non-negative
-	only" error appears.
-
-	Paging can be supported to locate at three position: Top, Bottom,
-	and Both.
-	<radiogroup
-		onCheck="tree.pagingPosition = self.selectedItem.label;">
-		<radio label="top" />
-		<radio label="bottom" checked="true" />
-		<radio label="both" />
-	</radiogroup>
-	<separator />
-	<button label="Change Paging Mold">
-		<attribute name="onClick">
-tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" :
-"os";
-</attribute>
-	</button>
+	<html><![CDATA[      
+		<ul>		
+			<li>Click "HIDE ALL" button</li>
+			<li>You sould not see any exception</li>
+		</ul>
+	]]></html>
 	<zscript>
-import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
-
-BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
-org.zkoss.zkdemo.userguide.BigList(1000)));
-</zscript>
-	<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}">
-		<attribute name="onCreate">
-tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
-tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
-</attribute>
-	</tree>
+	List items = new org.zkoss.zkdemo.userguide.BigList(1000);	//a big list of Integer
+	</zscript>
+	<listbox id="listbox" mold="paging">
+		<listitem forEach="&#36;{items}">
+			<listcell label="&#36;{each}-1" />
+			<listcell label="&#36;{each}-2" />
+			<listcell label="&#36;{each}-3" />
+			<listcell label="&#36;{each}-4" />
+		</listitem>
+	</listbox>
 	<button label="HIDE ALL">
-		<attribute name="onClick">
-import java.util.*;
-for (Component c: tree.getItems()){
-c.setVisible(false);
-}
-</attribute>
+		<attribute name="onClick"><![CDATA[
+			import java.util.*;
+			for (Component c: listbox.getItems()){
+				c.setVisible(false);
+			}
+		]]></attribute>
 	</button>
 </zk>

@@ -36,6 +36,7 @@ import java.io.IOException;
 import javax.servlet.ServletRequest;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Threads;
@@ -140,8 +141,17 @@ public class UiEngineImpl implements UiEngine {
 		synchronized (_suspended) {
 			map = (Map)_suspended.get(desktop);
 		}
-		return map == null || map.isEmpty() ? Collections.EMPTY_LIST:
-			Collections.synchronizedMap(map).values();
+
+		if (map == null || map.isEmpty())
+			return Collections.EMPTY_LIST;
+
+		final List threads = new LinkedList();
+		synchronized (map) {
+			for (Iterator it = map.values().iterator(); it.hasNext();) {
+				threads.addAll((List)it.next());
+			}
+		}
+		return threads;
 	}
 	public boolean ceaseSuspendedThread(Desktop desktop,
 	EventProcessingThread evtthd, String cause) {
@@ -406,10 +416,16 @@ public class UiEngineImpl implements UiEngine {
 
 			//Cycle 2: process pending events
 			//Unlike execUpdate, execution is aborted here if any exception
+			final List errs = new LinkedList();
 			Event event = nextEvent(uv);
 			do {
-				for (; event != null; event = nextEvent(uv))
-					process(desktop, event);
+				for (; event != null; event = nextEvent(uv)) {
+					try {
+						process(desktop, event);
+					} catch (Throwable ex) {
+						handleError(ex, uv, errs);
+					}
+				}
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
@@ -419,7 +435,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Redraw the page (and responses)
-			List responses = uv.getResponses();
+			List responses = getResponses(exec, uv, errs);
 
 			if (olduv != null && olduv.addToFirstAsyncUpdate(responses))
 				responses = null;
@@ -1029,7 +1045,6 @@ public class UiEngineImpl implements UiEngine {
 							process(desktop, event);
 						} catch (Throwable ex) {
 							handleError(ex, uv, errs);
-							break; //skip the rest of events! 
 						}
 					}
 
@@ -1043,20 +1058,7 @@ public class UiEngineImpl implements UiEngine {
 				abrn.execute(); //always execute even if !isAborting
 
 			//Cycle 3: Generate output
-			List responses;
-			try {
-				//Note: we have to call visualizeErrors before uv.getResponses,
-				//since it might create/update components
-				if (!errs.isEmpty())
-					visualizeErrors(exec, uv, errs);
-
-				responses = uv.getResponses();
-			} catch (Throwable ex) {
-				responses = new LinkedList();
-				responses.add(new AuAlert(Exceptions.getMessage(ex)));
-
-				log.error(ex);
-			}
+			final List responses = getResponses(exec, uv, errs);
 
 			if (rque.isEmpty())
 				doneReqIds = rque.clearPerfRequestIds();
@@ -1169,6 +1171,23 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		errs.add(ex);
+	}
+	private final List getResponses(Execution exec, UiVisualizer uv, List errs) {
+		List responses;
+		try {
+			//Note: we have to call visualizeErrors before uv.getResponses,
+			//since it might create/update components
+			if (!errs.isEmpty())
+				visualizeErrors(exec, uv, errs);
+
+			responses = uv.getResponses();
+		} catch (Throwable ex) {
+			responses = new LinkedList();
+			responses.add(new AuAlert(Exceptions.getMessage(ex)));
+
+			log.error(ex);
+		}
+		return responses;
 	}
 	/** Post-process the errors to represent them to the user.
 	 * Note: errs must be non-empty
@@ -1531,7 +1550,7 @@ public class UiEngineImpl implements UiEngine {
 				if (old == null) break; //grantable
 
 				try {
-					uvlock.wait(120*1000);
+					uvlock.wait(getRetryTimeout());
 				} catch (InterruptedException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -1562,6 +1581,23 @@ public class UiEngineImpl implements UiEngine {
 		}
 		return uv;
 	}
+
+	private static Integer _retryTimeout;
+	private static final int getRetryTimeout() {
+		if (_retryTimeout == null) {
+			int v = 0;
+			final String s = Library.getProperty("org.zkoss.zk.ui.activate.wait.retry.timeout");
+			if (s != null) {
+				try {
+					v = Integer.parseInt(s);
+				} catch (Throwable t) {
+				}
+			}
+			_retryTimeout = new Integer(v > 0 ? v: 120*1000);
+		}
+		return _retryTimeout.intValue();
+	}
+
 	/** Returns whether the desktop is being recovered.
 	 */
 	private static final boolean isRecovering(Desktop desktop) {

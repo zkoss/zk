@@ -18,8 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import javax.swing.SpinnerNumberModel;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
@@ -50,10 +48,6 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public Spinner(int value) throws WrongValueException {
 		this();
 		setValue(new Integer(value));
-	}
-
-	public Spinner(SpinnerNumberModel model) {
-		setCols(11);
 	}
 	
 	/** Returns the value (in Integer), might be null unless

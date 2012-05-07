@@ -107,6 +107,7 @@ zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") >= 0;
 zk.opera = zk.agent.indexOf("opera") >= 0;
 zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+zk.ios = zk.agent.indexOf("iphone") >= 0 || zk.agent.indexOf("ipad") >= 0;
 if (zk.gecko) {
 	var j = zk.agent.indexOf("firefox/");
 	j = $int(zk.agent.substring(j + 8));
@@ -879,7 +880,7 @@ zk.invoke = function (nm, fn, dtid) {
  * @since 3.0.6
  */
 zk.addOnLoad = function (nm, script) {
-	if (zk._modules[nm]) {
+	if (zk._modules[nm] && !zk.loading) {
 		setTimeout(script, 0);
 	} else {
 		var ary = zk._js4ld[nm] = [];

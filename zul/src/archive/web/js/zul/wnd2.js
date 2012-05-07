@@ -977,7 +977,7 @@ zkWnd2._doModal = function (cmp, replace) {
 			cmp.insertAdjacentHTML(
 				"beforeBegin", '<div id="'+maskId+'" class="z-modal-mask"></div>');
 			mask =  $e(maskId);
-			zk.listen(mask, "mousemove", Event.stop);
+			zk.listen(mask, "click", Event.stop);
 		}
 	}
 

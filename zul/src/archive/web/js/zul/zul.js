@@ -52,13 +52,6 @@ zul._fixdbtn2 = function (cmp) {
 			var imghgh = $int(Element.getStyle(img, "height")) + v;
 			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
 		}
-
-		v = inp.offsetTop - img.offsetTop;
-		btn.style.top = v + "px";
-		if (zk.ie)
-			btn.style.zoom = 0;
-		btn.style.position = "relative";
-		if (zk.safari) btn.style.left = "-2px";
 	}
 };
 zul.ondropbtnover = function (evt) {
@@ -384,7 +377,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 zulHdr.onclick = function (evt, cmp) {
 	var outer = $outer(Event.element(evt));
 	if (!zk.dragging && (outer.id == cmp.id || $tag(outer) == 'SPAN') && zulHdr._sortable(cmp)
-		&& zkau.insamepos(evt) && $tag(Event.element(evt)) != "INPUT")
+		&& zkau.insamepos(evt) && $tag(Event.element(evt)) != "INPUT" && !getZKAttr(outer, "lfclk"))
 		zkau.send({uuid: cmp.id, cmd: "onSort"}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {

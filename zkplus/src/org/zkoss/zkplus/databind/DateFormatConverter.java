@@ -20,6 +20,9 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
+import org.zkoss.util.Locales;
+import org.zkoss.util.TimeZones;
+
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.ListModel;
@@ -66,7 +69,12 @@ public class DateFormatConverter implements TypeConverter {
 			pattern = annot.getAttribute("value");
 		}
 		
+		if (date == null)
+			return "";
+
 		//prepare dateFormat and convert Date to String
-		return date == null ? "" : (new SimpleDateFormat(pattern == null ? "MM/dd/yyyy" : pattern)).format(date);
+		final SimpleDateFormat df = new SimpleDateFormat(pattern == null ? "MM/dd/yyyy" : pattern, Locales.getCurrent());
+		df.setTimeZone(TimeZones.getCurrent());
+		return df.format(date);
 	}
 }

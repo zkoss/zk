@@ -829,7 +829,9 @@ zk.position = function (el, ref, type) {
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
-
+	if (zk.ios) { // Bug 3042165(iphone/ipad)
+		refofs = [refofs[0] - scx, refofs[1] - scy];
+	}
 	if (type == "end_before") { //el's upper-left = ref's upper-right
 		x = refofs[0] + zk.offsetWidth(ref);
 		y = refofs[1];
@@ -1707,7 +1709,18 @@ zk.resolve = function (fullnm) {
 		j = k + 1;
 	}
 };
-
+/** since 3.6.5 */
+zk.clearStyle = function (el) {
+	var st = el;
+	if (st && (st=st.style))
+		for (var nm in st)
+			if ((!zk.ie || nm != "accelerator")
+			&& st[nm] && typeof st[nm] == "string")
+				try {
+					st[nm] = "";
+				} catch (e) { //ignore
+				}
+};
 /** Sets the style. */
 zk.setStyle = function (el, style) {
 	for (var j = 0, k = 0; k >= 0; j = k + 1) {
@@ -2112,7 +2125,7 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
 			case 'M':
-				var mon = txt.substring(j).toLowerCase(),
+				var mon = txt.substring(j).toLowerCase().trim(),
 					mToken = token ? token.toLowerCase() : '';
 				for (var index = zk.SMON.length; --index >= 0;) {
 					var smon = zk.SMON[index].toLowerCase();
