@@ -9,3 +9,5 @@ Thumbs.db
 zkex
 zkmax
 zml
+dist/lib/z*.jar
+dist/lib/z*.war
