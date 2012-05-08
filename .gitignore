@@ -1,0 +1,8 @@
+debug
+codegen
+*.local
+*.class
+javadoc
+Thumbs.db
+.project
+.children
