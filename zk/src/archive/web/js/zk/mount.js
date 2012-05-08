@@ -176,20 +176,23 @@ function zkamn(pkg, fn) {
 	}
 	//mount for browser loading
 	function mtBL() {
-		if (zk.loading)
-			return zk.afterLoad(mtBL);
+		for (;;) {
+			if (zk.loading)
+				return zk.afterLoad(mtBL); //later
 
-		var inf = _crInfBL0.shift();
-		if (inf) {
+			var inf = _crInfBL0.shift();
+			if (!inf)
+				break; //done
+
+			if (breathe(mtBL)) 
+				return; //mtBL has been scheduled for later execution
+
 			_crInfBL1.push([inf[0], create(inf[3]||inf[0], inf[1], true), inf[2], inf[4]]);
 				//inf[0]: desktop used as default parent if no owner
 				//inf[3]: owner passed from zkx
 				//inf[2]: bindOnly
 				//inf[4]: aucmds (if BL)
 				//true: don't update DOM
-
-			if (_crInfBL0.length)
-				return run(mtBL);
 		}
 
 		mtBL0();
@@ -239,30 +242,27 @@ function zkamn(pkg, fn) {
 
 	/* mount for AU */
 	function mtAU() {
-		if (zk.loading) {
-			zk.afterLoad(mtAU);
-			return;
-		}
+		for (;;) {
+			if (zk.loading)
+				return zk.afterLoad(mtAU);
 
-		try {
-			var inf = _crInfAU0.shift(),
-				filter, wgt;
-			if (inf) {
-				if (filter = inf[4][1]) //inf[4] is extra if AU
-					Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
-				try {
-					wgt = create(null, inf[1]);
-				} finally {
-					if (filter) Widget.$ = _wgt_$;
-				}
-				inf[4][0](wgt); //invoke stub
+			var inf = _crInfAU0.shift(), filter, wgt;
+			if (!inf)
+				break; //done
+
+			if (breathe(mtAU))
+				return; //mtAU has been scheduled for later execution
+
+			if (filter = inf[4][1]) //inf[4] is extra if AU
+				Widget.$ = function (n, opts) {return filter(_wgt_$(n, opts));}
+			try {
+				wgt = create(null, inf[1]);
+			} finally {
+				if (filter) Widget.$ = _wgt_$;
 			}
-		} finally {
-			if (_crInfAU0.length)
-				run(mtAU); //loop back to check if loading
-			else
-				mtAU0();
+			inf[4][0](wgt); //invoke stub
 		}
+		mtAU0();
 	}
 	function mtAU0() {
 		zk.mounting = false;
@@ -339,16 +339,18 @@ function zkamn(pkg, fn) {
 		return wgt;
 	}
 
-	/* run and delay if too busy, so progressbox has a chance to show. */
-	function run(fn) {
+	/** Schedules fn for later execution if it takes too long to boot up,
+	 * so progressbox has a chance to show
+	 */
+	function breathe(fn) {
 		var t = jq.now(), dt = t - _t0;
 		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			_t0 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe
 				//IE optimize the display if delay is too short
-		} else
-			fn();
+			return true;
+		}
 	}
 
   zk.copy(window, {
@@ -398,8 +400,10 @@ function zkamn(pkg, fn) {
 				mountpkg(infs);
 			}
 
-			if (delay) setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
-			else run(mount);
+			if (delay)
+				setTimeout(mount, 0); //Bug 2983792 (delay until non-defer script evaluated)
+			else if (!breathe(mount)) //give the browser a chance to breathe
+				mount();
 
 			doAuCmds(aucmds);
 		} catch (e) {
@@ -413,7 +417,7 @@ function zkamn(pkg, fn) {
 	//widget creation called by au.js
 	//args: [wi] (a single element array containing wi)
 	zkx_: function (args, stub, filter) {
-		_t0 = jq.now(); //so run() won't do unncessary delay
+		_t0 = jq.now(); //so breathe() won't do unncessary delay
 		args[1] = [stub, filter]; //assign stub as 2nd argument (see zkx)
 		zkx.apply(this, args); //args[2] (aucmds) must be null
 	},
