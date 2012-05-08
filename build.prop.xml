@@ -50,8 +50,8 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="outv.dir" value="${out.dir}v"/><!-- used for preverify classes -->
 <property name="out.tmp.dir" value="${out.dir}/tmp"/>
 <property name="out.app.dir" value="${out.tmp.dir}/${project.name}"/>
-<property name="dist.dir" value="../dist"/>
-<property name="working.dir" value="../working"/>
+<property name="dist.dir" value="${maindir}/dist"/>
+<property name="working.dir" value="${maindir}/working"/>
 <property name="dist.lib.dir" value="${dist.dir}/lib"/>
 <property name="dist.lib.ext.dir" value="${dist.lib.dir}/ext"/>
 <property name="working.javadoc.dir" value="${working.dir}/javadoc/${project.name}"/>

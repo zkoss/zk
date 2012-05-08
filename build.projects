@@ -3,10 +3,10 @@ zweb
 zk
 zul
 zkbind
-zkex
+$ZKCML/zkex
 zhtml
-zml
-zkmax
+$ZKCML/zml
+$ZKCML/zkmax
 zkplus
 zksandbox
 zktest
