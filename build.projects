@@ -2,10 +2,15 @@ zcommon
 zweb
 zk
 zul
+<<<<<<< HEAD
 zkex
+=======
+zkbind
+$ZKCML/zkex
+>>>>>>> 2e6347a... separate the build dependency
 zhtml
-zml
-zkmax
+$ZKCML/zml
+$ZKCML/zkmax
 zkplus
 zksandbox
 zktest

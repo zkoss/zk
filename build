@@ -87,6 +87,20 @@ else
 	exit 1
 fi
 
+maindir="$(pwd)"
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
 #-- parsing cmd
 cmdList=" bd br cd cr ud ur doc jsrc build.debug build.release clean clean.debug clean.release utest.debug utest.release javadoc jsdoc help"
 if [ \( $# != 0 \) -a \( "${cmdList#* $1 }" != "$cmdList" \) ] ; then
@@ -184,6 +198,7 @@ else
 	fi
 	targetListOld="$(cat build.projects | tr '\n' ' ')"
 	targetListOld="${targetListOld% }"
+	eval "targetListOld=\"$targetListOld\""
 	doall="-Ddo.all=true"
 		#denote all projects are built; passed to build.xml
 fi
@@ -274,6 +289,8 @@ function invoke_ant
 		prjnm=$2
 	fi
 	
+	prjnm=${prjnm#*/*/} #trim ../../
+
 	#handle class.test.local
 	local class_test=
 	if [ "${cmd#utest}" != "$cmd" ] ; then #utest
@@ -298,6 +315,8 @@ function invoke_ant
 	if [ -f classpath ] ; then
 		#retrieve path
 		CP=$(cat classpath | tr '\n' ':')
+		eval "CP=\"$CP\""
+
 		CP=${CP%:}
 
 		#javadoc.class.path shall not contain '.', because xdoclet will
@@ -396,6 +415,11 @@ function invoke_ant
 	if [ "$deprecation" = "" ] ; then
 		deprecation=on
 	fi
+	unchecked=$(grep '^unchecked=' version)
+	unchecked=${unchecked#unchecked=}
+	if [ "$unchecked" = "" ] ; then
+		unchecked=on
+	fi
 
 	this_dflag=$dflag
 	dflagtmp=$(grep '^debug=' version)
@@ -434,24 +458,26 @@ function invoke_ant
 	else
 		gentime=$(grep '^time=' format)
 		gentime=${gentime#time=}
-
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Dtomcat.home="$tomcat_home" \
 		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
+		-Dmaindir="$maindir" \
+		-Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" \
 		-Dproject.name="$prjnm" -Dproject.title="$prjtitle" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
+		-Ddeprecation="$deprecation" -Dunchecked="$unchecked" \
 		-Ddeprecation="$deprecation" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \
 		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
 		-Droot.context=$rootContext -Dgentime=$gentime \
-		$dfnList -buildfile ../build.xml $1
+		$dfnList -buildfile $maindir/build.xml $1
 	fi
 
 	if [ $? != 0 ] ; then
@@ -493,6 +519,7 @@ if [ "$javadocAll" = "true" ] ; then
 else
 	echo "targets: ${targetList}"
 	for target in $targetList ; do
+		cd $maindir
 		if [ -d $target ] ; then
 			invoke_ant $cmd $target
 		else
