@@ -14,6 +14,9 @@ stamp=$(date +%Y-%m-%d)
 cd ..
 maindir="$(pwd)"
 target=$1
+rootdir=$2
+cd $rootdir
+
 setting=build.setting.local
 if [ ! -f $setting ] ; then
 	setting=build.setting
@@ -22,15 +25,16 @@ if [ ! -f $setting ] ; then
 		exit 1
 	fi
 fi
-
-cd jsdoc
+cd $maindir
 if [ $# != 0 ] ; then
 	for target in $* ; do
 		target=${target%/}
-		jsdocsrc="$jsdocsrc $target"
-		if [ \( ! -d ../$target \) -a \( ! -d ../${target}Test \) ] ; then
-			echo "Error: $target doesn't exist"
-			exit 1
+		if [ "$target" != "$rootdir" ] ; then
+			jsdocsrc="$jsdocsrc $target"
+			if [ \( ! -d $target \) -a \( ! -d ${target}Test \) ] ; then
+				echo "Error: $target doesn't exist"
+				exit 1
+			fi
 		fi
 	done
 #else
@@ -50,8 +54,9 @@ if [ $# != 0 ] ; then
 #	jsdocsrc="$(echo $jsdocsrc | tr ',' ' ')"
 fi
 
+cd jsdoc
 for target in $jsdocsrc ; do
 	echo "jsdoc $target"
 	mkdir -p codegen/$target
-	java -jar $maindir/dist/lib/ext/zk_jsdoc.jar -t "$maindir/$target/src" -g "./codegen/"
+	java -jar $rootdir/dist/lib/ext/zk_jsdoc.jar -t "$maindir/$target/src" -g "$rootdir/jsdoc/codegen/"
 done

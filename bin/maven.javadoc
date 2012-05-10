@@ -19,31 +19,49 @@ if [ "$2" == "" ] ; then
       version=$version.FL.$(date +%Y%m%d)
 fi
 
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
 function jvdoc {
-	cp $maindir/$1/pom.xml $maindir/$1/pom.xml.bak
-	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $maindir/$1/pom.xml
+	cp $1/pom.xml $1/pom.xml.bak
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $1/pom.xml
 	
-	cd $maindir/$1
+	cd $1
 	echo Generating javadoc for $1
 	mvn --quiet javadoc:jar
+
+	mv -f pom.xml.bak pom.xml
 	
-	mv -f $maindir/$1/pom.xml.bak $maindir/$1/pom.xml
-	
-	rm -rf $maindir/$1/debug/apidocs
-	rm -rf $maindir/$1/debug/javadoc-bundle-options
-	cp $maindir/$1/debug/$1-$version-javadoc.jar /tmp/maven/_javadoc/$1-$version-javadoc.jar
+	rm -rf debug/apidocs
+	rm -rf debug/javadoc-bundle-options
+	cp debug/$1-$version-javadoc.jar /tmp/maven/_javadoc/$1-$version-javadoc.jar
 	chmod 644 /tmp/maven/_javadoc/$1-$version-javadoc.jar
 	cd ..
 }
 
 mkdir -p /tmp/maven/_javadoc
 
+cd $maindir
 jvdoc zcommon
 jvdoc zweb
 jvdoc zk
 jvdoc zul
 jvdoc zhtml
+jvdoc zkbind
+jvdoc zkplus
+cd $ZKCML
 jvdoc zml
 jvdoc zkex
 jvdoc zkmax
 jvdoc zkplus
+cd $maindir

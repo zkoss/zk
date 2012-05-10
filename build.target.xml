@@ -278,6 +278,7 @@ if="deploy.tomcat.required">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/jsdoc"/>
 		<arg value="${project.name}"/>
+		<arg value="${maindir}"/>
 	</exec>
 </target>
 
@@ -288,11 +289,13 @@ if="deploy.tomcat.required">
 <target name="check.version.freshly" if="${freshly}">
 	<echo message="check version files for freshly version."/>
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="build.setting"/>
 		<param name="regexp" value="${version.text.freshly}"/>
 		<param name="doCheck" value="true"/>
 	</antcall>
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="zk/**/Version.java"/>
 		<param name="regexp" value="${version.java.release.freshly}"/>
 		<param name="doCheck" value="true"/>
@@ -302,11 +305,13 @@ if="deploy.tomcat.required">
 <target name="check.version.official" unless="${freshly}" depends="check.version.freshly">
 	<echo message="check version files for official version."/>
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="build.setting"/>
 		<param name="regexp" value="${version.text}"/>
 		<param name="doCheck" value="true"/>
 	</antcall>
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="zk/**/Version.java"/>
 		<param name="regexp" value="${version.java.release}"/>
 		<param name="doCheck" value="true"/>
@@ -315,11 +320,13 @@ if="deploy.tomcat.required">
 
 <target name="check.version" depends="check.version.freshly, check.version.official">
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="deploy/version"/>
 		<param name="regexp" value="${version.text}"/>
 		<param name="doCheck" value="true"/>
 	</antcall>
 	<antcall target="check.version.file">
+		<param name="dir" value="."/>
 		<param name="path" value="jsdoc/version"/>
 		<param name="regexp" value="${version.text}"/>
 		<param name="doCheck" value="true"/>
@@ -328,43 +335,53 @@ if="deploy.tomcat.required">
 	<!-- app -->
 	<antcall target="check.version.app">
 		<param name="package" value="zksandbox"/>
+		<param name="dir" value="."/>
 	</antcall>
 	<antcall target="check.version.app">
 		<param name="package" value="zksandboxs"/>
+		<param name="dir" value="."/>
 	</antcall>
 	<antcall target="check.version.app">
 		<param name="package" value="zktest"/>
+		<param name="dir" value="."/>
 	</antcall>
 	
 	<!-- packages -->
 	<antcall target="check.version.package">
 		<param name="package" value="zcommon"/>
+		<param name="dir" value="."/>
 		<param name="check.xel.config.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zhtml"/>
+		<param name="dir" value="."/>
 		<param name="check.lang.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zk"/>
+		<param name="dir" value="."/>
 		<param name="check.tld.config.uid" value="true"/>
 		<param name="check.zk.config.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zkplus"/>
+		<param name="dir" value="."/>
 		<param name="check.lang-addon.uid" value="true"/>
 		<param name="check.lang-addon.zk-version" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zul"/>
+		<param name="dir" value="."/>
 		<param name="check.lang.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zweb"/>
+		<param name="dir" value="."/>
 		<param name="check.tld.config.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zkex"/>
+		<param name="dir" value="${ZKCML}"/>
 		<param name="check.zk.config.uid" value="true"/>
 		<param name="check.zk.config.zk-version" value="true"/>
 		<param name="check.lang-addon.uid" value="true"/>
@@ -372,6 +389,7 @@ if="deploy.tomcat.required">
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zkmax"/>
+		<param name="dir" value="${ZKCML}"/>
 		<param name="check.xel.config.uid" value="true"/>
 		<param name="check.zk.config.uid" value="true"/>
 		<param name="check.lang-addon.uid" value="true"/>
@@ -379,6 +397,7 @@ if="deploy.tomcat.required">
 	</antcall>
 	<antcall target="check.version.package">
 		<param name="package" value="zml"/>
+		<param name="dir" value="${ZKCML}"/>
 		<param name="check.zk.config.uid" value="true"/>
 		<param name="check.lang.uid" value="true"/>
 	</antcall>
@@ -386,7 +405,7 @@ if="deploy.tomcat.required">
 
 <target name="check.version.file" if="${doCheck}">
 	<echo message="checking ${path}"/>
-	<fileset id="file" dir="." includes="${path}">
+	<fileset id="file" dir="${dir}" includes="${path}">
 		<containsregexp expression="${regexp}"/>
 	</fileset>
 	<fail message="error in ${path}.">
