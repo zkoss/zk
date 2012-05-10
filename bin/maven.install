@@ -23,24 +23,40 @@ if [ "$2" == "" ] ; then
       version=$version.FL.$(date +%Y%m%d)
 fi
 
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
 function upVer {
-	cp $maindir/$1/pom.xml $maindir/$1/pom.xml.bak
-	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $maindir/$1/pom.xml
-	cd $maindir/$1
+	cp $1/pom.xml $1/pom.xml.bak
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $1/pom.xml
+	cd $1
 	mvn install
-	mv -f $maindir/$1/pom.xml.bak $maindir/$1/pom.xml
+	mv -f pom.xml.bak pom.xml
 	#Remove local files and folders
-	rm -f $maindir/$1/debug/*.jar
+	rm -f debug/*.jar
 	cd ..
 }
 
+cd $maindir
 upVer zcommon
 upVer zweb
 upVer zk
 upVer zul
-upVer zkbind
-upVer zkex
 upVer zhtml
+upVer zkbind
+upVer zkplus
+cd $ZKCML
+upVer zkex
 upVer zml
 upVer zkmax
-upVer zkplus
+cd $maindir

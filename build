@@ -178,6 +178,8 @@ fi
 #Add a project to the target list (the redudant ones won't be added)
 if [ $# != 0 ] ; then
 	for target in $* ; do
+		eval "target=\"$target\""
+		target=${target#\./}
 		target=${target%/}
 		targetListOld="$targetListOld $target"
 		if [ \( ! -d $target \) -a \( ! -d ${target}Test \) ] ; then
@@ -224,6 +226,7 @@ function addToTargetList
 targetList=
 if [ "${cmd#utest}" != "$cmd" ] ; then #utest
 	for target in $targetListOld ; do
+		target=${target#\./}
 		if [ "${target%Test}" = "$target" ] ; then
 			target=${target}Test
 		fi
@@ -231,6 +234,7 @@ if [ "${cmd#utest}" != "$cmd" ] ; then #utest
 	done
 else
 	for target in $targetListOld ; do
+		target=${target#\./}
 		addToTargetList $target
 	done
 fi
