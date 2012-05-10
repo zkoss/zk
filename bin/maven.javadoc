@@ -57,11 +57,9 @@ jvdoc zweb
 jvdoc zk
 jvdoc zul
 jvdoc zhtml
-jvdoc zkbind
 jvdoc zkplus
 cd $ZKCML
 jvdoc zml
 jvdoc zkex
 jvdoc zkmax
-jvdoc zkplus
 cd $maindir
