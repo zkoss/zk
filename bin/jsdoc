@@ -53,8 +53,7 @@ if [ $# != 0 ] ; then
 #	fi
 #	jsdocsrc="$(echo $jsdocsrc | tr ',' ' ')"
 fi
-
-cd jsdoc
+cd $rootdir/jsdoc
 for target in $jsdocsrc ; do
 	echo "jsdoc $target"
 	mkdir -p codegen/$target
