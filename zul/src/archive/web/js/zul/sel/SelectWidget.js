@@ -453,10 +453,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (this.ebody.offsetHeight) {} // force to recalculate
 			}
 			
-			// B50-ZK-1118
-			if (this.isSizedByContent() && zk(this.$n('body')).hasHScroll()) //check if there are horizontal scrollbar
-				hgh += jq.scrollbarWidth(); // add scrollbar width to height for preventing vertical scrollbar
-			
 			this.ebody.style.height = hgh + "px";
 			
 			// bug fixed for B50-3315594.zul on safari and chrome latest version

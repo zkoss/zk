@@ -20,7 +20,6 @@ ZK 5.0.12
   ZK-1079: Fileupload dialog will be masked while open it by a button in a popup  
   ZK-1086: Undefined on datebox format "EEEE" with specific locale
   ZK-1092: IE 8 - Scrollbar Bug in Tree
-  ZK-1095: ThreadLocalCache has incorrect constructor making it unusable
   
 	--------
 ZK 5.0.11
