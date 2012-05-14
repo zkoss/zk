@@ -44,7 +44,7 @@ public class ThreadLocalCache implements Cache {
 	 * max size=128 and lifetime=30minutes.
 	 */
 	public ThreadLocalCache() {
-		this(DEFAULT_LIFETIME, 128);
+		this(128, DEFAULT_LIFETIME);
 	}
 
 	//extra//

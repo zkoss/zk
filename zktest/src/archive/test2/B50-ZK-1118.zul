@@ -1,0 +1,37 @@
+<!--
+	B50-ZK-773.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon May 14 12:12:26 TST 2012, Created by vincent
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		You should not see vertical scroll bar in the listbox.
+	</div>
+	<zscript><![CDATA[
+		int[] loop1 = new int[]{1,2,3,4,5,6,7,8,9,10};
+		int[] loop2 = new int[]{1,2,3,4,5};
+	]]></zscript>
+	<window width="100%">
+		<listbox id="lbPatientList" rows="5" width="100%" sizedByContent="true">
+			<listhead>
+				<zk forEach="${loop1}">
+					<listheader label="some" />
+				</zk>
+			</listhead>
+			<zk forEach="${loop2}">
+				<listitem>
+					<zk forEach="${loop1}">
+						<listcell label="somesomesomesomesomesome${forEachStatus.index+1}" />
+					</zk>
+				</listitem>
+			</zk>
+		</listbox>
+	</window>
+</zk>
