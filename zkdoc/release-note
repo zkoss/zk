@@ -1,3 +1,13 @@
+  --------
+ZK 6.0.2
+
+* Features
+
+* Bugs
+  ZK-1113: Popup of chosenbox not removed after detach
+
+* Upgrade Notes
+
 	--------
 ZK 6.0.1
 May 2, 2012
