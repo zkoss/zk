@@ -1,0 +1,13 @@
+debug
+codegen
+*.local
+*.class
+javadoc
+Thumbs.db
+.project
+.children
+zkex
+zkmax
+zml
+dist/lib/z*.jar
+dist/lib/z*.war
