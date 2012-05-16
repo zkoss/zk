@@ -645,6 +645,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var paging;
 		if (zk.ie7_ && (paging = this.$n('pgib')))
 			zk(paging).redoCSS();
+		if (zk.ie7_)
+			zk(this.ebody).redoCSS(); //Bug ZK-1129
 	},
 	unbind_: function () {
 		if (this.ebody)
@@ -918,6 +920,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		//ZK-926 IE7 scrollbar not working after zoom or classname is changed in redoCSS.
 		//       Since ZK-335 is not reproducible in ZK 5.0.11 and it's causing bigger side effect,so we comment this first. 
+		//ZK-1129 Without redoCSS, layout is wrong, move redoCSS to bind_
 //		if (zk.ie7_)
 //			zk(this.ebody).redoCSS(); // B50-ZK-335: Grid, Tree may have extra horizonal scroll bar
 		

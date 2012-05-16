@@ -22,6 +22,7 @@ ZK 5.0.12
   ZK-1092: IE 8 - Scrollbar Bug in Tree
   ZK-1095: ThreadLocalCache has incorrect constructor making it unusable
   ZK-1118: Vertical scrollbar appears when listbox with fixed rows and sizedByContent is true exceeds browser width
+  ZK-1129: Listbox content did not match the outline border (IE7 only)
   
 	--------
 ZK 5.0.11
