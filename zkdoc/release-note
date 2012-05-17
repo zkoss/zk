@@ -5,6 +5,7 @@ ZK 6.0.2
 
 * Bugs
   ZK-1113: Popup of chosenbox not removed after detach
+  ZK-1118: Vertical scrollbar appears when listbox with fixed rows and sizedByContent is true exceeds browser width
 
 * Upgrade Notes
 
