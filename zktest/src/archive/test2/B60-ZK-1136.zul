@@ -1,4 +1,9 @@
 <zk>
+	<vlayout>
+		<label>1. Click "show notification" button</label>
+		<label>2. Click "close me" button</label>
+		<label>3. You should see two notification messages showed.</label>
+	</vlayout>
 	<window id="win_main" title="Hello Notification!!" border="normal" width="100%">
 		<button label="show notification" autodisable="self">
 			<attribute name="onClick"><![CDATA[
@@ -6,7 +11,7 @@
 				win.addEventListener(Events.ON_CLOSE, new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event event) throws Exception {
 						Clients.showNotification("ok 1", Clients.NOTIFICATION_TYPE_INFO, win_main, "top_right", -1);
-						Clients.showNotification("ok 2", null, null, null, -1);
+						Clients.showNotification("ok 2");
 					}
 				});
 				win.doModal();
