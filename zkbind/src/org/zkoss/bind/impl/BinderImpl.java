@@ -1856,20 +1856,26 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		if (compBindings != null) {
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_formBindingHandler.doInit(comp,bkey);
+				if(loadinit){
+					_formBindingHandler.doInit(comp,bkey);
+				}
 				_formBindingHandler.doLoad(comp,bkey);
 			}
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_propertyBindingHandler.doInit(comp,bkey);
+				if(loadinit){
+					_propertyBindingHandler.doInit(comp,bkey);
+				}
 				_propertyBindingHandler.doLoad(comp,bkey);
 			}
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
-				_childrenBindingHandler.doInit(comp,bkey);
+				if(loadinit){
+					_childrenBindingHandler.doInit(comp,bkey);
+				}
+					
 				_childrenBindingHandler.doLoad(comp,bkey);
 			}
-			
 		}
 	}
 	
