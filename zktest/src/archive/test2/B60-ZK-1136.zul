@@ -1,0 +1,16 @@
+<zk>
+	<window id="win_main" title="Hello Notification!!" border="normal" width="100%">
+		<button label="show notification" autodisable="self">
+			<attribute name="onClick"><![CDATA[
+				Window win = (Window) Executions.getCurrent().createComponents("B60-ZK-1136-1.zul", null, null);
+				win.addEventListener(Events.ON_CLOSE, new org.zkoss.zk.ui.event.EventListener() {
+					public void onEvent(Event event) throws Exception {
+						Clients.showNotification("ok 1", Clients.NOTIFICATION_TYPE_INFO, win_main, "top_right", -1);
+						Clients.showNotification("ok 2", null, null, null, -1);
+					}
+				});
+				win.doModal();
+			]]></attribute>
+		</button>
+	</window>
+</zk>

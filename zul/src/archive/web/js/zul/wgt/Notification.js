@@ -195,7 +195,8 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			pos = ref ? "end_center" : "middle_center";
 		
 		if (!parent) {
-			// TODO: append it somewhere
+			// bug ZK-1136: If target page is detached, append to current active page
+			parent = zk.Desktop.$().firstChild;
 		}
 		parent.appendChild(ntf);
 		ntf.open(ref, off, pos);
