@@ -8,6 +8,7 @@ ZK 6.0.2
   ZK-1118: Vertical scrollbar appears when listbox with fixed rows and sizedByContent is true exceeds browser width
   ZK-1136: Clients.showNotification(String) throws JS error when used with Include in defer mode
   ZK-1135: Notification is not correctly displayed on IE8 (compatibility view turned OFF)
+  ZK-1144: error-page in JBoss causes IllegalStateException
 
 * Upgrade Notes
 
@@ -104,6 +105,7 @@ May 2, 2012
   ZK-1096: Listbox multiselect bug with draggable on
   ZK-1101: Portallayout.setPanel() doesn't behave as expected
   ZK-1100: Menuitem.setImage() doesn't work in menubar
+  ZK-1139: ZK Bind loads "init" annotations no matter if "loadinit" parameter TRUE or FALSE
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
