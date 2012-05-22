@@ -1,0 +1,10 @@
+<zk>
+	<div>
+	You should see notification message in IE8, otherwise it is a bug.
+	</div>
+	<button label="show notification">
+		<attribute name="onClick"><![CDATA[
+			Clients.showNotification("Disappearing notification in IE8");
+		]]></attribute>
+	</button>
+</zk>
