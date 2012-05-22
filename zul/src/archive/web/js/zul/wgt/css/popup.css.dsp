@@ -102,7 +102,7 @@
 
 <%-- notification: base style --%>
 .z-notification .z-notification-cl {
-	background-color: ${zk.ie < 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"};
+	background-color: ${zk.ie <= 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"}; <%-- bug ZK-1135: IE8 does not support rgba --%>
 	color: #FFFFFF;
 }
 .z-notification .z-notification-pointer-l,
@@ -124,9 +124,10 @@
 	border-top-color: ${zk.ie < 8 ? "#444444" : "rgba(51, 51, 51, 0.9)"};
 }
 
-<c:set var="infoColor" value="${zk.ie < 8 ? '#3CA7B1' : 'rgba(33, 155, 166, 0.88)'}" />
-<c:set var="warningColor" value="${zk.ie < 8 ? '#ED5A33' : 'rgba(234, 67, 23, 0.88)'}" />
-<c:set var="errorColor" value="${zk.ie < 8 ? '#C61F23' : 'rgba(190, 0, 5, 0.88)'}" />
+<%-- bug ZK-1135: IE8 does not support rgba --%>
+<c:set var="infoColor" value="${zk.ie <= 8 ? '#3CA7B1' : 'rgba(33, 155, 166, 0.88)'}" />
+<c:set var="warningColor" value="${zk.ie <= 8 ? '#ED5A33' : 'rgba(234, 67, 23, 0.88)'}" />
+<c:set var="errorColor" value="${zk.ie <= 8 ? '#C61F23' : 'rgba(190, 0, 5, 0.88)'}" />
 
 <%-- notification: info --%>
 .z-notification-info .z-notification-cl {
