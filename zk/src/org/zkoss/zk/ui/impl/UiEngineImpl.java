@@ -1465,6 +1465,13 @@ public class UiEngineImpl implements UiEngine {
 				return; //done
 			} catch (Throwable ex) {
 				log.realCause("Unable to generate custom error page, "+location, ex);
+			} finally {
+				// Bug ZK-1144 in JBoss
+				exec.removeAttribute("javax.servlet.error.message");
+				exec.removeAttribute("javax.servlet.error.exception");
+				exec.removeAttribute("javax.servlet.error.exception_type");
+				exec.removeAttribute("javax.servlet.error.status_code");
+				exec.removeAttribute("javax.servlet.error.error_page");
 			}
 		}
 
