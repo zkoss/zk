@@ -33,14 +33,14 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<rows>
 			<row>
 				<textbox id="nameTexb" value="@load(vm.name)"></textbox>
-				<button label="change name">
+				<button id="changeNameBtn" label="change name">
 					<attribute name="onClick"><![CDATA[
 						myWin$composer.getViewModel().setName(nameTexb.getValue());
 						myWin$composer.getBinder().loadComponent(myWin, liChk.isChecked());
 					]]></attribute>
 				</button>
 			</row>
-			<row>name (init binding): <label value="@init(vm.name)"/></row>
+			<row>name (init binding): <label id="nameLbl" value="@init(vm.name)"/></row>
 			<row>title: <label value="@bind(vm.title)"/> </row>
 			<row>value: <label value="@bind(vm.value)"/> </row>
 		</rows>
