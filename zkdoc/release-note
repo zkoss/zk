@@ -9,6 +9,7 @@ ZK 6.0.2
   ZK-1136: Clients.showNotification(String) throws JS error when used with Include in defer mode
   ZK-1135: Notification is not correctly displayed on IE8 (compatibility view turned OFF)
   ZK-1144: error-page in JBoss causes IllegalStateException
+  ZK-1142: Second level menuitem onclick event not fired on iPad
 
 * Upgrade Notes
 
