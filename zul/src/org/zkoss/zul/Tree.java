@@ -1577,7 +1577,7 @@ public class Tree extends MeshElement implements org.zkoss.zul.api.Tree {
 	 */
 	private void renderChildren(Renderer renderer, Treechildren parent,
 	Object node) throws Throwable {
-		for(int i = 0, j = _model.getChildCount(node) ; i < j; i++) {
+		for (int i = 0, j = _model.getChildCount(node); i < j; i++) {
 			Treeitem ti = newUnloadedItem();
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);
