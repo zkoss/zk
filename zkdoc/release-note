@@ -24,6 +24,7 @@ ZK 5.0.12
   ZK-1118: Vertical scrollbar appears when listbox with fixed rows and sizedByContent is true exceeds browser width
   ZK-1144: error-page in JBoss causes IllegalStateException
   ZK-1129: Listbox content did not match the outline border (IE7 only)
+  ZK-1146: TreeModel getChildCount invoke too much times
   
 	--------
 ZK 5.0.11
