@@ -1111,11 +1111,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String ref uuid of a reference component
 	 * @param String pos the position of notification
 	 * @param int dur the duration of notification
+	 * @param boolean closable the close button of notification
 	 */
-	showNotification: function (msg, type, pid, ref, pos, off, dur) {
+	showNotification: function (msg, type, pid, ref, pos, off, dur, closable) {
 		var notif = (zul && zul.wgt) ? zul.wgt.Notification : null; // in zul
 		if (notif)
-			notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type});
+			notif.show(msg, pid, {ref:ref, pos:pos, off:off, dur:dur, type:type, closable:closable});
 		else {
 			// TODO: provide a hook to customize
 			jq.alert(msg); // fall back to alert when zul is not available

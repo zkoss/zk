@@ -20,11 +20,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	
-	$init: function (msg, type, ref) {
+	$init: function (msg, opts) {
 		this.$supers(zul.wgt.Notification, '$init', arguments);
 		this._msg = msg;
-		this._type = type;
-		this._ref = ref;
+		this._type = opts.type;
+		this._ref = opts.ref;
+		this._dur = opts.dur;
+		this._closable = opts.closable;
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
@@ -32,7 +34,10 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		out.push('<div', this.domAttrs_(), '><div id=', uuid, '-p class="', 
 				zcls, '-pointer"></div><div id="', uuid, '-body" class="', 
 				zcls, '-cl"><div id="', uuid, '-cave" class="', zcls, 
-				'-cnt">', this._msg, '</div></div></div>'); // not encoded to support HTML
+				'-cnt">', this._msg, '</div>');
+		if (this._closable)
+			out.push('<div id="', uuid, '-cls" class="', zcls, '-close"></div>');
+		out.push('</div></div>'); // not encoded to support HTML
 	},
 	domClass_: function (no) {
 		var zcls = this.getZclass(),
@@ -47,6 +52,44 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		if (zk.ie < 8 && type && ref) // need to provide extra class name for IE 6/7
 			s += ' ' + zcls + '-ref-' + entype;
 		return s;
+	},
+	doClick_: function (evt) {
+		var p = evt.domTarget;
+		if (p == this.$n('cls'))
+			this.close();
+		else
+			this.$supers('doClick_', arguments);
+	},
+	doMouseOver_: function (evt) {
+		var p = evt.domTarget;
+		if (p == this.$n('cls'))
+			jq(p).addClass(this.getZclass() + '-close-over');
+		else 
+			this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (evt) {
+		var p = evt.domTarget;
+		if (p == this.$n('cls'))
+			jq(p).removeClass(this.getZclass() + '-close-over');
+		else
+			this.$supers('doMouseOut_', arguments);
+	},
+	onFloatUp: function(ctl) {
+		if (!this.isVisible())
+			return;
+		var wgt = ctl.origin;
+		for (var floatFound; wgt; wgt = wgt.parent) {
+			if (wgt == this) {
+				if (!floatFound) 
+					this.setTopmost();
+				return;
+			}
+			if (wgt == this.parent && wgt.ignoreDescendantFloatUp_(this))
+				return;
+			floatFound = floatFound || wgt.isFloating_();
+		}
+		if (!this._closable && this._dur <= 0)
+			this.close({sendOnOpen:true});
 	},
 	open: function (ref, offset, position, opts) {
 		this.$supers(zul.wgt.Notification, 'open', arguments);
@@ -186,7 +229,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var parent = zk.Widget.$(pid),
 			ref = opts.ref,
 			pos = opts.pos,
-			ntf = new zul.wgt.Notification(msg, opts.type, ref),
+			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off;
 		
 		// TODO: allow user to specify arrow direction?
