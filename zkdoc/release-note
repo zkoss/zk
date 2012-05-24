@@ -12,6 +12,7 @@ ZK 6.0.2
   ZK-1143: Subsequent WrongValueException causes JS error on ipad
   ZK-1142: Second level menuitem onclick event not fired on iPad
   ZK-1146: TreeModel getChildCount invoke too much times
+  ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
 
 * Upgrade Notes
 
