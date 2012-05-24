@@ -143,8 +143,8 @@ public class Combobox extends Textbox {
 	 * @since 3.0.2
 	 * @see ListSubModel#getSubModel(Object, int)
 	 */
-	public ListModel<?> getModel() {
-		return _model;
+	public <T> ListModel<T> getModel() {
+		return (ListModel)_model;
 	}
 	/** Sets the list model associated with this combobox.
 	 * If a non-null model is assigned, no matter whether it is the same as

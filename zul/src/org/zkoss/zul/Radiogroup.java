@@ -354,8 +354,8 @@ public class Radiogroup extends XulElement {
 	 * if this radiogroup is not associated with any list data model.
 	 * @since 6.0.0
 	 */
-	public ListModel<?> getModel() {
-		return _model;
+	public <T> ListModel<T> getModel() {
+		return (ListModel)_model;
 	}
 	/** Sets the list model associated with this radiogroup.
 	 * If a non-null model is assigned, no matter whether it is the same as
