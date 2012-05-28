@@ -2,6 +2,7 @@
 ZK 6.0.2
 
 * Features
+  ZK-1127: Support OSGi
 
 * Bugs
   ZK-1113: Popup of chosenbox not removed after detach
