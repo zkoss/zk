@@ -11,3 +11,7 @@ zkmax
 zml
 dist/lib/z*.jar
 dist/lib/z*.war
+*.classpath
+*/.settings/*.prefs
+*/.settings/*.component
+*/.settings/*.xml
