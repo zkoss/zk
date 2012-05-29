@@ -21,8 +21,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<div height="90px">
 Please click the "show west" button, and you should see there is a horizontal scrollbar shown in the tree.		</div>
 	</north>
-	<west id="west" visible="false" title="navigation" width="20%" collapsible="true" flex="true" maxsize="500" splittable="true">
-		<div hflex="1">
+	<west id="west" visible="false" title="navigation" width="20%" collapsible="true" maxsize="500" splittable="true">
+		<div hflex="true" vflex="true">
     		<div vflex="1"> 
 			<tree id="tree" vflex="1"  hflex="1" span="true">
 		 		<treecols>

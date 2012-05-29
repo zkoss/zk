@@ -66,11 +66,11 @@ After loading the page, you should not see any error.
 				<panel height="260px">
 					<panelchildren>
 						<borderlayout>
-						<center flex="true">
-							<div id="viewer" style="overflow:auto;"/>
+						<center>
+							<div id="viewer" style="overflow:auto;" hflex="true" vflex="true"/>
 						</center>
-						<south splittable="true" size="25%"  flex="true">
-							<textbox id="text" multiline="true" width="98%" style="margin:0px" value="Hi, I am Jumper. (Please press the OK Button)"/>
+						<south splittable="true" size="25%">
+							<textbox id="text" multiline="true" style="margin:0px" value="Hi, I am Jumper. (Please press the OK Button)" hflex="true" vflex="true"/>
 						</south>
 						</borderlayout>
 					</panelchildren>

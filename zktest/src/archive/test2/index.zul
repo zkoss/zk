@@ -8,12 +8,12 @@ function newWindow(url){
 </script>
 <h:form id="newform" target="_blank" method="post"/>
 	<borderlayout id="main" use="org.zkoss.zktest.test2.MainLayout">
-	<west size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
+	<west size="355px" collapsible="true" maxsize="600" splittable="true">
 		<attribute name="onCreate">
 		 self.title = "ZK " + desktop.webApp.version + " " + WebApps.getEdition() + ", build " + desktop.webApp.build; 
 		</attribute>
 	<!-- ******************** Ctrl Panel ******************** -->
-			<window id="w1" contentStyle="overflow:auto;position:relative;">
+			<window id="w1" contentStyle="overflow:auto;position:relative;" hflex="true" vflex="true">
 				<vbox>
 					<tabbox mold="accordion">
 						<tabs>
@@ -156,9 +156,9 @@ if (lb.getSelectedItem() != null) {
 				</vbox>
 			</window>
 	</west>
-	<center id="center" title="ZK TEST2" autoscroll="true" flex="true">
+	<center id="center" title="ZK TEST2" autoscroll="true">
 		<!-- ******************** View Panel ******************** -->
-		<iframe id="ifr" height="98%" width="100%" autohide="true"/>
+		<iframe id="ifr" hflex="true" vflex="true" autohide="true"/>
 	</center>
 	<south id="leftPanel" title="Code View" collapsible="true" maxsize="600"
 		splittable="true" open="false" size="300px">

@@ -15,8 +15,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window height="100%" contentStyle="height:100%;">
    <borderlayout width="30%">
-    <center autoscroll="true" flex="true" >
-     <tabbox id="tabbox" >
+    <center autoscroll="true" >
+     <tabbox id="tabbox" hflex="true" vflex="true" >
       <tabs>
        <tab label="All Mail Items" />
        <tab id="tab2" label="Contacts" />
@@ -35,8 +35,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
       </tabpanels>
      </tabbox>
     </center>
-    <south title="Calendar" size="50%" collapsible="true" flex="true">
-     <calendar width="200px" />
+    <south title="Calendar" size="50%" collapsible="true">
+     <calendar hflex="true" vflex="true"/>
     </south>
    </borderlayout>
 </window>

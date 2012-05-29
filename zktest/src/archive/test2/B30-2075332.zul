@@ -20,12 +20,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <borderlayout height="500px" >
 <north size="100%" border="0" splittable="true" collapsible="true">
 <borderlayout>
-<west size="50%" border="none" flex="true" splittable="true"
+<west size="50%" border="none" splittable="true"
 collapsible="true">
 Please move the splitter to left, and the each column of the listbox should be recalculated.(IE only)
 </west>
-<center border="none" flex="true">
-<div>
+<center border="none">
+<div hflex="true" vflex="true">
 <listbox id="listBoxCategorias" height="100px" width="100%"
 mold="paging">
 <listhead sizable="true">

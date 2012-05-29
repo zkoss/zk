@@ -27,8 +27,8 @@ ListModel model = new ListModelList(data);
 <north splittable="true" height="180px">
 <borderlayout>
 <north size="10px" border="0"></north>
-<center id="nc" flex="true" border="none" style="padding:5px">
-<grid mold="paging" model="&#36;{model}">
+<center id="nc" border="none" style="padding:5px">
+<grid mold="paging" model="&#36;{model}" hflex="true" vflex="true">
 <columns>
 <column label="Grid"/>
 </columns>
@@ -36,8 +36,8 @@ ListModel model = new ListModelList(data);
 </center>
 </borderlayout>
 </north>
-<center flex="true" style="padding:5px">
-<div>
+<center style="padding:5px">
+<div hflex="true" vflex="true">
 Please insert 2 into the paging number, and press ENTER, if you see the grid disappears that is a bug.(Firefox only)
 </div>
 </center>

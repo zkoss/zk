@@ -12,9 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<borderlayout height="450px">
-		<north id="north" title="North" size="40%" flex="true" maxsize="250"
+		<north id="north" title="North" size="40%" maxsize="250"
 			splittable="true" collapsible="true">
-			<div id="div" style="background:#B8D335">
+			<div id="div" style="background:#B8D335" hflex="true" vflex="true">
 				<label value="25%" style="color:white;font-size:50px" />
 			</div>
 		</north>

@@ -25,8 +25,8 @@ new Center().setParent(b);
 </attribute>
 </button>
 <borderlayout id="b" height="300px">
-			<west maxsize="600" size="30%" flex="true" border="0" splittable="true">
-				<div style="background:#E6D92C">
+			<west maxsize="600" size="30%" border="0" splittable="true">
+				<div style="background:#E6D92C" hflex="true" vflex="true">
 					<label value="30%"
 						style="color:white;font-size:50px" />
 				</div>
@@ -35,8 +35,8 @@ new Center().setParent(b);
 				<label value="Here is a border"
 					style="color:gray;font-size:30px" />
 			</center>
-			<east size="30%" flex="true" border="0" collapsible="true">
-				<div style="background:#B8D335">
+			<east size="30%" border="0" collapsible="true">
+				<div style="background:#B8D335" hflex="true" vflex="true">
 					<label value="30%"
 						style="color:white;font-size:50px" />
 				</div>

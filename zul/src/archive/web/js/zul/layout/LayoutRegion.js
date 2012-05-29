@@ -13,26 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	
-	function _setFirstChildFlex (wgt, flex, ignoreMin) {
-		var cwgt = wgt.firstChild;
-		if(cwgt) {
-			if (flex) {
-				wgt._fcvflex = cwgt.getVflex();
-				wgt._fchflex = cwgt.getHflex();
-				if (!ignoreMin || cwgt._vflex != 'min') // B50-ZK-237
-					cwgt.setVflex(true);
-				if (!ignoreMin || cwgt._hflex != 'min') // B50-ZK-237
-					cwgt.setHflex(true);
-			} else {
-				cwgt.setVflex(wgt._fcvflex);
-				cwgt.setHflex(wgt._fchflex);
-				delete wgt._fcvflex;
-				delete wgt._fchflex;
-			}
-		}
-	}
-	
 /**
  * A layout region in a border layout.
  * <p>
@@ -52,9 +32,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 	$define: {
 		/**
-		 * Sets whether to grow and shrink vertical/horizontal to fit their given
-		 * space, so called flexibility.
-		 * @param boolean flex
+		 * @deprecated As of release 6.0.2, use {@link #setHflex(String)} and {@link #setVflex(String)} on child component instead
 		 */
 		/**
 		 * Returns whether to grow and shrink vertical/horizontal to fit their given
@@ -64,10 +42,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * Default: false.
 		 * @return boolean
 		 */
-		flex: function (v) {
-			_setFirstChildFlex(this, v);
-			this.rerender();
-		},
+		flex: null,
 		/**
 		 * Sets the border (either none or normal).
 		 * 
@@ -174,8 +149,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		autoscroll: function (autoscroll) {
 			var cave = this.$n('cave');
 			if (cave) {
-				var bodyEl = this.isFlex() && this.firstChild ?
-						this.firstChild.$n() : cave;
+				var fchild = this.firstChild,
+					bodyEl = fchild && fchild.getHflex() && fchild.getVflex() ?
+						fchild.$n() : cave;
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
@@ -437,13 +413,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
-			this.setFlex(true);
+			child.setVflex(true);
+			child.setHflex(true);
 			jq(this.$n()).addClass(this.getZclass() + "-nested");
 		}
-		
-		// Bug for B36-2841185.zul, resync flex="true"
-		if (this.isFlex())
-			_setFirstChildFlex(this, true, true);
 		
 		// reset
 		(this.$n('real') || {})._lastSize = null;
@@ -453,12 +426,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		
-		// check before "if (child.$instanceof(zul.layout.Borderlayout)) {"
-		if (this.isFlex())
-			_setFirstChildFlex(this, false);
-				
 		if (child.$instanceof(zul.layout.Borderlayout)) {
-			this.setFlex(false);
+			child.setVflex(false);
+			child.setHflex(false);
 			jq(this.$n()).removeClass(this.getZclass() + "-nested");
 		}
 		
@@ -517,18 +487,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this._open && !this.isVisible()) n.style.display = "none";
 		
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.$n() : this.$n('cave');
+			var fchild = this.firstChild,
+				bodyEl = fchild && fchild.getHflex() && fchild.getVflex() ?
+					fchild.$n() : this.$n('cave');
 			this.domListen_(bodyEl, "onScroll");
 		}
-		
-		if (this.isFlex())
-			_setFirstChildFlex(this, true, true);
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.$n() : this.$n('cave');
+			var fchild = this.firstChild,
+				bodyEl = fchild && fchild.getHflex() && fchild.getVflex() ?
+					fchild.$n() : this.$n('cave');
 			this.domUnlisten_(bodyEl, "onScroll");
 		}
 		if (this.$n('split')) {			
@@ -537,9 +506,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._drag = null;
 			}
 		}
-		
-		if (this.isFlex())
-			_setFirstChildFlex(this, false);
 		
 		this.$supers(zul.layout.LayoutRegion, 'unbind_', arguments);
 	},

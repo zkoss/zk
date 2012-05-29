@@ -23,9 +23,9 @@
 		<north maxsize="300" size="50%" border="0" splittable="true"
 			title="North" collapsible="true">
 			<borderlayout>
-				<west id="west" size="25%" border="0" flex="true" maxsize="250"
+				<west id="west" size="25%" border="0" maxsize="250"
 					 title="West" collapsible="true" autoscroll="true">
-					<div style="background:#B8D335">
+					<div style="background:#B8D335" hflex="true" vflex="true">
 						<listbox width="400px">
 							<auxhead>
 								<auxheader colspan="2">
@@ -101,8 +101,8 @@
 						</listbox>
 					</div>
 				</west>
-				<center border="none" flex="true">
-					<tablelayout id="tbl" columns="3">
+				<center border="none">
+					<tablelayout id="tbl" columns="3" hflex="true" vflex="true">
 		<tablechildren id="tc1" colspan="2">
 			<panel title="table1" border="normal" 
 			 	maximizable="true" collapsible="true" >
@@ -153,8 +153,8 @@
 		</tablechildren>
 </tablelayout>
 				</center>
-				<east size="50%" border="none" flex="true">
-				<div>
+				<east size="50%" border="none">
+				<div hflex="true" vflex="true">
 				<button id="btn" label="Restore Panel" visible="false" onClick='self.visible = panel.minimized = false;'/>
 					<panel id="panel" framable="true" width="500px" height="500px" title="Panel component" floatable="true" movable="true"
 	maximizable="true" minimizable="true"  border="normal" collapsible="true" closable="true">
@@ -220,9 +220,9 @@
 		</north>
 		<center border="0">
 			<borderlayout>
-				<west maxsize="600" size="30%" flex="true" border="0"
+				<west maxsize="600" size="30%" border="0"
 					splittable="true">
-					<div style="background:#E6D92C">
+					<div style="background:#E6D92C" hflex="true" vflex="true">
 						<label value="30%"
 							style="color:white;font-size:50px" />
 					</div>
@@ -277,9 +277,9 @@
 </window>
 
 				</center>
-				<east id="east" size="30%" flex="true" border="0" title="East"
+				<east id="east" size="30%" border="0" title="East"
 					collapsible="true">
-					<div style="background:#B8D335">
+					<div style="background:#B8D335" hflex="true" vflex="true">
 						<window title="Grid Demo" border="normal"
 							width="360px" closable="true">
 							<grid>

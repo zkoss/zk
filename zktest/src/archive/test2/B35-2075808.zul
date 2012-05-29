@@ -59,22 +59,21 @@ import org.zkoss.zkmax.zul.Columnchildren;
 							splittable="true" collapsible="true">
 							<borderlayout>
 								<west size="25%" border="none"
-									flex="true" maxsize="250" splittable="true"
+									maxsize="250" splittable="true"
 									collapsible="true">
-									<div style="background:#B8D335">
+									<div style="background:#B8D335" hflex="true" vflex="true">
 										<label value="25%"
 											style="color:white;font-size:30px" />
 									</div>
 								</west>
-								<center border="none" flex="true">
-									<div style="background:#E6D92C">
+								<center border="none">
+									<div style="background:#E6D92C" hflex="true" vflex="true">
 										<label value="25%"
 											style="color:white;font-size:30px" />
 									</div>
 								</center>
-								<east size="50%" border="none"
-									flex="true">
-									<label value="Here is a non-border"
+								<east size="50%" border="none">
+									<label value="Here is a non-border" hflex="true" vflex="true"
 										style="color:gray;font-size:30px" />
 								</east>
 							</borderlayout>
@@ -82,8 +81,8 @@ import org.zkoss.zkmax.zul.Columnchildren;
 						<center border="0">
 							<borderlayout>
 								<west maxsize="600" size="30%"
-									flex="true" border="0" splittable="true">
-									<div style="background:#E6D92C">
+									border="0" splittable="true">
+									<div style="background:#E6D92C" hflex="true" vflex="true">
 										<label value="30%"
 											style="color:white;font-size:30px" />
 									</div>
@@ -92,9 +91,9 @@ import org.zkoss.zkmax.zul.Columnchildren;
 									<label value="Here is a border"
 										style="color:gray;font-size:30px" />
 								</center>
-								<east size="30%" flex="true" border="0"
+								<east size="30%" border="0"
 									collapsible="true">
-									<div style="background:#B8D335">
+									<div style="background:#B8D335" hflex="true" vflex="true">
 										<label value="30%"
 											style="color:white;font-size:30px" />
 									</div>

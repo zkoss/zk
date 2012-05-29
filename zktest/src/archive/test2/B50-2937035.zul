@@ -6,9 +6,9 @@
 		<tabpanels>
 			<tabpanel>
 				<borderlayout height="100%">
-					<north title="Inbox" size="50%" flex="true"
+					<north title="Inbox" size="50%" 
 						splittable="true" collapsible="true">
-						<div>
+						<div hflex="true" vflex="true">
 							IE 6 only: Borderlayout inside tabpanel has
 							no height
 							<separator />
@@ -16,9 +16,9 @@
 							separate equally
 						</div>
 					</north>
-					<center flex="true" autoscroll="true"
+					<center autoscroll="true"
 						border="normal">
-						<div></div>
+						<div hflex="true" vflex="true"></div>
 					</center>
 				</borderlayout>
 			</tabpanel>

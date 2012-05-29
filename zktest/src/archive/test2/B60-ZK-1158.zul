@@ -1,0 +1,23 @@
+<zk>
+	<script>
+	zk.load('zul.mesh', function () {
+	var _meshWidget = {}
+	zk.override(zul.mesh.MeshWidget.prototype, _meshWidget, {
+		_calcSize: function () {
+			zk.log(this.uuid);
+			_meshWidget._calcSize.apply(this, arguments); //call the original method
+		}
+	});
+	});
+	</script>
+	<borderlayout>
+		<center>
+			<listbox hflex="true" vflex="true">
+				<listitem label="1" />
+				<listitem label="2" />
+				<listitem label="3" />
+				<listitem label="4" />
+			</listbox>
+		</center>
+	</borderlayout>
+</zk>

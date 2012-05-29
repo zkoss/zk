@@ -14,8 +14,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <borderlayout height="300px">
-<west title="Test" size="200px" open="false" collapsible="true" flex="true">
-<div style="background:blue"/>
+<west title="Test" size="200px" open="false" collapsible="true">
+<div style="background:blue" hflex="true" vflex="true"/>
 </west>
 <center>
 <div>

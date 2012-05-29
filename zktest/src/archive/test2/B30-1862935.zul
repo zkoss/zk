@@ -24,10 +24,10 @@ Being inside of borderlayout, the height of window is not initiated to property 
 If see the black block, it is correct
 <borderlayout>
 <west id="westborder" size="27%" maxsize="350" minsize="265"
-splittable="true" collapsible="true" flex="true">
-<window height="100%">
+splittable="true" collapsible="true">
+<window hflex="true" vflex="true">
 <tree height="100%" width="99%"
-style="background-color:black;" >
+style="background:black;" >
 </tree>
 </window>
 </west>

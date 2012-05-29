@@ -15,8 +15,10 @@ ZK 6.0.2
   ZK-1146: TreeModel getChildCount invoke too much times
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
+  ZK-1158: onSize is calculated twice when borderlayout's region with "flex=true"
 
 * Upgrade Notes
+  + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
 
 	--------
 ZK 6.0.1

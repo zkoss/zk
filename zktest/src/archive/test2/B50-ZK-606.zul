@@ -16,9 +16,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="native">
 	<borderlayout >
 		<center >Please click the south icon to open it, then you should see "south" label at the south area</center>
-		<south open="false" flex="true"
+		<south open="false"
 				title="south" collapsible="true">
-			<hbox>
+			<hbox hflex="true" vflex="true">
 					<n:div />
 			</hbox>
 		</south>
