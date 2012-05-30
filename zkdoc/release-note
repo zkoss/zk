@@ -17,7 +17,8 @@ ZK 6.0.2
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
 
 * Upgrade Notes
-
+  + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
+  
 	--------
 ZK 6.0.1
 May 2, 2012

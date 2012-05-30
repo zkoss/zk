@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -33,6 +34,8 @@ import org.zkoss.zul.impl.Utils;
  * @since 5.0.0
  */
 public abstract class LayoutRegion extends XulElement {
+	
+	private static final Log log = Log.lookup(LayoutRegion.class);
 
 	private String _border = "normal";
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
@@ -89,9 +92,7 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/**
-	 * Returns whether to grow and shrink vertical/horizontal to fit their given
-	 * space, so called flexibility.
-	 * 
+	 * @deprecated As of release 6.0.2, use {@link #getHflex()} and {@link #getVflex()} on child component instead
 	 * <p>
 	 * Default: false.
 	 */
@@ -100,11 +101,11 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/**
-	 * Sets whether to grow and shrink vertical/horizontal to fit their given
-	 * space, so called flexibility.
+	 * @deprecated As of release 6.0.2, use {@link #setHflex(String)} and {@link #setVflex(String)} on child component instead
 	 * 
 	 */
 	public void setFlex(boolean flex) {
+		log.warning("The flex attribute is deprecated, use setHflex and setVflex on child component instead.");
 		if (_flex != flex) {
 			_flex = flex;
 			smartUpdate("flex", _flex);
