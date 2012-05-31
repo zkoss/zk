@@ -493,17 +493,19 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					endeffect: LR._endeffect
 				});
 				
+				var colled = this.$n('colled');
+				if (colled && zk.ios)
+					jq(colled).css('cursor', 'pointer'); // ios need this style to trigger onClick event
+				
 				if (!this._open) {
-					var colled = this.$n('colled'),
-						real = this.$n('real');
+					var real = this.$n('real');
 					if (colled)
 						jq(colled).show();
 					jq(real).hide();
 				}
 				
 				if(!this._visible){
-					var colled = this.$n('colled'),
-						real = this.$n('real');
+					var real = this.$n('real');
 					jq(real).hide();
 					if (colled)
 						jq(colled).hide();

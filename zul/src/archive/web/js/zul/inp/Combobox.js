@@ -162,7 +162,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				this.valueEnter_ = inp.value = val;
 				//Bug 3058028
 				// ZK-518
-				if (!opts.noSelectRange)
+				if (!opts.noSelectRange && !zk.ios) // prevent ios native keyboard showed
 					if (zk.gecko)
 						inp.select();
 					else
@@ -279,7 +279,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
 		// setSelectionRange of FF5 or up will set the position to end,
 		// call select() of input element for select all 
-		if (val)
+		if (val && !zk.ios)
 			if (zk.gecko)
 				inp.select();
 			else
