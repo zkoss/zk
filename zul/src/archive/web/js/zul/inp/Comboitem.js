@@ -108,7 +108,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			
 			// Fixed the onFocus event is triggered too late in IE.
 			cb._shallClose = true;
-			if (!zk.mobile)
+			if (!zk.mobile) // prevent ios native keyboard showed
 				zk(cb.getInputNode()).focus();
 			evt.stop();
 		}

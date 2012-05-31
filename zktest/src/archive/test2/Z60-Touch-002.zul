@@ -1,0 +1,12 @@
+<zk>
+	<vlayout>
+		<div>1. Collapsed West region</div>
+		<div>2. Click collapsed bar, you should see west content</div>
+	</vlayout>
+	<borderlayout width="100%" height="100%">
+		<west size="20%" title="west" collapsible="true" border="normal">
+			<div hflex="true" vflex="true">WEST</div>
+		</west>
+		<center></center>
+	</borderlayout>
+</zk>

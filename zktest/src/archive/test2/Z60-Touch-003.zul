@@ -1,0 +1,195 @@
+<zk>
+	<vlayout>
+		<hlayout>
+			1. Click group button, it should be collapsed.
+			<grid hflex="min">
+				<columns sizable="true">
+					<column label="Brand" />
+					<column label="Processor Type" width="150px" />
+					<column label="Memory (RAM)" width="120px" />
+					<column label="Price" width="100px" />
+					<column label="Hard Drive Capacity" width="150px" />
+				</columns>
+				<rows>
+					<group label="Dell" />
+					<row height="20px">
+						<label style="padding-left:15px" value="Dell E4500 2.2GHz" />
+						<label value="Intel Core 2 Duo" />
+						<label value="2GB RAM" />
+						<label value="$261.00" style="color:green" />
+						<label value="500GB" />
+					</row>
+					<row height="20px">
+						<label style="padding-left:15px" value="XP-Pro Slim Dell-Inspiron-530-s" />
+						<label value="Intel Core 2 Duo" />
+						<label value="2GB RAM" />
+						<label value="$498.93" style="color:green" />
+						<label value="500GB" />
+					</row>
+					<row height="20px">
+						<label style="padding-left:15px" value="Dell P4 3.2 GHz" />
+						<label value="Intel Pentium 4" />
+						<label value="4GB RAM" />
+						<label value="$377.99" style="color:green" />
+						<label value="500GB" />
+					</row>
+				</rows>
+			</grid>
+		</hlayout>
+		<hlayout>
+			2. Click on ColorPicker, it should be opened.
+			<window id="win2" border="normal" title="Color Picker" height="180px" width="200px">
+				<colorbox width="30px" height="25px" color="#029BCB">
+					<attribute name="onChange"><![CDATA[
+						win2.setContentStyle("background-color:" + self.getColor());
+					]]></attribute>
+				</colorbox>
+			</window>
+		</hlayout>
+		<hlayout>
+			<style dynamic="true">
+				.focus .z-label { color: #029CCC; }
+			</style>
+			<zscript><![CDATA[
+				void changeStyle(org.zkoss.zul.Hbox h) {
+					h.setSclass("focus".equals(h.getSclass()) ? "" : "focus");
+				}
+			]]></zscript>
+			3. Focus on the two textbox, you should see the label text color changed.
+			<vlayout>
+				<hbox id="h1">
+					<label id="t1" value="Text1: " />
+					<textbox id="text1" onBlur="changeStyle(h1)" onFocus="changeStyle(h1)" />
+				</hbox>
+				<hbox id="h2">
+					<label id="t2" value="Text2: " />
+					<textbox id="text2" onBlur="changeStyle(h2)" onFocus="changeStyle(h2)" />
+				</hbox>
+			</vlayout>
+		</hlayout>
+		<hlayout>
+			4. Focus on textbox, you should see description text showd.
+			<grid width="400px" xmlns:c="client">
+				<rows>
+					<row height="20px">
+						<label value="text1: " />
+						<textbox c:onFocus="jq(this.$f('help1')).fadeIn()" c:onBlur="jq(this.$f('help1')).fadeOut()" />
+						<label id="help1" visible="false" value="This is help for text1." />
+					</row>
+					<row height="20px">
+						<label value="text2: " />
+						<textbox c:onFocus="jq(this.$f('help2')).fadeIn()" c:onBlur="jq(this.$f('help2')).fadeOut()" />
+						<label id="help2" visible="false" value="This is help for text2." />
+					</row>
+				</rows>
+			</grid>
+		</hlayout>
+		<hlayout>
+			5. keey scroll down, you should see more items under option 50.
+			<style>
+				div.z-listbox-body .z-listcell { padding: 2px 5px; }
+			</style>
+			<zscript><![CDATA[
+				org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(250000);
+			]]></zscript>
+			<listbox id="list" width="200px" rows="10" model="${strset}">
+				<listhead>
+					<listheader label="Load On Demand" sort="auto" />
+				</listhead>
+			</listbox>
+		</hlayout>
+		<hlayout xmlns:c="client">
+			6. click on these textbox, you should see the mask input.
+			<style>
+				.water-mark {
+					color: gray;
+					font-style: italic;
+				}
+				.form {
+					border: 1px solid #E1E1E1;
+					background: url('http://www.zkoss.org/zkdemo/widgets/effects/form_effect/img/bg.png');
+					padding: 20px 20px;
+					-webkit-border-radius:4px;
+					-moz-border-radius:4px;
+					border-radius:4px;
+				}
+				.form .name	{
+					display: block;
+					width: 100px;
+					text-align: center;
+				}
+			</style>
+
+			<script><![CDATA[
+				function pwdValid(pwd2) {
+					var valLabel = jq("$pwd_val");
+					if (pwd2.getValue() == "") {
+						zk.Widget.$(valLabel).setValue("Client Side	Validation");
+					} else if (pwd2.getValue() != zk.Widget.$(jq("$pwd")).getValue()) {
+						zk.Widget.$(valLabel).setValue("Not Match !")
+					} else {
+						zk.Widget.$(valLabel).setValue("OK !")
+					}
+				}
+			]]></script>
+			<div width="500px" class="form">
+				<vlayout spacing="7px">
+					<label value="On-line Shopping Info" style="font-size:16px;font-weight:bold;color:gray;" />
+					<hlayout spacing="20px">
+						<label class="name" value="Name :" />
+						<textbox id="username" width='150px' />
+						Watermark
+					</hlayout>
+					<hlayout spacing="20px">
+						<label class="name" value="Phone :" />
+						<textbox id="phone" width='150px' />
+						Mask : (999) 999-9999
+					</hlayout>
+					<hlayout spacing="20px">
+						<label class="name" value="Birthday :" />
+						<textbox id="date" width='150px' />
+						<label value="Mask : m9/d9/y999" />
+					</hlayout>
+					<hlayout spacing="20px">
+						<label class="name" value="Country Code:" />
+						<textbox id="country" width='150px' />
+						<label value='Mask : AA (Upper-Case)' />
+					</hlayout>
+					<hlayout spacing="20px">
+						<label class="name" value="Credit Card:" />
+						<textbox id="cc" width='150px' />
+						<label value='Mask : 9999-9999-9999-9999' />
+					</hlayout>
+
+					<hlayout spacing="20px">
+						<label class="name" value="Password: " />
+						<textbox id="pwd" type="password" width="150px" />
+					</hlayout>
+					<hlayout spacing="20px">
+						<label class="name" value="Re-type:" />
+						<textbox type="password" width="150px" c:onChange='pwdValid(this)' />
+						<label id="pwd_val" value="Client Side Validation" />
+					</hlayout>
+				</vlayout>
+			</div>
+			<div id="result" />
+			<!-- Load the script -->
+			<script type="text/javascript" src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/maskedinput-1.2.2.min.js" />
+			<script type="text/javascript" src="http://www.zkoss.org/zkdemo/widgets/effects/form_effect/watermarkinput.js" />
+			<script type="text/javascript">
+				zk.afterMount(function() {
+				jq("$username").Watermark("Your Name","gray");
+
+				$.mask.definitions['A']='[A-Z]';
+				$.mask.definitions['m']='[01]';
+				$.mask.definitions['d']='[0123]';
+				$.mask.definitions['y']='[12]';
+
+				jq("$phone").mask("(999) 999-9999");
+				jq("$date").mask("m9/d9/y999");
+				jq("$country").mask("AA");
+				jq("$cc").mask("9999-9999-9999-9999"); });
+			</script>
+		</hlayout>
+	</vlayout>
+</zk>

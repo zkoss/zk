@@ -583,7 +583,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (silent)
 			db.updateChange_();
-		else if (!zk.mobile)
+		else if (!zk.mobile) // prevent ios native keyboard showed
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
