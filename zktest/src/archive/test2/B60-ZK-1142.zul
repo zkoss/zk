@@ -1,0 +1,25 @@
+<zk>
+	<window id="win_main" title="Hello IPad!!" border="normal" width="100%">
+		<vlayout>
+			<label>1. Try selecting New >> Document/Spreadsheet/Presentation.</label>
+			<label>2. You should see alert message displayed</label>
+		</vlayout>
+		<menubar id="menubar" width="100%">
+			<menu label="File">
+				<menupopup>
+					<menu label="New" style="cursor :pointer">
+						<menupopup id="m" style="cursor :pointer">
+							<menuitem label="Document" style="cursor :pointer" onClick="alert(self.label)" />
+							<menuitem label="Spreadsheet" style="cursor:pointer" onClick="alert(self.label)" />
+							<menuitem label="Presentation" style="cursor:pointer" onClick="alert(self.label)" />
+						</menupopup>
+					</menu>
+					<menuitem label="Open.." onClick="alert(self.label)" />
+					<menuseparator></menuseparator>
+					<menuitem label="Save" onClick="alert(self.label)" />
+				</menupopup>
+			</menu>
+			<menuitem label="ZK Web Framework" onClick="alert(self.label)" />
+		</menubar>
+	</window>
+</zk>

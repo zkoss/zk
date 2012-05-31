@@ -1,0 +1,7 @@
+<zk>
+	<window id="win_modal" title="win modal!!" width="924px" height="568px" border="normal" closable="true">
+		<vlayout spacing="2px">
+			<include src="B60-ZK-1136-2.zul" mode="defer" progressing="true" arg_win_main="${win_modal}" />
+		</vlayout>
+	</window>
+</zk>

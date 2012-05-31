@@ -1630,7 +1630,7 @@ public class Tree extends MeshElement {
 	 */
 	private void renderChildren(Renderer renderer, Treechildren parent,
 	Object node) throws Throwable {
-		for(int i = 0; i < _model.getChildCount(node); i++) {
+		for (int i = 0, j = _model.getChildCount(node); i < j; i++) {
 			Treeitem ti = newUnloadedItem();
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);

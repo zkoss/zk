@@ -74,3 +74,9 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="version.java.uid" value='UID = &quot;${zk.version}&quot;;$'/>
 <property name="version.java.release" value='RELEASE = &quot;${zk.version}&quot;;'/>
 <property name="version.java.release.freshly" value='RELEASE = &quot;${zk.version}-FL&quot;;'/>
+
+<!-- OSGi -->
+<property name="bnd.lib.jar" value="${dist.lib.ext.dir}/bnd.jar"/>
+<property name="bnd.config.name" value="${project.name}.bnd"/>
+<property name="bnd2.config.name" value="${project.name}.nosrc.bnd"/>
+<property name="dist.osgi.dir" value="${dist.lib.dir}/osgi"/>

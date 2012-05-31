@@ -2,13 +2,23 @@
 ZK 6.0.2
 
 * Features
+  ZK-1127: Support OSGi
 
 * Bugs
   ZK-1113: Popup of chosenbox not removed after detach
   ZK-1118: Vertical scrollbar appears when listbox with fixed rows and sizedByContent is true exceeds browser width
+  ZK-1136: Clients.showNotification(String) throws JS error when used with Include in defer mode
+  ZK-1135: Notification is not correctly displayed on IE8 (compatibility view turned OFF)
+  ZK-1144: error-page in JBoss causes IllegalStateException
+  ZK-1143: Subsequent WrongValueException causes JS error on ipad
+  ZK-1142: Second level menuitem onclick event not fired on iPad
+  ZK-1146: TreeModel getChildCount invoke too much times
+  ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
+  ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
 
 * Upgrade Notes
-
+  + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
+  
 	--------
 ZK 6.0.1
 May 2, 2012
@@ -102,6 +112,7 @@ May 2, 2012
   ZK-1096: Listbox multiselect bug with draggable on
   ZK-1101: Portallayout.setPanel() doesn't behave as expected
   ZK-1100: Menuitem.setImage() doesn't work in menubar
+  ZK-1139: ZK Bind loads "init" annotations no matter if "loadinit" parameter TRUE or FALSE
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

@@ -1,0 +1,20 @@
+<zk>
+	<zscript>int i = 0;</zscript>
+	<vlayout spacing="2px">
+		<label>1. iPad only</label>
+		<label>2. Click "update" button twice</label>
+		<label>3. You should not see javascrip error</label>
+		<hlayout spacing="2px">
+			<label value="first name"/>: <textbox id="txt_fname"/>
+		</hlayout>
+		<button label="update">
+			<attribute name="onClick"><![CDATA[
+				times.setValue("click " + ++i + " times");
+		 		if (org.zkoss.lang.Strings.isBlank(txt_fname.getValue())) {
+		 			throw new WrongValueException(txt_fname, "first name required!");
+		 		}
+			]]></attribute>
+		</button>
+		<label id="times"></label>
+	</vlayout>
+</zk>
