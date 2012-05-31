@@ -1,0 +1,20 @@
+
+
+<window id="myWin" width="100%" border="normal" title="reattaching">
+
+	<include id="inc" src="/bind/basic/args.zul"/>
+
+	<button label="Detach" >
+		<attribute name="onClick"><![CDATA[
+			desktop.setAttribute("include_$", inc);
+			inc.setParent(null);
+		]]></attribute>
+	</button>
+	
+	<button label="Attach" >
+		<attribute name="onClick"><![CDATA[
+			desktop.getAttribute("include_$").setParent(myWin);
+		]]></attribute>
+	</button>
+</window>
+
