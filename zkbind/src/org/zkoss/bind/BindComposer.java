@@ -57,6 +57,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private final Map<String, Converter> _converters;
 	private final Map<String, Validator> _validators;
+	private final BindEvaluatorX evalx;
 	
 	private static final String ID_ANNO = "id";
 	private static final String INIT_ANNO = "init";
@@ -77,6 +78,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		setViewModel(this);
 		_converters = new HashMap<String, Converter>(8);
 		_validators = new HashMap<String, Validator>(8);
+		evalx = BindEvaluatorXUtil.createEvaluator(null);
 	}
 	
 	public Binder getBinder() {
@@ -112,10 +114,13 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	public void addValidator(String name, Validator validator) {
 		_validators.put(name, validator);
 	}
-
-	//--Composer--//
-	public void doAfterCompose(T comp) throws Exception {
-		BindEvaluatorX evalx = BindEvaluatorXUtil.createEvaluator(null);
+	//--ComposerExt//
+	public ComponentInfo doBeforeCompose(Page page, Component parent,
+			ComponentInfo compInfo) throws Exception {
+		return compInfo;
+	}
+	
+	public void doBeforeComposeChildren(Component comp) throws Exception {
 		
 		//name of this composer
 		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
@@ -131,12 +136,17 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		if(_vmsgs!=null){
 			((BinderCtrl)_binder).setValidationMessages(_vmsgs);
 		}
+	}
+
+	//--Composer--//
+	public void doAfterCompose(T comp) throws Exception {
 		
 		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
 		//init
 		_binder.init(comp, _viewModel, initArgs);
 		//load data
 		_binder.loadComponent(comp,true); //load all bindings
+		
 	}
 	
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
@@ -217,8 +227,11 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		String bname = null;
 		
 		if(idanno!=null){
-			bname = BindEvaluatorXUtil.eval(evalx,comp,AnnotationUtil.testString(idanno.getAttributeValues(VALUE_ANNO_ATTR),
-					comp,VALUE_ANNO_ATTR,ID_ANNO),String.class);
+			bname = BindEvaluatorXUtil.eval(evalx, 
+					comp,
+					AnnotationUtil.testString(
+						idanno.getAttributeValues(VALUE_ANNO_ATTR), comp, VALUE_ANNO_ATTR, ID_ANNO), 
+						String.class);
 		}else{
 			bname = "binder";
 		}
@@ -327,14 +340,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	}
 
 	
-	//--ComposerExt//
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-			ComponentInfo compInfo) throws Exception {
-		return compInfo;
-	}
-
-	public void doBeforeComposeChildren(Component comp) throws Exception {
-	}
 
 	public boolean doCatch(Throwable ex) throws Exception {
 		return false;
