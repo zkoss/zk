@@ -1,0 +1,46 @@
+<window id="myWin" width="100%" border="normal" title="reattaching">
+
+	<button label="Detach">
+		<attribute name="onClick"><![CDATA[
+			desktop.setAttribute("subwin_$", subWin);
+			subWin.setParent(null);
+		]]></attribute>
+	</button>
+
+	<button label="Attach">
+		<attribute name="onClick"><![CDATA[
+			desktop.getAttribute("subwin_$").setParent(myWin);
+		]]></attribute>
+	</button>
+	
+	<window id="subWin" apply="org.zkoss.zktest.bind.basic.ArgsComposer">
+		<custom-attributes composerName="vm" />
+		<hbox>
+			<label id="l1" value="@bind(vm.value1) @converter(vm.converter1, arg1 = 'Arg1', arg2 = 'Arg2')" />
+			<label id="l2" value="@bind(vm.value2) @converter(vm.converter1, arg1 = vm.myArg1, arg2 = vm.myArg2)" />
+		</hbox>
+		<hbox>
+			<textbox id="t1" value="@bind(vm.value1) @converter(vm.converter1, arg1 = 'Arg1', arg2 = 'Arg2')" />
+			<textbox id="t2" value="@bind(vm.value2) @converter(vm.converter1, arg1 = vm.myArg1, arg2 = vm.myArg2)" />
+		</hbox>
+		<hbox>
+			<textbox id="t3" value="@bind(vm.value1) @validator(vm.validator1, text = 'V1')" />
+			<label id="l3" value="@bind(vm.message3)" />
+		</hbox>
+		<hbox
+			form="@id('fx') @load(vm) @save(vm, before='cmd2') @validator(vm.validator2, text = 'V2')">
+			<textbox id="t4" value="@bind(fx.value1)" />
+			<label id="l4" value="@bind(vm.message4)" />
+		</hbox>
+
+		<hbox>
+			<button id="btn1" label="cmd1"
+				onClick="@command('cmd1', param1='Dennis', param2=vm.param2)" />
+			<button id="btn2" label="cmd2" onClick="@command('cmd2')" />
+			<button label="Dump" onClick="binder.getTracker().dump()" />
+		</hbox>
+	</window>
+
+
+</window>
+
