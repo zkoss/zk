@@ -1237,6 +1237,13 @@ zk.log('value is", value);
 		} else {
 			if (zk.safari)
 				bodycls = 'safari safari' + Math.floor(zk.safari);
+			if (zk.mobile) {
+				bodycls = (bodycls || '') + ' mobile';
+				if (zk.ios)
+					bodycls = (bodycls || '') + ' ios';
+				else
+					bodycls = (bodycls || '') + ' android';
+			}
 		}
 	}
 	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
