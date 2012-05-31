@@ -1509,18 +1509,23 @@ jq(el).zk.center(); //same as 'center'
 		if (start > len) start = len;
 		if (end == null || end > len) end = len;
 		if (end < 0) end = 0;
-
-		if (inp.setSelectionRange) {
-			inp.setSelectionRange(start, end);
-		} else if (inp.createTextRange) {
-			var range = inp.createTextRange();
-			if(start != end){
-				range.moveEnd('character', end - range.text.length);
-				range.moveStart('character', start);
-			}else{
-				range.move('character', start);
+		if (zk.android) { // the focus will penetrate the input element which is behind the popup
+			setTimeout(function () {
+				inp.setSelectionRange(start, end);
+			});
+		} else {
+			if (inp.setSelectionRange) {
+				inp.setSelectionRange(start, end);
+			} else if (inp.createTextRange) {
+				var range = inp.createTextRange();
+				if(start != end){
+					range.moveEnd('character', end - range.text.length);
+					range.moveStart('character', start);
+				}else{
+					range.move('character', start);
+				}
+				range.select();
 			}
-			range.select();
 		}
 		return this;
 	},

@@ -477,7 +477,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled && !zk.animating()) {		
 			if (this._open) this.close({focus:true,sendOnOpen:true});
-			else this.open({focus:true,sendOnOpen:true});	
+			else this.open({focus:!zk.mobile,sendOnOpen:true});	
 		}
 		evt.stop();
 	},
@@ -490,12 +490,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!this._disabled) {
 			if (evt.domTarget == this.getPopupNode_())
 				this.close({
-					focus: true,
+					focus: !zk.mobile,
 					sendOnOpen: true
 				});
 			else if (this._readonly && !this.isOpen() && this._buttonVisible)
 				this.open({
-					focus: true,
+					focus: !zk.mobile,
 					sendOnOpen: true
 				});
 			this.$supers('doClick_', arguments);

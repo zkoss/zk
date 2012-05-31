@@ -495,7 +495,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled)
-			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), true);
+			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), !zk.mobile);
 		evt.stop();
 	},
 	_doTimeZoneChange: function (evt) {
@@ -583,7 +583,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (silent)
 			db.updateChange_();
-		else
+		else if (!zk.mobile)
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {

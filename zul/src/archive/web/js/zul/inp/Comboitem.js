@@ -108,7 +108,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			
 			// Fixed the onFocus event is triggered too late in IE.
 			cb._shallClose = true;
-			zk(cb.getInputNode()).focus();
+			if (!zk.mobile)
+				zk(cb.getInputNode()).focus();
 			evt.stop();
 		}
 	},
