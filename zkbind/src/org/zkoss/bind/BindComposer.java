@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -43,6 +42,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @author henrichen
  * @since 6.0.0
  */
+@SuppressWarnings("rawtypes")
 public class BindComposer<T extends Component> implements Composer<T>, ComposerExt<T>, Serializable {
 	
 	private static final long serialVersionUID = 1463169907348730644L;
@@ -54,6 +54,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	private Object _viewModel;
 	private Binder _binder;
+	
 	private final Map<String, Converter> _converters;
 	private final Map<String, Validator> _validators;
 	

@@ -15,6 +15,7 @@ package org.zkoss.bind.tracker.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.zkoss.bind.AnnotateBinder;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
@@ -40,7 +41,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			if (selfBinder == null) {
 				//check if parent exists any binder
 				final Binder binder = (Binder) comp.getAttribute(BinderImpl.BINDER, true);
-				if (binder != null) {
+				
+				if (binder != null && (binder instanceof AnnotateBinder)) {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
@@ -59,6 +61,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 								return;
 							}
 							
+
 							new AnnotateBinderHelper(binder).initComponentBindings(comp);
 							binder.loadComponent(comp,true);
 							
