@@ -184,10 +184,6 @@
 	border: 1px solid #C5C5C5;
 	overflow: hidden;
 	position: absolute;
-	<%-- iOS need "cursor: point" to trigger click event --%>
-	<c:if test="${zk.ios > 0}">
-	cursor: pointer;
-	</c:if>
 }
 .z-east-colpsd-over,
 .z-west-colpsd-over,
