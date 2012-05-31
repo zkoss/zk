@@ -1,0 +1,36 @@
+<?meta name="viewport" content="width=600"?>
+<zk>
+	<div>
+		Click on icon button should not see native keyboard.
+	</div>
+	<vlayout spacing="30px">
+		<combobox onChange='lbl.setValue(self.getValue())'>
+			<comboitem label="Item 1" />
+			<comboitem label="Item 2" />
+			<comboitem label="Item 3" />
+		</combobox>
+		<bandbox id="bd" width="300px">
+			<bandpopup>
+				<listbox width="200px" onSelect="bd.value=self.selectedItem.label; bd.close(); lbl.value=bd.value">
+					<listhead>
+						<listheader label="Name" />
+						<listheader label="Description" />
+					</listhead>
+					<listitem>
+						<listcell label="John" />
+						<listcell label="CEO" />
+					</listitem>
+					<listitem>
+						<listcell label="Joe" />
+						<listcell label="Engineer" />
+					</listitem>
+					<listitem>
+						<listcell label="Mary" />
+						<listcell label="Supervisor" />
+					</listitem>
+				</listbox>
+			</bandpopup>
+		</bandbox>
+		<label id="lbl" />
+	</vlayout>
+</zk>
