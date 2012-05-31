@@ -114,6 +114,7 @@ May 2, 2012
   ZK-1101: Portallayout.setPanel() doesn't behave as expected
   ZK-1100: Menuitem.setImage() doesn't work in menubar
   ZK-1139: ZK Bind loads "init" annotations no matter if "loadinit" parameter TRUE or FALSE
+  ZK-1134: BindUiLifeCycle should check if binder instanceof AnnotateBinder
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
