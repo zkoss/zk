@@ -539,10 +539,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<component-name>iframe</component-name>
 		<extends>iframe</extends>
 	</component-->
-	<!--component>
+	<component>
 		<component-name>image</component-name>
 		<extends>image</extends>
-	</component-->
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>content</property-name>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.bind.converter.sys.ImageContentConverter</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
 	<!--component>
 		<component-name>imagemap</component-name>
 		<extends>imagemap</extends>
