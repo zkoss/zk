@@ -15,7 +15,7 @@ import org.zkoss.zk.ui.Component;
 
 /**
  * Generic binding conversion interface.
- * <b>U</b> is the object type for the Component, <b>B</b> is the object type for the Bean
+ * <b>U</b> is the value type of the Component attribute, <b>B</b> is the property type of the Bean
  * and <b>C</b> is the component type of the converter. 
  * <p/> 
  * 
@@ -36,19 +36,19 @@ public interface Converter<U,B,C extends Component> {
 	
 	/**
 	 * Coerces a value to another value to load to a component
-	 * @param val the bean value
+	 * @param beanProp the bean value
 	 * @param component the component to be loaded the value
 	 * @param ctx the bind context
 	 * @return the value to load to a component
 	 */
-	public U coerceToUi(B val, C component, BindContext ctx);
+	public U coerceToUi(B beanProp, C component, BindContext ctx);
 	
 	/**
 	 * Coerces a value to bean value to save to a bean
-	 * @param val the value
+	 * @param compAttr the value of component attribute.
 	 * @param component the component provides the value
 	 * @param ctx the bind context
 	 * @return the value to save to a bean
 	 */
-	public B coerceToBean(U val, C component, BindContext ctx);
+	public B coerceToBean(U compAttr, C component, BindContext ctx);
 }
