@@ -1,0 +1,38 @@
+<?page title="Nested ViewModel" contentType="text/html;charset=UTF-8"?>
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01165VM1')">
+
+	<div p="@ref(vm.selected)" pid="@ref(vm.selected.id)">
+
+		outerPidLb: <label id="outerPidLb" value="@load(pid)" style="color:red"/>
+		outerPDescLb: <label id="outerPDescLb" value="@load(p.desc)" style="color:red"/>
+
+
+
+		<grid width="600px" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vms') @init('org.zkoss.zktest.bind.issue.B01165VM1')">
+			<rows>
+				<row>
+					pid won't work: 
+					<label id="pidLb" value="@load(pid)" />
+				</row>
+				<row>
+					p.desc :
+					<label id="pDescLb" value="@load(p.desc)" />
+				</row>
+				<row>
+					vm won't work:
+					<label id="vmLb" value="@load(vm)" />
+				</row>
+				<row>
+					vms.selected.id works fine:
+					<label id="vmsSelIdLb" value="@load(vms.selected.id)" />
+				</row>
+				<row>
+					vms.selected.desc works fine:
+					<label id="vmsSelDescLb" value="@load(vms.selected.desc)" />
+				</row>
+			</rows>
+		</grid>
+	</div>
+</div>

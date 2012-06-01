@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -30,6 +31,9 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
@@ -136,18 +140,30 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		if(_vmsgs!=null){
 			((BinderCtrl)_binder).setValidationMessages(_vmsgs);
 		}
+		
+		BinderKeeper keeper = BinderKeeper.getInstance(comp);
+		keeper.book(_binder, comp);
+		
 	}
 
+	
+	
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
 		
 		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
 		//init
 		_binder.init(comp, _viewModel, initArgs);
-		//load data
-		_binder.loadComponent(comp,true); //load all bindings
 		
+		// call loadComponent
+		BinderKeeper keeper = BinderKeeper.getInstance(comp);
+		if(keeper.isRootBinder(_binder)){
+			keeper.loadComponentForAllBinders();
+		}
 	}
+	
+	
+	
 	
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
@@ -349,8 +365,99 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		// ignore
 	}
 	
+	
 	//--notifyChange--//
 	public void notifyChange(Object bean, String property) {
 		getBinder().notifyChange(bean, property);
 	}
-}
+	
+
+	/**
+	 * 
+	 * <p>A parsing scope context for storing Binders, and handle there loadComponent 
+	 * invocation properly.</p> 
+	 * 
+	 * <p>if component trees with bindings are totally separated( none of
+	 * each contains another), then for each separated tree, there's only one keeper.</p>
+	 * 
+	 * @author Ian Y.T Tsai(zanyking)
+	 */
+	private static class BinderKeeper{
+		private static final String KEY_BINDER_KEEPER = "$BinderKeeper$"; 
+
+		/**
+		 * get a Binder Keeper or create it by demand.
+		 * @param comp
+		 * @return
+		 */
+		static BinderKeeper getInstance(Component comp){
+			BinderKeeper keeper = 
+				(BinderKeeper) comp.getAttribute(KEY_BINDER_KEEPER, true);
+			if(keeper == null){
+				comp.setAttribute(KEY_BINDER_KEEPER, 
+						keeper = new BinderKeeper(comp));
+			}
+			return keeper;
+		}
+
+		private final LinkedList<Loader> _queue;
+		private Component _host;
+		
+		public BinderKeeper(final Component comp) {
+			_host = comp;
+			_queue = new LinkedList<Loader>();
+			// ensure the keeper will always cleaned up
+			Events.postEvent("onRootBinderHostDone", comp, null);
+			comp.addEventListener("onRootBinderHostDone", new EventListener<Event>(){
+				public void onEvent(Event event) throws Exception {
+					//suicide first...
+					_host.removeEventListener("onRootBinderHostDone", this);
+					BinderKeeper keeper = 
+						(BinderKeeper) _host.getAttribute(KEY_BINDER_KEEPER);
+					if(keeper==null){
+						// suppose to be null...
+					}else{
+						// The App is in trouble.
+						// some error might happened during page processing 
+						// which cause loadComponent() never invoked.
+						_host.removeAttribute(KEY_BINDER_KEEPER);
+					}
+				}
+			});
+		}
+		
+		public void book(Binder binder, Component comp) {
+			_queue.add(new Loader(binder, comp));
+		}
+		
+		public boolean isRootBinder(Binder binder){
+			return _queue.getFirst().binder == binder; 
+		}
+		
+		public void loadComponentForAllBinders(){
+			_host.removeAttribute(KEY_BINDER_KEEPER);
+			for(Loader loader : _queue){
+				loader.load();
+			}
+		}
+		
+		/**
+		 * for Binder to load Component.
+		 * @author Ian Y.T Tsai(zanyking)
+		 */
+		private static class Loader{
+			Binder binder;
+			Component comp;
+			public Loader(Binder _binder, Component comp) {
+				super();
+				this.binder = _binder;
+				this.comp = comp;
+			}
+			public void load(){
+				//load data
+				binder.loadComponent(comp, true);//load all bindings
+			}
+		}//end of class...
+	}//end of class...
+	
+}//end of class...
