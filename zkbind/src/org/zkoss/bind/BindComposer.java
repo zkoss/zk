@@ -126,9 +126,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		
-		//name of this composer
-		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
-		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
+
 		
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
@@ -150,6 +148,10 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
+		
+		//name of this composer
+		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
+		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
 		
 		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
 		//init
