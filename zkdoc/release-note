@@ -115,6 +115,7 @@ May 2, 2012
   ZK-1100: Menuitem.setImage() doesn't work in menubar
   ZK-1139: ZK Bind loads "init" annotations no matter if "loadinit" parameter TRUE or FALSE
   ZK-1134: BindUiLifeCycle should check if binder instanceof AnnotateBinder
+  ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>
