@@ -16,6 +16,7 @@ ZK 6.0.2
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
   ZK-1124: onOpen event not firing when closing a Menupopup
+  ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
