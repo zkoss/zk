@@ -248,8 +248,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		var c = dg.control.$n('c');
-		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
+		var c = dg.control.$n('c'),
+			ignore = zk.mobile ? true : jq(c).hasClass('z-errbox-close-over'); // ignore drag to whole close div for mobile to close errorbox easily
+		return evt.domTarget == c && ignore;
 	},
 	_change: function (dg) {
 		var errbox = dg.control,
