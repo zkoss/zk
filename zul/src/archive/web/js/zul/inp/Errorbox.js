@@ -108,7 +108,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 				$el = jq(el),
 				size = zk.parseInt($el.css('padding-right')),
 				offs = $el.zk.revisedOffset();
-			$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
+			if (!zk.mobile)
+				$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt) {
@@ -249,7 +250,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	},
 	_ignoredrag: function (dg, pointer, evt) {
 		var c = dg.control.$n('c'),
-			ignore = zk.mobile ? true : jq(c).hasClass('z-errbox-close-over'); // ignore drag to whole close div for mobile to close errorbox easily
+			el = evt.domTarget,
+			$el = jq(el),
+			left = $el.offset().left,
+			top = $el.offset().top;
+			ignore = zk.mobile ? pointer[0] >= left - 10 && pointer[0] < left + $el.width() + 10 && pointer[1] >= top - 10 && pointer[1] < top + $el.height() + 10 
+					: jq(c).hasClass('z-errbox-close-over'); // ignore drag range for mobile to close errorbox easily
 		return evt.domTarget == c && ignore;
 	},
 	_change: function (dg) {

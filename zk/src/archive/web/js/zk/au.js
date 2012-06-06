@@ -1044,12 +1044,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			if (zk.mobile) {
 				var link = document.createElement('a'),
 					evt = document.createEvent('Event');
-				link.setAttribute('href', url);
-				link.setAttribute('target','_blank');
-				link.setAttribute('id', 'zk_download');
+				link.id = 'zk_download';
+				link.href = url;
+				link.target = '_blank';
 				evt.initEvent('click', true, false);
 				link.dispatchEvent(evt);
-				jq('#zk_download').detach();
 			} else {
 				var ifr = jq('#zk_download')[0];
 				if (ifr) {
