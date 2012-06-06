@@ -79,7 +79,7 @@ public class Textbox extends InputElement {
 	}
 	/** Sets the type.
 	 * @param type the type. Acceptable values are "text" and "password".
-	 * Unlike XUL, "timed" is redudant because it is enabled as long as
+	 * Unlike XUL, "timed" is redundant because it is enabled as long as
 	 * onChanging is added.
 	 */
 	public void setType(String type) throws WrongValueException {

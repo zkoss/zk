@@ -344,7 +344,7 @@ function zkamn(pkg, fn) {
 	 */
 	function breathe(fn) {
 		var t = jq.now(), dt = t - _t0;
-		if (dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
+		if (!(zk.android && zk.chrome) && dt > 2500) { //huge page (the shorter the longer to load; but no loading icon)
 			_t0 = t;
 			dt >>= 6;
 			setTimeout(fn, dt < 10 ? dt: 10); //breathe

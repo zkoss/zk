@@ -1096,7 +1096,10 @@ zk.log('value is", value);
 			, (detailed === zk)
 		);
 		_logmsg = (_logmsg ? _logmsg + msg: msg) + '\n';
-		setTimeout(function(){jq(doLog);}, 300);
+		if (zk.mobile) {
+			console.log(_logmsg);
+			_logmsg = null;
+		} else setTimeout(function(){jq(doLog);}, 300);
 	},
 	/** Make a time stamp for this momemt; used for performance tuning.
 	 * A time stamp is represented by a name. It is an easy way to measure
@@ -1200,7 +1203,7 @@ zk.log('value is", value);
 	zk.safari = browser.safari && _ver(browser.version);
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla && _ver(browser.version);
-	zk.ios = zk.safari && (agent.indexOf("iphone") >= 0 || agent.indexOf("ipad") >= 0);
+	zk.ios = zk.safari && /iphone|ipad|ipod/.test(agent);
 	zk.android = zk.safari && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.linux = agent.indexOf('linux') >= 0;
@@ -1234,6 +1237,13 @@ zk.log('value is", value);
 		} else {
 			if (zk.safari)
 				bodycls = 'safari safari' + Math.floor(zk.safari);
+			if (zk.mobile) {
+				bodycls = (bodycls || '') + ' mobile';
+				if (zk.ios)
+					bodycls = (bodycls || '') + ' ios';
+				else
+					bodycls = (bodycls || '') + ' android';
+			}
 		}
 	}
 	if ((zk.air = agent.indexOf("adobeair") >= 0) && zk.safari)
