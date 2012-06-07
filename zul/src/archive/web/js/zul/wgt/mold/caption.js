@@ -30,7 +30,7 @@ function (out) {
 		pzcls = parent.getZclass();
 	out.push('<table', this.domAttrs_(), zUtl.cellps0,
 			' width="100%"><tr valign="middle"><td id="', uuid, '-cnt" align="left" class="',
-			zcls, '-l">', (cnt?cnt:'&nbsp;'), //Bug 1688261: nbsp required
+			zcls, '-l">', (cnt ? cnt : this._getBlank()), //Bug 1688261: nbsp required
 			'</td><td align="right" class="', zcls,
 			'-r" id="', uuid, '-cave">');
 	for (var w = this.firstChild; w; w = w.nextSibling)

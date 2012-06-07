@@ -31,6 +31,11 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>
  * Default {@link #getZclass}: z-tab. (since 3.5.0)
  * 
+ * <h3>Support child component</h3>
+ * {@link Caption} child component is allowed.
+ * [ZK EE]
+ * [Since 6.1.0]
+ * 
  * @author tomyeh
  */
 public class Tab extends LabelImageElement {
@@ -39,6 +44,8 @@ public class Tab extends LabelImageElement {
 	private boolean _closable;
 
 	private boolean _disabled;
+	private transient Caption _caption;
+	
 	static {
 		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
 		addClientEvent(Tab.class, Events.ON_SELECT, CE_IMPORTANT);
@@ -53,6 +60,13 @@ public class Tab extends LabelImageElement {
 		super(label, image);
 	}
 
+	/** Returns the caption of this window.
+	 * @since 6.1.0
+	 */
+	public Caption getCaption() {
+		return _caption;
+	}
+	
 	//-- super --//
 	public void setWidth(String width) {
 		Tabbox tb = getTabbox();
@@ -241,16 +255,70 @@ public class Tab extends LabelImageElement {
 
 	// -- Component --//
 	/**
-	 * No child is allowed.
+	 * Child is allowed, {@link Caption} only.
+	 * @since 6.1.0
 	 */
 	protected boolean isChildable() {
-		return false;
+		return true;
 	}
+	
+	public void beforeChildAdded(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			if (_caption != null && _caption != child)
+				throw new UiException("Only one caption is allowed: "+this);
+			super.beforeChildAdded(child, refChild);
+		} else {
+			throw new UiException("Only caption is allowed: "+this);
+		}
+	}
+	
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			refChild = getFirstChild();
+				//always makes caption as the first child
+			if (super.insertBefore(child, refChild)) {
+				_caption = (Caption)child;
+				return true;
+			}
+			return false;
+		}
+		return super.insertBefore(child, refChild);
+	}
+	
+	public void onChildRemoved(Component child) {
+		if (child instanceof Caption)
+			_caption = null;
+		super.onChildRemoved(child);
+	}
+
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabs))
 			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
+	}
+	
+	//Cloneable//
+	public Object clone() {
+		final Tab clone = (Tab)super.clone();
+		if (clone._caption != null) clone.afterUnmarshal();
+		return clone;
+	}
+	private void afterUnmarshal() {
+		for (Iterator it = getChildren().iterator(); it.hasNext();) {
+			final Object child = it.next();
+			if (child instanceof Caption) {
+				_caption = (Caption)child;
+				break;
+			}
+		}
+	}
+
+	//Serializable//
+	private void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		afterUnmarshal();
 	}
 
 	// -- ComponentCtrl --//

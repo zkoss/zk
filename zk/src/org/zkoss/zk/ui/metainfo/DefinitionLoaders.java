@@ -482,8 +482,7 @@ public class DefinitionLoaders {
 			parseTextAs(compdef, el.getElement("text-as"));
 
 			String s = el.getElementValue("preserve-blank", true);
-			if (s != null && !"false".equals(s))
-				compdef.setBlankPreserved(true);
+			compdef.setBlankPreserved((s != null && !"false".equals(s)));
 
 			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
@@ -556,9 +555,14 @@ public class DefinitionLoaders {
 			final String s = el.getText(true);
 			noEmpty("text-as", s, el);
 			noEL("text-as", s, el);
-			compdef.setTextAs(s);
-			if ("true".equals(el.getAttributeValue("childable")))
-				compdef.setChildAllowedInTextAs(true);
+			if (!"false".equals(s)) {
+				compdef.setTextAs(s);
+				if ("true".equals(el.getAttributeValue("childable")))
+					compdef.setChildAllowedInTextAs(true);
+			} else { // reset
+				compdef.setTextAs(null);
+				compdef.setChildAllowedInTextAs(false);
+			}
 		}
 	}
 
