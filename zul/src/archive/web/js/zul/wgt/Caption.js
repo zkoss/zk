@@ -65,6 +65,9 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doClick_', arguments);
 	},
 	//private//
+	_getBlank: function () {
+		return '&nbsp;';
+	},
 	/** Whether to generate a collapsible button. */
 	_isCollapsibleVisible: function () {
 		var parent = this.parent;

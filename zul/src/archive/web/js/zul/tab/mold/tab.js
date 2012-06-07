@@ -43,9 +43,9 @@ function (out) {
 
 			out.push('<div href="javascript:;" id="', this.uuid, '-tl" class="', zcls, '-tl">',
 					'<div class="', zcls, '-tr">',
-					'<span class="', zcls, '-tm">',
-					'<span class="', zcls, '-text">', this.domContent_(),
-					'</span></span></div></div></div></div>');
+					'<span class="', zcls, '-tm">');
+			this.contentRenderer_(out);
+			out.push('</span></div></div></div></div>');
 		} else {
 			var isFrameRequired = zul.tab.TabRenderer.isFrameRequired();
 			if (tbx.getPanelSpacing() && this.getIndex())
@@ -62,7 +62,9 @@ function (out) {
 			if (this.isClosable())
 				out.push('<a id="', this.uuid, '-close"  class="', zcls, '-close"><div class="', zcls, '-close-icon"></div></a>');
 
-			out.push('<span class="', zcls, '-text">', this.domContent_(), '</span></div></div></div>');
+			this.contentRenderer_(out);
+			
+			out.push('</div></div></div>');
 			
 			if (isFrameRequired)
 				out.push('</div></div>');
@@ -81,6 +83,8 @@ function (out) {
 			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ', zcls, '-hm-close">');
 		else
 			out.push('<div id="', uuid, '-hm" class="', zcls, '-hm ">');
-		out.push('<span class="', zcls, '-text">', this.domContent_(), '</span></div></div></div></li>');
+		this.contentRenderer_(out);
+		
+		out.push('</div></div></div></li>');
 	}
 }
