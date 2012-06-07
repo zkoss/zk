@@ -15,9 +15,13 @@ ZK 6.0.2
   ZK-1146: TreeModel getChildCount invoke too much times
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
+  ZK-1124: onOpen event not firing when closing a Menupopup
+  ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
+  ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
 
 * Upgrade Notes
-
+  + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
+  
 	--------
 ZK 6.0.1
 May 2, 2012
@@ -112,6 +116,7 @@ May 2, 2012
   ZK-1101: Portallayout.setPanel() doesn't behave as expected
   ZK-1100: Menuitem.setImage() doesn't work in menubar
   ZK-1139: ZK Bind loads "init" annotations no matter if "loadinit" parameter TRUE or FALSE
+  ZK-1134: BindUiLifeCycle should check if binder instanceof AnnotateBinder
 
 * Upgrade Notes
   + Component.queryAll() returns Iterable<Component> instead of List<Component>

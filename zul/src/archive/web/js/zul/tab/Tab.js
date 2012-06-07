@@ -297,10 +297,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
  */
 zul.tab.TabRenderer = {
 	/** Check the Tab whether to render the frame
-	 * 
-	 * @param zul.wnd.Panel wgt the window
 	 */
-	isFrameRequired: function (wgt) {
+	isFrameRequired: function () {
 		return false;
 	}
 };

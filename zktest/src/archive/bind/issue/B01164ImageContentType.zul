@@ -1,0 +1,13 @@
+<!-- B01164ImageContentType.zul -->
+<zk xmlns:n="native" >
+	<n:h3>if there's no error, then you passed</n:h3>
+	
+	<div apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01164VM1')">
+		
+		<image id="img" width="200px" height="200px" content="@load(vm.image)"	/>
+	</div>
+</zk>
+
+
+

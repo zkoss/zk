@@ -495,7 +495,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled)
-			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), !zk.mobile);
+			this.setOpen(!jq(this.$n("pp")).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		evt.stop();
 	},
 	_doTimeZoneChange: function (evt) {
@@ -583,7 +583,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (silent)
 			db.updateChange_();
-		else if (!zk.mobile) // prevent ios native keyboard showed
+		else if (zul.db.DateboxCtrl.isPreservedFocus(this))
 			zk(db.getInputNode()).focus();
 	},
 	isOpen: function () {
@@ -769,4 +769,21 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 		evt.stop();
 	}
 });
+
+
+/** @class DateboxCtrl
+ * The extra control for the Datebox.
+ * It is designed to be overriden
+ * @since 6.1.0
+ */
+zul.db.DateboxCtrl = {
+	/**
+	 * Returns whether to preserve the focus state.
+	 * @param Widget wgt a widget
+	 * @return boolean
+	 */
+	isPreservedFocus: function (wgt) {
+		return true;
+	}
+};
 })();

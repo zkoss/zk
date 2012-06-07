@@ -1845,6 +1845,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	 */
 	public void loadComponent(Component comp,boolean loadinit) {
 		loadComponentProperties(comp,loadinit);
+		
 		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
 			loadComponent(kid,loadinit); //recursive
 		}
@@ -1853,7 +1854,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private void loadComponentProperties(Component comp,boolean loadinit) {
 		
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
-		if (compBindings != null) {
+		if (compBindings != null) {// if component is not registered in this binder, do nothing.
 			for(String key : compBindings.keySet()) {
 				final BindingKey bkey = getBindingKey(comp, key);
 				if(loadinit){

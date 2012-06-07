@@ -1,5 +1,4 @@
 <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CollectionTemplateComboboxVM')">
-	<custom-attributes composerName="vm"/>
 	<label id="msg" value="@bind(vm.message1)"/>
 	
 	<grid id="outergrid" width="700px" model="@bind(vm.items)">

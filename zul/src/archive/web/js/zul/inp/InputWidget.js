@@ -867,4 +867,39 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	onChangingForced: true
 });
+
+/** @class InputCtrl
+ * The extra control for the InputWidget.
+ * It is designed to be overriden
+ * @since 6.1.0
+ */
+zul.inp.InputCtrl = {
+	/**
+	 * Returns whether to preserve the focus state.
+	 * @param Widget wgt a widget
+	 * @return boolean
+	 */
+	isPreservedFocus: function (wgt) {
+		return true;
+	},
+	/**
+	 * Returns whether to preserve the mousemove state.
+	 * @param Widget wgt a widget
+	 * @return boolean
+	 */
+	isPreservedMouseMove: function (wgt) {
+		return true;
+	},
+	/**
+	 * Returns whether to ignore the dragdrop for errorbox
+	 * @param zk.Draggable dg the drag object
+	 * @param Offset pointer
+	 * @param zk.Event evt
+	 * @return boolean
+	 */
+	isIgnoredDragForErrorbox: function (dg, pointer, evt) {
+		var c = dg.control.$n('c');
+		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
+	}
+};
 })();

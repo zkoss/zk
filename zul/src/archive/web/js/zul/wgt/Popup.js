@@ -219,7 +219,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	close: function (opts) {
 		if (this._stackup)
 			this._stackup.style.display = "none";
-		this.closeAnima_();
+		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
 	 * closing effect. afterCloseAnima_ needs to be called after the effect.
