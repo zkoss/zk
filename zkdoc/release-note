@@ -1,4 +1,14 @@
   --------
+ZK 6.1.0
+
+* Features
+  ZK-970: The Tab component support caption component as it's label
+
+* Bugs
+
+* Upgrade Notes
+
+  --------
 ZK 6.0.2
 
 * Features
