@@ -40,7 +40,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		wgt._shallFixEmpty = false;
 	}
-
+/**
+ * The theme renderer, which is designed to be overridden
+ * @since 6.1.0
+ */
+zul.sel.Renderer = {
+	/** Update the size of the column menu button when mouse over
+	 * 
+	 * @param zul.sel.Listheader wgt the listheader
+	 */
+	updateColumnMenuButton: function (wgt) {
+		var n = wgt.$n(), btn;
+		if (btn = wgt.$n('btn')) 
+			btn.style.height = zk.ie6_ || zk.ie7_ ? 
+					n.offsetHeight - 1  + 'px' : n.offsetHeight + "px";
+	}
+};
+	
 var Listbox =
 /**
  * A listbox.

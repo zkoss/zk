@@ -1041,6 +1041,7 @@
 		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
+		<xs:attribute name="onGroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- columnchildren -->
@@ -1810,6 +1811,9 @@
 			<xs:element ref="listheader" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="menupopup" type="xs:string" use="optional" />
+		<xs:attribute name="columnshide" type="booleanType" use="optional" />
+		<xs:attribute name="columnsgroup" type="booleanType" use="optional" />
 		<xs:attribute name="sizable" type="booleanType" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
@@ -1824,6 +1828,7 @@
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
+		<xs:attribute name="onGroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listitem -->

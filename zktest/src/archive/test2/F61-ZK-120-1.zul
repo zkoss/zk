@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-120-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 08, 2012  6:34:18 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vbox id="vb">
+	
+1. Please test if the column's menu function works well.(like Grouping, Sorting, Hiding)
+    <zscript><![CDATA[
+  int cnt = 0;
+Object[][] foods = new Object[][] {
+    new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+    new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+    new Object[] { "Vegetables", "Bell peppers", "Vitamin C", 291, 24},
+    new Object[] { "Vegetables", "Cauliflower", "Vitamin C", 92, 28},
+    new Object[] { "Vegetables", "Eggplant", "Dietary Fiber", 10, 27},
+    new Object[] { "Vegetables", "Onions", "Chromium", 21, 60},
+    new Object[] { "Vegetables", "Potatoes", "Vitamin C", 26, 132},
+    new Object[] { "Vegetables", "Spinach", "Vitamin K", 1110, 41},
+    new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37},
+    new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+    new Object[] { "Seafood", "Shrimp", "Tryptophan", 103, 112},
+    new Object[] { "Seafood", "Scallops", "Tryptophan", 81, 151},
+    new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119}
+};
+
+
+ListitemRenderer renderer = new org.zkoss.zktest.test2.group.FoodGroupRenderer2();
+GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+    ]]></zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="false" />
+    <listbox id="grid" model="${model}" itemRenderer="${renderer}">
+        <listhead menupopup="auto">
+            <listheader label="Category" sort="auto(0)"/>
+            <listheader label="Name" sort="auto(1)"/>
+            <listheader label="Top Nutrients" sort="auto(2)"/>
+            <listheader label="% of Daily" sort="auto(3)"/>
+            <listheader label="Calories" sort="auto(4)"/>
+        </listhead>
+    </listbox>
+	</vbox>
+</zk>
+
