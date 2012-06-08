@@ -18,6 +18,7 @@ ZK 6.0.2
   ZK-1124: onOpen event not firing when closing a Menupopup
   ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
   ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
+  ZK-1178: ZEL should support method overloading
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
