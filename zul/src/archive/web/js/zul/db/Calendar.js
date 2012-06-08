@@ -92,6 +92,127 @@ zul.db.Renderer = {
 		if (cal._end && (result = (cal._end - d) / 86400000 < 0))
 			return result;
 		return result;
+	},
+	/**
+	 * Generates the label of the week of year.
+	 * <p>Default: the string of the value
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param int the number of the week of the value
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @return String the label of the week of year
+	 * @since 6.1.0
+	 */
+	labelOfWeekOfYear: function (wgt, val) {
+		return val + '';
+	},
+	/**
+	 * Generates the title of the week of year.
+	 * <p>Default: 'Wk'
+	 * @param zul.db.Calendar wgt the calendar widget 
+	 * @return String the title of the week of year
+	 * @since 6.1.0
+	 */
+	titleOfWeekOfYear: function (wgt) {
+		return 'Wk';
+	},
+	/**
+	 * Renderer the dayView for this calendar
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 6.1.0
+	 */
+	dayView: function (wgt, out, localizedSymbols) {
+		var uuid = wgt.uuid,
+			zcls = wgt.getZclass();
+		out.push('<tr><td colspan="3"><table id="', uuid, '-mid" class="', zcls, '-calday" width="100%" border="0" cellspacing="0" cellpadding="0">',
+				'<tr class="', zcls, '-caldow">');
+		var sun = (7 - localizedSymbols.DOW_1ST) % 7, sat = (6 + sun) % 7;
+		for (var j = 0 ; j < 7; ++j)
+			out.push('<td class="', zcls, (j == sun || j == sat) ? '-wkend' : '-wkday', 
+					'">' + localizedSymbols.S2DOW[j] + '</td>');
+		out.push('</tr>');
+		for (var j = 0; j < 6; ++j) { //at most 7 rows
+			out.push('<tr class="', zcls, '-caldayrow" id="', uuid, '-w', j, '" >');
+			for (var k = 0; k < 7; ++k)
+				out.push ('<td class="', zcls, (k == sun || k == sat) ? '-wkend' : '-wkday', '"></td>');
+			out.push('</tr>');
+		}
+	},
+	/**
+	 * Renderer the monthView for this calendar
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 6.1.0
+	 */
+	monthView: function (wgt, out, localizedSymbols) {
+		var uuid = wgt.uuid,
+			zcls = wgt.getZclass();
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calmon" width="100%" border="0" cellspacing="0" cellpadding="0">');
+		for (var j = 0 ; j < 12; ++j) {
+			if (!(j % 4)) out.push('<tr>');
+			out.push('<td id="', uuid, '-m', j, '"_dt="', j ,'">', localizedSymbols.SMON[j] + '</td>');
+			if (!((j + 1) % 4)) out.push('</tr>');
+		}
+	},
+	/**
+	 * Renderer the yearView for this calendar
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 6.1.0
+	 */
+	yearView: function (wgt, out, localizedSymbols) {
+		var uuid = wgt.uuid,
+			zcls = wgt.getZclass(),
+			val = wgt.getTime(),
+			m = val.getMonth(),
+			d = val.getDate(),
+			y = val.getFullYear(),
+			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y, 
+			yofs = y - (y % 10 + 1);
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
+
+		for (var j = 0 ; j < 12; ++j) {
+			if (!(j % 4)) out.push('<tr>');
+			out.push('<td _dt="', yofs ,'" id="', uuid, '-y', j, '" >', yofs + ydelta, '</td>');
+			if (!((j + 1) % 4)) out.push('</tr>');
+			yofs++;
+		}
+	},
+	/**
+	 * Renderer the decadeView for this calendar
+	 * @param zul.db.Calendar wgt the calendar widget
+	 * @param Array out an array to output HTML fragments.
+	 * @param Map localizedSymbols the symbols for localization 
+	 * @since 6.1.0
+	 */
+	decadeView: function (wgt, out, localizedSymbols) {
+		var uuid = wgt.uuid,
+			zcls = wgt.getZclass(),
+			val = wgt.getTime(),
+			m = val.getMonth(),
+			d = val.getDate(),
+			y = val.getFullYear(),
+			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
+			ydec = zk.parseInt(y/100);
+		
+		out.push('<tr><td colspan="3" ><table id="', uuid, '-mid" class="', zcls, '-calyear" width="100%" border="0" cellspacing="0" cellpadding="0">');
+		var temp = ydec*100 - 10;
+		for (var j = 0 ; j < 12; ++j, temp += 10) {
+			if (!(j % 4)) out.push('<tr>');
+			if (temp < 1900 || temp > 2090) {
+				out.push('<td>&nbsp;</td>');
+				if (j + 1 == 12)
+					out.push('</tr>'); 
+				continue;
+			}
+			
+			out.push('<td _dt="', temp ,'" id="', uuid, '-de', j, '" class="', (y >= temp && y <= (temp + 9)) ? zcls + '-seld' : '', '"',
+					' >', temp + ydelta, '-<br />', temp + ydelta + 9, '</td>');
+			if (!((j + 1) % 4)) out.push('</tr>');
+		}
 	}
 };
 var Calendar =
@@ -187,6 +308,22 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		name: function () {
 			if (this.efield)
 				this.efield.name = this._name;
+		},
+		/**
+		 * Sets whether enable to show the week number within the current year or
+    	 * not. [ZK EE]
+    	 * @since 6.1.0
+    	 * @param boolean weekOfYear
+		 */
+	    /**
+	     * Returns whether enable to show the week number within the current year or not.
+	     * <p>Default: false
+	     * @since 6.1.0
+	     * @return boolean
+	     */
+		weekOfYear: function () {
+			if (this.desktop && zk.feature.ee)
+				this.rerender();
 		}
 	},
 	//@Override
@@ -503,11 +640,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	_markCal: function (opts) {
+		this._markCal0(opts);
+		var anc;
+		if ((anc = this.$n('a')) && (!opts || !opts.silent))
+			_doFocus(anc, opts && opts.timeout );
+	},
+	_markCal0: function (opts) {
 		var	zcls = this.getZclass(),
 		 	seldate = this.getTime(),
 		 	m = seldate.getMonth(),
 			y = seldate.getFullYear();
-
 		if (this._view == 'day') {
 			var d = seldate.getDate(),
 				DOW_1ST = (this._localizedSymbols && this._localizedSymbols.DOW_1ST )|| zk.DOW_1ST, //ZK-1061
@@ -560,9 +702,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (node = this.$n(field + j))
 					jq(node)[index == j ? 'addClass': 'removeClass'](zcls+"-seld");
 		}
-		var anc;
-		if ((anc = this.$n('a')) && (!opts || !opts.silent))
-			_doFocus(anc, opts && opts.timeout );
 	}
 });
 })();

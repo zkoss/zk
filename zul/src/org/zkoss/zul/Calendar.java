@@ -38,10 +38,22 @@ import org.zkoss.zul.impl.XulElement;
  *
  * <p>Default {@link #getZclass}: z-calendar. (since 3.5.0)
  *
+ * <h3>Support display the week number within the current year</h3>
+ * Events: onWeekClick
+ * <p>
+ * For example
+ * <pre><code>
+ * &lt;calendar weekOfYear=&quot;true&quot; onWeekClick='alert(event.data)'/&gt;
+ * </code></pre>
+ * [ZK EE]
+ * [Since 6.1.0]
+ * 
  * @author tomyeh
  */
 public class Calendar extends XulElement {
 	private Date _value;
+	private boolean _weekOfYear;
+	
 	/** The name. */
 	private String _name;
 
@@ -49,6 +61,7 @@ public class Calendar extends XulElement {
 	 */
 	static {
 		addClientEvent(Calendar.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Calendar.class, "onWeekClick", CE_REPEAT_IGNORE);
 	}
 	public Calendar() {
 		this(null);
@@ -56,6 +69,29 @@ public class Calendar extends XulElement {
 	public Calendar(Date value) {
 		_value = value != null ? value: Dates.today();
 	}
+
+	/**
+	 * Sets whether enable to show the week number within the current year or
+	 * not.
+	 * [ZK EE]
+	 * @since 6.1.0
+	 */
+	public void setWeekOfYear(boolean weekOfYear) {
+		if (_weekOfYear != weekOfYear) {
+			_weekOfYear = weekOfYear;
+			smartUpdate("weekOfYear", _weekOfYear);
+		}
+	}
+    
+    /**
+     * Returns whether enable to show the week number within the current year or not.
+     * <p>Default: false
+     * @since 6.1.0
+     */
+    public boolean isWeekOfYear() {
+		return _weekOfYear;
+    }
+
 
 	/** @deprecated As of release 5.0.5, it is meaningless to set time zone for a calendar.
 	 */
@@ -149,7 +185,6 @@ public class Calendar extends XulElement {
 				AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else {
-			
 			super.service(request, everError);
 		}
 	}
@@ -158,6 +193,7 @@ public class Calendar extends XulElement {
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
+		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "value", _value);
 	}
 }
