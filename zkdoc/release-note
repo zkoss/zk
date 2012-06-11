@@ -6,6 +6,7 @@ ZK 6.1.0
   ZK-1145: Notification supports closable
   ZK-1175: Calendar support show week number
   ZK-120: Provide menupopup="auto" for listbox
+  ZK-969: The LayoutRegion component support caption component as it's title
 
 * Bugs
 

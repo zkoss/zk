@@ -956,7 +956,11 @@
 	<xs:complexType name="centerType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -1206,7 +1210,11 @@
 	<xs:complexType name="eastType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -1909,7 +1917,11 @@
 	<xs:complexType name="northType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -2162,7 +2174,11 @@
 	<xs:complexType name="southType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />
@@ -2650,7 +2666,11 @@
 	<xs:complexType name="westType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="flex" type="booleanType" use="optional" />

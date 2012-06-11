@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-969-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 11, 2012  4:43:34 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  1. Please click the "Remove Caption" button, and the dropdown list and image are removed(only "Center" remains).
+  <button label="Remove Caption" onClick="center.caption.detach();"/>
+  <separator/>
+  2. Please click the "Add Label" button, you should see the "Center Label" is added into the content
+  <button label="Add Label" onClick='new Label("Center Label").setParent(center)'/>
+  <separator/>
+  3. Please click the "Add Label" button again, you should see an error dialog appears with "Only one child and one caption is allowed"
+  <separator/>
+  4. Please click the "Add Caption" button, you should see the label "Test" is added at the right side of the title bar.
+  <button label="Add Caption">
+  	<attribute name="onClick">
+  		Caption cap = new Caption();
+  		new Label("Test").setParent(cap);
+  		center.appendChild(cap);
+  	</attribute>
+  </button>
+	<borderlayout height="450px">
+		<center title="Center" id="center">
+			<caption label="search" image="/img/live.gif">
+				<combobox>
+					<comboitem label="item 1" />
+					<comboitem label="item 2" />
+					<comboitem label="item 3" />
+					<comboitem label="item 4" />
+				</combobox>
+			</caption>
+		</center>
+	</borderlayout>
+</zk>

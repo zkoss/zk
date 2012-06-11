@@ -254,3 +254,14 @@
 	background-image: url(${c:encodeThemeURL('~./zul/img/splt/colps-b.gif')});
 }
 </c:if>
+
+.z-north-capcnt,
+.z-south-capcnt,
+.z-west-capcnt,
+.z-east-capcnt,
+.z-center-capcnt {
+	float: left;
+	overflow: hidden;
+	height: 21px;
+	white-space: nowrap;
+}

@@ -60,7 +60,7 @@ public class Tab extends LabelImageElement {
 		super(label, image);
 	}
 
-	/** Returns the caption of this window.
+	/** Returns the caption of this tab.
 	 * @since 6.1.0
 	 */
 	public Caption getCaption() {
@@ -278,6 +278,7 @@ public class Tab extends LabelImageElement {
 				//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
 				_caption = (Caption)child;
+				invalidate();
 				return true;
 			}
 			return false;
@@ -286,8 +287,10 @@ public class Tab extends LabelImageElement {
 	}
 	
 	public void onChildRemoved(Component child) {
-		if (child instanceof Caption)
+		if (child instanceof Caption) {
 			_caption = null;
+			invalidate();
+		}
 		super.onChildRemoved(child);
 	}
 

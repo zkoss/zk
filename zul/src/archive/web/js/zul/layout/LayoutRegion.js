@@ -14,9 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	
-	function _setFirstChildFlex (wgt, flex, ignoreMin) {
-		var cwgt = wgt.firstChild;
-		if(cwgt) {
+	function _setFirstChildFlex(wgt, flex, ignoreMin) {
+		var cwgt = wgt.getFirstChild();
+		if (cwgt) {
 			if (flex) {
 				wgt._fcvflex = cwgt.getVflex();
 				wgt._fchflex = cwgt.getHflex();
@@ -174,8 +174,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		autoscroll: function (autoscroll) {
 			var cave = this.$n('cave');
 			if (cave) {
-				var bodyEl = this.isFlex() && this.firstChild ?
-						this.firstChild.$n() : cave;
+				var bodyEl = this.isFlex() && this.getFirstChild() ?
+						this.getFirstChild().$n() : cave;
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
@@ -510,15 +510,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-				
-		var n = this.$n(),
-			real = n.firstChild;
 					
 		if (this._open && !this.isVisible()) n.style.display = "none";
 		
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.$n() : this.$n('cave');
+			var bodyEl = this.isFlex() && this.getFirstChild() ? 
+					this.getFirstChild().$n() : this.$n('cave');
 			this.domListen_(bodyEl, "onScroll");
 		}
 		
@@ -527,8 +524,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
-			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.$n() : this.$n('cave');
+			var bodyEl = this.isFlex() && this.getFirstChild() ? 
+					this.getFirstChild().$n() : this.$n('cave');
 			this.domUnlisten_(bodyEl, "onScroll");
 		}
 		if (this.$n('split')) {			
@@ -799,7 +796,28 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		return ambit;
 	},
-	_reszSp2: zk.$void
+	_reszSp2: zk.$void,
+	titleRenderer_: function (out) {
+		if (this._title) {
+			var uuid = this.uuid,
+				zcls = this.getZclass(),
+				noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
+				pzcls = this.parent.getZclass();
+				
+			out.push('<div id="', uuid, '-cap" class="', zcls, '-header">');
+			if (noCenter) {
+				out.push('<div id="', uuid, '-btn" class="', pzcls,
+						'-icon ', zcls, '-colps"');
+				if (!this._collapsible)
+					out.push(' style="display:none;"');
+				out.push('><div class="', pzcls, '-icon-img"></div></div>');
+			}
+			out.push(zUtl.encodeXML(this._title), '</div>');
+		}
+	},
+	getFirstChild: function () {
+		return this.firstChild;
+	}
 },{
 	_aryToObject: function (array) {
 		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};

@@ -244,8 +244,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
 		var el = wgt.$n('real'),
-			fchild = wgt.isFlex() && wgt.firstChild,
-			bodyEl = fchild ? wgt.firstChild.$n() : wgt.$n('cave');
+			fchild = wgt.isFlex() && wgt.getFirstChild(),
+			bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			ambit.w = zk(el).revisedWidth(ambit.w);
 			el.style.width = jq.px0(ambit.w);
