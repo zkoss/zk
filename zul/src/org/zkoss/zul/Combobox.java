@@ -143,6 +143,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.2
 	 * @see ListSubModel#getSubModel(Object, int)
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
 		return (ListModel)_model;
 	}
