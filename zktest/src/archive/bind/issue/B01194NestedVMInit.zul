@@ -1,0 +1,25 @@
+<?page title="Nested ViewModel" contentType="text/html;charset=UTF-8"?>
+
+<!-- http://books.zkoss.org/wiki/ZK%20Developer's%20Reference/MVVM/Syntax/ViewModel -->
+<!-- http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVVM/Advance/Parameters -->
+<!-- http://books.zkoss.org/wiki/ZK%20Developer's%20Reference/MVVM/Advance/Wire%20Components -->
+
+<!-- type: "admin" | "user" -->
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194VM1', type='admin')">
+	<label id="myLbl" />
+	<grid width="600px" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vms') @init(vm.innerVm)">
+		<rows>
+			<row>
+				vms.name: 
+				<label id="pidLb" value="@load(vms.name)" />
+			</row>
+			<row>
+				vm.innerVm.desc :
+				<label id="pDescLb" value="@load(vm.innerVm.desc)" />
+			</row>
+			
+		</rows>
+	</grid>
+</div>
