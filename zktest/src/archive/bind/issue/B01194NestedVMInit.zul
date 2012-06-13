@@ -1,4 +1,4 @@
-<?page title="Nested ViewModel" contentType="text/html;charset=UTF-8"?>
+<?page title="Nested ViewModel init problem" contentType="text/html;charset=UTF-8"?>
 
 <!-- http://books.zkoss.org/wiki/ZK%20Developer's%20Reference/MVVM/Syntax/ViewModel -->
 <!-- http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVVM/Advance/Parameters -->
