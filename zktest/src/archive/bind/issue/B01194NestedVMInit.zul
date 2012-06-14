@@ -6,7 +6,7 @@
 
 <!-- type: "admin" | "user" -->
 <div apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194VM1', type='admin')">
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194NestedVMInit', type='admin')">
 	<label id="myLbl" />
 	<grid width="600px" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vms') @init(vm.innerVm)">
