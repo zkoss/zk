@@ -1046,6 +1046,7 @@
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
 		<xs:attribute name="onGroup" type="xs:string" use="optional" />
+		<xs:attribute name="onUngroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- columnchildren -->
@@ -1837,6 +1838,7 @@
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
 		<xs:attribute name="onGroup" type="xs:string" use="optional" />
+		<xs:attribute name="onUngroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listitem -->

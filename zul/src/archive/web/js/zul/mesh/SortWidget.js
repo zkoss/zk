@@ -266,5 +266,51 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			return scls != null ? scls + (added ? ' ' + added : '') : added || '';
 		}
 		return scls;
+	},
+	getColumnMenuPopup_: zk.$void,
+	_doMenuClick: function (evt) {
+		if (this.parent._menupopup && this.parent._menupopup != 'none') {
+			var pp = this.parent._menupopup,
+				n = this.$n(),
+				btn = this.$n('btn'),
+				zcls = this.getZclass();
+				
+			jq(n).addClass(zcls + "-visi");
+			
+			if (pp == 'auto' && this.parent._mpop)
+				pp = this.parent._mpop;
+			else
+				pp = this.$f(this.parent._menupopup);
+
+			if (zul.menu.Menupopup.isInstance(pp)) {
+				var ofs = zk(btn).revisedOffset(),
+					asc = this.getSortAscending() != 'none',
+					desc = this.getSortDescending() != 'none',
+					mw = this.getMeshWidget();
+				if (pp.$instanceof(zul.mesh.ColumnMenupopup)) {
+					pp.getAscitem().setVisible(asc);
+					pp.getDescitem().setVisible(desc);
+					var model = mw.getModel();
+					if (zk.feature.pe && pp.getGroupitem()) {
+						if (model == 'group' || !model || this.isListen('onGroup', {asapOnly: 1}))
+							pp.getGroupitem().setVisible((asc || desc));
+						else
+							pp.getGroupitem().setVisible(false);
+					}
+					if (zk.feature.ee && pp.getUngroupitem()) {
+						var visible = !model || this.isListen('onUngroup', {asapOnly: 1});
+						pp.getUngroupitem().setVisible(visible && mw.hasGroup());
+					}
+					
+					var sep = pp.getDescitem().nextSibling;
+					if (sep) 
+						sep.setVisible((asc || desc));
+				} else {
+					pp.listen({onOpen: [this.parent, this.parent._onMenuPopup]});
+				}
+				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
+			}
+			evt.stop(); // avoid onSort event.
+		}
 	}
 });

@@ -260,6 +260,14 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	getBodyWidgetIterator: function (opts) {
 		return new zul.grid.RowIter(this, opts);
+	},
+	/**
+	 * Returns whether the grid has group.
+	 * @since 6.1.0
+	 * @return boolean
+	 */
+	hasGroup: function () {
+		return this.rows && this.rows.hasGroup();
 	}
 });
 })();

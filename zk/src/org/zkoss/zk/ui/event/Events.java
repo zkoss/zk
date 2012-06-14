@@ -142,6 +142,11 @@ public class Events {
 	 * @since 5.0.0
 	 */
 	public static final String ON_GROUP = "onGroup";
+	/** The onUngroup event (used with {@link Event})
+	 * to notify a request for ungrouping.
+	 * @since 6.1.0
+	 */
+	public static final String ON_UNGROUP = "onUngroup";
 	/** The onUpload event (used with {@link UploadEvent}.
 	 */
 	public static final String ON_UPLOAD = "onUpload";

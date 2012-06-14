@@ -18,28 +18,29 @@ package org.zkoss.zul;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zk.ui.ext.Scopes;
-
+import org.zkoss.zul.ext.GroupsSortableModel;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.ext.Sortable;
-import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * The list header which defines the attributes and header of a column
@@ -70,6 +71,7 @@ public class Listheader extends HeaderElement {
 	static {
 		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
 		addClientEvent(Listheader.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listheader.class, Events.ON_UNGROUP, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Listheader() {
@@ -628,18 +630,65 @@ public class Listheader extends HeaderElement {
 		else if (!sort(true)) sort(false);
 	}
 
-	
-	/** It invokes {@link #group(boolean)} to group list items and maintain
-	 * {@link #getSortDirection}.
+	/**
+	 * Internal use only.
 	 * @since 6.1.0
 	 */
-	public void onGroup() {
-		final String dir = getSortDirection();
-		if ("ascending".equals(dir)) group(false);
-		else if ("descending".equals(dir)) group(true);
-		else if (!group(true)) group(false);
+	public void onGroupLater(SortEvent event) {
+		group(event.isAscending());
 	}
+	
+	/**
+	 * Ungroups and sorts the items ({@link Listitem}) based on the ascending.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @since 6.1.0
+	 */
+	public void ungroup(boolean ascending) {
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr != null) {
 
+			final Listbox listbox = getListbox();
+			if (listbox.getModel() == null) {
+
+				// comparator might be zscript
+				Scopes.beforeInterpret(this);
+				try {
+					final List<Listitem> items = listbox.getItems();
+					if (listbox.hasGroup()) {
+						for (Listgroup group : new ArrayList<Listgroup>(
+								listbox.getGroups()))
+							group.detach(); // Listgroupfoot is removed
+											// automatically, if any.
+					}
+
+					Comparator<?> cmprx;
+					if (cmpr instanceof GroupComparator) {
+						cmprx = new GroupToComparator((GroupComparator) cmpr);
+					} else {
+						cmprx = cmpr;
+					}
+
+					final List<Listitem> children = new LinkedList<Listitem>(
+							items);
+					items.clear();
+					sortCollection(children, cmprx);
+					for (Component c : children)
+						listbox.appendChild(c);
+				} finally {
+					Scopes.afterInterpret();
+				}
+			}
+			fixDirection(listbox, ascending);
+
+			// sometimes the items at client side are out of date
+			listbox.invalidate();
+		}
+	}
 	
 	//-- super --//
 	public String getZclass() {
@@ -664,6 +713,18 @@ public class Listheader extends HeaderElement {
 		if (cmd.equals(Events.ON_SORT)) {
 			SortEvent evt = SortEvent.getSortEvent(request);
 			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_GROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			Events.postEvent(new SortEvent(cmd, this, ascending));
+
+			// internal use, and it should be invoked after onGroup event.
+			Events.postEvent(-1000, new SortEvent("onGroupLater", this, ascending));
+		} else if (cmd.equals(Events.ON_UNGROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			ungroup(ascending);
+			Events.postEvent(new SortEvent(cmd, request.getComponent(), ascending));
 		} else
 			super.service(request, everError);
 	}

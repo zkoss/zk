@@ -2184,6 +2184,10 @@ redraw: function (out) {
 			s.height = t.style.height;
 		return s;
 	},
+	getZclass: function () {
+		var zcls = this._zclass;
+		return zcls != null ? zcls : 'z-' + this.widgetName;
+	},
 	/** Returns the DOM element that is used to hold the text, or null
 	 * if this widget doesn't show any text.
 	 * <p>Default: return null (no text node).

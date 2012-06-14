@@ -205,6 +205,9 @@ a.z-column-btn:hover {
 .z-columns-menu-dsc .z-menuitem-img {
 	background-image: url(${c:encodeThemeURL('~./zul/img/grid/menu-arrowdown.png')});
 }
+.z-columns-menu-ungrouping .z-menuitem-img {
+	background-image: url(${c:encodeThemeURL('~./zul/img/grid/menu-ungroup.png')});
+}
 div.z-grid-header th.z-column-over,
 div.z-grid-header th.z-auxheader-over {
 	background-image: url(${c:encodeThemeURL('~./zul/img/grid/header-over.png')});
@@ -351,6 +354,9 @@ div.z-grid {
 }
 .z-columns-menu-dsc .z-menuitem-img {
 	background-image: url(${c:encodeThemeURL('~./zul/img/grid/menu-arrowdown.gif')});
+}
+.z-columns-menu-ungrouping .z-menuitem-img {
+	background-image: url(${c:encodeThemeURL('~./zul/img/grid/menu-ungroup.gif')});
 }
 .z-group-inner .z-group-cnt {
 	width: 100%;
