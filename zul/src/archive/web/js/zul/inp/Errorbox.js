@@ -21,6 +21,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		this.setWidth("260px");
 		this.setSclass('z-errbox');
 	},
+	getZclass: function () {
+		return this._zclass == null ? 'z-popup' : this._zclass;
+	},
 	/** Opens the popup.
 	 * @param zk.Widget owner the owner widget
 	 * @param String msg the error message
