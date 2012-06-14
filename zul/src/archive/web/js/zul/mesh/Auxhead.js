@@ -19,8 +19,4 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-auxhead.
  */
 zul.mesh.Auxhead = zk.$extends(zul.mesh.HeadWidget, {
-	//super//
-	getZclass: function () {
-		return this._zclass == null ? "z-auxhead" : this._zclass;
-	}
 });

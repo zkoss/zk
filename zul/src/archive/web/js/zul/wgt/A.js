@@ -89,11 +89,6 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	// super//
-	getZclass: function(){
-		var zcls = this._zclass;
-		return zcls ? zcls : "z-a";
-	},
-
 	bind_: function(){
 		this.$supers(zul.wgt.A, 'bind_', arguments);
 		if (!this._disabled) {

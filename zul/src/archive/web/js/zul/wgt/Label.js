@@ -77,11 +77,5 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 	 */
 	getEncodedText: function () {
 		return zUtl.encodeXML(this._value, {multiline:this._multiline,pre:this._pre, maxlength: this._maxlength});
-	},
-
-	//super//
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-label";
 	}
 });

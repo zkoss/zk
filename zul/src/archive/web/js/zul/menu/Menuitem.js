@@ -199,9 +199,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 		return scls;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-menuitem" : this._zclass;
-	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = '<span class="' + this.getZclass() + '-img"' +

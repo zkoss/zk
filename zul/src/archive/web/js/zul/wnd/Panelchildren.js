@@ -33,9 +33,6 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	setWidth: zk.$void,       // readonly
 
 	// super
-	getZclass: function () {
-		return this._zclass == null ?  "z-panelchildren" : this._zclass;
-	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {

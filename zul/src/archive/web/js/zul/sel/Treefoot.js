@@ -25,9 +25,6 @@ zul.sel.Treefoot = zk.$extends(zul.Widget, {
 	getTree: function () {
 		return this.parent;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-treefoot" : this._zclass;
-	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Treefoot
 		v = false;

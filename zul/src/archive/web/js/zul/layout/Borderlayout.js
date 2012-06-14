@@ -108,9 +108,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (!this.childReplacing_)
 			this.resize();
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-borderlayout" : this._zclass;
-	},
 	bind_: function () {
 		this.$supers(Borderlayout, 'bind_', arguments);
 		zWatch.listen({onSize: this});

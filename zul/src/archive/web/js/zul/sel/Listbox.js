@@ -282,9 +282,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			jq(this.getCaveNode()).append(child.redrawHTML_());
 		child.bind(desktop);
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-listbox" : this._zclass;
-	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling,
 		ignoreDom || (!this.z_rod && !child.$instanceof(zul.sel.Listitem)))) {

@@ -28,10 +28,6 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			p.clearCache(); // B50-ZK-244
 		this.$supers('rerender', arguments);
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-caption";
-	},
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.getImage(),

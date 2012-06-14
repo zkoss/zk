@@ -35,10 +35,6 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-progressmeter";
-	},
 	_fixImgWidth: _zkf = function() {
 		var n = this.$n(), 
 			img = this.$n("img");

@@ -123,9 +123,6 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		return this.firstChild;
 	},
 	//super//
-	getZclass: function () {
-		return this._zclass == null ? "z-listitem" : this._zclass;
-	},
 	domStyle_: function (no) {
 		if (_isPE() && (this.$instanceof(zkex.sel.Listgroup) || this.$instanceof(zkex.sel.Listgroupfoot))
 				|| (no && no.visible))

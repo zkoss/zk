@@ -239,10 +239,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen) this.fire('onOpen', {open:false});
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-popup";
-	},
 	onFloatUp: function(ctl){
 		if (!this.isVisible()) 
 			return;

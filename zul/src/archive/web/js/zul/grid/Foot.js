@@ -23,9 +23,6 @@ zul.grid.Foot = zk.$extends(zul.Widget, {
 	getGrid: function () {
 		return this.parent;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-foot" : _zclass;
-	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for grid Foot
 		v = false;

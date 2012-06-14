@@ -120,9 +120,6 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (scroll)
 			scroll.scrollLeft = this._start * 50;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-frozen" : this._zclass;
-	},
 	// timing issue for B50-ZK-343.zul in ztltest
 	beforeSize: function () {
 		if (this._start != 0)

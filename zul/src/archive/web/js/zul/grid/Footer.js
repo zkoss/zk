@@ -33,8 +33,5 @@ zul.grid.Footer = zk.$extends(zul.mesh.FooterWidget, {
 	 */
 	getColumn: function () {
 		return this.getHeaderWidget();
-	},
-	getZclass: function () {
-		return this._zclass == null ? "z-footer" : this._zclass;
 	}
 });

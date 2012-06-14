@@ -46,10 +46,6 @@ zul.sel.Treefooter = zk.$extends(zul.mesh.FooterWidget, {
 		return tc ? tc.getMaxlength() : 0;
 	},
 	//@Override
-	getZclass: function () {
-		return this._zclass == null ? "z-treefooter" : this._zclass;
-	},
-	//@Override
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}

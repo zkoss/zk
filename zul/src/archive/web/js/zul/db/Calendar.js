@@ -392,10 +392,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	getFormat: function () {
 		return this._fmt || "yyyy/MM/dd";
 	},
-	getZclass: function () {
-		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-calendar";
-	},
 	_updFormData: function (val) {
 		val = new zk.fmt.Calendar().formatDate(val, this.getFormat(), this._localizedSymbols);
 		if (this._name) {

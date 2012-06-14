@@ -169,9 +169,6 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		else if ("descending" == dir) this.group(true, evt);
 		else if (!this.group(true, evt)) this.group(false, evt);
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-column" : this._zclass;
-	},
 	bind_: function () {
 		this.$supers(zul.grid.Column, 'bind_', arguments);
 		var n = this.$n();

@@ -217,10 +217,6 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	// super//
-	getZclass: function(){
-		var zcls = this._zclass;
-		return zcls ? zcls : "z-toolbarbutton";
-	},
 	getTextNode: function () {
 		return this.$n().firstChild.firstChild;
 	},

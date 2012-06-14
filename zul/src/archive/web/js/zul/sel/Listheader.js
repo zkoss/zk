@@ -190,9 +190,6 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			w.getChildAt(jcol).rerender();
 	},
 	//super//
-	getZclass: function () {
-		return this._zclass == null ? "z-listheader" : this._zclass;
-	},
 	bind_: function () {
 		this.$supers(zul.sel.Listheader, 'bind_', arguments);
 		var cm = this.$n('cm'),

@@ -92,10 +92,6 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 			if (n) n.name = name;
 		}
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-selectbox";
-	},
 	_fixSelIndex: function () {
 		if (this._selectedIndex < 0)
 			this.$n().selectedIndex = -1;
