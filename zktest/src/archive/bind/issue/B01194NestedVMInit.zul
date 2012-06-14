@@ -19,7 +19,6 @@
 				vm.innerVm.desc :
 				<label id="pDescLb" value="@load(vm.innerVm.desc)" />
 			</row>
-			
 		</rows>
 	</grid>
 </div>

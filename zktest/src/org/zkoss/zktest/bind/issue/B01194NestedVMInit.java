@@ -29,7 +29,7 @@ import org.zkoss.zul.Label;
  * @author Ian Y.T Tsai(zanyking)
  *
  */
-public class B01194VM1 {
+public class B01194NestedVMInit {
 
 	
 	
