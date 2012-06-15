@@ -1,0 +1,120 @@
+<!-- B01185TwoColsNPE.zul -->
+<?page title="Create New Financial Account" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window hflex="true" title="${c:l('contact.create')}" border="normal" 
+		apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01185TwoColsNPE')" 
+		validationMessages="@id('vmsgs')" width="100%">
+		
+		<groupbox id="myForm" hflex="true" mold="3d" 
+			form="@id('frm') @load(vm.contact) @save(vm.contact, before='saveContact')" 
+			validationMessages="@id('vmsgs')" 
+			visible="@load(not empty vm.contact)">
+			
+		<grid hflex="true">
+			<columns sizable="true">
+            	<column label="Fields" width="150px"/>
+            	<column label="" width="180px"/>
+            	<column/>
+        	</columns>
+			<rows>
+				<row>
+					<cell colspan="3"><hlayout><image src="@load(frmStatus.dirty?'~./zul/img/msgbox/warning-btn.png':'')" /></hlayout></cell>
+				</row>
+				<row>
+					First name:<textbox id="firstname" value="@bind(frm.firstname)" width="150px" constraint="no empty"/>
+					<cell></cell>
+				</row>
+				<row>
+					Last name:<textbox id="lastname" value="@bind(frm.lastname)" width="150px"  constraint="no empty"/>
+					<cell></cell>				
+				</row>
+				<row>
+					Birthday:<datebox id="birthday" cols="12" onCreate="self.value = new Date()" value="@bind(frm.birthday)" mold="rounded" />
+					<cell></cell>				
+				</row>
+				<row>	
+					Telephone Number:<textbox id="telephone" value="@bind(frm.telephone)" width="150px"/>
+					<cell></cell>
+				</row>
+				<row>	
+					Email:<textbox id="email" value="@bind(frm.email)" width="150px"/>
+					 <hlayout><label value="@load(vmsgs[myForm])" style="color:red"/></hlayout>
+				</row>
+				<row>
+					<cell colspan="3"></cell>
+				</row>
+			</rows>
+		</grid>
+					<!-- insert address info here  -->
+			<groupbox hflex="1">
+			<caption label="Address" />
+				<listbox id="urlList" model="@load(vm.address)">
+					<listhead>
+				        <listheader label="" width="140px"/>
+				         <listheader label=""/>
+				         <listheader label=""/>
+				    <listheader label="" width="30px"/>
+				    </listhead>
+					<template name="model" var="item">
+					<listitem>
+						<listcell>Address
+								<textbox value="@bind(item.address)"/>
+						</listcell>
+						<listcell>Postal<textbox value="@bind(item.postal)"/></listcell>
+						<listcell/>
+						<listcell><hlayout><image src="/resources/images/cancel.png" onClick="@command('removeAddress', index=urlList.getSelectedIndex(), comp=bottomsavebtn)" /></hlayout></listcell>
+					</listitem>					
+					</template>
+					<listfoot>
+		            <listfooter id="footerURL" span="4" align="right"><button onClick="@command('addMoreAddress')" label="add more bookie website"/></listfooter>
+       				</listfoot>
+				</listbox>
+			</groupbox>
+			
+								<!-- insert address info here  -->
+			<groupbox hflex="1">
+			<caption label="Address" />
+				<listbox id="otherurlList" model="@load(vm.otherAddress)">
+					<listhead>
+				        <listheader label="" width="140px"/>
+				         <listheader label=""/>
+				         <listheader label=""/>
+				    <listheader label="" width="30px"/>
+				    </listhead>
+					<template name="model" var="item">
+					<listitem>
+						<listcell>Address
+								<textbox value="@bind(item.address)"/>
+						</listcell>
+						<listcell>Postal<textbox value="@bind(item.postal)"/></listcell>
+						<listcell/>
+						<listcell><hlayout><image src="/resources/images/cancel.png" onClick="@command('removeOtherAddress', index=otherurlList.getSelectedIndex(), comp=bottomsavebtn)" /></hlayout></listcell>
+					</listitem>					
+					</template>
+					<listfoot>
+		            <listfooter id="otherfooterURL" span="4" align="right"><button onClick="@command('addMoreOtherAddress')" label="add more bookie website"/></listfooter>
+       				</listfoot>
+				</listbox>
+			</groupbox>
+		</groupbox>
+		<toolbar>
+		<button id="newbtn" onClick="@command('newContact')" label="${c:l('contact.new')}"/>
+		<button width="100px" label="${c:l('contact.save')}" id="savebtn" onClick="@command('saveContact')" disabled="@load(empty vm.contact)"  />
+		<button label="${c:l('contact.delete')}" onClick="@command(empty vm.contact.id?'deleteContact':'confirmDelete')" disabled="@load(empty vm.contact)" />
+		<window title="${c:l('contact.confirm')}" mode="modal" border="normal" width="300px" visible="@load(not empty vm.deleteMessage)">
+        <vbox hflex="true">
+            <hlayout height="50px">
+                <image src="~./zul/img/msgbox/question-btn.png"/>
+                <label value="@load(vm.deleteMessage)"/>
+            </hlayout>
+            <hbox pack="center" hflex="true">
+                <button label="${c:l('contact.delete')}" onClick="@command('deleteContact')"/>
+                <button label="${c:l('contact.cancel')}" onClick="@command('cancelDelete')"/>
+            </hbox>
+       		</vbox>
+   		</window>
+		</toolbar>
+	</window>
+</zk>
