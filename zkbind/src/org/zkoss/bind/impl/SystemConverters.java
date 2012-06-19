@@ -38,11 +38,11 @@ public class SystemConverters {
 			set0("objectBoolean", new ObjectBooleanConverter());
 			
 			set0("formatedDate", new FormatedDateConverter());
-			//bug-1157, correct the spelling of "formated" to "formatted"
+			//Ian Tsai, bug-1157, correct the spelling of "formated" to "formatted"
 			set0("formattedDate", new FormatedDateConverter());
 			
 			set0("formatedNumber", new FormatedNumberConverter());
-			//bug-1157, correct the spelling of "formated" to "formatted"
+			//Ian Tsai, bug-1157, correct the spelling of "formated" to "formatted"
 			set0("formattedNumber", new FormatedNumberConverter());
 			
 			set0("uri", new UriConverter());
