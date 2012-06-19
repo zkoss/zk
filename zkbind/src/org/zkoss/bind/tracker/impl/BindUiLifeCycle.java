@@ -42,7 +42,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				//check if parent exists any binder
 				final Binder binder = (Binder) comp.getAttribute(BinderImpl.BINDER, true);
 				
-				if (binder != null) {
+				if (binder != null && (binder instanceof BinderImpl)) {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
@@ -61,8 +61,10 @@ public class BindUiLifeCycle implements UiLifeCycle {
 								return;
 							}
 							
-							if((binder instanceof AnnotateBinder))
+							if(binder instanceof AnnotateBinder){
 								new AnnotateBinderHelper(binder).initComponentBindings(comp);
+							}
+								
 							
 							binder.loadComponent(comp,true);
 							
