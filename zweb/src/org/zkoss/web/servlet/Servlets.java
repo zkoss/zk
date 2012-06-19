@@ -74,6 +74,7 @@ public class Servlets {
 		_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
 		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
 		_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
+		_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
 		_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*");
 
 	private static final boolean _svl24, _svl23, _svl3;
@@ -309,7 +310,8 @@ public class Servlets {
 	 *
 	 * @param request the request.
 	 * @param name the browser's name. It includes "ie", "ff", "gecko",
-	 * "webkit", "safari", "opera", "ios", "iphone", "ipad" and "ipod".
+	 * "webkit", "safari", "opera", "android", "mobile", "ios", "iphone", "ipad"
+	 * and "ipod".
 	 * And, "ff" is the same as "gecko", and "webit" is the same as "safari".
 	 * @since 6.0.0
 	 */
@@ -332,7 +334,8 @@ public class Servlets {
 	 *
 	 * @param userAgent the user agent (i.e., the user-agent header in HTTP).
 	 * @param name the browser's name. It includes "ie", "ff", "gecko",
-	 * "webkit", "safari", "opera", "ios", "iphone", "ipad" and "ipod".
+	 * "webkit", "safari", "opera", "android", "mobile", "ios", "iphone", "ipad"
+	 * and "ipod".
 	 * And, "ff" is the same as "gecko", and "webit" is the same as "safari".
 	 * @since 6.0.0
 	 */
@@ -382,11 +385,19 @@ public class Servlets {
 				m = _rsafari.matcher(ua);
 				if (m.matches())
 					zk.put("safari", getVersion(m));
-
+				
+				m = _randroid.matcher(ua);
+				if (m.matches()) {
+					double v = getVersion(m);
+					zk.put("android", v);
+					zk.put("mobile", v);
+				}
+				
 				for (int j = _ios.length; --j >= 0;)
 					if (ua.indexOf(_ios[j]) >= 0) {
 						zk.put(_ios[j], version);
 						zk.put("ios", version);
+						zk.put("mobile", version);
 						return;
 					}
 				return;
@@ -517,8 +528,9 @@ public class Servlets {
 			last = j;
 		}
 
-		Double vclient = getBrowser(userAgent, type.substring(0, last));
-		if (vclient == null)
+		String btype = type.substring(0, last);
+		Double vclient = getBrowser(userAgent, btype);
+		if (vclient == null && userAgent.indexOf(btype) < 0)
 			return false; //not matched
 		if (vtype == null)
 			return true; //not care about version

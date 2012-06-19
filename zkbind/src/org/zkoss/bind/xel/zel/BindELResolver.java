@@ -140,12 +140,17 @@ public class BindELResolver extends XelELResolver {
         	final Path path = getPathList(ctx);
         	
         	String script = null;
-			if (base instanceof Form) {
+        	
+        	boolean isForm = base instanceof Form;
+        	//ZK-1189, form shouldn't count on property directly
+        	String formFieldName = null;
+			if (isForm) {
 				if (nums > 0) { //still in resolving the form field
 					return;
 				} else { //done resolving the form field
-					script = path.getTrackFieldName();
+					script = path.getTrackFieldName();//script is the expression, ex, bean[a.b.c]
 				}
+				formFieldName = path.getAccessFieldName();//filedname is the evaluated value, ex, bean.k (a.b.c is k in script case)
 			} else {
 				script = path.getTrackProperty();
 			}
@@ -165,9 +170,17 @@ public class BindELResolver extends XelELResolver {
 						//parse @NotifyChange and collect Property to publish PropertyChangeEvent
 						if (allownotify) { 
 							//ZK-905 Save into a Form should fire NotifyChange
-							if (base instanceof Form) {
+							if (isForm) {
 								//collect notify property, kept in BindContext
-								BindELContext.addNotifys(base, (String) propName, value, bctx);
+								
+								//notify indirect form properties that have same expression, 
+								//ex: bean[a.b.c] of fx, whose expression is 'bean[a.b.c]'
+								BindELContext.addNotifys(base, (String) script, value, bctx); 
+								//notify form property whose value equals expression result, 
+								//ex, bean[a.b.c] of fx, if a.b.c is 'prop', them it notify bean.prop of fx 
+								if(!script.equals(formFieldName)){
+									BindELContext.addNotifys(base, (String) formFieldName, value, bctx);
+								}
 								if (base instanceof FormExt)
 									BindELContext.addNotifys(((FormExt)base).getStatus(), ".", null, bctx);
 							} else {
