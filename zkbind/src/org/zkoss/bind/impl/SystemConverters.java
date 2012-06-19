@@ -33,11 +33,16 @@ public class SystemConverters {
 	private static boolean _init = false;
 	
 	static void initBuiltinConverters() {
-		//built in
+		//built in formattedDate and formattedNumber
 		synchronized(_converters){
 			set0("objectBoolean", new ObjectBooleanConverter());
+			
 			set0("formatedDate", new FormatedDateConverter());
-			set0("formatedNumber", new FormatedNumberConverter());		
+			set0("formattedDate", new FormatedDateConverter());
+			
+			set0("formatedNumber", new FormatedNumberConverter());
+			set0("formattedNumber", new FormatedNumberConverter());
+			
 			set0("uri", new UriConverter());
 			_init = true;
 		}
