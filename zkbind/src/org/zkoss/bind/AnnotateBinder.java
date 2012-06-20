@@ -43,12 +43,37 @@ public class AnnotateBinder extends BinderImpl {
 		super(qname, qscope);
 	}
 	
-	@Override
+	/**
+	 * in AnnotateBinder, {@link #init(Component, Object, Map)} is merely a convenient method for orignal  
+	 * @see #initViewModel(Component, Object, Map)
+	 * @see #initAnnotatedBindings()
+	 * @param comp
+	 * @param vm
+	 * @param initArgs
+	 */
 	public void init(Component comp, Object vm, Map<String, Object> initArgs){
+		initViewModel(comp, vm, initArgs);
+		initAnnotatedBindings();
+	}
+	
+	/**
+	 * 
+	 * @param comp
+	 * @param vm
+	 * @param initArgs
+	 * @since 6.0.2
+	 */
+	public void initViewModel(Component comp, Object vm, Map<String, Object> initArgs){
 		super.init(comp, vm, initArgs);
-		new AnnotateBinderHelper(this).initComponentBindings(comp);
-		
 		//mark this component was handled by binder after init
 		comp.setAttribute(BINDER, this);
+	}
+	
+	/**
+	 * 
+	 * @since 6.0.2
+	 */
+	public void initAnnotatedBindings(){
+		new AnnotateBinderHelper(this).initComponentBindings(this.getView());
 	}
 }

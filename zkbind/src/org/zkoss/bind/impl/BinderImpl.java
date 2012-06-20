@@ -258,6 +258,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	/**
+	 * 
+	 * 
+	 * 
 	 * @since 6.0.1
 	 */
 	public void init(Component comp, Object viewModel, Map<String, Object> initArgs){
