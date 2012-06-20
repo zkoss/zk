@@ -382,6 +382,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
+		if (!evt.domEvent) // mobile will trigger doClick twice
+			return;
 		_fixClick(this);
 		
 		if (!this._disabled) {
