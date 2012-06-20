@@ -2,7 +2,7 @@
 <zk>
 	<n:h3 xmlns:n="native">iPad/Android</n:h3>
 	<vlayout>
-		1. Should see scroll bar on inside Listbox, Grid and Tree components.<separator spacing="0"/>
+		1. Should see scroll bar on inside Listbox and Grid components.<separator spacing="0"/>
 		2. Scroll down on Listbox and Grid, should see more items under option 50 and won't jump back.
 		<zscript><![CDATA[
 			org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(150);
@@ -20,55 +20,6 @@
 					<column label="Grid" sort="auto" />
 				</columns>
 			</grid>
-			<tree id="tree" width="200px" rows="4">
-				<treecols>
-					<treecol label="Tree" />
-				</treecols>
-				<treechildren>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 1" />
-						</treerow>
-					</treeitem>
-					<treeitem>
-						<treerow>
-							<treecell label="Item 2" />
-						</treerow>
-						<treechildren>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.1" />
-								</treerow>
-								<treechildren>
-									<treeitem>
-										<treerow>
-											<treecell label="Item 2.1.1" />
-										</treerow>
-									</treeitem>
-									<treeitem>
-										<treerow>
-											<treecell label="Item 2.1.2" />
-										</treerow>
-									</treeitem>
-								</treechildren>
-							</treeitem>
-							<treeitem>
-								<treerow>
-									<treecell label="Item 2.2" />
-								</treerow>
-								<treechildren>
-									<treeitem>
-										<treerow>
-											<treecell label="Item 2.2.1" />
-										</treerow>
-									</treeitem>
-								</treechildren>
-							</treeitem>
-						</treechildren>
-					</treeitem>
-					<treeitem label="Item 3" />
-				</treechildren>
-			</tree>
 		</hlayout>
 	</vlayout>
 </zk>
