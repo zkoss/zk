@@ -182,6 +182,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		// Bug in B50-ZK-273.zul
 		if (zk.ie6_ && this.getSelectedIndex() > -1)
 			zk(this).redoCSS();
+		
+		zul.mesh.Scrollbar.init(w, zul.mesh.Scrollbar.getScrollCave(w));
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {
@@ -208,7 +210,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 		this.$super(zul.sel.Listbox, '_doScroll');
 	},
-	onResponse: function () {
+	onResponse: function (ctl, opts) {
 		if (this.desktop) {
 			if (this._shallStripe)
 				this.stripe();
