@@ -68,7 +68,7 @@ public class B01194NestedVMInit {
 	public void doInit(@BindingParam("type")@Default("user") String type,
 			@ContextParam(ContextType.VIEW) Component self) {
 
-		Selectors.wireComponents(self, this, false);
+		
 
 		if ("admin".equals(type)) {
 			innerVm = new VM2("Ian", " is an Admin");
@@ -76,12 +76,15 @@ public class B01194NestedVMInit {
 			innerVm = new VM2("Peter", "is a User");
 		}
 
-		myLbl.setValue(innerVm.getDesc());
+		
 	}
 	
 	@AfterCompose
-	public void doAfterCompose(){
+	public void doAfterCompose(@BindingParam("type")@Default("user") String type,
+			@ContextParam(ContextType.VIEW) Component self){
 		
+		Selectors.wireComponents(self, this, false);
+		myLbl.setValue(">>>doAfterCompose type: "+type+" => "+innerVm.getDesc());
 	}
 
 	public VM2 getInnerVm() {
