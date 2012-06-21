@@ -1,5 +1,4 @@
 <?meta name="viewport" content="width=800"?>
-<?script srt="http://10.1.3.108:8080/target/target-script-min.js"?>
 <zk>
 	<zscript><![CDATA[
 		int i = 0;
@@ -9,7 +8,6 @@
 	]]></zscript>
 	<n:h3 xmlns:n="native">iPad/Android</n:h3>
 	<vlayout>
-		<button label="Clear" onClick="Components.removeAllChildren(vlayout)"/>
 		<hlayout valign="middle">
 			1. Click on <button label="Button" onClick="doClick()" mold="os"/> one time.
 		</hlayout>
