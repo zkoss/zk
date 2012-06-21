@@ -99,11 +99,13 @@ public class ResourceBundleELResolver extends ELResolver {
         return true;
     }
 
+    //Dennis, 201206221, the override method cannot pass the build without warn because of the override generic type
+    //and I don't know the reason they explained below, so I fix it , added the generic type. 
     @Override
     // Can't use Iterator<FeatureDescriptor> because API needs to match
     // specification
-    @SuppressWarnings({ "unchecked", "rawtypes" }) 
-    public Iterator getFeatureDescriptors(
+    //@SuppressWarnings({ "unchecked", "rawtypes" }) 
+    public Iterator<java.beans.FeatureDescriptor> getFeatureDescriptors(
             ELContext context, Object base) {
         if (base instanceof ResourceBundle) {
             List<FeatureDescriptor> feats = new ArrayList<FeatureDescriptor>();
