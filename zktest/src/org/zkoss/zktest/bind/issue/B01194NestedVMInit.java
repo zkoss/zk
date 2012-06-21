@@ -16,6 +16,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zktest.bind.issue;
 
+import java.util.HashMap;
+
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ContextParam;
@@ -68,8 +70,6 @@ public class B01194NestedVMInit {
 	public void doInit(@BindingParam("type")@Default("user") String type,
 			@ContextParam(ContextType.VIEW) Component self) {
 
-		
-
 		if ("admin".equals(type)) {
 			innerVm = new VM2("Ian", " is an Admin");
 		} else if ("user".equals(type)) {
@@ -84,7 +84,9 @@ public class B01194NestedVMInit {
 			@ContextParam(ContextType.VIEW) Component self){
 		
 		Selectors.wireComponents(self, this, false);
-		myLbl.setValue(">>>doAfterCompose type: "+type+" => "+innerVm.getDesc());
+		HashMap<String, String[]> annotAttrs = new HashMap<String, String[]>();
+		annotAttrs.put("value", new String[]{"vm.innerVm.desc"});
+		myLbl.addAnnotation("value", "load", annotAttrs);
 	}
 
 	public VM2 getInnerVm() {
