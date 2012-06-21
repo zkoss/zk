@@ -52,8 +52,9 @@ public class AnnotateBinder extends BinderImpl {
 	 * @param initArgs
 	 */
 	public void init(Component comp, Object vm, Map<String, Object> initArgs){
-		initViewModel(comp, vm, initArgs);
-		initAnnotatedBindings();
+		super.init(comp, vm, initArgs);
+		new AnnotateBinderHelper(this).initComponentBindings(comp);
+		comp.setAttribute(BINDER, this);
 	}
 	
 	/**
@@ -65,8 +66,6 @@ public class AnnotateBinder extends BinderImpl {
 	 */
 	public void initViewModel(Component comp, Object vm, Map<String, Object> initArgs){
 		super.init(comp, vm, initArgs);
-		//mark this component was handled by binder after init
-		comp.setAttribute(BINDER, this);
 	}
 	
 	/**
@@ -75,5 +74,7 @@ public class AnnotateBinder extends BinderImpl {
 	 */
 	public void initAnnotatedBindings(){
 		new AnnotateBinderHelper(this).initComponentBindings(this.getView());
+		//mark this component was handled by binder after init
+		this.getView().setAttribute(BINDER, this);
 	}
 }

@@ -126,7 +126,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			ComponentInfo compInfo) throws Exception {
 		return compInfo;
 	}
-	
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
@@ -143,20 +142,18 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		keeper.book(_binder, comp);
 	
 		
-		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
-		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
-		
-		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
-		//init
-		_binder.initViewModel(comp, _viewModel, initArgs);
+//		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
+//		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
+//		_binder.initViewModel(comp, _viewModel, getViewModelInitArgs(evalx,comp));
 	}
 
 	
 	
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
-		
-		//name of this composer
+		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
+		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
+		_binder.initViewModel(comp, _viewModel,  getViewModelInitArgs(evalx,comp));
 		_binder.initAnnotatedBindings();
 		
 		// call loadComponent
