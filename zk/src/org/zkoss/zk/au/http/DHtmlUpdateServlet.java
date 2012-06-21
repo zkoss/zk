@@ -202,6 +202,31 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					});
 			}
 		}
+		
+		//==== for ZK-447 DropUpload ====//
+		if (getAuExtension("/dropUpload") == null) {
+			try {
+				addAuExtension("/dropUpload", new AuDropUploader());
+			} catch (Throwable ex) {
+				final String msg =
+						"Make sure commons-fileupload.jar is installed.";
+					log.warningBriefly("Failed to configure fileupload. "+msg, ex);
+
+					//still add /upload to generate exception when fileupload is used
+					addAuExtension("/upload",
+						new AuExtension() {
+							@Override public void init(DHtmlUpdateServlet servlet) {}
+							@Override public void destroy() {}
+							@Override
+							public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+							throws ServletException, IOException {
+								if (Sessions.getCurrent(false) != null)
+									throw new ServletException("Failed to upload. "+msg);
+							}
+						});
+				}
+		}
+		//================//		
 
 		if (getAuExtension("/view") == null)
 			addAuExtension("/view", new AuDynaMediar());
