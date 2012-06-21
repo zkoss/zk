@@ -22,6 +22,7 @@ ZK 6.0.2
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
   ZK-1202: Combobox not removing old items and reset selection when changing models
+  ZK-1157: formatedDate and formatedNumber should be formatted
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
