@@ -21,6 +21,7 @@ ZK 6.0.2
   ZK-1178: ZEL should support method overloading
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
+  ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
