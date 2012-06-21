@@ -21,9 +21,7 @@ package org.zkoss.zel.impl.parser;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
+import java.util.Locale;
 
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
@@ -41,7 +39,7 @@ import org.zkoss.zel.impl.util.ReflectionUtil;
  * @version $Id: AstValue.java 1071561 2011-02-17 09:59:30Z markt $
  */
 public final class AstValue extends SimpleNode {
-
+	/* 20120418, henrichen: ZK-1062. @see ELSupport 
     private static final boolean IS_SECURITY_ENABLED =
         (System.getSecurityManager() != null);
 
@@ -65,7 +63,7 @@ public final class AstValue extends SimpleNode {
                     "true")).booleanValue();
         }
     }
-
+	*/
     protected static class Target {
         protected Object base;
 
@@ -89,8 +87,11 @@ public final class AstValue extends SimpleNode {
     }
 
     private final Target getTarget(EvaluationContext ctx) throws ELException {
+    	ctx.putContext(AstValue.class, new Integer(this.jjtGetNumChildren()));
         // evaluate expr-a to value-a
+        ctx.putContext(Node.class, this.children[0]); //20110905, henrichen: bind property node
         Object base = this.children[0].getValue(ctx);
+        ctx.putContext(Node.class, this.children[0]); //20110905, henrichen: bind property node
 
         // if our base is null (we know there are more properties to evaluate)
         if (base == null) {
@@ -117,7 +118,9 @@ public final class AstValue extends SimpleNode {
             while (base != null && i < propCount) {
                 property = this.children[i].getValue(ctx);
                 ctx.setPropertyResolved(false);
+                ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: bind property node
                 base = resolver.getValue(ctx, base, property);
+                ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: bind property node
                 i++;
             }
             // if we are in this block, we have more properties to resolve,
@@ -128,7 +131,9 @@ public final class AstValue extends SimpleNode {
             }
         }
 
+        ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: to be used in getValue()
         property = this.children[i].getValue(ctx);
+        ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: to be used in setValue()
 
         if (property == null) {
             throw new PropertyNotFoundException(MessageFactory.get(
@@ -143,7 +148,10 @@ public final class AstValue extends SimpleNode {
 
     @Override
     public Object getValue(EvaluationContext ctx) throws ELException {
+    	ctx.putContext(AstValue.class, new Integer(this.jjtGetNumChildren()));
+        ctx.putContext(Node.class, this.children[0]); //20110905, henrichen: bind property node
         Object base = this.children[0].getValue(ctx);
+        ctx.putContext(Node.class, this.children[0]); //20110905, henrichen: bind property node
         int propCount = this.jjtGetNumChildren();
         int i = 1;
         Object suffix = null;
@@ -165,7 +173,9 @@ public final class AstValue extends SimpleNode {
                 }
                 
                 ctx.setPropertyResolved(false);
+                ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: bind property node
                 base = resolver.getValue(ctx, base, suffix);
+                ctx.putContext(Node.class, this.children[i]); //20110905, henrichen: bind property node
                 i++;
             }
         }
@@ -197,11 +207,43 @@ public final class AstValue extends SimpleNode {
         ELResolver resolver = ctx.getELResolver();
 
         // coerce to the expected type
-        Class<?> targetClass = resolver.getType(ctx, t.base, t.property);
-        if (COERCE_TO_ZERO == true
-                || !isAssignable(value, targetClass)) {
-            resolver.setValue(ctx, t.base, t.property,
-                    ELSupport.coerceToType(value, targetClass));
+		Class<?> targetClass = resolver.getType(ctx, t.base, t.property);
+		
+        if (!isAssignable(value, targetClass)) { //20120418, henrichen: ZK-1062
+        	//for ZK-1178: check t.property(method name) of t.base has polymorphism?
+        	boolean flag = false;
+        	Class<?> baseClass = t.base.getClass();
+        	for (Method m : baseClass.getMethods()) {
+        		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
+        		//XXX the same in BeanELResolver#setValue()
+        		String propertySetterName = t.property.toString();
+        		if(propertySetterName != null && propertySetterName.length()>0){
+        			propertySetterName = 
+        				"set"+ 
+        				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
+        				propertySetterName.substring(1);
+        		}
+        		////
+        		
+        		//method name must the same as t.property (setter)
+        		if (m.getName().equals(propertySetterName)) {
+        			Class<?>[] clazzes = m.getParameterTypes();
+        			if (clazzes.length!=1) { //not standard setter
+        				break;
+        			}
+        			if (clazzes[0].isInstance(value)) {
+    					resolver.setValue(ctx, t.base, t.property, value);
+    					flag = true;
+    					break;
+        			}
+        		}
+        	}
+        	//// <=ZK-1178
+        	
+        	if (!flag) {
+        		resolver.setValue(ctx, t.base, t.property,
+        			ELSupport.coerceToTypeForSetValue(value, targetClass));
+        	}
         } else {
             resolver.setValue(ctx, t.base, t.property, value);
         }
@@ -212,9 +254,9 @@ public final class AstValue extends SimpleNode {
     }
 
     private boolean isAssignable(Object value, Class<?> targetClass) {
-        if (targetClass == null) {
+        if (targetClass == null || value == null) {
             return false;
-        } else if (value != null && targetClass.isPrimitive()) {
+        } else if (targetClass.isPrimitive()) {
             return false;
         } else if (value != null && !targetClass.isInstance(value)) {
             return false;

@@ -49,7 +49,7 @@ import org.zkoss.zel.impl.util.MessageFactory;
  * @author Jacob Hookom [jacob@hookom.net]
  * @version $Id: ExpressionBuilder.java 1050660 2010-12-18 16:23:09Z markt $
  */
-public final class ExpressionBuilder implements NodeVisitor {
+public class ExpressionBuilder implements NodeVisitor {
 
     private static final int CACHE_SIZE;
     private static final String CACHE_SIZE_PROP =

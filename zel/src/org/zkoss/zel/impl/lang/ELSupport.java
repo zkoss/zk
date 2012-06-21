@@ -19,8 +19,11 @@ package org.zkoss.zel.impl.lang;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 
 import org.zkoss.zel.ELException;
@@ -34,7 +37,42 @@ import org.zkoss.zel.impl.util.MessageFactory;
  * @version $Id: ELSupport.java 1050680 2010-12-18 17:26:52Z markt $
  */
 public class ELSupport {
+	//20120418, henrichen: moved from org.zkoss.zel.impl.parser.AstValue (ZK-1062)
+    private static final boolean IS_SECURITY_ENABLED =
+        (System.getSecurityManager() != null);
 
+    //20120418, henrichen: ZK-1062
+    /**EL 2.2 by spec. should coerce "null" value to 0 number, 0 character, "" String, false boolean.
+     *This spec. makes it impossible to store null state into java lang object when doing setValue() 
+     *and can set unexpected coerced value into java lang object. So we provide a system property 
+     *"org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL" to switch this behavior when doing setValue(). 
+     *By default we will set org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL to true to allow set null value 
+     *though this is not compliant to the EL 2.2 spec.. Shall you need to make ZEL to follow EL 2.2 
+     *spec. when doing setValue, please set "org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL" system property
+     *to false.
+     *Ref. https://services.brics.dk/java/courseadmin/SWP2011/documents/getDocument/expression_language-2_2-mrel-spec.pdf?d=41976
+     */
+    protected static final boolean COERCE_NULL_TO_NULL;
+    
+    static {
+        if (IS_SECURITY_ENABLED) {
+            COERCE_NULL_TO_NULL = AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>(){
+                        public Boolean run() {
+                            return Boolean.valueOf(System.getProperty(
+                                    "org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL",
+                                    "true"));
+                        }
+
+                    }
+            ).booleanValue();
+        } else {
+            COERCE_NULL_TO_NULL = Boolean.valueOf(System.getProperty(
+                    "org.zkoss.zel.impl.parser.COERCE_NULL_TO_NULL",
+                    "true")).booleanValue();
+        }
+    }
+    //^^
     private static final Long ZERO = Long.valueOf(0L);
 
     /**
@@ -387,6 +425,50 @@ public class ELSupport {
         }
     }
 
+    //ZK-1062: null intbox give a 0 value to Long bean property (expect null)
+    protected static final Object coerceToTypeForSetValue(final Object obj,
+            final Class<?> type) throws ELException {
+        if (type == null || Object.class.equals(type) ||
+                (obj != null && type.isAssignableFrom(obj.getClass()))) {
+            return obj;
+        }
+        if (String.class.equals(type)) {
+            return obj == null && COERCE_NULL_TO_NULL ? null : coerceToString(obj);
+        }
+        if (ELArithmetic.isNumberType(type)) {
+            return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToNumber(obj, type);
+        }
+        if (Character.class.equals(type) || Character.TYPE == type) {
+            return (obj == null || "".equals(obj)) && !type.isPrimitive() && COERCE_NULL_TO_NULL ? null : coerceToCharacter(obj);
+        }
+        if (Boolean.class.equals(type) || Boolean.TYPE == type) {
+            return (obj == null || "".equals(obj)) && COERCE_NULL_TO_NULL ? null : coerceToBoolean(obj);
+        }
+        if (type.isEnum()) {
+            return coerceToEnum(obj, type);
+        }
+        //ZK-919: Cannot handle java.sql.Timestamp
+        if (isDateTimeType(type)) {
+        	return coerceToDateTime(obj, type);
+        }
+
+        // new to spec
+        if (obj == null)
+            return null;
+        if (obj instanceof String) {
+            if ("".equals(obj))
+                return null;
+            PropertyEditor editor = PropertyEditorManager.findEditor(type);
+            if (editor != null) {
+                editor.setAsText((String) obj);
+                return editor.getValue();
+            }
+        }
+        
+        throw new ELException(MessageFactory.get("error.convert",
+                obj, obj.getClass(), type));
+    }
+
     public static final Object coerceToType(final Object obj,
             final Class<?> type) throws ELException {
         if (type == null || Object.class.equals(type) ||
@@ -408,6 +490,10 @@ public class ELSupport {
         if (type.isEnum()) {
             return coerceToEnum(obj, type);
         }
+        //ZK-919: Cannot handle java.sql.Timestamp
+        if (isDateTimeType(type)) {
+        	return coerceToDateTime(obj, type);
+        }
 
         // new to spec
         if (obj == null)
@@ -421,6 +507,7 @@ public class ELSupport {
                 return editor.getValue();
             }
         }
+        
         throw new ELException(MessageFactory.get("error.convert",
                 obj, obj.getClass(), type));
     }
@@ -479,4 +566,49 @@ public class ELSupport {
         super();
     }
 
+    //20120314, henrichen: ZK-919
+    public static final boolean isDateTimeType(final Class<?> type) {
+        return java.util.Date.class.isAssignableFrom(type);
+    }
+    
+    /**
+     * Coerce an object to an instance of java.util.Date
+     * @param obj the object to be converted; must be an instance of java.util.Date or 
+     * a number which represents the millisecond since "the epoch" base time, namely January 1, 1970, 00:00:00 GMT.
+     * @param type the class type which shall be a kind of java.util.Date; e.g. java.sql.Date, java.sql.Time, java.sql.Timestamp
+     * @return the instance as requested by the specified type
+     */
+	@SuppressWarnings("unchecked")
+	public static final java.util.Date coerceToDateTime(final Object obj,
+            @SuppressWarnings("rawtypes") Class type) throws ELException {
+        if (obj == null || "".equals(obj)) {
+            return null;
+        }
+        
+        if (type.isAssignableFrom(obj.getClass())) {
+            return (java.util.Date) obj;
+        }
+
+        //convert among java.util.Date, java.sql.Date, java.sql.Time, java.sql.Timestamp
+		try {
+	        if (obj instanceof java.util.Date) {
+	        	return newDateInstance(((java.util.Date) obj).getTime(), type);
+	        } else if (obj instanceof Number) {
+	        	return newDateInstance(((Number) obj).longValue(), type);
+	        }
+		} catch (Exception e) {
+	        throw new ELException(MessageFactory.get("error.convert",
+	                obj, obj.getClass(), type), e);
+		}
+        
+        throw new ELException(MessageFactory.get("error.convert",
+                obj, obj.getClass(), type));
+    }
+	
+	@SuppressWarnings("rawtypes")
+	private static java.util.Date newDateInstance(long time, Class type) throws Exception {
+    	@SuppressWarnings("unchecked")
+		final Constructor ctr = type.getConstructor(new Class[] {long.class});
+    	return (java.util.Date) ctr.newInstance(time);
+	}
 }

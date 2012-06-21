@@ -51,7 +51,7 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
     public MethodExpression createMethodExpression(ELContext context,
             String expression, Class<?> expectedReturnType,
             Class<?>[] expectedParamTypes) {
-        ExpressionBuilder builder = new ExpressionBuilder(expression, context);
+        ExpressionBuilder builder = newExpressionBuilder(expression, context);
         return builder.createMethodExpression(expectedReturnType,
                 expectedParamTypes);
     }
@@ -63,7 +63,7 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
             throw new NullPointerException(MessageFactory
                     .get("error.value.expectedType"));
         }
-        ExpressionBuilder builder = new ExpressionBuilder(expression, context);
+        ExpressionBuilder builder = newExpressionBuilder(expression, context);
         return builder.createValueExpression(expectedType);
     }
 
@@ -75,5 +75,10 @@ public class ExpressionFactoryImpl extends ExpressionFactory {
                     .get("error.value.expectedType"));
         }
         return new ValueExpressionLiteral(instance, expectedType);
+    }
+    
+    //20110815, Henri Chen: allow override node visiting (see ExpressionBuilder#accept)
+    protected ExpressionBuilder newExpressionBuilder(String expression, ELContext context) {
+    	return new ExpressionBuilder(expression, context);
     }
 }

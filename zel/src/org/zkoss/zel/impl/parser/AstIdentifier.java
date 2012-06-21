@@ -50,6 +50,8 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
         ctx.setPropertyResolved(false);
+        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
+        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
         Class<?> result = ctx.getELResolver().getType(ctx, null, this.image);
         if (!ctx.isPropertyResolved()) {
             throw new PropertyNotFoundException(MessageFactory.get(
@@ -68,6 +70,8 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
         ctx.setPropertyResolved(false);
+        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
+        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
         Object result = ctx.getELResolver().getValue(ctx, null, this.image);
         if (!ctx.isPropertyResolved()) {
             throw new PropertyNotFoundException(MessageFactory.get(
@@ -106,6 +110,8 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
         ctx.setPropertyResolved(false);
+        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
+        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
         ctx.getELResolver().setValue(ctx, null, this.image, value);
         if (!ctx.isPropertyResolved()) {
             throw new PropertyNotFoundException(MessageFactory.get(

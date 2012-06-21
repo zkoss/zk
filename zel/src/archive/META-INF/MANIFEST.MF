@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: The ZK EL Library
+Specification-Version: 2.2.2
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zel
+Implementation-URL: http://www.zkoss.org/prj/zel
+Implementation-Version: 2.2.2
+Implementation-Vendor: Potix Corporation

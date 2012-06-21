@@ -198,4 +198,14 @@ public abstract class SimpleNode extends ELSupport implements Node {
     public boolean isParametersProvided() {
         return false;
     }
+    
+    //20120331, henrichen@zkoss.org
+    /**
+     * Returns total siblings (including self) of this node; so at least return one.
+     * @since ZEL 2.2.2
+     */
+    public int jjtGetNumSiblings() {
+    	final Node parent = jjtGetParent();
+    	return parent == null ? 1 : parent.jjtGetNumChildren();
+    }
 }
