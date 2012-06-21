@@ -23,9 +23,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.0
  */
 zul.layout.Absolutelayout = zk.$extends(zul.Widget, {
-	getZclass: function () {
-		return this._zclass != null ? this._zclass: "z-absolutelayout";
-	}
 }, {
 	redraw: function (out) {
 		out.push('<div ', this.domAttrs_(), '>');

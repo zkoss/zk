@@ -16,22 +16,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import org.zkoss.lang.Objects;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.mesg.Messages;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zk.ui.ext.Scopes;
-
-import org.zkoss.zul.impl.HeaderElement;
-import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.GroupsSortableModel;
+import org.zkoss.zul.ext.Sortable;
+import org.zkoss.zul.impl.HeaderElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * The list header which defines the attributes and header of a column
@@ -61,6 +70,8 @@ public class Listheader extends HeaderElement {
 
 	static {
 		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listheader.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
+		addClientEvent(Listheader.class, Events.ON_UNGROUP, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Listheader() {
@@ -441,6 +452,126 @@ public class Listheader extends HeaderElement {
 		
 		return true;
 	}
+	
+	private void fixDirection(Listbox listbox, boolean ascending) {
+		_ignoreSort = true;
+		//maintain
+		for (Iterator it = listbox.getListhead().getChildren().iterator();
+		it.hasNext();) {
+			final Listheader hd = (Listheader)it.next();
+			hd.setSortDirection(
+				hd != this ? "natural": ascending ? "ascending": "descending");
+		}
+		_ignoreSort = false;
+	}
+	/**
+	 * Groups and sorts the items ({@link Listitem}) based on
+	 * {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @return whether the rows are grouped.
+	 * @since 6.1.0
+	 */
+	public boolean group(boolean ascending) {
+		final String dir = getSortDirection();		
+		if (ascending) {
+			if ("ascending".equals(dir)) return false;
+		} else {
+			if ("descending".equals(dir)) return false;
+		}
+		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
+		if (cmpr == null) return false;
+		
+		final Listbox listbox = getListbox();
+		if (listbox == null) return false;
+		
+		//comparator might be zscript
+		Scopes.beforeInterpret(this);
+		try {
+			final ListModel model = listbox.getModel();
+			int index = listbox.getListhead().getChildren().indexOf(this);
+			if (model != null) { //live data
+				if (!(model instanceof GroupsSortableModel))
+					throw new UiException(GroupsSortableModel.class + " must be implemented in "+model.getClass().getName());
+				groupGroupsModel((GroupsSortableModel)model, cmpr, ascending, index);
+			} else { // not live data
+				final List<Listitem> items = listbox.getItems();
+				if (items.isEmpty()) return false;//Avoid listbox with null group		
+				if (listbox.hasGroup()) {
+					for (Listgroup group: new ArrayList<Listgroup>(listbox.getGroups()))
+						group.detach(); // Groupfoot is removed automatically, if any.
+				}
+				
+				Comparator<?> cmprx;
+				if(cmpr instanceof GroupComparator){
+					cmprx = new GroupToComparator((GroupComparator)cmpr);
+				}else{
+					cmprx = cmpr;
+				}
+
+				final List<Listitem> children = new LinkedList<Listitem>(items);
+				items.clear();
+				sortCollection(children, cmprx);
+
+				Listitem previous = null;
+				for (Listitem item : children) {
+					if (previous == null || compare(cmprx, previous, item) != 0) {
+						//new group
+						final List<Component> cells = item.getChildren();
+						if (cells.size() < index)
+							throw new IndexOutOfBoundsException(
+									"Index: "+index+" but size: "+ cells.size());
+						Listgroup group;
+						Listcell cell = (Listcell)cells.get(index);
+						if (cell.getLabel() != null) {
+							group = new Listgroup(cell.getLabel());
+						} else {
+							Component cc = cell.getFirstChild();
+							if (cc instanceof Label) {
+								String val = ((Label)cc).getValue();
+								group = new Listgroup(val);
+							} else {
+								group = new Listgroup(Messages.get(MZul.GRID_OTHER));
+							}
+						}
+						listbox.appendChild(group);
+					}
+					listbox.appendChild(item);
+					previous = item;
+				}
+
+				if (cmprx != cmpr)
+					sort0(listbox, cmpr); //need to sort each group
+			}
+		} finally {
+			Scopes.afterInterpret();
+		}
+
+		fixDirection(listbox, ascending);
+		
+		// sometimes the items at client side are out of date
+		listbox.invalidate();
+		
+		return true;
+	}
+	@SuppressWarnings("unchecked")
+	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr,
+	boolean ascending, int index) {
+		model.group(cmpr, ascending, index);
+	}
+	@SuppressWarnings("unchecked")
+	private static void sortCollection(List<Listitem> comps, Comparator cmpr) {
+		Collections.sort(comps, cmpr);
+	}
+	@SuppressWarnings("unchecked")
+	private static int compare(Comparator cmpr, Object a, Object b) {
+		return cmpr.compare(a, b);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void sortGroupsModel(Listbox box, GroupsSortableModel model,
 	Comparator cmpr, boolean ascending) {
@@ -478,8 +609,19 @@ public class Listheader extends HeaderElement {
 	}
 
 	//-- event listener --//
+	/**
+	 * Invokes a sorting action based on a {@link SortEvent} and maintains
+	 * {@link #getSortDirection}.
+	 * @since 6.1.0
+	 */
+	public void onSort(SortEvent event) {
+		sort(event.isAscending());
+	}
+	
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
+	 * @deprecated As of release 6.1.0, use or override {@link #onSort(SortEvent)}
+	 * instead.
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
@@ -488,6 +630,66 @@ public class Listheader extends HeaderElement {
 		else if (!sort(true)) sort(false);
 	}
 
+	/**
+	 * Internal use only.
+	 * @since 6.1.0
+	 */
+	public void onGroupLater(SortEvent event) {
+		group(event.isAscending());
+	}
+	
+	/**
+	 * Ungroups and sorts the items ({@link Listitem}) based on the ascending.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * 
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @since 6.1.0
+	 */
+	public void ungroup(boolean ascending) {
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr != null) {
+
+			final Listbox listbox = getListbox();
+			if (listbox.getModel() == null) {
+
+				// comparator might be zscript
+				Scopes.beforeInterpret(this);
+				try {
+					final List<Listitem> items = listbox.getItems();
+					if (listbox.hasGroup()) {
+						for (Listgroup group : new ArrayList<Listgroup>(
+								listbox.getGroups()))
+							group.detach(); // Listgroupfoot is removed
+											// automatically, if any.
+					}
+
+					Comparator<?> cmprx;
+					if (cmpr instanceof GroupComparator) {
+						cmprx = new GroupToComparator((GroupComparator) cmpr);
+					} else {
+						cmprx = cmpr;
+					}
+
+					final List<Listitem> children = new LinkedList<Listitem>(
+							items);
+					items.clear();
+					sortCollection(children, cmprx);
+					for (Component c : children)
+						listbox.appendChild(c);
+				} finally {
+					Scopes.afterInterpret();
+				}
+			}
+			fixDirection(listbox, ascending);
+
+			// sometimes the items at client side are out of date
+			listbox.invalidate();
+		}
+	}
+	
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-listheader" : _zclass;
@@ -500,6 +702,33 @@ public class Listheader extends HeaderElement {
 		super.beforeParentChanged(parent);
 	}
 
+	
+	/** Processes an AU request.
+	 * <p>Default: in addition to what are handled by its superclass, it also 
+	 * handles onSort.
+	 * @since 6.1.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SORT)) {
+			SortEvent evt = SortEvent.getSortEvent(request);
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_GROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			Events.postEvent(new SortEvent(cmd, this, ascending));
+
+			// internal use, and it should be invoked after onGroup event.
+			Events.postEvent(-1000, new SortEvent("onGroupLater", this, ascending));
+		} else if (cmd.equals(Events.ON_UNGROUP)) {
+			final Map<String, Object> data = request.getData();
+			final boolean ascending = AuRequests.getBoolean(data, "");
+			ungroup(ascending);
+			Events.postEvent(new SortEvent(cmd, request.getComponent(), ascending));
+		} else
+			super.service(request, everError);
+	}
+	
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -599,6 +828,16 @@ public class Listheader extends HeaderElement {
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
 			_sortDsc = (Comparator)s.readObject();
+		}
+	}
+	private static class GroupToComparator implements Comparator {
+		private final GroupComparator _gcmpr;
+		private GroupToComparator(GroupComparator gcmpr) {
+			_gcmpr = gcmpr;
+		}
+		@SuppressWarnings("unchecked")
+		public int compare(Object o1, Object o2) {
+			return _gcmpr.compareGroup(o1, o2);
 		}
 	}
 }

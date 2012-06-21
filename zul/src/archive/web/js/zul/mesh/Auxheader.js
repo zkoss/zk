@@ -64,8 +64,5 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 		if ((v = this._rowspan) != 1)
 			s += ' rowspan="' + v + '"';
 		return s;
-	},
-	getZclass: function () {
-		return this._zclass == null ? "z-auxheader" : this._zclass;
 	}
 });

@@ -73,6 +73,7 @@ public class Datebox extends FormatInputElement {
 	private Locale _locale;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 	private static Map<Locale, Object> _symbols = new HashMap<Locale, Object>(8);
+	private boolean _weekOfYear;
 	
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT|CE_DUPLICATE_IGNORE);
@@ -97,6 +98,28 @@ public class Datebox extends FormatInputElement {
 		setValue(date);
 	}
 
+	/**
+	 * Sets whether enable to show the week number in the current calendar or
+	 * not.
+	 * [ZK EE]
+	 * @since 6.1.0
+	 */
+	public void setWeekOfYear(boolean weekOfYear) {
+		if (_weekOfYear != weekOfYear) {
+			_weekOfYear = weekOfYear;
+			smartUpdate("weekOfYear", _weekOfYear);
+		}
+	}
+    
+    /**
+     * Returns whether enable to show the week number in the current calendar or not.
+     * <p>Default: false
+     * @since 6.1.0
+     */
+    public boolean isWeekOfYear() {
+    	return _weekOfYear;
+    }
+    
 	/**
 	 * Returns the default format, which is used when constructing a datebox,
 	 * or when {@link #setFormat} is called with null or empty.
@@ -844,6 +867,8 @@ the short time styling.
 			renderer.render("displayedTimeZones", sb.toString());
 		}
 
+		render(renderer, "weekOfYear", _weekOfYear);
+		
 		if (_tzone != null)
 			renderer.render("timeZone", _tzone.getID());
 		renderer.render("localizedFormat", getLocalizedFormat());

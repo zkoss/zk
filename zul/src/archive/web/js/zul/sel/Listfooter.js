@@ -50,10 +50,6 @@ zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
 		return lc ? lc.getMaxlength() : 0;
 	},
 	//@Override
-	getZclass: function () {
-		return this._zclass == null ? "z-listfooter" : this._zclass;
-	},
-	//@Override
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	}

@@ -151,9 +151,6 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 				sz += w.treechildren.getItemCount();
 		return sz;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-treechildren" : this._zclass;
-	},
 	beforeParentChanged_: function (newParent) {
 		var oldtree = this.getTree();
 		if (oldtree)

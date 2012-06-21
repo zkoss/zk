@@ -11,9 +11,10 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.mesh" language="xul/html" depends="zul">
+<package name="zul.mesh" language="xul/html" depends="zul,zul.menu">
 	<script src="MeshWidget.js" jsdoc="true"/>
 	<script src="HeadWidget.js" jsdoc="true"/>
+	<script src="ColumnMenuWidget.js" jsdoc="true"/>
 	<script src="HeaderWidget.js" jsdoc="true"/>
 	<script src="SortWidget.js" jsdoc="true"/>
 	<script src="FooterWidget.js" jsdoc="true"/>

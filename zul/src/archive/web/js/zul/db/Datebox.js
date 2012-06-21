@@ -268,7 +268,24 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				if (this._pop)
 					this._pop.setLocalizedSymbols(this._localizedSymbols);
 			}
-		]
+		],
+		/**
+		 * Sets whether enable to show the week number in the current calendar or
+    	 * not. [ZK EE]
+    	 * @since 6.1.0
+    	 * @param boolean weekOfYear
+		 */
+	    /**
+	     * Returns whether enable to show the week number in the current calendar
+	     * or not.
+	     * <p>Default: false
+	     * @since 6.1.0
+	     * @return boolean
+	     */
+		weekOfYear: function (v) {
+			if (this._pop)
+				this._pop.setWeekOfYear(v);
+		}
 	},
 	_setTimeZonesIndex: function () {
 		var select = this.$n('dtzones');

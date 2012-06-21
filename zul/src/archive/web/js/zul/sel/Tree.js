@@ -33,9 +33,6 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		for (var w = this._treechildren.firstChild; w; w = w.nextSibling)
 			w.detach();
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-tree" : this._zclass;
-	},
 	insertBefore: function (child, sibling, ignoreDom) {
 		if (this.$super('insertBefore', child, sibling, !this.z_rod)) {
 			this._fixOnAdd(child, ignoreDom, ignoreDom);

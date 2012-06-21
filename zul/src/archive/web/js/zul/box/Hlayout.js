@@ -36,9 +36,6 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	isVertical_: function () {
 		return false;
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-hlayout" : this._zclass;
-	},
 	// F60-ZK-537: Hlayout supports valign (top, middle and bottom),
 	// set vertical-align to children cause wrong layout on IE6,
 	// set it to parent directly

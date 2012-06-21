@@ -151,9 +151,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
 		this.$supers("beforeParentChanged_", arguments);
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-menu" : this._zclass;
-	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);
 		return this.isTopmost() ?

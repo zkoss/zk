@@ -121,9 +121,6 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 				tf.getChildAt(jcol).rerender();
 		}
 	},
-	getZclass: function () {
-		return this._zclass == null ? "z-treecol" : this._zclass;
-	},
 	bind_: function () {
 		this.$supers(zul.sel.Treecol, 'bind_', arguments);
 		var n;

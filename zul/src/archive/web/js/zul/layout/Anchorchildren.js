@@ -43,10 +43,6 @@ zul.layout.Anchorchildren = zk.$extends(zul.Widget, {
 				this.onSize();
 		}
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-anchorchildren";
-	},
 	bind_: function () {
 		this.$supers(zul.layout.Anchorchildren, 'bind_', arguments);
 		zWatch.listen({onSize: this});

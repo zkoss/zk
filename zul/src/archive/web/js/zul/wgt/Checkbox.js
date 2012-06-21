@@ -157,10 +157,6 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		zk(this.$n('real')||this.$n()).focus(timeout);
 		return true;
 	},
-	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-checkbox";
-	},
 	contentAttrs_: function () {
 		var html = '', v; // cannot use this._name for radio
 		if (v = this.getName())

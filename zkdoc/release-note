@@ -3,6 +3,11 @@ ZK 6.1.0
 
 * Features
   ZK-970: The Tab component support caption component as it's label
+  ZK-1145: Notification supports closable
+  ZK-1175: Calendar support show week number
+  ZK-120: Provide menupopup="auto" for listbox
+  ZK-969: The LayoutRegion component support caption component as it's title
+  ZK-147: Support ungroup for grid's column menu
 
 * Bugs
 
