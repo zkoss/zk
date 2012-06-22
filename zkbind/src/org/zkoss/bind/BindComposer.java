@@ -19,8 +19,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -33,6 +35,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
@@ -57,7 +60,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private static final String BINDER_ID = "$BINDER_ID$";
 	
 	private Object _viewModel;
-	private Binder _binder;
+	private AnnotateBinder _binder;
 	
 	private final Map<String, Converter> _converters;
 	private final Map<String, Validator> _validators;
@@ -123,11 +126,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			ComponentInfo compInfo) throws Exception {
 		return compInfo;
 	}
-	
 	public void doBeforeComposeChildren(Component comp) throws Exception {
-		
-
-		
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
@@ -136,26 +135,26 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		//wire before call init
 		Selectors.wireVariables(comp, _viewModel, Selectors.newVariableResolvers(_viewModel.getClass(), null));
 		if(_vmsgs!=null){
-			((BinderCtrl)_binder).setValidationMessages(_vmsgs);
+			_binder.setValidationMessages(_vmsgs);
 		}
 		
 		BinderKeeper keeper = BinderKeeper.getInstance(comp);
 		keeper.book(_binder, comp);
+	
 		
+//		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
+//		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
+//		_binder.initViewModel(comp, _viewModel, getViewModelInitArgs(evalx,comp));
 	}
 
 	
 	
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
-		
-		//name of this composer
 		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
 		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
-		
-		final Map<String,Object> initArgs = getViewModelInitArgs(evalx,comp);
-		//init
-		_binder.init(comp, _viewModel, initArgs);
+		_binder.initViewModel(comp, _viewModel,  getViewModelInitArgs(evalx,comp));
+		_binder.initAnnotatedBindings();
 		
 		// call loadComponent
 		BinderKeeper keeper = BinderKeeper.getInstance(comp);
@@ -237,7 +236,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		return vm;
 	}
 	
-	private Binder initBinder(BindEvaluatorX evalx, Component comp) {
+	private AnnotateBinder initBinder(BindEvaluatorX evalx, Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		final Annotation idanno = compCtrl.getAnnotation(BINDER_ATTR, ID_ANNO);
 		final Annotation initanno = compCtrl.getAnnotation(BINDER_ATTR, INIT_ANNO);
@@ -283,7 +282,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 				} catch (Exception e) {
 					throw new UiException(e.getMessage(),e);
 				}
-				if(!(binder instanceof Binder)){
+				if(!(binder instanceof AnnotateBinder)){
 					throw new UiException("evaluated binder is not a binder is "+binder);
 				}
 				
@@ -311,7 +310,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		comp.setAttribute(bname, binder);
 		comp.setAttribute(BINDER_ID, bname);
 		
-		return (Binder)binder;
+		return (AnnotateBinder)binder;
 	}
 	
 	private ValidationMessages initValidationMessages(BindEvaluatorX evalx, Component comp,Binder binder) {
@@ -463,3 +462,4 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	}//end of class...
 	
 }//end of class...
+

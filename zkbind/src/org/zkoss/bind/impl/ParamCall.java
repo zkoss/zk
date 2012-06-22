@@ -1,6 +1,7 @@
 package org.zkoss.bind.impl;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,6 +107,11 @@ public class ParamCall {
 			}
 			
 			method.invoke(base, params);
+		} catch(InvocationTargetException invokEx){ 
+			//Ian YT Tsai (2012.06.20), while InvocationTargetException,
+			//using original exception is much meaningful.
+			_log.error(invokEx.getCause());
+			throw UiException.Aide.wrap(invokEx.getCause());
 		} catch (Exception e) {
 			_log.error(e);
 			throw UiException.Aide.wrap(e);

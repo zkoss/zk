@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.UiException;
  */
 public class MiscUtil {
 
-	public static String toInitMethodSignature(Method method) {
+	public static String toSimpleMethodSignature(Method method) {
 		// only keep the method name and parameter type
 		StringBuilder sb = new StringBuilder();
 

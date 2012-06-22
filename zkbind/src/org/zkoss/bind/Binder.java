@@ -86,8 +86,16 @@ public interface Binder {
 	 * @param initArgs args key-value pairs for initial, nullable
 	 * @since 6.0.1
 	 */
-	public void init(Component root,Object viewModel,Map<String, Object> initArgs);
+	public void init(Component root, Object viewModel, Map<String, Object> initArgs);
 	
+	/**
+	 * Initializes the binder's viewModel object. 
+	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * this 
+	 * @param viewModel viewModel object
+	 * @since 6.0.2
+	 */
+//	public void initViewModel(Object viewModel);
 	
 	/**
 	 * Load the load-binding of the component. <br/>
