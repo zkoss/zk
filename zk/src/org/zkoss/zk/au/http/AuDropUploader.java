@@ -5,9 +5,9 @@
 	Description:
 		
 	History:
-		Fri Jan 11 23:59:59     2008, Created by Monty Pan
+		Fri Jan 22 23:59:59     2012, Created by Monty Pan
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under LGPL Version 2.1 in the hope that
@@ -62,7 +62,7 @@ import org.zkoss.zk.ui.util.Configuration;
 /**
  * The AU extension to upload files withd HTML5 feature.
  * It is based on Apache Commons File Upload.
- * @since 6.1
+ * @since 6.1.0
  */
 public class AuDropUploader implements AuExtension {
 	private static final Log log = Log.lookup(AuDropUploader.class);
@@ -89,7 +89,7 @@ public class AuDropUploader implements AuExtension {
 		}
 
 		final Map<String, String> attrs = new HashMap<String, String>();
-		String alert = null, uuid = null, nextURI = null;//, sid = null;
+		String alert = null, uuid = null, nextURI = null;
 		Desktop desktop = null;
 		try {
 			uuid = request.getParameter("uuid");
@@ -105,7 +105,7 @@ public class AuDropUploader implements AuExtension {
 				} else {
 					desktop = ((WebAppCtrl)sess.getWebApp())
 						.getDesktopCache(sess).getDesktop(dtid);
-					final Map<String, Object> params = parseRequest(request, desktop, "");//uuid + '_' + sid);
+					final Map<String, Object> params = parseRequest(request, desktop, "");
 					nextURI = (String)params.get("nextURI");
 					// Bug 3054784
 					params.put("native", request.getParameter("native"));
@@ -137,13 +137,7 @@ public class AuDropUploader implements AuExtension {
 				return;
 			}
 		}
-		if (log.finerable()) log.finer(attrs);
-		
-		//TODO nextURI?
-//		if (nextURI == null || nextURI.length() == 0)
-//			nextURI = "~./zul/html/fileupload-done.html.dsp";
-//		Servlets.forward(_ctx, request, response,
-//				nextURI, attrs, Servlets.PASS_THRU_ATTR);
+		if (log.finerable()) log.finer(attrs);		
 	}
 	
 
