@@ -107,6 +107,7 @@ sed -i "s/$oldVersion.*/$newVersion/g" $maindir/jsdoc/version
 sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/version
 sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/src/archive/META-INF/MANIFEST.MF
 cd $maindir
+upVer zel
 upVer zcommon
 upVer zhtml
 upVer zk

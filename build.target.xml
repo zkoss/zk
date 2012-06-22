@@ -373,6 +373,10 @@ if="deploy.tomcat.required">
 	
 	<!-- packages -->
 	<antcall target="check.version.package">
+		<param name="package" value="zel"/>
+		<param name="dir" value="."/>
+	</antcall>
+	<antcall target="check.version.package">
 		<param name="package" value="zcommon"/>
 		<param name="dir" value="."/>
 		<param name="check.xel.config.uid" value="true"/>
