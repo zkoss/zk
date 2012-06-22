@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.common</groupId>
-	<artifactId>zcommon</artifactId>
+	<artifactId>zel</artifactId>
 	<packaging>jar</packaging>
 	<version>6.0.2-SNAPSHOT</version>
-	<name>The ZKoss Common Library</name>
+	<name>The ZK EL Library</name>
 	<url>http://www.zkoss.org/common</url>
-	<description>The ZKoss common library</description>
+	<description>The ZK EL library</description>
 	<licenses>
 		<license>
-			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<scm>
+		<url>http://zel.googlecode.com/svn/branches/${project.version}</url>
+	</scm>
 	<developers>
 		<developer>
 			<id>zkteam</id>
@@ -33,10 +37,7 @@
 				<picUrl>http://www.zkoss.org</picUrl>
 			</properties>
 		</developer>
-	</developers>
-	<scm>
-		<url>http://svn.sourceforge.net/viewvc/zk1/releases/${project.version}/zcommon</url>
-	</scm>
+	</developers>	
 	<repositories>
 		<repository>
 			<id>zk repository</id>
@@ -66,35 +67,6 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</pluginRepository>
 	</pluginRepositories>
-	<dependencies>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zkforge.el</groupId>
-			<artifactId>zcommons-el</artifactId>
-			<version>1.1.0</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zel</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.beanshell</groupId>
-			<artifactId>bsh</artifactId>
-			<version>2.0b4</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
@@ -107,18 +79,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.zkoss.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-				<version>1.1.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
