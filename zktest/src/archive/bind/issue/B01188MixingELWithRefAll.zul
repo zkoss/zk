@@ -1,0 +1,70 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01188MixingELWithRefAll')">
+	<label multiline="true">
+
+	</label>
+	<zscript>
+	if(param.get("skip")==null){
+		win.setAttribute("each", "Wrong Each");
+		java.util.HashMap s = new java.util.HashMap(); 
+		s.put("index","Wrong index");
+		win.setAttribute("forEachStatus", s);
+	}
+	</zscript>
+	<vbox>
+	Children Binding:
+	<hlayout id="halyout1" children="@load(vm.data)">
+		<template name="children">
+			<label value="${forEachStatus.index}.${each}"/>
+		</template>
+	</hlayout>
+	Listbox:
+	<listbox id="listbox1" model="@load(vm.data)">
+		<template name="model">
+			<listitem>
+				<listcell>
+					<label value="${forEachStatus.index}.${each}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	grid:
+	<grid id="grid1" model="@load(vm.data)">
+		<template name="model">
+			<row>
+				<label value="${forEachStatus.index}.${each}" />
+			</row>
+		</template>
+	</grid>
+	combobox:
+	<combobox id="combobox1" model="@load(vm.data)">
+		<template name="model">
+			<comboitem label="${forEachStatus.index}.${each}"/>
+		</template>
+	</combobox>
+	radiogroup:
+	<radiogroup id="radiogroup1" model="@load(vm.data)">
+		<template name="model">
+			<radio label="${forEachStatus.index}.${each}"/>
+		</template>
+	</radiogroup>
+	selectbox:
+	<selectbox id="selectbox1" model="@load(vm.data)">
+		<template name="model">
+			<label value="${forEachStatus.index}.${each}"/>
+		</template>
+	</selectbox>
+	tree:
+	<tree id="tree" model="@bind(vm.treedata)" >
+		<template name="model">
+			<treeitem>
+				<treerow>
+					<treecell label="${forEachStatus.index}.${each}" />
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+ 	</vbox>
+	<button label="dump" onClick="binder.tracker.dump()" />
+</window>
