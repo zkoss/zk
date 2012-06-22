@@ -25,6 +25,7 @@ ZK 6.0.2
   ZK-1157: formatedDate and formatedNumber should be formatted
   ZK-1196: Listbox renders incorrectly in richlet with ZK 6.0.2.FL.20120607
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
+  ZK-1197: ZEL BeanELResolver's invoke impl has serious logical issue
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
