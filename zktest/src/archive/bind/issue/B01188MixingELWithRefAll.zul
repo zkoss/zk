@@ -2,7 +2,7 @@
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01188MixingELWithRefAll')">
 	<label multiline="true">
-
+	1.There are 2 element (0.Item1 , 1.Item2 ) in all the component)
 	</label>
 	<zscript>
 	if(param.get("skip")==null){
@@ -56,9 +56,9 @@
 		</template>
 	</selectbox>
 	tree:
-	<tree id="tree" model="@bind(vm.treedata)" >
+	<tree id="tree1" model="@bind(vm.treedata)" >
 		<template name="model">
-			<treeitem>
+			<treeitem open="@bind(true)">
 				<treerow>
 					<treecell label="${forEachStatus.index}.${each}" />
 				</treerow>

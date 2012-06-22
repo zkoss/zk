@@ -22,8 +22,12 @@ public class B01188MixingELWithRefAll {
 		TreeNode root = new DefaultTreeNode(new Item("Item 1"), new ArrayList());
 		treedata = new DefaultTreeModel(root);
 		
-		root.add(new DefaultTreeNode(new Item("Item 1")));
+		TreeNode n1 = new DefaultTreeNode(new Item("Item 1"), new ArrayList()); 
+		root.add(n1);
 		root.add(new DefaultTreeNode(new Item("Item 2")));
+		
+		n1.add(new DefaultTreeNode(new Item("Item 1-1")));
+		n1.add(new DefaultTreeNode(new Item("Item 1-2")));
 	}
 
 	public class Item {

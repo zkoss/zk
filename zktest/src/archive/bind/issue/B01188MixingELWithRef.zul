@@ -11,15 +11,15 @@
 			<listheader hflex="6" />
 		</listhead>
 		<template name="model">
-			<listitem>
-				<listcell>
+			<listitem sclass="outer">
+				<listcell sclass="outer">
 					<label value="${each[0]}" />
 				</listcell>
 				<listcell>
 					<listbox model="@load(each[1])">
 						<template name="model">
-							<listitem>
-								<listcell>
+							<listitem sclass="inner">
+								<listcell  sclass="inner">
 									<label value="${each}" />			
 								</listcell>
 							</listitem>

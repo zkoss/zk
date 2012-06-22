@@ -63,24 +63,17 @@ public class BindChildRenderer extends AbstractRenderer{
 		final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
 		final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
 
-		final Component[] items = tm.create(owner, null, 
-			new VariableResolverX() {//this resolver is for EL ${} not for binding 
-				public Object resolveVariable(String name) {
-					//shall never call here
-					return varnm.equals(name) ? data : null;
-				}
-
-				public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
-					if (base == null) {
-						if(varnm.equals(name)){
-							return data;
-						}else if(itervarnm.equals(name)){//iteration status
-							return iterStatus;
-						}
-					}
-					return null;
-				}
-			}, null);
+		//bug 1188, EL when nested var and itervar
+		Object oldVar = owner.getAttribute(varnm);
+		Object oldIter = owner.getAttribute(itervarnm);
+		owner.setAttribute(varnm, data);
+		owner.setAttribute(itervarnm, iterStatus);
+		
+		final Component[] items = tm.create(owner, null, null, null);
+		
+		owner.setAttribute(varnm, oldVar);
+		owner.setAttribute(itervarnm, oldIter);
+		
 
 		boolean templateTracked = false;
 		for(Component comp: items){
