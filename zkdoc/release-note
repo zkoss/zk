@@ -26,6 +26,7 @@ ZK 5.0.12
   ZK-1129: Listbox content did not match the outline border (IE7 only)
   ZK-1143: Subsequent WrongValueException causes JS error on ipad
   ZK-1146: TreeModel getChildCount invoke too much times
+  ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
   
 	--------
 ZK 5.0.11
