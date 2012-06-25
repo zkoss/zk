@@ -294,9 +294,7 @@ public class AuDropUploader implements AuExtension {
 		int thrs = conf.getFileSizeThreshold();
 		if (thrs > 0)
 			fty.setSizeThreshold(1024*thrs);
-		
-//		sfu.setProgressListener(fty.new ProgressCallback());
-		
+				
 		int maxsz = conf.getMaxUploadSize();
 		try {
 			maxsz = Integer.parseInt(request.getParameter("maxsize"));
@@ -424,10 +422,8 @@ public class AuDropUploader implements AuExtension {
 	}
 
 	/**
-	 * The file item factory that monitors the progress of uploading.
-	 * TODO delete this 
+	 * Customize DiskFileItemFactory (return ZkFileItem).
 	 */
-	@Deprecated
 	private static class ItemFactory extends DiskFileItemFactory implements Serializable {
 		@SuppressWarnings("unchecked")
 		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key) {

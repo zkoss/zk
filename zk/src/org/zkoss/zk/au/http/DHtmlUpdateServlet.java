@@ -212,7 +212,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						"Make sure commons-fileupload.jar is installed.";
 					log.warningBriefly("Failed to configure fileupload. "+msg, ex);
 
-					//still add /upload to generate exception when fileupload is used
+					//still add /dropupload to generate exception when fileupload is used
 					addAuExtension("/dropupload",
 						new AuExtension() {
 							@Override public void init(DHtmlUpdateServlet servlet) {}
