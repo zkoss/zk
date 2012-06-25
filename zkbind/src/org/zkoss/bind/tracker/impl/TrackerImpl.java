@@ -405,7 +405,10 @@ public class TrackerImpl implements Tracker, Serializable {
 		final Set<Object> beans = _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
 		final Set<TrackerNode> nodes = new LinkedHashSet<TrackerNode>();
 		for (Object obj : beans) {
-			nodes.addAll(_beanMap.get(obj));
+			Set<TrackerNode> beanNodes = _beanMap.get(obj);
+			if(beanNodes!=null){//zk-1185, _beanMap could contains no such entry, and returned null.
+				nodes.addAll(beanNodes);
+			}
 		}
 		results.addAll(nodes);
 		getAllTrackerNodesByBeanNodes(nodes, results);
