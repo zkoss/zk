@@ -416,15 +416,18 @@
 	</xs:attributeGroup>
 	<xs:attributeGroup name="zkAttrGroup">
 		<xs:attribute name="apply" type="xs:string" use="optional" />
+		<xs:attribute name="binder" type="xs:string" use="optional" />
 		<xs:attribute name="forEach" type="xs:string" use="optional" />
 		<xs:attribute name="forEachBegin" type="xs:string" use="optional" />
 		<xs:attribute name="forEachEnd" type="xs:string" use="optional" />
+		<xs:attribute name="form" type="xs:string" use="optional" />
 		<xs:attribute name="forward" type="xs:string" use="optional" />
 		<xs:attribute name="fulfill" type="xs:string" use="optional" />
 		<xs:attribute name="if" type="xs:string" use="optional" />
 		<xs:attribute name="self" type="xs:string" use="optional" />
 		<xs:attribute name="use" type="xs:string" use="optional" />
 		<xs:attribute name="unless" type="xs:string" use="optional" />
+		<xs:attribute name="viewModel" type="xs:string" use="optional" />
 		<xs:anyAttribute processContents="lax" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="abstractComponentAttrGroup">
