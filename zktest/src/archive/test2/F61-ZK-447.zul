@@ -87,8 +87,8 @@
 	5. If all files are cancel (nothing uploaded), nothing happen.
 	]]></label>
 	<hlayout>   
-		<dropupload maxsize="-1" label="default viewer" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload maxsize="-1" label="custom viewer" detection="none" onUpload="showFileInfo(event)" viewClass="zk.MyFileViewer" />
+		<dropupload maxsize="-1" content="default viewer" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="-1" content="custom viewer" detection="none" onUpload="showFileInfo(event)" viewClass="zk.MyFileViewer" />
 	</hlayout>
 	
 	<separator bar="true" />
@@ -99,9 +99,9 @@
 	2. Drop files into widget, if any files size bigger than limit, will alert error message and nothing will upload.
 	]]></label>
 	<hlayout>
-		<dropupload maxsize="51200" label="50MB" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload maxsize="-1" label="unlimited" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload label="no assign (5MB)" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="51200" content="50MB" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="-1" content="unlimited" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload content="no assign (5MB)" detection="none" onUpload="showFileInfo(event)" />
 	</hlayout>
 	
 	<separator bar="true" />
@@ -114,24 +114,30 @@
 	]]></label>
 	<hlayout>
 		<vlayout>
-			<dropupload maxsize="-1" label="label" detection="self" onUpload="showFileInfo(event)" />
+			<dropupload maxsize="-1" detection="self" onUpload="showFileInfo(event)">
+				<attribute name="content"><![CDATA[
+					<hr/>
+					<b>HTML content</b>
+					<hr/>
+				]]></attribute>
+			</dropupload>
 			<label>detection = self</label>
 		</vlayout>
 		<vlayout>
-			<dropupload maxsize="-1" label="label" detection="browser" onUpload="showFileInfo(event)" />
+			<dropupload maxsize="-1" content="content" detection="triggerBlock" onUpload="showFileInfo(event)" />
+			<label>detection = triggerBox</label>
+		</vlayout>		
+		<vlayout>
+			<dropupload maxsize="-1" content="content" detection="browser" onUpload="showFileInfo(event)" />
 			<label>detection = browser</label>
 		</vlayout>
 		<vlayout>
-			<dropupload maxsize="-1" label="label" detection="foo" onUpload="showFileInfo(event)" />
+			<dropupload maxsize="-1" content="content" detection="foo" onUpload="showFileInfo(event)" />
 			<label>detection = foo</label>
 		</vlayout>
 		<vlayout>
-			<dropupload maxsize="-1" label="label" onUpload="showFileInfo(event)" />
+			<dropupload maxsize="-1" content="content" onUpload="showFileInfo(event)" />
 			<label>not detection</label>
-		</vlayout>
-		<vlayout>
-			<dropupload maxsize="-1" label="label" detection="triggerBlock" onUpload="showFileInfo(event)" />
-			<label>detection = triggerBox</label>
 		</vlayout>
 	</hlayout>
 
