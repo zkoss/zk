@@ -2,6 +2,7 @@ package org.zkoss.zktest.bind.issue;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
@@ -33,8 +34,13 @@ public class F00638 extends F00638Base3{
 	
 	 
 	@Init(superclass=true)
-	public void init(@ContextParam(ContextType.BINDER) Binder binder){
+	public void init(){
 		this.value2 = "B";
+
+	}
+	
+	@AfterCompose
+	public void afterCompose(@ContextParam(ContextType.BINDER) Binder binder){
 //		Component r = ctx.getComponent();
 		Component r = binder.getView();
 		Selectors.wireComponents(r, this,false);

@@ -129,7 +129,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private static final String FORM_ID = "$FORM_ID$";
 	private static final String CHILDREN_ATTR = "$CHILDREN$";
 	private static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
-	private static final String INIT_ARGS = "$INIT_ARGS$";
 	
 	//Command lifecycle result
 	private static final int COMMAND_SUCCESS = 0;
@@ -139,11 +138,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//TODO make it configurable
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
 		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
-	//TODO make it configurable
-	private final static Map<Class<?>, List<Method>> _afterComposeMethodCache = 
-		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME); //class,list<afterCompose method>
-	
-	
+
 	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _commandMethodCache = 
 		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 	
@@ -286,186 +281,95 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			_log.warning("you are using a composer [%s] as a view model",viewModel);
 		}
 		//Should we handle here or in setViewModel for every time set a view model into binder?
-		initViewModel(viewModel, initArgs);
+//		initViewModel(viewModel, initArgs);
+		new ViewModelAnnotateMethodHandler<Init>(Init.class, _initMethodCache){
+			protected boolean shouldTraceSuperClass(Init annotation) {
+				return annotation.superclass();
+			}}.invokeAnnotatedMethod(this, initArgs);
+		
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 	}
 	
 	//handle init of a viewmodel. 
-	private void initViewModel(Object viewModel, Map<String, Object> initArgs){
-		final Class<?> clz = viewModel.getClass();
-		
-		List<Method> inits = getInitMethods(clz);
-		if(inits.size()==0) return;//no init method
-		
-		if(initArgs!=null){
-			initArgs = BindEvaluatorXUtil.evalArgs(getEvaluatorX(), _rootComp, initArgs);
-			_rootComp.setAttribute(INIT_ARGS, initArgs);
-		}
-		
-		for(Method m : inits){//TODO: why paramCall need to be prepared each time?
-			final BindContext ctx = 
-				BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
-			
-			try {
-				ParamCall parCall = createParamCall(ctx);
-				if(initArgs!=null){
-					parCall.setBindingArgs(initArgs);
-				}
-				parCall.call(viewModel, m);
-			} catch (Exception e) {
-				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
-					_initMethodCache.remove(clz);
-				}
-				throw new UiException(e.getMessage(),e);
-			}
-		}
-	}
-	
-	private static List<Method> getInitMethods(Class<?> clz) {
-		List<Method> inits = null;
-		synchronized(_initMethodCache){
-			//have to synchronized cache, because it calls expunge when get.
-			inits = _initMethodCache.get(clz);//check again
-			if(inits!=null) return inits;
-			
-			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
-			
-			Class<?> curr = clz;
-			
-			String sign = null;
-			Set<String> signs = new HashSet<String>();
-			
-			while(curr!=null && !curr.equals(Object.class)){
-				Method currm = null;
-				//ZK-1033 @Init should supports to annotate on Type
-				Init init = curr.getAnnotation(Init.class);
-				//only allow one init method in a class.
-				for(Method m : curr.getDeclaredMethods()){
-					final Init i = m.getAnnotation(Init.class);
-					if(i==null) continue;
-					if(init!=null){
-						throw new UiException("more than one @Init in the class "+curr);
-					}
-					init = i;
-					currm = m;
-					//don't break, we need to check all init methods, we allow only one per class.
-				}
-				
-				if(currm!=null){
-					//check if overrode the same init method
-					sign = MiscUtil.toSimpleMethodSignature(currm);
-					if(signs.contains(sign)){
-						_log.warning("more than one init method that has same signature '%s' in the hierarchy of '%s', the method in extended class will be call more than once ",sign,clz);
-					}else{
-						signs.add(sign);
-					}
-					
-					//super first
-					inits.add(0,currm);
-				}
-				//check if we should take care super's init also.
-				curr = (init!=null && init.superclass())?curr.getSuperclass():null;
-			}
-			inits = Collections.unmodifiableList(inits);
-			_initMethodCache.put(clz, inits);
-		}
-		return inits;
-	}
-	
-	
-	private boolean _afterComposed = false; 
-	//handle afterCompose of a viewmodel. 
-	private void afterComposeViewModel(){
-		if(_afterComposed)return;
-		_afterComposed = true;
-		
-		Object viewModel = _rootComp.getAttribute(VM);
-		
-		@SuppressWarnings("unchecked")
-		Map<String, Object> initArgs = 
-			(Map<String, Object>) _rootComp.getAttribute(INIT_ARGS);
-		
-		if(initArgs!=null){
-			_rootComp.removeAttribute(INIT_ARGS);// clear 
-		}
-		
-		final Class<?> clz = viewModel.getClass();
-		List<Method> methods = getAfterComposeMethods(clz);
-		if(methods.size()==0) return;//no afterCompose method
-		
-		for(Method m : methods){//TODO: why paramCall need to be prepared each time?
-			final BindContext ctx = 
-				BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
-			
-			try {
-				ParamCall parCall = createParamCall(ctx);
-				if(initArgs!=null){
-					parCall.setBindingArgs(initArgs);
-				}
-				parCall.call(viewModel, m);
-			} catch (Exception e) {
-				synchronized(_afterComposeMethodCache){//remove it for the hot deploy case if getting any error
-					_afterComposeMethodCache.remove(clz);
-				}
-				throw new UiException(e.getMessage(),e);
-			}
-		}
-	}
-	private static List<Method> getAfterComposeMethods(Class<?> clz){
-		List<Method> methods = null;
-		synchronized(_afterComposeMethodCache){
-			//have to synchronized cache, because it calls expunge when get.
-			methods = _afterComposeMethodCache.get(clz);//check again
-			if(methods!=null) return methods;
-			
-			methods = new ArrayList<Method>(); //if still null in synchronized, scan it
-			
-			Class<?> curr = clz;
-			
-			String sign = null;
-			Set<String> signs = new HashSet<String>();
-			
-			while(curr!=null && !curr.equals(Object.class)){
-				Method currm = null;
-				//@AfterCompose should supports to annotate on Type
-				AfterCompose afterCompose = curr.getAnnotation(AfterCompose.class);
-				//only allow one afterCompose method in a class.
-				for(Method m : curr.getDeclaredMethods()){
-					final AfterCompose i = m.getAnnotation(AfterCompose.class);
-					if(i==null) continue;
-					if(afterCompose!=null){
-						throw new UiException("more than one @AfterCompose in the class "+curr);
-					}
-					afterCompose = i;
-					currm = m;
-					//don't break, we need to check all afterCompose methods, we allow only one per class.
-				}
-				
-				if(currm!=null){
-					//check if overrode the same afterCompose method
-					sign = MiscUtil.toSimpleMethodSignature(currm);
-					if(signs.contains(sign)){
-						_log.warning("more than one afterCompose method that has same signature '%s' " +
-								"in the hierarchy of '%s', the method in extended class will be call " +
-								"more than once ",sign,clz);
-					}else{
-						signs.add(sign);
-					}
-					
-					//super first
-					methods.add(0,currm);
-				}
-				//check if we should take care super's afterCompose also.
-				curr = (afterCompose!=null && afterCompose.superclass())?
-						curr.getSuperclass() : null;
-			}
-			methods = Collections.unmodifiableList(methods);
-			_afterComposeMethodCache.put(clz, methods);
-		}
-		return methods;
-	}
-	
-	
+//	private void initViewModel(Object viewModel, Map<String, Object> initArgs){
+//		final Class<?> vmClz = viewModel.getClass();
+//		
+//		List<Method> inits = getInitMethods(vmClz);
+//		if(inits.size()==0) return;//no init method
+//		
+//		if(initArgs!=null){
+//			initArgs = BindEvaluatorXUtil.evalArgs(getEvaluatorX(), _rootComp, initArgs);
+//		}
+//		
+//		for(Method m : inits){//TODO: why paramCall need to be prepared each time?
+//			final BindContext ctx = 
+//				BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
+//			
+//			try {
+//				ParamCall parCall = createParamCall(ctx);
+//				if(initArgs!=null){
+//					parCall.setBindingArgs(initArgs);
+//				}
+//				parCall.call(viewModel, m);
+//			} catch (Exception e) {
+//				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
+//					_initMethodCache.remove(vmClz);
+//				}
+//				throw new UiException(e.getMessage(),e);
+//			}
+//		}
+//	}
+//	
+//	private static List<Method> getInitMethods(Class<?> vmClz) {
+//		List<Method> inits = null;
+//		synchronized(_initMethodCache){
+//			//have to synchronized cache, because it calls expunge when get.
+//			inits = _initMethodCache.get(vmClz);//check again
+//			if(inits!=null) return inits;
+//			
+//			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
+//			
+//			Class<?> curr = vmClz;
+//			
+//			String sign = null;
+//			Set<String> signs = new HashSet<String>();
+//			
+//			while(curr!=null && !curr.equals(Object.class)){
+//				Method currm = null;
+//				//ZK-1033 @Init should supports to annotate on Type
+//				Init initAnnotation = curr.getAnnotation(Init.class);
+//				//only allow one init method in a class.
+//				for(Method m : curr.getDeclaredMethods()){
+//					final Init i = m.getAnnotation(Init.class);
+//					if(i==null) continue;
+//					if(initAnnotation!=null){
+//						throw new UiException("more than one @Init in the class "+curr);
+//					}
+//					initAnnotation = i;
+//					currm = m;
+//					//don't break, we need to check all init methods, we allow only one per class.
+//				}
+//				
+//				if(currm!=null){
+//					//check if overrode the same init method
+//					sign = MiscUtil.toSimpleMethodSignature(currm);
+//					if(signs.contains(sign)){
+//						_log.warning("more than one init method that has same signature '%s' in the hierarchy of '%s', the method in extended class will be call more than once ",sign,vmClz);
+//					}else{
+//						signs.add(sign);
+//					}
+//					
+//					//super first
+//					inits.add(0,currm);
+//				}
+//				//check if we should take care super's init also.
+//				curr = (initAnnotation!=null && initAnnotation.superclass())?curr.getSuperclass():null;
+//			}
+//			inits = Collections.unmodifiableList(inits);
+//			_initMethodCache.put(vmClz, inits);
+//		}
+//		return inits;
+//	}
 	
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void loadOnPropertyChange(Object base, String prop) {
@@ -1957,7 +1861,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		for(Component kid = comp.getFirstChild(); kid != null; kid = kid.getNextSibling()) {
 			loadComponent(kid,loadinit); //recursive
 		}
-		afterComposeViewModel();
 	}
 	
 	private void loadComponentProperties(Component comp,boolean loadinit) {

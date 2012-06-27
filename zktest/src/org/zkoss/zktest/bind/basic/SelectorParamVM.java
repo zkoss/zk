@@ -3,6 +3,7 @@ package org.zkoss.zktest.bind.basic;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.SelectorParam;
 import org.zkoss.bind.annotation.Init;
@@ -12,7 +13,7 @@ import org.zkoss.zul.Label;
 
 public class SelectorParamVM {
 
-	@Init
+	@AfterCompose
 	public void init(@SelectorParam("#l14") Label l4,
 			@SelectorParam("label") List<Label> labels) {
 		for (int i = 0; i < labels.size(); i++) {

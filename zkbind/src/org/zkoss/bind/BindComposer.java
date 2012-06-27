@@ -12,22 +12,27 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
+import org.zkoss.bind.impl.ViewModelAnnotateMethodHandler;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.lang.Strings;
+import org.zkoss.util.CacheMap;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Component;
@@ -79,7 +84,8 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	private static final String QUEUE_NAME_ANNO_ATTR = "queueName";
 	private static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 	
-	
+	private final static Map<Class<?>, List<Method>> _afterComposeMethodCache = 
+		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME);
 	
 	public BindComposer() {
 		setViewModel(this);
@@ -121,11 +127,13 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 	public void addValidator(String name, Validator validator) {
 		_validators.put(name, validator);
 	}
+	
 	//--ComposerExt//
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
 			ComponentInfo compInfo) throws Exception {
 		return compInfo;
 	}
+	
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
@@ -141,29 +149,27 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		BinderKeeper keeper = BinderKeeper.getInstance(comp);
 		keeper.book(_binder, comp);
 	
-		
-//		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
-//		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
-//		_binder.initViewModel(comp, _viewModel, getViewModelInitArgs(evalx,comp));
+		_binder.initViewModel(comp, _viewModel, getViewModelInitArgs(evalx,comp));
 	}
-
-	
 	
 	//--Composer--//
 	public void doAfterCompose(T comp) throws Exception {
 		String cname = (String)comp.getAttribute(COMPOSER_NAME_ATTR);
 		comp.setAttribute(cname != null ? cname : comp.getId()+"$composer", this);
-		_binder.initViewModel(comp, _viewModel,  getViewModelInitArgs(evalx,comp));
 		_binder.initAnnotatedBindings();
 		
+		// trigger ViewModel's @AfterCompose method.
+		new ViewModelAnnotateMethodHandler<AfterCompose>(AfterCompose.class, _afterComposeMethodCache){
+			protected boolean shouldTraceSuperClass(AfterCompose annotation) {
+				return annotation.superclass();
+			}}.invokeAnnotatedMethod(_binder, getViewModelInitArgs(evalx,comp));
+			
 		// call loadComponent
 		BinderKeeper keeper = BinderKeeper.getInstance(comp);
 		if(keeper.isRootBinder(_binder)){
 			keeper.loadComponentForAllBinders();
 		}
 	}
-	
-	
 	
 	
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
