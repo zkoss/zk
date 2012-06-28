@@ -27,6 +27,7 @@ ZK 6.0.2
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
   ZK-1197: ZEL BeanELResolver's invoke impl has serious logical issue
   ZK-1188: Error when mixing ZK creation EL with zkbind on reference or element of collection
+  ZK-1182: stubonly doesn't work
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.

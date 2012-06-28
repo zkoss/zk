@@ -123,7 +123,11 @@ public class StubComponent extends AbstractComponent {
 	@Override
 	public void service(Event event, Scope scope) throws Exception {
 		if (event instanceof StubEvent) {
-			postToNonStubAncestor((StubEvent)event);
+			EventListenerMap map = ((ComponentCtrl) this).getEventListenerMap();
+			if (map != null) {
+				map.service(event, scope, this, ((StubEvent)event).getCommand());
+			} else
+				postToNonStubAncestor((StubEvent)event);
 		} else {
 			super.service(event, scope);
 		}
