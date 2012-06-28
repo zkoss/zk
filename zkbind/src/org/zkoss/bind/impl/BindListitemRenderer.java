@@ -67,24 +67,17 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
 			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
 			
-			final Component[] items = tm.create(listbox, item, 
-				new VariableResolverX() {//this resolver is for EL ${} not for binding 
-					public Object resolveVariable(String name) {
-						//shall never call here
-						return varnm.equals(name) ? data : null;
-					}
-
-					public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
-						if (base == null) {
-							if(varnm.equals(name)){
-								return data;
-							}else if(itervarnm.equals(name)){//iteration status
-								return iterStatus;
-							}
-						}
-						return null;
-					}
-				}, null);
+			//bug 1188, EL when nested var and itervar
+			Object oldVar = listbox.getAttribute(varnm);
+			Object oldIter = listbox.getAttribute(itervarnm);
+			listbox.setAttribute(varnm, data);
+			listbox.setAttribute(itervarnm, iterStatus);
+			
+			final Component[] items = tm.create(listbox, item, null, null);
+			
+			listbox.setAttribute(varnm, oldVar);
+			listbox.setAttribute(itervarnm, oldIter);
+			
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 
