@@ -1,0 +1,68 @@
+<?page title="Auto Generated index.zul"?>
+<window id="mainWindow" title="" border="normal" height="100%"
+	contentStyle="overflow:auto" apply="org.zkoss.bind.BindComposer"
+	validationMessages="@id('vmsgs')"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01185CollectionBindingNPE')">
+
+	<groupbox hflex="1">
+		<caption label="Person Profile" />
+		<listbox id="personList" model="@bind(vm.person)">
+			<listhead>
+				<listheader label="" width="140px" />
+				<listheader label="" width="30px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell>
+						Name
+						<textbox value="@bind(item.name)" width="90%" />
+					</listcell>
+					<listcell />
+					<listcell>
+						<hlayout>
+							<label value="X" onClick="@command('removePerson', index=personList.selectedIndex)" />
+						</hlayout>
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter id="footerPerson" span="4" align="right">
+					<button onClick="@command('addMorePerson')"
+						label="Add Person" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</groupbox>
+
+	<groupbox hflex="1">
+		<caption label="Person Websites" />
+		<listbox id="urlList" model="@bind(vm.URL)">
+			<listhead>
+				<listheader label="" width="140px" />
+				<listheader label="" width="30px" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell>
+						URL
+						<textbox
+							constraint="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/: Invalid URL"
+							value="@bind(item.url)" width="90%" />
+					</listcell>
+					<listcell />
+					<listcell>
+						<hlayout>
+							<label value="X" onClick="@command('remove', index=urlList.selectedIndex)" />
+						</hlayout>
+					</listcell>
+				</listitem>
+			</template>
+			<listfoot>
+				<listfooter id="footerURL" span="4" align="right">
+					<button onClick="@command('addMore')"
+						label="Add Website" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</groupbox>
+</window>
