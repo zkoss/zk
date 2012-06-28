@@ -882,7 +882,7 @@
 		<xs:attribute name="align" type="packAttrType" use="optional" />
 		<xs:attribute name="pack" type="packAttrType" use="optional" />
 		<xs:attribute name="sizedByContent" type="booleanType" use="optional" />
-	</xs:complexType>
+	</xs:complexType>		
     <!-- button -->
 	<xs:element name="button" type="buttonType" />
 	<xs:complexType name="buttonType">
@@ -1206,6 +1206,16 @@
 		<xs:attribute name="step" type="doubleType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
 	</xs:complexType>
+    <!-- dropupload -->
+	<xs:element name="dropupload" type="dropuploadType" />
+	<xs:complexType name="dropuploadType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="intType" use="optional" />
+		<xs:attribute name="detection" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>	
     <!-- east -->
 	<xs:element name="east" type="eastType" />
 	<xs:complexType name="eastType">

@@ -176,10 +176,11 @@ public class AuDropUploader implements AuExtension {
 	private static final
 	void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
 	throws IOException {
-		List<Media> meds = (List<Media>) desktop.getAttribute("UploadFile");
+		String uuid = attrs.get("uuid");
+		List<Media> meds = (List<Media>) desktop.getAttribute(uuid);
 		if (meds == null ){
 			meds = new LinkedList<Media>();
-			desktop.setAttribute("UploadFile", meds);
+			desktop.setAttribute(uuid, meds);
 		}
 		
 		final boolean alwaysNative = "true".equals(params.get("native"));
