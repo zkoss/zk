@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-B50-3355680.zul
-
-	Purpose:
-		
-	Description:
-		
-	History:
-		Tue Jul 12 12:50:31 TST 2011, Created by simon
-
-Copyright (C) 2011 Potix Corporation. All Rights Reserved.
--->
+<!-- B50-3355680.zul Purpose: Description: History: Tue Jul 12 12:50:31 TST 
+	2011, Created by simon Copyright (C) 2011 Potix Corporation. All Rights Reserved. -->
 <zk>
-	<div>
-		Open Combobox and select the first item. If the size of Combobox shrank, it is a bug.
-	</div>
-	<grid hflex="1">
-		<rows>
-			<row>
-				<combobox hflex="1"
-					onChange='self.setStyle("color:green;");'>
-					<comboitem label="14068250 (14068250,2,FCY111)" />
-				</combobox>
-			</row>
-		</rows>
-	</grid>
+	<vlayout>
+		<div>
+			Open Combobox and select the first item. If the size of Combobox shrank,
+			it is a bug.
+		</div>
+		<grid hflex="1">
+			<rows>
+				<row>
+					<combobox hflex="1" onChange='self.setStyle("color:green;");'>
+						<comboitem label="14068250 (14068250,2,FCY111)" />
+					</combobox>
+				</row>
+			</rows>
+		</grid>
+	</vlayout>
 </zk>
