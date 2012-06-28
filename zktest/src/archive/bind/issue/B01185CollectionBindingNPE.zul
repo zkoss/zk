@@ -1,5 +1,14 @@
 <?page title="Auto Generated index.zul"?>
-<window id="mainWindow" title="" border="normal" height="100%"
+<zk xmlns:n="native">
+<n:ol>
+	<n:li>click add Person</n:li>
+	<n:li>click X to delete person</n:li>
+	<n:li>click add URL</n:li>
+	<n:li>click X to delete URL</n:li>
+	<n:li>there shouldn't pop up an alert of NPE</n:li>
+</n:ol>
+
+<window id="mainWindow" title="" border="normal" height="400px"
 	contentStyle="overflow:auto" apply="org.zkoss.bind.BindComposer"
 	validationMessages="@id('vmsgs')"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01185CollectionBindingNPE')">
@@ -20,14 +29,15 @@
 					<listcell />
 					<listcell>
 						<hlayout>
-							<label value="X" onClick="@command('removePerson', index=personList.selectedIndex)" />
+							<label id="delPerson_${itemStatus.index}" 
+								value="X" onClick="@command('removePerson', index=itemStatus.index)" />
 						</hlayout>
 					</listcell>
 				</listitem>
 			</template>
 			<listfoot>
 				<listfooter id="footerPerson" span="4" align="right">
-					<button onClick="@command('addMorePerson')"
+					<button id="addPersonBtn" onClick="@command('addMorePerson')"
 						label="Add Person" />
 				</listfooter>
 			</listfoot>
@@ -52,7 +62,8 @@
 					<listcell />
 					<listcell>
 						<hlayout>
-							<label value="X" onClick="@command('remove', index=urlList.selectedIndex)" />
+							<label id="delUrl_${itemStatus.index}" 
+								value="X" onClick="@command('remove', index=itemStatus.index)" />
 						</hlayout>
 					</listcell>
 				</listitem>
@@ -60,9 +71,10 @@
 			<listfoot>
 				<listfooter id="footerURL" span="4" align="right">
 					<button onClick="@command('addMore')"
-						label="Add Website" />
+						id="addUrlBtn" label="Add Website" />
 				</listfooter>
 			</listfoot>
 		</listbox>
 	</groupbox>
 </window>
+</zk>
