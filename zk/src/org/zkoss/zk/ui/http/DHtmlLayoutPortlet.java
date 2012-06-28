@@ -140,10 +140,19 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 		SessionsCtrl.setCurrent(sess);
 		try {
-			if (!process(sess, request, response, path, bRichlet))
-				handleError(sess, request, response, path, null, null);
-		} catch (Throwable ex) {
-			handleError(sess, request, response, path, ex, null);
+			// Bug ZK-1179: process I18N in portlet environment
+			HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
+			HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
+			final Object old = I18Ns.setup(httpreq.getSession(), httpreq, httpres,
+					sess.getWebApp().getConfiguration().getResponseCharset()); 
+			try {
+				if (!process(sess, request, response, path, bRichlet))
+					handleError(sess, request, response, path, null, null);
+			} catch (Throwable ex) {
+				handleError(sess, request, response, path, ex, null);
+			} finally {
+				I18Ns.cleanup(httpreq, old);
+			}
 		} finally {
 			SessionsCtrl.requestExit(sess);
 			SessionsCtrl.setCurrent((Session)null);

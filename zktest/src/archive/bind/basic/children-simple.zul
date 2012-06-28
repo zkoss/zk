@@ -7,7 +7,7 @@
 		</template>
 	</vlayout> 
 	Simple - load
-	<vlayout id="load" children="@load(vm.nodes)">
+	<vlayout id="load" children="@load(vm.nodes2)"> <!-- node2 for testing zk-1191 -->
 		<template name="children" var="node">
 			<label value="@bind(node.name)" style="padding-left:10px"/>
 		</template>

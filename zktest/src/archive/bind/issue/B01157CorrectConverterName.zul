@@ -1,0 +1,18 @@
+<!-- B01157CorrectConverterName.zul -->
+<zk>
+
+	<window title="correct formatted converter name"
+		border="normal" 
+		apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01157CorrectConverterName')">
+	
+	
+	
+		<label value="@load(vm.price) @converter('formattedNumber', format='###,##0.00')"/>
+		<label value="@load(vm.creationDate) @converter('formattedDate', format='yyyy/MM/dd')"/>
+	</window>
+
+
+
+
+</zk>

@@ -33,6 +33,15 @@ ZK 6.0.2
   ZK-1124: onOpen event not firing when closing a Menupopup
   ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
   ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
+  ZK-1178: ZEL should support method overloading
+  ZK-1191: Children binding converter doesn't converter a pure Collection
+  ZK-1189: Save into a deep form bean fires improper NotifyChange
+  ZK-1202: Combobox not removing old items and reset selection when changing models
+  ZK-1157: formatedDate and formatedNumber should be formatted
+  ZK-1196: Listbox renders incorrectly in richlet with ZK 6.0.2.FL.20120607
+  ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
+  ZK-1197: ZEL BeanELResolver's invoke impl has serious logical issue
+  ZK-1188: Error when mixing ZK creation EL with zkbind on reference or element of collection
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.

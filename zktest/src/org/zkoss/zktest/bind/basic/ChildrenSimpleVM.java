@@ -1,12 +1,16 @@
 package org.zkoss.zktest.bind.basic;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.NotifyChange;
 
 public class ChildrenSimpleVM {
@@ -23,6 +27,24 @@ public class ChildrenSimpleVM {
 	
 	public List<Node> getNodes(){
 		return nodes;
+	}
+	
+	@DependsOn("nodes")
+	public Collection<Node> getNodes2(){
+		return new AbstractCollection<ChildrenSimpleVM.Node>() {
+
+			@Override
+			public Iterator<Node> iterator() {
+				return nodes.iterator();
+			}
+
+			@Override
+			public int size() {
+				// TODO Auto-generated method stub
+				return nodes.size();
+			}
+			
+		};
 	}
 	
 	Node createNode(String name,int children,int nested){
