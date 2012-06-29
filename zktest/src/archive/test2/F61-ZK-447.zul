@@ -1,0 +1,195 @@
+<zk>
+	<style>
+	.viewer {
+		background:#F4F8FF;
+		border: 1px solid #99AABD;
+		font-family: tahoma,helvetica,arial,sans-serif;
+		font-size: 11px;
+		padding: 2px;
+		width: 500px;
+		color: #0F3B82;
+	}
+	.viewer a {
+		color: #0366AC;
+		font-weight: bold;
+		cursor: pointer;
+	}
+	.float-left {
+		float: left;
+	}
+	.float-right {
+		float: right;
+	}
+	.clear {
+		clear: both;
+	}
+	</style>
+	<zscript><![CDATA[
+	public void showFileInfo(org.zkoss.zk.ui.event.UploadEvent event){
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		StringBuffer sb = new StringBuffer();
+		for (org.zkoss.util.media.Media m : medias) {
+			sb.append(m.getName()+" : "+m.getContentType()+"\n");
+		}
+		Messagebox.show(sb.toString());
+	}
+	]]></zscript>
+	<script><![CDATA[
+	zk.MyFileViewer = zk.$extends(zk.Object, {
+		updated: null,
+		$init: function (uplder,  file) {
+			this._uplder = uplder;
+			var id = uplder.id,
+				uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
+				html = '<div id="' + id + '" class="viewer"><image class="float-left" src="' + uri + '"/>'
+				+ '<div class="float-left">FileName: ' + file.name
+				+ ' <a id="' + id + '-cancel">Cancel</a></div><div class="float-right">'
+				+ msgzk.FILE_SIZE + ': <span id="' + id + '-sent">0</span> of '
+				+ '<span id="' + id + '-total">0</span></div><div class="clear"></div></div>';
+				
+			jq(uplder.getWidget().getPage()).append(html);
+			
+			this.viewer = jq('#'+ id)[0];
+			jq('#' + id + '-cancel').click(function() {
+				uplder.cancel();
+			});
+		},
+		update: function (sent, total) {
+			jq('#'+ this._uplder.id + '-sent').html(Math.round(sent/1000) + msgzk.KBYTES);
+			if (!this.updated) {
+				this.updated = true;
+				jq('#'+ this._uplder.id + '-total').html(Math.round(total/1024)+msgzk.KBYTES);
+			}
+		},
+		destroy: function () {
+			jq(this.viewer).remove();
+		}
+	});
+	]]></script>
+		
+	<label multiline="true"><![CDATA[
+	Browser support : Firefox (13+), Chrome (19+), Safari (5.1+)
+	Browser unsupport : IE9, Opera (11)
+	
+	Suggestion : Server and client run in different machine.
+		
+	Normail test case :
+	1. When drag files into widget, will show progress bar separately, but only one file will start upload. 
+	2. Press "cancle" on progress bar whenever the file is uploading or not, then upload will abort (if uploading), progress bar will dismiss, and start next upload (if need). 
+	3. When a file upload finish, progress bar will dismiss, then start next upload (if need).
+	4. If all files are uploaded, show information of upload files.
+	5. If all files are cancel (nothing uploaded), nothing happen.
+	]]></label>
+	<hlayout>   
+		<dropupload maxsize="-1" content="default viewer" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="-1" content="custom viewer" detection="none" onUpload="showFileInfo(event)" viewClass="zk.MyFileViewer" />
+	</hlayout>
+	
+	<separator bar="true" />
+	
+	<label multiline="true"><![CDATA[
+	Maxsize test case :
+	1. Drop files into widget, if all files size smaller than limit, upload will start.
+	2. Drop files into widget, if any files size bigger than limit, will alert error message and nothing will upload.
+	]]></label>
+	<hlayout>
+		<dropupload maxsize="51200" content="50MB" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="-1" content="unlimited" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload content="no assign (5MB)" detection="none" onUpload="showFileInfo(event)" />
+	</hlayout>
+	
+	<separator bar="true" />
+
+	<label multiline="true"><![CDATA[
+	Detection test case :
+	The behavior of test case, please see the bottom grid.
+	Notice : This test is NOT for detection="browser". Please test it on "F61-ZK-447-Browser.zul".
+	]]></label>
+	<hlayout>
+		<vlayout>
+			<dropupload maxsize="-1" detection="self" onUpload="showFileInfo(event)">
+				<attribute name="content"><![CDATA[
+					<hr/>
+					<b>HTML content</b>
+					<hr/>
+				]]></attribute>
+			</dropupload>
+			<label>detection = self</label>
+		</vlayout>
+		<vlayout>
+			<dropupload maxsize="-1" content="content" detection="triggerBlock" onUpload="showFileInfo(event)" />
+			<label>detection = triggerBox</label>
+		</vlayout>
+	</hlayout>
+
+	<grid id="triggerBlock">
+		<auxhead>
+			<auxheader colspan="4" label="id=triggerBlock" />
+		</auxhead>
+		<columns>
+			<column>  </column>
+			<column>detection="none"</column>
+			<column>detection="self"</column>
+			<column>detection="triggerBlock"</column>
+			<column>detection="browser" or id not found</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="initialization" />
+				<label value="Show both block and content" />
+				<label value="Show block without content" />
+				<label value="Show block without content" />
+				<label value="Nothing" />
+			</row>
+			<row>
+				<label multiline="true"><![CDATA[ Drag over document.body,
+					but not over Dropupload 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"><![CDATA[ Show both block and content.
+					 
+					The cursor will look like "stop".
+					Drop file will do nothing.
+				]]></label>
+			</row>
+			<row>
+				<label multiline="true">drag over id=triggerBlock</label>
+				<label multiline="true"> -- </label>
+				<label multiline="true"> -- </label>
+				<label multiline="true"><![CDATA[ Show content.
+					
+					The cursor will look like "stop".
+					Drop file will do nothing. 
+				]]></label>
+				<label multiline="true"> N/A </label>
+			</row>
+			<row>
+				<label multiline="true">drag over Dropupload</label>
+				<label multiline="true"><![CDATA[ The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>				
+				<label multiline="true"><![CDATA[ Show content.
+				
+					The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+				<label multiline="true"><![CDATA[ The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+				<label multiline="true"><![CDATA[ Show both block and content.
+				
+					The cursor will look like "copy into".
+					Drop file will start upload. 
+				]]></label>
+			</row>
+		</rows>
+	</grid>
+</zk>

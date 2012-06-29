@@ -2,6 +2,7 @@
 ZK 6.1.0
 
 * Features
+  ZK-447: The file upload allows users to drag and drop local files (HTML5)
   ZK-970: The Tab component support caption component as it's label
   ZK-1145: Notification supports closable
   ZK-1175: Calendar support show week number

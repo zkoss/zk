@@ -556,6 +556,7 @@
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
 			<xs:element ref="doublespinner" />
+			<xs:element ref="dropupload"/>
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="flash" />
@@ -637,6 +638,7 @@
 				<xs:element ref="div" />
 				<xs:element ref="doublebox" />
 				<xs:element ref="doublespinner" />
+				<xs:element ref="dropupload"/>
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="flash" />
@@ -1209,6 +1211,16 @@
 		<xs:attribute name="step" type="doubleType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
 	</xs:complexType>
+    <!-- dropupload -->
+	<xs:element name="dropupload" type="dropuploadType" />
+	<xs:complexType name="dropuploadType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="maxsize" type="intType" use="optional" />
+		<xs:attribute name="detection" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>	
     <!-- east -->
 	<xs:element name="east" type="eastType" />
 	<xs:complexType name="eastType">

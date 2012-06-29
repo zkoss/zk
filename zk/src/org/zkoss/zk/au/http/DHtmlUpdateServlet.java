@@ -100,8 +100,8 @@ import org.zkoss.zk.device.Devices;
  * </dd>
  * </dl>
  *
- * <p>By default: there are two extensions are associated with
- * "/upload" and "/view" (see {@link #addAuExtension}.
+ * <p>By default: there are three extensions are associated with
+ * "/upload", "/view" and "/dropupload" (see {@link #addAuExtension}.
  * Also, "/web" is reserved. Don't associate to any AU extension.
  *
  * @author tomyeh
@@ -202,6 +202,31 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					});
 			}
 		}
+		
+		//==== for ZK-447 DropUpload ====//
+		if (getAuExtension("/dropupload") == null) {
+			try {
+				addAuExtension("/dropupload", new AuDropUploader());
+			} catch (Throwable ex) {
+				final String msg =
+						"Make sure commons-fileupload.jar is installed.";
+					log.warningBriefly("Failed to configure fileupload. "+msg, ex);
+
+					//still add /upload to generate exception when fileupload is used
+					addAuExtension("/dropupload",
+						new AuExtension() {
+							@Override public void init(DHtmlUpdateServlet servlet) {}
+							@Override public void destroy() {}
+							@Override
+							public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+							throws ServletException, IOException {
+								if (Sessions.getCurrent(false) != null)
+									throw new ServletException("Failed to upload. "+msg);
+							}
+						});
+				}
+		}
+		//================//		
 
 		if (getAuExtension("/view") == null)
 			addAuExtension("/view", new AuDynaMediar());
