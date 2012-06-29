@@ -167,12 +167,20 @@ Selectable<E>, java.io.Serializable {
 	/**Removes the selection of the given collection.
 	 */
 	protected void removeAllSelection(Collection<?> c) {
-		_selection.removeAll(c);
+		// B60-ZK-1126
+		// Notify selection has been changed
+		if (_selection.removeAll(c)) {
+			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+		}
 	}
 	/**Removes the selection that doesn't belong to the given collection.
 	 */
 	protected void retainAllSelection(Collection<?> c) {
-		_selection.retainAll(c);
+		// B60-ZK-1126
+		// Notify selection has been changed
+		if (_selection.retainAll(c)) {
+			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
+		}
 	}
 
 	/** {@inheritDoc} */

@@ -16,6 +16,7 @@ ZK 6.0.2
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
   ZK-1124: onOpen event not firing when closing a Menupopup
+  ZK-1126: Removing all items in certain AbstractListModel(s) may not work properly
   ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
   ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
   ZK-1178: ZEL should support method overloading
