@@ -1176,6 +1176,10 @@ public class Tree extends MeshElement {
 			}
 			clone._dataListener = null;
 			clone.initDataListener();
+
+			// As the bug in B30-1892446.zul, the component clone won't
+			// clone the posted event, so we need to remove the attributes here.
+			clone.removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 		}
 		return clone;
 	}
