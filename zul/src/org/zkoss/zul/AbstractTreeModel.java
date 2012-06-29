@@ -151,7 +151,7 @@ java.io.Serializable {
 	 * @since 5.0.6
 	 */
 	public int getIndexOfChild(E parent, E child) {
-		final int cnt = getChildCount(parent);
+		final int cnt = _childCount(parent);
 		for (int j = 0; j < cnt; ++j)
 			if (Objects.equals(child, getChild(parent, j)))
 				return j;
@@ -164,19 +164,23 @@ java.io.Serializable {
 		if (path.length == 0) return parent;
 		
 		E node = null;
-		int childCount = getChildCount(parent);
+		int childCount = _childCount(parent);
 		for (int i = 0; i < path.length; i++) {
 			if (path[i] < 0 || path[i] > childCount)
 				return null;
 			node = getChild(parent, path[i]);
 
-			if (node != null && (childCount = getChildCount(node)) > 0) {
+			if (node != null && (childCount = _childCount(node)) > 0) {
 				parent = node;
 			} else if (i != path.length - 1) {
 				return null;
 			}
 		}
 		return node;
+	}
+	//Retrieves the child count. Note: it won't call getChildCount if isLeaf
+	private int _childCount(E parent) {
+		return isLeaf(parent) ? 0: getChildCount(parent);
 	}
 
 
@@ -200,10 +204,8 @@ java.io.Serializable {
 	private boolean dfSearch(List<Integer> path, E node, E target){
 		if (node.equals(target))
 			return true;
-		if (isLeaf(node))
-			return false;
 
-		for (int i = 0, size = getChildCount(node); i< size; i++)
+		for (int i = 0, size = _childCount(node); i< size; i++)
 			if (dfSearch(path, getChild(node, i), target)){
 				path.add(0, new Integer(i));
 				return true;

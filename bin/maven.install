@@ -48,6 +48,7 @@ function upVer {
 }
 
 cd $maindir
+upVer zel
 upVer zcommon
 upVer zweb
 upVer zk

@@ -143,6 +143,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.2
 	 * @see ListSubModel#getSubModel(Object, int)
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
 		return (ListModel)_model;
 	}
@@ -163,7 +164,13 @@ public class Combobox extends Textbox {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
-				} else if (!getItems().isEmpty()) getItems().clear();
+				}
+				// Bug B60-ZK-1202.zul
+				// Remove current items anyway, when changing models
+				if (!getItems().isEmpty()) { 
+				  getItems().clear();
+				}
+				
 				_model = model;
 				_subModel = null; //clean up (generated later)
 				initDataListener();
@@ -789,8 +796,11 @@ public class Combobox extends Textbox {
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		_syncItemIndicesLater = true;
-		if (child == _selItem)
+		if (child == _selItem) {
+			// Bug B60-ZK-1202.zul
+			_selItem = null;
 			schedSyncValueToSelection();
+		}
 		smartUpdate("repos", true);
 	}
 	

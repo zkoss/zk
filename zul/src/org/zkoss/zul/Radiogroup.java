@@ -354,6 +354,7 @@ public class Radiogroup extends XulElement {
 	 * if this radiogroup is not associated with any list data model.
 	 * @since 6.0.0
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
 		return (ListModel)_model;
 	}

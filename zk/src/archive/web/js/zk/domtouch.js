@@ -276,7 +276,7 @@ zk.override(jq.fn, _jq, {
 				}
 			}
 		} else
-			this.zbind.apply(this, arguments); // Bug ZK-1142: recove back to latest domios.js
+			this.zbind.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
 			
 		return this;
 	},
@@ -300,7 +300,7 @@ zk.override(jq.fn, _jq, {
 				}
 			}
 		} else
-			this.zunbind.apply(this, arguments); // Bug ZK-1142: recove back to latest domios.js
+			this.zunbind.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
 		return this;
 	}
 });

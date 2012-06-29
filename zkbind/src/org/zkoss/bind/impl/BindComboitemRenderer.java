@@ -66,24 +66,18 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
 			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
-			final Component[] items = tm.create(cb, item,
-				new VariableResolverX() {
-					public Object resolveVariable(String name) {
-						//shall never call here
-						return varnm.equals(name) ? data : null;
-					}
-	
-					public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
-						if (base == null) {
-							if(varnm.equals(name)){
-								return data;
-							}else if(itervarnm.equals(name)){//iteration status
-								return iterStatus;
-							}
-						}
-						return null;
-					}
-				}, null);
+			
+			//bug 1188, EL when nested var and itervar
+			Object oldVar = cb.getAttribute(varnm);
+			Object oldIter = cb.getAttribute(itervarnm);
+			cb.setAttribute(varnm, data);
+			cb.setAttribute(itervarnm, iterStatus);
+			
+			final Component[] items = tm.create(cb, item, null, null);
+			
+			cb.setAttribute(varnm, oldVar);
+			cb.setAttribute(itervarnm, oldIter);
+			
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not "+items.length);
 

@@ -52,6 +52,7 @@ function jvdoc {
 mkdir -p /tmp/maven/_javadoc
 
 cd $maindir
+jvdoc zel
 jvdoc zcommon
 jvdoc zweb
 jvdoc zk

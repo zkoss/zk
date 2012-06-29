@@ -103,7 +103,7 @@
 	<label multiline="true"><![CDATA[
 	Detection test case :
 	The behavior of test case, please see the bottom grid.
-	Notice : This test is NOT for detection="browser". Please test it at "F61-ZK-447-Browser.zul".
+	Notice : This test is NOT for detection="browser". Please test it on "F61-ZK-447-Browser.zul".
 	]]></label>
 	<hlayout>
 		<vlayout>

@@ -1,0 +1,26 @@
+<?meta name="viewport" content="width=800"?>
+<zk>
+	<n:h3 xmlns:n="native">iPad/Android</n:h3>
+	<vlayout>
+		1. Should see scroll bar on inside Listbox and Grid components.<separator spacing="0"/>
+		2. Scroll down on Listbox and Grid, should see more items under option 50 and won't jump back.
+		<zscript><![CDATA[
+			org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(300);
+		]]></zscript>
+		<hlayout>
+			<listbox width="200px" height="270px" model="${strset}">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listhead>
+					<listheader label="Listbox" />
+				</listhead>
+			</listbox>
+			<grid width="200px" height="270px" model="${strset}">
+				<custom-attributes org.zkoss.zul.grid.rod="true"/>
+				<columns>
+					<column label="Grid" />
+				</columns>
+			</grid>
+		</hlayout>
+	</vlayout>
+	javascript:(function(e){e.setAttribute("src","http://10.1.3.108:8080/target/target-script-min.js#anonymous");document.getElementsByTagName("body")[0].appendChild(e);})(document.createElement("script"));void(0);
+</zk>

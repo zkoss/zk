@@ -856,7 +856,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		
-		var t = this.ebody.scrollTop,
+		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = this.ebody.scrollLeft,
 			scrolled = (t != this._currentTop || l != this._currentLeft);
 		if (scrolled && 
@@ -885,7 +885,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_onScrollPos: function () {
 		// Bug ZK-414
 		if (this.ebody) {
-			this._currentTop = this.ebody.scrollTop;
+			this._currentTop = zul.mesh.Scrollbar.getScrollPosV(this);
 			this._currentLeft = this.ebody.scrollLeft;
 			this.fire('onScrollPos', {
 				top: this._currentTop,
@@ -926,7 +926,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
 		var items = [],
-			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
+			min = zul.mesh.Scrollbar.getScrollPosV(this), max = min + this.ebody.offsetHeight;
 		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}), 
 				len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
@@ -1554,4 +1554,33 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		_adjMinWd(this);
 	}
 });
+/** @class Scrollbar
+ * The extra Scrollbar for the MeshWidget.
+ * It is designed to be overriden
+ * @since 6.1.0
+ */
+zul.mesh.Scrollbar = {
+	/**
+	 * Initialize the scrollbar.
+	 * @param Widget wgt a widget
+	 */
+	init: function (wgt) {
+		return;
+	},
+	/**
+	 * Return the DOM contains all records
+	 * @param Widget wgt a widget
+	 */
+	getScrollCave: function (wgt) {
+		return;
+	},
+	/**
+	 * Return the vertical scroll position of the given DOM elements.
+	 * @param Widget wgt the widget
+	 * @return int
+	 */
+	getScrollPosV: function (wgt) {
+		return wgt.ebody.scrollTop;
+	}
+};
 })();
