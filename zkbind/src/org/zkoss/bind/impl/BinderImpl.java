@@ -181,7 +181,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	private boolean _hasGetValidatorMethod = true;
 
 	//flag to keep info of the binding is initialized or not.
-	private boolean _init = false;
+	protected boolean _init = false;
 	
 	//flag to keep info that binder is in activating state
 	private boolean _activating = false;
@@ -280,8 +280,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//show a warn only
 			_log.warning("you are using a composer [%s] as a view model",viewModel);
 		}
-		//Should we handle here or in setViewModel for every time set a view model into binder?
-//		initViewModel(viewModel, initArgs);
 		new ViewModelAnnotateMethodHandler<Init>(Init.class, _initMethodCache){
 			protected boolean shouldTraceSuperClass(Init annotation) {
 				return annotation.superclass();
@@ -290,86 +288,6 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 	}
 	
-	//handle init of a viewmodel. 
-//	private void initViewModel(Object viewModel, Map<String, Object> initArgs){
-//		final Class<?> vmClz = viewModel.getClass();
-//		
-//		List<Method> inits = getInitMethods(vmClz);
-//		if(inits.size()==0) return;//no init method
-//		
-//		if(initArgs!=null){
-//			initArgs = BindEvaluatorXUtil.evalArgs(getEvaluatorX(), _rootComp, initArgs);
-//		}
-//		
-//		for(Method m : inits){//TODO: why paramCall need to be prepared each time?
-//			final BindContext ctx = 
-//				BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
-//			
-//			try {
-//				ParamCall parCall = createParamCall(ctx);
-//				if(initArgs!=null){
-//					parCall.setBindingArgs(initArgs);
-//				}
-//				parCall.call(viewModel, m);
-//			} catch (Exception e) {
-//				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
-//					_initMethodCache.remove(vmClz);
-//				}
-//				throw new UiException(e.getMessage(),e);
-//			}
-//		}
-//	}
-//	
-//	private static List<Method> getInitMethods(Class<?> vmClz) {
-//		List<Method> inits = null;
-//		synchronized(_initMethodCache){
-//			//have to synchronized cache, because it calls expunge when get.
-//			inits = _initMethodCache.get(vmClz);//check again
-//			if(inits!=null) return inits;
-//			
-//			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
-//			
-//			Class<?> curr = vmClz;
-//			
-//			String sign = null;
-//			Set<String> signs = new HashSet<String>();
-//			
-//			while(curr!=null && !curr.equals(Object.class)){
-//				Method currm = null;
-//				//ZK-1033 @Init should supports to annotate on Type
-//				Init initAnnotation = curr.getAnnotation(Init.class);
-//				//only allow one init method in a class.
-//				for(Method m : curr.getDeclaredMethods()){
-//					final Init i = m.getAnnotation(Init.class);
-//					if(i==null) continue;
-//					if(initAnnotation!=null){
-//						throw new UiException("more than one @Init in the class "+curr);
-//					}
-//					initAnnotation = i;
-//					currm = m;
-//					//don't break, we need to check all init methods, we allow only one per class.
-//				}
-//				
-//				if(currm!=null){
-//					//check if overrode the same init method
-//					sign = MiscUtil.toSimpleMethodSignature(currm);
-//					if(signs.contains(sign)){
-//						_log.warning("more than one init method that has same signature '%s' in the hierarchy of '%s', the method in extended class will be call more than once ",sign,vmClz);
-//					}else{
-//						signs.add(sign);
-//					}
-//					
-//					//super first
-//					inits.add(0,currm);
-//				}
-//				//check if we should take care super's init also.
-//				curr = (initAnnotation!=null && initAnnotation.superclass())?curr.getSuperclass():null;
-//			}
-//			inits = Collections.unmodifiableList(inits);
-//			_initMethodCache.put(vmClz, inits);
-//		}
-//		return inits;
-//	}
 	
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void loadOnPropertyChange(Object base, String prop) {

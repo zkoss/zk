@@ -89,15 +89,6 @@ public interface Binder {
 	public void init(Component root, Object viewModel, Map<String, Object> initArgs);
 	
 	/**
-	 * Initializes the binder's viewModel object. 
-	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
-	 * this 
-	 * @param viewModel viewModel object
-	 * @since 6.0.2
-	 */
-//	public void initViewModel(Object viewModel);
-	
-	/**
 	 * Load the load-binding of the component. <br/>
 	 * By calling this method, all load-bindings in the component (including load-bindings in its descendant) will reload the value to components. 
 	 *   

@@ -17,6 +17,7 @@ import java.util.Map;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.EventQueues;
 
 /**
@@ -27,6 +28,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  */
 public class AnnotateBinder extends BinderImpl {
 	private static final long serialVersionUID = 1463169907348730644L;
+	private boolean _initBindings;
 	/**
 	 * new a annotate binder with default event queue name and scope
 	 */
@@ -44,24 +46,23 @@ public class AnnotateBinder extends BinderImpl {
 	}
 	
 	/**
-	 * in AnnotateBinder, {@link #init(Component, Object, Map)} is merely a convenient method for orignal  
-	 * @see #initViewModel(Component, Object, Map)
-	 * @see #initAnnotatedBindings()
-	 * @param comp
-	 * @param vm
-	 * @param initArgs
+	 *  {@inheritDoc}
+	 *  in {@link AnnotateBinder}, this method will do component annotation bindings parsing also.<br> 
+	 *  it's equivalent to call {@link #initViewModel(Component, Object, Map)} plus {@link #initAnnotatedBindings()}.
+	 *  @see #initViewModel(Component, Object, Map)
+	 *  @see #initAnnotatedBindings()  
 	 */
 	public void init(Component comp, Object vm, Map<String, Object> initArgs){
-		super.init(comp, vm, initArgs);
-		new AnnotateBinderHelper(this).initComponentBindings(comp);
-		comp.setAttribute(BINDER, this);
+		initViewModel(comp, vm, initArgs);
+		initAnnotatedBindings();
 	}
 	
 	/**
-	 * 
-	 * @param comp
-	 * @param vm
-	 * @param initArgs
+	 * this method will call super's {@link Binder#init(Component, Object)} only, this is a compromise 
+	 * to keep the original specification of {@link AnnotateBinder#init(Component, Object, Map)}   
+	 * @param comp host component of this binder
+	 * @param vm View model instance
+	 * @param initArgs init arguments
 	 * @since 6.0.2
 	 */
 	public void initViewModel(Component comp, Object vm, Map<String, Object> initArgs){
@@ -69,10 +70,14 @@ public class AnnotateBinder extends BinderImpl {
 	}
 	
 	/**
-	 * 
+	 * Do component zul annotation parsing and build binding relationship tree for further data bind evaluating works.  
 	 * @since 6.0.2
 	 */
 	public void initAnnotatedBindings(){
+		if(!_init ) throw new UiException("initViewModel need to be called before invoking this method");
+		if(_initBindings ) throw new UiException("this method can be called only once.");
+		_initBindings = true;
+		
 		new AnnotateBinderHelper(this).initComponentBindings(this.getView());
 		//mark this component was handled by binder after init
 		this.getView().setAttribute(BINDER, this);

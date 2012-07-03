@@ -48,11 +48,11 @@ import java.lang.annotation.Target;
  * <p> <b>Parameter Binding</b>: for convenience, afterCompose method support several kinds of 
  * Parameter Annotations.  Binder will weave it's context(Zul page annotation, Java EE Context) 
  * with method's parameters while invocation.<br>
- * The difference between @afterCompose and @Init is - afterCompose has no zul declaration's part 
+ * The difference between @afterCompose and @init is - afterCompose has no zul declaration's part 
  * by it's self. Instead, it will share BindingParam's with @init's zul declaration. 
  * An example of afterCompose method signature might be looks like this:<br>
  * 
- * <code>viewModel="@id('vm') @Init('BlaBlaVM', a='b')"</code><br>
+ * <code>viewModel="@id('vm') @init('BlaBlaVM', a='b')"</code><br>
  * <code>@AfterCompose public void doAfterCompose(@BindingParam("a")@Default("d") String a)</code><br>
  * 
  * 
