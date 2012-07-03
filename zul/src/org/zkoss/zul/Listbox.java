@@ -3032,6 +3032,11 @@ public class Listbox extends MeshElement {
 			// we use the same data model but we have to create a new listener
 			clone._dataListener = null;
 			clone.initDataListener();
+			
+			// As the bug in tree - B30-1892446.zul, the component clone won't
+			// clone the posted event, so we need to remove the attributes here.
+			clone.removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+			clone.removeAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED);
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
 

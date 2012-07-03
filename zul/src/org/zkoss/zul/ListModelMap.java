@@ -339,12 +339,16 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 		return "natural";	
 	}
 
+	@SuppressWarnings("unchecked")
 	private boolean removePartial(Collection<?> master, Collection<?> c, boolean isRemove, boolean byKey, boolean byValue) {
 		int sz = c.size();
 		int removed = 0;
 		int retained = 0;
 		int index = 0;
 		int begin = -1;
+		// B60-ZK-1126.zul
+		// Remember the selections to be cleared
+		List selected = new ArrayList();
 		for(final Iterator<?> it = master.iterator(); 
 			it.hasNext() && (!isRemove || removed < sz) && (isRemove || retained < sz); ++index) {
 			Object item = it.next();
@@ -353,16 +357,33 @@ implements Sortable<Map.Entry<K, V>>, Map<K, V>, java.io.Serializable {
 					begin = index;
 				}
 				++removed;
-				if (byKey) removeSelectionByKey(item);
-				else if (byValue) removeSelectionByValue(item);
-				else removeFromSelection(item);
 				it.remove();
+				// B60-ZK-1126.zul
+				// Clear the selection later
+				selected.add(item);
 			} else {
 				++retained;
 				if (begin >= 0) {
 					fireEvent(ListDataEvent.INTERVAL_REMOVED, begin, index - 1);
 					index = begin; //this range removed, the index is reset to begin
 					begin = -1;
+				}
+			}
+		}
+		// B60-ZK-1126.zul
+		// Clear the selected items that were removed
+		if (!selected.isEmpty()) {
+			if (byKey) {
+				for (Object item : selected) {
+					removeSelectionByKey(item);
+				}
+			} else if (byValue) {
+				for (Object item : selected) {
+					removeSelectionByValue(item);
+				}
+			} else {
+				for (Object item : selected) {
+					removeFromSelection(item);
 				}
 			}
 		}

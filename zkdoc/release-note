@@ -16,8 +16,10 @@ ZK 6.0.2
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
   ZK-1124: onOpen event not firing when closing a Menupopup
+  ZK-1126: Removing all items in certain AbstractListModel(s) may not work properly
   ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
   ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
+  ZK-1177: SimpleListModelSharer causes NullPointerException when the model is updated
   ZK-1178: ZEL should support method overloading
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
@@ -28,6 +30,8 @@ ZK 6.0.2
   ZK-1197: ZEL BeanELResolver's invoke impl has serious logical issue
   ZK-1188: Error when mixing ZK creation EL with zkbind on reference or element of collection
   ZK-1182: stubonly doesn't work
+  ZK-1228: Tree with model fail to clone
+  ZK-1185: Two collection on zul page returning null when both of them becomes empty
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.

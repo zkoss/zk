@@ -8,7 +8,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
 
 public class B00993IncludeReload {
-	String url = "B00993IncludeReload2.zul";
+	String url = "/bind/issue/B00993IncludeReload2.zul";
 	public String getUrl(){
 		return url;
 	}
