@@ -82,7 +82,7 @@
 	]]></label>
 	<hlayout>   
 		<dropupload maxsize="-1" content="default viewer" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload maxsize="-1" content="custom viewer" detection="none" onUpload="showFileInfo(event)" viewClass="zk.MyFileViewer" />
+		<dropupload maxsize="-1" content="custom viewer" detection="none" onUpload="showFileInfo(event)" viewerClass="zk.MyFileViewer" />
 	</hlayout>
 	
 	<separator bar="true" />
