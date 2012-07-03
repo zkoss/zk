@@ -201,7 +201,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		after.push(function() {
 			_fixForEmpty(w);
 		});
-		zul.mesh.Scrollbar.init(w, zul.mesh.Scrollbar.getScrollCave(w));
+		zul.mesh.Scrollbar.init(w, w.ebodytbl);
 	},
 	onResponse: function () {
 		if (this._shallFixEmpty) 

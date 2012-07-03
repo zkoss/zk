@@ -1013,8 +1013,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.fireOnRender(155);
 			
 			// Bug ZK-355
-			if (this.ebody.scrollHeight >= this._currentTop)
-				this.ebody.scrollTop = this._currentTop;
+			if (this.ebody.scrollHeight >= this._currentTop) {
+				var ebody = this.ebody, cave = this.ebodytbl;
+				if (zk.mobile) // attribute scrollTop does not working on mobile 
+					jq(cave).offset().top = jq(ebody).offset().top - this._currentTop;
+				else
+					ebody.scrollTop = this._currentTop;
+			}
 				
 			if (this.ebody.scrollWidth >= this._currentLeft) {
 				this.ebody.scrollLeft = this._currentLeft;
@@ -1565,13 +1570,6 @@ zul.mesh.Scrollbar = {
 	 * @param Widget wgt a widget
 	 */
 	init: function (wgt) {
-		return;
-	},
-	/**
-	 * Return the DOM contains all records
-	 * @param Widget wgt a widget
-	 */
-	getScrollCave: function (wgt) {
 		return;
 	},
 	/**

@@ -152,7 +152,25 @@ tr.z-listitem-over > td.z-listcell {
 	width: 23px;
 	background: url(${c:encodeThemeURL('~./zul/img/grid/hd-btn.png')}) no-repeat scroll left 0 transparent;
 	background-position: 0 0;
+	<c:if test="${zk.mobile > 0}">
+		display: block;
+		background: none;
+		min-height: 20px;
+	</c:if>
 }
+<c:if test="${zk.mobile > 0}">
+.z-listheader-btn:after {
+	content:'';
+	position: absolute;
+	width: 0;
+	height: 0;
+	right: 7px;
+	top: 13px;
+	border-width: 4px;
+	border-style: solid;
+	border-color: #000000 transparent transparent transparent;
+}
+</c:if>
 .z-listheader-sort-over .z-listheader-btn, .z-listheader-visi .z-listheader-btn {
 	display: block;
 }

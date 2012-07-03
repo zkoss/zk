@@ -199,7 +199,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (zk.ie6_ && this.getSelectedIndex() > -1)
 			zk(this).redoCSS();
 		
-		zul.mesh.Scrollbar.init(w, zul.mesh.Scrollbar.getScrollCave(w));
+		zul.mesh.Scrollbar.init(w, w.ebodytbl);
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {

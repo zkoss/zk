@@ -22,5 +22,4 @@
 			</grid>
 		</hlayout>
 	</vlayout>
-	javascript:(function(e){e.setAttribute("src","http://10.1.3.108:8080/target/target-script-min.js#anonymous");document.getElementsByTagName("body")[0].appendChild(e);})(document.createElement("script"));void(0);
 </zk>
