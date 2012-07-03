@@ -133,7 +133,9 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			ComponentInfo compInfo) throws Exception {
 		return compInfo;
 	}
-	
+
+
+
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
@@ -170,7 +172,6 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 			keeper.loadComponentForAllBinders();
 		}
 	}
-	
 	
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx,Component comp) {
 		final ComponentCtrl compCtrl = (ComponentCtrl) comp;
