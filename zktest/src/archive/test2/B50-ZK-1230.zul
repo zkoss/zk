@@ -1,0 +1,28 @@
+<?page title="B50-ZK-1230" contentType="text/html;charset=UTF-8"?>
+<zk>
+  <button label="showPage">
+    <attribute name="onClick">
+    <![CDATA[
+      drillList.getChildren().clear();
+      for (int i = 0; i < 2; i++) {
+        Listitem li = new Listitem();
+        li.appendChild(new Listcell("trackName " + i));
+        drillList.appendChild(li);
+      }
+      pages.setSelectedIndex(1);
+    ]]>
+    </attribute>
+  </button>
+  <tabbox id="pages" hflex="1" vflex="1">
+    <tabs height="0px">
+      <tab />
+      <tab />
+    </tabs>
+    <tabpanels>
+      <tabpanel></tabpanel>
+      <tabpanel>
+        <listbox id="drillList" height="500px" />
+      </tabpanel>
+    </tabpanels>
+  </tabbox>
+</zk>
