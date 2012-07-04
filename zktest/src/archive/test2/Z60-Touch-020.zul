@@ -1,0 +1,33 @@
+<?meta name="viewport" content="width=device-width,height=device-height"?>
+<zk>
+	1. Swipe left/right inside tab-panel, it should change to previous/next tab-panel.<separator />
+	2. Click "vertical" button to change orientation of tabbox.<separator />
+	3. Swipe up/down, it should change to previous/next tab-panel.<separator />
+	<button label="vertical" onClick='tbox.orient="vertical";' /><button label="horizontal" onClick='tbox.orient="horizontal";' />
+	<tabbox id="tbox" height="300px" width="300px">
+		<tabs>
+			<tab label="tab 1" />
+			<tab label="tab 2" />
+			<tab label="tab 3" />
+			<tab label="tab 4" />
+			<tab label="tab 5" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				This is tab panel 1
+			</tabpanel>
+			<tabpanel>
+				This is tab panel 2
+			</tabpanel>
+			<tabpanel>
+				This is tab panel 3
+			</tabpanel>
+			<tabpanel>
+				This is tab panel 4
+			</tabpanel>
+			<tabpanel>
+				This is tab panel 5
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
