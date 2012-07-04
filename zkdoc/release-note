@@ -31,6 +31,7 @@ ZK 6.0.2
   ZK-1188: Error when mixing ZK creation EL with zkbind on reference or element of collection
   ZK-1182: stubonly doesn't work
   ZK-1228: Tree with model fail to clone
+  ZK-1185: Two collection on zul page returning null when both of them becomes empty
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
