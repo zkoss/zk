@@ -62,7 +62,7 @@ zk.Swipe = zk.$extends(zk.Object, {
 		// prevent scrolling
 		var dispX = Math.abs(this._start.coords[0] - this._stop.coords[0]),
 			dispY = Math.abs(this._start.coords[1] - this._stop.coords[1]);
-		if (dispX > 5)
+		if (dispX > 5 || dispY > 5)
 			evt.preventDefault();
 	},
 	_swipeEnd: function(devt) {
