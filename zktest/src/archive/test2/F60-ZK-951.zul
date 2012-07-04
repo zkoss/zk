@@ -25,7 +25,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		FakerMatrixModel SingleColumn = new FakerMatrixModel(1, 10);
 		FakerMatrixModel MultipleColumn = new FakerMatrixModel(100, 10);
 		FakerMatrixModel HugeColumn = new FakerMatrixModel(10000, 10);
-		FakerMatrixModel SingleRow = new FakerMatrixModel(10, 10);
+		FakerMatrixModel SingleRow = new FakerMatrixModel(10, 1);
 		FakerMatrixModel MultipleRow = new FakerMatrixModel(10, 100);
 		FakerMatrixModel HugeRow = new FakerMatrixModel(10, 10000);
 		FakerMatrixModel BigData = new FakerMatrixModel(1000000, 1000000);
