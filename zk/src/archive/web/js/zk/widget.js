@@ -3893,6 +3893,20 @@ wgt.setListeners({
 			if (p) p.doKeyPress_(evt);
 		}
 	},
+	/** Called when the user swipe this widget.
+	 * A widget doesn't need to listen the touchstart, touchmove, and touchend DOM event.
+	 * Rather, it shall override this method if necessary. 
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doSwipe_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
+	 * It is the so-called event propagation.
+	 * @param zk.Event evt the widget event.
+	 */
+	doSwipe_: function(evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doSwipe_(evt);
+		}
+	},
 
 	/** A utility to simplify the listening of <code>onFocus</code>.
 	 * Unlike other doXxx_ (such as {@link #doClick_}), a widget needs to listen
