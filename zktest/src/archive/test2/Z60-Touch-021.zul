@@ -1,0 +1,33 @@
+<?meta name="viewport" content="width=device-width,height=device-height"?>
+<zk>
+	<borderlayout hflex="1" vflex="1">
+		<north size="25%" title="North" collapsible="true">
+			<div height="100%" width="100%" style="background: gold">
+				<label style="font-size: 26px" value="NORTH" />
+				<div hflex="min" vflex="min" style="background: red">
+					<label style="font-size: 26px" value="Sub Div" />
+				</div>
+			</div>
+		</north>
+		<west size="25%" title="West" collapsible="true">
+			<div height="100%" width="100%"  style="background: green">
+				<label style="font-size: 26px" value="WEST" />
+			</div>
+		</west>
+		<center>
+			<div height="100%" width="100%"  style="background: blue">
+				<label style="font-size: 26px" value="CENTER" />
+			</div>
+		</center>
+		<east size="25%" title="East" collapsible="true">
+			<div height="100%" width="100%"  style="background: red">
+				<label style="font-size: 26px" value="EAST" />
+			</div>
+		</east>
+		<south size="25%" title="South" collapsible="true">
+			<div height="100%" width="100%"  style="background: cyan">
+				<label style="font-size: 26px" value="SOUTH" />
+			</div>
+		</south>
+	</borderlayout>
+</zk>
