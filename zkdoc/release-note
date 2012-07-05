@@ -21,6 +21,7 @@ ZK 6.0.2
   ZK-1178: ZEL should support method overloading
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
+  ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
@@ -392,6 +393,7 @@ ZK 5.0.12
   ZK-1079: Fileupload dialog will be masked while open it by a button in a popup  
   ZK-1086: Undefined on datebox format "EEEE" with specific locale
   ZK-1092: IE 8 - Scrollbar Bug in Tree
+  ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   
 	--------
 ZK 5.0.11
