@@ -3899,7 +3899,7 @@ wgt.setListeners({
 var opts = evt.opts, dir = opts.dir;
 switch (dir) {
 case 'left': doSwipeLeft(); break;
-case 'righ': doSwipeRight(); break;
+case 'right': doSwipeRight(); break;
 case 'up': doSwipeUp(); break;
 case 'down': doSwipeDown(); break;
 }
