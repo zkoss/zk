@@ -161,15 +161,4 @@ public class Combobutton extends Button {
 		throw new UnsupportedOperationException("Combobutton do not support file upload.");
 	}
 	
-	// B60-ZK-1216.zul
-	// Combobutton has problems with label-change if its popup did not close beforehand
-	@Override
-    public void setLabel(String label) {
-	    super.setLabel(label);
-	    Component child = this.getFirstChild();
-	    if (child != null && child instanceof Popup) {
-	    	((Popup) child).close();
-	    }
-    }
-	
 }
