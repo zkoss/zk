@@ -1,0 +1,12 @@
+<?meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"?>
+<window title="color window" border="normal" width="500px">
+	<label multiline="true">
+		<attribute name="value"><![CDATA[
+		Colorbox of tablet.
+		Dislike traditional Colorbox, it will appear from bottom.
+		In palette mode, user must click "ok" button to confirm color user choose.
+		In picker mode, layout changed. 
+		]]></attribute>
+	</label>
+	<colorbox color="#FFFF00" />
+</window>
