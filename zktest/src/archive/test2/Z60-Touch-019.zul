@@ -1,0 +1,27 @@
+<?meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"?>
+<zk>
+	<zscript>Object[] o = new Object[10];</zscript>
+	<borderlayout hflex="1" vflex="1">
+		<west size="25%" title="West" collapsible="true">
+			<div hflex="1" vflex="1" style="background: green">
+				<label value="WEST Size=25%" style="font-size:30px;color: #FFF"/>
+			</div>
+		</west>
+		<center autoscroll="true">
+			<div hflex="min" vflex="min">
+				<vlayout hflex="min" vflex="min" spacing="0">
+					<label value="1.Try scroll down and right here 2.If you can't scroll, it is a bug" style="font-size:30px"/>
+					<zk forEach="${o}">
+						<hlayout hflex="min" vflex="min" spacing="0">
+							<zk forEach="${o}">
+								<div height="200px" width="200px" style="background: gold; border: 1px solid black;">
+									<label value="Div ${forEachStatus.previous.index * 10 + forEachStatus.index}" style="font-size:18px"/>
+								</div>
+							</zk>
+						</hlayout>
+					</zk>
+				</vlayout>
+			</div>
+		</center>
+	</borderlayout>
+</zk>
