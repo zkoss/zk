@@ -200,6 +200,15 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	},
 	ignoreDescendantFloatUp_: function (des) {
 		return des && des.$instanceof(zul.wgt.Popup);
+	},
+	// B60-ZK-1216
+	// Combobutton has problems with label-change if its popup did not close beforehand
+	// Override rerender should also work for the case of image-change
+	rerender: function(skipper) {
+		if (this.isOpen()) {
+			this.close();
+		}
+		this.$supers('rerender', arguments);
 	}
 });
 })();

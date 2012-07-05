@@ -24,6 +24,7 @@ ZK 6.0.2
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
   ZK-1202: Combobox not removing old items and reset selection when changing models
+  ZK-1216: Combobutton has problems with label change if its popup did not close beforehand
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   ZK-1157: formatedDate and formatedNumber should be formatted
   ZK-1196: Listbox renders incorrectly in richlet with ZK 6.0.2.FL.20120607
