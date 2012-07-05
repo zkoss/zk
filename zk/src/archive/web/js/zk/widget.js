@@ -3893,13 +3893,32 @@ wgt.setListeners({
 			if (p) p.doKeyPress_(evt);
 		}
 	},
-	/** Called when the user swipe this widget.
-	 * A widget doesn't need to listen the touchstart, touchmove, and touchend DOM event.
-	 * Rather, it shall override this method if necessary. 
+	/** Called when the user swipe left/right/up/down this widget.
+	 * <p>For example,
+<pre><code>
+var opts = evt.opts, start = opts.start, stop = opts.stop,
+	dispT = stop.time - start.time,
+	deltaX = start.coords[0] - stop.coords[0],
+	deltaY = start.coords[1] - stop.coords[1],
+	dispX = Math.abs(deltaX),
+	dispY = Math.abs(deltaY);
+
+//if swipe time is less than 500ms, it is considered as swipe event
+if (dispT < 500) {
+ 	//if horizontal displacement is larger than 30px and vertical displacement is smaller than 75px, it is considered swipe left/right
+	if (dispX > 30 && dispY < 75)
+		//swipe left if deltaX > 0
+	
+	//if vertical displacement is large than 30px and horizontal displacement is smaller than 75px, it is considered swipe up/down
+	else if (dispY > 30 && dispX < 75)
+		//swipe up if deltaY > 0
+}
+</code></pre>
 	 * <p>Default: fire the widget event ({@link #fireX}), and
 	 * call parent's doSwipe_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * @param zk.Event evt the widget event.
+	 * @since 6.1.0
 	 */
 	doSwipe_: function(evt) {
 		if (!this.fireX(evt).stopped) {
