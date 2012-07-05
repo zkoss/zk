@@ -694,8 +694,6 @@ jq(function() {
 				return false;
 		}
 	});
-	if (zk.Swipe)
-		zk._swipe = new zk.Swipe();
 
 	zjq.fixOnResize(900); //IE6/7: it sometimes fires an "extra" onResize in loading
 
