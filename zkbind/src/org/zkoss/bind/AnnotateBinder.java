@@ -14,6 +14,7 @@ package org.zkoss.bind;
 
 import java.util.Map;
 
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.zk.ui.Component;
@@ -47,30 +48,20 @@ public class AnnotateBinder extends BinderImpl {
 	
 	/**
 	 *  {@inheritDoc}
-	 *  in {@link AnnotateBinder}, this method will do component annotation bindings parsing also.<br> 
-	 *  it's equivalent to call {@link #initViewModel(Component, Object, Map)} plus {@link #initAnnotatedBindings()}.
-	 *  @see #initViewModel(Component, Object, Map)
+	 * <b>since 6.0.2</b>, this method will take care of super's {@link Binder#init(Component, Object)} only<br>
+	 * If {@link AnnotateBinder} need to be used manually, {@link #initAnnotatedBindings()} need to be invoked for scanning and building binding syntax tree.
 	 *  @see #initAnnotatedBindings()  
 	 */
 	public void init(Component comp, Object vm, Map<String, Object> initArgs){
-		initViewModel(comp, vm, initArgs);
-		initAnnotatedBindings();
-	}
-	
-	/**
-	 * this method will call super's {@link Binder#init(Component, Object)} only, this is a compromise 
-	 * to keep the original specification of {@link AnnotateBinder#init(Component, Object, Map)}   
-	 * @param comp host component of this binder
-	 * @param vm View model instance
-	 * @param initArgs init arguments
-	 * @since 6.0.2
-	 */
-	public void initViewModel(Component comp, Object vm, Map<String, Object> initArgs){
 		super.init(comp, vm, initArgs);
 	}
 	
+	
 	/**
-	 * Do component zul annotation parsing and build binding relationship tree for further data bind evaluating works.  
+	 * This method will parse Zul component's annotation that user declared and call {@link Binder}'s addBindings series methods 
+	 * to initiate binder's internal binding syntax trees, which then will cooperate with context(for look up variables) and be used by Binder's EL engine 
+	 * while {@link #loadComponent(Component, boolean)} or {@link Command} been triggered.<br>
+	 *   
 	 * @since 6.0.2
 	 */
 	public void initAnnotatedBindings(){

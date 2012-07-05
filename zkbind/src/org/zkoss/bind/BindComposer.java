@@ -151,7 +151,7 @@ public class BindComposer<T extends Component> implements Composer<T>, ComposerE
 		BinderKeeper keeper = BinderKeeper.getInstance(comp);
 		keeper.book(_binder, comp);
 	
-		_binder.initViewModel(comp, _viewModel, getViewModelInitArgs(evalx,comp));
+		_binder.init(comp, _viewModel, getViewModelInitArgs(evalx,comp));
 	}
 	
 	//--Composer--//

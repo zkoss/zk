@@ -19,8 +19,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Marker annotation to identify a life-cycle method of a 
- * View Model which will be called after host component's composition (AfterCompose).<br>
+ * Marker annotation to identify a life-cycle method in View Model. this method will be called after host component composition has been done (AfterCompose).<br>
  * Only one method could be tagged with this annotation.<br>
  * </p>
  * <p><b>Inheritance:</b>
@@ -42,14 +41,14 @@ import java.lang.annotation.Target;
  * <p> <b>Exception</b>: if {@link #superclass()} was been set to true and your afterCompose method 
  * is an overridden method to it's super's afterCompose method, ex:<br>
  * <code> X.m1() &lt;- Y.m1() </code><br>
- * Binder will throw an exception due to the conflict of java language's overriding nature.<br> 
+ * then Binder will throw an exception due to the conflict of java language's overriding nature.<br> 
  * </p>
  * 
  * <p> <b>Parameter Binding</b>: for convenience, afterCompose method support several kinds of 
  * Parameter Annotations.  Binder will weave it's context(Zul page annotation, Java EE Context) 
  * with method's parameters while invocation.<br>
- * The difference between @afterCompose and @init is - afterCompose has no zul declaration's part 
- * by it's self. Instead, it will share BindingParam's with @init's zul declaration. 
+ * The difference between @AfterCompose and @Init is - afterCompose has no zul declaration's part 
+ * by it's self. Instead, it will share BindingParam's with @Init's zul declaration. 
  * An example of afterCompose method signature might be looks like this:<br>
  * 
  * <code>viewModel="@id('vm') @init('BlaBlaVM', a='b')"</code><br>
