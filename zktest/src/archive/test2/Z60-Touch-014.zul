@@ -1,4 +1,4 @@
-<?meta name="viewport" content="width=600"?>
+<?meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"?>
 <zk>
-	<datebox id="dbx" width="200px" format="yyyy/MM/dd HH:mm:ss" lenient="false" constraint="between 20071225 and 20271203"/>
+	<datebox id="dbx" width="200px" format="yyyy/MM/dd HH:mm:ss" lenient="false" constraint="between 20070101 and 20271231"/>
 </zk>
