@@ -16,6 +16,7 @@ ZK 6.1.0
   ZK-120: Provide menupopup="auto" for listbox
   ZK-969: The LayoutRegion component support caption component as it's title
   ZK-147: Support ungroup for grid's column menu
+  ZK-1246: Calendar support touch's swipe event to switch the date view
 
 * Bugs
 
