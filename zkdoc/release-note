@@ -3,6 +3,13 @@ ZK 6.1.0
 
 * Features
   ZK-447: The file upload allows users to drag and drop local files (HTML5)
+  ZK-1241: ZK Client Widget support swipe event for tablet/mobile device
+  ZK-1239: Grid, Listbox, Tree can support to scroll the content by finger on tablet/mobile device
+  ZK-1240: Input element support HTML5 type, like tel, number, email, and so on
+  ZK-1242: Datebox support scrolling picker like ios's date picker for tablet/mobile device
+  ZK-1243: Combobox support scrolling picker like ios's select picker
+  ZK-1244: Tabbox support touch's swipe event to switch tab selection
+  ZK-1245: Borderlayout support touch's swipe event to close/open the layout region
   ZK-970: The Tab component support caption component as it's label
   ZK-1145: Notification supports closable
   ZK-1175: Calendar support show week number
