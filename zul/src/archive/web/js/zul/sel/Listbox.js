@@ -198,8 +198,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		// Bug in B50-ZK-273.zul
 		if (zk.ie6_ && this.getSelectedIndex() > -1)
 			zk(this).redoCSS();
-		
-		zul.mesh.Scrollbar.init(w, w.ebodytbl);
 	},
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {
