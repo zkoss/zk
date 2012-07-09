@@ -1,7 +1,9 @@
 <?meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"?>
 <zk>
+	<hlayout hflex="1" vflex="1">
+	<div width="50px" vflex="1"></div>
 	<borderlayout hflex="1" vflex="1">
-		<north size="25%" title="North" collapsible="true">
+		<north size="25%" title="North" collapsible="true" splittable="true">
 			<div height="100%" width="100%" style="background: gold">
 				<label style="font-size: 26px" value="NORTH" />
 				<div hflex="min" vflex="min" style="background: red">
@@ -33,4 +35,5 @@
 			</div>
 		</south>
 	</borderlayout>
+	</hlayout>
 </zk>
