@@ -1,0 +1,29 @@
+<zk>
+	<window id="win" title="window" border="normal" height="400px" width="600px">
+		<button label="add child">
+			<attribute name="onClick"><![CDATA[
+				Div d = new Div();
+				d.setId("add");
+				d.setHeight("400px");
+				d.setWidth("100%");
+				d.setStyle("background: black;");
+				win.insertBefore(d, div);
+			]]></attribute>
+		</button>
+		<button label="remove child" onClick="win.removeChild(add);" />
+		<button label="modal" onClick="win.doModal();"/>
+		<button label="highlight" onClick="win.doHighlighted();"/>
+		<button label="popup" onClick="win.doPopup();"/>
+		<button label="overlap" onClick="win.doOverlapped();"/>
+		<button label="embed" onClick="win.doEmbedded();"/>
+		<div id="div" height="400px" width="400px" style="background: red;"></div>
+		<hlayout hflex="min">
+			<div height="400px" width="400px" style="background: green;"></div>
+			<div height="400px" width="400px" style="background: yellow;"></div>
+			<div height="400px" width="400px" style="background: blue;"></div>
+			<div height="400px" width="400px" style="background: red;"></div>
+		</hlayout>
+		<div height="400px" width="400px" style="background: yellow;"></div>
+		<div height="400px" width="400px" style="background: blue;"></div>
+	</window>
+</zk>
