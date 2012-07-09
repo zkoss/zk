@@ -18,7 +18,9 @@
 		<button label="embed" onClick="win.doEmbedded();"/>
 		<div id="div" height="400px" width="400px" style="background: red;"></div>
 		<hlayout hflex="min">
-			<div height="400px" width="400px" style="background: green;"></div>
+			<div height="400px" width="400px" style="background: green;">
+				input: <textbox />
+			</div>
 			<div height="400px" width="400px" style="background: yellow;"></div>
 			<div height="400px" width="400px" style="background: blue;"></div>
 			<div height="400px" width="400px" style="background: red;"></div>

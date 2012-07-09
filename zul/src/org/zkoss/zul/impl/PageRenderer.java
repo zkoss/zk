@@ -79,7 +79,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			out.write(">\n<head>\n"
 					+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
-					+ "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\" > \n"
+					+ "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n"
 					+ "<title>");
 		}
 		write(out, page.getTitle());
