@@ -252,13 +252,20 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			$btn.show();
 		}
 	},
+	setBtnPos_: function (ver) {
+		var btn = this.$n('btn'),
+			node = this.$n();
+		if (ver)
+			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2)+"px";
+		else
+			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+"px";
+	},
 	_fixsz: _zkf = function () {
 		if (!this.isRealVisible()) return;
 
 		var node = this.$n(), pn = node.parentNode;
 		if (pn) {
-			var btn = this.$n('btn'),
-				bfcolps = "before" == this.getCollapse();
+			var bfcolps = "before" == this.getCollapse();
 			if (this.isVertical()) {
 				//Note: when the browser resizes, it might adjust splitter's wd/hgh
 				//Note: the real wd/hgh might be bigger than 8px (since the width
@@ -274,7 +281,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 				node.style.width = ""; // clean width
 				node.style.width = pn.clientWidth + "px"; //all wd the same
-				btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2)+"px";
+				this.setBtnPos_(true);
 			} else {
 				if (bfcolps) {
 					pn.align = "left";
@@ -288,7 +295,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				node.style.height =
 					(zk.safari ? pn.parentNode.clientHeight: pn.clientHeight)+"px";
 					//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
-				btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+"px";
+				this.setBtnPos_();
 			}
 		}
 
