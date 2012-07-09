@@ -778,16 +778,19 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return ambit;
 	},
 	_ambit2: zk.$void,
-
+	setBtnPos_: function (ambit, ver) {
+		var sbtn = this.$n('splitbtn');
+		if (ver) 
+			sbtn.style.marginLeft = jq.px0(((ambit.w - sbtn.offsetWidth) / 2));
+		else
+			sbtn.style.marginTop = jq.px0(((ambit.h - sbtn.offsetHeight) / 2));
+	},
 	_reszSplt: function (ambit) {
 		var split = this.$n('split'),
 			sbtn = this.$n('splitbtn');
 		if (zk(split).isVisible()) {
 			if (zk(sbtn).isVisible()) {
-				if (this._isVertical()) 
-					sbtn.style.marginLeft = jq.px0(((ambit.w - sbtn.offsetWidth) / 2));
-				else
-					sbtn.style.marginTop = jq.px0(((ambit.h - sbtn.offsetHeight) / 2));
+				this.setBtnPos_(ambit, this._isVertical());
 			}
 			zk.copy(split.style, this._reszSp2(ambit, {
 				w: split.offsetWidth,
