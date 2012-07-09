@@ -1,0 +1,26 @@
+<zk>
+	<tabbox width="800px" height="450px">
+		<tabs>
+			<tab label="tab1" />
+			<tab label="tab2" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<div id="div" height="400px" width="400px" style="background: red;"></div>
+				<hlayout hflex="min">
+					<div height="400px" width="400px" style="background: green;">
+						input: <textbox />
+					</div>
+					<div height="400px" width="400px" style="background: yellow;"></div>
+					<div height="400px" width="400px" style="background: blue;"></div>
+					<div height="400px" width="400px" style="background: red;"></div>
+				</hlayout>
+				<div height="400px" width="400px" style="background: yellow;"></div>
+				<div height="400px" width="400px" style="background: blue;"></div>
+			</tabpanel>
+			<tabpanel>
+				Simple tab panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

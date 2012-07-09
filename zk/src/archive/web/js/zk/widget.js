@@ -4924,7 +4924,7 @@ Object skip(zk.Widget wgt);
 	 * @return DOMElement
 	 */
 	skip: function (wgt, skipId) {
-		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
+		var skip = jq(skipId || wgt.getCaveNode(), zk)[0];
 		if (skip && skip.firstChild) {
 			skip.parentNode.removeChild(skip);
 				//don't use jq to remove, since it unlisten events
