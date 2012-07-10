@@ -27,6 +27,7 @@ ZK 5.0.12
   ZK-1143: Subsequent WrongValueException causes JS error on ipad
   ZK-1146: TreeModel getChildCount invoke too much times
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
+  ZK-1222: Popup component as tooltips fires multiple onOpen events
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   
 	--------
