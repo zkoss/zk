@@ -24,4 +24,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<taglib-uri>http://www.zkoss.org/dsp/web/html</taglib-uri>
 		<taglib-location>/web/WEB-INF/tld/web/html.dsp.tld</taglib-location>
 	</taglib>
+	<taglib>
+		<taglib-uri>http://www.zkoss.org/dsp/web/theme</taglib-uri>
+		<taglib-location>/web/WEB-INF/tld/web/theme.dsp.tld</taglib-location>
+	</taglib>
 </config>

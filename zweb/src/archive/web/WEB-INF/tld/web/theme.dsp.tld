@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+Purpose:
+	
+Description:
+	
+Histroy:
+	Tue, Jul 10, 2012  9:32:48 AM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<taglib>
+	<uri>http://www.zkoss.org/dsp/web/theme</uri>
+	<description>
+		Theme utility methods
+	</description>
+	
+	<!--      -->
+	<!-- Tags -->
+	<!--      -->
+	<!--  
+	<tag>
+		<description>
+	Provides the context for mutually exclusive conditional execution.
+		</description>
+		<name>choose</name>
+		<tag-class>org.zkoss.web.servlet.dsp.action.Choose</tag-class>
+	</tag>
+	-->
+	
+	<!--         -->
+	<!-- Imports -->
+	<!--         -->
+	<import>
+		<import-name>ThemeFns</import-name>
+		<import-class>org.zkoss.web.fn.ThemeFns</import-class>
+	</import>
+	
+	<!--                 -->
+	<!-- Theme Utilities -->
+	<!--                 -->
+	<function>
+		<name>gradient</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String gradient(java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific of browser CSS color gradient rules String.
+	@param type "ver", "hor", "diag-", "diag+", "rad"
+	@param colors the colors, which are separated by semicolon ";"
+		]]></description>
+	</function>
+	<function>
+		<name>gradValue</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String gradValue(java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific CSS color gradient value only
+	@param type "ver", "hor", "diag-", "diag+", "rad"
+	@param colors the colors, which are separated by semicolon ";"
+		]]></description>
+	</function>
+	<function>
+		<name>gradients</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String gradients(java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a set of cross-browser CSS color gradient rules String.
+	@param type "ver", "hor", "diag-", "diag+", "rad"
+	@param colors the colors, which are separated by semicolon ";"
+		]]></description>
+	</function>
+</taglib>
