@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
@@ -36,7 +37,7 @@ public class ContextParamVM {
 	String bindComponentId;
 	String bindViewId;
 
-	@Init
+	@AfterCompose
 	public void init(
 			@ContextParam(ContextType.EXECUTION) Execution execution,
 			@ContextParam(ContextType.COMPONENT) Component component,
