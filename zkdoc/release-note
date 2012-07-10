@@ -3,6 +3,7 @@ ZK 6.0.2
 
 * Features
   ZK-1127: Support OSGi
+  ZK-1231: Need a certain lifecycle point for afterCompose in a ViewModel
 
 * Bugs
   ZK-1113: Popup of chosenbox not removed after detach
@@ -35,10 +36,16 @@ ZK 6.0.2
   ZK-1182: stubonly doesn't work
   ZK-1228: Tree with model fail to clone
   ZK-1185: Two collection on zul page returning null when both of them becomes empty
+  ZK-1194: The timing of @Init on viewmodel is not so correct.
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
-  
+  + The invocation of current @Init tagged method in a ViewModel class is moved from doAfterCompose() to earlier stage 
+    doBeforeComposeChildren() in BindComposer, which means it's no longer applicable if you want to initiate your ViewModel 
+    based  on host component scope (ex: child components and custom attributes) in an @Init tagged method. Instead you 
+    should use @AfterCompose tagged method which is newly introduced since this version.
+  + AnnotateBinder#init() will only take care of super#init(), you'll have to call AnnotateBinder#initAnnotatedBindings() 
+    separately to initiate and register bindings based on ZUL component's annotation.
 	--------
 ZK 6.0.1
 May 2, 2012

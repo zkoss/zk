@@ -39,6 +39,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.PropertyChangeEvent;
 import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
@@ -137,7 +138,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	//TODO make it configurable
 	private final static Map<Class<?>, List<Method>> _initMethodCache = 
 		new CacheMap<Class<?>, List<Method>>(600,CacheMap.DEFAULT_LIFETIME); //class,list<init method>
-	
+
 	private final static Map<Class<?>, Map<String,CachedItem<Method>>> _commandMethodCache = 
 		new CacheMap<Class<?>, Map<String,CachedItem<Method>>>(200,CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 	
@@ -244,7 +245,7 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 		}
 	}
 	
-	private void checkInit(){
+	protected void checkInit(){
 		if(!_init){
 			throw new UiException("binder is not initialized yet");
 		}
@@ -258,6 +259,9 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 	}
 	
 	/**
+	 * 
+	 * 
+	 * 
 	 * @since 6.0.1
 	 */
 	public void init(Component comp, Object viewModel, Map<String, Object> initArgs){
@@ -276,89 +280,15 @@ public class BinderImpl implements Binder,BinderCtrl,Serializable{
 			//show a warn only
 			_log.warning("you are using a composer [%s] as a view model",viewModel);
 		}
-		//Should we handle here or in setViewModel for every time set a view model into binder?
-		initViewModel(viewModel, initArgs);
+		new AbstractAnnotatedMethodInvoker<Init>(Init.class, _initMethodCache){
+			protected boolean shouldLookupSuperclass(Init annotation) {
+				return annotation.superclass();
+			}}.invokeMethod(this, initArgs);
+		
 		_rootComp.setAttribute(ACTIVATOR, new Activator());//keep only one instance in root comp
 	}
 	
-	//handle init of a viewmodel. 
-	private void initViewModel(Object viewModel, Map<String, Object> initArgs){
-		final Class<?> clz = viewModel.getClass();
-		List<Method> inits = getInitMethods(clz);
-		if(inits.size()==0) return;//no init method
-		
-		if(initArgs!=null){
-			initArgs = BindEvaluatorXUtil.evalArgs(getEvaluatorX(), _rootComp, initArgs);
-		}
-		
-		for(Method m : inits){
-			final BindContext ctx = BindContextUtil.newBindContext(this, null, false, null, _rootComp, null);
-			try {
-				ParamCall parCall = createParamCall(ctx);
-				if(initArgs!=null){
-					parCall.setBindingArgs(initArgs);
-				}
-				parCall.call(viewModel, m);
-			} catch (Exception e) {
-				synchronized(_initMethodCache){//remove it for the hot deploy case if getting any error
-					_initMethodCache.remove(clz);
-				}
-				throw new UiException(e.getMessage(),e);
-			}
-		}
-	}
 	
-	private List<Method> getInitMethods(Class<?> clz) {
-		List<Method> inits = null;
-		synchronized(_initMethodCache){
-			//have to synchronized cache, because it calls expunge when get.
-			inits = _initMethodCache.get(clz);//check again
-			if(inits!=null) return inits;
-			
-			inits = new ArrayList<Method>(); //if still null in synchronized, scan it
-			
-			Class<?> curr = clz;
-			
-			String sign = null;
-			Set<String> signs = new HashSet<String>();
-			
-			while(curr!=null && !curr.equals(Object.class)){
-				Method currm = null;
-				//ZK-1033 @Init should supports to annotate on Type
-				Init init = curr.getAnnotation(Init.class);
-				//only allow one init method in a class.
-				for(Method m : curr.getDeclaredMethods()){
-					final Init i = m.getAnnotation(Init.class);
-					if(i==null) continue;
-					if(init!=null){
-						throw new UiException("more than one @Init in the class "+curr);
-					}
-					init = i;
-					currm = m;
-					//don't break, we need to check all init methods, we allow only one per class.
-				}
-				
-				if(currm!=null){
-					//check if overrode the same init method
-					sign = MiscUtil.toInitMethodSignature(currm);
-					if(signs.contains(sign)){
-						_log.warning("more than one init method that has same signature '%s' in the hierarchy of '%s', the method in extended class will be call more than once ",sign,clz);
-					}else{
-						signs.add(sign);
-					}
-					
-					//super first
-					inits.add(0,currm);
-				}
-				//check if we should take care super's init also.
-				curr = (init!=null && init.superclass())?curr.getSuperclass():null;
-			}
-			inits = Collections.unmodifiableList(inits);
-			_initMethodCache.put(clz, inits);
-		}
-		return inits;
-	}
-
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void loadOnPropertyChange(Object base, String prop) {
 		if(_log.debugable()){
