@@ -318,7 +318,7 @@ function zkamn(pkg, fn) {
 					//zkac used as token to optimize the performance of zk.Widget.$init
 				wgt.uuid = uuid;
 				if (v = wi[4])
-					wgt._mold = v;
+					wgt.setMold(v);
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
