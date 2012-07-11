@@ -1,5 +1,8 @@
 <zk>
-	<window id="win" title="window" border="normal" height="400px" width="600px">
+	<window id="win" title="window" border="normal" height="550px" width="600px">
+		<borderlayout width="100%" height="200px">
+			<center><div>Borderlayout CENTER</div></center>
+		</borderlayout>
 		<button label="add child">
 			<attribute name="onClick"><![CDATA[
 				Div d = new Div();

@@ -1,16 +1,26 @@
 <zk>
+1.Should see scrollbar inside tabpanel.  2.Click "add child" button, the scrollbar should be shorten than before.
 	<tabbox width="800px" height="450px">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
 		</tabs>
 		<tabpanels>
-			<tabpanel>
-				<div id="div" height="400px" width="400px" style="background: red;"></div>
-				<hlayout hflex="min">
-					<div height="400px" width="400px" style="background: green;">
-						input: <textbox />
-					</div>
+			<tabpanel id="tpl" style="overflow:auto;">
+				<div id="div" height="400px" width="400px" style="background: red;">
+					<button label="add child">
+						<attribute name="onClick"><![CDATA[
+							Div d = new Div();
+							d.setId("add");
+							d.setHeight("400px");
+							d.setWidth("600px");
+							d.setStyle("background: black;");
+							tpl.appendChild(d);
+						]]></attribute>
+					</button>
+				</div>
+				<hlayout hflex="min" spacing="0">
+					<div height="400px" width="400px" style="background: green;"></div>
 					<div height="400px" width="400px" style="background: yellow;"></div>
 					<div height="400px" width="400px" style="background: blue;"></div>
 					<div height="400px" width="400px" style="background: red;"></div>
