@@ -46,6 +46,8 @@ ZK 6.0.2
     should use @AfterCompose tagged method which is newly introduced since this version.
   + AnnotateBinder#init() will only take care of super#init(), you'll have to call AnnotateBinder#initAnnotatedBindings() 
     separately to initiate and register bindings based on ZUL component's annotation.
+  + Deprecated all of the Hibernate utility classes in zkplus package, HibernateSessionContextListener.java, HibernateSessionFactoryListener.java,
+    HibernateUtil.java, and OpenSessionInViewListener.java, please use official Hibernate's methods instead.
 	--------
 ZK 6.0.1
 May 2, 2012

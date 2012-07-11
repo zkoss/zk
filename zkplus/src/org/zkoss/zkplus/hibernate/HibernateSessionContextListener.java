@@ -52,6 +52,7 @@ import java.util.List;
  * </code></pre>
  * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
+ * @deprecate As of release 6.0.2, please use the official Hibernate's method instead.
  */
 public class HibernateSessionContextListener implements ExecutionInit, ExecutionCleanup, EventThreadInit, EventThreadResume {
 	private static final Log log = Log.lookup(HibernateSessionContextListener.class);
