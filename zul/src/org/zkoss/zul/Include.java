@@ -283,6 +283,14 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				//invalidate is redudant in instant mode, but less memory leak in IE
 		}
 	}
+	
+	// B60-ZK-1160: Exception when closing tab with included content
+	// Must clean up included content before detaching tab panel
+	public void detach() {
+		_childpg.removeComponents();
+		_childpg = null;
+		super.detach();
+	}
 
 	/** Returns the inclusion mode.
 	 * There are three modes: auto, instant and defer.
