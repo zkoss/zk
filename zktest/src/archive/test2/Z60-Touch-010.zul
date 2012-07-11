@@ -7,13 +7,13 @@
 			org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(150);
 		]]></zscript>
 		<hlayout>
-			<listbox width="200px" height="270px" model="${strset}">
+			<listbox width="400px" height="270px" model="${strset}">
 				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				<listhead>
 					<listheader label="Listbox" />
 				</listhead>
 			</listbox>
-			<grid width="200px" height="270px" model="${strset}">
+			<grid width="400px" height="270px" model="${strset}">
 				<custom-attributes org.zkoss.zul.grid.rod="false"/>
 				<columns>
 					<column label="Grid" sort="auto" />

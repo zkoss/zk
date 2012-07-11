@@ -86,7 +86,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			this.syncSize();
 	},
 	onChildAdded_: function () {
-		this.$supers('onChildRemoved_', arguments);
+		this.$supers('onChildAdded_', arguments);
 		this._shallSize = true;
 	},
 	onChildRemoved_: function () {

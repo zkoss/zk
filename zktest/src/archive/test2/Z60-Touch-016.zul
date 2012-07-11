@@ -1,12 +1,11 @@
-<?meta name="viewport" content="width=800"?>
 <zk>
 	<n:h3 xmlns:n="native">iPad/Android</n:h3>
 	<hlayout>
 	<vlayout>
-		1. Should see scrollbar inside two tree component.
+		1. Should see scrollbar inside tree component.
 		<separator spacing="0"/>
 		2. Open and close tree node, should see scroll bar size changed.
-		<tree id="tree" height="120px">
+		<tree id="tree" height="200px">
 			<treecols sizable="true">
 				<treecol label="Tree-no-rod" />
 			</treecols>
@@ -59,12 +58,12 @@
 		</tree>
 	</vlayout>
 	<vlayout>
-		1. open the tree node 'Item 1' and click button to add 'Item 1-3'
+		1. Open the tree node 'Item 1' and click button to add 'Item 1-3'
 		<separator spacing="0" />
-		2. should see scroll bar size changed.
-		<tree height="120px">
+		2. Should see scroll bar appeared.
+		<tree height="150px">
 			<treecols>
-				<treecol label="tree-rod" />
+				<treecol label="Tree-rod" />
 			</treecols>
 			<treechildren>
 				<treeitem open="false">
