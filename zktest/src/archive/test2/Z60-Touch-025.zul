@@ -1,8 +1,8 @@
 <zk>
 1.Should see scrollbar inside panel.  2.Click "add child" button, the scrollbar should be shorten than before.
-<hlayout width="100%" height="100%">
-	<panel title="panel" border="normal" vflex="1" hflex="1" maximizable="true" collapsible="true" closable="true">
-		<panelchildren>
+<hlayout height="100%" width="100%">
+	<panel title="panel" border="normal" height="600px" width="400px" maximizable="true" collapsible="true" closable="true">
+		<panelchildren style="overflow: auto">
 			<hlayout width="800px" height="200px" spacing="0">
 				<div hflex="1" vflex="1" style="background: green;"></div>
 				<div hflex="1" vflex="1" style="background: yellow;"></div>
@@ -14,7 +14,7 @@
 			<div height="200px" width="200px" style="background: blue;"></div>
 		</panelchildren>
 	</panel>
-	<panel title="panel" border="normal" vflex="1" hflex="2">
+	<panel title="panel" border="normal" height="600px" width="400px">
 		<panelchildren id="panel" style="overflow: auto">
 			<div height="200px" width="200px" style="background: red;">
 				<button label="add child">

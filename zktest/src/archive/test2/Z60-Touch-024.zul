@@ -1,12 +1,15 @@
 <zk>
 1.Should see scrollbar inside tabpanel.  2.Click "add child" button, the scrollbar should be shorten than before.
-	<tabbox width="800px" height="450px">
+	<tabbox id="tbx" width="800px" height="450px">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
 		</tabs>
 		<tabpanels>
 			<tabpanel id="tpl" style="overflow:auto;">
+				<groupbox mold="3d" title="groupbox" width="100%">
+					<div height="200px">1ads32f1a31f5s</div>
+				</groupbox>
 				<div id="div" height="400px" width="400px" style="background: red;">
 					<button label="add child">
 						<attribute name="onClick"><![CDATA[
@@ -18,6 +21,8 @@
 							tpl.appendChild(d);
 						]]></attribute>
 					</button>
+					<button label="remove child" onClick="tpl.removeChild(add)"/>
+					<button label="hide/show child" onClick="hide.setVisible(!hide.isVisible())"/>
 				</div>
 				<hlayout hflex="min" spacing="0">
 					<div height="400px" width="400px" style="background: green;"></div>
@@ -25,7 +30,7 @@
 					<div height="400px" width="400px" style="background: blue;"></div>
 					<div height="400px" width="400px" style="background: red;"></div>
 				</hlayout>
-				<div height="400px" width="400px" style="background: yellow;"></div>
+				<div id="hide" height="400px" width="400px" style="background: yellow;"></div>
 				<div height="400px" width="400px" style="background: blue;"></div>
 			</tabpanel>
 			<tabpanel>

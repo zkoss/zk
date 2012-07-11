@@ -1,3 +1,4 @@
 <zk>
-	<calendar />
+	1.Swipe up/down to change year.  2.Swipe left/right to change month.
+	<calendar width="400px" />
 </zk>

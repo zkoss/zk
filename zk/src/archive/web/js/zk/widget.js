@@ -1769,6 +1769,7 @@ wgt.$f().main.setTitle("foo");
 			}
 			if (p && !ocvCalled) p.onChildVisible_(this);
 				//after setDomVisible_ and after onHide
+			this.onResizeScroll_();
 		}
 		return this;
 	},
@@ -1819,6 +1820,13 @@ wgt.$f().main.setTitle("foo");
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
+	/** Resize scroller size after child added/removed or hide/show.
+	 * @since 6.1.0
+	 */
+	onResizeScroll_: function () {
+		var p = this.parent;
+		if (p) p.onResizeScroll_();
+	},
 	/** A callback called after a child has been added to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
 	 * is usually required to override, too.
@@ -1827,6 +1835,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildRemoved_
 	 */
 	onChildAdded_: function (/*child*/) {
+		this.onResizeScroll_();
 	},
 	/** A callback called after a child has been removed to this widget.
 	 * <p>Notice: when overriding this method, {@link #onChildReplaced_}
@@ -1835,6 +1844,7 @@ wgt.$f().main.setTitle("foo");
 	 * @see #onChildAdded_
 	 */
 	onChildRemoved_: function (/*child*/) {
+		this.onResizeScroll_();
 	},
 	/** A callback called after a child has been replaced.
 	 * Unlike {@link #onChildAdded_} and {@link #onChildRemoved_}, this
