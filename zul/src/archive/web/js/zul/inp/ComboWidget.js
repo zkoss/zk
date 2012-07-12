@@ -476,7 +476,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_doBtnClick: function (evt) {
 		if (this.inRoundedMold() && !this._buttonVisible) return;
 		if (!this._disabled && !zk.animating()) {		
-			if (this._open) this.close({focus:true,sendOnOpen:true});
+			if (this._open) this.close({focus:zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});
 			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen:true});	
 		}
 		evt.stop();

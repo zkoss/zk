@@ -149,9 +149,7 @@ public class ThemeFns {
 															// ver/hor
 		return String.format(template.getTemplate(dir), color1, color2, "", gradType,
 				ieGradType, colorAll.toString());
-	}
-	
-	
+	}	
 	
 	/**
 	 * Generates a set of cross-browser CSS color gradient
@@ -173,6 +171,37 @@ public class ThemeFns {
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * Generates a specific browser CSS box-shadow.
+	 * @param style the value of the box-shadow
+	 * @return a specific browser CSS box-shadow
+	 */
+	public static String boxShadow(String style) {
+		Double number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
+		if (number != null)
+			return "\t -webkit-box-shadow:\t" + style +";\n\t box-shadow:\t" + style + ";";
+		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ff");
+		if (number != null)
+			return "\t -moz-box-shadow:\t" + style +";\n\t box-shadow:\t" + style + ";";
+		return "\t box-shadow:\t" + style + ";";
+	}
+	
+	/**
+	 * Generates a specific browser CSS border-radius.
+	 * @param style the value of the border-radius
+	 * @return a specific browser CSS border-radius
+	 */
+	public static String borderRadius(String style) {
+		Double number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
+		if (number != null)
+			return "\t -webkit-border-radius:\t" + style +";\n\t border-radius:\t" + style + ";";
+		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ff");
+		if (number != null)
+			return "\t -moz-border-radius:\t" + style +";\n\t border-radius:\t" + style + ";";
+		return "\t border-radius:\t" + style + ";";
+	}
+	
 	@SuppressWarnings("unchecked")
 	private static String toHex(String color) {
 		color = color.trim();
@@ -200,7 +229,7 @@ public class ThemeFns {
 	private static Color toColor(String color) {
 		return Colors.parseCSS(color);
 	}
-	public enum Gradient {
+	private enum Gradient {
 		WebKit("-webkit-", "Chrome10+,Safari5.1+"),
 		W3C("", "W3C"),
 		Firefox("-moz-", "FF3.6+"),

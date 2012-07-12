@@ -76,4 +76,26 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	@param colors the colors, which are separated by semicolon ";"
 		]]></description>
 	</function>
+	<function>
+		<name>boxShadow</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String boxShadow(java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS box-shadow.
+	@param style the value of the box-shadow
+		]]></description>
+	</function>
+	<function>
+		<name>borderRadius</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String borderRadius(java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS border-radius.
+	@param style the value of the border-radius
+		]]></description>
+	</function>
 </taglib>
