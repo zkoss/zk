@@ -8,9 +8,26 @@
 			</div>
 		</west>
 		<center autoscroll="true">
-			<div hflex="min" vflex="min">
-				<vlayout hflex="min" vflex="min" spacing="0">
-					<label value="1.Try scroll down and right here 2.If you can't scroll, it is a bug" style="font-size:30px"/>
+			<div id="div" hflex="min" vflex="min">
+				<vlayout id="v" hflex="min" vflex="min" spacing="0">
+					<label value="1.Try scroll down and right here 2.Click 'add/remove' button and scroll again" style="font-size:30px"/>
+					<button label="add">
+						<attribute name="onClick"><![CDATA[
+							Div d1 = new Div();
+							d1.setId("add1");
+							d1.setHeight("400px");
+							d1.setWidth("100%");
+							d1.setStyle("background: black;");
+							Div d2 = new Div();
+							d2.setId("add2");
+							d2.setHeight("400px");
+							d2.setWidth("100%");
+							d2.setStyle("background: grey;");
+							v.appendChild(d1);
+							v.appendChild(d2);
+						]]></attribute>
+					</button>
+					<button label="remove" onClick="v.removeChild(add1);v.removeChild(add2);" />
 					<zk forEach="${o}">
 						<hlayout hflex="min" vflex="min" spacing="0">
 							<zk forEach="${o}">

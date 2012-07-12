@@ -329,10 +329,10 @@ zWatch = (function () {
 	function _cmpLevel(a, b) {
 		return _bindLevel(a[0]) - _bindLevel(b[0]);
 	}
-	function _zsync(name, org) {
+	zk._zsyncFns = function (name, org) {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
 			jq.zsync(org);
-	}
+	};
 	//invoke fns in the reverse order
 	function _reversefns(fns, args) {
 		if (fns)
@@ -369,15 +369,15 @@ zWatch = (function () {
 				setTimeout(function () {
 					gun.fire();
 					_reversefns(fns, args);
-					_zsync(name, org);
+					zk._zsyncFns(name, org);
 				}, opts.timeout);
 			else {
 				gun.fire();
 				_reversefns(fns, args);
-				_zsync(name, org);
+				zk._zsyncFns(name, org);
 			}
 		} else
-			_zsync(name, org);
+			zk._zsyncFns(name, org);
 	}
 
 /** @class zWatch
