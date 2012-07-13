@@ -84,7 +84,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	getZclass: function () {
 		var zcls = this._zclass;
 		// F60-ZK-719
-		return zcls ? zcls: this._isDefault() ? 'z-combobutton' : 'z-combobutton-tbbtn';
+		return zcls ? zcls: this._isDefault() ? 'z-combobutton' : 'z-combobutton-toolbar';
 	},
 	_isDefault: function () {
 		return this._mold == 'default';
@@ -166,7 +166,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
-			if (this._mold == 'tbbtn')
+			if (this._mold == 'toolbar')
 				jq(this.$n('box')).addClass(this.getZclass() + "-over");
 		}
 	},

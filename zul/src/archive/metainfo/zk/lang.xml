@@ -481,7 +481,7 @@ def alert(m):
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>
 		<mold>
-			<mold-name>tbbtn</mold-name>
+			<mold-name>toolbar</mold-name>
 			<mold-uri>mold/button.js</mold-uri>
 			<css-uri>css/combobutton.css.dsp</css-uri>
 		</mold>

@@ -21,6 +21,7 @@ ZK 6.1.0
 * Bugs
 
 * Upgrade Notes
+  + Rename the "tbbtn" mold of chosenbox to "toolbar"
 
   --------
 ZK 6.0.2
