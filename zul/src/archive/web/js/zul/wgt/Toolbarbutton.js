@@ -76,9 +76,30 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is disabled.
 		 * @param boolean disabled
 		 */
-		disabled: function () {
-			this.rerender(); //bind and unbind
-		},
+		disabled: [
+			//B60-ZK-1176
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
+			function (v, opts) {
+		    	if (opts && opts.adbs)
+		    		// called from zul.wgt.ADBS.autodisable
+		    		this._adbs = true;	// Start autodisabling  
+		    	else if (!opts || opts.adbs === undefined)
+		    		// called somewhere else (including server-side)
+		    		this._adbs = false;	// Stop autodisabling
+		    	if (!v) {
+		    		if (this._adbs)
+		    			// autodisable is still active, enable allowed
+		    			this._adbs = false;
+		    		else if (opts && !opts.adbs)
+		    			// ignore re-enable by autodisable mechanism
+		    			return this._disabled;
+		    	}
+		    	return v;
+			}, 
+			function () {
+				this.rerender(); //bind and unbind
+			}
+		],
 		/** Returns the href that the browser shall jump to, if an user clicks
 		 * this button.
 		 * <p>Default: null. If null, the button has no function unless you
