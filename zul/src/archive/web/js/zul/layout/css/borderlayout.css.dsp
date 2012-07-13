@@ -262,6 +262,6 @@
 .z-center-capcnt {
 	float: left;
 	overflow: hidden;
-	height: 21px;
+	min-height: 21px;
 	white-space: nowrap;
 }
