@@ -53,6 +53,7 @@ public class CDIUtil {
 					"org.zkoss.zkplus.cdi.beanManager.jndiName",
 					"java:comp/env/BeanManager"));
 		} catch (NamingException e) { // Error getting the home interface
+			e.printStackTrace();
 			throw XelException.Aide.wrap(e,
 					"Cannot locate the BeanManager for JavaEE 6.");
 		}

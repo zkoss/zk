@@ -51,7 +51,14 @@
 			<id>ZK EE Evaluation</id>
 			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
 		</repository>		
+		<repository>  
+		    <id>prime-repo</id>  
+		    <name>PrimeFaces Maven Repository</name>  
+		    <url>http://repository.primefaces.org</url>  
+		    <layout>default</layout>  
+		</repository> 
 	</repositories>
+	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>zkmaven</id>
@@ -248,7 +255,7 @@
 		</dependency>
 		
 		<!--  for zkbind jsr 303 
-		-->
+		
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
@@ -264,7 +271,50 @@
 		    <artifactId>slf4j-log4j12</artifactId>
 		    <version>1.6.1</version>
 		</dependency>
+		-->
 		
+		<!-- Jsf  -->
+		
+		<dependency>  
+		    <groupId>org.primefaces</groupId>  
+		    <artifactId>primefaces</artifactId>  
+		    <version>3.3.1</version>  
+		</dependency>      
+		
+		<!-- for JSR 299 -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+			<version>1.0.1-Final</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.0</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- for JNDI service support in Jetty  -->
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-naming</artifactId>
+			<version>6.1.26</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-plus</artifactId>
+			<version>6.1.26</version>
+		</dependency>
+		            
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>

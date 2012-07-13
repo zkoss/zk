@@ -17,11 +17,15 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.cdi;
 
+import java.util.Set;
+
 import javax.el.ELContext;
 import javax.el.ELResolver;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
@@ -33,9 +37,106 @@ import org.zkoss.xel.XelException;
  *
  */
 public class DelegatingVariableResolver implements VariableResolverX {
+
+	private VariableResolverX fVariableResolverX;
+	public DelegatingVariableResolver() {
+		fVariableResolverX = new DelegatingVariableResolverManager();
+		// DelegatingVariableResolverManager
+		// DelegatingVariableResolverEL
+	}
+	
+	public Object resolveVariable(String name) throws XelException {
+		return resolveVariable(null, null, name);
+	}
+
+	public Object resolveVariable(XelContext ctx, Object base, Object name)throws XelException {
+		return fVariableResolverX.resolveVariable(ctx, base, name);
+	}
+
+	public int hashCode() {
+		return fVariableResolverX.hashCode();
+	}
+	
+	public boolean equals(Object o) {
+		return fVariableResolverX.equals(o);
+	}
+}
+
+
+/**
+ * 
+ * @author Ian Y.T Tsai(zanyking)
+ *
+ */
+class DelegatingVariableResolverManager implements VariableResolverX {
+	
+	private static final String CREATIONAL_CONTEXT = DelegatingVariableResolver.class.getName();
+	private BeanManager _beanMgr;
+	public DelegatingVariableResolverManager() {
+		_beanMgr = CDIUtil.getBeanManager();
+		System.out.println(">>>>>>> DelegatingVariableResolverManager()");
+	}
+	public Object resolveVariable(String name) throws XelException {
+		return resolveVariable(null, null, name);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Object resolveVariable(XelContext ctx, Object base, Object name)
+	throws XelException {
+		if(base!=null || !(name instanceof String)) return null;
+		
+		final Set<Bean<?>> beans = _beanMgr.getBeans((String)name);
+		if(beans == null || beans.size()==0) return null;
+
+		
+		//I(Dennis) think we don't need to check(if there are more than one bean has same name), CDI should check this when startup
+		//However, Since it returns a Set, so I just check it.
+		//Note, I do some test, the alternative bean will not be returned by the getBeans api with the name.
+		Bean bean = null;
+		for(Bean b:beans){
+			if(b.isAlternative()) continue;//(Ian Tsai) alternative is the bean with explicit declaration in bean.xml. they are reserved for Bean 
+			if(bean != null){
+				throw new XelException("more than one non-alternative bean have same name "+bean+" and "+b+", name "+name);
+			}
+			bean = b;
+		}
+		if(bean==null) return null;
+
+		CreationalContext context = ctx==null?
+			null:(CreationalContext)ctx.getAttribute(CREATIONAL_CONTEXT);
+		if(context==null){
+			System.out.println(">>>>>create a new CreationalContext");
+			context = _beanMgr.createCreationalContext(null);
+			if(ctx!=null){
+				ctx.setAttribute(CREATIONAL_CONTEXT,context);
+			}else{
+				
+			}
+		}
+		System.out.println(">>>>>CreationalContext: "+context);		
+		Object value = _beanMgr.getReference(bean, bean.getBeanClass(), context);
+		context.release();
+
+		return value;
+	}
+
+	public int hashCode() {
+		return Objects.hashCode(_beanMgr);
+	}
+	public boolean equals(Object o) {
+		return this == o || (o instanceof DelegatingVariableResolverManager
+			&& Objects.equals(_beanMgr, ((DelegatingVariableResolverManager)o)._beanMgr));
+	}
+}
+/**
+ * 
+ * @author Ian Y.T Tsai(zanyking)
+ *
+ */
+class DelegatingVariableResolverEL implements VariableResolverX {
 	private boolean _resolving; //prevent recursive
 	private ELResolver _cdiResolver;
-	public DelegatingVariableResolver() {
+	public DelegatingVariableResolverEL() {
 		_cdiResolver = CDIUtil.getBeanManager().getELResolver();
 	}
 	public Object resolveVariable(String name) throws XelException {
@@ -61,7 +162,7 @@ public class DelegatingVariableResolver implements VariableResolverX {
 		return Objects.hashCode(_cdiResolver);
 	}
 	public boolean equals(Object o) {
-		return this == o || (o instanceof DelegatingVariableResolver
-			&& Objects.equals(_cdiResolver, ((DelegatingVariableResolver)o)._cdiResolver));
+		return this == o || (o instanceof DelegatingVariableResolverEL
+			&& Objects.equals(_cdiResolver, ((DelegatingVariableResolverEL)o)._cdiResolver));
 	}
 }
