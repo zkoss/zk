@@ -156,17 +156,38 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether it is disabled.
 		 * @param boolean disabled
 		 */
-		disabled: function (v) {
-			if (this.desktop) {
-				if (this._mold == "os") {
-					var n = this.$n(),
-						zclass = this.getZclass();
-					if (zclass)
-						jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
-				} else
-					this.rerender(); //bind and unbind required (because of many CSS classes to update)
-			}
-		},
+		disabled: [
+		    // B60-ZK-1176
+		    // Autodisable should not re-enable when setDisabled(true) is called during onClick 
+		    function (v, opts) {
+		    	if (opts && opts.adbs)
+		    		// called from zul.wgt.ADBS.autodisable
+		    		this._adbs = true;	// Start autodisabling  
+		    	else if (!opts || opts.adbs === undefined)
+		    		// called somewhere else (including server-side)
+		    		this._adbs = false;	// Stop autodisabling
+		    	if (!v) {
+		    		if (this._adbs) {
+		    			// autodisable is still active, allow enabling
+		    			this._adbs = false;
+		    		} else if (opts && !opts.adbs)
+		    			// ignore re-enable by autodisable mechanism
+		    			return this._disabled;
+		    	}
+		    	return v;
+		    }, 
+		    function (v) {
+		    	if (this.desktop) {
+		    		if (this._mold == "os") {
+		    			var n = this.$n(),
+							zclass = this.getZclass();
+		    			if (zclass)
+		    				jq(n)[(n.disabled = v) ? "addClass": "removeClass"](zclass + "-disd");
+		    		} else
+		    			this.rerender(); //bind and unbind required (because of many CSS classes to update)
+		    	}
+		    }
+		],
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			if (this.isTableLayout_()) {
@@ -500,7 +521,8 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	},
 	onResponse: function () {
 		for (var ads = this._ads, ad; ad = ads.shift();)
-			ad.setDisabled(false);
+			// B60-ZK-1176: distinguish from other usages
+			ad.setDisabled(false, {adbs: false});
 		zWatch.unlisten({onResponse: this});
 	}
 },{ //static
@@ -525,7 +547,8 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 						wgt._autodisable_self = true;
 					}
 					if (ad && !ad._disabled) {
-						ad.setDisabled(true);
+						// B60-ZK-1176: distinguish from other usages
+						ad.setDisabled(true, {adbs: true});
 						if (wgt.inServer)
 							if (perm)
 								ad.smartUpdate('disabled', true);
