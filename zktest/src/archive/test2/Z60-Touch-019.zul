@@ -2,43 +2,55 @@
 <zk>
 	<zscript>Object[] o = new Object[10];</zscript>
 	<borderlayout hflex="1" vflex="1">
-		<west size="25%" title="West" collapsible="true">
-			<div hflex="1" vflex="1" style="background: green">
-				<label value="WEST Size=25%" style="font-size:30px;color: #FFF"/>
+		<west size="25%" title="West" collapsible="true" autoscroll="true">
+			<div hflex="min" vflex="min" style="background: green">
+				<vlayout hflex="1" vflex="1">
+				<groupbox hflex="1" vflex="1">
+					<caption label="Test1" />
+					<div hflex="1" height="600px">Test1</div>
+				</groupbox>
+				<groupbox hflex="1" vflex="1">
+					<caption label="Test2" />
+					<div hflex="1" height="600px">Test2</div>
+				</groupbox>
+				</vlayout>
 			</div>
 		</west>
 		<center autoscroll="true">
-			<div id="div" hflex="min" vflex="min">
-				<vlayout id="v" hflex="min" vflex="min" spacing="0">
-					<label value="1.Try scroll down and right here 2.Click 'add/remove' button and scroll again" style="font-size:30px"/>
+			<vlayout id="v">
+				<label value="1.Try scroll down and right here" style="font-size:22px"/>
+				<label value="2.Click 'add/remove' button and scroll again" style="font-size:22px"/>
+				<hlayout>
 					<button label="add">
 						<attribute name="onClick"><![CDATA[
 							Div d1 = new Div();
 							d1.setId("add1");
-							d1.setHeight("400px");
-							d1.setWidth("100%");
+							d1.setHeight("100px");
+							d1.setWidth("300px");
 							d1.setStyle("background: black;");
 							Div d2 = new Div();
 							d2.setId("add2");
-							d2.setHeight("400px");
-							d2.setWidth("100%");
+							d2.setHeight("100px");
+							d2.setWidth("300px");
 							d2.setStyle("background: grey;");
 							v.appendChild(d1);
 							v.appendChild(d2);
 						]]></attribute>
 					</button>
 					<button label="remove" onClick="v.removeChild(add1);v.removeChild(add2);" />
-					<zk forEach="${o}">
-						<hlayout hflex="min" vflex="min" spacing="0">
+				</hlayout>
+				<zk forEach="${o}">
+					<div>
+						<hlayout hflex="min">
 							<zk forEach="${o}">
-								<div height="200px" width="200px" style="background: gold; border: 1px solid black;">
-									<label value="Div ${forEachStatus.previous.index * 10 + forEachStatus.index}" style="font-size:18px"/>
-								</div>
+							<div height="200px" width="200px" style="background: gold; border: 1px solid black;">
+								<label value="Div ${forEachStatus.previous.index * 10 + forEachStatus.index}" style="font-size:18px"/>
+							</div>
 							</zk>
 						</hlayout>
-					</zk>
-				</vlayout>
-			</div>
+					</div>
+				</zk>
+			</vlayout>
 		</center>
 	</borderlayout>
 </zk>

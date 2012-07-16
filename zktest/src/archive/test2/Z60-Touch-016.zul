@@ -1,7 +1,6 @@
 <zk>
-	<n:h3 xmlns:n="native">iPad/Android</n:h3>
-	<vlayout>
-	<vlayout>
+	<vlayout width="100%" height="100%">
+	<vlayout hflex="1" vflex="1">
 		1. Should see scrollbar inside tree component.
 		<separator spacing="0"/>
 		2. Open and close tree node, should see scroll bar size changed.
@@ -57,7 +56,7 @@
 			</treefoot>
 		</tree>
 	</vlayout>
-	<vlayout>
+	<vlayout hflex="1" vflex="1">
 		1. Open the tree node 'Item 1' and click button to add 'Item 1-3'
 		<separator spacing="0" />
 		2. Should see scroll bar appeared.
