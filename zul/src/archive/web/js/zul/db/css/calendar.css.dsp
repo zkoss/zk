@@ -25,7 +25,6 @@
 .z-calendar-tdl,
 .z-calendar-tdr {
 	position: relative;
-	width : 10px;
 	padding-bottom: 10px;
 	width: 16px;
 	cursor: pointer;
