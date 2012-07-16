@@ -170,7 +170,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		    		if (this._adbs) {
 		    			// autodisable is still active, allow enabling
 		    			this._adbs = false;
-		    		} else if (opts && !opts.adbs)
+		    		} else if (opts && opts.adbs === false)
 		    			// ignore re-enable by autodisable mechanism
 		    			return this._disabled;
 		    	}
