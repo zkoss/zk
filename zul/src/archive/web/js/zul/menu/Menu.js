@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				clickOffsetX = evt.domEvent.clientX - ofs[0];
 
 			if (clickOffsetX > clickArea) {
-				jq(wgt.$n('a')).addClass(wgt.getZclass() + '-body-seld');
+				jq(wgt.getAnchor_()).addClass(wgt.getZclass() + '-body-seld');
 				wgt.menupopup._shallClose = false;
 				wgt._togglePopup();
 				evt.stop();
@@ -40,7 +40,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
 				
 		} else {
-			jq(wgt.$n('a')).addClass(wgt.getZclass() + '-body-seld');
+			jq(wgt.getAnchor_()).addClass(wgt.getZclass() + '-body-seld');
 			wgt.menupopup._shallClose = false;
 			wgt._togglePopup();
 		}
@@ -124,7 +124,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	 */
 	open: function () {
 		if (this.desktop && this.isTopmost()) {
-			jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
+			jq(this.getAnchor_()).addClass(this.getZclass() + '-body-seld');
 			var mb = this.getMenubar();
 			if (mb._lastTarget)
 				this.$class._rmActive(mb._lastTarget);
@@ -132,6 +132,14 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this.menupopup._shallClose = false;
 			this._togglePopup();
 		}
+	},
+	// since ZK 6.1.0 internal use only.
+	getAnchor_: function () {
+		return this.$n('a');
+	},
+	// since ZK 6.1.0 internal use only.
+	getButton_: function () {
+		return this.$n('b');
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
@@ -196,7 +204,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this._contentHandler.onHide();
 	},
 	focus_: function (timeout, ignoreActive/* used for Menupopup.js*/) {
-		if (this.isTopmost() && zk(this.$n('b')).focus(timeout)) {
+		if (this.isTopmost() && zk(this.getButton_()).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
             // is the last one, in IE it will delay to show the active effect.
 			// We have to use the ignoreActive to avoid adding the active effect
@@ -258,7 +266,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				// 2. make the menu as focus effect
 				var pp = this.menupopup;
 				if (pp && pp.isOpen()) {
-					jq(this.$n('a')).removeClass(this.getZclass() + '-body-seld');
+					jq(this.getAnchor_()).removeClass(this.getZclass() + '-body-seld');
 					pp.close();
 				}
 				this.$class._addActive(this); // keep the focus
@@ -268,7 +276,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				// 1. open menupopup if any.
 				// 2. pass the focus control to menupopup
 				if (this.menupopup) {
-					jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
+					jq(this.getAnchor_()).addClass(this.getZclass() + '-body-seld');
 					this.menupopup._shallClose = false;
 					this.menupopup.open();
 				}
@@ -315,7 +323,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	bind_: function () {
 		this.$supers(zul.menu.Menu, 'bind_', arguments);
 
-		var anc = this.$n('a'),
+		var anc = this.getAnchor_(),
 			type = this._contentType;
 		if (!this.isTopmost()) {
 			var	n = this.$n();
@@ -324,7 +332,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				.domListen_(n, "onMouseOver")
 				.domListen_(n, "onMouseOut");
 		} else {
-			this.domListen_(this.$n('b'), "onFocus", "doFocus_") // used to handle keystroke
+			this.domListen_(this.getButton_(), "onFocus", "doFocus_") // used to handle keystroke
 				.domListen_(anc, "onMouseOver")
 				.domListen_(anc, "onMouseOut");
 			if (this.isListen('onClick')) {
@@ -337,17 +345,17 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		if (!this.isTopmost()) {
-			var anc = this.$n('a'),
+			var anc = this.getAnchor_(),
 				n = this.$n();
 			this.domUnlisten_(anc, "onFocus", "doFocus_")
 				.domUnlisten_(anc, "onBlur", "doBlur_")
 				.domUnlisten_(n, "onMouseOver")
 				.domUnlisten_(n, "onMouseOut");
 		} else {
-			var anc = this.$n('a');
+			var anc = this.getAnchor_();
 			this.domUnlisten_(anc, "onMouseOver")
 				.domUnlisten_(anc, "onMouseOut")
-				.domUnlisten_(this.$n('b'), "onFocus", "doFocus_");
+				.domUnlisten_(this.getButton_(), "onFocus", "doFocus_");
 		}
 
 		if (this._contentHandler)
@@ -385,8 +393,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if(this.isTopmost())
 				_toggleClickableCSS(this);
 			this.menupopup.open();
-		}
-		else if (this.isTopmost()) 
+		} else if (this.isTopmost()) 
 			this.menupopup.close({sendOnOpen: true});
 		else
 			zk(this.menupopup.$n('a')).focus(); // force to get a focus 
@@ -402,7 +409,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var	topmost = this.isTopmost();
 		if(topmost)
 			_toggleClickableCSS(this);
-		if (topmost && zk.ie && !jq.isAncestor(this.$n('a'), evt.domTarget))
+		if (topmost && zk.ie && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
 				return; // don't activate
 
 		if (this.menupopup)
@@ -430,7 +437,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var menubar = this.getMenubar();
 		if (menubar) menubar._bOver = false;
 		this._updateHoverImage(); // remove hover image if any
-		if (!zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (!zk.ie && jq.isAncestor(this.getAnchor_(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	
 		var topmost = this.isTopmost(),
@@ -452,7 +459,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
 			if (n) 
-				this._eimg = this.$n('b');
+				this._eimg = this.getButton_();
 		}
 		return this._eimg;
 	},
@@ -462,7 +469,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 }, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
+			n = top ? wgt.getAnchor_() : wgt.$n(),
 			menupopup = wgt.menupopup,
 			cls = wgt.getZclass();
 		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
@@ -470,7 +477,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
+			n = top ? wgt.getAnchor_() : wgt.$n(),
 			menupopup = wgt.menupopup,
 			cls = wgt.getZclass();
 		cls += top ? menupopup && menupopup.isOpen() ? '-body-seld' : '-body-over' : '-over';
@@ -485,7 +492,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_rmActive: function (wgt, ignoreSeld/* used for mouseout when topmost*/) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.$n('a') : wgt.$n(),
+			n = top ? wgt.getAnchor_() : wgt.$n(),
 			zcls = wgt.getZclass(),
 			cls = zcls + (top ? (!ignoreSeld && wgt.menupopup.isOpen()) ? '-body-seld' : '-body-over' : '-over');
 		var anode = jq(n);

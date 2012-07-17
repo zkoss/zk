@@ -132,7 +132,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._hideShadow();
 		var menu;
 		if ((menu = _getMenu(this)) && menu.isTopmost())
-			jq(menu.$n('a')).removeClass(menu.getZclass() + "-body-seld");
+			jq(menu.getAnchor_()).removeClass(menu.getZclass() + "-body-seld");
 
 		var item = _currentChild(this);
 		if (item) item.$class._rmActive(item);
@@ -145,7 +145,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		var menu;
 		if (menu = _getMenu(this)) {
 			if (!offset) {
-				ref = menu.$n('a');
+				ref = menu.getAnchor_();
 				if (!position)
 					if (menu.isTopmost())
 						position = menu.parent.getOrient() == 'vertical'
