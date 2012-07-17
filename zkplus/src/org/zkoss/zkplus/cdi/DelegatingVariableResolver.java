@@ -40,7 +40,7 @@ public class DelegatingVariableResolver implements VariableResolverX {
 
 	private VariableResolverX fVariableResolverX;
 	public DelegatingVariableResolver() {
-		fVariableResolverX = new DelegatingVariableResolverManager();
+		fVariableResolverX = new DelegatingVariableResolverEL();
 		// DelegatingVariableResolverManager
 		// DelegatingVariableResolverEL
 	}
@@ -102,17 +102,27 @@ class DelegatingVariableResolverManager implements VariableResolverX {
 		}
 		if(bean==null) return null;
 
-		CreationalContext context = ctx==null?
-			null:(CreationalContext)ctx.getAttribute(CREATIONAL_CONTEXT);
-		if(context==null){
-			System.out.println(">>>>>create a new CreationalContext");
-			context = _beanMgr.createCreationalContext(null);
-			if(ctx!=null){
-				ctx.setAttribute(CREATIONAL_CONTEXT,context);
-			}else{
-				
-			}
-		}
+		
+		CreationalContext context = _beanMgr.createCreationalContext(null);
+		
+		/*
+		 * Ian Tsai & Dennis
+		 * 
+		 * We are not sure what is the best way to handle the life cycle of CreationalContext.
+		 * CreationalContext is the context designed to serve  
+		 * if we put it in Desktop, then if the bean is 
+		 */
+//		CreationalContext context = ctx==null?
+//			null:(CreationalContext)ctx.getAttribute(CREATIONAL_CONTEXT);
+//		if(context==null){
+//			System.out.println(">>>>>create a new CreationalContext");
+//			context = _beanMgr.createCreationalContext(null);
+//			if(ctx!=null){
+//				ctx.setAttribute(CREATIONAL_CONTEXT,context);
+//			}else{
+//				
+//			}
+//		}
 		System.out.println(">>>>>CreationalContext: "+context);		
 		Object value = _beanMgr.getReference(bean, bean.getBeanClass(), context);
 		context.release();
@@ -148,8 +158,8 @@ class DelegatingVariableResolverEL implements VariableResolverX {
 		if (!_resolving) { //recursive back, return null.
 			final boolean old = _resolving;
 			_resolving = true;
+			final CDIELContext elctx = new CDIELContext(ctx, _cdiResolver);
 			try {
-				final ELContext elctx = new CDIELContext(ctx, _cdiResolver);
 				return _cdiResolver.getValue(elctx, base, name); //might cause recursive
 			} finally {
 				_resolving = old;

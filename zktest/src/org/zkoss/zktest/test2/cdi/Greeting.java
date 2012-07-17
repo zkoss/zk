@@ -18,14 +18,28 @@ package org.zkoss.zktest.test2.cdi;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+
 /**
  * @author Ian Y.T Tsai(zanyking)
  *
  */
+//@RequestScoped
 public class Greeting implements Serializable{
 	private static final long serialVersionUID = -5058722721630286971L;
 
 	public String greet(String name){
-		return "Hello, "+name+".";
+		return "Hello, "+name+". bean: "+this.getClass()+System.identityHashCode(this);
+	}
+	@PostConstruct
+	public void init(){
+		System.out.println(">>>>>>>>>> @PostConstruct:"+this);
+	}
+	@PreDestroy
+	public void dispose(){
+		System.out.println(">>>>>>>>>> @PreDestroy:"+this);
 	}
 }
