@@ -252,7 +252,7 @@
 			<version>${gmapsz.version}</version>
 		</dependency>
 		
-		<!--  for zkbind jsr 303 
+		<!--  for zkbind jsr 303 -->
 		
 		<dependency>
 		    <groupId>org.hibernate</groupId>
@@ -269,7 +269,7 @@
 		    <artifactId>slf4j-log4j12</artifactId>
 		    <version>1.6.1</version>
 		</dependency>
-		-->
+		
 		
 		            
 		<!-- for JSR 299 -->

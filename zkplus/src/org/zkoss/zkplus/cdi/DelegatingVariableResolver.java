@@ -74,8 +74,8 @@ public class DelegatingVariableResolver implements VariableResolverX {
 		 * Ian Tsai & Dennis
 		 * 
 		 * We are not sure what is the best way to handle the life cycle of CreationalContext.
-		 * CreationalContext is the context designed to serve  
-		 * if we put it in Desktop, then if the bean is 
+		 * CreationalContext is the context designed to serve a specific contextual bean type, 
+		 * we are using null here, so we got no contextual concept.
 		 */
 //		CreationalContext context = ctx==null?
 //			null:(CreationalContext)ctx.getAttribute(CREATIONAL_CONTEXT);
@@ -89,7 +89,9 @@ public class DelegatingVariableResolver implements VariableResolverX {
 //			}
 //		}
 		Object value = _beanMgr.getReference(bean, bean.getBeanClass(), context);
-		// follow the old specification, we won't handle preDestroy of creationalContext. 
+		
+		// follow the old implementation, we won't handle preDestroy of creationalContext in dependent scope.
+		// we cannot call release() before user get the returned value and use it.
 //		context.release();
 
 		return value;
