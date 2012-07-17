@@ -19,8 +19,6 @@ package org.zkoss.zkplus.cdi;
 
 import java.util.Set;
 
-import javax.el.ELContext;
-import javax.el.ELResolver;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -38,44 +36,12 @@ import org.zkoss.xel.XelException;
  */
 public class DelegatingVariableResolver implements VariableResolverX {
 
-	private VariableResolverX fVariableResolverX;
-	public DelegatingVariableResolver() {
-		fVariableResolverX = new DelegatingVariableResolverEL();
-		// DelegatingVariableResolverManager
-		// DelegatingVariableResolverEL
-	}
-	
-	public Object resolveVariable(String name) throws XelException {
-		return resolveVariable(null, null, name);
-	}
 
-	public Object resolveVariable(XelContext ctx, Object base, Object name)throws XelException {
-		return fVariableResolverX.resolveVariable(ctx, base, name);
-	}
-
-	public int hashCode() {
-		return fVariableResolverX.hashCode();
-	}
-	
-	public boolean equals(Object o) {
-		return fVariableResolverX.equals(o);
-	}
-}
-
-
-/**
- * 
- * @author Ian Y.T Tsai(zanyking)
- *
- */
-class DelegatingVariableResolverManager implements VariableResolverX {
-	
-	private static final String CREATIONAL_CONTEXT = DelegatingVariableResolver.class.getName();
 	private BeanManager _beanMgr;
-	public DelegatingVariableResolverManager() {
+	public DelegatingVariableResolver() {
 		_beanMgr = CDIUtil.getBeanManager();
-		System.out.println(">>>>>>> DelegatingVariableResolverManager()");
 	}
+	
 	public Object resolveVariable(String name) throws XelException {
 		return resolveVariable(null, null, name);
 	}
@@ -104,7 +70,6 @@ class DelegatingVariableResolverManager implements VariableResolverX {
 
 		
 		CreationalContext context = _beanMgr.createCreationalContext(null);
-		
 		/*
 		 * Ian Tsai & Dennis
 		 * 
@@ -123,9 +88,9 @@ class DelegatingVariableResolverManager implements VariableResolverX {
 //				
 //			}
 //		}
-		System.out.println(">>>>>CreationalContext: "+context);		
 		Object value = _beanMgr.getReference(bean, bean.getBeanClass(), context);
-		context.release();
+		// follow the old specification, we won't handle preDestroy of creationalContext. 
+//		context.release();
 
 		return value;
 	}
@@ -134,45 +99,8 @@ class DelegatingVariableResolverManager implements VariableResolverX {
 		return Objects.hashCode(_beanMgr);
 	}
 	public boolean equals(Object o) {
-		return this == o || (o instanceof DelegatingVariableResolverManager
-			&& Objects.equals(_beanMgr, ((DelegatingVariableResolverManager)o)._beanMgr));
+		return this == o || (o instanceof DelegatingVariableResolver
+			&& Objects.equals(_beanMgr, ((DelegatingVariableResolver)o)._beanMgr));
 	}
 }
-/**
- * 
- * @author Ian Y.T Tsai(zanyking)
- *
- */
-class DelegatingVariableResolverEL implements VariableResolverX {
-	private boolean _resolving; //prevent recursive
-	private ELResolver _cdiResolver;
-	public DelegatingVariableResolverEL() {
-		_cdiResolver = CDIUtil.getBeanManager().getELResolver();
-	}
-	public Object resolveVariable(String name) throws XelException {
-		return resolveVariable(null, null, name);
-	}
 
-	public Object resolveVariable(XelContext ctx, Object base, Object name)
-	throws XelException {
-		if (!_resolving) { //recursive back, return null.
-			final boolean old = _resolving;
-			_resolving = true;
-			final CDIELContext elctx = new CDIELContext(ctx, _cdiResolver);
-			try {
-				return _cdiResolver.getValue(elctx, base, name); //might cause recursive
-			} finally {
-				_resolving = old;
-			}
-		}
-		return null;
-	}
-
-	public int hashCode() {
-		return Objects.hashCode(_cdiResolver);
-	}
-	public boolean equals(Object o) {
-		return this == o || (o instanceof DelegatingVariableResolverEL
-			&& Objects.equals(_cdiResolver, ((DelegatingVariableResolverEL)o)._cdiResolver));
-	}
-}

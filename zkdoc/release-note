@@ -38,6 +38,8 @@ ZK 6.0.2
   ZK-1185: Two collection on zul page returning null when both of them becomes empty
   ZK-1194: The timing of @Init on viewmodel is not so correct.
   ZK-1205: Notification disappears immediately when other widgets gained focus
+  ZK-1176: Autodisabled (toolbar)button should stay disabled when setDisabled(true) onClick
+  ZK-1160: Exception when closing tab with included content
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
