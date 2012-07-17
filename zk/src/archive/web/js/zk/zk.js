@@ -1508,8 +1508,9 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
  			html = '<div class="z-error" id="' + id + '"><table cellpadding="2" cellspacing="2" width="100%">'
  					+ '<tr valign="top"><td class="msgcnt" colspan="3"><div class="msgs">'+ zUtl.encodeXML(msg, {multiline : true}) + '</div></td></tr>'
  					+ '<tr id="'+ id + '-p"><td class="errnum" align="left">'+ ++_errcnt+ ' Errors</td><td align="right"><div >'
-					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"></div>'
-					+ '<div class="btn close" onclick="zk._Erbx.remove()"></div></div></td></tr></table></div>';
+					+ '<div class="btn redraw" onclick="zk._Erbx.redraw()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.redraw()"' : '') + '></div>'
+					+ '<div class="btn close" onclick="zk._Erbx.remove()"' + (zk.mobile ? ' ontouchstart="zk._Erbx.remove()"' : '')	+ '></div>'
+					+ '</div></td></tr></table></div>';
 
 		jq(document.body).append(html);
 		_erbx = this;

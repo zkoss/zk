@@ -138,7 +138,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				hgh = zk(n = n.lastChild).revisedHeight(hgh);
 				if (zk.ie8)
 					hgh -= 1; // show the bottom border
-				var cave = this.getCaveNode(),
+				var cave = this.$n('cave'),
 					s = cave.style;
 				s.height = jq.px0(hgh);
 			}
