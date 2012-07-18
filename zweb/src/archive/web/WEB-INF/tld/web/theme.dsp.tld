@@ -77,6 +77,45 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		]]></description>
 	</function>
 	<function>
+		<name>box</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String box(java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS rule string for box model.
+	@param styleName
+	           the value of the style name, like <code>box-orient</code>,
+	           <code>box-pack</code>
+	@param styleValue
+	            the value according to the style name, like
+	           <code>horizontal</code>, <code>center</code>
+	@return a specific browser CSS rule string, like
+	         <code>-moz-box-orient</code> for firefox and
+	        <code>-webkit-box-orient</code> for safari and chrome
+		]]></description>
+	</function>
+	<function>
+		<name>box2</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String box2(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS rule string for box model with two pair styles.
+		]]></description>
+	</function>
+	<function>
+		<name>box3</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String box3(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS rule string for box model with three pair styles.
+		]]></description>
+	</function>
+	<function>
 		<name>boxShadow</name>
 		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
 		<function-signature>
@@ -96,6 +135,42 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<description><![CDATA[
 	Generates a specific browser CSS border-radius.
 	@param style the value of the border-radius
+		]]></description>
+	</function>
+	<function>
+		<name>applyCSS3</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String applyCSS3(java.lang.String, java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	 Generates a specific browser CSS rule String for the given style name and
+	 value.
+	 <p>
+	 Note: the method is only applied with the browser prefix as the style
+	 name, if the CSS3 style usage rule is different between browsers, please
+	 use another method instead.
+	 
+	 @param styleName
+	            the value of the style name, like <code>box-sizing</code>,
+	            <code>animation</code>
+	 @param styleValue
+	            the value according to the style name, like
+	            <code>border-box</code>, <code>mymove 5s infinite</code>
+	 @return a specific browser CSS rule string, like
+	         <code>-moz-box-sizing</code> for firefox and
+	         <code>-webkit-box-sizing</code> for safari and chrome
+		]]></description>
+	</function>
+	<function>
+		<name>transform</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	java.lang.String transform(java.lang.String)
+		</function-signature>
+		<description><![CDATA[
+	Generates a specific browser CSS transform.
+	@param style the value of the transform
 		]]></description>
 	</function>
 </taglib>
