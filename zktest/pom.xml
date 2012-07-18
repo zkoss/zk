@@ -40,6 +40,10 @@
 	</scm>
 	<repositories>
 		<repository>
+			<id>Java Net Repo</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
 			<id>zk repository</id>
 			<url>http://mavensync.zkoss.org/maven2</url>
 		</repository>
@@ -52,6 +56,7 @@
 			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
 		</repository>		
 	</repositories>
+	
 	<pluginRepositories>
 		<pluginRepository>
 			<id>zkmaven</id>
@@ -247,8 +252,8 @@
 			<version>${gmapsz.version}</version>
 		</dependency>
 		
-		<!--  for zkbind jsr 303 
-		-->
+		<!--  for zkbind jsr 303 -->
+		
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-validator</artifactId>
@@ -265,6 +270,55 @@
 		    <version>1.6.1</version>
 		</dependency>
 		
+		
+		            
+		<!-- for JSR 299 -->
+		 
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.0</version>
+			<optional>true</optional>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+			<version>1.0.1-Final</version>
+			<optional>true</optional>
+		</dependency> 
+		-->
+		 <!-- 
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+			<version>1.1.8.Final</version>
+			<optional>true</optional>
+		</dependency>
+ 		-->
+		
+		<!-- for JNDI service support in Jetty  -->
+		<!-- 
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-naming</artifactId>
+			<version>6.1.26</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-plus</artifactId>
+			<version>6.1.26</version>
+		</dependency>
+		-->
+		       
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
