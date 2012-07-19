@@ -1,0 +1,4 @@
+<zk>
+	<timebox width="250px" format="a HH:mm:ss" />
+	<timebox width="250px" format="a hh:mm:ss" />
+</zk>
