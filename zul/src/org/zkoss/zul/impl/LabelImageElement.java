@@ -37,14 +37,14 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * component like this:</p>
  *
  * <pre><code>&lt;button ...&gt;
- *	&lt;custom-attributes org.zkoss.zul.listbox.rod='true'/&gt;
+ *	&lt;custom-attributes org.zkoss.zul.image.preload='true'/&gt;
  *&lt;/button&gt;
  * </code></pre>
  * 
  * Or specify it onto the root component.
  * For example,
  * <pre><code>&lt;window ...&gt;
- * 	&lt;custom-attributes org.zkoss.zul.listbox.rod=&quot;true&quot;/&gt;
+ * 	&lt;custom-attributes org.zkoss.zul.image.preload=&quot;true&quot;/&gt;
  *  &lt;button .../&gt;
  * &lt;/window&gt;
  * </code></pre>
