@@ -133,8 +133,16 @@ public class Tab extends LabelImageElement {
 		final Tabpanel panel = getLinkedPanel();
 		
 		detach();
-		if (panel != null)
-			panel.detach();		
+
+		if (panel != null) {
+			// B60-ZK-1160: Exception when closing tab with included content
+			// Must clean up included content before detaching tab panel
+			Component include = panel.getFirstChild();
+			if (include instanceof Include) {
+				include.detach();
+			}
+			panel.detach();
+		}
 	}
 	
 	private Tab selectNextTab() {

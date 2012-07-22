@@ -29,6 +29,7 @@ ZK 6.0.2
 
 * Features
   ZK-1127: Support OSGi
+  ZK-1231: Need a certain lifecycle point for afterCompose in a ViewModel
 
 * Bugs
   ZK-1113: Popup of chosenbox not removed after detach
@@ -42,21 +43,41 @@ ZK 6.0.2
   ZK-1147: The returning type of getModel API in combobox and tree component shall be the same
   ZK-1159: Unnecessary Ajax update when the listbox with ROD is invisible
   ZK-1124: onOpen event not firing when closing a Menupopup
+  ZK-1126: Removing all items in certain AbstractListModel(s) may not work properly
   ZK-1165: Inner ViewMdel cannot get Outer ViewModel in Binding
   ZK-1164: "content" attribute in <image> can't handle the RenderedImage type with MVVM
+  ZK-1177: SimpleListModelSharer causes NullPointerException when the model is updated
   ZK-1178: ZEL should support method overloading
   ZK-1191: Children binding converter doesn't converter a pure Collection
   ZK-1189: Save into a deep form bean fires improper NotifyChange
   ZK-1202: Combobox not removing old items and reset selection when changing models
+  ZK-1222: Popup component as tooltip fires multiple onOpen events
+  ZK-1216: Combobutton has problems with label change if its popup did not close beforehand
+  ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   ZK-1157: formatedDate and formatedNumber should be formatted
   ZK-1196: Listbox renders incorrectly in richlet with ZK 6.0.2.FL.20120607
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
   ZK-1197: ZEL BeanELResolver's invoke impl has serious logical issue
   ZK-1188: Error when mixing ZK creation EL with zkbind on reference or element of collection
+  ZK-1182: stubonly doesn't work
+  ZK-1228: Tree with model fail to clone
+  ZK-1185: Two collection on zul page returning null when both of them becomes empty
+  ZK-1194: The timing of @Init on viewmodel is not so correct.
+  ZK-1205: Notification disappears immediately when other widgets gained focus
+  ZK-1176: Autodisabled (toolbar)button should stay disabled when setDisabled(true) onClick
+  ZK-1160: Exception when closing tab with included content
+  ZK-844: IllegalStateException when use cdi DelegatingVariableResolver
 
 * Upgrade Notes
   + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
-  
+  + The invocation of current @Init tagged method in a ViewModel class is moved from doAfterCompose() to earlier stage 
+    doBeforeComposeChildren() in BindComposer, which means it's no longer applicable if you want to initiate your ViewModel 
+    based  on host component scope (ex: child components and custom attributes) in an @Init tagged method. Instead you 
+    should use @AfterCompose tagged method which is newly introduced since this version.
+  + AnnotateBinder#init() will only take care of super#init(), you'll have to call AnnotateBinder#initAnnotatedBindings() 
+    separately to initiate and register bindings based on ZUL component's annotation.
+  + Deprecated all of the Hibernate utility classes in zkplus package, HibernateSessionContextListener.java, HibernateSessionFactoryListener.java,
+    HibernateUtil.java, and OpenSessionInViewListener.java, please use official Hibernate's methods instead.
 	--------
 ZK 6.0.1
 May 2, 2012
@@ -424,6 +445,7 @@ ZK 5.0.12
   ZK-1079: Fileupload dialog will be masked while open it by a button in a popup  
   ZK-1086: Undefined on datebox format "EEEE" with specific locale
   ZK-1092: IE 8 - Scrollbar Bug in Tree
+  ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
   
 	--------
 ZK 5.0.11

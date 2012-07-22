@@ -211,7 +211,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 				return; // no first tr
 			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
-				c.style.width = (zk.safari ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
+				c.style.width = (zk.safari_ ? wds[i++] : zk(c).revisedWidth(wds[i++])) + "px";
 			if (sbc && !meshmin) {
 				// add flex <td> if absent
 				var bdfx = tr.lastChild,

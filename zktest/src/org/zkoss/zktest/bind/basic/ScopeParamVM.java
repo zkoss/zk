@@ -1,5 +1,6 @@
 package org.zkoss.zktest.bind.basic;
 
+import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ExecutionParam;
 import org.zkoss.bind.annotation.Init;
@@ -22,7 +23,7 @@ public class ScopeParamVM {
 	String componentScope3;
 	
 	
-	@Init
+	@AfterCompose
 	public void init(@ScopeParam("applicationScopeVar") String applicationScope,
 			@ScopeParam("sessionScopeVar") String sessionScope,
 			@ScopeParam("desktopScopeVar") String desktopScope,

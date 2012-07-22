@@ -1,0 +1,49 @@
+<zk>
+  <zscript><![CDATA[
+	class PersonComposer extends org.zkoss.bind.BindComposer {
+		private String selected = null;
+		private String[] persons = new String[] { "Mike", "Jonhy" };
+
+		public String getSelected() {
+			return this.selected;
+		}
+
+		public void setSelected(String selected) {
+			this.selected = selected;
+		}
+
+		public String[] getPersons() {
+			return persons;
+		}
+	}
+  ]]>
+  </zscript>
+
+  <window
+    id="win"
+    apply="PersonComposer"
+    border="none">
+    <listbox
+      id="lbx"
+      vflex="true"
+      model="@load(win$composer.persons)"
+      selectedItem="@save(win$composer.selected)">
+      <listhead>
+        <listheader
+          label="name"
+          width="100%" />
+      </listhead>
+      <template name="model">
+        <listitem>
+          <listcell label="@bind(each)" />
+        </listitem>
+      </template>
+    </listbox>
+    <window title="Person">
+      <label value="Name" />
+      <textbox
+        value="@bind(win$composer.selected)"
+        width="90%" />
+    </window>
+  </window>
+</zk>

@@ -40,6 +40,7 @@ import java.util.List;
  * </p>
  * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
+ * @deprecate As of release 6.0.2, please use the official Hibernate's method instead.
  */
 public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanup {
 	private static final Log log = Log.lookup(OpenSessionInViewListener.class);

@@ -214,7 +214,7 @@ public class Grid extends MeshElement {
 
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
 		"org.zkoss.zul.Grid.onInitLaterPosted";
-	private static final String ATTR_ON_PAGING_INIT_RENDER_POSTED = 
+	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = 
 		"org.zkoss.zul.Grid.onPagingInitLaterPosted";
 
 	private static final int INIT_LIMIT = 50;
@@ -865,7 +865,7 @@ public class Grid extends MeshElement {
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
 	public void onPagingInitRender() {
-		removeAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED);
+		removeAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED);
 		doInitRenderer();
 	}
 
@@ -922,9 +922,9 @@ public class Grid extends MeshElement {
 	}
 
 	private void postOnPagingInitRender() {
-		if (getAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED) == null && 
+		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null && 
 				getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) { // B50-ZK-345
-			setAttribute(ATTR_ON_PAGING_INIT_RENDER_POSTED, Boolean.TRUE);
+			setAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED, Boolean.TRUE);
 			Events.postEvent("onPagingInitRender", this, null);
 		}
 	}
@@ -1379,6 +1379,12 @@ public class Grid extends MeshElement {
 			}
 			clone._dataListener = null;
 			clone.initDataListener();
+
+			// As the bug in tree - B30-1892446.zul, the component clone won't
+			// clone the posted event, so we need to remove the attributes here.
+			clone.removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
+			clone.removeAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED);
+			
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
 		

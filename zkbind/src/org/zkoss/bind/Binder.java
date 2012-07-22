@@ -86,8 +86,7 @@ public interface Binder {
 	 * @param initArgs args key-value pairs for initial, nullable
 	 * @since 6.0.1
 	 */
-	public void init(Component root,Object viewModel,Map<String, Object> initArgs);
-	
+	public void init(Component root, Object viewModel, Map<String, Object> initArgs);
 	
 	/**
 	 * Load the load-binding of the component. <br/>

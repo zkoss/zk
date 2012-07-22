@@ -1,0 +1,74 @@
+<?page title="Nested ViewModel init problem" contentType="text/html;charset=UTF-8"?>
+
+
+<zk xmlns:n="native">
+<!-- http://books.zkoss.org/wiki/ZK%20Developer's%20Reference/MVVM/Syntax/ViewModel -->
+<!-- http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/MVVM/Advance/Parameters -->
+<!-- http://books.zkoss.org/wiki/ZK%20Developer's%20Reference/MVVM/Advance/Wire%20Components -->
+<!-- type: "admin" | "user" -->
+<n:p>
+	this is an Outer-Inner VM test case, every logically connected component should reflect corresponding changes.  
+	<n:ol>
+		<n:li><n:b>vm.innerVm.name</n:b> and <n:b>vms.name</n:b> pointed to the same instance:
+			<n:ul>
+				<n:li>Textbox outerNameLb</n:li>
+				<n:li>Textbox vmsNameTxb</n:li>
+			</n:ul>
+		</n:li>
+		<n:li><n:b>vm.innerVm.desc</n:b> and <n:b>vms.desc</n:b> pointed to the same instance:
+			<n:ul>
+				<n:li>Label myLbl </n:li>
+				<n:li>Textbox vmsNameTxb</n:li>
+				<n:li>Textbox vmsDescTxb</n:li>
+				<n:li>Textbox vmInnerVmDescTxb</n:li>
+				<n:li>Label vmInnerVmDescLb</n:li>
+				<n:li>Textbox outerDescTxb</n:li>
+			</n:ul>
+		</n:li>
+	</n:ol>
+</n:p>
+<div apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01194NestedVMInit', type='admin')">
+	
+	<n:span style="font-weight:bold;" >myLbl:( </n:span>
+		<!-- manually configuring ZUL Annotation in VM. -->
+		<label id="myLbl" style="color:green; font-weight:bold;" />
+	<n:span style="font-weight:bold;">)</n:span>
+	
+	<grid width="600px" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vms') @init(vm.innerVm)">
+		<rows>
+			<row>
+				vmsNameTxb: 
+				<textbox id="vmsNameTxb" value="@bind(vms.name)" />
+			</row>
+			<row>
+				vmsDescTxb: 
+				<textbox id="vmsDescTxb" value="@bind(vms.desc)" />
+			</row>
+			<row>
+				vmInnerVmDescTxb:
+				<textbox id="vmInnerVmDescTxb" value="@bind(vm.innerVm.desc)" />
+			</row>
+			<row>
+				vmInnerVmDescLb:
+				<label id="vmInnerVmDescLb" value="@load(vm.innerVm.desc)" />
+			</row>
+		</rows>
+	</grid>
+	
+	<grid width="600px" >
+		<rows>
+			<row>
+				outerNameLb: 
+				<textbox id="outerNameLb" value="@load(vm.innerVm.name)" />
+			</row>
+			<row>
+				outerDescTxb: 
+				<textbox id="outerDescTxb" value="@load(vm.innerVm.desc)" />
+			</row>
+		</rows>
+	</grid>
+	
+</div>
+</zk>
