@@ -138,6 +138,7 @@ public class StubComponent extends AbstractComponent {
 		for (; target != null && (target instanceof Native
 		|| target instanceof StubComponent); target = target.getParent())
 			;
-		Events.postEvent(new StubEvent(event, target));
+		if (target != null)
+			Events.postEvent(new StubEvent(event, target));
 	}
 }
