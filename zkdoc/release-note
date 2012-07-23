@@ -18,6 +18,8 @@ ZK 6.1.0
   ZK-147: Support ungroup for grid's column menu
   ZK-1246: Calendar support touch's swipe event to switch the date view
   ZK-1255: InputElement supports HTML5 placeholder
+  ZK-1247: Add a new theme for tablet/mobile device with big icons
+  ZK-574: Minimum theme for better performance in mobile devices
 
 * Bugs
 
