@@ -10,3 +10,5 @@
 ../dist/lib/ext/jasperreports.jar
 ../dist/lib/ext/validation-api.jar
 ../dist/lib/ext/hibernate-validator.jar
+../dist/lib/ext/cdi-api.jar
+../dist/lib/ext/javax.inject-1.jar

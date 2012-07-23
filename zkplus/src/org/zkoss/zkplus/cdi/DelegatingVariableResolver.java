@@ -17,11 +17,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.cdi;
 
-import javax.el.ELContext;
-import javax.el.ELResolver;
+import java.util.Set;
+
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
@@ -33,35 +35,74 @@ import org.zkoss.xel.XelException;
  *
  */
 public class DelegatingVariableResolver implements VariableResolverX {
-	private boolean _resolving; //prevent recursive
-	private ELResolver _cdiResolver;
+
+
+	private BeanManager _beanMgr;
 	public DelegatingVariableResolver() {
-		_cdiResolver = CDIUtil.getBeanManager().getELResolver();
+		_beanMgr = CDIUtil.getBeanManager();
 	}
+	
 	public Object resolveVariable(String name) throws XelException {
 		return resolveVariable(null, null, name);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object resolveVariable(XelContext ctx, Object base, Object name)
 	throws XelException {
-		if (!_resolving) { //recursive back, return null.
-			final boolean old = _resolving;
-			_resolving = true;
-			try {
-				final ELContext elctx = new CDIELContext(ctx, _cdiResolver);
-				return _cdiResolver.getValue(elctx, base, name); //might cause recursive
-			} finally {
-				_resolving = old;
+		if(base!=null || !(name instanceof String)) return null;
+		
+		final Set<Bean<?>> beans = _beanMgr.getBeans((String)name);
+		if(beans == null || beans.size()==0) return null;
+
+		
+		//I(Dennis) think we don't need to check(if there are more than one bean has same name), CDI should check this when startup
+		//However, Since it returns a Set, so I just check it.
+		//Note, I do some test, the alternative bean will not be returned by the getBeans api with the name.
+		Bean bean = null;
+		for(Bean b:beans){
+			if(b.isAlternative()) continue;//(Ian Tsai) alternative is the bean with explicit declaration in bean.xml. they are reserved for Bean 
+			if(bean != null){
+				throw new XelException("more than one non-alternative bean have same name "+bean+" and "+b+", name "+name);
 			}
+			bean = b;
 		}
-		return null;
+		if(bean==null) return null;
+
+		
+		CreationalContext context = _beanMgr.createCreationalContext(null);
+		/*
+		 * Ian Tsai & Dennis
+		 * 
+		 * We are not sure what is the best way to handle the life cycle of CreationalContext.
+		 * CreationalContext is the context designed to serve a specific contextual bean type, 
+		 * we are using null here, so we got no contextual concept.
+		 */
+//		CreationalContext context = ctx==null?
+//			null:(CreationalContext)ctx.getAttribute(CREATIONAL_CONTEXT);
+//		if(context==null){
+//			System.out.println(">>>>>create a new CreationalContext");
+//			context = _beanMgr.createCreationalContext(null);
+//			if(ctx!=null){
+//				ctx.setAttribute(CREATIONAL_CONTEXT,context);
+//			}else{
+//				
+//			}
+//		}
+		Object value = _beanMgr.getReference(bean, bean.getBeanClass(), context);
+		
+		// follow the old implementation, we won't handle preDestroy of creationalContext in dependent scope.
+		// we cannot call release() before user get the returned value and use it.
+//		context.release();
+
+		return value;
 	}
 
 	public int hashCode() {
-		return Objects.hashCode(_cdiResolver);
+		return Objects.hashCode(_beanMgr);
 	}
 	public boolean equals(Object o) {
 		return this == o || (o instanceof DelegatingVariableResolver
-			&& Objects.equals(_cdiResolver, ((DelegatingVariableResolver)o)._cdiResolver));
+			&& Objects.equals(_beanMgr, ((DelegatingVariableResolver)o)._beanMgr));
 	}
 }
+
