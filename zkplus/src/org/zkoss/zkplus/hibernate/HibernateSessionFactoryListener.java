@@ -61,7 +61,7 @@ import org.zkoss.zk.ui.util.WebAppCleanup;
  * </code></pre>
  * <p>Applicable to Hibernate version 3.2.ga or later</p>
  * @author henrichen
- * @deprecate As of release 6.0.2, please use the official Hibernate's method instead.
+ * @deprecated As of release 6.0.2, please use the official Hibernate's method instead.
  */
 public class HibernateSessionFactoryListener 
 implements WebAppInit, WebAppCleanup,  ServletContextListener {
