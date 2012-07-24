@@ -417,8 +417,8 @@ public class CommonFns {
 	 * Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
 	 * <p>A utility to assist the handling of numeric data.
-	 * @param number The number to format.
-	 * @param pattern The pattern to apply, if it is null,
+	 * @param value The number to format.
+	 * @param format The pattern to apply, if it is null,
 	 * the system's default format is used.
 	 * @return the formatted number string.
 	 * @since 6.0.1

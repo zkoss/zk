@@ -505,7 +505,7 @@ public class Classes {
 	}
 
 	//--Support Class--
-	/**The method info class used for {@link #parseMethod(String signature)}.
+	/**The method info class used for parseMethod(String signature).
 	 * This info describe the method return type, method name and two collections for
 	 * arguments type and arguments name;
 	 */

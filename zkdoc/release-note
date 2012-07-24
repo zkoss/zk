@@ -28,7 +28,7 @@ ZK 6.1.0
 
   --------
 ZK 6.0.2
-
+Jul 24, 2012
 * Features
   ZK-1127: Support OSGi
   ZK-1231: Need a certain lifecycle point for afterCompose in a ViewModel

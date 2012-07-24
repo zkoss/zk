@@ -55,12 +55,11 @@ public class Objects {
 	 */
 	public static final Double ZERO_DOUBLE = new Double(0D);
 	/** Represents 0 in big decimal.
-	 * The same as {@link org.zkoss.math.BigDecimals#ZERO}.
-	 * @see org.zkoss.math.BigDecimals#ONE
+	 * The same as org.zkoss.math.BigDecimals#ZERO.
 	 */
 	public static final BigDecimal ZERO_BIG_DECIMAL = new BigDecimal(0D);
 	/** Represents 0 in big integer.
-	 * Same as {@link org.zkoss.math.BigIntegers#ZERO}.
+	 * Same as org.zkoss.math.BigIntegers#ZERO.
 	 */
 	public static final BigInteger ZERO_BIG_INTEGER = BigInteger.ZERO;
 	/** The null character.
