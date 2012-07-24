@@ -43,7 +43,6 @@ Jul 24, 2012
   ZK-844: IllegalStateException when use cdi DelegatingVariableResolver
 
 * Upgrade Notes
-  + The setFlex(String) API in org.zkoss.zul.LayoutRegion is deprecated, use setHflex/setVflex on child component instead.
   + The invocation of current @Init tagged method in a ViewModel class is moved from doAfterCompose() to earlier stage 
     doBeforeComposeChildren() in BindComposer, which means it's no longer applicable if you want to initiate your ViewModel 
     based  on host component scope (ex: child components and custom attributes) in an @Init tagged method. Instead you 
