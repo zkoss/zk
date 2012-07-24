@@ -295,11 +295,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt._drag = new zk.Draggable(wgt, null, {
 				handle: handle, stackup: true,
 				fireOnMove: false,
-				starteffect: _startmove,
-				ghosting: _ghostmove,
-				endghosting: _endghostmove,
-				ignoredrag: _ignoremove,
-				endeffect: _aftermove,
+				starteffect: Window._startmove,
+				ghosting: Window._ghostmove,
+				endghosting: Window._endghostmove,
+				ignoredrag: Window._ignoremove,
+				endeffect: Window._aftermove,
 				zIndex: 99999 //Bug 2929590
 			});
 		}
@@ -1365,7 +1365,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				w = dg.z_box.minWidth;
 			dg.node.style.width = jq.px0(w);
 		}
-	}
+	},
+	_startmove: _startmove,
+	_ghostmove: _ghostmove,
+	_endghostmove: _endghostmove,
+	_ignoremove: _ignoremove,
+	_aftermove: _aftermove
 });
 
 zul.wnd.Skipper = zk.$extends(zk.Skipper, {
