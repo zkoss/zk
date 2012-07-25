@@ -83,6 +83,10 @@ public class Events {
 	/** The onScrolling event (used with {@link ScrollEvent}).
 	 */
 	public static final String ON_SCROLLING = "onScrolling";
+	/** The onSwipe event (used with {@link SwipeEvent}).
+	 * @since 6.5.0
+	 */
+	public static final String ON_SWIPE = "onSwipe";
 	/** The onSelect event (used with {@link SelectEvent}).
 	 */
 	public static final String ON_SELECT = "onSelect";
