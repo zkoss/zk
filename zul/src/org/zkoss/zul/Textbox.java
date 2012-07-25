@@ -80,7 +80,7 @@ public class Textbox extends InputElement {
 	/** Sets the type.
 	 * @param type the type. Acceptable values are "text" and "password".
 	 * Unlike XUL, "timed" is redundant because it is enabled as long as
-	 * onChanging is added. Since 6.1.0 type also support tel, email and url.
+	 * onChanging is added. Since 6.5.0 type also support tel, email and url.
 	 */
 	public void setType(String type) throws WrongValueException {
 		if (!TEXT.equals(type) && !"password".equals(type) &&

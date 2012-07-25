@@ -42,7 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 /**
  * The theme renderer, which is designed to be overridden
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.sel.Renderer = {
 	/** Update the size of the column menu button when mouse over

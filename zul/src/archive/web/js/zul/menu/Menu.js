@@ -133,11 +133,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this._togglePopup();
 		}
 	},
-	// since ZK 6.1.0 internal use only.
+	// since ZK 6.5.0 internal use only.
 	getAnchor_: function () {
 		return this.$n('a');
 	},
-	// since ZK 6.1.0 internal use only.
+	// since ZK 6.5.0 internal use only.
 	getButton_: function () {
 		return this.$n('b');
 	},

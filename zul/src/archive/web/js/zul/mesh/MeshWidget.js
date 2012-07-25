@@ -1562,7 +1562,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 /** @class Scrollbar
  * The extra Scrollbar for the MeshWidget.
  * It is designed to be overriden
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.mesh.Scrollbar = {
 	/**

@@ -100,7 +100,7 @@ zul.db.Renderer = {
 	 * @param int the number of the week of the value
 	 * @param Map localizedSymbols the symbols for localization 
 	 * @return String the label of the week of year
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	labelOfWeekOfYear: function (wgt, val) {
 		return val + '';
@@ -110,7 +110,7 @@ zul.db.Renderer = {
 	 * <p>Default: 'Wk'
 	 * @param zul.db.Calendar wgt the calendar widget 
 	 * @return String the title of the week of year
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	titleOfWeekOfYear: function (wgt) {
 		return 'Wk';
@@ -120,7 +120,7 @@ zul.db.Renderer = {
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
 	 * @param Map localizedSymbols the symbols for localization 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	dayView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
@@ -144,7 +144,7 @@ zul.db.Renderer = {
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
 	 * @param Map localizedSymbols the symbols for localization 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	monthView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
@@ -161,7 +161,7 @@ zul.db.Renderer = {
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
 	 * @param Map localizedSymbols the symbols for localization 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	yearView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
@@ -186,7 +186,7 @@ zul.db.Renderer = {
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
 	 * @param Map localizedSymbols the symbols for localization 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	decadeView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
@@ -312,13 +312,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		/**
 		 * Sets whether enable to show the week number within the current year or
     	 * not. [ZK EE]
-    	 * @since 6.1.0
+    	 * @since 6.5.0
     	 * @param boolean weekOfYear
 		 */
 	    /**
 	     * Returns whether enable to show the week number within the current year or not.
 	     * <p>Default: false
-	     * @since 6.1.0
+	     * @since 6.5.0
 	     * @return boolean
 	     */
 		weekOfYear: function () {

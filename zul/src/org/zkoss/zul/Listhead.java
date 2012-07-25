@@ -50,7 +50,7 @@ public class Listhead extends HeadersElement {
 	/**
 	 * Sets whether to enable hiding of listheader with the header context menu.
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto. 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void setColumnshide(boolean columnshide) {
 		if (_columnshide != columnshide) {
@@ -61,7 +61,7 @@ public class Listhead extends HeadersElement {
 	/**
 	 * Returns whether to enable hiding of listheader with the header context menu.
 	 * <p>Default: true.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public boolean isColumnshide() {
 		return _columnshide;
@@ -69,7 +69,7 @@ public class Listhead extends HeadersElement {
 	/**
 	 * Sets whether to enable grouping of listheader with the header context menu.
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto. 
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void setColumnsgroup(boolean columnsgroup) {
 		if (_columnsgroup != columnsgroup) {
@@ -80,7 +80,7 @@ public class Listhead extends HeadersElement {
 	/**
 	 * Returns whether to enable grouping of listheader with the header context menu.
 	 * <p>Default: true.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public boolean isColumnsgroup() {
 		return _columnsgroup;
@@ -90,7 +90,7 @@ public class Listhead extends HeadersElement {
 	 * when the user clicks on the element.
 	 *
 	 * <p>Default: none (a default menupoppup).
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public String getMenupopup() {
 		return _mpop;
@@ -116,7 +116,7 @@ public class Listhead extends HeadersElement {
 	 * @param mpop an ID of the menupopup component, "none", or "auto".
 	 * 	"none" is assumed by default, "auto" means the menupopup component is 
 	 *  created automatically.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 * @see #setMenupopup(String)
 	 */
 	public void setMenupopup(String mpop) {

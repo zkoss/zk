@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  * 
  * <h3>Support Caption component</h3>
  * [ZK EE]
- * [Since 6.1.0]
+ * [Since 6.5.0]
  * 
  * @author jumperchen
  * @since 5.0.0
@@ -67,7 +67,7 @@ public abstract class LayoutRegion extends XulElement {
 	}
 
 	/** Returns the caption of this region.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public Caption getCaption() {
 		return _caption;
