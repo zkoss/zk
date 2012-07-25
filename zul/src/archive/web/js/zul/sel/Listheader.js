@@ -70,7 +70,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	 * and does nothing.
 	 * @param zk.Event evt the event causes the group
 	 * @return boolean whether the items are grouped.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	group: function (ascending, evt) {
 		var dir = this.getSortDirection();
@@ -164,7 +164,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	/** It invokes {@link #group} to group list items and maintain
 	 * {@link #getSortDirection}.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	onGroup: function (evt) {
 		var dir = this.getSortDirection();

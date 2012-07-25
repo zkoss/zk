@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <h3>Support child component</h3>
  * {@link Caption} child component is allowed.
  * [ZK EE]
- * [Since 6.1.0]
+ * [Since 6.5.0]
  * 
  * @author tomyeh
  */
@@ -66,7 +66,7 @@ public class Tab extends LabelImageElement {
 	}
 
 	/** Returns the caption of this tab.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public Caption getCaption() {
 		return _caption;
@@ -269,7 +269,7 @@ public class Tab extends LabelImageElement {
 	// -- Component --//
 	/**
 	 * Child is allowed, {@link Caption} only.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	protected boolean isChildable() {
 		return true;
@@ -290,7 +290,7 @@ public class Tab extends LabelImageElement {
 	private transient Label _tmpLabel;
 	/**
 	 * Internal use only
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void onCreate(Event evt) {
 		if (_tmpLabel != null)

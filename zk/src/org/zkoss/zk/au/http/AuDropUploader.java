@@ -62,7 +62,7 @@ import org.zkoss.zk.ui.util.Configuration;
 /**
  * The AU extension to upload files withd HTML5 feature.
  * It is based on Apache Commons File Upload.
- * @since 6.1.0
+ * @since 6.5.0
  */
 public class AuDropUploader implements AuExtension {
 	private static final Log log = Log.lookup(AuDropUploader.class);

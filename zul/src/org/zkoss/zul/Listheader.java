@@ -474,7 +474,7 @@ public class Listheader extends HeaderElement {
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
 	 * @return whether the rows are grouped.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public boolean group(boolean ascending) {
 		final String dir = getSortDirection();		
@@ -612,7 +612,7 @@ public class Listheader extends HeaderElement {
 	/**
 	 * Invokes a sorting action based on a {@link SortEvent} and maintains
 	 * {@link #getSortDirection}.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void onSort(SortEvent event) {
 		sort(event.isAscending());
@@ -620,7 +620,7 @@ public class Listheader extends HeaderElement {
 	
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
-	 * @deprecated As of release 6.1.0, use or override {@link #onSort(SortEvent)}
+	 * @deprecated As of release 6.5.0, use or override {@link #onSort(SortEvent)}
 	 * instead.
 	 */
 	public void onSort() {
@@ -632,7 +632,7 @@ public class Listheader extends HeaderElement {
 
 	/**
 	 * Internal use only.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void onGroupLater(SortEvent event) {
 		group(event.isAscending());
@@ -646,7 +646,7 @@ public class Listheader extends HeaderElement {
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void ungroup(boolean ascending) {
 		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
@@ -706,7 +706,7 @@ public class Listheader extends HeaderElement {
 	/** Processes an AU request.
 	 * <p>Default: in addition to what are handled by its superclass, it also 
 	 * handles onSort.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();

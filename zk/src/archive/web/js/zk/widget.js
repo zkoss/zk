@@ -3928,7 +3928,7 @@ if (dispT < 500) {
 	 * call parent's doSwipe_ if the event propagation is not stopped ({@link zk.Event#stopped}). 
 	 * It is the so-called event propagation.
 	 * @param zk.Event evt the widget event.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	doSwipe_: function(evt) {
 		if (!this.fireX(evt).stopped) {

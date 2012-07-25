@@ -73,7 +73,7 @@ implements Constrainted, Readonly, Disable {
 	
 	/**
 	 * Returns the placeholder text
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public String getPlaceholder() {
 		return _placeholder;
@@ -82,7 +82,7 @@ implements Constrainted, Readonly, Disable {
 	/**
 	 * Sets the placeholder text that is displayed when input is empty.
 	 * Only works for browsers supporting HTML5.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void setPlaceholder(String placeholder) {
 		if (_placeholder != placeholder) {
