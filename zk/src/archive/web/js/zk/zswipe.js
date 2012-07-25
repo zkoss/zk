@@ -59,24 +59,25 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			jq(document).unbind(moveEvt, swipeMove);
 			if (start && stop) {
 				var wgt = zk.Widget.$(devt, {child:true}),
-					evt = devt.originalEvent,
-					data = evt.touches ? evt.touches[0] : evt,
-					dispT = stop.time - start.time;
+					dispX, dispY, dispT = stop.time - start.time, dir;
 				
 				if (dispT < 500) {
 					var deltaX = start.coords[0] - stop.coords[0],
-						deltaY = start.coords[1] - stop.coords[1],
-						dispX = Math.abs(deltaX),
-						dispY = Math.abs(deltaY),
-						dir;
+						deltaY = start.coords[1] - stop.coords[1];
+					
+					dispX = Math.abs(deltaX);
+					dispY = Math.abs(deltaY);
+					
 					if (dispX > 30 && dispY < 75)
 						dir = deltaX > 0 ? 'left' : 'right';
 					else if (dispY > 30 && dispX < 75)
 						dir = deltaY > 0 ? 'up' : 'down';
 				}
 				
-				if (wgt)
-					_doEvt(new zk.Event(wgt, 'onSwipe', data, {start: start, stop: stop, dir: dir}, devt));
+				if (wgt && dir)
+					_doEvt(new zk.Event(wgt, 'onSwipe',
+						{dispX: dispX, dispY: dispY, dispT: dispT, dir: dir},
+						{start: start, stop: stop, dir: dir}, devt));
 			}
 			start = stop = null;
 		}
