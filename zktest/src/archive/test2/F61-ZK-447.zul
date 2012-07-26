@@ -33,6 +33,15 @@
 		}
 		Messagebox.show(sb.toString());
 	}
+	
+	public void showIsImage(org.zkoss.zk.ui.event.UploadEvent event){
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		StringBuffer sb = new StringBuffer();
+		for (org.zkoss.util.media.Media m : medias) {
+			sb.append(m.getName()+" : "+ (m instanceof org.zkoss.image.Image)+"\n");
+		}
+		Messagebox.show(sb.toString());		
+	}
 	]]></zscript>
 	<script><![CDATA[
 	zk.MyFileViewer = zk.$extends(zk.Object, {
@@ -81,7 +90,7 @@
 	5. If all files are cancel (nothing uploaded), nothing happen.
 	]]></label>
 	<hlayout>   
-		<dropupload maxsize="-1" content="default viewer" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="-1" content="default viewer" detection="none" onUpload="showFileInfo(event)" native="true"/>
 		<dropupload maxsize="-1" content="custom viewer" detection="none" onUpload="showFileInfo(event)" viewerClass="zk.MyFileViewer" />
 	</hlayout>
 	
@@ -91,11 +100,17 @@
 	Maxsize test case :
 	1. Drop files into widget, if all files size smaller than limit, upload will start.
 	2. Drop files into widget, if any files size bigger than limit, will alert error message and nothing will upload.
+	
+	Native test case :
+	Drop a image file and a text file into widget, when file upload finish...
+	native=true : all file will get "false"
+	native=false : image file will get "true", text file will get "false"
+	no assign : image file will get "true", text file will get "false"
 	]]></label>
 	<hlayout>
-		<dropupload maxsize="51200" content="50MB" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload maxsize="-1" content="unlimited" detection="none" onUpload="showFileInfo(event)" />
-		<dropupload content="no assign (5MB)" detection="none" onUpload="showFileInfo(event)" />
+		<dropupload maxsize="51200" content="50MB, native=true" native="true" detection="none" onUpload="showIsImage(event)" />
+		<dropupload maxsize="-1" content="unlimited, native=false" native="false" detection="none" onUpload="showIsImage(event)" />
+		<dropupload content="no assign (5MB)" detection="none" onUpload="showIsImage(event)" />
 	</hlayout>
 	
 	<separator bar="true" />

@@ -260,7 +260,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/**
 	 * Returns whether the grid has group.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 * @return boolean
 	 */
 	hasGroup: function () {

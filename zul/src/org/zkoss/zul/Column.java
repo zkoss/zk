@@ -614,7 +614,7 @@ public class Column extends HeaderElement {
 	
 	/**
 	 * Internal use only.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void onGroupLater(SortEvent event) {
 		group(event.isAscending());
@@ -628,7 +628,7 @@ public class Column extends HeaderElement {
 	 * @param ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void ungroup(boolean ascending) {
 		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;

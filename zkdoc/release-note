@@ -1,5 +1,5 @@
   --------
-ZK 6.1.0
+ZK 6.5.0
 
 * Features
   ZK-447: The file upload allows users to drag and drop local files (HTML5)
@@ -25,6 +25,18 @@ ZK 6.1.0
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"
+  + Unsupported mold for Tablet devices:
+    1. Button's os and trendy
+    2. Combobox's rounded mold
+    3. Datebox's rounded mold
+    4. Doublespinner's rounded mold
+    5. Doublespinner's rounded mold
+    6. Spinner's rounded mold
+    7. Timebox's rounded mold
+    8. Groupbox's default mold
+    9. Splitter's os mold,
+    10. Tabbox's accordion-lite mold
+	When using the molds above, the component will use default supported mold instead.
 
   --------
 ZK 6.0.2

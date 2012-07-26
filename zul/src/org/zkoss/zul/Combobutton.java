@@ -29,7 +29,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * to button.
  *
  * <p>Default {@link #getZclass}: z-combobutton. If {@link #getMold()} is toolbar,
- * "z-combobutton-toolbar" is assumed.(since 6.1.0)
+ * "z-combobutton-toolbar" is assumed.(since 6.5.0)
  *
  * <p>Events: onClick<br/>
  * Developers can listen to the onClick event.

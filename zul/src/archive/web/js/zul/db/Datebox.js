@@ -272,14 +272,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		/**
 		 * Sets whether enable to show the week number in the current calendar or
     	 * not. [ZK EE]
-    	 * @since 6.1.0
+    	 * @since 6.5.0
     	 * @param boolean weekOfYear
 		 */
 	    /**
 	     * Returns whether enable to show the week number in the current calendar
 	     * or not.
 	     * <p>Default: false
-	     * @since 6.1.0
+	     * @since 6.5.0
 	     * @return boolean
 	     */
 		weekOfYear: function (v) {
@@ -791,7 +791,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 /** @class DateboxCtrl
  * The extra control for the Datebox.
  * It is designed to be overriden
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.db.DateboxCtrl = {
 	/**

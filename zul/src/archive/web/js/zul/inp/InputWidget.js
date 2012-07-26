@@ -265,12 +265,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		},
 		/**
 		 * Returns the placeholder text
-		 * @since 6.1.0
+		 * @since 6.5.0
 		 */
 		/**
 		 * Sets the placeholder text that is displayed when input is empty.
 		 * Only works for browsers supporting HTML5.
-		 * @since 6.1.0
+		 * @since 6.5.0
 		 */
 		placeholder: function (placeholder) {
 			this.rerender();
@@ -885,7 +885,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 /** @class InputCtrl
  * The extra control for the InputWidget.
  * It is designed to be overriden
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.inp.InputCtrl = {
 	/**

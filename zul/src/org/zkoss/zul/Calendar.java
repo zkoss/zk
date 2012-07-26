@@ -46,7 +46,7 @@ import org.zkoss.zul.impl.XulElement;
  * &lt;calendar weekOfYear=&quot;true&quot; onWeekClick='alert(event.data)'/&gt;
  * </code></pre>
  * [ZK EE]
- * [Since 6.1.0]
+ * [Since 6.5.0]
  * 
  * @author tomyeh
  */
@@ -74,7 +74,7 @@ public class Calendar extends XulElement {
 	 * Sets whether enable to show the week number within the current year or
 	 * not.
 	 * [ZK EE]
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void setWeekOfYear(boolean weekOfYear) {
 		if (_weekOfYear != weekOfYear) {
@@ -86,7 +86,7 @@ public class Calendar extends XulElement {
     /**
      * Returns whether enable to show the week number within the current year or not.
      * <p>Default: false
-     * @since 6.1.0
+     * @since 6.5.0
      */
     public boolean isWeekOfYear() {
 		return _weekOfYear;

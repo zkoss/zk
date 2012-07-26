@@ -102,7 +102,7 @@ public class Datebox extends FormatInputElement {
 	 * Sets whether enable to show the week number in the current calendar or
 	 * not.
 	 * [ZK EE]
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public void setWeekOfYear(boolean weekOfYear) {
 		if (_weekOfYear != weekOfYear) {
@@ -114,7 +114,7 @@ public class Datebox extends FormatInputElement {
     /**
      * Returns whether enable to show the week number in the current calendar or not.
      * <p>Default: false
-     * @since 6.1.0
+     * @since 6.5.0
      */
     public boolean isWeekOfYear() {
     	return _weekOfYear;

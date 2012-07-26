@@ -236,7 +236,7 @@ public class Clients {
 	 * @param closable whether to close notification manually or not. If true there will be a
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public static final void showNotification(String msg, boolean closable) {
 		showNotification(msg, null, null, null, -1, closable);
@@ -259,7 +259,7 @@ public class Clients {
 	 * @param closable whether to close notification manually or not. If true there will be a
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public static final void showNotification(String msg, Component ref, boolean closable) {
 		showNotification(msg, null, ref, null, -1, closable);
@@ -348,7 +348,7 @@ public class Clients {
 	 * @param closable whether to close notification manually or not. If true there will be a
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public static final void showNotification(String msg, String type,
 			Component ref, String position, int duration, boolean closable) {
@@ -391,7 +391,7 @@ public class Clients {
 	 * @param closable whether to close notification manually or not. If true there will be a
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
-	 * @since 6.1.0
+	 * @since 6.5.0
 	 */
 	public static final void showNotification(String msg, String type, 
 			Component ref, int x, int y, int duration, boolean closable) {

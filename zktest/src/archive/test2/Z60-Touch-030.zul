@@ -1,0 +1,30 @@
+<zk xmlns:n="native">
+	<n:h3>iPad/Android only</n:h3>
+	<div>
+	1. Swipe left/right/up/down inside the tabpanel <separator />
+	2. Should see Swipe information showed
+	</div>
+	<tabbox height="300px" width="300px">
+		<tabs>
+			<tab label="tab 1" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<attribute name="onSwipe"><![CDATA[
+					SwipeEvent se = (SwipeEvent) event;
+					lbl1.setValue("Horizontal: " + se.getSwipeX() + "px");
+					lbl2.setValue("Vertical: " + se.getSwipeY() + "px");
+					lbl3.setValue("Duration: " + se.getSwipeDuration() + " milliseconds");
+					lbl4.setValue("Direction: " + se.getSwipeDirection());
+				]]></attribute>
+				<vlayout>
+					Swipe information
+					<label id="lbl1"/>
+					<label id="lbl2"/>
+					<label id="lbl3"/>
+					<label id="lbl4"/>
+				</vlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 /**
  * A skeletal implementation for a column menu widget.
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 	_menupopup: "none",
@@ -176,7 +176,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 
 /**
  * The Columns' Menu popup
- * @since 6.1.0
+ * @since 6.5.0
  */
 zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	$define: {

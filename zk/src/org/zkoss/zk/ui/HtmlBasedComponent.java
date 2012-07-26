@@ -31,7 +31,7 @@ import org.zkoss.zk.au.out.AuFocus;
  *
  * <p>Events:<br/>
  *  onClick, onDoubleClick, onRightClick, onDrop,
- *  onMouseOver, onMouseOut, onOK, onCacnel and onCtrlKey.<br/>
+ *  onMouseOver, onMouseOut, onOK, onCacnel, onCtrlKey and onSwipe.<br/>
  * 
  * <p>It supports
  * <ul>
@@ -45,6 +45,7 @@ import org.zkoss.zk.au.out.AuFocus;
  * @since 5.0.0 supports onOK event.
  * @since 5.0.0 supports onCancel event.
  * @since 5.0.0 supports onCtrlKey event.
+ * @since 6.5.0 supports onSwipe event for tablet.
  */
 abstract public class HtmlBasedComponent extends AbstractComponent {
 	/** The ZK CSS class. */
@@ -64,6 +65,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		addClientEvent(HtmlBasedComponent.class, Events.ON_DROP, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_MOUSE_OVER, 0); //not to use CE_DUPLICATE_IGNORE since there is an order issue
 		addClientEvent(HtmlBasedComponent.class, Events.ON_MOUSE_OUT, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_SWIPE, CE_DUPLICATE_IGNORE);
 	}
 
 	protected HtmlBasedComponent() {
@@ -626,6 +628,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_DROP)) {
 			DropEvent evt = DropEvent.getDropEvent(request);
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_SWIPE)) {
+			SwipeEvent evt = SwipeEvent.getSwipeEvent(request);
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

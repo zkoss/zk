@@ -28,7 +28,7 @@ import org.zkoss.web.servlet.Servlets;
  * 
  * @author simonpai
  * @author jumperchen
- * @since 6.1.0
+ * @since 6.5.0
  */
 public class ThemeFns {
 
