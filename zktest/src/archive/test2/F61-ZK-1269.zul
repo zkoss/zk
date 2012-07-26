@@ -1,0 +1,29 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<zscript><![CDATA[
+	public void showFileInfo(org.zkoss.zk.ui.event.UploadEvent event){
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		StringBuffer sb = new StringBuffer();
+		for (org.zkoss.util.media.Media m : medias) {
+			sb.append(m.getName()+" : "+m.getContentType()+"\n");
+		}
+		Messagebox.show(sb.toString());
+	}
+	
+	public void showIsImage(org.zkoss.zk.ui.event.UploadEvent event){
+		org.zkoss.util.media.Media[] medias = event.getMedias();
+		StringBuffer sb = new StringBuffer();
+		for (org.zkoss.util.media.Media m : medias) {
+			sb.append(m.getName()+" : "+ (m instanceof org.zkoss.image.Image)+"\n");
+		}
+		Messagebox.show(sb.toString());		
+	}
+	]]></zscript>
+<cardlayout>
+	<button>ccccc</button>
+	<button>ddddd</button>
+	<button>eeeee</button>
+	<button>fffff</button>
+	<button>ggggg</button>
+</cardlayout>
+</zk>
