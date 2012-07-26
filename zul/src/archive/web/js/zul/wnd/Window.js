@@ -86,6 +86,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var el = dg.node,
 			wgt = dg.control,
 			tar = evt.domTarget, wtar;
+			
+		if (!tar.id)
+			tar = tar.parentNode;
 		switch (tar) {
 		case wgt.$n('close'):
 		case wgt.$n('max'):
