@@ -20,6 +20,7 @@ ZK 6.5.0
   ZK-1255: InputElement supports HTML5 placeholder
   ZK-1247: Add a new theme for tablet/mobile device with big icons
   ZK-574: Minimum theme for better performance in mobile devices
+  ZK-1277: Group and listgroup components should be set as the same height as row and listitem components
 
 * Bugs
 
