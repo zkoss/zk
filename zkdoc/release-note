@@ -27,16 +27,21 @@ ZK 6.5.0
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"
   + Unsupported mold for Tablet devices:
-    1. Button's os and trendy
-    2. Combobox's rounded mold
-    3. Datebox's rounded mold
-    4. Doublespinner's rounded mold
-    5. Doublespinner's rounded mold
-    6. Spinner's rounded mold
-    7. Timebox's rounded mold
-    8. Groupbox's default mold
-    9. Splitter's os mold,
-    10. Tabbox's accordion-lite mold
+    *. Button's os and trendy
+    *. Bandbox's rounded mold
+    *. Combobox's rounded mold
+    *. Datebox's rounded mold
+    *. Doublespinner's rounded mold
+    *. Spinner's rounded mold
+    *. Timebox's rounded mold
+    *. Decimalbox's rounded mold
+    *. Doublebox's rounded mold
+    *. Intbox's rounded mold
+    *. Longbox's rounded mold
+    *. Textbox's rounded mold
+    *. Groupbox's default mold
+    *. Splitter's os mold,
+    *. Tabbox's accordion-lite mold
 	When using the molds above, the component will use default supported mold instead.
 
   --------
