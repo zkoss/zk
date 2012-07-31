@@ -74,7 +74,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 						dir = deltaY > 0 ? 'up' : 'down';
 				}
 				
-				if (wgt && dir)
+				if (wgt)
 					_doEvt(new zk.Event(wgt, 'onSwipe',
 						{dispX: dispX, dispY: dispY, dispT: dispT, dir: dir},
 						{start: start, stop: stop, dir: dir}, devt));

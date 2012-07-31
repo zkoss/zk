@@ -20,12 +20,12 @@ import java.util.Map;
 
 import org.zkoss.zk.au.AuRequest;
 
-/** The bookmark udpate event used with <code>onBookmarkChange</code>
+/** The bookmark update event used with <code>onBookmarkChange</code>
  * to notify that user pressed BACK, FORWARD or others
  * that causes the bookmark changed (but still in the same desktop).
  *
  * <p>All root components of all pages of the desktop will
- * recieves this event.
+ * receives this event.
  * 
  * @author tomyeh
  * @see URIEvent

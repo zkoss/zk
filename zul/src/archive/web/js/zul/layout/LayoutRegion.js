@@ -630,6 +630,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (btned == target || btned == target.parentNode) {
 				this.$class.afterSlideUp.apply(this, [target]);
 				this.setOpen(true, false, true);
+				this.$n('real').style.zIndex = ''; //reset
 			} else 
 				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid) || !zk.animating()) {
 					this._isSlideUp = true;

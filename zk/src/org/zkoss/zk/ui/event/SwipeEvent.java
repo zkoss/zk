@@ -34,11 +34,14 @@ public class SwipeEvent extends Event {
 
 	public static final SwipeEvent getSwipeEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
+		Object dir = data.get("dir");
+		String swipeDir = dir == null ? "" : (String) dir;
+		
 		return new SwipeEvent(request.getCommand(), request.getComponent(),
 				AuRequests.getInt(data, "dispX", 0),
 				AuRequests.getInt(data,	"dispY", 0),
 				AuRequests.getInt(data, "dispT", 0),
-				data.get("dir").toString());
+				swipeDir);
 	}
 
 	public SwipeEvent(String name, Component target, int swipeX, int swipeY,
