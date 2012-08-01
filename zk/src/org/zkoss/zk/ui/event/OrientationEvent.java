@@ -23,6 +23,9 @@ import org.zkoss.zk.au.AuRequest;
 /**
  * Represents orientation change event on tablet when user changes the
  * orientation.
+ * <p>All root components of all pages of the desktop will
+ * receives this event.
+ * 
  * @author vincentjian
  * @since 6.5.0
  */
