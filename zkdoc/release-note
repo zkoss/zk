@@ -42,7 +42,8 @@ ZK 6.5.0
     *. Longbox's rounded mold
     *. Textbox's rounded mold
     *. Groupbox's default mold
-    *. Splitter's os mold,
+    *. Slider's scale mold
+    *. Splitter's os mold
     *. Tabbox's accordion-lite mold
 	When using the molds above, the component will use default supported mold instead.
 
