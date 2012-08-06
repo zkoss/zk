@@ -97,7 +97,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** Indicates if {@link #invalidateNow} was called. */
 	private boolean _invalidated;
 
-	/** Construts a ZK session with a HTTP session.
+	/** Constructs a ZK session with a HTTP session.
 	 *
 	 * @param hsess the original HTTP session.
 	 * @param request the original request causing this session to be created.
@@ -108,7 +108,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	public SimpleSession(WebApp wapp, HttpSession hsess, Object request) {
 		this(wapp, (Object)hsess, request);
 	}
-	/** Construts a ZK session with either a HTTP session or a Portlet session.
+	/** Constructs a ZK session with either a HTTP session or a Portlet session.
 	 *
 	 * <p>Note: it assumes the scope of attributes is
 	 * PortletSession.APPLICATION_SCOPE.

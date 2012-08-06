@@ -3,6 +3,7 @@ ZK 6.0.3
 * Features
 
 * Bugs
+  ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
 
 * Upgrade Notes
 

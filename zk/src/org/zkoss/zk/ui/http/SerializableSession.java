@@ -42,6 +42,20 @@ implements HttpSessionActivationListener, java.io.Serializable {
 		super(wapp, hsess, request);
 	}
 
+	/** Constructs a ZK session with either a HTTP session or a Portlet session.
+	 *
+	 * @param navsess the original session, either an instance of
+	 * HttpSession or PortletSession.
+	 * Notice: we don't declare PortletSession in API
+	 * to avoid this class failed to be loaded in some system (without
+	 * portlet-api.jar)
+	 * @param request the original request causing this session to be created.
+	 * If portlet, it is javax.portlet.RenderRequest.
+	 * @since 6.0.3
+	 */
+	public SerializableSession(WebApp wapp, Object hsess, Object request) {
+		super(wapp, hsess, request);
+	}
 	//-- HttpSessionActivationListener --//
 	public void sessionWillPassivate(HttpSessionEvent se) {
 		sessionWillPassivate();
