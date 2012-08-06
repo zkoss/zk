@@ -1034,7 +1034,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
 		var orient = '',
-			dpr = 1.0;
+			dpr = 1;
 		if (zk.mobile) {
 			//change default portrait definition because landscape is the default orientation for this device/browser.
 			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
@@ -1044,12 +1044,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		}
 		
 		if (window.devicePixelRatio)
-			dpr = window.devicePixelRatio.toFixed(1);
+			dpr = window.devicePixelRatio;
 		
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr, orient],
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
 			{implicit:true}));
 	},
 	/** Asks the client to download the resource at the specified URL.
