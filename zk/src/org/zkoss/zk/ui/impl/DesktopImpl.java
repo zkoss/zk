@@ -16,7 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +63,6 @@ import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.OrientationEvent;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
@@ -708,8 +706,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			Events.postEvent(evt);
 		} else if (Events.ON_CLIENT_INFO.equals(cmd)) {
 			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
-		} else if (Events.ON_ORIENTATION_CHANGE.equals(cmd)) {
-			Events.postEvent(OrientationEvent.getOrientationEvent(request));
 		} else if ("rmDesktop".equals(cmd)) {
 			((WebAppCtrl)request.getDesktop().getWebApp())
 				.getUiEngine().setAbortingReason(

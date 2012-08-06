@@ -6,10 +6,11 @@
 		3. Height should be larger than width when orientation is portrait.
 	</div>
 	<tabbox id="tbx" height="400px" width="600px">
-		<attribute name="onOrientationChange"><![CDATA[
-			OrientationEvent oe = (OrientationEvent) event;
+		<attribute name="onClientInfo"><![CDATA[
+			ClientInfoEvent oe = (ClientInfoEvent) event;
 			String orient = oe.getOrientation();
 			lbl.setValue(orient);
+			lbl2.setValue("" + oe.getDevicePixelRatio());
 			if (orient.equals("portrait")) {
 				tbx.setHeight("600px");
 				tbx.setWidth("400px");
@@ -23,7 +24,8 @@
 		</tabs>
 		<tabpanels>
 			<tabpanel>
-				Current Orientation: <label id="lbl"/>
+				Current Orientation: <label id="lbl"/><separator />
+				Current Device Pixel Ratio: <label id="lbl2"/>
 			</tabpanel>
 		</tabpanels>
 	</tabbox>
