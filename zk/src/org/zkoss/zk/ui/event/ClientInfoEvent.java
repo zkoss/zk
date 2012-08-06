@@ -41,6 +41,8 @@ public class ClientInfoEvent extends Event {
 	private final TimeZone _timeZone;
 	private final int _scrnwd, _scrnhgh, _colorDepth;
 	private final int _dtwd, _dthgh, _dtx, _dty;
+	private final double _dpr;
+	private final String _orient;
 
 	/** Converts an AU request to a client-info event.
 	 * @since 5.0.0
@@ -51,10 +53,14 @@ public class ClientInfoEvent extends Event {
 		final List inf = (List)data.get("");
 		return new ClientInfoEvent(request.getCommand(),
 			getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
-			getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7));
+			getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7),
+			getDouble(inf, 8), (String)inf.get(9));
 	}
 	private static final int getInt(List inf, int j) {
 		return ((Integer)inf.get(j)).intValue();
+	}
+	private static final double getDouble(List inf, int j) {
+		return Double.parseDouble((String)inf.get(j));
 	}
 
 	/** Constructs an event to hold the client-info.
@@ -71,7 +77,7 @@ public class ClientInfoEvent extends Event {
 	 */
 	public ClientInfoEvent(String name, int timeZoneOfs,
 	int scrnwd, int scrnhgh, int colorDepth,
-	int dtwd, int dthgh, int dtx, int dty) {
+	int dtwd, int dthgh, int dtx, int dty, double dpr, String orient) {
 		super(name, null);
 
 		final StringBuffer sb = new StringBuffer(8).append("GMT");
@@ -87,6 +93,10 @@ public class ClientInfoEvent extends Event {
 		_dthgh = dthgh;
 		_dtx = dtx;
 		_dty = dty;
+		
+		//devicePixelRatio and orientation on tablet device
+		_dpr = dpr;
+		_orient = orient;
 	}
 	/** Returns the time zone of the client.
 	 */
@@ -133,5 +143,28 @@ public class ClientInfoEvent extends Event {
 	 */
 	public int getDesktopYOffset() {
 		return _dty;
+	}
+	/**
+	 * Return the current device pixel ratio on tablet/mobile device,
+	 * otherwise return 1.0 instead.
+	 * @since 6.5.0
+	 */
+	public double getDevicePixelRatio() {
+		return _dpr;
+	}
+	/**
+	 * Return the current orientation on tablet/mobile device(landscape or portrait),
+	 * otherwise return empty string instead.
+	 * @since 6.5.0
+	 */
+	public String getOrientation() {
+		return _orient;
+	}
+	/**
+	 * Utility to check if the current orientation is portrait on tablet/mobile device.
+	 * @since 6.5.0
+	 */
+	public boolean isVertical() {
+		return "portrait".equals(_orient);
 	}
 }

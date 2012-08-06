@@ -24,8 +24,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
 		_detached = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
-		Widget = zk.Widget;
-
+		Widget = zk.Widget,
+		_portrait = {'0': true, '180': true}, //default portrait definition
+		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+		_initDefault = _portrait[window.orientation]; //default orientation
+	
 	// Checks whether to turn off the progress prompt
 	function checkProgressing() {
 		if (!zAu.processing()) {
@@ -1030,10 +1033,23 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
+		var orient = '',
+			dpr = 1.0;
+		if (zk.mobile) {
+			//change default portrait definition because landscape is the default orientation for this device/browser.
+			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
+				_portrait = {'-90': true, '90': true};
+			
+			orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
+		}
+		
+		if (window.devicePixelRatio)
+			dpr = window.devicePixelRatio.toFixed(1);
+		
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()],
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr, orient],
 			{implicit:true}));
 	},
 	/** Asks the client to download the resource at the specified URL.
