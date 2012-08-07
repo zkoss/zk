@@ -12,18 +12,20 @@
 		);
 	}
 	</zscript>
-	<label multiline="true"><![CDATA[
-		1. Initially, the "Component 9" will be shown.
-		2. Click "previous" will transform "Component 9" to "Component 8".
-		3. Click "next" will transform "Component 8" to "Component 9".
-		4. Click "append component" will add "Component 11" at index 11.
-		5. Assign selected index "11", will transform "Component 9" to "Component 11"
-		6. Back to "Component 9"
-		7. Assign insert before index "9", will add "Component 12" at index 9. 
-		8. Click "show selected index" will alert "10"
-	]]>
+	<label multiline="true">
+	<![CDATA[
+ 		API and ROD test : 
+ 		1. Initially, the "Component 9" will be shown. 
+ 		2. Click "previous" will transform "Component 9" to "Component 8".
+ 		3. Click "next" will transform "Component 8" to "Component 9".
+ 		4. Click "append component" will add "Component 11" at index 11.
+ 		5. Assign selected index "11", will transform "Component 9" to "Component 11"
+ 		6. Back to "Component 9"
+ 		7. Assign insert before index "9", will add "Component 12" at index 9. 
+ 		8. Click "show selected index" will alert "10"
+ 	]]>
 	</label>
-	<cardlayout id="card" width="300px" height="300px" style="border:1px solid red" >
+	<cardlayout id="card" width="300px" height="300px" style="border:1px solid red" selectedIndex="9">
 		<window title="Embedded Style" border="normal" width="200px">Component 0</window>
 		<borderlayout>
 			<west width="20%">
@@ -44,7 +46,6 @@
 		<div vflex="1" hflex="1" style="background-color:yellow;">Component 9 with vflex, hflex</div>
 		<window title="Popup Style" zclass="z-window-popup" border="normal" width="200px"> Component 10 </window>
 	</cardlayout>
-
 	<hlayout>
 		<button onClick="card.previous()">previous</button>
 		<button onClick="card.next()">next</button>
@@ -60,5 +61,47 @@
 		insert before index : <intbox id="insertIndex" />
 		<button onClick="addBefore(insertIndex.value)">Add</button>
 		<button onClick="alert(card.selectedIndex)">show selected index</button>
+	</hlayout>
+	<separator bar="true" />
+	
+	<label multiline="true">
+	<![CDATA[
+		vflex="min", hflex="min", selectedIndex="1"
+	]]>
+	</label>
+	<cardlayout id="flexMin" hflex="min" vflex="min" style="border:red 1px solid" selectedIndex="1">
+ 		<div width="200px" height="250px" style="background-color:red;">
+ 			index=0, 200 * 250
+ 		</div> 
+ 		<div width="250px" height="300px" style="background-color:yellow;">
+ 			index=1, 250 * 300
+ 		</div>
+	</cardlayout>
+	<hlayout>
+		<button onClick="flexMin.previous()">previous</button>
+		<button onClick="flexMin.next()">next</button>
+	</hlayout>
+	
+	<label multiline="true">
+	<![CDATA[
+		vflex="1" and hflex="1", parent widget is 400 * 400
+	]]>
+	</label>
+	<div width="400px" height="400px">
+		<cardlayout id="flex1" hflex="1" vflex="1" style="border:red 1px solid">
+	 		<div width="200px" height="350px" style="background-color:yellow;">
+	 			index=0, 250 * 300
+	 		</div>
+	 		<div width="350px" height="200px" style="background-color:red;">
+	 			index=1, 200 * 250
+	 		</div>
+			<div vflex="1" hflex="1" style="background-color:yellow;">
+				index=1, vflex=1, hflex=1
+			</div>	 		
+		</cardlayout>
+	</div>
+	<hlayout>
+		<button onClick="flex1.previous()">previous</button>
+		<button onClick="flex1.next()">next</button>	
 	</hlayout>
 </zk>
