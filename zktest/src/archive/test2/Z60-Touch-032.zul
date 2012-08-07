@@ -1,13 +1,14 @@
 <zk xmlns:n="native" xmlns:ca="client/attribute">
 	<zscript><![CDATA[
-		String[] row = new String[15];
+		String[] row = new String[50];
 	]]></zscript>
 	<n:h3>iPad/Android only</n:h3>
 	<div>
-		If you can scroll the grid/listbox/tree, it is a bug
+		1. If you can scroll the grid/listbox/tree, it is a bug.<separator/>
+		2. Swipe left/right edges of grid/listbox/tree components, the page number should changed.
 	</div>
 	<hlayout>
-		<grid hflex="1" ca:data-scrollable="false">
+		<grid mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
 			<columns>
 				<column label="Grid" />
 			</columns>
@@ -20,7 +21,7 @@
 				<row><textbox></textbox></row>
 			</rows>
 		</grid>
-		<listbox hflex="1" ca:data-scrollable="false">
+		<listbox mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
 			<listhead>
 				<listheader label="Listbox" />
 			</listhead>
@@ -30,7 +31,7 @@
 				</listitem>
 			</zk>
 		</listbox>
-		<tree hflex="1" ca:data-scrollable="false">
+		<tree mold="paging" pageSize="5" hflex="1" ca:data-scrollable="false">
 			<treecols>
 	            <treecol label="Tree" />
 	        </treecols>

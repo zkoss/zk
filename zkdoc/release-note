@@ -21,6 +21,8 @@ ZK 6.5.0
   ZK-1247: Add a new theme for tablet/mobile device with big icons
   ZK-574: Minimum theme for better performance in mobile devices
   ZK-1277: Group and listgroup components should be set as the same height as row and listitem components
+  ZK-1273: Add a way to listen onOrientationChange for tablet device
+  ZK-1283: Grid/List/Tree support changing page by swipe event on tablet device
 
 * Bugs
 
@@ -40,7 +42,8 @@ ZK 6.5.0
     *. Longbox's rounded mold
     *. Textbox's rounded mold
     *. Groupbox's default mold
-    *. Splitter's os mold,
+    *. Slider's scale mold
+    *. Splitter's os mold
     *. Tabbox's accordion-lite mold
 	When using the molds above, the component will use default supported mold instead.
 

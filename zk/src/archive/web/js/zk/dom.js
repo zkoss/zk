@@ -714,7 +714,8 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	 * @return int the revised width
 	 */
 	revisedWidth: function (size, excludeMargin) {
-		size -= this.padBorderWidth();
+		if (this.jq.css('box-sizing') != 'border-box')
+			size -= this.padBorderWidth();
 		if (size > 0 && excludeMargin)
 			size -= this.sumStyles("lr", jq.margins);
 		return size < 0 ? 0: size;
@@ -729,7 +730,8 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	 * @return int the revised height
 	 */
 	revisedHeight: function (size, excludeMargin) {
-		size -= this.padBorderHeight();
+		if (this.jq.css('box-sizing') != 'border-box')
+			size -= this.padBorderHeight();
 		if (size > 0 && excludeMargin)
 			size -= this.sumStyles("tb", jq.margins);
 		return size < 0 ? 0: size;
