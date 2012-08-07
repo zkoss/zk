@@ -23,6 +23,7 @@ ZK 6.5.0
   ZK-1277: Group and listgroup components should be set as the same height as row and listitem components
   ZK-1273: Add a way to listen onOrientationChange for tablet device
   ZK-1283: Grid/List/Tree support changing page by swipe event on tablet device
+  ZK-1272: Scrollview component for tablet device
 
 * Bugs
 

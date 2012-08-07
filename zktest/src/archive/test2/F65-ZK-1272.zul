@@ -1,0 +1,43 @@
+<zk>
+	<window title="ScrollView Demo" border="normal" vflex="1" hflex="1">
+		<vlayout vflex="1" hflex="1">
+		<div>
+			1. Should be able to scroll the windows on vertical direction.<separator />
+			2. When scrolling outside top boundary, you can see a arrow showed.<separator />
+			3. Scroll outside top boundary again, a groupbox will insert before window1.<separator />
+			4. When scrolling outside bottom boundary, you can see a arrow showed.<separator />
+			5. Scroll outside bottom boundary again, a groupbox will append after window5.<separator />
+			6. Click <button label="Change Orient" onClick='sv.setOrient(sv.isVertical() ? "horizontal" : "vertical")' /> button, should be able to scroll on horizontal direction.
+		</div>
+		<scrollview id="sv" orient="vertical" vflex="1" hflex="1">
+			<attribute name="onScroll"><![CDATA[
+				ScrollEvent se = (ScrollEvent) event;
+				if (se.isOutOfBound() && se.getPos() > 0) {
+					Groupbox gb = new Groupbox();
+					gb.setId("bottom");
+					gb.setHeight("200px");
+					gb.setWidth("200px");
+					gb.setTitle("Groupbox");
+					if (sv.hasFellow("bottom"))
+						return;
+					sv.appendChild(gb);
+				}
+				if (se.isOutOfBound() && se.getPos() < 0) {
+					Groupbox gb = new Groupbox();
+					gb.setId("top");
+					gb.setHeight("200px");
+					gb.setWidth("200px");
+					gb.setTitle("Groupbox");
+					if (sv.hasFellow("top"))
+						return;
+					Component first = sv.getFirstChild();
+					sv.insertBefore(gb, first);
+				}
+			]]></attribute>
+			<zk forEach="1,2,3,4,5">
+				<window title="window ${each}" border="normal" width="200px" height="200px">This is Window ${each}</window>
+			</zk>
+		</scrollview>
+		</vlayout>
+	</window>
+</zk>
