@@ -141,6 +141,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//_tabindex: 0,
 	_type: 'text',
 	_placeholder: null,
+	_windowY: window.pageYOffset,
 	$define: {
 		/** Returns the name of this component.
 		 * <p>Default: null.
@@ -488,6 +489,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 		if (this._inplace && this._inplaceout)
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
+		
+		var y = window.pageYOffset;
+		if (zk.mobile && y != this._windowY)
+			window.scrollTo(0, this._windowY);
 	},
 
 	_doSelect: function (evt) { //domListen_
