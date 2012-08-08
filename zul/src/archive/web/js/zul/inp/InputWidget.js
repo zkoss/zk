@@ -490,19 +490,20 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
-		var x = window.pageXOffset,
-			y = window.pageYOffset,
-			winX = this._windowX,
-			winY = this._windowY;
-		zk.log('doBlur_', x, y);
-		if (zk.mobile && (x != winX || y != winY))
-			window.scrollTo(winX, winY);
+		if (zk.mobile) {		
+			var x = window.pageXOffset,
+				y = window.pageYOffset,
+				winX = this._windowX,
+				winY = this._windowY;
+			if (x != winX || y != winY)
+				window.scrollTo(winX, winY);
+		}
 	},
-	_doTouch: function (evt) {
+	_doTouch: zk.mobile ? function (evt) {
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
 		this._windowX = window.pageXOffset;
 		this._windowY = window.pageYOffset;
-	},
+	} : zk.$void,
 	_doSelect: function (evt) { //domListen_
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode(),

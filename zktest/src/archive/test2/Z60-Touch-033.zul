@@ -1,0 +1,26 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<div apply="org.zkoss.bind.BindComposer" 
+ viewModel="@id('vm') @init('org.zkoss.zktest.test2.cardlayout.F65_ZK_1269_VM')">	
+	<button onClick='@command("previous")'>←</button>
+	<button onClick='@command("next")'>→</button>
+	<cardlayout id="cl" children="@init(vm.child)" width="300px" height="300px" selectedIndex="@bind(vm.index)">
+		<template name="children" var="node">
+			<borderlayout>
+				<center>
+					<caption label="@load(node.title)" />
+					<image src="@load(node.image)" />
+				</center>
+				<east width="35%">
+					<label value="@load(node.content)" />
+				</east>
+			</borderlayout>
+		</template>
+	</cardlayout>
+	<hlayout children="@init(vm.child)">
+		<template name="children" var="btn">
+			<button label='@load(vm.index eq btnStatus.index ? "X" : "_")' onClick='@command("change", index=btnStatus.index)' />
+		</template>
+	</hlayout>
+</div>
+</zk>
