@@ -26,6 +26,7 @@ ZK 6.5.0
   ZK-1272: Scrollview component for tablet device
 
 * Bugs
+  ZK-1285: Modal window position issue with virtual keyboard on ipad
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"

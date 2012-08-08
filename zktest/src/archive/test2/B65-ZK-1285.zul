@@ -1,0 +1,11 @@
+<zk xmlns:n="native">
+	<n:h3>iPad Only</n:h3>
+	<div>
+	1. Focus on the textbox, ipad virtual keyboard showed. <separator />
+	2. Hide ipad virtual keyboard, the whole page should come back to the position. <separator />
+	</div>
+	<window mode="modal" width="500px" height="900px">
+		<div style="background: gold" width="100%" vflex="1" />
+		<textbox height="30px" />
+	</window>
+</zk>
