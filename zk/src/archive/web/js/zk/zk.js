@@ -1212,14 +1212,18 @@ zk.log('value is", value);
 	zk.safari_ = zk.safari && !zk.chrome; // safari only
 	zk.css3 = true;
 	
+	zk.vendor = zk.safari ? 'webkit' : '';
+
 	var bodycls;
 	if (zk.ff) {
 		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
 		&& (bodycls = agent.indexOf("firefox/")) > 0)
 			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
 		bodycls = 'gecko gecko' + Math.floor(zk.ff);
+		zk.vendor = 'Moz';
 	} else if (zk.opera) { //no longer to worry 10.5 or earlier
 		bodycls = 'opera';
+		zk.vendor = 'O';
 	} else {
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 			//zk.iex is the Browser Mode (aka., Compatibility View)
@@ -1234,6 +1238,7 @@ zk.log('value is", value);
 			zk.ie7_ = zk.ie == 7;
 			zk.ie8_ = zk.ie == 8;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
+			zk.vendor = 'ms';
 		} else {
 			if (zk.safari)
 				bodycls = 'safari safari' + Math.floor(zk.safari);
@@ -1253,6 +1258,8 @@ zk.log('value is", value);
 		jq(function () {
 			jq(document.body).addClass(bodycls);
 		});
+	
+	zk.vendor_ = zk.vendor.toLowerCase();
 })();
 
 //zk.Object//
