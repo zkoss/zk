@@ -30,14 +30,20 @@ import org.zkoss.zk.au.AuRequests;
  */
 public class ScrollEvent extends Event {
 	private final int _pos;
+	private boolean _outBound;
 
 	/** Converts an AU request to a scroll event.
 	 * @since 5.0.0
 	 */
 	public static final ScrollEvent getScrollEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new ScrollEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getInt(data, "", 0));
+		Object outBound = data.get("outBound");
+		if (outBound != null)
+			return new ScrollEvent(request.getCommand(), request.getComponent(),
+				AuRequests.getInt(data, "", 0), (Boolean)outBound);
+		else
+			return new ScrollEvent(request.getCommand(), request.getComponent(),
+				AuRequests.getInt(data, "", 0));
 	}
 
 	/** Constructs an scroll-relevant event.
@@ -47,9 +53,24 @@ public class ScrollEvent extends Event {
 		super(name, target);
 		_pos = pos;
 	}
+	/** Constructs an scroll-relevant event.
+	 * @param pos the new position
+	 * @param outBound the position is outside the boundary or not (only used on tablet/mobile device)
+	 */
+	public ScrollEvent(String name, Component target, int pos, boolean outBound) {
+		super(name, target);
+		_pos = pos;
+		_outBound = outBound;
+	}
 	/** Returns the position.
 	 */
 	public final int getPos() {
 		return _pos;
+	}
+	/** Return true if the scroll position is outside of boundary on tablet/mobile device.
+	 * @since 6.5.0
+	 */
+	public boolean isOutOfBound() {
+		return _outBound;
 	}
 }

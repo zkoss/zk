@@ -589,6 +589,7 @@
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
 			<xs:element ref="script" />
+			<xs:element ref="scrollview" />
 			<xs:element ref="selectbox" />
 			<xs:element ref="separator" />
 			<xs:element ref="slider" />
@@ -671,6 +672,7 @@
 				<xs:element ref="radio" />
 				<xs:element ref="radiogroup" />
 				<xs:element ref="script" />
+				<xs:element ref="scrollview" />
 				<xs:element ref="selectbox" />
 				<xs:element ref="separator" />
 				<xs:element ref="slider" />
@@ -2150,6 +2152,18 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<!-- scrollview -->
+	<xs:element name="scrollview" type="scrollviewType" />
+	<xs:complexType name="scrollviewType" mixed="true">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="anyGroup" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
+		<xs:attribute name="onScroll" type="xs:string" use="optional" />
+	</xs:complexType>
     <!-- selectbox -->
 	<xs:element name="selectbox" type="selectboxType" />
 	<xs:complexType name="selectboxType">
@@ -3101,4 +3115,6 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+
+
 </xs:schema>

@@ -171,10 +171,6 @@ public class Events {
 	/** The onClientInfo event (used with {@link ClientInfoEvent}).
 	 */
 	public static final String ON_CLIENT_INFO = "onClientInfo";
-	/** The onOrientationChange event (used with {@link OrientationEvent}).
-	 * @since 6.5.0
-	 */
-	public static final String ON_ORIENTATION_CHANGE = "onOrientationChange";
 	/** The onCreate event (used with {@link CreateEvent}) to notify a compoent
 	 * that it (and its children) has been created by ZK's evaluating a ZUML page.
 	 */
