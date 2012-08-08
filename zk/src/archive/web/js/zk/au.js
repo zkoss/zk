@@ -1035,12 +1035,15 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zAu._cInfoReg = true;
 		var orient = '',
 			dpr = 1;
+		
 		if (zk.mobile) {
 			//change default portrait definition because landscape is the default orientation for this device/browser.
 			if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
 				_portrait = {'-90': true, '90': true};
 			
 			orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
+		} else {
+			orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
 		}
 		
 		if (window.devicePixelRatio)
