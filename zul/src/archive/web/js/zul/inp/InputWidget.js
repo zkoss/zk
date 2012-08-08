@@ -494,10 +494,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			y = window.pageYOffset,
 			winX = this._windowX,
 			winY = this._windowY;
+		zk.log('doBlur_', x, y);
 		if (zk.mobile && (x != winX || y != winY))
 			window.scrollTo(winX, winY);
 	},
-
+	_doTouch: function (evt) {
+		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
+		this._windowX = window.pageXOffset;
+		this._windowY = window.pageYOffset;
+	},
 	_doSelect: function (evt) { //domListen_
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode(),
@@ -755,9 +760,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	//super//
 	focus_: function (timeout) {
-		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad
-		this._windowX = window.pageXOffset;
-		this._windowY = window.pageYOffset;
 		zk(this.getInputNode()).focus(timeout);
 		return true;
 	},
@@ -792,6 +794,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.domListen_(n, "onFocus", "doFocus_")
 			.domListen_(n, "onBlur", "doBlur_")
 			.domListen_(n, "onSelect");
+		
+		if (zk.mobile)
+			this.domListen_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)
 			jq(n).bind("reset", this.proxy(this._resetForm));
@@ -803,6 +808,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_")
 			.domUnlisten_(n, "onSelect");
+		
+		if (zk.mobile)
+			this.domUnlisten_(n, "onTouchStart", "_doTouch");
 
 		if (n = n.form)
 			jq(n).unbind("reset", this.proxy(this._resetForm));
