@@ -48,7 +48,7 @@
 	 		7. Assign remove child index "0", will transform empty to "Component 1".
 	 	]]></label>
 	</hbox>
-	<cardlayout id="card2" width="300px" height="350px" style="border:1px solid red" selectedIndex="0">
+	<cardlayout id="card2" width="300px" height="350px" style="border:1px solid red" selectedIndex="9">
 		<window title="Embedded Style" border="normal" width="200px">Component 0</window>
 		<borderlayout>
 			<west width="20%">
