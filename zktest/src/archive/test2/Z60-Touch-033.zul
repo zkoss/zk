@@ -1,10 +1,18 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
+	<label multiline="true">
+	<![CDATA[
+		* Click "Change Orient", the way of animation will change from "left-right" to "up-down". 
+		* Swipe will increase/decrease selectedIndex (according to orient).
+ 	]]>
+	</label>
 <div apply="org.zkoss.bind.BindComposer" 
  viewModel="@id('vm') @init('org.zkoss.zktest.test2.cardlayout.F65_ZK_1269_VM')">	
 	<button onClick='@command("previous")'>←</button>
 	<button onClick='@command("next")'>→</button>
-	<cardlayout id="cl" children="@init(vm.child)" width="300px" height="300px" selectedIndex="@bind(vm.index)">
+	<button onClick='@command("changeOrient")'>change orient</button>
+	<cardlayout id="cl" width="400px" height="300px" 
+	 children="@init(vm.child)" selectedIndex="@bind(vm.index)" orient="@load(vm.orient)">
 		<template name="children" var="node">
 			<borderlayout>
 				<center>
@@ -19,8 +27,100 @@
 	</cardlayout>
 	<hlayout children="@init(vm.child)">
 		<template name="children" var="btn">
-			<button label='@load(vm.index eq btnStatus.index ? "X" : "_")' onClick='@command("change", index=btnStatus.index)' />
+			<button label='@load(vm.index eq btnStatus.index ? vm.index : "_")' onClick='@command("change", index=btnStatus.index)' />
 		</template>
 	</hlayout>
 </div>
+
+<separator bar="true" />
+<zscript>
+void appendComponent(){
+	card.appendChild(new org.zkoss.zul.Label("Component "+card.getChildren().size()));
+}
+
+void addBefore(int index){
+	card.insertBefore(
+		new org.zkoss.zul.Label("Component " + card.getChildren().size()),
+		card.getChildren().get(index)
+	);
+}
+
+void remove(int index){
+	card.removeChild(card.getChildren().get(index));
+}
+
+void changeOrient(org.zkoss.zkmax.zul.Cardlayout cl){
+	cl.setOrient( "horizontal".equals(cl.getOrient()) ? "vertical" : "horizontal");
+}
+</zscript>
+<!-- 
+	There are difference animation/position logic between desktop and tablet, 
+	so need test append/remove child again in Touch.
+-->
+<hbox width="800px">
+	<label multiline="true" hflex="1"><![CDATA[
+ 		Normal and append child test : 
+ 		1. Initially, the "Component 9" will be shown. 
+ 		2. Click "append component" will add "Component 11" at index 11.
+ 		3. Assign selected index "11", will transform "Component 9" to "Component 11"
+ 		4. Back to "Component 9"
+ 		5. Assign insert before index "9", will add "Component 12" at index 9. 
+ 		5.1 Click "show selected index" will alert "10"
+ 	]]></label>
+	<label multiline="true" hflex="1"><![CDATA[
+ 		Remove child test : 
+ 		0. Please refresh page first.
+ 		1. Assign remove child index "2", will transform "Component 9" to "Component 10", click "show selected index" will show "9".
+ 		2. Assign remove child index "9", will transform empty to "Component 9".
+ 		2.1 Click "show selected index" will alert "8"
+ 		3. Assign selected index "2", will transform "Component 9" to "Component 3"
+ 		4. Assign remove child index "7" (no animation will occur)
+ 		5. Assign selected index "7", will transform "Component 3" to "Component 9"
+ 		6. Assign selected index "0", will transform "Component 9" to "Component 0"
+ 		7. Assign remove child index "0", will transform empty to "Component 1".
+ 	]]></label>
+</hbox>
+<cardlayout id="card" width="300px" height="350px" style="border:1px solid red" selectedIndex="9">
+	<window title="Embedded Style" border="normal" width="200px">Component 0</window>
+	<borderlayout>
+		<west width="20%">
+			<label value="west content" />
+		</west>
+		<center>
+			<caption label="center caption" />
+			<label value="Component 1" />
+		</center>
+	</borderlayout>
+	<window title="Overlapped Style" zclass="z-window-overlapped" border="normal" width="200px"> Component 2 </window>
+	<div vflex="1" hflex="1" style="background-color:yellow;">Component 3 with vflex, hflex</div>
+	<div vflex="1" hflex="1" style="background-color:#00FFCC;">Component 4 with vflex, hflex</div>
+	<div vflex="1" hflex="1" style="background-color:yellow;">Component 5 with vflex, hflex</div>		
+	<div vflex="1" hflex="1" style="background-color:#e4e4e4;">Component 6 with vflex, hflex</div>
+	<div vflex="1" hflex="1" style="background-color:yellow;">Component 7 with vflex, hflex</div>
+	<div vflex="1" hflex="1" style="background-color:#AAAACC;">Component 8 with vflex, hflex</div>
+	<div vflex="1" hflex="1" style="background-color:yellow;">Component 9 with vflex, hflex</div>
+	<window title="Popup Style" zclass="z-window-popup" border="normal" width="200px"> Component 10 </window>
+</cardlayout>
+<hlayout>
+	<button onClick="card.previous()">previous</button>
+	<button onClick="card.next()">next</button>
+	<button onClick="changeOrient(card)">change orient</button>
+	<button onClick="appendComponent()">append component</button>
+</hlayout>	
+<separator />
+<hlayout>
+	selected index : <intbox id="goIndex" />
+	<button onClick="card.setSelectedIndex(goIndex.value)">Go</button>
+</hlayout>
+<separator />
+<hlayout>	
+	insert before index : <intbox id="insertIndex" />
+	<button onClick="addBefore(insertIndex.value)">Add</button>
+	<button onClick="alert(card.selectedIndex)">show selected index</button>
+</hlayout>
+<separator />
+<hlayout>	
+	remove child index : <intbox id="removeIndex" />
+	<button onClick="remove(removeIndex.value)">Remove</button>
+</hlayout>	
 </zk>

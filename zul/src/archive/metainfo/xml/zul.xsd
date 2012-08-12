@@ -474,7 +474,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
-		<xs:attribute name="placeholder" type="string" use="optional" />
+		<xs:attribute name="placeholder" type="xs:string" use="optional" />
 		<xs:attribute name="inplace" type="booleanType" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="cols" type="intType" use="optional" />
@@ -948,6 +948,17 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 	</xs:complexType>
+	
+	<!-- cardlayout -->
+	<xs:element name="cardlayout" type="cardlayoutType" />
+	<xs:complexType name="cardlayoutType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="selectedIndex" type="intType" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+	</xs:complexType>
+	
 	<xs:element name="cell" type="cellType" />
 	<xs:complexType name="cellType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
@@ -962,7 +973,7 @@
 	<xs:complexType name="centerType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -1228,7 +1239,7 @@
 	<xs:complexType name="eastType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -1936,7 +1947,7 @@
 	<xs:complexType name="northType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -2193,7 +2204,7 @@
 	<xs:complexType name="southType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -2685,7 +2696,7 @@
 	<xs:complexType name="westType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="caption" minOccurs="0" maxOccurs="1" />
+<!-- 			<xs:element ref="caption" minOccurs="0" maxOccurs="1" /> -->
 			<xs:sequence minOccurs="0" maxOccurs="1">
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 				<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />

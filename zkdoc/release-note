@@ -24,6 +24,7 @@ ZK 6.5.0
   ZK-1273: Add a way to listen onOrientationChange for tablet device
   ZK-1283: Grid/List/Tree support changing page by swipe event on tablet device
   ZK-1272: Scrollview component for tablet device
+  ZK-1269: Need layout that allow user change view like change card
 
 * Bugs
 
