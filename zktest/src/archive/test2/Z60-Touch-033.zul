@@ -1,12 +1,12 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
+<window contentStyle="overflow:auto" vflex="1">
 	<label multiline="true">
 	<![CDATA[
 		* Click "Change Orient", the way of animation will change from "left-right" to "up-down". 
 		* Swipe will increase/decrease selectedIndex (according to orient).
  	]]>
-	</label>
-<div apply="org.zkoss.bind.BindComposer" 
+	</label>	
+<div apply="org.zkoss.bind.BindComposer"
  viewModel="@id('vm') @init('org.zkoss.zktest.test2.cardlayout.F65_ZK_1269_VM')">	
 	<button onClick='@command("previous")'>←</button>
 	<button onClick='@command("next")'>→</button>
@@ -123,4 +123,4 @@ void changeOrient(org.zkoss.zkmax.zul.Cardlayout cl){
 	remove child index : <intbox id="removeIndex" />
 	<button onClick="remove(removeIndex.value)">Remove</button>
 </hlayout>	
-</zk>
+</window>
