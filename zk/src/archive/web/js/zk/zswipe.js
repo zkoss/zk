@@ -16,8 +16,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		endEvt = hastouch ? 'touchend' : 'mouseup',
 		start, stop;
 	
-	jq(document).bind(startEvt, swipeStart);
-	
 	function _doEvt(wevt) {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
@@ -29,60 +27,84 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		}
 	}
 
-	function swipeStart(devt) {
+zk.Swipe = zk.$extends(zk.Object, {
+	$init: function (widget, node, opts) {
+		this.widget = widget;
+		this.node = node = node ? jq(node, zk)[0]: widget.node || (widget.$n ? widget.$n() : null);
+		if (!node)
+			throw "Handle required for " + widget;
+		
+		this.opts = zk.$default(opts, {
+			scrollThreshold: 5,
+			duration: 500,
+			minDisplacement: 30,
+			maxDisplacement: 75
+		});
+		
+		jq(this.node).bind(startEvt, this.proxy(this._swipeStart));
+	},
+	
+	destroy: function (node) {
+		jq(node).unbind(startEvt, this.proxy(this._swipeStart));
+		this.widget = this.node = this.opts = null;
+	},
+	
+	_swipeStart: function (devt) {
 		var evt = devt.originalEvent,
 			data = evt.touches ? evt.touches[0] : evt;
 		
 		start = {
-			time: (new Date()).getTime(),
+			time: evt.timeStamp || Date.now(),
+			coords: [data.pageX, data.pageY]
+		};
+		jq(this.node).bind(moveEvt, this.proxy(this._swipeMove)).one(endEvt, this.proxy(this._swipeEnd));
+	},
+	
+	_swipeMove: function (devt) {
+		if (!start) return;
+		var evt = devt.originalEvent,
+			data = evt.touches ? evt.touches[0] : evt;
+			
+		stop = {
+			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
 		};
 		
-		function swipeMove(devt) {
-			if (!start) return;
-			var evt = devt.originalEvent,
-				data = evt.touches ? evt.touches[0] : evt;
-				
-			stop = {
-				time: (new Date()).getTime(),
-				coords: [data.pageX, data.pageY]
-			};
+		// prevent scrolling when displacement is larger than scrollThreshold
+		var dispX = Math.abs(start.coords[0] - stop.coords[0]),
+			dispY = Math.abs(start.coords[1] - stop.coords[1]),
+			scrollThreshold = this.opts.scrollThreshold;
+		if (dispX > scrollThreshold || dispY > scrollThreshold)
+			evt.preventDefault();
+	},
+	
+	_swipeEnd: function (devt) {
+		jq(this.node).unbind(moveEvt, this.proxy(this._swipeMove));
+		if (start && stop) {
+			var dispX, dispY, dispT = stop.time - start.time, dir;
 			
-			// prevent scrolling
-			var dispX = Math.abs(start.coords[0] - stop.coords[0]),
-				dispY = Math.abs(start.coords[1] - stop.coords[1]);
-			if (dispX > 5 || dispY > 5)
-				evt.preventDefault();
-		}
-		
-		function swipeEnd(devt) {
-			jq(document).unbind(moveEvt, swipeMove);
-			if (start && stop) {
-				var wgt = zk.Widget.$(devt, {child:true}),
-					dispX, dispY, dispT = stop.time - start.time, dir;
+			if (dispT < this.opts.duration) {
+				var deltaX = start.coords[0] - stop.coords[0],
+					deltaY = start.coords[1] - stop.coords[1],
+					min = this.opts.minDisplacement,
+					max = this.opts.maxDisplacement;
 				
-				if (dispT < 500) {
-					var deltaX = start.coords[0] - stop.coords[0],
-						deltaY = start.coords[1] - stop.coords[1];
-					
-					dispX = Math.abs(deltaX);
-					dispY = Math.abs(deltaY);
-					
-					if (dispX > 30 && dispY < 75)
-						dir = deltaX > 0 ? 'left' : 'right';
-					else if (dispY > 30 && dispX < 75)
-						dir = deltaY > 0 ? 'up' : 'down';
-				}
+				dispX = Math.abs(deltaX);
+				dispY = Math.abs(deltaY);
 				
-				if (wgt)
-					_doEvt(new zk.Event(wgt, 'onSwipe',
-						{dispX: dispX, dispY: dispY, dispT: dispT, dir: dir},
-						{start: start, stop: stop, dir: dir}, devt));
+				if (dispX > min && dispY < max)
+					dir = deltaX > 0 ? 'left' : 'right';
+				else if (dispY > min && dispX < max)
+					dir = deltaY > 0 ? 'up' : 'down';
 			}
-			start = stop = null;
+			
+			var wgt = this.widget;
+			if (wgt)
+				_doEvt(new zk.Event(wgt, 'onSwipe',
+					{dispX: dispX, dispY: dispY, dispT: dispT, dir: dir},
+					{start: start, stop: stop, dir: dir}, devt));
 		}
-		
-		jq(document).bind(moveEvt, swipeMove)
-			.one(endEvt, swipeEnd);
+		start = stop = null;
 	}
+});
 })();

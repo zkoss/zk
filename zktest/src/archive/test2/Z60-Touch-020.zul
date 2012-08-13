@@ -1,11 +1,11 @@
-<zk>
+<zk xmlns:a="client/attribute">
 	<vlayout height="100%" width="100%">
 	1. Swipe left/right inside tab-panel, it should change to previous/next tab-panel.<separator />
 	2. Click "vertical/horizontal" button to change orientation of tabbox.<separator />
 	3. Swipe up/down, it should change to previous/next tab-panel.<separator />
 	<button label="vertical" onClick='tbox1.orient="vertical";' /><button label="horizontal" onClick='tbox1.orient="horizontal";' />
 	<hlayout hflex="1" vflex="1">
-		<tabbox id="tbox1" hflex="1" vflex="1" orient="vertical">
+		<tabbox id="tbox1" hflex="1" vflex="1" orient="vertical" a:data-swipeable="true">
 			<tabs>
 				<tab label="tab 1" />
 				<tab label="tab 2" />
@@ -31,7 +31,7 @@
 				</tabpanel>
 			</tabpanels>
 		</tabbox>
-		<tabbox id="tbox2" hflex="1" vflex="1" mold="accordion">
+		<tabbox id="tbox2" hflex="1" vflex="1" mold="accordion" a:data-swipeable="true">
 			<tabs>
 				<tab label="tab 1" />
 				<tab label="tab 2" />
