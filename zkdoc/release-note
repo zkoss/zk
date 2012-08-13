@@ -27,6 +27,7 @@ ZK 6.5.0
   ZK-1269: Need layout that allow user change view like change card
 
 * Bugs
+  ZK-1285: Modal window position issue with virtual keyboard on ipad
 
 * Upgrade Notes
   + Rename the "tbbtn" mold of chosenbox to "toolbar"

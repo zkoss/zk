@@ -153,8 +153,9 @@ public class ClientInfoEvent extends Event {
 		return _dpr;
 	}
 	/**
-	 * Return the current orientation on tablet/mobile device(landscape or portrait),
-	 * otherwise return empty string instead.
+	 * Return the current orientation. The orientation is portrait when the
+	 * media feature height is greater than or equal to media feature width,
+	 * otherwise is landscape.
 	 * @since 6.5.0
 	 */
 	public String getOrientation() {

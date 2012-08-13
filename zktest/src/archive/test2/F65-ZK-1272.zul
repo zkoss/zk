@@ -3,11 +3,9 @@
 		<vlayout vflex="1" hflex="1">
 		<div>
 			1. Should be able to scroll the windows on vertical direction.<separator />
-			2. When scrolling outside top boundary, you can see a arrow showed.<separator />
-			3. Scroll outside top boundary again, a groupbox will insert before window1.<separator />
-			4. When scrolling outside bottom boundary, you can see a arrow showed.<separator />
-			5. Scroll outside bottom boundary again, a groupbox will append after window5.<separator />
-			6. Click <button label="Change Orient" onClick='sv.setOrient(sv.isVertical() ? "horizontal" : "vertical")' /> button, should be able to scroll on horizontal direction.
+			2. When scrolling outside top boundary, you can see a arrow showed, scroll outside top boundary again, a groupbox will insert before window1.<separator />
+			3. When scrolling outside bottom boundary, you can see a arrow showed, scroll outside bottom boundary again, a groupbox will append after window5.<separator />
+			4. Click <button label="Change Orient" onClick='sv.setOrient(sv.isVertical() ? "horizontal" : "vertical")' /> button, should be able to scroll on horizontal direction.
 		</div>
 		<scrollview id="sv" orient="vertical" vflex="1" hflex="1">
 			<attribute name="onScroll"><![CDATA[
@@ -34,9 +32,24 @@
 					sv.insertBefore(gb, first);
 				}
 			]]></attribute>
-			<zk forEach="1,2,3,4,5">
-				<window title="window ${each}" border="normal" width="200px" height="200px">This is Window ${each}</window>
-			</zk>
+			<menubar>
+				<menu label="File">
+					<menupopup>
+						<menuitem label="New" onClick="alert(self.label)" />
+						<menuitem label="Open" onClick="alert(self.label)" />
+						<menuitem label="Save" onClick="alert(self.label)" />
+						<menuseparator />
+						<menuitem label="Exit" onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+			</menubar>
+			<textbox />
+			<button label="button" onClick="alert(self.label)"/>
+			<window title="window 1" border="normal" width="255px" height="200px">
+				This is Window 1
+				<textbox />
+			</window>
+			<window title="window 2" border="normal" width="200px" height="354px">This is Window 2</window>
 		</scrollview>
 		</vlayout>
 	</window>

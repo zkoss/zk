@@ -38,7 +38,8 @@
 		<label multiline="true" hflex="1"><![CDATA[
 	 		Remove child test : 
 	 		0. Please refresh page first.
-	 		1. Assign remove child index "2", will transform "Component 9" to "Component 10", click "show selected index" will show "9".
+	 		1. Assign remove child index "2", will transform "Component 9" to "Component 10"
+	 		1.1 Click "show selected index" will show "9".
 	 		2. Assign remove child index "9", will transform empty to "Component 9".
 	 		2.1 Click "show selected index" will alert "8"
 	 		3. Assign selected index "2", will transform "Component 9" to "Component 3"
@@ -46,9 +47,12 @@
 	 		5. Assign selected index "7", will transform "Component 3" to "Component 9"
 	 		6. Assign selected index "0", will transform "Component 9" to "Component 0"
 	 		7. Assign remove child index "0", will transform empty to "Component 1".
+	 		8. Assign selected index "6", will transform "Component 1" to "Component 9"
+	 		9. Assign remove child index "5" (no animation will occur)
+	 		9.1 Click "show selected index" will alert "5"
 	 	]]></label>
 	</hbox>
-	<cardlayout id="card2" width="300px" height="350px" style="border:1px solid red" selectedIndex="9">
+	<cardlayout id="card" width="300px" height="350px" style="border:1px solid red" selectedIndex="9">
 		<window title="Embedded Style" border="normal" width="200px">Component 0</window>
 		<borderlayout>
 			<west width="20%">
