@@ -11,21 +11,48 @@
 			card.getChildren().get(index)
 		);
 	}
+	
+	void remove(int index){
+		card.removeChild(card.getChildren().get(index));
+	}
+	
+	void changeOrient(org.zkoss.zkmax.zul.Cardlayout cl){
+		cl.setOrient( "horizontal".equals(cl.getOrient()) ? "vertical" : "horizontal");
+	}
 	</zscript>
-	<label multiline="true">
-	<![CDATA[
- 		API and ROD test : 
- 		1. Initially, the "Component 9" will be shown. 
- 		2. Click "previous" will transform "Component 9" to "Component 8".
- 		3. Click "next" will transform "Component 8" to "Component 9".
- 		4. Click "append component" will add "Component 11" at index 11.
- 		5. Assign selected index "11", will transform "Component 9" to "Component 11"
- 		6. Back to "Component 9"
- 		7. Assign insert before index "9", will add "Component 12" at index 9. 
- 		8. Click "show selected index" will alert "10"
- 	]]>
-	</label>
-	<cardlayout id="card" width="300px" height="300px" style="border:1px solid red" selectedIndex="9">
+	<label multiline="true"><![CDATA[
+		* Click "Change Orient", the way of animation will change from "left-right" to "up-down". 
+		* Click "next" or "previous" will show next or previous component.
+		* Only {component[index] | selectedIndex - 1 <= index <= selectedIndex + 1} will be rendered.
+	]]></label>
+	<hbox width="800px">
+		<label multiline="true" hflex="1"><![CDATA[
+	 		Normal and append child test : 
+	 		1. Initially, the "Component 9" will be shown. 
+	 		2. Click "append component" will add "Component 11" at index 11.
+	 		3. Assign selected index "11", will transform "Component 9" to "Component 11"
+	 		4. Back to "Component 9"
+	 		5. Assign insert before index "9", will add "Component 12" at index 9. 
+	 		5.1 Click "show selected index" will alert "10"
+	 	]]></label>
+		<label multiline="true" hflex="1"><![CDATA[
+	 		Remove child test : 
+	 		0. Please refresh page first.
+	 		1. Assign remove child index "2", will transform "Component 9" to "Component 10"
+	 		1.1 Click "show selected index" will show "9".
+	 		2. Assign remove child index "9", will transform empty to "Component 9".
+	 		2.1 Click "show selected index" will alert "8"
+	 		3. Assign selected index "2", will transform "Component 9" to "Component 3"
+	 		4. Assign remove child index "7" (no animation will occur)
+	 		5. Assign selected index "7", will transform "Component 3" to "Component 9"
+	 		6. Assign selected index "0", will transform "Component 9" to "Component 0"
+	 		7. Assign remove child index "0", will transform empty to "Component 1".
+	 		8. Assign selected index "6", will transform "Component 1" to "Component 9"
+	 		9. Assign remove child index "5" (no animation will occur)
+	 		9.1 Click "show selected index" will alert "5"
+	 	]]></label>
+	</hbox>
+	<cardlayout id="card" width="300px" height="350px" style="border:1px solid red" selectedIndex="9">
 		<window title="Embedded Style" border="normal" width="200px">Component 0</window>
 		<borderlayout>
 			<west width="20%">
@@ -49,6 +76,7 @@
 	<hlayout>
 		<button onClick="card.previous()">previous</button>
 		<button onClick="card.next()">next</button>
+		<button onClick="changeOrient(card)">change orient</button>
 		<button onClick="appendComponent()">append component</button>
 	</hlayout>	
 	<separator />
@@ -62,6 +90,11 @@
 		<button onClick="addBefore(insertIndex.value)">Add</button>
 		<button onClick="alert(card.selectedIndex)">show selected index</button>
 	</hlayout>
+	<separator />
+	<hlayout>	
+		remove child index : <intbox id="removeIndex" />
+		<button onClick="remove(removeIndex.value)">Remove</button>
+	</hlayout>	
 	<separator bar="true" />
 	
 	<label multiline="true">
@@ -80,17 +113,18 @@
 	<hlayout>
 		<button onClick="flexMin.previous()">previous</button>
 		<button onClick="flexMin.next()">next</button>
+		<button onClick="changeOrient(flexMin)">change orient</button>
 	</hlayout>
 	
 	<label multiline="true">
 	<![CDATA[
-		vflex="1" and hflex="1", parent widget is 400 * 400
+		vflex="1" and hflex="1", parent widget is 400 * 300
 	]]>
 	</label>
-	<div width="400px" height="400px">
+	<div width="400px" height="300px">
 		<cardlayout id="flex1" hflex="1" vflex="1" style="border:red 1px solid">
 	 		<div width="200px" height="350px" style="background-color:yellow;">
-	 			index=0, 250 * 300
+	 			index=0, 250 * 350
 	 		</div>
 	 		<div width="350px" height="200px" style="background-color:red;">
 	 			index=1, 200 * 250
@@ -102,6 +136,7 @@
 	</div>
 	<hlayout>
 		<button onClick="flex1.previous()">previous</button>
-		<button onClick="flex1.next()">next</button>	
+		<button onClick="flex1.next()">next</button>
+		<button onClick="changeOrient(flex1)">change orient</button>
 	</hlayout>
 </zk>
