@@ -32,7 +32,7 @@ function (out) {
 			zcls, '-prev"> </button></em></td><td class="', zcls, '-btn-r"></td>',
 			'</tr></tbody></table></td><td><span class="', zcls, '-sep"></span></td>',
 			'<td><span class="', zcls, '-text"></span></td><td><input id="',
-			uuid, '-real" name="', uuid, '-real" type="number" class="', zcls,
+			uuid, '-real" name="', uuid, '-real" type="text" class="', zcls,
 			'-inp" value="', this.getActivePage() + 1, '" size="3"/></td>',
 			'<td><span class="', zcls, '-text">/ ', this.getPageCount(), '</span></td>',
 			'<td><span class="', zcls, '-sep"></span></td><td><table id="', uuid,

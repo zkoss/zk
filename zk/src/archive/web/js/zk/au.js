@@ -33,7 +33,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function checkProgressing() {
 		if (!zAu.processing()) {
 			_detached = []; //clean up
-			zk.endProcessing();
+			if (!(zk.mobile && zAu._cInfoReg)) // ignore it when touch devices
+				zk.endProcessing();
 			zAu.doneTime = jq.now();
 		}
 	}
@@ -341,6 +342,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//Bug #2871135, always fire since the client might send back empty
 			if (!cmds || !cmds.length) {
 				zWatch.fire('onResponse', null, {timeout:0, rtags: rtags}); //use setTimeout
+				if (zk.mobile && rtags.onClientInfo) {
+					setTimeout(zk.endProcessing, 150);
+				}
+					
 			}
 		}
 		if (ex)
@@ -1053,7 +1058,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
 			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
-			{implicit:true}));
+			{implicit:true, rtags: {onClientInfo: 1}}));
 	},
 	/** Asks the client to download the resource at the specified URL.
 	 * @param String url the URL to download from
