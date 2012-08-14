@@ -2843,6 +2843,7 @@ unbind_: function (skipper, after) {
 
 		this.unbindChildren_(skipper, after);
 		this.cleanDrag_(); //ok to invoke even if not init
+		this.unbindSwipe_();
 
 		if (this.isListen('onUnbind')) {
 			var self = this;
@@ -2857,7 +2858,6 @@ unbind_: function (skipper, after) {
 			if (ef) ef.destroy();
 		}
 		this.effects_ = {};
-		this.unbindSwipe_();
 	},
 	/** Unbinds the children of this widget.
 	 * It is called by {@link #unbind_} to invoke child's {@link #unbind_} one-by-one.
@@ -3163,7 +3163,7 @@ unbind_: function (skipper, after) {
 	},
 	/** Bind swipe event to the widget on tablet device.
 	 * It is called if HTML 5 data attribute (data-swipeable) is set to true.
-	 * <p>You rarely need to override this method, unless you want to bind swipe event differently.
+	 * <p>You rarely need to override this method, unless you want to bind swipe behavior differently.
 	 * <p>Default: use {@link zk.Swipe} to implement swipe event.
 	 * @see #doSwipe_
 	 * @since 6.5.0
@@ -3181,8 +3181,10 @@ unbind_: function (skipper, after) {
 	 */
 	unbindSwipe_: zk.mobile ? function () {
 		var swipe = this._swipe;
-		if (swipe)
-			swipe.destroy(this.$n());
+		if (swipe) {
+			this._swipe = null;
+			swipe.destroy(node);
+		}
 	} : zk.$void,
 
 	/** Sets the focus to this widget.
