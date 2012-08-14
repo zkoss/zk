@@ -3180,9 +3180,12 @@ unbind_: function (skipper, after) {
 	 * @since 6.5.0
 	 */
 	unbindSwipe_: zk.mobile ? function () {
-		var swipe = this._swipe;
-		if (swipe)
-			swipe.destroy(this.$n());
+		var node = this.$n();
+		if (node) {
+			var swipe = this._swipe;
+			if (swipe)
+				swipe.destroy(node);
+		}
 	} : zk.$void,
 
 	/** Sets the focus to this widget.
