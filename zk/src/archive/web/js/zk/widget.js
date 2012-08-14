@@ -3183,7 +3183,7 @@ unbind_: function (skipper, after) {
 		var swipe = this._swipe;
 		if (swipe) {
 			this._swipe = null;
-			swipe.destroy(node);
+			swipe.destroy(this.$n());
 		}
 	} : zk.$void,
 
