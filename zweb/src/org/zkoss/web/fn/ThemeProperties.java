@@ -33,7 +33,7 @@ import org.zkoss.util.resource.Locators;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.el.ELFactory;
+import org.zkoss.xel.zel.ELFactory;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.util.SimpleResolver;
