@@ -16,7 +16,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.fn;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -41,6 +40,7 @@ import org.zkoss.xel.util.SimpleResolver;
 import org.zkoss.xel.util.SimpleXelContext;
 
 /**
+ * A utility theme properties loader
  * @author simonpai
  * @author jumperchen
  * @since 6.5.0
@@ -48,13 +48,11 @@ import org.zkoss.xel.util.SimpleXelContext;
 public class ThemeProperties {
 	private ThemeProperties() {}
 	private static final ELFactory _ELF = new ELFactory();
-	private static final String _THEME_FN_URL = "http://www.zkoss.org/dsp/web/theme";
+	private static final String THEME_FN_URL = "http://www.zkoss.org/dsp/web/theme";
+	private static final String CORE_FN_URL = "http://www.zkoss.org/dsp/web/core";
 	
 	/**
-	 * 
-	 * @param exec
-	 * @param bundleName
-	 * @throws FileNotFoundException 
+	 * Loads a properties file and apply them into the request scope
 	 */
 	public static boolean loadProperties(ServletRequest req, String bundleName) {
 		final Locators.StreamLocation loc =
@@ -66,9 +64,7 @@ public class ThemeProperties {
 	}
 	
 	/**
-	 * 
-	 * @param exec
-	 * @param in
+	 * Loads a properties file and apply them into the request scope
 	 */
 	public static boolean loadProperties(ServletRequest req, InputStream in) {
 		Map<String, Object> pmap = new LinkedHashMap<String, Object>(); // preserve order
@@ -117,7 +113,7 @@ public class ThemeProperties {
 	}
 	
 	private static XelContext buildXelContext(Map<String, Object> map) {
-		List<Taglib> libs = Arrays.asList(new Taglib("t", _THEME_FN_URL));
+		List<Taglib> libs = Arrays.asList(new Taglib("t", THEME_FN_URL), new Taglib("c", CORE_FN_URL));
 		FunctionMapper mapper = Taglibs.getFunctionMapper(libs, Locators.getDefault());
 		VariableResolver resolver = new SimpleResolver(map);
 		return new SimpleXelContext(resolver, mapper);

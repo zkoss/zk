@@ -180,7 +180,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	void loadProperties(java.lang.String path)
 		</function-signature>
 		<description><![CDATA[
-	Load a specific theme properties
+	Loads a specific theme properties and apply them into the request scope
 		]]></description>
 	</function>
 </taglib>

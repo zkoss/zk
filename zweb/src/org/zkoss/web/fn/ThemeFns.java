@@ -26,7 +26,6 @@ import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 /**
@@ -358,6 +357,10 @@ public class ThemeFns {
 		if (log.errorable()) log.error(msg);
 		else System.err.println(msg);
 	}
+	/**
+	 * Loads a theme properties and apply them into the request scope.
+	 * @param path a file path
+	 */
 	public static void loadProperties(String path) {
 		if (!ThemeProperties.loadProperties(ServletFns.getCurrentRequest(), 
 				locate(path))) {
