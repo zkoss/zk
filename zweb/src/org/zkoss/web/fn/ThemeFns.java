@@ -20,8 +20,13 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+
 import org.zkoss.lang.Strings;
+import org.zkoss.util.logging.Log;
+import org.zkoss.util.resource.Locators;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.util.resource.ClassWebResource;
 
 /**
  * Providing theme relevant functions for EL.
@@ -31,7 +36,7 @@ import org.zkoss.web.servlet.Servlets;
  * @since 6.5.0
  */
 public class ThemeFns {
-
+	
 	private ThemeFns() {
 	}
 
@@ -332,7 +337,37 @@ public class ThemeFns {
 			colors.put(color, toHex(toColor(color)));
 		return colors.get(color);
 	}
-
+	private static String locate(String path) {
+		try {
+			if (path.startsWith("~./")) {
+				path = Servlets.locate(ServletFns.getCurrentServletContext(), ServletFns.getCurrentRequest(),
+					ClassWebResource.PATH_PREFIX + path.substring(2),
+					Locators.getDefault());
+				return path;
+			}
+			return Servlets.locate(ServletFns.getCurrentServletContext(), ServletFns.getCurrentRequest(), path, null);
+		} catch (ServletException ex) {
+			log(ex.getLocalizedMessage());
+		}
+		return path;
+	}
+	
+	private static void log(String msg) {
+		Log log = Log.lookup("global");
+		if (log.errorable()) log.error(msg);
+		else System.err.println(msg);
+	}
+	/**
+	 * Loads a theme properties and apply them into the request scope.
+	 * @param path a file path
+	 */
+	public static void loadProperties(String path) {
+		if (!ThemeProperties.loadProperties(ServletFns.getCurrentRequest(), 
+				locate(path))) {
+			log("The properties file is not loaded correctly! [" + path + "]");
+		}
+	}
+	
 	private static String toHex(Color color) {
 		return Colors.getHexString(color);
 	}

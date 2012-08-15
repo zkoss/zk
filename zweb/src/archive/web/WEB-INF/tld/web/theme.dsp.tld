@@ -173,4 +173,14 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	@param style the value of the transform
 		]]></description>
 	</function>
+	<function>
+		<name>loadProperties</name>
+		<function-class>org.zkoss.web.fn.ThemeFns</function-class>
+		<function-signature>
+	void loadProperties(java.lang.String path)
+		</function-signature>
+		<description><![CDATA[
+	Loads a specific theme properties and apply them into the request scope
+		]]></description>
+	</function>
 </taglib>
