@@ -1,0 +1,5 @@
+<borderlayout>
+	<center autoscroll="true">
+		<div style="padding:3px; background:red;" hflex="1" vflex="1">test</div>
+	</center>
+</borderlayout>

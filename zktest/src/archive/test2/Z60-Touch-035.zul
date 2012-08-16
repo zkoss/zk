@@ -1,0 +1,9 @@
+<zk xmlns:n="native">
+	<n:h3>iPad Only</n:h3>
+	<window border="normal" title="iframe demo" width="100%" height="100%">
+		<div>
+		Should see a scroll-able iframe.
+		</div>
+		<iframe width="400px" height="400px" style="border: 1px solid gray" src="/zktest/test2/Z60-Touch-001.zul"></iframe>
+	</window>
+</zk>
