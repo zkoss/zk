@@ -29,6 +29,7 @@ ZK 5.0.12
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
   ZK-1222: Popup component as tooltips fires multiple onOpen events
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
+  ZK-1298: Can not set composer name with <custom-attributes>
   
 	--------
 ZK 5.0.11
