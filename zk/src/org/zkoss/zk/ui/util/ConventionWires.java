@@ -235,17 +235,22 @@ public class ConventionWires {
 		if (onm instanceof String && ((String)onm).length() > 0) {
 			comp.setAttribute((String)onm, controller);
 		} else {
-			comp.setAttribute(separator + "composer", controller);
-				//no need to check since it is more nature (new overwrites old)
-
-			//feature #2778513, support {id}$composer name
-			final String id = comp.getId();
-			comp.setAttribute(id + separator + "composer", controller);
-
-			//support {id}$ClassName
-			comp.setAttribute(
-				composerNameByClass(id, controller.getClass(), separator), controller);
+			//bug zk-1298, the timing doesn't correct to get composerName in doBeforeComposeChildren
+			//fix by post processing in AttributesInfo#apply
+			comp.setAttribute("_$composer$_", controller);//stored in a special attribute
 		}
+		
+		//after the fix of zk-1298, the id-$composer is always available no matter the composerName exsited or not.
+		comp.setAttribute(separator + "composer", controller);
+		//no need to check since it is more nature (new overwrites old)
+
+		//feature #2778513, support {id}$composer name
+		final String id = comp.getId();
+		comp.setAttribute(id + separator + "composer", controller);
+	
+		//support {id}$ClassName
+		comp.setAttribute(
+			composerNameByClass(id, controller.getClass(), separator), controller);
 	}
 	private static String composerNameByClass(String id, Class cls, char separator) {
 		final String clsname = cls.getName();

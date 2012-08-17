@@ -4,8 +4,10 @@ ZK 6.0.3
 
 * Bugs
   ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
+  ZK-1298: Can not set composer name with <custom-attributes>
 
 * Upgrade Notes
+  + The default names of a composer will still be assigned no matter you set a composerName by custom-attributes or not.
 
   --------
 ZK 6.0.2
@@ -428,6 +430,7 @@ ZK 5.0.12
   ZK-1086: Undefined on datebox format "EEEE" with specific locale
   ZK-1092: IE 8 - Scrollbar Bug in Tree
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
+  ZK-1298: Can not set composer name with <custom-attributes>
   
 	--------
 ZK 5.0.11
