@@ -29,6 +29,7 @@ ZK 5.0.12
   ZK-1179: ZK Internationalization Labels doesn't work with liferay (portal env)
   ZK-1222: Popup component as tooltips fires multiple onOpen events
   ZK-1230: Listbox with rod only removes the first list item when setItemInvalid
+  ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
   
 	--------
 ZK 5.0.11
