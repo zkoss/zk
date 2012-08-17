@@ -51,6 +51,16 @@ ZK 6.5.0
 	When using the molds above, the component will use default supported mold instead.
 
   --------
+ZK 6.0.3
+* Features
+
+* Bugs
+  ZK-1128: Use SerializableUiFactory with a portal environment will cause ClassCastException
+  ZK-1303: listbox select mold with 1 rows onSelect event not fired for first item
+
+* Upgrade Notes
+
+  --------
 ZK 6.0.2
 Jul 24, 2012
 * Features
