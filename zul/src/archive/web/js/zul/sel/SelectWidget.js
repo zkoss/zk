@@ -1096,7 +1096,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Toggle the selection and notifies server. */
 	_toggleSelect: function (row, toSel, evt, skipFocus) {
-		zk.log('toggleSelect');
 		if (!this._multiple) {
 			var old = this.getSelectedItem();
 			if (row != old && toSel)
