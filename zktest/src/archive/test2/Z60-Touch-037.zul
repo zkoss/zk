@@ -1,5 +1,7 @@
-<!-- <?script src="http://10.1.3.131:8080/target/target-script-min.js#anonymous"?> -->
 <zk>
+	<div>
+	Should not see popup candidates.
+	</div>
 	<combobox id="combo1" autodrop="true" />
 	<div height="400px"></div>
 	<combobox id="combo2" autodrop="true" buttonVisible="false"/>
