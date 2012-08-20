@@ -1,38 +1,43 @@
 <zk xmlns:a="client/attribute">
-	<hlayout hflex="1" vflex="1">
-	<div width="50px" vflex="1"></div>
-	<borderlayout hflex="1" vflex="1" a:data-swipeable="true">
-		<north size="25%" title="North" collapsible="true" splittable="true">
-			<div height="100%" width="100%" style="background: gold">
-				<label style="font-size: 26px" value="NORTH" />
-				<div hflex="min" vflex="min" style="background: red">
-					<label style="font-size: 26px" value="Sub Div" />
+	<vlayout hflex="1" vflex="1">
+		<div>
+		1. Swipe up on the bottom edge of North region, it should collisped. Swipe down on the collipsed bar, it should opened.<separator />
+		2. Swipe down on the top edge of South region, it should collisped. Swipe up on the collipsed bar of South region, it should opened.<separator />
+		3. Swipe left on the right edge of West region, it should collisped. Swipe right on the collipsed bar of West region, it should opened.<separator />
+		4. Swipe right on the left edge of East region, it should collisped. Swipe left on the collipsed bar of East region, it should opened.
+		</div>
+		<borderlayout hflex="1" vflex="1" a:data-swipeable="true">
+			<north size="25%" title="North" collapsible="true" splittable="true">
+				<div height="100%" width="100%" style="background: gold">
+					<label style="font-size: 26px" value="NORTH" />
+					<div hflex="min" vflex="min" style="background: red">
+						<label style="font-size: 26px" value="Sub Div" />
+					</div>
 				</div>
-			</div>
-		</north>
-		<west size="25%" title="West" collapsible="true">
-			<div hflex="1" vflex="1"  style="background: green">
-				<zscript>org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(300);</zscript>
-				<grid hflex="1" vflex="1" model="${strset}">
-					<custom-attributes org.zkoss.zul.grid.rod="true"/>
-				</grid>
-			</div>
-		</west>
-		<center>
-			<div height="100%" width="100%" style="background: blue">
-				<label style="font-size: 26px" value="CENTER" />
-			</div>
-		</center>
-		<east size="25%" title="East" collapsible="true">
-			<div height="100%" width="100%"  style="background: red">
-				<label style="font-size: 26px" value="EAST" />
-			</div>
-		</east>
-		<south size="25%" title="South" collapsible="true">
-			<div height="100%" width="100%"  style="background: cyan">
-				<label style="font-size: 26px" value="SOUTH" />
-			</div>
-		</south>
-	</borderlayout>
-	</hlayout>
+			</north>
+			<west size="25%" title="West" collapsible="true">
+				<div hflex="1" vflex="1"  style="background: green">
+					<zscript>org.zkoss.zul.ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(300);</zscript>
+					<grid hflex="1" vflex="1" model="${strset}">
+						<custom-attributes org.zkoss.zul.grid.rod="true"/>
+					</grid>
+				</div>
+			</west>
+			<center>
+				<div height="100%" width="100%" style="background: blue">
+					<label style="font-size: 26px" value="CENTER" />
+				</div>
+			</center>
+			<east size="25%" title="East" collapsible="true">
+				<div height="100%" width="100%"  style="background: red">
+					<label style="font-size: 26px" value="EAST" />
+				</div>
+			</east>
+			<south size="25%" title="South" collapsible="true">
+				<div height="100%" width="100%"  style="background: cyan">
+					<label style="font-size: 26px" value="SOUTH" />
+				</div>
+			</south>
+		</borderlayout>
+	</vlayout>
 </zk>

@@ -1,4 +1,9 @@
 <zk>
+	<div>
+	1. click button on first datebox, should see a popup contains 3 spin wheels of year, month and date.<separator />
+	2. click button on second datebox, should see a popup contains 6 spin wheels of year, month, date, hour, minute and second.<separator />
+	3. click button on third datebox, should see a popup contains 7 spin wheels of year, month, date, hour, minute, second and APM.
+	</div>
 	<datebox width="300px" height="40px" format="yyyy/MM/dd" lenient="false" /><separator/>
 	<datebox width="300px" height="40px" format="yyyy/MM/dd HH:mm:ss" lenient="false" constraint="between 20070101 and 20271231" /><separator/>
 	<datebox width="300px" height="40px" format="yyyy/MM/dd a hh:mm:ss" lenient="false" constraint="between 20070101 and 20271231" />
