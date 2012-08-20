@@ -511,7 +511,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 		}
 					
-		if (this._open && !this.isVisible()) n.style.display = "none";
+		if (this._open && !this.isVisible()) this.$n().style.display = "none";
 		
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.getFirstChild() ? 
