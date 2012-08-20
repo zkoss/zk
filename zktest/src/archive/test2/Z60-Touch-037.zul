@@ -1,0 +1,15 @@
+<!-- <?script src="http://10.1.3.131:8080/target/target-script-min.js#anonymous"?> -->
+<zk>
+	<combobox id="combo1" autodrop="true" />
+	<div height="400px"></div>
+	<combobox id="combo2" autodrop="true" buttonVisible="false"/>
+	<zscript><![CDATA[
+		String[] dictionary = {"abacus", "abase", "abate", "abbess", "abbey", "abbot",
+				"connoisseur", "connotation", "connote", "connubial", "conquer", 
+				"consanguineous", "conscience", "conscientious", "conscious",
+				"conscript", "consecrate", "consecutive", "consensus", "conservatism"};
+		org.zkoss.zul.ListModel dictModel= new org.zkoss.zul.SimpleListModel(dictionary);
+		combo1.setModel(dictModel);
+		combo2.setModel(dictModel);
+	]]></zscript>
+</zk>
