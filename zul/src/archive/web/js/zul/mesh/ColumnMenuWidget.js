@@ -162,7 +162,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		this.$supers('onChildAdded_', arguments);
 		this._syncColMenu();
 		var mesh = this.getMeshWidget();
-		if (mesh) mesh._syncEmpty();
+		if (mesh && mesh._syncEmpty)
+			mesh._syncEmpty();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
