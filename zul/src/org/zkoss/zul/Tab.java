@@ -293,8 +293,10 @@ public class Tab extends LabelImageElement {
 	 * @since 6.5.0
 	 */
 	public void onCreate(Event evt) {
-		if (_tmpLabel != null)
+		if (_tmpLabel != null) {
 			setLabel(_tmpLabel.getValue());
+			removeChild(_tmpLabel);
+		}
 		_tmpLabel = null;
 	}
 	
@@ -311,9 +313,9 @@ public class Tab extends LabelImageElement {
 		} else if (child instanceof Label) {// backward compatible
 			_tmpLabel = (Label)child;
 			log.warning("Please use Tab#setLabel(msg) instead! ["+this+"]");
-			return false;
-		} else
-			return super.insertBefore(child, refChild);
+		}
+		return super.insertBefore(child, refChild);
+		
 	}
 	
 	public void onChildRemoved(Component child) {
