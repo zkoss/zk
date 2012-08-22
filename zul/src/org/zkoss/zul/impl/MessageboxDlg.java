@@ -72,6 +72,7 @@ public class MessageboxDlg extends Window {
 				mbtn.setButton(_buttons[j],
 					btnLabels != null && j < btnLabels.length ? btnLabels[j]: null);
 				mbtn.setSclass(sclass);
+				mbtn.setAutodisable("self");
 				parent.appendChild(mbtn);
 			}
 		}
