@@ -52,6 +52,7 @@ ZK 6.5.0
   + Unsupported attribute for Tablet devices:
     *. Combobox's autodrop attribute
     *. Menubar's autodrop attribute
+  + Change Checkbox#setValue(String) to Checkbox#setValue(Object)
 
   --------
 ZK 6.0.3
