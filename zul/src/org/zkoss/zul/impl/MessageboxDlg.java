@@ -131,7 +131,9 @@ public class MessageboxDlg extends Window {
 	public static class Button extends org.zkoss.zul.Button {
 		private int _button;
 		private String _evtnm;
-
+		public Button() {
+			setAutodisable("self");
+		}
 		/** Sets the identity.
 		 */
 		public void setIdentity(int button) {
