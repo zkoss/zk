@@ -84,7 +84,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			<combobutton id="bdTwo" label="combobutton two"
 				onClick='lb.setValue("message: combobutton two clicked.");'
 				onOpen='lb.setValue("message: combobutton two popup "+ (self.open? "opened." : "closed."));'
-				dir="reverse" image="/img/network.gif" mold="tbbtn">
+				dir="reverse" image="/img/network.gif" mold="toolbar">
 				<popup id="ppTwo">
 					<vbox>
 						<hbox>
