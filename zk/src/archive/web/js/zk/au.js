@@ -30,10 +30,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		_initDefault = _portrait[window.orientation]; //default orientation
 	
 	// Checks whether to turn off the progress prompt
-	function checkProgressing() {
+	function checkProgressing(noReq) {
 		if (!zAu.processing()) {
 			_detached = []; //clean up
-			if (!(zk.mobile && zAu._cInfoReg)) // ignore it when touch devices
+			if (!(noReq && zk.mobile && zAu._cInfoReg)) // ignore it when touch devices
 				zk.endProcessing();
 			zAu.doneTime = jq.now();
 		}
@@ -229,10 +229,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		}
 
-		afterResponse();
+		afterResponse(!req);
 	}
-	function afterResponse() { 
-		zAu._doCmds(); //invokes checkProgressing
+	function afterResponse(noReq) {
+		zAu._doCmds(noReq); //invokes checkProgressing
 
 		//handle pending ajax send
 		if (sendPending && !ajaxReq && !pendingReqInf) {
@@ -627,7 +627,7 @@ zAu = {
 		pushCmds(cmds, rs);
 		zAu._doCmds();
 	},
-	_doCmds: function () { //called by mount.js, too
+	_doCmds: function (noReq) { //called by mount.js, too
 		for (var fn; fn = doCmdFns.shift();)
 			fn();
 
@@ -677,11 +677,11 @@ zAu = {
 						if (v > 500 || (v < 0 && v > -500)) r = r2;
 					}
 					responseId = r;
-					zAu._doCmds();
+					zAu._doCmds(noReq);
 				}
 			}, 3600);
 		} else
-			checkProgressing();
+			checkProgressing(noReq);
 
 		if (ex) throw ex;
 	},
