@@ -120,6 +120,18 @@ public class AttributesInfo extends ConditionLeafInfo {
 				comp.setAttribute(
 					name, Utils.evaluateComposite(eval, comp, value),
 					_scope != -1 ? _scope: Component.COMPONENT_SCOPE);
+				
+				//bug zk-1298, handle special composerName, see Components#wireController
+				if("composerName".equals(name)){
+					Object ctrlnm = comp.getAttribute(name);
+					if(ctrlnm instanceof String){
+						Object controller = comp.removeAttribute("_$composer$_");//get from special attribute
+						if(controller!=null && comp.getAttribute((String)ctrlnm)==null){
+							comp.setAttribute((String)ctrlnm, controller);
+						}
+					}
+				}
+				
 			}
 		}
 	}
